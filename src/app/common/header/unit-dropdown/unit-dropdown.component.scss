@@ -1,10 +1,33 @@
-::ng-deep .mat-menu-panel.unit-dropdown-menu {
-  max-width: 400px;
-  width: 400px;
+@import '../../../../theme.scss';
+
+::ng-deep .unit-dropdown-menu.mat-mdc-menu-panel {
+  max-width: 400px !important;
+  min-width: 400px !important;
+  width: 400px !important;
+}
+
+::ng-deep .mdc-list-item__primary-text {
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-menu-item-text {
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-menu-item {
+  width: 100%;
 }
 
 .unitName {
   max-width: 270px;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+mat-chip-option.f-chip {
+  background-color: $primary-color;
+  color: white;
+  font-style: bold;
+  opacity: 1;
+  --mdc-chip-disabled-label-text-color: white;
 }

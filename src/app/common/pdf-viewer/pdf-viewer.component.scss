@@ -12,20 +12,26 @@
   align-items: center;
 }
 
-
 #pdfActions {
+  padding-top: 1rem;
+  padding-right: 1rem;
   margin-left: auto;
 
-  ::ng-deep .mat-form-field-outline-start {
-    border-radius: 28px 0 0 28px !important;
+  ::ng-deep .mdc-notched-outline__leading {
     min-width: 28px !important;
+    border-top-left-radius: 28px !important;
+    border-bottom-left-radius: 28px !important;
   }
-
+  ::ng-deep .mdc-notched-outline__notch {
+    border-radius: 28px 0 0 28px !important;
+  }
+  ::ng-deep .mdc-notched-outline__trailing {
+    border-radius: 0 28px 28px 0 !important;
+  }
   ::ng-deep .mat-form-field-outline-end {
     border-radius: 0 28px 28px 0 !important;
   }
-
-  ::ng-deep .mat-form-field-infix {
+  ::ng-deep .mat-mdc-form-field-flex {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -33,9 +39,7 @@
   }
 
   button {
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
+    margin-left: -12px;
   }
 }
 

@@ -1,2 +1,4 @@
 <svg [hidden]="unselected" #svg></svg>
-<mat-icon disabled *ngIf="unselected">account_circle</mat-icon>
+@if (unselected) {
+<mat-icon disabled>account_circle</mat-icon>
+}

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Entity, EntityCache, RequestOptions } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
-import { alertService, visualisations } from 'src/app/ajs-upgraded-providers';
+import { visualisations } from 'src/app/ajs-upgraded-providers';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 import { MappingFunctions } from '../services/mapping-fn';
@@ -22,6 +22,7 @@ import {
   User,
 } from './doubtfire-model';
 import { TaskOutcomeAlignment } from './task-outcome-alignment';
+import { AlertService } from 'src/app/common/services/alert.service';
 
 export class Project extends Entity {
   public id: number;
@@ -57,7 +58,7 @@ export class Project extends Entity {
   public grade: number;
   public gradeRationale: string;
 
-  public maxPctCopy: number;
+  public similarityFlag: boolean = false;
 
   public constructor(unit?: Unit) {
     super();
@@ -82,7 +83,7 @@ export class Project extends Entity {
       this.tutorials.filter(
         (enrol) =>
           enrol.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
-          enrol.tutorName.toLowerCase().indexOf(matchText) >= 0
+          enrol.tutorName.toLowerCase().indexOf(matchText) >= 0,
       ).length > 0
     );
   }
@@ -226,7 +227,7 @@ export class Project extends Entity {
 
   // Assigns a grade to a student
   public assignGrade(score: number, rationale: string): void {
-    const alerts: any = AppInjector.get(alertService);
+    const alerts = AppInjector.get(AlertService);
     const projectService: ProjectService = AppInjector.get(ProjectService);
     const oldGrade: number = this.grade;
     this.grade = score;
@@ -241,12 +242,13 @@ export class Project extends Entity {
         },
       })
       .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         next: (project) => {
-          alerts.add('success', 'Grade updated.', 2000);
+          alerts.success('Grade updated.');
         },
         error: (message) => {
           this.grade = oldGrade;
-          alerts.add('danger', `Grade was not updated: ${message}`, 8000);
+          alerts.error(`Grade was not updated: ${message}`);
         },
       });
   }
@@ -286,7 +288,7 @@ export class Project extends Entity {
       .pipe(
         tap(() => {
           this.portfolioFiles = this.portfolioFiles.filter((value) => value != file);
-        })
+        }),
       );
   }
 
@@ -344,19 +346,15 @@ export class Project extends Entity {
   }
 
   public updateUnitEnrolment(): void {
-    const expected = (this.enrolled = !this.enrolled);
-    const alerts: any = AppInjector.get(alertService);
+    const alerts = AppInjector.get(AlertService);
     const projectService: ProjectService = AppInjector.get(ProjectService);
     projectService.update(this).subscribe({
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       next: (project) => {
-        if (expected == project.enrolled) {
-          alerts.add('success', 'Enrolment changed.', 2000);
-        } else {
-          alerts.add('danger', 'Enrolment change failed.', 5000);
-        }
+        alerts.success('Enrolment changed.', 2000);
       },
       error: (message) => {
-        alerts.add('danger', message, 5000);
+        alerts.error(message);
       },
     });
   }
@@ -391,7 +389,7 @@ export class Project extends Entity {
     // dates = unit.start_date.to_date.step(unit.end_date.to_date + 1.week, step=7).to_a
     const endDateValue = this.unit.endDate.getTime() + MappingFunctions.weeksMs(3);
     const dates = MappingFunctions.step(this.unit.startDate.getTime(), endDateValue, MappingFunctions.weeksMs(1)).map(
-      (val) => new Date(val)
+      (val) => new Date(val),
     );
 
     // Get the target task from the unit's task definitions
@@ -409,7 +407,7 @@ export class Project extends Entity {
     const tasks = this.tasks;
 
     const readyOrCompleteTasks = tasks.filter((task) =>
-      ['ready_for_feedback', 'discuss', 'demonstrate', 'complete'].includes(task.status)
+      ['ready_for_feedback', 'discuss', 'demonstrate', 'complete'].includes(task.status),
     );
     let lastTargetDate: Date;
 
@@ -417,7 +415,7 @@ export class Project extends Entity {
 
     // Get the tasks currently marked as done (or ready to mark)
     const doneTasks = tasks.filter(
-      (t) => !['working_on_it', 'not_started', 'fix_and_resubmit', 'redo', 'need_help'].includes(t.status)
+      (t) => !['working_on_it', 'not_started', 'fix_and_resubmit', 'redo', 'need_help'].includes(t.status),
     );
 
     // last done task date)

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Project, Unit, UnitRole } from 'src/app/api/models/doubtfire-model';
 import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
@@ -22,7 +22,7 @@ describe('HeaderComponent', () => {
     const showHideHeader = new Subject<boolean>();
     const unitRolesSubject = new BehaviorSubject<any>(null);
     const projectsSubject = new BehaviorSubject<any>(null);
-    const currentViewAndEntitySubject = new BehaviorSubject<{ viewType: ViewType; entity: Unit | Project | UnitRole }>(
+    const currentViewAndEntitySubject$ = new BehaviorSubject<{ viewType: ViewType; entity: Unit | Project | UnitRole }>(
       null
     );
 
@@ -34,7 +34,7 @@ describe('HeaderComponent', () => {
       showHideHeader: showHideHeader,
       unitRolesSubject: unitRolesSubject,
       projectsSubject: projectsSubject,
-      currentViewAndEntitySubject: currentViewAndEntitySubject,
+      currentViewAndEntitySubject$: currentViewAndEntitySubject$,
     };
 
     TestBed.configureTestingModule({

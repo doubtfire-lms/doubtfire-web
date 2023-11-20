@@ -72,7 +72,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
     private userService: UserService,
     private unitService: UnitService,
     private globalStateService: GlobalStateService,
-    @Inject(MAT_DIALOG_DATA) public data: TeachingPeriodUnitImportData
+    @Inject(MAT_DIALOG_DATA) public data: TeachingPeriodUnitImportData,
   ) {}
 
   ngOnInit(): void {
@@ -99,7 +99,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   private _filter(name: string): User[] {
     const filterValue = name.toLowerCase();
 
-    return this.teachingStaff.filter(option => option.name.toLowerCase().includes(filterValue));
+    return this.teachingStaff.filter((option) => option.name.toLowerCase().includes(filterValue));
   }
 
   private loadAllUnits() {
@@ -184,11 +184,11 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
         convenorFormControl: formControl,
         filteredStaff: formControl.valueChanges.pipe(
           startWith(''),
-          map(value => {
+          map((value) => {
             const name = typeof value === 'string' ? value : value?.name;
             return name ? this._filter(name as string) : this.teachingStaff;
-          })
-        )
+          }),
+        ),
       });
     }
 
@@ -230,24 +230,26 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   }
 
   private createNewUnit(unitToImport: UnitImportData, idx: number) {
-    this.unitService.create({
-      unit: {
-        code: unitToImport.unitCode,
-        name: unitToImport.unitName,
-        main_convenor_user_id: unitToImport.convenor?.id,
-        teaching_period_id: this.data.teachingPeriod.id,
-      }
-    }).subscribe({
-      next: (newUnit: Unit) => {
-        unitToImport.done = true;
-        this.importUnit(idx + 1);
-      },
-      error: (failure) => {
-        unitToImport.done = false;
-        console.log(failure);
-        this.importUnit(idx + 1);
-      }
-    });
+    this.unitService
+      .create({
+        unit: {
+          code: unitToImport.unitCode,
+          name: unitToImport.unitName,
+          main_convenor_user_id: unitToImport.convenor?.id,
+          teaching_period_id: this.data.teachingPeriod.id,
+        },
+      })
+      .subscribe({
+        next: (newUnit: Unit) => {
+          unitToImport.done = true;
+          this.importUnit(idx + 1);
+        },
+        error: (failure) => {
+          unitToImport.done = false;
+          console.log(failure);
+          this.importUnit(idx + 1);
+        },
+      });
   }
 
   private importUnit(idx: number) {
@@ -257,7 +259,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
     const code = unitToImport.sourceUnit ? unitToImport.sourceUnit.code : unitToImport.unitCode;
 
-    if (unitToImport.done !== undefined || this.teachigPeriod.hasUnitWithCode(code)){
+    if (unitToImport.done !== undefined || this.teachigPeriod.hasUnitWithCode(code)) {
       // Skip units already done
       this.importUnit(idx + 1);
     } else {

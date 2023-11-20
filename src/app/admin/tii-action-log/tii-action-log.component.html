@@ -1,0 +1,85 @@
+<div class="action-log-container">
+  <div class="flex items-center my-10">
+    <h1>Turnitin Actions</h1>
+    <span class="flex-grow"></span>
+    <div>
+      <mat-form-field appearance="outline">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" [(ngModel)]="filter" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <table
+    class="flex-grow f-table selectable"
+    mat-table
+    [dataSource]="tiiActionsSource"
+    matSort
+    (matSortChange)="sortData($event)"
+  >
+    <ng-container matColumnDef="type" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Action Type</th>
+      <td mat-cell *matCellDef="let action">
+        {{ action.description }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="lastRun" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Run</th>
+      <td mat-cell *matCellDef="let action">
+        {{ action.lastRun ? (action.lastRun | date: 'd LLL y') : '' }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="retries" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Retries</th>
+      <td mat-cell *matCellDef="let action">
+        {{ action.retries }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="retry" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Retry?</th>
+      <td mat-cell *matCellDef="let action">
+        {{ action.retry }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="errorCode" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Error Code</th>
+      <td mat-cell *matCellDef="let action">
+        {{ action.errorCode }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="complete" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Complete?</th>
+      <td mat-cell *matCellDef="let action">
+        {{ action.complete }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="errorMessage" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Error Message</th>
+      <td mat-cell *matCellDef="let action">
+        {{ action.errorMessage }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tiiActionTools" sticky>
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let action">
+        @if (!(action.complete || action.retry)) {
+        <button mat-icon-button aria-label="retry" color="primary" (click)="retryAction(action)">
+          <mat-icon>redo</mat-icon>
+        </button>
+        }
+      </td>
+    </ng-container>
+
+    <!-- Action footer row -->
+    <ng-container matColumnDef="actions">
+      <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length"></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: columns"
+      [style.background]="selectedTaskDefinition === row ? 'lightblue' : ''"
+    ></tr>
+  </table>
+</div>

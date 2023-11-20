@@ -1,0 +1,36 @@
+<div class="flex flex-row gap-4">
+  <div class="basis-1/2 flex flex-col">
+    <f-file-drop
+      mode="event"
+      (filesDropped)="uploadTaskSheet($event)"
+      accept="application/pdf"
+      [desiredFileName]="'Task ' + taskDefinition.abbreviation + ' pdf'"
+    />
+    @if (taskDefinition.hasTaskSheet) {
+<div class="flex flex-row gap-4 pt-4">
+      <button mat-flat-button color="warn" (click)="removeTaskSheet()" class="flex-grow me-4">Delete Task Sheet</button>
+      <button mat-flat-button color="accent" (click)="downloadTaskSheet()" class="flex-grow ms-4">
+        Download Task Sheet
+      </button>
+    </div>
+}
+  </div>
+  <div class="basis-1/2 flex flex-col">
+    <f-file-drop
+      mode="event"
+      (filesDropped)="uploadTaskResources($event)"
+      accept="application/pdf"
+      [desiredFileName]="'Task ' + taskDefinition.abbreviation + ' zip'"
+    />
+    @if (taskDefinition.hasTaskResources) {
+<div class="flex flex-row gap-4 pt-4">
+      <button mat-flat-button color="warn" (click)="removeTaskResources()" class="flex-grow me-4">
+        Delete Task Zip
+      </button>
+      <button mat-flat-button color="accent" (click)="downloadTaskResources()" class="flex-grow ms-4">
+        Download Task Zip
+      </button>
+    </div>
+}
+  </div>
+</div>

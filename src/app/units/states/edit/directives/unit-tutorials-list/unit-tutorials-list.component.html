@@ -1,29 +1,29 @@
 <div>
   <div class="header">
-    <div *ngIf="stream else noStream">
+    <div *ngIf="stream; else noStream">
       <div *ngIf="!editingStream; else doStreamEdit">
-        <h4>{{stream.name}} - {{stream.abbreviation}}</h4>
+        <h4>{{ stream.name }} - {{ stream.abbreviation }}</h4>
         <button mat-icon-button>
-          <mat-icon color="primary" (click)="setEditStream(true)" >edit</mat-icon>
+          <mat-icon color="primary" (click)="setEditStream(true)">edit</mat-icon>
         </button>
       </div>
 
       <ng-template #doStreamEdit>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="stream.name">
+          <input matInput [(ngModel)]="stream.name" />
         </mat-form-field>
         <span>-</span>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Abbreviation</mat-label>
-          <input matInput [(ngModel)]="stream.abbreviation">
+          <input matInput [(ngModel)]="stream.abbreviation" />
         </mat-form-field>
 
         <button mat-icon-button doStreamEdit>
-          <mat-icon color="warn" (click)="setEditStream(false)" >cancel</mat-icon>
+          <mat-icon color="warn" (click)="setEditStream(false)">cancel</mat-icon>
         </button>
         <button mat-icon-button #doStreamEditt>
-          <mat-icon color="warn" (click)="saveStream()" >save</mat-icon>
+          <mat-icon color="warn" (click)="saveStream()">save</mat-icon>
         </button>
         <button mat-icon-button color="warn" (click)="deleteStream()" #doStreamEdit>
           <mat-icon>delete</mat-icon>
@@ -36,37 +36,36 @@
     </ng-template>
   </div>
 
-  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="mat-elevation-z3">
-
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="f-table">
     <!-- Abbreviation Column -->
     <ng-container [formGroup]="formData" matColumnDef="abbreviation" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Abbreviation </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Abbreviation</th>
       <td mat-cell *matCellDef="let tutorial">
-        <div *ngIf="!editing(tutorial) else edit">
-          {{tutorial.abbreviation}}
+        <div *ngIf="!editing(tutorial); else edit">
+          {{ tutorial.abbreviation }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
-            <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
+          <mat-form-field appearance="outline" class="data-entry" >
+            <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
-          <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
+        <mat-form-field appearance="outline" class="data-entry">
+          <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Campus Column -->
     <ng-container [formGroup]="formData" matColumnDef="campus">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Campus </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Campus</th>
       <td mat-cell *matCellDef="let tutorial">
-        <div *ngIf="!editing(tutorial) else edit">
-          {{tutorial.campus ? tutorial.campus.name : ''}}
+        <div *ngIf="!editing(tutorial); else edit">
+          {{ tutorial.campus ? tutorial.campus.name : '' }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <mat-label>Campus</mat-label>
             <mat-select [compareWith]="compareSelection" formControlName="campus">
               <mat-option [value]="null">Not Specified</mat-option>
@@ -78,12 +77,12 @@
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <mat-label>Campus</mat-label>
           <mat-select formControlName="campus">
             <mat-option [value]="null">Not Specified</mat-option>
             <mat-option *ngFor="let campus of campuses" [value]="campus">
-              {{campus.name }}
+              {{ campus.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -92,44 +91,44 @@
 
     <!-- Location Column -->
     <ng-container [formGroup]="formData" matColumnDef="location" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
       <td mat-cell *matCellDef="let tutorial">
-        <div *ngIf="!editing(tutorial) else edit">
-          {{tutorial.meetingLocation}}
+        <div *ngIf="!editing(tutorial); else edit">
+          {{ tutorial.meetingLocation }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
-            <input matInput required formControlName="meetingLocation" placeholder="Location">
+          <mat-form-field appearance="outline" class="data-entry">
+            <input matInput required formControlName="meetingLocation" placeholder="Location" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
-          <input matInput required formControlName="meetingLocation" placeholder="Location">
+        <mat-form-field appearance="outline" class="data-entry">
+          <input matInput required formControlName="meetingLocation" placeholder="Location" />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Day Column -->
     <ng-container [formGroup]="formData" matColumnDef="day">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Day </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Day</th>
       <td mat-cell *matCellDef="let tutorial">
-        <div *ngIf="!editing(tutorial) else edit">
-          {{tutorial.meetingDay}}
+        <div *ngIf="!editing(tutorial); else edit">
+          {{ tutorial.meetingDay }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <mat-label>Day</mat-label>
             <mat-select required formControlName="meetingDay">
               <mat-option *ngFor="let day of days" [value]="day">
-                {{day  }}
+                {{ day }}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <mat-label>Day</mat-label>
           <mat-select required formControlName="meetingDay">
             <mat-option *ngFor="let day of days" [value]="day">
@@ -142,34 +141,39 @@
 
     <!-- Time Column -->
     <ng-container [formGroup]="formData" matColumnDef="time" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
       <td mat-cell *matCellDef="let tutorial">
-        <div *ngIf="!editing(tutorial) else edit">
-          {{tutorial.meetingTime}}
+        <div *ngIf="!editing(tutorial); else edit">
+          {{ tutorial.meetingTime }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
-            <input matInput required formControlName="meetingTime"
-              [value]="formData.get('meetingTime').value" placeholder="Time">
+          <mat-form-field appearance="outline" class="data-entry">
+            <input
+              matInput
+              required
+              formControlName="meetingTime"
+              [value]="formData.get('meetingTime').value"
+              placeholder="Time"
+            />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
-          <input matInput required formControlName="meetingTime" placeholder="Time">
+        <mat-form-field appearance="outline" class="data-entry">
+          <input matInput required formControlName="meetingTime" placeholder="Time" />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Tutor Column -->
     <ng-container [formGroup]="formData" matColumnDef="tutor">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tutor </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tutor</th>
       <td mat-cell *matCellDef="let tutorial">
-        <div *ngIf="!editing(tutorial) else edit">
+        <div *ngIf="!editing(tutorial); else edit">
           {{ tutorial.tutor?.name }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <mat-label>Tutor</mat-label>
             <mat-select required [compareWith]="compareSelection" formControlName="tutor">
               <mat-option *ngFor="let tutor of unit.staffUsers" [value]="tutor">
@@ -180,7 +184,7 @@
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
           <mat-label>Tutor</mat-label>
           <mat-select required formControlName="tutor">
             <mat-option *ngFor="let tutor of unit.staffUsers" [value]="tutor">
@@ -193,20 +197,20 @@
 
     <!-- Capacity Column -->
     <ng-container [formGroup]="formData" matColumnDef="capacity" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Capacity </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Capacity</th>
       <td mat-cell *matCellDef="let tutorial">
-        <div *ngIf="!editing(tutorial) else edit">
-          {{tutorial.capacity}}
+        <div *ngIf="!editing(tutorial); else edit">
+          {{ tutorial.capacity }}
         </div>
         <ng-template #edit>
-          <mat-form-field class="data-entry">
-            <input matInput required formControlName="capacity" placeholder="Capacity">
+          <mat-form-field appearance="outline" class="data-entry">
+            <input matInput required formControlName="capacity" placeholder="Capacity" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
-          <input matInput required formControlName="capacity" placeholder="Capacity">
+        <mat-form-field appearance="outline" class="data-entry">
+          <input matInput required formControlName="capacity" placeholder="Capacity" />
         </mat-form-field>
       </td>
     </ng-container>
@@ -215,7 +219,7 @@
     <ng-container matColumnDef="options" stickyEnd>
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let tutorial">
-        <div class="right" *ngIf="!editing(tutorial) else edit">
+        <div class="right" *ngIf="!editing(tutorial); else edit">
           <button mat-icon-button (click)="flagEdit(tutorial)">
             <mat-icon color="primary">edit</mat-icon>
           </button>
@@ -244,7 +248,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
     <tr [hidden]="selected" mat-footer-row *matFooterRowDef="columns"></tr>
   </table>
 </div>

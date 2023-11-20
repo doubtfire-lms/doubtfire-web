@@ -37,7 +37,7 @@ $warn-color: #f44336;
   align-items: center;
 
   .mat-icon {
-    color: #BCC0C4;
+    color: #bcc0c4;
   }
 }
 
@@ -73,7 +73,6 @@ $warn-color: #f44336;
 }
 
 .omnisearch {
-  border-radius: 1em;
   background-color: var(--background-gray);
   font-size: 15px;
   padding-right: 10px;
@@ -82,21 +81,19 @@ $warn-color: #f44336;
   &.expanded {
     height: 100%;
   }
-}
 
-.truncate {
-  min-width: 0;
-
-  h4,
-  p {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  &.mobile {
   }
-}
 
-.warn-icon {
-  color: darken($warn-color, 10%);
+  .search {
+    background-color: transparent;
+    border: hidden;
+    outline: none;
+  }
+
+  .mdc-icon-button {
+    display: flex;
+  }
 }
 
 .new_comments {
@@ -145,14 +142,16 @@ user-icon {
 }
 
 .task-list-data {
-  margin-top: -8px;
-
-  h4 {
-    margin-bottom: -5px;
+  margin-top: 0px;
+  .student-name {
+    font-size: 15px;
+    margin-bottom: -2px;
+    margin-top: 8px;
   }
 
-  p {
-    margin-bottom: -5px;
+  .task-details {
+    margin-bottom: 0px;
+    font-size: 12px;
   }
 }
 
@@ -160,45 +159,46 @@ user-icon {
   min-width: 40px;
   width: 40px;
   margin-right: -10px;
+  margin-left: -10px;
 }
 
-.mat-list-item {
+.mat-mdc-list-item {
   border: none;
 }
 
-:host ::ng-deep .mat-list-item-content {
-  padding: 0 !important;
-}
-
-
-.mat-list-item .notification {
-
-  &.active {
-    background-color: transparent;
-  }
-
+.mat-mdc-list-item .notification {
   height: 8px;
   width: 8px;
   margin-right: 8px;
-  background-color: mat.get-color-from-palette($my-palette, 500);
+
   border-radius: 50%;
   display: inline-block;
+
+  background-color: transparent;
+
+  &.active {
+    background-color: mat.get-color-from-palette($my-palette, 500);
+  }
+
+  &.active.similarities {
+    background-color: #f44336;
+  }
 }
 
-.mat-list-item .item-content {
+.mat-mdc-list-item .item-content {
   height: 60px;
   border-radius: 20px;
 }
 
-.mat-list-item .item-content:hover {
+.mat-mdc-list-item .item-content:hover {
   cursor: pointer;
 }
 
-.mat-list-item .item-content.selected {
+.mat-mdc-list-item .item-content.selected {
   background-color: var(--background-gray);
 }
 
-.task-inbox.narrow-width .mat-list-item .item-content.selected {
+.task-inbox.narrow-width .mat-mdc-list-item .item-content.selected {
   margin-right: 12px;
 }
 

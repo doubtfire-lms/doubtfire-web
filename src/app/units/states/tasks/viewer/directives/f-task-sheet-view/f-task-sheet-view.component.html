@@ -1,0 +1,17 @@
+<div class="w-full h-full overflow-auto">
+  @switch (taskDef) { @case (taskDef) { @if (taskDef) {
+
+  <f-pdf-viewer [pdfUrl]="taskDef.getTaskPDFUrl()"></f-pdf-viewer>
+
+  } @else {
+
+  <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+    <mat-icon>subtitles_off</mat-icon>
+  </div>
+
+  } } }
+
+  <!-- The PDF Viewer -->
+
+  <!-- Render if no PDF URL is available for the current view -->
+</div>

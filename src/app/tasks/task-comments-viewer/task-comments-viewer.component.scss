@@ -8,7 +8,7 @@
   margin: 0 0 0 0px !important;
 }
 
-$comment-bubble-color: rgb(0, 153, 255);
+$comment-bubble-color: #3939ff;
 $comment-bubble-color-darker: darken($comment-bubble-color, 10%);
 $comment-bubble-color-other-user: rgb(241, 240, 240);
 $comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
@@ -109,8 +109,11 @@ $comment-inner-border-radius: 4px;
   }
 
   .dragover {
-    margin: 0;
-    border: 5px dashed #333333;
+    z-index: 50;
+    border-radius: 10px;
+    outline-width: 1.5px;
+    outline-style: dashed;
+    outline-color: #3939ff;
   }
 
   .comment-container {
@@ -376,11 +379,11 @@ $comment-inner-border-radius: 4px;
       margin: 0 0 0 0px !important;
     }
 
-    .markdown-to-html p>*:last-child {
+    .markdown-to-html p > *:last-child {
       margin-bottom: 0px;
     }
 
-    .markdown-to-html p>pre:last-child {
+    .markdown-to-html p > pre:last-child {
       margin-bottom: 0em;
     }
   }
@@ -405,7 +408,7 @@ $comment-inner-border-radius: 4px;
       padding-right: 0;
     }
 
-    .markdown-to-html>*:last-child {
+    .markdown-to-html > *:last-child {
       margin-bottom: 0px;
     }
   }

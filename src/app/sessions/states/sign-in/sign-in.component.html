@@ -15,19 +15,26 @@
           fxLayoutAlign="center start"
           class="sign-in-form"
         >
-          <mat-form-field appearance="outline" fxFlex fxFlexFill *ngIf="showCredentials">
+          @if (showCredentials) {
+<mat-form-field appearance="outline" fxFlex fxFlexFill>
             <mat-label>Username</mat-label>
             <input matInput name="username" required [(ngModel)]="formData.username" />
           </mat-form-field>
+}
 
-          <mat-form-field appearance="outline" fxFlex fxFlexFill *ngIf="showCredentials">
+          @if (showCredentials) {
+<mat-form-field appearance="outline" fxFlex fxFlexFill>
             <mat-label>Password</mat-label>
             <input type="password" matInput name="password" required [(ngModel)]="formData.password" />
           </mat-form-field>
-          <mat-checkbox *ngIf="!showCredentials" matInput name="autoLogin" [(ngModel)]="formData.autoLogin"
-            >Automatically login</mat-checkbox
+}
+          @if (!showCredentials) {
+<mat-checkbox matInput name="autoLogin" [(ngModel)]="formData.autoLogin"
+            >Login via Institution</mat-checkbox
           >
-          <button fxFlex fxFlexFill mat-flat-button color="primary" type="form">Sign In</button>
+}
+          <button class="w-full" mat-flat-button color="primary" type="form" [disabled]="form.invalid">Sign In</button>
+
         </form>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { User } from 'src/app/api/models/doubtfire-model';
 import { EditProfileFormComponent } from '../../edit-profile-form/edit-profile-form.component';
 
@@ -11,6 +11,7 @@ export class EditProfileDialogService {
 
   openDialog(user: User): void {
     this.dialog.open(EditProfileFormComponent, {
+      width: '800px',
       data: { user, mode: 'edit' },
     });
   }

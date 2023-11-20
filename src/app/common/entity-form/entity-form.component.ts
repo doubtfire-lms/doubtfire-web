@@ -4,7 +4,7 @@ import { Entity, RequestOptions } from 'ngx-entity-service';
 import { EntityService } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { Sort } from '@angular/material/sort';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
@@ -104,7 +104,6 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
       .toLowerCase();
   }
 
-
   /**
    * Submit the form data to the server and create or update an entity
    * based on the form's state. A new entity will be created if there is
@@ -144,7 +143,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
       }
 
       // Handle the response
-      response.subscribe( {
+      response.subscribe({
         next: (result: T) => {
           alertService.add('success', `${this.entityName} saved`, 2000);
           // Success is implemented on all inheriting instances and is used
@@ -165,7 +164,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
             this.restoreFromBackup();
           }
           alertService.add('danger', `${this.entityName} save failed: ${error}`, 6000);
-        }
+        },
       });
     } else {
       // Once we mark forms as touched, erroneous state will be rendered
@@ -174,11 +173,11 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
     }
   }
 
-  protected delete(entity: T, entities: T[], service: EntityService<T>) : Observable<any> {
-    return service.delete<any>(entity, this.optionsOnRequest('delete')).pipe(tap(
-      (obj) => {
+  protected delete(entity: T, entities: T[], service: EntityService<T>): Observable<any> {
+    return service.delete<any>(entity, this.optionsOnRequest('delete')).pipe(
+      tap((obj) => {
         this.cancelEdit();
-        entities.splice( entities.indexOf(entity), 1);
+        entities.splice(entities.indexOf(entity), 1);
         this.dataSource.data = entities;
       })
     );

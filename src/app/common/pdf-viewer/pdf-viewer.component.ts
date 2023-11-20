@@ -2,7 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, Input, Inject, OnDestroy, SimpleChanges, OnChanges, ViewChild } from '@angular/core';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { alertService } from 'src/app/ajs-upgraded-providers';
-import { FileDownloaderService } from '../file-downloader/file-downloader';
+import { FileDownloaderService } from '../file-downloader/file-downloader.service';
 
 @Component({
   selector: 'f-pdf-viewer',
@@ -12,7 +12,6 @@ import { FileDownloaderService } from '../file-downloader/file-downloader';
 export class fPdfViewerComponent implements OnDestroy, OnChanges {
   private _pdfUrl: string;
   public pdfBlobUrl: string;
-  public progressPercentage = 0;
   @Input() pdfUrl: string;
   @ViewChild(PdfViewerComponent) private pdfComponent: PdfViewerComponent;
   pdfSearchString: string;
@@ -27,6 +26,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
   ngOnDestroy(): void {
     if (this.pdfBlobUrl) {
       this.fileDownloader.releaseBlob(this.pdfBlobUrl);
+      this.pdfBlobUrl = null;
     }
   }
 
@@ -81,10 +81,6 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
         this.alerts.add('danger', `Error downloading PDF. ${error}`, 6000);
       }
     );
-  }
-
-  onProgress(progressData: { loaded; total }) {
-    this.progressPercentage = Math.round((progressData.loaded / progressData.total) * 100);
   }
 
   onLoaded() {

@@ -19,6 +19,5 @@ angular.module('doubtfire.units.states.tasks.viewer', [
 )
 
 .controller('TaskViewerStateCtrl', ($scope) ->
-  $scope.unitTasks = $scope.unit.taskDefinitions
-  $scope.selectedTaskDef = $scope.unitTasks[0]
+  $scope.taskDefs = $scope.unit.taskDefinitions
 )

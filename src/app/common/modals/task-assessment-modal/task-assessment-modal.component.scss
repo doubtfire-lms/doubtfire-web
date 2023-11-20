@@ -1,10 +1,13 @@
-mat-dialog-container.mat-dialog-container {
+
+/* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version. */
+/* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version. */
+mat-dialog-container.mat-mdc-dialog-container {
   padding-top: 0;
   padding: 4;
   max-height: unset;
 }
 
-.mat-dialog-title{
+.mat-mdc-dialog-title{
   padding-top: 0;
   margin: 1em;
 }

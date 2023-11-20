@@ -1,4 +1,4 @@
-<form #form="ngForm" (ngSubmit)="submit()" fxLayout="column" fxLayoutAlign="center start">
+<form #form="ngForm" (ngSubmit)="submit()" fxLayout="column" fxLayoutAlign="center start" class="p-16">
   <div class="main-container" style="width: 100%" fxLayout="row" fxLayoutAlign="center start">
     <div class="main" style="width: 100%" fxLayout="column" fxLayoutAlign="start start">
       <!-- avatar -->
@@ -16,7 +16,7 @@
       <div fxLayout="row" fxFlexFill>
         <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="start">
           <mat-label>First Name</mat-label>
-          <input matInput [(ngModel)]="user.firstName" name="first" required />
+          <input matInput class="outline-none" [(ngModel)]="user.firstName" name="first" required />
         </mat-form-field>
 
         <div fxFlex></div>
@@ -57,17 +57,20 @@
         />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" fxFlexFill *ngIf="user.systemRole === 'Student'">
+      @if (user.systemRole === 'Student') {
+      <mat-form-field appearance="outline" fxFlexFill>
         <mat-label>Student ID</mat-label>
         <input matInput [(ngModel)]="user.studentId" name="student_id" required />
       </mat-form-field>
+      }
 
       <mat-form-field appearance="outline" fxFlexFill>
         <mat-label>Email</mat-label>
         <input type="email" matInput [(ngModel)]="user.email" name="email" required />
       </mat-form-field>
 
-      <mat-form-field *ngIf="canSeeSystemRole" fxFlexFill appearance="outline">
+      @if (canSeeSystemRole) {
+      <mat-form-field fxFlexFill appearance="outline">
         <mat-label>System Role</mat-label>
         <mat-select [(ngModel)]="user.systemRole" name="systemRole" [disabled]="!canEditSystemRole">
           <mat-option value="Admin">Administrator</mat-option>
@@ -76,6 +79,7 @@
           <mat-option value="Student">Student</mat-option>
         </mat-select>
       </mat-form-field>
+      }
 
       <section fxLayout="column" fxFlexFill fxLayoutAlign="center start">
         <mat-checkbox class="" color="primary" [(ngModel)]="user.receiveFeedbackNotifications" name="feedback_n"
@@ -101,18 +105,12 @@
           Sign Out
         </button>
         <div fxFlex></div>
-        <button
-          *ngIf="mode === 'create'"
-          [disabled]="form.invalid"
-          fxFlexAlign="end"
-          type="submit"
-          mat-flat-button
-          color="primary"
-        >
+        @if (mode === 'create') {
+        <button [disabled]="form.invalid" fxFlexAlign="end" type="submit" mat-flat-button color="primary">
           Confirm Account
         </button>
+        } @if (mode === 'edit') {
         <button
-          *ngIf="mode === 'edit'"
           type="button"
           [disabled]="form.invalid"
           fxFlexAlign="end"
@@ -122,6 +120,7 @@
         >
           Save Profile
         </button>
+        }
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 import { Component, Input, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { alertService, confirmationModal } from 'src/app/ajs-upgraded-providers';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
 import {
   Tutorial,
   TutorialService,
@@ -46,7 +46,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     private tutorialStreamService: TutorialStreamService,
     private campusService: CampusService,
     @Inject(confirmationModal) private confirmationModal: any,
-    @Inject(alertService) private alerts: any
+    @Inject(alertService) private alerts: any,
   ) {
     super(
       {
@@ -58,7 +58,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
         capacity: new UntypedFormControl('', [Validators.required]),
         tutor: new UntypedFormControl(null, [Validators.required]),
       },
-      'Tutorial'
+      'Tutorial',
     );
   }
 
@@ -80,7 +80,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
 
   private filterTutorials(): void {
     this.tutorials = this.unit.tutorials.filter(
-      (tutorial) => tutorial.tutorialStream === this.stream || (!tutorial.tutorialStream && !this.stream)
+      (tutorial) => tutorial.tutorialStream === this.stream || (!tutorial.tutorialStream && !this.stream),
     );
     this.dataSource.data = this.tutorials;
   }
@@ -189,7 +189,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
           error: (message) => {
             this.alerts.add('danger', `Failed to delete stream. ${message}`, 8000);
           },
-        })
+        }),
     );
   }
 

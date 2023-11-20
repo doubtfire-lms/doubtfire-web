@@ -4,16 +4,20 @@
     <!-- <pdf-viewer *ngIf="pdfUrl" [pdfUrl]="pdfUrl"></pdf-viewer> -->
   </div>
   <!--/panel-body-->
-  <div class="pdf-viewer-footer" *ngIf="!hideFooter">
+  @if (!hideFooter) {
+  <div class="pdf-viewer-footer">
     <div class="pull-left text-muted" [hidden]="!footerText"><strong>Note:</strong> {{ footerText }}</div>
     <div class="pull-right btn-group">
-      <a (click)="downloadResources()" class="btn btn-primary" *ngIf="resourcesUrl">
+      @if (resourcesUrl) {
+      <a (click)="downloadResources()" class="btn btn-primary">
         <i class="fa fa-download"></i><span> Resources</span>
       </a>
+      }
       <button (click)="downloadPdf()" class="btn btn-success">
         <i class="fa fa-download"></i><span [hidden]="!resourcesUrl"> PDF</span>
       </button>
     </div>
   </div>
+  }
   <!--/panel-footer-->''
 </div>

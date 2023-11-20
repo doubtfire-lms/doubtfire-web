@@ -25,109 +25,108 @@ export const plagiarismReportModal = new InjectionToken('PlagiarismReportModal')
 // It will get the service from AngularJS via the factory
 export const visualisationsProvider = {
   provide: visualisations,
-  useFactory: (i: any) => i.get('Visualisation'),
+  useFactory: (i) => i.get('Visualisation'),
   deps: ['$injector'],
 };
 
-
 export const calendarModalProvider = {
   provide: calendarModal,
-  useFactory: (i: any) => i.get('CalendarModal'),
+  useFactory: (i) => i.get('CalendarModal'),
   deps: ['$injector'],
 };
 
 export const rootScopeProvider = {
   provide: rootScope,
-  useFactory: (i: any) => i.get('$rootScope'),
+  useFactory: (i) => i.get('$rootScope'),
   deps: ['$injector'],
 };
 
 export const aboutDoubtfireModalProvider = {
   provide: aboutDoubtfireModal,
-  useFactory: (i: any) => i.get('AboutDoubtfireModal'),
+  useFactory: (i) => i.get('AboutDoubtfireModal'),
   deps: ['$injector'],
 };
 
 export const plagiarismReportModalProvider = {
   provide: plagiarismReportModal,
-  useFactory: (i: any) => i.get('PlagiarismReportModal'),
+  useFactory: (i) => i.get('PlagiarismReportModal'),
   deps: ['$injector'],
 };
 
 export const commentsModalProvider = {
   provide: commentsModal,
-  useFactory: (i: any) => i.get('CommentsModal'),
+  useFactory: (i) => i.get('CommentsModal'),
   deps: ['$injector'],
 };
 
 export const uploadSubmissionModalProvider = {
   provide: uploadSubmissionModal,
-  useFactory: (i: any) => i.get('UploadSubmissionModal'),
+  useFactory: (i) => i.get('UploadSubmissionModal'),
   deps: ['$injector'],
 };
 
 export const gradeTaskModalProvider = {
   provide: gradeTaskModal,
-  useFactory: (i: any) => i.get('GradeTaskModal'),
+  useFactory: (i) => i.get('GradeTaskModal'),
   deps: ['$injector'],
 };
 
 export const gradeServiceProvider = {
   provide: gradeService,
-  useFactory: (i: any) => i.get('gradeService'),
+  useFactory: (i) => i.get('gradeService'),
   deps: ['$injector'],
 };
 
 export const analyticsServiceProvider = {
   provide: analyticsService,
-  useFactory: (i: any) => i.get('analyticsService'),
+  useFactory: (i) => i.get('analyticsService'),
   deps: ['$injector'],
 };
 
 export const dateServiceProvider = {
   provide: dateService,
-  useFactory: (i: any) => i.get('dateService'),
+  useFactory: (i) => i.get('dateService'),
   deps: ['$injector'],
 };
 
 export const alertServiceProvider = {
   provide: alertService,
-  useFactory: (i: any) => i.get('alertService'),
+  useFactory: (i) => i.get('alertService'),
   deps: ['$injector'],
 };
 
 export const AudioRecorderProvider = {
   provide: audioRecorder,
-  useFactory: (i: any) => i.get('audioRecorder'),
+  useFactory: (i) => i.get('audioRecorder'),
   deps: ['$injector'],
 };
 
 export const AudioRecorderServiceProvider = {
   provide: audioRecorderService,
-  useFactory: (i: any) => i.get('recorderService'),
+  useFactory: (i) => i.get('recorderService'),
   deps: ['$injector'],
 };
 
 export const CsvUploadModalProvider = {
   provide: csvUploadModalService,
-  useFactory: (i: any) => i.get('CsvUploadModal'),
+  useFactory: (i) => i.get('CsvUploadModal'),
   deps: ['$injector'],
 };
 
 export const CsvResultModalProvider = {
   provide: csvResultModalService,
-  useFactory: (i: any) => i.get('CsvResultModal'),
+  useFactory: (i) => i.get('CsvResultModal'),
   deps: ['$injector'],
 };
 
 export const ConfirmationModalProvider = {
   provide: confirmationModal,
-  useFactory: (i: any) => i.get('ConfirmationModal'),
+  useFactory: (i) => i.get('ConfirmationModal'),
   deps: ['$injector'],
 };
 
 export const UnitStudentEnrolmentModalProvider = {
   provide: unitStudentEnrolmentModal,
-  useFactory: (i: any) => i.get('UnitStudentEnrolmentModal'),
+  useFactory: (i) => i.get('UnitStudentEnrolmentModal'),
   deps: ['$injector'],
 };

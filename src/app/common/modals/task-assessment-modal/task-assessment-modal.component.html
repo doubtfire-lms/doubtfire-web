@@ -1,13 +1,15 @@
 <div class="submission-history-modal">
   <h3 mat-dialog-title class="panel-title">Overseer Assessment</h3>
-  <mat-dialog-content style="height: calc(100% - 7em);">
+  <mat-dialog-content style="height: calc(100% - 7em)">
     <task-submission-history [task]="task" (hasNoData)="setNoDataFlag($event)" [refreshTrigger]="refreshTrigger">
     </task-submission-history>
   </mat-dialog-content>
   <div mat-dialog-actions style="float: right">
-    <button mat-button mat-raised-button color="primary" style="margin-right: 6px;" *ngIf="noDataFlag"
-      (click)="resfreshChildComponent()"><i class="fa fa-refresh"></i> Refresh
+    @if (noDataFlag) {
+    <button mat-button mat-raised-button color="primary" style="margin-right: 6px" (click)="resfreshChildComponent()">
+      <i class="fa fa-refresh"></i> Refresh
     </button>
+    }
     <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
   </div>
 </div>

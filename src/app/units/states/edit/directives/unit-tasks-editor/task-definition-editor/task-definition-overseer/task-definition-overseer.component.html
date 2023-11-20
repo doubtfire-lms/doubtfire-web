@@ -1,0 +1,40 @@
+<div class="flex flex-col gap-4">
+  <mat-checkbox matInput required [(ngModel)]="taskDefinition.assessmentEnabled" [disabled]="!overseerEnabled">
+    Automation Enabled
+  </mat-checkbox>
+
+  <mat-form-field class="flex-grow" appearance="outline">
+    <mat-label>Docker Image</mat-label>
+    <mat-select [(value)]="taskDefinition.overseerImageId" [disabled]="!overseerEnabled">
+      @for (image of images | async; track image) {
+  <mat-option [value]="image.id">{{ image.description }}</mat-option>
+}
+    </mat-select>
+    <mat-hint>Docker image for Overseer</mat-hint>
+  </mat-form-field>
+
+  <f-file-drop mode="event" (filesDropped)="uploadOverseerResources($event)" accept="application/pdf" [desiredFileName]="'Task ' + taskDefinition.abbreviation + ' Overseer zip'" />
+
+  <div class="flex flex-row gap-4">
+    <button
+      mat-button
+      mat-raised-button
+      color="primary"
+      [disabled]="!taskDefinition.id || !taskDefinition.hasTaskAssessmentResources"
+      (click)="testSubmission()"
+      style="width: 100%; line-height: 36px; padding: 0 16px"
+    >
+      <mat-icon>upload_file</mat-icon> Test Submission
+    </button>
+    <button
+      mat-button
+      mat-raised-button
+      color="accent"
+      [disabled]="!currentUserTask"
+      (click)="testSubmissionHistory()"
+      style="width: 100%; line-height: 36px; padding: 0 16px"
+    >
+      <mat-icon>preview</mat-icon> Test Submission History
+    </button>
+  </div>
+</div>

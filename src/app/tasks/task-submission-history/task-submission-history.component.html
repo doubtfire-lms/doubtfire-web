@@ -3,21 +3,25 @@
     <div class="submission-sidenav panel panel-primary">
       <div class="panel-heading panel-title submission-heading">Submissions</div>
       <mat-list class="list-group">
-        <mat-list-item class="list-group-item"
+        @for (tab of tabs; track tab) {
+  <mat-list-item class="list-group-item"
           [class.selected]="tab.timestampString === selectedTab.timestampString"
-          *ngFor="let tab of tabs"
+         
           (click)="openSubmission(tab)">
           <div style="-webkit-box-flex: 1; flex: 1;">{{tab.timestamp | date: 'dd/MM/yy, hh:mm a'}}</div>
            &nbsp; <status-icon [status]="tab.taskStatus" ></status-icon>
         </mat-list-item>
+}
       </mat-list>
     </div>
     <div class="submisson-result">
       <mat-tab-group dynamicHeight>
-        <mat-tab *ngFor="let selTab of selectedTab.content" label="{{selTab.label}}">
+        @for (selTab of selectedTab.content; track selTab) {
+  <mat-tab label="{{selTab.label}}">
           <pre class="terminal-output">{{selTab.result}} </pre>
           <button mat-button mat-flat-button [hidden]="selTab.label !== 'Error'" (click)="triggerOverseer(selectedTab)">Run Again</button>
         </mat-tab>
+}
       </mat-tab-group>
     </div>
   </div>

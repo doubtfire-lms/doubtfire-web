@@ -1,0 +1,53 @@
+<div class="p-4">
+  <div class="flex items-center">
+    <mat-icon class="mr-2">crisis_alert</mat-icon>
+    <h1 class="mat-headline m-0">Similarities</h1>
+    <span class="grow"></span>
+    <div class="example-action-buttons">
+      <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+    </div>
+  </div>
+
+  <mat-accordion multi>
+    @for (similarity of task?.similarityCache.values | async; track similarity) {
+  
+      <h1 class="mat-headline"></h1>
+      @for (part of similarity.parts; track part; let i = $index) {
+  <mat-expansion-panel
+       
+        hideToggle
+        (opened)="part.panelOpenState = true"
+        (closed)="part.panelOpenState = false"
+      >
+        <mat-expansion-panel-header [ngClass]="{ flagged: similarity.flagged }">
+          <mat-panel-title>
+            {{ similarity.friendlyTypeName }}
+          </mat-panel-title>
+          <mat-panel-description> {{ part.description }} </mat-panel-description>
+          @if (i === 0) {
+<button
+           
+            [matTooltip]="similarity.flagged ? 'Unflag similarity' : 'Flag similarity'"
+            mat-icon-button
+            aria-label="Flag similarities"
+            (click)="toggleFlag($event, similarity)"
+          >
+            <mat-icon [color]="similarity.flagged ? 'warn' : ''">{{
+              similarity.flagged ? 'flag_circle' : 'check_circle'
+            }}</mat-icon>
+          </button>
+}
+        </mat-expansion-panel-header>
+        @if (part.panelOpenState) {
+<f-file-viewer
+         
+          [fileType]="part.format"
+          [src]="similarity.fileUrl(part.idx)"
+        ></f-file-viewer>
+}
+      </mat-expansion-panel>
+}
+    
+}
+  </mat-accordion>
+</div>

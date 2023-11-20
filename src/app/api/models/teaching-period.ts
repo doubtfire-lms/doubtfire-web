@@ -1,7 +1,7 @@
 import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { Observable } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
-import { TeachingPeriodBreakService, TeachingPeriodService, Unit, UnitService, User } from './doubtfire-model';
+import { TeachingPeriodBreakService, TeachingPeriodService, Unit } from './doubtfire-model';
 
 export class TeachingPeriodBreak extends Entity {
   id: number;
@@ -33,7 +33,7 @@ export class TeachingPeriod extends Entity {
     };
   }
 
-  public name(): string {
+  public get name(): string {
     return `${this.period} ${this.year}`;
   }
 
@@ -70,6 +70,16 @@ export class TeachingPeriod extends Entity {
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
 
     return breakService.create({ teaching_period_id: this.id }, { cache: this.breaksCache, entity: breakEntity });
+  }
+
+  /**
+   * Removes a teaching period break.
+   * @param teachingBreakID the ID of the teaching period break to remove
+   * @returns an observable that emits the teaching period with the removed break, and indicates if any errors occured
+   */
+  public removeBreak(teachingBreakID: number): Observable<TeachingPeriodBreak> {
+    const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
+    return breakService.delete({ teaching_period_id: this.id, id: teachingBreakID }, { cache: this.breaksCache });
   }
 
   public rollover(newPeriod: TeachingPeriod, rolloverInactive: boolean, searchForward: boolean): Observable<boolean> {

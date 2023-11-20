@@ -1,0 +1,13 @@
+// import color
+.f-inner-border {
+  box-shadow: inset 0 0 1px rgba(0,0,0,0.8);
+  clip-path: inset(-1px -1px 0px 0px);
+}
+
+.dragover {
+  z-index: 50;
+  border-radius: 0.5rem;
+  outline-width: 1.5px;
+  outline-style: dashed;
+  outline-color: #3939ff;
+}

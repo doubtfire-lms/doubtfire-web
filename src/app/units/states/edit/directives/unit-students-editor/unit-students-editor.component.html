@@ -6,19 +6,13 @@
     </div>
     <div class="spacer"></div>
     <div class="filter">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Search</mat-label>
         <input matInput (keyup)="applyFilter($event)" />
       </mat-form-field>
     </div>
   </div>
-  <table
-    mat-table
-    [dataSource]="dataSource"
-    matSort
-    (matSortChange)="sortTableData($event)"
-    class="mat-elevation-z8"
-  >
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="f-table">
     <!-- Username Column -->
     <ng-container matColumnDef="username" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
@@ -54,7 +48,7 @@
     <!-- campus Column -->
     <ng-container matColumnDef="campus" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Campus</th>
-      <td mat-cell *matCellDef="let project">
+      <td mat-cell *matCellDef="let project" class="pt-4">
         <student-campus-select [unit]="unit" [student]="project" [update]="true"></student-campus-select>
       </td>
     </ng-container>
@@ -62,11 +56,8 @@
     <!-- Tutorial Column -->
     <ng-container matColumnDef="tutorial" sticky>
       <th mat-header-cell *matHeaderCellDef>Tutorial</th>
-      <td mat-cell *matCellDef="let project">
-        <student-tutorial-select
-          [unit]="unit"
-          [student]="project"
-        ></student-tutorial-select>
+      <td mat-cell *matCellDef="let project" class="pt-4">
+        <student-tutorial-select [unit]="unit" [student]="project"></student-tutorial-select>
       </td>
     </ng-container>
 
@@ -75,6 +66,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Enrolled</th>
       <td mat-cell *matCellDef="let project">
         <mat-checkbox
+          color="primary"
           [(ngModel)]="project.enrolled"
           (click)="project.updateUnitEnrolment()"
         ></mat-checkbox>
@@ -96,9 +88,7 @@
       <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length">
         <mat-toolbar>
           <mat-toolbar-row>
-            <button mat-button target="_blank" (click)="enrolStudent()">
-              <i class="fa fa-user"></i> Enrol
-            </button>
+            <button mat-button target="_blank" (click)="enrolStudent()"><i class="fa fa-user"></i> Enrol</button>
             <span class="spacer"></span>
             <button mat-button target="_blank" (click)="downloadEnrolments()">
               <i class="fa fa-download"></i> Download
@@ -110,10 +100,7 @@
               <i class="fa fa-upload"></i> Batch Withdraw
             </button>
             <span class="spacer"></span>
-            <mat-paginator
-              class="mat-elevation-z0"
-              [pageSizeOptions]="[5, 10, 25, 100]"
-            ></mat-paginator>
+            <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
           </mat-toolbar-row>
         </mat-toolbar>
       </td>

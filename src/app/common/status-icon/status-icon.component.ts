@@ -7,7 +7,7 @@ import { TaskStatus, TaskStatusEnum } from 'src/app/api/models/task-status';
   styleUrls: ['./status-icon.component.scss'],
 })
 export class StatusIconComponent implements OnInit {
-  @Input() status: TaskStatusEnum = "not_started";
+  @Input() status: TaskStatusEnum = 'not_started';
   @Input() showTooltip: boolean;
 
   statusIcon: (status: TaskStatusEnum) => string;

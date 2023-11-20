@@ -1,0 +1,82 @@
+<div class="table-padding">
+  <!-- Header -->
+  <div fxLayout="row" class="header-spacer">
+    <div fxLayout="column">
+      <h3>{{ externalName }} Users</h3>
+      <h3>Users Administration View</h3>
+    </div>
+    <span class="flex-grow"></span>
+    <mat-form-field appearance="outline">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="but for users" [(ngModel)]="filter" />
+    </mat-form-field>
+  </div>
+
+  <!-- Table -->
+  <table class="f-table selectable" mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+    <ng-container matColumnDef="avatar">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">
+        <user-icon fxFlexAlign="center" [user]="user" [size]="30"></user-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+      <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.firstName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+      <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.lastName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+      <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.username }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+      <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">
+        <a href="mailto: {{ user.email }}">{{ user.email }}</a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="systemRole">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>System Role</th>
+      <td mat-cell *matCellDef="let user" (click)="showUserModal(user)">{{ user.systemRole }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <!-- Footer -->
+  <span class="flex items-center">
+    <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 15, 20, 25]"></mat-paginator>
+    <span class="flex-grow"></span>
+    <button mat-raised-button color="primary" (click)="showUserModal({})">Add New User</button>
+  </span>
+
+  <mat-expansion-panel hideToggle class="mt-8">
+    <mat-expansion-panel-header>
+      <mat-panel-title> Bulk users operations </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="flex flex-row">
+      <div class="max-w-2xl">
+        <f-file-drop
+          mode="endpoint"
+          [endpoint]="uploadEndpoint"
+          (uploadSuccess)="onUserUploadSuccess($event)"
+          desiredFileName="users.csv"
+          multiple="false"
+          accept=".csv"
+        ></f-file-drop>
+      </div>
+      <div class="grow"></div>
+      <button mat-flat-button color="primary" (click)="downloadUsers()" aria-label="Download all users csv">
+        Download all users CSV <mat-icon>download</mat-icon>
+      </button>
+    </div>
+  </mat-expansion-panel>
+</div>

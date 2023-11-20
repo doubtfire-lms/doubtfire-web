@@ -7,9 +7,8 @@
   .form-field {
     margin: 5px;
   }
+}
 
-  /* checkbox */
-  ::ng-deep .mat-checkbox-label {
-    font-weight: normal;
-  }
+.subcontainer {
+  overflow-y: hidden;
 }

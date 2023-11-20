@@ -1,22 +1,21 @@
-<div
-  *ngIf="
-    (!task?.inFinalState() || (task?.inTimeExceeded() && !task?.isPastDeadline())) && !task?.inAwaitingFeedbackState()
-  "
->
+@if ( (!task?.inFinalState() || (task?.inTimeExceeded() && !task?.isPastDeadline())) && !task?.inAwaitingFeedbackState()
+) {
+<div>
   <!--Only show this if it matters... not in final or waiting for tutor input-->
-  <mat-card *ngIf="task?.isDueSoon() && !task?.pastDueDate()">
+  @if (task?.isDueSoon() && !task?.isPastDueDate()) {
+  <mat-card appearance="outlined">
     <!--Due soon-->
-
-    <mat-card-title>Aim To Complete Soon - Due in {{ task?.timeUntilDueDateDescription() }}</mat-card-title>
-
-    <mat-card-subtitle [hidden]="task?.inDiscussState()">
+    <mat-card-header>
+      <mat-card-title>Aim To Complete Soon - Due in {{ task?.timeUntilDueDateDescription() }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
       <!--Due and not in discuss-->
-      <p>
+      <p [hidden]="task?.inDiscussState()">
         This task's due date is <strong>{{ task?.localDueDateString() }}</strong
         >. You should aim to complete this task before then to keep your progress on track.
       </p>
-    </mat-card-subtitle>
-    <mat-card-subtitle [hidden]="!task?.inDiscussState()">
+    </mat-card-content>
+    <mat-card-content [hidden]="!task?.inDiscussState()">
       <!--Due but in discuss-->
       <p>
         This task's due date is <strong>{{ task?.localDueDateString() }}</strong
@@ -26,21 +25,29 @@
         Tasks are only considered <strong>Completed</strong> once your tutor has <strong>Discussed</strong> your work
         with you.
       </p>
-    </mat-card-subtitle>
+    </mat-card-content>
   </mat-card>
-  <!--/is due soon-->
-  <mat-card *ngIf="task?.betweenDueDateAndDeadlineDate()">
-    <mat-card-title>Past Due Date By {{ task?.timePastDueDateDescription() }}</mat-card-title>
+  }
 
-    <mat-card-subtitle [hidden]="task?.inDiscussState()">
+  <!--/is due soon-->
+  @if (task?.betweenDueDateAndDeadlineDate()) {
+  <mat-card appearance="outlined">
+    <mat-card-header class="bg-yellow-600 text-white">
+      <mat-card-title class="flex items-center mb-4"
+        ><mat-icon>warning</mat-icon>
+        <span class="ml-4">Past Due Date By {{ task?.timePastDueDateDescription() }}</span></mat-card-title
+      >
+    </mat-card-header>
+
+    <mat-card-content class="bg-yellow-50" [hidden]="task?.inDiscussState()">
       <!--Not in submitted state and overdue-->
-      <p>
+      <p class="mt-2">
         You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
         >. Try and finish it as soon as possible to avoid falling behind. You will need to request an extension in order
         to have this task checked and marked as complete by your tutor.
       </p>
-    </mat-card-subtitle>
-    <mat-card-subtitle [hidden]="!task?.inDiscussState()">
+    </mat-card-content>
+    <mat-card-content [hidden]="!task?.inDiscussState()">
       <!--Not discussed-->
       <p>
         You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
@@ -51,22 +58,29 @@
         Tasks are only considered <strong>completed</strong> once your tutor has <strong>discussed</strong> your work
         with you.
       </p>
-    </mat-card-subtitle>
+    </mat-card-content>
   </mat-card>
+  }
 
   <!--/between due date and deadline-->
-  <mat-card *ngIf="task?.isPastDeadline()">
-    <mat-card-title>Passed Due Date By {{ task?.timePastDueDateDescription() }}</mat-card-title>
-    <mat-card-subtitle [hidden]="task?.inDiscussState()">
+  @if (task?.isPastDeadline()) {
+  <mat-card appearance="outlined">
+    <mat-card-header class="bg-red-600 text-white">
+      <mat-card-title class="flex items-center mb-4"
+        ><mat-icon>error</mat-icon>
+        <span class="ml-4">Passed Due Date By {{ task?.timePastDueDateDescription() }}</span></mat-card-title
+      >
+    </mat-card-header>
+    <mat-card-content class="bg-red-50" [hidden]="task?.inDiscussState()">
       <!--Past deadline and not submitted-->
-      <p>
+      <p class="p-2">
         You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
         >. This task is now past the deadline and will be marked as <em>Time Exceeded</em> when submitted. You should
         consult with the unit assessment details to determine the impact of failing to complete this task within the
         allocated time.
       </p>
-    </mat-card-subtitle>
-    <mat-card-subtitle [hidden]="!task?.inDiscussState()">
+    </mat-card-content>
+    <mat-card-content [hidden]="!task?.inDiscussState()">
       <!--Past deadline but in discuss or awaiting feedback-->
       <p>
         You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
@@ -76,19 +90,23 @@
         Tasks are only considered <strong>Completed</strong> once it demonstrates the required standard, and it is
         <strong>discussed</strong> with your tutor.
       </p>
-    </mat-card-subtitle>
+    </mat-card-content>
   </mat-card>
+  }
 </div>
+}
 <!--/past deadline-->
 
-<mat-card [hidden]="!task?.inAwaitingFeedbackState()">
-  <mat-card-title>Wait for Tutor Feedback</mat-card-title>
-  <mat-card-subtitle>
+<mat-card appearance="outlined" [hidden]="!task?.inAwaitingFeedbackState()">
+  <mat-card-header>
+    <mat-card-title>Wait for Tutor Feedback</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
     <p>
       You have submitted this task and should now wait for feedback from your tutor.
       <span [hidden]="!task?.isPastDeadline()"
         >Do not re-upload new files at this time as the status will be changed to <strong>Time Exceeded</strong>.</span
       >
     </p>
-  </mat-card-subtitle>
+  </mat-card-content>
 </mat-card>

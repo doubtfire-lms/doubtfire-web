@@ -1,49 +1,63 @@
-<h1 mat-dialog-title>Import Units Into {{ data.teachingPeriod.name() }}</h1>
+<h1 mat-dialog-title>Import Units Into {{ data.teachingPeriod.name }}</h1>
 <div mat-dialog-content>
   <table mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="unitCode">
-      <th mat-header-cell *matHeaderCellDef> Unit Code </th>
+      <th mat-header-cell *matHeaderCellDef>Unit Code</th>
       <td mat-cell *matCellDef="let unitToImport">
         <mat-form-field appearance="outline">
-          <input matInput [(ngModel)]="unitToImport.unitCode" (input)="codeChange($event.target.value, unitToImport)">
+          <input matInput [(ngModel)]="unitToImport.unitCode" (input)="codeChange($event.target.value, unitToImport)" />
         </mat-form-field>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="sourceUnit">
-      <th mat-header-cell *matHeaderCellDef> Source Unit </th>
+      <th mat-header-cell *matHeaderCellDef>Source Unit</th>
       <td mat-cell *matCellDef="let unitToImport">
-        <object-select placeholder="New Unit" [source]="unitToImport.relatedUnits" [target]="unitToImport.sourceUnit" (targetChange)="changeSourceUnit(unitToImport, $event)"></object-select>
+        <object-select
+          placeholder="New Unit"
+          [source]="unitToImport.relatedUnits"
+          [target]="unitToImport.sourceUnit"
+          (targetChange)="changeSourceUnit(unitToImport, $event)"
+        ></object-select>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="unitName">
-      <th mat-header-cell *matHeaderCellDef> Unit Name </th>
+      <th mat-header-cell *matHeaderCellDef>Unit Name</th>
       <td mat-cell *matCellDef="let unitToImport">
-        <span *ngIf="unitToImport.sourceUnit">{{ unitToImport.sourceUnit.name }}</span>
-        <mat-form-field appearance="outline" *ngIf="!unitToImport.sourceUnit">
+        @if (unitToImport.sourceUnit) {
+        <span>{{ unitToImport.sourceUnit.name }}</span>
+        } @if (!unitToImport.sourceUnit) {
+        <mat-form-field appearance="outline">
           <mat-label>Unit Name</mat-label>
-          <input matInput [(ngModel)]="unitToImport.unitName">
+          <input matInput [(ngModel)]="unitToImport.unitName" />
         </mat-form-field>
+        }
       </td>
     </ng-container>
 
     <ng-container matColumnDef="convenor">
-      <th mat-header-cell *matHeaderCellDef> Main Convenor </th>
+      <th mat-header-cell *matHeaderCellDef>Main Convenor</th>
       <td mat-cell *matCellDef="let unitToImport">
         <mat-form-field appearance="outline">
-          <input type="text" matInput [formControl]="unitToImport.convenorFormControl" [matAutocomplete]="auto" [(ngModel)]="unitToImport.convenor">
+          <input
+            type="text"
+            matInput
+            [formControl]="unitToImport.convenorFormControl"
+            [matAutocomplete]="auto"
+            [(ngModel)]="unitToImport.convenor"
+          />
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-            <mat-option *ngFor="let staff of unitToImport.filteredStaff | async" [value]="staff">
-              {{staff.name}}
-            </mat-option>
+            @for (staff of unitToImport.filteredStaff | async; track staff) {
+            <mat-option [value]="staff"> {{staff.name}} </mat-option>
+            }
           </mat-autocomplete>
         </mat-form-field>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <th mat-header-cell *matHeaderCellDef>Status</th>
       <td mat-cell *matCellDef="let unitToImport">
         <span>{{ statusForUnit(unitToImport) }}</span>
       </td>
@@ -64,7 +78,7 @@
   <div class="flex flex-row">
     <mat-form-field appearance="outline">
       <mat-label>Unit Code(s)</mat-label>
-      <input matInput [(ngModel)]="codesToAdd">
+      <input matInput [(ngModel)]="codesToAdd" />
     </mat-form-field>
     <button mat-button color="secondary" (click)="addUnitsByCode()">Add</button>
     <span class="flex-grow"></span>

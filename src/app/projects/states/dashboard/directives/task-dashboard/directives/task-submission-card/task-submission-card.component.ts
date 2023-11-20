@@ -2,7 +2,7 @@ import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@ang
 import { alertService, uploadSubmissionModal } from 'src/app/ajs-upgraded-providers';
 import { Task } from 'src/app/api/models/task';
 import { TaskService } from 'src/app/api/services/task.service';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 
 @Component({
   selector: 'f-task-submission-card',

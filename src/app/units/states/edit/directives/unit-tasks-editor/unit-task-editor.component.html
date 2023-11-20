@@ -1,0 +1,132 @@
+<div class="flex flex-row gap-8">
+  <div class="flex-grow flex flex-col gap-8 gap-y-0">
+    <div class="flex flex-row">
+      <div>
+        <h3>Task List</h3>
+        <p>Plan the list of tasks for students to complete.</p>
+      </div>
+      <span class="flex-grow"></span>
+      <div>
+        <mat-form-field appearance="outline">
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" [(ngModel)]="filter" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <table
+      class="flex-grow f-table selectable"
+      mat-table
+      [dataSource]="taskDefinitionSource"
+      matSort
+      (matSortChange)="sortData($event)"
+    >
+      <ng-container matColumnDef="name" sticky>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Task Name</th>
+        <td mat-cell *matCellDef="let taskDefinition" (click)="selectTaskDefinition(taskDefinition)">
+          {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="grade" sticky>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Grade</th>
+        <td mat-cell *matCellDef="let taskDefinition" (click)="selectTaskDefinition(taskDefinition)">
+          {{ taskDefinition.targetGradeText }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="startDate" sticky>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
+        <td mat-cell *matCellDef="let taskDefinition" (click)="selectTaskDefinition(taskDefinition)">
+          {{ taskDefinition.startDate | date: 'd LLL y' }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="targetDate" sticky>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</th>
+        <td mat-cell *matCellDef="let taskDefinition" (click)="selectTaskDefinition(taskDefinition)">
+          {{ taskDefinition.targetDate | date: 'd LLL y' }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="deadlineDate" sticky>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Deadline</th>
+        <td mat-cell *matCellDef="let taskDefinition" (click)="selectTaskDefinition(taskDefinition)">
+          {{ taskDefinition.dueDate | date: 'd LLL y' }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="taskDefAction" sticky>
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let taskDefinition">
+          @if (taskDefinitionHasChanges(taskDefinition)) {
+<button
+            mat-icon-button
+            aria-label="save task definition"
+            color="primary"
+            (click)="saveTaskDefinition(taskDefinition)"
+           
+          >
+            <mat-icon>save</mat-icon>
+          </button>
+}
+          <button
+            mat-icon-button
+            aria-label="delete task definition"
+            color="warn"
+            (click)="deleteTaskDefinition(taskDefinition)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Action footer row -->
+      <ng-container matColumnDef="actions">
+        <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length"></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: columns"
+        [style.background]="selectedTaskDefinition === row ? 'lightblue' : ''"
+      ></tr>
+    </table>
+    <span class="flex items-center">
+      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      <span class="flex-grow"></span>
+      <label>Definitions CSV</label>
+      <button mat-icon-button (click)="unit.downloadTaskDefinitionsCsv()"><mat-icon>download</mat-icon></button>
+      <button mat-icon-button (click)="uploadTaskDefinitionsCsv()"><mat-icon>upload_file</mat-icon></button>
+      <span class="flex-grow"></span>
+      <label>Resources as Zip</label>
+      <button mat-icon-button (click)="unit.downloadAllTaskResourcesZip()"><mat-icon>download</mat-icon></button>
+      <button mat-icon-button (click)="uploadTaskResourcesZip()"><mat-icon>upload_file</mat-icon></button>
+      <span class="flex-grow"></span>
+      <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
+    </span>
+    @if (selectedTaskDefinition) {
+<f-task-definition-editor
+     
+      [taskDefinition]="selectedTaskDefinition"
+      [unit]="unit"
+    ></f-task-definition-editor>
+}
+  </div>
+  <!-- <div class="flex flex-col gap-4">
+    <h3>Batch Upload Tasks</h3>
+    <p>Batch upload task definitions with a CSV. Download to get format.</p>
+
+    <f-file-drop
+      mode="endpoint"
+      [endpoint]="unit.getTaskDefinitionBatchUploadUrl()"
+      desiredFileName="Task Definition csv"
+      accept="text/csv"
+      (uploadSuccess)="onSuccessTaskDefinitionBatchUpload($event)"
+    />
+
+    <h3>Download Tasks</h3>
+    <p>Download all task definitions for this unit.</p>
+
+
+
+    <h3>Batch Upload Task PDFs</h3>
+    <p>Upload all of the task PDFs in a Zip file.</p>
+    <f-file-drop [endpoint]="unit.taskUploadUrl" accept="application/zip" desiredFileName="Task PDFs in zip" (uploadSuccess)="onSuccessTaskZipUpload($event)" />
+  </div> -->
+</div>

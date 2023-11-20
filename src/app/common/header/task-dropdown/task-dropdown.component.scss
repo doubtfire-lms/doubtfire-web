@@ -1,7 +1,6 @@
 .mat-icon {
   color: black;
-  margin-right: 0;
-  transform: scale(0.8);
+  overflow: initial;
 }
 
 .task-dropdown-heading {
@@ -11,4 +10,8 @@
   padding-left: 16px;
   padding-top: 6px;
   margin-bottom: 0;
+}
+
+.mat-icon.f-breadcrumb {
+  color: rgb(221, 221, 221);
 }

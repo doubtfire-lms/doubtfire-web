@@ -1,3 +1,5 @@
+@import '../../../../theme.scss';
+
 #home {
   padding-top: 10px;
 
@@ -13,8 +15,8 @@
     align-items: center;
     justify-content: center;
 
-    ::ng-deep .mat-progress-spinner circle,
-    .mat-spinner circle {
+    ::ng-deep .mat-mdc-progress-spinner circle,
+    .mat-mdc-progress-spinner circle {
       stroke: gray;
     }
   }
@@ -24,8 +26,7 @@
   text-decoration: none;
 }
 
-.mat-card-header {
-  
+.mat-mdc-card-header {
 }
 
 .base-card {
@@ -39,21 +40,22 @@
   -webkit-mask-image: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
   mask-image: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
 
-  .mat-progress-bar {
-    height: 20px;
-  }
-
-  h4 {
-    max-height: 20px;
+  .f-card-title {
+    font-size: 18px;
+    max-height: 30px;
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 100%;
     overflow: hidden;
+    font-weight: 100;
   }
 
-  ::ng-deep .mat-button-wrapper {
-    display: flex !important;
-    justify-content: center !important;
+  mat-chip-option.f-chip {
+    background-color: $primary-color;
+    color: white;
+    opacity: 1;
+    border-style: none;
+    --mdc-chip-disabled-label-text-color: white;
   }
 }
 
@@ -62,15 +64,23 @@
   width: 250px;
   max-width: none;
   height: auto;
+
+  .mat-mdc-list-item-icon {
+    color: rgb(0, 0, 0);
+    margin-right: 6px;
+  }
 }
 
 .unit-card {
+  :hover {
+    cursor: pointer;
+  }
   @extend .base-card;
   width: 300px;
   max-width: 300px;
   max-height: 200px;
 
-  mat-card-actions {
+  .mat-mdc-card-actions {
     margin-bottom: 0px;
   }
 }

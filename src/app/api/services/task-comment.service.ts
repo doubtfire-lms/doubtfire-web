@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import { EmojiService } from 'src/app/common/services/emoji.service';
 import { MappingFunctions } from './mapping-fn';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 
 @Injectable()
 export class TaskCommentService extends CachedEntityService<TaskComment> {

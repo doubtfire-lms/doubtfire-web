@@ -1,47 +1,67 @@
 <div class="activity-type-list-container">
   <div class="header">
-    <div>
-      <h3>Activities</h3>
+    <div class="mt-10">
+      <h1 class="mb-1">Activities</h1>
       <p>Add new activities or modify existing ones</p>
     </div>
   </div>
-  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="mat-elevation-z3">
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="f-table">
     <!-- Name Column -->
     <ng-container [formGroup]="formData" matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
       <td mat-cell *matCellDef="let activityType">
-        <div *ngIf="!editing(activityType); else edit">
+        @if (!editing(activityType)) {
+        <div>
           {{ activityType.name }}
         </div>
+        } @else {
+
+        <div class="edit-actions right">
+          <span>
+            <button mat-icon-button color="warn" (click)="cancelEdit()" aria-label="cancel edit">
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="submit()" aria-label="submit changes">
+              <mat-icon>save</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteActivity(activityType)" aria-label="delete activity type">
+              <mat-icon color="primary">delete</mat-icon>
+            </button>
+          </span>
+        </div>
+
+        }
         <ng-template #edit>
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
             <input matInput required formControlName="name" placeholder="Name" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
-          <input matInput required formControlName="name" placeholder="Name">
+        <mat-form-field appearance="outline" class="data-entry">
+          <input matInput required formControlName="name" placeholder="Name" />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Abbreviation Column -->
     <ng-container [formGroup]="formData" matColumnDef="abbreviation">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Abbreviation </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Abbreviation</th>
       <td mat-cell *matCellDef="let activityType">
-        <div *ngIf="!editing(activityType) else edit">
-          {{activityType.abbreviation}}
+        @if (!editing(activityType)) {
+        <div>
+          {{ activityType.abbreviation }}
         </div>
+        } @else { #edit| }
         <ng-template #edit>
-          <mat-form-field class="data-entry">
-            <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
+          <mat-form-field appearance="outline" class="data-entry">
+            <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
           </mat-form-field>
         </ng-template>
       </td>
       <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field class="data-entry">
-          <input matInput required formControlName="abbreviation" placeholder="Abbreviation">
+        <mat-form-field appearance="outline" class="data-entry">
+          <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
         </mat-form-field>
       </td>
     </ng-container>
@@ -50,11 +70,13 @@
     <ng-container matColumnDef="options" stickyEnd>
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let activityType">
-        <div class="right" *ngIf="!editing(activityType) else edit">
+        @if (!editing(activityType)) {
+        <div class="right">
           <button mat-icon-button (click)="flagEdit(activityType)" aria-label="edit activity type">
             <mat-icon>edit</mat-icon>
           </button>
         </div>
+        } @else { #edit| }
         <ng-template #edit>
           <div class="edit-actions right">
             <span>
@@ -81,7 +103,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
     <tr [hidden]="selected" mat-footer-row *matFooterRowDef="columns"></tr>
   </table>
 </div>
