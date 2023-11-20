@@ -20,7 +20,8 @@
     align-items: center;
     justify-content: space-between;
     .flag-sort {
-      i, grade-icon {
+      i,
+      grade-icon {
         display: inline-block;
       }
     }
@@ -54,12 +55,26 @@
         height: 2.5em;
       }
     }
-    th.avatar     { width: 05%; }
-    th.username   { width: 10%; }
-    th.name       { width: 10%; }
-    th.stats      { width: 30%; }
-    th.flags      { width: 10%; }
-    th.tutorial   { width: 15%; }
-    th.campus     { width: 10%; }
+    th.avatar {
+      width: 05%;
+    }
+    th.username {
+      width: 10%;
+    }
+    th.name {
+      width: 10%;
+    }
+    th.stats {
+      width: 30%;
+    }
+    th.flags {
+      width: 10%;
+    }
+    th.tutorial {
+      width: 15%;
+    }
+    th.campus {
+      width: 10%;
+    }
   }
 }

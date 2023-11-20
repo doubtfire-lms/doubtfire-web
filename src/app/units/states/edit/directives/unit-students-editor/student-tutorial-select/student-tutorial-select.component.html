@@ -1,35 +1,26 @@
 <mat-form-field floatLabel="never" class="data-entry" appearance="outline">
-  <mat-label>Tutorial</mat-label>
   <mat-select multiple [compareWith]="compareSelection" [value]="student.tutorials">
     @if (tutorialsForStreamAndStudent(student).length > 0) {
-<mat-optgroup label="No stream">
-      @for (tutorial of tutorialsForStreamAndStudent(student); track tutorial) {
-  <mat-option
-       
-        [value]="tutorial"
-        (click)="student.switchToTutorial(tutorial)"
-      >
-        {{ tutorial.abbreviation }}
-      </mat-option>
-}
-    </mat-optgroup>
-}
-    @for (stream of unit.tutorialStreams; track stream) {
-  <div>
-      @if (tutorialsForStreamAndStudent(student, stream).length > 0) {
-<mat-optgroup [label]="stream.name">
-        @for (tutorial of tutorialsForStreamAndStudent(student, stream); track tutorial) {
-  <mat-option
-         
-          [value]="tutorial"
-          (click)="student.switchToTutorial(tutorial)"
-        >
-          {{ tutorial.abbreviation }}
-        </mat-option>
-}
+      <mat-optgroup label="No stream">
+        @for (tutorial of tutorialsForStreamAndStudent(student); track tutorial) {
+          <mat-option [value]="tutorial" (click)="student.switchToTutorial(tutorial)">
+            {{ tutorial.abbreviation }}
+          </mat-option>
+        }
       </mat-optgroup>
-}
-    </div>
-}
+    }
+    @for (stream of unit.tutorialStreams; track stream) {
+      <div>
+        @if (tutorialsForStreamAndStudent(student, stream).length > 0) {
+          <mat-optgroup [label]="stream.name">
+            @for (tutorial of tutorialsForStreamAndStudent(student, stream); track tutorial) {
+              <mat-option [value]="tutorial" (click)="student.switchToTutorial(tutorial)">
+                {{ tutorial.abbreviation }}
+              </mat-option>
+            }
+          </mat-optgroup>
+        }
+      </div>
+    }
   </mat-select>
 </mat-form-field>
