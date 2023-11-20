@@ -1,7 +1,7 @@
-<mat-toolbar class="footer" style="min-height: 85px" fxLayout="row" fxLayoutAlign="center center">
-  <f-user-badge fxFlex fxFlexAlign="start start" [selectedTask]="selectedTask"></f-user-badge>
+<mat-toolbar class="footer flex flex-row justify-center items-center" style="min-height: 85px">
+  <f-user-badge class="self-start" fxFlex [selectedTask]="selectedTask"></f-user-badge>
 
-  <span fxFlex fxFlexAlign="center center" class="center-buttons" fxLayoutAlign="center center">
+  <span class="center-buttons flex justify-center items-center self-center" fxFlex>
     <button
       [disabled]="selectedTask === undefined"
       mat-icon-button
@@ -48,7 +48,7 @@
     </button>
   </span>
 
-  <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
+  <div class="flex flex-row self-end" fxFlex fxLayoutAlign="end center">
     <button
       [disabled]="selectedTask === undefined"
       mat-icon-button
