@@ -8,9 +8,6 @@ module.exports = {
         'formatif-blue': '#3939ff',
         'formatif-blue-lighter': '#e7e7ff',
       },
-      height: {
-        '1/10': '10%',
-      },
     },
   },
   plugins: [],
