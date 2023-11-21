@@ -135,7 +135,7 @@
     "grunt-html2js": "^0.6.0",
     "grunt-karma": "~2.0.0",
     "grunt-newer": "^1.1.2",
-    "grunt-ng-annotate": "^3.0.0",
+    "grunt-ng-annotate": "^4.0.0",
     "grunt-postcss": "~0.8",
     "grunt-preprocess": "5.1.0",
     "grunt-sass": "^3.0.2",
