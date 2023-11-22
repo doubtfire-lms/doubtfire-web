@@ -19,7 +19,7 @@
   }
 
   <div class="flex w-full">
-    <f-user-badge fxFlex fxFlexAlign="start start" [selectedTask]="selectedTask"></f-user-badge>
+    <f-user-badge class="flex-1 self-start" [selectedTask]="selectedTask"></f-user-badge>
 
     <span class="center-buttons flex justify-center">
       <button
@@ -69,7 +69,7 @@
       </button>
     </span>
 
-    <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
+    <div class="flex flex-1 flex-row self-end justify-end items-center">
       @if (selectedTask?.similaritiesDetected) {
       <button
         #similaritiesButton
