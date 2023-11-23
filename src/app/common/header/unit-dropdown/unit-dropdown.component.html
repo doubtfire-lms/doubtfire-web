@@ -69,11 +69,13 @@
         class="flex items-center mb-2"
         mat-menu-item
       >
-        <div class="unitName">{{ project.unit.name }}</div>
-        <span fxFlex style="flex-grow: 1"></span>
-        <f-chip>
-          {{ project.unit.code }}
-        </f-chip>
+        <span class="flex flex-row border-box">
+          <div class="unitName">{{ project.unit.name }}</div>
+          <span class="flex-1 border-box"></span>
+          <f-chip>
+            {{ project.unit.code }}
+          </f-chip>
+        </span>
       </button>
     }
   }
