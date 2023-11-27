@@ -6,6 +6,7 @@ import { SignInComponent } from './sessions/states/sign-in/sign-in.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { TeachingPeriodListComponent } from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
+import { FUsersComponent } from './admin/states/f-users/f-users.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -25,6 +26,21 @@ const institutionSettingsState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Institution Settings',
+    roleWhiteList: ['Admin'],
+  },
+};
+
+const usersState: NgHybridStateDeclaration = {
+  name: 'admin/users', // This is the name of the state to jump to - so ui-sref="users" to jump here
+  url: '/admin/users', // You get here with this url
+  views: {
+    main: {
+      // Main body links to angular component
+      component: FUsersComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Administer users',
     roleWhiteList: ['Admin'],
   },
 };
@@ -225,4 +241,5 @@ export const doubtfireStates = [
   SignInState,
   EditProfileState,
   EulaState,
+  usersState,
 ];

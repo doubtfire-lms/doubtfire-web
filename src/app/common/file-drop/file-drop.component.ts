@@ -2,7 +2,6 @@ import { HttpClient, HttpErrorResponse, HttpEventType, HttpResponse } from '@ang
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Subscription, throwError } from 'rxjs';
 import { AlertService } from '../services/alert.service';
-import { TeachingPeriodService } from 'src/app/api/services/teaching-period.service';
 
 /**
  * Allow files to be dropped for upload
@@ -28,7 +27,7 @@ export class FileDropComponent {
   @Input() endpoint: string;
   @Input() body: object;
   @Output() fileChange = new EventEmitter<File>();
-  @Output() uploadSuccess = new EventEmitter<HttpResponse<Object>>();
+  @Output() uploadSuccess = new EventEmitter<HttpResponse<object>>();
 
   protected uploadProgress: number;
   protected uploadSub: Subscription;
