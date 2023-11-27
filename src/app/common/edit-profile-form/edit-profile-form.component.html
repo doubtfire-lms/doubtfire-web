@@ -1,8 +1,8 @@
-<form #form="ngForm" (ngSubmit)="submit()" fxLayout="column" fxLayoutAlign="center start" class="p-16">
-  <div class="main-container" style="width: 100%" fxLayout="row" fxLayoutAlign="center start">
-    <div class="main" style="width: 100%" fxLayout="column" fxLayoutAlign="start start">
+<form #form="ngForm" (ngSubmit)="submit()" class="p-16 flex flex-col justify-start items-center">
+  <div class="main-container flex flex-row justify-start items-center" style="width: 100%;">
+    <div class="main flex flex-col items-start place-content-start" style="width: 100%">
       <!-- avatar -->
-      <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-bottom: 25px">
+      <div class="flex flex-row place-content-center place-content-between items-center" style="margin-bottom: 25px">
         <a style="margin-left: 20px" href="https://gravatar.com/connect/?source=_signup/" target="_blank">
           <user-icon [size]="80" [user]="user" style="margin-right: 25px"></user-icon
         ></a>
