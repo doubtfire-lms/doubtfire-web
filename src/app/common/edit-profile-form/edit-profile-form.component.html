@@ -7,27 +7,27 @@
           <user-icon [size]="80" [user]="user" style="margin-right: 25px"></user-icon
         ></a>
 
-        <div fxLayout="column" fxLayoutAlign="space-around start">
+        <div class="flex flex-col place-content-start place-content-around items-start">
           <h1>{{ initialFirstName }}</h1>
           Set up your {{ externalName.value }} profile
         </div>
       </div>
 
-      <div fxLayout="row" fxFlexFill>
-        <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="start">
+      <div class="flex flex-row w-full h-full">
+        <mat-form-field class="grow shrink basis-full self-start" style="max-width: 48%" appearance="outline">
           <mat-label>First Name</mat-label>
           <input matInput class="outline-none" [(ngModel)]="user.firstName" name="first" required />
         </mat-form-field>
 
-        <div fxFlex></div>
+        <div class="flex-1"></div>
 
-        <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="end">
+          <mat-form-field class="grow shrink basis-full self-end" style="max-width: 48%" appearance="outline">
           <mat-label>Second Name</mat-label>
           <input matInput [(ngModel)]="user.lastName" name="last" required />
         </mat-form-field>
       </div>
 
-      <div fxLayout="row" fxFlexFill>
+      <div class="flex flex-row w-full h-full">
         <!-- <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
           <mat-label>Pronouns</mat-label>
           <mat-select [(ngModel)]="formPronouns.pronouns" name="pronouns">
@@ -37,9 +37,10 @@
             <mat-option value="They/Them">They/Them</mat-option>
             <mat-option value="__customPronouns">Custom</mat-option>
           </mat-select>
-        </mat-form-field>
-        <div fxFlex="3"></div> -->
-        <mat-form-field fxFlexFill appearance="outline">
+        </mat-form-field> -->
+        <div class="grow shrink basis-full" style="max-width: 3%"></div>
+        <mat-form-field class="w-full min-w-full h-full" appearance="outline">
+        <!-- <mat-form-field fxFlexFill appearance="outline"> -->
           <mat-label>Preferred Name</mat-label>
           <input matInput [(ngModel)]="user.nickname" name="preferred_name" />
         </mat-form-field>
