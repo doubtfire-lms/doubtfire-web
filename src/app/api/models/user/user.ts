@@ -3,6 +3,7 @@ import { Entity, EntityMapping } from 'ngx-entity-service';
 import { Observable, map } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { AuthenticationService } from '../doubtfire-model';
 
 export type Tutor = User;
 
@@ -59,6 +60,10 @@ export class User extends Entity {
   public acceptTiiEula(): Observable<boolean> {
     const httpClient = AppInjector.get(HttpClient);
     const uri = `${AppInjector.get(DoubtfireConstants).API_URL}/tii_eula/users/${this.id}/accept`;
-    return httpClient.put(uri, {}).pipe(map(() => (this.acceptedTiiEula = true)));
+    return httpClient.put(uri, {}).pipe(map(() => {
+      this.acceptedTiiEula = true;
+      AppInjector.get(AuthenticationService).saveCurrentUser();
+      return true;
+    }));
   }
 }
