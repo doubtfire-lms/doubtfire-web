@@ -76,7 +76,6 @@ export class TransitionHooksService {
       if ( this.tiiEnabled &&
         !this.userService.isAnonymousUser() &&
         userService.currentUser.hasRunFirstTimeSetup &&
-        userService.currentUser.isStaff &&
         !userService.currentUser.acceptedTiiEula &&
         toState !== 'eula'
       ) {
