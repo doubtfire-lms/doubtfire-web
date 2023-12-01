@@ -1,27 +1,39 @@
 <form #form="ngForm" (ngSubmit)="submit()" class="p-16 flex flex-col justify-start items-center">
-  <div class="main-container flex flex-row justify-start items-center" style="width: 100%;">
+  <div class="main-container flex flex-row justify-start items-center" style="width: 100%">
     <div class="main flex flex-col items-start place-content-start" style="width: 100%">
       <!-- avatar -->
       <div class="flex flex-row place-content-between items-center" style="margin-bottom: 25px">
-        <a style="margin-left: 20px" href="https://gravatar.com/connect/?source=_signup/" target="_blank">
+        <a
+          style="margin-left: 20px"
+          href="https://gravatar.com/connect/?source=_signup/"
+          target="_blank"
+        >
           <user-icon [size]="80" [user]="user" style="margin-right: 25px"></user-icon
         ></a>
 
-        <div class="flex flex-col place-content-start place-content-around items-start">
+        <div class="flex flex-col place-content-around items-start">
           <h1>{{ initialFirstName }}</h1>
           Set up your {{ externalName.value }} profile
         </div>
       </div>
 
       <div class="flex flex-row w-full min-w-full h-full min-h-full">
-        <mat-form-field class="grow shrink basis-full self-start" style="max-width: 48%" appearance="outline">
+        <mat-form-field
+          class="grow shrink basis-full self-start"
+          style="max-width: 48%"
+          appearance="outline"
+        >
           <mat-label>First Name</mat-label>
           <input matInput class="outline-none" [(ngModel)]="user.firstName" name="first" required />
         </mat-form-field>
 
         <div class="flex-1"></div>
 
-          <mat-form-field class="grow shrink basis-full self-end" style="max-width: 48%" appearance="outline">
+        <mat-form-field
+          class="grow shrink basis-full self-end"
+          style="max-width: 48%"
+          appearance="outline"
+        >
           <mat-label>Second Name</mat-label>
           <input matInput [(ngModel)]="user.lastName" name="last" required />
         </mat-form-field>
@@ -58,10 +70,10 @@
       </mat-form-field>
 
       @if (user.systemRole === 'Student') {
-      <mat-form-field class="w-full h-full" appearance="outline">
-        <mat-label>Student ID</mat-label>
-        <input matInput [(ngModel)]="user.studentId" name="student_id" required />
-      </mat-form-field>
+        <mat-form-field class="w-full h-full" appearance="outline">
+          <mat-label>Student ID</mat-label>
+          <input matInput [(ngModel)]="user.studentId" name="student_id" required />
+        </mat-form-field>
       }
 
       <mat-form-field class="w-full h-full" appearance="outline">
@@ -71,55 +83,82 @@
 
       @if (canSeeSystemRole) {
         <mat-form-field class="w-full h-full" appearance="outline">
-        <mat-label>System Role</mat-label>
-        <mat-select [(ngModel)]="user.systemRole" name="systemRole" [disabled]="!canEditSystemRole">
-          <mat-option value="Admin">Administrator</mat-option>
-          <mat-option value="Convenor">Convenor</mat-option>
-          <mat-option value="Tutor">Tutor</mat-option>
-          <mat-option value="Student">Student</mat-option>
-        </mat-select>
-      </mat-form-field>
+          <mat-label>System Role</mat-label>
+          <mat-select
+            [(ngModel)]="user.systemRole"
+            name="systemRole"
+            [disabled]="!canEditSystemRole"
+          >
+            <mat-option value="Admin">Administrator</mat-option>
+            <mat-option value="Convenor">Convenor</mat-option>
+            <mat-option value="Tutor">Tutor</mat-option>
+            <mat-option value="Student">Student</mat-option>
+          </mat-select>
+        </mat-form-field>
       }
 
       <section class="flex flex-col w-full h-full items-start place-content-center">
-        <mat-checkbox class="" color="primary" [(ngModel)]="user.receiveFeedbackNotifications" name="feedback_n"
+        <mat-checkbox
+          color="primary"
+          [(ngModel)]="user.receiveFeedbackNotifications"
+          name="feedback_n"
           >Receive notifications for new messages</mat-checkbox
         >
         <div class="flex-1"></div>
-        <mat-checkbox color="primary" [(ngModel)]="user.receivePortfolioNotifications" name="portfolio_n"
+        <mat-checkbox
+          color="primary"
+          [(ngModel)]="user.receivePortfolioNotifications"
+          name="portfolio_n"
           >Receive notifications when your portfolio is ready</mat-checkbox
         >
         <div class="flex-1"></div>
-        <mat-checkbox class="flex-1" color="primary" [(ngModel)]="user.receiveTaskNotifications" name="task_n"
+        <mat-checkbox
+          class="flex-1"
+          color="primary"
+          [(ngModel)]="user.receiveTaskNotifications"
+          name="task_n"
           >Receive notifications when new tasks are available</mat-checkbox
         >
       </section>
-      <section class="flex flex-row w-full h-full items-center place-content-start place-content-center">
+      <section class="flex flex-row w-full h-full items-center place-content-start">
         <mat-checkbox color="primary" [(ngModel)]="user.optInToResearch" name="optin"
           >Send anonymous research statistics
         </mat-checkbox>
       </section>
 
       <div class="flex flex-row w-full h-full" style="padding-top: 12px">
-        <button class="self-start" [hidden]="mode === 'edit'" type="button" mat-stroked-button (click)="signOut()">
+        <button
+          class="self-start"
+          [hidden]="mode === 'edit'"
+          type="button"
+          mat-stroked-button
+          (click)="signOut()"
+        >
           Sign Out
         </button>
         <div class="flex-1"></div>
         @if (mode === 'create') {
-        <button class="self-end" [disabled]="form.invalid" type="submit" mat-flat-button color="primary">
-          Confirm Account
-        </button>
-        } @if (mode === 'edit') {
-        <button
-          class="self-end"
-          type="button"
-          [disabled]="form.invalid"
-          (click)="submit()"
-          mat-flat-button
-          color="primary"
-        >
-          Save Profile
-        </button>
+          <button
+            class="self-end"
+            [disabled]="form.invalid"
+            type="submit"
+            mat-flat-button
+            color="primary"
+          >
+            Confirm Account
+          </button>
+        }
+        @if (mode === 'edit') {
+          <button
+            class="self-end"
+            type="button"
+            [disabled]="form.invalid"
+            (click)="submit()"
+            mat-flat-button
+            color="primary"
+          >
+            Save Profile
+          </button>
         }
       </div>
     </div>
