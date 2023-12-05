@@ -1,6 +1,5 @@
 <splash-screen></splash-screen>
 <div class="flex flex-row">
-  <span class="flex-grow w-10"></span>
   <div
     id="home"
     class="flex flex-col flex-wrap items-center content-center self-center"
@@ -26,7 +25,10 @@
           <div [hidden]="!loadingUnitRoles" style="height: 185px">
             <mat-spinner diameter="40" color="accent"></mat-spinner>
           </div>
-          <div [hidden]="loadingUnitRoles" class="flex flex-wrap items-center">
+          <div
+            [hidden]="loadingUnitRoles"
+            class="flex flex-wrap justify-start items-center content-center"
+          >
             <div *ngFor="let unitRole of unitRoles | isActiveUnitRole as filteredUnitRoles">
               <div
                 uiSref="units/tasks/inbox"
@@ -84,7 +86,11 @@
                 mat-mini-fab
                 aria-label="view all units"
               >
-                <mat-icon style="color: white; padding-right: 1px">history</mat-icon>
+                <mat-icon
+                  class="flex justify-center items-center content-center"
+                  style="color: white; padding-right: 1px"
+                  >history</mat-icon
+                >
               </button>
             </a>
           </div>
