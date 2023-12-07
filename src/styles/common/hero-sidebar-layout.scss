@@ -59,8 +59,6 @@ f-welcome .container {
   width: 100%;
 }
 
-/* Sidebar and Wordmark Media query for screens 960px and below */
-
 .sidebar {
   display: flex; /* Initially visible */
 }
@@ -69,13 +67,12 @@ f-welcome .container {
   display: none; /* Initially invisible */
 }
 
+/* Sidebar and Wordmark Media query for screens 960px and below */
+
 @media (max-width: 959px) {
   .sidebar {
     display: none; /* Hide the element */
   }
-}
-
-@media (max-width: 959px) {
   .wordmark{
     display: flex; /* Show the element */
   }
