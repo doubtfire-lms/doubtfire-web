@@ -63,9 +63,21 @@ f-welcome .container {
   display: flex; /* Initially visible */
 }
 
-/* Media query for small screens */
-@media screen and (max-width: 960px) {
-  .media-screen-hide {
-    display: none; /* Hide on small screens */
+.sidebar {
+  display: flex; /* Initially visible */
+}
+
+.wordmark {
+  display: none; /* Initially invisible */
+}
+
+/* Sidebar and Wordmark Media query for screens 960px and below */
+
+@media (max-width: 959px) {
+  .sidebar {
+    display: none; /* Hide the element */
+  }
+  .wordmark{
+    display: flex; /* Show the element */
   }
 }
