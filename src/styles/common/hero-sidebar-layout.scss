@@ -59,13 +59,24 @@ f-welcome .container {
   width: 100%;
 }
 
-.media-screen-hide {
+/* Sidebar and Wordmark Media query for screens 960px and below */
+
+.sidebar {
   display: flex; /* Initially visible */
 }
 
-/* Media query for small screens */
-@media screen and (max-width: 960px) {
-  .media-screen-hide {
-    display: none; /* Hide on small screens */
+.wordmark {
+  display: none; /* Initially invisible */
+}
+
+@media (max-width: 959px) {
+  .sidebar {
+    display: none; /* Hide the element */
+  }
+}
+
+@media (max-width: 959px) {
+  .wordmark{
+    display: flex; /* Show the element */
   }
 }
