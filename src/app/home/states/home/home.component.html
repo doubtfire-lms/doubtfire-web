@@ -1,10 +1,7 @@
 <splash-screen></splash-screen>
 <div class="flex flex-row">
-  <div
-    id="home"
-    class="flex flex-col flex-wrap items-center content-center self-center"
-    style="margin-left: 10%"
-  >
+  <span style="flex-basis: 10%"></span>
+  <div id="home" class="flex-1 flex-col flex-wrap items-center content-center self-center">
     <div class="text-center" [hidden]="!notEnrolled">
       <h1>You are not enrolled in {{ externalName.value }}.</h1>
       <p class="mat-lead">Contact your unit convenor or tutor to enrol you in a subject.</p>
@@ -19,7 +16,7 @@
     </div>
 
     <div class="flex flex-wrap" [hidden]="notEnrolled">
-      <div class="flex flex-row flex-wrap content-center items-center">
+      <div class="flex-1 flex-row flex-wrap content-center items-center">
         <div style="margin-bottom: 30px" [hidden]="unitRoles?.length === 0">
           <h1>Units you teach</h1>
           <div [hidden]="!loadingUnitRoles" style="height: 185px">
@@ -173,5 +170,5 @@
       </div>
     </div>
   </div>
-  <span class="flex-grow w-10"></span>
+  <span style="flex-basis: 10%"></span>
 </div>
