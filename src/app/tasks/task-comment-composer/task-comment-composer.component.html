@@ -36,9 +36,9 @@
 >
   @for (emoji of emojiSearchResults; track emoji) {
     <mat-list-item (click)="emojiSelected(emoji.native)">
-      <div fxLayout="row" fxLayoutAlign="start center">
+      <div class="flex flex-row items-center">
         <ngx-emoji style="align-items: center" [emoji]="emoji" set="apple" size="20"></ngx-emoji>
-        <div class="emoji-details" fxLayout="column" fxLayoutAlign="center start">
+        <div class="emoji-details flex flex-col justify-center items-start">
           <div style="font-weight: 500; font-size: 12px">{{ emoji.name }}</div>
           <div style="font-size: 10px">{{ emoji.colons }}</div>
         </div>
@@ -54,10 +54,10 @@
   ng-submit="addComment()"
   role="form"
 >
-  <div fxLayout="row" fxLayoutAlign="space-around center" class="composer-container">
+  <div class="flex flex-row items-center justify-around" class="composer-container">
     <div class="composer-action-group" [@shrinkgrow]="$userIsTyping | async">
       <!-- if active -->
-      <div fxLayout="row" fxLayoutAlign="start center">
+      <div class="flex flex-row items-center">
         @if ($userIsTyping | async) {
           <button
             (click)="$userIsTyping.next(false); recording = false"
