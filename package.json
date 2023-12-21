@@ -48,7 +48,7 @@
     "@uirouter/core": "^6.1.0",
     "@uirouter/rx": "^1.0.0",
     "angular": "1.5.11",
-    "angular-cookies": "1.5.11",
+    "angular-cookies": "1.8.3",
     "angular-file-upload": "~1",
     "angular-filter": "0.5.17",
     "angular-local-storage": "0.7.1",
