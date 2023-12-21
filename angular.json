@@ -48,7 +48,6 @@
               "node_modules/codemirror/lib/codemirror.js",
               "node_modules/codemirror/addon/display/placeholder.js",
               "node_modules/codemirror/mode/markdown/markdown.js",
-              "node_modules/showdown/dist/showdown.js",
               "node_modules/canvas-confetti/dist/confetti.browser.js"
             ],
             "extractLicenses": false,
