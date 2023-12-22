@@ -133,7 +133,7 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-env": "0.4.4",
     "grunt-html2js": "^0.6.0",
-    "grunt-karma": "~2.0.0",
+    "grunt-karma": "~4.0.2",
     "grunt-newer": "^1.1.2",
     "grunt-ng-annotate": "^3.0.0",
     "grunt-postcss": "~0.8",
