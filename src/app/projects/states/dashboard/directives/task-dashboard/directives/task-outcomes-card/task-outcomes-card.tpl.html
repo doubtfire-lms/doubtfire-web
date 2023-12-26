@@ -14,8 +14,8 @@
       <heading>
         <div>
           <h4>
-            <strong>{{alignment.ilo.abbreviation}}</strong>
-            <small>{{alignment.ilo.name}}</small>
+            <strong>{{alignment.learningOutcome.abbreviation}}</strong>
+            <small>{{alignment.learningOutcome.name}}</small>
           </h4>
           <p>{{alignment.label}} Click to expand</p>
         </div><!--/alignment-label-->
@@ -30,7 +30,7 @@
         <div class="panel-body">
           <p>
             <h5>Outcome Description</h5>
-            <div class="markdown-to-html" ng-bind-html="alignment.ilo.description | markdown | to_trusted"></div>
+            <div class="markdown-to-html" ng-bind-html="alignment.learningOutcome.description | markdown | to_trusted"></div>
           </p>
           <p>
             <h5>Rationale</h5>
