@@ -83,12 +83,12 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
     // Load all teaching staff
     this.userService.getTutors().subscribe((staff) => {
-      // Load all units now we have the staff
-      this.loadAllUnits();
-
       this.teachingStaff = staff
         .filter((s) => ['Convenor', 'Admin'].includes(s.systemRole))
         .sort((a, b) => a.name.localeCompare(b.name));
+
+      // Load all units now we have the staff
+      this.loadAllUnits();
     });
   }
 
@@ -201,7 +201,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
       next: (newUnit: Unit) => {
         unitToImport.done = true;
         // Employ the convenor
-        if (unitToImport.convenor && unitToImport.convenor != newUnit.mainConvenorUser) {
+        if (unitToImport.convenor && unitToImport.convenor !== newUnit.mainConvenorUser) {
           newUnit.addStaff(unitToImport.convenor, 'Convenor').subscribe({
             next: (newRole) => {
               console.log(`Employed ${unitToImport.convenor.name} in ${newUnit.code}`);
