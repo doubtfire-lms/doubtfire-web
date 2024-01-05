@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.17](https://github.com/macite/doubtfire-deploy/compare/v7.0.16...v7.0.17) (2023-12-01)
+
+### [7.0.16](https://github.com/macite/doubtfire-deploy/compare/v7.0.15...v7.0.16) (2023-11-10)
+
+
+### Bug Fixes
+
+* correct broken learning outcome alignment text ([4ac5ffc](https://github.com/macite/doubtfire-deploy/commit/4ac5ffcb4951df86ca062ab0aace87143ffa1a01))
+
 ### [7.0.15](https://github.com/macite/doubtfire-deploy/compare/v7.0.14...v7.0.15) (2023-06-20)
 
 
