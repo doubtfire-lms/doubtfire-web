@@ -46,4 +46,12 @@ export class TaskSimilarityViewComponent implements OnChanges {
         this.selectedTaskService.checkFooterHeight();
       });
   }
+
+  openReport(e: Event, similarity: TaskSimilarity) {
+    e.stopPropagation();
+    // Open similarity report in new tab
+    similarity.fetchSimilarityReportUrl().subscribe((url) => {
+      window.open(url, '_blank');
+    });
+  }
 }

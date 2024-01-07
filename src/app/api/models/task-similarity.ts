@@ -1,7 +1,8 @@
 import { Entity } from 'ngx-entity-service';
 import { AppInjector } from 'src/app/app-injector';
-import { Task } from './doubtfire-model';
+import { Task, TaskSimilarityService } from './doubtfire-model';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import { Observable } from 'rxjs';
 
 export enum TaskSimilarityType {
   Moss = 'MossTaskSimilarity',
@@ -34,6 +35,7 @@ export class TaskSimilarity extends Entity {
   pct: number;
   parts: TaskSimilarityPart[];
   task: Task;
+  readyForViewer: boolean = false;
 
   constructor(task: Task) {
     super();
@@ -49,6 +51,13 @@ export class TaskSimilarity extends Entity {
   public fileUrl(idx: number): string {
     const constants = AppInjector.get(DoubtfireConstants);
     return `${constants.API_URL}/tasks/${this.task.id}/similarities/${this.id}/contents/${idx}`;
+  }
+
+  /**
+   * Return an ovserverable that will fetch the similarity report url for this task similarity.
+   */
+  public fetchSimilarityReportUrl(): Observable<string> {
+    return AppInjector.get(TaskSimilarityService).getSimilarityReportUrl(this.task.id, this.id);
   }
 
   public get friendlyTypeName(): string {

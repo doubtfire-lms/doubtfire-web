@@ -84,7 +84,6 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
           return JSON.stringify(taskDef.plagiarismChecks);
         },
       },
-      'plagiarismReportUrl',
       'plagiarismWarnPct',
       'restrictStatusUpdates',
       {
@@ -111,7 +110,6 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
 
     this.mapping.mapAllKeysToJsonExcept(
       'id',
-      'plagiarismReportUrl',
       'hasTaskSheet',
       'hasTaskResources',
       'hasTaskAssessmentResources'
