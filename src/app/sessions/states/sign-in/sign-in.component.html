@@ -1,40 +1,53 @@
-<section class="welcome" fxFlex fxLayout="row">
-  <f-hero-sidebar fxHide.lt-md fxFlexAlign="start"></f-hero-sidebar>
-  <section class="content" fxFlex.gt-sm [ngClass.gt-sm]="'large'" fxLayout.gt-sm="column">
+<section class="welcome flex flex-row custom-md-h-screen">
+  <f-hero-sidebar class="sidebar self-start flex-col h-full"></f-hero-sidebar>
+  <section class="content flex flex-col custom-md-h-screen">
     <div class="container">
       <div class="subcontainer">
-        <div class="wordmark" fxLayout="row" fxLayoutAlign="start center" fxHide.gt-sm fxFlexAlign="start">
+        <div class="wordmark flex-row place-content-start">
           <img src="../../../assets/images/logo-bw.svg" width="40px" alt="Homepage Logo" />
           <p>{{ externalName.value }}</p>
         </div>
-        <h1 class="welcome-heading" fxFlexAlign="start">Welcome to {{ externalName.value }}</h1>
+        <h1 class="welcome-heading flex flex-row place-content-start">
+          Welcome to {{ externalName.value }}
+        </h1>
         <form
           #form="ngForm"
-          (ngSubmit)="signIn({ username: formData.username, password: formData.password })"
-          fxLayout="column"
-          fxLayoutAlign="center start"
-          class="sign-in-form"
+          (ngSubmit)="signIn({username: formData.username, password: formData.password})"
+          class="sign-in-form flex flex-col"
         >
           @if (showCredentials) {
-<mat-form-field appearance="outline" fxFlex fxFlexFill>
-            <mat-label>Username</mat-label>
-            <input matInput name="username" required [(ngModel)]="formData.username" />
-          </mat-form-field>
-}
+            <mat-form-field appearance="outline" class="flex-1 h-full w-full">
+              <mat-label>Username</mat-label>
+              <input matInput name="username" required [(ngModel)]="formData.username" />
+            </mat-form-field>
+          }
 
           @if (showCredentials) {
-<mat-form-field appearance="outline" fxFlex fxFlexFill>
-            <mat-label>Password</mat-label>
-            <input type="password" matInput name="password" required [(ngModel)]="formData.password" />
-          </mat-form-field>
-}
+            <mat-form-field appearance="outline" class="flex-1 h-full w-full">
+              <mat-label>Password</mat-label>
+              <input
+                type="password"
+                matInput
+                name="password"
+                required
+                [(ngModel)]="formData.password"
+              />
+            </mat-form-field>
+          }
           @if (!showCredentials) {
-<mat-checkbox matInput name="autoLogin" [(ngModel)]="formData.autoLogin"
-            >Login via Institution</mat-checkbox
+            <mat-checkbox matInput name="autoLogin" [(ngModel)]="formData.autoLogin"
+              >Login via Institution</mat-checkbox
+            >
+          }
+          <button
+            class="w-full"
+            mat-flat-button
+            color="primary"
+            type="form"
+            [disabled]="form.invalid"
           >
-}
-          <button class="w-full" mat-flat-button color="primary" type="form" [disabled]="form.invalid">Sign In</button>
-
+            Sign In
+          </button>
         </form>
       </div>
     </div>
