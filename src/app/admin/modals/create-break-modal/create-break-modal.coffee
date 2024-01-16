@@ -13,7 +13,7 @@ angular.module('doubtfire.admin.modals.create-break-modal', [])
   CreateBreakModal
 )
 
-.controller('CreateBreakModal', ($scope, $modalInstance, alertService, analyticsService, teachingperiod, Break) ->
+.controller('CreateBreakModal', ($scope, $modalInstance, alertService, analyticsService, teachingperiod) ->
   analyticsService.event 'Teaching Period Admin', 'Started to Add Break'
   $scope.teachingperiod = teachingperiod
 
