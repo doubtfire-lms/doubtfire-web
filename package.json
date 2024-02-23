@@ -42,7 +42,7 @@
     "@angular/service-worker": "^17.0.7",
     "@angular/upgrade": "^17.0.7",
     "@ctrl/ngx-emoji-mart": "^9.2.0",
-    "@uirouter/angular": "^12.0",
+    "@uirouter/angular": "^13.0",
     "@uirouter/angular-hybrid": "^16.0",
     "@uirouter/angularjs": "^1.0.30",
     "@uirouter/core": "^6.1.0",
