@@ -32,7 +32,6 @@
     "@angular/common": "^17.2.2",
     "@angular/compiler": "^17.2.2",
     "@angular/core": "^17.2.2",
-    "@angular/flex-layout": "^15.0.0-beta.42",
     "@angular/forms": "^17.2.2",
     "@angular/material": "^17.2.1",
     "@angular/material-moment-adapter": "^17.2.1",

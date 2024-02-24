@@ -7,7 +7,6 @@ import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
 import { UserService } from 'src/app/api/services/user.service';
 import { AuthenticationService, Project, Task, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
 import { Subscription } from 'rxjs';
-import { MediaObserver } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-header',
@@ -40,7 +39,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     protected globalState: GlobalStateService,
     private userService: UserService,
     private authService: AuthenticationService,
-    protected media: MediaObserver,
   ) {}
 
   ngOnInit(): void {
