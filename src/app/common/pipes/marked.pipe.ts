@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 import * as marked from 'marked';
 
 @Pipe({
@@ -11,16 +11,13 @@ export class MarkedPipe implements PipeTransform {
       renderer: new marked.Renderer(),
       pedantic: false,
       gfm: true,
-      breaks: false,
-      smartLists: true,
-      smartypants: false,
-      xhtml: false,
+      breaks: true,
     });
   }
 
   transform(value: string, ...args: any[]): string {
     if (value && value.length > 0) {
-      return marked.marked(value);
+      return marked.parse(value.replaceAll(/\r\n|\r|\n/g, '<br />'));
     }
     return value;
   }

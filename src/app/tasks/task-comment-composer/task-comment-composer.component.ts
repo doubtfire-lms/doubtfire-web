@@ -11,15 +11,15 @@ import {
   ViewChild,
   DoCheck,
 } from '@angular/core';
-import { trigger, style, animate, transition } from '@angular/animations';
-import { analyticsService, alertService } from 'src/app/ajs-upgraded-providers';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EmojiSearch } from '@ctrl/ngx-emoji-mart';
-import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji/';
-import { EmojiService } from 'src/app/common/services/emoji.service';
-import { Task, TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
-import { TaskCommentsViewerComponent } from '../task-comments-viewer/task-comments-viewer.component';
-import { BehaviorSubject } from 'rxjs';
+import {trigger, style, animate, transition} from '@angular/animations';
+import {analyticsService, alertService} from 'src/app/ajs-upgraded-providers';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
+import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji/';
+import {EmojiService} from 'src/app/common/services/emoji.service';
+import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {TaskCommentsViewerComponent} from '../task-comments-viewer/task-comments-viewer.component';
+import {BehaviorSubject} from 'rxjs';
 
 /**
  * The task comment viewer needs to share data with the Task Comment Composer. The data needed
@@ -54,8 +54,9 @@ const ACCEPTED_FILE_TYPES = [
   styleUrls: ['./task-comment-composer.component.scss'],
   animations: [
     trigger('shrinkgrow', [
-      transition('true => false', [style({ width: 14 }), animate('150ms 0ms ease-in-out', style({ width: 96 }))]),
-      transition('false => true', [style({ width: 96 }), animate('150ms 0ms ease-in-out', style({ width: 14 }))]),
+      // 38.4 and 80 are the precise sizes of the buttons to the left of the input field
+      transition('true => false', [style({width: 38.4}), animate('150ms 0ms ease-in-out')]),
+      transition('false => true', [style({width: 80}), animate('150ms 0ms ease-in-out')]),
     ]),
   ],
 })
@@ -63,7 +64,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
 
-  public $expandInput = new BehaviorSubject<boolean>(false);
+  public $userIsTyping = new BehaviorSubject<boolean>(false);
 
   comment = {
     text: '',
@@ -71,6 +72,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   };
 
   @ViewChildren('commentInput') input: QueryList<ElementRef>;
+  @ViewChildren('cag') cag: QueryList<ElementRef>;
   @ViewChild('uploader') uploader: ElementRef;
 
   differ: KeyValueDiffer<string, any>;
@@ -80,6 +82,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;
   recording = false;
+  cagStartWidth: number;
 
   constructor(
     private differs: KeyValueDiffers,
@@ -87,9 +90,9 @@ export class TaskCommentComposerComponent implements DoCheck {
     private emojiSearch: EmojiSearch,
     private emojiService: EmojiService,
     private commentsViewer: TaskCommentsViewerComponent,
-    @Inject(analyticsService) private analytics: any,
-    @Inject(alertService) private alerts: any,
-    @Inject(TaskCommentService) private taskCommentService: TaskCommentService
+    @Inject(analyticsService) private analytics,
+    @Inject(alertService) private alerts,
+    @Inject(TaskCommentService) private taskCommentService: TaskCommentService,
   ) {
     this.differ = this.differs.find({}).create();
   }
@@ -144,7 +147,7 @@ export class TaskCommentComposerComponent implements DoCheck {
 
   recordingMode(): void {
     this.recording = !this.recording;
-    this.$expandInput.next(true);
+    this.$userIsTyping.next(true);
   }
 
   send(e: Event) {
@@ -192,7 +195,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   emojiSelected(emoji: string) {
     this.input.first.nativeElement.innerText = this.input.first.nativeElement.innerText.replace(
       `:${this.emojiMatch}`,
-      emoji
+      emoji,
     );
     this.emojiSearchMode = false;
   }
@@ -222,8 +225,7 @@ export class TaskCommentComposerComponent implements DoCheck {
     return caretOffset;
   }
 
-  addEmoji(e: string | Event): void;
-  addEmoji(e: any): void {
+  addEmoji(e): void {
     let char: string;
     if (typeof e === 'string') {
       char = e;
@@ -232,15 +234,15 @@ export class TaskCommentComposerComponent implements DoCheck {
     }
     const text = this.input.first.nativeElement.innerText;
     const position = this.caretOffset();
-    this.input.first.nativeElement.innerText = [text.slice(0, position), char, text.slice(position)].join('');
+    this.input.first.nativeElement.innerText = [
+      text.slice(0, position),
+      char,
+      text.slice(position),
+    ].join('');
   }
 
   openDiscussionComposer() {
-    const self = this;
-
-    let dialogRef: MatDialogRef<DiscussionComposerDialog, any>;
-
-    dialogRef = this.dialog.open(DiscussionComposerDialog, {
+    this.dialog.open(DiscussionComposerDialog, {
       data: {
         task: this.task,
       },
@@ -268,23 +270,20 @@ export class TaskCommentComposerComponent implements DoCheck {
       },
       (error: any) => {
         this.alerts.add('danger', error || error?.message, 2000);
-      }
+      },
     );
   }
 
   addCommentWithType(comment: string, type: string) {
-    this.taskCommentService.addComment(
-      this.task,
-      comment,
-      type).subscribe({
-        next: (success: TaskComment) => {
-          this.comment.text = '';
-          this.commentsViewer.scrollDown();
-          console.log("implement - check map comments");
-          //this.task.comments = this.ts.mapComments(this.task.comments);
-        },
-        error: (message: string) => this.alerts.add('danger', message, 6000)
-      });
+    this.taskCommentService.addComment(this.task, comment, type).subscribe({
+      next: (success: TaskComment) => {
+        this.comment.text = '';
+        this.commentsViewer.scrollDown();
+        console.log('implement - check map comments');
+        //this.task.comments = this.ts.mapComments(this.task.comments);
+      },
+      error: (message: string) => this.alerts.add('danger', message, 6000),
+    });
   }
 
   openFile() {
@@ -293,10 +292,18 @@ export class TaskCommentComposerComponent implements DoCheck {
 
   uploadFiles(event) {
     [...event].forEach((file) => {
-      if (ACCEPTED_FILE_TYPES.includes(file.type) || file.type.startsWith('audio/') || file.type.startsWith('image/')) {
+      if (
+        ACCEPTED_FILE_TYPES.includes(file.type) ||
+        file.type.startsWith('audio/') ||
+        file.type.startsWith('image/')
+      ) {
         this.postAttachmentComment(file);
       } else {
-        this.alerts.add('danger', 'I cannot upload that file - only images, audio, and PDFs.', 4000);
+        this.alerts.add(
+          'danger',
+          'I cannot upload that file - only images, audio, and PDFs.',
+          4000,
+        );
       }
     });
   }
@@ -309,7 +316,7 @@ export class TaskCommentComposerComponent implements DoCheck {
       },
       (error: any) => {
         this.alerts.add('danger', error || error?.message, 2000);
-      }
+      },
     );
   }
 }
@@ -322,7 +329,10 @@ export class TaskCommentComposerComponent implements DoCheck {
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
 })
 export class DiscussionComposerDialog implements OnInit {
-  constructor(public dialogRef: MatDialogRef<DiscussionComposerDialog>, @Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(
+    public dialogRef: MatDialogRef<DiscussionComposerDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 }

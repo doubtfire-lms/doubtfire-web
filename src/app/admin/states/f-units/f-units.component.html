@@ -24,8 +24,8 @@
         <!-- Unit Code Column -->
         <ng-container matColumnDef="unit_code" sticky>
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Unit Code</th>
-          <td mat-cell *matCellDef="let element">
-            <f-chip>{{ element.code }}</f-chip>
+          <td mat-cell *matCellDef="let element" class="w-0 min-w-full">
+            <f-chip class="shrink">{{ element.code }}</f-chip>
           </td>
         </ng-container>
 
@@ -46,10 +46,10 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Teaching Period</th>
           <td mat-cell *matCellDef="let element">
             @if (element.teachingPeriod) {
-
-            {{ element.teachingPeriod.name }}
-
-            } @else { Custom }
+              {{ element.teachingPeriod.name }}
+            } @else {
+              Custom
+            }
           </td>
         </ng-container>
 
@@ -70,15 +70,21 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Active</th>
           <td mat-cell *matCellDef="let element">
             <!-- If element.teachingPeriod exists -->
-            @if (element.teachingPeriod) { @if (element.teachingPeriod.active && element.active) {
-            <i class="fa fa-check"></i>
-            } @if (!element.teachingPeriod.active || !element.active) {
-            <i class="fa fa-times"></i>
-            } } @else { @if (element.active) {
-            <i class="fa fa-check"></i>
-            } @if (!element.active) {
-            <i class="fa fa-times"></i>
-            } }
+            @if (element.teachingPeriod) {
+              @if (element.teachingPeriod.active && element.active) {
+                <i class="fa fa-check"></i>
+              }
+              @if (!element.teachingPeriod.active || !element.active) {
+                <i class="fa fa-times"></i>
+              }
+            } @else {
+              @if (element.active) {
+                <i class="fa fa-check"></i>
+              }
+              @if (!element.active) {
+                <i class="fa fa-times"></i>
+              }
+            }
 
             <!-- If element.teachingPeriod does not exist -->
           </td>
@@ -89,14 +95,17 @@
           mat-row
           *matRowDef="let row; columns: displayedColumns"
           uiSref="units/admin"
-          [uiParams]="{ unitId: row.id }"
+          [uiParams]="{unitId: row.id}"
         ></tr>
       </table>
       <span class="flex items-center">
         <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
         <span class="flex-grow"></span>
         <button mat-raised-button color="primary" (click)="createUnit()">
-          <mat-icon aria-hidden="false" aria-label="Example home icon" class="icon_display">add</mat-icon> Create Unit
+          <mat-icon aria-hidden="false" aria-label="Example home icon" class="icon_display"
+            >add</mat-icon
+          >
+          Create Unit
         </button>
       </span>
     </div>
