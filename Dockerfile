@@ -22,7 +22,7 @@ WORKDIR /doubtfire-web
 COPY --chown="${USER}":root . .
 
 # Setup within container
-RUN npm install
+RUN npm install --force
 
 EXPOSE 9876
 
