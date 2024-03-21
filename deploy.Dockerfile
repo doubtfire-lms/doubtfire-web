@@ -1,5 +1,5 @@
 ### STAGE 1: Build ###
-FROM lmsdoubtfire/doubtfire-web:6.0.x-dev AS build
+FROM node:18 AS build
 
 USER node
 
@@ -7,7 +7,7 @@ USER node
 # Copy in doubtfire-web code
 WORKDIR /doubtfire-web
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --force
 
 COPY --chown=node:node . .
 RUN chmod 777 src
