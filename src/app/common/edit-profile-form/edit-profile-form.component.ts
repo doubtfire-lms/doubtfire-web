@@ -62,6 +62,10 @@ export class EditProfileFormComponent implements OnInit {
     );
   }
 
+  public get tiiEnabled(): boolean {
+    return this.constants.IsTiiEnabled.value;
+  }
+
   public submit(): void {
     this.user.pronouns = this.customPronouns ? this.user.pronouns : this.formPronouns.pronouns;
     this.user.hasRunFirstTimeSetup = true;

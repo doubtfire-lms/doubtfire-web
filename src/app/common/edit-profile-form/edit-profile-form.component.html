@@ -100,6 +100,13 @@
         </mat-checkbox>
       </section>
 
+      @if(tiiEnabled){
+      <section fxLayout="row" fxFlexFill fxLayoutAlign="start center">
+        <mat-checkbox color="primary" [(ngModel)]="user.acceptedTiiEula" [disableRipple]="true" (click)="$event.preventDefault()" name="acceptedTiiEula" disabled
+          >Acceptted TurnItIn EULA
+        </mat-checkbox>
+      </section>
+      }
       <div fxLayout="row" fxFlexFill style="padding-top: 12px">
         <button [hidden]="mode === 'edit'" fxFlexAlign="start" type="button" mat-stroked-button (click)="signOut()">
           Sign Out
