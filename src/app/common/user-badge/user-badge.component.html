@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="start start">
+<div class="flex flex-row justify-start items-start">
   <a (click)="!unselected ? goToStudent() : null" style="display: flex">
     <user-icon
       size="40"
@@ -7,7 +7,7 @@
       style="margin-right: 8px"
     ></user-icon>
   </a>
-  <div fxLayout="column" fxLayoutAlign="center start" style="line-height: 0.5em; margin-top: 4px">
+  <div class="flex-col justify-center items-start" style="line-height: 0.5em; margin-top: 4px">
     <div style="margin-top: 6px" id="placeholder1" [hidden]="!unselected"></div>
     <div id="placeholder2" [hidden]="!unselected"></div>
     <a (click)="!unselected ? goToStudent() : null" style="display: flex">

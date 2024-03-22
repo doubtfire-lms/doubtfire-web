@@ -1,4 +1,4 @@
-<button id="dialogCloseButton" mat-button mat-dialog-close mat-icon-button aria-label="Close dialog button">
+<button id="dialogCloseButton" mat-icon-button mat-dialog-close aria-label="Close dialog button">
   <mat-icon aria-label="Quit cross icon">close</mat-icon>
 </button>
 <mat-horizontal-stepper id="intelligentDiscussionStepper" [linear]="true" #stepper>
@@ -42,7 +42,7 @@
   <mat-step>
     <ng-template matStepLabel>Discussion</ng-template>
     <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
-      
+
       <intelligent-discussion-recorder [task]="data.task" [discussion]="data.dc" #discussionRecorder>
       </intelligent-discussion-recorder>
       <div fxLayout="column" fxLayoutAlign="start end">

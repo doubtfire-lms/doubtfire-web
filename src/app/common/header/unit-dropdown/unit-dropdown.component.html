@@ -1,72 +1,82 @@
 <div class="flex items-center">
   @if (unit) {
-  <div
-    class="bg-formatif-blue text-white rounded-full cursor-pointer pl-6 pr-6 min-h-12 h-12 flex items-center"
-    style="font-size: 14px"
-    matTooltip="{{ unit.name }}"
-    [matMenuTriggerFor]="menu"
-    #menuState="matMenuTrigger"
-  >
-    <span class="text-md">{{ unit?.code }}</span>
-    <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
-  </div>
-  } @if (!unit) {
-
-  <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
-    <span class="flex items-center">
-      <span>Select Unit</span>
+    <div
+      class="bg-formatif-blue text-white rounded-full cursor-pointer pl-6 pr-6 min-h-12 h-12 flex items-center"
+      style="font-size: 14px"
+      matTooltip="{{ unit.name }}"
+      [matMenuTriggerFor]="menu"
+      #menuState="matMenuTrigger"
+    >
+      <span class="text-md">{{ unit?.code }}</span>
       <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
-    </span>
-  </button>
-
+    </div>
+  }
+  @if (!unit) {
+    <button mat-button [matMenuTriggerFor]="menu" #menuState="matMenuTrigger">
+      <span class="flex items-center">
+        <span>Select Unit</span>
+        <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+      </span>
+    </button>
   }
 </div>
 
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
   @if (media.isActive('xs')) {
-  <button uiSref="home" mat-menu-item>
-    <mat-icon
-      uiSref="home"
-      style="margin-right: 20px"
-      svgIcon="formatif-logo"
-      class="formatif-icon"
-      aria-label="Home Icon"
-    ></mat-icon>
-    <div class="unitName">Home</div>
-    <span class="flex-grow"></span>
-  </button>
-  } @if (media.isActive('xs')) {
-  <mat-divider></mat-divider>
+    <button uiSref="home" mat-menu-item>
+      <mat-icon
+        uiSref="home"
+        style="margin-right: 20px"
+        svgIcon="formatif-logo"
+        class="formatif-icon"
+        aria-label="Home Icon"
+      ></mat-icon>
+      <div class="unitName">Home</div>
+      <span class="flex-grow"></span>
+    </button>
+  }
+  @if (media.isActive('xs')) {
+    <mat-divider></mat-divider>
   }
 
   <div mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</div>
-  @for (unitRole of unitRoles; track unitRole) { @if (!unitRole.unit.teachingPeriod ||
-  unitRole.unit.teachingPeriod?.active) {
-  <div uiSref="units/tasks/inbox" [uiParams]="{ unitId: unitRole.unit.id }" mat-menu-item class="w-full">
-    <div class="flex items-center w-full">
-      <div class="flex-none unitName">{{ unitRole.unit.name }}</div>
-      <div class="grow"></div>
-      <f-chip>
-        {{ unitRole.unit.code }}
-      </f-chip>
-    </div>
-  </div>
-  } }
+  @for (unitRole of unitRoles; track unitRole) {
+    @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
+      <div
+        uiSref="units/tasks/inbox"
+        [uiParams]="{unitId: unitRole.unit.id}"
+        mat-menu-item
+        class="w-full"
+      >
+        <div class="flex items-center w-full">
+          <div class="flex-none unitName">{{ unitRole.unit.name }}</div>
+          <div class="grow"></div>
+          <f-chip>
+            {{ unitRole.unit.code }}
+          </f-chip>
+        </div>
+      </div>
+    }
+  }
 
   <mat-divider [hidden]="unitRoles?.length === 0 || projects?.length === 0"></mat-divider>
   <div mat-subheader [hidden]="projects?.length === 0">Units You Study</div>
-  @for (project of projects; track project) { @if (!project.unit.teachingPeriod || project.unit.teachingPeriod.active) {
-  <button
-    uiSref="projects/dashboard"
-    [uiParams]="{ projectId: project.id, taskAbbr: '' }"
-    class="flex items-center mb-2"
-    mat-menu-item
-  >
-    <div class="unitName">{{ project.unit.name }}</div>
-    <span fxFlex style="flex-grow: 1"></span>
-    <f-chip>
-      {{ project.unit.code }}
-    </f-chip>
-  </button>
-  } }
+  @for (project of projects; track project) {
+    @if (!project.unit.teachingPeriod || project.unit.teachingPeriod.active) {
+      <button
+        uiSref="projects/dashboard"
+        [uiParams]="{projectId: project.id, taskAbbr: ''}"
+        class="flex items-center mb-2"
+        mat-menu-item
+      >
+        <span class="flex flex-row border-box">
+          <div class="unitName">{{ project.unit.name }}</div>
+          <span class="flex-1 border-box"></span>
+          <f-chip>
+            {{ project.unit.code }}
+          </f-chip>
+        </span>
+      </button>
+    }
+  }
 </mat-menu>

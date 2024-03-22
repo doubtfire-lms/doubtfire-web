@@ -85,8 +85,8 @@
       >
         <form class="search-options">
           <div class="task-definition">
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-              <mat-form-field fxFlex>
+            <div class="flex flex-row justify-between items-center">
+              <mat-form-field class="flex-1">
                 <mat-label>Task</mat-label>
                 <mat-select
                   [(ngModel)]="filters.taskDefinitionIdSelected"
@@ -112,8 +112,8 @@
             </div>
           </div>
           <!--/task-definition-->
-          <div fxLayout="row" fxLayoutAlign="space-between center">
-            <mat-form-field fxFlex>
+          <div class="flex flex-row justify-between items-center">
+            <mat-form-field class="flex-1">
               <mat-label>Students</mat-label>
               <mat-select
                 [(ngModel)]="filters.tutorialIdSelected"
@@ -147,7 +147,7 @@
 </ng-template>
 
 <!-- Actual task-inbox -->
-<div class="task-inbox" [ngClass]="isNarrow ? 'narrow-width' : 'full-width'" div fxLayout="column" fxLayoutAlign="none">
+<div class="task-inbox flex flex-col justify-normal" [ngClass]="isNarrow ? 'narrow-width' : 'full-width'">
   <div class="openSearchDialog" [hidden]="!isNarrow">
     <button mat-icon-button (click)="openDialog()" aria-label="Seach Button">
       <mat-icon>search</mat-icon>
@@ -200,8 +200,8 @@
                 similarities: task.similaritiesDetected
               }"
             ></span>
-            <user-icon fxFlexAlign="center" [user]="task.project.student" [size]="30"> </user-icon>
-            <div class="task-list-data truncate" fxFlex [hidden]="isNarrow">
+            <user-icon class="self-center" [user]="task.project.student" [size]="30"> </user-icon>
+            <div class="task-list-data truncate flex-1" [hidden]="isNarrow">
               <h4 class="student-name">{{ task.project.student.name }}</h4>
               <div class="task-details truncate">
                 {{ task.definition.abbreviation }} -

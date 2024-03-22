@@ -10,32 +10,41 @@
 ></emoji-mart>
 
 @if (task) {
-<div id="replyContainer" [hidden]="originalComment === null">
-  <div>
-    <div class="replying-wrap">
-      Replying to:
-      <b>{{ originalComment !== null ? originalComment.author.name : '' }}</b>
-      <button id="cancelReplyButton" (click)="cancelReply()" mat-icon-button aria-label="Close reply">
-        <mat-icon inline="true" aria-label="Quit cross icon">close</mat-icon>
-      </button>
+  <div id="replyContainer" [hidden]="originalComment === null">
+    <div>
+      <div class="replying-wrap">
+        Replying to:
+        <b>{{ originalComment !== null ? originalComment.author.name : '' }}</b>
+        <button
+          id="cancelReplyButton"
+          (click)="cancelReply()"
+          mat-icon-button
+          aria-label="Close reply"
+        >
+          <mat-icon inline="true" aria-label="Quit cross icon">close</mat-icon>
+        </button>
+      </div>
+      <p>{{ originalComment !== null ? originalComment.text : '' }}</p>
     </div>
-    <p>{{ originalComment !== null ? originalComment.text : '' }}</p>
   </div>
-</div>
 }
 
-<mat-action-list [hidden]="!emojiSearchMode || !(emojiSearchResults?.length > 0)" dense id="emojiSearchResults">
+<mat-action-list
+  [hidden]="!emojiSearchMode || !(emojiSearchResults?.length > 0)"
+  dense
+  id="emojiSearchResults"
+>
   @for (emoji of emojiSearchResults; track emoji) {
-  <mat-list-item (click)="emojiSelected(emoji.native)">
-    <div fxLayout="row" fxLayoutAlign="start center">
-      <ngx-emoji style="align-items: center" [emoji]="emoji" set="apple" size="20"></ngx-emoji>
-      <div class="emoji-details" fxLayout="column" fxLayoutAlign="center start">
-        <div style="font-weight: 500; font-size: 12px">{{ emoji.name }}</div>
-        <div style="font-size: 10px">{{ emoji.colons }}</div>
+    <mat-list-item (click)="emojiSelected(emoji.native)">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <ngx-emoji style="align-items: center" [emoji]="emoji" set="apple" size="20"></ngx-emoji>
+        <div class="emoji-details" fxLayout="column" fxLayoutAlign="center start">
+          <div style="font-weight: 500; font-size: 12px">{{ emoji.name }}</div>
+          <div style="font-size: 10px">{{ emoji.colons }}</div>
+        </div>
       </div>
-    </div>
-  </mat-list-item>
-}
+    </mat-list-item>
+  }
 </mat-action-list>
 
 <form
@@ -46,24 +55,23 @@
   role="form"
 >
   <div fxLayout="row" fxLayoutAlign="space-around center" class="composer-container">
-    <div class="composer-action-group" [@shrinkgrow]="$expandInput | async">
+    <div class="composer-action-group" [@shrinkgrow]="$userIsTyping | async">
       <!-- if active -->
       <div fxLayout="row" fxLayoutAlign="start center">
-        @if ($expandInput | async) {
-<button
-         
-          (click)="$expandInput.next(false); recording = false"
-          matTooltip="Expand action buttons"
-          matTooltipShowDelay="400"
-          mat-icon-button
-          class="btn-no-outline"
-          type="button"
-          aria-label="Expand action buttons"
-          style="margin-right: -4px; margin-left: -4px"
-        >
-          <mat-icon>{{ recording ? 'cancel' : 'chevron_right' }}</mat-icon>
-        </button>
-}
+        @if ($userIsTyping | async) {
+          <button
+            (click)="$userIsTyping.next(false); recording = false"
+            matTooltip="Expand action buttons"
+            matTooltipShowDelay="400"
+            mat-icon-button
+            class="btn-no-outline"
+            type="button"
+            aria-label="Expand action buttons"
+            style="margin-right: -4px; margin-left: -4px"
+          >
+            <mat-icon>{{ recording ? 'cancel' : 'chevron_right' }}</mat-icon>
+          </button>
+        }
 
         <!-- <button
           [hidden]="shrinkGrowToggle"
@@ -80,23 +88,22 @@
         </button> -->
 
         @if (isStaff) {
-<button
-          [hidden]="$expandInput | async"
-         
-          matTooltip="Create a Real Talk discussion"
-          matTooltipShowDelay="400"
-          mat-icon-button
-          class="btn-no-outline"
-          type="button"
-          aria-label="launch real talk took"
-          (click)="openDiscussionComposer()"
-        >
-          <mat-icon class="message-inbox-icon">mark_chat_read</mat-icon>
-        </button>
-}
+          <button
+            [hidden]="$userIsTyping | async"
+            matTooltip="Create a Real Talk discussion"
+            matTooltipShowDelay="400"
+            mat-icon-button
+            class="btn-no-outline"
+            type="button"
+            aria-label="launch real talk took"
+            (click)="openDiscussionComposer()"
+          >
+            <mat-icon class="message-inbox-icon">mark_chat_read</mat-icon>
+          </button>
+        }
 
         <button
-          [hidden]="$expandInput | async"
+          [hidden]="$userIsTyping | async"
           matTooltip="Attach a file"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -117,7 +124,7 @@
         </button>
 
         <button
-          [hidden]="$expandInput | async"
+          [hidden]="$userIsTyping | async"
           matTooltip="Send a recording"
           matTooltipShowDelay="400"
           mat-icon-button
@@ -130,12 +137,16 @@
         </button>
       </div>
     </div>
-    <div id="textFieldContainer" [class.active]="$expandInput | async" [ngClass]="{ recording: recording }">
+    <div
+      id="textFieldContainer"
+      [class.active]="$userIsTyping | async"
+      [ngClass]="{recording: recording}"
+    >
       <div
         [hidden]="recording"
-        (focus)="$expandInput.next(true)"
-        (blur)="$expandInput.next(false)"
-        [class.active]="($expandInput | async) === false"
+        (focus)="$userIsTyping.next(true)"
+        (blur)="$userIsTyping.next(false)"
+        [class.active]="($userIsTyping | async) === false"
         #commentInput
         id="textField"
         [attr.contenteditable]="contentEditableValue() && !recording"
@@ -145,12 +156,11 @@
         name="commentComposer"
       ></div>
       @if (recording) {
-<audio-comment-recorder
-        style="display: flex; justify-content: center; width: 100%"
-       
-        [task]="task"
-      ></audio-comment-recorder>
-}
+        <audio-comment-recorder
+          style="display: flex; justify-content: center; width: 100%"
+          [task]="task"
+        ></audio-comment-recorder>
+      }
       <div id="innerButtons" [hidden]="recording">
         <mat-icon
           matTooltip="Choose an emoji"
