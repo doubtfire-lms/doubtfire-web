@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.19](https://github.com/macite/doubtfire-deploy/compare/v7.0.18...v7.0.19) (2024-03-22)
+
+
+### Bug Fixes
+
+* align center breaks ([93bbafe](https://github.com/macite/doubtfire-deploy/commit/93bbafe49372cff5ff20da9dcfd685b90c5e8f73))
+
 ### [7.0.18](https://github.com/macite/doubtfire-deploy/compare/v7.0.17...v7.0.18) (2024-01-16)
 
 
