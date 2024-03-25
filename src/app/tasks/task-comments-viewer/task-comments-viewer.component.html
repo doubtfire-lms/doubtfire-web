@@ -1,12 +1,5 @@
 <div style="height: 100%" class="comments-panel" appDragDrop (onFileDropped)="uploadFiles($event)" fxLayout="column">
-  <div
-    fxFlex
-    class="comments-body"
-    #commentsBody
-    fxLayout="column"
-    fxLayoutAlign="end"
-    style="place-content: stretch !important"
-  >
+  <div fxFlex class="comments-body" #commentsBody fxLayout="column" style="place-content: stretch !important">
     <div [hidden]="!loading" style="height: 100%" fxLayout="row" fxLayoutAlign="center center">
       <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
     </div>
