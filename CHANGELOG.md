@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.20](https://github.com/macite/doubtfire-deploy/compare/v7.0.19...v7.0.20) (2024-03-25)
+
+
+### Bug Fixes
+
+* ensure sign out on timeout even with token delete error ([61bad14](https://github.com/macite/doubtfire-deploy/commit/61bad14bf1665a71ba9b6b8b53613b6f8cfc4f6e))
+* remove flex-end from tcv ([e758247](https://github.com/macite/doubtfire-deploy/commit/e758247726ec16aefd2b554c33f7c7a8318b7a66))
+
 ### [7.0.19](https://github.com/macite/doubtfire-deploy/compare/v7.0.18...v7.0.19) (2024-03-22)
 
 
