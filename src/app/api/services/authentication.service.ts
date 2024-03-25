@@ -169,7 +169,8 @@ export class AuthenticationService {
 
     if (this.userService.currentUser.authenticationToken) {
       this.httpClient.delete(this.AUTH_URL).subscribe({
-        next: (response) => doSignOut(),
+        next: (_response) => doSignOut(),
+        error: (_response) => doSignOut(),
       });
     } else {
       doSignOut();
