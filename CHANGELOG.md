@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.19](https://github.com/macite/doubtfire-deploy/compare/v7.0.18...v7.0.19) (2024-03-22)
+
+
+### Bug Fixes
+
+* align center breaks ([93bbafe](https://github.com/macite/doubtfire-deploy/commit/93bbafe49372cff5ff20da9dcfd685b90c5e8f73))
+
+### [7.0.18](https://github.com/macite/doubtfire-deploy/compare/v7.0.17...v7.0.18) (2024-01-16)
+
+
+### Bug Fixes
+
+* ensure teaching staff loaded before units in a teaching period ([f90eef7](https://github.com/macite/doubtfire-deploy/commit/f90eef7f7cd5289c60b77345d1905894384e6442))
+* reinstate break model in teaching period editor ([f8dde88](https://github.com/macite/doubtfire-deploy/commit/f8dde88a42bc7cc27f6a611a7a3623e3c23d0990))
+
+### [7.0.17](https://github.com/macite/doubtfire-deploy/compare/v7.0.16...v7.0.17) (2023-12-01)
+
+### [7.0.16](https://github.com/macite/doubtfire-deploy/compare/v7.0.15...v7.0.16) (2023-11-10)
+
+
+### Bug Fixes
+
+* correct broken learning outcome alignment text ([4ac5ffc](https://github.com/macite/doubtfire-deploy/commit/4ac5ffcb4951df86ca062ab0aace87143ffa1a01))
+
+### [7.0.15](https://github.com/macite/doubtfire-deploy/compare/v7.0.14...v7.0.15) (2023-06-20)
+
+
+### Bug Fixes
+
+* handle null campus in projects ([48ab807](https://github.com/macite/doubtfire-deploy/commit/48ab807b06c794cf3bfd77aacb9bee64a278c78d))
+
 ### [7.0.14](https://github.com/macite/doubtfire-deploy/compare/v7.0.13...v7.0.14) (2023-06-18)
 
 

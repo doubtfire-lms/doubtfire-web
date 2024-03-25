@@ -181,7 +181,7 @@ export class TaskStatus {
     ["discuss", "Discuss"],
     ["demonstrate", "Demonstrate"],
     ["complete", "Complete"],
-    ["fail", "Fail"],
+    ["fail", "Needs Improvement"],
     ["time_exceeded", "Time Exceeded"],
   ]);
 
