@@ -164,6 +164,7 @@ import { OverseerImageListComponent } from './admin/institution-settings/oversee
 import { TaskAssessmentCommentComponent } from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import { TaskAssessmentModalComponent } from './common/modals/task-assessment-modal/task-assessment-modal.component';
 
+import { GroupSetSelector } from './groups/group-set-selector/group-set-selector.component';
 import { TaskSubmissionHistoryComponent } from './tasks/task-submission-history/task-submission-history.component';
 import { HomeComponent } from './home/states/home/home.component';
 import { IsActiveUnitRole } from './common/pipes/is-active-unit-role.pipe';
@@ -292,6 +293,7 @@ import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-vi
     StatusIconComponent,
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
+    GroupSetSelector,
     TaskSubmissionHistoryComponent,
     HeaderComponent,
     UnitDropdownComponent,

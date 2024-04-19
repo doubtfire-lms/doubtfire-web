@@ -241,6 +241,7 @@ import { FTaskSheetViewComponent } from './units/states/tasks/viewer/directives/
 import { TasksViewerComponent } from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 
 import { FUnitsComponent } from './admin/states/f-units/f-units.component';
+import { GroupSetSelectorComponent } from './groups/group-set-selector/group-set-selector.component';
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
   'doubtfire.sessions',
@@ -385,6 +386,8 @@ DoubtfireAngularJSModule.directive('fPdfViewer', downgradeComponent({ component:
 DoubtfireAngularJSModule.directive('pdfViewerPanel', downgradeComponent({ component: PdfViewerPanelComponent }));
 DoubtfireAngularJSModule.directive('staffTaskList', downgradeComponent({ component: StaffTaskListComponent }));
 DoubtfireAngularJSModule.directive('statusIcon', downgradeComponent({ component: StatusIconComponent }));
+
+DoubtfireAngularJSModule.directive('groupSetSelector', downgradeComponent({ component: GroupSetSelectorComponent }));
 
 // Global configuration
 

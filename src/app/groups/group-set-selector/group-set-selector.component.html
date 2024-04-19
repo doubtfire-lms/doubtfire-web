@@ -1,0 +1,6 @@
+<select
+  class="form-control"
+  (change)="selectGroupSet()"
+  [(ngModel)]="selectedGroupSet">
+  <option *ngFor="let gs of unit.groupSets" [ngValue]="gs">{{ gs.name }}</option>
+</select>
