@@ -94,7 +94,6 @@
       >
         <mat-icon class="small-icon">more_vert</mat-icon>
       </button>
-
       <mat-menu #aboveMenu="matMenu" yPosition="above">
         <button mat-menu-item (click)="viewTaskSheet()" [disabled]="!selectedTaskService.hasTaskSheet">
           <mat-icon matListItemIcon aria-label="View Task Sheet">description</mat-icon>
@@ -118,6 +117,32 @@
           Mark as fail
         </button>
       </mat-menu>
+
+      <button
+        [disabled]="selectedTask === undefined"
+        mat-icon-button
+        matTooltip="View Recently Interacted"
+        matTooltipPosition="above"
+        aria-label=""
+        class="button small-button"
+        [matMenuTriggerFor]="recentlyInteractedMenu"
+        (click)="viewRecentlyInteracted()"
+      >
+        <mat-icon class="small-icon">recent_actors</mat-icon>
+      </button>
+
+      <mat-menu #recentlyInteractedMenu="matMenu" yPosition="above">
+        @for (t of filteredTasks; track t) {
+          <map-option [value]="t.task_id">
+            <span class="truncate" (click)="setSelectedTask(t.task_id)">{{ t.task_id }}</span>
+          </map-option>
+        }
+        <button mat-menu-item (click)="viewTaskSheet()" [disabled]="!selectedTaskService.hasTaskSheet">
+          <mat-icon matListItemIcon aria-label="View Task Sheet">description</mat-icon>
+          View task sheet
+        </button>
+      </mat-menu>
+
       <button
         [disabled]="selectedTask === undefined"
         mat-icon-button

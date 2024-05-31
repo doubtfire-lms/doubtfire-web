@@ -6,7 +6,6 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
-  HostListener,
   ViewChild,
   TemplateRef,
   OnDestroy,
@@ -31,6 +30,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {HotkeysService} from '@ngneat/hotkeys';
+import { RecentlyInteractedTaskService } from 'src/app/api/services/recently-interacted-task.service';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -101,6 +101,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   allowHover = true;
 
   constructor(
+    private recentlyInteractedTaskService: RecentlyInteractedTaskService,
     private selectedTaskService: SelectedTaskService,
     private alertService: AlertService,
     private fileDownloaderService: FileDownloaderService,
@@ -167,6 +168,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         taskDefinitionIdSelected: null,
         taskDefinition: null,
         forceStream: true,
+        useCache: false,
       },
       this.filters,
     );
@@ -238,6 +240,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   applyFilters() {
     let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
+
     if (this.filters.tutorials) {
       filteredTasks = this.tasksInTutorialsPipe.transform(
         filteredTasks,
@@ -352,8 +355,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   setSelectedTask(task: Task) {
+    if (task === null || task === undefined) return;
     this.selectedTaskService.setSelectedTask(task);
     this.taskData.selectedTask = task;
+    this.recentlyInteractedTaskService.addInteractedTask(task.id, task.unit.id);
     if (this.taskData.onSelectedTaskChange) {
       this.taskData.onSelectedTaskChange(task);
     }

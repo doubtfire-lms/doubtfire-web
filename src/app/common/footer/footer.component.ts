@@ -2,8 +2,8 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { Observable } from 'rxjs';
 import { Task } from 'src/app/api/models/task';
 import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
-
 import { FileDownloaderService } from '../file-downloader/file-downloader.service';
+import { RecentlyInteractedTaskService } from 'src/app/api/services/recently-interacted-task.service';
 
 @Component({
   selector: 'f-footer',
@@ -11,10 +11,16 @@ import { FileDownloaderService } from '../file-downloader/file-downloader.servic
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  constructor(public selectedTaskService: SelectedTaskService, private fileDownloader: FileDownloaderService) {}
+  constructor(
+    public selectedTaskService: SelectedTaskService,
+    private fileDownloader: FileDownloaderService,
+    private recentlyInteractedTaskService: RecentlyInteractedTaskService,
+  ) {}
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;
+
+  filteredTasks: any[]
 
   @ViewChild('similaritiesButton', { static: false, read: ElementRef }) similaritiesButton: ElementRef;
   @ViewChild('warningText', { static: false, read: ElementRef }) warningText: ElementRef;
@@ -77,5 +83,16 @@ export class FooterComponent implements OnInit {
 
   viewSimilarity() {
     this.selectedTaskService.showSimilarity();
+  }
+
+  viewRecentlyInteracted() {
+    // TODO: Add a way to view recently interacted tasks based on the unitId
+    const unitId = 2;
+    const tasks = this.recentlyInteractedTaskService.getAllRecentlyInteractedTasksIds()[unitId];
+    this.filteredTasks = tasks;
+  }
+
+  setSelectedTask(taskId: number) {
+    this.selectedTaskService.setSelectedTask(taskId);
   }
 }
