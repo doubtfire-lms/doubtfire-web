@@ -224,10 +224,12 @@ import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-
 import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {GradeService} from './common/services/grade.service';
+import {TimeoutComponent} from './errors/states/timeout/timeout.component';
 
 @NgModule({
   // Components we declare
   declarations: [
+    TimeoutComponent,
     AlertComponent,
     AboutDoubtfireModalContent,
     TeachingPeriodUnitImportDialogComponent,

@@ -70,7 +70,7 @@ import 'build/src/app/projects/states/states.js';
 import 'build/src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.js';
 import 'build/src/app/projects/states/dashboard/directives/student-task-list/student-task-list.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
-import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.js';
+
 import 'build/src/app/projects/states/dashboard/dashboard.js';
 import 'build/src/app/projects/states/outcomes/outcomes.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.js';
@@ -225,6 +225,7 @@ import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {MarkedPipe} from './common/pipes/marked.pipe';
 import {AlertService} from './common/services/alert.service';
 import {GradeService} from './common/services/grade.service';
+import {TimeoutComponent} from './errors/states/timeout/timeout.component';
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
   'doubtfire.sessions',
@@ -462,6 +463,7 @@ DoubtfireAngularJSModule.directive(
   'statusIcon',
   downgradeComponent({component: StatusIconComponent}),
 );
+DoubtfireAngularJSModule.directive('timeout', downgradeComponent({component: TimeoutComponent}));
 DoubtfireAngularJSModule.directive('newFUnits', downgradeComponent({component: FUnitsComponent}));
 
 // Global configuration
