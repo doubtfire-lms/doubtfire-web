@@ -45,7 +45,7 @@
     "@uirouter/angular": "^13.0",
     "@uirouter/angular-hybrid": "^17.1.0",
     "@uirouter/angularjs": "^1.0.30",
-    "@uirouter/core": "^6.1.0",
+    "@uirouter/core": "^6.1.1",
     "@uirouter/rx": "^1.0.0",
     "angular": "1.5.11",
     "angular-cookies": "1.5.11",
