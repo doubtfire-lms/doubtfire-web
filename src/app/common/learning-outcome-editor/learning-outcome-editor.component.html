@@ -1,0 +1,206 @@
+<div class="flex flex-col gap-8">
+  <table
+    #outcomeTable
+    class="flex-grow f-table selectable"
+    mat-table
+    [dataSource]="outcomeSource"
+    matSort
+    (matSortChange)="sortOutcomeData($event)"
+  >
+    <ng-container matColumnDef="abbreviation" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Abbreviation</th>
+      <td
+        mat-cell
+        *matCellDef="let learningOutcome"
+        (click)="selectLearningOutcome(learningOutcome)"
+      >
+        {{ learningOutcome.abbreviation }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="shortDescription" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Short Description</th>
+      <td
+        mat-cell
+        *matCellDef="let learningOutcome"
+        (click)="selectLearningOutcome(learningOutcome)"
+      >
+        {{ learningOutcome.shortDescription }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="fullOutcomeDescription" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Outcome Description</th>
+      <td
+        mat-cell
+        *matCellDef="let learningOutcome"
+        (click)="selectLearningOutcome(learningOutcome)"
+      >
+        {{ learningOutcome.fullOutcomeDescription }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="connectedOutcomes" sticky>
+      <th mat-header-cell *matHeaderCellDef>Connected Learning Outcomes</th>
+      <td
+        mat-cell
+        *matCellDef="let learningOutcome"
+        (click)="selectLearningOutcome(learningOutcome)"
+      >
+        @for (outcome of getLinkedOutcomes(learningOutcome); track outcome.abbreviation) {
+          <mat-chip-row matTooltip="{{ outcome.shortDescription }}">{{
+            outcome.abbreviation
+          }}</mat-chip-row>
+        }
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="learningOutcomeAction" sticky>
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td
+        mat-cell
+        *matCellDef="let learningOutcome"
+        (click)="selectLearningOutcome(learningOutcome)"
+      >
+        @if (learningOutcomeHasChanges(learningOutcome)) {
+          <button
+            mat-icon-button
+            aria-label="save learning outcome"
+            color="primary"
+            (click)="saveLearningOutcome(learningOutcome)"
+          >
+            <mat-icon>save</mat-icon>
+          </button>
+        }
+        <button
+          mat-icon-button
+          aria-label="delete learning outcome"
+          color="warn"
+          (click)="deleteLearningOutcome(learningOutcome)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="outcomeColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: outcomeColumns"
+      [style.background]="selectedOutcome === row ? 'lightblue' : ''"
+    ></tr>
+  </table>
+
+  <span class="flex items-center">
+    <div class="h-20">
+      <mat-form-field appearance="outline">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
+      </mat-form-field>
+    </div>
+    <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    <span class="flex-grow"></span>
+    @if (abbreviationPrefix !== 'GLO') {
+      <label>Outcomes CSV</label>
+      <button mat-icon-button (click)="downloadCsv('Learning Outcomes')">
+        <mat-icon>download</mat-icon>
+      </button>
+      <button mat-icon-button (click)="uploadCsv('Learning Outcomes')">
+        <mat-icon>upload_file</mat-icon>
+      </button>
+      <span class="flex-grow"></span>
+    }
+    <label>Feedback CSV</label>
+    <button mat-icon-button (click)="downloadCsv('Feedback Templates')">
+      <mat-icon>download</mat-icon>
+    </button>
+    <button mat-icon-button (click)="uploadCsv('Feedback Templates')">
+      <mat-icon>upload_file</mat-icon>
+    </button>
+    <span class="flex-grow"></span>
+    <button mat-raised-button color="primary" (click)="createLearningOutcome()">Add Outcome</button>
+  </span>
+
+  @if (selectedOutcome) {
+    <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+      <div>
+        <h4 class="mt-1 font-bold text-2xl text-gray-900">Edit Outcome</h4>
+
+        <div class="flex flex-row gap-4">
+          <mat-form-field appearance="outline" class="basis-1/3">
+            <mat-label>Abbreviation</mat-label>
+            <input
+              matInput
+              required
+              pattern=".*\S.*"
+              [(ngModel)]="selectedOutcome.abbreviation"
+              maxlength="5"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="flex-grow">
+            <mat-label>Short Description</mat-label>
+            <input
+              matInput
+              required
+              pattern=".*\S.*"
+              [(ngModel)]="selectedOutcome.shortDescription"
+            />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="flex flex-grow">
+          <mat-label>Full Outcome Description</mat-label>
+          <textarea
+            matInput
+            required
+            pattern=".*\S.*"
+            [(ngModel)]="selectedOutcome.fullOutcomeDescription"
+          >
+          </textarea>
+        </mat-form-field>
+
+        @if (abbreviationPrefix !== 'GLO') {
+          <mat-form-field appearance="outline" class="flex flex-grow">
+            <mat-label>Connected Learning Outcomes</mat-label>
+            <mat-chip-grid #chipGrid aria-label="Outcome selection">
+              @for (outcome of selectedConnectedOutcomes(); track outcome.abbreviation) {
+                <mat-chip-row (removed)="remove(outcome)">
+                  {{ outcome.abbreviation }}
+                  <button matChipRemove [attr.aria-label]="'remove ' + outcome.abbreviation">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip-row>
+              }
+            </mat-chip-grid>
+            <input
+              name="typedConnectedOutcome"
+              placeholder="Connect an outcome..."
+              #connectedOutcomeInput
+              [(ngModel)]="typedConnectedOutcome"
+              [matChipInputFor]="chipGrid"
+              [matAutocomplete]="auto"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="add($event)"
+              [disabled]="!this.context"
+            />
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="select($event)">
+              @for (outcome of filteredOutcomes(); track outcome) {
+                <mat-option [value]="outcome.abbreviation"
+                  >{{ outcome.abbreviation }} - {{ outcome.shortDescription }}</mat-option
+                >
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        }
+
+        <div class="flex">
+          <span class="flex-grow"></span>
+          <button mat-raised-button color="primary" (click)="saveLearningOutcome(selectedOutcome)">
+            Save Outcome
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <f-feedback-template-editor
+      [context]="context"
+      [selectedOutcome]="selectedOutcome"
+    ></f-feedback-template-editor>
+  }
+</div>

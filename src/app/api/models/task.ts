@@ -59,6 +59,8 @@ export class Task extends Entity {
   public readonly similarityCache: EntityCache<TaskSimilarity> = new EntityCache<TaskSimilarity>();
   public readonly testAttemptCache: EntityCache<TestAttempt> = new EntityCache<TestAttempt>();
 
+  suggestedTaskStatus;
+
   private _unit: Unit;
 
   constructor(data?: Project | Unit) {

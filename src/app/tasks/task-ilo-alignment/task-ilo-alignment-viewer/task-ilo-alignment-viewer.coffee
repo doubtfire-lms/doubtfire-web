@@ -1,3 +1,5 @@
+# Component not used
+
 angular.module('doubtfire.tasks.task-ilo-alignment.task-ilo-alignment-viewer', [])
 
 #

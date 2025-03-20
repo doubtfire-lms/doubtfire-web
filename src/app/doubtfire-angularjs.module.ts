@@ -221,8 +221,10 @@ import {MarkedPipe} from './common/pipes/marked.pipe';
 import {AlertService} from './common/services/alert.service';
 import {GradeService} from './common/services/grade.service';
 import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
-import { D2lUnitDetailsModal } from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
-import { D2lTransferModal } from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
+import {D2lUnitDetailsModal} from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
+import {D2lTransferModal} from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
+import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/learning-outcome-editor.component';
+import {FeedbackTemplateService} from './api/services/feedback-template.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -305,6 +307,11 @@ DoubtfireAngularJSModule.factory(
   downgradeInjectable(EditProfileDialogService),
 );
 DoubtfireAngularJSModule.factory('CreateNewUnitModal', downgradeInjectable(CreateNewUnitModal));
+
+DoubtfireAngularJSModule.factory(
+  'FeedbackTemplateService',
+  downgradeInjectable(FeedbackTemplateService),
+);
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
@@ -464,6 +471,10 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'statusIcon',
   downgradeComponent({component: StatusIconComponent}),
+);
+DoubtfireAngularJSModule.directive(
+  'fLearningOutcomeEditor',
+  downgradeComponent({component: LearningOutcomeEditorComponent}),
 );
 DoubtfireAngularJSModule.directive('newFUnits', downgradeComponent({component: FUnitsComponent}));
 

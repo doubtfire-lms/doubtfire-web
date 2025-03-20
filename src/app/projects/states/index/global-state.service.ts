@@ -5,6 +5,7 @@ import {EntityCache} from 'ngx-entity-service';
 import {BehaviorSubject, Observable, Subject, skip, take} from 'rxjs';
 import {
   CampusService,
+  LearningOutcomeService,
   Project,
   ProjectService,
   TeachingPeriodService,
@@ -16,6 +17,7 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 
 /**
  * The different types of views that can be shown. Used by the header to determine details to show.
@@ -106,6 +108,8 @@ export class GlobalStateService implements OnDestroy {
     private projectService: ProjectService,
     private campusService: CampusService,
     private teachingPeriodService: TeachingPeriodService,
+    private learningOutcomeService: LearningOutcomeService,
+    private feedbackTemplateService: FeedbackTemplateService,
     @Inject(UIRouter) private router: UIRouter,
     private alerts: AlertService,
     private mediaObserver: MediaObserver,
@@ -219,13 +223,40 @@ export class GlobalStateService implements OnDestroy {
     const loadingObserver = new Observable((subscriber) => {
       // Loading campuses
       this.campusService.query().subscribe({
-        next: (_reponse) => {
+        next: (_response) => {
           subscriber.next(true);
         },
         error: (_response) => {
           this.alerts.error('Unable to access service. Failed loading campuses.', 6000);
         },
       });
+
+      if (this.userService.currentUser.isStaff) {
+        this.learningOutcomeService
+          .query({}, {endpointFormat: LearningOutcomeService.globalEndpoint})
+          .subscribe({
+            next: (_response) => {
+              subscriber.next(true);
+            },
+            error: (_response) => {
+              this.alerts.error('Unable to access service. Failed loading GLOs.', 6000);
+            },
+          });
+
+        this.feedbackTemplateService
+          .query({}, {endpointFormat: FeedbackTemplateService.globalEndpoint})
+          .subscribe({
+            next: (_response) => {
+              subscriber.next(true);
+            },
+            error: (_response) => {
+              this.alerts.error(
+                'Unable to access service. Failed loading GLO feedback templates.',
+                6000,
+              );
+            },
+          });
+      }
 
       // Loading teaching periods
       this.teachingPeriodService.query().subscribe({
@@ -270,7 +301,7 @@ export class GlobalStateService implements OnDestroy {
       },
       error: (_response) => {
         this.alerts.error('Unable to access your units.', 6000);
-      }
+      },
     });
   }
 

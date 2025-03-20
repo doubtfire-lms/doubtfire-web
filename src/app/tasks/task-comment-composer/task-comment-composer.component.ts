@@ -10,6 +10,8 @@ import {
   ElementRef,
   ViewChild,
   DoCheck,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import {trigger, style, animate, transition} from '@angular/animations';
 import {analyticsService} from 'src/app/ajs-upgraded-providers';
@@ -17,7 +19,12 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
 import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import {EmojiService} from 'src/app/common/services/emoji.service';
-import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {
+  Task,
+  TaskComment,
+  TaskCommentService,
+  FeedbackTemplate,
+} from 'src/app/api/models/doubtfire-model';
 import {TaskCommentsViewerComponent} from '../task-comments-viewer/task-comments-viewer.component';
 import {BehaviorSubject} from 'rxjs';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -61,9 +68,13 @@ const ACCEPTED_FILE_TYPES = [
     ]),
   ],
 })
-export class TaskCommentComposerComponent implements DoCheck {
+export class TaskCommentComposerComponent implements DoCheck, OnChanges {
   @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.showFeedbackTemplatePicker = false;
+  }
 
   public $userIsTyping = new BehaviorSubject<boolean>(false);
 
@@ -82,6 +93,7 @@ export class TaskCommentComposerComponent implements DoCheck {
   emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;
+  showFeedbackTemplatePicker: boolean = false;
   recording = false;
   cagStartWidth: number;
 
@@ -242,6 +254,18 @@ export class TaskCommentComposerComponent implements DoCheck {
     ].join('');
   }
 
+  addFeedback(template: FeedbackTemplate): void {
+    const char = template.commentText;
+    const text = this.input.first.nativeElement.innerText;
+    const position = this.caretOffset();
+    this.input.first.nativeElement.innerText = [
+      text.slice(0, position),
+      char,
+      text.slice(position),
+    ].join('');
+    this.input.first.nativeElement.focus();
+  }
+
   openDiscussionComposer() {
     this.dialog.open(DiscussionComposerDialog, {
       data: {
@@ -315,6 +339,11 @@ export class TaskCommentComposerComponent implements DoCheck {
         this.alerts.error(error || error?.message, 2000);
       },
     );
+  }
+
+  showFeedbackPicker() {
+    this.showFeedbackTemplatePicker = !this.showFeedbackTemplatePicker;
+    this.commentsViewer.scrollDown();
   }
 }
 

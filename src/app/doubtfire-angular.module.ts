@@ -239,8 +239,17 @@ import {TaskScormCardComponent} from './projects/states/dashboard/directives/tas
 import {TestAttemptService} from './api/services/test-attempt.service';
 import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
 import {ScormExtensionModalComponent} from './common/modals/scorm-extension-modal/scorm-extension-modal.component';
-import { D2lTransferComponent, D2lTransferModal } from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
-import { SuccessCloseComponent } from './common/success-close/success-close.component';
+import {
+  D2lTransferComponent,
+  D2lTransferModal,
+} from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
+import {SuccessCloseComponent} from './common/success-close/success-close.component';
+import {FeedbackTemplateService} from './api/services/feedback-template.service';
+import {FeedbackTemplateEditorComponent} from './common/feedback-template-editor/feedback-template-editor.component';
+import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/learning-outcome-editor.component';
+import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task-feedback-templates/task-feedback-templates.component';
+import {NestedCsvDownloadModalComponent} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.component';
+import {NestedCsvDownloadModalService} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -364,6 +373,10 @@ const MY_DATE_FORMAT = {
     TaskScormCardComponent,
     ScormExtensionCommentComponent,
     ScormExtensionModalComponent,
+    FeedbackTemplateEditorComponent,
+    LearningOutcomeEditorComponent,
+    TaskFeedbackTemplatesComponent,
+    NestedCsvDownloadModalComponent,
   ],
   // Services we provide
   providers: [
@@ -445,6 +458,8 @@ const MY_DATE_FORMAT = {
     provideLottieOptions({
       player: () => player,
     }),
+    FeedbackTemplateService,
+    NestedCsvDownloadModalService,
   ],
   imports: [
     FlexLayoutModule,

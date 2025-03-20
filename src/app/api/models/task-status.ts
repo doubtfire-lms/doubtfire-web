@@ -101,6 +101,14 @@ export class TaskStatus {
     'complete',
   ];
 
+  public static readonly FEEDBACK_TEMPLATE_STATUSES: TaskStatusEnum[] = [
+    'complete',
+    'discuss',
+    'fix_and_resubmit',
+    'redo',
+    'feedback_exceeded',
+  ];
+
   public static readonly LEARNING_WEIGHT: Map<TaskStatusEnum, number> = new Map<TaskStatusEnum, number>([
     ['fail', 0.0],
     ['not_started', 0.0],

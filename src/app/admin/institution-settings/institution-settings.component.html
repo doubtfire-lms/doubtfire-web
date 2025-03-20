@@ -9,6 +9,17 @@
     <mat-tab label="Teaching Periods">
       <f-teaching-period-list></f-teaching-period-list>
     </mat-tab>
+    <mat-tab label="Learning Outcomes">
+      <div class="learning-outcomes-container">
+        <div class="header">
+          <div class="mt-10">
+            <h1 class="mb-1">Learning Outcomes</h1>
+            <p>Manage global learning outcomes for the institution</p>
+          </div>
+        </div>
+        <f-learning-outcome-editor></f-learning-outcome-editor>
+      </div>
+    </mat-tab>
     @if (overseerEnabled) {
     <mat-tab label="Overseer Images">
       <overseer-image-list></overseer-image-list>

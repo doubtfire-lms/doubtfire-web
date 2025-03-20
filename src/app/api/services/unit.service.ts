@@ -32,7 +32,7 @@ export class UnitService extends CachedEntityService<Unit> {
     private taskDefinitionService: TaskDefinitionService,
     private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
     private groupSetService: GroupSetService,
-    private groupService: GroupService
+    private groupService: GroupService,
   ) {
     super(httpClient, API_URL);
 

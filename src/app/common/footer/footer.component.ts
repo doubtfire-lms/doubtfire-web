@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { Observable } from 'rxjs';
 import { Task } from 'src/app/api/models/task';
 import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
-
+import { TaskService } from 'src/app/api/services/task.service';
 import { FileDownloaderService } from '../file-downloader/file-downloader.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { FileDownloaderService } from '../file-downloader/file-downloader.servic
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  constructor(public selectedTaskService: SelectedTaskService, private fileDownloader: FileDownloaderService) {}
+  constructor(public selectedTaskService: SelectedTaskService, public taskService: TaskService, private fileDownloader: FileDownloaderService) {}
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;

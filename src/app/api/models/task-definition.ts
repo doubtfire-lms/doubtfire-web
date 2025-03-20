@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Entity, EntityMapping } from 'ngx-entity-service';
+import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { Grade, GroupSet, TutorialStream, Unit } from './doubtfire-model';
+import { Grade, GroupSet, LearningOutcome, TutorialStream, Unit } from './doubtfire-model';
 import { TaskDefinitionService } from '../services/task-definition.service';
+import { AlertService } from 'src/app/common/services/alert.service';
 
 export type UploadRequirement = { key: string; name: string; type: string; tiiCheck?: boolean; tiiPct?: number };
 
@@ -43,6 +44,9 @@ export class TaskDefinition extends Entity {
   overseerImageId: number;
   assessmentEnabled: boolean;
   mossLanguage: string = 'moss c';
+
+  public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
+    new EntityCache<LearningOutcome>();
 
   readonly unit: Unit;
 
@@ -111,6 +115,18 @@ export class TaskDefinition extends Entity {
     return this.originalSaveData != JSON.stringify(this.toJson(mapping));
   }
 
+  public refresh(): void {
+    const alerts = AppInjector.get(AlertService);
+    AppInjector.get(TaskDefinitionService)
+      .fetch(this.id)
+      .subscribe({
+        next: (taskDefinition) => {
+          console.log(taskDefinition.name);
+        },
+        error: (message) => alerts.error(message, 6000),
+      });
+  }
+
   public get isNew(): boolean {
     return !this.id;
   }
@@ -163,6 +179,16 @@ export class TaskDefinition extends Entity {
     return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/scorm_data.json${
       asAttachment ? '?as_attachment=true' : ''
     }`;
+  }
+
+  public getOutcomeBatchUploadUrl(): string {
+    const constants = AppInjector.get(DoubtfireConstants);
+    return `${constants.API_URL}/task_definitions/${this.id}/outcomes/csv`;
+  }
+
+  public getFeedbackTemplateBatchUploadUrl(): string {
+    const constants = AppInjector.get(DoubtfireConstants);
+    return `${constants.API_URL}/task_definitions/${this.id}/feedback_chips/csv`;
   }
 
   /**

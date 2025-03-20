@@ -18,7 +18,6 @@ export class TaskDropdownComponent {
   @Input() unitRole: UnitRole;
 
   taskToShortName: { [key: string]: string } = {
-    'Learning Outcomes': 'Outcomes',
     'Portfolio Creation': 'Portfolio',
     'Staff Tasks': 'Staff Tasks',
     'Student Groups': 'Groups',

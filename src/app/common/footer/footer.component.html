@@ -45,6 +45,22 @@
         <mat-icon>construction</mat-icon>
       </button>
       <span class="w-3"></span>
+      @if (selectedTask && selectedTask.suggestedTaskStatus) {
+        <button
+          mat-icon-button
+          matTooltip="Recommended: Mark as {{
+            taskService.statusData(selectedTask.suggestedTaskStatus).label
+          }}"
+          matTooltipPosition="above"
+          aria-label=""
+          class="button extra-large-button status-chip"
+          (click)="selectedTask?.updateTaskStatus(selectedTask.suggestedTaskStatus)"
+          [ngClass]="taskService.statusData(selectedTask.suggestedTaskStatus).class"
+        >
+          <i class="fa {{ taskService.statusData(selectedTask.suggestedTaskStatus).icon }}"></i>
+        </button>
+        <span class="w-3"></span>
+      }
       <button
         [disabled]="selectedTask === undefined"
         mat-icon-button

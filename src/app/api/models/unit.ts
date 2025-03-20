@@ -383,7 +383,7 @@ export class Unit extends Entity {
         return alignment.taskDefinition.id === td.id;
       })
       .sort((a: TaskOutcomeAlignment, b: TaskOutcomeAlignment) => {
-        return a.learningOutcome.iloNumber - b.learningOutcome.iloNumber;
+        return a.learningOutcome.id - b.learningOutcome.id;
       });
   }
 
@@ -399,6 +399,10 @@ export class Unit extends Entity {
 
   public getOutcomeBatchUploadUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/outcomes/csv`;
+  }
+
+  public getFeedbackTemplateBatchUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/feedback_chips/csv`;
   }
 
   public hasStreams(): boolean {
