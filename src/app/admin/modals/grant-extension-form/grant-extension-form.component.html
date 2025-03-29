@@ -1,0 +1,64 @@
+<div class="mx-auto max-w-3xl p-8 bg-white rounded-md shadow-md">
+  <h2 class="text-3xl font-bold text-gray-900 mb-10">Grant Extension</h2>
+
+  <form [formGroup]="grantExtensionForm" (ngSubmit)="onSubmit()" class="space-y-8">
+
+    <!-- Student -->
+    <div>
+      <label class="block text-lg font-semibold text-gray-800 mb-2" for="student">Student</label>
+      <select
+        id="student"
+        formControlName="student"
+        class="w-full border border-gray-300 rounded-md px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        required
+      >
+        <option value="" disabled selected>Select a student</option>
+        <option *ngFor="let student of students" [value]="student.id">
+          {{ student.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Extension -->
+    <div>
+      <label class="block text-lg font-semibold text-gray-800 mb-2">
+        Extension Duration:
+        <span class="font-bold">{{ grantExtensionForm.get('extension')?.value }}</span> day(s)
+      </label>
+      <input type="range" formControlName="extension" min="1" max="30" class="w-full" />
+    </div>
+
+    <!-- Reason -->
+    <div>
+      <label for="reason" class="block text-lg font-semibold text-gray-800 mb-2">Reason</label>
+      <textarea
+        id="reason"
+        formControlName="reason"
+        rows="4"
+        class="w-full border border-gray-300 rounded-md px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        required
+      ></textarea>
+    </div>
+
+    <!-- Notes -->
+    <div>
+      <label for="notes" class="block text-lg font-semibold text-gray-800 mb-2">Additional Notes</label>
+      <textarea
+        id="notes"
+        formControlName="notes"
+        rows="3"
+        class="w-full border border-gray-300 rounded-md px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      ></textarea>
+    </div>
+
+    <!-- Submit -->
+    <div class="pt-4 text-right">
+      <button
+        type="submit"
+        class="inline-flex items-center bg-blue-600 text-white text-lg font-medium px-6 py-3 rounded-md hover:bg-blue-700 transition"
+      >
+        Grant Extension
+      </button>
+    </div>
+  </form>
+</div>
