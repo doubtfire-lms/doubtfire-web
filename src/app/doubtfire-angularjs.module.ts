@@ -58,7 +58,6 @@ import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/config.js';
 import 'build/src/app/config/root-controller/root-controller.js';
 import 'build/src/app/config/local-storage/local-storage.js';
-import 'build/src/app/config/routing/routing.js';
 import 'build/src/app/config/vendor-dependencies/vendor-dependencies.js';
 import 'build/src/app/config/analytics/analytics.js';
 import 'build/src/app/config/debug/debug.js';

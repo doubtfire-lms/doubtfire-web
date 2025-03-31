@@ -10,6 +10,7 @@ import {FUsersComponent} from './admin/states/f-users/f-users.component';
 import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import { SuccessCloseComponent } from './common/success-close/success-close.component';
+import {UIRouter} from  '@uirouter/angular';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -404,6 +405,11 @@ const SuccessCloseState: NgHybridStateDeclaration = {
     roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
+
+export function uiRouterConfig(router: UIRouter){
+  router.urlService.rules.when('', '/');
+  router.urlService.rules.when('/', '/home');
+}
 
 
 /**

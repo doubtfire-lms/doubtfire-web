@@ -103,7 +103,7 @@ import { DateFnsAdapter, MAT_DATE_FNS_FORMATS } from '@angular/material-date-fns
 import { enAU } from 'date-fns/locale';
 
 
-import {doubtfireStates} from './doubtfire.states';
+import {doubtfireStates, uiRouterConfig} from './doubtfire.states';
 import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatSortModule} from '@angular/material/sort';
@@ -498,7 +498,7 @@ const MY_DATE_FORMAT = {
     EmojiModule,
     PdfViewerModule,
     LottieComponent,
-    UIRouterUpgradeModule.forRoot({states: doubtfireStates}),
+    UIRouterUpgradeModule.forRoot({states: doubtfireStates, config: uiRouterConfig}),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: () => interval(6000).pipe(take(1)),
