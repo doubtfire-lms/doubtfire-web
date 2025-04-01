@@ -24,7 +24,7 @@ export class UnitService extends CachedEntityService<Unit> {
   public readonly rolloverEndpoint = 'units/:id:/rollover';
 
   constructor(
-    httpClient: HttpClient,
+    private http: HttpClient,
     private teachingPeriodService: TeachingPeriodService,
     private tutorialService: TutorialService,
     private tutorialStreamService: TutorialStreamService,
@@ -34,7 +34,7 @@ export class UnitService extends CachedEntityService<Unit> {
     private groupSetService: GroupSetService,
     private groupService: GroupService
   ) {
-    super(httpClient, API_URL);
+    super(http, API_URL);
 
     this.cacheBehaviourOnGet = 'cacheQuery';
 
@@ -279,4 +279,15 @@ export class UnitService extends CachedEntityService<Unit> {
 
     return httpClient.get<any>(url);
   }
+
+  getUnitByCode(unitCode: string): Observable<Unit> {
+    const url = `${API_URL}/units/${unitCode}`;
+    return this.http.get<Unit>(url);
+  }
+
+  getUnits(): Observable<Unit[]> {
+    const url = `${API_URL}/units/`;
+    return this.http.get<Unit[]>(url);
+  }
+
 }
