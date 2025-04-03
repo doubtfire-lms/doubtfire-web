@@ -1,6 +1,7 @@
 import {Component, Inject, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {analyticsService, dateService} from 'src/app/ajs-upgraded-providers';
+import {AnalyticsService} from 'src/app/common/services/analytics.service';
+import {dateService} from 'src/app/ajs-upgraded-providers';
 import {UIRouter} from '@uirouter/angular';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
@@ -27,7 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private constants: DoubtfireConstants,
     private globalState: GlobalStateService,
     private userService: UserService,
-    @Inject(analyticsService) private AnalyticsService: any,
+    @Inject(AnalyticsService) private AnalyticsService: AnalyticsService,
     @Inject(dateService) private DateService: any,
     @Inject(UIRouter) private router: UIRouter,
   ) {
@@ -50,7 +51,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.router.stateService.go('sign_in');
     }
 
-    this.AnalyticsService.event('Home', 'Viewed Home page');
+    this.AnalyticsService.logEvent('Home', 'Viewed Home page');
     this.globalState.setView(ViewType.OTHER);
 
     this.loadingUnitRoles = true;
