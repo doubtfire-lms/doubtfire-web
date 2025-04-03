@@ -19,11 +19,16 @@ import {AlertService} from '../services/alert.service';
   styleUrls: ['./pdf-viewer.component.scss'],
 })
 export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit {
+  private readonly ZOOM_MIN = 0.5;
+  private readonly ZOOM_MAX = 2.5;
+
   private _pdfUrl: string;
   public pdfBlobUrl: string;
   public useNativePdfViewer = false;
 
   @Input() pdfUrl: string;
+  @Input() startPage: number = 1;
+
   @ViewChild(PdfViewerComponent) private pdfComponent: PdfViewerComponent;
   pdfSearchString: string;
   zoomValue = 1;
@@ -43,6 +48,9 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
 
   ngAfterViewInit(): void {
     this.useNativePdfViewer = localStorage.getItem('useNativePdfViewer') === 'true';
+    const storedZoomValue = parseFloat(localStorage.getItem('pdfViewerZoom')) || 1;
+    // Clamp zoom value between ZOOM_MIN and ZOOM_MAX
+    this.zoomValue = Math.min(Math.max(storedZoomValue, this.ZOOM_MIN), this.ZOOM_MAX);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -75,14 +83,24 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
     });
   }
 
+  scrollToPage(pageNumber: number) {
+    if (pageNumber <= this.pdfComponent.pdfViewer.pagesCount) {
+      this.pdfComponent.pdfViewer.scrollPageIntoView({
+        pageNumber,
+      });
+    }
+  }
+
   public zoomIn() {
-    if (this.zoomValue < 2.5) {
+    if (this.zoomValue < this.ZOOM_MAX) {
       this.zoomValue += 0.1;
+      localStorage.setItem('pdfViewerZoom', this.zoomValue.toString());
     }
   }
   public zoomOut() {
-    if (this.zoomValue > 0.5) {
+    if (this.zoomValue > this.ZOOM_MIN) {
       this.zoomValue -= 0.1;
+      localStorage.setItem('pdfViewerZoom', this.zoomValue.toString());
     }
   }
 
@@ -110,5 +128,12 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   onLoaded() {
     this.loaded = true;
     window.dispatchEvent(new Event('resize'));
+  }
+
+  onPageRendered() {
+    this.loaded = true;
+    if (this.startPage > 1) {
+      this.scrollToPage(this.startPage);
+    }
   }
 }
