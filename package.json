@@ -102,7 +102,6 @@
     "@angular/language-service": "^17.3.6",
     "@commitlint/cli": "^16.0.1",
     "@commitlint/config-conventional": "^17",
-    "@esbuild/linux-arm64": "^0.25.2",
     "@types/angular": "1.5.11",
     "@types/canvas-confetti": "^1.6.0",
     "@types/d3": "^3.5.17",
