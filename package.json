@@ -14,7 +14,7 @@
     "build:angular17": "ng build",
     "lint:fix": "ng lint --fix",
     "lint": "ng lint",
-    "serve:angular17": "export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --configuration $NODE_ENV --proxy-config proxy.conf.json",
+    "serve:angular17": "export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --poll=2000 --configuration $NODE_ENV --proxy-config proxy.conf.json",
     "serve:angular17-compose": "export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --configuration $NODE_ENV --proxy-config proxy-compose.conf.json",
     "start": "npm-run-all -l -s build:angular1 serve:angular17",
     "start-compose": "npm-run-all -l -s build:angular1 serve:angular17-compose",
@@ -80,7 +80,7 @@
     "ng-csv": "0.2.3",
     "ng-file-upload": "~5.0.9",
     "ng-flex-layout": "^17.3.7-beta.1",
-    "ng2-pdf-viewer": "^10.2",
+    "ng2-pdf-viewer": "10.2.2",
     "ngx-bootstrap": "^6.1.0",
     "ngx-entity-service": "^0.0.41",
     "ngx-lottie": "^11.0.2",
@@ -102,6 +102,7 @@
     "@angular/language-service": "^17.3.6",
     "@commitlint/cli": "^16.0.1",
     "@commitlint/config-conventional": "^17",
+    "@esbuild/linux-arm64": "^0.25.2",
     "@types/angular": "1.5.11",
     "@types/canvas-confetti": "^1.6.0",
     "@types/d3": "^3.5.17",
@@ -165,6 +166,8 @@
     "@nx/nx-darwin-arm64": "^18.0",
     "@nx/nx-darwin-x64": "^18.0",
     "@nx/nx-linux-x64-gnu": "^18.0",
-    "@nx/nx-win32-x64-msvc": "^18.0"
+    "@nx/nx-win32-x64-msvc": "^18.0",
+    "@rollup/rollup-linux-arm64-gnu": "*",
+    "@rollup/rollup-linux-x64-gnu": "*"
   }
 }
