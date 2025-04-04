@@ -109,7 +109,7 @@ export class AuthenticationService {
   }
 
   public get rememberMe(): boolean {
-    return localStorage.getItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) === 'true';
+    return localStorage.getItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) !== 'false';
   }
 
   public set rememberMe(remember: boolean) {

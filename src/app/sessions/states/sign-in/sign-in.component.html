@@ -16,7 +16,7 @@
             signIn({
               username: formData.username,
               password: formData.password,
-              remember: formData.remember,
+              remember: authService.rememberMe,
               autoLogin: formData.autoLogin
             })
           "
@@ -42,13 +42,13 @@
             </mat-form-field>
           }
           @if (!showCredentials) {
-            <mat-checkbox matInput name="autoLogin" [(ngModel)]="formData.autoLogin"
-              >Automatically redirect</mat-checkbox
-            >
+            <mat-checkbox matInput name="autoLogin" [(ngModel)]="formData.autoLogin">
+              Automatically redirect
+            </mat-checkbox>
           }
-          <mat-checkbox matInput name="remember" [(ngModel)]="formData.remember"
-            >Stay logged in</mat-checkbox
-          >
+          <mat-checkbox matInput name="remember" [(ngModel)]="authService.rememberMe">
+            Stay logged in
+          </mat-checkbox>
           <button
             class="w-full"
             mat-flat-button

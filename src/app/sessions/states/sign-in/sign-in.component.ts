@@ -52,7 +52,7 @@ export class SignInComponent implements OnInit {
     this.formData = {
       username: '',
       password: '',
-      remember: localStorage.getItem(this.authService.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) == 'true',
+      remember: this.authService.rememberMe,
       autoLogin: localStorage.getItem('autoLogin') == 'true',
     };
     // Check for SSO
@@ -76,12 +76,12 @@ export class SignInComponent implements OnInit {
           return this.signIn({
             auth_token: this.transition.params().authToken,
             username: this.transition.params().username,
-            remember: this.formData.remember,
+            remember: this.authService.rememberMe,
           });
         } else if (this.formData.autoLogin) {
           return wait.then(() => {
             // Double check in case changed in the meantime
-            if (this.formData.autoLogin && this.formData.remember) {
+            if (this.formData.autoLogin && this.authService.rememberMe) {
               this.redirectToSSO();
             }
           });
@@ -152,9 +152,6 @@ export class SignInComponent implements OnInit {
    * refreshes the page / returns to the app / etc.
    */
   public signIn(signInCredentials: signInData): void {
-    // Save remember me state
-    this.authService.rememberMe = signInCredentials.remember;
-
     // Redirect to SSO if we do not have an auth token already (from SSO callback)
     if (this.SSOLoginUrl && !signInCredentials.auth_token) {
       return this.redirectToSSO();
