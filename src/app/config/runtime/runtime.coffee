@@ -9,26 +9,15 @@ angular.module('doubtfire.config.runtime', [])
   editableThemes.bs3.inputClass = 'input-sm'
   editableThemes.bs3.buttonsClass = 'btn-sm'
 
-  serialize = (obj, prefix) ->
-    str = []
-    for p, v of obj
-      k = if prefix then prefix + "[" + p + "]" else p
-      if typeof v == "object"
-        str.push(serialize(v, k))
-      else
-        str.push(encodeURIComponent(k) + "=" + encodeURIComponent(v))
-
-    str.join("&")
-
   handleUnauthorisedDest = (toState) ->
     if authenticationService.isAuthenticated()
       $state.go "unauthorised"
     else if $state.current.name isnt "sign_in"
-      $state.go "sign_in", { dest: toState.name }
+      $state.go "sign_in"
 
   handleTokenTimeout = ->
     if $state.current.name isnt "timeout"
-      $state.go "timeout", { dest: $state.current.name, params: serialize($state.params) }
+      $state.go "timeout"
 
   handleUnauthorised = ->
     handleUnauthorisedDest($state.current)
@@ -46,7 +35,13 @@ angular.module('doubtfire.config.runtime', [])
     toState = trans.to()
     return true unless toState.data.roleWhitelist
 
-    unless authenticationService.isAuthorised toState.data.roleWhitelist
-      handleUnauthorisedDest(toState)
-      return false
+    # Get the auth service to check this when the auth is complete
+    authenticationService.afterAuthCall(
+      (isAuthenticated) ->
+        unless isAuthenticated && authenticationService.isAuthorised(toState.data.roleWhitelist)
+          handleUnauthorisedDest(toState)
+    )
+
+    # We can always transition... but may have to redirect after auth call...
+    return true
 )

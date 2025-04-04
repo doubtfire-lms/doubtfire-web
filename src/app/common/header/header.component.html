@@ -72,7 +72,7 @@
     </mat-menu>
 
     <button mat-button [matMenuTriggerFor]="menu2">
-      <user-icon [size]="32"></user-icon>
+      <user-icon [size]="32" [user]="currentUser"></user-icon>
     </button>
     <mat-menu #menu2="matMenu">
       <button mat-menu-item uiSref="edit_profile">

@@ -118,17 +118,16 @@ export class GlobalStateService implements OnDestroy {
     this.loadedUnits = this.unitService.cache;
     this.currentUserProjects = this.projectService.cache;
 
-    this.authenticationService.checkUserCookie();
-
-    setTimeout(() => {
-      if (this.authenticationService.isAuthenticated()) {
+    // Try to login using the refresh token
+    this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
+      if (result) {
         this.loadGlobals();
       } else {
         // not loading anything as no user - just redirect to sign in
         this.isLoadingSubject.next(false);
         this.router.stateService.go('sign_in');
       }
-    }, 800);
+    });
 
     // this is a hack to workaround horrific IOS "feature"
     // https://stackoverflow.com/questions/37112218/css3-100vh-not-constant-in-mobile-browser
@@ -205,9 +204,8 @@ export class GlobalStateService implements OnDestroy {
     this.isLoadingSubject.next(true);
     this.userService.cache.clear();
     this.clearUnitsAndProjects();
-    this.authenticationService.signOut();
     this.isLoadingSubject.next(false);
-    this.router.stateService.go('sign_in');
+    this.authenticationService.signOut();
   }
 
   public ngOnDestroy(): void {

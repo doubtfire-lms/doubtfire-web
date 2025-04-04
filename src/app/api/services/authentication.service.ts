@@ -5,11 +5,41 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {StateService, UIRouter, UIRouterGlobals} from '@uirouter/angular';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 import {AppInjector} from 'src/app/app-injector';
-import {map, Observable} from 'rxjs';
+import {AsyncSubject, catchError, map, Observable} from 'rxjs';
 import {AlertService} from 'src/app/common/services/alert.service';
+
+/**
+ * The format for the data returned from the auth api.
+ */
+interface AuthResponse {
+  user: object;
+  auth_token: string;
+}
 
 @Injectable()
 export class AuthenticationService {
+
+  /**
+   * The URL for the authentication API endpoint
+   */
+  private readonly AUTH_URL: string;
+
+  /**
+   * The key used to store the username in local storage - now removed.
+   */
+  public readonly USERNAME_KEY: string = 'doubtfire_user';
+
+  /**
+   * The key used to store the remember me option in local storage.
+   */
+  public readonly REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN: string =
+    'remember_doubtfire_credentials_token';
+
+  /**
+   * AsyncSubject to indicate when the authentication process is complete.
+   */
+  private authComplete$: AsyncSubject<boolean> = new AsyncSubject<boolean>();
+
   constructor(
     private httpClient: HttpClient,
     private userService: UserService,
@@ -20,127 +50,101 @@ export class AuthenticationService {
     private uiRouterGlobals: UIRouterGlobals,
   ) {
     this.AUTH_URL = `${this.doubtfireConstants.API_URL}/auth`;
+    // Ensure any only user data is removed from local storage
+    localStorage.removeItem(this.USERNAME_KEY);
+  }
+
+  private actionAuthFailed() {
+    // Complete the auth - so that waiting actions can continue
+    this.authComplete$.next(false);
+    this.authComplete$.complete();
+
+    this.signOut(false);
   }
 
   /**
-   * Use the refresh token cookie and username to get a new access token.
+   * Attempt to login using the refresh token secure cookie.
+   * This requires the remember option to be true - and the server to have sent a
+   * secure cookie.
+   * @param loginResultCallback - Callback function to indicate success or failure of login.
    */
-  public refreshAccessToken() {
-    this.httpClient.post(this.AUTH_URL + '/refresh-token/access-token', {}).subscribe({
-      next: (response) => {
+  public attemptLoginUsingRefreshToken(loginResultCallback: (result: boolean) => void): void {
+    // Check we have indication of secure cookie in local storage
+    const remember: boolean = this.rememberMe;
 
-      },
-      error: (error) => {
-        console.error('Error refreshing token:', error);
-      },
-    });
-  }
-
-  public getRefreshToken() {
-    this.httpClient.post(this.AUTH_URL + '/refresh-token', {}).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.refreshAccessToken();
-      },
-      error: (error) => {
-        console.error('Error refreshing token:', error);
-      },
-    });
-  }
-
-  public checkUserCookie(): void {
-    const userData = JSON.parse(localStorage.getItem(this.USERNAME_KEY));
-
-    // Exit if no user data
-    if (!userData || !userData.id) {
+    if (!remember) {
+      loginResultCallback(false);
       return;
     }
 
-    // Get current user from the user service - ensure the object exists there
-    const user = this.userService.cache.getOrCreate(userData.id, this.userService, {
-      username: userData.username,
+    // Attempt to get an access token using the refresh token cookie
+    this.httpClient.post(this.AUTH_URL + '/access-token', {}).subscribe({
+      next: (response: AuthResponse | null) => {
+        if (response && response.auth_token) {
+          this.setupUserFromResponse(response);
+          loginResultCallback(true);
+        } else {
+          this.actionAuthFailed();
+          loginResultCallback(false);
+        }
+      },
+      error: (_error) => {
+        // Will occur on 404 when the refresh token cookie is not present
+        this.actionAuthFailed();
+        loginResultCallback(false);
+      },
     });
-
-    // Merge in the cached data
-    Object.assign(user, userData);
-
-    if (this.tryChangeUser(user)) {
-      this.userService.currentUser = user;
-
-      const resetTime = new Date(
-        Number.parseInt(localStorage.getItem(this.DOUBTFIRE_LOGIN_TIME)) + 60 * 60 * 1000,
-      );
-      const waitTime = resetTime.valueOf() - new Date().valueOf();
-
-      setTimeout(() => this.updateAuth(), waitTime);
-    }
   }
 
-  private readonly AUTH_URL: string;
-  public readonly USERNAME_KEY: string = 'doubtfire_user';
-  public readonly REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN: string =
-    'remember_doubtfire_credentials_token';
-  public readonly DOUBTFIRE_LOGIN_TIME: string = 'doubtfire_login_time';
-
-  public saveCurrentUser(
-    remember: boolean = localStorage.getItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) === 'true',
-  ): void {
-    // this.getRefreshToken();
-    if (remember && this.userService.currentUser.id) {
-      localStorage.setItem(this.USERNAME_KEY, JSON.stringify(this.userService.currentUser));
-      localStorage.setItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN, 'true');
-      localStorage.setItem(this.DOUBTFIRE_LOGIN_TIME, JSON.stringify(new Date().getTime()));
-    } else {
-      localStorage.removeItem(this.USERNAME_KEY);
-      localStorage.removeItem(this.DOUBTFIRE_LOGIN_TIME);
-    }
-  }
-
+  /**
+   * Check if the user is authenticated.
+   *
+   * @returns true if the user is authenticated, false otherwise.
+   */
   public isAuthenticated(): boolean {
-    return this.userService.currentUser.id !== undefined;
+    return (
+      this.userService.currentUser.id !== undefined &&
+      !!this.userService.currentUser.authenticationToken
+    );
   }
 
-  private updateAuth() {
-    if (!this.isAuthenticated()) {
+  public get rememberMe(): boolean {
+    return localStorage.getItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) === 'true';
+  }
+
+  public set rememberMe(remember: boolean) {
+    localStorage.setItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN, String(remember));
+  }
+
+  /**
+   * Get a new access token - and delete the old one.
+   *
+   * @returns void
+   */
+  private cycleAccessToken() {
+    const remember: boolean = this.rememberMe;
+
+    // We cant get a new token if there is no refresh token cookie
+    if (!this.isAuthenticated() || !remember) {
       return;
     }
 
-    const remember: boolean =
-      localStorage.getItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) === 'true';
-    localStorage.setItem(this.DOUBTFIRE_LOGIN_TIME, JSON.stringify(new Date().getTime()));
-
-    this.httpClient
-      .put(this.AUTH_URL, {
-        username: this.userService.currentUser.username,
-        remember: remember,
-      })
-      .subscribe({
-        next: (response) => {
-          this.userService.currentUser.authenticationToken = response['auth_token'];
-          this.saveCurrentUser(remember);
-
-          // Update auth each hour
-          setTimeout(() => this.updateAuth(), 1000 * 60 * 60);
-        },
-      });
+    // Attempt to get a new access token using the refresh token cookie
+    this.attemptLoginUsingRefreshToken((result: boolean) => {
+      if (result) {
+        console.log('Successfully refreshed access token');
+      }
+    });
   }
 
-  private tryChangeUser(user: User, remember?: boolean) {
-    if (user) {
-      // Clear the current user object and populate it with the new values.
-      // Note how the actual user object reference doesn't change.
-      // delete currentUser[prop] for prop of currentUser
-      // _.extend currentUser, user
-      this.userService.currentUser = user;
-      this.saveCurrentUser(remember);
-
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  private readonly validRoles: string[] = ['anon', 'Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'];
+  private readonly validRoles: string[] = [
+    'anon',
+    'Student',
+    'Tutor',
+    'Convenor',
+    'Admin',
+    'Auditor',
+  ];
 
   private isValidRoleWhitelist(roleWhitelist: string[]) {
     return roleWhitelist.filter((role: string) => this.validRoles.includes(role)).length !== 0;
@@ -158,6 +162,53 @@ export class AuthenticationService {
     );
   }
 
+  /**
+   * Use the user service to get or create a user object, and update it
+   * from the response. Ensure that the authentication token is set.
+   *
+   * @param response the response from the authentication API
+   */
+  private setupUserFromResponse(response: AuthResponse): void {
+    // Extract relevant data from response and construct user object to store in cache.
+    const user: User = this.userService.cache.getOrCreate(
+      response.user['id'],
+      this.userService,
+      response.user,
+    );
+
+    // Set the user's authentication token for access to api.
+    user.authenticationToken = response['auth_token'];
+
+    // Record the current user
+    this.userService.currentUser = user;
+
+    // Load everything!
+    AppInjector.get(GlobalStateService).loadGlobals();
+
+    // Update token in one hour
+    setTimeout(() => this.cycleAccessToken(), 1000 * 60 * 60);
+
+    // Inidcate that the authentication was successful
+    this.authComplete$.next(true);
+    this.authComplete$.complete();
+  }
+
+  /**
+   * Register a callback to be called when the authentication process is complete.
+   * This is used by the runtime.coffee for now to check authorisation after login
+   * completes. The callback will be called with true if user is authorised and if
+   * not will redirect to another page.
+   *
+   * @param callback the callback function to call
+   */
+  public afterAuthCall(callback: (result: boolean) => void): void {
+    this.authComplete$.subscribe({
+      next: (result) => {
+        callback(result);
+      }
+    });
+  }
+
   public signIn(
     userCredentials:
       | {
@@ -170,39 +221,40 @@ export class AuthenticationService {
           username: string;
           remember: boolean;
         },
-  ): Observable<any> {
+  ): Observable<void> {
     return this.httpClient.post(this.AUTH_URL, userCredentials).pipe(
-      map((response: any) => {
-        // Extract relevant data from response and construct user object to store in cache.
-        const user: User = this.userService.cache.getOrCreate(
-          response['user']['id'],
-          this.userService,
-          response['user'],
-        );
+      map((response: AuthResponse) => {
+        this.setupUserFromResponse(response);
+      }),
+      catchError((_error, caught: Observable<void>) => {
+        this.authComplete$.next(false);
+        this.authComplete$.complete();
 
-        user.authenticationToken = response['auth_token'];
-
-        if (this.tryChangeUser(user, userCredentials.remember)) {
-          AppInjector.get(GlobalStateService).loadGlobals();
-        } else {
-          return new Error('Failed to change user');
-        }
-
-        // Update token in one hour
-        setTimeout(() => this.updateAuth(), 1000 * 60 * 60);
+        return caught;
       }),
     );
   }
 
   public signOut(ssoSignOut = true): void {
+    // This function is called after the token is deleted...
     const doSignOut = () => {
-      this.tryChangeUser(this.userService.anonymousUser, false);
+      // Setup ability to auth again
+      this.authComplete$.complete();
+      this.authComplete$ = new AsyncSubject<boolean>();
+
+      // Change the current user to the anonymous user
+      this.userService.currentUser = this.userService.anonymousUser;
+
+      // Clear global state
       const globalStateService = AppInjector.get(GlobalStateService);
+      globalStateService.clearUnitsAndProjects();
+      this.userService.cache.clear();
+
+      // Trigger the UI changes
       globalStateService.hideHeader();
       globalStateService.setView(ViewType.OTHER);
-      globalStateService.clearUnitsAndProjects();
 
-      // if string is not null
+      // if we have a signout URL, redirect to it
       if (ssoSignOut && this.doubtfireConstants.SignoutURL) {
         window.location.assign(this.doubtfireConstants.SignoutURL);
       } else {
@@ -210,8 +262,9 @@ export class AuthenticationService {
       }
     };
 
+    // If we have a token, delete it...
     if (this.userService.currentUser.authenticationToken) {
-      this.httpClient.delete(this.AUTH_URL).subscribe({
+      this.httpClient.delete(this.AUTH_URL, {params: {remember: false}}).subscribe({
         next: (_response) => doSignOut(),
         error: (_response) => doSignOut(),
       });
@@ -234,4 +287,6 @@ export class AuthenticationService {
       }),
     );
   }
+
+
 }

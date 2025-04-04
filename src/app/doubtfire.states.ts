@@ -176,7 +176,7 @@ const WelcomeState: NgHybridStateDeclaration = {
  */
 const SignInState: NgHybridStateDeclaration = {
   name: 'sign_in',
-  url: '/sign_in?dest&params&authToken&username',
+  url: '/sign_in?authToken&username',
   views: {
     main: {
       component: SignInComponent,

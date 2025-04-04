@@ -72,17 +72,6 @@ export class UserService extends CachedEntityService<User> {
     this._currentUser = user;
   }
 
-  // Specific to the User entity
-  public override update(pathIds: object | User, options?: RequestOptions<User>): Observable<User> {
-    return super.update(pathIds, options).pipe(
-      tap((user) => {
-        if (user === this.currentUser) {
-          AppInjector.get(AuthenticationService).saveCurrentUser();
-        }
-      })
-    );
-  }
-
   public getTutors(): Observable<User[]> {
     return this.query(undefined, { endpointFormat: this.tutorEndpointFormat });
   }
