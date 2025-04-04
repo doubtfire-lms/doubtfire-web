@@ -7,25 +7,28 @@
     <div>
       <label class="block text-lg font-semibold text-gray-800 mb-2" for="student">Student</label>
       <select
-        id="student"
-        formControlName="student"
-        class="w-full border border-gray-300 rounded-md px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        required
+      id="student"
+      formControlName="student"
+      class="w-full border border-gray-300 rounded-md px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      required
       >
-        <option value="" disabled selected>Select a student</option>
-        <option *ngFor="let student of students" [value]="student.id">
-          {{ student.name }}
-        </option>
+      <option value="" disabled>Select a student</option>
+      <option *ngFor="let student of students" [value]="student.id">
+      {{ student.name }}
+      </option>
       </select>
+      <!-- Error if not selected -->
+      <div *ngIf="grantExtensionForm.get('student')?.touched && grantExtensionForm.get('student')?.invalid" class="text-red-600 text-sm mt-2">
+        Please select a student.
     </div>
 
     <!-- Extension -->
     <div>
-      <label class="block text-lg font-semibold text-gray-800 mb-2">
+      <label for="extension" class="block text-lg font-semibold text-gray-800 mb-2">
         Extension Duration:
         <span class="font-bold">{{ grantExtensionForm.get('extension')?.value }}</span> day(s)
       </label>
-      <input type="range" formControlName="extension" min="1" max="30" class="w-full" />
+      <input id="extension" type="range" formControlName="extension" min="1" max="30" class="w-full" />
     </div>
 
     <!-- Reason -->
@@ -38,11 +41,14 @@
         class="w-full border border-gray-300 rounded-md px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
         required
       ></textarea>
+      <!-- Error if empty -->
+      <div *ngIf="grantExtensionForm.get('reason')?.touched && grantExtensionForm.get('reason')?.invalid" class="text-red-600 text-sm mt-2">
+      Please provide a reason for the extension.
     </div>
 
     <!-- Notes -->
     <div>
-      <label for="notes" class="block text-lg font-semibold text-gray-800 mb-2">Additional Notes</label>
+      <label for="notes" class="block text-lg font-semibold text-gray-800 mb-2">Additional Notes (optional)</label>
       <textarea
         id="notes"
         formControlName="notes"
@@ -55,10 +61,13 @@
     <div class="pt-4 text-right">
       <button
         type="submit"
-        class="inline-flex items-center bg-blue-600 text-white text-lg font-medium px-6 py-3 rounded-md hover:bg-blue-700 transition"
+        [disabled]="isSubmitting"
+        [ngClass]="{
+          'bg-blue-700 cursor-not-allowed opacity-70': isSubmitting,
+          'bg-blue-600 hover:bg-blue-700': !isSubmitting
+        }"
+        class="inline-flex items-center text-white text-lg font-medium px-6 py-3 rounded-md transition"
       >
         Grant Extension
       </button>
     </div>
-  </form>
-</div>

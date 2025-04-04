@@ -15,6 +15,9 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {Ng2ViewDeclaration} from '@uirouter/angular';
+import {GrantExtensionFormComponent} from './admin/modals/grant-extension-form/grant-extension-form.component';
+
 /*
  * Use this file to store any states that are sourced by angular components.
  */
@@ -267,6 +270,20 @@ const ViewAllProjectsState: NgHybridStateDeclaration = {
     pageTitle: 'Teaching Periods',
     roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
   },
+};
+
+const GrantExtensionState: NgHybridStateDeclaration = {
+  name: 'grant-extension',
+  url: '/grant-extension',
+  views: {
+    main: {
+      component: GrantExtensionFormComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Grant Extension',
+    roleWhitelist: ['Admin']
+  }
 };
 
 const AdministerUnits: NgHybridStateDeclaration = {
@@ -596,4 +613,5 @@ export const doubtfireStates = [
   LtiDashboardState,
   LtiUnitLinkState,
   TutorAttendance,
+  GrantExtensionState
 ];
