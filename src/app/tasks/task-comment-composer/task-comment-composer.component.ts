@@ -12,7 +12,7 @@ import {
   DoCheck,
 } from '@angular/core';
 import {trigger, style, animate, transition} from '@angular/animations';
-import {analyticsService} from 'src/app/ajs-upgraded-providers';
+import {AnalyticsService} from 'src/app/common/services/analytics.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
 import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji/';
@@ -91,7 +91,7 @@ export class TaskCommentComposerComponent implements DoCheck {
     private emojiSearch: EmojiSearch,
     private emojiService: EmojiService,
     private commentsViewer: TaskCommentsViewerComponent,
-    @Inject(analyticsService) private analytics,
+    private analyticsService: AnalyticsService,
     private alerts: AlertService,
     @Inject(TaskCommentService) private taskCommentService: TaskCommentService,
   ) {

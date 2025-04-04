@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private constants: DoubtfireConstants,
     private globalState: GlobalStateService,
     private userService: UserService,
-    @Inject(AnalyticsService) private AnalyticsService: AnalyticsService,
+    private analyticsService: AnalyticsService,
     @Inject(dateService) private DateService: any,
     @Inject(UIRouter) private router: UIRouter,
   ) {
@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.router.stateService.go('sign_in');
     }
 
-    this.AnalyticsService.logEvent('Home', 'Viewed Home page');
+    this.analyticsService.logEvent('Home', 'Viewed Home page');
     this.globalState.setView(ViewType.OTHER);
 
     this.loadingUnitRoles = true;

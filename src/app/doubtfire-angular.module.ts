@@ -57,7 +57,6 @@ import {DoubtfireAngularJSModule} from 'src/app/doubtfire-angularjs.module';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
 import {
   visualisationsProvider,
-  analyticsServiceProvider,
   dateServiceProvider,
   CsvUploadModalProvider,
   UnitStudentEnrolmentModalProvider,
@@ -224,6 +223,7 @@ import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-
 import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {GradeService} from './common/services/grade.service';
+import {AnalyticsService} from './common/services/analytics.service';
 
 @NgModule({
   // Components we declare
@@ -328,6 +328,7 @@ import {GradeService} from './common/services/grade.service';
   ],
   // Services we provide
   providers: [
+    AnalyticsService,
     AlertService,
     MarkedPipe,
     CampusService,
@@ -364,7 +365,6 @@ import {GradeService} from './common/services/grade.service';
     aboutDoubtfireModalProvider,
     uploadSubmissionModalProvider,
     gradeTaskModalProvider,
-    analyticsServiceProvider,
     dateServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,

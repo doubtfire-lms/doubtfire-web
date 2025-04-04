@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {UserService} from 'src/app/api/services/user.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -10,17 +11,16 @@ export class AnalyticsService {
         data: {category: string; label?: string; value?: number},
       ) => void;
     },
-    private newUserService: {currentUser: {optInToResearch: boolean}},
+    private newUserService: UserService,
   ) {}
 
-  //logs new event with category and event name.
+  // logs new event with category and event name.
   // category - pluralized category name (e.g., 'visualisations')
   // eventName - past-tense event name (e.g., 'refreshed all')
   // label - optional, but should be a string
   // value - optional, but must be a positive number
 
   public logEvent(category: string, eventName: string, label?: string, value?: number): void {
-    // Ensure the user has opted into research before logging
     if (!this.newUserService.currentUser.optInToResearch) {
       return;
     }
