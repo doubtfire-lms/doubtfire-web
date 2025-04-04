@@ -22,6 +22,32 @@ export class AuthenticationService {
     this.AUTH_URL = `${this.doubtfireConstants.API_URL}/auth`;
   }
 
+  /**
+   * Use the refresh token cookie and username to get a new access token.
+   */
+  public refreshAccessToken() {
+    this.httpClient.post(this.AUTH_URL + '/refresh-token/access-token', {}).subscribe({
+      next: (response) => {
+
+      },
+      error: (error) => {
+        console.error('Error refreshing token:', error);
+      },
+    });
+  }
+
+  public getRefreshToken() {
+    this.httpClient.post(this.AUTH_URL + '/refresh-token', {}).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.refreshAccessToken();
+      },
+      error: (error) => {
+        console.error('Error refreshing token:', error);
+      },
+    });
+  }
+
   public checkUserCookie(): void {
     const userData = JSON.parse(localStorage.getItem(this.USERNAME_KEY));
 
@@ -59,13 +85,13 @@ export class AuthenticationService {
   public saveCurrentUser(
     remember: boolean = localStorage.getItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) === 'true',
   ): void {
+    // this.getRefreshToken();
     if (remember && this.userService.currentUser.id) {
       localStorage.setItem(this.USERNAME_KEY, JSON.stringify(this.userService.currentUser));
       localStorage.setItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN, 'true');
       localStorage.setItem(this.DOUBTFIRE_LOGIN_TIME, JSON.stringify(new Date().getTime()));
     } else {
       localStorage.removeItem(this.USERNAME_KEY);
-      localStorage.setItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN, 'false');
       localStorage.removeItem(this.DOUBTFIRE_LOGIN_TIME);
     }
   }

@@ -49,8 +49,8 @@ export class SignInComponent implements OnInit {
     this.formData = {
       username: '',
       password: '',
-      remember: false,
-      autoLogin: localStorage.getItem('autoLogin') ? true : false,
+      remember: localStorage.getItem(this.authService.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) == 'true',
+      autoLogin: localStorage.getItem('autoLogin') == 'true',
     };
     // Check for SSO
     this.globalState.hideHeader();
@@ -69,12 +69,12 @@ export class SignInComponent implements OnInit {
           return this.signIn({
             auth_token: this.transition.params().authToken,
             username: this.transition.params().username,
-            remember: true,
+            remember: this.formData.remember,
           });
         } else if (this.formData.autoLogin) {
           return wait.then(() => {
             // Double check in case changed in the meantime
-            if (this.formData.autoLogin) {
+            if (this.formData.autoLogin && this.formData.remember) {
               this.redirectToSSO();
             }
           });
@@ -124,8 +124,11 @@ export class SignInComponent implements OnInit {
       return this.redirectToSSO();
     }
 
-    signInCredentials.remember = true;
     this.signingIn = true;
+    localStorage.setItem(
+      this.authService.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN,
+      signInCredentials.remember ? 'true' : 'false',
+    );
 
     this.authService.signIn(signInCredentials).subscribe({
       next: () => {

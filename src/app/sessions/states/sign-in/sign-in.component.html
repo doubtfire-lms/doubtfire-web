@@ -12,7 +12,14 @@
         </h1>
         <form
           #form="ngForm"
-          (ngSubmit)="signIn({username: formData.username, password: formData.password})"
+          (ngSubmit)="
+            signIn({
+              username: formData.username,
+              password: formData.password,
+              remember: formData.remember,
+              autoLogin: formData.autoLogin
+            })
+          "
           class="sign-in-form flex flex-col"
         >
           @if (showCredentials) {
@@ -36,9 +43,12 @@
           }
           @if (!showCredentials) {
             <mat-checkbox matInput name="autoLogin" [(ngModel)]="formData.autoLogin"
-              >Login via Institution</mat-checkbox
+              >Automatically redirect</mat-checkbox
             >
           }
+          <mat-checkbox matInput name="remember" [(ngModel)]="formData.remember"
+              >Stay logged in</mat-checkbox
+            >
           <button
             class="w-full"
             mat-flat-button
