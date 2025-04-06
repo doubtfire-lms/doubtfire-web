@@ -4,19 +4,11 @@ import {UserService} from 'src/app/api/services/user.service';
   providedIn: 'root',
 })
 export class AnalyticsService {
-  constructor(
-    private $analytics: {
-      eventTrack: (
-        eventName: string,
-        data: {category: string; label?: string; value?: number},
-      ) => void;
-    },
-    private newUserService: UserService,
-  ) {}
+  constructor(private newUserService: UserService) {}
 
   // logs new event with category and event name.
-  // category - pluralized category name (e.g., 'visualisations')
-  // eventName - past-tense event name (e.g., 'refreshed all')
+  // category - pluralized category name
+  // eventName - past-tense event name
   // label - optional, but should be a string
   // value - optional, but must be a positive number
 
@@ -27,7 +19,7 @@ export class AnalyticsService {
     if (value !== undefined && (typeof value !== 'number' || value < 0)) {
       throw new Error('Value needs to be a positive number');
     }
-    this.$analytics.eventTrack(eventName, {
+    console.log(`[Analytics] Event: "${eventName}"`, {
       category,
       label,
       value,

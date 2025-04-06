@@ -14,7 +14,7 @@ angular.module('doubtfire.admin.modals.create-unit-modal', [])
   CreateUnitModal
 )
 .controller('CreateUnitModalCtrl', ($scope, $modalInstance, DoubtfireConstants, alertService, units, newUnitService, analyticsService) ->
-  analyticsService.event 'Unit Admin', 'Started to Create Unit'
+  analyticsService.logEvent 'Unit Admin', 'Started to Create Unit'
   $scope.units = units
   $scope.unit = { code: null, name: null }
   $scope.saveUnit = ->

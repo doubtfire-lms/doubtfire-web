@@ -16,7 +16,7 @@ angular.module('doubtfire.tasks.project-tasks-list', [])
     inMenu: '@'
 
   controller: ($scope, $modal, newTaskService, analyticsService, gradeService) ->
-    analyticsService.event 'Student Project View', "Showed Task Button List"
+    analyticsService.logEventvent 'Student Project View', "Showed Task Button List"
 
     $scope.groupTasks = []
 
