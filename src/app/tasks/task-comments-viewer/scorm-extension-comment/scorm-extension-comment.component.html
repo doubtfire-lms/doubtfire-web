@@ -1,0 +1,29 @@
+<div class="flex flex-row justify-evenly items-center">
+  @if (comment.assessed) {
+    <div class="flex flex-col justify-around items-center">
+      <hr class="hr-text" [attr.data-content]="message" />
+      <p class="fade-text"><strong> reason:</strong> {{ comment.text }}</p>
+    </div>
+  }
+
+  @if (!comment.assessed) {
+    <div class="flex flex-col justify-around items-center">
+      <hr class="hr-fade" />
+      <p>
+        {{ message }} <br />
+        <strong> reason:</strong> {{ comment.text }}
+      </p>
+      @if (isNotStudent) {
+        <button
+          (click)="grantExtension()"
+          mat-flat-button
+          color="primary"
+          style="background-color: #43a047"
+        >
+          Grant
+        </button>
+      }
+      <hr class="hr-fade" />
+    </div>
+  }
+</div>

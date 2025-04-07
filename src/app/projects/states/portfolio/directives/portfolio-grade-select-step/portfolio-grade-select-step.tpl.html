@@ -35,14 +35,14 @@
             btn-radio="{{$index}}"
           >
             <grade-icon
-              grade="grade"
+              [grade]="grade"
               class="text-{{project.submittedGrade == grades.indexOf(grade) ? 'success' : 'muted'}}"
             ></grade-icon>
           </label>
         </div>
         <p class="help-block">
           Make sure your <strong>Learning Summary Report</strong> justifies how your portfolio demonstrates you have
-          <strong>met all unit learning outcomes to a {{targetGrade}} level</strong>
+          <strong>met all unit learning outcomes to a {{gradeName(project.submittedGrade)}} level</strong>
         </p>
       </div>
     </div>

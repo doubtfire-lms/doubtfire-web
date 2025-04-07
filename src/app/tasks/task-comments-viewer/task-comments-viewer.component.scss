@@ -140,11 +140,11 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  .comment-container .comment-extension {
+  .comment-container .comment-extension, .comment-container .comment-scorm-extension {
     width: 100%;
   }
 
-  .comment-container .comment-assessment {
+  .comment-container .comment-assessment, .comment-container .comment-scorm {
     width: 100%;
   }
 
@@ -354,7 +354,7 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  .comment .extension-bubble {
+  .comment .extension-bubble, .comment .scorm_extension-bubble {
     width: 100%;
     background-color: transparent;
   }

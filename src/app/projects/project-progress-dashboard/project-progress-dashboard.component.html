@@ -1,0 +1,65 @@
+<div *ngIf="project$ | async as project" class="w-full h-full grid grid-cols-12 gap-4">
+  <!-- Column -->
+  <div class="col-span-12 lg:col-span-6">
+    <mat-card class="w-full h-[250px] py-24 px-12">
+      <mat-card-content>
+        <!-- <f-unit-code class="w-48" [unit_code]="project.unit.code"></f-unit-code> -->
+        <h1 class="mb-2 text-5xl">
+          {{ project.student.nickname || project.student.firstName }}'s {{ project.unit.name }}
+        </h1>
+        <p class="text-2xl">{{ project.unit.description }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="col-span-12 lg:col-span-6">
+    <mat-card class="w-full h-[250px] py-24 px-12">
+      <mat-card-content class="w-full">
+        <span class="flex flex-row items-center mb-8">
+          <h1 class="text-5xl mb-0 mr-2">Targetting</h1>
+          <mat-icon matTooltip="Your target grade changes which tasks you need to complete.">
+            info</mat-icon
+          >
+        </span>
+
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Target grade</mat-label>
+          <mat-select [(value)]="project.targetGrade">
+            @for (grade of grades; track grade) {
+              <mat-option (click)="targetGradeClicked(grade.value)" [value]="grade.value">{{
+                grade.viewValue
+              }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <p class="caption-bottom"></p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Column -->
+  <div class="col-span-12 md:col-span-12 xl:col-span-12">
+    <mat-card class="w-full h-full">
+      <mat-card-header>
+        <mat-card-title>Your progress</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="w-full h-full flex items-center justify-center">
+          <!-- <f-project-progress-gauge [project]="project"></f-project-progress-gauge> -->
+          <f-progress-burndown-chart [project]="project" [unit]="project.unit" [grade]="project.targetGrade"></f-progress-burndown-chart>
+          <f-task-visualisation
+            [project]="project"
+            [grade]="project.targetGrade">
+          </f-task-visualisation>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Column -->
+  <!-- <div class="col-span-12 md:col-span-12 xl:col-span-12">
+    <mat-card>
+      <mat-card-content></mat-card-content>
+    </mat-card>
+  </div> -->
+</div>

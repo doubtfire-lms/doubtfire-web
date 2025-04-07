@@ -1,4 +1,4 @@
-import {Component, Input, type OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 
 @Component({
@@ -6,7 +6,7 @@ import {TaskDefinition} from 'src/app/api/models/task-definition';
   templateUrl: './task-badge.component.html',
   styleUrl: './task-badge.component.css',
 })
-export class FTaskBadgeComponent implements OnInit {
+export class FTaskBadgeComponent {
   @Input() taskDef: TaskDefinition;
   @Input() size = 100;
 
@@ -14,10 +14,8 @@ export class FTaskBadgeComponent implements OnInit {
 
   get abbreviation(): string {
     // return the first 3 characters of the task abbreviation
-    return this.taskDef.abbreviation.substring(0, 4);
+    return this.taskDef?.abbreviation.substring(0, 4);
   }
-
-  ngOnInit(): void {}
 
   calculateFontSize(length: number): string {
     const baseFontSize = 1.5; // Base font size in rem

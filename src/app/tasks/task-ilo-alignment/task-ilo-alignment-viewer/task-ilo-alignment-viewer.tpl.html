@@ -34,7 +34,7 @@
         <div class="list-group-item-text alignment-content col-sm-8" ng-show="align.expanded">
           <div ng-show="ilo.description">
             <h5>Description</h5>
-            <div class="markdown-to-html" ng-bind-html="ilo.description | markdown | to_trusted"></div>
+            <div>{{ilo.description}}</div>
           </div>
           <div ng-if="ilo && classStats &&!hideVisualisation">
             <h5>Visualisation</h5>
@@ -50,7 +50,7 @@
           </div>
           <div ng-show="!summaryOnly && align.description">
             <h5>Rationale</h5>
-            <div class="markdown-to-html" ng-bind-html="align.description | markdown | to_trusted"></div>
+            <div class="markdown-to-html" ng-bind-html="align.description"></div>
           </div>
           <div ng-show="summaryOnly">
             <h5>Related Tasks</h5>

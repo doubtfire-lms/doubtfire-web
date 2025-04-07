@@ -22,6 +22,7 @@ import {
   Project,
   TutorialStreamService,
   UnitRoleService,
+  Campus,
 } from './doubtfire-model';
 import {LearningOutcome} from './learning-outcome';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -78,7 +79,7 @@ export class Unit extends Entity {
 
   public readonly groupSetsCache: EntityCache<GroupSet> = new EntityCache<GroupSet>();
 
-  groupMemberships: Array<GroupMembership>;
+  groupMemberships: GroupMembership[];
 
   readonly studentCache: EntityCache<Project> = new EntityCache<Project>();
 
@@ -148,6 +149,27 @@ export class Unit extends Entity {
 
   public studentEnrolled(id: number): boolean {
     return this.findStudent(id)?.enrolled;
+  }
+
+  /**
+   * Enrol a student within the unit.
+   *
+   * @param idOrEmail The student id or email of the student to enrol.
+   * @param campus The student's campus
+   * @returns an observer of the post with the student project.
+   */
+  public enrolStudent(idOrEmail: string, campus: Campus): Observable<Project> {
+    const projectService = AppInjector.get(ProjectService);
+
+    return projectService.create(
+      {
+        unit_id: this.id,
+        student_num: idOrEmail,
+        campus_id: campus.id },
+      {
+        cache: this.studentCache
+      }
+    );
   }
 
   public get currentUserIsStaff(): boolean {
@@ -231,8 +253,8 @@ export class Unit extends Entity {
     return Math.round((startToNow / totalDuration) * 100);
   }
 
-  public rolloverTo(body: {start_date: Date; end_date: Date}): Observable<Unit>;
-  public rolloverTo(body: {teaching_period_id: number}): Observable<Unit>;
+  public rolloverTo(body: {new_unit_code?: string, start_date: Date; end_date: Date}): Observable<Unit>;
+  public rolloverTo(body: {new_unit_code?: string, teaching_period_id: number}): Observable<Unit>;
   public rolloverTo(body: any): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
 

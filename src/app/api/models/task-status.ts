@@ -151,7 +151,7 @@ export class TaskStatus {
   ]);
 
   public static readonly STATUS_LABELS = new Map<TaskStatusEnum, string>([
-    ['ready_for_feedback', 'Ready for Feedback'],
+    ['ready_for_feedback', 'Awaiting Feedback'],
     ['not_started', 'Not Started'],
     ['working_on_it', 'Working On It'],
     ['need_help', 'Need Help'],
@@ -163,6 +163,22 @@ export class TaskStatus {
     ['complete', 'Complete'],
     ['fail', 'Fail'],
     ['time_exceeded', 'Time Exceeded'],
+  ]);
+
+  public static readonly STATUS_NAME_TO_KEY = new Map<string, TaskStatusEnum>([
+    ['Ready for Feedback', 'ready_for_feedback'],
+    ['Awaiting Feedback', 'ready_for_feedback'],
+    ['Not Started', 'not_started'],
+    ['Working On It', 'working_on_it'],
+    ['Need Help', 'need_help'],
+    ['Redo', 'redo'],
+    ['Feedback Exceeded', 'feedback_exceeded'],
+    ['Resubmit', 'fix_and_resubmit'],
+    ['Discuss', 'discuss'],
+    ['Demonstrate', 'demonstrate'],
+    ['Complete', 'complete'],
+    ['Fail', 'fail'],
+    ['Time Exceeded', 'time_exceeded'],
   ]);
 
   public static readonly STATUS_ICONS = new Map<TaskStatusEnum, string>([
@@ -287,17 +303,18 @@ export class TaskStatus {
     [
       'discuss',
       {
-        detail: "You're almost complete!",
-        reason: 'Your work looks good and your tutor believes it is complete.',
-        action: 'To mark as complete, attend class and discuss it with your tutor.',
+        detail: 'Your work needs to be discussed further.',
+        reason: 'Your work looks good and your tutor believes it is on track.',
+        action: 'For this to be marked as complete, attend class and discuss it with your tutor.',
       },
     ],
     [
       'demonstrate',
       {
-        detail: "You're almost complete!",
-        reason: 'Your work looks good and your tutor believes it is complete.',
-        action: 'To mark as complete, attend class and demonstrate how your submission works to your tutor.',
+        detail: 'Your work needs to be demonstrated.',
+        reason: 'Your work looks good and your tutor believes it is on track.',
+        action:
+          'For this to be marked as complete you need to attend class and demonstrate how your submission works for your tutor.',
       },
     ],
     [

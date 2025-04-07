@@ -3,11 +3,10 @@
     <div class="panel-title">
       <span ng-hide="tutor || showFooter">{{task.definition.name}}</span>
       <span ng-show="tutor || showFooter" style="display: inline-flex">{{task.definition.name}} </span>
-
       <div
         class="dropdown pull-right"
         dropdown
-        ng-show="task.hasPdf || task.definition.hasTaskSheet || overseerEnabled.value"
+        ng-show="task.hasPdf || task.definition.hasTaskSheet || overseerEnabled()"
       >
         <button class="btn btn-default dropdown-toggle" dropdown-toggle>
           <i class="fa fa-search"></i>
@@ -30,8 +29,8 @@
           <li ng-show="task.hasPdf">
             <a ng-click="downloadSubmittedFiles()">Download Submitted Files</a>
           </li>
-          <li ng-if="overseerEnabled">
-            <a ng-click="showSubmissionHistoryModal()">View Submission History</a>
+          <li ng-if="overseerEnabled()">
+            <a ng-click="showSubmissionHistoryModal()">Execution History</a>
           </li>
         </ul>
       </div>
@@ -42,6 +41,7 @@
   <div class="panel-body task-detail-cards" ng-show="isCurrentView('details')">
     <!-- <div class="col-sm-12 col-xl-6"> -->
     <!-- migrated -->
+    <f-task-scorm-card [task]="task"></f-task-scorm-card>
     <f-task-status-card [task]="task"></f-task-status-card>
     <f-task-due-card [task]="task"></f-task-due-card>
     <task-description-card [task-def]="task.definition" [task]="task" [unit]="task.unit"></task-description-card>

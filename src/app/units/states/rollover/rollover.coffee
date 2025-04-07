@@ -14,13 +14,13 @@ angular.module('doubtfire.units.states.rollover', [
       roleWhitelist: ['Convenor', 'Admin']
    }
 )
-.controller("RolloverUnitState", ($scope, $state, $stateParams, newUserService, alertService, newUnitService, GlobalStateService) ->
+.controller("RolloverUnitState", ($scope, $state, $stateParams, newUserService, alertService, newUnitService, globalStateService) ->
   unitId = +$stateParams.unitId
   return $state.go('home') unless unitId
 
-  GlobalStateService.onLoad () ->
+  globalStateService.onLoad () ->
     # Load assessing unit role
-    $scope.unitRole = GlobalStateService.loadedUnitRoles.currentValues.find((unitRole) -> unitRole.unit.id == unitId)
+    $scope.unitRole = globalStateService.loadedUnitRoles.currentValues.find((unitRole) -> unitRole.unit.id == unitId)
 
     if (! $scope.unitRole?) && ( newUserService.currentUser.role == "Admin" )
       $scope.unitRole = newUserService.adminRoleFor(unitId, newUserService.currentUser)
@@ -28,7 +28,7 @@ angular.module('doubtfire.units.states.rollover', [
     # Go home if no unit role was found
     return $state.go('home') unless $scope.unitRole?
 
-    GlobalStateService.setView("UNIT", $scope.unitRole)
+    globalStateService.setView("UNIT", $scope.unitRole)
 
     newUnitService.get(unitId).subscribe({
       next: (unit)-> $scope.unit = unit

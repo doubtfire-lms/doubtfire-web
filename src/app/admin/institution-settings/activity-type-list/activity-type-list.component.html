@@ -15,27 +15,10 @@
           {{ activityType.name }}
         </div>
         } @else {
-
-        <div class="edit-actions right">
-          <span>
-            <button mat-icon-button color="warn" (click)="cancelEdit()" aria-label="cancel edit">
-              <mat-icon>cancel</mat-icon>
-            </button>
-            <button mat-icon-button color="primary" (click)="submit()" aria-label="submit changes">
-              <mat-icon>save</mat-icon>
-            </button>
-            <button mat-icon-button (click)="deleteActivity(activityType)" aria-label="delete activity type">
-              <mat-icon color="primary">delete</mat-icon>
-            </button>
-          </span>
-        </div>
-
-        }
-        <ng-template #edit>
           <mat-form-field appearance="outline" class="data-entry">
             <input matInput required formControlName="name" placeholder="Name" />
           </mat-form-field>
-        </ng-template>
+        }
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field appearance="outline" class="data-entry">
@@ -52,12 +35,11 @@
         <div>
           {{ activityType.abbreviation }}
         </div>
-        } @else { #edit| }
-        <ng-template #edit>
+        } @else {
           <mat-form-field appearance="outline" class="data-entry">
             <input matInput required formControlName="abbreviation" placeholder="Abbreviation" />
           </mat-form-field>
-        </ng-template>
+        }
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <mat-form-field appearance="outline" class="data-entry">
@@ -76,8 +58,7 @@
             <mat-icon>edit</mat-icon>
           </button>
         </div>
-        } @else { #edit| }
-        <ng-template #edit>
+        } @else {
           <div class="edit-actions right">
             <span>
               <button mat-icon-button color="warn" (click)="cancelEdit()" aria-label="cancel edit">
@@ -91,7 +72,7 @@
               </button>
             </span>
           </div>
-        </ng-template>
+        }
       </td>
       <td mat-footer-cell *matFooterCellDef>
         <div class="edit-actions right">

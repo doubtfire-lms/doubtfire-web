@@ -1,0 +1,89 @@
+<div class="w-full h-full" *ngIf="project$ | async as project">
+  <div class="flex flex-row">
+    <f-unit-task-list
+      class="min-w-[300px] w-1/2"
+      *ngIf="project.unit.taskDefinitions.length > 0"
+      [mode]="'project'"
+      [taskDefinitions]="project.unit.taskDefinitions"
+      [tasks]="project.tasks"
+      [selectedTaskDefinition$]="selectedTaskDefinition$"
+    ></f-unit-task-list>
+
+    @if (subs$ | async) {
+      <div
+        id="leftResizerEl"
+        #leftResizerEl
+        class="resizer"
+        cdkDragLockAxis="x"
+        cdkDrag
+        (cdkDragMoved)="dragging($event, leftComponent)"
+        (cdkDragEnded)="stoppedDragging($event, leftComponent)"
+        (cdkDragStarted)="startedDragging($event, leftComponent)"
+      ></div>
+    }
+
+    <f-project-progress-dashboard
+      class="w-full"
+      [project$]="project$"
+      [selectedTaskDefinition$]="selectedTaskDefinition$"
+    ></f-project-progress-dashboard>
+  </div>
+</div>
+
+<!--
+<div class="panel-footer">
+  <ng-container *ngIf="footerComponent">
+    <ng-container *ngComponentOutlet="footerComponent"></ng-container>
+  </ng-container>
+</div> -->
+
+<!--
+<div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
+  <div id="inboxpanel" #inboxpanel class="inbox-panel mobile" [hidden]="taskSelected">
+    @if (taskData) {
+      <df-staff-task-list
+        [isNarrow]="false"
+        [showSearchOptions]="showSearchOptions"
+        [filters]="filters"
+        [taskData]="taskData"
+        [unit]="unit"
+        [unitRole]="unitRole"
+      ></df-staff-task-list>
+    }
+  </div>
+  <div [hidden]="!taskSelected" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
+    <div class="flex items-center">
+      <button
+        mat-icon-button
+        aria-label="Back to inbox"
+        matTooltip="Back to inbox"
+        (click)="taskSelected = false"
+      >
+        <mat-icon>arrow_back_ios_new</mat-icon>
+      </button>
+      <h3 class="mb-0">{{ taskData?.selectedTask?.project.student.nickname }}</h3>
+      <div fxFlex></div>
+      <button
+        [disabled]="!this.taskData?.selectedTask?.hasPdf"
+        mat-icon-button
+        aria-label="Open Submission"
+        (click)="openPdfInNewTab()"
+        matTooltip="Open submission"
+      >
+        <mat-icon>description</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        aria-label="Go to student"
+        matTooltip="Go to student"
+        (click)="goToStudent()"
+      >
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </div>
+
+    <div #commentspanel fxFlex class="inbox-panel task-comment-panel mobile">
+      <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
+    </div>
+  </div>
+</div> -->

@@ -84,7 +84,7 @@
               Stats <i ng-show="tableSort.order == 'orderScale'" class="fa fa-caret-{{tableSort.reverse ? 'down' : 'up'}}"></i>
             </a>
           </th><!--/stats-column-header-->
-          <th class="flags">
+          <th class="flags" style="text-align: center;">
             <a ng-click="sortTableBy('flags')">
               Flags
               <i ng-show="
@@ -130,7 +130,7 @@
           <td class="text-left" ng-click="viewStudent(project)">
             <span class="flags">
               <span class="flag">
-                <grade-icon grade="project.targetGrade"></grade-icon>
+                <grade-icon [index]="project.targetGrade"></grade-icon>
               </span>
               <span ng-show="project.similarityFlag" class="flag">
                 <i class="fa fa-eye fa-2x" ></i>

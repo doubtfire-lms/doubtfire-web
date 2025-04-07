@@ -1,11 +1,17 @@
 <div class="w-full h-full overflow-auto">
+  <!-- <f-project-progress></f-project-progress> -->
+
   <ng-container [ngSwitch]="currentView">
     <ng-template [ngSwitchCase]="DashboardViews.task">
-      <ng-container *ngIf="selectedTaskService.hasTaskSheet; then pdfViewer; else noPdfUrl"></ng-container>
+      <ng-container
+        *ngIf="selectedTaskService.hasTaskSheet; then pdfViewer; else noPdfUrl"
+      ></ng-container>
     </ng-template>
 
     <ng-template [ngSwitchCase]="DashboardViews.submission">
-      <ng-container *ngIf="selectedTaskService.hasSubmissionPdf; then pdfViewer; else noPdfUrl"></ng-container>
+      <ng-container
+        *ngIf="selectedTaskService.hasSubmissionPdf; then pdfViewer; else noPdfUrl"
+      ></ng-container>
     </ng-template>
 
     <ng-template [ngSwitchCase]="DashboardViews.similarity">

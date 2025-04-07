@@ -91,7 +91,6 @@
           <button
             mat-icon-button
             aria-label="delete task definition"
-            color="warn"
             (click)="deleteTaskDefinition(taskDefinition)"
           >
             <mat-icon>delete</mat-icon>
@@ -139,25 +138,4 @@
       ></f-task-definition-editor>
     }
   </div>
-  <!-- <div class="flex flex-col gap-4">
-    <h3>Batch Upload Tasks</h3>
-    <p>Batch upload task definitions with a CSV. Download to get format.</p>
-
-    <f-file-drop
-      mode="endpoint"
-      [endpoint]="unit.getTaskDefinitionBatchUploadUrl()"
-      desiredFileName="Task Definition csv"
-      accept="text/csv"
-      (uploadSuccess)="onSuccessTaskDefinitionBatchUpload($event)"
-    />
-
-    <h3>Download Tasks</h3>
-    <p>Download all task definitions for this unit.</p>
-
-
-
-    <h3>Batch Upload Task PDFs</h3>
-    <p>Upload all of the task PDFs in a Zip file.</p>
-    <f-file-drop [endpoint]="unit.taskUploadUrl" accept="application/zip" desiredFileName="Task PDFs in zip" (uploadSuccess)="onSuccessTaskZipUpload($event)" />
-  </div> -->
 </div>
