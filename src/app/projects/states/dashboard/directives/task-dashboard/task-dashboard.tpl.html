@@ -41,6 +41,7 @@
   <div class="panel-body task-detail-cards" ng-show="isCurrentView('details')">
     <!-- <div class="col-sm-12 col-xl-6"> -->
     <!-- migrated -->
+    <f-task-scorm-card [task]="task"></f-task-scorm-card>
     <f-task-status-card [task]="task"></f-task-status-card>
     <f-task-due-card [task]="task"></f-task-due-card>
     <task-description-card [task-def]="task.definition" [task]="task" [unit]="task.unit"></task-description-card>

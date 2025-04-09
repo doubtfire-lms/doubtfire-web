@@ -1,0 +1,37 @@
+<mat-dialog-content class="mat-typography">
+  <div class="modal-header">
+    <h1>D2L Unit Details</h1>
+  </div>
+  <div class="modal-body">
+    <p>Enter the D2L identifier to allow grades to be transfered once entered.</p>
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        type="text"
+        placeholder="Org Unit Id"
+        [(ngModel)]="d2lDataMapping.orgUnitId"
+        name="orgUnitId"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        type="text"
+        placeholder="Grade Object Id"
+        [(ngModel)]="d2lDataMapping.gradeObjectId"
+        name="orgUnitId"
+      />
+      <mat-hint align="start">Created during grades transfer if not set</mat-hint>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="warn" (click)="delete()" *ngIf="d2lDataMapping.id">
+    Delete
+  </button>
+  <button mat-stroked-button (click)="saveAndClose()" class="pull-right">
+    <span *ngIf="d2lDataMapping.hasChanges(d2lAssessmentMappingService.mapping)">Save and </span
+    >Close
+  </button>
+</mat-dialog-actions>

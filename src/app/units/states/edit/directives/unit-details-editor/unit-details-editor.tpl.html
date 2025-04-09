@@ -13,7 +13,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="code">Code</label>
           <div class="col-sm-9">
-            <input class="form-control" id="code" type="text" placeholder="COS1234567" ng-model="unit.code" />
+            <input class="form-control" id="code" type="text" placeholder="Enter unit code" ng-model="unit.code" />
           </div>
         </div>
         <!--/code-date-->
@@ -26,7 +26,7 @@
               type="text"
               class="form-control"
               ng-model="unit.name"
-              placeholder="Introduction to {{externalName.value}}"
+              placeholder="Enter unit name"
             />
           </div>
         </div>
@@ -417,15 +417,23 @@
         </div>
         <!--/active-->
       </div>
+
       <div class="panel-footer text-right">
-        <a class="btn btn-success" ui-sref="units/rollover">
-          <header>Rollover</header>
-        </a>
-        <input
-          type="submit"
-          value="{{ unit.id == -1 ? 'Create' : 'Update' }}"
-          class="btn btn-success"
-        />
+          <div class="pull-left">
+            <a class="btn btn-info" ng-click="addD2lData()" ng-enabled="unit.id != -1" ng-hide="!d2lEnabled()">
+              <header>D2L Details</header>
+            </a>
+          </div>
+          <div>
+            <a class="btn btn-success" ui-sref="units/rollover">
+              <header>Copy</header>
+            </a>
+            <input
+              type="submit"
+              value="{{ unit.id == -1 ? 'Create' : 'Update' }}"
+              class="btn btn-success"
+            />
+          </div>
       </div>
     </form>
   </div>

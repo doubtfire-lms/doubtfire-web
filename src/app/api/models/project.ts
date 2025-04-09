@@ -229,7 +229,7 @@ export class Project extends Entity {
   public assignGrade(score: number, rationale: string): void {
     const alerts = AppInjector.get(AlertService);
     const projectService: ProjectService = AppInjector.get(ProjectService);
-    const oldGrade: number = this.grade;
+    const oldGrade: number = this.grade || 0;
     this.grade = score;
     this.gradeRationale = rationale;
 

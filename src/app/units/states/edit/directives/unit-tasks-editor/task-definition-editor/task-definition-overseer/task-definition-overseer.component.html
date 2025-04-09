@@ -12,8 +12,8 @@
     <mat-label>Docker Image</mat-label>
     <mat-select [(value)]="taskDefinition.overseerImageId" [disabled]="!overseerEnabled">
       @for (image of images | async; track image) {
-  <mat-option [value]="image.id">{{ image.description }}</mat-option>
-}
+        <mat-option [value]="image.id">{{ image.description }}</mat-option>
+      }
     </mat-select>
     <mat-hint>Docker image for Overseer</mat-hint>
   </mat-form-field>
@@ -24,27 +24,45 @@
     accept="application/zip,application/x-zip-compressed"
     [desiredFileName]="'Task ' + taskDefinition.abbreviation + ' Overseer zip'"
   />
+  @if (taskDefinition.hasTaskAssessmentResources) {
+    <div class="flex flex-row gap-4 pt-4">
+      <button
+        mat-flat-button
+        color="warn"
+        (click)="removeOverseerResources()"
+        class="grow me-4"
+      >
+        Delete Overseer Resources Zip
+      </button>
+      <button
+        mat-flat-button
+        color="accent"
+        (click)="downloadOverseerResources()"
+        class="grow ms-4"
+      >
+        Download Overseer Resources Zip
+      </button>
+    </div>
+  }
 
-  <div class="flex flex-row gap-4">
+  <div class="flex flex-row gap-4 pt-4">
     <button
-      mat-button
-      mat-raised-button
+      mat-flat-button
       color="primary"
       [disabled]="!taskDefinition.id || !taskDefinition.hasTaskAssessmentResources"
       (click)="testSubmission()"
-      style="width: 100%; line-height: 36px; padding: 0 16px"
+      class="flex-grow me-4"
     >
       <mat-icon>upload_file</mat-icon> Test Submission
     </button>
     <button
-      mat-button
-      mat-raised-button
+      mat-flat-button
       color="accent"
       [disabled]="!currentUserTask"
       (click)="testSubmissionHistory()"
-      style="width: 100%; line-height: 36px; padding: 0 16px"
+      class="flex-grow ms-4"
     >
-      <mat-icon>preview</mat-icon> Test Submission History
+      <mat-icon>preview</mat-icon> Submission History
     </button>
   </div>
 </div>

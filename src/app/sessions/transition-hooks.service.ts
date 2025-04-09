@@ -43,6 +43,7 @@ export class TransitionHooksService {
       // Adjust settings such as headers
       switch (toState) {
         case 'timeout':
+        case 'success-close':
           return true;
         case 'sign_in':
           this.globalState.hideHeader();

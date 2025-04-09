@@ -11,6 +11,7 @@ import {
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
+import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
 import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import { AlertService } from 'src/app/common/services/alert.service';
 import { TaskSubmissionService } from 'src/app/common/services/task-submission.service';
@@ -31,7 +32,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges {
     private modalService: TaskAssessmentModalService,
     private submissions: TaskSubmissionService,
     private userService: UserService,
-    private taskDefinitionService: TaskDefinitionService
+    private taskDefinitionService: TaskDefinitionService,
+    private fileDownloaderService: FileDownloaderService,
   ) {}
 
   public get overseerEnabled(): boolean {
@@ -86,18 +88,38 @@ export class TaskDefinitionOverseerComponent implements OnChanges {
     });
   }
 
+  public removeOverseerResources() {
+    this.taskDefinition.deleteOverseerResources().subscribe({
+      next: () => {
+        this.alerts.success('Deleted Overseer Resources', 2000);
+        this.taskDefinition.hasTaskAssessmentResources = false;
+      }
+    });
+  }
+
+  public downloadOverseerResources() {
+    this.fileDownloaderService.downloadFile(
+      this.taskDefinition.getOverseerResourcesUrl(),
+      this.taskDefinition.name + '.zip',
+    );
+  }
+
+
   public uploadOverseerResources(files: FileList) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(
       (f) => f.type === 'application/zip' || f.type === 'application/x-zip-compressed',
     );
     if (validFiles.length > 0) {
       const file = validFiles[0];
-      this.taskDefinitionService.uploadTaskResources(this.taskDefinition, file).subscribe({
-        next: () => this.alerts.success('Uploaded task sheet', 2000),
+      this.taskDefinitionService.uploadOverseerResources(this.taskDefinition, file).subscribe({
+        next: () => {
+          this.alerts.success('Uploaded Overseer Resources', 2000);
+          this.taskDefinition.hasTaskAssessmentResources = true;
+        },
         error: (message) => this.alerts.error(message, 6000),
       });
     } else {
-      this.alerts.error('Please drop a PDF to upload for this task', 6000);
+      this.alerts.error('Please drop a zip with scripts for this task to upload', 6000);
     }
   }
 }

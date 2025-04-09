@@ -47,6 +47,7 @@ import {AlertComponent} from 'src/app/common/services/alert.service';
 import {setTheme} from 'ngx-bootstrap/utils';
 
 import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
+import { D2lUnitDetailsFormComponent, D2lUnitDetailsModal } from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
 import {
   AboutDoubtfireModal,
   AboutDoubtfireModalContent,
@@ -93,6 +94,9 @@ import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import {ExtensionModalComponent} from './common/modals/extension-modal/extension-modal.component';
 import {CalendarModalComponent} from './common/modals/calendar-modal/calendar-modal.component';
+import { ConfirmationModalComponent } from './common/modals/confirmation-modal/confirmation-modal.component';
+import {CommentsModalComponent} from './common/modals/comments-modal/comments-modal.component';
+
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatOptionModule} from '@angular/material/core';
@@ -159,6 +163,7 @@ import {
   WebcalService,
   LearningOutcomeService,
   TaskSimilarityService,
+  D2lAssessmentMappingService,
 } from './api/models/doubtfire-model';
 import {FileDownloaderService} from './common/file-downloader/file-downloader.service';
 import {PdfImageCommentComponent} from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
@@ -208,6 +213,7 @@ import {TaskDefinitionUploadComponent} from './units/states/edit/directives/unit
 import {TaskDefinitionOptionsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-options/task-definition-options.component';
 import {TaskDefinitionResourcesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 import {TaskDefinitionOverseerComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/task-definition-overseer.component';
+import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-scorm/task-definition-scorm.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {FileDropComponent} from './common/file-drop/file-drop.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
@@ -229,7 +235,15 @@ import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-
 import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {GradeService} from './common/services/grade.service';
-import {CommentsModalComponent} from './common/modals/comments-modal/comments-modal.component';
+import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
+import {ScormAdapterService} from './api/services/scorm-adapter.service';
+import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
+import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
+import {TestAttemptService} from './api/services/test-attempt.service';
+import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
+import {ScormExtensionModalComponent} from './common/modals/scorm-extension-modal/scorm-extension-modal.component';
+import { D2lTransferComponent, D2lTransferModal } from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
+import { SuccessCloseComponent } from './common/success-close/success-close.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -249,6 +263,8 @@ const MY_DATE_FORMAT = {
   declarations: [
     AlertComponent,
     AboutDoubtfireModalContent,
+    D2lUnitDetailsFormComponent,
+    D2lTransferComponent,
     TeachingPeriodUnitImportDialogComponent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
@@ -265,7 +281,9 @@ const MY_DATE_FORMAT = {
     OverseerImageListComponent,
     ExtensionModalComponent,
     CalendarModalComponent,
+    ConfirmationModalComponent,
     InstitutionSettingsComponent,
+    SuccessCloseComponent,
     HomeComponent,
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
@@ -281,6 +299,7 @@ const MY_DATE_FORMAT = {
     TaskDefinitionOptionsComponent,
     TaskDefinitionResourcesComponent,
     TaskDefinitionOverseerComponent,
+    TaskDefinitionScormComponent,
     UnitAnalyticsComponent,
     StudentTutorialSelectComponent,
     StudentCampusSelectComponent,
@@ -345,6 +364,11 @@ const MY_DATE_FORMAT = {
     FTaskBadgeComponent,
     FUnitsComponent,
     CommentsModalComponent,
+    ScormPlayerComponent,
+    ScormCommentComponent,
+    TaskScormCardComponent,
+    ScormExtensionCommentComponent,
+    ScormExtensionModalComponent,
   ],
   // Services we provide
   providers: [
@@ -355,6 +379,7 @@ const MY_DATE_FORMAT = {
     GroupSetService,
     GroupService,
     UnitService,
+    D2lAssessmentMappingService,
     ProjectService,
     UnitRoleService,
     LearningOutcomeService,
@@ -417,7 +442,11 @@ const MY_DATE_FORMAT = {
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    D2lUnitDetailsModal,
+    D2lTransferModal,
     CreateNewUnitModal,
+    ScormAdapterService,
+    TestAttemptService,
     provideLottieOptions({
       player: () => player,
     }),

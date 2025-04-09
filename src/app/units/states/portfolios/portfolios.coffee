@@ -14,8 +14,10 @@ angular.module('doubtfire.units.states.portfolios', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor']
    }
 )
-.controller("UnitPortfoliosStateCtrl", ($scope, alertService, analyticsService, gradeService, newProjectService, Visualisation, newTaskService, fileDownloaderService, newUserService) ->
+.controller("UnitPortfoliosStateCtrl", ($scope, alertService, analyticsService, gradeService, newProjectService, Visualisation, newTaskService, fileDownloaderService, newUserService, D2lTransferModal) ->
   # TODO: (@alexcu) Break this down into smaller directives/substates
+
+  $scope.unit.loadD2lMapping().subscribe()
 
   $scope.downloadGrades = -> fileDownloaderService.downloadFile($scope.unit.gradesUrl, "#{$scope.unit.code}-grades.csv")
   $scope.downloadPortfolios = -> fileDownloaderService.downloadFile($scope.unit.portfoliosUrl, "#{$scope.unit.code}-portfolios.zip")
@@ -126,4 +128,10 @@ angular.module('doubtfire.units.states.portfolios', [])
         $scope.project.preloadedUrl = $scope.project.portfolioUrl()
       error: (message) -> alertService.error( message, 6000)
     })
+
+  $scope.hasD2lMapping = ->
+    $scope.unit.hasD2lMapping()
+
+  $scope.transferToD2L = ->
+    D2lTransferModal.open($scope.unit)
 )

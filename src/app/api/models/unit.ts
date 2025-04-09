@@ -22,9 +22,13 @@ import {
   Project,
   TutorialStreamService,
   UnitRoleService,
+  D2lAssessmentMappingService,
+  OverseerImage,
+  OverseerImageService,
 } from './doubtfire-model';
 import {LearningOutcome} from './learning-outcome';
 import {AlertService} from 'src/app/common/services/alert.service';
+import { D2lAssessmentMapping } from './d2l/d2l_assessment_mapping';
 
 export class Unit extends Entity {
   id: number;
@@ -51,6 +55,7 @@ export class Unit extends Entity {
 
   assessmentEnabled: boolean;
   overseerImageId: number = null; // image needs to be lazy loadaed
+  private _overseerImage: OverseerImage;
 
   autoApplyExtensionBeforeDeadline: boolean;
   sendNotifications: boolean;
@@ -62,6 +67,8 @@ export class Unit extends Entity {
   allowStudentExtensionRequests: boolean;
   extensionWeeksOnResubmitRequest: number;
   allowStudentChangeTutorial: boolean;
+
+  d2lMapping: D2lAssessmentMapping;
 
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
@@ -91,6 +98,12 @@ export class Unit extends Entity {
     return {
       unit: super.toJson(mappingData, ignoreKeys),
     };
+  }
+
+  public hasChanges(): boolean {
+    const unitService = AppInjector.get(UnitService);
+    const changes = this.toJson(unitService.mapping);
+    return JSON.stringify(changes) !== '{"unit":{}}';
   }
 
   public get nameAndPeriod(): string {
@@ -436,6 +449,15 @@ export class Unit extends Entity {
     return this.groupSetsCache.currentValues;
   }
 
+  public set overseerImage(image: OverseerImage) {
+    this._overseerImage = image;
+    this.overseerImageId = image.id;
+  }
+
+  public get overseerImage(): OverseerImage {
+    return this._overseerImage;
+  }
+
   public get overseerEnabled(): boolean {
     return this.assessmentEnabled && AppInjector.get(DoubtfireConstants).IsOverseerEnabled.value; // && this.overseerImageId !== null && this.overseerImageId !== undefined;
   }
@@ -545,6 +567,26 @@ export class Unit extends Entity {
     AppInjector.get(FileDownloaderService).downloadFile(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments.json`,
       `${this.name}-tutor-assessments.csv`,
+    );
+  }
+
+  public hasD2lMapping(): boolean {
+    const doubtfireConstants = AppInjector.get(DoubtfireConstants);
+    return (
+      doubtfireConstants.IsD2LEnabled.value &&
+      this.d2lMapping !== undefined &&
+      this.d2lMapping.orgUnitId !== undefined &&
+      this.d2lMapping.orgUnitId.length > 0
+    );
+  }
+
+  public loadD2lMapping(): Observable<D2lAssessmentMapping> {
+    const d2lMappingSvc = AppInjector.get(D2lAssessmentMappingService);
+
+    return d2lMappingSvc.get({unitId: this.id}).pipe(
+      tap((mappings) => {
+        this.d2lMapping = mappings;
+      }),
     );
   }
 }

@@ -11,21 +11,19 @@
 
 @if (task) {
   <div id="replyContainer" [hidden]="originalComment === null">
-    <div>
-      <div class="replying-wrap">
-        Replying to:
-        <b>{{ originalComment !== null ? originalComment.author.name : '' }}</b>
-        <button
-          id="cancelReplyButton"
-          (click)="cancelReply()"
-          mat-icon-button
-          aria-label="Close reply"
-        >
-          <mat-icon inline="true" aria-label="Quit cross icon">close</mat-icon>
-        </button>
-      </div>
-      <p>{{ originalComment !== null ? originalComment.text : '' }}</p>
+    <div class="replying-wrap" style="width: 100%">
+      <button
+        id="cancelReplyButton"
+        (click)="cancelReply()"
+        mat-icon-button
+        aria-label="Close reply"
+      >
+        <mat-icon aria-label="Quit cross icon">close</mat-icon>
+      </button>
+      Replying to:
+      <b>{{ originalComment !== null ? originalComment.author.name : '' }}</b>
     </div>
+    <p>{{ originalComment !== null ? originalComment.text : '' }}</p>
   </div>
 }
 

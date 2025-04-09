@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GroupSetService, LearningOutcomeService, TaskOutcomeAlignmentService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit, UserService } from 'src/app/api/models/doubtfire-model';
+import { GroupSetService, LearningOutcomeService, OverseerImageService, TaskOutcomeAlignmentService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit, UserService } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService, Entity, EntityMapping } from 'ngx-entity-service';
 import API_URL from 'src/app/config/constants/apiURL';
 import { UnitRoleService } from './unit-role.service';
@@ -124,7 +124,25 @@ export class UnitService extends CachedEntityService<Unit> {
         }
       },
       'assessmentEnabled',
-      'overseerImageId',
+      // 'overseerImageId',
+      {
+        keys: 'overseerImageId',
+        toEntityFn: (data, key, entity) => {
+          const overSeerEntityId = data[key];
+          if (overSeerEntityId) {
+            const overseerImageService = AppInjector.get(OverseerImageService);
+            overseerImageService.get(data[key]).subscribe({
+              next: (image) => {
+                entity.overseerImage = image;
+              },
+            });
+          }
+          return overSeerEntityId;
+        },
+        toJsonFn: (unit: Unit, _key: string) => {
+          return unit.overseerImage?.id;
+        },
+      },
       'autoApplyExtensionBeforeDeadline',
       'sendNotifications',
       'enableSyncEnrolments',
@@ -227,7 +245,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'portfolioAutoGenerationDate',
 
       'assessmentEnabled',
-      // 'overseerImage', - map to overseer image
+      'overseerImageId',
 
       'autoApplyExtensionBeforeDeadline',
       'sendNotifications',

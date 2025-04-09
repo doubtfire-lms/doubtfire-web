@@ -2,6 +2,173 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.0.37](https://github.com/macite/doubtfire-deploy/compare/v8.0.36...v8.0.37) (2025-03-10)
+
+
+### Bug Fixes
+
+* ensure overseer download get resources zip ([a1e4d71](https://github.com/macite/doubtfire-deploy/commit/a1e4d71b34733bc53cd2cfa63ee1e70f8f43386f))
+
+### [8.0.36](https://github.com/macite/doubtfire-deploy/compare/v8.0.35...v8.0.36) (2025-03-07)
+
+
+### Bug Fixes
+
+* overseer image admin in unit and task ([72c89b3](https://github.com/macite/doubtfire-deploy/commit/72c89b30cca426d56c7efbbac34e00fd734fe714))
+
+### [8.0.35](https://github.com/macite/doubtfire-deploy/compare/v8.0.34...v8.0.35) (2025-02-28)
+
+
+### Bug Fixes
+
+* correct ability to edit teaching periods ([ce37bf2](https://github.com/macite/doubtfire-deploy/commit/ce37bf27689744a6f43be46912be0d14e2cdbc6b))
+* ensure an old grade is present in portfolio assessment ([7daacd1](https://github.com/macite/doubtfire-deploy/commit/7daacd1bf0af050aeb6db503d963e574f68b9a94))
+* ensure overseer images can be edited ([3479b7a](https://github.com/macite/doubtfire-deploy/commit/3479b7af589b9ba986ddbb7dc8a84fd0be3e66e6))
+
+### [8.0.34](https://github.com/macite/doubtfire-deploy/compare/v8.0.33...v8.0.34) (2025-02-12)
+
+
+### Bug Fixes
+
+* enhance rollover messages ([48348c8](https://github.com/macite/doubtfire-deploy/commit/48348c8e6a7ffdb4186fe3e6d27fe860076922e1))
+
+### [8.0.33](https://github.com/macite/doubtfire-deploy/compare/v8.0.32...v8.0.33) (2025-01-29)
+
+
+### Bug Fixes
+
+* nginx conf redirect for spa ([95c0ca9](https://github.com/macite/doubtfire-deploy/commit/95c0ca9384e5a0fe7e522f61146b711b706712c1))
+
+### [8.0.32](https://github.com/macite/doubtfire-deploy/compare/v8.0.31...v8.0.32) (2025-01-29)
+
+
+### Bug Fixes
+
+* correct issue fetching user from cookie ([0d63775](https://github.com/macite/doubtfire-deploy/commit/0d63775339dcbb648d7c8702b1c3428b8622a704))
+
+### [8.0.31](https://github.com/macite/doubtfire-deploy/compare/v8.0.30...v8.0.31) (2025-01-28)
+
+
+### Bug Fixes
+
+* ensure test attempt work for staff students ([06bfa71](https://github.com/macite/doubtfire-deploy/commit/06bfa714d0b54938231004a29ae11e68fe515d80))
+* serve index.html for unknown paths ([d07ad26](https://github.com/macite/doubtfire-deploy/commit/d07ad26bd7e7bd8ba7c7877a1208a8f82958c72b))
+
+### [8.0.30](https://github.com/doubtfire-lms/doubtfire-deploy/compare/v8.0.29...v8.0.30) (2025-01-22)
+
+
+### Features
+
+* add ability to collect d2l org and grade object ids ([93fd614](https://github.com/doubtfire-lms/doubtfire-deploy/commit/93fd6144c798fd302204728a6c2dd43f74d7bf91))
+* add ability to trigger d2l grade transfer ([fd0cc07](https://github.com/doubtfire-lms/doubtfire-deploy/commit/fd0cc0737682e9aa02af14f858c8a5f5f27f22e7))
+* add success page for oauth callback ([921406e](https://github.com/doubtfire-lms/doubtfire-deploy/commit/921406ed595c7a74cb750bc87d49fac0337bdb8a))
+* check if d2l results available ([2460c88](https://github.com/doubtfire-lms/doubtfire-deploy/commit/2460c88af08740f8626ed71d8851a75af095a03d))
+* d2l integration checks settings ([0a61df5](https://github.com/doubtfire-lms/doubtfire-deploy/commit/0a61df53c9fc187b7462e8564a19641ac1693cf0))
+* switch to html5 mode ([9d017fb](https://github.com/doubtfire-lms/doubtfire-deploy/commit/9d017fbfaa1d5bae7f43da37ec7ae43e1dfafa8f))
+
+
+### Bug Fixes
+
+* ensure standard error propagate to the ui ([fd056db](https://github.com/doubtfire-lms/doubtfire-deploy/commit/fd056db47631087d5ef29223bd3dc9037c4b10dd))
+* report better errors during file downloads ([cf87d68](https://github.com/doubtfire-lms/doubtfire-deploy/commit/cf87d68ea3a5433a073ae6db413f8c1f825ada80))
+
+### [8.0.29](https://github.com/macite/doubtfire-deploy/compare/v8.0.28...v8.0.29) (2024-10-25)
+
+
+### Features
+
+* add support for the view language ([151ca04](https://github.com/macite/doubtfire-deploy/commit/151ca04ca8da9059890d7846293bf34ae67f05c5))
+
+
+### Bug Fixes
+
+* correct task scroll into view ([7984b39](https://github.com/macite/doubtfire-deploy/commit/7984b393752381e0a219dbbdafc0e7b44c3fcdb3))
+
+### [8.0.27](https://github.com/macite/doubtfire-deploy/compare/v8.0.26...v8.0.27) (2024-08-09)
+
+
+### Bug Fixes
+
+* encode . in the username in scorm player ([1ec1754](https://github.com/macite/doubtfire-deploy/commit/1ec175419ab3ef80f22ac8a6384f6ed40a17c217))
+
+### [8.0.26](https://github.com/macite/doubtfire-deploy/compare/v8.0.25...v8.0.26) (2024-08-09)
+
+
+### Bug Fixes
+
+* register service names in state resolve functions ([64e41f4](https://github.com/macite/doubtfire-deploy/commit/64e41f4aedcf519a2786d7fe4929900f86731896))
+
+### [8.0.25](https://github.com/macite/doubtfire-deploy/compare/v8.0.24...v8.0.25) (2024-08-09)
+
+
+### Bug Fixes
+
+* adjust shortcuts and unregister on inbox destroy ([8a2ce3b](https://github.com/macite/doubtfire-deploy/commit/8a2ce3bfe32d99be1bc0667ca1aba55d36f987d2))
+* switch to control shift ([a0c1185](https://github.com/macite/doubtfire-deploy/commit/a0c1185bf4af3acb8f58c97cc27021c952861603))
+
+### [8.0.24](https://github.com/macite/doubtfire-deploy/compare/v8.0.23...v8.0.24) (2024-08-09)
+
+
+### Features
+
+* add ability to preview scorm test ([7ffbea9](https://github.com/macite/doubtfire-deploy/commit/7ffbea9f56c393d44571c18f30735e090701b554))
+* add new Numbas Feature ([6f1ac4e](https://github.com/macite/doubtfire-deploy/commit/6f1ac4e4c1a78115c426838bce350bce286e44f0))
+* add new Numbas Feature ([8eba913](https://github.com/macite/doubtfire-deploy/commit/8eba913ec4462e1c252a8a698b4b6de67c4ec25f))
+* add numbas component ([7c1734b](https://github.com/macite/doubtfire-deploy/commit/7c1734b137ac369b3b605b38749c845df38b9a78))
+* add Numbas config options to task def service keys ([ff28e48](https://github.com/macite/doubtfire-deploy/commit/ff28e4802b86dc22be339cc196ef82ade67934f7))
+* add Numbas test attempt model ([097df79](https://github.com/macite/doubtfire-deploy/commit/097df7960d34a8c905ee495b8c6c8b8843e43b36))
+* add Numbas test section on ready for feedback ([e61295c](https://github.com/macite/doubtfire-deploy/commit/e61295c50006dbc89cfc0639bb3c68a09a3cda9d))
+* add Numbas test upload section and reorder editor sections ([edbd536](https://github.com/macite/doubtfire-deploy/commit/edbd536e73ace8b6b4cced1481c809fd36524dce))
+* add Numbas upload component and related functions to task-definition model ([4ecaee8](https://github.com/macite/doubtfire-deploy/commit/4ecaee8ad1c0caed9a5d848066a173000989f79b))
+* add test attempt service ([a576f48](https://github.com/macite/doubtfire-deploy/commit/a576f484bc434728eab9632c022bccf1ed26cb01))
+* add test attempt service and minor numbas related changes ([0652b56](https://github.com/macite/doubtfire-deploy/commit/0652b56f69eb850c2dfb43be54d07beb4c4eb469))
+* added numbas-lms service code ([471d344](https://github.com/macite/doubtfire-deploy/commit/471d34486f2582e95aac84469187f087277cc079))
+* allow changing scorm review config and add minor UI changes ([fc023af](https://github.com/macite/doubtfire-deploy/commit/fc023af462656e3557e2970f211fa4d59ee1e3d5))
+* change Numbas time delay config to enable incremental delays ([0afa719](https://github.com/macite/doubtfire-deploy/commit/0afa7197293c90a154c1716db91ecadae3677d53))
+* disable attempt button if passed and add button to review latest attempt in card ([703563c](https://github.com/macite/doubtfire-deploy/commit/703563c86253c60ad30d451ee2d8e0fa7ebbfabb))
+* display numbas task comments ([48a31da](https://github.com/macite/doubtfire-deploy/commit/48a31da1442f1e14f497c614053d9002c9f2631b))
+* enable reviewing, passing, deleting test attempts and add test attempt model and service ([561b924](https://github.com/macite/doubtfire-deploy/commit/561b9241c2f44fd69d3f09c656a025f514bbaf3a))
+* enable students to request extra scorm attempt ([d904ffd](https://github.com/macite/doubtfire-deploy/commit/d904ffd6fd674f6e61894d517f5aa147d1db6d29))
+* get unique token for scorm asset retrieval ([8fe2f9e](https://github.com/macite/doubtfire-deploy/commit/8fe2f9e9ca60c02e55c24d0f2bb3eb6dbea8217c))
+* implement numbas test data upload in task definition service ([2c7dab5](https://github.com/macite/doubtfire-deploy/commit/2c7dab555fc9a226b980a8dae96f5738bf517b1b))
+* insert Numbas test rules options in the task editor ([7e52ad5](https://github.com/macite/doubtfire-deploy/commit/7e52ad5e5759291d7d61805070ec482eb49c90be))
+* numbas-test-numbas-service ([cee13b7](https://github.com/macite/doubtfire-deploy/commit/cee13b727b35f804fc16070885f0e57c422c9982))
+* prevent uploading files until scorm passed ([ec86e4e](https://github.com/macite/doubtfire-deploy/commit/ec86e4eca8e9c50ebdaf54c34c302da88dd44b31))
+* show banner based on scorm success status ([db16172](https://github.com/macite/doubtfire-deploy/commit/db161721fab1359694c44d8df7237cd01892938b))
+* show launch button on ready for feedback if Numbas test is enabled for the task ([17af5b7](https://github.com/macite/doubtfire-deploy/commit/17af5b7fe9e1fbc8e5f18e2fece6e029b017408c))
+* use confirmation modal when passing or deleting test attempts ([3fb25bb](https://github.com/macite/doubtfire-deploy/commit/3fb25bb373acab837a3ef787620dd654bfd6803f))
+
+
+### Bug Fixes
+
+* add accepted Numbas file types ([bcaa8af](https://github.com/macite/doubtfire-deploy/commit/bcaa8af150aaf68b5cf5fb07ad9cb72037212d5d))
+* add auth headers to scorm adapter xhr requests ([97e1ea1](https://github.com/macite/doubtfire-deploy/commit/97e1ea187b769a51ebb66b82d76f21193bb29386))
+* adjusted edit profile accidental change ([316abc7](https://github.com/macite/doubtfire-deploy/commit/316abc775eeba6ca846c7c742bc88bec61d05a5e))
+* change success status descriptions ([20da042](https://github.com/macite/doubtfire-deploy/commit/20da0423450fe3b9b8006660bf6f5e06670f520c))
+* delete comment as well as test attempt ([b6887e8](https://github.com/macite/doubtfire-deploy/commit/b6887e85b7a06b166519924dd682ef57650a4e32))
+* disable launch scorm test button if user is staff ([9bc48b0](https://github.com/macite/doubtfire-deploy/commit/9bc48b03905c0a839d78ea13be9817ca73ba54cf))
+* ensure counters are incremented after object creation ([2b1dcfc](https://github.com/macite/doubtfire-deploy/commit/2b1dcfc717eb770dd623c62ac99d8d961d1c3124))
+* ensure datamodel is updated on termination ([2ac487f](https://github.com/macite/doubtfire-deploy/commit/2ac487f13c3743f2b5b805521964bdcbca7cdc15))
+* ensure scorm frame loads when src is available ([6ae4295](https://github.com/macite/doubtfire-deploy/commit/6ae42954162996acf145cef211981153381ff49d))
+* hide config options if numbas test is disabled ([0b15b1c](https://github.com/macite/doubtfire-deploy/commit/0b15b1c38b8f09a30f53bb42dccd1971109bce01))
+* indicate task def has scorm data when zip is uploaded ([4b983ba](https://github.com/macite/doubtfire-deploy/commit/4b983bae1f522013f750b8c36d5e1a52624abbbc))
+* initialise SCORM API wrapper before iframe loads ([5d0606c](https://github.com/macite/doubtfire-deploy/commit/5d0606c56eaeb929d5873cae7038ce729581512c))
+* integrate Numbas services well with the existing system ([d47b8ed](https://github.com/macite/doubtfire-deploy/commit/d47b8edc745660801984346c4fa67d6bb371f4cb))
+* marking shortcuts no longer conflict with common browser shortcuts ([ec7524a](https://github.com/macite/doubtfire-deploy/commit/ec7524aaae040794de76521363c2d885a0425db0))
+* remove attempt number field ([f0ff40b](https://github.com/macite/doubtfire-deploy/commit/f0ff40bfd7e86b904adae94bf8cbe5d56371e011))
+* remove saved scorm token and always get ([c8fc702](https://github.com/macite/doubtfire-deploy/commit/c8fc702bde6f1c448fc585042e5265625552bae8))
+* retrieve test attempt data correctly ([2810ce6](https://github.com/macite/doubtfire-deploy/commit/2810ce65d423a137600d621a98bf27dbc221921c))
+* send task id with numbas completed attempt data ([e46214d](https://github.com/macite/doubtfire-deploy/commit/e46214dd59d86014bb04d1c31f3a3bf21240e32b))
+* show correct attempts left and allow tutor to review attempt always ([58c24c3](https://github.com/macite/doubtfire-deploy/commit/58c24c3a6760af168a918bc099e755f475eac5f0))
+* show correct Numbas test from the task def with all assets loaded ([bee0a0b](https://github.com/macite/doubtfire-deploy/commit/bee0a0bb1eb905c964caf7888419effe70553520))
+* show delete and download buttons in editor when Numbas test exists ([821feb9](https://github.com/macite/doubtfire-deploy/commit/821feb93a8a40d095ef4f50adedbfd9216278fa9))
+* show Numbas button component and modify iframe request ([c9c2fbe](https://github.com/macite/doubtfire-deploy/commit/c9c2fbe10db156512946355f3cabfe54461f0eba))
+* show Numbas iframe on top of other elements ([f53befd](https://github.com/macite/doubtfire-deploy/commit/f53befd82b52bba24bc8c593a9266c11f9155d32))
+* show previously configured Numbas attempt limit ([56e1a5d](https://github.com/macite/doubtfire-deploy/commit/56e1a5de44ee275f9544b77909b7472f1020c2c3))
+* update numbas api path ([3df59dc](https://github.com/macite/doubtfire-deploy/commit/3df59dcc58f021ef16d81938d1d05473818bc75e))
+* use modal for Numbas and enable authentication ([64b1bfb](https://github.com/macite/doubtfire-deploy/commit/64b1bfb2918993e58a6659948d9621fc7d0b8ba4))
+* use nullish coalescing when retrieving data from the datamodel ([226d919](https://github.com/macite/doubtfire-deploy/commit/226d9193251fb675c92bec8265508477857a4ec9))
+
 ### [8.0.28](https://github.com/macite/doubtfire-deploy/compare/v8.0.23...v8.0.28) (2024-09-05)
 
 

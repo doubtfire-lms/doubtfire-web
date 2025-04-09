@@ -15,6 +15,9 @@ import {
   TaskCommentService,
   TaskSimilarity,
   TaskSimilarityService,
+  TestAttempt,
+  TestAttemptService,
+  ScormComment,
 } from './doubtfire-model';
 import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
@@ -30,6 +33,7 @@ export class Task extends Entity {
   status: TaskStatusEnum = 'not_started';
   dueDate: Date;
   extensions: number;
+  scormExtensions: number;
   submissionDate: Date;
   completionDate: Date;
   timesAssessed: number;
@@ -53,6 +57,7 @@ export class Task extends Entity {
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
 
   public readonly similarityCache: EntityCache<TaskSimilarity> = new EntityCache<TaskSimilarity>();
+  public readonly testAttemptCache: EntityCache<TestAttempt> = new EntityCache<TestAttempt>();
 
   private _unit: Unit;
 
@@ -276,7 +281,7 @@ export class Task extends Entity {
         return `${diff} ${data.period.charAt(0).toUpperCase() + data.period.substring(1)}`;
       } else if (diff === 1 && data.period !== 'weeks') {
         return `1 ${
-          data.period.charAt(0).toUpperCase() + data.period.substring(1, data.period.length - 2)
+          data.period.charAt(0).toUpperCase() + data.period.slice(1, -1)
         }`;
       }
     }
@@ -381,6 +386,14 @@ export class Task extends Entity {
       if (comments[i].replyToId) {
         comments[i].originalComment = comments.find((tc) => tc.id === comments[i].replyToId);
       }
+
+      // Scorm series
+      if (comments[i].commentType === 'scorm') {
+        comments[i].firstInSeries = i === 0 || comments[i - 1].commentType !== 'scorm';
+        (comments[i] as ScormComment).lastInScormSeries =
+          i + 1 === comments.length || comments[i + 1]?.commentType !== 'scorm';
+        if (!comments[i].firstInSeries) comments[i].shouldShowTimestamp = false;
+      }
     }
 
     comments[comments.length - 1].shouldShowAvatar = true;
@@ -396,7 +409,7 @@ export class Task extends Entity {
 
   public taskKeyToIdString(): string {
     const key = this.taskKey();
-    return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(/[.#]/g, '-');
+    return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(/[.# ]/g, '-');
   }
 
   public get similaritiesDetected(): boolean {
@@ -505,6 +518,33 @@ export class Task extends Entity {
       this.definition.assessmentEnabled &&
       this.definition.hasTaskAssessmentResources
     );
+  }
+
+  public get scormEnabled(): boolean {
+    return this.definition.scormEnabled && this.definition.hasScormData;
+  }
+
+  public get scormPassed(): boolean {
+    if (this.latestCompletedTestAttempt) {
+      return this.latestCompletedTestAttempt.successStatus;
+    }
+    return false;
+  }
+
+  /**
+   * Launch the SCORM player for this task in a new window.
+   */
+  public launchScormPlayer(): void {
+    const url = `#/projects/${this.project.id}/task_def_id/${this.taskDefId}/scorm-player/normal`;
+    window.open(url, '_blank');
+  }
+
+  public get isReadyForUpload(): boolean {
+    return !this.scormEnabled || this.definition.scormBypassTest || this.scormPassed;
+  }
+
+  public get latestCompletedTestAttempt(): TestAttempt {
+    return this.testAttemptCache.currentValues.find((attempt) => attempt.terminated);
   }
 
   public submissionUrl(asAttachment: boolean = false): string {
@@ -659,12 +699,15 @@ export class Task extends Entity {
 
   public triggerTransition(status: TaskStatusEnum): void {
     if (this.status === status) return;
+    const alerts: AlertService = AppInjector.get(AlertService);
 
     const requiresFileUpload =
       ['ready_for_feedback', 'need_help'].includes(status) && this.requiresFileUpload();
 
-    if (requiresFileUpload) {
+    if (requiresFileUpload && this.isReadyForUpload) {
       this.presentTaskSubmissionModal(status);
+    } else if (requiresFileUpload && !this.isReadyForUpload) {
+      alerts.error('Complete Knowledge Check first to submit files', 6000);
     } else {
       this.updateTaskStatus(status);
     }
@@ -760,6 +803,23 @@ export class Task extends Entity {
       {taskId: this.id},
       {
         cache: this.similarityCache,
+        constructorParams: this,
+      },
+    );
+  }
+
+  /**
+   * Fetch the SCORM test attempts for this task.
+   */
+  public fetchTestAttempts(): Observable<TestAttempt[]> {
+    const testAttemptService: TestAttemptService = AppInjector.get(TestAttemptService);
+    return testAttemptService.query(
+      {
+        project_id: this.project.id,
+        task_def_id: this.taskDefId,
+      },
+      {
+        cache: this.testAttemptCache,
         constructorParams: this,
       },
     );

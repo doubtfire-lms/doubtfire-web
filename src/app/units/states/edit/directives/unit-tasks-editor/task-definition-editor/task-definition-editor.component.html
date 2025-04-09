@@ -118,7 +118,9 @@
           Configure automated assessment
         </p>
         <div class="bg-white border border-gray-200 rounded-xl shadow p-6" *ngIf="overseerEnabled">
-          <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
+          <f-task-definition-overseer
+            [taskDefinition]="taskDefinition"
+          ></f-task-definition-overseer>
         </div>
       </div>
     </div>
@@ -131,24 +133,48 @@
           7
         </div>
       </div>
-
-      <div class="w-full mb-20">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Optional settings</h3>
-        <p class="font-normal text-gray-700">Apply other options</p>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> Options </mat-panel-title>
-          </mat-expansion-panel-header>
-          <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
-        </mat-expansion-panel>
+      <div class="w-full">
+        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">SCORM test</h3>
+        <p class="font-normal text-gray-700">
+          Upload the corresponding SCORM 2004 test (e.g. Numbas)
+        </p>
+        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+          <f-task-definition-scorm [taskDefinition]="taskDefinition"></f-task-definition-scorm>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="place-content-end">
-    <div class="sticky bottom-16">
-      <button mat-fab color="primary" (click)="save()">
-        <mat-icon>save</mat-icon>
-      </button>
+
+    <div class="flex mt-10">
+      <div class="mr-6">
+        <div
+          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
+        >
+          8
+        </div>
+      </div>
+
+      <div class="w-full">
+        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Optional settings</h3>
+        <p class="font-normal text-gray-700">Apply other options</p>
+        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title> Options </mat-panel-title>
+            </mat-expansion-panel-header>
+            <f-task-definition-options
+              [taskDefinition]="taskDefinition"
+            ></f-task-definition-options>
+          </mat-expansion-panel>
+        </div>
+      </div>
+
+      <div class="place-content-end">
+        <div class="sticky bottom-16">
+          <button mat-fab color="primary" (click)="save()">
+            <mat-icon>save</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

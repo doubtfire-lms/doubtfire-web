@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, DoubtfireConstants, newUnitService, alertService, newTeachingPeriodService, TaskSubmission) ->
+  controller: ($scope, $state, $rootScope, DoubtfireConstants, newUnitService, alertService, newTeachingPeriodService, TaskSubmission, D2lUnitDetailsModal) ->
     $scope.overseerEnabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.calOptions = {
@@ -76,6 +76,12 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
         error: (response) ->
           alertService.error( "Failed to update unit. #{response}", 6000)
     })
+
+    $scope.addD2lData = ->
+      D2lUnitDetailsModal.open($scope.unit)
+
+    $scope.d2lEnabled = ->
+      DoubtfireConstants.IsD2LEnabled.value
 
 )
 

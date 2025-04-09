@@ -237,7 +237,8 @@
         >
           <i class="fa fa-download"></i> Download All Portfolios
         </button> -->
-        <button ng-click="downloadGrades()"><i class="fa fa-download"></i> Download Grades</button>
+        <button ng-click="downloadGrades()" style="padding-right: 1rem"><i class="fa fa-download"></i> Download Grades</button>
+        <button ng-if="hasD2lMapping()" ng-click="transferToD2L()"><i class="fa fa-upload"></i> Transfer Grades to D2L</button>
       </div>
     </div>
   </div>
