@@ -55,10 +55,6 @@ export class AuthenticationService {
   }
 
   private actionAuthFailed() {
-    // Complete the auth - so that waiting actions can continue
-    this.authComplete$.next(false);
-    this.authComplete$.complete();
-
     this.signOut(false);
   }
 
@@ -227,8 +223,8 @@ export class AuthenticationService {
         this.setupUserFromResponse(response);
       }),
       catchError((error) => {
-        this.authComplete$.next(false);
-        this.authComplete$.complete();
+        // this.authComplete$.next(false);
+        // this.authComplete$.complete();
 
         return throwError(() => error);
       }),
