@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, Inject, Output, EventEmitter} from '@angular/core';
-import {analyticsService} from 'src/app/ajs-upgraded-providers';
+import {AnalyticsService} from 'src/app/common/services/analytics.service';
 import {Project, Unit, Task, TaskService, TaskStatusEnum, GradeService} from 'src/app/api/models/doubtfire-model';
 
 @Component({
@@ -17,12 +17,12 @@ export class ProjectTasksListComponent implements OnInit {
 
   constructor(
     private newTaskService: TaskService,
-    @Inject(analyticsService) private AnalyticsService,
+    @Inject (AnalyticsService) private AnalyticsService: AnalyticsService,
     public gradeService: GradeService,
   ) {}
 
   ngOnInit(): void {
-    this.AnalyticsService.event('Student Project View', 'Showed Task Button List');
+    this.AnalyticsService.logEvent('Student Project View', 'Showed Task Button List');
     this.groupTasks.push(
       ...this.unit.groupSets.map((gs) => ({
         groupSet: gs,
