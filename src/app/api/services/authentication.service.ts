@@ -5,7 +5,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {StateService, UIRouter, UIRouterGlobals} from '@uirouter/angular';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 import {AppInjector} from 'src/app/app-injector';
-import {AsyncSubject, catchError, map, Observable} from 'rxjs';
+import {AsyncSubject, catchError, map, Observable, throwError} from 'rxjs';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 /**
@@ -226,11 +226,11 @@ export class AuthenticationService {
       map((response: AuthResponse) => {
         this.setupUserFromResponse(response);
       }),
-      catchError((_error, caught: Observable<void>) => {
+      catchError((error) => {
         this.authComplete$.next(false);
         this.authComplete$.complete();
 
-        return caught;
+        return throwError(() => error);
       }),
     );
   }
