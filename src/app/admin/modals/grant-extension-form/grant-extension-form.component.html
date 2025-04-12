@@ -1,73 +1,65 @@
-<div class="mx-auto max-w-3xl p-8 bg-white rounded-md shadow-md">
-  <h2 class="text-3xl font-bold text-gray-900 mb-10">Grant Extension</h2>
+<h2 mat-dialog-title>Grant Extension</h2>
 
-  <form [formGroup]="grantExtensionForm" (ngSubmit)="onSubmit()" class="space-y-8">
+<mat-dialog-content [formGroup]="grantExtensionForm">
+  <!-- Student Selection -->
+  <mat-form-field appearance="fill" class="w-full mb-4">
+    <mat-label>Student</mat-label>
+    <mat-select formControlName="student" required>
+      <mat-option value="" disabled>Select a student</mat-option>
+      <mat-option *ngFor="let student of students" [value]="student.id">
+        {{ student.name }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="grantExtensionForm.get('student')?.touched && grantExtensionForm.get('student')?.invalid">
+      Please select a student.
+    </mat-error>
+  </mat-form-field>
 
-    <!-- Student -->
-    <div>
-      <label class="block text-lg font-semibold text-gray-800 mb-2" for="student">Student</label>
-      <select
-      id="student"
-      formControlName="student"
-      class="w-full border border-gray-300 rounded-md px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  <!-- Extension Duration -->
+  <div class="mb-4">
+  <label for="extension" class="block text-xl font-semibold text-gray-900">
+    Extension Duration: <strong>{{ grantExtensionForm.get('extension')?.value }}</strong> day(s)
+  </label>
+
+  <mat-slider
+    min="1"
+    max="30"
+    step="1"
+    tickInterval="5"
+    thumbLabel
+    class="w-full"
+    style="width: 100%; max-width: 600px; min-width: 300px;"
+  >
+    <input matSliderThumb formControlName="extension" />
+  </mat-slider>
+  </div>
+
+
+
+  <!-- Reason Field -->
+  <mat-form-field appearance="fill" class="w-full mb-4">
+    <mat-label>Reason</mat-label>
+    <textarea
+      matInput
+      formControlName="reason"
+      rows="4"
       required
-      >
-      <option value="" disabled>Select a student</option>
-      <option *ngFor="let student of students" [value]="student.id">
-      {{ student.name }}
-      </option>
-      </select>
-      <!-- Error if not selected -->
-      <div *ngIf="grantExtensionForm.get('student')?.touched && grantExtensionForm.get('student')?.invalid" class="text-red-600 text-sm mt-2">
-        Please select a student.
-    </div>
-
-    <!-- Extension -->
-    <div>
-      <label for="extension" class="block text-lg font-semibold text-gray-800 mb-2">
-        Extension Duration:
-        <span class="font-bold">{{ grantExtensionForm.get('extension')?.value }}</span> day(s)
-      </label>
-      <input id="extension" type="range" formControlName="extension" min="1" max="30" class="w-full" />
-    </div>
-
-    <!-- Reason -->
-    <div>
-      <label for="reason" class="block text-lg font-semibold text-gray-800 mb-2">Reason</label>
-      <textarea
-        id="reason"
-        formControlName="reason"
-        rows="4"
-        class="w-full border border-gray-300 rounded-md px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        required
-      ></textarea>
-      <!-- Error if empty -->
-      <div *ngIf="grantExtensionForm.get('reason')?.touched && grantExtensionForm.get('reason')?.invalid" class="text-red-600 text-sm mt-2">
+    ></textarea>
+    <mat-error *ngIf="grantExtensionForm.get('reason')?.touched && grantExtensionForm.get('reason')?.invalid">
       Please provide a reason for the extension.
-    </div>
+    </mat-error>
+  </mat-form-field>
 
-    <!-- Notes -->
-    <div>
-      <label for="notes" class="block text-lg font-semibold text-gray-800 mb-2">Additional Notes (optional)</label>
-      <textarea
-        id="notes"
-        formControlName="notes"
-        rows="3"
-        class="w-full border border-gray-300 rounded-md px-4 py-3 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      ></textarea>
-    </div>
+  <!-- Notes Field -->
+  <mat-form-field appearance="fill" class="w-full mb-4">
+    <mat-label>Additional Notes (optional)</mat-label>
+    <textarea matInput formControlName="notes" rows="3"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
 
-    <!-- Submit -->
-    <div class="pt-4 text-right">
-      <button
-        type="submit"
-        [disabled]="isSubmitting"
-        [ngClass]="{
-          'bg-blue-700 cursor-not-allowed opacity-70': isSubmitting,
-          'bg-blue-600 hover:bg-blue-700': !isSubmitting
-        }"
-        class="inline-flex items-center text-white text-lg font-medium px-6 py-3 rounded-md transition"
-      >
-        Grant Extension
-      </button>
-    </div>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()" [disabled]="isSubmitting">Cancel</button>
+  <button mat-flat-button color="primary" type="submit" (click)="onSubmit()" [disabled]="isSubmitting">
+    Grant Extension
+  </button>
+</mat-dialog-actions>

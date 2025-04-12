@@ -15,7 +15,7 @@ import {ProjectService} from 'src/app/api/services/project.service';
 import {GlobalStateService} from '../../index/global-state.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
-
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'f-project-dashboard',
   templateUrl: './project-dashboard.component.html',
@@ -43,6 +43,7 @@ export class ProjectDashboardComponent implements OnInit {
     private currentUser: UserService,
     private projectService: ProjectService,
     private globalStateService: GlobalStateService,
+    private dialog: MatDialog,
   ) {}
 
   startedDragging(event: CdkDragStart, div: HTMLDivElement) {

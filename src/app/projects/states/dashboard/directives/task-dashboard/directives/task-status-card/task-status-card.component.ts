@@ -5,6 +5,9 @@ import { Task } from 'src/app/api/models/task';
 import { TaskStatusEnum } from 'src/app/api/models/task-status';
 import { TaskService } from 'src/app/api/services/task.service';
 import { ExtensionModalService } from 'src/app/common/modals/extension-modal/extension-modal.service';
+import { MatDialog } from '@angular/material/dialog';
+import { GrantExtensionFormComponent } from 'src/app/admin/modals/grant-extension-form/grant-extension-form.component';
+
 
 @Component({
   selector: 'f-task-status-card',
@@ -19,6 +22,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private extensions: ExtensionModalService,
     private taskService: TaskService,
     private router: UIRouter,
+    private dialog: MatDialog,
   ) {}
 
   @Input() task: Task;
@@ -66,4 +70,12 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
       this.task.refresh();
     });
   }
+
+  openGrantExtensionDialog(): void {
+    this.dialog.open(GrantExtensionFormComponent, {
+      width: '600px',
+      disableClose: true,
+    });
+  }
+
 }
