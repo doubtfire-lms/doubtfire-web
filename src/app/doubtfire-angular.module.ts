@@ -311,6 +311,8 @@ const MY_DATE_FORMAT = {
     monthYearA11yLabel: 'MMMM yyyy',
   },
 };
+import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
+import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 
 @NgModule({
   // Components we declare
@@ -543,6 +545,7 @@ const MY_DATE_FORMAT = {
     LtiService,
     TaskPrerequisiteService,
     MarkingSessionService,
+    provideAnimationsAsync(),
   ],
   imports: [
     FlexLayoutModule,

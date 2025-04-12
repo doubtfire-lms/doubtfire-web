@@ -1,11 +1,15 @@
 <mat-card appearance="outlined">
   @if (triggers?.length > 0) {
     <mat-form-field class="px-4 pt-4" appearance="outline">
+<<<<<<< HEAD
       <mat-select
         [value]="task?.status"
         (selectionChange)="triggerTransition($event.value)"
         [disabled]="task?.blockedByPrerequisiteTasks()"
       >
+=======
+      <mat-select [value]="task?.status" (selectionChange)="triggerTransition($event.value)">
+>>>>>>> f75e7b32 (feat: update progress on grant extension form)
         <mat-select-trigger>
           <span style="display: inline-flex">
             <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
@@ -15,13 +19,20 @@
         @for (trigger of triggers; track trigger) {
           <mat-option [value]="trigger.status">
             <status-icon [status]="trigger.status" [showTooltip]="false"></status-icon>
+<<<<<<< HEAD
             <span style="display: inline-flex; margin-left: 10px"
               ><h5>{{ trigger.label }}</h5></span
             >
+=======
+            <span style="display: inline-flex; margin-left: 10px">
+              <h5>{{ trigger.label }}</h5>
+            </span>
+>>>>>>> f75e7b32 (feat: update progress on grant extension form)
           </mat-option>
         }
       </mat-select>
     </mat-form-field>
+<<<<<<< HEAD
   }
   @if (triggers?.length < 0) {
     <mat-card-title>
@@ -30,6 +41,8 @@
         <h5>{{ task?.statusLabel() }}</h5>
       </span>
     </mat-card-title>
+=======
+>>>>>>> f75e7b32 (feat: update progress on grant extension form)
   }
 
   <mat-card-content>
@@ -58,8 +71,15 @@
     @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
       <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
     }
+<<<<<<< HEAD
     <button mat-raised-button color="primary" (click)="openDiscussionQrCode()">
       Show Discussion QR
+=======
+
+    <!-- Always show for testing -->
+    <button mat-stroked-button color="primary" (click)="openGrantExtensionDialog()">
+      Grant Extension
+>>>>>>> f75e7b32 (feat: update progress on grant extension form)
     </button>
   </mat-card-actions>
 </mat-card>

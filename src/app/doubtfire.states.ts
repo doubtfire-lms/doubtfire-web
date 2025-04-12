@@ -9,6 +9,7 @@ import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {FUsersComponent} from './admin/states/f-users/f-users.component';
 import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
+<<<<<<< HEAD
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
@@ -17,6 +18,9 @@ import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.c
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {Ng2ViewDeclaration} from '@uirouter/angular';
 import {GrantExtensionFormComponent} from './admin/modals/grant-extension-form/grant-extension-form.component';
+=======
+import { Ng2ViewDeclaration } from '@uirouter/angular';
+>>>>>>> f75e7b32 (feat: update progress on grant extension form)
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -272,20 +276,6 @@ const ViewAllProjectsState: NgHybridStateDeclaration = {
   },
 };
 
-const GrantExtensionState: NgHybridStateDeclaration = {
-  name: 'grant-extension',
-  url: '/grant-extension',
-  views: {
-    main: {
-      component: GrantExtensionFormComponent,
-    },
-  },
-  data: {
-    pageTitle: 'Grant Extension',
-    roleWhitelist: ['Admin']
-  }
-};
-
 const AdministerUnits: NgHybridStateDeclaration = {
   name: 'admin/units', // This is the name of the state to jump to - so ui-sref="users" to jump here
   url: '/admin/units', // You get here with this url
@@ -305,6 +295,21 @@ const AdministerUnits: NgHybridStateDeclaration = {
     roleWhiteList: ['Admin'],
   },
 };
+
+const ProjectDashboardStateV1: NgHybridStateDeclaration = {
+  name: 'dashboard',
+  parent: 'projects',
+  url: '/dashboard',
+  views: {
+    projectView: {
+      component: ProjectDashboardComponent,  // <-- Your new Angular Component
+    },
+  },
+  data: {
+    pageTitle: 'Unit Dashboard',
+  },
+};
+
 
 const ViewAllUnits: NgHybridStateDeclaration = {
   name: 'view-all-units',
@@ -603,6 +608,7 @@ export const doubtfireStates = [
   ViewAllProjectsState,
   ViewAllUnits,
   AdministerUnits,
+<<<<<<< HEAD
   ScormPlayerNormalState,
   ScormPlayerReviewState,
   ScormPlayerStudentReviewState,
@@ -614,4 +620,15 @@ export const doubtfireStates = [
   LtiUnitLinkState,
   TutorAttendance,
   GrantExtensionState
+=======
+  UnauthoriedState,
+  ProjectRootState,
+  ProjectDashboardState,
+  ProjectDashboardStateV1,
+  UnitRootState,
+  TaskViewerState,
+  ScormPlayerNormalState,
+  ScormPlayerReviewState,
+  ScormPlayerStudentReviewState,
+>>>>>>> f75e7b32 (feat: update progress on grant extension form)
 ];
