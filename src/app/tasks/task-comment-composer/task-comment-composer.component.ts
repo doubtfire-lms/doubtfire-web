@@ -33,17 +33,34 @@ interface ApiError {
   status?: number;
 }
 
+/**
+ * The task comment viewer needs to share data with the Task Comment Composer. The data needed
+ * id defined through this interface.
+ */
+
 export interface TaskCommentComposerData {
   originalComment: TaskComment;
 }
 
 const ACCEPTED_FILE_TYPES = [
-  'audio/mpeg', 'audio/vorbis', 'audio/mp4', 'audio/ogg',
-  'audio/wav', 'audio/x-wav', 'audio/webm', 'image/png',
-  'image/pdf', 'application/pdf', 'image/gif', 'image/jpg',
-  'image/jpeg'
+  'audio/mpeg',
+  'audio/vorbis',
+  'audio/mp4',
+  'audio/ogg',
+  'audio/wav',
+  'audio/x-wav',
+  'audio/webm',
+  'image/png',
+  'image/pdf',
+  'application/pdf',
+  'image/gif',
+  'image/jpg',
+  'image/jpeg',
 ];
 
+/**
+ * The task comment composer is responsible for creating and adding comments to a given task.
+ */
 @Component({
   selector: 'task-comment-composer',
   templateUrl: './task-comment-composer.component.html',
@@ -69,19 +86,27 @@ export class TaskCommentComposerComponent
   private hasSubmittedComment = false;
   private submittedTaskIds: Set<number | string> = new Set();
 
-  comment = { text: '', type: 'text' };
-  showEmojiPicker = false;
-  emojiSearchMode = false;
-  emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
-  emojiSearchResults: EmojiData[] = [];
-  emojiMatch: string;
-  recording = false;
+  comment = {
+    text: '',
+    type: 'text',
+  };
 
   @ViewChildren('commentInput') input: QueryList<ElementRef>;
   @ViewChildren('cag') cag: QueryList<ElementRef>;
   @ViewChild('uploader') uploader: ElementRef;
 
   differ: KeyValueDiffer<string, any>;
+  showEmojiPicker = false;
+  emojiSearchMode = false;
+  emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
+  emojiSearchResults: EmojiData[] = [];
+  emojiMatch: string;
+  recording = false;
+  cagStartWidth: number;
+
+
+
+
 
   // Add a task content map to store text per task
   private taskDraftContents: Map<string, string> = new Map();
@@ -98,7 +123,7 @@ export class TaskCommentComposerComponent
     private cdRef: ChangeDetectorRef
   ) {
     this.differ = this.differs.find({}).create();
-    // Initialize submitted tasks from sessionStorage
+    // submitted tasks from sessionStorage
     try {
       const saved = sessionStorage.getItem('task_comments_submitted');
       if (saved) {
@@ -128,6 +153,7 @@ export class TaskCommentComposerComponent
       this.hasSubmittedComment = false;
 
       this.previousTaskId = newTask?.id;
+      this.cancelReply();
 
       this.clearInput();
 
@@ -151,7 +177,7 @@ export class TaskCommentComposerComponent
         const inputElement = this.input?.first?.nativeElement;
         if (inputElement) {
           const text = inputElement.innerText.trim();
-          console.log('[DRAFT-DEBUG] On destroy, text to save:',
+          console.log('text to save:',
             { taskId: this.task.id, length: text.length, preview: text.substring(0, 20) });
 
           if (text && !this.hasSubmittedComment) {
@@ -176,15 +202,9 @@ export class TaskCommentComposerComponent
     }
   }
 
-  contentEditableValue() {
-    const UA = navigator.userAgent;
-    const isWebkit = /WebKit/.test(UA) && !/Edge/.test(UA);
-    return isWebkit ? 'plaintext-only' : 'true';
-  }
 
-  get isStaff() {
-    return this.task?.unit?.currentUserIsStaff;
-  }
+
+
 
   // Update onInputChange to reset submitted status
   onInputChange(event: Event) {
@@ -277,11 +297,11 @@ export class TaskCommentComposerComponent
     const draftKey = this.getDraftKey(task);
     try {
       const draft = localStorage.getItem(draftKey);
-      console.log('[DRAFT-DEBUG] Draft found?', draft ? 'Yes' : 'No',
+      console.log('Draft found?', draft ? 'Yes' : 'No',
         draft ? { length: draft.length, preview: draft.substring(0, 20) } : '');
 
       if (!draft) {
-        console.log('[DRAFT-DEBUG] No draft found for task', task.id || 'without ID');
+        console.log('No draft found for task', task.id || 'without ID');
         return;
       }
 
@@ -324,20 +344,51 @@ export class TaskCommentComposerComponent
   }
 
   ngDoCheck() {
+    // Check to see if the sharedData has changed
     const change = this.differ.diff(this.sharedData);
     if (change) {
       change.forEachChangedItem((item) => {
+        // If it has changed to be an actual comment
         if (item != null) {
+          // Set the input field as focused, so the user can start typing
+          // timeout is required
           setTimeout(() => {
-            this.input.first?.nativeElement?.focus();
+            this.input.first.nativeElement.focus();
           });
         }
       });
     }
   }
 
+  get originalComment(): TaskComment {
+    return this.sharedData.originalComment;
+  }
+
+  get isStaff() {
+    return this.task?.unit?.currentUserIsStaff;
+  }
+
   cancelReply() {
     this.sharedData.originalComment = null;
+  }
+
+  contentEditableValue() {
+    const UA = navigator.userAgent;
+    const isWebkit = /WebKit/.test(UA) && !/Edge/.test(UA);
+    return isWebkit ? 'plaintext-only' : 'true';
+  }
+
+  formatImageName(imageName) {
+    const index = imageName.indexOf('.');
+    let nameString = imageName.substring(0, index);
+    const typeString = imageName.substring(index);
+
+    if (nameString.length > 20) {
+      nameString = nameString.substring(0, 20) + '..';
+    }
+
+    const finalString = nameString + typeString;
+    return finalString;
   }
 
   recordingMode(): void {
@@ -357,23 +408,33 @@ export class TaskCommentComposerComponent
   keyTyped() {
     setTimeout(() => {
       const commentText: string = this.input.first.nativeElement.innerText;
-      this.saveCurrentDraft();
       this.emojiSearchMode = !commentText.includes('`') && this.emojiRegex.test(commentText);
+
       if (this.emojiSearchMode) {
+        // get the cursor position in the content-editable
         const cursorPosition = this.caretOffset();
+
+        // get the text from the start of the string up to the cursor.
         const testText = commentText.slice(0, cursorPosition);
+
+        // within this smaller string, find the last :
         const lastColPos = testText.lastIndexOf(':');
+
+        // The emoji search term will be from the position after the last :
+        // Note, the second parameter is a length not position, so we subtract.
         this.emojiMatch = testText.substr(lastColPos + 1, cursorPosition - lastColPos);
+
         if (this.emojiMatch?.includes(' ')) {
           this.emojiSearchMode = false;
           this.emojiSearchResults = null;
         } else {
+          // results is the list of emoji returned.
           const results = this.emojiSearch.search(this.emojiMatch);
           if (results?.length > 0) {
             this.emojiSearchResults = results.slice(0, 15);
           }
         }
-      }
+      } // timeout to ensure that the inner html is updated with the new character.
     }, 0);
   }
 
@@ -387,19 +448,30 @@ export class TaskCommentComposerComponent
 
   private caretOffset() {
     const element = this.input.first.nativeElement;
-    let caretOffset = 0;
-    const sel = window.getSelection();
-    if (sel?.rangeCount > 0) {
-      const range = sel.getRangeAt(0);
-      const preCaretRange = range.cloneRange();
-      preCaretRange.selectNodeContents(element);
-      preCaretRange.setEnd(range.endContainer, range.endOffset);
-      caretOffset = preCaretRange.toString().length;
+    let caretOffset: number = 0;
+    const doc = element.ownerDocument || element.document;
+    const win = doc.defaultView || doc.parentWindow;
+    let sel;
+    if (typeof win.getSelection !== 'undefined') {
+      sel = win.getSelection();
+      if (sel.rangeCount > 0) {
+        const range = win.getSelection().getRangeAt(0);
+        const preCaretRange = range.cloneRange();
+        preCaretRange.selectNodeContents(element);
+        preCaretRange.setEnd(range.endContainer, range.endOffset);
+        caretOffset = preCaretRange.toString().length;
+      }
+    } else if (sel === doc.selection && sel.type !== 'Control') {
+      const textRange = sel.createRange();
+      const preCaretTextRange = doc.body.createTextRange();
+      preCaretTextRange.moveToElementText(element);
+      preCaretTextRange.setEndPoint('EndToEnd', textRange);
+      caretOffset = preCaretTextRange.text.length;
     }
     return caretOffset;
   }
 
-  addEmoji(e: any) {
+  addEmoji(e): void {
     let char: string;
     if (typeof e === 'string') {
       char = e;
@@ -423,7 +495,15 @@ export class TaskCommentComposerComponent
       maxWidth: '800px',
       disableClose: true,
     });
+
+    // dialogRef.afterOpened().subscribe((result: any) => {
+    // });
+
+    // dialogRef.afterClosed().subscribe((result: any) => {
+    // });
   }
+
+
 
   addComment() {
 
@@ -435,7 +515,6 @@ export class TaskCommentComposerComponent
     }
 
     const text = this.emojiService.nativeEmojiToColons(this.input.first.nativeElement.innerText);
-    console.log('[DRAFT-DEBUG] Comment text prepared for submission:', { length: text.length });
 
     this.hasSubmittedComment = true;
 
@@ -500,6 +579,8 @@ export class TaskCommentComposerComponent
       next: (success: TaskComment) => {
         this.comment.text = '';
         this.commentsViewer.scrollDown();
+        console.log('implement - check map comments');
+        //this.task.comments = this.ts.mapComments(this.task.comments);
       },
       error: (message: string) => this.alerts.error(message, 6000),
     });
@@ -509,7 +590,7 @@ export class TaskCommentComposerComponent
     this.uploader.nativeElement.click();
   }
 
-  uploadFiles(event: FileList | any) {
+  uploadFiles(event) {
     [...event].forEach((file) => {
       if (
         ACCEPTED_FILE_TYPES.includes(file.type) ||
@@ -523,7 +604,8 @@ export class TaskCommentComposerComponent
     });
   }
 
-  postAttachmentComment(file: File) {
+  // # Upload image files as comments to a given task
+  postAttachmentComment(file) {
     this.taskCommentService.addComment(this.task, file, 'file', null).subscribe(
       (tc: TaskComment) => {
         this.commentsViewer.scrollDown();
@@ -535,6 +617,8 @@ export class TaskCommentComposerComponent
   }
 }
 
+// The discussion prompt composer dialog Component
+// eslint-disable-next-line max-classes-per-file
 @Component({
   selector: 'discussion-prompt-composer-dialog.html',
   templateUrl: 'discussion-prompt-composer-dialog.html',

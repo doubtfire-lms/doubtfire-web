@@ -10,12 +10,11 @@
 ></emoji-mart>
 
 @if (task) {
-  <div id="replyContainer" [hidden]="!originalComment">
+  <div id="replyContainer" [hidden]="originalComment === null">
     <div>
       <div class="replying-wrap">
         Replying to:
-
-        <b>{{ originalComment?.author?.name }}</b>
+        <b>{{ originalComment !== null ? originalComment.author.name : '' }}</b>
         <button
           id="cancelReplyButton"
           (click)="cancelReply()"
@@ -25,7 +24,7 @@
           <mat-icon inline="true" aria-label="Quit cross icon">close</mat-icon>
         </button>
       </div>
-      <p>{{ originalComment?.text }}</p>
+      <p>{{ originalComment !== null ? originalComment.text : '' }}</p>
     </div>
   </div>
 }
@@ -57,6 +56,7 @@
 >
   <div fxLayout="row" fxLayoutAlign="space-around center" class="composer-container">
     <div class="composer-action-group" [@shrinkgrow]="$userIsTyping | async">
+      <!-- if active -->
       <div fxLayout="row" fxLayoutAlign="start center">
         @if ($userIsTyping | async) {
           <button
@@ -72,6 +72,20 @@
             <mat-icon>{{ recording ? 'cancel' : 'chevron_right' }}</mat-icon>
           </button>
         }
+
+        <!-- <button
+          [hidden]="shrinkGrowToggle"
+          *ngIf="isStaff"
+          matTooltip="Create a Real Talk discussion"
+          matTooltipShowDelay="400"
+          mat-icon-button
+          class="btn-no-outline"
+          type="button"
+          aria-label="launch real talk took"
+          (click)="openDiscussionComposer()"
+        >
+          <mat-icon>crisis_alert</mat-icon>
+        </button> -->
 
         @if (isStaff) {
           <button
@@ -105,7 +119,7 @@
             multiple="multiple"
             accept="audio/*,image/*,.pdf"
             style="display: none"
-            (change)="uploadFiles($event)"
+            (change)="uploadFiles($event.target.files)"
           />
         </button>
 
@@ -156,7 +170,9 @@
           id="emojiButton"
           (click)="this.showEmojiPicker = !this.showEmojiPicker"
           aria-label="Emoji picker button"
-        >emoji_emotions</mat-icon>
+        >
+          emoji_emotions</mat-icon
+        >
       </div>
     </div>
   </div>
