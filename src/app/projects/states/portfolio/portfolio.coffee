@@ -43,7 +43,7 @@ angular.module('doubtfire.projects.states.portfolio', [
   $scope.setActiveTab = (tab) ->
     $scope.activeTab = tab
     $scope.activeTab.active = true
-    analyticsService.logEventvent 'Portfolio Wizard', 'Switched to Step', "#{tab.title} Step"
+    analyticsService.logEvent 'Portfolio Wizard', 'Switched to Step', "#{tab.title} Step"
   $scope.advanceActiveTab = (advanceBy) ->
     newSeq = $scope.activeTab.seq + advanceBy
     $scope.setActiveTab (tab for tabKey, tab of $scope.tabs when tab.seq is newSeq)[0]

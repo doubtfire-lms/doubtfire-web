@@ -118,6 +118,6 @@ angular.module('doubtfire.units.states.students', [])
 
   # Shows the enrolment modal
   $scope.showEnrolModal = ->
-    analyticsService.logEventvent 'Teacher View - Students Tab', 'Enrol Student'
+    analyticsService.logEvent 'Teacher View - Students Tab', 'Enrol Student'
     UnitStudentEnrolmentModal.show $scope.unit
 )
