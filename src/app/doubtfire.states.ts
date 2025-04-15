@@ -185,6 +185,20 @@ const SignInState: NgHybridStateDeclaration = {
   data: {
     pageTitle: 'Sign In',
   },
+  resolve: {
+    username: [
+      '$stateParams',
+      function ($stateParams: {username: string}) {
+        return $stateParams.username;
+      }
+    ],
+    authToken: [
+      '$stateParams',
+      function ($stateParams: {authToken: string}) {
+        return $stateParams.authToken;
+      },
+    ],
+  },
 };
 
 /**

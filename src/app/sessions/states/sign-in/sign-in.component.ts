@@ -1,11 +1,25 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
-import { StateService, Transition } from '@uirouter/core';
-import { BehaviorSubject } from 'rxjs';
-import { AuthenticationService } from 'src/app/api/services/authentication.service';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
+import {HttpClient} from '@angular/common/http';
+import {Component, Input, OnInit} from '@angular/core';
+import {StateService, Transition} from '@uirouter/core';
+import {BehaviorSubject} from 'rxjs';
+import {AuthenticationService} from 'src/app/api/services/authentication.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+
+// Add fallback to check url for query parameters
+interface IParams {
+  [key: string]: string;
+}
+
+const paramReducer = (params: IParams, pair: string): IParams => {
+  const [key, value] = `${pair}=`.split('=').map(decodeURIComponent);
+
+  return key.length > 0 ? {...params, [key]: value} : params;
+};
+
+const getUrlParams = (search: string): IParams =>
+  `${search}?`.split('?')[1].split('&').reduce<IParams>(paramReducer, {});
 
 type signInData =
   | {
@@ -38,6 +52,10 @@ export class SignInComponent implements OnInit {
   public formData: signInData;
   public isLoading: boolean = true;
 
+  // Get query params from the resolve in the router state
+  @Input() username: string;
+  @Input() authToken: string;
+
   constructor(
     private authService: AuthenticationService,
     private state: StateService,
@@ -49,6 +67,10 @@ export class SignInComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.globalState.onLoad(() => this.initAfterGlobalLoad());
+  }
+
+  private initAfterGlobalLoad(): void {
     this.formData = {
       username: '',
       password: '',
@@ -60,28 +82,35 @@ export class SignInComponent implements OnInit {
     this.api = this.constants.API_URL;
     this.externalName = this.constants.ExternalName;
 
-    this.attemptRefreshTokenSignIn();
+    // this.attemptRefreshTokenSignIn();
+
+    // HACK: Workaround the fact that query params do not work in Safari with ui-router
+    if (!this.username) {
+      const params = getUrlParams(document.location.href);
+      this.username = this.transition.params().username || params.username;
+      this.authToken = this.transition.params().authToken || params.authToken;
+    }
 
     // wait 2 seconds with rxjs
-    const wait = new Promise((resolve) => setTimeout(resolve, 2000));
+    const wait = new Promise((resolve) => setTimeout(resolve, 3000));
     this.http.get(`${this.constants.API_URL}/auth/method`).subscribe((response: any) => {
       this.isLoading = false;
 
       // if there is a string in response.data.redirect_to
       this.SSOLoginUrl = response.redirect_to || false;
 
-      if (this.SSOLoginUrl) {
-        if (this.transition.params().authToken) {
-          // This is SSO and we just got an auth_token? Must request to sign in
-          return this.signIn({
-            auth_token: this.transition.params().authToken,
-            username: this.transition.params().username,
-            remember: this.authService.rememberMe,
-          });
-        } else if (this.formData.autoLogin) {
+      if (this.authToken) {
+        // We have an auth token - so attempt to convert to access token
+        return this.signIn({
+          auth_token: this.authToken,
+          username: this.username,
+          remember: this.authService.rememberMe,
+        });
+      } else if (this.SSOLoginUrl) {
+        if (this.formData.autoLogin) {
           return wait.then(() => {
             // Double check in case changed in the meantime
-            if (this.formData.autoLogin && this.authService.rememberMe) {
+            if (this.formData.autoLogin) {
               this.redirectToSSO();
             }
           });
