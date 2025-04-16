@@ -12,14 +12,13 @@ import {Project} from 'src/app/api/models/project';
 })
 export class ProgressDashboardComponent implements OnInit {
   @Input() project: Project;
-  @Input() tutor: boolean;
-  @Output() onUpdateTargetGrade = new EventEmitter<void>();
+  @Output() doUpdateTargetGrade = new EventEmitter<void>();
 
+  tutor: boolean;
   grades = {
     names: this.gradeService.grades,
     values: this.gradeService.gradeValues,
   };
-
   numberOfTasks = {
     completed: 0,
     remaining: 0,
@@ -34,6 +33,7 @@ export class ProgressDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateTaskCompletionValues();
+    this.tutor = this.project.myRole === 'Tutor' ? true : false;
   }
 
   updateTargetGrade(newGrade: number): void {
@@ -42,7 +42,7 @@ export class ProgressDashboardComponent implements OnInit {
       (project) => {
         project.refreshBurndownChartData();
         this.updateTaskCompletionValues();
-        this.onUpdateTargetGrade.emit();
+        this.doUpdateTargetGrade.emit();
         this.AnalyticsService.event(
           'Student Project View - Progress Dashboard',
           'Grade Changed',
