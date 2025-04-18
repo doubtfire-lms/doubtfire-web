@@ -130,7 +130,6 @@ export class GlobalStateService implements OnDestroy {
 
           // and if we are not going to the sign in page, then redirect to it
           if (this.router.globals.current.name !== 'sign_in') {
-            // not loading anything as no user - just redirect to sign in
             this.router.stateService.go('sign_in');
           }
         }
