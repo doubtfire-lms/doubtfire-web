@@ -29,6 +29,10 @@ export class TransitionHooksService {
 
     // Hook into "onBefore" to check transitions before they occur
     this.transitions.onBefore({}, (transition) => {
+      // log all possible states
+      // console.log(transition.router.stateRegistry.get())
+
+
       // Where is the transition coming from and going to?
       const toState = transition.to().name;
       // const fromState = transition.from().name;
@@ -62,26 +66,37 @@ export class TransitionHooksService {
           break;
       }
 
-      // Redirect to welcome if user has not run first time setup
-      if (
-        !this.userService.isAnonymousUser() &&
-        !userService.currentUser.hasRunFirstTimeSetup &&
-        toState !== 'welcome'
-      ) {
-        return transition.router.stateService.target('welcome');
-      }
+      // After auth... check the following
+      this.authenticationService.afterAuthCall(() => {
+        // Check authorization whitelist
+        if (toStateData.roleWhitelist && !this.authenticationService.isAuthorised(toStateData.roleWhitelist)) {
+          if (authenticationService.isAuthenticated()) {
+            return transition.router.stateService.go('unauthorised');
+          } else if (toState !== "sign_in") {
+            return transition.router.stateService.go('sign_in');
+          }
+        }
+        // Redirect to welcome if user has not run first time setup
+        if (
+          !this.userService.isAnonymousUser() &&
+          !userService.currentUser.hasRunFirstTimeSetup &&
+          toState !== 'welcome'
+        ) {
+          return transition.router.stateService.go('welcome');
+        }
 
-      // Redirect to eula if user has not accepted eula
-      // they are loged in, have run first time setup,
-      // but not accepted eula
-      if ( this.tiiEnabled &&
-        !this.userService.isAnonymousUser() &&
-        userService.currentUser.hasRunFirstTimeSetup &&
-        !userService.currentUser.acceptedTiiEula &&
-        toState !== 'eula'
-      ) {
-        return transition.router.stateService.target('eula');
-      }
+        // Redirect to eula if user has not accepted eula
+        // they are loged in, have run first time setup,
+        // but not accepted eula
+        if ( this.tiiEnabled &&
+          !this.userService.isAnonymousUser() &&
+          userService.currentUser.hasRunFirstTimeSetup &&
+          !userService.currentUser.acceptedTiiEula &&
+          toState !== 'eula'
+        ) {
+          return transition.router.stateService.go('eula');
+        }
+      });
     });
   }
 
