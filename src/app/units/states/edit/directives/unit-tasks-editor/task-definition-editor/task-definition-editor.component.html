@@ -1,146 +1,180 @@
-<div class="flex-col pr-32">
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        1
-      </div>
-    </div>
-
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Task details</h3>
-      <p class="font-normal text-gray-700">Name the task and set target grade</p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-        <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        2
-      </div>
-    </div>
-
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Inbox</h3>
-      <p class="font-normal text-gray-700">
-        Who assesses {{ unit.hasGroupwork() ? 'and submits ' : '' }}this task?
-      </p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-        <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        3
-      </div>
-    </div>
-
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Due dates</h3>
-      <p class="font-normal text-gray-700">When is this task due?</p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-        <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        4
-      </div>
-    </div>
-
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Upload requirements</h3>
-      <p class="font-normal text-gray-700">What do students need to upload?</p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-        <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        5
-      </div>
-    </div>
-
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">
-        Task description and resources
-      </h3>
-      <p class="font-normal text-gray-700">Upload task descriptions and resources</p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-        <f-task-definition-resources
-          [taskDefinition]="taskDefinition"
-        ></f-task-definition-resources>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        6
-      </div>
-    </div>
-
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">
-        Task assessment automation
-      </h3>
-      <p class="font-normal text-gray-700" *ngIf="!overseerEnabled">Automation is not enabled</p>
-      <p class="font-normal text-gray-700" *ngIf="overseerEnabled">
-        Configure automated assessment
-      </p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6" *ngIf="overseerEnabled">
-        <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        7
-      </div>
-    </div>
-
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Optional settings</h3>
-      <p class="font-normal text-gray-700">Configure automated assessment</p>
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> Options </mat-panel-title>
-          </mat-expansion-panel-header>
-          <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
-  </div>
+<div id="task-def-head" class="w-full sticky top-0">
+  <h3>Details for {{ taskDefinition.abbreviation }} - {{ taskDefinition.name }}</h3>
+  <mat-divider></mat-divider>
 </div>
-<div class="w-full flex flex-row place-content-end sticky bottom-16 z-10">
-  <button mat-fab color="primary" (click)="save()"><mat-icon>save</mat-icon></button>
+<div class="flex flex-row">
+  <div class="flex-col grow mr-4">
+    <div class="flex mt-10">
+      <div class="mr-6">
+        <div
+          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
+        >
+          1
+        </div>
+      </div>
+
+      <div class="w-full">
+        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Task details</h3>
+        <p class="font-normal text-gray-700">Name the task and set target grade</p>
+        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+          <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex mt-10">
+      <div class="mr-6">
+        <div
+          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
+        >
+          2
+        </div>
+      </div>
+
+      <div class="w-full">
+        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Inbox</h3>
+        <p class="font-normal text-gray-700">
+          Who assesses {{ unit.hasGroupwork() ? 'and submits ' : '' }}this task?
+        </p>
+        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+          <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex mt-10">
+      <div class="mr-6">
+        <div
+          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
+        >
+          3
+        </div>
+      </div>
+
+      <div class="w-full">
+        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Due dates</h3>
+        <p class="font-normal text-gray-700">When is this task due?</p>
+        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+          <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex mt-10">
+      <div class="mr-6">
+        <div
+          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
+        >
+          4
+        </div>
+      </div>
+
+      <div class="w-full">
+        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Upload requirements</h3>
+        <p class="font-normal text-gray-700">What do students need to upload?</p>
+        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+          <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex mt-10">
+      <div class="mr-6">
+        <div
+          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
+        >
+          5
+        </div>
+      </div>
+
+      <div class="w-full">
+        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">
+          Task description and resources
+        </h3>
+        <p class="font-normal text-gray-700">Upload task descriptions and resources</p>
+        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+          <f-task-definition-resources
+            [taskDefinition]="taskDefinition"
+          ></f-task-definition-resources>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex mt-10">
+      <div class="mr-6">
+        <div
+          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
+        >
+          6
+        </div>
+      </div>
+
+      <div class="w-full">
+        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">
+          Task assessment automation
+        </h3>
+        <p class="font-normal text-gray-700" *ngIf="!overseerEnabled">Automation is not enabled</p>
+        <p class="font-normal text-gray-700" *ngIf="overseerEnabled">
+          Configure automated assessment
+        </p>
+        <div class="bg-white border border-gray-200 rounded-xl shadow p-6" *ngIf="overseerEnabled">
+          <f-task-definition-overseer
+            [taskDefinition]="taskDefinition"
+          ></f-task-definition-overseer>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex mt-10">
+      <div class="mr-6">
+        <div
+          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
+        >
+          7
+        </div>
+      </div>
+      <div class="w-full">
+        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">SCORM test</h3>
+        <p class="font-normal text-gray-700">
+          Upload the corresponding SCORM 2004 test (e.g. Numbas)
+        </p>
+        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+          <f-task-definition-scorm [taskDefinition]="taskDefinition"></f-task-definition-scorm>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex mt-10">
+      <div class="mr-6">
+        <div
+          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
+        >
+          8
+        </div>
+      </div>
+
+      <div class="w-full">
+        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Optional settings</h3>
+        <p class="font-normal text-gray-700">Apply other options</p>
+        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title> Options </mat-panel-title>
+            </mat-expansion-panel-header>
+            <f-task-definition-options
+              [taskDefinition]="taskDefinition"
+            ></f-task-definition-options>
+          </mat-expansion-panel>
+        </div>
+      </div>
+
+      <div class="place-content-end">
+        <div class="sticky bottom-16">
+          <button mat-fab color="primary" (click)="save()">
+            <mat-icon>save</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

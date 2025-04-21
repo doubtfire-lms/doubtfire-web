@@ -18,7 +18,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
 
   constructor(
     private taskSimilarityService: TaskSimilarityService,
-    private alertsService: AlertService,
+    private alertService: AlertService,
     private selectedTaskService: SelectedTaskService
   ) {}
 
@@ -37,7 +37,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
     this.taskSimilarityService
       .update({ taskId: similarity.task.id, id: similarity.id }, { entity: similarity })
       .subscribe((_) => {
-        this.alertsService.success('Similarity flag updated');
+        this.alertService.success('Similarity flag updated');
         similarity.task.similarityFlag = similarity.task.similarityCache.currentValues
           .map((s) => {
             return s.flagged;
@@ -50,8 +50,13 @@ export class TaskSimilarityViewComponent implements OnChanges {
   openReport(e: Event, similarity: TaskSimilarity) {
     e.stopPropagation();
     // Open similarity report in new tab
-    similarity.fetchSimilarityReportUrl().subscribe((url) => {
-      window.open(url, '_blank');
+    similarity.fetchSimilarityReportUrl().subscribe({
+      next: (url) => {
+        window.open(url, '_blank');
+      },
+      error: (err) => {
+        this.alertService.error(`Error accessing TurnItIn: ${err}`);
+      },
     });
   }
 }

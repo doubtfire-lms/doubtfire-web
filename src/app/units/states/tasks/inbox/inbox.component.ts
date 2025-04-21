@@ -1,6 +1,5 @@
 import {CdkDragEnd, CdkDragStart, CdkDragMove} from '@angular/cdk/drag-drop';
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Input,
@@ -19,13 +18,14 @@ import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-ta
 import {HotkeysService, HotkeysHelpComponent} from '@ngneat/hotkeys';
 import {MatDialog} from '@angular/material/dialog';
 import {UserService} from 'src/app/api/services/user.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
   selector: 'f-inbox',
   templateUrl: './inbox.component.html',
   styleUrls: ['./inbox.component.scss'],
 })
-export class InboxComponent implements OnInit, AfterViewInit {
+export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
   @Input() taskData: {selectedTask: Task; any};
@@ -58,6 +58,7 @@ export class InboxComponent implements OnInit, AfterViewInit {
     private router: UIRouter,
     public dialog: MatDialog,
     private userService: UserService,
+    private constants: DoubtfireConstants,
   ) {
     this.selectedTask.currentPdfUrl$.subscribe((url) => {
       this.visiblePdfUrl = url;
@@ -67,35 +68,48 @@ export class InboxComponent implements OnInit, AfterViewInit {
       this.taskSelected = task != null;
     });
   }
-  ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
-    const markers = ['Admin', 'Convenor', 'Tutor', 'Student'];
 
-    if (markers.includes(this.userService.currentUser?.role)) {
+  ngOnInit(): void {
+    const registeredHotkeys = this.hotkeys.getHotkeys().map((hotkey) => hotkey.keys);
+
+    if (!registeredHotkeys.includes('shift.?')) {
       this.hotkeys.registerHelpModal(() => {
         const ref = this.dialog.open(HotkeysHelpComponent, {
           // width: '250px',
         });
-        ref.componentInstance.title = 'Formatif Marking Shortcuts';
+        ref.componentInstance.title = `${this.constants.ExternalName.value} Feedback Shortcuts`;
         ref.componentInstance.dismiss.subscribe(() => ref.close());
       });
     }
-  }
 
-  ngOnInit(): void {
-    // this.hotkeys
-    //   .addShortcut({
-    //     keys: 'control.c',
-    //     description: 'Mark selected task as complete',
-    //   })
-    //   .subscribe(() => this.selectedTask.selectedTask?.updateTaskStatus('complete'));
+    if (!registeredHotkeys.includes('control.shift.f')) {
+      this.hotkeys
+        .addShortcut({
+          keys: 'control.shift.f',
+          description: 'Mark selected task as fix',
+        })
+        .subscribe(() => this.selectedTask.selectedTask?.updateTaskStatus('fix_and_resubmit'));
+    }
 
-    // this.hotkeys
-    //   .addShortcut({
-    //     keys: 'control.f',
-    //     description: 'Mark selected task as fix',
-    //   })
-    //   .subscribe(() => this.selectedTask.selectedTask?.updateTaskStatus('fix_and_resubmit'));
+    if (!registeredHotkeys.includes('control.shift.c')) {
+      this.hotkeys
+        .addShortcut({
+          keys: 'control.Shift.c',
+          description: 'Mark selected task as complete',
+        })
+        .subscribe(() =>
+          this.selectedTask.selectedTask?.updateTaskStatus('complete')
+      );
+    }
+
+    if (!registeredHotkeys.includes('control.shift.d')) {
+      this.hotkeys
+        .addShortcut({
+          keys: 'control.shift.d',
+          description: 'Mark selected task as discuss',
+        })
+        .subscribe(() => this.selectedTask.selectedTask?.updateTaskStatus('discuss'));
+    }
 
     this.dragMoveAudited$ = this.dragMove$.pipe(
       withLatestFrom(this.inboxStartSize$),
@@ -126,6 +140,13 @@ export class InboxComponent implements OnInit, AfterViewInit {
     );
     this.subs$ = merge(this.dragMoveAudited$, of(true));
     window.dispatchEvent(new Event('resize'));
+  }
+
+  ngOnDestroy(): void {
+    this.hotkeys.removeShortcuts('control.shift.d');
+    this.hotkeys.removeShortcuts('control.shift.f');
+    this.hotkeys.removeShortcuts('control.shift.c');
+    this.hotkeys.removeShortcuts('shift.?');
   }
 
   startedDragging(event: CdkDragStart, div: HTMLDivElement) {

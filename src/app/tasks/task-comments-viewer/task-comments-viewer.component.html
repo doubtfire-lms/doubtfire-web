@@ -72,6 +72,14 @@
                 ></app-task-assessment-comment>
               </div>
 
+              <div *ngSwitchCase="'scorm'" class="comment-scorm">
+                <f-scorm-comment
+                  [task]="task"
+                  [comment]="comment"
+                  *ngIf="scormEnabled"
+                ></f-scorm-comment>
+              </div>
+
               <div class="bubble" [ngClass]="commentClasses(comment)">
                 <a
                   (click)="scrollToComment(comment.originalComment.id)"
@@ -85,6 +93,11 @@
                 </a>
                 <div *ngSwitchCase="'extension'" class="comment-extension">
                   <extension-comment [task]="task" [comment]="comment"> </extension-comment>
+                </div>
+
+                <div *ngSwitchCase="'scorm_extension'" class="comment-scorm-extension">
+                  <f-scorm-extension-comment [task]="task" [comment]="comment">
+                  </f-scorm-extension-comment>
                 </div>
 
                 <div *ngSwitchCase="'text'" class="comment-text">

@@ -143,7 +143,7 @@ export class ProjectService extends CachedEntityService<Project> {
         keys: 'tutorialEnrolments',
         toEntityOp: (data: object, key: string, project: Project, params?: any) => {
           const unit: Unit = project.unit;
-          data[key].forEach((tutorialEnrolment: { tutorial_id: number; }) => {
+          data[key]?.forEach((tutorialEnrolment: {tutorial_id: number}) => {
             if (tutorialEnrolment.tutorial_id) {
               const tutorial = unit.tutorialsCache.get(tutorialEnrolment.tutorial_id);
               project.tutorialEnrolmentsCache.add(tutorial);
@@ -154,12 +154,16 @@ export class ProjectService extends CachedEntityService<Project> {
       {
         keys: 'groups',
         toEntityOp: (data: object, key: string, project: Project, params?: any) => {
-          data[key].forEach((group) => {
-            const theGroup = project.unit.groupSetsCache.get(group.group_set_id).groupsCache.getOrCreate(group.id, this.groupService, group, {constructorParams: project.unit});
+          data[key]?.forEach((group) => {
+            const theGroup = project.unit.groupSetsCache
+              .get(group.group_set_id)
+              .groupsCache.getOrCreate(group.id, this.groupService, group, {
+                constructorParams: project.unit,
+              });
 
             project.groupCache.add(theGroup);
             theGroup.projectsCache.add(project);
-          })
+          });
         },
         toJsonFn: (entity: Project, key: string) => {
           return entity.unit?.id;
@@ -169,7 +173,7 @@ export class ProjectService extends CachedEntityService<Project> {
         keys: 'tasks',
         toEntityOp: (data: object, key: string, project: Project, params?: any) => {
           // create tasks from json
-          data['tasks'].forEach(taskData => {
+          data['tasks']?.forEach((taskData) => {
             project.taskCache.getOrCreate(taskData['id'], this.taskService, taskData, {constructorParams: project});
           });
 
@@ -179,14 +183,14 @@ export class ProjectService extends CachedEntityService<Project> {
       {
         keys: 'taskOutcomeAlignments',
         toEntityOp: (data: object, key: string, project: Project, params?: any) => {
-          data[key].forEach(alignment => {
+          data[key]?.forEach((alignment) => {
             project.taskOutcomeAlignmentsCache.getOrCreate(
               alignment['id'],
               taskOutcomeAlignmentService,
               alignment,
               {
-                constructorParams: project
-              }
+                constructorParams: project,
+              },
             );
           });
         }

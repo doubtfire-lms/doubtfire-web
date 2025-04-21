@@ -1,0 +1,92 @@
+@if (isPassed) {
+  <mat-card appearance="outlined" [hidden]="!task.scormEnabled">
+    @if (this.task.latestCompletedTestAttempt.scoreScaled === 1) {
+      <mat-card-header class="bg-green-600 text-white">
+        <mat-card-title class="flex items-center mb-4"
+          ><mat-icon class="font-extrabold">check</mat-icon>
+          <span class="ml-4">Knowledge Check Passed Without Mistakes</span></mat-card-title
+        >
+      </mat-card-header>
+    }
+    @if (this.task.latestCompletedTestAttempt.scoreScaled !== 1) {
+      <mat-card-header class="bg-green-500 text-white">
+        <mat-card-title class="flex items-center mb-4"
+          ><mat-icon class="font-extrabold">check</mat-icon>
+          <span class="ml-4">Knowledge Check Passed</span></mat-card-title
+        >
+      </mat-card-header>
+    }
+    <mat-card-content class="bg-green-50">
+      <p class="pt-2 pb-1">
+        You have successfully completed this knowledge check. You can now proceed to submitting task
+        files.
+      </p>
+    </mat-card-content>
+    <mat-card-actions
+      class="space-x-2 px-5 bg-green-50"
+      [hidden]="!user.isStaff && !task.definition.scormAllowReview"
+    >
+      <button mat-stroked-button (click)="reviewLatestCompletedAttempt()">
+        Review last attempt
+      </button>
+    </mat-card-actions>
+  </mat-card>
+}
+@if (!isPassed) {
+  <mat-card appearance="outlined" [hidden]="!task.scormEnabled">
+    @if (isPassed === false) {
+      <mat-card-header class="bg-red-600 text-white">
+        <mat-card-title class="flex items-center mb-4"
+          ><mat-icon class="font-extrabold">close</mat-icon>
+          <span class="ml-4">Knowledge Check Unsuccessful</span></mat-card-title
+        >
+      </mat-card-header>
+    }
+    @if (isPassed === undefined) {
+      <mat-card-header>
+        <mat-card-title>Knowledge Check</mat-card-title>
+      </mat-card-header>
+    }
+    <mat-card-content>
+      <p class="pt-2">You have to successfully pass this knowledge check to complete the task.</p>
+      <p>
+        You have {{ attemptsLeft !== undefined ? attemptsLeft : 'unlimited' }} attempts left to
+        complete this test.
+      </p>
+      <p class="mb-4" [hidden]="!task.definition.scormTimeDelayEnabled">
+        There will be an increased time delay between test attempts. First 2 attempts will not have
+        a time delay in between.
+      </p>
+    </mat-card-content>
+    <mat-card-actions class="space-x-2 px-5 pt-0">
+      <button
+        mat-stroked-button
+        (click)="launchScormPlayer()"
+        [hidden]="attemptsLeft === 0"
+        [disabled]="user.isStaff"
+      >
+        <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="Launch icon">
+          launch
+        </mat-icon>
+        Attempt test
+      </button>
+      <button
+        mat-stroked-button
+        (click)="reviewLatestCompletedAttempt()"
+        [hidden]="
+          (!user.isStaff && !task.definition.scormAllowReview) ||
+          !this.task.latestCompletedTestAttempt
+        "
+      >
+        Review last attempt
+      </button>
+      <button
+        mat-stroked-button
+        (click)="requestExtraAttempt()"
+        [hidden]="task.definition.scormAttemptLimit === 0 || attemptsLeft !== 0"
+      >
+        Request extra attempt
+      </button>
+    </mat-card-actions>
+  </mat-card>
+}

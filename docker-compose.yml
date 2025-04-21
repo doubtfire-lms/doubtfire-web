@@ -14,7 +14,7 @@ services:
       RAILS_ENV: 'development'
 
       DF_STUDENT_WORK_DIR: /student-work
-      DF_INSTITUTION_HOST: http://localhost:3000
+      DF_INSTITUTION_HOST: http://localhost:4200
       DF_INSTITUTION_PRODUCT_NAME: OnTrack
 
       DF_SECRET_KEY_BASE: test-secret-key-test-secret-key!
@@ -24,8 +24,8 @@ services:
       # Authentication method - can set to AAF or ldap
       DF_AUTH_METHOD: database
       DF_AAF_ISSUER_URL: https://rapid.test.aaf.edu.au
-      DF_AAF_AUDIENCE_URL: http://localhost:3000
-      DF_AAF_CALLBACK_URL: http://localhost:3000/api/auth/jwt
+      DF_AAF_AUDIENCE_URL: http://localhost:4200
+      DF_AAF_CALLBACK_URL: http://localhost:4200/api/auth/jwt
       DF_AAF_IDENTITY_PROVIDER_URL: https://signon-uat.deakin.edu.au/idp/shibboleth
       DF_AAF_UNIQUE_URL: https://rapid.test.aaf.edu.au/jwt/authnrequest/research/Ag4EJJhjf0zXHqlKvKZEbg
       DF_AAF_AUTH_SIGNOUT_URL: https://sync-uat.deakin.edu.au/auth/logout

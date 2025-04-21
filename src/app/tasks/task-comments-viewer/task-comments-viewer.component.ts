@@ -98,6 +98,10 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
     return this.constants.IsOverseerEnabled.value;
   }
 
+  get scormEnabled(): boolean {
+    return this.task.scormEnabled;
+  }
+
   uploadFiles(event) {
     [...event].forEach((file) => {
       if (
@@ -150,7 +154,13 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   }
 
   shouldShowAuthorIcon(commentType: string) {
-    return !(commentType === 'extension' || commentType === 'status' || commentType == 'assessment');
+    return !(
+      commentType === 'extension' ||
+      commentType === 'status' ||
+      commentType == 'assessment' ||
+      commentType === 'scorm' ||
+      commentType === 'scorm_extension'
+    );
   }
 
   commentClasses(comment: TaskComment): object {

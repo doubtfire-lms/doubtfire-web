@@ -1,0 +1,45 @@
+<h3 mat-dialog-title>Extra attempt request</h3>
+<div mat-dialog-content [formGroup]="extensionData">
+  <p class="w-full">
+    Please explain why you require an extra attempt for this knowledge check, the teaching team will
+    assess the request shortly.
+  </p>
+
+  <mat-form-field style="width: 100%" appearance="outline">
+    <mat-label>Reason</mat-label>
+    <textarea
+      type="text"
+      matInput
+      [formControl]="extensionData.controls.extensionReason"
+      [errorStateMatcher]="matcher"
+      placeholder="Reason"
+    ></textarea>
+    <mat-hint align="end"
+      >{{ extensionData.controls.extensionReason.value.length }} / {{ reasonMaxLength }}</mat-hint
+    >
+    @if (extensionData.controls.extensionReason.hasError('required')) {
+      <mat-error>You must enter a reason</mat-error>
+    }
+    @if (extensionData.controls.extensionReason.hasError('minlength')) {
+      <mat-error>The reason must be at least {{ reasonMinLength }} characters long</mat-error>
+    }
+    @if (extensionData.controls.extensionReason.hasError('maxlength')) {
+      <mat-error>The reason must be less than {{ reasonMaxLength }} characters long</mat-error>
+    }
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions style="float: right">
+  <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
+  <button
+    mat-dialog-close
+    style="margin-right: 10px"
+    mat-stroked-button
+    color="primary"
+    mat-button
+    [disabled]="!extensionData.valid"
+    (click)="submitApplication()"
+  >
+    Request extra attempt
+  </button>
+</div>

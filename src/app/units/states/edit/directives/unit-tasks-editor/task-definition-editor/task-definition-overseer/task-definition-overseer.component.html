@@ -1,5 +1,10 @@
 <div class="flex flex-col gap-4">
-  <mat-checkbox matInput required [(ngModel)]="taskDefinition.assessmentEnabled" [disabled]="!overseerEnabled">
+  <mat-checkbox
+    matInput
+    required
+    [(ngModel)]="taskDefinition.assessmentEnabled"
+    [disabled]="!overseerEnabled"
+  >
     Automation Enabled
   </mat-checkbox>
 
@@ -13,7 +18,12 @@
     <mat-hint>Docker image for Overseer</mat-hint>
   </mat-form-field>
 
-  <f-file-drop mode="event" (filesDropped)="uploadOverseerResources($event)" accept="application/zip" [desiredFileName]="'Task ' + taskDefinition.abbreviation + ' Overseer zip'" />
+  <f-file-drop
+    mode="event"
+    (filesDropped)="uploadOverseerResources($event)"
+    accept="application/zip,application/x-zip-compressed"
+    [desiredFileName]="'Task ' + taskDefinition.abbreviation + ' Overseer zip'"
+  />
 
   <div class="flex flex-row gap-4">
     <button

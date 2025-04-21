@@ -1,21 +1,21 @@
 <mat-toolbar class="footer flex-col w-full h-full justify-center p-0">
   @if (selectedTask?.similaritiesDetected) {
-  <div class="bg-red-500 grow w-full rounded-xl h-8 mb-5 mt-4 text-white text-lg">
-    <div
-      #arrow
-      class="shrink border-t-red-500"
-      [ngStyle]="{ 'left.px': leftOffset, 'top.px': topOffset }"
-      style="position: absolute; border: 10px solid transparent; transform: translateX(-50%)"
-    ></div>
-    <p
-      style="position: relative"
-      #warningText
-      [ngStyle]="{ 'left.px': warningTextLeftOffset }"
-      class="mat-caption inline-block select-none"
-    >
-      Similarities flagged for {{ selectedTask?.project.student.name }}
-    </p>
-  </div>
+    <div class="bg-red-500 grow w-full rounded-xl h-8 mb-5 mt-4 text-white text-lg">
+      <div
+        #arrow
+        class="shrink border-t-red-500"
+        [ngStyle]="{'left.px': leftOffset, 'top.px': topOffset}"
+        style="position: absolute; border: 10px solid transparent; transform: translateX(-50%)"
+      ></div>
+      <p
+        style="position: relative"
+        #warningText
+        [ngStyle]="{'left.px': warningTextLeftOffset}"
+        class="mat-caption inline-block select-none"
+      >
+        Similarities flagged for {{ selectedTask?.project.student.name }}
+      </p>
+    </div>
   }
 
   <div class="flex w-full">
@@ -71,17 +71,17 @@
 
     <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
       @if (selectedTask?.similaritiesDetected) {
-      <button
-        #similaritiesButton
-        mat-icon-button
-        matTooltip="High confidence of similarities detected for this task"
-        matTooltipPosition="above"
-        aria-label="View detected similarities"
-        class="button small-button"
-        (click)="viewSimilarity()"
-      >
-        <mat-icon class="small-icon">crisis_alert</mat-icon>
-      </button>
+        <button
+          #similaritiesButton
+          mat-icon-button
+          matTooltip="High confidence of similarities detected for this task"
+          matTooltipPosition="above"
+          aria-label="View detected similarities"
+          class="button small-button"
+          (click)="viewSimilarity()"
+        >
+          <mat-icon class="small-icon">crisis_alert</mat-icon>
+        </button>
       }
       <button
         [disabled]="selectedTask === undefined"
@@ -96,13 +96,25 @@
       </button>
 
       <mat-menu #aboveMenu="matMenu" yPosition="above">
-        <button mat-menu-item (click)="viewTaskSheet()" [disabled]="!selectedTaskService.hasTaskSheet">
+        <button
+          mat-menu-item
+          (click)="viewTaskSheet()"
+          [disabled]="!selectedTaskService.hasTaskSheet"
+        >
           <mat-icon matListItemIcon aria-label="View Task Sheet">description</mat-icon>
           View task sheet
         </button>
-        <button mat-menu-item (click)="viewSubmission()" [disabled]="!selectedTaskService.hasSubmissionPdf">
-          <mat-icon matListItemIcon aria-label="View student submission" fontIcon="contact_page"></mat-icon>View student
-          submission
+        <button
+          mat-menu-item
+          (click)="viewSubmission()"
+          [disabled]="!selectedTaskService.hasSubmissionPdf"
+        >
+          <mat-icon
+            matListItemIcon
+            aria-label="View student submission"
+            fontIcon="contact_page"
+          ></mat-icon
+          >View student submission
         </button>
         <button mat-menu-item (click)="viewSimilarity()">
           <mat-icon matListItemIcon aria-label="View Similarities">crisis_alert</mat-icon>
@@ -110,10 +122,16 @@
         </button>
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="selectedTask?.updateTaskStatus('feedback_exceeded')">
-          <mat-icon matListItemIcon aria-label="Switch to Feedback Exceeded">running_with_errors</mat-icon>
+          <mat-icon matListItemIcon aria-label="Switch to Feedback Exceeded"
+            >running_with_errors</mat-icon
+          >
           Mark as feedback exceeded
         </button>
-        <button mat-menu-item (click)="selectedTask?.updateTaskStatus('fail')" [disabled]="selectedTask === undefined">
+        <button
+          mat-menu-item
+          (click)="selectedTask?.updateTaskStatus('fail')"
+          [disabled]="selectedTask === undefined"
+        >
           <mat-icon matListItemIcon aria-label="Fail icon" fontIcon="cancel"></mat-icon>
           Mark as fail
         </button>
@@ -141,12 +159,16 @@
         <mat-icon class="small-icon">file_download</mat-icon>
       </button>
       <f-project-progress-bar
-        matTooltip="{{selectedTask?.project.taskStats[4]?.value}}% progress towards {{ selectedTask?.project.targetGradeWord }}"
+        matTooltip="{{ selectedTask?.project.taskStats[4]?.value }}% progress towards {{
+          selectedTask?.project.targetGradeWord
+        }}"
         [matTooltipDisabled]="selectedTask === undefined"
         [progress]="selectedTask?.project.taskStats"
       ></f-project-progress-bar>
       <mat-chip-listbox aria-label="Target Grade Symbol" class="pointer-events-none">
-        <mat-chip-option style="min-width: 33px">{{ selectedTask?.project.targetGradeAcronym }}</mat-chip-option>
+        <mat-chip-option style="min-width: 33px">{{
+          selectedTask?.project.targetGradeAcronym
+        }}</mat-chip-option>
       </mat-chip-listbox>
     </div>
   </div>
