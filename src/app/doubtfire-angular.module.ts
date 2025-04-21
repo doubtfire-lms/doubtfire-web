@@ -43,6 +43,7 @@ import {UIRouterUpgradeModule} from '@uirouter/angular-hybrid';
 import {MatDialogModule as MatDialogModuleNew} from '@angular/material/dialog';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {AlertComponent} from 'src/app/common/services/alert.service';
+import {CommonModule} from '@angular/common';
 
 import {setTheme} from 'ngx-bootstrap/utils';
 
@@ -224,6 +225,7 @@ import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-
 import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {GradeService} from './common/services/grade.service';
+import {ContentEditableDirective} from './common/content-editable/content-editable.directive';
 
 @NgModule({
   // Components we declare
@@ -325,6 +327,7 @@ import {GradeService} from './common/services/grade.service';
     FUsersComponent,
     FTaskBadgeComponent,
     FUnitsComponent,
+    ContentEditableDirective,
   ],
   // Services we provide
   providers: [
@@ -460,6 +463,7 @@ import {GradeService} from './common/services/grade.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModuleNew,
+    CommonModule,
   ],
 })
 
