@@ -7,6 +7,7 @@ import {UpgradeModule} from '@angular/upgrade/static';
 import {AppInjector, setAppInjector} from './app-injector';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 // Lottie animation module
 // import {LottieModule, LottieCacheModule} from 'ngx-lottie';
@@ -44,7 +45,6 @@ import {UIRouterUpgradeModule} from '@uirouter/angular-hybrid';
 import {MatDialogModule as MatDialogModuleNew} from '@angular/material/dialog';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {AlertComponent} from 'src/app/common/services/alert.service';
-import {CommonModule} from '@angular/common';
 
 import {setTheme} from 'ngx-bootstrap/utils';
 
@@ -271,7 +271,7 @@ const MY_DATE_FORMAT = {
   },
 };
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
-import {NgxChartsModule} from '@swimlane/ngx-charts/lib/ngx-charts.module';
+import {ContentEditableDirective} from './common/content-editable/content-editable.directive';
 
 @NgModule({
   // Components we declare
@@ -394,6 +394,7 @@ import {NgxChartsModule} from '@swimlane/ngx-charts/lib/ngx-charts.module';
     TaskScormCardComponent,
     ScormExtensionCommentComponent,
     ScormExtensionModalComponent,
+    ContentEditableDirective,
   ],
   // Services we provide
   providers: [
@@ -535,6 +536,7 @@ import {NgxChartsModule} from '@swimlane/ngx-charts/lib/ngx-charts.module';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModuleNew,
+    NgxChartsModule,
   ],
 })
 
