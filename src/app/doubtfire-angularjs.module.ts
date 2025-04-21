@@ -463,10 +463,6 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({component: StatusIconComponent}),
 );
 DoubtfireAngularJSModule.directive('newFUnits', downgradeComponent({component: FUnitsComponent}));
-DoubtfireAngularJSModule.directive(
-  'contentEditable',
-  downgradeComponent({component: ContentEditableDirective}),
-);
 
 // Global configuration
 
