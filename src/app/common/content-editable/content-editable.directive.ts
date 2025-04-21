@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Renderer2, HostListener, Input, forwardRef} from '@angular/core';
+import {Directive, ElementRef, HostListener, Input, forwardRef} from '@angular/core';
 import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
 
 @Directive({
