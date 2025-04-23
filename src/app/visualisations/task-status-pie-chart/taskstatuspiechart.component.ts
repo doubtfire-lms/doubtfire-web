@@ -74,7 +74,14 @@ export class TaskStatusPieChartComponent extends ChartBaseComponent implements O
     }
   }
 
-  onSelect(event) {
-    console.log(event);
-  }
+  /**
+   *
+   * Hover event handler for the pie chart segments.
+   *
+   */
+
+  // onSelect(event) {
+  //
+  //   console.log(event.value);
+  //}
 }
