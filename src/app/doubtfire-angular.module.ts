@@ -224,6 +224,32 @@ import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-
 import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {GradeService} from './common/services/grade.service';
+import {StartFromPipe} from './common/filters/start-from.pipe';
+import {ShowStudentsPipe} from './common/filters/show-students.pipe';
+import {StudentsWithPortfolioPipe} from './common/filters/students-with-portfolio.pipe';
+import {StudentsWithPlagiarismPipe} from './common/filters/students-with-plagiarism.pipe';
+import {ByGradePipe} from './common/filters/by-grade.pipe';
+import {OrderObjectByPipe} from './common/filters/order-object-by.pipe';
+import {StudentsWithSubmittedGradePipe} from './common/filters/students-with-submitted-grade.pipe';
+import {TaskWithPlagiarismPipe} from './common/filters/task-with-plagiarism.pipe';
+import {StudentsForGroupPipe} from './common/filters/students-for-group.pipe';
+import {OutcomeFilterPipe} from './common/filters/outcome-filter.pipe';
+import {TaskDefinitionFilterPipe} from './common/filters/task-definition-filter.pipe';
+import {StatusFilterPipe} from './common/filters/status-filter.pipe';
+import {ProjectFilterPipe} from './common/filters/project-filter.pipe';
+import {ProjectUnitFilterPipe} from './common/filters/project-unit-filter.pipe';
+import {UnitFilterPipe} from './common/filters/unit-filter.pipe';
+import {TeachingPeriodFilterPipe} from './common/filters/teaching-period-filter.pipe';
+import {TasksWithStatusesPipe} from './common/filters/tasks-with-statuses.pipe';
+import {TasksWithSearchTextPipe} from './common/filters/tasks-with-search-text.pipe';
+import {TutorialCampusFilterPipe} from './common/filters/tutorial-campus-filter.pipe';
+import {GroupsInTutorialsPipe} from './common/filters/groups-in-tutorials.pipe';
+import {GroupsForStudentPipe} from './common/filters/groups-for-student.pipe';
+import {TasksForGroupsetPipe} from './common/filters/tasks-for-groupset.pipe';
+import {PaginateAndSortPipe} from './common/filters/paginate-and-sort.pipe';
+import {TasksWithNamePipe} from './common/filters/tasks-with-name.pipe';
+import {LcfirstPipe} from './common/filters/lc-first.pipe';
+import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
 
 @NgModule({
   // Components we declare
@@ -399,6 +425,32 @@ import {GradeService} from './common/services/grade.service';
     provideLottieOptions({
       player: () => player,
     }),
+    StartFromPipe,
+    ShowStudentsPipe,
+    StudentsWithPortfolioPipe,
+    StudentsWithPlagiarismPipe,
+    ByGradePipe,
+    OrderObjectByPipe,
+    StudentsWithSubmittedGradePipe,
+    TaskWithPlagiarismPipe,
+    StudentsForGroupPipe,
+    OutcomeFilterPipe,
+    TaskDefinitionFilterPipe,
+    StatusFilterPipe,
+    ProjectFilterPipe,
+    ProjectUnitFilterPipe,
+    UnitFilterPipe,
+    TeachingPeriodFilterPipe,
+    TasksWithStatusesPipe,
+    TasksWithSearchTextPipe,
+    TutorialCampusFilterPipe,
+    GroupsInTutorialsPipe,
+    GroupsForStudentPipe,
+    TasksForGroupsetPipe,
+    PaginateAndSortPipe,
+    TasksWithNamePipe,
+    LcfirstPipe,
+    ToTrustedPipe,
   ],
   imports: [
     FlexLayoutModule,

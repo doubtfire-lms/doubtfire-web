@@ -1,5 +1,5 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { UnitRole } from 'src/app/api/models/unit-role';
+import {Pipe, PipeTransform} from '@angular/core';
+import {UnitRole} from 'src/app/api/models/unit-role';
 
 @Pipe({
   name: 'isActiveUnitRole',
