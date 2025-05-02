@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {UIRouter} from '@uirouter/core';
 import * as _ from 'lodash';
-<<<<<<< HEAD
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum, TaskStatusUiData} from 'src/app/api/models/task-status';
 import {TaskService} from 'src/app/api/services/task.service';
@@ -9,18 +8,10 @@ import {ExtensionModalService} from 'src/app/common/modals/extension-modal/exten
 import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';
-=======
-import { Task } from 'src/app/api/models/task';
-import { TaskStatusEnum } from 'src/app/api/models/task-status';
-import { TaskService } from 'src/app/api/services/task.service';
-import { ExtensionModalService } from 'src/app/common/modals/extension-modal/extension-modal.service';
-import { MatDialog } from '@angular/material/dialog';
-import { GrantExtensionFormComponent } from 'src/app/admin/modals/grant-extension-form/grant-extension-form.component';
-
->>>>>>> f75e7b32 (feat: update progress on grant extension form)
-
-import {Project} from 'src/app/api/models/project';
+import {MatDialog} from '@angular/material/dialog';
+import {GrantExtensionFormComponent} from 'src/app/admin/modals/grant-extension-form/grant-extension-form.component';
 import {UserService} from 'src/app/api/services/user.service';
+import {Project} from 'src/app/api/models/project';
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
@@ -33,14 +24,11 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private extensions: ExtensionModalService,
     private taskService: TaskService,
     private router: UIRouter,
-<<<<<<< HEAD
     private qrModalService: QrModalService,
     private doubtfireConstants: DoubtfireConstants,
     private submissionTypeModalService: SubmissionTypeModalService,
     private userService: UserService,
-=======
     private dialog: MatDialog,
->>>>>>> f75e7b32 (feat: update progress on grant extension form)
   ) {}
 
   @Input() task: Task;
@@ -131,6 +119,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
       width: '600px',
       disableClose: true,
     });
+  }
+
+  get currentUser() {
+    return this.userService.currentUser;
   }
 
 }

@@ -1,4 +1,6 @@
 <h2 mat-dialog-title>Grant Extension</h2>
+<form [formGroup]="grantExtensionForm" (ngSubmit)="submitForm()">
+
 
 <mat-dialog-content [formGroup]="grantExtensionForm">
   <!-- Student Selection -->
@@ -34,8 +36,6 @@
   </mat-slider>
   </div>
 
-
-
   <!-- Reason Field -->
   <mat-form-field appearance="fill" class="w-full mb-4">
     <mat-label>Reason</mat-label>
@@ -50,16 +50,18 @@
     </mat-error>
   </mat-form-field>
 
-  <!-- Notes Field -->
+  <!-- Notes Field (Optional) -->
   <mat-form-field appearance="fill" class="w-full mb-4">
     <mat-label>Additional Notes (optional)</mat-label>
     <textarea matInput formControlName="notes" rows="3"></textarea>
   </mat-form-field>
 </mat-dialog-content>
 
+  <!-- Form Buttons -->
 <mat-dialog-actions align="end">
   <button mat-button (click)="close()" [disabled]="isSubmitting">Cancel</button>
-  <button mat-flat-button color="primary" type="submit" (click)="onSubmit()" [disabled]="isSubmitting">
+  <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting">
     Grant Extension
   </button>
 </mat-dialog-actions>
+
