@@ -7,6 +7,8 @@ import { TaskService } from 'src/app/api/services/task.service';
 import { ExtensionModalService } from 'src/app/common/modals/extension-modal/extension-modal.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GrantExtensionFormComponent } from 'src/app/admin/modals/grant-extension-form/grant-extension-form.component';
+import { UserService } from 'src/app/api/services/user.service';
+
 
 
 @Component({
@@ -23,6 +25,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private taskService: TaskService,
     private router: UIRouter,
     private dialog: MatDialog,
+    private userService: UserService,
   ) {}
 
   @Input() task: Task;
@@ -76,6 +79,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
       width: '600px',
       disableClose: true,
     });
+  }
+
+  get currentUser() {
+    return this.userService.currentUser;
   }
 
 }

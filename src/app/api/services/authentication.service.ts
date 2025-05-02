@@ -136,7 +136,7 @@ export class AuthenticationService {
           remember: boolean;
         },
   ): Observable<any> {
-    return this.httpClient.post(this.AUTH_URL, userCredentials).pipe(
+    return this.httpClient.post(this.AUTH_URL, userCredentials, { withCredentials: true }).pipe(
       map((response: any) => {
         // Extract relevant data from response and construct user object to store in cache.
         const user: User = this.userService.cache.getOrCreate(

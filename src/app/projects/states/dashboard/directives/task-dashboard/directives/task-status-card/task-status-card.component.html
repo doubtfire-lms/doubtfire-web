@@ -31,10 +31,10 @@
     @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
       <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
     }
+    @if (currentUser?.role === 'Admin' || currentUser?.role === 'Convenor') {
+      <button mat-stroked-button (click)="openGrantExtensionDialog()">
+        Grant Extension
+      </button>
 
-    <!-- Showing for testing -->
-    <button mat-stroked-button (click)="openGrantExtensionDialog()">
-      Grant Extension
-    </button>
-  </mat-card-actions>
-</mat-card>
+    }
+
