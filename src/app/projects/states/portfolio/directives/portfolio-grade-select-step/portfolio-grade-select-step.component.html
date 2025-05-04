@@ -1,0 +1,64 @@
+<div id="portfolio-state" class="container project-portfolio-wizard">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Select Grade</h3>
+    </div>
+
+    <div class="panel-body">
+      <p>
+        In preparing your portfolio, you need to undertake a self assessment.
+        Use the unit's assessment criteria to determine the grade your portfolio should be awarded.
+      </p>
+
+      <!-- Warning Card -->
+      <div class="card card-danger">
+        <div class="card-heading">
+          <h4><i class="fa fa-warning"></i> Read the assessment criteria</h4>
+          Make sure that you have reviewed the Assessment Criteria for the grade you are applying for.
+          Each grade will have a list of criteria that you can use to determine if you meet the requirements to achieve
+          that grade.
+        </div>
+        <div class="card-body text-center" style="font-size: 1.25em">
+          <input type="checkbox" class="pointer" id="agree-read" [(ngModel)]="agreedToAssessmentCriteria" />
+          <label class="pointer" for="agree-read">I have read the Assessment Criteria for this unit</label>
+        </div>
+      </div>
+
+      <!-- Grade Selection -->
+      <div class="card card-default" *ngIf="agreedToAssessmentCriteria">
+        <div class="card-heading">
+          <h4>Grade Application</h4>
+          Select the <strong>grade</strong> you are applying for {{ unit.name }} below.
+        </div>
+
+        <div class="card-body text-center select-the-grade">
+          <div class="btn-group">
+            <label *ngFor="let grade of gradeList" class="btn btn-default col-sm-3"
+              [class.active]="selectedSubmittedGrade === grade.value" (click)="updateSubmittedGrade(grade)">
+              <div class="grade-icon" [ngClass]="'grade-' + grade.value" [matTooltip]="gradeService.grades[grade.value]"
+                matTooltipPosition="above">
+                {{ gradeService.gradeAcronyms[grade.value] }}
+              </div>
+            </label>
+          </div>
+
+          <p class="help-block mt-3">
+            Make sure your <strong>Learning Summary Report</strong> justifies how your portfolio demonstrates you have
+            <strong>met all unit learning outcomes to a {{ targetGrade }} level</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Buttons -->
+    <div class="panel-footer clearfix">
+      <button class="btn btn-primary pull-left" (click)="goToPreviousStep()">
+        <i class="fa fa-arrow-left"></i> Back
+      </button>
+
+      <button class="btn btn-primary pull-right" [disabled]="!agreedToAssessmentCriteria" (click)="goToNextStep()">
+        Next <i class="fa fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>

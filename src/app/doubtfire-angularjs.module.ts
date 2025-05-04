@@ -76,7 +76,6 @@ import 'build/src/app/projects/states/outcomes/outcomes.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.js';
-import 'build/src/app/projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.js';
 import 'build/src/app/projects/states/portfolio/directives/directives.js';
@@ -227,6 +226,7 @@ import {GradeService} from './common/services/grade.service';
 import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
 import { D2lUnitDetailsModal } from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
 import { D2lTransferModal } from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
+import { PortfolioGradeSelectStepComponent } from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -471,6 +471,10 @@ DoubtfireAngularJSModule.directive(
 );
 DoubtfireAngularJSModule.directive('newFUnits', downgradeComponent({component: FUnitsComponent}));
 
+DoubtfireAngularJSModule.directive(
+  'portfolioGradeSelectStep',
+  downgradeComponent({component: PortfolioGradeSelectStepComponent}),
+);
 // Global configuration
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
