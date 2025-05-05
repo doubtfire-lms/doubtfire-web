@@ -1,9 +1,7 @@
-import {Component, Input, Inject, signal} from '@angular/core';
-import {ElementRef, Injector, AfterViewInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {Injector} from '@angular/core';
 import angular from 'angular';
-import {Project} from 'src/app/api/models/project';
 import {ProjectService} from 'src/app/api/services/project.service';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {ViewEncapsulation} from '@angular/core';
 
@@ -15,29 +13,25 @@ import {ViewEncapsulation} from '@angular/core';
 })
 export class PortfolioGradeSelectStepComponent {
   @Input() project: any;
-  @Input() project_data: Project;
-  @Input() unit: any; //test
-
+  @Input() unit: any;
   private $scope: any;
 
   grades = this.gradeService.grades;
   gradeList = this.gradeService.gradeViewData;
-  targetGrade = null;
+  targetGrade?: number;
   agreedToAssessmentCriteria: boolean = false;
-  selectedSubmittedGrade: any = '';
+  selectedSubmittedGrade?: number;
 
   ngOnInit(): void {
     this.selectedSubmittedGrade = this.project.submittedGrade;
     this.gradeList = this.gradeService.gradeViewData.filter((g) => g.value !== -1);
     this.targetGrade = this.grades[this.project.targetGrade];
-    console.log('TargetGrade:', this.targetGrade);
   }
 
   constructor(
     private gradeService: GradeService,
     private injector: Injector,
     private projectService: ProjectService,
-    private alertService: AlertService,
   ) {
     this.$scope = this.injector.get('$scope');
   }
