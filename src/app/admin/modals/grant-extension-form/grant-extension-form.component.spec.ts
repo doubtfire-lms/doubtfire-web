@@ -10,7 +10,7 @@ describe('GrantExtensionFormComponent', () => {
       imports: [GrantExtensionFormComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(GrantExtensionFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
