@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Injector} from '@angular/core';
 import angular from 'angular';
 import {ProjectService} from 'src/app/api/services/project.service';
@@ -11,7 +11,7 @@ import {ViewEncapsulation} from '@angular/core';
   styleUrls: ['portfolio-grade-select-step.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class PortfolioGradeSelectStepComponent {
+export class PortfolioGradeSelectStepComponent implements OnInit {
   @Input() project: any;
   @Input() unit: any;
   private $scope: any;
