@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserService } from 'src/app/api/models/doubtfire-model'; // <-- Make sure to import this
+import { UserService } from 'src/app/api/models/doubtfire-model';
 
 interface GrantExtensionPayload {
   student_ids: number[];
@@ -17,7 +17,7 @@ interface GrantExtensionPayload {
 export class ExtensionService {
   constructor(
     private http: HttpClient,
-    private userService: UserService // <-- inject UserService here
+    private userService: UserService
   ) {}
 
   grantExtension(unitId: number, payload: GrantExtensionPayload): Observable<any> {
