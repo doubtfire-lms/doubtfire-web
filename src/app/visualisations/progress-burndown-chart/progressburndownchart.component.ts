@@ -40,9 +40,6 @@ export class ProgressBurndownChartComponent extends ChartBaseComponent implement
   }
 
   ngOnInit(): void {
-    console.log('ProgressBurndownChartComponent: ngOnInit');
-    console.log(this.project);
-
     this.project.refreshBurndownChartData();
     this.updateData();
     this.data.forEach((item) => {
