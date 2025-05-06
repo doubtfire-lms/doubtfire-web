@@ -9,7 +9,6 @@ import { AuthenticationService, Project, Task, Unit, UnitRole, User } from 'src/
 import { Subscription } from 'rxjs';
 import { MediaObserver } from 'ng-flex-layout';
 
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -68,7 +67,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         error: (err) => {},
       }),
     );
-
 
     this.subscriptions.push(
       this.globalState.projectsSubject.subscribe({
