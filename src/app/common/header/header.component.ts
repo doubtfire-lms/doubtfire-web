@@ -14,7 +14,6 @@ import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs
 import {QrModalService} from '../modals/qr-modal/qr-modal.service';
 import {StateService} from '@uirouter/core';
 
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -89,7 +88,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         },
       }),
     );
-
 
     this.subscriptions.push(
       this.globalState.projectsSubject.subscribe({
