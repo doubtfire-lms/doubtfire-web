@@ -1,0 +1,68 @@
+<mat-card class="grade-task-modal">
+  <mat-card-title> Assess Task Quality </mat-card-title>
+  <mat-card-content>
+    <!-- For Grade Tasks -->
+    <div
+      class="grade-task-item"
+      *ngIf="task.definition.isGraded"
+    >
+      <p>
+        Please provide a grade for task
+        <span class="task-label">
+          {{ task.definition.abbreviation }}
+        </span>
+      </p>
+      <div class="grade-toggle-group">
+        <mat-button-toggle-group #group="matButtonToggleGroup" hideSingleSelectionIndicator="true" [(ngModel)]="selectedGrade" [value]="selectedGrade">
+          <mat-button-toggle
+            *ngFor="let idx of gradeValues"
+            class="grade-toggle"
+            [value]="idx"
+            aria-label="Mark task as {{ gradeName(idx) }}"
+            matTooltip="This student completed the task to a {{ gradeName(idx) }} standard"
+            [matTooltipShowDelay]="500"
+            aria-describedby="This student completed the task to a {{ gradeName(idx) }} standard"
+          >
+            <grade-icon [grade]="idx"></grade-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+    <!-- For Quality Points Tasks -->
+    <div
+      class="grade-task-item"
+      *ngIf="task.definition.maxQualityPts > 0"
+    >
+      <p>
+        Please provide a quality rating for task
+        <span class="task-label">
+          {{ task.definition.abbreviation }}
+        </span>
+      </p>
+      <mat-slider
+        class="slider"
+        [max]="totalRating"
+        [min]="0"
+        [step]="1"
+        [discrete]="true"
+      >
+      <input matSliderThumb [(ngModel)]="rating">
+      </mat-slider>
+      <div class="label-rating">
+        <p>Rating: {{ rating }} / {{totalRating}} </p>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-divider></mat-divider>
+  <mat-card-actions align="end">
+    <button mat-raised-button (click)="dismiss()">Dismiss</button>
+    <button
+      mat-raised-button
+      color="primary"
+      [mat-dialog-close]="{ grade: selectedGrade, qualityPts: rating }"
+      [disabled]="!isValid()"
+    >
+      Submit
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,7 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Component, Input, ViewChild } from '@angular/core';
+import { MatTable } from '@angular/material/table';
 import { TaskDefinition, UploadRequirement } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
   selector: 'f-task-definition-upload',
@@ -10,9 +11,11 @@ import { Unit } from 'src/app/api/models/unit';
 })
 export class TaskDefinitionUploadComponent {
   @Input() public taskDefinition: TaskDefinition;
-  @ViewChild('upreqTable', { static: true }) table: MatTable<any>;
+  @ViewChild('upreqTable', {static: true}) table: MatTable<UploadRequirement>;
 
   public columns: string[] = ['file-name', 'file-type', 'tii-check', 'flag-pct', 'row-actions'];
+
+  constructor(private constants: DoubtfireConstants) {}
 
   public get unit(): Unit {
     return this.taskDefinition?.unit;
@@ -30,9 +33,13 @@ export class TaskDefinitionUploadComponent {
     this.table.renderRows();
   }
 
+  public tiiEnabled(): boolean {
+    return this.constants.IsTiiEnabled.value;
+  }
+
   public removeUpReq(upreq: UploadRequirement) {
     this.taskDefinition.uploadRequirements = this.taskDefinition.uploadRequirements.filter(
-      (anUpReq) => anUpReq.key != upreq.key
+      (anUpReq) => anUpReq.key != upreq.key,
     );
   }
 }

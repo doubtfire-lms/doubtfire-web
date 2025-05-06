@@ -7,6 +7,7 @@ import {UpgradeModule} from '@angular/upgrade/static';
 import {AppInjector, setAppInjector} from './app-injector';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 // Lottie animation module
 // import {LottieModule, LottieCacheModule} from 'ngx-lottie';
@@ -15,6 +16,7 @@ import player from 'lottie-web';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
@@ -73,6 +75,7 @@ import {
   uploadSubmissionModalProvider,
   ConfirmationModalProvider,
 } from './ajs-upgraded-providers';
+import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-tasks-list.component';
 import {
   TaskCommentComposerComponent,
   DiscussionComposerDialog,
@@ -95,8 +98,17 @@ import {ExtensionModalComponent} from './common/modals/extension-modal/extension
 import {CalendarModalComponent} from './common/modals/calendar-modal/calendar-modal.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MAT_DATE_LOCALE, MatOptionModule} from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatOptionModule,
+} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+
+import {DateFnsAdapter} from '@angular/material-date-fns-adapter';
+import {enAU} from 'date-fns/locale';
+
 import {doubtfireStates} from './doubtfire.states';
 import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -133,6 +145,8 @@ import {TasksInTutorialsPipe} from './common/filters/tasks-in-tutorials.pipe';
 import {TasksForInboxSearchPipe} from './common/filters/tasks-for-inbox-search.pipe';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import {TasksForGroupsetPipe} from './common/filters/tasks-for-group-set.pipe';
+import {OrderByPipe} from './common/filters/order-by.pipe';
 import {CheckForUpdateService} from './sessions/service-worker-updater/check-for-update.service';
 import {
   ActivityTypeService,
@@ -170,6 +184,7 @@ import {UnitDropdownComponent} from './common/header/unit-dropdown/unit-dropdown
 import {TaskDropdownComponent} from './common/header/task-dropdown/task-dropdown.component';
 import {SplashScreenComponent} from './home/splash-screen/splash-screen.component';
 import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
+import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
 import {TaskDefinitionService} from './api/services/task-definition.service';
 import {NewTeachingPeriodDialogComponent} from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import {MatNativeDateModule} from '@angular/material/core';
@@ -192,7 +207,7 @@ import {TaskDashboardComponent} from './projects/states/dashboard/directives/tas
 import {InboxComponent} from './units/states/tasks/inbox/inbox.component';
 import {ProjectProgressBarComponent} from './common/project-progress-bar/project-progress-bar.component';
 import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
-import {FChipComponent} from './common/f-chip/f-chip.component';
+import {FChipComponent} from './common/f-chip/chip.component';
 import {TaskSimilarityViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
 import {FileViewerComponent} from './common/file-viewer/file-viewer.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
@@ -203,27 +218,59 @@ import {TaskDefinitionUploadComponent} from './units/states/edit/directives/unit
 import {TaskDefinitionOptionsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-options/task-definition-options.component';
 import {TaskDefinitionResourcesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 import {TaskDefinitionOverseerComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/task-definition-overseer.component';
+import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-scorm/task-definition-scorm.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {FileDropComponent} from './common/file-drop/file-drop.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
-import {FUsersComponent} from './admin/states/f-users/f-users.component';
-
+import {FUsersComponent} from './admin/states/users/users.component';
+import {ProjectProgressGaugeComponent} from './common/project-progress/project-progress-gauge.component';
 import {CreateNewUnitModal} from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {CreateNewUnitModalContentComponent} from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
 import {
   TeachingPeriodUnitImportDialogComponent,
   TeachingPeriodUnitImportService,
 } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
+import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
 import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {TiiActionLogComponent} from './admin/tii-action-log/tii-action-log.component';
 import {TiiActionService} from './api/services/tii-action.service';
-import {FUnitsComponent} from './admin/states/f-units/f-units.component';
-import {FUnitTaskListComponent} from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
-import {FTaskDetailsViewComponent} from './units/states/tasks/viewer/directives/f-task-details-view/f-task-details-view.component';
-import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-task-sheet-view/f-task-sheet-view.component';
-import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
+import {FUnitsComponent} from './admin/states/units/units.component';
+import {FUnitTaskListComponent} from './units/task-viewer/directives/unit-task-list/unit-task-list.component';
+import {FTaskDetailsViewComponent} from './units/task-viewer/directives/task-details-view/task-details-view.component';
+import {FTaskSheetViewComponent} from './units/task-viewer/directives/task-sheet-view/task-sheet-view.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {GradeService} from './common/services/grade.service';
+import {UnitRootStateComponent} from './units/unit-root-state.component';
+import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
+import {ProjectRootStateComponent} from './projects/states/project-root-state.component';
+import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
+import {ProgressBurndownChartComponent} from './visualisations/progress-burndown-chart/progressburndownchart.component';
+import {TaskVisualisationComponent} from './visualisations/task-visualisation/taskvisualisation.component';
+import {ChartBaseComponent} from './common/chart-base/chart-base-component/chart-base-component.component';
+import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
+import {ScormAdapterService} from './api/services/scorm-adapter.service';
+import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
+import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
+import {TestAttemptService} from './api/services/test-attempt.service';
+import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
+import {ScormExtensionModalComponent} from './common/modals/scorm-extension-modal/scorm-extension-modal.component';
+import {GradeIconComponent} from './common/grade-icon/grade-icon.component';
+import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+
+// See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
+const MY_DATE_FORMAT = {
+  parse: {
+    dateInput: 'dd/MM/yyyy', // this is how your date will be parsed from Input
+  },
+  display: {
+    dateInput: 'dd/MM/yyyy', // this is how your date will get displayed on the Input
+    monthYearLabel: 'MMMM yyyy',
+    dateA11yLabel: 'do MMMM yyyy',
+    monthYearA11yLabel: 'MMMM yyyy',
+  },
+};
+import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {StartFromPipe} from './common/filters/start-from.pipe';
 import {ShowStudentsPipe} from './common/filters/show-students.pipe';
 import {StudentsWithPortfolioPipe} from './common/filters/students-with-portfolio.pipe';
@@ -245,7 +292,6 @@ import {TasksWithSearchTextPipe} from './common/filters/tasks-with-search-text.p
 import {TutorialCampusFilterPipe} from './common/filters/tutorial-campus-filter.pipe';
 import {GroupsInTutorialsPipe} from './common/filters/groups-in-tutorials.pipe';
 import {GroupsForStudentPipe} from './common/filters/groups-for-student.pipe';
-import {TasksForGroupsetPipe} from './common/filters/tasks-for-groupset.pipe';
 import {PaginateAndSortPipe} from './common/filters/paginate-and-sort.pipe';
 import {TasksWithNamePipe} from './common/filters/tasks-with-name.pipe';
 import {LcfirstPipe} from './common/filters/lc-first.pipe';
@@ -255,8 +301,10 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
   // Components we declare
   declarations: [
     AlertComponent,
+    UnitStudentEnrolmentModalComponent,
     AboutDoubtfireModalContent,
     TeachingPeriodUnitImportDialogComponent,
+    ProjectTasksListComponent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
@@ -288,6 +336,7 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     TaskDefinitionOptionsComponent,
     TaskDefinitionResourcesComponent,
     TaskDefinitionOverseerComponent,
+    TaskDefinitionScormComponent,
     UnitAnalyticsComponent,
     StudentTutorialSelectComponent,
     StudentCampusSelectComponent,
@@ -298,6 +347,7 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     TaskCommentsViewerComponent,
     UserIconComponent,
     AudioPlayerComponent,
+    ProjectProgressDashboardComponent,
     MarkedPipe,
     HumanizedDatePipe,
     IsActiveUnitRole,
@@ -307,6 +357,8 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     PdfViewerPanelComponent,
     StaffTaskListComponent,
     TaskSimilarityViewComponent,
+    TasksForGroupsetPipe,
+    OrderByPipe,
     FiltersPipe,
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
@@ -319,6 +371,9 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    ProjectDashboardComponent,
+    GradeIconComponent,
+    GradeTaskModalComponent,
     ObjectSelectComponent,
     WelcomeComponent,
     AcceptEulaComponent,
@@ -347,10 +402,22 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     FUnitTaskListComponent,
     FTaskDetailsViewComponent,
     FTaskSheetViewComponent,
-    TasksViewerComponent,
+    UnitRootStateComponent,
+    ProjectRootStateComponent,
+    TaskViewerStateComponent,
     FUsersComponent,
+    ProjectProgressGaugeComponent,
     FTaskBadgeComponent,
     FUnitsComponent,
+    UnauthorisedComponent,
+    ChartBaseComponent,
+    ProgressBurndownChartComponent,
+    TaskVisualisationComponent,
+    ScormPlayerComponent,
+    ScormCommentComponent,
+    TaskScormCardComponent,
+    ScormExtensionCommentComponent,
+    ScormExtensionModalComponent,
   ],
   // Services we provide
   providers: [
@@ -394,7 +461,9 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     dateServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,
-    {provide: MAT_DATE_LOCALE, useValue: 'en-AU'},
+    {provide: MAT_DATE_LOCALE, useValue: enAU},
+    {provide: DateAdapter, useClass: DateFnsAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT},
     UnitStudentEnrolmentModalProvider,
     TaskCommentService,
     AudioRecorderProvider,
@@ -422,6 +491,9 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
     CreateNewUnitModal,
+    ScormAdapterService,
+    TestAttemptService,
+    PrivacyPolicy,
     provideLottieOptions({
       player: () => player,
     }),
@@ -462,6 +534,7 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     DragDropModule,
     ScrollingModule,
     MatToolbarModule,
+    MatSidenavModule,
     MatFormFieldModule,
     MatAutocompleteModule,
     MatInputModule,
@@ -491,7 +564,6 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     MatExpansionModule,
     MatCardModule,
     MatGridListModule,
-    MatSelectModule,
     MatToolbarModule,
     MatTabsModule,
     UpgradeModule,
@@ -502,6 +574,7 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
+    NgxChartsModule,
     PdfViewerModule,
     LottieComponent,
     UIRouterUpgradeModule.forRoot({states: doubtfireStates}),
@@ -512,6 +585,7 @@ import {ToTrustedPipe} from './common/filters/to_trusted.pipe';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModuleNew,
+    NgxChartsModule,
   ],
 })
 

@@ -251,7 +251,6 @@ export class GlobalStateService implements OnDestroy {
    * Query the API for the units taught and studied by the current user.
    */
   private loadUnitsAndProjects() {
-    this.isLoadingSubject.next(true);
     this.unitRoleService.query().subscribe({
       next: (_unitRoles: UnitRole[]) => {
         // unit roles are now in the cache
@@ -264,8 +263,14 @@ export class GlobalStateService implements OnDestroy {
               this.isLoadingSubject.next(false);
             }, 800);
           },
+          error: (_response) => {
+            this.alerts.error('Unable to access the units you study.', 6000);
+          },
         });
       },
+      error: (_response) => {
+        this.alerts.error('Unable to access your units.', 6000);
+      }
     });
   }
 

@@ -1,6 +1,5 @@
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-
 @include mat.core();
 
 @import './theme.scss';
@@ -8,6 +7,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+$main-view-top-padding: 30px;
+$main-view-bottom-padding: $main-view-top-padding;
+
+$main-view-max-height: calc((var(--vh, 1vh) * (100)) - 85px);
+
+// This is the new Angular Material 3 theme file which we will migrate to
+// @use './styles/m3-theme.scss';
+
+// this is a pre-defined green palette for testing.
+// $theme: mat.define-theme((
+//   color: (
+//     theme-type: light,
+//     primary: mat.$spring-green-palette,
+//   ),
+//   typography: (
+//     brand-family: 'Grotesk',
+//     bold-weight: 900
+
+//   ),
+//   density: (
+//     scale: -1
+//   )
+// ));
+
+// html {
+//   @include mat.all-component-themes($theme);
+// }
+
 
 .mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
   .mdc-notched-outline__notch {
@@ -35,3 +63,4 @@
     }
   }
 }
+

@@ -12,7 +12,6 @@ angular.module('doubtfire.projects.states.outcomes', [])
     data:
       task: "Learning Outcomes"
       pageTitle: "_Home_"
-      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student', 'Auditor']
    }
 )
 

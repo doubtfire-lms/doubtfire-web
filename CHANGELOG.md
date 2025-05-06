@@ -2,6 +2,550 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.0.29](https://github.com/macite/doubtfire-deploy/compare/v8.0.28...v8.0.29) (2024-10-25)
+
+
+### Features
+
+* add support for the view language ([151ca04](https://github.com/macite/doubtfire-deploy/commit/151ca04ca8da9059890d7846293bf34ae67f05c5))
+
+
+### Bug Fixes
+
+* correct task scroll into view ([7984b39](https://github.com/macite/doubtfire-deploy/commit/7984b393752381e0a219dbbdafc0e7b44c3fcdb3))
+
+### [8.0.27](https://github.com/macite/doubtfire-deploy/compare/v8.0.26...v8.0.27) (2024-08-09)
+
+
+### Bug Fixes
+
+* encode . in the username in scorm player ([1ec1754](https://github.com/macite/doubtfire-deploy/commit/1ec175419ab3ef80f22ac8a6384f6ed40a17c217))
+
+### [8.0.26](https://github.com/macite/doubtfire-deploy/compare/v8.0.25...v8.0.26) (2024-08-09)
+
+
+### Bug Fixes
+
+* register service names in state resolve functions ([64e41f4](https://github.com/macite/doubtfire-deploy/commit/64e41f4aedcf519a2786d7fe4929900f86731896))
+
+### [8.0.25](https://github.com/macite/doubtfire-deploy/compare/v8.0.24...v8.0.25) (2024-08-09)
+
+
+### Bug Fixes
+
+* adjust shortcuts and unregister on inbox destroy ([8a2ce3b](https://github.com/macite/doubtfire-deploy/commit/8a2ce3bfe32d99be1bc0667ca1aba55d36f987d2))
+* switch to control shift ([a0c1185](https://github.com/macite/doubtfire-deploy/commit/a0c1185bf4af3acb8f58c97cc27021c952861603))
+
+### [8.0.24](https://github.com/macite/doubtfire-deploy/compare/v8.0.23...v8.0.24) (2024-08-09)
+
+
+### Features
+
+* add ability to preview scorm test ([7ffbea9](https://github.com/macite/doubtfire-deploy/commit/7ffbea9f56c393d44571c18f30735e090701b554))
+* add new Numbas Feature ([6f1ac4e](https://github.com/macite/doubtfire-deploy/commit/6f1ac4e4c1a78115c426838bce350bce286e44f0))
+* add new Numbas Feature ([8eba913](https://github.com/macite/doubtfire-deploy/commit/8eba913ec4462e1c252a8a698b4b6de67c4ec25f))
+* add numbas component ([7c1734b](https://github.com/macite/doubtfire-deploy/commit/7c1734b137ac369b3b605b38749c845df38b9a78))
+* add Numbas config options to task def service keys ([ff28e48](https://github.com/macite/doubtfire-deploy/commit/ff28e4802b86dc22be339cc196ef82ade67934f7))
+* add Numbas test attempt model ([097df79](https://github.com/macite/doubtfire-deploy/commit/097df7960d34a8c905ee495b8c6c8b8843e43b36))
+* add Numbas test section on ready for feedback ([e61295c](https://github.com/macite/doubtfire-deploy/commit/e61295c50006dbc89cfc0639bb3c68a09a3cda9d))
+* add Numbas test upload section and reorder editor sections ([edbd536](https://github.com/macite/doubtfire-deploy/commit/edbd536e73ace8b6b4cced1481c809fd36524dce))
+* add Numbas upload component and related functions to task-definition model ([4ecaee8](https://github.com/macite/doubtfire-deploy/commit/4ecaee8ad1c0caed9a5d848066a173000989f79b))
+* add test attempt service ([a576f48](https://github.com/macite/doubtfire-deploy/commit/a576f484bc434728eab9632c022bccf1ed26cb01))
+* add test attempt service and minor numbas related changes ([0652b56](https://github.com/macite/doubtfire-deploy/commit/0652b56f69eb850c2dfb43be54d07beb4c4eb469))
+* added numbas-lms service code ([471d344](https://github.com/macite/doubtfire-deploy/commit/471d34486f2582e95aac84469187f087277cc079))
+* allow changing scorm review config and add minor UI changes ([fc023af](https://github.com/macite/doubtfire-deploy/commit/fc023af462656e3557e2970f211fa4d59ee1e3d5))
+* change Numbas time delay config to enable incremental delays ([0afa719](https://github.com/macite/doubtfire-deploy/commit/0afa7197293c90a154c1716db91ecadae3677d53))
+* disable attempt button if passed and add button to review latest attempt in card ([703563c](https://github.com/macite/doubtfire-deploy/commit/703563c86253c60ad30d451ee2d8e0fa7ebbfabb))
+* display numbas task comments ([48a31da](https://github.com/macite/doubtfire-deploy/commit/48a31da1442f1e14f497c614053d9002c9f2631b))
+* enable reviewing, passing, deleting test attempts and add test attempt model and service ([561b924](https://github.com/macite/doubtfire-deploy/commit/561b9241c2f44fd69d3f09c656a025f514bbaf3a))
+* enable students to request extra scorm attempt ([d904ffd](https://github.com/macite/doubtfire-deploy/commit/d904ffd6fd674f6e61894d517f5aa147d1db6d29))
+* get unique token for scorm asset retrieval ([8fe2f9e](https://github.com/macite/doubtfire-deploy/commit/8fe2f9e9ca60c02e55c24d0f2bb3eb6dbea8217c))
+* implement numbas test data upload in task definition service ([2c7dab5](https://github.com/macite/doubtfire-deploy/commit/2c7dab555fc9a226b980a8dae96f5738bf517b1b))
+* insert Numbas test rules options in the task editor ([7e52ad5](https://github.com/macite/doubtfire-deploy/commit/7e52ad5e5759291d7d61805070ec482eb49c90be))
+* numbas-test-numbas-service ([cee13b7](https://github.com/macite/doubtfire-deploy/commit/cee13b727b35f804fc16070885f0e57c422c9982))
+* prevent uploading files until scorm passed ([ec86e4e](https://github.com/macite/doubtfire-deploy/commit/ec86e4eca8e9c50ebdaf54c34c302da88dd44b31))
+* show banner based on scorm success status ([db16172](https://github.com/macite/doubtfire-deploy/commit/db161721fab1359694c44d8df7237cd01892938b))
+* show launch button on ready for feedback if Numbas test is enabled for the task ([17af5b7](https://github.com/macite/doubtfire-deploy/commit/17af5b7fe9e1fbc8e5f18e2fece6e029b017408c))
+* use confirmation modal when passing or deleting test attempts ([3fb25bb](https://github.com/macite/doubtfire-deploy/commit/3fb25bb373acab837a3ef787620dd654bfd6803f))
+
+
+### Bug Fixes
+
+* add accepted Numbas file types ([bcaa8af](https://github.com/macite/doubtfire-deploy/commit/bcaa8af150aaf68b5cf5fb07ad9cb72037212d5d))
+* add auth headers to scorm adapter xhr requests ([97e1ea1](https://github.com/macite/doubtfire-deploy/commit/97e1ea187b769a51ebb66b82d76f21193bb29386))
+* adjusted edit profile accidental change ([316abc7](https://github.com/macite/doubtfire-deploy/commit/316abc775eeba6ca846c7c742bc88bec61d05a5e))
+* change success status descriptions ([20da042](https://github.com/macite/doubtfire-deploy/commit/20da0423450fe3b9b8006660bf6f5e06670f520c))
+* delete comment as well as test attempt ([b6887e8](https://github.com/macite/doubtfire-deploy/commit/b6887e85b7a06b166519924dd682ef57650a4e32))
+* disable launch scorm test button if user is staff ([9bc48b0](https://github.com/macite/doubtfire-deploy/commit/9bc48b03905c0a839d78ea13be9817ca73ba54cf))
+* ensure counters are incremented after object creation ([2b1dcfc](https://github.com/macite/doubtfire-deploy/commit/2b1dcfc717eb770dd623c62ac99d8d961d1c3124))
+* ensure datamodel is updated on termination ([2ac487f](https://github.com/macite/doubtfire-deploy/commit/2ac487f13c3743f2b5b805521964bdcbca7cdc15))
+* ensure scorm frame loads when src is available ([6ae4295](https://github.com/macite/doubtfire-deploy/commit/6ae42954162996acf145cef211981153381ff49d))
+* hide config options if numbas test is disabled ([0b15b1c](https://github.com/macite/doubtfire-deploy/commit/0b15b1c38b8f09a30f53bb42dccd1971109bce01))
+* indicate task def has scorm data when zip is uploaded ([4b983ba](https://github.com/macite/doubtfire-deploy/commit/4b983bae1f522013f750b8c36d5e1a52624abbbc))
+* initialise SCORM API wrapper before iframe loads ([5d0606c](https://github.com/macite/doubtfire-deploy/commit/5d0606c56eaeb929d5873cae7038ce729581512c))
+* integrate Numbas services well with the existing system ([d47b8ed](https://github.com/macite/doubtfire-deploy/commit/d47b8edc745660801984346c4fa67d6bb371f4cb))
+* marking shortcuts no longer conflict with common browser shortcuts ([ec7524a](https://github.com/macite/doubtfire-deploy/commit/ec7524aaae040794de76521363c2d885a0425db0))
+* remove attempt number field ([f0ff40b](https://github.com/macite/doubtfire-deploy/commit/f0ff40bfd7e86b904adae94bf8cbe5d56371e011))
+* remove saved scorm token and always get ([c8fc702](https://github.com/macite/doubtfire-deploy/commit/c8fc702bde6f1c448fc585042e5265625552bae8))
+* retrieve test attempt data correctly ([2810ce6](https://github.com/macite/doubtfire-deploy/commit/2810ce65d423a137600d621a98bf27dbc221921c))
+* send task id with numbas completed attempt data ([e46214d](https://github.com/macite/doubtfire-deploy/commit/e46214dd59d86014bb04d1c31f3a3bf21240e32b))
+* show correct attempts left and allow tutor to review attempt always ([58c24c3](https://github.com/macite/doubtfire-deploy/commit/58c24c3a6760af168a918bc099e755f475eac5f0))
+* show correct Numbas test from the task def with all assets loaded ([bee0a0b](https://github.com/macite/doubtfire-deploy/commit/bee0a0bb1eb905c964caf7888419effe70553520))
+* show delete and download buttons in editor when Numbas test exists ([821feb9](https://github.com/macite/doubtfire-deploy/commit/821feb93a8a40d095ef4f50adedbfd9216278fa9))
+* show Numbas button component and modify iframe request ([c9c2fbe](https://github.com/macite/doubtfire-deploy/commit/c9c2fbe10db156512946355f3cabfe54461f0eba))
+* show Numbas iframe on top of other elements ([f53befd](https://github.com/macite/doubtfire-deploy/commit/f53befd82b52bba24bc8c593a9266c11f9155d32))
+* show previously configured Numbas attempt limit ([56e1a5d](https://github.com/macite/doubtfire-deploy/commit/56e1a5de44ee275f9544b77909b7472f1020c2c3))
+* update numbas api path ([3df59dc](https://github.com/macite/doubtfire-deploy/commit/3df59dcc58f021ef16d81938d1d05473818bc75e))
+* use modal for Numbas and enable authentication ([64b1bfb](https://github.com/macite/doubtfire-deploy/commit/64b1bfb2918993e58a6659948d9621fc7d0b8ba4))
+* use nullish coalescing when retrieving data from the datamodel ([226d919](https://github.com/macite/doubtfire-deploy/commit/226d9193251fb675c92bec8265508477857a4ec9))
+
+### [8.0.28](https://github.com/macite/doubtfire-deploy/compare/v8.0.23...v8.0.28) (2024-09-05)
+
+
+### Features
+
+* add support for the view language ([b4b3654](https://github.com/macite/doubtfire-deploy/commit/b4b36541943232f7df3ee4888bf4ca46c4c04018))
+
+### [8.0.23](https://github.com/macite/doubtfire-deploy/compare/v8.0.22...v8.0.23) (2024-08-02)
+
+
+### Features
+
+* allow pdf download and switch to native viewer ([16ac9c8](https://github.com/macite/doubtfire-deploy/commit/16ac9c8bc488607025ee95dbb4b41134a5346b00))
+
+
+### Bug Fixes
+
+* ensure overseer menu only shows when active for task ([c04e9fe](https://github.com/macite/doubtfire-deploy/commit/c04e9fe3a824e316a632b3f7b53b08887e57c831))
+
+### [8.0.22](https://github.com/macite/doubtfire-deploy/compare/v8.0.21...v8.0.22) (2024-07-26)
+
+
+### Bug Fixes
+
+* correct duplicate shortcut registration ([dca03a4](https://github.com/macite/doubtfire-deploy/commit/dca03a41f502947136e301e51242570169826dd9))
+
+### [8.0.21](https://github.com/macite/doubtfire-deploy/compare/v8.0.20...v8.0.21) (2024-07-24)
+
+
+### Bug Fixes
+
+* ensure groups can be locked ([b671065](https://github.com/macite/doubtfire-deploy/commit/b67106589b71660bdfe01151deb68d3092b9091f))
+
+### [8.0.20](https://github.com/macite/doubtfire-deploy/compare/v8.0.19...v8.0.20) (2024-07-15)
+
+
+### Bug Fixes
+
+* ensure turn it in eula is accessible by all ([3d44c11](https://github.com/macite/doubtfire-deploy/commit/3d44c115b498366b80e5b8b99ccd3eaa660ff613))
+
+### [8.0.19](https://github.com/macite/doubtfire-deploy/compare/v8.0.18...v8.0.19) (2024-07-10)
+
+
+### Features
+
+* add ability to minimise task details in task viewer ([e904640](https://github.com/macite/doubtfire-deploy/commit/e9046400e827481e09492bcb458b00b4e3aca347))
+
+
+### Bug Fixes
+
+* ensure pdf is visible in task viewer mobile/narrow ([f5388e4](https://github.com/macite/doubtfire-deploy/commit/f5388e45715597f0c92f252f721cf274bb8de0d5))
+* task def editor so save is not over fields and header visible for task being edited ([22a2616](https://github.com/macite/doubtfire-deploy/commit/22a26165c9f2ef634b3e79d1e5d5d6b74e6f2731))
+
+### [8.0.18](https://github.com/macite/doubtfire-deploy/compare/v8.0.17...v8.0.18) (2024-07-03)
+
+
+### Features
+
+* add ability to set unit code on import from rollover ([d47d105](https://github.com/macite/doubtfire-deploy/commit/d47d10561bd7bfad495f878ebb0bab399ce144b7))
+
+### [8.0.17](https://github.com/macite/doubtfire-deploy/compare/v8.0.16...v8.0.17) (2024-07-01)
+
+
+### Bug Fixes
+
+* correct broken template in activities list ([4d81fa1](https://github.com/macite/doubtfire-deploy/commit/4d81fa1fabb07e40d0d42068f23b8e756f4cdf4b))
+* correct campus list templates ([1795895](https://github.com/macite/doubtfire-deploy/commit/17958955f65bab2b268826f2a7e19f311071615b))
+* switch date formats to date-fns ([2394efb](https://github.com/macite/doubtfire-deploy/commit/2394efb07c03da18fb8114d87b0c89e68bf7fd2d))
+
+### [8.0.16](https://github.com/macite/doubtfire-deploy/compare/v8.0.15...v8.0.16) (2024-06-28)
+
+
+### Bug Fixes
+
+* ensure drop works on task resource upload in windows ([f0505d7](https://github.com/macite/doubtfire-deploy/commit/f0505d7b62b97f1b821b19b1c4178973503789da))
+
+### [8.0.15](https://github.com/macite/doubtfire-deploy/compare/v8.0.14...v8.0.15) (2024-06-28)
+
+
+### Bug Fixes
+
+* ensure zip uploads work on windows ([1857bdc](https://github.com/macite/doubtfire-deploy/commit/1857bdc708c81dc39d467f42c9e316a8664dc080))
+
+### [8.0.14](https://github.com/macite/doubtfire-deploy/compare/v8.0.13...v8.0.14) (2024-06-27)
+
+
+### Bug Fixes
+
+* ensure unit import allows unit code change ([01013d3](https://github.com/macite/doubtfire-deploy/commit/01013d3d16ab5b704acc589d34975693030def0b))
+* ensure unit load sets main convenor user in all cases ([4c96624](https://github.com/macite/doubtfire-deploy/commit/4c966245d270af46107aae94bdd38e84b2188b65))
+
+### [8.0.13](https://github.com/macite/doubtfire-deploy/compare/v8.0.12...v8.0.13) (2024-06-27)
+
+
+### Bug Fixes
+
+* update discuss text to promote use ([7b5d35c](https://github.com/macite/doubtfire-deploy/commit/7b5d35c89a577d0408a51d8390400f44615591eb))
+
+### [8.0.12](https://github.com/macite/doubtfire-deploy/compare/v8.0.11...v8.0.12) (2024-06-25)
+
+
+### Bug Fixes
+
+* ensure null fields will not break in entity mapping ([32046e8](https://github.com/macite/doubtfire-deploy/commit/32046e89eaaf2a9b36e88f078a7b695b1506886d))
+* reinstate unit import for teaching period ([991230f](https://github.com/macite/doubtfire-deploy/commit/991230f7b527957116263b6abaa588ed43d3a787))
+
+### [8.0.11](https://github.com/macite/doubtfire-deploy/compare/v8.0.10...v8.0.11) (2024-06-24)
+
+
+### Bug Fixes
+
+* ensure turn it in only appears to task editor when enabled ([3a81688](https://github.com/macite/doubtfire-deploy/commit/3a81688904159c8c9e3efdde8f3605aa5677630f))
+* task date picker allows direct entry ([2f91e8f](https://github.com/macite/doubtfire-deploy/commit/2f91e8fbba7902e1e22871cc82c87f4ff797b058))
+
+### [7.0.24](https://github.com/macite/doubtfire-deploy/compare/v7.0.23...v7.0.24) (2024-06-05)
+
+
+### Bug Fixes
+
+* ensure download blob supports 206 responses ([6445f9f](https://github.com/macite/doubtfire-deploy/commit/6445f9f998db70fbe9b9abf723dc17fd298b5d2f))
+
+### [8.0.10](https://github.com/macite/doubtfire-deploy/compare/v7.0.23...v8.0.10) (2024-06-21)
+
+
+### Bug Fixes
+
+* ensure loading screen removed in sign in component ([729c438](https://github.com/macite/doubtfire-deploy/commit/729c438f7f6a988f5ff2fa4035493b5cae1c98f7))
+* ensure portfolio can get grades from strings ([fd916b9](https://github.com/macite/doubtfire-deploy/commit/fd916b94e9012c0909c5880f377f93d326c18e4d))
+* ensure portfolio only shown when it exists ([ce970f5](https://github.com/macite/doubtfire-deploy/commit/ce970f5fdc4f42708edc71c98dc9d869056e9e2c))
+* ensure tii open report alerts errors ([c5dd45c](https://github.com/macite/doubtfire-deploy/commit/c5dd45c57fd34e8373f11d065a0cd08edef0a794))
+* fix pdf viewer for portfolios ([da376b9](https://github.com/macite/doubtfire-deploy/commit/da376b9bc7905aadeb4d234cbb4f595e4c4424a1))
+* grade icon for portfolio page ([aab1b9c](https://github.com/macite/doubtfire-deploy/commit/aab1b9c3e7365cdf7dd64d767fdb6e5a9a2436a3))
+* show burndown and pie chart on portfolio page ([e70f4c7](https://github.com/macite/doubtfire-deploy/commit/e70f4c7cd1395eaab942ee389788f75f92e985c9))
+
+### [8.0.9](https://github.com/macite/doubtfire-deploy/compare/v7.0.22...v8.0.9) (2024-05-31)
+
+
+### Bug Fixes
+
+* comment out fix and complete hotkeys temporarily ([c1f623d](https://github.com/macite/doubtfire-deploy/commit/c1f623d17432f3563366ef32fc3da3b54dbef0b7))
+
+### [8.0.8](https://github.com/macite/doubtfire-deploy/compare/v8.0.7...v8.0.8) (2024-05-30)
+
+
+### Features
+
+* added percentage to tooltip when hovering student's task progress ([69ed613](https://github.com/macite/doubtfire-deploy/commit/69ed61380bd7681d4496cb109e628111873b6e82))
+
+
+### Bug Fixes
+
+* change from hiding element to not loading ([414da65](https://github.com/macite/doubtfire-deploy/commit/414da65fcef9b10367f53112239a60e1b271d475))
+* change grade values, change grade display ([081c35b](https://github.com/macite/doubtfire-deploy/commit/081c35ba0fbc7ab4ddb2fba3c58892d0e66f325c))
+* fix task inbox shortcuts ([9bc949f](https://github.com/macite/doubtfire-deploy/commit/9bc949fd6dcb71ea165e89de9a4ec9d9347e6562))
+* inbox search box width ([02a99a8](https://github.com/macite/doubtfire-deploy/commit/02a99a8f71033014b26260d3b0dbfca075ca7273))
+* remove pdf viewer on task view when no sheet ([f3e973d](https://github.com/macite/doubtfire-deploy/commit/f3e973dacc5b079ab58da239194d802c5586ca07))
+* revert index changes, html changes for grade ([8f41cd1](https://github.com/macite/doubtfire-deploy/commit/8f41cd1656971963c2035a9249acdde0a257766e))
+* task list scrolling ([0088e9e](https://github.com/macite/doubtfire-deploy/commit/0088e9e245dbd326dea4032239b53eee88754179))
+* use tailwind classes instead of css styling ([42434a5](https://github.com/macite/doubtfire-deploy/commit/42434a5fd4b866781da5d23ecdb0b9b4369aace1))
+
+### [8.0.7](https://github.com/macite/doubtfire-deploy/compare/v8.0.6...v8.0.7) (2024-05-26)
+
+
+### Bug Fixes
+
+* add task description editing ([ee0cfbf](https://github.com/macite/doubtfire-deploy/commit/ee0cfbf7ce804a1806ca5810bad138b97703ebfe))
+
+### [8.0.6](https://github.com/macite/doubtfire-deploy/compare/v8.0.5...v8.0.6) (2024-05-25)
+
+
+### Bug Fixes
+
+* ensure all admin units are fully loaded ([917325e](https://github.com/macite/doubtfire-deploy/commit/917325ed08b89690a7eea0716438673732ba1ec9))
+
+### [8.0.5](https://github.com/macite/doubtfire-deploy/compare/v8.0.4...v8.0.5) (2024-05-25)
+
+
+### Bug Fixes
+
+* ensure (click) is on button, not mat-icon ([99c717d](https://github.com/macite/doubtfire-deploy/commit/99c717d2333de0975da1b3f282195a0b3577a3f6))
+
+### [8.0.4](https://github.com/macite/doubtfire-deploy/compare/v8.0.3...v8.0.4) (2024-05-25)
+
+
+### Bug Fixes
+
+* fix various issues with admin unit list ([3720666](https://github.com/macite/doubtfire-deploy/commit/3720666fb4105bac274449eb468ce34e0f68bae7))
+
+### [8.0.3](https://github.com/macite/doubtfire-deploy/compare/v8.0.2...v8.0.3) (2024-05-25)
+
+
+### Features
+
+* add 4-character abbreviations ([eb62dfc](https://github.com/macite/doubtfire-deploy/commit/eb62dfc90db836870d6c396727fc43c149808e9d))
+
+### [8.0.2](https://github.com/macite/doubtfire-deploy/compare/v8.0.1...v8.0.2) (2024-05-25)
+
+
+### Bug Fixes
+
+* gradeservice bugs ([fd6eb1c](https://github.com/macite/doubtfire-deploy/commit/fd6eb1cd152b72cf297cbd6bd529579858afc543))
+* gradeservice bugs ([7545eb9](https://github.com/macite/doubtfire-deploy/commit/7545eb92b9353d99ac8d8d7d89982cdadf9688b1))
+
+### [8.0.1](https://github.com/macite/doubtfire-deploy/compare/v8.0.0...v8.0.1) (2024-05-24)
+
+
+### Features
+
+* implement live PDF search that updates dynamically as you type ([b9b9945](https://github.com/macite/doubtfire-deploy/commit/b9b9945346d55392e5ee9a6431d85ae92de1bde5))
+
+
+### Bug Fixes
+
+* fix critical bugs ([356846e](https://github.com/macite/doubtfire-deploy/commit/356846e5c385c484a6034553366965cde95ec78b))
+* fix splashscreen ([2692b7f](https://github.com/macite/doubtfire-deploy/commit/2692b7f4a3e1ca2a5bc4df3b82a9dfd4aa2ec68a))
+
+## [8.0.0](https://github.com/macite/doubtfire-deploy/compare/v8.0.0-6...v8.0.0) (2024-05-23)
+
+
+### Features
+
+* add multi-badge support ([44c1473](https://github.com/macite/doubtfire-deploy/commit/44c1473700a3d7a4a025d68acac5aa61189d8b52))
+* add synchronised multi-badge ([f70ebdc](https://github.com/macite/doubtfire-deploy/commit/f70ebdca92a05e5ca350d4062a8dc8efba9fd681))
+* add working unit-badge ([dd30247](https://github.com/macite/doubtfire-deploy/commit/dd302478e97228e6bfbfdbee0134abb3eabf2587))
+* add working unit-badge ([c7338ff](https://github.com/macite/doubtfire-deploy/commit/c7338ffd88edb457a3443b43ea21706c43231973))
+* qol improvements for unit codes ([f7f928e](https://github.com/macite/doubtfire-deploy/commit/f7f928e485448a69b054dca94f07d623f84e328f))
+* small fixes to home and unit code ([918e804](https://github.com/macite/doubtfire-deploy/commit/918e8047745b489aae1fafdc67720568dd8d829e))
+
+
+### Bug Fixes
+
+* add missing imports ([659b52c](https://github.com/macite/doubtfire-deploy/commit/659b52c82a26b9496a3dba81401b5147d05248ae))
+* change time exceeded to feedback exceeded ([673619d](https://github.com/macite/doubtfire-deploy/commit/673619d99f177d834fba3643171426092e0d05e0))
+* correct task resource upload actions ([5e9c9b1](https://github.com/macite/doubtfire-deploy/commit/5e9c9b1d05d6d6975fd4ba3a3176314ddd7d8514))
+* ensure loading state changed after projects and unit roles load ([9171d0c](https://github.com/macite/doubtfire-deploy/commit/9171d0c2c37c17d26f464f6aa0ba7c479851e6eb))
+* ensure staff task list checks unit exists ([dbb312d](https://github.com/macite/doubtfire-deploy/commit/dbb312dc3c5c9e2be24161914e8d95e1a5c1bc53))
+* ensure unit load updates unit object if it already exists ([e48ffad](https://github.com/macite/doubtfire-deploy/commit/e48ffadf63891212c3e40ab696d54a3935485b08))
+* hide overseer settings if automation disabled ([0c08fe3](https://github.com/macite/doubtfire-deploy/commit/0c08fe3e82a78dd1e91fb44ce6008fb5298c46ee))
+* slide unit code off left side ([8cd57b5](https://github.com/macite/doubtfire-deploy/commit/8cd57b589812fd59c6da4de02246791fb4410959))
+* sort units desc by start date ([9b78856](https://github.com/macite/doubtfire-deploy/commit/9b788561372a3ddf065d3b28e547a2194ef29655))
+* zip upload for overseer ([5ad2085](https://github.com/macite/doubtfire-deploy/commit/5ad2085b2d730235f61e7b7c603727d8b6736cf2))
+
+## [8.0.0-6](https://github.com/macite/doubtfire-deploy/compare/v8.0.0-5...v8.0.0-6) (2024-05-13)
+
+## [8.0.0-5](https://github.com/macite/doubtfire-deploy/compare/v8.0.0-4...v8.0.0-5) (2024-05-13)
+
+## [8.0.0-4](https://github.com/macite/doubtfire-deploy/compare/v8.0.0-3...v8.0.0-4) (2024-05-11)
+
+
+### Features
+
+* add task badge ([b48cd4c](https://github.com/macite/doubtfire-deploy/commit/b48cd4c99333e41c0c1d32531e571d32bb482a81))
+
+
+### Bug Fixes
+
+* (WIP) fix alert service migration ([3d9f4dc](https://github.com/macite/doubtfire-deploy/commit/3d9f4dc05e7a45884dc383e0f5ed4bdb09b0558d))
+* add max length validator and change reason field to text-area ([6227200](https://github.com/macite/doubtfire-deploy/commit/6227200566c3f608c279e92a3f255a7e94148c1d))
+* address linter issues in task.ts ([14e9699](https://github.com/macite/doubtfire-deploy/commit/14e9699bdfe336f1e3f3cce3d722c835d58f3cdb))
+* copy dist browser to nginx html ([08fa919](https://github.com/macite/doubtfire-deploy/commit/08fa91937e028cb3ee093709e5a31f94da44fc33))
+* correct filenames for grotesk fonts ([9bedd81](https://github.com/macite/doubtfire-deploy/commit/9bedd812b12628df9cb32e48cb91a88b5cdf69b1))
+* ensure eula state remains visible ([131540c](https://github.com/macite/doubtfire-deploy/commit/131540ca4b934773afd9f72aa2578579048ed6a2))
+* ensure unit admin shows all units ([02b7a15](https://github.com/macite/doubtfire-deploy/commit/02b7a15bbbd2306a61e344f995dffb72a3915498))
+* fix course progress bar on firefox ([ae5c1e0](https://github.com/macite/doubtfire-deploy/commit/ae5c1e0b5901bae0411cf7bbaa32ee8f340b908a))
+* fix incorrect projcets listed in dropdown ([6a7e478](https://github.com/macite/doubtfire-deploy/commit/6a7e4788b522e5af6331a82ed33e9c9137d2ca86))
+* fix margin issue on dropdown ([c8145f0](https://github.com/macite/doubtfire-deploy/commit/c8145f0972a03e52377e0203cabb2cf6353db8b3))
+* grade and quality point display on task-assessment-card ([7cba502](https://github.com/macite/doubtfire-deploy/commit/7cba502e002143e8255bf0d786551bd270f73f0e))
+* indicate mandatory fields in upload-submission-modal ([e8801e2](https://github.com/macite/doubtfire-deploy/commit/e8801e2a64fe15ad423d9017d10e5e23f6e00eda))
+* only check grade if it exists ([1c213c5](https://github.com/macite/doubtfire-deploy/commit/1c213c53571f79563e9a071e2dd9645598382522))
+* remove unused imports in extension-modal.service ([8081f51](https://github.com/macite/doubtfire-deploy/commit/8081f51b5f28ea511b9f76d026ae63f16153ae2c))
+* use tailwindcss classes ([8d7e160](https://github.com/macite/doubtfire-deploy/commit/8d7e160e2d40c42284ee0c1fc85d6d9e01166cda))
+
+## [8.0.0-3](https://github.com/macite/doubtfire-deploy/compare/v8.0.0-2...v8.0.0-3) (2024-05-02)
+
+
+### Bug Fixes
+
+* reenable eula html fetch ([cda9e52](https://github.com/macite/doubtfire-deploy/commit/cda9e52a259bfaa27e8252f40e579d11d1af280c))
+
+## [8.0.0-2](https://github.com/macite/doubtfire-deploy/compare/v7.0.21...v8.0.0-2) (2024-05-01)
+
+
+### Features
+
+* accept promela files ([df93a69](https://github.com/macite/doubtfire-deploy/commit/df93a69e45d2d9e41b9cf0802d521a3663d7a36c))
+* migrate unit list in all locations ([6651d00](https://github.com/macite/doubtfire-deploy/commit/6651d0011446fdde7179c5173f902ce2e4ea7545))
+* remove misleading progress statement ([63e276c](https://github.com/macite/doubtfire-deploy/commit/63e276c041f77d8b401d24a4f49896cfa2095442))
+
+
+### Bug Fixes
+
+* correct change detection on task def ([55daff2](https://github.com/macite/doubtfire-deploy/commit/55daff234441a242d96de097c2b2912df0c6c9a8))
+* correct npm install for dev container image ([5126c3b](https://github.com/macite/doubtfire-deploy/commit/5126c3ba7fed55217e88c54c25dc70595ec4c666))
+* ensure npm will force install ([f91751e](https://github.com/macite/doubtfire-deploy/commit/f91751eae788bc3f65d33b610ed80c96d3978974))
+* fix firefox-specific bug ([6b6054b](https://github.com/macite/doubtfire-deploy/commit/6b6054bd5c1104a96ccac413a7115009eeba8d2f))
+* remove ngClass ([d1d8c72](https://github.com/macite/doubtfire-deploy/commit/d1d8c72ace21551a68bd4d0a8ba88eabb2ebdb9d))
+* remove plagiarism checks ([21b02fb](https://github.com/macite/doubtfire-deploy/commit/21b02fb7cc616090f1fb2d26f65b336072f9105b))
+* remove the incorrect option from for scrollIntoView() ([9e752fe](https://github.com/macite/doubtfire-deploy/commit/9e752fe9d49df786ceb3e7007cbf0aad57809604))
+* remove unused loading from f-units ([c4c38fa](https://github.com/macite/doubtfire-deploy/commit/c4c38fad4fbdfe248e383cf247f949197ad0a047))
+* typo ([820c56f](https://github.com/macite/doubtfire-deploy/commit/820c56f3a1bc30b7637b98e6f80b406ca350b5b8))
+
+## [8.0.0-1](https://github.com/macite/doubtfire-deploy/compare/v8.0.0-0...v8.0.0-1) (2024-03-21)
+
+
+### Bug Fixes
+
+* update deploy dockerfile ([41a5161](https://github.com/macite/doubtfire-deploy/commit/41a5161b356931eafd8e4caf256f311f10bc8bb4))
+
+## [8.0.0-0](https://github.com/macite/doubtfire-deploy/compare/v7.0.18...v8.0.0-0) (2024-03-21)
+
+
+### Features
+
+* (wip) add similarities notification ([8e4a198](https://github.com/macite/doubtfire-deploy/commit/8e4a198a037de832bbebe96e309c4c8485d076cc))
+* add ability to accept tii eula to model ([0106b01](https://github.com/macite/doubtfire-deploy/commit/0106b01ed249139cbe06096f95a36b5d11bcd0ac))
+* add ability to accept turn it in eula ([380ad1e](https://github.com/macite/doubtfire-deploy/commit/380ad1e93252f8f928893626b65f4dab01813524))
+* add ability to open turnitin viewer ([5248e80](https://github.com/macite/doubtfire-deploy/commit/5248e80622e55b79ce4d7b35f8202ee8099c2dce))
+* add ability to update similarity flag ([de005ee](https://github.com/macite/doubtfire-deploy/commit/de005ee98a270998e2175109783cab72b92e36f3))
+* add dynamic footer ([3c62fe0](https://github.com/macite/doubtfire-deploy/commit/3c62fe06d009c3b752259f50887c625c98a371cd))
+* add empty pdf view to new task dashboard ([9c3cdfb](https://github.com/macite/doubtfire-deploy/commit/9c3cdfbb93711a6ae911ed461651200d8c75db48))
+* add file drop component ([c211003](https://github.com/macite/doubtfire-deploy/commit/c211003004ae6c7505158a65ce2006b219920827))
+* add footer content ([735c43b](https://github.com/macite/doubtfire-deploy/commit/735c43b5c2df7e8f367310ad92ef716fd5140375))
+* add link to student task from inbox ([d4301e0](https://github.com/macite/doubtfire-deploy/commit/d4301e0d1f2f6ec4c563801a7f0d1132884f9989))
+* add mobile inbox view ([56ded70](https://github.com/macite/doubtfire-deploy/commit/56ded707e638ae769665a863ce65acffea5a588a))
+* add multi-file support to f-upload ([d181969](https://github.com/macite/doubtfire-deploy/commit/d181969198e2b7611e3f0e330577b825e99a248f))
+* add new file upload component ([891ab20](https://github.com/macite/doubtfire-deploy/commit/891ab20eb6f1d545ff58d0157fdd9912b9546c9f))
+* add new inbox component ([ec0f62c](https://github.com/macite/doubtfire-deploy/commit/ec0f62c488ae3e99e9487ea1ab87f5bb2f1fbed7))
+* add new pdf-viewer ([617fbd2](https://github.com/macite/doubtfire-deploy/commit/617fbd24f8424541aeb87b16651f06737b570633))
+* add new similarity component ([48ba01c](https://github.com/macite/doubtfire-deploy/commit/48ba01c8d780a04a1f526f89fcd9bc63ef5d4aec))
+* add new task assessment card ([ac3b50f](https://github.com/macite/doubtfire-deploy/commit/ac3b50f29b8a2722d09ad94a2f82bb54c1c32da7))
+* add new task dashboard component ([dc841f9](https://github.com/macite/doubtfire-deploy/commit/dc841f9e7af811a3a56a0c21fd3b3968ec7aead9))
+* add new task due card ([3ade5ea](https://github.com/macite/doubtfire-deploy/commit/3ade5ea34eb3c2c756d7df0f7a6c250fa50290bb))
+* add new task due card content ([c43ea3e](https://github.com/macite/doubtfire-deploy/commit/c43ea3e27abdf253596bfedd5112f5ef7a7b929d))
+* add new task submission card ([6d27690](https://github.com/macite/doubtfire-deploy/commit/6d2769029413f84b73c7c825d16e9a3366142177))
+* add pdf search and zoom ([f83ce57](https://github.com/macite/doubtfire-deploy/commit/f83ce570e80dc20d118288c6d32c2d2a9ca263b5))
+* add resizable inbox panels ([4920e31](https://github.com/macite/doubtfire-deploy/commit/4920e31ce366c3dfb4340ab4da159b176381cf49))
+* add resizable panels to inbox ([5abda03](https://github.com/macite/doubtfire-deploy/commit/5abda039af5b2d3b5e2589c4864b2e1715c5e8c0))
+* add rest of layout to footer ([3b9de7c](https://github.com/macite/doubtfire-deploy/commit/3b9de7cc6d923a0e6431524f2967b5e3bc360a6f))
+* add selected task sheet url ([00a7fb5](https://github.com/macite/doubtfire-deploy/commit/00a7fb516d362d3725b915d012878a9ccf8ef009))
+* add selectedTask service ([02aa41a](https://github.com/macite/doubtfire-deploy/commit/02aa41a34232359d1366d841d1236a068a837ae5))
+* add similarities staff dashboard switch ([1ec0b72](https://github.com/macite/doubtfire-deploy/commit/1ec0b72c26cc27bd4d17376af5b47650d28bbc10))
+* add similarity flags to view ([8c7975c](https://github.com/macite/doubtfire-deploy/commit/8c7975cadd14e6d3390cfa9917983cd01498a69c))
+* add simple project progress bar ([73fda77](https://github.com/macite/doubtfire-deploy/commit/73fda776ee36c6574c1ddc0dc09b958d61de3000))
+* add start of new similarity view ([a1e51b6](https://github.com/macite/doubtfire-deploy/commit/a1e51b6bc7030086a1d7a4d715f23b3e76f7ddb3))
+* add task plagairism warning on inbox ([6bd8620](https://github.com/macite/doubtfire-deploy/commit/6bd8620f5473db4517e38fd0487ab5876f921a36))
+* add teaching period remove break function ([90c6a37](https://github.com/macite/doubtfire-deploy/commit/90c6a3730f84da9e64abec676bcdf66c10b7fc60))
+* add tii action log ([96d982d](https://github.com/macite/doubtfire-deploy/commit/96d982d5fb945bdbf9ea8b6d534a5dd18ab64ad7))
+* add unselected user icon badge in inbox ([794697b](https://github.com/macite/doubtfire-deploy/commit/794697b53d6ee81f57b37b173d03a0688c6993b5))
+* complete mobile task inbox view ([00a4b3f](https://github.com/macite/doubtfire-deploy/commit/00a4b3f1e8f52364a83b6affae34295da4a7af34))
+* disable hover on task inbox for mobile ([a59fd01](https://github.com/macite/doubtfire-deploy/commit/a59fd0153de8b1f9e9b9022d0f6df1032c92f8d1))
+* downgrade task due card ([c342ac2](https://github.com/macite/doubtfire-deploy/commit/c342ac2e3cc4213c2b92499bc4a191485184af37))
+* enhance task search with similarity flags ([65ad918](https://github.com/macite/doubtfire-deploy/commit/65ad91842882e76379033350f90b966d874c6ba4))
+* enhance ui/ux of task inbox screen ([6b275c3](https://github.com/macite/doubtfire-deploy/commit/6b275c3cd5d575a399e901d52a62808238c6d0e4))
+* expand new file uplaoder ([11d798d](https://github.com/macite/doubtfire-deploy/commit/11d798d6a6e5eca4555a7d141e1d11d2a862fcfe))
+* finish new alerts service ([3beb059](https://github.com/macite/doubtfire-deploy/commit/3beb05987e605c9f4270fc0d7bdd95f82bf64007))
+* make all datetime in aus format ([7a0f749](https://github.com/macite/doubtfire-deploy/commit/7a0f749a4328a44c1ffb5692017dfa39a061e1d5))
+* migrate new unit dialog ([0a2a1e9](https://github.com/macite/doubtfire-deploy/commit/0a2a1e9baca6b0553730c1a939b246bf1be178a3))
+* minor improvements to file-drop ([73139be](https://github.com/macite/doubtfire-deploy/commit/73139be83449f50036eedb3520ed2d8daa5da09c))
+* new footer component ([c3b4c18](https://github.com/macite/doubtfire-deploy/commit/c3b4c182921079d6ebc0851ec7e6515e65f1c15b))
+* new grade service ([31073e1](https://github.com/macite/doubtfire-deploy/commit/31073e1dbe963c1e0f2c84139a2c3f746cc31bbb))
+* new student user badge ([97c84d3](https://github.com/macite/doubtfire-deploy/commit/97c84d3016b0e322d54062fae0d46da112146d5d))
+* new task status card ([78218cf](https://github.com/macite/doubtfire-deploy/commit/78218cf6d45f5cac50203f96109d27400fa37686))
+* only download similarity resource on view ([563d102](https://github.com/macite/doubtfire-deploy/commit/563d1024ee7023e4228a9ceef9f556e48e7127d1))
+* progress redesigned inbox ([f1b672b](https://github.com/macite/doubtfire-deploy/commit/f1b672b7495a9086abb88f5e1991cb4c4f7b60c1))
+* register new inbox component ([3d79baa](https://github.com/macite/doubtfire-deploy/commit/3d79baae505e44c401179ae34de4804e8d90b7ba))
+* show TII accepted status in profile ([7b5c3e2](https://github.com/macite/doubtfire-deploy/commit/7b5c3e2c0fe9fcc30f9fffc73d9a942714db7cb2))
+* small change to task view ([f640920](https://github.com/macite/doubtfire-deploy/commit/f6409201e9d4af4f075b4db8559fc1e26f4a374f))
+* small changes to user table ([18957ac](https://github.com/macite/doubtfire-deploy/commit/18957acfc700e941ebb161d9ddb8f5e1ebe1beff))
+* trigger window resize when pdf loads ([044c170](https://github.com/macite/doubtfire-deploy/commit/044c170ebe05e7e3a368df2e8041884d2e23c752))
+* update file viewer to use file download and blobs ([8751123](https://github.com/macite/doubtfire-deploy/commit/87511232ca384a355ddfc5eb396186babd676f92))
+* wip add file uploader component ([48c73f5](https://github.com/macite/doubtfire-deploy/commit/48c73f547892ae3ce12fdac416bf93c3a2c72006))
+
+
+### Bug Fixes
+
+* add activeUntil date mapping to tps ([2cae20a](https://github.com/macite/doubtfire-deploy/commit/2cae20a6b3fa3e5ea8a001ffa40a87263c438b68))
+* add arbitrary task argument to `togglePin` in task inbox ([6e1784f](https://github.com/macite/doubtfire-deploy/commit/6e1784ff52a745330e57f2ccc2a55b3206d535d0))
+* add seperator to naviation on mobile ([fc4f052](https://github.com/macite/doubtfire-deploy/commit/fc4f0527b144fd8f3b6e98b335e629f85fe1bb3b))
+* add the correct enterkeyhint to the comment composer ([569db05](https://github.com/macite/doubtfire-deploy/commit/569db059fc9786363b1b62d7be72e44f711faba3))
+* add unloaded state to progressbar ([2c3a28e](https://github.com/macite/doubtfire-deploy/commit/2c3a28e9718879f55596221517db35bda8c09450))
+* adjust due card layout ([0360a6e](https://github.com/macite/doubtfire-deploy/commit/0360a6e0868e995d7ba5c9091be556dad4bfd474))
+* always display shortened task name in header ([a05c8ff](https://github.com/macite/doubtfire-deploy/commit/a05c8ffd9aef9c865f72458157b465f9de1e07f3))
+* center pins along items in new task inbox ([6b3c0d2](https://github.com/macite/doubtfire-deploy/commit/6b3c0d2b1d5541fe36c6fbd03dfc752f43d03e18))
+* center placeholder text in task inbox search bar & reduce padding on far-right ([ffec9b6](https://github.com/macite/doubtfire-deploy/commit/ffec9b6f4bfc9d2aee6aa762c41bcce1ed1823ba))
+* center student and task name on bottom left screen ([e986199](https://github.com/macite/doubtfire-deploy/commit/e9861992e9e5a40076973a2215bcc919c1777b5d))
+* center view all units button on home page ([9807dfd](https://github.com/macite/doubtfire-deploy/commit/9807dfd1f18e1efc9f882a67ef99f1d198a03ff7))
+* centering of Administration icons on home page ([1043f74](https://github.com/macite/doubtfire-deploy/commit/1043f74e2ca5d23cad8c4d890a202b20ddb4bc37))
+* change display name of student on bottom left screen from being nickname to full name ([5fe7790](https://github.com/macite/doubtfire-deploy/commit/5fe7790e23aec709f8be5a444bf84ebdf77c9ce5))
+* change shown name on messages in chat to be student's full name ([93636c4](https://github.com/macite/doubtfire-deploy/commit/93636c400c1850e20320a57be010347541c5137c))
+* chatbox spacing, placement of messages <> photos, distance between message & name ([dd9cb2a](https://github.com/macite/doubtfire-deploy/commit/dd9cb2ab3bdde886c2f297d8044986427febd366))
+* ensure accepted TII eula details are retained ([e60ae54](https://github.com/macite/doubtfire-deploy/commit/e60ae547121f33edd7cc8d8c5d4afd27a1f90e8c))
+* ensure blobs are freed on destroy ([ee017eb](https://github.com/macite/doubtfire-deploy/commit/ee017eb00a506c81a108ce6dec52f7f91064d350))
+* ensure font is set to roboto ([a6ff4ce](https://github.com/macite/doubtfire-deploy/commit/a6ff4cee9794e37a208af28d7d085182441fa555))
+* ensure loadedUnitRoles is public in global ([b92159f](https://github.com/macite/doubtfire-deploy/commit/b92159ff33cf9537c0ccec50d57a54636315bec4))
+* ensure logout in timeout always signs out ([3380075](https://github.com/macite/doubtfire-deploy/commit/33800759083156682014f0f63bc83a0283ae96fa))
+* ensure mat menu icons have correct tags ([f971ad1](https://github.com/macite/doubtfire-deploy/commit/f971ad1cf7fa56de0f4e97e9533a0567db897da4))
+* ensure only staff need to accept turn it in EULA ([029c40b](https://github.com/macite/doubtfire-deploy/commit/029c40b556bb1709e75547615b2d1a1109997a74))
+* ensure pdf actions loads after pdf loaded ([0425c54](https://github.com/macite/doubtfire-deploy/commit/0425c5465a678509e1a8d719fef39975c4d8e9e5))
+* ensure similarities without files still view ([5794e2f](https://github.com/macite/doubtfire-deploy/commit/5794e2fb345328396517a7d2f945cfabb1c37173))
+* ensure task pdf viewer works ([d3d1bf8](https://github.com/macite/doubtfire-deploy/commit/d3d1bf8564c6e6134130b44df90bef42430f4654))
+* ensure task submission status updated on init ([ca77c92](https://github.com/macite/doubtfire-deploy/commit/ca77c92d251bf4087964886579de642f6f300b9a))
+* ensure that timeout state not re-routed ([c16ee90](https://github.com/macite/doubtfire-deploy/commit/c16ee90c2c372ea1889d3470e2be510aefd2245f))
+* ensure welcome page still can go to timeout ([5253f2e](https://github.com/macite/doubtfire-deploy/commit/5253f2eb6fce1de1b6df585589f1cc2594ac87a8))
+* excessive spacing below unit tags on home page ([1bfaa21](https://github.com/macite/doubtfire-deploy/commit/1bfaa216440d880d82875f519e9b3f0f59ddcc23))
+* fix few type errors ([8a96e5b](https://github.com/macite/doubtfire-deploy/commit/8a96e5b33a095cd70222719b33d7dc853d67f347))
+* fix file drop to support click to upload ([599cd9e](https://github.com/macite/doubtfire-deploy/commit/599cd9e82c1518113374f0675fc54dd1483fcc85))
+* fix footer height not resetting on similarity ([19c43d7](https://github.com/macite/doubtfire-deploy/commit/19c43d7945c5848d1ca511e146fefdfa9735c49b))
+* fix incorrect closing tag ([ad28818](https://github.com/macite/doubtfire-deploy/commit/ad28818fba9dac552a2adf14785c5bbf98b4e206))
+* fix page height recalculation trigger ([8f219c3](https://github.com/macite/doubtfire-deploy/commit/8f219c31e9a3461626a9344352c4d7aa68c57c43))
+* fix various build issues ([8b947ae](https://github.com/macite/doubtfire-deploy/commit/8b947aeea1cb0dfa4bac8e22ff5bdb2a9a82ec49))
+* fix various task comment composer/display issues ([5670bf1](https://github.com/macite/doubtfire-deploy/commit/5670bf1dcd77e8010fe88bf24662ec96e4e29847))
+* hide extension for staff if can't apply ([1699e50](https://github.com/macite/doubtfire-deploy/commit/1699e50f2d7424361e0f7d5a173bdd9fffd87c24))
+* initialise inbox on return ([1249e96](https://github.com/macite/doubtfire-deploy/commit/1249e96f53ef9544cd81e3f2c3f1d5acf4a628f3))
+* initialise inbox view ([1ae4ac9](https://github.com/macite/doubtfire-deploy/commit/1ae4ac9b304348f5528368d87ded3c26e8e5cf40))
+* issues with UI in photo spacing and text alignment ([716ead3](https://github.com/macite/doubtfire-deploy/commit/716ead3497a8a2ecd1050484bd289c003a47dffa))
+* make photo in chatbox fall to bottom ([aa4e814](https://github.com/macite/doubtfire-deploy/commit/aa4e81446546f1e62b08fd74ba8ac1e563e5efc8))
+* make read receipt smaller to fix message alignment ([c869458](https://github.com/macite/doubtfire-deploy/commit/c869458cd45334e009ae83ab3c911033bc1987b9))
+* null input checks on migrated cards ([7a192af](https://github.com/macite/doubtfire-deploy/commit/7a192af22bf1eef026d05a16edcc3a97c6abbebf))
+* pass selected task to footer's user icon ([28782b1](https://github.com/macite/doubtfire-deploy/commit/28782b134cb03f5c334df48e8887f81393661bda))
+* photo from below message to being inline ([0e97a03](https://github.com/macite/doubtfire-deploy/commit/0e97a03a491f4137ec301dd18a42130a845ebe37))
+* reduce user badge clickable region ([7305f86](https://github.com/macite/doubtfire-deploy/commit/7305f866a9582e10dd870fad1861de4ce209a4e0))
+* regenerate user icons on input changes ([257ab4e](https://github.com/macite/doubtfire-deploy/commit/257ab4eb63ec15de545193f8b60176ac33e17b01))
+* remove call to teaching period name ([1e2e019](https://github.com/macite/doubtfire-deploy/commit/1e2e0198a32acd59c11932fde2a2f14a5bacf48f))
+* remove dupe case in transition hook ([9808798](https://github.com/macite/doubtfire-deploy/commit/98087981e06296a1eb9a17f527c49ab9b27caef3))
+* remove incorrect aria hidden tags ([46bfe21](https://github.com/macite/doubtfire-deploy/commit/46bfe2109e4b912a146201572671ff759fc02226))
+* remove no PDF text from overlapping with icon ([c6543cf](https://github.com/macite/doubtfire-deploy/commit/c6543cf2f9be9644b7382eeb64699e15e461447a))
+* remove old teaching periods from home ([4f4a617](https://github.com/macite/doubtfire-deploy/commit/4f4a6175f39ac9df75c7efe920ffcc15576cc98e))
+* remove pct copy data ([6bb96b4](https://github.com/macite/doubtfire-deploy/commit/6bb96b49f436a7d4bd6f5e587b30a8528e6d75b7))
+* remove user badge from old task panel ([9129956](https://github.com/macite/doubtfire-deploy/commit/9129956f41b78a8e3e84ffe9a124a7941d8905c1))
+* require eula for any user ([daf7ba9](https://github.com/macite/doubtfire-deploy/commit/daf7ba9d9056c262cafc871b623c59a0ef837274))
+* resolved issue with intelligent discussion ([18cd1fc](https://github.com/macite/doubtfire-deploy/commit/18cd1fc6f0443c353fc5f49c81dafd2428901cbc))
+* resolved issue with intelligent-discussion-dialog component rendering ([1efa758](https://github.com/macite/doubtfire-deploy/commit/1efa758fd813751788cc79fe30e01ca8a09013d8))
+* shrink header menu on small screens ([580445d](https://github.com/macite/doubtfire-deploy/commit/580445d25573bf00671246269c61685917c34867))
+* spacing (of own/person messaging) is now right/left aligned respectively ([7d10aa0](https://github.com/macite/doubtfire-deploy/commit/7d10aa0f58e2d7c8e8fd45439d8c464fabe3508c))
+* split header onto seperate lines on small screens ([d8a9016](https://github.com/macite/doubtfire-deploy/commit/d8a90168e58ef8d71f31f76d999d4f6a59232987))
+* switch max pct to similarity flag in project ([094b418](https://github.com/macite/doubtfire-deploy/commit/094b418c1bff709e755bf7c61207ebf22bfc6106))
+* task explorer 405 error ([7ea516c](https://github.com/macite/doubtfire-deploy/commit/7ea516ce8e346d46e8acf68c8b41fa81485515ba))
+* task submission pdf downloading ([b0becb4](https://github.com/macite/doubtfire-deploy/commit/b0becb4c76e4e45f10782561a6b53a322eb43665))
+* tweak theme.scss file ([393770b](https://github.com/macite/doubtfire-deploy/commit/393770b35d1688d27bce47e1d6b94735a1822494))
+* update package lock ([674f3c7](https://github.com/macite/doubtfire-deploy/commit/674f3c70bd0a4c8c33e25d34beeab76c29f56325))
+* use angular 15 ([d0104cc](https://github.com/macite/doubtfire-deploy/commit/d0104cc57edda68a1a165bdf1fd7cf75bd74ec68))
+* use correct task object in task pinning ([a5fceb0](https://github.com/macite/doubtfire-deploy/commit/a5fceb048b931dbd5ccc3ad5d4fd898b146284fb))
+* use correct theming import ([b0d3232](https://github.com/macite/doubtfire-deploy/commit/b0d3232eaed2096296cf025437dda26ddcd595e0))
+* use disabled blinding ([628ca55](https://github.com/macite/doubtfire-deploy/commit/628ca55b4e8f569f751b78ead7a50fa9e086ccec))
+* use new state name in task dropdown ([3c2fe44](https://github.com/macite/doubtfire-deploy/commit/3c2fe444d398bcedb5c998a47683d04279996680))
+* use onChanges rather than input setter ([8069c21](https://github.com/macite/doubtfire-deploy/commit/8069c21d9ecfc412dea37cade8e8a37e79730f01))
+
 ### [8.0.9](https://github.com/doubtfire-lms/doubtfire-deploy/compare/v8.0.8...v8.0.9) (2024-05-31)
 
 
@@ -328,8 +872,15 @@ All notable changes to this project will be documented in this file. See [standa
 * use tailwindcss classes ([8d7e160](https://github.com/macite/doubtfire-deploy/commit/8d7e160e2d40c42284ee0c1fc85d6d9e01166cda))
 
 
-### [7.0.23](https://github.com/macite/doubtfire-deploy/compare/v7.0.22...v7.0.23) (2024-06-04)
+### [7.0.24](https://github.com/macite/doubtfire-deploy/compare/v7.0.23...v7.0.24) (2024-06-05)
 
+### Bug Fixes
+
+* ensure download blob supports 206 responses ([6445f9f](https://github.com/macite/doubtfire-deploy/commit/6445f9f998db70fbe9b9abf723dc17fd298b5d2f))
+
+
+
+### [7.0.23](https://github.com/macite/doubtfire-deploy/compare/v7.0.22...v7.0.23) (2024-06-04)
 
 ### Bug Fixes
 

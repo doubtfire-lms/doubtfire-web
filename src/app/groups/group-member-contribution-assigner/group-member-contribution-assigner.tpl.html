@@ -8,29 +8,29 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="contrib in team.memberContributions | orderBy:memberSortOrder:reverse">
-        <td>{{contrib.project.student.name}}</td>
+      <tr ng-repeat="member in team.members | orderBy:memberSortOrder:reverse">
+        <td>{{member.student_name}}</td>
         <td class="text-left">
-          <grade-icon grade="contrib.project.targetGrade"></grade-icon>
+          <grade-icon [index]="member.targetGrade"></grade-icon>
         </td>
         <td>
           <rating
             class="group-member-contribution-rating"
-            ng-click="checkClearRating(contrib)"
-            ng-model="contrib.rating"
-            on-hover="hoveringOver(contrib, value)"
-            on-leave="hoveringOver(contrib, null)"
+            ng-click="checkClearRating(member)"
+            ng-model="member.rating"
+            on-hover="hoveringOver(member, value)"
+            on-leave="hoveringOver(member, null)"
             max="numStars"
             state-on="'fa fa-child rating-outline'"
             state-off="'fa fa-child rating-disabled'">
           </rating>
           <span
-            class="label {{percentClass(contrib.percent)}}"
-            ng-show="contrib.overStar">
-            <span ng-show="contrib.percent > 0">
-              {{contrib.percent}} % effort
+            class="label {{percentClass(member.percent)}}"
+            ng-show="member.overStar">
+            <span ng-show="member.percent > 0">
+              {{member.percent}} % effort
             </span>
-            <span ng-hide="contrib.percent > 0">
+            <span ng-hide="member.percent > 0">
               No effort
             </span>
           </span>

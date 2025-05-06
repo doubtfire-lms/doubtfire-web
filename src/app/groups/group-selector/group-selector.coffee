@@ -195,11 +195,12 @@ angular.module('doubtfire.groups.group-selector', [])
     # Toggle lockable group
     $scope.toggleLocked = (group) ->
       group.locked = !group.locked
-      $scope.unit.updateGroup(group,
-        (success) ->
+      newGroupService.update(group).subscribe({
+        next: (success) ->
           group.locked = success.locked
           alertService.success( "Group updated", 2000)
-      )
+        error: () -> alertService.error( "Failed to lock group. #{message}", 6000)
+      })
 
     # Watch selected group set changes
     listeners.push $scope.$on 'UnitGroupSetEditor/SelectedGroupSetChanged', (evt, args) ->

@@ -1,0 +1,64 @@
+<div class="flex flex-col gap-4">
+  <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormEnabled">
+    Enable test for task
+  </mat-checkbox>
+
+  @if (taskDefinition.scormEnabled) {
+    <f-file-drop
+      mode="event"
+      (filesDropped)="uploadScormData($event)"
+      accept="application/zip"
+      [desiredFileName]="'SCORM zip'"
+    />
+    @if (taskDefinition.hasScormData) {
+      <div class="flex flex-row gap-4 pt-4">
+        <button mat-flat-button color="warn" (click)="removeScormData()" class="flex-grow me-4">
+          Delete SCORM Zip
+        </button>
+        <button mat-flat-button color="accent" (click)="downloadScormData()" class="flex-grow ms-4 me-4">
+          Download SCORM Zip
+        </button>
+        <button mat-flat-button color="accent" (click)="previewScormTest()" class="flex-grow me-4">
+          Preview SCORM Test
+        </button>
+      </div>
+    }
+
+    <div class="flex-grow flex flex-row gap-4 pt-4">
+      <div class="basis-1/2">
+        <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormAllowReview">
+          Allow students to review completed test attempt
+        </mat-checkbox>
+        <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormBypassTest">
+          Allow file upload regardless of test pass status
+        </mat-checkbox>
+      </div>
+      <mat-form-field appearance="outline" class="basis-1/2">
+        <mat-label>Limit to this number of attempts - 0 is unlimited</mat-label>
+        <input
+          matInput
+          min="0"
+          max="100"
+          type="number"
+          [(ngModel)]="taskDefinition.scormAttemptLimit"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="flex-grow flex flex-row gap-4 pt-4">
+      <mat-checkbox
+        matInput
+        required
+        [(ngModel)]="taskDefinition.scormTimeDelayEnabled"
+        disabled
+        class="basis-1/2"
+      >
+        Enable incremental time delays between test attempts
+      </mat-checkbox>
+      <span class="basis-1/2" disabled
+        >If enabled, first 2 attempts can be completed immediately. Subsequently, a time delay will
+        be added, increasing by 2 hours every attempt made.</span
+      >
+    </div>
+  }
+</div>

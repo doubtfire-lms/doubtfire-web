@@ -38,7 +38,7 @@
       <td class="student-id" ng-show="unitRole">{{member.student.username || "N/A"}}</td>
       <td class="student-name">{{member.student.name}}</td>
       <td ng-show="unitRole" class="student-grade text-left">
-        <grade-icon grade="member.targetGrade"></grade-icon>
+        <grade-icon [index]="member.targetGrade"></grade-icon>
       </td>
       <td class="actions" ng-if="canRemoveMembers">
         <button ng-click="removeMember(member)" class="btn btn-sm btn-danger" ng-hide="project">

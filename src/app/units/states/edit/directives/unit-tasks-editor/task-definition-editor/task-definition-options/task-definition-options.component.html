@@ -18,7 +18,7 @@
 
   <div class="flex-grow flex flex-row gap-4">
     <mat-form-field appearance="outline" class="basis-1/2">
-      <mat-label>Maximum Score</mat-label>
+      <mat-label>Quality Stars</mat-label>
       <input
         matInput
         min="0"
@@ -27,6 +27,9 @@
         [(ngModel)]="taskDefinition.maxQualityPts"
       />
     </mat-form-field>
-    <span class="basis-1/2">Provide a score alongside the task status. We recommend avoiding this practice.</span>
+    <span class="basis-1/2"
+      >Provide a number of stars alongside the task status. Make sure you have a clear reason for
+      each star within your task description.</span
+    >
   </div>
 </div>

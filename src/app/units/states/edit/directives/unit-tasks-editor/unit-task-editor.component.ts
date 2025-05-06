@@ -8,6 +8,7 @@ import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
 import { AlertService } from 'src/app/common/services/alert.service';
+import { addWeeks } from 'date-fns';
 
 @Component({
   selector: 'f-unit-task-editor',
@@ -183,7 +184,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     task.abbreviation = abbr;
     task.description = 'New Description';
     task.startDate = new Date();
-    task.targetDate = new Date();
+    task.targetDate = addWeeks(new Date(), 2);
     task.uploadRequirements = [];
     task.weighting = 4;
     task.targetGrade = 0;

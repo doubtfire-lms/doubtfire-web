@@ -1,6 +1,6 @@
 import {User, UserService} from 'src/app/api/models/doubtfire-model';
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {StateService, UIRouter, UIRouterGlobals} from '@uirouter/angular';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
@@ -190,5 +190,13 @@ export class AuthenticationService {
       this.alertService.error('Authentication timed out', 6000);
       setTimeout(() => this.router.stateService.go('timeout'), 500);
     }
+  }
+
+  public getScormToken(): Observable<string> {
+    return this.httpClient.get(this.AUTH_URL + '/scorm').pipe(
+      map((response) => {
+        return response['scorm_auth_token'];
+      }),
+    );
   }
 }

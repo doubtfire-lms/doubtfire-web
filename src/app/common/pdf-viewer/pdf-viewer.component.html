@@ -1,27 +1,67 @@
 <div id="pdfContainer">
-  <div id="pdfActions" [hidden]="!loaded">
-    <form #loginForm="ngForm">
-      <mat-form-field floatLabel="never" appearance="outline" class="pdf-form-field" ngSubmit>
-        <mat-icon matPrefix>search</mat-icon>
-        <input matInput type="text" placeholder="Search PDF" [(ngModel)]="pdfSearchString" (ngModelChange)="searchPdf(pdfSearchString)" name="pdfSearchString" />
+  <div id="actionBar">
+    <div id="pdfViewActions" [hidden]="!pdfBlobUrl">
+      <button mat-icon-button aria-label="Switch viewer" (click)="toggleNativePdfViewer()">
+        @if (useNativePdfViewer) {
+          <mat-icon>toggle_on</mat-icon>
+        } @else {
+          <mat-icon>toggle_off</mat-icon>
+        }
+      </button>
+      <button mat-icon-button aria-label="Download pdf" (click)="downloadPdf()">
+        <mat-icon>download</mat-icon>
+      </button>
+    </div>
+    <div id="pdfActions" [hidden]="!loaded || useNativePdfViewer">
+      <form #loginForm="ngForm">
+        <mat-form-field floatLabel="never" appearance="outline" class="pdf-form-field" ngSubmit>
+          <mat-icon matPrefix>search</mat-icon>
+          <input
+            matInput
+            type="text"
+            placeholder="Search PDF"
+            [(ngModel)]="pdfSearchString"
+            (ngModelChange)="searchPdf(pdfSearchString)"
+            name="pdfSearchString"
+          />
 
-        <button matSuffix mat-icon-button type="button" (click)="zoomOut()" aria-label="Zoom in PDF button">
-          <mat-icon>zoom_out</mat-icon>
-        </button>
-        <button matSuffix mat-icon-button type="button" (click)="zoomIn()" aria-label="Zoom in PDF button">
-          <mat-icon>zoom_in</mat-icon>
-        </button>
-      </mat-form-field>
-    </form>
+          <button
+            matSuffix
+            mat-icon-button
+            type="button"
+            (click)="zoomOut()"
+            aria-label="Zoom in PDF button"
+          >
+            <mat-icon>zoom_out</mat-icon>
+          </button>
+          <button
+            matSuffix
+            mat-icon-button
+            type="button"
+            (click)="zoomIn()"
+            aria-label="Zoom in PDF button"
+          >
+            <mat-icon>zoom_in</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </div>
   </div>
+
   @if (pdfBlobUrl) {
-  <pdf-viewer
-    [zoom]="zoomValue"
-    [src]="pdfBlobUrl"
-    [render-text]="true"
-    [original-size]="false"
-    (after-load-complete)="onLoaded()"
-    (page-rendered)="loaded = true"
-  ></pdf-viewer>
+    @if (useNativePdfViewer) {
+      <object [data]="pdfBlobUrl | safe" *ngIf="pdfBlobUrl"></object>
+    } @else {
+      <pdf-viewer
+        [zoom]="zoomValue"
+        [src]="pdfBlobUrl"
+        [render-text]="true"
+        [original-size]="false"
+        (after-load-complete)="onLoaded()"
+        (page-rendered)="loaded = true"
+      ></pdf-viewer>
+    }
+  } @else {
+    <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
   }
 </div>
