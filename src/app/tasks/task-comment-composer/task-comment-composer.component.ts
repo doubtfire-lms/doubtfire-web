@@ -210,6 +210,7 @@ export class TaskCommentComposerComponent
   onInputChange(event: Event) {
     const target = event.target as HTMLElement;
     const text = target.innerText;
+    const raw = target.innerText;
 
     // If user is typing something new after submission, reset the submitted status
     if (this.task) {
@@ -230,8 +231,8 @@ export class TaskCommentComposerComponent
         }
       }
 
-      const key = this.getDraftKey(this.task);
-      this.taskDraftContents.set(key, text);
+      const draftKey = this.getDraftKey(this.task);
+      this.taskDraftContents.set(draftKey, raw);
     }
 
     this.saveCurrentDraft();
@@ -251,34 +252,43 @@ export class TaskCommentComposerComponent
     return `${this.DRAFT_KEY_PREFIX}${projectId}_${definitionId}`;
   }
 
+  private hasContent(raw: string): boolean {
+    return raw.replace(/\s+/g, '').length > 0;
+  }
+
   // Update saveDraftForTask to use the taskDraftContents map
-  private saveDraftForTask(task: Task) {
+  private saveDraftForTask(task: Task): void {
     if (!task) {
       return;
     }
 
+    const draftKey = this.getDraftKey(task);
+
     try {
-      const draftKey = this.getDraftKey(task);
 
-      // Get text from map for this specific task
-      let text: string;
-
-      // If it's the current task, get from input directly
-      if (this.task && this.task.id === task.id) {
-        text = this.input?.first?.nativeElement?.innerText?.trim() || '';
+      let raw: string;
+      if (this.task?.id === task.id && this.input.first) {
+        raw = this.input.first.nativeElement.innerText;
       } else {
-        // Otherwise get from our map
-        text = this.taskDraftContents.get(draftKey) || '';
+        raw = this.taskDraftContents.get(draftKey) ?? '';
       }
 
-      // Rest of the method remains the same
-      if (!text) {
+
+      if (!this.hasContent(raw)) {
+        console.log('No text to save for task', task.id ?? 'without ID');
+        console.log('Removing draft from localStorage, key:', draftKey);
+        this.taskDraftContents.delete(draftKey);
+        localStorage.removeItem(draftKey);
         return;
       }
 
-
+      const text = raw.trim();
+      console.log('Saving draft for', draftKey, 'preview:', text);
+      this.taskDraftContents.set(draftKey, text);
       localStorage.setItem(draftKey, text);
+
     } catch (error) {
+      console.error('saveDraftForTask error:', error);
     }
   }
 
@@ -317,6 +327,7 @@ export class TaskCommentComposerComponent
         }
 
         this.input.first.nativeElement.innerText = draft;
+        this.taskDraftContents.set(draftKey, draft);
         this.isDraftLoaded = true;
         this.cdRef.detectChanges();
 

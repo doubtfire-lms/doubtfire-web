@@ -1,3 +1,7 @@
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+
+
+
 @mixin dropdown-selector {
   height: 100%;
   padding-left: 0px;
@@ -33,7 +37,7 @@
     margin-top: 0px;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
-    @media (max-width: $screen-sm) {
+    @media (max-width: $screen-sm-min) {
       position: relative;
       bottom: 0;
       left: 0;
