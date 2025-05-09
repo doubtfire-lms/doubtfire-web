@@ -35,3 +35,86 @@
     }
   }
 }
+
+body.theme-black-and-white {
+  background-color: #ffffff;
+  color: #000000;
+
+  .mat-mdc-form-field,
+  .mat-mdc-input-element,
+  .mat-mdc-select,
+  .mat-mdc-option,
+  .mat-mdc-button,
+  .mat-mdc-raised-button,
+  .mat-mdc-flat-button {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .mat-mdc-form-field-outline,
+  .mdc-notched-outline {
+    border-color: #000000 !important;
+  }
+
+  .mat-mdc-checkbox .mdc-checkbox__background {
+    border-color: #000000 !important;
+  }
+
+  .mat-mdc-checkbox .mdc-checkbox__checkmark-path {
+    stroke: #000000 !important;
+  }
+
+  .mat-mdc-button,
+  .mat-mdc-raised-button,
+  .mat-mdc-flat-button {
+    background-color: #eeeeee !important;
+    color: #000000 !important;
+  }
+
+  .mat-mdc-snack-bar-container {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+
+  .mat-mdc-option.mat-mdc-selected {
+    background-color: #e0e0e0 !important;
+  }
+
+  .mat-mdc-option:hover {
+    background-color: #f0f0f0 !important;
+  }
+
+  .mat-mdc-label {
+    color: #000000 !important;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper,
+  .mat-mdc-hint {
+    color: #666666 !important;
+  }
+  .cdk-overlay-container,
+.cdk-overlay-pane {
+  background-color: transparent !important;
+  color: #000000 !important;
+}
+
+.mat-mdc-select-panel {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+}
+
+.mat-mdc-option {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.mat-mdc-option:hover {
+  background-color: #f0f0f0 !important;
+}
+
+.mat-mdc-option.mat-mdc-selected {
+  background-color: #e0e0e0 !important;
+  font-weight: 600;
+}
+}

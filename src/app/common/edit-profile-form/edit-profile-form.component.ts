@@ -36,6 +36,9 @@ export class EditProfileFormComponent implements OnInit {
   public externalName = this.constants.ExternalName;
   public initialFirstName: string;
   public formPronouns = { pronouns: '' };
+  public themes = ['default', 'black-and-white'];
+  public selectedTheme: 'default' | 'black-and-white' = 'default';
+
   public get customPronouns(): boolean {
     return this.formPronouns.pronouns === '__customPronouns';
   }
@@ -48,6 +51,9 @@ export class EditProfileFormComponent implements OnInit {
     if (this.userService.isAnonymousUser()) {
       this.state.go('sign_in');
     }
+
+    this.selectedTheme = this.user.themePreference || 'default';
+    this.applyTheme(this.selectedTheme);
 
     this.user.optInToResearch = false;
     this.user.receiveFeedbackNotifications = true;
@@ -78,9 +84,16 @@ export class EditProfileFormComponent implements OnInit {
     return this.constants.IsTiiEnabled.value;
   }
 
+  public applyTheme(theme: 'default' | 'black-and-white'): void {
+    document.body.classList.remove('theme-default', 'theme-black-and-white');
+    document.body.classList.add(`theme-${theme}`);
+  }
+
   public submit(): void {
     this.user.pronouns = this.customPronouns ? this.user.pronouns : this.formPronouns.pronouns;
     this.user.hasRunFirstTimeSetup = true;
+    this.user.themePreference = this.selectedTheme;
+    this.applyTheme(this.selectedTheme);
 
     if (this.newUser) {
       this.userService.create(this.user).subscribe({

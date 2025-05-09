@@ -24,6 +24,7 @@ export class User extends Entity {
   authenticationToken: string;
   pronouns: string | null;
   acceptedTiiEula: boolean;
+  themePreference: 'default' | 'black-and-white';
 
   public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
     return {
