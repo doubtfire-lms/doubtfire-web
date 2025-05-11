@@ -1,0 +1,54 @@
+<div class="group-member-contribution-assigner">
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th class="text-blue-500 font-bold text-lg">
+          <button type="button" (click)="sortBy('project.student.name')">Team Member</button>
+        </th>
+        <th class="text-blue-500 font-bold text-lg text-center relative left-[-6rem]">
+          <button type="button" (click)="sortBy('project.targetGrade')">Target Grade</button>
+        </th>
+        <th class="col-sm-4 text-blue-500 font-bold text-lg">
+          <button type="button" (click)="sortBy('rating')">Contribution</button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let member of team.memberContributions">
+        <td>{{ member.project.student.name }}</td>
+        <td class="text-center relative left-[-6rem]">
+          <grade-icon [index]="member.project.targetGrade"></grade-icon>
+        </td>
+        <td>
+          <span class="group-member-contribution-rating">
+            <ng-container *ngFor="let icon of [].constructor(numStars); let i = index">
+              <mat-icon
+                (click)="member.rating = i + 1; hoveringOver(member, i + 1)"
+                (mouseenter)="hoveringOver(member, i + 1)"
+                (mouseleave)="hoveringOver(member, null)"
+                [ngClass]="{
+                  'text-amber-400': (i + 1) <= member.rating,
+                  'text-gray-300': (i + 1) > member.rating
+                }"
+                class="text-4xl mr-1 align-middle cursor-pointer"
+              >
+                person
+              </mat-icon>
+            </ng-container>
+          </span>
+          <span
+            class="label"
+            [ngClass]="percentClass(member.percent)"
+            *ngIf="member.overStar > 0">
+            <span *ngIf="member.percent > 0">
+              {{ member.percent }} % effort
+            </span>
+            <span *ngIf="member.percent <= 0">
+              No effort
+            </span>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
