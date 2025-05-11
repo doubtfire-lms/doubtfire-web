@@ -1,0 +1,51 @@
+<div class="task-ilo-alignment-rater" [ngClass]="{ 'colorful': colorful }">
+  <div class="rating-area" *ngIf="!compact">
+    <ng-container *ngFor="let i of [].constructor(max); let idx = index">
+      <mat-icon
+        (mouseenter)="setHoverValue(idx + 1)"
+        (mouseleave)="setHoverValue(null)"
+        (click)="onRatingChange(idx + 1)"
+        [ngClass]="{
+          'selected': (hoveringOver || ngModel?.rating) >= idx + 1,
+          'unselected': (hoveringOver || ngModel?.rating) < idx + 1
+        }"
+      >
+
+      </mat-icon>
+    </ng-container>
+  </div>
+
+  <div *ngIf="!hideLabels && selectedTooltip && !showTooltips && !compact" class="text-center rating-static-tooltip">
+    <ng-container *ngIf="getCurrentRating() !== 0; else noRatingText">
+      <span
+        class="badge"
+        [ngClass]="'rating-' + getCurrentRating()"
+      >
+        {{ tooltips[getCurrentRating()] }}
+      </span>
+    </ng-container>
+
+    <ng-template #noRatingText>
+      <span class="text-muted">
+        {{ tooltips[0] || 'This task is not related to this outcome at all' }}
+      </span>
+    </ng-template>
+  </div>
+
+  <div *ngIf="compact" class="compact-rating-wrapper">
+    <div
+      [ngClass]="ngModel?.rating > 0 ? 'compact-badge rating-' + ngModel.rating : 'compact-badge rating-zero'"
+      matTooltip="{{ tooltips[ngModel?.rating] }}"
+      matTooltipPosition="top"
+    >
+      <ng-container *ngIf="ngModel?.rating > 0; else zeroCircle">
+        {{ ngModel?.rating }}
+      </ng-container>
+      <ng-template #zeroCircle>
+        <mat-icon class="zero-icon">radio_button_unchecked</mat-icon>
+      </ng-template>
+    </div>
+  </div>
+
+
+</div>
