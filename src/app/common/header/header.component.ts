@@ -8,6 +8,7 @@ import { UserService } from 'src/app/api/services/user.service';
 import { AuthenticationService, Project, Task, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
 import { Subscription } from 'rxjs';
 import { MediaObserver } from 'ng-flex-layout';
+import { DoubtfireConstants, LogoSettings } from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,7 @@ import { MediaObserver } from 'ng-flex-layout';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   task: Task;
-  data: { isTutor: boolean } = {
+  data: {isTutor: boolean} = {
     isTutor: false,
   };
   unitRoles: UnitRole[];
@@ -30,6 +31,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentView: ViewType;
   showHeader = true;
 
+  logoSettings: LogoSettings = {
+    hasLogo: false,
+    logoLinkUrl: '/assets/images/institution-logo.png',
+    logoUrl: null,
+  };
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -41,6 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthenticationService,
     protected media: MediaObserver,
+    protected doubtfireConstants: DoubtfireConstants,
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +57,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.showHeader = shouldShow;
         },
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        error: (err) => {},
+        error: (err) => {
+          console.log(`Error showing header: ${err}`);
+        },
       }),
     );
 
@@ -64,7 +73,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
             .transform(this.unitRoles)
             .filter((role) => this.isUniqueRole(role));
         },
-        error: (err) => {},
+        error: (err) => {
+          console.log(`Error fetching unit roles: ${err}`);
+        },
       }),
     );
 
@@ -74,7 +85,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (projects == null) return;
           this.projects = projects.filter((project) => project.unit.myRole === 'Student');
         },
-        error: (err) => {},
+        error: (err) => {
+          console.log(`Error fetching projects: ${err}`);
+        },
       }),
     );
 
@@ -94,7 +107,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
         },
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        error: (_err) => {},
+        error: (err) => {
+          console.log(`Error on switching view and entity: ${err}`);
+        },
+      }),
+    );
+
+    // Subscribe to logo changes
+    this.subscriptions.push(
+      this.doubtfireConstants.LogoSettings.subscribe({
+        next: (settings) => {
+          this.logoSettings = settings;
+        },
+        error: (err) => {
+          console.log(`Error getting settings: ${err}`);
+        }
       }),
     );
   }

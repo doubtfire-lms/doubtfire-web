@@ -281,7 +281,7 @@ export class Task extends Entity {
         return `${diff} ${data.period.charAt(0).toUpperCase() + data.period.substring(1)}`;
       } else if (diff === 1 && data.period !== 'weeks') {
         return `1 ${
-          data.period.charAt(0).toUpperCase() + data.period.substring(1, data.period.length - 2)
+          data.period.charAt(0).toUpperCase() + data.period.slice(1, -1)
         }`;
       }
     }

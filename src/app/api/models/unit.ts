@@ -23,6 +23,8 @@ import {
   TutorialStreamService,
   UnitRoleService,
   D2lAssessmentMappingService,
+  OverseerImage,
+  OverseerImageService,
 } from './doubtfire-model';
 import {LearningOutcome} from './learning-outcome';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -53,6 +55,7 @@ export class Unit extends Entity {
 
   assessmentEnabled: boolean;
   overseerImageId: number = null; // image needs to be lazy loadaed
+  private _overseerImage: OverseerImage;
 
   autoApplyExtensionBeforeDeadline: boolean;
   sendNotifications: boolean;
@@ -444,6 +447,15 @@ export class Unit extends Entity {
 
   public get groupSets(): readonly GroupSet[] {
     return this.groupSetsCache.currentValues;
+  }
+
+  public set overseerImage(image: OverseerImage) {
+    this._overseerImage = image;
+    this.overseerImageId = image.id;
+  }
+
+  public get overseerImage(): OverseerImage {
+    return this._overseerImage;
   }
 
   public get overseerEnabled(): boolean {

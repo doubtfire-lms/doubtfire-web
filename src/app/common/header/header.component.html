@@ -5,6 +5,12 @@
     style="min-height: 85px"
   >
     @if (!media.isActive('xs')) {
+      @if (logoSettings.hasLogo) {
+        <a [href]="logoSettings.logoLinkUrl" class="mx-6">
+          <img [src]="logoSettings.logoUrl" style="height: 32px" />
+        </a>
+      }
+
       <a uiSref="home" class="pt-4">
         <mat-icon
           uiSref="home"

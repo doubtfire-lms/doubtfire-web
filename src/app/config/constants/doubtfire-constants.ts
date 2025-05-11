@@ -6,9 +6,18 @@ import API_URL from 'src/app/config/constants/apiURL';
 
 interface SettingsResponseFormat {
   externalName: string;
+  hasLogo: boolean;
+  logoUrl: string;
+  logoLinkUrl: string;
   overseerEnabled: boolean;
   tiiEnabled: boolean;
   d2lEnabled: boolean;
+}
+
+export interface LogoSettings {
+  hasLogo: boolean;
+  logoUrl: string;
+  logoLinkUrl: string;
 }
 
 interface SignOutUrlResponseFormat {
@@ -44,6 +53,15 @@ export class DoubtfireConstants {
   public IsD2LEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   /**
+   * Details on the logo
+   */
+  public LogoSettings: BehaviorSubject<LogoSettings> = new BehaviorSubject<LogoSettings>({
+    hasLogo: false,
+    logoUrl: '/assets/images/institution-logo.png',
+    logoLinkUrl: '/',
+  });
+
+  /**
    * Whether or not the TurnItIn integration is enabled.
    */
   public IsTiiEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -73,6 +91,12 @@ export class DoubtfireConstants {
       this.IsOverseerEnabled.next(result.overseerEnabled);
       this.IsTiiEnabled.next(result.tiiEnabled);
       this.IsD2LEnabled.next(result.d2lEnabled);
+
+      this.LogoSettings.next({
+        hasLogo: result.hasLogo,
+        logoUrl: result.logoUrl,
+        logoLinkUrl: result.logoLinkUrl
+      });
     });
   }
 }

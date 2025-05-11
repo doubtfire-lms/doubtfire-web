@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.0.37](https://github.com/macite/doubtfire-deploy/compare/v8.0.36...v8.0.37) (2025-03-10)
+
+
+### Bug Fixes
+
+* ensure overseer download get resources zip ([a1e4d71](https://github.com/macite/doubtfire-deploy/commit/a1e4d71b34733bc53cd2cfa63ee1e70f8f43386f))
+
+### [8.0.36](https://github.com/macite/doubtfire-deploy/compare/v8.0.35...v8.0.36) (2025-03-07)
+
+
+### Bug Fixes
+
+* overseer image admin in unit and task ([72c89b3](https://github.com/macite/doubtfire-deploy/commit/72c89b30cca426d56c7efbbac34e00fd734fe714))
+
+### [8.0.35](https://github.com/macite/doubtfire-deploy/compare/v8.0.34...v8.0.35) (2025-02-28)
+
+
+### Bug Fixes
+
+* correct ability to edit teaching periods ([ce37bf2](https://github.com/macite/doubtfire-deploy/commit/ce37bf27689744a6f43be46912be0d14e2cdbc6b))
+* ensure an old grade is present in portfolio assessment ([7daacd1](https://github.com/macite/doubtfire-deploy/commit/7daacd1bf0af050aeb6db503d963e574f68b9a94))
+* ensure overseer images can be edited ([3479b7a](https://github.com/macite/doubtfire-deploy/commit/3479b7af589b9ba986ddbb7dc8a84fd0be3e66e6))
+
 ### [8.0.34](https://github.com/macite/doubtfire-deploy/compare/v8.0.33...v8.0.34) (2025-02-12)
 
 

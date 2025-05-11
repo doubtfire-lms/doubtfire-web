@@ -133,13 +133,19 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
   public uploadTaskResources(taskDefinition: TaskDefinition, file: File): Observable<boolean> {
     const formData = new FormData();
     formData.append('file', file);
-    return AppInjector.get(HttpClient).post<boolean>(taskDefinition.taskResourcesUploadUrl, formData);
+    return AppInjector.get(HttpClient).post<boolean>(
+      taskDefinition.taskResourcesUploadUrl,
+      formData,
+    );
   }
 
   public uploadOverseerResources(taskDefinition: TaskDefinition, file: File): Observable<boolean> {
     const formData = new FormData();
     formData.append('file', file);
-    return AppInjector.get(HttpClient).post<boolean>(taskDefinition.taskAssessmentResourcesUploadUrl, formData);
+    return AppInjector.get(HttpClient).post<boolean>(
+      taskDefinition.taskOverseerResourcesUploadUrl,
+      formData,
+    );
   }
 
   public uploadScormData(taskDefinition: TaskDefinition, file: File): Observable<boolean> {
