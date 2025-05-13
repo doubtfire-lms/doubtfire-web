@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,7 +6,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'f-grant-extension-form',
@@ -34,7 +34,11 @@ export class GrantExtensionFormComponent implements OnInit {
     { id: 3, name: 'Samindi M' }
   ];
 
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<GrantExtensionFormComponent>) {}
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<GrantExtensionFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { unitId: number; taskDefinitionId: number }
+    ) {}
 
   ngOnInit(): void {
     this.grantExtensionForm = this.fb.group({
@@ -43,6 +47,7 @@ export class GrantExtensionFormComponent implements OnInit {
       reason: ['', Validators.required],
       notes: [''],
     });
+    console.log('Received dialog data:', this.data);
   }
 
   onSubmit(): void {
@@ -54,7 +59,11 @@ export class GrantExtensionFormComponent implements OnInit {
     this.isSubmitting = true;
 
     setTimeout(() => {
-      console.log('Form submitted:', this.grantExtensionForm.value);
+      console.log('Form submitted:', {
+        ...this.grantExtensionForm.value,
+        unitId: this.data.unitId,
+        taskDefinitionId: this.data.taskDefinitionId
+      });
 
       this.grantExtensionForm.reset({
         student: '',
@@ -66,6 +75,9 @@ export class GrantExtensionFormComponent implements OnInit {
       this.isSubmitting = false;
       this.dialogRef.close();
     }, 1000);
+    console.log('Submitting with data:', this.data);
+
+
   }
   close(): void {
     this.dialogRef.close();
