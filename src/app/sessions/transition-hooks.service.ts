@@ -4,6 +4,7 @@ import { UserService } from '../api/services/user.service';
 import { DoubtfireAngularModule } from '../doubtfire-angular.module';
 import { GlobalStateService } from '../projects/states/index/global-state.service';
 import { DoubtfireConstants } from '../config/constants/doubtfire-constants';
+import { AuthenticationService } from '../api/services/authentication.service';
 
 /**
  * The TransitionHooksService is responsible for intercepting transitions between states.
@@ -20,7 +21,8 @@ export class TransitionHooksService {
     private userService: UserService,
     private transitions: TransitionService,
     private globalState: GlobalStateService,
-    private constants: DoubtfireConstants
+    private constants: DoubtfireConstants,
+    private authenticationService: AuthenticationService,
   ) {
     // Get the tii settings...
     this.constants.IsTiiEnabled.subscribe((enabled) => {
@@ -35,6 +37,7 @@ export class TransitionHooksService {
 
       // Where is the transition coming from and going to?
       const toState = transition.to().name;
+      const toStateData = transition.to().data;
       // const fromState = transition.from().name;
 
       // Setup the global state
