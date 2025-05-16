@@ -2,6 +2,9 @@
   <div class="rating-area" *ngIf="!compact">
     <ng-container *ngFor="let i of [].constructor(max); let idx = index">
       <mat-icon
+      matTooltip="{{ tooltips[idx + 1] }}"
+      matTooltipPosition="above"
+      [matTooltipDisabled]="!showTooltips"
         (mouseenter)="setHoverValue(idx + 1)"
         (mouseleave)="setHoverValue(null)"
         (click)="onRatingChange(idx + 1)"
@@ -16,7 +19,7 @@
   </div>
 
   <div *ngIf="!hideLabels && selectedTooltip && !showTooltips && !compact" class="text-center rating-static-tooltip">
-    <ng-container *ngIf="getCurrentRating() !== 0; else noRatingText">
+    <ng-container *ngIf="getCurrentRating() !== 0">
       <span
         class="badge"
         [ngClass]="'rating-' + getCurrentRating()"
@@ -25,18 +28,18 @@
       </span>
     </ng-container>
 
-    <ng-template #noRatingText>
+    <ng-container *ngIf="getCurrentRating() === 0 && unit">
       <span class="text-muted">
         {{ tooltips[0] || 'This task is not related to this outcome at all' }}
       </span>
-    </ng-template>
+    </ng-container>
   </div>
 
   <div *ngIf="compact" class="compact-rating-wrapper">
     <div
       [ngClass]="ngModel?.rating > 0 ? 'compact-badge rating-' + ngModel.rating : 'compact-badge rating-zero'"
       matTooltip="{{ tooltips[ngModel?.rating] }}"
-      matTooltipPosition="top"
+      matTooltipPosition="above"
     >
       <ng-container *ngIf="ngModel?.rating > 0; else zeroCircle">
         {{ ngModel?.rating }}

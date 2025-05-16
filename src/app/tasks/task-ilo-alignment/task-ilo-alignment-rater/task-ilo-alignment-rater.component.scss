@@ -73,13 +73,45 @@
     margin-top: 10px;
 
     .badge {
-      background-color: hsl(219, 74%, 43%);
-      color: white;
       font-size: 12px;
       border-radius: 12px;
       padding: 2px 6px;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    .rating-1 {
+      background-color: hsl(219, 74%, 73%);
+      color: #ffffff;
+    }
+
+    .rating-2 {
+      background-color: hsl(219, 74%, 63%);
+      color: #ffffff;
+    }
+
+    .rating-3 {
+      background-color: hsl(219, 74%, 53%);
+      color: white;
+    }
+
+    .rating-4 {
+      background-color: hsl(219, 74%, 43%);
+      color: white;
+    }
+
+    .rating-5 {
+      background-color: hsl(219, 74%, 33%);
+      color: white;
+    }
+
+    .rating-0 {
+      background-color: transparent;
+      color: #888;
+      border: 1px solid #ccc;
     }
   }
+
 
     .compact-rating {
       border-radius: 2em;
@@ -113,19 +145,25 @@
     }
 
     .compact-badge {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 36px;
       height: 36px;
       border-radius: 50%;
       text-align: center;
-      line-height: 36px;
       font-weight: bold;
       font-size: 16px;
       background-color: #e0e0e0;
-      color: #333;
+      color: #000000;
+      position: relative;
+      cursor: pointer;
+      pointer-events: auto;
     }
 
-    .rating-1 { background-color: #87abed; color: #003366; }
-    .rating-2 { background-color: #5b8ce6; color: #003366; }
+
+    .rating-1 { background-color: #87abed; color: #ffffff; }
+    .rating-2 { background-color: #5b8ce6; color: #ffffff; }
     .rating-3 { background-color: #2e6de0; color: #fff; }
     .rating-4 { background-color: #1d55bf; color: #fff; }
     .rating-5 { background-color: #164192; color: #fff; }
@@ -141,4 +179,7 @@
       color: #cc0000;
       vertical-align: middle;
     }
+
+
   }
+
