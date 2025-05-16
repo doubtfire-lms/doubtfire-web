@@ -37,7 +37,7 @@
 
   <div *ngIf="compact" class="compact-rating-wrapper">
     <div
-      [ngClass]="ngModel?.rating > 0 ? 'compact-badge rating-' + ngModel.rating : 'compact-badge rating-zero'"
+      [ngClass]="ngModel?.rating > 0 ? 'compact-badge rating-' + ngModel.rating : 'compact-badge-empty'"
       matTooltip="{{ tooltips[ngModel?.rating] }}"
       matTooltipPosition="above"
     >
@@ -45,7 +45,7 @@
         {{ ngModel?.rating }}
       </ng-container>
       <ng-template #zeroCircle>
-        <mat-icon class="zero-icon">radio_button_unchecked</mat-icon>
+       <span class="zero-number">0</span>
       </ng-template>
     </div>
   </div>

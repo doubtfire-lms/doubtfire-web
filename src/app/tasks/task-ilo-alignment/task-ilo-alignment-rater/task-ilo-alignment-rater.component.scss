@@ -161,6 +161,12 @@
       pointer-events: auto;
     }
 
+    .compact-badge-empty {
+      align-items: center;
+      width: 36px;
+      height: 36px;
+      font-size: 24px;
+    }
 
     .rating-1 { background-color: #87abed; color: #ffffff; }
     .rating-2 { background-color: #5b8ce6; color: #ffffff; }
@@ -179,6 +185,8 @@
       color: #cc0000;
       vertical-align: middle;
     }
+
+
 
 
   }
