@@ -15,6 +15,13 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     $scope.overseerEnabled = () ->
       DoubtfireConstants.IsOverseerEnabled.value && $scope.task?.overseerEnabled
 
+    $scope.urls = {
+      taskSheetPdfUrl: null
+      taskSubmissionPdfUrl: null
+      taskSubmissionPdfAttachmentUrl: null
+      taskFilesUrl: null
+    }
+
     # Is the current user a tutor?
     $scope.tutor = $stateParams.tutor
     # the ways in which the dashboard can be viewed
@@ -32,17 +39,21 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     # Cleanup
     listeners = listenerService.listenTo($scope)
     # Required changes when task changes
-    listeners.push $scope.$watch('task.id', ->
+    listeners.push $scope.$watch('task.definition.id', ->
       return unless $scope.task?
+      task = $scope.task
       # get the url for the task sheet and the submissions
-      $scope.urls = {
-        taskSheetPdfUrl: $scope.task.definition.getTaskPDFUrl()
-        taskSubmissionPdfUrl: $scope.task.submissionUrl()
-        taskSubmissionPdfAttachmentUrl: $scope.task.submissionUrl(true)
-        taskFilesUrl: $scope.task.submittedFilesUrl()
-      }
+      $scope.urls.taskSheetPdfUrl = task.definition.getTaskPDFUrl()
+      $scope.urls.taskSubmissionPdfUrl = task.submissionUrl()
+      $scope.urls.taskSubmissionPdfAttachmentUrl = task.submissionUrl(true)
+      $scope.urls.taskFilesUrl = task.submittedFilesUrl()
 
-      updateCurrentView()
+      if $scope.isCurrentView('task') && !task.definition.hasTaskSheet
+        # If the task sheet is not available, switch to details view
+        updateCurrentView()
+      else if $scope.isCurrentView('submission') && !task.hasPdf
+        # If the submission is not available, switch to details view
+        updateCurrentView()
     )
 
     # Set the selected dashboard view
