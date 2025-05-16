@@ -143,12 +143,9 @@ export class TaskCommentComposerComponent
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue !== changes.task.previousValue) {
-      const newTask = changes.task.currentValue;
-      const previousTask = changes.task.previousValue;
+      const newTask = changes.task.currentValue as Task;
+      // Check if the task has changed
 
-      if (previousTask && !this.hasSubmittedComment) {
-        this.saveDraftForTask(previousTask);
-      }
 
       this.hasSubmittedComment = false;
 
@@ -257,7 +254,7 @@ export class TaskCommentComposerComponent
   }
 
   // Update saveDraftForTask to use the taskDraftContents map
-  private saveDraftForTask(task: Task): void {
+  private saveDraftForTask(task: Task, rawFromDom?: string): void {
     if (!task) {
       return;
     }
