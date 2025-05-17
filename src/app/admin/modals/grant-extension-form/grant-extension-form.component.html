@@ -59,7 +59,7 @@
 
   <!-- Form Buttons -->
 <mat-dialog-actions align="end">
-  <button mat-button (click)="close()" [disabled]="isSubmitting">Cancel</button>
+  <button mat-button type="button" (click)="close()" [disabled]="isSubmitting">Cancel</button>
   <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting">
     Grant Extension
   </button>
