@@ -297,6 +297,7 @@ import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/direc
 import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
+import {NotificationsButtonComponent} from './common/header/notifications-button/notifications-button.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -452,6 +453,7 @@ const MY_DATE_FORMAT = {
     AnalyticsTutorTimesComponent,
     PortfolioIncludedTasksComponent,
     OverseerScriptEditorModalComponent,
+    NotificationsButtonComponent,
   ],
   providers: [
     // Services we provide
