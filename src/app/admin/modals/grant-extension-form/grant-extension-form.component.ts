@@ -82,11 +82,7 @@ export class GrantExtensionFormComponent implements OnInit {
     });
   }
 
-  /**
-   * Filters the student list based on the search query.
-   * Matches against both student name and ID.
-   * If no query is provided, shows all students.
-   */
+  // Filters students based on search query
   filterStudents(): void {
     if (!this.searchQuery) {
       this.filteredStudents = this.students;
@@ -99,12 +95,7 @@ export class GrantExtensionFormComponent implements OnInit {
     }
   }
 
-  /**
-   * Toggles the selection state of a student.
-   * Adds the student to selectedStudents if not already selected,
-   * removes them if already selected.
-   * Updates the form control value accordingly.
-   */
+  // Toggles student selection state
   toggleStudent(studentId: number): void {
     const index = this.selectedStudents.indexOf(studentId);
     if (index === -1) {
@@ -115,11 +106,7 @@ export class GrantExtensionFormComponent implements OnInit {
     this.grantExtensionForm.patchValue({ students: this.selectedStudents });
   }
 
-  /**
-   * Handles keyboard navigation for student selection.
-   * Allows selection/deselection using Enter or Space keys.
-   * Prevents default browser behavior for these keys.
-   */
+  // Handles keyboard navigation for student selection
   handleStudentKeydown(event: KeyboardEvent, studentId: number): void {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -127,12 +114,7 @@ export class GrantExtensionFormComponent implements OnInit {
     }
   }
 
-  /**
-   * Toggles selection of all currently filtered students.
-   * If all filtered students are selected, deselects all.
-   * If not all are selected, selects all filtered students.
-   * Updates the form control value accordingly.
-   */
+  // Toggles selection of all filtered students
   toggleSelectAll(): void {
     if (this.selectedStudents.length === this.filteredStudents.length) {
       this.selectedStudents = [];
@@ -142,10 +124,7 @@ export class GrantExtensionFormComponent implements OnInit {
     this.grantExtensionForm.patchValue({ students: this.selectedStudents });
   }
 
-  /**
-   * Checks if a student is currently selected.
-   * Used for UI state management and visual feedback.
-   */
+  // Checks if a student is selected
   isStudentSelected(studentId: number): boolean {
     return this.selectedStudents.includes(studentId);
   }
