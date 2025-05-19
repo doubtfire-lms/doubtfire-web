@@ -2,20 +2,20 @@
 <form [formGroup]="grantExtensionForm" (ngSubmit)="submitForm()">
 
 
-<mat-dialog-content [formGroup]="grantExtensionForm">
+<mat-dialog-content>
   <!-- Student Selection -->
   <mat-form-field appearance="fill" class="w-full mb-4">
-    <mat-label>Student</mat-label>
-    <mat-select formControlName="student" required>
-      <mat-option value="" disabled>Select a student</mat-option>
+    <mat-label>Students</mat-label>
+    <mat-select formControlName="student_ids" multiple>
       <mat-option *ngFor="let student of students" [value]="student.id">
         {{ student.name }}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="grantExtensionForm.get('student')?.touched && grantExtensionForm.get('student')?.invalid">
-      Please select a student.
+    <mat-error *ngIf="grantExtensionForm.get('student_ids')?.touched && grantExtensionForm.get('student_ids')?.invalid">
+      Please select at least one student.
     </mat-error>
   </mat-form-field>
+
 
   <!-- Extension Duration -->
   <div class="mb-4">

@@ -78,6 +78,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     this.dialog.open(GrantExtensionFormComponent, {
       width: '600px',
       disableClose: true,
+      data: {
+        unitId: this.task.unit.id,
+        taskDefinitionId: this.task.definition.id
+      }
     });
   }
 
