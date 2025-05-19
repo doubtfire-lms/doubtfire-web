@@ -224,6 +224,8 @@ import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-
 import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {GradeService} from './common/services/grade.service';
+import {TutorTimesComponent} from './units/states/tutor-times/tutor-times.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   // Components we declare
@@ -325,6 +327,7 @@ import {GradeService} from './common/services/grade.service';
     FUsersComponent,
     FTaskBadgeComponent,
     FUnitsComponent,
+    TutorTimesComponent,
   ],
   // Services we provide
   providers: [
@@ -460,6 +463,7 @@ import {GradeService} from './common/services/grade.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModuleNew,
+    NgxChartsModule,
   ],
 })
 

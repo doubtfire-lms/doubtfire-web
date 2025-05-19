@@ -1,0 +1,35 @@
+<div class="mat-typography" style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; ">
+  <div style="margin: 2rem 0;">
+    <mat-form-field appearance="fill" color="primary">
+      <mat-label>
+        <span style="font-weight: 600; font-size: 1.1rem; color: #3f51b5;">Filter by Unit</span>
+      </mat-label>
+      <mat-select [(value)]="selectedUnit" (selectionChange)="onUnitChange()">
+        <mat-option *ngFor="let unit of units" [value]="unit">{{ unit }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div style="width: 100%; display: flex; justify-content: center;">
+    <ngx-charts-bar-vertical
+      [view]="[1000, 500]"
+      [scheme]="colorScheme"
+      [results]="chartData"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [yAxisTickFormatting]="formatMinutesToHourMinute"
+
+      (select)="onSelect($event)">
+    </ngx-charts-bar-vertical>
+
+
+</div>
+
+<!-- Show this chart only if the user is a Convenor -->
+
+

@@ -30,6 +30,7 @@ export class TaskDropdownComponent {
     'Tutorial List': 'Tutorials',
     'Unit Administration': 'Admin',
     'Unit Analytics': 'Analytics',
+    'Tutor Times': 'Tutor Times',
   };
 
   taskDropdownData: { title: string; target: string; visible: any }[];

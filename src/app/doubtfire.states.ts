@@ -8,6 +8,7 @@ import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teach
 import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {FUsersComponent} from './admin/states/f-users/f-users.component';
 import {FUnitsComponent} from './admin/states/f-units/f-units.component';
+import {TutorTimesComponent} from './units/states/tutor-times/tutor-times.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -291,6 +292,20 @@ const ViewAllUnits: NgHybridStateDeclaration = {
   },
 };
 
+const TutorTimesState: NgHybridStateDeclaration = {
+  name: 'units/tutor-times', // Unique ID for this "place"
+  url: '/units/:unitId/tutor-times', // URL pattern, :unitId is a parameter
+  views: {
+    main: {
+      component: TutorTimesComponent, // What to show
+    },
+  },
+  data: {
+    pageTitle: 'Tutor Times', // Sets the browser title
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin'], // Who can access
+    task: 'Tutor Times', // Tells the dropdown what to display
+  },
+};
 /**
  * Export the list of states we have created in angular
  */
@@ -306,4 +321,5 @@ export const doubtfireStates = [
   ViewAllProjectsState,
   ViewAllUnits,
   AdministerUnits,
+  TutorTimesState,
 ];

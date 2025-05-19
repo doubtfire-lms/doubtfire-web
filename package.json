@@ -42,6 +42,7 @@
     "@angular/upgrade": "^17.3.6",
     "@ctrl/ngx-emoji-mart": "^9.2.0",
     "@ngneat/hotkeys": "^4.0.0",
+    "@swimlane/ngx-charts": "^22.0.0",
     "@uirouter/angular": "^13.0",
     "@uirouter/angular-hybrid": "^17.1.0",
     "@uirouter/angularjs": "^1.0.30",

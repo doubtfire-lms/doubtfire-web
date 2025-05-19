@@ -37,6 +37,9 @@
         <button mat-menu-item uiSref="units/analytics" [uiParams]="{unitId: currentUnit.id}">
           <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
         </button>
+        <button mat-menu-item uiSref="units/tutor-times" [uiParams]="{unitId: currentUnit.id}">
+          <mat-icon aria-label="Tutor Times icon" fontIcon="schedule"></mat-icon>Tutor Times
+        </button>
         @if (currentUnit.currentUserCanViewUnitAdmin) {
           <button mat-menu-item uiSref="units/admin" [uiParams]="{unitId: currentUnit.id}">
             <mat-icon aria-label="Unit Administration" fontIcon="admin_panel_settings"></mat-icon>
@@ -143,6 +146,9 @@
         <!-- <p class="task-dropdown-heading">Unit</p> -->
         <button uiSref="units/analytics" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
+        </button>
+        <button mat-menu-item uiSref="units/tutor-times" [uiParams]="{unitId: unitRole.unit.id}">
+          <mat-icon aria-label="Tutor Times icon" fontIcon="schedule"></mat-icon>Tutor Times
         </button>
         @if (unitRole.role === 'Convenor' || unitRole.role === 'Admin' || unitRole.role === 'Auditor') {
           <button uiSref="units/admin" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
