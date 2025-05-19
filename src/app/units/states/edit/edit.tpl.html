@@ -4,7 +4,7 @@
       <tab-heading>{{tab.title}}</tab-heading>
     </tab>
   </tabset><!--/tabs-->
-  <unit-details-editor unit="unit" ng-if="activeTab === tabs.unitTab"></unit-details-editor>
+  <unit-details-editor [unit]="unit" ng-if="activeTab === tabs.unitTab"></unit-details-editor>
   <unit-ilo-editor ng-if="activeTab === tabs.learningOutcomesTab"></unit-ilo-editor>
   <unit-staff-editor ng-if="activeTab === tabs.staffTab"></unit-staff-editor>
   <unit-tutorials-manager ng-if="activeTab === tabs.tutorialsTab" [unit]="unit"></unit-tutorials-manager>

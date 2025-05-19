@@ -1,0 +1,318 @@
+<div class="unit-details-editor">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ unit?.id === -1 ? 'Create Unit' : 'Update Unit' }}</h3>
+      {{
+      unit?.id === -1
+      ? 'Create a new unit with all overview unit details here.'
+      : 'Update overview details of the unit below.'
+      }}
+    </div>
+
+    <form class="form-horizontal" (ngSubmit)="saveUnit()">
+      <div class="panel-body">
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="code">Code</label>
+          <div class="col-sm-9">
+            <input id="code" class="form-control" type="text" [(ngModel)]="unit.code" name="code"
+              placeholder="Enter unit code" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="name">Name</label>
+          <div class="col-sm-9">
+            <input id="name" class="form-control" type="text" [(ngModel)]="unit.name" name="name"
+              placeholder="Enter unit name" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="description">Description</label>
+          <div class="col-sm-9">
+            <textarea id="description" class="form-control" [(ngModel)]="unit.description"
+              name="description"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Teaching Period</label>
+          <div class="col-sm-4">
+            <select class="form-control" [(ngModel)]="unit.teachingPeriod" name="teachingPeriod"
+              (change)="teachingPeriodSelected($event.target.value)">
+              <option *ngFor="let period of teachingPeriodValues" [ngValue]="period.value">
+                {{ period.text }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Draft Learning Summary</label>
+          <div class="col-sm-4">
+            <select class="form-control" [(ngModel)]="unit.draftTaskDefinition" name="draftTaskDefinition"
+              (change)="draftTaskDefSelected($event.target.value)">
+              <option *ngFor="let td of taskDefinitionValues" [ngValue]="td.value">
+                {{ td.text }}
+              </option>
+            </select>
+          </div>
+          <div class="col-sm-offset-2 col-sm-10">
+            <span class="help-block">
+              When a draft learning summary task is selected, this will ensure a student’s uploaded draft is
+              automatically added to the student’s portfolio.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Start Date</label>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [matDatepicker]="startPicker" [(ngModel)]="unit.startDate" name="startDate"
+                [disabled]="unit.teachingPeriod" />
+              <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">End Date</label>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [matDatepicker]="endPicker" [(ngModel)]="unit.endDate" name="endDate"
+                [disabled]="unit.teachingPeriod" />
+              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Portfolio Auto-generation Date</label>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [matDatepicker]="portfolioPicker" [(ngModel)]="unit.portfolioAutoGenerationDate"
+                name="portfolioAutoGenerationDate" />
+              <mat-datepicker-toggle matSuffix [for]="portfolioPicker"></mat-datepicker-toggle>
+              <mat-datepicker #portfolioPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Allow student extensions</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn" [class.btn-success]="unit.allowStudentExtensionRequests"
+                [class.btn-default]="!unit.allowStudentExtensionRequests"
+                (click)="unit.allowStudentExtensionRequests = true" role="radio" tabindex="0"
+                [attr.aria-pressed]="unit.allowStudentExtensionRequests">
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn" [class.btn-danger]="!unit.allowStudentExtensionRequests"
+                [class.btn-default]="unit.allowStudentExtensionRequests"
+                (click)="unit.allowStudentExtensionRequests = false" role="radio" tabindex="0"
+                [attr.aria-pressed]="!unit.allowStudentExtensionRequests">
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              When false only staff can request extensions on behalf of students.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="extensionWeeksOnResubmitRequest">Extension duration on
+            resubmit</label>
+          <div class="col-sm-9">
+            <input class="form-control" id="extensionWeeksOnResubmitRequest" type="number" placeholder="1"
+              [(ngModel)]="unit.extensionWeeksOnResubmitRequest" name="extensionWeeksOnResubmitRequest" />
+            <span class="help-block">
+              When tutors request resubmission of a task, this setting determines how many weeks the
+              task will be extended to allow students to fix and resubmit their work.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Auto apply extensions</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn" [class.btn-success]="unit.autoApplyExtensionBeforeDeadline"
+                [class.btn-default]="!unit.autoApplyExtensionBeforeDeadline"
+                (click)="unit.autoApplyExtensionBeforeDeadline = true" role="radio" tabindex="0"
+                [attr.aria-pressed]="unit.autoApplyExtensionBeforeDeadline">
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn" [class.btn-danger]="!unit.autoApplyExtensionBeforeDeadline"
+                [class.btn-default]="unit.autoApplyExtensionBeforeDeadline"
+                (click)="unit.autoApplyExtensionBeforeDeadline = false" role="radio" tabindex="0"
+                [attr.aria-pressed]="!unit.autoApplyExtensionBeforeDeadline">
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              When true, extensions will be automatically applied when they result in a date that is
+              between the task's due date and deadline.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Allow students to change tutorial</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn" [class.btn-success]="unit.allowStudentChangeTutorial"
+                [class.btn-default]="!unit.allowStudentChangeTutorial" (click)="unit.allowStudentChangeTutorial = true"
+                role="radio" tabindex="0" [attr.aria-pressed]="unit.allowStudentChangeTutorial">
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn" [class.btn-danger]="!unit.allowStudentChangeTutorial"
+                [class.btn-default]="unit.allowStudentChangeTutorial" (click)="unit.allowStudentChangeTutorial = false"
+                role="radio" tabindex="0" [attr.aria-pressed]="!unit.allowStudentChangeTutorial">
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block"> When false only staff can change student tutorials. </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Send notification emails</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn" [class.btn-success]="unit.sendNotifications"
+                [class.btn-default]="!unit.sendNotifications" (click)="unit.sendNotifications = true" role="radio"
+                tabindex="0" [attr.aria-pressed]="unit.sendNotifications">
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn" [class.btn-danger]="!unit.sendNotifications"
+                [class.btn-default]="unit.sendNotifications" (click)="unit.sendNotifications = false" role="radio"
+                tabindex="0" [attr.aria-pressed]="!unit.sendNotifications">
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              When true, emails will be set to students each week to indicate progress and suggest
+              future tasks for them to work on.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Synchronise enrolments</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn" [class.btn-success]="unit.enableSyncEnrolments"
+                [class.btn-default]="!unit.enableSyncEnrolments" (click)="unit.enableSyncEnrolments = true" role="radio"
+                tabindex="0" [attr.aria-pressed]="unit.enableSyncEnrolments">
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn" [class.btn-danger]="!unit.enableSyncEnrolments"
+                [class.btn-default]="unit.enableSyncEnrolments" (click)="unit.enableSyncEnrolments = false" role="radio"
+                tabindex="0" [attr.aria-pressed]="!unit.enableSyncEnrolments">
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              When true student enrolments will be synchronised with other systems where this is
+              possible.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Synchronise Timetable</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn" [class.btn-success]="unit.enableSyncTimetable"
+                [class.btn-default]="!unit.enableSyncTimetable" (click)="unit.enableSyncTimetable = true" role="radio"
+                tabindex="0" [attr.aria-pressed]="unit.enableSyncTimetable">
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn" [class.btn-danger]="!unit.enableSyncTimetable"
+                [class.btn-default]="unit.enableSyncTimetable" (click)="unit.enableSyncTimetable = false" role="radio"
+                tabindex="0" [attr.aria-pressed]="!unit.enableSyncTimetable">
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              When true timetable data will be synchronised with other systems where this is
+              possible.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="overseerEnabled">
+          <label class="col-sm-2 control-label">Overseer Assessment</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn" [class.btn-success]="unit.assessmentEnabled"
+                [class.btn-default]="!unit.assessmentEnabled" (click)="unit.assessmentEnabled = true" role="radio"
+                tabindex="0" [attr.aria-pressed]="unit.assessmentEnabled">
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn" [class.btn-danger]="!unit.assessmentEnabled"
+                [class.btn-default]="unit.assessmentEnabled" (click)="unit.assessmentEnabled = false" role="radio"
+                tabindex="0" [attr.aria-pressed]="!unit.assessmentEnabled">
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              If true, unit tasks will be able to make use of Overseer automated checking.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="overseerEnabled">
+          <label class="col-sm-2 control-label">Docker Image Name</label>
+          <div class="col-sm-9">
+            <select class="form-control" [(ngModel)]="unit.overseerImage" name="overseerImage">
+              <option *ngFor="let image of dockerImages" [ngValue]="image">
+                {{ image.description }}
+              </option>
+            </select>
+            <span class="help-block">
+              Use this to select the default container used to check tasks with Overseer.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Active</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label class="btn" [class.btn-success]="unit.active" [class.btn-default]="!unit.active"
+                (click)="unit.active = true" role="radio" tabindex="0" [attr.aria-pressed]="unit.active">
+                <i class="fa fa-check"></i>
+              </label>
+              <label class="btn" [class.btn-danger]="!unit.active" [class.btn-default]="unit.active"
+                (click)="unit.active = false" role="radio" tabindex="0" [attr.aria-pressed]="!unit.active">
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block"> Set to false to hide unit from students and tutors. </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer text-right">
+        <div class="pull-left">
+          <button class="btn btn-info" type="button" (click)="addD2lData()" *ngIf="unit?.id !== -1 && d2lEnabled()">
+            D2L Details
+          </button>
+        </div>
+        <button *ngIf="unit?.id" class="btn btn-success" (click)="copyUnit()" style="margin-right: 5px;">Copy</button>
+        <button class="btn btn-success" type="submit">
+          {{ unit?.id === -1 ? 'Create' : 'Update' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
