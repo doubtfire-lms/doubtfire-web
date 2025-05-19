@@ -9,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExtensionService } from 'src/app/api/services/extension.service';
+import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'f-grant-extension-form',
@@ -21,13 +23,18 @@ import { ExtensionService } from 'src/app/api/services/extension.service';
     MatInputModule,
     MatSliderModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    FormsModule,
+    MatCheckboxModule
   ],
   templateUrl: './grant-extension-form.component.html'
 })
 export class GrantExtensionFormComponent implements OnInit {
   grantExtensionForm!: FormGroup;
   isSubmitting = false;
+  searchQuery = '';
+  selectedStudents: number[] = [];
+  showStudentList = false;
 
   // Temporary values will be replaced with dynamic context
   unitId = 1;
@@ -37,8 +44,26 @@ export class GrantExtensionFormComponent implements OnInit {
   students = [
     { id: 1, name: 'Joe M' },
     { id: 2, name: 'Sahiru W' },
-    { id: 3, name: 'Samindi M' }
+    { id: 3, name: 'Samindi M' },
+    { id: 4, name: 'Student 4' },
+    { id: 5, name: 'Student 5' },
+    { id: 6, name: 'Student 6' },
+    { id: 7, name: 'Student 7' },
+    { id: 8, name: 'Student 8' },
+    { id: 9, name: 'Student 9' },
+    { id: 10, name: 'Student 10' },
+    { id: 11, name: 'Student 11' },
+    { id: 12, name: 'Student 12' },
+    { id: 13, name: 'Student 13' },
+    { id: 14, name: 'Student 14' },
+    { id: 15, name: 'Student 15' },
+    { id: 16, name: 'Student 16' },
+    { id: 17, name: 'Student 17' },
+    { id: 18, name: 'Student 18' },
+    { id: 19, name: 'Student 19' },
+    { id: 20, name: 'Student 20' }
   ];
+  filteredStudents = this.students;
 
   constructor(
     private fb: FormBuilder,
@@ -50,11 +75,79 @@ export class GrantExtensionFormComponent implements OnInit {
   // Initialize the reactive form with validators for each field
   ngOnInit(): void {
     this.grantExtensionForm = this.fb.group({
-      student: ['', Validators.required],
+      students: [[], Validators.required],
       extension: [1, [Validators.required, Validators.min(1)]],
       reason: ['', Validators.required],
       notes: ['']
     });
+  }
+
+  /**
+   * Filters the student list based on the search query.
+   * Matches against both student name and ID.
+   * If no query is provided, shows all students.
+   */
+  filterStudents(): void {
+    if (!this.searchQuery) {
+      this.filteredStudents = this.students;
+    } else {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredStudents = this.students.filter(student =>
+        student.name.toLowerCase().includes(query) ||
+        student.id.toString().includes(query)
+      );
+    }
+  }
+
+  /**
+   * Toggles the selection state of a student.
+   * Adds the student to selectedStudents if not already selected,
+   * removes them if already selected.
+   * Updates the form control value accordingly.
+   */
+  toggleStudent(studentId: number): void {
+    const index = this.selectedStudents.indexOf(studentId);
+    if (index === -1) {
+      this.selectedStudents.push(studentId);
+    } else {
+      this.selectedStudents.splice(index, 1);
+    }
+    this.grantExtensionForm.patchValue({ students: this.selectedStudents });
+  }
+
+  /**
+   * Handles keyboard navigation for student selection.
+   * Allows selection/deselection using Enter or Space keys.
+   * Prevents default browser behavior for these keys.
+   */
+  handleStudentKeydown(event: KeyboardEvent, studentId: number): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.toggleStudent(studentId);
+    }
+  }
+
+  /**
+   * Toggles selection of all currently filtered students.
+   * If all filtered students are selected, deselects all.
+   * If not all are selected, selects all filtered students.
+   * Updates the form control value accordingly.
+   */
+  toggleSelectAll(): void {
+    if (this.selectedStudents.length === this.filteredStudents.length) {
+      this.selectedStudents = [];
+    } else {
+      this.selectedStudents = this.filteredStudents.map(student => student.id);
+    }
+    this.grantExtensionForm.patchValue({ students: this.selectedStudents });
+  }
+
+  /**
+   * Checks if a student is currently selected.
+   * Used for UI state management and visual feedback.
+   */
+  isStudentSelected(studentId: number): boolean {
+    return this.selectedStudents.includes(studentId);
   }
 
   // Handles form submission.
@@ -68,10 +161,10 @@ export class GrantExtensionFormComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    const { student, extension, reason, notes } = this.grantExtensionForm.value;
+    const { students, extension, reason, notes } = this.grantExtensionForm.value;
     const unitId = 1; // temporary value
     const payload = {
-      student_ids: [student],
+      student_ids: students,
       task_definition_id: 25,
       weeks_requested: extension,
       comment: reason,
