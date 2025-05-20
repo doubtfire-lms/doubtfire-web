@@ -20,7 +20,7 @@
         #selectAllBox
         [checked]="selectedStudents.length === filteredStudents.length"
         (change)="toggleSelectAll()"
-        (mouseup)="selectAllBox.blur()"
+        (mouseup)="handleCheckboxBlur()"
         color="primary"
         disableRipple>
         Select All

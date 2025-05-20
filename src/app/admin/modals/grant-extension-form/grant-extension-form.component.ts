@@ -129,6 +129,15 @@ export class GrantExtensionFormComponent implements OnInit {
     return this.selectedStudents.includes(studentId);
   }
 
+  // Safely handles blur for checkboxes
+  handleCheckboxBlur(): void {
+    // This avoids calling blur() directly on the checkbox reference
+    // which can cause errors when the reference isn't to a DOM element
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }
+
   // Handles form submission.
   // Builds the payload and sends it to the backend via the ExtensionService.
   // Displays a success or error message and closes the dialog on success.
