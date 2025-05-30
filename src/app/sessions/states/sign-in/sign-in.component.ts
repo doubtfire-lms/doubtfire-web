@@ -75,7 +75,7 @@ export class SignInComponent implements OnInit {
       username: '',
       password: '',
       remember: this.authService.rememberMe,
-      autoLogin: localStorage.getItem('autoLogin') == 'true',
+      autoLogin: this.autoLogin,
     };
     // Check for SSO
     this.globalState.hideHeader();
@@ -107,10 +107,10 @@ export class SignInComponent implements OnInit {
           remember: this.authService.rememberMe,
         });
       } else if (this.SSOLoginUrl) {
-        if (this.formData.autoLogin) {
+        if (this.autoLogin) {
           return wait.then(() => {
             // Double check in case changed in the meantime
-            if (this.formData.autoLogin) {
+            if (this.autoLogin) {
               this.redirectToSSO();
             }
           });
@@ -134,6 +134,16 @@ export class SignInComponent implements OnInit {
         // return after waiting with the wait promise
         return wait.then();
       };
+  }
+
+  public get autoLogin(): boolean {
+    // Check if autoLogin is set in localStorage
+    return localStorage.getItem('autoLogin') === 'true';
+  }
+
+  public set autoLogin(value: boolean) {
+    // Set autoLogin in localStorage
+    localStorage.setItem('autoLogin', value ? 'true' : 'false');
   }
 
   /**
@@ -161,7 +171,7 @@ export class SignInComponent implements OnInit {
    */
   private redirectToSSO(): void {
     if (this.SSOLoginUrl) {
-      if (this.formData.autoLogin) {
+      if (this.autoLogin) {
         localStorage.setItem('autoLogin', 'true');
       } else {
         localStorage.removeItem('autoLogin');

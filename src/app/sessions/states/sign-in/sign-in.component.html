@@ -17,7 +17,7 @@
               username: formData.username,
               password: formData.password,
               remember: authService.rememberMe,
-              autoLogin: formData.autoLogin
+              autoLogin: autoLogin
             })
           "
           class="sign-in-form flex flex-col"
@@ -42,7 +42,7 @@
             </mat-form-field>
           }
           @if (!showCredentials) {
-            <mat-checkbox matInput name="autoLogin" [(ngModel)]="formData.autoLogin">
+            <mat-checkbox matInput name="autoLogin" [(ngModel)]="autoLogin">
               Automatically redirect
             </mat-checkbox>
           }

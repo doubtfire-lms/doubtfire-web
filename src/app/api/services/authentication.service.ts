@@ -109,7 +109,7 @@ export class AuthenticationService {
   }
 
   public set rememberMe(remember: boolean) {
-    localStorage.setItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN, String(remember));
+    localStorage.setItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN, remember ? 'true' : 'false');
   }
 
   /**
