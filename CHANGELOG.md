@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-5](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-4...v10.0.0-5) (2025-05-30)
+
+
+### Bug Fixes
+
+* correct broken transition hooks ([d237eda](https://github.com/macite/doubtfire-deploy/commit/d237eda82dd989fc1b69d6e4236932050bc5b1a4))
+* delay authorisation code until after authentication ([34410d4](https://github.com/macite/doubtfire-deploy/commit/34410d4afdf5bd73d9c244a6f40c7fb78b714e63))
+* ensure transition in student pages update pdf view ([68a2f38](https://github.com/macite/doubtfire-deploy/commit/68a2f38167c792974aafd907f04fcf9e8b5bf091))
+* simplify setting of auto redirect on login ([60dbceb](https://github.com/macite/doubtfire-deploy/commit/60dbceb2a104894b4eff157c038446796bf01708))
+
 ## [10.0.0-4](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-3...v10.0.0-4) (2025-04-15)
 
 
