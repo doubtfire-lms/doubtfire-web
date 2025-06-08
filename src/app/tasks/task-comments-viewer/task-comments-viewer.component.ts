@@ -81,7 +81,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
           }
         });
 
-      if (this.userService.currentUser.isStaff) {
+      if (this.project.unit.currentUserIsStaff) {
         this.feedbackTemplateService
           .query({contextType: 'task_definitions', contextId: this.task.definition.id}, {})
           .subscribe({
