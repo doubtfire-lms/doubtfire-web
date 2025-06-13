@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-6](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-5...v10.0.0-6) (2025-06-13)
+
+
+### Features
+
+* add spec con and flexible dates ([a874cff](https://github.com/macite/doubtfire-deploy/commit/a874cff846e788a1820da7e19899ecb20a113888))
+
+
+### Bug Fixes
+
+* only get task feedback templates if staff ([8341b93](https://github.com/macite/doubtfire-deploy/commit/8341b933487ccd451a15cb8f7ec6afc1695cb121))
+* remove unnecessary safe pipe ([c92242a](https://github.com/macite/doubtfire-deploy/commit/c92242ad9afb0a934d4e8fb00afee0c69782c625))
+
 ## [10.0.0-5](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-4...v10.0.0-5) (2025-05-30)
 
 
