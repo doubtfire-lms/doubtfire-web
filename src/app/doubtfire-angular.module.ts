@@ -251,6 +251,10 @@ import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/l
 import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task-feedback-templates/task-feedback-templates.component';
 import {NestedCsvDownloadModalComponent} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.component';
 import {NestedCsvDownloadModalService} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.service';
+import { TaskDateSliderComponent } from './common/modals/date-change-modal/task-date-slider.component';
+import { SpecConModalComponent } from './common/modals/spec-con-modal/spec-con-modal.component';
+import { SpecConModalService } from './common/modals/spec-con-modal/spec-con-modal.service';
+import { ProjectPlanComponent } from './projects/states/plan/project-plan.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -278,6 +282,7 @@ const MY_DATE_FORMAT = {
     MicrophoneTesterComponent,
     DiscussionPromptComposerComponent,
     IntelligentDiscussionPlayerComponent,
+    TaskDateSliderComponent,
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
@@ -287,9 +292,11 @@ const MY_DATE_FORMAT = {
     ActivityTypeListComponent,
     OverseerImageListComponent,
     ExtensionModalComponent,
+    SpecConModalComponent,
     CalendarModalComponent,
     ConfirmationModalComponent,
     InstitutionSettingsComponent,
+    ProjectPlanComponent,
     SuccessCloseComponent,
     HomeComponent,
     CommentBubbleActionComponent,
@@ -447,6 +454,7 @@ const MY_DATE_FORMAT = {
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
+    SpecConModalService,
     DoubtfireConstants,
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,

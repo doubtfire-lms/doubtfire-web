@@ -179,8 +179,56 @@ export class Task extends Entity {
     return formatDate(this.localDueDate(), 'd MMM', locale);
   }
 
+  public get dueWeek(): number {
+    const startDate: Date = this.unit.startDate;
+    const dueDate: Date = this.localDueDate();
+    const diffInMs: number = dueDate.getTime() - startDate.getTime();
+    const diffInDays: number = Math.ceil(diffInMs / (1000 * 3600 * 24));
+
+    return Math.ceil(diffInDays / 7);
+  }
+
+  /**
+   * Set the task to be due in a specific week.
+   *
+   * @returns the new due week
+   */
+  public set dueWeek(week: number) {
+    // Get original due week and current due week
+    const tdDueWeek: number = this.definition.dueWeek;
+    const currentDueWeek = this.dueWeek;
+
+    // Determine how long the extension needs to be
+    this.extensions = week - tdDueWeek;
+
+    // Map to ms to adjust due date
+    const currentWeekDueMs = MappingFunctions.weeksMs(currentDueWeek);
+    const newWeekDueMs = MappingFunctions.weeksMs(week);
+
+    // Adjust due date based on difference in current and new due weeks
+    this.dueDate = new Date(this.localDueDate().getTime() - currentWeekDueMs + newWeekDueMs);
+  }
+
   public localDeadlineDate(): Date {
-    return this.definition.localDeadlineDate();
+    return MappingFunctions.addDays(this.definition.localDeadlineDate(), this.project.specConDays);
+  }
+
+  public savePlannedDate(): Observable<Task> {
+    const taskService: TaskService = AppInjector.get(TaskService);
+
+    return taskService.update(
+      {
+        projectId: this.project.id,
+        taskDefId: this.definition.id,
+      },
+      {
+        endpointFormat: '/projects/:projectId:/task_def_id/:taskDefId:/plan',
+        entity: this,
+        body: {
+          extensions: this.extensions,
+        },
+      },
+    );
   }
 
   /**
@@ -243,12 +291,22 @@ export class Task extends Entity {
     return this.daysUntilDueDate() == 0 && !this.inSubmittedState();
   }
 
+  public get startDate(): Date {
+    if (this.extensions < 0) {
+      // If the task has an extension, the start date is the due date minus the extension
+      return MappingFunctions.addWeeks(this.definition.startDate, this.extensions);
+    } else {
+      // If the task does not have an extension, the start date is the definition's start date
+      return this.definition.startDate;
+    }
+  }
+
   public timeUntilStartDate(): number {
-    return this.timeBetween(new Date(), this.definition.startDate);
+    return this.timeBetween(new Date(), this.startDate);
   }
 
   public daysUntilStartDate() {
-    return this.daysBetween(new Date(), this.definition.startDate);
+    return this.daysBetween(new Date(), this.startDate);
   }
 
   public isBeforeStartDate(): boolean {
@@ -763,7 +821,8 @@ export class Task extends Entity {
 
   public canApplyForExtension(): boolean {
     return (
-      this.unit.allowStudentExtensionRequests &&
+      (this.unit.allowStudentExtensionRequests || this.unit.currentUserIsStaff) &&
+      !this.unit.allowFlexibleDates &&
       this.inStateThatAllowsExtension() &&
       (!this.isPastDeadline() || this.wasSubmittedOnTime()) &&
       this.maxWeeksCanExtend() > 0
@@ -778,9 +837,7 @@ export class Task extends Entity {
   }
 
   public maxWeeksCanExtend(): number {
-    return Math.ceil(
-      this.daysBetween(this.localDueDate(), this.definition.localDeadlineDate()) / 7,
-    );
+    return Math.ceil(this.daysBetween(this.localDueDate(), this.localDeadlineDate()) / 7);
   }
 
   /**

@@ -148,6 +148,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'enableSyncEnrolments',
       'enableSyncTimetable',
       'allowStudentExtensionRequests',
+      'allowFlexibleDates',
       'extensionWeeksOnResubmitRequest',
       'allowStudentChangeTutorial',
       {
@@ -253,9 +254,10 @@ export class UnitService extends CachedEntityService<Unit> {
       'enableSyncTimetable',
 
       'draftTaskDefinition',
+      'allowFlexibleDates',
       'allowStudentExtensionRequests',
       'extensionWeeksOnResubmitRequest',
-      'allowStudentChangeTutorial'
+      'allowStudentChangeTutorial',
     );
   }
 

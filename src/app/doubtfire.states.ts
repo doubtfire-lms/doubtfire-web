@@ -10,6 +10,7 @@ import {FUsersComponent} from './admin/states/f-users/f-users.component';
 import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import { SuccessCloseComponent } from './common/success-close/success-close.component';
+import { ProjectPlanComponent } from './projects/states/plan/project-plan.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -419,6 +420,27 @@ const SuccessCloseState: NgHybridStateDeclaration = {
   },
 };
 
+/**
+ * Allow the uesr to plan the task due dates for their project.
+ */
+const projectPlanState: NgHybridStateDeclaration = {
+  name: 'project/plan',
+  parent: 'projects/index',
+  url: '/plan',
+  component: ProjectPlanComponent,
+  // views: {
+  //   main: {
+  //     // Main body links to angular component
+  //     component: ProjectPlanComponent,
+  //   },
+  // },
+  data: {
+    pageTitle: 'Task Plan',
+    task: 'Plan Tasks',
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
 
 /**
  * Export the list of states we have created in angular
@@ -438,5 +460,6 @@ export const doubtfireStates = [
   ScormPlayerNormalState,
   ScormPlayerReviewState,
   ScormPlayerStudentReviewState,
-  SuccessCloseState
+  SuccessCloseState,
+  projectPlanState,
 ];

@@ -32,7 +32,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   UploadSubmissionModal
 )
-.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, newTaskService, newProjectService, task, reuploadEvidence, PrivacyPolicy) ->
+.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, newTaskService, newProjectService, task, reuploadEvidence, PrivacyPolicy, alertService) ->
   $scope.privacyPolicy = PrivacyPolicy
   # Expose task to scope
   $scope.task = task

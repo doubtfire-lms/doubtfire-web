@@ -86,5 +86,9 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     $scope.downloadSubmittedFiles = () ->
       fileDownloaderService.downloadFile($scope.urls.taskFilesUrl)
 
+    $scope.switchView = (view) ->
+      if view in $scope.dashboardViews
+        $scope.currentView = view
+
 
 )

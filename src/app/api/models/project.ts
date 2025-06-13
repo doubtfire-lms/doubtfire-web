@@ -38,6 +38,8 @@ export class Project extends Entity {
   public portfolioAvailable: boolean;
   public usesDraftLearningSummary: boolean;
 
+  public specConDays: number = 0;
+
   public hasPortfolio: boolean;
   public portfolioStatus: number;
   public portfolioFiles: { kind: string; name: string; idx: number }[];
@@ -177,13 +179,13 @@ export class Project extends Entity {
 
   public calcTopTasks() {
     // We will assign current weight to tasks...
-    var currentWeight: number = 0;
+    let currentWeight: number = 0;
 
     // Assign weights to tasks in final state - complete, fail, etc
     const sortedCompletedTasks: Task[] = this.taskCache.currentValues
       .filter((task) => task.inFinalState())
       .sort((a, b) => a.definition.seq - b.definition.seq)
-      .sort((a, b) => a.definition.startDate.getTime() - b.definition.startDate.getTime());
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     sortedCompletedTasks.forEach((task) => {
       task.topWeight = currentWeight;
@@ -193,8 +195,8 @@ export class Project extends Entity {
     // Sort valid top tasks by start date - tasks in non-final state
     const sortedTasks: Task[] = this.taskCache.currentValues
       .filter((task) => task.isValidTopTask())
-      .sort((a, b) => a.definition.seq - b.definition.seq)
-      .sort((a, b) => a.definition.startDate.getTime() - b.definition.startDate.getTime());
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+      .sort((a, b) => a.definition.seq - b.definition.seq);
 
     const overdueTasks: Task[] = sortedTasks.filter((task) => task.daysUntilDueDate() <= 7);
 
@@ -215,7 +217,7 @@ export class Project extends Entity {
     const toAdd: Task[] = sortedTasks
       .filter((task) => task.daysUntilDueDate() > 7)
       .sort((a, b) => a.definition.targetGrade - b.definition.targetGrade)
-      .sort((a, b) => a.definition.startDate.getTime() - b.definition.startDate.getTime());
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     // Sort by the targetGrade. Pass task are done first if same due date as others.
 
@@ -512,5 +514,14 @@ export class Project extends Entity {
     });
 
     this.burndownChartData = result;
+  }
+
+  public applySpecCon(days: number): Observable<Project> {
+    const projectService: ProjectService = AppInjector.get(ProjectService);
+    return projectService.update(this, {body: {spec_con_days: days}, endpointFormat: 'projects/:id:/spec_con'}).pipe(
+      tap((project: Project) => {
+        project.specConDays = days;
+      }),
+    );
   }
 }

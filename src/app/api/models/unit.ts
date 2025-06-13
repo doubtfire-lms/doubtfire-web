@@ -65,6 +65,7 @@ export class Unit extends Entity {
   draftTaskDefinition: TaskDefinition;
 
   allowStudentExtensionRequests: boolean;
+  allowFlexibleDates: boolean = false;
   extensionWeeksOnResubmitRequest: number;
   allowStudentChangeTutorial: boolean;
 
@@ -227,6 +228,20 @@ export class Unit extends Entity {
   }
 
   /**
+   * Get the total duration of the unit in milliseconds.
+   */
+  public get totalDuration(): number {
+    return this.endDate.valueOf() - this.startDate.valueOf();
+  }
+
+  /**
+   * Get the number of weeks in the unit's teaching period.
+   */
+  public get totalWeeks(): number {
+    return Math.ceil(this.totalDuration / (1000 * 60 * 60 * 24 * 7));
+  }
+
+  /**
    * Calculate how much time has elapsed in the teaching period, based on the start and
    * end date of the unit relative to the current date.
    *
@@ -240,7 +255,7 @@ export class Unit extends Entity {
     if (today >= this.endDate) return 100;
 
     const startToNow = Math.abs(today.valueOf() - this.startDate.valueOf());
-    const totalDuration = Math.abs(this.endDate.valueOf() - this.startDate.valueOf());
+    const totalDuration = Math.abs(this.totalDuration);
     return Math.round((startToNow / totalDuration) * 100);
   }
 

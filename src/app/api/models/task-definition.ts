@@ -143,6 +143,14 @@ export class TaskDefinition extends Entity {
     return this.dueDate;
   }
 
+  public get dueWeek(): number {
+    const startDate = this.unit.startDate;
+    const dueDate = this.localDueDate() || this.unit.endDate;
+
+    const diffInMs = dueDate.getTime() - startDate.getTime();
+    return Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 7)); // Convert ms to weeks
+  }
+
   public matches(text: string): boolean {
     return this.abbreviation.toLowerCase().indexOf(text) !== -1 || this.name.toLowerCase().indexOf(text) !== -1;
   }

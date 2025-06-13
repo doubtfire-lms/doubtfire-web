@@ -169,6 +169,32 @@
         <!--/portfolio-auto-generation-date-->
 
         <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate">Allow flexible dates</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label
+                class="btn btn-{{unit.allowFlexibleDates ? 'success' : 'default'}}"
+                ng-model="unit.allowFlexibleDates"
+                btn-radio="true"
+                uncheckable
+              >
+                <i class="fa fa-check"></i>
+              </label>
+              <label
+                class="btn btn-{{unit.allowFlexibleDates ? 'default' : 'danger'}}"
+                ng-model="unit.allowFlexibleDates"
+                btn-radio="false"
+                uncheckable
+              >
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block"> Allows students to set planned due dates, without using extensions. </span>
+          </div>
+        </div>
+        <!--/allowStudentExtensionRequests-->
+
+        <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Allow student extensions</label>
           <div class="col-sm-9">
             <div class="btn-group">
@@ -195,11 +221,11 @@
         <!--/allowStudentExtensionRequests-->
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="code">Extension duration on resubmit</label>
+          <label class="col-sm-2 control-label" for="extn-on-resub">Extension duration on resubmit</label>
           <div class="col-sm-9">
             <input
               class="form-control"
-              id="code"
+              id="extn-on-resub"
               type="number"
               placeholder="1"
               ng-model="unit.extensionWeeksOnResubmitRequest"

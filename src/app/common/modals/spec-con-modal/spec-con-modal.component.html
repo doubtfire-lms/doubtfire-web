@@ -1,0 +1,25 @@
+<h3 mat-dialog-title>Grant Extension / Special Consideration</h3>
+<div mat-dialog-content>
+  <p class="w-full">
+    Please enter number of days to extend the portfolio due date and all tasks for this student.
+  </p>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Number of days</mat-label>
+    <input matInput min="0" type="number" placeholder="Number of days" [(ngModel)]="days" />
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions style="float: right">
+  <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
+  <button
+    mat-dialog-close
+    style="margin-right: 10px"
+    mat-stroked-button
+    color="primary"
+    mat-button
+    (click)="save()"
+  >
+    Apply
+  </button>
+</div>
