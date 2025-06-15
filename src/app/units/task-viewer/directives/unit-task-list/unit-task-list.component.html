@@ -1,0 +1,64 @@
+<div class="task-list" div fxLayout="column" fxLayoutAlign="none">
+  <!-- Search Box -->
+  <div class="omnisearch rounded-t-2xl md:rounded-2xl">
+    <div class="flex items-center">
+      <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
+        <mat-icon class="flex items-center" disabled>search</mat-icon>
+      </button>
+      <div class="grow">
+        <input
+          class="search"
+          autocomplete="off"
+          spellcheck="false"
+          type="text"
+          placeholder="Search Tasks"
+          [(ngModel)]="searchText"
+          (ngModelChange)="applyFilters()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Scrollable Unit Task List -->
+  <div class="tasks-viewport scrollable" itemSize="60">
+    <mat-nav-list #taskDefinitions>
+      @if (filteredTaskDefinitions.length === 0) {
+        <div class="text-center text-muted">No tasks to display</div>
+      }
+      @for (taskDef of filteredTaskDefinitions; track taskDef) {
+        <mat-list-item class="clearfix p-0 h-[60px]" [disableRipple]="true">
+          @if (taskDef) {
+            <div
+              class="flex w-full item-content items-center hover:bg-gray-50"
+              (click)="setSelectedTaskDefinition(taskDef)"
+              [ngClass]="{
+                selected: isSelectedTaskDefinition(taskDef),
+              }"
+            >
+              <div class="task-entry w-full flex items-center">
+                <div class="task-list-data flex items-center justify-center">
+                  <f-task-badge [taskDef]="taskDef"></f-task-badge>
+                  <div class="flex-col ml-4">
+                    <h4 class="task-title line-clamp-1 mt-1">{{ taskDef.name }}</h4>
+
+                    <span class="flex">
+                      @if (taskDef.isGroupTask()) {
+                        <mat-icon class="text-gray-400 scale-75">group</mat-icon>
+                      }
+                      <div class="task-details">{{ gradeNames[taskDef.targetGrade] }} Task</div>
+                      @if (hasTasks && taskForTaskDef(taskDef)) {
+                        <p style="background-color: red">{{ taskForTaskDef(taskDef).status }}</p>
+                      }
+                    </span>
+
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </mat-list-item>
+      }
+    </mat-nav-list>
+  </div>
+</div>

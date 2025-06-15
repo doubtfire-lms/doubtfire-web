@@ -82,8 +82,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.globalState.projectsSubject.subscribe({
         next: (projects) => {
-          if (projects == null) return;
-          this.projects = projects.filter((project) => project.unit.myRole === 'Student');
+          if (!projects) return;
+          this.projects = projects.filter((project) => project?.unit?.myRole === 'Student');
         },
         error: (err) => {
           console.log(`Error fetching projects: ${err}`);

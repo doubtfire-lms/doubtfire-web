@@ -1,12 +1,13 @@
 import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
 
-import {NgModule, Injector, DoBootstrap} from '@angular/core';
-import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
-import {UpgradeModule} from '@angular/upgrade/static';
-import {AppInjector, setAppInjector} from './app-injector';
-import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { NgModule, Injector, DoBootstrap } from '@angular/core';
+import { BrowserModule, DomSanitizer, Title } from '@angular/platform-browser';
+import { UpgradeModule } from '@angular/upgrade/static';
+import { AppInjector, setAppInjector } from './app-injector';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 // Lottie animation module
 // import {LottieModule, LottieCacheModule} from 'ngx-lottie';
@@ -15,6 +16,7 @@ import player from 'lottie-web';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
@@ -74,6 +76,7 @@ import {
   uploadSubmissionModalProvider,
   ConfirmationModalProvider,
 } from './ajs-upgraded-providers';
+import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-tasks-list.component';
 import {
   TaskCommentComposerComponent,
   DiscussionComposerDialog,
@@ -100,7 +103,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatOptionModule} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
-import { DateFnsAdapter, MAT_DATE_FNS_FORMATS } from '@angular/material-date-fns-adapter';
+import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { enAU } from 'date-fns/locale';
 
 
@@ -140,6 +143,8 @@ import {TasksInTutorialsPipe} from './common/filters/tasks-in-tutorials.pipe';
 import {TasksForInboxSearchPipe} from './common/filters/tasks-for-inbox-search.pipe';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import {TasksForGroupsetPipe} from './common/filters/tasks-for-group-set.pipe';
+import {OrderByPipe} from './common/filters/order-by.pipe';
 import {CheckForUpdateService} from './sessions/service-worker-updater/check-for-update.service';
 import {
   ActivityTypeService,
@@ -178,6 +183,7 @@ import {UnitDropdownComponent} from './common/header/unit-dropdown/unit-dropdown
 import {TaskDropdownComponent} from './common/header/task-dropdown/task-dropdown.component';
 import {SplashScreenComponent} from './home/splash-screen/splash-screen.component';
 import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
+import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
 import {TaskDefinitionService} from './api/services/task-definition.service';
 import {NewTeachingPeriodDialogComponent} from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import {MatNativeDateModule} from '@angular/material/core';
@@ -200,7 +206,7 @@ import {TaskDashboardComponent} from './projects/states/dashboard/directives/tas
 import {InboxComponent} from './units/states/tasks/inbox/inbox.component';
 import {ProjectProgressBarComponent} from './common/project-progress-bar/project-progress-bar.component';
 import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
-import {FChipComponent} from './common/f-chip/f-chip.component';
+import {FChipComponent} from './common/f-chip/chip.component';
 import {TaskSimilarityViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
 import {FileViewerComponent} from './common/file-viewer/file-viewer.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
@@ -215,24 +221,31 @@ import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {FileDropComponent} from './common/file-drop/file-drop.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
-import {FUsersComponent} from './admin/states/f-users/f-users.component';
-
+import {FUsersComponent} from './admin/states/users/users.component';
+import {ProjectProgressGaugeComponent} from './common/project-progress/project-progress-gauge.component';
 import {CreateNewUnitModal} from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {CreateNewUnitModalContentComponent} from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
 import {
   TeachingPeriodUnitImportDialogComponent,
   TeachingPeriodUnitImportService,
 } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
-import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
-import {TiiActionLogComponent} from './admin/tii-action-log/tii-action-log.component';
-import {TiiActionService} from './api/services/tii-action.service';
-import {FUnitsComponent} from './admin/states/f-units/f-units.component';
-import {FUnitTaskListComponent} from './units/states/tasks/viewer/directives/f-unit-task-list/f-unit-task-list.component';
-import {FTaskDetailsViewComponent} from './units/states/tasks/viewer/directives/f-task-details-view/f-task-details-view.component';
-import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-task-sheet-view/f-task-sheet-view.component';
-import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
-import {UnitCodeComponent} from './common/unit-code/unit-code.component';
-import {GradeService} from './common/services/grade.service';
+import { UnauthorisedComponent } from './errors/states/unauthorised/unauthorised.component';
+import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
+import { TiiActionLogComponent } from './admin/tii-action-log/tii-action-log.component';
+import { TiiActionService } from './api/services/tii-action.service';
+import { FUnitsComponent } from './admin/states/units/units.component';
+import { FUnitTaskListComponent } from './units/task-viewer/directives/unit-task-list/unit-task-list.component';
+import { FTaskDetailsViewComponent } from './units/task-viewer/directives/task-details-view/task-details-view.component';
+import { FTaskSheetViewComponent } from './units/task-viewer/directives/task-sheet-view/task-sheet-view.component';
+import { UnitCodeComponent } from './common/unit-code/unit-code.component';
+import { GradeService } from './common/services/grade.service';
+import { UnitRootStateComponent } from './units/unit-root-state.component';
+import { TaskViewerStateComponent } from './units/task-viewer/task-viewer-state.component';
+import { ProjectRootStateComponent } from './projects/states/project-root-state.component';
+import { ProjectProgressDashboardComponent } from './projects/project-progress-dashboard/project-progress-dashboard.component';
+import { ProgressBurndownChartComponent } from './visualisations/progress-burndown-chart/progressburndownchart.component';
+import { TaskVisualisationComponent } from './visualisations/task-visualisation/taskvisualisation.component';
+import { ChartBaseComponent } from './common/chart-base/chart-base-component/chart-base-component.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import {ScormAdapterService} from './api/services/scorm-adapter.service';
 import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
@@ -242,6 +255,9 @@ import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm
 import {ScormExtensionModalComponent} from './common/modals/scorm-extension-modal/scorm-extension-modal.component';
 import { D2lTransferComponent, D2lTransferModal } from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
 import { SuccessCloseComponent } from './common/success-close/success-close.component';
+import { GradeIconComponent } from './common/grade-icon/grade-icon.component';
+import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-task-modal.component';
+import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -255,15 +271,18 @@ const MY_DATE_FORMAT = {
     monthYearA11yLabel: 'MMMM yyyy',
   },
 };
+import { UnitStudentEnrolmentModalComponent } from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 
 @NgModule({
   // Components we declare
   declarations: [
     AlertComponent,
+    UnitStudentEnrolmentModalComponent,
     AboutDoubtfireModalContent,
     D2lUnitDetailsFormComponent,
     D2lTransferComponent,
     TeachingPeriodUnitImportDialogComponent,
+    ProjectTasksListComponent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
@@ -308,6 +327,7 @@ const MY_DATE_FORMAT = {
     TaskCommentsViewerComponent,
     UserIconComponent,
     AudioPlayerComponent,
+    ProjectProgressDashboardComponent,
     MarkedPipe,
     HumanizedDatePipe,
     IsActiveUnitRole,
@@ -317,6 +337,8 @@ const MY_DATE_FORMAT = {
     PdfViewerPanelComponent,
     StaffTaskListComponent,
     TaskSimilarityViewComponent,
+    TasksForGroupsetPipe,
+    OrderByPipe,
     FiltersPipe,
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
@@ -329,6 +351,9 @@ const MY_DATE_FORMAT = {
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    ProjectDashboardComponent,
+    GradeIconComponent,
+    GradeTaskModalComponent,
     ObjectSelectComponent,
     WelcomeComponent,
     AcceptEulaComponent,
@@ -357,10 +382,17 @@ const MY_DATE_FORMAT = {
     FUnitTaskListComponent,
     FTaskDetailsViewComponent,
     FTaskSheetViewComponent,
-    TasksViewerComponent,
+    UnitRootStateComponent,
+    ProjectRootStateComponent,
+    TaskViewerStateComponent,
     FUsersComponent,
+    ProjectProgressGaugeComponent,
     FTaskBadgeComponent,
     FUnitsComponent,
+    UnauthorisedComponent,
+    ChartBaseComponent,
+    ProgressBurndownChartComponent,
+    TaskVisualisationComponent,
     ScormPlayerComponent,
     ScormCommentComponent,
     TaskScormCardComponent,
@@ -444,6 +476,7 @@ const MY_DATE_FORMAT = {
     CreateNewUnitModal,
     ScormAdapterService,
     TestAttemptService,
+    PrivacyPolicy,
     provideLottieOptions({
       player: () => player,
     }),
@@ -458,6 +491,7 @@ const MY_DATE_FORMAT = {
     DragDropModule,
     ScrollingModule,
     MatToolbarModule,
+    MatSidenavModule,
     MatFormFieldModule,
     MatAutocompleteModule,
     MatInputModule,
@@ -487,7 +521,6 @@ const MY_DATE_FORMAT = {
     MatExpansionModule,
     MatCardModule,
     MatGridListModule,
-    MatSelectModule,
     MatToolbarModule,
     MatTabsModule,
     UpgradeModule,
@@ -498,6 +531,7 @@ const MY_DATE_FORMAT = {
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
+    NgxChartsModule,
     PdfViewerModule,
     LottieComponent,
     UIRouterUpgradeModule.forRoot({states: doubtfireStates, config: uiRouterConfig}),
@@ -508,6 +542,7 @@ const MY_DATE_FORMAT = {
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModuleNew,
+    NgxChartsModule,
   ],
 })
 

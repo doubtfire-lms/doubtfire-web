@@ -2,11 +2,11 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "downlevelIteration": true,
     "importHelpers": true,
     "module": "es2020",
     "outDir": "./build",
     "sourceMap": true,
+    "esModuleInterop": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -18,8 +18,7 @@
     "target": "ES2022",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2020", "dom", "ES2021.String"],
-    "useDefineForClassFields": false,
-    "allowSyntheticDefaultImports": true
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "strictTemplates": false

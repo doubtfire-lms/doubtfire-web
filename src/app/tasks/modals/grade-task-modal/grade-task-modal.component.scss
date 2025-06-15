@@ -1,0 +1,36 @@
+.grade-task-modal {
+  width: 450px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.slider {
+  width: 100%;
+}
+
+.task-label {
+  background-color: #3939ff;
+  color: white;
+  padding: 0 0.75rem;
+  border-radius: 0.75rem;
+  margin-left: 0.5rem;
+  font-size: small;
+}
+
+.label-rating {
+  display: flex;
+  justify-content: end;
+}
+
+.grade-toggle-group {
+  display: flex;
+  justify-content: center;
+}
+
+.grade-toggle {
+  padding: 0.5rem 0;
+}
+
+.grade-task-item + .grade-task-item {
+  padding-top: 2rem;
+}

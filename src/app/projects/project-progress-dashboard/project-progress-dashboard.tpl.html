@@ -1,60 +1,99 @@
 <div ng-if="unit" class="project-progress-dashboard">
-  <div class="col-md-4 col-md-push-8">
-    <div class="row">
-      <div class="col-sm-6 col-md-12">
-        <div class="panel panel-primary">
-          <div class="panel-heading clearfix">
-            <div class="pull-left">
-              <h4 class="panel-title">Task List</h4>
+    <div class="col-md-4 col-md-push-8">
+      <div class="row">
+        <div class="col-sm-6 col-md-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+              <div class="pull-left">
+                <h4 class="panel-title">Task List</h4>
+              </div>
+            </div>
+            <div class="panel-body">
+              <f-project-tasks-list [project]="project" [unit]="unit" ></f-project-tasks-list>
+            </div>
+          </div><!--task-lists-->
+        </div>
+        <div class="col-sm-6 col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Target Grade</h3>
+              Select the grade you wish to achieve in the unit.
+            </div>
+            <div class="panel-body text-center">
+              <p class="btn-group">
+                <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="project.targetGrade" btn-radio="{{$index}}">
+                  <grade-icon [grade]="grade" tooltip="Select a {{grade}} as your target grade" tooltip-append-to-body="true"></grade-icon>
+                </label>
+
+                <label ng-repeat="grade in grades" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="project.targetGrade" btn-radio="{{$index}}">
+                  <grade-icon grade="grade" tooltip="Select a {{grade}} as your target grade" tooltip-append-to-body="true" class="text-{{$index == project.targetGrade ? 'primary' : 'muted'}}"></grade-icon>
+                </label>
+              </p>
             </div>
           </div>
-          <div class="panel-body">
-            <project-tasks-list project="project" student-project-id="studentProjectId" task-def="taskDef" unit="unit" assessing-unit-role="assessingUnitRole" on-select="showTaskView"></project-tasks-list>
-          </div>
-        </div><!--task-lists-->
+        </div>
       </div>
-      <div class="col-sm-6 col-md-12">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Target Grade</h3>
-            Select the grade you wish to achieve in the unit.
+    </div><!--right-hand-panel-->
+
+    <div class="col-md-8 col-md-pull-4">
+      <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+          <div class="pull-left">
+            <div ng-show="currentVisualisation == 'burndown'">
+              <h3 class="panel-title">Burndown Chart</h3>
+              The Burndown chart shows how much work remains for you to achieve your target grade.
+            </div>
+            <div ng-show="currentVisualisation == 'taskSummary'">
+              <h3 class="panel-title">Task Summary Chart</h3>
+              Summary of each of your task statuses
+            </div>
+          </div><!--/headings-->
+          <div class="pull-right text-right toolbar">
+            <div class="buttons">
+              <div class="btn-group">
+                <label class="btn btn-default text-center" btn-radio="'burndown'" ng-model="currentVisualisation">
+                  <i class="fa fa-line-chart"></i>
+                </label>
+                <label class="btn btn-default text-center" btn-radio="'taskSummary'" ng-model="currentVisualisation">
+                  <i class="fa fa-pie-chart"></i>
+                </label>
+              </div>
+            </div>
+          </div><!--/button-switch-->
+        </div>
+        <div class="panel-body">
+          <div class="burndown-chart" ng-if="currentVisualisation == 'burndown'">
+            <!-- <progress-burndown-chart project="project" unit="unit"></progress-burndown-chart> -->
           </div>
+          <div ng-if="currentVisualisation == 'taskSummary'">
+            <!-- <student-task-status-pie-chart project="project"></student-task-status-pie-chart> -->
+
           <div class="panel-body text-center">
             <p class="btn-group">
               <label ng-repeat="grade in grades" ng-if="$index != 4" ng-click="chooseGrade($index)" class="btn btn-default col-sm-3 text-center" ng-model="project.targetGrade" btn-radio="{{$index}}">
                 <grade-icon grade="grade" tooltip="Select a {{grade}} as your target grade" tooltip-append-to-body="true" class="text-{{$index == project.targetGrade ? 'primary' : 'muted'}}"></grade-icon>
               </label>
             </p>
+
           </div>
         </div>
-      </div>
-    </div>
-  </div><!--right-hand-panel-->
-
-  <div class="col-md-8 col-md-pull-4">
-    <div class="panel panel-default">
-      <div class="panel-heading clearfix">
-        <div class="pull-left">
-          <div ng-show="currentVisualisation == 'burndown'">
-            <h3 class="panel-title">Burndown Chart</h3>
-            The Burndown chart shows how much work remains for you to achieve your target grade.
-          </div>
+        <div class="panel-footer text-center">
           <div ng-show="currentVisualisation == 'taskSummary'">
-            <h3 class="panel-title">Task Summary Chart</h3>
-            Summary of each of your task statuses
+            You have completed
+            <strong>{{taskStats.numberOfTasksCompleted}}</strong>
+            tasks and have
+            <strong>{{taskStats.numberOfTasksRemaining}}</strong>
+            left to complete to achieve a
+            <strong>{{grade.names[project.targetGrade]}}</strong>.
           </div>
-        </div><!--/headings-->
-        <div class="pull-right text-right toolbar">
-          <div class="buttons">
-            <div class="btn-group">
-              <label class="btn btn-default text-center" btn-radio="'burndown'" ng-model="currentVisualisation">
-                <i class="fa fa-line-chart"></i>
-              </label>
-              <label class="btn btn-default text-center" btn-radio="'taskSummary'" ng-model="currentVisualisation">
-                <i class="fa fa-pie-chart"></i>
-              </label>
-            </div>
+          <div ng-show="currentVisualisation == 'burndown'">
+            Aim to keep your
+            <strong style="color: #e01b5d">Complete</strong>
+            line close to or ahead of the
+            <strong class="text-muted">Target</strong>
+            line to keep on track.
           </div>
+
         </div><!--/button-switch-->
       </div>
       <div class="panel-body">
@@ -80,8 +119,8 @@
           line close to or ahead of the
           <strong class="text-muted">Target</strong>
           line to keep on track.
+
         </div>
       </div>
-    </div>
-  </div><!--primary-panel-->
-</div>
+    </div><!--primary-panel-->
+  </div>

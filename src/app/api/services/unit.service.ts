@@ -50,10 +50,10 @@ export class UnitService extends CachedEntityService<Unit> {
         toEntityFn: (data: object, jsonKey: string, entity: Unit) => {
           const unitRoleService = AppInjector.get(UnitRoleService);
           unitRoleService.cache.get(data[jsonKey]);
-        }
+        },
       },
       {
-        keys: 'staff',
+        keys: 'unitRoles',
         toEntityOp: (data, key, entity) => {
           const unitRoleService = AppInjector.get(UnitRoleService);
           // Add staff

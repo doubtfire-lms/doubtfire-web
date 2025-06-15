@@ -9,7 +9,10 @@ angular.module('doubtfire.projects.states.portfolio.directives.portfolio-grade-s
   replace: true
   templateUrl: 'projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.tpl.html'
   controller: ($scope, newProjectService, gradeService) ->
-    $scope.grades = gradeService.grades
+    if ! $scope.project.submittedGrade
+      $scope.project.submittedGrade = 0
+    $scope.grades = gradeService.gradeValues
+    $scope.gradeName = (grade) -> gradeService.grades[grade]
     $scope.agreedToAssessmentCriteria = $scope.projectHasLearningSummaryReport()
     $scope.chooseGrade = (idx) ->
       $scope.project.submittedGrade = idx

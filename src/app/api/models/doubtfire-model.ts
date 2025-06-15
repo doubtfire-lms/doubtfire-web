@@ -61,5 +61,6 @@ export * from '../services/teaching-period-break.service';
 export * from '../services/learning-outcome.service';
 export * from '../services/group-set.service';
 export * from '../services/task-similarity.service';
+export * from '../../common/services/grade.service';
 export * from '../services/test-attempt.service';
 export * from '../models/d2l/d2l_assessment_mapping.service';

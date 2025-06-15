@@ -1,0 +1,25 @@
+.project-tasks-list {
+  .chip {
+    border-radius: 4px;
+    ::ng-deep .mdc-evolution-chip__text-label {
+      color: inherit !important;
+    }
+  }
+
+  .group-set-name {
+    color: #777;
+    text-align: center;
+    font-size: 1em;
+    font-weight: bold;
+  }
+
+  .mat-chip-clicked {
+    outline: #007bff auto 1px !important;
+  }
+
+  .task-status {
+    ::ng-deep .mdc-evolution-chip__cell {
+      justify-content: center !important;
+    }
+  }
+}
