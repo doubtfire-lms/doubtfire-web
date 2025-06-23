@@ -82,8 +82,6 @@ export class SignInComponent implements OnInit {
     this.api = this.constants.API_URL;
     this.externalName = this.constants.ExternalName;
 
-    // this.attemptRefreshTokenSignIn();
-
     // HACK: Workaround the fact that query params do not work in Safari with ui-router
     if (!this.username) {
       const params = getUrlParams(document.location.href);
@@ -151,19 +149,7 @@ export class SignInComponent implements OnInit {
    */
   private actionSignInSuccess(): void {
     this.globalState.loadGlobals();
-    this.state.go('home');
-  }
-
-  /**
-   * Try to sign in using the refresh token cookie.
-   */
-  private attemptRefreshTokenSignIn(): void {
-    // Attempt to get an access token using the refresh token cookie
-    this.authService.attemptLoginUsingRefreshToken((loggedIn: boolean) => {
-      if (loggedIn) {
-        this.actionSignInSuccess();
-      }
-    });
+    this.state.go('welcome');
   }
 
   /**
