@@ -77,6 +77,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   tasks: any[] = null;
 
+  hasJplagReport: boolean;
+
   watchingTaskKey: any;
 
   panelOpenState = false;
@@ -207,6 +209,20 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     return this.taskData.taskDefMode;
   }
 
+  // TODO: Get this to return correct value from the API
+  public async taskHasJplagReport(): Promise<boolean> {
+    const taskDef = this.filters.taskDefinition;
+    return taskDef
+      .hasJplagReport()
+      .then((hasReport) => {
+        return hasReport ?? false;
+      })
+      .catch((error) => {
+        console.error(error);
+        return false;
+      });
+  }
+
   downloadSubmissionPdfs() {
     const taskDef = this.filters.taskDefinition;
     this.fileDownloaderService.downloadFile(
@@ -225,6 +241,18 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       }/task_definitions/${taskDef.id}/download_submissions`,
       `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`,
     );
+  }
+
+  downloadJPLAGReport() {
+    const taskDef = this.filters.taskDefinition;
+    this.fileDownloaderService.downloadFile(
+      //this.taskData.selectedTask.jplagReportUrl()
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${
+        this.unit.id
+      }/task_definitions/${taskDef.id}/jplag_report`,
+      `${this.unit.code}-${taskDef.abbreviation}-jplag-report.zip`,
+    );
+    window.open('https://jplag.github.io/JPlag/', '_blank');
   }
 
   openDialog() {
@@ -350,6 +378,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.alertService.error(message, 6000);
       },
     });
+    this.taskHasJplagReport().then((hasReport) => {
+      this.hasJplagReport = hasReport;
+    });
+    console.log('HAS JPLAG REPORT:', this.hasJplagReport);
   }
 
   setSelectedTask(task: Task) {

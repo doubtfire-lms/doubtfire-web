@@ -23,14 +23,25 @@
             </mat-panel-title>
             <mat-panel-description> {{ part.description }} </mat-panel-description>
             @if (similarity.readyForViewer) {
-              <button
-                matTooltip="View report for this similarity"
-                mat-icon-button
-                aria-label="View Detailed Report"
-                (click)="openReport($event, similarity)"
-              >
-                <mat-icon>summarize</mat-icon>
-              </button>
+              @if (similarity.type === 'JplagTaskSimilarity') {
+                <button
+                  matTooltip="Download report for this similarity"
+                  mat-icon-button
+                  aria-label="View Detailed Report"
+                  (click)="downloadJPLAGReport()"
+                >
+                  <mat-icon>download</mat-icon>
+                </button>
+              } @else {
+                <button
+                  matTooltip="View similarity for this part"
+                  mat-icon-button
+                  aria-label="View Similarity"
+                  (click)="openViewer($event, similarity, part)"
+                >
+                  <mat-icon>summarize</mat-icon>
+                </button>
+              }
             }
             @if (i === 0) {
               <button

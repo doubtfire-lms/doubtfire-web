@@ -29,7 +29,7 @@
         <mat-checkbox [(ngModel)]="upreq.tiiCheck">TurnItIn</mat-checkbox>
       }
       @if (upreq.type === 'code') {
-        <mat-checkbox [(ngModel)]="upreq.tiiCheck">Moss</mat-checkbox>
+        <mat-checkbox [(ngModel)]="upreq.tiiCheck">Jplag</mat-checkbox>
       }
     </td>
   </ng-container>
@@ -74,19 +74,19 @@
   <tr mat-footer-row *matFooterRowDef="['actions']"></tr>
 </table>
 
-@if (taskDefinition.needsMoss) {
+@if (taskDefinition.needsJplag) {
 <div class="flex-grow flex flex-row gap-4">
   <mat-form-field appearance="outline" class="basis-1/2">
-    <mat-label>Language used for Moss checks</mat-label>
-    <mat-select [(ngModel)]="taskDefinition.mossLanguage">
-      <mat-option value="moss c">C</mat-option>
-      <mat-option value="moss csharp">C#</mat-option>
-      <mat-option value="moss cc">C++</mat-option>
-      <mat-option value="moss python">Python</mat-option>
+    <mat-label>Language used for JPLAG checks</mat-label>
+    <mat-select [(ngModel)]="taskDefinition.jplagLanguage">
+      <mat-option value="c">C</mat-option>
+      <mat-option value="csharp">C#</mat-option>
+      <mat-option value="cpp">C++</mat-option>
+      <mat-option value="python">Python</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="outline" class="basis-1/2">
-    <mat-label>Similarity percent to flag for Moss checks</mat-label>
+    <mat-label>Similarity percent to flag for JPLAG checks</mat-label>
     <input matInput [(ngModel)]="taskDefinition.plagiarismWarnPct" type="number" />
   </mat-form-field>
 </div>

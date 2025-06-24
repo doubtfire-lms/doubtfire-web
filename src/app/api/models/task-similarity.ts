@@ -5,7 +5,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { Observable } from 'rxjs';
 
 export enum TaskSimilarityType {
-  Moss = 'MossTaskSimilarity',
+  Jplag = 'JplagTaskSimilarity',
   TurnItIn = 'TiiTaskSimilarity',
 }
 
@@ -62,8 +62,8 @@ export class TaskSimilarity extends Entity {
 
   public get friendlyTypeName(): string {
     switch (this.type) {
-      case TaskSimilarityType.Moss:
-        return 'MOSS';
+      case TaskSimilarityType.Jplag:
+        return 'JPLAG';
       case TaskSimilarityType.TurnItIn:
         return 'TurnItIn';
     }
