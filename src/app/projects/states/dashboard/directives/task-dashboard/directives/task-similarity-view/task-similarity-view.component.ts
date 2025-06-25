@@ -17,7 +17,9 @@ import { AppInjector } from 'src/app/app-injector';
 export class TaskSimilarityViewComponent implements OnChanges {
   @Input() task: Task;
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  @ViewChild('jplagIframe', {static: true}) jplagIframe!: ElementRef<HTMLIFrameElement>;
   panelOpenState = false;
+  jplagOpenState = false;
 
   constructor(
     private taskSimilarityService: TaskSimilarityService,
@@ -28,6 +30,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue && this.task?.id) {
+      this.jplagOpenState = false;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       this.task?.fetchSimilarities().subscribe((_) => {
         console.log('similarities fetched');
@@ -41,7 +44,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
     this.taskSimilarityService
       .update({ taskId: similarity.task.id, id: similarity.id }, { entity: similarity })
       .subscribe((_) => {
-        this.alertService.success('Similarity flag updated');
+        this.alertsService.success('Similarity flag updated');
         similarity.task.similarityFlag = similarity.task.similarityCache.currentValues
           .map((s) => {
             return s.flagged;
@@ -59,20 +62,52 @@ export class TaskSimilarityViewComponent implements OnChanges {
         window.open(url, '_blank');
       },
       error: (err) => {
-        this.alertService.error(`Error accessing TurnItIn: ${err}`);
+        this.alertsService.error(`Error accessing TurnItIn: ${err}`);
       },
     });
   }
 
   downloadJPLAGReport() {
+    this.jplagOpenState = true;
     const taskDef = this.task.definition;
-    this.fileDownloaderService.downloadFile(
-      //this.taskData.selectedTask.jplagReportUrl()
+    this.fileDownloaderService.downloadBlob(
       `${AppInjector.get(DoubtfireConstants).API_URL}/units/${
         this.task.unit.id
       }/task_definitions/${taskDef.id}/jplag_report`,
-      `${this.task.unit.code}-${taskDef.abbreviation}-jplag-report.zip`,
+      (resourceUrl: string, response: HttpResponse<Blob>) => {
+        // Open in embedded iframe
+        setTimeout(() => {
+          const data = {
+            type: 'jplag-zip',
+            file: response.body,
+            name: 'report.jplag',
+          };
+          this.jplagIframe.nativeElement.contentWindow?.postMessage(data, '*');
+        }, 1000);
+
+        // Open in external window
+        // const viewerWindow = window.open(
+        //   'http://localhost:5173',
+        //   '_blank',
+        //   `width=1600,height=800,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,status=no`,
+        // );
+        // if (viewerWindow) {
+        //   // Wait for the viewer to fully load
+        //   setTimeout(() => {
+        //     const data = {
+        //       type: 'jplag-zip',
+        //       file: response.body,
+        //       name: 'report.jplag',
+        //     };
+        //     this.jplagIframe.nativeElement.contentWindow?.postMessage(data, '*');
+
+        //     // viewerWindow.postMessage(data, '*');
+        //   }, 1000);
+        // }
+      },
+      (error) => {
+        console.error(error);
+      },
     );
-    window.open('https://jplag.github.io/JPlag/', '_blank');
   }
 }

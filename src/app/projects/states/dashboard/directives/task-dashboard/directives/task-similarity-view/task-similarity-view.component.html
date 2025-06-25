@@ -8,6 +8,17 @@
     </div>
   </div>
 
+  <!-- TODO: we can either load the report viewer remotely or build it first and load it from file -->
+  <!-- <iframe src="/assets/jplag/index.html" frameborder="0" class="w-full h-[1000px]"></iframe> -->
+  <iframe
+    [hidden]="!jplagOpenState"
+    #jplagIframe
+    src="http://localhost:5173"
+    frameborder="0"
+    class="w-full h-[750px]"
+  ></iframe>
+
+  @if (!jplagOpenState) {
   <mat-accordion multi>
     @for (similarity of task?.similarityCache.values | async; track similarity) {
       <h1 class="mat-headline"></h1>
@@ -68,4 +79,5 @@
       }
     }
   </mat-accordion>
+  }
 </div>

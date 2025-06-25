@@ -78,4 +78,14 @@ export class FooterComponent implements OnInit {
   viewSimilarity() {
     this.selectedTaskService.showSimilarity();
   }
+
+  getJplagReport() {
+    if (!this.selectedTask?.definition) {
+      return;
+    }
+    this.fileDownloader.downloadFile(
+      this.selectedTask.definition.getJplagReportUrl(),
+      `${this.selectedTask.definition.abbreviation}-jplag-report`,
+    );
+  }
 }

@@ -49,7 +49,8 @@ export class TaskDefinition extends Entity {
   maxQualityPts: number;
   overseerImageId: number;
   assessmentEnabled: boolean;
-  jplagLanguage: string = 'c';
+  similarityLanguage: string = 'c';
+  hasJplagReport: boolean;
 
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
@@ -257,18 +258,22 @@ export class TaskDefinition extends Entity {
     }/task_assessment_resources.json`;
   }
 
-  public async hasJplagReport(): Promise<boolean> {
-    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/has_jplag_report`;
-    //console.log(url);
-    try {
-      const response = await fetch(url);
-      const result = await response.json();
-      return result === 'true';
-    } catch (error) {
-      console.error('Error fetching JPLAG report:', error);
-      return false;
-    }
+  public getJplagReportUrl() {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/jplag_report`;
   }
+
+  // public async hasJplagReport(): Promise<boolean> {
+  //   const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/has_jplag_report`;
+  //   console.log(`Jplag api url: ${url}`);
+  //   try {
+  //     const response = await fetch(url);
+  //     const result = await response.json();
+  //     return result === 'true';
+  //   } catch (error) {
+  //     console.error('Error fetching JPLAG report:', error);
+  //     return false;
+  //   }
+  // }
 
   public deleteTaskSheet(): Observable<any> {
     const httpClient = AppInjector.get(HttpClient);
