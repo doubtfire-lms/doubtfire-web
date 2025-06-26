@@ -68,8 +68,9 @@ export class TaskSimilarityViewComponent implements OnChanges {
     });
   }
 
-  downloadJPLAGReport(similarityDescription: string) {
-    // TODO: confirm how the users are identified in jplag reports; username or full name?
+  downloadJPLAGReport() {
+    // Students are identified by their username in JPlag reports (configured by API)
+    // In most cases, usernames are a combination of their first and last names
     const studentUsername = this.task.project.student.username;
 
     const taskDef = this.task.definition;
@@ -77,28 +78,22 @@ export class TaskSimilarityViewComponent implements OnChanges {
       `${AppInjector.get(DoubtfireConstants).API_URL}/units/${
         this.task.unit.id
       }/task_definitions/${taskDef.id}/jplag_report`,
-      (resourceUrl: string, response: HttpResponse<Blob>) => {
+      (_, response: HttpResponse<Blob>) => {
         // Open JPlag report viewer in embedded iframe
         setTimeout(() => {
           // Send the JPlag report to load
-          this.jplagIframe.nativeElement.contentWindow?.postMessage(
-            {
-              type: 'upload-jplag-file',
-              file: response.body,
-              name: 'report.jplag',
-            },
-            '*',
-          );
+          this.jplagIframe.nativeElement.contentWindow?.postMessage({
+            type: 'upload-jplag-file',
+            file: response.body,
+            name: 'report.jplag',
+          });
           setTimeout(() => {
-            // Search comparisons by student username, auto load
-            this.jplagIframe.nativeElement.contentWindow?.postMessage(
-              {
-                type: 'set-search-filter-value',
-                filter: studentUsername,
-                autoViewComparison: true,
-              },
-              '*',
-            );
+            // Search comparisons by student username, auto load comparisons if only one is found
+            this.jplagIframe.nativeElement.contentWindow?.postMessage({
+              type: 'set-search-filter-value',
+              filter: studentUsername,
+              autoViewComparison: true,
+            });
             this.jplagOpenState = true;
           }, 100);
         }, 100);

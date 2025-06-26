@@ -4,7 +4,12 @@
     <h1 class="mat-headline m-0">Similarities</h1>
     <span class="grow"></span>
     <div class="example-action-buttons">
-      <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+      @if (!jplagOpenState) {
+        <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+      }
+      @if (jplagOpenState) {
+        <button mat-button (click)="jplagOpenState = false">Back to Summary</button>
+      }
     </div>
   </div>
 
@@ -34,12 +39,20 @@
               @if (similarity.readyForViewer) {
                 @if (similarity.type === 'JplagTaskSimilarity') {
                   <button
-                    matTooltip="Download report for this similarity"
+                    [matTooltip]="
+                      similarity.type === 'JplagTaskSimilarity'
+                        ? 'View JPlag report for this similarity'
+                        : 'Download report for this similarity'
+                    "
                     mat-icon-button
                     aria-label="View Detailed Report"
-                    (click)="downloadJPLAGReport(part.description)"
+                    (click)="downloadJPLAGReport()"
                   >
-                    <mat-icon>download</mat-icon>
+                    @if (similarity.type === 'JplagTaskSimilarity') {
+                      <mat-icon>assessment</mat-icon>
+                    } @else {
+                      <mat-icon>download</mat-icon>
+                    }
                   </button>
                 } @else {
                   <button
