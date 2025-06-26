@@ -68,42 +68,40 @@ export class TaskSimilarityViewComponent implements OnChanges {
     });
   }
 
-  downloadJPLAGReport() {
-    this.jplagOpenState = true;
+  downloadJPLAGReport(similarityDescription: string) {
+    // TODO: confirm how the users are identified in jplag reports; username or full name?
+    const studentUsername = this.task.project.student.username;
+
     const taskDef = this.task.definition;
     this.fileDownloaderService.downloadBlob(
       `${AppInjector.get(DoubtfireConstants).API_URL}/units/${
         this.task.unit.id
       }/task_definitions/${taskDef.id}/jplag_report`,
       (resourceUrl: string, response: HttpResponse<Blob>) => {
-        // Open in embedded iframe
+        // Open JPlag report viewer in embedded iframe
         setTimeout(() => {
-          const data = {
-            type: 'jplag-zip',
-            file: response.body,
-            name: 'report.jplag',
-          };
-          this.jplagIframe.nativeElement.contentWindow?.postMessage(data, '*');
-        }, 1000);
-
-        // Open in external window
-        // const viewerWindow = window.open(
-        //   'http://localhost:5173',
-        //   '_blank',
-        //   `width=1600,height=800,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,status=no`,
-        // );
-        // if (viewerWindow) {
-        //   // Wait for the viewer to fully load
-        //   setTimeout(() => {
-        //     const data = {
-        //       type: 'jplag-zip',
-        //       file: response.body,
-        //       name: 'report.jplag',
-        //     };
-        //     this.jplagIframe.nativeElement.contentWindow?.postMessage(data, '*');
-
-        //     }, 1000);
-        // }
+          // Send the JPlag report to load
+          this.jplagIframe.nativeElement.contentWindow?.postMessage(
+            {
+              type: 'upload-jplag-file',
+              file: response.body,
+              name: 'report.jplag',
+            },
+            '*',
+          );
+          setTimeout(() => {
+            // Search comparisons by student username, auto load
+            this.jplagIframe.nativeElement.contentWindow?.postMessage(
+              {
+                type: 'set-search-filter-value',
+                filter: studentUsername,
+                autoViewComparison: true,
+              },
+              '*',
+            );
+            this.jplagOpenState = true;
+          }, 100);
+        }, 100);
       },
       (error) => {
         console.error(error);

@@ -8,12 +8,10 @@
     </div>
   </div>
 
-  <!-- TODO: we can either load the report viewer remotely or build it first and load it from file -->
-  <!-- <iframe src="/assets/jplag/index.html" frameborder="0" class="w-full h-[1000px]"></iframe> -->
   <iframe
     [hidden]="!jplagOpenState"
     #jplagIframe
-    src="http://localhost:5173"
+    src="/JPlag/"
     frameborder="0"
     class="w-full h-[750px]"
   ></iframe>
@@ -39,7 +37,7 @@
                     matTooltip="Download report for this similarity"
                     mat-icon-button
                     aria-label="View Detailed Report"
-                    (click)="downloadJPLAGReport()"
+                    (click)="downloadJPLAGReport(part.description)"
                   >
                     <mat-icon>download</mat-icon>
                   </button>
