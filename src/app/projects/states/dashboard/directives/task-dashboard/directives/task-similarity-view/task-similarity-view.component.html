@@ -33,22 +33,12 @@
               @if (similarity.readyForViewer) {
                 @if (similarity.type === 'JplagTaskSimilarity') {
                   <button
-                    [matTooltip]="
-                      similarity.type === 'JplagTaskSimilarity'
-                        ? 'View JPlag report for this similarity'
-                        : 'Download report for this similarity'
-                    "
+                    matTooltip="View JPlag report for this similarity"
                     mat-icon-button
                     aria-label="View Detailed Report"
-                    (click)="
-                      similarity.type === 'JplagTaskSimilarity' ? viewJplagReport() : openReport()
-                    "
+                    (click)="viewJplagReport()"
                   >
-                    @if (similarity.type === 'JplagTaskSimilarity') {
-                      <mat-icon>assessment</mat-icon>
-                    } @else {
-                      <mat-icon>download</mat-icon>
-                    }
+                    <mat-icon>summarize</mat-icon>
                   </button>
                 } @else {
                   <button
