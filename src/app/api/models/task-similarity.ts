@@ -1,11 +1,12 @@
-import { Entity } from 'ngx-entity-service';
-import { AppInjector } from 'src/app/app-injector';
-import { Task, TaskSimilarityService } from './doubtfire-model';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { Observable } from 'rxjs';
+import {Entity} from 'ngx-entity-service';
+import {AppInjector} from 'src/app/app-injector';
+import {Task, TaskSimilarityService} from './doubtfire-model';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Observable} from 'rxjs';
 
 export enum TaskSimilarityType {
   Jplag = 'JplagTaskSimilarity',
+  Moss = 'MossTaskSimilarity',
   TurnItIn = 'TiiTaskSimilarity',
 }
 
