@@ -1,13 +1,14 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { MatAccordion } from '@angular/material/expansion';
-import { Task } from 'src/app/api/models/task';
-import { TaskSimilarity } from 'src/app/api/models/task-similarity';
-import { TaskSimilarityService } from 'src/app/api/services/task-similarity.service';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { SelectedTaskService } from '../../../../selected-task.service';
+import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {MatAccordion} from '@angular/material/expansion';
+import {Task} from 'src/app/api/models/task';
+import {TaskSimilarity} from 'src/app/api/models/task-similarity';
+import {TaskSimilarityService} from 'src/app/api/services/task-similarity.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {SelectedTaskService} from '../../../../selected-task.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { AppInjector } from 'src/app/app-injector';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {AppInjector} from 'src/app/app-injector';
+import {HttpResponse} from '@angular/common/http';
 
 @Component({
   selector: 'f-task-similarity-view',
@@ -42,7 +43,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
     e.stopPropagation();
     similarity.flagged = !similarity.flagged;
     this.taskSimilarityService
-      .update({ taskId: similarity.task.id, id: similarity.id }, { entity: similarity })
+      .update({taskId: similarity.task.id, id: similarity.id}, {entity: similarity})
       .subscribe((_) => {
         this.alertsService.success('Similarity flag updated');
         similarity.task.similarityFlag = similarity.task.similarityCache.currentValues
@@ -101,8 +102,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
         //     };
         //     this.jplagIframe.nativeElement.contentWindow?.postMessage(data, '*');
 
-        //     // viewerWindow.postMessage(data, '*');
-        //   }, 1000);
+        //     }, 1000);
         // }
       },
       (error) => {

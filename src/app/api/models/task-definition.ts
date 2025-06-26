@@ -1,11 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
-import { Observable, tap } from 'rxjs';
-import { AppInjector } from 'src/app/app-injector';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { TaskDefinitionService } from '../services/task-definition.service';
-import { Grade, GroupSet, LearningOutcome, TutorialStream, Unit } from './doubtfire-model';
+import {HttpClient} from '@angular/common/http';
+import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
+import {Observable, tap} from 'rxjs';
+import {AppInjector} from 'src/app/app-injector';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {TaskDefinitionService} from '../services/task-definition.service';
+import {Grade, GroupSet, LearningOutcome, TutorialStream, Unit} from './doubtfire-model';
 
 export type UploadRequirement = {
   key: string;

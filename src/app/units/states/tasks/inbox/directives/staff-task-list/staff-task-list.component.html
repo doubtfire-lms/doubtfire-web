@@ -80,10 +80,10 @@
           <span>Bulk Export Submission Files</span>
         </button>
         <!-- Commented out until hasJplagReport check works correctly -->
-        <!-- <button mat-menu-item (click)="downloadJPLAGReport()" [disabled]="hasJplagReport">
+        <button mat-menu-item (click)="downloadJPLAGReport()" [disabled]="hasJplagReport">
           <mat-icon>download</mat-icon>
           <span>Download JPLAG Report</span>
-        </button> -->
+        </button>
       </mat-menu>
     </div>
     <mat-accordion>
@@ -209,7 +209,7 @@
               id="{{ task.taskKeyToIdString() }}"
               [ngClass]="{
                 selected: isSelectedTask(task),
-                'item-content': task.statusClass(),
+                'item-content': task.statusClass()
               }"
             >
               <div
@@ -223,7 +223,7 @@
                   class="notification"
                   [ngClass]="{
                     active: task.numNewComments > 0 || task.similaritiesDetected,
-                    similarities: task.similaritiesDetected,
+                    similarities: task.similaritiesDetected
                   }"
                 ></span>
                 <user-icon class="self-center" [user]="task.project.student" [size]="30">

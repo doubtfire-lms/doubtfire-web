@@ -39,11 +39,11 @@
     <th style="width: 20%" mat-header-cell *matHeaderCellDef>Flag At</th>
     <td style="width: 20%" mat-cell *matCellDef="let upreq">
       @if (upreq.type === 'document' && upreq.tiiCheck) {
-<mat-form-field appearance="outline" style="width: 7em">
-        <input matInput [(ngModel)]="upreq.tiiPct" type="number" />
-        <span matTextSuffix>&nbsp;%</span>
-      </mat-form-field>
-}
+        <mat-form-field appearance="outline" style="width: 7em">
+          <input matInput [(ngModel)]="upreq.tiiPct" type="number" />
+          <span matTextSuffix>&nbsp;%</span>
+        </mat-form-field>
+      }
     </td>
   </ng-container>
 
@@ -51,7 +51,12 @@
   <ng-container matColumnDef="row-actions" sticky>
     <th style="width: 10%" mat-header-cell *matHeaderCellDef></th>
     <td style="width: 10%" mat-cell *matCellDef="let upreq">
-      <button mat-icon-button aria-label="delete upload requirement" color="warn" (click)="removeUpReq(upreq)">
+      <button
+        mat-icon-button
+        aria-label="delete upload requirement"
+        color="warn"
+        (click)="removeUpReq(upreq)"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     </td>
@@ -63,7 +68,9 @@
       <mat-toolbar>
         <mat-toolbar-row>
           <span class="flex flex-grow"></span>
-          <button mat-flat-button color="primary" (click)="addUpReq()"><mat-icon>add</mat-icon> Add</button>
+          <button mat-flat-button color="primary" (click)="addUpReq()">
+            <mat-icon>add</mat-icon> Add
+          </button>
         </mat-toolbar-row>
       </mat-toolbar>
     </td>
@@ -75,19 +82,34 @@
 </table>
 
 @if (taskDefinition.needsJplag) {
-<div class="flex-grow flex flex-row gap-4">
-  <mat-form-field appearance="outline" class="basis-1/2">
-    <mat-label>Language used for JPLAG checks</mat-label>
-    <mat-select [(ngModel)]="taskDefinition.jplagLanguage">
-      <mat-option value="c">C</mat-option>
-      <mat-option value="csharp">C#</mat-option>
-      <mat-option value="cpp">C++</mat-option>
-      <mat-option value="python">Python</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="basis-1/2">
-    <mat-label>Similarity percent to flag for JPLAG checks</mat-label>
-    <input matInput [(ngModel)]="taskDefinition.plagiarismWarnPct" type="number" />
-  </mat-form-field>
-</div>
+  <div class="flex-grow flex flex-row gap-4">
+    <mat-form-field appearance="outline" class="basis-1/2">
+      <mat-label>Language used for JPLAG checks</mat-label>
+      <mat-select [(ngModel)]="taskDefinition.similarityLanguage">
+        <mat-option value="java">Java</mat-option>
+        <mat-option value="c">C</mat-option>
+        <mat-option value="cpp">C++</mat-option>
+        <mat-option value="csharp">C#</mat-option>
+        <mat-option value="python3">Python</mat-option>
+        <mat-option value="javascript">JavaScript</mat-option>
+        <mat-option value="typescript">TypeScript</mat-option>
+        <mat-option value="golang">Go</mat-option>
+        <mat-option value="kotlin">Kotlin</mat-option>
+        <mat-option value="rlang">R</mat-option>
+        <mat-option value="rust">Rust</mat-option>
+        <mat-option value="swift">Swift</mat-option>
+        <mat-option value="scala">Scala</mat-option>
+        <mat-option value="llvmir">LLVM IR</mat-option>
+        <mat-option value="scheme">Scheme</mat-option>
+        <mat-option value="emf">EMF Metamodel</mat-option>
+        <mat-option value="emf-model">EMF Model</mat-option>
+        <mat-option value="scxml">SCXML</mat-option>
+        <mat-option value="text">Text</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="basis-1/2">
+      <mat-label>Similarity percent to flag for JPLAG checks</mat-label>
+      <input matInput [(ngModel)]="taskDefinition.plagiarismWarnPct" type="number" />
+    </mat-form-field>
+  </div>
 }

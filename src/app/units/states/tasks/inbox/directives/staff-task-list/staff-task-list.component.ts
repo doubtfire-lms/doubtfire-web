@@ -77,7 +77,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   tasks: any[] = null;
 
-  hasJplagReport: boolean;
+  // hasJplagReport: boolean = false;
 
   watchingTaskKey: any;
 
@@ -210,18 +210,23 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   // TODO: Get this to return correct value from the API
-  public async taskHasJplagReport(): Promise<boolean> {
-    const taskDef = this.filters.taskDefinition;
-    return taskDef
-      .hasJplagReport()
-      .then((hasReport) => {
-        return hasReport ?? false;
-      })
-      .catch((error) => {
-        console.error(error);
-        return false;
-      });
-  }
+  // public async taskHasJplagReport(task: TaskDefinition): Promise<boolean> {
+  //   const taskDef = this.filters?.taskDefinition ?? task;
+  //   if (!taskDef) {
+  //     console.log('tasks is invalid?');
+  //     return false;
+  //   }
+
+  //   // return taskDef
+  //   //   .hasJplagReport()
+  //   //   .then((hasReport) => {
+  //   //     return hasReport ?? false;
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error(error);
+  //   //     return false;
+  //   //   });
+  // }
 
   downloadSubmissionPdfs() {
     const taskDef = this.filters.taskDefinition;
@@ -378,10 +383,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.alertService.error(message, 6000);
       },
     });
-    this.taskHasJplagReport().then((hasReport) => {
-      this.hasJplagReport = hasReport;
-    });
-    console.log('HAS JPLAG REPORT:', this.hasJplagReport);
   }
 
   setSelectedTask(task: Task) {
@@ -392,6 +393,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (task) {
       this.scrollToTaskInList(task);
+    }
+
+    if (task?.definition) {
+      console.log(`does task def have a jplag report?: ${task.definition.hasJplagReport}`);
     }
   }
 
