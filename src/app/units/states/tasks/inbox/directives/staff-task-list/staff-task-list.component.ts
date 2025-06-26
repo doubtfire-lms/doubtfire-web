@@ -209,25 +209,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     return this.taskData.taskDefMode;
   }
 
-  // TODO: Get this to return correct value from the API
-  // public async taskHasJplagReport(task: TaskDefinition): Promise<boolean> {
-  //   const taskDef = this.filters?.taskDefinition ?? task;
-  //   if (!taskDef) {
-  //     console.log('tasks is invalid?');
-  //     return false;
-  //   }
-
-  //   // return taskDef
-  //   //   .hasJplagReport()
-  //   //   .then((hasReport) => {
-  //   //     return hasReport ?? false;
-  //   //   })
-  //   //   .catch((error) => {
-  //   //     console.error(error);
-  //   //     return false;
-  //   //   });
-  // }
-
   downloadSubmissionPdfs() {
     const taskDef = this.filters.taskDefinition;
     this.fileDownloaderService.downloadFile(
@@ -393,10 +374,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (task) {
       this.scrollToTaskInList(task);
-    }
-
-    if (task?.definition) {
-      console.log(`does task def have a jplag report?: ${task.definition.hasJplagReport}`);
     }
   }
 
