@@ -232,13 +232,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   downloadJPLAGReport() {
     const taskDef = this.filters.taskDefinition;
     this.fileDownloaderService.downloadFile(
-      //this.taskData.selectedTask.jplagReportUrl()
-      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${
-        this.unit.id
-      }/task_definitions/${taskDef.id}/jplag_report`,
+      taskDef.getJplagReportUrl(),
       `${this.unit.code}-${taskDef.abbreviation}-jplag-report.zip`,
     );
-    window.open('https://jplag.github.io/JPlag/', '_blank');
+
+    // TODO: redirect to our self hosted jplag?
+    // window.open('https://jplag.github.io/JPlag/', '_blank');
   }
 
   openDialog() {

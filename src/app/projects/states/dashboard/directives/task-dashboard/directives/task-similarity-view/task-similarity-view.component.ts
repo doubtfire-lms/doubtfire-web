@@ -68,7 +68,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
     });
   }
 
-  downloadJPLAGReport() {
+  viewJplagReport() {
     // Students are identified by their username in JPlag reports (configured by API)
     // In most cases, usernames are a combination of their first and last names
     const studentUsername = this.task.project.student.username;

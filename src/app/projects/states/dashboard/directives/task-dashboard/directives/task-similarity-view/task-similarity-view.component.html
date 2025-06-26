@@ -46,7 +46,9 @@
                     "
                     mat-icon-button
                     aria-label="View Detailed Report"
-                    (click)="downloadJPLAGReport()"
+                    (click)="
+                      similarity.type === 'JplagTaskSimilarity' ? viewJplagReport() : openReport()
+                    "
                   >
                     @if (similarity.type === 'JplagTaskSimilarity') {
                       <mat-icon>assessment</mat-icon>
