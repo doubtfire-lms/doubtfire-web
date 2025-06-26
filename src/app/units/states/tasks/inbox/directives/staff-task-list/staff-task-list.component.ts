@@ -31,6 +31,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {HotkeysService} from '@ngneat/hotkeys';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -109,6 +110,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     public dialog: MatDialog,
     private userService: UserService,
     private hotkeys: HotkeysService,
+    private router: Router,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -236,8 +238,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       `${this.unit.code}-${taskDef.abbreviation}-jplag-report.zip`,
     );
 
-    // TODO: redirect to our self hosted jplag?
-    // window.open('https://jplag.github.io/JPlag/', '_blank');
+    const url = this.router.serializeUrl(this.router.createUrlTree(['/jplag-report-viewer']));
+    window.open(url, '_blank');
   }
 
   openDialog() {

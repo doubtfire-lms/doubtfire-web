@@ -9,6 +9,7 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AppInjector} from 'src/app/app-injector';
 import {HttpResponse} from '@angular/common/http';
+import {JplagReportViewerComponent} from 'src/app/projects/states/jplag/jplag-report-viewer.component';
 
 @Component({
   selector: 'f-task-similarity-view',
@@ -18,7 +19,7 @@ import {HttpResponse} from '@angular/common/http';
 export class TaskSimilarityViewComponent implements OnChanges {
   @Input() task: Task;
   @ViewChild(MatAccordion) accordion: MatAccordion;
-  @ViewChild('jplagIframe', {static: true}) jplagIframe!: ElementRef<HTMLIFrameElement>;
+  @ViewChild('jplagViewer') jplagViewer!: JplagReportViewerComponent;
   panelOpenState = false;
   jplagOpenState = false;
 
@@ -72,28 +73,18 @@ export class TaskSimilarityViewComponent implements OnChanges {
     // Students are identified by their username in JPlag reports (configured by API)
     // In most cases, usernames are a combination of their first and last names
     const studentUsername = this.task.project.student.username;
-
     const taskDef = this.task.definition;
+    // const reportUrl =       `${AppInjector.get(DoubtfireConstants).API_URL}/units/${
+    //     this.task.unit.id
+    //   }/task_definitions/${taskDef.id}/jplag_report`
     this.fileDownloaderService.downloadBlob(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${
-        this.task.unit.id
-      }/task_definitions/${taskDef.id}/jplag_report`,
+      this.task.definition.getJplagReportUrl(),
       (_, response: HttpResponse<Blob>) => {
         // Open JPlag report viewer in embedded iframe
         setTimeout(() => {
-          // Send the JPlag report to load
-          this.jplagIframe.nativeElement.contentWindow?.postMessage({
-            type: 'upload-jplag-file',
-            file: response.body,
-            name: 'report.jplag',
-          });
+          this.jplagViewer.openReport(response.body);
           setTimeout(() => {
-            // Search comparisons by student username, auto load comparisons if only one is found
-            this.jplagIframe.nativeElement.contentWindow?.postMessage({
-              type: 'set-search-filter-value',
-              filter: studentUsername,
-              autoViewComparison: true,
-            });
+            this.jplagViewer.setSearchFilter(studentUsername);
             this.jplagOpenState = true;
           }, 100);
         }, 100);

@@ -13,13 +13,7 @@
     </div>
   </div>
 
-  <iframe
-    [hidden]="!jplagOpenState"
-    #jplagIframe
-    src="/JPlag/"
-    frameborder="0"
-    class="w-full h-[750px]"
-  ></iframe>
+  <f-jplag-report-viewer #jplagViewer [hidden]="!jplagOpenState" />
 
   @if (!jplagOpenState) {
     <mat-accordion multi>

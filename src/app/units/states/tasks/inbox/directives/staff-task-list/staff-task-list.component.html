@@ -79,8 +79,11 @@
           <mat-icon>download</mat-icon>
           <span>Bulk Export Submission Files</span>
         </button>
-        <!-- Commented out until hasJplagReport check works correctly -->
-        <button mat-menu-item (click)="downloadJPLAGReport()" [disabled]="hasJplagReport">
+        <button
+          mat-menu-item
+          (click)="downloadJPLAGReport()"
+          [disabled]="!this.filters?.taskDefinition?.hasJplagReport"
+        >
           <mat-icon>download</mat-icon>
           <span>Download JPLAG Report</span>
         </button>
