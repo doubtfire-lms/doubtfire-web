@@ -1,3 +1,3 @@
 [submodule "JPlag-Report-Viewer"]
 	path = JPlag-Report-Viewer
-	url = https://github.com/doubtfire-lms/jplag-deploy.git
+  url = https://github.com/doubtfire-lms/jplag-report-viewer-static.git
