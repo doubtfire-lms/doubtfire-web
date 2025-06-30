@@ -255,6 +255,7 @@ import { TaskDateSliderComponent } from './common/modals/date-change-modal/task-
 import { SpecConModalComponent } from './common/modals/spec-con-modal/spec-con-modal.component';
 import { SpecConModalService } from './common/modals/spec-con-modal/spec-con-modal.service';
 import { ProjectPlanComponent } from './projects/states/plan/project-plan.component';
+import {TaskIlosCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-ilos-card/task-ilos-card.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -386,6 +387,7 @@ const MY_DATE_FORMAT = {
     LearningOutcomeEditorComponent,
     TaskFeedbackTemplatesComponent,
     NestedCsvDownloadModalComponent,
+    TaskIlosCardComponent,
   ],
   // Services we provide
   providers: [
