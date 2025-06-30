@@ -26,4 +26,13 @@ export class JplagReportViewerComponent {
       autoViewComparison: true,
     });
   }
+
+  public openComparison(submissionId1: string, submissionId2: string) {
+    // Open comparisons between these two submissions (student usernames)
+    this.jplagIframe.nativeElement.contentWindow?.postMessage({
+      type: 'open-comparison',
+      submissionId1,
+      submissionId2,
+    });
+  }
 }

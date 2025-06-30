@@ -1,6 +1,6 @@
 import {Entity} from 'ngx-entity-service';
 import {AppInjector} from 'src/app/app-injector';
-import {Task, TaskSimilarityService} from './doubtfire-model';
+import {Task, TaskSimilarityService, User} from './doubtfire-model';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Observable} from 'rxjs';
 
@@ -37,6 +37,8 @@ export class TaskSimilarity extends Entity {
   parts: TaskSimilarityPart[];
   task: Task;
   readyForViewer: boolean = false;
+  other_task?: Task;
+  other_student?: User;
 
   constructor(task: Task) {
     super();

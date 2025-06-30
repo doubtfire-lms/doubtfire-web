@@ -1,15 +1,13 @@
-import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {HttpResponse} from '@angular/common/http';
+import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {MatAccordion} from '@angular/material/expansion';
 import {Task} from 'src/app/api/models/task';
 import {TaskSimilarity} from 'src/app/api/models/task-similarity';
 import {TaskSimilarityService} from 'src/app/api/services/task-similarity.service';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {SelectedTaskService} from '../../../../selected-task.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {AppInjector} from 'src/app/app-injector';
-import {HttpResponse} from '@angular/common/http';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {JplagReportViewerComponent} from 'src/app/projects/states/jplag/jplag-report-viewer.component';
+import {SelectedTaskService} from '../../../../selected-task.service';
 
 @Component({
   selector: 'f-task-similarity-view',
@@ -69,14 +67,9 @@ export class TaskSimilarityViewComponent implements OnChanges {
     });
   }
 
-  viewJplagReport() {
+  viewJplagReport(similarity: TaskSimilarity) {
     // Students are identified by their username in JPlag reports (configured by API)
     // In most cases, usernames are a combination of their first and last names
-    const studentUsername = this.task.project.student.username;
-    const taskDef = this.task.definition;
-    // const reportUrl =       `${AppInjector.get(DoubtfireConstants).API_URL}/units/${
-    //     this.task.unit.id
-    //   }/task_definitions/${taskDef.id}/jplag_report`
     this.fileDownloaderService.downloadBlob(
       this.task.definition.getJplagReportUrl(),
       (_, response: HttpResponse<Blob>) => {
@@ -84,7 +77,11 @@ export class TaskSimilarityViewComponent implements OnChanges {
         setTimeout(() => {
           this.jplagViewer.openReport(response.body);
           setTimeout(() => {
-            this.jplagViewer.setSearchFilter(studentUsername);
+            // Open comparison between the two students
+            this.jplagViewer.openComparison(
+              similarity.task.project.student.username,
+              similarity.other_student.username,
+            );
             this.jplagOpenState = true;
           }, 100);
         }, 100);
