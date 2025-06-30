@@ -28,7 +28,7 @@
               {
                 "input": "./JPlag-Report-Viewer",
                 "output": "/JPlag",
-                "glob": "**/*"
+                "glob": "**/!(*.gitignore|README.md)"
               }
             ],
             "styles": [
