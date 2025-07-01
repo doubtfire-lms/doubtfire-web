@@ -441,6 +441,40 @@ const projectPlanState: NgHybridStateDeclaration = {
   },
 };
 
+const TutorMarkingState: NgHybridStateDeclaration = {
+  name: 'tutor-marking',
+  url: '/tutor/marking?unitId&username&projectId',
+  views: {
+    main: {
+      component: TutorMarkingComponent,
+    },
+  },
+  resolve: {
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+    username: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.username;
+      },
+    ],
+    projectId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.projectId;
+      },
+    ],
+  },
+  data: {
+    pageTitle: 'Tutor Marking',
+    task: 'Tutor Marking',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
 
 /**
  * Export the list of states we have created in angular
@@ -462,4 +496,5 @@ export const doubtfireStates = [
   ScormPlayerStudentReviewState,
   SuccessCloseState,
   projectPlanState,
+  TutorMarkingState,
 ];
