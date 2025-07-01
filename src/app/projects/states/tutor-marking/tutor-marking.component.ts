@@ -56,9 +56,8 @@ export class TutorMarkingComponent implements OnInit {
     });
   }
 
-  public taskSelectionChange(event: MatSelectionListChange) {
-    console.log(event);
-    console.log('selecting task...');
+  public selectTask(task: Task) {
+    this.selectedTask = task;
   }
 
   public setSelectedTasksStatus(status: TaskStatusEnum) {
@@ -110,13 +109,15 @@ export class TutorMarkingComponent implements OnInit {
   }
 
   public refresh() {
+    const projectIds = [10, 13, 8, 11, 17, 0, 6, 14, 16, 5]; // debug list of valid projectIds
     // this.getStudentTasks();
-    const newRoute = `tutor/marking?unitId=${this.unitId}&username=x&projectId=${Math.floor(Math.random() * 26) + 5}`;
+    const randomId = projectIds[Math.floor(Math.random() * projectIds.length)];
+    const newRoute = `tutor/marking?unitId=${this.unitId}&username=x&projectId=${randomId}`;
     // this.router.stateService.go(newRoute);
 
     this.router.stateService.go('tutor-marking', {
       unitId: this.unitId,
-      username: `student_${Math.floor(Math.random() * 26)}`,
+      username: `student_${randomId}`,
       // projectId: ,
     });
     console.log(newRoute);
@@ -133,6 +134,7 @@ export class TutorMarkingComponent implements OnInit {
     // this.student = null;
     this.project = null;
     this.filteredTasks = [];
+    this.selectedTask = null;
     try {
       const unit = await this.getUnit();
       const student = await this.loadStudents(unit);

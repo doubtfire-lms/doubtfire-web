@@ -2,9 +2,11 @@
   <div class="task-inbox flex flex-col flex-1 justify-normal items-center full-width">
     <!-- Get list of tutorials for student that are either submitted or ready for discussion -->
     <!-- <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60"> -->
-    <div class="w-full">
+    <div class="w-full flex justify-between items-center">
       <button mat-raised-button color="primary" (click)="refresh()">Refresh</button>
-      <button mat-raised-button color="primary" (click)="loadAllTasks()">Load all tasks</button>
+      <button mat-icon-button color="primary">
+        <mat-icon>qr_code</mat-icon>
+      </button>
     </div>
 
     @if (project) {
@@ -18,7 +20,7 @@
       </div>
     }
 
-    <mat-selection-list class="m-0 p-0" #tasks (selectionChange)="(taskSelectionChange)">
+    <mat-selection-list class="m-0 p-0" #tasks>
       @for (task of filteredTasks; track task) {
         <mat-list-option
           [value]="task"
@@ -27,7 +29,7 @@
           togglePosition="before"
         >
           @if (task) {
-            <div class="w-full" id="{{ task.id }}">
+            <div (click)="selectTask(task)" class="w-full" id="{{ task.id }}">
               <div
                 class="inbox-entry flex items-center"
                 [ngClass]="{hover: task.hover}"
@@ -109,109 +111,39 @@
 
       <!--/task-->
     </mat-selection-list>
+    <div class="w-full flex justify-center mt-4">
+      <button mat-raised-button color="primary" (click)="loadAllTasks()">Load all tasks</button>
+    </div>
     <!-- </cdk-virtual-scroll-viewport> -->
   </div>
 
-  <div class="mt-2">
-    <div class="w-full flex justify-center items-center my-3 gap-3">
-      <button
-        class="bg-gray-100 large-icon-button"
-        mat-fab
-        color="secondary"
-        [disabled]="!tasks.selectedOptions.selected.length"
-        (click)="setSelectedTasksStatus('redo')"
-      >
-        <!-- Redo -->
-        <mat-icon>undo</mat-icon>
-      </button>
-      <button
-        class="bg-green-400 large-icon-button"
-        mat-fab
-        [disabled]="!tasks.selectedOptions.selected.length"
-        (click)="setSelectedTasksStatus('complete')"
-      >
-        <!-- Mark as Complete -->
-        <mat-icon>done</mat-icon>
-        <!-- <mat-icon class="text-2xl leading-none m-0">done</mat-icon> -->
-      </button>
-
-      <!-- <button
-        [disabled]="selectedTask === undefined"
-        mat-icon-button
-        matTooltip="Mark as Resubmit"
-        matTooltipPosition="above"
-        aria-label=""
-        class="button large-button"
-        (click)="selectedTask?.updateTaskStatus('fix')"
-      >
-        <mat-icon>construction</mat-icon>
-      </button> -->
+  @if (project) {
+    <div class="mt-2">
+      <div class="w-full flex justify-center items-center my-3 gap-3">
+        <button
+          class="bg-gray-100 large-icon-button"
+          mat-fab
+          color="secondary"
+          [disabled]="!tasks.selectedOptions.selected.length"
+          (click)="setSelectedTasksStatus('redo')"
+        >
+          <!-- Redo -->
+          <mat-icon>undo</mat-icon>
+        </button>
+        <button
+          class="bg-green-400 large-icon-button"
+          mat-fab
+          [disabled]="!tasks.selectedOptions.selected.length"
+          (click)="setSelectedTasksStatus('complete')"
+        >
+          <!-- Mark as Complete -->
+          <mat-icon>done</mat-icon>
+          <!-- <mat-icon class="text-2xl leading-none m-0">done</mat-icon> -->
+        </button>
+      </div>
+      <div class="w-full text-center py-4">{{ selectedTask?.definition.name }}</div>
     </div>
-
-    <!-- <span class="center-buttons flex justify-center">
-    <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Mark as Redo"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button"
-      (click)="selectedTask?.updateTaskStatus('redo')"
-    >
-      <mat-icon>undo</mat-icon>
-    </button> -->
-    <!-- <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Mark as Resubmit"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button large-button"
-      (click)="selectedTask?.updateTaskStatus('fix')"
-    >
-      <mat-icon>construction</mat-icon>
-    </button> -->
-    <!-- <span class="w-3"></span>
-    @if (selectedTask && selectedTask.suggestedTaskStatus) {
-      <button
-        mat-icon-button
-        matTooltip="Recommended: Mark as {{
-          taskService.statusData(selectedTask.suggestedTaskStatus).label
-        }}"
-        matTooltipPosition="above"
-        aria-label=""
-        class="my-2 rounded-full scale-90 pt-2 status-chip"
-        (click)="selectedTask?.updateTaskStatus(selectedTask.suggestedTaskStatus)"
-        [ngClass]="taskService.statusData(selectedTask.suggestedTaskStatus).class"
-      >
-        <i class="fa {{ taskService.statusData(selectedTask.suggestedTaskStatus).icon }}"></i>
-      </button>
-      <span class="w-3"></span>
-    }
-    <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Mark as Complete"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button large-button"
-      (click)="selectedTask?.updateTaskStatus('complete')"
-    >
-      <mat-icon>done</mat-icon>
-    </button> -->
-    <!-- <button
-      [disabled]="selectedTask === undefined"
-      mat-icon-button
-      matTooltip="Mark as Discuss"
-      matTooltipPosition="above"
-      aria-label=""
-      class="button"
-      (click)="selectedTask?.updateTaskStatus('discuss')"
-    >
-      <mat-icon>question_answer</mat-icon>
-    </button> -->
-    <!-- </span> -->
-  </div>
+  }
 
   @if (selectedTask && project) {
     <div #commentspanel class="task-comment-panel inbox-panel w-full flex-1">
