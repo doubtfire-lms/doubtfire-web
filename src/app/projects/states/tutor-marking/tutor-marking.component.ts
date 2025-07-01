@@ -83,7 +83,7 @@ export class TutorMarkingComponent implements OnInit {
 
   private loadStudents(unit: Unit): Promise<Project> {
     return new Promise((resolve, reject) => {
-      this.projectService.loadStudents(unit, false).subscribe((projects) => {
+      this.projectService.loadStudents(unit, false, false).subscribe((projects) => {
         const project = projects.find((p) => p.student.username === this.username);
         if (!project) {
           reject('Student is not a part of this unit');

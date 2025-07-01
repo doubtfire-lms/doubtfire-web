@@ -3,6 +3,7 @@
     <!-- Get list of tutorials for student that are either submitted or ready for discussion -->
     <!-- <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60"> -->
     <div class="w-full flex justify-between items-center">
+      <!-- <div></div> -->
       <button mat-raised-button color="primary" (click)="refresh()">Refresh</button>
       <button mat-icon-button color="primary">
         <mat-icon>qr_code</mat-icon>
@@ -20,7 +21,7 @@
       </div>
     }
 
-    <mat-selection-list class="m-0 p-0" #tasks>
+    <mat-selection-list class="m-0 p-0 h-min" #tasks>
       @for (task of filteredTasks; track task) {
         <mat-list-option
           [value]="task"
@@ -112,26 +113,26 @@
       <!--/task-->
     </mat-selection-list>
     <div class="w-full flex justify-center mt-4">
-      <button mat-raised-button color="primary" (click)="loadAllTasks()">Load all tasks</button>
+      <button mat-button color="primary" (click)="loadAllTasks()">Load all tasks</button>
     </div>
     <!-- </cdk-virtual-scroll-viewport> -->
   </div>
 
   @if (project) {
     <div class="mt-2">
-      <div class="w-full flex justify-center items-center my-3 gap-3">
+      <div class="w-full flex justify-center items-center my-3 gap-5">
         <button
-          class="bg-gray-100 large-icon-button"
+          class="bg-gray-100 medium-icon-button"
           mat-fab
           color="secondary"
           [disabled]="!tasks.selectedOptions.selected.length"
-          (click)="setSelectedTasksStatus('redo')"
+          (click)="setSelectedTasksStatus('fix_and_resubmit')"
         >
           <!-- Redo -->
-          <mat-icon>undo</mat-icon>
+          <mat-icon>construction</mat-icon>
         </button>
         <button
-          class="bg-green-400 large-icon-button"
+          class="bg-green-400 medium-icon-button"
           mat-fab
           [disabled]="!tasks.selectedOptions.selected.length"
           (click)="setSelectedTasksStatus('complete')"
@@ -141,12 +142,13 @@
           <!-- <mat-icon class="text-2xl leading-none m-0">done</mat-icon> -->
         </button>
       </div>
-      <div class="w-full text-center py-4">{{ selectedTask?.definition.name }}</div>
     </div>
   }
 
   @if (selectedTask && project) {
     <div #commentspanel class="task-comment-panel inbox-panel w-full flex-1">
+      <!-- <div class="w-full text-center py-4">{{ selectedTask?.definition.name }}</div> -->
+
       <task-comments-viewer
         style="background: white; border-radius: 12px"
         [task]="selectedTask"
