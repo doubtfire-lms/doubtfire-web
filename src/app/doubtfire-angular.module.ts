@@ -256,6 +256,7 @@ import { SpecConModalComponent } from './common/modals/spec-con-modal/spec-con-m
 import { SpecConModalService } from './common/modals/spec-con-modal/spec-con-modal.service';
 import { ProjectPlanComponent } from './projects/states/plan/project-plan.component';
 import {TutorMarkingComponent} from './projects/states/tutor-marking/tutor-marking.component';
+import { QrModalComponent } from './common/modals/qr-modal/qr-modal.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -472,6 +473,7 @@ const MY_DATE_FORMAT = {
     }),
     FeedbackTemplateService,
     NestedCsvDownloadModalService,
+    QrModalComponent,
   ],
   imports: [
     FlexLayoutModule,

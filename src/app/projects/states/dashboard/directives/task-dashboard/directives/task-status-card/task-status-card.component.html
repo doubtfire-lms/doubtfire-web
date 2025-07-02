@@ -42,6 +42,9 @@
     }
     @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
       <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
+      <button mat-raised-button color="primary" (click)="openDiscussionQrCode()">
+        Show Discussion QR
+      </button>
     }
   </mat-card-actions>
 </mat-card>
