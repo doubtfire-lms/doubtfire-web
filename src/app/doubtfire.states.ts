@@ -11,6 +11,7 @@ import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import { SuccessCloseComponent } from './common/success-close/success-close.component';
 import { ProjectPlanComponent } from './projects/states/plan/project-plan.component';
+import {TutorMarkingComponent} from './projects/states/tutor-marking/tutor-marking.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
