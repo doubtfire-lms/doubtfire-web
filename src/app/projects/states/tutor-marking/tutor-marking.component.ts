@@ -1,112 +1,130 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {MatSelectionList} from '@angular/material/list';
-import {StateService, UIRouter} from '@uirouter/core';
-import QrScanner from 'qr-scanner';
+import {StateService} from '@uirouter/core';
+import {Html5QrcodeScanner} from 'html5-qrcode';
 import {
   AuthenticationService,
   Project,
   ProjectService,
   Task,
-  TaskService,
   TaskStatusEnum,
   Unit,
   UnitService,
-  User,
 } from 'src/app/api/models/doubtfire-model';
-import {UserService} from 'src/app/api/services/user.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
   selector: 'f-tutor-marking',
   templateUrl: './tutor-marking.component.html',
   styleUrl: './tutor-marking.component.scss',
-  // encapsulation: ViewEncapsulation.None, // enables custom material-ui css
+  encapsulation: ViewEncapsulation.None, // enables custom material-ui css
 })
 export class TutorMarkingComponent implements OnInit {
   @Input() unitId: number;
   @Input() projectId: number;
 
   @ViewChild('tasks') tasksList: MatSelectionList;
-  @ViewChild('qrScanner') qrScannerElement: ElementRef<HTMLVideoElement>;
 
   public filteredTasks: Task[] = [];
   public project: Project | null;
-  public student: User | null;
 
   public selectedTask: Task | null;
 
   public scanningQr: boolean = false;
-  private qrScanner: QrScanner = null;
+  public loadingStudentData: boolean = false;
+
+  private html5QrcodeScanner: Html5QrcodeScanner;
+
+  private _unitId: number;
+  private _projectId: number;
 
   constructor(
-    private userService: UserService,
+    // private userService: UserService,
     private unitService: UnitService,
     private authService: AuthenticationService,
     private projectService: ProjectService,
-    private taskService: TaskService,
+    // private taskService: TaskService,
     private gradeService: GradeService,
     private state: StateService,
-    private router: UIRouter,
+    private alertService: AlertService,
+    // private router: UIRouter,
   ) {}
 
   public ngOnInit(): void {
-    this.projectId = Number(this.projectId);
-    this.unitId = Number(this.unitId);
-
     this.authService.afterAuthCall((result) => {
       if (!result) {
         return this.state.go('sign_in');
       } else {
-        this.getStudentTasks();
+        if (!this.project) {
+          if (this.unitId && this.projectId) {
+            this._projectId = Number(this.projectId);
+            this._unitId = Number(this.unitId);
+            this.getStudentTasks();
+          } else {
+            this.scanQrCode();
+          }
+        }
       }
     });
   }
 
   private decodeQrCode(data: string) {
+    if (!this.scanningQr || this.loadingStudentData) {
+      return;
+    }
     try {
       const qrData = JSON.parse(data);
       if (qrData && 'unitId' in qrData && 'projectId' in qrData) {
-        this.qrScanner.stop();
-        this.scanningQr = false;
-        this.router.stateService.go('tutor-marking', {
-          unitId: qrData.unitId,
-          projectId: qrData.projectId,
-        });
+        this.changeProject(qrData.unitId, qrData.projectId);
+      } else {
+        const params = new URL(data).searchParams;
+        const unitId = Number(params.get('unitId'));
+        const projectId = Number(params.get('projectId'));
+        this.changeProject(unitId, projectId);
       }
     } catch (e) {
       console.log(e);
     }
   }
 
+  private changeProject(unitId: number, projectId: number) {
+    this._unitId = unitId;
+    this._projectId = projectId;
+    this.html5QrcodeScanner.pause(true);
+    this.loadingStudentData = true;
+    setTimeout(() => {
+      this.getStudentTasks();
+    });
+  }
+
   public scanQrCode() {
     this.scanningQr = true;
+    this.loadingStudentData = false;
 
-    setTimeout(() => {
-      this.qrScanner = new QrScanner(
-        this.qrScannerElement.nativeElement,
-        (result) => {
-          if (result && result.data) {
-            this.decodeQrCode(result.data);
-          }
-        },
-        {
-          highlightScanRegion: true,
-          maxScansPerSecond: 10,
-          preferredCamera: 'environment',
-          onDecodeError: (error) => {
-            console.error(error);
-          },
-        },
-      );
-      this.qrScanner
-        .start()
-        .then(() => {
-          console.log('starting scan');
-        })
-        .catch((err) => {
-          console.log('could not start qr scanner...', err);
-          this.scanningQr = false;
-        });
+    // Trigger permission
+    navigator.mediaDevices.getUserMedia({video: true}).then(() => {
+      setTimeout(() => {
+        if (!this.html5QrcodeScanner) {
+          this.html5QrcodeScanner = new Html5QrcodeScanner(
+            'qr-reader',
+            {fps: 10, qrbox: 250},
+            false,
+          );
+
+          this.html5QrcodeScanner.render(
+            (data) => {
+              console.log(data);
+              this.decodeQrCode(data);
+            },
+            (_error) => {
+              // console.error(error);
+            },
+          );
+        } else {
+          this.html5QrcodeScanner.resume();
+        }
+      });
     });
   }
 
@@ -124,7 +142,7 @@ export class TutorMarkingComponent implements OnInit {
 
   private getUnit(): Promise<Unit> {
     return new Promise((resolve, reject) => {
-      this.unitService.get({id: this.unitId}).subscribe({
+      this.unitService.get({id: this._unitId}).subscribe({
         next: (unit) => {
           resolve(unit);
         },
@@ -138,7 +156,7 @@ export class TutorMarkingComponent implements OnInit {
   private loadStudents(unit: Unit): Promise<Project> {
     return new Promise((resolve, reject) => {
       this.projectService.loadStudents(unit, false, false).subscribe((projects) => {
-        const project = projects.find((p) => p.id === this.projectId);
+        const project = projects.find((p) => p.id === this._projectId);
         if (!project) {
           reject('Student is not a part of this unit');
         }
@@ -163,18 +181,7 @@ export class TutorMarkingComponent implements OnInit {
   }
 
   public refresh() {
-    const projectIds = [10, 13, 8, 11, 17, 0, 6, 14, 16, 5]; // debug list of valid projectIds
-    // this.getStudentTasks();
-    const randomId = projectIds[Math.floor(Math.random() * projectIds.length)];
-    const newRoute = `tutor/marking?unitId=${this.unitId}&username=x&projectId=${randomId}`;
-    // this.router.stateService.go(newRoute);
-
-    this.router.stateService.go('tutor-marking', {
-      unitId: this.unitId,
-      username: `student_${randomId}`,
-      // projectId: ,
-    });
-    console.log(newRoute);
+    this.decodeQrCode('{"unitId":2,"projectId":20}');
   }
 
   public loadAllTasks() {
@@ -183,43 +190,48 @@ export class TutorMarkingComponent implements OnInit {
     this.filteredTasks = [...this.project.tasks];
   }
 
-  public async getStudentTasks(): Promise<void> {
+  statusesToFetch: TaskStatusEnum[] = [
+    'demonstrate',
+    'ready_for_feedback',
+    'discuss',
+    'need_help',
+    // 'complete',
+    'fix_and_resubmit',
+    'redo',
+  ];
+
+  public getStudentTasks(): void {
     console.time('getStudentTasks()');
-    // this.student = null;
-    this.project = null;
-    this.filteredTasks = [];
-    this.selectedTask = null;
-    try {
-      const unit = await this.getUnit();
-      const student = await this.loadStudents(unit);
-      this.student = student.student;
-      // const project = await this.getProject(unit);
-      const project = await this.getProject(unit, student.id);
-      console.log(project);
-      // this.student = project.student;
-      this.project = project;
+    // this.project = null;
+    // this.filteredTasks = [];
+    // this.selectedTask = null;
 
-      const statusesToFetch: TaskStatusEnum[] = [
-        'demonstrate',
-        'ready_for_feedback',
-        'discuss',
-        'need_help',
-        // 'complete',
-        'fix_and_resubmit',
-        'redo',
-      ];
-
-      const discussionTasks = project.tasks.filter((task) => statusesToFetch.includes(task.status));
-      console.log(discussionTasks);
-      this.selectedTask = discussionTasks[0];
-      this.filteredTasks = [...discussionTasks];
-
-      setTimeout(() => this.tasksList.selectAll());
-
-      console.timeEnd('getStudentTasks()');
-    } catch (err) {
-      console.error('Failed to fetch tasks');
-      console.error(err);
-    }
+    let unit: Unit;
+    this.getUnit()
+      .then((_unit) => {
+        unit = _unit;
+        return this.loadStudents(unit);
+      })
+      .then((student) => {
+        return this.getProject(unit, student.id);
+      })
+      .then((project) => {
+        const discussionTasks = project.tasks.filter((task) =>
+          this.statusesToFetch.includes(task.status),
+        );
+        this.filteredTasks = [...discussionTasks];
+        this.selectedTask = discussionTasks[0];
+        this.project = project;
+        this.scanningQr = false;
+        this.loadingStudentData = false;
+      })
+      .catch((e) => {
+        console.error(e);
+        this.alertService.error(e, 5000);
+        this.scanQrCode();
+      })
+      .finally(() => {
+        console.timeEnd('getStudentTasks()');
+      });
   }
 }

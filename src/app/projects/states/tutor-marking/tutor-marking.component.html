@@ -1,41 +1,60 @@
-@if (scanningQr) {
-  <div
-    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen"
-  >
-    <video #qrScanner class="w-full h-full"></video>
-  </div>
-}
-
-<div [hidden]="scanningQr" class="w-full flex flex-col h-[calc(100vh-140px)]">
-  <div class="task-inbox flex flex-col flex-1 justify-normal items-center full-width">
-    <!-- Get list of tutorials for student that are either submitted or ready for discussion -->
-    <!-- <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60"> -->
-    <div class="w-full flex justify-between items-center">
-      <!-- <div></div> -->
-      <button mat-raised-button color="primary" (click)="refresh()">Refresh</button>
-      <button mat-icon-button color="primary" (click)="scanQrCode()">
-        <mat-icon>qr_code</mat-icon>
-      </button>
+<div
+  [hidden]="!scanningQr"
+  class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen z-40 bg-gray-500/50 backdrop-blur"
+>
+  <!-- bg-gray-500 -->
+  <!-- <video id="qr-reader" class="w-full h-full"></video> -->
+  @if (loadingStudentData) {
+    <mat-spinner
+      color="blue"
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
+    ></mat-spinner>
+  }
+  <div class="w-full h-full flex flex-col justify-around">
+    <div class="w-full text-center text-white px-10 py-5 text-md font-bold">
+      Scan a student's QR code to instantly load their project and mark submissions.
     </div>
+    <div id="qr-reader" class=""></div>
+    <button
+      mat-raised-button
+      color="secondary"
+      (click)="scanningQr = false"
+      class="max-w-md my-5 mx-auto"
+    >
+      <!-- TODO: if user clicks on 'Exit', take them back to Home.-->
+      <!-- TODO: 'Cancel' closes the camera and displays the previously scanned project  -->
+      {{ project ? 'Cancel' : 'Exit' }}
+    </button>
+  </div>
+</div>
 
-    @if (project) {
-      <div class="text-center">{{ student?.firstName }} {{ student?.lastName }}</div>
-      <!-- <div class="text-center">{{ username }}</div>s -->
-      <div class="text-center">Target Grade: {{ getTargetTradeString(project?.targetGrade) }}</div>
-    } @else {
-      <div class="w-full flex justify-center z-50">
-        <!-- <mat-spinner color="blue"></mat-spinner> -->
-        Loading...
-      </div>
-    }
+<div class="w-full flex flex-col h-[calc(100vh-140px)]">
+  <div class="task-inbox flex flex-col flex-1 justify-normal items-center full-width">
+    <div class="flex justify-between w-full relative">
+      @if (project && project?.student) {
+        <div></div>
+        <div class="absolute left-1/2 transform -translate-x-1/2 text-center">
+          <div class="text-center">
+            {{ project?.student?.firstName }} {{ project?.student?.lastName }}
+          </div>
+          <div class="text-center">
+            Target Grade: {{ getTargetTradeString(project?.targetGrade) }}
+          </div>
+        </div>
+        <button mat-icon-button color="primary" (click)="scanQrCode()">
+          <mat-icon>qr_code</mat-icon>
+        </button>
+      }
+    </div>
 
     <mat-selection-list class="m-0 p-0 h-min" #tasks>
       @for (task of filteredTasks; track task) {
         <mat-list-option
           [value]="task"
-          class="clearfix"
+          class="clearfix w-full"
           style="padding: 0; height: 60px"
           togglePosition="before"
+          [selected]="true"
         >
           @if (task) {
             <div (click)="selectTask(task)" class="w-full" id="{{ task.id }}">
@@ -52,7 +71,7 @@
                     similarities: task.similaritiesDetected
                   }"
                 ></span>
-                <user-icon class="self-center" [user]="student" [size]="30"> </user-icon>
+                <user-icon class="self-center" [user]="project?.student" [size]="30"> </user-icon>
                 <div class="task-list-data truncate flex-1" [hidden]="isNarrow">
                   <h4 class="student-name">{{ task.definition.name }}</h4>
                   <div class="task-details truncate">
@@ -120,9 +139,13 @@
 
       <!--/task-->
     </mat-selection-list>
-    <div class="w-full flex justify-center mt-4">
-      <button mat-button color="primary" (click)="loadAllTasks()">Load all tasks</button>
-    </div>
+    @if (project && filteredTasks.length) {
+      <!-- TODO: if filteredtasks && there are more tasks to load.. -->
+      <div class="w-full flex justify-center mt-4">
+        <button mat-button color="primary" (click)="loadAllTasks()">Load all tasks</button>
+      </div>
+    }
+
     <!-- </cdk-virtual-scroll-viewport> -->
   </div>
 

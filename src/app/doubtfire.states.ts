@@ -457,12 +457,6 @@ const TutorMarkingState: NgHybridStateDeclaration = {
         return $stateParams.unitId;
       },
     ],
-    username: [
-      '$stateParams',
-      function ($stateParams) {
-        return $stateParams.username;
-      },
-    ],
     projectId: [
       '$stateParams',
       function ($stateParams) {
