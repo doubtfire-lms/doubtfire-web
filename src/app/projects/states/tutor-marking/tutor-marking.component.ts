@@ -40,15 +40,12 @@ export class TutorMarkingComponent implements OnInit {
   private _projectId: number;
 
   constructor(
-    // private userService: UserService,
     private unitService: UnitService,
     private authService: AuthenticationService,
     private projectService: ProjectService,
-    // private taskService: TaskService,
     private gradeService: GradeService,
     private state: StateService,
     private alertService: AlertService,
-    // private router: UIRouter,
   ) {}
 
   public ngOnInit(): void {
@@ -73,18 +70,16 @@ export class TutorMarkingComponent implements OnInit {
     if (!this.scanningQr || this.loadingStudentData) {
       return;
     }
+
     try {
-      const qrData = JSON.parse(data);
-      if (qrData && 'unitId' in qrData && 'projectId' in qrData) {
-        this.changeProject(qrData.unitId, qrData.projectId);
-      } else {
-        const params = new URL(data).searchParams;
-        const unitId = Number(params.get('unitId'));
-        const projectId = Number(params.get('projectId'));
+      const params = new URL(data).searchParams;
+      const unitId = Number(params.get('unitId'));
+      const projectId = Number(params.get('projectId'));
+      if (!isNaN(unitId) && !isNaN(projectId)) {
         this.changeProject(unitId, projectId);
       }
-    } catch (e) {
-      console.log(e);
+    } catch {
+      // QR code data is invalid
     }
   }
 
