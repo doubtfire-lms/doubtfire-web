@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {MatSelectionList} from '@angular/material/list';
-import {StateService} from '@uirouter/core';
+import {StateService, UIRouter} from '@uirouter/core';
 import {Html5QrcodeScanner} from 'html5-qrcode';
 import {
   AuthenticationService,
@@ -46,6 +46,7 @@ export class TutorMarkingComponent implements OnInit {
     private gradeService: GradeService,
     private state: StateService,
     private alertService: AlertService,
+    private route: UIRouter,
   ) {}
 
   public ngOnInit(): void {
@@ -83,6 +84,16 @@ export class TutorMarkingComponent implements OnInit {
     }
   }
 
+  public closeQrReader(): void {
+    if (!this.project) {
+      // Exiting the route entirely
+      this.route.stateService.go('home');
+    } else {
+      // Close the camera view
+      this.scanningQr = false;
+    }
+  }
+
   private changeProject(unitId: number, projectId: number) {
     this._unitId = unitId;
     this._projectId = projectId;
@@ -97,19 +108,19 @@ export class TutorMarkingComponent implements OnInit {
     this.scanningQr = true;
     this.loadingStudentData = false;
 
-    // Trigger permission
+    // Trigger video permissions
     navigator.mediaDevices.getUserMedia({video: true}).then(() => {
       setTimeout(() => {
+        // Only init the scanner once and let it run in the background
         if (!this.html5QrcodeScanner) {
           this.html5QrcodeScanner = new Html5QrcodeScanner(
-            'qr-reader',
+            'qr-reader', // id of the div in the html
             {fps: 10, qrbox: 250},
             false,
           );
 
           this.html5QrcodeScanner.render(
             (data) => {
-              console.log(data);
               this.decodeQrCode(data);
             },
             (_error) => {
@@ -117,6 +128,7 @@ export class TutorMarkingComponent implements OnInit {
             },
           );
         } else {
+          // Resume scanner if we've already set it up
           this.html5QrcodeScanner.resume();
         }
       });

@@ -18,11 +18,9 @@
     <button
       mat-raised-button
       color="secondary"
-      (click)="scanningQr = false"
+      (click)="closeQrReader()"
       class="max-w-md my-5 mx-auto"
     >
-      <!-- TODO: if user clicks on 'Exit', take them back to Home.-->
-      <!-- TODO: 'Cancel' closes the camera and displays the previously scanned project  -->
       {{ project ? 'Cancel' : 'Exit' }}
     </button>
   </div>
