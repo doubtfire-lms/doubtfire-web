@@ -191,10 +191,14 @@ export class TutorMarkingComponent implements OnInit {
     this.decodeQrCode('{"unitId":2,"projectId":20}');
   }
 
-  public loadAllTasks() {
-    // TODO: filter out tasks higher than student's target grade
-    // TODO: filter out tasks with no submissions
-    this.filteredTasks = [...this.project.tasks];
+  public loadAllSubmittedtasks() {
+    this.filteredTasks = [
+      ...this.project.tasks.filter(
+        (task) =>
+          task.status !== 'not_started' && // Filter out tasks with no submissions yet
+          task.definition.targetGrade <= this.project.targetGrade, // Filter out tasks that are higher than student's target grade
+      ),
+    ];
   }
 
   statusesToFetch: TaskStatusEnum[] = [

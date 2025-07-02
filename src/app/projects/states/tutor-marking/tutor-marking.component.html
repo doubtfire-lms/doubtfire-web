@@ -138,9 +138,10 @@
       <!--/task-->
     </mat-selection-list>
     @if (project && filteredTasks.length) {
-      <!-- TODO: if filteredtasks && there are more tasks to load.. -->
       <div class="w-full flex justify-center mt-4">
-        <button mat-button color="primary" (click)="loadAllTasks()">Load all tasks</button>
+        <button mat-button color="primary" (click)="loadAllSubmittedtasks()">
+          Load all submitted tasks
+        </button>
       </div>
     }
 
