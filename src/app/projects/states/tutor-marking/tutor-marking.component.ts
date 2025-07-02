@@ -1,7 +1,7 @@
-import {Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import {MatListOption, MatSelectionList, MatSelectionListChange} from '@angular/material/list';
-import {Router} from '@angular/router';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {MatSelectionList} from '@angular/material/list';
 import {StateService, UIRouter} from '@uirouter/core';
+import QrScanner from 'qr-scanner';
 import {
   AuthenticationService,
   Project,
@@ -25,15 +25,18 @@ import {GradeService} from 'src/app/common/services/grade.service';
 export class TutorMarkingComponent implements OnInit {
   @Input() unitId: number;
   @Input() projectId: number;
-  @Input() username: string;
 
   @ViewChild('tasks') tasksList: MatSelectionList;
+  @ViewChild('qrScanner') qrScannerElement: ElementRef<HTMLVideoElement>;
 
-  filteredTasks: Task[] = [];
-  project: Project | null;
-  student: User | null;
+  public filteredTasks: Task[] = [];
+  public project: Project | null;
+  public student: User | null;
 
-  selectedTask: Task | null;
+  public selectedTask: Task | null;
+
+  public scanningQr: boolean = false;
+  private qrScanner: QrScanner = null;
 
   constructor(
     private userService: UserService,
@@ -47,12 +50,63 @@ export class TutorMarkingComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    this.projectId = Number(this.projectId);
+    this.unitId = Number(this.unitId);
+
     this.authService.afterAuthCall((result) => {
       if (!result) {
-        // return this.state.go('sign_in');
+        return this.state.go('sign_in');
       } else {
         this.getStudentTasks();
       }
+    });
+  }
+
+  private decodeQrCode(data: string) {
+    try {
+      const qrData = JSON.parse(data);
+      if (qrData && 'unitId' in qrData && 'projectId' in qrData) {
+        this.qrScanner.stop();
+        this.scanningQr = false;
+        this.router.stateService.go('tutor-marking', {
+          unitId: qrData.unitId,
+          projectId: qrData.projectId,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public scanQrCode() {
+    this.scanningQr = true;
+
+    setTimeout(() => {
+      this.qrScanner = new QrScanner(
+        this.qrScannerElement.nativeElement,
+        (result) => {
+          if (result && result.data) {
+            this.decodeQrCode(result.data);
+          }
+        },
+        {
+          highlightScanRegion: true,
+          maxScansPerSecond: 10,
+          preferredCamera: 'environment',
+          onDecodeError: (error) => {
+            console.error(error);
+          },
+        },
+      );
+      this.qrScanner
+        .start()
+        .then(() => {
+          console.log('starting scan');
+        })
+        .catch((err) => {
+          console.log('could not start qr scanner...', err);
+          this.scanningQr = false;
+        });
     });
   }
 
@@ -84,7 +138,7 @@ export class TutorMarkingComponent implements OnInit {
   private loadStudents(unit: Unit): Promise<Project> {
     return new Promise((resolve, reject) => {
       this.projectService.loadStudents(unit, false, false).subscribe((projects) => {
-        const project = projects.find((p) => p.student.username === this.username);
+        const project = projects.find((p) => p.id === this.projectId);
         if (!project) {
           reject('Student is not a part of this unit');
         }

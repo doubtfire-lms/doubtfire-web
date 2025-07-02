@@ -1,11 +1,19 @@
-<div class="w-full flex flex-col h-[calc(100vh-140px)]">
+@if (scanningQr) {
+  <div
+    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen"
+  >
+    <video #qrScanner class="w-full h-full"></video>
+  </div>
+}
+
+<div [hidden]="scanningQr" class="w-full flex flex-col h-[calc(100vh-140px)]">
   <div class="task-inbox flex flex-col flex-1 justify-normal items-center full-width">
     <!-- Get list of tutorials for student that are either submitted or ready for discussion -->
     <!-- <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60"> -->
     <div class="w-full flex justify-between items-center">
       <!-- <div></div> -->
       <button mat-raised-button color="primary" (click)="refresh()">Refresh</button>
-      <button mat-icon-button color="primary">
+      <button mat-icon-button color="primary" (click)="scanQrCode()">
         <mat-icon>qr_code</mat-icon>
       </button>
     </div>
