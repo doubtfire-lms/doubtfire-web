@@ -45,6 +45,9 @@
       }
     </div>
 
+    @if (project && !filteredTasks.length) {
+      <div class="italic text-gray-400 py-10">No tasks to discuss.</div>
+    }
     <mat-selection-list class="m-0 p-0 h-min" #tasks>
       @for (task of filteredTasks; track task) {
         <mat-list-option
@@ -137,7 +140,7 @@
 
       <!--/task-->
     </mat-selection-list>
-    @if (project && filteredTasks.length) {
+    @if (project) {
       <div class="w-full flex justify-center mt-4">
         <button mat-button color="primary" (click)="loadAllSubmittedtasks()">
           Load all submitted tasks
@@ -148,7 +151,7 @@
     <!-- </cdk-virtual-scroll-viewport> -->
   </div>
 
-  @if (project) {
+  @if (project && filteredTasks.length) {
     <div class="mt-2">
       <div class="w-full flex justify-center items-center my-3 gap-5">
         <button
