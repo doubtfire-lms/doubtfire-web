@@ -104,6 +104,8 @@ export class TutorMarkingComponent implements OnInit {
     });
   }
 
+  hideQrScannerBloat: boolean = true;
+
   public scanQrCode() {
     this.scanningQr = true;
     this.loadingStudentData = false;
@@ -118,25 +120,45 @@ export class TutorMarkingComponent implements OnInit {
 
       // Trigger video permissions
       // If we call getUserMedia when html5QrcodeScanner is already active, the scanner will break on iOS
-      navigator.mediaDevices.getUserMedia({video: true}).then(() => {
-        setTimeout(() => {
-          // Only init the scanner once and let it run in the background
-          this.html5QrcodeScanner = new Html5QrcodeScanner(
-            'qr-reader', // id of the div in the html
-            {fps: 10, qrbox: 250},
-            false,
+      navigator.mediaDevices
+        .getUserMedia({video: true})
+        .then(() => {
+          return navigator.mediaDevices.enumerateDevices();
+        })
+        .then((devices) => {
+          // Find the deviceId of the back camera
+          const backCameras = devices.filter(
+            (d) => d.kind === 'videoinput' && d.label.toLowerCase().includes('back camera'),
           );
 
-          this.html5QrcodeScanner.render(
-            (data) => {
-              this.decodeQrCode(data);
-            },
-            (_error) => {
-              // console.error(_error);
-            },
-          );
+          const html5QrcodeData = {
+            hasPermission: true,
+            lastUsedCameraId: backCameras[0]?.deviceId ?? null,
+          };
+          localStorage.setItem('HTML5_QRCODE_DATA', JSON.stringify(html5QrcodeData));
+
+          // Hide most of the UI if we found and set the back camera
+          // Otherwise, we need to reveal the UI so that the user can select which camera to use
+          this.hideQrScannerBloat = html5QrcodeData.lastUsedCameraId ? true : false;
+
+          setTimeout(() => {
+            // Only init the scanner once and let it run in the background
+            this.html5QrcodeScanner = new Html5QrcodeScanner(
+              'qr-reader', // id of the div in the html
+              {fps: 10, qrbox: 250},
+              false,
+            );
+
+            this.html5QrcodeScanner.render(
+              (data) => {
+                this.decodeQrCode(data);
+              },
+              (_error) => {
+                // console.error(_error);
+              },
+            );
+          });
         });
-      });
     }
   }
 

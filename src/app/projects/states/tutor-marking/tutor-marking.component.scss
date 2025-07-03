@@ -268,15 +268,29 @@ user-icon {
 }
 
 // Hide auto-injected QR scanner elements that are not needed in the UI
-// #html5-qrcode-button-camera-stop,
-// #qr-reader__header_message,
-// #qr-reader img,
-// #qr-reader__dashboard_section,
-// #html5-qrcode-anchor-scan-type-change,
-// #qr-reader > div:not([id]):not([class]),
-// #qr-reader__scan_region > div:not([id]):not([class]) {
-//   display: none !important;
-// }
+// We only hide this if we found a "back camera" on user's device
+.qr-reader-hide-bloat #qr-reader__header_message,
+.qr-reader-hide-bloat #qr-reader__dashboard_section,
+.qr-reader-hide-bloat #qr-reader__dashboard_section_csr,
+.qr-reader-hide-bloat #qr-reader > div:not([id]):not([class]),
+.qr-reader-hide-bloat #qr-reader__scan_region > div:not([id]):not([class]),
+.qr-reader-hide-bloat #html5-qrcode-button-camera-stop,
+.qr-reader-hide-bloat #html5-qrcode-button-camera-start {
+  display: none !important;
+}
+
+#qr-reader img,
+#html5-qrcode-anchor-scan-type-change {
+  display: none !important;
+}
+
+#html5-qrcode-button-camera-stop,
+#html5-qrcode-button-camera-start {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow w-full uppercase;
+  max-width: 1000px;
+  height: 45px;
+  margin-top: 15px;
+}
 
 #html5-qrcode-button-camera-permission {
   @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow w-full uppercase;

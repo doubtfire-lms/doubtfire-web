@@ -10,11 +10,15 @@
       class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
     ></mat-spinner>
   }
-  <div class="w-full h-full flex flex-col justify-around">
-    <div class="w-full text-center text-white px-10 py-5 text-md font-bold">
+  <div class="w-full h-full flex flex-col justify-around relative">
+    <div [ngClass]="{'qr-reader-hide-bloat': hideQrScannerBloat}">
+      <div id="qr-reader" class="w-full h-[calc(100%-50px)]"></div>
+    </div>
+    <div
+      class="absolute top-[50px] left-1/2 transform -translate-x-1/2 w-full text-center text-white px-10 py-5 text-md font-bold pointer-events-none z-10"
+    >
       Scan a student's QR code to instantly load their project and mark submissions.
     </div>
-    <div id="qr-reader" class=""></div>
     <button
       mat-raised-button
       color="secondary"
