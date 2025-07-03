@@ -268,15 +268,15 @@ user-icon {
 }
 
 // Hide auto-injected QR scanner elements that are not needed in the UI
-#html5-qrcode-button-camera-stop,
-#qr-reader__header_message,
-#qr-reader img,
-#qr-reader__dashboard_section,
-#html5-qrcode-anchor-scan-type-change,
-#qr-reader > div:not([id]):not([class]),
-#qr-reader__scan_region > div:not([id]):not([class]) {
-  display: none !important;
-}
+// #html5-qrcode-button-camera-stop,
+// #qr-reader__header_message,
+// #qr-reader img,
+// #qr-reader__dashboard_section,
+// #html5-qrcode-anchor-scan-type-change,
+// #qr-reader > div:not([id]):not([class]),
+// #qr-reader__scan_region > div:not([id]):not([class]) {
+//   display: none !important;
+// }
 
 #html5-qrcode-button-camera-permission {
   @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow w-full uppercase;

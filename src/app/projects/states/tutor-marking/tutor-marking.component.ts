@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {MatSelectionList} from '@angular/material/list';
 import {StateService, UIRouter} from '@uirouter/core';
-import {Html5QrcodeScanner} from 'html5-qrcode';
+import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
 import {
   AuthenticationService,
   Project,
@@ -108,11 +108,19 @@ export class TutorMarkingComponent implements OnInit {
     this.scanningQr = true;
     this.loadingStudentData = false;
 
-    // Trigger video permissions
-    navigator.mediaDevices.getUserMedia({video: true}).then(() => {
-      setTimeout(() => {
-        // Only init the scanner once and let it run in the background
-        if (!this.html5QrcodeScanner) {
+    if (
+      this.html5QrcodeScanner &&
+      this.html5QrcodeScanner.getState() === Html5QrcodeScannerState.PAUSED
+    ) {
+      this.html5QrcodeScanner.resume();
+    } else {
+      this.html5QrcodeScanner?.clear();
+
+      // Trigger video permissions
+      // If we call getUserMedia when html5QrcodeScanner is already active, the scanner will break on iOS
+      navigator.mediaDevices.getUserMedia({video: true}).then(() => {
+        setTimeout(() => {
+          // Only init the scanner once and let it run in the background
           this.html5QrcodeScanner = new Html5QrcodeScanner(
             'qr-reader', // id of the div in the html
             {fps: 10, qrbox: 250},
@@ -124,15 +132,12 @@ export class TutorMarkingComponent implements OnInit {
               this.decodeQrCode(data);
             },
             (_error) => {
-              // console.error(error);
+              // console.error(_error);
             },
           );
-        } else {
-          // Resume scanner if we've already set it up
-          this.html5QrcodeScanner.resume();
-        }
+        });
       });
-    });
+    }
   }
 
   public selectTask(task: Task) {
