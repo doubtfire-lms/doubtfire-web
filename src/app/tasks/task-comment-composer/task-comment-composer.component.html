@@ -146,7 +146,7 @@
     <div
       id="textFieldContainer"
       [class.active]="$userIsTyping | async"
-      [ngClass]="{recording: recording}"
+      [ngClass]="{recording: recording, 'draft-loaded': isDraftLoaded}"
     >
       <div
         [hidden]="recording"
@@ -158,6 +158,7 @@
         [attr.contenteditable]="contentEditableValue() && !recording"
         (keydown.enter)="send($event)"
         (keydown)="keyTyped()"
+        (input)="onInputChange($event)"
         placeholder="Aa"
         name="commentComposer"
         enterkeyhint="send"
