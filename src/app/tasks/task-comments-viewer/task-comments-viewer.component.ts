@@ -5,6 +5,7 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
 import { TaskCommentComposerData } from '../task-comment-composer/task-comment-composer.component';
 import { AlertService } from 'src/app/common/services/alert.service';
 import { FeedbackTemplateService } from 'src/app/api/services/feedback-template.service';
+import { CommentsModalService } from 'src/app/common/modals/comments-modal/comments-modal.service';
 
 @Component({
   selector: 'task-comments-viewer',
@@ -32,7 +33,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
     private feedbackTemplateService: FeedbackTemplateService,
     private userService: UserService,
     private constants: DoubtfireConstants,
-    @Inject(commentsModal) private commentsModalRef: any,
+    @Inject(commentsModal) private commentsModalRef: CommentsModalService,
     private alerts: AlertService,
   ) {
     const self = this;
@@ -161,7 +162,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
 
   openCommentsModal(comment: TaskComment) {
     const resourceUrl = comment.attachmentUrl;
-    this.commentsModalRef.show(resourceUrl, comment.commentType);
+    this.commentsModalRef.show(resourceUrl, comment);
   }
 
   shouldShowAuthorIcon(commentType: string) {
