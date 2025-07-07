@@ -83,9 +83,6 @@ export class TaskCommentComposerComponent
   @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.showFeedbackTemplatePicker = false;
-  }
 
   public $userIsTyping = new BehaviorSubject<boolean>(false);
   private draftSaveSubscription = new Subscription();
@@ -152,6 +149,8 @@ export class TaskCommentComposerComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.showFeedbackTemplatePicker = false;
+
     if (changes.task && changes.task.currentValue !== changes.task.previousValue) {
       const newTask = changes.task.currentValue as Task;
       // Check if the task has changed
