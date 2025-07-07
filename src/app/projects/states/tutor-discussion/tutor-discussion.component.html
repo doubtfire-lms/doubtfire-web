@@ -100,7 +100,7 @@
                 <button
                   mat-icon-button
                   aria-label="task-comments"
-                  [ngClass]="task.id === selectedTask.id ? 'text-blue-500' : 'text-gray-400'"
+                  [ngClass]="task.id === selectedTask?.id ? 'text-blue-500' : 'text-gray-400'"
                   (click)="loadTaskComments($event, task)"
                 >
                   <mat-icon>chat-bubble</mat-icon>
@@ -116,9 +116,15 @@
     </mat-selection-list>
     @if (project) {
       <div class="w-full flex justify-center mt-4">
-        <button mat-button color="primary" (click)="loadAllSubmittedtasks()">
-          Load all submitted tasks
-        </button>
+        @if (this.filteredTasks?.length !== this.allTasks?.length && this.allTasks?.length > 0) {
+          <button mat-button color="primary" (click)="viewAllSubmittedTasks()">
+            Load all submitted tasks
+          </button>
+        } @else {
+          <button mat-button color="primary" (click)="viewAllFilteredTasks()">
+            Hide all submitted tasks
+          </button>
+        }
       </div>
     }
 

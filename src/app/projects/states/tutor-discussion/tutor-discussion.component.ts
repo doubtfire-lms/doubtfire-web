@@ -27,6 +27,7 @@ export class TutorDiscussionComponent implements OnInit {
   @ViewChild('tasks') tasksList: MatSelectionList;
 
   public filteredTasks: Task[] = [];
+  public allTasks: Task[] = [];
   public project: Project | null;
 
   public selectedTask: Task | null;
@@ -219,16 +220,6 @@ export class TutorDiscussionComponent implements OnInit {
     this.decodeQrCode('{"unitId":2,"projectId":20}');
   }
 
-  public loadAllSubmittedtasks() {
-    this.filteredTasks = [
-      ...this.project.tasks.filter(
-        (task) =>
-          task.status !== 'not_started' && // Filter out tasks with no submissions yet
-          task.definition.targetGrade <= this.project.targetGrade, // Filter out tasks that are higher than student's target grade
-      ),
-    ];
-  }
-
   statusesToFetch: TaskStatusEnum[] = [
     'demonstrate',
     'ready_for_feedback',
@@ -238,6 +229,17 @@ export class TutorDiscussionComponent implements OnInit {
     'fix_and_resubmit',
     'redo',
   ];
+
+  public viewAllSubmittedTasks() {
+    this.filteredTasks = [...this.allTasks];
+  }
+
+  public viewAllFilteredTasks() {
+    const discussionTasks = this.project?.tasks.filter((task) =>
+      this.statusesToFetch.includes(task.status),
+    );
+    this.filteredTasks = [...discussionTasks];
+  }
 
   public getStudentTasks(): void {
     console.time('getStudentTasks()');
@@ -259,7 +261,14 @@ export class TutorDiscussionComponent implements OnInit {
           this.statusesToFetch.includes(task.status),
         );
         this.filteredTasks = [...discussionTasks];
-        this.selectedTask = discussionTasks[0];
+        this.allTasks = [
+          ...project.tasks.filter(
+            (task) =>
+              task.status !== 'not_started' && // Filter out tasks with no submissions yet
+              task.definition.targetGrade <= project.targetGrade, // Filter out tasks that are higher than student's target grade
+          ),
+        ];
+        this.selectedTask = discussionTasks[0] ?? null;
         this.project = project;
         this.scanningQr = false;
         this.loadingStudentData = false;
