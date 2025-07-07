@@ -28,7 +28,7 @@
 
 <!-- We offset the height by 145px to compensate for the header -->
 <div class="w-full flex flex-col h-[calc(100vh-145px)]">
-  <div class="task-inbox flex flex-col flex-1 justify-normal items-center full-width">
+  <div class="task-inbox flex flex-col flex-1 justify-normal items-center w-full">
     <div class="flex justify-between w-full relative">
       @if (project && project?.student) {
         <div></div>
@@ -59,7 +59,7 @@
           [selected]="true"
         >
           @if (task) {
-            <div (click)="selectTask(task)" class="w-full" id="{{ task.id }}">
+            <div class="w-full" id="{{ task.id }}">
               <div
                 class="inbox-entry flex items-center"
                 [ngClass]="{hover: task.hover}"
@@ -74,9 +74,9 @@
                   }"
                 ></span>
                 <user-icon class="self-center" [user]="project?.student" [size]="30"> </user-icon>
-                <div class="task-list-data truncate flex-1" [hidden]="isNarrow">
-                  <h4 class="student-name">{{ task.definition.name }}</h4>
-                  <div class="task-details truncate">
+                <div class="truncate flex-1 mt-0" [hidden]="isNarrow">
+                  <h4 class="text-[15px] -mb-[2px] mt-[8px]">{{ task.definition.name }}</h4>
+                  <div class="truncate mb-0 text-[12px]">
                     {{ task.definition.abbreviation }} -
                     {{ getTargetTradeString(task.definition.targetGrade) }} Task
                   </div>
