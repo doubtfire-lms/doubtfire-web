@@ -100,6 +100,7 @@
                 <button
                   mat-icon-button
                   aria-label="task-comments"
+                  [ngClass]="task.id === selectedTask.id ? 'text-blue-500' : 'text-gray-400'"
                   (click)="loadTaskComments($event, task)"
                 >
                   <mat-icon>chat-bubble</mat-icon>
