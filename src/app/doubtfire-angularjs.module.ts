@@ -214,14 +214,17 @@ import {FUnitTaskListComponent} from './units/states/tasks/viewer/directives/f-u
 import {FTaskDetailsViewComponent} from './units/states/tasks/viewer/directives/f-task-details-view/f-task-details-view.component';
 import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-task-sheet-view/f-task-sheet-view.component';
 import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
+import {TaskIlosCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-ilos-card/task-ilos-card.component';
 import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {MarkedPipe} from './common/pipes/marked.pipe';
 import {AlertService} from './common/services/alert.service';
 import {GradeService} from './common/services/grade.service';
 import {CommentsModalService} from './common/modals/comments-modal/comments-modal.service';
 import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
-import { D2lUnitDetailsModal } from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
-import { D2lTransferModal } from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
+import {D2lUnitDetailsModal} from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
+import {D2lTransferModal} from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
+import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/learning-outcome-editor.component';
+import {FeedbackTemplateService} from './api/services/feedback-template.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -306,6 +309,11 @@ DoubtfireAngularJSModule.factory(
 );
 DoubtfireAngularJSModule.factory('CreateNewUnitModal', downgradeInjectable(CreateNewUnitModal));
 DoubtfireAngularJSModule.factory('CommentsModal', downgradeInjectable(CommentsModalService));
+
+DoubtfireAngularJSModule.factory(
+  'FeedbackTemplateService',
+  downgradeInjectable(FeedbackTemplateService),
+);
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
@@ -466,7 +474,16 @@ DoubtfireAngularJSModule.directive(
   'statusIcon',
   downgradeComponent({component: StatusIconComponent}),
 );
+DoubtfireAngularJSModule.directive(
+  'fLearningOutcomeEditor',
+  downgradeComponent({component: LearningOutcomeEditorComponent}),
+);
 DoubtfireAngularJSModule.directive('newFUnits', downgradeComponent({component: FUnitsComponent}));
+
+DoubtfireAngularJSModule.directive(
+  'fTaskIlosCard',
+  downgradeComponent({component: TaskIlosCardComponent}),
+);
 
 // Global configuration
 

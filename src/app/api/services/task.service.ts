@@ -160,6 +160,7 @@ export class TaskService extends CachedEntityService<Task> {
   public readonly stateThatAllowsExtension = TaskStatus.STATE_THAT_ALLOWS_EXTENSION;
   public readonly pdfRegeneratableStatuses = TaskStatus.PDF_REGENERATABLE_STATES;
   public readonly submittableStatuses = TaskStatus.SUBMITTABLE_STATUSES;
+  public readonly feedbackTemplateStatuses = TaskStatus.FEEDBACK_TEMPLATE_STATUSES;
   public readonly completeStatus: TaskStatusEnum = 'complete';
   public readonly learningWeight: Map<TaskStatusEnum, number> = TaskStatus.LEARNING_WEIGHT;
   public readonly statusAcronym: Map<TaskStatusEnum, string> = TaskStatus.STATUS_ACRONYM;

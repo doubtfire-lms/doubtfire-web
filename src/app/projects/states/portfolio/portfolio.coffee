@@ -32,15 +32,12 @@ angular.module('doubtfire.projects.states.portfolio', [
     summaryStep:
       title: "Learning Summary Report"
       seq: 3
-    taskStep:
-      title: "Select Tasks"
-      seq: 4
     otherFilesStep:
       title: "Upload Other Files"
-      seq: 5
+      seq: 4
     reviewStep:
       title: "Review Portfolio"
-      seq: 6
+      seq: 5
   $scope.setActiveTab = (tab) ->
     $scope.activeTab = tab
     $scope.activeTab.active = true
@@ -82,19 +79,10 @@ angular.module('doubtfire.projects.states.portfolio', [
       # when f.idx is 0 it's the LSR
       f.idx isnt 0
 
-  # Gets whether the unit has ilos
-  $scope.unitHasILOs = $scope.unit.ilos.length > 0
-
   # Gets selected tasks in the task selector
   $scope.selectedTasks = ->
-    if $scope.unitHasILOs
-      # Filter by aligned tasks that are included
-      tasks = _.filter $scope.project.tasks, (t) ->
-        hasAlignmentsForTask = _.find($scope.project.taskOutcomeAlignments, (ta) -> ta.task.id ==  t.id )?
-        t.includeInPortfolio and hasAlignmentsForTask
-    else
-      # Filter by included in portfolio
-      tasks = _.filter $scope.project.tasks, (t) -> t.includeInPortfolio
+    # Filter by included in portfolio
+    tasks = _.filter $scope.project.tasks, (t) -> t.includeInPortfolio
     tasks = _.filter tasks, (t) -> !_.includes(newTaskService.toBeWorkedOn, t.status)
     _.sortBy tasks, (t) -> t.definition.seq
 
@@ -104,7 +92,7 @@ angular.module('doubtfire.projects.states.portfolio', [
   else if $scope.projectHasDraftLearningSummaryReport
     $scope.setActiveTab $scope.tabs.summaryStep
   else if $scope.projectHasLearningSummaryReport()
-    $scope.setActiveTab $scope.tabs.taskStep
+    $scope.setActiveTab $scope.tabs.otherFilesStep
   else
     $scope.setActiveTab $scope.tabs.welcomeStep
 

@@ -65,6 +65,7 @@ export class Unit extends Entity {
   draftTaskDefinition: TaskDefinition;
 
   allowStudentExtensionRequests: boolean;
+  allowFlexibleDates: boolean = false;
   extensionWeeksOnResubmitRequest: number;
   allowStudentChangeTutorial: boolean;
 
@@ -227,6 +228,20 @@ export class Unit extends Entity {
   }
 
   /**
+   * Get the total duration of the unit in milliseconds.
+   */
+  public get totalDuration(): number {
+    return this.endDate.valueOf() - this.startDate.valueOf();
+  }
+
+  /**
+   * Get the number of weeks in the unit's teaching period.
+   */
+  public get totalWeeks(): number {
+    return Math.ceil(this.totalDuration / (1000 * 60 * 60 * 24 * 7));
+  }
+
+  /**
    * Calculate how much time has elapsed in the teaching period, based on the start and
    * end date of the unit relative to the current date.
    *
@@ -240,7 +255,7 @@ export class Unit extends Entity {
     if (today >= this.endDate) return 100;
 
     const startToNow = Math.abs(today.valueOf() - this.startDate.valueOf());
-    const totalDuration = Math.abs(this.endDate.valueOf() - this.startDate.valueOf());
+    const totalDuration = Math.abs(this.totalDuration);
     return Math.round((startToNow / totalDuration) * 100);
   }
 
@@ -383,7 +398,7 @@ export class Unit extends Entity {
         return alignment.taskDefinition.id === td.id;
       })
       .sort((a: TaskOutcomeAlignment, b: TaskOutcomeAlignment) => {
-        return a.learningOutcome.iloNumber - b.learningOutcome.iloNumber;
+        return a.learningOutcome.id - b.learningOutcome.id;
       });
   }
 
@@ -399,6 +414,10 @@ export class Unit extends Entity {
 
   public getOutcomeBatchUploadUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/outcomes/csv`;
+  }
+
+  public getFeedbackTemplateBatchUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/feedback_chips/csv`;
   }
 
   public hasStreams(): boolean {

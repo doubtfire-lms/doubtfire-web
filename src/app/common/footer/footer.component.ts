@@ -1,9 +1,9 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Task } from 'src/app/api/models/task';
-import { SelectedTaskService } from 'src/app/projects/states/dashboard/selected-task.service';
-
-import { FileDownloaderService } from '../file-downloader/file-downloader.service';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Task} from 'src/app/api/models/task';
+import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import {TaskService} from 'src/app/api/services/task.service';
+import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 
 @Component({
   selector: 'f-footer',
@@ -11,13 +11,18 @@ import { FileDownloaderService } from '../file-downloader/file-downloader.servic
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  constructor(public selectedTaskService: SelectedTaskService, private fileDownloader: FileDownloaderService) {}
+  constructor(
+    public selectedTaskService: SelectedTaskService,
+    public taskService: TaskService,
+    private fileDownloader: FileDownloaderService,
+  ) {}
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;
 
-  @ViewChild('similaritiesButton', { static: false, read: ElementRef }) similaritiesButton: ElementRef;
-  @ViewChild('warningText', { static: false, read: ElementRef }) warningText: ElementRef;
+  @ViewChild('similaritiesButton', {static: false, read: ElementRef})
+  similaritiesButton: ElementRef;
+  @ViewChild('warningText', {static: false, read: ElementRef}) warningText: ElementRef;
   public leftOffset: number;
   public topOffset: number;
   public warningTextLeftOffset: number;
@@ -37,7 +42,8 @@ export class FooterComponent implements OnInit {
 
     const totalPaddingOffset = 30;
     this.warningTextLeftOffset =
-      this.leftOffset - (this.warningText?.nativeElement.getBoundingClientRect().width + totalPaddingOffset) / 2;
+      this.leftOffset -
+      (this.warningText?.nativeElement.getBoundingClientRect().width + totalPaddingOffset) / 2;
   }
 
   ngOnInit(): void {
@@ -56,14 +62,14 @@ export class FooterComponent implements OnInit {
   downloadFiles() {
     this.fileDownloader.downloadFile(
       this.selectedTask.submittedFilesUrl(true),
-      `${this.selectedTask.project.student.lastName}-${this.selectedTask.definition.name}.zip`
+      `${this.selectedTask.project.student.lastName}-${this.selectedTask.definition.name}.zip`,
     );
   }
 
   downloadSubmissionPdf() {
     this.fileDownloader.downloadFile(
       this.selectedTask.submissionUrl(true),
-      `${this.selectedTask.project.student.lastName}-${this.selectedTask.definition.name}.pdf`
+      `${this.selectedTask.project.student.lastName}-${this.selectedTask.definition.name}.pdf`,
     );
   }
 
@@ -77,5 +83,15 @@ export class FooterComponent implements OnInit {
 
   viewSimilarity() {
     this.selectedTaskService.showSimilarity();
+  }
+
+  getJplagReport() {
+    if (!this.selectedTask?.definition) {
+      return;
+    }
+    this.fileDownloader.downloadFile(
+      this.selectedTask.definition.getJplagReportUrl(),
+      `${this.selectedTask.definition.abbreviation}-jplag-report`,
+    );
   }
 }

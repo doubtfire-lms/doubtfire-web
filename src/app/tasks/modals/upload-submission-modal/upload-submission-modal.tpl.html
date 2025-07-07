@@ -79,64 +79,6 @@
     </div>
     <!--/state-files-->
     <div
-      class="state state-alignment"
-      ng-class="{'state-hidden-left': isHidden('alignment').left,
-                 'state-hidden-right': isHidden('alignment').right}">
-      <div class="card card-default">
-        <div class="card-heading">
-          <h4>
-            Learning Outcome Alignment <b class="text-red-500">*</b>
-          </h4>
-          <p>
-            Please rate the relevancy of this task to the specific learning outcome.
-            You must relate this task to at least one outcome and provide a rationale to proceed.
-          </p>
-          <p class="text-muted">
-            If you think the task is not related to a specific outcome, click the highest filled circle to remove its relevancy.
-          </p>
-        </div>
-        <!--/card-heading-->
-        <div class="list-group">
-          <div class="list-group-item clearfix" ng-repeat="ilo in ilos | orderBy: 'iloNumber'">
-            <div class="col-sm-12 col-md-7 pointer" ng-click="ilo.collapsed = !ilo.collapsed">
-              <h4>
-                <strong>{{ilo.abbreviation}}</strong>
-                <small>{{ilo.name}}</small>
-              </h4>
-              <div>Staff believe that {{ilo.staffAlignment.label | lcfirst}}. Click to expand.</div>
-              <div class="panel panel-default" collapse="!ilo.collapsed">
-                <div class="panel-body">
-                  <p>
-                    <h5>Outcome Description</h5>
-                    <div class="markdown-to-html" ng-bind-html="ilo.description | marked | to_trusted"></div>
-                  </p>
-                  <p ng-show="ilo.staffAlignment.rating > 0">
-                    <h5>Rationale</h5>
-                    <div class="markdown-to-html" ng-bind-html="ilo.staffAlignment.rationale | marked | to_trusted"></div>
-                  </p>
-                </div>
-              </div>
-            </div><!--/ilo-description-->
-            <div class="col-sm-12 col-md-5">
-              <task-ilo-alignment-rater
-                readonly="false"
-                unit="task.unit"
-                show-zero-rating="true"
-                ng-model="alignments[ilo.id]">
-              </task-ilo-alignment-rater>
-            </div><!--/alignment-rater-->
-          </div>
-        </div><!--/alignment-list-group-->
-        <div class="card-footer">
-          <p>
-            Justify your relevancy alignments with a comment to explain your choices. <b class="text-red-500">*</b>
-          </p>
-          <textarea ng-model="alignmentsRationale" class="form-control input-lg" rows="3" placeholder="My rationale is...">
-          </textarea>
-        </div><!--/comments-for-alignment-->
-      </div><!--/card-alignment-->
-    </div><!--/state-alignment-->
-    <div
       class="state state-comments"
       ng-class="{'state-hidden-left': isHidden('comments').left,
                  'state-hidden-right': isHidden('comments').right}">

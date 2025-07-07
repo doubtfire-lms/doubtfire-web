@@ -32,7 +32,7 @@ export class UnitService extends CachedEntityService<Unit> {
     private taskDefinitionService: TaskDefinitionService,
     private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
     private groupSetService: GroupSetService,
-    private groupService: GroupService
+    private groupService: GroupService,
   ) {
     super(httpClient, API_URL);
 
@@ -148,6 +148,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'enableSyncEnrolments',
       'enableSyncTimetable',
       'allowStudentExtensionRequests',
+      'allowFlexibleDates',
       'extensionWeeksOnResubmitRequest',
       'allowStudentChangeTutorial',
       {
@@ -253,9 +254,10 @@ export class UnitService extends CachedEntityService<Unit> {
       'enableSyncTimetable',
 
       'draftTaskDefinition',
+      'allowFlexibleDates',
       'allowStudentExtensionRequests',
       'extensionWeeksOnResubmitRequest',
-      'allowStudentChangeTutorial'
+      'allowStudentChangeTutorial',
     );
   }
 

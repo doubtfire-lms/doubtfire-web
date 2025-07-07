@@ -13,6 +13,7 @@ import { Project, ProjectService, Unit } from 'src/app/api/models/doubtfire-mode
 import { UIRouter } from '@uirouter/angular';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/common/services/alert.service';
+import { SpecConModalService } from 'src/app/common/modals/spec-con-modal/spec-con-modal.service';
 
 @Component({
   selector: 'unit-students-editor',
@@ -41,7 +42,8 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     @Inject(csvResultModalService) private csvResultModal: any,
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private specConModalService: SpecConModalService
   ) {}
 
   // The paginator is inside the table
@@ -147,5 +149,9 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     const url: string = this.unit.enrolStudentsCSVUrl;
 
     this.fileDownloader.downloadFile(url, `${this.unit.code}-students.csv`);
+  }
+
+  public updateSpecCon(student: Project) {
+    this.specConModalService.show(student);
   }
 }

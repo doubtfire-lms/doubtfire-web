@@ -5,7 +5,7 @@ angular.module("doubtfire.errors.states.timeout", [])
 #
 .config(($stateProvider) ->
   stateData =
-    url: "/timeout?dest&params"
+    url: "/timeout"
     views:
       main:
         controller: "TimeoutCtrl"
@@ -16,5 +16,5 @@ angular.module("doubtfire.errors.states.timeout", [])
 )
 # this can be removed... timeout should just sign out and redirect to login
 .controller("TimeoutCtrl", (authenticationService) ->
-  authenticationService.signOut(false)
+  setTimeout((-> authenticationService.signOut(false)), 2000)
 )

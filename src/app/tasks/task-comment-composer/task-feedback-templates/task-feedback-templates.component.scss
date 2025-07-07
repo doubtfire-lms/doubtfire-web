@@ -1,0 +1,31 @@
+.category-tab-group .mat-mdc-tab-header {
+  --mdc-secondary-navigation-tab-container-height: 40px;
+}
+
+.template-search .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+  height: 0px;
+}
+
+.template-search .mat-mdc-text-field-wrapper, .template-search .mat-mdc-form-field {
+  height: 40px;
+}
+
+.template-search .mat-mdc-form-field-infix {
+  min-height: 40px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.template-search .mat-mdc-input-element {
+  font-size: 14px;
+  padding-top: 3px;
+}
+
+.template-search .material-icons {
+  font-size: 19px;
+  padding-top: 5px;
+}
+
+.template-grid .mdc-evolution-chip__graphic.mat-mdc-chip-graphic.ng-star-inserted {
+  padding-right: 2px;
+}

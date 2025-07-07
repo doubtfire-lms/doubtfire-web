@@ -31,6 +31,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {HotkeysService} from '@ngneat/hotkeys';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -77,6 +78,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   tasks: any[] = null;
 
+  // hasJplagReport: boolean = false;
+
   watchingTaskKey: any;
 
   panelOpenState = false;
@@ -107,6 +110,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     public dialog: MatDialog,
     private userService: UserService,
     private hotkeys: HotkeysService,
+    private router: Router,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -225,6 +229,17 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       }/task_definitions/${taskDef.id}/download_submissions`,
       `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`,
     );
+  }
+
+  downloadJPLAGReport() {
+    const taskDef = this.filters.taskDefinition;
+    this.fileDownloaderService.downloadFile(
+      taskDef.getJplagReportUrl(),
+      `${this.unit.code}-${taskDef.abbreviation}-jplag-report.zip`,
+    );
+
+    const url = this.router.serializeUrl(this.router.createUrlTree(['/jplag-report-viewer']));
+    window.open(url, '_blank');
   }
 
   openDialog() {

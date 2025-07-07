@@ -9,6 +9,7 @@ import { Unit } from 'src/app/api/models/unit';
 import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
 import { AlertService } from 'src/app/common/services/alert.service';
 import { addWeeks } from 'date-fns';
+import { FeedbackTemplateService } from 'src/app/api/services/feedback-template.service';
 
 @Component({
   selector: 'f-unit-task-editor',
@@ -29,6 +30,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
 
   constructor(
     private taskDefinitionService: TaskDefinitionService,
+    private feedbackTemplateService: FeedbackTemplateService,
     private alerts: AlertService,
     @Inject(csvResultModalService) private csvResultModalService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
@@ -68,6 +70,12 @@ export class UnitTaskEditorComponent implements AfterViewInit {
       if (!this.selectedTaskDefinition.hasOriginalSaveData) {
         this.selectedTaskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
       }
+
+      this.feedbackTemplateService
+        .query({contextType: 'task_definitions', contextId: this.selectedTaskDefinition.id}, {})
+        .subscribe({
+          error: () => this.alerts.error('Error loading task feedback templates.'),
+        });
     }
   }
 

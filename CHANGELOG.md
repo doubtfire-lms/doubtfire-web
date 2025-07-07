@@ -2,6 +2,126 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-6](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-5...v10.0.0-6) (2025-06-13)
+
+
+### Features
+
+* add spec con and flexible dates ([a874cff](https://github.com/macite/doubtfire-deploy/commit/a874cff846e788a1820da7e19899ecb20a113888))
+
+
+### Bug Fixes
+
+* only get task feedback templates if staff ([8341b93](https://github.com/macite/doubtfire-deploy/commit/8341b933487ccd451a15cb8f7ec6afc1695cb121))
+* remove unnecessary safe pipe ([c92242a](https://github.com/macite/doubtfire-deploy/commit/c92242ad9afb0a934d4e8fb00afee0c69782c625))
+
+## [10.0.0-5](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-4...v10.0.0-5) (2025-05-30)
+
+
+### Bug Fixes
+
+* correct broken transition hooks ([d237eda](https://github.com/macite/doubtfire-deploy/commit/d237eda82dd989fc1b69d6e4236932050bc5b1a4))
+* delay authorisation code until after authentication ([34410d4](https://github.com/macite/doubtfire-deploy/commit/34410d4afdf5bd73d9c244a6f40c7fb78b714e63))
+* ensure transition in student pages update pdf view ([68a2f38](https://github.com/macite/doubtfire-deploy/commit/68a2f38167c792974aafd907f04fcf9e8b5bf091))
+* simplify setting of auto redirect on login ([60dbceb](https://github.com/macite/doubtfire-deploy/commit/60dbceb2a104894b4eff157c038446796bf01708))
+
+## [10.0.0-4](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-3...v10.0.0-4) (2025-04-15)
+
+
+### Bug Fixes
+
+* ensure sign in waits for global load ([fb6e61f](https://github.com/macite/doubtfire-deploy/commit/fb6e61f874797cd48e77f2a8d0a32f345f5b785b))
+
+## [10.0.0-3](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-2...v10.0.0-3) (2025-04-10)
+
+
+### Bug Fixes
+
+* correct auth callback ([2e087d2](https://github.com/macite/doubtfire-deploy/commit/2e087d267c8bfde633550823aed460379a643ad9))
+
+## [10.0.0-2](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-1...v10.0.0-2) (2025-04-10)
+
+
+### Bug Fixes
+
+* correct handling of errors on auth ([622768a](https://github.com/macite/doubtfire-deploy/commit/622768a06112910d5ba79061689fc0ba486982a5))
+
+## [10.0.0-1](https://github.com/macite/doubtfire-deploy/compare/v8.0.37...v10.0.0-1) (2025-04-10)
+
+
+### Features
+
+* add comment text to comment area ([5c45415](https://github.com/macite/doubtfire-deploy/commit/5c45415eafb38e221963781e4575480294d74e09))
+* add connected learning outcomes ([9532d9f](https://github.com/macite/doubtfire-deploy/commit/9532d9ffe620d67d7bc83137d59e0a91ecf8a73a))
+* add editor for task feedback templates ([3da7a4b](https://github.com/macite/doubtfire-deploy/commit/3da7a4b54a5892ea99cd365ae439677b0f52ed6f))
+* add feedback template picker to comment composer ([9acc365](https://github.com/macite/doubtfire-deploy/commit/9acc36502dc3fd2365817f73ccc742dd3947e293))
+* add field to connect outcomes ([db2d2bc](https://github.com/macite/doubtfire-deploy/commit/db2d2bc32b19165bac8ff6ba0282a16adffbb815))
+* add glo editor ([4efe876](https://github.com/macite/doubtfire-deploy/commit/4efe87694a426c4b6a55ef943576fe47498166e5))
+* add greeting and summary chip ([ed68317](https://github.com/macite/doubtfire-deploy/commit/ed683174ab7b330a48b2aeacdd65012396357479))
+* add option for institution logo ([5141529](https://github.com/macite/doubtfire-deploy/commit/5141529b1ed37f8ca254e89e1b91edac3139f166))
+* add startpage property to auto scroll to on pdf render ([90830cd](https://github.com/macite/doubtfire-deploy/commit/90830cdba73bcfe564362015b5abaf2c40810f5f))
+* combine outcome and template editor ([c12536b](https://github.com/macite/doubtfire-deploy/commit/c12536bc4375b1ae5f19d4e54d0783b6948921eb))
+* edit feedback chips ([04f8dce](https://github.com/macite/doubtfire-deploy/commit/04f8dce30f79d86637abd6db2aa9fa3aa14d1de2))
+* **feedback-template:** add hierarchical sorting for feedback templates ([8db1844](https://github.com/macite/doubtfire-deploy/commit/8db1844402d080902a9d3938ecc04dd7a2f0340f))
+* **feedback-template:** improve sorting logic for feedback templates ([d3f156a](https://github.com/macite/doubtfire-deploy/commit/d3f156a640e6a3da99c147c4c2303a1af3050f8f))
+* **feedback-template:** merge upstream changes ([0fb1d8a](https://github.com/macite/doubtfire-deploy/commit/0fb1d8abfa3264befddd97e1ce0832359866919d))
+* fetch feedback chips when selecting task in unit editor ([9caeda4](https://github.com/macite/doubtfire-deploy/commit/9caeda4e71946ddb7907027ebf7a54397f11606f))
+* init pdf viewer on page 2 for student submissions ([45cc89e](https://github.com/macite/doubtfire-deploy/commit/45cc89e18cff8fcde66480448eea178940d316a2))
+* make template editor reusable across contexts ([a42f177](https://github.com/macite/doubtfire-deploy/commit/a42f177f61b3f7166edf3b9c93dfd2dcd3949df7))
+* modify fields and operate on learning outcomes ([65ffc4f](https://github.com/macite/doubtfire-deploy/commit/65ffc4f8d61a9d0b2cc7c5f8d13db932436fc4f5))
+* persistent pdf zoom level ([1348da2](https://github.com/macite/doubtfire-deploy/commit/1348da2d345b080002a62a24d717fac15c4b0a92))
+* rebuild auth with refresh token ([5d3a36e](https://github.com/macite/doubtfire-deploy/commit/5d3a36e8f16e8993c5607241112c490361a31c97))
+* show chips on picker ([e54216f](https://github.com/macite/doubtfire-deploy/commit/e54216f8472b67cf9f2ff69c9bcb3355efa90081))
+* suggest task status according to feedback ([95796da](https://github.com/macite/doubtfire-deploy/commit/95796da4e7855bcd76023754d95cec8d033668fc))
+
+
+### Bug Fixes
+
+* adjust ui for nested csv modal ([d7fac6f](https://github.com/macite/doubtfire-deploy/commit/d7fac6f0fb23f060373fd4c40f5e82b960098c77))
+* check difference before updating linked outcomes ([aa0bc76](https://github.com/macite/doubtfire-deploy/commit/aa0bc76d32656dc14d28ebca520e4f90d6d9434e))
+* check for unit context for template csv name ([6ecec84](https://github.com/macite/doubtfire-deploy/commit/6ecec8483222304161f9cda87a8bdf3ecd774bcb))
+* comment console logs ([e86162d](https://github.com/macite/doubtfire-deploy/commit/e86162d1592d8418bab3c889b1d0bbfe3662b86d))
+* correct a typo in /edit_profile ([4b7901f](https://github.com/macite/doubtfire-deploy/commit/4b7901fd03d9652230aecb52791313f052d7b53d))
+* correct string manipulation for task period formatting ([aa06cbf](https://github.com/macite/doubtfire-deploy/commit/aa06cbf3a08efa02f508062d47c127289fc8c6fa))
+* display feedback picker chips in color ([6ae0771](https://github.com/macite/doubtfire-deploy/commit/6ae077149d16e5af538d432a9ce2db974298b549))
+* display nested feedback groups in picker ([db93b18](https://github.com/macite/doubtfire-deploy/commit/db93b187cfe6e197a3b6243445809ec6d767d4bd))
+* display task status in coloured chip in feedback editor ([73986e8](https://github.com/macite/doubtfire-deploy/commit/73986e89839603b19f643404e5a48964ac9a3c1b))
+* exclude greeting and summary from selected ([1978e54](https://github.com/macite/doubtfire-deploy/commit/1978e5410f6aa9314252ae3cf922917033f551f0))
+* feedback picker search ([3a5e02e](https://github.com/macite/doubtfire-deploy/commit/3a5e02e2f7864b9e1ea4f8d49ce69d23addbcc5a))
+* **feedback-template-editor:** add missing operator ([a1f220c](https://github.com/macite/doubtfire-deploy/commit/a1f220c9f5462a2b91035eb936f3ff25b7d4cd67))
+* **feedback-template-editor:** improve feedback template sorting logic ([bd48c40](https://github.com/macite/doubtfire-deploy/commit/bd48c40c4c3b0a3d67d41373b624ed8b3b754f4a))
+* **feedback-template:** ensure sorting defaults are applied ([96f7555](https://github.com/macite/doubtfire-deploy/commit/96f7555f9dfcf4c62ee3dd54b9e9e74087bec47a))
+* focus on composer input after selecting chip ([95afdff](https://github.com/macite/doubtfire-deploy/commit/95afdff12aac914bb8af8727f8b8d960bc3b072c))
+* hide feedback group comment text ([55a6625](https://github.com/macite/doubtfire-deploy/commit/55a662584c4b8b6123335bcbc5149a9f0f0701d8))
+* hide picker on task change ([198b7f9](https://github.com/macite/doubtfire-deploy/commit/198b7f9d0ccad631059ed5e1ad5487604582074b))
+* hide summary instead of comment text for groups ([7644cba](https://github.com/macite/doubtfire-deploy/commit/7644cba92f92f5c261501c1907f7f5418538e3a7))
+* hide template editor on outcome switch ([a3706e9](https://github.com/macite/doubtfire-deploy/commit/a3706e9394b78edf9ec15030246c98acca9d3852))
+* lock ng2-pdf-viewer to 10.2.2 ([2cf6215](https://github.com/macite/doubtfire-deploy/commit/2cf62152524ec728c73aaa23f678bbce9ae6b4d1))
+* only get feedback chips if staff ([7f4381e](https://github.com/macite/doubtfire-deploy/commit/7f4381e1179400642821068d1acdba346a2969a2))
+* organise outcome and feedback csv functionality ([641f1d9](https://github.com/macite/doubtfire-deploy/commit/641f1d9f75177d48b3911c300e23c901e0a603e1))
+* prevent saving empty items ([0eed547](https://github.com/macite/doubtfire-deploy/commit/0eed5477940db511cee09bbdb7ccb0adde57cbbf))
+* refine feedback editor ([f410cfe](https://github.com/macite/doubtfire-deploy/commit/f410cfe47b0c242f1a164c6345bc4d29f5659f6a))
+* refresh context when changing task defs ([c078bcf](https://github.com/macite/doubtfire-deploy/commit/c078bcf40198c5495d4c94354fab411d3e0ee934))
+* remove duplicate alert ([955d0a1](https://github.com/macite/doubtfire-deploy/commit/955d0a17ae23be77954145ba189ac8bb0aa90da0))
+* remove glo outcome specific csv buttons ([579c491](https://github.com/macite/doubtfire-deploy/commit/579c49170808a6fcca1bfd67f0923f0339255463))
+* remove selected outcomes from dropdown ([5494384](https://github.com/macite/doubtfire-deploy/commit/5494384f1a4becf462dd031e89fae2734ed46e55))
+* reply to position and wrapping ([e065c46](https://github.com/macite/doubtfire-deploy/commit/e065c46c3fe6689a7b295a3f91a576eabc11f7bd))
+* reset template table for new outcome ([7585c1c](https://github.com/macite/doubtfire-deploy/commit/7585c1c60ca8fe168084ec3d857aec4856bfb0db))
+* save connected outcomes ([eb3cf6d](https://github.com/macite/doubtfire-deploy/commit/eb3cf6daf99b893642336efb48ed58bc9c8b8207))
+* save linked outcomes upon selection ([07f103d](https://github.com/macite/doubtfire-deploy/commit/07f103de46defa2a78f5d7c43030e67255c0d5fe))
+* save to proper cache and clean up ([80edff2](https://github.com/macite/doubtfire-deploy/commit/80edff2ef04137b3d38ccdd252788cfb40f458f0))
+* show description for connected outcome selection ([0f2c164](https://github.com/macite/doubtfire-deploy/commit/0f2c164579491298b81849cc110301229f2ca5af))
+* show picker above composer and below comments ([ef524f1](https://github.com/macite/doubtfire-deploy/commit/ef524f1b048b3bfe1781307a34e1a5fe364943a4))
+* show proper selected outcome or template ([0ac3881](https://github.com/macite/doubtfire-deploy/commit/0ac3881e7f6d0f5b7ddeb85e5e8f9e6835c5dba6))
+* support hot reloading on windows ([247330e](https://github.com/macite/doubtfire-deploy/commit/247330e46d74186519dbcbbef8378b508eaca83f))
+* support windows build ([3594528](https://github.com/macite/doubtfire-deploy/commit/35945288c73052afd28209a7381335af2b14ba10))
+* template editor not showing if new ([6cfe379](https://github.com/macite/doubtfire-deploy/commit/6cfe37999fa7f484e1b89f4dbe657b99907adae1))
+* tlo csv url ([73588d8](https://github.com/macite/doubtfire-deploy/commit/73588d886118861bbd3e5ae380cddc7baa532dbb))
+* update packages ([e5a57f8](https://github.com/macite/doubtfire-deploy/commit/e5a57f8ba3669345a272b308b0c892fdab4843ef))
+* upon save update entity in frontend ([a128744](https://github.com/macite/doubtfire-deploy/commit/a1287449b945295ced60e86a21bcaab67ed0f9bd))
+* use icon instead of color for template task status ([11a3993](https://github.com/macite/doubtfire-deploy/commit/11a399324ee64af901f44f28de3526cbd7650bac))
+* use task status color for recommended button ([174cde0](https://github.com/macite/doubtfire-deploy/commit/174cde0022d0c728d2c6408d40129d6c343aa91d))
+
 ### [8.0.37](https://github.com/macite/doubtfire-deploy/compare/v8.0.36...v8.0.37) (2025-03-10)
 
 

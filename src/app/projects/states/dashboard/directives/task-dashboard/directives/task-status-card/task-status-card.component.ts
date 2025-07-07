@@ -53,6 +53,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     this.taskService.statusKeys;
   }
 
+  public isReadyForFeedback(): boolean {
+    return this.task.status === 'ready_for_feedback';
+  }
+
   triggerTransition(trigger: TaskStatusEnum): void {
     this.task.triggerTransition(trigger);
   }
