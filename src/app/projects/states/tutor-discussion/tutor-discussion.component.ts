@@ -162,7 +162,8 @@ export class TutorDiscussionComponent implements OnInit {
     }
   }
 
-  public selectTask(task: Task) {
+  public loadTaskComments(event: MouseEvent, task: Task) {
+    event.stopPropagation();
     this.selectedTask = task;
   }
 

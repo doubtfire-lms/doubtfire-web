@@ -96,42 +96,14 @@
                   [status]="task.status"
                   class="ml-3"
                 ></status-icon>
-                @if (!isTaskDefMode) {
-                  <div class="overflow" [hidden]="isNarrow">
-                    <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
-                      <!-- <mat-icon class="warn-icon" *ngIf="task.similaritiesDetected">remove_red_eye</mat-icon> -->
 
-                      @if (task.pinned) {
-                        <div class="pin-container">
-                          <mat-icon>push_pin</mat-icon>
-                        </div>
-                      }
-                    </button>
-                    <button
-                      [hidden]="!task.hover"
-                      mat-icon-button
-                      aria-label="task overflow"
-                      [matMenuTriggerFor]="overflowMenu"
-                      (menuOpened)="setSelectedTask(task); task.optionsOpened = true"
-                      (menuClosed)="task.hover = false; task.optionsOpened = false"
-                      matTooltip="Submission options"
-                      matTooltipPosition="right"
-                      matTooltipShowDelay="400"
-                    >
-                      <mat-icon>more_horiz</mat-icon>
-                    </button>
-                    <mat-menu #overflowMenu="matMenu" yPosition="below">
-                      <button mat-menu-item (click)="togglePin(task)" class="flex items-center">
-                        <mat-icon class="mr-0">
-                          {{ task.pinned ? 'remove_circle' : 'add_alert' }}
-                        </mat-icon>
-                        <span class="ml-5"
-                          >{{ task.pinned ? 'Unpin from inbox' : 'Pin to inbox' }}
-                        </span>
-                      </button>
-                    </mat-menu>
-                  </div>
-                }
+                <button
+                  mat-icon-button
+                  aria-label="task-comments"
+                  (click)="loadTaskComments($event, task)"
+                >
+                  <mat-icon>chat-bubble</mat-icon>
+                </button>
               </div>
               <!--/badges-->
             </div>
