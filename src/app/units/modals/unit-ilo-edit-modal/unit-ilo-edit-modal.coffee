@@ -1,3 +1,5 @@
+# Component not used
+
 angular.module('doubtfire.units.modals.unit-ilo-edit-modal', [])
 #
 # Modal to edit or create a new ILO

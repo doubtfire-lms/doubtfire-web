@@ -1,7 +1,7 @@
 <section class="welcome flex flex-row custom-md-h-screen">
   <f-hero-sidebar class="sidebar self-start flex-col h-full"></f-hero-sidebar>
   <section class="content flex flex-col custom-md-h-screen">
-    <div class="container">
+    <div class="container" *ngIf="!isLoading">
       <div class="subcontainer">
         <div class="wordmark flex-row place-content-start">
           <img src="../../../assets/images/logo-bw.svg" width="40px" alt="Homepage Logo" />
@@ -12,7 +12,14 @@
         </h1>
         <form
           #form="ngForm"
-          (ngSubmit)="signIn({username: formData.username, password: formData.password})"
+          (ngSubmit)="
+            signIn({
+              username: formData.username,
+              password: formData.password,
+              remember: authService.rememberMe,
+              autoLogin: autoLogin
+            })
+          "
           class="sign-in-form flex flex-col"
         >
           @if (showCredentials) {
@@ -35,10 +42,13 @@
             </mat-form-field>
           }
           @if (!showCredentials) {
-            <mat-checkbox matInput name="autoLogin" [(ngModel)]="formData.autoLogin"
-              >Login via Institution</mat-checkbox
-            >
+            <mat-checkbox matInput name="autoLogin" [(ngModel)]="autoLogin">
+              Automatically redirect
+            </mat-checkbox>
           }
+          <mat-checkbox matInput name="remember" [(ngModel)]="authService.rememberMe">
+            Stay logged in
+          </mat-checkbox>
           <button
             class="w-full"
             mat-flat-button

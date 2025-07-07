@@ -46,10 +46,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.userService.isAnonymousUser()) {
-      this.router.stateService.go('sign_in');
-    }
-
     this.AnalyticsService.event('Home', 'Viewed Home page');
     this.globalState.setView(ViewType.OTHER);
 

@@ -17,7 +17,7 @@ angular.module('doubtfire.units.states.index', [])
   }
 )
 
-.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newUnitService, newProjectService, listenerService, GlobalStateService, newUserService, alertService) ->
+.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newUnitService, newProjectService, listenerService, GlobalStateService, newUserService, FeedbackTemplateService) ->
   # Error - required unitId is missing!
   unitId = +$stateParams.unitId
   return $state.go('home') unless unitId
@@ -39,6 +39,10 @@ angular.module('doubtfire.units.states.index', [])
         newProjectService.loadStudents(unit).subscribe({
           next: (students)->
             $scope.unit = unit
+            FeedbackTemplateService.query({contextType: 'units', contextId: unitId}).subscribe({
+              error: (err) ->
+                alertService.error( "Error loading unit feedback templates: " + err, 8000)
+            })
           error: (err)->
             alertService.error( "Error loading students: " + err, 8000)
             setTimeout((()-> $state.go('home')), 5000)

@@ -1,0 +1,13 @@
+<div class="flex flex-col container">
+  <h2>Plan Your Tasks</h2>
+  <p>
+    View and adjust the due dates of tasks. Remember to leave time to get and respond to feedback.
+  </p>
+  <!-- Add your project plan content here -->
+
+  <div class="flex flex-col gap-4 mb-10">
+    @for (taskDef of taskDefs(); track $index) {
+      <f-task-date-slider [task]="project.findTaskForDefinition(taskDef.id)" showTaskAbbr="true" />
+    }
+  </div>
+</div>

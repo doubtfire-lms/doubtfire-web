@@ -11,21 +11,19 @@
 
 @if (task) {
   <div id="replyContainer" [hidden]="originalComment === null">
-    <div>
-      <div class="replying-wrap">
-        Replying to:
-        <b>{{ originalComment !== null ? originalComment.author.name : '' }}</b>
-        <button
-          id="cancelReplyButton"
-          (click)="cancelReply()"
-          mat-icon-button
-          aria-label="Close reply"
-        >
-          <mat-icon inline="true" aria-label="Quit cross icon">close</mat-icon>
-        </button>
-      </div>
-      <p>{{ originalComment !== null ? originalComment.text : '' }}</p>
+    <div class="replying-wrap" style="width: 100%">
+      <button
+        id="cancelReplyButton"
+        (click)="cancelReply()"
+        mat-icon-button
+        aria-label="Close reply"
+      >
+        <mat-icon aria-label="Quit cross icon">close</mat-icon>
+      </button>
+      Replying to:
+      <b>{{ originalComment !== null ? originalComment.author.name : '' }}</b>
     </div>
+    <p>{{ originalComment !== null ? originalComment.text : '' }}</p>
   </div>
 }
 
@@ -50,10 +48,18 @@
 <form
   [hidden]="!this.task"
   style="display: flex; width: 100%"
-  class="input-group col-sm-12 comment-submitter"
+  class="input-group col-sm-12 comment-submitter flex-col"
   ng-submit="addComment()"
   role="form"
 >
+  @if (task) {
+    <f-task-feedback-templates
+      [task]="task"
+      (templateSelected)="addFeedback($event)"
+      [hidden]="!this.showFeedbackTemplatePicker"
+      class="feedback-template-picker pt-3"
+    ></f-task-feedback-templates>
+  }
   <div fxLayout="row" fxLayoutAlign="space-around center" class="composer-container">
     <div class="composer-action-group" [@shrinkgrow]="$userIsTyping | async">
       <!-- if active -->
@@ -172,6 +178,17 @@
           aria-label="Emoji picker button"
         >
           emoji_emotions</mat-icon
+        >
+      </div>
+      <div id="innerButtons" [hidden]="recording || !isStaff">
+        <mat-icon
+          matTooltip="Choose feedback templates"
+          matTooltipShowDelay="400"
+          id="feedbackTemplateButton"
+          (click)="showFeedbackPicker()"
+          aria-label="Feedback template button"
+        >
+          task</mat-icon
         >
       </div>
     </div>

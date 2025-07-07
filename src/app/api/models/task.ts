@@ -15,6 +15,9 @@ import {
   TaskCommentService,
   TaskSimilarity,
   TaskSimilarityService,
+  TestAttempt,
+  TestAttemptService,
+  ScormComment,
 } from './doubtfire-model';
 import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
@@ -30,6 +33,7 @@ export class Task extends Entity {
   status: TaskStatusEnum = 'not_started';
   dueDate: Date;
   extensions: number;
+  scormExtensions: number;
   submissionDate: Date;
   completionDate: Date;
   timesAssessed: number;
@@ -53,6 +57,9 @@ export class Task extends Entity {
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
 
   public readonly similarityCache: EntityCache<TaskSimilarity> = new EntityCache<TaskSimilarity>();
+  public readonly testAttemptCache: EntityCache<TestAttempt> = new EntityCache<TestAttempt>();
+
+  suggestedTaskStatus;
 
   private _unit: Unit;
 
@@ -172,8 +179,56 @@ export class Task extends Entity {
     return formatDate(this.localDueDate(), 'd MMM', locale);
   }
 
+  public get dueWeek(): number {
+    const startDate: Date = this.unit.startDate;
+    const dueDate: Date = this.localDueDate();
+    const diffInMs: number = dueDate.getTime() - startDate.getTime();
+    const diffInDays: number = Math.ceil(diffInMs / (1000 * 3600 * 24));
+
+    return Math.ceil(diffInDays / 7);
+  }
+
+  /**
+   * Set the task to be due in a specific week.
+   *
+   * @returns the new due week
+   */
+  public set dueWeek(week: number) {
+    // Get original due week and current due week
+    const tdDueWeek: number = this.definition.dueWeek;
+    const currentDueWeek = this.dueWeek;
+
+    // Determine how long the extension needs to be
+    this.extensions = week - tdDueWeek;
+
+    // Map to ms to adjust due date
+    const currentWeekDueMs = MappingFunctions.weeksMs(currentDueWeek);
+    const newWeekDueMs = MappingFunctions.weeksMs(week);
+
+    // Adjust due date based on difference in current and new due weeks
+    this.dueDate = new Date(this.localDueDate().getTime() - currentWeekDueMs + newWeekDueMs);
+  }
+
   public localDeadlineDate(): Date {
-    return this.definition.localDeadlineDate();
+    return MappingFunctions.addDays(this.definition.localDeadlineDate(), this.project.specConDays);
+  }
+
+  public savePlannedDate(): Observable<Task> {
+    const taskService: TaskService = AppInjector.get(TaskService);
+
+    return taskService.update(
+      {
+        projectId: this.project.id,
+        taskDefId: this.definition.id,
+      },
+      {
+        endpointFormat: '/projects/:projectId:/task_def_id/:taskDefId:/plan',
+        entity: this,
+        body: {
+          extensions: this.extensions,
+        },
+      },
+    );
   }
 
   /**
@@ -236,12 +291,22 @@ export class Task extends Entity {
     return this.daysUntilDueDate() == 0 && !this.inSubmittedState();
   }
 
+  public get startDate(): Date {
+    if (this.extensions < 0) {
+      // If the task has an extension, the start date is the due date minus the extension
+      return MappingFunctions.addWeeks(this.definition.startDate, this.extensions);
+    } else {
+      // If the task does not have an extension, the start date is the definition's start date
+      return this.definition.startDate;
+    }
+  }
+
   public timeUntilStartDate(): number {
-    return this.timeBetween(new Date(), this.definition.startDate);
+    return this.timeBetween(new Date(), this.startDate);
   }
 
   public daysUntilStartDate() {
-    return this.daysBetween(new Date(), this.definition.startDate);
+    return this.daysBetween(new Date(), this.startDate);
   }
 
   public isBeforeStartDate(): boolean {
@@ -276,7 +341,7 @@ export class Task extends Entity {
         return `${diff} ${data.period.charAt(0).toUpperCase() + data.period.substring(1)}`;
       } else if (diff === 1 && data.period !== 'weeks') {
         return `1 ${
-          data.period.charAt(0).toUpperCase() + data.period.substring(1, data.period.length - 2)
+          data.period.charAt(0).toUpperCase() + data.period.slice(1, -1)
         }`;
       }
     }
@@ -381,6 +446,14 @@ export class Task extends Entity {
       if (comments[i].replyToId) {
         comments[i].originalComment = comments.find((tc) => tc.id === comments[i].replyToId);
       }
+
+      // Scorm series
+      if (comments[i].commentType === 'scorm') {
+        comments[i].firstInSeries = i === 0 || comments[i - 1].commentType !== 'scorm';
+        (comments[i] as ScormComment).lastInScormSeries =
+          i + 1 === comments.length || comments[i + 1]?.commentType !== 'scorm';
+        if (!comments[i].firstInSeries) comments[i].shouldShowTimestamp = false;
+      }
     }
 
     comments[comments.length - 1].shouldShowAvatar = true;
@@ -396,7 +469,7 @@ export class Task extends Entity {
 
   public taskKeyToIdString(): string {
     const key = this.taskKey();
-    return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(/[.#]/g, '-');
+    return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(/[.# ]/g, '-');
   }
 
   public get similaritiesDetected(): boolean {
@@ -505,6 +578,33 @@ export class Task extends Entity {
       this.definition.assessmentEnabled &&
       this.definition.hasTaskAssessmentResources
     );
+  }
+
+  public get scormEnabled(): boolean {
+    return this.definition.scormEnabled && this.definition.hasScormData;
+  }
+
+  public get scormPassed(): boolean {
+    if (this.latestCompletedTestAttempt) {
+      return this.latestCompletedTestAttempt.successStatus;
+    }
+    return false;
+  }
+
+  /**
+   * Launch the SCORM player for this task in a new window.
+   */
+  public launchScormPlayer(): void {
+    const url = `#/projects/${this.project.id}/task_def_id/${this.taskDefId}/scorm-player/normal`;
+    window.open(url, '_blank');
+  }
+
+  public get isReadyForUpload(): boolean {
+    return !this.scormEnabled || this.definition.scormBypassTest || this.scormPassed;
+  }
+
+  public get latestCompletedTestAttempt(): TestAttempt {
+    return this.testAttemptCache.currentValues.find((attempt) => attempt.terminated);
   }
 
   public submissionUrl(asAttachment: boolean = false): string {
@@ -659,12 +759,15 @@ export class Task extends Entity {
 
   public triggerTransition(status: TaskStatusEnum): void {
     if (this.status === status) return;
+    const alerts: AlertService = AppInjector.get(AlertService);
 
     const requiresFileUpload =
       ['ready_for_feedback', 'need_help'].includes(status) && this.requiresFileUpload();
 
-    if (requiresFileUpload) {
+    if (requiresFileUpload && this.isReadyForUpload) {
       this.presentTaskSubmissionModal(status);
+    } else if (requiresFileUpload && !this.isReadyForUpload) {
+      alerts.error('Complete Knowledge Check first to submit files', 6000);
     } else {
       this.updateTaskStatus(status);
     }
@@ -718,7 +821,8 @@ export class Task extends Entity {
 
   public canApplyForExtension(): boolean {
     return (
-      this.unit.allowStudentExtensionRequests &&
+      (this.unit.allowStudentExtensionRequests || this.unit.currentUserIsStaff) &&
+      !this.unit.allowFlexibleDates &&
       this.inStateThatAllowsExtension() &&
       (!this.isPastDeadline() || this.wasSubmittedOnTime()) &&
       this.maxWeeksCanExtend() > 0
@@ -733,9 +837,7 @@ export class Task extends Entity {
   }
 
   public maxWeeksCanExtend(): number {
-    return Math.ceil(
-      this.daysBetween(this.localDueDate(), this.definition.localDeadlineDate()) / 7,
-    );
+    return Math.ceil(this.daysBetween(this.localDueDate(), this.localDeadlineDate()) / 7);
   }
 
   /**
@@ -760,6 +862,23 @@ export class Task extends Entity {
       {taskId: this.id},
       {
         cache: this.similarityCache,
+        constructorParams: this,
+      },
+    );
+  }
+
+  /**
+   * Fetch the SCORM test attempts for this task.
+   */
+  public fetchTestAttempts(): Observable<TestAttempt[]> {
+    const testAttemptService: TestAttemptService = AppInjector.get(TestAttemptService);
+    return testAttemptService.query(
+      {
+        project_id: this.project.id,
+        task_def_id: this.taskDefId,
+      },
+      {
+        cache: this.testAttemptCache,
         constructorParams: this,
       },
     );

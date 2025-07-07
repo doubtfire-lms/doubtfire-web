@@ -1,0 +1,6 @@
+{
+  "/api": {
+    "target": "http://doubtfire-api:3000",
+    "secure": false
+  }
+}

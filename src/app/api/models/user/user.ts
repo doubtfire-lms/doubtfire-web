@@ -1,31 +1,34 @@
-import { HttpClient } from '@angular/common/http';
-import { Entity, EntityMapping } from 'ngx-entity-service';
-import { Observable, map } from 'rxjs';
-import { AppInjector } from 'src/app/app-injector';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { AuthenticationService } from '../doubtfire-model';
+import {HttpClient} from '@angular/common/http';
+import {Entity, EntityMapping} from 'ngx-entity-service';
+import {Observable, map} from 'rxjs';
+import {AppInjector} from 'src/app/app-injector';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {AuthenticationService} from '../doubtfire-model';
 
 export type Tutor = User;
 
 export class User extends Entity {
-  id: number;
-  firstName: string;
-  lastName: string;
-  optInToResearch: boolean;
-  studentId: string;
-  email: string;
-  username: string;
-  nickname: string;
-  systemRole: 'Admin' | 'Convenor' | 'Tutor' | 'Student' | 'Auditor';
-  receiveTaskNotifications: boolean;
-  receivePortfolioNotifications: boolean;
-  receiveFeedbackNotifications: boolean;
-  hasRunFirstTimeSetup: boolean;
-  authenticationToken: string;
-  pronouns: string | null;
-  acceptedTiiEula: boolean;
+  public id: number;
+  public firstName: string;
+  public lastName: string;
+  public optInToResearch: boolean;
+  public studentId: string;
+  public email: string;
+  public username: string;
+  public nickname: string;
+  public systemRole: 'Admin' | 'Convenor' | 'Tutor' | 'Student' | 'Auditor';
+  public receiveTaskNotifications: boolean;
+  public receivePortfolioNotifications: boolean;
+  public receiveFeedbackNotifications: boolean;
+  public hasRunFirstTimeSetup: boolean;
+  public authenticationToken: string;
+  public pronouns: string | null;
+  public acceptedTiiEula: boolean;
 
-  public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+  public override toJson<T extends Entity>(
+    mappingData: EntityMapping<T>,
+    ignoreKeys?: string[],
+  ): object {
     return {
       user: super.toJson(mappingData, ignoreKeys),
     };
@@ -42,7 +45,8 @@ export class User extends Entity {
   public get name(): string {
     const fn = this.firstName.slice(0, 11);
     const sn = this.lastName.slice(0, 11);
-    const nn = this.nickname && this.nickname.trim() ? ` (${this.nickname.trim().slice(0, 11)})` : '';
+    const nn =
+      this.nickname && this.nickname.trim() ? ` (${this.nickname.trim().slice(0, 11)})` : '';
     return `${fn} ${sn}${nn}`;
   }
 
@@ -60,10 +64,12 @@ export class User extends Entity {
   public acceptTiiEula(): Observable<boolean> {
     const httpClient = AppInjector.get(HttpClient);
     const uri = `${AppInjector.get(DoubtfireConstants).API_URL}/tii_eula/users/${this.id}/accept`;
-    return httpClient.put(uri, {}).pipe(map(() => {
-      this.acceptedTiiEula = true;
-      AppInjector.get(AuthenticationService).saveCurrentUser();
-      return true;
-    }));
+    return httpClient.put(uri, {}).pipe(
+      map(() => {
+        this.acceptedTiiEula = true;
+        // AppInjector.get(AuthenticationService).saveCurrentUser();
+        return true;
+      }),
+    );
   }
 }

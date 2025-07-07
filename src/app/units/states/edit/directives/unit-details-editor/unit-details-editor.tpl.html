@@ -13,7 +13,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="code">Code</label>
           <div class="col-sm-9">
-            <input class="form-control" id="code" type="text" placeholder="COS1234567" ng-model="unit.code" />
+            <input class="form-control" id="code" type="text" placeholder="Enter unit code" ng-model="unit.code" />
           </div>
         </div>
         <!--/code-date-->
@@ -26,7 +26,7 @@
               type="text"
               class="form-control"
               ng-model="unit.name"
-              placeholder="Introduction to {{externalName.value}}"
+              placeholder="Enter unit name"
             />
           </div>
         </div>
@@ -169,6 +169,32 @@
         <!--/portfolio-auto-generation-date-->
 
         <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate">Allow flexible dates</label>
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label
+                class="btn btn-{{unit.allowFlexibleDates ? 'success' : 'default'}}"
+                ng-model="unit.allowFlexibleDates"
+                btn-radio="true"
+                uncheckable
+              >
+                <i class="fa fa-check"></i>
+              </label>
+              <label
+                class="btn btn-{{unit.allowFlexibleDates ? 'default' : 'danger'}}"
+                ng-model="unit.allowFlexibleDates"
+                btn-radio="false"
+                uncheckable
+              >
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block"> Allows students to set planned due dates, without using extensions. </span>
+          </div>
+        </div>
+        <!--/allowStudentExtensionRequests-->
+
+        <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Allow student extensions</label>
           <div class="col-sm-9">
             <div class="btn-group">
@@ -195,11 +221,11 @@
         <!--/allowStudentExtensionRequests-->
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="code">Extension duration on resubmit</label>
+          <label class="col-sm-2 control-label" for="extn-on-resub">Extension duration on resubmit</label>
           <div class="col-sm-9">
             <input
               class="form-control"
-              id="code"
+              id="extn-on-resub"
               type="number"
               placeholder="1"
               ng-model="unit.extensionWeeksOnResubmitRequest"
@@ -417,15 +443,23 @@
         </div>
         <!--/active-->
       </div>
+
       <div class="panel-footer text-right">
-        <a class="btn btn-success" ui-sref="units/rollover">
-          <header>Rollover</header>
-        </a>
-        <input
-          type="submit"
-          value="{{ unit.id == -1 ? 'Create' : 'Update' }}"
-          class="btn btn-success"
-        />
+          <div class="pull-left">
+            <a class="btn btn-info" ng-click="addD2lData()" ng-enabled="unit.id != -1" ng-hide="!d2lEnabled()">
+              <header>D2L Details</header>
+            </a>
+          </div>
+          <div>
+            <a class="btn btn-success" ui-sref="units/rollover">
+              <header>Copy</header>
+            </a>
+            <input
+              type="submit"
+              value="{{ unit.id == -1 ? 'Create' : 'Update' }}"
+              class="btn btn-success"
+            />
+          </div>
       </div>
     </form>
   </div>

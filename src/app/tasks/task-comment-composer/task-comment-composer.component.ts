@@ -22,7 +22,12 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
 import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import {EmojiService} from 'src/app/common/services/emoji.service';
-import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {
+  Task,
+  TaskComment,
+  TaskCommentService,
+  FeedbackTemplate,
+} from 'src/app/api/models/doubtfire-model';
 import {TaskCommentsViewerComponent} from '../task-comments-viewer/task-comments-viewer.component';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -78,6 +83,10 @@ export class TaskCommentComposerComponent
   @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.showFeedbackTemplatePicker = false;
+  }
+
   public $userIsTyping = new BehaviorSubject<boolean>(false);
   private draftSaveSubscription = new Subscription();
   private readonly DRAFT_KEY_PREFIX = 'task_comment_draft_';
@@ -101,6 +110,7 @@ export class TaskCommentComposerComponent
   emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;
+  showFeedbackTemplatePicker: boolean = false;
   recording = false;
   cagStartWidth: number;
 
@@ -495,6 +505,18 @@ export class TaskCommentComposerComponent
     ].join('');
   }
 
+  addFeedback(template: FeedbackTemplate): void {
+    const char = template.commentText;
+    const text = this.input.first.nativeElement.innerText;
+    const position = this.caretOffset();
+    this.input.first.nativeElement.innerText = [
+      text.slice(0, position),
+      char,
+      text.slice(position),
+    ].join('');
+    this.input.first.nativeElement.focus();
+  }
+
   openDiscussionComposer() {
     this.dialog.open(DiscussionComposerDialog, {
       data: {
@@ -622,6 +644,11 @@ export class TaskCommentComposerComponent
         this.alerts.error(error || error?.message, 2000);
       },
     );
+  }
+
+  showFeedbackPicker() {
+    this.showFeedbackTemplatePicker = !this.showFeedbackTemplatePicker;
+    this.commentsViewer.scrollDown();
   }
 }
 

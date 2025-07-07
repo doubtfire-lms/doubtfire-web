@@ -71,7 +71,7 @@ export class TaskDefinitionResourcesComponent {
 
   public uploadTaskResources(files: FileList) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(
-      (f) => f.type === 'application/zip',
+      (f) => f.type === 'application/zip' || f.type === 'application/x-zip-compressed',
     );
     if (validFiles.length > 0) {
       const file = validFiles[0];
@@ -83,7 +83,7 @@ export class TaskDefinitionResourcesComponent {
         error: (message) => this.alerts.error(message, 6000),
       });
     } else {
-      this.alerts.error('Please drop a PDF to upload for this task', 6000);
+      this.alerts.error('Please drop a Zip to upload for this task', 6000);
     }
   }
 }

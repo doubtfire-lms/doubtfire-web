@@ -7,6 +7,7 @@ import {
   SimpleChanges,
   OnChanges,
   ViewChild,
+  AfterViewInit,
 } from '@angular/core';
 import {PdfViewerComponent} from 'ng2-pdf-viewer';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
@@ -17,10 +18,17 @@ import {AlertService} from '../services/alert.service';
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss'],
 })
-export class fPdfViewerComponent implements OnDestroy, OnChanges {
+export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit {
+  private readonly ZOOM_MIN = 0.5;
+  private readonly ZOOM_MAX = 2.5;
+
   private _pdfUrl: string;
   public pdfBlobUrl: string;
+  public useNativePdfViewer = false;
+
   @Input() pdfUrl: string;
+  @Input() startPage: number = 1;
+
   @ViewChild(PdfViewerComponent) private pdfComponent: PdfViewerComponent;
   pdfSearchString: string;
   zoomValue = 1;
@@ -36,6 +44,13 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
       this.fileDownloader.releaseBlob(this.pdfBlobUrl);
       this.pdfBlobUrl = null;
     }
+  }
+
+  ngAfterViewInit(): void {
+    this.useNativePdfViewer = localStorage.getItem('useNativePdfViewer') === 'true';
+    const storedZoomValue = parseFloat(localStorage.getItem('pdfViewerZoom')) || 1;
+    // Clamp zoom value between ZOOM_MIN and ZOOM_MAX
+    this.zoomValue = Math.min(Math.max(storedZoomValue, this.ZOOM_MIN), this.ZOOM_MAX);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -68,24 +83,43 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
     });
   }
 
-  zoomIn() {
-    if (this.zoomValue < 2.5) {
-      this.zoomValue += 0.1;
+  scrollToPage(pageNumber: number) {
+    if (pageNumber <= this.pdfComponent.pdfViewer.pagesCount) {
+      this.pdfComponent.pdfViewer.scrollPageIntoView({
+        pageNumber,
+      });
     }
   }
-  zoomOut() {
-    if (this.zoomValue > 0.5) {
-      this.zoomValue -= 0.1;
+
+  public zoomIn() {
+    if (this.zoomValue < this.ZOOM_MAX) {
+      this.zoomValue += 0.1;
+      localStorage.setItem('pdfViewerZoom', this.zoomValue.toString());
     }
+  }
+  public zoomOut() {
+    if (this.zoomValue > this.ZOOM_MIN) {
+      this.zoomValue -= 0.1;
+      localStorage.setItem('pdfViewerZoom', this.zoomValue.toString());
+    }
+  }
+
+  public downloadPdf() {
+    this.fileDownloader.downloadBlobToFile(this.pdfBlobUrl, 'displayed-pdf.pdf');
+  }
+
+  public toggleNativePdfViewer() {
+    this.useNativePdfViewer = !this.useNativePdfViewer;
+    localStorage.setItem('useNativePdfViewer', this.useNativePdfViewer.toString());
   }
 
   private downloadBlob(downloadUrl: string): void {
     this.fileDownloader.downloadBlob(
       downloadUrl,
-      (url: string, response: HttpResponse<Blob>) => {
+      (url: string, _response: HttpResponse<Blob>) => {
         this.pdfBlobUrl = url;
       },
-      (error: any) => {
+      (error: unknown) => {
         this.alerts.error(`Error downloading PDF. ${error}`, 6000);
       },
     );
@@ -94,5 +128,12 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges {
   onLoaded() {
     this.loaded = true;
     window.dispatchEvent(new Event('resize'));
+  }
+
+  onPageRendered() {
+    this.loaded = true;
+    if (this.startPage > 1) {
+      this.scrollToPage(this.startPage);
+    }
   }
 }

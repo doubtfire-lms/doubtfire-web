@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GroupSetService, LearningOutcomeService, TaskOutcomeAlignmentService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit, UserService } from 'src/app/api/models/doubtfire-model';
+import { GroupSetService, LearningOutcomeService, OverseerImageService, TaskOutcomeAlignmentService, TeachingPeriodService, TutorialService, TutorialStreamService, Unit, UserService } from 'src/app/api/models/doubtfire-model';
 import { CachedEntityService, Entity, EntityMapping } from 'ngx-entity-service';
 import API_URL from 'src/app/config/constants/apiURL';
 import { UnitRoleService } from './unit-role.service';
@@ -32,7 +32,7 @@ export class UnitService extends CachedEntityService<Unit> {
     private taskDefinitionService: TaskDefinitionService,
     private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
     private groupSetService: GroupSetService,
-    private groupService: GroupService
+    private groupService: GroupService,
   ) {
     super(httpClient, API_URL);
 
@@ -58,7 +58,7 @@ export class UnitService extends CachedEntityService<Unit> {
           const unitRoleService = AppInjector.get(UnitRoleService);
           // Add staff
           entity.staffCache.clear();
-          data[key].forEach(staff => {
+          data[key]?.forEach(staff => {
             entity.staffCache.add(unitRoleService.buildInstance(staff));
           });
         }
@@ -66,7 +66,9 @@ export class UnitService extends CachedEntityService<Unit> {
       {
         keys: ['mainConvenor', 'main_convenor_id'],
         toEntityFn: (data, key, entity) => {
-          return entity.staffCache.get(data[key]);
+          let result = entity.staffCache.get(data[key]);
+          entity.mainConvenorUser = result?.user;
+          return result;
         },
         toJsonFn: (unit: Unit, key: string) => {
           return unit.mainConvenor?.id;
@@ -122,18 +124,37 @@ export class UnitService extends CachedEntityService<Unit> {
         }
       },
       'assessmentEnabled',
-      'overseerImageId',
+      // 'overseerImageId',
+      {
+        keys: 'overseerImageId',
+        toEntityFn: (data, key, entity) => {
+          const overSeerEntityId = data[key];
+          if (overSeerEntityId) {
+            const overseerImageService = AppInjector.get(OverseerImageService);
+            overseerImageService.get(data[key]).subscribe({
+              next: (image) => {
+                entity.overseerImage = image;
+              },
+            });
+          }
+          return overSeerEntityId;
+        },
+        toJsonFn: (unit: Unit, _key: string) => {
+          return unit.overseerImage?.id;
+        },
+      },
       'autoApplyExtensionBeforeDeadline',
       'sendNotifications',
       'enableSyncEnrolments',
       'enableSyncTimetable',
       'allowStudentExtensionRequests',
+      'allowFlexibleDates',
       'extensionWeeksOnResubmitRequest',
       'allowStudentChangeTutorial',
       {
         keys: 'ilos',
         toEntityOp: (data: object, key: string, unit: Unit) => {
-          data[key].forEach(ilo => {
+          data[key]?.forEach(ilo => {
             unit.learningOutcomesCache.getOrCreate(ilo['id'], this.learningOutcomeService, ilo);
           });
         }
@@ -160,7 +181,7 @@ export class UnitService extends CachedEntityService<Unit> {
       {
         keys: 'groupSets',
         toEntityOp: (data, key, unit) => {
-          data[key].forEach((groupSetJson: object) => {
+          data[key]?.forEach((groupSetJson: object) => {
             unit.groupSetsCache.add(this.groupSetService.buildInstance(groupSetJson, {constructorParams: unit}));
           });
         }
@@ -168,7 +189,7 @@ export class UnitService extends CachedEntityService<Unit> {
       {
         keys: 'groups',
         toEntityOp: (data, key, unit) => {
-          data[key].forEach((groupJson: object) => {
+          data[key]?.forEach((groupJson: object) => {
             const group = this.groupService.buildInstance(groupJson, {constructorParams: unit});
             group.groupSet.groupsCache.add(group);
           });
@@ -225,7 +246,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'portfolioAutoGenerationDate',
 
       'assessmentEnabled',
-      // 'overseerImage', - map to overseer image
+      'overseerImageId',
 
       'autoApplyExtensionBeforeDeadline',
       'sendNotifications',
@@ -233,9 +254,10 @@ export class UnitService extends CachedEntityService<Unit> {
       'enableSyncTimetable',
 
       'draftTaskDefinition',
+      'allowFlexibleDates',
       'allowStudentExtensionRequests',
       'extensionWeeksOnResubmitRequest',
-      'allowStudentChangeTutorial'
+      'allowStudentChangeTutorial',
     );
   }
 

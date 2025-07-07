@@ -1,3 +1,5 @@
+# Component not used
+
 angular.module("doubtfire.projects.project-outcome-alignment", [])
 
 .directive("projectOutcomeAlignment", ->

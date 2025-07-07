@@ -22,9 +22,13 @@ import {
   Project,
   TutorialStreamService,
   UnitRoleService,
+  D2lAssessmentMappingService,
+  OverseerImage,
+  OverseerImageService,
 } from './doubtfire-model';
 import {LearningOutcome} from './learning-outcome';
 import {AlertService} from 'src/app/common/services/alert.service';
+import { D2lAssessmentMapping } from './d2l/d2l_assessment_mapping';
 
 export class Unit extends Entity {
   id: number;
@@ -51,6 +55,7 @@ export class Unit extends Entity {
 
   assessmentEnabled: boolean;
   overseerImageId: number = null; // image needs to be lazy loadaed
+  private _overseerImage: OverseerImage;
 
   autoApplyExtensionBeforeDeadline: boolean;
   sendNotifications: boolean;
@@ -60,8 +65,11 @@ export class Unit extends Entity {
   draftTaskDefinition: TaskDefinition;
 
   allowStudentExtensionRequests: boolean;
+  allowFlexibleDates: boolean = false;
   extensionWeeksOnResubmitRequest: number;
   allowStudentChangeTutorial: boolean;
+
+  d2lMapping: D2lAssessmentMapping;
 
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
@@ -91,6 +99,12 @@ export class Unit extends Entity {
     return {
       unit: super.toJson(mappingData, ignoreKeys),
     };
+  }
+
+  public hasChanges(): boolean {
+    const unitService = AppInjector.get(UnitService);
+    const changes = this.toJson(unitService.mapping);
+    return JSON.stringify(changes) !== '{"unit":{}}';
   }
 
   public get nameAndPeriod(): string {
@@ -214,6 +228,20 @@ export class Unit extends Entity {
   }
 
   /**
+   * Get the total duration of the unit in milliseconds.
+   */
+  public get totalDuration(): number {
+    return this.endDate.valueOf() - this.startDate.valueOf();
+  }
+
+  /**
+   * Get the number of weeks in the unit's teaching period.
+   */
+  public get totalWeeks(): number {
+    return Math.ceil(this.totalDuration / (1000 * 60 * 60 * 24 * 7));
+  }
+
+  /**
    * Calculate how much time has elapsed in the teaching period, based on the start and
    * end date of the unit relative to the current date.
    *
@@ -227,12 +255,12 @@ export class Unit extends Entity {
     if (today >= this.endDate) return 100;
 
     const startToNow = Math.abs(today.valueOf() - this.startDate.valueOf());
-    const totalDuration = Math.abs(this.endDate.valueOf() - this.startDate.valueOf());
+    const totalDuration = Math.abs(this.totalDuration);
     return Math.round((startToNow / totalDuration) * 100);
   }
 
-  public rolloverTo(body: {start_date: Date; end_date: Date}): Observable<Unit>;
-  public rolloverTo(body: {teaching_period_id: number}): Observable<Unit>;
+  public rolloverTo(body: {new_unit_code?: string, start_date: Date; end_date: Date}): Observable<Unit>;
+  public rolloverTo(body: {new_unit_code?: string, teaching_period_id: number}): Observable<Unit>;
   public rolloverTo(body: any): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
 
@@ -370,7 +398,7 @@ export class Unit extends Entity {
         return alignment.taskDefinition.id === td.id;
       })
       .sort((a: TaskOutcomeAlignment, b: TaskOutcomeAlignment) => {
-        return a.learningOutcome.iloNumber - b.learningOutcome.iloNumber;
+        return a.learningOutcome.id - b.learningOutcome.id;
       });
   }
 
@@ -386,6 +414,10 @@ export class Unit extends Entity {
 
   public getOutcomeBatchUploadUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/outcomes/csv`;
+  }
+
+  public getFeedbackTemplateBatchUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/feedback_chips/csv`;
   }
 
   public hasStreams(): boolean {
@@ -434,6 +466,15 @@ export class Unit extends Entity {
 
   public get groupSets(): readonly GroupSet[] {
     return this.groupSetsCache.currentValues;
+  }
+
+  public set overseerImage(image: OverseerImage) {
+    this._overseerImage = image;
+    this.overseerImageId = image.id;
+  }
+
+  public get overseerImage(): OverseerImage {
+    return this._overseerImage;
   }
 
   public get overseerEnabled(): boolean {
@@ -545,6 +586,26 @@ export class Unit extends Entity {
     AppInjector.get(FileDownloaderService).downloadFile(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments.json`,
       `${this.name}-tutor-assessments.csv`,
+    );
+  }
+
+  public hasD2lMapping(): boolean {
+    const doubtfireConstants = AppInjector.get(DoubtfireConstants);
+    return (
+      doubtfireConstants.IsD2LEnabled.value &&
+      this.d2lMapping !== undefined &&
+      this.d2lMapping.orgUnitId !== undefined &&
+      this.d2lMapping.orgUnitId.length > 0
+    );
+  }
+
+  public loadD2lMapping(): Observable<D2lAssessmentMapping> {
+    const d2lMappingSvc = AppInjector.get(D2lAssessmentMappingService);
+
+    return d2lMappingSvc.get({unitId: this.id}).pipe(
+      tap((mappings) => {
+        this.d2lMapping = mappings;
+      }),
     );
   }
 }

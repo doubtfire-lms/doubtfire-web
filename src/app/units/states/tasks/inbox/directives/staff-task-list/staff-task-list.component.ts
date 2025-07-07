@@ -31,6 +31,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {HotkeysService} from '@ngneat/hotkeys';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -77,6 +78,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   tasks: any[] = null;
 
+  // hasJplagReport: boolean = false;
+
   watchingTaskKey: any;
 
   panelOpenState = false;
@@ -107,6 +110,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     public dialog: MatDialog,
     private userService: UserService,
     private hotkeys: HotkeysService,
+    private router: Router,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -122,27 +126,28 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       this.refreshData();
     }
   }
+
   ngOnDestroy(): void {
-    this.hotkeys.removeShortcuts('meta.shift.arrowdown');
-    this.hotkeys.removeShortcuts('meta.shift.arrowup');
+    this.hotkeys.removeShortcuts('control.shift.arrowdown');
+    this.hotkeys.removeShortcuts('control.shift.arrowup');
   }
 
   ngOnInit(): void {
     const registeredHotkeys = this.hotkeys.getHotkeys().map((hotkey) => hotkey.keys);
 
-    if (!registeredHotkeys.includes('meta.shift.arrowdown')) {
+    if (!registeredHotkeys.includes('control.shift.arrowdown')) {
       this.hotkeys
         .addShortcut({
-          keys: 'meta.shift.arrowdown',
+          keys: 'control.shift.arrowdown',
           description: 'Select next task',
         })
         .subscribe(() => this.nextTask());
     }
 
-    if (!registeredHotkeys.includes('meta.shift.arrowup')) {
+    if (!registeredHotkeys.includes('control.shift.arrowup')) {
       this.hotkeys
         .addShortcut({
-          keys: 'meta.shift.arrowup',
+          keys: 'control.shift.arrowup',
           description: 'Select previous task',
         })
         .subscribe(() => this.previousTask());
@@ -224,6 +229,17 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       }/task_definitions/${taskDef.id}/download_submissions`,
       `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`,
     );
+  }
+
+  downloadJPLAGReport() {
+    const taskDef = this.filters.taskDefinition;
+    this.fileDownloaderService.downloadFile(
+      taskDef.getJplagReportUrl(),
+      `${this.unit.code}-${taskDef.abbreviation}-jplag-report.zip`,
+    );
+
+    const url = this.router.serializeUrl(this.router.createUrlTree(['/jplag-report-viewer']));
+    window.open(url, '_blank');
   }
 
   openDialog() {
@@ -363,7 +379,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private scrollToTaskInList(task) {
-    const taskEl = document.querySelector(`staff-task-list #${task.taskKeyToIdString()}`) as any;
+    const taskEl = document.querySelector(`#${task.taskKeyToIdString()}`) as any;
     if (!taskEl) {
       return;
     }
@@ -385,6 +401,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   nextTask(): void {
+    if (!this.filteredTasks) {
+      return;
+    }
     const currentTaskIndex = this.filteredTasks.findIndex((task) => this.isSelectedTask(task));
     if (currentTaskIndex >= this.filteredTasks.length) {
       return;

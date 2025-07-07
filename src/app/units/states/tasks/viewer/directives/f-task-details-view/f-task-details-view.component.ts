@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 import { TasksViewerService } from '../../../tasks-viewer.service';
@@ -19,4 +19,6 @@ export class FTaskDetailsViewComponent implements OnInit {
       this.taskDef = taskDef;
     });
   }
+
+  public readonly panelOpenState = signal(false);
 }
