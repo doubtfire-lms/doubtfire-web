@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Inject, OnDestroy } from '@angular/core';
-import { commentsModal } from 'src/app/ajs-upgraded-providers';
-import { Project, TaskComment, Task } from 'src/app/api/models/doubtfire-model';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {Component, OnInit, Input, Inject, OnDestroy} from '@angular/core';
+import {commentsModal} from 'src/app/ajs-upgraded-providers';
+import {Project, TaskComment, Task} from 'src/app/api/models/doubtfire-model';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'pdf-image-comment',
@@ -18,7 +19,7 @@ export class PdfImageCommentComponent implements OnInit, OnDestroy {
 
   constructor(
     private alerts: AlertService,
-    @Inject(commentsModal) private commentsModalRef: any,
+    @Inject(commentsModal) private commentsModalRef: CommentsModalService,
     private fileDownloaderService: FileDownloaderService,
   ) {}
 
@@ -48,7 +49,7 @@ export class PdfImageCommentComponent implements OnInit, OnDestroy {
 
   public openCommentsModal() {
     if (this.resourceUrl) {
-      this.commentsModalRef.show(this.resourceUrl, this.comment.commentType);
+      this.commentsModalRef.show(this.resourceUrl, this.comment);
     } else {
       this.downloadCommentResource(this.openCommentsModal.bind(this));
     }

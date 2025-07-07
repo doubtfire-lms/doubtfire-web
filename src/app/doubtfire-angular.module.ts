@@ -97,6 +97,7 @@ import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import {ExtensionModalComponent} from './common/modals/extension-modal/extension-modal.component';
 import {CalendarModalComponent} from './common/modals/calendar-modal/calendar-modal.component';
+import {CommentsModalComponent} from './common/modals/comments-modal/comments-modal.component';
 import {ConfirmationModalComponent} from './common/modals/confirmation-modal/confirmation-modal.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
@@ -386,6 +387,7 @@ const MY_DATE_FORMAT = {
     FUsersComponent,
     FTaskBadgeComponent,
     FUnitsComponent,
+    CommentsModalComponent,
     ScormPlayerComponent,
     ScormCommentComponent,
     TaskScormCardComponent,
