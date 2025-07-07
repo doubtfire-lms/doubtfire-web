@@ -1,6 +1,6 @@
 <div
   [hidden]="!scanningQr"
-  class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen z-40 bg-gray-500/50 backdrop-blur"
+  class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen z-40 bg-gray-500/50 backdrop-blur overflow-hidden"
 >
   @if (loadingStudentData) {
     <mat-spinner
@@ -116,14 +116,16 @@
     </mat-selection-list>
     @if (project) {
       <div class="w-full flex justify-center mt-4">
-        @if (this.filteredTasks?.length !== this.allTasks?.length && this.allTasks?.length > 0) {
-          <button mat-button color="primary" (click)="viewAllSubmittedTasks()">
-            Load all submitted tasks
-          </button>
-        } @else {
-          <button mat-button color="primary" (click)="viewAllFilteredTasks()">
-            Hide all submitted tasks
-          </button>
+        @if (this.allTasks?.length > 0) {
+          @if (this.filteredTasks?.length < this.allTasks?.length) {
+            <button mat-button color="primary" (click)="viewAllSubmittedTasks()">
+              Load all submitted tasks
+            </button>
+          } @else {
+            <button mat-button color="primary" (click)="viewAllFilteredTasks()">
+              Hide all submitted tasks
+            </button>
+          }
         }
       </div>
     }
@@ -159,6 +161,11 @@
   }
 
   @if (selectedTask && project) {
+    <mat-tab-group dynamicHeight>
+      <mat-tab label="Task Comments"></mat-tab>
+      <mat-tab label="Staff Notes"></mat-tab>
+    </mat-tab-group>
+
     <div #commentspanel class="task-comment-panel inbox-panel w-full flex-1">
       <!-- <div class="w-full text-center py-4">{{ selectedTask?.definition.name }}</div> -->
 
