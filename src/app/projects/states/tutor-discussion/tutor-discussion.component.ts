@@ -7,6 +7,7 @@ import {
   Project,
   ProjectService,
   Task,
+  TaskCommentService,
   TaskStatusEnum,
   Unit,
   UnitService,
@@ -28,6 +29,8 @@ export class TutorDiscussionComponent implements OnInit {
 
   public filteredTasks: Task[] = [];
   public allTasks: Task[] = [];
+
+  public unit: Unit | null;
   public project: Project | null;
 
   public selectedTask: Task | null;
@@ -40,6 +43,8 @@ export class TutorDiscussionComponent implements OnInit {
   private _unitId: number;
   private _projectId: number;
 
+  private showComments: boolean = true;
+
   constructor(
     private unitService: UnitService,
     private authService: AuthenticationService,
@@ -48,6 +53,7 @@ export class TutorDiscussionComponent implements OnInit {
     private state: StateService,
     private alertService: AlertService,
     private route: UIRouter,
+    private taskCommentService: TaskCommentService,
   ) {}
 
   public ngOnInit(): void {
@@ -172,7 +178,21 @@ export class TutorDiscussionComponent implements OnInit {
     const selectedTasks = this.tasksList.selectedOptions.selected;
     for (const taskOption of selectedTasks) {
       const task = taskOption.value as Task;
-      task.updateTaskStatus(status);
+      this.taskCommentService
+        .addComment(task, `**Automated Comment**: Discussed in class.`, 'text')
+        .subscribe(() => {
+          task.updateTaskStatus(status);
+          task.commentCache.clear(); // force fetch of new comments (with the new status update)
+          if (this.selectedTask.id === task.id) {
+            // reload task-comments-viewer
+            setTimeout(() => {
+              this.showComments = false;
+              setTimeout(() => {
+                this.showComments = true;
+              });
+            }, 1000);
+          }
+        });
     }
   }
 
@@ -247,14 +267,13 @@ export class TutorDiscussionComponent implements OnInit {
     // this.filteredTasks = [];
     // this.selectedTask = null;
 
-    let unit: Unit;
     this.getUnit()
       .then((_unit) => {
-        unit = _unit;
-        return this.loadStudents(unit);
+        this.unit = _unit;
+        return this.loadStudents(this.unit);
       })
       .then((student) => {
-        return this.getProject(unit, student.id);
+        return this.getProject(this.unit, student.id);
       })
       .then((project) => {
         const discussionTasks = project.tasks.filter((task) =>

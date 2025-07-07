@@ -166,19 +166,21 @@
       <mat-tab label="Staff Notes"></mat-tab>
     </mat-tab-group>
 
-    <div #commentspanel class="task-comment-panel inbox-panel w-full flex-1">
-      <!-- <div class="w-full text-center py-4">{{ selectedTask?.definition.name }}</div> -->
+    @if (showComments) {
+      <div #commentspanel class="task-comment-panel inbox-panel w-full flex-1">
+        <!-- <div class="w-full text-center py-4">{{ selectedTask?.definition.name }}</div> -->
 
-      <task-comments-viewer
-        style="background: white; border-radius: 12px"
-        [task]="selectedTask"
-        [project]="project"
-        class="h-full"
-        refocus-on-task-change="true"
-        ng-if="selectedTask"
-        style="padding: 0 8px 0 12px"
-      >
-      </task-comments-viewer>
-    </div>
+        <task-comments-viewer
+          style="background: white; border-radius: 12px"
+          [task]="selectedTask"
+          [project]="project"
+          class="h-full"
+          refocus-on-task-change="true"
+          ng-if="selectedTask"
+          style="padding: 0 8px 0 12px"
+        >
+        </task-comments-viewer>
+      </div>
+    }
   }
 </div>
