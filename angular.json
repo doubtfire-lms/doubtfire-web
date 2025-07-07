@@ -24,7 +24,12 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/assets",
-              "src/manifest.webmanifest"
+              "src/manifest.webmanifest",
+              {
+                "input": "./JPlag-Report-Viewer",
+                "output": "/JPlag",
+                "glob": "**/!(*.gitignore|README.md)"
+              }
             ],
             "styles": [
               "src/theme.scss",

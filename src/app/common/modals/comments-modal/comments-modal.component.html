@@ -1,0 +1,7 @@
+<div class="p-6">
+  @if (taskComment.commentType === 'image') {
+    <img class="w-full h-full p-0 rounded border-none" [src]="commentResourceUrl" />
+  } @else if (taskComment.commentType === 'pdf') {
+    <f-pdf-viewer class="w-full h-[85vh] block" [pdfUrl]="commentResourceUrl"> </f-pdf-viewer>
+  }
+</div>

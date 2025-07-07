@@ -47,7 +47,10 @@ import {AlertComponent} from 'src/app/common/services/alert.service';
 import {setTheme} from 'ngx-bootstrap/utils';
 
 import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
-import { D2lUnitDetailsFormComponent, D2lUnitDetailsModal } from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
+import {
+  D2lUnitDetailsFormComponent,
+  D2lUnitDetailsModal,
+} from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
 import {
   AboutDoubtfireModal,
   AboutDoubtfireModalContent,
@@ -94,15 +97,20 @@ import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import {ExtensionModalComponent} from './common/modals/extension-modal/extension-modal.component';
 import {CalendarModalComponent} from './common/modals/calendar-modal/calendar-modal.component';
-import { ConfirmationModalComponent } from './common/modals/confirmation-modal/confirmation-modal.component';
+import {CommentsModalComponent} from './common/modals/comments-modal/comments-modal.component';
+import {ConfirmationModalComponent} from './common/modals/confirmation-modal/confirmation-modal.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatOptionModule} from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatOptionModule,
+} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
-import { DateFnsAdapter, MAT_DATE_FNS_FORMATS } from '@angular/material-date-fns-adapter';
-import { enAU } from 'date-fns/locale';
-
+import {DateFnsAdapter, MAT_DATE_FNS_FORMATS} from '@angular/material-date-fns-adapter';
+import {enAU} from 'date-fns/locale';
 
 import {doubtfireStates} from './doubtfire.states';
 import {MatTableModule} from '@angular/material/table';
@@ -251,12 +259,14 @@ import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/l
 import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task-feedback-templates/task-feedback-templates.component';
 import {NestedCsvDownloadModalComponent} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.component';
 import {NestedCsvDownloadModalService} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.service';
-import { TaskDateSliderComponent } from './common/modals/date-change-modal/task-date-slider.component';
-import { SpecConModalComponent } from './common/modals/spec-con-modal/spec-con-modal.component';
-import { SpecConModalService } from './common/modals/spec-con-modal/spec-con-modal.service';
-import { ProjectPlanComponent } from './projects/states/plan/project-plan.component';
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
-import { QrModalComponent } from './common/modals/qr-modal/qr-modal.component';
+import {QrModalComponent} from './common/modals/qr-modal/qr-modal.component';
+import {TaskIlosCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-ilos-card/task-ilos-card.component';
+import {TaskDateSliderComponent} from './common/modals/date-change-modal/task-date-slider.component';
+import {SpecConModalComponent} from './common/modals/spec-con-modal/spec-con-modal.component';
+import {SpecConModalService} from './common/modals/spec-con-modal/spec-con-modal.service';
+import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
+import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -379,6 +389,7 @@ const MY_DATE_FORMAT = {
     FUsersComponent,
     FTaskBadgeComponent,
     FUnitsComponent,
+    CommentsModalComponent,
     ScormPlayerComponent,
     ScormCommentComponent,
     TaskScormCardComponent,
@@ -388,7 +399,9 @@ const MY_DATE_FORMAT = {
     LearningOutcomeEditorComponent,
     TaskFeedbackTemplatesComponent,
     NestedCsvDownloadModalComponent,
-    TutorDiscussionComponent
+    TutorDiscussionComponent,
+    TaskIlosCardComponent,
+    JplagReportViewerComponent,
   ],
   // Services we provide
   providers: [
