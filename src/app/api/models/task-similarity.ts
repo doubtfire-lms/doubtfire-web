@@ -1,10 +1,11 @@
-import { Entity } from 'ngx-entity-service';
-import { AppInjector } from 'src/app/app-injector';
-import { Task, TaskSimilarityService } from './doubtfire-model';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { Observable } from 'rxjs';
+import {Entity} from 'ngx-entity-service';
+import {AppInjector} from 'src/app/app-injector';
+import {Task, TaskSimilarityService, User} from './doubtfire-model';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Observable} from 'rxjs';
 
 export enum TaskSimilarityType {
+  Jplag = 'JplagTaskSimilarity',
   Moss = 'MossTaskSimilarity',
   TurnItIn = 'TiiTaskSimilarity',
 }
@@ -36,6 +37,8 @@ export class TaskSimilarity extends Entity {
   parts: TaskSimilarityPart[];
   task: Task;
   readyForViewer: boolean = false;
+  other_task?: Task;
+  other_student?: User;
 
   constructor(task: Task) {
     super();
@@ -62,8 +65,8 @@ export class TaskSimilarity extends Entity {
 
   public get friendlyTypeName(): string {
     switch (this.type) {
-      case TaskSimilarityType.Moss:
-        return 'MOSS';
+      case TaskSimilarityType.Jplag:
+        return 'JPLAG';
       case TaskSimilarityType.TurnItIn:
         return 'TurnItIn';
     }

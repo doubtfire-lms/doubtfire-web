@@ -1,10 +1,13 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { MatAccordion } from '@angular/material/expansion';
-import { Task } from 'src/app/api/models/task';
-import { TaskSimilarity } from 'src/app/api/models/task-similarity';
-import { TaskSimilarityService } from 'src/app/api/services/task-similarity.service';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { SelectedTaskService } from '../../../../selected-task.service';
+import {HttpResponse} from '@angular/common/http';
+import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {MatAccordion} from '@angular/material/expansion';
+import {Task} from 'src/app/api/models/task';
+import {TaskSimilarity} from 'src/app/api/models/task-similarity';
+import {TaskSimilarityService} from 'src/app/api/services/task-similarity.service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {JplagReportViewerComponent} from 'src/app/projects/states/jplag/jplag-report-viewer.component';
+import {SelectedTaskService} from '../../../../selected-task.service';
 
 @Component({
   selector: 'f-task-similarity-view',
@@ -14,16 +17,20 @@ import { SelectedTaskService } from '../../../../selected-task.service';
 export class TaskSimilarityViewComponent implements OnChanges {
   @Input() task: Task;
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  @ViewChild('jplagViewer') jplagViewer!: JplagReportViewerComponent;
   panelOpenState = false;
+  jplagOpenState = false;
 
   constructor(
     private taskSimilarityService: TaskSimilarityService,
-    private alertService: AlertService,
-    private selectedTaskService: SelectedTaskService
+    private alertsService: AlertService,
+    private selectedTaskService: SelectedTaskService,
+    private fileDownloaderService: FileDownloaderService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue && this.task?.id) {
+      this.jplagOpenState = false;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       this.task?.fetchSimilarities().subscribe((_) => {
         console.log('similarities fetched');
@@ -35,9 +42,9 @@ export class TaskSimilarityViewComponent implements OnChanges {
     e.stopPropagation();
     similarity.flagged = !similarity.flagged;
     this.taskSimilarityService
-      .update({ taskId: similarity.task.id, id: similarity.id }, { entity: similarity })
+      .update({taskId: similarity.task.id, id: similarity.id}, {entity: similarity})
       .subscribe((_) => {
-        this.alertService.success('Similarity flag updated');
+        this.alertsService.success('Similarity flag updated');
         similarity.task.similarityFlag = similarity.task.similarityCache.currentValues
           .map((s) => {
             return s.flagged;
@@ -55,8 +62,33 @@ export class TaskSimilarityViewComponent implements OnChanges {
         window.open(url, '_blank');
       },
       error: (err) => {
-        this.alertService.error(`Error accessing TurnItIn: ${err}`);
+        this.alertsService.error(`Error accessing TurnItIn: ${err}`);
       },
     });
+  }
+
+  viewJplagReport(similarity: TaskSimilarity) {
+    // Students are identified by their username in JPlag reports (configured by API)
+    // In most cases, usernames are a combination of their first and last names
+    this.fileDownloaderService.downloadBlob(
+      this.task.definition.getJplagReportUrl(),
+      (_, response: HttpResponse<Blob>) => {
+        // Open JPlag report viewer in embedded iframe
+        setTimeout(() => {
+          this.jplagViewer.openReport(response.body);
+          setTimeout(() => {
+            // Open comparison between the two students
+            this.jplagViewer.openComparison(
+              similarity.task.project.student.username,
+              similarity.other_student.username,
+            );
+            this.jplagOpenState = true;
+          }, 100);
+        }, 100);
+      },
+      (error) => {
+        console.error(error);
+      },
+    );
   }
 }
