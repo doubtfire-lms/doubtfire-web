@@ -1,0 +1,21 @@
+@if (learningOutcomes.length) {
+  <mat-card appearance="outlined" class="p-[16px]">
+    <mat-card-title class="f-card-title"
+      >{{ getIloContextLabel() }} Learning Outcomes</mat-card-title
+    >
+    <mat-card-subtitle class="mb-4"
+      >These outcomes describe the key skills and knowledge you are aiming to achieve by completing
+      this {{ getIloContextLabel().toLowerCase() }}.</mat-card-subtitle
+    >
+    <table class="overflow-hidden rounded-lg">
+      <tbody>
+        @for (ilo of learningOutcomes; track ilo) {
+          <tr class="even:bg-white odd:bg-gray-100 border-b border-gray-200">
+            <td class="px-6 py-4 text-black uppercase">{{ ilo.abbreviation }}</td>
+            <td class="px-6 py-4 text-gray-500">{{ ilo.fullOutcomeDescription }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </mat-card>
+}

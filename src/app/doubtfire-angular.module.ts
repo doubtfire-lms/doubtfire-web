@@ -258,6 +258,7 @@ import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/l
 import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task-feedback-templates/task-feedback-templates.component';
 import {NestedCsvDownloadModalComponent} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.component';
 import {NestedCsvDownloadModalService} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.service';
+import {TaskIlosCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-ilos-card/task-ilos-card.component';
 import {TaskDateSliderComponent} from './common/modals/date-change-modal/task-date-slider.component';
 import {SpecConModalComponent} from './common/modals/spec-con-modal/spec-con-modal.component';
 import {SpecConModalService} from './common/modals/spec-con-modal/spec-con-modal.service';
@@ -394,6 +395,7 @@ const MY_DATE_FORMAT = {
     LearningOutcomeEditorComponent,
     TaskFeedbackTemplatesComponent,
     NestedCsvDownloadModalComponent,
+    TaskIlosCardComponent,
     JplagReportViewerComponent,
   ],
   // Services we provide
