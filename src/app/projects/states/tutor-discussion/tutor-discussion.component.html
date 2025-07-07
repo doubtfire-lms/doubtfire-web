@@ -2,35 +2,32 @@
   [hidden]="!scanningQr"
   class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen z-40 bg-gray-500/50 backdrop-blur"
 >
-  <!-- bg-gray-500 -->
-  <!-- <video id="qr-reader" class="w-full h-full"></video> -->
   @if (loadingStudentData) {
     <mat-spinner
       color="blue"
-      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 z-50"
     ></mat-spinner>
   }
-  <div class="w-full h-full flex flex-col justify-around relative">
-    <div [ngClass]="{'qr-reader-hide-bloat': hideQrScannerBloat}">
-      <div id="qr-reader" class="w-full h-[calc(100%-50px)]"></div>
-    </div>
-    <div
-      class="absolute top-[50px] left-1/2 transform -translate-x-1/2 w-full text-center text-white px-10 py-5 text-md font-bold pointer-events-none z-10"
-    >
-      Scan a student's QR code to instantly load their project and mark submissions.
-    </div>
-    <button
-      mat-raised-button
-      color="secondary"
-      (click)="closeQrReader()"
-      class="max-w-md my-5 mx-auto"
-    >
-      {{ project ? 'Cancel' : 'Exit' }}
-    </button>
+  <div [ngClass]="{'qr-reader-hide-bloat': hideQrScannerBloat}">
+    <div id="qr-reader" class="absolute top-1/2 transform -translate-y-1/2 w-full"></div>
   </div>
+  <div
+    class="absolute top-[150px] left-1/2 transform -translate-x-1/2 w-full text-center text-white px-10 py-5 text-md font-bold pointer-events-none z-10"
+  >
+    Scan a student's QR code to instantly load their project and mark submissions.
+  </div>
+  <button
+    mat-raised-button
+    color="secondary"
+    (click)="closeQrReader()"
+    class="max-w-md my-5 absolute bottom-[150px] left-1/2 transform -translate-x-1/2"
+  >
+    {{ project ? 'Cancel' : 'Exit' }}
+  </button>
 </div>
 
-<div class="w-full flex flex-col h-[calc(100vh-140px)]">
+<!-- We offset the height by 145px to compensate for the header -->
+<div class="w-full flex flex-col h-[calc(100vh-145px)]">
   <div class="task-inbox flex flex-col flex-1 justify-normal items-center full-width">
     <div class="flex justify-between w-full relative">
       @if (project && project?.student) {
