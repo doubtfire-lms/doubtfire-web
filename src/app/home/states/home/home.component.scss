@@ -42,8 +42,8 @@
 
   .f-card-title {
     font-size: 18px;
-    max-height: 30px;
-    white-space: nowrap;
+    min-height: 65px; // Ensures consistent card height while allowing text to wrap
+    white-space: wrap;
     text-overflow: ellipsis;
     width: 100%;
     overflow: hidden;
