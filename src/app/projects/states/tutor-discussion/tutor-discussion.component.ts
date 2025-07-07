@@ -15,12 +15,12 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
-  selector: 'f-tutor-marking',
-  templateUrl: './tutor-marking.component.html',
-  styleUrl: './tutor-marking.component.scss',
+  selector: 'f-tutor-discussion',
+  templateUrl: './tutor-discussion.component.html',
+  styleUrl: './tutor-discussion.component.scss',
   encapsulation: ViewEncapsulation.None, // enables custom material-ui css
 })
-export class TutorMarkingComponent implements OnInit {
+export class TutorDiscussionComponent implements OnInit {
   @Input() unitId: number;
   @Input() projectId: number;
 

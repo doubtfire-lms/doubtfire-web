@@ -11,7 +11,7 @@ import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import { SuccessCloseComponent } from './common/success-close/success-close.component';
 import { ProjectPlanComponent } from './projects/states/plan/project-plan.component';
-import {TutorMarkingComponent} from './projects/states/tutor-marking/tutor-marking.component';
+import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -442,12 +442,12 @@ const projectPlanState: NgHybridStateDeclaration = {
   },
 };
 
-const TutorMarkingState: NgHybridStateDeclaration = {
-  name: 'tutor-marking',
-  url: '/tutor/marking?unitId&username&projectId',
+const TutorDiscussionState: NgHybridStateDeclaration = {
+  name: 'tutor-discussion',
+  url: '/tutor-discussion?unitId&projectId',
   views: {
     main: {
-      component: TutorMarkingComponent,
+      component: TutorDiscussionComponent,
     },
   },
   resolve: {
@@ -465,8 +465,8 @@ const TutorMarkingState: NgHybridStateDeclaration = {
     ],
   },
   data: {
-    pageTitle: 'Tutor Marking',
-    task: 'Tutor Marking',
+    pageTitle: 'Tutor Discussion',
+    task: 'Tutor Discussion',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
@@ -491,5 +491,5 @@ export const doubtfireStates = [
   ScormPlayerStudentReviewState,
   SuccessCloseState,
   projectPlanState,
-  TutorMarkingState,
+  TutorDiscussionState,
 ];
