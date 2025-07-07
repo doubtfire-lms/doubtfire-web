@@ -9,8 +9,9 @@ import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {FUsersComponent} from './admin/states/f-users/f-users.component';
 import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
-import { SuccessCloseComponent } from './common/success-close/success-close.component';
-import { ProjectPlanComponent } from './projects/states/plan/project-plan.component';
+import {SuccessCloseComponent} from './common/success-close/success-close.component';
+import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
+import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -191,7 +192,7 @@ const SignInState: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams: {username: string}) {
         return $stateParams.username;
-      }
+      },
     ],
     authToken: [
       '$stateParams',
@@ -318,13 +319,13 @@ const ScormPlayerNormalState: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams: {project_id: number}) {
         return $stateParams.project_id;
-      }
+      },
     ],
     taskDefId: [
       '$stateParams',
       function ($stateParams: {task_definition_id: number}) {
         return $stateParams.task_definition_id;
-      }
+      },
     ],
     mode: function () {
       return 'normal';
@@ -352,19 +353,19 @@ const ScormPlayerStudentReviewState: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams) {
         return $stateParams.project_id;
-      }
+      },
     ],
     taskDefId: [
       '$stateParams',
       function ($stateParams) {
         return $stateParams.task_definition_id;
-      }
+      },
     ],
     testAttemptId: [
       '$stateParams',
       function ($stateParams) {
         return $stateParams.test_attempt_id;
-      }
+      },
     ],
     mode: function () {
       return 'review';
@@ -389,7 +390,7 @@ const ScormPlayerReviewState: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams) {
         return $stateParams.task_definition_id;
-      }
+      },
     ],
     mode: function () {
       return 'preview';
@@ -441,6 +442,19 @@ const projectPlanState: NgHybridStateDeclaration = {
   },
 };
 
+const jplagReportViewerState: NgHybridStateDeclaration = {
+  name: 'jplag-report-viewer',
+  url: '/jplag-report-viewer',
+  views: {
+    main: {
+      component: JplagReportViewerComponent,
+    },
+  },
+  data: {
+    pageTitle: 'JPlag Report Viewer',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
 
 /**
  * Export the list of states we have created in angular
@@ -462,4 +476,5 @@ export const doubtfireStates = [
   ScormPlayerStudentReviewState,
   SuccessCloseState,
   projectPlanState,
+  jplagReportViewerState,
 ];

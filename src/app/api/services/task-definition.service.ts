@@ -1,11 +1,11 @@
-import { CachedEntityService } from 'ngx-entity-service';
-import { LearningOutcomeService, TaskDefinition, Unit } from 'src/app/api/models/doubtfire-model';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {CachedEntityService} from 'ngx-entity-service';
+import {LearningOutcomeService, TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
-import { MappingFunctions } from './mapping-fn';
-import { AppInjector } from 'src/app/app-injector';
-import { Observable } from 'rxjs';
+import {MappingFunctions} from './mapping-fn';
+import {AppInjector} from 'src/app/app-injector';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -24,7 +24,8 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'description',
       'weighting',
       'targetGrade',
-      'mossLanguage',
+      'similarityLanguage',
+      'hasJplagReport',
       {
         keys: 'targetDate',
         toEntityFn: MappingFunctions.mapDateToEndOfDay,
@@ -115,7 +116,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       {
         keys: 'ilos',
         toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
-          data[key]?.forEach(ilo => {
+          data[key]?.forEach((ilo) => {
             taskDefinition.learningOutcomesCache.getOrCreate(
               ilo['id'],
               this.learningOutcomeService,
@@ -131,7 +132,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'hasTaskSheet',
       'hasTaskResources',
       'hasTaskAssessmentResources',
-      'hasScormData'
+      'hasScormData',
     );
   }
 
