@@ -75,6 +75,12 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   }
 
   fetchComments(task: Task, useCache: boolean = true, fetchAfterCache: boolean = false) {
+    if (!task.comments.length) {
+      // If the cache is empty we know the query will attempt to fetch, so we can avoid fetching a second time
+      useCache = false;
+      fetchAfterCache = false;
+    }
+
     const request$ = !useCache
       ? this.taskCommentService.fetchAll({
           projectId: this.project.id,
