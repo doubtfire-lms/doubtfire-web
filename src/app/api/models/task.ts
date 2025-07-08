@@ -722,6 +722,7 @@ export class Task extends Entity {
               this.project.taskCache.add(this);
             }
             this.processTaskStatusChange(status, alerts);
+            taskService.notifyStatusChange(this);
           },
           error: (error) => {
             this.status = oldStatus;

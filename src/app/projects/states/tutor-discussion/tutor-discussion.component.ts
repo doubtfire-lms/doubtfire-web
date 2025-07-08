@@ -182,16 +182,6 @@ export class TutorDiscussionComponent implements OnInit {
         .addComment(task, `**Automated Comment**: Discussed in class.`, 'text')
         .subscribe(() => {
           task.updateTaskStatus(status);
-          task.commentCache.clear(); // force fetch of new comments (with the new status update)
-          if (this.selectedTask.id === task.id) {
-            // reload task-comments-viewer
-            setTimeout(() => {
-              this.showComments = false;
-              setTimeout(() => {
-                this.showComments = true;
-              });
-            }, 1000);
-          }
         });
     }
   }
