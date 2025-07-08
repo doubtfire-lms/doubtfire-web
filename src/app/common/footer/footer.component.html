@@ -76,6 +76,17 @@
       >
         <mat-icon>question_answer</mat-icon>
       </button>
+      <button
+        [disabled]="selectedTask === undefined"
+        mat-icon-button
+        matTooltip="Discussed in class"
+        matTooltipPosition="above"
+        aria-label=""
+        class="button"
+        (click)="selectedTask?.markAsDiscussed()"
+      >
+        <mat-icon>group</mat-icon>
+      </button>
     </span>
 
     <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">

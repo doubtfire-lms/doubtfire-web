@@ -70,6 +70,10 @@
                 <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>
 
+              <div *ngSwitchCase="'discussed'" class="comment-status">
+                <hr class="hr-text" [attr.data-content]="comment.text" />
+              </div>
+
               <div *ngSwitchCase="'plan'" class="comment-status">
                 <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>

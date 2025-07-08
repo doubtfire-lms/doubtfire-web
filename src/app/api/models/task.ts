@@ -690,7 +690,37 @@ export class Task extends Entity {
     }
   }
 
-  public updateTaskStatus(status: TaskStatusEnum) {
+  public markAsDiscussed() {
+    const alerts: AlertService = AppInjector.get(AlertService);
+    const taskService: TaskService = AppInjector.get(TaskService);
+
+    const options: RequestOptions<Task> = {
+      entity: this,
+      cache: this.project.taskCache,
+      body: {
+        discussed: true,
+      },
+    };
+
+    taskService
+      .update(
+        {
+          projectId: this.project.id,
+          taskDefId: this.definition.id,
+        },
+        options,
+      )
+      .subscribe({
+        next: (response) => {
+          taskService.notifyStatusChange(this);
+        },
+        error: (error) => {
+          alerts.error(error, 6000);
+        },
+      });
+  }
+
+  public updateTaskStatus(status: TaskStatusEnum, markAsDiscussed?: boolean) {
     const oldStatus = this.status;
     const alerts: AlertService = AppInjector.get(AlertService);
 
@@ -705,6 +735,11 @@ export class Task extends Entity {
           quality_pts: this.qualityPts,
         },
       };
+
+      if (markAsDiscussed === true) {
+        options.body['discussed'] = true;
+      }
+
       const hasId: boolean = this.id > 0;
 
       taskService

@@ -181,7 +181,7 @@ export class TutorDiscussionComponent implements OnInit {
       this.taskCommentService
         .addComment(task, `**Automated Comment**: Discussed in class.`, 'text')
         .subscribe(() => {
-          task.updateTaskStatus(status);
+          task.updateTaskStatus(status, true);
         });
     }
   }
