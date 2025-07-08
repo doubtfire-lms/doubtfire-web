@@ -178,11 +178,7 @@ export class TutorDiscussionComponent implements OnInit {
     const selectedTasks = this.tasksList.selectedOptions.selected;
     for (const taskOption of selectedTasks) {
       const task = taskOption.value as Task;
-      this.taskCommentService
-        .addComment(task, `**Automated Comment**: Discussed in class.`, 'text')
-        .subscribe(() => {
-          task.updateTaskStatus(status, true);
-        });
+      task.updateTaskStatus(status, true);
     }
   }
 
