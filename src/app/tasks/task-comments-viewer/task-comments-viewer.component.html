@@ -60,7 +60,13 @@
               fxLayoutAlign="start center"
               [ngSwitch]="comment.commentType"
             >
-              <div *ngSwitchCase="'status'" class="comment-status">
+              <div
+                *ngSwitchCase="'status'"
+                class="comment-status"
+                [matTooltip]="comment.createdAt | humanizedDate"
+                matTooltipPosition="above"
+                matTooltipShowDelay="1000"
+              >
                 <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>
 
@@ -104,7 +110,13 @@
                   </f-scorm-extension-comment>
                 </div>
 
-                <div *ngSwitchCase="'text'" class="comment-text">
+               <div
+                  *ngSwitchCase="'text'"
+                  class="comment-text"
+                  [matTooltip]="comment.createdAt | humanizedDate"
+                  matTooltipPosition="above"
+                  matTooltipShowDelay="1000"
+                >
                   <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
                 </div>
 
