@@ -70,7 +70,13 @@
                 <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>
 
-              <div *ngSwitchCase="'discussed'" class="comment-status">
+              <div
+                *ngSwitchCase="'discussed_in_class'"
+                class="comment-status"
+                [matTooltip]="comment.createdAt | humanizedDate"
+                matTooltipPosition="above"
+                matTooltipShowDelay="1000"
+              >
                 <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>
 
