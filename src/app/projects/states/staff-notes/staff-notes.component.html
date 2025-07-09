@@ -18,12 +18,18 @@
                 <user-icon size="25" [user]="note.user" style="margin-right: 8px"></user-icon>
                 {{ note.user?.firstName }} {{ note.user?.lastName }}</mat-card-title
               >
-              <mat-card-subtitle
-                [matTooltip]="note.createdAt"
-                matTooltipPosition="above"
-                matTooltipShowDelay="1000"
-                >{{ note.createdAt | humanizedDate }}</mat-card-subtitle
-              >
+              <div class="flex">
+                <mat-card-subtitle
+                  [matTooltip]="note.createdAt"
+                  matTooltipPosition="above"
+                  matTooltipShowDelay="1000"
+                  >{{ note.createdAt | humanizedDate }}</mat-card-subtitle
+                >
+                <!-- TODO: only show delete if we're allowed to -->
+                <button mat-button (click)="deleteNote(note)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
             </div>
 
             <mat-card-content class="py-4">

@@ -59,4 +59,8 @@ export class StaffNotesComponent implements OnInit {
       // TODO: if it errors restore the note into the textarea
     });
   }
+
+  public deleteNote(note: StaffNote) {
+    note.delete();
+  }
 }

@@ -10,7 +10,7 @@ import {Observable, tap} from 'rxjs';
 export class StaffNoteService extends CachedEntityService<StaffNote> {
   public readonly staffNoteAdded$: EventEmitter<StaffNote> = new EventEmitter();
 
-  protected readonly endpointFormat = 'projects/:projectId:/staff_notes';
+  protected readonly endpointFormat = 'projects/:projectId:/staff_notes/:id:';
 
   constructor(
     httpClient: HttpClient,

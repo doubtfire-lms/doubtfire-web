@@ -29,17 +29,18 @@ export class StaffNote extends Entity {
     return this.project.id;
   }
 
-  // public delete() {
-  //   const staffNoteService: StaffNoteService = AppInjector.get(StaffNoteService);
-  //   staffNoteService
-  //     .delete({projectId: this.project.id, id: this.id}, {cache: this.project.staffNoteCache})
-  //     .subscribe({
-  //       next: (response: object) => {
-  //         console.log('deleted staff note');
-  //       },
-  //       error: (error: any) => {
-  //         AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
-  //       },
-  //     });
-  // }
+  public delete() {
+    const staffNoteService: StaffNoteService = AppInjector.get(StaffNoteService);
+    staffNoteService
+      .delete({projectId: this.project.id, id: this.id}, {cache: this.project.staffNoteCache})
+      .subscribe({
+        next: (response: object) => {
+          console.log('deleted staff note');
+          AppInjector.get(AlertService).error('Successfully deleted staff note', 4000);
+        },
+        error: (error: any) => {
+          AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
+        },
+      });
+  }
 }
