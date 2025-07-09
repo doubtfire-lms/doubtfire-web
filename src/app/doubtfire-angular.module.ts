@@ -267,6 +267,8 @@ import {SpecConModalComponent} from './common/modals/spec-con-modal/spec-con-mod
 import {SpecConModalService} from './common/modals/spec-con-modal/spec-con-modal.service';
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
+import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
+import {StaffNoteService} from './api/services/staff-note.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -402,6 +404,8 @@ const MY_DATE_FORMAT = {
     TutorDiscussionComponent,
     TaskIlosCardComponent,
     JplagReportViewerComponent,
+    StaffNotesComponent,
+    QrModalComponent,
   ],
   // Services we provide
   providers: [
@@ -486,7 +490,7 @@ const MY_DATE_FORMAT = {
     }),
     FeedbackTemplateService,
     NestedCsvDownloadModalService,
-    QrModalComponent,
+    StaffNoteService,
   ],
   imports: [
     FlexLayoutModule,

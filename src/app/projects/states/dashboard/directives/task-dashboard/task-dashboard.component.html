@@ -15,6 +15,10 @@
     <ng-template [ngSwitchCase]="DashboardViews.similarity">
       <f-task-similarity-view [task]="task"></f-task-similarity-view>
     </ng-template>
+
+    <ng-template [ngSwitchCase]="DashboardViews.staff_notes">
+      <f-staff-notes [project]="task.project"></f-staff-notes>
+    </ng-template>
   </ng-container>
 
   <!-- The PDF Viewer -->
