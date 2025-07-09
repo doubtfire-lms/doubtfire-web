@@ -15,8 +15,8 @@
           <mat-card class="mb-4 p-4">
             <div class="flex justify-between">
               <mat-card-title class="flex items-center">
-                <user-icon size="25" [user]="note.author" style="margin-right: 8px"></user-icon>
-                {{ note.author?.firstName }} {{ note.author?.lastName }}</mat-card-title
+                <user-icon size="25" [user]="note.user" style="margin-right: 8px"></user-icon>
+                {{ note.user?.firstName }} {{ note.user?.lastName }}</mat-card-title
               >
               <mat-card-subtitle
                 [matTooltip]="note.createdAt"

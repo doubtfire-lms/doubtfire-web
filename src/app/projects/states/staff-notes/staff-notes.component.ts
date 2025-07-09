@@ -14,8 +14,6 @@ export class StaffNotesComponent implements OnInit {
   @ViewChild('staffNotesContainer') staffNotesContainer!: ElementRef;
 
   @Input() project: Project;
-  // staffNotes: StaffNote[];
-  user: User;
 
   loadingStaffNotes: boolean = true;
 

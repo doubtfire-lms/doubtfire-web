@@ -8,15 +8,17 @@ export class StaffNote extends Entity {
   id: number;
 
   project: Project;
-  author: User;
+  user: User;
   replyTo: StaffNote;
   createdAt: Date;
   updatedAt: Date;
 
   constructor(data?: Project) {
     super();
-    if (data instanceof Project) {
-      this.project = data as Project;
+    if (data) {
+      this.project = data;
+    } else {
+      console.error('Failed to get project');
     }
   }
 

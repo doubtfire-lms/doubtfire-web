@@ -20,10 +20,12 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     super(httpClient, API_URL);
 
     this.mapping.addKeys('id', 'note', 'createdAt', 'updatedAt', {
-      keys: 'author',
-      toEntityFn: (data: object, key: string, _staffNote: StaffNote) => {
-        const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
-        return user;
+      keys: ['user', 'user_id'],
+      toEntityFn: (data: object, key: string, staffNote: StaffNote) => {
+        const userRole = staffNote.project.unit.staff.find((s) => s.user.id === data['user_id']);
+
+        // const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
+        return userRole.user;
       },
     });
 
@@ -50,7 +52,7 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     const opts: RequestOptions<StaffNote> = {endpointFormat: this.endpointFormat};
     opts.cache = project.staffNoteCache;
     opts.body = body;
-    // opts.constructorParams = task;
+    opts.constructorParams = project;
 
     return this.create(pathId, opts).pipe(
       tap((note: StaffNote) => {
@@ -66,6 +68,7 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
       cache: project.staffNoteCache,
       sourceCache: project.staffNoteCache,
       cacheBehaviourOnGet: 'cacheQuery',
+      constructorParams: project,
     };
 
     if (useFetch) {
