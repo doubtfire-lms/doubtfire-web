@@ -18,6 +18,7 @@
             (mouseout)="note.hover = false"
           >
             <div [hidden]="!note.hover" class="flex absolute right-5 bottom-5">
+              <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
               <mat-icon type="button" (click)="replyToNote(note)">reply</mat-icon>
               <mat-icon type="button" (click)="deleteNote(note)">delete</mat-icon>
             </div>
@@ -37,7 +38,25 @@
             </div>
 
             <mat-card-content class="py-4">
-              <div class="markdown-to-html" [innerHTML]="note.note | marked"></div>
+              @if (editingNote && editingNote.id === note.id) {
+                <mat-form-field appearance="outline" class="flex items-center w-full">
+                  <mat-label>Update Note</mat-label>
+                  <textarea
+                    #staffNoteEditor
+                    matInput
+                    [(ngModel)]="editingNoteText"
+                    class="resize-none w-full px-2 py-1 placeholder:px-2 placeholder:py-1 overflow-hidden"
+                  ></textarea>
+                  <div class="flex justify-end gap-2">
+                    <button mat-raised-button color="" (click)="cancelEditingNote()">Cancel</button>
+                    <button mat-raised-button color="primary" (click)="updateNote(note)">
+                      Update Note
+                    </button>
+                  </div>
+                </mat-form-field>
+              } @else {
+                <div class="markdown-to-html" [innerHTML]="note.note | marked"></div>
+              }
             </mat-card-content>
           </mat-card>
         }

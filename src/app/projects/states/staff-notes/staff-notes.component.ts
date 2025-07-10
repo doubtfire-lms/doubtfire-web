@@ -10,14 +10,17 @@ import {AlertService} from 'src/app/common/services/alert.service';
   styleUrl: './staff-notes.component.scss',
 })
 export class StaffNotesComponent implements OnInit {
-  // TODO: markdown support / new lines
   @ViewChild('staffNotesContainer') staffNotesContainer!: ElementRef;
+  @ViewChild('staffNoteEditor', {static: false}) staffNoteEditor!: ElementRef<HTMLTextAreaElement>;
 
   @Input() project: Project;
 
   loadingStaffNotes: boolean = true;
 
   noteText: string = '';
+
+  editingNote?: StaffNote;
+  editingNoteText?: string = '';
 
   constructor(
     private userService: UserService,
@@ -52,12 +55,35 @@ export class StaffNotesComponent implements OnInit {
 
     this.noteText = '';
 
-    this.staffNoteService.addNote(this.project, noteText, null).subscribe((note) => {
-      console.log(note);
-      this.alertService.success('Succesfully submitted note', 4000);
-      this.scrollDown();
-      this.project.staffNotes++;
-      // TODO: if it errors restore the note into the textarea
+    this.staffNoteService.addNote(this.project, noteText, null).subscribe({
+      next: (note) => {
+        console.log(note);
+        this.alertService.success('Succesfully submitted note', 4000);
+        this.scrollDown();
+        this.project.staffNotes++;
+      },
+      error: (error) => {
+        this.alertService.error(`Failed to create note: ${error}`, 4000);
+        this.noteText = noteText;
+      },
+    });
+  }
+
+  public updateNote() {
+    const noteText = this.editingNoteText.trim();
+    if (noteText === '' || !this.editingNote) {
+      return;
+    }
+
+    this.staffNoteService.updateNote(this.project, this.editingNote, noteText).subscribe({
+      next: (note) => {
+        this.alertService.success('Succesfully updated note', 4000);
+        this.editingNote = null;
+        this.editingNoteText = '';
+      },
+      error: (error) => {
+        this.alertService.error(`Failed to update note: ${error}`, 4000);
+      },
     });
   }
 
@@ -67,5 +93,27 @@ export class StaffNotesComponent implements OnInit {
 
   public replyToNote(note: StaffNote) {
     console.log('replying to note...');
+  }
+
+  public editNote(note: StaffNote) {
+    this.editingNote = note;
+    this.editingNoteText = note.note;
+    setTimeout(() => {
+      this.autoResizeStaffNoteEditor();
+      this.staffNoteEditor?.nativeElement.focus();
+    });
+  }
+
+  public cancelEditingNote() {
+    this.editingNote = null;
+    this.editingNoteText = '';
+  }
+
+  private autoResizeStaffNoteEditor() {
+    const el = this.staffNoteEditor.nativeElement;
+    console.log(el);
+    el.style.height = 'auto';
+    el.offsetHeight;
+    el.style.height = el.scrollHeight + 'px';
   }
 }

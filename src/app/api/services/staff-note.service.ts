@@ -61,6 +61,27 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     );
   }
 
+  public updateNote(project: Project, note: StaffNote, text: string): Observable<StaffNote> {
+    const pathId = {
+      projectId: project.id,
+      id: note.id,
+    };
+
+    const body: FormData = new FormData();
+    body.append('note', text);
+
+    const opts: RequestOptions<StaffNote> = {endpointFormat: this.endpointFormat};
+    opts.cache = project.staffNoteCache;
+    opts.body = body;
+    opts.constructorParams = project;
+
+    return this.put(pathId, opts).pipe(
+      tap((_note: StaffNote) => {
+        note.note = text;
+      }),
+    );
+  }
+
   public loadStaffNotes(project: Project, useFetch: boolean = false): Observable<StaffNote[]> {
     console.log(project);
     const options: RequestOptions<StaffNote> = {

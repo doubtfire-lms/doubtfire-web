@@ -9,6 +9,7 @@ export class StaffNote extends Entity {
 
   project: Project;
   user: User;
+  note: string;
   replyTo: StaffNote;
   createdAt: Date;
   updatedAt: Date;
