@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {Project, User, UserService} from 'src/app/api/models/doubtfire-model';
+import {Project, UserService} from 'src/app/api/models/doubtfire-model';
 import {StaffNote} from 'src/app/api/models/staff-note';
 import {StaffNoteService} from 'src/app/api/services/staff-note.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
@@ -36,7 +36,6 @@ export class StaffNotesComponent implements OnInit {
   ngOnInit(): void {
     this.loadingStaffNotes = true;
     this.staffNoteService.loadStaffNotes(this.project).subscribe((notes) => {
-      console.log(notes);
       this.loadingStaffNotes = false;
       this.staffNoteService.updateStaffNoteReplies(this.project?.staffNoteCache.currentValues);
       this.scrollDown();
@@ -64,7 +63,6 @@ export class StaffNotesComponent implements OnInit {
 
     this.staffNoteService.addNote(this.project, noteText, this.replyingToNote).subscribe({
       next: (note) => {
-        console.log(note);
         this.alertService.success('Succesfully submitted note', 4000);
         this.scrollDown();
         this.project.staffNotes++;
@@ -108,13 +106,16 @@ export class StaffNotesComponent implements OnInit {
 
   public replyToNote(note: StaffNote) {
     this.replyingToNote = note;
-    console.log('replying to note...');
   }
   public cancelReplyingToNote() {
     this.replyingToNote = null;
   }
 
   public editNote(note: StaffNote) {
+    if (!note.authorIsMe) {
+      return;
+    }
+
     this.editingNote = note;
     this.editingNoteText = note.note;
     setTimeout(() => {
@@ -130,7 +131,6 @@ export class StaffNotesComponent implements OnInit {
 
   public autoResizeStaffNoteEditor() {
     const el = this.staffNoteEditor.nativeElement;
-    console.log(el);
     el.style.height = 'auto';
     el.offsetHeight;
     el.style.height = el.scrollHeight + 'px';

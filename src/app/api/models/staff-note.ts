@@ -1,5 +1,5 @@
 import {Entity} from 'ngx-entity-service';
-import {Project, Unit, User} from './doubtfire-model';
+import {Project, Unit, User, UserService} from './doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {StaffNoteService} from '../services/staff-note.service';
@@ -29,6 +29,11 @@ export class StaffNote extends Entity {
    */
   public get projectId(): number {
     return this.project.id;
+  }
+
+  public get authorIsMe(): boolean {
+    const userService: UserService = AppInjector.get(UserService);
+    return this.user.id === userService.currentUser.id;
   }
 
   public delete() {

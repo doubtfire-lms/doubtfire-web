@@ -38,7 +38,9 @@
           (mouseout)="hoveredNoteId = null"
         >
           <div [hidden]="hoveredNoteId !== note.id" class="flex absolute right-5 bottom-5">
-            <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
+            @if (note.authorIsMe) {
+              <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
+            }
             <mat-icon type="button" (click)="replyToNote(note)">reply</mat-icon>
             <mat-icon type="button" (click)="deleteNote(note)">delete</mat-icon>
           </div>

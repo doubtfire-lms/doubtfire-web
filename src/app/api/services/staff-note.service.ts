@@ -36,7 +36,6 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     return new StaffNote(other);
   }
 
-  // TODO: use originalNote for replies
   public addNote(project: Project, text: string, originalNote: StaffNote): Observable<StaffNote> {
     const pathId = {
       projectId: project.id,
