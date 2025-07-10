@@ -35,8 +35,8 @@ export class StaffNote extends Entity {
       .delete({projectId: this.project.id, id: this.id}, {cache: this.project.staffNoteCache})
       .subscribe({
         next: (response: object) => {
-          console.log('deleted staff note');
           AppInjector.get(AlertService).error('Successfully deleted staff note', 4000);
+          this.project.staffNotes--;
         },
         error: (error: any) => {
           AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);

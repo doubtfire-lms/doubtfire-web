@@ -56,6 +56,7 @@ export class StaffNotesComponent implements OnInit {
       console.log(note);
       this.alertService.success('Succesfully submitted note', 4000);
       this.scrollDown();
+      this.project.staffNotes++;
       // TODO: if it errors restore the note into the textarea
     });
   }

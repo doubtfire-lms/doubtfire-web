@@ -64,6 +64,8 @@ export class Project extends Entity {
 
   public similarityFlag: boolean = false;
 
+  public staffNotes: number;
+
   public constructor(unit?: Unit) {
     super();
     this.unit = unit;

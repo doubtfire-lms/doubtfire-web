@@ -112,21 +112,30 @@
           </button>
         </div>
       }
-      <div class="relative inline-block">
-        <div matBadge="3"></div>
-        <!-- TODO: fetch number of staff notes from project -->
-        <button
-          #similaritiesButton
-          mat-icon-button
-          matTooltip="There are 3 staff notes for this student"
-          matTooltipPosition="above"
-          aria-label="View detected similarities"
-          class="button small-button"
-          (click)="viewStaffNotes()"
-        >
-          <mat-icon class="small-icon">comment</mat-icon>
-        </button>
-      </div>
+      @if (selectedTask?.project) {
+        <div class="relative inline-block">
+          @if (selectedTask.project.staffNotes > 0) {
+            <div [matBadge]="selectedTask.project.staffNotes"></div>
+          }
+          <button
+            #similaritiesButton
+            mat-icon-button
+            [matTooltip]="
+              'Student has ' +
+              (selectedTask.project.staffNotes || 'no') +
+              ' staff note' +
+              (selectedTask.project.staffNotes !== 1 ? 's' : '')
+            "
+            matTooltipPosition="above"
+            aria-label="View detected similarities"
+            class="button small-button"
+            (click)="viewStaffNotes()"
+          >
+            <mat-icon class="small-icon">comment</mat-icon>
+          </button>
+        </div>
+      }
+
       <button
         [disabled]="selectedTask === undefined"
         mat-icon-button
