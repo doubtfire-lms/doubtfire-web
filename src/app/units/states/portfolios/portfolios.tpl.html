@@ -267,6 +267,18 @@
       </div>
     </div>
 
+    <div class="panel panel-primary" ng-show="activeTab == tabs.viewStaffNotes">
+      <div class="panel-heading clearfix">
+        <div class="pull-left">
+          <h3 class="panel-title">Review Staff Notes for {{selectedStudent.student.name}}</h3>
+          View internal notes recorded by staff about the student.
+        </div>
+      </div>
+      <div class="panel-body">
+        <f-staff-notes ng-if="project" [project]="project"></f-staff-notes>
+      </div>
+    </div>
+
     <div class="panel panel-primary" ng-show="activeTab == tabs.viewPortfolio">
       <div class="panel-heading clearfix">
         <div class="pull-left">

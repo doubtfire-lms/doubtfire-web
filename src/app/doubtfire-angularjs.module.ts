@@ -225,6 +225,7 @@ import {D2lUnitDetailsModal} from './units/states/edit/directives/unit-details-e
 import {D2lTransferModal} from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
 import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/learning-outcome-editor.component';
 import {FeedbackTemplateService} from './api/services/feedback-template.service';
+import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -483,6 +484,10 @@ DoubtfireAngularJSModule.directive('newFUnits', downgradeComponent({component: F
 DoubtfireAngularJSModule.directive(
   'fTaskIlosCard',
   downgradeComponent({component: TaskIlosCardComponent}),
+);
+DoubtfireAngularJSModule.directive(
+  'fStaffNotes',
+  downgradeComponent({component: StaffNotesComponent}),
 );
 
 // Global configuration
