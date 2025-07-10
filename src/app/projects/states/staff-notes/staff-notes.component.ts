@@ -25,6 +25,8 @@ export class StaffNotesComponent implements OnInit {
 
   replyingToNote?: StaffNote;
 
+  hoveredNoteId: number | null = null;
+
   constructor(
     private userService: UserService,
     private staffNoteService: StaffNoteService,
@@ -36,6 +38,7 @@ export class StaffNotesComponent implements OnInit {
     this.staffNoteService.loadStaffNotes(this.project).subscribe((notes) => {
       console.log(notes);
       this.loadingStaffNotes = false;
+      this.staffNoteService.updateStaffNoteReplies(this.project?.staffNoteCache.currentValues);
       this.scrollDown();
     });
   }
@@ -66,6 +69,7 @@ export class StaffNotesComponent implements OnInit {
         this.scrollDown();
         this.project.staffNotes++;
         this.replyingToNote = null;
+        this.staffNoteService.updateStaffNoteReplies(this.project?.staffNoteCache.currentValues);
       },
       error: (error) => {
         this.alertService.error(`Failed to create note: ${error}`, 4000);
@@ -124,11 +128,20 @@ export class StaffNotesComponent implements OnInit {
     this.editingNoteText = '';
   }
 
-  private autoResizeStaffNoteEditor() {
+  public autoResizeStaffNoteEditor() {
     const el = this.staffNoteEditor.nativeElement;
     console.log(el);
     el.style.height = 'auto';
     el.offsetHeight;
     el.style.height = el.scrollHeight + 'px';
+  }
+
+  scrollToNote(note: StaffNote): void {
+    const el = document.getElementById(`note-${note.id}`);
+    if (el) {
+      el.scrollIntoView({behavior: 'smooth', block: 'center'});
+      el.classList.add('flash-highlight');
+      setTimeout(() => el.classList.remove('flash-highlight'), 1000);
+    }
   }
 }

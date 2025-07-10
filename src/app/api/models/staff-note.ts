@@ -10,7 +10,8 @@ export class StaffNote extends Entity {
   project: Project;
   user: User;
   note: string;
-  replyTo: StaffNote;
+  replyTo?: StaffNote;
+  replyToId: number;
   createdAt: Date;
   updatedAt: Date;
 

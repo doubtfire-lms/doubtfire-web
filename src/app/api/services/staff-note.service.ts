@@ -19,7 +19,7 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
   ) {
     super(httpClient, API_URL);
 
-    this.mapping.addKeys('id', 'note', 'createdAt', 'updatedAt', {
+    this.mapping.addKeys('id', 'note', 'createdAt', 'updatedAt', 'replyToId', {
       keys: ['user', 'user_id'],
       toEntityFn: (data: object, key: string, staffNote: StaffNote) => {
         const userRole = staffNote.project.unit.staff.find((s) => s.user.id === data['user_id']);
@@ -59,6 +59,18 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
         this.staffNoteAdded$.emit(note);
       }),
     );
+  }
+
+  public updateStaffNoteReplies(staffNotes: readonly StaffNote[]) {
+    for (const note of staffNotes) {
+      if (note.replyToId) {
+        const repliedTo = staffNotes.find((n) => n.id === note.replyToId);
+        if (repliedTo) {
+          note.replyTo = repliedTo;
+          console.log(note, repliedTo);
+        }
+      }
+    }
   }
 
   public updateNote(project: Project, note: StaffNote, text: string): Observable<StaffNote> {
