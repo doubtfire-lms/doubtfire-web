@@ -2,6 +2,7 @@ import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {Project, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {StaffNote} from 'src/app/api/models/staff-note';
 import {StaffNoteService} from 'src/app/api/services/staff-note.service';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
@@ -26,6 +27,7 @@ export class StaffNotesComponent implements OnInit {
     private userService: UserService,
     private staffNoteService: StaffNoteService,
     private alertService: AlertService,
+    private confirmationModalService: ConfirmationModalService,
   ) {}
   ngOnInit(): void {
     this.loadingStaffNotes = true;
@@ -88,7 +90,13 @@ export class StaffNotesComponent implements OnInit {
   }
 
   public deleteNote(note: StaffNote) {
-    note.delete();
+    this.confirmationModalService.show(
+      'Delete note',
+      'Are you sure want to delete this staff note?',
+      () => {
+        note.delete();
+      },
+    );
   }
 
   public replyToNote(note: StaffNote) {
