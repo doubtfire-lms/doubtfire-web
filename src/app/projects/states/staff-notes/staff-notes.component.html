@@ -69,18 +69,32 @@
       }
     </div>
 
-    <div class="h-[150px] border-t border-gray-300 p-4 flex">
-      <mat-form-field appearance="outline" class="flex items-center w-full">
-        <mat-label>Staff Note</mat-label>
-        <textarea
-          matInput
-          [(ngModel)]="noteText"
-          class="resize-none w-full px-2 py-1 placeholder:px-2 placeholder:py-1"
-        ></textarea>
-        <div class="flex justify-end">
-          <button mat-raised-button color="primary" (click)="submitNote()">Submit</button>
+  <div class="h-[150px] border-t border-gray-300 p-4">
+    @if (replyingToNote) {
+      <div
+        class="text-base px-2 py-2 select-none rounded-t-md border border-b-0 border-gray-300 flex justify-between items-center"
+      >
+        <div>
+          <mat-icon class="mr-4">reply</mat-icon>
+          <span>
+            Replying to {{ replyingToNote.user.firstName }} {{ replyingToNote.user.lastName }}:
+            {{ replyingToNote.note }}</span
+          >
         </div>
-      </mat-form-field>
-    </div>
+        <mat-icon (click)="cancelReplyingToNote()">close</mat-icon>
+      </div>
+    }
+
+    <mat-form-field appearance="outline" class="flex items-center w-full">
+      <mat-label>Staff Note</mat-label>
+      <textarea
+        matInput
+        [(ngModel)]="noteText"
+        class="resize-none w-full px-2 py-1 placeholder:px-2 placeholder:py-1"
+      ></textarea>
+      <div class="flex justify-end">
+        <button mat-raised-button color="primary" (click)="submitNote()">Submit</button>
+      </div>
+    </mat-form-field>
   </div>
 </div>

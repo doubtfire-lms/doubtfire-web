@@ -23,6 +23,8 @@ export class StaffNotesComponent implements OnInit {
   editingNote?: StaffNote;
   editingNoteText?: string = '';
 
+  replyingToNote?: StaffNote;
+
   constructor(
     private userService: UserService,
     private staffNoteService: StaffNoteService,
@@ -57,12 +59,13 @@ export class StaffNotesComponent implements OnInit {
 
     this.noteText = '';
 
-    this.staffNoteService.addNote(this.project, noteText, null).subscribe({
+    this.staffNoteService.addNote(this.project, noteText, this.replyingToNote).subscribe({
       next: (note) => {
         console.log(note);
         this.alertService.success('Succesfully submitted note', 4000);
         this.scrollDown();
         this.project.staffNotes++;
+        this.replyingToNote = null;
       },
       error: (error) => {
         this.alertService.error(`Failed to create note: ${error}`, 4000);
@@ -100,7 +103,11 @@ export class StaffNotesComponent implements OnInit {
   }
 
   public replyToNote(note: StaffNote) {
+    this.replyingToNote = note;
     console.log('replying to note...');
+  }
+  public cancelReplyingToNote() {
+    this.replyingToNote = null;
   }
 
   public editNote(note: StaffNote) {
