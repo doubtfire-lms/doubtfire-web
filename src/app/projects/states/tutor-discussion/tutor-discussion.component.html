@@ -70,7 +70,7 @@
                   class="notification"
                   [ngClass]="{
                     active: task.numNewComments > 0 || task.similaritiesDetected,
-                    similarities: task.similaritiesDetected
+                    similarities: task.similaritiesDetected,
                   }"
                 ></span>
                 <user-icon class="self-center" [user]="project?.student" [size]="30"> </user-icon>
@@ -161,12 +161,12 @@
   }
 
   @if (selectedTask && project) {
-    <mat-tab-group dynamicHeight>
+    <mat-tab-group dynamicHeight (selectedTabChange)="onTabChange($event)">
       <mat-tab label="Task Comments"></mat-tab>
       <mat-tab label="Staff Notes"></mat-tab>
     </mat-tab-group>
 
-    @if (showComments) {
+    @if (footerTabView === TutorDiscussionTabView.SHOW_COMMENTS) {
       <div #commentspanel class="task-comment-panel inbox-panel w-full flex-1">
         <!-- <div class="w-full text-center py-4">{{ selectedTask?.definition.name }}</div> -->
 
@@ -181,6 +181,8 @@
         >
         </task-comments-viewer>
       </div>
+    } @else if (footerTabView === TutorDiscussionTabView.SHOW_STAFF_NOTES) {
+      <f-staff-notes class="min-h-[350px]" [project]="project"></f-staff-notes>
     }
   }
 </div>

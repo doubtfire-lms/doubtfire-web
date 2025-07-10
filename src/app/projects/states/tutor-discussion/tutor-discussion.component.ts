@@ -1,5 +1,6 @@
 import {Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {MatSelectionList} from '@angular/material/list';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 import {StateService, UIRouter} from '@uirouter/core';
 import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
 import {
@@ -15,6 +16,10 @@ import {
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
+enum TutorDiscussionTabView {
+  SHOW_COMMENTS,
+  SHOW_STAFF_NOTES,
+}
 @Component({
   selector: 'f-tutor-discussion',
   templateUrl: './tutor-discussion.component.html',
@@ -43,7 +48,8 @@ export class TutorDiscussionComponent implements OnInit {
   private _unitId: number;
   private _projectId: number;
 
-  private showComments: boolean = true;
+  public TutorDiscussionTabView = TutorDiscussionTabView;
+  public footerTabView: TutorDiscussionTabView = TutorDiscussionTabView.SHOW_COMMENTS;
 
   constructor(
     private unitService: UnitService,
@@ -55,6 +61,23 @@ export class TutorDiscussionComponent implements OnInit {
     private route: UIRouter,
     private taskCommentService: TaskCommentService,
   ) {}
+
+  onTabChange(event: MatTabChangeEvent): void {
+    if (event.index === 0) {
+      this.showComments();
+    } else if (event.index === 1) {
+      this.showStaffNotes();
+    }
+  }
+
+  public showComments() {
+    this.footerTabView = TutorDiscussionTabView.SHOW_COMMENTS;
+  }
+
+  public showStaffNotes() {
+    console.log('showing staff notes:)');
+    this.footerTabView = TutorDiscussionTabView.SHOW_STAFF_NOTES;
+  }
 
   public ngOnInit(): void {
     this.authService.afterAuthCall((result) => {
