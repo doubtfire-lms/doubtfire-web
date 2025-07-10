@@ -12,23 +12,27 @@
     <div #staffNotesContainer class="flex-1 overflow-auto p-4">
       @if (!loadingStaffNotes) {
         @for (note of project?.staffNoteCache?.currentValues; track note) {
-          <mat-card class="mb-4 p-4">
+          <mat-card
+            class="mb-4 p-5"
+            (mouseover)="note.hover = true"
+            (mouseout)="note.hover = false"
+          >
+            <div [hidden]="!note.hover" class="flex absolute right-5 bottom-5">
+              <mat-icon type="button" (click)="replyToNote(note)">reply</mat-icon>
+              <mat-icon type="button" (click)="deleteNote(note)">delete</mat-icon>
+            </div>
             <div class="flex justify-between">
               <mat-card-title class="flex items-center">
                 <user-icon size="25" [user]="note.user" style="margin-right: 8px"></user-icon>
                 {{ note.user?.firstName }} {{ note.user?.lastName }}</mat-card-title
               >
-              <div class="flex">
+              <div class="flex items-center">
                 <mat-card-subtitle
                   [matTooltip]="note.createdAt | localizedDateTime"
                   matTooltipPosition="above"
                   matTooltipShowDelay="1000"
                   >{{ note.createdAt | humanizedDate }}</mat-card-subtitle
                 >
-                <!-- TODO: only show delete if we're allowed to -->
-                <button mat-button (click)="deleteNote(note)">
-                  <mat-icon>delete</mat-icon>
-                </button>
               </div>
             </div>
 

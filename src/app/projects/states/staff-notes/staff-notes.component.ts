@@ -64,4 +64,8 @@ export class StaffNotesComponent implements OnInit {
   public deleteNote(note: StaffNote) {
     note.delete();
   }
+
+  public replyToNote(note: StaffNote) {
+    console.log('replying to note...');
+  }
 }
