@@ -67,7 +67,9 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
         const repliedTo = staffNotes.find((n) => n.id === note.replyToId);
         if (repliedTo) {
           note.replyTo = repliedTo;
-          console.log(note, repliedTo);
+        } else {
+          // Remove deleted replies
+          note.replyTo = null;
         }
       }
     }

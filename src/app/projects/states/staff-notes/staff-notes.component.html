@@ -7,22 +7,26 @@
   <div #staffNotesContainer class="flex-1 overflow-auto p-4">
     @if (!loadingStaffNotes) {
       @for (note of project?.staffNoteCache?.currentValues; track note) {
-        @if (note.replyTo) {
+        @if (note.replyToId) {
           <div
             class="text-md px-2 py-2 select-none rounded-t-md border border-gray-300 flex items-center justify-between"
           >
             <div
-              class="flex items-center hover:text-blue-500 hover:underline cursor-pointer"
+              class="flex items-center"
+              [ngClass]="note.replyTo && 'hover:text-blue-500 hover:underline cursor-pointer'"
               (click)="scrollToNote(note.replyTo)"
             >
-              <mat-icon class="mr-3 mt-1">reply</mat-icon>
+              <mat-icon class="mr-3">reply</mat-icon>
               <div class="flex flex-col">
-                <span class="font-medium">
-                  Replying to {{ note.replyTo.user.firstName }} {{ note.replyTo.user.lastName }} ({{
-                    note.replyTo.user.nickname
-                  }})
-                </span>
-                <span class="text-base text-gray-600">{{ note.replyTo.note }}</span>
+                @if (note.replyTo) {
+                  <span class="font-medium">
+                    Replying to {{ note.replyTo.user.firstName }}
+                    {{ note.replyTo.user.lastName }} ({{ note.replyTo.user.nickname }})
+                  </span>
+                  <span class="text-base text-gray-600">{{ note.replyTo.note }}</span>
+                } @else {
+                  <span class="text-base text-gray-400 italic">Replying to: Deleted note</span>
+                }
               </div>
             </div>
           </div>

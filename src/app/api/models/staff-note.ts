@@ -39,6 +39,7 @@ export class StaffNote extends Entity {
         next: (response: object) => {
           AppInjector.get(AlertService).error('Successfully deleted staff note', 4000);
           this.project.staffNotes--;
+          staffNoteService.updateStaffNoteReplies(this.project.staffNoteCache.currentValues);
         },
         error: (error: any) => {
           AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
