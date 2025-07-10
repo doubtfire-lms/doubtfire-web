@@ -20,7 +20,7 @@
               >
               <div class="flex">
                 <mat-card-subtitle
-                  [matTooltip]="note.createdAt"
+                  [matTooltip]="note.createdAt | localizedDateTime"
                   matTooltipPosition="above"
                   matTooltipShowDelay="1000"
                   >{{ note.createdAt | humanizedDate }}</mat-card-subtitle

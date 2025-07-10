@@ -269,6 +269,7 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
 import {StaffNoteService} from './api/services/staff-note.service';
+import {LocalizedDatePipe} from './common/pipes/localized-date.pipe';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -406,6 +407,7 @@ const MY_DATE_FORMAT = {
     JplagReportViewerComponent,
     StaffNotesComponent,
     QrModalComponent,
+    LocalizedDatePipe,
   ],
   // Services we provide
   providers: [
