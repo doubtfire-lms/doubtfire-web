@@ -33,7 +33,7 @@
             </div>
 
             <mat-card-content class="py-4">
-              <p class="">{{ note.note }}</p>
+              <div class="markdown-to-html" [innerHTML]="note.note | marked"></div>
             </mat-card-content>
           </mat-card>
         }
