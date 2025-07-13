@@ -65,7 +65,7 @@ export class StaffNotesComponent implements OnInit {
       next: (note) => {
         this.alertService.success('Succesfully submitted note', 4000);
         this.scrollDown();
-        this.project.staffNotes++;
+        this.project.staffNoteCount++;
         this.replyingToNote = null;
         this.staffNoteService.updateStaffNoteReplies(this.project?.staffNoteCache.currentValues);
       },

@@ -67,7 +67,7 @@ export class ProjectService extends CachedEntityService<Project> {
       'compilePortfolio',
       'similarityFlag',
       'specConDays',
-      'staffNotes',
+      'staffNoteCount',
       {
         keys: 'hasPortfolio',
         toEntityFn: (data: object, key: string, entity: Project, params?: any) => {

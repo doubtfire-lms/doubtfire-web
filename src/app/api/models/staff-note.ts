@@ -43,7 +43,7 @@ export class StaffNote extends Entity {
       .subscribe({
         next: (response: object) => {
           AppInjector.get(AlertService).error('Successfully deleted staff note', 4000);
-          this.project.staffNotes--;
+          this.project.staffNoteCount--;
           staffNoteService.updateStaffNoteReplies(this.project.staffNoteCache.currentValues);
         },
         error: (error: any) => {

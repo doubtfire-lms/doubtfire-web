@@ -114,17 +114,17 @@
       }
       @if (selectedTask?.project) {
         <div class="relative inline-block">
-          @if (selectedTask.project.staffNotes > 0) {
-            <div [matBadge]="selectedTask.project.staffNotes"></div>
+          @if (selectedTask.project.staffNoteCount > 0) {
+            <div [matBadge]="selectedTask.project.staffNoteCount"></div>
           }
           <button
             #similaritiesButton
             mat-icon-button
             [matTooltip]="
               'Student has ' +
-              (selectedTask.project.staffNotes || 'no') +
+              (selectedTask.project.staffNoteCount || 'no') +
               ' staff note' +
-              (selectedTask.project.staffNotes !== 1 ? 's' : '')
+              (selectedTask.project.staffNoteCount !== 1 ? 's' : '')
             "
             matTooltipPosition="above"
             aria-label="View detected similarities"

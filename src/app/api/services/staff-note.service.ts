@@ -96,7 +96,6 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
   }
 
   public loadStaffNotes(project: Project, useFetch: boolean = false): Observable<StaffNote[]> {
-    console.log(project);
     const options: RequestOptions<StaffNote> = {
       endpointFormat: this.endpointFormat,
       cache: project.staffNoteCache,

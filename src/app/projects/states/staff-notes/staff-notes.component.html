@@ -1,5 +1,5 @@
 <div class="flex flex-col h-full">
-  @if (!loadingStaffNotes && project?.staffNotes === 0) {
+  @if (!loadingStaffNotes && project?.staffNoteCount === 0) {
     <div class="flex justify-center items-center w-full h-full text-gray-300">
       No staff notes for {{ project.student.firstName }} {{ project.student.lastName }}
     </div>
