@@ -60,8 +60,27 @@
               fxLayoutAlign="start center"
               [ngSwitch]="comment.commentType"
             >
-              <div *ngSwitchCase="'status'" class="comment-status">
+              <div
+                *ngSwitchCase="'status'"
+                class="comment-status"
+                [matTooltip]="comment.createdAt | humanizedDate"
+                matTooltipPosition="above"
+                matTooltipShowDelay="1000"
+              >
                 <hr class="hr-text" [attr.data-content]="comment.text" />
+              </div>
+
+              <div
+                *ngSwitchCase="'discussed_in_class'"
+                class="w-full flex flex-col items-center"
+                [matTooltip]="comment.createdAt | humanizedDate"
+                matTooltipPosition="above"
+                matTooltipShowDelay="1000"
+              >
+                <mat-icon class="m-auto" style="color: #9696969d">group</mat-icon>
+                <div class="comment-status">
+                  <hr class="hr-text" [attr.data-content]="comment.text" />
+                </div>
               </div>
 
               <div *ngSwitchCase="'plan'" class="comment-status">
@@ -104,7 +123,13 @@
                   </f-scorm-extension-comment>
                 </div>
 
-                <div *ngSwitchCase="'text'" class="comment-text">
+               <div
+                  *ngSwitchCase="'text'"
+                  class="comment-text"
+                  [matTooltip]="comment.createdAt | humanizedDate"
+                  matTooltipPosition="above"
+                  matTooltipShowDelay="1000"
+                >
                   <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
                 </div>
 

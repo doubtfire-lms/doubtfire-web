@@ -1,0 +1,188 @@
+<div
+  [hidden]="!scanningQr"
+  class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen z-40 bg-gray-500/50 backdrop-blur overflow-hidden"
+>
+  @if (loadingStudentData) {
+    <mat-spinner
+      color="blue"
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 z-50"
+    ></mat-spinner>
+  }
+  <div [ngClass]="{'qr-reader-hide-bloat': hideQrScannerBloat}">
+    <div id="qr-reader" class="absolute top-1/2 transform -translate-y-1/2 w-full"></div>
+  </div>
+  <div
+    class="absolute top-[150px] left-1/2 transform -translate-x-1/2 w-full text-center text-white px-10 py-5 text-md font-bold pointer-events-none z-10"
+  >
+    Scan a student's QR code to instantly load their project and mark submissions.
+  </div>
+  <button
+    mat-raised-button
+    color="secondary"
+    (click)="closeQrReader()"
+    class="max-w-md my-5 absolute bottom-[150px] left-1/2 transform -translate-x-1/2"
+  >
+    {{ project ? 'Cancel' : 'Exit' }}
+  </button>
+</div>
+
+<!-- We offset the height by 145px to compensate for the header -->
+<div class="w-full flex flex-col h-[calc(100vh-145px)]">
+  <div class="task-inbox flex flex-col flex-1 justify-normal items-center w-full">
+    <div class="flex justify-between w-full relative">
+      @if (project && project?.student) {
+        <div></div>
+        <div class="absolute left-1/2 transform -translate-x-1/2 text-center">
+          <div class="text-center">
+            {{ project?.student?.firstName }} {{ project?.student?.lastName }}
+          </div>
+          <div class="text-center">
+            Target Grade: {{ getTargetTradeString(project?.targetGrade) }}
+          </div>
+        </div>
+        <button mat-icon-button color="primary" (click)="scanQrCode()">
+          <mat-icon>qr_code</mat-icon>
+        </button>
+      }
+    </div>
+
+    @if (project && !filteredTasks.length) {
+      <div class="italic text-gray-400 py-10">No tasks to discuss.</div>
+    }
+    <mat-selection-list class="m-0 p-0 h-min" #tasks>
+      @for (task of filteredTasks; track task) {
+        <mat-list-option
+          [value]="task"
+          class="clearfix w-full"
+          style="padding: 0; height: 60px"
+          togglePosition="before"
+          [selected]="task.status === 'discuss'"
+        >
+          @if (task) {
+            <div class="w-full" id="{{ task.id }}">
+              <div
+                class="inbox-entry flex items-center"
+                [ngClass]="{hover: task.hover}"
+                (mouseover)="task.hover = allowHover"
+                (mouseout)="task.hover = task.optionsOpened"
+              >
+                <span
+                  class="notification"
+                  [ngClass]="{
+                    active: task.numNewComments > 0 || task.similaritiesDetected,
+                    similarities: task.similaritiesDetected,
+                  }"
+                ></span>
+                <user-icon class="self-center" [user]="project?.student" [size]="30"> </user-icon>
+                <div class="truncate flex-1 mt-0" [hidden]="isNarrow">
+                  <h4 class="text-[15px] -mb-[2px] mt-[8px]">{{ task.definition.name }}</h4>
+                  <div class="truncate mb-0 text-[12px]">
+                    {{ task.definition.abbreviation }} -
+                    {{ getTargetTradeString(task.definition.targetGrade) }} Task
+                  </div>
+                </div>
+                @if (task.hasGrade()) {
+                  <div matTooltip="The grade assigned to the submission" matTooltipPosition="above">
+                    <mat-chip-option style="margin-right: 6px" [hidden]="isNarrow"
+                      >{{ task.gradeDesc() }}
+                    </mat-chip-option>
+                  </div>
+                }
+                <status-icon
+                  [hidden]="isNarrow"
+                  matBadge="{{ task.qualityPts }}/{{ task.definition.maxQualityPts }}"
+                  [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts"
+                  matBadgePosition="before"
+                  [status]="task.status"
+                  class="ml-3"
+                ></status-icon>
+
+                <button
+                  mat-icon-button
+                  aria-label="task-comments"
+                  [ngClass]="task.id === selectedTask?.id ? 'text-blue-500' : 'text-gray-400'"
+                  (click)="loadTaskComments($event, task)"
+                >
+                  <mat-icon>chat-bubble</mat-icon>
+                </button>
+              </div>
+              <!--/badges-->
+            </div>
+          }
+        </mat-list-option>
+      }
+
+      <!--/task-->
+    </mat-selection-list>
+    @if (project) {
+      <div class="w-full flex justify-center mt-4">
+        @if (this.allTasks?.length > 0) {
+          @if (this.filteredTasks?.length < this.allTasks?.length) {
+            <button mat-button color="primary" (click)="viewAllSubmittedTasks()">
+              Load all submitted tasks
+            </button>
+          } @else {
+            <button mat-button color="primary" (click)="viewAllFilteredTasks()">
+              Hide all submitted tasks
+            </button>
+          }
+        }
+      </div>
+    }
+
+    <!-- </cdk-virtual-scroll-viewport> -->
+  </div>
+
+  @if (project && filteredTasks.length) {
+    <div class="mt-2">
+      <div class="w-full flex justify-center items-center my-3 gap-5">
+        <button
+          class="bg-gray-100 medium-icon-button"
+          mat-fab
+          color="secondary"
+          [disabled]="!tasks.selectedOptions.selected.length"
+          (click)="setSelectedTasksStatus('fix_and_resubmit')"
+        >
+          <!-- Redo -->
+          <mat-icon>construction</mat-icon>
+        </button>
+        <button
+          class="bg-green-400 medium-icon-button"
+          mat-fab
+          [disabled]="!tasks.selectedOptions.selected.length"
+          (click)="setSelectedTasksStatus('complete')"
+        >
+          <!-- Mark as Complete -->
+          <mat-icon>done</mat-icon>
+          <!-- <mat-icon class="text-2xl leading-none m-0">done</mat-icon> -->
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (selectedTask && project) {
+    <mat-tab-group dynamicHeight (selectedTabChange)="onTabChange($event)">
+      <mat-tab label="Task Comments"></mat-tab>
+      <mat-tab label="Staff Notes"></mat-tab>
+    </mat-tab-group>
+
+    @if (footerTabView === TutorDiscussionTabView.SHOW_COMMENTS) {
+      <div #commentspanel class="task-comment-panel inbox-panel w-full flex-1">
+        <!-- <div class="w-full text-center py-4">{{ selectedTask?.definition.name }}</div> -->
+
+        <task-comments-viewer
+          style="background: white; border-radius: 12px"
+          [task]="selectedTask"
+          [project]="project"
+          class="h-full"
+          refocus-on-task-change="true"
+          ng-if="selectedTask"
+          style="padding: 0 8px 0 12px"
+        >
+        </task-comments-viewer>
+      </div>
+    } @else if (footerTabView === TutorDiscussionTabView.SHOW_STAFF_NOTES) {
+      <f-staff-notes class="min-h-[350px]" [project]="project"></f-staff-notes>
+    }
+  }
+</div>

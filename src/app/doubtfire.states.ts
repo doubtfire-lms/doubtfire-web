@@ -9,6 +9,7 @@ import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {FUsersComponent} from './admin/states/f-users/f-users.component';
 import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
+import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
@@ -442,6 +443,35 @@ const projectPlanState: NgHybridStateDeclaration = {
   },
 };
 
+const TutorDiscussionState: NgHybridStateDeclaration = {
+  name: 'tutor-discussion',
+  url: '/tutor-discussion?unitId&projectId',
+  views: {
+    main: {
+      component: TutorDiscussionComponent,
+    },
+  },
+  resolve: {
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+    projectId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.projectId;
+      },
+    ],
+  },
+  data: {
+    pageTitle: 'Tutor Discussion',
+    task: 'Tutor Discussion',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
 const jplagReportViewerState: NgHybridStateDeclaration = {
   name: 'jplag-report-viewer',
   url: '/jplag-report-viewer',
@@ -476,5 +506,6 @@ export const doubtfireStates = [
   ScormPlayerStudentReviewState,
   SuccessCloseState,
   projectPlanState,
+  TutorDiscussionState,
   jplagReportViewerState,
 ];

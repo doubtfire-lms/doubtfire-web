@@ -259,12 +259,18 @@ import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/l
 import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task-feedback-templates/task-feedback-templates.component';
 import {NestedCsvDownloadModalComponent} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.component';
 import {NestedCsvDownloadModalService} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.service';
+import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
+import {QrModalComponent} from './common/modals/qr-modal/qr-modal.component';
 import {TaskIlosCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-ilos-card/task-ilos-card.component';
 import {TaskDateSliderComponent} from './common/modals/date-change-modal/task-date-slider.component';
 import {SpecConModalComponent} from './common/modals/spec-con-modal/spec-con-modal.component';
 import {SpecConModalService} from './common/modals/spec-con-modal/spec-con-modal.service';
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
+import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
+import {StaffNoteService} from './api/services/staff-note.service';
+import {LocalizedDatePipe} from './common/pipes/localized-date.pipe';
+import {StaffNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/staff-notes-view/staff-notes-view.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -397,8 +403,13 @@ const MY_DATE_FORMAT = {
     LearningOutcomeEditorComponent,
     TaskFeedbackTemplatesComponent,
     NestedCsvDownloadModalComponent,
+    TutorDiscussionComponent,
     TaskIlosCardComponent,
     JplagReportViewerComponent,
+    StaffNotesComponent,
+    StaffNotesViewComponent,
+    QrModalComponent,
+    LocalizedDatePipe,
   ],
   // Services we provide
   providers: [
@@ -483,6 +494,7 @@ const MY_DATE_FORMAT = {
     }),
     FeedbackTemplateService,
     NestedCsvDownloadModalService,
+    StaffNoteService,
   ],
   imports: [
     FlexLayoutModule,

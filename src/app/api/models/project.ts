@@ -23,6 +23,7 @@ import {
 } from './doubtfire-model';
 import { TaskOutcomeAlignment } from './task-outcome-alignment';
 import { AlertService } from 'src/app/common/services/alert.service';
+import { StaffNote } from './staff-note';
 
 export class Project extends Entity {
   public id: number;
@@ -52,6 +53,7 @@ export class Project extends Entity {
 
   public burndownChartData: { key: string; values: number[] }[];
   public readonly taskCache: EntityCache<Task> = new EntityCache<Task>();
+  public readonly staffNoteCache: EntityCache<StaffNote> = new EntityCache<StaffNote>();
   public readonly tutorialEnrolmentsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
   public readonly groupCache: EntityCache<Group> = new EntityCache<Group>();
   public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> =
@@ -61,6 +63,8 @@ export class Project extends Entity {
   public gradeRationale: string;
 
   public similarityFlag: boolean = false;
+
+  public staffNoteCount: number;
 
   public constructor(unit?: Unit) {
     super();

@@ -5,7 +5,8 @@ import { Task } from 'src/app/api/models/task';
 import { TaskStatusEnum } from 'src/app/api/models/task-status';
 import { TaskService } from 'src/app/api/services/task.service';
 import { ExtensionModalService } from 'src/app/common/modals/extension-modal/extension-modal.service';
-
+import { QrModalService } from 'src/app/common/modals/qr-modal/qr-modal.service';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
@@ -19,6 +20,8 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private extensions: ExtensionModalService,
     private taskService: TaskService,
     private router: UIRouter,
+    private qrModalService: QrModalService,
+    private doubtfireConstants: DoubtfireConstants,
   ) {}
 
   @Input() task: Task;
@@ -63,6 +66,12 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
 
   updateFilesInSubmission(): void {
     this.task.presentTaskSubmissionModal(this.task.status, true);
+  }
+
+  openDiscussionQrCode(): void {
+    const hostName = this.doubtfireConstants.API_URL.replace('/api', '');
+    const url = `${hostName}/tutor-discussion?unitId=${this.task.unit.id}&projectId=${this.task.project.id}`;
+    this.qrModalService.show(url);
   }
 
   applyForExtension(): void {

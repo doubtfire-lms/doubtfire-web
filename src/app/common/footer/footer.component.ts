@@ -85,6 +85,10 @@ export class FooterComponent implements OnInit {
     this.selectedTaskService.showSimilarity();
   }
 
+  viewStaffNotes() {
+    this.selectedTaskService.showStaffNotes();
+  }
+
   getJplagReport() {
     if (!this.selectedTask?.definition) {
       return;

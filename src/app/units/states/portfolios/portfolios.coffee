@@ -55,14 +55,18 @@ angular.module('doubtfire.units.states.portfolios', [])
       title: "View Progress"
       subtitle: "See the progress of the student"
       seq: 1
+    viewStaffNotes:
+      title: "View Staff Notes"
+      subtitle: "See notes of the student add by staff"
+      seq: 2
     viewPortfolio:
       title: "View Portfolio"
       subtitle: "See the portfolio of the student"
-      seq: 2
+      seq: 3
     assessPortfolio:
       title: "Assess Portfolio"
       subtitle: "Enter a grade for the student"
-      seq: 3
+      seq: 4
 
   $scope.setActiveTab($scope.tabs.selectStudent)
 

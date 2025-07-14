@@ -76,6 +76,20 @@
       >
         <mat-icon>question_answer</mat-icon>
       </button>
+
+      <div class="ml-5 border-l-2 border-gray-300">
+        <button
+          [disabled]="selectedTask === undefined"
+          mat-icon-button
+          matTooltip="Discussed in class"
+          matTooltipPosition="above"
+          aria-label=""
+          class="button ml-5"
+          (click)="selectedTask?.markAsDiscussed()"
+        >
+          <mat-icon>group</mat-icon>
+        </button>
+      </div>
     </span>
 
     <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
@@ -98,6 +112,30 @@
           </button>
         </div>
       }
+      @if (selectedTask?.project) {
+        <div class="relative inline-block">
+          @if (selectedTask.project.staffNoteCount > 0) {
+            <div [matBadge]="selectedTask.project.staffNoteCount"></div>
+          }
+          <button
+            #similaritiesButton
+            mat-icon-button
+            [matTooltip]="
+              'Student has ' +
+              (selectedTask.project.staffNoteCount || 'no') +
+              ' staff note' +
+              (selectedTask.project.staffNoteCount !== 1 ? 's' : '')
+            "
+            matTooltipPosition="above"
+            aria-label="View detected similarities"
+            class="button small-button"
+            (click)="viewStaffNotes()"
+          >
+            <mat-icon class="small-icon">comment</mat-icon>
+          </button>
+        </div>
+      }
+
       <button
         [disabled]="selectedTask === undefined"
         mat-icon-button

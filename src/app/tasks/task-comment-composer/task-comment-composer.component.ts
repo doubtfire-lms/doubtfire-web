@@ -141,12 +141,7 @@ export class TaskCommentComposerComponent
     }
   }
 
-  ngOnInit() {
-    window.addEventListener('storage', (event) => {
-      console.log('[STORAGE-EVENT]', event);
-    });
-    this.testLocalStorage();
-  }
+  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
     this.showFeedbackTemplatePicker = false;
@@ -183,9 +178,6 @@ export class TaskCommentComposerComponent
         const inputElement = this.input?.first?.nativeElement;
         if (inputElement) {
           const text = inputElement.innerText.trim();
-          console.log('text to save:',
-            { taskId: this.task.id, length: text.length, preview: text.substring(0, 20) });
-
           if (text && !this.hasSubmittedComment) {
             localStorage.setItem(this.getDraftKey(this.task), text);
           } else {
@@ -195,22 +187,6 @@ export class TaskCommentComposerComponent
       }
     }
   }
-
-  private testLocalStorage() {
-    try {
-      const testKey = 'test_draft_' + Date.now();
-      localStorage.setItem(testKey, 'test_value');
-      const value = localStorage.getItem(testKey);
-      console.log('LocalStorage test:', value === 'test_value' ? 'Working' : 'Not working');
-      localStorage.removeItem(testKey);
-    } catch (e) {
-      console.error('LocalStorage error:', e);
-    }
-  }
-
-
-
-
 
   // Update onInputChange to reset submitted status
   onInputChange(event: Event) {
@@ -281,18 +257,16 @@ export class TaskCommentComposerComponent
 
 
       if (!this.hasContent(raw)) {
-        console.log('No text to save for task', task.id ?? 'without ID');
-        console.log('Removing draft from localStorage, key:', draftKey);
+        // No text to save, removing draft from localStorage
         this.taskDraftContents.delete(draftKey);
         localStorage.removeItem(draftKey);
         return;
       }
 
       const text = raw.trim();
-      console.log('Saving draft for', draftKey, 'preview:', text);
+      // Save comment draf
       this.taskDraftContents.set(draftKey, text);
       localStorage.setItem(draftKey, text);
-
     } catch (error) {
       console.error('saveDraftForTask error:', error);
     }
@@ -313,11 +287,8 @@ export class TaskCommentComposerComponent
     const draftKey = this.getDraftKey(task);
     try {
       const draft = localStorage.getItem(draftKey);
-      console.log('Draft found?', draft ? 'Yes' : 'No',
-        draft ? { length: draft.length, preview: draft.substring(0, 20) } : '');
 
       if (!draft) {
-        console.log('No draft found for task', task.id || 'without ID');
         return;
       }
 
@@ -570,28 +541,23 @@ export class TaskCommentComposerComponent
 
     this.taskCommentService.addComment(this.task, text, 'text', originalComment).subscribe({
       next: (tc: TaskComment) => {
-
         const inputEl = this.input.first.nativeElement;
         const originalOnInput = inputEl.oninput;
         inputEl.oninput = null;
 
         this.input.first.nativeElement.innerText = '';
-        console.log('[DRAFT-DEBUG] Cleared input field');
 
         setTimeout(() => {
           inputEl.oninput = originalOnInput;
         }, 100);
 
-
         if (this.task?.id) {
           localStorage.removeItem(this.getDraftKey(this.task));
-          console.log('[DRAFT-DEBUG] Double-checked draft removal from localStorage');
         }
       },
       error: (error: ApiError) => {
         console.log('[DRAFT-DEBUG] Error submitting comment:', error);
         this.hasSubmittedComment = false;
-        console.log('[DRAFT-DEBUG] Reset hasSubmittedComment flag due to error');
 
         this.alerts.error(error.error || error.message || 'Failed to add comment', 2000);
 

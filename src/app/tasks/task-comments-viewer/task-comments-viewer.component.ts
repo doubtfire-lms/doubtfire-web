@@ -1,10 +1,27 @@
-import { Component, OnInit, Input, Inject, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { commentsModal } from 'src/app/ajs-upgraded-providers';
-import { Task, Project, TaskComment, TaskCommentService, UserService } from 'src/app/api/models/doubtfire-model';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { TaskCommentComposerData } from '../task-comment-composer/task-comment-composer.component';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { FeedbackTemplateService } from 'src/app/api/services/feedback-template.service';
+import {
+  Component,
+  OnInit,
+  Input,
+  Inject,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
+import {commentsModal} from 'src/app/ajs-upgraded-providers';
+import {
+  Task,
+  Project,
+  TaskComment,
+  TaskCommentService,
+  UserService,
+  TaskService,
+} from 'src/app/api/models/doubtfire-model';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {TaskCommentComposerData} from '../task-comment-composer/task-comment-composer.component';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
+import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
 
 @Component({
   selector: 'task-comments-viewer',
@@ -31,65 +48,110 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
     private taskCommentService: TaskCommentService,
     private feedbackTemplateService: FeedbackTemplateService,
     private userService: UserService,
+    private taskService: TaskService,
     private constants: DoubtfireConstants,
-    @Inject(commentsModal) private commentsModalRef: any,
+    @Inject(commentsModal) private commentsModalRef: CommentsModalService,
     private alerts: AlertService,
   ) {
     const self = this;
     this.taskCommentService.commentAdded$.subscribe((tc: TaskComment) => {
       self.scrollDown();
     });
+    this.taskService.taskStatusUpdated$.subscribe((task) => {
+      this.fetchComments(task, false);
+    });
   }
 
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges) {
-    this.loading = true;
-
     // Must have project for task to be mapped
     if (changes.task?.currentValue?.project != null) {
       this.project = changes.task.currentValue.project;
-      this.taskCommentService
-        .query(
-          {
-            projectId: this.project.id,
-            taskDefinitionId: this.task.definition.id,
-          },
-          this.task,
-          {
-            cache: this.task.commentCache,
-            constructorParams: this.task,
-          },
-        )
-        .subscribe((comments) => {
-          // this.task.comments = comments;
-
-          this.task.refreshCommentData();
-
-          const lastReadComment: TaskComment = this.task.comments
-            .slice()
-            .reverse()
-            .find((comment: TaskComment) => comment.recipientReadTime != null && !comment.recipientIsMe);
-
-          setTimeout(() => {
-            this.loading = false;
-            this.scrollDown();
-          }, 1000);
-
-          if (lastReadComment) {
-            lastReadComment.lastRead = true;
-          }
-        });
-
-      if (this.project.unit.currentUserIsStaff) {
-        this.feedbackTemplateService
-          .query({contextType: 'task_definitions', contextId: this.task.definition.id}, {})
-          .subscribe({
-            error: () => this.alerts.error('Error loading task feedback templates.'),
-          });
-      }
+      this.fetchComments(this.task, true, true);
     } else {
       this.loading = false;
+    }
+  }
+
+  fetchComments(task: Task, useCache: boolean = true, fetchAfterCache: boolean = false) {
+    if (!task.comments.length) {
+      // If the cache is empty we know the query will attempt to fetch, so we can avoid fetching a second time
+      useCache = false;
+      fetchAfterCache = false;
+    }
+
+    const request$ = !useCache
+      ? this.taskCommentService.fetchAll({
+          projectId: this.project.id,
+          taskDefinitionId: task.definition.id,
+        })
+      : this.taskCommentService.query(
+          {
+            projectId: this.project.id,
+            taskDefinitionId: task.definition.id,
+          },
+          task,
+          {
+            cache: task.commentCache,
+            constructorParams: task,
+          },
+        );
+
+    request$.subscribe((comments) => {
+      for (const comment of comments) {
+        const existingComment = task.commentCache.get(comment.id);
+        comment.task = task;
+        if (!existingComment) {
+          // Update the cache with any new comments
+          task.commentCache.add(comment);
+        } else if (
+          existingComment.recipientReadTime !== comment.recipientReadTime ||
+          existingComment.text !== comment.text
+        ) {
+          // Update cached read receipts or edited messages
+          task.commentCache.set(comment.id, comment);
+        }
+      }
+
+      for (const cachedComment of task.comments) {
+        if (!comments.find((c) => c.id === cachedComment.id)) {
+          // This comment is in cache but not in the latest comments list
+          task.commentCache.delete(cachedComment.id);
+        }
+      }
+
+      task.refreshCommentData();
+
+      const lastReadComment: TaskComment = task.comments
+        .slice()
+        .reverse()
+        .find(
+          (comment: TaskComment) => comment.recipientReadTime != null && !comment.recipientIsMe,
+        );
+
+      setTimeout(() => {
+        this.loading = false;
+        this.scrollDown();
+        if (useCache && fetchAfterCache) {
+          this.fetchComments(task, false, false);
+        }
+      }, 100);
+
+      if (lastReadComment) {
+        for (const comment of task.comments) {
+          comment.lastRead = false;
+        }
+        lastReadComment.lastRead = true;
+      }
+    });
+
+    if (this.project.unit.currentUserIsStaff) {
+      this.feedbackTemplateService
+        .query({contextType: 'task_definitions', contextId: task.definition.id}, {})
+        .subscribe({
+          error: () => this.alerts.error('Error loading task feedback templates.'),
+        });
     }
   }
 
@@ -161,7 +223,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
 
   openCommentsModal(comment: TaskComment) {
     const resourceUrl = comment.attachmentUrl;
-    this.commentsModalRef.show(resourceUrl, comment.commentType);
+    this.commentsModalRef.show(resourceUrl, comment);
   }
 
   shouldShowAuthorIcon(commentType: string) {
@@ -170,7 +232,8 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
       commentType === 'status' ||
       commentType == 'assessment' ||
       commentType === 'scorm' ||
-      commentType === 'scorm_extension'
+      commentType === 'scorm_extension' ||
+      commentType === 'discussed_in_class'
     );
   }
 

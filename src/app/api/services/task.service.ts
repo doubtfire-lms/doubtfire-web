@@ -7,15 +7,17 @@ import {
   TaskStatusUiData,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import { Injectable } from '@angular/core';
-import { CachedEntityService, EntityCache, RequestOptions } from 'ngx-entity-service';
-import { HttpClient } from '@angular/common/http';
+import {EventEmitter, Injectable} from '@angular/core';
+import {CachedEntityService, EntityCache, RequestOptions} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
-import { MappingFunctions } from './mapping-fn';
-import { Observable, map, tap } from 'rxjs';
+import {MappingFunctions} from './mapping-fn';
+import {Observable, map, tap} from 'rxjs';
 
 @Injectable()
 export class TaskService extends CachedEntityService<Task> {
+  public readonly taskStatusUpdated$: EventEmitter<Task> = new EventEmitter();
+
   protected readonly endpointFormat = '/projects/:projectId:/task_def_id/:taskDefId:';
 
   private readonly taskInboxEndpoint = '/units/:id:/tasks/inbox';
@@ -173,6 +175,10 @@ export class TaskService extends CachedEntityService<Task> {
 
   public statusClass(status: TaskStatusEnum): string {
     return TaskStatus.statusClass(status);
+  }
+
+  public notifyStatusChange(task: Task): void {
+    this.taskStatusUpdated$.emit(task);
   }
 
   public readonly statusColors: Map<string, string> = TaskStatus.STATUS_COLORS;
