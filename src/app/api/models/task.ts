@@ -711,7 +711,7 @@ export class Task extends Entity {
         options,
       )
       .subscribe({
-        next: (response) => {
+        next: (_response) => {
           taskService.notifyStatusChange(this);
           alerts.success('Task successfully marked as discussed in class.', 4000);
         },

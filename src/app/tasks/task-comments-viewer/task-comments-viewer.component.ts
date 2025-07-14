@@ -232,7 +232,8 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
       commentType === 'status' ||
       commentType == 'assessment' ||
       commentType === 'scorm' ||
-      commentType === 'scorm_extension'
+      commentType === 'scorm_extension' ||
+      commentType === 'discussed_in_class'
     );
   }
 
