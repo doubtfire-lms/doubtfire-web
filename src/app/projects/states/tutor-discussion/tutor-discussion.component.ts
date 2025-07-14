@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {MatSelectionList} from '@angular/material/list';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {StateService, UIRouter} from '@uirouter/core';
@@ -12,6 +12,7 @@ import {
   TaskStatusEnum,
   Unit,
   UnitService,
+  UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
@@ -24,9 +25,9 @@ enum TutorDiscussionTabView {
   selector: 'f-tutor-discussion',
   templateUrl: './tutor-discussion.component.html',
   styleUrl: './tutor-discussion.component.scss',
-  // encapsulation: ViewEncapsulation.None, // enables custom material-ui css
+  encapsulation: ViewEncapsulation.None, // enables custom material-ui css
 })
-export class TutorDiscussionComponent implements OnInit {
+export class TutorDiscussionComponent implements AfterViewInit {
   @Input() unitId: number;
   @Input() projectId: number;
 
@@ -54,6 +55,7 @@ export class TutorDiscussionComponent implements OnInit {
   constructor(
     private unitService: UnitService,
     private authService: AuthenticationService,
+    private userService: UserService,
     private projectService: ProjectService,
     private gradeService: GradeService,
     private state: StateService,
@@ -75,15 +77,18 @@ export class TutorDiscussionComponent implements OnInit {
   }
 
   public showStaffNotes() {
-    console.log('showing staff notes:)');
     this.footerTabView = TutorDiscussionTabView.SHOW_STAFF_NOTES;
   }
 
-  public ngOnInit(): void {
+  public ngAfterViewInit(): void {
     this.authService.afterAuthCall((result) => {
       if (!result) {
         return this.state.go('sign_in');
       } else {
+        if (this.userService.currentUser.systemRole === 'Student') {
+          // Avoid prompting students for camera permissions before redirecting to unauthorised state
+          return;
+        }
         if (!this.project) {
           if (this.unitId && this.projectId) {
             this._projectId = Number(this.projectId);
