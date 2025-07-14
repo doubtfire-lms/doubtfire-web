@@ -16,119 +16,6 @@ $my-palette: mat.define-palette($md-formatif);
   border-right-width: 1px;
 }
 
-// ::ng-deep .cdk-virtual-scroll-content-wrapper {
-//   width: 100%;
-// }
-
-// .task-inbox.full-width {
-//   .inbox-entry {
-//     padding-right: 8px;
-//     padding-left: 6px;
-//     width: 100%;
-//     height: 100%;
-//   }
-// }
-
-$warn-color: #f44336;
-
-// .pin-container {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-
-//   .mat-icon {
-//     color: #bcc0c4;
-//   }
-// }
-
-// .task-inbox {
-//   height: 100%;
-//   overflow-x: hidden;
-// }
-
-// .task-inbox.narrow-width {
-//   max-width: 60px;
-//   width: 60px;
-//   min-width: 60px;
-//   margin: 0;
-
-//   .inbox-entry {
-//     padding-right: 0px;
-//     width: 45px;
-//     height: 100%;
-//     padding-left: 5px;
-//   }
-// }
-
-// .scrollable {
-//   height: 100%;
-//   @include scrollable();
-// }
-
-// .openSearchDialog {
-//   border-radius: 40px;
-//   width: 40px;
-//   height: 40px;
-//   background-color: var(--background-gray);
-// }
-
-// .omnisearch {
-//   background-color: var(--background-gray);
-//   font-size: 15px;
-//   padding-right: 10px;
-//   text-align: left;
-
-//   &.expanded {
-//     height: 100%;
-//   }
-
-//   &.mobile {
-//   }
-
-//   .search {
-//     background-color: transparent;
-//     border: hidden;
-//     outline: none;
-//   }
-
-//   .mdc-icon-button {
-//     display: flex;
-//   }
-// }
-
-.new_comments {
-  font-size: 10px;
-  font-weight: 700;
-
-  width: 2em;
-  height: 2em;
-
-  margin-left: 10px;
-  box-sizing: initial;
-
-  background: $warn-color;
-  -webkit-font-smoothing: antialiased;
-  color: #fff;
-  text-align: center;
-  border-radius: 50%;
-
-  line-height: 2em;
-  box-sizing: content-box;
-}
-
-// .task-badges {
-//   width: 50px;
-//   height: 35px;
-// }
-
-// .full-width {
-//   width: 100%;
-// }
-
-.search-settings-panel {
-  background-color: transparent;
-}
-
 :host ::ng-deep div.mat-expansion-panel-body {
   padding-right: 0 !important;
 }
@@ -136,31 +23,6 @@ $warn-color: #f44336;
 user-icon {
   margin-right: 10px;
 }
-
-// .muted {
-//   color: rgba(0, 0, 0, 0.5);
-// }
-
-// .task-list-data {
-//   margin-top: 0px;
-//   .student-name {
-//     font-size: 15px;
-//     margin-bottom: -2px;
-//     margin-top: 8px;
-//   }
-
-//   .task-details {
-//     margin-bottom: 0px;
-//     font-size: 12px;
-//   }
-// }
-
-// .overflow {
-//   min-width: 40px;
-//   width: 40px;
-//   margin-right: -10px;
-//   margin-left: -10px;
-// }
 
 .mat-mdc-list-item {
   border: none;
@@ -194,43 +56,14 @@ user-icon {
   cursor: pointer;
 }
 
-// .mat-mdc-list-item .item-content.selected {
-//   background-color: var(--background-gray);
-// }
+// .tasks-viewport.list-group-item-text-extended {
+//   margin-top: 0.5em;
+//   line-height: 1.3;
 
-// .task-inbox.narrow-width .mat-mdc-list-item .item-content.selected {
-//   margin-right: 12px;
-// }
-
-// :host {
-//   ::ng-deep.mat-pseudo-checkbox {
-//     display: none !important;
-//   }
-// }
-
-.tasks-viewport.list-group-item-text-extended {
-  margin-top: 0.5em;
-  line-height: 1.3;
-
-  p {
-    margin-bottom: 0;
-    padding: 0;
-    color: gray;
-  }
-}
-
-// .tasks-viewport {
-//   height: 100%;
-// }
-
-// .center-task-list {
-//   align-self: center;
-//   position: absolute;
-//   top: calc(50% + 40px);
-
-//   .mat-icon {
-//     // font-size: 50px;
-//     color: rgba(0, 0, 0, 0.2);
+//   p {
+//     margin-bottom: 0;
+//     padding: 0;
+//     color: gray;
 //   }
 // }
 
@@ -243,29 +76,6 @@ user-icon {
   width: 75px !important;
   height: 75px !important;
 }
-// .large-icon-button {
-//   width: 100px !important;
-//   height: 100px !important;
-//   padding: 0px !important;
-//   // display: inline-flex !important;
-//   // align-items: center;
-//   // justify-content: center;
-
-//   font-size: 35px;
-//   // & > *[role='img'] {
-//   //   width: 75px;
-//   //   height: 75px;
-//   //   font-size: 35px;
-//   //   svg {
-//   //     width: 75px;
-//   //     height: 75px;
-//   //   }
-//   // }
-//   .mat-mdc-button-touch-target {
-//     width: 100px !important;
-//     height: 100px !important;
-//   }
-// }
 
 // Hide auto-injected QR scanner elements that are not needed in the UI
 // We only hide this if we found a "back camera" on user's device
