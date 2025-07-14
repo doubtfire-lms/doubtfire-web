@@ -69,8 +69,8 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   }
 
   openDiscussionQrCode(): void {
-    const url = `${this.doubtfireConstants.API_URL}/tutor/marking?unitId=${this.task.unit.id}&projectId=${this.task.project.id}`;
-    console.log(url);
+    const hostName = this.doubtfireConstants.API_URL.replace('/api', '');
+    const url = `${hostName}/tutor-discussion?unitId=${this.task.unit.id}&projectId=${this.task.project.id}`;
     this.qrModalService.show(url);
   }
 
