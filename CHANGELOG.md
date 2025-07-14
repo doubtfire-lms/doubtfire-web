@@ -2,6 +2,62 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-7](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-6...v10.0.0-7) (2025-07-14)
+
+
+### Features
+
+* add icon to discussed in class update ([c11cec0](https://github.com/macite/doubtfire-deploy/commit/c11cec02ece3b6bf7c2e36998ee2fa2a3572bc58))
+* add jplag report download button to student submission tutor teacher footer view ([2ec1b06](https://github.com/macite/doubtfire-deploy/commit/2ec1b06b5330c5e142cc3fc01c49c2aded5411cb))
+* add tutor discussion qr scanning ([e549c4e](https://github.com/macite/doubtfire-deploy/commit/e549c4e0ac9377bd864c81122cffce004681c845))
+* auto send dicussed in class comment ([fbf90c7](https://github.com/macite/doubtfire-deploy/commit/fbf90c7fdfa440f565e2c8abae4ae62bc1fe70eb))
+* **comments:** enhanced drafting for messages using localStorage ([f331734](https://github.com/macite/doubtfire-deploy/commit/f33173409f0804da4de24e1e6ec53971896b28e9))
+* **comments:** enhanced drafting for messages using localStorage ([b6f6831](https://github.com/macite/doubtfire-deploy/commit/b6f683175db6ab9549b8b4481ab54bb89700016a))
+* edit staff note ([b2d8ba4](https://github.com/macite/doubtfire-deploy/commit/b2d8ba41b1dc467a03728d5df4ede6ac6fb3c9a1))
+* fetch new comments on task switching and status updates ([1b7da69](https://github.com/macite/doubtfire-deploy/commit/1b7da692423acaf53b96229b665b971360bacc89))
+* force scanner to use back camera, enhance ux ([e5799b1](https://github.com/macite/doubtfire-deploy/commit/e5799b18ec0603123b6a99b3733919d2611b4fbd))
+* highlight selected task ([25b361f](https://github.com/macite/doubtfire-deploy/commit/25b361f699ad54e45c32167ccae230635a6b2758))
+* indicate reply has been deleted ([c3e288a](https://github.com/macite/doubtfire-deploy/commit/c3e288ae95e2fa5fd43bdf3922e81501f26e1baf))
+* init qr tutor marking state ([41d1d61](https://github.com/macite/doubtfire-deploy/commit/41d1d61a417573e33c4344898ae6d7562c459004))
+* init reply to button ([100a533](https://github.com/macite/doubtfire-deploy/commit/100a5335aa7f37f4477b9d9b8f43806ca32c640b))
+* init staff notes ([c7eed99](https://github.com/macite/doubtfire-deploy/commit/c7eed9903bcc4463f4d0b52889e0d3d9045b03ba))
+* jplag report download button in task explorer view ([16670a2](https://github.com/macite/doubtfire-deploy/commit/16670a27d5dc544ae828da85cda48358cab4d75e))
+* link note that is being replied to ([27726b3](https://github.com/macite/doubtfire-deploy/commit/27726b3f1368031c24bf069bde4f930dd02c1e80))
+* load jplag report viewer into iframe ([1360438](https://github.com/macite/doubtfire-deploy/commit/13604383b403dbf82b013786127a72fab08ac895))
+* localized date time pipe ([5cf752b](https://github.com/macite/doubtfire-deploy/commit/5cf752baf1b9de6105ea2a951ec75818ce1e0cfc))
+* mark task as discussed ([a54f94f](https://github.com/macite/doubtfire-deploy/commit/a54f94f045b4280d0f13304a6b5728b62fc4107e))
+* message tooltip timestamps ([2d79007](https://github.com/macite/doubtfire-deploy/commit/2d79007c033d56218326f55dd8d6821e17fec74f))
+* native jplag report viewer state ([8f6bc6a](https://github.com/macite/doubtfire-deploy/commit/8f6bc6ae5b80502b5d81b65bab2be3aaa56ce42f))
+* qr code generation for student projects ([6f8b94f](https://github.com/macite/doubtfire-deploy/commit/6f8b94f7c0b48d292dfe28871ff7ae7fda86b2b9))
+* redirect back to home if exiting the scanner ([71f09ae](https://github.com/macite/doubtfire-deploy/commit/71f09ae77da6f0a2f5ed135071c92c110940c2f5))
+* reply to ui ([40078df](https://github.com/macite/doubtfire-deploy/commit/40078df477bd300c9b8897976d10658fb91a6d04))
+* show number of notes project has ([f3d4c4c](https://github.com/macite/doubtfire-deploy/commit/f3d4c4c00128ca00dec18ea9950c01df25b75b61))
+* staff note deletion ([0ab1ebf](https://github.com/macite/doubtfire-deploy/commit/0ab1ebff3964d8665d9560bf3007a2d30109ee37))
+* switch to staff note tab view ([65f8c71](https://github.com/macite/doubtfire-deploy/commit/65f8c71bd37ef71481bd14f591af263470987a6e))
+* task and unit ilos ui ([1cef438](https://github.com/macite/doubtfire-deploy/commit/1cef438b458efcee4adce01cc81648d32bb97f35))
+* view filtered tasks only button ([a4e422d](https://github.com/macite/doubtfire-deploy/commit/a4e422dcf3dfa329b83cd7e3d521fc3665c9c45f))
+* view staff notes in portfolio assessment ([020ab5b](https://github.com/macite/doubtfire-deploy/commit/020ab5b9a98a401835e41bee7abc3dee70978c07))
+
+
+### Bug Fixes
+
+* allow oversized images to be scrollable ([8ff67d2](https://github.com/macite/doubtfire-deploy/commit/8ff67d2f8e483813bc3af0dc2429b58fe16f8f2b))
+* avoid fetching twice if no comments are cached yet ([d219d49](https://github.com/macite/doubtfire-deploy/commit/d219d49ca6457119084d4c3d2cb39343dece5aa0))
+* decode url from qr code ([31822ab](https://github.com/macite/doubtfire-deploy/commit/31822abaa4c66e2dcbc3ab74c71fe0f6e9b5861d))
+* discussed context type ([d87e620](https://github.com/macite/doubtfire-deploy/commit/d87e620ab54aa75f03d8295f0319798214ad39f0))
+* display load more button only if there are more tasks ([84d5bca](https://github.com/macite/doubtfire-deploy/commit/84d5bcaa4f6329ed34f30a58d88e18fce9c3a76d))
+* enable unit name text wrapping ([5f779b8](https://github.com/macite/doubtfire-deploy/commit/5f779b8cb626ada2e8b6488812424813cc5e9913))
+* ensure jplag iframe extends to full height ([7ae6466](https://github.com/macite/doubtfire-deploy/commit/7ae6466e6586ceaf58edec8a741c9e2f8a737c0c))
+* ensure scanner doesn't break on ios ([a0b010e](https://github.com/macite/doubtfire-deploy/commit/a0b010ef31161b6cf2ab1038deb82c199ffb9ecb))
+* improve task similarity notice ui ([ba26841](https://github.com/macite/doubtfire-deploy/commit/ba2684192c2a8a139237affc4c0702af901f1808))
+* match comments-modals's original max width ([7edb445](https://github.com/macite/doubtfire-deploy/commit/7edb445d7bc5f61daba1b47a3a36b633b551267e))
+* merge conflict ([e599fe3](https://github.com/macite/doubtfire-deploy/commit/e599fe35ec338cfd7f5ffc419a3379d3f3160312))
+* show edit icon for authors only ([a83a875](https://github.com/macite/doubtfire-deploy/commit/a83a875f25efbe9297fe76d773ef4ff55456bcf8))
+* support markdown ([3ac10f6](https://github.com/macite/doubtfire-deploy/commit/3ac10f6cab39dab42ce19f61029488d220786703))
+* **task-comment-composer:** deleting the key when text is empty ([6ef91e0](https://github.com/macite/doubtfire-deploy/commit/6ef91e0ddb119e03dbaf2b6e53e450e5bcc58b8b))
+* update discussion route ([b5c35d9](https://github.com/macite/doubtfire-deploy/commit/b5c35d9cb0be11a6c6cbd49d9e6aee37bb5b83cd))
+* welcome page redirect issues ([14ad26e](https://github.com/macite/doubtfire-deploy/commit/14ad26e8ed4acf6f77043447a2691360fd62ce51))
+
 ## [10.0.0-6](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-5...v10.0.0-6) (2025-06-13)
 
 
