@@ -24,7 +24,7 @@ enum TutorDiscussionTabView {
   selector: 'f-tutor-discussion',
   templateUrl: './tutor-discussion.component.html',
   styleUrl: './tutor-discussion.component.scss',
-  encapsulation: ViewEncapsulation.None, // enables custom material-ui css
+  // encapsulation: ViewEncapsulation.None, // enables custom material-ui css
 })
 export class TutorDiscussionComponent implements OnInit {
   @Input() unitId: number;
@@ -249,7 +249,7 @@ export class TutorDiscussionComponent implements OnInit {
     this.decodeQrCode('{"unitId":2,"projectId":20}');
   }
 
-  statusesToFetch: TaskStatusEnum[] = [
+  statusesToInclude: TaskStatusEnum[] = [
     'demonstrate',
     'ready_for_feedback',
     'discuss',
@@ -265,7 +265,7 @@ export class TutorDiscussionComponent implements OnInit {
 
   public viewAllFilteredTasks() {
     const discussionTasks = this.project?.tasks.filter((task) =>
-      this.statusesToFetch.includes(task.status),
+      this.statusesToInclude.includes(task.status),
     );
     this.filteredTasks = [...discussionTasks];
   }
@@ -286,7 +286,7 @@ export class TutorDiscussionComponent implements OnInit {
       })
       .then((project) => {
         const discussionTasks = project.tasks.filter((task) =>
-          this.statusesToFetch.includes(task.status),
+          this.statusesToInclude.includes(task.status),
         );
         this.filteredTasks = [...discussionTasks];
         this.allTasks = [
