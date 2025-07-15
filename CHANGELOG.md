@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-10](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-9...v10.0.0-10) (2025-07-15)
+
 ## [10.0.0-9](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-8...v10.0.0-9) (2025-07-15)
 
 ## [10.0.0-8](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-7...v10.0.0-8) (2025-07-15)
