@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-12](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-11...v10.0.0-12) (2025-07-15)
+
+
+### Bug Fixes
+
+* exclude jplag route from ngsw cache ([69b55bb](https://github.com/macite/doubtfire-deploy/commit/69b55bb85d8583b6935e08c91aad63e98e6ce887))
+
 ## [10.0.0-11](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-10...v10.0.0-11) (2025-07-15)
 
 ## [10.0.0-10](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-9...v10.0.0-10) (2025-07-15)
