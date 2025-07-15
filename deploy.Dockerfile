@@ -17,7 +17,7 @@ RUN npm run-script deploy
 
 
 ## STAGE 2: Host ###
-FROM nginx:1.21.5-alpine
+FROM nginx:1.29.0-alpine
 
 # Remove the default Nginx configuration file
 RUN rm -v /etc/nginx/nginx.conf
