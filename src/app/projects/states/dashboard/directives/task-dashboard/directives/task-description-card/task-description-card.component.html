@@ -7,7 +7,9 @@
   </mat-card-header>
   <mat-card-content>
     <div class="markdown-to-pdf" [innerHTML]="taskDef?.description | marked"></div>
-    <f-task-date-slider [task]="task" />
+    @if (task) {
+      <f-task-date-slider [task]="task" />
+    }
     <ul>
       <li>{{ grades.names[taskDef?.targetGrade] }} Task</li>
       <li>Start Date &mdash; Aim to start this task by {{ startDate() | date: 'EEE d MMM' }}.</li>
