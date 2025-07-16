@@ -72,15 +72,23 @@
 
               <div
                 *ngSwitchCase="'discussed_in_class'"
-                class="w-full flex flex-col items-center"
+                class="w-full flex flex-col items-center my-2"
                 [matTooltip]="comment.createdAt | humanizedDate"
                 matTooltipPosition="above"
                 matTooltipShowDelay="1000"
               >
-                <mat-icon class="m-auto" style="color: #9696969d">group</mat-icon>
-                <div class="comment-status">
-                  <hr class="hr-text" [attr.data-content]="comment.text" />
-                </div>
+                <mat-card class="w-full self-end" appearance="outlined">
+                  <mat-card-header>
+                    <mat-icon class="m-auto" style="color: #9696969d">group</mat-icon>
+                  </mat-card-header>
+
+                  <mat-card-content
+                    style="color: #9696969d"
+                    class="flex flex-col justify-center items-center"
+                  >
+                    {{ comment.text }}
+                  </mat-card-content>
+                </mat-card>
               </div>
 
               <div *ngSwitchCase="'plan'" class="comment-status">
