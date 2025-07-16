@@ -45,7 +45,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() project: Project;
 
   @Input() taskData: {
-    source: (unit: Unit, taskDef: TaskDefinition | number) => Observable<Task[]>;
+    source: (
+      unit: Unit,
+      taskDef: TaskDefinition | number,
+      fetchMyStudentsOnly?: boolean,
+    ) => Observable<Task[]>;
     selectedTask: Task;
     taskKey: string;
     onSelectedTaskChange: (task: Task) => void;
@@ -102,6 +106,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   tutorialSort = 0;
   originalFilteredTasks: any[] = null;
   allowHover = true;
+
+  // Track if all tasks have already been fetched
+  // Avoids redundant API calls when changing tutorial filters
+  fetchedAllTasks: boolean = false;
 
   constructor(
     private selectedTaskService: SelectedTaskService,
@@ -303,6 +311,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.applyFilters();
+
+    if (tutorialId === 'all' && !this.fetchedAllTasks) {
+      this.refreshData();
+    }
   }
 
   //  Task definition options
@@ -341,13 +353,19 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   // Callback to refresh data from the task source
   private refreshData() {
+    const fetchMyStudentsOnly = this.filters.tutorialIdSelected === 'mine';
+
     this.loading = true;
     // Tasks for feedback or tasks for task, depending on the data source
-    this.taskData.source(this.unit, this.filters?.taskDefinitionIdSelected).subscribe({
-      next: (response) => {
-        this.tasks = response;
-        this.applyFilters();
-        this.loading = false;
+    this.taskData
+      .source(this.unit, this.filters?.taskDefinitionIdSelected, fetchMyStudentsOnly)
+      .subscribe({
+        next: (response) => {
+          this.tasks = response;
+          this.applyFilters();
+          this.loading = false;
+
+          this.fetchedAllTasks = !fetchMyStudentsOnly;
 
         // Load initial set task, either the one provided (by the URL)
         // then load actual task in now or the first task that applies
