@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-13](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-12...v10.0.0-13) (2025-07-16)
+
+
+### Bug Fixes
+
+* display task-date-slider only when task exists ([c886034](https://github.com/macite/doubtfire-deploy/commit/c886034d4bf69851f4b06599a45bd1b135c3fff2))
+
 ## [10.0.0-12](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-11...v10.0.0-12) (2025-07-15)
 
 
