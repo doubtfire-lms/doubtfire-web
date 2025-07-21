@@ -272,6 +272,7 @@ import {StaffNoteService} from './api/services/staff-note.service';
 import {LocalizedDatePipe} from './common/pipes/localized-date.pipe';
 import {StaffNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/staff-notes-view/staff-notes-view.component';
 import {SidekiqProgressModalComponent} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.component';
+import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/sidekiq-jobs-modal.component';
 import {SidekiqJobService} from './api/services/sidekiq-job.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
@@ -413,6 +414,7 @@ const MY_DATE_FORMAT = {
     QrModalComponent,
     LocalizedDatePipe,
     SidekiqProgressModalComponent,
+    SidekiqJobsModalComponent,
   ],
   // Services we provide
   providers: [

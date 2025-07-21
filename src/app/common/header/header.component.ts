@@ -9,6 +9,9 @@ import { AuthenticationService, Project, Task, Unit, UnitRole, User } from 'src/
 import { Subscription } from 'rxjs';
 import { MediaObserver } from 'ng-flex-layout';
 import { DoubtfireConstants, LogoSettings } from 'src/app/config/constants/doubtfire-constants';
+import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
 
 @Component({
   selector: 'app-header',
@@ -38,6 +41,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   };
   private subscriptions: Subscription[] = [];
 
+  sidekiqJobs: SidekiqJob[] = [];
+
   constructor(
     @Inject(calendarModal) private CalendarModal,
     @Inject(aboutDoubtfireModal) private AboutDoubtfireModal,
@@ -48,6 +53,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: AuthenticationService,
     protected media: MediaObserver,
     protected doubtfireConstants: DoubtfireConstants,
+    private sidekiqJobService: SidekiqJobService,
+    private sidekiqJobsModalService: SidekiqJobsModalService,
   ) {}
 
   ngOnInit(): void {
@@ -124,6 +131,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       }),
     );
+
+    this.sidekiqJobService.sidekiqJobsSubject.subscribe((jobs) => {
+      this.sidekiqJobs = [...jobs];
+    });
+  }
+
+  showSidekiqJob() {
+    this.sidekiqJobsModalService.show();
   }
 
   ngOnDestroy(): void {

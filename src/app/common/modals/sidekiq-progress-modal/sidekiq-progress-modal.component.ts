@@ -37,8 +37,6 @@ export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
   ) {}
 
-  private shouldDisplayJobInProgressBar: boolean = true;
-
   ngOnInit(): void {
     this.pollFailureLimit = this.data.pollFailureLimit ?? 3;
     this.pollFailureCount = 0;
@@ -50,46 +48,19 @@ export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
 
     this.dialogRef.afterClosed().subscribe(() => {
       clearInterval(this.jobPollingInterval);
-      this.displayJobInProgressBar();
     });
-  }
-
-  private readonly JOBS_KEY = 'ontrack_background_jobs';
-
-  private storeJobId(jobId: string) {
-    // TODO: move jobId storage into its own service, we can later use it to render ui in the header
-    // TODO: this would allow the user to close their browser, wait for the job to complete, then view results after loading it up again
-    try {
-      const jobs: string[] = JSON.parse(localStorage.getItem(this.JOBS_KEY)) ?? [];
-      if (!jobs.includes(jobId)) {
-        jobs.push(jobId);
-      }
-      localStorage.setItem(this.JOBS_KEY, JSON.stringify(jobs));
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  private removeJobId(jobId: string) {
-    try {
-      const jobs: string[] = JSON.parse(localStorage.getItem(this.JOBS_KEY)) ?? [];
-      const updatedJobs = jobs.filter((job) => job !== jobId);
-      localStorage.setItem(this.JOBS_KEY, JSON.stringify(updatedJobs));
-    } catch (e) {
-      console.error(e);
-    }
   }
 
   private getSidekiqJob() {
     if (!this.data.jobId) {
       clearInterval(this.jobPollingInterval);
-      this.shouldDisplayJobInProgressBar = false;
       this.dialogRef.close();
     }
 
     this.sidekiqJobService.getSidekiqJob(this.data.jobId).subscribe({
       next: (job) => {
-        this.storeJobId(job.id);
+        this.sidekiqJobService.sidekiqJobsSubject;
+        this.sidekiqJobService.addJob(job);
         this.job = job;
         this.pollFailureCount = 0;
 
@@ -117,42 +88,11 @@ export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
   public viewResult() {
     this.data.subject.next(this.job);
 
-    this.shouldDisplayJobInProgressBar = false;
     this.dialogRef.close();
-    this.removeJobId(this.data.jobId);
+    this.sidekiqJobService.removeJob(this.data.jobId);
   }
 
   public dismissModal() {
     this.dialogRef.close();
-  }
-
-  public displayJobInProgressBar() {
-    if (!this.job) {
-      return;
-    }
-
-    if (!this.shouldDisplayJobInProgressBar) {
-      return;
-    }
-    this.shouldDisplayJobInProgressBar = false;
-
-    this.snackBar
-      .open(`Job in progress: ${this.data.title}`, 'View', {
-        verticalPosition: 'bottom',
-        horizontalPosition: 'center',
-      })
-      .afterDismissed()
-      .subscribe(() => {
-        // TODO: if we know we have more than 1 in progress job, we could display a modal of a list of jobs to view
-        // TODO: replace snack bar with an icon in the header?
-        this.sidekiqProgressModalService.show(this.data.title, this.data.jobId).subscribe({
-          next: (job) => {
-            this.data.subject.next(job);
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
-      });
   }
 }

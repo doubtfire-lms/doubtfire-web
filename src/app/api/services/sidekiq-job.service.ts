@@ -1,13 +1,41 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {CachedEntityService} from 'ngx-entity-service';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiURL';
 import {SidekiqJob} from '../models/sidekiq-job';
+
+export interface SidekiqProgressData {
+  title: string;
+  subject: Subject<SidekiqJob>;
+}
 
 @Injectable()
 export class SidekiqJobService extends CachedEntityService<SidekiqJob> {
   protected readonly endpointFormat = 'sidekiq/:id:';
+
+  public activeSidekiqJobs: Map<string, SidekiqJob> = new Map();
+  public sidekiqJobsSubject: BehaviorSubject<SidekiqJob[]> = new BehaviorSubject<SidekiqJob[]>([]);
+
+  // Track the titles and callbacks for each sidekiqJob
+  public sidekiqJobCallbacks: Map<string, SidekiqProgressData> = new Map<
+    string,
+    SidekiqProgressData
+  >();
+
+  public addJob(job: SidekiqJob) {
+    this.activeSidekiqJobs.set(job.id, job);
+    this.emitJobs();
+  }
+
+  public removeJob(jobId: string) {
+    this.activeSidekiqJobs.delete(jobId);
+    this.emitJobs();
+  }
+
+  private emitJobs() {
+    this.sidekiqJobsSubject.next(Array.from(this.activeSidekiqJobs.values()));
+  }
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);

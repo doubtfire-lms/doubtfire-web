@@ -7,7 +7,11 @@
       This job is running in the background. You can close this dialog and monitor progress anytime.
     </div>
     <div class="flex justify-between w-full mt-5 mb-2">
-      <div>{{ job?.status === 'complete' ? 'Complete' : job?.message }}</div>
+      @if (job?.status === 'complete') {
+        <div>COMPLETE</div>
+      } @else {
+        <div>{{ job?.status.toUpperCase() }}{{ job?.message ? ': ' + job.message : '' }}</div>
+      }
       <div>{{ job?.processedCount }}/{{ job?.totalCount }} ({{ job?.pctComplete }}%)</div>
     </div>
     <mat-progress-bar mode="determinate" [value]="job?.pctComplete ?? 0"></mat-progress-bar>

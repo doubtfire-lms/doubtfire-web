@@ -1,0 +1,21 @@
+<div>
+  <h3 mat-dialog-title>Active jobs in progress</h3>
+  <mat-dialog-content>
+    <div>
+      @for (job of sidekiqJobs; track job) {
+        <div class="flex justify-between items-center p-2">
+          <div>{{ job.jobClass }}</div>
+          <div>{{ job.status.toUpperCase() }}</div>
+
+          <div class="flex gap-4">
+            <button mat-raised-button color="primary" (click)="viewJob(job)">View</button>
+            <button mat-raised-button color="red" (click)="removeJob(job)">Clear</button>
+          </div>
+        </div>
+      }
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions class="flex justify-between">
+    <button mat-raised-button (click)="dismissModal()">Close</button>
+  </mat-dialog-actions>
+</div>

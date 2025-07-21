@@ -6,15 +6,24 @@ import {
 } from './sidekiq-progress-modal.component';
 import {Subject} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SidekiqProgressModalService {
-  constructor(public dialog: MatDialog) {}
+  constructor(
+    public dialog: MatDialog,
+    private sidekiqJobService: SidekiqJobService,
+  ) {}
 
   public show(title: string, jobId: string) {
     const subject = new Subject<SidekiqJob>();
+
+    this.sidekiqJobService.sidekiqJobCallbacks.set(jobId, {
+      title,
+      subject,
+    });
 
     this.dialog.open<SidekiqProgressModalComponent, SidekiqProgressModalData>(
       SidekiqProgressModalComponent,
