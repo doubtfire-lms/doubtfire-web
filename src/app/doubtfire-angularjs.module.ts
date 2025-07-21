@@ -226,6 +226,7 @@ import {D2lTransferModal} from './units/states/portfolios/d2l-transfer-modal/d2l
 import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/learning-outcome-editor.component';
 import {FeedbackTemplateService} from './api/services/feedback-template.service';
 import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
+import {SidekiqProgressModalService} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -314,6 +315,11 @@ DoubtfireAngularJSModule.factory('CommentsModal', downgradeInjectable(CommentsMo
 DoubtfireAngularJSModule.factory(
   'FeedbackTemplateService',
   downgradeInjectable(FeedbackTemplateService),
+);
+
+DoubtfireAngularJSModule.factory(
+  'sidekiqProgressModalService',
+  downgradeInjectable(SidekiqProgressModalService),
 );
 
 // directive -> component

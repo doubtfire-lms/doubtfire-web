@@ -15,6 +15,7 @@ import {Subscription} from 'rxjs';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {SpecConModalService} from 'src/app/common/modals/spec-con-modal/spec-con-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 
 @Component({
   selector: 'unit-students-editor',
@@ -134,12 +135,11 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
       'Test message',
       {file: {name: 'Enrol CSV Data', type: 'csv'}},
       this.unit.enrolStudentsCSVUrl,
-      (response: any) => {
-        const jobId = response.job_id;
-        const status = response.status;
-        console.log(jobId, status);
-
-        this.sidekiqProgressModalService.show('Importing Students', jobId).subscribe({
+      (response: SidekiqJob) => {
+        if (!response || !response.id) {
+          this.alerts.error('Failed to start student import job', 6000);
+        }
+        this.sidekiqProgressModalService.show('Importing Students', response.id).subscribe({
           next: (job) => {
             const result = JSON.parse(job.result);
             this.csvResultModal.show('Enrol Student CSV Results', result);

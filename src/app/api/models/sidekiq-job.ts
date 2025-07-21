@@ -2,7 +2,7 @@ import {Entity} from 'ngx-entity-service';
 
 export class SidekiqJob extends Entity {
   id: string;
-  status: 'working' | 'queued' | 'complete' | 'retrying' | 'failed';
+  status: 'queued' | 'working' | 'retrying' | 'complete' | 'stopped' | 'failed' | 'interrupted';
   message?: string;
 
   pctComplete: number;

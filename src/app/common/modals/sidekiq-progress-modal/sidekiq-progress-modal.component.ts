@@ -81,6 +81,12 @@ export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
   }
 
   private getSidekiqJob() {
+    if (!this.data.jobId) {
+      clearInterval(this.jobPollingInterval);
+      this.shouldDisplayJobInProgressBar = false;
+      this.dialogRef.close();
+    }
+
     this.sidekiqJobService.getSidekiqJob(this.data.jobId).subscribe({
       next: (job) => {
         this.storeJobId(job.id);
