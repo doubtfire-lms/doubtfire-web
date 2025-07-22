@@ -14,6 +14,6 @@ export class SidekiqJob extends Entity {
   // Custom data unique to each job
   result?: string;
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: number;
+  updatedAt: number;
 }
