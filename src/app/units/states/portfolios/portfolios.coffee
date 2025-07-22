@@ -24,7 +24,7 @@ angular.module('doubtfire.units.states.portfolios', [])
   $scope.downloadPortfolios = ->
     newUnitService.zipPortfolios($scope.unit).subscribe({
       next: (newJob) ->
-        sidekiqProgressModalService.show("Download Portfolios", newJob.id).subscribe({
+        sidekiqProgressModalService.show("Downloading Portfolios: " + $scope.unit.code, newJob.id).subscribe({
           next: (job) ->
             fileDownloaderService.downloadFile($scope.unit.portfoliosUrl, "#{$scope.unit.code}-portfolios.zip")
           error: (message) -> alertService.error(message, 6000)

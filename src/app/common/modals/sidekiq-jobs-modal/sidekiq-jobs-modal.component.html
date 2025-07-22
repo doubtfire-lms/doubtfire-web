@@ -4,12 +4,13 @@
     <div>
       @for (job of sidekiqJobs; track job) {
         <div class="flex justify-between items-center p-2">
-          <div>{{ job.jobClass }}</div>
-          <div>{{ job.status.toUpperCase() }}</div>
-
-          <div class="flex gap-4">
-            <button mat-raised-button color="primary" (click)="viewJob(job)">View</button>
-            <button mat-raised-button color="red" (click)="removeJob(job)">Clear</button>
+          <div>{{ getJobTitle(job) }}</div>
+          <div class="flex items-center">
+            <div class="mr-10 text-center">{{ job.status.toUpperCase() }}</div>
+            <div class="flex gap-4">
+              <button mat-raised-button color="primary" (click)="viewJob(job)">View</button>
+              <button mat-raised-button color="red" (click)="removeJob(job)">Clear</button>
+            </div>
           </div>
         </div>
       }

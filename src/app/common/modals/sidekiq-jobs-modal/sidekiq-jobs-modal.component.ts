@@ -40,6 +40,11 @@ export class SidekiqJobsModalComponent implements OnInit {
     this.dismissModal();
   }
 
+  getJobTitle(job: SidekiqJob) {
+    const jobData = this.sidekiqJobService.sidekiqJobCallbacks.get(job.id);
+    return jobData.title;
+  }
+
   removeJob(job: SidekiqJob) {
     this.sidekiqJobService.removeJob(job.id);
   }

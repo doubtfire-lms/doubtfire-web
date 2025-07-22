@@ -139,19 +139,21 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
         if (!response || !response.id) {
           this.alerts.error('Failed to start student import job', 6000);
         }
-        this.sidekiqProgressModalService.show('Importing Students', response.id).subscribe({
-          next: (job) => {
-            const result = JSON.parse(job.result);
-            this.csvResultModal.show('Enrol Student CSV Results', result);
-            // at least one student?
-            if (result.success.length > 0) {
-              this.unit.refreshStudents(true);
-            }
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
+        this.sidekiqProgressModalService
+          .show(`Importing Students: ${this.unit.code}`, response.id)
+          .subscribe({
+            next: (job) => {
+              const result = JSON.parse(job.result);
+              this.csvResultModal.show('Enrol Student CSV Results', result);
+              // at least one student?
+              if (result.success.length > 0) {
+                this.unit.refreshStudents(true);
+              }
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
       },
     );
   }
