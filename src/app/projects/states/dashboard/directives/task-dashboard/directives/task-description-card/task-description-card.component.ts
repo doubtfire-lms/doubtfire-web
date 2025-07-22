@@ -53,7 +53,7 @@ export class TaskDescriptionCardComponent {
   }
 
   public startDate(): Date {
-    return this.task?.startDate;
+    return this.task?.startDate ?? this.taskDef?.startDate;
   }
 
   public shouldShowDeadline(): boolean {
