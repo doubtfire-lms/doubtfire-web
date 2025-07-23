@@ -20,7 +20,7 @@ export class SidekiqJobService extends CachedEntityService<SidekiqJob> {
   // Allow components to track changes to jobEntries
   public sidekiqJobsSubject = new BehaviorSubject<SidekiqJobEntry[]>([]);
 
-  public addJob(jobId: string, title: string, subject: Subject<SidekiqJob>, job?: SidekiqJob) {
+  public setJob(jobId: string, title: string, subject: Subject<SidekiqJob>, job?: SidekiqJob) {
     this.jobEntries.set(jobId, {
       job,
       title,
