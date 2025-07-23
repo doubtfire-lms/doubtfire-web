@@ -38,6 +38,9 @@
   &.time-exceeded {
     @include task-status-color-time-exceeded;
   }
+  &.assess-in-portfolio {
+    @include task-status-color-assess-in-portfolio;
+  }
 
   &.ready-for-feedback:hover {
     background-color: task-status-color('ready-for-feedback');
@@ -74,6 +77,9 @@
   }
   &.time-exceeded:hover {
     background-color: task-status-color('time-exceeded');
+  }
+  &.assess-in-portfolio:hover {
+    background-color: task-status-color('assess-in-portfolio');
   }
 }
 
@@ -138,6 +144,11 @@
   &.time-exceeded:hover {
     @include task-status-color-time-exceeded;
   }
+  &.assess-in-portfolio,
+  &.assess-in-portfolio.active,
+  &.assess-in-portfolio:hover {
+    @include task-status-color-assess-in-portfolio;
+  }
 
   &.ready-for-feedback {
     background-color: lighten(task-status-color('ready-for-feedback'), 15%);
@@ -174,6 +185,9 @@
   }
   &.time-exceeded {
     background-color: lighten(task-status-color('time-exceeded'), 15%);
+  }
+  &.assess-in-portfolio {
+    background-color: lighten(task-status-color('assess-in-portfolio'), 15%);
   }
 }
 

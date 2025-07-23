@@ -26,6 +26,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'targetGrade',
       'similarityLanguage',
       'hasJplagReport',
+      'assessInPortfolioOnly',
       {
         keys: 'targetDate',
         toEntityFn: MappingFunctions.mapDateToEndOfDay,

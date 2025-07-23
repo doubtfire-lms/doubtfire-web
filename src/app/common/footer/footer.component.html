@@ -54,17 +54,32 @@
         </button>
         <span class="w-3"></span>
       }
-      <button
-        [disabled]="selectedTask === undefined"
-        mat-icon-button
-        matTooltip="Mark as Complete"
-        matTooltipPosition="above"
-        aria-label=""
-        class="button large-button"
-        (click)="selectedTask?.updateTaskStatus('complete')"
-      >
-        <mat-icon>done</mat-icon>
-      </button>
+      @if (selectedTask?.definition?.assessInPortfolioOnly) {
+        <button
+          [disabled]="selectedTask === undefined"
+          mat-icon-button
+          matTooltip="Mark as Working On It"
+          matTooltipPosition="above"
+          aria-label="Mark as Working On It"
+          class="button large-button"
+          (click)="selectedTask?.updateTaskStatus('working_on_it')"
+        >
+          <mat-icon>bolt</mat-icon>
+        </button>
+      } @else {
+        <button
+          [disabled]="selectedTask === undefined"
+          mat-icon-button
+          matTooltip="Mark as Complete"
+          matTooltipPosition="above"
+          aria-label="Mark as Complete"
+          class="button large-button"
+          (click)="selectedTask?.updateTaskStatus('complete')"
+        >
+          <mat-icon>done</mat-icon>
+        </button>
+      }
+
       <button
         [disabled]="selectedTask === undefined"
         mat-icon-button
@@ -174,6 +189,12 @@
           View similarities
         </button>
         <mat-divider></mat-divider>
+        <button mat-menu-item (click)="selectedTask?.updateTaskStatus('assess_in_portfolio')">
+          <mat-icon matListItemIcon aria-label="Switch to Assess in Portfolio"
+            >folder_open</mat-icon
+          >
+          Mark as Assess in Portfolio
+        </button>
         <button mat-menu-item (click)="selectedTask?.updateTaskStatus('feedback_exceeded')">
           <mat-icon matListItemIcon aria-label="Switch to Feedback Exceeded"
             >running_with_errors</mat-icon
