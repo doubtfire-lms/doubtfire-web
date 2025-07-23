@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
-import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
+import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from '../../services/alert.service';
 
@@ -19,7 +18,7 @@ export class SidekiqJobsModalComponent implements OnInit {
     private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
 
-  sidekiqJobs: SidekiqJob[] = [];
+  sidekiqJobs: SidekiqJobEntry[] = [];
   ngOnInit(): void {
     this.sidekiqJobService.sidekiqJobsSubject.subscribe((jobs) => {
       this.sidekiqJobs = jobs;
@@ -29,24 +28,18 @@ export class SidekiqJobsModalComponent implements OnInit {
     });
   }
 
-  viewJob(job: SidekiqJob) {
-    const jobData = this.sidekiqJobService.sidekiqJobCallbacks.get(job.id);
-    this.sidekiqProgressModalService.show(jobData.title, job.id).subscribe({
+  viewJob(jobEntry: SidekiqJobEntry) {
+    this.sidekiqProgressModalService.show(jobEntry.title, jobEntry.job.id).subscribe({
       next: (job) => {
-        jobData.subject.next(job);
+        jobEntry.resultSubject.next(job);
       },
     });
 
     this.dismissModal();
   }
 
-  getJobTitle(job: SidekiqJob) {
-    const jobData = this.sidekiqJobService.sidekiqJobCallbacks.get(job.id);
-    return jobData.title;
-  }
-
-  removeJob(job: SidekiqJob) {
-    this.sidekiqJobService.removeJob(job.id);
+  removeJob(jobEntry: SidekiqJobEntry) {
+    this.sidekiqJobService.removeJob(jobEntry.job.id);
   }
 
   public dismissModal() {

@@ -9,8 +9,7 @@ import { AuthenticationService, Project, Task, Unit, UnitRole, User } from 'src/
 import { Subscription } from 'rxjs';
 import { MediaObserver } from 'ng-flex-layout';
 import { DoubtfireConstants, LogoSettings } from 'src/app/config/constants/doubtfire-constants';
-import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
-import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
 
 @Component({
@@ -41,7 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   };
   private subscriptions: Subscription[] = [];
 
-  sidekiqJobs: SidekiqJob[] = [];
+  sidekiqJobs: SidekiqJobEntry[] = [];
 
   constructor(
     @Inject(calendarModal) private CalendarModal,

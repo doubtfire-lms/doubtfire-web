@@ -20,10 +20,7 @@ export class SidekiqProgressModalService {
   public show(title: string, jobId: string) {
     const subject = new Subject<SidekiqJob>();
 
-    this.sidekiqJobService.sidekiqJobCallbacks.set(jobId, {
-      title,
-      subject,
-    });
+    this.sidekiqJobService.addJob(jobId, title, subject);
 
     this.dialog.open<SidekiqProgressModalComponent, SidekiqProgressModalData>(
       SidekiqProgressModalComponent,

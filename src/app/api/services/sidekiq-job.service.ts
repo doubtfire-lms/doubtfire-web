@@ -5,36 +5,37 @@ import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiURL';
 import {SidekiqJob} from '../models/sidekiq-job';
 
-export interface SidekiqProgressData {
+export interface SidekiqJobEntry {
+  job?: SidekiqJob;
   title: string;
-  subject: Subject<SidekiqJob>;
+  resultSubject: Subject<SidekiqJob>;
 }
 
 @Injectable()
 export class SidekiqJobService extends CachedEntityService<SidekiqJob> {
   protected readonly endpointFormat = 'sidekiq/:id:';
 
-  public activeSidekiqJobs: Map<string, SidekiqJob> = new Map();
-  public sidekiqJobsSubject: BehaviorSubject<SidekiqJob[]> = new BehaviorSubject<SidekiqJob[]>([]);
+  public jobEntries: Map<string, SidekiqJobEntry> = new Map();
 
-  // Track the titles and callbacks for each sidekiqJob
-  public sidekiqJobCallbacks: Map<string, SidekiqProgressData> = new Map<
-    string,
-    SidekiqProgressData
-  >();
+  // Allow components to track changes to jobEntries
+  public sidekiqJobsSubject = new BehaviorSubject<SidekiqJobEntry[]>([]);
 
-  public addJob(job: SidekiqJob) {
-    this.activeSidekiqJobs.set(job.id, job);
+  public addJob(jobId: string, title: string, subject: Subject<SidekiqJob>, job?: SidekiqJob) {
+    this.jobEntries.set(jobId, {
+      job,
+      title,
+      resultSubject: subject,
+    });
     this.emitJobs();
   }
 
   public removeJob(jobId: string) {
-    this.activeSidekiqJobs.delete(jobId);
+    this.jobEntries.delete(jobId);
     this.emitJobs();
   }
 
   private emitJobs() {
-    this.sidekiqJobsSubject.next(Array.from(this.activeSidekiqJobs.values()));
+    this.sidekiqJobsSubject.next(Array.from(this.jobEntries.values()));
   }
 
   constructor(httpClient: HttpClient) {
