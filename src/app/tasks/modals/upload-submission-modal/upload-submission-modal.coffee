@@ -69,6 +69,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     onBeforeUpload: ->
       $scope.uploader.payload.contributions = mapTeamToPayload() if _.includes(states.shown, 'group')
       $scope.uploader.payload.trigger = 'need_help' if $scope.submissionType == 'need_help'
+      $scope.uploader.payload.trigger = 'assess_in_portfolio' if $scope.submissionType == 'assess_in_portfolio'
     onSuccess: (response) ->
       $scope.uploader.response = response
       if $scope.task.isTestSubmission

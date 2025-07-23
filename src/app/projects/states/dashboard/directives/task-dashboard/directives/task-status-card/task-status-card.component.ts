@@ -60,6 +60,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     return this.task.status === 'ready_for_feedback';
   }
 
+  public isSubmittedForPortfolio(): boolean {
+    return this.task.status === 'assess_in_portfolio';
+  }
+
   triggerTransition(trigger: TaskStatusEnum): void {
     this.task.triggerTransition(trigger);
   }

@@ -98,7 +98,11 @@ export class TaskStatus {
     'redo',
   ];
 
-  public static readonly SUBMITTABLE_STATUSES: TaskStatusEnum[] = ['ready_for_feedback', 'need_help'];
+  public static readonly SUBMITTABLE_STATUSES: TaskStatusEnum[] = [
+    'ready_for_feedback',
+    'need_help',
+    'assess_in_portfolio',
+  ];
 
   public static readonly MARKED_STATUSES: TaskStatusEnum[] = [
     'redo',
