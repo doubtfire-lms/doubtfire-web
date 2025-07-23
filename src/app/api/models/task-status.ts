@@ -371,9 +371,8 @@ export class TaskStatus {
       {
         detail: 'Your submission will be assessed in your portfolio',
         reason:
-          'This task will not be signed off as complete and will be assessed directly in your final portfolio submission.',
-        action:
-          'Tutors may offer feedback before the feedback deadline, but this task will only be assessed in your final portfolio. You can make changes before the portfolio due date, but you must manually set the status back to "assess in portfolio".',
+          'This task will no longer be checked by tutors, and will be assessed directly in your final portfolio submission.',
+        action: 'You will need to ensure this task is at an adequare standard in your portfolio.',
       },
     ],
     // [
