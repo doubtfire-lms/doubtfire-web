@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Select submission type</h2>
+<mat-dialog-content>
+  <p>
+    You can either upload your submission for tutor feedback or submit it directly for your
+    portfolio. Make sure to check if a discussion is required — tutors won’t review tasks submitted
+    to the portfolio or submitted late.
+  </p>
+  <div class="p-5 flex justify-center gap-5">
+    <button
+      mat-raised-button
+      class="h-[175px] w-[175px] flex flex-col text-align p-2 items-center gap-3"
+      color="primary"
+      (click)="triggerTransition('ready_for_feedback')"
+    >
+      <mat-icon class="icon-size">grading</mat-icon>
+      <div class="text-center">Submit for Feedback</div>
+    </button>
+    <button
+      mat-raised-button
+      class="h-[175px] w-[175px] flex flex-col text-align p-2 items-center gap-3"
+      (click)="triggerTransition('assess_in_portfolio')"
+    >
+      <mat-icon class="icon-size">auto_stories</mat-icon>
+
+      <div class="text-center">Skip Feedback</div>
+    </button>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="flex justify-end">
+  <button mat-button [mat-dialog-close]>Cancel</button>
+</mat-dialog-actions>

@@ -7,6 +7,8 @@ import { TaskService } from 'src/app/api/services/task.service';
 import { ExtensionModalService } from 'src/app/common/modals/extension-modal/extension-modal.service';
 import { QrModalService } from 'src/app/common/modals/qr-modal/qr-modal.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';
+
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
@@ -22,6 +24,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private router: UIRouter,
     private qrModalService: QrModalService,
     private doubtfireConstants: DoubtfireConstants,
+    private submissionTypeModalService: SubmissionTypeModalService,
   ) {}
 
   @Input() task: Task;
@@ -66,6 +69,14 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
 
   triggerTransition(trigger: TaskStatusEnum): void {
     this.task.triggerTransition(trigger);
+  }
+
+  uploadSubmission(): void {
+    if (this.task.definition.assessInPortfolioOnly) {
+      this.submissionTypeModalService.show(this.task);
+    } else {
+      this.task.triggerTransition('ready_for_feedback');
+    }
   }
 
   updateFilesInSubmission(): void {

@@ -35,7 +35,7 @@
   <mat-card-actions class="space-x-2">
     <button
       mat-stroked-button
-      (click)="triggerTransition('ready_for_feedback')"
+      (click)="uploadSubmission()"
       [disabled]="isReadyForFeedback() || isSubmittedForPortfolio()"
     >
       Upload Submission
