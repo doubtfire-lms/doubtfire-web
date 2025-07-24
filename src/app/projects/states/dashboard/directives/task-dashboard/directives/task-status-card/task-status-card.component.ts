@@ -68,7 +68,11 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   }
 
   triggerTransition(trigger: TaskStatusEnum): void {
-    this.task.triggerTransition(trigger);
+    if (trigger === 'ready_for_feedback') {
+      this.uploadSubmission();
+    } else {
+      this.task.triggerTransition(trigger);
+    }
   }
 
   uploadSubmission(): void {
