@@ -240,13 +240,7 @@ export class TaskStatus {
   ]);
 
   public static readonly SWITCHABLE_STATES = {
-    student: [
-      'not_started',
-      'working_on_it',
-      'need_help',
-      'ready_for_feedback',
-      'assess_in_portfolio',
-    ],
+    student: ['not_started', 'working_on_it', 'need_help', 'ready_for_feedback'],
     tutor: [
       'complete',
       'discuss',
