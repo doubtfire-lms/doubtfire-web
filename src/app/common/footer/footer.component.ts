@@ -73,6 +73,18 @@ export class FooterComponent implements OnInit {
     );
   }
 
+  markTaskWorkingOnIt(task?: Task) {
+    if (!task || !task.definition?.assessInPortfolioOnly) {
+      return;
+    }
+    task.addComment(
+      `**Automated Message:** Task "${task.definition.abbreviation}" will be graded during portfolio assessment only. You must now submit it for "Assess in Portfolio" before the portfolio deadline.`,
+    );
+    setTimeout(() => {
+      task.updateTaskStatus('working_on_it');
+    }, 500);
+  }
+
   viewTaskSheet() {
     this.selectedTaskService.showTaskSheet();
   }
