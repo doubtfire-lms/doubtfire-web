@@ -14,13 +14,24 @@ angular.module('doubtfire.units.states.portfolios', [])
       roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor']
    }
 )
-.controller("UnitPortfoliosStateCtrl", ($scope, alertService, analyticsService, gradeService, newProjectService, Visualisation, newTaskService, fileDownloaderService, newUserService, D2lTransferModal) ->
+.controller("UnitPortfoliosStateCtrl", ($scope, alertService, analyticsService, gradeService, newProjectService, Visualisation, newTaskService, fileDownloaderService, newUserService, D2lTransferModal, newUnitService, sidekiqProgressModalService) ->
   # TODO: (@alexcu) Break this down into smaller directives/substates
 
   $scope.unit.loadD2lMapping().subscribe()
 
   $scope.downloadGrades = -> fileDownloaderService.downloadFile($scope.unit.gradesUrl, "#{$scope.unit.code}-grades.csv")
-  $scope.downloadPortfolios = -> fileDownloaderService.downloadFile($scope.unit.portfoliosUrl, "#{$scope.unit.code}-portfolios.zip")
+
+  $scope.downloadPortfolios = ->
+    newUnitService.zipPortfolios($scope.unit).subscribe({
+      next: (newJob) ->
+        sidekiqProgressModalService.show("Downloading Portfolios: " + $scope.unit.code, newJob.id).subscribe({
+          next: (job) ->
+            fileDownloaderService.downloadFile($scope.unit.portfoliosUrl, "#{$scope.unit.code}-portfolios.zip")
+          error: (message) -> alertService.error(message, 6000)
+        })
+      error: (message) -> alertService.error(message, 6000)
+    })
+
 
   $scope.studentFilter = 'allStudents'
   $scope.portfolioFilter = 'withPortfolio'

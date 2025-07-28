@@ -39,7 +39,12 @@
     ></task-dropdown>
 
     <span class="grow"></span>
-
+    @if (sidekiqJobs.length) {
+      <button mat-icon-button (click)="showSidekiqJob()">
+        <div [matBadge]="sidekiqJobs.length" matBadgeSize="small" class="z-50"></div>
+        <mat-icon>cloud_sync_outline</mat-icon>
+      </button>
+    }
     @if (currentUser.role === 'Admin' || currentUser.role === 'Convenor') {
       <button
         #menuState="matMenuTrigger"
