@@ -274,6 +274,7 @@ import {StaffNotesViewComponent} from './projects/states/dashboard/directives/ta
 import {SidekiqProgressModalComponent} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.component';
 import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/sidekiq-jobs-modal.component';
 import {SidekiqJobService} from './api/services/sidekiq-job.service';
+import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-card.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -415,6 +416,7 @@ const MY_DATE_FORMAT = {
     LocalizedDatePipe,
     SidekiqProgressModalComponent,
     SidekiqJobsModalComponent,
+    UnavailableCardComponent,
   ],
   // Services we provide
   providers: [

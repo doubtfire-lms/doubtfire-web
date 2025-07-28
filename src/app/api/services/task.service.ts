@@ -98,7 +98,11 @@ export class TaskService extends CachedEntityService<Task> {
     return new Task(other as Project);
   }
 
-  public queryTasksForTaskInbox(unit: Unit, taskDef?: TaskDefinition | number): Observable<Task[]> {
+  public queryTasksForTaskInbox(
+    unit: Unit,
+    taskDef?: TaskDefinition | number,
+    fetchMyStudentsOnly?: boolean,
+  ): Observable<Task[]> {
     const cache: EntityCache<Task> = new EntityCache<Task>();
 
     return this.query(
@@ -109,7 +113,10 @@ export class TaskService extends CachedEntityService<Task> {
         endpointFormat: this.taskInboxEndpoint,
         cache: cache,
         constructorParams: unit,
-      }
+        params: {
+          my_students_only: fetchMyStudentsOnly,
+        },
+      },
     ).pipe(
       tap((tasks: Task[]) => {
         unit.incorporateTasks(tasks);
