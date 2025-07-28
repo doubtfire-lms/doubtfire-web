@@ -12,11 +12,15 @@ export enum TaskSimilarityType {
 
 /**
  * Represents teh format for a part of a similarity report for a task.
- * This is html for moss, and pdf for turn it in.
+ *
+ * HTML for moss
+ * PDF for TurnItIn
+ * jplag for JPlag
  */
 export enum TaskSimilarityPartFormat {
   Html = 'html',
   Pdf = 'pdf',
+  Jplag = 'jplag',
 }
 
 export class TaskSimilarityPart {
@@ -37,8 +41,8 @@ export class TaskSimilarity extends Entity {
   parts: TaskSimilarityPart[];
   task: Task;
   readyForViewer: boolean = false;
-  other_task?: Task;
-  other_student?: User;
+  otherTask?: Task;
+  otherStudent?: User;
 
   constructor(task: Task) {
     super();
@@ -67,6 +71,8 @@ export class TaskSimilarity extends Entity {
     switch (this.type) {
       case TaskSimilarityType.Jplag:
         return 'JPLAG';
+      case TaskSimilarityType.Moss:
+        return 'MOSS';
       case TaskSimilarityType.TurnItIn:
         return 'TurnItIn';
     }
