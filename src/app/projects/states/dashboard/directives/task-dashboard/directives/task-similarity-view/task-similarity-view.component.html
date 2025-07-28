@@ -64,13 +64,26 @@
                 </button>
               }
             </mat-expansion-panel-header>
-            @if (part.panelOpenState && part.format) {
-              <f-file-viewer
-                [fileType]="part.format"
-                [src]="similarity.fileUrl(part.idx)"
-              ></f-file-viewer>
-            } @else {
-              <p>There is no local similarity file for this.</p>
+            @if (part.panelOpenState) {
+              @if (part.format) {
+                @if (part.format === 'html' || part.format === 'pdf') {
+                  <f-file-viewer
+                    [fileType]="part.format"
+                    [src]="similarity.fileUrl(part.idx)"
+                  ></f-file-viewer>
+                } @else if (part.format === 'jplag') {
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="mx-auto block"
+                    (click)="viewJplagReport(similarity)"
+                  >
+                    View JPlag Similarity
+                  </button>
+                }
+              } @else {
+                <p>There is no local similarity file for this.</p>
+              }
             }
           </mat-expansion-panel>
         }
