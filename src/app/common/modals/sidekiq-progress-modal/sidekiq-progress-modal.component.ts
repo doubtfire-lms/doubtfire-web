@@ -64,7 +64,6 @@ export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
         this.job = job;
         this.pollFailureCount = 0;
 
-        // TODO: update UI to indicate if its being queued, and not being worked yet
         if (job.status === 'complete' || job.status === 'failed') {
           clearInterval(this.jobPollingInterval);
         }
