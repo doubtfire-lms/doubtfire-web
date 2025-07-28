@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-14](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-13...v10.0.0-14) (2025-07-28)
+
+
+### Features
+
+* portfolio zip downloading via sidekiq ([9000830](https://github.com/b0ink/doubtfire-deploy/commit/9000830e5e98bc0b921d618c034471eeddf996b4))
+* show list of active sidekiq jobs ([aa85665](https://github.com/b0ink/doubtfire-deploy/commit/aa85665670a23fea556c6420f139e7e7853d16ba))
+* show maintenance ui when api fails ([29bb95f](https://github.com/b0ink/doubtfire-deploy/commit/29bb95f5974dc8f258b204957a212a8399ad2d6e))
+* sidekiq progress modal component ([b9691e7](https://github.com/b0ink/doubtfire-deploy/commit/b9691e793204e84fae323610a7b555b15e065514))
+
+
+### Bug Fixes
+
+* fallback to task definition due date ([bef0a9c](https://github.com/b0ink/doubtfire-deploy/commit/bef0a9cbfefc58407f851d3ca73b90af6b81151f))
+
 ## [10.0.0-13](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-12...v10.0.0-13) (2025-07-16)
 
 
