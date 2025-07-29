@@ -26,7 +26,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   private _pdfUrl: string;
   public pdfBlobUrl: string;
   public useNativePdfViewer = false;
-  public pdfTotalPages: number;
+  public pdfTotalPages?: number | undefined;
 
   @Input() pdfUrl: string;
   @Input() startPage: number = 1;
@@ -138,6 +138,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
       this.pdfTotalPages = pdf.numPages;
     } catch (_error) {
       console.warn('Could not parse PDF. Defaulting to first page.');
+      this.pdfTotalPages = undefined;
     } finally {
       this.pdfBlobUrl = url;
     }
@@ -149,7 +150,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   }
 
   getStartPage(): number {
-    if (this.startPage > 1 && this.startPage <= this.pdfTotalPages) {
+    if (this.startPage > 1 && this.pdfTotalPages && this.startPage <= this.pdfTotalPages) {
       return this.startPage;
     }
     return 1;
