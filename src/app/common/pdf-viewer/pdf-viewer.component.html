@@ -58,7 +58,7 @@
         [render-text]="true"
         [original-size]="false"
         (after-load-complete)="onLoaded()"
-        (page-rendered)="onPageRendered()"
+        [page]="getStartPage()"
       ></pdf-viewer>
     }
   } @else {

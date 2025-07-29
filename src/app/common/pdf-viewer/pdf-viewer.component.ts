@@ -9,6 +9,7 @@ import {
   ViewChild,
   AfterViewInit,
 } from '@angular/core';
+import {getDocument} from 'pdfjs-dist';
 import {PdfViewerComponent} from 'ng2-pdf-viewer';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {AlertService} from '../services/alert.service';
@@ -25,6 +26,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   private _pdfUrl: string;
   public pdfBlobUrl: string;
   public useNativePdfViewer = false;
+  public pdfTotalPages?: number | undefined;
 
   @Input() pdfUrl: string;
   @Input() startPage: number = 1;
@@ -117,7 +119,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
     this.fileDownloader.downloadBlob(
       downloadUrl,
       (url: string, _response: HttpResponse<Blob>) => {
-        this.pdfBlobUrl = url;
+        this.setPdfBlob(url);
       },
       (error: unknown) => {
         this.alerts.error(`Error downloading PDF. ${error}`, 6000);
@@ -125,15 +127,32 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
     );
   }
 
+  private async setPdfBlob(url: string) {
+    try {
+      const pdfjs = await import('pdfjs-dist/build/pdf');
+      const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+      pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
+      // Get PDF page count before rendering to validate startPage
+      const pdf = await getDocument(url).promise;
+      this.pdfTotalPages = pdf.numPages;
+    } catch (_error) {
+      console.warn('Could not parse PDF. Defaulting to first page.');
+      this.pdfTotalPages = undefined;
+    } finally {
+      this.pdfBlobUrl = url;
+    }
+  }
+
   onLoaded() {
     this.loaded = true;
     window.dispatchEvent(new Event('resize'));
   }
 
-  onPageRendered() {
-    this.loaded = true;
-    if (this.startPage > 1) {
-      this.scrollToPage(this.startPage);
+  getStartPage(): number {
+    if (this.startPage > 1 && this.pdfTotalPages && this.startPage <= this.pdfTotalPages) {
+      return this.startPage;
     }
+    return 1;
   }
 }
