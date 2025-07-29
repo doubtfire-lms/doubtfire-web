@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-14...v10.0.0-15) (2025-07-29)
+
+
+### Bug Fixes
+
+* correctly load start page ([e297f26](https://github.com/b0ink/doubtfire-deploy/commit/e297f261e3df19faf11be9fde6515ce75434c320))
+* map correct variables ([b180799](https://github.com/b0ink/doubtfire-deploy/commit/b180799efd716d802cf83ce08b6df0639d9055b6))
+* prevent report button from expanding accordion ([e715415](https://github.com/b0ink/doubtfire-deploy/commit/e7154157ff1b88817141bae5b1b3de9fd37171f0))
+
 ## [10.0.0-14](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-13...v10.0.0-14) (2025-07-28)
 
 
