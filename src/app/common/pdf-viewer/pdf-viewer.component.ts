@@ -1,16 +1,15 @@
 import {HttpResponse} from '@angular/common/http';
 import {
+  AfterViewInit,
   Component,
-  Input,
   Inject,
+  Input,
+  OnChanges,
   OnDestroy,
   SimpleChanges,
-  OnChanges,
   ViewChild,
-  AfterViewInit,
 } from '@angular/core';
-import {getDocument} from 'pdfjs-dist';
-import {PdfViewerComponent} from 'ng2-pdf-viewer';
+import {PDFDocumentProxy, PdfViewerComponent} from 'ng2-pdf-viewer';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {AlertService} from '../services/alert.service';
 
@@ -27,9 +26,12 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   public pdfBlobUrl: string;
   public useNativePdfViewer = false;
   public pdfTotalPages?: number | undefined;
+  public pdfHasRendered: boolean = false;
 
   @Input() pdfUrl: string;
   @Input() startPage: number = 1;
+
+  public pageNumber: number = 1;
 
   @ViewChild(PdfViewerComponent) private pdfComponent: PdfViewerComponent;
   pdfSearchString: string;
@@ -70,6 +72,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
       // Get the new blob
       this._pdfUrl = value;
       this.loaded = false;
+      this.pdfHasRendered = false;
       this.downloadBlob(value);
     }
   }
@@ -119,7 +122,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
     this.fileDownloader.downloadBlob(
       downloadUrl,
       (url: string, _response: HttpResponse<Blob>) => {
-        this.setPdfBlob(url);
+        this.pdfBlobUrl = url;
       },
       (error: unknown) => {
         this.alerts.error(`Error downloading PDF. ${error}`, 6000);
@@ -127,32 +130,26 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
     );
   }
 
-  private async setPdfBlob(url: string) {
-    try {
-      const pdfjs = await import('pdfjs-dist/build/pdf');
-      const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
-      pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-
-      // Get PDF page count before rendering to validate startPage
-      const pdf = await getDocument(url).promise;
-      this.pdfTotalPages = pdf.numPages;
-    } catch (_error) {
-      console.warn('Could not parse PDF. Defaulting to first page.');
-      this.pdfTotalPages = undefined;
-    } finally {
-      this.pdfBlobUrl = url;
-    }
-  }
-
-  onLoaded() {
+  onLoaded(event: PDFDocumentProxy) {
     this.loaded = true;
     window.dispatchEvent(new Event('resize'));
+    this.pdfTotalPages = event.numPages;
   }
 
-  getStartPage(): number {
-    if (this.startPage > 1 && this.pdfTotalPages && this.startPage <= this.pdfTotalPages) {
-      return this.startPage;
+  onTextLayerRendered() {
+    if (this.pdfHasRendered) {
+      return;
     }
-    return 1;
+    this.pdfHasRendered = true;
+    setTimeout(() => {
+      if (
+        this.startPage &&
+        this.startPage > 1 &&
+        this.pdfTotalPages &&
+        this.startPage <= this.pdfTotalPages
+      ) {
+        this.pageNumber = Number(this.startPage);
+      }
+    });
   }
 }
