@@ -80,7 +80,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
             // Open comparison between the two students
             this.jplagViewer.openComparison(
               similarity.task.project.student.username,
-              similarity.other_student.username,
+              similarity.otherStudent.username,
             );
             this.jplagOpenState = true;
           }, 100);
