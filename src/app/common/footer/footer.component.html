@@ -219,7 +219,7 @@
       </button>
       <f-project-progress-bar
         [matTooltip]="
-          selectedTask?.project?.taskStats?.[4]?.value
+          selectedTask?.project?.taskStats?.length > 4
             ? selectedTask.project.taskStats[4].value +
               '% progress towards ' +
               selectedTask.project.targetGradeWord
