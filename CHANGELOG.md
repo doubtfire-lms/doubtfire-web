@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-17](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-16...v10.0.0-17) (2025-07-31)
+
+
+### Features
+
+* return task to not started status ([bce1483](https://github.com/b0ink/doubtfire-deploy/commit/bce1483296064bafd44bc538f83731809d816a05))
+
+
+### Bug Fixes
+
+* check if project task stats exist ([e59af80](https://github.com/b0ink/doubtfire-deploy/commit/e59af803f8440338b0210b6a437537372f5dac5b))
+* ensure new comments are fetched for selected project only ([3b0e387](https://github.com/b0ink/doubtfire-deploy/commit/3b0e3877e05f162143fc78065cee9a191d0755f4))
+* ensure whitespace is trimmed ([fe687df](https://github.com/b0ink/doubtfire-deploy/commit/fe687df8b035ef851b9d147e01f575187f428a8c))
+* prevent additional inbox queries ([0d35f7f](https://github.com/b0ink/doubtfire-deploy/commit/0d35f7f4ef2e87dd078edf20e509c8f6efc5c216))
+
 ## [10.0.0-16](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-15...v10.0.0-16) (2025-07-29)
 
 ## [10.0.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-14...v10.0.0-15) (2025-07-29)
