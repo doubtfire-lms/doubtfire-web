@@ -43,10 +43,10 @@ export class User extends Entity {
   }
 
   public get name(): string {
-    const fn = this.firstName.slice(0, 11);
-    const sn = this.lastName.slice(0, 11);
+    const fn = this.firstName.slice(0, 11).trim();
+    const sn = this.lastName.slice(0, 11).trim();
     const nn =
-      this.nickname && this.nickname.trim() ? ` (${this.nickname.trim().slice(0, 11)})` : '';
+      this.nickname && this.nickname.trim() ? ` (${this.nickname.trim().slice(0, 11).trim()})` : '';
     return `${fn} ${sn}${nn}`;
   }
 
