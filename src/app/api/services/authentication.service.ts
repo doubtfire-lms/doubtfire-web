@@ -231,6 +231,19 @@ export class AuthenticationService {
     );
   }
 
+  public signInWithLti(userCredentials: {lti_token: string}): Observable<void> {
+    return this.httpClient.post(`${this.AUTH_URL}/lti`, userCredentials).pipe(
+      map((response: AuthResponse) => {
+        const username = encodeURIComponent(response.user['username']);
+        const authToken = encodeURIComponent(response.auth_token);
+        window.location.href = `/sign_in?username=${username}&authToken=${authToken}&isLtiLogin=true`;
+      }),
+      catchError((error) => {
+        return throwError(() => error);
+      }),
+    );
+  }
+
   public signOut(ssoSignOut = true): void {
     // This function is called after the token is deleted...
     const doSignOut = () => {

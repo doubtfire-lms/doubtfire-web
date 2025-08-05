@@ -13,6 +13,8 @@ import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
+import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
+import {LtiDeeplinkComponent} from './home/states/lti-deeplink/lti-deeplink.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -486,6 +488,42 @@ const jplagReportViewerState: NgHybridStateDeclaration = {
   },
 };
 
+// Lti States
+
+/**
+ * Define the LTI dashboard state.
+ */
+const LtiDashboardState: NgHybridStateDeclaration = {
+  name: 'lti',
+  url: '/lti',
+  views: {
+    main: {
+      component: LtiDashboardComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Home Page',
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+/**
+ * Renders the content selection form shown when "Select Content" is clicked in Moodle's external tool setup.
+ */
+const LtiDeeplinkState: NgHybridStateDeclaration = {
+  name: 'lti/deeplink',
+  url: '/lti/deeplink',
+  views: {
+    main: {
+      component: LtiDeeplinkComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Select Content',
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
 /**
  * Export the list of states we have created in angular
  */
@@ -508,4 +546,6 @@ export const doubtfireStates = [
   projectPlanState,
   TutorDiscussionState,
   jplagReportViewerState,
+  LtiDashboardState,
+  LtiDeeplinkState,
 ];

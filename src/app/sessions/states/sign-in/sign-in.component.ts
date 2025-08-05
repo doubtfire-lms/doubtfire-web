@@ -56,6 +56,8 @@ export class SignInComponent implements OnInit {
   // Get query params from the resolve in the router state
   @Input() username: string;
   @Input() authToken: string;
+  @Input() ltiToken: string;
+  @Input() isLtiLogin: boolean;
 
   constructor(
     private authService: AuthenticationService,
@@ -68,10 +70,31 @@ export class SignInComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.authService.afterAuthCall((result) => {
+      if (result) {
+        const params = getUrlParams(document.location.href);
+        this.isLoading = false;
+
+        if (params.ltiToken) {
+          this.globalState.hideHeader();
+          return this.state.go('lti');
+        } else {
+          this.globalState.goHome();
+          return this.state.go('welcome');
+        }
+      }
+      this.isLoading = true;
+    });
+
     this.globalState.onLoad(() => this.initAfterGlobalLoad());
   }
 
   private initAfterGlobalLoad(): void {
+    if (!this.isLoading) {
+      // return out if we're already redirecting elsewhere in the afterAuthCall
+      return;
+    }
+
     this.formData = {
       username: '',
       password: '',
@@ -84,11 +107,14 @@ export class SignInComponent implements OnInit {
     this.externalName = this.constants.ExternalName;
 
     // HACK: Workaround the fact that query params do not work in Safari with ui-router
+    const params = getUrlParams(document.location.href);
     if (!this.username) {
-      const params = getUrlParams(document.location.href);
       this.username = this.transition.params().username || params.username;
       this.authToken = this.transition.params().authToken || params.authToken;
     }
+
+    this.ltiToken = params.ltiToken ?? undefined;
+    this.isLtiLogin = params.isLtiLogin?.toLowerCase() === 'true' ? true : false;
 
     // wait 2 seconds with rxjs
     const wait = new Promise((resolve) => setTimeout(resolve, 3000));
@@ -106,6 +132,27 @@ export class SignInComponent implements OnInit {
             username: this.username,
             remember: this.authService.rememberMe,
           });
+        } else if (this.ltiToken) {
+          // We have a signed Lti token containing user data
+          // Forward it to the API and request a one time auth token
+          this.signingIn = true;
+
+          this.authService
+            .signInWithLti({
+              lti_token: this.ltiToken,
+            })
+            .subscribe({
+              next: () => {
+                // this.globalState.goHome();
+                // this.actionSignInSuccess();
+              },
+              error: (err) => {
+                this.signingIn = false;
+                this.formData.password = '';
+                this.invalidCredentials = true;
+                this.alerts.error(err, 6000);
+              },
+            });
         } else if (this.SSOLoginUrl) {
           if (this.autoLogin) {
             return wait.then(() => {
@@ -190,7 +237,12 @@ export class SignInComponent implements OnInit {
 
     this.authService.signIn(signInCredentials).subscribe({
       next: () => {
-        this.actionSignInSuccess();
+        if (this.isLtiLogin) {
+          this.globalState.loadGlobals();
+          this.state.go('lti');
+        } else {
+          this.actionSignInSuccess();
+        }
       },
       error: (err) => {
         this.signingIn = false;

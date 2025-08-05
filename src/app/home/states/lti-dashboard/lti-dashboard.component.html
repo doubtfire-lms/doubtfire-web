@@ -1,0 +1,59 @@
+<div id="home" class="w-full h-screen px-20 justify-center items-center">
+  <div class="flex flex-col gap-5 w-full max-w-lg mx-auto justify-center h-screen">
+    <div class="flex justify-center items-center">
+      <mat-icon
+        svgIcon="formatif-logo"
+        class="formatif-icon"
+        aria-label="Formatif logo"
+        class="w-[100px] h-[100px]"
+      ></mat-icon>
+      <h1 class="m-0 ml-5 text-6xl">OnTrack</h1>
+    </div>
+    <button
+      mat-fab
+      extended
+      color="primary"
+      class="h-[50px] my-5"
+      (click)="launchApplication()"
+      target="_blank"
+    >
+      <mat-icon>rocket_launch</mat-icon>
+      Launch
+    </button>
+
+    <div class="flex justify-center gap-5">
+      <button
+        mat-fab
+        matTooltip="Manage Unit"
+        matTooltipPosition="above"
+        aria-label=""
+        class="w-[60px] h-[60px]"
+        color="default"
+      >
+        <mat-icon mat-icon-button>school</mat-icon>
+      </button>
+
+      <button
+        mat-fab
+        matTooltip="Manage Enrolment"
+        matTooltipPosition="above"
+        aria-label=""
+        class="w-[60px] h-[60px]"
+        color="default"
+      >
+        <mat-icon mat-icon-button>admin_panel_settings</mat-icon>
+      </button>
+
+      <button
+        mat-fab
+        matTooltip="View Progress"
+        matTooltipPosition="above"
+        aria-label=""
+        class="w-[60px] h-[60px]"
+        color="default"
+      >
+        <mat-icon mat-icon-button>assessment</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
