@@ -243,7 +243,23 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
       (response: any) => {
         this.csvResultModalService.show('Feedback Templates CSV Upload Results', response);
         if (response.success.length > 0) {
-          this.context.refresh();
+          let contextType: 'units' | 'task_definitions';
+
+          if (this.context instanceof Unit) {
+            this.context.refresh();
+            contextType = 'units';
+          } else if (this.context instanceof TaskDefinition) {
+            this.context.unit.refresh();
+            contextType = 'task_definitions';
+          }
+          if (contextType) {
+            this.feedbackTemplateService
+              .fetchAll({contextType, contextId: this.context.id}, {})
+              .subscribe({
+                next: () => this.getFeedbackChips(),
+                error: () => this.alerts.error('Error loading task feedback templates.'),
+              });
+          }
         }
       },
     );
