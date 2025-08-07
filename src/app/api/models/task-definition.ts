@@ -125,7 +125,10 @@ export class TaskDefinition extends Entity {
   public refresh(): void {
     const alerts = AppInjector.get(AlertService);
     AppInjector.get(TaskDefinitionService)
-      .fetch(this.id)
+      .fetch({
+        unitId: this.unit.id,
+        id: this.id,
+      })
       .subscribe({
         next: (taskDefinition) => {
           console.log(taskDefinition.name);

@@ -20,5 +20,6 @@ export class NestedCsvDownloadModalComponent {
       `${this.data.url}?includes_tlos=${this.includeNested}`,
       this.data.name,
     );
+    this.dialogRef.close();
   }
 }
