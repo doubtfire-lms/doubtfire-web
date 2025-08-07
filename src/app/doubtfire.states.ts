@@ -512,7 +512,15 @@ const LtiDashboardState: NgHybridStateDeclaration = {
  */
 const LtiDeeplinkState: NgHybridStateDeclaration = {
   name: 'lti/deeplink',
-  url: '/lti/deeplink',
+  url: '/lti/deeplink?ltik',
+  resolve: {
+    ltik: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.ltik;
+      },
+    ],
+  },
   views: {
     main: {
       component: LtiDeeplinkComponent,
