@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
 import {MatSelectionList} from '@angular/material/list';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {StateService, UIRouter} from '@uirouter/core';
@@ -207,6 +207,14 @@ export class TutorDiscussionComponent implements AfterViewInit {
     for (const taskOption of selectedTasks) {
       const task = taskOption.value as Task;
       task.updateTaskStatus(status, true);
+    }
+  }
+
+  public markSelectedTasksDicussed() {
+    const selectedTasks = this.tasksList.selectedOptions.selected;
+    for (const taskOption of selectedTasks) {
+      const task = taskOption.value as Task;
+      task.markAsDiscussed();
     }
   }
 
