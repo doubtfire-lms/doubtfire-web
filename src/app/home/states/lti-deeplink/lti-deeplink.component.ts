@@ -92,7 +92,7 @@ export class LtiDeeplinkComponent implements AfterViewInit {
           this.activeUnits = [...units];
         },
         error: (error) => {
-          this.alertsService.error(`Failed to fetch units: ${error.message}`, 6000);
+          this.alertsService.error(`Failed to fetch units`, 6000);
         },
       });
   }
