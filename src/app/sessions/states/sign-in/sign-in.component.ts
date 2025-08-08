@@ -3,6 +3,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {StateService, Transition} from '@uirouter/core';
 import {BehaviorSubject} from 'rxjs';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
+import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
@@ -57,10 +58,12 @@ export class SignInComponent implements OnInit {
   @Input() username: string;
   @Input() authToken: string;
   @Input() ltiToken: string;
+  @Input() ltik: string;
   @Input() isLtiLogin: boolean;
 
   constructor(
     private authService: AuthenticationService,
+    private userService: UserService,
     private state: StateService,
     private constants: DoubtfireConstants,
     private http: HttpClient,
@@ -77,7 +80,10 @@ export class SignInComponent implements OnInit {
 
         if (params.ltiToken) {
           this.globalState.hideHeader();
-          return this.state.go('lti');
+          this.userService.currentUser.ltik = params.ltik;
+          return this.state.go('lti', {
+            ltik: params.ltik,
+          });
         } else {
           this.globalState.goHome();
           return this.state.go('welcome');
@@ -114,6 +120,7 @@ export class SignInComponent implements OnInit {
     }
 
     this.ltiToken = params.ltiToken ?? undefined;
+    this.ltik = params.ltik ?? undefined;
     this.isLtiLogin = params.isLtiLogin?.toLowerCase() === 'true' ? true : false;
 
     // wait 2 seconds with rxjs
@@ -139,6 +146,7 @@ export class SignInComponent implements OnInit {
 
           this.authService
             .signInWithLti({
+              ltik: this.ltik,
               lti_token: this.ltiToken,
             })
             .subscribe({
@@ -239,7 +247,10 @@ export class SignInComponent implements OnInit {
       next: () => {
         if (this.isLtiLogin) {
           this.globalState.loadGlobals();
-          this.state.go('lti');
+          const params = getUrlParams(document.location.href);
+          this.state.go('lti', {
+            ltik: params.ltik,
+          });
         } else {
           this.actionSignInSuccess();
         }
