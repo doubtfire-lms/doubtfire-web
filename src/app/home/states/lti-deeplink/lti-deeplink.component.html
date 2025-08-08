@@ -10,7 +10,9 @@
       <h1 class="m-0 ml-5 text-6xl">OnTrack</h1>
     </div>
 
-    @if (!activeUnits.length) {
+    @if (loadingUnits) {
+      <p>Loading...</p>
+    } @else if (!activeUnits.length) {
       <p class="w-full text-center text-gray-400">
         You must already be a Convenor or Admin to link a unit. You are not currently assigned to
         any units.
@@ -25,7 +27,7 @@
         <mat-select [(value)]="selectedUnit">
           @for (unit of activeUnits; track unit) {
             <mat-option [value]="unit"
-              >{{ unit.code }} - {{ unit.name }} ({{ unit.teachingPeriod.name }})</mat-option
+              >{{ unit.code }} - {{ unit.name }} ({{ unit.teachingPeriod?.name }})</mat-option
             >
           }
         </mat-select>

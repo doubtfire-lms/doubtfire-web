@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, Input} from '@angular/core';
+import {StateService} from '@uirouter/core';
 import {CreateNewUnitModal} from 'src/app/admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -22,6 +23,7 @@ export class LtiDeeplinkComponent implements AfterViewInit {
     private alertsService: AlertService,
     private ltiService: LtiService,
     private userService: UserService,
+    private stateService: StateService,
   ) {}
 
   @Input() ltik: string;
@@ -31,7 +33,11 @@ export class LtiDeeplinkComponent implements AfterViewInit {
 
   public unitLinked: boolean = false;
 
+  public loadingUnits: boolean;
+
   ngAfterViewInit(): void {
+    this.loadingUnits = true;
+
     // Scroll to the bottom of the page in case the header is visible
     // Ensures our action buttons are centered
     setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
@@ -57,23 +63,27 @@ export class LtiDeeplinkComponent implements AfterViewInit {
   }
 
   private async linkUnit(unit: Unit) {
-    const formData = {
-      unit_id: unit.code,
-    };
+    this.ltiService
+      .setUnitLink({
+        unitId: unit.id.toString(),
+        // unitCode: unit.code,
+        // unitName: unit.name,
+      })
+      .subscribe({
+        next: (link) => {
+          console.log(link);
 
-    this.ltiService.sendDeeplinkRequest(formData).subscribe({
-      next: (form) => {
-        // On success, LTI.js returns an HTML script that tells our LMS to return back to the settings page
-        document.body.innerHTML += form;
-        setTimeout(() => {
-          (document.getElementById('ltijs_submit') as HTMLFormElement)?.submit();
-        });
-      },
-      error: (error) => {
-        console.log(error);
-        this.alertsService.error(`Failed to link unit: ${error.error}`, 6000);
-      },
-    });
+          this.alertsService.success(`Successfully linked ${unit.code}`, 5000);
+
+          this.stateService.go('lti', {
+            ltik: this.ltik,
+          });
+        },
+        error: (error) => {
+          console.log(error);
+          this.alertsService.error(`Failed to link unit: ${error.error}`, 6000);
+        },
+      });
   }
 
   public loadUnits(): void {
@@ -90,6 +100,7 @@ export class LtiDeeplinkComponent implements AfterViewInit {
       .subscribe({
         next: (units) => {
           this.activeUnits = [...units];
+          this.loadingUnits = false;
         },
         error: (error) => {
           this.alertsService.error(`Failed to fetch units`, 6000);

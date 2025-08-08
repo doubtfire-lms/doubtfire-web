@@ -1,5 +1,5 @@
 <div id="home" class="w-full h-screen px-20 justify-center items-center">
-  <div class="flex flex-col gap-5 w-full max-w-lg mx-auto justify-center h-screen">
+  <div class="flex flex-col gap-5 w-full max-w-2xl mx-auto justify-center h-screen items-center">
     <div class="flex justify-center items-center">
       <mat-icon
         svgIcon="formatif-logo"
@@ -9,54 +9,73 @@
       ></mat-icon>
       <h1 class="m-0 ml-5 text-6xl">OnTrack</h1>
     </div>
-    <button
-      mat-fab
-      extended
-      color="primary"
-      class="h-[50px] my-5"
-      (click)="launchApplication()"
-      target="_blank"
-    >
-      <mat-icon>rocket_launch</mat-icon>
-      Launch
-    </button>
 
-    <div class="flex justify-center gap-5">
+    @if (isLoading) {
+      <!-- TODO: spinner -->
+      <p>Loading...</p>
+    } @else {
+      <div class="flex justify-center gap-5">
+        @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
+          <button
+            mat-fab
+            [disabled]="!linkedUnit"
+            matTooltip="Sync enrolments"
+            matTooltipPosition="above"
+            aria-label=""
+            class="w-[60px] h-[60px]"
+            color="default"
+          >
+            <mat-icon mat-icon-button>people</mat-icon>
+          </button>
+
+          <button
+            mat-fab
+            [disabled]="!linkedUnit"
+            matTooltip="Sync grades"
+            matTooltipPosition="above"
+            aria-label=""
+            class="w-[60px] h-[60px]"
+            color="default"
+            (click)="syncGrades()"
+          >
+            <mat-icon mat-icon-button>grade</mat-icon>
+          </button>
+        }
+      </div>
       <button
         mat-fab
-        matTooltip="Manage Unit"
-        matTooltipPosition="above"
-        aria-label=""
-        class="w-[60px] h-[60px]"
-        color="default"
+        extended
+        color="primary"
+        class="h-[50px] my-5 w-full max-w-lg"
+        (click)="launchApplication()"
+        target="_blank"
       >
-        <mat-icon mat-icon-button>school</mat-icon>
+        <mat-icon>rocket_launch</mat-icon>
+        Launch {{ linkedUnit ? linkedUnit.code : 'OnTrack' }}
       </button>
+      <div class="text-center text-gray-300 mt-4 w-full">
+        @if (linkedUnit) {
+          {{ linkedUnit.code }} &mdash; {{ linkedUnit.name }}
+          @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
+            <br />
+            <button mat-button class="underline text-blue-400" (click)="removeLink()">
+              Unlink
+            </button>
+          }
+        } @else {
+          This course has not yet been linked to an OnTrack Unit.
 
-      <button
-        mat-fab
-        matTooltip="Manage Enrolment"
-        matTooltipPosition="above"
-        aria-label=""
-        class="w-[60px] h-[60px]"
-        color="default"
-      >
-        <mat-icon mat-icon-button>admin_panel_settings</mat-icon>
-      </button>
-
-      <button
-        mat-fab
-        matTooltip="View Progress"
-        matTooltipPosition="above"
-        aria-label=""
-        class="w-[60px] h-[60px]"
-        color="default"
-      >
-        <mat-icon mat-icon-button>assessment</mat-icon>
-      </button>
-    </div>
-    <div class="text-center text-gray-300 mt-4 text-base">
-      COS10001 &mdash; Introduction to Programming
-    </div>
+          @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
+            <br />
+            <button mat-button class="underline text-blue-400" (click)="goToLinkUnit()">
+              Link it now
+            </button>
+          } @else {
+            <br />
+            Only OnTrack staff are permitted to link this course.
+          }
+        }
+      </div>
+    }
   </div>
 </div>

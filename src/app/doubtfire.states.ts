@@ -495,7 +495,15 @@ const jplagReportViewerState: NgHybridStateDeclaration = {
  */
 const LtiDashboardState: NgHybridStateDeclaration = {
   name: 'lti',
-  url: '/lti',
+  url: '/lti?ltik',
+  resolve: {
+    ltik: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.ltik;
+      },
+    ],
+  },
   views: {
     main: {
       component: LtiDashboardComponent,
