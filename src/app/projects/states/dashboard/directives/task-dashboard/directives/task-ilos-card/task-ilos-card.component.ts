@@ -15,6 +15,7 @@ export class TaskIlosCardComponent implements OnInit, OnChanges {
   @Input() taskDef: TaskDefinition | undefined;
   @Input() project: Project;
 
+  allOutcomesCache: LearningOutcome[] = []; // Track linked outcomes
   learningOutcomes: LearningOutcome[] = [];
 
   public ngOnChanges(_changes: SimpleChanges) {
@@ -29,18 +30,29 @@ export class TaskIlosCardComponent implements OnInit, OnChanges {
     this.learningOutcomes = [];
 
     if (this.iloContextType === 'Unit' && this.unit) {
-      for (const ilo of this.unit.ilos) {
-        this.learningOutcomes.push(ilo);
-      }
+      this.addIlosToCache(this.unit.ilos as LearningOutcome[]);
+      this.learningOutcomes.push(...this.unit.ilos);
     } else if (this.iloContextType === 'TaskDefinition' && this.taskDef) {
+      this.addIlosToCache(this.taskDef.unit.ilos as LearningOutcome[]);
       this.taskDef.learningOutcomesCache.values.subscribe((ilos) => {
-        for (const ilo of ilos) {
-          this.learningOutcomes.push(ilo);
-        }
+        this.learningOutcomes.push(...ilos);
+        this.addIlosToCache(ilos);
       });
     }
 
     // TODO: implement Course and Global learning outcomes when available
+  }
+
+  private addIlosToCache(outcomes: LearningOutcome[]): void {
+    for (const ilo of outcomes) {
+      if (!this.allOutcomesCache.find((existing) => existing.id === ilo.id)) {
+        this.allOutcomesCache.push(ilo);
+      }
+    }
+  }
+
+  getLinkedOutcomes(ilo: LearningOutcome): LearningOutcome[] {
+    return this.allOutcomesCache.filter((outcome) => ilo.linkedOutcomeIds.includes(outcome.id));
   }
 
   public getIloContextLabel(): string {
