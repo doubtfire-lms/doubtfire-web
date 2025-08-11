@@ -52,7 +52,7 @@ export class LtiDeeplinkComponent implements AfterViewInit {
 
   public submit(): void {
     this.confirmationModalService.show(
-      `Are you sure you want to link ${this.selectedUnit.code} to ${'Moodle-Name-Here'}?`,
+      `Are you sure you want to link ${this.selectedUnit.code} ${this.selectedUnit.name} (${this.getTeachingPeriod(this.selectedUnit)}) to this course?`,
       'Once you have linked an OnTrack unit, students who launch this app will be enrolled automatically. Unlinking a unit will not withdraw students automatically.',
       () => {
         // Trigger API call to LTI.js with our deeplink request
@@ -60,6 +60,20 @@ export class LtiDeeplinkComponent implements AfterViewInit {
         this.linkUnit(this.selectedUnit);
       },
     );
+  }
+
+  private formatTeachingPeriod(date): string {
+    const month = date.toLocaleString('en-US', {month: 'short'});
+    const year = String(date.getFullYear()).slice(-2);
+    return `${month} '${year}`;
+  }
+
+  public getTeachingPeriod(unit: Unit) {
+    if (unit.teachingPeriod?.name) {
+      return unit.teachingPeriod.name;
+    }
+
+    return `${this.formatTeachingPeriod(unit.startDate)} - ${this.formatTeachingPeriod(unit.endDate)}`;
   }
 
   private async linkUnit(unit: Unit) {
@@ -99,7 +113,10 @@ export class LtiDeeplinkComponent implements AfterViewInit {
       )
       .subscribe({
         next: (units) => {
-          this.activeUnits = [...units];
+          // Show newer units first
+          this.activeUnits = [...units].sort(
+            (a, b) => b.startDate.getTime() - a.startDate.getTime(),
+          );
           this.loadingUnits = false;
         },
         error: (error) => {

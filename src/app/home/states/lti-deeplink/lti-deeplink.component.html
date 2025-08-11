@@ -1,5 +1,5 @@
 <div id="home" class="w-full h-screen px-20 justify-center items-center">
-  <div class="flex flex-col gap-5 w-full max-w-2xl mx-auto justify-center items-center h-screen">
+  <div class="flex flex-col gap-5 w-full max-w-4xl mx-auto justify-center items-center h-screen">
     <div class="flex justify-center items-center">
       <mat-icon
         svgIcon="formatif-logo"
@@ -13,12 +13,12 @@
     @if (loadingUnits) {
       <p>Loading...</p>
     } @else if (!activeUnits.length) {
-      <p class="w-full text-center text-gray-400">
+      <p class="w-full text-center text-gray-400 max-w-2xl">
         You must already be a Convenor or Admin to link a unit. You are not currently assigned to
         any units.
       </p>
     } @else {
-      <p class="w-full text-center">
+      <p class="w-full text-center max-w-2xl">
         Students will be automatically enrolled in this unit when they launch the OnTrack tool from
         this course.
       </p>
@@ -27,7 +27,7 @@
         <mat-select [(value)]="selectedUnit">
           @for (unit of activeUnits; track unit) {
             <mat-option [value]="unit"
-              >{{ unit.code }} - {{ unit.name }} ({{ unit.teachingPeriod?.name }})</mat-option
+              >{{ unit.code }} {{ unit.name }} ({{ getTeachingPeriod(unit) }})</mat-option
             >
           }
         </mat-select>

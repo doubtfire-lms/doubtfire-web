@@ -7,6 +7,7 @@ import {AuthenticationService} from 'src/app/api/services/authentication.service
 import {LtiService} from 'src/app/api/services/lti.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {UserService} from 'src/app/api/services/user.service';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 @Component({
   selector: 'f-lti-dashboard',
@@ -23,6 +24,7 @@ export class LtiDashboardComponent implements AfterViewInit {
     private alertsService: AlertService,
     private unitService: UnitService,
     private projectService: ProjectService,
+    private confirmationModalService: ConfirmationModalService,
     @Inject(csvResultModalService) private _csvResultModalService: any,
   ) {}
 
@@ -115,30 +117,36 @@ export class LtiDashboardComponent implements AfterViewInit {
   //   });
   // }
 
-  syncMyGrade(): void {
-    this.ltiService.syncGrade().subscribe({
-      next: (result) => {
-        console.log('Successfully synced grade from OnTrack');
-        this.alertsService.success('Successfully synced grade from OnTrack', 5000);
-      },
-      error: (error) => {
-        console.log(error);
-        this.alertsService.error(`Failed to retrieve grade`);
-      },
-    });
-  }
+  // syncMyGrade(): void {
+  //   this.ltiService.syncGrade().subscribe({
+  //     next: (result) => {
+  //       console.log('Successfully synced grade from OnTrack');
+  //       this.alertsService.success('Successfully synced grade from OnTrack', 5000);
+  //     },
+  //     error: (error) => {
+  //       console.log(error);
+  //       this.alertsService.error(`Failed to retrieve grade`);
+  //     },
+  //   });
+  // }
 
   syncStudentsGrades(): void {
-    this.ltiService.syncStudentsGrades().subscribe({
-      next: (result) => {
-        this.alertsService.success('Successfully synced grades from OnTrack', 5000);
-        this._csvResultModalService.show('Grade sync', result);
+    this.confirmationModalService.show(
+      'Sync Grades from OnTrack',
+      'Are you sure you want to sync portfolio grades from OnTrack? Please confirm that grades are final and approved for release.',
+      () => {
+        this.ltiService.syncStudentsGrades().subscribe({
+          next: (result) => {
+            this.alertsService.success('Successfully synced grades from OnTrack', 5000);
+            this._csvResultModalService.show('Grade sync', result);
+          },
+          error: (error) => {
+            console.log(error);
+            this.alertsService.error(`Failed to retrieve grade`);
+          },
+        });
       },
-      error: (error) => {
-        console.log(error);
-        this.alertsService.error(`Failed to retrieve grade`);
-      },
-    });
+    );
   }
   public launchApplication(): void {
     window.open('http://localhost:4200/home', '_blank');
