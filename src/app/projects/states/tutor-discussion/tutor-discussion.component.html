@@ -70,7 +70,7 @@
                   class="notification"
                   [ngClass]="{
                     active: task.numNewComments > 0 || task.similaritiesDetected,
-                    similarities: task.similaritiesDetected,
+                    similarities: task.similaritiesDetected
                   }"
                 ></span>
                 <user-icon class="self-center" [user]="project?.student" [size]="30"> </user-icon>
@@ -135,7 +135,7 @@
 
   @if (project && filteredTasks.length) {
     <div class="mt-2">
-      <div class="w-full flex justify-center items-center my-3 gap-5">
+      <div class="w-full flex justify-center items-center my-3 gap-8">
         <button
           class="bg-gray-100 medium-icon-button"
           mat-fab
@@ -154,7 +154,16 @@
         >
           <!-- Mark as Complete -->
           <mat-icon>done</mat-icon>
-          <!-- <mat-icon class="text-2xl leading-none m-0">done</mat-icon> -->
+        </button>
+
+        <button
+          class="bg-blue-300 medium-icon-button"
+          mat-fab
+          [disabled]="!tasks.selectedOptions.selected.length"
+          (click)="markSelectedTasksDicussed()"
+        >
+          <!-- Mark as Discussed -->
+          <mat-icon>group</mat-icon>
         </button>
       </div>
     </div>

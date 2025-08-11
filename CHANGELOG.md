@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-19](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-18...v10.0.0-19) (2025-08-07)
+
+
+### Features
+
+* mark as discussed button in mobile tutor discussion ([9e62214](https://github.com/b0ink/doubtfire-deploy/commit/9e62214df772355048f4c7c7ffc13f3181f746e2))
+
 ## [10.0.0-18](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-17...v10.0.0-18) (2025-07-31)
 
 

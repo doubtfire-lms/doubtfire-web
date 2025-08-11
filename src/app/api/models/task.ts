@@ -179,6 +179,11 @@ export class Task extends Entity {
     return formatDate(this.localDueDate(), 'd MMM', locale);
   }
 
+  public localDeadlineDateString(): string {
+    const locale: string = AppInjector.get(LOCALE_ID);
+    return formatDate(this.localDeadlineDate(), 'd MMM', locale);
+  }
+
   public get dueWeek(): number {
     const startDate: Date = this.unit.startDate;
     const dueDate: Date = this.localDueDate();

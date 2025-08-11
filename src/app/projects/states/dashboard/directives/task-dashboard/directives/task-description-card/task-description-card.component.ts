@@ -56,6 +56,13 @@ export class TaskDescriptionCardComponent {
     return this.task?.startDate ?? this.taskDef?.startDate;
   }
 
+  public feedbackDate(): Date {
+    if (this.task) {
+      return this.task.localDeadlineDate();
+    }
+    this.taskDef.localDeadlineDate();
+  }
+
   public shouldShowDeadline(): boolean {
     return this.task && this.task.daysUntilDeadlineDate() <= 14;
   }
