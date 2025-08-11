@@ -27,7 +27,6 @@
           >
             <mat-icon mat-icon-button>people</mat-icon>
           </button>
-
           <button
             mat-fab
             [disabled]="!linkedUnit"
@@ -36,7 +35,20 @@
             aria-label=""
             class="w-[60px] h-[60px]"
             color="default"
-            (click)="syncGrades()"
+            (click)="syncStudentsGrades()"
+          >
+            <mat-icon mat-icon-button>grade</mat-icon>
+          </button>
+        } @else {
+          <button
+            mat-fab
+            [disabled]="!linkedUnit"
+            matTooltip="Sync grades"
+            matTooltipPosition="above"
+            aria-label=""
+            class="w-[60px] h-[60px]"
+            color="default"
+            (click)="syncMyGrade()"
           >
             <mat-icon mat-icon-button>grade</mat-icon>
           </button>

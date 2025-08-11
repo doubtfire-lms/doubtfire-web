@@ -1,13 +1,13 @@
-import {AfterViewInit, Component, Inject, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, Input} from '@angular/core';
 import {StateService, UIRouter} from '@uirouter/angular';
+import {csvResultModalService} from 'src/app/ajs-upgraded-providers';
 import {ProjectService, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
-import {LtiService, UnitLink} from 'src/app/api/services/lti.service';
+import {LtiService} from 'src/app/api/services/lti.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-
 @Component({
   selector: 'f-lti-dashboard',
   templateUrl: 'lti-dashboard.component.html',
@@ -23,6 +23,7 @@ export class LtiDashboardComponent implements AfterViewInit {
     private alertsService: AlertService,
     private unitService: UnitService,
     private projectService: ProjectService,
+    @Inject(csvResultModalService) private _csvResultModalService: any,
   ) {}
 
   @Input() ltik: string;
@@ -53,6 +54,9 @@ export class LtiDashboardComponent implements AfterViewInit {
             this.isLoading = false;
             return;
           }
+
+          // this.getGrade();
+
           // Ensure user is enrolled into the linked unit
           this.ltiService.enrolUser(link).subscribe({
             next: () => {
@@ -99,6 +103,43 @@ export class LtiDashboardComponent implements AfterViewInit {
     });
   }
 
+  // getGrade(): void {
+  //   this.ltiService.getGrade().subscribe({
+  //     next: (result) => {
+  //       console.log('grade result?: ', result);
+  //       console.log(JSON.stringify(result));
+  //     },
+  //     error: (error) => {
+  //       console.log(error);
+  //     },
+  //   });
+  // }
+
+  syncMyGrade(): void {
+    this.ltiService.syncGrade().subscribe({
+      next: (result) => {
+        console.log('Successfully synced grade from OnTrack');
+        this.alertsService.success('Successfully synced grade from OnTrack', 5000);
+      },
+      error: (error) => {
+        console.log(error);
+        this.alertsService.error(`Failed to retrieve grade`);
+      },
+    });
+  }
+
+  syncStudentsGrades(): void {
+    this.ltiService.syncStudentsGrades().subscribe({
+      next: (result) => {
+        this.alertsService.success('Successfully synced grades from OnTrack', 5000);
+        this._csvResultModalService.show('Grade sync', result);
+      },
+      error: (error) => {
+        console.log(error);
+        this.alertsService.error(`Failed to retrieve grade`);
+      },
+    });
+  }
   public launchApplication(): void {
     window.open('http://localhost:4200/home', '_blank');
   }

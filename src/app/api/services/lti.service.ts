@@ -19,6 +19,15 @@ interface info {
     | undefined;
 }
 
+export interface RetrievedGrade {
+  id: string;
+  scoreOf: string;
+  userId: string;
+  resultScore: number;
+  resultMaximum: number;
+  comment: string;
+}
+
 export interface UnitLink {
   contextId?: string;
   unitId: string;
@@ -53,5 +62,23 @@ export class LtiService {
 
   public enrolUser(unit: UnitLink): Observable<Project | null> {
     return this.httpClient.post<Project | null>(`${LTI_API_URL}/enrol`, unit);
+  }
+
+  public getMembers(): Observable<any> {
+    return this.httpClient.get<any>(`${LTI_API_URL}/members`);
+  }
+
+  // Sync grade for current student
+  public syncGrade(): Observable<boolean> {
+    return this.httpClient.post<boolean>(`${LTI_API_URL}/grades`, {});
+  }
+
+  // Sync grades for all members in the context (course)
+  public syncStudentsGrades(): Observable<boolean> {
+    return this.httpClient.post<boolean>(`${LTI_API_URL}/grades`, {});
+  }
+
+  public getGrade(): Observable<RetrievedGrade[] | null> {
+    return this.httpClient.get<RetrievedGrade[] | null>(`${LTI_API_URL}/grade`, {});
   }
 }
