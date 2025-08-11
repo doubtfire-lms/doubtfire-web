@@ -14,8 +14,7 @@ import {SuccessCloseComponent} from './common/success-close/success-close.compon
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
-import {LtiDeeplinkComponent} from './home/states/lti-deeplink/lti-deeplink.component';
-
+import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 /*
  * Use this file to store any states that are sourced by angular components.
  */
@@ -518,9 +517,9 @@ const LtiDashboardState: NgHybridStateDeclaration = {
 /**
  * Renders the content selection form shown when "Select Content" is clicked in Moodle's external tool setup.
  */
-const LtiDeeplinkState: NgHybridStateDeclaration = {
-  name: 'lti/deeplink',
-  url: '/lti/deeplink?ltik',
+const LtiUnitLinkState: NgHybridStateDeclaration = {
+  name: 'lti/link',
+  url: '/lti/link?ltik',
   resolve: {
     ltik: [
       '$stateParams',
@@ -531,7 +530,7 @@ const LtiDeeplinkState: NgHybridStateDeclaration = {
   },
   views: {
     main: {
-      component: LtiDeeplinkComponent,
+      component: LtiUnitLinkComponent,
     },
   },
   data: {
@@ -563,5 +562,5 @@ export const doubtfireStates = [
   TutorDiscussionState,
   jplagReportViewerState,
   LtiDashboardState,
-  LtiDeeplinkState,
+  LtiUnitLinkState,
 ];

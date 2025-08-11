@@ -276,7 +276,7 @@ import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/side
 import {SidekiqJobService} from './api/services/sidekiq-job.service';
 import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-card.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
-import {LtiDeeplinkComponent} from './home/states/lti-deeplink/lti-deeplink.component';
+import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LtiService} from './api/services/lti.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
@@ -421,7 +421,7 @@ const MY_DATE_FORMAT = {
     SidekiqJobsModalComponent,
     UnavailableCardComponent,
     LtiDashboardComponent,
-    LtiDeeplinkComponent,
+    LtiUnitLinkComponent,
   ],
   // Services we provide
   providers: [

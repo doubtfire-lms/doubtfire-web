@@ -10,11 +10,11 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-lti-deeplink',
-  templateUrl: 'lti-deeplink.component.html',
-  styleUrls: ['lti-deeplink.component.scss'],
+  selector: 'f-lti-unit-link',
+  templateUrl: 'lti-unit-link.component.html',
+  styleUrls: ['lti-unit-link.component.scss'],
 })
-export class LtiDeeplinkComponent implements AfterViewInit {
+export class LtiUnitLinkComponent implements AfterViewInit {
   constructor(
     private createUnitModalService: CreateNewUnitModal,
     private unitService: UnitService,
@@ -55,7 +55,7 @@ export class LtiDeeplinkComponent implements AfterViewInit {
       `Are you sure you want to link ${this.selectedUnit.code} ${this.selectedUnit.name} (${this.getTeachingPeriod(this.selectedUnit)}) to this course?`,
       'Once you have linked an OnTrack unit, students who launch this app will be enrolled automatically. Unlinking a unit will not withdraw students automatically.',
       () => {
-        // Trigger API call to LTI.js with our deeplink request
+        // Trigger API call to LTI.js with our unit link request
         console.log('Trigger API call to LTI.js');
         this.linkUnit(this.selectedUnit);
       },

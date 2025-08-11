@@ -87,7 +87,7 @@ export class LtiDashboardComponent implements AfterViewInit {
   }
 
   goToLinkUnit(): void {
-    this.stateService.go('lti/deeplink', {
+    this.stateService.go('lti/link', {
       ltik: this.ltik,
     });
   }

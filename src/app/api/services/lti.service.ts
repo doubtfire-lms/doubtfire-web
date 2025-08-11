@@ -37,13 +37,6 @@ export interface UnitLink {
 export class LtiService {
   constructor(private httpClient: HttpClient) {}
 
-  // Sends a deeplink request to the LTI.js API (not the Ruby API).
-  public sendDeeplinkRequest(data: {unit_id: string}): Observable<string> {
-    return this.httpClient.post<string>(`${LTI_API_URL}/deeplink`, data);
-  }
-
-  // Sends a deeplink request to the LTI.js API (not the Ruby API).
-
   public getInfo(): Observable<info> {
     return this.httpClient.get<info>(`${LTI_API_URL}/info`);
   }
