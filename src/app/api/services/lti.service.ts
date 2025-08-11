@@ -68,17 +68,13 @@ export class LtiService {
     return this.httpClient.get<any>(`${LTI_API_URL}/members`);
   }
 
-  // Sync grade for current student
-  public syncGrade(): Observable<boolean> {
-    return this.httpClient.post<boolean>(`${LTI_API_URL}/grades`, {});
-  }
-
   // Sync grades for all members in the context (course)
   public syncStudentsGrades(): Observable<boolean> {
     return this.httpClient.post<boolean>(`${LTI_API_URL}/grades`, {});
   }
 
-  public getGrade(): Observable<RetrievedGrade[] | null> {
-    return this.httpClient.get<RetrievedGrade[] | null>(`${LTI_API_URL}/grade`, {});
+  // Sync grades for all members in the context (course)
+  public syncEnrolments(): Observable<boolean> {
+    return this.httpClient.post<boolean>(`${LTI_API_URL}/enrolments`, {});
   }
 }

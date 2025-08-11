@@ -130,6 +130,39 @@ export class LtiDashboardComponent implements AfterViewInit {
   //   });
   // }
 
+  syncEnrolments(): void {
+    if (!this.linkedUnit) {
+      this.alertsService.error(
+        `Course must be linked to an OnTrack unit before you can sync members.`,
+        6000,
+      );
+      return;
+    }
+
+    this.ltiService.getMembers().subscribe({
+      next: (members) => {
+        this.confirmationModalService.show(
+          'Sync Enrolments into OnTrack',
+          `Are you sure you want to import ${members.members.length} users into ${this.linkedUnit.code} ${this.linkedUnit.name}`,
+          () => {
+            this.ltiService.syncEnrolments().subscribe({
+              next: (result) => {
+                this.alertsService.success('Successfully imported users into OnTrack', 5000);
+              },
+              error: (error) => {
+                console.log(error);
+                this.alertsService.error(`Failed to retrieve grade`);
+              },
+            });
+          },
+        );
+      },
+      error: (error) => {
+        this.alertsService.error('Failed to retrieve course members', 6000);
+      },
+    });
+  }
+
   syncStudentsGrades(): void {
     this.confirmationModalService.show(
       'Sync Grades from OnTrack',
