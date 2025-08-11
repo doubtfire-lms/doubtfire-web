@@ -10,54 +10,103 @@
     </mat-card-header>
     <mat-card-content>
       <!--Due and not in discuss-->
-      <p [hidden]="task?.inDiscussState()">
-        This task's due date is <strong>{{ task?.localDueDateString() }}</strong
-        >. You should aim to complete this task before then to keep your progress on track.
-      </p>
+          @if (flexibleDatesEnabled) {
+            <p [hidden]="task?.inDiscussState()">
+              Your target due date for this task is
+              <strong>{{ task?.localDueDateString() }}</strong
+              >. You should aim to complete this task before then to keep your progress on track.
+            </p>
+          } @else {
+            <p [hidden]="task?.inDiscussState()">
+              This task's due date is <strong>{{ task?.localDueDateString() }}</strong
+              >. You should aim to complete this task before then to keep your progress on track.
+            </p>
+          }
     </mat-card-content>
     <mat-card-content [hidden]="!task?.inDiscussState()">
       <!--Due but in discuss-->
-      <p>
-        This task's due date is <strong>{{ task?.localDueDateString() }}</strong
-        >. Make sure to discuss this task with your tutor as soon as possible.
-      </p>
-      <p class="mat-caption">
-        Tasks are only considered <strong>Completed</strong> once your tutor has <strong>Discussed</strong> your work
-        with you.
-      </p>
-    </mat-card-content>
+          @if (flexibleDatesEnabled) {
+            <p>
+              This target due date for this task is <strong>{{ task?.localDueDateString() }}</strong
+              >. Make sure to discuss this task with your tutor as soon as possible.
+            </p>
+            <p class="mat-caption">
+              Tasks are only considered <strong>Completed</strong> once your tutor has
+              <strong>Discussed</strong> your work with you.
+            </p>
+          } @else {
+            <p>
+              This task's due date is <strong>{{ task?.localDueDateString() }}</strong
+              >. Make sure to discuss this task with your tutor as soon as possible.
+            </p>
+            <p class="mat-caption">
+              Tasks are only considered <strong>Completed</strong> once your tutor has
+              <strong>Discussed</strong> your work with you.
+            </p>
+          }
+        </mat-card-content>
   </mat-card>
   }
 
   <!--/is due soon-->
   @if (task?.betweenDueDateAndDeadlineDate()) {
-  <mat-card appearance="outlined">
-    <mat-card-header class="bg-yellow-600 text-white">
-      <mat-card-title class="flex items-center mb-4"
-        ><mat-icon>warning</mat-icon>
-        <span class="ml-4">Past Due Date By {{ task?.timePastDueDateDescription() }}</span></mat-card-title
-      >
-    </mat-card-header>
+      <mat-card appearance="outlined">
+        <mat-card-header class="bg-yellow-600 text-white">
+          <mat-card-title class="flex items-center mb-4"
+            ><mat-icon>warning</mat-icon>
+            @if (flexibleDatesEnabled) {
+              <span class="ml-4">Past Target Date By {{ task?.timePastDueDateDescription() }}</span>
+            } @else {
+              <span class="ml-4">Past Due Date By {{ task?.timePastDueDateDescription() }}</span>
+            }
+          </mat-card-title>
+        </mat-card-header>
 
-    <mat-card-content class="bg-yellow-50" [hidden]="task?.inDiscussState()">
-      <!--Not in submitted state and overdue-->
-      <p class="mt-2">
-        You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
-        >. Try and finish it as soon as possible to avoid falling behind. You will need to request an extension in order
-        to have this task checked and marked as complete by your tutor.
-      </p>
+        <mat-card-content class="bg-yellow-50" [hidden]="task?.inDiscussState()">
+          <!--Not in submitted state and overdue-->
+          @if (flexibleDatesEnabled) {
+            <p class="mt-2 p-2">
+              You should have submitted this task by
+              <strong>{{ task?.localDueDateString() }}</strong> to keep your progress on track. Try
+              to finish it as soon as possible to avoid delays. You can revise your project plan
+              dates, but ensure you submit before the deadline to receive feedback.
+            </p>
+          } @else {
+            <p class="mt-2 p-2">
+              You should have completed this task by
+              <strong>{{ task?.localDueDateString() }}</strong
+              >. Try and finish it as soon as possible to avoid falling behind. You will need to
+              request an extension in order to have this task checked and marked as complete by your
+              tutor.
+            </p>
+          }
     </mat-card-content>
     <mat-card-content [hidden]="!task?.inDiscussState()">
       <!--Not discussed-->
-      <p>
-        You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
-        >. Make sure to discuss this task with your tutor as soon as possible. If this task remains on this state for an
-        extended period, it will be marked as Time Exceeded.
-      </p>
-      <p class="mat-caption">
-        Tasks are only considered <strong>completed</strong> once your tutor has <strong>discussed</strong> your work
-        with you.
-      </p>
+          @if (flexibleDatesEnabled) {
+            <p>
+              You should have completed this task by
+              <strong>{{ task?.localDueDateString() }}</strong
+              >. Make sure to discuss this task with your tutor as soon as possible. If you do not
+              discuss this task by {{ task?.localDeadlineDateString() }}, it will be marked as Time
+              Exceeded.
+            </p>
+            <p class="mat-caption">
+              Tasks are only considered <strong>completed</strong> once your tutor has
+              <strong>discussed</strong> your work with you.
+            </p>
+          } @else {
+            <p>
+              You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
+              >. Make sure to discuss this task with your tutor as soon as possible. If this task remains on this state for an
+              extended period, it will be marked as Time Exceeded.
+            </p>
+            <p class="mat-caption">
+              Tasks are only considered <strong>completed</strong> once your tutor has <strong>discussed</strong> your work
+              with you.
+            </p>
+          }
+
     </mat-card-content>
   </mat-card>
   }
