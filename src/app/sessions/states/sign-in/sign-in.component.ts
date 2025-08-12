@@ -78,7 +78,7 @@ export class SignInComponent implements OnInit {
         const params = getUrlParams(document.location.href);
         this.isLoading = false;
 
-        if (params.ltiToken) {
+        if (params.isLtiLogin && params.ltik) {
           this.globalState.hideHeader();
           this.userService.currentUser.ltik = params.ltik;
           return this.state.go('lti', {
