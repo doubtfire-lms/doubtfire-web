@@ -11,8 +11,14 @@
     </div>
 
     @if (isLoading) {
-      <!-- TODO: spinner -->
-      <p>Loading...</p>
+      @if (unauthorised) {
+        <div class="w-full bg-red-200 text-red-800 p-5 text-center font-semibold rounded-lg">
+          An error occurred. Please refresh the page.
+        </div>
+      } @else {
+        <!-- TODO: spinner -->
+        <p>Loading...</p>
+      }
     } @else {
       <div class="flex justify-center gap-5">
         @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {

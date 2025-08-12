@@ -33,6 +33,7 @@ export class LtiDashboardComponent implements AfterViewInit {
   // linkedUnit: UnitLink;
   linkedUnit: Unit;
   currentUser: User;
+  unauthorised: boolean = false;
 
   loadingState: 'creatingUser' | 'enrollingUser' | 'fetchingUnit';
   isLoading: boolean;
@@ -81,6 +82,7 @@ export class LtiDashboardComponent implements AfterViewInit {
         },
         error: (error) => {
           this.alertsService.error('Unauthorised. Please relaunch the app.', 6000);
+          this.unauthorised = true;
         },
       });
     });
