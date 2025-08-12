@@ -112,6 +112,9 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
         );
 
     request$.subscribe((comments) => {
+      // Remove task notification
+      task.numNewComments = 0;
+
       for (const comment of comments) {
         const existingComment = task.commentCache.get(comment.id);
         comment.task = task;
