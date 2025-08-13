@@ -36,6 +36,14 @@ export class UnitAnalyticsComponent {
     );
   }
 
+  public getTasksAwaitingFeedbackCsv() {
+    this.downloadCsv(
+      this.unit.downloadTasksAwaitingFeedbackCsv(),
+      'Tasks Awaiting Feedback CSV',
+      `${this.unit.code}-tasks-awaiting-feedback.csv`,
+    );
+  }
+
   private downloadCsv(newJob: Observable<SidekiqJob>, title: string, filename: string) {
     newJob.subscribe({
       next: (job) => {
