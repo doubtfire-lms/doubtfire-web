@@ -77,6 +77,7 @@ export class LtiDashboardComponent implements AfterViewInit {
             },
             error: (error) => {
               console.error(error);
+              this.isLoading = false;
             },
           });
         },
