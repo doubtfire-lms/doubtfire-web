@@ -12,9 +12,21 @@
       } @else {
         <div>{{ job?.status.toUpperCase() }}{{ job?.message ? ': ' + job.message : '' }}</div>
       }
-      <div>{{ job?.processedCount }}/{{ job?.totalCount }} ({{ job?.pctComplete }}%)</div>
+      <div>
+        {{ job?.status === 'complete' ? job?.totalCount : job?.processedCount }}/{{
+          job?.totalCount
+        }}
+        ({{ job?.status === 'complete' ? '100' : job?.pctComplete }}%)
+      </div>
     </div>
-    <mat-progress-bar mode="determinate" [value]="job?.pctComplete ?? 0"></mat-progress-bar>
+    @if (job?.status === 'queued') {
+      <mat-progress-bar mode="buffer" [value]="job?.pctComplete ?? 0"></mat-progress-bar>
+    } @else {
+      <mat-progress-bar
+        mode="determinate"
+        [value]="job?.status === 'complete' ? 100 : job?.pctComplete ?? 0"
+      ></mat-progress-bar>
+    }
   </mat-dialog-content>
   <mat-dialog-actions class="flex justify-between">
     <button mat-raised-button (click)="dismissModal()">Dismiss</button>
