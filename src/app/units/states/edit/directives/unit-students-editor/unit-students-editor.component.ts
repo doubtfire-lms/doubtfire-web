@@ -137,7 +137,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
       this.unit.enrolStudentsCSVUrl,
       (response: SidekiqJob) => {
         if (!response || !response.id) {
-          this.alerts.error('Failed to start student import job', 6000);
+          return this.alerts.error('Failed to start student import job', 6000);
         }
         this.sidekiqProgressModalService
           .show(`Importing Students: ${this.unit.code}`, response.id)
