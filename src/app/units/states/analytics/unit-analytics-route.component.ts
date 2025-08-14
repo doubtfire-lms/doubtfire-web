@@ -51,7 +51,6 @@ export class UnitAnalyticsComponent {
           return this.alertsService.error(`Failed to download ${title}`, 6000);
         }
         this.sidekiqProgressModalService.show(`Downloading ${title}`, job.id).subscribe((job) => {
-          console.log(job);
           const blob = new Blob([job.result], {type: 'text/csv'});
           const url = URL.createObjectURL(blob);
 
