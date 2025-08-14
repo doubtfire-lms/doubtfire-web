@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-22](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-21...v10.0.0-22) (2025-08-14)
+
+
+### Features
+
+* download tasks awaiting feedback csv ([4a94373](https://github.com/b0ink/doubtfire-deploy/commit/4a943736689e41c405a831ca88a1303fb7c00385))
+
+
+### Bug Fixes
+
+* add return statement ([b8779e7](https://github.com/b0ink/doubtfire-deploy/commit/b8779e70d4decdc837caa8c84e8e8e2dfd3faf7f))
+* show full progress when sidekiq job is complete ([6a60d94](https://github.com/b0ink/doubtfire-deploy/commit/6a60d94b896d173a5008badd1b45bc7f45eee808))
+
 ## [10.0.0-21](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-20...v10.0.0-21) (2025-08-12)
 
 
