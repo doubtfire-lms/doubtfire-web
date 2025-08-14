@@ -150,6 +150,7 @@ export class LtiDashboardComponent implements AfterViewInit {
           () => {
             this.ltiService.syncEnrolments().subscribe({
               next: (result) => {
+                this._csvResultModalService.show('Enrolment sync', result);
                 this.alertsService.success('Successfully imported users into OnTrack', 5000);
               },
               error: (error) => {
