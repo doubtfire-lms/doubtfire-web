@@ -13,6 +13,7 @@ export type UploadRequirement = {
   type: string;
   tiiCheck?: boolean;
   tiiPct?: number;
+  maxFileSize?: number; // MB
 };
 
 export type SimilarityCheck = {key: string; type: string; pattern: string};

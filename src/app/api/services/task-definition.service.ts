@@ -52,6 +52,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
                 type: upreq.type,
                 tii_check: upreq.tiiCheck,
                 tii_pct: upreq.tiiPct,
+                max_file_size: upreq.maxFileSize,
               };
             }),
           );
@@ -64,6 +65,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
               type: string;
               tii_check: boolean;
               tii_pct: number;
+              max_file_size: number;
             }>
           )?.map((upreq) => {
             return {
@@ -71,7 +73,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
               name: upreq.name,
               type: upreq.type,
               tiiCheck: upreq.tii_check,
-              tiiPct: upreq.tii_pct,
+              maxFileSize: upreq.max_file_size,
             };
           });
         },

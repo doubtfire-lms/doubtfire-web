@@ -13,7 +13,14 @@ export class TaskDefinitionUploadComponent {
   @Input() public taskDefinition: TaskDefinition;
   @ViewChild('upreqTable', {static: true}) table: MatTable<UploadRequirement>;
 
-  public columns: string[] = ['file-name', 'file-type', 'tii-check', 'flag-pct', 'row-actions'];
+  public columns: string[] = [
+    'file-name',
+    'file-type',
+    'tii-check',
+    'flag-pct',
+    'max-file-size',
+    'row-actions',
+  ];
 
   constructor(private constants: DoubtfireConstants) {}
 

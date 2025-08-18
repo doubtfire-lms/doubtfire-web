@@ -47,6 +47,21 @@
     </td>
   </ng-container>
 
+  <!-- Max File Size Limit -->
+  <ng-container matColumnDef="max-file-size" sticky>
+    <th style="width: 25%" mat-header-cell *matHeaderCellDef>Max File Size</th>
+    <td style="width: 25%" mat-cell *matCellDef="let upreq">
+      <mat-select placeholder="10MB" [(ngModel)]="upreq.maxFileSize">
+        <mat-option [value]="5">5MB</mat-option>
+        <mat-option [value]="10">10MB</mat-option>
+        <mat-option [value]="15">15MB</mat-option>
+        <mat-option [value]="20">20MB</mat-option>
+        <mat-option [value]="25">25MB</mat-option>
+        <mat-option [value]="30">30MB</mat-option>
+      </mat-select>
+    </td>
+  </ng-container>
+
   <!-- Actions -->
   <ng-container matColumnDef="row-actions" sticky>
     <th style="width: 10%" mat-header-cell *matHeaderCellDef></th>
