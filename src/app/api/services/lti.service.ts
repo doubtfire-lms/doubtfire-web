@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import LTI_API_URL from 'src/app/config/constants/ltiApiUrl';
 import {Project} from '../models/project';
+import {SidekiqJob} from '../models/sidekiq-job';
 
 interface info {
   name?: string;
@@ -67,7 +68,7 @@ export class LtiService {
   }
 
   // Sync grades for all members in the context (course)
-  public syncEnrolments(): Observable<boolean> {
-    return this.httpClient.post<boolean>(`${LTI_API_URL}/enrolments`, {});
+  public syncEnrolments(): Observable<SidekiqJob> {
+    return this.httpClient.post<SidekiqJob>(`${LTI_API_URL}/enrolments`, {});
   }
 }

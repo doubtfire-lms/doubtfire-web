@@ -24,27 +24,42 @@
         @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
           <button
             mat-fab
-            [disabled]="!linkedUnit"
+            [disabled]="!linkedUnit || isSyncingEnrolments || isSyncingGrades"
             matTooltip="Sync enrolments"
             matTooltipPosition="above"
             aria-label=""
-            class="w-[60px] h-[60px]"
+            class="w-[60px] h-[60px] relative"
+            [ngClass]="{'bg-gray-300': isSyncingEnrolments}"
             color="default"
             (click)="syncEnrolments()"
           >
+            @if (isSyncingEnrolments) {
+              <mat-spinner
+                diameter="35"
+                class="z-50 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+              ></mat-spinner>
+            }
             <mat-icon mat-icon-button>people</mat-icon>
           </button>
           <button
             mat-fab
-            [disabled]="!linkedUnit"
+            [disabled]="!linkedUnit || isSyncingEnrolments || isSyncingGrades"
             matTooltip="Sync grades"
             matTooltipPosition="above"
             aria-label=""
-            class="w-[60px] h-[60px]"
+            class="w-[60px] h-[60px] relative"
+            [ngClass]="{'bg-gray-300': isSyncingGrades}"
             color="default"
             (click)="syncStudentsGrades()"
           >
             <mat-icon mat-icon-button>grade</mat-icon>
+
+            @if (isSyncingGrades) {
+              <mat-spinner
+                diameter="35"
+                class="z-50 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+              ></mat-spinner>
+            }
           </button>
         }
       </div>

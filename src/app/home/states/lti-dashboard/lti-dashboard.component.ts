@@ -8,7 +8,9 @@ import {LtiService} from 'src/app/api/services/lti.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+
 @Component({
   selector: 'f-lti-dashboard',
   templateUrl: 'lti-dashboard.component.html',
@@ -25,7 +27,9 @@ export class LtiDashboardComponent implements AfterViewInit {
     private unitService: UnitService,
     private projectService: ProjectService,
     private confirmationModalService: ConfirmationModalService,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Inject(csvResultModalService) private _csvResultModalService: any,
+    private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
 
   @Input() ltik: string;
@@ -37,6 +41,10 @@ export class LtiDashboardComponent implements AfterViewInit {
 
   loadingState: 'creatingUser' | 'enrollingUser' | 'fetchingUnit';
   isLoading: boolean;
+
+  isSyncingGrades: boolean;
+  isSyncingEnrolments: boolean;
+
   ngAfterViewInit(): void {
     // Scroll to the bottom of the page in case the header is visible
     // Ensures our action buttons are centered
@@ -81,7 +89,7 @@ export class LtiDashboardComponent implements AfterViewInit {
             },
           });
         },
-        error: (error) => {
+        error: (_error) => {
           this.alertsService.error('Unauthorised. Please relaunch the app.', 6000);
           this.unauthorised = true;
         },
@@ -148,20 +156,35 @@ export class LtiDashboardComponent implements AfterViewInit {
           'Sync Enrolments into OnTrack',
           `Are you sure you want to import ${members.members.length} users into ${this.linkedUnit.code} ${this.linkedUnit.name}`,
           () => {
+            this.isSyncingEnrolments = true;
             this.ltiService.syncEnrolments().subscribe({
-              next: (result) => {
-                this._csvResultModalService.show('Enrolment sync', result);
-                this.alertsService.success('Successfully imported users into OnTrack', 5000);
+              next: (job) => {
+                if (!job) {
+                  this.isSyncingEnrolments = false;
+                  return this.alertsService.error(`Failed to sync enrolments`);
+                }
+
+                this.sidekiqProgressModalService
+                  .show('Syncing users into OnTrack', job.id)
+                  .subscribe((completedJob) => {
+                    this.isSyncingEnrolments = false;
+                    this._csvResultModalService.show(
+                      'Enrolment sync',
+                      JSON.parse(completedJob.result),
+                    );
+                    this.alertsService.success('Successfully imported users into OnTrack', 5000);
+                  });
               },
               error: (error) => {
                 console.log(error);
-                this.alertsService.error(`Failed to retrieve grade`);
+                this.alertsService.error(`Failed to sync enrolments`);
+                this.isSyncingEnrolments = false;
               },
             });
           },
         );
       },
-      error: (error) => {
+      error: (_error) => {
         this.alertsService.error('Failed to retrieve course members', 6000);
       },
     });
@@ -172,14 +195,17 @@ export class LtiDashboardComponent implements AfterViewInit {
       'Sync Grades from OnTrack',
       'Are you sure you want to sync portfolio grades from OnTrack? Please confirm that grades are final and approved for release.',
       () => {
+        this.isSyncingGrades = true;
         this.ltiService.syncStudentsGrades().subscribe({
           next: (result) => {
+            this.isSyncingGrades = false;
             this.alertsService.success('Successfully synced grades from OnTrack', 5000);
             this._csvResultModalService.show('Grade sync', result);
           },
           error: (error) => {
             console.log(error);
             this.alertsService.error(`Failed to retrieve grade`);
+            this.isSyncingGrades = true;
           },
         });
       },
