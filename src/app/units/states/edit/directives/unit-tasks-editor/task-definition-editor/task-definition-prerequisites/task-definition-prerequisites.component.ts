@@ -13,6 +13,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 })
 export class TaskDefinitionPrerequisitesComponent implements OnInit {
   @Input() taskDefinition: TaskDefinition;
+  @Input() editingMode: boolean;
 
   selectedTaskPrerequisite: TaskDefinition | null = null;
   searchCtrl = new FormControl('');

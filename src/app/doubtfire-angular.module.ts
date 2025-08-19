@@ -276,6 +276,7 @@ import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/side
 import {SidekiqJobService} from './api/services/sidekiq-job.service';
 import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-card.component';
 import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
+import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -419,6 +420,7 @@ const MY_DATE_FORMAT = {
     SidekiqJobsModalComponent,
     UnavailableCardComponent,
     TaskDefinitionPrerequisitesComponent,
+    TaskPrerequisitesCardComponent,
   ],
   // Services we provide
   providers: [
