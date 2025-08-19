@@ -6,6 +6,7 @@ import API_URL from 'src/app/config/constants/apiURL';
 import {MappingFunctions} from './mapping-fn';
 import {AppInjector} from 'src/app/app-injector';
 import {Observable} from 'rxjs';
+import {MappingProcess} from 'ngx-entity-service/lib/mapping-process';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -125,6 +126,31 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
           });
         },
       },
+      {
+        keys: ['prerequisites', 'task_prerequisites'],
+        toEntityOpAsync: (process: MappingProcess<TaskDefinition>) => {
+          // HACK: Wait for all the other task definitions to be processed before we map the pre-requisites
+          setTimeout(() => {
+            const prereqs = process.data['task_prerequisites'];
+            const td = process.entity;
+            const taskDefinitions = process.entity.unit.taskDefinitionCache.currentValues;
+
+            // remove any prerequisites that have been deleted
+            td.taskPrerequisitesCache.currentValues
+              .filter((p) => !prereqs.some((pr) => pr['prerequisite_id'] === p.id))
+              .forEach((p) => td.taskPrerequisitesCache.delete(p.id));
+
+            // add/update prerequisites
+            for (const prereq of prereqs) {
+              td.taskPrerequisitesCache.getOrCreate(
+                prereq['prerequisite_id'],
+                this,
+                taskDefinitions.find((t) => t.id === prereq['prerequisite_id']),
+              );
+            }
+          });
+        },
+      },
     );
 
     this.mapping.mapAllKeysToJsonExcept(
@@ -168,5 +194,23 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     const formData = new FormData();
     formData.append('file', file);
     return AppInjector.get(HttpClient).post<boolean>(taskDefinition.scormDataUploadUrl, formData);
+  }
+
+  public addTaskPrerequisite(
+    taskDefinition: TaskDefinition,
+    prerequsite: TaskDefinition,
+  ): Observable<boolean> {
+    return AppInjector.get(HttpClient).post<boolean>(taskDefinition.taskPrerequisiteUrl, {
+      prerequisite_id: prerequsite.id,
+    });
+  }
+
+  public removeTaskPrerequisite(
+    taskDefinition: TaskDefinition,
+    prerequsite: TaskDefinition,
+  ): Observable<boolean> {
+    return AppInjector.get(HttpClient).delete<boolean>(
+      `${taskDefinition.taskPrerequisiteUrl}/${prerequsite.id}`,
+    );
   }
 }

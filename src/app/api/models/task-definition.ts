@@ -52,6 +52,9 @@ export class TaskDefinition extends Entity {
   similarityLanguage: string = 'c';
   hasJplagReport: boolean;
 
+  public readonly taskPrerequisitesCache: EntityCache<TaskDefinition> =
+    new EntityCache<TaskDefinition>();
+
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
 
@@ -247,6 +250,12 @@ export class TaskDefinition extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
       this.id
     }/scorm_data`;
+  }
+
+  public get taskPrerequisiteUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
+      this.id
+    }/prerequisites`;
   }
 
   public get taskOverseerResourcesUploadUrl(): string {
