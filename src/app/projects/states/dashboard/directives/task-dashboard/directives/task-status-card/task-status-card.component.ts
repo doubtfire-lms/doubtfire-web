@@ -46,29 +46,6 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     document.getElementsByTagName('style')[0].append(this.textCss);
   }
 
-  public get blockedByPrerequisites(): boolean {
-    if (!this.project) {
-      return false;
-    }
-
-    const prereqs = this.task.definition.taskPrerequisitesCache.currentValues;
-    // If no prerequisites, allow submission
-    if (!prereqs.length) {
-      return false;
-    }
-
-    for (const prereq of prereqs) {
-      const task = this.project.tasks.find((t) => t.definition.id === prereq.id);
-
-      // If the task doesnt exist or isnt completed, block submission
-      if (!task || !TaskStatus.SUBMITTED_STATUSES.includes(task.status)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   reapplyTriggers(): void {
     // if tutor is in queryParam
     if (this.router.globals.params.tutor != null) {

@@ -4,7 +4,7 @@
       <mat-select
         [value]="task?.status"
         (selectionChange)="triggerTransition($event.value)"
-        [disabled]="blockedByPrerequisites"
+        [disabled]="task?.blockedByPrerequisiteTasks()"
       >
         <mat-select-trigger>
           <span style="display: inline-flex">
@@ -34,7 +34,7 @@
 
   <mat-card-content>
     <p>{{ task?.statusHelp().reason }} {{ task?.statusHelp().action }}</p>
-    @if (blockedByPrerequisites) {
+    @if (task?.blockedByPrerequisiteTasks()) {
       <p>
         To submit this task, you must first complete all tasks that are listed as prerequisites.
       </p>
@@ -45,7 +45,7 @@
     <button
       mat-stroked-button
       (click)="triggerTransition('ready_for_feedback')"
-      [disabled]="isReadyForFeedback() || blockedByPrerequisites"
+      [disabled]="isReadyForFeedback() || task?.blockedByPrerequisiteTasks()"
     >
       Upload Submission
     </button>

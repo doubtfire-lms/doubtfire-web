@@ -345,9 +345,7 @@ export class Task extends Entity {
         // Always show in days, Hours, Minutes and Seconds.
         return `${diff} ${data.period.charAt(0).toUpperCase() + data.period.substring(1)}`;
       } else if (diff === 1 && data.period !== 'weeks') {
-        return `1 ${
-          data.period.charAt(0).toUpperCase() + data.period.slice(1, -1)
-        }`;
+        return `1 ${data.period.charAt(0).toUpperCase() + data.period.slice(1, -1)}`;
       }
     }
 
@@ -676,7 +674,7 @@ export class Task extends Entity {
         }
         const alerts: any = AppInjector.get(AlertService);
         alerts.message('Submission cancelled. Status was reverted.', 6000);
-      }
+      },
     );
   }
 
@@ -924,5 +922,37 @@ export class Task extends Entity {
         constructorParams: this,
       },
     );
+  }
+
+  public hasPrerequisiteTasks(): boolean {
+    if (!this.project) {
+      return false;
+    }
+    return this.definition.taskPrerequisitesCache.currentValues.length > 0;
+  }
+
+  /**
+   * Returns true if this task has prerequisite tasks that are not in a submitted state
+   */
+  public blockedByPrerequisiteTasks(): boolean {
+    if (!this.project) {
+      return false;
+    }
+
+    const prereqs = this.definition.taskPrerequisitesCache.currentValues;
+    if (!prereqs.length) {
+      return false;
+    }
+
+    for (const prereq of prereqs) {
+      const task = this.project.tasks.find((t) => t.definition.id === prereq.id);
+
+      // If the task doesnt exist or isnt completed, block submission
+      if (!task || !task.inSubmittedState()) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
