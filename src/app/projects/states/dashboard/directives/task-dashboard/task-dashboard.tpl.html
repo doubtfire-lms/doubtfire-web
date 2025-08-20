@@ -51,7 +51,10 @@
       [unit]="task.unit"
       (switch-view$)="switchView($event)"
     ></task-description-card>
-    <f-task-prerequisites-card [task-definition]="task.definition"></f-task-prerequisites-card>
+    <f-task-prerequisites-card
+      [task-definition]="task.definition"
+      [task]="task"
+    ></f-task-prerequisites-card>
     <f-task-scorm-card [task]="task"></f-task-scorm-card>
     <f-task-status-card [task]="task"></f-task-status-card>
     <f-task-due-card [task]="task"></f-task-due-card>

@@ -1,11 +1,12 @@
 <mat-card appearance="outlined" class="p-[16px]">
-  <mat-card-title class="f-card-title">Tasks Required to Complete First</mat-card-title>
+  <mat-card-title class="f-card-title">Prerequisite Tasks</mat-card-title>
   <mat-card-subtitle class="mb-4">
-    You must complete all of the following tasks before submitting
+    You must submit these tasks before you can submit
     {{ taskDefinition.abbreviation }}.</mat-card-subtitle
   >
   <f-task-definition-prerequisites
     [taskDefinition]="taskDefinition"
     [editingMode]="false"
+    [task]="task"
   ></f-task-definition-prerequisites>
 </mat-card>

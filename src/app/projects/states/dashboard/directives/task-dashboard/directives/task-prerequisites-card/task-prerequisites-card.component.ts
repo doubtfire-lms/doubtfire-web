@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Task} from 'src/app/api/models/task';
 @Component({
   selector: 'f-task-prerequisites-card',
   templateUrl: './task-prerequisites-card.component.html',
@@ -7,4 +8,5 @@ import {TaskDefinition} from 'src/app/api/models/task-definition';
 })
 export class TaskPrerequisitesCardComponent {
   @Input() taskDefinition: TaskDefinition;
+  @Input() task?: Task;
 }

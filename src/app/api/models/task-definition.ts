@@ -5,7 +5,8 @@ import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {TaskDefinitionService} from '../services/task-definition.service';
-import {Grade, GroupSet, LearningOutcome, TutorialStream, Unit} from './doubtfire-model';
+import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
+import {Task} from './doubtfire-model';
 
 export type UploadRequirement = {
   key: string;
@@ -296,5 +297,9 @@ export class TaskDefinition extends Entity {
     return httpClient
       .delete(this.taskOverseerResourcesUploadUrl)
       .pipe(tap(() => (this.hasTaskAssessmentResources = false)));
+  }
+
+  public projectTask(project?: Project): Task | undefined {
+    return project?.tasks?.find((p) => p.definition.id === this.id);
   }
 }

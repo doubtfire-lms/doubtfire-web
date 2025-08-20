@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
+import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
@@ -14,6 +15,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 export class TaskDefinitionPrerequisitesComponent implements OnInit {
   @Input() taskDefinition: TaskDefinition;
   @Input() editingMode: boolean;
+  @Input() task: Task;
 
   selectedTaskPrerequisite: TaskDefinition | null = null;
   searchCtrl = new FormControl('');

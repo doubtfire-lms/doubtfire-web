@@ -5,8 +5,31 @@
         @for (prereq of prerequisites | async; track prereq) {
           @if (prereq.id !== taskDefinition.id) {
             <tr class="border-b">
-              <td class="py-2 px-3 w-[120px]">{{ prereq.abbreviation }}</td>
-              <td class="py-2 px-3">{{ prereq.name }}</td>
+              @if (!editingMode) {
+                <td class="py-2 px-3">
+                  <status-icon
+                    [hidden]="isNarrow"
+                    matBadgePosition="before"
+                    [status]="prereq.projectTask(task?.project)?.status ?? 'not_started'"
+                  ></status-icon>
+                </td>
+              }
+
+              <td
+                class="py-2 px-3 w-[50px]"
+                [class.line-through]="prereq.projectTask(task?.project)?.inSubmittedState()"
+              >
+                {{ prereq.abbreviation }}
+              </td>
+              <td
+                class="py-2 px-3"
+                [class.line-through]="prereq.projectTask(task?.project)?.inSubmittedState()"
+              >
+                {{ prereq.name }}
+              </td>
+              @if (!editingMode) {
+                <td>{{ prereq.projectTask(task?.project)?.statusLabel() ?? 'Not Started' }}</td>
+              }
               @if (editingMode) {
                 <td class="py-2 px-3 text-right">
                   <button
