@@ -6,7 +6,7 @@
           @if (prereq.id !== taskDefinition.id) {
             <tr class="border-b">
               @if (!editingMode) {
-                <td class="py-2 px-3">
+                <td class="py-2 px-3 w-[75px]">
                   <status-icon
                     [hidden]="isNarrow"
                     matBadgePosition="before"
@@ -16,7 +16,7 @@
               }
 
               <td
-                class="py-2 px-3 w-[50px]"
+                class="py-2 px-3 w-[50px] text-center"
                 [class.line-through]="prereq.projectTask(task?.project)?.inSubmittedState()"
               >
                 {{ prereq.abbreviation }}
