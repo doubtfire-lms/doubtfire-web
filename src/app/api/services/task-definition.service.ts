@@ -131,21 +131,22 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
         toEntityOpAsync: (process: MappingProcess<TaskDefinition>) => {
           // HACK: Wait for all the other task definitions to be processed before we map the pre-requisites
           setTimeout(() => {
+            const idColumnKey = 'prerequisite_id';
             const prereqs = process.data['task_prerequisites'];
             const td = process.entity;
             const taskDefinitions = process.entity.unit.taskDefinitionCache.currentValues;
 
             // remove any prerequisites that have been deleted
             td.taskPrerequisitesCache.currentValues
-              .filter((p) => !prereqs.some((pr) => pr['prerequisite_id'] === p.id))
+              .filter((p) => !prereqs.some((pr) => pr[idColumnKey] === p.id))
               .forEach((p) => td.taskPrerequisitesCache.delete(p.id));
 
             // add/update prerequisites
             for (const prereq of prereqs) {
               td.taskPrerequisitesCache.getOrCreate(
-                prereq['prerequisite_id'],
+                prereq[idColumnKey],
                 this,
-                taskDefinitions.find((t) => t.id === prereq['prerequisite_id']),
+                taskDefinitions.find((t) => t.id === prereq[idColumnKey]),
               );
             }
           });
