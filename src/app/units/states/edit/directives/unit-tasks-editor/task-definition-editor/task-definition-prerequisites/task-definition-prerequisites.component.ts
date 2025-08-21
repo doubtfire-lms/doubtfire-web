@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
@@ -12,7 +12,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'task-definition-prerequisites.component.html',
   styleUrls: ['task-definition-prerequisites.component.scss'],
 })
-export class TaskDefinitionPrerequisitesComponent implements OnInit {
+export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   @Input() taskDefinition: TaskDefinition;
   @Input() editingMode: boolean;
   @Input() task: Task;
@@ -38,24 +38,35 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit {
   ngOnInit(): void {
     this.searchCtrl.valueChanges.subscribe((value: string | TaskDefinition) => {
       const search = (typeof value === 'string' ? value : value?.name || '').toLowerCase();
-
-      this.filteredTaskDefs = this.taskDefinition.unit.taskDefinitionCache.currentValues
-        // Hide self from the list
-        .filter((td) => td.id !== this.taskDefinition.id)
-        // Hide tasks already added as a prerequisite
-        .filter(
-          (td) =>
-            !this.taskDefinition.taskPrerequisitesCache.currentValues.some((p) => p.id === td.id),
-        )
-        // Higher target grades can not be a prerequisite
-        .filter((td) => td.targetGrade <= this.taskDefinition.targetGrade)
-        // Search filter
-        .filter(
-          (td) =>
-            td.name.toLowerCase().includes(search) ||
-            td.abbreviation.toLowerCase().includes(search),
-        );
+      this.filterTaskDefs(search);
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes.taskDefinition &&
+      changes.taskDefinition.previousValue?.id !== changes.taskDefinition.currentValue?.id
+    ) {
+      this.filterTaskDefs(this.searchCtrl.value ?? '');
+    }
+  }
+
+  private filterTaskDefs(search: string) {
+    this.filteredTaskDefs = this.taskDefinition.unit.taskDefinitionCache.currentValues
+      // Hide self from the list
+      .filter((td) => td.id !== this.taskDefinition.id)
+      // Hide tasks already added as a prerequisite
+      .filter(
+        (td) =>
+          !this.taskDefinition.taskPrerequisitesCache.currentValues.some((p) => p.id === td.id),
+      )
+      // Higher target grades can not be a prerequisite
+      .filter((td) => td.targetGrade <= this.taskDefinition.targetGrade)
+      // Search filter
+      .filter(
+        (td) =>
+          td.name.toLowerCase().includes(search) || td.abbreviation.toLowerCase().includes(search),
+      );
   }
 
   displayFn(td: TaskDefinition): string {
