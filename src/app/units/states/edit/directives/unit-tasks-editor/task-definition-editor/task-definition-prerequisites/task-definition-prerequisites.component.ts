@@ -40,11 +40,16 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit {
       const search = (typeof value === 'string' ? value : value?.name || '').toLowerCase();
 
       this.filteredTaskDefs = this.taskDefinition.unit.taskDefinitionCache.currentValues
+        // Hide self from the list
         .filter((td) => td.id !== this.taskDefinition.id)
+        // Hide tasks already added as a prerequisite
         .filter(
           (td) =>
             !this.taskDefinition.taskPrerequisitesCache.currentValues.some((p) => p.id === td.id),
         )
+        // Higher target grades can not be a prerequisite
+        .filter((td) => td.targetGrade <= this.taskDefinition.targetGrade)
+        // Search filter
         .filter(
           (td) =>
             td.name.toLowerCase().includes(search) ||
