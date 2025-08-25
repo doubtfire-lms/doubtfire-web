@@ -13,6 +13,10 @@ import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
+import {UnitService} from './api/services/unit.service';
+import {AppInjector} from './app-injector';
+import {GlobalStateService} from './projects/states/index/global-state.service';
+import {AuthenticationService} from './api/services/authentication.service';
 
 /*
  * Use this file to store any states that are sourced by angular components.
