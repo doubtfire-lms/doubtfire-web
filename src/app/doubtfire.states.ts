@@ -488,8 +488,6 @@ const TutorAttendance: NgHybridStateDeclaration = {
       const globalState = AppInjector.get(GlobalStateService);
       const authService = AppInjector.get(AuthenticationService);
       globalState.onLoad(() => {});
-      console.log($stateParams);
-
       return new Promise((resolve) => {
         globalState.onLoad(() => {});
         authService.afterAuthCall(() => {
@@ -500,7 +498,6 @@ const TutorAttendance: NgHybridStateDeclaration = {
       });
     },
     attendance: function ($stateParams) {
-      console.log($stateParams);
       if ($stateParams.attendance == 'true' || $stateParams.attendance === true) {
         return true;
       }
