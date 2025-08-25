@@ -1,5 +1,16 @@
-<div class="comments-panel h-full" appDragDrop (fileDropped)="uploadFiles($event)" fxLayout="column">
-  <div fxFlex class="comments-body" #commentsBody fxLayout="column" style="place-content: stretch !important">
+<div
+  class="comments-panel h-full min-h-[350px]"
+  appDragDrop
+  (fileDropped)="uploadFiles($event)"
+  fxLayout="column"
+>
+  <div
+    fxFlex
+    class="comments-body"
+    #commentsBody
+    fxLayout="column"
+    style="place-content: stretch !important"
+  >
     <div [hidden]="!loading" class="h-full" fxLayout="row" fxLayoutAlign="center center">
       <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
     </div>
