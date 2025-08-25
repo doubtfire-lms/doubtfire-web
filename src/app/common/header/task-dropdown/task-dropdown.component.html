@@ -136,6 +136,13 @@
         <button uiSref="units/analytics" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
         </button>
+        <button
+          uiSref="tutor-attendance"
+          [uiParams]="{unitId: unitRole.unit.id, attendance: true}"
+          mat-menu-item
+        >
+          <mat-icon aria-label="Unit Attendance icon" fontIcon="history_edu"></mat-icon>Attendance
+        </button>
         @if (
           unitRole.role === 'Convenor' || unitRole.role === 'Admin' || unitRole.role === 'Auditor'
         ) {

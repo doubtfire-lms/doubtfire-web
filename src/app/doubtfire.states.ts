@@ -472,6 +472,48 @@ const TutorDiscussionState: NgHybridStateDeclaration = {
   },
 };
 
+const TutorAttendance: NgHybridStateDeclaration = {
+  name: 'tutor-attendance',
+  url: '/tutor-attendance?unitId&attendance',
+  resolve: {
+    unitId: function ($stateParams) {
+      return $stateParams.unitId;
+    },
+    unit: function ($stateParams) {
+      const unitService = AppInjector.get(UnitService);
+      const globalState = AppInjector.get(GlobalStateService);
+      const authService = AppInjector.get(AuthenticationService);
+      globalState.onLoad(() => {});
+      console.log($stateParams);
+
+      return new Promise((resolve) => {
+        globalState.onLoad(() => {});
+        authService.afterAuthCall(() => {
+          unitService.get({id: $stateParams.unitId}).subscribe((unit) => {
+            resolve(unit);
+          });
+        });
+      });
+    },
+    attendance: function ($stateParams) {
+      console.log($stateParams);
+      if ($stateParams.attendance == 'true' || $stateParams.attendance === true) {
+        return true;
+      }
+      return false;
+    },
+  },
+  views: {
+    main: {
+      component: TutorDiscussionComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Tutor Attendance',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
 const jplagReportViewerState: NgHybridStateDeclaration = {
   name: 'jplag-report-viewer',
   url: '/jplag-report-viewer',
@@ -508,4 +550,5 @@ export const doubtfireStates = [
   projectPlanState,
   TutorDiscussionState,
   jplagReportViewerState,
+  TutorAttendance,
 ];
