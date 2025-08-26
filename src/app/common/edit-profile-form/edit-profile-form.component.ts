@@ -6,6 +6,7 @@ import {User} from 'src/app/api/models/user/user';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {QrModalService} from '../modals/qr-modal/qr-modal.service';
 
 @Component({
   selector: 'f-edit-profile-form',
@@ -20,6 +21,8 @@ export class EditProfileFormComponent implements OnInit {
     private authService: AuthenticationService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: {user: User; mode: 'edit' | 'create' | 'new'},
     private _snackBar: MatSnackBar,
+    private qrModalService: QrModalService,
+    private doubtfireConstants: DoubtfireConstants,
   ) {
     this.user = data?.user || this.userService.currentUser;
   }
@@ -113,5 +116,14 @@ export class EditProfileFormComponent implements OnInit {
         error: (error) => console.log(error),
       });
     }
+  }
+
+  showQrCode() {
+    const hostName = this.doubtfireConstants.API_URL.replace('/api', '');
+    const url = `${hostName}/me?username=${this.userService.currentUser.username}`;
+    this.qrModalService.show(
+      url,
+      'Display this QR code during your class so your tutor can scan it to view your submissions and mark your tasks as complete.',
+    );
   }
 }
