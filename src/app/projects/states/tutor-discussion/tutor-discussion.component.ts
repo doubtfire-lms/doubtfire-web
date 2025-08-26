@@ -117,11 +117,8 @@ export class TutorDiscussionComponent implements AfterViewInit {
       const params = new URL(data).searchParams;
       const unitId = parseInt(params.get('unitId'));
       const projectId = parseInt(params.get('projectId'));
-
       const username = params.get('username');
 
-      console.log('we got ', unitId, projectId, username);
-      console.log(params);
       if ((!isNaN(unitId) && !isNaN(projectId)) || username) {
         if (unitId) {
           this._unitId = unitId;
@@ -129,7 +126,6 @@ export class TutorDiscussionComponent implements AfterViewInit {
         if (username) {
           this._username = username;
         }
-        console.log('changing project', unitId, projectId, username);
 
         this.changeProject();
       }
