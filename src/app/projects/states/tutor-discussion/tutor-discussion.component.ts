@@ -152,7 +152,13 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public closeQrReader(): void {
     if (!this.project) {
       // Exiting the route entirely
-      this.route.stateService.go('home');
+      if (this.unitId) {
+        this.route.stateService.go('units/tasks/inbox', {
+          unitId: this.unitId,
+        });
+      } else {
+        this.route.stateService.go('home');
+      }
     } else {
       // Close the camera view
       this.scanningQr = false;
