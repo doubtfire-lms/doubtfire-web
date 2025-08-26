@@ -31,7 +31,6 @@ enum TutorDiscussionTabView {
 })
 export class TutorDiscussionComponent implements AfterViewInit {
   @Input() unitId: number;
-  @Input() projectId: number;
   @Input() attendance: boolean;
 
   @ViewChild('tasks') tasksList: MatSelectionList;
@@ -51,7 +50,6 @@ export class TutorDiscussionComponent implements AfterViewInit {
   private html5QrcodeScanner: Html5QrcodeScanner;
 
   private _unitId: number;
-  private _projectId: number;
   private _username: string;
 
   public TutorDiscussionTabView = TutorDiscussionTabView;
@@ -96,20 +94,14 @@ export class TutorDiscussionComponent implements AfterViewInit {
           // Avoid prompting students for camera permissions before redirecting to unauthorised state
           return;
         }
-        if (!this.project) {
-          if (this.unitId && this.projectId) {
-            this._projectId = Number(this.projectId);
-            this._unitId = Number(this.unitId);
-            this.getStudentTasks();
+        if (this.unitId) {
+          this._unitId = Number(this.unitId);
+          if (!this.attendance) {
+            this.scanQrCode();
           } else {
-            if (!this.attendance) {
-              this.scanQrCode();
-            } else {
-              this._unitId = Number(this.unitId);
-              this.getUnit().then((u) => {
-                this.unit = u;
-              });
-            }
+            this.getUnit().then((u) => {
+              this.unit = u;
+            });
           }
         }
       }
@@ -133,9 +125,6 @@ export class TutorDiscussionComponent implements AfterViewInit {
       if ((!isNaN(unitId) && !isNaN(projectId)) || username) {
         if (unitId) {
           this._unitId = unitId;
-        }
-        if (projectId) {
-          this._projectId = projectId;
         }
         if (username) {
           this._username = username;
@@ -298,9 +287,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
     return new Promise((resolve, reject) => {
       this.projectService.loadStudents(unit, false, false).subscribe((projects) => {
         console.log(projects);
-        const project =
-          projects.find((p) => p.id === this._projectId) ??
-          projects.find((p) => p.student.username === this._username);
+        const project = projects.find((p) => p.student.username === this._username);
         if (!project) {
           reject('Student is not a part of this unit');
         }
