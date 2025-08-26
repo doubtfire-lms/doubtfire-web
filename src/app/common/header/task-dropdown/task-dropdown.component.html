@@ -111,6 +111,10 @@
         <button uiSref="units/tasks/viewer" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
         </button>
+        <button uiSref="tutor-discussion" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+          <mat-icon aria-label="Tutor Discussion icon" fontIcon="qr_code_scanner"></mat-icon
+          >Discussion
+        </button>
         <mat-divider></mat-divider>
         <!-- <p class="task-dropdown-heading">Students</p> -->
         <button uiSref="units/students/list" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
