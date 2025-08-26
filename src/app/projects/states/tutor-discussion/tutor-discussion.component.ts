@@ -154,7 +154,16 @@ export class TutorDiscussionComponent implements AfterViewInit {
     this.html5QrcodeScanner.pause(true);
     this.loadingStudentData = true;
     setTimeout(() => {
-      this.getStudentTasks();
+      try {
+        this.getStudentTasks();
+      } catch (_e) {
+        this.alertService.error(`Invalid QR code`, 2000);
+        this.loadingStudentData = false;
+
+        setTimeout(() => {
+          this.html5QrcodeScanner.resume();
+        }, 2000);
+      }
     });
   }
 
