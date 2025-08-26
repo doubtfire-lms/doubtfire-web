@@ -29,6 +29,7 @@ export class TaskDropdownComponent {
     'Tutorial List': 'Tutorials',
     'Unit Administration': 'Admin',
     'Unit Analytics': 'Analytics',
+    'Staff Grant Extension': 'Extension', // Todo @Jason - test
   };
 
   taskDropdownData: { title: string; target: string; visible: any }[];
@@ -38,5 +39,4 @@ export class TaskDropdownComponent {
       this.menuText = this.taskToShortName?.[this.currentActivity] ?? this.currentActivity;
     });
   }
-
 }

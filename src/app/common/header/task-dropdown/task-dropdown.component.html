@@ -150,6 +150,10 @@
         @if (
           unitRole.role === 'Convenor' || unitRole.role === 'Admin' || unitRole.role === 'Auditor'
         ) {
+        <button uiSref="units/staff_grant_extension" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item> <!-- Todo @Jason - verify route & params to pass-->
+          <mat-icon aria-label="Staff Grant Extension" fontIcon="schedule"></mat-icon>Staff Grant Extension
+        </button>
+        @if (unitRole.role === 'Convenor' || unitRole.role === 'Admin' || unitRole.role === 'Auditor') {
           <button uiSref="units/admin" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
             <mat-icon aria-label="Unit Administration" fontIcon="admin_panel_settings"></mat-icon>
             Administration

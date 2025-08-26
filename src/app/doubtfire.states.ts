@@ -23,6 +23,7 @@ import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.c
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {Ng2ViewDeclaration} from '@uirouter/angular';
 import {GrantExtensionFormComponent} from './admin/modals/grant-extension-form/grant-extension-form.component';
+import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component'; // Todo @SGE team: Replace with SGE component
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -583,18 +584,17 @@ const LtiUnitLinkState: NgHybridStateDeclaration = {
 /**
  * Define the Staff Grant Extension state.
  */
-const StaffGrantExtensionState: NgHybridStateDeclaration = {
-  name: 'staff-grant-extension',
-  url: '/staff-grant-extension',
+const StaffGrantExtensionState: NgHybridStateDeclaration = { // Todo @Jason: Navigating to this route makes the `TaskDropdown` disappear - fix
+  name: 'units/staff_grant_extension',
+  url: '/units/:unitId/staff_grant_extension',
   views: {
     main: {
-      component: StaffGrantExtensionComponent,
+      component: UnitAnalyticsComponent, // Todo @SGE team: Replace with SGE component
     },
   },
-
   data: {
     pageTitle: 'Staff Grant Extension',
-    roleWhitelist: ['Admin', 'Convenor'],
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
   },
 };
 
