@@ -449,7 +449,7 @@ const projectPlanState: NgHybridStateDeclaration = {
 
 const TutorDiscussionState: NgHybridStateDeclaration = {
   name: 'tutor-discussion',
-  url: '/tutor-discussion?unitId&projectId',
+  url: '/tutor-discussion?unitId&username',
   views: {
     main: {
       component: TutorDiscussionComponent,
@@ -462,10 +462,10 @@ const TutorDiscussionState: NgHybridStateDeclaration = {
         return $stateParams.unitId;
       },
     ],
-    projectId: [
+    username: [
       '$stateParams',
       function ($stateParams) {
-        return $stateParams.projectId;
+        return $stateParams.username;
       },
     ],
   },

@@ -31,6 +31,7 @@ enum TutorDiscussionTabView {
 })
 export class TutorDiscussionComponent implements AfterViewInit {
   @Input() unitId: number;
+  @Input() username: string;
   @Input() attendance: boolean;
 
   @ViewChild('tasks') tasksList: MatSelectionList;
@@ -85,7 +86,6 @@ export class TutorDiscussionComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    console.log('is attendnance? ', this.attendance);
     this.authService.afterAuthCall((result) => {
       if (!result) {
         return this.state.go('sign_in');
@@ -97,7 +97,13 @@ export class TutorDiscussionComponent implements AfterViewInit {
         if (this.unitId) {
           this._unitId = Number(this.unitId);
           if (!this.attendance) {
-            this.scanQrCode();
+            // Tutor discussion view
+            if (this.username) {
+              this._username = this.username;
+              this.getStudentTasks();
+            } else {
+              this.scanQrCode();
+            }
           } else {
             this.getUnit().then((u) => {
               this.unit = u;

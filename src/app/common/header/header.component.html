@@ -45,6 +45,11 @@
         <mat-icon>cloud_sync_outline</mat-icon>
       </button>
     }
+    @if (currentUnit) {
+      <button mat-icon-button (click)="showMyQr()">
+        <mat-icon>qr_code_scanner</mat-icon>
+      </button>
+    }
     @if (currentUser.role === 'Admin' || currentUser.role === 'Convenor') {
       <button
         #menuState="matMenuTrigger"

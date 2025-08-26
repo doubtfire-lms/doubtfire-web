@@ -72,7 +72,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
 
   openDiscussionQrCode(): void {
     const hostName = this.doubtfireConstants.API_URL.replace('/api', '');
-    const url = `${hostName}/tutor-discussion?unitId=${this.task.unit.id}&projectId=${this.task.project.id}&username=${this.userService.currentUser.username}`;
+    const url = `${hostName}/tutor-discussion?unitId=${this.task.unit.id}&username=${this.userService.currentUser.username}`;
     this.qrModalService.show(
       url,
       'Display this QR code during your class so your tutor can scan it to view your submissions and mark your tasks as complete.',

@@ -11,6 +11,7 @@ import { MediaObserver } from 'ng-flex-layout';
 import { DoubtfireConstants, LogoSettings } from 'src/app/config/constants/doubtfire-constants';
 import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
+import {QrModalService} from '../modals/qr-modal/qr-modal.service';
 
 @Component({
   selector: 'app-header',
@@ -54,6 +55,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     protected doubtfireConstants: DoubtfireConstants,
     private sidekiqJobService: SidekiqJobService,
     private sidekiqJobsModalService: SidekiqJobsModalService,
+    private qrModalService: QrModalService,
   ) {}
 
   ngOnInit(): void {
@@ -134,6 +136,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.sidekiqJobService.sidekiqJobsSubject.subscribe((jobs) => {
       this.sidekiqJobs = [...jobs];
     });
+  }
+
+  showMyQr() {
+    const hostName = this.doubtfireConstants.API_URL.replace('/api', '');
+    const url = `${hostName}/tutor-discussion?unitId=${this.currentUnit.id}&username=${this.currentUser.username}`;
+    this.qrModalService.show(
+      url,
+      'Display this QR code during your class so your tutor can scan it to view your submissions and mark your tasks as complete.',
+      true,
+    );
   }
 
   showSidekiqJob() {
