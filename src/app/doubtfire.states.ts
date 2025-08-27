@@ -466,8 +466,8 @@ const TutorDiscussionState: NgHybridStateDeclaration = {
     ],
   },
   data: {
-    pageTitle: 'Tutor Discussion',
-    task: 'Tutor Discussion',
+    pageTitle: 'Discussion',
+    task: 'Discussion',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
@@ -498,8 +498,8 @@ const TutorAttendance: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'Tutor Attendance',
-    task: 'Tutor Attendance',
+    pageTitle: 'Attendance',
+    task: 'Attendance',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
