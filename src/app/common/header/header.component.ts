@@ -140,10 +140,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   showMyQr() {
     const hostName = this.doubtfireConstants.API_URL.replace('/api', '');
-    const url = `${hostName}/tutor-discussion?unitId=${this.currentUnit.id}&username=${this.currentUser.username}`;
+
+    const projectView =
+      this.currentProject &&
+      this.currentProject.student &&
+      this.currentProject.student.username !== this.currentUser.username;
+
+    const username = projectView ? this.currentProject.student.username : this.currentUser.username;
+
+    const url = `${hostName}/tutor-discussion?unitId=${this.currentUnit.id}&username=${username}`;
     this.qrModalService.show(
       url,
       'Display this QR code during your class so your tutor can scan it to view your submissions and mark your tasks as complete.',
+      projectView ? `Viewing QR for ${this.currentProject.student.name}` : '',
       true,
     );
   }
