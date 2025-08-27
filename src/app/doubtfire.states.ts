@@ -15,7 +15,6 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {UnitService} from './api/services/unit.service';
 import {AppInjector} from './app-injector';
-import {GlobalStateService} from './projects/states/index/global-state.service';
 import {AuthenticationService} from './api/services/authentication.service';
 
 /*
@@ -480,29 +479,35 @@ const TutorAttendance: NgHybridStateDeclaration = {
   name: 'tutor-attendance',
   url: '/tutor-attendance?unitId&attendance',
   resolve: {
-    unitId: function ($stateParams) {
-      return $stateParams.unitId;
-    },
-    unit: function ($stateParams) {
-      const unitService = AppInjector.get(UnitService);
-      const globalState = AppInjector.get(GlobalStateService);
-      const authService = AppInjector.get(AuthenticationService);
-      globalState.onLoad(() => {});
-      return new Promise((resolve) => {
-        globalState.onLoad(() => {});
-        authService.afterAuthCall(() => {
-          unitService.get({id: $stateParams.unitId}).subscribe((unit) => {
-            resolve(unit);
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+    unit: [
+      '$stateParams',
+      function ($stateParams) {
+        const unitService = AppInjector.get(UnitService);
+        const authService = AppInjector.get(AuthenticationService);
+        return new Promise((resolve) => {
+          authService.afterAuthCall(() => {
+            unitService.get({id: $stateParams.unitId}).subscribe((unit) => {
+              resolve(unit);
+            });
           });
         });
-      });
-    },
-    attendance: function ($stateParams) {
-      if ($stateParams.attendance == 'true' || $stateParams.attendance === true) {
-        return true;
-      }
-      return false;
-    },
+      },
+    ],
+    attendance: [
+      '$stateParams',
+      function ($stateParams) {
+        if ($stateParams.attendance == 'true' || $stateParams.attendance === true) {
+          return true;
+        }
+        return false;
+      },
+    ],
   },
   views: {
     main: {
@@ -511,6 +516,7 @@ const TutorAttendance: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Tutor Attendance',
+    task: 'Tutor Attendance',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
