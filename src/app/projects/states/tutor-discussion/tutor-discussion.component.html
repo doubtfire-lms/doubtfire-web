@@ -53,9 +53,10 @@
         <div></div>
         <div class="absolute left-1/2 transform -translate-x-1/2 text-center">
           <div class="text-center">
-            {{ project?.student?.firstName }} {{ project?.student?.lastName }} ({{
-              project?.student.student_id
-            }})
+            {{ project?.student?.firstName }} {{ project?.student?.lastName }}
+            @if (project?.student.student_id) {
+              ({{ project?.student.student_id }})
+            }
           </div>
           <div class="text-center">
             Target Grade: {{ getTargetTradeString(project?.targetGrade) }}
