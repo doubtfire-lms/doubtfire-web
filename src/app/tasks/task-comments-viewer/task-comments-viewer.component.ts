@@ -250,7 +250,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
       commentType === 'scorm' ||
       commentType === 'scorm_extension' ||
       commentType === 'discussed_in_class' ||
-      commentType === 'attendance_marked'
+      commentType === 'checked_in'
     );
   }
 
