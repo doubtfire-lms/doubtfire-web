@@ -257,18 +257,16 @@ export class TutorDiscussionComponent implements AfterViewInit {
     }
   }
 
-  public markSelectedTasksAttendance() {
+  public markSelectedTasksCheckedIn() {
     const selectedTasks = this.tasksList.selectedOptions.selected;
     if (selectedTasks.length > 1) {
       this.alertService.error('Can only mark attendance 1 task at a time', 5000);
       return;
     }
-    console.log(selectedTasks);
     for (const taskOption of selectedTasks) {
       const task = taskOption.value as Task;
-      this.taskService.markAttendance(task).subscribe({
+      this.taskService.checkInTaskForStudent(task).subscribe({
         next: () => {
-          console.log('good');
           this.taskService.notifyStatusChange(task);
           this.alertService.success('Successfully marked attendance', 2500);
         },

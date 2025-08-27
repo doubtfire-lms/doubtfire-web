@@ -217,11 +217,11 @@ export class TaskService extends CachedEntityService<Task> {
     return null;
   }
 
-  public markAttendance(task: Task): Observable<void> {
+  public checkInTaskForStudent(task: Task): Observable<void> {
     const options: RequestOptions<Task> = {
       entity: task,
       cache: task.project.taskCache,
-      endpointFormat: `${this.endpointFormat}/attendance`,
+      endpointFormat: `${this.endpointFormat}/check_in`,
     };
 
     return this.post(
