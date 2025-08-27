@@ -13,9 +13,6 @@ import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
-import {UnitService} from './api/services/unit.service';
-import {AppInjector} from './app-injector';
-import {AuthenticationService} from './api/services/authentication.service';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -483,20 +480,6 @@ const TutorAttendance: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams) {
         return $stateParams.unitId;
-      },
-    ],
-    unit: [
-      '$stateParams',
-      function ($stateParams) {
-        const unitService = AppInjector.get(UnitService);
-        const authService = AppInjector.get(AuthenticationService);
-        return new Promise((resolve) => {
-          authService.afterAuthCall(() => {
-            unitService.get({id: $stateParams.unitId}).subscribe((unit) => {
-              resolve(unit);
-            });
-          });
-        });
       },
     ],
     attendance: [
