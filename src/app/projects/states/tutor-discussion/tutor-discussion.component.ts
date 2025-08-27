@@ -268,7 +268,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
       this.taskService.checkInTaskForStudent(task).subscribe({
         next: () => {
           this.taskService.notifyStatusChange(task);
-          this.alertService.success('Successfully marked attendance', 2500);
+          this.alertService.success('Successfully checked in', 2500);
         },
         error: (_error) => {
           this.alertService.error('Failed to mark attendance', 5000);
