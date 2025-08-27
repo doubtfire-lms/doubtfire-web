@@ -13,6 +13,10 @@ import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
+import {UnitService} from './api/services/unit.service';
+import {AppInjector} from './app-injector';
+import {GlobalStateService} from './projects/states/index/global-state.service';
+import {AuthenticationService} from './api/services/authentication.service';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -445,7 +449,7 @@ const projectPlanState: NgHybridStateDeclaration = {
 
 const TutorDiscussionState: NgHybridStateDeclaration = {
   name: 'tutor-discussion',
-  url: '/tutor-discussion?unitId&projectId',
+  url: '/tutor-discussion?unitId&username',
   views: {
     main: {
       component: TutorDiscussionComponent,
@@ -458,16 +462,55 @@ const TutorDiscussionState: NgHybridStateDeclaration = {
         return $stateParams.unitId;
       },
     ],
-    projectId: [
+    username: [
       '$stateParams',
       function ($stateParams) {
-        return $stateParams.projectId;
+        return $stateParams.username;
       },
     ],
   },
   data: {
     pageTitle: 'Tutor Discussion',
     task: 'Tutor Discussion',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+const TutorAttendance: NgHybridStateDeclaration = {
+  name: 'tutor-attendance',
+  url: '/tutor-attendance?unitId&attendance',
+  resolve: {
+    unitId: function ($stateParams) {
+      return $stateParams.unitId;
+    },
+    unit: function ($stateParams) {
+      const unitService = AppInjector.get(UnitService);
+      const globalState = AppInjector.get(GlobalStateService);
+      const authService = AppInjector.get(AuthenticationService);
+      globalState.onLoad(() => {});
+      return new Promise((resolve) => {
+        globalState.onLoad(() => {});
+        authService.afterAuthCall(() => {
+          unitService.get({id: $stateParams.unitId}).subscribe((unit) => {
+            resolve(unit);
+          });
+        });
+      });
+    },
+    attendance: function ($stateParams) {
+      if ($stateParams.attendance == 'true' || $stateParams.attendance === true) {
+        return true;
+      }
+      return false;
+    },
+  },
+  views: {
+    main: {
+      component: TutorDiscussionComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Tutor Attendance',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
@@ -508,4 +551,5 @@ export const doubtfireStates = [
   projectPlanState,
   TutorDiscussionState,
   jplagReportViewerState,
+  TutorAttendance,
 ];

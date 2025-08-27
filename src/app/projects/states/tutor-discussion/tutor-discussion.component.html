@@ -27,7 +27,26 @@
 </div>
 
 <!-- We offset the height by 145px to compensate for the header -->
-<div class="w-full flex flex-col h-[calc(100vh-145px)]">
+<div class="w-full flex flex-col h-[calc(100vh-145px)] max-w-7xl mx-auto">
+  @if (attendance && unit) {
+    <div class="flex items-center gap-4">
+      <mat-form-field appearance="outline" class="w-full mt-[22px]">
+        <mat-select
+          placeholder="Select a task"
+          [(ngModel)]="selectedTaskDefinition"
+          [disabled]="selectedTaskDefinition"
+        >
+          @for (td of unit?.taskDefinitionCache.values | async; track td) {
+            <mat-option [value]="td">{{ td.abbreviation }} - {{ td.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      @if (selectedTaskDefinition) {
+        <button mat-raised-button color="red" (click)="selectedTaskDefinition = null">Clear</button>
+      }
+    </div>
+  }
+
   <div class="task-inbox flex flex-col flex-1 justify-normal items-center w-full">
     <div class="flex justify-between w-full relative">
       @if (project && project?.student) {
@@ -35,15 +54,21 @@
         <div class="absolute left-1/2 transform -translate-x-1/2 text-center">
           <div class="text-center">
             {{ project?.student?.firstName }} {{ project?.student?.lastName }}
+            @if (project?.student.student_id) {
+              ({{ project?.student.student_id }})
+            }
           </div>
           <div class="text-center">
             Target Grade: {{ getTargetTradeString(project?.targetGrade) }}
           </div>
         </div>
-        <button mat-icon-button color="primary" (click)="scanQrCode()">
-          <mat-icon>qr_code</mat-icon>
-        </button>
+      } @else {
+        <div></div>
+        <div class="mt-5 italic text-gray-500">Click the QR code to open the scanner..</div>
       }
+      <button mat-icon-button color="primary" (click)="scanQrCode()">
+        <mat-icon>qr_code</mat-icon>
+      </button>
     </div>
 
     @if (project && !filteredTasks.length) {
@@ -56,7 +81,7 @@
           class="clearfix w-full"
           style="padding: 0; height: 60px"
           togglePosition="before"
-          [selected]="task.status === 'discuss'"
+          [selected]="task.status === 'discuss' || attendance"
         >
           @if (task) {
             <div class="w-full" id="{{ task.id }}">
@@ -136,35 +161,48 @@
   @if (project && filteredTasks.length) {
     <div class="mt-2">
       <div class="w-full flex justify-center items-center my-3 gap-8">
-        <button
-          class="bg-gray-100 medium-icon-button"
-          mat-fab
-          color="secondary"
-          [disabled]="!tasks.selectedOptions.selected.length"
-          (click)="setSelectedTasksStatus('fix_and_resubmit')"
-        >
-          <!-- Redo -->
-          <mat-icon>construction</mat-icon>
-        </button>
-        <button
-          class="bg-green-400 medium-icon-button"
-          mat-fab
-          [disabled]="!tasks.selectedOptions.selected.length"
-          (click)="setSelectedTasksStatus('complete')"
-        >
-          <!-- Mark as Complete -->
-          <mat-icon>done</mat-icon>
-        </button>
+        @if (attendance) {
+          <button
+            class="bg-gray-100 medium-icon-button"
+            mat-fab
+            color="secondary"
+            [disabled]="!tasks.selectedOptions.selected.length"
+            (click)="markSelectedTasksAttendance()"
+          >
+            <!-- Redo -->
+            <mat-icon>how_to_reg</mat-icon>
+          </button>
+        } @else {
+          <button
+            class="bg-gray-100 medium-icon-button"
+            mat-fab
+            color="secondary"
+            [disabled]="!tasks.selectedOptions.selected.length"
+            (click)="setSelectedTasksStatus('fix_and_resubmit')"
+          >
+            <!-- Redo -->
+            <mat-icon>construction</mat-icon>
+          </button>
+          <button
+            class="bg-green-400 medium-icon-button"
+            mat-fab
+            [disabled]="!tasks.selectedOptions.selected.length"
+            (click)="setSelectedTasksStatus('complete')"
+          >
+            <!-- Mark as Complete -->
+            <mat-icon>done</mat-icon>
+          </button>
 
-        <button
-          class="bg-blue-300 medium-icon-button"
-          mat-fab
-          [disabled]="!tasks.selectedOptions.selected.length"
-          (click)="markSelectedTasksDicussed()"
-        >
-          <!-- Mark as Discussed -->
-          <mat-icon>group</mat-icon>
-        </button>
+          <button
+            class="bg-blue-300 medium-icon-button"
+            mat-fab
+            [disabled]="!tasks.selectedOptions.selected.length"
+            (click)="markSelectedTasksDicussed()"
+          >
+            <!-- Mark as Discussed -->
+            <mat-icon>group</mat-icon>
+          </button>
+        }
       </div>
     </div>
   }
@@ -172,7 +210,8 @@
   @if (selectedTask && project) {
     <mat-tab-group dynamicHeight (selectedTabChange)="onTabChange($event)">
       <mat-tab label="Task Comments"></mat-tab>
-      <mat-tab label="Staff Notes"></mat-tab>
+
+      <mat-tab [matTooltip]="project?.staffNoteCount" label="Staff Notes"></mat-tab>
     </mat-tab-group>
 
     @if (footerTabView === TutorDiscussionTabView.SHOW_COMMENTS) {
