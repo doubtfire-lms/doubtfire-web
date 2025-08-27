@@ -260,7 +260,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public markSelectedTasksCheckedIn() {
     const selectedTasks = this.tasksList.selectedOptions.selected;
     if (selectedTasks.length > 1) {
-      this.alertService.error('Can only mark attendance 1 task at a time', 5000);
+      this.alertService.error('Can only check-in 1 task at a time', 5000);
       return;
     }
     for (const taskOption of selectedTasks) {
@@ -271,7 +271,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
           this.alertService.success('Successfully checked in', 2500);
         },
         error: (_error) => {
-          this.alertService.error('Failed to mark attendance', 5000);
+          this.alertService.error('Failed to check-in', 5000);
         },
       });
     }
