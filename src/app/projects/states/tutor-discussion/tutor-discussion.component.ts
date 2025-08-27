@@ -177,7 +177,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
 
   public scanQrCode() {
     if (this.attendance && !this.selectedTaskDefinition) {
-      this.alertService.error('Please select a task first');
+      this.alertService.error('You must select a task first', 3000);
       return;
     }
 
