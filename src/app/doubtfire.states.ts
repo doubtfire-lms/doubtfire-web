@@ -498,8 +498,8 @@ const TutorAttendance: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'Attendance',
-    task: 'Attendance',
+    pageTitle: 'Check-in',
+    task: 'Check-in',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
