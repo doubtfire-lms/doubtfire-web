@@ -13,9 +13,11 @@ export class QrModalComponent implements OnInit {
 
   qrCodeImage: string;
   caption: string;
+  footer: string;
 
   ngOnInit() {
     this.caption = this.data.caption;
+    this.footer = this.data.footer;
     if (this.data?.qrCodeImage) {
       this.generateQr();
     }

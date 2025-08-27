@@ -3,4 +3,7 @@
     {{ caption }}
   </div>
   <img [src]="qrCodeImage" alt="QR Code for tutor assessment" class="w-full" />
+  @if (footer) {
+    <div class="text-center">{{ footer }}</div>
+  }
 </div>
