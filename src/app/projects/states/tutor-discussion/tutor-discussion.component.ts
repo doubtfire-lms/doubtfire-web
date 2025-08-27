@@ -297,7 +297,6 @@ export class TutorDiscussionComponent implements AfterViewInit {
   private loadStudents(unit: Unit): Promise<Project> {
     return new Promise((resolve, reject) => {
       this.projectService.loadStudents(unit, false, false).subscribe((projects) => {
-        console.log(projects);
         const project = projects.find((p) => p.student.username === this._username);
         if (!project) {
           reject('Student is not a part of this unit');
