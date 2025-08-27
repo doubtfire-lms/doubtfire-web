@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-26](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-25...v10.0.0-26) (2025-08-27)
+
+
+### Features
+
+* add attendance marked task comment ([1559e81](https://github.com/b0ink/doubtfire-deploy/commit/1559e8104c8c4bc137df4f46a0a5ed0e345260af))
+* add tutor discussion to unit dropdown ([90f4149](https://github.com/b0ink/doubtfire-deploy/commit/90f41493313d6a3ad9bdafdd4cd4865c80e94ca2))
+* redirect back to inbox if unit context exists ([b7f4ab9](https://github.com/b0ink/doubtfire-deploy/commit/b7f4ab9e7801fbb33ffc6b4e02bf6613e6d7a524))
+
+
+### Bug Fixes
+
+* enforce minimum height on task comments viewer ([a7588e6](https://github.com/b0ink/doubtfire-deploy/commit/a7588e6f007381c04a570650257cd6f2ff93e5ae))
+* set max width on main container ([d1e5ab1](https://github.com/b0ink/doubtfire-deploy/commit/d1e5ab1427352fcf1b0fdd920cb9838a4f8799a0))
+
 ## [10.0.0-25](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-24...v10.0.0-25) (2025-08-26)
 
 
