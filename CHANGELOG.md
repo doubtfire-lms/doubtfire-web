@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-27](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-26...v10.0.0-27) (2025-08-27)
+
+
+### Features
+
+* add option for qr footer text ([9e9b9db](https://github.com/b0ink/doubtfire-deploy/commit/9e9b9dbfb13d7531cb5387060407e23c25212cca))
+* support viewing qr for selected student in tutor view ([1f7fa51](https://github.com/b0ink/doubtfire-deploy/commit/1f7fa51d65767b3186e6eda8970a408cf0e6c847))
+
+
+### Bug Fixes
+
+* add padding when edit profile form displayed as modal ([a3f3b97](https://github.com/b0ink/doubtfire-deploy/commit/a3f3b977251a206b268c369c370934ff69b574d3))
+* show student id ([d1eeefb](https://github.com/b0ink/doubtfire-deploy/commit/d1eeefbea53cb13385bef2b3ba6b04d2f606c391))
+
 ## [10.0.0-26](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-25...v10.0.0-26) (2025-08-27)
 
 
