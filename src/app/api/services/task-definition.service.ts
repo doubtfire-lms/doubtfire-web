@@ -1,12 +1,17 @@
 import {CachedEntityService} from 'ngx-entity-service';
-import {LearningOutcomeService, TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
+import {
+  LearningOutcomeService,
+  TaskDefinition,
+  TaskStatusEnum,
+  Unit,
+} from 'src/app/api/models/doubtfire-model';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import {MappingFunctions} from './mapping-fn';
 import {AppInjector} from 'src/app/app-injector';
 import {Observable} from 'rxjs';
-import {MappingProcess} from 'ngx-entity-service/lib/mapping-process';
+import {TaskPrerequisiteService} from './task-prerequisite.service';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -15,6 +20,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
   constructor(
     httpClient: HttpClient,
     private learningOutcomeService: LearningOutcomeService,
+    private taskPrerequisiteService: TaskPrerequisiteService,
   ) {
     super(httpClient, API_URL);
 
@@ -128,27 +134,20 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       },
       {
         keys: ['prerequisites', 'task_prerequisites'],
-        toEntityOpAsync: (process: MappingProcess<TaskDefinition>) => {
-          // HACK: Wait for all the other task definitions to be processed before we map the pre-requisites
-          setTimeout(() => {
-            const idColumnKey = 'prerequisite_id';
-            const prereqs = process.data['task_prerequisites'];
-            const td = process.entity;
-            const taskDefinitions = process.entity.unit.taskDefinitionCache.currentValues;
+        toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
+          data[key]?.forEach((prerequisite) => {
+            // Remove any deleted prerequisites from the cache
+            taskDefinition.taskPrerequisitesCache.forEach((_, id) => {
+              if (!data[key]?.some((p) => p['id'] === id)) {
+                taskDefinition.taskPrerequisitesCache.delete(id);
+              }
+            });
 
-            // remove any prerequisites that have been deleted
-            td.taskPrerequisitesCache.currentValues
-              .filter((p) => !prereqs.some((pr) => pr[idColumnKey] === p.id))
-              .forEach((p) => td.taskPrerequisitesCache.delete(p.id));
-
-            // add/update prerequisites
-            for (const prereq of prereqs) {
-              td.taskPrerequisitesCache.getOrCreate(
-                prereq[idColumnKey],
-                this,
-                taskDefinitions.find((t) => t.id === prereq[idColumnKey]),
-              );
-            }
+            taskDefinition.taskPrerequisitesCache.getOrCreate(
+              prerequisite['id'],
+              this.taskPrerequisiteService,
+              prerequisite,
+            );
           });
         },
       },
@@ -202,7 +201,21 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     prerequsite: TaskDefinition,
   ): Observable<boolean> {
     return AppInjector.get(HttpClient).post<boolean>(taskDefinition.taskPrerequisiteUrl, {
+      task_def_id: taskDefinition.id,
       prerequisite_id: prerequsite.id,
+    });
+  }
+
+  public updateTaskPrerequisite(
+    taskDefinition: TaskDefinition,
+    prerequsite: TaskDefinition,
+    taskStatus: TaskStatusEnum,
+  ): Observable<boolean> {
+    return AppInjector.get(HttpClient).put<boolean>(taskDefinition.taskPrerequisiteUrl, {
+      unit_id: taskDefinition.unit.id,
+      task_def_id: taskDefinition.id,
+      prerequisite_id: prerequsite.id,
+      task_status_required: taskStatus,
     });
   }
 

@@ -3,8 +3,11 @@ import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
+import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
+import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
@@ -23,15 +26,30 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   // All other task definitions in the unit (exclude the current one)
   filteredTaskDefs: TaskDefinition[] = [];
 
+  public readonly STATES: Partial<Record<TaskStatusEnum, number>> = {
+    ready_for_feedback: 1,
+    discuss: 2,
+    demonstrate: 2,
+    complete: 3,
+  };
+
+  public readonly stateOptions = [
+    {value: 'ready_for_feedback', label: 'Ready for Feedback'},
+    {value: 'discuss', label: 'Discuss / Demonstrate'},
+    // {value: 'demonstrate', label: 'Discuss / Demonstrate'},
+    {value: 'complete', label: 'Complete'},
+  ];
+
   constructor(
     private taskDefinitionService: TaskDefinitionService,
     private alertService: AlertService,
+    private taskPrerequisiteService: TaskPrerequisiteService,
   ) {}
   public get unit(): Unit {
     return this.taskDefinition?.unit;
   }
 
-  public get prerequisites(): Observable<TaskDefinition[]> {
+  public get prerequisites(): Observable<TaskPrerequisite[]> {
     return this.taskDefinition.taskPrerequisitesCache.values;
   }
 
@@ -40,6 +58,15 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
       const search = (typeof value === 'string' ? value : value?.name || '').toLowerCase();
       this.filterTaskDefs(search);
     });
+
+    this.mapPrerequisites();
+  }
+
+  private mapPrerequisites() {
+    this.taskPrerequisiteService.mapTaskPrerequisites(
+      this.taskDefinition.taskPrerequisitesCache.currentValues,
+      this.taskDefinition.unit.taskDefinitionCache.currentValues,
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -103,6 +130,30 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
             5000,
           );
           this.unit.refresh();
+        },
+        error: (error) => {
+          this.alertService.error(`Failed to add task prerequisite: ${error}`, 6000);
+        },
+      });
+  }
+
+  public updateTaskPrerequisite(prerequisiteLink: TaskPrerequisite) {
+    this.taskDefinitionService
+      .updateTaskPrerequisite(
+        prerequisiteLink.taskDefinition,
+        prerequisiteLink.prerequisite,
+        prerequisiteLink.taskStatus,
+      )
+      .subscribe({
+        next: (response) => {
+          if (!response) {
+            this.alertService.error('Failed to add task prerequisite', 6000);
+            return;
+          }
+          this.alertService.success(
+            `Successfully updated prerequisite ${prerequisiteLink.prerequisite.abbreviation} to ${prerequisiteLink.taskStatus} `,
+            5000,
+          );
         },
         error: (error) => {
           this.alertService.error(`Failed to add task prerequisite: ${error}`, 6000);

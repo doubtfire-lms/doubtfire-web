@@ -2,33 +2,59 @@
   <div class="flex-grow flex flex-row">
     <table class="w-full">
       <tbody>
-        @for (prereq of prerequisites | async; track prereq) {
-          @if (prereq.id !== taskDefinition.id) {
+        @for (link of prerequisites | async; track link) {
+          @if (link.prerequisite?.id !== taskDefinition.id) {
             <tr class="border-b">
               @if (!editingMode) {
                 <td class="py-2 px-3 w-[75px]">
                   <status-icon
                     [hidden]="isNarrow"
                     matBadgePosition="before"
-                    [status]="prereq.projectTask(task?.project)?.status ?? 'not_started'"
+                    [status]="
+                      link.prerequisite?.projectTask(task?.project)?.status ?? 'not_started'
+                    "
                   ></status-icon>
                 </td>
               }
 
               <td
                 class="py-2 px-3 w-[50px] text-center"
-                [class.line-through]="prereq.projectTask(task?.project)?.inSubmittedState()"
+                [class.line-through]="
+                  link.prerequisite?.projectTask(task?.project)?.inSubmittedState()
+                "
               >
-                {{ prereq.abbreviation }}
+                {{ link.prerequisite?.abbreviation }}
               </td>
               <td
                 class="py-2 px-3"
-                [class.line-through]="prereq.projectTask(task?.project)?.inSubmittedState()"
+                [class.line-through]="
+                  link.prerequisite?.projectTask(task?.project)?.inSubmittedState()
+                "
               >
-                {{ prereq.name }}
+                {{ link.prerequisite?.name }}
               </td>
               @if (!editingMode) {
-                <td>{{ prereq.projectTask(task?.project)?.statusLabel() ?? 'Not Started' }}</td>
+                <td>
+                  {{
+                    link.prerequisite?.projectTask(task?.project)?.statusLabel() ?? 'Not Started'
+                  }}
+                </td>
+              } @else {
+                @if (link.taskStatus) {
+                  <td class="py-2 px-3">
+                    <mat-select
+                      [(value)]="link.taskStatus"
+                      placeholder="Select required status"
+                      matTooltip="Task must reach this state before students can submit"
+                      matTooltipShowDelay="1000"
+                      (selectionChange)="updateTaskPrerequisite(link)"
+                    >
+                      <mat-option *ngFor="let state of stateOptions" [value]="state.value">
+                        {{ state.label }}
+                      </mat-option>
+                    </mat-select>
+                  </td>
+                }
               }
               @if (editingMode) {
                 <td class="py-2 px-3 text-right">
@@ -36,7 +62,7 @@
                     mat-icon-button
                     aria-label="Remove prerequisite"
                     color="warn"
-                    (click)="removePrerequisite(prereq)"
+                    (click)="removePrerequisite(link.prerequisite)"
                   >
                     <mat-icon>delete</mat-icon>
                   </button>

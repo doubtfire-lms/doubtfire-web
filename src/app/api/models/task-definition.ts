@@ -7,6 +7,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
 import {Task} from './doubtfire-model';
+import {TaskPrerequisite} from './task-prerequisite';
 
 export type UploadRequirement = {
   key: string;
@@ -53,8 +54,8 @@ export class TaskDefinition extends Entity {
   similarityLanguage: string = 'c';
   hasJplagReport: boolean;
 
-  public readonly taskPrerequisitesCache: EntityCache<TaskDefinition> =
-    new EntityCache<TaskDefinition>();
+  public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
+    new EntityCache<TaskPrerequisite>();
 
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
