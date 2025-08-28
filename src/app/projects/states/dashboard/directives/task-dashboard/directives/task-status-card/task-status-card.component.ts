@@ -3,8 +3,9 @@ import {UIRouter} from '@uirouter/core';
 import * as _ from 'lodash';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
-import {TaskStatus, TaskStatusEnum} from 'src/app/api/models/task-status';
+import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import {TaskService} from 'src/app/api/services/task.service';
+import {UserService} from 'src/app/api/services/user.service';
 import {ExtensionModalService} from 'src/app/common/modals/extension-modal/extension-modal.service';
 import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
@@ -23,6 +24,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private router: UIRouter,
     private qrModalService: QrModalService,
     private doubtfireConstants: DoubtfireConstants,
+    private userService: UserService,
   ) {}
 
   @Input() task: Task;
@@ -52,7 +54,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
       this.triggers = this.taskService.statusKeys.map(this.taskService.statusData);
     } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const studentTriggers = _.map(this.taskService.switchableStates.student, this.taskService.statusData) as any;
+      const studentTriggers = _.map(
+        this.taskService.switchableStates.student,
+        this.taskService.statusData,
+      ) as any;
       const filteredStudentTriggers = this.task.filterFutureStates(studentTriggers);
       this.triggers = filteredStudentTriggers;
     }
@@ -73,8 +78,11 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
 
   openDiscussionQrCode(): void {
     const hostName = this.doubtfireConstants.API_URL.replace('/api', '');
-    const url = `${hostName}/tutor-discussion?unitId=${this.task.unit.id}&projectId=${this.task.project.id}`;
-    this.qrModalService.show(url);
+    const url = `${hostName}/tutor-discussion?unitId=${this.task.unit.id}&username=${this.userService.currentUser.username}`;
+    this.qrModalService.show(
+      url,
+      'Display this QR code during your class so your tutor can scan it to view your submissions and mark your tasks as complete.',
+    );
   }
 
   applyForExtension(): void {

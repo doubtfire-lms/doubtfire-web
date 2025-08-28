@@ -525,8 +525,6 @@ export class TaskCommentComposerComponent
 
     this.submittedTaskIds.add(taskKey);
 
-
-
     try {
       sessionStorage.setItem('task_comments_submitted',
         JSON.stringify([...this.submittedTaskIds]));
@@ -534,13 +532,13 @@ export class TaskCommentComposerComponent
       console.error('Error saving submitted tasks:', e);
     }
 
-    if (this.task) {
-      localStorage.removeItem(this.getDraftKey(this.task));
-      this.previousTaskId = this.task.id;
-    }
-
     this.taskCommentService.addComment(this.task, text, 'text', originalComment).subscribe({
       next: (tc: TaskComment) => {
+        if (this.task) {
+          localStorage.removeItem(this.getDraftKey(this.task));
+          this.previousTaskId = this.task.id;
+        }
+
         const inputEl = this.input.first.nativeElement;
         const originalOnInput = inputEl.oninput;
         inputEl.oninput = null;

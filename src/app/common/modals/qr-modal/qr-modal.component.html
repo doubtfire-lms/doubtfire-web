@@ -1,7 +1,9 @@
 <div class="p-10 w-full max-w-[500px]">
   <div class="text-center">
-    Display this QR code during your class so your tutor can scan it to view your submissions and
-    mark your tasks as complete.
+    {{ caption }}
   </div>
   <img [src]="qrCodeImage" alt="QR Code for tutor assessment" class="w-full" />
+  @if (footer) {
+    <div class="text-center">{{ footer }}</div>
+  }
 </div>
