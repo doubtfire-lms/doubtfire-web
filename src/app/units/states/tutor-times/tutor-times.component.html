@@ -1,35 +1,233 @@
-<div class="mat-typography" style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; ">
-  <div style="margin: 2rem 0;">
-    <mat-form-field appearance="fill" color="primary">
-      <mat-label>
-        <span style="font-weight: 600; font-size: 1.1rem; color: #3f51b5;">Filter by Unit</span>
-      </mat-label>
-      <mat-select [(value)]="selectedUnit" (selectionChange)="onUnitChange()">
-        <mat-option *ngFor="let unit of units" [value]="unit">{{ unit }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+<div class="mat-typography min-h-screen flex flex-col items-center">
+
+  <!-- Loading and Error States -->
+  <div *ngIf="isLoading" class="my-8 text-center">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p class="mt-4 text-gray-600">Loading your assessment data...</p>
   </div>
-  <div style="width: 100%; display: flex; justify-content: center;">
-    <ngx-charts-bar-vertical
-      [view]="[1000, 500]"
-      [scheme]="colorScheme"
-      [results]="chartData"
-      [gradient]="gradient"
-      [xAxis]="showXAxis"
-      [yAxis]="showYAxis"
-      [legend]="showLegend"
-      [showXAxisLabel]="showXAxisLabel"
-      [showYAxisLabel]="showYAxisLabel"
-      [xAxisLabel]="xAxisLabel"
-      [yAxisLabel]="yAxisLabel"
-      [yAxisTickFormatting]="formatMinutesToHourMinute"
 
-      (select)="onSelect($event)">
-    </ngx-charts-bar-vertical>
+  <div *ngIf="error" class="my-8 text-center text-red-500">
+    <mat-icon>error</mat-icon>
+    <p class="mt-2">{{ error }}</p>
+  </div>
 
+  <!-- Main Content -->
+  <div *ngIf="!isLoading && !error" class="w-full max-w-4xl">
+
+    <!-- Header with Controls -->
+    <div class="my-8 flex justify-between items-center flex-wrap gap-4">
+
+      <!-- Unit Selection -->
+      <mat-form-field appearance="fill" color="primary" class="min-w-64">
+        <mat-label>
+          <span class="font-semibold text-lg text-blue-600">Select Unit</span>
+        </mat-label>
+        <mat-select [(value)]="selectedUnit" (selectionChange)="onUnitChange()">
+          <mat-option *ngFor="let unit of units; trackBy: trackByUnit" [value]="unit">{{ unit }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Refresh Button -->
+      <button mat-icon-button (click)="refreshData()" [disabled]="isRefreshing" matTooltip="Refresh data">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+
+        <!-- Your Assessment Summary -->
+    <div *ngIf="tutorTimesStats.length > 0" class="my-8">
+      <h2 class="text-center text-blue-600 mb-4 text-2xl font-semibold">
+        Your Assessment Summary - {{ unit?.code || selectedUnit }}
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <mat-card class="text-center">
+          <mat-card-content>
+            <h3 class="text-blue-600 m-0 text-2xl font-bold">{{ tutorTimesStats[0]?.total_sessions || 0 }}</h3>
+            <p class="m-0 text-gray-600">Total Sessions</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="text-center">
+          <mat-card-content>
+            <h3 class="text-green-500 m-0 text-2xl font-bold">{{ formatMinutesToHourMinute(tutorTimesStats[0]?.total_duration_minutes || 0) }}</h3>
+            <p class="m-0 text-gray-600">Total Time Spent</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="text-center">
+          <mat-card-content>
+            <h3 class="text-orange-500 m-0 text-2xl font-bold">{{ tutorTimesStats[0]?.tasks_assessed || 0 }}</h3>
+            <p class="m-0 text-gray-600">Tasks Assessed</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="text-center">
+          <mat-card-content>
+            <h3 class="text-blue-400 m-0 text-2xl font-bold">{{ formatMinutesToHourMinute(((tutorTimesStats[0]?.total_duration_minutes || 0) / (tutorTimesStats[0]?.tasks_assessed || 1)).toFixed(2)) }}</h3>
+            <p class="m-0 text-gray-600">Avg Time per Task</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Task Assessment Times Chart -->
+    <div class="my-8">
+      <h2 class="text-center text-blue-600 mb-4 text-2xl font-semibold">
+        Time Spent per Task
+      </h2>
+      <div class="flex justify-center">
+        <ngx-charts-bar-vertical
+          [view]="view"
+          [scheme]="colorScheme"
+          [results]="taskTimesChartData"
+          [gradient]="gradient"
+          [xAxis]="showXAxis"
+          [yAxis]="showYAxis"
+          [legend]="showLegend"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          [yAxisTickFormatting]="formatMinutesToHourMinute"
+          (select)="onSelect($event)">
+        </ngx-charts-bar-vertical>
+      </div>
+    </div>
+
+    <!-- Task Times Table -->
+    <div class="my-8">
+      <h3 class="text-center text-blue-600 mb-4 text-xl font-semibold">Task Details</h3>
+      <table mat-table [dataSource]="taskTimesData" class="w-full">
+        <ng-container matColumnDef="task_name">
+          <th mat-header-cell *matHeaderCellDef>Task</th>
+          <td mat-cell *matCellDef="let element">{{ element.task_name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="total_time_minutes">
+          <th mat-header-cell *matHeaderCellDef>Time Spent</th>
+          <td mat-cell *matCellDef="let element">{{ formatMinutesToHourMinute(element.total_time_minutes) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="assessment_count">
+          <th mat-header-cell *matHeaderCellDef>Assessments</th>
+          <td mat-cell *matCellDef="let element">{{ element.assessment_count }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="average_time_per_assessment">
+          <th mat-header-cell *matHeaderCellDef>Avg Time/Assessment</th>
+          <td mat-cell *matCellDef="let element">{{ formatMinutesToHourMinute(element.average_time_per_assessment.toFixed(2)) }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="taskTableColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: taskTableColumns; trackBy: trackByTask;"></tr>
+      </table>
+    </div>
+
+        <!-- Your Recent Sessions -->
+    <div *ngIf="markingSessions.length > 0" class="my-8">
+      <h2 class="text-center text-blue-600 mb-4 text-2xl font-semibold">
+        Your Recent Sessions
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <mat-card *ngFor="let session of markingSessions.slice(0, 5); trackBy: trackBySession"
+                  class="border-l-4 border-blue-600">
+          <mat-card-header>
+            <mat-card-title>Session #{{ session.id }}</mat-card-title>
+            <mat-card-subtitle>
+              {{ session.start_time | date:'medium' }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="mb-2"><strong>Duration:</strong> {{ formatMinutesToHourMinute(session.duration_minutes) }}</p>
+            <p class="mb-2"><strong>Status:</strong>
+              <span *ngIf="session.is_active" class="text-green-500 font-bold">🟢 Active</span>
+              <span *ngIf="!session.is_active" class="text-gray-500">⚪ Completed</span>
+            </p>
+          </mat-card-content>
+          <mat-card-actions *ngIf="unitRole?.role !== 'Convenor'">
+            <button mat-button (click)="selectSession(session.id)" color="primary">
+              View Details
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+
+        <!-- Session Details Modal -->
+    <div *ngIf="showSessionDetails && selectedSessionId && unitRole?.role !== 'Convenor'" class="my-8">
+      <h2 class="text-center text-blue-600 mb-4 text-2xl font-semibold">
+        Session Details - Session #{{ selectedSessionId }}
+      </h2>
+
+      <div class="flex justify-between items-center mb-4">
+        <button mat-button (click)="closeSessionDetails()" class="flex items-center gap-2">
+          <mat-icon>close</mat-icon>
+          Close Details
+        </button>
+      </div>
+
+      <!-- Session Activities Timeline -->
+      <div class="my-8">
+        <h3 class="text-center text-blue-600 mb-4 text-xl font-semibold">Session Activities</h3>
+        <div class="border-l-4 border-blue-600 pl-4">
+          <div *ngFor="let activity of getSessionActivities(selectedSessionId); trackBy: trackByActivity"
+               class="mb-4 p-4 bg-gray-50 rounded-lg">
+            <div class="flex justify-between items-center">
+              <div>
+                <strong class="text-gray-800">{{ activity.action.toUpperCase() }}</strong>
+                <span *ngIf="activity.duration_minutes" class="ml-4 text-gray-600">
+                  ({{ formatMinutesToHourMinute(activity.duration_minutes) }})
+                </span>
+              </div>
+              <span class="text-gray-600 text-sm">
+                {{ activity.created_at | date:'short' }}
+              </span>
+            </div>
+            <div *ngIf="activity.project_id" class="mt-2 text-gray-600">
+              Project: {{ activity.project_id }} | Task: {{ activity.task_id }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session Assessments -->
+      <div class="my-8">
+        <h3 class="text-center text-blue-600 mb-4 text-xl font-semibold">Assessments in This Session</h3>
+        <table mat-table [dataSource]="getSessionAssessments(selectedSessionId)" class="w-full">
+          <ng-container matColumnDef="student_name">
+            <th mat-header-cell *matHeaderCellDef>Student</th>
+            <td mat-cell *matCellDef="let element">{{ element.student_name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="task_name">
+            <th mat-header-cell *matHeaderCellDef>Task</th>
+            <td mat-cell *matCellDef="let element">{{ element.task_name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="duration_minutes">
+            <th mat-header-cell *matHeaderCellDef>Duration</th>
+            <td mat-cell *matCellDef="let element">{{ formatMinutesToHourMinute(element.duration_minutes) }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="assessment_start">
+            <th mat-header-cell *matHeaderCellDef>Start Time</th>
+            <td mat-cell *matCellDef="let element">{{ element.assessment_start | date:'short' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="assessment_end">
+            <th mat-header-cell *matHeaderCellDef>End Time</th>
+            <td mat-cell *matCellDef="let element">{{ element.assessment_end | date:'short' }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['student_name', 'task_name', 'duration_minutes', 'assessment_start', 'assessment_end']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['student_name', 'task_name', 'duration_minutes', 'assessment_start', 'assessment_end'];"></tr>
+        </table>
+      </div>
+    </div>
+
+  </div>
 
 </div>
-
-<!-- Show this chart only if the user is a Convenor -->
 
 
