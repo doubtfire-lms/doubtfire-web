@@ -41,6 +41,8 @@
     }
   </mat-card-content>
 
+  @if ( task?.unit.currentUserIsStaff || task?.canApplyForExtension() || (task?.inSubmittedState() &&
+  task?.requiresFileUpload()) ) {
   <mat-card-actions class="space-x-2">
     <button
       mat-stroked-button
@@ -53,7 +55,9 @@
     </button>
 
     @if (task?.canApplyForExtension()) {
-      <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
+    <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
+    } @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
+    <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
     }
     @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
       <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>

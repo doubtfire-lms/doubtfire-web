@@ -113,16 +113,4 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
       this.task.refresh();
     });
   }
-
-  openGrantExtensionDialog(): void {
-    this.dialog.open(GrantExtensionFormComponent, {
-      width: '600px',
-      disableClose: true,
-    });
-  }
-
-  get currentUser() {
-    return this.userService.currentUser;
-  }
-
 }

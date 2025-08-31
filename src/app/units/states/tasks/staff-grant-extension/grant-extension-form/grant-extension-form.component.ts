@@ -76,8 +76,8 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     this.grantExtensionForm = this.fb.group({
       students: [[], Validators.required],
       extension: [1, [Validators.required, Validators.min(1)]],
-      reason: ['', Validators.required],
-      notes: ['']
+      reason: ['', [Validators.required, Validators.maxLength(300)]],
+      notes: ['', Validators.maxLength(500)]
     });
   }
 
