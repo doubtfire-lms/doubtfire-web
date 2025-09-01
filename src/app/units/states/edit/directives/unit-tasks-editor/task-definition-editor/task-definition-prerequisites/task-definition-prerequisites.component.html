@@ -2,7 +2,7 @@
   <div class="flex-grow flex flex-row">
     <table class="w-full">
       <tbody>
-        @for (link of prerequisites | async; track link) {
+        @for (link of taskPrerequisites; track link) {
           @if (link.prerequisite?.id !== taskDefinition.id) {
             <tr class="border-b">
               @if (!editingMode) {

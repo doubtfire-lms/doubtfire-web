@@ -26,6 +26,8 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   // All other task definitions in the unit (exclude the current one)
   filteredTaskDefs: TaskDefinition[] = [];
 
+  taskPrerequisites: TaskPrerequisite[] = [];
+
   public readonly STATES: Partial<Record<TaskStatusEnum, number>> = {
     ready_for_feedback: 1,
     discuss: 2,
@@ -63,10 +65,14 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   }
 
   private mapPrerequisites() {
-    this.taskPrerequisiteService.mapTaskPrerequisites(
-      this.taskDefinition.taskPrerequisitesCache.currentValues,
-      this.taskDefinition.unit.taskDefinitionCache.currentValues,
-    );
+    const prerequisites = this.taskPrerequisites;
+    const definitions = this.taskDefinition.unit.taskDefinitions;
+    for (const prerequisite of prerequisites) {
+      prerequisite.taskDefinition = definitions.find(
+        (td) => td.id === prerequisite.taskDefinitionId,
+      );
+      prerequisite.prerequisite = definitions.find((td) => td.id === prerequisite.prerequisiteId);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -75,6 +81,16 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
       changes.taskDefinition.previousValue?.id !== changes.taskDefinition.currentValue?.id
     ) {
       this.filterTaskDefs(this.searchCtrl.value ?? '');
+
+      this.taskPrerequisiteService
+        .query({
+          unitId: this.unit.id,
+          id: this.taskDefinition.id,
+        })
+        .subscribe((data) => {
+          this.taskPrerequisites = [...data];
+          this.mapPrerequisites();
+        });
     }
   }
 

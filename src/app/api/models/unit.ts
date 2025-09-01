@@ -329,13 +329,6 @@ export class Unit extends Entity {
       .subscribe({
         next: (unit) => {
           console.log(unit.teachingPeriod?.name);
-          const taskPrerequisiteService = AppInjector.get(TaskPrerequisiteService);
-          for (const td of unit.taskDefinitions) {
-            taskPrerequisiteService.mapTaskPrerequisites(
-              td.taskPrerequisitesCache.currentValues,
-              unit.taskDefinitions,
-            );
-          }
         },
         error: (message) => alerts.error(message, 6000),
       });

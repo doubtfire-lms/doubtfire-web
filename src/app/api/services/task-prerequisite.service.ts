@@ -22,16 +22,4 @@ export class TaskPrerequisiteService extends CachedEntityService<TaskPrerequisit
   public override createInstanceFrom(json: object, other?: any): TaskPrerequisite {
     return new TaskPrerequisite();
   }
-
-  public mapTaskPrerequisites(
-    prerequisites: readonly TaskPrerequisite[],
-    definitions: readonly TaskDefinition[],
-  ): void {
-    for (const prerequisite of prerequisites) {
-      prerequisite.taskDefinition = definitions.find(
-        (td) => td.id === prerequisite.taskDefinitionId,
-      );
-      prerequisite.prerequisite = definitions.find((td) => td.id === prerequisite.prerequisiteId);
-    }
-  }
 }
