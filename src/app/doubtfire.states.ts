@@ -586,13 +586,22 @@ const LtiUnitLinkState: NgHybridStateDeclaration = {
  */
 const StaffGrantExtensionState: NgHybridStateDeclaration = { // Todo @Jason: Navigating to this route makes the `TaskDropdown` disappear - fix
   name: 'units/staff_grant_extension',
-  url: '/units/:unitId/staff_grant_extension',
+  url: '/units/:unit_id/staff_grant_extension',
+  resolve: {
+    unitID: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unit_id
+      },
+    ],
+  },
   views: {
     main: {
-      component: UnitAnalyticsComponent, // Todo @SGE team: Replace with SGE component
+      component: FUnitsComponent, // Todo @SGE team: Replace with SGE component - accept `unitID` as @Input
     },
   },
   data: {
+    task: 'Staff Grant Extension',
     pageTitle: 'Staff Grant Extension',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
   },
