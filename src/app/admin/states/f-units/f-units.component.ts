@@ -37,7 +37,6 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatTable, {static: false}) table: MatTable<Unit>;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @Input() unitID;
   @Input({required: true}) mode: 'admin' | 'tutor' | 'student';
 
   displayedColumns: string[] = [
