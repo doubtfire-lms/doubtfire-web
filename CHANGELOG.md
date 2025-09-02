@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-32](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-31...v10.0.0-32) (2025-09-02)
+
 ## [10.0.0-31](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-30...v10.0.0-31) (2025-08-27)
 
 
