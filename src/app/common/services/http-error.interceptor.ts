@@ -1,17 +1,47 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { AuthenticationService, UserService } from 'src/app/api/models/doubtfire-model';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
+import {catchError, filter, switchMap, take} from 'rxjs/operators';
+import {AuthenticationService, UserService} from 'src/app/api/models/doubtfire-model';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
-  constructor(private authenticationService: AuthenticationService, private userService: UserService) {}
+  private refreshTokenInProgress = false;
+  private refreshTokenSubject: Subject<any> = new BehaviorSubject<any>(null);
+
+  constructor(
+    private authenticationService: AuthenticationService,
+    private userService: UserService,
+  ) {}
+
+  attemptRefresh$(): Observable<void> {
+    return new Observable<void>((observer) => {
+      this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
+        if (result) {
+          observer.next();
+          observer.complete();
+        } else {
+          this.authenticationService.timeoutAuthentication();
+          this.refreshTokenInProgress = false;
+          observer.error(new Error('Authentication timed out'));
+        }
+      }, false); // Don't display splashscreen
+    });
+  }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // const retryTimes: number = 3;
     // const delayDuration: number = 100;
+
+    // TODO: Check for access token / refresh token expiration before trying the initial request
+    // .. This way we can avoid spamming console with 409 errors
 
     return next.handle(request).pipe(
       // retryWhen(errors => errors
@@ -48,11 +78,42 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         console.error(`${logMessage}: ${errorMessage}`);
 
         if (error.status === 419 || (error.status === 403 && this.userService.isAnonymousUser())) {
-          this.authenticationService.timeoutAuthentication();
+          if (!this.refreshTokenInProgress) {
+            this.refreshTokenInProgress = true;
+            this.refreshTokenSubject.next(null);
+            return this.attemptRefresh$().pipe(
+              switchMap(() => {
+                this.refreshTokenInProgress = false;
+                this.refreshTokenSubject.next(this.userService.currentUser.authenticationToken);
+                return next.handle(this.injectToken(request));
+              }),
+              catchError((err) => {
+                this.refreshTokenInProgress = false;
+                return throwError(() => err);
+              }),
+            );
+          } else {
+            return this.refreshTokenSubject.pipe(
+              filter((result) => result !== null),
+              take(1),
+              switchMap((_res) => {
+                return next.handle(this.injectToken(request));
+              }),
+            );
+          }
         }
 
         return throwError(() => errorMessage);
-      })
+      }),
     );
+  }
+
+  injectToken(request: HttpRequest<any>) {
+    return request.clone({
+      setHeaders: {
+        'Auth-Token': this.userService.currentUser.authenticationToken,
+        Username: this.userService.currentUser.username,
+      },
+    });
   }
 }
