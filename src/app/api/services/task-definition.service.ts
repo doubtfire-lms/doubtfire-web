@@ -12,6 +12,7 @@ import {MappingFunctions} from './mapping-fn';
 import {AppInjector} from 'src/app/app-injector';
 import {Observable} from 'rxjs';
 import {TaskPrerequisiteService} from './task-prerequisite.service';
+import {TaskPrerequisite} from '../models/task-prerequisite';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -132,25 +133,25 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
           });
         },
       },
-      {
-        keys: ['prerequisites', 'task_prerequisites'],
-        toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
-          data[key]?.forEach((prerequisite) => {
-            // Remove any deleted prerequisites from the cache
-            taskDefinition.taskPrerequisitesCache.forEach((_, id) => {
-              if (!data[key]?.some((p) => p['id'] === id)) {
-                taskDefinition.taskPrerequisitesCache.delete(id);
-              }
-            });
+      // {
+      //   keys: ['prerequisites', 'task_prerequisites'],
+      //   toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
+      //     data[key]?.forEach((prerequisite) => {
+      //       // Remove any deleted prerequisites from the cache
+      //       taskDefinition.taskPrerequisitesCache.forEach((_, id) => {
+      //         if (!data[key]?.some((p) => p['id'] === id)) {
+      //           taskDefinition.taskPrerequisitesCache.delete(id);
+      //         }
+      //       });
 
-            taskDefinition.taskPrerequisitesCache.getOrCreate(
-              prerequisite['id'],
-              this.taskPrerequisiteService,
-              prerequisite,
-            );
-          });
-        },
-      },
+      //       taskDefinition.taskPrerequisitesCache.getOrCreate(
+      //         prerequisite['id'],
+      //         this.taskPrerequisiteService,
+      //         prerequisite,
+      //       );
+      //     });
+      //   },
+      // },
     );
 
     this.mapping.mapAllKeysToJsonExcept(
@@ -199,8 +200,8 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
   public addTaskPrerequisite(
     taskDefinition: TaskDefinition,
     prerequsite: TaskDefinition,
-  ): Observable<boolean> {
-    return AppInjector.get(HttpClient).post<boolean>(taskDefinition.taskPrerequisiteUrl, {
+  ): Observable<TaskPrerequisite> {
+    return AppInjector.get(HttpClient).post<TaskPrerequisite>(taskDefinition.taskPrerequisiteUrl, {
       task_def_id: taskDefinition.id,
       prerequisite_id: prerequsite.id,
     });
@@ -217,14 +218,5 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       prerequisite_id: prerequsite.id,
       task_status_required: taskStatus,
     });
-  }
-
-  public removeTaskPrerequisite(
-    taskDefinition: TaskDefinition,
-    prerequsite: TaskDefinition,
-  ): Observable<boolean> {
-    return AppInjector.get(HttpClient).delete<boolean>(
-      `${taskDefinition.taskPrerequisiteUrl}/${prerequsite.id}`,
-    );
   }
 }

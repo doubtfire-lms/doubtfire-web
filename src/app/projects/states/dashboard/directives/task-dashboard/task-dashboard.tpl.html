@@ -53,7 +53,6 @@
     ></task-description-card>
     <f-task-prerequisites-card
       [task-definition]="task.definition"
-      ng-if="task.hasPrerequisiteTasks()"
       [task]="task"
     ></f-task-prerequisites-card>
     <f-task-scorm-card [task]="task"></f-task-scorm-card>

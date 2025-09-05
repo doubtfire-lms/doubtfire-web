@@ -2,7 +2,7 @@
   <div class="flex-grow flex flex-row">
     <table class="w-full">
       <tbody>
-        @for (link of taskPrerequisites; track link) {
+        @for (link of taskDefinition.taskPrerequisitesCache.values | async; track link) {
           @if (link.prerequisite?.id !== taskDefinition.id) {
             <tr class="border-b">
               @if (!editingMode) {
@@ -19,18 +19,11 @@
 
               <td
                 class="py-2 px-3 w-[50px] text-center"
-                [class.line-through]="
-                  link.prerequisite?.projectTask(task?.project)?.inSubmittedState()
-                "
+                [class.line-through]="link.hasMetRequiredState(task?.project)"
               >
                 {{ link.prerequisite?.abbreviation }}
               </td>
-              <td
-                class="py-2 px-3"
-                [class.line-through]="
-                  link.prerequisite?.projectTask(task?.project)?.inSubmittedState()
-                "
-              >
+              <td class="py-2 px-3" [class.line-through]="link.hasMetRequiredState(task?.project)">
                 {{ link.prerequisite?.name }}
               </td>
               @if (!editingMode) {
@@ -62,7 +55,7 @@
                     mat-icon-button
                     aria-label="Remove prerequisite"
                     color="warn"
-                    (click)="removePrerequisite(link.prerequisite)"
+                    (click)="removePrerequisite(link)"
                   >
                     <mat-icon>delete</mat-icon>
                   </button>

@@ -26,8 +26,6 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   // All other task definitions in the unit (exclude the current one)
   filteredTaskDefs: TaskDefinition[] = [];
 
-  taskPrerequisites: TaskPrerequisite[] = [];
-
   public readonly STATES: Partial<Record<TaskStatusEnum, number>> = {
     ready_for_feedback: 1,
     discuss: 2,
@@ -65,7 +63,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   }
 
   private mapPrerequisites() {
-    const prerequisites = this.taskPrerequisites;
+    const prerequisites = this.taskDefinition.taskPrerequisitesCache.currentValues;
     const definitions = this.taskDefinition.unit.taskDefinitions;
     for (const prerequisite of prerequisites) {
       prerequisite.taskDefinition = definitions.find(
@@ -85,10 +83,16 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
       this.taskPrerequisiteService
         .query({
           unitId: this.unit.id,
-          id: this.taskDefinition.id,
+          taskDefId: this.taskDefinition.id,
         })
         .subscribe((data) => {
-          this.taskPrerequisites = [...data];
+          for (const prereq of data) {
+            this.taskDefinition.taskPrerequisitesCache.getOrCreate(
+              prereq.id,
+              this.taskPrerequisiteService,
+              prereq,
+            );
+          }
           this.mapPrerequisites();
         });
     }
@@ -141,6 +145,13 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
             this.alertService.error('Failed to add task prerequisite', 6000);
             return;
           }
+          taskDefinition.taskPrerequisitesCache.getOrCreate(
+            response.id,
+            this.taskPrerequisiteService,
+            response,
+          );
+          this.mapPrerequisites();
+
           this.alertService.success(
             `Successfully added task ${selectedTaskPrerequisite.abbreviation} as a prerequisite`,
             5000,
@@ -177,28 +188,10 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
       });
   }
 
-  public removePrerequisite(taskDefToRemove: TaskDefinition) {
-    if (!taskDefToRemove) {
+  public removePrerequisite(prerequisiteToRemove: TaskPrerequisite) {
+    if (!prerequisiteToRemove) {
       return;
     }
-
-    this.taskDefinitionService
-      .removeTaskPrerequisite(this.taskDefinition, taskDefToRemove)
-      .subscribe({
-        next: (response) => {
-          if (!response) {
-            this.alertService.error('Failed to remove task prerequisite', 6000);
-            return;
-          }
-          this.alertService.success(
-            `Removed task ${taskDefToRemove.abbreviation} as a prerequisite`,
-            5000,
-          );
-          this.unit.refresh();
-        },
-        error: (error) => {
-          this.alertService.error(`Failed to remove task prerequisite: ${error}`, 6000);
-        },
-      });
+    prerequisiteToRemove.delete();
   }
 }

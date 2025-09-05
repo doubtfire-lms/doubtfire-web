@@ -7,7 +7,8 @@ import {TaskPrerequisite} from '../models/task-prerequisite';
 
 @Injectable()
 export class TaskPrerequisiteService extends CachedEntityService<TaskPrerequisite> {
-  protected readonly endpointFormat = 'units/:unitId:/task_definitions/:id:/prerequisites';
+  protected readonly endpointFormat =
+    'units/:unitId:/task_definitions/:taskDefId:/prerequisites/:prerequisiteId:';
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
@@ -17,9 +18,10 @@ export class TaskPrerequisiteService extends CachedEntityService<TaskPrerequisit
     this.mapping.addKeys('id', 'taskDefinitionId', 'prerequisiteId', 'taskStatus');
 
     // this.mapping.mapAllKeysToJsonExcept('id', 'taskDefinitionId', 'prerequisiteId', 'taskStatus');
+    this.mapping.mapAllKeysToJsonExcept('id');
   }
 
   public override createInstanceFrom(json: object, other?: any): TaskPrerequisite {
-    return new TaskPrerequisite();
+    return new TaskPrerequisite(json);
   }
 }

@@ -944,11 +944,12 @@ export class Task extends Entity {
       return false;
     }
 
-    for (const prereq of prereqs) {
-      const task = this.project.tasks.find((t) => t.definition.id === prereq.id);
+    for (const prerequisiteLink of prereqs) {
+      const prerequisiteTask = prerequisiteLink.prerequisite;
+      const task = this.project.tasks.find((t) => t.definition.id === prerequisiteTask.id);
 
-      // If the task doesnt exist or isnt completed, block submission
-      if (!task || !task.inSubmittedState()) {
+      // If the task doesnt exist or its state has not met the minimum require state, block submission
+      if (!task || !prerequisiteLink.hasMetRequiredState(this.project)) {
         return true;
       }
     }
