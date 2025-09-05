@@ -14,6 +14,7 @@ export class EditProfileDialogService {
       width: '100%',
       maxWidth: '800px',
       data: {user, mode: mode, modal: true},
+      panelClass: 'overflow-y-auto',
     });
   }
 }
