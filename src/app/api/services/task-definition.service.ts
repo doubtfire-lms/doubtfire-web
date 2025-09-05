@@ -133,25 +133,6 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
           });
         },
       },
-      // {
-      //   keys: ['prerequisites', 'task_prerequisites'],
-      //   toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
-      //     data[key]?.forEach((prerequisite) => {
-      //       // Remove any deleted prerequisites from the cache
-      //       taskDefinition.taskPrerequisitesCache.forEach((_, id) => {
-      //         if (!data[key]?.some((p) => p['id'] === id)) {
-      //           taskDefinition.taskPrerequisitesCache.delete(id);
-      //         }
-      //       });
-
-      //       taskDefinition.taskPrerequisitesCache.getOrCreate(
-      //         prerequisite['id'],
-      //         this.taskPrerequisiteService,
-      //         prerequisite,
-      //       );
-      //     });
-      //   },
-      // },
     );
 
     this.mapping.mapAllKeysToJsonExcept(
