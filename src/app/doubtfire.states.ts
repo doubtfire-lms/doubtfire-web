@@ -597,7 +597,7 @@ const StaffGrantExtensionState: NgHybridStateDeclaration = { // Todo @Jason: Nav
   },
   views: {
     main: {
-      component: FUnitsComponent, // Todo @SGE team: Replace with SGE component - accept `unitID` as @Input
+      component: StaffGrantExtensionComponent,
     },
   },
   data: {
