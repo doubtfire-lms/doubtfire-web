@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -36,34 +36,36 @@ export class StaffGrantExtensionFormComponent implements OnInit {
   selectedStudents: number[] = [];
   showStudentList = true;
 
-  // Temporary values will be replaced with dynamic context
-  unitId = 1;
-  taskDefinitionId = 25;
+  // Old hardcoded values (for reference):
+  // unitId = 1;
+  // taskDefinitionId = 25;
+  // students = [
+  //   { id: 1, name: 'Joe M' },
+  //   { id: 2, name: 'Sahiru W' },
+  //   { id: 3, name: 'Samindi M' },
+  //   { id: 4, name: 'Student 4' },
+  //   { id: 5, name: 'Student 5' },
+  //   { id: 6, name: 'Student 6' },
+  //   { id: 7, name: 'Student 7' },
+  //   { id: 8, name: 'Student 8' },
+  //   { id: 9, name: 'Student 9' },
+  //   { id: 10, name: 'Student 10' },
+  //   { id: 11, name: 'Student 11' },
+  //   { id: 12, name: 'Student 12' },
+  //   { id: 13, name: 'Student 13' },
+  //   { id: 14, name: 'Student 14' },
+  //   { id: 15, name: 'Student 15' },
+  //   { id: 16, name: 'Student 16' },
+  //   { id: 17, name: 'Student 17' },
+  //   { id: 18, name: 'Student 18' },
+  //   { id: 19, name: 'Student 19' },
+  //   { id: 20, name: 'Student 20' }
+  // ];
 
-  // List of test students to choose from
-  students = [
-    { id: 1, name: 'Joe M' },
-    { id: 2, name: 'Sahiru W' },
-    { id: 3, name: 'Samindi M' },
-    { id: 4, name: 'Student 4' },
-    { id: 5, name: 'Student 5' },
-    { id: 6, name: 'Student 6' },
-    { id: 7, name: 'Student 7' },
-    { id: 8, name: 'Student 8' },
-    { id: 9, name: 'Student 9' },
-    { id: 10, name: 'Student 10' },
-    { id: 11, name: 'Student 11' },
-    { id: 12, name: 'Student 12' },
-    { id: 13, name: 'Student 13' },
-    { id: 14, name: 'Student 14' },
-    { id: 15, name: 'Student 15' },
-    { id: 16, name: 'Student 16' },
-    { id: 17, name: 'Student 17' },
-    { id: 18, name: 'Student 18' },
-    { id: 19, name: 'Student 19' },
-    { id: 20, name: 'Student 20' }
-  ];
-  filteredStudents = this.students;
+  @Input() unitId!: number;
+  @Input() taskDefinitionId!: number;
+  @Input() students: { id: number; name: string }[] = [];
+  filteredStudents: { id: number; name: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -79,6 +81,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
       reason: ['', [Validators.required, Validators.maxLength(300)]],
       notes: ['', Validators.maxLength(500)]
     });
+    this.filteredStudents = this.students;
   }
 
   // Filters students based on search query
