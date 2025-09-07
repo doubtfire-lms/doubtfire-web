@@ -51,7 +51,7 @@
   <!-- Extension Duration -->
   <div class="mb-8">
     <label for="extension" class="block text-xl font-semibold text-gray-900 mb-4">
-      Extension Duration: <strong>{{ grantExtensionForm.get('extension')?.value }}</strong> day(s)
+      Extension Duration: <strong>{{ grantExtensionForm.get('extension')?.value }}</strong> week(s)
     </label>
 
     <div [class.border-red-500]="grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid"
@@ -61,7 +61,7 @@
          [class.p-2]="grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid">
       <mat-slider
         min="1"
-        max="30"
+        max="4"
         step="1"
         tickInterval="5"
         thumbLabel
@@ -73,7 +73,7 @@
     </div>
 
     <mat-error *ngIf="grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid" class="mt-2">
-      Please select a valid extension duration (1-30 days).
+      Please select a valid extension duration (1-4 weeks).
     </mat-error>
   </div>
 
