@@ -1,8 +1,9 @@
 import {Entity, EntityMapping} from 'ngx-entity-service';
+import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
-import {Project, TaskDefinition, TaskStatusEnum} from './doubtfire-model';
+import {Project, TaskDefinition, TaskStatus, TaskStatusEnum} from './doubtfire-model';
 
 export class TaskPrerequisite extends Entity {
   id: number;
@@ -38,6 +39,10 @@ export class TaskPrerequisite extends Entity {
     };
   }
 
+  public requiredStatusLabel() {
+    return TaskStatus.STATUS_LABELS.get(this.taskStatus);
+  }
+
   public hasMetRequiredState(project: Project) {
     if (!this.prerequisite || !project) {
       return false;
@@ -54,10 +59,11 @@ export class TaskPrerequisite extends Entity {
     return false;
   }
 
-  public delete() {
+  public delete(): Observable<unknown> {
     const taskPrerequisiteService: TaskPrerequisiteService =
       AppInjector.get(TaskPrerequisiteService);
-    taskPrerequisiteService
+
+    return taskPrerequisiteService
       .delete(
         {
           unitId: this.taskDefinition.unit.id,
@@ -66,14 +72,16 @@ export class TaskPrerequisite extends Entity {
         },
         {cache: this.taskDefinition.taskPrerequisitesCache},
       )
-      .subscribe({
-        next: (response: object) => {
-          AppInjector.get(AlertService).error('Successfully deleted prerequisite', 4000);
-          this.taskDefinition.taskPrerequisitesCache.delete(this.id);
-        },
-        error: (error: any) => {
-          AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
-        },
-      });
+      .pipe(
+        tap({
+          next: () => {
+            AppInjector.get(AlertService).error('Successfully deleted prerequisite', 4000);
+            this.taskDefinition.taskPrerequisitesCache.delete(this.id);
+          },
+          error: (error) => {
+            AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
+          },
+        }),
+      );
   }
 }

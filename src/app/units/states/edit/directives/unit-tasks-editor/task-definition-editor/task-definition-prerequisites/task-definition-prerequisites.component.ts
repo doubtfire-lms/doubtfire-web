@@ -159,6 +159,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
             5000,
           );
           this.unit.refresh();
+          this.filterTaskDefs(this.searchCtrl.value ?? '');
         },
         error: (error) => {
           this.alertService.error(`Failed to add task prerequisite: ${error}`, 6000);
@@ -194,6 +195,8 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
     if (!prerequisiteToRemove) {
       return;
     }
-    prerequisiteToRemove.delete();
+    prerequisiteToRemove.delete().subscribe(() => {
+      this.filterTaskDefs(this.searchCtrl.value ?? '');
+    });
   }
 }
