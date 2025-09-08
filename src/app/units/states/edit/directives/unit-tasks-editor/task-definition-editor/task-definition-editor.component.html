@@ -128,7 +128,9 @@
       <div class="w-full">
         <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Prerequisite Tasks</h3>
         <p class="font-normal text-gray-700">
-          Select which tasks need to be in a submitted state before this task can be submitted
+          Select which tasks need to be submitted before
+          <span class="font-bold">{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</span>
+          can be submitted
         </p>
         <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
           <f-task-definition-prerequisites [taskDefinition]="taskDefinition" [editingMode]="true">
