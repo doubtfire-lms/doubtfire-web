@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-34](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-33...v10.0.0-34) (2025-09-08)
+
+
+### Features
+
+* task assessment counts csv ([c2c6002](https://github.com/b0ink/doubtfire-deploy/commit/c2c6002cef6e5a75f722c964bf2843cf662380f4))
+
+
+### Bug Fixes
+
+* allow scrolling in edit profile form dialog ([ee2b908](https://github.com/b0ink/doubtfire-deploy/commit/ee2b9085a931df551408cd12dbc8187c04d088fc))
+
 ## [10.0.0-33](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-32...v10.0.0-33) (2025-09-04)
 
 ## [10.0.0-32](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-31...v10.0.0-32) (2025-09-02)
