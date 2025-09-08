@@ -1,70 +1,96 @@
 <div class="flex flex-col">
   <div class="flex-grow flex flex-row">
-    <table class="w-full">
-      <tbody>
-        @for (link of taskDefinition.taskPrerequisitesCache.values | async; track link) {
-          @if (link.prerequisite?.id !== taskDefinition.id) {
-            <tr class="border-b">
-              @if (!editingMode) {
-                <td class="py-2 px-3 w-[75px]">
-                  <status-icon
-                    [hidden]="isNarrow"
-                    matBadgePosition="before"
-                    [status]="
-                      link.prerequisite?.projectTask(task?.project)?.status ?? 'not_started'
-                    "
-                  ></status-icon>
-                </td>
-              }
-
-              <td
-                class="py-2 px-3 w-[50px] text-center"
-                [class.line-through]="link.hasMetRequiredState(task?.project)"
-              >
-                {{ link.prerequisite?.abbreviation }}
-              </td>
-              <td class="py-2 px-3" [class.line-through]="link.hasMetRequiredState(task?.project)">
-                {{ link.prerequisite?.name }}
-              </td>
-              @if (!editingMode) {
-                <td>
-                  {{
-                    link.prerequisite?.projectTask(task?.project)?.statusLabel() ?? 'Not Started'
-                  }}
-                </td>
-              } @else {
-                @if (link.taskStatus) {
-                  <td class="py-2 px-3">
-                    <mat-select
-                      [(value)]="link.taskStatus"
-                      placeholder="Select required status"
-                      matTooltip="Task must reach this state before students can submit"
-                      matTooltipShowDelay="1000"
-                      (selectionChange)="updateTaskPrerequisite(link)"
-                    >
-                      <mat-option *ngFor="let state of stateOptions" [value]="state.value">
-                        {{ state.label }}
-                      </mat-option>
-                    </mat-select>
-                  </td>
-                }
-              }
-              @if (editingMode) {
-                <td class="py-2 px-3 text-right">
-                  <button
-                    mat-icon-button
-                    aria-label="Remove prerequisite"
-                    color="warn"
-                    (click)="removePrerequisite(link)"
-                  >
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </td>
-              }
-            </tr>
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="current-status">
+        <th mat-header-cell *matHeaderCellDef>
+          @if (!editingMode) {
+            Status
           }
-        }
-      </tbody>
+        </th>
+        <td mat-cell *matCellDef="let link">
+          @if (!editingMode) {
+            <ng-container>
+              @if (!editingMode) {
+                <status-icon
+                  matBadgePosition="before"
+                  [status]="link.prerequisite?.projectTask(task?.project)?.status ?? 'not_started'"
+                ></status-icon>
+              }
+            </ng-container>
+          }
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="task-definition">
+        <th mat-header-cell *matHeaderCellDef>Task Definition</th>
+        <td
+          mat-cell
+          *matCellDef="let link"
+          [class.line-through]="link.hasMetRequiredState(task?.project)"
+        >
+          {{ link.prerequisite?.abbreviation }} {{ link.prerequisite?.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="minimum-required-state">
+        <th mat-header-cell *matHeaderCellDef>
+          @if (editingMode) {
+            Minimum Required Status
+          } @else {
+            Current Status
+          }
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let link"
+          [class.line-through]="link.hasMetRequiredState(task?.project)"
+        >
+          @if (!editingMode) {
+            {{ link.prerequisite?.projectTask(task?.project)?.statusLabel() ?? 'Not Started' }}
+          } @else {
+            @if (link.taskStatus) {
+              <mat-select
+                [(value)]="link.taskStatus"
+                placeholder="Select required status"
+                matTooltip="Task must reach this state before students can submit"
+                matTooltipShowDelay="1000"
+                (selectionChange)="updateTaskPrerequisite(link)"
+              >
+                <mat-option *ngFor="let state of stateOptions" [value]="state.value">
+                  {{ state.label }}
+                </mat-option>
+              </mat-select>
+            }
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          @if (editingMode) {
+            Actions
+          } @else {
+            Required Status
+          }
+        </th>
+        <td mat-cell *matCellDef="let link">
+          @if (editingMode) {
+            <td class="py-2 px-3 text-right">
+              <button
+                mat-icon-button
+                aria-label="Remove prerequisite"
+                color="warn"
+                (click)="removePrerequisite(link)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          } @else {
+            {{ link?.requiredStatusLabel() ?? 'Not Started' }}
+          }
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>
 
@@ -83,7 +109,7 @@
           mat-raised-button
           color="primary"
           class="min-w-xl mr-4"
-          (click)="addTaskPrerequisite()"
+          (click)="addTaskPrerequisite($event)"
           [disabled]="!selectedTaskPrerequisite"
           matSuffix
         >

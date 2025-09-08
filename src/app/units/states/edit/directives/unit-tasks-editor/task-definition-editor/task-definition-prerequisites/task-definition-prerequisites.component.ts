@@ -1,6 +1,7 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {MatTableDataSource} from '@angular/material/table';
+import {Observable, Subscription} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
@@ -19,6 +20,17 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   @Input() taskDefinition: TaskDefinition;
   @Input() editingMode: boolean;
   @Input() task: Task;
+
+  displayedColumns: string[] = [
+    'current-status',
+    'task-definition',
+    'minimum-required-state',
+    'actions',
+  ];
+
+  private prereqSub?: Subscription;
+
+  public dataSource = new MatTableDataSource<TaskPrerequisite>();
 
   selectedTaskPrerequisite: TaskDefinition | null = null;
   searchCtrl = new FormControl('');
@@ -59,12 +71,16 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
       this.filterTaskDefs(search);
     });
 
-    this.mapPrerequisites();
+    this.prereqSub = this.taskDefinition.taskPrerequisitesCache.values.subscribe((values) => {
+      this.dataSource.data = values;
+    });
+
+    // this.fetchTaskPrerequisites();
   }
 
-  private mapPrerequisites() {
-    const prerequisites = this.taskDefinition.taskPrerequisitesCache.currentValues;
-    const definitions = this.taskDefinition.unit.taskDefinitions;
+  private mapPrerequisites(taskDefinition: TaskDefinition) {
+    const prerequisites = taskDefinition.taskPrerequisitesCache.currentValues;
+    const definitions = taskDefinition.unit.taskDefinitions;
     for (const prerequisite of prerequisites) {
       prerequisite.taskDefinition = definitions.find(
         (td) => td.id === prerequisite.taskDefinitionId,
@@ -79,23 +95,37 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
       changes.taskDefinition.previousValue?.id !== changes.taskDefinition.currentValue?.id
     ) {
       this.filterTaskDefs(this.searchCtrl.value ?? '');
+      this.prereqSub?.unsubscribe();
+      this.prereqSub = this.taskDefinition.taskPrerequisitesCache.values.subscribe((values) => {
+        this.dataSource.data = values;
+      });
+      this.fetchTaskPrerequisites();
+    }
+  }
 
-      this.taskPrerequisiteService
-        .query({
-          unitId: this.unit.id,
-          taskDefId: this.taskDefinition.id,
-        })
-        .subscribe((data) => {
+  private fetchTaskPrerequisites() {
+    const taskDefinition = this.taskDefinition;
+    this.taskPrerequisiteService
+      .query({
+        unitId: this.unit.id,
+        taskDefId: taskDefinition.id,
+      })
+      .subscribe({
+        next: (data) => {
           for (const prereq of data) {
-            this.taskDefinition.taskPrerequisitesCache.getOrCreate(
+            taskDefinition.taskPrerequisitesCache.getOrCreate(
               prereq.id,
               this.taskPrerequisiteService,
               prereq,
             );
           }
-          this.mapPrerequisites();
-        });
-    }
+          this.mapPrerequisites(taskDefinition);
+          this.filterTaskDefs(this.searchCtrl.value ?? '');
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
   }
 
   private filterTaskDefs(search: string) {
@@ -105,7 +135,9 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
       // Hide tasks already added as a prerequisite
       .filter(
         (td) =>
-          !this.taskDefinition.taskPrerequisitesCache.currentValues.some((p) => p.id === td.id),
+          !this.taskDefinition.taskPrerequisitesCache.currentValues.some(
+            (p: TaskPrerequisite) => p.prerequisite.id === td.id,
+          ),
       )
       // Higher target grades can not be a prerequisite
       .filter((td) => td.targetGrade <= this.taskDefinition.targetGrade)
@@ -122,7 +154,8 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
     return td && td.abbreviation ? `${td.abbreviation} - ${td.name}` : '';
   }
 
-  public addTaskPrerequisite(): void {
+  public addTaskPrerequisite(event: Event): void {
+    event.stopPropagation();
     const taskDefinition = this.taskDefinition;
     const selectedTaskPrerequisite = this.selectedTaskPrerequisite;
 
@@ -152,7 +185,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
             this.taskPrerequisiteService,
             response,
           );
-          this.mapPrerequisites();
+          this.mapPrerequisites(taskDefinition);
 
           this.alertService.success(
             `Successfully added task ${selectedTaskPrerequisite.abbreviation} as a prerequisite`,
