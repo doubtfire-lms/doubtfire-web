@@ -189,15 +189,14 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
   }
 
   public updateTaskPrerequisite(
-    taskDefinition: TaskDefinition,
-    prerequsite: TaskDefinition,
+    taskPrerequisiteLink: TaskPrerequisite,
     taskStatus: TaskStatusEnum,
   ): Observable<boolean> {
-    return AppInjector.get(HttpClient).put<boolean>(taskDefinition.taskPrerequisiteUrl, {
-      unit_id: taskDefinition.unit.id,
-      task_def_id: taskDefinition.id,
-      prerequisite_id: prerequsite.id,
-      task_status_required: taskStatus,
-    });
+    return AppInjector.get(HttpClient).put<boolean>(
+      `${taskPrerequisiteLink.taskDefinition.taskPrerequisiteUrl}/${taskPrerequisiteLink.id}`,
+      {
+        task_status_required: taskStatus,
+      },
+    );
   }
 }

@@ -169,15 +169,11 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
 
   public updateTaskPrerequisite(prerequisiteLink: TaskPrerequisite) {
     this.taskDefinitionService
-      .updateTaskPrerequisite(
-        prerequisiteLink.taskDefinition,
-        prerequisiteLink.prerequisite,
-        prerequisiteLink.taskStatus,
-      )
+      .updateTaskPrerequisite(prerequisiteLink, prerequisiteLink.taskStatus)
       .subscribe({
         next: (response) => {
           if (!response) {
-            this.alertService.error('Failed to add task prerequisite', 6000);
+            this.alertService.error('Failed to update task prerequisite', 6000);
             return;
           }
           this.alertService.success(
@@ -186,7 +182,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
           );
         },
         error: (error) => {
-          this.alertService.error(`Failed to add task prerequisite: ${error}`, 6000);
+          this.alertService.error(`Failed to update task prerequisite: ${error}`, 6000);
         },
       });
   }
