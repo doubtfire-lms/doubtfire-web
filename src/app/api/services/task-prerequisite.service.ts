@@ -1,7 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {CachedEntityService} from 'ngx-entity-service';
-import {TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiURL';
 import {TaskPrerequisite} from '../models/task-prerequisite';
 
@@ -12,8 +11,6 @@ export class TaskPrerequisiteService extends CachedEntityService<TaskPrerequisit
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
-
-    console.log('making new prerequisite');
 
     this.mapping.addKeys('id', 'taskDefinitionId', 'prerequisiteId', 'taskStatus');
 
