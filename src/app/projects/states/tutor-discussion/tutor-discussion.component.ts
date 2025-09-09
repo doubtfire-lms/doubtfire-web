@@ -9,6 +9,8 @@ import {
   ProjectService,
   Task,
   TaskCommentService,
+  TaskDefinition,
+  TaskService,
   TaskStatusEnum,
   Unit,
   UnitService,
@@ -29,9 +31,11 @@ enum TutorDiscussionTabView {
 })
 export class TutorDiscussionComponent implements AfterViewInit {
   @Input() unitId: number;
-  @Input() projectId: number;
+  @Input() username: string;
+  @Input() attendance: boolean;
 
   @ViewChild('tasks') tasksList: MatSelectionList;
+  selectedTaskDefinition: TaskDefinition | null = null;
 
   public filteredTasks: Task[] = [];
   public allTasks: Task[] = [];
@@ -47,7 +51,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
   private html5QrcodeScanner: Html5QrcodeScanner;
 
   private _unitId: number;
-  private _projectId: number;
+  private _username: string;
 
   public TutorDiscussionTabView = TutorDiscussionTabView;
   public footerTabView: TutorDiscussionTabView = TutorDiscussionTabView.SHOW_COMMENTS;
@@ -62,6 +66,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
     private alertService: AlertService,
     private route: UIRouter,
     private taskCommentService: TaskCommentService,
+    private taskService: TaskService,
   ) {}
 
   onTabChange(event: MatTabChangeEvent): void {
@@ -89,13 +94,20 @@ export class TutorDiscussionComponent implements AfterViewInit {
           // Avoid prompting students for camera permissions before redirecting to unauthorised state
           return;
         }
-        if (!this.project) {
-          if (this.unitId && this.projectId) {
-            this._projectId = Number(this.projectId);
-            this._unitId = Number(this.unitId);
-            this.getStudentTasks();
+        if (this.unitId) {
+          this._unitId = Number(this.unitId);
+          if (!this.attendance) {
+            // Tutor discussion view
+            if (this.username) {
+              this._username = this.username;
+              this.getStudentTasks();
+            } else {
+              this.scanQrCode();
+            }
           } else {
-            this.scanQrCode();
+            this.getUnit().then((u) => {
+              this.unit = u;
+            });
           }
         }
       }
@@ -109,10 +121,19 @@ export class TutorDiscussionComponent implements AfterViewInit {
 
     try {
       const params = new URL(data).searchParams;
-      const unitId = Number(params.get('unitId'));
-      const projectId = Number(params.get('projectId'));
-      if (!isNaN(unitId) && !isNaN(projectId)) {
-        this.changeProject(unitId, projectId);
+      const unitId = parseInt(params.get('unitId'));
+      const projectId = parseInt(params.get('projectId'));
+      const username = params.get('username');
+
+      if ((!isNaN(unitId) && !isNaN(projectId)) || username) {
+        if (unitId) {
+          this._unitId = unitId;
+        }
+        if (username) {
+          this._username = username;
+        }
+
+        this.changeProject();
       }
     } catch {
       // QR code data is invalid
@@ -122,26 +143,44 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public closeQrReader(): void {
     if (!this.project) {
       // Exiting the route entirely
-      this.route.stateService.go('home');
+      if (this.unitId) {
+        this.route.stateService.go('units/tasks/inbox', {
+          unitId: this.unitId,
+        });
+      } else {
+        this.route.stateService.go('home');
+      }
     } else {
       // Close the camera view
       this.scanningQr = false;
     }
   }
 
-  private changeProject(unitId: number, projectId: number) {
-    this._unitId = unitId;
-    this._projectId = projectId;
+  private changeProject() {
     this.html5QrcodeScanner.pause(true);
     this.loadingStudentData = true;
     setTimeout(() => {
-      this.getStudentTasks();
+      try {
+        this.getStudentTasks();
+      } catch (_e) {
+        this.alertService.error(`Invalid QR code`, 2000);
+        this.loadingStudentData = false;
+
+        setTimeout(() => {
+          this.html5QrcodeScanner.resume();
+        }, 2000);
+      }
     });
   }
 
   hideQrScannerBloat: boolean = true;
 
   public scanQrCode() {
+    if (this.attendance && !this.selectedTaskDefinition) {
+      this.alertService.error('You must select a task first', 3000);
+      return;
+    }
+
     this.scanningQr = true;
     this.loadingStudentData = false;
 
@@ -218,11 +257,33 @@ export class TutorDiscussionComponent implements AfterViewInit {
     }
   }
 
+  public markSelectedTasksCheckedIn() {
+    const selectedTasks = this.tasksList.selectedOptions.selected;
+    if (selectedTasks.length > 1) {
+      this.alertService.error('Can only check-in 1 task at a time', 5000);
+      return;
+    }
+    for (const taskOption of selectedTasks) {
+      const task = taskOption.value as Task;
+      this.taskService.checkInTaskForStudent(task).subscribe({
+        next: () => {
+          this.taskService.notifyStatusChange(task);
+          this.alertService.success('Successfully checked in', 2500);
+        },
+        error: (_error) => {
+          this.alertService.error('Failed to check-in', 5000);
+        },
+      });
+    }
+  }
+
   private getUnit(): Promise<Unit> {
     return new Promise((resolve, reject) => {
       this.unitService.get({id: this._unitId}).subscribe({
         next: (unit) => {
-          resolve(unit);
+          setTimeout(() => {
+            resolve(unit);
+          });
         },
         error: (err) => {
           reject(err);
@@ -234,7 +295,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
   private loadStudents(unit: Unit): Promise<Project> {
     return new Promise((resolve, reject) => {
       this.projectService.loadStudents(unit, false, false).subscribe((projects) => {
-        const project = projects.find((p) => p.id === this._projectId);
+        const project = projects.find((p) => p.student.username === this._username);
         if (!project) {
           reject('Student is not a part of this unit');
         }
@@ -301,15 +362,22 @@ export class TutorDiscussionComponent implements AfterViewInit {
         const discussionTasks = project.tasks.filter((task) =>
           this.statusesToInclude.includes(task.status),
         );
-        this.filteredTasks = [...discussionTasks];
-        this.allTasks = [
-          ...project.tasks.filter(
-            (task) =>
-              task.status !== 'not_started' && // Filter out tasks with no submissions yet
-              task.definition.targetGrade <= project.targetGrade, // Filter out tasks that are higher than student's target grade
-          ),
-        ];
-        this.selectedTask = discussionTasks[0] ?? null;
+        if (!this.attendance) {
+          this.filteredTasks = [...discussionTasks];
+          this.allTasks = [
+            ...project.tasks.filter(
+              (task) =>
+                task.status !== 'not_started' && // Filter out tasks with no submissions yet
+                task.definition.targetGrade <= project.targetGrade, // Filter out tasks that are higher than student's target grade
+            ),
+          ];
+        } else {
+          this.filteredTasks = [
+            project.tasks.find((t) => t.definition.id === this.selectedTaskDefinition.id),
+          ];
+        }
+
+        this.selectedTask = this.filteredTasks[0] ?? null;
         this.project = project;
         this.scanningQr = false;
         this.loadingStudentData = false;

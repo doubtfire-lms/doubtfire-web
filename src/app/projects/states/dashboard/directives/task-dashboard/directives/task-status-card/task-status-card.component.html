@@ -1,7 +1,11 @@
 <mat-card appearance="outlined">
   @if (triggers?.length > 0) {
     <mat-form-field class="px-4 pt-4" appearance="outline">
-      <mat-select [value]="task?.status" (selectionChange)="triggerTransition($event.value)">
+      <mat-select
+        [value]="task?.status"
+        (selectionChange)="triggerTransition($event.value)"
+        [disabled]="task?.blockedByPrerequisiteTasks()"
+      >
         <mat-select-trigger>
           <span style="display: inline-flex">
             <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
@@ -30,10 +34,19 @@
 
   <mat-card-content>
     <p>{{ task?.statusHelp().reason }} {{ task?.statusHelp().action }}</p>
+    @if (task?.blockedByPrerequisiteTasks()) {
+      <p>
+        To submit this task, you must first complete all tasks that are listed as prerequisites.
+      </p>
+    }
   </mat-card-content>
 
   <mat-card-actions class="space-x-2">
-    <button mat-stroked-button (click)="triggerTransition('ready_for_feedback')" [disabled]="isReadyForFeedback()">
+    <button
+      mat-stroked-button
+      (click)="triggerTransition('ready_for_feedback')"
+      [disabled]="isReadyForFeedback() || task?.blockedByPrerequisiteTasks()"
+    >
       Upload Submission
     </button>
 

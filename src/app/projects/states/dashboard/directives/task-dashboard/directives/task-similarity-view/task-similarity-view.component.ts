@@ -75,7 +75,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
       (_, response: HttpResponse<Blob>) => {
         // Open JPlag report viewer in embedded iframe
         setTimeout(() => {
-          this.jplagViewer.openReport(response.body);
+          this.jplagViewer.uploadReport(response.body);
           setTimeout(() => {
             // Open comparison between the two students
             this.jplagViewer.openComparison(

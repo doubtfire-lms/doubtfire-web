@@ -278,6 +278,9 @@ import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-ca
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LtiService} from './api/services/lti.service';
+import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
+import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
+import {TaskPrerequisiteService} from './api/services/task-prerequisite.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -422,6 +425,8 @@ const MY_DATE_FORMAT = {
     UnavailableCardComponent,
     LtiDashboardComponent,
     LtiUnitLinkComponent,
+    TaskDefinitionPrerequisitesComponent,
+    TaskPrerequisitesCardComponent,
   ],
   // Services we provide
   providers: [
@@ -509,6 +514,7 @@ const MY_DATE_FORMAT = {
     StaffNoteService,
     SidekiqJobService,
     LtiService,
+    TaskPrerequisiteService,
   ],
   imports: [
     FlexLayoutModule,

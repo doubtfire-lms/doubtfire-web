@@ -9,30 +9,21 @@ export class JplagReportViewerComponent {
 
   @Input() hidden: boolean = false;
 
-  public openReport(file: Blob) {
+  public uploadReport(file: Blob) {
     // Send the JPlag report to load
     this.jplagIframe.nativeElement.contentWindow?.postMessage({
-      type: 'upload-jplag-file',
+      type: 'upload-jplag-report',
       file: file,
       name: 'report.jplag',
     });
   }
 
-  public setSearchFilter(searchTerm: string) {
-    // Search comparisons by student username, auto load comparisons if only one is found
-    this.jplagIframe.nativeElement.contentWindow?.postMessage({
-      type: 'set-search-filter-value',
-      filter: searchTerm,
-      autoViewComparison: true,
-    });
-  }
-
-  public openComparison(submissionId1: string, submissionId2: string) {
+  public openComparison(firstSubmissionId: string, secondSubmissionId: string) {
     // Open comparisons between these two submissions (student usernames)
     this.jplagIframe.nativeElement.contentWindow?.postMessage({
       type: 'open-comparison',
-      submissionId1,
-      submissionId2,
+      firstSubmissionId,
+      secondSubmissionId,
     });
   }
 }

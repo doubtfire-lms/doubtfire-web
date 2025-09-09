@@ -45,6 +45,11 @@
         <mat-icon>cloud_sync_outline</mat-icon>
       </button>
     }
+    @if (currentUnit) {
+      <button mat-icon-button (click)="showMyQr()">
+        <mat-icon>qr_code_scanner</mat-icon>
+      </button>
+    }
     @if (currentUser.role === 'Admin' || currentUser.role === 'Convenor') {
       <button
         #menuState="matMenuTrigger"
@@ -82,14 +87,8 @@
     <mat-menu #menu2="matMenu">
       <button mat-menu-item uiSref="edit_profile">
         <mat-icon matListItemIcon aria-label="Edit profile">person</mat-icon>
-        Edit Profile
+        My Profile
       </button>
-      @if (currentUser.role !== 'Student') {
-        <button mat-menu-item uiSref="tutor-discussion">
-          <mat-icon matListItemIcon aria-label="Tutor Discussion">qr_code_scanner</mat-icon>
-          Discussion
-        </button>
-      }
       <button mat-menu-item (click)="openCalendar()">
         <mat-icon matListItemIcon aria-label="Edit calendar">calendar_month</mat-icon>
         Calendar

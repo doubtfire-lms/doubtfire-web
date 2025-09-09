@@ -111,6 +111,10 @@
         <button uiSref="units/tasks/viewer" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
         </button>
+        <button uiSref="tutor-discussion" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+          <mat-icon aria-label="Tutor Discussion icon" fontIcon="qr_code_scanner"></mat-icon
+          >Discussion
+        </button>
         <mat-divider></mat-divider>
         <!-- <p class="task-dropdown-heading">Students</p> -->
         <button uiSref="units/students/list" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
@@ -135,6 +139,13 @@
         <!-- <p class="task-dropdown-heading">Unit</p> -->
         <button uiSref="units/analytics" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
+        </button>
+        <button
+          uiSref="tutor-attendance"
+          [uiParams]="{unitId: unitRole.unit.id, attendance: true}"
+          mat-menu-item
+        >
+          <mat-icon aria-label="Student Check In icon" fontIcon="history_edu"></mat-icon>Check-in
         </button>
         @if (
           unitRole.role === 'Convenor' || unitRole.role === 'Admin' || unitRole.role === 'Auditor'

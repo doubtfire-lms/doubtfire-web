@@ -31,6 +31,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {SidekiqJob} from './sidekiq-job';
 import {HttpClient} from '@angular/common/http';
+import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
 
 export class Unit extends Entity {
   id: number;
@@ -586,6 +587,12 @@ export class Unit extends Entity {
   public downloadTasksAwaitingFeedbackCsv(): Observable<SidekiqJob> {
     return AppInjector.get(HttpClient).get<SidekiqJob>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tasks_awaiting_feedback`,
+    );
+  }
+
+  public downloadTaskAssessmentCountsCsv(): Observable<SidekiqJob> {
+    return AppInjector.get(HttpClient).get<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/task_assessment_counts`,
     );
   }
 
