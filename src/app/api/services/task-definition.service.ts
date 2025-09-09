@@ -1,11 +1,18 @@
 import {CachedEntityService} from 'ngx-entity-service';
-import {LearningOutcomeService, TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
+import {
+  LearningOutcomeService,
+  TaskDefinition,
+  TaskStatusEnum,
+  Unit,
+} from 'src/app/api/models/doubtfire-model';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiURL';
 import {MappingFunctions} from './mapping-fn';
 import {AppInjector} from 'src/app/app-injector';
 import {Observable} from 'rxjs';
+import {TaskPrerequisiteService} from './task-prerequisite.service';
+import {TaskPrerequisite} from '../models/task-prerequisite';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -14,6 +21,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
   constructor(
     httpClient: HttpClient,
     private learningOutcomeService: LearningOutcomeService,
+    private taskPrerequisiteService: TaskPrerequisiteService,
   ) {
     super(httpClient, API_URL);
 
@@ -168,5 +176,27 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     const formData = new FormData();
     formData.append('file', file);
     return AppInjector.get(HttpClient).post<boolean>(taskDefinition.scormDataUploadUrl, formData);
+  }
+
+  public addTaskPrerequisite(
+    taskDefinition: TaskDefinition,
+    prerequsite: TaskDefinition,
+  ): Observable<TaskPrerequisite> {
+    return AppInjector.get(HttpClient).post<TaskPrerequisite>(taskDefinition.taskPrerequisiteUrl, {
+      task_def_id: taskDefinition.id,
+      prerequisite_id: prerequsite.id,
+    });
+  }
+
+  public updateTaskPrerequisite(
+    taskPrerequisiteLink: TaskPrerequisite,
+    taskStatus: TaskStatusEnum,
+  ): Observable<boolean> {
+    return AppInjector.get(HttpClient).put<boolean>(
+      `${taskPrerequisiteLink.taskDefinition.taskPrerequisiteUrl}/${taskPrerequisiteLink.id}`,
+      {
+        task_status_required: taskStatus,
+      },
+    );
   }
 }

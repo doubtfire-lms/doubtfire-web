@@ -5,7 +5,9 @@ import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {TaskDefinitionService} from '../services/task-definition.service';
-import {Grade, GroupSet, LearningOutcome, TutorialStream, Unit} from './doubtfire-model';
+import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
+import {Task} from './doubtfire-model';
+import {TaskPrerequisite} from './task-prerequisite';
 
 export type UploadRequirement = {
   key: string;
@@ -51,6 +53,9 @@ export class TaskDefinition extends Entity {
   assessmentEnabled: boolean;
   similarityLanguage: string = 'c';
   hasJplagReport: boolean;
+
+  public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
+    new EntityCache<TaskPrerequisite>();
 
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
@@ -249,6 +254,12 @@ export class TaskDefinition extends Entity {
     }/scorm_data`;
   }
 
+  public get taskPrerequisiteUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
+      this.id
+    }/prerequisites`;
+  }
+
   public get taskOverseerResourcesUploadUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${
       this.id
@@ -287,5 +298,9 @@ export class TaskDefinition extends Entity {
     return httpClient
       .delete(this.taskOverseerResourcesUploadUrl)
       .pipe(tap(() => (this.hasTaskAssessmentResources = false)));
+  }
+
+  public projectTask(project?: Project): Task | undefined {
+    return project?.tasks?.find((p) => p.definition.id === this.id);
   }
 }

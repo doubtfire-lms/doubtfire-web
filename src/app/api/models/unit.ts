@@ -31,6 +31,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {SidekiqJob} from './sidekiq-job';
 import {HttpClient} from '@angular/common/http';
+import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
 
 export class Unit extends Entity {
   id: number;
