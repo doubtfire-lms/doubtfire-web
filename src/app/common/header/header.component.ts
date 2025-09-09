@@ -12,6 +12,7 @@ import { DoubtfireConstants, LogoSettings } from 'src/app/config/constants/doubt
 import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
 import {QrModalService} from '../modals/qr-modal/qr-modal.service';
+import {StateService} from '@uirouter/core';
 
 @Component({
   selector: 'app-header',
@@ -56,6 +57,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sidekiqJobService: SidekiqJobService,
     private sidekiqJobsModalService: SidekiqJobsModalService,
     private qrModalService: QrModalService,
+    private stateService: StateService,
   ) {}
 
   ngOnInit(): void {
@@ -147,14 +149,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.currentProject.student.username !== this.currentUser.username;
 
     const username = projectView ? this.currentProject.student.username : this.currentUser.username;
-
-    const url = `${hostName}/tutor-discussion?unitId=${this.currentUnit.id}&username=${username}`;
-    this.qrModalService.show(
-      url,
-      'Display this QR code during your class so your tutor can scan it to view your submissions and mark your tasks as complete.',
-      projectView ? `Viewing QR for ${this.currentProject.student.name}` : '',
-      true,
-    );
+    if (projectView || this.currentUser.role === 'Student') {
+      const url = `${hostName}/tutor-discussion?unitId=${this.currentUnit.id}&username=${username}`;
+      this.qrModalService.show(
+        url,
+        'Display this QR code during your class so your tutor can scan it to view your submissions and mark your tasks as complete.',
+        projectView ? `Viewing QR for ${this.currentProject.student.name}` : '',
+        true,
+      );
+    } else {
+      this.stateService.go('tutor-discussion', {
+        unitId: this.currentUnit.id,
+      });
+    }
   }
 
   showSidekiqJob() {
