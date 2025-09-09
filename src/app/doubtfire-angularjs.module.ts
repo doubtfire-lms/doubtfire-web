@@ -227,6 +227,7 @@ import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/l
 import {FeedbackTemplateService} from './api/services/feedback-template.service';
 import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
 import {SidekiqProgressModalService} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -494,6 +495,11 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fStaffNotes',
   downgradeComponent({component: StaffNotesComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fTaskPrerequisitesCard',
+  downgradeComponent({component: TaskPrerequisitesCardComponent}),
 );
 
 // Global configuration

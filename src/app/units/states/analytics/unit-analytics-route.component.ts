@@ -44,6 +44,14 @@ export class UnitAnalyticsComponent {
     );
   }
 
+  public getTaskAssessmentCountCsv() {
+    this.downloadCsv(
+      this.unit.downloadTaskAssessmentCountsCsv(),
+      'Task Assessment Counts CSV',
+      `${this.unit.code}-task-assessment-counts.csv`,
+    );
+  }
+
   private downloadCsv(newJob: Observable<SidekiqJob>, title: string, filename: string) {
     newJob.subscribe({
       next: (job) => {

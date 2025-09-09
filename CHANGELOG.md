@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-35](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-34...v10.0.0-35) (2025-09-09)
+
+
+### Features
+
+* add task prerequisites ([d5c1a51](https://github.com/b0ink/doubtfire-deploy/commit/d5c1a51dc049b025ae85b2ef6513630a197eabee))
+* cross out prerequisite tasks that have been submitted ([7e1a7db](https://github.com/b0ink/doubtfire-deploy/commit/7e1a7dbd3351dbcc8230f115554d6afdfaca0f70))
+* show list of prerequisites in task dashboard ([111f60a](https://github.com/b0ink/doubtfire-deploy/commit/111f60a4272abcf683c50b711bd43a1f772153ec))
+
+
+### Bug Fixes
+
+* typo ([e0c867f](https://github.com/b0ink/doubtfire-deploy/commit/e0c867fc7f24301d414ed584b6859e09d95c652c))
+
+## [10.0.0-34](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-33...v10.0.0-34) (2025-09-08)
+
+
+### Features
+
+* task assessment counts csv ([c2c6002](https://github.com/b0ink/doubtfire-deploy/commit/c2c6002cef6e5a75f722c964bf2843cf662380f4))
+
+
+### Bug Fixes
+
+* allow scrolling in edit profile form dialog ([ee2b908](https://github.com/b0ink/doubtfire-deploy/commit/ee2b9085a931df551408cd12dbc8187c04d088fc))
+
+## [10.0.0-33](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-32...v10.0.0-33) (2025-09-04)
+
 ## [10.0.0-32](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-31...v10.0.0-32) (2025-09-02)
 
 ## [10.0.0-31](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-30...v10.0.0-31) (2025-08-27)
