@@ -21,12 +21,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   @Input() staffView: boolean;
   @Input() task: Task;
 
-  displayedColumns: string[] = [
-    'current-status',
-    'task-definition',
-    'minimum-required-state',
-    'actions',
-  ];
+  displayedColumns: string[] = ['task-definition', 'minimum-required-state', 'actions'];
 
   private prereqSub?: Subscription;
 
