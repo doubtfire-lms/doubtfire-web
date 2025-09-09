@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
-import {catchError, filter, switchMap, take} from 'rxjs/operators';
+import {catchError, filter, finalize, switchMap, take} from 'rxjs/operators';
 import {AuthenticationService, UserService} from 'src/app/api/models/doubtfire-model';
 
 @Injectable()
@@ -56,41 +56,23 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       //   )
       // ),
       catchError((error: HttpErrorResponse) => {
-        let errorMessage: string = '';
-        let logMessage: string = '';
-        if (error.error instanceof ErrorEvent) {
-          // client-side error
-          errorMessage = error.error.message;
-        } else if (error.error instanceof ProgressEvent) {
-          errorMessage = error.statusText;
-        } else {
-          // server-side error
-          if (error.error.error) {
-            errorMessage = error.error.error;
-          } else if (error.error instanceof Blob) {
-            errorMessage = error.statusText;
-          } else {
-            errorMessage = error.error;
-          }
-          logMessage = `Error Code: ${error.status}`;
-        }
-
-        console.error(`${logMessage}: ${errorMessage}`);
-
-        if (error.status === 419 || (error.status === 403 && this.userService.isAnonymousUser())) {
+        if (this.isAuthError(error)) {
           if (!this.refreshTokenInProgress) {
             this.refreshTokenInProgress = true;
             this.refreshTokenSubject.next(null);
             return this.attemptRefresh$().pipe(
               switchMap(() => {
-                this.refreshTokenInProgress = false;
                 this.refreshTokenSubject.next(this.userService.currentUser.authenticationToken);
                 return next.handle(this.injectToken(request));
               }),
-              catchError((err) => {
+              catchError((err: HttpErrorResponse) => {
                 this.refreshTokenInProgress = false;
-                return throwError(() => err);
+                if (this.isAuthError(err)) {
+                  this.authenticationService.timeoutAuthentication();
+                }
+                return throwError(() => this.extractErrorMessage(err));
               }),
+              finalize(() => (this.refreshTokenInProgress = false)),
             );
           } else {
             return this.refreshTokenSubject.pipe(
@@ -103,9 +85,37 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           }
         }
 
-        return throwError(() => errorMessage);
+        return throwError(() => this.extractErrorMessage(error));
       }),
     );
+  }
+
+  private isAuthError(error: HttpErrorResponse) {
+    return error.status === 419 || (error.status === 403 && this.userService.isAnonymousUser());
+  }
+
+  private extractErrorMessage(error: HttpErrorResponse) {
+    let errorMessage: string = '';
+    let logMessage: string = '';
+    if (error.error instanceof ErrorEvent) {
+      // client-side error
+      errorMessage = error.error.message;
+    } else if (error.error instanceof ProgressEvent) {
+      errorMessage = error.statusText;
+    } else {
+      // server-side error
+      if (error.error.error) {
+        errorMessage = error.error.error;
+      } else if (error.error instanceof Blob) {
+        errorMessage = error.statusText;
+      } else {
+        errorMessage = error.error;
+      }
+      logMessage = `Error Code: ${error.status}`;
+    }
+
+    console.error(`${logMessage}: ${errorMessage}`);
+    return errorMessage;
   }
 
   injectToken(request: HttpRequest<any>) {
