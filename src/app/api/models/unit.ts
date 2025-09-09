@@ -590,6 +590,12 @@ export class Unit extends Entity {
     );
   }
 
+  public downloadTaskAssessmentCountsCsv(): Observable<SidekiqJob> {
+    return AppInjector.get(HttpClient).get<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/task_assessment_counts`,
+    );
+  }
+
   public downloadTutorAssessmentCsv(): Observable<SidekiqJob> {
     return AppInjector.get(HttpClient).get<SidekiqJob>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments`,
