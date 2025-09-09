@@ -18,7 +18,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 })
 export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   @Input() taskDefinition: TaskDefinition;
-  @Input() editingMode: boolean;
+  @Input() staffView: boolean;
   @Input() task: Task;
 
   displayedColumns: string[] = [

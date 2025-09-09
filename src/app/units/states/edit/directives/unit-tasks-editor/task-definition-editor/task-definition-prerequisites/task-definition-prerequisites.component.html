@@ -3,14 +3,14 @@
     <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="current-status">
         <th mat-header-cell *matHeaderCellDef>
-          @if (!editingMode) {
+          @if (!staffView) {
             Status
           }
         </th>
         <td mat-cell *matCellDef="let link">
-          @if (!editingMode) {
+          @if (!staffView) {
             <ng-container>
-              @if (!editingMode) {
+              @if (!staffView) {
                 <status-icon
                   matBadgePosition="before"
                   [status]="link.prerequisite?.projectTask(task?.project)?.status ?? 'not_started'"
@@ -33,7 +33,7 @@
 
       <ng-container matColumnDef="minimum-required-state">
         <th mat-header-cell *matHeaderCellDef>
-          @if (editingMode) {
+          @if (staffView) {
             Minimum Required Status
           } @else {
             Current Status
@@ -44,7 +44,7 @@
           *matCellDef="let link"
           [class.line-through]="link.hasMetRequiredState(task?.project)"
         >
-          @if (!editingMode) {
+          @if (!staffView) {
             {{ link.prerequisite?.projectTask(task?.project)?.statusLabel() ?? 'Not Started' }}
           } @else {
             @if (link.taskStatus) {
@@ -66,14 +66,14 @@
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>
-          @if (editingMode) {
+          @if (staffView) {
             Actions
           } @else {
             Required Status
           }
         </th>
         <td mat-cell *matCellDef="let link">
-          @if (editingMode) {
+          @if (staffView) {
             <td class="py-2 px-3 text-right">
               <button
                 mat-icon-button
@@ -94,7 +94,7 @@
     </table>
   </div>
 
-  @if (editingMode) {
+  @if (staffView) {
     <div class="flex-grow flex flex-row items-center">
       <mat-form-field appearance="outline" class="w-full mt-[22px]">
         <input
