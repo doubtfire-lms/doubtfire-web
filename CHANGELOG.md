@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-38](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-37...v10.0.0-38) (2025-09-09)
+
+
+### Bug Fixes
+
+* ensure task prerequisites are correctly cached ([3945f4e](https://github.com/b0ink/doubtfire-deploy/commit/3945f4e2ecff1a1d79662c099baf745bfd6f4b7d))
+
 ## [10.0.0-37](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-36...v10.0.0-37) (2025-09-09)
 
 ## [10.0.0-36](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-35...v10.0.0-36) (2025-09-09)
