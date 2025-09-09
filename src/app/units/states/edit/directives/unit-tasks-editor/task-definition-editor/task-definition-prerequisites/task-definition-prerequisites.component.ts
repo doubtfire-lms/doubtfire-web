@@ -47,8 +47,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
 
   public readonly stateOptions = [
     {value: 'ready_for_feedback', label: 'Ready for Feedback'},
-    {value: 'discuss', label: 'Discuss / Demonstrate'},
-    // {value: 'demonstrate', label: 'Discuss / Demonstrate'},
+    {value: 'discuss', label: 'Discuss'},
     {value: 'complete', label: 'Complete'},
   ];
 
