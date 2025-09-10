@@ -13,6 +13,13 @@
           <tr class="even:bg-white odd:bg-gray-100 border-b border-gray-200">
             <td class="px-6 py-4 text-black uppercase">{{ ilo.abbreviation }}</td>
             <td class="px-6 py-4 text-gray-500">{{ ilo.fullOutcomeDescription }}</td>
+            <td class="px-6 py-4 text-gray-500 flex justify-end">
+              @for (outcome of getLinkedOutcomes(ilo); track outcome.abbreviation) {
+                <mat-chip-row class="m-1" matTooltip="{{ outcome.shortDescription }}">{{
+                  outcome.abbreviation
+                }}</mat-chip-row>
+              }
+            </td>
           </tr>
         }
       </tbody>

@@ -7,6 +7,7 @@ import {
   SimpleChanges,
   ViewChild,
   ElementRef,
+  OnDestroy,
 } from '@angular/core';
 import {commentsModal} from 'src/app/ajs-upgraded-providers';
 import {
@@ -22,13 +23,14 @@ import {TaskCommentComposerData} from '../task-comment-composer/task-comment-com
 import {AlertService} from 'src/app/common/services/alert.service';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'task-comments-viewer',
   templateUrl: './task-comments-viewer.component.html',
   styleUrls: ['./task-comments-viewer.component.scss'],
 })
-export class TaskCommentsViewerComponent implements OnChanges, OnInit {
+export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy {
   // Get the comments body from the HTML template
   @ViewChild('commentsBody') commentsBody: ElementRef;
 
@@ -44,6 +46,9 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
   @Input() task: Task;
   @Input() refocusOnTaskChange: boolean;
 
+  private taskStatusSub: Subscription;
+  private commentAddedSub: Subscription;
+
   constructor(
     private taskCommentService: TaskCommentService,
     private feedbackTemplateService: FeedbackTemplateService,
@@ -54,15 +59,23 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
     private alerts: AlertService,
   ) {
     const self = this;
-    this.taskCommentService.commentAdded$.subscribe((tc: TaskComment) => {
+    this.commentAddedSub = this.taskCommentService.commentAdded$.subscribe((tc: TaskComment) => {
       self.scrollDown();
     });
-    this.taskService.taskStatusUpdated$.subscribe((task) => {
-      this.fetchComments(task, false);
+
+    this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
+      if (task && task.project && this.project && task.project.id === this.project.id) {
+        this.fetchComments(task, false);
+      }
     });
   }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.taskStatusSub?.unsubscribe();
+    this.commentAddedSub?.unsubscribe();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     // Must have project for task to be mapped
@@ -99,6 +112,9 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
         );
 
     request$.subscribe((comments) => {
+      // Remove task notification
+      task.numNewComments = 0;
+
       for (const comment of comments) {
         const existingComment = task.commentCache.get(comment.id);
         comment.task = task;
@@ -233,7 +249,8 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit {
       commentType == 'assessment' ||
       commentType === 'scorm' ||
       commentType === 'scorm_extension' ||
-      commentType === 'discussed_in_class'
+      commentType === 'discussed_in_class' ||
+      commentType === 'checked_in'
     );
   }
 

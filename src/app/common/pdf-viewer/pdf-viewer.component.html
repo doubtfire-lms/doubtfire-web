@@ -57,8 +57,10 @@
         [src]="pdfBlobUrl"
         [render-text]="true"
         [original-size]="false"
-        (after-load-complete)="onLoaded()"
-        (page-rendered)="onPageRendered()"
+        [(page)]="pageNumber"
+        (after-load-complete)="onLoaded($event)"
+        [show-all]="true"
+        (text-layer-rendered)="onTextLayerRendered($event)"
       ></pdf-viewer>
     }
   } @else {

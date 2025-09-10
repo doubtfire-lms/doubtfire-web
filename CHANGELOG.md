@@ -2,6 +2,177 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-38](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-37...v10.0.0-38) (2025-09-09)
+
+
+### Bug Fixes
+
+* ensure task prerequisites are correctly cached ([3945f4e](https://github.com/b0ink/doubtfire-deploy/commit/3945f4e2ecff1a1d79662c099baf745bfd6f4b7d))
+
+## [10.0.0-37](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-36...v10.0.0-37) (2025-09-09)
+
+## [10.0.0-36](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-35...v10.0.0-36) (2025-09-09)
+
+## [10.0.0-35](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-34...v10.0.0-35) (2025-09-09)
+
+
+### Features
+
+* add task prerequisites ([d5c1a51](https://github.com/b0ink/doubtfire-deploy/commit/d5c1a51dc049b025ae85b2ef6513630a197eabee))
+* cross out prerequisite tasks that have been submitted ([7e1a7db](https://github.com/b0ink/doubtfire-deploy/commit/7e1a7dbd3351dbcc8230f115554d6afdfaca0f70))
+* show list of prerequisites in task dashboard ([111f60a](https://github.com/b0ink/doubtfire-deploy/commit/111f60a4272abcf683c50b711bd43a1f772153ec))
+
+
+### Bug Fixes
+
+* typo ([e0c867f](https://github.com/b0ink/doubtfire-deploy/commit/e0c867fc7f24301d414ed584b6859e09d95c652c))
+
+## [10.0.0-34](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-33...v10.0.0-34) (2025-09-08)
+
+
+### Features
+
+* task assessment counts csv ([c2c6002](https://github.com/b0ink/doubtfire-deploy/commit/c2c6002cef6e5a75f722c964bf2843cf662380f4))
+
+
+### Bug Fixes
+
+* allow scrolling in edit profile form dialog ([ee2b908](https://github.com/b0ink/doubtfire-deploy/commit/ee2b9085a931df551408cd12dbc8187c04d088fc))
+
+## [10.0.0-33](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-32...v10.0.0-33) (2025-09-04)
+
+## [10.0.0-32](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-31...v10.0.0-32) (2025-09-02)
+
+## [10.0.0-31](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-30...v10.0.0-31) (2025-08-27)
+
+
+### Bug Fixes
+
+* use new checked_in comment type ([3033c6c](https://github.com/b0ink/doubtfire-deploy/commit/3033c6ca3c27ad4fc0a7ce4bda3ac44df09516e3))
+
+## [10.0.0-30](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-29...v10.0.0-30) (2025-08-27)
+
+## [10.0.0-29](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-28...v10.0.0-29) (2025-08-27)
+
+## [10.0.0-28](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-27...v10.0.0-28) (2025-08-27)
+
+## [10.0.0-27](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-26...v10.0.0-27) (2025-08-27)
+
+
+### Features
+
+* add option for qr footer text ([9e9b9db](https://github.com/b0ink/doubtfire-deploy/commit/9e9b9dbfb13d7531cb5387060407e23c25212cca))
+* support viewing qr for selected student in tutor view ([1f7fa51](https://github.com/b0ink/doubtfire-deploy/commit/1f7fa51d65767b3186e6eda8970a408cf0e6c847))
+
+
+### Bug Fixes
+
+* add padding when edit profile form displayed as modal ([a3f3b97](https://github.com/b0ink/doubtfire-deploy/commit/a3f3b977251a206b268c369c370934ff69b574d3))
+* show student id ([d1eeefb](https://github.com/b0ink/doubtfire-deploy/commit/d1eeefbea53cb13385bef2b3ba6b04d2f606c391))
+
+## [10.0.0-26](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-25...v10.0.0-26) (2025-08-27)
+
+
+### Features
+
+* add attendance marked task comment ([1559e81](https://github.com/b0ink/doubtfire-deploy/commit/1559e8104c8c4bc137df4f46a0a5ed0e345260af))
+* add tutor discussion to unit dropdown ([90f4149](https://github.com/b0ink/doubtfire-deploy/commit/90f41493313d6a3ad9bdafdd4cd4865c80e94ca2))
+* redirect back to inbox if unit context exists ([b7f4ab9](https://github.com/b0ink/doubtfire-deploy/commit/b7f4ab9e7801fbb33ffc6b4e02bf6613e6d7a524))
+
+
+### Bug Fixes
+
+* enforce minimum height on task comments viewer ([a7588e6](https://github.com/b0ink/doubtfire-deploy/commit/a7588e6f007381c04a570650257cd6f2ff93e5ae))
+* set max width on main container ([d1e5ab1](https://github.com/b0ink/doubtfire-deploy/commit/d1e5ab1427352fcf1b0fdd920cb9838a4f8799a0))
+
+## [10.0.0-25](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-24...v10.0.0-25) (2025-08-26)
+
+
+### Bug Fixes
+
+* only clear draft comment after successfully sending message ([2556355](https://github.com/b0ink/doubtfire-deploy/commit/2556355b0c3e1770fab021ed7d46e462882025b3))
+
+## [10.0.0-24](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-23...v10.0.0-24) (2025-08-21)
+
+## [10.0.0-23](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-22...v10.0.0-23) (2025-08-14)
+
+## [10.0.0-22](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-21...v10.0.0-22) (2025-08-14)
+
+
+### Features
+
+* download tasks awaiting feedback csv ([4a94373](https://github.com/b0ink/doubtfire-deploy/commit/4a943736689e41c405a831ca88a1303fb7c00385))
+
+
+### Bug Fixes
+
+* add return statement ([b8779e7](https://github.com/b0ink/doubtfire-deploy/commit/b8779e70d4decdc837caa8c84e8e8e2dfd3faf7f))
+* show full progress when sidekiq job is complete ([6a60d94](https://github.com/b0ink/doubtfire-deploy/commit/6a60d94b896d173a5008badd1b45bc7f45eee808))
+
+## [10.0.0-21](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-20...v10.0.0-21) (2025-08-12)
+
+
+### Bug Fixes
+
+* clear notification after fetching task comments ([c2d1536](https://github.com/b0ink/doubtfire-deploy/commit/c2d15367d9c53cb426dd12e73dc8d0b779a7f563))
+
+## [10.0.0-20](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-19...v10.0.0-20) (2025-08-11)
+
+## [10.0.0-19](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-18...v10.0.0-19) (2025-08-07)
+
+
+### Features
+
+* mark as discussed button in mobile tutor discussion ([9e62214](https://github.com/b0ink/doubtfire-deploy/commit/9e62214df772355048f4c7c7ffc13f3181f746e2))
+
+## [10.0.0-18](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-17...v10.0.0-18) (2025-07-31)
+
+
+### Bug Fixes
+
+* ensure no progress returns 0 ([9cb1f1a](https://github.com/b0ink/doubtfire-deploy/commit/9cb1f1ab770ac798ec8ecc555ceb73024bc98649))
+
+## [10.0.0-17](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-16...v10.0.0-17) (2025-07-31)
+
+
+### Features
+
+* return task to not started status ([bce1483](https://github.com/b0ink/doubtfire-deploy/commit/bce1483296064bafd44bc538f83731809d816a05))
+
+
+### Bug Fixes
+
+* check if project task stats exist ([e59af80](https://github.com/b0ink/doubtfire-deploy/commit/e59af803f8440338b0210b6a437537372f5dac5b))
+* ensure new comments are fetched for selected project only ([3b0e387](https://github.com/b0ink/doubtfire-deploy/commit/3b0e3877e05f162143fc78065cee9a191d0755f4))
+* ensure whitespace is trimmed ([fe687df](https://github.com/b0ink/doubtfire-deploy/commit/fe687df8b035ef851b9d147e01f575187f428a8c))
+* prevent additional inbox queries ([0d35f7f](https://github.com/b0ink/doubtfire-deploy/commit/0d35f7f4ef2e87dd078edf20e509c8f6efc5c216))
+
+## [10.0.0-16](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-15...v10.0.0-16) (2025-07-29)
+
+## [10.0.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-14...v10.0.0-15) (2025-07-29)
+
+
+### Bug Fixes
+
+* correctly load start page ([e297f26](https://github.com/b0ink/doubtfire-deploy/commit/e297f261e3df19faf11be9fde6515ce75434c320))
+* map correct variables ([b180799](https://github.com/b0ink/doubtfire-deploy/commit/b180799efd716d802cf83ce08b6df0639d9055b6))
+* prevent report button from expanding accordion ([e715415](https://github.com/b0ink/doubtfire-deploy/commit/e7154157ff1b88817141bae5b1b3de9fd37171f0))
+
+## [10.0.0-14](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-13...v10.0.0-14) (2025-07-28)
+
+
+### Features
+
+* portfolio zip downloading via sidekiq ([9000830](https://github.com/b0ink/doubtfire-deploy/commit/9000830e5e98bc0b921d618c034471eeddf996b4))
+* show list of active sidekiq jobs ([aa85665](https://github.com/b0ink/doubtfire-deploy/commit/aa85665670a23fea556c6420f139e7e7853d16ba))
+* show maintenance ui when api fails ([29bb95f](https://github.com/b0ink/doubtfire-deploy/commit/29bb95f5974dc8f258b204957a212a8399ad2d6e))
+* sidekiq progress modal component ([b9691e7](https://github.com/b0ink/doubtfire-deploy/commit/b9691e793204e84fae323610a7b555b15e065514))
+
+
+### Bug Fixes
+
+* fallback to task definition due date ([bef0a9c](https://github.com/b0ink/doubtfire-deploy/commit/bef0a9cbfefc58407f851d3ca73b90af6b81151f))
+
 ## [10.0.0-13](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-12...v10.0.0-13) (2025-07-16)
 
 

@@ -18,7 +18,6 @@ interface AuthResponse {
 
 @Injectable()
 export class AuthenticationService {
-
   /**
    * The URL for the authentication API endpoint
    */
@@ -64,7 +63,10 @@ export class AuthenticationService {
    * secure cookie.
    * @param loginResultCallback - Callback function to indicate success or failure of login.
    */
-  public attemptLoginUsingRefreshToken(loginResultCallback: (result: boolean) => void): void {
+  public attemptLoginUsingRefreshToken(
+    loginResultCallback: (result: boolean) => void,
+    firstTime: boolean = true,
+  ): void {
     // Check we have indication of secure cookie in local storage
     const remember: boolean = this.rememberMe;
 
@@ -77,7 +79,7 @@ export class AuthenticationService {
     this.httpClient.post(this.AUTH_URL + '/access-token', {}).subscribe({
       next: (response: AuthResponse | null) => {
         if (response && response.auth_token) {
-          this.setupUserFromResponse(response);
+          this.setupUserFromResponse(response, firstTime);
           loginResultCallback(true);
         } else {
           this.actionAuthFailed();
@@ -164,7 +166,7 @@ export class AuthenticationService {
    *
    * @param response the response from the authentication API
    */
-  private setupUserFromResponse(response: AuthResponse): void {
+  private setupUserFromResponse(response: AuthResponse, firstTime: boolean = true): void {
     // Extract relevant data from response and construct user object to store in cache.
     const user: User = this.userService.cache.getOrCreate(
       response.user['id'],
@@ -178,11 +180,12 @@ export class AuthenticationService {
     // Record the current user
     this.userService.currentUser = user;
 
-    // Load everything!
-    AppInjector.get(GlobalStateService).loadGlobals();
-
-    // Update token in one hour
-    setTimeout(() => this.cycleAccessToken(), 1000 * 60 * 60);
+    if (firstTime) {
+      // Load everything!
+      AppInjector.get(GlobalStateService).loadGlobals();
+      // Update token in one hour
+      setTimeout(() => this.cycleAccessToken(), 1000 * 60 * 60);
+    }
 
     // Inidcate that the authentication was successful
     this.authComplete$.next(true);
@@ -201,7 +204,7 @@ export class AuthenticationService {
     this.authComplete$.subscribe({
       next: (result) => {
         callback(result);
-      }
+      },
     });
   }
 
@@ -283,6 +286,4 @@ export class AuthenticationService {
       }),
     );
   }
-
-
 }

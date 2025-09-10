@@ -179,6 +179,11 @@ export class Task extends Entity {
     return formatDate(this.localDueDate(), 'd MMM', locale);
   }
 
+  public localDeadlineDateString(): string {
+    const locale: string = AppInjector.get(LOCALE_ID);
+    return formatDate(this.localDeadlineDate(), 'd MMM', locale);
+  }
+
   public get dueWeek(): number {
     const startDate: Date = this.unit.startDate;
     const dueDate: Date = this.localDueDate();
@@ -340,9 +345,7 @@ export class Task extends Entity {
         // Always show in days, Hours, Minutes and Seconds.
         return `${diff} ${data.period.charAt(0).toUpperCase() + data.period.substring(1)}`;
       } else if (diff === 1 && data.period !== 'weeks') {
-        return `1 ${
-          data.period.charAt(0).toUpperCase() + data.period.slice(1, -1)
-        }`;
+        return `1 ${data.period.charAt(0).toUpperCase() + data.period.slice(1, -1)}`;
       }
     }
 
@@ -671,7 +674,7 @@ export class Task extends Entity {
         }
         const alerts: any = AppInjector.get(AlertService);
         alerts.message('Submission cancelled. Status was reverted.', 6000);
-      }
+      },
     );
   }
 
@@ -920,5 +923,38 @@ export class Task extends Entity {
         constructorParams: this,
       },
     );
+  }
+
+  public hasPrerequisiteTasks(): boolean {
+    if (!this.project) {
+      return false;
+    }
+    return this.definition.taskPrerequisitesCache.currentValues.length > 0;
+  }
+
+  /**
+   * Returns true if this task has prerequisite tasks that are not in a submitted state
+   */
+  public blockedByPrerequisiteTasks(): boolean {
+    if (!this.project) {
+      return false;
+    }
+
+    const prereqs = this.definition.taskPrerequisitesCache.currentValues;
+    if (!prereqs.length) {
+      return false;
+    }
+
+    for (const prerequisiteLink of prereqs) {
+      const prerequisiteTask = prerequisiteLink.prerequisite;
+      const task = this.project.tasks.find((t) => t.definition.id === prerequisiteTask.id);
+
+      // If the task doesnt exist or its state has not met the minimum require state, block submission
+      if (!task || !prerequisiteLink.hasMetRequiredState(this.project)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

@@ -226,6 +226,8 @@ import {D2lTransferModal} from './units/states/portfolios/d2l-transfer-modal/d2l
 import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/learning-outcome-editor.component';
 import {FeedbackTemplateService} from './api/services/feedback-template.service';
 import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
+import {SidekiqProgressModalService} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -314,6 +316,11 @@ DoubtfireAngularJSModule.factory('CommentsModal', downgradeInjectable(CommentsMo
 DoubtfireAngularJSModule.factory(
   'FeedbackTemplateService',
   downgradeInjectable(FeedbackTemplateService),
+);
+
+DoubtfireAngularJSModule.factory(
+  'sidekiqProgressModalService',
+  downgradeInjectable(SidekiqProgressModalService),
 );
 
 // directive -> component
@@ -488,6 +495,11 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fStaffNotes',
   downgradeComponent({component: StaffNotesComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fTaskPrerequisitesCard',
+  downgradeComponent({component: TaskPrerequisitesCardComponent}),
 );
 
 // Global configuration

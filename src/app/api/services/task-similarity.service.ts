@@ -21,8 +21,8 @@ export class TaskSimilarityService extends CachedEntityService<TaskSimilarity> {
       'pct',
       'readyForViewer',
       'parts',
-      'other_task',
-      'other_student',
+      'otherTask',
+      'otherStudent',
     );
 
     this.mapping.addJsonKey('flagged');

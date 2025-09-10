@@ -1,15 +1,23 @@
-<form #form="ngForm" (ngSubmit)="submit()" fxLayout="column" fxLayoutAlign="center start" class="p-16">
-  <div class="main-container" style="width: 100%" fxLayout="row" fxLayoutAlign="center start">
-    <div class="main" style="width: 100%" fxLayout="column" fxLayoutAlign="start start">
+<form
+  #form="ngForm"
+  (ngSubmit)="submit()"
+  fxLayout="column"
+  fxLayoutAlign="center start"
+  [ngClass]="{'p-16': modal}"
+>
+  <div class="main-container w-full flex flex-row justify-center items-start">
+    <div class="main flex flex-col justify-start items-start w-full">
       <!-- avatar -->
-      <div fxLayout="row" fxLayoutAlign="space-between center" style="margin-bottom: 25px">
-        <a style="margin-left: 20px" href="https://gravatar.com/connect/?source=_signup/" target="_blank">
-          <user-icon [size]="80" [user]="user" style="margin-right: 25px"></user-icon
-        ></a>
+      <div class="flex flex-row justify-between items-center mb-[25px] w-full">
+        <div class="flex flex-row justify-between items-center">
+          <a class="ml-[20px]" href="https://gravatar.com/connect/?source=_signup/" target="_blank">
+            <user-icon [size]="80" [user]="user" style="margin-right: 25px"></user-icon
+          ></a>
 
-        <div fxLayout="column" fxLayoutAlign="space-around start">
-          <h1>{{ initialFirstName }}</h1>
-          Set up your {{ externalName.value }} profile
+          <div>
+            <h1>{{ user?.firstName }}</h1>
+            Set up your {{ externalName.value }} profile
+          </div>
         </div>
       </div>
 

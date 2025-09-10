@@ -229,16 +229,20 @@
         rotate="false"
       ></pagination>
       <div class="pull-right">
-        <!-- <button
-          class="btn btn-info"
+        <button
           ng-click="downloadPortfolios()"
+          class="mr-3"
           tooltip-html-unsafe="<i class='fa fa-warning'></i> <strong>WARNING:</strong> Downloading all portfolios may take a long time"
           tooltip-append-to-body="true"
         >
           <i class="fa fa-download"></i> Download All Portfolios
-        </button> -->
-        <button ng-click="downloadGrades()" style="padding-right: 1rem"><i class="fa fa-download"></i> Download Grades</button>
-        <button ng-if="hasD2lMapping()" ng-click="transferToD2L()"><i class="fa fa-upload"></i> Transfer Grades to D2L</button>
+        </button>
+        <button ng-click="downloadGrades()" style="padding-right: 1rem">
+          <i class="fa fa-download"></i> Download Grades
+        </button>
+        <button ng-if="hasD2lMapping()" ng-click="transferToD2L()">
+          <i class="fa fa-upload"></i> Transfer Grades to D2L
+        </button>
       </div>
     </div>
   </div>

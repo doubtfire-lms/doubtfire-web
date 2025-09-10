@@ -216,4 +216,20 @@ export class TaskService extends CachedEntityService<Task> {
 
     return null;
   }
+
+  public checkInTaskForStudent(task: Task): Observable<void> {
+    const options: RequestOptions<Task> = {
+      entity: task,
+      cache: task.project.taskCache,
+      endpointFormat: `${this.endpointFormat}/check_in`,
+    };
+
+    return this.post(
+      {
+        projectId: task.project.id,
+        taskDefId: task.definition.id,
+      },
+      options,
+    );
+  }
 }

@@ -21,6 +21,7 @@ import {
   LearningOutcome,
   LearningOutcomeService,
   TaskService,
+  FeedbackTemplateService,
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MatSort, Sort} from '@angular/material/sort';
@@ -71,6 +72,7 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
     private learningOutcomeService: LearningOutcomeService,
     private fileDownloaderService: FileDownloaderService,
     private nestedCsvDownloadModalService: NestedCsvDownloadModalService,
+    private feedbackTemplateService: FeedbackTemplateService,
     private taskService: TaskService,
     @Inject(csvResultModalService) private csvResultModalService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
@@ -263,7 +265,21 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
       (response: any) => {
         this.csvResultModalService.show(`${type} CSV Upload Results`, response);
         if (response.success.length > 0) {
-          this.context.refresh();
+          let contextType: 'units' | 'task_definitions';
+          if (this.context instanceof Unit) {
+            this.context.refresh();
+            contextType = 'units';
+          } else if (this.context instanceof TaskDefinition) {
+            this.context.unit.refresh();
+            contextType = 'task_definitions';
+          }
+          if (type === 'Feedback Templates' && contextType) {
+            this.feedbackTemplateService
+              .fetchAll({contextType, contextId: this.context.id}, {})
+              .subscribe({
+                error: () => this.alerts.error('Error loading task feedback templates.'),
+              });
+          }
         }
       },
     );

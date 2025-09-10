@@ -205,7 +205,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       }),
     ];
 
-    this.tutorialIdChanged();
+    this.tutorialIdChanged(false);
 
     this.setTaskDefFromTaskKey(this.taskData.taskKey);
 
@@ -294,7 +294,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     selectEl.focus();
   }
 
-  tutorialIdChanged(): void {
+  tutorialIdChanged(attemptRefreshData: boolean = true): void {
     const tutorialId = this.filters.tutorialIdSelected;
 
     const filterOption = this.studentFilter.find((f) => f.id === tutorialId);
@@ -312,7 +312,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
     this.applyFilters();
 
-    if (tutorialId === 'all' && !this.fetchedAllTasks) {
+    const isExplorerView = this.isTaskDefMode;
+    if (attemptRefreshData && !this.fetchedAllTasks && !isExplorerView) {
       this.refreshData();
     }
   }
@@ -365,7 +366,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
           this.applyFilters();
           this.loading = false;
 
-          this.fetchedAllTasks = !fetchMyStudentsOnly;
+          this.fetchedAllTasks = !fetchMyStudentsOnly && !this.isTaskDefMode;
 
         // Load initial set task, either the one provided (by the URL)
         // then load actual task in now or the first task that applies

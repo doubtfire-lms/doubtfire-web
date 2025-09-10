@@ -1,15 +1,15 @@
 import {HttpResponse} from '@angular/common/http';
 import {
+  AfterViewInit,
   Component,
-  Input,
   Inject,
+  Input,
+  OnChanges,
   OnDestroy,
   SimpleChanges,
-  OnChanges,
   ViewChild,
-  AfterViewInit,
 } from '@angular/core';
-import {PdfViewerComponent} from 'ng2-pdf-viewer';
+import {PDFDocumentProxy, PdfViewerComponent} from 'ng2-pdf-viewer';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {AlertService} from '../services/alert.service';
 
@@ -25,9 +25,13 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   private _pdfUrl: string;
   public pdfBlobUrl: string;
   public useNativePdfViewer = false;
+  public pdfTotalPages?: number | undefined;
+  public pdfHasRendered: boolean = false;
 
   @Input() pdfUrl: string;
   @Input() startPage: number = 1;
+
+  public pageNumber: number = 1;
 
   @ViewChild(PdfViewerComponent) private pdfComponent: PdfViewerComponent;
   pdfSearchString: string;
@@ -68,6 +72,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
       // Get the new blob
       this._pdfUrl = value;
       this.loaded = false;
+      this.pdfHasRendered = false;
       this.downloadBlob(value);
     }
   }
@@ -125,15 +130,26 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
     );
   }
 
-  onLoaded() {
+  onLoaded(event: PDFDocumentProxy) {
     this.loaded = true;
     window.dispatchEvent(new Event('resize'));
+    this.pdfTotalPages = event.numPages;
   }
 
-  onPageRendered() {
-    this.loaded = true;
-    if (this.startPage > 1) {
-      this.scrollToPage(this.startPage);
+  onTextLayerRendered() {
+    if (this.pdfHasRendered) {
+      return;
     }
+    this.pdfHasRendered = true;
+    setTimeout(() => {
+      if (
+        this.startPage &&
+        this.startPage > 1 &&
+        this.pdfTotalPages &&
+        this.startPage <= this.pdfTotalPages
+      ) {
+        this.pageNumber = Number(this.startPage);
+      }
+    });
   }
 }

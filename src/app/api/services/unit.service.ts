@@ -9,6 +9,7 @@ import { TaskDefinitionService } from './task-definition.service';
 import { GroupService } from './group.service';
 import { Observable } from 'rxjs';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 
 export type IloStats = {
   median: number;
@@ -300,5 +301,12 @@ export class UnitService extends CachedEntityService<Unit> {
     const httpClient = AppInjector.get(HttpClient);
 
     return httpClient.get<any>(url);
+  }
+
+  public zipPortfolios(unit: Unit): Observable<SidekiqJob> {
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/submission/units/${unit.id}/portfolio/zip`;
+    const httpClient = AppInjector.get(HttpClient);
+
+    return httpClient.get<SidekiqJob>(url);
   }
 }

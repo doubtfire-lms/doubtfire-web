@@ -206,7 +206,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Capacity</th>
       <td mat-cell *matCellDef="let tutorial">
         <div *ngIf="!editing(tutorial); else edit">
-          {{ tutorial.capacity }}
+          {{ tutorial.numStudents }} / {{ tutorial.capacity }}
         </div>
         <ng-template #edit>
           <mat-form-field appearance="outline" class="data-entry">

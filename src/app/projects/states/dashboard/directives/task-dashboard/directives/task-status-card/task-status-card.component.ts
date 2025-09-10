@@ -1,14 +1,16 @@
-import { AfterViewInit, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { UIRouter } from '@uirouter/core';
+import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {UIRouter} from '@uirouter/core';
 import * as _ from 'lodash';
-import { Task } from 'src/app/api/models/task';
-import { TaskStatusEnum } from 'src/app/api/models/task-status';
-import { TaskService } from 'src/app/api/services/task.service';
-import { ExtensionModalService } from 'src/app/common/modals/extension-modal/extension-modal.service';
-import { QrModalService } from 'src/app/common/modals/qr-modal/qr-modal.service';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import {Task} from 'src/app/api/models/task';
+import {TaskStatusEnum} from 'src/app/api/models/task-status';
+import {TaskService} from 'src/app/api/services/task.service';
+import {ExtensionModalService} from 'src/app/common/modals/extension-modal/extension-modal.service';
+import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';
 
+import {Project} from 'src/app/api/models/project';
+import {UserService} from 'src/app/api/services/user.service';
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
@@ -25,17 +27,20 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private qrModalService: QrModalService,
     private doubtfireConstants: DoubtfireConstants,
     private submissionTypeModalService: SubmissionTypeModalService,
+    private userService: UserService,
   ) {}
 
   @Input() task: Task;
   taskStatusColor: string;
+
+  private project?: Project;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.task) {
       this.task = changes.task.currentValue;
       this.reapplyTriggers();
       this.taskStatusColor = this.taskService.statusColors.get(this.task.statusClass());
-
+      this.project = this.task.project;
       this.textCss = `::ng-deep f-task-status-card .mat-mdc-text-field-wrapper.mdc-text-field {
         background-color: #${this.taskStatusColor} !important;
       }`;
@@ -52,7 +57,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
       this.triggers = this.taskService.statusKeys.map(this.taskService.statusData);
     } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const studentTriggers = _.map(this.taskService.switchableStates.student, this.taskService.statusData) as any;
+      const studentTriggers = _.map(
+        this.taskService.switchableStates.student,
+        this.taskService.statusData,
+      ) as any;
       const filteredStudentTriggers = this.task.filterFutureStates(studentTriggers);
       this.triggers = filteredStudentTriggers;
     }
@@ -89,8 +97,11 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
 
   openDiscussionQrCode(): void {
     const hostName = this.doubtfireConstants.API_URL.replace('/api', '');
-    const url = `${hostName}/tutor-discussion?unitId=${this.task.unit.id}&projectId=${this.task.project.id}`;
-    this.qrModalService.show(url);
+    const url = `${hostName}/tutor-discussion?unitId=${this.task.unit.id}&username=${this.userService.currentUser.username}`;
+    this.qrModalService.show(
+      url,
+      'Display this QR code during your class so your tutor can scan it to view your submissions and mark your tasks as complete.',
+    );
   }
 
   applyForExtension(): void {

@@ -51,6 +51,7 @@ export class SignInComponent implements OnInit {
   public externalName: BehaviorSubject<string>;
   public formData: signInData;
   public isLoading: boolean = true;
+  public authMethodFailed: boolean = false;
 
   // Get query params from the resolve in the router state
   @Input() username: string;
@@ -91,47 +92,49 @@ export class SignInComponent implements OnInit {
 
     // wait 2 seconds with rxjs
     const wait = new Promise((resolve) => setTimeout(resolve, 3000));
-    this.http.get(`${this.constants.API_URL}/auth/method`).subscribe((response: any) => {
-      this.isLoading = false;
+    this.http.get(`${this.constants.API_URL}/auth/method`).subscribe({
+      next: (response: any) => {
+        this.isLoading = false;
 
-      // if there is a string in response.data.redirect_to
-      this.SSOLoginUrl = response.redirect_to || false;
+        // if there is a string in response.data.redirect_to
+        this.SSOLoginUrl = response.redirect_to || false;
 
-      if (this.authToken) {
-        // We have an auth token - so attempt to convert to access token
-        return this.signIn({
-          auth_token: this.authToken,
-          username: this.username,
-          remember: this.authService.rememberMe,
-        });
-      } else if (this.SSOLoginUrl) {
-        if (this.autoLogin) {
-          return wait.then(() => {
-            // Double check in case changed in the meantime
-            if (this.autoLogin) {
-              this.redirectToSSO();
-            }
+        if (this.authToken) {
+          // We have an auth token - so attempt to convert to access token
+          return this.signIn({
+            auth_token: this.authToken,
+            username: this.username,
+            remember: this.authService.rememberMe,
           });
+        } else if (this.SSOLoginUrl) {
+          if (this.autoLogin) {
+            return wait.then(() => {
+              // Double check in case changed in the meantime
+              if (this.autoLogin) {
+                this.redirectToSSO();
+              }
+            });
+          } else {
+            this.globalState.isLoadingSubject.next(false);
+            // We are SSO and no credentials
+            this.showCredentials = false;
+            return wait.then();
+          }
         } else {
           this.globalState.isLoadingSubject.next(false);
-          // We are SSO and no credentials
-          this.showCredentials = false;
+          this.authMethodLoaded = true;
+          this.showCredentials = true;
           return wait.then();
         }
-      } else {
-        this.globalState.isLoadingSubject.next(false);
-        this.authMethodLoaded = true;
-        this.showCredentials = true;
-        return wait.then();
-      }
-    }),
-      function (err) {
+      },
+      error: (err) => {
         this.authMethodFailed = true;
-        this.error = err;
+        // this.error = err;
 
         // return after waiting with the wait promise
         return wait.then();
-      };
+      },
+    });
   }
 
   public get autoLogin(): boolean {

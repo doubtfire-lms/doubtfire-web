@@ -18,7 +18,9 @@ export class EditProfileFormComponent implements OnInit {
     private userService: UserService,
     private state: StateService,
     private authService: AuthenticationService,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: {user: User; mode: 'edit' | 'create' | 'new'},
+    @Optional()
+    @Inject(MAT_DIALOG_DATA)
+    public data: {user: User; mode: 'edit' | 'create' | 'new'; modal: boolean},
     private _snackBar: MatSnackBar,
   ) {
     this.user = data?.user || this.userService.currentUser;
@@ -31,6 +33,7 @@ export class EditProfileFormComponent implements OnInit {
    * new is used for creating a new user
    */
   @Input() mode: 'edit' | 'create' | 'new';
+  @Input() modal: boolean = false;
 
   public user: User;
   public externalName = this.constants.ExternalName;
@@ -43,6 +46,9 @@ export class EditProfileFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.data?.mode) {
       this.mode = this.data.mode;
+    }
+    if (this.data?.modal) {
+      this.modal = this.data.modal;
     }
 
     this.user.optInToResearch = false;

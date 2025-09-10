@@ -445,7 +445,7 @@ const projectPlanState: NgHybridStateDeclaration = {
 
 const TutorDiscussionState: NgHybridStateDeclaration = {
   name: 'tutor-discussion',
-  url: '/tutor-discussion?unitId&projectId',
+  url: '/tutor-discussion?unitId&username',
   views: {
     main: {
       component: TutorDiscussionComponent,
@@ -458,16 +458,48 @@ const TutorDiscussionState: NgHybridStateDeclaration = {
         return $stateParams.unitId;
       },
     ],
-    projectId: [
+    username: [
       '$stateParams',
       function ($stateParams) {
-        return $stateParams.projectId;
+        return $stateParams.username;
       },
     ],
   },
   data: {
-    pageTitle: 'Tutor Discussion',
-    task: 'Tutor Discussion',
+    pageTitle: 'Discussion',
+    task: 'Discussion',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+const TutorAttendance: NgHybridStateDeclaration = {
+  name: 'tutor-attendance',
+  url: '/tutor-attendance?unitId&attendance',
+  resolve: {
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+    attendance: [
+      '$stateParams',
+      function ($stateParams) {
+        if ($stateParams.attendance == 'true' || $stateParams.attendance === true) {
+          return true;
+        }
+        return false;
+      },
+    ],
+  },
+  views: {
+    main: {
+      component: TutorDiscussionComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Check-in',
+    task: 'Check-in',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
@@ -508,4 +540,5 @@ export const doubtfireStates = [
   projectPlanState,
   TutorDiscussionState,
   jplagReportViewerState,
+  TutorAttendance,
 ];
