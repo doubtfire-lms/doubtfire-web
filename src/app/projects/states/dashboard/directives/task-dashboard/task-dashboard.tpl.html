@@ -76,7 +76,8 @@
     <i class="fa fa-exclamation-triangle mr-2 fa-lg"></i>
     Warning: This task has {{task.definition.taskPrerequisitesCache.currentValues.length}}
     prerequisite{{ task.definition.taskPrerequisitesCache.currentValues.length > 1 ? 's' : '' }}
-    that you still need to complete. You won’t be able to submit this task until they’re done.
+    that you still need to complete. You won’t be able to submit this task until all prerequisites
+    are met.
   </div>
   <!-- /Incomplete Task Prerequisites Warning -->
   <div class="panel-body has-pdf" ng-if="isCurrentView('task')">
