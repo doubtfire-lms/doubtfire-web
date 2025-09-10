@@ -87,7 +87,6 @@ import 'build/src/app/groups/group-set-manager/group-set-manager.js';
 import 'build/src/app/groups/groups.js';
 import 'build/src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.js';
 import 'build/src/app/groups/group-member-list/group-member-list.js';
-import 'build/src/app/groups/group-set-selector/group-set-selector.js';
 import 'build/src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.js';
 import 'build/src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.js';
 import 'build/src/app/units/modals/modals.js';
@@ -148,7 +147,7 @@ import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {ExtensionModalService} from './common/modals/extension-modal/extension-modal.service';
 import {CalendarModalService} from './common/modals/calendar-modal/calendar-modal.service';
-import { ConfirmationModalService } from './common/modals/confirmation-modal/confirmation-modal.service';
+import {ConfirmationModalService} from './common/modals/confirmation-modal/confirmation-modal.service';
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import {ActivityTypeListComponent} from './admin/institution-settings/activity-type-list/activity-type-list.component';
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
@@ -228,20 +227,28 @@ import {FeedbackTemplateService} from './api/services/feedback-template.service'
 import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
 import {SidekiqProgressModalService} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
+// import { UnitStudentEnrolmentModalService } from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
+// import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
+import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 
-export const DoubtfireAngularJSModule = angular.module('doubtfire', [
-  'doubtfire.config',
-  'doubtfire.sessions',
-  'doubtfire.common',
-  'doubtfire.errors',
-  'doubtfire.units',
-  'doubtfire.tasks',
-  'doubtfire.projects',
-  'doubtfire.groups',
-  'doubtfire.visualisations',
-]).config(['$locationProvider', ($locationProvider) => {
-  $locationProvider.html5Mode(true);
-}]);
+export const DoubtfireAngularJSModule = angular
+  .module('doubtfire', [
+    'doubtfire.config',
+    'doubtfire.sessions',
+    'doubtfire.common',
+    'doubtfire.errors',
+    'doubtfire.units',
+    'doubtfire.tasks',
+    'doubtfire.projects',
+    'doubtfire.groups',
+    'doubtfire.visualisations',
+  ])
+  .config([
+    '$locationProvider',
+    ($locationProvider) => {
+      $locationProvider.html5Mode(true);
+    },
+  ]);
 
 // Downgrade angular modules that we need...
 // factory -> service
@@ -252,7 +259,10 @@ DoubtfireAngularJSModule.factory('DoubtfireConstants', downgradeInjectable(Doubt
 DoubtfireAngularJSModule.factory('ExtensionModal', downgradeInjectable(ExtensionModalService));
 DoubtfireAngularJSModule.factory('Marked', downgradeInjectable(MarkedPipe));
 DoubtfireAngularJSModule.factory('CalendarModal', downgradeInjectable(CalendarModalService));
-DoubtfireAngularJSModule.factory('ConfirmationModal', downgradeInjectable(ConfirmationModalService));
+DoubtfireAngularJSModule.factory(
+  'ConfirmationModal',
+  downgradeInjectable(ConfirmationModalService),
+);
 DoubtfireAngularJSModule.factory('TaskCommentService', downgradeInjectable(TaskCommentService));
 DoubtfireAngularJSModule.factory('alertService', downgradeInjectable(AlertService));
 DoubtfireAngularJSModule.factory('tutorialService', downgradeInjectable(TutorialService));
@@ -514,3 +524,18 @@ const otherwiseConfigBlock = [
   },
 ];
 DoubtfireAngularJSModule.config(otherwiseConfigBlock);
+
+// DoubtfireAngularJSModule.directive(
+//   'fProgressBurndownChart',
+//   downgradeComponent({ component: ProgressBurndownChartComponent })
+// );
+
+// DoubtfireAngularJSModule.directive(
+//   'fTaskVisualisation',
+//   downgradeComponent({ component: TaskVisualisationComponent })
+// );
+
+DoubtfireAngularJSModule.directive(
+  'groupSetSelector',
+  downgradeComponent({component: GroupSetSelectorComponent}),
+);

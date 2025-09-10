@@ -3,10 +3,10 @@
     Groups for
     <strong ng-hide="showGroupSetSelector"> {{selectedGroupSet.name}} </strong>
     <group-set-selector
-      ng-show="showGroupSetSelector"
-      unit="unit"
-      ng-model="selectedGroupSet"
-      on-change="selectGroupSet"
+      *ngIf="showGroupSetSelector"
+      [unit]="unit"
+      [(selected-group-set)]="selectedGroupSet"
+      (selected-group-set-change)="selectGroupSet($event)"
     >
     </group-set-selector>
   </h4>
