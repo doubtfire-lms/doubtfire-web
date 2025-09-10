@@ -10,6 +10,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExtensionService } from 'src/app/api/services/extension.service';
 import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { UserService } from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-staff-grant-extension-form',
@@ -67,11 +69,74 @@ export class StaffGrantExtensionFormComponent implements OnInit {
   @Input() students: { id: number; name: string }[] = [];
   filteredStudents: { id: number; name: string }[] = [];
 
+  // tasks + selection state
+  tasks: { id: number; name: string }[] = [];
+  selectedTaskId: number | null = null;
+
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private extensionService: ExtensionService
-  ) {}
+    private extensionService: ExtensionService,
+    private http: HttpClient,
+    private userService: UserService
+  ) { }
+
+  // Build headers for API calls
+  private buildHeaders(): HttpHeaders {
+    const authToken = this.userService.currentUser?.authenticationToken ?? '';
+    const username = this.userService.currentUser?.username ?? '';
+    return new HttpHeaders({
+      'Auth-Token': authToken,
+      'Username': username
+    });
+  }
+
+  // Load students for the unit
+  private loadUnitStudents(): void {
+    if (!this.unitId) return;
+
+    this.http.get<{ student: { id: number; first_name: string; last_name: string } }[]>(
+      `/api/students?unit_id=${this.unitId}`,
+      { headers: this.buildHeaders() }
+    ).subscribe({
+      next: (projects) => {
+        this.students = (projects ?? []).map(p => ({
+          id: p.student.id,
+          name: `${p.student.first_name} ${p.student.last_name}`
+        }));
+        this.filteredStudents = this.students;
+      },
+      error: () => {
+        this.students = [];
+        this.filteredStudents = [];
+      }
+    });
+  }
+
+  // Load tasks for the unit + task definition
+  private loadUnitTasks(): void {
+    if (!this.unitId || !this.taskDefinitionId) return;
+
+    this.http.get<{ id: number; name: string }[]>(
+      `/api/units/${this.unitId}/task_definitions/${this.taskDefinitionId}/tasks`,
+      { headers: this.buildHeaders() }
+    ).subscribe({
+      next: (tasks) => {
+        this.tasks = (tasks ?? []).map(t => ({
+          id: t.id,
+          name: t.name
+        }));
+
+        if (this.selectedTaskId && !this.tasks.find(t => t.id === this.selectedTaskId)) {
+          this.onTaskSelected(null);
+        }
+      },
+      error: () => {
+        this.tasks = [];
+        this.onTaskSelected(null);
+      }
+    });
+  }
 
   // Initialize the reactive form with validators for each field
   ngOnInit(): void {
@@ -81,7 +146,18 @@ export class StaffGrantExtensionFormComponent implements OnInit {
       reason: ['', [Validators.required, Validators.maxLength(300)]],
       notes: ['', Validators.maxLength(500)]
     });
+
     this.filteredStudents = this.students;
+
+    if (!this.students?.length) {
+      this.loadUnitStudents();
+    }
+    this.loadUnitTasks();
+  }
+
+  // Handle task selection (from parent/left pane)
+  onTaskSelected(taskId: number | null): void {
+    this.selectedTaskId = taskId;
   }
 
   // Filters students based on search query
@@ -158,6 +234,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
       const payload = {
         student_ids: this.selectedStudents,
         task_definition_id: this.taskDefinitionId,
+        task_id: this.selectedTaskId ?? null,
         weeks_requested: formData.extension,
         comment: formData.reason,
         notes: formData.notes || ''
@@ -221,5 +298,6 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     this.searchQuery = '';
     this.filteredStudents = this.students;
     this.showStudentList = true;
+    this.selectedTaskId = null;
   }
 }

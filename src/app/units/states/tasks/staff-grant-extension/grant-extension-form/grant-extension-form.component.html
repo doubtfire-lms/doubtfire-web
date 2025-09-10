@@ -14,7 +14,7 @@
     <div class="flex items-center px-2 mt-0" *ngIf="showStudentList">
       <mat-checkbox
         #selectAllBox
-        [checked]="selectedStudents.length === filteredStudents.length"
+        [checked]="selectedStudents?.length === filteredStudents?.length"
         (change)="toggleSelectAll()"
         (mouseup)="handleCheckboxBlur()"
         color="primary"

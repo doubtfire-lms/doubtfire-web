@@ -33,7 +33,9 @@
 
       <div class="form-container">
         <div *ngIf="isFormActive && selectedTaskDefinition" class="form-content">
-          <f-staff-grant-extension-form (formSubmitted)="onFormSubmitted()"></f-staff-grant-extension-form>
+          <f-staff-grant-extension-form (formSubmitted)="onFormSubmitted()" [unitId]="unitId"
+            [taskDefinitionId]="taskDefinitionId" [students]="unitStudents">
+          </f-staff-grant-extension-form>
         </div>
         <div *ngIf="!isFormActive || !selectedTaskDefinition" class="form-disabled-message">
           <mat-icon>lock</mat-icon>

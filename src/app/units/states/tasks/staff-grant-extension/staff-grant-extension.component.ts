@@ -20,13 +20,16 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   selectedTaskDefinition: TaskDefinition | null = null;
   selectedTaskDefinition$ = new BehaviorSubject<TaskDefinition | null>(null);
   isFormActive = false;
+  unitId?: number;
+  taskDefinitionId?: number;
+  unitStudents: { id: number; name: string }[] = [];
   private destroy$ = new Subject<void>();
 
   constructor(
     private globalState: GlobalStateService,
     private router: UIRouter,
     private unitService: UnitService
-  ) {}
+  ) { }
 
   //Temporary fix for the unit not being set (should be fixed by the backend intergration)
   ngOnInit(): void {
@@ -36,6 +39,10 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
     ).subscribe(taskDef => {
       this.selectedTaskDefinition = taskDef;
       this.isFormActive = !!taskDef;
+
+      if (taskDef) {
+        this.taskDefinitionId = taskDef.id;
+      }
     });
 
     // Get current unit from global state
@@ -44,6 +51,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
     ).subscribe(state => {
       if (state && state.entity && state.entity instanceof Unit) {
         this.unit = state.entity;
+        this.unitId = this.unit.id;
       }
     });
 
@@ -56,6 +64,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
       this.unitService.get(unitId).subscribe({
         next: (unit: Unit) => {
           this.unit = unit;
+          this.unitId = unit.id;
         },
         error: (err) => {
           console.error('Error loading unit:', err);
@@ -71,6 +80,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
         if (unitRoles && unitRoles.length > 0 && !this.unit) {
           const firstUnitRole = unitRoles[0];
           this.unit = firstUnitRole.unit;
+          this.unitId = this.unit.id;
         }
       });
     }
@@ -85,5 +95,13 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
     this.isFormActive = false;
     this.selectedTaskDefinition = null;
     this.selectedTaskDefinition$.next(null);
+    this.taskDefinitionId = undefined;
+  }
+
+  // Handle task selection from <f-unit-task-list>
+  onTaskSelected(task: TaskDefinition): void {
+    this.selectedTaskDefinition = task;
+    this.selectedTaskDefinition$.next(task);
+    this.taskDefinitionId = task.id;
   }
 }
