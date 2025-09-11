@@ -221,7 +221,7 @@ import {GradeService} from './common/services/grade.service';
 import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
 import {UnitStudentEnrolmentModalService} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
-import { GroupSetSelectorComponent } from './groups/group-set-selector/group-set-selector.component';
+import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -510,5 +510,5 @@ DoubtfireAngularJSModule.directive(
 
 DoubtfireAngularJSModule.directive(
   'groupSetSelector',
-  downgradeComponent({ component: GroupSetSelectorComponent })
+  downgradeComponent({component: GroupSetSelectorComponent}),
 );
