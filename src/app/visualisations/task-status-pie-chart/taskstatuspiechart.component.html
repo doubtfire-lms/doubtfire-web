@@ -1,0 +1,13 @@
+<div class="chart-container">
+  <ngx-charts-pie-chart
+    class="task-status-pie-chart"
+    [results]="data"
+    [view]=""
+    [customColors]="colors"
+    [legend]="true"
+    [legendTitle]="''"
+    [legendPosition]="'right'"
+    (select)="onSelect($event)"
+  >
+  </ngx-charts-pie-chart>
+</div>

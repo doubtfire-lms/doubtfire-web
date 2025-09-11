@@ -165,6 +165,7 @@ import {fPdfViewerComponent} from './common/pdf-viewer/pdf-viewer.component';
 import {PdfViewerPanelComponent} from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import {StaffTaskListComponent} from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
+import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/taskstatuspiechart.component';
 import {
   GroupSetService,
   LearningOutcomeService,
@@ -218,8 +219,8 @@ import {AlertService} from './common/services/alert.service';
 
 import {GradeService} from './common/services/grade.service';
 import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
-import { UnitStudentEnrolmentModalService } from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
-import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
+import {UnitStudentEnrolmentModalService} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
+import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import { GroupSetSelectorComponent } from './groups/group-set-selector/group-set-selector.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
@@ -307,6 +308,10 @@ DoubtfireAngularJSModule.factory(
 DoubtfireAngularJSModule.factory('PrivacyPolicy', downgradeInjectable(PrivacyPolicy));
 
 // directive -> component
+DoubtfireAngularJSModule.directive(
+  'fTaskStatusPieChart',
+  downgradeComponent({component: TaskStatusPieChartComponent}),
+);
 DoubtfireAngularJSModule.directive(
   'fProgressDashboard',
   downgradeComponent({component: ProgressDashboardComponent}),
