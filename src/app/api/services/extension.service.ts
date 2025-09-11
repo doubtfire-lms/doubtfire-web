@@ -8,7 +8,6 @@ interface GrantExtensionPayload {
   task_definition_id: number;
   weeks_requested: number;
   comment: string;
-  notes?: string;
 }
 
 @Injectable({

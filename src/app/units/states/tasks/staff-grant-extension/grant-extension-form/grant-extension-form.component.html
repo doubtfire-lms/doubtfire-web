@@ -94,19 +94,6 @@
     </mat-error>
   </mat-form-field>
 
-  <!-- Notes Field (Optional) -->
-  <mat-form-field appearance="fill" class="w-full mb-4">
-    <mat-label>Additional Notes (optional)</mat-label>
-    <textarea
-      matInput
-      formControlName="notes"
-      rows="3"
-      maxlength="500"
-      placeholder="Additional context (max 500 characters)"
-    ></textarea>
-    <mat-hint align="end">{{grantExtensionForm.get('notes')?.value?.length || 0}}/500</mat-hint>
-  </mat-form-field>
-
   <!-- Form Buttons -->
   <div class="flex justify-end gap-3 mt-6">
     <button mat-button type="button" (click)="resetForm()" [disabled]="isSubmitting">Reset</button>

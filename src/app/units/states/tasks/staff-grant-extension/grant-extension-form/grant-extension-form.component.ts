@@ -143,8 +143,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     this.grantExtensionForm = this.fb.group({
       students: [[], Validators.required],
       extension: [1, [Validators.required, Validators.min(1)]],
-      reason: ['', [Validators.required, Validators.maxLength(300)]],
-      notes: ['', Validators.maxLength(500)]
+      reason: ['', [Validators.required, Validators.maxLength(300)]]
     });
 
     this.filteredStudents = this.students;
@@ -236,8 +235,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
         task_definition_id: this.taskDefinitionId,
         task_id: this.selectedTaskId ?? null,
         weeks_requested: formData.extension,
-        comment: formData.reason,
-        notes: formData.notes || ''
+        comment: formData.reason
       };
 
       // Submit the extension request
@@ -291,8 +289,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     this.grantExtensionForm.reset({
       students: [],
       extension: 1,
-      reason: '',
-      notes: ''
+      reason: ''
     });
     this.selectedStudents = [];
     this.searchQuery = '';
