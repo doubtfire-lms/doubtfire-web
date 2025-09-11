@@ -370,7 +370,7 @@ export class TaskStatus {
         detail: 'Your submission will be assessed in your portfolio',
         reason:
           'This task will no longer be checked by tutors, and will be assessed directly in your final portfolio submission.',
-        action: 'You will need to ensure this task is at an adequare standard in your portfolio.',
+        action: 'You will need to ensure this task is at an adequate standard in your portfolio.',
       },
     ],
     // [
