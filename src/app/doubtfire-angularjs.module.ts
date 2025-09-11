@@ -126,7 +126,6 @@ import 'build/src/app/common/services/services.js';
 import 'build/src/app/common/services/recorder-service.js';
 import 'build/src/app/common/services/media-service.js';
 import 'build/src/app/common/services/analytics-service.js';
-import 'build/src/app/common/services/date-service.js';
 import 'build/src/app/sessions/auth/http-auth-injector.js';
 import 'build/src/app/sessions/sessions.js';
 import 'build/src/app/errors/errors.js';
@@ -161,6 +160,7 @@ import {TutorialStreamService} from './api/services/tutorial-stream.service';
 import {UnitStudentsEditorComponent} from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
 import {CampusService} from './api/services/campus.service';
 import {WebcalService} from './api/services/webcal.service';
+import {DateService} from './common/services/date.service';
 import {StudentTutorialSelectComponent} from './units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 import {StudentCampusSelectComponent} from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
 import {EmojiService} from './common/services/emoji.service';
@@ -305,6 +305,7 @@ DoubtfireAngularJSModule.factory(
   'EditProfileService',
   downgradeInjectable(EditProfileDialogService),
 );
+DoubtfireAngularJSModule.factory('dateService', downgradeInjectable(DateService));
 DoubtfireAngularJSModule.factory('CreateNewUnitModal', downgradeInjectable(CreateNewUnitModal));
 
 // directive -> component

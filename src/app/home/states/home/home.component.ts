@@ -1,6 +1,7 @@
 import {Component, Inject, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {analyticsService, dateService} from 'src/app/ajs-upgraded-providers';
+import {analyticsService} from 'src/app/ajs-upgraded-providers';
+import {DateService} from 'src/app/common/services/date.service';
 import {UIRouter} from '@uirouter/angular';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
@@ -28,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private globalState: GlobalStateService,
     private userService: UserService,
     @Inject(analyticsService) private AnalyticsService: any,
-    @Inject(dateService) private DateService: any,
+    @Inject(DateService) private DateService: DateService,
     @Inject(UIRouter) private router: UIRouter,
   ) {
     // this.renderer.setStyle(document.body, 'background-color', '#f0f2f5');

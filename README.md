@@ -91,6 +91,7 @@ MIGRATED:
 - [x] ./src/app/common/services/alert.service.ts
 - [x] ./src/app/sessions/states/sign-in/sign-in.component.ts
 - [x] ./src/app/account/edit-profile/edit-profile.component.ts
+- [x] ./src/app/common/services/date.service.ts
 
 TODO:
 
@@ -209,7 +210,6 @@ TODO:
 - [ ] ./src/app/common/file-uploader/file-uploader.coffee
 - [ ] ./src/app/common/common.coffee
 - [ ] ./src/app/common/services/grade-service.coffee
-- [ ] ./src/app/common/services/date-service.coffee
 - [ ] ./src/app/common/services/alert-service.coffee
 - [ ] ./src/app/common/services/media-service.coffee
 - [ ] ./src/app/common/services/recorder-service.coffee
