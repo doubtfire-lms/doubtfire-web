@@ -34,7 +34,7 @@
       <div class="form-container">
         <div *ngIf="isFormActive && selectedTaskDefinition" class="form-content">
           <f-staff-grant-extension-form (formSubmitted)="onFormSubmitted()" [unitId]="unitId"
-            [taskDefinitionId]="taskDefinitionId" [students]="unitStudents">
+            [taskDefinitionId]="taskDefinitionId">
           </f-staff-grant-extension-form>
         </div>
         <div *ngIf="!isFormActive || !selectedTaskDefinition" class="form-disabled-message">

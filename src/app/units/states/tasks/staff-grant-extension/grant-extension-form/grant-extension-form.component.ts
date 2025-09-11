@@ -69,10 +69,6 @@ export class StaffGrantExtensionFormComponent implements OnInit {
   @Input() students: { id: number; name: string }[] = [];
   filteredStudents: { id: number; name: string }[] = [];
 
-  // tasks + selection state
-  tasks: { id: number; name: string }[] = [];
-  selectedTaskId: number | null = null;
-
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
@@ -113,31 +109,6 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     });
   }
 
-  // Load tasks for the unit + task definition
-  private loadUnitTasks(): void {
-    if (!this.unitId || !this.taskDefinitionId) return;
-
-    this.http.get<{ id: number; name: string }[]>(
-      `/api/units/${this.unitId}/task_definitions/${this.taskDefinitionId}/tasks`,
-      { headers: this.buildHeaders() }
-    ).subscribe({
-      next: (tasks) => {
-        this.tasks = (tasks ?? []).map(t => ({
-          id: t.id,
-          name: t.name
-        }));
-
-        if (this.selectedTaskId && !this.tasks.find(t => t.id === this.selectedTaskId)) {
-          this.onTaskSelected(null);
-        }
-      },
-      error: () => {
-        this.tasks = [];
-        this.onTaskSelected(null);
-      }
-    });
-  }
-
   // Initialize the reactive form with validators for each field
   ngOnInit(): void {
     this.grantExtensionForm = this.fb.group({
@@ -151,12 +122,6 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     if (!this.students?.length) {
       this.loadUnitStudents();
     }
-    this.loadUnitTasks();
-  }
-
-  // Handle task selection (from parent/left pane)
-  onTaskSelected(taskId: number | null): void {
-    this.selectedTaskId = taskId;
   }
 
   // Filters students based on search query
@@ -233,7 +198,6 @@ export class StaffGrantExtensionFormComponent implements OnInit {
       const payload = {
         student_ids: this.selectedStudents,
         task_definition_id: this.taskDefinitionId,
-        task_id: this.selectedTaskId ?? null,
         weeks_requested: formData.extension,
         comment: formData.reason
       };
@@ -295,6 +259,5 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     this.searchQuery = '';
     this.filteredStudents = this.students;
     this.showStudentList = true;
-    this.selectedTaskId = null;
   }
 }

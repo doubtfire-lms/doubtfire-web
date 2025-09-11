@@ -22,7 +22,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   isFormActive = false;
   unitId?: number;
   taskDefinitionId?: number;
-  unitStudents: { id: number; name: string }[] = [];
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -31,7 +31,6 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
     private unitService: UnitService
   ) { }
 
-  //Temporary fix for the unit not being set (should be fixed by the backend intergration)
   ngOnInit(): void {
     // Subscribe to task definition selection changes
     this.selectedTaskDefinition$.pipe(
@@ -49,9 +48,19 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
     this.globalState.currentViewAndEntitySubject$.pipe(
       takeUntil(this.destroy$)
     ).subscribe(state => {
-      if (state && state.entity && state.entity instanceof Unit) {
-        this.unit = state.entity;
-        this.unitId = this.unit.id;
+      if (state && state.entity) {
+        let newUnit: Unit | undefined;
+
+        // Handle both cases: Unit OR UnitRole
+        if (state.entity instanceof Unit) {
+          newUnit = state.entity;
+        } else if (state.entity instanceof UnitRole) {
+          newUnit = state.entity.unit;
+        }
+
+        if (newUnit) {
+          this.loadUnit(newUnit.id);
+        }
       }
     });
 
@@ -59,17 +68,9 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
     const currentUrl = this.router.globals.current.url;
     const unitMatch = currentUrl.match(/\/units\/(\d+)/);
 
-    if (unitMatch && !this.unit) {
+    if (unitMatch) {
       const unitId = parseInt(unitMatch[1]);
-      this.unitService.get(unitId).subscribe({
-        next: (unit: Unit) => {
-          this.unit = unit;
-          this.unitId = unit.id;
-        },
-        error: (err) => {
-          console.error('Error loading unit:', err);
-        }
-      });
+      this.loadUnit(unitId);
     }
 
     // If still no unit, try to get the first available unit for the user
@@ -92,10 +93,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   }
 
   onFormSubmitted(): void {
-    this.isFormActive = false;
-    this.selectedTaskDefinition = null;
-    this.selectedTaskDefinition$.next(null);
-    this.taskDefinitionId = undefined;
+    this.resetFormState();
   }
 
   // Handle task selection from <f-unit-task-list>
@@ -103,5 +101,28 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
     this.selectedTaskDefinition = task;
     this.selectedTaskDefinition$.next(task);
     this.taskDefinitionId = task.id;
+  }
+
+  // Helper: fetch unit and refresh taskDefinitions
+  private loadUnit(unitId: number): void {
+    if (!this.unitId || this.unitId !== unitId) {
+      this.unitId = unitId;
+      this.unitService.get(unitId).subscribe({
+        next: (fresh: Unit) => {
+          this.unit = fresh; // includes updated taskDefinitions
+          this.resetFormState();
+        },
+        error: (err) => {
+          console.error('Error loading unit:', err);
+        }
+      });
+    }
+  }
+
+  private resetFormState(): void {
+    this.selectedTaskDefinition = null;
+    this.selectedTaskDefinition$.next(null);
+    this.taskDefinitionId = undefined;
+    this.isFormActive = false;
   }
 }
