@@ -7,6 +7,7 @@ import { TaskDefinition } from 'src/app/api/models/doubtfire-model';
 import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
 import { UIRouter } from '@uirouter/angular';
 import { UnitService } from 'src/app/api/models/doubtfire-model';
+import { ExtensionSummaryPayload } from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
 
 @Component({
   selector: 'f-staff-grant-extension',
@@ -22,6 +23,9 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   isFormActive = false;
   unitId?: number;
   taskDefinitionId?: number;
+
+  extensionSummary?: ExtensionSummaryPayload | null = null;
+  showSummary = false;
 
   private destroy$ = new Subject<void>();
 
@@ -90,6 +94,17 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  // Called when child emits extensionResult
+  onExtensionResult(payload: ExtensionSummaryPayload): void {
+    this.extensionSummary = payload;
+    this.showSummary = true;
+  }
+
+  onSummaryDismissed(): void {
+    this.showSummary = false;
+    this.extensionSummary = null;
   }
 
   onFormSubmitted(): void {

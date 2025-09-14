@@ -32,8 +32,18 @@
       </div>
 
       <div class="form-container">
+        <f-staff-grant-extension-summary
+          *ngIf="showSummary && extensionSummary"
+          [summary]="extensionSummary"
+          (dismissed)="onSummaryDismissed()"
+          class="mb-4"
+        ></f-staff-grant-extension-summary>
+
         <div *ngIf="isFormActive && selectedTaskDefinition" class="form-content">
-          <f-staff-grant-extension-form (formSubmitted)="onFormSubmitted()" [unitId]="unitId"
+          <f-staff-grant-extension-form
+            (formSubmitted)="onFormSubmitted()"
+            (extensionResult)="onExtensionResult($event)"
+            [unitId]="unitId"
             [taskDefinitionId]="taskDefinitionId">
           </f-staff-grant-extension-form>
         </div>
