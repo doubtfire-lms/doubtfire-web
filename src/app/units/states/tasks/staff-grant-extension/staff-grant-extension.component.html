@@ -41,7 +41,6 @@
 
         <div *ngIf="isFormActive && selectedTaskDefinition" class="form-content">
           <f-staff-grant-extension-form
-            (formSubmitted)="onFormSubmitted()"
             (extensionResult)="onExtensionResult($event)"
             [unitId]="unitId"
             [taskDefinitionId]="taskDefinitionId">

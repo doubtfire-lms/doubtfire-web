@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserService } from 'src/app/api/models/doubtfire-model';
+import { finalize } from 'rxjs/operators';
 import { ExtensionServiceResult, ExtensionSummaryPayload } from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
 
 @Component({
@@ -31,7 +32,6 @@ import { ExtensionServiceResult, ExtensionSummaryPayload } from 'src/app/units/s
   templateUrl: './grant-extension-form.component.html'
 })
 export class StaffGrantExtensionFormComponent implements OnInit {
-  @Output() formSubmitted = new EventEmitter<void>();
   @Output() extensionResult = new EventEmitter<ExtensionSummaryPayload>();
 
   grantExtensionForm!: FormGroup;
@@ -205,29 +205,32 @@ export class StaffGrantExtensionFormComponent implements OnInit {
       };
 
       // Submit the extension request
-      this.extensionService.grantExtension(this.unitId, payload).subscribe({
-        next: (results: ExtensionServiceResult) => {
-          this.snackBar.open('Extensions granted successfully!', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top'
-          });
+      this.extensionService.grantExtension(this.unitId, payload)
+        .pipe(
+          finalize(() => { this.isSubmitting = false; }) // added this: always unset submitting flag
+        )
+        .subscribe({
+          next: (results: ExtensionServiceResult) => {
+            this.snackBar.open('Extensions granted successfully!', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
 
-          // Build summary payload including weeksRequested and createdAt timestamp
-          const summaryPayload: ExtensionSummaryPayload = {
-            results: results,
-            weeksRequested: payload.weeks_requested,
-            createdAt: new Date().toISOString()
-          };
+            // Build summary payload including weeksRequested and createdAt timestamp
+            const summaryPayload: ExtensionSummaryPayload = {
+              results: results,
+              weeksRequested: payload.weeks_requested,
+              createdAt: new Date().toISOString(),
+              taskDefinitionId: this.taskDefinitionId!
+            };
 
-          // Emit the detailed summary so parent can show it
-          this.extensionResult.emit(summaryPayload);
+            // Emit the detailed summary so parent can show it
+            this.extensionResult.emit(summaryPayload);
 
-          // Reset form
-          this.resetForm();
+            // Reset form
+            this.resetForm();
 
-          // Emit event to parent component
-          this.formSubmitted.emit();
         },
         error: (error) => {
           console.error('Error granting extensions:', error);
@@ -237,7 +240,8 @@ export class StaffGrantExtensionFormComponent implements OnInit {
             const summaryPayload: ExtensionSummaryPayload = {
               results: errorResults,
               weeksRequested: payload.weeks_requested,
-              createdAt: new Date().toISOString()
+              createdAt: new Date().toISOString(),
+              taskDefinitionId: this.taskDefinitionId!
             };
             this.extensionResult.emit(summaryPayload);
           }
@@ -247,9 +251,6 @@ export class StaffGrantExtensionFormComponent implements OnInit {
             horizontalPosition: 'center',
             verticalPosition: 'top'
           });
-        },
-        complete: () => {
-          this.isSubmitting = false;
         }
       });
     } else {

@@ -26,6 +26,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
 
   extensionSummary?: ExtensionSummaryPayload | null = null;
   showSummary = false;
+  extensionSummaries = new Map<number, ExtensionSummaryPayload>();
 
   private destroy$ = new Subject<void>();
 
@@ -45,6 +46,17 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
 
       if (taskDef) {
         this.taskDefinitionId = taskDef.id;
+        const saved = this.extensionSummaries.get(taskDef.id);
+        if (saved) {
+          this.extensionSummary = saved;
+          this.showSummary = true;
+        } else {
+          this.extensionSummary = null;
+          this.showSummary = false;
+        }
+      } else {
+        this.extensionSummary = null;
+        this.showSummary = false;
       }
     });
 
@@ -98,17 +110,37 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
 
   // Called when child emits extensionResult
   onExtensionResult(payload: ExtensionSummaryPayload): void {
-    this.extensionSummary = payload;
-    this.showSummary = true;
+    const tdId = payload.taskDefinitionId ?? this.taskDefinitionId;
+    if (!tdId) return;
+
+    // Always clear the previous one
+    this.extensionSummaries.delete(tdId);
+
+    // Temporarily hide the summary
+    this.extensionSummary = null;
+    this.showSummary = false;
+
+
+    // Save the payload for that specific task
+    this.extensionSummaries.set(tdId, payload)
+
+    if (this.selectedTaskDefinition && this.selectedTaskDefinition.id === tdId) {
+    setTimeout(() => {
+      this.extensionSummary = payload;
+      this.showSummary = true;
+    }, 0);
+  }
+
   }
 
   onSummaryDismissed(): void {
+    const tdId = this.extensionSummary?.taskDefinitionId ?? this.selectedTaskDefinition?.id;
+    if (tdId) {
+      this.extensionSummaries.delete(tdId);
+    }
+
     this.showSummary = false;
     this.extensionSummary = null;
-  }
-
-  onFormSubmitted(): void {
-    this.resetFormState();
   }
 
   // Handle task selection from <f-unit-task-list>
@@ -121,6 +153,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   // Helper: fetch unit and refresh taskDefinitions
   private loadUnit(unitId: number): void {
     if (!this.unitId || this.unitId !== unitId) {
+      this.extensionSummaries.clear();
       this.unitId = unitId;
       this.unitService.get(unitId).subscribe({
         next: (fresh: Unit) => {
@@ -139,5 +172,8 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
     this.selectedTaskDefinition$.next(null);
     this.taskDefinitionId = undefined;
     this.isFormActive = false;
+
+    this.extensionSummary = null;
+    this.showSummary = false;
   }
 }

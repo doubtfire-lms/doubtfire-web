@@ -27,4 +27,5 @@ export interface ExtensionSummaryPayload {
   results: ExtensionServiceResult;
   weeksRequested: number;
   createdAt: string; // ISO string
+  taskDefinitionId: number;
 }
