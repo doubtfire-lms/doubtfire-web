@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserService } from 'src/app/api/models/doubtfire-model';
+import { ExtensionServiceResult, ExtensionSummaryPayload } from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
 
 @Component({
   selector: 'f-staff-grant-extension-form',
@@ -31,6 +32,7 @@ import { UserService } from 'src/app/api/models/doubtfire-model';
 })
 export class StaffGrantExtensionFormComponent implements OnInit {
   @Output() formSubmitted = new EventEmitter<void>();
+  @Output() extensionResult = new EventEmitter<ExtensionSummaryPayload>();
 
   grantExtensionForm!: FormGroup;
   isSubmitting = false;
@@ -204,12 +206,22 @@ export class StaffGrantExtensionFormComponent implements OnInit {
 
       // Submit the extension request
       this.extensionService.grantExtension(this.unitId, payload).subscribe({
-        next: () => {
+        next: (results: ExtensionServiceResult) => {
           this.snackBar.open('Extensions granted successfully!', 'Close', {
             duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top'
           });
+
+          // Build summary payload including weeksRequested and createdAt timestamp
+          const summaryPayload: ExtensionSummaryPayload = {
+            results: results,
+            weeksRequested: payload.weeks_requested,
+            createdAt: new Date().toISOString()
+          };
+
+          // Emit the detailed summary so parent can show it
+          this.extensionResult.emit(summaryPayload);
 
           // Reset form
           this.resetForm();
@@ -219,6 +231,17 @@ export class StaffGrantExtensionFormComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error granting extensions:', error);
+
+          const errorResults = error?.error?.results;
+          if (errorResults) {
+            const summaryPayload: ExtensionSummaryPayload = {
+              results: errorResults,
+              weeksRequested: payload.weeks_requested,
+              createdAt: new Date().toISOString()
+            };
+            this.extensionResult.emit(summaryPayload);
+          }
+
           this.snackBar.open('Error granting extensions. Please try again.', 'Close', {
             duration: 5000,
             horizontalPosition: 'center',
