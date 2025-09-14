@@ -1,10 +1,8 @@
-// import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { Component, OnInit  } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppInjector } from 'src/app/app-injector';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
-// Define structure of a Notification object
 interface Notification {
   id: number;
   message: string;
@@ -16,27 +14,20 @@ interface Notification {
   styleUrls: ['./notifications-button.component.css']
 })
 export class NotificationsButtonComponent implements OnInit {
-
-  // Tracks whether the notifications dropdown is visible
   showNotifications = false;
-
-  // List of notifications to be displayed
   notifications: Notification[] = [];
-
   private readonly API_URL = AppInjector.get(DoubtfireConstants).API_URL;
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient, private eRef: ElementRef) {}
 
   ngOnInit() {
     this.loadNotifications();
   }
 
-   // Toggle the visibility of the notifications dropdown
   toggleNotifications() {
     this.showNotifications = !this.showNotifications;
-    console.log('showNotifications toggled:', this.showNotifications);
   }
 
-   // Fetch notifications from the API
   loadNotifications() {
     this.http.get<Notification[]>(`${this.API_URL}/notifications`).subscribe({
       next: data => this.notifications = data,
@@ -44,9 +35,7 @@ export class NotificationsButtonComponent implements OnInit {
     });
   }
 
-  // Remove a specific notification by ID
   dismissNotification(notificationId: number) {
-    console.log('Dismissed notification with ID:', notificationId);
     this.http.delete(`${this.API_URL}/notifications/${notificationId}`).subscribe({
       next: () => {
         this.notifications = this.notifications.filter(note => note.id !== notificationId);
@@ -55,9 +44,7 @@ export class NotificationsButtonComponent implements OnInit {
     });
   }
 
-  // Delete all notifications
   deleteAllNotifications() {
-    console.log('All notifications deleted');
     this.http.delete(`${this.API_URL}/notifications`).subscribe({
       next: () => {
         this.notifications = [];
@@ -66,4 +53,10 @@ export class NotificationsButtonComponent implements OnInit {
     });
   }
 
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.showNotifications && !this.eRef.nativeElement.contains(event.target)) {
+      this.showNotifications = false;
+    }
+  }
 }
