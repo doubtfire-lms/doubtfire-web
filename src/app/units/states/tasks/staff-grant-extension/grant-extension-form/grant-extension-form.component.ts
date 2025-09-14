@@ -234,7 +234,6 @@ export class StaffGrantExtensionFormComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error granting extensions:', error);
-          console.log('Error structure:', JSON.stringify(error, null, 2));
 
           // Extract specific error message from the API response
           let errorMessage = 'Error granting extensions. Please try again.';
@@ -242,25 +241,18 @@ export class StaffGrantExtensionFormComponent implements OnInit {
           // Check if error is directly a string (most common case)
           if (typeof error === 'string') {
             errorMessage = error;
-            console.log('Using direct error string:', errorMessage);
           } else if (error?.error) {
             // Check if error.error is a string
             if (typeof error.error === 'string') {
               errorMessage = error.error;
-              console.log('Using error.error string:', errorMessage);
             } else if (error.error.error) {
               errorMessage = error.error.error;
-              console.log('Using nested error.error:', errorMessage);
             } else if (error.error.message) {
               errorMessage = error.error.message;
-              console.log('Using nested error.message:', errorMessage);
             }
           } else if (error?.message) {
             errorMessage = error.message;
-            console.log('Using top-level message:', errorMessage);
           }
-
-          console.log('Final error message:', errorMessage);
 
           const errorResults = error?.error?.results;
           if (errorResults) {
