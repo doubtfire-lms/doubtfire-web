@@ -12,7 +12,8 @@ export type TaskStatusEnum =
   | 'demonstrate'
   | 'complete'
   | 'fail'
-  | 'time_exceeded';
+  | 'time_exceeded'
+  | 'assess_in_portfolio';
 
 export type TaskStatusUiData = {
   status: TaskStatusEnum;
@@ -36,6 +37,7 @@ export class TaskStatus {
     'complete',
     'fail',
     'time_exceeded',
+    'assess_in_portfolio',
   ];
 
   public static readonly VALID_TOP_TASKS: TaskStatusEnum[] = [
@@ -57,9 +59,16 @@ export class TaskStatus {
     'complete',
     'fail',
     'time_exceeded',
+    'assess_in_portfolio',
   ];
 
-  public static readonly FINAL_STATUSES: TaskStatusEnum[] = ['complete', 'fail', 'feedback_exceeded', 'time_exceeded'];
+  public static readonly FINAL_STATUSES: TaskStatusEnum[] = [
+    'complete',
+    'fail',
+    'feedback_exceeded',
+    'time_exceeded',
+    'assess_in_portfolio',
+  ];
 
   public static readonly GRADEABLE_STATUSES: TaskStatusEnum[] = ['fail', 'discuss', 'demonstrate', 'complete'];
 
@@ -89,7 +98,11 @@ export class TaskStatus {
     'redo',
   ];
 
-  public static readonly SUBMITTABLE_STATUSES: TaskStatusEnum[] = ['ready_for_feedback', 'need_help'];
+  public static readonly SUBMITTABLE_STATUSES: TaskStatusEnum[] = [
+    'ready_for_feedback',
+    'need_help',
+    'assess_in_portfolio',
+  ];
 
   public static readonly MARKED_STATUSES: TaskStatusEnum[] = [
     'redo',
@@ -122,6 +135,7 @@ export class TaskStatus {
     ['demonstrate', 0.8],
     ['complete', 1.0],
     ['time_exceeded', 0.3],
+    ['assess_in_portfolio', 0.0],
   ]);
 
   public static readonly STATUS_ACRONYM: Map<TaskStatusEnum, string> = new Map<TaskStatusEnum, string>([
@@ -137,6 +151,7 @@ export class TaskStatus {
     ['complete', 'COM'],
     ['fail', 'FAL'],
     ['time_exceeded', 'TIE'],
+    ['assess_in_portfolio', 'AIP'],
   ]);
 
   // Which status should not show up in the task status drop down... for students
@@ -156,6 +171,7 @@ export class TaskStatus {
     ['feedback_exceeded', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
     ['time_exceeded', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
     ['fail', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
+    ['assess_in_portfolio', ['not_started']],
   ]);
 
   public static readonly STATUS_LABELS = new Map<TaskStatusEnum, string>([
@@ -171,6 +187,7 @@ export class TaskStatus {
     ['complete', 'Complete'],
     ['fail', 'Fail'],
     ['time_exceeded', 'Time Exceeded'],
+    ['assess_in_portfolio', 'Assess in Portfolio'],
   ]);
 
   public static readonly STATUS_ICONS = new Map<TaskStatusEnum, string>([
@@ -186,6 +203,7 @@ export class TaskStatus {
     ['complete', 'fa fa-check'],
     ['fail', 'fa fa-times'],
     ['time_exceeded', 'fa fa-clock-o'],
+    ['assess_in_portfolio', 'fa fa-folder-open'],
   ]);
 
   // Please make sure this matches task-status-colors.less
@@ -202,6 +220,7 @@ export class TaskStatus {
     ['complete', '#5BB75B'],
     ['fail', '#d93713'],
     ['time_exceeded', '#d93713'],
+    ['assess_in_portfolio', '#91b891'],
   ]);
 
   public static readonly STATUS_SEQ = new Map<TaskStatusEnum, number>([
@@ -217,11 +236,21 @@ export class TaskStatus {
     ['discuss', 10],
     ['demonstrate', 11],
     ['complete', 12],
+    ['assess_in_portfolio', 13],
   ]);
 
   public static readonly SWITCHABLE_STATES = {
     student: ['not_started', 'working_on_it', 'need_help', 'ready_for_feedback'],
-    tutor: ['complete', 'discuss', 'demonstrate', 'fix_and_resubmit', 'redo', 'feedback_exceeded', 'fail'],
+    tutor: [
+      'complete',
+      'discuss',
+      'demonstrate',
+      'fix_and_resubmit',
+      'redo',
+      'feedback_exceeded',
+      'fail',
+      'assess_in_portfolio',
+    ],
   };
 
   // detail = in a brief context to the student
@@ -333,6 +362,15 @@ export class TaskStatus {
         reason: 'This work was submitted after the deadline, having missed both the target date and deadline.',
         action:
           'Work submitted after the feedback deadline will not be checked by tutors prior to the portfolio assessment. You will need to ensure this task is at an adequate standard in your portfolio.',
+      },
+    ],
+    [
+      'assess_in_portfolio',
+      {
+        detail: 'Your submission will be assessed in your portfolio',
+        reason:
+          'This task will no longer be checked by tutors, and will be assessed directly in your final portfolio submission.',
+        action: 'You will need to ensure this task is at an adequate standard in your portfolio.',
       },
     ],
     // [

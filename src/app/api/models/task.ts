@@ -802,7 +802,8 @@ export class Task extends Entity {
     const alerts: AlertService = AppInjector.get(AlertService);
 
     const requiresFileUpload =
-      ['ready_for_feedback', 'need_help'].includes(status) && this.requiresFileUpload();
+      ['ready_for_feedback', 'need_help', 'assess_in_portfolio'].includes(status) &&
+      this.requiresFileUpload();
 
     if (requiresFileUpload && this.isReadyForUpload) {
       this.presentTaskSubmissionModal(status);

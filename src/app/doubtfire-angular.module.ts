@@ -271,6 +271,7 @@ import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.com
 import {StaffNoteService} from './api/services/staff-note.service';
 import {LocalizedDatePipe} from './common/pipes/localized-date.pipe';
 import {StaffNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/staff-notes-view/staff-notes-view.component';
+import {SubmissionTypeModalComponent} from './tasks/modals/submission-type-modal/submission-type-modal.component';
 import {SidekiqProgressModalComponent} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.component';
 import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/sidekiq-jobs-modal.component';
 import {SidekiqJobService} from './api/services/sidekiq-job.service';
@@ -421,6 +422,7 @@ const MY_DATE_FORMAT = {
     StaffNotesViewComponent,
     QrModalComponent,
     LocalizedDatePipe,
+    SubmissionTypeModalComponent,
     SidekiqProgressModalComponent,
     SidekiqJobsModalComponent,
     UnavailableCardComponent,

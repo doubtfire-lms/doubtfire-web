@@ -71,6 +71,7 @@ export class Unit extends Entity {
   allowFlexibleDates: boolean = false;
   extensionWeeksOnResubmitRequest: number;
   allowStudentChangeTutorial: boolean;
+  markLateSubmissionsAsAssessInPortfolio: boolean;
 
   d2lMapping: D2lAssessmentMapping;
 

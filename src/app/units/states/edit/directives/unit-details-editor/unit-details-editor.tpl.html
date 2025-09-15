@@ -268,7 +268,42 @@
         <!--/auto apply extension-->
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="enddate">Allow students to change tutorial</label>
+          <label class="col-sm-2 control-label" for="enddate"
+            >Has tasks assessed in portfolio</label
+          >
+          <div class="col-sm-9">
+            <div class="btn-group">
+              <label
+                class="btn btn-{{unit.markLateSubmissionsAsAssessInPortfolio ? 'success' : 'default'}}"
+                ng-model="unit.markLateSubmissionsAsAssessInPortfolio"
+                btn-radio="true"
+                uncheckable
+              >
+                <i class="fa fa-check"></i>
+              </label>
+              <label
+                class="btn btn-{{unit.markLateSubmissionsAsAssessInPortfolio ? 'default' : 'danger'}}"
+                ng-model="unit.markLateSubmissionsAsAssessInPortfolio"
+                btn-radio="false"
+                uncheckable
+              >
+                <i class="fa fa-times"></i>
+              </label>
+            </div>
+            <span class="help-block">
+              When enabled, late submissions will not be automatically marked as "Time Exceeded" or
+              "Feedback Exceeded", and will instead appear as "Assess in Portfolio". Tutors can
+              still sign off tasks as complete unless the task definition has the "Assess in
+              Portfolio Only" option enabled.
+            </span>
+          </div>
+        </div>
+        <!--/mark-late-submissions-as-assess-in-portfolio-status-->
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="enddate"
+            >Allow students to change tutorial</label
+          >
           <div class="col-sm-9">
             <div class="btn-group">
               <label

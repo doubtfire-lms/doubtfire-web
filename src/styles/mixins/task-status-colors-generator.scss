@@ -59,3 +59,6 @@
 @mixin task-status-color-time-exceeded {
   @include task-status-color('time-exceeded');
 }
+@mixin task-status-color-assess-in-portfolio {
+  @include task-status-color('assess-in-portfolio');
+}
