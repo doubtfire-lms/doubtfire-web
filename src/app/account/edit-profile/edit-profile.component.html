@@ -2,6 +2,25 @@
   <div fxFlex.gt-sm="20"></div>
   <div fxFlex class="form-container">
     <f-edit-profile-form mode="edit"></f-edit-profile-form>
+
+    <mat-divider></mat-divider>
+
+    <section class="change-password">
+      <h2>Change Password</h2>
+      <form (ngSubmit)="changePassword()" #pwForm="ngForm" class="flex flex-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Current Password</mat-label>
+          <input matInput type="password" name="current_password" required [(ngModel)]="current_password" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>New Password</mat-label>
+          <input matInput type="password" name="new_password" required [(ngModel)]="new_password" />
+        </mat-form-field>
+        <button mat-flat-button color="primary" [disabled]="pwForm.invalid || changing">
+          Update Password
+        </button>
+      </form>
+    </section>
   </div>
   <div fxFlex.gt-sm="20"></div>
 </div>

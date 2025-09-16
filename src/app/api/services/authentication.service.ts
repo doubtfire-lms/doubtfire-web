@@ -191,4 +191,45 @@ export class AuthenticationService {
       setTimeout(() => this.router.stateService.go('timeout'), 500);
     }
   }
+
+  // Account registration (local auth only)
+  public register(data: {
+    username: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    password: string;
+  }): Observable<any> {
+    const url = `${this.AUTH_URL}/register`;
+    return this.httpClient.post(url, data).pipe(
+      map((response: any) => {
+        const user: User = this.userService.cache.getOrCreate(
+          response['user']['id'],
+          this.userService,
+          response['user'],
+        );
+        user.authenticationToken = response['auth_token'];
+        this.tryChangeUser(user, true);
+        setTimeout(() => this.updateAuth(), 1000 * 60 * 60);
+      }),
+    );
+  }
+
+  // Forgot password (request reset email/token)
+  public forgotPassword(email: string): Observable<any> {
+    const url = `${this.AUTH_URL}/password/forgot`;
+    return this.httpClient.post(url, {email});
+  }
+
+  // Reset password using token from email/link
+  public resetPassword(token: string, password: string): Observable<any> {
+    const url = `${this.AUTH_URL}/password/reset`;
+    return this.httpClient.post(url, {token, password});
+  }
+
+  // Change password for logged-in user
+  public changePassword(current_password: string, new_password: string): Observable<any> {
+    const url = `${this.AUTH_URL}/password`;
+    return this.httpClient.put(url, {current_password, new_password});
+  }
 }

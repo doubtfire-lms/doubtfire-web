@@ -179,6 +179,8 @@ import {ObjectSelectComponent} from './common/obect-select/object-select.compone
 import {WelcomeComponent} from './welcome/welcome.component';
 import {HeroSidebarComponent} from './common/hero-sidebar/hero-sidebar.component';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
+import {ForgotPasswordComponent} from './sessions/states/forgot-password/forgot-password.component';
+import {ResetPasswordComponent} from './sessions/states/reset-password/reset-password.component';
 import {EditProfileFormComponent} from './common/edit-profile-form/edit-profile-form.component';
 import {TransitionHooksService} from './sessions/transition-hooks.service';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
@@ -298,6 +300,8 @@ import {GradeService} from './common/services/grade.service';
     AcceptEulaComponent,
     HeroSidebarComponent,
     SignInComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
     EditProfileFormComponent,
     EditProfileComponent,
     UserBadgeComponent,

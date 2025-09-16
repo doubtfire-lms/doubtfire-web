@@ -3,6 +3,8 @@ import {InstitutionSettingsComponent} from './admin/institution-settings/institu
 import {HomeComponent} from './home/states/home/home.component';
 import {WelcomeComponent} from './welcome/welcome.component';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
+import {ForgotPasswordComponent} from './sessions/states/forgot-password/forgot-password.component';
+import {ResetPasswordComponent} from './sessions/states/reset-password/reset-password.component';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
@@ -300,6 +302,18 @@ export const doubtfireStates = [
   HomeState,
   WelcomeState,
   SignInState,
+  {
+    name: 'forgot_password',
+    url: '/forgot_password',
+    views: {main: {component: ForgotPasswordComponent}},
+    data: {pageTitle: 'Forgot Password'},
+  },
+  {
+    name: 'reset_password',
+    url: '/reset_password?token',
+    views: {main: {component: ResetPasswordComponent}},
+    data: {pageTitle: 'Reset Password'},
+  },
   EditProfileState,
   EulaState,
   usersState,
