@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import LTI_API_URL from 'src/app/config/constants/ltiApiUrl';
+import LTI_API_URL from 'src/app/config/constants/ltiApiURL';
 import {Project} from '../models/project';
 import {SidekiqJob} from '../models/sidekiq-job';
 

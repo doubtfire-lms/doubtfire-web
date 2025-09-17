@@ -3,7 +3,7 @@ import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor} from '@angular/com
 import {Observable} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiURL';
 import {UserService} from 'src/app/api/services/user.service';
-import LTI_API_URL from 'src/app/config/constants/ltiApiUrl';
+import LTI_API_URL from 'src/app/config/constants/ltiApiURL';
 
 @Injectable()
 export class HttpAuthenticationInterceptor implements HttpInterceptor {
