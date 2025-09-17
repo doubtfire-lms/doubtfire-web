@@ -13,6 +13,8 @@ import {AppInjector} from 'src/app/app-injector';
 import {Observable} from 'rxjs';
 import {TaskPrerequisiteService} from './task-prerequisite.service';
 import {TaskPrerequisite} from '../models/task-prerequisite';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {SidekiqJob} from '../models/sidekiq-job';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -34,6 +36,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'targetGrade',
       'similarityLanguage',
       'hasJplagReport',
+      'assessInPortfolioOnly',
       {
         keys: 'targetDate',
         toEntityFn: MappingFunctions.mapDateToEndOfDay,
@@ -198,5 +201,17 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
         task_status_required: taskStatus,
       },
     );
+  }
+
+  public zipSubmissionFiles(taskDefinition: TaskDefinition): Observable<SidekiqJob> {
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/submission/units/${taskDefinition.unit.id}/task_definitions/${taskDefinition.id}/download_submissions/zip`;
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.get<SidekiqJob>(url);
+  }
+
+  public zipSubmissionPdfs(taskDefinition: TaskDefinition): Observable<SidekiqJob> {
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/submission/units/${taskDefinition.unit.id}/task_definitions/${taskDefinition.id}/student_pdfs/zip`;
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.get<SidekiqJob>(url);
   }
 }

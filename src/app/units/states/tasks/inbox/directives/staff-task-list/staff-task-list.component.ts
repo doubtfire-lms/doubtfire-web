@@ -32,6 +32,8 @@ import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-ta
 import {AlertService} from 'src/app/common/services/alert.service';
 import {HotkeysService} from '@ngneat/hotkeys';
 import {Router} from '@angular/router';
+import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -119,6 +121,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     private userService: UserService,
     private hotkeys: HotkeysService,
     private router: Router,
+    private taskDefinitionService: TaskDefinitionService,
+    private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -221,22 +225,48 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   downloadSubmissionPdfs() {
     const taskDef = this.filters.taskDefinition;
-    this.fileDownloaderService.downloadFile(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
-        this.unit.id
-      }/task_definitions/${taskDef.id}/student_pdfs`,
-      `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`,
-    );
+    this.taskDefinitionService.zipSubmissionPdfs(taskDef).subscribe({
+      next: (newJob) => {
+        this.sidekiqProgressModalService
+          .show(`Downloading submission pdfs for ${taskDef.abbreviation}`, newJob.id)
+          .subscribe({
+            next: (job) => {
+              this.fileDownloaderService.downloadFile(
+                `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
+                  this.unit.id
+                }/task_definitions/${taskDef.id}/student_pdfs`,
+                `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`,
+              );
+            },
+          });
+      },
+      error: (error) => {
+        this.alertService.error(error, 6000);
+      },
+    });
   }
 
-  downloadSubmissions() {
+  downloadSubmissionFiles() {
     const taskDef = this.filters.taskDefinition;
-    this.fileDownloaderService.downloadFile(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
-        this.unit.id
-      }/task_definitions/${taskDef.id}/download_submissions`,
-      `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`,
-    );
+    this.taskDefinitionService.zipSubmissionFiles(taskDef).subscribe({
+      next: (newJob) => {
+        this.sidekiqProgressModalService
+          .show(`Downloading submission files for ${taskDef.abbreviation}`, newJob.id)
+          .subscribe({
+            next: (job) => {
+              this.fileDownloaderService.downloadFile(
+                `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
+                  this.unit.id
+                }/task_definitions/${taskDef.id}/download_submissions`,
+                `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`,
+              );
+            },
+          });
+      },
+      error: (error) => {
+        this.alertService.error(error, 6000);
+      },
+    });
   }
 
   downloadJPLAGReport() {

@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-41](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-40...v10.0.0-41) (2025-09-15)
+
+## [10.0.0-40](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-39...v10.0.0-40) (2025-09-15)
+
+
+### Features
+
+* assess in portfolio status ([ada4a21](https://github.com/b0ink/doubtfire-deploy/commit/ada4a21c945018abeb9ca1169e48fdd822a27322))
+* ensure complete button updates aip only tasks to working on it ([c8dd020](https://github.com/b0ink/doubtfire-deploy/commit/c8dd020a5e572765f7710c266ae2b20563ab05c2))
+* send automated message when set back to working on it ([a858d3a](https://github.com/b0ink/doubtfire-deploy/commit/a858d3a7b2f41ac7478d4917d2d2f6c68a167e6e))
+* submission type modal ([52f7d40](https://github.com/b0ink/doubtfire-deploy/commit/52f7d404ef154ff27c0ba887c8321360df95ddb6))
+
+
+### Bug Fixes
+
+* typo ([2a2e4a4](https://github.com/b0ink/doubtfire-deploy/commit/2a2e4a41e6ea20152632a9f82ca1723d9a6b56cc))
+* wording ([6291bd6](https://github.com/b0ink/doubtfire-deploy/commit/6291bd61ccc4ff45c708300d0a5014a59a565414))
+
+## [10.0.0-39](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-38...v10.0.0-39) (2025-09-10)
+
+
+### Features
+
+* display warning above task sheet for incomplete prerequisites ([86433bb](https://github.com/b0ink/doubtfire-deploy/commit/86433bb18e6ff9b024d7c397b8744618721b602f))
+
+## [10.0.0-38](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-37...v10.0.0-38) (2025-09-09)
+
+
+### Bug Fixes
+
+* ensure task prerequisites are correctly cached ([3945f4e](https://github.com/b0ink/doubtfire-deploy/commit/3945f4e2ecff1a1d79662c099baf745bfd6f4b7d))
+
 ## [10.0.0-37](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-36...v10.0.0-37) (2025-09-09)
 
 ## [10.0.0-36](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-35...v10.0.0-36) (2025-09-09)

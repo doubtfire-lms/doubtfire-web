@@ -152,6 +152,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'allowFlexibleDates',
       'extensionWeeksOnResubmitRequest',
       'allowStudentChangeTutorial',
+      'markLateSubmissionsAsAssessInPortfolio',
       {
         keys: 'ilos',
         toEntityOp: (data: object, key: string, unit: Unit) => {
@@ -250,6 +251,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'overseerImageId',
 
       'autoApplyExtensionBeforeDeadline',
+      'markLateSubmissionsAsAssessInPortfolio',
       'sendNotifications',
       'enableSyncEnrolments',
       'enableSyncTimetable',

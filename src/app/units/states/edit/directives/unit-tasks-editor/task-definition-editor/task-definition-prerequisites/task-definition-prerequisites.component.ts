@@ -100,13 +100,21 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   private fetchTaskPrerequisites() {
     const taskDefinition = this.taskDefinition;
     this.taskPrerequisiteService
-      .query({
-        unitId: this.unit.id,
-        taskDefId: taskDefinition.id,
-      })
+      .query(
+        {
+          unitId: this.unit.id,
+          taskDefId: taskDefinition.id,
+        },
+        {
+          cache: taskDefinition.taskPrerequisitesCache,
+        },
+      )
       .subscribe({
         next: (data) => {
           for (const prereq of data) {
+            if (prereq.taskDefinitionId !== taskDefinition.id) {
+              continue;
+            }
             taskDefinition.taskPrerequisitesCache.getOrCreate(
               prereq.id,
               this.taskPrerequisiteService,

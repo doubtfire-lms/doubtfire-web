@@ -1,22 +1,23 @@
 import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {UIRouter} from '@uirouter/core';
 import * as _ from 'lodash';
-import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
-import {TaskStatusEnum} from 'src/app/api/models/task-status';
+import {TaskStatusEnum, TaskStatusUiData} from 'src/app/api/models/task-status';
 import {TaskService} from 'src/app/api/services/task.service';
-import {UserService} from 'src/app/api/services/user.service';
 import {ExtensionModalService} from 'src/app/common/modals/extension-modal/extension-modal.service';
 import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';
+
+import {Project} from 'src/app/api/models/project';
+import {UserService} from 'src/app/api/services/user.service';
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
   styleUrls: ['./task-status-card.component.scss'],
 })
 export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  triggers: any;
+  triggers: TaskStatusUiData[];
   textCss: string;
   constructor(
     private extensions: ExtensionModalService,
@@ -24,6 +25,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private router: UIRouter,
     private qrModalService: QrModalService,
     private doubtfireConstants: DoubtfireConstants,
+    private submissionTypeModalService: SubmissionTypeModalService,
     private userService: UserService,
   ) {}
 
@@ -51,15 +53,18 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   reapplyTriggers(): void {
     // if tutor is in queryParam
     if (this.router.globals.params.tutor != null) {
-      this.triggers = this.taskService.statusKeys.map(this.taskService.statusData);
+      this.triggers = this.taskService.statusKeys.map((k) => this.taskService.statusData(k));
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const studentTriggers = _.map(
-        this.taskService.switchableStates.student,
-        this.taskService.statusData,
-      ) as any;
+        this.taskService.switchableStates.student as TaskStatusEnum[],
+        (k) => this.taskService.statusData(k),
+      );
       const filteredStudentTriggers = this.task.filterFutureStates(studentTriggers);
       this.triggers = filteredStudentTriggers;
+      // Ensure the current task's status is in the list
+      if (!this.triggers.find((t) => t.status === this.task.status)) {
+        this.triggers.push(this.taskService.statusData(this.task.status));
+      }
     }
     this.taskService.statusKeys;
   }
@@ -68,8 +73,24 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     return this.task.status === 'ready_for_feedback';
   }
 
+  public isSubmittedForPortfolio(): boolean {
+    return this.task.status === 'assess_in_portfolio';
+  }
+
   triggerTransition(trigger: TaskStatusEnum): void {
-    this.task.triggerTransition(trigger);
+    if (trigger === 'ready_for_feedback') {
+      this.uploadSubmission();
+    } else {
+      this.task.triggerTransition(trigger);
+    }
+  }
+
+  uploadSubmission(): void {
+    if (this.task.definition.assessInPortfolioOnly) {
+      this.submissionTypeModalService.show(this.task);
+    } else {
+      this.task.triggerTransition('ready_for_feedback');
+    }
   }
 
   updateFilesInSubmission(): void {

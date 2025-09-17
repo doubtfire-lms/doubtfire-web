@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Select submission type</h2>
+<mat-dialog-content>
+  <p>
+    This task will not be marked as complete by your tutor, and will instead be assessed in your
+    final portfolio.
+  </p>
+  <p>
+    You may submit it for tutor feedback before the deadline, but you'll still need to resubmit it
+    for your portfolio when you are ready.
+  </p>
+  <div class="p-5 flex justify-center gap-5">
+    <button
+      matTooltip="Receive feedback from your tutor"
+      mat-raised-button
+      class="h-[175px] w-[175px] flex flex-col text-align p-2 items-center gap-3"
+      color="primary"
+      (click)="triggerTransition('ready_for_feedback')"
+    >
+      <mat-icon class="icon-size">grading</mat-icon>
+      <div class="text-center">Submit for Feedback</div>
+    </button>
+    <button
+      matTooltip="Submit directly for portfolio assessment"
+      mat-raised-button
+      class="h-[175px] w-[175px] flex flex-col text-align p-2 items-center gap-3"
+      (click)="triggerTransition('assess_in_portfolio')"
+    >
+      <mat-icon class="icon-size">auto_stories</mat-icon>
+
+      <div class="text-center">Skip Feedback</div>
+    </button>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="flex justify-end">
+  <button mat-button [mat-dialog-close]>Cancel</button>
+</mat-dialog-actions>

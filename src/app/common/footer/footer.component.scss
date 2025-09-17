@@ -72,4 +72,7 @@
   &.complete {
     @include status-icon('complete');
   }
+  &.assess-in-portfolio {
+    @include status-icon('assess-in-portfolio');
+  }
 }

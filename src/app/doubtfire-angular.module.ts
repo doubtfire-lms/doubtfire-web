@@ -271,6 +271,7 @@ import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.com
 import {StaffNoteService} from './api/services/staff-note.service';
 import {LocalizedDatePipe} from './common/pipes/localized-date.pipe';
 import {StaffNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/staff-notes-view/staff-notes-view.component';
+import {SubmissionTypeModalComponent} from './tasks/modals/submission-type-modal/submission-type-modal.component';
 import {SidekiqProgressModalComponent} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.component';
 import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/sidekiq-jobs-modal.component';
 import {SidekiqJobService} from './api/services/sidekiq-job.service';
@@ -281,6 +282,10 @@ import {LtiService} from './api/services/lti.service';
 import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
 import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
 import {TaskPrerequisiteService} from './api/services/task-prerequisite.service';
+// import { GradeIconComponent } from './common/grade-icon/grade-icon.component';
+// import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
+import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -420,6 +425,7 @@ const MY_DATE_FORMAT = {
     StaffNotesViewComponent,
     QrModalComponent,
     LocalizedDatePipe,
+    SubmissionTypeModalComponent,
     SidekiqProgressModalComponent,
     SidekiqJobsModalComponent,
     UnavailableCardComponent,
@@ -427,6 +433,7 @@ const MY_DATE_FORMAT = {
     LtiUnitLinkComponent,
     TaskDefinitionPrerequisitesComponent,
     TaskPrerequisitesCardComponent,
+    GroupSetSelectorComponent,
   ],
   // Services we provide
   providers: [
