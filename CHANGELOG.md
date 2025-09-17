@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-42](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-41...v10.0.0-42) (2025-09-17)
+
+
+### Features
+
+* display result of student imports ([e0503f4](https://github.com/b0ink/doubtfire-deploy/commit/e0503f424dfbef49e68b4e2f697e8d135120634e))
+* enable unit linking to lms context using deeplink ([73de1f1](https://github.com/b0ink/doubtfire-deploy/commit/73de1f1c68223c863c35198b773f0bdeaa1f549e))
+* init lti integration ([248be93](https://github.com/b0ink/doubtfire-deploy/commit/248be93e7c8b5ff060957e500b6a4943882f456c))
+* sync enrolments for all lti members ([5ec499f](https://github.com/b0ink/doubtfire-deploy/commit/5ec499f37b93f2b4bd56d145501fd55ab6af45e6))
+* sync grades for all members ([0f5daa8](https://github.com/b0ink/doubtfire-deploy/commit/0f5daa852f4c3750367f7d2c3f9b0c07ffbfed3f))
+* unauthorised lti banner ([12e65d8](https://github.com/b0ink/doubtfire-deploy/commit/12e65d8f1609f2030b25347beb1c0e06f513f65c))
+
+
+### Bug Fixes
+
+* forward correct lti token ([e95544e](https://github.com/b0ink/doubtfire-deploy/commit/e95544e2e158affefafd2fc0fe9657bf47c200db))
+
 ## [10.0.0-41](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-40...v10.0.0-41) (2025-09-15)
 
 ## [10.0.0-40](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-39...v10.0.0-40) (2025-09-15)
