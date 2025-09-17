@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import API_URL from 'src/app/config/constants/apiURL';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {UserService} from 'src/app/api/services/user.service';
-import LTI_API_URL from 'src/app/config/constants/ltiApiURL';
+import LTI_API_URL from 'src/app/config/constants/ltiApiUrl';
 
 @Injectable()
 export class HttpAuthenticationInterceptor implements HttpInterceptor {

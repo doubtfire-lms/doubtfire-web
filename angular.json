@@ -73,8 +73,8 @@
                   "with": "src/environments/environment.prod.ts"
                 },
                 {
-                  "replace": "src/app/config/constants/hostURL.ts",
-                  "with": "src/app/config/constants/hostURL.prod.ts"
+                  "replace": "src/app/config/constants/hostUrl.ts",
+                  "with": "src/app/config/constants/hostUrl.prod.ts"
                 }
               ],
               "optimization": true,
@@ -94,8 +94,8 @@
               "sourceMap": true,
               "fileReplacements": [
                 {
-                  "replace": "src/app/config/constants/hostURL.ts",
-                  "with": "src/app/config/constants/hostURL.devcontainer.ts"
+                  "replace": "src/app/config/constants/hostUrl.ts",
+                  "with": "src/app/config/constants/hostUrl.devcontainer.ts"
                 }
               ]
             }
