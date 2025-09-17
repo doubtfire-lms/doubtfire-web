@@ -38,7 +38,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {isEqual} from 'lodash';
 import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-csv-download-modal.service';
-import API_URL from 'src/app/config/constants/apiURL';
+import API_URL from 'src/app/config/constants/apiUrl';
 
 @Component({
   selector: 'f-learning-outcome-editor',

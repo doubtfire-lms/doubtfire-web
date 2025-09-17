@@ -1,10 +1,10 @@
-import { AppInjector } from 'src/app/app-injector';
-import { Entity } from 'ngx-entity-service';
-import { Project, Task, TaskCommentService, User } from 'src/app/api/models/doubtfire-model';
-import { UserService } from '../../services/user.service';
-import API_URL from 'src/app/config/constants/apiURL';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {AppInjector} from 'src/app/app-injector';
+import {Entity} from 'ngx-entity-service';
+import {Project, Task, TaskCommentService, User} from 'src/app/api/models/doubtfire-model';
+import {UserService} from '../../services/user.service';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 export class TaskComment extends Entity {
   // Linked objects
@@ -19,7 +19,7 @@ export class TaskComment extends Entity {
   recipient: User;
   createdAt: Date;
   recipientReadTime: string;
-  commentType: string = "text";
+  commentType: string = 'text';
   isNew: boolean;
   replyToId: number;
 
@@ -68,7 +68,10 @@ export class TaskComment extends Entity {
   public delete() {
     const tcs: TaskCommentService = AppInjector.get(TaskCommentService);
     tcs
-      .delete({ projectId: this.project.id, taskDefinitionId: this.task.definition.id, id: this.id }, { cache: this.task.commentCache })
+      .delete(
+        {projectId: this.project.id, taskDefinitionId: this.task.definition.id, id: this.id},
+        {cache: this.task.commentCache},
+      )
       .subscribe({
         next: (response: object) => {
           // this.task.comments = this.task.comments.filter((e: TaskComment) => e.id !== this.id);
@@ -76,12 +79,11 @@ export class TaskComment extends Entity {
         },
         error: (error: any) => {
           AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
-        }
-      }
-      );
+        },
+      });
   }
 
   public get attachmentUrl(): string {
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.task.definition.id}/comments/${this.id}?as_attachment=false`
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${this.task.definition.id}/comments/${this.id}?as_attachment=false`;
   }
 }

@@ -14,6 +14,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 interface AuthResponse {
   user: object;
   auth_token: string;
+  lti_token?: string;
 }
 
 @Injectable()
@@ -229,6 +230,22 @@ export class AuthenticationService {
         // this.authComplete$.next(false);
         // this.authComplete$.complete();
 
+        return throwError(() => error);
+      }),
+    );
+  }
+
+  public signInWithLti(userCredentials: {ltik: string; lti_token: string}): Observable<void> {
+    return this.httpClient.post(`${this.AUTH_URL}/lti`, userCredentials).pipe(
+      map((response: AuthResponse) => {
+        const username = encodeURIComponent(response.user['username']);
+        const authToken = encodeURIComponent(response.auth_token);
+        const ltik = encodeURIComponent(userCredentials.ltik);
+        setTimeout(() => {
+          window.location.href = `/sign_in?username=${username}&authToken=${authToken}&ltik=${ltik}&isLtiLogin=true`;
+        });
+      }),
+      catchError((error) => {
         return throwError(() => error);
       }),
     );

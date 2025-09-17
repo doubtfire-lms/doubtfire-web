@@ -7,7 +7,7 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiURL';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {MappingFunctions} from './mapping-fn';
 import {AppInjector} from 'src/app/app-injector';
 import {Observable} from 'rxjs';

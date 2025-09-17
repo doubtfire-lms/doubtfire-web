@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {CachedEntityService} from 'ngx-entity-service';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import API_URL from 'src/app/config/constants/apiURL';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {SidekiqJob} from '../models/sidekiq-job';
 
 export interface SidekiqJobEntry {

@@ -1,9 +1,15 @@
-import { TeachingPeriodService, Unit, UnitRole, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
-import { CachedEntityService } from 'ngx-entity-service';
-import { Inject, Injectable } from '@angular/core';
-import { analyticsService } from 'src/app/ajs-upgraded-providers';
-import { HttpClient } from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiURL';
+import {
+  TeachingPeriodService,
+  Unit,
+  UnitRole,
+  UnitService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
+import {CachedEntityService} from 'ngx-entity-service';
+import {Inject, Injectable} from '@angular/core';
+import {analyticsService} from 'src/app/ajs-upgraded-providers';
+import {HttpClient} from '@angular/common/http';
+import API_URL from 'src/app/config/constants/apiUrl';
 
 @Injectable()
 export class UnitRoleService extends CachedEntityService<UnitRole> {
@@ -14,7 +20,7 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
     private userService: UserService,
     private unitService: UnitService,
     private teachingPeriodService: TeachingPeriodService,
-    @Inject(analyticsService) private AnalyticsService: any
+    @Inject(analyticsService) private AnalyticsService: any,
   ) {
     super(httpClient, API_URL);
 
@@ -34,7 +40,7 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
         },
         toJsonFn: (entity: UnitRole, key: string) => {
           return entity.unit?.id;
-        }
+        },
       },
       {
         keys: 'user',
@@ -48,13 +54,13 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
         keys: 'userId',
         toJsonFn: (entity: UnitRole, key: string) => {
           return entity.user?.id;
-        }
+        },
       },
       {
         keys: 'unitId',
         toJsonFn: (entity: UnitRole, key: string) => {
           return entity.unit?.id;
-        }
+        },
       },
     );
 
@@ -64,5 +70,4 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
   public createInstanceFrom(json: any, other?: any): UnitRole {
     return new UnitRole();
   }
-
 }

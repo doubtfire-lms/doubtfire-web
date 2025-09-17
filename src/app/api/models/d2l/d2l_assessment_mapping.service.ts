@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { EntityService } from 'ngx-entity-service';
-import API_URL from 'src/app/config/constants/apiURL';
-import { HttpClient } from '@angular/common/http';
-import { D2lAssessmentMapping } from './d2l_assessment_mapping';
-import { Unit } from '../doubtfire-model';
+import {Injectable} from '@angular/core';
+import {EntityService} from 'ngx-entity-service';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {HttpClient} from '@angular/common/http';
+import {D2lAssessmentMapping} from './d2l_assessment_mapping';
+import {Unit} from '../doubtfire-model';
 
 @Injectable()
 export class D2lAssessmentMappingService extends EntityService<D2lAssessmentMapping> {

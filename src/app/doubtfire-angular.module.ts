@@ -276,6 +276,9 @@ import {SidekiqProgressModalComponent} from './common/modals/sidekiq-progress-mo
 import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/sidekiq-jobs-modal.component';
 import {SidekiqJobService} from './api/services/sidekiq-job.service';
 import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-card.component';
+import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
+import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {LtiService} from './api/services/lti.service';
 import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
 import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
 import {TaskPrerequisiteService} from './api/services/task-prerequisite.service';
@@ -426,6 +429,8 @@ const MY_DATE_FORMAT = {
     SidekiqProgressModalComponent,
     SidekiqJobsModalComponent,
     UnavailableCardComponent,
+    LtiDashboardComponent,
+    LtiUnitLinkComponent,
     TaskDefinitionPrerequisitesComponent,
     TaskPrerequisitesCardComponent,
     GroupSetSelectorComponent,
@@ -515,6 +520,7 @@ const MY_DATE_FORMAT = {
     NestedCsvDownloadModalService,
     StaffNoteService,
     SidekiqJobService,
+    LtiService,
     TaskPrerequisiteService,
   ],
   imports: [
