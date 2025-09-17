@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-43](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-42...v10.0.0-43) (2025-09-17)
+
+
+### Bug Fixes
+
+* remove /api from host url ([5889edc](https://github.com/b0ink/doubtfire-deploy/commit/5889edc35bb427dfd4defefa7b77e8c81cd6dd7c))
+
 ## [10.0.0-42](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-41...v10.0.0-42) (2025-09-17)
 
 
