@@ -71,14 +71,22 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $scope.uploader.payload.trigger = 'need_help' if $scope.submissionType == 'need_help'
       $scope.uploader.payload.trigger = 'assess_in_portfolio' if $scope.submissionType == 'assess_in_portfolio' || $scope.task.status == 'assess_in_portfolio'
     onSuccess: (response) ->
-      $scope.uploader.response = response
-      if $scope.task.isTestSubmission
-        newProjectService.loadProject(response.project_id, $scope.task.unit).subscribe({
-          next: (response) ->
-            $scope.task.project = response
-        })
+      # Ensure our response contains the data we're expecting
+      if typeof response is 'object' and response? and response.id? and response.project_id? and response.status?
+        $scope.uploader.response = response
+        if $scope.task.isTestSubmission
+          newProjectService.loadProject(response.project_id, $scope.task.unit).subscribe({
+            next: (response) ->
+              $scope.task.project = response
+          })
+      else
+        console.error "Invalid response", response
+        $modalInstance.close(task)
+        alertService.error("Upload failed. Please try again, or contact your tutor if the issue continues.", 8000)
+
     onFailureCancel: $modalInstance.dismiss
     onComplete: ->
+      return unless $scope.uploader.response? and $scope.uploader.response.id?
       $modalInstance.close(task)
       unless $scope.task.isTestSubmission
         # Add comment if requested
