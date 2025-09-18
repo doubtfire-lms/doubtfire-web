@@ -1,7 +1,8 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {Task} from 'src/app/api/models/doubtfire-model';
-import { MappingFunctions } from 'src/app/api/services/mapping-fn';
-import { AlertService } from '../../services/alert.service';
+import {MappingFunctions} from 'src/app/api/services/mapping-fn';
+import {AlertService} from '../../services/alert.service';
+import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal.service';
 
 @Component({
   selector: 'f-task-date-slider',
@@ -27,6 +28,7 @@ export class TaskDateSliderComponent implements OnChanges {
 
   public constructor(
     private alerts: AlertService,
+    private confirmationModalService: ConfirmationModalService,
   ) {}
 
   public get max(): number {
@@ -63,17 +65,28 @@ export class TaskDateSliderComponent implements OnChanges {
   }
 
   public saveDueDate(): void {
-    this.task.savePlannedDate().subscribe({
-      next: () => {
-        this.alerts.success('Plan updated successfully.');
-        this.editMode = false;
-        this.task.project.calcTopTasks();
-      },
-      error: (message) => {
-        this.alerts.error(`Error updating due date: ${message}`);
-        this.cancelEdit();
-      }
-    });
+    const save = () =>
+      this.task.savePlannedDate().subscribe({
+        next: () => {
+          this.alerts.success('Plan updated successfully.');
+          this.editMode = false;
+          this.task.project.calcTopTasks();
+        },
+        error: (message) => {
+          this.alerts.error(`Error updating due date: ${message}`, 6000);
+          this.cancelEdit();
+        },
+      });
+
+    if (this.afterDeadline()) {
+      this.confirmationModalService.show(
+        'Due date is after feedback deadline',
+        'You won’t receive feedback for this task if you submit after the feedback cutoff. Do you want to continue?',
+        save,
+      );
+    } else {
+      save();
+    }
   }
 
   public afterDeadline(): boolean {
