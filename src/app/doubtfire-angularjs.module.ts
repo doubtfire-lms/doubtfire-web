@@ -115,7 +115,6 @@ import 'build/src/app/common/filters/filters.js';
 import 'build/src/app/common/content-editable/content-editable.js';
 import 'build/src/app/common/modals/csv-result-modal/csv-result-modal.js';
 import 'build/src/app/common/modals/modals.js';
-import 'build/src/app/common/grade-icon/grade-icon.js';
 import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
 import 'build/src/app/common/services/listener-service.js';
@@ -187,6 +186,7 @@ import {CheckForUpdateService} from './sessions/service-worker-updater/check-for
 import {TaskSubmissionService} from './common/services/task-submission.service';
 import {TaskAssessmentModalService} from './common/modals/task-assessment-modal/task-assessment-modal.service';
 import {TaskSubmissionHistoryComponent} from './tasks/task-submission-history/task-submission-history.component';
+import {GradeIconComponent} from './common/grade-icon/grade-icon.component';
 import {HeaderComponent} from './common/header/header.component';
 import {SplashScreenComponent} from './home/splash-screen/splash-screen.component';
 import {GlobalStateService} from './projects/states/index/global-state.service';
@@ -342,6 +342,7 @@ DoubtfireAngularJSModule.directive(
   'objectSelect',
   downgradeComponent({component: ObjectSelectComponent}),
 );
+DoubtfireAngularJSModule.directive('fGradeIcon', downgradeComponent({component: GradeIconComponent}));
 DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({component: HeaderComponent}));
 DoubtfireAngularJSModule.directive(
   'splashScreen',

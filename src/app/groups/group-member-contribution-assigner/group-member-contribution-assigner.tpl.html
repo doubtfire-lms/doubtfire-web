@@ -11,7 +11,7 @@
       <tr ng-repeat="contrib in team.memberContributions | orderBy:memberSortOrder:reverse">
         <td>{{contrib.project.student.name}}</td>
         <td class="text-left">
-          <grade-icon grade="contrib.project.targetGrade"></grade-icon>
+          <f-grade-icon [grade]="contrib.project.targetGrade"></f-grade-icon>
         </td>
         <td>
           <rating

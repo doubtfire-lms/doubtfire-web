@@ -64,12 +64,12 @@
               ng-model="filterOptions.selectedGrade"
               btn-radio="{{$index}}"
             >
-              <grade-icon
-                grade="grade"
+              <f-grade-icon
+                [grade]="grade"
                 tooltip="Select to show student's aiming for {{grades[grade]}}"
                 tooltip-append-to-body="true"
                 class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"
-              ></grade-icon>
+              ></f-grade-icon>
             </label>
           </div>
         </div>
@@ -194,10 +194,10 @@
             <td>{{student.tutorNames()}}</td>
             <td>{{student.shortTutorialDescription()}}</td>
             <td class="flags-data">
-              <grade-icon grade="student.targetGrade"></grade-icon>
+              <f-grade-icon [grade]="student.targetGrade"></f-grade-icon>
             </td>
             <td class="flags-data">
-              <grade-icon grade="student.submittedGrade"></grade-icon>
+              <f-grade-icon [grade]="student.submittedGrade"></f-grade-icon>
             </td>
             <td class="task-progress-bar">
               <progress class="task-progress" animate="true">
