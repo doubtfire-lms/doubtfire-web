@@ -141,7 +141,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   showMyQr() {
-    const hostName = this.doubtfireConstants.API_URL.replace('/api', '');
+    const hostName = this.doubtfireConstants.HOST_URL;
 
     const projectView =
       this.currentProject &&

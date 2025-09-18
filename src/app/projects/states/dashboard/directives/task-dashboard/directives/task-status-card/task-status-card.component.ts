@@ -98,7 +98,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   }
 
   openDiscussionQrCode(): void {
-    const hostName = this.doubtfireConstants.API_URL.replace('/api', '');
+    const hostName = this.doubtfireConstants.HOST_URL;
     const url = `${hostName}/tutor-discussion?unitId=${this.task.unit.id}&username=${this.userService.currentUser.username}`;
     this.qrModalService.show(
       url,

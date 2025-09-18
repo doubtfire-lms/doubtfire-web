@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 
 import API_URL from 'src/app/config/constants/apiUrl';
+import HOST_URL from 'src/app/config/constants/hostUrl';
 
 interface SettingsResponseFormat {
   externalName: string;
@@ -34,6 +35,7 @@ export class DoubtfireConstants {
     'jakerenzella', // Jake Renzella
   ];
 
+  public HOST_URL: string = HOST_URL;
   public API_URL: string = API_URL;
 
   // Where should we redirect users on signout?
