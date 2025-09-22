@@ -34,8 +34,7 @@
         @if (unitRole?.role === 'Convenor') {
           <button
             [disabled]="unitRole.id === unit.mainConvenor.id"
-            type="button"
-            class="btn btn-default"
+            mat-icon-button
             (click)="changeMainConvenor(unitRole)"
             aria-label="Make staff member the Main Convenor"
           >
