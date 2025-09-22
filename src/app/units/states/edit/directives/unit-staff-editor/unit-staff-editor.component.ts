@@ -4,6 +4,9 @@ import {UnitRoleService} from 'src/app/api/services/unit-role.service';
 import {Unit} from 'src/app/api/models/unit';
 import {User} from 'src/app/api/models/doubtfire-model';
 import {UnitRole} from 'src/app/api/models/unit-role';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
   selector: 'unit-staff-editor',
@@ -19,19 +22,32 @@ export class UnitStaffEditorComponent implements OnInit {
   filteredStaff: User[] = []; // Filtered staff members
   searchTerm: string = ''; // Search term entered by the user
 
+  displayedColumns: string[] = ['name', 'role', 'main-convenor', 'actions'];
+  dataSource = new MatTableDataSource<UnitRole>();
+
   // Inject services here
   constructor(
     private alertService: AlertService,
     private unitRoleService: UnitRoleService,
+    private confirmationModalService: ConfirmationModalService,
   ) {}
 
   ngOnInit(): void {
     // Subscribe to staff cache
     this.unit.staffCache.values.subscribe((staff: UnitRole[]) => {
       this.unitStaff = staff;
+      this.dataSource.data = staff;
     });
   }
 
+  onRoleChange(unitRole: UnitRole, event: MatButtonToggleChange) {
+    const role = event.value;
+    if (role !== 'Tutor' && role !== 'Convenor') {
+      return;
+    }
+    const roleId = role === 'Tutor' ? 2 : 3; // map however you like
+    this.changeRole(unitRole, roleId, role);
+  }
   /**
    * Changes the role of a staff member.
    *
@@ -40,11 +56,20 @@ export class UnitStaffEditorComponent implements OnInit {
    *
    * @returns void
    */
-  changeRole(unitRole: UnitRole, role_id: number) {
-    unitRole.roleId = role_id;
+  changeRole(unitRole: UnitRole, roleId: number, role: string) {
+    const previousRoleId = unitRole.roleId;
+    const previousRole = unitRole.role;
+
+    unitRole.roleId = roleId;
+    unitRole.role = role;
     this.unitRoleService.update(unitRole).subscribe({
-      next: (response) => this.alertService.success('Role changed', 2000),
-      error: (response) => this.alertService.error(response, 6000),
+      next: () => this.alertService.success('Role changed', 2000),
+      error: (response) => {
+        // Revert changes on error
+        unitRole.roleId = previousRoleId;
+        unitRole.role = previousRole;
+        this.alertService.error(response, 6000);
+      },
     });
   }
 
@@ -56,10 +81,16 @@ export class UnitStaffEditorComponent implements OnInit {
    * @returns void
    */
   changeMainConvenor(staff: UnitRole) {
-    this.unit.changeMainConvenor(staff).subscribe({
-      next: (response) => this.alertService.success('Main convenor changed', 2000),
-      error: (response) => this.alertService.error(response, 6000),
-    });
+    this.confirmationModalService.show(
+      'Set Main Convenor',
+      `Do you want to make ${staff.user.name} the main convenor for this unit?`,
+      () => {
+        this.unit.changeMainConvenor(staff).subscribe({
+          next: (_response) => this.alertService.success('Main convenor changed', 2000),
+          error: (response) => this.alertService.error(response, 6000),
+        });
+      },
+    );
   }
 
   /**
@@ -99,7 +130,7 @@ export class UnitStaffEditorComponent implements OnInit {
     }
     this.filteredStaff = this.staff.filter(
       (staff) =>
-        staff.name.toLowerCase().includes(this.searchTerm.toLowerCase()) && // Find by name
+        staff.matches(this.searchTerm.toLowerCase()) && // Find by name
         !this.unit.staff.find((listStaff) => staff.id === listStaff.user.id), // Not already assigned to the unit
     );
   }
@@ -124,7 +155,7 @@ export class UnitStaffEditorComponent implements OnInit {
    */
   removeStaff(staff: UnitRole) {
     this.unitRoleService.delete(staff, {cache: this.unit.staffCache}).subscribe({
-      next: (response) => this.alertService.success('Staff member removed', 2000),
+      next: () => this.alertService.success('Staff member removed', 2000),
       error: (response) => this.alertService.error(response, 6000),
     });
   }

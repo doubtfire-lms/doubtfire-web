@@ -173,8 +173,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   isUniqueRole = (unit) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const units = this.unitRoles.filter((role: any) => role.unit.id === unit.unit.id);
+    const units = this.unitRoles.filter((role: UnitRole) => role.unit?.id === unit.unit?.id);
     return units.length == 1 || unit.role == 'Tutor';
   };
 
