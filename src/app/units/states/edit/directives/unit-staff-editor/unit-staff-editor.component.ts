@@ -108,7 +108,7 @@ export class UnitStaffEditorComponent implements OnInit {
     }
     this.filteredStaff = this.staff.filter(
       (staff) =>
-        staff.name.toLowerCase().includes(this.searchTerm.toLowerCase()) && // Find by name
+        staff.matches(this.searchTerm.toLowerCase()) && // Find by name
         !this.unit.staff.find((listStaff) => staff.id === listStaff.user.id), // Not already assigned to the unit
     );
   }
