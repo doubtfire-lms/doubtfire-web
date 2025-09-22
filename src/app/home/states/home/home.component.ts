@@ -46,6 +46,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // const last = this.router.stateRegistry.get()[this.router.stateRegistry.get().length - 1];
+    // this.router.stateService.go(last, {projectId: 55});
     if (this.userService.isAnonymousUser()) {
       this.router.stateService.go('sign_in');
     }

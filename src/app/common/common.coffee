@@ -3,6 +3,5 @@ angular.module("doubtfire.common", [
   'doubtfire.common.filters'
   'doubtfire.common.modals'
   'doubtfire.common.file-uploader'
-  'doubtfire.common.grade-icon'
   'doubtfire.common.content-editable'
 ])

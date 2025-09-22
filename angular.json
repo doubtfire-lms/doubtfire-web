@@ -10,7 +10,10 @@
       "prefix": "f",
       "schematics": {
         "@schematics/angular:application": {
-          "strict": false
+          "strict": false,
+          "standalone": false,
+          "style": "scss",
+          "skipTests": true
         }
       },
       "architect": {
@@ -20,7 +23,9 @@
             "outputPath": "dist",
             "index": "build/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["src/polyfills.ts"],
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/assets",
@@ -150,7 +155,7 @@
           "options": {
             "lintFilePatterns": [
               "src/**/*.ts",
-              "src/**/*.component.html"
+              "src/**/*.html"
             ]
           }
         },
@@ -167,9 +172,6 @@
     }
   },
   "schematics": {
-    "@schematics/angular:component": {
-      "style": "scss"
-    },
     "@angular-eslint/schematics:application": {
       "setParserOptionsProject": true
     },

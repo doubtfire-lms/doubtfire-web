@@ -126,6 +126,10 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
   public codeChange(code: string, value: UnitImportData) {
     value.relatedUnits = this.relatedUnits(code);
+    // add source unit to realted units - so that it is retained on code change
+    if (value.sourceUnit && !value.relatedUnits.find((u) => u.value.id === value.sourceUnit.id)) {
+      value.relatedUnits.unshift({value: value.sourceUnit, text: value.sourceUnit.codeAndPeriod});
+    }
     value.sourceUnit = value.relatedUnits.length > 0 ? value.relatedUnits[0].value : null;
   }
 
@@ -197,36 +201,43 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   }
 
   private importExistingUnit(unitToImport: UnitImportData, idx: number) {
-    unitToImport.sourceUnit.rolloverTo({ teaching_period_id: this.data.teachingPeriod.id }).subscribe({
-      next: (newUnit: Unit) => {
-        unitToImport.done = true;
-        // Employ the convenor
-        if (unitToImport.convenor && unitToImport.convenor !== newUnit.mainConvenorUser) {
-          newUnit.addStaff(unitToImport.convenor, 'Convenor').subscribe({
-            next: (newRole) => {
-              console.log(`Employed ${unitToImport.convenor.name} in ${newUnit.code}`);
-              newUnit.changeMainConvenor(newRole).subscribe({
-                next: () => {
-                  console.log(`Set ${unitToImport.convenor.name} as main convenor in ${newUnit.code}`);
-                },
-                error: (failure) => {
-                  console.log(failure);
-                },
-              });
-            },
-            error: (failure) => {
-              console.log(failure);
-            },
-          });
-        }
-        this.importUnit(idx + 1);
-      },
-      error: (failure) => {
-        console.log(failure);
-        unitToImport.done = false;
-        this.importUnit(idx + 1);
-      },
-    });
+    unitToImport.sourceUnit
+      .rolloverTo({
+        new_unit_code: unitToImport.unitCode,
+        teaching_period_id: this.data.teachingPeriod.id,
+      })
+      .subscribe({
+        next: (newUnit: Unit) => {
+          unitToImport.done = true;
+          // Employ the convenor
+          if (unitToImport.convenor && unitToImport.convenor !== newUnit.mainConvenorUser) {
+            newUnit.addStaff(unitToImport.convenor, 'Convenor').subscribe({
+              next: (newRole) => {
+                console.log(`Employed ${unitToImport.convenor.name} in ${newUnit.code}`);
+                newUnit.changeMainConvenor(newRole).subscribe({
+                  next: () => {
+                    console.log(
+                      `Set ${unitToImport.convenor.name} as main convenor in ${newUnit.code}`,
+                    );
+                  },
+                  error: (failure) => {
+                    console.log(failure);
+                  },
+                });
+              },
+              error: (failure) => {
+                console.log(failure);
+              },
+            });
+          }
+          this.importUnit(idx + 1);
+        },
+        error: (failure) => {
+          console.log(failure);
+          unitToImport.done = false;
+          this.importUnit(idx + 1);
+        },
+      });
   }
 
   private createNewUnit(unitToImport: UnitImportData, idx: number) {

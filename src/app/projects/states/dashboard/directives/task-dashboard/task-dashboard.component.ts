@@ -1,5 +1,14 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Injector,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewContainerRef,
+} from '@angular/core';
 import {UIRouter} from '@uirouter/core';
+import * as _ from 'lodash';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
@@ -7,6 +16,7 @@ import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from '../../selected-task.service';
 import {DashboardViews} from '../../selected-task.service';
+import {TooltipService} from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'f-task-dashboard',
@@ -16,6 +26,8 @@ import {DashboardViews} from '../../selected-task.service';
 export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
   @Input() pdfUrl: string;
+
+  readonly viewContainerRef: ViewContainerRef;
 
   public DashboardViews = DashboardViews;
 
@@ -37,7 +49,8 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
     public selectedTaskService: SelectedTaskService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.selectedTaskService.currentView$.next(DashboardViews.submission);

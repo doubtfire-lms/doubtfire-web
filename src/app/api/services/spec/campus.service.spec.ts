@@ -1,8 +1,8 @@
 import { TestBed, tick, fakeAsync } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Campus } from 'src/app/api/models/doubtfire-model';
 import { CampusService } from '../campus.service';
-import { HttpRequest } from '@angular/common/http';
+import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('CampusService', () => {
   let campusService: CampusService;
@@ -10,9 +10,9 @@ describe('CampusService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [CampusService],
-    });
+    imports: [],
+    providers: [CampusService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     campusService = TestBed.inject(CampusService);
     httpMock = TestBed.inject(HttpTestingController);

@@ -1,0 +1,36 @@
+<hr class="hr-text" data-content="Knowledge Check Summary" [hidden]="!comment.firstInSeries" />
+<div class="flex flex-row items-center">
+  <button
+    mat-button
+    class="mr-4 h-12 flex-shrink-0"
+    (click)="reviewScormTest()"
+    [hidden]="!user.isStaff && !task.definition.scormAllowReview"
+  >
+    Review
+  </button>
+  @if (!user.isStaff && !task.definition.scormAllowReview) {
+    <div class="markdown-to-html m-auto mb-1 mt-1" [innerHTML]="comment.text"></div>
+  } @else {
+    <div class="markdown-to-html flex-grow" [innerHTML]="comment.text"></div>
+  }
+  <button
+    #menuState="matMenuTrigger"
+    mat-icon-button
+    class="p-0 h-12 flex-shrink-0"
+    [matMenuTriggerFor]="menu"
+    [hidden]="!user.isStaff"
+  >
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button
+      mat-menu-item
+      (click)="passScormAttempt()"
+      [hidden]="this.comment.testAttempt.successStatus"
+    >
+      Pass attempt
+    </button>
+    <button mat-menu-item (click)="deleteScormAttempt()">Delete attempt</button>
+  </mat-menu>
+</div>
+<hr class="hr-fade" [hidden]="!comment.lastInScormSeries" />

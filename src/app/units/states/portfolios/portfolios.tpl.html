@@ -27,7 +27,11 @@
               ></i>
             </label>
             <label class="btn btn-default" ng-model="portfolioFilter" btn-radio="'withPortfolio'">
-              <i class="fa fa-book" tooltip-placement="top" tooltip="Show only students with portfolios"></i>
+              <i
+                class="fa fa-book"
+                tooltip-placement="top"
+                tooltip="Show only students with portfolios"
+              ></i>
             </label>
           </div>
           <div class="btn-group">
@@ -39,11 +43,15 @@
             </label>
           </div>
           <div class="btn-group btn-group-sm select-portfolio-grade">
-            <label class="btn btn-default text-center" ng-model="filterOptions.selectedGrade" btn-radio="-1">
+            <label
+              class="btn btn-default text-center"
+              ng-model="filterOptions.selectedGrade"
+              btn-radio="-1"
+            >
               <span
                 class="grade-icon"
                 tooltip="Show all portfolios"
-                class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"
+                class="text-{{$index === filterOptions.selectedGrade ? 'primary' : 'muted'}}"
                 >All</span
               >
             </label>
@@ -57,10 +65,9 @@
               btn-radio="{{$index}}"
             >
               <grade-icon
-                grade="grade"
+                [index]="grade"
                 tooltip="Select to show student's aiming for {{grades[grade]}}"
                 tooltip-append-to-body="true"
-                class="text-{{$index == filterOptions.selectedGrade ? 'primary' : 'muted'}}"
               ></grade-icon>
             </label>
           </div>
@@ -92,54 +99,84 @@
         <i class="fa fa-book"></i>
         <p>No portfolios found</p>
       </div>
-      <table ng-hide="filteredStudents.length == 0" class="table table-condensed table-hover table-pointer">
+      <table
+        ng-hide="filteredStudents.length == 0"
+        class="table table-condensed table-hover table-pointer"
+      >
         <thead>
           <tr>
             <th class="student-id">
               <a ng-click="sortOrder='student.studentId'; reverse=!reverse">
-                Student <i ng-show="sortOrder=='student.studentId'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                Student
+                <i
+                  ng-show="sortOrder=='student.studentId'"
+                  class="fa fa-caret-{{reverse ? 'down' : 'up'}}"
+                ></i>
               </a>
             </th>
             <th class="name">
               <a ng-click="sortOrder='name'; reverse=!reverse">
-                Name <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                Name
+                <i ng-show="sortOrder=='name'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
             <th>
               <a ng-click="sortOrder='tutorial.tutorName'; reverse=!reverse">
-                Tutor <i ng-show="sortOrder=='tutorial.tutorName'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                Tutor
+                <i
+                  ng-show="sortOrder=='tutorial.tutorName'"
+                  class="fa fa-caret-{{reverse ? 'down' : 'up'}}"
+                ></i>
               </a>
             </th>
             <th class="tutorial">
               <a ng-click="sortOrder='tutorial.abbreviation'; reverse=!reverse">
                 Tutorial
-                <i ng-show="sortOrder=='tutorial.abbreviation'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                <i
+                  ng-show="sortOrder=='tutorial.abbreviation'"
+                  class="fa fa-caret-{{reverse ? 'down' : 'up'}}"
+                ></i>
               </a>
             </th>
             <th>
               <a ng-click="sortOrder='targetGrade'; reverse=!reverse">
-                Target <i ng-show="sortOrder=='targetGrade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                Target
+                <i
+                  ng-show="sortOrder=='targetGrade'"
+                  class="fa fa-caret-{{reverse ? 'down' : 'up'}}"
+                ></i>
               </a>
             </th>
             <th>
               <a ng-click="sortOrder='submittedGrade'; reverse=!reverse">
                 Submitted as
-                <i ng-show="sortOrder=='submittedGrade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                <i
+                  ng-show="sortOrder=='submittedGrade'"
+                  class="fa fa-caret-{{reverse ? 'down' : 'up'}}"
+                ></i>
               </a>
             </th>
             <th>
               <a ng-click="sortOrder='orderScale'; reverse=!reverse">
-                Stats<i ng-show="sortOrder=='orderScale'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                Stats<i
+                  ng-show="sortOrder=='orderScale'"
+                  class="fa fa-caret-{{reverse ? 'down' : 'up'}}"
+                ></i>
               </a>
             </th>
             <th class="has-portfolio" ng-show="portfolioFilter == 'allStudents'">
               <a ng-click="sortOrder='hasPortfolio'; reverse=!reverse">
-                Portfolio? <i ng-show="sortOrder=='hasPortfolio'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                Portfolio?
+                <i
+                  ng-show="sortOrder=='hasPortfolio'"
+                  class="fa fa-caret-{{reverse ? 'down' : 'up'}}"
+                ></i>
               </a>
             </th>
             <th class="grade">
               <a ng-click="sortOrder='grade'; reverse=!reverse">
-                Grade <i ng-show="sortOrder=='grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
+                Grade
+                <i ng-show="sortOrder=='grade'" class="fa fa-caret-{{reverse ? 'down' : 'up'}}"></i>
               </a>
             </th>
           </tr>
@@ -156,10 +193,10 @@
             <td>{{student.tutorNames()}}</td>
             <td>{{student.shortTutorialDescription()}}</td>
             <td class="flags-data">
-              <grade-icon grade="student.targetGrade"></grade-icon>
+              <grade-icon [index]="student.targetGrade"></grade-icon>
             </td>
             <td class="flags-data">
-              <grade-icon grade="student.submittedGrade"></grade-icon>
+              <grade-icon [index]="student.submittedGrade"></grade-icon>
             </td>
             <td class="task-progress-bar">
               <progress class="task-progress" animate="true">
@@ -172,7 +209,9 @@
                 </bar>
               </progress>
             </td>
-            <td ng-show="portfolioFilter == 'allStudents'">{{student.hasPortfolio ? "Yes" : "No"}}</td>
+            <td ng-show="portfolioFilter == 'allStudents'">
+              {{student.hasPortfolio ? "Yes" : "No"}}
+            </td>
             <td>{{student.grade}}</td>
           </tr>
         </tbody>
@@ -237,7 +276,13 @@
         <i class="fa fa-book"></i>
         <p>No Portfolio Submitted</p>
       </div>
-      <pdf-viewer-panel ng-if="activeTab == tabs.viewPortfolio && project.portfolioAvailable" [pdf-url]="project.portfolioUrl()"></pdf-viewer-panel>
+      <div class="panel-body flex flex-col h-screen" ng-if="project.portfolioAvailable">
+        <f-pdf-viewer
+          class="flex flex-grow"
+          [pdf-url]="project.preloadedUrl"
+        >
+        </f-pdf-viewer>
+      </div>
     </div>
 
     <div class="panel panel-primary" ng-show="activeTab == tabs.assessPortfolio">

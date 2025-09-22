@@ -4,6 +4,7 @@ import { UserService } from '../api/services/user.service';
 import { DoubtfireAngularModule } from '../doubtfire-angular.module';
 import { GlobalStateService } from '../projects/states/index/global-state.service';
 import { DoubtfireConstants } from '../config/constants/doubtfire-constants';
+import { AuthenticationService } from '../api/services/authentication.service';
 
 /**
  * The TransitionHooksService is responsible for intercepting transitions between states.
@@ -20,7 +21,8 @@ export class TransitionHooksService {
     private userService: UserService,
     private transitions: TransitionService,
     private globalState: GlobalStateService,
-    private constants: DoubtfireConstants
+    private constants: DoubtfireConstants,
+    private authenticationService: AuthenticationService,
   ) {
     // Get the tii settings...
     this.constants.IsTiiEnabled.subscribe((enabled) => {
@@ -29,8 +31,13 @@ export class TransitionHooksService {
 
     // Hook into "onBefore" to check transitions before they occur
     this.transitions.onBefore({}, (transition) => {
+      // log all possible states
+      console.log(transition.router.stateRegistry.get())
+
+
       // Where is the transition coming from and going to?
       const toState = transition.to().name;
+      const toStateData = transition.to().data;
       // const fromState = transition.from().name;
 
       // Setup the global state
@@ -38,6 +45,16 @@ export class TransitionHooksService {
         this.globalState.setInboxState();
       } else {
         this.globalState.setNotInboxState();
+      }
+
+      // Check authorization whitelist
+      if (toStateData.roleWhitelist && !this.authenticationService.isAuthorised(toStateData.roleWhitelist)) {
+        if (authenticationService.isAuthenticated()) {
+          return transition.router.stateService.target("unauthorised");
+        } else if (toState !== "sign_in") {
+          return transition.router.stateService.target("sign_in");
+        }
+        return false;
       }
 
       // Adjust settings such as headers

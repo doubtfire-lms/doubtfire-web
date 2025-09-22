@@ -79,11 +79,13 @@ export class SignInComponent implements OnInit {
             }
           });
         } else {
+          this.globalState.isLoadingSubject.next(false);
           // We are SSO and no credentials
           this.showCredentials = false;
           return wait.then();
         }
       } else {
+        this.globalState.isLoadingSubject.next(false);
         this.authMethodLoaded = true;
         this.showCredentials = true;
         return wait.then();

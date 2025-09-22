@@ -15,14 +15,18 @@ import {
   TaskCommentService,
   TaskSimilarity,
   TaskSimilarityService,
+  TestAttempt,
+  TestAttemptService,
+  ScormComment,
 } from './doubtfire-model';
 import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {Observable, map} from 'rxjs';
-import {gradeTaskModal, uploadSubmissionModal} from 'src/app/ajs-upgraded-providers';
+import {uploadSubmissionModal} from 'src/app/ajs-upgraded-providers';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MappingFunctions} from '../services/mapping-fn';
+import { GradeTaskModalService } from 'src/app/tasks/modals/grade-task-modal/grade-task-modal.service';
 
 export class Task extends Entity {
   id: number;
@@ -30,6 +34,7 @@ export class Task extends Entity {
   status: TaskStatusEnum = 'not_started';
   dueDate: Date;
   extensions: number;
+  scormExtensions: number;
   submissionDate: Date;
   completionDate: Date;
   timesAssessed: number;
@@ -53,6 +58,7 @@ export class Task extends Entity {
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
 
   public readonly similarityCache: EntityCache<TaskSimilarity> = new EntityCache<TaskSimilarity>();
+  public readonly testAttemptCache: EntityCache<TestAttempt> = new EntityCache<TestAttempt>();
 
   private _unit: Unit;
 
@@ -381,6 +387,14 @@ export class Task extends Entity {
       if (comments[i].replyToId) {
         comments[i].originalComment = comments.find((tc) => tc.id === comments[i].replyToId);
       }
+
+      // Scorm series
+      if (comments[i].commentType === 'scorm') {
+        comments[i].firstInSeries = i === 0 || comments[i - 1].commentType !== 'scorm';
+        (comments[i] as ScormComment).lastInScormSeries =
+          i + 1 === comments.length || comments[i + 1]?.commentType !== 'scorm';
+        if (!comments[i].firstInSeries) comments[i].shouldShowTimestamp = false;
+      }
     }
 
     comments[comments.length - 1].shouldShowAvatar = true;
@@ -396,7 +410,7 @@ export class Task extends Entity {
 
   public taskKeyToIdString(): string {
     const key = this.taskKey();
-    return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(/[.#]/g, '-');
+    return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(/[.# ]/g, '-');
   }
 
   public get similaritiesDetected(): boolean {
@@ -505,6 +519,33 @@ export class Task extends Entity {
       this.definition.assessmentEnabled &&
       this.definition.hasTaskAssessmentResources
     );
+  }
+
+  public get scormEnabled(): boolean {
+    return this.definition.scormEnabled && this.definition.hasScormData;
+  }
+
+  public get scormPassed(): boolean {
+    if (this.latestCompletedTestAttempt) {
+      return this.latestCompletedTestAttempt.successStatus;
+    }
+    return false;
+  }
+
+  /**
+   * Launch the SCORM player for this task in a new window.
+   */
+  public launchScormPlayer(): void {
+    const url = `#/projects/${this.project.id}/task_def_id/${this.taskDefId}/scorm-player/normal`;
+    window.open(url, '_blank');
+  }
+
+  public get isReadyForUpload(): boolean {
+    return !this.scormEnabled || this.definition.scormBypassTest || this.scormPassed;
+  }
+
+  public get latestCompletedTestAttempt(): TestAttempt {
+    return this.testAttemptCache.currentValues.find((attempt) => attempt.terminated);
   }
 
   public submissionUrl(asAttachment: boolean = false): string {
@@ -630,28 +671,22 @@ export class Task extends Entity {
         });
     }; // end update function
 
-    // Must provide grade if graded and in a final complete state
-    if (
-      (this.definition.isGraded || this.definition.maxQualityPts > 0) &&
-      TaskStatus.GRADEABLE_STATUSES.includes(status)
-    ) {
-      const gradeModal: any = AppInjector.get(gradeTaskModal);
-      const modal = gradeModal.show(this);
-      if (modal) {
-        modal.result.then(
-          // Grade was selected (modal closed with result)
-          (response) => {
-            this.grade = response.selectedGrade;
-            this.qualityPts = response.qualityPts;
-            updateFunc();
-          },
-          // Grade was not selected (modal was dismissed)
-          () => {
-            this.status = oldStatus;
-            alerts.message('Status reverted, as no grade was specified', 6000);
-          },
-        );
-      }
+    // Must provide grade if graded and in a final complete state - so use callback to run update function
+    if ((this.definition.isGraded || this.definition.maxQualityPts > 0) && TaskStatus.GRADEABLE_STATUSES.includes(status)) {
+      const gradeModal: GradeTaskModalService = AppInjector.get(GradeTaskModalService);
+      gradeModal.show(this,
+        // Grade was selected (modal closed with result)
+        (response) => {
+          this.grade = response.grade;
+          this.qualityPts = response.qualityPts;
+          updateFunc();
+        },
+        // Grade was not selected (modal was dismissed)
+        () => {
+          this.status = oldStatus;
+          alerts.message('Status reverted, as no grade was specified', 6000);
+        },
+      );
     } else {
       updateFunc();
     }
@@ -659,12 +694,15 @@ export class Task extends Entity {
 
   public triggerTransition(status: TaskStatusEnum): void {
     if (this.status === status) return;
+    const alerts: AlertService = AppInjector.get(AlertService);
 
     const requiresFileUpload =
       ['ready_for_feedback', 'need_help'].includes(status) && this.requiresFileUpload();
 
-    if (requiresFileUpload) {
+    if (requiresFileUpload && this.isReadyForUpload) {
       this.presentTaskSubmissionModal(status);
+    } else if (requiresFileUpload && !this.isReadyForUpload) {
+      alerts.error('Complete Knowledge Check first to submit files', 6000);
     } else {
       this.updateTaskStatus(status);
     }
@@ -760,6 +798,23 @@ export class Task extends Entity {
       {taskId: this.id},
       {
         cache: this.similarityCache,
+        constructorParams: this,
+      },
+    );
+  }
+
+  /**
+   * Fetch the SCORM test attempts for this task.
+   */
+  public fetchTestAttempts(): Observable<TestAttempt[]> {
+    const testAttemptService: TestAttemptService = AppInjector.get(TestAttemptService);
+    return testAttemptService.query(
+      {
+        project_id: this.project.id,
+        task_def_id: this.taskDefId,
+      },
+      {
+        cache: this.testAttemptCache,
         constructorParams: this,
       },
     );
