@@ -4,6 +4,9 @@ import {UnitRoleService} from 'src/app/api/services/unit-role.service';
 import {Unit} from 'src/app/api/models/unit';
 import {User} from 'src/app/api/models/doubtfire-model';
 import {UnitRole} from 'src/app/api/models/unit-role';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
   selector: 'unit-staff-editor',
@@ -19,19 +22,32 @@ export class UnitStaffEditorComponent implements OnInit {
   filteredStaff: User[] = []; // Filtered staff members
   searchTerm: string = ''; // Search term entered by the user
 
+  displayedColumns: string[] = ['name', 'role', 'main-convenor', 'actions'];
+  dataSource = new MatTableDataSource<UnitRole>();
+
   // Inject services here
   constructor(
     private alertService: AlertService,
     private unitRoleService: UnitRoleService,
+    private confirmationModalService: ConfirmationModalService,
   ) {}
 
   ngOnInit(): void {
     // Subscribe to staff cache
     this.unit.staffCache.values.subscribe((staff: UnitRole[]) => {
       this.unitStaff = staff;
+      this.dataSource.data = staff;
     });
   }
 
+  onRoleChange(unitRole: UnitRole, event: MatButtonToggleChange) {
+    const role = event.value;
+    if (role !== 'Tutor' && role !== 'Convenor') {
+      return;
+    }
+    const roleId = role === 'Tutor' ? 2 : 3; // map however you like
+    this.changeRole(unitRole, roleId, role);
+  }
   /**
    * Changes the role of a staff member.
    *
@@ -65,10 +81,16 @@ export class UnitStaffEditorComponent implements OnInit {
    * @returns void
    */
   changeMainConvenor(staff: UnitRole) {
-    this.unit.changeMainConvenor(staff).subscribe({
-      next: (response) => this.alertService.success('Main convenor changed', 2000),
-      error: (response) => this.alertService.error(response, 6000),
-    });
+    this.confirmationModalService.show(
+      'Set Main Convenor',
+      `Do you want to make ${staff.user.name} the main convenor for this unit?`,
+      () => {
+        this.unit.changeMainConvenor(staff).subscribe({
+          next: (_response) => this.alertService.success('Main convenor changed', 2000),
+          error: (response) => this.alertService.error(response, 6000),
+        });
+      },
+    );
   }
 
   /**
