@@ -43,7 +43,7 @@
                       class="btn btn-default"
                       mat-button
                       [class.active]="staff.role === 'Tutor'"
-                      (click)="changeRole(staff, 2)"
+                      (click)="changeRole(staff, 2, 'Tutor')"
                       matTooltip="Tutors deliver unit content."
                       aria-label="Make staff member a Tutor"
                     >
@@ -53,7 +53,7 @@
                       class="btn btn-default"
                       mat-button
                       [class.active]="staff.role === 'Convenor'"
-                      (click)="changeRole(staff, 3)"
+                      (click)="changeRole(staff, 3, 'Convenor')"
                       matTooltip="Convenors manage the unit."
                       aria-label="Make staff member a Convenor"
                     >
@@ -76,11 +76,7 @@
                   </button>
                 </td>
                 <td>
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    (click)="removeStaff(staff)"
-                  >
+                  <button mat-icon-button color="warn" (click)="removeStaff(staff)">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </td>

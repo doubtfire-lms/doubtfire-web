@@ -40,11 +40,20 @@ export class UnitStaffEditorComponent implements OnInit {
    *
    * @returns void
    */
-  changeRole(unitRole: UnitRole, role_id: number) {
+  changeRole(unitRole: UnitRole, role_id: number, role: string) {
+    const previousRoleId = unitRole.roleId;
+    const previousRole = unitRole.role;
+
     unitRole.roleId = role_id;
+    unitRole.role = role;
     this.unitRoleService.update(unitRole).subscribe({
-      next: (response) => this.alertService.success('Role changed', 2000),
-      error: (response) => this.alertService.error(response, 6000),
+      next: (_response) => this.alertService.success('Role changed', 2000),
+      error: (response) => {
+        // Revert changes on error
+        unitRole.roleId = previousRoleId;
+        unitRole.role = previousRole;
+        this.alertService.error(response, 6000);
+      },
     });
   }
 
