@@ -45,13 +45,13 @@
       <td mat-cell *matCellDef="let unitRole">
         @if (unitRole?.role === 'Convenor') {
           <button
-            [disabled]="unitRole.id === unit.mainConvenor.id"
+            [disabled]="unitRole.id === unit?.mainConvenor?.id"
             mat-icon-button
             (click)="changeMainConvenor(unitRole)"
             aria-label="Make staff member the Main Convenor"
           >
             <mat-icon aria-hidden="true">
-              {{ unitRole.id === unit.mainConvenor.id ? 'check' : 'close' }}
+              {{ unitRole.id === unit?.mainConvenor?.id ? 'check' : 'close' }}
             </mat-icon>
           </button>
         }
