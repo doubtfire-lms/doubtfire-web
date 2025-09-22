@@ -23,8 +23,20 @@
           (change)="onRoleChange(unitRole, $event)"
           hideSingleSelectionIndicator
         >
-          <mat-button-toggle value="Tutor">Tutor</mat-button-toggle>
-          <mat-button-toggle value="Convenor">Convenor</mat-button-toggle>
+          <mat-button-toggle
+            value="Tutor"
+            matTooltip="Tutors deliver unit content"
+            matTooltipShowDelay="1000"
+            matTooltipPosition="above"
+            >Tutor</mat-button-toggle
+          >
+          <mat-button-toggle
+            value="Convenor"
+            matTooltip="Convenors manage the unit"
+            matTooltipShowDelay="1000"
+            matTooltipPosition="above"
+            >Convenor</mat-button-toggle
+          >
         </mat-button-toggle-group>
       </td>
     </ng-container>
