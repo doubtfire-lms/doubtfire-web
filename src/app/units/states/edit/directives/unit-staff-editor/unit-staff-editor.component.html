@@ -1,0 +1,116 @@
+<div class="unit-staff-editor">
+  <!-- Template for staff avatar -->
+  <ng-template #staffAvatar let-match="match" let-query="query">
+    <a>
+      <!-- User icon or avatar -->
+      <span [innerHTML]="match.label"></span>
+    </a>
+  </ng-template>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Modify Unit Staff</h3>
+      <p>Add staff members to the unit, assigning them a convenor or tutor role.</p>
+    </div>
+
+    <div class="panel-body">
+      <div class="col-sm-12">
+        <!-- Message when no staff are assigned -->
+        <div *ngIf="unitStaff.length === 0" class="callout callout-info">
+          This unit has no staff assigned.
+        </div>
+
+        <!-- Staff table -->
+        <div *ngIf="unitStaff.length > 0">
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th colspan="2">Name</th>
+                <th>Role</th>
+                <th>Main Convenor</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let staff of unitStaff">
+                <td style="width: 30px">
+                  <user-icon [size]="30" [user]="staff.user" aria-hidden="true"></user-icon>
+                </td>
+                <td>{{ staff.user.name }}</td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="btn btn-default"
+                      mat-button
+                      [class.active]="staff.role === 'Tutor'"
+                      (click)="changeRole(staff, 2)"
+                      matTooltip="Tutors deliver unit content."
+                      aria-label="Make staff member a Tutor"
+                    >
+                      Tutor
+                    </button>
+                    <button
+                      class="btn btn-default"
+                      mat-button
+                      [class.active]="staff.role === 'Convenor'"
+                      (click)="changeRole(staff, 3)"
+                      matTooltip="Convenors manage the unit."
+                      aria-label="Make staff member a Convenor"
+                    >
+                      Convenor
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <button
+                    *ngIf="staff.role === 'Convenor'"
+                    [disabled]="staff.id === unit.mainConvenor.id"
+                    type="button"
+                    class="btn btn-default"
+                    (click)="changeMainConvenor(staff)"
+                    aria-label="Make staff member the Main Convenor"
+                  >
+                    <mat-icon aria-hidden="true">
+                      {{ staff.id === unit.mainConvenor.id ? 'check' : 'close' }}
+                    </mat-icon>
+                  </button>
+                </td>
+                <td>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="removeStaff(staff)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer clearfix">
+      <div class="input-group col-sm-12">
+        <mat-form-field class="full-width" appearance="outline">
+          <input
+            matInput
+            placeholder="Staff Name"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="filterStaffList()"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="addSelectedStaff($event.option.value)"
+            [displayWith]="displayStaffName"
+          >
+            <mat-option *ngFor="let staff of filteredStaff" [value]="staff">
+              {{ staff.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>

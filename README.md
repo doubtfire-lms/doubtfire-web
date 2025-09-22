@@ -64,6 +64,7 @@ MIGRATED:
 - [x] ./src/app/units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-general/task-definition-general.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component.ts
+- [x] ./src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.component.ts
 - [x] ./src/app/units/states/analytics/unit-analytics-route.component.ts
 - [x] ./src/app/common/footer/footer.component.ts
 - [x] ./src/app/common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder.ts
@@ -189,7 +190,6 @@ TODO:
 - [ ] ./src/app/units/states/edit/directives/directives.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-details-editor/unit-details-editor.coffee
-- [ ] ./src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee
 - [ ] ./src/app/units/states/edit/edit.coffee
 - [ ] ./src/app/units/states/rollover/directives/directives.coffee

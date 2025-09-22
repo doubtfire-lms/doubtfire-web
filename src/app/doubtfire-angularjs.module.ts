@@ -101,7 +101,6 @@ import 'build/src/app/units/states/groups/groups.js';
 import 'build/src/app/units/states/states.js';
 import 'build/src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-details-editor/unit-details-editor.js';
-import 'build/src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/directives/directives.js';
 import 'build/src/app/units/states/edit/edit.js';
@@ -229,6 +228,7 @@ import {SidekiqProgressModalService} from './common/modals/sidekiq-progress-moda
 import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
 // import { UnitStudentEnrolmentModalService } from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 // import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
+import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 
 export const DoubtfireAngularJSModule = angular
@@ -342,7 +342,10 @@ DoubtfireAngularJSModule.directive(
   'objectSelect',
   downgradeComponent({component: ObjectSelectComponent}),
 );
-DoubtfireAngularJSModule.directive('fGradeIcon', downgradeComponent({component: GradeIconComponent}));
+DoubtfireAngularJSModule.directive(
+  'fGradeIcon',
+  downgradeComponent({component: GradeIconComponent}),
+);
 DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({component: HeaderComponent}));
 DoubtfireAngularJSModule.directive(
   'splashScreen',
@@ -499,6 +502,10 @@ DoubtfireAngularJSModule.directive(
 );
 DoubtfireAngularJSModule.directive('newFUnits', downgradeComponent({component: FUnitsComponent}));
 
+DoubtfireAngularJSModule.directive(
+  'unitStaffEditor',
+  downgradeComponent({component: UnitStaffEditorComponent}),
+);
 DoubtfireAngularJSModule.directive(
   'fTaskIlosCard',
   downgradeComponent({component: TaskIlosCardComponent}),
