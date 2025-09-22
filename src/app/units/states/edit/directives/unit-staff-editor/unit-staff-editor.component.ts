@@ -63,7 +63,7 @@ export class UnitStaffEditorComponent implements OnInit {
     unitRole.roleId = roleId;
     unitRole.role = role;
     this.unitRoleService.update(unitRole).subscribe({
-      next: (_response) => this.alertService.success('Role changed', 2000),
+      next: () => this.alertService.success('Role changed', 2000),
       error: (response) => {
         // Revert changes on error
         unitRole.roleId = previousRoleId;
@@ -155,7 +155,7 @@ export class UnitStaffEditorComponent implements OnInit {
    */
   removeStaff(staff: UnitRole) {
     this.unitRoleService.delete(staff, {cache: this.unit.staffCache}).subscribe({
-      next: (response) => this.alertService.success('Staff member removed', 2000),
+      next: () => this.alertService.success('Staff member removed', 2000),
       error: (response) => this.alertService.error(response, 6000),
     });
   }
