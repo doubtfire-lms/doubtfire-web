@@ -14,7 +14,7 @@ A modern, lightweight learning management system.
 
 SUMMARY:
 
-73 / 132 components migrated
+74 / 132 components migrated
 
 MIGRATED:
 
@@ -91,6 +91,9 @@ MIGRATED:
 - [x] ./src/app/common/services/alert.service.ts
 - [x] ./src/app/sessions/states/sign-in/sign-in.component.ts
 - [x] ./src/app/account/edit-profile/edit-profile.component.ts
+- [x] ./src/app/groups/group-set-selector/group-set-selector.component.ts
+- [x] ./src/app/admin/modals/create-unit-modal/create-unit-modal.coffee
+- [x] ./src/app/common/services/date.service.ts
 
 TODO:
 
@@ -155,7 +158,6 @@ TODO:
 - [ ] ./src/app/projects/states/tutorials/tutorials.coffee
 - [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee
 - [ ] ./src/app/admin/modals/modals.coffee
-- [ ] ./src/app/admin/modals/create-unit-modal/create-unit-modal.coffee
 - [ ] ./src/app/admin/states/states.coffee
 - [ ] ./src/app/admin/states/units/units.coffee
 - [ ] ./src/app/admin/states/users/users.coffee
@@ -164,7 +166,6 @@ TODO:
 - [ ] ./src/app/groups/group-set-manager/group-set-manager.coffee
 - [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
 - [ ] ./src/app/groups/group-member-list/group-member-list.coffee
-- [ ] ./src/app/groups/group-set-selector/group-set-selector.coffee
 - [ ] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
 - [ ] ./src/app/groups/groups.coffee
 - [ ] ./src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.coffee
@@ -209,7 +210,6 @@ TODO:
 - [ ] ./src/app/common/file-uploader/file-uploader.coffee
 - [ ] ./src/app/common/common.coffee
 - [ ] ./src/app/common/services/grade-service.coffee
-- [ ] ./src/app/common/services/date-service.coffee
 - [ ] ./src/app/common/services/alert-service.coffee
 - [ ] ./src/app/common/services/media-service.coffee
 - [ ] ./src/app/common/services/recorder-service.coffee

@@ -1,16 +1,17 @@
 import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
 
-import { NgModule, Injector, DoBootstrap } from '@angular/core';
-import { BrowserModule, DomSanitizer, Title } from '@angular/platform-browser';
-import { UpgradeModule } from '@angular/upgrade/static';
-import { AppInjector, setAppInjector } from './app-injector';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import {NgModule, Injector, DoBootstrap} from '@angular/core';
+import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
+import {UpgradeModule} from '@angular/upgrade/static';
+import {AppInjector, setAppInjector} from './app-injector';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 // Lottie animation module
 // import {LottieModule, LottieCacheModule} from 'ngx-lottie';
+import {ProgressDashboardComponent} from './projects/states/dashboard/directives/progress-dashboard/progress-dashboard.component';
 import {provideLottieOptions, LottieComponent} from 'ngx-lottie';
 import player from 'lottie-web';
 import {ClipboardModule} from '@angular/cdk/clipboard';
@@ -98,12 +99,16 @@ import {ExtensionModalComponent} from './common/modals/extension-modal/extension
 import {CalendarModalComponent} from './common/modals/calendar-modal/calendar-modal.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatOptionModule} from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatOptionModule,
+} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
-import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { enAU } from 'date-fns/locale';
-
+import {DateFnsAdapter} from '@angular/material-date-fns-adapter';
+import {enAU} from 'date-fns/locale';
 
 import {doubtfireStates} from './doubtfire.states';
 import {MatTableModule} from '@angular/material/table';
@@ -226,53 +231,56 @@ import {
   TeachingPeriodUnitImportDialogComponent,
   TeachingPeriodUnitImportService,
 } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
-import { UnauthorisedComponent } from './errors/states/unauthorised/unauthorised.component';
-import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
-import { TiiActionLogComponent } from './admin/tii-action-log/tii-action-log.component';
-import { TiiActionService } from './api/services/tii-action.service';
-import { FUnitsComponent } from './admin/states/units/units.component';
-import { FUnitTaskListComponent } from './units/task-viewer/directives/unit-task-list/unit-task-list.component';
-import { FTaskDetailsViewComponent } from './units/task-viewer/directives/task-details-view/task-details-view.component';
-import { FTaskSheetViewComponent } from './units/task-viewer/directives/task-sheet-view/task-sheet-view.component';
-import { UnitCodeComponent } from './common/unit-code/unit-code.component';
-import { GradeService } from './common/services/grade.service';
-import { UnitRootStateComponent } from './units/unit-root-state.component';
-import { TaskViewerStateComponent } from './units/task-viewer/task-viewer-state.component';
-import { ProjectRootStateComponent } from './projects/states/project-root-state.component';
-import { ProjectProgressDashboardComponent } from './projects/project-progress-dashboard/project-progress-dashboard.component';
-import { ProgressBurndownChartComponent } from './visualisations/progress-burndown-chart/progressburndownchart.component';
-import { TaskVisualisationComponent } from './visualisations/task-visualisation/taskvisualisation.component';
-import { ChartBaseComponent } from './common/chart-base/chart-base-component/chart-base-component.component';
+import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
+import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
+import {TiiActionLogComponent} from './admin/tii-action-log/tii-action-log.component';
+import {TiiActionService} from './api/services/tii-action.service';
+import {FUnitsComponent} from './admin/states/units/units.component';
+import {FUnitTaskListComponent} from './units/task-viewer/directives/unit-task-list/unit-task-list.component';
+import {FTaskDetailsViewComponent} from './units/task-viewer/directives/task-details-view/task-details-view.component';
+import {FTaskSheetViewComponent} from './units/task-viewer/directives/task-sheet-view/task-sheet-view.component';
+import {UnitCodeComponent} from './common/unit-code/unit-code.component';
+import {GradeService} from './common/services/grade.service';
+import {UnitRootStateComponent} from './units/unit-root-state.component';
+import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
+import {ProjectRootStateComponent} from './projects/states/project-root-state.component';
+import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
+import {ProgressBurndownChartComponent} from './visualisations/progress-burndown-chart/progressburndownchart.component';
+import {TaskVisualisationComponent} from './visualisations/task-visualisation/taskvisualisation.component';
+import {ChartBaseComponent} from './common/chart-base/chart-base-component/chart-base-component.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import {ScormAdapterService} from './api/services/scorm-adapter.service';
 import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
-import {TaskScormCardComponent}from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
+import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
 import {TestAttemptService} from './api/services/test-attempt.service';
 import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
 import {ScormExtensionModalComponent} from './common/modals/scorm-extension-modal/scorm-extension-modal.component';
-import { GradeIconComponent } from './common/grade-icon/grade-icon.component';
-import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-task-modal.component';
-import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
+import {GradeIconComponent} from './common/grade-icon/grade-icon.component';
+import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
   parse: {
-    dateInput: 'dd/MM/yyyy',
+    dateInput: 'dd/MM/yyyy', // this is how your date will be parsed from Input
   },
   display: {
-    dateInput: 'dd/MM/yyyy',
+    dateInput: 'dd/MM/yyyy', // this is how your date will get displayed on the Input
     monthYearLabel: 'MMMM yyyy',
     dateA11yLabel: 'do MMMM yyyy',
     monthYearA11yLabel: 'MMMM yyyy',
   },
 };
-import { UnitStudentEnrolmentModalComponent } from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
-import { TutorTimesComponent } from './units/states/tutor-times/tutor-times.component';
+import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
+import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/taskstatuspiechart.component';
 
 @NgModule({
   // Components we declare
   declarations: [
+    TaskStatusPieChartComponent,
     AlertComponent,
+    ProgressDashboardComponent,
     UnitStudentEnrolmentModalComponent,
     AboutDoubtfireModalContent,
     TeachingPeriodUnitImportDialogComponent,
@@ -390,7 +398,7 @@ import { TutorTimesComponent } from './units/states/tutor-times/tutor-times.comp
     TaskScormCardComponent,
     ScormExtensionCommentComponent,
     ScormExtensionModalComponent,
-    TutorTimesComponent,
+    GroupSetSelectorComponent,
   ],
   // Services we provide
   providers: [

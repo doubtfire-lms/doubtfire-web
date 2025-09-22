@@ -1,14 +1,13 @@
-import { Component, OnInit, Input, SimpleChanges, LOCALE_ID, ViewContainerRef } from '@angular/core';
-import { Project, Unit } from 'src/app/api/models/doubtfire-model';
-import { formatDate } from '@angular/common';
-import { MappingFunctions } from 'src/app/api/services/mapping-fn';
-import { AppInjector } from 'src/app/app-injector';
-import { ChartBaseComponent } from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
+import {Component, OnInit, Input, SimpleChanges, LOCALE_ID, ViewContainerRef} from '@angular/core';
+import {Project, Unit} from 'src/app/api/models/doubtfire-model';
+import {formatDate} from '@angular/common';
+import {AppInjector} from 'src/app/app-injector';
+import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
 
 @Component({
   selector: 'f-progress-burndown-chart',
   templateUrl: './progressburndownchart.component.html',
-  styleUrls: ['./progressburndownchart.component.scss']
+  styleUrls: ['./progressburndownchart.component.scss'],
 })
 export class ProgressBurndownChartComponent extends ChartBaseComponent implements OnInit {
   @Input() project: Project;
@@ -28,9 +27,11 @@ export class ProgressBurndownChartComponent extends ChartBaseComponent implement
   showXAxisLabel: boolean = true;
   xAxisLabel: string = 'Time';
   yAxisLabel: string = 'Tasks Remaining';
-  colorScheme = { domain: ['#AAAAAA', '#777777', '#0079d8', '#E01B5D'] };
+  colorScheme = {domain: ['#AAAAAA', '#777777', '#0079d8', '#E01B5D', 'transparent']};
+  yScaleMin: number = 0;
+  yScaleMax: number = 100;
 
-  private seriesVisibility: { [key: string]: boolean } = {};
+  private seriesVisibility: {[key: string]: boolean} = {};
 
   constructor(public viewContainerRef: ViewContainerRef) {
     super(viewContainerRef);
@@ -39,9 +40,6 @@ export class ProgressBurndownChartComponent extends ChartBaseComponent implement
   }
 
   ngOnInit(): void {
-    console.log('ProgressBurndownChartComponent: ngOnInit');
-    console.log(this.project);
-
     this.project.refreshBurndownChartData();
     this.updateData();
     this.data.forEach((item) => {
@@ -56,49 +54,46 @@ export class ProgressBurndownChartComponent extends ChartBaseComponent implement
     }
   }
 
-  generateDates() {
-    const startDate: Date = this.project.unit.startDate;
-    const endDate: Date = this.project.unit.endDate;
-    const locale: string = AppInjector.get(LOCALE_ID);
-    const numberPoints = 10;
-    // Get the number of days between dates
-    const totalDays =  MappingFunctions.daysBetween(startDate, endDate);
-    const interval = totalDays / (numberPoints - 1); // get gaps between points
-
-    const dates = [];
-    for (let i = 0; i < numberPoints; i++) {
-      const date = MappingFunctions.daysAfter(startDate, interval * i);
-      dates.push(formatDate(date, 'd MMM', locale));
-    }
-
-    return dates;
-  }
-
   updateData(): void {
     const chartData = this.project?.burndownChartData;
-    const dates = this.generateDates();
+    const locale: string = AppInjector.get(LOCALE_ID);
+    const startDate: Date = this.project.unit.startDate;
+    const endDate: Date = this.project.unit.endDate;
 
-    const formattedData = chartData.map((dataset) => {
-      const values = Array(10)
-        .fill(0)
-        .map((_, index) => dataset.values[index] || 0);
+    if (!chartData) {
+      this.data = [];
+      return;
+    }
 
-      const series = dates.map((date, index) => {
-        let value = values[index][1] ?? 0;
-        value = value * 100;
+    const formattedData = chartData.map((series) => ({
+      name: series.key, // Use the "key" as the "name"
+      series: series.values
+        .filter((value) => value[0] >= startDate.getTime() && value[0] <= endDate.getTime()) // Filter values based on the date range
+        .map((value) => {
+          if (value[1] < 0) {
+            value[1] = 0; // If the value is negative, set it to 0
+          }
+          value[1] = Math.round(value[1] * 100); // Round the value to 2 decimal places
+          return {
+            name: formatDate(new Date(value[0]), 'd MMM', locale), // Format the timestamp as a date
+            value: value[1],
+          };
+        }),
+    }));
 
-        if (value < 0) {
-          value = 0;
-        }
+    // Hack to get around yScaleMin and yScaleMax not working.
+    const target = formattedData.find((series) => series.name === 'Target');
+    if (target) {
+      const start = target.series.find(
+        (point) => point.name === formatDate(new Date(startDate), 'd MMM', locale),
+      );
+      const end = target.series.find(
+        (point) => point.name === formatDate(new Date(endDate), 'd MMM', locale),
+      );
 
-        return { name: date, value };
-      });
-
-      return {
-        name: dataset.key,
-        series,
-      };
-    });
+      if (start) start.value = 100; // Update start
+      if (end) end.value = 0; // Update end
+    }
 
     this.temp = JSON.parse(JSON.stringify(formattedData));
     this.data = formattedData;
