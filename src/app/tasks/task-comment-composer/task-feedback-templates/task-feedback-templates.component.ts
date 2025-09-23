@@ -191,7 +191,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   selectTemplate(template: FeedbackTemplate) {
     if (template.type === 'template') {
       if (template.chipText === 'Greeting') {
-        template.commentText = `Hi ${this.task.project.student.firstName}. `;
+        template.commentText = `Hi ${this.task.project.student.preferredName}. `;
       } else if (template.chipText === 'Summarise feedback') {
         if (!this.selectedTemplates || this.selectedTemplates.length < 1) return;
         template.commentText = 'Summary of the given feedback:';

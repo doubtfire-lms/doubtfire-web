@@ -53,6 +53,15 @@ export class User extends Entity {
     return `${fn} ${sn}${nn}`;
   }
 
+  public get preferredName(): string {
+    const nickname = this.nickname.trim();
+    const firstName = this.firstName.trim();
+    if (nickname) {
+      return nickname;
+    }
+    return firstName;
+  }
+
   public matches(text: string): boolean {
     return (
       this.studentId?.toLowerCase().indexOf(text) >= 0 ||
