@@ -78,7 +78,7 @@ export class FooterComponent implements OnInit {
       return;
     }
     task.addComment(
-      `**Automated Message:** Task "${task.definition.abbreviation} ${task.definition.name}" will be graded during portfolio assessment only. You must now submit it directly for portfolio assessment before the portfolio deadline.`,
+      `**Automated Message:** Task "${task.definition.abbreviation} ${task.definition.name}" will be graded during portfolio assessment only. You can keep submitting it for feedback before the task deadline, but you must still submit it directly for portfolio assessment before the portfolio deadline.`,
     );
     setTimeout(() => {
       task.updateTaskStatus('working_on_it');
