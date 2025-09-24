@@ -100,7 +100,6 @@ import 'build/src/app/units/states/portfolios/portfolios.js';
 import 'build/src/app/units/states/groups/groups.js';
 import 'build/src/app/units/states/states.js';
 import 'build/src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.js';
-import 'build/src/app/units/states/edit/directives/unit-details-editor/unit-details-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/directives/directives.js';
 import 'build/src/app/units/states/edit/edit.js';
@@ -230,6 +229,7 @@ import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/direct
 // import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
+import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
 
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
@@ -518,6 +518,11 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fTaskPrerequisitesCard',
   downgradeComponent({component: TaskPrerequisitesCardComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'unitDetailsEditor',
+  downgradeComponent({component: UnitDetailsEditorComponent}),
 );
 
 // Global configuration
