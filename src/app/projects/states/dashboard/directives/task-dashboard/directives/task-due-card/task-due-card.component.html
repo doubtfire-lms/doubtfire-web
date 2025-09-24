@@ -129,10 +129,19 @@
         <mat-card-content class="bg-red-50" [hidden]="task?.inDiscussState()">
           <!--Past deadline and not submitted-->
           <p class="p-2">
-            You should have completed this task by <strong>{{ task?.localDueDateString() }}</strong
-            >. This task is now past the deadline and will be marked as <em>Time Exceeded</em> when
-            submitted. You should consult with the unit assessment details to determine the impact
-            of failing to complete this task within the allocated time.
+            @if (task?.taskDefinition?.unit.markLateSubmissionsAsAssessInPortfolio) {
+              You should have completed this task by
+              <strong>{{ task?.localDueDateString() }}</strong
+              >. This task is now past the deadline and can only be submitted directly for your
+              portfolio without feedback.
+            } @else {
+              You should have completed this task by
+              <strong>{{ task?.localDueDateString() }}</strong
+              >. This task is now past the deadline and will be marked as
+              <em>Time Exceeded</em> when submitted. You should consult with the unit assessment
+              details to determine the impact of failing to complete this task within the allocated
+              time.
+            }
           </p>
         </mat-card-content>
         <mat-card-content [hidden]="!task?.inDiscussState()">
