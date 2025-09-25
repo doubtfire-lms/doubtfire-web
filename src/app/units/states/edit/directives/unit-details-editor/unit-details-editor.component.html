@@ -32,18 +32,29 @@
     </mat-form-field>
 
     <div class="flex w-full gap-5">
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Start Date</mat-label>
-        <input matInput [matDatepicker]="startdatepicker" [(ngModel)]="unit.startDate" />
-        <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #startdatepicker> </mat-datepicker>
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>End Date</mat-label>
-        <input matInput [matDatepicker]="enddatepicker" [(ngModel)]="unit.endDate" />
-        <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #enddatepicker> </mat-datepicker>
-      </mat-form-field>
+      @if (!unit.teachingPeriod) {
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startdatepicker" [(ngModel)]="unit.startDate" />
+          <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
+          <mat-datepicker #startdatepicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="enddatepicker" [(ngModel)]="unit.endDate" />
+          <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
+          <mat-datepicker #enddatepicker></mat-datepicker>
+        </mat-form-field>
+      } @else {
+        <mat-form-field appearance="outline" class="w-full" disabled>
+          <mat-label>{{ unit.teachingPeriod.name }} Start Date</mat-label>
+          <input matInput [value]="unit.teachingPeriod?.startDate | date" disabled readonly />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full" disabled>
+          <mat-label>{{ unit.teachingPeriod.name }} End Date</mat-label>
+          <input matInput [value]="unit.teachingPeriod?.endDate | date" disabled readonly />
+        </mat-form-field>
+      }
     </div>
 
     <mat-form-field appearance="outline">
