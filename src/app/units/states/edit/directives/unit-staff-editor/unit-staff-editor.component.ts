@@ -22,7 +22,7 @@ export class UnitStaffEditorComponent implements OnInit {
   filteredStaff: User[] = []; // Filtered staff members
   searchTerm: string = ''; // Search term entered by the user
 
-  displayedColumns: string[] = ['name', 'role', 'main-convenor', 'actions'];
+  displayedColumns: string[] = ['name', 'role', 'main-convenor', 'observer-only', 'actions'];
   dataSource = new MatTableDataSource<UnitRole>();
 
   // Inject services here
@@ -68,6 +68,20 @@ export class UnitStaffEditorComponent implements OnInit {
         // Revert changes on error
         unitRole.roleId = previousRoleId;
         unitRole.role = previousRole;
+        this.alertService.error(response, 6000);
+      },
+    });
+  }
+
+  toggleObserverOnly(unitRole: UnitRole) {
+    const previousValue = unitRole.observerOnly;
+    unitRole.observerOnly = !unitRole.observerOnly;
+    unitRole.roleId = unitRole.role === 'Tutor' ? 2 : 3;
+    this.unitRoleService.update(unitRole).subscribe({
+      next: () => this.alertService.success('Observer status updated', 2000),
+      error: (response) => {
+        // Revert changes on error
+        unitRole.observerOnly = previousValue;
         this.alertService.error(response, 6000);
       },
     });

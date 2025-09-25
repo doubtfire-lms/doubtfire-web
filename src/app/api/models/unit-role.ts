@@ -11,6 +11,7 @@ export class UnitRole extends Entity {
   role: string;
   user: User;
   unit: Unit;
+  observerOnly: boolean;
 
   /**
    * The id for updated roles - but we need to move away from this to the role string...
