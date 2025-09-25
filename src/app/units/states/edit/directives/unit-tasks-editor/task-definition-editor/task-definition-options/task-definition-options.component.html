@@ -10,7 +10,11 @@
   </div>
 
   <div class="flex-grow flex flex-row gap-5 items-center">
-    <mat-checkbox class="basis-1/2" matInput [(ngModel)]="taskDefinition.assessInPortfolioOnly"
+    <mat-checkbox
+      (change)="onToggleAssessInPortfolioOnly()"
+      class="basis-1/2"
+      matInput
+      [(ngModel)]="taskDefinition.assessInPortfolioOnly"
       >Assess in Portfolio Only</mat-checkbox
     >
     <span class="basis-1/2">
