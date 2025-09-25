@@ -48,8 +48,6 @@ export class UnitDetailsEditorComponent implements OnInit {
       this.teachingPeriods = periods;
     });
 
-    console.log(this.unit.draftTaskDefinition);
-    console.log(this.unit.teachingPeriod);
     this.unit.taskDefinitionCache.values.subscribe((taskDefs) => {
       this.taskDefinitions = taskDefs;
     });
