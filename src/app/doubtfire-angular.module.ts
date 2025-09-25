@@ -288,6 +288,7 @@ import {TaskPrerequisiteService} from './api/services/task-prerequisite.service'
 // import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
+import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -438,6 +439,7 @@ const MY_DATE_FORMAT = {
     TaskPrerequisitesCardComponent,
     UnitStaffEditorComponent,
     GroupSetSelectorComponent,
+    UnitDetailsEditorComponent,
   ],
   // Services we provide
   providers: [
