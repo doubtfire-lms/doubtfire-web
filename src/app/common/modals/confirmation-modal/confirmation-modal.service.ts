@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ConfirmationModalComponent, ConfirmationModalData} from './confirmation-modal.component';
 
 @Injectable({
@@ -8,8 +8,12 @@ import {ConfirmationModalComponent, ConfirmationModalData} from './confirmation-
 export class ConfirmationModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(title: string, message: string, action?: any) {
-    this.dialog.open<ConfirmationModalComponent, ConfirmationModalData>(
+  public show(
+    title: string,
+    message: string,
+    action?: any,
+  ): MatDialogRef<ConfirmationModalComponent, ConfirmationModalData> {
+    return this.dialog.open<ConfirmationModalComponent, ConfirmationModalData>(
       ConfirmationModalComponent,
       {
         data: {

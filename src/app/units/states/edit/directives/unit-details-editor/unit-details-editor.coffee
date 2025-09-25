@@ -8,7 +8,7 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
   replace: true
   restrict: 'E'
   templateUrl: 'units/states/edit/directives/unit-details-editor/unit-details-editor.tpl.html'
-  controller: ($scope, $state, $rootScope, DoubtfireConstants, newUnitService, alertService, newTeachingPeriodService, TaskSubmission, D2lUnitDetailsModal) ->
+  controller: ($scope, $timeout, $state, $rootScope, DoubtfireConstants, newUnitService, alertService, newTeachingPeriodService, TaskSubmission, D2lUnitDetailsModal, ConfirmationModal) ->
     $scope.overseerEnabled = DoubtfireConstants.IsOverseerEnabled
 
     $scope.calOptions = {
@@ -83,6 +83,28 @@ angular.module('doubtfire.units.states.edit.directives.unit-details-editor', [])
     $scope.d2lEnabled = ->
       DoubtfireConstants.IsD2LEnabled.value
 
+    updatingAssessInPortfolio = false
+    $scope.$watch 'unit.markLateSubmissionsAsAssessInPortfolio', (newVal, oldVal) ->
+      return if newVal is oldVal or newVal == false or updatingAssessInPortfolio
+      updatingAssessInPortfolio = true
+      $scope.unit.markLateSubmissionsAsAssessInPortfolio = false
+      modal = ConfirmationModal.show(
+        'Enable Assess in Portfolio?',
+        """
+        Are you sure you want to enable "Assess in Portfolio" for late submissions?
+        This will update any existing Time/Feedback Exceeded tasks to the "Assess in Portfolio" state.
+        You will not be able to disable this setting while any tasks remain in the "Assess in Portfolio" state.
+        """
+        () ->
+          $scope.unit.markLateSubmissionsAsAssessInPortfolio = true
+          $timeout ->
+            updatingAssessInPortfolio = false
+      )
+
+      modal.afterClosed().subscribe(() ->
+        $timeout ->
+          updatingAssessInPortfolio = false
+      )
 )
 
 
