@@ -103,7 +103,9 @@
     </div>
 
     <div>
-      <mat-slide-toggle [(ngModel)]="unit.markLateSubmissionsAsAssessInPortfolio"
+      <mat-slide-toggle
+        (change)="onToggleAssessInPortfolio($event)"
+        [(ngModel)]="unit.markLateSubmissionsAsAssessInPortfolio"
         >Has tasks assessed in portfolio</mat-slide-toggle
       >
       <p>
