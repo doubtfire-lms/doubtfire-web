@@ -100,7 +100,7 @@
     "@angular-eslint/template-parser": "^17.3.0",
     "@angular/compiler-cli": "^17.3.6",
     "@angular/language-service": "^17.3.6",
-    "@commitlint/cli": "^16.0.1",
+    "@commitlint/cli": "^20.0.0",
     "@commitlint/config-conventional": "^17",
     "@types/angular": "1.5.11",
     "@types/canvas-confetti": "^1.6.0",
