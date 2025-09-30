@@ -54,6 +54,7 @@ export class TaskDefinition extends Entity {
   similarityLanguage: string = 'c';
   hasJplagReport: boolean;
   assessInPortfolioOnly: boolean;
+  useResourcesForJplagBaseCode: boolean;
 
   public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
     new EntityCache<TaskPrerequisite>();

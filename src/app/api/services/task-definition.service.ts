@@ -136,6 +136,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
           });
         },
       },
+      'useResourcesForJplagBaseCode',
     );
 
     this.mapping.mapAllKeysToJsonExcept(
