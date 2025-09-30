@@ -17,6 +17,7 @@ export class TaskDateSliderComponent implements OnChanges {
    * The value of the slider, representing the number of weeks
    */
   public value: number;
+  public startWeek: number;
 
   private _originalDueDate: Date;
   private _originalExtension: number;
@@ -42,6 +43,8 @@ export class TaskDateSliderComponent implements OnChanges {
       }
 
       this.value = this.task.dueWeek;
+      this.startWeek = this.task.startWeek;
+
       this._originalDueDate = this.task.dueDate;
       this._originalExtension = this.task.extensions;
     }

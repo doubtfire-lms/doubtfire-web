@@ -193,6 +193,13 @@ export class Task extends Entity {
     return Math.ceil(diffInDays / 7);
   }
 
+  public get startWeek(): number {
+    return Math.ceil(
+      Math.ceil((this.localDueDate().getTime() - this.startDate.getTime()) / (1000 * 3600 * 24)) /
+        7,
+    );
+  }
+
   /**
    * Set the task to be due in a specific week.
    *

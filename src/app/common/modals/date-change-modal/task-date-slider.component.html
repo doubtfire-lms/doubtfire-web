@@ -9,8 +9,9 @@
       <label>Complete By: </label>
     }
     <mat-slider [max]="max" min="0" class="grow">
+      <input matSliderStartThumb [(ngModel)]="startWeek" disabled />
       <input
-        matSliderThumb
+        matSliderEndThumb
         [(ngModel)]="value"
         (input)="updateExtension($event)"
         [disabled]="!editMode"
