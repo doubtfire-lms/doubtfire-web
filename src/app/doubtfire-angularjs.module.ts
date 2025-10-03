@@ -506,7 +506,10 @@ DoubtfireAngularJSModule.directive(
   'unitStaffEditor',
   downgradeComponent({component: UnitStaffEditorComponent}),
 );
-DoubtfireAngularJSModule.directive(downgradeComponent({component: TaskIlosCardComponent}));
+DoubtfireAngularJSModule.directive(
+  'fTaskIlosCard',
+  downgradeComponent({component: TaskIlosCardComponent}),
+);
 DoubtfireAngularJSModule.directive(
   'fStaffNotes',
   downgradeComponent({component: StaffNotesComponent}),
@@ -529,6 +532,7 @@ DoubtfireAngularJSModule.directive(
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
 const otherwiseConfigBlock = [
+  '$urlRouterProvider',
   '$locationProvider',
   ($urlRouterProvider, $locationProvider) => {
     $locationProvider.hashPrefix('');
