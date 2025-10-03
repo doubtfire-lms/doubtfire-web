@@ -72,7 +72,6 @@ import 'build/src/app/projects/states/outcomes/outcomes.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.js';
-import 'build/src/app/projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.js';
 import 'build/src/app/projects/states/portfolio/directives/directives.js';
@@ -230,6 +229,7 @@ import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/direct
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
+import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
@@ -506,10 +506,7 @@ DoubtfireAngularJSModule.directive(
   'unitStaffEditor',
   downgradeComponent({component: UnitStaffEditorComponent}),
 );
-DoubtfireAngularJSModule.directive(
-  'fTaskIlosCard',
-  downgradeComponent({component: TaskIlosCardComponent}),
-);
+DoubtfireAngularJSModule.directive(downgradeComponent({component: TaskIlosCardComponent}));
 DoubtfireAngularJSModule.directive(
   'fStaffNotes',
   downgradeComponent({component: StaffNotesComponent}),
@@ -525,11 +522,13 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({component: UnitDetailsEditorComponent}),
 );
 
-// Global configuration
+DoubtfireAngularJSModule.directive(
+  'portfolioGradeSelectStep',
+  downgradeComponent({component: PortfolioGradeSelectStepComponent}),
+);
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
 const otherwiseConfigBlock = [
-  '$urlRouterProvider',
   '$locationProvider',
   ($urlRouterProvider, $locationProvider) => {
     $locationProvider.hashPrefix('');

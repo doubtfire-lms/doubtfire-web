@@ -289,6 +289,7 @@ import {TaskPrerequisiteService} from './api/services/task-prerequisite.service'
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
+import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -422,7 +423,6 @@ const MY_DATE_FORMAT = {
     LearningOutcomeEditorComponent,
     TaskFeedbackTemplatesComponent,
     NestedCsvDownloadModalComponent,
-    TutorDiscussionComponent,
     TaskIlosCardComponent,
     JplagReportViewerComponent,
     StaffNotesComponent,
@@ -440,11 +440,12 @@ const MY_DATE_FORMAT = {
     UnitStaffEditorComponent,
     GroupSetSelectorComponent,
     UnitDetailsEditorComponent,
+    PortfolioGradeSelectStepComponent,
+    TutorDiscussionComponent,
   ],
-  // Services we provide
   providers: [
+    // Services we provide
     AlertService,
-    MarkedPipe,
     CampusService,
     AuthenticationService,
     GroupSetService,

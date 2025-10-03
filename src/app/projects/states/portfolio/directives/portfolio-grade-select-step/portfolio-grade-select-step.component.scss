@@ -1,0 +1,111 @@
+/* Wrapper card - not too wide */
+#portfolio-state mat-card {
+  @apply mb-6 shadow-none border border-gray-300 rounded-none mx-auto;
+  max-width: 900px; /* limit width for better readability */
+  width: 100%;
+}
+
+/* Panel header style (default, not warnings) */
+#portfolio-state mat-card-header {
+  border-bottom: 1px solid #b0b0b0;
+  background-color: #f5f5f5;
+  padding: 8px 12px;
+}
+
+.warning-card {
+  background-color: #d9534f !important;
+  border: 1px solid #d43f3a !important;
+  border-radius: 0;
+  color: #fff !important;
+  padding: 0;
+}
+
+.warning-card mat-card-header {
+  background-color: transparent !important;
+  border-bottom: none !important;
+  padding: 8px 12px;
+}
+
+.warning-card mat-card-title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+}
+
+.warning-card .warning-icon {
+  color: #fff !important;
+  font-size: 22px !important;
+  margin-right: 8px;
+}
+
+.warning-card mat-card-content {
+  @apply text-sm leading-relaxed;
+  font-size: 1.25rem;
+  margin-top: 4px;
+  color: #fff !important;
+}
+
+.warning-card mat-card-actions {
+  @apply mt-3;
+}
+
+.warning-card mat-checkbox {
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 500;
+}
+
+#portfolio-state mat-card-title {
+  font-size: 1.5rem;
+  line-height: 4rem;
+  font-weight: 500;
+  color: #292828 !important; /* changed from #fefcfc (white) to dark gray */
+}
+
+.grade-card-title.mat-mdc-card-title {
+  color: #292828 !important; /* enforce dark text */
+  font-weight: 600;
+}
+
+.select-the-grade .btn-group {
+  @apply flex justify-center gap-4 flex-wrap;
+}
+
+.grade-label {
+  @apply cursor-pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.grade-label.active {
+  background-color: #e6e6e6;
+}
+
+.grade-icon {
+  @apply flex items-center justify-center w-12 h-12 rounded-full font-semibold
+    border border-gray-400 bg-gray-100 text-gray-800;
+  transition: all 0.2s ease;
+}
+
+.grade-label.active .grade-icon {
+  @apply bg-gray-800 text-white border-gray-800;
+}
+
+mat-card-actions button {
+  @apply px-6 py-2 text-base font-medium;
+}
+
+button[color='primary'] {
+  background-color: #337ab7 !important;
+  border: 1px solid #2e6da4 !important;
+  color: #fff !important;
+}
+
+button[color='primary']:hover {
+  background-color: #286090 !important;
+  border-color: #204d74 !important;
+}
