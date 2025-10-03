@@ -422,6 +422,7 @@ const MY_DATE_FORMAT = {
     LearningOutcomeEditorComponent,
     TaskFeedbackTemplatesComponent,
     NestedCsvDownloadModalComponent,
+    TutorDiscussionComponent,
     TaskIlosCardComponent,
     JplagReportViewerComponent,
     StaffNotesComponent,
@@ -440,7 +441,6 @@ const MY_DATE_FORMAT = {
     GroupSetSelectorComponent,
     UnitDetailsEditorComponent,
     PortfolioGradeSelectStepComponent,
-    TutorDiscussionComponent,
   ],
   providers: [
     // Services we provide
