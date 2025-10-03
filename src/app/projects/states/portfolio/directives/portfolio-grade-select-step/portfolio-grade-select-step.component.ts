@@ -1,4 +1,4 @@
-import {Component, Injector, Input, OnInit} from '@angular/core';
+import {Component, Injector, Input} from '@angular/core';
 import {Project, Unit} from 'src/app/api/models/doubtfire-model';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {GradeService} from 'src/app/common/services/grade.service';
@@ -8,16 +8,11 @@ import {GradeService} from 'src/app/common/services/grade.service';
   templateUrl: 'portfolio-grade-select-step.component.html',
   styleUrls: ['portfolio-grade-select-step.component.scss'],
 })
-export class PortfolioGradeSelectStepComponent implements OnInit {
+export class PortfolioGradeSelectStepComponent {
   @Input() project: Project;
   @Input() unit: Unit;
 
-  gradeList = this.gradeService.gradeViewData;
-  agreedToAssessmentCriteria: boolean = false;
-
-  ngOnInit(): void {
-    this.gradeList = this.gradeService.gradeViewData.filter((g) => g.value !== -1);
-  }
+  public agreedToAssessmentCriteria: boolean = false;
 
   constructor(
     private gradeService: GradeService,
@@ -27,9 +22,13 @@ export class PortfolioGradeSelectStepComponent implements OnInit {
     this.$scope = this.injector.get('$scope');
   }
 
-  updateSubmittedGrade(newGrade: {value: number; viewValue: string}): void {
+  public get gradeValues() {
+    return this.gradeService.gradeValues;
+  }
+
+  updateSubmittedGrade(newGrade: number): void {
     const previousSubmittedGrade = this.project.submittedGrade;
-    this.project.submittedGrade = newGrade.value;
+    this.project.submittedGrade = newGrade;
 
     this.projectService.update(this.project).subscribe(
       (project) => {

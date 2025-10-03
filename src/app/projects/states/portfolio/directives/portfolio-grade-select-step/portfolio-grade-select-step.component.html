@@ -59,13 +59,13 @@
               hideSingleSelectionIndicator
               [ngModel]="project.submittedGrade"
             >
-              @for (grade of gradeList; track grade) {
+              @for (grade of gradeValues; track grade) {
                 <mat-button-toggle
-                  [value]="grade.value"
+                  [value]="grade"
                   class="p-2 py-4"
                   (click)="updateSubmittedGrade(grade)"
                 >
-                  <f-grade-icon [grade]="grade.value" [colorful]="true"></f-grade-icon>
+                  <f-grade-icon [grade]="grade"></f-grade-icon>
                 </mat-button-toggle>
               }
             </mat-button-toggle-group>
