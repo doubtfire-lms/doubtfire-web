@@ -141,7 +141,12 @@ export class TutorialsComponent implements OnInit {
       return tutorials;
     }
     return tutorials.filter((tutorial) => {
-      return !project.campus?.id || !tutorial.campus || tutorial.campus.id === project.campus.id;
+      return (
+        !project.campus?.id ||
+        !tutorial.campus ||
+        tutorial.campus.id === project.campus.id ||
+        project.isEnrolledIn(tutorial)
+      );
     });
   }
 
