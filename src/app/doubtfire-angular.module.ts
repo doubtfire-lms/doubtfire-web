@@ -442,8 +442,8 @@ const MY_DATE_FORMAT = {
     UnitDetailsEditorComponent,
     PortfolioGradeSelectStepComponent,
   ],
+  // Services we provide
   providers: [
-    // Services we provide
     AlertService,
     CampusService,
     AuthenticationService,
