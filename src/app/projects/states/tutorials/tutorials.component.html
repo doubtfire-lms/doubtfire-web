@@ -1,0 +1,77 @@
+<div *ngIf="!loading" class="container" id="tutorials-state"> <!-- This flag is used to handle the async fetching of data -->
+  <div class="container" id="tutorials-state">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">Select a Tutorial</h4>
+      </div>
+      <div class="panel-body">
+        <p>
+          Click the plus on the specific tutorial to enrol in that tutorial, or click the minus icon to withdraw from your
+          current tutorial.
+        </p>
+      </div>
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th class="stream" *ngIf="unit.tutorialStreamsCache.size > 0">
+              <a (click)="setSortOrder('tutorialStream.name')">Stream</a>
+            </th>
+            <th class="campus">
+              <a (click)="setSortOrder('campus.name')">Campus</a>
+            </th>
+            <th class="code">
+              <a (click)="setSortOrder('abbreviation')">Code</a>
+            </th>
+            <th class="day">
+              <a (click)="setSortOrder('meetingDay')">Day</a>
+            </th>
+            <th class="time">
+              <a (click)="setSortOrder('meetingTime')">Time</a>
+            </th>
+            <th class="room">
+              <a (click)="setSortOrder('meetingLocation')">Room</a>
+            </th>
+            <th class="tutor">
+              <a (click)="setSortOrder('tutorName')">Tutor</a>
+            </th>
+            <th class="actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let tutorial of filteredTutorials"
+            [ngClass]="{ info: tutorial === project.tutorial }"
+          >
+            <td *ngIf="unit.tutorialStreamsCache.size > 0">{{ tutorial.tutorialStream?.name || 'All' }}</td>
+            <td>{{ tutorial.campus?.name || 'All' }}</td>
+            <td>{{ tutorial.abbreviation }}</td>
+            <td>{{ tutorial.meetingDay }}</td>
+            <td>{{ shortTime(tutorial.meetingTime) }}</td>
+            <td>{{ tutorial.meetingLocation }}</td>
+            <td>{{ tutorial.tutorName }}</td>
+            <td>
+              <button
+                mat-button
+                class="btn btn-default btn-sm"
+                color="primary"
+                (click)="project.switchToTutorial(tutorial)"
+                [hidden]="project.isEnrolledIn(tutorial) || !tutorial.hasCapacity()"
+              >
+                <mat-icon>add</mat-icon> Enrol
+              </button>
+              <button
+                mat-button
+                class="btn btn-default btn-sm"
+                color="warn"
+                (click)="project.switchToTutorial(tutorial)"
+                *ngIf="project.isEnrolledIn(tutorial)"
+              >
+                <mat-icon>remove</mat-icon> Withdraw
+            </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

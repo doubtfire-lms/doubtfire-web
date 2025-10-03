@@ -274,8 +274,10 @@ const MY_DATE_FORMAT = {
     monthYearA11yLabel: 'MMMM yyyy',
   },
 };
+import { TutorialsComponent } from './projects/states/tutorials/tutorials.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/taskstatuspiechart.component';
+
 
 @NgModule({
   // Components we declare
@@ -401,6 +403,7 @@ import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-char
     TaskScormCardComponent,
     ScormExtensionCommentComponent,
     ScormExtensionModalComponent,
+    TutorialsComponent,
     UnitStaffEditorComponent,
     GroupSetSelectorComponent,
   ],
