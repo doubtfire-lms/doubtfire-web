@@ -526,7 +526,7 @@ DoubtfireAngularJSModule.directive(
 );
 
 DoubtfireAngularJSModule.directive(
-  'portfolioGradeSelectStep',
+  'fPortfolioGradeSelectStep',
   downgradeComponent({component: PortfolioGradeSelectStepComponent}),
 );
 

@@ -1,32 +1,32 @@
 <div id="portfolio-state" class="project-portfolio-wizard w-full">
-  <mat-card class="grade-header-card">
+  <mat-card class="max-w-7xl mx-auto">
     <!-- Main Header -->
     <mat-card-header>
       <mat-card-title class="grade-card-title">
-        <h3 class="text-xl font-semibold">Select Grade</h3>
+        <h3>Select Grade</h3>
       </mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
       <p class="m-4">
-        In preparing your portfolio, you need to undertake a self-assessment.
-        Use the unit's assessment criteria to determine the grade your portfolio should be awarded.
+        In preparing your portfolio, you need to undertake a self-assessment. Use the unit's
+        assessment criteria to determine the grade your portfolio should be awarded.
       </p>
 
       <!-- Warning Card -->
-      <mat-card class="warning-card mb-6">
-        <mat-card-header>
-          <mat-card-title>
+      <mat-card class="mt-4 mx-2">
+        <mat-card-header class="bg-red-500 text-white">
+          <mat-card-title class="flex flex-row items-center gap-2">
             <mat-icon class="warning-icon">warning</mat-icon>
             Read the assessment criteria
           </mat-card-title>
         </mat-card-header>
 
-        <mat-card-content>
+        <mat-card-content class="bg-red-500 text-white">
           <p class="m-3">
-            Make sure that you have reviewed the Assessment Criteria for the grade you are applying for.
-            Each grade will have a list of criteria that you can use to determine if you meet the requirements
-            to achieve that grade.
+            Make sure that you have reviewed the Assessment Criteria for the grade you are applying
+            for. Each grade will have a list of criteria that you can use to determine if you meet
+            the requirements to achieve that grade.
           </p>
         </mat-card-content>
 
@@ -38,47 +38,58 @@
       </mat-card>
 
       <!-- Grade Selection -->
-      <mat-card *ngIf="agreedToAssessmentCriteria">
-        <mat-card-header>
-          <mat-card-title>
-            <div class="flex flex-col">
-              <span class="text-lg font-semibold">Grade Application</span>
-              <span class="text-m font-normal mt-1">
-                Select the <strong>grade</strong> you are applying for {{ unit.name }} below.
-              </span>
-            </div>
-          </mat-card-title>
-        </mat-card-header>
 
-        <mat-card-content class="text-center select-the-grade">
-          <div class="btn-group flex justify-center gap-4 flex-wrap">
-            <label *ngFor="let grade of gradeList" class="grade-label"
-              [class.active]="selectedSubmittedGrade === grade.value" (click)="updateSubmittedGrade(grade)">
-              <div class="grade-icon m-2" [ngClass]="'grade-' + grade.value"
-                [matTooltip]="gradeService.grades[grade.value]" matTooltipPosition="above">
-                {{ gradeService.gradeAcronyms[grade.value] }}
-              </div>
-            </label>
-          </div>
+      @if (agreedToAssessmentCriteria) {
+        <mat-card class="mt-4 mx-2">
+          <mat-card-header>
+            <mat-card-title class="flex flex-row items-center gap-2">
+              Grade Application
+            </mat-card-title>
+          </mat-card-header>
 
-          <p class="mt-4 text-gray-600">
-            Make sure your <strong>Learning Summary Report</strong> justifies how your portfolio demonstrates you have
-            <strong>met all unit learning outcomes to a {{ targetGrade }} level</strong>
-          </p>
-        </mat-card-content>
-      </mat-card>
+          <mat-card-content>
+            <p class="m-3">
+              Select the <strong>grade</strong> you are applying for {{ unit.code }}
+              {{ unit.name }} below.
+            </p>
+          </mat-card-content>
+
+          <mat-card-content class="text-center">
+            <mat-button-toggle-group
+              hideSingleSelectionIndicator
+              [ngModel]="project.submittedGrade"
+            >
+              @for (grade of gradeList; track grade) {
+                <mat-button-toggle
+                  [value]="grade.value"
+                  class="p-2 py-4"
+                  (click)="updateSubmittedGrade(grade)"
+                >
+                  <f-grade-icon [grade]="grade.value" [colorful]="true"></f-grade-icon>
+                </mat-button-toggle>
+              }
+            </mat-button-toggle-group>
+
+            <p class="mt-4 text-gray-600">
+              Make sure your <strong>Learning Summary Report</strong> justifies how your portfolio
+              demonstrates you have
+              <strong>met all unit learning outcomes to a {{ targetGrade }} level</strong>
+            </p>
+          </mat-card-content>
+        </mat-card>
+      }
     </mat-card-content>
 
     <!-- Footer Buttons -->
-    <mat-card-actions class="flex justify-between mt-6">
-      <button mat-raised-button color="primary" (click)="goToPreviousStep()">
-        <mat-icon class="mr-2">arrow_back</mat-icon>
-        Back
-      </button>
-
-      <button mat-raised-button color="primary" [disabled]="!agreedToAssessmentCriteria" (click)="goToNextStep()">
+    <mat-card-actions class="flex justify-between">
+      <button mat-raised-button color="primary" (click)="goToPreviousStep()">Back</button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!agreedToAssessmentCriteria"
+        (click)="goToNextStep()"
+      >
         Next
-        <mat-icon class="ml-2">arrow_forward</mat-icon>
       </button>
     </mat-card-actions>
   </mat-card>
