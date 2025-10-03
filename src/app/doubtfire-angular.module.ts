@@ -445,6 +445,7 @@ const MY_DATE_FORMAT = {
   // Services we provide
   providers: [
     AlertService,
+    MarkedPipe,
     CampusService,
     AuthenticationService,
     GroupSetService,
