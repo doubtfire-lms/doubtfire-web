@@ -30,7 +30,7 @@ import {LearningOutcome} from './learning-outcome';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {SidekiqJob} from './sidekiq-job';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
 
 export class Unit extends Entity {
@@ -600,6 +600,18 @@ export class Unit extends Entity {
   public downloadTutorAssessmentCsv(): Observable<SidekiqJob> {
     return AppInjector.get(HttpClient).get<SidekiqJob>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments`,
+    );
+  }
+
+  public downloadTutorTimesSummaryCsv(startDate?: Date, endDate?: Date): Observable<SidekiqJob> {
+    let params = new HttpParams();
+    if (startDate) params = params.set('start_date', startDate.toISOString().split('T')[0]);
+    if (endDate) params = params.set('end_date', endDate.toISOString().split('T')[0]);
+
+    console.log(params);
+    return AppInjector.get(HttpClient).get<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_times_summary`,
+      {params},
     );
   }
 

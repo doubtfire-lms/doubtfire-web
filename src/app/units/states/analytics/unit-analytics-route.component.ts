@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
@@ -11,14 +11,24 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'unit-analytics-route.component.html',
   styleUrls: ['unit-analytics-route.component.scss'],
 })
-export class UnitAnalyticsComponent {
+export class UnitAnalyticsComponent implements OnInit {
   @Input() unit: Unit;
+
+  tutorTimeSummaryStartDate: Date;
+  tutorTimeSummaryEndDate: Date;
 
   constructor(
     private sidekiqProgressModalService: SidekiqProgressModalService,
     private alertsService: AlertService,
     private fileDownloaderService: FileDownloaderService,
   ) {}
+
+  ngOnInit(): void {
+    this.tutorTimeSummaryEndDate = new Date();
+    this.tutorTimeSummaryStartDate = new Date(
+      this.tutorTimeSummaryEndDate.getTime() - 7 * 24 * 60 * 60 * 1000,
+    );
+  }
 
   public getTaskCompletionCsv() {
     this.downloadCsv(
@@ -49,6 +59,20 @@ export class UnitAnalyticsComponent {
       this.unit.downloadTaskAssessmentCountsCsv(),
       'Task Assessment Counts CSV',
       `${this.unit.code}-task-assessment-counts.csv`,
+    );
+  }
+
+  public getTutorTimesSummary() {
+    const start = this.tutorTimeSummaryStartDate.toISOString().split('T')[0];
+    const end = this.tutorTimeSummaryEndDate.toISOString().split('T')[0];
+
+    this.downloadCsv(
+      this.unit.downloadTutorTimesSummaryCsv(
+        this.tutorTimeSummaryStartDate,
+        this.tutorTimeSummaryEndDate,
+      ),
+      'Tutor Times Summary CSV',
+      `${this.unit.code}-tutor-times-summary-${start}-to-${end}.csv`,
     );
   }
 

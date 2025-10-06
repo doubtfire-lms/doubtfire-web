@@ -1,16 +1,69 @@
 <h1>Unit Statistics</h1>
 
-<div class="flex gap-2">
-  <button mat-button (click)="getTaskCompletionCsv()">
-    <mat-icon>download</mat-icon> Task Completion Stats
-  </button>
-  <button mat-button (click)="getTutorAssessmentCsv()">
-    <mat-icon>download</mat-icon> Tutor Assessment Stats
-  </button>
-  <button mat-button (click)="getTasksAwaitingFeedbackCsv()">
-    <mat-icon>download</mat-icon> Tasks Awaiting Feedback
-  </button>
-  <button mat-button (click)="getTaskAssessmentCountCsv()">
-    <mat-icon>download</mat-icon> Task Assessment Counts
-  </button>
+<div class="flex flex-col gap-4">
+  <mat-card appearance="outlined" class="mt-4 p-[16px]">
+    <!-- <div > -->
+    <mat-card-content class="flex gap-2">
+      <button mat-button (click)="getTaskCompletionCsv()">
+        <mat-icon>download</mat-icon> Task Completion Stats
+      </button>
+      <button mat-button (click)="getTutorAssessmentCsv()">
+        <mat-icon>download</mat-icon> Tutor Assessment Stats
+      </button>
+      <button mat-button (click)="getTasksAwaitingFeedbackCsv()">
+        <mat-icon>download</mat-icon> Tasks Awaiting Feedback
+      </button>
+      <button mat-button (click)="getTaskAssessmentCountCsv()">
+        <mat-icon>download</mat-icon> Task Assessment Counts
+      </button>
+    </mat-card-content>
+
+    <!-- </div> -->
+  </mat-card>
+
+  <mat-card appearance="outlined" class="mt-4 p-[16px]">
+    <mat-card-header>
+      <mat-card-title>
+        <h2>Tutor Times Sesson Summary</h2>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>
+        Download a summary of how much time each tutor has spent marking. Leave the date filters
+        blank to include all sessions.
+      </p>
+      <div class="flex row w-full gap-2">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Start Date</mat-label>
+          <input
+            matInput
+            placeholder="Start date"
+            [matDatepicker]="startdatepicker"
+            [(ngModel)]="tutorTimeSummaryStartDate"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
+          <mat-datepicker #startdatepicker></mat-datepicker>
+          <mat-hint>All sessions from this day and onwards.</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>End Date</mat-label>
+          <input
+            matInput
+            placeholder="End date"
+            [matDatepicker]="enddatepicker"
+            [(ngModel)]="tutorTimeSummaryEndDate"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
+          <mat-datepicker #enddatepicker></mat-datepicker>
+          <mat-hint>All sessions from this day and prior.</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <button mat-button (click)="getTutorTimesSummary()">
+        <mat-icon>download</mat-icon> Tutor Times Summary
+      </button>
+    </mat-card-content>
+  </mat-card>
 </div>
