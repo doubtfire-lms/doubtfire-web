@@ -259,8 +259,11 @@ import {ScormExtensionModalComponent} from './common/modals/scorm-extension-moda
 import {GradeIconComponent} from './common/grade-icon/grade-icon.component';
 import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
 import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
+import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -405,6 +408,7 @@ import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-char
     TutorialsComponent,
     UnitStaffEditorComponent,
     GroupSetSelectorComponent,
+    PortfolioGradeSelectStepComponent,
   ],
   // Services we provide
   providers: [
