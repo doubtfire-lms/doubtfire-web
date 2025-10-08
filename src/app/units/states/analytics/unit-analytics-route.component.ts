@@ -25,6 +25,7 @@ export class UnitAnalyticsComponent implements OnInit {
 
   tutorTimeSummaryStartDate: Date;
   tutorTimeSummaryEndDate: Date;
+  daysInWeek: number = 7;
 
   constructor(
     private sidekiqProgressModalService: SidekiqProgressModalService,
@@ -33,22 +34,33 @@ export class UnitAnalyticsComponent implements OnInit {
     private userService: UserService,
   ) {}
 
+  public loadSessions: boolean = false;
+
   get role() {
     return this.unit.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
   }
 
   goPreviousWeek() {
-    this.viewDate = new Date(this.viewDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-    this.getMarkingSesssions();
+    this.loadSessions = true;
+
+    this.viewDate = new Date(this.viewDate.getTime() - this.daysInWeek * 24 * 60 * 60 * 1000);
+    // this.getMarkingSesssions();
+    // TODO: previous week should subtract by the number of days currently being viewed
   }
 
   goTodayWeek() {
+    this.loadSessions = true;
     this.viewDate = new Date();
-    this.getMarkingSesssions();
+    // this.getMarkingSesssions();
+    const startOfWeek = new Date();
+    startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1); // Sunday
+
+    this.viewDate = startOfWeek;
   }
   goNextWeek() {
-    this.viewDate = new Date(this.viewDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-    this.getMarkingSesssions();
+    this.loadSessions = true;
+    this.viewDate = new Date(this.viewDate.getTime() + this.daysInWeek * 24 * 60 * 60 * 1000);
+    // this.getMarkingSesssions();
   }
 
   ngOnInit(): void {
@@ -57,7 +69,16 @@ export class UnitAnalyticsComponent implements OnInit {
       this.tutorTimeSummaryEndDate.getTime() - 7 * 24 * 60 * 60 * 1000,
     );
 
+    this.loadSessions = true;
+
     this.getMarkingSesssions();
+
+    const startOfWeek = new Date(this.viewDate);
+    startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1); // Sunday
+
+    this.viewDate = startOfWeek;
+    // TODO: viewDate should be todays Date - 7 days
+    // TODO: or if date picker... last Date - number of days selected
   }
 
   public getTaskCompletionCsv() {
@@ -92,18 +113,38 @@ export class UnitAnalyticsComponent implements OnInit {
     );
   }
 
+  beforeViewRender(event): void {
+    console.log(event.period.start);
+    console.log(event.period.end);
+
+    this.tutorTimeSummaryStartDate = event.period.start;
+    this.tutorTimeSummaryEndDate = event.period.end;
+
+    this.getMarkingSesssions();
+  }
+
   public getTutorTimesSummary() {
-    const startOfWeek = new Date(this.viewDate);
-    startOfWeek.setDate(this.viewDate.getDate() - this.viewDate.getDay()); // Sunday
+    // const startOfWeek = new Date(this.viewDate);
+    // startOfWeek.setDate(this.viewDate.getDate() - this.viewDate.getDay()); // Sunday
 
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday
+    // const endOfWeek = new Date(startOfWeek);
+    // endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday
 
-    const start = startOfWeek.toISOString().split('T')[0];
-    const end = endOfWeek.toISOString().split('T')[0];
+    // const startOfWeek = new Date(this.viewDate);
+    // // startOfWeek.setDate(this.viewDate.getDate() - this.viewDate.getDay()); // Sunday
+    // startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1); // Sunday
+
+    // const endOfWeek = new Date(startOfWeek);
+    // endOfWeek.setDate(startOfWeek.getDate() + this.daysInWeek); // Saturday
+
+    const start = this.tutorTimeSummaryStartDate.toLocaleString().split('T')[0];
+    const end = this.tutorTimeSummaryEndDate.toLocaleString().split('T')[0];
 
     this.downloadCsv(
-      this.unit.downloadTutorTimesSummaryCsv(startOfWeek, endOfWeek),
+      this.unit.downloadTutorTimesSummaryCsv(
+        this.tutorTimeSummaryStartDate,
+        this.tutorTimeSummaryEndDate,
+      ),
       'Tutor Times Summary CSV',
       `${this.unit.code}-tutor-times-summary-${start}-to-${end}.csv`,
     );
@@ -147,47 +188,56 @@ export class UnitAnalyticsComponent implements OnInit {
   }
 
   public getMarkingSesssions() {
-    const user = this.userService.currentUser;
-    this.events = [];
+    if (!this.loadSessions) {
+      return;
+    }
+    // const user = this.userService.currentUser;
+    // this.events = [];
 
-    const startOfWeek = new Date(this.viewDate);
-    startOfWeek.setDate(this.viewDate.getDate() - this.viewDate.getDay()); // Sunday
+    // const startOfWeek = new Date(this.viewDate);
+    // // startOfWeek.setDate(this.viewDate.getDate() - this.viewDate.getDay()); // Sunday
+    // startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1); // Sunday
 
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday
+    // const endOfWeek = new Date(startOfWeek);
+    // endOfWeek.setDate(startOfWeek.getDate() + this.daysInWeek); // Saturday
 
-    this.unit.getUserMarkingSessions(startOfWeek, endOfWeek).subscribe({
-      next: (data) => {
-        this.events = data.map((row) => {
-          const tutor = this.unit.staff.find((t) => t.user.id === row['user_id'])?.user;
-          // const {primary, secondary} = this.stringToColors(tutor.name);
-          const primary = this.stringToHexColor(tutor.firstName);
-          const secondary = this.stringToHexColor(tutor.firstName);
-          return {
-            start: new Date(row['start_time']),
-            end: new Date(row['end_time']),
-            // title: `${tutor?.firstName} (${row['duration_minutes']}m)<br/>${row['comments_added']} comments<br/>${row['assessments']} assessments<br/>${row['submissions_opened']} Submissions opened`,
-            title: `${tutor?.firstName} (${row['duration_minutes']}m)`,
-            color: {primary: secondary, secondary: primary},
-            user_id: row['user_id'],
-            comments_added: row['comments_added'],
-            assessments: row['assessments'],
-            submissions_opened: row['submissions_opened'],
-            duration: row['duration_minutes'],
-            name: tutor?.firstName,
-          };
-        });
+    this.unit
+      .getUserMarkingSessions(this.tutorTimeSummaryStartDate, this.tutorTimeSummaryEndDate)
+      .subscribe({
+        next: (data) => {
+          this.loadSessions = false;
+          this.events = data.map((row) => {
+            const tutor = this.unit.staff.find((t) => t.user.id === row['user_id'])?.user;
+            // const {primary, secondary} = this.stringToColors(tutor.name);
+            const primary = this.stringToHexColor(tutor.firstName);
+            const secondary = this.stringToHexColor(tutor.firstName);
+            return {
+              start: new Date(row['start_time']),
+              end: new Date(row['end_time']),
+              // title: `${tutor?.firstName} (${row['duration_minutes']}m)<br/>${row['comments_added']} comments<br/>${row['assessments']} assessments<br/>${row['submissions_opened']} Submissions opened`,
+              title: `${tutor?.firstName} (${row['duration_minutes']}m)`,
+              color: {primary: secondary, secondary: primary},
+              user_id: row['user_id'],
+              comments_added: row['comments_added'],
+              assessments: row['assessments'],
+              submissions_opened: row['submissions_opened'],
+              duration: row['duration_minutes'],
+              name: tutor?.firstName,
+            };
+          });
 
-        this.filteredEvents = this.events.filter(
-          (row) => this.selectedUserId === null || row['user_id'] === this.selectedUserId,
-        );
+          this.filteredEvents = this.events.filter(
+            (row) => this.selectedUserId === null || row['user_id'] === this.selectedUserId,
+          );
 
-        console.log(data);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
+          console.log(data);
+        },
+        error: (error) => {
+          this.loadSessions = false;
+
+          console.error(error);
+        },
+      });
   }
 
   eventClicked({event}: {event: CalendarEvent}): void {

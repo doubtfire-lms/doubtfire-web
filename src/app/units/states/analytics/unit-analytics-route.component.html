@@ -85,11 +85,10 @@
 
       <div class="flex justify-between my-4">
         <div class="flex gap-2">
-          <button mat-raised-button color="primary" (click)="goPreviousWeek()">
-            Previous Week
-          </button>
+          <button mat-raised-button color="primary" (click)="goPreviousWeek()">Previous</button>
           <button mat-raised-button (click)="goTodayWeek()">Today</button>
-          <button mat-raised-button color="primary" (click)="goNextWeek()">Next Week</button>
+          <button mat-raised-button color="primary" (click)="goNextWeek()">Next</button>
+          <button mat-button>Custom Range</button>
         </div>
         <button mat-button (click)="getTutorTimesSummary()">
           <mat-icon>download</mat-icon> Weekly Summary
@@ -101,6 +100,11 @@
         [events]="filteredEvents"
         (eventClicked)="eventClicked($event)"
         [tooltipTemplate]="eventTooltipTemplate"
+        [hourDuration]="60"
+        [hourSegments]="1"
+        [weekStartsOn]="0"
+        [daysInWeek]="daysInWeek"
+        (beforeViewRender)="beforeViewRender($event)"
       />
     </mat-card>
   }
