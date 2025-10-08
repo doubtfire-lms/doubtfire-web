@@ -93,22 +93,19 @@ export class UnitAnalyticsComponent implements OnInit {
   }
 
   public getTutorTimesSummary() {
-    // const start = this.tutorTimeSummaryStartDate.toISOString().split('T')[0];
-    // const end = this.tutorTimeSummaryEndDate.toISOString().split('T')[0];
-
     const startOfWeek = new Date(this.viewDate);
     startOfWeek.setDate(this.viewDate.getDate() - this.viewDate.getDay()); // Sunday
 
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday
 
-    console.log(`start of week is ${startOfWeek.toString()}`);
-    console.log(`end of week is ${endOfWeek.toString()}`);
+    const start = startOfWeek.toISOString().split('T')[0];
+    const end = endOfWeek.toISOString().split('T')[0];
 
     this.downloadCsv(
       this.unit.downloadTutorTimesSummaryCsv(startOfWeek, endOfWeek),
       'Tutor Times Summary CSV',
-      `${this.unit.code}-tutor-times-summary-${startOfWeek}-to-${endOfWeek}.csv`,
+      `${this.unit.code}-tutor-times-summary-${start}-to-${end}.csv`,
     );
   }
 
