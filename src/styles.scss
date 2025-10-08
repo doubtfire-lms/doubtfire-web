@@ -4,6 +4,7 @@
 @include mat.core();
 
 @import './theme.scss';
+@import '../node_modules/angular-calendar/css/angular-calendar.css';
 
 @tailwind base;
 @tailwind components;

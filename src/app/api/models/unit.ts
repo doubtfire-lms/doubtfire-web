@@ -603,6 +603,18 @@ export class Unit extends Entity {
     );
   }
 
+  // TODO: create type
+  // TODO: create entity for marking sessions and session activities?
+  public getUserMarkingSessions(startDate?: Date, endDate?: Date): Observable<any> {
+    let params = new HttpParams();
+    if (startDate) params = params.set('start_date', startDate.toISOString().split('T')[0]);
+    if (endDate) params = params.set('end_date', endDate.toISOString().split('T')[0]);
+    return AppInjector.get(HttpClient).get<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/marking_sessions/units/${this.id}`,
+      {params},
+    );
+  }
+
   public downloadTutorTimesSummaryCsv(startDate?: Date, endDate?: Date): Observable<SidekiqJob> {
     let params = new HttpParams();
     if (startDate) params = params.set('start_date', startDate.toISOString().split('T')[0]);

@@ -21,7 +21,7 @@
     <!-- </div> -->
   </mat-card>
 
-  <mat-card appearance="outlined" class="mt-4 p-[16px]">
+  <!-- <mat-card appearance="outlined" class="mt-4 p-[16px]">
     <mat-card-header>
       <mat-card-title>
         <h2>Tutor Times Session Summary</h2>
@@ -65,5 +65,43 @@
         <mat-icon>download</mat-icon> Tutor Times Summary
       </button>
     </mat-card-content>
-  </mat-card>
+  </mat-card> -->
+
+  @if (role === 'Convenor') {
+    <mat-card appearance="outlined" class="p-[16px]">
+      <mat-card-header>
+        <mat-card-title>
+          <h2>Tutor Times Session Summary</h2>
+        </mat-card-title>
+      </mat-card-header>
+      <ng-template #eventTooltipTemplate let-event="event">
+        <div class="z-50 bg-[rgba(25,25,25,0.8)] text-white p-2 rounded">
+          <strong>{{ event.name }} ({{ event.duration }} minutes)</strong><br />
+          Assessments: {{ event.assessments || 0 }}<br />
+          Comments: {{ event.comments_added || 0 }}<br />
+          Submissions opened: {{ event.submissions_opened || 0 }}
+        </div>
+      </ng-template>
+
+      <div class="flex justify-between my-4">
+        <div class="flex gap-2">
+          <button mat-raised-button color="primary" (click)="goPreviousWeek()">
+            Previous Week
+          </button>
+          <button mat-raised-button (click)="goTodayWeek()">Today</button>
+          <button mat-raised-button color="primary" (click)="goNextWeek()">Next Week</button>
+        </div>
+        <button mat-button (click)="getTutorTimesSummary()">
+          <mat-icon>download</mat-icon> Weekly Summary
+        </button>
+      </div>
+
+      <mwl-calendar-week-view
+        [viewDate]="viewDate"
+        [events]="filteredEvents"
+        (eventClicked)="eventClicked($event)"
+        [tooltipTemplate]="eventTooltipTemplate"
+      />
+    </mat-card>
+  }
 </div>
