@@ -156,40 +156,37 @@ export class UnitAnalyticsComponent implements OnInit {
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday
 
-    this.userService.getTutors().subscribe((tutors) => {
-      console.log(tutors);
-      this.unit.getUserMarkingSessions(startOfWeek, endOfWeek).subscribe({
-        next: (data) => {
-          this.events = data.map((row) => {
-            const tutor = tutors.find((t) => t.id === row['user_id']);
-            // const {primary, secondary} = this.stringToColors(tutor.name);
-            const primary = this.stringToHexColor(tutor.firstName);
-            const secondary = this.stringToHexColor(tutor.firstName);
-            return {
-              start: new Date(row['start_time']),
-              end: new Date(row['end_time']),
-              // title: `${tutor?.firstName} (${row['duration_minutes']}m)<br/>${row['comments_added']} comments<br/>${row['assessments']} assessments<br/>${row['submissions_opened']} Submissions opened`,
-              title: `${tutor?.firstName} (${row['duration_minutes']}m)`,
-              color: {primary: secondary, secondary: primary},
-              user_id: row['user_id'],
-              comments_added: row['comments_added'],
-              assessments: row['assessments'],
-              submissions_opened: row['submissions_opened'],
-              duration: row['duration_minutes'],
-              name: tutor?.firstName,
-            };
-          });
+    this.unit.getUserMarkingSessions(startOfWeek, endOfWeek).subscribe({
+      next: (data) => {
+        this.events = data.map((row) => {
+          const tutor = this.unit.staff.find((t) => t.user.id === row['user_id'])?.user;
+          // const {primary, secondary} = this.stringToColors(tutor.name);
+          const primary = this.stringToHexColor(tutor.firstName);
+          const secondary = this.stringToHexColor(tutor.firstName);
+          return {
+            start: new Date(row['start_time']),
+            end: new Date(row['end_time']),
+            // title: `${tutor?.firstName} (${row['duration_minutes']}m)<br/>${row['comments_added']} comments<br/>${row['assessments']} assessments<br/>${row['submissions_opened']} Submissions opened`,
+            title: `${tutor?.firstName} (${row['duration_minutes']}m)`,
+            color: {primary: secondary, secondary: primary},
+            user_id: row['user_id'],
+            comments_added: row['comments_added'],
+            assessments: row['assessments'],
+            submissions_opened: row['submissions_opened'],
+            duration: row['duration_minutes'],
+            name: tutor?.firstName,
+          };
+        });
 
-          this.filteredEvents = this.events.filter(
-            (row) => this.selectedUserId === null || row['user_id'] === this.selectedUserId,
-          );
+        this.filteredEvents = this.events.filter(
+          (row) => this.selectedUserId === null || row['user_id'] === this.selectedUserId,
+        );
 
-          console.log(data);
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
+        console.log(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
     });
   }
 
