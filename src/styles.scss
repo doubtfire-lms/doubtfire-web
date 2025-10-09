@@ -36,3 +36,8 @@
     }
   }
 }
+
+.mat-mdc-progress-spinner circle,
+.mat-spinner circle {
+  stroke: #ddd !important;
+}

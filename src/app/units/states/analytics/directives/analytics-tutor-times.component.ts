@@ -4,6 +4,8 @@ import {CalendarEvent} from 'angular-calendar';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
@@ -30,37 +32,48 @@ export class AnalyticsTutorTimesComponent implements OnInit {
   tutorTimeSummaryEndDate: Date;
   daysInWeek: number = 7;
 
-  constructor(private alertService: AlertService) {}
+  public canLoadSessions: boolean = false;
+  public isLoading: boolean = false;
 
-  public loadSessions: boolean = false;
+  constructor(
+    private alertService: AlertService,
+    private sidekiqProgressModalService: SidekiqProgressModalService,
+    private fileDownloaderService: FileDownloaderService,
+  ) {}
 
   ngOnInit(): void {
+    if (!this.sidekiqProgressModalService || !this.fileDownloaderService) {
+      // NOTE: Our `downloadCsvFn` callback requires these services because it calls `this` context
+      console.error('Failed to load tutor times analytics');
+    }
+
     this.tutorTimeSummaryEndDate = new Date();
-    this.tutorTimeSummaryStartDate = new Date(
-      this.tutorTimeSummaryEndDate.getTime() - 7 * 24 * 60 * 60 * 1000,
-    );
+    this.tutorTimeSummaryEndDate.setHours(0, 0, 0, 0);
+
+    this.tutorTimeSummaryStartDate = new Date(this.tutorTimeSummaryEndDate);
+    this.tutorTimeSummaryStartDate.setDate(this.tutorTimeSummaryEndDate.getDate() - 7);
 
     const startOfWeek = new Date(this.viewDate);
     startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1);
 
     this.viewDate = startOfWeek;
 
-    this.loadSessions = true;
+    this.canLoadSessions = true;
     this.getMarkingSesssions();
   }
 
   goPreviousWeek() {
-    this.loadSessions = true;
+    this.canLoadSessions = true;
     this.viewDate = new Date(this.viewDate.getTime() - this.daysInWeek * 24 * 60 * 60 * 1000);
   }
 
   goNextWeek() {
-    this.loadSessions = true;
+    this.canLoadSessions = true;
     this.viewDate = new Date(this.viewDate.getTime() + this.daysInWeek * 24 * 60 * 60 * 1000);
   }
 
   goTodayWeek() {
-    this.loadSessions = true;
+    this.canLoadSessions = true;
 
     this.tutorTimeSummaryEndDate = new Date();
     this.tutorTimeSummaryStartDate = new Date(
@@ -91,13 +104,14 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       this.alertService.error('You cannot select more than a year', 3000);
       return;
     }
+    console.log('diff days', diffDays);
     if (diffDays < 1) {
       this.tutorTimeSummaryStartDate = this.tutorTimeSummaryEndDate;
       this.alertService.error('End date must be on or after the start date');
       return;
     }
-    this.loadSessions = true;
-    this.daysInWeek = diffDays + 1;
+    this.canLoadSessions = true;
+    this.daysInWeek = diffDays;
     this.viewDate = new Date(this.tutorTimeSummaryStartDate);
   }
 
@@ -112,8 +126,8 @@ export class AnalyticsTutorTimesComponent implements OnInit {
   }
 
   public getTutorTimesSummary() {
-    const start = this.tutorTimeSummaryStartDate.toLocaleString().split('T')[0];
-    const end = this.tutorTimeSummaryEndDate.toLocaleString().split('T')[0];
+    const start = `${this.tutorTimeSummaryStartDate.getFullYear()}-${(this.tutorTimeSummaryStartDate.getMonth() + 1).toString().padStart(2, '0')}-${this.tutorTimeSummaryStartDate.getDate().toString().padStart(2, '0')}`;
+    const end = `${this.tutorTimeSummaryEndDate.getFullYear()}-${(this.tutorTimeSummaryEndDate.getMonth() + 1).toString().padStart(2, '0')}-${this.tutorTimeSummaryEndDate.getDate().toString().padStart(2, '0')}`;
 
     this.downloadCsvFn(
       this.unit.downloadTutorTimesSummaryCsv(
@@ -126,17 +140,18 @@ export class AnalyticsTutorTimesComponent implements OnInit {
   }
 
   public getMarkingSesssions() {
-    if (!this.loadSessions) {
+    if (!this.canLoadSessions) {
       return;
     }
 
-    this.loadSessions = false;
-
+    this.canLoadSessions = false;
+    this.isLoading = true;
     this.unit
       .getUserMarkingSessions(this.tutorTimeSummaryStartDate, this.tutorTimeSummaryEndDate)
       .subscribe({
         next: (data) => {
-          this.loadSessions = false;
+          this.isLoading = false;
+          this.canLoadSessions = false;
           this.events = data.map((row) => {
             const tutor = this.unit.staff.find((t) => t.user.id === row['user_id'])?.user;
 
@@ -164,7 +179,7 @@ export class AnalyticsTutorTimesComponent implements OnInit {
           console.log(data);
         },
         error: (error) => {
-          this.loadSessions = false;
+          this.canLoadSessions = false;
 
           console.error(error);
         },

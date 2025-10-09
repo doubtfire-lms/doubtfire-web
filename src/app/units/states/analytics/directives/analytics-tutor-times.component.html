@@ -4,7 +4,13 @@
       <h2>Tutor Times Session Summary</h2>
     </mat-card-title>
 
-    <button mat-button (click)="getTutorTimesSummary()">
+    <button
+      mat-button
+      (click)="getTutorTimesSummary()"
+      matTooltip="Download CSV summary for the selected date range"
+      matTooltipShowDelay="1000"
+      matTooltipPosition="above"
+    >
       <mat-icon>download</mat-icon> Download Summary
     </button>
   </mat-card-header>
@@ -55,15 +61,25 @@
     </div>
   </ng-template>
 
-  <mwl-calendar-week-view
-    [viewDate]="viewDate"
-    [events]="filteredEvents"
-    (eventClicked)="eventClicked($event)"
-    [tooltipTemplate]="eventTooltipTemplate"
-    [hourDuration]="60"
-    [hourSegments]="1"
-    [weekStartsOn]="0"
-    [daysInWeek]="daysInWeek"
-    (beforeViewRender)="beforeViewRender($event)"
-  />
+  <div class="relative">
+    @if (isLoading) {
+      <mat-progress-spinner
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50"
+        mode="indeterminate"
+      >
+      </mat-progress-spinner>
+    }
+
+    <mwl-calendar-week-view
+      [viewDate]="viewDate"
+      [events]="filteredEvents"
+      (eventClicked)="eventClicked($event)"
+      [tooltipTemplate]="eventTooltipTemplate"
+      [hourDuration]="60"
+      [hourSegments]="1"
+      [weekStartsOn]="0"
+      [daysInWeek]="daysInWeek"
+      (beforeViewRender)="beforeViewRender($event)"
+    />
+  </div>
 </mat-card>
