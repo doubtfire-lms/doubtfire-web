@@ -16,15 +16,15 @@
   </mat-card-header>
 
   <div class="flex flex-col items-center justify-center">
-    <div class="flex flex-row gap-2 m-2">
+    <div class="flex flex-row gap-2 mb-5">
       <button mat-raised-button color="primary" (click)="goPreviousWeek()" class="w-40">
         Previous
       </button>
       <button mat-raised-button (click)="goTodayWeek()">Today</button>
       <button mat-raised-button color="primary" (click)="goNextWeek()" class="w-40">Next</button>
     </div>
-    <div class="flex flex-row gap-2 m-2">
-      <mat-form-field>
+    <div class="flex flex-row gap-2 mb-5">
+      <mat-form-field appearance="outline">
         <mat-label>Choose a date</mat-label>
         <input
           matInput
@@ -32,12 +32,12 @@
           [(ngModel)]="tutorTimeSummaryStartDate"
           (dateChange)="onDateChange($event)"
         />
-        <mat-hint>All sessions from this day and onwards.</mat-hint>
+        <mat-hint>Sessions from this day onward</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
         <mat-datepicker #startdatepicker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Choose a date</mat-label>
         <input
           matInput
@@ -45,7 +45,7 @@
           [(ngModel)]="tutorTimeSummaryEndDate"
           (dateChange)="onDateChange($event)"
         />
-        <mat-hint>All sessions from this day and prior.</mat-hint>
+        <mat-hint>Sessions up to this day</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
         <mat-datepicker #enddatepicker></mat-datepicker>
       </mat-form-field>
