@@ -111,6 +111,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 
 import {DateFnsAdapter, MAT_DATE_FNS_FORMATS} from '@angular/material-date-fns-adapter';
 import {enAU} from 'date-fns/locale';
+import {CalendarModule, DateAdapter as CalendarDateAdapter} from 'angular-calendar';
+import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 
 import {doubtfireStates} from './doubtfire.states';
 import {MatTableModule} from '@angular/material/table';
@@ -283,14 +285,12 @@ import {LtiService} from './api/services/lti.service';
 import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
 import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
 import {TaskPrerequisiteService} from './api/services/task-prerequisite.service';
-// import { GradeIconComponent } from './common/grade-icon/grade-icon.component';
-// import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-task-modal.component';
-// import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
-import {CalendarModule, DateAdapter as CalendarDateAdapter} from 'angular-calendar';
-import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
+import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -442,6 +442,7 @@ const MY_DATE_FORMAT = {
     UnitStaffEditorComponent,
     GroupSetSelectorComponent,
     UnitDetailsEditorComponent,
+    PortfolioGradeSelectStepComponent,
   ],
   // Services we provide
   providers: [
