@@ -622,7 +622,7 @@ export class Unit extends Entity {
     }
 
     return AppInjector.get(HttpClient).get<any>(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/marking_sessions/units/${this.id}`,
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/marking_sessions`,
       {params},
     );
   }
