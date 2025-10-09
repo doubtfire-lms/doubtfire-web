@@ -1,5 +1,5 @@
-import {HttpClient} from '@angular/common/http';
 import {Component, Input, OnInit} from '@angular/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {CalendarEvent} from 'angular-calendar';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -32,6 +32,7 @@ export class UnitAnalyticsComponent implements OnInit {
     private alertsService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     private userService: UserService,
+    private alertService: AlertService,
   ) {}
 
   public loadSessions: boolean = false;
@@ -42,25 +43,47 @@ export class UnitAnalyticsComponent implements OnInit {
 
   goPreviousWeek() {
     this.loadSessions = true;
-
     this.viewDate = new Date(this.viewDate.getTime() - this.daysInWeek * 24 * 60 * 60 * 1000);
-    // this.getMarkingSesssions();
-    // TODO: previous week should subtract by the number of days currently being viewed
+  }
+
+  goNextWeek() {
+    this.loadSessions = true;
+    this.viewDate = new Date(this.viewDate.getTime() + this.daysInWeek * 24 * 60 * 60 * 1000);
   }
 
   goTodayWeek() {
     this.loadSessions = true;
     this.viewDate = new Date();
-    // this.getMarkingSesssions();
     const startOfWeek = new Date();
     startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1); // Sunday
 
     this.viewDate = startOfWeek;
   }
-  goNextWeek() {
+
+  onDateChange(_event: MatDatepickerInputEvent<Date>) {
+    if (!this.tutorTimeSummaryStartDate || !this.tutorTimeSummaryEndDate) {
+      return;
+    }
+
+    // Includes both the selected start & end days
+    const diffDays =
+      Math.floor(
+        (this.tutorTimeSummaryEndDate.getTime() - this.tutorTimeSummaryStartDate.getTime()) /
+          (1000 * 60 * 60 * 24),
+      ) + 1;
+
+    if (diffDays > 366) {
+      this.alertService.error('You cannot select more than a year', 3000);
+      return;
+    }
+    if (diffDays < 1) {
+      this.tutorTimeSummaryStartDate = this.tutorTimeSummaryEndDate;
+      this.alertService.error('End date must be on or after the start date');
+      return;
+    }
     this.loadSessions = true;
-    this.viewDate = new Date(this.viewDate.getTime() + this.daysInWeek * 24 * 60 * 60 * 1000);
-    // this.getMarkingSesssions();
+    this.daysInWeek = diffDays + 1;
+    this.viewDate = new Date(this.tutorTimeSummaryStartDate);
   }
 
   ngOnInit(): void {
@@ -77,8 +100,6 @@ export class UnitAnalyticsComponent implements OnInit {
     startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1); // Sunday
 
     this.viewDate = startOfWeek;
-    // TODO: viewDate should be todays Date - 7 days
-    // TODO: or if date picker... last Date - number of days selected
   }
 
   public getTaskCompletionCsv() {
@@ -124,19 +145,6 @@ export class UnitAnalyticsComponent implements OnInit {
   }
 
   public getTutorTimesSummary() {
-    // const startOfWeek = new Date(this.viewDate);
-    // startOfWeek.setDate(this.viewDate.getDate() - this.viewDate.getDay()); // Sunday
-
-    // const endOfWeek = new Date(startOfWeek);
-    // endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday
-
-    // const startOfWeek = new Date(this.viewDate);
-    // // startOfWeek.setDate(this.viewDate.getDate() - this.viewDate.getDay()); // Sunday
-    // startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1); // Sunday
-
-    // const endOfWeek = new Date(startOfWeek);
-    // endOfWeek.setDate(startOfWeek.getDate() + this.daysInWeek); // Saturday
-
     const start = this.tutorTimeSummaryStartDate.toLocaleString().split('T')[0];
     const end = this.tutorTimeSummaryEndDate.toLocaleString().split('T')[0];
 
@@ -191,15 +199,6 @@ export class UnitAnalyticsComponent implements OnInit {
     if (!this.loadSessions) {
       return;
     }
-    // const user = this.userService.currentUser;
-    // this.events = [];
-
-    // const startOfWeek = new Date(this.viewDate);
-    // // startOfWeek.setDate(this.viewDate.getDate() - this.viewDate.getDay()); // Sunday
-    // startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1); // Sunday
-
-    // const endOfWeek = new Date(startOfWeek);
-    // endOfWeek.setDate(startOfWeek.getDate() + this.daysInWeek); // Saturday
 
     this.unit
       .getUserMarkingSessions(this.tutorTimeSummaryStartDate, this.tutorTimeSummaryEndDate)

@@ -84,14 +84,43 @@
       </ng-template>
 
       <div class="flex justify-between my-4">
-        <div class="flex gap-2">
+        <div class="flex gap-2 items-center">
           <button mat-raised-button color="primary" (click)="goPreviousWeek()">Previous</button>
           <button mat-raised-button (click)="goTodayWeek()">Today</button>
           <button mat-raised-button color="primary" (click)="goNextWeek()">Next</button>
-          <button mat-button>Custom Range</button>
+
+          <!-- <button mat-button>Custom Range</button> -->
+
+          <div>
+            <mat-form-field>
+              <mat-label>Choose a date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="startdatepicker"
+                [(ngModel)]="tutorTimeSummaryStartDate"
+                (dateChange)="onDateChange($event)"
+              />
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #startdatepicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Choose a date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="enddatepicker"
+                [(ngModel)]="tutorTimeSummaryEndDate"
+                (dateChange)="onDateChange($event)"
+              />
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #enddatepicker></mat-datepicker>
+            </mat-form-field>
+          </div>
         </div>
         <button mat-button (click)="getTutorTimesSummary()">
-          <mat-icon>download</mat-icon> Weekly Summary
+          <mat-icon>download</mat-icon> Download Summary
         </button>
       </div>
 
