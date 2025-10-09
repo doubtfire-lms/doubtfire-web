@@ -607,9 +607,21 @@ export class Unit extends Entity {
   // TODO: create entity for marking sessions and session activities?
   public getUserMarkingSessions(startDate?: Date, endDate?: Date): Observable<any> {
     let params = new HttpParams();
-    if (startDate) params = params.set('start_date', startDate.toISOString().split('T')[0]);
-    if (endDate) params = params.set('end_date', endDate.toISOString().split('T')[0]);
-    return AppInjector.get(HttpClient).get<SidekiqJob>(
+    if (startDate) {
+      params = params.set(
+        'start_date',
+        `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    if (endDate) {
+      params = params.set(
+        'end_date',
+        `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    return AppInjector.get(HttpClient).get<any>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/marking_sessions/units/${this.id}`,
       {params},
     );
@@ -617,10 +629,21 @@ export class Unit extends Entity {
 
   public downloadTutorTimesSummaryCsv(startDate?: Date, endDate?: Date): Observable<SidekiqJob> {
     let params = new HttpParams();
-    if (startDate) params = params.set('start_date', startDate.toISOString().split('T')[0]);
-    if (endDate) params = params.set('end_date', endDate.toISOString().split('T')[0]);
 
-    console.log(params);
+    if (startDate) {
+      params = params.set(
+        'start_date',
+        `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    if (endDate) {
+      params = params.set(
+        'end_date',
+        `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
     return AppInjector.get(HttpClient).get<SidekiqJob>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_times_summary`,
       {params},
