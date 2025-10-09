@@ -53,6 +53,13 @@ export class UnitAnalyticsComponent implements OnInit {
 
   goTodayWeek() {
     this.loadSessions = true;
+
+    this.tutorTimeSummaryEndDate = new Date();
+    this.tutorTimeSummaryStartDate = new Date(
+      this.tutorTimeSummaryEndDate.getTime() - 7 * 24 * 60 * 60 * 1000,
+    );
+    this.daysInWeek = 7;
+
     this.viewDate = new Date();
     const startOfWeek = new Date();
     startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1); // Sunday
@@ -87,19 +94,22 @@ export class UnitAnalyticsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('on init');
+    this.loadSessions = false;
+
     this.tutorTimeSummaryEndDate = new Date();
     this.tutorTimeSummaryStartDate = new Date(
       this.tutorTimeSummaryEndDate.getTime() - 7 * 24 * 60 * 60 * 1000,
     );
 
-    this.loadSessions = true;
-
-    this.getMarkingSesssions();
-
     const startOfWeek = new Date(this.viewDate);
     startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1); // Sunday
 
     this.viewDate = startOfWeek;
+
+    this.loadSessions = true;
+
+    this.getMarkingSesssions();
   }
 
   public getTaskCompletionCsv() {
@@ -199,6 +209,8 @@ export class UnitAnalyticsComponent implements OnInit {
     if (!this.loadSessions) {
       return;
     }
+
+    this.loadSessions = false;
 
     this.unit
       .getUserMarkingSessions(this.tutorTimeSummaryStartDate, this.tutorTimeSummaryEndDate)
