@@ -292,6 +292,7 @@ import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-s
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
 import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
+import {MarkingSessionService} from './api/services/marking-session.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -533,6 +534,7 @@ const MY_DATE_FORMAT = {
     SidekiqJobService,
     LtiService,
     TaskPrerequisiteService,
+    MarkingSessionService,
   ],
   imports: [
     FlexLayoutModule,

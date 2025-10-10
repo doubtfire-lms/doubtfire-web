@@ -169,24 +169,24 @@ export class AnalyticsTutorTimesComponent implements OnInit {
         next: (data) => {
           this.isLoading = false;
           this.canLoadSessions = false;
-          this.events = data.map((row) => {
-            const tutor = this.unit.staff.find((t) => t.user.id === row['user_id'])?.user;
+          this.events = data.map((session) => {
+            const tutor = this.unit.staff.find((t) => t.user.id === session.user.id);
 
-            const primary = this.stringToHexColor(tutor.firstName);
-            const secondary = this.stringToHexColor(tutor.firstName);
+            const primary = this.stringToHexColor(tutor.user.firstName);
+            const secondary = this.stringToHexColor(tutor.user.firstName);
             return {
-              start: new Date(row['start_time']),
-              end: new Date(row['end_time']),
+              start: new Date(session.startTime),
+              end: new Date(session.endTime),
               // title: `${tutor?.firstName} (${row['duration_minutes']}m)<br/>${row['comments_added']} comments<br/>${row['assessments']} assessments<br/>${row['submissions_opened']} Submissions opened`,
-              title: `${tutor?.firstName} (${row['duration_minutes']}m) ${row['during_tutorial'] ? '(T)' : ''}`,
+              title: `${tutor?.user.firstName} (${session.durationMinutes}m) ${session.duringTutorial ? '(T)' : ''}`,
               color: {primary: secondary, secondary: primary},
-              user_id: row['user_id'],
-              comments_added: row['comments_added'],
-              assessments: row['assessments'],
-              submissions_opened: row['submissions_opened'],
-              duration: row['duration_minutes'],
-              duringTutorial: row['during_tutorial'],
-              name: tutor?.firstName,
+              user_id: session.user.id,
+              comments_added: session.commentsAdded,
+              assessments: session.assessments,
+              submissions_opened: session.submissionsOpened,
+              duration: session.durationMinutes,
+              duringTutorial: session.duringTutorial,
+              name: tutor?.user.firstName,
             };
           });
 

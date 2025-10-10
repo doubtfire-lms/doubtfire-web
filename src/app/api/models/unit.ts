@@ -32,6 +32,8 @@ import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {SidekiqJob} from './sidekiq-job';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
+import {MarkingSession} from './marking-session';
+import {MarkingSessionService} from '../services/marking-session.service';
 
 export class Unit extends Entity {
   id: number;
@@ -603,9 +605,7 @@ export class Unit extends Entity {
     );
   }
 
-  // TODO: create type
-  // TODO: create entity for marking sessions and session activities?
-  public getUserMarkingSessions(startDate?: Date, endDate?: Date): Observable<any> {
+  public getUserMarkingSessions(startDate?: Date, endDate?: Date): Observable<MarkingSession[]> {
     let params = new HttpParams();
     if (startDate) {
       params = params.set(
@@ -621,9 +621,13 @@ export class Unit extends Entity {
       );
     }
 
-    return AppInjector.get(HttpClient).get<any>(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/marking_sessions`,
-      {params},
+    // TODO: we should cache the data by the same start/end date
+    const markingSessionService = AppInjector.get(MarkingSessionService);
+    return markingSessionService.fetchAll(
+      {
+        unitId: this.id,
+      },
+      {params, constructorParams: this},
     );
   }
 
