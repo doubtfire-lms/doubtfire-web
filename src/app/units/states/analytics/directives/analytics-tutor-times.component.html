@@ -4,18 +4,15 @@
       <h2>Tutor Times Session Summary</h2>
     </mat-card-title>
 
-    <div class="flex flex-col items-end justify-end">
-      <button
-        mat-button
-        (click)="getTutorTimesSummary()"
-        matTooltip="Download CSV summary for the selected date range"
-        matTooltipShowDelay="1000"
-        matTooltipPosition="above"
-      >
-        <mat-icon>download</mat-icon> Download Summary
-      </button>
-      <mat-slide-toggle>Include sessions during tutorials</mat-slide-toggle>
-    </div>
+    <button
+      mat-button
+      (click)="getTutorTimesSummary()"
+      matTooltip="Download CSV summary for the selected date range"
+      matTooltipShowDelay="1000"
+      matTooltipPosition="above"
+    >
+      <mat-icon>download</mat-icon> Download Summary
+    </button>
   </mat-card-header>
 
   <div class="flex flex-col items-center justify-center">
