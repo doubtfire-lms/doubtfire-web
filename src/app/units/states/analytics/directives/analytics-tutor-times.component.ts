@@ -32,6 +32,8 @@ export class AnalyticsTutorTimesComponent implements OnInit {
   tutorTimeSummaryEndDate: Date;
   daysInWeek: number = 7;
 
+  hideSessionsDuringTutorials: boolean = false;
+
   public canLoadSessions: boolean = false;
   public isLoading: boolean = false;
 
@@ -88,6 +90,20 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     this.viewDate = startOfWeek;
   }
 
+  public onToggleChangeHideSessionsDuringTutorial() {
+    setTimeout(() => {
+      this.applyFilters();
+    });
+  }
+
+  applyFilters() {
+    this.filteredEvents = this.events.filter(
+      (e) =>
+        (this.selectedUserId === null || e['user_id'] === this.selectedUserId) &&
+        (!this.hideSessionsDuringTutorials || !e['duringTutorial']),
+    );
+  }
+
   onDateChange(_event: MatDatepickerInputEvent<Date>) {
     if (!this.tutorTimeSummaryStartDate || !this.tutorTimeSummaryEndDate) {
       return;
@@ -133,9 +149,10 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       this.unit.downloadTutorTimesSummaryCsv(
         this.tutorTimeSummaryStartDate,
         this.tutorTimeSummaryEndDate,
+        this.hideSessionsDuringTutorials,
       ),
       'Tutor Times Summary CSV',
-      `${this.unit.code}-tutor-times-summary-${start}-to-${end}.csv`,
+      `${this.unit.code}-tutor-times-summary-${start}-to-${end}-${!this.hideSessionsDuringTutorials ? 'incl-tutorials' : ''}.csv`,
     );
   }
 
@@ -161,13 +178,14 @@ export class AnalyticsTutorTimesComponent implements OnInit {
               start: new Date(row['start_time']),
               end: new Date(row['end_time']),
               // title: `${tutor?.firstName} (${row['duration_minutes']}m)<br/>${row['comments_added']} comments<br/>${row['assessments']} assessments<br/>${row['submissions_opened']} Submissions opened`,
-              title: `${tutor?.firstName} (${row['duration_minutes']}m)`,
+              title: `${tutor?.firstName} (${row['duration_minutes']}m) ${row['during_tutorial'] ? '(T)' : ''}`,
               color: {primary: secondary, secondary: primary},
               user_id: row['user_id'],
               comments_added: row['comments_added'],
               assessments: row['assessments'],
               submissions_opened: row['submissions_opened'],
               duration: row['duration_minutes'],
+              duringTutorial: row['during_tutorial'],
               name: tutor?.firstName,
             };
           });
@@ -190,16 +208,10 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     if (event['user_id'] !== undefined) {
       if (this.selectedUserId === null) {
         this.selectedUserId = Number(event['user_id']);
-
-        this.filteredEvents = this.events.filter(
-          (row) => this.selectedUserId === null || row['user_id'] === this.selectedUserId,
-        );
       } else {
         this.selectedUserId = null;
-
-        this.filteredEvents = [...this.events];
-        // this.getMarkingSesssions();
       }
+      this.applyFilters();
     }
   }
 

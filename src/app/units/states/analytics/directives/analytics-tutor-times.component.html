@@ -1,18 +1,21 @@
 <mat-card appearance="outlined" class="p-[16px]">
-  <mat-card-header class="flex justify-between">
+  <mat-card-header class="flex justify-between mb-4">
     <mat-card-title>
       <h2>Tutor Times Session Summary</h2>
     </mat-card-title>
 
-    <button
-      mat-button
-      (click)="getTutorTimesSummary()"
-      matTooltip="Download CSV summary for the selected date range"
-      matTooltipShowDelay="1000"
-      matTooltipPosition="above"
-    >
-      <mat-icon>download</mat-icon> Download Summary
-    </button>
+    <div class="flex flex-col items-end justify-end">
+      <button
+        mat-button
+        (click)="getTutorTimesSummary()"
+        matTooltip="Download CSV summary for the selected date range"
+        matTooltipShowDelay="1000"
+        matTooltipPosition="above"
+      >
+        <mat-icon>download</mat-icon> Download Summary
+      </button>
+      <mat-slide-toggle>Include sessions during tutorials</mat-slide-toggle>
+    </div>
   </mat-card-header>
 
   <div class="flex flex-col items-center justify-center">
@@ -50,14 +53,26 @@
         <mat-datepicker #enddatepicker></mat-datepicker>
       </mat-form-field>
     </div>
+    <div class="flex w-full justify-end mb-2">
+      <mat-slide-toggle
+        labelPosition="before"
+        [(ngModel)]="hideSessionsDuringTutorials"
+        (toggleChange)="onToggleChangeHideSessionsDuringTutorial()"
+        >Hide sessions during tutorials</mat-slide-toggle
+      >
+    </div>
   </div>
 
   <ng-template #eventTooltipTemplate let-event="event">
     <div class="z-50 bg-[rgba(25,25,25,0.8)] text-white p-2 rounded">
-      <strong>{{ event.name }} ({{ event.duration }} minutes)</strong><br />
+      <strong
+        >{{ event.name }} ({{ event.duration }} minutes)
+        {{ event.duringTutorial ? 'T' : '' }}</strong
+      ><br />
       Assessments: {{ event.assessments || 0 }}<br />
       Comments: {{ event.comments_added || 0 }}<br />
-      Submissions opened: {{ event.submissions_opened || 0 }}
+      Submissions opened: {{ event.submissions_opened || 0 }} <br />
+      During Tutorial?: {{ event.duringTutorial ? 'yes' : 'no' }}
     </div>
   </ng-template>
 
