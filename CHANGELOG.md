@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-48](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-47...v10.0.0-48) (2025-10-12)
+
+
+### Features
+
+* add tutor times summary download ([#1015](https://github.com/b0ink/doubtfire-deploy/issues/1015)) ([2b4afe2](https://github.com/b0ink/doubtfire-deploy/commit/2b4afe24e3f8139fec23337facc7656eec9a9d3a))
+
+
+### Bug Fixes
+
+* add assess in portfolio tasks as completed tasks in burndown chart ([8d36c94](https://github.com/b0ink/doubtfire-deploy/commit/8d36c94f03563a0924cfeb7d2d9e8dd911b65960))
+
 ## [10.0.0-47](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-46...v10.0.0-47) (2025-09-25)
 
 
