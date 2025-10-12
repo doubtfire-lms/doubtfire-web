@@ -25,11 +25,8 @@ export class MarkingSessionService extends CachedEntityService<MarkingSession> {
 
       {
         keys: ['user', 'user_id'],
-        toEntityFn: (data: object, key: string, markingSession: MarkingSession) => {
-          console.log(markingSession);
+        toEntityFn: (data: object, _key: string, markingSession: MarkingSession) => {
           const userRole = markingSession.unit.staff.find((s) => s.user.id === data['user_id']);
-          console.log(userRole);
-          // const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
           return userRole.user;
         },
       },

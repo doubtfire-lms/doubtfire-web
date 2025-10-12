@@ -177,7 +177,6 @@ export class AnalyticsTutorTimesComponent implements OnInit {
             return {
               start: new Date(session.startTime),
               end: new Date(session.endTime),
-              // title: `${tutor?.firstName} (${row['duration_minutes']}m)<br/>${row['comments_added']} comments<br/>${row['assessments']} assessments<br/>${row['submissions_opened']} Submissions opened`,
               title: `${tutor?.user.firstName} (${session.durationMinutes}m) ${session.duringTutorial ? '(T)' : ''}`,
               color: {primary: secondary, secondary: primary},
               user_id: session.user.id,

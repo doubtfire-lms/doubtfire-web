@@ -5,7 +5,7 @@ import {Unit} from './unit';
 export class MarkingSession extends Entity {
   id: number;
 
-  // tutor
+  // Marking tutor
   user: User;
 
   unit: Unit;
