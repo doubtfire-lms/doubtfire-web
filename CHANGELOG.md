@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-49](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-48...v10.0.0-49) (2025-10-12)
+
+
+### Features
+
+* display session start and end time ([bb548b9](https://github.com/b0ink/doubtfire-deploy/commit/bb548b92d04bb7b8665444e7935317bc4b6a0981))
+
 ## [10.0.0-48](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-47...v10.0.0-48) (2025-10-12)
 
 
