@@ -30,8 +30,10 @@ import {LearningOutcome} from './learning-outcome';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {SidekiqJob} from './sidekiq-job';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
+import {MarkingSession} from './marking-session';
+import {MarkingSessionService} from '../services/marking-session.service';
 
 export class Unit extends Entity {
   id: number;
@@ -600,6 +602,61 @@ export class Unit extends Entity {
   public downloadTutorAssessmentCsv(): Observable<SidekiqJob> {
     return AppInjector.get(HttpClient).get<SidekiqJob>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments`,
+    );
+  }
+
+  public getUserMarkingSessions(startDate?: Date, endDate?: Date): Observable<MarkingSession[]> {
+    let params = new HttpParams();
+    if (startDate) {
+      params = params.set(
+        'start_date',
+        `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    if (endDate) {
+      params = params.set(
+        'end_date',
+        `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    // TODO: we should cache the data by the same start/end date
+    const markingSessionService = AppInjector.get(MarkingSessionService);
+    return markingSessionService.fetchAll(
+      {
+        unitId: this.id,
+      },
+      {params, constructorParams: this},
+    );
+  }
+
+  public downloadTutorTimesSummaryCsv(
+    startDate?: Date,
+    endDate?: Date,
+    ignoreSessionsDuringTutorials?: boolean,
+  ): Observable<SidekiqJob> {
+    let params = new HttpParams();
+
+    if (startDate) {
+      params = params.set(
+        'start_date',
+        `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    if (endDate) {
+      params = params.set(
+        'end_date',
+        `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    params = params.set('ignore_sessions_during_tutorials', ignoreSessionsDuringTutorials ?? false);
+
+    return AppInjector.get(HttpClient).get<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_times_summary`,
+      {params},
     );
   }
 
