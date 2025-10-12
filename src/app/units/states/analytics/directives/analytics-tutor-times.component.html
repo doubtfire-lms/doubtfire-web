@@ -66,6 +66,7 @@
         >{{ event.name }} ({{ event.duration }} minutes)
         {{ event.duringTutorial ? 'T' : '' }}</strong
       ><br />
+      {{ event.startHour }} — {{ event.endHour }}<br />
       Assessments: {{ event.assessments || 0 }}<br />
       Comments: {{ event.comments_added || 0 }}<br />
       Submissions opened: {{ event.submissions_opened || 0 }} <br />

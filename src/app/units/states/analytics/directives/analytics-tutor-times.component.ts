@@ -177,6 +177,16 @@ export class AnalyticsTutorTimesComponent implements OnInit {
             return {
               start: new Date(session.startTime),
               end: new Date(session.endTime),
+              startHour: new Date(session.startTime).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+              }),
+              endHour: new Date(session.endTime).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+              }),
               title: `${tutor?.user.firstName} (${session.durationMinutes}m) ${session.duringTutorial ? '(T)' : ''}`,
               color: {primary: secondary, secondary: primary},
               user_id: session.user.id,
