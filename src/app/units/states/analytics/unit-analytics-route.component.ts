@@ -1,7 +1,10 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {CalendarEvent} from 'angular-calendar';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
+import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -18,7 +21,13 @@ export class UnitAnalyticsComponent {
     private sidekiqProgressModalService: SidekiqProgressModalService,
     private alertsService: AlertService,
     private fileDownloaderService: FileDownloaderService,
+    private userService: UserService,
+    private alertService: AlertService,
   ) {}
+
+  get role() {
+    return this.unit.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
+  }
 
   public getTaskCompletionCsv() {
     this.downloadCsv(
