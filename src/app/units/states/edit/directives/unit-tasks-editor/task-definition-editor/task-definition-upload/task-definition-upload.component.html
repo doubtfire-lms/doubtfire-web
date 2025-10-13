@@ -113,4 +113,17 @@
       <input matInput [(ngModel)]="taskDefinition.plagiarismWarnPct" type="number" />
     </mat-form-field>
   </div>
+  <div class="flex flex-grow">
+    <div class="basis-1/2">
+      <mat-slide-toggle [(ngModel)]="taskDefinition.useResourcesForJplagBaseCode">
+        Use Task Resources for JPlag Base Code</mat-slide-toggle
+      >
+      <p>
+        Base code is a common framework included in all submissions. When enabled, student code
+        matching this base code will be ignored during JPlag similarity checks. The base code will
+        be automatically extracted from the task resources.
+      </p>
+    </div>
+    <div class="basis-1/2"></div>
+  </div>
 }
