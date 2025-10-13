@@ -280,6 +280,7 @@ const MY_DATE_FORMAT = {
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/taskstatuspiechart.component';
+import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
 
 @NgModule({
   // Components we declare
@@ -409,6 +410,7 @@ import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-char
     UnitStaffEditorComponent,
     GroupSetSelectorComponent,
     PortfolioGradeSelectStepComponent,
+    GroupMemberListComponent,
   ],
   // Services we provide
   providers: [
