@@ -1,0 +1,53 @@
+@if (loading) {
+  <div class="w-full flex justify-center items-center h-full text-gray-400 italic">Loading...</div>
+} @else if (selectedGroup.members.length === 0) {
+  <div class="w-full p-4 flex flex-col justify-center items-center h-full text-gray-400">
+    <mat-icon class="scale-125">group_off</mat-icon>
+    <p class="p-4">There are no members in this group</p>
+  </div>
+} @else {
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="student_id">
+      <th mat-header-cell *matHeaderCellDef>{{ unitRole ? 'Student ID' : '' }}</th>
+      <td mat-cell *matCellDef="let member">
+        @if (unitRole) {
+          {{ member.student.username || 'N/A' }}
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let member">
+        {{ member.student.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="target_grade">
+      <th mat-header-cell *matHeaderCellDef>{{ unitRole ? 'Target Grade' : '' }}</th>
+      <td mat-cell *matCellDef="let member">
+        @if (unitRole) {
+          <grade-icon [index]="member.targetGrade"></grade-icon>
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>{{ canRemoveMembers ? 'Actions' : '' }}</th>
+      <td mat-cell *matCellDef="let member">
+        @if (canRemoveMembers) {
+          @if (!project && unitRole) {
+            <button mat-icon-button color="warn" (click)="removeMember(member)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          } @else if (project && project.id === member.id) {
+            <button mat-raised-button (click)="removeMember(member)">Leave</button>
+          }
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+}
