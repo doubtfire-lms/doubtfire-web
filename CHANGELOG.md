@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-51](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-50...v10.0.0-51) (2025-10-14)
+
+
+### Bug Fixes
+
+* unlock tasks when prerequisite requires rff and task is in aip state ([173d8c2](https://github.com/b0ink/doubtfire-deploy/commit/173d8c25375e231b25e64a04c1e3d2aedf741300))
+
 ## [10.0.0-50](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-49...v10.0.0-50) (2025-10-13)
 
 
