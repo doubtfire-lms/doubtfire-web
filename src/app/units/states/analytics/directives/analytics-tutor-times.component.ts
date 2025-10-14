@@ -8,6 +8,25 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
+interface SessionEvent {
+  start: Date;
+  end: Date;
+  startHour: string;
+  endHour: string;
+  title: string;
+  color: {
+    primary: string;
+    secondary: string;
+  };
+  userId: number;
+  commentsAdded: number;
+  assessments: number;
+  submissionsOpened: number;
+  duration: number;
+  duringTutorial: boolean;
+  tutorName: string;
+}
+
 @Component({
   selector: 'f-analytics-tutor-times',
   templateUrl: 'analytics-tutor-times.component.html',
@@ -25,7 +44,7 @@ export class AnalyticsTutorTimesComponent implements OnInit {
   selectedUserId: number | null = null;
 
   viewDate = new Date();
-  events = [];
+  events: SessionEvent[] = [];
   filteredEvents = [];
 
   tutorTimeSummaryStartDate: Date;
@@ -100,7 +119,8 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     this.filteredEvents = this.events.filter(
       (e) =>
         (this.selectedUserId === null || e['user_id'] === this.selectedUserId) &&
-        (!this.hideSessionsDuringTutorials || !e['duringTutorial']),
+        (!this.hideSessionsDuringTutorials || !e['duringTutorial']) &&
+        e.duration >= 1,
     );
   }
 
@@ -120,7 +140,6 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       this.alertService.error('You cannot select more than a year', 3000);
       return;
     }
-    console.log('diff days', diffDays);
     if (diffDays < 1) {
       this.tutorTimeSummaryStartDate = this.tutorTimeSummaryEndDate;
       this.alertService.error('End date must be on or after the start date');
@@ -189,21 +208,17 @@ export class AnalyticsTutorTimesComponent implements OnInit {
               }),
               title: `${tutor?.user.firstName} (${session.durationMinutes}m) ${session.duringTutorial ? '(T)' : ''}`,
               color: {primary: secondary, secondary: primary},
-              user_id: session.user.id,
-              comments_added: session.commentsAdded,
+              userId: session.user.id,
+              commentsAdded: session.commentsAdded,
               assessments: session.assessments,
-              submissions_opened: session.submissionsOpened,
+              submissionsOpened: session.submissionsOpened,
               duration: session.durationMinutes,
               duringTutorial: session.duringTutorial,
-              name: tutor?.user.firstName,
+              tutorName: tutor?.user.firstName,
             };
           });
 
-          this.filteredEvents = this.events.filter(
-            (row) => this.selectedUserId === null || row['user_id'] === this.selectedUserId,
-          );
-
-          console.log(data);
+          this.applyFilters();
         },
         error: (error) => {
           this.canLoadSessions = false;
