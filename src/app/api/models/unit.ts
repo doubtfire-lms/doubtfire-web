@@ -669,6 +669,35 @@ export class Unit extends Entity {
     );
   }
 
+  public downloadMyTutorTimeSessionsCsv(
+    startDate?: Date,
+    endDate?: Date,
+    timezone?: string,
+  ): Observable<SidekiqJob> {
+    let params = new HttpParams();
+
+    if (startDate) {
+      params = params.set(
+        'start_date',
+        `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    if (endDate) {
+      params = params.set(
+        'end_date',
+        `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    params = params.set('timezone', timezone);
+
+    return AppInjector.get(HttpClient).get<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/my_marking_sessions`,
+      {params},
+    );
+  }
+
   public hasD2lMapping(): boolean {
     const doubtfireConstants = AppInjector.get(DoubtfireConstants);
     return (
