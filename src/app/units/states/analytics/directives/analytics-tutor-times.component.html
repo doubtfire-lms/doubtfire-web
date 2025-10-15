@@ -100,8 +100,10 @@
       (eventClicked)="eventClicked($event)"
       [tooltipTemplate]="eventTooltipTemplate"
       [hourDuration]="60"
-      [hourSegments]="1"
+      [hourSegments]="4"
       [weekStartsOn]="0"
+      [hourSegmentHeight]="15"
+      [minimumEventHeight]="5"
       [daysInWeek]="daysInWeek"
       (beforeViewRender)="beforeViewRender($event)"
     />
