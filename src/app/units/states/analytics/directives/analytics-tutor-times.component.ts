@@ -120,8 +120,8 @@ export class AnalyticsTutorTimesComponent implements OnInit {
   applyFilters() {
     this.filteredEvents = this.events.filter(
       (e) =>
-        (this.selectedUserId === null || e['user_id'] === this.selectedUserId) &&
-        (!this.hideSessionsDuringTutorials || !e['duringTutorial']) &&
+        (this.selectedUserId === null || e.userId === this.selectedUserId) &&
+        (!this.hideSessionsDuringTutorials || !e.duringTutorial) &&
         e.duration >= 1,
     );
   }
@@ -252,10 +252,10 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       });
   }
 
-  eventClicked({event}: {event: CalendarEvent}): void {
-    if (event['user_id'] !== undefined) {
+  eventClicked({event}: {event: SessionEvent}): void {
+    if (event.userId !== undefined) {
       if (this.selectedUserId === null) {
-        this.selectedUserId = Number(event['user_id']);
+        this.selectedUserId = Number(event.userId);
       } else {
         this.selectedUserId = null;
       }
