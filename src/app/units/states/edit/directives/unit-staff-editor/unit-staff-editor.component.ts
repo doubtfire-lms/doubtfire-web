@@ -145,7 +145,10 @@ export class UnitStaffEditorComponent implements OnInit {
     this.filteredStaff = this.staff.filter(
       (staff) =>
         staff.matches(this.searchTerm.toLowerCase()) && // Find by name
-        !this.unit.staff.find((listStaff) => staff.id === listStaff.user.id), // Not already assigned to the unit
+        !this.unit.staff.find((listStaff) => staff.id === listStaff.user.id) && // Not already assigned to the unit
+        // Filter out students from the staff search
+        // NOTE: This is a hotfix to an issue where loading the inbox populates this.staff with students...
+        staff.isStaff,
     );
   }
 
