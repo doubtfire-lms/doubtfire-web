@@ -164,14 +164,17 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     const start = `${this.tutorTimeSummaryStartDate.getFullYear()}-${(this.tutorTimeSummaryStartDate.getMonth() + 1).toString().padStart(2, '0')}-${this.tutorTimeSummaryStartDate.getDate().toString().padStart(2, '0')}`;
     const end = `${this.tutorTimeSummaryEndDate.getFullYear()}-${(this.tutorTimeSummaryEndDate.getMonth() + 1).toString().padStart(2, '0')}-${this.tutorTimeSummaryEndDate.getDate().toString().padStart(2, '0')}`;
 
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
     this.downloadCsvFn(
       this.unit.downloadTutorTimesSummaryCsv(
         this.tutorTimeSummaryStartDate,
         this.tutorTimeSummaryEndDate,
+        tz,
         this.hideSessionsDuringTutorials,
       ),
       'Tutor Times Summary CSV',
-      `${this.unit.code}-tutor-times-summary-${start}-to-${end}-${!this.hideSessionsDuringTutorials ? 'incl-tutorials' : ''}.csv`,
+      `${this.unit.code}-tutor-times-summary-${start}-to-${end}-${tz}-${!this.hideSessionsDuringTutorials ? 'incl-tutorials' : ''}.csv`,
     );
   }
 
@@ -180,10 +183,12 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       return;
     }
 
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
     this.canLoadSessions = false;
     this.isLoading = true;
     this.unit
-      .getUserMarkingSessions(this.tutorTimeSummaryStartDate, this.tutorTimeSummaryEndDate)
+      .getUserMarkingSessions(this.tutorTimeSummaryStartDate, this.tutorTimeSummaryEndDate, tz)
       .subscribe({
         next: (data) => {
           this.isLoading = false;
@@ -222,7 +227,7 @@ export class AnalyticsTutorTimesComponent implements OnInit {
         },
         error: (error) => {
           this.canLoadSessions = false;
-
+          this.alertService.error(`Failed to load sessions: ${error}`, 6000);
           console.error(error);
         },
       });

@@ -605,7 +605,11 @@ export class Unit extends Entity {
     );
   }
 
-  public getUserMarkingSessions(startDate?: Date, endDate?: Date): Observable<MarkingSession[]> {
+  public getUserMarkingSessions(
+    startDate?: Date,
+    endDate?: Date,
+    timezone?: string,
+  ): Observable<MarkingSession[]> {
     let params = new HttpParams();
     if (startDate) {
       params = params.set(
@@ -621,6 +625,8 @@ export class Unit extends Entity {
       );
     }
 
+    params = params.set('timezone', timezone);
+
     // TODO: we should cache the data by the same start/end date
     const markingSessionService = AppInjector.get(MarkingSessionService);
     return markingSessionService.fetchAll(
@@ -634,6 +640,7 @@ export class Unit extends Entity {
   public downloadTutorTimesSummaryCsv(
     startDate?: Date,
     endDate?: Date,
+    timezone?: string,
     ignoreSessionsDuringTutorials?: boolean,
   ): Observable<SidekiqJob> {
     let params = new HttpParams();
@@ -651,6 +658,8 @@ export class Unit extends Entity {
         `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
       );
     }
+
+    params = params.set('timezone', timezone);
 
     params = params.set('ignore_sessions_during_tutorials', ignoreSessionsDuringTutorials ?? false);
 
