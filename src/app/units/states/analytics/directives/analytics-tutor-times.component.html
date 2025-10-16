@@ -4,15 +4,26 @@
       <h2>Tutor Times Session Summary</h2>
     </mat-card-title>
 
-    <button
-      mat-button
-      (click)="getTutorTimesSummary()"
-      matTooltip="Download CSV summary for the selected date range"
-      matTooltipShowDelay="1000"
-      matTooltipPosition="above"
-    >
-      <mat-icon>download</mat-icon> Download Summary
-    </button>
+    <div class="flex gap-2">
+      <button
+        mat-button
+        (click)="getTutorTimesSummary()"
+        matTooltip="Download CSV summary for the selected date range"
+        matTooltipShowDelay="1000"
+        matTooltipPosition="above"
+      >
+        <mat-icon>download</mat-icon> Download Summary
+      </button>
+      <button
+        mat-button
+        (click)="getMyTutorTimesSessions()"
+        matTooltip="Download CSV of your tutor sessions for the selected date range"
+        matTooltipShowDelay="1000"
+        matTooltipPosition="above"
+      >
+        <mat-icon>download</mat-icon> Download My Sessions
+      </button>
+    </div>
   </mat-card-header>
 
   <div class="flex flex-col items-center justify-center">
@@ -63,7 +74,7 @@
   <ng-template #eventTooltipTemplate let-event="event">
     <div class="z-50 bg-[rgba(25,25,25,0.8)] text-white p-2 rounded">
       <strong
-        >{{ event.name }} ({{ event.duration }} minutes)
+        >{{ event.tutorName }} ({{ event.duration }} minutes)
         {{ event.duringTutorial ? 'T' : '' }}</strong
       ><br />
       {{ event.startHour }} — {{ event.endHour }}<br />
@@ -89,8 +100,10 @@
       (eventClicked)="eventClicked($event)"
       [tooltipTemplate]="eventTooltipTemplate"
       [hourDuration]="60"
-      [hourSegments]="1"
+      [hourSegments]="4"
       [weekStartsOn]="0"
+      [hourSegmentHeight]="15"
+      [minimumEventHeight]="5"
       [daysInWeek]="daysInWeek"
       (beforeViewRender)="beforeViewRender($event)"
     />

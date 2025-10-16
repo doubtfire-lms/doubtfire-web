@@ -4,6 +4,7 @@ import {CalendarEvent} from 'angular-calendar';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
+import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -60,6 +61,7 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     private alertService: AlertService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
     private fileDownloaderService: FileDownloaderService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -118,8 +120,8 @@ export class AnalyticsTutorTimesComponent implements OnInit {
   applyFilters() {
     this.filteredEvents = this.events.filter(
       (e) =>
-        (this.selectedUserId === null || e['user_id'] === this.selectedUserId) &&
-        (!this.hideSessionsDuringTutorials || !e['duringTutorial']) &&
+        (this.selectedUserId === null || e.userId === this.selectedUserId) &&
+        (!this.hideSessionsDuringTutorials || !e.duringTutorial) &&
         e.duration >= 1,
     );
   }
@@ -178,6 +180,23 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     );
   }
 
+  public getMyTutorTimesSessions() {
+    const start = `${this.tutorTimeSummaryStartDate.getFullYear()}-${(this.tutorTimeSummaryStartDate.getMonth() + 1).toString().padStart(2, '0')}-${this.tutorTimeSummaryStartDate.getDate().toString().padStart(2, '0')}`;
+    const end = `${this.tutorTimeSummaryEndDate.getFullYear()}-${(this.tutorTimeSummaryEndDate.getMonth() + 1).toString().padStart(2, '0')}-${this.tutorTimeSummaryEndDate.getDate().toString().padStart(2, '0')}`;
+
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    this.downloadCsvFn(
+      this.unit.downloadMyTutorTimeSessionsCsv(
+        this.tutorTimeSummaryStartDate,
+        this.tutorTimeSummaryEndDate,
+        tz,
+      ),
+      'My Marking Sessions CSV',
+      `${this.unit.code}-${this.userService.currentUser.name}-sessions-${start}-to-${end}-${tz}}.csv`,
+    );
+  }
+
   public getMarkingSesssions() {
     if (!this.canLoadSessions) {
       return;
@@ -233,10 +252,10 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       });
   }
 
-  eventClicked({event}: {event: CalendarEvent}): void {
-    if (event['user_id'] !== undefined) {
+  eventClicked({event}: {event: SessionEvent}): void {
+    if (event.userId !== undefined) {
       if (this.selectedUserId === null) {
-        this.selectedUserId = Number(event['user_id']);
+        this.selectedUserId = Number(event.userId);
       } else {
         this.selectedUserId = null;
       }
