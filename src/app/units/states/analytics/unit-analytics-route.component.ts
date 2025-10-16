@@ -61,7 +61,7 @@ export class UnitAnalyticsComponent {
     );
   }
 
-  private downloadCsv(newJob: Observable<SidekiqJob>, title: string, filename: string) {
+  public downloadCsv(newJob: Observable<SidekiqJob>, title: string, filename: string) {
     newJob.subscribe({
       next: (job) => {
         if (!job || !job.id) {

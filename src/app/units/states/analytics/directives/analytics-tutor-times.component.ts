@@ -64,6 +64,10 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     private userService: UserService,
   ) {}
 
+  get role() {
+    return this.unit.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
+  }
+
   ngOnInit(): void {
     if (!this.sidekiqProgressModalService || !this.fileDownloaderService) {
       // NOTE: Our `downloadCsvFn` callback requires these services because it calls `this` context
