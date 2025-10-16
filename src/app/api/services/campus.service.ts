@@ -11,7 +11,7 @@ export class CampusService extends CachedEntityService<Campus> {
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
 
-    this.mapping.addKeys('id', 'name', 'mode', 'abbreviation', 'active');
+    this.mapping.addKeys('id', 'name', 'mode', 'abbreviation', 'active', 'timezone');
 
     this.mapping.mapAllKeysToJsonExcept('id');
   }

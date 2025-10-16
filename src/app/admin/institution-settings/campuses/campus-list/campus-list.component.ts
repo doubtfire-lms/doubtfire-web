@@ -18,7 +18,7 @@ export class CampusListComponent extends EntityFormComponent<Campus> {
   syncModes = ['timetable', 'automatic', 'manual'];
 
   // Set up the table
-  columns: string[] = ['name', 'abbreviation', 'mode', 'active', 'options'];
+  columns: string[] = ['name', 'abbreviation', 'mode', 'timezone', 'active', 'options'];
   campuses: Campus[] = new Array<Campus>();
   dataSource = new MatTableDataSource(this.campuses);
 
@@ -33,6 +33,7 @@ export class CampusListComponent extends EntityFormComponent<Campus> {
         abbreviation: new UntypedFormControl('', [Validators.required]),
         name: new UntypedFormControl('', [Validators.required]),
         mode: new UntypedFormControl('', [Validators.required]),
+        timezone: new UntypedFormControl('', [Validators.required]),
         active: new UntypedFormControl(false),
       },
       'Campus',
@@ -91,6 +92,7 @@ export class CampusListComponent extends EntityFormComponent<Campus> {
       case 'name':
       case 'abbreviation':
       case 'mode':
+      case 'timezone':
       case 'active':
         return super.sortTableData(sort);
     }
