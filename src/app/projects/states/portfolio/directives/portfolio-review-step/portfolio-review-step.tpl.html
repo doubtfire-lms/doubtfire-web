@@ -53,14 +53,20 @@
       </div>
       <div ng-show="selectedTasks().length > 0">
         <p>
-          You have included <strong>{{selectedTasks().length}} tasks</strong> in your portfolio. If you wish to add or
-          remove some of these tasks, please review the <em>Select Tasks</em> step to adjust your alignments of each
-          task to the unit's learning outcomes. Each task will be attached in the order below:
+          Only submitted tasks can be included in your portfolio. If a task is missing from the
+          list, you will need to submit it before compiling your portfolio. Make sure you review all
+          selected tasks before creating your portfolio. The following
+          <strong>{{ selectedTasks().length }} tasks</strong> will be included in your portfolio in
+          this order:
         </p>
         <ol>
-          <li ng-repeat="task in selectedTasks()">
-            <label class="label label-info">{{task.definition.abbreviation}}</label>
-            {{task.definition.name}}
+          <li ng-repeat="task in selectedTasks()" class="my-2">
+            <div class="flex justify-between">
+              <div class="flex gap-2 items-center">
+                <div>{{task.definition.name}}</div>
+              </div>
+              <status-icon [status]="task.status"></status-icon>
+            </div>
           </li>
         </ol>
       </div>

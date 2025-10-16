@@ -82,7 +82,7 @@ angular.module('doubtfire.projects.states.portfolio', [
   # Gets selected tasks in the task selector
   $scope.selectedTasks = ->
     # Filter by included in portfolio
-    tasks = _.filter $scope.project.tasks, (t) -> t.includeInPortfolio
+    tasks = $scope.project.tasks
     tasks = _.filter tasks, (t) -> !_.includes(newTaskService.toBeWorkedOn, t.status)
     _.sortBy tasks, (t) -> t.definition.seq
 
