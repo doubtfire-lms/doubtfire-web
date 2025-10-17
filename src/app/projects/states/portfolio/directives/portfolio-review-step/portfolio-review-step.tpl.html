@@ -51,15 +51,14 @@
           <li ng-repeat="file in extraFiles()"><i class="fa fa-file-{{file.kind}}-o"></i> {{file.name}}</li>
         </ol>
       </div>
-      <div ng-show="selectedTasks().length > 0">
-        <p>
-          Only submitted tasks can be included in your portfolio. If a task is missing from the
-          list, you will need to submit it before compiling your portfolio. Make sure you review all
-          selected tasks before creating your portfolio. The following tasks will be included in
-          your portfolio in this order:
-        </p>
-        <f-portfolio-included-tasks [project]="project"></f-portfolio-included-tasks>
-      </div>
+      <p>
+        Only submitted tasks will be included in your portfolio. If a task is missing from the list,
+        you will need to submit it before compiling your portfolio. All feedback and comments for
+        each task will appear in the final portfolio, so you can add any additional comments now if
+        there's something you'd like to address. The following tasks will be included automatically
+        in this order:
+      </p>
+      <f-portfolio-included-tasks [project]="project"></f-portfolio-included-tasks>
     </div>
     <div class="card card-default" ng-show="canCompilePortfolio">
       <div class="card-heading">
