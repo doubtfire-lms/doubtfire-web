@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-52](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-51...v10.0.0-52) (2025-10-17)
+
+
+### Features
+
+* campus timezone ([#1022](https://github.com/b0ink/doubtfire-deploy/issues/1022)) ([4384b37](https://github.com/b0ink/doubtfire-deploy/commit/4384b376eaedf8ab66febec4c0ada53111311ff0))
+* download marking sessions for tutor ([e3fbe44](https://github.com/b0ink/doubtfire-deploy/commit/e3fbe4404661eb16b9c0e5ba19a1369dac1fb5b0))
+
+
+### Bug Fixes
+
+* display tutor name ([8956020](https://github.com/b0ink/doubtfire-deploy/commit/89560205d7316c53d77f376b5f7cfff5bf99e9c6))
+* filter out students from unit staff editor ([#1018](https://github.com/b0ink/doubtfire-deploy/issues/1018)) ([5c0c997](https://github.com/b0ink/doubtfire-deploy/commit/5c0c9974569e720a6c95aa8333c2a38d0ab4a1b0))
+* re-enable user filtering on click ([697daf2](https://github.com/b0ink/doubtfire-deploy/commit/697daf26693f20f61dcfbbeb0597a02715c9512d))
+
 ## [10.0.0-51](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-50...v10.0.0-51) (2025-10-14)
 
 
