@@ -528,4 +528,13 @@ export class Project extends Entity {
       }),
     );
   }
+
+  public tasksIncludedInPortfolioUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.id}/portfolio_tasks`;
+  }
+
+  public getTasksIncludedInPortfolio(): Observable<number[]> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.get<number[]>(this.tasksIncludedInPortfolioUrl());
+  }
 }
