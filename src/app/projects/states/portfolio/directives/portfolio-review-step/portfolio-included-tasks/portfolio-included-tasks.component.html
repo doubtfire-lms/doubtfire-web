@@ -1,0 +1,19 @@
+@if (loading) {
+  <div class="w-full flex flex-col gap-5 justify-center items-center min-h-[150px]">
+    <div>Loading tasks...</div>
+    <mat-progress-spinner mode="indeterminate"> </mat-progress-spinner>
+  </div>
+} @else {
+  <ol>
+    @for (task of tasksInPortfolio; track task) {
+      <li class="my-2">
+        <div class="flex justify-between">
+          <div class="flex gap-2 items-center">
+            <div>{{ task.definition.abbreviation }} &mdash; {{ task.definition.name }}</div>
+          </div>
+          <status-icon [status]="task.status"></status-icon>
+        </div>
+      </li>
+    }
+  </ol>
+}

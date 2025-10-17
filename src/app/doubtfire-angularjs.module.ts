@@ -230,6 +230,7 @@ import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staf
 import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
 import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
+import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
 
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
@@ -556,4 +557,9 @@ DoubtfireAngularJSModule.config(otherwiseConfigBlock);
 DoubtfireAngularJSModule.directive(
   'groupSetSelector',
   downgradeComponent({component: GroupSetSelectorComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fPortfolioIncludedTasks',
+  downgradeComponent({component: PortfolioIncludedTasksComponent}),
 );

@@ -59,16 +59,7 @@
           <strong>{{ selectedTasks().length }} tasks</strong> will be included in your portfolio in
           this order:
         </p>
-        <ol>
-          <li ng-repeat="task in selectedTasks()" class="my-2">
-            <div class="flex justify-between">
-              <div class="flex gap-2 items-center">
-                <div>{{task.definition.name}}</div>
-              </div>
-              <status-icon [status]="task.status"></status-icon>
-            </div>
-          </li>
-        </ol>
+        <f-portfolio-included-tasks [project]="project"></f-portfolio-included-tasks>
       </div>
     </div>
     <div class="card card-default" ng-show="canCompilePortfolio">
