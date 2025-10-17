@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'f-portfolio-included-tasks',
@@ -9,6 +10,8 @@ import {Task} from 'src/app/api/models/task';
 })
 export class PortfolioIncludedTasksComponent implements OnInit {
   @Input() project: Project;
+
+  constructor(private alertService: AlertService) {}
 
   loading: boolean = false;
 
@@ -26,7 +29,7 @@ export class PortfolioIncludedTasksComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error(error);
+        this.alertService.error(`Failed to get tasks for portfolio: ${error}`, 6000);
       },
     });
   }
