@@ -4,16 +4,23 @@
     <mat-progress-spinner mode="indeterminate"> </mat-progress-spinner>
   </div>
 } @else {
-  <ol>
-    @for (task of tasksInPortfolio; track task) {
-      <li class="my-2">
-        <div class="flex justify-between">
-          <div class="flex gap-2 items-center">
-            <div>{{ task.definition.abbreviation }} &mdash; {{ task.definition.name }}</div>
+  @if (tasksInPortfolio.length === 0) {
+    <div class="w-full p-4 flex flex-col justify-center items-center h-full text-gray-400">
+      <mat-icon class="scale-125">assignment_late</mat-icon>
+      <p class="p-4">No tasks found</p>
+    </div>
+  } @else {
+    <ol>
+      @for (task of tasksInPortfolio; track task) {
+        <li class="my-2">
+          <div class="flex justify-between">
+            <div class="flex gap-2 items-center">
+              <div>{{ task.definition.abbreviation }} &mdash; {{ task.definition.name }}</div>
+            </div>
+            <status-icon [status]="task.status"></status-icon>
           </div>
-          <status-icon [status]="task.status"></status-icon>
-        </div>
-      </li>
-    }
-  </ol>
+        </li>
+      }
+    </ol>
+  }
 }
