@@ -197,7 +197,7 @@ export class AnalyticsTutorTimesComponent implements OnInit {
         tz,
       ),
       'My Marking Sessions CSV',
-      `${this.unit.code}-${this.userService.currentUser.name}-sessions-${start}-to-${end}-${tz}}.csv`,
+      `${this.unit.code}-${this.userService.currentUser.name}-sessions-${start}-to-${end}-${tz}.csv`,
     );
   }
 
