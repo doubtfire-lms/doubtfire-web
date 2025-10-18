@@ -1,8 +1,7 @@
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
   "index": "/index.html",
-  "dataGroups":
-  [
+  "dataGroups": [
     {
       "name": "api",
       "urls": ["/api"],
@@ -11,6 +10,16 @@
         "maxAge": "0u",
         "strategy": "freshness"
       }
+    },
+    {
+      "name": "google-fonts-cache",
+      "urls": ["https://fonts.gstatic.com/**"],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 10,
+        "maxAge": "7d",
+        "timeout": "5s"
+      }
     }
   ],
   "assetGroups": [
@@ -18,15 +27,10 @@
       "name": "app",
       "installMode": "prefetch",
       "resources": {
-        "files": [
-          "/favicon.ico",
-          "/index.html",
-          "/manifest.webmanifest",
-          "/*.css",
-          "/*.js"
-        ]
+        "files": ["/favicon.ico", "/index.html", "/manifest.webmanifest", "/*.css", "/*.js"]
       }
-    }, {
+    },
+    {
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",
@@ -36,12 +40,12 @@
           "/*.(eot|svg|cur|jpg|png|png?default=blank&size=25webp|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
-    }, {
+    },
+    {
       "name": "external_assets",
       "resources": {
         "urls": [
           "https://maxcdn.bootstrapcdn.com/bootstrap/**",
-          "https://fonts.googleapis.com/**",
           "https://www.gravatar.com/avatar/**"
         ]
       }
