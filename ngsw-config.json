@@ -10,6 +10,16 @@
         "maxAge": "0u",
         "strategy": "freshness"
       }
+    },
+    {
+      "name": "google-fonts-cache",
+      "urls": ["https://fonts.gstatic.com/**"],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 10,
+        "maxAge": "7d",
+        "timeout": "5s"
+      }
     }
   ],
   "assetGroups": [
@@ -36,7 +46,6 @@
       "resources": {
         "urls": [
           "https://maxcdn.bootstrapcdn.com/bootstrap/**",
-          "https://fonts.googleapis.com/**",
           "https://www.gravatar.com/avatar/**"
         ]
       }
