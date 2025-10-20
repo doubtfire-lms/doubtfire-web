@@ -200,7 +200,9 @@
   <!--/search-options-->
   @if (filteredTasks) {
     <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60">
-      <div class="w-full text-gray-400 text-center mt-4">{{ filteredTasks.length }} Tasks</div>
+      @if (filteredTasks.length) {
+        <div class="w-full text-gray-400 text-center mt-4">{{ filteredTasks.length }} Tasks</div>
+      }
       <mat-list class="m-0 p-0">
         <mat-list-item
           class="clearfix"
