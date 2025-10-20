@@ -70,6 +70,8 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $scope.uploader.payload.contributions = mapTeamToPayload() if _.includes(states.shown, 'group')
       $scope.uploader.payload.trigger = 'need_help' if $scope.submissionType == 'need_help'
       $scope.uploader.payload.trigger = 'assess_in_portfolio' if $scope.submissionType == 'assess_in_portfolio' || $scope.task.status == 'assess_in_portfolio'
+      if $scope.comment? and $scope.comment.trim() isnt ''
+        $scope.uploader.payload.comment = $scope.comment
     onSuccess: (response) ->
       # Ensure our response contains the data we're expecting
       if typeof response is 'object' and response? and response.id? and response.project_id? and response.status?
@@ -88,9 +90,9 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     onComplete: ->
       return unless $scope.uploader.response? and $scope.uploader.response.id?
       $modalInstance.close(task)
-      unless $scope.task.isTestSubmission
+      # unless $scope.task.isTestSubmission
         # Add comment if requested
-        task.addComment($scope.comment) if $scope.comment.trim().length > 0
+        # task.addComment($scope.comment) if $scope.comment.trim().length > 0
       # Broadcast that upload is complete
       $rootScope.$broadcast('TaskSubmissionUploadComplete', task)
       # Perform as timeout to show 'Upload Complete'
@@ -176,8 +178,8 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
     back: ->
       false
     submit: ->
-      # Disable if no comment is supplied with need_help
-      !$scope.uploader.isReady || ($scope.comment.trim().length == 0 && $scope.submissionType == 'need_help')
+      # # Disable if no comment is supplied with need_help, or if submitting for feedback and task is assess in portfolio only
+     !$scope.uploader.isReady or ($scope.comment.trim().length < 25 && ($scope.submissionType == 'ready_for_feedback' && $scope.task.definition.assessInPortfolioOnly) || $scope.submissionType == 'need_help')
     cancel: ->
       # Can't cancel whilst uploading
       $scope.uploader.isUploading
