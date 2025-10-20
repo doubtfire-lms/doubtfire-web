@@ -1,6 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {CalendarEvent} from 'angular-calendar';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
@@ -32,6 +31,7 @@ interface SessionEvent {
   selector: 'f-analytics-tutor-times',
   templateUrl: 'analytics-tutor-times.component.html',
   styleUrls: ['analytics-tutor-times.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class AnalyticsTutorTimesComponent implements OnInit {
   @Input() unit: Unit;

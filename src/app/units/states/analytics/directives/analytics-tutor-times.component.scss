@@ -1,0 +1,16 @@
+.cal-week-view {
+  position: relative;
+  max-height: 750px;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+}
+
+.cal-day-headers {
+  position: sticky;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  background-color: white;
+  width: 100%;
+  min-height: 35px;
+}
