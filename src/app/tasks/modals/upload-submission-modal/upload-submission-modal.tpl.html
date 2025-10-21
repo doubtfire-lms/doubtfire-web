@@ -83,23 +83,25 @@
       ng-class="{'state-hidden-left': isHidden('comments').left,
                  'state-hidden-right': isHidden('comments').right}">
       <div class="card card-default">
-        <div class="card-heading">
-          <h4 ng-show="submissionType == 'need_help'">
-            What do you need help with?
-          </h4>
-          <h4 ng-hide="submissionType == 'need_help'">
-            Final comments
-          </h4>
-          <span ng-show="submissionType == 'need_help'">
+        <div class="card-heading" ng-show="submissionType == 'need_help'">
+          <h4>What do you need help with?</h4>
+          <span>
             Supply a comment on what you would like help on for this task so your tutor can assist you.
           </span>
-          <span ng-hide="submissionType == 'need_help'">
+        </div>
+        <div class="card-heading" ng-show="submissionType == 'ready_for_feedback'">
+          <h4>Final comments</h4>
+          <span ng-show="task.definition.assessInPortfolioOnly">
+              Please supply a comment specifying which areas of your submission you would like feedback on.
+          </span>
+          <span ng-show="!task.definition.assessInPortfolioOnly">
             Supply an <strong>optional</strong> comment about this submission for your tutor to read as they assess.
           </span>
         </div><!--/card-heading-->
         <div class="card-body">
-          <textarea ng-model="comment" class="form-control input-lg" rows="3" placeholder="{{submissionType == 'need_help' ? 'I need help with...' : 'Make a comment...'}}">
+          <textarea ng-model="comment" class="form-control input-lg" rows="3" placeholder="{{submissionType == 'need_help' ? 'I need help with...' : submissionType == 'ready_for_feedback' && task.definition.assessInPortfolioOnly ? 'I would like feedback with...' : 'Make a comment...'}}">
           </textarea>
+          <div class="w-full text-right py-2 text-gray-400">Character count: {{comment.length}} <span ng-show="submissionType == 'need_help' || (submissionType=='ready_for_feedback' && task.definition.assessInPortfolioOnly)">(Min. 25)</span></div>
         </div>
       </div><!--/card-comments-->
       <div class="card card-default" ng-show="privacyPolicy.privacy">
@@ -138,7 +140,7 @@
     <i class="fa fa-arrow-right"></i>
   </button>
   <!--/next-button-->
-  <button class="btn btn-success" ng-click="uploadButtonClicked()" ng-disabled="shouldDisableBtn.submit()" ng-show="shouldShowBtn.submit()">
+  <button tooltip="{{submissionType == 'need_help' || (submissionType=='ready_for_feedback' && task.definition.assessInPortfolioOnly) ? 'This submission requires a comment' : ''}}" class="btn btn-success" ng-click="uploadButtonClicked()" ng-disabled="shouldDisableBtn.submit()" ng-show="shouldShowBtn.submit()">
     <i class="fa fa-upload"></i> Upload Submission
   </button>
   <!--/upload-button-->
