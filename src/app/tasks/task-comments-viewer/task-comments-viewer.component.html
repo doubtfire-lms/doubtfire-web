@@ -38,7 +38,7 @@
             *ngIf="comment.shouldShowTimestamp"
             [ngClass]="{own: comment.authorIsMe}"
           >
-            {{ comment.author.firstName }} {{ comment.author.lastName }}
+            {{ comment.author.preferredName }}
             {{ comment.createdAt | humanizedDate }}
           </p>
           <div
