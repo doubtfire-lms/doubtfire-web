@@ -1,6 +1,6 @@
 {
   "name": "doubtfire",
-  "version": "10.0.0-55",
+  "version": "10.0.0-56",
   "homepage": "http://github.com/doubtfire-lms/",
   "description": "Learning and feedback tool.",
   "license": "AGPL-3.0",
@@ -44,6 +44,7 @@
     "@angular/upgrade": "^17.3.6",
     "@ctrl/ngx-emoji-mart": "^9.2.0",
     "@ngneat/hotkeys": "^4.0.0",
+    "@ngstack/code-editor": "7.3.0",
     "@uirouter/angular": "^13.0",
     "@uirouter/angular-hybrid": "^17.1.0",
     "@uirouter/angularjs": "^1.0.30",
@@ -79,6 +80,7 @@
     "lottie-web": "^5.12.2",
     "marked": "^11.1.0",
     "moment": "^2.29.4",
+    "monaco-editor": "^0.54.0",
     "ng-csv": "0.2.3",
     "ng-file-upload": "~5.0.9",
     "ng-flex-layout": "^17.3.7-beta.1",
