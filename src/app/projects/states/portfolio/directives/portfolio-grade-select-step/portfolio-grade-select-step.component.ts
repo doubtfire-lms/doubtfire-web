@@ -1,6 +1,7 @@
 import {Component, Injector, Input} from '@angular/core';
 import {Project, Unit} from 'src/app/api/models/doubtfire-model';
 import {ProjectService} from 'src/app/api/services/project.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
@@ -18,6 +19,7 @@ export class PortfolioGradeSelectStepComponent {
     private gradeService: GradeService,
     private injector: Injector,
     private projectService: ProjectService,
+    private alertService: AlertService,
   ) {
     this.$scope = this.injector.get('$scope');
   }
@@ -37,6 +39,7 @@ export class PortfolioGradeSelectStepComponent {
       (error) => {
         this.project.submittedGrade = previousSubmittedGrade;
         console.error('Error updating target grade:', error);
+        this.alertService.error(`Could not update grade: ${error}`, 6000);
       },
     );
   }
