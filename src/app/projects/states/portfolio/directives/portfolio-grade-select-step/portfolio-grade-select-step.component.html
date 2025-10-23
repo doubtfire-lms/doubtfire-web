@@ -86,7 +86,11 @@
       <button
         mat-raised-button
         color="primary"
-        [disabled]="!agreedToAssessmentCriteria"
+        [disabled]="
+          !agreedToAssessmentCriteria ||
+          project.submittedGrade === null ||
+          project.submittedGrade === undefined
+        "
         (click)="goToNextStep()"
       >
         Next
