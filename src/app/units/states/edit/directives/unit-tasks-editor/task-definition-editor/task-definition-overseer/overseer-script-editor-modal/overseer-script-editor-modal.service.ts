@@ -22,7 +22,7 @@ export class OverseerScriptEditorModalService {
         taskDefinition: taskDefinition,
       },
       width: '100%',
-      maxWidth: '900px',
+      maxWidth: '1200px',
     });
   }
 }
