@@ -18,6 +18,10 @@
     <mat-hint>Docker image for Overseer</mat-hint>
   </mat-form-field>
 
+  <button mat-flat-button color="primary" (click)="editScript()" class="flex-grow me-4">
+    <mat-icon>upload_file</mat-icon> Edit Execution Script
+  </button>
+
   <f-file-drop
     mode="event"
     (filesDropped)="uploadOverseerResources($event)"
@@ -26,12 +30,7 @@
   />
   @if (taskDefinition.hasTaskAssessmentResources) {
     <div class="flex flex-row gap-4 pt-4">
-      <button
-        mat-flat-button
-        color="warn"
-        (click)="removeOverseerResources()"
-        class="grow me-4"
-      >
+      <button mat-flat-button color="warn" (click)="removeOverseerResources()" class="grow me-4">
         Delete Overseer Resources Zip
       </button>
       <button
@@ -55,13 +54,7 @@
     >
       <mat-icon>upload_file</mat-icon> Test Submission
     </button>
-    <button
-      mat-flat-button
-      color="accent"
-      [disabled]="!currentUserTask"
-      (click)="testSubmissionHistory()"
-      class="flex-grow ms-4"
-    >
+    <button mat-flat-button color="accent" (click)="testSubmissionHistory()" class="flex-grow ms-4">
       <mat-icon>preview</mat-icon> Submission History
     </button>
   </div>

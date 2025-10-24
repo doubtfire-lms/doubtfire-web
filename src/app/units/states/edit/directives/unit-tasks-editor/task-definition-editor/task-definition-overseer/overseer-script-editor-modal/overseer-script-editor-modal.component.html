@@ -1,0 +1,14 @@
+<div class="p-10 w-full">
+  <div class="w-full text-center">
+    <p>{{ data.taskDefinition.abbreviation }} {{ data.taskDefinition.name }}</p>
+    <p>Overseer script</p>
+  </div>
+  <div class="flex justify-end">
+    <button mat-icon-button (click)="save()">
+      <mat-icon>save</mat-icon>
+    </button>
+  </div>
+  @if (!loading) {
+    <ngs-code-editor class="w-full h-[500px]" [codeModel]="model" readOnly></ngs-code-editor>
+  }
+</div>

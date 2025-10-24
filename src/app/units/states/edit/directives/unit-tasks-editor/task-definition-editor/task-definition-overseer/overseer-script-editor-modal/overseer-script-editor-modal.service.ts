@@ -1,0 +1,28 @@
+import {Injectable} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {OverseerScriptEditorModalComponent} from './overseer-script-editor-modal.component';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
+
+export interface OverseerScriptEditorModalData {
+  taskDefinition: TaskDefinition;
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OverseerScriptEditorModalService {
+  constructor(public dialog: MatDialog) {}
+
+  public show(taskDefinition: TaskDefinition) {
+    const _dialogRef = this.dialog.open<
+      OverseerScriptEditorModalComponent,
+      OverseerScriptEditorModalData
+    >(OverseerScriptEditorModalComponent, {
+      data: {
+        taskDefinition: taskDefinition,
+      },
+      width: '100%',
+      maxWidth: '900px',
+    });
+  }
+}

@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { Observable } from 'rxjs';
+import {Component, Input, OnChanges} from '@angular/core';
+import {Observable} from 'rxjs';
 import {
   OverseerAssessment,
   OverseerImage,
@@ -8,13 +8,14 @@ import {
   User,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
-import { TaskDefinition } from 'src/app/api/models/task-definition';
-import { Unit } from 'src/app/api/models/unit';
-import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
-import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { TaskSubmissionService } from 'src/app/common/services/task-submission.service';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Unit} from 'src/app/api/models/unit';
+import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
+import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/overseer-script-editor-modal.service';
 
 @Component({
   selector: 'f-task-definition-overseer',
@@ -34,6 +35,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges {
     private userService: UserService,
     private taskDefinitionService: TaskDefinitionService,
     private fileDownloaderService: FileDownloaderService,
+    private overseerScriptEditorModal: OverseerScriptEditorModalService,
   ) {}
 
   public get overseerEnabled(): boolean {
@@ -73,6 +75,10 @@ export class TaskDefinitionOverseerComponent implements OnChanges {
     this.currentUserTask.presentTaskSubmissionModal(this.currentUserTask.status, false, true);
   }
 
+  editScript() {
+    this.overseerScriptEditorModal.show(this.taskDefinition);
+  }
+
   testSubmissionHistory() {
     this.modalService.show(this.currentUserTask);
   }
@@ -93,7 +99,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges {
       next: () => {
         this.alerts.success('Deleted Overseer Resources', 2000);
         this.taskDefinition.hasTaskAssessmentResources = false;
-      }
+      },
     });
   }
 
@@ -103,7 +109,6 @@ export class TaskDefinitionOverseerComponent implements OnChanges {
       this.taskDefinition.name + '.zip',
     );
   }
-
 
   public uploadOverseerResources(files: FileList) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(

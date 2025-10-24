@@ -4,6 +4,7 @@ import {Task} from 'src/app/api/models/task';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
 
 @Component({
   selector: 'f-footer',
@@ -15,6 +16,7 @@ export class FooterComponent implements OnInit {
     public selectedTaskService: SelectedTaskService,
     public taskService: TaskService,
     private fileDownloader: FileDownloaderService,
+    private taskAssessmentModal: TaskAssessmentModalService,
   ) {}
 
   selectedTask$: Observable<Task>;
@@ -95,6 +97,10 @@ export class FooterComponent implements OnInit {
 
   viewSimilarity() {
     this.selectedTaskService.showSimilarity();
+  }
+
+  viewOverseer() {
+    this.taskAssessmentModal.show(this.selectedTask);
   }
 
   viewStaffNotes() {

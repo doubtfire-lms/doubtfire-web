@@ -294,6 +294,8 @@ import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/dir
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
 import {MarkingSessionService} from './api/services/marking-session.service';
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
+import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
+import {CodeEditorModule} from '@ngstack/code-editor';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -448,6 +450,7 @@ const MY_DATE_FORMAT = {
     PortfolioGradeSelectStepComponent,
     AnalyticsTutorTimesComponent,
     PortfolioIncludedTasksComponent,
+    OverseerScriptEditorModalComponent,
   ],
   // Services we provide
   providers: [
@@ -599,6 +602,7 @@ const MY_DATE_FORMAT = {
     MatNativeDateModule,
     MatDialogModuleNew,
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
+    CodeEditorModule.forRoot(),
   ],
 })
 
