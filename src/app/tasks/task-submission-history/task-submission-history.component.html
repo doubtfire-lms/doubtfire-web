@@ -12,7 +12,11 @@
               <div>
                 {{ tab.timestamp | humanizedDate }}
               </div>
-              <status-icon [status]="tab.taskStatus"></status-icon>
+              @if (tab.status === 'pre_queued') {
+                <mat-icon>schedule</mat-icon>
+              } @else {
+                <status-icon [status]="tab.taskStatus"></status-icon>
+              }
             </div>
           </mat-list-item>
         }
