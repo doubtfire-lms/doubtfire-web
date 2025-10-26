@@ -38,7 +38,7 @@
             *ngIf="comment.shouldShowTimestamp"
             [ngClass]="{own: comment.authorIsMe}"
           >
-            {{ comment.author.preferredName }}
+            {{ comment.author.preferredName }} {{ comment.author.lastName }}
             {{ comment.createdAt | humanizedDate }}
           </p>
           <div
@@ -163,7 +163,7 @@
                   </f-scorm-extension-comment>
                 </div>
 
-               <div
+                <div
                   *ngSwitchCase="'text'"
                   class="comment-text"
                   [matTooltip]="comment.createdAt | humanizedDate"
