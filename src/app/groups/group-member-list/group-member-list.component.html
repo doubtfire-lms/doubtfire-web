@@ -2,7 +2,7 @@
   <div class="w-full flex justify-center items-center h-full text-gray-400 italic">
     Loading members...
   </div>
-} @else if (selectedGroup.members.length === 0) {
+} @else if (!selectedGroup || selectedGroup.members.length === 0) {
   <div class="w-full p-4 flex flex-col justify-center items-center h-full text-gray-400">
     <mat-icon class="scale-125">group_off</mat-icon>
     <p class="p-4">There are no members in this group</p>

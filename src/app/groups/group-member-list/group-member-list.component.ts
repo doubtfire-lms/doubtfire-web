@@ -31,6 +31,10 @@ export class GroupMemberListComponent implements OnInit, OnChanges {
   constructor(private alertService: AlertService) {}
 
   ngOnInit() {
+    if (!this.selectedGroup) {
+      return;
+    }
+
     this.groupMembersSub = this.selectedGroup.projectsCache.values.subscribe((values) => {
       this.dataSource.data = values;
     });
