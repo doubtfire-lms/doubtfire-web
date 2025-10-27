@@ -281,6 +281,7 @@ import {TutorialsComponent} from './projects/states/tutorials/tutorials.componen
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/taskstatuspiechart.component';
 import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
+import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
 
 @NgModule({
   // Components we declare
@@ -411,6 +412,7 @@ import {GroupMemberListComponent} from './groups/group-member-list/group-member-
     GroupSetSelectorComponent,
     PortfolioGradeSelectStepComponent,
     GroupMemberListComponent,
+    GroupSelectorComponent,
   ],
   // Services we provide
   providers: [

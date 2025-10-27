@@ -1,0 +1,105 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title
+      >Groups
+      @if (selectedGroupSet) {
+        for "{{ selectedGroupSet?.name }}"
+      }
+    </mat-card-title>
+  </mat-card-header>
+  <table mat-table [dataSource]="dataSource" class="">
+    <ng-container matColumnDef="name" [formGroup]="formData">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let group">
+        @if (editing(group)) {
+          <mat-form-field appearance="outline" class="p-2">
+            <input matInput required formControlName="name" placeholder="Name" />
+          </mat-form-field>
+        } @else {
+          {{ group.name || 'Not set' }}
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tutorial" [formGroup]="formData">
+      <th mat-header-cell *matHeaderCellDef>Tutorial</th>
+      <td mat-cell *matCellDef="let group">
+        @if (editing(group)) {
+          <mat-form-field appearance="outline" class="p-2">
+            <mat-select formControlName="tutorial" placeholder="Tutorial">
+              @for (tutorial of unit.tutorials; track tutorial) {
+                <mat-option [value]="tutorial">{{ tutorial.abbreviation }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        } @else {
+          {{ group.tutorial.abbreviation }}
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="capacity_adjustment" [formGroup]="formData">
+      <th mat-header-cell *matHeaderCellDef>Capacity Adjustment</th>
+      <td mat-cell *matCellDef="let group">
+        @if (editing(group)) {
+          <mat-form-field appearance="outline" class="p-2">
+            <input
+              matInput
+              required
+              formControlName="capacityAdjustment"
+              placeholder="Capacity Adjustment"
+            />
+          </mat-form-field>
+        } @else {
+          {{ group.capacityAdjustment }}
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="capacity">
+      <th mat-header-cell *matHeaderCellDef>Capacity</th>
+      <td mat-cell *matCellDef="let group">
+        @if (group.hasSpace()) {
+          Available
+        } @else {
+          Full
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let group">
+        <div class="flex gap-2">
+          @if (editing(group)) {
+            <div class="flex gap-2 mb-[22px]">
+              <button mat-icon-button (click)="saveEdit($event)">
+                <mat-icon>save</mat-icon>
+              </button>
+              <button mat-icon-button (click)="cancelEditGroup($event)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          } @else {
+            <button mat-icon-button (click)="startEditGroup($event, group)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="amber" (click)="toggleLocked($event, group)">
+              @if (group.locked) {
+                <mat-icon>lock_outline</mat-icon>
+              } @else {
+                <mat-icon>lock_open</mat-icon>
+              }
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteGroup($event, group)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectGroup(row)"></tr>
+  </table>
+</mat-card>
