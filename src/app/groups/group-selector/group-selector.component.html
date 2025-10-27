@@ -130,17 +130,19 @@
         </th>
         <td mat-cell *matCellDef="let group">
           @if (project && group.hasSpace() && selectedGroupSet.allowStudentsToManageGroups) {
-            @if (!group.locked && !selectedGroupSet.locked) {
-              <button
-                mat-raised-button
-                (click)="joinGroup(group)"
-                [disabled]="isPartOfGroup(project, group)"
-              >
-                Join
-              </button>
-            } @else {
-              Locked
-            }
+            <div class="flex justify-center w-full">
+              @if (!group.locked && !selectedGroupSet.locked) {
+                <button
+                  mat-raised-button
+                  (click)="joinGroup(group)"
+                  [disabled]="isPartOfGroup(project, group)"
+                >
+                  Join
+                </button>
+              } @else {
+                <mat-icon>lock</mat-icon>
+              }
+            </div>
           }
           @if (unitRole) {
             <div class="flex gap-2">
