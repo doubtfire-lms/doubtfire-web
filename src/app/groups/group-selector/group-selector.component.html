@@ -118,7 +118,11 @@
               <button mat-icon-button (click)="startEditGroup($event, group)">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button color="amber" (click)="toggleLocked($event, group)">
+              <button
+                mat-icon-button
+                [color]="group.locked ? 'warn' : 'accent'"
+                (click)="toggleLocked($event, group)"
+              >
                 @if (group.locked) {
                   <mat-icon>lock_outline</mat-icon>
                 } @else {
