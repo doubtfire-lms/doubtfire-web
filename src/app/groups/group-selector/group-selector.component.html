@@ -19,19 +19,21 @@
           </mat-form-field>
         }
       </div>
-      <div class="flex items-center gap-2">
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="Group Name" [ngModel]="newGroupName" />
-        </mat-form-field>
-        <button
-          mat-raised-button
-          color="primary"
-          class="mb-[22px]"
-          (click)="addGroup(newGroupName)"
-        >
-          Create Group
-        </button>
-      </div>
+      @if (unitRole || selectedGroupSet?.allowStudentsToCreateGroups) {
+        <div class="flex items-center gap-2">
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Group Name" [ngModel]="newGroupName" />
+          </mat-form-field>
+          <button
+            mat-raised-button
+            color="primary"
+            class="mb-[22px]"
+            (click)="addGroup(newGroupName)"
+          >
+            Create Group
+          </button>
+        </div>
+      }
     </div>
   </mat-card-header>
 
@@ -108,9 +110,13 @@
       </ng-container>
 
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <th mat-header-cell *matHeaderCellDef>
+          @if (unitRole || (project && selectedGroupSet.allowStudentsToManageGroups)) {
+            Actions
+          }
+        </th>
         <td mat-cell *matCellDef="let group">
-          @if (project && group.hasSpace()) {
+          @if (project && group.hasSpace() && selectedGroupSet.allowStudentsToManageGroups) {
             @if (!group.locked && !selectedGroupSet.locked) {
               <button
                 mat-raised-button
