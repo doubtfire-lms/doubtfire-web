@@ -1,22 +1,13 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  AfterViewInit,
-} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
-import {Group, GroupSet, UnitRole, UserService, User} from 'src/app/api/models/doubtfire-model';
+import {Group, GroupSet, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {GroupService} from 'src/app/api/services/group.service';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
-import {UntypedFormControl, Validators} from '@angular/forms';
+import {AlertService} from 'src/app/common/services/alert.service';
 @Component({
   selector: 'f-group-selector',
   templateUrl: './group-selector.component.html',
@@ -33,14 +24,15 @@ export class GroupSelectorComponent
   @Input() selectedGroup: Group;
 
   @Input() selectedGroupSet: GroupSet;
-  @Input() showGroupSetSelector: boolean;
+
   @Input() onSelect: (group: Group) => void;
 
   displayedColumns: string[] = ['name', 'tutorial', 'capacity_adjustment', 'capacity', 'actions'];
   groups: Group[] = [];
-  // dataSource = new MatTableDataSource();
 
   loading = false;
+
+  newGroupName: string;
 
   private groupsSub?: Subscription;
 
@@ -59,14 +51,33 @@ export class GroupSelectorComponent
     );
   }
 
+  public get showGroupSetSelector() {
+    return this.unit.groupSets.length > 1;
+  }
+
   ngOnInit(): void {
-    // this.addGroup('test4!');
-    console.log();
+    if (this.unit.groupSets.length > 0) {
+      this.selectedGroupSet = this.unit.groupSets[0];
+    }
+  }
+
+  selectGroupSet(groupSet: GroupSet) {
+    this.selectedGroupSet = groupSet;
+    this.refreshGroups();
   }
 
   ngAfterViewInit() {
     this.dataSource = new MatTableDataSource();
 
+    if (this.unit.groupSets.length > 0) {
+      this.selectedGroupSet = this.unit.groupSets[0];
+    }
+
+    this.refreshGroups();
+  }
+
+  refreshGroups() {
+    this.groupsSub?.unsubscribe();
     this.groupsSub = this.selectedGroupSet.groupsCache.values.subscribe((values) => {
       this.dataSource.data = values;
     });
@@ -78,10 +89,7 @@ export class GroupSelectorComponent
       if (!this.dataSource) {
         this.dataSource = new MatTableDataSource();
       }
-      this.groupsSub?.unsubscribe();
-      this.groupsSub = this.selectedGroupSet.groupsCache.values.subscribe((values) => {
-        this.dataSource.data = values;
-      });
+      this.refreshGroups();
     }
   }
 
@@ -120,11 +128,13 @@ export class GroupSelectorComponent
       )
       .subscribe({
         next: (group) => {
-          console.log(group);
+          this.alertService.success('Successfully created group', 3000);
           this.selectedGroup = group;
+          this.newGroupName = '';
+          // TODO: apply filters
         },
         error: (error) => {
-          console.error(error);
+          this.alertService.error(`Failed to create group: ${error}`);
         },
       });
 
@@ -193,9 +203,6 @@ export class GroupSelectorComponent
   }
 
   onSuccess(_response: Group, _isNew: boolean): void {
-    this.groupsSub?.unsubscribe();
-    this.groupsSub = this.selectedGroupSet.groupsCache.values.subscribe((values) => {
-      this.dataSource.data = values;
-    });
+    this.refreshGroups();
   }
 }
