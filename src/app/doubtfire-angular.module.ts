@@ -262,7 +262,6 @@ import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 // import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
 // import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
-import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
@@ -281,6 +280,7 @@ import {TutorialsComponent} from './projects/states/tutorials/tutorials.componen
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/taskstatuspiechart.component';
 import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
+import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
 
 @NgModule({
   // Components we declare
@@ -408,9 +408,9 @@ import {GroupMemberListComponent} from './groups/group-member-list/group-member-
     ScormExtensionModalComponent,
     TutorialsComponent,
     UnitStaffEditorComponent,
-    GroupSetSelectorComponent,
     PortfolioGradeSelectStepComponent,
     GroupMemberListComponent,
+    GroupSelectorComponent,
   ],
   // Services we provide
   providers: [

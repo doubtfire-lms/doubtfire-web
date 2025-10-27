@@ -78,7 +78,6 @@ import 'build/src/app/projects/states/portfolio/portfolio.js';
 import 'build/src/app/projects/states/index/index.js';
 import 'build/src/app/projects/project-outcome-alignment/project-outcome-alignment.js';
 import 'build/src/app/admin/modals/modals.js';
-import 'build/src/app/groups/group-selector/group-selector.js';
 import 'build/src/app/groups/group-set-manager/group-set-manager.js';
 import 'build/src/app/groups/groups.js';
 import 'build/src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.js';
@@ -220,9 +219,9 @@ import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 // import { UnitStudentEnrolmentModalService } from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 // import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
-import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
+import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -527,11 +526,11 @@ DoubtfireAngularJSModule.directive(
 );
 
 DoubtfireAngularJSModule.directive(
-  'groupSetSelector',
-  downgradeComponent({component: GroupSetSelectorComponent}),
+  'fGroupMemberList',
+  downgradeComponent({component: GroupMemberListComponent}),
 );
 
 DoubtfireAngularJSModule.directive(
-  'fGroupMemberList',
-  downgradeComponent({component: GroupMemberListComponent}),
+  'fGroupSelector',
+  downgradeComponent({component: GroupSelectorComponent}),
 );
