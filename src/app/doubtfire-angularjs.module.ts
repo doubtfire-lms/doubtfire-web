@@ -219,7 +219,6 @@ import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 // import { UnitStudentEnrolmentModalService } from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 // import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
-import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
 import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
@@ -524,11 +523,6 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fTaskVisualisation',
   downgradeComponent({component: TaskVisualisationComponent}),
-);
-
-DoubtfireAngularJSModule.directive(
-  'groupSetSelector',
-  downgradeComponent({component: GroupSetSelectorComponent}),
 );
 
 DoubtfireAngularJSModule.directive(

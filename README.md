@@ -19,7 +19,6 @@ SUMMARY:
 - `89 / 183` components migrated
 - `19` components no longer in the doubtfire-lms/9.x branch
 
-
 NO LONGER IN doubtfire-lms/9.x
 
 - [x] ./src/app/projects/states/all/directives/all-projects-list/all-projects-list.coffee
@@ -142,7 +141,7 @@ MIGRATED:
 - [x] ./src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.coffee
 - [x] ./src/app/common/modals/confirmation-modal/confirmation-modal.coffee
 - [x] ./src/app/common/modals/comments-modal/comments-modal.coffee (IN 10.0.x)
-
+- [x] ./src/app/groups/group-selector/group-selector.coffee
 
 TODO:
 
@@ -194,10 +193,8 @@ TODO:
 - [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee
 - [ ] ./src/app/projects/states/tutorials/tutorials.coffee
 - [ ] ./src/app/admin/modals/modals.coffee
-- [ ] ./src/app/groups/group-selector/group-selector.coffee
 - [ ] ./src/app/groups/group-set-manager/group-set-manager.coffee
 - [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
-- [ ] ./src/app/groups/group-set-selector/group-set-selector.coffee
 - [ ] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
 - [ ] ./src/app/groups/groups.coffee
 - [ ] ./src/app/units/states/groups/groups.coffee
@@ -236,7 +233,6 @@ TODO:
 - [ ] ./src/app/errors/states/states.coffee
 - [ ] ./src/app/errors/states/timeout/timeout.coffee
 - [ ] ./src/app/common/filters/filters.coffee
-
 
 ## Table of Contents
 
