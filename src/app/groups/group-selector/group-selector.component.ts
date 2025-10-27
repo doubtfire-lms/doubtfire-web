@@ -1,5 +1,15 @@
-import {AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
+import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {Group, GroupSet, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
@@ -8,6 +18,7 @@ import {Unit} from 'src/app/api/models/unit';
 import {GroupService} from 'src/app/api/services/group.service';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {AlertService} from 'src/app/common/services/alert.service';
+
 @Component({
   selector: 'f-group-selector',
   templateUrl: './group-selector.component.html',
@@ -17,6 +28,8 @@ export class GroupSelectorComponent
   extends EntityFormComponent<Group>
   implements OnInit, OnChanges, AfterViewInit
 {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
   @Input() project: Project;
@@ -35,6 +48,8 @@ export class GroupSelectorComponent
   newGroupName: string;
 
   private groupsSub?: Subscription;
+
+  staffTutorialFilter: 'all' | 'mine' = 'all';
 
   constructor(
     private userService: UserService,
@@ -68,6 +83,7 @@ export class GroupSelectorComponent
 
   ngAfterViewInit() {
     this.dataSource = new MatTableDataSource();
+    this.dataSource.paginator = this.paginator;
 
     if (this.unit.groupSets.length > 0) {
       this.selectedGroupSet = this.unit.groupSets[0];
@@ -79,8 +95,27 @@ export class GroupSelectorComponent
   refreshGroups() {
     this.groupsSub?.unsubscribe();
     this.groupsSub = this.selectedGroupSet.groupsCache.values.subscribe((values) => {
-      this.dataSource.data = values;
+      this.groups = [...values];
     });
+    this.applyFilters();
+  }
+
+  onGroupNameChange() {
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    const filteredGroups = this.groups
+      .filter(
+        (g) =>
+          this.staffTutorialFilter === 'all' ||
+          (this.unitRole && g.tutorial.tutor.id === this.unitRole.user.id),
+      )
+      .filter(
+        (g) => !this.newGroupName || g.name.toLowerCase().includes(this.newGroupName.toLowerCase()),
+      );
+
+    this.dataSource.data = filteredGroups.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -90,6 +125,11 @@ export class GroupSelectorComponent
       }
       this.refreshGroups();
     }
+  }
+
+  onTutorialFilterChange(event: MatButtonToggleChange) {
+    this.staffTutorialFilter = event.value;
+    this.applyFilters();
   }
 
   addGroup(name: string) {
@@ -132,7 +172,7 @@ export class GroupSelectorComponent
           this.alertService.success('Successfully created group', 3000);
           this.selectedGroup = group;
           this.newGroupName = '';
-          // TODO: apply filters
+          this.applyFilters();
         },
         error: (error) => {
           this.alertService.error(`Failed to create group: ${error}`);
@@ -225,7 +265,7 @@ export class GroupSelectorComponent
     this.cancelEdit();
   }
 
-  onSuccess(_response: Group, _isNew: boolean): void {
+  onSuccess(): void {
     this.refreshGroups();
   }
 }

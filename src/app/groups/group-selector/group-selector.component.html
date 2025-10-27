@@ -1,37 +1,55 @@
 <mat-card appearance="outlined">
   <mat-card-header>
-    <div class="flex flex-row w-full justify-between">
-      <div class="flex items-center gap-2">
-        <mat-card-title class="mb-[22px]">
-          Groups for
-          @if (!showGroupSetSelector && selectedGroup) {
-            "{{ selectedGroupSet?.name }}"
-          }
-        </mat-card-title>
+    <div class="flex flex-col w-full">
+      <div class="flex flex-row w-full justify-between">
+        <div class="flex items-center gap-2">
+          <mat-card-title class="mb-[22px]">
+            Groups for
+            @if (!showGroupSetSelector && selectedGroup) {
+              "{{ selectedGroupSet?.name }}"
+            }
+          </mat-card-title>
 
-        @if (showGroupSetSelector) {
-          <mat-form-field appearance="outline">
-            <mat-select (ngModelChange)="selectGroupSet($event)" [(ngModel)]="selectedGroupSet">
-              @for (gs of unit.groupSets; track gs.id) {
-                <mat-option [value]="gs">{{ gs.name }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+          @if (showGroupSetSelector) {
+            <mat-form-field appearance="outline">
+              <mat-select (ngModelChange)="selectGroupSet($event)" [(ngModel)]="selectedGroupSet">
+                @for (gs of unit.groupSets; track gs.id) {
+                  <mat-option [value]="gs">{{ gs.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+        </div>
+        @if (unitRole || selectedGroupSet?.allowStudentsToCreateGroups) {
+          <div class="flex items-center gap-2">
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                placeholder="Group Name"
+                [(ngModel)]="newGroupName"
+                (ngModelChange)="onGroupNameChange()"
+              />
+            </mat-form-field>
+            <button
+              mat-raised-button
+              color="primary"
+              class="mb-[22px]"
+              (click)="addGroup(newGroupName)"
+            >
+              Create Group
+            </button>
+          </div>
         }
       </div>
-      @if (unitRole || selectedGroupSet?.allowStudentsToCreateGroups) {
-        <div class="flex items-center gap-2">
-          <mat-form-field appearance="outline">
-            <input matInput placeholder="Group Name" [ngModel]="newGroupName" />
-          </mat-form-field>
-          <button
-            mat-raised-button
-            color="primary"
-            class="mb-[22px]"
-            (click)="addGroup(newGroupName)"
+      @if (unitRole) {
+        <div class="flex w-full justify-center">
+          <mat-button-toggle-group
+            [ngModel]="staffTutorialFilter"
+            (change)="onTutorialFilterChange($event)"
           >
-            Create Group
-          </button>
+            <mat-button-toggle value="all">All Tutorials</mat-button-toggle>
+            <mat-button-toggle value="mine">My Tutorials</mat-button-toggle>
+          </mat-button-toggle-group>
         </div>
       }
     </div>
@@ -167,6 +185,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectGroup(row)"></tr>
     </table>
+    <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 15, 20, 25]"></mat-paginator>
   }
 
   @if (selectedGroupSet.keepGroupsInSameClass && selectedGroupSet.groups.length > 0 && !unitRole) {
