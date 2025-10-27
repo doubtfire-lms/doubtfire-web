@@ -73,19 +73,25 @@
       </ng-container>
 
       <ng-container matColumnDef="capacity_adjustment" [formGroup]="formData">
-        <th mat-header-cell *matHeaderCellDef>Capacity Adjustment</th>
+        <th mat-header-cell *matHeaderCellDef>
+          @if (unitRole) {
+            Capacity Adjustment
+          }
+        </th>
         <td mat-cell *matCellDef="let group">
-          @if (editing(group)) {
-            <mat-form-field appearance="outline" class="p-2">
-              <input
-                matInput
-                required
-                formControlName="capacityAdjustment"
-                placeholder="Capacity Adjustment"
-              />
-            </mat-form-field>
-          } @else {
-            {{ group.capacityAdjustment }}
+          @if (unitRole) {
+            @if (editing(group)) {
+              <mat-form-field appearance="outline" class="p-2">
+                <input
+                  matInput
+                  required
+                  formControlName="capacityAdjustment"
+                  placeholder="Capacity Adjustment"
+                />
+              </mat-form-field>
+            } @else {
+              {{ group.capacityAdjustment }}
+            }
           }
         </td>
       </ng-container>
@@ -104,36 +110,51 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let group">
-          <div class="flex gap-2">
-            @if (editing(group)) {
-              <div class="flex gap-2 mb-[22px]">
-                <button mat-icon-button (click)="saveEdit($event)">
-                  <mat-icon>save</mat-icon>
-                </button>
-                <button mat-icon-button (click)="cancelEditGroup($event)">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </div>
-            } @else {
-              <button mat-icon-button (click)="startEditGroup($event, group)">
-                <mat-icon>edit</mat-icon>
-              </button>
+          @if (project && group.hasSpace()) {
+            @if (!group.locked && !selectedGroupSet.locked) {
               <button
-                mat-icon-button
-                [color]="group.locked ? 'warn' : 'accent'"
-                (click)="toggleLocked($event, group)"
+                mat-raised-button
+                (click)="joinGroup(group)"
+                [disabled]="isPartOfGroup(project, group)"
               >
-                @if (group.locked) {
-                  <mat-icon>lock_outline</mat-icon>
-                } @else {
-                  <mat-icon>lock_open</mat-icon>
-                }
+                Join
               </button>
-              <button mat-icon-button color="warn" (click)="deleteGroup($event, group)">
-                <mat-icon>delete</mat-icon>
-              </button>
+            } @else {
+              Locked
             }
-          </div>
+          }
+          @if (unitRole) {
+            <div class="flex gap-2">
+              @if (editing(group)) {
+                <div class="flex gap-2 mb-[22px]">
+                  <button mat-icon-button (click)="saveEdit($event)">
+                    <mat-icon>save</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="cancelEditGroup($event)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              } @else {
+                <button mat-icon-button (click)="startEditGroup($event, group)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  [color]="group.locked ? 'warn' : 'accent'"
+                  (click)="toggleLocked($event, group)"
+                >
+                  @if (group.locked) {
+                    <mat-icon>lock_outline</mat-icon>
+                  } @else {
+                    <mat-icon>lock_open</mat-icon>
+                  }
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteGroup($event, group)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </div>
+          }
         </td>
       </ng-container>
 

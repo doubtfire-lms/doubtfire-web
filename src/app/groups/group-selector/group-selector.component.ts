@@ -85,7 +85,6 @@ export class GroupSelectorComponent
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['selectedGroupSet'] && this.selectedGroupSet) {
-      console.log(this.selectedGroupSet);
       if (!this.dataSource) {
         this.dataSource = new MatTableDataSource();
       }
@@ -95,9 +94,11 @@ export class GroupSelectorComponent
 
   addGroup(name: string) {
     if (this.unit.tutorials.length == 0) {
-      return console.error(
-        'Please ensure there is at least one tutorial before groups are created',
+      this.alertService.error(
+        `Please ensure there is at least one tutorial before groups are created`,
+        6000,
       );
+      return;
     }
     let tutorialId = -1;
     if (this.project) {
@@ -137,8 +138,26 @@ export class GroupSelectorComponent
           this.alertService.error(`Failed to create group: ${error}`);
         },
       });
+  }
 
-    console.log(tutorialId);
+  isPartOfGroup(project: Project, group: Group) {
+    return project.inGroup(group);
+  }
+
+  joinGroup(group: Group) {
+    if (!this.project) {
+      return;
+    }
+
+    if (this.isPartOfGroup(this.project, group)) {
+      this.alertService.error('You are already member of this group');
+      return;
+    }
+
+    group.addMember(this.project, () => {
+      this.selectedGroup = group;
+      this.selectGroup(group);
+    });
   }
 
   selectGroup(group: Group) {
@@ -156,14 +175,13 @@ export class GroupSelectorComponent
     this.groupService.delete(group, {cache: this.selectedGroupSet.groupsCache}).subscribe({
       next: () => {
         this.alertService.success('Deleted group', 3000);
-        console.log(group.id, this.selectedGroup);
         if (group.id === this.selectedGroup?.id) {
           this.selectedGroup = null;
           this.selectGroup(null);
         }
       },
       error: (error) => {
-        console.error(error);
+        this.alertService.error(`Failed to delete group: ${error}`, 6000);
       },
     });
   }
