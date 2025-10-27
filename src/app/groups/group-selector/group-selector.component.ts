@@ -28,28 +28,21 @@ export class GroupSelectorComponent
   extends EntityFormComponent<Group>
   implements OnInit, OnChanges, AfterViewInit
 {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
   @Input() project: Project;
-
   @Input() selectedGroup: Group;
-
   @Input() selectedGroupSet: GroupSet;
-
   @Input() onSelect: (group: Group) => void;
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   displayedColumns: string[] = ['name', 'tutorial', 'capacity_adjustment', 'capacity', 'actions'];
-  groups: Group[] = [];
+  public groups: Group[] = [];
 
-  loading = false;
-
-  newGroupName: string;
+  public newGroupName: string;
+  public staffTutorialFilter: 'all' | 'mine' = 'all';
 
   private groupsSub?: Subscription;
-
-  staffTutorialFilter: 'all' | 'mine' = 'all';
 
   constructor(
     private userService: UserService,
