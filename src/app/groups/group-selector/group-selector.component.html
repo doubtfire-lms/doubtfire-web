@@ -168,4 +168,13 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectGroup(row)"></tr>
     </table>
   }
+
+  @if (selectedGroupSet.keepGroupsInSameClass && selectedGroupSet.groups.length > 0 && !unitRole) {
+    <p>
+      Can't see the group you need to join? Groups shown are limited to those in your allocated
+      tutorials. Use the
+      <a ui-sref="projects/tutorials({projectId: project.id})">Tutorial List</a> to check and update
+      your tutorial enrolment if needed.
+    </p>
+  }
 </mat-card>
