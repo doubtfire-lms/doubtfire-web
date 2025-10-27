@@ -166,6 +166,7 @@ export class GroupSelectorComponent
       return;
     }
 
+    this.selectedGroup = group;
     this.onSelect(group);
   }
 
