@@ -5,7 +5,7 @@
 
 <mat-stepper orientation="vertical" #stepper>
   <mat-step>
-    <ng-template matStepLabel matStepperIcon="1">Task details</ng-template>
+    <ng-template matStepLabel matStepperIcon="1">Task Details</ng-template>
     <div class="pt-[12px]">
       <p class="font-normal text-gray-500 pb-2">Name the task and set target grade</p>
       <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
@@ -13,7 +13,7 @@
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>Task learning outcomes</ng-template>
+    <ng-template matStepLabel>Task Learning Outcomes</ng-template>
     <div class="pt-[12px]">
       <p class="font-normal text-gray-500 pb-2">Add learning outcomes for this task</p>
       <f-learning-outcome-editor [context]="taskDefinition"></f-learning-outcome-editor>
@@ -31,7 +31,7 @@
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>Due dates</ng-template>
+    <ng-template matStepLabel>Due Dates</ng-template>
     <div class="pt-[12px]">
       <p class="font-normal text-gray-500 pb-2">When is the task due?</p>
       <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
@@ -39,7 +39,7 @@
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>Upload requirements</ng-template>
+    <ng-template matStepLabel>Upload Requirements</ng-template>
     <div class="pt-[12px]">
       <p class="font-normal text-gray-500 pb-2">What do students need to upload?</p>
       <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
@@ -47,7 +47,7 @@
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>Task description and resources</ng-template>
+    <ng-template matStepLabel>Task Resources</ng-template>
     <div class="pt-[12px]">
       <p class="font-normal text-gray-500 pb-2">Upload task descriptions and resources</p>
       <f-task-definition-resources [taskDefinition]="taskDefinition"></f-task-definition-resources>
@@ -55,7 +55,7 @@
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>Prerequisite tasks</ng-template>
+    <ng-template matStepLabel>Prerequisite Tasks</ng-template>
     <div class="pt-[12px]">
       <p class="font-normal text-gray-500 pb-2">
         Select which tasks need to be submitted before
@@ -70,7 +70,7 @@
 
   @if (overseerEnabled) {
     <mat-step>
-      <ng-template matStepLabel>Task assessment automatiion</ng-template>
+      <ng-template matStepLabel>Task Assessment Automatiion</ng-template>
       <div class="pt-[12px]">
         <p class="font-normal text-gray-500 pb-2">Configure automated assessment</p>
         <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
@@ -89,7 +89,7 @@
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>Optional settings</ng-template>
+    <ng-template matStepLabel>Optional Settings</ng-template>
     <div class="pt-[12px]">
       <p class="font-normal text-gray-500 pb-2">Apply other optiosn</p>
 
