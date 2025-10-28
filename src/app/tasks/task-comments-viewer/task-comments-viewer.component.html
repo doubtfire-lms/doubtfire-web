@@ -127,7 +127,10 @@
                 <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>
 
-              <div *ngSwitchCase="'assessment'" class="comment-assessment">
+              <div
+                *ngSwitchCase="'assessment'"
+                class="comment-assessment overflow-x-scroll max-w-[350px] mx-auto"
+              >
                 <app-task-assessment-comment
                   [task]="task"
                   [comment]="comment"
