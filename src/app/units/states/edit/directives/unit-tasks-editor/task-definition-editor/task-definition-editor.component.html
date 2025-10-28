@@ -2,218 +2,105 @@
   <h3>Details for {{ taskDefinition.abbreviation }} - {{ taskDefinition.name }}</h3>
   <mat-divider></mat-divider>
 </div>
-<div class="flex flex-row">
-  <div class="flex-col grow mr-4">
-    <div class="flex mt-10">
-      <div class="mr-6">
-        <div
-          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-        >
-          1
-        </div>
-      </div>
 
-      <div class="w-full">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Task details</h3>
-        <p class="font-normal text-gray-700">Name the task and set target grade</p>
-        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-          <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
-        </div>
-      </div>
+<mat-stepper orientation="vertical" #stepper>
+  <mat-step>
+    <ng-template matStepLabel matStepperIcon="1">Task details</ng-template>
+    <div class="pt-[12px]">
+      <p class="font-normal text-gray-500 pb-2">Name the task and set target grade</p>
+      <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
     </div>
+  </mat-step>
 
-    <div class="flex mt-10">
-      <div class="mr-6">
-        <div
-          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-        >
-          2
-        </div>
-      </div>
-      <div class="w-full">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Task Learning Outcomes</h3>
-        <p class="font-normal text-gray-700">Add learning outcomes for this task</p>
-        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-          <f-learning-outcome-editor [context]="taskDefinition"></f-learning-outcome-editor>
-        </div>
-      </div>
+  <mat-step>
+    <ng-template matStepLabel>Task learning outcomes</ng-template>
+    <div class="pt-[12px]">
+      <p class="font-normal text-gray-500 pb-2">Add learning outcomes for this task</p>
+      <f-learning-outcome-editor [context]="taskDefinition"></f-learning-outcome-editor>
     </div>
+  </mat-step>
 
-    <div class="flex mt-10">
-      <div class="mr-6">
-        <div
-          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-        >
-          3
-        </div>
-      </div>
-
-      <div class="w-full">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Inbox</h3>
-        <p class="font-normal text-gray-700">
-          Who assesses {{ unit.hasGroupwork() ? 'and submits ' : '' }}this task?
-        </p>
-        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-          <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
-        </div>
-      </div>
+  <mat-step>
+    <ng-template matStepLabel>Inbox</ng-template>
+    <div class="pt-[12px]">
+      <p class="font-normal text-gray-500 pb-2">
+        Who assesses {{ unit.hasGroupwork() ? 'and submits ' : '' }}this task?
+      </p>
+      <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
     </div>
+  </mat-step>
 
-    <div class="flex mt-10">
-      <div class="mr-6">
-        <div
-          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-        >
-          4
-        </div>
-      </div>
-
-      <div class="w-full">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Due dates</h3>
-        <p class="font-normal text-gray-700">When is this task due?</p>
-        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-          <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
-        </div>
-      </div>
+  <mat-step>
+    <ng-template matStepLabel>Due dates</ng-template>
+    <div class="pt-[12px]">
+      <p class="font-normal text-gray-500 pb-2">When is the task due?</p>
+      <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
     </div>
+  </mat-step>
 
-    <div class="flex mt-10">
-      <div class="mr-6">
-        <div
-          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-        >
-          5
-        </div>
-      </div>
-
-      <div class="w-full">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Upload requirements</h3>
-        <p class="font-normal text-gray-700">What do students need to upload?</p>
-        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-          <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
-        </div>
-      </div>
+  <mat-step>
+    <ng-template matStepLabel>Upload requirements</ng-template>
+    <div class="pt-[12px]">
+      <p class="font-normal text-gray-500 pb-2">What do students need to upload?</p>
+      <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
     </div>
+  </mat-step>
 
-    <div class="flex mt-10">
-      <div class="mr-6">
-        <div
-          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-        >
-          6
-        </div>
-      </div>
-
-      <div class="w-full">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">
-          Task description and resources
-        </h3>
-        <p class="font-normal text-gray-700">Upload task descriptions and resources</p>
-        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-          <f-task-definition-resources
-            [taskDefinition]="taskDefinition"
-          ></f-task-definition-resources>
-        </div>
-      </div>
+  <mat-step>
+    <ng-template matStepLabel>Task description and resources</ng-template>
+    <div class="pt-[12px]">
+      <p class="font-normal text-gray-500 pb-2">Upload task descriptions and resources</p>
+      <f-task-definition-resources [taskDefinition]="taskDefinition"></f-task-definition-resources>
     </div>
+  </mat-step>
 
-    <div class="flex mt-10">
-      <div class="mr-6">
-        <div
-          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-        >
-          7
-        </div>
-      </div>
-      <div class="w-full">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Prerequisite Tasks</h3>
-        <p class="font-normal text-gray-700">
-          Select which tasks need to be submitted before
-          <span class="font-bold">{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</span>
-          can be submitted
-        </p>
-        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-          <f-task-definition-prerequisites [taskDefinition]="taskDefinition" [staffView]="true">
-          </f-task-definition-prerequisites>
-        </div>
-      </div>
+  <mat-step>
+    <ng-template matStepLabel>Prerequisite tasks</ng-template>
+    <div class="pt-[12px]">
+      <p class="font-normal text-gray-500 pb-2">
+        Select which tasks need to be submitted before
+        <span class="font-bold">{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</span>
+        can be submitted
+      </p>
+
+      <f-task-definition-prerequisites [taskDefinition]="taskDefinition" [staffView]="true">
+      </f-task-definition-prerequisites>
     </div>
+  </mat-step>
 
-    <div class="flex mt-10">
-      <div class="mr-6">
-        <div
-          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-        >
-          8
-        </div>
+  @if (overseerEnabled) {
+    <mat-step>
+      <ng-template matStepLabel>Task assessment automatiion</ng-template>
+      <div class="pt-[12px]">
+        <p class="font-normal text-gray-500 pb-2">Configure automated assessment</p>
+        <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
       </div>
+    </mat-step>
+  }
 
-      <div class="w-full">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">
-          Task assessment automation
-        </h3>
-        <p class="font-normal text-gray-700" *ngIf="!overseerEnabled">Automation is not enabled</p>
-        <p class="font-normal text-gray-700" *ngIf="overseerEnabled">
-          Configure automated assessment
-        </p>
-        <div class="bg-white border border-gray-200 rounded-xl shadow p-6" *ngIf="overseerEnabled">
-          <f-task-definition-overseer
-            [taskDefinition]="taskDefinition"
-          ></f-task-definition-overseer>
-        </div>
-      </div>
+  <mat-step>
+    <ng-template matStepLabel>SCORM Test</ng-template>
+    <div class="pt-[12px]">
+      <p class="font-normal text-gray-500 pb-2">
+        Upload the corresponding SCORM 2004 test (e.g. Numbas)
+      </p>
+      <f-task-definition-scorm [taskDefinition]="taskDefinition"></f-task-definition-scorm>
     </div>
+  </mat-step>
 
-    <div class="flex mt-10">
-      <div class="mr-6">
-        <div
-          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-        >
-          9
-        </div>
-      </div>
-      <div class="w-full">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">SCORM test</h3>
-        <p class="font-normal text-gray-700">
-          Upload the corresponding SCORM 2004 test (e.g. Numbas)
-        </p>
-        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-          <f-task-definition-scorm [taskDefinition]="taskDefinition"></f-task-definition-scorm>
-        </div>
-      </div>
+  <mat-step>
+    <ng-template matStepLabel>Optional settings</ng-template>
+    <div class="pt-[12px]">
+      <p class="font-normal text-gray-500 pb-2">Apply other optiosn</p>
+
+      <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
     </div>
-
-    <div class="flex mt-10">
-      <div class="mr-6">
-        <div
-          class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-        >
-          10
-        </div>
-      </div>
-
-      <div class="w-full">
-        <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Optional settings</h3>
-        <p class="font-normal text-gray-700">Apply other options</p>
-        <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title> Options </mat-panel-title>
-            </mat-expansion-panel-header>
-            <f-task-definition-options
-              [taskDefinition]="taskDefinition"
-            ></f-task-definition-options>
-          </mat-expansion-panel>
-        </div>
-      </div>
-
-      <div class="place-content-end">
-        <div class="sticky bottom-16">
-          <button mat-fab color="primary" (click)="save()">
-            <mat-icon>save</mat-icon>
-          </button>
-        </div>
-      </div>
-    </div>
+  </mat-step>
+</mat-stepper>
+<div class="flex w-full justify-end place-content-end mb-5">
+  <div class="sticky bottom-16">
+    <button mat-fab color="primary" (click)="save()">
+      <mat-icon>save</mat-icon>
+    </button>
   </div>
 </div>
