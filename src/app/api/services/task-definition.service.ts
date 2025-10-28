@@ -114,6 +114,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'hasTaskSheet',
       'hasTaskResources',
       'hasTaskAssessmentResources',
+      'hasTaskAssessmentScript',
       'scormEnabled',
       'hasScormData',
       'scormAllowReview',
