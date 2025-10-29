@@ -91,6 +91,9 @@
     <!-- <pdf-viewer-panel [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer-panel> -->
     <f-pdf-viewer [pdf-url]="urls.taskSubmissionPdfUrl"></f-pdf-viewer>
   </div>
+  <div class="panel-body" ng-if="isCurrentView('similarities')">
+    <f-task-similarity-view [task]="task"></f-task-similarity-view>
+  </div>
   <!--/panel-body-->
   <div class="panel-body text-muted no-pdf" ng-show="isCurrentView('submission') && !task.hasPdf">
     <i class="fa fa-file-pdf-o"></i>
