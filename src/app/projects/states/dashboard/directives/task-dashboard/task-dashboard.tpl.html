@@ -22,6 +22,9 @@
           <li ng-show="task.definition.hasTaskSheet">
             <a ng-click="setSelectedDashboardView('task')">View Task Sheet</a>
           </li>
+          <li ng-show="tutor">
+            <a ng-click="setSelectedDashboardView('similarities')">View Similarities</a>
+          </li>
           <li class="divider" ng-show="task.hasPdf"></li>
           <li ng-show="task.hasPdf">
             <a ng-click="downloadSubmission()">Download Submission PDF</a>
