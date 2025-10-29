@@ -12,7 +12,7 @@
 
   @if (selectedGroup) {
     <mat-card class="w-full h-min" appearance="outlined">
-      <mat-card-header>
+      <mat-card-header class="flex justify-between items-center">
         <mat-card-title class="flex items-center"
           >Members of
           @if (!editingGroupName) {
@@ -36,10 +36,10 @@
             }
           }
         </mat-card-title>
-        <!-- TODO: Show the locked symbol -->
+        @if (selectedGroup.locked) {
+          <mat-icon>lock</mat-icon>
+        }
       </mat-card-header>
-
-      <!-- <button mat-raised-button>Add Member</button> -->
 
       <f-group-member-list
         [unit]="unit"
@@ -50,10 +50,7 @@
       >
       </f-group-member-list>
       <mat-card-footer>
-        <!-- <mat-form-field appearance="outline" class="w-full p-5">
-          <input matInput placeholder="Enter student name or username..." />
-        </mat-form-field> -->
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field appearance="outline" class="w-full px-5 mt-5">
           <input
             type="text"
             matInput
