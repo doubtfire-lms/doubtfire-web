@@ -142,6 +142,7 @@ MIGRATED:
 - [x] ./src/app/common/modals/confirmation-modal/confirmation-modal.coffee
 - [x] ./src/app/common/modals/comments-modal/comments-modal.coffee (IN 10.0.x)
 - [x] ./src/app/groups/group-selector/group-selector.coffee
+- [x] ./src/app/groups/group-set-manager/group-set-manager.coffee
 
 TODO:
 
@@ -193,7 +194,6 @@ TODO:
 - [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee
 - [ ] ./src/app/projects/states/tutorials/tutorials.coffee
 - [ ] ./src/app/admin/modals/modals.coffee
-- [ ] ./src/app/groups/group-set-manager/group-set-manager.coffee
 - [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
 - [ ] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
 - [ ] ./src/app/groups/groups.coffee
