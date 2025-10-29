@@ -281,6 +281,7 @@ import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-en
 import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/taskstatuspiechart.component';
 import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
 import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
+import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
 
 @NgModule({
   // Components we declare
@@ -411,6 +412,7 @@ import {GroupSelectorComponent} from './groups/group-selector/group-selector.com
     PortfolioGradeSelectStepComponent,
     GroupMemberListComponent,
     GroupSelectorComponent,
+    GroupSetManagerComponent,
   ],
   // Services we provide
   providers: [

@@ -222,6 +222,7 @@ import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staf
 import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
 import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
+import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -533,4 +534,9 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fGroupSelector',
   downgradeComponent({component: GroupSelectorComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fGroupSetManager',
+  downgradeComponent({component: GroupSetManagerComponent}),
 );

@@ -1,0 +1,55 @@
+<div class="flex w-full gap-5">
+  <f-group-selector
+    class="w-full"
+    [unit]="unit"
+    [unitRole]="unitRole"
+    [project]="project"
+    [selectedGroup]="selectedGroup"
+    [selectedGroupSet]="selectedGroupSet"
+    [onSelect]="groupSelectHandler"
+  >
+  </f-group-selector>
+
+  @if (selectedGroup) {
+    <mat-card class="w-full h-min" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Members of {{ selectedGroup?.name }}</mat-card-title>
+        <!-- TODO: Show the locked symbol -->
+      </mat-card-header>
+
+      <!-- <button mat-raised-button>Add Member</button> -->
+
+      <f-group-member-list
+        [unit]="unit"
+        [unitRole]="unitRole"
+        [project]="project"
+        [selectedGroup]="selectedGroup"
+        [onMembersLoaded]="groupMembersLoaded"
+      >
+      </f-group-member-list>
+      <mat-card-footer>
+        <!-- <mat-form-field appearance="outline" class="w-full p-5">
+          <input matInput placeholder="Enter student name or username..." />
+        </mat-form-field> -->
+        <mat-form-field appearance="outline" class="w-full">
+          <input
+            type="text"
+            matInput
+            [matAutocomplete]="auto"
+            placeholder="Enter student name or username..."
+            [formControl]="control"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            [displayWith]="displayFn"
+            (optionSelected)="addMember($event.option.value)"
+          >
+            @for (project of filteredProjects | async; track project) {
+              <mat-option [value]="project"> {{ project.student.name }} </mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </mat-card-footer>
+    </mat-card>
+  }
+</div>
