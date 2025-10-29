@@ -25,7 +25,7 @@ angular.module('doubtfire.projects.states.dashboard.directives.task-dashboard', 
     # Is the current user a tutor?
     $scope.tutor = $stateParams.tutor
     # the ways in which the dashboard can be viewed
-    $scope.dashboardViews = ["details", "submission", "task"]
+    $scope.dashboardViews = ["details", "submission", "task", "similarities"]
 
     # set the current dashboard view to details by default
     updateCurrentView = ->
