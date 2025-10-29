@@ -1,8 +1,9 @@
-import {AfterViewInit, Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {map, Observable, startWith} from 'rxjs';
 import {Group, GroupSet, Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
-import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
+import {GroupService} from 'src/app/api/services/group.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'f-group-set-manager',
@@ -19,6 +20,11 @@ export class GroupSetManagerComponent implements OnInit {
 
   public selectedGroup: Group;
 
+  constructor(
+    private groupService: GroupService,
+    private alertService: AlertService,
+  ) {}
+
   ngOnInit(): void {
     this.filteredProjects = this.control.valueChanges.pipe(
       startWith(''),
@@ -26,6 +32,8 @@ export class GroupSetManagerComponent implements OnInit {
     );
   }
   // students: Pro
+
+  editingGroupName = false;
 
   control = new FormControl('');
   projects: Project[] = [];
@@ -40,9 +48,16 @@ export class GroupSetManagerComponent implements OnInit {
   }
 
   newGroupSelected(group: Group) {
+    if (this.selectedGroup) {
+      this.selectedGroup.name = this.originalGroupName;
+    }
+    this.editingGroupName = false;
     this.selectedGroup = group;
+
     const students = this.unit.studentsForGroupTypeAhead(group) || [];
     this.projects = students.filter((project) => !group.projects.find((p) => project.id === p.id));
+
+    this.originalGroupName = group.name;
   }
 
   private _filter(value: string | Project): Project[] {
@@ -63,5 +78,40 @@ export class GroupSetManagerComponent implements OnInit {
   addMember(project: Project) {
     this.selectedGroup.addMember(project);
     this.control.setValue('');
+  }
+
+  private originalGroupName: string;
+  startEditingGroupName() {
+    this.originalGroupName = this.selectedGroup.name;
+    this.editingGroupName = true;
+  }
+
+  stopEditinGroupName() {
+    this.selectedGroup.name = this.originalGroupName;
+    this.editingGroupName = false;
+  }
+
+  updateGroup() {
+    this.editingGroupName = false;
+    this.groupService
+      .update(
+        {
+          unitId: this.unit.id,
+          groupSetId: this.selectedGroup.groupSet.id,
+          id: this.selectedGroup.id,
+        },
+        {
+          entity: this.selectedGroup,
+        },
+      )
+      .subscribe({
+        next: () => {
+          this.alertService.success('Successfully updated group', 3000);
+        },
+        error: (error) => {
+          this.selectedGroup.name = this.originalGroupName;
+          this.alertService.error(`Failed to update gorup: ${error}`, 6000);
+        },
+      });
   }
 }

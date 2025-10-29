@@ -13,7 +13,29 @@
   @if (selectedGroup) {
     <mat-card class="w-full h-min" appearance="outlined">
       <mat-card-header>
-        <mat-card-title>Members of {{ selectedGroup?.name }}</mat-card-title>
+        <mat-card-title class="flex items-center"
+          >Members of
+          @if (!editingGroupName) {
+            {{ selectedGroup?.name }}
+            @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
+              <button mat-icon-button class="p-2" (click)="startEditingGroupName()">
+                <mat-icon>edit</mat-icon>
+              </button>
+            }
+          } @else {
+            @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
+              <mat-form-field appearance="outline" class="ml-2 mt-[22px]">
+                <input matInput [(ngModel)]="selectedGroup.name" required />
+              </mat-form-field>
+              <button mat-icon-button class="p-2" (click)="updateGroup()">
+                <mat-icon>save</mat-icon>
+              </button>
+              <button mat-icon-button class="p-2" (click)="stopEditinGroupName()">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          }
+        </mat-card-title>
         <!-- TODO: Show the locked symbol -->
       </mat-card-header>
 
