@@ -81,7 +81,11 @@
           class="clearfix w-full"
           style="padding: 0; height: 60px"
           togglePosition="before"
-          [selected]="task.status === 'discuss' || attendance"
+          [selected]="
+            (task.status === 'discuss' || attendance) &&
+            (!task.definition.lockAssessmentsToTutorialStream ||
+              currentUserTutorsInStream(task.definition.tutorialStream))
+          "
         >
           @if (task) {
             <div class="w-full" id="{{ task.id }}">
