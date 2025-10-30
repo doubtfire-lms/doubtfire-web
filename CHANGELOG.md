@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-57](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-56...v10.0.0-57) (2025-10-30)
+
+
+### Features
+
+* open similarities from project dashboard ([#1035](https://github.com/b0ink/doubtfire-deploy/issues/1035)) ([ec0af0c](https://github.com/b0ink/doubtfire-deploy/commit/ec0af0cbe47392d6542d9741e1131954195d407f))
+
+
+### Bug Fixes
+
+* enable submission button for 'need help' trigger ([#1034](https://github.com/b0ink/doubtfire-deploy/issues/1034)) ([07de5b1](https://github.com/b0ink/doubtfire-deploy/commit/07de5b1e34f78f83c1418399f45e8c754aea530a))
+* typo ([2712a68](https://github.com/b0ink/doubtfire-deploy/commit/2712a68f6031794c571a7ee5866c653bf67de1dd))
+
 ## [10.0.0-56](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-55...v10.0.0-56) (2025-10-23)
 
 
