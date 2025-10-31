@@ -129,7 +129,9 @@
           }
         </th>
         <td mat-cell *matCellDef="let group">
-          @if (project && group.hasSpace() && selectedGroupSet.allowStudentsToManageGroups) {
+          @if (isPartOfGroup(project, group)) {
+            <div class="text-green-500 font-bold text-center">Joined</div>
+          } @else if (project && group.hasSpace() && selectedGroupSet.allowStudentsToManageGroups) {
             <div class="flex justify-center w-full">
               @if (!group.locked && !selectedGroupSet.locked) {
                 <button
