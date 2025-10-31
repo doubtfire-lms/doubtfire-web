@@ -174,7 +174,7 @@ export class GroupSelectorComponent
   }
 
   isPartOfGroup(project: Project, group: Group) {
-    return project.inGroup(group);
+    return group && project?.inGroup(group);
   }
 
   joinGroup(group: Group) {
