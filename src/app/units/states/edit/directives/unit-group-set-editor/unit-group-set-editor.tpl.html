@@ -123,18 +123,21 @@
           <i class="fa fa-plus"></i>
           New Group Set
         </button>
-      </div><!--/panel-footer-->
-    </div><!--/panel-->
-  </div><!--/group-sets-->
-  <div class="clearfix">
-    <group-set-manager
-      ng-show="selectedGroupSet && unit.groupSets.length > 0"
-      unit="unit"
-      selected-group-set="selectedGroupSet"
-      show-group-set-selector="false"
-      unit-role="unitRole"
-      class="col-sm-12"></group-set-manager>
+      </div>
+      <!--/panel-footer-->
+    </div>
+    <!--/panel-->
   </div>
+  <!--/group-sets-->
+  <f-group-set-manager
+    *ngIf="selectedGroupSet && unit.groupSets.length > 0"
+    [unit]="unit"
+    [selected-group-set]="selectedGroupSet"
+    [show-group-set-selector]="false"
+    [unit-role]="unitRole"
+  >
+  </f-group-set-manager>
+
   <div class="file-io col-sm-12" ng-if="selectedGroupSet && unit.groupSets.length > 0">
     <hr>
     <div class="panel-row">

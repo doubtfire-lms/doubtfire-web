@@ -1,10 +1,8 @@
 <div class="container" ng-if="unit.hasGroupwork()">
-  <group-set-manager
-    project="project"
-    unit="unit"
-    selected-group-set="selectedGroupSet">
-  </group-set-manager>
-</div><!--/has-groupwork-->
+  <f-group-set-manager [project]="project" [unit]="unit" [selected-group-set]="selectedGroupSet">
+  </f-group-set-manager>
+</div>
+<!--/has-groupwork-->
 <div class="container" ng-hide="unit.hasGroupwork()">
   <div class="large-notice-block">
     <i class="fa fa-2x fa-users"></i>
