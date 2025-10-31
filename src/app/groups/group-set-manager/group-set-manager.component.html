@@ -49,26 +49,28 @@
         [onMembersLoaded]="groupMembersLoaded"
       >
       </f-group-member-list>
-      <mat-card-footer>
-        <mat-form-field appearance="outline" class="w-full px-5 mt-5">
-          <input
-            type="text"
-            matInput
-            [matAutocomplete]="auto"
-            placeholder="Enter student name or username..."
-            [formControl]="control"
-          />
-          <mat-autocomplete
-            #auto="matAutocomplete"
-            [displayWith]="displayFn"
-            (optionSelected)="addMember($event.option.value)"
-          >
-            @for (project of filteredProjects | async; track project) {
-              <mat-option [value]="project"> {{ project.student.name }} </mat-option>
-            }
-          </mat-autocomplete>
-        </mat-form-field>
-      </mat-card-footer>
+      @if (unitRole) {
+        <mat-card-footer>
+          <mat-form-field appearance="outline" class="w-full px-5 mt-5">
+            <input
+              type="text"
+              matInput
+              [matAutocomplete]="auto"
+              placeholder="Enter student name or username..."
+              [formControl]="control"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              [displayWith]="displayFn"
+              (optionSelected)="addMember($event.option.value)"
+            >
+              @for (project of filteredProjects | async; track project) {
+                <mat-option [value]="project"> {{ project.student.name }} </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-card-footer>
+      }
     </mat-card>
   }
 </div>
