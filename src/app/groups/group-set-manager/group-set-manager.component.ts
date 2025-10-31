@@ -10,7 +10,6 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: './group-set-manager.component.html',
   styleUrls: ['./group-set-manager.component.scss'],
 })
-// export class GroupSetManagerComponent extends EntityFormComponent<Group> {
 export class GroupSetManagerComponent implements OnInit {
   @Input() project: Project;
   @Input() unit: Unit;
@@ -19,6 +18,12 @@ export class GroupSetManagerComponent implements OnInit {
   @Input() unitRole: UnitRole;
 
   public selectedGroup: Group;
+
+  editingGroupName = false;
+
+  control = new FormControl('');
+  projects: Project[] = [];
+  filteredProjects: Observable<Project[]>;
 
   constructor(
     private groupService: GroupService,
@@ -31,13 +36,6 @@ export class GroupSetManagerComponent implements OnInit {
       map((value) => this._filter(value)),
     );
   }
-  // students: Pro
-
-  editingGroupName = false;
-
-  control = new FormControl('');
-  projects: Project[] = [];
-  filteredProjects: Observable<Project[]>;
 
   get groupSelectHandler() {
     return (group: Group) => this.newGroupSelected(group);
