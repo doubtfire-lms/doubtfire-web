@@ -71,8 +71,6 @@ export class GroupSetManagerComponent implements OnInit {
     );
   }
 
-  groupMembersLoaded() {}
-
   addMember(project: Project) {
     this.selectedGroup.addMember(project);
     this.control.setValue('');
