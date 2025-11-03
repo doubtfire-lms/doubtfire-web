@@ -89,6 +89,8 @@ angular.module('doubtfire.projects.states.portfolio', [
   # Jump to a step
   if $scope.project.portfolioAvailable or $scope.project.compilePortfolio
     $scope.setActiveTab $scope.tabs.reviewStep
+  else if not $scope.project.submittedGrade?
+    $scope.setActiveTab $scope.tabs.welcomeStep
   else if $scope.projectHasDraftLearningSummaryReport
     $scope.setActiveTab $scope.tabs.summaryStep
   else if $scope.projectHasLearningSummaryReport()
