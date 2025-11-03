@@ -179,7 +179,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       false
     submit: ->
       # Disable if no comment is supplied with need_help, or if submitting for feedback and task is assess in portfolio only
-      !$scope.uploader.isReady or ($scope.comment.trim().length < 25 && (($scope.submissionType == 'ready_for_feedback' && $scope.task.definition.assessInPortfolioOnly) || $scope.submissionType == 'need_help') )
+      !$scope.uploader.isReady or ($scope.comment.trim().length < 25 && ((($scope.submissionType == 'ready_for_feedback' || $scope.submissionType == 'reupload_evidence') && $scope.task.definition.assessInPortfolioOnly) || $scope.submissionType == 'need_help') )
     cancel: ->
       # Can't cancel whilst uploading
       $scope.uploader.isUploading
