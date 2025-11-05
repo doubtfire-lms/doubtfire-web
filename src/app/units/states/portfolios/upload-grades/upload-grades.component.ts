@@ -42,9 +42,7 @@ export class UploadGradesComponent implements OnInit {
 
         this.sidekiqModalService.show('Import student grades', response.id).subscribe({
           next: (job) => {
-            console.log(job);
             this.csvResultModal.show('Student grade import results', JSON.parse(job.result));
-            console.log('completed import!');
           },
           error: (error) => {
             console.error(error);
