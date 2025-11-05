@@ -294,6 +294,7 @@ import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/dir
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
 import {MarkingSessionService} from './api/services/marking-session.service';
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
+import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -448,6 +449,7 @@ const MY_DATE_FORMAT = {
     PortfolioGradeSelectStepComponent,
     AnalyticsTutorTimesComponent,
     PortfolioIncludedTasksComponent,
+    UploadGradesComponent,
   ],
   // Services we provide
   providers: [
