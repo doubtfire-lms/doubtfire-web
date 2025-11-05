@@ -414,6 +414,10 @@ export class Unit extends Entity {
     }/learning_alignments/csv.json`;
   }
 
+  public get gradesCSVUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/grades/csv`;
+  }
+
   public taskStatusFactor(td: TaskDefinition): number {
     return 1;
   }
