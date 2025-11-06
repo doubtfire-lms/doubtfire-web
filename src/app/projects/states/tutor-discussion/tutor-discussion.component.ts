@@ -12,6 +12,7 @@ import {
   TaskDefinition,
   TaskService,
   TaskStatusEnum,
+  TutorialStream,
   Unit,
   UnitService,
   UserService,
@@ -68,6 +69,19 @@ export class TutorDiscussionComponent implements AfterViewInit {
     private taskCommentService: TaskCommentService,
     private taskService: TaskService,
   ) {}
+
+  public currentUserTutorsInStream(tutorialStream: TutorialStream): boolean {
+    const user = this.userService.currentUser;
+    const tutorials = this.unit.tutorials.filter(
+      (t) =>
+        t.tutorialStream.abbreviation === tutorialStream.abbreviation &&
+        t.tutorialStream.name === tutorialStream.name,
+    );
+    if (tutorials.some((t) => t.tutor.id === user.id)) {
+      return true;
+    }
+    return false;
+  }
 
   onTabChange(event: MatTabChangeEvent): void {
     if (event.index === 0) {

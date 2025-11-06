@@ -56,6 +56,7 @@ export class TaskDefinition extends Entity {
   hasJplagReport: boolean;
   assessInPortfolioOnly: boolean;
   useResourcesForJplagBaseCode: boolean;
+  lockAssessmentsToTutorialStream: boolean;
 
   public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
     new EntityCache<TaskPrerequisite>();

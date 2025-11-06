@@ -138,6 +138,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
         },
       },
       'useResourcesForJplagBaseCode',
+      'lockAssessmentsToTutorialStream',
     );
 
     this.mapping.mapAllKeysToJsonExcept(
