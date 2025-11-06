@@ -1,3 +1,9 @@
+<ng-template #textDialog let-data>
+  <mat-card class="p-4 max-w-[600px]">
+    <pre>{{ data.text }}</pre>
+  </mat-card>
+</ng-template>
+
 <div class="overseer-image-list-container">
   <div class="header">
     <div>
@@ -5,7 +11,13 @@
       <p>Add new image or modify existing ones used for automated task analysis</p>
     </div>
   </div>
-  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="f-table">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    (matSortChange)="sortTableData($event)"
+    class="f-table"
+  >
     <!-- Name Column -->
     <ng-container [formGroup]="formData" matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
@@ -51,7 +63,9 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let overseerImage">
         <div class="right" *ngIf="!editing(overseerImage); else edit">
-          <button mat-flat-button color="primary" (click)="pullOverseerImage(overseerImage)">Pull</button>
+          <button mat-flat-button color="primary" (click)="pullOverseerImage(overseerImage)">
+            Pull
+          </button>
         </div>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
@@ -62,7 +76,7 @@
       <th mat-header-cell *matHeaderCellDef>Last Pulled</th>
       <td mat-cell *matCellDef="let overseerImage">
         <div class="right" *ngIf="!editing(overseerImage); else edit">
-          {{ overseerImage.lastPulledDate }}
+          {{ overseerImage.lastPulledDate | humanizedDate }}
         </div>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
@@ -80,10 +94,10 @@
               overseerImage.pulledImageStatus === 'success'
                 ? 'green'
                 : overseerImage.pulledImageStatus === 'loading'
-                ? 'orange'
-                : overseerImage.pulledImageStatus === 'failed'
-                ? 'red'
-                : ''
+                  ? 'orange'
+                  : overseerImage.pulledImageStatus === 'failed'
+                    ? 'red'
+                    : ''
           }"
         >
           <button
@@ -100,6 +114,7 @@
             class="status-icon"
             *ngIf="overseerImage.pulledImageStatus === 'failed'"
             [matTooltip]="overseerImage.pulledImageText"
+            (click)="showDialog(overseerImage)"
           >
             <mat-icon>error_outline</mat-icon>
           </button>
@@ -113,7 +128,11 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let overseerImage">
         <div class="right" *ngIf="!editing(overseerImage); else edit">
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            aria-label="Example icon-button with a menu"
+          >
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">

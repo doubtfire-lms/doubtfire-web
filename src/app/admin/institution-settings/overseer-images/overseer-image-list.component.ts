@@ -1,17 +1,24 @@
-import {Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
 import {MatTableDataSource, MatTable} from '@angular/material/table';
 import {OverseerImage, OverseerImageService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatSort, Sort} from '@angular/material/sort';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {MatDialog} from '@angular/material/dialog';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 
 @Component({
   selector: 'overseer-image-list',
   templateUrl: 'overseer-image-list.component.html',
   styleUrls: ['overseer-image-list.component.scss'],
 })
-export class OverseerImageListComponent extends EntityFormComponent<OverseerImage> {
+export class OverseerImageListComponent
+  extends EntityFormComponent<OverseerImage>
+  implements AfterViewInit
+{
+  @ViewChild('textDialog') textDialog!: TemplateRef<any>;
+
   @ViewChild(MatTable, {static: true}) table: MatTable<any>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -26,6 +33,8 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
   constructor(
     private overseerImageService: OverseerImageService,
     private alerts: AlertService,
+    private dialog: MatDialog,
+    private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {
     super(
       {
@@ -69,8 +78,15 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
   pullOverseerImage(image: OverseerImage) {
     this.loading = true;
     image.pulledImageStatus = 'loading';
-    this.overseerImageService.pullDockerImage(image).subscribe((response) => {
-      this.loading = false;
+    this.overseerImageService.pullDockerImage(image).subscribe((job) => {
+      this.sidekiqProgressModalService
+        .show(`Pulling image ${image.name} (${image.tag})`, job.id)
+        .subscribe((_job) => {
+          this.overseerImageService.fetch(image.id).subscribe((newImage) => {
+            console.log(newImage);
+            this.loading = false;
+          });
+        });
     });
   }
 
@@ -95,5 +111,11 @@ export class OverseerImageListComponent extends EntityFormComponent<OverseerImag
       case 'tag':
         return super.sortTableData(sort);
     }
+  }
+
+  public showDialog(image: OverseerImage) {
+    this.dialog.open(this.textDialog, {
+      data: {text: image.pulledImageText},
+    });
   }
 }

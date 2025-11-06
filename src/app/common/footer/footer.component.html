@@ -188,6 +188,10 @@
           <mat-icon matListItemIcon aria-label="View Similarities">crisis_alert</mat-icon>
           View similarities
         </button>
+        <button mat-menu-item (click)="viewOverseer()">
+          <mat-icon matListItemIcon aria-label="View Overseer">preview</mat-icon>
+          View overseer
+        </button>
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="selectedTask?.updateTaskStatus('assess_in_portfolio')">
           <mat-icon matListItemIcon aria-label="Switch to Assess in Portfolio"

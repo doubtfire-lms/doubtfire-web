@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {OverseerAssessment} from '../models/overseer/overseer-assessment';
+import {Task} from '../models/doubtfire-model';
 
 @Injectable()
 export class OverseerAssessmentService extends EntityService<OverseerAssessment> {
@@ -37,13 +38,13 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
     return new OverseerAssessment(other);
   }
 
-  public queryForTask(task: any): Observable<OverseerAssessment[]> {
+  public queryForTask(task: Task): Observable<OverseerAssessment[]> {
     const pathIds = {
       project_id: task.project.id,
       td_id: task.definition.id,
     };
 
-    return this.query(pathIds, task);
+    return this.query(pathIds);
   }
 
   public triggerOverseer(assessment: OverseerAssessment): Observable<OverseerAssessment> {
