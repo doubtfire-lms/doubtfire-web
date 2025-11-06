@@ -240,6 +240,7 @@
         <button ng-click="downloadGrades()" style="padding-right: 1rem">
           <i class="fa fa-download"></i> Download Grades
         </button>
+        <f-upload-grades [unit]="unit"></f-upload-grades>
         <button ng-if="hasD2lMapping()" ng-click="transferToD2L()">
           <i class="fa fa-upload"></i> Transfer Grades to D2L
         </button>

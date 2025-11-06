@@ -570,6 +570,9 @@ export class Task extends Entity {
           this.hasPdf = response['has_pdf'];
           this.processingPdf = response['processing_pdf'];
           this.submissionDate = MappingFunctions.mapDate(response, 'submission_date', this);
+          if (response['task_status'] && TaskStatus.STATUS_KEYS.includes(response['task_status'])) {
+            this.status = response['task_status'];
+          }
           return this;
         }),
       );

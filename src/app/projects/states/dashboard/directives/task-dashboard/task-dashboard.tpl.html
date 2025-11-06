@@ -22,6 +22,9 @@
           <li ng-show="task.definition.hasTaskSheet">
             <a ng-click="setSelectedDashboardView('task')">View Task Sheet</a>
           </li>
+          <li ng-show="tutor">
+            <a ng-click="setSelectedDashboardView('similarities')">View Similarities</a>
+          </li>
           <li class="divider" ng-show="task.hasPdf"></li>
           <li ng-show="task.hasPdf">
             <a ng-click="downloadSubmission()">Download Submission PDF</a>
@@ -87,6 +90,9 @@
   <div class="panel-body has-pdf" ng-if="isCurrentView('submission') && task.hasPdf">
     <!-- <pdf-viewer-panel [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer-panel> -->
     <f-pdf-viewer [pdf-url]="urls.taskSubmissionPdfUrl"></f-pdf-viewer>
+  </div>
+  <div class="panel-body" ng-if="isCurrentView('similarities')">
+    <f-task-similarity-view [task]="task"></f-task-similarity-view>
   </div>
   <!--/panel-body-->
   <div class="panel-body text-muted no-pdf" ng-show="isCurrentView('submission') && !task.hasPdf">

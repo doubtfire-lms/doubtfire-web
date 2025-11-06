@@ -129,7 +129,7 @@
         <mat-card-content class="bg-red-50" [hidden]="task?.inDiscussState()">
           <!--Past deadline and not submitted-->
           <p class="p-2">
-            @if (task?.taskDefinition?.unit.markLateSubmissionsAsAssessInPortfolio) {
+            @if (task?.definition?.unit.markLateSubmissionsAsAssessInPortfolio) {
               You should have completed this task by
               <strong>{{ task?.localDueDateString() }}</strong
               >. This task is now past the deadline and can only be submitted directly for your

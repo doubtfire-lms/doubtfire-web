@@ -101,7 +101,7 @@
         <div class="card-body">
           <textarea ng-model="comment" class="form-control input-lg" rows="3" placeholder="{{submissionType == 'need_help' ? 'I need help with...' : submissionType == 'ready_for_feedback' && task.definition.assessInPortfolioOnly ? 'I would like feedback with...' : 'Make a comment...'}}">
           </textarea>
-          <div class="w-full text-right py-2 text-gray-400">Character count: {{comment.length}} <span ng-show="submissionType == 'need_help' || (submissionType=='ready_for_feedback' && task.definition.assessInPortfolioOnly)">(Min. 25)</span></div>
+          <div class="w-full text-right py-2 text-gray-400">Character count: {{comment.length}} <span ng-show="submissionType == 'need_help' || ((submissionType=='ready_for_feedback' || submissionType=='reupload_evidence) && task.definition.assessInPortfolioOnly)">(Min. 25)</span></div>
         </div>
       </div><!--/card-comments-->
       <div class="card card-default" ng-show="privacyPolicy.privacy">
@@ -140,7 +140,7 @@
     <i class="fa fa-arrow-right"></i>
   </button>
   <!--/next-button-->
-  <button tooltip="{{submissionType == 'need_help' || (submissionType=='ready_for_feedback' && task.definition.assessInPortfolioOnly) ? 'This submission requires a comment' : ''}}" class="btn btn-success" ng-click="uploadButtonClicked()" ng-disabled="shouldDisableBtn.submit()" ng-show="shouldShowBtn.submit()">
+  <button tooltip="{{submissionType == 'need_help' || ((submissionType=='ready_for_feedback' || submissionType=='reupload_evidence') && task.definition.assessInPortfolioOnly) ? 'This submission requires a comment' : ''}}" class="btn btn-success" ng-click="uploadButtonClicked()" ng-disabled="shouldDisableBtn.submit()" ng-show="shouldShowBtn.submit()">
     <i class="fa fa-upload"></i> Upload Submission
   </button>
   <!--/upload-button-->

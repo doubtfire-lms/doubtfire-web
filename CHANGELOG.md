@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-60](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-59...v10.0.0-60) (2025-11-05)
+
+
+### Features
+
+* upload grades csv ([#1038](https://github.com/b0ink/doubtfire-deploy/issues/1038)) ([c67ceaa](https://github.com/b0ink/doubtfire-deploy/commit/c67ceaa84d02bb71626890fc28bb4aaea164b952))
+
+## [10.0.0-59](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-58...v10.0.0-59) (2025-11-04)
+
+
+### Bug Fixes
+
+* require comment for new evidence ([58ec499](https://github.com/b0ink/doubtfire-deploy/commit/58ec499a8d59c7202f591de661551d8a32c37527))
+* require comment for new evidence ([c5397fc](https://github.com/b0ink/doubtfire-deploy/commit/c5397fc5c444e76b431aa5d6487553c60e711c2e))
+
+## [10.0.0-58](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-57...v10.0.0-58) (2025-11-01)
+
+## [10.0.0-57](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-56...v10.0.0-57) (2025-10-30)
+
+
+### Features
+
+* open similarities from project dashboard ([#1035](https://github.com/b0ink/doubtfire-deploy/issues/1035)) ([ec0af0c](https://github.com/b0ink/doubtfire-deploy/commit/ec0af0cbe47392d6542d9741e1131954195d407f))
+
+
+### Bug Fixes
+
+* enable submission button for 'need help' trigger ([#1034](https://github.com/b0ink/doubtfire-deploy/issues/1034)) ([07de5b1](https://github.com/b0ink/doubtfire-deploy/commit/07de5b1e34f78f83c1418399f45e8c754aea530a))
+* typo ([2712a68](https://github.com/b0ink/doubtfire-deploy/commit/2712a68f6031794c571a7ee5866c653bf67de1dd))
+
 ## [10.0.0-56](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-55...v10.0.0-56) (2025-10-23)
 
 
