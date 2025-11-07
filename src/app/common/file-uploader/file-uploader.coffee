@@ -263,7 +263,7 @@ angular.module('doubtfire.common.file-uploader', ["ngFileUpload"])
               response = JSON.parse xhr.responseText
             catch e
               if xhr.status is 0
-                response = { error: 'Could not connect to the Doubtfire server' }
+                response = { error: 'Could not connect to the OnTrack server' }
               else
                 response = xhr.responseText
             # Success (20x success range)
