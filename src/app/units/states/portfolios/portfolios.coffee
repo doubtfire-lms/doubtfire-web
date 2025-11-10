@@ -149,4 +149,8 @@ angular.module('doubtfire.units.states.portfolios', [])
 
   $scope.transferToD2L = ->
     D2lTransferModal.open($scope.unit)
+
+  $scope.openProject = ($event, project) ->
+    $event.stopPropagation()
+    window.open("/projects/#{project.id}/dashboard/?tutor=true", "_blank")
 )

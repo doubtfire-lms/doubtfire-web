@@ -214,6 +214,13 @@
               {{student.hasPortfolio ? "Yes" : "No"}}
             </td>
             <td>{{student.grade}}</td>
+            <td
+              class="hover:bg-gray-300 text-center"
+              ng-click="openProject($event, student)"
+              tooltip="View student project in new tab"
+            >
+              <i class="fa fa-arrow-right"></i>
+            </td>
           </tr>
         </tbody>
       </table>
