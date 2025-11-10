@@ -152,5 +152,9 @@ angular.module('doubtfire.units.states.portfolios', [])
 
   $scope.openProject = ($event, project) ->
     $event.stopPropagation()
-    window.open("/projects/#{project.id}/dashboard/?tutor=true", "_blank")
+    # HACK: avoids using window.open() to prevent AngularJS error
+    link = document.createElement('a')
+    link.href = "/projects/#{project.id}/dashboard/?tutor=true"
+    link.target = '_blank'
+    link.click()
 )
