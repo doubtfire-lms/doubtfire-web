@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-63](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-62...v10.0.0-63) (2025-11-10)
+
+
+### Features
+
+* open project dashboard from portfolios view ([5b4b097](https://github.com/b0ink/doubtfire-deploy/commit/5b4b097a9b189e5a816695cce7438104f1144283)), closes [#1040](https://github.com/b0ink/doubtfire-deploy/issues/1040)
+
 ## [10.0.0-62](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-61...v10.0.0-62) (2025-11-06)
 
 
