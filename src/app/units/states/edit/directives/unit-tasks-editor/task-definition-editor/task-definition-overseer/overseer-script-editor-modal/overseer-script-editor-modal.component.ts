@@ -2,8 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CodeModel} from '@ngstack/code-editor';
-import {AppInjector} from 'src/app/app-injector';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {OverseerScriptEditorModalData} from './overseer-script-editor-modal.service';
 
 @Component({
@@ -16,6 +15,7 @@ export class OverseerScriptEditorModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: OverseerScriptEditorModalData,
     public dialogRef: MatDialogRef<OverseerScriptEditorModalData>,
     private httpClient: HttpClient,
+    private alertService: AlertService,
   ) {}
 
   public model: CodeModel = {
@@ -29,26 +29,33 @@ export class OverseerScriptEditorModalComponent implements OnInit {
   loading: boolean = false;
   ngOnInit() {
     this.loading = true;
-    // TODO: move to taskDefinition model
-    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.data.taskDefinition.unit.id}/task_definitions/${this.data.taskDefinition.id}/overseer_script`;
-    this.httpClient.get(url).subscribe((data: string) => {
-      this.model.value = data;
-      this.loading = false;
-    });
+    this.httpClient
+      .get(this.data.taskDefinition.taskOverseerExecutionScriptUrl)
+      .subscribe((data: string) => {
+        this.model.value = data;
+        this.loading = false;
+      });
   }
 
   save() {
-    console.log(this.model.value);
-    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.data.taskDefinition.unit.id}/task_definitions/${this.data.taskDefinition.id}/overseer_script`;
+    const scriptOriginal = this.model.value;
+    const scriptEncoded = this.base64UrlEncode(scriptOriginal);
 
-    this.httpClient.put(url, {script_content: this.model.value}).subscribe({
-      next: (result) => {
-        console.log(result);
-        this.dialogRef.close();
-      },
-      error: (error) => {
-        console.error(error);
-      },
-    });
+    this.httpClient
+      .put(this.data.taskDefinition.taskOverseerExecutionScriptUrl, {
+        script_content: scriptEncoded,
+      })
+      .subscribe({
+        next: (_result) => {
+          this.dialogRef.close();
+        },
+        error: (error) => {
+          this.alertService.error(`Failed to save script: ${error}`, 6000);
+        },
+      });
+  }
+
+  private base64UrlEncode(str) {
+    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   }
 }

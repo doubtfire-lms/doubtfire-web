@@ -276,6 +276,10 @@ export class TaskDefinition extends Entity {
     }/task_assessment_resources.json`;
   }
 
+  public get taskOverseerExecutionScriptUrl() {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/overseer_script`;
+  }
+
   public getJplagReportUrl() {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/jplag_report`;
   }
