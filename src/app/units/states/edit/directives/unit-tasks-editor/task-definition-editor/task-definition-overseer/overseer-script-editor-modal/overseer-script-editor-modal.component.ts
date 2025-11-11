@@ -38,9 +38,12 @@ export class OverseerScriptEditorModalComponent implements OnInit {
   }
 
   save() {
+    const scriptOriginal = this.model.value;
+    const scriptEncoded = this.base64UrlEncode(scriptOriginal);
+
     this.httpClient
       .put(this.data.taskDefinition.taskOverseerExecutionScriptUrl, {
-        script_content: this.model.value,
+        script_content: scriptEncoded,
       })
       .subscribe({
         next: (_result) => {
@@ -50,5 +53,9 @@ export class OverseerScriptEditorModalComponent implements OnInit {
           this.alertService.error(`Failed to save script: ${error}`, 6000);
         },
       });
+  }
+
+  private base64UrlEncode(str) {
+    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   }
 }
