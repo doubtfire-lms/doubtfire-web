@@ -79,7 +79,7 @@
         <mat-list-option
           [value]="task"
           class="clearfix w-full"
-          style="padding: 0; height: 60px"
+          style="padding: 0; min-height: 60px; height: min-content"
           togglePosition="before"
           [selected]="
             (task.status === 'discuss' || attendance) &&
@@ -103,12 +103,12 @@
                   }"
                 ></span>
                 <user-icon class="self-center" [user]="project?.student" [size]="30"> </user-icon>
-                <div class="truncate flex-1 mt-0" [hidden]="isNarrow">
-                  <h4 class="text-[15px] -mb-[2px] mt-[8px]">{{ task.definition.name }}</h4>
-                  <div class="truncate mb-0 text-[12px]">
+                <div class="flex-1 mt-0 whitespace-normal break-words" [hidden]="isNarrow">
+                  <h4 class="text-[15px] mb-[2px] mt-[8px]">{{ task.definition.name }}</h4>
+                  <span class="mb-0 text-[12px] inline">
                     {{ task.definition.abbreviation }} -
                     {{ getTargetTradeString(task.definition.targetGrade) }} Task
-                  </div>
+                  </span>
                 </div>
                 @if (task.hasGrade()) {
                   <div matTooltip="The grade assigned to the submission" matTooltipPosition="above">
