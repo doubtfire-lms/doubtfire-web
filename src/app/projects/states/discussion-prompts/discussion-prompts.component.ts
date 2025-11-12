@@ -41,7 +41,7 @@ export class DiscussionPromptsComponent implements OnInit {
     console.log('task def?', this.taskDefinition);
     this.loadingStaffNotes = true;
     this.discussionPromptService
-      .loadDiscussionPrompts(this.project, this.taskDefinition)
+      .loadDiscussionPromptsForPoject(this.project)
       .subscribe((prompts) => {
         console.log(prompts);
         this.discussionPrompts = prompts;

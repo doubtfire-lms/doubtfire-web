@@ -32,12 +32,6 @@ export class TaskDefinitionDiscussionPromptsComponent
 
   public dataSource = new MatTableDataSource<DiscussionPrompt>();
 
-  public readonly PRIORITY = {
-    1: 'Low',
-    2: 'Medium',
-    3: 'High',
-  } as const;
-
   creatingNewDiscussionPrompt: boolean = false;
 
   newDiscussionPromptContent: string;

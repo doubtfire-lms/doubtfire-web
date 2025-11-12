@@ -19,7 +19,7 @@ export class DiscussionPromptService extends CachedEntityService<DiscussionPromp
 
   protected readonly projectEndpointFormat = 'projects/:projectId:/discussion_prompts';
   protected readonly taskDefinitionProjectEndpointFormat =
-    'projects/:projectId:/task_definitions/:taskDefinitionId:/discussion_prompts';
+    'projects/:projectId:/discussion_prompts';
   protected readonly taskDefinitionEndpointFormat =
     'task_definitions/:taskDefinitionId:/discussion_prompts';
 
@@ -74,6 +74,21 @@ export class DiscussionPromptService extends CachedEntityService<DiscussionPromp
   }
 
   // TODO: loadDiscussionPromptsForProject and overload for loadTaskDefinitionDiscussionPrompts()
+
+  public loadDiscussionPromptsForPoject(project: Project) {
+    const options: RequestOptions<DiscussionPrompt> = {
+      endpointFormat: this.taskDefinitionProjectEndpointFormat,
+      cacheBehaviourOnGet: 'cacheQuery',
+      constructorParams: project,
+    };
+
+    return super.fetchAll(
+      {
+        projectId: project?.id,
+      },
+      options,
+    );
+  }
 
   public loadDiscussionPrompts(
     project: Project,

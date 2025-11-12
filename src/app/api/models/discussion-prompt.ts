@@ -14,6 +14,12 @@ export class DiscussionPrompt extends Entity {
   weight: number;
   discussedAt: Date;
 
+  public readonly PRIORITY = {
+    1: 'Low',
+    2: 'Medium',
+    3: 'High',
+  } as const;
+
   constructor(data?: Project | TaskDefinition | Unit) {
     super();
     if (data) {
@@ -27,6 +33,10 @@ export class DiscussionPrompt extends Entity {
     } else {
       console.error('Failed to get project');
     }
+  }
+
+  public get priorityLabel() {
+    return this.PRIORITY[this.weight] ?? this.weight;
   }
 
   public delete() {

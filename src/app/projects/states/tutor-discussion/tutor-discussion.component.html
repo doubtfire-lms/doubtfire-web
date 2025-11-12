@@ -215,7 +215,8 @@
     <mat-tab-group dynamicHeight (selectedTabChange)="onTabChange($event)">
       <mat-tab label="Task Comments"></mat-tab>
 
-      <mat-tab [matTooltip]="project?.staffNoteCount" label="Staff Notes"></mat-tab>
+      <mat-tab [matBadge]="project?.staffNoteCount" label="Staff Notes"></mat-tab>
+      <mat-tab label="Discussion Prompts"></mat-tab>
     </mat-tab-group>
 
     @if (footerTabView === TutorDiscussionTabView.SHOW_COMMENTS) {
@@ -235,6 +236,8 @@
       </div>
     } @else if (footerTabView === TutorDiscussionTabView.SHOW_STAFF_NOTES) {
       <f-staff-notes class="min-h-[350px]" [project]="project"></f-staff-notes>
+    } @else if (footerTabView === TutorDiscussionTabView.SHOW_DISCUSSION_PROMPTS) {
+      <f-discussion-prompts class="min-h-[350px]" [project]="project"></f-discussion-prompts>
     }
   }
 </div>
