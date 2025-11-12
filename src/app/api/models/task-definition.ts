@@ -8,6 +8,7 @@ import {TaskDefinitionService} from '../services/task-definition.service';
 import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
 import {Task} from './doubtfire-model';
 import {TaskPrerequisite} from './task-prerequisite';
+import {DiscussionPrompt} from './discussion-prompt';
 
 export type UploadRequirement = {
   key: string;
@@ -57,9 +58,13 @@ export class TaskDefinition extends Entity {
   assessInPortfolioOnly: boolean;
   useResourcesForJplagBaseCode: boolean;
   lockAssessmentsToTutorialStream: boolean;
+  discussionPromptsCount: number;
 
   public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
     new EntityCache<TaskPrerequisite>();
+
+  public readonly discussionPromptsCache: EntityCache<DiscussionPrompt> =
+    new EntityCache<DiscussionPrompt>();
 
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
