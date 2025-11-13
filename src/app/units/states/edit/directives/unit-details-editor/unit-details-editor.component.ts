@@ -90,7 +90,7 @@ export class UnitDetailsEditorComponent implements OnInit {
       const modal = this.confirmationModal.show(
         'Enable Assess in Portfolio?',
         `Are you sure you want to enable "Assess in Portfolio" for late submissions?
-        This will update any existing Time/Feedback Exceeded tasks to the "Assess in Portfolio" state.
+        This will update any existing Time Exceeded tasks to the "Assess in Portfolio" state.
         You will not be able to disable this setting while any tasks remain in the "Assess in Portfolio" state.`,
         () => {
           this.unit.markLateSubmissionsAsAssessInPortfolio = true;
