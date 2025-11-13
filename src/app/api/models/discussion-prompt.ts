@@ -11,7 +11,7 @@ export class DiscussionPrompt extends Entity {
   project: Project | null;
   createdBy: User;
   content: string;
-  weight: number;
+  priority: number;
   discussedAt: Date;
 
   public readonly PRIORITY = {
@@ -36,7 +36,7 @@ export class DiscussionPrompt extends Entity {
   }
 
   public get priorityLabel() {
-    return this.PRIORITY[this.weight] ?? this.weight;
+    return this.PRIORITY[this.priority] ?? this.priority;
   }
 
   public delete() {

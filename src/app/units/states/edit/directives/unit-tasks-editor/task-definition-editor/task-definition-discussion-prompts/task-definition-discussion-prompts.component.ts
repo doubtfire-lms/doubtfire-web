@@ -46,7 +46,7 @@ export class TaskDefinitionDiscussionPromptsComponent
     super(
       {
         content: new UntypedFormControl('', [Validators.required]),
-        weight: new UntypedFormControl('', [Validators.required]),
+        priority: new UntypedFormControl('', [Validators.required]),
       },
       'Discussion Prompt',
     );
@@ -92,13 +92,13 @@ export class TaskDefinitionDiscussionPromptsComponent
 
   public addNewPrompt() {
     const content = this.newDiscussionPromptContent;
-    const weight = this.newDiscussionPromptWeight;
+    const priority = this.newDiscussionPromptWeight;
     this.discussionPromptService
       .create(
         {
           task_definition_id: this.taskDefinition.id,
           content: content,
-          weight: weight,
+          priority: priority,
         },
         {
           cache: this.taskDefinition.discussionPromptsCache,
@@ -140,7 +140,7 @@ export class TaskDefinitionDiscussionPromptsComponent
         id: this.selected.id,
         task_definition_id: this.taskDefinition.id,
         content: this.selected.content,
-        weight: this.selected.weight,
+        priority: this.selected.priority,
       })
       .subscribe({
         next: (_response) => {

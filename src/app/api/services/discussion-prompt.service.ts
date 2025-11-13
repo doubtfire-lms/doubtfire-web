@@ -33,7 +33,7 @@ export class DiscussionPromptService extends CachedEntityService<DiscussionPromp
     this.mapping.addKeys(
       'id',
       'content',
-      'weight',
+      'priority',
       {
         keys: ['createdBy', 'created_by_id'],
         toEntityFn: (data: object, key: string, prompt: DiscussionPrompt) => {
