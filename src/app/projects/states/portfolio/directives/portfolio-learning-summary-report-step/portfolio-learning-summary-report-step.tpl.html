@@ -55,11 +55,11 @@
         you have achieved a {{targetGrade}} in {{unit.name}}.
       </div>
       <div class="card-body" ng-show="!projectHasLearningSummaryReport() || (projectHasLearningSummaryReport() && (forceLSRSubmit || acceptUploadNewLearningSummary))">
-        <file-uploader
-          files="learningSummaryReportFileUploadData.type"
-          payload="learningSummaryReportFileUploadData.payload"
-          url="project.portfolioUrl()"
-          on-success="addNewFile"></file-uploader>
+        <f-file-uploader
+          [files]="learningSummaryReportFileUploadData.type"
+          [payload]="learningSummaryReportFileUploadData.payload"
+          [url]="project.portfolioUrl()"
+          [on-success]="addNewFile"></f-file-uploader>
       </div>
     </div>
   </div>

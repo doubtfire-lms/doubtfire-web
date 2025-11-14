@@ -105,7 +105,6 @@ import 'build/src/app/common/content-editable/content-editable.js';
 import 'build/src/app/common/modals/comments-modal/comments-modal.js';
 import 'build/src/app/common/modals/csv-result-modal/csv-result-modal.js';
 import 'build/src/app/common/modals/modals.js';
-import 'build/src/app/common/file-uploader/file-uploader.js';
 import 'build/src/app/common/common.js';
 import 'build/src/app/common/services/listener-service.js';
 import 'build/src/app/common/services/outcome-service.js';
@@ -222,6 +221,7 @@ import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/dir
 import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
 import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
 import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
+import {FileUploaderComponent} from './common/file-uploader/file-uploader.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -538,4 +538,9 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fGroupSetManager',
   downgradeComponent({component: GroupSetManagerComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fFileUploader',
+  downgradeComponent({component: FileUploaderComponent}),
 );

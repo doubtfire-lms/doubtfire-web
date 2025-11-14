@@ -195,15 +195,17 @@
             <i class="fa fa-download"></i> Download CSV
           </button>
           <hr />
-          <file-uploader
-            files="groupCSV"
-            url="groupStudentCSVUploadUrl()"
-            is-uploading="isGroupCSVUploading"
-            on-success="onGroupCSVSuccess"
-            on-complete="onGroupCSVComplete"
-            as-button="true">
-          </file-uploader>
-        </div><!--/download-panel-->
+          <f-file-uploader
+            [files]="groupCSV"
+            [url]="groupStudentCSVUploadUrl()"
+            [is-uploading]="isGroupCSVUploading"
+            [on-success]="onGroupCSVSuccess"
+            [on-complete]="onGroupCSVComplete"
+            [as-button]="true"
+          >
+          </f-file-uploader>
+        </div>
+        <!--/download-panel-->
       </div>
     </div>
   </div><!--/file-io-->

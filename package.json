@@ -40,6 +40,7 @@
     "@angular/service-worker": "^18.0",
     "@angular/upgrade": "^18.0",
     "@ctrl/ngx-emoji-mart": "^9.2.0",
+    "@iplab/ngx-file-upload": "^18.0.0",
     "@ngneat/hotkeys": "^4.0.0",
     "@uirouter/angular": "^14.0",
     "@uirouter/angular-hybrid": "^18.0",

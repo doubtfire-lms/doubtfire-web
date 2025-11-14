@@ -60,20 +60,21 @@
           </span>
         </div>
         <div class="card-body">
-          <file-uploader
-            files="uploader.files"
-            url="uploader.url"
-            payload="uploader.payload"
-            single-drop-zone="true"
-            show-upload-button="false"
-            reset-after-upload="false"
-            is-ready="uploader.isReady"
-            is-uploading="uploader.isUploading"
-            initiate-upload="uploader.start"
-            on-click-failure-cancel="uploader.onFailureCancel"
-            on-before-upload="uploader.onBeforeUpload"
-            on-success="uploader.onSuccess"
-            on-complete="uploader.onComplete"></file-uploader>
+          <f-file-uploader
+            [files]="uploader.files"
+            [url]="uploader.url"
+            [payload]="uploader.payload"
+            [single-drop-zone]="true"
+            [show-upload-button]="false"
+            [reset-after-upload]="false"
+            [(is-ready)]="uploader.isReady"
+            (is-ready-change)="isReadyChange"
+            (upload-ready)="uploadIsReady($event)"
+            [is-uploading]="uploader.isUploading"
+            [on-click-failure-cancel]="uploader.onFailureCancel"
+            [on-before-upload]="uploader.onBeforeUpload"
+            [on-success]="uploader.onSuccess"
+            [on-complete]="uploader.onComplete"></f-file-uploader>
         </div>
       </div>
     </div>
