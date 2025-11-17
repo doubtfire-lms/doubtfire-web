@@ -143,6 +143,10 @@ MIGRATED:
 - [x] ./src/app/common/modals/comments-modal/comments-modal.coffee (IN 10.0.x)
 - [x] ./src/app/groups/group-selector/group-selector.coffee
 - [x] ./src/app/groups/group-set-manager/group-set-manager.coffee
+- [x] ./src/app/common/file-uploader/file-uploader.coffee
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.coffee
+- [x] ./src/app/sessions/auth/http-auth-injector.coffee
+- [x] ./src/app/sessions/sessions.coffee
 
 TODO:
 
@@ -187,7 +191,6 @@ TODO:
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.coffee
 - [ ] ./src/app/projects/states/portfolio/portfolio.coffee
 - [ ] ./src/app/projects/states/index/index.coffee
@@ -217,7 +220,6 @@ TODO:
 - [ ] ./src/app/units/states/students-list/students-list.coffee
 - [ ] ./src/app/common/modals/modals.coffee
 - [ ] ./src/app/common/modals/csv-result-modal/csv-result-modal.coffee
-- [ ] ./src/app/common/file-uploader/file-uploader.coffee
 - [ ] ./src/app/common/common.coffee
 - [ ] ./src/app/common/content-editable/content-editable.coffee
 - [ ] ./src/app/common/services/media-service.coffee
@@ -227,8 +229,6 @@ TODO:
 - [ ] ./src/app/common/services/services.coffee
 - [ ] ./src/app/common/services/date-service.coffee
 - [ ] ./src/app/common/services/analytics-service.coffee
-- [ ] ./src/app/sessions/auth/http-auth-injector.coffee
-- [ ] ./src/app/sessions/sessions.coffee
 - [ ] ./src/app/errors/errors.coffee
 - [ ] ./src/app/errors/states/states.coffee
 - [ ] ./src/app/errors/states/timeout/timeout.coffee
