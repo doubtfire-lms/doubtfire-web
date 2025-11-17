@@ -11,7 +11,7 @@ import {FileUploadControl} from '@iplab/ngx-file-upload';
 import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
-interface File {
+interface FileData {
   name: string;
   type: string;
 }
@@ -24,7 +24,7 @@ interface UploadDisplay {
 }
 interface UploadZone {
   name: string;
-  model: any;
+  model: File[];
   accept: string;
   accepts: string[];
   rejects: string[];
@@ -83,14 +83,14 @@ export const ACCEPTED_TYPES = {
   styleUrls: ['./file-uploader.component.scss'],
 })
 export class FileUploaderComponent implements OnInit, OnChanges {
-  @Input() files: File[];
+  @Input() files: FileData[];
   @Input() url: string;
   @Input() method = 'POST';
-  @Input() payload?: any;
+  @Input() payload?: unknown;
 
   @Input() onBeforeUpload?: () => void;
-  @Input() onSuccess?: (response: any) => void;
-  @Input() onFailure?: (response: any) => void;
+  @Input() onSuccess?: (response) => void;
+  @Input() onFailure?: (response) => void;
   @Input() onComplete?: () => void;
   @Input() onClickFailureCancel?: () => void;
 
@@ -237,7 +237,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
       for (const [key, value] of Object.entries(this.payload)) {
         let v = value;
         if (typeof v === 'object') v = JSON.stringify(v);
-        form.append(key, v as any);
+        form.append(key, v);
       }
     }
 
@@ -251,10 +251,11 @@ export class FileUploaderComponent implements OnInit, OnChanges {
       if (xhr.readyState === 4) {
         setTimeout(() => {
           this.uploadingInfo.complete = true;
-          let response: any = null;
+          let response = null;
           try {
             response = JSON.parse(xhr.responseText);
-          } catch (_e) {
+          } catch (e) {
+            console.error(e);
             if (xhr.status === 0) {
               response = {error: `Could not connect to ${this.externalName} the server`};
             } else {
@@ -299,7 +300,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     }
   };
 
-  createUploadZones(files: File[]) {
+  createUploadZones(files: FileData[]) {
     const zones = Object.entries(files).map(([uploadName, uploadData]) => {
       const typeData = ACCEPTED_TYPES[uploadData.type];
       if (!typeData) throw new Error(`Invalid type provided to File Uploader ${uploadData.type}`);
