@@ -3,6 +3,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FileUploadControl, FileUploadValidators} from '@iplab/ngx-file-upload';
 import {UserService} from 'src/app/api/services/user.service';
+import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 interface File {
   name: string;
@@ -93,8 +94,9 @@ export class FileUploaderComponent implements OnInit {
   public uploadZones = [];
   public dropSupported: boolean = true;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private constants: DoubtfireConstants) {}
 
+  private externalName: string = 'OnTrack'
   ngOnInit(): void {
     this.showUploader = !this.asButton;
     this.createUploadZones(this.files);
@@ -113,6 +115,11 @@ export class FileUploaderComponent implements OnInit {
     }
 
     this.resetUploader();
+
+    this.constants.ExternalName.subscribe(name => {
+      this.externalName = name;
+    })
+
   }
 
   public backToUpload() {
@@ -219,7 +226,7 @@ export class FileUploaderComponent implements OnInit {
             response = JSON.parse(xhr.responseText);
           } catch (e) {
             if (xhr.status === 0) {
-              response = {error: 'Could not connect to the server'};
+              response = {error: `Could not connect to ${this.externalName} the server`};
             } else {
               response = xhr.responseText;
             }
