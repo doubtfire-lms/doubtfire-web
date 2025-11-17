@@ -44,5 +44,16 @@ export class PortfolioLearningSummaryReportStepComponent {
     this.forceLSRSubmit = false;
   }
 
+  draftTaskDefinitionWasUsed() {
+    const draftTaskDef = this.unit.draftTaskDefinition;
+    if (draftTaskDef) {
+      const task = this.project.findTaskForDefinition(draftTaskDef.id);
+      if (task && task.inSubmittedState()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // downloadLearningSummaryReport(){}
 }

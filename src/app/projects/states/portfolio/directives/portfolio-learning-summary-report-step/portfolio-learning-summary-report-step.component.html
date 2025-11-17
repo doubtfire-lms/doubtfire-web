@@ -31,17 +31,18 @@
       projectHasDraftLearningSummaryReport && !forceLSRSubmit && !acceptUploadNewLearningSummary
     ) {
       <div class="flex flex-col justify-center items-center text-center max-w-4xl mx-auto py-5">
-        <!-- @if (unit.draftTaskDefinition) {
-          <p class="text-gray-400">
-            Your learning summary report has automatically been submitted from your
-            {{ unit.draftTaskDefinition.abbreviation }} {{ unit.draftTaskDefinition.name }} task
-            submission.
-          </p>
-        } -->
         <div class="flex justify-center items-center gap-5 text-center text-4xl py-5">
           <mat-icon color="primary">check_circle</mat-icon>
           Learning Summary Report Submitted
         </div>
+        @if (draftTaskDefinitionWasUsed()) {
+          <div class="w-full text-center text-gray-400 text-xl py-2 max-w-2xl">
+            Your learning summary report was automatically submitted from your
+            {{ unit.draftTaskDefinition.abbreviation }} {{ unit.draftTaskDefinition.name }}
+            submission.
+          </div>
+        }
+
         <!-- <button mat-button (click)="downloadLearningSummaryReport()" color="primary">
           View Learning Summary Report
         </button> -->
