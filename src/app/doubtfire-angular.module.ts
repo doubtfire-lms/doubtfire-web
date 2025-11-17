@@ -284,6 +284,7 @@ import {GroupMemberListComponent} from './groups/group-member-list/group-member-
 import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
 import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
 import {FileUploaderComponent} from './common/file-uploader/file-uploader.component';
+import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
 
 @NgModule({
   // Components we declare
@@ -416,6 +417,7 @@ import {FileUploaderComponent} from './common/file-uploader/file-uploader.compon
     GroupSelectorComponent,
     GroupSetManagerComponent,
     FileUploaderComponent,
+    PortfolioWelcomeStepComponent,
   ],
   // Services we provide
   providers: [
