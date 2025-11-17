@@ -19,7 +19,7 @@ export class PortfolioLearningSummaryReportStepComponent implements OnInit {
       file0: {name: 'Learning Summary Report', type: 'document'},
     },
     payload: {
-      name: 'LearningSummaryReport', // DO NOT MODIFY - case senstitive on API
+      name: 'LearningSummaryReport', // DO NOT MODIFY - case sensitive on API
       kind: 'document',
     },
   };
