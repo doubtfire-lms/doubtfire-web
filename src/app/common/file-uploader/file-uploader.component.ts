@@ -1,5 +1,3 @@
-// TODO: remove this
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Component,
   EventEmitter,
@@ -16,6 +14,28 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 interface File {
   name: string;
   type: string;
+}
+
+interface UploadDisplay {
+  name: string;
+  icon: string;
+  type: string;
+  error: boolean;
+}
+interface UploadZone {
+  name: string;
+  model: any;
+  accept: string;
+  accepts: string[];
+  rejects: string[];
+  display: UploadDisplay;
+}
+
+interface UploadingInfo {
+  progress: number;
+  success: boolean;
+  error: string;
+  complete: boolean;
 }
 
 export const ACCEPTED_TYPES = {
@@ -78,7 +98,6 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   @Input() isReady: boolean;
   @Input() showName: boolean = true;
   @Input() asButton: boolean = false;
-  @Input() filesSelected: any;
   @Input() singleDropZone: boolean = false;
   @Input() showUploadButton: boolean = true;
   @Input() resetAfterUpload: boolean = true;
@@ -95,11 +114,11 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   public readonly ACCEPTED_TYPES = ACCEPTED_TYPES;
 
   public showUploader: boolean = false;
-  public uploadingInfo: any = null;
+  public uploadingInfo: UploadingInfo = null;
 
   public fileUploadControl = new FileUploadControl({listVisible: false, discardInvalid: true});
-  public shownUploadZones = [];
-  public uploadZones = [];
+  public shownUploadZones: UploadZone[] = [];
+  public uploadZones: UploadZone[] = [];
   public dropSupported: boolean = true;
 
   constructor(
@@ -161,7 +180,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     this.refreshShownUploadZones();
   }
 
-  clearEnqueuedUpload(upload: any) {
+  clearEnqueuedUpload(upload: UploadZone) {
     upload.model = null;
     this.refreshShownUploadZones();
   }
@@ -235,7 +254,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
           let response: any = null;
           try {
             response = JSON.parse(xhr.responseText);
-          } catch (e) {
+          } catch (_e) {
             if (xhr.status === 0) {
               response = {error: `Could not connect to ${this.externalName} the server`};
             } else {
