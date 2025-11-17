@@ -1,0 +1,24 @@
+<mat-card appearance="outlined" class="max-w-[1100px] mx-auto">
+  <mat-card-header>
+    <mat-card-title>Portfolio Preparation</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>Preparing your portfolio involves 5 steps:</p>
+    <ol class="list-decimal list-inside space-y-2 ml-4 py-5">
+      <li>Select your <strong>Grade</strong> you are applying for</li>
+      <li>Upload your <strong>Learning Summary Report</strong></li>
+      <li>Select the <strong>Tasks</strong> you want included</li>
+      <li>Upload any <strong>Other Resources</strong> you want to add</li>
+      <li><strong>Compile</strong> your resources into your portfolio and review</li>
+    </ol>
+    <p>
+      Once you have completed all of these steps, your portfolio will be prepared by
+      {{ externalName }} and you will be notified when it is ready. You can then check your work,
+      and if you want to make any corrections repeat these steps to create a new version of your
+      portfolio.
+    </p>
+  </mat-card-content>
+  <mat-card-footer class="w-full flex justify-end p-5">
+    <button mat-raised-button (click)="goNextStep()" color="primary">Next</button>
+  </mat-card-footer>
+</mat-card>
