@@ -285,6 +285,7 @@ import {GroupSelectorComponent} from './groups/group-selector/group-selector.com
 import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
 import {FileUploaderComponent} from './common/file-uploader/file-uploader.component';
 import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
+import {PortfolioLearningSummaryReportStepComponent} from './projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.component';
 
 @NgModule({
   // Components we declare
@@ -418,6 +419,7 @@ import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directi
     GroupSetManagerComponent,
     FileUploaderComponent,
     PortfolioWelcomeStepComponent,
+    PortfolioLearningSummaryReportStepComponent,
   ],
   // Services we provide
   providers: [

@@ -1,0 +1,75 @@
+<mat-card appearance="outlined" class="max-w-[1100px] mx-auto">
+  <mat-card-header>
+    <mat-card-title>Learning Summary Report</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p class="pt-5">
+      Upload the Learning Summary Report, the primary porfolio document which justifies your desired
+      grade.
+    </p>
+    <p>
+      Your Learning Summary Report is a
+      <strong>summary of what you have learnt in this unit</strong>. It consists of two sections:
+    </p>
+
+    <ol class="list-decimal list-inside space-y-2 ml-4 py-5">
+      <li>a self-assessment, and</li>
+      <li>your reflections on the unit.</li>
+    </ol>
+
+    <p>
+      The <strong>self-assessment</strong> indicates how your portfolio aligns with the assessment
+      criteria, and which grade you are applying for.
+    </p>
+
+    <p>
+      Your <strong>reflections</strong> are a personal comment on what you have learnt in the unit,
+      and how your knowledge and skills have developed.
+    </p>
+
+    @if (
+      projectHasDraftLearningSummaryReport && !forceLSRSubmit && !acceptUploadNewLearningSummary
+    ) {
+      <div class="flex flex-col justify-center items-center text-center max-w-4xl mx-auto py-5">
+        <!-- @if (unit.draftTaskDefinition) {
+          <p class="text-gray-400">
+            Your learning summary report has automatically been submitted from your
+            {{ unit.draftTaskDefinition.abbreviation }} {{ unit.draftTaskDefinition.name }} task
+            submission.
+          </p>
+        } -->
+        <div class="flex justify-center items-center gap-5 text-center text-4xl py-5">
+          <mat-icon color="primary">check_circle</mat-icon>
+          Learning Summary Report Submitted
+        </div>
+        <!-- <button mat-button (click)="forceLSRSubmit = true" color="primary">
+          View Learning Summary Report
+        </button> -->
+        <button mat-button (click)="forceLSRSubmit = true" color="primary">Upload a new one</button>
+      </div>
+    }
+    <div
+      [hidden]="
+        projectHasDraftLearningSummaryReport && !(forceLSRSubmit || acceptUploadNewLearningSummary)
+      "
+    >
+      <f-file-uploader
+        [files]="learningSummaryReportFileUploadData.type"
+        [payload]="learningSummaryReportFileUploadData.payload"
+        [url]="project.portfolioUrl()"
+        [onSuccess]="addNewFile.bind(this)"
+      ></f-file-uploader>
+    </div>
+  </mat-card-content>
+  <mat-card-footer class="w-full flex justify-between p-5">
+    <button mat-raised-button (click)="goBackStep()">Back</button>
+    <button
+      mat-raised-button
+      (click)="goNextStep()"
+      color="primary"
+      [disabled]="!projectHasDraftLearningSummaryReport"
+    >
+      Next
+    </button>
+  </mat-card-footer>
+</mat-card>
