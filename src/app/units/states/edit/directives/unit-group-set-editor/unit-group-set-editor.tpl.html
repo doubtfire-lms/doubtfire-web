@@ -162,14 +162,14 @@
             <i class="fa fa-download"></i> Download CSV
           </button>
           <hr />
-          <file-uploader
-            files="groupCSV"
-            url="groupCSVUploadUrl()"
-            is-uploading="isGroupCSVUploading"
-            on-success="onGroupCSVSuccess"
-            on-complete="onGroupCSVComplete"
-            as-button="true">
-          </file-uploader>
+          <f-file-uploader
+            [files]="groupCSV"
+            [url]="groupCSVUploadUrl()"
+            [is-uploading]="isGroupCSVUploading"
+            [on-success]="onGroupCSVSuccess"
+            [on-complete]="onGroupCSVComplete"
+            [as-button]="true">
+          </f-file-uploader>
         </div>
       </div><!--/import-group-->
       <div class="panel panel-default">

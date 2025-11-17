@@ -1,6 +1,6 @@
 // TODO: remove this
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FileUploadControl, FileUploadValidators} from '@iplab/ngx-file-upload';
 import {UserService} from 'src/app/api/services/user.service';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
@@ -54,7 +54,7 @@ export const ACCEPTED_TYPES = {
   templateUrl: './file-uploader.component.html',
   styleUrls: ['./file-uploader.component.scss'],
 })
-export class FileUploaderComponent implements OnInit {
+export class FileUploaderComponent implements OnInit, OnChanges{
   @Input() files: File[];
   @Input() url: string;
   @Input() method = 'POST';
@@ -120,6 +120,12 @@ export class FileUploaderComponent implements OnInit {
       this.externalName = name;
     })
 
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['files']){
+      this.createUploadZones(changes.files.currentValue);
+    }
   }
 
   public backToUpload() {
