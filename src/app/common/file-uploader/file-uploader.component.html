@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-content>
     @if (!showUploader) {
-      <button mat-raised-button color="primary" (click)="showUploader = true">
+      <button mat-raised-button color="primary" (click)="showUploader = true" class="w-full">
         <mat-icon>upload</mat-icon>
         Begin Upload
       </button>
@@ -36,13 +36,13 @@
                   @if (!upload.display.error) {
                     <mat-icon>{{ upload.display.icon }}</mat-icon>
                     @if (dropSupported) {
-                      <p class="text-center">
+                      <p class="text-center select-none">
                         Drop {{ upload.display.type }} file here <br /><small
                           >or click to select</small
                         >
                       </p>
                     } @else {
-                      <p>Click to select {{ upload.display.type }} file</p>
+                      <p class="select-none">Click to select {{ upload.display.type }} file</p>
                     }
                   } @else {
                     <div class="!text-red-500 !w-full flex flex-col justify-center items-center">
@@ -60,7 +60,7 @@
             </file-upload>
 
             @if (!singleDropZone && upload.model?.length > 0) {
-              <div>
+              <div class="flex items-center gap-5">
                 <mat-icon>{{ upload.display.icon }}</mat-icon>
                 {{ upload.model[0].name }}
                 <button mat-icon-button (click)="clearEnqueuedUpload(upload)">
@@ -100,30 +100,27 @@
     @if (showUploader && !isUploading) {
       <div>
         @if (showUploadButton && readyToUpload() && uploadingInfo === null) {
-          <button mat-raised-button color="primary" (click)="initiateUpload()">
+          <button mat-raised-button color="primary" (click)="initiateUploadInternal()">
             <mat-icon>upload</mat-icon>
             Start Upload
           </button>
         }
 
         @if (asButton) {
-          <button mat-raised-button color="warn" (click)="resetUploader()">
-            <mat-icon>close</mat-icon>
-            Cancel Upload
-          </button>
+          <button mat-button color="warn" (click)="resetUploader()">Cancel Upload</button>
         }
       </div>
     }
 
     @if (showUploader && readyToUpload() && isUploading) {
       @if (!uploadingInfo?.complete) {
-        <div class="uploading w-full">
+        <div class="uploading w-full min-h-[300px] flex flex-col justify-center items-center gap-5">
           <div class="flex justify-center items-center gap-2">
             @for (upload of uploadZones; track upload) {
               <mat-icon>{{ upload.display.icon }}</mat-icon>
             }
             <mat-icon>arrow_right_alt</mat-icon>
-            <i class="logo w-[100px] h-[100px]"></i>
+            <i class="logo w-[75px] h-[75px]"></i>
           </div>
 
           <mat-progress-bar mode="determinate" [value]="uploadingInfo?.progress">
@@ -132,19 +129,29 @@
       }
 
       @if (uploadingInfo?.complete) {
-        <div>
-          <mat-icon color="{{ uploadingInfo.success ? 'primary' : 'warn' }}">
-            {{ uploadingInfo.success ? 'check_circle' : 'cancel' }}
-          </mat-icon>
+        <div class="complete min-h-[300px] flex flex-col justify-center items-center gap-5">
+          <div class="flex justify-center items-center gap-5 w-full">
+            <mat-icon color="{{ uploadingInfo.success ? 'primary' : 'warn' }}">
+              {{ uploadingInfo.success ? 'check_circle' : 'cancel' }}
+            </mat-icon>
 
-          <strong> File Upload {{ uploadingInfo.success ? 'Successful' : 'Failed' }} </strong>
+            <strong class="text-4xl">
+              File Upload {{ uploadingInfo.success ? 'Successful' : 'Failed' }}
+            </strong>
+          </div>
 
           @if (!uploadingInfo.success) {
-            <hr />
-            <p><strong>Error Message:</strong> {{ uploadingInfo.error }}</p>
+            <div class="max-w-xl flex flex-col justify-center items-center">
+              <hr class="border-b border-gray-300" />
+              <p><strong>Error Message:</strong> {{ uploadingInfo.error }}</p>
 
-            <button mat-raised-button (click)="initiateUpload()">Retry Upload</button>
-            <button mat-raised-button (click)="onClickFailureCancel()">Cancel</button>
+              <div class="flex gap-5">
+                <button mat-button (click)="initiateUploadInternal()" color="primary">
+                  Retry Upload
+                </button>
+                <button mat-button (click)="onClickFailureCancel()">Back to Upload</button>
+              </div>
+            </div>
           }
         </div>
       }

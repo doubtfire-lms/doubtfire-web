@@ -18,7 +18,7 @@ export const ACCEPTED_TYPES = {
   },
   csv: {
     extensions: ['csv', 'xls', 'xlsx'],
-    icon: 'fa-file-excel-o',
+    icon: 'insert_chart_outlined',
     name: 'CSV',
   },
   code: {
@@ -54,9 +54,8 @@ export const ACCEPTED_TYPES = {
   styleUrls: ['./file-uploader.component.scss'],
 })
 export class FileUploaderComponent implements OnInit {
-  // Bound values
   @Input() files: File[];
-  @Input() url!: string;
+  @Input() url: string;
   @Input() method = 'POST';
   @Input() payload?: any;
 
@@ -66,20 +65,20 @@ export class FileUploaderComponent implements OnInit {
   @Input() onComplete?: () => void;
   @Input() onClickFailureCancel?: () => void;
 
-  @Input() isUploading?: boolean;
-  @Input() isReady?: boolean;
-  @Input() showName?: boolean = true;
-  @Input() asButton?: boolean = false;
-  @Input() filesSelected?: any;
-  @Input() singleDropZone?: boolean = false;
-  @Input() showUploadButton?: boolean = true;
-  @Input() resetAfterUpload?: boolean;
+  @Input() isUploading: boolean;
+  @Input() isReady: boolean;
+  @Input() showName: boolean = true;
+  @Input() asButton: boolean = false;
+  @Input() filesSelected: any;
+  @Input() singleDropZone: boolean = false;
+  @Input() showUploadButton: boolean = true;
+  @Input() resetAfterUpload: boolean = true;
 
   @Input() initiateUpload?: () => void;
 
   // HACK: workaround for TypeScript -> Coffeescript communication
-  // Once all parent components such as upload-submission-modal are migrated
-  // These *might* be necessary anymore
+  // Once all parent components such as upload-submission-modal are migrated..
+  // .. these *wont* not be necessary anymore
   // Parent components should declare the file-uploader using @ViewChild() and directly call initiateUpload()
   @Output() isReadyChange = new EventEmitter<boolean>();
   @Output() uploadReady = new EventEmitter<() => void>();
@@ -98,18 +97,27 @@ export class FileUploaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.showUploader = !this.asButton;
-    console.log(`ShowUploader: ${this.showUploader}`);
-    console.log(`uploadingInfo: ${this.uploadingInfo}`);
-    console.log(`shownUploadZones: ${this.shownUploadZones}`);
     this.createUploadZones(this.files);
+
     this.fileUploadControl.valueChanges.subscribe((value) => {
-      console.log('value changed', value);
       setTimeout(() => {
         this.validateFiles();
       });
     });
 
+
     this.uploadReady.emit(this.initiateUploadInternal.bind(this));
+
+    if (!this.onClickFailureCancel) {
+      this.onClickFailureCancel = this.resetUploader;
+    }
+
+    this.resetUploader();
+  }
+
+  public backToUpload() {
+    this.isUploading = false;
+    this.uploadingInfo = null;
   }
 
   validateFiles() {
@@ -134,14 +142,10 @@ export class FileUploaderComponent implements OnInit {
   }
 
   clearEnqueuedUpload(upload: any) {
-    console.log('clearEnqueuedUpload', upload);
     upload.model = null;
     this.refreshShownUploadZones();
   }
 
-  modelChanged(newFiles: any, upload: any) {
-    console.log('modelChanged', newFiles, upload);
-  }
 
   readyToUpload(): boolean {
     const allSelected = this.uploadZones.every((zone) => zone.model?.length);
@@ -155,17 +159,22 @@ export class FileUploaderComponent implements OnInit {
   }
 
   resetUploader() {
-    console.log('resetUploader');
+    this.uploadingInfo = null;
+    this.isUploading = false;
+    this.showUploader = !this.asButton;
+    for (const upload of this.uploadZones) {
+      this.clearEnqueuedUpload(upload);
+    }
   }
 
   initiateUploadInternal() {
-    console.log('initiateUploadInternal');
 
     if (!this.readyToUpload()) {
       return;
     }
-    this.onBeforeUpload();
-    console.log('initiateUploadInternal2');
+    if (this.onBeforeUpload) {
+      this.onBeforeUpload();
+    }
 
     this.uploadingInfo = {
       progress: 5,
@@ -195,7 +204,6 @@ export class FileUploaderComponent implements OnInit {
       }
     }
 
-    console.log(this.payload, form);
     xhr.upload.onprogress = (event) => {
       if (event.total) {
         this.uploadingInfo.progress = Math.floor((event.loaded / event.total) * 100);
@@ -281,10 +289,5 @@ export class FileUploaderComponent implements OnInit {
 
     console.log(this.shownUploadZones);
     console.log(this.uploadZones);
-  }
-
-  checkForError(upload: any) {
-    console.log('checkForError', upload);
-    return false;
   }
 }
