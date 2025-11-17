@@ -8,6 +8,7 @@ import {AppInjector, setAppInjector} from './app-injector';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {FileUploadModule} from '@iplab/ngx-file-upload';
 
 // Lottie animation module
 // import {LottieModule, LottieCacheModule} from 'ngx-lottie';
@@ -282,6 +283,7 @@ import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-char
 import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
 import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
 import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
+import {FileUploaderComponent} from './common/file-uploader/file-uploader.component';
 
 @NgModule({
   // Components we declare
@@ -413,6 +415,7 @@ import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-man
     GroupMemberListComponent,
     GroupSelectorComponent,
     GroupSetManagerComponent,
+    FileUploaderComponent,
   ],
   // Services we provide
   providers: [
@@ -555,6 +558,7 @@ import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-man
     MatNativeDateModule,
     MatDialogModuleNew,
     NgxChartsModule,
+    FileUploadModule,
   ],
 })
 

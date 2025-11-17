@@ -40,14 +40,14 @@
             </select>
           </div>
         </div>
-        <file-uploader
-          show-name="false"
-          files="uploadFileData.type"
-          payload="uploadFileData.payload"
-          is-uploading="isUploading"
-          url="project.portfolioUrl()"
-          on-success="addNewFilesToPortfolio">
-        </file-uploader>
+        <f-file-uploader
+          [show-name]="false"
+          [files]="uploadFileData.type"
+          [payload]="uploadFileData.payload"
+          [is-uploading]="isUploading"
+          [url]="project.portfolioUrl()"
+          [on-success]="addNewFilesToPortfolio">
+        </f-file-uploader>
       </div>
     </div>
   </div><!--/add-some-more-files-->
