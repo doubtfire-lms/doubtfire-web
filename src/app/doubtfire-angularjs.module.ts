@@ -111,8 +111,6 @@ import 'build/src/app/common/services/outcome-service.js';
 import 'build/src/app/common/services/services.js';
 import 'build/src/app/common/services/recorder-service.js';
 import 'build/src/app/common/services/analytics-service.js';
-import 'build/src/app/sessions/auth/http-auth-injector.js';
-import 'build/src/app/sessions/sessions.js';
 import 'build/src/app/errors/errors.js';
 import 'build/src/app/errors/states/timeout/timeout.js';
 import 'build/src/app/errors/states/states.js';
@@ -225,7 +223,6 @@ import {FileUploaderComponent} from './common/file-uploader/file-uploader.compon
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
-  'doubtfire.sessions',
   'doubtfire.common',
   'doubtfire.errors',
   'doubtfire.units',
