@@ -45,10 +45,10 @@
                       <p class="select-none">Click to select {{ upload.display.type }} file</p>
                     }
                   } @else {
-                    <div class="!text-red-500 !w-full flex flex-col justify-center items-center">
+                    <div class="!text-red-500 !w-full flex flex-col justify-center items-center text-2xl">
                       <mat-icon>block</mat-icon>
                       <p>Invalid file provided</p>
-                      <small class="w-full"
+                      <small class="w-full text-center"
                         >Accepted: {{ upload.accept.split(',').join(', ') }}</small
                       >
                     </div>
