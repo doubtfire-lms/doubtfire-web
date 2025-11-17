@@ -106,7 +106,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
 
   // HACK: workaround for TypeScript -> Coffeescript communication
   // Once all parent components such as upload-submission-modal are migrated..
-  // .. these *wont* not be necessary anymore
+  // .. these *wont* be necessary anymore
   // Parent components should declare the file-uploader using @ViewChild() and directly call initiateUpload()
   @Output() isReadyChange = new EventEmitter<boolean>();
   @Output() uploadReady = new EventEmitter<() => void>();
