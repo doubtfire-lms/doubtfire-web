@@ -21,6 +21,7 @@ export class PortfolioWelcomeStepComponent implements OnInit {
   }
 
   goNextStep() {
+    // TODO: remove this once parent component is migrated
     this.injector.get('$scope').advanceActiveTab(1);
   }
 }
