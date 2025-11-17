@@ -1,18 +1,15 @@
-import {Component, OnInit, Injector, Input} from '@angular/core';
-import {Unit} from 'src/app/api/models/unit';
+import {Component, Injector, Input} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Unit} from 'src/app/api/models/unit';
 
 @Component({
   selector: 'f-portfolio-learning-summary-report-step',
   templateUrl: 'portfolio-learning-summary-report-step.component.html',
   styleUrls: ['portfolio-learning-summary-report-step.component.scss'],
 })
-export class PortfolioLearningSummaryReportStepComponent implements OnInit {
+export class PortfolioLearningSummaryReportStepComponent {
   @Input() unit: Unit;
   @Input() project: Project;
-
-  public externalName: string = 'OnTrack';
 
   public learningSummaryReportFileUploadData = {
     type: {
@@ -27,10 +24,7 @@ export class PortfolioLearningSummaryReportStepComponent implements OnInit {
   public forceLSRSubmit: boolean = false;
   public acceptUploadNewLearningSummary: boolean = false;
 
-  constructor(
-    private constants: DoubtfireConstants,
-    private injector: Injector,
-  ) {}
+  constructor(private injector: Injector) {}
 
   public get projectHasDraftLearningSummaryReport() {
     return (
@@ -39,36 +33,16 @@ export class PortfolioLearningSummaryReportStepComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-    this.constants.ExternalName.subscribe((name) => {
-      this.externalName = name;
-    });
-
-    console.log(`unit: `, this.unit);
-    console.log(`project: `, this.project);
-  }
-
-  goNextStep() {
-    // TODO: remove this once parent component is migrated
-    this.injector.get('$scope').advanceActiveTab(1);
-  }
-
-  goBackStep() {
-    // TODO: remove this once parent component is migrated
-    this.injector.get('$scope').advanceActiveTab(-1);
+  // TODO: remove this once parent component is migrated
+  advanceActiveTab(index: 1 | -1) {
+    this.injector.get('$scope').advanceActiveTab(index);
   }
 
   addNewFile(newFile) {
-    console.log('yoo', newFile);
-    console.log(this);
-    console.log(this.project);
     this.project.portfolioFiles.push(newFile);
-    // this.injector.get('$scope').addNewFilesToPortfolio(newFile);
     this.acceptUploadNewLearningSummary = false;
     this.forceLSRSubmit = false;
   }
 
-  // downloadLearningSummaryReport(){
-
-  // }
+  // downloadLearningSummaryReport(){}
 }

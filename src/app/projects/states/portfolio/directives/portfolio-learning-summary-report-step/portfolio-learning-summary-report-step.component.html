@@ -62,10 +62,10 @@
     </div>
   </mat-card-content>
   <mat-card-footer class="w-full flex justify-between p-5">
-    <button mat-raised-button (click)="goBackStep()">Back</button>
+    <button mat-raised-button (click)="advanceActiveTab(-1)">Back</button>
     <button
       mat-raised-button
-      (click)="goNextStep()"
+      (click)="advanceActiveTab(1)"
       color="primary"
       [disabled]="!projectHasDraftLearningSummaryReport"
     >
