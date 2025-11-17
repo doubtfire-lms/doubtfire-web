@@ -38,7 +38,7 @@ export class PortfolioLearningSummaryReportStepComponent {
     this.injector.get('$scope').advanceActiveTab(index);
   }
 
-  addNewFile(newFile) {
+  addNewFile(newFile: {kind: string; name: string; idx: number}) {
     this.project.portfolioFiles.push(newFile);
     this.acceptUploadNewLearningSummary = false;
     this.forceLSRSubmit = false;
