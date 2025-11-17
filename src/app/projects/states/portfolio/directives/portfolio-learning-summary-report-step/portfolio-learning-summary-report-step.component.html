@@ -64,13 +64,20 @@
   </mat-card-content>
   <mat-card-footer class="w-full flex justify-between p-5">
     <button mat-raised-button (click)="advanceActiveTab(-1)">Back</button>
-    <button
-      mat-raised-button
-      (click)="advanceActiveTab(1)"
-      color="primary"
-      [disabled]="!projectHasDraftLearningSummaryReport"
-    >
-      Next
-    </button>
+    <div class="flex justify-center items-center gap-5">
+      @if (!projectHasDraftLearningSummaryReport) {
+        <div class="text-gray-400">
+          You're missing a Learning Summary Report. Upload one to continue.
+        </div>
+      }
+      <button
+        mat-raised-button
+        (click)="advanceActiveTab(1)"
+        color="primary"
+        [disabled]="!projectHasDraftLearningSummaryReport"
+      >
+        Next
+      </button>
+    </div>
   </mat-card-footer>
 </mat-card>
