@@ -1,9 +1,17 @@
 // TODO: remove this
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FileUploadControl, FileUploadValidators} from '@iplab/ngx-file-upload';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import {FileUploadControl} from '@iplab/ngx-file-upload';
 import {UserService} from 'src/app/api/services/user.service';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 interface File {
   name: string;
@@ -54,7 +62,7 @@ export const ACCEPTED_TYPES = {
   templateUrl: './file-uploader.component.html',
   styleUrls: ['./file-uploader.component.scss'],
 })
-export class FileUploaderComponent implements OnInit, OnChanges{
+export class FileUploaderComponent implements OnInit, OnChanges {
   @Input() files: File[];
   @Input() url: string;
   @Input() method = 'POST';
@@ -94,19 +102,22 @@ export class FileUploaderComponent implements OnInit, OnChanges{
   public uploadZones = [];
   public dropSupported: boolean = true;
 
-  constructor(private userService: UserService, private constants: DoubtfireConstants) {}
+  constructor(
+    private userService: UserService,
+    private constants: DoubtfireConstants,
+  ) {}
 
-  private externalName: string = 'OnTrack'
+  private externalName: string = 'OnTrack';
+
   ngOnInit(): void {
     this.showUploader = !this.asButton;
     this.createUploadZones(this.files);
 
-    this.fileUploadControl.valueChanges.subscribe((value) => {
+    this.fileUploadControl.valueChanges.subscribe(() => {
       setTimeout(() => {
         this.validateFiles();
       });
     });
-
 
     this.uploadReady.emit(this.initiateUploadInternal.bind(this));
 
@@ -116,14 +127,13 @@ export class FileUploaderComponent implements OnInit, OnChanges{
 
     this.resetUploader();
 
-    this.constants.ExternalName.subscribe(name => {
+    this.constants.ExternalName.subscribe((name) => {
       this.externalName = name;
-    })
-
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['files']){
+    if (changes['files']) {
       this.createUploadZones(changes.files.currentValue);
     }
   }
@@ -136,12 +146,9 @@ export class FileUploaderComponent implements OnInit, OnChanges{
   validateFiles() {
     for (const upload of this.shownUploadZones) {
       if (upload.model?.length) {
-        console.log(upload);
         const name: string = upload.model[0].name.toLowerCase();
         const accepts: string[] = upload.accepts.map((ext: string) => ext.toLowerCase());
-        console.log(name, accepts);
         const valid = accepts.some((ext) => name.endsWith(ext));
-        console.log(valid);
         if (!valid) {
           upload.model = null;
           upload.display.error = true;
@@ -158,7 +165,6 @@ export class FileUploaderComponent implements OnInit, OnChanges{
     upload.model = null;
     this.refreshShownUploadZones();
   }
-
 
   readyToUpload(): boolean {
     const allSelected = this.uploadZones.every((zone) => zone.model?.length);
@@ -181,7 +187,6 @@ export class FileUploaderComponent implements OnInit, OnChanges{
   }
 
   initiateUploadInternal() {
-
     if (!this.readyToUpload()) {
       return;
     }
@@ -264,9 +269,9 @@ export class FileUploaderComponent implements OnInit, OnChanges{
     xhr.send(form);
   }
 
-  onClickFailureCancelInternal() {
-    console.log('onClickFailureCancelInternal');
-  }
+  // onClickFailureCancelInternal() {
+  //   console.log('onClickFailureCancelInternal');
+  // }
 
   refreshShownUploadZones = () => {
     if (this.singleDropZone) {
@@ -295,12 +300,7 @@ export class FileUploaderComponent implements OnInit, OnChanges{
       };
     });
 
-    console.log(zones, this.singleDropZone);
-
     this.shownUploadZones = this.singleDropZone ? [zones[0]] : zones;
     this.uploadZones = zones;
-
-    console.log(this.shownUploadZones);
-    console.log(this.uploadZones);
   }
 }
