@@ -1,1 +1,18 @@
-<p>portfolios works!</p>
+<div class="container">
+  <h1>Student Portfolios</h1>
+  <mat-tab-group>
+    <mat-tab label="Select Student">
+      <f-portfolios-list class="p-5"></f-portfolios-list>
+    </mat-tab>
+    <mat-tab label="View Progress">
+      <f-portfolios-project-progress class="p-5"></f-portfolios-project-progress>
+    </mat-tab>
+    <!-- TODO: View Staff Notes directive -->
+    <mat-tab label="View Portfolio">
+      <f-portfolios-portfolio-view class="p-5"></f-portfolios-portfolio-view>
+    </mat-tab>
+    <mat-tab label="Assess Portfolio">
+      <f-portfolios-assessment class="p-5"></f-portfolios-assessment>
+    </mat-tab>
+  </mat-tab-group>
+</div>
