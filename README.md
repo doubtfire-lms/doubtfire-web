@@ -147,6 +147,7 @@ MIGRATED:
 - [x] ./src/app/projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.coffee
 - [x] ./src/app/sessions/auth/http-auth-injector.coffee
 - [x] ./src/app/sessions/sessions.coffee
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.coffee
 
 TODO:
 
@@ -188,7 +189,6 @@ TODO:
 - [ ] ./src/app/projects/states/outcomes/outcomes.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/directives.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.coffee
