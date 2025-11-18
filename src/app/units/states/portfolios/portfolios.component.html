@@ -4,17 +4,36 @@
   @if (unit) {
     <mat-tab-group>
       <mat-tab label="Select Student">
-        <f-portfolios-list class="p-5" [unit]="unit"></f-portfolios-list>
+        <f-portfolios-list
+          class="p-5"
+          [unit]="unit"
+          (studentSelected)="studentSelected($event)"
+        ></f-portfolios-list>
       </mat-tab>
       <mat-tab label="View Progress" [disabled]="!selectedProject">
-        <f-portfolios-project-progress class="p-5"></f-portfolios-project-progress>
+        @if (selectedProject) {
+          <f-portfolios-project-progress
+            class="p-5"
+            [project]="selectedProject"
+          ></f-portfolios-project-progress>
+        }
       </mat-tab>
       <!-- TODO: View Staff Notes directive -->
       <mat-tab label="View Portfolio" [disabled]="!selectedProject">
-        <f-portfolios-portfolio-view class="p-5"></f-portfolios-portfolio-view>
+        @if (selectedProject) {
+          <f-portfolios-portfolio-view
+            class="p-5"
+            [project]="selectedProject"
+          ></f-portfolios-portfolio-view>
+        }
       </mat-tab>
       <mat-tab label="Assess Portfolio" [disabled]="!selectedProject">
-        <f-portfolios-assessment class="p-5"></f-portfolios-assessment>
+        @if (selectedProject) {
+          <f-portfolios-assessment
+            class="p-5"
+            [project]="selectedProject"
+          ></f-portfolios-assessment>
+        }
       </mat-tab>
     </mat-tab-group>
   }

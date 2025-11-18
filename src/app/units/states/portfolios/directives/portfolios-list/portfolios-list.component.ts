@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Project} from 'src/app/api/models/project';
@@ -15,6 +15,9 @@ export class PortfoliosListComponent implements OnInit {
   constructor(private taskService: TaskService) {}
   @Input() unit: Unit;
 
+  @Output()
+  public studentSelected = new EventEmitter<Project>();
+
   displayedColumns: string[] = [
     'student',
     'name',
@@ -27,6 +30,10 @@ export class PortfoliosListComponent implements OnInit {
   ];
 
   dataSource = new MatTableDataSource<Project>([]);
+
+  selectStudent(project: Project) {
+    this.studentSelected.emit(project);
+  }
 
   public statusColor(status: TaskStatusEnum): string {
     return this.taskService.statusColors.get(status);

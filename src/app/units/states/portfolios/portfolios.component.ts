@@ -24,6 +24,11 @@ export class PortfoliosComponent implements OnInit {
     private projectService: ProjectService,
   ) {}
 
+  // TODO: Selecting should auto advance to the View Progress tab
+  studentSelected(project: Project) {
+    this.selectedProject = project;
+  }
+
   ngOnInit(): void {
     this.unitService.get(this.unitId).subscribe({
       next: (unit) => {
