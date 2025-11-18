@@ -1,24 +1,26 @@
-<mat-form-field appearance="outline" class="w-full">
-  <mat-label>Rationale</mat-label>
-  <textarea matInput [(ngModel)]="project.gradeRationale" rows="5"></textarea>
-</mat-form-field>
-@for (group of gradeResults; track group) {
-  <div class="flex gap-2 justify-between">
-    <h5 class="mt-4 w-[128px]">{{ group.name }}</h5>
+<div class="p-5">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Rationale</mat-label>
+    <textarea matInput [(ngModel)]="project.gradeRationale" rows="5"></textarea>
+  </mat-form-field>
+  @for (group of gradeResults; track group) {
+    <div class="flex gap-2 justify-between">
+      <h5 class="mt-4 w-[128px]">{{ group.name }}</h5>
 
-    <div class="flex gap-2">
-      @for (score of group.scores; track score) {
-        <button
-          mat-raised-button
-          [disabled]="!project.gradeRationale"
-          class="w-[150px]"
-          [value]="score"
-          (click)="project.assignGrade(score, project.gradeRationale)"
-          [color]="project.grade === score ? 'primary' : 'default'"
-        >
-          {{ score }}
-        </button>
-      }
+      <div class="flex gap-2">
+        @for (score of group.scores; track score) {
+          <button
+            mat-raised-button
+            [disabled]="!project.gradeRationale"
+            class="w-[150px]"
+            [value]="score"
+            (click)="project.assignGrade(score, project.gradeRationale)"
+            [color]="project.grade === score ? 'primary' : 'default'"
+          >
+            {{ score }}
+          </button>
+        }
+      </div>
     </div>
-  </div>
-}
+  }
+</div>

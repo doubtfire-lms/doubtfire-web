@@ -5,7 +5,6 @@
     <mat-tab-group #tabs dynamicHeight class="overflow-visible">
       <mat-tab label="Select Student">
         <f-portfolios-list
-          class="p-5"
           [unit]="unit"
           (studentSelected)="studentSelected($event)"
         ></f-portfolios-list>
@@ -13,7 +12,6 @@
       <mat-tab label="View Progress" [disabled]="!selectedProject">
         @if (selectedProject) {
           <f-portfolios-project-progress
-            class="p-5"
             [unit]="unit"
             [project]="selectedProject"
           ></f-portfolios-project-progress>
@@ -22,16 +20,12 @@
       <!-- TODO: View Staff Notes directive -->
       <mat-tab label="View Portfolio" [disabled]="!selectedProject">
         @if (selectedProject) {
-          <f-portfolios-portfolio-view
-            class="p-5"
-            [project]="selectedProject"
-          ></f-portfolios-portfolio-view>
+          <f-portfolios-portfolio-view [project]="selectedProject"></f-portfolios-portfolio-view>
         }
       </mat-tab>
       <mat-tab label="Assess Portfolio" [disabled]="!selectedProject">
         @if (selectedProject) {
           <f-portfolios-assessment
-            class="p-5"
             [project]="selectedProject"
             [unit]="unit"
           ></f-portfolios-assessment>
