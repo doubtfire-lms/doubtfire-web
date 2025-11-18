@@ -87,14 +87,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (this.currentView == ViewType.PROJECT) {
             this.updateSelectedProject(currentViewAndEntity.entity as Project);
           } else if (this.currentView == ViewType.UNIT) {
-            this.updateSelectedUnitRole(currentViewAndEntity.entity as UnitRole);
+            if (currentViewAndEntity.entity instanceof UnitRole) {
+              this.updateSelectedUnitRole(currentViewAndEntity.entity as UnitRole);
+            } else if (currentViewAndEntity.entity instanceof Unit) {
+              this.updateSelectedUnit(currentViewAndEntity.entity as Unit);
+            }
           } else {
             this.currentUnit = null;
             this.currentProject = null;
           }
         },
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        error: (_err) => {},
+        error: (_err) => {
+          console.error(_err);
+        },
       }),
     );
   }
@@ -120,6 +126,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentProject = null;
     this.currentUnitRole = unitRole;
     this.currentUnit = unitRole.unit;
+  }
+
+  updateSelectedUnit(unit: Unit): void {
+    this.currentUnit = unit;
+    this.currentProject = null;
+
+    this.currentUnitRole = unit.staff.find(
+      (ur) => ur.user?.id === this.userService.currentUser?.id,
+    );
+
+    if (this.currentUnitRole) {
+      // Re-map Unit onto UnitRole object
+      this.currentUnitRole.unit = unit;
+    }
   }
 
   update(): void {
