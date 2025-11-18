@@ -69,7 +69,6 @@ import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-d
 import 'build/src/app/projects/states/dashboard/dashboard.js';
 import 'build/src/app/projects/states/outcomes/outcomes.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.js';
-import 'build/src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.js';
 import 'build/src/app/projects/states/portfolio/directives/directives.js';
 import 'build/src/app/projects/states/portfolio/portfolio.js';
@@ -220,6 +219,7 @@ import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-man
 import {FileUploaderComponent} from './common/file-uploader/file-uploader.component';
 import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
 import {PortfolioLearningSummaryReportStepComponent} from './projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.component';
+import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -550,4 +550,9 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fPortfolioLearningSummaryReportStep',
   downgradeComponent({component: PortfolioLearningSummaryReportStepComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fPortfolioAddExtraFilesStep',
+  downgradeComponent({component: PortfolioAddExtraFilesStepComponent}),
 );
