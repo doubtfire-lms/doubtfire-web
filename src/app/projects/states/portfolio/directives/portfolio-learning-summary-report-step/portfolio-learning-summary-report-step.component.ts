@@ -1,6 +1,7 @@
 import {Component, Injector, Input} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
+import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
   selector: 'f-portfolio-learning-summary-report-step',
@@ -24,13 +25,20 @@ export class PortfolioLearningSummaryReportStepComponent {
   public forceLSRSubmit: boolean = false;
   public acceptUploadNewLearningSummary: boolean = false;
 
-  constructor(private injector: Injector) {}
+  constructor(
+    private injector: Injector,
+    private gradeService: GradeService,
+  ) {}
 
   public get projectHasDraftLearningSummaryReport() {
     return (
       this.project?.usesDraftLearningSummary ||
       this.project?.portfolioFiles.find((f) => f.idx === 0)
     );
+  }
+
+  public get targetGradeLabel(): string {
+    return this.gradeService.grades[this.project.targetGrade];
   }
 
   // TODO: remove this once parent component is migrated
