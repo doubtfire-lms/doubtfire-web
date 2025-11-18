@@ -15,12 +15,7 @@
               <mat-icon>{{ icons[file.kind] }}</mat-icon>
               {{ file.name }}
             </div>
-            <button
-              mat-button
-              (click)="deleteFileFromPortfolio(file)"
-              color="primary"
-              class="delete-file"
-            >
+            <button mat-button (click)="deleteFileFromPortfolio(file)" color="primary">
               Remove
             </button>
           </li>
