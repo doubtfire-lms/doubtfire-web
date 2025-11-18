@@ -26,10 +26,19 @@ export class PortfoliosComponent implements OnInit {
 
   // TODO: Selecting should auto advance to the View Progress tab
   studentSelected(project: Project) {
-    this.selectedProject = project;
+    this.selectedProject = null;
+    this.projectService.loadProject(project, this.unit).subscribe({
+      next: (project) => {
+        this.selectedProject = project;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 
   ngOnInit(): void {
+    // TODO: Unit and student loading needs to be moved to the parent controller (units/{unitId}) when everything is migrated
     this.unitService.get(this.unitId).subscribe({
       next: (unit) => {
         this.globalStateService.setView(ViewType.UNIT, unit);
