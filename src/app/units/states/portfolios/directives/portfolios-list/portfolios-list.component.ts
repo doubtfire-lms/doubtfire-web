@@ -1,4 +1,13 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  AfterViewInit,
+  ViewChild,
+} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Project} from 'src/app/api/models/project';
@@ -11,7 +20,7 @@ import {TaskService} from 'src/app/api/services/task.service';
   templateUrl: './portfolios-list.component.html',
   styleUrl: './portfolios-list.component.scss',
 })
-export class PortfoliosListComponent implements OnInit {
+export class PortfoliosListComponent implements OnInit, AfterViewInit {
   constructor(private taskService: TaskService) {}
   @Input() unit: Unit;
 
@@ -29,7 +38,17 @@ export class PortfoliosListComponent implements OnInit {
     'grade',
   ];
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource = new MatTableDataSource<Project>([]);
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnInit(): void {
+    console.log(this.unit);
+    this.dataSource.data = [...this.unit.students];
+  }
 
   selectStudent(project: Project) {
     this.studentSelected.emit(project);
@@ -41,11 +60,6 @@ export class PortfoliosListComponent implements OnInit {
 
   public statusLabel(status: TaskStatusEnum): string {
     return this.taskService.statusLabels.get(status);
-  }
-
-  ngOnInit(): void {
-    console.log(this.unit);
-    this.dataSource.data = [...this.unit.students];
   }
 
   private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
