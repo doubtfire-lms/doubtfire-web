@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatTabGroup} from '@angular/material/tabs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
@@ -18,18 +19,22 @@ export class PortfoliosComponent implements OnInit {
   public unit: Unit = null;
   public selectedProject: Project;
 
+  @ViewChild('tabs') tabs!: MatTabGroup;
+
   constructor(
     private globalStateService: GlobalStateService,
     private unitService: UnitService,
     private projectService: ProjectService,
   ) {}
 
-  // TODO: Selecting should auto advance to the View Progress tab
   studentSelected(project: Project) {
     this.selectedProject = null;
+
+    // TODO: add spinner while waiting for project to load
     this.projectService.loadProject(project, this.unit).subscribe({
       next: (project) => {
         this.selectedProject = project;
+        this.tabs.selectedIndex = 1;
       },
       error: (error) => {
         console.error(error);

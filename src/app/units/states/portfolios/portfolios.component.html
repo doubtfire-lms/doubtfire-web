@@ -2,7 +2,7 @@
   <h1>Student Portfolios</h1>
   <!-- TODO: loading unit spinner -->
   @if (unit) {
-    <mat-tab-group>
+    <mat-tab-group #tabs>
       <mat-tab label="Select Student">
         <f-portfolios-list
           class="p-5"
