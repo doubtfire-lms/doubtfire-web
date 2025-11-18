@@ -52,7 +52,7 @@ export class PortfolioLearningSummaryReportStepComponent {
     this.forceLSRSubmit = false;
   }
 
-  draftTaskDefinitionWasUsed() {
+  draftTaskDefinitionWasUsed(): boolean {
     const draftTaskDef = this.unit.draftTaskDefinition;
     if (draftTaskDef) {
       const task = this.project.findTaskForDefinition(draftTaskDef.id);
