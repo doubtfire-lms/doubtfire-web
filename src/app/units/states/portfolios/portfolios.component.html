@@ -2,7 +2,7 @@
   <h1>Student Portfolios</h1>
   <!-- TODO: loading unit spinner -->
   @if (unit) {
-    <mat-tab-group #tabs>
+    <mat-tab-group #tabs dynamicHeight class="overflow-visible">
       <mat-tab label="Select Student">
         <f-portfolios-list
           class="p-5"
