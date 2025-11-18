@@ -1,13 +1,45 @@
-<div class="flex flex-col">
-  <f-task-status-pie-chart
-    [project]="project"
-    [grade]="project.targetGrade"
-  ></f-task-status-pie-chart>
-  <f-progress-burndown-chart
-    [project]="project"
-    [unit]="unit"
-    [grade]="project.targetGrade"
-  ></f-progress-burndown-chart>
-
-  <f-project-tasks-list [project]="project" [unit]="unit"></f-project-tasks-list>
+<div class="flex flex-col justify-center items-center gap-5">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Target Grade</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      {{ project.targetGradeWord }}
+    </mat-card-content>
+  </mat-card>
+  <mat-card appearance="outlined" class="w-full">
+    <mat-card-header>
+      <mat-card-title>Task List</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <f-project-tasks-list
+        [project]="project"
+        [unit]="unit"
+        class="max-w-4xl"
+      ></f-project-tasks-list>
+    </mat-card-content>
+  </mat-card>
+  <mat-card appearance="outlined" class="w-full">
+    <mat-card-header>
+      <mat-card-title>Task Summary Chart</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <f-task-status-pie-chart
+        [project]="project"
+        [grade]="project.targetGrade"
+      ></f-task-status-pie-chart>
+    </mat-card-content>
+  </mat-card>
+  <mat-card appearance="outlined" class="w-full">
+    <mat-card-header>
+      <mat-card-title>Burndown Chart</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <f-progress-burndown-chart
+        [project]="project"
+        [unit]="unit"
+        [grade]="project.targetGrade"
+      ></f-progress-burndown-chart>
+    </mat-card-content>
+  </mat-card>
 </div>
