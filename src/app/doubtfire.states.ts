@@ -15,6 +15,7 @@ import { TaskViewerState } from './units/task-viewer/task-viewer-state.component
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import { Ng2ViewDeclaration } from '@uirouter/angular';
 import { TutorialsComponent } from './projects/states/tutorials/tutorials.component';
+import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -430,6 +431,30 @@ const TutorialState: NgHybridStateDeclaration = {
   },
 };
 
+// TODO 10.0.x: this will need to go under the unit parent state
+const PortfoliosState: NgHybridStateDeclaration = {
+  name: 'units/students/portfolios',
+  url: '/units/:unitId/students/portfolios',
+  resolve: {
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+  },
+  views: {
+    main: {
+      component: PortfoliosComponent,
+    },
+  },
+  data: {
+    task: 'Student Portfolios',
+    pageTitle: 'Student Portfolios',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
 /**
  * Export the list of states we have created in angular
  */
@@ -453,4 +478,5 @@ export const doubtfireStates = [
   ScormPlayerReviewState,
   ScormPlayerStudentReviewState,
   TutorialState,
+  PortfoliosState,
 ];

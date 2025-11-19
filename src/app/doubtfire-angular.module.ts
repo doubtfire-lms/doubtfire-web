@@ -287,6 +287,11 @@ import {FileUploaderComponent} from './common/file-uploader/file-uploader.compon
 import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
 import {PortfolioLearningSummaryReportStepComponent} from './projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.component';
 import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.component';
+import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
+import {PortfoliosListComponent} from './units/states/portfolios/directives/portfolios-list/portfolios-list.component';
+import {PortfoliosProjectProgressComponent} from './units/states/portfolios/directives/portfolios-project-progress/portfolios-project-progress.component';
+import {PortfoliosPortfolioViewComponent} from './units/states/portfolios/directives/portfolios-portfolio-view/portfolios-portfolio-view.component';
+import {PortfoliosAssessmentComponent} from './units/states/portfolios/directives/portfolios-assessment/portfolios-assessment.component';
 
 @NgModule({
   // Components we declare
@@ -422,6 +427,11 @@ import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/d
     PortfolioWelcomeStepComponent,
     PortfolioLearningSummaryReportStepComponent,
     PortfolioAddExtraFilesStepComponent,
+    PortfoliosComponent,
+    PortfoliosListComponent,
+    PortfoliosProjectProgressComponent,
+    PortfoliosPortfolioViewComponent,
+    PortfoliosAssessmentComponent,
   ],
   // Services we provide
   providers: [

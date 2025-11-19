@@ -1,0 +1,100 @@
+<div class="p-5">
+  <h2>Review progress of {{ project.student.name }}</h2>
+  <p>Review the students progress through the unit's tasks.</p>
+  <div class="flex flex-col justify-center items-center gap-5 w-full">
+    <div class="flex gap-5 w-full">
+      <mat-card appearance="outlined" class="w-full">
+        <mat-card-header>
+          <mat-card-title>Target Grade</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-5">
+          <div class="flex flex-col justify-center items-center gap-5 p-5">
+            <div class="flex flex-col gap-2 justify-center items-center">
+              <mat-button-toggle-group hideSingleSelectionIndicator [ngModel]="project.targetGrade">
+                @for (grade of gradeValues; track grade) {
+                  <mat-button-toggle
+                    [value]="grade"
+                    class="p-2 py-4"
+                    (click)="updatedTargetGrade(grade)"
+                  >
+                    <grade-icon [grade]="grade"></grade-icon>
+                  </mat-button-toggle>
+                }
+              </mat-button-toggle-group>
+            </div>
+            {{ gradeWord(project.targetGrade) ?? 'N/A' }}
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card appearance="outlined" class="w-full">
+        <mat-card-header>
+          <mat-card-title>Submitted Grade</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-5">
+          <div class="flex flex-col justify-center items-center gap-5 p-5">
+            <div class="flex gap-2 justify-center items-center">
+              <mat-button-toggle-group
+                hideSingleSelectionIndicator
+                [ngModel]="project.submittedGrade"
+              >
+                @for (grade of gradeValues; track grade) {
+                  <mat-button-toggle
+                    [value]="grade"
+                    class="p-2 py-4"
+                    (click)="updateSubmittedGrade(grade)"
+                  >
+                    <grade-icon [grade]="grade"></grade-icon>
+                  </mat-button-toggle>
+                }
+              </mat-button-toggle-group>
+            </div>
+            {{ gradeWord(project.submittedGrade) ?? 'N/A' }}
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <mat-card appearance="outlined" class="w-full">
+      <mat-card-header>
+        <mat-card-title>Task List</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="p-5">
+        <f-project-tasks-list
+          [project]="project"
+          [unit]="unit"
+          class="max-w-4xl"
+        ></f-project-tasks-list>
+      </mat-card-content>
+    </mat-card>
+    <div class="flex flex-col 2xl:flex-row gap-5 w-full">
+      <mat-card appearance="outlined" class="w-full">
+        <mat-card-header>
+          <mat-card-title>Task Summary Chart</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-5">
+          <f-task-status-pie-chart
+            [project]="project"
+            [grade]="project.targetGrade"
+          ></f-task-status-pie-chart>
+        </mat-card-content>
+      </mat-card>
+      <mat-card appearance="outlined" class="w-full">
+        <mat-card-header>
+          <mat-card-title>Burndown Chart</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-5">
+          <div class="text-center p-5">
+            {{ project.student.name }} has completed {{ taskStats.numberOfTasksCompleted }} tasks
+            and have {{ taskStats.numberOfTasksRemaining }} left to complete to achieve their target
+            of a
+            {{ grades[project.targetGrade] }}
+          </div>
+          <f-progress-burndown-chart
+            [project]="project"
+            [unit]="unit"
+            [grade]="project.targetGrade"
+          ></f-progress-burndown-chart>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
