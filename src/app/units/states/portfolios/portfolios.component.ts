@@ -40,6 +40,7 @@ export class PortfoliosComponent implements OnInit {
         this.tabs.selectedIndex = 1;
       },
       error: (error) => {
+        this.alertService.error(`Failed to load project: ${error}`, 6000);
         console.error(error);
       },
     });
