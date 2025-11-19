@@ -1,19 +1,22 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
   OnInit,
   Output,
-  AfterViewInit,
   ViewChild,
 } from '@angular/core';
+import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatPaginator} from '@angular/material/paginator';
-import {Sort} from '@angular/material/sort';
+import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Project} from 'src/app/api/models/project';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskService} from 'src/app/api/services/task.service';
+import {UserService} from 'src/app/api/services/user.service';
+import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
   selector: 'f-portfolios-list',
@@ -21,7 +24,6 @@ import {TaskService} from 'src/app/api/services/task.service';
   styleUrl: './portfolios-list.component.scss',
 })
 export class PortfoliosListComponent implements OnInit, AfterViewInit {
-  constructor(private taskService: TaskService) {}
   @Input() unit: Unit;
 
   @Output()
@@ -39,15 +41,86 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   dataSource = new MatTableDataSource<Project>([]);
+
+  public portfolioFilter: 'all' | 'submitted_only' = 'submitted_only';
+  public tutorialFilter: 'all' | 'mine' = 'all';
+  public gradeFilter: number | null = null;
+
+  constructor(
+    private taskService: TaskService,
+    private userService: UserService,
+    private gradeService: GradeService,
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {
-    console.log(this.unit);
-    this.dataSource.data = [...this.unit.students];
+    this.updateDataSource();
+  }
+
+  public get gradeValues() {
+    return this.gradeService.gradeValues;
+  }
+
+  public gradeLabel(grade) {
+    return this.gradeService.grades[grade];
+  }
+
+  updateDataSource() {
+    const currentUser = this.userService.currentUser;
+
+    const students = this.unit.students
+      .filter((p) => (this.portfolioFilter === 'submitted_only' ? p.hasPortfolio : true))
+      .filter((p) => (this.tutorialFilter === 'mine' ? p.hasTutor(currentUser) : true))
+      .filter((p) => (this.gradeFilter !== null ? p.submittedGrade === this.gradeFilter : true));
+
+    this.dataSource.data = students;
+    this.dataSource.paginator?.firstPage();
+  }
+
+  onPortfolioFilterChange(event: MatButtonToggleChange) {
+    this.portfolioFilter = event.value;
+    this.updateDataSource();
+  }
+
+  onTutorialFilterChange(event: MatButtonToggleChange) {
+    this.portfolioFilter = event.value;
+    this.updateDataSource();
+  }
+
+  onGradeFilterChange(event: MatButtonToggleChange) {
+    this.gradeFilter = event.value;
+    this.updateDataSource();
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+
+    this.dataSource.filterPredicate = (project, filter) => {
+      const text = [
+        project.student.studentId,
+        project.student.username,
+        project.student.name,
+        project.tutorNames(),
+        project.shortTutorialDescription(),
+        String(project.grade),
+      ]
+        .join(' ')
+        .toLowerCase();
+
+      return text.includes(filter);
+    };
   }
 
   selectStudent(project: Project) {
