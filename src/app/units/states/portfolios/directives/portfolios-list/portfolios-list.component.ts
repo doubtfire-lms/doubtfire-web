@@ -90,7 +90,7 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
   }
 
   onTutorialFilterChange(event: MatButtonToggleChange) {
-    this.portfolioFilter = event.value;
+    this.tutorialFilter = event.value;
     this.updateDataSource();
   }
 
