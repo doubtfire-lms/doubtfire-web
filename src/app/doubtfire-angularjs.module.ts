@@ -217,6 +217,7 @@ import {FileUploaderComponent} from './common/file-uploader/file-uploader.compon
 import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
 import {PortfolioLearningSummaryReportStepComponent} from './projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.component';
 import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.component';
+import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -552,4 +553,9 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fPortfolioAddExtraFilesStep',
   downgradeComponent({component: PortfolioAddExtraFilesStepComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fUnitGroups',
+  downgradeComponent({component: UnitGroupsComponent}),
 );
