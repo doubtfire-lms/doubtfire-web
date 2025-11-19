@@ -54,6 +54,7 @@ export class PortfoliosProjectProgressComponent {
       next: (project) => {
         project.refreshBurndownChartData?.();
         this.alertService.success(`Updated project's submitted grade`);
+        this.updateTaskCompletionStats();
       },
       error: (error) => {
         this.project.submittedGrade = previousSubmittedGrade;
@@ -70,6 +71,7 @@ export class PortfoliosProjectProgressComponent {
       next: (project) => {
         project.refreshBurndownChartData?.();
         this.alertService.success(`Updated project's target grade`);
+        this.updateTaskCompletionStats();
       },
       error: (error) => {
         this.project.targetGrade = previousTargetGrade;
