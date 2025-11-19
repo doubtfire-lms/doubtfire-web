@@ -30,16 +30,7 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
   @Output()
   public studentSelected = new EventEmitter<Project>();
 
-  displayedColumns: string[] = [
-    'student',
-    'name',
-    'tutor',
-    'tutorial',
-    'target',
-    'submitted-as',
-    'stats',
-    'grade',
-  ];
+  displayedColumns: string[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -98,6 +89,18 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
       .filter((p) => (this.portfolioFilter === 'submitted_only' ? p.hasPortfolio : true))
       .filter((p) => (this.tutorialFilter === 'mine' ? p.hasTutor(currentUser) : true))
       .filter((p) => (this.gradeFilter !== null ? p.submittedGrade === this.gradeFilter : true));
+
+    this.displayedColumns = [
+      'student',
+      'name',
+      'tutor',
+      'tutorial',
+      'target',
+      'submitted-as',
+      ...(this.portfolioFilter === 'all' ? ['has-portfolio'] : []),
+      'stats',
+      'grade',
+    ];
 
     this.dataSource.data = students;
     this.dataSource.paginator?.firstPage();
@@ -186,6 +189,12 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
           return this.sortCompare(a.targetGrade, b.targetGrade, sort.direction === 'asc');
         case 'submitted-as':
           return this.sortCompare(a.submittedGrade, b.submittedGrade, sort.direction === 'asc');
+        case 'has-portfolio':
+          return this.sortCompare(
+            a.hasPortfolio.toString(),
+            b.hasPortfolio.toString(),
+            sort.direction === 'asc',
+          );
         case 'grade':
           return this.sortCompare(a.grade, b.grade, sort.direction === 'asc');
         default:
