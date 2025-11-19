@@ -71,7 +71,16 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
   }
 
   downloadPortfolios() {
-    // TODO: Download portfolios via sidekiq job
+    // TODO 10.0.x: Download portfolios via sidekiq job
+  }
+
+  public hasD2lMapping() {
+    // TODO 10.0.x: fetch this.unit.hasD2lMapping()
+    return false;
+  }
+
+  transferToD2l() {
+    // TODO 10.0.x: Open D2lTransferModal for this.unit
   }
 
   public get gradeValues() {

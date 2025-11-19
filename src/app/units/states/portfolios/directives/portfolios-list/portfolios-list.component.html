@@ -16,6 +16,11 @@
       >
         <mat-icon>download</mat-icon>Download Portfolios
       </button>
+      @if (hasD2lMapping) {
+        <button mat-button (click)="transferToD2l()">
+          <mat-icon>upload</mat-icon>Transfer Grades to D2L
+        </button>
+      }
     </div>
     <div class="flex flex-row items-center justify-end gap-5">
       <mat-form-field appearance="outline" class="mt-[22px]">
