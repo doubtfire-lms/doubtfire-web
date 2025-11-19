@@ -30,7 +30,6 @@ export class PortfoliosComponent implements OnInit {
   studentSelected(project: Project) {
     this.selectedProject = null;
 
-    // TODO: add spinner while waiting for project to load
     this.projectService.loadProject(project, this.unit).subscribe({
       next: (project) => {
         this.selectedProject = project;
