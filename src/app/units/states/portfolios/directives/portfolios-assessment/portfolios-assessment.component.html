@@ -1,4 +1,6 @@
 <div class="p-5">
+  <h2>Grade for {{ project.student.name }}</h2>
+  <p>Assign grade for this project.</p>
   <mat-form-field appearance="outline" class="w-full">
     <mat-label>Rationale</mat-label>
     <textarea matInput [(ngModel)]="project.gradeRationale" rows="5"></textarea>

@@ -1,4 +1,6 @@
 <div class="p-5">
+  <h2>Review portfolio of {{ project.student.name }}</h2>
+  <p>View or download portfolio for assessment.</p>
   <f-pdf-viewer class="w-full h-screen flex flex-grow" [pdfUrl]="project.portfolioUrl()">
   </f-pdf-viewer>
 </div>
