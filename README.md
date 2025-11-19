@@ -149,6 +149,8 @@ MIGRATED:
 - [x] ./src/app/sessions/sessions.coffee
 - [x] ./src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.coffee
 - [x] ./src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.coffee
+- [x] ./src/app/projects/project-progress-dashboard/project-progress-dashboard.coffee
+- [x] ./src/app/units/states/portfolios/portfolios.coffee
 
 TODO:
 
@@ -179,7 +181,6 @@ TODO:
 - [ ] ./src/app/config/routing/routing.coffee
 - [ ] ./src/app/config/analytics/analytics.coffee
 - [ ] ./src/app/projects/projects.coffee
-- [ ] ./src/app/projects/project-progress-dashboard/project-progress-dashboard.coffee
 - [ ] ./src/app/projects/states/states.coffee
 - [ ] ./src/app/projects/states/groups/groups.coffee
 - [ ] ./src/app/projects/states/feedback/feedback.coffee
@@ -208,7 +209,6 @@ TODO:
 - [ ] ./src/app/units/states/states.coffee
 - [ ] ./src/app/units/states/tasks/tasks.coffee
 - [ ] ./src/app/units/states/tasks/definition/definition.coffee
-- [ ] ./src/app/units/states/portfolios/portfolios.coffee
 - [ ] ./src/app/units/states/analytics/analytics.coffee
 - [ ] ./src/app/units/states/edit/directives/directives.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee
