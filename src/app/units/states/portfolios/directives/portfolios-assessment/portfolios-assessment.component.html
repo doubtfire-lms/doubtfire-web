@@ -7,16 +7,16 @@
   </mat-form-field>
   @for (group of gradeResults; track group) {
     <div class="flex gap-2 justify-between items-center mt-5">
-      <div class="w-[128px]">
+      <div class="w-[200px]">
         <strong>{{ group.name }}</strong>
       </div>
 
-      <div class="flex gap-2">
+      <div class="flex gap-2 flex-1 justify-end">
         @for (score of group.scores; track score) {
           <button
             mat-raised-button
             [disabled]="!project.gradeRationale"
-            class="w-[150px]"
+            [style.flex]="'0 0 ' + 100 / maxScoresPerRow + '%'"
             [value]="score"
             (click)="project.assignGrade(score, project.gradeRationale)"
             [color]="project.grade === score ? 'primary' : 'default'"

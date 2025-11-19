@@ -37,4 +37,6 @@ export class PortfoliosAssessmentComponent {
       scores: [90, 93, 95, 97, 100],
     },
   ];
+
+  public maxScoresPerRow = Math.max(...this.gradeResults.map((g) => g.scores.length));
 }
