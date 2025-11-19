@@ -14,12 +14,12 @@ A modern, lightweight learning management system.
 
 Important: When completing a frontend migration, please update the below list regarding the component you have migrated.
 
-SUMMARY:
+### SUMMARY:
 
 - `89 / 183` components migrated
 - `19` components no longer in the doubtfire-lms/9.x branch
 
-NO LONGER IN doubtfire-lms/9.x
+### NO LONGER IN doubtfire-lms/9.x
 
 - [x] ./src/app/projects/states/all/directives/all-projects-list/all-projects-list.coffee
 - [x] ./src/app/projects/states/all/all.coffee
@@ -41,7 +41,7 @@ NO LONGER IN doubtfire-lms/9.x
 - [x] ./src/app/common/modals/progress-modal/progress-modal.coffee
 - [x] ./src/app/errors/states/not-found/not-found.coffee
 
-MIGRATED:
+### MIGRATED:
 
 - [x] ./src/app/home/splash-screen/splash-screen.component.ts
 - [x] ./src/app/home/states/home/home.component.ts
@@ -151,88 +151,88 @@ MIGRATED:
 - [x] ./src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.coffee
 - [x] ./src/app/projects/project-progress-dashboard/project-progress-dashboard.coffee
 - [x] ./src/app/units/states/portfolios/portfolios.coffee
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.coffee
+- [x] ./src/app/config/local-storage/local-storage.coffee (Removed in 10.0.x)
+- [x] ./src/app/projects/states/tutorials/tutorials.coffee
+- [x] ./src/app/admin/modals/modals.coffee
 
-TODO:
+### TODO:
 
-- [ ] ./src/app/visualisations/alignment-bar-chart.coffee
-- [ ] ./src/app/visualisations/summary-task-status-scatter.coffee
-- [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
-- [ ] ./src/app/visualisations/achievement-custom-bar-chart.coffee
-- [ ] ./src/app/visualisations/student-task-status-pie-chart.coffee
-- [ ] ./src/app/visualisations/alignment-bullet-chart.coffee
-- [ ] ./src/app/visualisations/task-status-pie-chart.coffee
-- [ ] ./src/app/visualisations/achievement-box-plot.coffee
-- [ ] ./src/app/visualisations/task-completion-box-plot.coffee
-- [ ] ./src/app/visualisations/visualisations.coffee
-- [ ] ./src/app/tasks/tasks.coffee
+- [ ] ./src/app/common/common.coffee
+- [ ] ./src/app/common/content-editable/content-editable.coffee
+- [ ] ./src/app/common/filters/filters.coffee
+- [ ] ./src/app/common/modals/csv-result-modal/csv-result-modal.coffee
+- [ ] ./src/app/common/modals/modals.coffee
+- [ ] ./src/app/common/services/analytics-service.coffee
+- [ ] ./src/app/common/services/date-service.coffee
+- [ ] ./src/app/common/services/listener-service.coffee
+- [ ] ./src/app/common/services/media-service.coffee
+- [ ] ./src/app/common/services/outcome-service.coffee
+- [ ] ./src/app/common/services/recorder-service.coffee
+- [ ] ./src/app/common/services/services.coffee
+- [ ] ./src/app/config/analytics/analytics.coffee
+- [ ] ./src/app/config/config.coffee
+- [ ] ./src/app/config/root-controller/root-controller.coffee
+- [ ] ./src/app/config/routing/routing.coffee
+- [ ] ./src/app/config/runtime/runtime.coffee
+- [ ] ./src/app/config/vendor-dependencies/vendor-dependencies.coffee
+- [ ] ./src/app/errors/errors.coffee
+- [ ] ./src/app/errors/states/states.coffee
+- [ ] ./src/app/errors/states/timeout/timeout.coffee
+- [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
+- [ ] ./src/app/groups/groups.coffee
+- [ ] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
+- [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee
+- [ ] ./src/app/projects/projects.coffee
+- [ ] ./src/app/projects/states/dashboard/dashboard.coffee
+- [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
+- [ ] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
+- [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
+- [ ] ./src/app/projects/states/feedback/feedback.coffee
+- [ ] ./src/app/projects/states/groups/groups.coffee
+- [ ] ./src/app/projects/states/index/index.coffee
+- [ ] ./src/app/projects/states/outcomes/outcomes.coffee
+- [ ] ./src/app/projects/states/portfolio/directives/directives.coffee
+- [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Wait until merged in with 10.0.x)
+- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Wait until merged in with 10.0.x)
+- [ ] ./src/app/projects/states/portfolio/portfolio.coffee
+- [ ] ./src/app/projects/states/states.coffee
+- [ ] ./src/app/tasks/modals/modals.coffee
 - [ ] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal.coffee
 - [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.coffee
 - [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.coffee
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee
-- [ ] ./src/app/tasks/modals/modals.coffee
-- [ ] ./src/app/config/config.coffee
-- [ ] ./src/app/config/runtime/runtime.coffee
-- [ ] ./src/app/config/root-controller/root-controller.coffee
-- [ ] ./src/app/config/local-storage/local-storage.coffee
-- [ ] ./src/app/config/vendor-dependencies/vendor-dependencies.coffee
-- [ ] ./src/app/config/routing/routing.coffee
-- [ ] ./src/app/config/analytics/analytics.coffee
-- [ ] ./src/app/projects/projects.coffee
-- [ ] ./src/app/projects/states/states.coffee
-- [ ] ./src/app/projects/states/groups/groups.coffee
-- [ ] ./src/app/projects/states/feedback/feedback.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
-- [ ] ./src/app/projects/states/dashboard/dashboard.coffee
-- [ ] ./src/app/projects/states/outcomes/outcomes.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/directives.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.coffee
-- [ ] ./src/app/projects/states/portfolio/portfolio.coffee
-- [ ] ./src/app/projects/states/index/index.coffee
-- [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee
-- [ ] ./src/app/projects/states/tutorials/tutorials.coffee
-- [ ] ./src/app/admin/modals/modals.coffee
-- [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
-- [ ] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
-- [ ] ./src/app/groups/groups.coffee
-- [ ] ./src/app/units/states/groups/groups.coffee
-- [ ] ./src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.coffee
+- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee
+- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee
+- [ ] ./src/app/tasks/tasks.coffee
 - [ ] ./src/app/units/modals/modals.coffee
 - [ ] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee
-- [ ] ./src/app/units/units.coffee
-- [ ] ./src/app/units/states/states.coffee
-- [ ] ./src/app/units/states/tasks/tasks.coffee
-- [ ] ./src/app/units/states/tasks/definition/definition.coffee
-- [ ] ./src/app/units/states/analytics/analytics.coffee
+- [ ] ./src/app/units/states/analytics/analytics.coffee (Just the routing, since the TypeScript f-analytics component has been expanded in 10.0.x)
 - [ ] ./src/app/units/states/edit/directives/directives.coffee
+- [ ] ./src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee
 - [ ] ./src/app/units/states/edit/edit.coffee
+- [ ] ./src/app/units/states/groups/groups.coffee
+- [ ] ./src/app/units/states/index/index.coffee
 - [ ] ./src/app/units/states/rollover/directives/directives.coffee
 - [ ] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
 - [ ] ./src/app/units/states/rollover/rollover.coffee
-- [ ] ./src/app/units/states/index/index.coffee
+- [ ] ./src/app/units/states/states.coffee
 - [ ] ./src/app/units/states/students-list/students-list.coffee
-- [ ] ./src/app/common/modals/modals.coffee
-- [ ] ./src/app/common/modals/csv-result-modal/csv-result-modal.coffee
-- [ ] ./src/app/common/common.coffee
-- [ ] ./src/app/common/content-editable/content-editable.coffee
-- [ ] ./src/app/common/services/media-service.coffee
-- [ ] ./src/app/common/services/recorder-service.coffee
-- [ ] ./src/app/common/services/outcome-service.coffee
-- [ ] ./src/app/common/services/listener-service.coffee
-- [ ] ./src/app/common/services/services.coffee
-- [ ] ./src/app/common/services/date-service.coffee
-- [ ] ./src/app/common/services/analytics-service.coffee
-- [ ] ./src/app/errors/errors.coffee
-- [ ] ./src/app/errors/states/states.coffee
-- [ ] ./src/app/errors/states/timeout/timeout.coffee
-- [ ] ./src/app/common/filters/filters.coffee
+- [ ] ./src/app/units/states/tasks/definition/definition.coffee
+- [ ] ./src/app/units/states/tasks/tasks.coffee
+- [ ] ./src/app/units/units.coffee
+- [ ] ./src/app/visualisations/achievement-box-plot.coffee
+- [ ] ./src/app/visualisations/achievement-custom-bar-chart.coffee
+- [ ] ./src/app/visualisations/alignment-bar-chart.coffee
+- [ ] ./src/app/visualisations/alignment-bullet-chart.coffee
+- [ ] ./src/app/visualisations/student-task-status-pie-chart.coffee
+- [ ] ./src/app/visualisations/summary-task-status-scatter.coffee
+- [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
+- [ ] ./src/app/visualisations/task-completion-box-plot.coffee
+- [ ] ./src/app/visualisations/task-status-pie-chart.coffee
+- [ ] ./src/app/visualisations/visualisations.coffee
 
 ## Table of Contents
 
