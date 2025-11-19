@@ -46,7 +46,7 @@ export class PortfoliosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // TODO: Unit and student loading needs to be moved to the parent controller (units/{unitId}) when everything is migrated
+    // TODO 10.0.x: Unit and student loading needs to be moved to the parent controller (units/{unitId}) when everything is migrated
     this.unitService.get(this.unitId).subscribe({
       next: (unit) => {
         this.globalStateService.setView(ViewType.UNIT, unit);
