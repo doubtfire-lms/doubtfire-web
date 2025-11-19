@@ -1,9 +1,11 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatTabGroup} from '@angular/material/tabs';
+import {StateService} from '@uirouter/core';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {UnitService} from 'src/app/api/services/unit.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 @Component({
@@ -25,6 +27,8 @@ export class PortfoliosComponent implements OnInit {
     private globalStateService: GlobalStateService,
     private unitService: UnitService,
     private projectService: ProjectService,
+    private stateService: StateService,
+    private alertService: AlertService,
   ) {}
 
   studentSelected(project: Project) {
@@ -49,17 +53,17 @@ export class PortfoliosComponent implements OnInit {
 
         this.projectService.loadStudents(unit, false).subscribe({
           next: () => {
-            console.log('got students');
             this.unit = unit;
           },
           error: (error) => {
-            // TODO: redirect back to home..
-            console.error(error);
+            this.alertService.error(`Failed to load unit: ${error}`, 6000);
+            this.stateService.go('home');
           },
         });
       },
       error: (error) => {
-        console.error(error);
+        this.alertService.error(`Failed to load unit: ${error}`, 6000);
+        this.stateService.go('home');
       },
     });
   }
