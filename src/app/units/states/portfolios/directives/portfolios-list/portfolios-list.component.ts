@@ -16,6 +16,7 @@ import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskService} from 'src/app/api/services/task.service';
 import {UserService} from 'src/app/api/services/user.service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
@@ -53,6 +54,7 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
     private taskService: TaskService,
     private userService: UserService,
     private gradeService: GradeService,
+    private fileDownloaderService: FileDownloaderService,
   ) {}
 
   ngAfterViewInit() {
@@ -62,6 +64,14 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.updateDataSource();
+  }
+
+  downloadGrades() {
+    this.fileDownloaderService.downloadFile(this.unit.gradesUrl, `${this.unit.code}-grades.csv`);
+  }
+
+  downloadPortfolios() {
+    // TODO: Download portfolios via sidekiq job
   }
 
   public get gradeValues() {

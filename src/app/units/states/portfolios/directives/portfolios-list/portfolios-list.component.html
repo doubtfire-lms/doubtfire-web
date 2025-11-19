@@ -1,72 +1,89 @@
 <div class="p-5">
   <h2>Mark portfolios</h2>
   <p>Assess student portfolios</p>
-  <div class="flex flex-row items-center justify-end gap-5">
-    <mat-form-field appearance="outline" class="mt-[22px]">
-      <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Eg. Student ID" #input />
-    </mat-form-field>
-    <mat-button-toggle-group
-      hideSingleSelectionIndicator
-      [(ngModel)]="portfolioFilter"
-      (change)="onPortfolioFilterChange($event)"
-    >
-      <mat-button-toggle
-        value="all"
-        matTooltip="Show all students, even those without portfolios"
-        matTooltipPosition="above"
-        ><mat-icon>public</mat-icon></mat-button-toggle
-      >
-      <mat-button-toggle
-        value="submitted_only"
-        matTooltip="Show only students with a submitted portfolio"
-        matTooltipPosition="above"
-        ><mat-icon>menu_book</mat-icon></mat-button-toggle
-      >
-    </mat-button-toggle-group>
+  <div class="flex justify-between items-center">
+    <div class="flex gap-2 items-center justify-start">
+      <button mat-button (click)="downloadGrades()">
+        <mat-icon>download</mat-icon>Download Grades
+      </button>
 
-    <mat-button-toggle-group
-      hideSingleSelectionIndicator
-      [(ngModel)]="tutorialFilter"
-      (change)="onTutorialFilterChange($event)"
-    >
-      <mat-button-toggle
-        value="all"
-        matTooltip="Show students from all tutorials"
-        matTooltipPosition="above"
-        ><mat-icon>account_balance</mat-icon></mat-button-toggle
-      >
-      <mat-button-toggle
-        value="mine"
-        matTooltip="Show students from my tutorials"
-        matTooltipPosition="above"
-        ><mat-icon>edit</mat-icon></mat-button-toggle
-      >
-    </mat-button-toggle-group>
-
-    <mat-button-toggle-group
-      hideSingleSelectionIndicator
-      [(ngModel)]="gradeFilter"
-      (change)="onGradeFilterChange($event)"
-    >
-      <mat-button-toggle
-        [value]="null"
-        matTooltip="Show students aiming for any grade"
+      <button
+        mat-button
+        (click)="downloadPortfolios()"
+        matTooltip="Downloading all portfolios may take a long time"
+        matTooltipShowDelay="500"
         matTooltipPosition="above"
       >
-        All
-      </mat-button-toggle>
-      @for (grade of gradeValues; track grade) {
+        <mat-icon>download</mat-icon>Download Portfolios
+      </button>
+    </div>
+    <div class="flex flex-row items-center justify-end gap-5">
+      <mat-form-field appearance="outline" class="mt-[22px]">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Eg. Student ID" #input />
+      </mat-form-field>
+      <mat-button-toggle-group
+        hideSingleSelectionIndicator
+        [(ngModel)]="portfolioFilter"
+        (change)="onPortfolioFilterChange($event)"
+      >
         <mat-button-toggle
-          [value]="grade"
-          matTooltip="Show students aiming for a {{ gradeLabel(grade) }}"
+          value="all"
+          matTooltip="Show all students, even those without portfolios"
           matTooltipPosition="above"
-          class="flex justify-center items-center"
+          ><mat-icon>public</mat-icon></mat-button-toggle
         >
-          <grade-icon [grade]="grade"></grade-icon>
+        <mat-button-toggle
+          value="submitted_only"
+          matTooltip="Show only students with a submitted portfolio"
+          matTooltipPosition="above"
+          ><mat-icon>menu_book</mat-icon></mat-button-toggle
+        >
+      </mat-button-toggle-group>
+
+      <mat-button-toggle-group
+        hideSingleSelectionIndicator
+        [(ngModel)]="tutorialFilter"
+        (change)="onTutorialFilterChange($event)"
+      >
+        <mat-button-toggle
+          value="all"
+          matTooltip="Show students from all tutorials"
+          matTooltipPosition="above"
+          ><mat-icon>account_balance</mat-icon></mat-button-toggle
+        >
+        <mat-button-toggle
+          value="mine"
+          matTooltip="Show students from my tutorials"
+          matTooltipPosition="above"
+          ><mat-icon>edit</mat-icon></mat-button-toggle
+        >
+      </mat-button-toggle-group>
+
+      <mat-button-toggle-group
+        hideSingleSelectionIndicator
+        [(ngModel)]="gradeFilter"
+        (change)="onGradeFilterChange($event)"
+      >
+        <mat-button-toggle
+          [value]="null"
+          matTooltip="Show students aiming for any grade"
+          matTooltipPosition="above"
+        >
+          All
         </mat-button-toggle>
-      }
-    </mat-button-toggle-group>
+        @for (grade of gradeValues; track grade) {
+          <mat-button-toggle
+            [value]="grade"
+            matTooltip="Show students aiming for a {{ gradeLabel(grade) }}"
+            matTooltipPosition="above"
+            class="flex justify-center items-center"
+          >
+            <grade-icon [grade]="grade"></grade-icon>
+          </mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+    </div>
   </div>
 
   <table
