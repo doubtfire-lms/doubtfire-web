@@ -184,6 +184,15 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="actions" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>View</th>
+      <td mat-cell *matCellDef="let project">
+        <button mat-icon-button (click)="openProject($event, project)">
+          <mat-icon>launch</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr
       mat-row

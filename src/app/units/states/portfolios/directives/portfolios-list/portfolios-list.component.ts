@@ -57,6 +57,11 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
     this.updateDataSource();
   }
 
+  openProject(event: Event, project: Project) {
+    event.stopPropagation();
+    window.open(`/#/projects/${project.id}/dashboard/?tutor=true`, '_blank');
+  }
+
   downloadGrades() {
     this.fileDownloaderService.downloadFile(this.unit.gradesUrl, `${this.unit.code}-grades.csv`);
   }
@@ -100,6 +105,7 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
       ...(this.portfolioFilter === 'all' ? ['has-portfolio'] : []),
       'stats',
       'grade',
+      'actions',
     ];
 
     this.dataSource.data = students;
