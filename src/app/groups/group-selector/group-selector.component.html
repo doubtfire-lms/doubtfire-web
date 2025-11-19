@@ -187,7 +187,12 @@
     <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 15, 20, 25]"></mat-paginator>
   }
 
-  @if (selectedGroupSet.keepGroupsInSameClass && selectedGroupSet.groups.length > 0 && !unitRole) {
+  @if (
+    selectedGroupSet &&
+    selectedGroupSet.keepGroupsInSameClass &&
+    selectedGroupSet.groups.length > 0 &&
+    !unitRole
+  ) {
     <p>
       Can't see the group you need to join? Groups shown are limited to those in your allocated
       tutorials. Use the

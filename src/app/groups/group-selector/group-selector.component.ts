@@ -87,7 +87,7 @@ export class GroupSelectorComponent
 
   refreshGroups() {
     this.groupsSub?.unsubscribe();
-    this.groupsSub = this.selectedGroupSet.groupsCache.values.subscribe((values) => {
+    this.groupsSub = this.selectedGroupSet?.groupsCache.values.subscribe((values) => {
       this.groups = [...values];
     });
     this.applyFilters();
