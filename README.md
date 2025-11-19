@@ -155,6 +155,7 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/config/local-storage/local-storage.coffee (Removed in 10.0.x)
 - [x] ./src/app/projects/states/tutorials/tutorials.coffee
 - [x] ./src/app/admin/modals/modals.coffee
+- [x] ./src/app/common/services/date-service.coffee
 
 ### TODO:
 
@@ -164,7 +165,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/common/modals/csv-result-modal/csv-result-modal.coffee
 - [ ] ./src/app/common/modals/modals.coffee
 - [ ] ./src/app/common/services/analytics-service.coffee
-- [ ] ./src/app/common/services/date-service.coffee
 - [ ] ./src/app/common/services/listener-service.coffee
 - [ ] ./src/app/common/services/media-service.coffee
 - [ ] ./src/app/common/services/outcome-service.coffee
