@@ -1,6 +1,5 @@
 <div class="container">
   <h1>Student Portfolios</h1>
-  <!-- TODO: loading unit spinner -->
   @if (unit) {
     <mat-tab-group #tabs dynamicHeight class="overflow-visible">
       <mat-tab label="Select Student">
@@ -17,6 +16,7 @@
           ></f-portfolios-project-progress>
         }
       </mat-tab>
+      <!-- TODO: View Project Tasks/Dashboard directive (project. dashboard) -->
       <!-- TODO: View Staff Notes directive -->
       <mat-tab label="View Portfolio" [disabled]="!selectedProject">
         @if (selectedProject) {
@@ -32,5 +32,8 @@
         }
       </mat-tab>
     </mat-tab-group>
+  } @else {
+    <!-- TODO: loading unit spinner -->
+    <div>Loading unit...</div>
   }
 </div>
