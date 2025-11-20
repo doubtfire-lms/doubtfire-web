@@ -162,6 +162,7 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee (Removed in 10.0.x)
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee (Removed in 10.0.x)
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee (Removed in 10.0.x)
+- [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee (Removed in 10.0.x)
 
 ### TODO:
 
@@ -188,7 +189,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
 - [ ] ./src/app/groups/groups.coffee
 - [ ] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
-- [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee
 - [ ] ./src/app/projects/projects.coffee
 - [ ] ./src/app/projects/states/dashboard/dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
