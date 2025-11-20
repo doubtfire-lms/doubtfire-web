@@ -297,6 +297,7 @@ import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/direc
 import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
+import {GANTT_GLOBAL_CONFIG, GanttLinkLineType, NgxGanttModule} from '@worktile/gantt';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -541,6 +542,30 @@ const MY_DATE_FORMAT = {
     LtiService,
     TaskPrerequisiteService,
     MarkingSessionService,
+    {
+      provide: GANTT_GLOBAL_CONFIG,
+      useValue: {
+        locale: 'en-AU',
+        dateFormat: {
+          timeZone: 'Australia/Melbourne',
+          weekStartsOn: 1,
+          week: 'w',
+          year: 'yyyy',
+          month: 'MMMM',
+          yearMonth: 'yyyy MMM',
+          yearQuarter: 'yyyy',
+        },
+        linkOptions: {
+          showArrow: true,
+          lineType: GanttLinkLineType.straight,
+        },
+        styleOptions: {
+          // lineHeight: '25',
+          // barHeight: '23',
+          // headerHeight: '50px',
+        },
+      },
+    },
   ],
   imports: [
     FlexLayoutModule,
@@ -604,6 +629,7 @@ const MY_DATE_FORMAT = {
     MatDialogModuleNew,
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
     CodeEditorModule.forRoot(),
+    NgxGanttModule,
   ],
 })
 

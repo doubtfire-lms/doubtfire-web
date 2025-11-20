@@ -1,3 +1,25 @@
+<div class="w-full h-[1000px]">
+  <ngx-gantt
+    #gantt
+    [items]="items"
+    [viewOptions]="viewOptions"
+    [draggable]="false"
+    [viewType]="viewType"
+    [start]="project.unit.startDate.getTime() / 1000"
+    [end]="project.unit.endDate.getTime() / 1000"
+    [async]="false"
+    [virtualScrollEnabled]="false"
+  >
+    <ngx-gantt-table [draggable]="true">
+      <ngx-gantt-column name="Tasks" width="300px">
+        <ng-template #cell let-item="item"> {{ item.title }} </ng-template>
+      </ngx-gantt-column>
+      <ng-template #bar let-item="item">
+        <span style="color: #fff">&nbsp;&nbsp;{{ item.title }} </span>
+      </ng-template>
+    </ngx-gantt-table>
+  </ngx-gantt>
+</div>
 <div class="flex flex-col container">
   <h2>Plan Your Tasks</h2>
   <p>
@@ -5,9 +27,9 @@
   </p>
   <!-- Add your project plan content here -->
 
-  <div class="flex flex-col gap-4 mb-10">
+  <!-- <div class="flex flex-col gap-4 mb-10">
     @for (taskDef of taskDefs(); track $index) {
       <f-task-date-slider [task]="project.findTaskForDefinition(taskDef.id)" showTaskAbbr="true" />
     }
-  </div>
+  </div> -->
 </div>
