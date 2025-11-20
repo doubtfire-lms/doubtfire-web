@@ -22,42 +22,42 @@
   <!-- Scrollable Unit Task List -->
   <div class="tasks-viewport scrollable" itemSize="60">
     <mat-nav-list #taskDefinitions>
-      @if (filteredTaskDefinitions.length === 0) {
-        <div class="text-center text-muted">No tasks to display</div>
-      }
       @for (taskDef of filteredTaskDefinitions; track taskDef) {
-        <mat-list-item class="clearfix p-0 h-[60px]" [disableRipple]="true">
+        <mat-list-item
+          class="flex w-full item-content items-center hover:bg-gray-50 p-0 px-2 h-[60px] cursor-pointer"
+          [disableRipple]="true"
+          (click)="setSelectedTaskDefinition(taskDef)"
+          [ngClass]="{
+            selected: isSelectedTaskDefinition(taskDef),
+          }"
+        >
           @if (taskDef) {
-            <div
-              class="flex w-full item-content items-center hover:bg-gray-50"
-              (click)="setSelectedTaskDefinition(taskDef)"
-              [ngClass]="{
-                selected: isSelectedTaskDefinition(taskDef),
-              }"
-            >
-              <div class="task-entry w-full flex items-center">
-                <div class="task-list-data flex items-center justify-center">
+            <div class="flex justify-between items-center w-fill">
+              <div class="flex items-center gap-5 flex-1 min-w-0">
+                <div class="flex items-center gap-5 min-w-0 truncate text-ellipsis">
                   <f-task-badge [taskDef]="taskDef"></f-task-badge>
-                  <div class="flex-col ml-4">
-                    <h4 class="task-title line-clamp-1 mt-1">{{ taskDef.name }}</h4>
+                  <div class="flex flex-col justify-start truncate text-ellipsis">
+                    <div class="truncate text-ellipsis">{{ taskDef.name }}</div>
 
-                    <span class="flex">
+                    <div class="flex items-center gap-2">
                       @if (taskDef.isGroupTask()) {
                         <mat-icon class="text-gray-400 scale-75">group</mat-icon>
+                      } @else {
+                        <mat-icon class="text-gray-400 scale-75">person</mat-icon>
                       }
                       <div class="task-details">{{ gradeNames[taskDef.targetGrade] }} Task</div>
-                      @if (hasTasks && taskForTaskDef(taskDef)) {
-                        <p style="background-color: red">{{ taskForTaskDef(taskDef).status }}</p>
-                      }
-                    </span>
-
-                    <div></div>
+                    </div>
                   </div>
                 </div>
               </div>
+              @if (hasTasks && taskForTaskDef(taskDef)) {
+                <status-icon [status]="taskForTaskDef(taskDef).status"></status-icon>
+              }
             </div>
           }
         </mat-list-item>
+      } @empty {
+        <div class="text-center text-muted">No tasks to display</div>
       }
     </mat-nav-list>
   </div>
