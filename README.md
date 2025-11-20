@@ -156,6 +156,12 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/projects/states/tutorials/tutorials.coffee
 - [x] ./src/app/admin/modals/modals.coffee
 - [x] ./src/app/common/services/date-service.coffee
+- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.coffee (Removed in 10.0.x)
+- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.coffee (Removed in 10.0.x)
+- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.coffee (Removed in 10.0.x)
+- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee (Removed in 10.0.x)
+- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee (Removed in 10.0.x)
+- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee (Removed in 10.0.x)
 
 ### TODO:
 
@@ -199,12 +205,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/states/states.coffee
 - [ ] ./src/app/tasks/modals/modals.coffee
 - [ ] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee
 - [ ] ./src/app/tasks/tasks.coffee
 - [ ] ./src/app/units/modals/modals.coffee
 - [ ] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee
