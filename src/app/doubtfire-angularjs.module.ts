@@ -90,7 +90,6 @@ import 'build/src/app/units/states/edit/directives/directives.js';
 import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.js';
 import 'build/src/app/units/states/rollover/directives/directives.js';
-import 'build/src/app/units/states/rollover/rollover.js';
 import 'build/src/app/units/states/index/index.js';
 import 'build/src/app/units/states/students-list/students-list.js';
 import 'build/src/app/units/states/analytics/analytics.js';

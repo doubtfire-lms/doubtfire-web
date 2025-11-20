@@ -13,7 +13,13 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="code">Code</label>
           <div class="col-sm-9">
-            <input class="form-control" id="code" type="text" placeholder="COS1234567" ng-model="unit.code" />
+            <input
+              class="form-control"
+              id="code"
+              type="text"
+              placeholder="COS1234567"
+              ng-model="unit.code"
+            />
           </div>
         </div>
         <!--/code-date-->
@@ -43,7 +49,12 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="teachingPeriod">Teaching Period</label>
           <div class="col-sm-9">
-            <object-select [source]="teachingPeriodValues" [target]="unit.teachingPeriod" (target-change)="teachingPeriodSelected($event)" label="Select Teaching Period"  />
+            <object-select
+              [source]="teachingPeriodValues"
+              [target]="unit.teachingPeriod"
+              (target-change)="teachingPeriodSelected($event)"
+              label="Select Teaching Period"
+            />
           </div>
         </div>
         <!--/teaching-period-date-->
@@ -51,18 +62,26 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="">Draft Learning Summary</label>
           <div class="col-sm-9">
-            <object-select [source]="taskDefinitionValues" [target]="unit.draftTaskDefinition" (target-change)="draftTaskDefSelected($event)" label="Select Learning Summary Task"  />
+            <object-select
+              [source]="taskDefinitionValues"
+              [target]="unit.draftTaskDefinition"
+              (target-change)="draftTaskDefSelected($event)"
+              label="Select Learning Summary Task"
+            />
 
             <span class="help-block">
-              When a draft learning summary task is selected, this will ensure a students uploaded draft is
-              automatically added to the students portfolio.
+              When a draft learning summary task is selected, this will ensure a students uploaded
+              draft is automatically added to the students portfolio.
             </span>
           </div>
         </div>
         <!--/draft-learning-summary-->
 
         <div class="form-group">
-          <label tooltip="Date for the start of teaching in the unit." class="col-sm-2 control-label" for="startdate"
+          <label
+            tooltip="Date for the start of teaching in the unit."
+            class="col-sm-2 control-label"
+            for="startdate"
             >Start Date</label
           >
           <div class="col-sm-9">
@@ -141,7 +160,9 @@
         <!--/end-date-->
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="portfolioautogenerationdate">Portfolio auto-generation date</label>
+          <label class="col-sm-2 control-label" for="portfolioautogenerationdate"
+            >Portfolio auto-generation date</label
+          >
           <div class="col-sm-9">
             <div class="col-sm-4 input-group">
               <input
@@ -155,11 +176,7 @@
                 close-text="Close"
               />
               <span class="input-group-btn">
-                <button
-                  class="btn btn-default"
-                  type="button"
-                  ng-click="open($event,'autogen')"
-                >
+                <button class="btn btn-default" type="button" ng-click="open($event,'autogen')">
                   <i class="fa fa-calendar"></i>
                 </button>
               </span>
@@ -189,7 +206,9 @@
                 <i class="fa fa-times"></i>
               </label>
             </div>
-            <span class="help-block"> When false only staff can request extensions on behalf of students. </span>
+            <span class="help-block">
+              When false only staff can request extensions on behalf of students.
+            </span>
           </div>
         </div>
         <!--/allowStudentExtensionRequests-->
@@ -205,8 +224,8 @@
               ng-model="unit.extensionWeeksOnResubmitRequest"
             />
             <span class="help-block">
-              When tutors request resubmission of a task, this setting determines how many weeks the task will be
-              extended to allow students to fix and resubmit their work.
+              When tutors request resubmission of a task, this setting determines how many weeks the
+              task will be extended to allow students to fix and resubmit their work.
             </span>
           </div>
         </div>
@@ -234,15 +253,17 @@
               </label>
             </div>
             <span class="help-block">
-              When true, extensions will be automatically applied when they result in a date that is between the task's
-              due date and deadline.
+              When true, extensions will be automatically applied when they result in a date that is
+              between the task's due date and deadline.
             </span>
           </div>
         </div>
         <!--/auto apply extension-->
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="enddate">Allow students to change tutorial</label>
+          <label class="col-sm-2 control-label" for="enddate"
+            >Allow students to change tutorial</label
+          >
           <div class="col-sm-9">
             <div class="btn-group">
               <label
@@ -289,8 +310,8 @@
               </label>
             </div>
             <span class="help-block">
-              When true, emails will be set to students each week to indicate progress and suggest future tasks for them
-              to work on.
+              When true, emails will be set to students each week to indicate progress and suggest
+              future tasks for them to work on.
             </span>
           </div>
         </div>
@@ -318,7 +339,8 @@
               </label>
             </div>
             <span class="help-block">
-              When true student enrolments will be synchronised with other systems where this is possible.
+              When true student enrolments will be synchronised with other systems where this is
+              possible.
             </span>
           </div>
         </div>
@@ -346,7 +368,8 @@
               </label>
             </div>
             <span class="help-block">
-              When true timetable data will be synchronised with other systems where this is possible.
+              When true timetable data will be synchronised with other systems where this is
+              possible.
             </span>
           </div>
         </div>
@@ -377,17 +400,23 @@
               If true, unit tasks will be able to make use of Overseer automated checking.
             </span>
           </div>
-        </div><!--/task-assessment-enabled-->
+        </div>
+        <!--/task-assessment-enabled-->
 
         <div class="form-group" ng-if="overseerEnabled.value">
           <label class="col-sm-2 control-label">Docker Image Name</label>
           <div class="col-sm-9">
-            <select class="form-control" ng-model="unit.overseerImage" ng-options="image as image.description for image in dockerImages" />
+            <select
+              class="form-control"
+              ng-model="unit.overseerImage"
+              ng-options="image as image.description for image in dockerImages"
+            />
             <span class="help-block">
               Use this to select the default container used to check tasks with Overseer.
             </span>
           </div>
-        </div> <!--/docker-image-name-->
+        </div>
+        <!--/docker-image-name-->
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="enddate">Active</label>
@@ -410,15 +439,13 @@
                 <i class="fa fa-times"></i>
               </label>
             </div>
-            <span class="help-block">
-              Set to false to hide unit from students and tutors.
-            </span>
+            <span class="help-block"> Set to false to hide unit from students and tutors. </span>
           </div>
         </div>
         <!--/active-->
       </div>
       <div class="panel-footer text-right">
-        <a class="btn btn-success" ui-sref="units/rollover">
+        <a class="btn btn-success" ui-sref="units/rollover({unitId: unit.id})">
           <header>Rollover</header>
         </a>
         <input
