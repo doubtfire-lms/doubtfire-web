@@ -1,17 +1,50 @@
 <div class="w-full h-full overflow-auto">
   <!-- <f-project-progress></f-project-progress> -->
-
+  <mat-tab-group
+    [(selectedIndex)]="currentIndex"
+    dynamicHeight
+    (selectedTabChange)="onTabChange($event)"
+  >
+    <mat-tab label="Task Details"></mat-tab>
+    <mat-tab label="Task Sheet" [disabled]="!task.definition.hasTaskSheet"></mat-tab>
+    <mat-tab label="Submission" [disabled]="!task.hasPdf"></mat-tab>
+  </mat-tab-group>
   <ng-container [ngSwitch]="currentView">
+    <ng-template [ngSwitchCase]="DashboardViews.details">
+      <div class="flex flex-col gap-5 p-5">
+        <f-task-scorm-card [task]="task"></f-task-scorm-card>
+        <f-task-status-card [task]="task"></f-task-status-card>
+        <f-task-due-card [task]="task"></f-task-due-card>
+        <f-task-description-card
+          [taskDef]="task.definition"
+          [task]="task"
+          [unit]="task.unit"
+        ></f-task-description-card>
+        <f-task-assessment-card [task]="task"></f-task-assessment-card>
+        <f-task-submission-card [task]="task"></f-task-submission-card>
+      </div>
+    </ng-template>
+
     <ng-template [ngSwitchCase]="DashboardViews.task">
-      <ng-container
-        *ngIf="selectedTaskService.hasTaskSheet; then pdfViewer; else noPdfUrl"
-      ></ng-container>
+      @if (task.definition.hasTaskSheet) {
+        <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()"></f-pdf-viewer>
+      } @else {
+        <div class="flex flex-col w-full h-full justify-center items-center">
+          <mat-icon>subtitles_off</mat-icon>
+        </div>
+        <!-- <ng-container noPdfUrl></ng-container> -->
+      }
     </ng-template>
 
     <ng-template [ngSwitchCase]="DashboardViews.submission">
-      <ng-container
-        *ngIf="selectedTaskService.hasSubmissionPdf; then pdfViewer; else noPdfUrl"
-      ></ng-container>
+      @if (task.hasPdf) {
+        <f-pdf-viewer [pdfUrl]="task.submissionUrl()"></f-pdf-viewer>
+      } @else {
+        <div class="flex flex-col w-full h-full justify-center items-center">
+          <mat-icon>subtitles_off</mat-icon>
+        </div>
+        <!-- <ng-container noPdfUrl></ng-container> -->
+      }
     </ng-template>
 
     <ng-template [ngSwitchCase]="DashboardViews.similarity">
@@ -20,9 +53,9 @@
   </ng-container>
 
   <!-- The PDF Viewer -->
-  <ng-template #pdfViewer>
+  <!-- <ng-template #pdfViewer>
     <f-pdf-viewer [pdfUrl]="pdfUrl"></f-pdf-viewer>
-  </ng-template>
+  </ng-template> -->
 
   <!-- Render if no PDF URL is available for the current view -->
   <ng-template #noPdfUrl>

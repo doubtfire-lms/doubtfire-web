@@ -17,6 +17,8 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from '../../selected-task.service';
 import {DashboardViews} from '../../selected-task.service';
 import {TooltipService} from '@swimlane/ngx-charts';
+import {SelectionChange} from '@angular/cdk/collections';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 
 @Component({
   selector: 'f-task-dashboard',
@@ -42,6 +44,27 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
   public currentView: DashboardViews;
 
+  public currentIndex;
+
+  onTabChange(event: MatTabChangeEvent) {
+    switch (event.index) {
+      case 0:
+        this.currentView = DashboardViews.details;
+        break;
+      case 1:
+        this.currentView = DashboardViews.task;
+        break;
+      case 2:
+        this.currentView = DashboardViews.submission;
+        break;
+      case 3:
+        this.currentView = DashboardViews.similarity;
+        break;
+    }
+
+    console.log(this.currentView);
+  }
+
   constructor(
     private doubtfire: DoubtfireConstants,
     private taskService: TaskService,
@@ -49,11 +72,10 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
     public selectedTaskService: SelectedTaskService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.selectedTaskService.currentView$.next(DashboardViews.submission);
+    this.selectedTaskService.currentView$.next(DashboardViews.details);
     this.selectedTaskService.currentView$.subscribe((view) => {
       this.currentView = view;
     });
