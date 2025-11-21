@@ -12,7 +12,7 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import {ProjectService} from 'src/app/api/services/project.service';
-import {GlobalStateService} from '../../index/global-state.service';
+import {GlobalStateService, ViewType} from '../../index/global-state.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 
@@ -65,6 +65,7 @@ export class ProjectDashboardComponent implements OnInit {
     // projectTasks = this.projectService.loadProject
     this.project$.subscribe((project) => {
       console.log(project);
+      this.globalStateService.setView(ViewType.PROJECT, project);
     });
 
     this.dragMoveAudited$ = this.dragMove$.pipe(
