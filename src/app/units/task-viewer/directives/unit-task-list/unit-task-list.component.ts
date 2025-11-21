@@ -73,15 +73,6 @@ export class FUnitTaskListComponent implements OnInit {
     } else {
       this.selectedTaskDefinition$.next(taskDef);
     }
-
-    // this.selectedTaskDefinition.emit(taskDef);
-    // const selectedTask = this.taskForTaskDef(taskDef);
-    // if (selectedTask) {
-    //   this.selectedTask$.next(selectedTask);
-    // }
-
-    //TODO: remove
-    // this.taskViewerService.setSelectedTaskDef(taskDef);
   }
 
   public isSelectedTaskDefinition(taskDef: TaskDefinition): boolean {
