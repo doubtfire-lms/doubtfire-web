@@ -3,6 +3,7 @@ import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinition, Task} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
 import {BehaviorSubject} from 'rxjs';
+import {StateService, UIRouter} from '@uirouter/core';
 
 @Component({
   selector: 'f-unit-task-list',
@@ -25,6 +26,11 @@ export class FUnitTaskListComponent implements OnInit {
   taskDefinitionNamePipe = new TaskDefinitionNamePipe();
   protected gradeNames: string[] = Grade.GRADES;
 
+  constructor(
+    private router: UIRouter,
+    private stateService: StateService,
+  ) {}
+
   applyFilters() {
     this.filteredTaskDefinitions = this.taskDefinitionNamePipe.transform(
       this.taskDefinitions,
@@ -43,6 +49,12 @@ export class FUnitTaskListComponent implements OnInit {
 
     return this.tasks.find((task) => task.definition.id === taskDef?.id);
   }
+
+  /*
+    TODO: There's still an issue where loading the route for the first time will cause child components (like task-dashboard) to load trigger OnInit and OnChanges twice...
+    Causing duplicate queries to submission_details and task comments.
+    One hack would be to always keep the task-dashboard rendered using [hidden].
+  */
 
   ngOnInit(): void {
     this.applyFilters();
@@ -65,14 +77,41 @@ export class FUnitTaskListComponent implements OnInit {
     // if (this.taskDefinitions.length > 0) {
     //   this.setSelectedTaskDefinition(this.taskDefinitions[0]);
     // }
+
+    // Load selected task from URL
+    const current = this.selectedTaskDefinition$.value;
+    const param = this.router.globals.params.taskAbbreviation;
+
+    if (param) {
+      const taskDef = this.taskDefinitions.find((t) => t.abbreviation === param);
+
+      if (taskDef !== current) {
+        this.selectedTaskDefinition$.next(taskDef);
+      }
+    } else {
+      if (current !== null) {
+        this.selectedTaskDefinition$.next(null);
+      }
+    }
   }
 
   setSelectedTaskDefinition(taskDef: TaskDefinition) {
     if (this.isSelectedTaskDefinition(taskDef)) {
       this.selectedTaskDefinition$.next(null);
+      this.stateService.go('.', {taskAbbreviation: null}, {location: 'replace'});
     } else {
       this.selectedTaskDefinition$.next(taskDef);
+      this.stateService.go('.', {taskAbbreviation: taskDef.abbreviation}, {location: 'replace'});
     }
+
+    // this.selectedTaskDefinition.emit(taskDef);
+    // const selectedTask = this.taskForTaskDef(taskDef);
+    // if (selectedTask) {
+    //   this.selectedTask$.next(selectedTask);
+    // }
+
+    //TODO: remove
+    // this.taskViewerService.setSelectedTaskDef(taskDef);
   }
 
   public isSelectedTaskDefinition(taskDef: TaskDefinition): boolean {
