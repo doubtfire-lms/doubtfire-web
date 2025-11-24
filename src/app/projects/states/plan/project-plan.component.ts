@@ -65,10 +65,114 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(event.item.id));
 
     console.log(event.item.end, td.localDeadlineDate().getTime() / 1000);
-    if (event.item.end > td.localDeadlineDate().getTime() / 1000) {
-      alert('Your selected date is past the feedback deadline...');
+    // if (event.item.end > td.localDeadlineDate().getTime() / 1000) {
+    //   event.item.color = '#eb6134';
+    //   this.items = [...this.items];
+    //   // alert('Your selected date is past the feedback deadline...');
+    // } else {
+    //   event.item.color = '#3333ff';
+    //   this.items = [...this.items];
+    // }
+  }
+
+  isPastFeedbackDeadline(item: GanttItem) {
+    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
+    return item.end > td.localDeadlineDate().getTime() / 1000;
+  }
+
+  isCloseToFeedbackDeadline(item: GanttItem) {
+    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
+    const deadlineTs = this.normalizeDateUTC(td.localDeadlineDate().getTime() / 1000);
+    const diff =
+      this.normalizeDateUTC(td.localDeadlineDate().getTime() / 1000) -
+      this.normalizeDateUTC(item.end);
+    return diff >= 0 && diff <= 7 * 24 * 60 * 60;
+  }
+
+  toDateStr = (timestamp: number) => {
+    const d = new Date(timestamp * 1000);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  };
+
+  saveTargetDates() {
+    for (const item of this.items) {
+      const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
+      if (!td) {
+        continue;
+      }
+      const task = this.project.findTaskForDefinition(td.id);
+      if (this.unsavedChanges(item)) {
+        const task = this.project.findTaskForDefinition(td.id);
+        // task.targetStartDate = new Date(item.start * 1000);
+        // task.targetDueDate = new Date(item.end * 1000);
+
+        // const start = new Date(item.start * 1000);
+        // const startStr = start.toISOString().substring(0, 10); // "YYYY-MM-DD"
+
+        // const end = new Date(item.end * 1000);
+        // const endStr = end.toISOString().substring(0, 10);
+
+        console.log(this.toDateStr(item.start), this.toDateStr(item.end));
+
+        task.saveTargetDates(this.toDateStr(item.start), this.toDateStr(item.end)).subscribe({
+          next: (data) => {
+            console.log(`task Updated!`);
+            task.targetDueDate = data.targetDueDate;
+            task.targetStartDate = data.targetStartDate;
+            console.log(data.targetDueDate, data.targetStartDate);
+            console.log(
+              Math.floor(data.targetStartDate.getTime() / 1000),
+              Math.floor(data.targetDueDate.getTime() / 1000),
+            );
+            console.log(item.start, item.end);
+            item.start = this.normalizeDateUTC(data.targetStartDate.getTime() / 1000);
+            item.end = this.normalizeDateUTC(data.targetDueDate.getTime() / 1000);
+            this.items = [...this.items];
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
+      }
     }
   }
+
+  resetTargetDates() {
+    // TODO: maybe an api endpoint that clears them all at once
+    for (const item of this.items) {
+      const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
+      if (!td) {
+        continue;
+      }
+      const task = this.project.findTaskForDefinition(td.id);
+      if (task.targetDueDate || task.targetStartDate) {
+        task.saveTargetDates(null, null).subscribe({
+          next: (data) => {
+            console.log(`task Updated!`);
+            task.targetDueDate = null;
+            task.targetStartDate = null;
+
+            item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
+            item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
+            this.items = [...this.items];
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
+      } else {
+        item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
+        item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
+        this.items = [...this.items];
+      }
+    }
+  }
+
+  normalizeDateUTC = (ts: number) => {
+    const d = new Date(ts * 1000);
+    const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+    return Math.floor(utc / 1000);
+  };
 
   toDateString(timestamp: number | Date) {
     const date = timestamp instanceof Date ? timestamp : new Date(timestamp * 1000);
@@ -79,6 +183,13 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     });
   }
 
+  getTask(tdId: string) {
+    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(tdId));
+    const task = this.project.findTaskForDefinition(td.id);
+
+    return task;
+  }
+
   getTaskDeadline(tdId: string) {
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(tdId));
     return td?.localDeadlineDate() ?? 'N/A';
@@ -86,6 +197,21 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
 
   getPrerequisitesFor(tdId: string) {
     return this.taskPrerequisites.filter((p) => p.prerequisiteId === Number(tdId));
+  }
+  floor(value: number) {
+    return Math.floor(value);
+  }
+
+  unsavedChanges(item: GanttItem) {
+    const task = this.getTask(item.id);
+    // console.log(Math.floor(task.startDate.getTime() / 1000), item.start, '??');
+    // console.log(Math.floor(task.localDueDate().getTime() / 1000), item.end, '??');
+    return (
+      this.normalizeDateUTC(task.startDate.getTime() / 1000) !== item.start ||
+      this.normalizeDateUTC(task.localDueDate().getTime() / 1000) !== item.end
+      // Math.floor(task.startDate.getTime() / 1000) !== item.start ||
+      // Math.floor(task.localDueDate().getTime() / 1000) !== item.end
+    );
   }
 
   getTooltip(item: GanttItem) {
@@ -102,9 +228,7 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-
+    // TODO: use the baseline items to show the unit's default dates
     console.log(this.project.unit.startDate, this.project.unit.endDate);
     this.viewOptions = {
       datePrecisionUnit: 'day',
@@ -129,12 +253,15 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
           const item: GanttItem = {
             id: td.id.toString(),
             title: `${td.abbreviation} ${td.name}`,
-            start: Math.floor(task.startDate.getTime() / 1000),
-            end: Math.floor(task.localDueDate().getTime() / 1000),
+            start: this.normalizeDateUTC(task.startDate.getTime() / 1000),
+            end: this.normalizeDateUTC(task.localDueDate().getTime() / 1000),
+            // start: Math.floor(task.startDate.getTime() / 1000),
+            // end: Math.floor(task.localDueDate().getTime() / 1000),
             expandable: false,
             draggable: true,
             // color: this.gradeService.gradeColors[td.targetGrade],
             expanded: false,
+            color: '#3333ff',
             links: taskPrerequisites
               // .filter((p) => p.prerequisiteId === td.id)
               .filter((p) => p.taskDefinitionId === td.id)

@@ -241,6 +241,25 @@ export class Task extends Entity {
     );
   }
 
+  public saveTargetDates(startDate: Date | string, dueDate: Date | string): Observable<Task> {
+    const taskService: TaskService = AppInjector.get(TaskService);
+
+    return taskService.update(
+      {
+        projectId: this.project.id,
+        taskDefId: this.definition.id,
+      },
+      {
+        endpointFormat: '/projects/:projectId:/task_def_id/:taskDefId:/target_dates',
+        entity: this,
+        body: {
+          target_start_date: startDate,
+          target_due_date: dueDate,
+        },
+      },
+    );
+  }
+
   /**
    * Calculate the time between two dates
    *

@@ -547,7 +547,7 @@ const MY_DATE_FORMAT = {
       useValue: {
         locale: 'en-AU',
         dateFormat: {
-          timeZone: 'Australia/Melbourne',
+          timeZone: 'UTC',
           weekStartsOn: 1,
           week: 'w',
           year: 'yyyy',

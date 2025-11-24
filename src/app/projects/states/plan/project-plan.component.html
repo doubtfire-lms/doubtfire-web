@@ -10,6 +10,8 @@
       <f-task-date-slider [task]="project.findTaskForDefinition(taskDef.id)" showTaskAbbr="true" />
     }
   </div> -->
+  <button mat-raised-button (click)="saveTargetDates()">Save Dates</button>
+  <button mat-raised-button (click)="resetTargetDates()">Reset To Unit Default</button>
 </div>
 
 <div class="w-full h-[1000px]">
@@ -30,7 +32,9 @@
   >
     <ngx-gantt-table>
       <ngx-gantt-column name="Tasks" width="300px">
-        <ng-template #cell let-item="item"> {{ item.title }} </ng-template>
+        <ng-template #cell let-item="item">
+          {{ item.title }}
+        </ng-template>
       </ngx-gantt-column>
 
       @if (showDatesColumn) {
@@ -49,10 +53,35 @@
 
       <ng-template #bar let-item="item">
         <span
-          class="w-full h-full text-white"
+          class="w-full text-white flex gap-2 justify-between items-center p-2 h-[35px]"
+          [ngClass]="
+            isPastFeedbackDeadline(item)
+              ? 'bg-[#eb6134] text-white'
+              : isCloseToFeedbackDeadline(item)
+                ? 'bg-[#ffc53d] text-black'
+                : 'bg-[#3333ff] text-white'
+          "
           [matTooltip]="getTooltip(item)"
           matTooltipPosition="above"
-          >&nbsp;&nbsp;{{ item.title }}
+          ><div class="flex gap-2 items-center">
+            @if (unsavedChanges(item)) {
+              <mat-icon class="scale-95">change_circle</mat-icon>
+            }
+            &nbsp;&nbsp;{{ item.title }}
+          </div>
+          @if (isPastFeedbackDeadline(item)) {
+            <mat-icon
+              class="scale-90"
+              matTooltip="Your planned target date is past the feedback deadline."
+              >warning</mat-icon
+            >
+          } @else if (isCloseToFeedbackDeadline(item)) {
+            <mat-icon
+              class="scale-90"
+              matTooltip="Your planned target date is close to the last date to receive feedback for this task."
+              >query_builder</mat-icon
+            >
+          }
         </span>
       </ng-template>
     </ngx-gantt-table>
