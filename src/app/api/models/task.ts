@@ -53,6 +53,9 @@ export class Task extends Entity {
 
   pinned: boolean = false;
 
+  targetStartDate: Date;
+  targetDueDate: Date;
+
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
 
@@ -167,7 +170,9 @@ export class Task extends Entity {
   }
 
   public localDueDate(): Date {
-    if (this.dueDate) {
+    if (this.targetDueDate) {
+      return this.targetDueDate;
+    } else if (this.dueDate) {
       return this.dueDate;
     } else {
       return this.definition.localDueDate();
@@ -297,7 +302,9 @@ export class Task extends Entity {
   }
 
   public get startDate(): Date {
-    if (this.extensions < 0) {
+    if (this.targetStartDate) {
+      return this.targetStartDate;
+    } else if (this.extensions < 0) {
       // If the task has an extension, the start date is the due date minus the extension
       return MappingFunctions.addWeeks(this.definition.startDate, this.extensions);
     } else {
