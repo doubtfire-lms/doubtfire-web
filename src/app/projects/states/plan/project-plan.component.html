@@ -1,21 +1,47 @@
 <div class="w-full h-[1000px]">
+  <button (click)="showDatesColumn = !showDatesColumn">Toggle Dates Column</button>
   <ngx-gantt
     #gantt
     [items]="items"
     [viewOptions]="viewOptions"
-    [draggable]="false"
+    [draggable]="true"
     [viewType]="viewType"
     [start]="project.unit.startDate.getTime() / 1000"
     [end]="project.unit.endDate.getTime() / 1000"
     [async]="false"
     [virtualScrollEnabled]="false"
+    [disabledLoadOnScroll]="true"
+    (dragStarted)="onDragStarted($event)"
+    (dragEnded)="onDragEnded($event)"
   >
-    <ngx-gantt-table [draggable]="true">
+    <ngx-gantt-table>
       <ngx-gantt-column name="Tasks" width="300px">
         <ng-template #cell let-item="item"> {{ item.title }} </ng-template>
       </ngx-gantt-column>
+
+      @if (showDatesColumn) {
+        <ngx-gantt-column name="Your Target Dates" width="300px">
+          <ng-template #cell let-item="item" class="text-center">
+            {{ toDateString(item.start) }} - {{ toDateString(item.end) }}
+          </ng-template>
+        </ngx-gantt-column>
+
+        <ngx-gantt-column name="Deadline" width="150px">
+          <ng-template #cell let-item="item" class="text-center">
+            {{ toDateString(getTaskDeadline(item.id)) }}
+          </ng-template>
+        </ngx-gantt-column>
+      }
+
       <ng-template #bar let-item="item">
-        <span style="color: #fff">&nbsp;&nbsp;{{ item.title }} </span>
+        <span
+          class="w-full h-full text-white"
+          [matTooltip]="
+            toDateString(item.start) + ' - ' + toDateString(item.end) + '\nPrerequiste to..'
+          "
+          matTooltipPosition="above"
+          >&nbsp;&nbsp;{{ item.title }}
+        </span>
       </ng-template>
     </ngx-gantt-table>
   </ngx-gantt>
