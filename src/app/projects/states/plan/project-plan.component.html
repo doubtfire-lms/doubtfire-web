@@ -1,3 +1,17 @@
+<div class="flex flex-col container">
+  <h2>Plan Your Tasks</h2>
+  <p>
+    View and adjust the due dates of tasks. Remember to leave time to get and respond to feedback.
+  </p>
+  <!-- Add your project plan content here -->
+
+  <!-- <div class="flex flex-col gap-4 mb-10">
+    @for (taskDef of taskDefs(); track $index) {
+      <f-task-date-slider [task]="project.findTaskForDefinition(taskDef.id)" showTaskAbbr="true" />
+    }
+  </div> -->
+</div>
+
 <div class="w-full h-[1000px]">
   <button (click)="showDatesColumn = !showDatesColumn">Toggle Dates Column</button>
   <ngx-gantt
@@ -36,26 +50,11 @@
       <ng-template #bar let-item="item">
         <span
           class="w-full h-full text-white"
-          [matTooltip]="
-            toDateString(item.start) + ' - ' + toDateString(item.end) + '\nPrerequiste to..'
-          "
+          [matTooltip]="getTooltip(item)"
           matTooltipPosition="above"
           >&nbsp;&nbsp;{{ item.title }}
         </span>
       </ng-template>
     </ngx-gantt-table>
   </ngx-gantt>
-</div>
-<div class="flex flex-col container">
-  <h2>Plan Your Tasks</h2>
-  <p>
-    View and adjust the due dates of tasks. Remember to leave time to get and respond to feedback.
-  </p>
-  <!-- Add your project plan content here -->
-
-  <!-- <div class="flex flex-col gap-4 mb-10">
-    @for (taskDef of taskDefs(); track $index) {
-      <f-task-date-slider [task]="project.findTaskForDefinition(taskDef.id)" showTaskAbbr="true" />
-    }
-  </div> -->
 </div>

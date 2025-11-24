@@ -17,7 +17,7 @@ import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
 @Component({
   selector: 'f-project-plan',
   templateUrl: 'project-plan.component.html',
-  // styleUrls: ['project-plan.component.scss']
+  styleUrls: ['project-plan.component.scss'],
 })
 export class ProjectPlanComponent implements OnInit, AfterViewInit {
   public project: Project;
@@ -27,6 +27,9 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
   public viewType: GanttViewType = GanttViewType.day;
 
   viewOptions: GanttViewOptions;
+
+  public taskPrerequisites: TaskPrerequisite[];
+
   constructor(
     private globalStateService: GlobalStateService,
     private gradeService: GradeService,
@@ -81,6 +84,23 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     return td?.localDeadlineDate() ?? 'N/A';
   }
 
+  getPrerequisitesFor(tdId: string) {
+    return this.taskPrerequisites.filter((p) => p.prerequisiteId === Number(tdId));
+  }
+
+  getTooltip(item: GanttItem) {
+    const prereqs = this.getPrerequisitesFor(item.id)
+      .map((p) => {
+        const td = this.taskDefs().find((t) => t.id === p.taskDefinitionId);
+        return `${td?.abbreviation}` || '';
+      })
+      .filter(Boolean);
+
+    return `${this.toDateString(item.start)} - ${this.toDateString(item.end)}\n${
+      prereqs.length ? `Required for: \n${prereqs.join(', ')}` : ''
+    }`;
+  }
+
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
@@ -103,6 +123,7 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
       next: (prereqs) => {
         const taskPrerequisites: TaskPrerequisite[] = prereqs;
         console.log(taskPrerequisites);
+        this.taskPrerequisites = taskPrerequisites;
         for (const td of taskDefinitions) {
           const task = this.project.findTaskForDefinition(td.id) ?? td;
           const item: GanttItem = {
