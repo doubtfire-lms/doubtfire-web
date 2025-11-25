@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-64](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-63...v10.0.0-64) (2025-11-25)
+
+
+### Bug Fixes
+
+* avoid calling window to open project in new tab ([9ab015d](https://github.com/b0ink/doubtfire-deploy/commit/9ab015d168cf7e421500910766b9e6fb0bf907f5))
+* use new google fonts api for proper weight loading ([#1039](https://github.com/b0ink/doubtfire-deploy/issues/1039)) ([40f2640](https://github.com/b0ink/doubtfire-deploy/commit/40f2640e6579536cef8e82e9476733083b82bac1))
+
 ## [10.0.0-63](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-62...v10.0.0-63) (2025-11-10)
 
 
