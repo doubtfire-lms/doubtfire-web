@@ -33,7 +33,7 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
   items: GanttItem[] = [];
 
   // TaskDefinition default dates for reference
-  baselineItems: GanttItem[] = [];
+  baselineItems: GanttBaselineItem[] = [];
 
   constructor(
     private globalStateService: GlobalStateService,
@@ -311,9 +311,10 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
           this.items = [...this.items];
 
           // Create baseline item
-          item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
-          item.end = this.normalizeDateUTC(td.targetDate.getTime() / 1000);
-          this.baselineItems.push(item);
+          const baselineItem = {...item};
+          baselineItem.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
+          baselineItem.end = this.normalizeDateUTC(td.targetDate.getTime() / 1000);
+          this.baselineItems.push(baselineItem);
           this.baselineItems = [...this.baselineItems];
 
           // newItems.push(item);
