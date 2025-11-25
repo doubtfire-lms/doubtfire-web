@@ -229,21 +229,32 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     }`;
   }
 
+  public get earliestStartDate() {
+    const earliestTaskStartDate = Math.min(
+      ...this.taskDefs().map((t) => t.startDate.getTime() / 1000),
+    );
+    return Math.min(this.project.unit.startDate.getTime() / 1000, earliestTaskStartDate);
+  }
+
   ngOnInit(): void {
     // TODO: use the baseline items to show the unit's default dates
     console.log(this.project.unit.startDate, this.project.unit.endDate);
+
     this.viewOptions = {
       datePrecisionUnit: 'day',
-      start: new GanttDate(this.normalizeDateUTC(this.project.unit.startDate.getTime() / 1000)),
+      start: new GanttDate(this.earliestStartDate),
       end: new GanttDate(this.normalizeDateUTC(this.project.unit.endDate.getTime() / 1000)),
       dragPreviewDateFormat: 'MMM dd',
     };
 
+    console.log(this.earliestStartDate);
+    console.log(Math.min(...this.taskDefs().map((t) => t.startDate.getTime())));
     const newItems: GanttItem[] = [];
 
     this.items = [];
     const unit = this.project.unit;
-    const taskDefinitions = unit.taskDefinitions;
+    // const taskDefinitions = unit.taskDefinitions;
+    const taskDefinitions = this.taskDefs();
 
     this.project.unit.getTaskPrerequisites().subscribe({
       next: (prereqs) => {
@@ -261,7 +272,7 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
             // start: Math.floor(task.startDate.getTime() / 1000),
             // end: Math.floor(task.localDueDate().getTime() / 1000),
             expandable: false,
-            draggable: true,
+            draggable: this.project.unit.allowFlexibleDates,
             // color: this.gradeService.gradeColors[td.targetGrade],
             expanded: false,
             color: '#3333ff',
