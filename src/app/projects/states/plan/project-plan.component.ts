@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {
+  GanttBaselineItem,
   GanttDate,
   GanttDragEvent,
   GanttItem,
@@ -157,8 +158,8 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
             task.targetDueDate = null;
             task.targetStartDate = null;
 
-            item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
-            item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
+            item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+            item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
             this.items = [...this.items];
           },
           error: (error) => {
@@ -166,17 +167,17 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
           },
         });
       } else {
-        item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
-        item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
+        item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+        item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
         this.items = [...this.items];
       }
     }
   }
 
   normalizeDateUTC = (ts: number) => {
-    const d = new Date(ts * 1000);
-    const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
-    return Math.floor(utc / 1000);
+    const d = new GanttDate(ts * 1000);
+    // const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0);
+    return Math.floor(d.getUnixTime());
   };
 
   toDateString(timestamp: number | Date) {
@@ -209,14 +210,10 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
 
   unsavedChanges(item: GanttItem) {
     const task = this.getTask(item.id);
-    // console.log(Math.floor(task.startDate.getTime() / 1000), item.start, '??');
-    // console.log(Math.floor(task.localDueDate().getTime() / 1000), item.end, '??');
-    return (
-      this.normalizeDateUTC(task.startDate.getTime() / 1000) !== item.start ||
-      this.normalizeDateUTC(task.localDueDate().getTime() / 1000) !== item.end
-      // Math.floor(task.startDate.getTime() / 1000) !== item.start ||
-      // Math.floor(task.localDueDate().getTime() / 1000) !== item.end
-    );
+    const start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+    const end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+
+    return start !== this.normalizeDateUTC(item.start) || end !== this.normalizeDateUTC(item.end);
   }
 
   getTooltip(item: GanttItem) {
@@ -237,8 +234,8 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     console.log(this.project.unit.startDate, this.project.unit.endDate);
     this.viewOptions = {
       datePrecisionUnit: 'day',
-      start: new GanttDate(this.project.unit.startDate.getTime() / 1000),
-      end: new GanttDate(this.project.unit.endDate.getTime() / 1000),
+      start: new GanttDate(this.normalizeDateUTC(this.project.unit.startDate.getTime() / 1000)),
+      end: new GanttDate(this.normalizeDateUTC(this.project.unit.endDate.getTime() / 1000)),
       dragPreviewDateFormat: 'MMM dd',
     };
 
@@ -254,7 +251,8 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
         console.log(taskPrerequisites);
         this.taskPrerequisites = taskPrerequisites;
         for (const td of taskDefinitions) {
-          const task = this.project.findTaskForDefinition(td.id) ?? td;
+          const task = this.project.findTaskForDefinition(td.id);
+
           const item: GanttItem = {
             id: td.id.toString(),
             title: `${td.abbreviation} ${td.name}`,

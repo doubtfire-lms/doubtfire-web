@@ -545,9 +545,9 @@ const MY_DATE_FORMAT = {
     {
       provide: GANTT_GLOBAL_CONFIG,
       useValue: {
-        locale: 'en-AU',
+        // locale: 'en-US',
         dateFormat: {
-          timeZone: 'UTC',
+          // timeZone: 'UTC',
           weekStartsOn: 1,
           week: 'w',
           year: 'yyyy',
