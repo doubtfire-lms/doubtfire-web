@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-65](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-64...v10.0.0-65) (2025-11-25)
+
+
+### Bug Fixes
+
+* typo ([bdcd75d](https://github.com/b0ink/doubtfire-deploy/commit/bdcd75d91d5ddc7d9a60317bd91289a7242251e1))
+
 ## [10.0.0-64](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-63...v10.0.0-64) (2025-11-25)
 
 
