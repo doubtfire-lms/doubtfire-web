@@ -10,12 +10,18 @@
       <f-task-date-slider [task]="project.findTaskForDefinition(taskDef.id)" showTaskAbbr="true" />
     }
   </div> -->
-  <button mat-raised-button (click)="saveTargetDates()">Save Dates</button>
-  <button mat-raised-button (click)="resetTargetDates()">Reset To Unit Default</button>
 </div>
 
 <div class="w-full h-[1000px]">
-  <button (click)="showDatesColumn = !showDatesColumn">Toggle Dates Column</button>
+  <div class="flex justify-between items-center py-5">
+    <div>
+      <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
+    </div>
+    <div class="flex items-center gap-2">
+      <button mat-raised-button (click)="saveTargetDates()" color="primary">Save Dates</button>
+      <button mat-raised-button (click)="resetTargetDates()">Reset To Unit Default</button>
+    </div>
+  </div>
   <ngx-gantt
     #gantt
     [items]="items"
