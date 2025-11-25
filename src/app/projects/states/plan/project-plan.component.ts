@@ -30,6 +30,11 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
 
   public taskPrerequisites: TaskPrerequisite[];
 
+  items: GanttItem[] = [];
+
+  // TaskDefinition default dates for reference
+  baselineItems: GanttItem[] = [];
+
   constructor(
     private globalStateService: GlobalStateService,
     private gradeService: GradeService,
@@ -305,6 +310,12 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
           this.items.push(item);
           this.items = [...this.items];
 
+          // Create baseline item
+          item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
+          item.end = this.normalizeDateUTC(td.targetDate.getTime() / 1000);
+          this.baselineItems.push(item);
+          this.baselineItems = [...this.baselineItems];
+
           // newItems.push(item);
           // console.log(item);
         }
@@ -316,8 +327,6 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
 
     // this.items = [...newItems];
   }
-
-  items: GanttItem[] = [];
 
   getstuff() {
     console.log(JSON.stringify(this.items));
