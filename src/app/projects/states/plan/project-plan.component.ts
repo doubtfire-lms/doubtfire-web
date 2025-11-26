@@ -9,7 +9,7 @@ import {
   GanttViewOptions,
   GanttViewType,
 } from '@worktile/gantt';
-import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
+import {Project, ProjectService, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {GlobalStateService} from '../index/global-state.service';
@@ -47,6 +47,9 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     private globalStateService: GlobalStateService,
     private gradeService: GradeService,
     private taskPrerequisiteService: TaskPrerequisiteService,
+    private projectService: ProjectService,
+    private alertService: AlertService,
+    private confirmationModalService: ConfirmationModalService,
   ) {
     this.globalStateService.currentViewAndEntitySubject$.subscribe((viewAndEntity) => {
       if (viewAndEntity.viewType === 'PROJECT' && viewAndEntity.entity) {
@@ -54,6 +57,21 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  public get gradeValues() {
+    return this.gradeService.gradeValues;
+  }
+
+  public get gradeAcronyms() {
+    return this.gradeService.gradeAcronyms;
+  }
+
+  public gradeString(grade: number) {
+    return this.gradeService.grades[grade];
+  }
+
+  public selectedTargetGrade: number;
+
   ngAfterViewInit(): void {
     console.log();
   }
@@ -270,9 +288,25 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     return Math.min(this.project.unit.startDate.getTime() / 1000, earliestTaskStartDate);
   }
 
+  onTargetGradeChange(event: MatSelectChange) {
+    const previousTargetGrade = this.project.targetGrade;
+    this.project.targetGrade = event.value;
+
+    this.projectService.update(this.project).subscribe({
+      next: () => {
+        this.alertService.success(`Succesfully updated target grade`, 2000);
+        this.refreshItems();
+      },
+      error: (error) => {
+        this.project.targetGrade = previousTargetGrade;
+        this.selectedTargetGrade = previousTargetGrade;
+        this.alertService.error(`Failed to update target grade: ${error}`, 6000);
+      },
+    });
+  }
+
   ngOnInit(): void {
-    // TODO: use the baseline items to show the unit's default dates
-    console.log(this.project.unit.startDate, this.project.unit.endDate);
+    this.selectedTargetGrade = this.project.targetGrade;
 
     this.viewOptions = {
       datePrecisionUnit: 'day',

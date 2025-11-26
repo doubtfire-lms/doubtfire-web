@@ -18,7 +18,21 @@
   </div> -->
 </div>
 
-<div class="w-full h-[1000px]">
+<div class="w-full" [style.height.px]="(items.length + 2) * 43">
+  <div class="w-full flex justify-center">
+    <mat-form-field appearance="outline" class="w-full max-w-3xl">
+      <mat-label>Target Grade</mat-label>
+      <mat-select
+        [(ngModel)]="selectedTargetGrade"
+        class="w-full"
+        (selectionChange)="onTargetGradeChange($event)"
+      >
+        @for (grade of gradeValues; track grade) {
+          <mat-option [value]="grade">{{ gradeString(grade) }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
   @if (unit.allowFlexibleDates) {
     <div class="flex justify-between items-center py-5">
       <div>
