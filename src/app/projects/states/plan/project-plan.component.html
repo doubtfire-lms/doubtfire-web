@@ -25,8 +25,15 @@
         <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
       </div>
       <div class="flex items-center gap-2">
-        <button mat-raised-button (click)="saveTargetDates()" color="primary">Save Dates</button>
-        <button mat-raised-button (click)="resetTargetDates()">Reset To Unit Default</button>
+        <button
+          mat-raised-button
+          (click)="confirmSaveTargetDates()"
+          color="primary"
+          [disabled]="!anyUnsavedChanges()"
+        >
+          Save Dates
+        </button>
+        <button mat-raised-button (click)="confirmResetTargetDates()">Reset To Unit Default</button>
       </div>
     </div>
   }

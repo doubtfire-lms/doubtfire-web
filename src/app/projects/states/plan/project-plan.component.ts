@@ -14,6 +14,9 @@ import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.se
 import {GradeService} from 'src/app/common/services/grade.service';
 import {GlobalStateService} from '../index/global-state.service';
 import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
+import {MatSelectChange} from '@angular/material/select';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
   selector: 'f-project-plan',
@@ -148,6 +151,30 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
         });
       }
     }
+  }
+
+  anyUnsavedChanges() {
+    return this.items.some((i) => this.unsavedChanges(i));
+  }
+
+  confirmSaveTargetDates() {
+    this.confirmationModalService.show(
+      'Save Task Dates?',
+      `Do you want to save these new target dates for your tasks? You can always reset them to the unit's default later.`,
+      () => {
+        this.resetTargetDates();
+      },
+    );
+  }
+
+  confirmResetTargetDates() {
+    this.confirmationModalService.show(
+      'Reset Task Dates?',
+      `Are you sure you want to reset all target dates to the unit's default? All modified dates will be reset.`,
+      () => {
+        this.resetTargetDates();
+      },
+    );
   }
 
   resetTargetDates() {
