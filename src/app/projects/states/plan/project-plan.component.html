@@ -19,19 +19,21 @@
 </div>
 
 <div class="w-full h-[1000px]">
-  <div class="flex justify-between items-center py-5">
-    <div>
-      <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
+  @if (unit.allowFlexibleDates) {
+    <div class="flex justify-between items-center py-5">
+      <div>
+        <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
+      </div>
+      <div class="flex items-center gap-2">
+        <button mat-raised-button (click)="saveTargetDates()" color="primary">Save Dates</button>
+        <button mat-raised-button (click)="resetTargetDates()">Reset To Unit Default</button>
+      </div>
     </div>
-    <div class="flex items-center gap-2">
-      <button mat-raised-button (click)="saveTargetDates()" color="primary">Save Dates</button>
-      <button mat-raised-button (click)="resetTargetDates()">Reset To Unit Default</button>
-    </div>
-  </div>
+  }
   <ngx-gantt
     #gantt
     [items]="items"
-    [baselineItems]="baselineItems"
+    [baselineItems]="unit.allowFlexibleDates ? baselineItems : []"
     [viewOptions]="viewOptions"
     [draggable]="project.unit.allowFlexibleDates"
     [viewType]="viewType"
@@ -51,13 +53,19 @@
       </ngx-gantt-column>
 
       @if (showDatesColumn) {
-        <ngx-gantt-column name="Your Target Dates" width="300px">
+        <ngx-gantt-column name="Start Date" width="110px">
           <ng-template #cell let-item="item" class="text-center">
-            {{ toDateString(item.start) }} - {{ toDateString(item.end) }}
+            {{ toDateString(item.start) }}
           </ng-template>
         </ngx-gantt-column>
 
-        <ngx-gantt-column name="Deadline" width="150px">
+        <ngx-gantt-column name="Target Date" width="110px">
+          <ng-template #cell let-item="item" class="text-center">
+            {{ toDateString(item.end) }}
+          </ng-template>
+        </ngx-gantt-column>
+
+        <ngx-gantt-column name="Deadline" width="110px">
           <ng-template #cell let-item="item" class="text-center">
             {{ toDateString(getTaskDeadline(item.id)) }}
           </ng-template>

@@ -36,6 +36,10 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
   // TaskDefinition default dates for reference
   baselineItems: GanttBaselineItem[] = [];
 
+  public get unit() {
+    return this.project?.unit;
+  }
+
   constructor(
     private globalStateService: GlobalStateService,
     private gradeService: GradeService,
@@ -87,6 +91,9 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
   }
 
   isCloseToFeedbackDeadline(item: GanttItem) {
+    if (!this.unit.allowFlexibleDates) {
+      return false;
+    }
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
     const deadlineTs = this.normalizeDateUTC(td.localDeadlineDate().getTime() / 1000);
     const diff =
@@ -185,7 +192,7 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     return date.toLocaleDateString('en-AU', {
       month: 'short',
       day: 'numeric',
-      year: 'numeric',
+      // year: '2-digit',
     });
   }
 
