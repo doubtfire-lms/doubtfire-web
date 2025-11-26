@@ -94,21 +94,12 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     );
 
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(event.item.id));
-
-    console.log(event.item.end, td.localDeadlineDate().getTime() / 1000);
-    // if (event.item.end > td.localDeadlineDate().getTime() / 1000) {
-    //   event.item.color = '#eb6134';
-    //   this.items = [...this.items];
-    //   // alert('Your selected date is past the feedback deadline...');
-    // } else {
-    //   event.item.color = '#3333ff';
-    //   this.items = [...this.items];
-    // }
   }
 
   isPastFeedbackDeadline(item: GanttItem) {
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
-    return item.end > td.localDeadlineDate().getTime() / 1000;
+    const task = this.project.findTaskForDefinition(td.id);
+    return item.end > task.localDeadlineDate().getTime() / 1000;
   }
 
   isCloseToFeedbackDeadline(item: GanttItem) {
@@ -116,9 +107,10 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
       return false;
     }
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
-    const deadlineTs = this.normalizeDateUTC(td.localDeadlineDate().getTime() / 1000);
+    const task = this.project.findTaskForDefinition(td.id);
+
     const diff =
-      this.normalizeDateUTC(td.localDeadlineDate().getTime() / 1000) -
+      this.normalizeDateUTC(task.localDeadlineDate().getTime() / 1000) -
       this.normalizeDateUTC(item.end);
     return diff >= 0 && diff <= 7 * 24 * 60 * 60;
   }
@@ -134,31 +126,15 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
       if (!td) {
         continue;
       }
-      const task = this.project.findTaskForDefinition(td.id);
       if (this.unsavedChanges(item)) {
         const task = this.project.findTaskForDefinition(td.id);
-        // task.targetStartDate = new Date(item.start * 1000);
-        // task.targetDueDate = new Date(item.end * 1000);
-
-        // const start = new Date(item.start * 1000);
-        // const startStr = start.toISOString().substring(0, 10); // "YYYY-MM-DD"
-
-        // const end = new Date(item.end * 1000);
-        // const endStr = end.toISOString().substring(0, 10);
 
         console.log(this.toDateStr(item.start), this.toDateStr(item.end));
 
         task.saveTargetDates(this.toDateStr(item.start), this.toDateStr(item.end)).subscribe({
           next: (data) => {
-            console.log(`task Updated!`);
             task.targetDueDate = data.targetDueDate;
             task.targetStartDate = data.targetStartDate;
-            console.log(data.targetDueDate, data.targetStartDate);
-            console.log(
-              Math.floor(data.targetStartDate.getTime() / 1000),
-              Math.floor(data.targetDueDate.getTime() / 1000),
-            );
-            console.log(item.start, item.end);
             item.start = this.normalizeDateUTC(data.targetStartDate.getTime() / 1000);
             item.end = this.normalizeDateUTC(data.targetDueDate.getTime() / 1000);
             this.items = [...this.items];
@@ -205,8 +181,7 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
       const task = this.project.findTaskForDefinition(td.id);
       if (task.targetDueDate || task.targetStartDate) {
         task.saveTargetDates(null, null).subscribe({
-          next: (data) => {
-            console.log(`task Updated!`);
+          next: (_data) => {
             task.targetDueDate = null;
             task.targetStartDate = null;
 
@@ -248,9 +223,15 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     return task;
   }
 
+  getTaskDefinition(tdId: string) {
+    const td = this.unit.taskDefinitions.find((td) => td.id === Number(tdId));
+    return td;
+  }
+
   getTaskDeadline(tdId: string) {
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(tdId));
-    return td?.localDeadlineDate() ?? 'N/A';
+    const task = this.project.findTaskForDefinition(td.id);
+    return task?.localDeadlineDate() ?? 'N/A';
   }
 
   getPrerequisitesFor(tdId: string) {
@@ -315,99 +296,83 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
       dragPreviewDateFormat: 'MMM dd',
     };
 
-    console.log(this.earliestStartDate);
-    console.log(Math.min(...this.taskDefs().map((t) => t.startDate.getTime())));
-    const newItems: GanttItem[] = [];
-
-    this.items = [];
-    const unit = this.project.unit;
-    // const taskDefinitions = unit.taskDefinitions;
-    const taskDefinitions = this.taskDefs();
-
     this.project.unit.getTaskPrerequisites().subscribe({
       next: (prereqs) => {
         const taskPrerequisites: TaskPrerequisite[] = prereqs;
         console.log(taskPrerequisites);
         this.taskPrerequisites = taskPrerequisites;
-        for (const td of taskDefinitions) {
-          const task = this.project.findTaskForDefinition(td.id);
-
-          const item: GanttItem = {
-            id: td.id.toString(),
-            title: `${td.abbreviation} ${td.name}`,
-            start: this.normalizeDateUTC(task.startDate.getTime() / 1000),
-            end: this.normalizeDateUTC(task.localDueDate().getTime() / 1000),
-            // start: Math.floor(task.startDate.getTime() / 1000),
-            // end: Math.floor(task.localDueDate().getTime() / 1000),
-            expandable: false,
-            draggable: this.project.unit.allowFlexibleDates,
-            // color: this.gradeService.gradeColors[td.targetGrade],
-            expanded: false,
-            color: '#3333ff',
-            links: taskPrerequisites
-              // .filter((p) => p.prerequisiteId === td.id)
-              .filter((p) => p.taskDefinitionId === td.id)
-              .map((p) => {
-                let color: string;
-
-                switch (p.taskStatus) {
-                  case 'ready_for_feedback':
-                    color = '#0079D8';
-                    break;
-                  case 'complete':
-                    color = '#5BB75B';
-                    break;
-                  case 'discuss':
-                    color = '#31b0d5';
-                    break;
-                  case 'demonstrate':
-                    color = '#31b0d5';
-                    break;
-                  default:
-                    color = 'gray';
-                }
-
-                const link: GanttLink = {
-                  type: GanttLinkType.fs,
-                  // link: p.taskDefinitionId.toString(),
-                  link: p.prerequisiteId.toString(),
-                  color: {
-                    default: color,
-                    active: 'red',
-                  },
-                };
-
-                return link;
-              }),
-            // .map((dataItem) => dataItem.taskDefinitionId.toString()),
-            // type: GanttItemType.bar,
-            // links: [(td.id - 1).toString()],
-          };
-          // if()
-          this.items.push(item);
-          this.items = [...this.items];
-
-          // Create baseline item
-          const baselineItem = {...item};
-          baselineItem.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
-          baselineItem.end = this.normalizeDateUTC(td.targetDate.getTime() / 1000);
-          this.baselineItems.push(baselineItem);
-          this.baselineItems = [...this.baselineItems];
-
-          // newItems.push(item);
-          // console.log(item);
-        }
+        this.refreshItems();
       },
       error: (error) => {
         console.error(error);
       },
     });
-
-    // this.items = [...newItems];
   }
 
-  getstuff() {
-    console.log(JSON.stringify(this.items));
+  refreshItems() {
+    const taskDefinitions = this.taskDefs();
+    this.items = [];
+
+    for (const td of taskDefinitions) {
+      const task = this.project.findTaskForDefinition(td.id);
+
+      const item: GanttItem = {
+        id: td.id.toString(),
+        title: `${td.abbreviation} ${td.name}`,
+        start: this.normalizeDateUTC(task.startDate.getTime() / 1000),
+        end: this.normalizeDateUTC(task.localDueDate().getTime() / 1000),
+        // start: Math.floor(task.startDate.getTime() / 1000),
+        // end: Math.floor(task.localDueDate().getTime() / 1000),
+        expandable: false,
+        draggable: this.project.unit.allowFlexibleDates,
+        // color: this.gradeService.gradeColors[td.targetGrade],
+        expanded: false,
+        color: '#3333ff',
+        links: this.taskPrerequisites
+          // .filter((p) => p.prerequisiteId === td.id)
+          .filter((p) => p.taskDefinitionId === td.id)
+          .map((p) => {
+            let color: string;
+
+            switch (p.taskStatus) {
+              case 'ready_for_feedback':
+                color = '#0079D8';
+                break;
+              case 'complete':
+                color = '#5BB75B';
+                break;
+              case 'discuss':
+                color = '#31b0d5';
+                break;
+              case 'demonstrate':
+                color = '#31b0d5';
+                break;
+              default:
+                color = 'gray';
+            }
+
+            const link: GanttLink = {
+              type: GanttLinkType.fs,
+              link: p.prerequisiteId.toString(),
+              color: {
+                default: color,
+                active: 'red',
+              },
+            };
+
+            return link;
+          }),
+      };
+      this.items.push(item);
+      this.items = [...this.items];
+
+      // Create baseline item
+      const baselineItem = {...item};
+      baselineItem.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
+      baselineItem.end = this.normalizeDateUTC(td.targetDate.getTime() / 1000);
+      this.baselineItems.push(baselineItem);
+      this.baselineItems = [...this.baselineItems];
+    }
   }
 
   public taskDefs(): TaskDefinition[] {

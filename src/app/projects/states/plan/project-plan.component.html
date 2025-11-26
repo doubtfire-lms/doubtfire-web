@@ -65,11 +65,18 @@
     [disabledLoadOnScroll]="true"
     (dragStarted)="onDragStarted($event)"
     (dragEnded)="onDragEnded($event)"
+    class="h-full overflow-hidden"
   >
     <ngx-gantt-table>
-      <ngx-gantt-column name="Tasks" width="300px">
+      <ngx-gantt-column name="Tasks" width="325px">
         <ng-template #cell let-item="item">
-          {{ item.title }}
+          <div class="flex items-center gap-5">
+            <f-grade-icon
+              [grade]="getTaskDefinition(item.id).targetGrade"
+              [colorful]="true"
+            ></f-grade-icon>
+            {{ item.title }}
+          </div>
         </ng-template>
       </ngx-gantt-column>
 
