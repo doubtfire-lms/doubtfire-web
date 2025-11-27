@@ -23,10 +23,8 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
   templateUrl: 'project-plan.component.html',
   styleUrls: ['project-plan.component.scss'],
 })
-export class ProjectPlanComponent implements OnInit, AfterViewInit {
+export class ProjectPlanComponent implements OnInit {
   public project: Project;
-
-  // @ViewChild('gantt') ganttComponent: NgxGanttComponent;
 
   public viewType: GanttViewType = GanttViewType.day;
 
@@ -46,7 +44,6 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
   constructor(
     private globalStateService: GlobalStateService,
     private gradeService: GradeService,
-    private taskPrerequisiteService: TaskPrerequisiteService,
     private projectService: ProjectService,
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
@@ -72,29 +69,7 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
 
   public selectedTargetGrade: number;
 
-  ngAfterViewInit(): void {
-    console.log();
-  }
-
   public showDatesColumn: boolean = false;
-
-  onDragStarted(event: GanttDragEvent) {
-    console.log('drag started', event);
-    console.log(
-      new Date(event.item.start * 1000).toLocaleDateString(),
-      new Date(event.item.end * 1000).toLocaleDateString(),
-    );
-  }
-
-  onDragEnded(event: GanttDragEvent) {
-    console.log('drag ended', event);
-    console.log(
-      new Date(event.item.start * 1000).toLocaleDateString(),
-      new Date(event.item.end * 1000).toLocaleDateString(),
-    );
-
-    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(event.item.id));
-  }
 
   isPastFeedbackDeadline(item: GanttItem) {
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
@@ -129,8 +104,6 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
       if (this.unsavedChanges(item)) {
         const task = this.project.findTaskForDefinition(td.id);
 
-        console.log(this.toDateStr(item.start), this.toDateStr(item.end));
-
         task.saveTargetDates(this.toDateStr(item.start), this.toDateStr(item.end)).subscribe({
           next: (data) => {
             task.targetDueDate = data.targetDueDate;
@@ -140,7 +113,10 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
             this.items = [...this.items];
           },
           error: (error) => {
-            console.error(error);
+            this.alertService.error(
+              `Failed to save target date for ${td.abbreviation}: ${error}`,
+              6000,
+            );
           },
         });
       }
@@ -190,7 +166,10 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
             this.items = [...this.items];
           },
           error: (error) => {
-            console.error(error);
+            this.alertService.error(
+              `Failed to reset target date for ${td.abbreviation}: ${error}`,
+              6000,
+            );
           },
         });
       } else {
@@ -299,12 +278,11 @@ export class ProjectPlanComponent implements OnInit, AfterViewInit {
     this.project.unit.getTaskPrerequisites().subscribe({
       next: (prereqs) => {
         const taskPrerequisites: TaskPrerequisite[] = prereqs;
-        console.log(taskPrerequisites);
         this.taskPrerequisites = taskPrerequisites;
         this.refreshItems();
       },
       error: (error) => {
-        console.error(error);
+        this.alertService.error(`Failed to get task prerequisites: ${error}`, 6000);
       },
     });
   }
