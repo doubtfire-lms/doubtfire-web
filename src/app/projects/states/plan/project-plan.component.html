@@ -26,11 +26,11 @@
       </mat-select>
     </mat-form-field>
   </div>
-  @if (unit.allowFlexibleDates) {
-    <div class="flex justify-between items-center py-5">
-      <div>
-        <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
-      </div>
+  <div class="flex justify-between items-center py-5">
+    <div>
+      <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
+    </div>
+    @if (unit.allowFlexibleDates) {
       <div class="flex items-center gap-2">
         <button
           mat-raised-button
@@ -42,8 +42,8 @@
         </button>
         <button mat-raised-button (click)="confirmResetTargetDates()">Reset To Unit Default</button>
       </div>
-    </div>
-  }
+    }
+  </div>
   <ngx-gantt
     #gantt
     [items]="items"
