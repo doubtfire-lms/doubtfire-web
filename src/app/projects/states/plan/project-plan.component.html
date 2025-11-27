@@ -70,7 +70,14 @@
     <ngx-gantt-table>
       <ngx-gantt-column name="Tasks" width="325px">
         <ng-template #cell let-item="item">
-          <div class="flex items-center gap-5">
+          <div
+            class="flex items-center gap-5"
+            uiSref="projects/dashboard"
+            [uiParams]="{
+              projectId: project.id,
+              taskAbbr: getTaskDefinition(item.id).abbreviation
+            }"
+          >
             <f-grade-icon
               [grade]="getTaskDefinition(item.id).targetGrade"
               [colorful]="true"
