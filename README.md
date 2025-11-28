@@ -40,6 +40,8 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/common/alert-list/alert-list.coffee
 - [x] ./src/app/common/modals/progress-modal/progress-modal.coffee
 - [x] ./src/app/errors/states/not-found/not-found.coffee
+- [x] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
+- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Removed in 10.0.x)
 
 ### MIGRATED:
 
@@ -191,7 +193,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/errors/states/timeout/timeout.coffee
 - [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
 - [ ] ./src/app/groups/groups.coffee
-- [ ] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
 - [ ] ./src/app/projects/projects.coffee
 - [ ] ./src/app/projects/states/dashboard/dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
@@ -203,7 +204,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/states/outcomes/outcomes.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/directives.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Wait until merged in with 10.0.x)
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Wait until merged in with 10.0.x)
 - [ ] ./src/app/projects/states/portfolio/portfolio.coffee
 - [ ] ./src/app/projects/states/states.coffee
 - [ ] ./src/app/tasks/modals/modals.coffee
