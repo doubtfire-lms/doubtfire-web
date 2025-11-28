@@ -53,7 +53,6 @@ export class RolloverComponent implements OnInit {
     this.teachingPeriodService.cache.values.subscribe((periods) => {
       this.teachingPeriods = periods;
       this.teachingPeriods = periods.filter((p) => p.endDate.getTime() > Date.now());
-      // .map((p) => ({value: p, text: `${p.year} ${p.period}`}));
       if (this.teachingPeriods.length) {
         this.teachingPeriod = this.teachingPeriods[this.teachingPeriods.length - 1];
       }
