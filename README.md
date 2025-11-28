@@ -203,7 +203,7 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
 - [ ] ./src/app/projects/states/feedback/feedback.coffee
-- [ ] ./src/app/projects/states/groups/groups.coffee
+- [ ] ./src/app/projects/states/groups/groups.coffee (-> "project-groups")
 - [ ] ./src/app/projects/states/index/index.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/directives.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Migrate this in 10.0.x)
@@ -217,7 +217,7 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/units/states/edit/directives/directives.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.coffee
 - [ ] ./src/app/units/states/edit/edit.coffee
-- [ ] ./src/app/units/states/groups/groups.coffee
+- [ ] ./src/app/units/states/groups/groups.coffee (State only -> "unit-groups")
 - [ ] ./src/app/units/states/index/index.coffee
 - [ ] ./src/app/units/states/states.coffee
 - [ ] ./src/app/units/states/students-list/students-list.coffee (Refer to the unit-students-editor component)
