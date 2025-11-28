@@ -59,4 +59,20 @@ export class RolloverComponent implements OnInit {
       }
     });
   }
+
+  createUnit() {
+    const body = this.teachingPeriod
+      ? {teaching_period_id: this.teachingPeriod.id}
+      : {start_date: this.newStartDate, end_date: this.newEndDate};
+
+    this.unit.rolloverTo(body).subscribe({
+      next: (response) => {
+        this.alertService.success(`Unit created`, 2000);
+        this.state.go('units/admin', {unitId: response.id});
+      },
+      error: (error) => {
+        this.alertService.error(`Error creating unit: ${error}`, 6000);
+      },
+    });
+  }
 }
