@@ -6,8 +6,8 @@ import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component
 
 @Component({
   selector: 'f-progress-burndown-chart',
-  templateUrl: './progressburndownchart.component.html',
-  styleUrls: ['./progressburndownchart.component.scss'],
+  templateUrl: './progress-burndown-chart.component.html',
+  styleUrls: ['./progress-burndown-chart.component.scss'],
 })
 export class ProgressBurndownChartComponent extends ChartBaseComponent implements OnInit {
   @Input() project: Project;

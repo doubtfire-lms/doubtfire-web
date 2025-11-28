@@ -147,7 +147,7 @@ import {fPdfViewerComponent} from './common/pdf-viewer/pdf-viewer.component';
 import {PdfViewerPanelComponent} from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import {StaffTaskListComponent} from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
-import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/taskstatuspiechart.component';
+import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/task-status-pie-chart.component';
 import {
   GroupSetService,
   LearningOutcomeService,
@@ -192,8 +192,8 @@ import {FUsersComponent} from './admin/states/users/users.component';
 import {FUnitTaskListComponent} from './units/task-viewer/directives/unit-task-list/unit-task-list.component';
 import {FTaskDetailsViewComponent} from './units/task-viewer/directives/task-details-view/task-details-view.component';
 import {FTaskSheetViewComponent} from './units/task-viewer/directives/task-sheet-view/task-sheet-view.component';
-import {ProgressBurndownChartComponent} from './visualisations/progress-burndown-chart/progressburndownchart.component';
-import {TaskVisualisationComponent} from './visualisations/task-visualisation/taskvisualisation.component';
+import {ProgressBurndownChartComponent} from './visualisations/progress-burndown-chart/progress-burndown-chart.component';
+import {TaskVisualisationComponent} from './visualisations/task-visualisation/task-visualisation.component';
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {ProgressDashboardComponent} from './projects/states/dashboard/directives/progress-dashboard/progress-dashboard.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
