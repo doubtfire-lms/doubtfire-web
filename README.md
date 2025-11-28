@@ -40,6 +40,7 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/common/alert-list/alert-list.coffee
 - [x] ./src/app/common/modals/progress-modal/progress-modal.coffee
 - [x] ./src/app/errors/states/not-found/not-found.coffee
+- [x] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
 
 ### MIGRATED:
 
@@ -163,6 +164,14 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee (Removed in 10.0.x)
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee (Removed in 10.0.x)
 - [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee (Removed in 10.0.x)
+- [ ] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee (Removed in 10.0.x)
+- [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee (Removed in 10.0.x)
+- [ ] ./src/app/projects/states/outcomes/outcomes.coffee (Removed in 10.0.x)
+- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Removed in 10.0.x)
+- [x] ./src/app/units/states/rollover/directives/directives.coffee
+- [x] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
+- [x] ./src/app/units/states/rollover/rollover.coffee
+- [x] ./src/app/visualisations/task-status-pie-chart.coffee
 
 ### TODO:
 
@@ -188,7 +197,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/errors/states/timeout/timeout.coffee
 - [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
 - [ ] ./src/app/groups/groups.coffee
-- [ ] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
 - [ ] ./src/app/projects/projects.coffee
 - [ ] ./src/app/projects/states/dashboard/dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
@@ -197,29 +205,22 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/states/feedback/feedback.coffee
 - [ ] ./src/app/projects/states/groups/groups.coffee
 - [ ] ./src/app/projects/states/index/index.coffee
-- [ ] ./src/app/projects/states/outcomes/outcomes.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/directives.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Wait until merged in with 10.0.x)
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Wait until merged in with 10.0.x)
+- [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Migrate this in 10.0.x)
 - [ ] ./src/app/projects/states/portfolio/portfolio.coffee
 - [ ] ./src/app/projects/states/states.coffee
 - [ ] ./src/app/tasks/modals/modals.coffee
 - [ ] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal.coffee
 - [ ] ./src/app/tasks/tasks.coffee
 - [ ] ./src/app/units/modals/modals.coffee
-- [ ] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee
 - [ ] ./src/app/units/states/analytics/analytics.coffee (Just the routing, since the TypeScript f-analytics component has been expanded in 10.0.x)
 - [ ] ./src/app/units/states/edit/directives/directives.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.coffee
-- [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee
 - [ ] ./src/app/units/states/edit/edit.coffee
 - [ ] ./src/app/units/states/groups/groups.coffee
 - [ ] ./src/app/units/states/index/index.coffee
-- [ ] ./src/app/units/states/rollover/directives/directives.coffee
-- [ ] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
-- [ ] ./src/app/units/states/rollover/rollover.coffee
 - [ ] ./src/app/units/states/states.coffee
-- [ ] ./src/app/units/states/students-list/students-list.coffee
+- [ ] ./src/app/units/states/students-list/students-list.coffee (Refer to the unit-students-editor component)
 - [ ] ./src/app/units/states/tasks/definition/definition.coffee
 - [ ] ./src/app/units/states/tasks/tasks.coffee
 - [ ] ./src/app/units/units.coffee
@@ -231,7 +232,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/visualisations/summary-task-status-scatter.coffee
 - [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
 - [ ] ./src/app/visualisations/task-completion-box-plot.coffee
-- [ ] ./src/app/visualisations/task-status-pie-chart.coffee
 - [ ] ./src/app/visualisations/visualisations.coffee
 
 ## Table of Contents
