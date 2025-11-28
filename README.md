@@ -167,6 +167,7 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee (Removed in 10.0.x)
 - [ ] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee (Removed in 10.0.x)
 - [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee (Removed in 10.0.x)
+- [ ] ./src/app/projects/states/outcomes/outcomes.coffee (Removed in 10.0.x)
 - [x] ./src/app/units/states/rollover/directives/directives.coffee
 - [x] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
 - [x] ./src/app/units/states/rollover/rollover.coffee
@@ -204,7 +205,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/states/feedback/feedback.coffee
 - [ ] ./src/app/projects/states/groups/groups.coffee
 - [ ] ./src/app/projects/states/index/index.coffee
-- [ ] ./src/app/projects/states/outcomes/outcomes.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/directives.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Migrate this in 10.0.x)
 - [ ] ./src/app/projects/states/portfolio/portfolio.coffee
