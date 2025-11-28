@@ -220,7 +220,7 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/units/states/groups/groups.coffee
 - [ ] ./src/app/units/states/index/index.coffee
 - [ ] ./src/app/units/states/states.coffee
-- [ ] ./src/app/units/states/students-list/students-list.coffee
+- [ ] ./src/app/units/states/students-list/students-list.coffee (Refer to the unit-students-editor component)
 - [ ] ./src/app/units/states/tasks/definition/definition.coffee
 - [ ] ./src/app/units/states/tasks/tasks.coffee
 - [ ] ./src/app/units/units.coffee
