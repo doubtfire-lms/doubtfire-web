@@ -203,7 +203,7 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
 - [ ] ./src/app/projects/states/feedback/feedback.coffee
-- [ ] ./src/app/projects/states/groups/groups.coffee
+- [ ] ./src/app/projects/states/groups/groups.coffee (-> "project-groups")
 - [ ] ./src/app/projects/states/index/index.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/directives.coffee
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Migrate this in 10.0.x)
