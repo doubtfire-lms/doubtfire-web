@@ -41,7 +41,6 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/common/modals/progress-modal/progress-modal.coffee
 - [x] ./src/app/errors/states/not-found/not-found.coffee
 - [x] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Removed in 10.0.x)
 
 ### MIGRATED:
 
@@ -168,6 +167,7 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee (Removed in 10.0.x)
 - [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee (Removed in 10.0.x)
 - [ ] ./src/app/projects/states/outcomes/outcomes.coffee (Removed in 10.0.x)
+- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Removed in 10.0.x)
 - [x] ./src/app/units/states/rollover/directives/directives.coffee
 - [x] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
 - [x] ./src/app/units/states/rollover/rollover.coffee
