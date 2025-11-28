@@ -5,18 +5,18 @@ import {WelcomeComponent} from './welcome/welcome.component';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
-import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
+import { UnauthorisedComponent } from './errors/states/unauthorised/unauthorised.component';
 import {FUsersComponent} from './admin/states/users/users.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
 import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
 import {UnitRootState} from './units/unit-root-state.component';
 import {ProjectRootState} from './projects/states/project-root-state.component';
-import {TaskViewerState} from './units/task-viewer/task-viewer-state.component';
+import { TaskViewerState } from './units/task-viewer/task-viewer-state.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
-import {Ng2ViewDeclaration} from '@uirouter/angular';
-import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
+import { Ng2ViewDeclaration } from '@uirouter/angular';
+import { TutorialsComponent } from './projects/states/tutorials/tutorials.component';
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
-import {RolloverComponent} from './units/states/rollover/rollover.component';
+import { RolloverComponent } from './units/states/rollover/rollover.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -67,7 +67,7 @@ const HomeState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'Home Page',
+    pageTitle: 'Home Page'
   },
 };
 
@@ -172,7 +172,7 @@ const WelcomeState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'Welcome',
+    pageTitle: 'Welcome'
   },
 };
 
@@ -204,7 +204,7 @@ const EditProfileState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'Edit Profile',
+    pageTitle: 'Edit Profile'
   },
 };
 
@@ -217,7 +217,7 @@ const EulaState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'End User License Agreement',
+    pageTitle: 'End User License Agreement'
   },
 };
 
@@ -235,7 +235,7 @@ const ViewAllProjectsState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'All Units',
+    pageTitle: 'All Units'
   },
 };
 
@@ -312,7 +312,7 @@ const UnauthoriedState: NgHybridStateDeclaration = {
   },
   data: {
     // Add data used by header
-    pageTitle: 'Unauthorised',
+    pageTitle: 'Unauthorised'
   },
 };
 /**
@@ -326,13 +326,13 @@ const ScormPlayerNormalState: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams: {project_id: number}) {
         return $stateParams.project_id;
-      },
+      }
     ],
     taskDefId: [
       '$stateParams',
       function ($stateParams: {task_definition_id: number}) {
         return $stateParams.task_definition_id;
-      },
+      }
     ],
     mode: function () {
       return 'normal';
@@ -360,19 +360,19 @@ const ScormPlayerStudentReviewState: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams) {
         return $stateParams.project_id;
-      },
+      }
     ],
     taskDefId: [
       '$stateParams',
       function ($stateParams) {
         return $stateParams.task_definition_id;
-      },
+      }
     ],
     testAttemptId: [
       '$stateParams',
       function ($stateParams) {
         return $stateParams.test_attempt_id;
-      },
+      }
     ],
     mode: function () {
       return 'review';
@@ -397,7 +397,7 @@ const ScormPlayerReviewState: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams) {
         return $stateParams.task_definition_id;
-      },
+      }
     ],
     mode: function () {
       return 'preview';
@@ -455,6 +455,7 @@ const PortfoliosState: NgHybridStateDeclaration = {
     roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
+
 
 const RolloverState: NgHybridStateDeclaration = {
   name: 'units/rollover',
