@@ -163,6 +163,9 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee (Removed in 10.0.x)
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee (Removed in 10.0.x)
 - [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee (Removed in 10.0.x)
+- [x] ./src/app/units/states/rollover/directives/directives.coffee
+- [x] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
+- [x] ./src/app/units/states/rollover/rollover.coffee
 
 ### TODO:
 
@@ -215,9 +218,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/units/states/edit/edit.coffee
 - [ ] ./src/app/units/states/groups/groups.coffee
 - [ ] ./src/app/units/states/index/index.coffee
-- [ ] ./src/app/units/states/rollover/directives/directives.coffee
-- [ ] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
-- [ ] ./src/app/units/states/rollover/rollover.coffee
 - [ ] ./src/app/units/states/states.coffee
 - [ ] ./src/app/units/states/students-list/students-list.coffee
 - [ ] ./src/app/units/states/tasks/definition/definition.coffee
