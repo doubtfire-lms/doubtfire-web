@@ -16,6 +16,7 @@ import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component
 import { Ng2ViewDeclaration } from '@uirouter/angular';
 import { TutorialsComponent } from './projects/states/tutorials/tutorials.component';
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
+import { RolloverComponent } from './units/states/rollover/rollover.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -455,6 +456,30 @@ const PortfoliosState: NgHybridStateDeclaration = {
   },
 };
 
+
+const RolloverState: NgHybridStateDeclaration = {
+  name: 'units/rollover',
+  url: '/units/:unitId/rollover',
+  resolve: {
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+  },
+  views: {
+    main: {
+      component: RolloverComponent,
+    },
+  },
+  data: {
+    task: 'Unit Rollover',
+    pageTitle: 'Unit Rollover',
+    roleWhitelist: ['Convenor', 'Admin'],
+  },
+};
+
 /**
  * Export the list of states we have created in angular
  */
@@ -479,4 +504,5 @@ export const doubtfireStates = [
   ScormPlayerStudentReviewState,
   TutorialState,
   PortfoliosState,
+  RolloverState,
 ];
