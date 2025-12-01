@@ -125,6 +125,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'maxQualityPts',
       'overseerImageId',
       'assessmentEnabled',
+      'discussionPromptsCount',
       {
         keys: 'ilos',
         toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {

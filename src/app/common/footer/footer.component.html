@@ -128,6 +128,19 @@
         </div>
       }
       @if (selectedTask?.project) {
+        @if (selectedTask?.definition.discussionPromptsCount) {
+          <button
+            mat-icon-button
+            matTooltip="Discussion Prompts"
+            matTooltipPosition="above"
+            aria-label="View discussion prompts"
+            class="button small-button"
+            (click)="viewDiscussionPrompts()"
+          >
+            <mat-icon class="small-icon">forum</mat-icon>
+          </button>
+        }
+
         <div class="relative inline-block">
           @if (selectedTask.project.staffNoteCount > 0) {
             <div [matBadge]="selectedTask.project.staffNoteCount"></div>

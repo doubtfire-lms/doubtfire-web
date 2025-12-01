@@ -107,6 +107,10 @@ export class FooterComponent implements OnInit {
     this.selectedTaskService.showStaffNotes();
   }
 
+  viewDiscussionPrompts() {
+    this.selectedTaskService.showDiscussionPrompts();
+  }
+
   getJplagReport() {
     if (!this.selectedTask?.definition) {
       return;
