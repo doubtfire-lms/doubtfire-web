@@ -172,6 +172,11 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
 - [x] ./src/app/units/states/rollover/rollover.coffee
 - [x] ./src/app/visualisations/task-status-pie-chart.coffee
+- [x] ./src/app/visualisations/student-task-status-pie-chart.coffee
+- [ ] ./src/app/visualisations/achievement-box-plot.coffee (ILO Alignments removed)
+- [ ] ./src/app/visualisations/achievement-custom-bar-chart.coffee (ILO Alignments removed)
+- [ ] ./src/app/visualisations/alignment-bar-chart.coffee (ILO Alignments removed)
+- [ ] ./src/app/visualisations/alignment-bullet-chart.coffee (ILO Alignments removed)
 
 ### TODO:
 
@@ -224,12 +229,7 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/units/states/tasks/definition/definition.coffee
 - [ ] ./src/app/units/states/tasks/tasks.coffee
 - [ ] ./src/app/units/units.coffee
-- [ ] ./src/app/visualisations/achievement-box-plot.coffee
-- [ ] ./src/app/visualisations/achievement-custom-bar-chart.coffee
-- [ ] ./src/app/visualisations/alignment-bar-chart.coffee
-- [ ] ./src/app/visualisations/alignment-bullet-chart.coffee
-- [ ] ./src/app/visualisations/student-task-status-pie-chart.coffee
-- [ ] ./src/app/visualisations/summary-task-status-scatter.coffee
+- [ ] ./src/app/visualisations/summary-task-status-scatter.coffee (Unit task status summary)
 - [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
 - [ ] ./src/app/visualisations/task-completion-box-plot.coffee
 - [ ] ./src/app/visualisations/visualisations.coffee
