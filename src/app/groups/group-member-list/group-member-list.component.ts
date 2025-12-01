@@ -50,7 +50,7 @@ export class GroupMemberListComponent implements OnInit, OnChanges {
       this.selectedGroup.getMembers().subscribe({
         next: (members) => {
           this.loading = false;
-          this.onMembersLoaded();
+          this.onMembersLoaded?.();
           this.canRemoveMembers =
             !!this.unitRole ||
             (this.selectedGroup.groupSet.allowStudentsToManageGroups && !this.selectedGroup.locked);
