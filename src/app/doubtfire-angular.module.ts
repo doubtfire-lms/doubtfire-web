@@ -294,6 +294,7 @@ import {PortfoliosPortfolioViewComponent} from './units/states/portfolios/direct
 import {PortfoliosAssessmentComponent} from './units/states/portfolios/directives/portfolios-assessment/portfolios-assessment.component';
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
+import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 
 @NgModule({
   // Components we declare
@@ -436,6 +437,7 @@ import {RolloverComponent} from './units/states/rollover/rollover.component';
     PortfoliosAssessmentComponent,
     UnitGroupsComponent,
     RolloverComponent,
+    ProjectGroupsComponent,
   ],
   // Services we provide
   providers: [

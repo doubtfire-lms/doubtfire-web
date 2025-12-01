@@ -209,6 +209,7 @@ import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directi
 import {PortfolioLearningSummaryReportStepComponent} from './projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.component';
 import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.component';
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
+import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -549,4 +550,9 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fUnitGroups',
   downgradeComponent({component: UnitGroupsComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fProjectGroups',
+  downgradeComponent({component: ProjectGroupsComponent}),
 );
