@@ -78,7 +78,9 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
   private loadMembers(): void {
     // Fallback: assign first group in groupSet.groups if selectedGroup is undefined
     if (!this.selectedGroup && this.selectedGroupSet?.groups?.length > 0) {
-      this.selectedGroup = this.selectedGroupSet.groups[0];
+      console.error(`Could not find project's group`);
+      this.team.memberContributions = [];
+      return;
     }
     if (this.selectedGroup && this.selectedGroupSet) {
       this.selectedGroup.getMembers().subscribe({
