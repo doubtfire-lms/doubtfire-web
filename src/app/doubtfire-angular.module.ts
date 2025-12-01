@@ -557,7 +557,7 @@ const MY_DATE_FORMAT = {
         },
         linkOptions: {
           showArrow: true,
-          lineType: GanttLinkLineType.straight,
+          lineType: GanttLinkLineType.curve,
         },
         styleOptions: {
           // lineHeight: '25',
