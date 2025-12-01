@@ -307,8 +307,8 @@ export class ProjectPlanComponent implements OnInit {
         expanded: false,
         color: '#3333ff',
         links: this.taskPrerequisites
-          // .filter((p) => p.prerequisiteId === td.id)
-          .filter((p) => p.taskDefinitionId === td.id)
+          .filter((p) => p.prerequisiteId === td.id)
+          // .filter((p) => p.taskDefinitionId === td.id)
           .map((p) => {
             let color: string;
 
@@ -331,7 +331,8 @@ export class ProjectPlanComponent implements OnInit {
 
             const link: GanttLink = {
               type: GanttLinkType.fs,
-              link: p.prerequisiteId.toString(),
+              link: p.taskDefinitionId.toString(),
+              // link: p.prerequisiteId.toString(),
               color: {
                 default: color,
                 active: 'red',
