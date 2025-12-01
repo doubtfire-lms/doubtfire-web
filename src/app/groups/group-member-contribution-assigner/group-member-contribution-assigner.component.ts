@@ -12,6 +12,7 @@ import {GroupSet} from 'src/app/api/models/doubtfire-model';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {MatTableDataSource} from '@angular/material/table';
 
 interface MemberContribution {
   project: Project;
@@ -45,6 +46,9 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
     success: 100,
   };
 
+  displayedColumns = ['name', 'target-grade', 'contribution'];
+  dataSource = new MatTableDataSource<MemberContribution>([]);
+
   constructor(private gradeService: GradeService) {}
 
   ngOnInit(): void {
@@ -66,10 +70,8 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
       this.selectedGroup = group;
       if (!this.selectedGroup && this.selectedGroupSet?.groups?.length > 0) {
         this.selectedGroup = this.selectedGroupSet.groups[0];
-
       }
     }
-
   }
 
   private loadMembers(): void {
@@ -98,6 +100,7 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
           this.percentages.success = +(95 / members.length).toFixed();
 
           this.teamChange.emit(this.team);
+          this.dataSource.data = [...this.team.memberContributions];
         },
       });
     } else {
