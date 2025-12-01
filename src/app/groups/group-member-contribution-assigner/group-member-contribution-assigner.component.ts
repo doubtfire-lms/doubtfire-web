@@ -29,6 +29,8 @@ interface MemberContribution {
   styleUrls: ['./group-member-contribution-assigner.component.scss'],
 })
 export class GroupMemberContributionAssignerComponent implements OnInit, OnChanges {
+  @Input() isTestSubmission: boolean;
+
   @Input() task: Task;
   @Input() project: Project;
   @Input() team = {memberContributions: [] as MemberContribution[]};
@@ -66,7 +68,8 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
 
   private initializeGroupData(): void {
     this.selectedGroupSet = this.task?.definition?.groupSet;
-    if (!this.task?.testSubmissionUrl) {
+    // Check if this is a overseer test submission
+    if (!this.isTestSubmission) {
       const group = this.project?.getGroupForTask(this.task);
       this.selectedGroup = group;
       if (!this.selectedGroup && this.selectedGroupSet?.groups?.length > 0) {
