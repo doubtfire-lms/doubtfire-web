@@ -132,7 +132,7 @@ export class ProjectPlanComponent implements OnInit {
       'Save Task Dates?',
       `Do you want to save these new target dates for your tasks? You can always reset them to the unit's default later.`,
       () => {
-        this.resetTargetDates();
+        this.saveTargetDates();
       },
     );
   }
