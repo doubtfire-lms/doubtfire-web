@@ -1,0 +1,74 @@
+<div class="bg-white shadow-md rounded-lg overflow-hidden max-[991px]:mt-6 min-[992px]:mt-0">
+  <div class="bg-neutral-100 px-6 items-center">
+    <h4 class="font-semibold text-gray-800 py-6">
+      Progress Dashboard <span *ngIf="tutor">for {{ project.student.name }}</span>
+    </h4>
+  </div>
+  <div class="p-6 grid grid-cols-2 gap-6">
+    <!-- Target Grade Card -->
+    <div class="bg-white shadow rounded-lg col-span-2 overflow-hidden">
+      <div class="mb-4">
+        <div class="bg-neutral-100 px-6 items-center">
+          <h4 class="font-semibold text-gray-800 py-6">Target Grade</h4>
+        </div>
+      </div>
+      <div class="p-4">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Select Target Grade</mat-label>
+          <mat-select
+            [(value)]="project.targetGrade"
+            (selectionChange)="updateTargetGrade($event.value)"
+          >
+            <mat-option *ngFor="let grade of grades.values" [value]="grade">
+              {{ grades.names[grade] }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Progress Burndown Card -->
+    <div class="bg-white shadow rounded-lg col-span-2 2xl:col-span-1 overflow-hidden">
+      <div class="mb-4">
+        <div class="bg-neutral-100 px-6 items-center">
+          <h4 class="font-semibold text-gray-800 pt-6">Progress Burndown</h4>
+          <p class="text-gray-600 pb-6 font-light">
+            The burndown chart shows how much work remains for you to achieve your target grade.
+          </p>
+        </div>
+      </div>
+      <div class="p-4">
+        <f-progress-burndown-chart
+          [project]="project"
+          [unit]="project.unit"
+          [grade]="project.targetGrade"
+        ></f-progress-burndown-chart>
+      </div>
+      <div class="mt-4 text-gray-600 p-4 font-light">
+        Aim to keep your
+        <strong class="text-red-500 font-semibold">Complete</strong>
+        line close to or ahead of the
+        <strong class="text-gray-500 font-semibold">Target</strong>
+        line to keep on track.
+      </div>
+    </div>
+
+    <!-- Task Statuses Card -->
+    <div class="bg-white shadow rounded-lg col-span-2 2xl:col-span-1 overflow-hidden">
+      <div class="mb-4">
+        <div class="bg-neutral-100 px-6 items-center">
+          <h4 class="font-semibold text-gray-800 pt-6">Task Statuses</h4>
+          <p class="text-gray-600 pb-6 font-light">
+            Breakdown summary of each of your task statuses.
+          </p>
+        </div>
+      </div>
+      <div class="p-4 overflow-x-scroll h-auto">
+        <f-task-visualisation
+          [project]="project"
+          [grade]="project.targetGrade"
+        ></f-task-visualisation>
+      </div>
+    </div>
+  </div>
+</div>

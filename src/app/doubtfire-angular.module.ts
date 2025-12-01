@@ -1,16 +1,18 @@
 import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
 
-import { NgModule, Injector, DoBootstrap } from '@angular/core';
-import { BrowserModule, DomSanitizer, Title } from '@angular/platform-browser';
-import { UpgradeModule } from '@angular/upgrade/static';
-import { AppInjector, setAppInjector } from './app-injector';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import {NgModule, Injector, DoBootstrap} from '@angular/core';
+import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
+import {UpgradeModule} from '@angular/upgrade/static';
+import {AppInjector, setAppInjector} from './app-injector';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {FileUploadModule} from '@iplab/ngx-file-upload';
 
 // Lottie animation module
 // import {LottieModule, LottieCacheModule} from 'ngx-lottie';
+import {ProgressDashboardComponent} from './projects/states/dashboard/directives/progress-dashboard/progress-dashboard.component';
 import {provideLottieOptions, LottieComponent} from 'ngx-lottie';
 import player from 'lottie-web';
 import {ClipboardModule} from '@angular/cdk/clipboard';
@@ -96,14 +98,19 @@ import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import {ExtensionModalComponent} from './common/modals/extension-modal/extension-modal.component';
 import {CalendarModalComponent} from './common/modals/calendar-modal/calendar-modal.component';
+import {ConfirmationModalComponent} from './common/modals/confirmation-modal/confirmation-modal.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatOptionModule} from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatOptionModule,
+} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
-import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { enAU } from 'date-fns/locale';
-
+import {DateFnsAdapter} from '@angular/material-date-fns-adapter';
+import {enAU} from 'date-fns/locale';
 
 import {doubtfireStates} from './doubtfire.states';
 import {MatTableModule} from '@angular/material/table';
@@ -226,23 +233,23 @@ import {
   TeachingPeriodUnitImportDialogComponent,
   TeachingPeriodUnitImportService,
 } from './admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog';
-import { UnauthorisedComponent } from './errors/states/unauthorised/unauthorised.component';
-import { AcceptEulaComponent } from './eula/accept-eula/accept-eula.component';
-import { TiiActionLogComponent } from './admin/tii-action-log/tii-action-log.component';
-import { TiiActionService } from './api/services/tii-action.service';
-import { FUnitsComponent } from './admin/states/units/units.component';
-import { FUnitTaskListComponent } from './units/task-viewer/directives/unit-task-list/unit-task-list.component';
-import { FTaskDetailsViewComponent } from './units/task-viewer/directives/task-details-view/task-details-view.component';
-import { FTaskSheetViewComponent } from './units/task-viewer/directives/task-sheet-view/task-sheet-view.component';
-import { UnitCodeComponent } from './common/unit-code/unit-code.component';
-import { GradeService } from './common/services/grade.service';
-import { UnitRootStateComponent } from './units/unit-root-state.component';
-import { TaskViewerStateComponent } from './units/task-viewer/task-viewer-state.component';
-import { ProjectRootStateComponent } from './projects/states/project-root-state.component';
-import { ProjectProgressDashboardComponent } from './projects/project-progress-dashboard/project-progress-dashboard.component';
-import { ProgressBurndownChartComponent } from './visualisations/progress-burndown-chart/progressburndownchart.component';
-import { TaskVisualisationComponent } from './visualisations/task-visualisation/taskvisualisation.component';
-import { ChartBaseComponent } from './common/chart-base/chart-base-component/chart-base-component.component';
+import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
+import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
+import {TiiActionLogComponent} from './admin/tii-action-log/tii-action-log.component';
+import {TiiActionService} from './api/services/tii-action.service';
+import {FUnitsComponent} from './admin/states/units/units.component';
+import {FUnitTaskListComponent} from './units/task-viewer/directives/unit-task-list/unit-task-list.component';
+import {FTaskDetailsViewComponent} from './units/task-viewer/directives/task-details-view/task-details-view.component';
+import {FTaskSheetViewComponent} from './units/task-viewer/directives/task-sheet-view/task-sheet-view.component';
+import {UnitCodeComponent} from './common/unit-code/unit-code.component';
+import {GradeService} from './common/services/grade.service';
+import {UnitRootStateComponent} from './units/unit-root-state.component';
+import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
+import {ProjectRootStateComponent} from './projects/states/project-root-state.component';
+import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
+import {ProgressBurndownChartComponent} from './visualisations/progress-burndown-chart/progress-burndown-chart.component';
+import {TaskVisualisationComponent} from './visualisations/task-visualisation/task-visualisation.component';
+import {ChartBaseComponent} from './common/chart-base/chart-base-component/chart-base-component.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import {ScormAdapterService} from './api/services/scorm-adapter.service';
 import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
@@ -250,10 +257,14 @@ import {TaskScormCardComponent} from './projects/states/dashboard/directives/tas
 import {TestAttemptService} from './api/services/test-attempt.service';
 import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
 import {ScormExtensionModalComponent} from './common/modals/scorm-extension-modal/scorm-extension-modal.component';
-import { GradeIconComponent } from './common/grade-icon/grade-icon.component';
-import { GradeTaskModalComponent } from './tasks/modals/grade-task-modal/grade-task-modal.component';
-import { PrivacyPolicy } from './config/privacy-policy/privacy-policy';
-import { GroupMemberContributionAssignerComponent } from './groups/group-member-contribution-assigner/group-member-contribution-assigner.component';
+import {GradeIconComponent} from './common/grade-icon/grade-icon.component';
+import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
+import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
+import {GroupMemberContributionAssignerComponent} from './groups/group-member-contribution-assigner/group-member-contribution-assigner.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -267,12 +278,31 @@ const MY_DATE_FORMAT = {
     monthYearA11yLabel: 'MMMM yyyy',
   },
 };
-import { UnitStudentEnrolmentModalComponent } from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
+import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
+import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
+import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/task-status-pie-chart.component';
+import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
+import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
+import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
+import {FileUploaderComponent} from './common/file-uploader/file-uploader.component';
+import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
+import {PortfolioLearningSummaryReportStepComponent} from './projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.component';
+import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.component';
+import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
+import {PortfoliosListComponent} from './units/states/portfolios/directives/portfolios-list/portfolios-list.component';
+import {PortfoliosProjectProgressComponent} from './units/states/portfolios/directives/portfolios-project-progress/portfolios-project-progress.component';
+import {PortfoliosPortfolioViewComponent} from './units/states/portfolios/directives/portfolios-portfolio-view/portfolios-portfolio-view.component';
+import {PortfoliosAssessmentComponent} from './units/states/portfolios/directives/portfolios-assessment/portfolios-assessment.component';
+import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
+import {RolloverComponent} from './units/states/rollover/rollover.component';
+import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 
 @NgModule({
   // Components we declare
   declarations: [
+    TaskStatusPieChartComponent,
     AlertComponent,
+    ProgressDashboardComponent,
     UnitStudentEnrolmentModalComponent,
     AboutDoubtfireModalContent,
     TeachingPeriodUnitImportDialogComponent,
@@ -292,6 +322,7 @@ import { UnitStudentEnrolmentModalComponent } from './units/modals/unit-student-
     OverseerImageListComponent,
     ExtensionModalComponent,
     CalendarModalComponent,
+    ConfirmationModalComponent,
     InstitutionSettingsComponent,
     HomeComponent,
     CommentBubbleActionComponent,
@@ -390,6 +421,24 @@ import { UnitStudentEnrolmentModalComponent } from './units/modals/unit-student-
     TaskScormCardComponent,
     ScormExtensionCommentComponent,
     ScormExtensionModalComponent,
+    TutorialsComponent,
+    UnitStaffEditorComponent,
+    PortfolioGradeSelectStepComponent,
+    GroupMemberListComponent,
+    GroupSelectorComponent,
+    GroupSetManagerComponent,
+    FileUploaderComponent,
+    PortfolioWelcomeStepComponent,
+    PortfolioLearningSummaryReportStepComponent,
+    PortfolioAddExtraFilesStepComponent,
+    PortfoliosComponent,
+    PortfoliosListComponent,
+    PortfoliosProjectProgressComponent,
+    PortfoliosPortfolioViewComponent,
+    PortfoliosAssessmentComponent,
+    UnitGroupsComponent,
+    RolloverComponent,
+    ProjectGroupsComponent,
     GroupMemberContributionAssignerComponent,
   ],
   // Services we provide
@@ -533,6 +582,7 @@ import { UnitStudentEnrolmentModalComponent } from './units/modals/unit-student-
     MatNativeDateModule,
     MatDialogModuleNew,
     NgxChartsModule,
+    FileUploadModule,
   ],
 })
 

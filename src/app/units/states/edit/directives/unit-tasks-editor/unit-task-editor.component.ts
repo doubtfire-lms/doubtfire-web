@@ -138,9 +138,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
       () => {
         this.unit.deleteTaskDefinition(taskDefinition);
         //TODO: reinstate ProgressModal.show "Deleting Task #{task.abbreviation}", 'Please wait while student projects are updated.', promise
-
-        this.alerts.success('Task deleted');
-      }
+      },
     );
   }
 

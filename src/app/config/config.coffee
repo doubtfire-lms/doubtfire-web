@@ -12,5 +12,4 @@ angular.module('doubtfire.config', [
   'doubtfire.config.analytics'
   'doubtfire.config.runtime'
   'doubtfire.config.root-controller'
-  'doubtfire.config.debug'
 ])

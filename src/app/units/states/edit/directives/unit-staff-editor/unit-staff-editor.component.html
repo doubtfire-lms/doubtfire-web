@@ -1,0 +1,89 @@
+<div>
+  <div class="header">
+    <h3>Unit Staff</h3>
+    <p>Manage unit staff by adding members and assigning them as convenors or tutors.</p>
+  </div>
+  <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+
+      <td mat-cell *matCellDef="let unitRole">
+        <div class="flex gap-5 items-center">
+          <user-icon [size]="30" [user]="unitRole.user" aria-hidden="true"></user-icon
+          >{{ unitRole.user.name }}
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef>Role</th>
+      <td mat-cell *matCellDef="let unitRole">
+        <mat-button-toggle-group
+          name="role"
+          [ngModel]="unitRole.role"
+          (change)="onRoleChange(unitRole, $event)"
+          hideSingleSelectionIndicator
+        >
+          <mat-button-toggle
+            value="Tutor"
+            matTooltip="Tutors deliver unit content"
+            matTooltipShowDelay="1000"
+            matTooltipPosition="above"
+            >Tutor</mat-button-toggle
+          >
+          <mat-button-toggle
+            value="Convenor"
+            matTooltip="Convenors manage the unit"
+            matTooltipShowDelay="1000"
+            matTooltipPosition="above"
+            >Convenor</mat-button-toggle
+          >
+        </mat-button-toggle-group>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="main-convenor">
+      <th mat-header-cell *matHeaderCellDef>Main Convenor</th>
+      <td mat-cell *matCellDef="let unitRole">
+        @if (unitRole?.role === 'Convenor') {
+          <button
+            [disabled]="unitRole.id === unit?.mainConvenor?.id"
+            mat-icon-button
+            (click)="changeMainConvenor(unitRole)"
+            aria-label="Make staff member the Main Convenor"
+          >
+            <mat-icon aria-hidden="true">
+              {{ unitRole.id === unit?.mainConvenor?.id ? 'check' : 'close' }}
+            </mat-icon>
+          </button>
+        }
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let unitRole">
+        <button mat-icon-button color="warn" (click)="removeStaff(unitRole)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-form-field class="w-full mt-5" appearance="outline">
+    <input
+      matInput
+      placeholder="Staff Name"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="filterStaffList()"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="addSelectedStaff($event.option.value)"
+      [displayWith]="displayStaffName"
+    >
+      <mat-option *ngFor="let staff of filteredStaff" [value]="staff">
+        {{ staff.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

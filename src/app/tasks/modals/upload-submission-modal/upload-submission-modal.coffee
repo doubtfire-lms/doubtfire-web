@@ -55,6 +55,12 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   $scope.submissionTypes = submissionTypes
 
+  $scope.isReadyChange = (ready) ->
+    $scope.uploader.isReady = ready
+
+  $scope.uploadIsReady = (callback) ->
+    $scope.uploader.start = callback
+
   # Upload files
   $scope.uploader = {
     # url: Task.generateSubmissionUrl($scope.task.project, $scope.task)

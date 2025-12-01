@@ -1,0 +1,20 @@
+<div class="confirmation-modal">
+  <h3 mat-dialog-title>
+    <div class="flex flex-row items-center">
+      <i class="fa fa-question-circle fa-2x pull-left"></i>
+      <div class="flex flex-col">
+        <div>{{ title }}</div>
+        <small>Please confirm that you want to perform this action.</small>
+      </div>
+    </div>
+  </h3>
+  <mat-dialog-content>
+    {{ message }}
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" (click)="confirmAction()">
+      <i class="fa fa-check"></i> Confirm
+    </button>
+    <button mat-button color="warn" (click)="cancelAction()">Cancel</button>
+  </mat-dialog-actions>
+</div>

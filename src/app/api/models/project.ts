@@ -347,7 +347,7 @@ export class Project extends Entity {
   }
 
   public isEnrolledIn(tutorial: Tutorial): boolean {
-    return this.tutorials.includes(tutorial);
+    return this.tutorials.some((t) => t.id === tutorial.id);
   }
 
   public updateUnitEnrolment(): void {

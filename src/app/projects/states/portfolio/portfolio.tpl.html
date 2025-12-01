@@ -6,10 +6,14 @@
       </tab-heading>
     </tab>
   </tabset><!--/tabs-->
-  <portfolio-welcome-step ng-if="activeTab == tabs.welcomeStep"></portfolio-welcome-step>
-  <portfolio-grade-select-step ng-if="activeTab == tabs.gradeStep"></portfolio-grade-select-step>
-  <portfolio-learning-summary-report-step ng-if="activeTab == tabs.summaryStep"></portfolio-learning-summary-report-step>
+  <f-portfolio-welcome-step ng-if="activeTab == tabs.welcomeStep"></f-portfolio-welcome-step>
+  <f-portfolio-grade-select-step
+      [project]="project"
+      [unit]="unit"
+      ng-if="activeTab == tabs.gradeStep">
+    </f-portfolio-grade-select-step>
+  <f-portfolio-learning-summary-report-step ng-if="activeTab == tabs.summaryStep" [unit]="unit" [project]="project"></f-portfolio-learning-summary-report-step>
   <portfolio-tasks-step ng-if="activeTab == tabs.taskStep"></portfolio-tasks-step>
-  <portfolio-add-extra-files-step ng-if="activeTab == tabs.otherFilesStep"></portfolio-add-extra-files-step>
+  <f-portfolio-add-extra-files-step ng-if="activeTab == tabs.otherFilesStep" [project]="project"></f-portfolio-add-extra-files-step>
   <portfolio-review-step ng-if="activeTab == tabs.reviewStep"></portfolio-review-step>
 </div>
