@@ -13,6 +13,7 @@ import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {MatTableDataSource} from '@angular/material/table';
+import {Sort} from '@angular/material/sort';
 
 interface MemberContribution {
   project: Project;
@@ -156,20 +157,33 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
     return this.gradeService.gradeColors[value] || '#000000';
   }
 
-  sortBy(key: string): void {
-    this.memberSortOrder = key;
-    this.team.memberContributions = [...this.team.memberContributions].sort((a, b) => {
-      const aVal = this.getNestedValue(a, key);
-      const bVal = this.getNestedValue(b, key);
-      if (typeof aVal === 'string' && typeof bVal === 'string') {
-        return aVal.localeCompare(bVal);
-      }
-      return aVal < bVal ? -1 : 1;
-    });
-    this.teamChange.emit(this.team);
+  private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+    return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  private getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((o, i) => o?.[i], obj);
+  sortTableData(sort: Sort) {
+    if (!sort.active || sort.direction === '') {
+      return;
+    }
+    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+      switch (sort.active) {
+        case 'name':
+          return this.sortCompare(
+            a.project.student.name,
+            b.project.student.name,
+            sort.direction === 'asc',
+          );
+        case 'target-grade':
+          return this.sortCompare(
+            a.project.targetGrade,
+            b.project.targetGrade,
+            sort.direction === 'asc',
+          );
+        case 'contribution':
+          return this.sortCompare(a.rating, b.rating, sort.direction === 'asc');
+        default:
+          return 0;
+      }
+    });
   }
 }

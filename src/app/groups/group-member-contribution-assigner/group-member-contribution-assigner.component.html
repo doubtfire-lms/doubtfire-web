@@ -5,9 +5,8 @@
   matSortActive="stream"
   matSortDirection="asc"
   matSortDisableClear
+  (matSortChange)="sortTableData($event)"
 >
-  <!-- (matSortChange)="sortTableData($event)" -->
-
   <ng-container matColumnDef="name" sticky>
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Team Member</th>
     <td mat-cell *matCellDef="let member">
