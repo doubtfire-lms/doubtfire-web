@@ -114,15 +114,6 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
     }
   }
 
-  checkClearRating(contrib: MemberContribution): void {
-    if (contrib.confRating === 1 && contrib.overStar === 1 && contrib.rating === 0) {
-      contrib.rating = contrib.percent = 0;
-    } else if (contrib.confRating === 1 && contrib.overStar === 1) {
-      contrib.rating = 1;
-    }
-    contrib.confRating = contrib.rating;
-  }
-
   private memberPercentage(contrib: MemberContribution, rating: number): number {
     return +(
       100 *
@@ -134,9 +125,11 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
   selectRating(contrib: MemberContribution, rating: number) {
     if (contrib.rating !== rating) {
       contrib.rating = rating;
+      contrib.confRating = rating;
       this.hoveringOver(contrib, rating);
     } else {
       contrib.rating = 0;
+      contrib.confRating = 0;
       this.hoveringOver(contrib, 0);
     }
   }
