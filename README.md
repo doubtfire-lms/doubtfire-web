@@ -177,6 +177,8 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/visualisations/achievement-custom-bar-chart.coffee (ILO Alignments removed)
 - [ ] ./src/app/visualisations/alignment-bar-chart.coffee (ILO Alignments removed)
 - [ ] ./src/app/visualisations/alignment-bullet-chart.coffee (ILO Alignments removed)
+- [x] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
+- [x] ./src/app/groups/groups.coffee
 
 ### TODO:
 
@@ -200,8 +202,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/errors/errors.coffee
 - [ ] ./src/app/errors/states/states.coffee
 - [ ] ./src/app/errors/states/timeout/timeout.coffee
-- [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
-- [ ] ./src/app/groups/groups.coffee
 - [ ] ./src/app/projects/projects.coffee
 - [ ] ./src/app/projects/states/dashboard/dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
