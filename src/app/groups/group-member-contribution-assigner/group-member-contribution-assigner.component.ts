@@ -10,17 +10,9 @@ import {
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {GroupSet} from 'src/app/api/models/doubtfire-model';
-import {Group} from 'src/app/api/models/groups/group';
+import {Group, MemberContribution} from 'src/app/api/models/groups/group';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
-
-interface MemberContribution {
-  project: Project;
-  rating: number;
-  confRating: number;
-  percent: number;
-  overStar: number;
-}
 
 @Component({
   selector: 'f-group-member-contribution-assigner',
@@ -88,7 +80,6 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
             const result: MemberContribution = {
               project: member,
               rating: this.initialStars,
-              confRating: this.initialStars,
               percent: 0,
               overStar: null,
             };
@@ -122,11 +113,9 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
   selectRating(contrib: MemberContribution, rating: number) {
     if (contrib.rating !== rating) {
       contrib.rating = rating;
-      contrib.confRating = rating;
       this.hoveringOver(contrib, rating);
     } else {
       contrib.rating = 0;
-      contrib.confRating = 0;
       this.hoveringOver(contrib, 0);
     }
   }
