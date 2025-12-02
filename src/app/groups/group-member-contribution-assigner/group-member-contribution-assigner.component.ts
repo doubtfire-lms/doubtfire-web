@@ -38,7 +38,7 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
 
   selectedGroupSet: GroupSet;
   selectedGroup: Group;
-  memberSortOrder = 'project.student.name';
+
   numStars = 5;
   initialStars = 3;
 
@@ -68,7 +68,7 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
 
   private initializeGroupData(): void {
     this.selectedGroupSet = this.task?.definition?.groupSet;
-    // Check if this is a overseer test submission
+    // Check if this is an overseer test submission
     if (!this.isTestSubmission) {
       const group = this.project?.getGroupForTask(this.task);
       this.selectedGroup = group;
@@ -79,7 +79,6 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
   }
 
   private loadMembers(): void {
-    // Fallback: assign first group in groupSet.groups if selectedGroup is undefined
     if (!this.selectedGroup && this.selectedGroupSet?.groups?.length > 0) {
       console.error(`Could not find project's group`);
       this.team.memberContributions = [];
@@ -94,7 +93,7 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
               rating: this.initialStars,
               confRating: this.initialStars,
               percent: 0,
-              overStar: 0,
+              overStar: null,
             };
             result.percent = this.memberPercentage(result, this.initialStars);
             return result;
@@ -130,6 +129,16 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
       (rating /
         this.selectedGroup.contributionSum(this.team.memberContributions, contrib.project, rating))
     ).toFixed();
+  }
+
+  selectRating(contrib: MemberContribution, rating: number) {
+    if (contrib.rating !== rating) {
+      contrib.rating = rating;
+      this.hoveringOver(contrib, rating);
+    } else {
+      contrib.rating = 0;
+      this.hoveringOver(contrib, 0);
+    }
   }
 
   hoveringOver(contrib: MemberContribution, value: number): void {

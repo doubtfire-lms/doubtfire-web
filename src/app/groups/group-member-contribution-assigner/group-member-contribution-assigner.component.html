@@ -30,14 +30,16 @@
           [matTooltip]="member.percent + '% effort'"
         >
           <mat-icon
-            (click)="member.rating = i + 1; hoveringOver(member, i + 1)"
+            (click)="selectRating(member, i + 1)"
             (mouseenter)="hoveringOver(member, i + 1)"
             (mouseleave)="hoveringOver(member, null)"
             [ngClass]="{
-              'text-amber-400': i + 1 <= member.rating,
-              'text-gray-300': i + 1 > member.rating,
+              'text-amber-400':
+                member.overStar !== null ? i + 1 <= member.overStar : i + 1 <= member.rating,
+              'text-gray-300':
+                member.overStar !== null ? i + 1 > member.overStar : i + 1 > member.rating,
             }"
-            class="text-4xl mr-1 align-middle cursor-pointer"
+            class="text-4xl px-1 align-middle cursor-pointer"
           >
             person
           </mat-icon>
