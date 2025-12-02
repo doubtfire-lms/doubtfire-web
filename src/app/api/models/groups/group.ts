@@ -10,7 +10,7 @@ export interface MemberContribution {
   project: Project;
   rating: number;
   percent: number;
-  overStar?: number;
+  overStar?: number | null;
 }
 
 export class Group extends Entity {
