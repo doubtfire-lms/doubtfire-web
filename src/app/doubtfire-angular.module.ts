@@ -296,6 +296,7 @@ import {PortfoliosAssessmentComponent} from './units/states/portfolios/directive
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
+import {SummaryTaskStatusChartComponent} from './visualisations/summary-task-status-chart/summary-task-status-chart.component';
 
 @NgModule({
   // Components we declare
@@ -440,6 +441,7 @@ import {ProjectGroupsComponent} from './projects/states/groups/project-groups/pr
     RolloverComponent,
     ProjectGroupsComponent,
     GroupMemberContributionAssignerComponent,
+    SummaryTaskStatusChartComponent,
   ],
   // Services we provide
   providers: [

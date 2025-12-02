@@ -209,6 +209,7 @@ import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/d
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 import {GroupMemberContributionAssignerComponent} from './groups/group-member-contribution-assigner/group-member-contribution-assigner.component';
+import {SummaryTaskStatusChartComponent} from './visualisations/summary-task-status-chart/summary-task-status-chart.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -558,4 +559,9 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fGroupMemberContributionAssigner',
   downgradeComponent({component: GroupMemberContributionAssignerComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fSummaryTaskStatusChart',
+  downgradeComponent({component: SummaryTaskStatusChartComponent}),
 );
