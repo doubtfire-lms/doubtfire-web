@@ -1,19 +1,18 @@
 import {
   Component,
-  Input,
-  Output,
   EventEmitter,
-  OnInit,
+  Input,
   OnChanges,
+  OnInit,
+  Output,
   SimpleChanges,
 } from '@angular/core';
-import {Group} from 'src/app/api/models/groups/group';
+import {Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {GroupSet} from 'src/app/api/models/doubtfire-model';
+import {Group} from 'src/app/api/models/groups/group';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
-import {GradeService} from 'src/app/common/services/grade.service';
-import {MatTableDataSource} from '@angular/material/table';
-import {Sort} from '@angular/material/sort';
 
 interface MemberContribution {
   project: Project;
@@ -51,8 +50,6 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
 
   displayedColumns = ['name', 'target-grade', 'contribution'];
   dataSource = new MatTableDataSource<MemberContribution>([]);
-
-  constructor(private gradeService: GradeService) {}
 
   ngOnInit(): void {
     this.initializeGroupData();
@@ -137,31 +134,6 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
   hoveringOver(contrib: MemberContribution, value: number): void {
     contrib.overStar = value;
     contrib.percent = this.memberPercentage(contrib, value);
-  }
-
-  percentClass(percent: number): string {
-    if (percent >= this.percentages.success) return 'label-success';
-    if (this.percentages.info <= percent && percent < this.percentages.success) return 'label-info';
-    if (this.percentages.warning <= percent && percent < this.percentages.info)
-      return 'label-warning';
-    if (this.percentages.danger <= percent && percent < this.percentages.warning)
-      return 'label-danger';
-    return 'label-danger';
-  }
-
-  // Grade-related methods
-  gradeFor(value: number | string): string {
-    if (typeof value === 'string') {
-      return this.gradeService.grades[value] || value;
-    }
-    return this.gradeService.grades[value] || 'Unknown';
-  }
-
-  gradeColor(value: number | string): string {
-    if (typeof value === 'string') {
-      return this.gradeService.gradeColors[value] || '#000000';
-    }
-    return this.gradeService.gradeColors[value] || '#000000';
   }
 
   private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
