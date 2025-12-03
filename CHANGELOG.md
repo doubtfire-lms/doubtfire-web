@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-66](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-65...v10.0.0-66) (2025-12-03)
+
+
+### Features
+
+* discussion prompts ([#1042](https://github.com/b0ink/doubtfire-deploy/issues/1042)) ([730ffd0](https://github.com/b0ink/doubtfire-deploy/commit/730ffd0c3f79a5ad42c0c59c2f2c2a901ab0d702))
+
+
+### Bug Fixes
+
+* correctly set rollover end date ([0611be0](https://github.com/b0ink/doubtfire-deploy/commit/0611be04e8fe7e75ae07504945a2984839475e3a))
+
 ## [10.0.0-65](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-64...v10.0.0-65) (2025-11-25)
 
 
