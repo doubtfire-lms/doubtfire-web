@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-67](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-66...v10.0.0-67) (2025-12-03)
+
+
+### Features
+
+* allow sidekiq web access ([#1053](https://github.com/b0ink/doubtfire-deploy/issues/1053)) ([6651279](https://github.com/b0ink/doubtfire-deploy/commit/6651279c49f431dbddf6fd5d810440ae7b3b9898))
+
 ## [10.0.0-66](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-65...v10.0.0-66) (2025-12-03)
 
 
