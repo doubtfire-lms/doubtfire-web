@@ -118,6 +118,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     private injectorObj: Injector,
   ) {
+    // https://github.com/swimlane/ngx-charts/issues/1428#issuecomment-659237562
     this.chartToolTipService = this.injectorObj.get(TooltipService);
     this.viewContainerRef = this.injectorObj.get(ViewContainerRef);
   }
