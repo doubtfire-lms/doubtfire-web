@@ -1,46 +1,87 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskService} from 'src/app/api/services/task.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-
+import {TooltipService} from '@swimlane/ngx-charts';
 const actualData = {
-  '1.1P': {'1': 7, '2': 5, '9': 3, '10': 1},
-  '1.2P': {'1': 7, '2': 5, '7': 1, '8': 1, '4': 1, '9': 1},
-  '1.3P': {'1': 7, '2': 6, '9': 3},
-  '1.4C': {'1': 10, '2': 5, '9': 1},
-  '2.1P': {'1': 10, '2': 5, '9': 1},
-  '2.2P': {'1': 10, '2': 5, '5': 1},
-  '2.3P': {'1': 10, '2': 5, '9': 1},
-  '2.4P': {'1': 10, '2': 6},
-  '2.5C': {'1': 11, '2': 4, '9': 1},
-  '3.1P': {'1': 11, '2': 5},
-  '3.2P': {'1': 11, '2': 4, '10': 1},
-  '3.3P': {'1': 11, '2': 4, '10': 1},
-  '3.4C': {'1': 12, '2': 3, '5': 1},
-  '3.5C': {'1': 12, '2': 2, '8': 1, '7': 1},
-  '3.6D': {'1': 15, '2': 1},
-  '4.1P': {'1': 11, '2': 2, '10': 1, '9': 1, '5': 1},
-  '4.2C': {'1': 12, '2': 2, '10': 1, '9': 1},
-  '4.3C': {'1': 12, '2': 2, '9': 2},
-  'T1': {'1': 11, '2': 2, '9': 3},
-  '5.1P': {'1': 14, '2': 1, '10': 1},
-  '5.2P': {'1': 14, '2': 1, '5': 1},
-  '5.3C': {'1': 14, '2': 2},
-  '5.4C': {'1': 14, '8': 1, '10': 1},
-  '5.5D': {'1': 15, '2': 1},
-  '6.1P': {'1': 14, '9': 2},
-  '7.1P': {'1': 16},
-  '7.2D': {'1': 16},
-  '8.1P': {'1': 16},
-  '8.2P': {'1': 16},
-  'T2': {'1': 16},
-  '9.1P': {'1': 16},
-  '9.2C': {'1': 16},
-  '10.1H': {'1': 16},
-  '10.2H': {'1': 16},
-  '11.1P': {'1': 16},
-  '6.2D': {'1': 16},
-  'T10': {'1': 16},
+  'Geelong': {
+    '1.1P': {'1': 4, '2': 3, '9': 3, '10': 1},
+    '1.2P': {'1': 4, '2': 3, '7': 1, '8': 1, '4': 1, '9': 1},
+    '1.3P': {'1': 4, '2': 4, '9': 3},
+    '1.4C': {'1': 6, '2': 4, '9': 1},
+    '2.1P': {'1': 7, '2': 3, '9': 1},
+    '2.2P': {'1': 7, '2': 3, '5': 1},
+    '2.3P': {'1': 7, '2': 3, '9': 1},
+    '2.4P': {'1': 7, '2': 4},
+    '2.5C': {'1': 7, '2': 3, '9': 1},
+    '3.1P': {'1': 8, '2': 3},
+    '3.2P': {'1': 8, '2': 3},
+    '3.3P': {'1': 8, '2': 2, '10': 1},
+    '3.4C': {'1': 8, '2': 2, '5': 1},
+    '3.5C': {'1': 8, '2': 1, '8': 1, '7': 1},
+    '3.6D': {'1': 11},
+    '4.1P': {'1': 8, '2': 1, '10': 1, '5': 1},
+    '4.2C': {'1': 8, '2': 1, '10': 1, '9': 1},
+    '4.3C': {'1': 8, '2': 1, '9': 2},
+    'T1': {'1': 8, '2': 1, '9': 2},
+    '5.1P': {'1': 10, '2': 1},
+    '5.2P': {'1': 10, '2': 1},
+    '5.3C': {'1': 10, '2': 1},
+    '5.4C': {'1': 10, '8': 1},
+    '5.5D': {'1': 11},
+    '6.1P': {'1': 10, '9': 1},
+    '7.1P': {'1': 11},
+    '7.2D': {'1': 11},
+    '8.1P': {'1': 11},
+    '8.2P': {'1': 11},
+    'T2': {'1': 11},
+    '9.1P': {'1': 11},
+    '9.2C': {'1': 11},
+    '10.1H': {'1': 11},
+    '10.2H': {'1': 11},
+    '11.1P': {'1': 11},
+    '6.2D': {'1': 11},
+    'T10': {'1': 11},
+  },
+  'Online': {
+    '1.1P': {'1': 3, '2': 2},
+    '1.2P': {'1': 3, '2': 2},
+    '1.3P': {'1': 3, '2': 2},
+    '1.4C': {'1': 4, '2': 1},
+    '2.1P': {'1': 3, '2': 2},
+    '2.2P': {'1': 3, '2': 2},
+    '2.3P': {'1': 3, '2': 2},
+    '2.4P': {'1': 3, '2': 2},
+    '2.5C': {'1': 4, '2': 1},
+    '3.1P': {'1': 3, '2': 2},
+    '3.2P': {'1': 3, '2': 1, '10': 1},
+    '3.3P': {'1': 3, '2': 2},
+    '3.4C': {'1': 4, '2': 1},
+    '3.5C': {'1': 4, '2': 1},
+    '3.6D': {'1': 4, '2': 1},
+    '4.1P': {'1': 3, '2': 1, '9': 1},
+    '4.2C': {'1': 4, '2': 1},
+    '4.3C': {'1': 4, '2': 1},
+    'T1': {'1': 3, '2': 1, '9': 1},
+    '5.1P': {'1': 4, '10': 1},
+    '5.2P': {'1': 4, '5': 1},
+    '5.3C': {'1': 4, '2': 1},
+    '5.4C': {'1': 4, '10': 1},
+    '5.5D': {'1': 4, '2': 1},
+    '6.1P': {'1': 4, '9': 1},
+    '7.1P': {'1': 5},
+    '7.2D': {'1': 5},
+    '8.1P': {'1': 5},
+    '8.2P': {'1': 5},
+    'T2': {'1': 5},
+    '9.1P': {'1': 5},
+    '9.2C': {'1': 5},
+    '10.1H': {'1': 5},
+    '10.2H': {'1': 5},
+    '11.1P': {'1': 5},
+    '6.2D': {'1': 5},
+    'T10': {'1': 5},
+  },
 };
 
 @Component({
@@ -73,14 +114,46 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   constructor(
     private gradeService: GradeService,
     private taskService: TaskService,
-  ) {}
+    private chartToolTipService: TooltipService,
+    private viewContainerRef: ViewContainerRef,
+    private injectorObj: Injector,
+  ) {
+    this.chartToolTipService = this.injectorObj.get(TooltipService);
+    this.viewContainerRef = this.injectorObj.get(ViewContainerRef);
+  }
 
   statusLabelsArr = Array.from(this.taskService.statusLabels.values());
 
-  ngOnInit(): void {
-    this.colorScheme.domain = [...this.taskService.statusColors.values()];
+  campusFilter: string = 'all';
 
-    const data = Object.entries(actualData).map(([taskDef, counts]) => ({
+  ngOnInit(): void {
+    this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
+
+    this.colorScheme.domain = [...this.taskService.statusColors.values()];
+    this.refreshData();
+  }
+
+  refreshData() {
+    const mergedData: Record<string, Record<string, number>> = {};
+
+    // combine all campuses
+    Object.values(actualData).forEach((campusData) => {
+      Object.entries(campusData).forEach(([taskDef, counts]) => {
+        mergedData[taskDef] = mergedData[taskDef] || {};
+        Object.entries(counts).forEach(([status, value]) => {
+          mergedData[taskDef][status] = (mergedData[taskDef][status] || 0) + value;
+        });
+      });
+    });
+
+    // if a campus filter is set, use only that campus
+    const dataSource =
+      this.campusFilter && this.campusFilter !== 'all' && actualData[this.campusFilter]
+        ? actualData[this.campusFilter]
+        : mergedData;
+
+    // build chart series
+    const data = Object.entries(dataSource).map(([taskDef, counts]) => ({
       name: taskDef,
       series: this.statusLabelsArr.map((label, idx) => ({
         name: label,
@@ -89,8 +162,6 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     }));
 
     this.data = data;
-
-    console.log(data);
   }
 
   onSelect(event) {

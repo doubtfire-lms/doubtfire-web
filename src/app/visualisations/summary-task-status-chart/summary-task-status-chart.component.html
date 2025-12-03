@@ -1,4 +1,11 @@
 <div class="h-[500px]">
+  <mat-form-field appearance="outline">
+    <mat-select [(ngModel)]="campusFilter" (selectionChange)="refreshData()">
+      <mat-option value="all">All</mat-option>
+      <mat-option value="Geelong">Geelong</mat-option>
+      <mat-option value="Online">Online</mat-option>
+    </mat-select>
+  </mat-form-field>
   <ngx-charts-bar-vertical-normalized
     [scheme]="colorScheme"
     [results]="data"
