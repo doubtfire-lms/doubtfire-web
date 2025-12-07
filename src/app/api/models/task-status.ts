@@ -13,7 +13,8 @@ export type TaskStatusEnum =
   | 'complete'
   | 'fail'
   | 'time_exceeded'
-  | 'assess_in_portfolio';
+  | 'assess_in_portfolio'
+  | 'discuss_check';
 
 export type TaskStatusUiData = {
   status: TaskStatusEnum;
@@ -38,6 +39,7 @@ export class TaskStatus {
     'fail',
     'time_exceeded',
     'assess_in_portfolio',
+    'discuss_check',
   ];
 
   public static readonly VALID_TOP_TASKS: TaskStatusEnum[] = [
@@ -70,7 +72,13 @@ export class TaskStatus {
     'assess_in_portfolio',
   ];
 
-  public static readonly GRADEABLE_STATUSES: TaskStatusEnum[] = ['fail', 'discuss', 'demonstrate', 'complete'];
+  public static readonly GRADEABLE_STATUSES: TaskStatusEnum[] = [
+    'fail',
+    'discuss',
+    'discuss_check',
+    'demonstrate',
+    'complete',
+  ];
 
   public static readonly TO_BE_WORKED_ON: TaskStatusEnum[] = ['not_started', 'redo', 'need_help', 'working_on_it'];
 
@@ -183,6 +191,7 @@ export class TaskStatus {
     ['feedback_exceeded', 'Feedback Exceeded'],
     ['fix_and_resubmit', 'Resubmit'],
     ['discuss', 'Discuss'],
+    ['discuss_check', 'Discuss Check'],
     ['demonstrate', 'Demonstrate'],
     ['complete', 'Complete'],
     ['fail', 'Fail'],
