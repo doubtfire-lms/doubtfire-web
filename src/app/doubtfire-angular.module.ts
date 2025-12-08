@@ -553,24 +553,26 @@ const MY_DATE_FORMAT = {
     DiscussionPromptService,
     {
       provide: GANTT_GLOBAL_CONFIG,
-      // locale: 'en-US',
-      dateFormat: {
-        // timeZone: 'UTC',
-        weekStartsOn: 1,
-        week: 'w',
-        year: 'yyyy',
-        month: 'MMMM',
-        yearMonth: 'yyyy MMM',
-        yearQuarter: 'yyyy',
-      },
-      linkOptions: {
-        showArrow: true,
-        lineType: GanttLinkLineType.curve,
-      },
-      styleOptions: {
-        // lineHeight: '25',
-        // barHeight: '23',
-        // headerHeight: '50px',
+      useValue: {
+        // locale: 'en-US',
+        dateFormat: {
+          // timeZone: 'UTC',
+          weekStartsOn: 1,
+          week: 'w',
+          year: 'yyyy',
+          month: 'MMMM',
+          yearMonth: 'yyyy MMM',
+          yearQuarter: 'yyyy',
+        },
+        linkOptions: {
+          showArrow: true,
+          lineType: GanttLinkLineType.curve,
+        },
+        styleOptions: {
+          // lineHeight: '25',
+          // barHeight: '23',
+          // headerHeight: '50px',
+        },
       },
     },
   ],
