@@ -1,0 +1,92 @@
+<h2 mat-dialog-title class="text-center">
+  How much does
+  <span class="label label-info mx-1" [matTooltip]="data.task.definition.name">
+    {{ data.task.definition.abbreviation }}
+  </span>
+  relate to
+  <span class="label label-info mx-1" [matTooltip]="data.ilo.name">
+    {{ data.ilo.abbreviation }} </span
+  >?
+</h2>
+
+<mat-dialog-content class="mat-typography">
+  <div class="flex flex-col items-center gap-4 mt-4">
+    <div class="flex flex-col items-center w-full">
+      <p class="text-gray-500 mb-2">Select Rating</p>
+
+      <!-- Custom Circle Rater -->
+      <div class="rating-container">
+        <!-- Loop 1 to 5 -->
+        <button
+          type="button"
+          *ngFor="let r of [1, 2, 3, 4, 5]"
+          class="rating-circle"
+          [ngClass]="{'filled': alignment.rating >= r}"
+          (click)="onRatingChange(r)"
+          [matTooltip]="alignmentLabels[r]"
+        ></button>
+      </div>
+
+      <!-- Rating Label Badge -->
+      <div class="mt-3 min-h-[2em]">
+        <span class="rating-label-badge" *ngIf="alignment.rating > 0">
+          {{ alignmentLabels[alignment.rating] }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Rationale Section -->
+    <div class="w-full rationale-wrapper px-4" *ngIf="alignment.rating > 0">
+      <!-- Display Mode -->
+      <div
+        *ngIf="!editingRationale"
+        class="rationale-display p-4 border rounded relative hover:bg-gray-50 cursor-pointer"
+        (click)="toggleEditRationale()"
+        matTooltip="Click to edit rationale"
+      >
+        <span class="rationale-header text-gray-500 text-lg font-bold uppercase block mb-2">
+          Provided Rationale
+        </span>
+
+        <div class="markdown-content" [innerHTML]="alignment.description || '' | marked"></div>
+
+        <div class="text-lg text-gray-400 italic mt-2" *ngIf="!alignment.description">
+          Click to add a rationale...
+        </div>
+      </div>
+
+      <!-- Edit Mode -->
+      <div *ngIf="editingRationale" class="flex flex-col animate-fade-in">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Rationale</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="alignment.description"
+            rows="6"
+            placeholder="Explain why this task meets this outcome..."
+            autofocus
+          ></textarea>
+        </mat-form-field>
+        <button mat-button color="primary" class="self-end" (click)="toggleEditRationale()">
+          Done Editing
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="px-4 pb-4">
+  <button
+    mat-mini-fab
+    color="warn"
+    *ngIf="alignment.id"
+    (click)="removeAlignmentItem()"
+    matTooltip="Remove this alignment"
+  >
+    <mat-icon>delete</mat-icon>
+  </button>
+  <span class="flex-grow"></span>
+  <button mat-fab color="primary" (click)="closeModal()" matTooltip="Save and Close">
+    <mat-icon>check</mat-icon>
+  </button>
+</mat-dialog-actions>

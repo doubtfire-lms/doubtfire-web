@@ -265,7 +265,8 @@ import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 import {GroupMemberContributionAssignerComponent} from './groups/group-member-contribution-assigner/group-member-contribution-assigner.component';
-
+import {TaskIloAlignmentModalComponent} from './tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.component';
+import {TaskIloAlignmentModalService} from './tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.service';
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
   parse: {
@@ -440,6 +441,7 @@ import {ProjectGroupsComponent} from './projects/states/groups/project-groups/pr
     RolloverComponent,
     ProjectGroupsComponent,
     GroupMemberContributionAssignerComponent,
+    TaskIloAlignmentModalComponent,
   ],
   // Services we provide
   providers: [
@@ -472,6 +474,7 @@ import {ProjectGroupsComponent} from './projects/states/groups/project-groups/pr
     FileDownloaderService,
     CheckForUpdateService,
     TaskOutcomeAlignmentService,
+    TaskIloAlignmentModalService,
     visualisationsProvider,
     commentsModalProvider,
     rootScopeProvider,

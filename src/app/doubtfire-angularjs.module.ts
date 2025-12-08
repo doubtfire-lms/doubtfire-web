@@ -41,8 +41,8 @@ import 'build/src/app/tasks/modals/modals.js';
 import 'build/src/app/tasks/tasks.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.js';
-import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.js';
-import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.js';
+// import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.js';
+// import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.js';
 import 'build/src/app/config/runtime/runtime.js';
@@ -209,6 +209,7 @@ import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/d
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 import {GroupMemberContributionAssignerComponent} from './groups/group-member-contribution-assigner/group-member-contribution-assigner.component';
+import {TaskIloAlignmentModalService} from './tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -295,6 +296,10 @@ DoubtfireAngularJSModule.factory(
   downgradeInjectable(UnitStudentEnrolmentModalService),
 );
 DoubtfireAngularJSModule.factory('PrivacyPolicy', downgradeInjectable(PrivacyPolicy));
+DoubtfireAngularJSModule.factory(
+  'TaskILOAlignmentModal',
+  downgradeInjectable(TaskIloAlignmentModalService),
+);
 
 // directive -> component
 DoubtfireAngularJSModule.directive(
@@ -488,6 +493,9 @@ DoubtfireAngularJSModule.directive(
 );
 
 // Global configuration
+// To compensate for rest unmigrated components
+angular.module('doubtfire.tasks.task-ilo-alignment.modals', []);
+angular.module('doubtfire.tasks.task-ilo-alignment.modals.task-ilo-alignment-modal', []);
 
 // If the user enters a URL that doesn't match any known URL (state), send them to `/home`
 const otherwiseConfigBlock = [

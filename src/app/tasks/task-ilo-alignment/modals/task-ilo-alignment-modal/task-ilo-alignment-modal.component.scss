@@ -1,0 +1,78 @@
+@import '../../../../../theme.scss';
+
+.label-info {
+  background-color: #17a2b8;
+  color: white;
+  padding: 0.3em 0.8em;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25em;
+}
+
+.rating-container {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.rating-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  background-color: #e0e0e0;
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: mix(#3f51b5, #e0e0e0, 20%);
+  }
+
+  // Filled state
+  &.filled {
+    background-color: #3f51b5;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+    &:hover {
+      background-color: darken(#3f51b5, 5%);
+    }
+  }
+}
+
+.rating-label-badge {
+  background-color: #303f9f;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  line-height: 1.4;
+}
+
+mat-dialog-content {
+  min-height: 350px;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+// Rationale Text Area
+.rationale-display, .markdown-content {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.rationale-header {
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
