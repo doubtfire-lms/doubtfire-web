@@ -39,11 +39,11 @@
           <label class="col-sm-2 control-label" for="enddate">End Date</label>
           <div class="col-sm-9">
             <div class="col-sm-4 input-group">
-              <input datepicker-popup="{{format}}" id="enddate" type="text" class="form-control" ng-model="unit.endDate" is-open="calOptions.endOpened" ng-required="true" close-text="Close" ng-if="!saveData.toPeriod" />
+              <input datepicker-popup="yyyy-MM-dd" id="enddate" type="text" class="form-control" ng-model="saveData.endDate" is-open="calOptions.endOpened" ng-required="true" placeholder="yyyy-MM-dd" close-text="Close" ng-if="!saveData.toPeriod" />
               <input
                 type="text"
                 class="form-control"
-                id="startdate"
+                id="enddate"
                 value="{{saveData.toPeriod.endDate | date}}"
                 ng-disabled="true"
                 ng-if="saveData.toPeriod"

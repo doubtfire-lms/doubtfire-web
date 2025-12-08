@@ -298,6 +298,10 @@ import {OverseerScriptEditorModalComponent} from './units/states/edit/directives
 import {CodeEditorModule} from '@ngstack/code-editor';
 import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
 import {GANTT_GLOBAL_CONFIG, GanttLinkLineType, NgxGanttModule} from '@worktile/gantt';
+import {DiscussionPromptService} from './api/services/discussion-prompt.service';
+import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
+import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
+import {DiscussionPromptsViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/discussion-prompts-view/discussion-prompts-view.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -453,6 +457,10 @@ const MY_DATE_FORMAT = {
     AnalyticsTutorTimesComponent,
     PortfolioIncludedTasksComponent,
     OverseerScriptEditorModalComponent,
+    UploadGradesComponent,
+    DiscussionPromptsComponent,
+    TaskDefinitionDiscussionPromptsComponent,
+    DiscussionPromptsViewComponent,
   ],
   providers: [
     // Services we provide
@@ -542,28 +550,27 @@ const MY_DATE_FORMAT = {
     LtiService,
     TaskPrerequisiteService,
     MarkingSessionService,
+    DiscussionPromptService,
     {
       provide: GANTT_GLOBAL_CONFIG,
-      useValue: {
-        // locale: 'en-US',
-        dateFormat: {
-          // timeZone: 'UTC',
-          weekStartsOn: 1,
-          week: 'w',
-          year: 'yyyy',
-          month: 'MMMM',
-          yearMonth: 'yyyy MMM',
-          yearQuarter: 'yyyy',
-        },
-        linkOptions: {
-          showArrow: true,
-          lineType: GanttLinkLineType.curve,
-        },
-        styleOptions: {
-          // lineHeight: '25',
-          // barHeight: '23',
-          // headerHeight: '50px',
-        },
+      // locale: 'en-US',
+      dateFormat: {
+        // timeZone: 'UTC',
+        weekStartsOn: 1,
+        week: 'w',
+        year: 'yyyy',
+        month: 'MMMM',
+        yearMonth: 'yyyy MMM',
+        yearQuarter: 'yyyy',
+      },
+      linkOptions: {
+        showArrow: true,
+        lineType: GanttLinkLineType.curve,
+      },
+      styleOptions: {
+        // lineHeight: '25',
+        // barHeight: '23',
+        // headerHeight: '50px',
       },
     },
   ],

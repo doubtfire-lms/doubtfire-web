@@ -46,7 +46,7 @@ export class TaskAssessmentCommentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.update();
+    // this.update();
   }
 
   get message() {

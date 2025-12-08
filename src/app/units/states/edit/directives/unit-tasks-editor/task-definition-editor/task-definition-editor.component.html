@@ -68,6 +68,18 @@
     </div>
   </mat-step>
 
+  <mat-step>
+    <ng-template matStepLabel>Discussion Prompts</ng-template>
+    <div class="pt-[12px]">
+      <p class="font-normal text-gray-500 pb-2">
+        Discussion prompts for tutors to use when discussing student tasks in class
+      </p>
+
+      <f-task-definition-discussion-prompts [taskDefinition]="taskDefinition" [staffView]="true">
+      </f-task-definition-discussion-prompts>
+    </div>
+  </mat-step>
+
   @if (overseerEnabled) {
     <mat-step>
       <ng-template matStepLabel>Task Assessment Automation</ng-template>
