@@ -14,18 +14,32 @@
   <div class="flex w-full">
     <f-user-badge fxFlex fxFlexAlign="start start" [selectedTask]="selectedTask"></f-user-badge>
 
-    <span class="center-buttons flex justify-center">
-      <button
-        [disabled]="selectedTask === undefined"
-        mat-icon-button
-        matTooltip="Mark as Redo"
-        matTooltipPosition="above"
-        aria-label=""
-        class="button"
-        (click)="selectedTask?.updateTaskStatus('redo')"
-      >
-        <mat-icon>undo</mat-icon>
-      </button>
+    <span class="center-buttons flex justify-around gap-5">
+      <div>
+        <button
+          [disabled]="selectedTask === undefined"
+          mat-icon-button
+          matTooltip="Mark as Redo"
+          matTooltipPosition="above"
+          aria-label=""
+          class="button"
+          (click)="selectedTask?.updateTaskStatus('redo')"
+        >
+          <mat-icon>undo</mat-icon>
+        </button>
+
+        <button
+          [disabled]="selectedTask === undefined"
+          mat-icon-button
+          matTooltip="Mark as Discuss & Check"
+          matTooltipPosition="above"
+          aria-label=""
+          class="button"
+          (click)="selectedTask?.updateTaskStatus('discuss_check')"
+        >
+          <mat-icon>sms_failed</mat-icon>
+        </button>
+      </div>
       <button
         [disabled]="selectedTask === undefined"
         mat-icon-button
@@ -37,7 +51,7 @@
       >
         <mat-icon>construction</mat-icon>
       </button>
-      <span class="w-3"></span>
+
       @if (selectedTask && selectedTask.suggestedTaskStatus) {
         <button
           mat-icon-button
@@ -52,7 +66,6 @@
         >
           <i class="fa {{ taskService.statusData(selectedTask.suggestedTaskStatus).icon }}"></i>
         </button>
-        <span class="w-3"></span>
       }
       @if (selectedTask?.definition?.assessInPortfolioOnly) {
         <button
@@ -92,7 +105,9 @@
         <mat-icon>question_answer</mat-icon>
       </button>
 
-      <div class="ml-5 border-l-2 border-gray-300">
+      <mat-divider [vertical]="true"></mat-divider>
+
+      <div class="w-[120px] flex justify-start">
         <button
           [disabled]="selectedTask === undefined"
           mat-icon-button
