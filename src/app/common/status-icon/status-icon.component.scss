@@ -50,4 +50,7 @@
   &.fail {
     @include status-icon('fail');
   }
+  &.discuss-check {
+    @include status-icon('discuss-check');
+  }
 }

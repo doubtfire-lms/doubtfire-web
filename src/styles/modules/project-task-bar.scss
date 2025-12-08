@@ -76,6 +76,12 @@
 .progress-bar-complete {
   @include task-status-color-complete;
 }
+.progress-bar-assess-in-portfolio {
+  @include task-status-color-assess-in-portfolio;
+}
+.progress-bar-discuss-check {
+  @include task-status-color-discuss-check;
+}
 
 .progress-bar-not-started {
   @include task-status-color-not-started;

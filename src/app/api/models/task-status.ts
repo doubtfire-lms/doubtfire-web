@@ -1,4 +1,4 @@
-import { Task } from './task';
+import {Task} from './task';
 
 export type TaskStatusEnum =
   | 'not_started'
@@ -21,7 +21,7 @@ export type TaskStatusUiData = {
   icon: string;
   label: string;
   class: string;
-  help: { detail: string; reason: string; action: string };
+  help: {detail: string; reason: string; action: string};
 };
 
 export class TaskStatus {
@@ -50,6 +50,7 @@ export class TaskStatus {
     'fix_and_resubmit',
     'ready_for_feedback',
     'discuss',
+    'discuss_check',
     'demonstrate',
   ];
 
@@ -62,6 +63,7 @@ export class TaskStatus {
     'fail',
     'time_exceeded',
     'assess_in_portfolio',
+    'discuss_check',
   ];
 
   public static readonly FINAL_STATUSES: TaskStatusEnum[] = [
@@ -75,14 +77,23 @@ export class TaskStatus {
   public static readonly GRADEABLE_STATUSES: TaskStatusEnum[] = [
     'fail',
     'discuss',
-    'discuss_check',
     'demonstrate',
     'complete',
+    'discuss_check',
   ];
 
-  public static readonly TO_BE_WORKED_ON: TaskStatusEnum[] = ['not_started', 'redo', 'need_help', 'working_on_it'];
+  public static readonly TO_BE_WORKED_ON: TaskStatusEnum[] = [
+    'not_started',
+    'redo',
+    'need_help',
+    'working_on_it',
+  ];
 
-  public static readonly DISCUSSION_STATES: TaskStatusEnum[] = ['discuss', 'demonstrate'];
+  public static readonly DISCUSSION_STATES: TaskStatusEnum[] = [
+    'discuss',
+    'discuss_check',
+    'demonstrate',
+  ];
 
   public static readonly STATE_THAT_ALLOWS_EXTENSION: TaskStatusEnum[] = [
     'not_started',
@@ -104,6 +115,7 @@ export class TaskStatus {
     'fix_and_resubmit',
     'feedback_exceeded',
     'redo',
+    'discuss_check',
   ];
 
   public static readonly SUBMITTABLE_STATUSES: TaskStatusEnum[] = [
@@ -120,6 +132,7 @@ export class TaskStatus {
     'discuss',
     'demonstrate',
     'complete',
+    'discuss_check',
   ];
 
   public static readonly FEEDBACK_TEMPLATE_STATUSES: TaskStatusEnum[] = [
@@ -128,9 +141,13 @@ export class TaskStatus {
     'fix_and_resubmit',
     'redo',
     'feedback_exceeded',
+    'discuss_check',
   ];
 
-  public static readonly LEARNING_WEIGHT: Map<TaskStatusEnum, number> = new Map<TaskStatusEnum, number>([
+  public static readonly LEARNING_WEIGHT: Map<TaskStatusEnum, number> = new Map<
+    TaskStatusEnum,
+    number
+  >([
     ['fail', 0.0],
     ['not_started', 0.0],
     ['working_on_it', 0.0],
@@ -143,10 +160,14 @@ export class TaskStatus {
     ['demonstrate', 0.8],
     ['complete', 1.0],
     ['time_exceeded', 0.3],
-    ['assess_in_portfolio', 0.0],
+    ['assess_in_portfolio', 1.0],
+    ['discuss_check', 0.8],
   ]);
 
-  public static readonly STATUS_ACRONYM: Map<TaskStatusEnum, string> = new Map<TaskStatusEnum, string>([
+  public static readonly STATUS_ACRONYM: Map<TaskStatusEnum, string> = new Map<
+    TaskStatusEnum,
+    string
+  >([
     ['ready_for_feedback', 'RFF'],
     ['not_started', 'NOS'],
     ['working_on_it', 'WRK'],
@@ -160,6 +181,7 @@ export class TaskStatus {
     ['fail', 'FAL'],
     ['time_exceeded', 'TIE'],
     ['assess_in_portfolio', 'AIP'],
+    ['discuss_check', 'DC'],
   ]);
 
   // Which status should not show up in the task status drop down... for students
@@ -180,6 +202,7 @@ export class TaskStatus {
     ['time_exceeded', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
     ['fail', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
     ['assess_in_portfolio', ['not_started']],
+    ['discuss_check', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
   ]);
 
   public static readonly STATUS_LABELS = new Map<TaskStatusEnum, string>([
@@ -191,12 +214,12 @@ export class TaskStatus {
     ['feedback_exceeded', 'Feedback Exceeded'],
     ['fix_and_resubmit', 'Resubmit'],
     ['discuss', 'Discuss'],
-    ['discuss_check', 'Discuss Check'],
     ['demonstrate', 'Demonstrate'],
     ['complete', 'Complete'],
     ['fail', 'Fail'],
     ['time_exceeded', 'Time Exceeded'],
     ['assess_in_portfolio', 'Assess in Portfolio'],
+    ['discuss_check', 'Discuss & Check'],
   ]);
 
   public static readonly STATUS_ICONS = new Map<TaskStatusEnum, string>([
@@ -213,6 +236,7 @@ export class TaskStatus {
     ['fail', 'fa fa-times'],
     ['time_exceeded', 'fa fa-clock-o'],
     ['assess_in_portfolio', 'fa fa-folder-open'],
+    ['discuss_check', 'fa fa-commenting'],
   ]);
 
   // Please make sure this matches task-status-colors.less
@@ -230,6 +254,7 @@ export class TaskStatus {
     ['fail', '#d93713'],
     ['time_exceeded', '#d93713'],
     ['assess_in_portfolio', '#91b891'],
+    ['discuss_check', '#31b0d5'],
   ]);
 
   public static readonly STATUS_SEQ = new Map<TaskStatusEnum, number>([
@@ -246,6 +271,7 @@ export class TaskStatus {
     ['demonstrate', 11],
     ['complete', 12],
     ['assess_in_portfolio', 13],
+    ['discuss_check', 14],
   ]);
 
   public static readonly SWITCHABLE_STATES = {
@@ -253,6 +279,7 @@ export class TaskStatus {
     tutor: [
       'complete',
       'discuss',
+      'discuss_check',
       'demonstrate',
       'fix_and_resubmit',
       'redo',
@@ -267,14 +294,16 @@ export class TaskStatus {
   // action = action student can take
   public static readonly HELP_DESCRIPTIONS = new Map<
     TaskStatusEnum,
-    { detail: string; reason: string; action: string }
+    {detail: string; reason: string; action: string}
   >([
     [
       'ready_for_feedback',
       {
         detail: 'Submitted this task for feedback',
-        reason: 'You have finished working on the task and have uploaded it for your tutor to assess.',
-        action: 'No further action is required. Your tutor will change this task status once they have assessed it.',
+        reason:
+          'You have finished working on the task and have uploaded it for your tutor to assess.',
+        action:
+          'No further action is required. Your tutor will change this task status once they have assessed it.',
       },
     ],
     [
@@ -298,7 +327,8 @@ export class TaskStatus {
       {
         detail: 'Need help for the task',
         reason: 'You are working on the task but would like some help to get it complete.',
-        action: 'Upload the task with what you have completed so far and add a comment on what you would like help on.',
+        action:
+          'Upload the task with what you have completed so far and add a comment on what you would like help on.',
       },
     ],
     [
@@ -315,7 +345,8 @@ export class TaskStatus {
       'feedback_exceeded',
       {
         detail: 'Feedback will no longer be given',
-        reason: 'This work is not complete to an acceptable standard and your tutor will not reassess it again.',
+        reason:
+          'This work is not complete to an acceptable standard and your tutor will not reassess it again.',
         action:
           "It is now your responsibility to ensure this task is at an adequate standard in your portfolio. You should fix your work according to your tutor's prior feedback and include a corrected version in your portfolio.",
       },
@@ -339,6 +370,14 @@ export class TaskStatus {
       },
     ],
     [
+      'discuss_check',
+      {
+        detail: 'Your work needs to be discussed further.',
+        reason: 'Your work looks good and your tutor believes it is on track.',
+        action: 'For this to be marked as complete, attend class and discuss it with your tutor.',
+      },
+    ],
+    [
       'demonstrate',
       {
         detail: 'Your work needs to be demonstrated.',
@@ -352,7 +391,8 @@ export class TaskStatus {
       {
         detail: 'You are finished with this task 🎉',
         reason: 'Your tutor is happy with your work and it has been discussed with them.',
-        action: 'No further action required. Move onto the next task, or go party if everything is done.',
+        action:
+          'No further action required. Move onto the next task, or go party if everything is done.',
       },
     ],
     [
@@ -368,7 +408,8 @@ export class TaskStatus {
       'time_exceeded',
       {
         detail: 'Time limit exceeded',
-        reason: 'This work was submitted after the deadline, having missed both the target date and deadline.',
+        reason:
+          'This work was submitted after the deadline, having missed both the target date and deadline.',
         action:
           'Work submitted after the feedback deadline will not be checked by tutors prior to the portfolio assessment. You will need to ensure this task is at an adequate standard in your portfolio.',
       },

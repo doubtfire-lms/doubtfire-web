@@ -37,6 +37,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
     ready_for_feedback: 1,
     assess_in_portfolio: 1,
     discuss: 2,
+    discuss_check: 2,
     demonstrate: 2,
     complete: 3,
   };
