@@ -54,7 +54,7 @@ export class User extends Entity {
   }
 
   public get preferredName(): string {
-    const nickname = this.nickname.trim();
+    const nickname = this.nickname?.trim();
     const firstName = this.firstName.trim();
     if (nickname) {
       return nickname;
