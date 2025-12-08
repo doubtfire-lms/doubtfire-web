@@ -57,6 +57,8 @@
     [virtualScrollEnabled]="false"
     [disabledLoadOnScroll]="true"
     class="h-full overflow-hidden"
+    (dragEnded)="dragEnded($event)"
+    (dragMoved)="dragMoved($event)"
   >
     <ngx-gantt-table>
       <ngx-gantt-column name="Tasks" width="325px">
@@ -106,7 +108,7 @@
               ? 'bg-[#eb6134] text-white'
               : isCloseToFeedbackDeadline(item)
                 ? 'bg-[#ffc53d] text-black'
-                : 'bg-[#3333ff] text-white'
+                : 'bg-[#0e467b] text-white'
           "
           [matTooltip]="getTooltip(item)"
           matTooltipPosition="above"

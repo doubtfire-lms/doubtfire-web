@@ -1,4 +1,5 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
 import {
   GanttBaselineItem,
   GanttDate,
@@ -10,13 +11,11 @@ import {
   GanttViewType,
 } from '@worktile/gantt';
 import {Project, ProjectService, TaskDefinition} from 'src/app/api/models/doubtfire-model';
-import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
+import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {GlobalStateService} from '../index/global-state.service';
-import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
-import {MatSelectChange} from '@angular/material/select';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
   selector: 'f-project-plan',
@@ -71,6 +70,42 @@ export class ProjectPlanComponent implements OnInit {
 
   public showDatesColumn: boolean = false;
 
+  dragMoved(event: GanttDragEvent) {
+    // console.log(event);
+  }
+
+  dragEnded(event: GanttDragEvent) {
+    const item = event.item;
+    const td = this.getTaskDefinition(item.id);
+
+    const requisites = this.taskPrerequisites.filter((p) => p.prerequisiteId === td.id);
+    const requisiteItems = this.items.filter((p) =>
+      requisites.find((pre) => pre.taskDefinitionId == Number(p.id)),
+    );
+
+    if (
+      requisiteItems.length &&
+      (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item))
+    ) {
+      const task = this.project.findTaskForDefinition(td.id);
+
+      item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+      item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+
+      // If the task defaults are still invalid, reset them to the task definition default
+      if (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item)) {
+        item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
+        item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
+      }
+
+      this.items = [...this.items];
+      this.alertService.error(
+        `You must allow enough time to submit this task because it is a prerequisite for tasks: ${requisiteItems.map((r) => this.getTaskDefinition(r.id).abbreviation).join(', ')}`,
+        8000,
+      );
+    }
+  }
+
   isPastFeedbackDeadline(item: GanttItem) {
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
     const task = this.project.findTaskForDefinition(td.id);
@@ -102,25 +137,30 @@ export class ProjectPlanComponent implements OnInit {
         continue;
       }
       if (this.unsavedChanges(item)) {
-        const task = this.project.findTaskForDefinition(td.id);
-
-        task.saveTargetDates(this.toDateStr(item.start), this.toDateStr(item.end)).subscribe({
-          next: (data) => {
-            task.targetDueDate = data.targetDueDate;
-            task.targetStartDate = data.targetStartDate;
-            item.start = this.normalizeDateUTC(data.targetStartDate.getTime() / 1000);
-            item.end = this.normalizeDateUTC(data.targetDueDate.getTime() / 1000);
-            this.items = [...this.items];
-          },
-          error: (error) => {
-            this.alertService.error(
-              `Failed to save target date for ${td.abbreviation}: ${error}`,
-              6000,
-            );
-          },
-        });
+        this.saveTargetDate(item);
       }
     }
+  }
+
+  saveTargetDate(item: GanttItem) {
+    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
+    const task = this.project.findTaskForDefinition(td.id);
+
+    task.saveTargetDates(this.toDateStr(item.start), this.toDateStr(item.end)).subscribe({
+      next: (data) => {
+        task.targetDueDate = data.targetDueDate;
+        task.targetStartDate = data.targetStartDate;
+        item.start = this.normalizeDateUTC(data.targetStartDate.getTime() / 1000);
+        item.end = this.normalizeDateUTC(data.targetDueDate.getTime() / 1000);
+        this.items = [...this.items];
+      },
+      error: (error) => {
+        this.alertService.error(
+          `Failed to save target date for ${td.abbreviation}: ${error}`,
+          6000,
+        );
+      },
+    });
   }
 
   anyUnsavedChanges() {
@@ -315,6 +355,7 @@ export class ProjectPlanComponent implements OnInit {
             switch (p.taskStatus) {
               case 'ready_for_feedback':
                 color = '#0079D8';
+                // color = '#90c8fc';
                 break;
               case 'complete':
                 color = '#5BB75B';
@@ -342,6 +383,23 @@ export class ProjectPlanComponent implements OnInit {
             return link;
           }),
       };
+
+      if (
+        item.links.length &&
+        (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item))
+      ) {
+        const task = this.project.findTaskForDefinition(td.id);
+
+        item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+        item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+
+        // If the task defaults are still invalid, reset them to the task definition default
+        if (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item)) {
+          item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
+          item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
+        }
+      }
+
       this.items.push(item);
       this.items = [...this.items];
 
@@ -351,6 +409,10 @@ export class ProjectPlanComponent implements OnInit {
       baselineItem.end = this.normalizeDateUTC(td.targetDate.getTime() / 1000);
       this.baselineItems.push(baselineItem);
       this.baselineItems = [...this.baselineItems];
+
+      if (this.unsavedChanges(item)) {
+        this.saveTargetDate(item);
+      }
     }
   }
 
