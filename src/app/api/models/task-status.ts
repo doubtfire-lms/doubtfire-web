@@ -372,11 +372,11 @@ export class TaskStatus {
     [
       'discuss_check',
       {
-        detail: 'Your work is almost correct but needs closer review.',
+        detail: 'Your work is off track and needs focused discussion.',
         reason:
-          'Some parts are not entirely accurate or could be improved. Your tutor wants to ensure you understand it fully.',
+          'It seems you have misunderstood some key requirements for this task. Previous feedback has not led to sufficient progress.',
         action:
-          'Attend class and go through your work in detail with your tutor to clarify and correct any mistakes.',
+          'Attend class so your tutor can go through your work in detail and help you get back on track.',
       },
     ],
     [
