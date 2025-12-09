@@ -372,9 +372,11 @@ export class TaskStatus {
     [
       'discuss_check',
       {
-        detail: 'Your work needs to be discussed further.',
-        reason: 'Your work looks good and your tutor believes it is on track.',
-        action: 'For this to be marked as complete, attend class and discuss it with your tutor.',
+        detail: 'Your work is almost correct but needs closer review.',
+        reason:
+          'Some parts are not entirely accurate or could be improved. Your tutor wants to ensure you understand it fully.',
+        action:
+          'Attend class and go through your work in detail with your tutor to clarify and correct any mistakes.',
       },
     ],
     [
