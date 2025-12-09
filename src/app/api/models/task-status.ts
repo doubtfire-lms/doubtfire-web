@@ -219,7 +219,7 @@ export class TaskStatus {
     ['fail', 'Fail'],
     ['time_exceeded', 'Time Exceeded'],
     ['assess_in_portfolio', 'Assess in Portfolio'],
-    ['discuss_check', 'Discuss & Check'],
+    ['discuss_check', 'Off Track'],
   ]);
 
   public static readonly STATUS_ICONS = new Map<TaskStatusEnum, string>([
