@@ -106,6 +106,40 @@ export class ProjectPlanComponent implements OnInit {
     }
   }
 
+  // Check to see if this task is a prerequisite for another task
+  // If it is, ensure the end date on the task is before the start of its dependent task
+  prerequisiteConflict(item: GanttItem) {
+    if (!item.links.length) {
+      return false;
+    }
+
+    let isAfterDependentStartDate: boolean = false;
+    for (const ganttLink of item.links) {
+      if (typeof ganttLink === 'string') {
+        continue;
+      }
+
+      const ganttItem = this.items.find((i) => i.id === ganttLink.link);
+      const diff = this.normalizeDateUTC(item.end) - this.normalizeDateUTC(ganttItem.start);
+      const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
+
+      if (color === '#0079D8') {
+        // Ready for feedback
+        if (diff > 0) {
+          isAfterDependentStartDate = true;
+        }
+      } else if (color === '#31b0d5' || color === '#5BB75B') {
+        // Discuss or Complete
+        if (diff >= 7 * 24 * 60 * 60 * -1) {
+          // We need to ensure this task is submitted a week earlier than its dependent so get it in a Discuss state
+          isAfterDependentStartDate = true;
+        }
+      }
+    }
+
+    return isAfterDependentStartDate;
+  }
+
   isPastFeedbackDeadline(item: GanttItem) {
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
     const task = this.project.findTaskForDefinition(td.id);

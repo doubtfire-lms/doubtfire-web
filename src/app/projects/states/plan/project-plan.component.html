@@ -104,11 +104,13 @@
         <span
           class="w-full text-white flex gap-2 justify-between items-center p-2 h-[35px]"
           [ngClass]="
-            isPastFeedbackDeadline(item)
-              ? 'bg-[#eb6134] text-white'
-              : isCloseToFeedbackDeadline(item)
-                ? 'bg-[#ffc53d] text-black'
-                : 'bg-[#0e467b] text-white'
+            prerequisiteConflict(item)
+              ? 'bg-[#cd3704] text-white'
+              : isPastFeedbackDeadline(item)
+                ? 'bg-[#eb6134] text-white'
+                : isCloseToFeedbackDeadline(item)
+                  ? 'bg-[#ffc53d] text-black'
+                  : 'bg-[#0e467b] text-white'
           "
           [matTooltip]="getTooltip(item)"
           matTooltipPosition="above"
@@ -118,7 +120,13 @@
             }
             &nbsp;&nbsp;{{ item.title }}
           </div>
-          @if (isPastFeedbackDeadline(item)) {
+          @if (prerequisiteConflict(item)) {
+            <mat-icon
+              class="scale-90"
+              matTooltip="This task must be completed earlier because other tasks depend on it"
+              >warning</mat-icon
+            >
+          } @else if (isPastFeedbackDeadline(item)) {
             <mat-icon
               class="scale-90"
               matTooltip="Your planned target date is past the feedback deadline."
