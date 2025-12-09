@@ -215,7 +215,10 @@
     <mat-tab-group dynamicHeight (selectedTabChange)="onTabChange($event)">
       <mat-tab label="Task Comments"></mat-tab>
 
-      <mat-tab [matBadge]="project?.staffNoteCount" label="Staff Notes"></mat-tab>
+      <mat-tab
+        [matBadge]="project?.staffNoteCount"
+        label="Staff Notes{{ project?.staffNoteCount ? ' (' + project.staffNoteCount + ')' : '' }}"
+      ></mat-tab>
       <mat-tab label="Discussion Prompts"></mat-tab>
     </mat-tab-group>
 
