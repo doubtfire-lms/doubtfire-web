@@ -119,9 +119,9 @@
                 }
                 <status-icon
                   [hidden]="isNarrow"
-                  matBadge="{{ task.qualityPts }}/{{ task.definition.maxQualityPts }}"
-                  [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts"
-                  matBadgePosition="before"
+                  matBadge="{{ task.status === 'discuss_check' ? '!' : '' }}"
+                  matBadgePosition="after"
+                  matBadgeColor="warn"
                   [status]="task.status"
                   class="ml-3"
                 ></status-icon>
