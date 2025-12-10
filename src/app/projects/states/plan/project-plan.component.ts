@@ -120,6 +120,9 @@ export class ProjectPlanComponent implements OnInit {
       }
 
       const ganttItem = this.items.find((i) => i.id === ganttLink.link);
+      if (!ganttItem) {
+        return false;
+      }
       const diff = this.normalizeDateUTC(item.end) - this.normalizeDateUTC(ganttItem.start);
       const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
 
