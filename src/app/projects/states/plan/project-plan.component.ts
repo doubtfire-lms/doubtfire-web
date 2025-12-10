@@ -83,28 +83,33 @@ export class ProjectPlanComponent implements OnInit {
       requisites.find((pre) => pre.taskDefinitionId == Number(p.id)),
     );
 
-    if (
-      requisiteItems.length &&
-      (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item))
-    ) {
-      const task = this.project.findTaskForDefinition(td.id);
+    // if (
+    //   requisiteItems.length &&
+    //   (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item))
+    // ) {
+    //   const task = this.project.findTaskForDefinition(td.id);
 
-      item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
-      item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+    //   item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+    //   item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
 
-      // If the task defaults are still invalid, reset them to the task definition default
-      if (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item)) {
-        item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
-        item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
-      }
+    //   // If the task defaults are still invalid, reset them to the task definition default
+    //   if (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item)) {
+    //     item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
+    //     item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
+    //   }
 
-      this.items = [...this.items];
-      this.alertService.error(
-        `You must allow enough time to submit this task because it is a prerequisite for tasks: ${requisiteItems.map((r) => this.getTaskDefinition(r.id).abbreviation).join(', ')}`,
-        8000,
-      );
-    }
+    //   this.items = [...this.items];
+    //   this.alertService.error(
+    //     `You must allow enough time to submit this task because it is a prerequisite for tasks: ${requisiteItems.map((r) => this.getTaskDefinition(r.id).abbreviation).join(', ')}`,
+    //     8000,
+    //   );
+    // }
   }
+
+  public blockedDependents: Map<string, boolean> = new Map();
+
+  // TODO: create a map to track errors for each task, and what their final color should currently be
+  // a task can hold multiple errors, for example
 
   // Check to see if this task is a prerequisite for another task
   // If it is, ensure the end date on the task is before the start of its dependent task
@@ -123,24 +128,96 @@ export class ProjectPlanComponent implements OnInit {
       if (!ganttItem) {
         return false;
       }
-      const diff = this.normalizeDateUTC(item.end) - this.normalizeDateUTC(ganttItem.start);
+      const diff = this.normalizeDateUTC(item.end) - this.normalizeDateUTC(ganttItem.end);
       const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
-
+      this.blockedDependents.set(ganttItem.id, false);
+      // console.log(this.taskDefs().find((t) => t.id == 75));
       if (color === '#0079D8') {
         // Ready for feedback
         if (diff > 0) {
           isAfterDependentStartDate = true;
+          // TODO: if gantItemm is also a prerequisite to another task, they should all recursively be checked and have warnings
+          this.blockedDependents.set(ganttItem.id, true);
+        } else {
+          // this.blockedDependents.set(ganttItem.id, false);
         }
       } else if (color === '#31b0d5' || color === '#5BB75B') {
         // Discuss or Complete
-        if (diff >= 7 * 24 * 60 * 60 * -1) {
+        if (diff >= -7 * 24 * 60 * 60) {
           // We need to ensure this task is submitted a week earlier than its dependent so get it in a Discuss state
           isAfterDependentStartDate = true;
+          this.blockedDependents.set(ganttItem.id, true);
+        } else {
+          // this.blockedDependents.set(ganttItem.id, false);
         }
       }
     }
 
+    if (this.blockedDependents.get(item.id) === true) {
+      return true;
+    }
+
+    // const prerequisites = this.items.filter((i) => {
+    //   const links = i.links;
+    //   if (typeof links === 'string') {
+    //     return false;
+    //   }
+
+    //   return links.some((l) => typeof l !== 'string' && l.link === i.id);
+    // });
+
     return isAfterDependentStartDate;
+  }
+
+  isBlockedByPrerequisite(item: GanttItem) {
+    if (this.blockedDependents.get(item.id) === true) {
+      return true;
+    }
+
+    const prerequisites = this.items.filter((i) => {
+      const links = i.links;
+      if (typeof links === 'string') {
+        return false;
+      }
+
+      return links.some((l) => typeof l !== 'string' && l.link === item.id);
+    });
+
+    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
+
+    if (td.abbreviation === 'D3') {
+      console.log(prerequisites);
+    }
+
+    for (const link of prerequisites) {
+      if (this.prerequisiteConflict(link)) {
+        return true;
+      }
+    }
+
+    if (prerequisites.some((p) => this.blockedDependents.get(p.id) === true)) {
+      this.blockedDependents.set(item.id, true);
+      return true;
+    } else {
+      this.blockedDependents.set(item.id, false);
+    }
+
+    return false;
+  }
+
+  getItemClasses(item: GanttItem) {
+    // call all functions so they run
+    const pastDeadline = this.isPastFeedbackDeadline(item);
+    const conflict = this.prerequisiteConflict(item);
+    const blocked = this.isBlockedByPrerequisite(item);
+    const closeDeadline = this.isCloseToFeedbackDeadline(item);
+
+    // decide the class based on priority
+    if (pastDeadline) return 'bg-[#cd3704] text-white';
+    if (conflict) return 'bg-[#eb6134] text-white';
+    if (blocked) return 'bg-[#cd3704] text-black';
+    if (closeDeadline) return 'bg-[#ffc53d] text-black';
+    return 'bg-[#0e467b] text-white';
   }
 
   isPastFeedbackDeadline(item: GanttItem) {
@@ -355,7 +432,9 @@ export class ProjectPlanComponent implements OnInit {
     this.project.unit.getTaskPrerequisites().subscribe({
       next: (prereqs) => {
         const taskPrerequisites: TaskPrerequisite[] = prereqs;
-        this.taskPrerequisites = taskPrerequisites;
+        this.taskPrerequisites = taskPrerequisites.filter((pre) =>
+          this.taskDefs().find((td) => td.id === pre.taskDefinitionId),
+        );
         this.refreshItems();
       },
       error: (error) => {
@@ -383,6 +462,7 @@ export class ProjectPlanComponent implements OnInit {
         // color: this.gradeService.gradeColors[td.targetGrade],
         expanded: false,
         color: '#3333ff',
+        // progress: 0.5,
         links: this.taskPrerequisites
           .filter((p) => p.prerequisiteId === td.id)
           // .filter((p) => p.taskDefinitionId === td.id)
