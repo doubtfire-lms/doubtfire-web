@@ -253,8 +253,8 @@ export class TaskStatus {
     ['complete', '#5BB75B'],
     ['fail', '#d93713'],
     ['time_exceeded', '#d93713'],
-    ['assess_in_portfolio', '#91b891'],
-    ['discuss_check', '#fea852'],
+    ['assess_in_portfolio', '#d2db33'],
+    ['discuss_check', '#f1814d'],
   ]);
 
   public static readonly STATUS_SEQ = new Map<TaskStatusEnum, number>([
