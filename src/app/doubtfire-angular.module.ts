@@ -43,6 +43,7 @@ import {UIRouterUpgradeModule} from '@uirouter/angular-hybrid';
 import {MatDialogModule as MatDialogModuleNew} from '@angular/material/dialog';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {AlertComponent} from 'src/app/common/services/alert.service';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 import {setTheme} from 'ngx-bootstrap/utils';
 
@@ -613,6 +614,7 @@ const MY_DATE_FORMAT = {
     MatDialogModuleNew,
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
     CodeEditorModule.forRoot(),
+    MatSidenavModule,
   ],
 })
 

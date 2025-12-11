@@ -1,15 +1,19 @@
-import { AfterViewInit, Component, Inject, Input, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
-import { confirmationModal, csvResultModalService, csvUploadModalService } from 'src/app/ajs-upgraded-providers';
-import { TaskDefinition } from 'src/app/api/models/task-definition';
-import { Unit } from 'src/app/api/models/unit';
-import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { addWeeks } from 'date-fns';
-import { FeedbackTemplateService } from 'src/app/api/services/feedback-template.service';
+import {AfterViewInit, Component, Inject, Input, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {Subscription} from 'rxjs';
+import {
+  confirmationModal,
+  csvResultModalService,
+  csvUploadModalService,
+} from 'src/app/ajs-upgraded-providers';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Unit} from 'src/app/api/models/unit';
+import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {addWeeks} from 'date-fns';
+import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 
 @Component({
   selector: 'f-unit-task-editor',
@@ -17,14 +21,21 @@ import { FeedbackTemplateService } from 'src/app/api/services/feedback-template.
   styleUrls: ['unit-task-editor.component.scss'],
 })
 export class UnitTaskEditorComponent implements AfterViewInit {
-  @ViewChild(MatTable, { static: false }) table: MatTable<TaskDefinition>;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatTable, {static: false}) table: MatTable<TaskDefinition>;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   @Input() unit: Unit;
 
   public taskDefinitionSource: MatTableDataSource<TaskDefinition>;
-  public columns: string[] = ['name', 'grade', 'startDate', 'targetDate', 'deadlineDate', 'taskDefAction'];
+  public columns: string[] = [
+    'name',
+    // 'grade',
+    // 'startDate',
+    // 'targetDate',
+    // 'deadlineDate',
+    'taskDefAction',
+  ];
   public filter: string;
   public selectedTaskDefinition: TaskDefinition;
 
@@ -34,7 +45,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     private alerts: AlertService,
     @Inject(csvResultModalService) private csvResultModalService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(confirmationModal) private confirmationModal: any
+    @Inject(confirmationModal) private confirmationModal: any,
   ) {}
 
   ngAfterViewInit(): void {
@@ -43,8 +54,9 @@ export class UnitTaskEditorComponent implements AfterViewInit {
         this.taskDefinitionSource = new MatTableDataSource<TaskDefinition>(taskDefinitions);
         this.taskDefinitionSource.paginator = this.paginator;
         this.taskDefinitionSource.sort = this.sort;
-        this.taskDefinitionSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
-      })
+        this.taskDefinitionSource.filterPredicate = (data: any, filter: string) =>
+          data.matches(filter);
+      }),
     );
   }
 
@@ -154,7 +166,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     this.csvUploadModal.show(
       'Upload Task Definitions as CSV',
       'Test message',
-      { file: { name: 'Task Definition CSV Data', type: 'csv' } },
+      {file: {name: 'Task Definition CSV Data', type: 'csv'}},
       this.unit.getTaskDefinitionBatchUploadUrl(),
       (response: any) => {
         // at least one student?
@@ -162,7 +174,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
         if (response.success.length > 0) {
           this.unit.refresh();
         }
-      }
+      },
     );
   }
 
@@ -170,7 +182,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     this.csvUploadModal.show(
       'Upload Task Sheets and Resources as Zip',
       'Test message',
-      { file: { name: 'Task Sheets and Resources', type: 'zip' } },
+      {file: {name: 'Task Sheets and Resources', type: 'zip'}},
       this.unit.taskUploadUrl,
       (response: any) => {
         // at least one student?
@@ -178,7 +190,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
         if (response.success.length > 0) {
           this.unit.refresh();
         }
-      }
+      },
     );
   }
 
