@@ -59,3 +59,113 @@
     </button>
   </div>
 </div>
+
+<mat-card class="w-full">
+  <mat-card-header>
+    <mat-card-title>Step 1: Compile</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="w-full flex flex-col">
+    <div class="flex gap-5 w-full">
+      <mat-form-field appearance="outline" class="basis-1/4">
+        <mat-label>Step Name</mat-label>
+        <input matInput name="Name" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Description</mat-label>
+        <input matInput placeholder="Description" name="Description" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Step Type</mat-label>
+      <mat-select [(ngModel)]="stepType">
+        <mat-option value="status_check">Custom Script</mat-option>
+        <mat-option value="output_diff">Input/Output</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    @if (stepType === 'output_diff') {
+      <mat-form-field appearance="outline">
+        <mat-label>Script Input File</mat-label>
+        <mat-select>
+          <mat-option value="public">/expected-input.in</mat-option>
+          <mat-option value="masked">/solution.py</mat-option>
+          <mat-option value="hidden">/build/program.cs</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Expected Output File</mat-label>
+        <mat-select>
+          <mat-option value="public">/expected-input.in</mat-option>
+          <mat-option value="masked">/solution.py</mat-option>
+          <mat-option value="hidden">/build/program.cs</mat-option>
+        </mat-select>
+      </mat-form-field>
+    }
+
+    <mat-label>Run Command</mat-label>
+    <ngs-code-editor class="w-full min-h-[100px]" [codeModel]="model"></ngs-code-editor>
+    <div class="flex gap-5">
+      <mat-form-field appearance="outline">
+        <mat-label>Task Status on Success</mat-label>
+        <mat-select>
+          <mat-option value="no_change">No Change</mat-option>
+          <mat-option value="rff">Ready For Feedback</mat-option>
+          <mat-option value="fixandresubmit">Fix and resubmit</mat-option>
+          <mat-option value="discuss">Discuss</mat-option>
+          <mat-option value="Complete">Complete</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Task Status on Fail</mat-label>
+        <mat-select>
+          <mat-option value="no_change">No Change</mat-option>
+          <mat-option value="rff">Ready For Feedback</mat-option>
+          <mat-option value="fixandresubmit">Fix and resubmit</mat-option>
+          <mat-option value="discuss">Discuss</mat-option>
+          <mat-option value="Complete">Complete</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Feedback message</mat-label>
+      <input
+        matInput
+        placeholder="Eg. There was an error compiling your code"
+        name="Feedback message"
+      />
+      <mat-hint>Feedback to provide to the student if the task failed</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Time Limit (s)</mat-label>
+
+      <input matInput placeholder="60" name="Time Limit" />
+      <mat-hint
+        >How long the code can execute for before overseer automatically kills the
+        process.</mat-hint
+      >
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Step Visibility</mat-label>
+      <mat-select [(ngModel)]="visibility">
+        <mat-option value="public">Public</mat-option>
+        <mat-option value="masked">Masked</mat-option>
+        <mat-option value="hidden">Hidden</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div>
+      <mat-slide-toggle>Enabled</mat-slide-toggle>
+      <br />
+      <mat-hint>Whether this step is executed or not</mat-hint>
+    </div>
+
+    <div>
+      <mat-slide-toggle>Halt on fail</mat-slide-toggle>
+      <br />
+      <mat-hint>Whether consecutive tasks should run even if this task fails</mat-hint>
+    </div>
+  </mat-card-content>
+</mat-card>

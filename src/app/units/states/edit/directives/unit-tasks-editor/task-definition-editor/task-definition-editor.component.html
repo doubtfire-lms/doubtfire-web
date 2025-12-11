@@ -3,6 +3,8 @@
   <mat-divider></mat-divider>
 </div>
 
+<f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
+
 <mat-stepper orientation="vertical" #stepper>
   <mat-step>
     <ng-template matStepLabel matStepperIcon="1">Task Details</ng-template>
@@ -85,7 +87,7 @@
       <ng-template matStepLabel>Task Assessment Automation</ng-template>
       <div class="pt-[12px]">
         <p class="font-normal text-gray-500 pb-2">Configure automated assessment</p>
-        <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
+        <!-- <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer> -->
       </div>
     </mat-step>
   }

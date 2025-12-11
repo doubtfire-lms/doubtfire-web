@@ -16,6 +16,7 @@ import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/overseer-script-editor-modal.service';
+import {CodeModel} from '@ngstack/code-editor';
 
 @Component({
   selector: 'f-task-definition-overseer',
@@ -27,6 +28,14 @@ export class TaskDefinitionOverseerComponent implements OnChanges {
 
   public currentUserTask: Task;
 
+  public model: CodeModel = {
+    language: 'shell',
+    uri: 'run.sh',
+    value: '#!/bin/bash\n\n',
+  };
+
+  public stepType: 'status_check' | 'output_diff' = 'status_check';
+  public visibility = 'public';
   constructor(
     private alerts: AlertService,
     private overseerImageService: OverseerImageService,
