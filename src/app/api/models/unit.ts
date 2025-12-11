@@ -721,4 +721,15 @@ export class Unit extends Entity {
       }),
     );
   }
+
+  public get staffNotesCsvDownloadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/staff_notes`;
+  }
+
+  public downloadStaffNotesCsv(): void {
+    AppInjector.get(FileDownloaderService).downloadFile(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/staff_notes`,
+      `${this.name}-StaffNotes.csv`,
+    );
+  }
 }
