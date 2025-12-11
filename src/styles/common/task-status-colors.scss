@@ -91,9 +91,9 @@ $task-status-colors: (
     fore: $task-status-foreground-color-light,
   ),
   discuss-check: (
-    base: #e0531b,
-    dark: darken(#e0531b, 15%),
-    light: lighten(#e0531b, 15%),
+    base: #fea852,
+    dark: darken(#fea852, 15%),
+    light: lighten(#fea852, 15%),
     fore: $task-status-foreground-color-light,
   ),
 );
