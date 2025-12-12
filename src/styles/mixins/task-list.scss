@@ -81,8 +81,8 @@
       &.assess-in-portfolio {
         @include custom-box-shadow(lighten(task-status-color('assess-in-portfolio'), 15%));
       }
-      &.discuss-check {
-        @include custom-box-shadow(lighten(task-status-color('discuss-check'), 15%));
+      &.attention-required {
+        @include custom-box-shadow(lighten(task-status-color('attention-required'), 15%));
       }
     }
     &.selected {
@@ -125,8 +125,8 @@
       &.assess-in-portfolio {
         @include custom-box-shadow(task-status-color('assess-in-portfolio'));
       }
-      &.discuss-check {
-        @include custom-box-shadow(task-status-color('discuss-check'));
+      &.attention-required {
+        @include custom-box-shadow(task-status-color('attention-required'));
       }
     }
     .task-badges {

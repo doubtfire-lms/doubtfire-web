@@ -79,8 +79,8 @@
 .progress-bar-assess-in-portfolio {
   @include task-status-color-assess-in-portfolio;
 }
-.progress-bar-discuss-check {
-  @include task-status-color-discuss-check;
+.progress-bar-attention-required {
+  @include task-status-color-attention-required;
 }
 
 .progress-bar-not-started {

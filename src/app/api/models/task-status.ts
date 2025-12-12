@@ -14,7 +14,7 @@ export type TaskStatusEnum =
   | 'fail'
   | 'time_exceeded'
   | 'assess_in_portfolio'
-  | 'discuss_check';
+  | 'attention_required';
 
 export type TaskStatusUiData = {
   status: TaskStatusEnum;
@@ -39,7 +39,7 @@ export class TaskStatus {
     'fail',
     'time_exceeded',
     'assess_in_portfolio',
-    'discuss_check',
+    'attention_required',
   ];
 
   public static readonly VALID_TOP_TASKS: TaskStatusEnum[] = [
@@ -50,7 +50,7 @@ export class TaskStatus {
     'fix_and_resubmit',
     'ready_for_feedback',
     'discuss',
-    'discuss_check',
+    'attention_required',
     'demonstrate',
   ];
 
@@ -63,7 +63,7 @@ export class TaskStatus {
     'fail',
     'time_exceeded',
     'assess_in_portfolio',
-    'discuss_check',
+    'attention_required',
   ];
 
   public static readonly FINAL_STATUSES: TaskStatusEnum[] = [
@@ -79,7 +79,6 @@ export class TaskStatus {
     'discuss',
     'demonstrate',
     'complete',
-    'discuss_check',
   ];
 
   public static readonly TO_BE_WORKED_ON: TaskStatusEnum[] = [
@@ -91,7 +90,7 @@ export class TaskStatus {
 
   public static readonly DISCUSSION_STATES: TaskStatusEnum[] = [
     'discuss',
-    'discuss_check',
+    'attention_required',
     'demonstrate',
   ];
 
@@ -115,7 +114,6 @@ export class TaskStatus {
     'fix_and_resubmit',
     'feedback_exceeded',
     'redo',
-    'discuss_check',
   ];
 
   public static readonly SUBMITTABLE_STATUSES: TaskStatusEnum[] = [
@@ -132,7 +130,7 @@ export class TaskStatus {
     'discuss',
     'demonstrate',
     'complete',
-    'discuss_check',
+    'attention_required',
   ];
 
   public static readonly FEEDBACK_TEMPLATE_STATUSES: TaskStatusEnum[] = [
@@ -141,7 +139,7 @@ export class TaskStatus {
     'fix_and_resubmit',
     'redo',
     'feedback_exceeded',
-    'discuss_check',
+    'attention_required',
   ];
 
   public static readonly LEARNING_WEIGHT: Map<TaskStatusEnum, number> = new Map<
@@ -161,7 +159,7 @@ export class TaskStatus {
     ['complete', 1.0],
     ['time_exceeded', 0.3],
     ['assess_in_portfolio', 1.0],
-    ['discuss_check', 0.8],
+    ['attention_required', 0.1],
   ]);
 
   public static readonly STATUS_ACRONYM: Map<TaskStatusEnum, string> = new Map<
@@ -181,7 +179,7 @@ export class TaskStatus {
     ['fail', 'FAL'],
     ['time_exceeded', 'TIE'],
     ['assess_in_portfolio', 'AIP'],
-    ['discuss_check', 'DC'],
+    ['attention_required', 'AR'],
   ]);
 
   // Which status should not show up in the task status drop down... for students
@@ -202,7 +200,7 @@ export class TaskStatus {
     ['time_exceeded', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
     ['fail', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
     ['assess_in_portfolio', ['not_started']],
-    ['discuss_check', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
+    ['attention_required', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
   ]);
 
   public static readonly STATUS_LABELS = new Map<TaskStatusEnum, string>([
@@ -219,7 +217,7 @@ export class TaskStatus {
     ['fail', 'Fail'],
     ['time_exceeded', 'Time Exceeded'],
     ['assess_in_portfolio', 'Assess in Portfolio'],
-    ['discuss_check', 'Attention Required'],
+    ['attention_required', 'Attention Required'],
   ]);
 
   public static readonly STATUS_ICONS = new Map<TaskStatusEnum, string>([
@@ -236,7 +234,7 @@ export class TaskStatus {
     ['fail', 'fa fa-times'],
     ['time_exceeded', 'fa fa-clock-o'],
     ['assess_in_portfolio', 'fa fa-folder-open'],
-    ['discuss_check', 'fa fa-commenting'],
+    ['attention_required', 'fa fa-commenting'],
   ]);
 
   // Please make sure this matches task-status-colors.less
@@ -254,7 +252,7 @@ export class TaskStatus {
     ['fail', '#d93713'],
     ['time_exceeded', '#d93713'],
     ['assess_in_portfolio', '#d2db33'],
-    ['discuss_check', '#f1814d'],
+    ['attention_required', '#f1814d'],
   ]);
 
   public static readonly STATUS_SEQ = new Map<TaskStatusEnum, number>([
@@ -271,7 +269,7 @@ export class TaskStatus {
     ['demonstrate', 11],
     ['complete', 12],
     ['assess_in_portfolio', 13],
-    ['discuss_check', 14],
+    ['attention_required', 14],
   ]);
 
   public static readonly SWITCHABLE_STATES = {
@@ -279,7 +277,7 @@ export class TaskStatus {
     tutor: [
       'complete',
       'discuss',
-      'discuss_check',
+      'attention_required',
       'demonstrate',
       'fix_and_resubmit',
       'redo',
@@ -370,7 +368,7 @@ export class TaskStatus {
       },
     ],
     [
-      'discuss_check',
+      'attention_required',
       {
         detail: 'Your work is off track and needs focused discussion.',
         reason:

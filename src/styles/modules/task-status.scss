@@ -41,8 +41,8 @@
   &.assess-in-portfolio {
     @include task-status-color-assess-in-portfolio;
   }
-  &.discuss-check {
-    @include task-status-color-discuss-check;
+  &.attention-required {
+    @include task-status-color-attention-required;
   }
 
   &.ready-for-feedback:hover {
@@ -84,8 +84,8 @@
   &.assess-in-portfolio:hover {
     background-color: task-status-color('assess-in-portfolio');
   }
-  &.discuss-check:hover {
-    background-color: task-status-color('discuss-check');
+  &.attention-required:hover {
+    background-color: task-status-color('attention-required');
   }
 }
 
@@ -155,10 +155,10 @@
   &.assess-in-portfolio:hover {
     @include task-status-color-assess-in-portfolio;
   }
-  &.discuss-check,
-  &.discuss-check.active,
-  &.discuss-check:hover {
-    @include task-status-color-discuss-check;
+  &.attention-required,
+  &.attention-required.active,
+  &.attention-required:hover {
+    @include task-status-color-attention-required;
   }
 
   &.ready-for-feedback {
@@ -200,8 +200,8 @@
   &.assess-in-portfolio {
     background-color: lighten(task-status-color('assess-in-portfolio'), 15%);
   }
-  &.discuss-check {
-    background-color: lighten(task-status-color('discuss-check'), 15%);
+  &.attention-required {
+    background-color: lighten(task-status-color('attention-required'), 15%);
   }
 }
 

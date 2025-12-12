@@ -62,6 +62,6 @@
 @mixin task-status-color-assess-in-portfolio {
   @include task-status-color('assess-in-portfolio');
 }
-@mixin task-status-color-discuss-check {
-  @include task-status-color('discuss-check');
+@mixin task-status-color-attention-required {
+  @include task-status-color('attention-required');
 }

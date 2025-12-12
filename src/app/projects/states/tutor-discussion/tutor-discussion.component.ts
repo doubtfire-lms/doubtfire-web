@@ -352,7 +352,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
     'demonstrate',
     'ready_for_feedback',
     'discuss',
-    'discuss_check',
+    'attention_required',
     'need_help',
     // 'complete',
     'fix_and_resubmit',
