@@ -34,21 +34,26 @@
   (barClick)="barClick($event)"
 >
   <ngx-gantt-table>
-    <ngx-gantt-column name="Tasks" width="325px">
+    <ngx-gantt-column name="Tasks" width="350px">
       <ng-template #cell let-item="item">
         <div
-          class="flex items-center gap-5"
+          class="flex items-center justify-between"
           uiSref="projects/dashboard"
           [uiParams]="{
             projectId: project.id,
             taskAbbr: getTaskDefinition(item.id).abbreviation
           }"
         >
-          <f-grade-icon
-            [grade]="getTaskDefinition(item.id).targetGrade"
-            [colorful]="true"
-          ></f-grade-icon>
-          {{ item.title }}
+          <div class="flex items-center gap-5 w-full min-w-0">
+            <f-grade-icon
+              [grade]="getTaskDefinition(item.id).targetGrade"
+              [colorful]="true"
+            ></f-grade-icon>
+            <div class="truncate w-full flex-1 min-w-0">
+              {{ item.title }}
+            </div>
+          </div>
+          <status-icon [status]="getTask(item.id).status"></status-icon>
         </div>
       </ng-template>
     </ngx-gantt-column>
