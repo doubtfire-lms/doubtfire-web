@@ -10,6 +10,7 @@ import {
   GanttLink,
   GanttLinkType,
   NgxGanttComponent,
+  GanttBarClickEvent,
 } from '@worktile/gantt';
 import {Project} from 'src/app/api/models/project';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -34,7 +35,10 @@ export class TaskPlannerComponent implements OnInit {
 
   viewOptions: GanttViewOptions;
 
+  public allTaskPrerequisites: TaskPrerequisite[];
   public taskPrerequisites: TaskPrerequisite[];
+
+  public originalLinks: Map<string, GanttLink[]> = new Map();
 
   items: GanttItem[] = [];
 
@@ -70,6 +74,90 @@ export class TaskPlannerComponent implements OnInit {
   dragMoved(event: GanttDragEvent) {
     // console.log(event);
   }
+
+  onBarHover(item: GanttItem) {
+    console.log(item);
+
+    const ganttItem = this.items.find((i) => i.id === item.id);
+    const originalColor = this.originalLinks.get(ganttItem.id);
+    ganttItem.links = [...originalColor];
+
+    ganttItem.links.forEach((linkItem) => {
+      const link = linkItem as GanttLink;
+      const color = link.color as {active: string; default: string};
+      if (color.default.endsWith('0.1)')) {
+        color.default = color.default.slice(0, -4);
+        color.default += '1)';
+      }
+    });
+
+    const prerequisites = this.items.filter((i) => {
+      const links = i.links;
+      if (typeof links === 'string') {
+        return false;
+      }
+
+      return links.some((l) => typeof l !== 'string' && l.link === item.id);
+    });
+
+    prerequisites.forEach((prereq) => {
+      prereq.links.forEach((linkItem) => {
+        const link = linkItem as GanttLink;
+        if (link.link !== item.id) {
+          return;
+        }
+        const color = link.color as {active: string; default: string};
+        if (color.default.endsWith('0.1)')) {
+          color.default = color.default.slice(0, -4);
+          color.default += '1)';
+        }
+      });
+    });
+
+    this.items = [...this.items];
+  }
+
+  onBarLeave(item: GanttItem) {
+    console.log(item);
+
+    const ganttItem = this.items.find((i) => i.id === item.id);
+    ganttItem.links.forEach((linkItem) => {
+      const link = linkItem as GanttLink;
+      const color = link.color as {active: string; default: string};
+      if (!color.default.endsWith('0.1)')) {
+        color.default = color.default.slice(0, -2);
+        color.default += '0.1)';
+      }
+    });
+
+    const prerequisites = this.items.filter((i) => {
+      const links = i.links;
+      if (typeof links === 'string') {
+        return false;
+      }
+
+      return links.some((l) => typeof l !== 'string' && l.link === item.id);
+    });
+
+    prerequisites.forEach((prereq) => {
+      prereq.links.forEach((linkItem) => {
+        const link = linkItem as GanttLink;
+
+        if (link.link !== item.id) {
+          return;
+        }
+        const color = link.color as {active: string; default: string};
+        if (!color.default.endsWith('0.1)')) {
+          color.default = color.default.slice(0, -2);
+          color.default += '0.1)';
+        }
+      });
+    });
+
+    this.items = [...this.items];
+  }
+
+  barClick(event: GanttBarClickEvent) {}
 
   dragEnded(event: GanttDragEvent) {
     const item = event.item;
@@ -127,14 +215,19 @@ export class TaskPlannerComponent implements OnInit {
       }
       const diff = this.normalizeDateUTC(item.end) - this.normalizeDateUTC(ganttItem.end);
       const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
-      this.blockedDependents.set(ganttItem.id, false);
+      // this.blockedDependents.set(ganttItem.id, false);
       // console.log(this.taskDefs().find((t) => t.id == 75));
+      if (diff > 0) {
+        isAfterDependentStartDate = true;
+      }
+      continue;
+
       if (color === '#0079D8') {
         // Ready for feedback
         if (diff > 0) {
           isAfterDependentStartDate = true;
           // TODO: if gantItemm is also a prerequisite to another task, they should all recursively be checked and have warnings
-          this.blockedDependents.set(ganttItem.id, true);
+          // this.blockedDependents.set(ganttItem.id, true);
         } else {
           // this.blockedDependents.set(ganttItem.id, false);
         }
@@ -143,7 +236,7 @@ export class TaskPlannerComponent implements OnInit {
         if (diff >= -7 * 24 * 60 * 60) {
           // We need to ensure this task is submitted a week earlier than its dependent so get it in a Discuss state
           isAfterDependentStartDate = true;
-          this.blockedDependents.set(ganttItem.id, true);
+          // this.blockedDependents.set(ganttItem.id, true);
         } else {
           // this.blockedDependents.set(ganttItem.id, false);
         }
@@ -183,7 +276,7 @@ export class TaskPlannerComponent implements OnInit {
     const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
 
     if (td.abbreviation === 'D3') {
-      console.log(prerequisites);
+      // console.log(prerequisites);
     }
 
     for (const link of prerequisites) {
@@ -193,10 +286,10 @@ export class TaskPlannerComponent implements OnInit {
     }
 
     if (prerequisites.some((p) => this.blockedDependents.get(p.id) === true)) {
-      this.blockedDependents.set(item.id, true);
+      // this.blockedDependents.set(item.id, true);
       return true;
     } else {
-      this.blockedDependents.set(item.id, false);
+      // this.blockedDependents.set(item.id, false);
     }
 
     return false;
@@ -211,7 +304,7 @@ export class TaskPlannerComponent implements OnInit {
 
     // decide the class based on priority
     if (pastDeadline) return 'bg-[#cd3704] text-white';
-    if (conflict) return 'bg-[#eb6134] text-white';
+    // if (conflict) return 'bg-[#eb6134] text-white';
     if (blocked) return 'bg-[#cd3704] text-black';
     if (closeDeadline) return 'bg-[#ffc53d] text-black';
     return 'bg-[#0e467b] text-white';
@@ -233,7 +326,8 @@ export class TaskPlannerComponent implements OnInit {
     const diff =
       this.normalizeDateUTC(task.localDeadlineDate().getTime() / 1000) -
       this.normalizeDateUTC(item.end);
-    return diff >= 0 && diff <= 7 * 24 * 60 * 60;
+
+    return diff >= 0 && diff <= 3 * 24 * 60 * 60;
   }
 
   toDateStr = (timestamp: number) => {
@@ -409,10 +503,7 @@ export class TaskPlannerComponent implements OnInit {
 
     this.project.unit.getTaskPrerequisites().subscribe({
       next: (prereqs) => {
-        const taskPrerequisites: TaskPrerequisite[] = prereqs;
-        this.taskPrerequisites = taskPrerequisites.filter((pre) =>
-          this.taskDefs().find((td) => td.id === pre.taskDefinitionId),
-        );
+        this.allTaskPrerequisites = prereqs;
         this.refreshItems();
       },
       error: (error) => {
@@ -422,6 +513,10 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   refreshItems() {
+    this.taskPrerequisites = this.allTaskPrerequisites.filter((pre) =>
+      this.taskDefs().find((td) => td.id === pre.taskDefinitionId),
+    );
+
     const taskDefinitions = this.taskDefs();
     this.items = [];
 
@@ -449,29 +544,30 @@ export class TaskPlannerComponent implements OnInit {
 
             switch (p.taskStatus) {
               case 'ready_for_feedback':
-                color = '#0079D8';
+                color = 'rgba(0, 121, 216, 0.1)';
                 // color = '#90c8fc';
                 break;
               case 'complete':
-                color = '#5BB75B';
+                color = 'rgba(91, 183, 91, 0.1)';
                 break;
               case 'discuss':
-                color = '#31b0d5';
+                color = 'rgba(49, 176, 213, 0.1)';
+                // color = '#31b0d5';
                 break;
               case 'demonstrate':
-                color = '#31b0d5';
+                color = 'rgba(49, 176, 213, 0.1)';
                 break;
               default:
                 color = 'gray';
             }
-
             const link: GanttLink = {
               type: GanttLinkType.fs,
               link: p.taskDefinitionId.toString(),
               // link: p.prerequisiteId.toString(),
               color: {
                 default: color,
-                active: 'red',
+                // active: '#00000000',
+                active: 'rgba(0, 255,0, 0)',
               },
             };
 
@@ -494,6 +590,16 @@ export class TaskPlannerComponent implements OnInit {
           item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
         }
       }
+
+      // this.originalLinks.set(, [...(item.links as GanttLink[])]);
+      const originalItem = {...item};
+      this.originalLinks.set(item.id.toString(), [...(originalItem.links as GanttLink[])]);
+
+      // console.log(this.originalLinks);
+      // item.links.forEach((linkItem) => {
+      //   const link = linkItem as GanttLink;
+      //   (link.color as {active: string; default: string}).default += 'FC';
+      // });
 
       this.items.push(item);
       this.items = [...this.items];

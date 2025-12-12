@@ -31,6 +31,7 @@
   class="h-full overflow-hidden"
   (dragEnded)="dragEnded($event)"
   (dragMoved)="dragMoved($event)"
+  (barClick)="barClick($event)"
 >
   <ngx-gantt-table>
     <ngx-gantt-column name="Tasks" width="325px">
@@ -74,6 +75,8 @@
 
     <ng-template #bar let-item="item">
       <span
+        (mouseover)="onBarHover(item)"
+        (mouseleave)="onBarLeave(item)"
         class="w-full text-white flex gap-2 justify-between items-center p-2 h-[35px]"
         [ngClass]="getItemClasses(item)"
         [matTooltip]="getTooltip(item)"
