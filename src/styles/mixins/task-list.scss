@@ -81,6 +81,9 @@
       &.assess-in-portfolio {
         @include custom-box-shadow(lighten(task-status-color('assess-in-portfolio'), 15%));
       }
+      &.attention-required {
+        @include custom-box-shadow(lighten(task-status-color('attention-required'), 15%));
+      }
     }
     &.selected {
       &.ready-for-feedback {
@@ -121,6 +124,9 @@
       }
       &.assess-in-portfolio {
         @include custom-box-shadow(task-status-color('assess-in-portfolio'));
+      }
+      &.attention-required {
+        @include custom-box-shadow(task-status-color('attention-required'));
       }
     }
     .task-badges {
