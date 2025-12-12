@@ -260,9 +260,9 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   isBlockedByPrerequisite(item: GanttItem) {
-    if (this.blockedDependents.get(item.id) === true) {
-      return true;
-    }
+    // if (this.blockedDependents.get(item.id) === true) {
+    //   return true;
+    // }
 
     const prerequisites = this.items.filter((i) => {
       const links = i.links;
@@ -273,15 +273,18 @@ export class TaskPlannerComponent implements OnInit {
       return links.some((l) => typeof l !== 'string' && l.link === item.id);
     });
 
-    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
+    // const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
 
-    if (td.abbreviation === 'D3') {
-      // console.log(prerequisites);
-    }
+    // if (td.abbreviation === 'D2') {
+    //   console.log(prerequisites);
+    // }
 
     for (const link of prerequisites) {
       if (this.prerequisiteConflict(link)) {
-        return true;
+        const diff = this.normalizeDateUTC(link.end) - this.normalizeDateUTC(item.end);
+        if (diff > 0) {
+          return true;
+        }
       }
     }
 
@@ -298,7 +301,7 @@ export class TaskPlannerComponent implements OnInit {
   getItemClasses(item: GanttItem) {
     // call all functions so they run
     const pastDeadline = this.isPastFeedbackDeadline(item);
-    const conflict = this.prerequisiteConflict(item);
+    // const conflict = this.prerequisiteConflict(item);
     const blocked = this.isBlockedByPrerequisite(item);
     const closeDeadline = this.isCloseToFeedbackDeadline(item);
 
@@ -327,7 +330,7 @@ export class TaskPlannerComponent implements OnInit {
       this.normalizeDateUTC(task.localDeadlineDate().getTime() / 1000) -
       this.normalizeDateUTC(item.end);
 
-    return diff >= 0 && diff <= 3 * 24 * 60 * 60;
+    return diff >= 0 && diff <= 7 * 24 * 60 * 60;
   }
 
   toDateStr = (timestamp: number) => {
