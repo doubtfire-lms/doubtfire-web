@@ -251,7 +251,7 @@ export class TaskStatus {
     ['complete', '#5BB75B'],
     ['fail', '#d93713'],
     ['time_exceeded', '#d93713'],
-    ['assess_in_portfolio', '#d2db33'],
+    ['assess_in_portfolio', '#f2d85c'],
     ['attention_required', '#f1814d'],
   ]);
 
