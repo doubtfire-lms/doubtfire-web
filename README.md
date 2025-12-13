@@ -16,8 +16,9 @@ Important: When completing a frontend migration, please update the below list re
 
 ### SUMMARY:
 
-- `89 / 183` components migrated
-- `19` components no longer in the doubtfire-lms/9.x branch
+- `125 / 185` components migrated
+
+- `21` components no longer in the doubtfire-lms/9.x branch
 
 ### NO LONGER IN doubtfire-lms/9.x
 
@@ -41,6 +42,7 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/common/modals/progress-modal/progress-modal.coffee
 - [x] ./src/app/errors/states/not-found/not-found.coffee
 - [x] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
+- [x] ./src/app/common/services/media-service.coffee
 
 ### MIGRATED:
 
@@ -157,17 +159,6 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/projects/states/tutorials/tutorials.coffee
 - [x] ./src/app/admin/modals/modals.coffee
 - [x] ./src/app/common/services/date-service.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.coffee (Removed in 10.0.x)
-- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.coffee (Removed in 10.0.x)
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.coffee (Removed in 10.0.x)
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee (Removed in 10.0.x)
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee (Removed in 10.0.x)
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee (Removed in 10.0.x)
-- [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee (Removed in 10.0.x)
-- [ ] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee (Removed in 10.0.x)
-- [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee (Removed in 10.0.x)
-- [ ] ./src/app/projects/states/outcomes/outcomes.coffee (Removed in 10.0.x)
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Removed in 10.0.x)
 - [x] ./src/app/units/states/rollover/directives/directives.coffee
 - [x] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
 - [x] ./src/app/units/states/rollover/rollover.coffee
@@ -179,6 +170,21 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/visualisations/alignment-bullet-chart.coffee (ILO Alignments removed)
 - [x] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
 - [x] ./src/app/groups/groups.coffee
+- [x] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee (9.x)
+
+### To be removed from 10.0.x
+
+- [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee (Removed in 10.0.x)
+- [ ] ./src/app/projects/states/outcomes/outcomes.coffee
+- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee
+- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.coffee (Removed in 10.0.x)
+- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.coffee (Removed in 10.0.x)
+- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee (Removed in 10.0.x)
+- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.coffee (Removed in 10.0.x)
+- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee (Removed in 10.0.x)
+- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee (Removed in 10.0.x)
+- [ ] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee (Removed in 10.0.x)
+- [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee (Removed in 10.0.x)
 
 ### TODO:
 
@@ -189,7 +195,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/common/modals/modals.coffee
 - [ ] ./src/app/common/services/analytics-service.coffee
 - [ ] ./src/app/common/services/listener-service.coffee
-- [ ] ./src/app/common/services/media-service.coffee
 - [ ] ./src/app/common/services/outcome-service.coffee
 - [ ] ./src/app/common/services/recorder-service.coffee
 - [ ] ./src/app/common/services/services.coffee
@@ -205,7 +210,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/projects.coffee
 - [ ] ./src/app/projects/states/dashboard/dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
 - [ ] ./src/app/projects/states/feedback/feedback.coffee
 - [ ] ./src/app/projects/states/groups/groups.coffee (State only -> "project-groups")
