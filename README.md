@@ -172,7 +172,7 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/groups/groups.coffee
 - [x] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee (9.x)
 
-### To be removed from 10.0.x
+### TO REMOVE IN 10.0.x
 
 - [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee (Removed in 10.0.x)
 - [ ] ./src/app/projects/states/outcomes/outcomes.coffee
