@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ taskDefinition.name }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{ taskDefinition.description }}</p>
+    <f-task-prerequisites-card
+      [taskDefinition]="taskDefinition"
+      [task]="task"
+    ></f-task-prerequisites-card>
+    @if (!task.hasPrerequisiteTasks()) {
+      <div class="p-5 w-full text-center text-gray-400">This task has no prerequisites.</div>
+    }
+  </mat-card-content>
+</mat-card>

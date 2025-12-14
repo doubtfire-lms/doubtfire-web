@@ -303,6 +303,8 @@ import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/d
 import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
 import {DiscussionPromptsViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/discussion-prompts-view/discussion-prompts-view.component';
 import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-planner.component';
+import {TaskPlannerPrerequisitesModalComponent} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.component';
+import {TaskPlannerPrerequisitesModalService} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -463,6 +465,7 @@ const MY_DATE_FORMAT = {
     TaskDefinitionDiscussionPromptsComponent,
     DiscussionPromptsViewComponent,
     TaskPlannerComponent,
+    TaskPlannerPrerequisitesModalComponent,
   ],
   providers: [
     // Services we provide
@@ -577,6 +580,7 @@ const MY_DATE_FORMAT = {
         },
       },
     },
+    TaskPlannerPrerequisitesModalService,
   ],
   imports: [
     FlexLayoutModule,

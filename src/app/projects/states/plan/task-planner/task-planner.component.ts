@@ -20,6 +20,7 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {GlobalStateService} from '../../index/global-state.service';
+import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 
 @Component({
   selector: 'f-task-planner',
@@ -55,6 +56,7 @@ export class TaskPlannerComponent implements OnInit {
     private projectService: ProjectService,
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
+    private taskPlannerPrerequisitesModal: TaskPlannerPrerequisitesModalService,
   ) {}
 
   public get gradeValues() {
@@ -157,7 +159,10 @@ export class TaskPlannerComponent implements OnInit {
     this.items = [...this.items];
   }
 
-  barClick(event: GanttBarClickEvent) {}
+  barClick(event: GanttBarClickEvent) {
+    const td = this.getTaskDefinition(event.item.id);
+    this.taskPlannerPrerequisitesModal.show(this.project, td);
+  }
 
   dragEnded(event: GanttDragEvent) {
     const item = event.item;
@@ -570,7 +575,7 @@ export class TaskPlannerComponent implements OnInit {
               color: {
                 default: color,
                 // active: '#00000000',
-                active: 'rgba(0, 255,0, 0)',
+                active: color,
               },
             };
 
