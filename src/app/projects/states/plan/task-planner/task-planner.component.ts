@@ -308,7 +308,7 @@ export class TaskPlannerComponent implements OnInit {
     // decide the class based on priority
     if (pastDeadline) return 'bg-[#cd3704] text-white';
     // if (conflict) return 'bg-[#eb6134] text-white';
-    if (blocked) return 'bg-[#cd3704] text-black';
+    if (blocked) return 'bg-[#e88307] text-black';
     if (closeDeadline) return 'bg-[#ffc53d] text-black';
     return 'bg-[#0e467b] text-white';
   }
