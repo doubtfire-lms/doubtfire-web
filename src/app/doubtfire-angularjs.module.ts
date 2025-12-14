@@ -225,6 +225,8 @@ import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {MarkedPipe} from './common/pipes/marked.pipe';
 import {AlertService} from './common/services/alert.service';
 import {GradeService} from './common/services/grade.service';
+import {IndexComponent as UnitsIndexComponent} from './units/states/index/index.component';
+
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
   'doubtfire.sessions',
@@ -236,6 +238,12 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.groups',
   'doubtfire.visualisations',
 ]);
+
+DoubtfireAngularJSModule.directive(
+  'fUnitsIndex',
+  downgradeComponent({component: UnitsIndexComponent}),
+);
+
 
 // Downgrade angular modules that we need...
 // factory -> service
