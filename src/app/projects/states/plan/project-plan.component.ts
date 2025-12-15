@@ -17,7 +17,6 @@ export class ProjectPlanComponent implements OnInit {
 
   @ViewChild(TaskPlannerComponent) planner!: TaskPlannerComponent;
 
-  // wherever you want to trigger it
   public get unit() {
     return this.project?.unit;
   }
@@ -39,7 +38,6 @@ export class ProjectPlanComponent implements OnInit {
     private gradeService: GradeService,
     private projectService: ProjectService,
     private alertService: AlertService,
-    private confirmationModalService: ConfirmationModalService,
   ) {
     this.globalStateService.currentViewAndEntitySubject$.subscribe((viewAndEntity) => {
       if (viewAndEntity.viewType === 'PROJECT' && viewAndEntity.entity) {
@@ -61,7 +59,6 @@ export class ProjectPlanComponent implements OnInit {
     this.projectService.update(this.project).subscribe({
       next: () => {
         this.alertService.success(`Succesfully updated target grade`, 2000);
-        // this.refreshItems();
         this.planner.refreshItems();
       },
       error: (error) => {
