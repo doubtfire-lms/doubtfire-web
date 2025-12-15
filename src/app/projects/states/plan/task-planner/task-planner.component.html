@@ -25,7 +25,7 @@
   [draggable]="project.unit.allowFlexibleDates"
   [viewType]="viewType"
   [start]="earliestStartDate"
-  [end]="project.unit.endDate.getTime() / 1000"
+  [end]="latestEndDate"
   [async]="false"
   [virtualScrollEnabled]="false"
   [disabledLoadOnScroll]="true"

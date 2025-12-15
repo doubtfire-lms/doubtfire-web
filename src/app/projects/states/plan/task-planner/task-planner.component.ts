@@ -500,14 +500,21 @@ export class TaskPlannerComponent implements OnInit {
     const earliestTaskStartDate = Math.min(
       ...this.taskDefs().map((t) => t.startDate.getTime() / 1000),
     );
-    return Math.min(this.project.unit.startDate.getTime() / 1000, earliestTaskStartDate);
+    return Math.floor(
+      Math.min(this.project.unit.startDate.getTime() / 1000, earliestTaskStartDate),
+    );
+  }
+
+  public get latestEndDate() {
+    const latestTaskEndDate = Math.max(...this.taskDefs().map((t) => t.dueDate.getTime() / 1000));
+    return Math.floor(Math.max(this.project.unit.endDate.getTime() / 1000, latestTaskEndDate));
   }
 
   ngOnInit(): void {
     this.viewOptions = {
       datePrecisionUnit: 'day',
       start: new GanttDate(this.earliestStartDate),
-      end: new GanttDate(this.normalizeDateUTC(this.project.unit.endDate.getTime() / 1000)),
+      end: new GanttDate(this.latestEndDate),
       dragPreviewDateFormat: 'MMM dd',
     };
 
