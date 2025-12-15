@@ -21,6 +21,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {GlobalStateService} from '../../index/global-state.service';
 import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
+import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
 
 @Component({
   selector: 'f-task-planner',
@@ -57,6 +58,7 @@ export class TaskPlannerComponent implements OnInit {
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
     private taskPlannerPrerequisitesModal: TaskPlannerPrerequisitesModalService,
+    private taskPrerequisiteService: TaskPrerequisiteService,
   ) {}
 
   public get gradeValues() {
@@ -78,8 +80,6 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   onBarHover(item: GanttItem) {
-    console.log(item);
-
     const ganttItem = this.items.find((i) => i.id === item.id);
     const originalColor = this.originalLinks.get(ganttItem.id);
     ganttItem.links = [...originalColor];
@@ -120,8 +120,6 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   onBarLeave(item: GanttItem) {
-    console.log(item);
-
     const ganttItem = this.items.find((i) => i.id === item.id);
     ganttItem.links.forEach((linkItem) => {
       const link = linkItem as GanttLink;
@@ -161,7 +159,20 @@ export class TaskPlannerComponent implements OnInit {
 
   barClick(event: GanttBarClickEvent) {
     const td = this.getTaskDefinition(event.item.id);
-    this.taskPlannerPrerequisitesModal.show(this.project, td);
+    const prereqs = this.getPrerequisitesFor(event.item.id);
+    this.taskPlannerPrerequisitesModal.show(this.project, td, prereqs);
+  }
+
+  private mapPrerequisites() {
+    for (const prerequisite of this.allTaskPrerequisites) {
+      prerequisite.taskDefinition = this.unit.taskDefinitions.find(
+        (td) => td.id === prerequisite.taskDefinitionId,
+      );
+      prerequisite.prerequisite = this.unit.taskDefinitions.find(
+        (td) => td.id === prerequisite.prerequisiteId,
+      );
+    }
+    this.allTaskPrerequisites = [...this.allTaskPrerequisites];
   }
 
   dragEnded(event: GanttDragEvent) {
@@ -474,10 +485,10 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   unsavedChanges(item: GanttItem) {
-    const task = this.getTask(item.id);
+    const task = this.project.findTaskForDefinition(Number(item.id));
+
     const start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
     const end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
-
     return start !== this.normalizeDateUTC(item.start) || end !== this.normalizeDateUTC(item.end);
   }
 
@@ -512,6 +523,28 @@ export class TaskPlannerComponent implements OnInit {
     this.project.unit.getTaskPrerequisites().subscribe({
       next: (prereqs) => {
         this.allTaskPrerequisites = prereqs;
+        this.mapPrerequisites();
+        for (const prerequisite of this.allTaskPrerequisites) {
+          prerequisite.taskDefinition.taskPrerequisitesCache.getOrCreate(
+            prerequisite.id,
+            this.taskPrerequisiteService,
+            prerequisite,
+          );
+        }
+
+        for (const td of this.unit.taskDefinitions) {
+          const prerequisites = td.taskPrerequisitesCache.currentValues;
+          const definitions = td.unit.taskDefinitions;
+          for (const prerequisite of prerequisites) {
+            prerequisite.taskDefinition = definitions.find(
+              (td) => td.id === prerequisite.taskDefinitionId,
+            );
+            prerequisite.prerequisite = definitions.find(
+              (td) => td.id === prerequisite.prerequisiteId,
+            );
+          }
+        }
+
         this.refreshItems();
       },
       error: (error) => {
@@ -583,21 +616,21 @@ export class TaskPlannerComponent implements OnInit {
           }),
       };
 
-      if (
-        item.links.length &&
-        (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item))
-      ) {
-        const task = this.project.findTaskForDefinition(td.id);
+      // if (
+      //   item.links.length &&
+      //   (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item))
+      // ) {
+      //   const task = this.project.findTaskForDefinition(td.id);
 
-        item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
-        item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+      //   item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+      //   item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
 
-        // If the task defaults are still invalid, reset them to the task definition default
-        if (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item)) {
-          item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
-          item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
-        }
-      }
+      //   // If the task defaults are still invalid, reset them to the task definition default
+      //   if (this.isCloseToFeedbackDeadline(item) || this.isPastFeedbackDeadline(item)) {
+      //     item.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
+      //     item.end = this.normalizeDateUTC(td.localDueDate().getTime() / 1000);
+      //   }
+      // }
 
       // this.originalLinks.set(, [...(item.links as GanttLink[])]);
       const originalItem = {...item};
@@ -621,9 +654,9 @@ export class TaskPlannerComponent implements OnInit {
       this.baselineItems.push(baselineItem);
       this.baselineItems = [...this.baselineItems];
 
-      if (this.unsavedChanges(item)) {
-        this.saveTargetDate(item);
-      }
+      // if (this.unsavedChanges(item)) {
+      //   this.saveTargetDate(item);
+      // }
     }
   }
 
