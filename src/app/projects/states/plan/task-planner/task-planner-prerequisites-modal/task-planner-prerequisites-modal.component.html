@@ -6,7 +6,10 @@
     <status-icon [status]="taskDefinition.projectTask(project).status"></status-icon>
   </mat-card-header>
   <mat-card-content>
-    <p class="py-5">{{ taskDefinition.description }}</p>
+    <mat-card-subtitle class="py-5"
+      >Task Description:
+      <p>{{ taskDefinition.description }}</p></mat-card-subtitle
+    >
     <f-task-prerequisites-card
       [taskDefinition]="taskDefinition"
       [task]="task"
