@@ -170,7 +170,7 @@ export class Task extends Entity {
   }
 
   public localDueDate(): Date {
-    if (this.targetDueDate) {
+    if (this.targetDueDate && this.unit.allowFlexibleDates) {
       return this.targetDueDate;
     } else if (this.dueDate) {
       return this.dueDate;
@@ -321,7 +321,7 @@ export class Task extends Entity {
   }
 
   public get startDate(): Date {
-    if (this.targetStartDate) {
+    if (this.targetStartDate && this.unit.allowFlexibleDates) {
       return this.targetStartDate;
     } else if (this.extensions < 0) {
       // If the task has an extension, the start date is the due date minus the extension
