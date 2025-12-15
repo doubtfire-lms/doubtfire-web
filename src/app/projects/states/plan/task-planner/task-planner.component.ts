@@ -22,6 +22,7 @@ import {GradeService} from 'src/app/common/services/grade.service';
 import {GlobalStateService} from '../../index/global-state.service';
 import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
+import {UIRouter} from '@uirouter/core';
 
 @Component({
   selector: 'f-task-planner',
@@ -59,7 +60,11 @@ export class TaskPlannerComponent implements OnInit {
     private confirmationModalService: ConfirmationModalService,
     private taskPlannerPrerequisitesModal: TaskPlannerPrerequisitesModalService,
     private taskPrerequisiteService: TaskPrerequisiteService,
+    private router: UIRouter,
   ) {}
+
+  public highlightedItemId: string = null;
+  public animateBackground: boolean = false;
 
   public get gradeValues() {
     return this.gradeService.gradeValues;
@@ -318,19 +323,24 @@ export class TaskPlannerComponent implements OnInit {
     return false;
   }
 
-  getItemClasses(item: GanttItem) {
-    // call all functions so they run
-    const pastDeadline = this.isPastFeedbackDeadline(item);
-    // const conflict = this.prerequisiteConflict(item);
-    const blocked = this.isBlockedByPrerequisite(item);
-    const closeDeadline = this.isCloseToFeedbackDeadline(item);
+  getItemClasses(item: GanttItem): string[] {
+    const classes: string[] = ['gantt-bar'];
+    if (this.animateBackground) {
+      classes.push('flash');
+    }
+    if (item.id === this.highlightedItemId) {
+      classes.push('[--bar-bg:#03c6fc]');
+    } else if (this.isPastFeedbackDeadline(item)) {
+      classes.push('[--bar-bg:#cd3704]', 'text-white');
+    } else if (this.isBlockedByPrerequisite(item)) {
+      classes.push('[--bar-bg:#e88307]', 'text-black');
+    } else if (this.isCloseToFeedbackDeadline(item)) {
+      classes.push('[--bar-bg:#ffc53d]', 'text-black');
+    } else {
+      classes.push('[--bar-bg:#0e467b]', 'text-white');
+    }
 
-    // decide the class based on priority
-    if (pastDeadline) return 'bg-[#cd3704] text-white';
-    // if (conflict) return 'bg-[#eb6134] text-white';
-    if (blocked) return 'bg-[#e88307] text-black';
-    if (closeDeadline) return 'bg-[#ffc53d] text-black';
-    return 'bg-[#0e467b] text-white';
+    return classes;
   }
 
   isPastFeedbackDeadline(item: GanttItem) {
@@ -643,8 +653,6 @@ export class TaskPlannerComponent implements OnInit {
       this.items.push(item);
       this.items = [...this.items];
 
-      this.ganttComponent.scrollToToday();
-
       // Create baseline item
       const baselineItem = {...item};
       baselineItem.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
@@ -655,6 +663,34 @@ export class TaskPlannerComponent implements OnInit {
       // if (this.unsavedChanges(item)) {
       //   this.saveTargetDate(item);
       // }
+    }
+
+    this.ganttComponent.scrollToToday();
+
+    if (this.router.globals.params.taskDef) {
+      const td = this.items.find((item) => item.id === this.router.globals.params.taskDef);
+      if (td) {
+        this.ganttComponent.scrollToDate(td.start);
+        this.highlightedItemId = td.id;
+        this.animateBackground = true;
+
+        setTimeout(() => {
+          const el = document.querySelector(`[data-gantt-id="${td.id}"]`) as HTMLElement;
+
+          el?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'nearest',
+          });
+        });
+        setTimeout(() => (this.highlightedItemId = null), 1000);
+        setTimeout(() => (this.animateBackground = false), 2000);
+      }
+      this.router.stateService.go(
+        this.router.globals.current.name,
+        {taskDef: null},
+        {location: 'replace', notify: false, reload: false},
+      );
     }
   }
 

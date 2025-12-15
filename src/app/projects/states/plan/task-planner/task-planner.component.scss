@@ -8,3 +8,11 @@
   overflow: visible !important;
   pointer-events: none;
 }
+
+.gantt-bar {
+  background-color: var(--bar-bg);
+}
+
+.flash {
+  transition: background-color 500ms ease-in-out;
+}
