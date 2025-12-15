@@ -17,6 +17,7 @@
   }
 </div>
 <ngx-gantt
+  [class.flexible-dates]="overlayLines"
   #gantt
   [items]="items"
   [baselineItems]="unit.allowFlexibleDates ? baselineItems : []"

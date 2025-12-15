@@ -79,7 +79,10 @@ export class TaskPlannerComponent implements OnInit {
     // console.log(event);
   }
 
+  public overlayLines: boolean = false;
+
   onBarHover(item: GanttItem) {
+    this.overlayLines = true;
     const ganttItem = this.items.find((i) => i.id === item.id);
     const originalColor = this.originalLinks.get(ganttItem.id);
     ganttItem.links = [...originalColor];
@@ -120,6 +123,7 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   onBarLeave(item: GanttItem) {
+    this.overlayLines = false;
     const ganttItem = this.items.find((i) => i.id === item.id);
     ganttItem.links.forEach((linkItem) => {
       const link = linkItem as GanttLink;
