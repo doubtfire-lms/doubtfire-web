@@ -320,6 +320,31 @@ const MY_DATE_FORMAT = {
   },
 };
 
+const GANTT_CHART_CONFIG = {
+  provide: GANTT_GLOBAL_CONFIG,
+  useValue: {
+    // locale: 'en-US',
+    dateFormat: {
+      // timeZone: 'UTC',
+      weekStartsOn: 1,
+      week: 'w',
+      year: 'yyyy',
+      month: 'MMMM',
+      yearMonth: 'yyyy MMM',
+      yearQuarter: 'yyyy',
+    },
+    linkOptions: {
+      showArrow: true,
+      lineType: GanttLinkLineType.curve,
+    },
+    styleOptions: {
+      // lineHeight: '25',
+      // barHeight: '23',
+      // headerHeight: '50px',
+    },
+  },
+};
+
 @NgModule({
   // Components we declare
   declarations: [
@@ -558,30 +583,7 @@ const MY_DATE_FORMAT = {
     TaskPrerequisiteService,
     MarkingSessionService,
     DiscussionPromptService,
-    {
-      provide: GANTT_GLOBAL_CONFIG,
-      useValue: {
-        // locale: 'en-US',
-        dateFormat: {
-          // timeZone: 'UTC',
-          weekStartsOn: 1,
-          week: 'w',
-          year: 'yyyy',
-          month: 'MMMM',
-          yearMonth: 'yyyy MMM',
-          yearQuarter: 'yyyy',
-        },
-        linkOptions: {
-          showArrow: true,
-          lineType: GanttLinkLineType.curve,
-        },
-        styleOptions: {
-          // lineHeight: '25',
-          // barHeight: '23',
-          // headerHeight: '50px',
-        },
-      },
-    },
+    GANTT_CHART_CONFIG,
     TaskPlannerPrerequisitesModalService,
   ],
   imports: [
