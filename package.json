@@ -16,7 +16,7 @@
     "lint": "ng lint",
     "serve:angular17": "export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --poll=2000 --configuration $NODE_ENV --proxy-config proxy.conf.json",
     "serve:angular17-compose": "export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --configuration $NODE_ENV --proxy-config proxy-compose.conf.json",
-    "start": "npm-run-all -l -s build:angular1  serve:angular17",
+    "start": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular17",
     "start-compose": "npm-run-all -l -s build:angular1 -p watch:angular1 serve:angular17-compose",
     "watch:angular1": "grunt delta",
     "deploy:build2api": "ng build --delete-output-path=true --optimization=true --configuration production --output-path dist",
