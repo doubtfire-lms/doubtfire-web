@@ -410,42 +410,27 @@ export class TaskPlannerComponent implements OnInit {
       'Reset Task Dates?',
       `Are you sure you want to reset all target dates to the unit's default? All modified dates will be reset.`,
       () => {
-        this.resetTargetDates();
-      },
-    );
-  }
+        this.project.resetTargetDates().subscribe({
+          next: (project) => {
+            console.log(project);
+            console.log(this.project.tasks);
+            for (const task of this.project.tasks) {
+              task.targetDueDate = null;
+              task.targetStartDate = null;
 
-  resetTargetDates() {
-    // TODO: maybe an api endpoint that clears them all at once
-    for (const item of this.items) {
-      const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
-      if (!td) {
-        continue;
-      }
-      const task = this.project.findTaskForDefinition(td.id);
-      if (task.targetDueDate || task.targetStartDate) {
-        task.saveTargetDates(null, null).subscribe({
-          next: (_data) => {
-            task.targetDueDate = null;
-            task.targetStartDate = null;
+              const item = this.items.find((item) => item.id === task.definition.id.toString());
 
-            item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
-            item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+              item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+              item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+            }
             this.items = [...this.items];
           },
           error: (error) => {
-            this.alertService.error(
-              `Failed to reset target date for ${td.abbreviation}: ${error}`,
-              6000,
-            );
+            this.alertService.error(`Failed to reset target dates: ${error}`, 6000);
           },
         });
-      } else {
-        item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
-        item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
-        this.items = [...this.items];
-      }
-    }
+      },
+    );
   }
 
   normalizeDateUTC = (ts: number) => {
