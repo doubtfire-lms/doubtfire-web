@@ -41,7 +41,6 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/common/alert-list/alert-list.coffee
 - [x] ./src/app/common/modals/progress-modal/progress-modal.coffee
 - [x] ./src/app/errors/states/not-found/not-found.coffee
-- [x] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
 - [x] ./src/app/common/services/media-service.coffee
 
 ### MIGRATED:
@@ -170,7 +169,7 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/visualisations/alignment-bullet-chart.coffee (ILO Alignments removed)
 - [x] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
 - [x] ./src/app/groups/groups.coffee
-- [x] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee (9.x)
+- [x] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
 
 ### TO REMOVE IN 10.0.x
 
