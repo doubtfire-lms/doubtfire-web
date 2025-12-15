@@ -489,9 +489,11 @@ export class TaskPlannerComponent implements OnInit {
       })
       .filter(Boolean);
 
-    return `${this.toDateString(item.start)} - ${this.toDateString(item.end)}\n${
-      prereqs.length ? `Required for: \n${prereqs.join(', ')}` : ''
-    }`;
+    // return `${this.toDateString(item.start)} - ${this.toDateString(item.end)}\n${
+    //   prereqs.length ? `Required for: \n${prereqs.join(', ')}` : ''
+    // }`;
+
+    return `${this.toDateString(item.start)} — ${this.toDateString(item.end)}`;
   }
 
   public get earliestStartDate() {
