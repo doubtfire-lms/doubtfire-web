@@ -1,28 +1,24 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatSelectChange} from '@angular/material/select';
+import {UIRouter} from '@uirouter/core';
 import {
-  GanttViewType,
-  GanttViewOptions,
-  GanttItem,
+  GanttBarClickEvent,
   GanttBaselineItem,
-  GanttDragEvent,
   GanttDate,
+  GanttItem,
   GanttLink,
   GanttLinkType,
+  GanttViewOptions,
+  GanttViewType,
   NgxGanttComponent,
-  GanttBarClickEvent,
 } from '@worktile/gantt';
 import {Project} from 'src/app/api/models/project';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
-import {ProjectService} from 'src/app/api/services/project.service';
+import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {GlobalStateService} from '../../index/global-state.service';
 import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
-import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
-import {UIRouter} from '@uirouter/core';
 
 @Component({
   selector: 'f-task-planner',
@@ -546,7 +542,6 @@ export class TaskPlannerComponent implements OnInit {
       //   }
       // }
 
-      // this.originalLinks.set(, [...(item.links as GanttLink[])]);
       const originalItem = {...item};
       this.originalLinks.set(item.id.toString(), [...(originalItem.links as GanttLink[])]);
 
