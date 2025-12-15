@@ -5,6 +5,7 @@ import {
   TaskPlannerPrerequisitesModalComponent,
   TaskPlannerPrerequisitesModalData,
 } from './task-planner-prerequisites-modal.component';
+import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +13,11 @@ import {
 export class TaskPlannerPrerequisitesModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(project: Project, taskDefinition: TaskDefinition) {
+  public show(project: Project, taskDefinition: TaskDefinition, dependents: TaskPrerequisite[]) {
     this.dialog.open<TaskPlannerPrerequisitesModalComponent, TaskPlannerPrerequisitesModalData>(
       TaskPlannerPrerequisitesModalComponent,
       {
-        data: {taskDefinition, project},
+        data: {taskDefinition, project, dependents},
         width: '100%',
         maxWidth: '900px',
         panelClass: 'overflow-y-auto',

@@ -1,15 +1,76 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>{{ taskDefinition.name }}</mat-card-title>
+<mat-card appearance="outlined">
+  <mat-card-header class="w-full flex justify-between items-center">
+    <mat-card-title class="w-full">
+      {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
+    </mat-card-title>
+    <status-icon [status]="taskDefinition.projectTask(project).status"></status-icon>
   </mat-card-header>
   <mat-card-content>
-    <p>{{ taskDefinition.description }}</p>
+    <p class="py-5">{{ taskDefinition.description }}</p>
     <f-task-prerequisites-card
       [taskDefinition]="taskDefinition"
       [task]="task"
     ></f-task-prerequisites-card>
     @if (!task.hasPrerequisiteTasks()) {
       <div class="p-5 w-full text-center text-gray-400">This task has no prerequisites.</div>
+    }
+    <mat-divider class="my-5"></mat-divider>
+    @if (dependents.length) {
+      <mat-card appearance="outlined" class="mt-5">
+        <mat-card-header>
+          <mat-card-title>Required by</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <mat-card-subtitle class="mb-4">
+            <strong>{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</strong> is a
+            prerequisite for the following tasks. In some cases,
+            <strong>{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</strong> needs to
+            reach the <strong>Discuss</strong> or <strong>Complete</strong> status, which requires
+            tutor feedback. Plan ahead to avoid being locked out of submission.
+          </mat-card-subtitle>
+          <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="task-definition">
+              <th mat-header-cell *matHeaderCellDef>Task</th>
+              <td mat-cell *matCellDef="let link">
+                {{ link.taskDefinition?.abbreviation }} {{ link.taskDefinition?.name }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="current-status">
+              <th mat-header-cell *matHeaderCellDef>Submission Open</th>
+              <td mat-cell *matCellDef="let link">
+                @if (link.taskDefinition.projectTask(project).blockedByPrerequisiteTasks()) {
+                  <mat-icon>block_outlined</mat-icon>
+                } @else {
+                  <mat-icon>check_circle</mat-icon>
+                }
+                <!-- <status-icon
+                matBadgePosition="before"
+                [status]="link.taskDefinition?.projectTask(task?.project)?.status ?? 'not_started'"
+              ></status-icon> -->
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="required-status">
+              <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">Required Status</th>
+              <td mat-cell *matCellDef="let link">
+                <status-icon
+                  matTooltip=""
+                  matBadgePosition="before"
+                  [status]="link.taskStatus ?? 'complete'"
+                ></status-icon>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    } @else {
+      <div class="p-5 w-full text-center text-gray-400">
+        This task is not a prerequisite for any other tasks.
+      </div>
     }
   </mat-card-content>
 </mat-card>
