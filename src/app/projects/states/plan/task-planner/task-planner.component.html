@@ -71,7 +71,7 @@
 
       <ngx-gantt-column name="Deadline" width="110px">
         <ng-template #cell let-item="item" class="text-center">
-          {{ item.task.localDeadlineDate() ? toDateString() : 'N/A' }}
+          {{ item.task.localDeadlineDate() ? toDateString(item.task.localDeadlineDate()) : 'N/A' }}
         </ng-template>
       </ngx-gantt-column>
     }
