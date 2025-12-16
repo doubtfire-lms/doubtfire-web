@@ -1,7 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {UIRouter} from '@uirouter/core';
 import {
-  GanttBarClickEvent,
   GanttBaselineItem,
   GanttDate,
   GanttItem,
@@ -12,6 +11,7 @@ import {
   NgxGanttComponent,
 } from '@worktile/gantt';
 import {Project} from 'src/app/api/models/project';
+import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
 import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
@@ -20,29 +20,39 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 
+interface TaskGanttItem extends GanttItem {
+  highlighted?: boolean;
+  taskDefinition: TaskDefinition;
+  task: Task;
+  originalLinks: GanttLink[];
+}
+
 @Component({
   selector: 'f-task-planner',
   templateUrl: './task-planner.component.html',
   styleUrl: './task-planner.component.scss',
 })
 export class TaskPlannerComponent implements OnInit {
-  @Input() project: Project;
+  // Show a warning if the task's target end date is within this many days of the feedback deadline
+  public readonly CLOSE_TO_FEEDBACK_DEADLINE_THRESHOLD = 7;
 
+  @Input() project: Project;
   @ViewChild('gantt') ganttComponent: NgxGanttComponent;
 
   public viewType: GanttViewType = GanttViewType.day;
-
-  viewOptions: GanttViewOptions;
+  public viewOptions: GanttViewOptions;
 
   public allTaskPrerequisites: TaskPrerequisite[];
   public taskPrerequisites: TaskPrerequisite[];
 
-  public originalLinks: Map<string, GanttLink[]> = new Map();
-
-  items: GanttItem[] = [];
+  public items: TaskGanttItem[] = [];
 
   // TaskDefinition default dates for reference
-  baselineItems: GanttBaselineItem[] = [];
+  public baselineItems: GanttBaselineItem[] = [];
+
+  public animateBackground: boolean = false;
+  public showDatesColumn: boolean = false;
+  public overlayLines: boolean = false;
 
   public get unit() {
     return this.project?.unit;
@@ -57,9 +67,6 @@ export class TaskPlannerComponent implements OnInit {
     private router: UIRouter,
   ) {}
 
-  public highlightedItemId: string = null;
-  public animateBackground: boolean = false;
-
   public get gradeValues() {
     return this.gradeService.gradeValues;
   }
@@ -72,23 +79,21 @@ export class TaskPlannerComponent implements OnInit {
     return this.gradeService.grades[grade];
   }
 
-  public showDatesColumn: boolean = false;
+  onBarHover(item: TaskGanttItem) {
+    this.setLinkColors(item, true);
+  }
 
-  public overlayLines: boolean = false;
+  onBarLeave(item: TaskGanttItem) {
+    this.setLinkColors(item, false);
+  }
 
-  onBarHover(item: GanttItem) {
-    this.overlayLines = true;
+  setLinkColors(item: TaskGanttItem, active: boolean) {
+    this.overlayLines = active;
+
     const ganttItem = this.items.find((i) => i.id === item.id);
-    const originalColor = this.originalLinks.get(ganttItem.id);
-    ganttItem.links = [...originalColor];
-
     ganttItem.links.forEach((linkItem) => {
       const link = linkItem as GanttLink;
-      const color = link.color as {active: string; default: string};
-      if (color.default.endsWith('0.1)')) {
-        color.default = color.default.slice(0, -4);
-        color.default += '1)';
-      }
+      this.toggleLinkOpacity(link, active);
     });
 
     const prerequisites = this.items.filter((i) => {
@@ -103,13 +108,8 @@ export class TaskPlannerComponent implements OnInit {
     prerequisites.forEach((prereq) => {
       prereq.links.forEach((linkItem) => {
         const link = linkItem as GanttLink;
-        if (link.link !== item.id) {
-          return;
-        }
-        const color = link.color as {active: string; default: string};
-        if (color.default.endsWith('0.1)')) {
-          color.default = color.default.slice(0, -4);
-          color.default += '1)';
+        if (link.link == item.id) {
+          this.toggleLinkOpacity(link, active);
         }
       });
     });
@@ -117,48 +117,21 @@ export class TaskPlannerComponent implements OnInit {
     this.items = [...this.items];
   }
 
-  onBarLeave(item: GanttItem) {
-    this.overlayLines = false;
-    const ganttItem = this.items.find((i) => i.id === item.id);
-    ganttItem.links.forEach((linkItem) => {
-      const link = linkItem as GanttLink;
-      const color = link.color as {active: string; default: string};
-      if (!color.default.endsWith('0.1)')) {
-        color.default = color.default.slice(0, -2);
-        color.default += '0.1)';
-      }
-    });
+  private toggleLinkOpacity(link: GanttLink, active: boolean) {
+    const color = link.color as {active: string; default: string};
 
-    const prerequisites = this.items.filter((i) => {
-      const links = i.links;
-      if (typeof links === 'string') {
-        return false;
-      }
-
-      return links.some((l) => typeof l !== 'string' && l.link === item.id);
-    });
-
-    prerequisites.forEach((prereq) => {
-      prereq.links.forEach((linkItem) => {
-        const link = linkItem as GanttLink;
-
-        if (link.link !== item.id) {
-          return;
-        }
-        const color = link.color as {active: string; default: string};
-        if (!color.default.endsWith('0.1)')) {
-          color.default = color.default.slice(0, -2);
-          color.default += '0.1)';
-        }
-      });
-    });
-
-    this.items = [...this.items];
+    if (!active && !color.default.endsWith('0.1)')) {
+      // Dim link by lowering alpha
+      color.default = color.default.slice(0, -2) + '0.1)';
+    } else if (active && color.default.endsWith('0.1)')) {
+      // Restore full opacity
+      color.default = color.default.slice(0, -4) + '1)';
+    }
   }
 
-  barClick(event: GanttBarClickEvent) {
-    const td = this.getTaskDefinition(event.item.id);
-    const prereqs = this.getPrerequisitesFor(event.item.id);
+  barClick(item: TaskGanttItem) {
+    const td = item.taskDefinition;
+    const prereqs = this.taskPrerequisites.filter((p) => p.prerequisiteId === td.id);
     this.taskPlannerPrerequisitesModal.show(this.project, td, prereqs);
   }
 
@@ -178,7 +151,7 @@ export class TaskPlannerComponent implements OnInit {
 
   // Check to see if this task is a prerequisite for another task
   // If it is, ensure the end date on the task is before the start of its dependent task
-  prerequisiteConflict(item: GanttItem) {
+  prerequisiteConflict(item: TaskGanttItem) {
     if (!item.links.length) {
       return false;
     }
@@ -219,7 +192,7 @@ export class TaskPlannerComponent implements OnInit {
     return isAfterDependentStartDate;
   }
 
-  isBlockedByPrerequisite(item: GanttItem) {
+  isBlockedByPrerequisite(item: TaskGanttItem) {
     const prerequisites = this.items.filter((i) => {
       const links = i.links;
       if (typeof links === 'string') {
@@ -241,12 +214,12 @@ export class TaskPlannerComponent implements OnInit {
     return false;
   }
 
-  getItemClasses(item: GanttItem): string[] {
+  getItemClasses(item: TaskGanttItem): string[] {
     const classes: string[] = ['gantt-bar'];
     if (this.animateBackground) {
       classes.push('flash');
     }
-    if (item.id === this.highlightedItemId) {
+    if (item.highlighted) {
       classes.push('[--bar-bg:#03c6fc]');
     } else if (this.isPastFeedbackDeadline(item)) {
       classes.push('[--bar-bg:#cd3704]', 'text-white');
@@ -261,24 +234,21 @@ export class TaskPlannerComponent implements OnInit {
     return classes;
   }
 
-  isPastFeedbackDeadline(item: GanttItem) {
-    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
-    const task = this.project.findTaskForDefinition(td.id);
-    return item.end > task.localDeadlineDate().getTime() / 1000;
+  isPastFeedbackDeadline(item: TaskGanttItem) {
+    return item.end > item.task.localDeadlineDate().getTime() / 1000;
   }
 
-  isCloseToFeedbackDeadline(item: GanttItem) {
+  isCloseToFeedbackDeadline(item: TaskGanttItem) {
     if (!this.unit.allowFlexibleDates) {
       return false;
     }
-    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
-    const task = this.project.findTaskForDefinition(td.id);
 
+    const task = item.task;
     const diff =
       this.normalizeDateUTC(task.localDeadlineDate().getTime() / 1000) -
       this.normalizeDateUTC(item.end);
 
-    return diff >= 0 && diff <= 7 * 24 * 60 * 60;
+    return diff >= 0 && diff <= this.CLOSE_TO_FEEDBACK_DEADLINE_THRESHOLD * 24 * 60 * 60;
   }
 
   toDateStr = (timestamp: number) => {
@@ -288,7 +258,7 @@ export class TaskPlannerComponent implements OnInit {
 
   saveTargetDates() {
     for (const item of this.items) {
-      const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
+      const td = item.taskDefinition;
       if (!td) {
         continue;
       }
@@ -298,9 +268,9 @@ export class TaskPlannerComponent implements OnInit {
     }
   }
 
-  saveTargetDate(item: GanttItem) {
-    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(item.id));
-    const task = this.project.findTaskForDefinition(td.id);
+  saveTargetDate(item: TaskGanttItem) {
+    const td = item.taskDefinition;
+    const task = item.task;
 
     task.saveTargetDates(this.toDateStr(item.start), this.toDateStr(item.end)).subscribe({
       next: (data) => {
@@ -339,9 +309,7 @@ export class TaskPlannerComponent implements OnInit {
       `Are you sure you want to reset all target dates to the unit's default? All modified dates will be reset.`,
       () => {
         this.project.resetTargetDates().subscribe({
-          next: (project) => {
-            console.log(project);
-            console.log(this.project.tasks);
+          next: (_project) => {
             for (const task of this.project.tasks) {
               task.targetDueDate = null;
               task.targetStartDate = null;
@@ -376,40 +344,14 @@ export class TaskPlannerComponent implements OnInit {
     });
   }
 
-  getTask(tdId: string) {
-    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(tdId));
-    const task = this.project.findTaskForDefinition(td.id);
-
-    return task;
-  }
-
-  getTaskDefinition(tdId: string) {
-    const td = this.unit.taskDefinitions.find((td) => td.id === Number(tdId));
-    return td;
-  }
-
-  getTaskDeadline(tdId: string) {
-    const td = this.project.unit.taskDefinitions.find((td) => td.id === Number(tdId));
-    const task = this.project.findTaskForDefinition(td.id);
-    return task?.localDeadlineDate() ?? 'N/A';
-  }
-
-  getPrerequisitesFor(tdId: string) {
-    return this.taskPrerequisites.filter((p) => p.prerequisiteId === Number(tdId));
-  }
-  floor(value: number) {
-    return Math.floor(value);
-  }
-
-  unsavedChanges(item: GanttItem) {
-    const task = this.project.findTaskForDefinition(Number(item.id));
-
+  unsavedChanges(item: TaskGanttItem) {
+    const task = item.task;
     const start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
     const end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
     return start !== this.normalizeDateUTC(item.start) || end !== this.normalizeDateUTC(item.end);
   }
 
-  getTooltip(item: GanttItem) {
+  getTooltip(item: TaskGanttItem) {
     return `${this.toDateString(item.start)} — ${this.toDateString(item.end)}`;
   }
 
@@ -417,14 +359,12 @@ export class TaskPlannerComponent implements OnInit {
     const earliestTaskStartDate = Math.min(
       ...this.taskDefs().map((t) => t.startDate.getTime() / 1000),
     );
-    return Math.floor(
-      Math.min(this.project.unit.startDate.getTime() / 1000, earliestTaskStartDate),
-    );
+    return Math.floor(Math.min(this.unit.startDate.getTime() / 1000, earliestTaskStartDate));
   }
 
   public get latestEndDate() {
     const latestTaskEndDate = Math.max(...this.taskDefs().map((t) => t.dueDate.getTime() / 1000));
-    return Math.floor(Math.max(this.project.unit.endDate.getTime() / 1000, latestTaskEndDate));
+    return Math.floor(Math.max(this.unit.endDate.getTime() / 1000, latestTaskEndDate));
   }
 
   ngOnInit(): void {
@@ -435,7 +375,7 @@ export class TaskPlannerComponent implements OnInit {
       dragPreviewDateFormat: 'MMM dd',
     };
 
-    this.project.unit.getTaskPrerequisites().subscribe({
+    this.unit.getTaskPrerequisites().subscribe({
       next: (prereqs) => {
         this.allTaskPrerequisites = prereqs;
         this.mapPrerequisites();
@@ -449,7 +389,7 @@ export class TaskPlannerComponent implements OnInit {
 
         for (const td of this.unit.taskDefinitions) {
           const prerequisites = td.taskPrerequisitesCache.currentValues;
-          const definitions = td.unit.taskDefinitions;
+          const definitions = this.unit.taskDefinitions;
           for (const prerequisite of prerequisites) {
             prerequisite.taskDefinition = definitions.find(
               (td) => td.id === prerequisite.taskDefinitionId,
@@ -479,7 +419,7 @@ export class TaskPlannerComponent implements OnInit {
     for (const td of taskDefinitions) {
       const task = this.project.findTaskForDefinition(td.id);
 
-      const item: GanttItem = {
+      const item: TaskGanttItem = {
         id: td.id.toString(),
         title: `${td.abbreviation} ${td.name}`,
         start: this.normalizeDateUTC(task.startDate.getTime() / 1000),
@@ -489,7 +429,10 @@ export class TaskPlannerComponent implements OnInit {
         // color: this.gradeService.gradeColors[td.targetGrade],
         expanded: false,
         color: '#3333ff',
+        taskDefinition: td,
+        task: task,
         // progress: 0.5,
+        originalLinks: [],
         links: this.taskPrerequisites
           .filter((p) => p.prerequisiteId === td.id)
           // .filter((p) => p.taskDefinitionId === td.id)
@@ -543,7 +486,7 @@ export class TaskPlannerComponent implements OnInit {
       // }
 
       const originalItem = {...item};
-      this.originalLinks.set(item.id.toString(), [...(originalItem.links as GanttLink[])]);
+      item.originalLinks = [...(originalItem.links as GanttLink[])];
 
       this.items.push(item);
       this.items = [...this.items];
@@ -563,14 +506,14 @@ export class TaskPlannerComponent implements OnInit {
     this.ganttComponent.scrollToToday();
 
     if (this.router.globals.params.taskDef) {
-      const td = this.items.find((item) => item.id === this.router.globals.params.taskDef);
-      if (td) {
-        this.ganttComponent.scrollToDate(td.start);
-        this.highlightedItemId = td.id;
+      const taskItem = this.items.find((item) => item.id === this.router.globals.params.taskDef);
+      if (taskItem) {
+        this.ganttComponent.scrollToDate(taskItem.start);
+        taskItem.highlighted = true;
         this.animateBackground = true;
 
         setTimeout(() => {
-          const el = document.querySelector(`[data-gantt-id="${td.id}"]`) as HTMLElement;
+          const el = document.querySelector(`[data-gantt-id="${taskItem.id}"]`) as HTMLElement;
 
           el?.scrollIntoView({
             behavior: 'smooth',
@@ -578,7 +521,7 @@ export class TaskPlannerComponent implements OnInit {
             inline: 'nearest',
           });
         });
-        setTimeout(() => (this.highlightedItemId = null), 1000);
+        setTimeout(() => (taskItem.highlighted = false), 1000);
         setTimeout(() => (this.animateBackground = false), 2000);
       }
       this.router.stateService.go(

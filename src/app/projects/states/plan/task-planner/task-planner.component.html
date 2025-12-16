@@ -30,7 +30,6 @@
   [virtualScrollEnabled]="false"
   [disabledLoadOnScroll]="true"
   class="h-full overflow-hidden"
-  (barClick)="barClick($event)"
 >
   <ngx-gantt-table>
     <ngx-gantt-column name="Tasks" width="350px">
@@ -40,19 +39,19 @@
           uiSref="projects/dashboard"
           [uiParams]="{
             projectId: project.id,
-            taskAbbr: getTaskDefinition(item.id).abbreviation
+            taskAbbr: item.taskDefinition.abbreviation
           }"
         >
           <div class="flex items-center gap-5 w-full min-w-0">
             <f-grade-icon
-              [grade]="getTaskDefinition(item.id).targetGrade"
+              [grade]="item.taskDefinition.targetGrade"
               [colorful]="true"
             ></f-grade-icon>
             <div class="truncate w-full flex-1 min-w-0">
               {{ item.title }}
             </div>
           </div>
-          <status-icon [status]="getTask(item.id).status"></status-icon>
+          <status-icon [status]="item.task.status"></status-icon>
         </div>
       </ng-template>
     </ngx-gantt-column>
@@ -72,13 +71,14 @@
 
       <ngx-gantt-column name="Deadline" width="110px">
         <ng-template #cell let-item="item" class="text-center">
-          {{ toDateString(getTaskDeadline(item.id)) }}
+          {{ item.task.localDeadlineDate() ? toDateString() : 'N/A' }}
         </ng-template>
       </ngx-gantt-column>
     }
 
     <ng-template #bar let-item="item">
       <span
+        (click)="barClick(item)"
         [attr.data-gantt-id]="item.id"
         (mouseover)="onBarHover(item)"
         (mouseleave)="onBarLeave(item)"
