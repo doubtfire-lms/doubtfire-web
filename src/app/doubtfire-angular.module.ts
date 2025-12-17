@@ -302,6 +302,7 @@ import {DiscussionPromptService} from './api/services/discussion-prompt.service'
 import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
 import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
 import {DiscussionPromptsViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/discussion-prompts-view/discussion-prompts-view.component';
+import {OverseerStepService} from './api/services/overseer-step.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -551,6 +552,7 @@ const MY_DATE_FORMAT = {
     TaskPrerequisiteService,
     MarkingSessionService,
     DiscussionPromptService,
+    OverseerStepService,
   ],
   imports: [
     FlexLayoutModule,

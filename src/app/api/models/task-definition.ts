@@ -9,6 +9,7 @@ import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from '.
 import {Task} from './doubtfire-model';
 import {TaskPrerequisite} from './task-prerequisite';
 import {DiscussionPrompt} from './discussion-prompt';
+import {OverseerStep} from './overseer/overseer-step';
 
 export type UploadRequirement = {
   key: string;
@@ -68,6 +69,8 @@ export class TaskDefinition extends Entity {
 
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
+
+  public readonly overseerStepsCache: EntityCache<OverseerStep> = new EntityCache<OverseerStep>();
 
   readonly unit: Unit;
 
