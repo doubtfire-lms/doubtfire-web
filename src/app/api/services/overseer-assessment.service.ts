@@ -50,6 +50,7 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
           });
         },
       },
+      'overseerStepId',
     );
   }
 
@@ -63,7 +64,9 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
       td_id: task.definition.id,
     };
 
-    return this.query(pathIds);
+    return this.query(pathIds, {
+      constructorParams: task,
+    });
   }
 
   public triggerOverseer(assessment: OverseerAssessment): Observable<OverseerAssessment> {

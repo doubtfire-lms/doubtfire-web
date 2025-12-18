@@ -19,16 +19,69 @@ export class TaskOverseerReportComponent implements OnInit {
     private overseerAssessmentService: OverseerAssessmentService,
   ) {}
 
-  editorOptions = {
-    theme: 'vs',
-    language: 'text',
+  public viewOutput: 'your_output' | 'expected_output' | 'diff' | 'split_diff' = 'your_output';
+
+  stdoutOptions = {
+    theme: 'vs-dark',
+    language: 'plaintext',
     renderMinimap: false,
-    readOnly: true,
-    renderSideBySide: false,
+    lineNumbers: false,
+
     minimap: {
       enabled: false,
     },
   };
+  editorOptions = {
+    theme: 'vs',
+    language: 'text',
+    renderMinimap: false,
+    minimap: {
+      enabled: false,
+    },
+    readOnly: true,
+  };
+
+  diffEditorOptions = {
+    theme: 'vs',
+    language: 'plaintext',
+    renderMinimap: false,
+    readOnly: true,
+    domReadOnly: true,
+    renderMarginRevertIcon: false,
+    enableSplitViewResizing: false,
+    useInlineViewWhenSpaceIsLimited: false,
+    renderSideBySideInlineBreakpoint: 1000,
+    renderSideBySide: true,
+    compactMode: true,
+    minimap: {
+      enabled: false,
+    },
+    lineNumbers: 'off',
+  };
+
+  diff() {
+    this.diffEditorOptions.renderSideBySide = false;
+    this.diffEditorOptions.compactMode = true;
+    this.diffEditorOptions = {...this.diffEditorOptions};
+    this.viewOutput = 'diff';
+  }
+
+  splitDiff() {
+    this.diffEditorOptions.renderSideBySide = true;
+    this.diffEditorOptions.compactMode = false;
+    this.diffEditorOptions = {...this.diffEditorOptions};
+    setTimeout(() => {
+      this.viewOutput = 'split_diff';
+    }, 100);
+  }
+
+  yourOutput() {
+    this.viewOutput = 'your_output';
+  }
+
+  expectedOutput() {
+    this.viewOutput = 'expected_output';
+  }
 
   public overseerAssessments: OverseerAssessment[] = [];
 
@@ -38,6 +91,15 @@ export class TaskOverseerReportComponent implements OnInit {
     this.overseerAssessmentService.queryForTask(this.task).subscribe({
       next: (assessments) => {
         this.overseerAssessments = assessments;
+        for (const oa of this.overseerAssessments) {
+          for (const result of oa.stepResultsCache.currentValues) {
+            result.overseerStep = this.task.definition.overseerStepsCache.currentValues.find(
+              (step) => step.id === result.overseerStepId,
+            );
+            console.log(result);
+            console.log(this.task.definition.overseerStepsCache.currentValues);
+          }
+        }
         console.log(assessments);
       },
       error: (error) => {},

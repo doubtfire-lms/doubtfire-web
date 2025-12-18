@@ -34,10 +34,22 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
 
   public currentUserTask: Task;
 
+  stdoutOptions = {
+    theme: 'vs',
+    language: 'plaintext',
+    renderMinimap: false,
+    lineNumbers: false,
+
+    minimap: {
+      enabled: false,
+    },
+  };
+
   editorOptions = {
     theme: 'vs',
-    language: 'shell',
+    language: 'plaintext',
     renderMinimap: false,
+
     minimap: {
       enabled: false,
     },

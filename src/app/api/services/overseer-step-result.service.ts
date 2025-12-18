@@ -15,6 +15,7 @@ export class OverseerStepResultService extends CachedEntityService<OverseerStepR
 
     this.mapping.addKeys(
       'id',
+      'overseerStepId',
       'exitStatus',
       'pass',
       'stdout',

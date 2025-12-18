@@ -5,7 +5,8 @@ import {OverseerStep} from './overseer-step';
 export class OverseerStepResult extends Entity {
   id: number;
   overseerAssessment: OverseerAssessment;
-  // overseerStep: OverseerStep;
+  overseerStep: OverseerStep;
+  overseerStepId: number;
 
   exitStatus: number;
   pass: boolean;
