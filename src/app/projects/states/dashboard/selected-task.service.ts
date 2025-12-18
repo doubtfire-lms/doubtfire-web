@@ -10,6 +10,7 @@ export enum DashboardViews {
   similarity,
   staff_notes,
   discussion_prompts,
+  overseer,
 }
 
 @Injectable({
@@ -65,6 +66,10 @@ export class SelectedTaskService {
 
   public showStaffNotes() {
     this.currentView$.next(DashboardViews.staff_notes);
+  }
+
+  public showOverseerReports() {
+    this.currentView$.next(DashboardViews.overseer);
   }
 
   public showDiscussionPrompts() {

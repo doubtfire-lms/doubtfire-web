@@ -1,5 +1,6 @@
-import {Entity, EntityMapping} from 'ngx-entity-service';
+import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {Task} from '../doubtfire-model';
+import {OverseerStepResult} from './overseer-step-result';
 
 export class OverseerAssessment extends Entity {
   id: number;
@@ -14,6 +15,9 @@ export class OverseerAssessment extends Entity {
   taskId?: number;
 
   label: string;
+
+  public readonly stepResultsCache: EntityCache<OverseerStepResult> =
+    new EntityCache<OverseerStepResult>();
 
   constructor(task?: Task) {
     super();
