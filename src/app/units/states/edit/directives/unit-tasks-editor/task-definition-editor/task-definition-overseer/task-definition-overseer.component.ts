@@ -104,7 +104,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   }
 
   addStep() {
-    this.newOverseerStep = new OverseerStep();
+    this.newOverseerStep = new OverseerStep(this.taskDefinition);
     this.newOverseerStep.stepType = 'status_check';
     this.newOverseerStep.timeoutMs = 5;
     this.newOverseerStep.enabled = true;
@@ -152,12 +152,23 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
           },
           {
             entity: step,
+            constructorParams: this.taskDefinition,
           },
         )
-        .subscribe(() => {
-          console.log('updated!');
+        .subscribe({
+          next: () => {
+            console.log('updated!');
+          },
+          error: (error) => {
+            console.error(error);
+          },
         });
     }
+  }
+
+  deleteStep() {
+    this.selectedOverseerStep?.delete();
+    this.selectedOverseerStep = null;
   }
 
   saveStep() {
@@ -177,6 +188,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
           next: (result) => {
             console.log(result);
             this.alerts.success('Added overseer step', 3000);
+            result.taskDefinition = this.taskDefinition;
             this.taskDefinition.overseerStepsCache.add(result);
             this.selectStep(result);
             this.newOverseerStep = null;

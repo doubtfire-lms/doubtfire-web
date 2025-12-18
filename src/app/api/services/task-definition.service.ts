@@ -142,15 +142,17 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       },
       'useResourcesForJplagBaseCode',
       'lockAssessmentsToTutorialStream',
-      'overseerSteps',
       {
-        keys: 'overseer_steps',
+        keys: 'overseerSteps',
         toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
           data[key]?.forEach((overseerStep) => {
             taskDefinition.overseerStepsCache.getOrCreate(
               overseerStep['id'],
               this.overseerStepService,
               overseerStep,
+              {
+                constructorParams: taskDefinition,
+              },
             );
           });
         },

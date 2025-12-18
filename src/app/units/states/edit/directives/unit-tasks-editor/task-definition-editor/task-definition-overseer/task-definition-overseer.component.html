@@ -71,7 +71,10 @@
 <div class="flex justify-between">
   <div></div>
   <!-- <button mat-raised-button (click)="addStep()">Add step</button> -->
-  <button mat-raised-button color="primary" (click)="saveStep()">Save</button>
+  <div>
+    <button mat-raised-button color="warn" (click)="deleteStep()">Delete</button>
+    <button mat-raised-button color="primary" (click)="saveStep()">Save</button>
+  </div>
 </div>
 
 <mat-drawer-container class="example-container">

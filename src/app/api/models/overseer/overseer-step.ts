@@ -1,6 +1,9 @@
 import {Entity, EntityMapping} from 'ngx-entity-service';
 import {TaskDefinition} from '../task-definition';
 import {TaskStatus, TaskStatusEnum} from '../task-status';
+import {OverseerStepService} from '../../services/overseer-step.service';
+import {AppInjector} from 'src/app/app-injector';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 export class OverseerStep extends Entity {
   id: number;
@@ -36,10 +39,10 @@ export class OverseerStep extends Entity {
 
   // showStdOutToStudent: boolean
 
-  // constructor(json: any) {
-  //   super();
-  //   this.statusOnSuccess = TaskStatus.S;
-  // }
+  constructor(td?: TaskDefinition) {
+    super();
+    this.taskDefinition = td;
+  }
 
   public override toJson<T extends Entity>(
     mappingData: EntityMapping<T>,
@@ -48,5 +51,24 @@ export class OverseerStep extends Entity {
     return {
       overseer_step: super.toJson(mappingData, ignoreKeys),
     };
+  }
+
+  public delete() {
+    const overseerStepService: OverseerStepService = AppInjector.get(OverseerStepService);
+    overseerStepService
+      .delete(
+        {
+          id: this.id,
+        },
+        {cache: this.taskDefinition.overseerStepsCache, endpointFormat: 'overseer_steps/:id:'},
+      )
+      .subscribe({
+        next: (_response: object) => {
+          AppInjector.get(AlertService).success('Successfully deleted overseer step', 4000);
+        },
+        error: (error) => {
+          AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
+        },
+      });
   }
 }
