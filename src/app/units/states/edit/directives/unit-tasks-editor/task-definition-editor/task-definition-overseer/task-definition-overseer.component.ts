@@ -1,4 +1,5 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {
   OverseerAssessment,
@@ -10,18 +11,16 @@ import {
   User,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
+import {OverseerStep} from 'src/app/api/models/overseer/overseer-step';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
+import {OverseerStepService} from 'src/app/api/services/overseer-step.service';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/overseer-script-editor-modal.service';
-import {CodeModel} from '@ngstack/code-editor';
-import {OverseerStep} from 'src/app/api/models/overseer/overseer-step';
-import {OverseerStepService} from 'src/app/api/services/overseer-step.service';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'f-task-definition-overseer',
@@ -31,13 +30,39 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   @Input() taskDefinition: TaskDefinition;
 
+  @ViewChild('editor') editorComponent;
+
   public currentUserTask: Task;
 
-  public model: CodeModel = {
+  editorOptions = {
+    theme: 'vs-dark',
     language: 'shell',
-    uri: 'run.sh',
-    value: '#!/bin/bash\n\n',
+    renderMinimap: false,
+    minimap: {
+      enabled: false,
+    },
   };
+
+  // public originalModel: DiffEditorModel = {
+  //   language: 'text',
+  //   code: `
+  //     testing
+  //     line 1
+  //     line 2
+  //     line 3
+  //   `,
+  // };
+
+  // public modifiedModel: DiffEditorModel = {
+  //   language: 'text',
+  //   code: `
+  //     testing
+  //     line 3
+  //     line 2
+  //     new line!
+  //     line 3
+  //   `,
+  // };
 
   public stepType: 'status_check' | 'output_diff' = 'status_check';
   public visibility = 'public';
@@ -69,22 +94,37 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
 
   selectStep(step: OverseerStep) {
     this.selectedOverseerStep = step;
-    this.model = {
-      language: 'shell',
-      uri: 'run.sh',
-      value: step.runCommand,
-    };
+    setTimeout(() => {
+      const editor = this.editorComponent?._editor;
+      if (editor) {
+        editor.revealLine(1);
+        editor.setScrollPosition({scrollTop: 0});
+      }
+    });
   }
 
   addStep() {
     this.newOverseerStep = new OverseerStep();
+    this.newOverseerStep.stepType = 'status_check';
+    this.newOverseerStep.timeoutMs = 5;
+    this.newOverseerStep.enabled = true;
+    this.newOverseerStep.showStdout = true;
+    this.newOverseerStep.statusOnFailure = 'no_change';
+    this.newOverseerStep.statusOnSuccess = 'no_change';
+    this.newOverseerStep.runCommand = '#!/bin/bash\n\n';
+    this.newOverseerStep.showExpectedOutput = true;
+
     this.newOverseerStep.sortOrder = this.taskDefinition.overseerStepsCache.currentValues.length;
     this.selectedOverseerStep = this.newOverseerStep;
-    this.model = {
-      language: 'shell',
-      uri: 'run.sh',
-      value: '#!/bin/bash\n\n',
-    };
+  }
+
+  getFeedbackMessagePlaceholder() {
+    switch (this.selectedOverseerStep.stepType) {
+      case 'status_check':
+        return 'There was an error compiling your code. Please check the output for any errors.';
+      case 'output_diff':
+        return 'Your program produced the incorrect output';
+    }
   }
 
   ngOnInit(): void {
@@ -98,6 +138,10 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     // TODO: open endpoint to update sort orders in a single request
     for (let i = 0; i < this.overseerSteps.length; i++) {
       const step = this.taskDefinition.overseerStepsCache.get(this.overseerSteps[i].id);
+      if (step.sortOrder === i) {
+        // Ignore if no change
+        continue;
+      }
       step.sortOrder = i;
       this.overseerStepService
         .update(
@@ -118,7 +162,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
 
   saveStep() {
     if (!this.selectedOverseerStep.id) {
-      this.newOverseerStep.runCommand = this.model.value;
+      // this.newOverseerStep.runCommand = this.model.value;
       this.overseerStepService
         .create(
           {
@@ -146,8 +190,6 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
           },
         });
     } else {
-      console.log(this.selectedOverseerStep);
-      this.selectedOverseerStep.runCommand = this.model.value;
       this.overseerStepService
         .update(
           {

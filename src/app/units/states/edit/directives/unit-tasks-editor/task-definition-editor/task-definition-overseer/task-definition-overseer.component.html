@@ -184,10 +184,18 @@
           }
 
           <div class="py-2">Execution Script</div>
-          <ngs-code-editor
+          <!-- <ngs-code-editor
             class="w-full min-h-[100px] bg-gray-100 p-5"
             [codeModel]="model"
-          ></ngs-code-editor>
+          ></ngs-code-editor> -->
+
+          <ngx-monaco-editor
+            #editor
+            class="w-full p-5"
+            [options]="editorOptions"
+            [(ngModel)]="selectedOverseerStep.runCommand"
+          ></ngx-monaco-editor>
+
           <mat-form-field appearance="outline" class="w-full mt-5">
             <mat-label>Time Limit (s)</mat-label>
             <input

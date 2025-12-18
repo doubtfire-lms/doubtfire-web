@@ -29,7 +29,8 @@
                 "input": "./JPlag-Report-Viewer",
                 "output": "/JPlag",
                 "glob": "**/!(*.gitignore|README.md|.git)"
-              }
+              },
+              {"glob": "**/*", "input": "node_modules/monaco-editor", "output": "/assets/monaco/"}
             ],
             "styles": [
               "src/theme.scss",
