@@ -163,6 +163,7 @@
                   <mat-label>Script Input File</mat-label>
                   <!-- Input for command (Standard input)-->
                   <mat-select [(ngModel)]="selectedOverseerStep.stdinInputFile">
+                    <mat-option value="">(none)</mat-option>
                     @for (file of taskDefinition.overseerResourceFiles; track file) {
                       <mat-option [value]="file">{{ file }}</mat-option>
                     }
