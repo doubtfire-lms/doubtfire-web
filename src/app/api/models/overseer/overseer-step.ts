@@ -17,6 +17,7 @@ export class OverseerStep extends Entity {
   timeoutMs: number;
   sortOrder: number;
   stepType: 'status_check' | 'output_diff';
+  partialOutputDiff: boolean;
   stdinInputFile: string;
   expectedOutputFile: string;
 

@@ -192,6 +192,15 @@
                 >
                   Show expected output file to student
                 </mat-slide-toggle>
+                <br />
+                <mat-slide-toggle [(ngModel)]="selectedOverseerStep.partialOutputDiff" class="mt-2"
+                  >Partial Output Comparison</mat-slide-toggle
+                >
+                <br />
+                <mat-hint>
+                  If enabled, test passes if the expected output appears anywhere in the student's
+                  output. Otherwise, only exact matches pass.
+                </mat-hint>
               </div>
             </div>
             <!-- <mat-checkbox [(ngModel)]="selectedOverseerStep.showExpectedOutputToStudent">
@@ -199,7 +208,7 @@
             </mat-checkbox> -->
           }
 
-          <div class="py-2">Execution Script</div>
+          <div class="py-2 mt-2">Execution Script</div>
           <!-- <ngs-code-editor
             class="w-full min-h-[100px] bg-gray-100 p-5"
             [codeModel]="model"

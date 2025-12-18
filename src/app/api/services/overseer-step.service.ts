@@ -23,6 +23,7 @@ export class OverseerStepService extends CachedEntityService<OverseerStep> {
       'timeoutMs',
       'sortOrder',
       'stepType',
+      'partialOutputDiff',
       // 'visibility',
       'stdinInputFile',
       'expectedOutputFile',

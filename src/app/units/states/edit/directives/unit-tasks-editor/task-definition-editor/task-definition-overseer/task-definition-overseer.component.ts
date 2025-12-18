@@ -35,7 +35,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   public currentUserTask: Task;
 
   editorOptions = {
-    theme: 'vs-dark',
+    theme: 'vs',
     language: 'shell',
     renderMinimap: false,
     minimap: {
@@ -177,11 +177,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
           next: (result) => {
             console.log(result);
             this.alerts.success('Added overseer step', 3000);
-            this.taskDefinition.overseerStepsCache.getOrCreate(
-              result.id,
-              this.overseerStepService,
-              result,
-            );
+            this.taskDefinition.overseerStepsCache.add(result);
+            this.selectStep(result);
             this.newOverseerStep = null;
           },
           error: (error) => {
