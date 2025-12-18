@@ -16,13 +16,13 @@ export class OverseerStep extends Entity {
   runCommand: string;
   timeoutMs: number;
   sortOrder: number;
-  stepType: string;
+  stepType: 'status_check' | 'output_diff';
   stdinInputFile: string;
   expectedOutputFile: string;
 
   feedbackMessage: string;
-  statusOnSuccess: TaskStatusEnum;
-  statusOnFailure: TaskStatusEnum;
+  statusOnSuccess: TaskStatusEnum | 'no_change';
+  statusOnFailure: TaskStatusEnum | 'no_change';
 
   haltOnSuccess: boolean;
   haltOnFailure: boolean;
