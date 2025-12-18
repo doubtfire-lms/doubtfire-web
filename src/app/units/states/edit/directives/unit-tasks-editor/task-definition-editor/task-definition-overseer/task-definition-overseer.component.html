@@ -163,9 +163,9 @@
                   <mat-label>Script Input File</mat-label>
                   <!-- Input for command (Standard input)-->
                   <mat-select [(ngModel)]="selectedOverseerStep.stdinInputFile">
-                    <mat-option value="public">/expected-input.in</mat-option>
-                    <mat-option value="masked">/solution.py</mat-option>
-                    <mat-option value="hidden">/build/program.cs</mat-option>
+                    @for (file of taskDefinition.overseerResourceFiles; track file) {
+                      <mat-option [value]="file">{{ file }}</mat-option>
+                    }
                   </mat-select>
                   <mat-hint
                     >The selected file will be passed as standard input to the program when it runs.
@@ -179,9 +179,9 @@
                 <mat-form-field appearance="outline" class="w-full">
                   <mat-label>Expected Output File</mat-label>
                   <mat-select [(ngModel)]="selectedOverseerStep.expectedOutputFile" required>
-                    <mat-option value="public">/expected-input.in</mat-option>
-                    <mat-option value="masked">/solution.py</mat-option>
-                    <mat-option value="hidden">/build/program.cs</mat-option>
+                    @for (file of taskDefinition.overseerResourceFiles; track file) {
+                      <mat-option [value]="file">{{ file }}</mat-option>
+                    }
                   </mat-select>
                   <mat-hint> Program output must exactly match this file to pass. </mat-hint>
                 </mat-form-field>

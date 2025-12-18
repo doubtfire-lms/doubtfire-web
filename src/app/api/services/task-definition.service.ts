@@ -155,6 +155,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
           });
         },
       },
+      'overseerResourceFiles',
     );
 
     this.mapping.mapAllKeysToJsonExcept(

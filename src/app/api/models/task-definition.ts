@@ -60,6 +60,7 @@ export class TaskDefinition extends Entity {
   useResourcesForJplagBaseCode: boolean;
   lockAssessmentsToTutorialStream: boolean;
   discussionPromptsCount: number;
+  overseerResourceFiles: string[] = [];
 
   public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
     new EntityCache<TaskPrerequisite>();
