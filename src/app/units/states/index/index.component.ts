@@ -4,7 +4,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 @Component({
   selector: 'f-units-index',
   templateUrl: './index.component.html',
-  styleUrls: ['./index.component.scss'],
 })
 export class IndexComponent implements OnInit {
   // Variables that replace $scope
