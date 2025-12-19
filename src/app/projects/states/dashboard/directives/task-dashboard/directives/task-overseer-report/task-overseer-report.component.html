@@ -4,9 +4,7 @@
       <mat-expansion-panel-header class="flex justify-between items-center">
         <mat-panel-title> Assessment: {{ oa.timestamp | humanizedDate }} </mat-panel-title>
         <div class="flex gap-5 items-center">
-          <span class="text-gray-500">
-            {{ oa.passedSteps }} / {{ oa.totalSteps + oa.stepsSkipped?.length }}</span
-          >
+          <span class="text-gray-500"> {{ oa.passedSteps }} / {{ oa.totalSteps }}</span>
           @if (oa.passedSteps === oa.totalSteps) {
             <mat-icon color="primary">done</mat-icon>
           } @else {

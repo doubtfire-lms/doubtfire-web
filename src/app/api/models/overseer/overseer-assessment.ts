@@ -15,6 +15,8 @@ export class OverseerAssessment extends Entity {
   updatedAt?: Date;
   taskId?: number;
 
+  totalSteps: number;
+
   label: string;
 
   public readonly stepResultsCache: EntityCache<OverseerStepResult> =
@@ -35,10 +37,6 @@ export class OverseerAssessment extends Entity {
     return {
       overseer_assessment: super.toJson(mappingData, ignoreKeys),
     };
-  }
-
-  public get totalSteps() {
-    return this.stepResultsCache.currentValues.length;
   }
 
   public get passedSteps() {

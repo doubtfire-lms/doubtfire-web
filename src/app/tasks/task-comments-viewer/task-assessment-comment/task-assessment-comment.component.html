@@ -1,15 +1,33 @@
-<div fxLayout="row" fxLayoutAlign="space-evenly center">
-  <div fxLayout="column" fxLayoutAlign="space-around center">
-    <!-- @if (comment.assessment_result && comment.assessment_result.is_successful) { -->
-    <div>
-      <hr class="hr-text" data-content="Assessment Summary" />
-      <pre class="overflow-x-scroll scrollbar-gutter-stable">{{ comment.text }}</pre>
+<div class="flex flex-col justify-center items-center overflow-hidden w-full">
+  <!-- TODO: dont render this comment if we're still in pre_queued and the submission timestamp is over 1 hour etc -->
+  <div class="flex items-center text-center text-[#9696969d] opacity-80 my-2 w-full">
+    <div
+      class="flex-grow h-px bg-gradient-to-r from-transparent via-gray-400/60 to-transparent w-full"
+    ></div>
 
-      <button mat-button (click)="showTaskAssessmentResult()">View report</button>
-      <hr class="hr-fade" />
-    </div>
-    <!-- } @else {
-      <hr class="hr-text" data-content="Tests in Progress" />
-    } -->
+    @if (comment.overseerStatus === 'pre_queued') {
+      <div class="flex items-center gap-2 px-2 bg-white whitespace-nowrap ml-[15px]">
+        Tests In Progress
+        <mat-progress-spinner [diameter]="15" mode="indeterminate"></mat-progress-spinner>
+        <!-- <mat-icon class="mr-1 text-blue-500">check_circle</mat-icon> -->
+      </div>
+    } @else if (comment.overseerStatus === 'passed') {
+      <div class="flex items-center px-2 gap-2 bg-white whitespace-nowrap ml-[15px]">
+        Tests Passed {{ comment.overseerPassedSteps }} / {{ comment.overseerTotalSteps }}
+        <mat-icon class="mr-1 text-green-500">check_circle</mat-icon>
+      </div>
+    } @else if (comment.overseerStatus === 'failed') {
+      <div class="flex items-center px-2 gap-2 bg-white whitespace-nowrap ml-[15px]">
+        Tests Failed {{ comment.overseerPassedSteps }} / {{ comment.overseerTotalSteps }}
+        <mat-icon color="warn">cancel</mat-icon>
+      </div>
+    }
+
+    <div
+      class="flex-grow h-px bg-gradient-to-r from-transparent via-gray-400/60 to-transparent w-full"
+    ></div>
   </div>
+  @if (comment.overseerStatus !== 'pre_queued') {
+    <button mat-button (click)="showTaskAssessmentResult()">View report</button>
+  }
 </div>
