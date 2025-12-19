@@ -52,6 +52,7 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
       },
       'overseerStepId',
       'totalSteps',
+      'passedSteps',
     );
   }
 

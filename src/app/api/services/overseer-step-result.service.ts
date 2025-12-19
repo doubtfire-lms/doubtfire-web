@@ -4,6 +4,7 @@ import {CachedEntityService} from 'ngx-entity-service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {OverseerAssessment} from '../models/doubtfire-model';
 import {OverseerStepResult} from '../models/overseer/overseer-step-result';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class OverseerStepResultService extends CachedEntityService<OverseerStepResult> {
@@ -32,5 +33,20 @@ export class OverseerStepResultService extends CachedEntityService<OverseerStepR
 
   public createInstanceFrom(json: object, other?: any): OverseerStepResult {
     return new OverseerStepResult(other as OverseerAssessment);
+  }
+
+  public getOverseerStepResults(assessment: OverseerAssessment): Observable<OverseerStepResult[]> {
+    const pathIds = {
+      projectId: assessment.task.project.id,
+      taskDefId: assessment.task.definition.id,
+      id: assessment.id,
+    };
+
+    return this.query(pathIds, {
+      endpointFormat:
+        'projects/:projectId:/task_definitions/:taskDefId:/overseer_assessments_results/:id:',
+      constructorParams: assessment.task,
+      cache: assessment.stepResultsCache,
+    });
   }
 }

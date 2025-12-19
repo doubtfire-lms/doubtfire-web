@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {OverseerAssessmentService} from 'src/app/api/services/overseer-assessment.service';
+import {OverseerStepResultService} from 'src/app/api/services/overseer-step-result.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 
@@ -17,6 +18,7 @@ export class TaskOverseerReportComponent implements OnInit {
     private alerts: AlertService,
     private submissions: TaskSubmissionService,
     private overseerAssessmentService: OverseerAssessmentService,
+    private overseerStepResultsService: OverseerStepResultService,
   ) {}
 
   public viewOutput: 'your_output' | 'expected_output' | 'diff' | 'split_diff' = 'your_output';
@@ -103,6 +105,29 @@ export class TaskOverseerReportComponent implements OnInit {
         console.log(assessments);
       },
       error: (error) => {},
+    });
+  }
+
+  loadingAssessments = new Set<number>();
+
+  onAssessmentOpen(overseerAssesment: OverseerAssessment) {
+    this.loadingAssessments.add(overseerAssesment.id);
+
+    this.overseerStepResultsService.getOverseerStepResults(overseerAssesment).subscribe({
+      next: () => {
+        for (const oa of this.overseerAssessments) {
+          for (const result of oa.stepResultsCache.currentValues) {
+            result.overseerStep = this.task.definition.overseerStepsCache.currentValues.find(
+              (step) => step.id === result.overseerStepId,
+            );
+          }
+        }
+        this.loadingAssessments.delete(overseerAssesment.id);
+      },
+      error: (error) => {
+        console.error(error);
+        this.loadingAssessments.delete(overseerAssesment.id);
+      },
     });
   }
 }

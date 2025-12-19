@@ -16,6 +16,7 @@ export class OverseerAssessment extends Entity {
   taskId?: number;
 
   totalSteps: number;
+  passedSteps: number;
 
   label: string;
 
@@ -37,10 +38,6 @@ export class OverseerAssessment extends Entity {
     return {
       overseer_assessment: super.toJson(mappingData, ignoreKeys),
     };
-  }
-
-  public get passedSteps() {
-    return this.stepResultsCache.currentValues.filter((step) => step.pass).length;
   }
 
   public get stepsSkipped() {
