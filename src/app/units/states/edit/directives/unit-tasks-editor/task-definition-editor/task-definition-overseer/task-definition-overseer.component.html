@@ -205,19 +205,47 @@
             </mat-checkbox> -->
           }
 
-          <div class="py-2 mt-2">Execution Script</div>
+          <div class="py-2 mt-2 flex justify-between items-end">
+            <div class="pl-2">Execution Script</div>
+            <mat-form-field appearance="outline">
+              <mat-label>Language</mat-label>
+              <mat-select
+                [(ngModel)]="selectedOverseerStep.commandLanguage"
+                required
+                (selectionChange)="onLanguageChange($event)"
+              >
+                @for (language of getLanguages; track language) {
+                  <mat-option [value]="language.id">{{
+                    language.id ?? language.aliases?.[0] ?? language.id
+                  }}</mat-option>
+                }
+              </mat-select>
+              <mat-hint>Visual use only</mat-hint>
+            </mat-form-field>
+          </div>
+
           <!-- <ngs-code-editor
             class="w-full min-h-[100px] bg-gray-100 p-5"
             [codeModel]="model"
           ></ngs-code-editor> -->
 
-          <ngx-monaco-editor
-            #editor
-            class="w-full p-5"
-            [options]="editorOptions"
-            [(ngModel)]="selectedOverseerStep.runCommand"
-          ></ngx-monaco-editor>
-
+          <div class="w-full">
+            <ngx-monaco-editor
+              #editor
+              class="w-full"
+              [options]="editorOptions"
+              [(ngModel)]="selectedOverseerStep.runCommand"
+            ></ngx-monaco-editor>
+            <mat-hint class="pl-2 text-xl w-full">
+              @if (selectedOverseerStep.stepType === 'status_check') {
+                This step passes only if the script exits with status 0. Any non-zero exit code
+                marks the step as failed.
+              } @else if (selectedOverseerStep.stepType === 'output_diff') {
+                The script output is compared against the expected output. If noisy warnings cause
+                failures, move that logic into a separate step.
+              }
+            </mat-hint>
+          </div>
           <mat-form-field appearance="outline" class="w-full mt-5">
             <mat-label>Time Limit (s)</mat-label>
             <input

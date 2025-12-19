@@ -21,7 +21,8 @@ import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/overseer-script-editor-modal.service';
-
+import * as monaco from 'monaco-editor';
+import {MatSelectChange} from '@angular/material/select';
 @Component({
   selector: 'f-task-definition-overseer',
   templateUrl: 'task-definition-overseer.component.html',
@@ -34,47 +35,15 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
 
   public currentUserTask: Task;
 
-  stdoutOptions = {
-    theme: 'vs',
-    language: 'plaintext',
-    renderMinimap: false,
-    lineNumbers: false,
-
-    minimap: {
-      enabled: false,
-    },
-  };
-
   editorOptions = {
     theme: 'vs',
-    language: 'plaintext',
+    language: 'shell',
     renderMinimap: false,
 
     minimap: {
       enabled: false,
     },
   };
-
-  // public originalModel: DiffEditorModel = {
-  //   language: 'text',
-  //   code: `
-  //     testing
-  //     line 1
-  //     line 2
-  //     line 3
-  //   `,
-  // };
-
-  // public modifiedModel: DiffEditorModel = {
-  //   language: 'text',
-  //   code: `
-  //     testing
-  //     line 3
-  //     line 2
-  //     new line!
-  //     line 3
-  //   `,
-  // };
 
   public stepType: 'status_check' | 'output_diff' = 'status_check';
   public visibility = 'public';
@@ -123,6 +92,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     this.newOverseerStep.showStdout = true;
     this.newOverseerStep.statusOnFailure = 'no_change';
     this.newOverseerStep.statusOnSuccess = 'no_change';
+    this.newOverseerStep.commandLanguage = 'shell';
     this.newOverseerStep.runCommand = '#!/bin/bash\n\n';
     this.newOverseerStep.showExpectedOutput = true;
 
@@ -143,9 +113,32 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     this.taskDefinition.overseerStepsCache.values.subscribe((steps) => {
       this.overseerSteps = [...steps];
     });
+
+    console.log(monaco.languages.getLanguages());
+
+    // setInterval(() => {
+    //   if (this.editorComponent) {
+    //     console.log(monaco.languages.getLanguages());
+    //     // console.log(this.editorComponent._editor.getLanguages());
+    //   }
+    // }, 1000);
+  }
+
+  public get getLanguages() {
+    return monaco?.languages.getLanguages() ?? [];
+  }
+
+  onLanguageChange(event: MatSelectChange) {
+    const value = event.value;
+    this.editorOptions.language = value;
+    this.editorOptions = {...this.editorOptions};
   }
 
   drop(event: CdkDragDrop<string[]>) {
+    if (this.newOverseerStep) {
+      this.alerts.error('Please save changes before re-ordering steps', 3000);
+      return;
+    }
     moveItemInArray(this.overseerSteps, event.previousIndex, event.currentIndex);
     // TODO: open endpoint to update sort orders in a single request
     for (let i = 0; i < this.overseerSteps.length; i++) {
@@ -220,6 +213,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
           },
           {
             entity: this.selectedOverseerStep,
+            cache: this.taskDefinition.overseerStepsCache,
           },
         )
         .subscribe({

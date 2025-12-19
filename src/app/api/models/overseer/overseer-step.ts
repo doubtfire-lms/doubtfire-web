@@ -17,6 +17,7 @@ export class OverseerStep extends Entity {
   displayDescription: string;
 
   runCommand: string;
+  commandLanguage: string;
   timeoutMs: number;
   sortOrder: number;
   stepType: 'status_check' | 'output_diff';
