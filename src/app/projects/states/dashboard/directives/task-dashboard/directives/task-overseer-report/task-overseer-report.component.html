@@ -37,6 +37,11 @@
               [options]="stdoutOptions"
               [(ngModel)]="result.stdout"
             ></ngx-monaco-editor> -->
+            @if (!result.pass) {
+              <p class="text-gray-500 text-left w-full tracking-wide p-2 text-normal">
+                {{ result.feedbackMessage }}
+              </p>
+            }
 
             @if (result.expectedOutput && result.expectedOutput !== result.stdout) {
               <!-- TODO: if stepType was an output diff check -->

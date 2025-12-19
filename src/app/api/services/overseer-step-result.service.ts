@@ -18,6 +18,7 @@ export class OverseerStepResultService extends CachedEntityService<OverseerStepR
       'overseerStepId',
       'exitStatus',
       'pass',
+      'feedbackMessage',
       'stdout',
       'stdin',
       'expectedOutput',
