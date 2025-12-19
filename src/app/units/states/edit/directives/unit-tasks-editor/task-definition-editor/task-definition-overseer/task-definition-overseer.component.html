@@ -74,7 +74,7 @@
 <mat-drawer-container class="example-container">
   <mat-drawer mode="side" opened class="min-w-[300px] border border-gray-300">
     <div
-      class="w-[300px] px-[20px] border border-gray-300 min-h-[35px] bg-gray-300 flex justify-between items-center"
+      class="w-[300px] px-[20px] border border-gray-300 min-h-[50px] bg-gray-300 flex justify-between items-center"
     >
       <div>Overseer Steps</div>
       @if (!newOverseerStep) {
@@ -96,7 +96,12 @@
         </div>
       }
       @if (newOverseerStep) {
-        <div class="example-box bg-gray-100" cdkDrag cdkDragDisabled>
+        <div
+          class="example-box bg-gray-100"
+          cdkDrag
+          cdkDragDisabled
+          (click)="selectStep(newOverseerStep)"
+        >
           <!-- <mat-icon cdkDragHandle class="cursor-move">drag_indicator</mat-icon> -->
           {{ newOverseerStep.sortOrder }}. {{ newOverseerStep.name || 'Untitled Step' }}
         </div>
