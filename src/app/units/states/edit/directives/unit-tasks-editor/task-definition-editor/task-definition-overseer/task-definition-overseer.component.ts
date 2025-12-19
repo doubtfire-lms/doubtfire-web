@@ -101,11 +101,13 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   }
 
   getFeedbackMessagePlaceholder() {
+    // If the feedback message is blank, this is what will automatically be used
+    // (If this changes, ensure to update it in AcceptOverseerJob)
     switch (this.selectedOverseerStep.stepType) {
       case 'status_check':
-        return 'There was an error compiling your code. Please check the output for any errors.';
+        return 'This test did not complete successfully. Check the output for any errors.';
       case 'output_diff':
-        return 'Your program produced the incorrect output';
+        return 'Your output did not match the expected result.';
     }
   }
 
