@@ -47,6 +47,9 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 
 import {setTheme} from 'ngx-bootstrap/utils';
 
+import {CodeEditorModule} from '@ngstack/code-editor';
+import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
+
 import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
 import {
   D2lUnitDetailsFormComponent,
@@ -296,7 +299,6 @@ import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/
 import {MarkingSessionService} from './api/services/marking-session.service';
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
 import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
-import {CodeEditorModule} from '@ngstack/code-editor';
 import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
 import {DiscussionPromptService} from './api/services/discussion-prompt.service';
 import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
