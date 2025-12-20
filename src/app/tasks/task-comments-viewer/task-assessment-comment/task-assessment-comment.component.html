@@ -1,33 +1,45 @@
-<div class="flex flex-col justify-center items-center overflow-hidden w-full">
+<div class="flex flex-col justify-center items-center overflow-hidden w-full mx-auto">
   <!-- TODO: dont render this comment if we're still in pre_queued and the submission timestamp is over 1 hour etc -->
-  <div class="flex items-center text-center text-[#9696969d] opacity-80 my-2 w-full">
+  <div class="flex justify-center items-center text-center text-[#9696969d] opacity-80 w-full">
     <div
       class="flex-grow h-px bg-gradient-to-r from-transparent via-gray-400/60 to-transparent w-full"
     ></div>
 
-    @if (comment.overseerStatus === 'pre_queued') {
-      <div class="flex items-center gap-2 px-2 bg-white whitespace-nowrap ml-[15px]">
+    <div class="flex items-center gap-2 px-2 bg-white whitespace-nowrap">
+      @if (comment.overseerStatus === 'pre_queued') {
         Tests In Progress
-        <mat-progress-spinner [diameter]="15" mode="indeterminate"></mat-progress-spinner>
-        <!-- <mat-icon class="mr-1 text-blue-500">check_circle</mat-icon> -->
-      </div>
-    } @else if (comment.overseerStatus === 'passed') {
-      <div class="flex items-center px-2 gap-2 bg-white whitespace-nowrap ml-[15px]">
+      } @else if (comment.overseerStatus === 'passed') {
         Tests Passed {{ comment.overseerPassedSteps }} / {{ comment.overseerTotalSteps }}
-        <mat-icon class="mr-1 text-green-500">check_circle</mat-icon>
-      </div>
-    } @else if (comment.overseerStatus === 'failed') {
-      <div class="flex items-center px-2 gap-2 bg-white whitespace-nowrap ml-[15px]">
+      } @else if (comment.overseerStatus === 'failed') {
         Tests Failed {{ comment.overseerPassedSteps }} / {{ comment.overseerTotalSteps }}
-        <mat-icon color="warn">cancel</mat-icon>
-      </div>
-    }
+      }
+    </div>
 
     <div
       class="flex-grow h-px bg-gradient-to-r from-transparent via-gray-400/60 to-transparent w-full"
     ></div>
   </div>
+
+  @if (comment.overseerStatus === 'passed') {
+    <mat-icon
+      class="my-2 text-green-500 opacity-70"
+      style="width: 45px; height: 45px; font-size: 45px"
+      >check_circle</mat-icon
+    >
+  } @else if (comment.overseerStatus === 'failed') {
+    <mat-icon
+      color="warn"
+      class="my-2 opacity-70"
+      style="width: 45px; height: 45px; font-size: 45px"
+      >highlight_off_outline</mat-icon
+    >
+  } @else if (comment.overseerStatus === 'pre_queued') {
+    <mat-progress-spinner [diameter]="15" mode="indeterminate"></mat-progress-spinner>
+  }
+
   @if (comment.overseerStatus !== 'pre_queued') {
-    <button mat-button (click)="showTaskAssessmentResult()">View report</button>
+    <button mat-stroked-button (click)="showTaskAssessmentResult()" class="mb-2">
+      View report
+    </button>
   }
 </div>
