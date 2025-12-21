@@ -1,6 +1,6 @@
-<div class="container">
-  @if (unit.hasGroupwork()) {
-    <f-group-set-manager [project]="project" [unit]="unit" [selectedGroupSet]="selectedGroupSet">
+<div class="container" *ngIf="project$ | async as project">
+  @if (project.unit.hasGroupwork()) {
+    <f-group-set-manager [project]="project" [unit]="project.unit" [selectedGroupSet]="selectedGroupSet">
     </f-group-set-manager>
   } @else {
     <div class="flex flex-col justify-center items-center max-w-4xl mx-auto">

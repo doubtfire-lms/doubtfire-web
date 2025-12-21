@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {GroupSet, Project} from 'src/app/api/models/doubtfire-model';
-import {Unit} from 'src/app/api/models/unit';
+import { Observable } from 'rxjs';
 
 // This component is only displayed to students (projects)
 @Component({
@@ -9,7 +9,6 @@ import {Unit} from 'src/app/api/models/unit';
   styleUrl: './project-groups.component.scss',
 })
 export class ProjectGroupsComponent {
-  @Input() unit: Unit;
-  @Input() project: Project;
+  @Input() project$: Observable<Project>;
   @Input() selectedGroupSet: GroupSet;
 }
