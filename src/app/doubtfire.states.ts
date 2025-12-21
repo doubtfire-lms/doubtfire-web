@@ -17,7 +17,7 @@ import { Ng2ViewDeclaration } from '@uirouter/angular';
 import { TutorialsComponent } from './projects/states/tutorials/tutorials.component';
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
 import { RolloverComponent } from './units/states/rollover/rollover.component';
-
+import { ProjectGroupsComponent } from './projects/states/groups/project-groups/project-groups.component';
 /*
  * Use this file to store any states that are sourced by angular components.
  */
@@ -456,6 +456,20 @@ const PortfoliosState: NgHybridStateDeclaration = {
   },
 };
 
+const ProjectGroupsState: NgHybridStateDeclaration = {
+  name: 'projects/groups',
+  parent: 'projects2',
+  url: '/groups',
+  views: {
+    projectView: {
+      component: ProjectGroupsComponent,
+    },
+  },
+  data: {
+    task: 'Groups List',
+    pageTitle: 'Unit Groups',
+  },
+};
 
 const RolloverState: NgHybridStateDeclaration = {
   name: 'units/rollover',
@@ -505,4 +519,5 @@ export const doubtfireStates = [
   TutorialState,
   PortfoliosState,
   RolloverState,
+  ProjectGroupsState,
 ];
