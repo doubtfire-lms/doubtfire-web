@@ -59,7 +59,7 @@
       color="accent"
       (click)="testSubmissionHistory()"
       class="flex-grow ms-4"
-      [disabled]="!this.currentUserTask"
+      [disabled]="!this.currentUserTask?.project"
     >
       <mat-icon>preview</mat-icon> Submission History
     </button>
