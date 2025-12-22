@@ -10,10 +10,11 @@
       [expanded]="oa.id === loadOverseerAssessmentId && oa.reportReady"
     >
       <mat-expansion-panel-header class="flex justify-between items-center">
-        <mat-panel-title>
+        <mat-panel-title class="flex items-center gap-5">
+          <status-icon [status]="oa.taskStatus"> </status-icon>
           Submission {{ idx + 1 }}: {{ oa.timestamp | humanizedDate }}
           @if (idx === 0) {
-            <span class="text-gray-500 ml-5">(Most recent)</span>
+            <span class="text-gray-500">(Most recent)</span>
           }
         </mat-panel-title>
         @if (oa.reportReady) {
