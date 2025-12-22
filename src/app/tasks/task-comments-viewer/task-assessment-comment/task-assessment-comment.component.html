@@ -23,18 +23,18 @@
   @if (comment.overseerStatus === 'passed') {
     <mat-icon
       class="my-2 text-green-500 opacity-70"
-      style="width: 45px; height: 45px; font-size: 45px"
+      style="width: 35px; height: 35px; font-size: 35px"
       >check_circle</mat-icon
     >
   } @else if (comment.overseerStatus === 'failed') {
     <mat-icon
       color="warn"
       class="my-2 opacity-70"
-      style="width: 45px; height: 45px; font-size: 45px"
+      style="width: 35px; height: 35px; font-size: 35px"
       >highlight_off_outline</mat-icon
     >
   } @else if (comment.overseerStatus === 'pre_queued') {
-    <mat-progress-spinner [diameter]="15" mode="indeterminate"></mat-progress-spinner>
+    <mat-progress-spinner [diameter]="25" mode="indeterminate"></mat-progress-spinner>
   }
 
   @if (comment.overseerStatus !== 'pre_queued') {
