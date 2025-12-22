@@ -48,13 +48,19 @@
     <button
       mat-flat-button
       color="primary"
-      [disabled]="!taskDefinition.id || !taskDefinition.hasTaskAssessmentScript"
+      [disabled]="!taskDefinition.id"
       (click)="testSubmission()"
       class="flex-grow me-4"
     >
       <mat-icon>upload_file</mat-icon> Test Submission
     </button>
-    <button mat-flat-button color="accent" (click)="testSubmissionHistory()" class="flex-grow ms-4">
+    <button
+      mat-flat-button
+      color="accent"
+      (click)="testSubmissionHistory()"
+      class="flex-grow ms-4"
+      [disabled]="!this.currentUserTask"
+    >
       <mat-icon>preview</mat-icon> Submission History
     </button>
   </div>

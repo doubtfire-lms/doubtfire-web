@@ -262,7 +262,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
       this.currentUserTask.definition = this.taskDefinition;
       this.currentUserTask.status = 'ready_for_feedback';
       this.currentUserTask.id = this.taskDefinition.id; // set a default id...
-      this.hasAnySubmissions();
+      // this.hasAnySubmissions();
     }
 
     this.currentUserTask.presentTaskSubmissionModal(this.currentUserTask.status, false, true);
