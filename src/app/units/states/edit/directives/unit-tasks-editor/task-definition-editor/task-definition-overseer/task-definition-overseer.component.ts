@@ -174,6 +174,11 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   }
 
   deleteStep() {
+    if (this.selectedOverseerStep && this.selectedOverseerStep === this.newOverseerStep) {
+      this.newOverseerStep = null;
+      this.selectedOverseerStep = null;
+      return;
+    }
     this.selectedOverseerStep?.delete();
     this.selectedOverseerStep = null;
   }
