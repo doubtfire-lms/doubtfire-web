@@ -10,7 +10,7 @@ export class OverseerAssessment extends Entity {
   content?: [{label: string; result: string}];
   task?: Task;
   taskStatus?: string;
-  submissionStatus?: string;
+  submissionStatus?: 'queued' | 'executing' | 'passed' | 'failed' | 'error';
   createdAt?: Date;
   updatedAt?: Date;
   taskId?: number;
@@ -45,5 +45,9 @@ export class OverseerAssessment extends Entity {
       (step) =>
         !this.stepResultsCache.currentValues.find((result) => result.overseerStepId === step.id),
     );
+  }
+
+  public get reportReady() {
+    return this.submissionStatus === 'passed' || this.submissionStatus === 'failed';
   }
 }
