@@ -1,3 +1,6 @@
+<div class="flex justify-end mb-5">
+  <button mat-stroked-button (click)="loadAssessments()">Refresh</button>
+</div>
 <mat-accordion>
   @for (oa of overseerAssessments; track oa) {
     <mat-expansion-panel (opened)="onAssessmentOpen(oa)" [disabled]="!oa.reportReady">

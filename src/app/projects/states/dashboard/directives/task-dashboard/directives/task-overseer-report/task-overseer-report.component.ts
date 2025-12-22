@@ -89,7 +89,10 @@ export class TaskOverseerReportComponent implements OnInit {
 
   ngOnInit(): void {
     console.log();
+    this.loadAssessments();
+  }
 
+  loadAssessments() {
     this.overseerAssessmentService.queryForTask(this.task).subscribe({
       next: (assessments) => {
         this.overseerAssessments = assessments;
