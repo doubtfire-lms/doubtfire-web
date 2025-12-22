@@ -13,6 +13,7 @@ import {TaskSubmissionService} from 'src/app/common/services/task-submission.ser
 })
 export class TaskOverseerReportComponent implements OnInit {
   @Input() task: Task;
+  @Input() loadOverseerAssessmentId?: number;
 
   constructor(
     private alerts: AlertService,
@@ -88,11 +89,13 @@ export class TaskOverseerReportComponent implements OnInit {
   public overseerAssessments: OverseerAssessment[] = [];
 
   ngOnInit(): void {
-    console.log();
     this.loadAssessments();
   }
 
-  loadAssessments() {
+  loadAssessments(isRefresh: boolean = false) {
+    if (isRefresh) {
+      this.loadOverseerAssessmentId = null;
+    }
     this.overseerAssessmentService.queryForTask(this.task).subscribe({
       next: (assessments) => {
         this.overseerAssessments = assessments;
@@ -101,19 +104,25 @@ export class TaskOverseerReportComponent implements OnInit {
             result.overseerStep = this.task.definition.overseerStepsCache.currentValues.find(
               (step) => step.id === result.overseerStepId,
             );
-            console.log(result);
-            console.log(this.task.definition.overseerStepsCache.currentValues);
           }
         }
-        console.log(assessments);
       },
-      error: (error) => {},
+      error: (error) => {
+        this.alerts.error(`Failed to load overseer reports: ${error}`, 6000);
+      },
     });
   }
 
   loadingAssessments = new Set<number>();
 
   onAssessmentOpen(overseerAssesment: OverseerAssessment) {
+    if (this.loadOverseerAssessmentId === overseerAssesment.id) {
+      setTimeout(() => {
+        const el = document.getElementById(`oa-panel-${overseerAssesment.id}`);
+        el?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }, 250);
+    }
+
     this.loadingAssessments.add(overseerAssesment.id);
 
     this.overseerStepResultsService.getOverseerStepResults(overseerAssesment).subscribe({

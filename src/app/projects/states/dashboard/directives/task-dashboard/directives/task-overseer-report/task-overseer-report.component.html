@@ -1,11 +1,21 @@
 <div class="flex justify-end mb-5">
-  <button mat-stroked-button (click)="loadAssessments()">Refresh</button>
+  <button mat-stroked-button (click)="loadAssessments(true)">Refresh</button>
 </div>
 <mat-accordion>
-  @for (oa of overseerAssessments; track oa) {
-    <mat-expansion-panel (opened)="onAssessmentOpen(oa)" [disabled]="!oa.reportReady">
+  @for (oa of overseerAssessments; track oa; let idx = $index) {
+    <mat-expansion-panel
+      [attr.id]="'oa-panel-' + oa.id"
+      (opened)="onAssessmentOpen(oa)"
+      [disabled]="!oa.reportReady"
+      [expanded]="oa.id === loadOverseerAssessmentId && oa.reportReady"
+    >
       <mat-expansion-panel-header class="flex justify-between items-center">
-        <mat-panel-title> Assessment: {{ oa.timestamp | humanizedDate }} </mat-panel-title>
+        <mat-panel-title>
+          Submission {{ idx + 1 }}: {{ oa.timestamp | humanizedDate }}
+          @if (idx === 0) {
+            <span class="text-gray-500 ml-5">(Most recent)</span>
+          }
+        </mat-panel-title>
         @if (oa.reportReady) {
           <div class="flex gap-5 items-center">
             <span class="text-gray-500"> {{ oa.passedSteps }} / {{ oa.totalSteps }}</span>

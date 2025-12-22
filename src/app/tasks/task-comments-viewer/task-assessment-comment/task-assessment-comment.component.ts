@@ -61,8 +61,8 @@ export class TaskAssessmentCommentComponent implements OnInit {
     return this.comment.assessment_result.assessment_output;
   }
 
-  showTaskAssessmentResult() {
-    this.modalService.show(this.task);
+  showTaskAssessmentResult(overseerAssessmentId?: number) {
+    this.modalService.show(this.task, overseerAssessmentId);
   }
 
   scroll(el: HTMLElement) {
