@@ -1,12 +1,19 @@
 <div class="flex flex-col gap-4">
-  <mat-checkbox
-    matInput
-    required
-    [(ngModel)]="taskDefinition.assessmentEnabled"
-    [disabled]="!overseerEnabled"
-  >
-    Automation Enabled
-  </mat-checkbox>
+  <div>
+    <mat-checkbox
+      matInput
+      required
+      [(ngModel)]="taskDefinition.assessmentEnabled"
+      [disabled]="!overseerEnabled"
+    >
+      Automation Enabled
+    </mat-checkbox>
+    <br />
+    <mat-hint>
+      You can add or modify Overseer steps while keeping this unchecked and use the test submission
+      feature. Once everything is ready, enable automation to apply it to all student submissions.
+    </mat-hint>
+  </div>
 
   <mat-form-field class="flex-grow" appearance="outline">
     <mat-label>Docker Image</mat-label>
