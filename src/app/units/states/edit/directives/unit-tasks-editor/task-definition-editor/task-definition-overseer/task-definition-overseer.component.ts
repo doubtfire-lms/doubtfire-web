@@ -1,5 +1,5 @@
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {
   OverseerAssessment,
@@ -252,11 +252,16 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     return this.userService.currentUser;
   }
 
-  public ngOnChanges() {
+  public ngOnChanges(changes: SimpleChanges) {
     const proj = this.unit.findProjectForUsername(this.currentUser.username);
     if (proj) {
       this.currentUserTask = proj.findTaskForDefinition(this.taskDefinition.id);
       this.hasAnySubmissions();
+    }
+    if (changes['taskDefinition']) {
+      this.taskDefinition.overseerStepsCache.values.subscribe((steps) => {
+        this.overseerSteps = [...steps];
+      });
     }
   }
 
