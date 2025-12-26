@@ -252,6 +252,10 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     return this.userService.currentUser;
   }
 
+  public taskDefinitionHasChanges(): boolean {
+    return this.taskDefinition.hasChanges(this.taskDefinitionService.mapping);
+  }
+
   public ngOnChanges(changes: SimpleChanges) {
     const proj = this.unit.findProjectForUsername(this.currentUser.username);
     if (proj) {
