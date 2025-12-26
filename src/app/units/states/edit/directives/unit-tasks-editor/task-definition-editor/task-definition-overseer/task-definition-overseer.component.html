@@ -73,12 +73,12 @@
 
 @if (taskDefinition.overseerImageId) {
   @if (!taskDefinitionHasChanges()) {
-    <div class="flex justify-between">
-      <div></div>
-      <!-- <button mat-raised-button (click)="addStep()">Add step</button> -->
-      <div>
-        <button mat-raised-button color="warn" (click)="deleteStep()">Delete</button>
-        <button mat-raised-button color="primary" (click)="saveStep()">Save</button>
+    <div class="flex justify-end">
+      <div class="flex gap-2">
+        @if (this.selectedOverseerStep) {
+          <button mat-raised-button color="warn" (click)="deleteStep()">Delete</button>
+          <button mat-raised-button color="primary" (click)="saveStep()">Save</button>
+        }
       </div>
     </div>
 
