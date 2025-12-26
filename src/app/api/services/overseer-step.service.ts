@@ -21,11 +21,10 @@ export class OverseerStepService extends CachedEntityService<OverseerStep> {
       'displayName',
       'displayDescription',
       'runCommand',
-      'timeoutMs',
+      'timeout',
       'sortOrder',
       'stepType',
       'partialOutputDiff',
-      // 'visibility',
       'stdinInputFile',
       'expectedOutputFile',
       'feedbackMessage',
@@ -40,26 +39,7 @@ export class OverseerStepService extends CachedEntityService<OverseerStep> {
     );
 
     this.mapping.mapAllKeysToJsonExcept('id');
-    // this.mapping.addJsonKey(
-    //   'name',
-    //   'description',
-    //   'timeoutMs',
-    //   'sortOrder',
-    //   'stepType',
-    //   'visibility',
-    //   'stdinInputFile',
-    //   'expectedOutputFile',
-    //   'feedbackMessage',
-    //   'statusOnSuccess',
-    //   'statusOnFailed',
-    // );
   }
-
-  // public pullDockerImage(image: OverseerStep): Observable<SidekiqJob> {
-  //   return super.put(image, {
-  //     endpointFormat: this.pullImageEndpointFormat,
-  //   });
-  // }
 
   public createInstanceFrom(json: object, other?: any): OverseerStep {
     return new OverseerStep(other as TaskDefinition);

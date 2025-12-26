@@ -271,12 +271,12 @@
                   matInput
                   placeholder="60"
                   name="Time Limit"
-                  [(ngModel)]="selectedOverseerStep.timeoutMs"
+                  [(ngModel)]="selectedOverseerStep.timeout"
                   required
                 />
                 <mat-hint
                   >How long the code can execute for before overseer automatically kills the
-                  process.</mat-hint
+                  process. A timeout will result in a failed test (Exit status 124)</mat-hint
                 >
               </mat-form-field>
               <div class="flex gap-5 w-full">

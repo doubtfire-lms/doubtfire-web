@@ -87,7 +87,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   addStep() {
     this.newOverseerStep = new OverseerStep(this.taskDefinition);
     this.newOverseerStep.stepType = 'status_check';
-    this.newOverseerStep.timeoutMs = 5;
+    this.newOverseerStep.timeout = 30;
     this.newOverseerStep.enabled = true;
     this.newOverseerStep.showStdout = true;
     this.newOverseerStep.statusOnFailure = 'no_change';
