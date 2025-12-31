@@ -31,7 +31,6 @@ import 'angular-md5/angular-md5.js';
 
 import 'build/templates-app.js';
 import 'build/assets/wav-worker.js';
-import 'build/src/app/visualisations/summary-task-status-scatter.js';
 import 'build/src/app/visualisations/target-grade-pie-chart.js';
 import 'build/src/app/visualisations/task-status-pie-chart.js';
 import 'build/src/app/visualisations/task-completion-box-plot.js';

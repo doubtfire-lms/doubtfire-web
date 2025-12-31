@@ -1,5 +1,4 @@
 angular.module('doubtfire.visualisations', [
-  'doubtfire.visualisations.summary-task-status-scatter'
   'doubtfire.visualisations.task-status-pie-chart'
   'doubtfire.visualisations.target-grade-pie-chart'
   'doubtfire.visualisations.task-completion-box-plot'
