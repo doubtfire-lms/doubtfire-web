@@ -179,6 +179,7 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/visualisations/alignment-bullet-chart.coffee (ILO Alignments removed)
 - [x] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
 - [x] ./src/app/groups/groups.coffee
+- [x] ./src/app/visualisations/summary-task-status-scatter.coffee (Unit task status summary)
 
 ### TODO:
 
@@ -229,7 +230,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/units/states/tasks/definition/definition.coffee
 - [ ] ./src/app/units/states/tasks/tasks.coffee
 - [ ] ./src/app/units/units.coffee
-- [ ] ./src/app/visualisations/summary-task-status-scatter.coffee (Unit task status summary)
 - [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
 - [ ] ./src/app/visualisations/task-completion-box-plot.coffee
 - [ ] ./src/app/visualisations/visualisations.coffee
