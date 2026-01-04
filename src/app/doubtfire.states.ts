@@ -1,4 +1,5 @@
 import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
+
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
 import {HomeComponent} from './home/states/home/home.component';
 import {WelcomeComponent} from './welcome/welcome.component';
@@ -9,19 +10,18 @@ import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {FUsersComponent} from './admin/states/f-users/f-users.component';
 import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 
+/*  IMPORT */
+import {unitsIndexState} from './units/states/index/index.state';
+
 /*
  * Use this file to store any states that are sourced by angular components.
  */
 
-/**
- * Define the institution settings state - used to edit campus data.
- */
 const institutionSettingsState: NgHybridStateDeclaration = {
-  name: 'institutionsettings', // This is the name of the state to jump to - so ui-sref="institutionsettings" to jump here
-  url: '/admin/institution-settings', // You get here with this url
+  name: 'institutionsettings',
+  url: '/admin/institution-settings',
   views: {
     main: {
-      // Main body links to angular component
       component: InstitutionSettingsComponent,
     },
   },
@@ -32,11 +32,10 @@ const institutionSettingsState: NgHybridStateDeclaration = {
 };
 
 const usersState: NgHybridStateDeclaration = {
-  name: 'admin/users', // This is the name of the state to jump to - so ui-sref="users" to jump here
-  url: '/admin/users', // You get here with this url
+  name: 'admin/users',
+  url: '/admin/users',
   views: {
     main: {
-      // Main body links to angular component
       component: FUsersComponent,
     },
   },
@@ -46,9 +45,6 @@ const usersState: NgHybridStateDeclaration = {
   },
 };
 
-/**
- * Define the new home state.
- */
 const HomeState: NgHybridStateDeclaration = {
   name: 'home',
   url: '/home',
@@ -63,98 +59,6 @@ const HomeState: NgHybridStateDeclaration = {
   },
 };
 
-// const unitParentState: NgHybridStateDeclaration = {
-//   name: 'units',
-//   url: '/units/:unit_id',
-//   // template for the parent state
-//   views: {
-//     main: {
-//       component: IndexComponent,
-//     },
-//   },
-//   resolve: {
-//     unit: function ($stateParams) {
-//       const unitService = AppInjector.get(UnitService);
-//       const globalState = AppInjector.get(GlobalStateService);
-//       globalState.onLoad(() => {});
-//       console.log($stateParams);
-//       unitService.query({ id: $stateParams.unit_id }).subscribe((unit) => {
-//         console.log($stateParams.unit_id);
-//         console.log(unit);
-//         return unit;
-//       });
-//     },
-//     unitRole: function ($stateParams) {
-//       const globalStateService = AppInjector.get(GlobalStateService);
-
-//       globalStateService.unitRolesSubject.subscribe((unitRoles) => {
-//         return unitRoles.find((unitRole) => unitRole.id === $stateParams.unit_id);
-//       });
-//     },
-//   },
-// };
-
-/**
- * Define the new home state.
- */
-// const InboxState: NgHybridStateDeclaration = {
-//   name: 'inbox',
-//   url: '/units/:unit_id/inbox/:task_key',
-
-//   params: {
-//     // unitRole: UnitRole,
-//     // taskKey: null,
-//     // taskData:
-//     // unit,
-//   },
-//   views: {
-//     main: {
-//       component: InboxComponent,
-//     },
-//   },
-//   data: {
-//     task: 'Task Inbox',
-//     pageTitle: '_Home_',
-//     roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
-//   },
-//   resolve: {
-//     unit$: function ($stateParams) {
-//       const unitService = AppInjector.get(UnitService);
-//       const globalState = AppInjector.get(GlobalStateService);
-//       globalState.onLoad(() => {});
-//       console.log($stateParams);
-//       return unitService.get({ id: $stateParams.unit_id });
-//     },
-//     unitRole$: function ($stateParams) {
-//       const globalStateService = AppInjector.get(GlobalStateService);
-
-//       const result = globalStateService.loadedUnitRoles.values.pipe(
-//         map((unitRoles) => unitRoles.find((unitRole) => unitRole.id == $stateParams.unit_id))
-//       );
-//       return result;
-//     },
-//     taskData$: function () {
-//       const taskService = AppInjector.get(TaskService);
-//       const taskData = {
-//         taskKey: null,
-//         source: null,
-//         selectedTask: null,
-//         onSelectedTaskChange: (task) =>{
-//           const taskKey = task?.taskKey()
-//           $scope.taskData.taskKey = taskKey
-//           setTaskKeyAsUrlParams(task);
-//         }
-//       }
-//       taskData.source = taskService.queryTasksForTaskInbox.bind(taskService);
-//       taskData.taskDefMode = false;
-//       return of(taskData);
-//     },
-//   },
-// };
-
-/**
- * Define the welcome state.
- */
 const WelcomeState: NgHybridStateDeclaration = {
   name: 'welcome',
   url: '/welcome',
@@ -169,9 +73,6 @@ const WelcomeState: NgHybridStateDeclaration = {
   },
 };
 
-/**
- * Define the Sign In state.
- */
 const SignInState: NgHybridStateDeclaration = {
   name: 'sign_in',
   url: '/sign_in?dest&params&authToken&username',
@@ -185,9 +86,6 @@ const SignInState: NgHybridStateDeclaration = {
   },
 };
 
-/**
- * Define the Edit Profile state.
- */
 const EditProfileState: NgHybridStateDeclaration = {
   name: 'edit_profile',
   url: '/edit_profile',
@@ -234,9 +132,7 @@ const ViewAllProjectsState: NgHybridStateDeclaration = {
   name: 'view-all-projects',
   url: '/view-all-projects',
   resolve: {
-    'mode': function () {
-      return 'student';
-    },
+    mode: () => 'student',
   },
   views: {
     main: {
@@ -250,16 +146,13 @@ const ViewAllProjectsState: NgHybridStateDeclaration = {
 };
 
 const AdministerUnits: NgHybridStateDeclaration = {
-  name: 'admin/units', // This is the name of the state to jump to - so ui-sref="users" to jump here
-  url: '/admin/units', // You get here with this url
+  name: 'admin/units',
+  url: '/admin/units',
   resolve: {
-    'mode': function () {
-      return 'admin';
-    },
+    mode: () => 'admin',
   },
   views: {
     main: {
-      // Main body links to angular component
       component: FUnitsComponent,
     },
   },
@@ -269,15 +162,11 @@ const AdministerUnits: NgHybridStateDeclaration = {
   },
 };
 
-
 const ViewAllUnits: NgHybridStateDeclaration = {
   name: 'view-all-units',
   url: '/view-all-units',
-  // passes 'mode' as @Input to the component
   resolve: {
-    'mode': function () {
-      return 'tutor';
-    },
+    mode: () => 'tutor',
   },
   views: {
     main: {
@@ -286,14 +175,11 @@ const ViewAllUnits: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Teaching Periods',
-    mode: 'tutor',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
   },
 };
 
-/**
- * Export the list of states we have created in angular
- */
+/* FINAL EXPORTED STATE LIST */
 export const doubtfireStates = [
   institutionSettingsState,
   TeachingPeriodsState,
@@ -306,4 +192,7 @@ export const doubtfireStates = [
   ViewAllProjectsState,
   ViewAllUnits,
   AdministerUnits,
+
+  /* STRICT MIGRATION STATE */
+  unitsIndexState,
 ];

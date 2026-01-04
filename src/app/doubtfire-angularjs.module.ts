@@ -1,9 +1,5 @@
-// #
-// # Doubtfire - A lightweight, modern learning management system
-// #
-// # Doubtfire is modularised into many modules, as indicated by the directory
-// # tree inside app/
-// #
+
+import './units/states/index/index.ajs.module';
 
 import * as angular from 'angular';
 import {downgradeInjectable, downgradeComponent} from '@angular/upgrade/static';
@@ -27,7 +23,7 @@ import 'angulartics/dist/angulartics.min.js';
 import 'angulartics-google-analytics/lib/angulartics-google-analytics.js';
 import 'angular-md5/angular-md5.js';
 
-// Ok... here is what we need to convert!
+
 
 import 'build/templates-app.js';
 import 'build/assets/wav-worker.js';
@@ -113,7 +109,6 @@ import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.js';
 import 'build/src/app/units/states/rollover/directives/directives.js';
 import 'build/src/app/units/states/rollover/rollover.js';
-import 'build/src/app/units/states/index/index.js';
 import 'build/src/app/units/states/students-list/students-list.js';
 import 'build/src/app/units/states/analytics/analytics.js';
 import 'build/src/app/common/filters/filters.js';
@@ -225,7 +220,7 @@ import {FUnitsComponent} from './admin/states/f-units/f-units.component';
 import {MarkedPipe} from './common/pipes/marked.pipe';
 import {AlertService} from './common/services/alert.service';
 import {GradeService} from './common/services/grade.service';
-import {IndexComponent as UnitsIndexComponent} from './units/states/index/index.component';
+//
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -239,13 +234,9 @@ export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.visualisations',
 ]);
 
-DoubtfireAngularJSModule.directive(
-  'fUnitsIndex',
-  downgradeComponent({component: UnitsIndexComponent}),
-);
+//
 
 
-// Downgrade angular modules that we need...
 // factory -> service
 DoubtfireAngularJSModule.factory('AboutDoubtfireModal', downgradeInjectable(AboutDoubtfireModal));
 DoubtfireAngularJSModule.factory(

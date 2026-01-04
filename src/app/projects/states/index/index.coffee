@@ -10,7 +10,8 @@ angular.module('doubtfire.projects.states.index', [])
     views:
       main:
         controller: "ProjectsIndexStateCtrl"
-        templateUrl: "units/states/index/index.tpl.html" # We can re-use unit's index here
+        template: "<ui-view></ui-view>" # Unit index is now handled by Angular state units/index
+
     data:
       pageTitle: "_Home_"
       roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor']
