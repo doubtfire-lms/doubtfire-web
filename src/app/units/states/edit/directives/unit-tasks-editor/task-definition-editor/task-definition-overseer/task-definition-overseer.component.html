@@ -194,6 +194,7 @@
                     <mat-form-field appearance="outline" class="w-full">
                       <mat-label>Expected Output File</mat-label>
                       <mat-select [(ngModel)]="selectedOverseerStep.expectedOutputFile" required>
+                        <mat-option value="">(none)</mat-option>
                         @for (file of taskDefinition.overseerResourceFiles; track file) {
                           <mat-option [value]="file">{{ file }}</mat-option>
                         }
