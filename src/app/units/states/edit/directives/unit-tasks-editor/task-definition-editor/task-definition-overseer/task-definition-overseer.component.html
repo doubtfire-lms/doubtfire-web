@@ -281,46 +281,50 @@
               </mat-form-field>
               <div class="flex gap-5 w-full">
                 <div class="w-full">
-                  <div class="pb-2 mt-5">Success:</div>
+                  <!-- <div class="pb-2 mt-5">Success:</div> -->
                   <div class="w-full">
-                    <mat-form-field appearance="outline" class="w-full">
-                      <mat-label>Status on Success</mat-label>
-                      <mat-select [(ngModel)]="selectedOverseerStep.statusOnSuccess" required>
-                        <mat-option value="no_change">No Change</mat-option>
-                        @for (status of statusKeys; track status) {
-                          <mat-option [value]="status">{{ statusName(status) }}</mat-option>
-                        }
-                      </mat-select>
-                    </mat-form-field>
                     <mat-slide-toggle
-                      class="mb-[22px] min-w-fit"
+                      class="my-2 min-w-fit"
                       matTooltip="Whether consecutive tasks should run even if this task fails"
                       [(ngModel)]="selectedOverseerStep.haltOnSuccess"
                       >Halt on success
                     </mat-slide-toggle>
+                    @if (selectedOverseerStep.haltOnSuccess) {
+                      <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Status on Success</mat-label>
+                        <mat-select [(ngModel)]="selectedOverseerStep.statusOnSuccess" required>
+                          <mat-option value="no_change">No Change</mat-option>
+                          @for (status of statusKeys; track status) {
+                            <mat-option [value]="status">{{ statusName(status) }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    }
                   </div>
                 </div>
                 <mat-divider [vertical]="true"></mat-divider>
                 <div class="w-full">
-                  <div class="py-2 mt-2">Fail:</div>
+                  <!-- <div class="py-2 mt-2">Fail:</div> -->
                   <div class="w-full">
                     <!-- On Sucesss, which status, should halt? -->
-                    <mat-form-field appearance="outline" class="w-full">
-                      <!-- On Fail, which status, should halt, feedback message? -->
-                      <mat-label>Status on Fail</mat-label>
-                      <mat-select [(ngModel)]="selectedOverseerStep.statusOnFailure" required>
-                        <mat-option value="no_change">No Change</mat-option>
-                        @for (status of statusKeys; track status) {
-                          <mat-option [value]="status">{{ statusName(status) }}</mat-option>
-                        }
-                      </mat-select>
-                    </mat-form-field>
                     <mat-slide-toggle
-                      class="mb-[22px] min-w-fit"
+                      class="my-2 min-w-fit"
                       matTooltip="Whether consecutive tasks should run even if this task fails"
                       [(ngModel)]="selectedOverseerStep.haltOnFailure"
                       >Halt on failure
                     </mat-slide-toggle>
+                    @if (selectedOverseerStep.haltOnFailure) {
+                      <mat-form-field appearance="outline" class="w-full">
+                        <!-- On Fail, which status, should halt, feedback message? -->
+                        <mat-label>Status on Fail</mat-label>
+                        <mat-select [(ngModel)]="selectedOverseerStep.statusOnFailure" required>
+                          <mat-option value="no_change">No Change</mat-option>
+                          @for (status of statusKeys; track status) {
+                            <mat-option [value]="status">{{ statusName(status) }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    }
                   </div>
                 </div>
               </div>
