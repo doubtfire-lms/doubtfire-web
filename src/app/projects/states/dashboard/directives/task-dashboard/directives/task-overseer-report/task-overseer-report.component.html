@@ -60,7 +60,7 @@
             @if (
               result.expectedOutput &&
               result.expectedOutput !== result.stdout &&
-              result.overseerStep?.stepType === 'output_diff'
+              (result.overseerStep?.stepType === 'output_diff' || !result.overseerStep)
             ) {
               <div class="flex gap-2 mb-5 w-fill justify-center items-center">
                 <button
