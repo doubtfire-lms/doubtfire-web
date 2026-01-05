@@ -115,15 +115,6 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     this.taskDefinition.overseerStepsCache.values.subscribe((steps) => {
       this.overseerSteps = [...steps];
     });
-
-    console.log(monaco.languages.getLanguages());
-
-    // setInterval(() => {
-    //   if (this.editorComponent) {
-    //     console.log(monaco.languages.getLanguages());
-    //     // console.log(this.editorComponent._editor.getLanguages());
-    //   }
-    // }, 1000);
   }
 
   public get getLanguages() {
@@ -164,10 +155,10 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
         )
         .subscribe({
           next: () => {
-            console.log('updated!');
+            // console.log('updated!');
           },
           error: (error) => {
-            console.error(error);
+            this.alerts.error(`Failed to update order of steps: ${error}`, 6000);
           },
         });
     }
@@ -198,7 +189,6 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
         )
         .subscribe({
           next: (result) => {
-            console.log(result);
             this.alerts.success('Added overseer step', 3000);
             result.taskDefinition = this.taskDefinition;
             this.taskDefinition.overseerStepsCache.add(result);
@@ -225,7 +215,6 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
         )
         .subscribe({
           next: (result) => {
-            console.log(result);
             this.alerts.success('Saved overseer step', 3000);
           },
           error: (error) => {
