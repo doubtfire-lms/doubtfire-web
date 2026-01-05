@@ -101,6 +101,9 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
 
   private fetchTaskPrerequisites() {
     const taskDefinition = this.taskDefinition;
+    if (!taskDefinition.id) {
+      return;
+    }
     this.taskPrerequisiteService
       .query(
         {
@@ -127,7 +130,10 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
           this.filterTaskDefs(this.searchCtrl.value ?? '');
         },
         error: (error) => {
-          console.error(error);
+          this.alertService.error(
+            `Failed to fetch prerequisites for task definition: ${error}`,
+            6000,
+          );
         },
       });
   }
