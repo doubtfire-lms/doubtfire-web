@@ -2,7 +2,9 @@
   <div class="panel-heading" ng-show="task">
     <div class="panel-title">
       <span ng-hide="tutor || showFooter">{{task.definition.name}}</span>
-      <span ng-show="tutor || showFooter" style="display: inline-flex">{{task.definition.name}} </span>
+      <span ng-show="tutor || showFooter" style="display: inline-flex"
+        >{{task.definition.name}}
+      </span>
       <div
         class="dropdown pull-right"
         dropdown
@@ -25,6 +27,9 @@
           <li ng-show="tutor">
             <a ng-click="setSelectedDashboardView('similarities')">View Similarities</a>
           </li>
+          <li ng-if="overseerEnabled()">
+            <a ng-click="setSelectedDashboardView('overseer')">View Overseer Reports</a>
+          </li>
           <li class="divider" ng-show="task.hasPdf"></li>
           <li ng-show="task.hasPdf">
             <a ng-click="downloadSubmission()">Download Submission PDF</a>
@@ -32,9 +37,9 @@
           <li ng-show="task.hasPdf">
             <a ng-click="downloadSubmittedFiles()">Download Submitted Files</a>
           </li>
-          <li ng-if="overseerEnabled()">
+          <!-- <li ng-if="overseerEnabled()">
             <a ng-click="showSubmissionHistoryModal()">Execution History</a>
-          </li>
+          </li> -->
         </ul>
       </div>
       <!--/download-dropdown-->
@@ -93,6 +98,9 @@
   </div>
   <div class="panel-body" ng-if="isCurrentView('similarities')">
     <f-task-similarity-view [task]="task"></f-task-similarity-view>
+  </div>
+  <div class="panel-body" ng-if="isCurrentView('overseer')">
+    <f-task-overseer-report [task]="task" class="max-w-full"></f-task-overseer-report>
   </div>
   <!--/panel-body-->
   <div class="panel-body text-muted no-pdf" ng-show="isCurrentView('submission') && !task.hasPdf">

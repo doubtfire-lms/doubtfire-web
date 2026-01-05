@@ -233,6 +233,7 @@ import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/dir
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
 import {TaskSimilarityViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
 import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
+import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
@@ -574,4 +575,9 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fUploadGrades',
   downgradeComponent({component: UploadGradesComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fTaskOverseerReport',
+  downgradeComponent({component: TaskOverseerReportComponent}),
 );

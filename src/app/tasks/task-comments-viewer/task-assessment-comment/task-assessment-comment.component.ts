@@ -1,8 +1,11 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
-import { TaskSubmissionService, TaskAssessmentResult } from 'src/app/common/services/task-submission.service';
-import { TaskAssessmentModalService } from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
-import { Task } from 'src/app/api/models/doubtfire-model';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {Component, OnInit, Input, Inject} from '@angular/core';
+import {
+  TaskSubmissionService,
+  TaskAssessmentResult,
+} from 'src/app/common/services/task-submission.service';
+import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
+import {Task} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 export interface User {
   id: number;
@@ -23,6 +26,11 @@ export interface TaskAssessmentComment {
   recipient_read_time?: Date;
   // new fields that extend regular Comment Interface. TODO: create a separate Comment entity and extend it.
   assessment_result?: TaskAssessmentResult;
+  overseerAssessmentId: number;
+  overseerPassedSteps: number;
+  overseerTotalSteps: number;
+  overseerInProgress: boolean;
+  overseerStatus: string;
 }
 
 @Component({
@@ -53,12 +61,12 @@ export class TaskAssessmentCommentComponent implements OnInit {
     return this.comment.assessment_result.assessment_output;
   }
 
-  showTaskAssessmentResult() {
-    this.modalService.show(this.task);
+  showTaskAssessmentResult(overseerAssessmentId?: number) {
+    this.modalService.show(this.task, overseerAssessmentId);
   }
 
   scroll(el: HTMLElement) {
-    el.scrollIntoView({ behavior: 'smooth' });
+    el.scrollIntoView({behavior: 'smooth'});
   }
 
   update(): void {
