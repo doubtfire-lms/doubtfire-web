@@ -429,8 +429,11 @@ const SuccessCloseState: NgHybridStateDeclaration = {
 const projectPlanState: NgHybridStateDeclaration = {
   name: 'project/plan',
   parent: 'projects/index',
-  url: '/plan',
+  url: '/plan?:taskDef?',
   component: ProjectPlanComponent,
+  params: {
+    taskDef: {value: null, squash: true, dynamic: true},
+  },
   // views: {
   //   main: {
   //     // Main body links to angular component

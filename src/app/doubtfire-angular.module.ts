@@ -300,10 +300,15 @@ import {MarkingSessionService} from './api/services/marking-session.service';
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
 import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
 import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
+import {GANTT_GLOBAL_CONFIG, GanttLinkLineType, NgxGanttModule} from '@worktile/gantt';
 import {DiscussionPromptService} from './api/services/discussion-prompt.service';
 import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
 import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
 import {DiscussionPromptsViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/discussion-prompts-view/discussion-prompts-view.component';
+import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-planner.component';
+import {TaskPlannerPrerequisitesModalComponent} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.component';
+import {TaskPlannerPrerequisitesModalService} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
+import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
 import {OverseerStepService} from './api/services/overseer-step.service';
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 import {OverseerStepResultService} from './api/services/overseer-step-result.service';
@@ -318,6 +323,31 @@ const MY_DATE_FORMAT = {
     monthYearLabel: 'MMMM yyyy',
     dateA11yLabel: 'do MMMM yyyy',
     monthYearA11yLabel: 'MMMM yyyy',
+  },
+};
+
+const GANTT_CHART_CONFIG = {
+  provide: GANTT_GLOBAL_CONFIG,
+  useValue: {
+    // locale: 'en-US',
+    dateFormat: {
+      // timeZone: 'UTC',
+      weekStartsOn: 1,
+      week: 'w',
+      year: 'yyyy',
+      month: 'MMMM',
+      yearMonth: 'yyyy MMM',
+      yearQuarter: 'yyyy',
+    },
+    linkOptions: {
+      showArrow: true,
+      lineType: GanttLinkLineType.curve,
+    },
+    styleOptions: {
+      // lineHeight: '25',
+      // barHeight: '23',
+      // headerHeight: '50px',
+    },
   },
 };
 
@@ -466,6 +496,9 @@ const MY_DATE_FORMAT = {
     DiscussionPromptsComponent,
     TaskDefinitionDiscussionPromptsComponent,
     DiscussionPromptsViewComponent,
+    TaskPlannerComponent,
+    TaskPlannerCardComponent,
+    TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
   ],
   providers: [
@@ -557,6 +590,8 @@ const MY_DATE_FORMAT = {
     TaskPrerequisiteService,
     MarkingSessionService,
     DiscussionPromptService,
+    GANTT_CHART_CONFIG,
+    TaskPlannerPrerequisitesModalService,
     OverseerStepService,
     OverseerStepResultService,
   ],
@@ -622,6 +657,7 @@ const MY_DATE_FORMAT = {
     MatDialogModuleNew,
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
     CodeEditorModule.forRoot(),
+    NgxGanttModule,
     MatSidenavModule,
     MonacoEditorModule.forRoot(),
   ],

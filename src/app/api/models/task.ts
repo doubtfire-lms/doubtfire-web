@@ -53,6 +53,9 @@ export class Task extends Entity {
 
   pinned: boolean = false;
 
+  targetStartDate: Date;
+  targetDueDate: Date;
+
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
 
@@ -167,7 +170,9 @@ export class Task extends Entity {
   }
 
   public localDueDate(): Date {
-    if (this.dueDate) {
+    if (this.targetDueDate && this.unit.allowFlexibleDates) {
+      return this.targetDueDate;
+    } else if (this.dueDate) {
       return this.dueDate;
     } else {
       return this.definition.localDueDate();
@@ -236,6 +241,25 @@ export class Task extends Entity {
     );
   }
 
+  public saveTargetDates(startDate: Date | string, dueDate: Date | string): Observable<Task> {
+    const taskService: TaskService = AppInjector.get(TaskService);
+
+    return taskService.update(
+      {
+        projectId: this.project.id,
+        taskDefId: this.definition.id,
+      },
+      {
+        endpointFormat: '/projects/:projectId:/task_def_id/:taskDefId:/target_dates',
+        entity: this,
+        body: {
+          target_start_date: startDate,
+          target_due_date: dueDate,
+        },
+      },
+    );
+  }
+
   /**
    * Calculate the time between two dates
    *
@@ -297,7 +321,9 @@ export class Task extends Entity {
   }
 
   public get startDate(): Date {
-    if (this.extensions < 0) {
+    if (this.targetStartDate && this.unit.allowFlexibleDates) {
+      return this.targetStartDate;
+    } else if (this.extensions < 0) {
       // If the task has an extension, the start date is the due date minus the extension
       return MappingFunctions.addWeeks(this.definition.startDate, this.extensions);
     } else {
