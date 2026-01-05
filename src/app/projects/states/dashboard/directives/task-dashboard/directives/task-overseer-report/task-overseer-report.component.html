@@ -51,24 +51,22 @@
             <!-- <p>Exit Status: {{ result.exitStatus }}</p> -->
             <!-- <p>Pass?: {{ result.pass }}</p> -->
 
-            <!-- <ngx-monaco-editor
-              class="w-full max-w-full"
-              [options]="stdoutOptions"
-              [(ngModel)]="result.stdout"
-            ></ngx-monaco-editor> -->
             @if (!result.pass) {
               <p class="text-gray-500 text-left w-full tracking-wide p-2 text-normal">
                 {{ result.feedbackMessage }}
               </p>
             }
 
-            @if (result.expectedOutput && result.expectedOutput !== result.stdout) {
-              <!-- TODO: if stepType was an output diff check -->
+            @if (
+              result.expectedOutput &&
+              result.expectedOutput !== result.stdout &&
+              result.overseerStep?.stepType === 'output_diff'
+            ) {
               <div class="flex gap-2 mb-5 w-fill justify-center items-center">
                 <button
                   mat-stroked-button
                   [color]="viewOutput === 'your_output' ? 'primary' : undefined"
-                  (click)="yourOutput()"
+                  (click)="submissionOutput()"
                 >
                   Your Output
                 </button>

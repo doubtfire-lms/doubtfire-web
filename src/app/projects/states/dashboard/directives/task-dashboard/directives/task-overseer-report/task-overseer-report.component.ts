@@ -78,7 +78,7 @@ export class TaskOverseerReportComponent implements OnInit {
     }, 100);
   }
 
-  yourOutput() {
+  submissionOutput() {
     this.viewOutput = 'your_output';
   }
 
