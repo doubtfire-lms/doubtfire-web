@@ -236,6 +236,7 @@ import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upl
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
 import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-planner.component';
 import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
+import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
@@ -592,4 +593,9 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fTaskPlannerCard',
   downgradeComponent({component: TaskPlannerCardComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fTaskOverseerReport',
+  downgradeComponent({component: TaskOverseerReportComponent}),
 );

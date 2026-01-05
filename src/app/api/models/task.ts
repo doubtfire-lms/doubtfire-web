@@ -605,11 +605,7 @@ export class Task extends Entity {
   }
 
   public get overseerEnabled(): boolean {
-    return (
-      this.unit.overseerEnabled &&
-      this.definition.assessmentEnabled &&
-      this.definition.hasTaskAssessmentResources
-    );
+    return this.unit.overseerEnabled && this.definition.assessmentEnabled;
   }
 
   public get scormEnabled(): boolean {

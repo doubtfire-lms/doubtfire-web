@@ -29,8 +29,16 @@
                 "input": "./JPlag-Report-Viewer",
                 "output": "/JPlag",
                 "glob": "**/!(*.gitignore|README.md|.git)"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/monaco-editor/min",
+                "output": "/assets/monaco/min/"
               }
             ],
+            "loader": {
+              ".ttf": "binary"
+            },
             "styles": [
               "src/theme.scss",
               "src/styles.scss",
