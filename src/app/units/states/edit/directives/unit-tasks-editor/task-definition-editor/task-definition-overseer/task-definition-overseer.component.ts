@@ -313,9 +313,10 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     if (validFiles.length > 0) {
       const file = validFiles[0];
       this.taskDefinitionService.uploadOverseerResources(this.taskDefinition, file).subscribe({
-        next: () => {
+        next: (resourceFiles) => {
           this.alerts.success('Uploaded Overseer Resources', 2000);
           this.taskDefinition.hasTaskAssessmentResources = true;
+          this.taskDefinition.overseerResourceFiles = [...resourceFiles];
         },
         error: (message) => this.alerts.error(message, 6000),
       });
