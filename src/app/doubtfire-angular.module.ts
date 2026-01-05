@@ -497,6 +497,7 @@ const GANTT_CHART_CONFIG = {
     TaskDefinitionDiscussionPromptsComponent,
     DiscussionPromptsViewComponent,
     TaskPlannerComponent,
+    TaskPlannerCardComponent,
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
   ],
