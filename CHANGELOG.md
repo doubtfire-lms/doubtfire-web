@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-70](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-69...v10.0.0-70) (2026-01-05)
+
+
+### Bug Fixes
+
+* skip query for unsaved task definition ([a6bdd22](https://github.com/b0ink/doubtfire-deploy/commit/a6bdd22ff864e72c679fae1844345963447fdf08))
+
 ## [10.0.0-69](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-68...v10.0.0-69) (2026-01-05)
 
 
