@@ -156,6 +156,20 @@
           </button>
         }
 
+        @if (canAccessTutorNotes(selectedTask)) {
+          <div class="relative inline-block">
+            <button
+              mat-icon-button
+              matTooltipPosition="above"
+              class="button small-button"
+              [disabled]="!markingTutor(selectedTask)"
+              (click)="viewTutorNotes()"
+            >
+              <mat-icon class="small-icon">local_library</mat-icon>
+            </button>
+          </div>
+        }
+
         <div class="relative inline-block">
           @if (selectedTask.project.staffNoteCount > 0) {
             <div [matBadge]="selectedTask.project.staffNoteCount"></div>

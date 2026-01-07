@@ -5,6 +5,8 @@ import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-ta
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
+import {UnitRole} from 'src/app/api/models/unit-role';
+import {UserService} from 'src/app/api/services/user.service';
 
 @Component({
   selector: 'f-footer',
@@ -17,6 +19,7 @@ export class FooterComponent implements OnInit {
     public taskService: TaskService,
     private fileDownloader: FileDownloaderService,
     private taskAssessmentModal: TaskAssessmentModalService,
+    private userService: UserService,
   ) {}
 
   selectedTask$: Observable<Task>;
@@ -48,12 +51,59 @@ export class FooterComponent implements OnInit {
       (this.warningText?.nativeElement.getBoundingClientRect().width + totalPaddingOffset) / 2;
   }
 
+  public markingTutor(task: Task): UnitRole {
+    const enrolments = task.project.tutorialEnrolmentsCache.currentValues.filter(
+      (t) => t.tutorialStream.name === task.definition.tutorialStream.name,
+    );
+    // TODO: is checking for just the one tutorial enrolment correct? should be..
+    if (enrolments.length === 1) {
+      const user = enrolments[0].tutor;
+      return task.unit.staff.find((ur) => ur.user.id === user.id);
+    }
+    return null;
+  }
+
+  public canAccessTutorNotes(task: Task): boolean {
+    // TODO: if the access is truthy because current user == marking tutor
+    // TODO: we should only reveal the icon if a note has been left by their mentor
+
+    const tutor = this.markingTutor(task);
+    if (!tutor) {
+      console.log('tutor invalid!');
+      return false;
+    }
+
+    const currentUser = this.userService.currentUser;
+    const currentUserRole = task.unit.staff.find((ur) => ur.user.id === currentUser.id);
+
+    if (!currentUserRole) {
+      return false;
+    }
+
+    // Ensure the unit is mapped correctly to access the mentor
+    tutor.unit = task.unit;
+
+    const canAccess =
+      currentUserRole.role === 'Convenor' ||
+      currentUserRole.role === 'Admin' ||
+      (tutor.mentor && tutor.mentor.id === currentUserRole.id) ||
+      tutor.id === currentUserRole.id;
+
+    return canAccess;
+  }
+
+  public viewTutorNotes() {
+    console.log(`viewing tutor notes for `, this.markingTutor(this.selectedTask));
+    this.selectedTaskService.showTutorNotes();
+  }
+
   ngOnInit(): void {
     // watch for changes to the selected task
     this.selectedTask$ = this.selectedTaskService.selectedTask$;
 
     this.selectedTask$.subscribe((task) => {
       this.selectedTask = task;
+
       // We need to timeout to give the DOM a chance to place the elements
       setTimeout(() => {
         this.findSimilaritiesButton();

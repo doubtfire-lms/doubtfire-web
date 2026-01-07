@@ -7,6 +7,7 @@ import {UnitRole} from 'src/app/api/models/unit-role';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {MatSelectChange} from '@angular/material/select';
 
 @Component({
   selector: 'unit-staff-editor',
@@ -22,7 +23,14 @@ export class UnitStaffEditorComponent implements OnInit {
   filteredStaff: User[] = []; // Filtered staff members
   searchTerm: string = ''; // Search term entered by the user
 
-  displayedColumns: string[] = ['name', 'role', 'main-convenor', 'observer-only', 'actions'];
+  displayedColumns: string[] = [
+    'name',
+    'role',
+    'main-convenor',
+    'observer-only',
+    'mentor',
+    'actions',
+  ];
   dataSource = new MatTableDataSource<UnitRole>();
 
   // Inject services here
@@ -87,6 +95,20 @@ export class UnitStaffEditorComponent implements OnInit {
     });
   }
 
+  selectMentor(unitRole: UnitRole, event: MatSelectChange) {
+    const previousValue = unitRole.mentorId;
+    unitRole.mentorId = event.value;
+    unitRole.roleId = unitRole.role === 'Tutor' ? 2 : 3;
+
+    this.unitRoleService.update(unitRole).subscribe({
+      next: () => this.alertService.success('Mentor updated', 2000),
+      error: (response) => {
+        // Revert changes on error
+        unitRole.mentorId = previousValue;
+        this.alertService.error(response, 6000);
+      },
+    });
+  }
   /**
    * Changes who the `Main Convenor` of the unit is.
    *

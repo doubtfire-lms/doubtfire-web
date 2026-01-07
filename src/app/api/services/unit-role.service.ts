@@ -63,9 +63,10 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
         },
       },
       'observerOnly',
+      'mentorId',
     );
 
-    this.mapping.addJsonKey('roleId', 'userId', 'unitId', 'role', 'observerOnly');
+    this.mapping.addJsonKey('roleId', 'userId', 'unitId', 'role', 'observerOnly', 'mentorId');
   }
 
   public createInstanceFrom(json: any, other?: any): UnitRole {

@@ -312,6 +312,9 @@ import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/p
 import {OverseerStepService} from './api/services/overseer-step.service';
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 import {OverseerStepResultService} from './api/services/overseer-step-result.service';
+import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
+import {TutorNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/tutor-notes-view/tutor-notes-view.component';
+import {TutorNoteService} from './api/services/tutor-note.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -500,6 +503,8 @@ const GANTT_CHART_CONFIG = {
     TaskPlannerCardComponent,
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
+    TutorNotesComponent,
+    TutorNotesViewComponent,
   ],
   providers: [
     // Services we provide
@@ -594,6 +599,7 @@ const GANTT_CHART_CONFIG = {
     TaskPlannerPrerequisitesModalService,
     OverseerStepService,
     OverseerStepResultService,
+    TutorNoteService,
   ],
   imports: [
     FlexLayoutModule,
