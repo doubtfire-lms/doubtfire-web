@@ -53,7 +53,7 @@ export class FooterComponent implements OnInit {
 
   public markingTutor(task: Task): UnitRole {
     const enrolments = task.project.tutorialEnrolmentsCache.currentValues.filter(
-      (t) => t.tutorialStream.name === task.definition.tutorialStream.name,
+      (t) => t.tutorialStream.abbreviation === task.definition.tutorialStream.abbreviation,
     );
     // TODO: is checking for just the one tutorial enrolment correct? should be..
     if (enrolments.length === 1) {

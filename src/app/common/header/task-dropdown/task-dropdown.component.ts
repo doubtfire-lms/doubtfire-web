@@ -24,6 +24,7 @@ export class TaskDropdownComponent {
     'Student List': 'Students',
     'Student Portfolios': 'Portfolios',
     'Task Explorer': 'Task Explorer',
+    'Task Moderation': 'Task Moderation',
     'Task Inbox': 'Inbox',
     'Task Lists': 'Tasks',
     'Tutorial List': 'Tutorials',
