@@ -1,0 +1,28 @@
+<div class="w-full p-5 flex justify-center gap-5">
+  <!-- TODO: Show the name of the tutor -->
+  <button
+    mat-stroked-button
+    (click)="showMore()"
+    [disabled]="isModerated(task)"
+    matTooltip="See more tasks from this tutor for moderation due to feedback concerns"
+  >
+    Show more from this tutor
+  </button>
+  <button
+    mat-stroked-button
+    color="primary"
+    (click)="showLess()"
+    [disabled]="isModerated(task)"
+    matTooltip="Remove this task from moderation without changing how many tasks from this tutor are shown"
+  >
+    Dismiss task
+  </button>
+  <button
+    mat-stroked-button
+    (click)="dismiss()"
+    [disabled]="isModerated(task)"
+    matTooltip="Reduce moderation for this tutor based on satisfactory feedback"
+  >
+    Show less from this tutor
+  </button>
+</div>

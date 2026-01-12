@@ -18,6 +18,8 @@ import {
   TestAttempt,
   TestAttemptService,
   ScormComment,
+  UnitRoleService,
+  UnitRole,
 } from './doubtfire-model';
 import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
@@ -91,6 +93,16 @@ export class Task extends Entity {
 
   public get comments(): readonly TaskComment[] {
     return this.commentCache.currentValues;
+  }
+
+  public get tutor(): UnitRole {
+    const enrolments = this.project.tutorialEnrolmentsCache.currentValues.filter(
+      (t) => t.tutorialStream.name === this.definition.tutorialStream.name,
+    );
+    if (enrolments.length === 1) {
+      const user = enrolments[0].tutor;
+      return this.unit.staff.find((ur) => ur.user.id === user.id);
+    }
   }
 
   public addComment(textString): void {
@@ -981,5 +993,27 @@ export class Task extends Entity {
     }
 
     return false;
+  }
+
+  public moderateFeedback(score: -1 | 0 | 1): Observable<boolean> {
+    const unitRoleService: UnitRoleService = AppInjector.get(UnitRoleService);
+
+    const tutor = this.tutor;
+    if (!tutor) {
+      return;
+    }
+
+    return unitRoleService.post(
+      {
+        id: tutor.id,
+        taskId: this.id,
+      },
+      {
+        endpointFormat: '/unit_roles/:id:/moderation/:taskId:',
+        body: {
+          score: score,
+        },
+      },
+    );
   }
 }

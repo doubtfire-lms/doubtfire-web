@@ -36,6 +36,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   @ViewChild('inboxpanel') inboxPanel: ElementRef;
   @ViewChild('commentspanel') commentspanel: ElementRef;
 
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
+
   subs$: Observable<unknown>;
 
   private inboxStartSize$ = new Subject<number>();

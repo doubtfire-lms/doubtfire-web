@@ -22,8 +22,7 @@ angular.module('doubtfire.units.states.tasks.moderation', [
 
 .controller('TaskModerationStateCtrl', ($scope, newTaskService) ->
   $scope.taskData.source = newTaskService.queryTasksForMentorModeration.bind(newTaskService)
-
-  $scope.taskData.taskDefMode = false
+  $scope.viewType = 'moderation'
   $scope.showSearchOptions = false
   $scope.filters = {
     tutorialIdSelected: 'all'
