@@ -14,6 +14,7 @@ export class UnitRole extends Entity {
   observerOnly: boolean;
   // mentor: UnitRole;
   mentorId: number;
+  tutorNoteCount: number;
 
   public readonly tutorNotesCache: EntityCache<TutorNote> = new EntityCache<TutorNote>();
 

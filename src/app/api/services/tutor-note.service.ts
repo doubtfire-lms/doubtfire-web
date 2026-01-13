@@ -11,6 +11,8 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
   // public readonly staffNoteAdded$: EventEmitter<StaffNote> = new EventEmitter();
 
   protected readonly endpointFormat = 'unit_roles/:unitRoleId:/tutor_notes/:id:';
+  protected readonly markAsReadEndpointFormat =
+    'unit_roles/:unitRoleId:/tutor_notes/:id:/mark_as_read';
 
   constructor(
     httpClient: HttpClient,
@@ -50,6 +52,7 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
           return project;
         },
       },
+      'readByUnitRole',
     );
 
     this.mapping.addJsonKey('note', 'createdAt', 'updatedAt');
@@ -123,6 +126,29 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
     return this.put(pathId, opts).pipe(
       tap((_note: TutorNote) => {
         note.note = text;
+      }),
+    );
+  }
+
+  public markAsRead(unitRole: UnitRole, note: TutorNote): Observable<boolean> {
+    const pathId = {
+      unitRoleId: unitRole.id,
+      id: note.id,
+    };
+
+    const opts: RequestOptions<TutorNote> = {endpointFormat: this.markAsReadEndpointFormat};
+    opts.cache = unitRole.tutorNotesCache;
+    opts.constructorParams = unitRole;
+
+    return this.put<boolean>(pathId, opts).pipe(
+      tap((response: boolean) => {
+        if (response) {
+          note.readByUnitRole = true;
+          unitRole.tutorNoteCount--;
+          // unitRole.tutorNoteCount = unitRole.tutorNotesCache.currentValues.filter(
+          //   (note) => !note.readByUnitRole,
+          // ).length;
+        }
       }),
     );
   }

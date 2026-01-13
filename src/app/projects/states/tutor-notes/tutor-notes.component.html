@@ -37,7 +37,17 @@
           (mouseover)="hoveredNoteId = note.id"
           (mouseout)="hoveredNoteId = null"
         >
-          <div [hidden]="hoveredNoteId !== note.id" class="flex absolute right-5 bottom-5">
+          <div
+            [hidden]="hoveredNoteId !== note.id"
+            class="flex items-center absolute right-5 bottom-5"
+          >
+            @if (!note.readByUnitRole) {
+              @if (note.noteIsForMe) {
+                <button mat-button color="primary" (click)="markAsRead(note)">Mark as Read</button>
+              }
+            } @else {
+              <div class="text-gray-400 italic px-5">Read by tutor</div>
+            }
             @if (note.authorIsMe) {
               <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
             }

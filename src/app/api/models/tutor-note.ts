@@ -17,6 +17,8 @@ export class TutorNote extends Entity {
   note: string;
   replyTo?: TutorNote;
   replyToId: number;
+  readByUnitRole: boolean;
+
   createdAt: Date;
   updatedAt: Date;
 
@@ -27,6 +29,11 @@ export class TutorNote extends Entity {
     } else {
       console.error('Failed to get project');
     }
+  }
+
+  public get noteIsForMe(): boolean {
+    const userService: UserService = AppInjector.get(UserService);
+    return this.unitRole.user.id === userService.currentUser.id;
   }
 
   public get authorIsMe(): boolean {

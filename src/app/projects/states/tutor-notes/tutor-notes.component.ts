@@ -121,6 +121,21 @@ export class TutorNotesComponent implements OnInit {
     });
   }
 
+  public markAsRead(note: TutorNote) {
+    this.tutorNoteService.markAsRead(this.unitRole, note).subscribe({
+      next: (response) => {
+        if (response) {
+          this.alertService.success(`Marked note as read`, 3000);
+        } else {
+          this.alertService.error(`Failed to mark as read`, 6000);
+        }
+      },
+      error: (error) => {
+        this.alertService.error(`Failed to mark as read: ${error}`, 6000);
+      },
+    });
+  }
+
   public deleteNote(note: TutorNote) {
     this.confirmationModalService.show(
       'Delete note',
@@ -197,11 +212,13 @@ export class TutorNotesComponent implements OnInit {
   }
 
   public get taskDefinitionFilters() {
-    return (
+    const abbrs =
       this.unitRole.tutorNotesCache.currentValues
         .map((note) => note.taskDefinition?.abbreviation)
-        .filter(Boolean) ?? []
-    );
+        .filter(Boolean) ?? [];
+
+    // Remove duplicates
+    return Array.from(new Set(abbrs));
   }
 
   openProject(event: Event, note: TutorNote) {
