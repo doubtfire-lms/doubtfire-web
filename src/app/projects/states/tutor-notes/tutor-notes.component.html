@@ -6,7 +6,7 @@
   } -->
   <div #staffNotesContainer class="flex-1 overflow-auto p-4">
     @if (!loadingStaffNotes) {
-      @for (note of unitRole?.tutorNotesCache?.currentValues; track note) {
+      @for (note of filteredNotes; track note) {
         @if (note.replyToId) {
           <div
             class="text-md px-2 py-2 select-none rounded-t-md border border-gray-300 flex items-center justify-between"
@@ -44,6 +44,7 @@
             <mat-icon type="button" (click)="replyToNote(note)">reply</mat-icon>
             <mat-icon type="button" (click)="deleteNote(note)">delete</mat-icon>
           </div>
+
           <div class="flex justify-between">
             <mat-card-title class="flex items-center">
               <user-icon size="25" [user]="note.user" style="margin-right: 8px"></user-icon>
@@ -57,6 +58,23 @@
                 >{{ note.createdAt | humanizedDate }}</mat-card-subtitle
               >
             </div>
+          </div>
+
+          <div class="flex gap-5 py-2">
+            @if (note.taskDefinition) {
+              <mat-chip class="w-fit"
+                >{{ note.taskDefinition?.abbreviation }} {{ note.taskDefinition.name }}</mat-chip
+              >
+            }
+            @if (note.project) {
+              <!-- TODO: you should be able to click this chip to view the project and task definition -->
+              <mat-chip
+                chipListSelectable
+                class="w-fit cursor-pointer"
+                (click)="openProject($event, note)"
+                >{{ note.project?.student.name }}</mat-chip
+              >
+            }
           </div>
 
           <mat-card-content class="py-4">
@@ -93,6 +111,19 @@
   </div>
 
   <div class="h-[150px] border-t border-gray-300 p-4">
+    <mat-chip-listbox selectable multiple class="mb-4">
+      <mat-chip-option value="all" (click)="toggleSelection('all')">All Tasks</mat-chip-option>
+      @for (option of taskDefinitionFilters; track option) {
+        <mat-chip-option
+          [value]="option"
+          [selected]="selectedTaskDefinitions.get(option)"
+          (click)="toggleSelection(option)"
+        >
+          {{ option }}
+        </mat-chip-option>
+      }
+    </mat-chip-listbox>
+
     @if (replyingToNote) {
       <div
         class="text-md px-2 py-2 select-none rounded-t-md border border-b-0 border-gray-300 flex items-center justify-between"
@@ -113,7 +144,7 @@
     }
 
     <mat-form-field appearance="outline" class="flex items-center w-full">
-      <mat-label>Staff Note</mat-label>
+      <mat-label>Tutor note</mat-label>
       <textarea
         matInput
         [(ngModel)]="noteText"

@@ -1,5 +1,5 @@
 import {Entity} from 'ngx-entity-service';
-import {Project, Unit, User, UserService, Task, UnitRole} from './doubtfire-model';
+import {Project, Unit, User, UserService, Task, UnitRole, TaskDefinition} from './doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {StaffNoteService} from '../services/staff-note.service';
@@ -10,7 +10,9 @@ export class TutorNote extends Entity {
 
   // project: Project;
   unitRole: UnitRole;
-  task: Task;
+  task?: Task;
+  taskDefinition?: TaskDefinition;
+  project?: Project;
   user: User;
   note: string;
   replyTo?: TutorNote;

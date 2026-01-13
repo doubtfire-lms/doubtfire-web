@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
-import {ProjectService, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
+import {ProjectService, Task, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {TutorNote} from '../models/tutor-note';
 
@@ -19,15 +19,38 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
   ) {
     super(httpClient, API_URL);
 
-    this.mapping.addKeys('id', 'note', 'createdAt', 'updatedAt', 'replyToId', {
-      keys: ['user', 'user_id'],
-      toEntityFn: (data: object, key: string, tutorNote: TutorNote) => {
-        const userRole = tutorNote.unitRole.unit.staff.find((s) => s.user.id === data['user_id']);
-        // const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
-        // If the user is not a staff in the unit it will be null
-        return userRole?.user;
+    this.mapping.addKeys(
+      'id',
+      'note',
+      'createdAt',
+      'updatedAt',
+      'replyToId',
+      {
+        keys: ['user', 'user_id'],
+        toEntityFn: (data: object, key: string, tutorNote: TutorNote) => {
+          const userRole = tutorNote.unitRole.unit.staff.find((s) => s.user.id === data['user_id']);
+          // const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
+          // If the user is not a staff in the unit it will be null
+          return userRole?.user;
+        },
       },
-    });
+      {
+        keys: ['taskDefinition', 'task_definition_id'],
+        toEntityFn: (data: object, key: string, tutorNote: TutorNote) => {
+          const taskDefinition = tutorNote.unitRole.unit.taskDefinitions.find(
+            (td) => td.id === data['task_definition_id'],
+          );
+          return taskDefinition;
+        },
+      },
+      {
+        keys: ['project', 'project_id'],
+        toEntityFn: (data: object, key: string, tutorNote: TutorNote) => {
+          const project = tutorNote.unitRole.unit.students.find((p) => p.id === data['project_id']);
+          return project;
+        },
+      },
+    );
 
     this.mapping.addJsonKey('note', 'createdAt', 'updatedAt');
   }
@@ -36,7 +59,12 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
     return new TutorNote(other);
   }
 
-  public addNote(unitRole: UnitRole, text: string, originalNote: TutorNote): Observable<TutorNote> {
+  public addNote(
+    unitRole: UnitRole,
+    text: string,
+    task?: Task,
+    originalNote?: TutorNote,
+  ): Observable<TutorNote> {
     const pathId = {
       unitRoleId: unitRole.id,
     };
@@ -44,6 +72,10 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
     const body: FormData = new FormData();
     if (originalNote) {
       body.append('reply_to_id', originalNote?.id.toString());
+    }
+
+    if (task) {
+      body.append('task_id', task?.id.toString());
     }
 
     body.append('note', text);

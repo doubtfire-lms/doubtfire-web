@@ -56,6 +56,9 @@ export class TutorNotesComponent implements OnInit {
       this.tutorNoteService.updateTutorNoteReplies(this.unitRole?.tutorNotesCache.currentValues);
       this.scrollDown();
     });
+    if (this.task) {
+      this.selectedTaskDefinitions.set(this.task.definition.abbreviation, true);
+    }
   }
 
   scrollToComment(commentID: number) {
@@ -77,23 +80,27 @@ export class TutorNotesComponent implements OnInit {
 
     this.noteText = '';
 
-    this.tutorNoteService.addNote(this.unitRole, noteText, this.replyingToNote).subscribe({
-      next: (note) => {
-        this.alertService.success('Succesfully submitted note', 4000);
-        this.scrollDown();
-        // TODO: maybe we do export a tutorNoteCount? but then we dont know for which tasks they are for
-        // TODO: itll only be helpful in the header notifications icon...
-        // TODO: otherwise, we could just load all the notes for a mentors mentee when loading the audt page?
+    this.tutorNoteService
+      .addNote(this.unitRole, noteText, this.task, this.replyingToNote)
+      .subscribe({
+        next: (note) => {
+          this.alertService.success('Succesfully submitted note', 4000);
+          this.scrollDown();
+          // TODO: maybe we do export a tutorNoteCount? but then we dont know for which tasks they are for
+          // TODO: itll only be helpful in the header notifications icon...
+          // TODO: otherwise, we could just load all the notes for a mentors mentee when loading the audt page?
 
-        // this.project.staffNoteCount++;
-        this.replyingToNote = null;
-        this.tutorNoteService.updateTutorNoteReplies(this.unitRole?.tutorNotesCache.currentValues);
-      },
-      error: (error) => {
-        this.alertService.error(`Failed to create note: ${error}`, 4000);
-        this.noteText = noteText;
-      },
-    });
+          // this.project.staffNoteCount++;
+          this.replyingToNote = null;
+          this.tutorNoteService.updateTutorNoteReplies(
+            this.unitRole?.tutorNotesCache.currentValues,
+          );
+        },
+        error: (error) => {
+          this.alertService.error(`Failed to create note: ${error}`, 4000);
+          this.noteText = noteText;
+        },
+      });
   }
 
   public updateNote() {
@@ -163,5 +170,45 @@ export class TutorNotesComponent implements OnInit {
       el.classList.add('flash-highlight');
       setTimeout(() => el.classList.remove('flash-highlight'), 1000);
     }
+  }
+
+  public selectedTaskDefinitions: Map<string, boolean> = new Map<string, boolean>();
+
+  public get filteredNotes() {
+    const selected = this.selectedTaskDefinitions;
+    const allSelected = selected.size === 0 || selected.get('all');
+
+    return (
+      this.unitRole?.tutorNotesCache?.currentValues?.filter((note) => {
+        const abbr = note.taskDefinition?.abbreviation;
+        // if (!abbr) return false; // skip notes without taskDefinition
+        if (allSelected) return true;
+        return selected.get(abbr);
+      }) ?? []
+    );
+  }
+
+  toggleSelection(option: string) {
+    if (this.selectedTaskDefinitions.get(option)) {
+      this.selectedTaskDefinitions.set(option, false);
+    } else {
+      this.selectedTaskDefinitions.set(option, true);
+    }
+  }
+
+  public get taskDefinitionFilters() {
+    return (
+      this.unitRole.tutorNotesCache.currentValues
+        .map((note) => note.taskDefinition?.abbreviation)
+        .filter(Boolean) ?? []
+    );
+  }
+
+  openProject(event: Event, note: TutorNote) {
+    event.stopPropagation();
+    const link = document.createElement('a');
+    link.href = `/projects/${note.project.id}/dashboard/${note.taskDefinition.abbreviation}?tutor=true`;
+    link.target = '_blank';
+    link.click();
   }
 }

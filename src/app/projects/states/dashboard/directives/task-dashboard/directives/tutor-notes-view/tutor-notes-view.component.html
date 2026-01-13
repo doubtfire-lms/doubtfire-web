@@ -1,8 +1,15 @@
-<div class="p-4 h-[calc(100%-50px)]">
+<div class="p-4 h-[calc(100%-154px)]">
   <div class="flex items-center">
     <mat-icon class="mr-2">comment</mat-icon>
     <h1 class="mat-headline m-0">Tutor Notes for {{ unitRole?.user?.name }}</h1>
   </div>
+  @if (task) {
+    <p>
+      {{ task.definition.abbreviation }} {{ task.definition.name }} ({{
+        task.project.student.name
+      }})
+    </p>
+  }
   <p>
     Notes left here are for staff-only discussion about the feedback given to the student. Use this
     space to question, clarify, or discuss the tutor’s feedback. These notes are visible to
