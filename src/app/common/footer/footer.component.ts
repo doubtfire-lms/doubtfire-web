@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
@@ -21,6 +21,8 @@ export class FooterComponent implements OnInit {
     private taskAssessmentModal: TaskAssessmentModalService,
     private userService: UserService,
   ) {}
+
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;

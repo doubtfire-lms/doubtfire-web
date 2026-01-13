@@ -1,29 +1,36 @@
-<div class="flex justify-center py-2">Tutor: {{ task.tutor?.user.name }}</div>
-<div class="w-full p-5 flex justify-center gap-5">
-  <!-- TODO: Show the name of the tutor -->
+<!-- <div class="flex justify-center py-2">Tutor: {{ task.tutor?.user.name }}</div> -->
+<span class="center-buttons flex justify-around gap-2">
   <button
-    mat-stroked-button
+    [disabled]="task === undefined || isModerated(task)"
+    mat-icon-button
+    matTooltip="Show more from this tutor"
+    matTooltipPosition="above"
+    aria-label=""
+    class="button"
     (click)="showMore()"
-    [disabled]="isModerated(task)"
-    matTooltip="See more tasks from this tutor for moderation due to feedback concerns"
   >
-    Show more from this tutor
+    <mat-icon>flag</mat-icon>
   </button>
   <button
-    mat-stroked-button
-    color="primary"
+    [disabled]="task === undefined || isModerated(task)"
+    mat-icon-button
+    matTooltip="Dismiss moderation task"
+    matTooltipPosition="above"
+    aria-label=""
+    class="button large-button"
     (click)="dismiss()"
-    [disabled]="isModerated(task)"
-    matTooltip="Remove this task from moderation without changing how many tasks from this tutor are shown"
   >
-    Dismiss task
+    <mat-icon>archive</mat-icon>
   </button>
   <button
-    mat-stroked-button
+    [disabled]="task === undefined || isModerated(task)"
+    mat-icon-button
+    matTooltip="Show less from this tutor"
+    matTooltipPosition="above"
+    aria-label=""
+    class="button"
     (click)="showLess()"
-    [disabled]="isModerated(task)"
-    matTooltip="Reduce moderation for this tutor based on satisfactory feedback"
   >
-    Show less from this tutor
+    <mat-icon>thumb_up</mat-icon>
   </button>
-</div>
+</span>

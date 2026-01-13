@@ -26,9 +26,6 @@
     }
 
     <div fxFlex class="inbox-panel">
-      @if (viewType === 'moderation' && taskData.selectedTask) {
-        <f-moderation [task]="taskData.selectedTask"></f-moderation>
-      }
       <f-task-dashboard [task]="taskData.selectedTask" [pdfUrl]="visiblePdfUrl"></f-task-dashboard>
     </div>
     <div
@@ -45,7 +42,7 @@
       <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
     </div>
   </div>
-  <f-footer></f-footer>
+  <f-footer class="z-10" [viewType]="viewType"></f-footer>
 </div>
 
 <div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
