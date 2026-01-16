@@ -36,7 +36,7 @@ export class TaskViewerStateComponent {
 export const TaskViewerState: NgHybridStateDeclaration = {
   name: 'units2/tasks',
   url: '/tasks/:taskDefId',
-  parent: 'unit-root-state',
+  parent: 'units/index',
   data: {
     pageTitle: 'Unit Tasks',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
