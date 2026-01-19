@@ -94,7 +94,6 @@ import 'build/src/app/common/services/outcome-service.js';
 import 'build/src/app/common/services/services.js';
 import 'build/src/app/common/services/recorder-service.js';
 import 'build/src/app/common/services/analytics-service.js';
-import 'build/src/app/errors/errors.js';
 import 'build/src/app/errors/states/timeout/timeout.js';
 import 'build/src/app/errors/states/states.js';
 import 'build/src/common/utilService/utilService.js';
@@ -213,7 +212,7 @@ import {GroupMemberContributionAssignerComponent} from './groups/group-member-co
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
   'doubtfire.common',
-  'doubtfire.errors',
+  'doubtfire.errors.states',
   'doubtfire.units',
   'doubtfire.tasks',
   'doubtfire.projects',
