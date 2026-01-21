@@ -10,8 +10,7 @@
       <div class="task-list-container">
         <f-unit-task-list
           *ngIf="unit"
-          [taskDefinitions]="unit.taskDefinitions"
-          [selectedTaskDefinition$]="selectedTaskDefinition$"
+          [unitTasks]="unit.taskDefinitions"
           mode="all-tasks"
         ></f-unit-task-list>
         <div *ngIf="!unit" class="no-unit-message">

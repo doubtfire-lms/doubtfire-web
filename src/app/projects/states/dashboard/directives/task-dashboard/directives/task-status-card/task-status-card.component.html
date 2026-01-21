@@ -55,7 +55,7 @@
     </button>
 
     @if (task?.canApplyForExtension()) {
-    <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
+      <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
     } @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
     <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
     }
@@ -73,4 +73,5 @@
     }
 
   </mat-card-actions>
+}
 </mat-card>

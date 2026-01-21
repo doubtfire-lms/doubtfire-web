@@ -8,6 +8,7 @@ import { GlobalStateService } from 'src/app/projects/states/index/global-state.s
 import { UIRouter } from '@uirouter/angular';
 import { UnitService } from 'src/app/api/models/doubtfire-model';
 import { ExtensionSummaryPayload } from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
+import { TasksViewerService } from '../tasks-viewer.service';
 
 @Component({
   selector: 'f-staff-grant-extension',
@@ -19,7 +20,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   @Input() unitRole?: UnitRole;
 
   selectedTaskDefinition: TaskDefinition | null = null;
-  selectedTaskDefinition$ = new BehaviorSubject<TaskDefinition | null>(null);
+  // selectedTaskDefinition$ = new BehaviorSubject<TaskDefinition | null>(null);
   isFormActive = false;
   unitId?: number;
   taskDefinitionId?: number;
@@ -33,37 +34,42 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   constructor(
     private globalState: GlobalStateService,
     private router: UIRouter,
-    private unitService: UnitService
-  ) { }
+    private unitService: UnitService,
+    private taskViewerService: TasksViewerService,
+  ) {}
 
   ngOnInit(): void {
     // Subscribe to task definition selection changes
-    this.selectedTaskDefinition$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(taskDef => {
-      this.selectedTaskDefinition = taskDef;
-      this.isFormActive = !!taskDef;
+    this.taskViewerService.selectedTaskDef
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(taskDef => {
+        this.selectedTaskDefinition = taskDef;
+        this.isFormActive = !!taskDef;
 
-      if (taskDef) {
-        this.taskDefinitionId = taskDef.id;
-        const saved = this.extensionSummaries.get(taskDef.id);
-        if (saved) {
-          this.extensionSummary = saved;
-          this.showSummary = true;
+        if (taskDef) {
+          this.taskDefinitionId = taskDef.id;
+          const saved = this.extensionSummaries.get(taskDef.id);
+          if (saved) {
+            this.extensionSummary = saved;
+            this.showSummary = true;
+          } else {
+            this.extensionSummary = null;
+            this.showSummary = false;
+          }
         } else {
           this.extensionSummary = null;
           this.showSummary = false;
         }
-      } else {
-        this.extensionSummary = null;
-        this.showSummary = false;
-      }
-    });
+      });
 
     // Get current unit from global state
     this.globalState.currentViewAndEntitySubject$.pipe(
       takeUntil(this.destroy$)
     ).subscribe(state => {
+console.log('STATE ENTITY:', state.entity);
+console.log('Is Unit?', state.entity instanceof Unit);
+console.log('Is UnitRole?', state.entity instanceof UnitRole);
+console.log('Constructor:', state.entity?.constructor?.name);
       if (state && state.entity) {
         let newUnit: Unit | undefined;
 
@@ -146,8 +152,8 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   // Handle task selection from <f-unit-task-list>
   onTaskSelected(task: TaskDefinition): void {
     this.selectedTaskDefinition = task;
-    this.selectedTaskDefinition$.next(task);
-    this.taskDefinitionId = task.id;
+    // this.selectedTaskDefinition$.next(task);
+    // this.taskDefinitionId = task.id;
   }
 
   // Helper: fetch unit and refresh taskDefinitions
@@ -169,7 +175,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
 
   private resetFormState(): void {
     this.selectedTaskDefinition = null;
-    this.selectedTaskDefinition$.next(null);
+    // this.selectedTaskDefinition$.next(null);
     this.taskDefinitionId = undefined;
     this.isFormActive = false;
 

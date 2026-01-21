@@ -311,7 +311,7 @@ const MY_DATE_FORMAT = {
     monthYearA11yLabel: 'MMMM yyyy',
   },
 };
-import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
+// import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {StaffGrantExtensionComponent} from './units/states/tasks/staff-grant-extension/staff-grant-extension.component';
 import {StaffGrantExtensionFormComponent} from './units/states/tasks/staff-grant-extension/grant-extension-form/grant-extension-form.component';
