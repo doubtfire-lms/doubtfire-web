@@ -23,6 +23,7 @@ import {GradeService} from 'src/app/common/services/grade.service';
 enum TutorDiscussionTabView {
   SHOW_COMMENTS,
   SHOW_STAFF_NOTES,
+  SHOW_DISCUSSION_PROMPTS,
 }
 @Component({
   selector: 'f-tutor-discussion',
@@ -88,6 +89,8 @@ export class TutorDiscussionComponent implements AfterViewInit {
       this.showComments();
     } else if (event.index === 1) {
       this.showStaffNotes();
+    } else if (event.index === 2) {
+      this.showDiscussionPrompts();
     }
   }
 
@@ -97,6 +100,10 @@ export class TutorDiscussionComponent implements AfterViewInit {
 
   public showStaffNotes() {
     this.footerTabView = TutorDiscussionTabView.SHOW_STAFF_NOTES;
+  }
+
+  public showDiscussionPrompts() {
+    this.footerTabView = TutorDiscussionTabView.SHOW_DISCUSSION_PROMPTS;
   }
 
   public ngAfterViewInit(): void {
@@ -345,6 +352,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
     'demonstrate',
     'ready_for_feedback',
     'discuss',
+    'attention_required',
     'need_help',
     // 'complete',
     'fix_and_resubmit',

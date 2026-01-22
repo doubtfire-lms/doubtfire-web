@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-70](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-69...v10.0.0-70) (2026-01-05)
+
+
+### Bug Fixes
+
+* skip query for unsaved task definition ([a6bdd22](https://github.com/b0ink/doubtfire-deploy/commit/a6bdd22ff864e72c679fae1844345963447fdf08))
+
+## [10.0.0-69](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-68...v10.0.0-69) (2026-01-05)
+
+
+### Features
+
+* attention required task status ([#1061](https://github.com/b0ink/doubtfire-deploy/issues/1061)) ([15365ed](https://github.com/b0ink/doubtfire-deploy/commit/15365ed4f42af790af9a9ae24dae42f041dff1df))
+* display number of stuff notes in tutor discussion ([2674d4e](https://github.com/b0ink/doubtfire-deploy/commit/2674d4e5ade26e5420b87518f4cd9da909ec7246))
+* overseer pipeline ([#1064](https://github.com/b0ink/doubtfire-deploy/issues/1064)) ([7cb8fc7](https://github.com/b0ink/doubtfire-deploy/commit/7cb8fc7471f0402c562fb8a0b87df672ceb22ea3))
+* project task planner gantt chart ([#1051](https://github.com/b0ink/doubtfire-deploy/issues/1051)) ([4f60792](https://github.com/b0ink/doubtfire-deploy/commit/4f607926e3ac305316a05607fda7f7bff7faec00))
+
+## [10.0.0-68](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-67...v10.0.0-68) (2025-12-08)
+
+
+### Bug Fixes
+
+* only trim if valid ([fbc63b0](https://github.com/b0ink/doubtfire-deploy/commit/fbc63b0308d87d921e1d74788e8da6031443e57e))
+
+## [10.0.0-67](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-66...v10.0.0-67) (2025-12-03)
+
+
+### Features
+
+* allow sidekiq web access ([#1053](https://github.com/b0ink/doubtfire-deploy/issues/1053)) ([6651279](https://github.com/b0ink/doubtfire-deploy/commit/6651279c49f431dbddf6fd5d810440ae7b3b9898))
+
+## [10.0.0-66](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-65...v10.0.0-66) (2025-12-03)
+
+
+### Features
+
+* discussion prompts ([#1042](https://github.com/b0ink/doubtfire-deploy/issues/1042)) ([730ffd0](https://github.com/b0ink/doubtfire-deploy/commit/730ffd0c3f79a5ad42c0c59c2f2c2a901ab0d702))
+
+
+### Bug Fixes
+
+* correctly set rollover end date ([0611be0](https://github.com/b0ink/doubtfire-deploy/commit/0611be04e8fe7e75ae07504945a2984839475e3a))
+
 ## [10.0.0-65](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-64...v10.0.0-65) (2025-11-25)
 
 

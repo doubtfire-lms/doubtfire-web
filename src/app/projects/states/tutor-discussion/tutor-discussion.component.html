@@ -79,7 +79,7 @@
         <mat-list-option
           [value]="task"
           class="clearfix w-full"
-          style="padding: 0; height: 60px"
+          style="padding: 0; min-height: 60px; height: min-content"
           togglePosition="before"
           [selected]="
             (task.status === 'discuss' || attendance) &&
@@ -103,12 +103,12 @@
                   }"
                 ></span>
                 <user-icon class="self-center" [user]="project?.student" [size]="30"> </user-icon>
-                <div class="truncate flex-1 mt-0" [hidden]="isNarrow">
-                  <h4 class="text-[15px] -mb-[2px] mt-[8px]">{{ task.definition.name }}</h4>
-                  <div class="truncate mb-0 text-[12px]">
+                <div class="flex-1 mt-0 whitespace-normal break-words" [hidden]="isNarrow">
+                  <h4 class="text-[15px] mb-[2px] mt-[8px]">{{ task.definition.name }}</h4>
+                  <span class="mb-0 text-[12px] inline">
                     {{ task.definition.abbreviation }} -
                     {{ getTargetTradeString(task.definition.targetGrade) }} Task
-                  </div>
+                  </span>
                 </div>
                 @if (task.hasGrade()) {
                   <div matTooltip="The grade assigned to the submission" matTooltipPosition="above">
@@ -119,9 +119,9 @@
                 }
                 <status-icon
                   [hidden]="isNarrow"
-                  matBadge="{{ task.qualityPts }}/{{ task.definition.maxQualityPts }}"
-                  [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts"
-                  matBadgePosition="before"
+                  matBadge="{{ task.status === 'attention_required' ? '!' : '' }}"
+                  matBadgePosition="after"
+                  matBadgeColor="warn"
                   [status]="task.status"
                   class="ml-3"
                 ></status-icon>
@@ -215,7 +215,11 @@
     <mat-tab-group dynamicHeight (selectedTabChange)="onTabChange($event)">
       <mat-tab label="Task Comments"></mat-tab>
 
-      <mat-tab [matTooltip]="project?.staffNoteCount" label="Staff Notes"></mat-tab>
+      <mat-tab
+        [matBadge]="project?.staffNoteCount"
+        label="Staff Notes{{ project?.staffNoteCount ? ' (' + project.staffNoteCount + ')' : '' }}"
+      ></mat-tab>
+      <mat-tab label="Discussion Prompts"></mat-tab>
     </mat-tab-group>
 
     @if (footerTabView === TutorDiscussionTabView.SHOW_COMMENTS) {
@@ -235,6 +239,8 @@
       </div>
     } @else if (footerTabView === TutorDiscussionTabView.SHOW_STAFF_NOTES) {
       <f-staff-notes class="min-h-[350px]" [project]="project"></f-staff-notes>
+    } @else if (footerTabView === TutorDiscussionTabView.SHOW_DISCUSSION_PROMPTS) {
+      <f-discussion-prompts class="min-h-[350px]" [project]="project"></f-discussion-prompts>
     }
   }
 </div>

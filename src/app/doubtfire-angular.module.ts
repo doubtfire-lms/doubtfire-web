@@ -43,8 +43,12 @@ import {UIRouterUpgradeModule} from '@uirouter/angular-hybrid';
 import {MatDialogModule as MatDialogModuleNew} from '@angular/material/dialog';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {AlertComponent} from 'src/app/common/services/alert.service';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 import {setTheme} from 'ngx-bootstrap/utils';
+
+import {CodeEditorModule} from '@ngstack/code-editor';
+import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 
 import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
 import {
@@ -295,9 +299,20 @@ import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/
 import {MarkingSessionService} from './api/services/marking-session.service';
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
 import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
-import {CodeEditorModule} from '@ngstack/code-editor';
 import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
 import {NotificationsButtonComponent} from './common/header/notifications-button/notifications-button.component';
+import {GANTT_GLOBAL_CONFIG, GanttLinkLineType, NgxGanttModule} from '@worktile/gantt';
+import {DiscussionPromptService} from './api/services/discussion-prompt.service';
+import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
+import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
+import {DiscussionPromptsViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/discussion-prompts-view/discussion-prompts-view.component';
+import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-planner.component';
+import {TaskPlannerPrerequisitesModalComponent} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.component';
+import {TaskPlannerPrerequisitesModalService} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
+import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
+import {OverseerStepService} from './api/services/overseer-step.service';
+import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
+import {OverseerStepResultService} from './api/services/overseer-step-result.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -316,6 +331,31 @@ import {provideAnimationsAsync} from '@angular/platform-browser/animations/async
 import {StaffGrantExtensionComponent} from './units/states/tasks/staff-grant-extension/staff-grant-extension.component';
 import {StaffGrantExtensionFormComponent} from './units/states/tasks/staff-grant-extension/grant-extension-form/grant-extension-form.component';
 import {StaffGrantExtensionSummaryComponent} from './units/states/tasks/staff-grant-extension/staff-grant-extension-summary/staff-grant-extension-summary.component';
+
+const GANTT_CHART_CONFIG = {
+  provide: GANTT_GLOBAL_CONFIG,
+  useValue: {
+    // locale: 'en-US',
+    dateFormat: {
+      // timeZone: 'UTC',
+      weekStartsOn: 1,
+      week: 'w',
+      year: 'yyyy',
+      month: 'MMMM',
+      yearMonth: 'yyyy MMM',
+      yearQuarter: 'yyyy',
+    },
+    linkOptions: {
+      showArrow: true,
+      lineType: GanttLinkLineType.curve,
+    },
+    styleOptions: {
+      // lineHeight: '25',
+      // barHeight: '23',
+      // headerHeight: '50px',
+    },
+  },
+};
 
 @NgModule({
   // Components we declare
@@ -462,6 +502,14 @@ import {StaffGrantExtensionSummaryComponent} from './units/states/tasks/staff-gr
     StaffGrantExtensionComponent,
     StaffGrantExtensionSummaryComponent,
     StaffTaskListComponent,
+    UploadGradesComponent,
+    DiscussionPromptsComponent,
+    TaskDefinitionDiscussionPromptsComponent,
+    DiscussionPromptsViewComponent,
+    TaskPlannerComponent,
+    TaskPlannerCardComponent,
+    TaskPlannerPrerequisitesModalComponent,
+    TaskOverseerReportComponent,
   ],
   providers: [
     // Services we provide
@@ -552,6 +600,11 @@ import {StaffGrantExtensionSummaryComponent} from './units/states/tasks/staff-gr
     TaskPrerequisiteService,
     MarkingSessionService,
     provideAnimationsAsync(),
+    DiscussionPromptService,
+    GANTT_CHART_CONFIG,
+    TaskPlannerPrerequisitesModalService,
+    OverseerStepService,
+    OverseerStepResultService,
   ],
   imports: [
     FlexLayoutModule,
@@ -616,6 +669,9 @@ import {StaffGrantExtensionSummaryComponent} from './units/states/tasks/staff-gr
     MatDialogModuleNew,
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
     CodeEditorModule.forRoot(),
+    NgxGanttModule,
+    MatSidenavModule,
+    MonacoEditorModule.forRoot(),
   ],
 })
 

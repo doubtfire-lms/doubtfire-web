@@ -537,4 +537,17 @@ export class Project extends Entity {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get<number[]>(this.tasksIncludedInPortfolioUrl());
   }
+
+  public resetTargetDates(): Observable<Project> {
+    const projectService: ProjectService = AppInjector.get(ProjectService);
+    return projectService.update(
+      {
+        projectId: this.id,
+      },
+      {
+        endpointFormat: '/projects/:projectId:/reset_target_dates',
+        entity: this,
+      },
+    );
+  }
 }

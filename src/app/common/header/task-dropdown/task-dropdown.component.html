@@ -63,13 +63,11 @@
         >
           <mat-icon aria-label="Dashboard icon" fontIcon="dashboard"></mat-icon> Dashboard
         </button>
-        @if (currentProject.unit.allowFlexibleDates) {
-          <mat-divider></mat-divider>
-          <button uiSref="project/plan" [uiParams]="{projectId: currentProject.id}" mat-menu-item>
-            <mat-icon aria-label="Plan icon" fontIcon="calendar_month"></mat-icon>
-            Plan Tasks
-          </button>
-        }
+        <mat-divider></mat-divider>
+        <button uiSref="project/plan" [uiParams]="{projectId: currentProject.id}" mat-menu-item>
+          <mat-icon aria-label="Plan icon" fontIcon="calendar_month"></mat-icon>
+          Task Planner
+        </button>
         <mat-divider></mat-divider>
         <button
           uiSref="projects/portfolio"
