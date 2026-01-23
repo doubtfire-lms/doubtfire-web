@@ -66,10 +66,6 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
     this.globalState.currentViewAndEntitySubject$.pipe(
       takeUntil(this.destroy$)
     ).subscribe(state => {
-console.log('STATE ENTITY:', state.entity);
-console.log('Is Unit?', state.entity instanceof Unit);
-console.log('Is UnitRole?', state.entity instanceof UnitRole);
-console.log('Constructor:', state.entity?.constructor?.name);
       if (state && state.entity) {
         let newUnit: Unit | undefined;
 
