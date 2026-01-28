@@ -109,7 +109,10 @@ import {
 } from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
-import {DateFnsAdapter, MAT_DATE_FNS_FORMATS} from '@angular/material-date-fns-adapter';
+import {
+  DateFnsAdapter,
+  //MAT_DATE_FNS_FORMATS (unused vars)
+} from '@angular/material-date-fns-adapter';
 import {enAU} from 'date-fns/locale';
 import {CalendarModule, DateAdapter as CalendarDateAdapter} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
@@ -296,7 +299,9 @@ import {MarkingSessionService} from './api/services/marking-session.service';
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
 import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
 import {CodeEditorModule} from '@ngstack/code-editor';
-import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
+//import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component'; (unused vars)
+import {CommonModule} from '@angular/common';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -604,6 +609,8 @@ const MY_DATE_FORMAT = {
     MatDialogModuleNew,
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
     CodeEditorModule.forRoot(),
+    CommonModule,
+    NgxChartsModule,
   ],
 })
 

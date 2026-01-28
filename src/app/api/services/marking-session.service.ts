@@ -33,7 +33,7 @@ export class MarkingSessionService extends CachedEntityService<MarkingSession> {
     );
   }
 
-  public createInstanceFrom(json: object, other?: Unit): MarkingSession {
+  public createInstanceFrom(_json: object, other?: Unit): MarkingSession {
     return new MarkingSession(other);
   }
 }
