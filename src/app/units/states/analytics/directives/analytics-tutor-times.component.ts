@@ -160,7 +160,7 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       iterDate.setDate(iterDate.getDate() + 1);
     }
 
-    this.filteredEvents.forEach((event) => {
+    this.filteredEvents.forEach((event: SessionEvent) => {
       const duration = event.duration;
 
       this.totalMinutes += duration;
