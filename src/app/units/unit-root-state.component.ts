@@ -4,6 +4,7 @@ import {Observable, Subscription} from 'rxjs';
 import {Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from '../app-injector';
 import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
+import {Ng2ViewDeclaration} from '@uirouter/angular';
 import {GlobalStateService, ViewType} from '../projects/states/index/global-state.service';
 import {StateService} from '@uirouter/core';
 import {AlertService} from '../common/services/alert.service';
@@ -26,19 +27,10 @@ export class UnitRootStateComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
-    // Subscribe to observables and store values
-    // This makes them available to both Angular template and AngularJS child states
+    // Subscribe to observables and store values for Angular template
     if (this.unit$) {
       const unitSub = this.unit$.subscribe((unit) => {
         this.unit = unit;
-        // Also set on window for AngularJS child state access
-        if ((window as any).angular) {
-          const $rootScope = (window as any).angular.element(document.body).injector()?.get('$rootScope');
-          if ($rootScope) {
-            $rootScope.unit = unit;
-            $rootScope.$applyAsync();
-          }
-        }
       });
       this.subscriptions.push(unitSub);
     }
@@ -46,14 +38,6 @@ export class UnitRootStateComponent implements OnInit, OnDestroy {
     if (this.unitRole$) {
       const roleSub = this.unitRole$.subscribe((unitRole) => {
         this.unitRole = unitRole;
-        // Also set on window for AngularJS child state access
-        if ((window as any).angular) {
-          const $rootScope = (window as any).angular.element(document.body).injector()?.get('$rootScope');
-          if ($rootScope) {
-            $rootScope.unitRole = unitRole;
-            $rootScope.$applyAsync();
-          }
-        }
       });
       this.subscriptions.push(roleSub);
     }
@@ -75,9 +59,23 @@ export const UnitRootState: NgHybridStateDeclaration = {
   },
   views: {
     main: {
-      component: UnitRootStateComponent,
-    },
+      controller: function($scope, unit$, unitRole$) {
+        // Set observables on $scope for template binding to Angular component
+        $scope.unit$ = unit$;
+        $scope.unitRole$ = unitRole$;
+
+        // Subscribe and set values on $scope for AngularJS child states
+        unit$.subscribe((unit) => {
+          $scope.unit = unit;
+        });
+        unitRole$.subscribe((unitRole) => {
+          $scope.unitRole = unitRole;
+        });
+      },
+      template: '<f-unit-root-state [unit$]="unit$" [unitRole$]="unitRole$"></f-unit-root-state>',
+    } as unknown as Ng2ViewDeclaration,
   },
+
   resolve: {
     unit$: function ($stateParams) {
       const unitService = AppInjector.get(UnitService);
