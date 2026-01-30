@@ -1,9 +1,4 @@
-import {
-  Component,
-  Input, //, OnInit  (unused vars)
-} from '@angular/core';
-//import {MatDatepickerInputEvent} from '@angular/material/datepicker'; (unused vars)
-//import {CalendarEvent} from 'angular-calendar'; (unused vars)
+import {Component, Input} from '@angular/core';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
