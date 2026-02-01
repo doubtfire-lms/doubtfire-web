@@ -113,7 +113,10 @@ import {
 } from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
-import {DateFnsAdapter, MAT_DATE_FNS_FORMATS} from '@angular/material-date-fns-adapter';
+import {
+  DateFnsAdapter,
+  //MAT_DATE_FNS_FORMATS (unused vars)
+} from '@angular/material-date-fns-adapter';
 import {enAU} from 'date-fns/locale';
 import {CalendarModule, DateAdapter as CalendarDateAdapter} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
@@ -289,8 +292,8 @@ import {LtiService} from './api/services/lti.service';
 import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
 import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
 import {TaskPrerequisiteService} from './api/services/task-prerequisite.service';
-// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
-// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
@@ -299,9 +302,6 @@ import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/
 import {MarkingSessionService} from './api/services/marking-session.service';
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
 import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
-import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
-import {GANTT_GLOBAL_CONFIG, GanttLinkLineType, NgxGanttModule} from '@worktile/gantt';
-import {DiscussionPromptService} from './api/services/discussion-prompt.service';
 import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
 import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
 import {DiscussionPromptsViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/discussion-prompts-view/discussion-prompts-view.component';
@@ -312,6 +312,9 @@ import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/p
 import {OverseerStepService} from './api/services/overseer-step.service';
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 import {OverseerStepResultService} from './api/services/overseer-step-result.service';
+// Feature Branch Imports
+import {CommonModule} from '@angular/common';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -657,9 +660,13 @@ const GANTT_CHART_CONFIG = {
     MatDialogModuleNew,
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
     CodeEditorModule.forRoot(),
+    // HEAD (Main Branch) additions:
     NgxGanttModule,
     MatSidenavModule,
     MonacoEditorModule.forRoot(),
+    // Feature Branch additions:
+    CommonModule,
+    NgxChartsModule,
   ],
 })
 

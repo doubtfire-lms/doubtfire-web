@@ -48,6 +48,13 @@ export class AnalyticsTutorTimesComponent implements OnInit {
   events: SessionEvent[] = [];
   filteredEvents = [];
 
+  // hold data for new cards and chart
+  totalMinutes: number = 0;
+  totalAssessments: number = 0;
+  avgMinPerAssessments: number = 0;
+  totalSubmissionsOpened: number = 0;
+  weekChartData: {name: string; series: {name: string; value: number}[]}[] = [];
+
   tutorTimeSummaryStartDate: Date;
   tutorTimeSummaryEndDate: Date;
   daysInWeek: number = 7;
@@ -126,9 +133,64 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       (e) =>
         (this.selectedUserId === null || e.userId === this.selectedUserId) &&
         (!this.hideSessionsDuringTutorials || !e.duringTutorial) &&
-        e.duration >= 1,
+        e.duration >= 0,
     );
+
+    // recalcuate stats when filter sekection changes
+    this.calculateAnalytics();
   }
+
+  calculateAnalytics() {
+    this.totalMinutes = 0;
+    this.totalAssessments = 0;
+    this.totalSubmissionsOpened = 0;
+
+    const groupedMap = new Map<string, {time: number; count: number}>();
+    const iterDate = new Date(this.tutorTimeSummaryStartDate);
+    const endDate = new Date(this.tutorTimeSummaryEndDate);
+
+    // Normalize to midnight
+    iterDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+
+    // Loop through the date range to create "buckets"
+    while (iterDate <= endDate) {
+      const label = iterDate.toLocaleDateString('en-AU', {weekday: 'short', day: 'numeric'});
+      groupedMap.set(label, {time: 0, count: 0});
+      iterDate.setDate(iterDate.getDate() + 1);
+    }
+
+    this.filteredEvents.forEach((event: SessionEvent) => {
+      const duration = event.duration;
+
+      this.totalMinutes += duration;
+      this.totalAssessments += event.assessments || 0;
+      this.totalSubmissionsOpened += event.submissionsOpened || 0;
+
+      const label = event.start.toLocaleDateString('en-AU', {weekday: 'short', day: 'numeric'});
+
+      if (groupedMap.has(label)) {
+        const currentVal = groupedMap.get(label)!;
+        currentVal.time += duration;
+        currentVal.count += event.assessments || 0;
+      }
+    });
+
+    this.avgMinPerAssessments =
+      this.totalAssessments > 0 ? this.totalMinutes / this.totalAssessments : 0;
+
+    this.weekChartData = Array.from(groupedMap, ([name, data]) => ({
+      name,
+      series: [
+        {name: 'Time (hrs)', value: data.time / 60},
+        {name: 'Assessments', value: data.count},
+      ],
+    }));
+  }
+
+  public formatDataLabel = (value: number): string => {
+    return value === 0 ? '' : value.toString();
+  };
 
   onDateChange(_event: MatDatepickerInputEvent<Date>) {
     if (!this.tutorTimeSummaryStartDate || !this.tutorTimeSummaryEndDate) {

@@ -31,11 +31,9 @@
 
   <div class="flex flex-col items-center justify-center">
     <div class="flex flex-row gap-2 mb-5">
-      <button mat-raised-button color="primary" (click)="goPreviousWeek()" class="w-40">
-        Previous
-      </button>
-      <button mat-raised-button (click)="goTodayWeek()">Today</button>
-      <button mat-raised-button color="primary" (click)="goNextWeek()" class="w-40">Next</button>
+      <button mat-raised-button (click)="goPreviousWeek()" class="w-40">Previous</button>
+      <button mat-raised-button color="primary" (click)="goTodayWeek()">Today</button>
+      <button mat-raised-button (click)="goNextWeek()" class="w-40">Next</button>
     </div>
     <div class="flex flex-row gap-2 mb-5">
       <mat-form-field appearance="outline">
@@ -46,7 +44,7 @@
           [(ngModel)]="tutorTimeSummaryStartDate"
           (dateChange)="onDateChange($event)"
         />
-        <mat-hint>Sessions from this day onward</mat-hint>
+        <mat-hint>Sessions from</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
         <mat-datepicker #startdatepicker></mat-datepicker>
       </mat-form-field>
@@ -59,7 +57,7 @@
           [(ngModel)]="tutorTimeSummaryEndDate"
           (dateChange)="onDateChange($event)"
         />
-        <mat-hint>Sessions up to this day</mat-hint>
+        <mat-hint>Sessions up until</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
         <mat-datepicker #enddatepicker></mat-datepicker>
       </mat-form-field>
@@ -71,6 +69,36 @@
         (toggleChange)="onToggleChangeHideSessionsDuringTutorial()"
         >Hide sessions during tutorials</mat-slide-toggle
       >
+    </div>
+
+    <div class="w-full grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 mt-4">
+      <div class="bg-gray-50 border rounded p-4 text-center">
+        <h3 class="text-3xl font-bold text-primary mb-0">
+          {{ totalMinutes / 60 | number: '1.2-2' }} hrs
+        </h3>
+        <div class="text-sm text-gray-500 uppercase tracking-wide">Total Time</div>
+      </div>
+
+      <div class="bg-gray-50 border rounded p-4 text-center">
+        <h3 class="text-3xl font-bold text-primary mb-0">
+          {{ totalAssessments }}
+        </h3>
+        <div class="text-sm text-gray-500 uppercase tracking-wide">Assessements made</div>
+      </div>
+
+      <div class="bg-gray-50 border rounded p-4 text-center">
+        <h3 class="text-3xl font-bold text-primary mb-0">
+          {{ avgMinPerAssessments | number: '1.0-1' }}
+        </h3>
+        <div class="text-sm text-gray-500 uppercase tracking-wide">Min per Assessment</div>
+      </div>
+
+      <div class="bg-gray-50 border rounded p-4 text-center">
+        <h3 class="text-3xl font-bold text-primary mb-0">
+          {{ totalSubmissionsOpened | number: '1.0-1' }}
+        </h3>
+        <div class="text-sm text-gray-500 uppercase tracking-wide">Submissions Viewed</div>
+      </div>
     </div>
   </div>
 
@@ -110,5 +138,33 @@
       [daysInWeek]="daysInWeek"
       (beforeViewRender)="beforeViewRender($event)"
     />
+  </div>
+
+  <div class="mt-8 border-t pt-6">
+    <h3 class="text-lg font-medium mb-4 ml-2">Marking Trend</h3>
+    <div style="height: 300px" class="w-full">
+      <ngx-charts-bar-vertical-2d
+        [results]="weekChartData"
+        [xAxis]="true"
+        [yAxis]="true"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        xAxisLabel="Day"
+        yAxisLabel="Assessments & Time Spent (hrs)"
+        [roundEdges]="false"
+        [showDataLabel]="true"
+        [groupPadding]="10"
+        [barPadding]="4"
+        [dataLabelFormatting]="formatDataLabel"
+      >
+      </ngx-charts-bar-vertical-2d>
+
+      <div
+        *ngIf="weekChartData.length === 0"
+        class="flex justify-center items-center h-full text-gray-400"
+      >
+        No marking sessions recorded for this week.
+      </div>
+    </div>
   </div>
 </mat-card>
