@@ -26,5 +26,8 @@ angular.module('doubtfire.units.states.tasks.moderation', [
   $scope.showSearchOptions = false
   $scope.filters = {
     tutorialIdSelected: 'all'
+    taskDefinition: null
+    taskDefinitionIdSelected: null
   }
+  $scope.taskData.taskDefMode = false
 )
