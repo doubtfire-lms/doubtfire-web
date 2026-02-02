@@ -107,7 +107,7 @@
 
         <mat-divider [vertical]="true"></mat-divider>
 
-        <div class="w-[120px] flex justify-start">
+        <div class="flex justify-start">
           <button
             [disabled]="selectedTask === undefined"
             mat-icon-button
@@ -123,7 +123,9 @@
       </span>
 
       @if (viewType === 'moderation' && selectedTask) {
+        <mat-divider class="ml-10" [vertical]="true"></mat-divider>
         <f-moderation [task]="selectedTask"></f-moderation>
+        <mat-divider class="mr-10" [vertical]="true"></mat-divider>
       }
     </div>
 
