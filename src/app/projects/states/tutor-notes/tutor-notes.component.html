@@ -77,10 +77,11 @@
               >
             }
             @if (note.project) {
-              <!-- TODO: you should be able to click this chip to view the project and task definition -->
               <mat-chip
                 chipListSelectable
                 class="w-fit cursor-pointer"
+                matTooltip="Click to view student"
+                matTooltipPosition="above"
                 (click)="openProject($event, note)"
                 >{{ note.project?.student.name }}</mat-chip
               >
