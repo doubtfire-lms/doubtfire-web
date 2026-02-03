@@ -12,15 +12,15 @@ export class UnitRole extends Entity {
   user: User;
   unit: Unit;
   observerOnly: boolean;
-  // mentor: UnitRole;
   mentorId: number;
   tutorNoteCount: number;
-
-  public readonly tutorNotesCache: EntityCache<TutorNote> = new EntityCache<TutorNote>();
 
   public get mentor(): UnitRole {
     return this.unit?.staff.find((ur) => ur.id === this.mentorId);
   }
+
+  public readonly tutorNotesCache: EntityCache<TutorNote> = new EntityCache<TutorNote>();
+
   /**
    * The id for updated roles - but we need to move away from this to the role string...
    * @deprecated

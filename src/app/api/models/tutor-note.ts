@@ -1,14 +1,12 @@
 import {Entity} from 'ngx-entity-service';
-import {Project, Unit, User, UserService, Task, UnitRole, TaskDefinition} from './doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {StaffNoteService} from '../services/staff-note.service';
 import {TutorNoteService} from '../services/tutor-note.service';
+import {Project, Task, TaskDefinition, UnitRole, User, UserService} from './doubtfire-model';
 
 export class TutorNote extends Entity {
   id: number;
 
-  // project: Project;
   unitRole: UnitRole;
   task?: Task;
   taskDefinition?: TaskDefinition;
@@ -27,7 +25,7 @@ export class TutorNote extends Entity {
     if (data) {
       this.unitRole = data;
     } else {
-      console.error('Failed to get project');
+      console.error('Failed to get unit role');
     }
   }
 
@@ -46,10 +44,8 @@ export class TutorNote extends Entity {
     tutorNoteService
       .delete({unitRoleId: this.unitRole.id, id: this.id}, {cache: this.unitRole.tutorNotesCache})
       .subscribe({
-        next: (response: object) => {
+        next: () => {
           AppInjector.get(AlertService).error('Successfully deleted tutor note', 4000);
-          // this.project.staffNoteCount--;
-          // staffNoteService.updateStaffNoteReplies(this.project.staffNoteCache.currentValues);
         },
         error: (error) => {
           AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);

@@ -8,8 +8,6 @@ import {TutorNote} from '../models/tutor-note';
 
 @Injectable()
 export class TutorNoteService extends CachedEntityService<TutorNote> {
-  // public readonly staffNoteAdded$: EventEmitter<StaffNote> = new EventEmitter();
-
   protected readonly endpointFormat = 'unit_roles/:unitRoleId:/tutor_notes/:id:';
   protected readonly markAsReadEndpointFormat =
     'unit_roles/:unitRoleId:/tutor_notes/:id:/mark_as_read';
@@ -29,16 +27,15 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
       'replyToId',
       {
         keys: ['user', 'user_id'],
-        toEntityFn: (data: object, key: string, tutorNote: TutorNote) => {
+        toEntityFn: (data: object, _key: string, tutorNote: TutorNote) => {
           const userRole = tutorNote.unitRole.unit.staff.find((s) => s.user.id === data['user_id']);
-          // const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
           // If the user is not a staff in the unit it will be null
           return userRole?.user;
         },
       },
       {
         keys: ['taskDefinition', 'task_definition_id'],
-        toEntityFn: (data: object, key: string, tutorNote: TutorNote) => {
+        toEntityFn: (data: object, _key: string, tutorNote: TutorNote) => {
           const taskDefinition = tutorNote.unitRole.unit.taskDefinitions.find(
             (td) => td.id === data['task_definition_id'],
           );
@@ -58,7 +55,7 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
     this.mapping.addJsonKey('note', 'createdAt', 'updatedAt');
   }
 
-  public createInstanceFrom(json: object, other?: UnitRole): TutorNote {
+  public createInstanceFrom(_json: object, other?: UnitRole): TutorNote {
     return new TutorNote(other);
   }
 
@@ -88,11 +85,7 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
     opts.body = body;
     opts.constructorParams = unitRole;
 
-    return this.create(pathId, opts).pipe(
-      tap((note: TutorNote) => {
-        // this.staffNoteAdded$.emit(note);
-      }),
-    );
+    return this.create(pathId, opts);
   }
 
   public updateTutorNoteReplies(tutorNotes: readonly TutorNote[]) {
