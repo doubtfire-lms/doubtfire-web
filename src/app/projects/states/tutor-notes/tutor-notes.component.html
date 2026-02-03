@@ -4,8 +4,8 @@
       No staff notes for {{ project.student.preferredName }} {{ project.student.lastName }}
     </div>
   } -->
-  <div #staffNotesContainer class="flex-1 overflow-auto p-4">
-    @if (!loadingStaffNotes) {
+  <div #tutorNotesContainer class="flex-1 overflow-auto p-4">
+    @if (!loadingTutorNotes) {
       @for (note of filteredNotes; track note) {
         @if (note.replyToId) {
           <div
@@ -93,8 +93,8 @@
               <mat-form-field appearance="outline" class="flex items-center w-full">
                 <mat-label>Update Note</mat-label>
                 <textarea
-                  (input)="autoResizeStaffNoteEditor()"
-                  #staffNoteEditor
+                  (input)="autoResizeTutorNoteEditor()"
+                  #tutorNoteEditor
                   matInput
                   [(ngModel)]="editingNoteText"
                   class="resize-none w-full px-2 py-1 placeholder:px-2 placeholder:py-1 overflow-hidden"

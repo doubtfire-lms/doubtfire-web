@@ -11,13 +11,13 @@ import {AlertService} from 'src/app/common/services/alert.service';
   styleUrl: './tutor-notes.component.scss',
 })
 export class TutorNotesComponent implements OnInit {
-  @ViewChild('staffNotesContainer') staffNotesContainer!: ElementRef;
-  @ViewChild('staffNoteEditor', {static: false}) staffNoteEditor!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('tutorNotesContainer') tutorNotesContainer!: ElementRef;
+  @ViewChild('tutorNoteEditor', {static: false}) tutorNoteEditor!: ElementRef<HTMLTextAreaElement>;
 
   @Input() unitRole: UnitRole;
   @Input() task: Task;
 
-  loadingStaffNotes: boolean = true;
+  loadingTutorNotes: boolean = true;
 
   noteText: string = '';
 
@@ -39,9 +39,9 @@ export class TutorNotesComponent implements OnInit {
       this.unitRole = this.task.tutor;
     }
 
-    this.loadingStaffNotes = true;
+    this.loadingTutorNotes = true;
     this.tutorNoteService.loadTutorNotes(this.unitRole).subscribe((notes) => {
-      this.loadingStaffNotes = false;
+      this.loadingTutorNotes = false;
       this.tutorNoteService.updateTutorNoteReplies(this.unitRole?.tutorNotesCache.currentValues);
       this.scrollDown();
     });
@@ -56,7 +56,7 @@ export class TutorNotesComponent implements OnInit {
 
   scrollDown() {
     setTimeout(() => {
-      const el = this.staffNotesContainer.nativeElement;
+      const el = this.tutorNotesContainer.nativeElement;
       el.scrollTop = el.scrollHeight;
     }, 50);
   }
@@ -72,14 +72,9 @@ export class TutorNotesComponent implements OnInit {
     this.tutorNoteService
       .addNote(this.unitRole, noteText, this.task, this.replyingToNote)
       .subscribe({
-        next: (note) => {
+        next: (_note) => {
           this.alertService.success('Succesfully submitted note', 4000);
           this.scrollDown();
-          // TODO: maybe we do export a tutorNoteCount? but then we dont know for which tasks they are for
-          // TODO: itll only be helpful in the header notifications icon...
-          // TODO: otherwise, we could just load all the notes for a mentors mentee when loading the audt page?
-
-          // this.project.staffNoteCount++;
           this.replyingToNote = null;
           this.tutorNoteService.updateTutorNoteReplies(
             this.unitRole?.tutorNotesCache.currentValues,
@@ -99,7 +94,7 @@ export class TutorNotesComponent implements OnInit {
     }
 
     this.tutorNoteService.updateNote(this.unitRole, this.editingNote, noteText).subscribe({
-      next: (note) => {
+      next: (_note) => {
         this.alertService.success('Succesfully updated note', 4000);
         this.editingNote = null;
         this.editingNoteText = '';
@@ -150,8 +145,8 @@ export class TutorNotesComponent implements OnInit {
     this.editingNote = note;
     this.editingNoteText = note.note;
     setTimeout(() => {
-      this.autoResizeStaffNoteEditor();
-      this.staffNoteEditor?.nativeElement.focus();
+      this.autoResizeTutorNoteEditor();
+      this.tutorNoteEditor?.nativeElement.focus();
     });
   }
 
@@ -160,8 +155,8 @@ export class TutorNotesComponent implements OnInit {
     this.editingNoteText = '';
   }
 
-  public autoResizeStaffNoteEditor() {
-    const el = this.staffNoteEditor.nativeElement;
+  public autoResizeTutorNoteEditor() {
+    const el = this.tutorNoteEditor.nativeElement;
     el.style.height = 'auto';
     el.offsetHeight;
     el.style.height = el.scrollHeight + 'px';
