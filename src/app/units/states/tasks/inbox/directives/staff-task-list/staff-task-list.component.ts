@@ -71,8 +71,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() isNarrow: boolean;
 
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
+
   userHasTutorials: boolean;
-  filteredTasks: any[] = null;
+  filteredTasks: Task[] = null;
 
   studentFilter: {
     id: number | string;
@@ -82,7 +84,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     tutorial?: Tutorial;
   }[] = null;
 
-  tasks: any[] = null;
+  tasks: Task[] = null;
 
   // hasJplagReport: boolean = false;
 
