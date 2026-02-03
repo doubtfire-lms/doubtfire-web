@@ -169,7 +169,7 @@
               mat-icon-button
               matTooltipPosition="above"
               class="button small-button"
-              [disabled]="!markingTutor(selectedTask)"
+              [disabled]="!selectedTask.tutor"
               (click)="viewTutorNotes()"
             >
               <mat-icon class="small-icon">local_library</mat-icon>
