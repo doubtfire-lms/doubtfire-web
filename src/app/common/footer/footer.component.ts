@@ -53,25 +53,9 @@ export class FooterComponent implements OnInit {
       (this.warningText?.nativeElement.getBoundingClientRect().width + totalPaddingOffset) / 2;
   }
 
-  public markingTutor(task: Task): UnitRole {
-    const enrolments = task.project.tutorialEnrolmentsCache.currentValues.filter(
-      (t) => t.tutorialStream.abbreviation === task.definition.tutorialStream.abbreviation,
-    );
-    // TODO: is checking for just the one tutorial enrolment correct? should be..
-    if (enrolments.length === 1) {
-      const user = enrolments[0].tutor;
-      return task.unit.staff.find((ur) => ur.user.id === user.id);
-    }
-    return null;
-  }
-
   public canAccessTutorNotes(task: Task): boolean {
-    // TODO: if the access is truthy because current user == marking tutor
-    // TODO: we should only reveal the icon if a note has been left by their mentor
-
-    const tutor = this.markingTutor(task);
+    const tutor = task.tutor;
     if (!tutor) {
-      console.log('tutor invalid!');
       return false;
     }
 
@@ -95,7 +79,6 @@ export class FooterComponent implements OnInit {
   }
 
   public viewTutorNotes() {
-    console.log(`viewing tutor notes for `, this.markingTutor(this.selectedTask));
     this.selectedTaskService.showTutorNotes();
   }
 
