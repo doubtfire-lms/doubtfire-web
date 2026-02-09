@@ -1016,4 +1016,13 @@ export class Task extends Entity {
       },
     );
   }
+
+  public requestFeedbackReview(): Observable<boolean> {
+    const httpClient: HttpClient = AppInjector.get(HttpClient);
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${
+      this.project.id
+    }/task_def_id/${this.definition.id}/feedback_review`;
+
+    return httpClient.post<boolean>(url, {});
+  }
 }

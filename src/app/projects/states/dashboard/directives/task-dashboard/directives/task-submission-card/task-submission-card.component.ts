@@ -74,6 +74,19 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
     });
   }
 
+  escalateFeedback(): void {
+    // TODO: Open a modal
+    this.task.requestFeedbackReview().subscribe({
+      next: (response) => {
+        console.log(response);
+        this.alerts.success(`Requested feedback review for this task!`, 3000);
+      },
+      error: (error) => {
+        this.alerts.error(`An error occurred: ${error}`, 3000);
+      },
+    });
+  }
+
   downloadSubmission(): void {
     this.fileDownloader.downloadFile(this.urls.pdf, `${this.task.definition.abbreviation}.pdf`);
   }

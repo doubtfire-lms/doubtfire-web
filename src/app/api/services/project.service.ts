@@ -207,6 +207,7 @@ export class ProjectService extends CachedEntityService<Project> {
           });
         },
       },
+      'escalationAttemptsRemaining',
     );
 
     this.mapping.addJsonKey(
