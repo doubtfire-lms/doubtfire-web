@@ -98,6 +98,7 @@ export class TaskService extends CachedEntityService<Task> {
           });
         },
       },
+      'moderationType',
     );
 
     this.mapping.addJsonKey('qualityPts', 'grade', 'includeInPortfolio', 'trigger');

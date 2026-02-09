@@ -46,6 +46,8 @@ export class Task extends Entity {
   numNewComments: number = 0;
   hasExtensions: boolean;
 
+  moderationType: 'random_sample' | 'escalation' | 'first_feedback';
+
   project: Project;
   definition: TaskDefinition;
 
