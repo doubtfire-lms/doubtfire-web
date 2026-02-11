@@ -17,7 +17,7 @@ export class JplagReportViewerComponent {
     this.jplagIframe.nativeElement.src = `/JPlag/?file=${encodeURIComponent(blobUrl)}`;
   }
 
-  public openComparison(first: string, second: string) {
+  public openComparison(firstSubmissionId: string, secondSubmissionId: string) {
     const iframe = this.jplagIframe.nativeElement;
 
     const tryClick = () => {
@@ -25,8 +25,10 @@ export class JplagReportViewerComponent {
       if (!doc) return false;
 
       const el =
-        doc.querySelector(`a[href="/JPlag/comparison/${first}/${second}"]`) ||
-        doc.querySelector(`a[href="/JPlag/comparison/${second}/${first}"]`);
+        doc.querySelector(
+          `a[href="/JPlag/comparison/${firstSubmissionId}/${secondSubmissionId}"]`,
+        ) ||
+        doc.querySelector(`a[href="/JPlag/comparison/${secondSubmissionId}/${firstSubmissionId}"]`);
 
       if (el) {
         (el as HTMLElement).click();
