@@ -9,6 +9,8 @@ export class TaskPrerequisiteService extends CachedEntityService<TaskPrerequisit
   protected readonly endpointFormat =
     'units/:unitId:/task_definitions/:taskDefId:/prerequisites/:prerequisiteId:';
 
+  protected readonly unitEndpointFormat = 'units/:unitId:/task_prerequisites';
+
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
 
@@ -20,5 +22,16 @@ export class TaskPrerequisiteService extends CachedEntityService<TaskPrerequisit
 
   public override createInstanceFrom(json: object, other?: any): TaskPrerequisite {
     return new TaskPrerequisite(json);
+  }
+
+  public getUnitPrerequisites(unitId: number) {
+    return this.fetchAll(
+      {
+        unitId: unitId,
+      },
+      {
+        endpointFormat: this.unitEndpointFormat,
+      },
+    );
   }
 }

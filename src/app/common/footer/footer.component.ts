@@ -99,8 +99,12 @@ export class FooterComponent implements OnInit {
     this.selectedTaskService.showSimilarity();
   }
 
+  // viewOverseer() {
+  //   this.taskAssessmentModal.show(this.selectedTask);
+  // }
+
   viewOverseer() {
-    this.taskAssessmentModal.show(this.selectedTask);
+    this.selectedTaskService.showOverseerReports();
   }
 
   viewStaffNotes() {

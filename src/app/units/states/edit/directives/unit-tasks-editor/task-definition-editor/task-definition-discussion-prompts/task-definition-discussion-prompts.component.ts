@@ -80,12 +80,15 @@ export class TaskDefinitionDiscussionPromptsComponent
 
   private fetchDiscussionPrompts() {
     const taskDefinition = this.taskDefinition;
+    if (!taskDefinition.id) {
+      return;
+    }
     this.discussionPromptService.loadDiscussionPrompts(null, taskDefinition).subscribe({
       next: (data) => {
         this.dataSource.data = data;
       },
       error: (error) => {
-        this.alertService.error(`Failed to load discussion promnpts: ${error}`);
+        this.alertService.error(`Failed to load discussion prompts: ${error}`, 6000);
       },
     });
   }

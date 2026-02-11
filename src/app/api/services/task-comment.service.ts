@@ -120,6 +120,11 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
 
       // Scorm Extension Comments
       ['taskScormExtensions', 'scorm_extensions'],
+      'overseerAssessmentId',
+      'overseerPassedSteps',
+      'overseerTotalSteps',
+      'overseerInProgress',
+      'overseerStatus',
     );
 
     this.mapping.addJsonKey('granted');

@@ -15,6 +15,7 @@ import {TaskPrerequisiteService} from './task-prerequisite.service';
 import {TaskPrerequisite} from '../models/task-prerequisite';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SidekiqJob} from '../models/sidekiq-job';
+import {OverseerStepService} from './overseer-step.service';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -24,6 +25,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     httpClient: HttpClient,
     private learningOutcomeService: LearningOutcomeService,
     private taskPrerequisiteService: TaskPrerequisiteService,
+    private overseerStepService: OverseerStepService,
   ) {
     super(httpClient, API_URL);
 
@@ -140,6 +142,22 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       },
       'useResourcesForJplagBaseCode',
       'lockAssessmentsToTutorialStream',
+      {
+        keys: 'overseerSteps',
+        toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
+          data[key]?.forEach((overseerStep) => {
+            taskDefinition.overseerStepsCache.getOrCreate(
+              overseerStep['id'],
+              this.overseerStepService,
+              overseerStep,
+              {
+                constructorParams: taskDefinition,
+              },
+            );
+          });
+        },
+      },
+      'overseerResourceFiles',
     );
 
     this.mapping.mapAllKeysToJsonExcept(

@@ -85,9 +85,15 @@ $task-status-colors: (
     fore: $task-status-foreground-color-light,
   ),
   assess-in-portfolio: (
-    base: #91b891,
-    dark: darken(#91b891, 15%),
-    light: lighten(#91b891, 15%),
+    base: #f2d85c,
+    dark: darken(#f2d85c, 15%),
+    light: lighten(#f2d85c, 15%),
+    fore: $task-status-foreground-color-dark,
+  ),
+  attention-required: (
+    base: #f1814d,
+    dark: darken(#f1814d, 15%),
+    light: lighten(#f1814d, 15%),
     fore: $task-status-foreground-color-light,
   ),
 );

@@ -9,6 +9,7 @@ import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from '.
 import {Task} from './doubtfire-model';
 import {TaskPrerequisite} from './task-prerequisite';
 import {DiscussionPrompt} from './discussion-prompt';
+import {OverseerStep} from './overseer/overseer-step';
 
 export type UploadRequirement = {
   key: string;
@@ -59,6 +60,7 @@ export class TaskDefinition extends Entity {
   useResourcesForJplagBaseCode: boolean;
   lockAssessmentsToTutorialStream: boolean;
   discussionPromptsCount: number;
+  overseerResourceFiles: string[] = [];
 
   public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
     new EntityCache<TaskPrerequisite>();
@@ -68,6 +70,8 @@ export class TaskDefinition extends Entity {
 
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
+
+  public readonly overseerStepsCache: EntityCache<OverseerStep> = new EntityCache<OverseerStep>();
 
   readonly unit: Unit;
 
