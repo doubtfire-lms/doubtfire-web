@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0-71](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-70...v10.0.0-71) (2026-02-11)
+
+
+### Features
+
+* download staff notes csv ([#1062](https://github.com/b0ink/doubtfire-deploy/issues/1062)) ([6dcfe95](https://github.com/b0ink/doubtfire-deploy/commit/6dcfe952f0415fb1327b738137f817a0fcfa0488))
+* migrate to jplag report viewer v6.3.0 ([#1082](https://github.com/b0ink/doubtfire-deploy/issues/1082)) ([697588b](https://github.com/b0ink/doubtfire-deploy/commit/697588b98e28ec663f4982c49f18fe8109ba7c34))
+
 ## [10.0.0-70](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-69...v10.0.0-70) (2026-01-05)
 
 
