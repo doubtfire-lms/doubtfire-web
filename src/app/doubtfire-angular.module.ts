@@ -497,11 +497,14 @@ const GANTT_CHART_CONFIG = {
     DiscussionPromptsComponent,
     TaskDefinitionDiscussionPromptsComponent,
     DiscussionPromptsViewComponent,
+    TaskPlannerComponent,
     DownloadStaffNotesComponent,
     TaskPlannerCardComponent,
+    TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
   ],
   providers: [
+    // Services we provide
     AlertService,
     MarkedPipe,
     CampusService,
