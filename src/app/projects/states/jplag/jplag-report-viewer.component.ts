@@ -1,4 +1,5 @@
 import {Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'f-jplag-report-viewer',
@@ -9,21 +10,48 @@ export class JplagReportViewerComponent {
 
   @Input() hidden: boolean = false;
 
+  constructor(private alertService: AlertService) {}
+
   public uploadReport(file: Blob) {
-    // Send the JPlag report to load
-    this.jplagIframe.nativeElement.contentWindow?.postMessage({
-      type: 'upload-jplag-report',
-      file: file,
-      name: 'report.jplag',
-    });
+    const blobUrl = URL.createObjectURL(file);
+    this.jplagIframe.nativeElement.src = `/JPlag/?file=${encodeURIComponent(blobUrl)}`;
   }
 
   public openComparison(firstSubmissionId: string, secondSubmissionId: string) {
-    // Open comparisons between these two submissions (student usernames)
-    this.jplagIframe.nativeElement.contentWindow?.postMessage({
-      type: 'open-comparison',
-      firstSubmissionId,
-      secondSubmissionId,
-    });
+    const iframe = this.jplagIframe.nativeElement;
+
+    const tryClick = () => {
+      const doc = iframe.contentDocument;
+      if (!doc) return false;
+
+      const el =
+        doc.querySelector(
+          `a[href="/JPlag/comparison/${firstSubmissionId}/${secondSubmissionId}"]`,
+        ) ||
+        doc.querySelector(`a[href="/JPlag/comparison/${secondSubmissionId}/${firstSubmissionId}"]`);
+
+      if (el) {
+        (el as HTMLElement).click();
+        return true;
+      }
+
+      return false;
+    };
+
+    // Attempt to find the Vue component for 5 seconds
+    let elapsed = 0;
+    const interval = setInterval(() => {
+      if (tryClick()) {
+        clearInterval(interval);
+        return;
+      }
+
+      elapsed += 50;
+
+      if (elapsed >= 5000) {
+        clearInterval(interval);
+        this.alertService.error('Could not open JPlag comparison.', 6000);
+      }
+    }, 50);
   }
 }
