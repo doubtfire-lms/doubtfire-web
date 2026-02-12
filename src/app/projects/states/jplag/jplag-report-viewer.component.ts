@@ -20,34 +20,51 @@ export class JplagReportViewerComponent {
   public openComparison(firstSubmissionId: string, secondSubmissionId: string) {
     const iframe = this.jplagIframe.nativeElement;
 
-    const tryClick = () => {
-      const doc = iframe.contentDocument;
-      if (!doc) return false;
-
-      const el =
+    const findLink = (doc: Document) =>
+      (doc.querySelector(
+        `a[href="/JPlag/comparison/${firstSubmissionId}/${secondSubmissionId}"]`,
+      ) ||
         doc.querySelector(
-          `a[href="/JPlag/comparison/${firstSubmissionId}/${secondSubmissionId}"]`,
-        ) ||
-        doc.querySelector(`a[href="/JPlag/comparison/${secondSubmissionId}/${firstSubmissionId}"]`);
+          `a[href="/JPlag/comparison/${secondSubmissionId}/${firstSubmissionId}"]`,
+        )) as HTMLElement | null;
 
-      if (el) {
-        (el as HTMLElement).click();
-        return true;
+    // If the Vue component isn't rendered yet, try to scroll down the window until we find it
+    const getScroller = (doc: Document) => {
+      const wrapper = doc.querySelector(
+        '.vue-recycle-scroller__item-wrapper',
+      ) as HTMLElement | null;
+      if (!wrapper) return null;
+
+      let cur = wrapper.parentElement as HTMLElement | null;
+      while (cur) {
+        const overflowY = getComputedStyle(cur).overflowY;
+        if (
+          (overflowY === 'auto' || overflowY === 'scroll') &&
+          cur.scrollHeight > cur.clientHeight
+        ) {
+          return cur;
+        }
+        cur = cur.parentElement;
       }
 
-      return false;
+      return doc.scrollingElement as HTMLElement | null;
     };
 
-    // Attempt to find the Vue component for 5 seconds
     let elapsed = 0;
     const interval = setInterval(() => {
-      if (tryClick()) {
+      const doc = iframe.contentDocument;
+      if (!doc) return;
+
+      const el = findLink(doc);
+      if (el) {
+        el.click();
         clearInterval(interval);
         return;
       }
 
-      elapsed += 50;
+      getScroller(doc)?.scrollBy(0, 600);
 
+      elapsed += 50;
       if (elapsed >= 5000) {
         clearInterval(interval);
         this.alertService.error('Could not open JPlag comparison.', 6000);
