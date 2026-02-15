@@ -305,6 +305,7 @@ import {DiscussionPromptService} from './api/services/discussion-prompt.service'
 import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
 import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
 import {DiscussionPromptsViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/discussion-prompts-view/discussion-prompts-view.component';
+import {DownloadStaffNotesComponent} from './units/states/portfolios/download-staff-notes/download-staff-notes.component';
 import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-planner.component';
 import {TaskPlannerPrerequisitesModalComponent} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.component';
 import {TaskPlannerPrerequisitesModalService} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
@@ -502,6 +503,7 @@ const GANTT_CHART_CONFIG = {
     TaskDefinitionDiscussionPromptsComponent,
     DiscussionPromptsViewComponent,
     TaskPlannerComponent,
+    DownloadStaffNotesComponent,
     TaskPlannerCardComponent,
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,

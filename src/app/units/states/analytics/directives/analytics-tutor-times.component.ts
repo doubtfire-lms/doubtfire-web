@@ -217,10 +217,10 @@ export class AnalyticsTutorTimesComponent implements OnInit {
           this.isLoading = false;
           this.canLoadSessions = false;
           this.events = data.map((session) => {
-            const tutor = this.unit.staff.find((t) => t.user.id === session.user.id);
+            const tutor = this.unit.staff.find((t) => t.user.id === session.user?.id);
 
-            const primary = this.stringToHexColor(tutor.user.firstName);
-            const secondary = this.stringToHexColor(tutor.user.firstName);
+            const primary = tutor ? this.stringToHexColor(tutor.user.firstName) : '#e0e0e0';
+            const secondary = tutor ? this.stringToHexColor(tutor.user.firstName) : '#e3e2e1';
             return {
               start: new Date(session.startTime),
               end: new Date(session.endTime),
@@ -234,15 +234,15 @@ export class AnalyticsTutorTimesComponent implements OnInit {
                 minute: '2-digit',
                 hour12: false,
               }),
-              title: `${tutor?.user.firstName} (${session.durationMinutes}m) ${session.duringTutorial ? '(T)' : ''}`,
+              title: `${tutor?.user?.firstName ?? 'N/A'} (${session.durationMinutes}m) ${session.duringTutorial ? '(T)' : ''}`,
               color: {primary: secondary, secondary: primary},
-              userId: session.user.id,
+              userId: session.user?.id,
               commentsAdded: session.commentsAdded,
               assessments: session.assessments,
               submissionsOpened: session.submissionsOpened,
               duration: session.durationMinutes,
               duringTutorial: session.duringTutorial,
-              tutorName: tutor?.user.firstName,
+              tutorName: tutor?.user?.firstName ?? 'N/A',
             };
           });
 
