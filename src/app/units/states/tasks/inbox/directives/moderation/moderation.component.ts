@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {FeedbackModerationActionType, Task} from 'src/app/api/models/task';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {ConfirmModerationModalService} from './confirm-moderation-modal/confirm-moderation-modal.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'f-moderation',
@@ -16,6 +17,7 @@ export class ModerationComponent {
   constructor(
     private alertService: AlertService,
     private confirmModerationModal: ConfirmModerationModalService,
+    private router: Router,
   ) {}
 
   overturn() {
@@ -88,13 +90,16 @@ export class ModerationComponent {
 
   private moderateTask(action: FeedbackModerationActionType, applyToAll: boolean = false) {
     this.task.moderateFeedback(action, applyToAll).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.alertService.success(`Task moderated`, 2000);
+      next: (_response) => {
         if (applyToAll) {
-          // TODO: we should this.setModerated for all tasks in our queue
-          // TODO: should it just refresh the queue?
+          this.alertService.success(
+            `Tasks moderated successfully. Refresh the list to view the updated queue.`,
+            2000,
+          );
+        } else {
+          this.alertService.success(`Task moderated successfully`, 2000);
         }
+
         this.setModerated(this.task);
       },
       error: (error) => {
