@@ -15,13 +15,13 @@
     <p>
       <mat-checkbox [(ngModel)]="dismissAllTasks">
         Apply this action to all {{ task.definition.abbreviation }} {{ task.definition.name }} tasks
-        from {{ task.tutor?.user.name }} currently waiting for moderation
+        from {{ task.tutor?.user.name ?? 'N/A' }}, currently waiting for moderation
       </mat-checkbox>
     </p>
   }
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-raised-button color="primary" (click)="callback(dismissAllTasks)">
+  <button mat-raised-button color="primary" (click)="runCallback()">
     <i class="fa fa-check"></i> Confirm
   </button>
   <button mat-button color="warn" (click)="dismiss()">Cancel</button>

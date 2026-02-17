@@ -37,6 +37,11 @@ export class ConfirmModerationModalComponent implements OnInit {
     this.callback = this.data.callback;
   }
 
+  public runCallback() {
+    this.callback(this.dismissAllTasks);
+    this.dismiss();
+  }
+
   public dismiss() {
     this.dialogRef.close();
   }
