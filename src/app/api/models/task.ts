@@ -29,6 +29,18 @@ import {gradeTaskModal, uploadSubmissionModal} from 'src/app/ajs-upgraded-provid
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MappingFunctions} from '../services/mapping-fn';
 
+export const FeedbackModerationAction = {
+  ShowMore: 'show_more',
+  ShowLess: 'show_less',
+  DismissOk: 'dismiss_ok',
+  DismissGood: 'dismiss_good',
+  Upheld: 'upheld',
+  Overturn: 'overturn',
+} as const;
+
+export type FeedbackModerationActionType =
+  (typeof FeedbackModerationAction)[keyof typeof FeedbackModerationAction];
+
 export class Task extends Entity {
   id: number;
 
@@ -997,7 +1009,7 @@ export class Task extends Entity {
     return false;
   }
 
-  public moderateFeedback(score: -1 | 0 | 1): Observable<boolean> {
+  public moderateFeedback(action: FeedbackModerationActionType): Observable<boolean> {
     const unitRoleService: UnitRoleService = AppInjector.get(UnitRoleService);
 
     const tutor = this.tutor;
@@ -1013,7 +1025,7 @@ export class Task extends Entity {
       {
         endpointFormat: '/unit_roles/:id:/moderation/:taskId:',
         body: {
-          score: score,
+          action,
         },
       },
     );

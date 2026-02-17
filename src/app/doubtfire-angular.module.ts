@@ -318,6 +318,7 @@ import {TutorNotesViewComponent} from './projects/states/dashboard/directives/ta
 import {TutorNoteService} from './api/services/tutor-note.service';
 import {ModerationComponent} from './units/states/tasks/inbox/directives/moderation/moderation.component';
 import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-notes-modal.component';
+import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -511,6 +512,7 @@ const GANTT_CHART_CONFIG = {
     TutorNotesViewComponent,
     ModerationComponent,
     TutorNotesModalComponent,
+    FeedbackAppealModalComponent,
   ],
   providers: [
     // Services we provide

@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Task} from 'src/app/api/models/task';
+import {FeedbackModerationActionType, Task} from 'src/app/api/models/task';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
@@ -18,13 +18,32 @@ export class ModerationComponent {
     private confirmationModal: ConfirmationModalService,
   ) {}
 
+  overturn() {
+    this.confirmationModal.show(
+      'Overturn',
+      `There were concerns with feedback given to the student and you have changed the status of the task.`,
+      () => {
+        this.moderateTask('overturn');
+      },
+    );
+  }
+
+  upheld() {
+    this.confirmationModal.show(
+      'Upheld',
+      `The feedback given to the student was justified, and no changes are required.`,
+      () => {
+        this.moderateTask('upheld');
+      },
+    );
+  }
+
   showMore() {
-    console.log('bad!');
     this.confirmationModal.show(
       'Show more from this tutor',
       `There were concerns with feedback and you would like to see more tasks from this tutor. You will review this task again if further feedback is provided.`,
       () => {
-        this.moderateTask(-1);
+        this.moderateTask('show_more');
       },
     );
   }
@@ -34,7 +53,7 @@ export class ModerationComponent {
       'Show less from this tutor',
       `The feedback provided by the tutor is satisfactory and you would like to see less of their feedback for moderation. You won't see this task again.`,
       () => {
-        this.moderateTask(1);
+        this.moderateTask('show_less');
       },
     );
   }
@@ -44,13 +63,13 @@ export class ModerationComponent {
       'Dismiss from moderation',
       'This task will be removed from moderation and will not get a follow up. This will not affect how many tasks from this tutor are selected for moderation.',
       () => {
-        this.moderateTask(0);
+        this.moderateTask('dismiss_ok');
       },
     );
   }
 
-  private moderateTask(score: -1 | 0 | 1) {
-    this.task.moderateFeedback(score).subscribe({
+  private moderateTask(action: FeedbackModerationActionType) {
+    this.task.moderateFeedback(action).subscribe({
       next: (response) => {
         console.log(response);
         this.alertService.success(`Task moderated`, 2000);
