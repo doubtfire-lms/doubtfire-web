@@ -1,6 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {FeedbackModerationActionType, Task} from 'src/app/api/models/task';
-import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {ConfirmModerationModalService} from './confirm-moderation-modal/confirm-moderation-modal.service';
 
@@ -16,7 +15,6 @@ export class ModerationComponent {
 
   constructor(
     private alertService: AlertService,
-    private confirmationModal: ConfirmationModalService,
     private confirmModerationModal: ConfirmModerationModalService,
   ) {}
 
@@ -24,7 +22,8 @@ export class ModerationComponent {
     this.confirmModerationModal.show(
       this.task,
       'Overturn',
-      `There were concerns with feedback given to the student and you have changed the status of the task.`,
+      `The original feedback will be revised and the task outcome updated.
+      Provide clear, constructive feedback explaining the changes made, and record any guidance for the tutor in the tutor notes section.`,
       'overturn',
       false,
       () => {
@@ -37,7 +36,9 @@ export class ModerationComponent {
     this.confirmModerationModal.show(
       this.task,
       'Upheld',
-      `The feedback given to the student was justified, and no changes are required.`,
+      `After reviewing the task and feedback, you are satisfied that the original marking and comments are appropriate and align with the assessment criteria.
+      No changes will be made.
+      Ensure any concerns raised by the student have been considered and addressed where necessary.`,
       'upheld',
       false,
       () => {
