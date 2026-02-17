@@ -1,6 +1,20 @@
 <h3 mat-dialog-title>
   <div class="flex flex-row items-center">
-    <i class="fa fa-question-circle fa-2x pull-left"></i>
+    <div class="mr-5 flex items-center">
+      @if (action === 'show_less') {
+        <mat-icon>thumb_up</mat-icon>
+      } @else if (action === 'show_more') {
+        <mat-icon>flag</mat-icon>
+      } @else if (action === 'dismiss_ok') {
+        <mat-icon>check_circle</mat-icon>
+      } @else if (action === 'dismiss_good') {
+        <mat-icon>task_alt</mat-icon>
+      } @else if (action === 'overturn') {
+        <mat-icon>gavel</mat-icon>
+      } @else if (action === 'upheld') {
+        <mat-icon>verified</mat-icon>
+      }
+    </div>
     <div class="flex flex-col">
       <div>{{ title }}</div>
       <small>Please confirm that you want to perform this action.</small>
