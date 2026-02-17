@@ -94,7 +94,7 @@ export class ModerationComponent {
         if (applyToAll) {
           this.alertService.success(
             `Tasks moderated successfully. Refresh the list to view the updated queue.`,
-            2000,
+            6000,
           );
         } else {
           this.alertService.success(`Task moderated successfully`, 2000);
