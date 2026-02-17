@@ -225,10 +225,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         id: 'all',
         inboxDescription: 'All Tutors',
       },
-      ...this.unit.staff.map((ur: UnitRole) => ({
-        id: ur.id,
-        inboxDescription: ur.user?.name,
-      })),
+      ...this.unit.staff
+        .slice()
+        .sort((a, b) => (a.user?.name ?? '').localeCompare(b.user?.name ?? ''))
+        .map((ur: UnitRole) => ({
+          id: ur.id,
+          inboxDescription: ur.user?.name,
+        })),
     ];
 
     this.tutorialIdChanged(false);
