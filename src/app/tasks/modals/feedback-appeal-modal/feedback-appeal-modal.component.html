@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Appeal Feedback</h2>
+<mat-dialog-content>
+  <p>
+    If you are not happy with the feedback or decision of the marking for your task, you may appeal
+    it.
+  </p>
+  <p>
+    You have <b>{{ task.project.escalationAttemptsRemaining }} requests</b> left to appeal. If the
+    feedback you have received is overturned, you'll receive another appeal request
+  </p>
+  <mat-dialog-actions class="flex justify-between">
+    <button mat-raised-button (click)="dismissModal()">Close</button>
+    <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+  </mat-dialog-actions>
+</mat-dialog-content>

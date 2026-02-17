@@ -1,9 +1,10 @@
-import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { uploadSubmissionModal } from 'src/app/ajs-upgraded-providers';
-import { Task } from 'src/app/api/models/task';
-import { TaskService } from 'src/app/api/services/task.service';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {Component, Inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {uploadSubmissionModal} from 'src/app/ajs-upgraded-providers';
+import {Task} from 'src/app/api/models/task';
+import {TaskService} from 'src/app/api/services/task.service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 
 @Component({
   selector: 'f-task-submission-card',
@@ -21,7 +22,8 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
     private taskService: TaskService,
     @Inject(uploadSubmissionModal) private UploadSubmissionModal,
     private alerts: AlertService,
-    private fileDownloader: FileDownloaderService
+    private fileDownloader: FileDownloaderService,
+    private feedbackAppealService: FeedbackAppealModalService,
   ) {}
 
   ngOnInit(): void {
@@ -74,17 +76,8 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
     });
   }
 
-  escalateFeedback(): void {
-    // TODO: Open a modal
-    this.task.requestFeedbackReview().subscribe({
-      next: (response) => {
-        console.log(response);
-        this.alerts.success(`Requested feedback review for this task!`, 3000);
-      },
-      error: (error) => {
-        this.alerts.error(`An error occurred: ${error}`, 3000);
-      },
-    });
+  openFeedbackAppealModal(): void {
+    this.feedbackAppealService.show(this.task);
   }
 
   downloadSubmission(): void {
