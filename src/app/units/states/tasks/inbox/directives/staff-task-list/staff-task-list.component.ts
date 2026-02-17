@@ -34,6 +34,7 @@ import {HotkeysService} from '@ngneat/hotkeys';
 import {Router} from '@angular/router';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {TasksByTutorPipe} from 'src/app/common/filters/tasks-by-tutor.pipe';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -65,6 +66,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     forceStream: boolean;
     studentName: string;
     tutorialIdSelected: any;
+    unitRoleIdSelected: number | string;
     taskDefinitionIdSelected: number | TaskDefinition;
   };
   @Input() showSearchOptions = true;
@@ -84,6 +86,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     tutorial?: Tutorial;
   }[] = null;
 
+  tutorFilter: {
+    id: number | string;
+    inboxDescription: string;
+  }[] = null;
+
   tasks: Task[] = null;
 
   // hasJplagReport: boolean = false;
@@ -96,6 +103,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   definedTasksPipe = new TasksOfTaskDefinitionPipe();
   tasksInTutorialsPipe = new TasksInTutorialsPipe();
   taskWithStudentNamePipe = new TasksForInboxSearchPipe();
+  tasksByTutorPipe = new TasksByTutorPipe();
   // Let's call having a source of tasksForDefinition plus having a task definition
   // auto-selected with the search options open task def mode -- i.e., the mode
   // for selecting tasks by task definitions
@@ -183,6 +191,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         tutorialIdSelected:
           (this.unitRole.role === 'Tutor' || 'Convenor') && this.userHasTutorials ? 'mine' : 'all',
         tutorials: [],
+        unitRoleIdSelected: 'all',
         taskDefinitionIdSelected: null,
         taskDefinition: null,
         forceStream: true,
@@ -209,6 +218,17 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
           tutorial: t,
         };
       }),
+    ];
+
+    this.tutorFilter = [
+      {
+        id: 'all',
+        inboxDescription: 'All Tutors',
+      },
+      ...this.unit.staff.map((ur: UnitRole) => ({
+        id: ur.id,
+        inboxDescription: ur.user?.name,
+      })),
     ];
 
     this.tutorialIdChanged(false);
@@ -301,6 +321,14 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.filters.forceStream,
       );
     }
+
+    if (this.filters.unitRoleIdSelected) {
+      filteredTasks = this.tasksByTutorPipe.transform(
+        filteredTasks,
+        this.filters.unitRoleIdSelected,
+      );
+    }
+
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
 
@@ -326,6 +354,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     selectEl.focus();
   }
 
+  unitRoleIdChanged(attemptRefreshData: boolean = true): void {
+    this.applyFilters();
+
+    const isExplorerView = this.isTaskDefMode;
+    if (attemptRefreshData && !this.fetchedAllTasks && !isExplorerView) {
+      this.refreshData();
+    }
+  }
+
   tutorialIdChanged(attemptRefreshData: boolean = true): void {
     const tutorialId = this.filters.tutorialIdSelected;
 
@@ -335,11 +372,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
     if (tutorialId === 'mine') {
       this.filters.tutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name);
+      this.filters.unitRoleIdSelected = 'all';
     } else if (tutorialId === 'all') {
       // Ignore tutorials filter
       this.filters.tutorials = null;
     } else {
       this.filters.tutorials = [filterOption.tutorial];
+      this.filters.unitRoleIdSelected = 'all';
     }
 
     this.applyFilters();
