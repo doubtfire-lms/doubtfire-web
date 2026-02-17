@@ -16,6 +16,10 @@
       <f-task-similarity-view [task]="task"></f-task-similarity-view>
     </ng-template>
 
+    <ng-template [ngSwitchCase]="DashboardViews.overseer">
+      <f-task-overseer-report [task]="task"></f-task-overseer-report>
+    </ng-template>
+
     <ng-template [ngSwitchCase]="DashboardViews.staff_notes">
       <f-staff-notes-view [project]="task.project"></f-staff-notes-view>
     </ng-template>

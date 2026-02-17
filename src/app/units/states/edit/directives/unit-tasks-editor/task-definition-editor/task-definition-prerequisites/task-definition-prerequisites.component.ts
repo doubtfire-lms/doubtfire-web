@@ -37,6 +37,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
     ready_for_feedback: 1,
     assess_in_portfolio: 1,
     discuss: 2,
+    attention_required: 0,
     demonstrate: 2,
     complete: 3,
   };
@@ -100,6 +101,9 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
 
   private fetchTaskPrerequisites() {
     const taskDefinition = this.taskDefinition;
+    if (!taskDefinition.id) {
+      return;
+    }
     this.taskPrerequisiteService
       .query(
         {
@@ -126,7 +130,10 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
           this.filterTaskDefs(this.searchCtrl.value ?? '');
         },
         error: (error) => {
-          console.error(error);
+          this.alertService.error(
+            `Failed to fetch prerequisites for task definition: ${error}`,
+            6000,
+          );
         },
       });
   }

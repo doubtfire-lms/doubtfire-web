@@ -34,6 +34,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
 import {MarkingSession} from './marking-session';
 import {MarkingSessionService} from '../services/marking-session.service';
+import {TaskPrerequisite} from './task-prerequisite';
 
 export class Unit extends Entity {
   id: number;
@@ -720,5 +721,25 @@ export class Unit extends Entity {
         this.d2lMapping = mappings;
       }),
     );
+  }
+
+  public get staffNotesCsvDownloadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/staff_notes`;
+  }
+
+  public downloadStaffNotesCsv(): void {
+    AppInjector.get(FileDownloaderService).downloadFile(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/staff_notes`,
+      `${this.name}-StaffNotes.csv`,
+    );
+  }
+
+  public get taskDefinitionsPrerequisitesUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/task_prerequisites`;
+  }
+
+  public getTaskPrerequisites(): Observable<TaskPrerequisite[]> {
+    const prerequisiteService = AppInjector.get(TaskPrerequisiteService);
+    return prerequisiteService.getUnitPrerequisites(this.id);
   }
 }

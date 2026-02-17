@@ -29,8 +29,16 @@
                 "input": "./JPlag-Report-Viewer",
                 "output": "/JPlag",
                 "glob": "**/!(*.gitignore|README.md|.git)"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/monaco-editor/min",
+                "output": "/assets/monaco/min/"
               }
             ],
+            "loader": {
+              ".ttf": "binary"
+            },
             "styles": [
               "src/theme.scss",
               "src/styles.scss",
@@ -41,7 +49,8 @@
               "./build/assets/node_modules/codemirror/lib/codemirror.css",
               "./build/assets/node_modules/codemirror/theme/xq-light.css",
               "./build/assets/node_modules/nvd3/build/nv.d3.css",
-              "node_modules/@ctrl/ngx-emoji-mart/picker.css"
+              "node_modules/@ctrl/ngx-emoji-mart/picker.css",
+              "node_modules/@worktile/gantt/styles/index.scss"
             ],
             "scripts": [
               "node_modules/moment/moment.js",

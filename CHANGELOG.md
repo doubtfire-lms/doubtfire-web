@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.0.0](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-73...v10.0.0) (2026-02-12)
+
+## [10.0.0-73](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-72...v10.0.0-73) (2026-02-12)
+
+## [10.0.0-72](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-71...v10.0.0-72) (2026-02-12)
+
+
+### Bug Fixes
+
+* null safe user access ([f6aeecc](https://github.com/b0ink/doubtfire-deploy/commit/f6aeecc6c2c79909ca859422e7d9b3bc65ef6456))
+
+## [10.0.0-71](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-70...v10.0.0-71) (2026-02-11)
+
+
+### Features
+
+* download staff notes csv ([#1062](https://github.com/b0ink/doubtfire-deploy/issues/1062)) ([6dcfe95](https://github.com/b0ink/doubtfire-deploy/commit/6dcfe952f0415fb1327b738137f817a0fcfa0488))
+* migrate to jplag report viewer v6.3.0 ([#1082](https://github.com/b0ink/doubtfire-deploy/issues/1082)) ([697588b](https://github.com/b0ink/doubtfire-deploy/commit/697588b98e28ec663f4982c49f18fe8109ba7c34))
+
+## [10.0.0-70](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-69...v10.0.0-70) (2026-01-05)
+
+
+### Bug Fixes
+
+* skip query for unsaved task definition ([a6bdd22](https://github.com/b0ink/doubtfire-deploy/commit/a6bdd22ff864e72c679fae1844345963447fdf08))
+
+## [10.0.0-69](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-68...v10.0.0-69) (2026-01-05)
+
+
+### Features
+
+* attention required task status ([#1061](https://github.com/b0ink/doubtfire-deploy/issues/1061)) ([15365ed](https://github.com/b0ink/doubtfire-deploy/commit/15365ed4f42af790af9a9ae24dae42f041dff1df))
+* display number of stuff notes in tutor discussion ([2674d4e](https://github.com/b0ink/doubtfire-deploy/commit/2674d4e5ade26e5420b87518f4cd9da909ec7246))
+* overseer pipeline ([#1064](https://github.com/b0ink/doubtfire-deploy/issues/1064)) ([7cb8fc7](https://github.com/b0ink/doubtfire-deploy/commit/7cb8fc7471f0402c562fb8a0b87df672ceb22ea3))
+* project task planner gantt chart ([#1051](https://github.com/b0ink/doubtfire-deploy/issues/1051)) ([4f60792](https://github.com/b0ink/doubtfire-deploy/commit/4f607926e3ac305316a05607fda7f7bff7faec00))
+
 ## [10.0.0-68](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-67...v10.0.0-68) (2025-12-08)
 
 

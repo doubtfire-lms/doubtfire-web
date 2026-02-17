@@ -50,4 +50,7 @@
   &.fail {
     @include status-icon('fail');
   }
+  &.attention-required {
+    @include status-icon('attention-required');
+  }
 }
