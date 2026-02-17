@@ -23,7 +23,6 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
     @Inject(uploadSubmissionModal) private UploadSubmissionModal,
     private alerts: AlertService,
     private fileDownloader: FileDownloaderService,
-    private feedbackAppealService: FeedbackAppealModalService,
   ) {}
 
   ngOnInit(): void {
@@ -74,10 +73,6 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
         this.alerts.error('Request failed, cannot recreate PDF at this time.', 6000);
       },
     });
-  }
-
-  openFeedbackAppealModal(): void {
-    this.feedbackAppealService.show(this.task);
   }
 
   downloadSubmission(): void {

@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Task} from 'src/app/api/models/task';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {FeedbackAppealModalData} from './feedback-appeal-modal.service';
+import {TaskService} from 'src/app/api/services/task.service';
 
 @Component({
   selector: 'f-feedback-appeal-modal',
@@ -16,6 +17,7 @@ export class FeedbackAppealModalComponent implements OnInit {
     public dialogRef: MatDialogRef<FeedbackAppealModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: FeedbackAppealModalData,
     private alerts: AlertService,
+    private taskService: TaskService,
   ) {}
 
   ngOnInit() {
@@ -25,7 +27,14 @@ export class FeedbackAppealModalComponent implements OnInit {
   submit(): void {
     this.task.requestFeedbackReview().subscribe({
       next: (_response) => {
-        this.alerts.success(`Requested feedback review for this task!`, 3000);
+        this.alerts.success(
+          `Requested feedback review for ${this.task.definition.abbreviation} ${this.task.definition.name}`,
+          3000,
+        );
+        setTimeout(() => {
+          // Fetch the "Feedback Review Requested" comment
+          this.taskService.notifyStatusChange(this.task);
+        }, 250);
       },
       error: (error) => {
         this.alerts.error(`An error occurred: ${error}`, 3000);

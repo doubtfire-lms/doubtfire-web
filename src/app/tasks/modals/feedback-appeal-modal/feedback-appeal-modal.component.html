@@ -1,15 +1,32 @@
-<h2 mat-dialog-title>Appeal Feedback</h2>
+<h2 mat-dialog-title>Request Feedback Review</h2>
 <mat-dialog-content>
   <p>
-    If you are not happy with the feedback or decision of the marking for your task, you may appeal
-    it.
+    If you believe the feedback or marking on this task does not accurately reflect your work, you
+    may request a review. This allows another staff member to reassess the feedback and determine
+    whether it should be confirmed or revised.
   </p>
+
   <p>
-    You have <b>{{ task.project.escalationAttemptsRemaining }} requests</b> left to appeal. If the
-    feedback you have received is overturned, you'll receive another appeal request
+    If you would like to provide context, you can add a comment to the task explaining why you
+    believe the feedback should be reviewed. Referencing specific criteria may help clarify your
+    concerns.
   </p>
+
+  <p>
+    You have
+    <b>
+      {{ task.project.escalationAttemptsRemaining }} review request{{
+        task.project.escalationAttemptsRemaining !== 1 ? 's' : ''
+      }}
+    </b>
+    remaining for this unit. If the original feedback is revised as a result of this review, the
+    request will not be counted against your remaining total.
+  </p>
+
+  <p class="opacity-70">Review decisions are final once resolved.</p>
+
   <mat-dialog-actions class="flex justify-between">
-    <button mat-raised-button (click)="dismissModal()">Close</button>
+    <button mat-raised-button (click)="dismissModal()">Cancel</button>
     <button mat-raised-button color="primary" (click)="submit()">Submit</button>
   </mat-dialog-actions>
 </mat-dialog-content>
