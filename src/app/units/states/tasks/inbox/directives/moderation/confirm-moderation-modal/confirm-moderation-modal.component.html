@@ -20,9 +20,9 @@
     </p>
   }
 </mat-dialog-content>
-<mat-dialog-actions>
+<mat-dialog-actions class="flex justify-between">
+  <button mat-button color="warn" (click)="dismiss()">Cancel</button>
   <button mat-raised-button color="primary" (click)="runCallback()">
     <i class="fa fa-check"></i> Confirm
   </button>
-  <button mat-button color="warn" (click)="dismiss()">Cancel</button>
 </mat-dialog-actions>
