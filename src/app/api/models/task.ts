@@ -1009,7 +1009,10 @@ export class Task extends Entity {
     return false;
   }
 
-  public moderateFeedback(action: FeedbackModerationActionType): Observable<boolean> {
+  public moderateFeedback(
+    action: FeedbackModerationActionType,
+    applyToAll: boolean = false,
+  ): Observable<boolean> {
     const unitRoleService: UnitRoleService = AppInjector.get(UnitRoleService);
 
     const tutor = this.tutor;
@@ -1026,6 +1029,7 @@ export class Task extends Entity {
         endpointFormat: '/unit_roles/:id:/moderation/:taskId:',
         body: {
           action,
+          apply_to_all: applyToAll,
         },
       },
     );
