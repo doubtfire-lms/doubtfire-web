@@ -23,6 +23,7 @@ export class TaskService extends CachedEntityService<Task> {
   private readonly taskInboxEndpoint = '/units/:id:/tasks/inbox';
   private readonly taskExplorerEndpoint = '/units/:id:/task_definitions/:task_def_id:/tasks';
   private readonly taskModerationEndpoint = '/units/:id:/tasks/moderation';
+  private readonly taskOverflowEndpoint = '/units/:id:/tasks/overflow';
   private readonly refreshTaskEndpoint = 'projects/:projectId:/refresh_tasks/:taskDefinitionId:';
 
   constructor(httpClient: HttpClient) {
@@ -165,6 +166,25 @@ export class TaskService extends CachedEntityService<Task> {
       },
       {
         endpointFormat: this.taskModerationEndpoint,
+        cache: cache,
+        constructorParams: unit,
+      },
+    ).pipe(
+      tap((tasks: Task[]) => {
+        unit.incorporateTasks(tasks);
+      }),
+    );
+  }
+
+  public queryTasksForOverflow(unit: Unit): Observable<Task[]> {
+    // TODO: experiment if we can actually persist a cache to hotfix the duplicate inbox requests?
+    const cache: EntityCache<Task> = new EntityCache<Task>();
+    return this.query(
+      {
+        id: unit.id,
+      },
+      {
+        endpointFormat: this.taskOverflowEndpoint,
         cache: cache,
         constructorParams: unit,
       },

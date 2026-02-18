@@ -71,6 +71,19 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="overflow-marking">
+      <th mat-header-cell *matHeaderCellDef>Overflow Marking</th>
+      <td mat-cell *matCellDef="let unitRole">
+        <mat-slide-toggle
+          [checked]="unitRole.canOverflowMark"
+          (change)="toggleCanOverflowMark(unitRole)"
+          matTooltip="This staff member can mark overflow tasks"
+          matTooltipShowDelay="1000"
+          matTooltipPosition="above"
+        ></mat-slide-toggle>
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="mentor">
       <th mat-header-cell *matHeaderCellDef>Mentor</th>
       <td mat-cell *matCellDef="let unitRole">

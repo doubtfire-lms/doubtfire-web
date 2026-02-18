@@ -22,7 +22,7 @@ export class FooterComponent implements OnInit {
     private userService: UserService,
   ) {}
 
-  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;

@@ -127,6 +127,13 @@
         <f-moderation [task]="selectedTask"></f-moderation>
         <!-- <mat-divider class="mr-10" [vertical]="true"></mat-divider> -->
       }
+      @if (viewType === 'overflow' && selectedTask) {
+        <!-- TODO: all the status buttons should be disabled until the task has been claimed -->
+        <button mat-raised-button>Claim task</button>
+        <!--
+          - "Claim Task" should create a new OverflowTask
+        -->
+      }
     </div>
 
     <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">

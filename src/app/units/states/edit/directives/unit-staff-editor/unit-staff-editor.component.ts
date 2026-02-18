@@ -28,6 +28,7 @@ export class UnitStaffEditorComponent implements OnInit {
     'role',
     'main-convenor',
     'observer-only',
+    'overflow-marking',
     'mentor',
     'actions',
   ];
@@ -93,6 +94,20 @@ export class UnitStaffEditorComponent implements OnInit {
         this.alertService.error(response, 6000);
       },
     });
+  }
+
+  toggleCanOverflowMark(unitRole: UnitRole) {
+    const previousValue = unitRole.canOverflowMark;
+    unitRole.canOverflowMark = !unitRole.canOverflowMark;
+    unitRole.roleId = unitRole.role === 'Tutor' ? 2 : 3;
+    // this.unitRoleService.update(unitRole).subscribe({
+    //   next: () => this.alertService.success('Observer status updated', 2000),
+    //   error: (response) => {
+    //     // Revert changes on error
+    //     unitRole.observerOnly = previousValue;
+    //     this.alertService.error(response, 6000);
+    //   },
+    // });
   }
 
   selectMentor(unitRole: UnitRole, event: MatSelectChange) {
