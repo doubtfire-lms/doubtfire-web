@@ -40,4 +40,7 @@ export class TaskDropdownComponent {
     });
   }
 
+  public get isMentor(): boolean {
+    return this.currentUnit.staff.some((ur) => ur.mentorId === this.unitRole.id);
+  }
 }
