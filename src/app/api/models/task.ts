@@ -18,6 +18,8 @@ import {
   TestAttempt,
   TestAttemptService,
   ScormComment,
+  UnitRoleService,
+  UnitRole,
 } from './doubtfire-model';
 import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
@@ -26,6 +28,18 @@ import {Observable, map} from 'rxjs';
 import {gradeTaskModal, uploadSubmissionModal} from 'src/app/ajs-upgraded-providers';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MappingFunctions} from '../services/mapping-fn';
+
+export const FeedbackModerationAction = {
+  ShowMore: 'show_more',
+  ShowLess: 'show_less',
+  DismissOk: 'dismiss_ok',
+  DismissGood: 'dismiss_good',
+  Upheld: 'upheld',
+  Overturn: 'overturn',
+} as const;
+
+export type FeedbackModerationActionType =
+  (typeof FeedbackModerationAction)[keyof typeof FeedbackModerationAction];
 
 export class Task extends Entity {
   id: number;
@@ -43,6 +57,8 @@ export class Task extends Entity {
   similarityFlag: boolean = false;
   numNewComments: number = 0;
   hasExtensions: boolean;
+
+  moderationType: 'random_sample' | 'escalation' | 'first_feedback';
 
   project: Project;
   definition: TaskDefinition;
@@ -91,6 +107,16 @@ export class Task extends Entity {
 
   public get comments(): readonly TaskComment[] {
     return this.commentCache.currentValues;
+  }
+
+  public get tutor(): UnitRole {
+    const enrolments = this.project.tutorialEnrolmentsCache.currentValues.filter(
+      (t) => t.tutorialStream.name === this.definition.tutorialStream.name,
+    );
+    if (enrolments.length === 1) {
+      const user = enrolments[0].tutor;
+      return this.unit.staff.find((ur) => ur.user.id === user.id);
+    }
   }
 
   public addComment(textString): void {
@@ -981,5 +1007,40 @@ export class Task extends Entity {
     }
 
     return false;
+  }
+
+  public moderateFeedback(
+    action: FeedbackModerationActionType,
+    applyToAll: boolean = false,
+  ): Observable<boolean> {
+    const unitRoleService: UnitRoleService = AppInjector.get(UnitRoleService);
+
+    const tutor = this.tutor;
+    if (!tutor) {
+      return;
+    }
+
+    return unitRoleService.post(
+      {
+        id: tutor.id,
+        taskId: this.id,
+      },
+      {
+        endpointFormat: '/unit_roles/:id:/moderation/:taskId:',
+        body: {
+          action,
+          apply_to_all: applyToAll,
+        },
+      },
+    );
+  }
+
+  public requestFeedbackReview(): Observable<boolean> {
+    const httpClient: HttpClient = AppInjector.get(HttpClient);
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${
+      this.project.id
+    }/task_def_id/${this.definition.id}/feedback_review`;
+
+    return httpClient.post<boolean>(url, {});
   }
 }

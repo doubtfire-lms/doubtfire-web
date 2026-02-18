@@ -153,6 +153,26 @@
               <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
             </button>
           </div>
+          <div class="flex flex-row justify-between items-center">
+            <mat-form-field class="flex-1">
+              <mat-label>Tutors</mat-label>
+              <mat-select
+                [disabled]="filters.tutorialIdSelected !== 'all'"
+                [(ngModel)]="filters.unitRoleIdSelected"
+                name="tutor"
+                (selectionChange)="unitRoleIdChanged()"
+              >
+                @for (t of tutorFilter; track t) {
+                  <mat-option [value]="t.id">
+                    <span class="truncate">{{ t.inboxDescription }}</span>
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <button disabled mat-icon-button aria-label="Sort by tutor icon">
+              <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
+            </button>
+          </div>
           <!--/students-->
         </form>
       </mat-expansion-panel>

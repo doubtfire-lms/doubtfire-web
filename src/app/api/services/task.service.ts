@@ -22,6 +22,7 @@ export class TaskService extends CachedEntityService<Task> {
 
   private readonly taskInboxEndpoint = '/units/:id:/tasks/inbox';
   private readonly taskExplorerEndpoint = '/units/:id:/task_definitions/:task_def_id:/tasks';
+  private readonly taskModerationEndpoint = '/units/:id:/tasks/moderation';
   private readonly refreshTaskEndpoint = 'projects/:projectId:/refresh_tasks/:taskDefinitionId:';
 
   constructor(httpClient: HttpClient) {
@@ -97,6 +98,7 @@ export class TaskService extends CachedEntityService<Task> {
           });
         },
       },
+      'moderationType',
     );
 
     this.mapping.addJsonKey('qualityPts', 'grade', 'includeInPortfolio', 'trigger');
@@ -151,6 +153,24 @@ export class TaskService extends CachedEntityService<Task> {
       map((tasks: Task[]) => {
         unit.incorporateTasks(tasks);
         return unit.fillWithUnStartedTasks(tasks, taskDef);
+      }),
+    );
+  }
+
+  public queryTasksForMentorModeration(unit: Unit): Observable<Task[]> {
+    const cache: EntityCache<Task> = new EntityCache<Task>();
+    return this.query(
+      {
+        id: unit.id,
+      },
+      {
+        endpointFormat: this.taskModerationEndpoint,
+        cache: cache,
+        constructorParams: unit,
+      },
+    ).pipe(
+      tap((tasks: Task[]) => {
+        unit.incorporateTasks(tasks);
       }),
     );
   }

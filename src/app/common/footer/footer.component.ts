@@ -1,10 +1,12 @@
-import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
+import {UnitRole} from 'src/app/api/models/unit-role';
+import {UserService} from 'src/app/api/services/user.service';
 
 @Component({
   selector: 'f-footer',
@@ -17,7 +19,10 @@ export class FooterComponent implements OnInit {
     public taskService: TaskService,
     private fileDownloader: FileDownloaderService,
     private taskAssessmentModal: TaskAssessmentModalService,
+    private userService: UserService,
   ) {}
+
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;
@@ -48,12 +53,42 @@ export class FooterComponent implements OnInit {
       (this.warningText?.nativeElement.getBoundingClientRect().width + totalPaddingOffset) / 2;
   }
 
+  public canAccessTutorNotes(task: Task): boolean {
+    const tutor = task.tutor;
+    if (!tutor) {
+      return false;
+    }
+
+    const currentUser = this.userService.currentUser;
+    const currentUserRole = task.unit.staff.find((ur) => ur.user.id === currentUser.id);
+
+    if (!currentUserRole) {
+      return false;
+    }
+
+    // Ensure the unit is mapped correctly to access the mentor
+    tutor.unit = task.unit;
+
+    const canAccess =
+      currentUserRole.role === 'Convenor' ||
+      currentUserRole.role === 'Admin' ||
+      (tutor.mentor && tutor.mentor.id === currentUserRole.id) ||
+      tutor.id === currentUserRole.id;
+
+    return canAccess;
+  }
+
+  public viewTutorNotes() {
+    this.selectedTaskService.showTutorNotes();
+  }
+
   ngOnInit(): void {
     // watch for changes to the selected task
     this.selectedTask$ = this.selectedTaskService.selectedTask$;
 
     this.selectedTask$.subscribe((task) => {
       this.selectedTask = task;
+
       // We need to timeout to give the DOM a chance to place the elements
       setTimeout(() => {
         this.findSimilaritiesButton();

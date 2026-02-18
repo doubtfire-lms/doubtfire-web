@@ -2,14 +2,14 @@
   <div fxLayout="row" fxLayoutAlign="center stretch" fxFill>
     <div id="inboxpanel" #inboxpanel class="staff-task-list inbox-panel">
       @if (taskData) {
-      <df-staff-task-list
-        [isNarrow]="narrowTaskInbox"
-        [showSearchOptions]="showSearchOptions"
-        [filters]="filters"
-        [taskData]="taskData"
-        [unit]="unit"
-        [unitRole]="unitRole"
-      ></df-staff-task-list>
+        <df-staff-task-list
+          [isNarrow]="narrowTaskInbox"
+          [showSearchOptions]="showSearchOptions"
+          [filters]="filters"
+          [taskData]="taskData"
+          [unit]="unit"
+          [unitRole]="unitRole"
+        ></df-staff-task-list>
       }
     </div>
     @if (subs$ | async) {
@@ -42,20 +42,20 @@
       <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
     </div>
   </div>
-  <f-footer></f-footer>
+  <f-footer class="z-10" [viewType]="viewType"></f-footer>
 </div>
 
 <div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
   <div id="inboxpanel" #inboxpanel class="inbox-panel mobile" [hidden]="taskSelected">
     @if (taskData) {
-    <df-staff-task-list
-      [isNarrow]="false"
-      [showSearchOptions]="showSearchOptions"
-      [filters]="filters"
-      [taskData]="taskData"
-      [unit]="unit"
-      [unitRole]="unitRole"
-    ></df-staff-task-list>
+      <df-staff-task-list
+        [isNarrow]="false"
+        [showSearchOptions]="showSearchOptions"
+        [filters]="filters"
+        [taskData]="taskData"
+        [unit]="unit"
+        [unitRole]="unitRole"
+      ></df-staff-task-list>
     }
   </div>
   <div [hidden]="!taskSelected" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
