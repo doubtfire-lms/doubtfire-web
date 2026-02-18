@@ -13,6 +13,9 @@ import {TaskService} from 'src/app/api/services/task.service';
 export class FeedbackAppealModalComponent implements OnInit {
   task: Task;
 
+  reviewComment: string;
+  submitting: boolean;
+
   constructor(
     public dialogRef: MatDialogRef<FeedbackAppealModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: FeedbackAppealModalData,
@@ -25,6 +28,7 @@ export class FeedbackAppealModalComponent implements OnInit {
   }
 
   submit(): void {
+    this.submitting = true;
     this.task.requestFeedbackReview().subscribe({
       next: (_response) => {
         this.alerts.success(
@@ -34,13 +38,17 @@ export class FeedbackAppealModalComponent implements OnInit {
         setTimeout(() => {
           // Fetch the "Feedback Review Requested" comment
           this.taskService.notifyStatusChange(this.task);
+          setTimeout(() => {
+            this.task.addComment(this.reviewComment);
+          }, 250);
+          this.dismissModal();
         }, 250);
       },
       error: (error) => {
         this.alerts.error(`An error occurred: ${error}`, 3000);
+        this.submitting = false;
       },
     });
-    this.dismissModal();
   }
 
   public dismissModal() {
