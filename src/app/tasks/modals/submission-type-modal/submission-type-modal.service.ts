@@ -16,6 +16,7 @@ export class SubmissionTypeModalService {
     const _dialogRef = this.dialog.open<SubmissionTypeModalComponent, SubmissionTypeModalData>(
       SubmissionTypeModalComponent,
       {
+        autoFocus: false,
         data: {
           task: task,
         },
