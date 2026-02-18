@@ -22,7 +22,7 @@ export class SubmissionTypeModalService {
         },
         position: {top: '2.5%'},
         width: '100%',
-        maxWidth: '650px',
+        maxWidth: '700px',
       },
     );
   }
