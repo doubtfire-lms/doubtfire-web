@@ -21,9 +21,13 @@
             ng-model="project.targetGrade"
             ng-options="grade as grades.names[grade] for grade in grades.values"
             ng-if="$index != 4"
-            ng-change="updateTargetGrade(project.targetGrade)"></select>
-        </div><!--/target-grade-body-->
-      </div><!--/target-grade-card-->
+            disabled
+          ></select>
+          <div class="ml-1 py-2 opacity-70">To change your target grade, use the Task Planner.</div>
+        </div>
+        <!--/target-grade-body-->
+      </div>
+      <!--/target-grade-card-->
       <div class="card">
         <f-task-ilos-card [unit]="project.unit" [ilo-context-type]="'Unit'"></f-task-ilos-card>
       </div>
