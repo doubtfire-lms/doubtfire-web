@@ -113,12 +113,19 @@
         >
           <mat-icon aria-label="Audit Icon">rate_review</mat-icon> Moderation
         </button>
-        <button uiSref="units/tasks/overflow" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
-          <!-- <mat-icon aria-label="Audit Icon">pending_actions</mat-icon> Overflow -->
-          <mat-icon aria-label="Audit Icon">more_time</mat-icon> Overflow
-          <!-- <mat-icon aria-label="Audit Icon">work_history</mat-icon> Overflow -->
-          <!-- <mat-icon aria-label="Audit Icon">safety_check</mat-icon> Overflow -->
-        </button>
+        @if (unitRole.canOverflowMark) {
+          <button
+            uiSref="units/tasks/overflow"
+            [uiParams]="{unitId: unitRole.unit.id}"
+            mat-menu-item
+          >
+            <!-- <mat-icon aria-label="Audit Icon">pending_actions</mat-icon> Overflow -->
+            <mat-icon aria-label="Audit Icon">more_time</mat-icon> Overflow
+            <!-- <mat-icon aria-label="Audit Icon">work_history</mat-icon> Overflow -->
+            <!-- <mat-icon aria-label="Audit Icon">safety_check</mat-icon> Overflow -->
+          </button>
+        }
+
         <button uiSref="units/tasks/viewer" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
         </button>
