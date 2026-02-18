@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-1](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-0...v10.0.1-1) (2026-02-18)
+
+
+### Features
+
+* tutor notes + mentorship + moderation + escalation ([#1068](https://github.com/b0ink/doubtfire-deploy/issues/1068)) ([48f4db7](https://github.com/b0ink/doubtfire-deploy/commit/48f4db730f06e349f5e3c791f1972d23b0f8573f))
+
+
+### Bug Fixes
+
+* ensure tutor notes view extends full height ([c872ed7](https://github.com/b0ink/doubtfire-deploy/commit/c872ed766bf493456da56e33dcda48a90ed3f6ce))
+
 ### [10.0.1-0](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0...v10.0.1-0) (2026-02-17)
 
 ## [10.0.0](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-73...v10.0.0) (2026-02-12)
