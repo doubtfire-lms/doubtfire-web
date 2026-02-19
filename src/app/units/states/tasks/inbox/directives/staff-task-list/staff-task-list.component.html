@@ -162,10 +162,14 @@
                 name="tutor"
                 (selectionChange)="unitRoleIdChanged()"
               >
-                @for (t of tutorFilter; track t) {
-                  <mat-option [value]="t.id">
-                    <span class="truncate">{{ t.inboxDescription }}</span>
-                  </mat-option>
+                @for (g of tutorGroups; track g.label) {
+                  <mat-optgroup [label]="g.label">
+                    @for (t of g.options; track t.id) {
+                      <mat-option [value]="t.id">
+                        <span class="truncate">{{ t.inboxDescription }}</span>
+                      </mat-option>
+                    }
+                  </mat-optgroup>
                 }
               </mat-select>
             </mat-form-field>

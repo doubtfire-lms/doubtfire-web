@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-2](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-1...v10.0.1-2) (2026-02-19)
+
+
+### Bug Fixes
+
+* set min width for mentor dropdown ([75cc1b3](https://github.com/b0ink/doubtfire-deploy/commit/75cc1b3569d17cd54e71f86874addb4bc34d566f))
+
 ### [10.0.1-1](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-0...v10.0.1-1) (2026-02-18)
 
 

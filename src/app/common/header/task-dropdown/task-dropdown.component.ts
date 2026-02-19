@@ -42,9 +42,13 @@ export class TaskDropdownComponent {
   }
 
   public get canMarkOverflowTask() {
-    // this.unitRole does not have permission-based fields such as canMarkOverflowTasks
+    // this.unitRole does not have permission-based fields exposed such as canMarkOverflowTasks
     // so we must access them via the unit data
     const staff = this.currentUnit.staff.find((ur) => ur.id === this.unitRole.id);
     return staff?.canMarkOverflowTasks;
+  }
+
+  public get isMentor(): boolean {
+    return this.currentUnit.staff.some((ur) => ur.mentorId === this.unitRole.id);
   }
 }
