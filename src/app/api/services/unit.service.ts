@@ -255,6 +255,8 @@ export class UnitService extends CachedEntityService<Unit> {
         },
       },
       // 'groupMemberships', - map to group memberships
+      'feedbackWarningThresholdDays',
+      'feedbackOverflowThresholdDays',
     );
 
     this.mapping.addJsonKey(

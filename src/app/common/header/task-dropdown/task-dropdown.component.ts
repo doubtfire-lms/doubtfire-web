@@ -45,6 +45,6 @@ export class TaskDropdownComponent {
     // this.unitRole does not have permission-based fields such as canMarkOverflowTasks
     // so we must access them via the unit data
     const staff = this.currentUnit.staff.find((ur) => ur.id === this.unitRole.id);
-    return staff.canMarkOverflowTasks;
+    return staff?.canMarkOverflowTasks;
   }
 }

@@ -90,6 +90,37 @@
         will be extended to allow students to fix and resubmit their work.
       </mat-hint>
     </mat-form-field>
+
+    <div class="flex w-full gap-5">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Feedback warning after (days)</mat-label>
+        <input
+          matInput
+          type="number"
+          min="0"
+          required
+          [(ngModel)]="unit.feedbackWarningThresholdDays"
+        />
+        <mat-hint>
+          Tasks in inbox are highlighted if feedback isn’t given within this many days of
+          submission.
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Move to overflow after (days)</mat-label>
+        <input
+          matInput
+          type="number"
+          min="0"
+          required
+          [(ngModel)]="unit.feedbackOverflowThresholdDays"
+        />
+        <mat-hint>
+          Tasks without feedback for this many days will appear in the overflow queue.
+        </mat-hint>
+      </mat-form-field>
+    </div>
   </mat-card>
 
   <mat-card appearance="outlined" class="flex flex-col gap-5 p-[16px]">
