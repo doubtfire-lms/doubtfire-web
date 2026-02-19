@@ -106,7 +106,7 @@
         >
           <mat-icon aria-label="Task Explorer Icon" fontIcon="pageview"></mat-icon> Explorer
         </button>
-        @if (isMentor) {
+        @if (isMentor || unitRole.role === 'Convenor') {
           <button
             uiSref="units/tasks/moderation"
             [uiParams]="{unitId: unitRole.unit.id}"
