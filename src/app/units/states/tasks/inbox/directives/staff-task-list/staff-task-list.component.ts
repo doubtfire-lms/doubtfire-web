@@ -86,10 +86,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     tutorial?: Tutorial;
   }[] = null;
 
-  tutorFilter: {
-    id: number | string;
-    inboxDescription: string;
-  }[] = null;
+  tutorGroups: {
+    label: string;
+    options: {id: string | number; inboxDescription: string | undefined}[];
+  }[] = [];
 
   tasks: Task[] = null;
 
@@ -185,13 +185,25 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.userHasTutorials =
       this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
 
+    const staff = this.unit.staff.slice();
+
+    const byName = (a: UnitRole, b: UnitRole) =>
+      (a.user?.name ?? '').localeCompare(b.user?.name ?? '');
+
+    const mentored = staff
+      .filter((ur) => ur.mentorId === this.unitRole.id)
+      .slice()
+      .sort(byName);
+
+    const allTutors = staff.slice().sort(byName);
+
     this.filters = Object.assign(
       {
         studentName: null,
         tutorialIdSelected:
           (this.unitRole.role === 'Tutor' || 'Convenor') && this.userHasTutorials ? 'mine' : 'all',
         tutorials: [],
-        unitRoleIdSelected: 'all',
+        unitRoleIdSelected: mentored.length > 0 ? 'mentoring_all' : 'all',
         taskDefinitionIdSelected: null,
         taskDefinition: null,
         forceStream: true,
@@ -219,19 +231,31 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         };
       }),
     ];
-
-    this.tutorFilter = [
+    this.tutorGroups = [
+      ...(mentored.length > 0
+        ? [
+            {
+              label: 'My Tutors (Mentoring)',
+              options: [
+                {id: 'mentoring_all', inboxDescription: 'Show All Mine'},
+                ...mentored.map((ur) => ({
+                  id: ur.id,
+                  inboxDescription: ur.user?.name,
+                })),
+              ],
+            },
+          ]
+        : []),
       {
-        id: 'all',
-        inboxDescription: 'All Tutors',
+        label: 'All Tutors',
+        options: [
+          {id: 'all', inboxDescription: 'Show All'},
+          ...allTutors.map((ur) => ({
+            id: ur.id,
+            inboxDescription: ur.user?.name,
+          })),
+        ],
       },
-      ...this.unit.staff
-        .slice()
-        .sort((a, b) => (a.user?.name ?? '').localeCompare(b.user?.name ?? ''))
-        .map((ur: UnitRole) => ({
-          id: ur.id,
-          inboxDescription: ur.user?.name,
-        })),
     ];
 
     this.tutorialIdChanged(false);
@@ -327,6 +351,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
     if (this.filters.unitRoleIdSelected) {
       filteredTasks = this.tasksByTutorPipe.transform(
+        this.unitRole,
         filteredTasks,
         this.filters.unitRoleIdSelected,
       );
