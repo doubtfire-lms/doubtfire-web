@@ -97,17 +97,17 @@ export class UnitStaffEditorComponent implements OnInit {
   }
 
   toggleCanOverflowMark(unitRole: UnitRole) {
-    const previousValue = unitRole.canOverflowMark;
-    unitRole.canOverflowMark = !unitRole.canOverflowMark;
+    const previousValue = unitRole.canMarkOverflowTasks;
+    unitRole.canMarkOverflowTasks = !unitRole.canMarkOverflowTasks;
     unitRole.roleId = unitRole.role === 'Tutor' ? 2 : 3;
-    // this.unitRoleService.update(unitRole).subscribe({
-    //   next: () => this.alertService.success('Observer status updated', 2000),
-    //   error: (response) => {
-    //     // Revert changes on error
-    //     unitRole.observerOnly = previousValue;
-    //     this.alertService.error(response, 6000);
-    //   },
-    // });
+    this.unitRoleService.update(unitRole).subscribe({
+      next: () => this.alertService.success('Overflow marking permissions updated', 2000),
+      error: (response) => {
+        // Revert changes on error
+        unitRole.canMarkOverflowTasks = previousValue;
+        this.alertService.error(response, 6000);
+      },
+    });
   }
 
   selectMentor(unitRole: UnitRole, event: MatSelectChange) {

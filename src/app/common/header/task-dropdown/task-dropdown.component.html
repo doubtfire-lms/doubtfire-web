@@ -113,7 +113,7 @@
         >
           <mat-icon aria-label="Audit Icon">rate_review</mat-icon> Moderation
         </button>
-        @if (unitRole.canOverflowMark) {
+        @if (canMarkOverflowTask) {
           <button
             uiSref="units/tasks/overflow"
             [uiParams]="{unitId: unitRole.unit.id}"
