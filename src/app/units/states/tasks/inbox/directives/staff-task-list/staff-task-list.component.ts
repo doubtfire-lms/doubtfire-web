@@ -203,7 +203,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         tutorialIdSelected:
           (this.unitRole.role === 'Tutor' || 'Convenor') && this.userHasTutorials ? 'mine' : 'all',
         tutorials: [],
-        unitRoleIdSelected: mentored.length > 0 ? 'mentoring_all' : 'all',
+        unitRoleIdSelected:
+          mentored.length > 0 && this.viewType === 'moderation' ? 'mentoring_all' : 'all',
         taskDefinitionIdSelected: null,
         taskDefinition: null,
         forceStream: true,
