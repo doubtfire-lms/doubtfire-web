@@ -283,4 +283,20 @@ export class TaskService extends CachedEntityService<Task> {
       options,
     );
   }
+
+  public claimTask(task: Task): Observable<boolean> {
+    const options: RequestOptions<Task> = {
+      entity: task,
+      cache: task.project.taskCache,
+      endpointFormat: `${this.endpointFormat}/claim_overflow_task`,
+    };
+
+    return this.post(
+      {
+        projectId: task.project.id,
+        taskDefId: task.definition.id,
+      },
+      options,
+    );
+  }
 }
