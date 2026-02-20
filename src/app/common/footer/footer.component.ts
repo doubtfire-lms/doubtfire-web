@@ -162,6 +162,28 @@ export class FooterComponent implements OnInit {
     );
   }
 
+  // TODO: put this into its own component like moderation
+  claimTask(task: Task) {
+    this.taskService.claimTask(task).subscribe({
+      next: (response) => {
+        this.alertService.success(
+          `Successfully claimed task. This task will automatically be released after 30 minutes.`,
+          6000,
+        );
+        // TODO: use snack bar for "This task will automatically be released after 30 minutes of no activity."
+        // too much text in toast looks like an error
+        const currentUser = this.userService.currentUser;
+        const currentUserRole = this.selectedTask.unit.staff.find(
+          (ur) => ur.user.id === currentUser.id,
+        );
+        task.claimedByUnitRoleId = currentUserRole.id;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
   public get actionButtonEnabled(): boolean {
     if (!this.selectedTask) {
       return false;
