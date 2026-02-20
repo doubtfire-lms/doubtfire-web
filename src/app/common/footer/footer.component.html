@@ -128,9 +128,9 @@
         <f-moderation [task]="selectedTask"></f-moderation>
         <!-- <mat-divider class="mr-10" [vertical]="true"></mat-divider> -->
       }
-      @if (viewType === 'overflow' && selectedTask) {
+      @if (viewType === 'overflow' && selectedTask && !selectedTask.loadingSubmissionDetails) {
         <button
-          mat-flat-button
+          mat-raised-button
           color="primary"
           (click)="claimTask(selectedTask)"
           [disabled]="
@@ -141,8 +141,22 @@
           class="ml-5"
         >
           <!-- TODO: tooltips "You have already claimed this task".. -->
-          <mat-icon class="scale-150">sync_lock</mat-icon>
-          Claim task
+          <div class="flex items-center gap-1">
+            @if (selectedTask.claimedByUnitRoleId) {
+              @if (selectedTask.claimedByUnitRoleId === currentUnitRole.id) {
+                <mat-icon class="scale-80">check_circle</mat-icon>
+                <!-- <mat-icon>check_circle</mat-icon> -->
+                Claimed by you
+              } @else {
+                <mat-icon class="scale-80">event_busy</mat-icon>
+                <!-- <mat-icon>event_busy</mat-icon> -->
+                Claimed by tutor
+              }
+            } @else {
+              <mat-icon>sync_lock</mat-icon>
+              Claim Task
+            }
+          </div>
         </button>
         <!--
           - "Claim Task" should create a new OverflowTask
@@ -184,7 +198,7 @@
           </button>
         }
 
-        @if (canAccessTutorNotes(selectedTask)) {
+        @if (canAccessTutorNotes) {
           <div class="relative inline-block">
             <button
               mat-icon-button
