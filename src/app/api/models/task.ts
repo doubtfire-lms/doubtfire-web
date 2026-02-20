@@ -66,6 +66,9 @@ export class Task extends Entity {
   //TODO: map task submission details
   hasPdf: boolean = false;
   processingPdf: boolean = false;
+  claimedByUnitRoleId: number;
+
+  loadingSubmissionDetails: boolean = false;
 
   pinned: boolean = false;
 
@@ -610,7 +613,7 @@ export class Task extends Entity {
 
   public getSubmissionDetails(): Observable<Task> {
     const http: HttpClient = AppInjector.get(HttpClient);
-
+    this.loadingSubmissionDetails = true;
     return http
       .get(
         `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${
@@ -619,11 +622,15 @@ export class Task extends Entity {
       )
       .pipe(
         map((response: object) => {
+          this.loadingSubmissionDetails = false;
           this.hasPdf = response['has_pdf'];
           this.processingPdf = response['processing_pdf'];
           this.submissionDate = MappingFunctions.mapDate(response, 'submission_date', this);
           if (response['task_status'] && TaskStatus.STATUS_KEYS.includes(response['task_status'])) {
             this.status = response['task_status'];
+          }
+          if (response['claimed_by_unit_role_id']) {
+            this.claimedByUnitRoleId = response['claimed_by_unit_role_id'];
           }
           return this;
         }),
