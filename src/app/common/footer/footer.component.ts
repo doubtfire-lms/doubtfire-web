@@ -7,6 +7,7 @@ import {FileDownloaderService} from '../file-downloader/file-downloader.service'
 import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {UserService} from 'src/app/api/services/user.service';
+import {AlertService} from '../services/alert.service';
 
 @Component({
   selector: 'f-footer',
@@ -20,6 +21,7 @@ export class FooterComponent implements OnInit {
     private fileDownloader: FileDownloaderService,
     private taskAssessmentModal: TaskAssessmentModalService,
     private userService: UserService,
+    private alertService: AlertService,
   ) {}
 
   @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
@@ -158,5 +160,28 @@ export class FooterComponent implements OnInit {
       this.selectedTask.definition.getJplagReportUrl(),
       `${this.selectedTask.definition.abbreviation}-jplag-report`,
     );
+  }
+
+  public get actionButtonEnabled(): boolean {
+    if (!this.selectedTask) {
+      return false;
+    }
+
+    if (this.selectedTask.loadingSubmissionDetails) {
+      return false;
+    }
+
+    if (this.viewType === 'overflow' || this.selectedTask.claimedByUnitRoleId) {
+      const currentUser = this.userService.currentUser;
+      const currentUserRole = this.selectedTask.unit.staff.find(
+        (ur) => ur.user.id === currentUser.id,
+      );
+
+      if (currentUserRole.id !== this.selectedTask.claimedByUnitRoleId) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

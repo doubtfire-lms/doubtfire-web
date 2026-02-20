@@ -13,14 +13,14 @@
 
   <div class="flex w-full">
     <f-user-badge fxFlex fxFlexAlign="start start" [selectedTask]="selectedTask"></f-user-badge>
-    <div class="flex justify-between">
+    <div class="flex justify-between items-center">
       <span class="center-buttons flex justify-around gap-5">
         <div>
           <button
-            [disabled]="selectedTask === undefined"
+            [disabled]="!actionButtonEnabled"
             mat-icon-button
             matTooltip="Mark as Redo"
-            matTooltipPosition="above"
+            matTooltipPo`sition="above"
             aria-label=""
             class="button"
             (click)="selectedTask?.updateTaskStatus('redo')"
@@ -29,7 +29,7 @@
           </button>
 
           <button
-            [disabled]="selectedTask === undefined"
+            [disabled]="!actionButtonEnabled"
             mat-icon-button
             matTooltip="Mark as Attention Required"
             matTooltipPosition="above"
@@ -41,7 +41,7 @@
           </button>
         </div>
         <button
-          [disabled]="selectedTask === undefined"
+          [disabled]="!actionButtonEnabled"
           mat-icon-button
           matTooltip="Mark as Resubmit"
           matTooltipPosition="above"
@@ -63,13 +63,14 @@
             class="button extra-large-button status-chip"
             (click)="selectedTask?.updateTaskStatus(selectedTask.suggestedTaskStatus)"
             [ngClass]="taskService.statusData(selectedTask.suggestedTaskStatus).class"
+            [disabled]="!actionButtonEnabled"
           >
             <i class="fa {{ taskService.statusData(selectedTask.suggestedTaskStatus).icon }}"></i>
           </button>
         }
         @if (selectedTask?.definition?.assessInPortfolioOnly) {
           <button
-            [disabled]="selectedTask === undefined"
+            [disabled]="!actionButtonEnabled"
             mat-icon-button
             matTooltip="Mark as Working On It"
             matTooltipPosition="above"
@@ -81,7 +82,7 @@
           </button>
         } @else {
           <button
-            [disabled]="selectedTask === undefined"
+            [disabled]="!actionButtonEnabled"
             mat-icon-button
             matTooltip="Mark as Complete"
             matTooltipPosition="above"
@@ -94,7 +95,7 @@
         }
 
         <button
-          [disabled]="selectedTask === undefined"
+          [disabled]="!actionButtonEnabled"
           mat-icon-button
           matTooltip="Mark as Discuss"
           matTooltipPosition="above"
@@ -109,7 +110,7 @@
 
         <div class="flex justify-start">
           <button
-            [disabled]="selectedTask === undefined"
+            [disabled]="!actionButtonEnabled"
             mat-icon-button
             matTooltip="Discussed in class"
             matTooltipPosition="above"
@@ -128,8 +129,21 @@
         <!-- <mat-divider class="mr-10" [vertical]="true"></mat-divider> -->
       }
       @if (viewType === 'overflow' && selectedTask) {
-        <!-- TODO: all the status buttons should be disabled until the task has been claimed -->
-        <button mat-raised-button>Claim task</button>
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="claimTask(selectedTask)"
+          [disabled]="
+            !selectedTask ||
+            selectedTask.loadingSubmissionDetails ||
+            selectedTask.claimedByUnitRoleId
+          "
+          class="ml-5"
+        >
+          <!-- TODO: tooltips "You have already claimed this task".. -->
+          <mat-icon class="scale-150">sync_lock</mat-icon>
+          Claim task
+        </button>
         <!--
           - "Claim Task" should create a new OverflowTask
         -->
@@ -270,7 +284,7 @@
         <button
           mat-menu-item
           (click)="selectedTask?.updateTaskStatus('fail')"
-          [disabled]="selectedTask === undefined"
+          [disabled]="!actionButtonEnabled"
         >
           <mat-icon matListItemIcon aria-label="Fail icon" fontIcon="cancel"></mat-icon>
           Mark as fail
