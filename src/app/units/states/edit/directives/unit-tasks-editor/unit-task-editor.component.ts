@@ -1,15 +1,21 @@
-import { AfterViewInit, Component, Inject, Input, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
-import { confirmationModal, csvResultModalService, csvUploadModalService } from 'src/app/ajs-upgraded-providers';
-import { TaskDefinition } from 'src/app/api/models/task-definition';
-import { Unit } from 'src/app/api/models/unit';
-import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { addWeeks } from 'date-fns';
-import { FeedbackTemplateService } from 'src/app/api/services/feedback-template.service';
+import {AfterViewInit, Component, Inject, Input, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {addWeeks} from 'date-fns';
+import {Subscription} from 'rxjs';
+import {
+  confirmationModal,
+  csvResultModalService,
+  csvUploadModalService,
+} from 'src/app/ajs-upgraded-providers';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Unit} from 'src/app/api/models/unit';
+import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
+import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+
+type GradeCol = 'p' | 'c' | 'd' | 'hd';
 
 @Component({
   selector: 'f-unit-task-editor',
@@ -17,16 +23,62 @@ import { FeedbackTemplateService } from 'src/app/api/services/feedback-template.
   styleUrls: ['unit-task-editor.component.scss'],
 })
 export class UnitTaskEditorComponent implements AfterViewInit {
-  @ViewChild(MatTable, { static: false }) table: MatTable<TaskDefinition>;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatTable, {static: false}) table: MatTable<TaskDefinition>;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   @Input() unit: Unit;
 
   public taskDefinitionSource: MatTableDataSource<TaskDefinition>;
-  public columns: string[] = ['name', 'grade', 'startDate', 'targetDate', 'deadlineDate', 'taskDefAction'];
+  public columns: string[] = [
+    'name',
+    'grade',
+    'startDate',
+    'targetDate',
+    'deadlineDate',
+    'taskDefAction',
+  ];
   public filter: string;
   public selectedTaskDefinition: TaskDefinition;
+
+  public gradeColumns: string[] = ['p', 'c', 'd', 'hd'];
+  public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
+  public dueDateSource: MatTableDataSource<TaskDefinition>;
+
+  getGradeDueDate(td: TaskDefinition, g: GradeCol): Date | null {
+    switch (g) {
+      case 'p':
+        // return td.pDueDate ?? td.dueDate ?? null; // fallback to existing dueDate
+        return td.dueDate ?? null; // fallback to existing dueDate
+      case 'c':
+        return td.cDueDate ?? null;
+      case 'd':
+        return td.dDueDate ?? null;
+      case 'hd':
+        return td.hdDueDate ?? null;
+    }
+  }
+
+  setGradeDueDate(td: TaskDefinition, g: GradeCol, value: Date | null): void {
+    switch (g) {
+      // case 'p':
+      //   td.pDueDate = value;
+      //   break;
+      case 'c':
+        td.cDueDate = value;
+        break;
+      case 'd':
+        td.dDueDate = value;
+        break;
+      case 'hd':
+        td.hdDueDate = value;
+        break;
+    }
+
+    this.saveTaskDefinition(td);
+
+    // TODO: call save endpoint / td.save() once you expose these fields
+  }
 
   constructor(
     private taskDefinitionService: TaskDefinitionService,
@@ -34,7 +86,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     private alerts: AlertService,
     @Inject(csvResultModalService) private csvResultModalService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(confirmationModal) private confirmationModal: any
+    @Inject(confirmationModal) private confirmationModal: any,
   ) {}
 
   ngAfterViewInit(): void {
@@ -43,8 +95,9 @@ export class UnitTaskEditorComponent implements AfterViewInit {
         this.taskDefinitionSource = new MatTableDataSource<TaskDefinition>(taskDefinitions);
         this.taskDefinitionSource.paginator = this.paginator;
         this.taskDefinitionSource.sort = this.sort;
-        this.taskDefinitionSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
-      })
+        this.taskDefinitionSource.filterPredicate = (data: any, filter: string) =>
+          data.matches(filter);
+      }),
     );
   }
 
@@ -154,7 +207,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     this.csvUploadModal.show(
       'Upload Task Definitions as CSV',
       'Test message',
-      { file: { name: 'Task Definition CSV Data', type: 'csv' } },
+      {file: {name: 'Task Definition CSV Data', type: 'csv'}},
       this.unit.getTaskDefinitionBatchUploadUrl(),
       (response: any) => {
         // at least one student?
@@ -162,7 +215,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
         if (response.success.length > 0) {
           this.unit.refresh();
         }
-      }
+      },
     );
   }
 
@@ -170,7 +223,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     this.csvUploadModal.show(
       'Upload Task Sheets and Resources as Zip',
       'Test message',
-      { file: { name: 'Task Sheets and Resources', type: 'zip' } },
+      {file: {name: 'Task Sheets and Resources', type: 'zip'}},
       this.unit.taskUploadUrl,
       (response: any) => {
         // at least one student?
@@ -178,7 +231,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
         if (response.success.length > 0) {
           this.unit.refresh();
         }
-      }
+      },
     );
   }
 

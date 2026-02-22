@@ -62,6 +62,11 @@ export class TaskDefinition extends Entity {
   discussionPromptsCount: number;
   overseerResourceFiles: string[] = [];
 
+  // pDueDate: Date;
+  cDueDate: Date;
+  dDueDate: Date;
+  hdDueDate: Date;
+
   public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
     new EntityCache<TaskPrerequisite>();
 

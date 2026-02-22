@@ -408,13 +408,15 @@ export class TaskPlannerComponent implements OnInit {
     });
   }
 
-  refreshItems() {
+  refreshItems(scroll: boolean = true) {
     this.taskPrerequisites = this.allTaskPrerequisites.filter((pre) =>
       this.taskDefs().find((td) => td.id === pre.taskDefinitionId),
     );
 
+    console.log(`my garget grade is ${this.project.targetGrade}`);
     const taskDefinitions = this.taskDefs();
     this.items = [];
+    this.baselineItems = [];
 
     for (const td of taskDefinitions) {
       const task = this.project.findTaskForDefinition(td.id);
@@ -489,23 +491,40 @@ export class TaskPlannerComponent implements OnInit {
       item.originalLinks = [...(originalItem.links as GanttLink[])];
 
       this.items.push(item);
-      this.items = [...this.items];
 
       // Create baseline item
       const baselineItem = {...item};
       baselineItem.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
-      baselineItem.end = this.normalizeDateUTC(td.targetDate.getTime() / 1000);
+
+      const tdTargetDate =
+        (this.project.targetGrade === 1
+          ? td.cDueDate
+          : this.project.targetGrade === 2
+            ? td.dDueDate
+            : this.project.targetGrade === 3
+              ? td.hdDueDate
+              : td.targetDate) ?? td.targetDate;
+
+      if (td.id === 1) {
+        console.log(tdTargetDate);
+      }
+
+      baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
       this.baselineItems.push(baselineItem);
-      this.baselineItems = [...this.baselineItems];
 
       // if (this.unsavedChanges(item)) {
       //   this.saveTargetDate(item);
       // }
     }
 
-    this.ganttComponent.scrollToToday();
+    this.items = [...this.items];
+    this.baselineItems = [...this.baselineItems];
 
-    if (this.router.globals.params.taskDef) {
+    if (scroll) {
+      this.ganttComponent.scrollToToday();
+    }
+
+    if (this.router.globals.params.taskDef && scroll) {
       const taskItem = this.items.find((item) => item.id === this.router.globals.params.taskDef);
       if (taskItem) {
         this.ganttComponent.scrollToDate(taskItem.start);
