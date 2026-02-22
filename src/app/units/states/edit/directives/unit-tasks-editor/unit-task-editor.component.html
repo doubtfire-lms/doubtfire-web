@@ -156,14 +156,19 @@
           </div>
         </th>
         <td mat-cell *matCellDef="let td">
-          <mat-form-field appearance="outline" class="w-[200px] flex justify-center">
+          <mat-form-field
+            appearance="outline"
+            class="w-[200px] flex justify-center items-center pt-[22px]"
+          >
             <input
               matInput
               [matDatepicker]="dp"
               [ngModel]="getGradeDueDate(td, g)"
               (ngModelChange)="setGradeDueDate(td, g, $event)"
+              [ngClass]="{'fallback-date': isFallbackDate(td, g)}"
               placeholder="Select date"
             />
+
             <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
             <mat-datepicker #dp></mat-datepicker>
           </mat-form-field>

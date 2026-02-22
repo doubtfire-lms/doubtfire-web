@@ -49,13 +49,26 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     switch (g) {
       case 'p':
         // return td.pTargetDate ?? td.dueDate ?? null; // fallback to existing dueDate
-        return td.targetDate ?? null; // fallback to existing targetDate
+        return td.targetDate ?? td.targetDate; // fallback to existing targetDate
       case 'c':
-        return td.cTargetDate ?? null;
+        return td.cTargetDate ?? td.targetDate;
       case 'd':
-        return td.dTargetDate ?? null;
+        return td.dTargetDate ?? td.targetDate;
       case 'hd':
-        return td.hdTargetDate ?? null;
+        return td.hdTargetDate ?? td.targetDate;
+    }
+  }
+
+  isFallbackDate(td: TaskDefinition, g: GradeCol): boolean {
+    switch (g) {
+      case 'p':
+        return false; // P is always real
+      case 'c':
+        return !td.cTargetDate;
+      case 'd':
+        return !td.dTargetDate;
+      case 'hd':
+        return !td.hdTargetDate;
     }
   }
 
