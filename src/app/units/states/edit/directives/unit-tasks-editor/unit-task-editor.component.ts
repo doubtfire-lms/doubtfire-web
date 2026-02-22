@@ -48,8 +48,8 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   getGradeDueDate(td: TaskDefinition, g: GradeCol): Date | null {
     switch (g) {
       case 'p':
-        // return td.pDueDate ?? td.dueDate ?? null; // fallback to existing dueDate
-        return td.targetDate ?? null; // fallback to existing dueDate
+        // return td.pTargetDate ?? td.dueDate ?? null; // fallback to existing dueDate
+        return td.targetDate ?? null; // fallback to existing targetDate
       case 'c':
         return td.cTargetDate ?? null;
       case 'd':

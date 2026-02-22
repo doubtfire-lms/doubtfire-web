@@ -62,7 +62,7 @@ export class TaskDefinition extends Entity {
   discussionPromptsCount: number;
   overseerResourceFiles: string[] = [];
 
-  // pDueDate: Date;
+  // pTargetDate: Date;
   cTargetDate: Date;
   dTargetDate: Date;
   hdTargetDate: Date;
