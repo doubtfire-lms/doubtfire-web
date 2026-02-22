@@ -113,9 +113,14 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   }
 
   public saveTaskDefinition(taskDefinition: TaskDefinition) {
-    taskDefinition.save().subscribe(() => {
-      this.alerts.success('Task Saved');
-      taskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
+    taskDefinition.save().subscribe({
+      next: () => {
+        this.alerts.success('Task Saved');
+        taskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
+      },
+      error: (error) => {
+        this.alerts.error(`Failed to update task: ${error}`, 6000);
+      },
     });
   }
 
