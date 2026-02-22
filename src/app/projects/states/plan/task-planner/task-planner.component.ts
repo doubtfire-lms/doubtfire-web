@@ -37,6 +37,8 @@ export class TaskPlannerComponent implements OnInit {
   public readonly CLOSE_TO_FEEDBACK_DEADLINE_THRESHOLD = 7;
 
   @Input() project: Project;
+  @Input() targetGrade: number;
+
   @ViewChild('gantt') ganttComponent: NgxGanttComponent;
 
   public viewType: GanttViewType = GanttViewType.day;
@@ -418,6 +420,9 @@ export class TaskPlannerComponent implements OnInit {
     this.items = [];
     this.baselineItems = [];
 
+    const _items: TaskGanttItem[] = [];
+    const _baselineItems: GanttBaselineItem[] = [];
+
     for (const td of taskDefinitions) {
       const task = this.project.findTaskForDefinition(td.id);
 
@@ -491,30 +496,38 @@ export class TaskPlannerComponent implements OnInit {
       item.originalLinks = [...(originalItem.links as GanttLink[])];
 
       this.items.push(item);
+      _items.push(item);
 
       // Create baseline item
       const baselineItem = {...item};
       baselineItem.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
 
       const tdTargetDate =
-        (this.project.targetGrade === 1
+        (this.targetGrade === 1
           ? td.cTargetDate
-          : this.project.targetGrade === 2
+          : this.targetGrade === 2
             ? td.dTargetDate
-            : this.project.targetGrade === 3
+            : this.targetGrade === 3
               ? td.hdTargetDate
               : td.targetDate) ?? td.targetDate;
 
+      console.log(this.targetGrade);
+      if (td.id === 65) {
+        console.log(tdTargetDate);
+      }
+
       baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
-      this.baselineItems.push(baselineItem);
+      _baselineItems.push(baselineItem);
 
       // if (this.unsavedChanges(item)) {
       //   this.saveTargetDate(item);
       // }
     }
 
-    this.items = [...this.items];
-    this.baselineItems = [...this.baselineItems];
+    this.items = [..._items];
+    setTimeout(() => {
+      this.baselineItems = [..._baselineItems];
+    });
 
     if (scroll) {
       this.ganttComponent.scrollToToday();
@@ -553,7 +566,7 @@ export class TaskPlannerComponent implements OnInit {
     }
 
     return this.project.unit.taskDefinitions.filter((taskDef) => {
-      return taskDef.targetGrade <= this.project.targetGrade;
+      return taskDef.targetGrade <= this.targetGrade;
     });
   }
 }
