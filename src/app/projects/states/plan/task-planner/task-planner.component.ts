@@ -413,7 +413,6 @@ export class TaskPlannerComponent implements OnInit {
       this.taskDefs().find((td) => td.id === pre.taskDefinitionId),
     );
 
-    console.log(`my garget grade is ${this.project.targetGrade}`);
     const taskDefinitions = this.taskDefs();
     this.items = [];
     this.baselineItems = [];
@@ -498,16 +497,12 @@ export class TaskPlannerComponent implements OnInit {
 
       const tdTargetDate =
         (this.project.targetGrade === 1
-          ? td.cDueDate
+          ? td.cTargetDate
           : this.project.targetGrade === 2
-            ? td.dDueDate
+            ? td.dTargetDate
             : this.project.targetGrade === 3
-              ? td.hdDueDate
+              ? td.hdTargetDate
               : td.targetDate) ?? td.targetDate;
-
-      if (td.id === 1) {
-        console.log(tdTargetDate);
-      }
 
       baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
       this.baselineItems.push(baselineItem);

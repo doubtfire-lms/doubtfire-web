@@ -164,17 +164,17 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       //   toJsonFn: MappingFunctions.mapDayToJson,
       // },
       {
-        keys: 'cDueDate',
+        keys: 'cTargetDate',
         toEntityFn: MappingFunctions.mapDateToDay,
         toJsonFn: MappingFunctions.mapDayToJson,
       },
       {
-        keys: 'dDueDate',
+        keys: 'dTargetDate',
         toEntityFn: MappingFunctions.mapDateToDay,
         toJsonFn: MappingFunctions.mapDayToJson,
       },
       {
-        keys: 'hdDueDate',
+        keys: 'hdTargetDate',
         toEntityFn: MappingFunctions.mapDateToDay,
         toJsonFn: MappingFunctions.mapDayToJson,
       },

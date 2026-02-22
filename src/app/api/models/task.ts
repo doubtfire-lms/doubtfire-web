@@ -198,12 +198,12 @@ export class Task extends Entity {
   public localDueDate(): Date {
     if (this.targetDueDate && this.unit.allowFlexibleDates) {
       return this.targetDueDate;
-    } else if (this.project.targetGrade === 1 && this.definition.cDueDate) {
-      return this.definition.cDueDate;
-    } else if (this.project.targetGrade === 2 && this.definition.dDueDate) {
-      return this.definition.dDueDate;
-    } else if (this.project.targetGrade === 3 && this.definition.hdDueDate) {
-      return this.definition.hdDueDate;
+    } else if (this.project.targetGrade === 1 && this.definition.cTargetDate) {
+      return this.definition.cTargetDate;
+    } else if (this.project.targetGrade === 2 && this.definition.dTargetDate) {
+      return this.definition.dTargetDate;
+    } else if (this.project.targetGrade === 3 && this.definition.hdTargetDate) {
+      return this.definition.hdTargetDate;
       // if targetGrade is pass we falback to the default dueDate
     } else if (this.dueDate) {
       return this.dueDate;

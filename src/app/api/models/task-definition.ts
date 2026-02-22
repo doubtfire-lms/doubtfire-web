@@ -63,9 +63,9 @@ export class TaskDefinition extends Entity {
   overseerResourceFiles: string[] = [];
 
   // pDueDate: Date;
-  cDueDate: Date;
-  dDueDate: Date;
-  hdDueDate: Date;
+  cTargetDate: Date;
+  dTargetDate: Date;
+  hdTargetDate: Date;
 
   public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
     new EntityCache<TaskPrerequisite>();

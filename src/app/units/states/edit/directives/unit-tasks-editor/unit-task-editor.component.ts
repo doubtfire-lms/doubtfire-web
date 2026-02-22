@@ -49,35 +49,33 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     switch (g) {
       case 'p':
         // return td.pDueDate ?? td.dueDate ?? null; // fallback to existing dueDate
-        return td.dueDate ?? null; // fallback to existing dueDate
+        return td.targetDate ?? null; // fallback to existing dueDate
       case 'c':
-        return td.cDueDate ?? null;
+        return td.cTargetDate ?? null;
       case 'd':
-        return td.dDueDate ?? null;
+        return td.dTargetDate ?? null;
       case 'hd':
-        return td.hdDueDate ?? null;
+        return td.hdTargetDate ?? null;
     }
   }
 
   setGradeDueDate(td: TaskDefinition, g: GradeCol, value: Date | null): void {
     switch (g) {
-      // case 'p':
-      //   td.pDueDate = value;
-      //   break;
+      case 'p':
+        td.targetDate = value;
+        break;
       case 'c':
-        td.cDueDate = value;
+        td.cTargetDate = value;
         break;
       case 'd':
-        td.dDueDate = value;
+        td.dTargetDate = value;
         break;
       case 'hd':
-        td.hdDueDate = value;
+        td.hdTargetDate = value;
         break;
     }
 
     this.saveTaskDefinition(td);
-
-    // TODO: call save endpoint / td.save() once you expose these fields
   }
 
   constructor(
