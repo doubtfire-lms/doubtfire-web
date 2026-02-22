@@ -315,9 +315,10 @@ export class TaskPlannerComponent implements OnInit {
               task.targetStartDate = null;
 
               const item = this.items.find((item) => item.id === task.definition.id.toString());
-
-              item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
-              item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+              if (item) {
+                item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+                item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+              }
             }
             this.items = [...this.items];
           },
