@@ -142,6 +142,13 @@
 </div>
 
 @if (unit.allowFlexibleDates) {
+  <br />
+  <mat-divider class="my-5"></mat-divider>
+  <br />
+  <div>
+    <h3>Manage Target Dates</h3>
+    <p>Modify or add target dates for each target grade</p>
+  </div>
   <div class="mt-6">
     <table mat-table [dataSource]="taskDefinitionSource" class="mat-elevation-z0 w-full">
       <ng-container matColumnDef="taskDefinition">
