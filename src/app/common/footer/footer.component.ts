@@ -177,7 +177,7 @@ export class FooterComponent implements OnInit {
         task.claimedByUnitRoleId = this.currentUnitRole.id;
       },
       error: (error) => {
-        console.error(error);
+        this.alertService.error(`Failed to claim task ${error}`, 6000);
       },
     });
   }
