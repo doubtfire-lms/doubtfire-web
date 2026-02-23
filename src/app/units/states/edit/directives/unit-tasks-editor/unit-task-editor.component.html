@@ -130,6 +130,11 @@
         <mat-icon>upload_file</mat-icon>
       </button>
       <span class="flex-grow"></span>
+      @if (unit.allowFlexibleDates) {
+        <button mat-raised-button (click)="manageDueDates = !manageDueDates" class="mr-5">
+          Manage Due Dates
+        </button>
+      }
       <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
     </span>
     @if (selectedTaskDefinition) {
@@ -142,48 +147,50 @@
 </div>
 
 @if (unit.allowFlexibleDates) {
-  <br />
-  <mat-divider class="my-5"></mat-divider>
-  <br />
-  <div>
-    <h3>Manage Target Dates</h3>
-    <p>Modify or add target dates for each target grade</p>
-  </div>
-  <div class="mt-6">
-    <table mat-table [dataSource]="taskDefinitionSource" class="mat-elevation-z0 w-full">
-      <ng-container matColumnDef="taskDefinition">
-        <th mat-header-cell *matHeaderCellDef>Task</th>
-        <td mat-cell *matCellDef="let td">{{ td.abbreviation }} {{ td.name }}</td>
-      </ng-container>
+  @if (manageDueDates) {
+    <br />
+    <mat-divider class="my-5"></mat-divider>
+    <br />
+    <div>
+      <h3>Manage Target Dates</h3>
+      <p>Modify or add target dates for each target grade</p>
+    </div>
+    <div class="mt-6">
+      <table mat-table [dataSource]="taskDefinitionSource" class="mat-elevation-z0 w-full">
+        <ng-container matColumnDef="taskDefinition">
+          <th mat-header-cell *matHeaderCellDef>Task</th>
+          <td mat-cell *matCellDef="let td">{{ td.abbreviation }} {{ td.name }}</td>
+        </ng-container>
 
-      <ng-container *ngFor="let g of gradeColumns" [matColumnDef]="g">
-        <th mat-header-cell *matHeaderCellDef class="text-center w-[160px]">
-          <div class="w-full flex justify-center">
-            <f-grade-icon [grade]="gradeColumns.indexOf(g)"></f-grade-icon>
-          </div>
-        </th>
-        <td mat-cell *matCellDef="let td">
-          <mat-form-field
-            appearance="outline"
-            class="w-[200px] flex justify-center items-center pt-[22px]"
-          >
-            <input
-              matInput
-              [matDatepicker]="dp"
-              [ngModel]="getGradeDueDate(td, g)"
-              (ngModelChange)="setGradeDueDate(td, g, $event)"
-              [ngClass]="{'fallback-date': isFallbackDate(td, g)}"
-              placeholder="Select date"
-            />
+        <ng-container *ngFor="let g of gradeColumns" [matColumnDef]="g">
+          <th mat-header-cell *matHeaderCellDef class="text-center w-[160px]">
+            <div class="w-full flex justify-center">
+              <f-grade-icon [grade]="gradeColumns.indexOf(g)"></f-grade-icon>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let td">
+            <mat-form-field
+              appearance="outline"
+              class="w-[200px] flex justify-center items-center pt-[22px]"
+            >
+              <input
+                matInput
+                [matDatepicker]="dp"
+                [ngModel]="getGradeDueDate(td, g)"
+                (ngModelChange)="setGradeDueDate(td, g, $event)"
+                [ngClass]="{'fallback-date': isFallbackDate(td, g)}"
+                placeholder="Select date"
+              />
 
-            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-            <mat-datepicker #dp></mat-datepicker>
-          </mat-form-field>
-        </td>
-      </ng-container>
+              <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+              <mat-datepicker #dp></mat-datepicker>
+            </mat-form-field>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="dueDateColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: dueDateColumns"></tr>
-    </table>
-  </div>
+        <tr mat-header-row *matHeaderRowDef="dueDateColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: dueDateColumns"></tr>
+      </table>
+    </div>
+  }
 }

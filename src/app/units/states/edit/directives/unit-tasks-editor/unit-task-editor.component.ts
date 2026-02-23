@@ -45,6 +45,8 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
   public dueDateSource: MatTableDataSource<TaskDefinition>;
 
+  public manageDueDates: boolean;
+
   getGradeDueDate(td: TaskDefinition, g: GradeCol): Date | null {
     switch (g) {
       case 'p':
