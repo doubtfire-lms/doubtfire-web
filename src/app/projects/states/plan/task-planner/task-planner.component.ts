@@ -511,11 +511,6 @@ export class TaskPlannerComponent implements OnInit {
               ? td.hdTargetDate
               : td.targetDate) ?? td.targetDate;
 
-      console.log(this.targetGrade);
-      if (td.id === 65) {
-        console.log(tdTargetDate);
-      }
-
       baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
       _baselineItems.push(baselineItem);
 
