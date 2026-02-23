@@ -4,3 +4,9 @@
   // bottom: 0;
   // width: 100%;
 }
+
+::ng-deep input.mat-mdc-input-element.fallback-date {
+  font-style: italic;
+  color: #bfbfbf !important;
+  -webkit-text-fill-color: #bfbfbf !important; /* fixes some WebKit cases */
+}

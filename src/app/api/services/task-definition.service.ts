@@ -158,6 +158,26 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
         },
       },
       'overseerResourceFiles',
+      // {
+      //   keys: 'pTargetDate',
+      //   toEntityFn: MappingFunctions.mapDateToDay,
+      //   toJsonFn: MappingFunctions.mapDayToJson,
+      // },
+      {
+        keys: 'cTargetDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
+      {
+        keys: 'dTargetDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
+      {
+        keys: 'hdTargetDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
     );
 
     this.mapping.mapAllKeysToJsonExcept(

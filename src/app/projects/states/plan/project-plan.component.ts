@@ -59,7 +59,7 @@ export class ProjectPlanComponent implements OnInit {
     this.projectService.update(this.project).subscribe({
       next: () => {
         this.alertService.success(`Succesfully updated target grade`, 2000);
-        this.planner.refreshItems();
+        this.planner.refreshItems(false);
       },
       error: (error) => {
         this.project.targetGrade = previousTargetGrade;

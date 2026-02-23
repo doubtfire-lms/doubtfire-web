@@ -196,13 +196,29 @@ export class Task extends Entity {
   }
 
   public localDueDate(): Date {
-    if (this.targetDueDate && this.unit.allowFlexibleDates) {
-      return this.targetDueDate;
-    } else if (this.dueDate) {
-      return this.dueDate;
-    } else {
-      return this.definition.localDueDate();
+    if (this.unit.allowFlexibleDates) {
+      if (this.targetDueDate) {
+        // Student's custom planned date
+        return this.targetDueDate;
+      }
+
+      // Unit target dates per grade guidelines
+      if (this.project.targetGrade === 1 && this.definition.cTargetDate) {
+        return this.definition.cTargetDate;
+      }
+      if (this.project.targetGrade === 2 && this.definition.dTargetDate) {
+        return this.definition.dTargetDate;
+      }
+      if (this.project.targetGrade === 3 && this.definition.hdTargetDate) {
+        return this.definition.hdTargetDate;
+      }
     }
+
+    if (this.dueDate) {
+      return this.dueDate;
+    }
+
+    return this.definition.localDueDate();
   }
 
   public localDueDateString(): string {
