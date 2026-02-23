@@ -47,6 +47,51 @@ export class UnitTaskEditorComponent implements AfterViewInit {
 
   public manageDueDates: boolean;
 
+  getGradeStartDate(td: TaskDefinition, g: GradeCol): Date | null {
+    switch (g) {
+      case 'p':
+        return td.startDate ?? td.startDate; // fallback to existing startDate
+      case 'c':
+        return td.cStartDate ?? td.startDate;
+      case 'd':
+        return td.dStartDate ?? td.startDate;
+      case 'hd':
+        return td.hdStartDate ?? td.startDate;
+    }
+  }
+
+  isFallbackStartDate(td: TaskDefinition, g: GradeCol): boolean {
+    switch (g) {
+      case 'p':
+        return false; // P is always real
+      case 'c':
+        return !td.cStartDate;
+      case 'd':
+        return !td.dStartDate;
+      case 'hd':
+        return !td.hdStartDate;
+    }
+  }
+
+  setGradeStartDate(td: TaskDefinition, g: GradeCol, value: Date | null): void {
+    switch (g) {
+      case 'p':
+        td.startDate = value;
+        break;
+      case 'c':
+        td.cStartDate = value;
+        break;
+      case 'd':
+        td.dStartDate = value;
+        break;
+      case 'hd':
+        td.hdStartDate = value;
+        break;
+    }
+
+    this.saveTaskDefinition(td);
+  }
+
   getGradeDueDate(td: TaskDefinition, g: GradeCol): Date | null {
     switch (g) {
       case 'p':
@@ -61,7 +106,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     }
   }
 
-  isFallbackDate(td: TaskDefinition, g: GradeCol): boolean {
+  isFallbackTargetDate(td: TaskDefinition, g: GradeCol): boolean {
     switch (g) {
       case 'p':
         return false; // P is always real
