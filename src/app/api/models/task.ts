@@ -645,8 +645,8 @@ export class Task extends Entity {
           if (response['task_status'] && TaskStatus.STATUS_KEYS.includes(response['task_status'])) {
             this.status = response['task_status'];
           }
-          if (response['claimed_by_unit_role_id']) {
-            this.claimedByUnitRoleId = response['claimed_by_unit_role_id'];
+          if ('claimed_by_unit_role_id' in response) {
+            this.claimedByUnitRoleId = response['claimed_by_unit_role_id'] as number | null;
           }
           return this;
         }),
