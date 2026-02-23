@@ -23,7 +23,17 @@
             ng-if="$index != 4"
             disabled
           ></select>
-          <div class="ml-1 py-2 opacity-70">To change your target grade, use the Task Planner.</div>
+          <!-- <div class="ml-1 py-2 opacity-70">To change your target grade, use the Task Planner.</div> -->
+          <div class="ml-1 py-2 opacity-70">
+            To change your target grade, use the
+            <a
+              ui-sref="project/plan"
+              [ui-params]="{projectId: project.id}"
+              class="underline cursor-pointer"
+            >
+              Task Planner
+            </a>
+          </div>
         </div>
         <!--/target-grade-body-->
       </div>

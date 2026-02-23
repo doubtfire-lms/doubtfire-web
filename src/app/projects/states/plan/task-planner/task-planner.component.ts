@@ -37,6 +37,8 @@ export class TaskPlannerComponent implements OnInit {
   public readonly CLOSE_TO_FEEDBACK_DEADLINE_THRESHOLD = 7;
 
   @Input() project: Project;
+  @Input() targetGrade: number;
+
   @ViewChild('gantt') ganttComponent: NgxGanttComponent;
 
   public viewType: GanttViewType = GanttViewType.day;
@@ -315,9 +317,10 @@ export class TaskPlannerComponent implements OnInit {
               task.targetStartDate = null;
 
               const item = this.items.find((item) => item.id === task.definition.id.toString());
-
-              item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
-              item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+              if (item) {
+                item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+                item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+              }
             }
             this.items = [...this.items];
           },
@@ -408,13 +411,17 @@ export class TaskPlannerComponent implements OnInit {
     });
   }
 
-  refreshItems() {
+  refreshItems(scroll: boolean = true) {
     this.taskPrerequisites = this.allTaskPrerequisites.filter((pre) =>
       this.taskDefs().find((td) => td.id === pre.taskDefinitionId),
     );
 
     const taskDefinitions = this.taskDefs();
     this.items = [];
+    this.baselineItems = [];
+
+    const _items: TaskGanttItem[] = [];
+    const _baselineItems: GanttBaselineItem[] = [];
 
     for (const td of taskDefinitions) {
       const task = this.project.findTaskForDefinition(td.id);
@@ -489,23 +496,39 @@ export class TaskPlannerComponent implements OnInit {
       item.originalLinks = [...(originalItem.links as GanttLink[])];
 
       this.items.push(item);
-      this.items = [...this.items];
+      _items.push(item);
 
       // Create baseline item
       const baselineItem = {...item};
       baselineItem.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
-      baselineItem.end = this.normalizeDateUTC(td.targetDate.getTime() / 1000);
-      this.baselineItems.push(baselineItem);
-      this.baselineItems = [...this.baselineItems];
+
+      const tdTargetDate =
+        (this.targetGrade === 1
+          ? td.cTargetDate
+          : this.targetGrade === 2
+            ? td.dTargetDate
+            : this.targetGrade === 3
+              ? td.hdTargetDate
+              : td.targetDate) ?? td.targetDate;
+
+      baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
+      _baselineItems.push(baselineItem);
 
       // if (this.unsavedChanges(item)) {
       //   this.saveTargetDate(item);
       // }
     }
 
-    this.ganttComponent.scrollToToday();
+    this.items = [..._items];
+    setTimeout(() => {
+      this.baselineItems = [..._baselineItems];
+    });
 
-    if (this.router.globals.params.taskDef) {
+    if (scroll) {
+      this.ganttComponent.scrollToToday();
+    }
+
+    if (this.router.globals.params.taskDef && scroll) {
       const taskItem = this.items.find((item) => item.id === this.router.globals.params.taskDef);
       if (taskItem) {
         this.ganttComponent.scrollToDate(taskItem.start);
@@ -538,7 +561,7 @@ export class TaskPlannerComponent implements OnInit {
     }
 
     return this.project.unit.taskDefinitions.filter((taskDef) => {
-      return taskDef.targetGrade <= this.project.targetGrade;
+      return taskDef.targetGrade <= this.targetGrade;
     });
   }
 }
