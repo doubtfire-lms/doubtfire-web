@@ -366,9 +366,24 @@ export class Task extends Entity {
   }
 
   public get startDate(): Date {
-    if (this.targetStartDate && this.unit.allowFlexibleDates) {
-      return this.targetStartDate;
-    } else if (this.extensions < 0) {
+    if (this.unit.allowFlexibleDates) {
+      if (this.targetStartDate) {
+        return this.targetStartDate;
+      }
+
+      // Unit start dates per grade guidelines
+      if (this.project.targetGrade === 1 && this.definition.cStartDate) {
+        return this.definition.cStartDate;
+      }
+      if (this.project.targetGrade === 2 && this.definition.dStartDate) {
+        return this.definition.dStartDate;
+      }
+      if (this.project.targetGrade === 3 && this.definition.hdStartDate) {
+        return this.definition.hdStartDate;
+      }
+    }
+
+    if (this.extensions < 0) {
       // If the task has an extension, the start date is the due date minus the extension
       return MappingFunctions.addWeeks(this.definition.startDate, this.extensions);
     } else {

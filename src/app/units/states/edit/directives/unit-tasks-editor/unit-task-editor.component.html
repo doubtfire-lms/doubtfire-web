@@ -159,7 +159,9 @@
       <table mat-table [dataSource]="taskDefinitionSource" class="mat-elevation-z0 w-full">
         <ng-container matColumnDef="taskDefinition">
           <th mat-header-cell *matHeaderCellDef>Task</th>
-          <td mat-cell *matCellDef="let td">{{ td.abbreviation }} {{ td.name }}</td>
+          <td mat-cell *matCellDef="let td" class="w-fit whitespace-nowrap">
+            {{ td.abbreviation }} {{ td.name }}
+          </td>
         </ng-container>
 
         <ng-container *ngFor="let g of gradeColumns" [matColumnDef]="g">
@@ -169,22 +171,55 @@
             </div>
           </th>
           <td mat-cell *matCellDef="let td">
-            <mat-form-field
-              appearance="outline"
-              class="w-[200px] flex justify-center items-center pt-[22px]"
-            >
-              <input
-                matInput
-                [matDatepicker]="dp"
-                [ngModel]="getGradeDueDate(td, g)"
-                (ngModelChange)="setGradeDueDate(td, g, $event)"
-                [ngClass]="{'fallback-date': isFallbackDate(td, g)}"
-                placeholder="Select date"
-              />
+            <div class="flex flex-col gap-2">
+              <mat-form-field
+                appearance="outline"
+                class="w-[250px] flex justify-center items-center pt-[22px]"
+                [ngClass]="{
+                  'date-error': isStartAfterTarget(td, g)
+                }"
+              >
+                <mat-label> Start Date </mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="dpStart"
+                  [ngModel]="getGradeStartDate(td, g)"
+                  (ngModelChange)="setGradeStartDate(td, g, $event)"
+                  [ngClass]="{
+                    'fallback-date': isFallbackStartDate(td, g)
+                  }"
+                  placeholder="Select date"
+                />
 
-              <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-              <mat-datepicker #dp></mat-datepicker>
-            </mat-form-field>
+                <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
+                <mat-datepicker #dpStart></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="w-[250px] flex justify-center items-center"
+                [ngClass]="{
+                  'date-error': isStartAfterTarget(td, g)
+                }"
+              >
+                <mat-label> Target Date </mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="dpTarget"
+                  [ngModel]="getGradeDueDate(td, g)"
+                  (ngModelChange)="setGradeDueDate(td, g, $event)"
+                  [ngClass]="{
+                    'fallback-date': isFallbackTargetDate(td, g)
+                  }"
+                  placeholder="Select date"
+                />
+                @if (isStartAfterTarget(td, g)) {
+                  <mat-hint class="text-red-500"> Target date must be after start date </mat-hint>
+                }
+
+                <mat-datepicker-toggle matSuffix [for]="dpTarget"></mat-datepicker-toggle>
+                <mat-datepicker #dpTarget></mat-datepicker>
+              </mat-form-field>
+            </div>
           </td>
         </ng-container>
 

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-6](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-5...v10.0.1-6) (2026-02-24)
+
+### [10.0.1-5](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-4...v10.0.1-5) (2026-02-24)
+
+
+### Features
+
+* per grade start dates ([#1090](https://github.com/b0ink/doubtfire-deploy/issues/1090)) ([a35019a](https://github.com/b0ink/doubtfire-deploy/commit/a35019aa4011fce7808da8cc1481fae7635aac69))
+
 ### [10.0.1-4](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-3...v10.0.1-4) (2026-02-23)
 
 

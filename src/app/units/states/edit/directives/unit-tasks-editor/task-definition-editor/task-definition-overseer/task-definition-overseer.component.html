@@ -224,7 +224,8 @@
                   #editor
                   class="w-full"
                   [options]="editorOptions"
-                  [(ngModel)]="selectedOverseerStep.runCommand"
+                  [(ngModel)]="selectedOverseerStep.decodedRunCommand"
+                  (ngModelChange)="onRunCommandChange(selectedOverseerStep, $event)"
                 ></ngx-monaco-editor>
                 <mat-hint class="pl-2 text-xl w-full">
                   @if (selectedOverseerStep.stepType === 'status_check') {

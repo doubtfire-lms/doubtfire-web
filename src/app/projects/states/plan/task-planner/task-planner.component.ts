@@ -359,15 +359,31 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   public get earliestStartDate() {
-    const earliestTaskStartDate = Math.min(
-      ...this.taskDefs().map((t) => t.startDate.getTime() / 1000),
-    );
-    return Math.floor(Math.min(this.unit.startDate.getTime() / 1000, earliestTaskStartDate));
+    const tasks = this.taskDefs()
+      .map((td) => this.project.findTaskForDefinition(td.id))
+      .filter((t) => t?.startDate);
+
+    if (!tasks.length) {
+      return Math.floor(this.unit.startDate.getTime() / 1000);
+    }
+
+    const earliestTaskStart = Math.min(...tasks.map((t) => t.startDate.getTime() / 1000));
+
+    return Math.floor(Math.min(this.unit.startDate.getTime() / 1000, earliestTaskStart));
   }
 
   public get latestEndDate() {
-    const latestTaskEndDate = Math.max(...this.taskDefs().map((t) => t.dueDate.getTime() / 1000));
-    return Math.floor(Math.max(this.unit.endDate.getTime() / 1000, latestTaskEndDate));
+    const tasks = this.taskDefs()
+      .map((td) => this.project.findTaskForDefinition(td.id))
+      .filter((t) => t?.localDueDate());
+
+    if (!tasks.length) {
+      return Math.floor(this.unit.endDate.getTime() / 1000);
+    }
+
+    const latestTaskEnd = Math.max(...tasks.map((t) => t.localDueDate().getTime() / 1000));
+
+    return Math.floor(Math.max(this.unit.endDate.getTime() / 1000, latestTaskEnd));
   }
 
   ngOnInit(): void {
@@ -500,7 +516,6 @@ export class TaskPlannerComponent implements OnInit {
 
       // Create baseline item
       const baselineItem = {...item};
-      baselineItem.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
 
       const tdTargetDate =
         (this.targetGrade === 1
@@ -511,7 +526,18 @@ export class TaskPlannerComponent implements OnInit {
               ? td.hdTargetDate
               : td.targetDate) ?? td.targetDate;
 
+      const tdStartDate =
+        (this.targetGrade === 1
+          ? td.cStartDate
+          : this.targetGrade === 2
+            ? td.dStartDate
+            : this.targetGrade === 3
+              ? td.hdStartDate
+              : td.startDate) ?? td.startDate;
+
+      baselineItem.start = this.normalizeDateUTC(tdStartDate.getTime() / 1000);
       baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
+
       _baselineItems.push(baselineItem);
 
       // if (this.unsavedChanges(item)) {
