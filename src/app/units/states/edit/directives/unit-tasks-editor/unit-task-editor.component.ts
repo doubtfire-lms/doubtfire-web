@@ -47,6 +47,13 @@ export class UnitTaskEditorComponent implements AfterViewInit {
 
   public manageDueDates: boolean;
 
+  isStartAfterTarget(td: TaskDefinition, g: GradeCol): boolean {
+    const start = this.getGradeStartDate(td, g);
+    const target = this.getGradeDueDate(td, g);
+    if (!start || !target) return false;
+    return new Date(start).getTime() > new Date(target).getTime();
+  }
+
   getGradeStartDate(td: TaskDefinition, g: GradeCol): Date | null {
     switch (g) {
       case 'p':
