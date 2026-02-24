@@ -500,7 +500,6 @@ export class TaskPlannerComponent implements OnInit {
 
       // Create baseline item
       const baselineItem = {...item};
-      baselineItem.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
 
       const tdTargetDate =
         (this.targetGrade === 1
@@ -511,7 +510,18 @@ export class TaskPlannerComponent implements OnInit {
               ? td.hdTargetDate
               : td.targetDate) ?? td.targetDate;
 
+      const tdStartDate =
+        (this.targetGrade === 1
+          ? td.cStartDate
+          : this.targetGrade === 2
+            ? td.dStartDate
+            : this.targetGrade === 3
+              ? td.hdStartDate
+              : td.startDate) ?? td.startDate;
+
+      baselineItem.start = this.normalizeDateUTC(tdStartDate.getTime() / 1000);
       baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
+
       _baselineItems.push(baselineItem);
 
       // if (this.unsavedChanges(item)) {

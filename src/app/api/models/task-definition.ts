@@ -67,6 +67,10 @@ export class TaskDefinition extends Entity {
   dTargetDate: Date;
   hdTargetDate: Date;
 
+  cStartDate: Date;
+  dStartDate: Date;
+  hdStartDate: Date;
+
   public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
     new EntityCache<TaskPrerequisite>();
 
