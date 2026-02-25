@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-8](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-7...v10.0.1-8) (2026-02-25)
+
+
+### Features
+
+* overflow marking ([#1086](https://github.com/b0ink/doubtfire-deploy/issues/1086)) ([e047988](https://github.com/b0ink/doubtfire-deploy/commit/e047988c4fff787852d1cc5a041cb48e11ee57f8))
+
 ### [10.0.1-7](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-6...v10.0.1-7) (2026-02-25)
 
 
