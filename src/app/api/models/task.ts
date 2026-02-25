@@ -66,7 +66,7 @@ export class Task extends Entity {
   //TODO: map task submission details
   hasPdf: boolean = false;
   processingPdf: boolean = false;
-  claimedByUnitRoleId: number;
+  claimedByUnitRoleId: number | null;
 
   loadingSubmissionDetails: boolean = false;
 
