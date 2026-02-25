@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-7](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-6...v10.0.1-7) (2026-02-25)
+
+
+### Bug Fixes
+
+* ensure timestamp is normalised to start of day ([671c391](https://github.com/b0ink/doubtfire-deploy/commit/671c3916797dc5ab680b9dac52ae68626e49d351))
+
 ### [10.0.1-6](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-5...v10.0.1-6) (2026-02-24)
 
 ### [10.0.1-5](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-4...v10.0.1-5) (2026-02-24)
