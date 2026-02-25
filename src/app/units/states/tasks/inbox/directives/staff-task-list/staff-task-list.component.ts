@@ -565,4 +565,26 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   togglePin(task: Task) {
     task.pinned ? task.unpin() : task.pin();
   }
+
+  getWarningIcon(task: Task): 'warning' | 'overflow' | null {
+    if (!task.submissionDate) return null;
+    if (task.status !== 'ready_for_feedback') {
+      return null;
+    }
+
+    const now = Date.now();
+    const submission = new Date(task.submissionDate).getTime();
+
+    const daysSinceSubmission = (now - submission) / (1000 * 60 * 60 * 24);
+
+    if (daysSinceSubmission >= task.unit.feedbackOverflowThresholdDays) {
+      return 'overflow';
+    }
+
+    if (daysSinceSubmission >= task.unit.feedbackWarningThresholdDays) {
+      return 'warning';
+    }
+
+    return null;
+  }
 }
