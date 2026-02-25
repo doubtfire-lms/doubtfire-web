@@ -3,10 +3,13 @@
   @for (stream of unit.tutorialStreams; track stream) {
     <df-unit-tutorials-list [unit]="unit" [stream]="stream"></df-unit-tutorials-list>
   }
-  <button class="new-activity-stream-button" mat-raised-button [matMenuTriggerFor]="activities">
-    <mat-icon>add</mat-icon>
-    New Tutorial Stream
-  </button>
+  <div class="w-full flex justify-center">
+    <button mat-raised-button class="mx-auto" color="primary" [matMenuTriggerFor]="activities">
+      <mat-icon>add</mat-icon>
+      New Tutorial Stream
+    </button>
+  </div>
+
   <mat-menu #activities="matMenu">
     @for (activityType of activityTypes; track activityType) {
       <button mat-menu-item (click)="onClickNewActivity(activityType)">
