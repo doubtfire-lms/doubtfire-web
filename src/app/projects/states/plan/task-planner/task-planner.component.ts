@@ -332,11 +332,23 @@ export class TaskPlannerComponent implements OnInit {
     );
   }
 
+  // normalizeDateUTC = (ts: number) => {
+  //   const d = new GanttDate(ts * 1000);
+  //   // const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0);
+  //   return Math.floor(d.getUnixTime());
+  // };
+
   normalizeDateUTC = (ts: number) => {
     const d = new GanttDate(ts * 1000);
-    // const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0);
-    return Math.floor(d.getUnixTime());
+    // d.setHours(0, 0, 0, 0);
+    return Math.floor(d.startOfDay().getTime() / 1000);
   };
+
+  // normalizeDateUTC = (ts: number) => {
+  //   const d = new Date(ts * 1000);
+  //   d.setHours(0, 0, 0, 0);
+  //   return Math.floor(d.getTime() / 1000);
+  // };
 
   toDateString(timestamp: number | Date) {
     const date = timestamp instanceof Date ? timestamp : new Date(timestamp * 1000);
