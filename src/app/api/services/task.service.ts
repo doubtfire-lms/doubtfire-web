@@ -177,7 +177,6 @@ export class TaskService extends CachedEntityService<Task> {
   }
 
   public queryTasksForOverflow(unit: Unit): Observable<Task[]> {
-    // TODO: experiment if we can actually persist a cache to hotfix the duplicate inbox requests?
     const cache: EntityCache<Task> = new EntityCache<Task>();
     return this.query(
       {
