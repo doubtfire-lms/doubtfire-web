@@ -22,7 +22,7 @@ export class FooterComponent implements OnInit {
     private userService: UserService,
   ) {}
 
-  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;
@@ -53,27 +53,24 @@ export class FooterComponent implements OnInit {
       (this.warningText?.nativeElement.getBoundingClientRect().width + totalPaddingOffset) / 2;
   }
 
-  public canAccessTutorNotes(task: Task): boolean {
-    const tutor = task.tutor;
+  public get canAccessTutorNotes(): boolean {
+    const tutor = this.selectedTask.tutor;
     if (!tutor) {
       return false;
     }
 
-    const currentUser = this.userService.currentUser;
-    const currentUserRole = task.unit.staff.find((ur) => ur.user.id === currentUser.id);
-
-    if (!currentUserRole) {
+    if (!this.currentUnitRole) {
       return false;
     }
 
     // Ensure the unit is mapped correctly to access the mentor
-    tutor.unit = task.unit;
+    tutor.unit = this.selectedTask.unit;
 
     const canAccess =
-      currentUserRole.role === 'Convenor' ||
-      currentUserRole.role === 'Admin' ||
-      (tutor.mentor && tutor.mentor.id === currentUserRole.id) ||
-      tutor.id === currentUserRole.id;
+      this.currentUnitRole.role === 'Convenor' ||
+      this.currentUnitRole.role === 'Admin' ||
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id) ||
+      tutor.id === this.currentUnitRole.id;
 
     return canAccess;
   }
@@ -158,5 +155,28 @@ export class FooterComponent implements OnInit {
       this.selectedTask.definition.getJplagReportUrl(),
       `${this.selectedTask.definition.abbreviation}-jplag-report`,
     );
+  }
+
+  public get currentUnitRole(): UnitRole | undefined {
+    const currentUser = this.userService.currentUser;
+    return this.selectedTask.unit.staff.find((ur) => ur.user.id === currentUser.id);
+  }
+
+  public get actionButtonEnabled(): boolean {
+    if (!this.selectedTask) {
+      return false;
+    }
+
+    if (this.selectedTask.loadingSubmissionDetails) {
+      return false;
+    }
+
+    if (this.viewType === 'overflow' || this.selectedTask.claimedByUnitRoleId) {
+      if (this.currentUnitRole.id !== this.selectedTask.claimedByUnitRoleId) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

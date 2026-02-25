@@ -25,6 +25,7 @@ export class TaskDropdownComponent {
     'Student Portfolios': 'Portfolios',
     'Task Explorer': 'Task Explorer',
     'Task Moderation': 'Task Moderation',
+    'Task Overflow': 'Task Overflow',
     'Task Inbox': 'Inbox',
     'Task Lists': 'Tasks',
     'Tutorial List': 'Tutorials',
@@ -38,6 +39,13 @@ export class TaskDropdownComponent {
       this.currentActivity = trans.to().data.task;
       this.menuText = this.taskToShortName?.[this.currentActivity] ?? this.currentActivity;
     });
+  }
+
+  public get canMarkOverflowTask() {
+    // this.unitRole does not have permission-based fields exposed such as canMarkOverflowTasks
+    // so we must access them via the unit data
+    const staff = this.currentUnit.staff.find((ur) => ur.id === this.unitRole.id);
+    return staff?.canMarkOverflowTasks;
   }
 
   public get isMentor(): boolean {
