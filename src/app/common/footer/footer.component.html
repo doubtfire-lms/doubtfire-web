@@ -130,46 +130,7 @@
           <!-- <mat-divider class="mr-10" [vertical]="true"></mat-divider> -->
         }
         @if (viewType === 'overflow' || selectedTask.claimedByUnitRoleId) {
-          <div
-            [matTooltip]="
-              selectedTask.claimedByUnitRoleId
-                ? selectedTask.claimedByUnitRoleId === currentUnitRole.id
-                  ? 'You have claimed this task.'
-                  : 'This task has been acquired from the overflow marking queue by another tutor.'
-                : 'Claim this task from the overflow marking queue.'
-            "
-          >
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="claimTask(selectedTask)"
-              [disabled]="
-                !selectedTask ||
-                selectedTask.loadingSubmissionDetails ||
-                selectedTask.claimedByUnitRoleId
-              "
-              class="ml-5"
-            >
-              <div class="flex items-center gap-1">
-                @if (selectedTask.claimedByUnitRoleId) {
-                  @if (selectedTask.claimedByUnitRoleId === currentUnitRole.id) {
-                    <mat-icon class="scale-80">check_circle</mat-icon>
-                    Claimed by you
-                  } @else {
-                    <mat-icon class="scale-80">event_busy</mat-icon>
-                    Claimed by tutor
-                  }
-                } @else {
-                  <mat-icon>sync_lock</mat-icon>
-                  Claim Task
-                }
-              </div>
-            </button>
-          </div>
-
-          <!--
-          - "Claim Task" should create a new OverflowTask
-        -->
+          <f-task-claim [selectedTask]="selectedTask"></f-task-claim>
         }
       }
     </div>

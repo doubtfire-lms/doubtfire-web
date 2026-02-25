@@ -7,7 +7,6 @@ import {FileDownloaderService} from '../file-downloader/file-downloader.service'
 import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {UserService} from 'src/app/api/services/user.service';
-import {AlertService} from '../services/alert.service';
 
 @Component({
   selector: 'f-footer',
@@ -21,7 +20,6 @@ export class FooterComponent implements OnInit {
     private fileDownloader: FileDownloaderService,
     private taskAssessmentModal: TaskAssessmentModalService,
     private userService: UserService,
-    private alertService: AlertService,
   ) {}
 
   @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
@@ -162,23 +160,6 @@ export class FooterComponent implements OnInit {
   public get currentUnitRole(): UnitRole | undefined {
     const currentUser = this.userService.currentUser;
     return this.selectedTask.unit.staff.find((ur) => ur.user.id === currentUser.id);
-  }
-
-  // TODO: put this into its own component like moderation
-  claimTask(task: Task) {
-    this.taskService.claimTask(task).subscribe({
-      next: (_response) => {
-        this.alertService.success(`Successfully claimed task`, 6000);
-        this.snackBar.open(
-          `Successfully claimed task. This task will be automatically unclaimed after 30 minutes of inactivity.`,
-          'OK',
-        );
-        task.claimedByUnitRoleId = this.currentUnitRole.id;
-      },
-      error: (error) => {
-        this.alertService.error(`Failed to claim task ${error}`, 6000);
-      },
-    });
   }
 
   public get actionButtonEnabled(): boolean {

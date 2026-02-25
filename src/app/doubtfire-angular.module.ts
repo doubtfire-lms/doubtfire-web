@@ -320,6 +320,7 @@ import {ModerationComponent} from './units/states/tasks/inbox/directives/moderat
 import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-notes-modal.component';
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
 import {ConfirmModerationModalComponent} from './units/states/tasks/inbox/directives/moderation/confirm-moderation-modal/confirm-moderation-modal.component';
+import {TaskClaimComponent} from './units/states/tasks/inbox/directives/task-claim/task-claim.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -515,6 +516,7 @@ const GANTT_CHART_CONFIG = {
     TutorNotesModalComponent,
     FeedbackAppealModalComponent,
     ConfirmModerationModalComponent,
+    TaskClaimComponent,
   ],
   providers: [
     // Services we provide
