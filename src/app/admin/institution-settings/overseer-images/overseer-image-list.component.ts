@@ -29,7 +29,7 @@ export class OverseerImageListComponent
   dataSource = new MatTableDataSource(this.overseerImages);
   loading = false;
 
-  public diskSpace: number;
+  public diskSpace: number | null = null;
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.

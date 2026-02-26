@@ -7,7 +7,12 @@
 <div class="overseer-image-list-container">
   <div class="header">
     <div>
-      <h3>Overseer Images ({{ diskSpace ?? 'N/A' }} GB available)</h3>
+      <h3>
+        Overseer Images
+        @if (diskSpace !== null) {
+          ({{ diskSpace ?? 'N/A' }} GB available)
+        }
+      </h3>
       <p>Add new image or modify existing ones used for automated task analysis</p>
     </div>
   </div>
