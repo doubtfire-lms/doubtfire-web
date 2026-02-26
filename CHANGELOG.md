@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-10](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-9...v10.0.1-10) (2026-02-26)
+
+
+### Features
+
+* display available storage for docker images ([#1092](https://github.com/b0ink/doubtfire-deploy/issues/1092)) ([81ebd34](https://github.com/b0ink/doubtfire-deploy/commit/81ebd3488d20a1e057c24b37190f4eea99bad9ec))
+
 ### [10.0.1-9](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-8...v10.0.1-9) (2026-02-25)
 
 
