@@ -25,6 +25,15 @@
             } @else {
               <mat-icon color="warn">cancel</mat-icon>
             }
+            <div>
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <div fxFlex></div>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item>Compare submission with...</button>
+              </mat-menu>
+            </div>
           </div>
         } @else {
           <div class="flex gap-5 uppercase items-center">
@@ -154,6 +163,11 @@
             </mat-expansion-panel>
           }
         }
+
+        <div class="w-full m-5 justify-center flex gap-5">
+          <button mat-raised-button>Compare with...</button>
+          <button mat-raised-button color="primary">View submission</button>
+        </div>
       </mat-accordion>
     </mat-expansion-panel>
   } @empty {
