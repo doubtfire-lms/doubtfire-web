@@ -15,6 +15,17 @@
     <button
       [disabled]="task === undefined || isModerated(task)"
       mat-icon-button
+      matTooltip="Snooze task"
+      matTooltipPosition="above"
+      aria-label=""
+      class="button large-button"
+      (click)="snooze()"
+    >
+      <mat-icon>snooze</mat-icon>
+    </button>
+    <button
+      [disabled]="task === undefined || isModerated(task)"
+      mat-icon-button
       matTooltip="Dismiss moderation task"
       matTooltipPosition="above"
       aria-label=""
