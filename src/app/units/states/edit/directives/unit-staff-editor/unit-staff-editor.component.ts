@@ -8,6 +8,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {MatSelectChange} from '@angular/material/select';
+import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 
 @Component({
   selector: 'unit-staff-editor',
@@ -39,6 +40,7 @@ export class UnitStaffEditorComponent implements OnInit {
     private alertService: AlertService,
     private unitRoleService: UnitRoleService,
     private confirmationModalService: ConfirmationModalService,
+    private tutorNotesModal: TutorNotesModalService,
   ) {}
 
   ngOnInit(): void {
@@ -216,5 +218,10 @@ export class UnitStaffEditorComponent implements OnInit {
 
   groupSetName(id: number) {
     this.unit.groupSetsCache.get(id).name || 'Individual Work';
+  }
+
+  openTutorNotes(unitRole: UnitRole) {
+    unitRole.unit = this.unit; // HACK: ensure unit is mapped within the UnitRole
+    this.tutorNotesModal.show(null, unitRole);
   }
 }
