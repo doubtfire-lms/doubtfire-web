@@ -4,8 +4,8 @@ import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component
 
 @Component({
   selector: 'f-task-status-pie-chart',
-  templateUrl: './taskstatuspiechart.component.html',
-  styleUrls: ['./taskstatuspiechart.component.scss'],
+  templateUrl: './task-status-pie-chart.component.html',
+  styleUrls: ['./task-status-pie-chart.component.scss'],
 })
 export class TaskStatusPieChartComponent extends ChartBaseComponent implements OnInit {
   @Input() project: Project;

@@ -247,8 +247,8 @@ import {UnitRootStateComponent} from './units/unit-root-state.component';
 import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
 import {ProjectRootStateComponent} from './projects/states/project-root-state.component';
 import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
-import {ProgressBurndownChartComponent} from './visualisations/progress-burndown-chart/progressburndownchart.component';
-import {TaskVisualisationComponent} from './visualisations/task-visualisation/taskvisualisation.component';
+import {ProgressBurndownChartComponent} from './visualisations/progress-burndown-chart/progress-burndown-chart.component';
+import {TaskVisualisationComponent} from './visualisations/task-visualisation/task-visualisation.component';
 import {ChartBaseComponent} from './common/chart-base/chart-base-component/chart-base-component.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import {ScormAdapterService} from './api/services/scorm-adapter.service';
@@ -264,6 +264,7 @@ import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 // import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
+import {GroupMemberContributionAssignerComponent} from './groups/group-member-contribution-assigner/group-member-contribution-assigner.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -279,7 +280,7 @@ const MY_DATE_FORMAT = {
 };
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
-import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/taskstatuspiechart.component';
+import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/task-status-pie-chart.component';
 import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
 import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
 import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
@@ -292,6 +293,9 @@ import {PortfoliosListComponent} from './units/states/portfolios/directives/port
 import {PortfoliosProjectProgressComponent} from './units/states/portfolios/directives/portfolios-project-progress/portfolios-project-progress.component';
 import {PortfoliosPortfolioViewComponent} from './units/states/portfolios/directives/portfolios-portfolio-view/portfolios-portfolio-view.component';
 import {PortfoliosAssessmentComponent} from './units/states/portfolios/directives/portfolios-assessment/portfolios-assessment.component';
+import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
+import {RolloverComponent} from './units/states/rollover/rollover.component';
+import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 
 @NgModule({
   // Components we declare
@@ -432,6 +436,10 @@ import {PortfoliosAssessmentComponent} from './units/states/portfolios/directive
     PortfoliosProjectProgressComponent,
     PortfoliosPortfolioViewComponent,
     PortfoliosAssessmentComponent,
+    UnitGroupsComponent,
+    RolloverComponent,
+    ProjectGroupsComponent,
+    GroupMemberContributionAssignerComponent,
   ],
   // Services we provide
   providers: [
