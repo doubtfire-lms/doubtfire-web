@@ -598,8 +598,16 @@ export class TaskPlannerComponent implements OnInit {
       return [];
     }
 
-    return this.project.unit.taskDefinitions.filter((taskDef) => {
-      return taskDef.targetGrade <= this.targetGrade;
-    });
+    return this.project.unit.taskDefinitions
+      .filter((taskDef) => taskDef.targetGrade <= this.targetGrade)
+      .sort((a, b) => {
+        const taskA = this.project.findTaskForDefinition(a.id);
+        const taskB = this.project.findTaskForDefinition(b.id);
+
+        const dateA = taskA?.startDate ?? a.startDate;
+        const dateB = taskB?.startDate ?? b.startDate;
+
+        return new Date(dateA).getTime() - new Date(dateB).getTime();
+      });
   }
 }
