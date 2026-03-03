@@ -26,6 +26,9 @@
     }
 
     <div fxFlex class="inbox-panel">
+      <!-- TODO: Separate this with a new f-inbox-dashboard -->
+      <!-- TODO: inbox dashboard can have: Submission | Task Sheet | Staff Notes | Plagiarism | Overseer -->
+      <!-- TODO: alternative:              Submission | Staff Notes | Plagiarism | Overseer -->
       <f-task-dashboard [task]="taskData.selectedTask" [pdfUrl]="visiblePdfUrl"></f-task-dashboard>
     </div>
     <div
