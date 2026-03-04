@@ -210,10 +210,16 @@ export class UnitStaffEditorComponent implements OnInit {
    * @returns void
    */
   removeStaff(staff: UnitRole) {
-    this.unitRoleService.delete(staff, {cache: this.unit.staffCache}).subscribe({
-      next: () => this.alertService.success('Staff member removed', 2000),
-      error: (response) => this.alertService.error(response, 6000),
-    });
+    this.confirmationModalService.show(
+      'Remove staff member',
+      `Are you sure you want to remove ${staff.user.name} from ${this.unit.code} ${this.unit.name}?`,
+      () => {
+        this.unitRoleService.delete(staff, {cache: this.unit.staffCache}).subscribe({
+          next: () => this.alertService.success('Staff member removed', 2000),
+          error: (response) => this.alertService.error(response, 6000),
+        });
+      },
+    );
   }
 
   groupSetName(id: number) {
