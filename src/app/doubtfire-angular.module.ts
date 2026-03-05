@@ -296,6 +296,8 @@ import {PortfoliosAssessmentComponent} from './units/states/portfolios/directive
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
+import {CsvResultModalService} from './common/modals/csv-result-modal/csv-result-modal.service';
+import {CsvResultModalComponent} from './common/modals/csv-result-modal/csv-result-modal.component';
 
 @NgModule({
   // Components we declare
@@ -440,6 +442,7 @@ import {ProjectGroupsComponent} from './projects/states/groups/project-groups/pr
     RolloverComponent,
     ProjectGroupsComponent,
     GroupMemberContributionAssignerComponent,
+    CsvResultModalComponent,
   ],
   // Services we provide
   providers: [
@@ -519,6 +522,7 @@ import {ProjectGroupsComponent} from './projects/states/groups/project-groups/pr
     provideLottieOptions({
       player: () => player,
     }),
+    CsvResultModalService,
   ],
   imports: [
     FlexLayoutModule,
