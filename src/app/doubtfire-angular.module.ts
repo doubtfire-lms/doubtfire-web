@@ -296,6 +296,7 @@ import {PortfoliosAssessmentComponent} from './units/states/portfolios/directive
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
+import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
 
 @NgModule({
   // Components we declare
@@ -440,6 +441,7 @@ import {ProjectGroupsComponent} from './projects/states/groups/project-groups/pr
     RolloverComponent,
     ProjectGroupsComponent,
     GroupMemberContributionAssignerComponent,
+    UnitGroupSetEditorComponent,
   ],
   // Services we provide
   providers: [

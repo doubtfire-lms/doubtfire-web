@@ -75,7 +75,7 @@ import 'build/src/app/units/states/tasks/tasks.js';
 import 'build/src/app/units/states/tasks/definition/definition.js';
 import 'build/src/app/units/states/groups/groups.js';
 import 'build/src/app/units/states/states.js';
-import 'build/src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.js';
+// import 'build/src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-details-editor/unit-details-editor.js';
 import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/directives/directives.js';
@@ -209,6 +209,7 @@ import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/d
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 import {GroupMemberContributionAssignerComponent} from './groups/group-member-contribution-assigner/group-member-contribution-assigner.component';
+import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', [
   'doubtfire.config',
@@ -558,4 +559,9 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fGroupMemberContributionAssigner',
   downgradeComponent({component: GroupMemberContributionAssignerComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fUnitGroupSetEditor',
+  downgradeComponent({component: UnitGroupSetEditorComponent}),
 );
