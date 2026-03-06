@@ -33,26 +33,27 @@
         }
         <mat-card
           [id]="'note-' + note.id"
-          class="mb-4 p-5"
+          class="mb-4 p-5 pb-12"
           (mouseover)="hoveredNoteId = note.id"
           (mouseout)="hoveredNoteId = null"
         >
-          <div
-            [hidden]="hoveredNoteId !== note.id"
-            class="flex items-center absolute right-5 bottom-5"
-          >
+          <div class="flex items-center absolute right-5 bottom-5 gap-5">
+            <div [hidden]="hoveredNoteId !== note.id" class="flex items-center">
+              @if (note.authorIsMe) {
+                <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
+              }
+              <mat-icon type="button" (click)="replyToNote(note)">reply</mat-icon>
+              <mat-icon type="button" (click)="deleteNote(note)">delete</mat-icon>
+            </div>
             @if (!note.readByUnitRole) {
               @if (note.noteIsForMe) {
-                <button mat-button color="primary" (click)="markAsRead(note)">Mark as Read</button>
+                <button mat-stroked-button color="primary" (click)="markAsRead(note)">
+                  Mark as read
+                </button>
               }
             } @else {
               <div class="text-gray-400 italic px-5">Read by tutor</div>
             }
-            @if (note.authorIsMe) {
-              <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
-            }
-            <mat-icon type="button" (click)="replyToNote(note)">reply</mat-icon>
-            <mat-icon type="button" (click)="deleteNote(note)">delete</mat-icon>
           </div>
 
           <div class="flex justify-between">
