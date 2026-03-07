@@ -11,7 +11,7 @@
   </f-group-selector>
 
   @if (selectedGroup) {
-    <mat-card class="w-full h-min" appearance="outlined">
+    <mat-card class="w-full self-stretch flex flex-col" appearance="outlined">
       <mat-card-header class="flex justify-between items-center">
         <mat-card-title class="flex items-center"
           >Members of
@@ -42,6 +42,7 @@
       </mat-card-header>
 
       <f-group-member-list
+        class="flex-1"
         [unit]="unit"
         [unitRole]="unitRole"
         [project]="project"
@@ -49,7 +50,7 @@
       >
       </f-group-member-list>
       @if (unitRole) {
-        <mat-card-footer>
+        <mat-card-footer class="mt-auto">
           <mat-form-field appearance="outline" class="w-full px-5 mt-5">
             <input
               type="text"
