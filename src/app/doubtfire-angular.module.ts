@@ -298,6 +298,7 @@ import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 import {CsvResultModalService} from './common/modals/csv-result-modal/csv-result-modal.service';
 import {CsvResultModalComponent} from './common/modals/csv-result-modal/csv-result-modal.component';
+import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
 
 @NgModule({
   // Components we declare
@@ -443,6 +444,7 @@ import {CsvResultModalComponent} from './common/modals/csv-result-modal/csv-resu
     ProjectGroupsComponent,
     GroupMemberContributionAssignerComponent,
     CsvResultModalComponent,
+    UnitGroupSetEditorComponent,
   ],
   // Services we provide
   providers: [
