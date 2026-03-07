@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
@@ -152,8 +152,8 @@ export class Group extends Entity {
   }
 
   public hasSpace(): boolean {
-    if (!this.groupSet.capacity) {
-      return false;
+    if (this.groupSet.capacity == null) {
+      return true;
     } else {
       return this.memberCount < this.groupSet.capacity + this.capacityAdjustment;
     }
