@@ -1,9 +1,9 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { csvResultModalService } from 'src/app/ajs-upgraded-providers';
-import { GroupSet, Unit, UnitRole } from 'src/app/api/models/doubtfire-model';
-import { GroupSetService } from 'src/app/api/services/group-set.service';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {Component, Inject, Input, OnInit} from '@angular/core';
+import {csvResultModalService} from 'src/app/ajs-upgraded-providers';
+import {GroupSet, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
+import {GroupSetService} from 'src/app/api/services/group-set.service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 interface GroupSetEditModel {
   name: string;
@@ -28,20 +28,20 @@ export class UnitGroupSetEditorComponent implements OnInit {
 
   // Keep `file` key to preserve backend form field name used in legacy implementation.
   public groupCSV = {
-    file: { name: 'Group CSV', type: 'csv' },
+    file: {name: 'Group CSV', type: 'csv'},
   };
 
   public editingGroupSetId: number | null = null;
   public editingGroupSetModel: GroupSetEditModel | null = null;
 
   public studentStaffOptions = [
-    { value: true, text: 'Staff and Students' },
-    { value: false, text: 'Staff Only' },
+    {value: true, text: 'Staff and Students'},
+    {value: false, text: 'Staff Only'},
   ];
 
   public tutorialOptions = [
-    { value: true, text: 'Same Tutorial' },
-    { value: false, text: 'Any Tutorial' },
+    {value: true, text: 'Same Tutorial'},
+    {value: false, text: 'Any Tutorial'},
   ];
 
   constructor(
@@ -62,7 +62,7 @@ export class UnitGroupSetEditorComponent implements OnInit {
     const gsCount = this.unit.groupSets.length;
     groupSet.name = gsCount === 0 ? 'Group Work' : `Group Work Set ${gsCount + 1}`;
 
-    this.groupSetService.store(groupSet, { cache: this.unit.groupSetsCache }).subscribe({
+    this.groupSetService.store(groupSet, {cache: this.unit.groupSetsCache}).subscribe({
       next: (createdGroupSet) => {
         this.alertService.success('Group set created.', 2000);
         this.selectGroupSet(createdGroupSet ?? groupSet);
@@ -113,7 +113,10 @@ export class UnitGroupSetEditorComponent implements OnInit {
 
     this.groupSetService.update(groupSet).subscribe({
       next: (response) => {
-        this.alertService.success(`${response.locked ? 'Locked' : 'Unlocked'} ${groupSet.name}`, 2000);
+        this.alertService.success(
+          `${response.locked ? 'Locked' : 'Unlocked'} ${groupSet.name}`,
+          2000,
+        );
       },
       error: (message) => {
         groupSet.locked = originalLockedState;
@@ -126,7 +129,7 @@ export class UnitGroupSetEditorComponent implements OnInit {
   }
 
   removeGroupSet(groupSet: GroupSet): void {
-    this.groupSetService.delete(groupSet, { cache: this.unit.groupSetsCache }).subscribe({
+    this.groupSetService.delete(groupSet, {cache: this.unit.groupSetsCache}).subscribe({
       next: () => {
         if (groupSet === this.selectedGroupSet) {
           this.selectGroupSet(this.unit.groupSets[0] ?? null);
