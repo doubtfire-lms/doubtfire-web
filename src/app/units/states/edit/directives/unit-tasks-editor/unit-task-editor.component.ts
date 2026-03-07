@@ -3,10 +3,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { confirmationModal, csvResultModalService, csvUploadModalService } from 'src/app/ajs-upgraded-providers';
+import { confirmationModal, csvUploadModalService } from 'src/app/ajs-upgraded-providers';
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
+import { CsvResultModalService } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import { AlertService } from 'src/app/common/services/alert.service';
 import { addWeeks } from 'date-fns';
 
@@ -30,7 +31,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   constructor(
     private taskDefinitionService: TaskDefinitionService,
     private alerts: AlertService,
-    @Inject(csvResultModalService) private csvResultModalService: any,
+    private csvResultModalService: CsvResultModalService,
     @Inject(csvUploadModalService) private csvUploadModal: any,
     @Inject(confirmationModal) private confirmationModal: any
   ) {}

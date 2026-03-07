@@ -9,7 +9,6 @@ export const dateService = new InjectionToken('dateService');
 export const audioRecorder = new InjectionToken('audioRecorder');
 export const audioRecorderService = new InjectionToken('recorderService');
 export const csvUploadModalService = new InjectionToken('CsvUploadModalAngular');
-export const csvResultModalService = new InjectionToken('CsvResultModalAngular');
 export const confirmationModal = new InjectionToken('ConfirmationModal');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
 export const commentsModal = new InjectionToken('CommentsModal');
@@ -110,12 +109,6 @@ export const AudioRecorderServiceProvider = {
 export const CsvUploadModalProvider = {
   provide: csvUploadModalService,
   useFactory: (i) => i.get('CsvUploadModal'),
-  deps: ['$injector'],
-};
-
-export const CsvResultModalProvider = {
-  provide: csvResultModalService,
-  useFactory: (i) => i.get('CsvResultModal'),
   deps: ['$injector'],
 };
 
