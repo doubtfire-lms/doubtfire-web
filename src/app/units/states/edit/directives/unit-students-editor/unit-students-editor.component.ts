@@ -1,5 +1,4 @@
 import {
-  csvUploadModalService,
   unitStudentEnrolmentModal,
 } from './../../../../../ajs-upgraded-providers';
 import { ViewChild, Component, Input, Inject, AfterViewInit, OnDestroy } from '@angular/core';
@@ -13,6 +12,7 @@ import { UIRouter } from '@uirouter/angular';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/common/services/alert.service';
 import { CsvResultModalService } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import { CsvUploadModalService } from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
 
 @Component({
   selector: 'unit-students-editor',
@@ -37,7 +37,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     private httpClient: HttpClient,
     @Inject(unitStudentEnrolmentModal) private enrolModal: any,
     private alerts: AlertService,
-    @Inject(csvUploadModalService) private csvUploadModal: any,
+    private csvUploadModal: CsvUploadModalService,
     private csvResultModal: CsvResultModalService,
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
@@ -114,7 +114,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
   uploadEnrolments() {
     this.csvUploadModal.show(
       'Upload Students to Enrol',
-      'Test message',
+      'Upload a CSV to enrol students.',
       { file: { name: 'Enrol CSV Data', type: 'csv' } },
       this.unit.enrolStudentsCSVUrl,
       (response: any) => {
@@ -130,7 +130,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
   uploadWithdrawals() {
     this.csvUploadModal.show(
       'Upload Students to Withdraw',
-      'Test message',
+      'Upload a CSV to withdraw students.',
       { file: { name: 'Withdraw CSV Data', type: 'csv' } },
       this.unit.withdrawStudentsCSVUrl,
       (response: any) => {

@@ -3,11 +3,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { confirmationModal, csvUploadModalService } from 'src/app/ajs-upgraded-providers';
+import { confirmationModal } from 'src/app/ajs-upgraded-providers';
 import { TaskDefinition } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
 import { CsvResultModalService } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import { CsvUploadModalService } from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
 import { AlertService } from 'src/app/common/services/alert.service';
 import { addWeeks } from 'date-fns';
 
@@ -32,7 +33,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     private taskDefinitionService: TaskDefinitionService,
     private alerts: AlertService,
     private csvResultModalService: CsvResultModalService,
-    @Inject(csvUploadModalService) private csvUploadModal: any,
+    private csvUploadModal: CsvUploadModalService,
     @Inject(confirmationModal) private confirmationModal: any
   ) {}
 
@@ -146,7 +147,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   public uploadTaskDefinitionsCsv() {
     this.csvUploadModal.show(
       'Upload Task Definitions as CSV',
-      'Test message',
+      'Upload a CSV of task definitions.',
       { file: { name: 'Task Definition CSV Data', type: 'csv' } },
       this.unit.getTaskDefinitionBatchUploadUrl(),
       (response: any) => {
@@ -162,7 +163,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   public uploadTaskResourcesZip() {
     this.csvUploadModal.show(
       'Upload Task Sheets and Resources as Zip',
-      'Test message',
+      'Upload a ZIP of task sheets and resources.',
       { file: { name: 'Task Sheets and Resources', type: 'zip' } },
       this.unit.taskUploadUrl,
       (response: any) => {

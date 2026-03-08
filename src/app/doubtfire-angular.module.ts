@@ -63,7 +63,6 @@ import {
   visualisationsProvider,
   analyticsServiceProvider,
   dateServiceProvider,
-  CsvUploadModalProvider,
   UnitStudentEnrolmentModalProvider,
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
@@ -297,6 +296,8 @@ import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 import {CsvResultModalService} from './common/modals/csv-result-modal/csv-result-modal.service';
 import {CsvResultModalComponent} from './common/modals/csv-result-modal/csv-result-modal.component';
+import {CsvUploadModalComponent} from './common/modals/csv-upload-modal/csv-upload-modal.component';
+import {CsvUploadModalService} from './common/modals/csv-upload-modal/csv-upload-modal.service';
 import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
 
 @NgModule({
@@ -443,6 +444,7 @@ import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-g
     ProjectGroupsComponent,
     GroupMemberContributionAssignerComponent,
     CsvResultModalComponent,
+    CsvUploadModalComponent,
     UnitGroupSetEditorComponent,
   ],
   // Services we provide
@@ -485,7 +487,6 @@ import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-g
     gradeTaskModalProvider,
     analyticsServiceProvider,
     dateServiceProvider,
-    CsvUploadModalProvider,
     {provide: MAT_DATE_LOCALE, useValue: enAU},
     {provide: DateAdapter, useClass: DateFnsAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT},
@@ -523,6 +524,7 @@ import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-g
       player: () => player,
     }),
     CsvResultModalService,
+    CsvUploadModalService,
   ],
   imports: [
     FlexLayoutModule,
