@@ -88,6 +88,19 @@ export class ModerationComponent {
     );
   }
 
+  snooze() {
+    this.confirmModerationModal.show(
+      this.task,
+      'Snooze task',
+      'This task will be hidden from moderation until the tutor leaves new feedback. This will not affect how many tasks from this tutor are selected for moderation.',
+      'snooze',
+      false,
+      (applyToAll) => {
+        this.moderateTask('snooze', applyToAll);
+      },
+    );
+  }
+
   private moderateTask(action: FeedbackModerationActionType, applyToAll: boolean = false) {
     this.task.moderateFeedback(action, applyToAll).subscribe({
       next: (_response) => {

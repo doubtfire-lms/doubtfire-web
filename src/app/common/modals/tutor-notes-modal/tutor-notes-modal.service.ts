@@ -25,7 +25,7 @@ export class TutorNotesModalService {
         },
         width: '100%',
         height: '90vh',
-        maxWidth: '900px',
+        maxWidth: '1200px',
         panelClass: 'overflow-y-auto',
       },
     );

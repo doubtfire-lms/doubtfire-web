@@ -36,6 +36,7 @@ export const FeedbackModerationAction = {
   DismissGood: 'dismiss_good',
   Upheld: 'upheld',
   Overturn: 'overturn',
+  Snooze: 'snooze',
 } as const;
 
 export type FeedbackModerationActionType =

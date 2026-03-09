@@ -12,7 +12,7 @@
       submission or the files you uploaded below.
     </p>
     <p [hidden]="!submission?.isUploaded">
-      You uploaded this submission <strong>{{ task.submissionDate | humanizedDate }}</strong
+      You uploaded this submission <strong>{{ task.submissionDate | date: 'dd/MM/yyyy' }}</strong
       >.
     </p>
     <p [hidden]="!canRegeneratePdf">

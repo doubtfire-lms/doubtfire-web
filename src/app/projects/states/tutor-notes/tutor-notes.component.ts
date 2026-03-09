@@ -47,6 +47,8 @@ export class TutorNotesComponent implements OnInit {
     });
     if (this.task) {
       this.selectedTaskDefinitions.set(this.task.definition.abbreviation, true);
+    } else {
+      this.selectedTaskDefinitions.set('all', true);
     }
   }
 

@@ -136,6 +136,9 @@
           <mat-icon aria-label="Tutor Discussion icon" fontIcon="qr_code_scanner"></mat-icon
           >Discussion
         </button>
+        <button (click)="openTutorNotes()" mat-menu-item>
+          <mat-icon aria-label="Tutor Notes icon" fontIcon="local_library"></mat-icon>Tutor Notes
+        </button>
         <mat-divider></mat-divider>
         <!-- <p class="task-dropdown-heading">Students</p> -->
         <button uiSref="units/students/list" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>

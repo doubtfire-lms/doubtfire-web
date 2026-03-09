@@ -137,7 +137,9 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
       tap((response: boolean) => {
         if (response) {
           note.readByUnitRole = true;
-          unitRole.tutorNoteCount--;
+          if (unitRole.user.id !== note.user.id) {
+            unitRole.tutorNoteCount--;
+          }
           // unitRole.tutorNoteCount = unitRole.tutorNotesCache.currentValues.filter(
           //   (note) => !note.readByUnitRole,
           // ).length;

@@ -61,7 +61,7 @@ export class TaskService extends CachedEntityService<Task> {
       'scormExtensions',
       {
         keys: 'submissionDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
+        toEntityFn: MappingFunctions.mapDate,
       },
       {
         keys: 'completionDate',

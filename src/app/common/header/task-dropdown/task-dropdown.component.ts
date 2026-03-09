@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { UIRouter } from '@uirouter/core';
-import { Project, Unit, UnitRole } from 'src/app/api/models/doubtfire-model';
-import { ViewType } from 'src/app/projects/states/index/global-state.service';
+import {Component, Input} from '@angular/core';
+import {UIRouter} from '@uirouter/core';
+import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
+import {ViewType} from 'src/app/projects/states/index/global-state.service';
+import {TutorNotesModalService} from '../../modals/tutor-notes-modal/tutor-notes-modal.service';
 
 @Component({
   selector: 'task-dropdown',
@@ -33,9 +34,12 @@ export class TaskDropdownComponent {
     'Unit Analytics': 'Analytics',
   };
 
-  taskDropdownData: { title: string; target: string; visible: any }[];
-  constructor(private router: UIRouter) {
-    this.router.transitionService.onSuccess({ to: '**' }, (trans) => {
+  taskDropdownData: {title: string; target: string; visible: any}[];
+  constructor(
+    private router: UIRouter,
+    private tutorNotesModal: TutorNotesModalService,
+  ) {
+    this.router.transitionService.onSuccess({to: '**'}, (trans) => {
       this.currentActivity = trans.to().data.task;
       this.menuText = this.taskToShortName?.[this.currentActivity] ?? this.currentActivity;
     });
@@ -50,5 +54,9 @@ export class TaskDropdownComponent {
 
   public get isMentor(): boolean {
     return this.currentUnit.staff.some((ur) => ur.mentorId === this.unitRole.id);
+  }
+
+  openTutorNotes() {
+    this.tutorNotesModal.show(null, this.unitRole);
   }
 }
