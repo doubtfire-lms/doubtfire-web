@@ -179,4 +179,8 @@ export class FooterComponent implements OnInit {
 
     return true;
   }
+
+  public get completeButtonEnabled(): boolean {
+    return this.actionButtonEnabled && !!this.selectedTask?.canMarkComplete;
+  }
 }

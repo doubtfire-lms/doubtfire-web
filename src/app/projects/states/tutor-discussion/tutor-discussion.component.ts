@@ -263,15 +263,49 @@ export class TutorDiscussionComponent implements AfterViewInit {
   }
 
   public setSelectedTasksStatus(status: TaskStatusEnum) {
-    const selectedTasks = this.tasksList.selectedOptions.selected;
-    for (const taskOption of selectedTasks) {
-      const task = taskOption.value as Task;
+    const selectedTasks = this.tasksList.selectedOptions.selected.map((taskOption) => {
+      return taskOption.value as Task;
+    });
+
+    if (status === 'complete') {
+      const blockedTasks = selectedTasks.filter(
+        (task) => !task.definition.assessInPortfolioOnly && !task.canMarkComplete,
+      );
+      if (blockedTasks.length > 0) {
+        this.alertService.error(
+          'Some selected tasks cannot be marked as complete until they are marked as discussed in class.',
+          5000,
+        );
+      }
+    }
+
+    for (const task of selectedTasks) {
+      if (
+        status === 'complete' &&
+        !task.definition.assessInPortfolioOnly &&
+        !task.canMarkComplete
+      ) {
+        continue;
+      }
+
       if (task.definition.assessInPortfolioOnly) {
         task.updateTaskStatus(status === 'complete' ? 'working_on_it' : status, true);
       } else {
         task.updateTaskStatus(status, true);
       }
     }
+  }
+
+  public get canMarkSelectedTasksComplete(): boolean {
+    const selectedTasks = this.tasksList?.selectedOptions?.selected ?? [];
+    if (!selectedTasks.length) {
+      return false;
+    }
+
+    return selectedTasks.every((taskOption) => {
+      const task = taskOption.value as Task;
+      return task.definition.assessInPortfolioOnly || task.canMarkComplete;
+    });
   }
 
   public markSelectedTasksDicussed() {

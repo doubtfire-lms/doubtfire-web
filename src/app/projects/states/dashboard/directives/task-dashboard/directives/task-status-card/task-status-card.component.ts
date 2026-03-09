@@ -55,7 +55,15 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   reapplyTriggers(): void {
     // if tutor is in queryParam
     if (this.router.globals.params.tutor != null) {
-      this.triggers = this.taskService.statusKeys.map((k) => this.taskService.statusData(k));
+      this.triggers = this.taskService.statusKeys
+        .map((k) => this.taskService.statusData(k))
+        .filter((trigger) => {
+          if (trigger.status !== 'complete') {
+            return true;
+          }
+
+          return this.task.canMarkComplete || this.task.status === 'complete';
+        });
     } else {
       const studentTriggers = _.map(
         this.taskService.switchableStates.student as TaskStatusEnum[],
@@ -80,6 +88,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   }
 
   triggerTransition(trigger: TaskStatusEnum): void {
+    if (trigger === 'complete' && !this.task.canMarkComplete) {
+      return;
+    }
+
     if (trigger === 'ready_for_feedback') {
       this.uploadSubmission();
     } else {

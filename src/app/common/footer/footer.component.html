@@ -63,7 +63,10 @@
             class="button extra-large-button status-chip"
             (click)="selectedTask?.updateTaskStatus(selectedTask.suggestedTaskStatus)"
             [ngClass]="taskService.statusData(selectedTask.suggestedTaskStatus).class"
-            [disabled]="!actionButtonEnabled"
+            [disabled]="
+              !actionButtonEnabled ||
+              (selectedTask?.suggestedTaskStatus === 'complete' && !selectedTask?.canMarkComplete)
+            "
           >
             <i class="fa {{ taskService.statusData(selectedTask.suggestedTaskStatus).icon }}"></i>
           </button>
@@ -81,17 +84,25 @@
             <mat-icon>bolt</mat-icon>
           </button>
         } @else {
-          <button
-            [disabled]="!actionButtonEnabled"
-            mat-icon-button
-            matTooltip="Mark as Complete"
-            matTooltipPosition="above"
-            aria-label="Mark as Complete"
-            class="button large-button"
-            (click)="selectedTask?.updateTaskStatus('complete')"
+          <div
+            [matTooltip]="
+              !selectedTask?.canMarkComplete
+                ? 'This task must be discussed in class before it can marked completed'
+                : ''
+            "
           >
-            <mat-icon>done</mat-icon>
-          </button>
+            <button
+              [disabled]="!completeButtonEnabled"
+              mat-icon-button
+              matTooltip="Mark as Complete"
+              matTooltipPosition="above"
+              aria-label="Mark as Complete"
+              class="button large-button"
+              (click)="selectedTask?.updateTaskStatus('complete')"
+            >
+              <mat-icon>done</mat-icon>
+            </button>
+          </div>
         }
 
         <button
