@@ -25,6 +25,27 @@
             } @else {
               <mat-icon color="warn">cancel</mat-icon>
             }
+            @if (oa.hasSubmissionFiles) {
+              <button
+                mat-icon-button
+                aria-label="Submission options"
+                [matMenuTriggerFor]="menu"
+                (click)="viewSubmissionOptions($event)"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <div fxFlex></div>
+              <mat-menu #menu="matMenu">
+                <button
+                  mat-menu-item
+                  (click)="viewSubmissionFiles(oa, $event)"
+                >
+                  <mat-icon>folder_zip</mat-icon>
+                  View Submission Files
+                </button>
+                <button mat-menu-item>Compare Submission With...</button>
+              </mat-menu>
+            }
           </div>
         } @else {
           <div class="flex gap-5 uppercase items-center">
@@ -100,11 +121,11 @@
                     [options]="diffEditorOptions"
                     [originalModel]="{
                       language: 'plaintext',
-                      code: result.expectedOutput
+                      code: result.expectedOutput,
                     }"
                     [modifiedModel]="{
                       language: 'plainttext',
-                      code: result.stdout
+                      code: result.stdout,
                     }"
                   ></ngx-monaco-diff-editor>
                 }

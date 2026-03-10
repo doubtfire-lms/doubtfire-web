@@ -1,0 +1,25 @@
+<div class="flex justify-between p-5">
+  <h3 mat-dialog-title>Submission Files {{ data.assessment.timestamp | humanizedDate }}</h3>
+
+  <button mat-stroked-button color="warn" mat-dialog-close>Close</button>
+</div>
+
+<div class="flex flex-1 min-h-0 overflow-hidden p-5">
+  @if (isLoading) {
+    <div class="w-full h-full min-h-[300px] flex items-center justify-center">
+      <mat-spinner [diameter]="56"></mat-spinner>
+    </div>
+  } @else if (archiveBlob) {
+    <f-archive-viewer
+      class="block h-full min-h-0 w-full overflow-hidden"
+      [archiveFile]="archiveBlob"
+      [readOnly]="true"
+    ></f-archive-viewer>
+  } @else {
+    <div
+      class="flex h-full min-h-[300px] w-full items-center justify-center text-base text-slate-500"
+    >
+      Unable to load submission files.
+    </div>
+  }
+</div>

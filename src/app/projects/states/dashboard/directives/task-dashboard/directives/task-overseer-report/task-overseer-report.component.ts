@@ -1,10 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {OverseerAssessmentService} from 'src/app/api/services/overseer-assessment.service';
 import {OverseerStepResultService} from 'src/app/api/services/overseer-step-result.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
+import {SubmissionFilesModalComponent} from './submission-files-modal/submission-files-modal.component';
 
 @Component({
   selector: 'f-task-overseer-report',
@@ -20,6 +22,7 @@ export class TaskOverseerReportComponent implements OnInit {
     private submissions: TaskSubmissionService,
     private overseerAssessmentService: OverseerAssessmentService,
     private overseerStepResultsService: OverseerStepResultService,
+    private dialog: MatDialog,
   ) {}
 
   public viewOutput: 'your_output' | 'expected_output' | 'diff' | 'split_diff' = 'your_output';
@@ -140,6 +143,24 @@ export class TaskOverseerReportComponent implements OnInit {
         console.error(error);
         this.loadingAssessments.delete(overseerAssesment.id);
       },
+    });
+  }
+
+  viewSubmissionOptions(event: Event) {
+    event.stopPropagation();
+  }
+
+  viewSubmissionFiles(assessment: OverseerAssessment, event?: Event) {
+    event?.stopPropagation();
+    this.dialog.open(SubmissionFilesModalComponent, {
+      data: {
+        assessment,
+        title: `Submission Files - ${assessment.timestampString}`,
+      },
+      maxWidth: '95vw',
+      width: '100%',
+      height: '90vh',
+      panelClass: 'submission-files-dialog',
     });
   }
 }
