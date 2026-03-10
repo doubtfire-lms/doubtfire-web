@@ -57,6 +57,11 @@ export function getOrderedUploadFileIndex(path: string): number | null {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 }
 
+export function isArchivePathHidden(path: string): boolean {
+  const segments = path.split('/').filter((segment) => segment.length > 0);
+  return segments.some((segment) => segment.startsWith('.') || segment === '__MACOSX');
+}
+
 export function createArchiveFileEntry(
   existing: ArchiveFileEntry,
   classification: ArchiveFileClassification,

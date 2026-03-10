@@ -1,4 +1,4 @@
-<div class="flex h-full min-h-0 w-full flex-col">
+<div class="flex h-full min-h-0 min-w-0 w-full max-w-full flex-col">
   @if (isLoading) {
     <div
       class="flex min-h-[20rem] flex-1 flex-col items-center justify-center gap-3 text-slate-600"
@@ -27,100 +27,161 @@
     </div>
   } @else {
     @if (!readOnly && saveEndpoint) {
-      <div class="flex justify-end px-3 pt-3">
-        <button mat-flat-button color="primary" (click)="saveArchive()" [disabled]="!canSave">
+      <div class="flex justify-end px-3 pt-3 items-center">
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="saveArchive()"
+          [disabled]="!canSave"
+          class="flex items-center gap-2"
+        >
           @if (isSaving) {
             <mat-icon class="animate-spin">sync</mat-icon>
             Saving...
           } @else {
-            <mat-icon>save</mat-icon>
+            <!-- <mat-icon>save</mat-icon> -->
             Save Archive
           }
         </button>
       </div>
     }
 
-    <div class="sticky top-0 z-10 w-full shrink-0 overflow-x-auto bg-white px-1 pb-1">
-      <mat-button-toggle-group
-        [value]="selectedTab"
-        (change)="selectTab($event.value)"
-        class="whitespace-nowrap"
-      >
-        @for (file of files; track trackByPath($index, file); let i = $index) {
-          <mat-button-toggle [value]="i" [title]="file.path">
-            <span class="inline-block max-w-56 truncate align-bottom">{{ file.tabLabel }}</span>
-          </mat-button-toggle>
-        }
-      </mat-button-toggle-group>
-    </div>
-
-    @if (selectedFile; as file) {
-      <div class="flex min-h-0 w-full flex-1 flex-col">
-        @if (showPreview) {
-          @if (file.isLoading || !file.isLoaded) {
-            <div
-              class="flex min-h-[350px] w-full flex-1 items-center justify-center gap-3 text-slate-600"
-            >
-              <mat-spinner [diameter]="42"></mat-spinner>
-              <span>Loading {{ file.name }}...</span>
-            </div>
-          } @else if (file.kind === 'code' || file.kind === 'text') {
-            <div class="archive-editor-wrapper flex min-h-0 flex-1 flex-col">
-              <ng-container
-                [ngTemplateOutlet]="filePathLabel"
-                [ngTemplateOutletContext]="{$implicit: file.path}"
-              ></ng-container>
-              <ngx-monaco-editor
-                class="archive-monaco block h-full w-full flex-1"
-                [options]="editorOptionsForSelectedFile"
-                [ngModel]="file.textContent"
-                (ngModelChange)="onEditorChange($event)"
-              ></ngx-monaco-editor>
-            </div>
-          } @else if (file.kind === 'image') {
-            <div class="flex min-h-0 w-full flex-1 flex-col">
-              <ng-container
-                [ngTemplateOutlet]="filePathLabel"
-                [ngTemplateOutletContext]="{$implicit: file.path}"
-              ></ng-container>
-              <div class="flex min-h-[350px] w-full flex-1 items-center justify-center p-4">
-                <img
-                  class="max-h-full max-w-full object-contain"
-                  [src]="file.blobUrl"
-                  [alt]="file.name"
-                />
-              </div>
-            </div>
-          } @else if (file.kind === 'pdf') {
-            <div class="archive-pdf-wrapper flex min-h-0 flex-1 flex-col">
-              <ng-container
-                [ngTemplateOutlet]="filePathLabel"
-                [ngTemplateOutletContext]="{$implicit: file.path}"
-              ></ng-container>
-              <f-pdf-viewer
-                class="block h-full w-full flex-1"
-                [pdfUrl]="file.blobUrl"
-              ></f-pdf-viewer>
-            </div>
-          } @else {
-            <div
-              class="flex min-h-[350px] flex-1 items-center justify-center gap-4 px-4 text-slate-600"
-            >
-              <mat-icon class="h-9 w-9">insert_drive_file</mat-icon>
-              <div>
-                <p class="mb-3">This file type cannot be previewed.</p>
-                <button mat-stroked-button color="primary" (click)="downloadSelectedFile()">
-                  <mat-icon>download</mat-icon>
-                  Download {{ file.name }}
-                </button>
-              </div>
-            </div>
-          }
-        }
+    @if (navigationMode === 'tree') {
+      <div class="flex min-h-0 w-full flex-1 border-t border-slate-200">
+        <aside
+          class="w-72 max-w-[45%] min-w-[13rem] shrink-0 overflow-y-auto border-r border-slate-200 bg-slate-50/60 py-2"
+        >
+          <ng-container
+            [ngTemplateOutlet]="treeNodesTemplate"
+            [ngTemplateOutletContext]="{$implicit: fileTreeNodes, depth: 0}"
+          ></ng-container>
+        </aside>
+        <div class="min-w-0 flex flex-1 flex-col">
+          <ng-container [ngTemplateOutlet]="selectedFilePane"></ng-container>
+        </div>
       </div>
+    } @else {
+      <div
+        class="sticky top-0 z-10 w-full max-w-full shrink-0 overflow-x-auto overflow-y-hidden bg-white px-1 pb-1 min-w-0"
+      >
+        <div class="inline-block min-w-full">
+          <mat-button-toggle-group
+            [value]="selectedTab"
+            (change)="selectTab($event.value)"
+            class="inline-flex whitespace-nowrap"
+            style="display: inline-flex; width: max-content"
+          >
+            @for (file of files; track trackByPath($index, file); let i = $index) {
+              <mat-button-toggle [value]="i" [title]="file.path" class="flex-none">
+                <span class="inline-block max-w-56 truncate align-bottom">{{ file.tabLabel }}</span>
+              </mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        </div>
+      </div>
+      <ng-container [ngTemplateOutlet]="selectedFilePane"></ng-container>
     }
   }
 </div>
+
+<ng-template #selectedFilePane>
+  @if (selectedFile; as file) {
+    <div class="flex min-h-0 w-full flex-1 flex-col">
+      @if (showPreview) {
+        @if (file.isLoading || !file.isLoaded) {
+          <div
+            class="flex min-h-[350px] w-full flex-1 items-center justify-center gap-3 text-slate-600"
+          >
+            <mat-spinner [diameter]="42"></mat-spinner>
+            <span>Loading {{ file.name }}...</span>
+          </div>
+        } @else if (file.kind === 'code' || file.kind === 'text') {
+          <div class="archive-editor-wrapper flex min-h-0 flex-1 flex-col">
+            <ng-container
+              [ngTemplateOutlet]="filePathLabel"
+              [ngTemplateOutletContext]="{$implicit: file.path}"
+            ></ng-container>
+            <ngx-monaco-editor
+              class="archive-monaco block h-full w-full flex-1"
+              [options]="editorOptionsForSelectedFile"
+              [ngModel]="file.textContent"
+              (ngModelChange)="onEditorChange($event)"
+            ></ngx-monaco-editor>
+          </div>
+        } @else if (file.kind === 'image') {
+          <div class="flex min-h-0 w-full flex-1 flex-col">
+            <ng-container
+              [ngTemplateOutlet]="filePathLabel"
+              [ngTemplateOutletContext]="{$implicit: file.path}"
+            ></ng-container>
+            <div class="flex min-h-[350px] w-full flex-1 items-center justify-center p-4">
+              <img
+                class="max-h-full max-w-full object-contain"
+                [src]="file.blobUrl"
+                [alt]="file.name"
+              />
+            </div>
+          </div>
+        } @else if (file.kind === 'pdf') {
+          <div class="archive-pdf-wrapper flex min-h-0 flex-1 flex-col">
+            <ng-container
+              [ngTemplateOutlet]="filePathLabel"
+              [ngTemplateOutletContext]="{$implicit: file.path}"
+            ></ng-container>
+            <f-pdf-viewer class="block h-full w-full flex-1" [pdfUrl]="file.blobUrl"></f-pdf-viewer>
+          </div>
+        } @else {
+          <div
+            class="flex min-h-[350px] flex-1 items-center justify-center gap-4 px-4 text-slate-600"
+          >
+            <mat-icon class="h-9 w-9">insert_drive_file</mat-icon>
+            <div>
+              <p class="mb-3">This file type cannot be previewed.</p>
+              <button mat-stroked-button color="primary" (click)="downloadSelectedFile()">
+                <mat-icon>download</mat-icon>
+                Download {{ file.name }}
+              </button>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  }
+</ng-template>
+
+<ng-template #treeNodesTemplate let-nodes let-depth="depth">
+  @for (node of nodes; track trackTreeNode($index, node)) {
+    @if (node.isDirectory) {
+      <div
+        class="flex items-center gap-1 py-1 pr-2 text-slate-600"
+        [style.paddingLeft.px]="8 + depth * 14"
+        [title]="node.path"
+      >
+        <mat-icon class="!h-4 !w-4 !text-base text-slate-500">folder</mat-icon>
+        <span class="truncate">{{ node.name }}</span>
+      </div>
+      <ng-container
+        [ngTemplateOutlet]="treeNodesTemplate"
+        [ngTemplateOutletContext]="{$implicit: node.children, depth: depth + 1}"
+      ></ng-container>
+    } @else {
+      <button
+        type="button"
+        class="flex w-full items-center gap-1 py-1 pr-2 text-left hover:bg-slate-200/70"
+        [style.paddingLeft.px]="8 + depth * 14"
+        [ngClass]="{
+          'bg-slate-200/80 text-slate-900': selectedTab === node.fileIndex,
+          'text-slate-700': selectedTab !== node.fileIndex
+        }"
+        [title]="node.path"
+        (click)="selectTreeNode(node)"
+      >
+        <mat-icon class="!h-4 !w-4 !text-base text-slate-500">description</mat-icon>
+        <span class="truncate">{{ treeNodeLabel(node) }}</span>
+      </button>
+    }
+  }
+</ng-template>
 
 <ng-template #filePathLabel let-path>
   <div

@@ -18,7 +18,19 @@ import {
   createArchiveFilePlaceholder,
   getMonacoLanguageForPath,
   getOrderedUploadFileIndex,
+  isArchivePathHidden,
 } from './archive-viewer.helpers';
+
+type ArchiveViewerNavigationMode = 'tabs' | 'tree';
+
+interface ArchiveFileTreeNode {
+  key: string;
+  name: string;
+  path: string;
+  isDirectory: boolean;
+  fileIndex: number | null;
+  children: ArchiveFileTreeNode[];
+}
 
 @Component({
   selector: 'f-archive-viewer',
@@ -27,6 +39,7 @@ import {
 })
 export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Input() archiveFile: File | Blob | null = null;
+  @Input() navigationMode: ArchiveViewerNavigationMode = 'tabs';
   @Input() readOnly = true;
   @Input() uploadRequirementNames: string[] = [];
   @Input() showPreview = true;
@@ -46,6 +59,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   public isLoading = false;
   public isSaving = false;
   public errorMessage: string | null = null;
+  public fileTreeNodes: ArchiveFileTreeNode[] = [];
 
   private loadToken = 0;
 
@@ -79,6 +93,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
     }
     if (changes['uploadRequirementNames']) {
       this.applyUploadRequirementLabels(this.files);
+      this.rebuildFileTree();
     }
     if (changes['readOnly']) {
       this.updateEditorOptions();
@@ -107,6 +122,24 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
 
   public trackByPath(index: number, file: ArchiveFileEntry): string {
     return `${index}-${file.path}`;
+  }
+
+  public trackTreeNode(_index: number, node: ArchiveFileTreeNode): string {
+    return node.key;
+  }
+
+  public selectTreeNode(node: ArchiveFileTreeNode): void {
+    if (node.fileIndex === null) {
+      return;
+    }
+    this.selectTab(node.fileIndex);
+  }
+
+  public treeNodeLabel(node: ArchiveFileTreeNode): string {
+    if (node.fileIndex === null) {
+      return node.name;
+    }
+    return this.files[node.fileIndex]?.tabLabel || node.name;
   }
 
   public selectTab(index: number): void {
@@ -226,7 +259,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
 
       for (const path of paths) {
         const zipFile = zip.files[path];
-        if (!zipFile || zipFile.dir) {
+        if (!zipFile || zipFile.dir || isArchivePathHidden(path)) {
           continue;
         }
 
@@ -240,6 +273,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
 
       this.files = loadedFiles;
       this.applyUploadRequirementLabels(this.files);
+      this.rebuildFileTree();
       this.filesLoaded.emit(this.files.length);
       if (this.files.length === 0) {
         this.errorMessage = 'This archive does not contain any files.';
@@ -265,6 +299,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   private clearFiles(): void {
     this.revokeUrls(this.files);
     this.files = [];
+    this.fileTreeNodes = [];
     this.selectedFileChanged.emit(null);
   }
 
@@ -276,6 +311,84 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       const requirementName = this.uploadRequirementNames[requirementIndex];
       file.tabLabel = requirementName?.trim() || file.name;
     }
+  }
+
+  private rebuildFileTree(): void {
+    const rootNodes: ArchiveFileTreeNode[] = [];
+
+    const getOrCreateNode = (
+      siblings: ArchiveFileTreeNode[],
+      node: Pick<ArchiveFileTreeNode, 'name' | 'path' | 'isDirectory' | 'fileIndex'>,
+    ): ArchiveFileTreeNode => {
+      const existing = siblings.find(
+        (candidate) =>
+          candidate.name === node.name &&
+          candidate.path === node.path &&
+          candidate.isDirectory === node.isDirectory,
+      );
+      if (existing) {
+        if (!node.isDirectory && node.fileIndex !== null) {
+          existing.fileIndex = node.fileIndex;
+        }
+        return existing;
+      }
+
+      const createdNode: ArchiveFileTreeNode = {
+        key: `${node.isDirectory ? 'dir' : 'file'}:${node.path}`,
+        name: node.name,
+        path: node.path,
+        isDirectory: node.isDirectory,
+        fileIndex: node.fileIndex,
+        children: [],
+      };
+      siblings.push(createdNode);
+      return createdNode;
+    };
+
+    for (let fileIndex = 0; fileIndex < this.files.length; fileIndex++) {
+      const file = this.files[fileIndex];
+      const segments = file.path.split('/').filter((segment) => segment.length > 0);
+      if (segments.length === 0) {
+        continue;
+      }
+
+      let currentNodes = rootNodes;
+      let currentPath = '';
+      for (let i = 0; i < segments.length; i++) {
+        const segment = segments[i];
+        const isFile = i === segments.length - 1;
+        currentPath = currentPath ? `${currentPath}/${segment}` : segment;
+
+        const node = getOrCreateNode(currentNodes, {
+          name: segment,
+          path: currentPath,
+          isDirectory: !isFile,
+          fileIndex: isFile ? fileIndex : null,
+        });
+
+        if (!isFile) {
+          currentNodes = node.children;
+        }
+      }
+    }
+
+    const sortNodes = (nodes: ArchiveFileTreeNode[]): void => {
+      nodes.sort((a, b) => {
+        if (a.isDirectory !== b.isDirectory) {
+          return a.isDirectory ? -1 : 1;
+        }
+        return a.name.localeCompare(b.name);
+      });
+
+      for (const node of nodes) {
+        if (node.children.length > 0) {
+          sortNodes(node.children);
+        }
+      }
+    };
+
+    sortNodes(rootNodes);
+    this.fileTreeNodes = rootNodes;
   }
 
   private revokeUrls(files: ArchiveFileEntry[]): void {
