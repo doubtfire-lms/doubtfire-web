@@ -9,7 +9,11 @@ import {AlertService} from 'src/app/common/services/alert.service';
 
 export interface SubmissionFilesModalData {
   assessment: OverseerAssessment;
+  assessmentNumber?: number;
+  assessmentIsMostRecent?: boolean;
   comparedWith?: OverseerAssessment;
+  comparedWithNumber?: number;
+  comparedWithIsMostRecent?: boolean;
 }
 
 @Component({

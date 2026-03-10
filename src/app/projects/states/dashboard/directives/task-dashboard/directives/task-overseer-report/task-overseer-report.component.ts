@@ -218,10 +218,21 @@ export class TaskOverseerReportComponent implements OnInit {
     assessment: OverseerAssessment,
     comparedWith?: OverseerAssessment,
   ) {
+    const assessmentIndex = this.overseerAssessments.findIndex((item) => item.id === assessment.id);
+    const comparedWithIndex = comparedWith
+      ? this.overseerAssessments.findIndex((item) => item.id === comparedWith.id)
+      : -1;
+
     this.dialog.open(SubmissionFilesModalComponent, {
       data: {
         assessment,
+        assessmentNumber:
+          assessmentIndex >= 0 ? this.overseerAssessments.length - assessmentIndex : undefined,
+        assessmentIsMostRecent: assessmentIndex === 0,
         comparedWith,
+        comparedWithNumber:
+          comparedWithIndex >= 0 ? this.overseerAssessments.length - comparedWithIndex : undefined,
+        comparedWithIsMostRecent: comparedWithIndex === 0,
       },
       maxWidth: '95vw',
       width: '100%',

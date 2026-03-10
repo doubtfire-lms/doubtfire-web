@@ -33,7 +33,9 @@
         <div class="grid min-h-0 w-full grid-cols-1 gap-4 lg:grid-cols-2">
           <div class="flex min-h-0 flex-col overflow-hidden rounded">
             <div class="shrink-0 px-3 py-2 text-slate-500">
-              Submission {{ data.assessment.timestamp | humanizedDate }}
+              Submission{{ data.assessmentNumber !== undefined ? ' ' + data.assessmentNumber : '' }}{{
+                data.assessmentIsMostRecent ? ' (Most recent)' : ''
+              }}: {{ data.assessment.timestamp | date: 'dd/MM/yyyy HH:mm' }}
             </div>
             <f-archive-viewer
               class="block h-full min-h-0 w-full overflow-hidden"
@@ -49,7 +51,10 @@
 
           <div class="flex min-h-0 flex-col overflow-hidden rounded">
             <div class="shrink-0 px-3 py-2 text-slate-500">
-              Submission {{ data.comparedWith?.timestamp | humanizedDate }}
+              Submission{{
+                data.comparedWithNumber !== undefined ? ' ' + data.comparedWithNumber : ''
+              }}{{ data.comparedWithIsMostRecent ? ' (Most recent)' : '' }}:
+              {{ data.comparedWith?.timestamp | date: 'dd/MM/yyyy HH:mm' }}
             </div>
             @if (primaryArchiveParsed) {
               <f-archive-viewer
@@ -122,12 +127,19 @@
       </div>
     }
   } @else if (archiveBlob) {
-    <f-archive-viewer
-      class="block h-full min-h-0 w-full overflow-hidden"
-      [archiveFile]="archiveBlob"
-      [uploadRequirementNames]="uploadRequirementNames"
-      [readOnly]="true"
-    ></f-archive-viewer>
+    <div class="flex h-full min-h-0 w-full flex-col overflow-hidden rounded">
+      <div class="shrink-0 px-3 py-2 text-slate-500">
+        Submission{{ data.assessmentNumber !== undefined ? ' ' + data.assessmentNumber : '' }}{{
+          data.assessmentIsMostRecent ? ' (Most recent)' : ''
+        }}: {{ data.assessment.timestamp | date: 'dd/MM/yyyy HH:mm' }}
+      </div>
+      <f-archive-viewer
+        class="block h-full min-h-0 w-full overflow-hidden"
+        [archiveFile]="archiveBlob"
+        [uploadRequirementNames]="uploadRequirementNames"
+        [readOnly]="true"
+      ></f-archive-viewer>
+    </div>
   } @else {
     <div
       class="flex h-full min-h-[300px] w-full items-center justify-center text-base text-slate-500"
