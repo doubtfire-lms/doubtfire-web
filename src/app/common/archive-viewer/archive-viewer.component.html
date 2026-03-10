@@ -1,4 +1,4 @@
-<div class="flex h-full min-h-[350px] w-full flex-col">
+<div class="flex h-full min-h-0 w-full flex-col">
   @if (isLoading) {
     <div
       class="flex min-h-[20rem] flex-1 flex-col items-center justify-center gap-3 text-slate-600"
@@ -63,47 +63,49 @@
           {{ file.path }}
         </div>
 
-        @if (file.isLoading || !file.isLoaded) {
-          <div
-            class="flex min-h-[350px] w-full flex-1 items-center justify-center gap-3 text-slate-600"
-          >
-            <mat-spinner [diameter]="42"></mat-spinner>
-            <span>Loading {{ file.name }}...</span>
-          </div>
-        } @else if (file.kind === 'code' || file.kind === 'text') {
-          <div class="archive-editor-wrapper">
-            <ngx-monaco-editor
-              class="archive-monaco block h-full w-full"
-              [options]="editorOptionsForSelectedFile"
-              [ngModel]="file.textContent"
-              (ngModelChange)="onEditorChange($event)"
-            ></ngx-monaco-editor>
-          </div>
-        } @else if (file.kind === 'image') {
-          <div class="flex min-h-[350px] w-full flex-1 items-center justify-center p-4">
-            <img
-              class="max-h-full max-w-full object-contain"
-              [src]="file.blobUrl"
-              [alt]="file.name"
-            />
-          </div>
-        } @else if (file.kind === 'pdf') {
-          <div class="archive-pdf-wrapper">
-            <f-pdf-viewer class="block h-full w-full" [pdfUrl]="file.blobUrl"></f-pdf-viewer>
-          </div>
-        } @else {
-          <div
-            class="flex min-h-[350px] flex-1 items-center justify-center gap-4 px-4 text-slate-600"
-          >
-            <mat-icon class="h-9 w-9">insert_drive_file</mat-icon>
-            <div>
-              <p class="mb-3">This file type cannot be previewed.</p>
-              <button mat-stroked-button color="primary" (click)="downloadSelectedFile()">
-                <mat-icon>download</mat-icon>
-                Download {{ file.name }}
-              </button>
+        @if (showPreview) {
+          @if (file.isLoading || !file.isLoaded) {
+            <div
+              class="flex min-h-[350px] w-full flex-1 items-center justify-center gap-3 text-slate-600"
+            >
+              <mat-spinner [diameter]="42"></mat-spinner>
+              <span>Loading {{ file.name }}...</span>
             </div>
-          </div>
+          } @else if (file.kind === 'code' || file.kind === 'text') {
+            <div class="archive-editor-wrapper">
+              <ngx-monaco-editor
+                class="archive-monaco block h-full w-full"
+                [options]="editorOptionsForSelectedFile"
+                [ngModel]="file.textContent"
+                (ngModelChange)="onEditorChange($event)"
+              ></ngx-monaco-editor>
+            </div>
+          } @else if (file.kind === 'image') {
+            <div class="flex min-h-[350px] w-full flex-1 items-center justify-center p-4">
+              <img
+                class="max-h-full max-w-full object-contain"
+                [src]="file.blobUrl"
+                [alt]="file.name"
+              />
+            </div>
+          } @else if (file.kind === 'pdf') {
+            <div class="archive-pdf-wrapper">
+              <f-pdf-viewer class="block h-full w-full" [pdfUrl]="file.blobUrl"></f-pdf-viewer>
+            </div>
+          } @else {
+            <div
+              class="flex min-h-[350px] flex-1 items-center justify-center gap-4 px-4 text-slate-600"
+            >
+              <mat-icon class="h-9 w-9">insert_drive_file</mat-icon>
+              <div>
+                <p class="mb-3">This file type cannot be previewed.</p>
+                <button mat-stroked-button color="primary" (click)="downloadSelectedFile()">
+                  <mat-icon>download</mat-icon>
+                  Download {{ file.name }}
+                </button>
+              </div>
+            </div>
+          }
         }
       </div>
     }

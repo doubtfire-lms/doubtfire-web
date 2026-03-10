@@ -29,6 +29,8 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Input() archiveFile: File | Blob | null = null;
   @Input() readOnly = true;
   @Input() uploadRequirementNames: string[] = [];
+  @Input() showPreview = true;
+  @Input() preloadSelectedFile = false;
   @Input() saveEndpoint?: string;
   @Input() saveMethod: 'POST' | 'PUT' = 'POST';
   @Input() saveFieldName = 'file';
@@ -37,6 +39,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Output() filesLoaded = new EventEmitter<number>();
   @Output() saveSuccess = new EventEmitter<HttpResponse<unknown>>();
   @Output() saveError = new EventEmitter<unknown>();
+  @Output() selectedFileChanged = new EventEmitter<ArchiveFileEntry | null>();
 
   public files: ArchiveFileEntry[] = [];
   public selectedTab = 0;
@@ -240,9 +243,14 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       this.filesLoaded.emit(this.files.length);
       if (this.files.length === 0) {
         this.errorMessage = 'This archive does not contain any files.';
+        this.selectedFileChanged.emit(null);
       } else {
-        await this.loadAndPrepareSelectedFile();
         this.updateEditorOptions();
+        if (this.showPreview || this.preloadSelectedFile) {
+          void this.loadAndPrepareSelectedFile();
+        } else {
+          this.selectedFileChanged.emit(null);
+        }
       }
     } catch (_error) {
       this.errorMessage = 'Unable to read archive. Please provide a valid zip file.';
@@ -257,6 +265,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   private clearFiles(): void {
     this.revokeUrls(this.files);
     this.files = [];
+    this.selectedFileChanged.emit(null);
   }
 
   private applyUploadRequirementLabels(files: ArchiveFileEntry[]): void {
@@ -301,9 +310,11 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
     const file = this.selectedFile;
     await this.ensureFileLoaded(file);
     if (!file || file !== this.selectedFile || !file.isLoaded) {
+      this.selectedFileChanged.emit(null);
       return;
     }
     this.prepareFileForDisplay(file);
+    this.selectedFileChanged.emit(file);
   }
 
   private prepareFileForDisplay(file: ArchiveFileEntry): void {

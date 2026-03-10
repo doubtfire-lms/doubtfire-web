@@ -16,6 +16,9 @@
           @if (idx === 0) {
             <span class="text-gray-500">(Most recent)</span>
           }
+          @if (isComparisonSource(oa)) {
+            <span class="text-blue-600">(Selected for comparison)</span>
+          }
         </mat-panel-title>
         @if (oa.reportReady) {
           <div class="flex gap-5 items-center">
@@ -36,14 +39,26 @@
               </button>
               <div fxFlex></div>
               <mat-menu #menu="matMenu">
-                <button
-                  mat-menu-item
-                  (click)="viewSubmissionFiles(oa, $event)"
-                >
+                <button mat-menu-item (click)="viewSubmissionFiles(oa, $event)">
                   <mat-icon>folder_zip</mat-icon>
                   View Submission Files
                 </button>
-                <button mat-menu-item>Compare Submission With...</button>
+                @if (hasComparisonSourceFor(oa)) {
+                  <button mat-menu-item (click)="compareWithSelected(oa, $event)">
+                    <mat-icon>compare_arrows</mat-icon>
+                    Compare With Selected
+                  </button>
+                } @else if (isComparisonSource(oa)) {
+                  <button mat-menu-item (click)="clearComparisonSource($event)">
+                    <mat-icon>close</mat-icon>
+                    Clear Compare Selection
+                  </button>
+                } @else {
+                  <button mat-menu-item (click)="selectComparisonSource(oa, $event)">
+                    <mat-icon>task_alt</mat-icon>
+                    Select For Comparison
+                  </button>
+                }
               </mat-menu>
             }
           </div>

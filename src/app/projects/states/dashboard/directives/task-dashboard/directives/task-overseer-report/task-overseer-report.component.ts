@@ -16,6 +16,7 @@ import {SubmissionFilesModalComponent} from './submission-files-modal/submission
 export class TaskOverseerReportComponent implements OnInit {
   @Input() task: Task;
   @Input() loadOverseerAssessmentId?: number;
+  public comparisonSourceAssessmentId: number | null = null;
 
   constructor(
     private alerts: AlertService,
@@ -91,6 +92,16 @@ export class TaskOverseerReportComponent implements OnInit {
 
   public overseerAssessments: OverseerAssessment[] = [];
 
+  public get comparisonSourceAssessment(): OverseerAssessment | null {
+    if (!this.comparisonSourceAssessmentId) {
+      return null;
+    }
+    return (
+      this.overseerAssessments.find((assessment) => assessment.id === this.comparisonSourceAssessmentId) ??
+      null
+    );
+  }
+
   ngOnInit(): void {
     this.loadAssessments();
   }
@@ -102,6 +113,14 @@ export class TaskOverseerReportComponent implements OnInit {
     this.overseerAssessmentService.queryForTask(this.task).subscribe({
       next: (assessments) => {
         this.overseerAssessments = assessments;
+        if (
+          this.comparisonSourceAssessmentId &&
+          !this.overseerAssessments.some(
+            (assessment) => assessment.id === this.comparisonSourceAssessmentId,
+          )
+        ) {
+          this.comparisonSourceAssessmentId = null;
+        }
         for (const oa of this.overseerAssessments) {
           for (const result of oa.stepResultsCache.currentValues) {
             result.overseerStep = this.task.definition.overseerStepsCache.currentValues.find(
@@ -150,12 +169,56 @@ export class TaskOverseerReportComponent implements OnInit {
     event.stopPropagation();
   }
 
+  isComparisonSource(assessment: OverseerAssessment): boolean {
+    return this.comparisonSourceAssessmentId === assessment.id;
+  }
+
+  hasComparisonSourceFor(assessment: OverseerAssessment): boolean {
+    return (
+      this.comparisonSourceAssessmentId !== null && this.comparisonSourceAssessmentId !== assessment.id
+    );
+  }
+
+  selectComparisonSource(assessment: OverseerAssessment, event?: Event) {
+    event?.stopPropagation();
+    this.comparisonSourceAssessmentId = assessment.id;
+    this.alerts.message(
+      `Selected submission ${assessment.timestampString} for comparison.`,
+      3500,
+    );
+  }
+
+  clearComparisonSource(event?: Event) {
+    event?.stopPropagation();
+    this.comparisonSourceAssessmentId = null;
+  }
+
+  compareWithSelected(assessment: OverseerAssessment, event?: Event) {
+    event?.stopPropagation();
+    const selected = this.comparisonSourceAssessment;
+    if (!selected || selected.id === assessment.id) {
+      return;
+    }
+
+    this.openSubmissionFilesDialog(assessment, selected);
+  }
+
   viewSubmissionFiles(assessment: OverseerAssessment, event?: Event) {
     event?.stopPropagation();
+    this.openSubmissionFilesDialog(assessment);
+  }
+
+  private openSubmissionFilesDialog(
+    assessment: OverseerAssessment,
+    comparedWith?: OverseerAssessment,
+  ) {
     this.dialog.open(SubmissionFilesModalComponent, {
       data: {
         assessment,
-        title: `Submission Files - ${assessment.timestampString}`,
+        comparedWith,
+        title: comparedWith
+          ? `Compare Submission Files - ${assessment.timestampString} vs ${comparedWith.timestampString}`
+          : `Submission Files - ${assessment.timestampString}`,
       },
       maxWidth: '95vw',
       width: '100%',
