@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {MatMenuTrigger} from '@angular/material/menu';
 import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {OverseerAssessmentService} from 'src/app/api/services/overseer-assessment.service';
@@ -179,9 +180,14 @@ export class TaskOverseerReportComponent implements OnInit {
     );
   }
 
-  selectComparisonSource(assessment: OverseerAssessment, event?: Event) {
+  selectComparisonSource(
+    assessment: OverseerAssessment,
+    event?: Event,
+    menuTrigger?: MatMenuTrigger,
+  ) {
     event?.stopPropagation();
     this.comparisonSourceAssessmentId = assessment.id;
+    menuTrigger?.closeMenu();
     this.alerts.message(
       `Selected submission ${assessment.timestampString} for comparison.`,
       3500,

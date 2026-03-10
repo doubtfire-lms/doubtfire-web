@@ -33,6 +33,7 @@
                 mat-icon-button
                 aria-label="Submission options"
                 [matMenuTriggerFor]="menu"
+                #submissionMenuTrigger="matMenuTrigger"
                 (click)="viewSubmissionOptions($event)"
               >
                 <mat-icon>more_vert</mat-icon>
@@ -54,7 +55,10 @@
                     Clear Compare Selection
                   </button>
                 } @else {
-                  <button mat-menu-item (click)="selectComparisonSource(oa, $event)">
+                  <button
+                    mat-menu-item
+                    (click)="selectComparisonSource(oa, $event, submissionMenuTrigger)"
+                  >
                     <mat-icon>task_alt</mat-icon>
                     Select For Comparison
                   </button>
