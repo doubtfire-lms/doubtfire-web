@@ -313,6 +313,8 @@ import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/p
 import {OverseerStepService} from './api/services/overseer-step.service';
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 import {OverseerStepResultService} from './api/services/overseer-step-result.service';
+import { SummaryTaskStatusChartComponent } from './units/states/analytics/directives/summary-task-status-chart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -662,6 +664,8 @@ const GANTT_CHART_CONFIG = {
     NgxGanttModule,
     MatSidenavModule,
     MonacoEditorModule.forRoot(),
+    SummaryTaskStatusChartComponent,
+    NgxChartsModule,
   ],
 })
 
