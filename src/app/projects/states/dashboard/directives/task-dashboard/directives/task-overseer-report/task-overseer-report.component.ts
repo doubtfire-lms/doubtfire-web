@@ -222,9 +222,6 @@ export class TaskOverseerReportComponent implements OnInit {
       data: {
         assessment,
         comparedWith,
-        title: comparedWith
-          ? `Compare Submission Files - ${assessment.timestampString} vs ${comparedWith.timestampString}`
-          : `Submission Files - ${assessment.timestampString}`,
       },
       maxWidth: '95vw',
       width: '100%',

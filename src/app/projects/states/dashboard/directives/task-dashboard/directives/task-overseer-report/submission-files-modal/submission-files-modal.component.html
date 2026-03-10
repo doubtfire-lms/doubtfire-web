@@ -1,10 +1,22 @@
-<div class="flex justify-between p-5">
-  <h3 mat-dialog-title>{{ data.title ?? ('Submission Files ' + (data.assessment.timestamp | humanizedDate)) }}</h3>
+<div class="flex justify-between p-10">
+  <div class="min-w-0">
+    <h3 class="mb-0">
+      @if (compareMode) {
+        Compare Submission Files
+      } @else {
+        Submission Files
+      }
+    </h3>
+    <div class="truncate text-slate-600">
+      {{ data.assessment.task.definition.abbreviation }}
+      {{ data.assessment.task.definition.name }} ({{ data.assessment.task.project.student.name }})
+    </div>
+  </div>
 
   <button mat-stroked-button color="warn" mat-dialog-close>Close</button>
 </div>
 
-<div class="flex flex-1 min-h-0 overflow-hidden p-5">
+<div class="flex flex-1 min-h-0 overflow-hidden p-10">
   @if (isLoading) {
     <div class="w-full h-full min-h-[300px] flex items-center justify-center">
       <mat-spinner [diameter]="56"></mat-spinner>
