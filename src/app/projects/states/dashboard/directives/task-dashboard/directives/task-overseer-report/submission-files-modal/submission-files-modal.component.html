@@ -84,7 +84,7 @@
                 @if (isCodeOrText(primarySelectedFile)) {
                   <ngx-monaco-editor
                     class="block h-full w-full"
-                    [options]="singleEditorOptions"
+                    [options]="primarySingleEditorOptions"
                     [ngModel]="primarySelectedFile?.textContent ?? ''"
                   ></ngx-monaco-editor>
                 } @else if (isPdf(primarySelectedFile)) {
@@ -117,7 +117,7 @@
                 @if (isCodeOrText(comparedSelectedFile)) {
                   <ngx-monaco-editor
                     class="block h-full w-full"
-                    [options]="singleEditorOptions"
+                    [options]="comparedSingleEditorOptions"
                     [ngModel]="comparedSelectedFile?.textContent ?? ''"
                   ></ngx-monaco-editor>
                 } @else if (isPdf(comparedSelectedFile)) {

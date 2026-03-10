@@ -61,6 +61,8 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
       enabled: false,
     },
   };
+  public primarySingleEditorOptions = {...this.singleEditorOptions};
+  public comparedSingleEditorOptions = {...this.singleEditorOptions};
   public diffOriginalModel: {language: string; code: string; uri: monaco.Uri} = {
     language: 'plaintext',
     code: '',
@@ -116,6 +118,7 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
     this.primarySelectedFile = null;
     this.comparedSelectedFile = null;
     this.resetDiffModels();
+    this.resetSingleEditorOptions();
 
     try {
       if (this.data.comparedWith) {
@@ -155,6 +158,7 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
       return;
     }
     this.primarySelectedFile = file;
+    this.refreshSingleEditorOptions();
     this.refreshDiffModels();
   }
 
@@ -163,6 +167,7 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
       return;
     }
     this.comparedSelectedFile = file;
+    this.refreshSingleEditorOptions();
     this.refreshDiffModels();
   }
 
@@ -206,6 +211,22 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
       language: this.comparedSelectedFile?.language ?? 'plaintext',
       code: this.comparedSelectedFile?.textContent ?? '',
       uri: this.diffModifiedUri,
+    };
+  }
+
+  private resetSingleEditorOptions(): void {
+    this.primarySingleEditorOptions = {...this.singleEditorOptions, language: 'plaintext'};
+    this.comparedSingleEditorOptions = {...this.singleEditorOptions, language: 'plaintext'};
+  }
+
+  private refreshSingleEditorOptions(): void {
+    this.primarySingleEditorOptions = {
+      ...this.singleEditorOptions,
+      language: this.primarySelectedFile?.language ?? 'plaintext',
+    };
+    this.comparedSingleEditorOptions = {
+      ...this.singleEditorOptions,
+      language: this.comparedSelectedFile?.language ?? 'plaintext',
     };
   }
 }
