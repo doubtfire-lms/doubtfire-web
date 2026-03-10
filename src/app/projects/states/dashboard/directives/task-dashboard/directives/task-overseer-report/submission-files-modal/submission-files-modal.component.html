@@ -31,8 +31,8 @@
     @if (archiveBlob && comparedArchiveBlob) {
       <div class="flex h-full min-h-0 w-full flex-col gap-4">
         <div class="grid min-h-0 w-full grid-cols-1 gap-4 lg:grid-cols-2">
-          <div class="flex min-h-0 flex-col overflow-hidden rounded border border-slate-200">
-            <div class="shrink-0 border-b border-slate-200 px-3 py-2 text-sm text-slate-700">
+          <div class="flex min-h-0 flex-col overflow-hidden rounded">
+            <div class="shrink-0 px-3 py-2 text-slate-500">
               Submission {{ data.assessment.timestamp | humanizedDate }}
             </div>
             <f-archive-viewer
@@ -47,8 +47,8 @@
             ></f-archive-viewer>
           </div>
 
-          <div class="flex min-h-0 flex-col overflow-hidden rounded border border-slate-200">
-            <div class="shrink-0 border-b border-slate-200 px-3 py-2 text-sm text-slate-700">
+          <div class="flex min-h-0 flex-col overflow-hidden rounded">
+            <div class="shrink-0 px-3 py-2 text-slate-500">
               Submission {{ data.comparedWith?.timestamp | humanizedDate }}
             </div>
             @if (primaryArchiveParsed) {
@@ -70,7 +70,7 @@
           </div>
         </div>
 
-        <div class="flex min-h-0 flex-1 overflow-hidden rounded border border-slate-200">
+        <div class="flex min-h-0 flex-1 overflow-hidden rounded">
           @if (!bothSelectionsReady) {
             <div
               class="flex h-full w-full items-center justify-center px-4 text-base text-slate-500"
@@ -78,20 +78,41 @@
               Select a file in both submissions to compare.
             </div>
           } @else if (canShowDiffEditor) {
-            <ngx-monaco-diff-editor
-              class="block h-full w-full"
-              [options]="diffEditorOptions"
-              [originalModel]="diffOriginalModel"
-              [modifiedModel]="diffModifiedModel"
-            ></ngx-monaco-diff-editor>
+            <div class="flex h-full w-full min-h-0 flex-col">
+              <div class="grid w-full grid-cols-1 gap-4 px-3 py-2 text-slate-500 lg:grid-cols-2">
+                <div class="min-w-0 overflow-hidden whitespace-nowrap truncate">
+                  {{ primarySelectedFile?.path ?? primarySelectedFile?.name }}
+                </div>
+                <div class="min-w-0 overflow-hidden whitespace-nowrap truncate">
+                  {{ comparedSelectedFile?.path ?? comparedSelectedFile?.name }}
+                </div>
+              </div>
+              <ngx-monaco-diff-editor
+                class="block h-full w-full flex-1"
+                [options]="diffEditorOptions"
+                [originalModel]="diffOriginalModel"
+                [modifiedModel]="diffModifiedModel"
+              ></ngx-monaco-diff-editor>
+            </div>
           } @else {
             <div class="grid h-full w-full grid-cols-1 gap-4 p-4 lg:grid-cols-2">
-              <div class="flex min-h-0 flex-col overflow-hidden rounded border border-slate-200">
+              <div class="flex min-h-0 flex-col overflow-hidden rounded">
                 <div
-                  class="shrink-0 overflow-hidden border-b border-slate-200 px-3 py-2 text-sm whitespace-nowrap text-slate-700 truncate"
+                  class="shrink-0 flex items-center gap-2 px-3 py-2 text-slate-500"
                   [title]="primarySelectedFile?.path ?? ''"
                 >
-                  {{ primarySelectedFile?.path ?? primarySelectedFile?.name }}
+                  <span class="min-w-0 flex-1 overflow-hidden whitespace-nowrap truncate">
+                    {{ primarySelectedFile?.path ?? primarySelectedFile?.name }}
+                  </span>
+                  @if (selectedFilesMatch !== null) {
+                    <span
+                      class="shrink-0"
+                      [class.text-green-700]="selectedFilesMatch"
+                      [class.text-red-700]="!selectedFilesMatch"
+                    >
+                      {{ selectedFilesMatch ? 'Identical' : 'Different' }}
+                    </span>
+                  }
                 </div>
                 @if (isCodeOrText(primarySelectedFile)) {
                   <ngx-monaco-editor
@@ -119,12 +140,23 @@
                 }
               </div>
 
-              <div class="flex min-h-0 flex-col overflow-hidden rounded border border-slate-200">
+              <div class="flex min-h-0 flex-col overflow-hidden rounded">
                 <div
-                  class="shrink-0 overflow-hidden border-b border-slate-200 px-3 py-2 text-sm whitespace-nowrap text-slate-700 truncate"
+                  class="shrink-0 flex items-center gap-2 px-3 py-2 text-slate-500"
                   [title]="comparedSelectedFile?.path ?? ''"
                 >
-                  {{ comparedSelectedFile?.path ?? comparedSelectedFile?.name }}
+                  <span class="min-w-0 flex-1 overflow-hidden whitespace-nowrap truncate">
+                    {{ comparedSelectedFile?.path ?? comparedSelectedFile?.name }}
+                  </span>
+                  @if (selectedFilesMatch !== null) {
+                    <span
+                      class="shrink-0"
+                      [class.text-green-700]="selectedFilesMatch"
+                      [class.text-red-700]="!selectedFilesMatch"
+                    >
+                      {{ selectedFilesMatch ? 'Identical' : 'Different' }}
+                    </span>
+                  }
                 </div>
                 @if (isCodeOrText(comparedSelectedFile)) {
                   <ngx-monaco-editor

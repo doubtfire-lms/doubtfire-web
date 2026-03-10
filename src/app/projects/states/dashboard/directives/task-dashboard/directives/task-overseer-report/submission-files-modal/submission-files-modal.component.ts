@@ -30,6 +30,8 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   public comparedSelectedFile: ArchiveFileEntry | null = null;
   public primaryArchiveParsed = false;
   public comparedArchiveParsed = false;
+  public selectedFilesMatch: boolean | null = null;
+  private selectedFilesComparisonToken = 0;
 
   public diffEditorOptions = {
     theme: 'vs',
@@ -98,8 +100,9 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.uploadRequirementNames =
-      this.data.assessment.task?.definition?.uploadRequirements
-        ?.map((requirement) => requirement?.name?.trim() ?? '') ?? [];
+      this.data.assessment.task?.definition?.uploadRequirements?.map(
+        (requirement) => requirement?.name?.trim() ?? '',
+      ) ?? [];
 
     void this.loadSubmissionArchives();
   }
@@ -116,6 +119,7 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
     this.comparedArchiveParsed = false;
     this.primarySelectedFile = null;
     this.comparedSelectedFile = null;
+    this.selectedFilesMatch = null;
     this.resetDiffModels();
     this.resetSingleEditorOptions();
 
@@ -159,6 +163,7 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
     this.primarySelectedFile = file;
     this.refreshSingleEditorOptions();
     this.refreshDiffModels();
+    void this.refreshSelectedFilesMatch();
   }
 
   public onComparedSelectionChange(file: ArchiveFileEntry | null): void {
@@ -168,6 +173,7 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
     this.comparedSelectedFile = file;
     this.refreshSingleEditorOptions();
     this.refreshDiffModels();
+    void this.refreshSelectedFilesMatch();
   }
 
   public onPrimaryFilesLoaded(): void {
@@ -227,5 +233,42 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
       ...this.singleEditorOptions,
       language: this.comparedSelectedFile?.language ?? 'plaintext',
     };
+  }
+
+  private async refreshSelectedFilesMatch(): Promise<void> {
+    const token = ++this.selectedFilesComparisonToken;
+    if (!this.primarySelectedFile || !this.comparedSelectedFile) {
+      this.selectedFilesMatch = null;
+      return;
+    }
+
+    const [primaryHash, comparedHash] = await Promise.all([
+      this.computeFileHash(this.primarySelectedFile),
+      this.computeFileHash(this.comparedSelectedFile),
+    ]);
+
+    if (token !== this.selectedFilesComparisonToken) {
+      return;
+    }
+
+    this.selectedFilesMatch = primaryHash === comparedHash;
+  }
+
+  private async computeFileHash(file: ArchiveFileEntry): Promise<string> {
+    let bytes: Uint8Array | null = file.data ?? null;
+    if (!bytes && file.textContent !== undefined) {
+      bytes = new TextEncoder().encode(file.textContent);
+    }
+    if (!bytes && file.blob) {
+      bytes = new Uint8Array(await file.blob.arrayBuffer());
+    }
+    if (!bytes) {
+      return '';
+    }
+
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest))
+      .map((value) => value.toString(16).padStart(2, '0'))
+      .join('');
   }
 }
