@@ -17,6 +17,7 @@ import {
   createArchiveFileEntry,
   createArchiveFilePlaceholder,
   getMonacoLanguageForPath,
+  getOrderedUploadFileIndex,
 } from './archive-viewer.helpers';
 
 @Component({
@@ -27,6 +28,7 @@ import {
 export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Input() archiveFile: File | Blob | null = null;
   @Input() readOnly = true;
+  @Input() uploadRequirementNames: string[] = [];
   @Input() saveEndpoint?: string;
   @Input() saveMethod: 'POST' | 'PUT' = 'POST';
   @Input() saveFieldName = 'file';
@@ -71,6 +73,9 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['archiveFile']) {
       this.loadArchive();
+    }
+    if (changes['uploadRequirementNames']) {
+      this.applyUploadRequirementLabels(this.files);
     }
     if (changes['readOnly']) {
       this.updateEditorOptions();
@@ -231,6 +236,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       }
 
       this.files = loadedFiles;
+      this.applyUploadRequirementLabels(this.files);
       this.filesLoaded.emit(this.files.length);
       if (this.files.length === 0) {
         this.errorMessage = 'This archive does not contain any files.';
@@ -251,6 +257,16 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   private clearFiles(): void {
     this.revokeUrls(this.files);
     this.files = [];
+  }
+
+  private applyUploadRequirementLabels(files: ArchiveFileEntry[]): void {
+    for (let fileIndex = 0; fileIndex < files.length; fileIndex++) {
+      const file = files[fileIndex];
+      const orderedIndex = getOrderedUploadFileIndex(file.path);
+      const requirementIndex = orderedIndex ?? fileIndex;
+      const requirementName = this.uploadRequirementNames[requirementIndex];
+      file.tabLabel = requirementName?.trim() || file.name;
+    }
   }
 
   private revokeUrls(files: ArchiveFileEntry[]): void {

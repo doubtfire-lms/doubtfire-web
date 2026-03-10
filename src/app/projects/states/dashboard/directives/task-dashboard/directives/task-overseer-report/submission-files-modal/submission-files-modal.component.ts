@@ -18,6 +18,7 @@ export interface SubmissionFilesModalData {
 export class SubmissionFilesModalComponent implements OnInit {
   public archiveBlob: Blob | null = null;
   public isLoading = true;
+  public uploadRequirementNames: string[] = [];
 
   constructor(
     private fileDownloader: FileDownloaderService,
@@ -27,6 +28,10 @@ export class SubmissionFilesModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.uploadRequirementNames =
+      this.data.assessment.task?.definition?.uploadRequirements
+        ?.map((requirement) => requirement?.name?.trim() ?? '') ?? [];
+
     this.fileDownloader.downloadBlob(
       this.data.assessment.submissionFilesUrl(),
       (resourceUrl: string, response: HttpResponse<Blob>) => {

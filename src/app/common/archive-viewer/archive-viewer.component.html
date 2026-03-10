@@ -48,7 +48,7 @@
       >
         @for (file of files; track trackByPath($index, file); let i = $index) {
           <mat-button-toggle [value]="i" [title]="file.path">
-            <span class="inline-block max-w-56 truncate align-bottom">{{ file.name }}</span>
+            <span class="inline-block max-w-56 truncate align-bottom">{{ file.tabLabel }}</span>
           </mat-button-toggle>
         }
       </mat-button-toggle-group>

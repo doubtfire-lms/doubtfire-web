@@ -13,6 +13,7 @@ export interface ArchiveFileClassification {
 export interface ArchiveFileEntry {
   path: string;
   name: string;
+  tabLabel: string;
   kind: ArchiveFileKind;
   mimeType: string;
   language?: string;
@@ -31,9 +32,11 @@ export function createArchiveFilePlaceholder(
   path: string,
   zipObject: JSZip.JSZipObject,
 ): ArchiveFileEntry {
+  const name = getBaseName(path);
   return {
     path,
-    name: getBaseName(path),
+    name,
+    tabLabel: name,
     kind: 'binary',
     mimeType: 'application/octet-stream',
     dirty: false,
@@ -41,6 +44,17 @@ export function createArchiveFilePlaceholder(
     isLoading: false,
     zipObject,
   };
+}
+
+export function getOrderedUploadFileIndex(path: string): number | null {
+  const fileName = getBaseName(path);
+  const match = fileName.match(/^(\d+)-/);
+  if (!match) {
+    return null;
+  }
+
+  const parsed = Number.parseInt(match[1], 10);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 }
 
 export function createArchiveFileEntry(
