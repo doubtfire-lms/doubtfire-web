@@ -96,93 +96,20 @@
             </div>
           } @else {
             <div class="grid h-full w-full grid-cols-1 gap-4 p-4 lg:grid-cols-2">
-              <div class="flex min-h-0 flex-col overflow-hidden rounded">
-                <div
-                  class="shrink-0 flex items-center gap-2 px-3 py-2 text-slate-500"
-                  [title]="primarySelectedFile?.path ?? ''"
-                >
-                  <span class="min-w-0 flex-1 overflow-hidden whitespace-nowrap truncate">
-                    {{ primarySelectedFile?.path ?? primarySelectedFile?.name }}
-                  </span>
-                  @if (selectedFilesMatch !== null) {
-                    <span
-                      class="shrink-0"
-                      [class.text-green-700]="selectedFilesMatch"
-                      [class.text-red-700]="!selectedFilesMatch"
-                    >
-                      {{ selectedFilesMatch ? 'Identical' : 'Different' }}
-                    </span>
-                  }
-                </div>
-                @if (isCodeOrText(primarySelectedFile)) {
-                  <ngx-monaco-editor
-                    class="block h-full w-full"
-                    [options]="primarySingleEditorOptions"
-                    [ngModel]="primarySelectedFile?.textContent ?? ''"
-                  ></ngx-monaco-editor>
-                } @else if (isPdf(primarySelectedFile)) {
-                  <f-pdf-viewer
-                    class="block h-full w-full"
-                    [pdfUrl]="primarySelectedFile?.blobUrl ?? ''"
-                  ></f-pdf-viewer>
-                } @else if (isImage(primarySelectedFile)) {
-                  <div class="flex h-full w-full items-center justify-center p-3">
-                    <img
-                      class="max-h-full max-w-full object-contain"
-                      [src]="primarySelectedFile?.blobUrl"
-                      [alt]="primarySelectedFile?.name"
-                    />
-                  </div>
-                } @else {
-                  <div class="flex h-full w-full items-center justify-center p-3 text-slate-500">
-                    Preview not available for this file type.
-                  </div>
-                }
-              </div>
-
-              <div class="flex min-h-0 flex-col overflow-hidden rounded">
-                <div
-                  class="shrink-0 flex items-center gap-2 px-3 py-2 text-slate-500"
-                  [title]="comparedSelectedFile?.path ?? ''"
-                >
-                  <span class="min-w-0 flex-1 overflow-hidden whitespace-nowrap truncate">
-                    {{ comparedSelectedFile?.path ?? comparedSelectedFile?.name }}
-                  </span>
-                  @if (selectedFilesMatch !== null) {
-                    <span
-                      class="shrink-0"
-                      [class.text-green-700]="selectedFilesMatch"
-                      [class.text-red-700]="!selectedFilesMatch"
-                    >
-                      {{ selectedFilesMatch ? 'Identical' : 'Different' }}
-                    </span>
-                  }
-                </div>
-                @if (isCodeOrText(comparedSelectedFile)) {
-                  <ngx-monaco-editor
-                    class="block h-full w-full"
-                    [options]="comparedSingleEditorOptions"
-                    [ngModel]="comparedSelectedFile?.textContent ?? ''"
-                  ></ngx-monaco-editor>
-                } @else if (isPdf(comparedSelectedFile)) {
-                  <f-pdf-viewer
-                    class="block h-full w-full"
-                    [pdfUrl]="comparedSelectedFile?.blobUrl ?? ''"
-                  ></f-pdf-viewer>
-                } @else if (isImage(comparedSelectedFile)) {
-                  <div class="flex h-full w-full items-center justify-center p-3">
-                    <img
-                      class="max-h-full max-w-full object-contain"
-                      [src]="comparedSelectedFile?.blobUrl"
-                      [alt]="comparedSelectedFile?.name"
-                    />
-                  </div>
-                } @else {
-                  <div class="flex h-full w-full items-center justify-center p-3 text-slate-500">
-                    Preview not available for this file type.
-                  </div>
-                }
-              </div>
+              <ng-container
+                [ngTemplateOutlet]="selectedFilePreviewPane"
+                [ngTemplateOutletContext]="{
+                  file: primarySelectedFile,
+                  editorOptions: primarySingleEditorOptions,
+                }"
+              ></ng-container>
+              <ng-container
+                [ngTemplateOutlet]="selectedFilePreviewPane"
+                [ngTemplateOutletContext]="{
+                  file: comparedSelectedFile,
+                  editorOptions: comparedSingleEditorOptions,
+                }"
+              ></ng-container>
             </div>
           }
         </div>
@@ -209,3 +136,46 @@
     </div>
   }
 </div>
+
+<ng-template #selectedFilePreviewPane let-file="file" let-editorOptions="editorOptions">
+  <div class="flex min-h-0 flex-col overflow-hidden rounded">
+    <div
+      class="shrink-0 flex items-center gap-2 px-3 py-2 text-slate-500"
+      [title]="file?.path ?? ''"
+    >
+      <span class="min-w-0 flex-1 overflow-hidden whitespace-nowrap truncate">
+        {{ file?.path ?? file?.name }}
+      </span>
+      @if (selectedFilesMatch !== null) {
+        <span
+          class="shrink-0"
+          [class.text-green-700]="selectedFilesMatch"
+          [class.text-red-700]="!selectedFilesMatch"
+        >
+          {{ selectedFilesMatch ? 'Identical' : 'Different' }}
+        </span>
+      }
+    </div>
+    @if (isCodeOrText(file)) {
+      <ngx-monaco-editor
+        class="block h-full w-full"
+        [options]="editorOptions"
+        [ngModel]="file?.textContent ?? ''"
+      ></ngx-monaco-editor>
+    } @else if (isPdf(file)) {
+      <f-pdf-viewer class="block h-full w-full" [pdfUrl]="file?.blobUrl ?? ''"></f-pdf-viewer>
+    } @else if (isImage(file)) {
+      <div class="flex h-full w-full items-center justify-center p-3">
+        <img
+          class="max-h-full max-w-full object-contain"
+          [src]="file?.blobUrl"
+          [alt]="file?.name"
+        />
+      </div>
+    } @else {
+      <div class="flex h-full w-full items-center justify-center p-3 text-slate-500">
+        Preview not available for this file type.
+      </div>
+    }
+  </div>
+</ng-template>

@@ -157,20 +157,25 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   }
 
   public onPrimarySelectionChange(file: ArchiveFileEntry | null): void {
-    if (file && !file.isLoaded) {
-      return;
-    }
-    this.primarySelectedFile = file;
-    this.refreshSingleEditorOptions();
-    this.refreshDiffModels();
-    void this.refreshSelectedFilesMatch();
+    this.applySelectionChange(file, (value) => {
+      this.primarySelectedFile = value;
+    });
   }
 
   public onComparedSelectionChange(file: ArchiveFileEntry | null): void {
+    this.applySelectionChange(file, (value) => {
+      this.comparedSelectedFile = value;
+    });
+  }
+
+  private applySelectionChange(
+    file: ArchiveFileEntry | null,
+    assignSelection: (value: ArchiveFileEntry | null) => void,
+  ): void {
     if (file && !file.isLoaded) {
       return;
     }
-    this.comparedSelectedFile = file;
+    assignSelection(file);
     this.refreshSingleEditorOptions();
     this.refreshDiffModels();
     void this.refreshSelectedFilesMatch();

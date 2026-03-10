@@ -66,12 +66,10 @@
             </div>
           } @else if (file.kind === 'code' || file.kind === 'text') {
             <div class="archive-editor-wrapper flex min-h-0 flex-1 flex-col">
-              <div
-                class="shrink-0 overflow-hidden px-4 py-2 text-sm text-slate-700 whitespace-nowrap truncate"
-                [title]="file.path"
-              >
-                {{ file.path }}
-              </div>
+              <ng-container
+                [ngTemplateOutlet]="filePathLabel"
+                [ngTemplateOutletContext]="{$implicit: file.path}"
+              ></ng-container>
               <ngx-monaco-editor
                 class="archive-monaco block h-full w-full flex-1"
                 [options]="editorOptionsForSelectedFile"
@@ -81,12 +79,10 @@
             </div>
           } @else if (file.kind === 'image') {
             <div class="flex min-h-0 w-full flex-1 flex-col">
-              <div
-                class="shrink-0 overflow-hidden px-4 py-2 text-sm text-slate-700 whitespace-nowrap truncate"
-                [title]="file.path"
-              >
-                {{ file.path }}
-              </div>
+              <ng-container
+                [ngTemplateOutlet]="filePathLabel"
+                [ngTemplateOutletContext]="{$implicit: file.path}"
+              ></ng-container>
               <div class="flex min-h-[350px] w-full flex-1 items-center justify-center p-4">
                 <img
                   class="max-h-full max-w-full object-contain"
@@ -97,12 +93,10 @@
             </div>
           } @else if (file.kind === 'pdf') {
             <div class="archive-pdf-wrapper flex min-h-0 flex-1 flex-col">
-              <div
-                class="shrink-0 overflow-hidden px-4 py-2 text-sm text-slate-700 whitespace-nowrap truncate"
-                [title]="file.path"
-              >
-                {{ file.path }}
-              </div>
+              <ng-container
+                [ngTemplateOutlet]="filePathLabel"
+                [ngTemplateOutletContext]="{$implicit: file.path}"
+              ></ng-container>
               <f-pdf-viewer
                 class="block h-full w-full flex-1"
                 [pdfUrl]="file.blobUrl"
@@ -127,3 +121,12 @@
     }
   }
 </div>
+
+<ng-template #filePathLabel let-path>
+  <div
+    class="shrink-0 overflow-hidden px-4 py-2 text-slate-700 whitespace-nowrap truncate"
+    [title]="path"
+  >
+    {{ path }}
+  </div>
+</ng-template>
