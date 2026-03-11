@@ -1,7 +1,5 @@
-import {AfterViewInit, Component, Inject, Input, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {AfterViewInit, Component, Inject, Input} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
 import {addWeeks} from 'date-fns';
 import {Subscription} from 'rxjs';
 import {
@@ -23,23 +21,12 @@ type GradeCol = 'p' | 'c' | 'd' | 'hd';
   styleUrls: ['unit-task-editor.component.scss'],
 })
 export class UnitTaskEditorComponent implements AfterViewInit {
-  @ViewChild(MatTable, {static: false}) table: MatTable<TaskDefinition>;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-
   @Input() unit: Unit;
 
   public taskDefinitionSource: MatTableDataSource<TaskDefinition>;
-  public columns: string[] = [
-    'name',
-    'grade',
-    'startDate',
-    'targetDate',
-    'deadlineDate',
-    'taskDefAction',
-  ];
   public filter: string;
   public selectedTaskDefinition: TaskDefinition;
+  public isTaskListCollapsed: boolean = false;
 
   public gradeColumns: string[] = ['p', 'c', 'd', 'hd'];
   public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
@@ -158,8 +145,6 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     this.subscriptions.push(
       this.unit.taskDefinitionCache.values.subscribe((taskDefinitions) => {
         this.taskDefinitionSource = new MatTableDataSource<TaskDefinition>(taskDefinitions);
-        this.taskDefinitionSource.paginator = this.paginator;
-        this.taskDefinitionSource.sort = this.sort;
         this.taskDefinitionSource.filterPredicate = (data: any, filter: string) =>
           data.matches(filter);
       }),
@@ -185,62 +170,37 @@ export class UnitTaskEditorComponent implements AfterViewInit {
 
   public selectTaskDefinition(taskDefinition: TaskDefinition) {
     if (this.selectedTaskDefinition === taskDefinition) {
-      this.selectedTaskDefinition = null;
-    } else {
-      this.selectedTaskDefinition = taskDefinition;
-
-      // Record original save data if none present
-      if (!this.selectedTaskDefinition.hasOriginalSaveData) {
-        this.selectedTaskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
-      }
-
-      this.feedbackTemplateService
-        .query({contextType: 'task_definitions', contextId: this.selectedTaskDefinition.id}, {})
-        .subscribe({
-          error: () => this.alerts.error('Error loading task feedback templates.'),
-        });
-    }
-  }
-
-  public sortData(sort: Sort) {
-    const data = this.taskDefinitionSource.data;
-
-    if (!sort.active || sort.direction === '') {
-      this.taskDefinitionSource.data = data;
       return;
     }
 
-    this.taskDefinitionSource.data = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name':
-          return this.compare(a.abbreviation, b.abbreviation, isAsc);
-        case 'grade':
-          return this.compare(a.targetGrade, b.targetGrade, isAsc);
-        case 'startDate':
-          return this.compare(a.startDate.getTime(), b.startDate.getTime(), isAsc);
-        case 'targetDate':
-          return this.compare(a.targetDate.getTime(), b.targetDate.getTime(), isAsc);
-        case 'deadlineDate':
-          return this.compare(a.dueDate.getTime(), b.dueDate.getTime(), isAsc);
-        default:
-          return 0;
-      }
-    });
+    this.selectedTaskDefinition = taskDefinition;
+
+    // Record original save data if none present
+    if (!this.selectedTaskDefinition.hasOriginalSaveData) {
+      this.selectedTaskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
+    }
+
+    this.feedbackTemplateService
+      .query({contextType: 'task_definitions', contextId: this.selectedTaskDefinition.id}, {})
+      .subscribe({
+        error: () => this.alerts.error('Error loading task feedback templates.'),
+      });
   }
 
-  public compare(a: number | string, b: number | string, isAsc: boolean): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  public isSelectedTaskDefinition(taskDefinition: TaskDefinition): boolean {
+    return this.selectedTaskDefinition === taskDefinition;
+  }
+
+  public toggleTaskListCollapsed(): void {
+    this.isTaskListCollapsed = !this.isTaskListCollapsed;
   }
 
   applyFilter(filterValue: string) {
+    if (!this.taskDefinitionSource) return;
+
     this.taskDefinitionSource.filter = filterValue.trim().toLowerCase();
 
     this.selectedTaskDefinition = null;
-
-    if (this.taskDefinitionSource.paginator) {
-      this.taskDefinitionSource.paginator.firstPage();
-    }
   }
 
   private guessTaskAbbreviation() {

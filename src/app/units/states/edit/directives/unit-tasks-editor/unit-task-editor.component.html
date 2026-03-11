@@ -1,124 +1,145 @@
 <div class="flex-grow flex flex-col gap-8 gap-y-0">
-  <div class="flex flex-row">
-    <div>
-      <h3>Task List</h3>
-      <p>Plan the list of tasks for students to complete.</p>
-    </div>
-    <span class="flex-grow"></span>
-    <div>
-      <mat-form-field appearance="outline">
-        <input
-          matInput
-          (keyup)="applyFilter($event.target.value)"
-          placeholder="Filter"
-          [(ngModel)]="filter"
-        />
-      </mat-form-field>
-    </div>
+  <div>
+    <h3>Task List</h3>
+    <p>Plan the list of tasks for students to complete.</p>
   </div>
-  <mat-drawer-container class="h-[1000px]">
-    <mat-drawer mode="side" opened
-      ><table
-        class="flex-grow f-table selectable"
-        mat-table
-        [dataSource]="taskDefinitionSource"
-        matSort
-        (matSortChange)="sortData($event)"
-      >
-        <ng-container matColumnDef="name" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Task Name</th>
-          <td
-            mat-cell
-            *matCellDef="let taskDefinition"
-            (click)="selectTaskDefinition(taskDefinition)"
-          >
-            {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="grade" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Grade</th>
-          <td
-            mat-cell
-            *matCellDef="let taskDefinition"
-            (click)="selectTaskDefinition(taskDefinition)"
-          >
-            {{ taskDefinition.targetGradeText }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="startDate" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
-          <td
-            mat-cell
-            *matCellDef="let taskDefinition"
-            (click)="selectTaskDefinition(taskDefinition)"
-          >
-            {{ taskDefinition.startDate | date: 'd LLL y' }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="targetDate" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</th>
-          <td
-            mat-cell
-            *matCellDef="let taskDefinition"
-            (click)="selectTaskDefinition(taskDefinition)"
-          >
-            {{ taskDefinition.targetDate | date: 'd LLL y' }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="deadlineDate" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Deadline</th>
-          <td
-            mat-cell
-            *matCellDef="let taskDefinition"
-            (click)="selectTaskDefinition(taskDefinition)"
-          >
-            {{ taskDefinition.dueDate | date: 'd LLL y' }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="taskDefAction" sticky>
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let taskDefinition">
-            @if (taskDefinitionHasChanges(taskDefinition)) {
-              <button
-                mat-icon-button
-                aria-label="save task definition"
-                color="primary"
-                (click)="saveTaskDefinition(taskDefinition)"
-              >
-                <mat-icon>save</mat-icon>
-              </button>
-            }
+  <div class="flex flex-col items-start gap-4 md:flex-row">
+    <aside
+      class="self-start md:sticky md:top-4 md:shrink-0"
+      [ngClass]="{
+        'w-full md:w-[420px]': !isTaskListCollapsed,
+        'w-full md:w-[92px]': isTaskListCollapsed
+      }"
+    >
+      <div class="h-full overflow-hidden rounded-2xl border border-gray-200 bg-white">
+        <div class="border-b border-gray-200 px-1 text-left text-[15px]">
+          <div class="flex items-center">
             <button
               mat-icon-button
-              aria-label="delete task definition"
-              color="warn"
-              (click)="deleteTaskDefinition(taskDefinition)"
+              [attr.aria-label]="isTaskListCollapsed ? 'Expand task list' : 'Collapse task list'"
+              class="flex-none flex items-center"
+              (click)="toggleTaskListCollapsed()"
             >
-              <mat-icon>delete</mat-icon>
+              <mat-icon class="flex items-center">
+                {{ isTaskListCollapsed ? 'chevron_right' : 'chevron_left' }}
+              </mat-icon>
             </button>
-          </td>
-        </ng-container>
+            @if (!isTaskListCollapsed) {
+              <button
+                mat-icon-button
+                aria-label="Search Icon"
+                disabled
+                class="flex-none flex items-center"
+              >
+                <mat-icon class="flex items-center">search</mat-icon>
+              </button>
+              <div class="grow pr-2">
+                <input
+                  class="w-full border-0 bg-transparent outline-none"
+                  autocomplete="off"
+                  spellcheck="false"
+                  type="text"
+                  placeholder="Search Tasks"
+                  [(ngModel)]="filter"
+                  (ngModelChange)="applyFilter($event)"
+                />
+              </div>
+            }
+          </div>
+        </div>
 
-        <ng-container matColumnDef="actions">
-          <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length"></td>
-        </ng-container>
+        <div class="h-full max-h-[460px] overflow-auto md:max-h-[calc(100vh-290px)]">
+          <mat-selection-list [multiple]="false">
+            @if ((taskDefinitionSource?.filteredData ?? []).length === 0) {
+              <div class="text-center text-muted p-3">No task definitions to display</div>
+            }
+            @for (
+              taskDefinition of taskDefinitionSource?.filteredData ?? [];
+              track taskDefinition
+            ) {
+              <mat-list-item class="clearfix p-0 h-[60px]" [disableRipple]="true">
+                <div
+                  class="flex h-[60px] w-full cursor-pointer items-center rounded-[6px] hover:bg-gray-50"
+                  (click)="selectTaskDefinition(taskDefinition)"
+                  [matTooltip]="taskDefinition.name"
+                  matTooltipPosition="above"
+                  [matTooltipDisabled]="!isTaskListCollapsed"
+                  [matTooltipShowDelay]="250"
+                  [ngClass]="{
+                    'bg-black/5': isSelectedTaskDefinition(taskDefinition)
+                  }"
+                >
+                  <div
+                    class="w-full flex items-center"
+                    [ngClass]="{'justify-center': isTaskListCollapsed}"
+                  >
+                    <div
+                      class="flex w-full items-center justify-center"
+                      [ngClass]="{
+                        'pl-[6px]': !isTaskListCollapsed,
+                        'pl-0': isTaskListCollapsed
+                      }"
+                    >
+                      <f-task-badge [taskDef]="taskDefinition"></f-task-badge>
 
-        <tr mat-header-row *matHeaderRowDef="columns"></tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: columns"
-          [style.background]="selectedTaskDefinition === row ? 'lightblue' : ''"
-        ></tr></table
-    ></mat-drawer>
-    <mat-drawer-content>
+                      @if (!isTaskListCollapsed) {
+                        <div class="flex-col ml-4 min-w-0 flex-1">
+                          <h4 class="line-clamp-1 mt-[8px] mb-[-2px] text-[15px]">
+                            {{ taskDefinition.name }}
+                          </h4>
+                          <div class="line-clamp-1 mb-0 text-xs">
+                            {{ taskDefinition.abbreviation }}
+                          </div>
+                        </div>
+
+                        <div
+                          class="flex items-center gap-1 pr-1"
+                          (click)="$event.stopPropagation()"
+                        >
+                          @if (taskDefinitionHasChanges(taskDefinition)) {
+                            <button
+                              mat-icon-button
+                              aria-label="save task definition"
+                              color="primary"
+                              (click)="saveTaskDefinition(taskDefinition)"
+                            >
+                              <mat-icon>save</mat-icon>
+                            </button>
+                          }
+                          <button
+                            mat-icon-button
+                            aria-label="delete task definition"
+                            color="warn"
+                            (click)="deleteTaskDefinition(taskDefinition)"
+                          >
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </mat-list-item>
+            }
+          </mat-selection-list>
+        </div>
+      </div>
+    </aside>
+
+    <div class="w-full min-w-0 flex-1">
       @if (selectedTaskDefinition) {
         <f-task-definition-editor
           [taskDefinition]="selectedTaskDefinition"
           [unit]="unit"
         ></f-task-definition-editor>
+      } @else {
+        <div class="border border-dashed border-gray-300 rounded-xl bg-gray-50 p-8 text-gray-600">
+          <h4>Select a task definition</h4>
+          <p>Pick a task from the left list to edit its details.</p>
+        </div>
       }
-    </mat-drawer-content>
-  </mat-drawer-container>
+    </div>
+  </div>
 
   <!-- <div class="flex flex-row gap-8">
 

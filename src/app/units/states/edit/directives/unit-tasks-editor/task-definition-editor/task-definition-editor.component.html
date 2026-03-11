@@ -1,113 +1,155 @@
-<div id="task-def-head" class="w-full sticky top-0">
+<div id="task-def-head" class="w-full sticky top-0 bg-white z-10 pb-3">
   <h3>Details for {{ taskDefinition.abbreviation }} - {{ taskDefinition.name }}</h3>
   <mat-divider></mat-divider>
 </div>
 
-<mat-stepper orientation="vertical" #stepper>
-  <mat-step>
-    <ng-template matStepLabel matStepperIcon="1">Task Details</ng-template>
-    <div class="pt-[12px]">
+<div class="flex flex-col items-start gap-4 md:flex-row">
+  <aside class="sticky top-0 z-[9] w-full self-start md:top-20 md:w-[240px] md:shrink-0">
+    <div
+      class="flex flex-row flex-wrap gap-1 overflow-auto rounded-xl border border-gray-200 bg-white p-2 md:max-h-[calc(100vh-260px)] md:flex-col"
+    >
+      @for (section of visibleSections; track section.id) {
+        <button
+          type="button"
+          class="border-0 rounded-lg bg-transparent cursor-pointer px-3 py-2 text-left transition-colors"
+          [ngClass]="{
+            'bg-blue-100 text-blue-700 font-semibold': activeSectionId === section.id,
+            'text-gray-700 hover:bg-gray-100': activeSectionId !== section.id
+          }"
+          (click)="scrollToSection(section.id)"
+        >
+          {{ section.label }}
+        </button>
+      }
+    </div>
+  </aside>
+
+  <div class="w-full flex-1 pr-1" #sectionScrollContainer>
+    <section
+      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="task-details"
+    >
+      <h3>Task Details</h3>
       <p class="font-normal text-gray-500 pb-2">Name the task and set target grade</p>
       <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
-    </div>
-  </mat-step>
+    </section>
 
-  <mat-step>
-    <ng-template matStepLabel>Task Learning Outcomes</ng-template>
-    <div class="pt-[12px]">
+    <section
+      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="task-learning-outcomes"
+    >
+      <h3>Task Learning Outcomes</h3>
       <p class="font-normal text-gray-500 pb-2">Add learning outcomes for this task</p>
       <f-learning-outcome-editor [context]="taskDefinition"></f-learning-outcome-editor>
-    </div>
-  </mat-step>
+    </section>
 
-  <mat-step>
-    <ng-template matStepLabel>Inbox</ng-template>
-    <div class="pt-[12px]">
+    <section
+      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="inbox"
+    >
+      <h3>Inbox</h3>
       <p class="font-normal text-gray-500 pb-2">
         Who assesses {{ unit.hasGroupwork() ? 'and submits ' : '' }}this task?
       </p>
       <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
-    </div>
-  </mat-step>
+    </section>
 
-  <mat-step>
-    <ng-template matStepLabel>Due Dates</ng-template>
-    <div class="pt-[12px]">
+    <section
+      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="due-dates"
+    >
+      <h3>Due Dates</h3>
       <p class="font-normal text-gray-500 pb-2">When is the task due?</p>
       <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
-    </div>
-  </mat-step>
+    </section>
 
-  <mat-step>
-    <ng-template matStepLabel>Upload Requirements</ng-template>
-    <div class="pt-[12px]">
+    <section
+      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="upload-requirements"
+    >
+      <h3>Upload Requirements</h3>
       <p class="font-normal text-gray-500 pb-2">What do students need to upload?</p>
       <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
-    </div>
-  </mat-step>
+    </section>
 
-  <mat-step>
-    <ng-template matStepLabel>Task Resources</ng-template>
-    <div class="pt-[12px]">
+    <section
+      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="task-resources"
+    >
+      <h3>Task Resources</h3>
       <p class="font-normal text-gray-500 pb-2">Upload task descriptions and resources</p>
       <f-task-definition-resources [taskDefinition]="taskDefinition"></f-task-definition-resources>
-    </div>
-  </mat-step>
+    </section>
 
-  <mat-step>
-    <ng-template matStepLabel>Prerequisite Tasks</ng-template>
-    <div class="pt-[12px]">
+    <section
+      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="prerequisite-tasks"
+    >
+      <h3>Prerequisite Tasks</h3>
       <p class="font-normal text-gray-500 pb-2">
         Select which tasks need to be submitted before
         <span class="font-bold">{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</span>
         can be submitted
       </p>
-
       <f-task-definition-prerequisites [taskDefinition]="taskDefinition" [staffView]="true">
       </f-task-definition-prerequisites>
-    </div>
-  </mat-step>
+    </section>
 
-  <mat-step>
-    <ng-template matStepLabel>Discussion Prompts</ng-template>
-    <div class="pt-[12px]">
+    <section
+      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="discussion-prompts"
+    >
+      <h3>Discussion Prompts</h3>
       <p class="font-normal text-gray-500 pb-2">
         Discussion prompts for tutors to use when discussing student tasks in class
       </p>
-
       <f-task-definition-discussion-prompts [taskDefinition]="taskDefinition" [staffView]="true">
       </f-task-definition-discussion-prompts>
-    </div>
-  </mat-step>
+    </section>
 
-  @if (overseerEnabled) {
-    <mat-step>
-      <ng-template matStepLabel>Task Assessment Automation</ng-template>
-      <div class="pt-[12px]">
+    @if (overseerEnabled) {
+      <section
+        class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+        #sectionElement
+        data-section-id="task-assessment-automation"
+      >
+        <h3>Task Assessment Automation</h3>
         <p class="font-normal text-gray-500 pb-2">Configure automated assessment</p>
         <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
-      </div>
-    </mat-step>
-  }
+      </section>
+    }
 
-  <mat-step>
-    <ng-template matStepLabel>SCORM Test</ng-template>
-    <div class="pt-[12px]">
+    <section
+      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="scorm-test"
+    >
+      <h3>SCORM Test</h3>
       <p class="font-normal text-gray-500 pb-2">
         Upload the corresponding SCORM 2004 test (e.g. Numbas)
       </p>
       <f-task-definition-scorm [taskDefinition]="taskDefinition"></f-task-definition-scorm>
-    </div>
-  </mat-step>
+    </section>
 
-  <mat-step>
-    <ng-template matStepLabel>Optional Settings</ng-template>
-    <div class="pt-[12px]">
+    <section
+      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="optional-settings"
+    >
+      <h3>Optional Settings</h3>
       <p class="font-normal text-gray-500 pb-2">Apply other options</p>
       <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
-    </div>
-  </mat-step>
-</mat-stepper>
+    </section>
+  </div>
+</div>
 <div class="flex w-full justify-end place-content-end mb-5">
   <div class="sticky bottom-16">
     <button mat-fab color="primary" (click)="save()">
