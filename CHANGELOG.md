@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-18](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-17...v10.0.1-18) (2026-03-11)
+
+
+### Bug Fixes
+
+* convert emojis in submission comment to string with colons ([#1105](https://github.com/b0ink/doubtfire-deploy/issues/1105)) ([7c508cb](https://github.com/b0ink/doubtfire-deploy/commit/7c508cba8695fcd7b6df4aaa53a70066ecb137f3))
+* dont subtract tutor note count for reading your own notes ([8fe6171](https://github.com/b0ink/doubtfire-deploy/commit/8fe61718c0e263fa965b861763337af27c175b36))
+
 ### [10.0.1-17](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-16...v10.0.1-17) (2026-03-06)
 
 
