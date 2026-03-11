@@ -95,7 +95,7 @@
             <mat-spinner [diameter]="42"></mat-spinner>
             <span>Loading {{ file.name }}...</span>
           </div>
-        } @else if (file.kind === 'code' || file.kind === 'text') {
+        } @else if (isArchiveCodeOrTextFile(file)) {
           <div class="archive-editor-wrapper flex min-h-0 flex-1 flex-col">
             <ng-container
               [ngTemplateOutlet]="filePathLabel"
@@ -108,7 +108,7 @@
               (ngModelChange)="onEditorChange($event)"
             ></ngx-monaco-editor>
           </div>
-        } @else if (file.kind === 'image') {
+        } @else if (isArchiveImageFile(file)) {
           <div class="flex min-h-0 w-full flex-1 flex-col">
             <ng-container
               [ngTemplateOutlet]="filePathLabel"
@@ -122,7 +122,7 @@
               />
             </div>
           </div>
-        } @else if (file.kind === 'pdf') {
+        } @else if (isArchivePdfFile(file)) {
           <div class="archive-pdf-wrapper flex min-h-0 flex-1 flex-col">
             <ng-container
               [ngTemplateOutlet]="filePathLabel"

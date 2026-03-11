@@ -3,7 +3,12 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import * as monaco from 'monaco-editor';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
-import {ArchiveFileEntry} from 'src/app/common/archive-viewer/archive-viewer.helpers';
+import {
+  ArchiveFileEntry,
+  isArchiveCodeOrTextFile,
+  isArchiveImageFile,
+  isArchivePdfFile,
+} from 'src/app/common/archive-viewer/archive-viewer.helpers';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
@@ -24,6 +29,9 @@ export interface SubmissionFilesModalData {
 export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   private readonly diffOriginalUri = monaco.Uri.parse('inmemory://submission-compare/original');
   private readonly diffModifiedUri = monaco.Uri.parse('inmemory://submission-compare/modified');
+  public readonly isArchiveCodeOrTextFile = isArchiveCodeOrTextFile;
+  public readonly isArchiveImageFile = isArchiveImageFile;
+  public readonly isArchivePdfFile = isArchivePdfFile;
 
   public archiveBlob: Blob | null = null;
   public comparedArchiveBlob: Blob | null = null;
@@ -97,8 +105,8 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   public get canShowDiffEditor(): boolean {
     return (
       this.bothSelectionsReady &&
-      this.isCodeOrText(this.primarySelectedFile) &&
-      this.isCodeOrText(this.comparedSelectedFile)
+      isArchiveCodeOrTextFile(this.primarySelectedFile) &&
+      isArchiveCodeOrTextFile(this.comparedSelectedFile)
     );
   }
 
@@ -191,18 +199,6 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
 
   public onComparedFilesLoaded(): void {
     this.comparedArchiveParsed = true;
-  }
-
-  public isCodeOrText(file: ArchiveFileEntry | null): boolean {
-    return file?.kind === 'code' || file?.kind === 'text';
-  }
-
-  public isPdf(file: ArchiveFileEntry | null): boolean {
-    return file?.kind === 'pdf' && !!file.blobUrl;
-  }
-
-  public isImage(file: ArchiveFileEntry | null): boolean {
-    return file?.kind === 'image' && !!file.blobUrl;
   }
 
   private resetDiffModels(): void {

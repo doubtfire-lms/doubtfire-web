@@ -18,7 +18,10 @@ import {
   createArchiveFilePlaceholder,
   getMonacoLanguageForPath,
   getOrderedUploadFileIndex,
+  isArchiveCodeOrTextFile,
+  isArchiveImageFile,
   isArchivePathHidden,
+  isArchivePdfFile,
 } from './archive-viewer.helpers';
 
 type ArchiveViewerNavigationMode = 'tabs' | 'tree';
@@ -61,9 +64,11 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   public errorMessage: string | null = null;
   public fileTreeNodes: ArchiveFileTreeNode[] = [];
 
-  private loadToken = 0;
+  public readonly isArchiveCodeOrTextFile = isArchiveCodeOrTextFile;
+  public readonly isArchiveImageFile = isArchiveImageFile;
+  public readonly isArchivePdfFile = isArchivePdfFile;
 
-  public editorOptions = {
+  public readonly editorOptions = {
     theme: 'vs',
     language: 'plaintext',
     automaticLayout: true,
@@ -76,6 +81,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       enabled: false,
     },
   };
+
   public editorOptionsForSelectedFile = {
     ...this.editorOptions,
     language: 'plaintext',
@@ -89,12 +95,14 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['archiveFile']) {
-      this.loadArchive();
+      void this.loadArchive();
     }
+
     if (changes['uploadRequirementNames']) {
       this.applyUploadRequirementLabels(this.files);
       this.rebuildFileTree();
     }
+
     if (changes['readOnly']) {
       this.updateEditorOptions();
     }
@@ -132,14 +140,12 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
     if (node.fileIndex === null) {
       return;
     }
+
     this.selectTab(node.fileIndex);
   }
 
   public treeNodeLabel(node: ArchiveFileTreeNode): string {
-    if (node.fileIndex === null) {
-      return node.name;
-    }
-    return this.files[node.fileIndex]?.tabLabel || node.name;
+    return node.fileIndex === null ? node.name : this.files[node.fileIndex]?.tabLabel || node.name;
   }
 
   public selectTab(index: number): void {
@@ -163,7 +169,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       !selectedFile ||
       !selectedFile.isLoaded ||
       this.readOnly ||
-      (selectedFile.kind !== 'code' && selectedFile.kind !== 'text')
+      !isArchiveCodeOrTextFile(selectedFile)
     ) {
       return;
     }
@@ -198,21 +204,21 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       const zip = new JSZip();
 
       for (const file of this.files) {
-        if (
-          file.isLoaded &&
-          (file.kind === 'code' || file.kind === 'text') &&
-          file.textContent !== undefined
-        ) {
+        if (file.isLoaded && isArchiveCodeOrTextFile(file) && file.textContent !== undefined) {
           const encoded = new TextEncoder().encode(file.textContent);
           file.data = encoded;
           file.originalTextContent = file.textContent;
           zip.file(file.path, encoded);
-        } else if (file.data) {
-          zip.file(file.path, file.data);
-        } else {
-          const rawData = await file.zipObject.async('uint8array');
-          zip.file(file.path, rawData);
+          continue;
         }
+
+        if (file.data) {
+          zip.file(file.path, file.data);
+          continue;
+        }
+
+        const rawData = await file.zipObject.async('uint8array');
+        zip.file(file.path, rawData);
       }
 
       const archiveBlob = await zip.generateAsync({type: 'blob'});
@@ -229,6 +235,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       for (const file of this.files) {
         file.dirty = false;
       }
+
       this.alerts.success('Archive saved', 3000);
       this.saveSuccess.emit(response);
     } catch (error) {
@@ -240,19 +247,20 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   }
 
   private async loadArchive(): Promise<void> {
-    const token = ++this.loadToken;
+    const requestedArchive = this.archiveFile;
+
     this.errorMessage = null;
     this.selectedTab = 0;
     this.clearFiles();
 
-    if (!this.archiveFile) {
+    if (!requestedArchive) {
       return;
     }
 
     this.isLoading = true;
 
     try {
-      const zipData = await this.archiveFile.arrayBuffer();
+      const zipData = await requestedArchive.arrayBuffer();
       const zip = await JSZip.loadAsync(zipData);
       const paths = Object.keys(zip.files).sort((a, b) => a.localeCompare(b));
       const loadedFiles: ArchiveFileEntry[] = [];
@@ -266,7 +274,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
         loadedFiles.push(createArchiveFilePlaceholder(path, zipFile));
       }
 
-      if (token !== this.loadToken) {
+      if (requestedArchive !== this.archiveFile) {
         this.revokeUrls(loadedFiles);
         return;
       }
@@ -275,22 +283,24 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       this.applyUploadRequirementLabels(this.files);
       this.rebuildFileTree();
       this.filesLoaded.emit(this.files.length);
+
       if (this.files.length === 0) {
         this.errorMessage = 'This archive does not contain any files.';
         this.selectedFileChanged.emit(null);
-      } else {
-        this.updateEditorOptions();
-        if (this.showPreview || this.preloadSelectedFile) {
-          void this.loadAndPrepareSelectedFile();
-        } else {
-          this.selectedFileChanged.emit(null);
-        }
+        return;
       }
-    } catch (_error) {
+
+      this.updateEditorOptions();
+      if (this.showPreview || this.preloadSelectedFile) {
+        void this.loadAndPrepareSelectedFile();
+      } else {
+        this.selectedFileChanged.emit(null);
+      }
+    } catch {
       this.errorMessage = 'Unable to read archive. Please provide a valid zip file.';
       this.filesLoaded.emit(0);
     } finally {
-      if (token === this.loadToken) {
+      if (requestedArchive === this.archiveFile) {
         this.isLoading = false;
       }
     }
@@ -413,7 +423,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       if (file === this.selectedFile) {
         this.updateEditorOptions();
       }
-    } catch (_error) {
+    } catch {
       file.isLoading = false;
       this.alerts.error(`Unable to open file '${file.path}' from archive`, 6000);
     }
@@ -422,10 +432,12 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   private async loadAndPrepareSelectedFile(): Promise<void> {
     const file = this.selectedFile;
     await this.ensureFileLoaded(file);
+
     if (!file || file !== this.selectedFile || !file.isLoaded) {
       this.selectedFileChanged.emit(null);
       return;
     }
+
     this.prepareFileForDisplay(file);
     this.selectedFileChanged.emit(file);
   }
@@ -435,22 +447,11 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       return;
     }
 
-    this.normalizePdfViewerZoom();
     if (file.blobUrl) {
       URL.revokeObjectURL(file.blobUrl);
     }
-    file.blobUrl = URL.createObjectURL(file.blob);
-  }
 
-  private normalizePdfViewerZoom(): void {
-    try {
-      const current = localStorage.getItem('pdfViewerZoom');
-      if (current !== '1') {
-        localStorage.setItem('pdfViewerZoom', '1');
-      }
-    } catch {
-      // Ignore storage access errors.
-    }
+    file.blobUrl = URL.createObjectURL(file.blob);
   }
 
   private updateEditorOptions(): void {

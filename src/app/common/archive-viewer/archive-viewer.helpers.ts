@@ -28,6 +28,21 @@ export interface ArchiveFileEntry {
   zipObject: JSZip.JSZipObject;
 }
 
+type ArchiveFileKindLike = Pick<ArchiveFileEntry, 'kind'> | null | undefined;
+type ArchiveFilePreviewLike = Pick<ArchiveFileEntry, 'kind' | 'blobUrl'> | null | undefined;
+
+export function isArchiveCodeOrTextFile(file: ArchiveFileKindLike): boolean {
+  return file?.kind === 'code' || file?.kind === 'text';
+}
+
+export function isArchiveImageFile(file: ArchiveFilePreviewLike): boolean {
+  return file?.kind === 'image' && !!file.blobUrl;
+}
+
+export function isArchivePdfFile(file: ArchiveFilePreviewLike): boolean {
+  return file?.kind === 'pdf' && !!file.blobUrl;
+}
+
 export function createArchiveFilePlaceholder(
   path: string,
   zipObject: JSZip.JSZipObject,
