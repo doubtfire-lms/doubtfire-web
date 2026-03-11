@@ -37,6 +37,8 @@ export class TaskPlannerComponent implements OnInit {
   public readonly CLOSE_TO_FEEDBACK_DEADLINE_THRESHOLD = 7;
 
   @Input() project: Project;
+  @Input() targetGrade: number;
+
   @ViewChild('gantt') ganttComponent: NgxGanttComponent;
 
   public viewType: GanttViewType = GanttViewType.day;
@@ -315,9 +317,10 @@ export class TaskPlannerComponent implements OnInit {
               task.targetStartDate = null;
 
               const item = this.items.find((item) => item.id === task.definition.id.toString());
-
-              item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
-              item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+              if (item) {
+                item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
+                item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+              }
             }
             this.items = [...this.items];
           },
@@ -329,11 +332,23 @@ export class TaskPlannerComponent implements OnInit {
     );
   }
 
+  // normalizeDateUTC = (ts: number) => {
+  //   const d = new GanttDate(ts * 1000);
+  //   // const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0);
+  //   return Math.floor(d.getUnixTime());
+  // };
+
   normalizeDateUTC = (ts: number) => {
     const d = new GanttDate(ts * 1000);
-    // const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0);
-    return Math.floor(d.getUnixTime());
+    // d.setHours(0, 0, 0, 0);
+    return Math.floor(d.startOfDay().getTime() / 1000);
   };
+
+  // normalizeDateUTC = (ts: number) => {
+  //   const d = new Date(ts * 1000);
+  //   d.setHours(0, 0, 0, 0);
+  //   return Math.floor(d.getTime() / 1000);
+  // };
 
   toDateString(timestamp: number | Date) {
     const date = timestamp instanceof Date ? timestamp : new Date(timestamp * 1000);
@@ -356,15 +371,31 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   public get earliestStartDate() {
-    const earliestTaskStartDate = Math.min(
-      ...this.taskDefs().map((t) => t.startDate.getTime() / 1000),
-    );
-    return Math.floor(Math.min(this.unit.startDate.getTime() / 1000, earliestTaskStartDate));
+    const tasks = this.taskDefs()
+      .map((td) => this.project.findTaskForDefinition(td.id))
+      .filter((t) => t?.startDate);
+
+    if (!tasks.length) {
+      return Math.floor(this.unit.startDate.getTime() / 1000);
+    }
+
+    const earliestTaskStart = Math.min(...tasks.map((t) => t.startDate.getTime() / 1000));
+
+    return Math.floor(Math.min(this.unit.startDate.getTime() / 1000, earliestTaskStart));
   }
 
   public get latestEndDate() {
-    const latestTaskEndDate = Math.max(...this.taskDefs().map((t) => t.dueDate.getTime() / 1000));
-    return Math.floor(Math.max(this.unit.endDate.getTime() / 1000, latestTaskEndDate));
+    const tasks = this.taskDefs()
+      .map((td) => this.project.findTaskForDefinition(td.id))
+      .filter((t) => t?.localDueDate());
+
+    if (!tasks.length) {
+      return Math.floor(this.unit.endDate.getTime() / 1000);
+    }
+
+    const latestTaskEnd = Math.max(...tasks.map((t) => t.localDueDate().getTime() / 1000));
+
+    return Math.floor(Math.max(this.unit.endDate.getTime() / 1000, latestTaskEnd));
   }
 
   ngOnInit(): void {
@@ -408,13 +439,17 @@ export class TaskPlannerComponent implements OnInit {
     });
   }
 
-  refreshItems() {
+  refreshItems(scroll: boolean = true) {
     this.taskPrerequisites = this.allTaskPrerequisites.filter((pre) =>
       this.taskDefs().find((td) => td.id === pre.taskDefinitionId),
     );
 
     const taskDefinitions = this.taskDefs();
     this.items = [];
+    this.baselineItems = [];
+
+    const _items: TaskGanttItem[] = [];
+    const _baselineItems: GanttBaselineItem[] = [];
 
     for (const td of taskDefinitions) {
       const task = this.project.findTaskForDefinition(td.id);
@@ -489,23 +524,49 @@ export class TaskPlannerComponent implements OnInit {
       item.originalLinks = [...(originalItem.links as GanttLink[])];
 
       this.items.push(item);
-      this.items = [...this.items];
+      _items.push(item);
 
       // Create baseline item
       const baselineItem = {...item};
-      baselineItem.start = this.normalizeDateUTC(td.startDate.getTime() / 1000);
-      baselineItem.end = this.normalizeDateUTC(td.targetDate.getTime() / 1000);
-      this.baselineItems.push(baselineItem);
-      this.baselineItems = [...this.baselineItems];
+
+      const tdTargetDate =
+        (this.targetGrade === 1
+          ? td.cTargetDate
+          : this.targetGrade === 2
+            ? td.dTargetDate
+            : this.targetGrade === 3
+              ? td.hdTargetDate
+              : td.targetDate) ?? td.targetDate;
+
+      const tdStartDate =
+        (this.targetGrade === 1
+          ? td.cStartDate
+          : this.targetGrade === 2
+            ? td.dStartDate
+            : this.targetGrade === 3
+              ? td.hdStartDate
+              : td.startDate) ?? td.startDate;
+
+      baselineItem.start = this.normalizeDateUTC(tdStartDate.getTime() / 1000);
+      baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
+
+      _baselineItems.push(baselineItem);
 
       // if (this.unsavedChanges(item)) {
       //   this.saveTargetDate(item);
       // }
     }
 
-    this.ganttComponent.scrollToToday();
+    this.items = [..._items];
+    setTimeout(() => {
+      this.baselineItems = [..._baselineItems];
+    });
 
-    if (this.router.globals.params.taskDef) {
+    if (scroll) {
+      this.ganttComponent.scrollToToday();
+    }
+
+    if (this.router.globals.params.taskDef && scroll) {
       const taskItem = this.items.find((item) => item.id === this.router.globals.params.taskDef);
       if (taskItem) {
         this.ganttComponent.scrollToDate(taskItem.start);
@@ -537,8 +598,16 @@ export class TaskPlannerComponent implements OnInit {
       return [];
     }
 
-    return this.project.unit.taskDefinitions.filter((taskDef) => {
-      return taskDef.targetGrade <= this.project.targetGrade;
-    });
+    return this.project.unit.taskDefinitions
+      .filter((taskDef) => taskDef.targetGrade <= this.targetGrade)
+      .sort((a, b) => {
+        const taskA = this.project.findTaskForDefinition(a.id);
+        const taskB = this.project.findTaskForDefinition(b.id);
+
+        const dateA = taskA?.startDate ?? a.startDate;
+        const dateB = taskB?.startDate ?? b.startDate;
+
+        return new Date(dateA).getTime() - new Date(dateB).getTime();
+      });
   }
 }

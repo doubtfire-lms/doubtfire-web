@@ -158,6 +158,42 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
         },
       },
       'overseerResourceFiles',
+      // {
+      //   keys: 'pTargetDate',
+      //   toEntityFn: MappingFunctions.mapDateToDay,
+      //   toJsonFn: MappingFunctions.mapDayToJson,
+      // },
+      {
+        keys: 'cTargetDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
+      {
+        keys: 'dTargetDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
+      {
+        keys: 'hdTargetDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
+
+      {
+        keys: 'cStartDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
+      {
+        keys: 'dStartDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
+      {
+        keys: 'hdStartDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
     );
 
     this.mapping.mapAllKeysToJsonExcept(
@@ -188,10 +224,10 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     );
   }
 
-  public uploadOverseerResources(taskDefinition: TaskDefinition, file: File): Observable<boolean> {
+  public uploadOverseerResources(taskDefinition: TaskDefinition, file: File): Observable<string[]> {
     const formData = new FormData();
     formData.append('file', file);
-    return AppInjector.get(HttpClient).post<boolean>(
+    return AppInjector.get(HttpClient).post<string[]>(
       taskDefinition.taskOverseerResourcesUploadUrl,
       formData,
     );

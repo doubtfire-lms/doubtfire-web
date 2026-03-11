@@ -73,6 +73,14 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
 
   public overseerSteps: OverseerStep[] = [];
 
+  onRunCommandChange(step: OverseerStep, value: string) {
+    step.runCommand = `b64:${this.base64UrlEncode(value)}`;
+  }
+
+  private base64UrlEncode(str) {
+    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
   selectStep(step: OverseerStep) {
     this.selectedOverseerStep = step;
     setTimeout(() => {
@@ -93,6 +101,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     this.newOverseerStep.statusOnFailure = 'no_change';
     this.newOverseerStep.statusOnSuccess = 'no_change';
     this.newOverseerStep.commandLanguage = 'shell';
+    this.newOverseerStep.decodedRunCommand = '#!/bin/bash\n\n';
     this.newOverseerStep.runCommand = '#!/bin/bash\n\n';
     this.newOverseerStep.showExpectedOutput = true;
 
@@ -313,9 +322,10 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     if (validFiles.length > 0) {
       const file = validFiles[0];
       this.taskDefinitionService.uploadOverseerResources(this.taskDefinition, file).subscribe({
-        next: () => {
+        next: (resourceFiles) => {
           this.alerts.success('Uploaded Overseer Resources', 2000);
           this.taskDefinition.hasTaskAssessmentResources = true;
+          this.taskDefinition.overseerResourceFiles = [...resourceFiles];
         },
         error: (message) => this.alerts.error(message, 6000),
       });

@@ -43,7 +43,8 @@ export class Project extends Entity {
 
   public hasPortfolio: boolean;
   public portfolioStatus: number;
-  public portfolioFiles: { kind: string; name: string; idx: number }[];
+  public portfolioFiles: {kind: string; name: string; idx: number}[];
+  public escalationAttemptsRemaining: number;
 
   public taskStats: {
     key: TaskStatusEnum;

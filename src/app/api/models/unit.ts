@@ -76,6 +76,9 @@ export class Unit extends Entity {
   allowStudentChangeTutorial: boolean;
   markLateSubmissionsAsAssessInPortfolio: boolean;
 
+  feedbackWarningThresholdDays: number;
+  feedbackOverflowThresholdDays: number;
+
   d2lMapping: D2lAssessmentMapping;
 
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =

@@ -153,6 +153,30 @@
               <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
             </button>
           </div>
+          <div class="flex flex-row justify-between items-center">
+            <mat-form-field class="flex-1">
+              <mat-label>Tutors</mat-label>
+              <mat-select
+                [disabled]="filters.tutorialIdSelected !== 'all'"
+                [(ngModel)]="filters.unitRoleIdSelected"
+                name="tutor"
+                (selectionChange)="unitRoleIdChanged()"
+              >
+                @for (g of tutorGroups; track g.label) {
+                  <mat-optgroup [label]="g.label">
+                    @for (t of g.options; track t.id) {
+                      <mat-option [value]="t.id">
+                        <span class="truncate">{{ t.inboxDescription }}</span>
+                      </mat-option>
+                    }
+                  </mat-optgroup>
+                }
+              </mat-select>
+            </mat-form-field>
+            <button disabled mat-icon-button aria-label="Sort by tutor icon">
+              <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
+            </button>
+          </div>
           <!--/students-->
         </form>
       </mat-expansion-panel>
@@ -235,7 +259,25 @@
                 <user-icon class="self-center" [user]="task.project.student" [size]="30">
                 </user-icon>
                 <div class="task-list-data truncate flex-1" [hidden]="isNarrow">
-                  <h4 class="student-name">{{ task.project.student.name }}</h4>
+                  <h4 class="student-name flex items-center gap-1">
+                    @if (getWarningIcon(task) === 'warning') {
+                      <mat-icon
+                        matTooltip="Feedback due soon — please review before it escalates."
+                        class="shrink-0 text-amber-500"
+                      >
+                        warning
+                      </mat-icon>
+                    } @else if (getWarningIcon(task) === 'overflow') {
+                      <mat-icon
+                        matTooltip="Feedback overdue — this task has been escalated for urgent review."
+                        class="shrink-0 text-red-500"
+                      >
+                        watch_later
+                      </mat-icon>
+                    }
+
+                    {{ task.project.student.name }}
+                  </h4>
                   <div class="task-details truncate">
                     {{ task.definition.abbreviation }} -
                     {{ task.definition.name }}

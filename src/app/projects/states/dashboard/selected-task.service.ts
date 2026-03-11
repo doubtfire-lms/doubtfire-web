@@ -9,6 +9,7 @@ export enum DashboardViews {
   task,
   similarity,
   staff_notes,
+  tutor_notes,
   discussion_prompts,
   overseer,
 }
@@ -66,6 +67,10 @@ export class SelectedTaskService {
 
   public showStaffNotes() {
     this.currentView$.next(DashboardViews.staff_notes);
+  }
+
+  public showTutorNotes() {
+    this.currentView$.next(DashboardViews.tutor_notes);
   }
 
   public showOverseerReports() {

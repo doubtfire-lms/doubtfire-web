@@ -29,7 +29,7 @@ export class SidekiqProgressModalService {
           title,
           jobId,
           subject: subject,
-          pollFailureLimit: 3,
+          pollFailureLimit: 5,
         },
         position: {top: '2.5%'},
         width: '100%',

@@ -18,6 +18,8 @@ import {
   TestAttempt,
   TestAttemptService,
   ScormComment,
+  UnitRoleService,
+  UnitRole,
 } from './doubtfire-model';
 import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
@@ -26,6 +28,19 @@ import {Observable, map} from 'rxjs';
 import {gradeTaskModal, uploadSubmissionModal} from 'src/app/ajs-upgraded-providers';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MappingFunctions} from '../services/mapping-fn';
+
+export const FeedbackModerationAction = {
+  ShowMore: 'show_more',
+  ShowLess: 'show_less',
+  DismissOk: 'dismiss_ok',
+  DismissGood: 'dismiss_good',
+  Upheld: 'upheld',
+  Overturn: 'overturn',
+  Snooze: 'snooze',
+} as const;
+
+export type FeedbackModerationActionType =
+  (typeof FeedbackModerationAction)[keyof typeof FeedbackModerationAction];
 
 export class Task extends Entity {
   id: number;
@@ -44,12 +59,17 @@ export class Task extends Entity {
   numNewComments: number = 0;
   hasExtensions: boolean;
 
+  moderationType: 'random_sample' | 'escalation' | 'first_feedback';
+
   project: Project;
   definition: TaskDefinition;
 
   //TODO: map task submission details
   hasPdf: boolean = false;
   processingPdf: boolean = false;
+  claimedByUnitRoleId: number | null;
+
+  loadingSubmissionDetails: boolean = false;
 
   pinned: boolean = false;
 
@@ -91,6 +111,16 @@ export class Task extends Entity {
 
   public get comments(): readonly TaskComment[] {
     return this.commentCache.currentValues;
+  }
+
+  public get tutor(): UnitRole {
+    const enrolments = this.project.tutorialEnrolmentsCache.currentValues.filter(
+      (t) => t.tutorialStream.name === this.definition.tutorialStream.name,
+    );
+    if (enrolments.length === 1) {
+      const user = enrolments[0].tutor;
+      return this.unit.staff.find((ur) => ur.user.id === user.id);
+    }
   }
 
   public addComment(textString): void {
@@ -170,13 +200,29 @@ export class Task extends Entity {
   }
 
   public localDueDate(): Date {
-    if (this.targetDueDate && this.unit.allowFlexibleDates) {
-      return this.targetDueDate;
-    } else if (this.dueDate) {
-      return this.dueDate;
-    } else {
-      return this.definition.localDueDate();
+    if (this.unit.allowFlexibleDates) {
+      if (this.targetDueDate) {
+        // Student's custom planned date
+        return this.targetDueDate;
+      }
+
+      // Unit target dates per grade guidelines
+      if (this.project.targetGrade === 1 && this.definition.cTargetDate) {
+        return this.definition.cTargetDate;
+      }
+      if (this.project.targetGrade === 2 && this.definition.dTargetDate) {
+        return this.definition.dTargetDate;
+      }
+      if (this.project.targetGrade === 3 && this.definition.hdTargetDate) {
+        return this.definition.hdTargetDate;
+      }
     }
+
+    if (this.dueDate) {
+      return this.dueDate;
+    }
+
+    return this.definition.localDueDate();
   }
 
   public localDueDateString(): string {
@@ -321,9 +367,24 @@ export class Task extends Entity {
   }
 
   public get startDate(): Date {
-    if (this.targetStartDate && this.unit.allowFlexibleDates) {
-      return this.targetStartDate;
-    } else if (this.extensions < 0) {
+    if (this.unit.allowFlexibleDates) {
+      if (this.targetStartDate) {
+        return this.targetStartDate;
+      }
+
+      // Unit start dates per grade guidelines
+      if (this.project.targetGrade === 1 && this.definition.cStartDate) {
+        return this.definition.cStartDate;
+      }
+      if (this.project.targetGrade === 2 && this.definition.dStartDate) {
+        return this.definition.dStartDate;
+      }
+      if (this.project.targetGrade === 3 && this.definition.hdStartDate) {
+        return this.definition.hdStartDate;
+      }
+    }
+
+    if (this.extensions < 0) {
       // If the task has an extension, the start date is the due date minus the extension
       return MappingFunctions.addWeeks(this.definition.startDate, this.extensions);
     } else {
@@ -584,7 +645,7 @@ export class Task extends Entity {
 
   public getSubmissionDetails(): Observable<Task> {
     const http: HttpClient = AppInjector.get(HttpClient);
-
+    this.loadingSubmissionDetails = true;
     return http
       .get(
         `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${
@@ -593,11 +654,15 @@ export class Task extends Entity {
       )
       .pipe(
         map((response: object) => {
+          this.loadingSubmissionDetails = false;
           this.hasPdf = response['has_pdf'];
           this.processingPdf = response['processing_pdf'];
           this.submissionDate = MappingFunctions.mapDate(response, 'submission_date', this);
           if (response['task_status'] && TaskStatus.STATUS_KEYS.includes(response['task_status'])) {
             this.status = response['task_status'];
+          }
+          if ('claimed_by_unit_role_id' in response) {
+            this.claimedByUnitRoleId = response['claimed_by_unit_role_id'] as number | null;
           }
           return this;
         }),
@@ -981,5 +1046,40 @@ export class Task extends Entity {
     }
 
     return false;
+  }
+
+  public moderateFeedback(
+    action: FeedbackModerationActionType,
+    applyToAll: boolean = false,
+  ): Observable<boolean> {
+    const unitRoleService: UnitRoleService = AppInjector.get(UnitRoleService);
+
+    const tutor = this.tutor;
+    if (!tutor) {
+      return;
+    }
+
+    return unitRoleService.post(
+      {
+        id: tutor.id,
+        taskId: this.id,
+      },
+      {
+        endpointFormat: '/unit_roles/:id:/moderation/:taskId:',
+        body: {
+          action,
+          apply_to_all: applyToAll,
+        },
+      },
+    );
+  }
+
+  public requestFeedbackReview(): Observable<boolean> {
+    const httpClient: HttpClient = AppInjector.get(HttpClient);
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${
+      this.project.id
+    }/task_def_id/${this.definition.id}/feedback_review`;
+
+    return httpClient.post<boolean>(url, {});
   }
 }

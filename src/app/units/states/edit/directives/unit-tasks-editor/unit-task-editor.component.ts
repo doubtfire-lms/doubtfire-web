@@ -2,6 +2,7 @@ import {AfterViewInit, Component, Inject, Input, ViewChild} from '@angular/core'
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {addWeeks} from 'date-fns';
 import {Subscription} from 'rxjs';
 import {
   confirmationModal,
@@ -10,10 +11,11 @@ import {
 } from 'src/app/ajs-upgraded-providers';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
+import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {addWeeks} from 'date-fns';
-import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
+
+type GradeCol = 'p' | 'c' | 'd' | 'hd';
 
 @Component({
   selector: 'f-unit-task-editor',
@@ -30,14 +32,118 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   public taskDefinitionSource: MatTableDataSource<TaskDefinition>;
   public columns: string[] = [
     'name',
-    // 'grade',
-    // 'startDate',
-    // 'targetDate',
-    // 'deadlineDate',
+    'grade',
+    'startDate',
+    'targetDate',
+    'deadlineDate',
     'taskDefAction',
   ];
   public filter: string;
   public selectedTaskDefinition: TaskDefinition;
+
+  public gradeColumns: string[] = ['p', 'c', 'd', 'hd'];
+  public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
+  public dueDateSource: MatTableDataSource<TaskDefinition>;
+
+  public manageDueDates: boolean;
+
+  isStartAfterTarget(td: TaskDefinition, g: GradeCol): boolean {
+    const start = this.getGradeStartDate(td, g);
+    const target = this.getGradeDueDate(td, g);
+    if (!start || !target) return false;
+    return new Date(start).getTime() > new Date(target).getTime();
+  }
+
+  getGradeStartDate(td: TaskDefinition, g: GradeCol): Date | null {
+    switch (g) {
+      case 'p':
+        return td.startDate ?? td.startDate; // fallback to existing startDate
+      case 'c':
+        return td.cStartDate ?? td.startDate;
+      case 'd':
+        return td.dStartDate ?? td.startDate;
+      case 'hd':
+        return td.hdStartDate ?? td.startDate;
+    }
+  }
+
+  isFallbackStartDate(td: TaskDefinition, g: GradeCol): boolean {
+    switch (g) {
+      case 'p':
+        return false; // P is always real
+      case 'c':
+        return !td.cStartDate;
+      case 'd':
+        return !td.dStartDate;
+      case 'hd':
+        return !td.hdStartDate;
+    }
+  }
+
+  setGradeStartDate(td: TaskDefinition, g: GradeCol, value: Date | null): void {
+    switch (g) {
+      case 'p':
+        td.startDate = value;
+        break;
+      case 'c':
+        td.cStartDate = value;
+        break;
+      case 'd':
+        td.dStartDate = value;
+        break;
+      case 'hd':
+        td.hdStartDate = value;
+        break;
+    }
+
+    this.saveTaskDefinition(td);
+  }
+
+  getGradeDueDate(td: TaskDefinition, g: GradeCol): Date | null {
+    switch (g) {
+      case 'p':
+        // return td.pTargetDate ?? td.dueDate ?? null; // fallback to existing dueDate
+        return td.targetDate ?? td.targetDate; // fallback to existing targetDate
+      case 'c':
+        return td.cTargetDate ?? td.targetDate;
+      case 'd':
+        return td.dTargetDate ?? td.targetDate;
+      case 'hd':
+        return td.hdTargetDate ?? td.targetDate;
+    }
+  }
+
+  isFallbackTargetDate(td: TaskDefinition, g: GradeCol): boolean {
+    switch (g) {
+      case 'p':
+        return false; // P is always real
+      case 'c':
+        return !td.cTargetDate;
+      case 'd':
+        return !td.dTargetDate;
+      case 'hd':
+        return !td.hdTargetDate;
+    }
+  }
+
+  setGradeDueDate(td: TaskDefinition, g: GradeCol, value: Date | null): void {
+    switch (g) {
+      case 'p':
+        td.targetDate = value;
+        break;
+      case 'c':
+        td.cTargetDate = value;
+        break;
+      case 'd':
+        td.dTargetDate = value;
+        break;
+      case 'hd':
+        td.hdTargetDate = value;
+        break;
+    }
+
+    this.saveTaskDefinition(td);
+  }
 
   constructor(
     private taskDefinitionService: TaskDefinitionService,
@@ -61,9 +167,14 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   }
 
   public saveTaskDefinition(taskDefinition: TaskDefinition) {
-    taskDefinition.save().subscribe(() => {
-      this.alerts.success('Task Saved');
-      taskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
+    taskDefinition.save().subscribe({
+      next: () => {
+        this.alerts.success('Task Saved');
+        taskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
+      },
+      error: (error) => {
+        this.alerts.error(`Failed to update task: ${error}`, 6000);
+      },
     });
   }
 

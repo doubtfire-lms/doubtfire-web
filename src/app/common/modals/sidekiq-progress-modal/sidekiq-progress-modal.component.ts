@@ -20,10 +20,12 @@ export interface SidekiqProgressModalData {
   styleUrl: './sidekiq-progress-modal.component.scss',
 })
 export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
+  private readonly pollingInterval: number = 1250;
+
   private jobPollingInterval; // NodeJS.timeout
 
   pollFailureCount: number = 0;
-  pollFailureLimit: number = 3;
+  pollFailureLimit: number = 5;
 
   public job?: SidekiqJob;
 
@@ -38,13 +40,13 @@ export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.pollFailureLimit = this.data.pollFailureLimit ?? 3;
+    this.pollFailureLimit = this.data.pollFailureLimit ?? 5;
     this.pollFailureCount = 0;
 
     this.getSidekiqJob();
     this.jobPollingInterval = setInterval(() => {
       this.getSidekiqJob();
-    }, 1000);
+    }, this.pollingInterval);
 
     this.dialogRef.afterClosed().subscribe(() => {
       clearInterval(this.jobPollingInterval);

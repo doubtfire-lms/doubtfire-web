@@ -36,7 +36,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatChipsModule} from '@angular/material/chips';
+import {MatChipListbox, MatChipsModule} from '@angular/material/chips';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
 import {UIRouterUpgradeModule} from '@uirouter/angular-hybrid';
@@ -313,6 +313,14 @@ import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/p
 import {OverseerStepService} from './api/services/overseer-step.service';
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 import {OverseerStepResultService} from './api/services/overseer-step-result.service';
+import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
+import {TutorNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/tutor-notes-view/tutor-notes-view.component';
+import {TutorNoteService} from './api/services/tutor-note.service';
+import {ModerationComponent} from './units/states/tasks/inbox/directives/moderation/moderation.component';
+import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-notes-modal.component';
+import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
+import {ConfirmModerationModalComponent} from './units/states/tasks/inbox/directives/moderation/confirm-moderation-modal/confirm-moderation-modal.component';
+import {TaskClaimComponent} from './units/states/tasks/inbox/directives/task-claim/task-claim.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -502,6 +510,13 @@ const GANTT_CHART_CONFIG = {
     TaskPlannerCardComponent,
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
+    TutorNotesComponent,
+    TutorNotesViewComponent,
+    ModerationComponent,
+    TutorNotesModalComponent,
+    FeedbackAppealModalComponent,
+    ConfirmModerationModalComponent,
+    TaskClaimComponent,
   ],
   providers: [
     // Services we provide
@@ -596,6 +611,7 @@ const GANTT_CHART_CONFIG = {
     TaskPlannerPrerequisitesModalService,
     OverseerStepService,
     OverseerStepResultService,
+    TutorNoteService,
   ],
   imports: [
     FlexLayoutModule,
@@ -663,6 +679,7 @@ const GANTT_CHART_CONFIG = {
     NgxGanttModule,
     MatSidenavModule,
     MonacoEditorModule.forRoot(),
+    MatChipListbox,
   ],
 })
 

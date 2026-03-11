@@ -62,10 +62,10 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    @if (!dataSource.data.length) {
-      <div class="w-full text-center text-gray-400 m-5">No discussion prompts</div>
-    }
   </div>
+  @if (!dataSource.data.length) {
+    <div class="w-full text-center text-gray-400 m-5">No discussion prompts</div>
+  }
   @if (!creatingNewDiscussionPrompt) {
     <div class="flex justify-center m-5">
       <button mat-raised-button color="primary" (click)="createNewDiscussionPrompt()">

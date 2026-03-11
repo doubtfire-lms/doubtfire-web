@@ -11,6 +11,7 @@ import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-m
 
 import {Project} from 'src/app/api/models/project';
 import {UserService} from 'src/app/api/services/user.service';
+import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
@@ -27,6 +28,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private doubtfireConstants: DoubtfireConstants,
     private submissionTypeModalService: SubmissionTypeModalService,
     private userService: UserService,
+    private feedbackAppealService: FeedbackAppealModalService,
   ) {}
 
   @Input() task: Task;
@@ -110,5 +112,9 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     this.extensions.show(this.task, () => {
       this.task.refresh();
     });
+  }
+
+  openFeedbackAppealModal(): void {
+    this.feedbackAppealService.show(this.task);
   }
 }

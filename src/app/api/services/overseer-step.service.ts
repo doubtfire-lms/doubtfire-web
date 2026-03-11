@@ -20,7 +20,20 @@ export class OverseerStepService extends CachedEntityService<OverseerStep> {
       'description',
       'displayName',
       'displayDescription',
-      'runCommand',
+      // 'runCommand',
+      {
+        keys: 'runCommand',
+        toEntityFn: (data: object, key: string, entity: OverseerStep, params?: any) => {
+          const raw = data['run_command'];
+          if (raw?.startsWith('b64:')) {
+            entity.decodedRunCommand = atob(raw.slice(4));
+          } else {
+            entity.decodedRunCommand = raw;
+          }
+
+          return raw;
+        },
+      },
       'timeout',
       'sortOrder',
       'stepType',
