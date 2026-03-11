@@ -157,7 +157,7 @@
         [style.paddingLeft.px]="8 + depth * 14"
         [title]="node.path"
       >
-        <mat-icon class="!h-4 !w-4 !text-base text-slate-500">folder</mat-icon>
+        <mat-icon class="small-icon text-slate-500">folder</mat-icon>
         <span class="truncate">{{ node.name }}</span>
       </div>
       <ng-container
@@ -176,7 +176,7 @@
         [title]="node.path"
         (click)="selectTreeNode(node)"
       >
-        <mat-icon class="!h-4 !w-4 !text-base text-slate-500">description</mat-icon>
+        <mat-icon class="small-icon text-slate-500">description</mat-icon>
         <span class="truncate">{{ treeNodeLabel(node) }}</span>
       </button>
     }
