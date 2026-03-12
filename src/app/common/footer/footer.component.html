@@ -124,23 +124,6 @@
             [ngClass]="hideMainActionButtonsForModeration ? 'w-full justify-center' : ''"
           >
             <div class="relative flex items-center">
-              <!-- <button
-                mat-raised-button
-                [matTooltip]="
-                  hideMainActionButtonsForModeration ? 'Show status buttons' : 'Hide status buttons'
-                "
-                matTooltipPosition="above"
-                aria-label="Toggle task status buttons"
-                class="absolute -left-56 top-1/2 z-10 flex -translate-y-1/2 items-center gap-1 mr-10"
-                (click)="toggleModerationStatusButtons()"
-              >
-                <mat-icon>{{
-                  hideMainActionButtonsForModeration ? 'visibility' : 'visibility_off'
-                }}</mat-icon>
-                <span>{{
-                  hideMainActionButtonsForModeration ? 'show statuses' : 'hide statuses'
-                }}</span>
-              </button>-->
               @if (!hideMainActionButtonsForModeration) {
                 <ng-container [ngTemplateOutlet]="statusActionButtons"></ng-container>
                 <mat-divider class="mx-4" [vertical]="true"></mat-divider>
