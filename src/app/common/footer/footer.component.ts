@@ -26,6 +26,7 @@ export class FooterComponent implements OnInit {
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;
+  public showModerationStatusButtons = false;
 
   @ViewChild('similaritiesButton', {static: false, read: ElementRef})
   similaritiesButton: ElementRef;
@@ -177,5 +178,13 @@ export class FooterComponent implements OnInit {
     }
 
     return true;
+  }
+
+  public get hideMainActionButtonsForModeration(): boolean {
+    return this.viewType === 'moderation' && !this.showModerationStatusButtons;
+  }
+
+  public toggleModerationStatusButtons() {
+    this.showModerationStatusButtons = !this.showModerationStatusButtons;
   }
 }
