@@ -104,22 +104,6 @@
           <mat-icon>done</mat-icon>
         </button>
       }
-
-      <!-- <mat-divider [vertical]="true"></mat-divider> -->
-
-      <!-- <div class="flex justify-start">
-        <button
-          [disabled]="!actionButtonEnabled"
-          mat-icon-button
-          matTooltip="Discussed in class"
-          matTooltipPosition="above"
-          aria-label=""
-          class="button ml-5"
-          (click)="selectedTask?.markAsDiscussed()"
-        >
-          <mat-icon>group</mat-icon>
-        </button>
-      </div> -->
     </span>
   </ng-template>
 
@@ -313,7 +297,7 @@
         <mat-divider></mat-divider>
 
         <button mat-menu-item (click)="selectedTask?.markAsDiscussed()">
-          <mat-icon matListItemIcon aria-label="Switch to Assess in Portfolio">group</mat-icon>
+          <mat-icon matListItemIcon aria-label="Mark task as discussed">group</mat-icon>
           Mark Discussed in Class
         </button>
         <button mat-menu-item (click)="selectedTask?.updateTaskStatus('assess_in_portfolio')">
