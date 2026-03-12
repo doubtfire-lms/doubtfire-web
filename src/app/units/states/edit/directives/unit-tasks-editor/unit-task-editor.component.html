@@ -1,8 +1,125 @@
 <div class="flex-grow flex flex-col gap-8 gap-y-0">
-  <div>
-    <h3>Task List</h3>
-    <p>Plan the list of tasks for students to complete.</p>
+  <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <div>
+      <h3>Task List</h3>
+      <p>Plan the list of tasks for students to complete.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-5 md:justify-end">
+      <div class="flex items-center">
+        <label>Definitions CSV</label>
+        <div class="flex items-center">
+          <button mat-icon-button (click)="unit.downloadTaskDefinitionsCsv()">
+            <mat-icon>download</mat-icon>
+          </button>
+          <button mat-icon-button (click)="uploadTaskDefinitionsCsv()">
+            <mat-icon>upload_file</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <label>Resources as Zip</label>
+        <div class="flex items-center">
+          <button mat-icon-button (click)="unit.downloadAllTaskResourcesZip()">
+            <mat-icon>download</mat-icon>
+          </button>
+          <button mat-icon-button (click)="uploadTaskResourcesZip()">
+            <mat-icon>upload_file</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
+  <div class="my-3 flex justify-between items-center gap-3 w-full">
+    <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
+    @if (unit.allowFlexibleDates) {
+      <button mat-raised-button (click)="manageDueDates = !manageDueDates">Manage Due Dates</button>
+    }
+  </div>
+
+  @if (unit.allowFlexibleDates) {
+    @if (manageDueDates) {
+      <br />
+      <mat-divider class="my-5"></mat-divider>
+      <br />
+      <div>
+        <h3>Manage Target Dates</h3>
+        <p>Modify or add target dates for each target grade</p>
+      </div>
+      <div class="mt-6">
+        <table mat-table [dataSource]="taskDefinitionSource" class="mat-elevation-z0 w-full">
+          <ng-container matColumnDef="taskDefinition">
+            <th mat-header-cell *matHeaderCellDef>Task</th>
+            <td mat-cell *matCellDef="let td" class="w-fit whitespace-nowrap">
+              {{ td.abbreviation }} {{ td.name }}
+            </td>
+          </ng-container>
+
+          <ng-container *ngFor="let g of gradeColumns" [matColumnDef]="g">
+            <th mat-header-cell *matHeaderCellDef class="text-center w-[160px]">
+              <div class="w-full flex justify-center">
+                <f-grade-icon [grade]="gradeColumns.indexOf(g)"></f-grade-icon>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let td">
+              <div class="flex flex-col gap-2">
+                <mat-form-field
+                  appearance="outline"
+                  class="w-[250px] flex justify-center items-center pt-[22px]"
+                  [ngClass]="{
+                    'date-error': isStartAfterTarget(td, g)
+                  }"
+                >
+                  <mat-label> Start Date </mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="dpStart"
+                    [ngModel]="getGradeStartDate(td, g)"
+                    (ngModelChange)="setGradeStartDate(td, g, $event)"
+                    [ngClass]="{
+                      'fallback-date': isFallbackStartDate(td, g)
+                    }"
+                    placeholder="Select date"
+                  />
+
+                  <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
+                  <mat-datepicker #dpStart></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="outline"
+                  class="w-[250px] flex justify-center items-center"
+                  [ngClass]="{
+                    'date-error': isStartAfterTarget(td, g)
+                  }"
+                >
+                  <mat-label> Target Date </mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="dpTarget"
+                    [ngModel]="getGradeDueDate(td, g)"
+                    (ngModelChange)="setGradeDueDate(td, g, $event)"
+                    [ngClass]="{
+                      'fallback-date': isFallbackTargetDate(td, g)
+                    }"
+                    placeholder="Select date"
+                  />
+                  @if (isStartAfterTarget(td, g)) {
+                    <mat-hint class="text-red-500"> Target date must be after start date </mat-hint>
+                  }
+
+                  <mat-datepicker-toggle matSuffix [for]="dpTarget"></mat-datepicker-toggle>
+                  <mat-datepicker #dpTarget></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="dueDateColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: dueDateColumns"></tr>
+        </table>
+      </div>
+    }
+  }
+
   <div class="flex flex-col items-start gap-4 md:flex-row">
     <aside
       class="self-start md:sticky md:top-4 md:shrink-0"
@@ -143,122 +260,4 @@
       }
     </div>
   </div>
-
-  <!-- <div class="flex flex-row gap-8">
-
-
-
-    <span class="flex items-center">
-      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-      <span class="flex-grow"></span>
-      <label>Definitions CSV</label>
-      <button mat-icon-button (click)="unit.downloadTaskDefinitionsCsv()">
-        <mat-icon>download</mat-icon>
-      </button>
-      <button mat-icon-button (click)="uploadTaskDefinitionsCsv()">
-        <mat-icon>upload_file</mat-icon>
-      </button>
-      <span class="flex-grow"></span>
-      <label>Resources as Zip</label>
-      <button mat-icon-button (click)="unit.downloadAllTaskResourcesZip()">
-        <mat-icon>download</mat-icon>
-      </button>
-      <button mat-icon-button (click)="uploadTaskResourcesZip()">
-        <mat-icon>upload_file</mat-icon>
-      </button>
-      <span class="flex-grow"></span>
-      @if (unit.allowFlexibleDates) {
-        <button mat-raised-button (click)="manageDueDates = !manageDueDates" class="mr-5">
-          Manage Due Dates
-        </button>
-      }
-      <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
-    </span>
-
-  </div>
-</div> -->
 </div>
-
-@if (unit.allowFlexibleDates) {
-  @if (manageDueDates) {
-    <br />
-    <mat-divider class="my-5"></mat-divider>
-    <br />
-    <div>
-      <h3>Manage Target Dates</h3>
-      <p>Modify or add target dates for each target grade</p>
-    </div>
-    <div class="mt-6">
-      <table mat-table [dataSource]="taskDefinitionSource" class="mat-elevation-z0 w-full">
-        <ng-container matColumnDef="taskDefinition">
-          <th mat-header-cell *matHeaderCellDef>Task</th>
-          <td mat-cell *matCellDef="let td" class="w-fit whitespace-nowrap">
-            {{ td.abbreviation }} {{ td.name }}
-          </td>
-        </ng-container>
-
-        <ng-container *ngFor="let g of gradeColumns" [matColumnDef]="g">
-          <th mat-header-cell *matHeaderCellDef class="text-center w-[160px]">
-            <div class="w-full flex justify-center">
-              <f-grade-icon [grade]="gradeColumns.indexOf(g)"></f-grade-icon>
-            </div>
-          </th>
-          <td mat-cell *matCellDef="let td">
-            <div class="flex flex-col gap-2">
-              <mat-form-field
-                appearance="outline"
-                class="w-[250px] flex justify-center items-center pt-[22px]"
-                [ngClass]="{
-                  'date-error': isStartAfterTarget(td, g)
-                }"
-              >
-                <mat-label> Start Date </mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="dpStart"
-                  [ngModel]="getGradeStartDate(td, g)"
-                  (ngModelChange)="setGradeStartDate(td, g, $event)"
-                  [ngClass]="{
-                    'fallback-date': isFallbackStartDate(td, g)
-                  }"
-                  placeholder="Select date"
-                />
-
-                <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
-                <mat-datepicker #dpStart></mat-datepicker>
-              </mat-form-field>
-              <mat-form-field
-                appearance="outline"
-                class="w-[250px] flex justify-center items-center"
-                [ngClass]="{
-                  'date-error': isStartAfterTarget(td, g)
-                }"
-              >
-                <mat-label> Target Date </mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="dpTarget"
-                  [ngModel]="getGradeDueDate(td, g)"
-                  (ngModelChange)="setGradeDueDate(td, g, $event)"
-                  [ngClass]="{
-                    'fallback-date': isFallbackTargetDate(td, g)
-                  }"
-                  placeholder="Select date"
-                />
-                @if (isStartAfterTarget(td, g)) {
-                  <mat-hint class="text-red-500"> Target date must be after start date </mat-hint>
-                }
-
-                <mat-datepicker-toggle matSuffix [for]="dpTarget"></mat-datepicker-toggle>
-                <mat-datepicker #dpTarget></mat-datepicker>
-              </mat-form-field>
-            </div>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="dueDateColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: dueDateColumns"></tr>
-      </table>
-    </div>
-  }
-}
