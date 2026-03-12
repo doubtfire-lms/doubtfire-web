@@ -37,7 +37,7 @@
             >
               <div class="task-entry w-full flex items-center">
                 <div class="task-list-data flex items-center justify-center">
-                  <f-task-badge [taskDef]="task"></f-task-badge>
+                  <f-task-badge [taskDef]="task" [highlight]="isSelectedTask(task)"></f-task-badge>
                   <div class="flex-col ml-4">
                     <h4 class="task-title line-clamp-1 mt-1">{{ task.name }}</h4>
 
