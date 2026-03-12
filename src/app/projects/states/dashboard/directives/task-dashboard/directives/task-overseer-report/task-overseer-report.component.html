@@ -28,7 +28,7 @@
             } @else {
               <mat-icon color="warn">cancel</mat-icon>
             }
-            @if (oa.hasSubmissionFiles) {
+            @if (oa.hasSubmissionFiles && currentUnitRole) {
               <button
                 mat-icon-button
                 aria-label="Submission options"
@@ -140,11 +140,11 @@
                     [options]="diffEditorOptions"
                     [originalModel]="{
                       language: 'plaintext',
-                      code: result.expectedOutput,
+                      code: result.expectedOutput
                     }"
                     [modifiedModel]="{
                       language: 'plainttext',
-                      code: result.stdout,
+                      code: result.stdout
                     }"
                   ></ngx-monaco-diff-editor>
                 }

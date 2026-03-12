@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatMenuTrigger} from '@angular/material/menu';
-import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
+import {OverseerAssessment, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {OverseerAssessmentService} from 'src/app/api/services/overseer-assessment.service';
 import {OverseerStepResultService} from 'src/app/api/services/overseer-step-result.service';
@@ -25,7 +25,13 @@ export class TaskOverseerReportComponent implements OnInit {
     private overseerAssessmentService: OverseerAssessmentService,
     private overseerStepResultsService: OverseerStepResultService,
     private dialog: MatDialog,
+    private userService: UserService,
   ) {}
+
+  public get currentUnitRole(): UnitRole | undefined {
+    const currentUser = this.userService.currentUser;
+    return this.task.unit.staff.find((ur) => ur.user.id === currentUser.id);
+  }
 
   public viewOutput: 'your_output' | 'expected_output' | 'diff' | 'split_diff' = 'your_output';
 
@@ -98,8 +104,9 @@ export class TaskOverseerReportComponent implements OnInit {
       return null;
     }
     return (
-      this.overseerAssessments.find((assessment) => assessment.id === this.comparisonSourceAssessmentId) ??
-      null
+      this.overseerAssessments.find(
+        (assessment) => assessment.id === this.comparisonSourceAssessmentId,
+      ) ?? null
     );
   }
 
@@ -176,7 +183,8 @@ export class TaskOverseerReportComponent implements OnInit {
 
   hasComparisonSourceFor(assessment: OverseerAssessment): boolean {
     return (
-      this.comparisonSourceAssessmentId !== null && this.comparisonSourceAssessmentId !== assessment.id
+      this.comparisonSourceAssessmentId !== null &&
+      this.comparisonSourceAssessmentId !== assessment.id
     );
   }
 
@@ -188,10 +196,7 @@ export class TaskOverseerReportComponent implements OnInit {
     event?.stopPropagation();
     this.comparisonSourceAssessmentId = assessment.id;
     menuTrigger?.closeMenu();
-    this.alerts.message(
-      `Selected submission ${assessment.timestampString} for comparison.`,
-      3500,
-    );
+    this.alerts.message(`Selected submission ${assessment.timestampString} for comparison.`, 3500);
   }
 
   clearComparisonSource(event?: Event) {
