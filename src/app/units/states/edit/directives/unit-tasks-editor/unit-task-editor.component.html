@@ -29,11 +29,11 @@
       </div>
     </div>
   </div>
-  <div class="my-3 flex justify-between items-center gap-3 w-full">
-    <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
+  <div class="my-3 flex justify-end items-center gap-3 w-full">
     @if (unit.allowFlexibleDates) {
       <button mat-raised-button (click)="manageDueDates = !manageDueDates">Manage Due Dates</button>
     }
+    <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
   </div>
 
   @if (unit.allowFlexibleDates) {
