@@ -11,8 +11,8 @@
         'w-full md:w-[92px]': isTaskListCollapsed
       }"
     >
-      <div class="h-full overflow-hidden rounded-2xl border border-gray-200 bg-white">
-        <div class="border-b border-gray-200 px-1 text-left text-[15px]">
+      <div class="overflow-hidden rounded-2xl bg-white md:flex md:h-[calc(100vh-2rem)] md:flex-col">
+        <div class="px-1 text-left text-[15px]">
           <div class="flex items-center">
             <button
               mat-icon-button
@@ -48,7 +48,7 @@
           </div>
         </div>
 
-        <div class="h-full max-h-[460px] overflow-auto md:max-h-[calc(100vh-290px)]">
+        <div class="h-[560px] overflow-auto md:h-auto md:flex-1">
           <mat-selection-list [multiple]="false">
             @if ((taskDefinitionSource?.filteredData ?? []).length === 0) {
               <div class="text-center text-muted p-3">No task definitions to display</div>
@@ -66,7 +66,7 @@
                   [matTooltipDisabled]="!isTaskListCollapsed"
                   [matTooltipShowDelay]="250"
                   [ngClass]="{
-                    'bg-black/5': isSelectedTaskDefinition(taskDefinition)
+                    'bg-[#e7e7ff]': isSelectedTaskDefinition(taskDefinition)
                   }"
                 >
                   <div
@@ -80,15 +80,18 @@
                         'pl-0': isTaskListCollapsed
                       }"
                     >
-                      <f-task-badge [taskDef]="taskDefinition"></f-task-badge>
+                      <f-task-badge
+                        [taskDef]="taskDefinition"
+                        [highlight]="isSelectedTaskDefinition(taskDefinition)"
+                      ></f-task-badge>
 
                       @if (!isTaskListCollapsed) {
                         <div class="flex-col ml-4 min-w-0 flex-1">
                           <h4 class="line-clamp-1 mt-[8px] mb-[-2px] text-[15px]">
                             {{ taskDefinition.name }}
                           </h4>
-                          <div class="line-clamp-1 mb-0 text-xs">
-                            {{ taskDefinition.abbreviation }}
+                          <div class="mb-0 text-[12px]">
+                            {{ gradeNames[taskDefinition.targetGrade] }} Task
                           </div>
                         </div>
 

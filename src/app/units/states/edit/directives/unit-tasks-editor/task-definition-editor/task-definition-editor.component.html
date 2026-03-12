@@ -5,17 +5,19 @@
 
 <div class="flex flex-col items-start gap-4 md:flex-row">
   <aside class="sticky top-0 z-[9] w-full self-start md:top-20 md:w-[240px] md:shrink-0">
-    <div
-      class="flex flex-row flex-wrap gap-1 overflow-auto rounded-xl border border-gray-200 bg-white p-2 md:max-h-[calc(100vh-260px)] md:flex-col"
-    >
+    <div class="flex flex-col gap-1 overflow-y-auto overflow-x-hidden rounded-xl bg-white p-2">
       @for (section of visibleSections; track section.id) {
         <button
           type="button"
-          class="border-0 rounded-lg bg-transparent cursor-pointer px-3 py-2 text-left transition-colors"
+          class="w-full whitespace-nowrap border-0 rounded-lg bg-transparent cursor-pointer px-3 py-5 text-left transition-colors"
           [ngClass]="{
-            'bg-blue-100 text-blue-700 font-semibold': activeSectionId === section.id,
+            'font-semibold': activeSectionId === section.id,
             'text-gray-700 hover:bg-gray-100': activeSectionId !== section.id
           }"
+          [style.backgroundColor]="activeSectionId === section.id ? '#e7e7ff' : null"
+          [style.color]="
+            activeSectionId === section.id ? 'var(--mdc-theme-primary, #3939ff)' : null
+          "
           (click)="scrollToSection(section.id)"
         >
           {{ section.label }}
@@ -24,9 +26,9 @@
     </div>
   </aside>
 
-  <div class="w-full flex-1 pr-1" #sectionScrollContainer>
+  <div class="w-full flex-1 pr-1 pb-48 md:pb-64" #sectionScrollContainer>
     <section
-      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
       data-section-id="task-details"
     >
@@ -34,9 +36,10 @@
       <p class="font-normal text-gray-500 pb-2">Name the task and set target grade</p>
       <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
     </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
       data-section-id="task-learning-outcomes"
     >
@@ -44,9 +47,10 @@
       <p class="font-normal text-gray-500 pb-2">Add learning outcomes for this task</p>
       <f-learning-outcome-editor [context]="taskDefinition"></f-learning-outcome-editor>
     </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
       data-section-id="inbox"
     >
@@ -56,9 +60,10 @@
       </p>
       <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
     </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
       data-section-id="due-dates"
     >
@@ -66,9 +71,10 @@
       <p class="font-normal text-gray-500 pb-2">When is the task due?</p>
       <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
     </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
       data-section-id="upload-requirements"
     >
@@ -76,9 +82,10 @@
       <p class="font-normal text-gray-500 pb-2">What do students need to upload?</p>
       <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
     </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
       data-section-id="task-resources"
     >
@@ -86,9 +93,10 @@
       <p class="font-normal text-gray-500 pb-2">Upload task descriptions and resources</p>
       <f-task-definition-resources [taskDefinition]="taskDefinition"></f-task-definition-resources>
     </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
       data-section-id="prerequisite-tasks"
     >
@@ -101,9 +109,10 @@
       <f-task-definition-prerequisites [taskDefinition]="taskDefinition" [staffView]="true">
       </f-task-definition-prerequisites>
     </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
       data-section-id="discussion-prompts"
     >
@@ -114,10 +123,11 @@
       <f-task-definition-discussion-prompts [taskDefinition]="taskDefinition" [staffView]="true">
       </f-task-definition-discussion-prompts>
     </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
     @if (overseerEnabled) {
       <section
-        class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+        class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
         #sectionElement
         data-section-id="task-assessment-automation"
       >
@@ -125,10 +135,11 @@
         <p class="font-normal text-gray-500 pb-2">Configure automated assessment</p>
         <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
       </section>
+      <mat-divider class="my-[25px]"></mat-divider>
     }
 
     <section
-      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
       data-section-id="scorm-test"
     >
@@ -138,9 +149,10 @@
       </p>
       <f-task-definition-scorm [taskDefinition]="taskDefinition"></f-task-definition-scorm>
     </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-[25px] rounded-xl bg-white p-4 scroll-mt-28"
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
       data-section-id="optional-settings"
     >
@@ -148,10 +160,12 @@
       <p class="font-normal text-gray-500 pb-2">Apply other options</p>
       <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
     </section>
+
+    <div class="h-[300px]" aria-hidden="true"></div>
   </div>
 </div>
-<div class="flex w-full justify-end place-content-end mb-5">
-  <div class="sticky bottom-16">
+<div class="fixed bottom-6 right-6 z-50">
+  <div>
     <button mat-fab color="primary" (click)="save()">
       <mat-icon>save</mat-icon>
     </button>

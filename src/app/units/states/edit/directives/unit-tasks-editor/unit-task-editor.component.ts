@@ -7,6 +7,7 @@ import {
   csvResultModalService,
   csvUploadModalService,
 } from 'src/app/ajs-upgraded-providers';
+import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
@@ -33,6 +34,8 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   public dueDateSource: MatTableDataSource<TaskDefinition>;
 
   public manageDueDates: boolean;
+
+  protected gradeNames: string[] = Grade.GRADES;
 
   isStartAfterTarget(td: TaskDefinition, g: GradeCol): boolean {
     const start = this.getGradeStartDate(td, g);
