@@ -69,8 +69,7 @@ export class FooterComponent implements OnInit {
     const canAccess =
       this.currentUnitRole.role === 'Convenor' ||
       this.currentUnitRole.role === 'Admin' ||
-      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id) ||
-      tutor.id === this.currentUnitRole.id;
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id);
 
     return canAccess;
   }
