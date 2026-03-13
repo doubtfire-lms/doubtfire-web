@@ -186,17 +186,8 @@
                     'bg-[#e7e7ff]': isSelectedTaskDefinition(taskDefinition)
                   }"
                 >
-                  <div
-                    class="w-full flex items-center"
-                    [ngClass]="{'justify-center': isTaskListCollapsed}"
-                  >
-                    <div
-                      class="flex w-full items-center justify-center"
-                      [ngClass]="{
-                        'pl-[6px]': !isTaskListCollapsed,
-                        'pl-0': isTaskListCollapsed
-                      }"
-                    >
+                  <div class="flex w-full items-center px-[6px]">
+                    <div class="flex w-full items-center">
                       <f-task-badge
                         [taskDef]="taskDefinition"
                         [highlight]="isSelectedTaskDefinition(taskDefinition)"
