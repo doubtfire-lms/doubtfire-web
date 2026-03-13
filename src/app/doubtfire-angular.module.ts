@@ -679,6 +679,7 @@ const GANTT_CHART_CONFIG = {
     MatDialogModuleNew,
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
     CodeEditorModule.forRoot(),
+    MatSidenavModule,
     NgxGanttModule,
     MatSidenavModule,
     MonacoEditorModule.forRoot(),
