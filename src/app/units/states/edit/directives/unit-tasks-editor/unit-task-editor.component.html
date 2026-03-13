@@ -129,8 +129,14 @@
       }"
     >
       <div class="overflow-hidden rounded-2xl bg-white md:flex md:h-[calc(100vh-2rem)] md:flex-col">
-        <div class="px-1 text-left text-[15px]">
-          <div class="flex items-center">
+        <div
+          class="text-left text-[15px]"
+          [ngClass]="{
+            'px-1': !isTaskListCollapsed,
+            'px-0': isTaskListCollapsed
+          }"
+        >
+          <div class="flex items-center" [ngClass]="{'justify-center': isTaskListCollapsed}">
             <button
               mat-icon-button
               [attr.aria-label]="isTaskListCollapsed ? 'Expand task list' : 'Collapse task list'"
@@ -187,7 +193,10 @@
                   }"
                 >
                   <div class="flex w-full items-center px-[6px]">
-                    <div class="flex w-full items-center">
+                    <div
+                      class="flex w-full items-center"
+                      [ngClass]="{'justify-center': isTaskListCollapsed}"
+                    >
                       <f-task-badge
                         [taskDef]="taskDefinition"
                         [highlight]="isSelectedTaskDefinition(taskDefinition)"
