@@ -1,4 +1,6 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
+import {AppInjector} from 'src/app/app-injector';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Task} from '../doubtfire-model';
 import {OverseerStepResult} from './overseer-step-result';
 
@@ -19,6 +21,7 @@ export class OverseerAssessment extends Entity {
   passedSteps: number;
 
   label: string;
+  hasSubmissionFiles?: boolean;
 
   public readonly stepResultsCache: EntityCache<OverseerStepResult> =
     new EntityCache<OverseerStepResult>();
@@ -49,5 +52,12 @@ export class OverseerAssessment extends Entity {
 
   public get reportReady() {
     return this.submissionStatus === 'passed' || this.submissionStatus === 'failed';
+  }
+
+  public submissionFilesUrl(): string {
+    const constants = AppInjector.get(DoubtfireConstants);
+    const timestamp =
+      this.timestampString ?? Math.floor(this.timestamp.getTime() / 1000).toString();
+    return `${constants.API_URL}/projects/${this.task.project.id}/task_def_id/${this.task.definition.id}/submissions/timestamps/${timestamp}/files`;
   }
 }

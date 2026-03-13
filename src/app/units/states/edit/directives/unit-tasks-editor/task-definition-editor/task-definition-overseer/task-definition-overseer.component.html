@@ -32,19 +32,52 @@
     [desiredFileName]="'Task ' + taskDefinition.abbreviation + ' Overseer zip'"
   />
   @if (taskDefinition.hasTaskAssessmentResources) {
-    <div class="flex flex-row gap-4 pt-4">
-      <button mat-flat-button color="warn" (click)="removeOverseerResources()" class="grow me-4">
+    <div class="flex flex-row flex-wrap gap-4 pt-4">
+      <button mat-flat-button color="warn" (click)="removeOverseerResources()" class="grow">
         Delete Overseer Resources Zip
+      </button>
+      <button mat-flat-button color="accent" (click)="downloadOverseerResources()" class="grow">
+        Download Overseer Resources Zip
       </button>
       <button
         mat-flat-button
-        color="accent"
-        (click)="downloadOverseerResources()"
-        class="grow ms-4"
+        color="primary"
+        (click)="toggleOverseerResourcesEditor()"
+        class="grow"
       >
-        Download Overseer Resources Zip
+        <mat-icon>{{ showOverseerResourcesEditor ? 'visibility_off' : 'edit' }}</mat-icon>
+        {{
+          showOverseerResourcesEditor
+            ? 'Hide Overseer Resource Editor'
+            : 'Edit Overseer Resources Zip'
+        }}
       </button>
     </div>
+
+    @if (showOverseerResourcesEditor) {
+      <div class="mt-4 rounded border border-slate-200 p-2">
+        @if (isLoadingOverseerResourcesArchive) {
+          <div class="flex h-[32rem] items-center justify-center text-slate-600">
+            Loading Overseer Resources archive...
+          </div>
+        } @else if (overseerResourcesArchive) {
+          <f-archive-viewer
+            class="block h-[400px] w-full overflow-hidden"
+            [archiveFile]="overseerResourcesArchive"
+            navigationMode="tree"
+            [readOnly]="false"
+            [saveEndpoint]="taskDefinition.taskOverseerResourcesUploadUrl"
+            [saveMethod]="'POST'"
+            [saveFileName]="'Task ' + taskDefinition.abbreviation + ' Overseer zip'"
+            (saveSuccess)="onOverseerResourcesArchiveSaved($event)"
+          ></f-archive-viewer>
+        } @else {
+          <div class="flex h-[32rem] items-center justify-center text-slate-600">
+            Unable to load Overseer Resources archive.
+          </div>
+        }
+      </div>
+    }
   }
 
   <div class="flex flex-row gap-4 pt-4">
