@@ -4,10 +4,14 @@ import {HomeComponent} from './home/states/home/home.component';
 import {WelcomeComponent} from './welcome/welcome.component';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
-import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
-import {FUsersComponent} from './admin/states/f-users/f-users.component';
-import {FUnitsComponent} from './admin/states/f-units/f-units.component';
+import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
+import {FUsersComponent} from './admin/states/users/users.component';
+import {FUnitsComponent} from './admin/states/units/units.component';
+import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
+import {UnitRootState} from './units/unit-root-state.component';
+import {ProjectRootState} from './projects/states/project-root-state.component';
+import {TaskViewerState} from './units/task-viewer/task-viewer-state.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
@@ -15,6 +19,11 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {Ng2ViewDeclaration} from '@uirouter/angular';
+import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
+import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
+import {RolloverComponent} from './units/states/rollover/rollover.component';
+
 /*
  * Use this file to store any states that are sourced by angular components.
  */
@@ -33,7 +42,7 @@ const institutionSettingsState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Institution Settings',
-    roleWhiteList: ['Admin'],
+    roleWhitelist: ['Admin'],
   },
 };
 
@@ -48,7 +57,7 @@ const usersState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Administer users',
-    roleWhiteList: ['Admin'],
+    roleWhitelist: ['Admin'],
   },
 };
 
@@ -65,7 +74,6 @@ const HomeState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Home Page',
-    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
 
@@ -101,7 +109,7 @@ const HomeState: NgHybridStateDeclaration = {
 // };
 
 /**
- * Define the new home state.
+ * Define the new inbox state.
  */
 // const InboxState: NgHybridStateDeclaration = {
 //   name: 'inbox',
@@ -171,7 +179,6 @@ const WelcomeState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Welcome',
-    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
 
@@ -218,21 +225,6 @@ const EditProfileState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Edit Profile',
-    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
-  },
-};
-
-const TeachingPeriodsState: NgHybridStateDeclaration = {
-  name: 'teaching_periods',
-  url: '/admin/teachingperiods',
-  views: {
-    main: {
-      component: TeachingPeriodListComponent,
-    },
-  },
-  data: {
-    pageTitle: 'Teaching Periods',
-    roleWhitelist: ['Convenor', 'Admin'],
   },
 };
 
@@ -246,7 +238,6 @@ const EulaState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'End User License Agreement',
-    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
 
@@ -264,8 +255,7 @@ const ViewAllProjectsState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'Teaching Periods',
-    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
+    pageTitle: 'All Units',
   },
 };
 
@@ -285,7 +275,25 @@ const AdministerUnits: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Administer units',
-    roleWhiteList: ['Admin'],
+    roleWhitelist: ['Admin', 'Convenor', 'Auditor'],
+  },
+};
+
+// projectDashboardState which gets the project from the abstract state above
+const ProjectDashboardState: NgHybridStateDeclaration = {
+  name: 'dashboard2',
+  parent: 'projects2',
+  url: '/dashboard2/:taskAbbreviation?',
+  params: {
+    taskAbbreviation: {value: null, squash: true, dynamic: true},
+  },
+  views: {
+    projectView: {
+      component: ProjectDashboardComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Unit Dashboard',
   },
 };
 
@@ -304,12 +312,32 @@ const ViewAllUnits: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'Teaching Periods',
+    pageTitle: 'View Units',
     mode: 'tutor',
-    roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
 
+const UnauthoriedState: NgHybridStateDeclaration = {
+  name: 'unauthorised',
+  url: '/unauthorised', // You get here with this url
+  views: {
+    // These are the 2 views - the header and main from the body of DF
+    header: {
+      // Header is still angularjs
+      controller: 'BasicHeaderCtrl', // This is the angularjs controller
+      templateUrl: 'common/header/header.tpl.html', // and the related template html
+    } as unknown as Ng2ViewDeclaration, // Need dodgy cast to get compiler to ignore type data
+    main: {
+      // Main body links to angular component
+      component: UnauthorisedComponent,
+    },
+  },
+  data: {
+    // Add data used by header
+    pageTitle: 'Unauthorised',
+  },
+};
 /**
  * Define the SCORM Player state.
  */
@@ -380,7 +408,7 @@ const ScormPlayerStudentReviewState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Review Knowledge Check',
-    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin'],
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
 
@@ -476,6 +504,48 @@ const TutorDiscussionState: NgHybridStateDeclaration = {
   },
 };
 
+const TutorialState: NgHybridStateDeclaration = {
+  name: 'projects/tutorials',
+  url: '/tutorials/project/:projectId',
+  views: {
+    main: {
+      component: TutorialsComponent, // Link to the Angular component
+    },
+  },
+  resolve: {
+    projectId: ['$stateParams', ($stateParams) => $stateParams.projectId], // Resolve the project object
+  },
+  data: {
+    task: 'Tutorial List',
+    pageTitle: '_Home_',
+    roleWhiteList: ['Tutor', 'Convenor', 'Admin', 'Student', 'Auditor'], // Roles allowed to access this state
+  },
+};
+
+// TODO 10.0.x: this will need to go under the unit parent state
+const PortfoliosState: NgHybridStateDeclaration = {
+  name: 'units/students/portfolios',
+  url: '/units/:unitId/students/portfolios',
+  resolve: {
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+  },
+  views: {
+    main: {
+      component: PortfoliosComponent,
+    },
+  },
+  data: {
+    task: 'Student Portfolios',
+    pageTitle: 'Student Portfolios',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
 const TutorAttendance: NgHybridStateDeclaration = {
   name: 'tutor-attendance',
   url: '/tutor-attendance?unitId&attendance',
@@ -505,6 +575,29 @@ const TutorAttendance: NgHybridStateDeclaration = {
     pageTitle: 'Check-in',
     task: 'Check-in',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+const RolloverState: NgHybridStateDeclaration = {
+  name: 'units/rollover',
+  url: '/units/:unitId/rollover',
+  resolve: {
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+  },
+  views: {
+    main: {
+      component: RolloverComponent,
+    },
+  },
+  data: {
+    task: 'Unit Rollover',
+    pageTitle: 'Unit Rollover',
+    roleWhitelist: ['Convenor', 'Admin'],
   },
 };
 
@@ -579,7 +672,6 @@ const LtiUnitLinkState: NgHybridStateDeclaration = {
  */
 export const doubtfireStates = [
   institutionSettingsState,
-  TeachingPeriodsState,
   HomeState,
   WelcomeState,
   SignInState,
@@ -589,6 +681,11 @@ export const doubtfireStates = [
   ViewAllProjectsState,
   ViewAllUnits,
   AdministerUnits,
+  UnauthoriedState,
+  ProjectRootState,
+  ProjectDashboardState,
+  UnitRootState,
+  TaskViewerState,
   ScormPlayerNormalState,
   ScormPlayerReviewState,
   ScormPlayerStudentReviewState,
@@ -599,4 +696,7 @@ export const doubtfireStates = [
   LtiDashboardState,
   LtiUnitLinkState,
   TutorAttendance,
+  TutorialState,
+  PortfoliosState,
+  RolloverState,
 ];

@@ -223,7 +223,7 @@ export class UnitStaffEditorComponent implements OnInit {
   }
 
   groupSetName(id: number) {
-    this.unit.groupSetsCache.get(id).name || 'Individual Work';
+    return this.unit.groupSetsCache.get(id).name || 'Individual Work';
   }
 
   openTutorNotes(unitRole: UnitRole) {

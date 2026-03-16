@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
@@ -6,9 +6,8 @@ import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
 })
-export class WelcomeComponent implements OnInit {
+export class WelcomeComponent {
   constructor(private constants: DoubtfireConstants) {}
-  ngOnInit(): void {}
 
   public externalName = this.constants.ExternalName;
 }

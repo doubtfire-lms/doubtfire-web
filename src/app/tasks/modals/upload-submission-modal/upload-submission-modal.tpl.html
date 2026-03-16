@@ -35,12 +35,12 @@
           </p>
         </div>
         <!--/card-heading-->
-        <group-member-contribution-assigner
-          task="task"
-          class="card-body"
-          project="task.project"
-          team="team">
-        </group-member-contribution-assigner><!--/group-member-contribution-->
+        <f-group-member-contribution-assigner
+          [is-test-submission]="task.isTestSubmission"
+          [task]="task"
+          [project]="task.project"
+          [(team)]="team">
+        </f-group-member-contribution-assigner><!--/group-member-contribution-->
       </div><!--/card-group-->
     </div><!--/state-group-->
     <div class="state state-files" ng-class="{'state-hidden-left': isHidden('files').left,
@@ -60,20 +60,21 @@
           </span>
         </div>
         <div class="card-body">
-          <file-uploader
-            files="uploader.files"
-            url="uploader.url"
-            payload="uploader.payload"
-            single-drop-zone="true"
-            show-upload-button="false"
-            reset-after-upload="false"
-            is-ready="uploader.isReady"
-            is-uploading="uploader.isUploading"
-            initiate-upload="uploader.start"
-            on-click-failure-cancel="uploader.onFailureCancel"
-            on-before-upload="uploader.onBeforeUpload"
-            on-success="uploader.onSuccess"
-            on-complete="uploader.onComplete"></file-uploader>
+          <f-file-uploader
+            [files]="uploader.files"
+            [url]="uploader.url"
+            [payload]="uploader.payload"
+            [single-drop-zone]="true"
+            [show-upload-button]="false"
+            [reset-after-upload]="false"
+            [(is-ready)]="uploader.isReady"
+            (is-ready-change)="isReadyChange"
+            (upload-ready)="uploadIsReady($event)"
+            [is-uploading]="uploader.isUploading"
+            [on-click-failure-cancel]="uploader.onFailureCancel"
+            [on-before-upload]="uploader.onBeforeUpload"
+            [on-success]="uploader.onSuccess"
+            [on-complete]="uploader.onComplete"></f-file-uploader>
         </div>
       </div>
     </div>
@@ -111,9 +112,9 @@
           </h4>
         </div><!--/card-heading-->
         <div class="card-body">
-          <span>
+          <p>
             {{privacyPolicy.privacy}}
-          </span>
+          </p>
           <a href="#" ng-click="showPlagiarism = !showPlagiarism">Plagiarism and collusion</a>
           <div ng-show="showPlagiarism">
             <h4>Plagiarism and Collusion</h4>

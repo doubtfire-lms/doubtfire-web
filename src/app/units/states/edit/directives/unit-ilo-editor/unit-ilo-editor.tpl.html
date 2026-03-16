@@ -54,7 +54,11 @@
         description.
       </div>
       <div class="panel-body">
-        <file-uploader files="batchFiles" url="batchOutcomeUrl()" on-success="onBatchOutcomeSuccess"></file-uploader>
+        <f-file-uploader
+          [files]="batchFiles"
+          [url]="batchOutcomeUrl()"
+          [on-success]="onBatchOutcomeSuccess"
+        ></f-file-uploader>
       </div>
       <!--batch-withdraw-->
       <div class="panel-heading">

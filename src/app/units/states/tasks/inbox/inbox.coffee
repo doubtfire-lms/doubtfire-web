@@ -14,7 +14,7 @@ angular.module('doubtfire.units.states.tasks.inbox', [])
     data:
       task: "Task Inbox"
       pageTitle: "_Home_"
-      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor', 'Auditor']
+      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor']
    }
 )
 

@@ -1,12 +1,12 @@
-import {User, UserService} from 'src/app/api/models/doubtfire-model';
-import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Injectable} from '@angular/core';
 import {StateService, UIRouter, UIRouterGlobals} from '@uirouter/angular';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
-import {AppInjector} from 'src/app/app-injector';
 import {AsyncSubject, catchError, map, Observable, throwError} from 'rxjs';
+import {User, UserService} from 'src/app/api/models/doubtfire-model';
+import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 /**
  * The format for the data returned from the auth api.

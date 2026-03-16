@@ -12,7 +12,7 @@
       [unit]="unit"
       ng-if="activeTab == tabs.gradeStep">
     </f-portfolio-grade-select-step>
-  <portfolio-learning-summary-report-step ng-if="activeTab == tabs.summaryStep"></portfolio-learning-summary-report-step>
-  <portfolio-add-extra-files-step ng-if="activeTab == tabs.otherFilesStep"></portfolio-add-extra-files-step>
+  <f-portfolio-learning-summary-report-step ng-if="activeTab == tabs.summaryStep" [unit]="unit" [project]="project"></f-portfolio-learning-summary-report-step>
+  <f-portfolio-add-extra-files-step ng-if="activeTab == tabs.otherFilesStep" [project]="project"></f-portfolio-add-extra-files-step>
   <portfolio-review-step ng-if="activeTab == tabs.reviewStep"></portfolio-review-step>
 </div>

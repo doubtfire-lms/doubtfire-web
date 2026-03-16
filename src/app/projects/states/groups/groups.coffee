@@ -12,7 +12,6 @@ angular.module('doubtfire.projects.states.groups', [])
     data:
       task: "Groups List"
       pageTitle: "_Home_"
-      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student', 'Auditor']
    }
 )
 

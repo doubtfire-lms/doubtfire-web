@@ -10,5 +10,5 @@
   <unit-tutorials-manager ng-if="activeTab === tabs.tutorialsTab" [unit]="unit"></unit-tutorials-manager>
   <unit-students-editor [unit]="unit" ng-if="activeTab === tabs.studentsTab"></unit-students-editor>
   <f-unit-task-editor ng-if="activeTab === tabs.tasksTab" [unit]="unit"></f-unit-task-editor>
-  <unit-group-set-editor ng-if="activeTab === tabs.groupsTab"></unit-group-set-editor>
+  <f-unit-group-set-editor ng-if="activeTab === tabs.groupsTab" [unit]="unit" [unit-role]="assessingUnitRole"></f-unit-group-set-editor>
 </div>

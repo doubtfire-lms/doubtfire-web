@@ -1,6 +1,60 @@
 <div class="w-full h-full overflow-auto">
+  <div class="flex w-full items-center gap-2">
+    <mat-tab-group
+      class="w-full"
+      [(selectedIndex)]="currentIndex"
+      dynamicHeight
+      (selectedTabChange)="onTabChange($event)"
+    >
+      <mat-tab label="Task Details"></mat-tab>
+      <mat-tab label="Task Sheet" [disabled]="!task.definition.hasTaskSheet"></mat-tab>
+      <mat-tab label="Submission" [disabled]="!task.hasPdf"></mat-tab>
+    </mat-tab-group>
+
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="taskMenu"
+      aria-label="Task actions"
+      class="shrink-0 text-gray-600"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #taskMenu="matMenu" xPosition="before">
+      <button mat-menu-item [disabled]="!task.hasPdf" (click)="downloadSubmission()">
+        <mat-icon>download</mat-icon>
+        <span>Download submission PDF</span>
+      </button>
+      <button mat-menu-item [disabled]="!task.hasPdf" (click)="downloadSubmittedFiles()">
+        <mat-icon>folder_zip</mat-icon>
+        <span>Download submitted files</span>
+      </button>
+      @if (overseerEnabled) {
+        <button mat-menu-item (click)="showSubmissionHistoryModal()">
+          <mat-icon>history</mat-icon>
+          <span>Execution history</span>
+        </button>
+      }
+    </mat-menu>
+  </div>
+
   <ng-container [ngSwitch]="currentView">
-    <ng-template [ngSwitchCase]="DashboardViews.task">
+    <ng-template [ngSwitchCase]="DashboardViews.details">
+      <div class="flex flex-col gap-5 p-5">
+        <f-task-scorm-card [task]="task"></f-task-scorm-card>
+        <f-task-status-card [task]="task"></f-task-status-card>
+        <f-task-due-card [task]="task"></f-task-due-card>
+        <f-task-description-card
+          [taskDef]="task.definition"
+          [task]="task"
+          [unit]="task.unit"
+        ></f-task-description-card>
+        <f-task-assessment-card [task]="task"></f-task-assessment-card>
+        <f-task-submission-card [task]="task"></f-task-submission-card>
+      </div>
+    </ng-template>
+
+    <!-- <ng-template [ngSwitchCase]="DashboardViews.task">
       <ng-container
         *ngIf="selectedTaskService.hasTaskSheet; then pdfViewer; else noPdfUrl"
       ></ng-container>
@@ -10,6 +64,26 @@
       <ng-container
         *ngIf="selectedTaskService.hasSubmissionPdf; then pdfViewer; else noPdfUrl"
       ></ng-container>
+    </ng-template> -->
+
+    <ng-template [ngSwitchCase]="DashboardViews.task">
+      @if (task.definition.hasTaskSheet) {
+        <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()" [startPage]="1"></f-pdf-viewer>
+      } @else {
+        <div class="flex flex-col w-full h-full justify-center items-center">
+          <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
+        </div>
+      }
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="DashboardViews.submission">
+      @if (task.hasPdf) {
+        <f-pdf-viewer [pdfUrl]="task.submissionUrl()" [startPage]="2"></f-pdf-viewer>
+      } @else {
+        <div class="flex flex-col w-full h-full justify-center items-center">
+          <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
+        </div>
+      }
     </ng-template>
 
     <ng-template [ngSwitchCase]="DashboardViews.similarity">
@@ -37,14 +111,14 @@
   </ng-container>
 
   <!-- The PDF Viewer -->
-  <ng-template #pdfViewer>
+  <!-- <ng-template #pdfViewer>
     <f-pdf-viewer [pdfUrl]="pdfUrl" [startPage]="2"></f-pdf-viewer>
-  </ng-template>
+  </ng-template> -->
 
   <!-- Render if no PDF URL is available for the current view -->
   <ng-template #noPdfUrl>
     <div class="flex flex-col w-full h-full justify-center items-center">
-      <mat-icon>subtitles_off</mat-icon>
+      <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
     </div>
   </ng-template>
 </div>

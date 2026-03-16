@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Component, Input, ViewChild } from '@angular/core';
+import { MatTable } from '@angular/material/table';
 import { TaskDefinition, UploadRequirement } from 'src/app/api/models/task-definition';
 import { Unit } from 'src/app/api/models/unit';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';

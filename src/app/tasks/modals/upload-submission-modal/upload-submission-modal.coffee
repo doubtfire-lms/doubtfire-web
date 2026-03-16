@@ -55,6 +55,12 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   $scope.submissionTypes = submissionTypes
 
+  $scope.isReadyChange = (ready) ->
+    $scope.uploader.isReady = ready
+
+  $scope.uploadIsReady = (callback) ->
+    $scope.uploader.start = callback
+
   # Upload files
   $scope.uploader = {
     # url: Task.generateSubmissionUrl($scope.task.project, $scope.task)
@@ -169,7 +175,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       shouldDisableByState = {
         # Disable group if group members not allocated anything
         group: ->
-          _.chain($scope.team.memberContributions).map('confRating').compact().value().length == 0
+          _.chain($scope.team.memberContributions).map('rating').compact().value().length == 0
         # Disable files if no files made
         files: ->
           !$scope.uploader.isReady
