@@ -33,6 +33,7 @@ export class ProgressDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateTaskCompletionValues();
+    this.project?.refreshBurndownChartData();
     this.tutor = this.project.myRole === 'Tutor' ? true : false;
   }
 

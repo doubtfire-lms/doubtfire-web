@@ -28,7 +28,7 @@
     </div>
 
     <!-- Progress Burndown Card -->
-    <div class="bg-white shadow rounded-lg col-span-2 2xl:col-span-1 overflow-hidden">
+    <div class="bg-white shadow rounded-lg col-span-2 2xl:col-span-1 overflow-hidden h-full flex flex-col">
       <div class="mb-4">
         <div class="bg-neutral-100 px-6 items-center">
           <h4 class="font-semibold text-gray-800 pt-6">Progress Burndown</h4>
@@ -37,8 +37,9 @@
           </p>
         </div>
       </div>
-      <div class="p-4">
+      <div class="p-4 flex-1 flex min-h-0">
         <f-progress-burndown-chart
+          class="w-full h-full"
           [project]="project"
           [unit]="project.unit"
           [grade]="project.targetGrade"

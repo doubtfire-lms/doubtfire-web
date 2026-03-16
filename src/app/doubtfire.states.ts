@@ -263,7 +263,10 @@ const AdministerUnits: NgHybridStateDeclaration = {
 const ProjectDashboardState: NgHybridStateDeclaration = {
   name: 'dashboard2',
   parent: 'projects2',
-  url: '/dashboard2',
+  url: '/dashboard2/:taskAbbreviation?',
+  params: {
+    taskAbbreviation: {value: null, squash: true, dynamic: true},
+  },
   views: {
     projectView: {
       component: ProjectDashboardComponent,

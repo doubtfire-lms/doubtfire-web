@@ -1,14 +1,5 @@
-import {
-  Component,
-  Injector,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  ViewContainerRef,
-} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {UIRouter} from '@uirouter/core';
-import * as _ from 'lodash';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
@@ -16,7 +7,7 @@ import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from '../../selected-task.service';
 import {DashboardViews} from '../../selected-task.service';
-import {TooltipService} from '@swimlane/ngx-charts';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 
 @Component({
   selector: 'f-task-dashboard',
@@ -26,9 +17,6 @@ import {TooltipService} from '@swimlane/ngx-charts';
 export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
   @Input() pdfUrl: string;
-
-  readonly viewContainerRef: ViewContainerRef;
-
   public DashboardViews = DashboardViews;
 
   public taskStatusData: any;
@@ -42,6 +30,25 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
   public currentView: DashboardViews;
 
+  public currentIndex;
+
+  onTabChange(event: MatTabChangeEvent) {
+    switch (event.index) {
+      case 0:
+        this.setSelectedDashboardView(DashboardViews.details);
+        break;
+      case 1:
+        this.setSelectedDashboardView(DashboardViews.task);
+        break;
+      case 2:
+        this.setSelectedDashboardView(DashboardViews.submission);
+        break;
+      case 3:
+        this.setSelectedDashboardView(DashboardViews.similarity);
+        break;
+    }
+  }
+
   constructor(
     private doubtfire: DoubtfireConstants,
     private taskService: TaskService,
@@ -49,13 +56,13 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
     public selectedTaskService: SelectedTaskService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.selectedTaskService.currentView$.next(DashboardViews.submission);
+    this.setSelectedDashboardView(DashboardViews.details);
     this.selectedTaskService.currentView$.subscribe((view) => {
       this.currentView = view;
+      this.currentIndex = this.tabIndexForView(view);
     });
 
     this.taskStatusData = {
@@ -77,6 +84,24 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
         taskSubmissionPdfAttachmentUrl: changes.task.currentValue.submissionUrl(true),
         taskFilesUrl: changes.task.currentValue.submittedFilesUrl(),
       };
+      this.setSelectedDashboardView(DashboardViews.details);
+    }
+  }
+
+  setSelectedDashboardView(view: DashboardViews): void {
+    this.selectedTaskService.currentView$.next(view);
+    this.currentView = view;
+    this.currentIndex = this.tabIndexForView(view);
+  }
+
+  private tabIndexForView(view: DashboardViews): number {
+    switch (view) {
+      case DashboardViews.task:
+        return 1;
+      case DashboardViews.submission:
+        return 2;
+      default:
+        return 0;
     }
   }
 

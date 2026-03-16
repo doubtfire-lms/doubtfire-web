@@ -1,32 +1,47 @@
-<div class="w-full h-full" *ngIf="project$ | async as project">
-  <div class="flex flex-row">
-    <f-unit-task-list
-      class="min-w-[300px] w-1/2"
-      *ngIf="project.unit.taskDefinitions.length > 0"
-      [mode]="'project'"
-      [taskDefinitions]="project.unit.taskDefinitions"
-      [tasks]="project.tasks"
-      [selectedTaskDefinition$]="selectedTaskDefinition$"
-    ></f-unit-task-list>
-
+<div class="w-full h-[calc(100vh-100px)]" *ngIf="project$ | async as project">
+  <div class="flex flex-row h-full" #boundary>
     @if (subs$ | async) {
-      <div
-        id="leftResizerEl"
-        #leftResizerEl
-        class="resizer"
-        cdkDragLockAxis="x"
-        cdkDrag
-        (cdkDragMoved)="dragging($event, leftComponent)"
-        (cdkDragEnded)="stoppedDragging($event, leftComponent)"
-        (cdkDragStarted)="startedDragging($event, leftComponent)"
-      ></div>
+      <f-unit-task-list
+        class="flex-none p-2"
+        [style.width.px]="leftWidth"
+        #leftPanel
+        *ngIf="project.unit.taskDefinitions.length > 0"
+        [mode]="'project'"
+        [taskDefinitions]="project.unit.taskDefinitionsForGrade(project.targetGrade)"
+        [tasks]="project.tasks"
+        [selectedTaskDefinition$]="selectedTaskDefinition$"
+      ></f-unit-task-list>
+      <div class="relative flex-none" [style.width.px]="10">
+        <div
+          #leftResizerEl
+          class="absolute inset-y-0 left-0 w-[10px] z-50 bg-slate-100 cursor-ew-resize"
+          cdkDragLockAxis="x"
+          cdkDrag
+          [cdkDragBoundary]="boundary"
+          (cdkDragStarted)="startedDragging($event, boundary)"
+          (cdkDragMoved)="dragging($event, boundary)"
+          (cdkDragEnded)="stoppedDragging($event)"
+        ></div>
+      </div>
     }
 
-    <f-project-progress-dashboard
-      class="w-full"
-      [project$]="project$"
-      [selectedTaskDefinition$]="selectedTaskDefinition$"
-    ></f-project-progress-dashboard>
+    @if (selectedTaskDefinition$.value) {
+      <div class="flex-1 p-2 bg-white rounded-lg">
+        <f-task-dashboard
+          [task]="project.findTaskForDefinition(selectedTaskDefinition$.value.id)"
+        ></f-task-dashboard>
+      </div>
+      <div #commentspanel class="flex-none w-1/4 p-2 bg-white rounded-lg">
+        <task-comments-viewer
+          [task]="project.findTaskForDefinition(selectedTaskDefinition$.value.id)"
+        >
+        </task-comments-viewer>
+      </div>
+    } @else {
+      <div class="flex-1 p-2">
+        <f-progress-dashboard class="w-full" [project]="project"></f-progress-dashboard>
+      </div>
+    }
   </div>
 </div>
 
