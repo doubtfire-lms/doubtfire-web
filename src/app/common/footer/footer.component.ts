@@ -180,6 +180,10 @@ export class FooterComponent implements OnInit {
     return true;
   }
 
+  public get completeButtonEnabled(): boolean {
+    return this.actionButtonEnabled && !!this.selectedTask?.canMarkComplete;
+  }
+
   public get hideMainActionButtonsForModeration(): boolean {
     return this.viewType === 'moderation' && !this.showModerationStatusButtons;
   }

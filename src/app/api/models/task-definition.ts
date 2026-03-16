@@ -57,6 +57,7 @@ export class TaskDefinition extends Entity {
   similarityLanguage: string = 'c';
   hasJplagReport: boolean;
   assessInPortfolioOnly: boolean;
+  requiresDiscussion: boolean;
   useResourcesForJplagBaseCode: boolean;
   lockAssessmentsToTutorialStream: boolean;
   discussionPromptsCount: number;

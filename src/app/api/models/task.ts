@@ -113,6 +113,18 @@ export class Task extends Entity {
     return this.commentCache.currentValues;
   }
 
+  public get hasDiscussedInClassComment(): boolean {
+    return this.comments.some((comment) => comment.commentType === 'discussed_in_class');
+  }
+
+  public get requiresDiscussionForComplete(): boolean {
+    return !!this.definition?.requiresDiscussion;
+  }
+
+  public get canMarkComplete(): boolean {
+    return !this.requiresDiscussionForComplete || this.hasDiscussedInClassComment;
+  }
+
   public get tutor(): UnitRole {
     const enrolments = this.project.tutorialEnrolmentsCache.currentValues.filter(
       (t) => t.tutorialStream.name === this.definition.tutorialStream.name,
@@ -817,6 +829,11 @@ export class Task extends Entity {
   public updateTaskStatus(status: TaskStatusEnum, markAsDiscussed?: boolean) {
     const oldStatus = this.status;
     const alerts: AlertService = AppInjector.get(AlertService);
+
+    if (status === 'complete' && !this.canMarkComplete) {
+      alerts.error('This task must be discussed in class before it can marked complete.', 6000);
+      return;
+    }
 
     const updateFunc = () => {
       const taskService: TaskService = AppInjector.get(TaskService);
