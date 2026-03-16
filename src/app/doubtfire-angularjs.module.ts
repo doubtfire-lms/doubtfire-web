@@ -80,6 +80,7 @@ import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-edit
 import 'build/src/app/units/states/edit/directives/directives.js';
 import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/index/index.js';
+import 'build/src/app/units/states/students-list/students-list.js';
 import 'build/src/app/units/states/analytics/analytics.js';
 import 'build/src/app/common/filters/filters.js';
 import 'build/src/app/common/content-editable/content-editable.js';
