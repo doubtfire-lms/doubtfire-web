@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinition, Task} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
@@ -10,7 +10,7 @@ import {StateService, UIRouter} from '@uirouter/core';
   templateUrl: './unit-task-list.component.html',
   styleUrls: ['./unit-task-list.component.scss'],
 })
-export class FUnitTaskListComponent implements OnInit {
+export class FUnitTaskListComponent implements OnChanges, OnInit {
   @Input() mode: 'project' | 'all-tasks';
   @Input() taskDefinitions: TaskDefinition[];
   @Input() tasks: Task[];
@@ -36,6 +36,19 @@ export class FUnitTaskListComponent implements OnInit {
       this.taskDefinitions,
       this.searchText,
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('taskDefinitions' in changes || 'tasks' in changes) {
+      this.applyFilters();
+
+      if (
+        this.selectedTaskDef &&
+        !this.filteredTaskDefinitions?.some((taskDef) => taskDef.id === this.selectedTaskDef.id)
+      ) {
+        this.selectedTaskDefinition$.next(null);
+      }
+    }
   }
 
   public get hasTasks(): boolean {
