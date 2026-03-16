@@ -236,15 +236,22 @@ import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directi
 import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 
-export const DoubtfireAngularJSModule = angular.module('doubtfire', [
-  'doubtfire.config',
-  'doubtfire.common',
-  'doubtfire.errors',
-  'doubtfire.units',
-  'doubtfire.tasks',
-  'doubtfire.projects',
-  'doubtfire.visualisations',
-]);
+export const DoubtfireAngularJSModule = angular
+  .module('doubtfire', [
+    'doubtfire.config',
+    'doubtfire.common',
+    'doubtfire.errors',
+    'doubtfire.units',
+    'doubtfire.tasks',
+    'doubtfire.projects',
+    'doubtfire.visualisations',
+  ])
+  .config([
+    '$locationProvider',
+    ($locationProvider) => {
+      $locationProvider.html5Mode(true);
+    },
+  ]);
 
 // Downgrade angular modules that we need...
 // factory -> service

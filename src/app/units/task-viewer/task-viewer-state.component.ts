@@ -2,6 +2,7 @@
 import {Component, Input} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
+import {StateService} from '@uirouter/core';
 import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
 
 @Component({
@@ -11,6 +12,8 @@ import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
 })
 export class TaskViewerStateComponent {
   @Input() public unit$: Observable<Unit>;
+
+  constructor(private stateService: StateService) {}
 
   /**
  * Monitor and publish the selected task definition for child components.
@@ -30,12 +33,16 @@ export class TaskViewerStateComponent {
 
   public clearTaskSelection(): void {
     this.selectedTaskDefinition$.next(null);
+    this.stateService.go('.', {taskAbbreviation: null}, {location: 'replace'});
   }
 }
 
 export const TaskViewerState: NgHybridStateDeclaration = {
   name: 'units2/tasks',
-  url: '/tasks/:taskDefId',
+  url: '/tasks/:taskAbbreviation?',
+  params: {
+    taskAbbreviation: {value: null, squash: true, dynamic: true},
+  },
   parent: 'unit-root-state',
   data: {
     pageTitle: 'Unit Tasks',
