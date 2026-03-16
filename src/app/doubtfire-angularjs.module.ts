@@ -80,7 +80,6 @@ import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-edit
 import 'build/src/app/units/states/edit/directives/directives.js';
 import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/index/index.js';
-import 'build/src/app/units/states/students-list/students-list.js';
 import 'build/src/app/units/states/analytics/analytics.js';
 import 'build/src/app/common/filters/filters.js';
 import 'build/src/app/common/content-editable/content-editable.js';
@@ -122,6 +121,7 @@ import {UnitTutorialsManagerComponent} from './units/states/edit/directives/unit
 import {TutorialService} from './api/services/tutorial.service';
 import {TutorialStreamService} from './api/services/tutorial-stream.service';
 import {UnitStudentsEditorComponent} from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
+import {StudentsListComponent} from './units/states/students-list/students-list.component';
 import {CampusService} from './api/services/campus.service';
 import {WebcalService} from './api/services/webcal.service';
 import {DateService} from './common/services/date.service';
@@ -404,6 +404,10 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'unitStudentsEditor',
   downgradeComponent({component: UnitStudentsEditorComponent}),
+);
+DoubtfireAngularJSModule.directive(
+  'fStudentsList',
+  downgradeComponent({component: StudentsListComponent}),
 );
 DoubtfireAngularJSModule.directive(
   'fTaskDefinitionEditor',
