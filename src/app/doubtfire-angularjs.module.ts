@@ -122,6 +122,7 @@ import {UnitTutorialsManagerComponent} from './units/states/edit/directives/unit
 import {TutorialService} from './api/services/tutorial.service';
 import {TutorialStreamService} from './api/services/tutorial-stream.service';
 import {UnitStudentsEditorComponent} from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
+import {StudentsListComponent} from './units/states/students-list/students-list.component';
 import {CampusService} from './api/services/campus.service';
 import {WebcalService} from './api/services/webcal.service';
 import {DateService} from './common/services/date.service';
@@ -404,6 +405,10 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'unitStudentsEditor',
   downgradeComponent({component: UnitStudentsEditorComponent}),
+);
+DoubtfireAngularJSModule.directive(
+  'fStudentsList',
+  downgradeComponent({component: StudentsListComponent}),
 );
 DoubtfireAngularJSModule.directive(
   'fTaskDefinitionEditor',

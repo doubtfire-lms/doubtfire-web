@@ -116,6 +116,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatSortModule} from '@angular/material/sort';
 import {ActivityTypeListComponent} from './admin/institution-settings/activity-type-list/activity-type-list.component';
 import {UnitStudentsEditorComponent} from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
+import {StudentsListComponent} from './units/states/students-list/students-list.component';
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
 import {UnitTutorialsListComponent} from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import {UnitTutorialsManagerComponent} from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
@@ -334,6 +335,7 @@ import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-g
     UnitTutorialsManagerComponent,
     FileDropComponent,
     UnitStudentsEditorComponent,
+    StudentsListComponent,
     UnitTaskEditorComponent,
     TaskDefinitionEditorComponent,
     TaskDefinitionGeneralComponent,
