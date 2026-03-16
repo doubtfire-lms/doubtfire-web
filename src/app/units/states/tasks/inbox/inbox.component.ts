@@ -1,12 +1,5 @@
 import {CdkDragEnd, CdkDragStart, CdkDragMove} from '@angular/cdk/drag-drop';
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MediaObserver} from 'ng-flex-layout';
 import {UIRouter} from '@uirouter/angular';
 import {auditTime, merge, Observable, of, Subject, tap, withLatestFrom} from 'rxjs';
@@ -97,9 +90,7 @@ export class InboxComponent implements OnInit, OnDestroy {
           keys: 'control.Shift.c',
           description: 'Mark selected task as complete',
         })
-        .subscribe(() =>
-          this.selectedTask.selectedTask?.updateTaskStatus('complete')
-      );
+        .subscribe(() => this.selectedTask.selectedTask?.updateTaskStatus('complete'));
     }
 
     if (!registeredHotkeys.includes('control.shift.d')) {
@@ -174,11 +165,17 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   openPdfInNewTab(): void {
-    if (this.taskData.selectedTask.hasPdf) {
-      this.fileDownloader.downloadFile(
-        this.visiblePdfUrl,
-        `${this.taskData.selectedTask.definition.abbreviation}.pdf`,
-      );
+    if (!this.visiblePdfUrl || !this.taskData?.selectedTask) {
+      return;
     }
+
+    const task = this.taskData.selectedTask;
+    const taskSheetUrl = task.definition.getTaskPDFUrl();
+    const fileName =
+      this.visiblePdfUrl === taskSheetUrl
+        ? `${task.definition.abbreviation}-task-sheet.pdf`
+        : `${task.definition.abbreviation}.pdf`;
+
+    this.fileDownloader.downloadFile(this.visiblePdfUrl, fileName);
   }
 }

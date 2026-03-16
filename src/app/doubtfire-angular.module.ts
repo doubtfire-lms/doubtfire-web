@@ -208,6 +208,7 @@ import {TaskAssessmentCardComponent} from './projects/states/dashboard/directive
 import {TaskSubmissionCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import {TaskDashboardComponent} from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
 import {InboxComponent} from './units/states/tasks/inbox/inbox.component';
+import {InboxDashboardComponent} from './units/states/tasks/inbox/directives/inbox-dashboard/inbox-dashboard.component';
 import {ProjectProgressBarComponent} from './common/project-progress-bar/project-progress-bar.component';
 import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import {FChipComponent} from './common/f-chip/chip.component';
@@ -392,6 +393,7 @@ import {ProjectGroupsComponent} from './projects/states/groups/project-groups/pr
     TaskSubmissionCardComponent,
     TaskDashboardComponent,
     InboxComponent,
+    InboxDashboardComponent,
     ProjectProgressBarComponent,
     TeachingPeriodListComponent,
     CreateNewUnitModal,

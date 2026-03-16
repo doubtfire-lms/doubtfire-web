@@ -26,10 +26,10 @@
     }
 
     <div fxFlex class="inbox-panel">
-      <!-- TODO: Separate this with a new f-inbox-dashboard -->
-      <!-- TODO: inbox dashboard can have: Submission | Task Sheet | Staff Notes | Plagiarism | Overseer -->
-      <!-- TODO: alternative:              Submission | Staff Notes | Plagiarism | Overseer -->
-      <f-task-dashboard [task]="taskData.selectedTask" [pdfUrl]="visiblePdfUrl"></f-task-dashboard>
+      <f-inbox-dashboard
+        [task]="taskData?.selectedTask"
+        (visiblePdfUrlChange)="visiblePdfUrl = $event"
+      ></f-inbox-dashboard>
     </div>
     <div
       id="rightResizerEl"
@@ -74,11 +74,11 @@
       <h3 class="mb-0">{{ taskData?.selectedTask?.project.student.nickname }}</h3>
       <div fxFlex></div>
       <button
-        [disabled]="!this.taskData?.selectedTask?.hasPdf"
+        [disabled]="!visiblePdfUrl"
         mat-icon-button
-        aria-label="Open Submission"
+        aria-label="Open current document"
         (click)="openPdfInNewTab()"
-        matTooltip="Open submission"
+        matTooltip="Open current document"
       >
         <mat-icon>description</mat-icon>
       </button>
@@ -92,8 +92,11 @@
       </button>
     </div>
 
-    <div #commentspanel fxFlex class="inbox-panel task-comment-panel mobile">
-      <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
+    <div fxFlex class="inbox-panel mobile">
+      <f-inbox-dashboard
+        [task]="taskData?.selectedTask"
+        (visiblePdfUrlChange)="visiblePdfUrl = $event"
+      ></f-inbox-dashboard>
     </div>
   </div>
 </div>
