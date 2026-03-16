@@ -1,6 +1,6 @@
 {
   "name": "doubtfire",
-  "version": "10.0.1-17",
+  "version": "10.0.1-21",
   "homepage": "http://github.com/doubtfire-lms/",
   "description": "Learning and feedback tool.",
   "license": "AGPL-3.0",
@@ -78,6 +78,7 @@
     "html2canvas": "^1.4.1",
     "html5-qrcode": "^2.3.8",
     "jquery": "2.1.4",
+    "jszip": "^3.10.1",
     "lodash": "~4.17",
     "lottie-web": "^5.12.2",
     "marked": "^11.1.0",

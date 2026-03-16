@@ -218,6 +218,7 @@ import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teach
 import {FChipComponent} from './common/f-chip/f-chip.component';
 import {TaskSimilarityViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
 import {FileViewerComponent} from './common/file-viewer/file-viewer.component';
+import {ArchiveViewerComponent} from './common/archive-viewer/archive-viewer.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
 import {TaskDefinitionGeneralComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-general/task-definition-general.component';
 import {TaskDefinitionWhoComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
@@ -312,6 +313,7 @@ import {TaskPlannerPrerequisitesModalService} from './projects/states/plan/task-
 import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
 import {OverseerStepService} from './api/services/overseer-step.service';
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
+import {SubmissionFilesModalComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/submission-files-modal/submission-files-modal.component';
 import {OverseerStepResultService} from './api/services/overseer-step-result.service';
 import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
 import {TutorNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/tutor-notes-view/tutor-notes-view.component';
@@ -461,6 +463,7 @@ const GANTT_CHART_CONFIG = {
     UnitCodeComponent,
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
+    ArchiveViewerComponent,
     AlertComponent,
     FUnitTaskListComponent,
     FTaskDetailsViewComponent,
@@ -510,6 +513,7 @@ const GANTT_CHART_CONFIG = {
     TaskPlannerCardComponent,
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
+    SubmissionFilesModalComponent,
     TutorNotesComponent,
     TutorNotesViewComponent,
     ModerationComponent,
@@ -675,6 +679,7 @@ const GANTT_CHART_CONFIG = {
     MatDialogModuleNew,
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
     CodeEditorModule.forRoot(),
+    MatSidenavModule,
     NgxGanttModule,
     MatSidenavModule,
     MonacoEditorModule.forRoot(),

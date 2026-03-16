@@ -26,6 +26,7 @@ export class FooterComponent implements OnInit {
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;
+  public showModerationStatusButtons = false;
 
   @ViewChild('similaritiesButton', {static: false, read: ElementRef})
   similaritiesButton: ElementRef;
@@ -69,8 +70,7 @@ export class FooterComponent implements OnInit {
     const canAccess =
       this.currentUnitRole.role === 'Convenor' ||
       this.currentUnitRole.role === 'Admin' ||
-      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id) ||
-      tutor.id === this.currentUnitRole.id;
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id);
 
     return canAccess;
   }
@@ -182,5 +182,13 @@ export class FooterComponent implements OnInit {
 
   public get completeButtonEnabled(): boolean {
     return this.actionButtonEnabled && !!this.selectedTask?.canMarkComplete;
+  }
+
+  public get hideMainActionButtonsForModeration(): boolean {
+    return this.viewType === 'moderation' && !this.showModerationStatusButtons;
+  }
+
+  public toggleModerationStatusButtons() {
+    this.showModerationStatusButtons = !this.showModerationStatusButtons;
   }
 }

@@ -1,4 +1,5 @@
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {
@@ -47,7 +48,11 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
 
   public stepType: 'status_check' | 'output_diff' = 'status_check';
   public visibility = 'public';
+  public showOverseerResourcesEditor = false;
+  public isLoadingOverseerResourcesArchive = false;
+  public overseerResourcesArchive: Blob | File | null = null;
   constructor(
+    private http: HttpClient,
     private alerts: AlertService,
     private overseerImageService: OverseerImageService,
     private modalService: TaskAssessmentModalService,
@@ -264,6 +269,9 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
       this.taskDefinition.overseerStepsCache.values.subscribe((steps) => {
         this.overseerSteps = [...steps];
       });
+      this.showOverseerResourcesEditor = false;
+      this.isLoadingOverseerResourcesArchive = false;
+      this.overseerResourcesArchive = null;
     }
   }
 
@@ -304,6 +312,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
       next: () => {
         this.alerts.success('Deleted Overseer Resources', 2000);
         this.taskDefinition.hasTaskAssessmentResources = false;
+        this.showOverseerResourcesEditor = false;
+        this.overseerResourcesArchive = null;
       },
     });
   }
@@ -326,11 +336,50 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
           this.alerts.success('Uploaded Overseer Resources', 2000);
           this.taskDefinition.hasTaskAssessmentResources = true;
           this.taskDefinition.overseerResourceFiles = [...resourceFiles];
+          this.overseerResourcesArchive = file;
         },
         error: (message) => this.alerts.error(message, 6000),
       });
     } else {
       this.alerts.error('Please drop a zip with scripts for this task to upload', 6000);
     }
+  }
+
+  public toggleOverseerResourcesEditor() {
+    this.showOverseerResourcesEditor = !this.showOverseerResourcesEditor;
+    if (
+      this.showOverseerResourcesEditor &&
+      !this.overseerResourcesArchive &&
+      this.taskDefinition?.hasTaskAssessmentResources
+    ) {
+      this.loadOverseerResourcesArchive();
+    }
+  }
+
+  public onOverseerResourcesArchiveSaved(response: HttpResponse<unknown>) {
+    this.taskDefinition.hasTaskAssessmentResources = true;
+
+    if (Array.isArray(response.body)) {
+      this.taskDefinition.overseerResourceFiles = response.body.filter(
+        (file): file is string => typeof file === 'string',
+      );
+    }
+  }
+
+  private loadOverseerResourcesArchive() {
+    this.isLoadingOverseerResourcesArchive = true;
+    this.http.get(this.taskDefinition.getOverseerResourcesUrl(), {responseType: 'blob'}).subscribe({
+      next: (archiveBlob) => {
+        this.overseerResourcesArchive = archiveBlob;
+      },
+      error: (error) => {
+        this.isLoadingOverseerResourcesArchive = false;
+        this.showOverseerResourcesEditor = false;
+        this.alerts.error(`Failed to load Overseer Resources Zip: ${error?.error?.error ?? error}`);
+      },
+      complete: () => {
+        this.isLoadingOverseerResourcesArchive = false;
+      },
+    });
   }
 }

@@ -32,7 +32,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   UploadSubmissionModal
 )
-.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, newTaskService, newProjectService, task, reuploadEvidence, PrivacyPolicy, alertService) ->
+.controller('UploadSubmissionModalCtrl', ($scope, $rootScope, $timeout, $modalInstance, newTaskService, newProjectService, task, reuploadEvidence, PrivacyPolicy, alertService, emojiService) ->
   $scope.privacyPolicy = PrivacyPolicy
   # Expose task to scope
   $scope.task = task
@@ -71,7 +71,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       $scope.uploader.payload.trigger = 'need_help' if $scope.submissionType == 'need_help'
       $scope.uploader.payload.trigger = 'assess_in_portfolio' if $scope.submissionType == 'assess_in_portfolio' || $scope.task.status == 'assess_in_portfolio'
       if $scope.comment? and $scope.comment.trim() isnt ''
-        $scope.uploader.payload.comment = $scope.comment
+        $scope.uploader.payload.comment = emojiService.nativeEmojiToColons($scope.comment)
     onSuccess: (response) ->
       # Ensure our response contains the data we're expecting
       if typeof response is 'object' and response? and response.id? and response.project_id? and response.status?
