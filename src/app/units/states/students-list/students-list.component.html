@@ -1,174 +1,172 @@
-<div class="w-full p-4">
-  <section class="flex flex-col gap-4 border rounded p-4">
-    <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-      <div>
-        <h2>Students</h2>
-        <p>Browse progress, filter tutorial groups, and manage enrolments.</p>
-      </div>
+<div class="container w-full">
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+    <div>
+      <h2>Students</h2>
+      <p>Browse progress, filter tutorial groups, and manage enrolments.</p>
+    </div>
 
-      <mat-form-field appearance="outline" class="w-full lg:w-auto">
-        <mat-label>Search for students or tutors...</mat-label>
-        <input
-          matInput
-          [(ngModel)]="searchText"
-          (ngModelChange)="onSearchChange()"
-          [matAutocomplete]="studentSearch"
-        />
-        <mat-autocomplete #studentSearch="matAutocomplete">
-          @for (suggestion of filteredSuggestions; track suggestion) {
-            <mat-option [value]="suggestion">{{ suggestion }}</mat-option>
+    <mat-form-field appearance="outline" class="w-full lg:w-auto">
+      <mat-label>Search for students or tutors...</mat-label>
+      <input
+        matInput
+        [(ngModel)]="searchText"
+        (ngModelChange)="onSearchChange()"
+        [matAutocomplete]="studentSearch"
+      />
+      <mat-autocomplete #studentSearch="matAutocomplete">
+        @for (suggestion of filteredSuggestions; track suggestion) {
+          <mat-option [value]="suggestion">{{ suggestion }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+  <div class="w-full flex justify-center">
+    <mat-button-toggle-group
+      [ngModel]="staffFilter"
+      class="w-full max-w-lg"
+      (ngModelChange)="setStaffFilter($event)"
+    >
+      <mat-button-toggle value="all" class="w-full">All Tutorials</mat-button-toggle>
+      <mat-button-toggle value="mine" class="w-full">My Tutorials</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      (matSortChange)="sortTableData($event)"
+      class="min-w-full"
+    >
+      <ng-container matColumnDef="avatar">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let project">
+          <user-icon [size]="30" [user]="project.student"></user-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+        <td mat-cell *matCellDef="let project">
+          {{ project.student.username || 'N/A' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let project">
+          {{ project.student.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="stats">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="stats">Stats</th>
+        <td mat-cell *matCellDef="let project">
+          <div class="flex w-[150px] h-[25px] rounded overflow-hidden">
+            @for (bar of project.taskStats; track bar.key) {
+              <div
+                class="h-[25px] overflow-hidden flex justify-center items-center"
+                [ngStyle]="{
+                  width: bar.value + '%',
+                  background: statusColor(bar.key),
+                }"
+                [matTooltip]="statusLabel(bar.key) + ' ' + bar.value + '%'"
+                matTooltipPosition="above"
+                matTooltipDelay="100"
+              >
+                @if (bar.key === 'not_started') {
+                  <span class="text-black">{{ bar.value }}%</span>
+                }
+                @if (bar.key === 'complete') {
+                  <span class="text-white">{{ bar.value }}%</span>
+                }
+              </div>
+            }
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="grade">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="grade">Target Grade</th>
+        <td mat-cell *matCellDef="let project">
+          <grade-icon [index]="project.targetGrade"></grade-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="portfolio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="portfolio">Portfolio</th>
+        <td mat-cell *matCellDef="let project">
+          @if (project.hasPortfolio) {
+            <mat-icon [class.text-muted]="project.compilePortfolio">menu_book</mat-icon>
           }
-        </mat-autocomplete>
-      </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="similarity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="similarity">Similarity</th>
+        <td mat-cell *matCellDef="let project">
+          @if (project.similarityFlag) {
+            <mat-icon>visibility</mat-icon>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="campus">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Campus</th>
+        <td mat-cell *matCellDef="let project" (click)="$event.stopPropagation()">
+          <div class="pt-[22px]">
+            <student-campus-select
+              [unit]="unit"
+              [student]="project"
+              [update]="true"
+            ></student-campus-select>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="tutorial">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tutorial</th>
+        <td mat-cell *matCellDef="let project" (click)="$event.stopPropagation()">
+          <div class="pt-[22px]">
+            <student-tutorial-select [unit]="unit" [student]="project"></student-tutorial-select>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let project; columns: displayedColumns"
+        class="cursor-pointer"
+        (click)="viewStudent(project)"
+      ></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell p-4 text-center" [attr.colspan]="displayedColumns.length">
+          No students were found using the filters specified.
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div class="flex flex-wrap gap-2">
+      <button mat-stroked-button type="button" (click)="exportCsv()">
+        <mat-icon>download</mat-icon>
+        Export CSV
+      </button>
+      <button mat-flat-button color="primary" type="button" (click)="showEnrolModal()">
+        <mat-icon>person_add</mat-icon>
+        Enrol Student
+      </button>
     </div>
 
-    <div class="w-full flex justify-center">
-      <mat-button-toggle-group
-        [ngModel]="staffFilter"
-        class="w-full max-w-lg"
-        (ngModelChange)="setStaffFilter($event)"
-      >
-        <mat-button-toggle value="all" class="w-full">All Tutorials</mat-button-toggle>
-        <mat-button-toggle value="mine" class="w-full">My Tutorials</mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-
-    <div class="overflow-x-auto">
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        matSort
-        (matSortChange)="sortTableData($event)"
-        class="min-w-full"
-      >
-        <ng-container matColumnDef="avatar">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let project">
-            <user-icon [size]="30" [user]="project.student"></user-icon>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="username">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
-          <td mat-cell *matCellDef="let project">
-            {{ project.student.username || 'N/A' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-          <td mat-cell *matCellDef="let project">
-            {{ project.student.name }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="stats">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="stats">Stats</th>
-          <td mat-cell *matCellDef="let project">
-            <div class="flex w-[150px] h-[25px] rounded overflow-hidden">
-              @for (bar of project.taskStats; track bar.key) {
-                <div
-                  class="h-[25px] overflow-hidden flex justify-center items-center"
-                  [ngStyle]="{
-                    width: bar.value + '%',
-                    background: statusColor(bar.key),
-                  }"
-                  [matTooltip]="statusLabel(bar.key) + ' ' + bar.value + '%'"
-                  matTooltipPosition="above"
-                  matTooltipDelay="100"
-                >
-                  @if (bar.key === 'not_started') {
-                    <span class="text-black">{{ bar.value }}%</span>
-                  }
-                  @if (bar.key === 'complete') {
-                    <span class="text-white">{{ bar.value }}%</span>
-                  }
-                </div>
-              }
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="grade">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="grade">Target Grade</th>
-          <td mat-cell *matCellDef="let project">
-            <grade-icon [index]="project.targetGrade"></grade-icon>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="portfolio">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="portfolio">Portfolio</th>
-          <td mat-cell *matCellDef="let project">
-            @if (project.hasPortfolio) {
-              <mat-icon [class.text-muted]="project.compilePortfolio">menu_book</mat-icon>
-            }
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="similarity">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="similarity">Similarity</th>
-          <td mat-cell *matCellDef="let project">
-            @if (project.similarityFlag) {
-              <mat-icon>visibility</mat-icon>
-            }
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="campus">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Campus</th>
-          <td mat-cell *matCellDef="let project" (click)="$event.stopPropagation()">
-            <div class="pt-[22px]">
-              <student-campus-select
-                [unit]="unit"
-                [student]="project"
-                [update]="true"
-              ></student-campus-select>
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="tutorial">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tutorial</th>
-          <td mat-cell *matCellDef="let project" (click)="$event.stopPropagation()">
-            <div class="pt-[22px]">
-              <student-tutorial-select [unit]="unit" [student]="project"></student-tutorial-select>
-            </div>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr
-          mat-row
-          *matRowDef="let project; columns: displayedColumns"
-          class="cursor-pointer"
-          (click)="viewStudent(project)"
-        ></tr>
-
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell p-4 text-center" [attr.colspan]="displayedColumns.length">
-            No students were found using the filters specified.
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-      <div class="flex flex-wrap gap-2">
-        <button mat-stroked-button type="button" (click)="exportCsv()">
-          <mat-icon>download</mat-icon>
-          Export CSV
-        </button>
-        <button mat-flat-button color="primary" type="button" (click)="showEnrolModal()">
-          <mat-icon>person_add</mat-icon>
-          Enrol Student
-        </button>
-      </div>
-
-      <mat-paginator
-        [pageSizeOptions]="[15, 25, 50, 100]"
-        [pageSize]="15"
-        showFirstLastButtons
-      ></mat-paginator>
-    </div>
-  </section>
+    <mat-paginator
+      [pageSizeOptions]="[15, 25, 50, 100]"
+      [pageSize]="15"
+      showFirstLastButtons
+    ></mat-paginator>
+  </div>
 </div>
