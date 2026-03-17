@@ -1,8 +1,8 @@
-<div class="w-full h-[calc(100vh-100px)]" *ngIf="project$ | async as project">
-  <div class="flex flex-row h-full" #boundary>
+<div class="w-full h-[calc(100vh-100px)] overflow-hidden" *ngIf="project$ | async as project">
+  <div class="flex flex-row h-full min-h-0" #boundary>
     @if (subs$ | async) {
       <f-unit-task-list
-        class="flex-none p-2"
+        class="flex-none p-2 h-full min-h-0"
         [style.width.px]="leftWidth"
         #leftPanel
         *ngIf="project.unit.taskDefinitions.length > 0"
@@ -38,7 +38,7 @@
         </task-comments-viewer>
       </div>
     } @else {
-      <div class="flex-1 p-2">
+      <div class="flex-1 p-2 min-h-0 overflow-y-auto">
         <f-progress-dashboard class="w-full" [project]="project"></f-progress-dashboard>
       </div>
     }
