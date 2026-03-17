@@ -26,7 +26,6 @@ export class ProjectGroupsStateComponent implements OnInit, OnDestroy {
 
       this.project = project;
       this.selectedGroupSet = this.selectedGroupSet ?? project.unit?.groupSets?.[0];
-      this.globalStateService.setView(ViewType.PROJECT, project);
     });
   }
 
