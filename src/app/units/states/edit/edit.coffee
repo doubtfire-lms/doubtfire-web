@@ -16,7 +16,7 @@ angular.module('doubtfire.units.states.edit', [
       roleWhitelist: ['Convenor', 'Admin', 'Auditor']
    }
 )
-.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, alertService, analyticsService, newUnitService, newUserService, globalStateService) ->
+.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, alertService, newUnitService, newUserService, globalStateService) ->
   globalStateService.onLoad () ->
     $scope.currentStaff = $scope.unit.staff
 
