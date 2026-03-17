@@ -1,3 +1,4 @@
+@if (!isMobileView) {
 <div fxLayout="column" fxFill fxHide fxShow.gt-sm>
   <div fxLayout="row" fxLayoutAlign="center stretch" fxFill>
     <div id="inboxpanel" #inboxpanel class="staff-task-list inbox-panel">
@@ -45,7 +46,7 @@
   </div>
   <f-footer class="z-10" [viewType]="viewType"></f-footer>
 </div>
-
+} @else {
 <div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
   <div id="inboxpanel" #inboxpanel class="inbox-panel mobile" [hidden]="taskSelected">
     @if (taskData) {
@@ -86,3 +87,4 @@
     </div>
   </div>
 </div>
+}

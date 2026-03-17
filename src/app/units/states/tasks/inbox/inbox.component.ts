@@ -55,6 +55,10 @@ export class InboxComponent implements OnInit, OnDestroy {
     return this.inboxPanel?.nativeElement.getBoundingClientRect().width < 150;
   }
 
+  get isMobileView(): boolean {
+    return this.mediaObserver.isActive('lt-md');
+  }
+
   constructor(
     private hotkeys: HotkeysService,
     private selectedTask: SelectedTaskService,
