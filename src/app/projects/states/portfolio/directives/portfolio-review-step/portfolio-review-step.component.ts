@@ -43,7 +43,7 @@ export class PortfolioReviewStepComponent implements OnInit {
     });
   }
 
-  public get hasLSR(): boolean {
+  public get hasLearningSummaryReport(): boolean {
     return (this.project?.portfolioFiles ?? []).some((file) => file.idx === 0);
   }
 
@@ -59,7 +59,7 @@ export class PortfolioReviewStepComponent implements OnInit {
     return (
       !this.portfolioIsCompiling &&
       this.hasTasksSelected &&
-      this.hasLSR &&
+      this.hasLearningSummaryReport &&
       !this.project?.portfolioAvailable
     );
   }

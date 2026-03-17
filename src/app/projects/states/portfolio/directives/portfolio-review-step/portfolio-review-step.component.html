@@ -4,7 +4,7 @@
   </mat-card-header>
 
   <mat-card-content class="p-5 px-20">
-    @if (!hasLSR || !hasTasksSelected) {
+    @if (!hasLearningSummaryReport || !hasTasksSelected) {
       <mat-card appearance="outlined" class="p-2">
         <mat-card-header class="bg-red-500 text-white">
           <mat-card-title class="flex items-center gap-2">
@@ -13,7 +13,7 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          @if (!hasLSR) {
+          @if (!hasLearningSummaryReport) {
             <p class="py-3">
               Your portfolio <strong>must</strong> include a learning summary report. Upload this
               before you schedule your portfolio to be compiled.
