@@ -30,8 +30,6 @@ import 'build/assets/wav-worker.js';
 import 'build/src/app/common/common.js';
 import 'build/src/app/common/content-editable/content-editable.js';
 import 'build/src/app/common/filters/filters.js';
-// import 'build/src/app/common/modals/comments-modal/comments-modal.js';
-import 'build/src/app/common/modals/modals.js';
 import 'build/src/app/common/services/analytics-service.js';
 import 'build/src/app/common/services/listener-service.js';
 import 'build/src/app/common/services/outcome-service.js';
@@ -46,7 +44,6 @@ import 'build/src/app/config/vendor-dependencies/vendor-dependencies.js';
 import 'build/src/app/errors/errors.js';
 import 'build/src/app/errors/states/states.js';
 import 'build/src/app/errors/states/timeout/timeout.js';
-import 'build/src/app/projects/project-outcome-alignment/project-outcome-alignment.js';
 import 'build/src/app/projects/projects.js';
 import 'build/src/app/projects/states/dashboard/dashboard.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
@@ -55,25 +52,12 @@ import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-d
 import 'build/src/app/projects/states/feedback/feedback.js';
 import 'build/src/app/projects/states/groups/groups.js';
 import 'build/src/app/projects/states/index/index.js';
-import 'build/src/app/projects/states/outcomes/outcomes.js';
 import 'build/src/app/projects/states/portfolio/directives/directives.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.js';
 import 'build/src/app/projects/states/portfolio/portfolio.js';
 import 'build/src/app/projects/states/states.js';
-import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.js';
-import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.js';
-import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
-import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.js';
-import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.js';
-import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment.js';
-import 'build/src/app/tasks/tasks.js';
-import 'build/src/app/units/modals/modals.js';
-import 'build/src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.js';
 import 'build/src/app/units/states/analytics/analytics.js';
-import 'build/src/app/units/states/edit/directives/directives.js';
-// import 'build/src/app/units/states/edit/directives/unit-details-editor/unit-details-editor.js';
-import 'build/src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.js';
 import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/groups/groups.js';
 import 'build/src/app/units/states/index/index.js';
@@ -241,7 +225,6 @@ export const DoubtfireAngularJSModule = angular
     'doubtfire.common',
     'doubtfire.errors',
     'doubtfire.units',
-    'doubtfire.tasks',
     'doubtfire.projects',
     'doubtfire.visualisations',
   ])

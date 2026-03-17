@@ -1,5 +1,4 @@
 angular.module('doubtfire.units.states.edit', [
-  'doubtfire.units.states.edit.directives'
 ])
 
 #
