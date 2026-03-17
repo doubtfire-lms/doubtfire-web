@@ -63,8 +63,8 @@
   @for (project of projects; track project) {
     @if (!project.unit.teachingPeriod || project.unit.teachingPeriod.active) {
       <button
-        uiSref="projects/dashboard"
-        [uiParams]="{projectId: project.id, taskAbbr: ''}"
+        uiSref="projects2/dashboard2"
+        [uiParams]="{projectId: project.id, taskAbbreviation: ''}"
         class="flex items-center mb-2"
         mat-menu-item
       >

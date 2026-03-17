@@ -89,8 +89,8 @@
         <div *ngFor="let project of projects">
           <div
             *ngIf="project.unit.isActive"
-            uiSref="dashboard2"
-            [uiParams]="{projectId: project.id, taskAbbr: ''}"
+            uiSref="projects2/dashboard2"
+            [uiParams]="{projectId: project.id, taskAbbreviation: ''}"
             class="removeStyle"
           >
             <mat-card class="unit-card">

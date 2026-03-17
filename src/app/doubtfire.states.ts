@@ -282,7 +282,7 @@ const AdministerUnits: NgHybridStateDeclaration = {
 
 // projectDashboardState which gets the project from the abstract state above
 const ProjectDashboardState: NgHybridStateDeclaration = {
-  name: 'dashboard2',
+  name: 'projects2/dashboard2',
   parent: 'projects2',
   url: '/dashboard2/:taskAbbreviation?',
   params: {

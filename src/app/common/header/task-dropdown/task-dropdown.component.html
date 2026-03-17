@@ -57,8 +57,8 @@
     <mat-menu #menu2="matMenu">
       @if (currentProject !== null && currentView === 'PROJECT') {
         <button
-          uiSref="projects/dashboard"
-          [uiParams]="{projectId: currentProject.id, taskAbbr: ''}"
+          uiSref="projects2/dashboard2"
+          [uiParams]="{projectId: currentProject.id, taskAbbreviation: ''}"
           mat-menu-item
         >
           <mat-icon aria-label="Dashboard icon" fontIcon="dashboard"></mat-icon> Dashboard

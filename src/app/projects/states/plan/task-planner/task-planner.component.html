@@ -34,12 +34,13 @@
   <ngx-gantt-table>
     <ngx-gantt-column name="Tasks" width="350px">
       <ng-template #cell let-item="item">
+        <!-- TODO: redirect to new project dashboard -->
         <div
           class="flex items-center justify-between"
           uiSref="projects/dashboard"
           [uiParams]="{
             projectId: project.id,
-            taskAbbr: item.taskDefinition.abbreviation
+            taskAbbr: item.taskDefinition.abbreviation,
           }"
         >
           <div class="flex items-center gap-5 w-full min-w-0">
