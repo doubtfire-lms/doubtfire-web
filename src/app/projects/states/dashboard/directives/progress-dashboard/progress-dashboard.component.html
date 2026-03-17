@@ -4,71 +4,100 @@
       Progress Dashboard <span *ngIf="tutor">for {{ project.student.name }}</span>
     </h4>
   </div>
-  <div class="p-6 grid grid-cols-2 gap-6">
+  <div class="p-6 grid grid-cols-1 xl:grid-cols-2 gap-6 items-stretch">
+    <!-- Task Planner Card -->
+    <div class="w-full h-full xl:col-span-1">
+      <f-task-planner-card [project]="project" class="block w-full h-full"></f-task-planner-card>
+    </div>
+
     <!-- Target Grade Card -->
-    <div class="bg-white shadow rounded-lg col-span-2 overflow-hidden">
-      <div class="mb-4">
-        <div class="bg-neutral-100 px-6 items-center">
-          <h4 class="font-semibold text-gray-800 py-6">Target Grade</h4>
-        </div>
-      </div>
-      <div class="p-4">
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Select Target Grade</mat-label>
-          <mat-select
-            [(value)]="project.targetGrade"
-            (selectionChange)="updateTargetGrade($event.value)"
-          >
-            <mat-option *ngFor="let grade of grades.values" [value]="grade">
-              {{ grades.names[grade] }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+    <div class="h-full xl:col-span-1">
+      <mat-card appearance="outlined" class="h-full flex flex-col">
+        <mat-card-header>
+          <mat-card-title>Target Grade</mat-card-title>
+          <mat-card-subtitle class="mb-4">
+            <p>Your target grade changes which tasks you need to complete.</p>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="flex-1 flex items-center">
+          <div class="w-full">
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>Select Target Grade</mat-label>
+              <mat-select
+                [(value)]="project.targetGrade"
+                (selectionChange)="updateTargetGrade($event.value)"
+                disabled
+              >
+                <mat-option *ngFor="let grade of grades.values" [value]="grade">
+                  {{ grades.names[grade] }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="ml-1 py-2 opacity-70">
+              To change your target grade, use the
+              <a
+                uiSref="project/plan"
+                [uiParams]="{projectId: project.id}"
+                class="underline cursor-pointer"
+              >
+                Task Planner
+              </a>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
 
-    <!-- Progress Burndown Card -->
-    <div class="bg-white shadow rounded-lg col-span-2 2xl:col-span-1 overflow-hidden h-full flex flex-col">
-      <div class="mb-4">
-        <div class="bg-neutral-100 px-6 items-center">
-          <h4 class="font-semibold text-gray-800 pt-6">Progress Burndown</h4>
-          <p class="text-gray-600 pb-6 font-light">
-            The burndown chart shows how much work remains for you to achieve your target grade.
-          </p>
-        </div>
-      </div>
-      <div class="p-4 flex-1 flex min-h-0">
-        <f-progress-burndown-chart
-          class="w-full h-full"
-          [project]="project"
-          [unit]="project.unit"
-          [grade]="project.targetGrade"
-        ></f-progress-burndown-chart>
-      </div>
-      <div class="mt-4 text-gray-600 p-4 font-light">
-        Aim to keep your
-        <strong class="text-red-500 font-semibold">Complete</strong>
-        line close to or ahead of the
-        <strong class="text-gray-500 font-semibold">Target</strong>
-        line to keep on track.
-      </div>
+    <!-- Unit learning outcomes -->
+    <div class="xl:col-span-2">
+      <f-task-ilos-card [unit]="project.unit" [iloContextType]="'Unit'"></f-task-ilos-card>
     </div>
 
-    <!-- Task Statuses Card -->
-    <div class="bg-white shadow rounded-lg col-span-2 2xl:col-span-1 overflow-hidden">
-      <div class="mb-4">
-        <div class="bg-neutral-100 px-6 items-center">
-          <h4 class="font-semibold text-gray-800 pt-6">Task Statuses</h4>
-          <p class="text-gray-600 pb-6 font-light">
-            Breakdown summary of each of your task statuses.
-          </p>
+    <div class="xl:col-span-2 grid grid-cols-1 xl:grid-cols-2 gap-6 items-stretch">
+      <!-- Progress Burndown Card -->
+      <div class="bg-white shadow rounded-lg overflow-hidden h-full flex flex-col">
+        <div class="mb-4">
+          <div class="bg-neutral-100 px-6 items-center">
+            <h4 class="font-semibold text-gray-800 pt-6">Progress Burndown</h4>
+            <p class="text-gray-600 pb-6 font-light">
+              The burndown chart shows how much work remains for you to achieve your target grade.
+            </p>
+          </div>
+        </div>
+        <div class="p-4 flex-1 flex min-h-0">
+          <f-progress-burndown-chart
+            class="w-full h-full"
+            [project]="project"
+            [unit]="project.unit"
+            [grade]="project.targetGrade"
+          ></f-progress-burndown-chart>
+        </div>
+        <div class="mt-4 text-gray-600 p-4 font-light">
+          Aim to keep your
+          <strong class="text-red-500 font-semibold">Complete</strong>
+          line close to or ahead of the
+          <strong class="text-gray-500 font-semibold">Target</strong>
+          line to keep on track.
         </div>
       </div>
-      <div class="p-4 overflow-x-scroll h-auto">
-        <f-task-visualisation
-          [project]="project"
-          [grade]="project.targetGrade"
-        ></f-task-visualisation>
+
+      <!-- Task Statuses Card -->
+      <div class="bg-white shadow rounded-lg overflow-hidden h-full flex flex-col">
+        <div class="mb-4">
+          <div class="bg-neutral-100 px-6 items-center">
+            <h4 class="font-semibold text-gray-800 pt-6">Task Statuses</h4>
+            <p class="text-gray-600 pb-6 font-light">
+              Breakdown summary of each of your task statuses.
+            </p>
+          </div>
+        </div>
+        <div class="p-4 overflow-x-auto flex-1">
+          <f-task-visualisation
+            [project]="project"
+            [grade]="project.targetGrade"
+          ></f-task-visualisation>
+        </div>
       </div>
     </div>
   </div>
