@@ -1,5 +1,4 @@
 angular.module('doubtfire.projects.states.portfolio', [
-  'doubtfire.projects.states.portfolio.directives'
 ])
 
 #

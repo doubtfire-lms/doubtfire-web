@@ -52,8 +52,6 @@ import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-d
 import 'build/src/app/projects/states/feedback/feedback.js';
 import 'build/src/app/projects/states/groups/groups.js';
 import 'build/src/app/projects/states/index/index.js';
-import 'build/src/app/projects/states/portfolio/directives/directives.js';
-import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.js';
 import 'build/src/app/projects/states/portfolio/portfolio.js';
 import 'build/src/app/projects/states/states.js';
 import 'build/src/app/units/states/analytics/analytics.js';
@@ -197,6 +195,7 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-planner.component';
 import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
+import {PortfolioReviewStepComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.component';
 import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
 import {UnitStudentEnrolmentModalService} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
@@ -661,6 +660,11 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fPortfolioAddExtraFilesStep',
   downgradeComponent({component: PortfolioAddExtraFilesStepComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fPortfolioReviewStep',
+  downgradeComponent({component: PortfolioReviewStepComponent}),
 );
 
 DoubtfireAngularJSModule.directive(

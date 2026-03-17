@@ -325,6 +325,7 @@ import {TaskPlannerPrerequisitesModalService} from './projects/states/plan/task-
 import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-planner.component';
 import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
+import {PortfolioReviewStepComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.component';
 import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
 import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
@@ -564,6 +565,7 @@ const GANTT_CHART_CONFIG = {
     PortfolioGradeSelectStepComponent,
     AnalyticsTutorTimesComponent,
     PortfolioIncludedTasksComponent,
+    PortfolioReviewStepComponent,
     OverseerScriptEditorModalComponent,
     UploadGradesComponent,
     DiscussionPromptsComponent,
