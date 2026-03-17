@@ -158,16 +158,16 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/admin/modals/modals.coffee
 - [x] ./src/app/common/services/date-service.coffee
 - [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.coffee (Removed in 10.0.x)
-- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.coffee (Removed in 10.0.x)
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.coffee (Removed in 10.0.x)
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee (Removed in 10.0.x)
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee (Removed in 10.0.x)
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee (Removed in 10.0.x)
-- [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee (Removed in 10.0.x)
-- [ ] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee (Removed in 10.0.x)
-- [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee (Removed in 10.0.x)
-- [ ] ./src/app/projects/states/outcomes/outcomes.coffee (Removed in 10.0.x)
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Removed in 10.0.x)
+- [x] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.coffee (Removed in 10.0.x)
+- [x] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.coffee (Removed in 10.0.x)
+- [x] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee (Removed in 10.0.x)
+- [x] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee (Removed in 10.0.x)
+- [x] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee (Removed in 10.0.x)
+- [x] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee (Removed in 10.0.x)
+- [x] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee (Removed in 10.0.x)
+- [x] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee (Removed in 10.0.x)
+- [x] ./src/app/projects/states/outcomes/outcomes.coffee (Removed in 10.0.x)
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Removed in 10.0.x)
 - [x] ./src/app/units/states/rollover/directives/directives.coffee
 - [x] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
 - [x] ./src/app/units/states/rollover/rollover.coffee
@@ -182,13 +182,18 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/common/modals/csv-result-modal/csv-result-modal.coffee
 - [x] ./src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.coffee
 - [x] ./src/app/units/states/students-list/students-list.coffee
+- [x] ./src/app/common/modals/modals.coffee
+- [x] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal.coffee
+- [x] ./src/app/tasks/modals/modals.coffee
+- [x] ./src/app/tasks/tasks.coffee
+- [x] ./src/app/units/modals/modals.coffee
+- [x] ./src/app/units/states/edit/directives/directives.coffee
 
 ### TODO:
 
 - [ ] ./src/app/common/common.coffee
 - [ ] ./src/app/common/content-editable/content-editable.coffee
 - [ ] ./src/app/common/filters/filters.coffee
-- [ ] ./src/app/common/modals/modals.coffee
 - [ ] ./src/app/common/services/analytics-service.coffee
 - [ ] ./src/app/common/services/listener-service.coffee
 - [ ] ./src/app/common/services/media-service.coffee
@@ -216,18 +221,15 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Migrate this in 10.0.x)
 - [ ] ./src/app/projects/states/portfolio/portfolio.coffee
 - [ ] ./src/app/projects/states/states.coffee
-- [ ] ./src/app/tasks/modals/modals.coffee
-- [ ] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal.coffee
-- [ ] ./src/app/tasks/tasks.coffee
-- [ ] ./src/app/units/modals/modals.coffee
 - [ ] ./src/app/units/states/analytics/analytics.coffee (Just the routing, since the TypeScript f-analytics component has been expanded in 10.0.x)
-- [ ] ./src/app/units/states/edit/directives/directives.coffee
 - [ ] ./src/app/units/states/edit/edit.coffee
 - [ ] ./src/app/units/states/groups/groups.coffee (State only -> "unit-groups")
 - [ ] ./src/app/units/states/index/index.coffee
 - [ ] ./src/app/units/states/states.coffee
 - [ ] ./src/app/units/states/tasks/definition/definition.coffee
 - [ ] ./src/app/units/states/tasks/tasks.coffee
+- [ ] ./src/app/units/states/tasks/moderation.coffee
+- [ ] ./src/app/units/states/tasks/overflow.coffee
 - [ ] ./src/app/units/units.coffee
 - [ ] ./src/app/visualisations/summary-task-status-scatter.coffee (Unit task status summary)
 - [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
