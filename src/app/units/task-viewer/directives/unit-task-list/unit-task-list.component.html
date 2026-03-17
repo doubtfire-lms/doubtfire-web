@@ -24,7 +24,7 @@
     <mat-nav-list #taskDefinitions>
       @for (taskDef of filteredTaskDefinitions; track taskDef) {
         <mat-list-item
-          class="flex w-full item-content items-center hover:bg-gray-50 p-0 px-2 h-[60px] cursor-pointer"
+          class="flex w-full item-content items-center hover:bg-gray-50 p-2 h-[65px] cursor-pointer border-b border-gray-200"
           [disableRipple]="true"
           (click)="setSelectedTaskDefinition(taskDef)"
           [ngClass]="{
@@ -35,17 +35,21 @@
             <div class="flex justify-between items-center w-fill">
               <div class="flex items-center gap-5 flex-1 min-w-0">
                 <div class="flex items-center gap-5 min-w-0 truncate text-ellipsis">
-                  <f-task-badge [taskDef]="taskDef"></f-task-badge>
                   <div class="flex flex-col justify-start truncate text-ellipsis">
                     <div class="truncate text-ellipsis">{{ taskDef.name }}</div>
 
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1">
                       @if (taskDef.isGroupTask()) {
-                        <mat-icon class="text-gray-400 scale-75">group</mat-icon>
+                        <mat-icon class="text-gray-600 scale-75">groups</mat-icon>
                       } @else {
-                        <mat-icon class="text-gray-400 scale-75">person</mat-icon>
+                        <mat-icon class="text-gray-600 scale-75">person</mat-icon>
                       }
-                      <div class="task-details">{{ gradeNames[taskDef.targetGrade] }} Task</div>
+
+                      <div class="task-details text-[14px] text-gray-500">
+                        {{ taskDef.abbreviation }}
+                        -
+                        {{ gradeNames[taskDef.targetGrade] }} Task
+                      </div>
                     </div>
                   </div>
                 </div>
