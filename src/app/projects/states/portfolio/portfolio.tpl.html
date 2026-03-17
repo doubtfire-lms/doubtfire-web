@@ -14,5 +14,5 @@
     </f-portfolio-grade-select-step>
   <f-portfolio-learning-summary-report-step ng-if="activeTab == tabs.summaryStep" [unit]="unit" [project]="project"></f-portfolio-learning-summary-report-step>
   <f-portfolio-add-extra-files-step ng-if="activeTab == tabs.otherFilesStep" [project]="project"></f-portfolio-add-extra-files-step>
-  <portfolio-review-step ng-if="activeTab == tabs.reviewStep"></portfolio-review-step>
+  <f-portfolio-review-step ng-if="activeTab == tabs.reviewStep" [project]="project" [unit]="unit"></f-portfolio-review-step>
 </div>

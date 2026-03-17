@@ -188,6 +188,8 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/tasks/tasks.coffee
 - [x] ./src/app/units/modals/modals.coffee
 - [x] ./src/app/units/states/edit/directives/directives.coffee
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Migrate this in 10.0.x)
+- [x] ./src/app/projects/states/portfolio/directives/directives.coffee
 
 ### TODO:
 
@@ -217,8 +219,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/states/feedback/feedback.coffee
 - [ ] ./src/app/projects/states/groups/groups.coffee (State only -> "project-groups")
 - [ ] ./src/app/projects/states/index/index.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/directives.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Migrate this in 10.0.x)
 - [ ] ./src/app/projects/states/portfolio/portfolio.coffee
 - [ ] ./src/app/projects/states/states.coffee
 - [ ] ./src/app/units/states/analytics/analytics.coffee (Just the routing, since the TypeScript f-analytics component has been expanded in 10.0.x)
