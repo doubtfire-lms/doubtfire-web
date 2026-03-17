@@ -152,7 +152,6 @@ import {TutorialsComponent} from './projects/states/tutorials/tutorials.componen
 import {CheckForUpdateService} from './sessions/service-worker-updater/check-for-update.service';
 import {TransitionHooksService} from './sessions/transition-hooks.service';
 import {GradeTaskModalService} from './tasks/modals/grade-task-modal/grade-task-modal.service';
-import {UploadSubmissionModalService} from './tasks/modals/upload-submission-modal/upload-submission-modal.service';
 import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-tasks-list.component';
 import {CommentBubbleActionComponent} from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
