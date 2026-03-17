@@ -11,6 +11,7 @@ import {GradeService} from 'src/app/common/services/grade.service';
 export class PortfolioLearningSummaryReportStepComponent {
   @Input() unit: Unit;
   @Input() project: Project;
+  @Input() onAdvanceActiveTab?: (index: 1 | -1) => void;
 
   public learningSummaryReportFileUploadData = {
     type: {
@@ -41,9 +42,11 @@ export class PortfolioLearningSummaryReportStepComponent {
     return this.gradeService.grades[this.project.targetGrade];
   }
 
-  // TODO: remove this once parent component is migrated
   advanceActiveTab(index: 1 | -1) {
-    this.injector.get('$scope').advanceActiveTab(index);
+    if (this.onAdvanceActiveTab) {
+      this.onAdvanceActiveTab(index);
+      return;
+    }
   }
 
   addNewFile(newFile: {kind: string; name: string; idx: number}) {

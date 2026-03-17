@@ -9,6 +9,7 @@ import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.c
 import {FUsersComponent} from './admin/states/users/users.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
 import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
+import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-state.component';
 import {UnitRootState} from './units/unit-root-state.component';
 import {ProjectRootState} from './projects/states/project-root-state.component';
 import {TaskViewerState} from './units/task-viewer/task-viewer-state.component';
@@ -294,6 +295,21 @@ const ProjectDashboardState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Unit Dashboard',
+  },
+};
+
+const PortfolioCreationState: NgHybridStateDeclaration = {
+  name: 'projects2/portfolio2',
+  parent: 'projects2',
+  url: '/portfolio2',
+  views: {
+    projectView: {
+      component: PortfolioStateComponent,
+    },
+  },
+  data: {
+    task: 'Portfolio Creation',
+    pageTitle: '_Home_',
   },
 };
 
@@ -684,6 +700,7 @@ export const doubtfireStates = [
   UnauthoriedState,
   ProjectRootState,
   ProjectDashboardState,
+  PortfolioCreationState,
   UnitRootState,
   TaskViewerState,
   ScormPlayerNormalState,

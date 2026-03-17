@@ -1,4 +1,4 @@
-import {Component, OnInit, Injector} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
@@ -7,12 +7,11 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   styleUrls: ['portfolio-welcome-step.component.scss'],
 })
 export class PortfolioWelcomeStepComponent implements OnInit {
+  @Input() onAdvanceActiveTab?: (index: 1 | -1) => void;
+
   public externalName: string = 'OnTrack';
 
-  constructor(
-    private constants: DoubtfireConstants,
-    private injector: Injector,
-  ) {}
+  constructor(private constants: DoubtfireConstants) {}
 
   ngOnInit(): void {
     this.constants.ExternalName.subscribe((name) => {
@@ -21,7 +20,9 @@ export class PortfolioWelcomeStepComponent implements OnInit {
   }
 
   goNextStep() {
-    // TODO: remove this once parent component is migrated
-    this.injector.get('$scope').advanceActiveTab(1);
+    if (this.onAdvanceActiveTab) {
+      this.onAdvanceActiveTab(1);
+      return;
+    }
   }
 }
