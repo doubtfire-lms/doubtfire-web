@@ -154,6 +154,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['files']) {
       this.createUploadZones(changes.files.currentValue);
+      this.updateReadyState(this.readyToUpload());
     }
   }
 
@@ -178,17 +179,17 @@ export class FileUploaderComponent implements OnInit, OnChanges {
       }
     }
     this.refreshShownUploadZones();
+    this.updateReadyState(this.readyToUpload());
   }
 
   clearEnqueuedUpload(upload: UploadZone) {
     upload.model = null;
     this.refreshShownUploadZones();
+    this.updateReadyState(this.readyToUpload());
   }
 
   readyToUpload(): boolean {
-    const allSelected = this.uploadZones.every((zone) => zone.model?.length);
-    this.updateReadyState(allSelected);
-    return allSelected;
+    return this.uploadZones.every((zone) => zone.model?.length);
   }
 
   updateReadyState(ready: boolean) {
@@ -201,8 +202,10 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     this.isUploading = false;
     this.showUploader = !this.asButton;
     for (const upload of this.uploadZones) {
-      this.clearEnqueuedUpload(upload);
+      upload.model = null;
     }
+    this.refreshShownUploadZones();
+    this.updateReadyState(this.readyToUpload());
   }
 
   initiateUploadInternal() {

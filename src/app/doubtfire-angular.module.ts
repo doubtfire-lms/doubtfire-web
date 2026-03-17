@@ -77,7 +77,6 @@ import {
   plagiarismReportModalProvider,
   rootScopeProvider,
   UnitStudentEnrolmentModalProvider,
-  uploadSubmissionModalProvider,
   visualisationsProvider,
 } from './ajs-upgraded-providers';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
@@ -329,6 +328,7 @@ import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/direc
 import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
 import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+import {UploadSubmissionModalComponent} from './tasks/modals/upload-submission-modal/upload-submission-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
@@ -580,6 +580,7 @@ const GANTT_CHART_CONFIG = {
     ModerationComponent,
     TutorNotesModalComponent,
     FeedbackAppealModalComponent,
+    UploadSubmissionModalComponent,
     ConfirmModerationModalComponent,
     TaskClaimComponent,
     TutorialsComponent,
@@ -642,7 +643,6 @@ const GANTT_CHART_CONFIG = {
     rootScopeProvider,
     calendarModalProvider,
     aboutDoubtfireModalProvider,
-    uploadSubmissionModalProvider,
     gradeTaskModalProvider,
     analyticsServiceProvider,
     dateServiceProvider,

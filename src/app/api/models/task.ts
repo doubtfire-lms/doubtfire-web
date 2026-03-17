@@ -25,10 +25,10 @@ import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable, map} from 'rxjs';
-import {uploadSubmissionModal} from 'src/app/ajs-upgraded-providers';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MappingFunctions} from '../services/mapping-fn';
 import { GradeTaskModalService } from 'src/app/tasks/modals/grade-task-modal/grade-task-modal.service';
+import {UploadSubmissionModalService} from 'src/app/tasks/modals/upload-submission-modal/upload-submission-modal.service';
 
 export const FeedbackModerationAction = {
   ShowMore: 'show_more',
@@ -756,7 +756,7 @@ export class Task extends Entity {
     if (!isTestSubmission) {
       this.status = status;
     }
-    const uploadModal: any = AppInjector.get(uploadSubmissionModal);
+    const uploadModal: UploadSubmissionModalService = AppInjector.get(UploadSubmissionModalService);
 
     const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission);
     // Modal failed to present
