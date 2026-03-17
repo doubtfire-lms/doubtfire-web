@@ -50,7 +50,6 @@ import 'build/src/app/projects/states/dashboard/directives/directives.js';
 import 'build/src/app/projects/states/dashboard/directives/student-task-list/student-task-list.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.js';
 import 'build/src/app/projects/states/feedback/feedback.js';
-import 'build/src/app/projects/states/groups/groups.js';
 import 'build/src/app/projects/states/index/index.js';
 import 'build/src/app/projects/states/states.js';
 import 'build/src/app/units/states/analytics/analytics.js';

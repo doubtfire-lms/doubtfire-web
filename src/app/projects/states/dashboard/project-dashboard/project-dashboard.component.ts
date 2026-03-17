@@ -80,7 +80,6 @@ export class ProjectDashboardComponent implements OnInit {
     // projectTasks = this.projectService.loadProject
     this.project$.subscribe((project) => {
       console.log(project);
-      this.globalStateService.setView(ViewType.PROJECT, project);
     });
 
     this.dragMoveAudited$ = this.dragMove$.pipe(

@@ -77,7 +77,6 @@ export class PortfolioStateComponent implements OnInit, OnDestroy {
       }
 
       this.project = project;
-      this.globalStateService.setView(ViewType.PROJECT, project);
       this.setInitialActiveTab();
     });
   }
