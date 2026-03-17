@@ -60,7 +60,7 @@ import 'build/src/app/units/states/states.js';
 import 'build/src/app/units/states/students-list/students-list.js';
 // import 'build/src/app/units/states/tasks/viewer/viewer.js';
 import 'build/src/app/units/states/tasks/definition/definition.js';
-import 'build/src/app/units/states/tasks/inbox/inbox.js';
+// import 'build/src/app/units/states/tasks/inbox/inbox.js';
 import 'build/src/app/units/states/tasks/moderation/moderation.js';
 import 'build/src/app/units/states/tasks/overflow/overflow.js';
 import 'build/src/app/units/states/tasks/tasks.js';

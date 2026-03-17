@@ -44,7 +44,7 @@
   @for (unitRole of unitRoles; track unitRole) {
     @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
       <div
-        uiSref="units/tasks/inbox"
+        uiSref="units2/tasks/inbox"
         [uiParams]="{unitId: unitRole.unit.id}"
         mat-menu-item
         class="w-full"

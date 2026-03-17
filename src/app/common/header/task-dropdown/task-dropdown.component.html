@@ -8,10 +8,10 @@
       </span>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item uiSref="units/tasks/inbox" [uiParams]="{unitId: currentUnit.id}">
+      <button mat-menu-item uiSref="units2/tasks/inbox" [uiParams]="{unitId: currentUnit.id}">
         <mat-icon aria-label="Inbox icon" fontIcon="inbox"></mat-icon> <span>Inbox</span>
       </button>
-      <button mat-menu-item uiSref="units/tasks/definition" [uiParams]="{unitId: currentUnit.id}">
+      <button mat-menu-item uiSref="units2/tasks/definition" [uiParams]="{unitId: currentUnit.id}">
         <mat-icon aria-label="Task Explorer Icon" fontIcon="pageview"></mat-icon> Explorer
       </button>
       <button mat-menu-item uiSref="units2/tasks" [uiParams]="{unitId: currentUnit.id}">
@@ -96,11 +96,11 @@
       }
       @if (unitRole && currentView === 'UNIT') {
         <!-- <p class="task-dropdown-heading">Tasks</p> -->
-        <button uiSref="units/tasks/inbox" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+        <button uiSref="units2/tasks/inbox" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Inbox icon" fontIcon="inbox"></mat-icon> <span>Inbox</span>
         </button>
         <button
-          uiSref="units/tasks/definition"
+          uiSref="units2/tasks/definition"
           [uiParams]="{unitId: unitRole.unit.id}"
           mat-menu-item
         >
@@ -109,7 +109,7 @@
 
         @if (isMentor || unitRole.role === 'Convenor') {
           <button
-            uiSref="units/tasks/moderation"
+            uiSref="units2/tasks/moderation"
             [uiParams]="{unitId: unitRole.unit.id}"
             mat-menu-item
           >
@@ -119,7 +119,7 @@
 
         @if (canMarkOverflowTask) {
           <button
-            uiSref="units/tasks/overflow"
+            uiSref="units2/tasks/overflow"
             [uiParams]="{unitId: unitRole.unit.id}"
             mat-menu-item
           >

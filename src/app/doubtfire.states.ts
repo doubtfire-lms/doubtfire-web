@@ -14,6 +14,12 @@ import {ProjectGroupsStateComponent} from './projects/states/groups/project-grou
 import {UnitRootState} from './units/unit-root-state.component';
 import {ProjectRootState} from './projects/states/project-root-state.component';
 import {TaskViewerState} from './units/task-viewer/task-viewer-state.component';
+import {
+  UnitTaskDefinitionState,
+  UnitTaskInboxState,
+  UnitTaskModerationState,
+  UnitTaskOverflowState,
+} from './units/states/tasks/inbox/unit-task-inbox-state.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
@@ -717,6 +723,10 @@ export const doubtfireStates = [
   ProjectGroupsState,
   UnitRootState,
   TaskViewerState,
+  UnitTaskInboxState,
+  UnitTaskDefinitionState,
+  UnitTaskModerationState,
+  UnitTaskOverflowState,
   ScormPlayerNormalState,
   ScormPlayerReviewState,
   ScormPlayerStudentReviewState,

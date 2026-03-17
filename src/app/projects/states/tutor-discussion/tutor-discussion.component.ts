@@ -165,7 +165,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
     if (!this.project) {
       // Exiting the route entirely
       if (this.unitId) {
-        this.route.stateService.go('units/tasks/inbox', {
+        this.route.stateService.go('units2/tasks/inbox', {
           unitId: this.unitId,
         });
       } else {
