@@ -294,6 +294,7 @@ const ProjectDashboardState: NgHybridStateDeclaration = {
     },
   },
   data: {
+    task: 'Dashboard',
     pageTitle: 'Unit Dashboard',
   },
 };
