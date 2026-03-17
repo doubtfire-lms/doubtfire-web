@@ -352,6 +352,7 @@ import {GroupMemberListComponent} from './groups/group-member-list/group-member-
 import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
 import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
+import {ProjectGroupsStateComponent} from './projects/states/groups/project-groups-state.component';
 import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.component';
 import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-state.component';
 import {PortfolioLearningSummaryReportStepComponent} from './projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.component';
@@ -605,6 +606,7 @@ const GANTT_CHART_CONFIG = {
     UnitGroupsComponent,
     RolloverComponent,
     ProjectGroupsComponent,
+    ProjectGroupsStateComponent,
     GroupMemberContributionAssignerComponent,
     CsvResultModalComponent,
     CsvUploadModalComponent,

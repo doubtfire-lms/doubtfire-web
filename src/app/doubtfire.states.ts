@@ -10,6 +10,7 @@ import {FUsersComponent} from './admin/states/users/users.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
 import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
 import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-state.component';
+import {ProjectGroupsStateComponent} from './projects/states/groups/project-groups-state.component';
 import {UnitRootState} from './units/unit-root-state.component';
 import {ProjectRootState} from './projects/states/project-root-state.component';
 import {TaskViewerState} from './units/task-viewer/task-viewer-state.component';
@@ -310,6 +311,21 @@ const PortfolioCreationState: NgHybridStateDeclaration = {
   },
   data: {
     task: 'Portfolio Creation',
+    pageTitle: '_Home_',
+  },
+};
+
+const ProjectGroupsState: NgHybridStateDeclaration = {
+  name: 'projects2/groups2',
+  parent: 'projects2',
+  url: '/groups2',
+  views: {
+    projectView: {
+      component: ProjectGroupsStateComponent,
+    },
+  },
+  data: {
+    task: 'Groups List',
     pageTitle: '_Home_',
   },
 };
@@ -702,6 +718,7 @@ export const doubtfireStates = [
   ProjectRootState,
   ProjectDashboardState,
   PortfolioCreationState,
+  ProjectGroupsState,
   UnitRootState,
   TaskViewerState,
   ScormPlayerNormalState,
