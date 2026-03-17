@@ -1,4 +1,4 @@
-import {Component, Injector, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {Unit} from 'src/app/api/models/unit';
@@ -17,6 +17,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 export class PortfolioReviewStepComponent implements OnInit {
   @Input() project: Project;
   @Input() unit: Unit;
+  @Input() onAdvanceActiveTab?: (index: 1 | -1) => void;
 
   public externalName: string = 'OnTrack';
 
@@ -28,7 +29,6 @@ export class PortfolioReviewStepComponent implements OnInit {
   };
 
   constructor(
-    private injector: Injector,
     private constants: DoubtfireConstants,
     private projectService: ProjectService,
     private taskService: TaskService,
@@ -126,6 +126,9 @@ export class PortfolioReviewStepComponent implements OnInit {
   }
 
   goBack() {
-    this.injector.get('$scope').advanceActiveTab(-1);
+    if (this.onAdvanceActiveTab) {
+      this.onAdvanceActiveTab(-1);
+      return;
+    }
   }
 }

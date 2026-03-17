@@ -353,6 +353,7 @@ import {GroupSelectorComponent} from './groups/group-selector/group-selector.com
 import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.component';
+import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-state.component';
 import {PortfolioLearningSummaryReportStepComponent} from './projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.component';
 import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
@@ -595,6 +596,7 @@ const GANTT_CHART_CONFIG = {
     PortfolioWelcomeStepComponent,
     PortfolioLearningSummaryReportStepComponent,
     PortfolioAddExtraFilesStepComponent,
+    PortfolioStateComponent,
     PortfoliosComponent,
     PortfoliosListComponent,
     PortfoliosProjectProgressComponent,

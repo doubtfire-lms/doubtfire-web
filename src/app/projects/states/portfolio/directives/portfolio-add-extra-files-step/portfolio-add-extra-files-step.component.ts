@@ -1,4 +1,4 @@
-import {Component, Injector, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
 import {Project} from 'src/app/api/models/project';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -10,6 +10,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 })
 export class PortfolioAddExtraFilesStepComponent implements OnInit {
   @Input() project: Project;
+  @Input() onAdvanceActiveTab?: (index: 1 | -1) => void;
 
   public uploadType: 'document' | 'code' | 'image' = 'document';
 
@@ -27,10 +28,7 @@ export class PortfolioAddExtraFilesStepComponent implements OnInit {
     kind: 'document',
   };
 
-  constructor(
-    private injector: Injector,
-    private alertService: AlertService,
-  ) {}
+  constructor(private alertService: AlertService) {}
 
   public readonly icons = {
     document: 'article_outlined',
@@ -85,9 +83,11 @@ export class PortfolioAddExtraFilesStepComponent implements OnInit {
     });
   }
 
-  // TODO: remove this once parent component is migrated
   advanceActiveTab(index: 1 | -1) {
-    this.injector.get('$scope').advanceActiveTab(index);
+    if (this.onAdvanceActiveTab) {
+      this.onAdvanceActiveTab(index);
+      return;
+    }
   }
 
   addNewFilesToPortfolio(newFile: {kind: string; name: string; idx: number}) {
