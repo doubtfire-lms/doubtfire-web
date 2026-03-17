@@ -488,19 +488,17 @@ const SuccessCloseState: NgHybridStateDeclaration = {
  * Allow the uesr to plan the task due dates for their project.
  */
 const projectPlanState: NgHybridStateDeclaration = {
-  name: 'project/plan',
-  parent: 'projects/index',
-  url: '/plan?:taskDef?',
-  component: ProjectPlanComponent,
+  name: 'projects2/plan2',
+  parent: 'projects2',
+  url: '/plan2?:taskDef?',
   params: {
     taskDef: {value: null, squash: true, dynamic: true},
   },
-  // views: {
-  //   main: {
-  //     // Main body links to angular component
-  //     component: ProjectPlanComponent,
-  //   },
-  // },
+  views: {
+    projectView: {
+      component: ProjectPlanComponent,
+    },
+  },
   data: {
     pageTitle: 'Task Plan',
     task: 'Plan Tasks',
