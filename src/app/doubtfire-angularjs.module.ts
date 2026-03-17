@@ -54,7 +54,6 @@ import 'build/src/app/projects/states/groups/groups.js';
 import 'build/src/app/projects/states/index/index.js';
 import 'build/src/app/projects/states/portfolio/directives/directives.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.js';
-import 'build/src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.js';
 import 'build/src/app/projects/states/portfolio/portfolio.js';
 import 'build/src/app/projects/states/states.js';
 import 'build/src/app/units/states/analytics/analytics.js';
