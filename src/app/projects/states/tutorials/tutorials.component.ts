@@ -1,18 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {Tutorial, UnitService} from 'src/app/api/models/doubtfire-model';
-import {Project} from 'src/app/api/models/project';
-import {Unit} from 'src/app/api/models/unit';
-import {ProjectService} from 'src/app/api/services/project.service';
+import {Observable, Subscription} from 'rxjs';
+import {Project, Tutorial, Unit} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-tutorials',
   templateUrl: './tutorials.component.html',
   styleUrls: ['./tutorials.component.scss'],
 })
-export class TutorialsComponent implements OnInit {
-  @Input() projectId: number;
+export class TutorialsComponent implements OnInit, OnDestroy {
+  @Input() public project$: Observable<Project>;
 
   filteredTutorials: Tutorial[] = [];
 
@@ -32,30 +30,25 @@ export class TutorialsComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Tutorial>([]);
 
-  constructor(
-    private projectService: ProjectService,
-    private unitService: UnitService,
-  ) {}
+  private projectSub?: Subscription;
+
+  constructor() {}
 
   ngOnInit(): void {
-    this.projectService.fetch(this.projectId).subscribe({
-      next: (project) => {
-        this.unitService.get(project.unit.id).subscribe({
-          next: (unit) => {
-            this.unit = unit;
-            this.project = project;
-            this.filteredTutorials = this.tutorialCampusFilter([...unit.tutorials], this.project);
-            this.dataSource.data = this.filteredTutorials;
-          },
-          error: (error) => {
-            console.error('Error fetching unit:', error);
-          },
-        });
-      },
-      error: (error) => {
-        console.error('Error fetching project:', error);
-      },
+    this.projectSub = this.project$?.subscribe((project) => {
+      if (!project || !project.unit) {
+        return;
+      }
+
+      this.project = project;
+      this.unit = project.unit;
+      this.filteredTutorials = this.tutorialCampusFilter([...(this.unit.tutorials ?? [])], project);
+      this.dataSource.data = this.filteredTutorials;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.projectSub?.unsubscribe();
   }
 
   /**
@@ -106,8 +99,19 @@ export class TutorialsComponent implements OnInit {
     return `${formattedHours}:${formattedMinutes}`;
   }
 
-  private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
-    return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
+  private sortCompare(
+    aValue: number | string | undefined,
+    bValue: number | string | undefined,
+    isAsc: boolean,
+  ) {
+    const left = aValue ?? '';
+    const right = bValue ?? '';
+
+    if (left === right) {
+      return 0;
+    }
+
+    return (left < right ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   sortTableData(sort: Sort) {

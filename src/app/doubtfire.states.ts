@@ -538,20 +538,18 @@ const TutorDiscussionState: NgHybridStateDeclaration = {
 };
 
 const TutorialState: NgHybridStateDeclaration = {
-  name: 'projects/tutorials',
-  url: '/tutorials/project/:projectId',
+  name: 'projects2/tutorials2',
+  parent: 'projects2',
+  url: '/tutorials2',
   views: {
-    main: {
-      component: TutorialsComponent, // Link to the Angular component
+    projectView: {
+      component: TutorialsComponent,
     },
-  },
-  resolve: {
-    projectId: ['$stateParams', ($stateParams) => $stateParams.projectId], // Resolve the project object
   },
   data: {
     task: 'Tutorial List',
     pageTitle: '_Home_',
-    roleWhiteList: ['Tutor', 'Convenor', 'Admin', 'Student', 'Auditor'], // Roles allowed to access this state
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student', 'Auditor'],
   },
 };
 
