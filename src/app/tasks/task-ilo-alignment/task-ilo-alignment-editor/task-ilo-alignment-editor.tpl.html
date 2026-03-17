@@ -105,12 +105,13 @@
         Import links between tasks and outcomes from a CSV containing: unit_code, learning_outcome, task_abbr, rating.
       </div>
       <div class="panel-body">
-        <file-uploader
-          files="taskAlignmentCSV"
-          url="source.taskAlignmentCSVUploadUrl"
-          is-uploading="isTaskAlignmentCSVUploading"
-          on-success="onTaskAlignmentCSVSuccess"
-          on-complete="onTaskAlignmentCSVComplete"></file-uploader>
+        <f-file-uploader
+          [files]="taskAlignmentCSV"
+          [url]="source.taskAlignmentCSVUploadUrl"
+          [is-uploading]="isTaskAlignmentCSVUploading"
+          [on-success]="onTaskAlignmentCSVSuccess"
+          [on-complete]="onTaskAlignmentCSVComplete"
+        ></f-file-uploader>
       </div>
       <div class="panel-heading">
         <h3 class="panel-title">Export Task Outcome Alignments</h3>

@@ -13,7 +13,7 @@
     <ul>
       <li>{{ grades.names[taskDef?.targetGrade] }} Task</li>
 
-      @if (taskDef.unit.allowFlexibleDates) {
+      @if (unit?.allowFlexibleDates ?? taskDef?.unit?.allowFlexibleDates) {
         <li>I'm planning to <b>start</b> this task by {{ startDate() | date: 'EEE d MMM' }}.</li>
         <li [hidden]="!task?.extensions || task?.extensions <= 0">
           The due date has been <b>extended</b> by {{ task?.extensions }} week{{

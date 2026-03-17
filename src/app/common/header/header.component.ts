@@ -1,14 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { aboutDoubtfireModal, calendarModal } from 'src/app/ajs-upgraded-providers';
-import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/check-for-update.service';
-import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
-import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
-import { UserService } from 'src/app/api/services/user.service';
-import { AuthenticationService, Project, Task, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
-import { Subscription } from 'rxjs';
-import { MediaObserver } from 'ng-flex-layout';
-import { DoubtfireConstants, LogoSettings } from 'src/app/config/constants/doubtfire-constants';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {aboutDoubtfireModal, calendarModal} from 'src/app/ajs-upgraded-providers';
+import {CheckForUpdateService} from 'src/app/sessions/service-worker-updater/check-for-update.service';
+import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {IsActiveUnitRole} from '../pipes/is-active-unit-role.pipe';
+import {UserService} from 'src/app/api/services/user.service';
+import {
+  AuthenticationService,
+  Project,
+  Task,
+  Unit,
+  UnitRole,
+  User,
+} from 'src/app/api/models/doubtfire-model';
+import {Subscription} from 'rxjs';
+import {MediaObserver} from 'ng-flex-layout';
+import {DoubtfireConstants, LogoSettings} from 'src/app/config/constants/doubtfire-constants';
 import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
 import {QrModalService} from '../modals/qr-modal/qr-modal.service';
@@ -94,8 +101,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.globalState.projectsSubject.subscribe({
         next: (projects) => {
-          if (projects == null) return;
-          this.projects = projects.filter((project) => project.unit.myRole === 'Student');
+          if (!projects) return;
+          this.projects = projects.filter((project) => project?.unit?.myRole === 'Student');
         },
         error: (err) => {
           console.log(`Error fetching projects: ${err}`);
@@ -112,7 +119,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (this.currentView == ViewType.PROJECT) {
             this.updateSelectedProject(currentViewAndEntity.entity as Project);
           } else if (this.currentView == ViewType.UNIT) {
-            this.updateSelectedUnitRole(currentViewAndEntity.entity as UnitRole);
+            if (currentViewAndEntity.entity instanceof UnitRole) {
+              this.updateSelectedUnitRole(currentViewAndEntity.entity as UnitRole);
+            } else if (currentViewAndEntity.entity instanceof Unit) {
+              this.updateSelectedUnit(currentViewAndEntity.entity as Unit);
+            }
           } else {
             this.currentUnit = null;
             this.currentProject = null;
@@ -133,7 +144,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           console.log(`Error getting settings: ${err}`);
-        }
+        },
       }),
     );
 
@@ -191,6 +202,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentProject = null;
     this.currentUnitRole = unitRole;
     this.currentUnit = unitRole.unit;
+  }
+
+  updateSelectedUnit(unit: Unit): void {
+    this.currentUnit = unit;
+    this.currentProject = null;
+
+    this.currentUnitRole = unit.staff.find(
+      (ur) => ur.user?.id === this.userService.currentUser?.id,
+    );
+
+    if (this.currentUnitRole) {
+      // Re-map Unit onto UnitRole object
+      this.currentUnitRole.unit = unit;
+    }
   }
 
   update(): void {

@@ -10,7 +10,10 @@
       "prefix": "f",
       "schematics": {
         "@schematics/angular:application": {
-          "strict": false
+          "strict": false,
+          "standalone": false,
+          "style": "scss",
+          "skipTests": true
         }
       },
       "architect": {
@@ -158,7 +161,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html", "src/**/*.html"]
           }
         },
         "eslint": {
@@ -171,9 +174,6 @@
     }
   },
   "schematics": {
-    "@schematics/angular:component": {
-      "style": "scss"
-    },
     "@angular-eslint/schematics:application": {
       "setParserOptionsProject": true
     },

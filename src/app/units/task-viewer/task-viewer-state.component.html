@@ -1,0 +1,56 @@
+<div *ngIf="unit$ | async as unit">
+  <!-- Wide Window Display -->
+  <div fxLayout="column" fxFill fxHide fxShow.gt-sm>
+    <div fxLayoutAlign="center stretch" fxFill>
+      <!-- Panel 1 -->
+      <div #tasklistpanel id="tasklistpanel" class="vertical-panel min-w-12">
+        <f-unit-task-list
+          [mode]="'all-tasks'"
+          [taskDefinitions]="unit.taskDefinitions"
+          [selectedTaskDefinition$]="selectedTaskDefinition$"
+        ></f-unit-task-list>
+      </div>
+
+      <div class="vertical-spacer"></div>
+
+      <!-- Panel 2 -->
+      <div class="vertical-panel w-full h-full">
+        <div class="flex flex-col h-full" *ngIf="selectedTaskDefinition$ | async as selectedTaskDef">
+          <div class="shrink">
+            <f-task-details-view [taskDef]="selectedTaskDef" [unit]="unit"></f-task-details-view>
+          </div>
+          <f-task-sheet-view class="h-full" [taskDef]="selectedTaskDef"> </f-task-sheet-view>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Narrow Window / Mobile Display -->
+  <div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
+    <div class="vertical-panel mobile" [hidden]="selectedTaskDefinition$ | async">
+      <f-unit-task-list
+        [mode]="'all-tasks'"
+        [taskDefinitions]="unit.taskDefinitions"
+        [selectedTaskDefinition$]="selectedTaskDefinition$"
+      ></f-unit-task-list>
+    </div>
+
+    <div [hidden]="!taskSelected" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
+      <div class="flex items-center">
+        <button
+          mat-icon-button
+          aria-label="Back to task list"
+          matTooltip="Back to list"
+          (click)="clearTaskSelection()"
+        >
+          <mat-icon>arrow_back_ios_new</mat-icon>
+        </button>
+      </div>
+
+      <div fxFlex class="vertical-panel mobile">
+        <f-task-details-view [taskDef]="selectedTaskDef" [unit]="unit"></f-task-details-view>
+      </div>
+      <f-task-sheet-view class="h-full" [taskDef]="selectedTaskDef"> </f-task-sheet-view>
+    </div>
+  </div>
+</div>

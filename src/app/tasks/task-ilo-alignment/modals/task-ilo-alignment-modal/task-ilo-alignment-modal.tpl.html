@@ -14,7 +14,7 @@
         <label class="text-muted" ng-show="alignment.description != null">
           Provided Rationale
         </label>
-        <div ng-bind-html="(alignment.description || 'No rationale provided') | markdown | to_trusted"></div>
+        <div ng-bind-html="(alignment.description || 'No rationale provided')"></div>
         <div class="small" ng-hide="alignment.description">Click to add one</div>
       </div>
       <div ng-if="editingRationale" class="clearfix">

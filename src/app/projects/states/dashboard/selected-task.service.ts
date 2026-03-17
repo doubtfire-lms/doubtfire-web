@@ -5,6 +5,7 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {GlobalStateService} from '../index/global-state.service';
 
 export enum DashboardViews {
+  details,
   submission,
   task,
   similarity,

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { FileDownloaderService } from '../file-downloader/file-downloader.service';
 import { PdfViewerPanelComponent } from './pdf-viewer-panel.component';
@@ -12,10 +12,10 @@ describe('PdfViewerPanelComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [PdfViewerPanelComponent],
-        imports: [HttpClientModule],
-        providers: [{ provide: FileDownloaderService, useValue: fileDownloaderServiceStub }],
-      }).compileComponents();
+    declarations: [PdfViewerPanelComponent],
+    imports: [],
+    providers: [{ provide: FileDownloaderService, useValue: fileDownloaderServiceStub }, provideHttpClient(withInterceptorsFromDi())]
+}).compileComponents();
     })
   );
 

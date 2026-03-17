@@ -14,7 +14,6 @@ angular.module('doubtfire.projects.states.portfolio', [
     data:
       task: "Portfolio Creation"
       pageTitle: "_Home_"
-      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student', 'Auditor']
    }
 )
 

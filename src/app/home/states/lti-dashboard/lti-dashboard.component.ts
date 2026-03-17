@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, Inject, Input} from '@angular/core';
 import {StateService, UIRouter} from '@uirouter/angular';
-import {csvResultModalService} from 'src/app/ajs-upgraded-providers';
 import {ProjectService, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -8,6 +7,7 @@ import {LtiService} from 'src/app/api/services/lti.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
@@ -27,8 +27,7 @@ export class LtiDashboardComponent implements AfterViewInit {
     private unitService: UnitService,
     private projectService: ProjectService,
     private confirmationModalService: ConfirmationModalService,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    @Inject(csvResultModalService) private _csvResultModalService: any,
+    private csvResultModalService: CsvResultModalService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
 
@@ -168,7 +167,7 @@ export class LtiDashboardComponent implements AfterViewInit {
                   .show('Syncing users into OnTrack', job.id)
                   .subscribe((completedJob) => {
                     this.isSyncingEnrolments = false;
-                    this._csvResultModalService.show(
+                    this.csvResultModalService.show(
                       'Enrolment sync',
                       JSON.parse(completedJob.result),
                     );
@@ -200,7 +199,7 @@ export class LtiDashboardComponent implements AfterViewInit {
           next: (result) => {
             this.isSyncingGrades = false;
             this.alertsService.success('Successfully synced grades from OnTrack', 5000);
-            this._csvResultModalService.show('Grade sync', result);
+            this.csvResultModalService.show('Grade sync', result);
           },
           error: (error) => {
             console.log(error);

@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {TransitionService} from '@uirouter/angular';
+import {AuthenticationService} from '../api/services/authentication.service';
 import {UserService} from '../api/services/user.service';
+import {DoubtfireConstants} from '../config/constants/doubtfire-constants';
 import {DoubtfireAngularModule} from '../doubtfire-angular.module';
 import {GlobalStateService} from '../projects/states/index/global-state.service';
-import {DoubtfireConstants} from '../config/constants/doubtfire-constants';
-import {AuthenticationService} from '../api/services/authentication.service';
 
 /**
  * The TransitionHooksService is responsible for intercepting transitions between states.
@@ -44,6 +44,19 @@ export class TransitionHooksService {
         this.globalState.setInboxState();
       } else {
         this.globalState.setNotInboxState();
+      }
+
+      // Check authorization whitelist
+      if (
+        toStateData.roleWhitelist &&
+        !this.authenticationService.isAuthorised(toStateData.roleWhitelist)
+      ) {
+        if (authenticationService.isAuthenticated()) {
+          return transition.router.stateService.target('unauthorised');
+        } else if (toState !== 'sign_in') {
+          return transition.router.stateService.target('sign_in');
+        }
+        return false;
       }
 
       // Adjust settings such as headers

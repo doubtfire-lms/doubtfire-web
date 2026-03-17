@@ -7,6 +7,7 @@ import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from '../../selected-task.service';
 import {DashboardViews} from '../../selected-task.service';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 
 @Component({
   selector: 'f-task-dashboard',
@@ -16,7 +17,6 @@ import {DashboardViews} from '../../selected-task.service';
 export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
   @Input() pdfUrl: string;
-
   public DashboardViews = DashboardViews;
 
   public taskStatusData: any;
@@ -30,6 +30,25 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
   public currentView: DashboardViews;
 
+  public currentIndex;
+
+  onTabChange(event: MatTabChangeEvent) {
+    switch (event.index) {
+      case 0:
+        this.setSelectedDashboardView(DashboardViews.details);
+        break;
+      case 1:
+        this.setSelectedDashboardView(DashboardViews.task);
+        break;
+      case 2:
+        this.setSelectedDashboardView(DashboardViews.submission);
+        break;
+      case 3:
+        this.setSelectedDashboardView(DashboardViews.similarity);
+        break;
+    }
+  }
+
   constructor(
     private doubtfire: DoubtfireConstants,
     private taskService: TaskService,
@@ -40,9 +59,10 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.selectedTaskService.currentView$.next(DashboardViews.submission);
+    this.setSelectedDashboardView(DashboardViews.details);
     this.selectedTaskService.currentView$.subscribe((view) => {
       this.currentView = view;
+      this.currentIndex = this.tabIndexForView(view);
     });
 
     this.taskStatusData = {
@@ -64,6 +84,24 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
         taskSubmissionPdfAttachmentUrl: changes.task.currentValue.submissionUrl(true),
         taskFilesUrl: changes.task.currentValue.submittedFilesUrl(),
       };
+      this.setSelectedDashboardView(DashboardViews.details);
+    }
+  }
+
+  setSelectedDashboardView(view: DashboardViews): void {
+    this.selectedTaskService.currentView$.next(view);
+    this.currentView = view;
+    this.currentIndex = this.tabIndexForView(view);
+  }
+
+  private tabIndexForView(view: DashboardViews): number {
+    switch (view) {
+      case DashboardViews.task:
+        return 1;
+      case DashboardViews.submission:
+        return 2;
+      default:
+        return 0;
     }
   }
 

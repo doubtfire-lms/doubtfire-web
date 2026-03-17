@@ -13,18 +13,18 @@ angular.module('doubtfire.units.states.index', [])
         templateUrl: "units/states/index/index.tpl.html"
     data:
       pageTitle: "_Home_"
-      roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor']
+      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor']
   }
 )
 
-.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newUnitService, newProjectService, listenerService, GlobalStateService, newUserService, FeedbackTemplateService) ->
+.controller("UnitsIndexStateCtrl", ($scope, $rootScope, $state, $stateParams, newUnitService, newProjectService, listenerService, globalStateService, newUserService, alertService, FeedbackTemplateService) ->
   # Error - required unitId is missing!
   unitId = +$stateParams.unitId
   return $state.go('home') unless unitId
 
-  GlobalStateService.onLoad () ->
+  globalStateService.onLoad () ->
     # Load assessing unit role
-    $scope.unitRole = GlobalStateService.loadedUnitRoles.currentValues.find((unitRole) -> unitRole.unit.id == unitId)
+    $scope.unitRole = globalStateService.loadedUnitRoles.currentValues.find((unitRole) -> unitRole.unit.id == unitId)
 
     if (! $scope.unitRole?) && ( newUserService.currentUser.role == "Admin" || newUserService.currentUser.role == "Auditor" )
       $scope.unitRole = newUserService.adminOrAuditorRoleFor(newUserService.currentUser.role, unitId, newUserService.currentUser)
@@ -32,7 +32,7 @@ angular.module('doubtfire.units.states.index', [])
     # Go home if no unit role was found
     return $state.go('home') unless $scope.unitRole?
 
-    GlobalStateService.setView("UNIT", $scope.unitRole)
+    globalStateService.setView("UNIT", $scope.unitRole)
 
     newUnitService.get(unitId).subscribe({
       next: (unit)->

@@ -17,11 +17,11 @@ angular.module('doubtfire.units.states.edit', [
       roleWhitelist: ['Convenor', 'Admin', 'Auditor']
    }
 )
-.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, alertService, analyticsService, newUnitService, newUserService, GlobalStateService) ->
-  GlobalStateService.onLoad () ->
+.controller('EditUnitStateCtrl', ($scope, $state, $stateParams, alertService, analyticsService, newUnitService, newUserService, globalStateService) ->
+  globalStateService.onLoad () ->
     $scope.currentStaff = $scope.unit.staff
 
-    $scope.assessingUnitRole = GlobalStateService.loadedUnitRoles.currentValues.find((role) -> role.unit == $scope.unit)
+    $scope.assessingUnitRole = globalStateService.loadedUnitRoles.currentValues.find((role) -> role.unit == $scope.unit)
 
     newUserService.getTutors().subscribe( (tutors) -> $scope.staff = tutors )
 

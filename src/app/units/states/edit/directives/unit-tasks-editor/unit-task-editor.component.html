@@ -66,7 +66,7 @@
                   appearance="outline"
                   class="w-[250px] flex justify-center items-center pt-[22px]"
                   [ngClass]="{
-                    'date-error': isStartAfterTarget(td, g)
+                    'date-error': isStartAfterTarget(td, g),
                   }"
                 >
                   <mat-label> Start Date </mat-label>
@@ -76,7 +76,7 @@
                     [ngModel]="getGradeStartDate(td, g)"
                     (ngModelChange)="setGradeStartDate(td, g, $event)"
                     [ngClass]="{
-                      'fallback-date': isFallbackStartDate(td, g)
+                      'fallback-date': isFallbackStartDate(td, g),
                     }"
                     placeholder="Select date"
                   />
@@ -88,7 +88,7 @@
                   appearance="outline"
                   class="w-[250px] flex justify-center items-center"
                   [ngClass]="{
-                    'date-error': isStartAfterTarget(td, g)
+                    'date-error': isStartAfterTarget(td, g),
                   }"
                 >
                   <mat-label> Target Date </mat-label>
@@ -98,7 +98,7 @@
                     [ngModel]="getGradeDueDate(td, g)"
                     (ngModelChange)="setGradeDueDate(td, g, $event)"
                     [ngClass]="{
-                      'fallback-date': isFallbackTargetDate(td, g)
+                      'fallback-date': isFallbackTargetDate(td, g),
                     }"
                     placeholder="Select date"
                   />
@@ -125,7 +125,7 @@
       class="self-start md:sticky md:top-4 md:shrink-0"
       [ngClass]="{
         'w-full md:w-[420px]': !isTaskListCollapsed,
-        'w-full md:w-[92px]': isTaskListCollapsed
+        'w-full md:w-[92px]': isTaskListCollapsed,
       }"
     >
       <div class="overflow-hidden rounded-2xl bg-white md:flex md:h-[calc(100vh-2rem)] md:flex-col">
@@ -133,7 +133,7 @@
           class="text-left text-[15px]"
           [ngClass]="{
             'px-1': !isTaskListCollapsed,
-            'px-0': isTaskListCollapsed
+            'px-0': isTaskListCollapsed,
           }"
         >
           <div class="flex items-center" [ngClass]="{'justify-center': isTaskListCollapsed}">
@@ -189,7 +189,7 @@
                   [matTooltipDisabled]="!isTaskListCollapsed"
                   [matTooltipShowDelay]="250"
                   [ngClass]="{
-                    'bg-[#e7e7ff]': isSelectedTaskDefinition(taskDefinition)
+                    'bg-[#e7e7ff]': isSelectedTaskDefinition(taskDefinition),
                   }"
                 >
                   <div class="flex w-full items-center px-[6px]">

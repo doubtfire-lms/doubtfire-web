@@ -1,44 +1,44 @@
+import {LiveAnnouncer} from '@angular/cdk/a11y';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {
   AfterViewInit,
   Component,
   computed,
+  effect,
   inject,
-  Inject,
   Input,
   model,
+  OnChanges,
   OnDestroy,
   signal,
-  effect,
-  ViewChild,
-  OnChanges,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatChipInputEvent} from '@angular/material/chips';
 import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {isEqual} from 'lodash';
+import {Subscription} from 'rxjs';
 import {
-  TaskDefinition,
-  Unit,
+  FeedbackTemplateService,
   LearningOutcome,
   LearningOutcomeService,
+  TaskDefinition,
   TaskService,
-  FeedbackTemplateService,
+  Unit,
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {MatSort, Sort} from '@angular/material/sort';
-import {
-  confirmationModal,
-  csvResultModalService,
-  csvUploadModalService,
-} from 'src/app/ajs-upgraded-providers';
-import {Subscription} from 'rxjs';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {FileDownloaderService} from '../file-downloader/file-downloader.service';
-import {isEqual} from 'lodash';
-import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-csv-download-modal.service';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
+import {
+  CsvResult,
+  CsvResultModalService,
+} from '../modals/csv-result-modal/csv-result-modal.service';
+import {CsvUploadModalService} from '../modals/csv-upload-modal/csv-upload-modal.service';
+import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-csv-download-modal.service';
 
 @Component({
   selector: 'f-learning-outcome-editor',
@@ -74,9 +74,9 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
     private nestedCsvDownloadModalService: NestedCsvDownloadModalService,
     private feedbackTemplateService: FeedbackTemplateService,
     private taskService: TaskService,
-    @Inject(csvResultModalService) private csvResultModalService: any,
-    @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(confirmationModal) private confirmationModal: any,
+    private csvResultModalService: CsvResultModalService,
+    private csvUploadModal: CsvUploadModalService,
+    private confirmationModal: ConfirmationModalService,
   ) {
     effect(() => {
       const linkedOutcomes = this.selectedConnectedOutcomes().map((outcome) => outcome.id);
@@ -262,7 +262,7 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
       'Test message',
       {file: {name: `${type} CSV Data`, type: 'csv'}},
       url,
-      (response: any) => {
+      (response: CsvResult) => {
         this.csvResultModalService.show(`${type} CSV Upload Results`, response);
         if (response.success.length > 0) {
           let contextType: 'units' | 'task_definitions';

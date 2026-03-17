@@ -14,7 +14,7 @@
       <button mat-menu-item uiSref="units/tasks/definition" [uiParams]="{unitId: currentUnit.id}">
         <mat-icon aria-label="Task Explorer Icon" fontIcon="pageview"></mat-icon> Explorer
       </button>
-      <button mat-menu-item uiSref="units/tasks/viewer" [uiParams]="{unitId: currentUnit.id}">
+      <button mat-menu-item uiSref="units2/tasks" [uiParams]="{unitId: currentUnit.id}">
         <mat-icon aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
       </button>
       <mat-divider></mat-divider>
@@ -129,7 +129,7 @@
             <!-- <mat-icon aria-label="Audit Icon">safety_check</mat-icon> Overflow -->
           </button>
         }
-        <button uiSref="units/tasks/viewer" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+        <button uiSref="units2/tasks" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
         </button>
         <button uiSref="tutor-discussion" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
