@@ -202,11 +202,11 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/projects/states/feedback/feedback.coffee
 - [x] ./src/app/common/content-editable/content-editable.coffee
 - [x] ./src/app/common/services/outcome-service.coffee
+- [ ] ./src/app/common/filters/filters.coffee
 
 ### TODO:
 
 - [ ] ./src/app/common/common.coffee
-- [ ] ./src/app/common/filters/filters.coffee
 - [ ] ./src/app/common/services/analytics-service.coffee
 - [ ] ./src/app/common/services/listener-service.coffee
 - [ ] ./src/app/common/services/media-service.coffee
