@@ -28,7 +28,6 @@ import 'ng-file-upload/dist/ng-file-upload-all.min.js';
 
 import 'build/assets/wav-worker.js';
 import 'build/src/app/common/common.js';
-import 'build/src/app/common/content-editable/content-editable.js';
 import 'build/src/app/common/filters/filters.js';
 import 'build/src/app/common/services/analytics-service.js';
 import 'build/src/app/common/services/listener-service.js';

@@ -200,11 +200,11 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/units/states/groups/groups.coffee (State only -> "unit-groups")
 - [x] ./src/app/units/states/analytics/analytics.coffee (Just the routing, since the TypeScript f-analytics component has been expanded in 10.0.x)
 - [x] ./src/app/projects/states/feedback/feedback.coffee
+- [x] ./src/app/common/content-editable/content-editable.coffee
 
 ### TODO:
 
 - [ ] ./src/app/common/common.coffee
-- [ ] ./src/app/common/content-editable/content-editable.coffee
 - [ ] ./src/app/common/filters/filters.coffee
 - [ ] ./src/app/common/services/analytics-service.coffee
 - [ ] ./src/app/common/services/listener-service.coffee
