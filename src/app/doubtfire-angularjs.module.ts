@@ -215,7 +215,6 @@ export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
     'doubtfire.config',
     'doubtfire.common',
-    'doubtfire.errors',
     'doubtfire.units',
     'doubtfire.projects',
     'doubtfire.visualisations',
