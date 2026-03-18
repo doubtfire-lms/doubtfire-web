@@ -60,7 +60,7 @@ export class TaskDescriptionCardComponent {
     if (this.task) {
       return this.task.localDeadlineDate();
     }
-    return this.taskDef.localDeadlineDate();
+    return this.taskDef?.localDeadlineDate();
   }
 
   public shouldShowDeadline(): boolean {
