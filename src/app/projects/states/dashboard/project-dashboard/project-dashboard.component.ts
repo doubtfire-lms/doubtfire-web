@@ -12,14 +12,14 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import {ProjectService} from 'src/app/api/services/project.service';
-import {GlobalStateService} from '../../index/global-state.service';
+import {GlobalStateService, ViewType} from '../../index/global-state.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-project-dashboard',
   templateUrl: './project-dashboard.component.html',
-  styleUrl: './project-dashboard.component.css',
+  styleUrl: './project-dashboard.component.scss',
 })
 export class ProjectDashboardComponent implements OnInit {
   @Input() public project$: Observable<Project>;
@@ -45,14 +45,29 @@ export class ProjectDashboardComponent implements OnInit {
     private globalStateService: GlobalStateService,
   ) {}
 
-  startedDragging(event: CdkDragStart, div: HTMLDivElement) {
-    event.source.element.nativeElement.classList.add('hovering');
-    const w = div.getBoundingClientRect().width;
-    this.leftComponentStartSize$.next(w);
+  public leftWidth = 400;
+  public lastX;
+  public startWidth = 0;
+
+  public startLeftX = 0;
+
+  startedDragging(event: CdkDragStart, boundary: HTMLElement) {
+    const rect = boundary.getBoundingClientRect();
+    // x relative to the container
+    this.startLeftX = (event.event as MouseEvent).clientX - rect.left;
+    this.startWidth = this.leftWidth;
   }
 
-  dragging(event: CdkDragMove, div: HTMLDivElement) {
-    this.dragMove$.next({event, div});
+  dragging(event: CdkDragMove, boundary: HTMLElement) {
+    const rect = boundary.getBoundingClientRect();
+    const x = (event.event as MouseEvent).clientX - rect.left;
+
+    const delta = x - this.startLeftX;
+    const newWidth = this.startWidth + delta;
+
+    this.leftWidth = Math.max(150, Math.min(500, newWidth));
+
+    // keep the handle visually glued to the divider
     event.source.reset();
   }
 

@@ -1,12 +1,5 @@
 import {CdkDragEnd, CdkDragStart, CdkDragMove} from '@angular/cdk/drag-drop';
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MediaObserver} from 'ng-flex-layout';
 import {UIRouter} from '@uirouter/angular';
 import {auditTime, merge, Observable, of, Subject, tap, withLatestFrom} from 'rxjs';
@@ -19,6 +12,8 @@ import {HotkeysService, HotkeysHelpComponent} from '@ngneat/hotkeys';
 import {MatDialog} from '@angular/material/dialog';
 import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Tutorial} from 'src/app/api/models/doubtfire-model';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
 
 @Component({
   selector: 'f-inbox',
@@ -29,9 +24,19 @@ export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
   @Input() taskData: {selectedTask: Task; any};
-
+  @Input() filters: Partial<{
+    taskDefinition: TaskDefinition;
+    tutorials: Tutorial[];
+    forceStream: boolean;
+    studentName: string;
+    tutorialIdSelected: any;
+    taskDefinitionIdSelected: number | TaskDefinition;
+  }>;
+  @Input() showSearchOptions: boolean;
   @ViewChild('inboxpanel') inboxPanel: ElementRef;
   @ViewChild('commentspanel') commentspanel: ElementRef;
+
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
 
   subs$: Observable<unknown>;
 
@@ -39,8 +44,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   private dragMove$ = new Subject<{event: CdkDragMove; div: HTMLDivElement}>();
   private dragMoveAudited$;
 
-  protected filters;
-  protected showSearchOptions;
+  // protected filters;
+  // protected showSearchOptions;
 
   public taskSelected = false;
 
@@ -48,6 +53,10 @@ export class InboxComponent implements OnInit, OnDestroy {
 
   get narrowTaskInbox(): boolean {
     return this.inboxPanel?.nativeElement.getBoundingClientRect().width < 150;
+  }
+
+  get isMobileView(): boolean {
+    return this.mediaObserver.isActive('lt-md');
   }
 
   constructor(
@@ -97,9 +106,18 @@ export class InboxComponent implements OnInit, OnDestroy {
           keys: 'control.Shift.c',
           description: 'Mark selected task as complete',
         })
-        .subscribe(() =>
-          this.selectedTask.selectedTask?.updateTaskStatus('complete')
-      );
+        .subscribe(() => {
+          const task = this.selectedTask.selectedTask;
+          if (!task) {
+            return;
+          }
+
+          if (!task.canMarkComplete) {
+            return;
+          }
+
+          task.updateTaskStatus('complete');
+        });
     }
 
     if (!registeredHotkeys.includes('control.shift.d')) {
@@ -174,11 +192,17 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   openPdfInNewTab(): void {
-    if (this.taskData.selectedTask.hasPdf) {
-      this.fileDownloader.downloadFile(
-        this.visiblePdfUrl,
-        `${this.taskData.selectedTask.definition.abbreviation}.pdf`,
-      );
+    if (!this.visiblePdfUrl || !this.taskData?.selectedTask) {
+      return;
     }
+
+    const task = this.taskData.selectedTask;
+    const taskSheetUrl = task.definition.getTaskPDFUrl();
+    const fileName =
+      this.visiblePdfUrl === taskSheetUrl
+        ? `${task.definition.abbreviation}-task-sheet.pdf`
+        : `${task.definition.abbreviation}.pdf`;
+
+    this.fileDownloader.downloadFile(this.visiblePdfUrl, fileName);
   }
 }

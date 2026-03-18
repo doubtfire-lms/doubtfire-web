@@ -18,7 +18,9 @@
     "target": "ES2022",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2020", "dom", "ES2021.String"],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
   "angularCompilerOptions": {
     "strictTemplates": false

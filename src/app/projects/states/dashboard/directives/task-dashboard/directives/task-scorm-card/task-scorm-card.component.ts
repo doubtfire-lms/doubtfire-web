@@ -43,6 +43,10 @@ export class TaskScormCardComponent implements OnChanges {
     }
   }
 
+  isNotStudent(): boolean {
+    return this.user !== this.task.project.student;
+  }
+
   launchScormPlayer(): void {
     this.task.launchScormPlayer();
   }

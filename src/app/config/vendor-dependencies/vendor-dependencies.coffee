@@ -4,7 +4,6 @@
 #
 angular.module('doubtfire.config.vendor-dependencies', [
   # ng*
-  'ngCookies'
   'ngCsv'
   'ngSanitize'
 
@@ -18,13 +17,11 @@ angular.module('doubtfire.config.vendor-dependencies', [
   'ui.codemirror'
 
   # other libraries
-  'angularFileUpload'
   'angular.filter'
   'localization'
   'markdown'
   'nvd3'
   'xeditable'
-  'LocalStorageModule'
   'angular-md5'
 
   # analytics

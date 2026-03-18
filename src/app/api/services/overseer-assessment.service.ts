@@ -1,16 +1,23 @@
-import { Injectable } from '@angular/core';
-import { EntityService } from 'ngx-entity-service';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiURL';
-import { OverseerAssessment } from '../models/overseer/overseer-assessment';
+import {Injectable} from '@angular/core';
+import {EntityService} from 'ngx-entity-service';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {OverseerAssessment} from '../models/overseer/overseer-assessment';
+import {Task} from '../models/doubtfire-model';
+import {OverseerStepResultService} from './overseer-step-result.service';
 
 @Injectable()
 export class OverseerAssessmentService extends EntityService<OverseerAssessment> {
-  protected readonly endpointFormat = 'projects/:project_id:/task_def_id/:td_id:/submissions/timestamps/:timestamp:';
-  protected readonly triggerEndpointFormat = 'projects/:project_id:/task_def_id/:td_id:/overseer_assessment/:id:/trigger';
+  protected readonly endpointFormat =
+    'projects/:project_id:/task_def_id/:td_id:/submissions/timestamps/:timestamp:';
+  protected readonly triggerEndpointFormat =
+    'projects/:project_id:/task_def_id/:td_id:/overseer_assessment/:id:/trigger';
 
-  constructor(httpClient: HttpClient) {
+  constructor(
+    httpClient: HttpClient,
+    private overseerStepResultService: OverseerStepResultService,
+  ) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
@@ -25,9 +32,28 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
         keys: ['timestamp', 'submission_timestamp'],
         toEntityFn: (data, key, entity, params?) => {
           return new Date(data['submission_timestamp'] * 1000);
-        }
+        },
       },
-      ['timestampString', 'submission_timestamp']
+      ['timestampString', 'submission_timestamp'],
+      {
+        keys: 'overseerStepResults',
+        toEntityOp: (data: object, key: string, overseerAssesment: OverseerAssessment) => {
+          data[key]?.forEach((overseerStep) => {
+            overseerAssesment.stepResultsCache.getOrCreate(
+              overseerStep['id'],
+              this.overseerStepResultService,
+              overseerStep,
+              {
+                constructorParams: overseerAssesment,
+              },
+            );
+          });
+        },
+      },
+      'overseerStepId',
+      'totalSteps',
+      'passedSteps',
+      'hasSubmissionFiles',
     );
   }
 
@@ -35,22 +61,23 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
     return new OverseerAssessment(other);
   }
 
-  public queryForTask(task: any): Observable<OverseerAssessment[]> {
+  public queryForTask(task: Task): Observable<OverseerAssessment[]> {
     const pathIds = {
       project_id: task.project.id,
-      td_id: task.definition.id
+      td_id: task.definition.id,
     };
 
-    return this.query(pathIds, task);
+    return this.query(pathIds, {
+      constructorParams: task,
+    });
   }
 
-  public triggerOverseer(assessment: OverseerAssessment) : Observable<OverseerAssessment> {
+  public triggerOverseer(assessment: OverseerAssessment): Observable<OverseerAssessment> {
     const pathIds = {
       project_id: assessment.task.project.id,
       td_id: assessment.task.definition.id,
-      id: assessment.id
-    }
-    return this.put(pathIds, { endpointFormat: this.triggerEndpointFormat });
+      id: assessment.id,
+    };
+    return this.put(pathIds, {endpointFormat: this.triggerEndpointFormat});
   }
-
 }

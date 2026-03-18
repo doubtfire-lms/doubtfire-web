@@ -1,14 +1,20 @@
-import { CachedEntityService, RequestOptions } from 'ngx-entity-service';
-import { CampusService, Project, Unit, UnitService, UserService } from 'src/app/api/models/doubtfire-model';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiURL';
-import { AppInjector } from 'src/app/app-injector';
-import { Observable } from 'rxjs';
-import { TaskService } from './task.service';
-import { MappingProcess } from 'ngx-entity-service/lib/mapping-process';
-import { TaskOutcomeAlignmentService } from './task-outcome-alignment.service';
-import { GroupService } from './group.service';
+import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
+import {
+  CampusService,
+  Project,
+  Unit,
+  UnitService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {AppInjector} from 'src/app/app-injector';
+import {Observable} from 'rxjs';
+import {TaskService} from './task.service';
+import {MappingProcess} from 'ngx-entity-service/lib/mapping-process';
+import {TaskOutcomeAlignmentService} from './task-outcome-alignment.service';
+import {GroupService} from './group.service';
 
 @Injectable()
 export class ProjectService extends CachedEntityService<Project> {
@@ -22,7 +28,7 @@ export class ProjectService extends CachedEntityService<Project> {
     private userService: UserService,
     private taskService: TaskService,
     private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
-    private groupService: GroupService
+    private groupService: GroupService,
   ) {
     super(httpClient, API_URL);
 
@@ -33,12 +39,14 @@ export class ProjectService extends CachedEntityService<Project> {
         keys: ['campus', 'campus_id'],
         toEntityOp: (data: object, key: string, entity: Project, params?: any) => {
           if (data['campus_id']) {
-            return this.campusService.get(data['campus_id']).subscribe(campus => { entity.campus = campus; });
+            return this.campusService.get(data['campus_id']).subscribe((campus) => {
+              entity.campus = campus;
+            });
           }
         },
         toJsonFn: (entity: Project, key: string) => {
           return entity.campus ? entity.campus.id : entity.originalJson['camput_id'] ? -1 : null;
-        }
+        },
       },
       {
         keys: 'student',
@@ -46,7 +54,7 @@ export class ProjectService extends CachedEntityService<Project> {
           const userData = data['student'];
 
           return this.userService.cache.getOrCreate(userData.id, this.userService, userData);
-        }
+        },
       },
       {
         keys: 'userId',
@@ -56,9 +64,9 @@ export class ProjectService extends CachedEntityService<Project> {
           this.userService.get(userId).subscribe({
             next: (user) => {
               entity.student = user;
-            }
+            },
           });
-        }
+        },
       },
       'enrolled',
       'targetGrade',
@@ -66,6 +74,8 @@ export class ProjectService extends CachedEntityService<Project> {
       'portfolioFiles',
       'compilePortfolio',
       'similarityFlag',
+      'specConDays',
+      'staffNoteCount',
       {
         keys: 'hasPortfolio',
         toEntityFn: (data: object, key: string, entity: Project, params?: any) => {
@@ -76,7 +86,7 @@ export class ProjectService extends CachedEntityService<Project> {
           else entity.portfolioStatus = 0;
 
           return result;
-        }
+        },
       },
       'portfolioAvailable',
       'usesDraftLearningSummary',
@@ -86,29 +96,29 @@ export class ProjectService extends CachedEntityService<Project> {
           const values = data[key];
           entity.taskStats = [
             {
-              key: "fail",
-              value: Math.round((values['red_pct'] || 0) * 100)
+              key: 'fail',
+              value: Math.round((values['red_pct'] || 0) * 100),
             },
             {
-              key: "not_started",
+              key: 'not_started',
               value: Math.round((values['grey_pct'] || 1) * 100),
             },
             {
-              key: "working_on_it",
-              value: Math.round((values['orange_pct'] ||  0) * 100),
+              key: 'working_on_it',
+              value: Math.round((values['orange_pct'] || 0) * 100),
             },
             {
-              key: "ready_for_feedback",
+              key: 'ready_for_feedback',
               value: Math.round((values['blue_pct'] || 0) * 100),
             },
             {
-              key: "complete",
-              value: Math.round((values['green_pct'] || 0) * 100)
-            }
+              key: 'complete',
+              value: Math.round((values['green_pct'] || 0) * 100),
+            },
           ];
 
           entity.orderScale = Math.round((values['order_scale'] || 0) * 100);
-        }
+        },
       },
       'grade',
       'gradeRationale',
@@ -123,7 +133,7 @@ export class ProjectService extends CachedEntityService<Project> {
         },
         toJsonFn: (entity: Project, key: string) => {
           return entity.unit?.id;
-        }
+        },
       },
       {
         keys: 'unitId',
@@ -131,13 +141,13 @@ export class ProjectService extends CachedEntityService<Project> {
           const unitService: UnitService = AppInjector.get(UnitService);
           const unitId = process.data['unit_id'];
           // Load what we have... or a a stub for now...
-          process.entity.unit = unitService.cache.getOrCreate(unitId, unitService, { id: unitId });
-          return unitService.get(unitId).subscribe(unit => {
+          process.entity.unit = unitService.cache.getOrCreate(unitId, unitService, {id: unitId});
+          return unitService.get(unitId).subscribe((unit) => {
             process.entity.unit = unit;
             unit.studentCache.add(process.entity);
             process.continue();
           });
-        }
+        },
       },
       {
         keys: 'tutorialEnrolments',
@@ -149,7 +159,7 @@ export class ProjectService extends CachedEntityService<Project> {
               project.tutorialEnrolmentsCache.add(tutorial);
             }
           });
-        }
+        },
       },
       {
         keys: 'groups',
@@ -167,18 +177,20 @@ export class ProjectService extends CachedEntityService<Project> {
         },
         toJsonFn: (entity: Project, key: string) => {
           return entity.unit?.id;
-        }
+        },
       },
       {
         keys: 'tasks',
         toEntityOp: (data: object, key: string, project: Project, params?: any) => {
           // create tasks from json
           data['tasks']?.forEach((taskData) => {
-            project.taskCache.getOrCreate(taskData['id'], this.taskService, taskData, {constructorParams: project});
+            project.taskCache.getOrCreate(taskData['id'], this.taskService, taskData, {
+              constructorParams: project,
+            });
           });
 
           project.unit.setupTasksForStudent(project);
-        }
+        },
       },
       {
         keys: 'taskOutcomeAlignments',
@@ -193,8 +205,9 @@ export class ProjectService extends CachedEntityService<Project> {
               },
             );
           });
-        }
+        },
       },
+      'escalationAttemptsRemaining',
     );
 
     this.mapping.addJsonKey(
@@ -204,7 +217,7 @@ export class ProjectService extends CachedEntityService<Project> {
       'compilePortfolio',
       'grade',
       'gradeRationale',
-      'campus'
+      'campus',
     );
   }
 
@@ -212,16 +225,20 @@ export class ProjectService extends CachedEntityService<Project> {
     return new Project(other as Unit);
   }
 
-  public loadStudents(unit: Unit, withdrawnOnly: boolean = false, useFetch: boolean = false): Observable<Project[]> {
+  public loadStudents(
+    unit: Unit,
+    withdrawnOnly: boolean = false,
+    useFetch: boolean = false,
+  ): Observable<Project[]> {
     const options: RequestOptions<Project> = {
       cache: unit.studentCache,
       endpointFormat: this.studentEndpointFormat,
       params: {
         withdrawn: withdrawnOnly,
-        unit_id: unit.id
+        unit_id: unit.id,
       },
-      constructorParams: unit
-    }
+      constructorParams: unit,
+    };
 
     if (useFetch) {
       return super.fetchAll(undefined, options);
@@ -230,13 +247,17 @@ export class ProjectService extends CachedEntityService<Project> {
     }
   }
 
-  public loadProject(proj: Project | number, unit: Unit, useFetch: boolean = false): Observable<Project> {
+  public loadProject(
+    proj: Project | number,
+    unit: Unit,
+    useFetch: boolean = false,
+  ): Observable<Project> {
     const options: RequestOptions<Project> = {
       cache: unit.studentCache,
       sourceCache: unit.studentCache,
       constructorParams: unit,
-      cacheBehaviourOnGet: "cacheQuery"
-    }
+      cacheBehaviourOnGet: 'cacheQuery',
+    };
 
     if (useFetch) {
       return super.fetch(proj, options);

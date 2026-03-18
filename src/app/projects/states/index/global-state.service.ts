@@ -5,6 +5,7 @@ import {EntityCache} from 'ngx-entity-service';
 import {BehaviorSubject, Observable, Subject, skip, take} from 'rxjs';
 import {
   CampusService,
+  LearningOutcomeService,
   Project,
   ProjectService,
   TeachingPeriodService,
@@ -16,6 +17,7 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 
 /**
  * The different types of views that can be shown. Used by the header to determine details to show.
@@ -106,6 +108,8 @@ export class GlobalStateService implements OnDestroy {
     private projectService: ProjectService,
     private campusService: CampusService,
     private teachingPeriodService: TeachingPeriodService,
+    private learningOutcomeService: LearningOutcomeService,
+    private feedbackTemplateService: FeedbackTemplateService,
     @Inject(UIRouter) private router: UIRouter,
     private alerts: AlertService,
     private mediaObserver: MediaObserver,
@@ -114,17 +118,23 @@ export class GlobalStateService implements OnDestroy {
     this.loadedUnits = this.unitService.cache;
     this.currentUserProjects = this.projectService.cache;
 
-    this.authenticationService.checkUserCookie();
-
+    // Use timeout to ensure everything is loaded before we try to login
     setTimeout(() => {
-      if (this.authenticationService.isAuthenticated()) {
-        this.loadGlobals();
-      } else {
-        // not loading anything as no user - just redirect to sign in
-        this.isLoadingSubject.next(false);
-        this.router.stateService.go('sign_in');
-      }
-    }, 800);
+      // Try to login using the refresh token
+      this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
+        if (result) {
+          this.loadGlobals();
+        } else {
+          // Loading is finshed...
+          this.isLoadingSubject.next(false);
+
+          // and if we are not going to the sign in page, then redirect to it
+          if (this.router.globals.current.name !== 'sign_in') {
+            this.router.stateService.go('sign_in');
+          }
+        }
+      });
+    }, 100);
 
     // this is a hack to workaround horrific IOS "feature"
     // https://stackoverflow.com/questions/37112218/css3-100vh-not-constant-in-mobile-browser
@@ -201,9 +211,8 @@ export class GlobalStateService implements OnDestroy {
     this.isLoadingSubject.next(true);
     this.userService.cache.clear();
     this.clearUnitsAndProjects();
-    this.authenticationService.signOut();
     this.isLoadingSubject.next(false);
-    this.router.stateService.go('sign_in');
+    this.authenticationService.signOut();
   }
 
   public ngOnDestroy(): void {
@@ -213,19 +222,47 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public loadGlobals(): void {
+    // Indicate we are loading data...
     this.isLoadingSubject.next(true);
 
     // Loading observer watches for loading of campuses, and teaching periods before loading unit roles, and projects
     const loadingObserver = new Observable((subscriber) => {
       // Loading campuses
       this.campusService.query().subscribe({
-        next: (_reponse) => {
+        next: (_response) => {
           subscriber.next(true);
         },
         error: (_response) => {
           this.alerts.error('Unable to access service. Failed loading campuses.', 6000);
         },
       });
+
+      if (this.userService.currentUser.isStaff) {
+        this.learningOutcomeService
+          .query({}, {endpointFormat: LearningOutcomeService.globalEndpoint})
+          .subscribe({
+            next: (_response) => {
+              subscriber.next(true);
+            },
+            error: (_response) => {
+              this.alerts.error('Unable to access service. Failed loading GLOs.', 6000);
+            },
+          });
+
+        this.feedbackTemplateService
+          .query({}, {endpointFormat: FeedbackTemplateService.globalEndpoint})
+          .subscribe({
+            next: (_response) => {
+              subscriber.next(true);
+            },
+            error: (_response) => {
+              this.alerts.error(
+                'Unable to access service. Failed loading GLO feedback templates.',
+                6000,
+              );
+            },
+          });
+      }
 
       // Loading teaching periods
       this.teachingPeriodService.query().subscribe({
@@ -270,7 +307,7 @@ export class GlobalStateService implements OnDestroy {
       },
       error: (_response) => {
         this.alerts.error('Unable to access your units.', 6000);
-      }
+      },
     });
   }
 

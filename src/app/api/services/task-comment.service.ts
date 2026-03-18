@@ -1,24 +1,32 @@
-import { ScormComment, Task, TaskComment, TestAttemptService, UserService } from 'src/app/api/models/doubtfire-model';
-import { EventEmitter, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { CachedEntityService } from 'ngx-entity-service';
-import { DiscussionComment } from '../models/task-comment/discussion-comment';
-import { ExtensionComment } from '../models/task-comment/extension-comment';
-import { RequestOptions } from 'ngx-entity-service/lib/request-options';
-import { HttpClient } from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiURL';
-import { EmojiService } from 'src/app/common/services/emoji.service';
-import { MappingFunctions } from './mapping-fn';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
-import { ScormExtensionComment } from '../models/task-comment/scorm-extension-comment';
+import {
+  ScormComment,
+  Task,
+  TaskComment,
+  TestAttemptService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
+import {EventEmitter, Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {CachedEntityService} from 'ngx-entity-service';
+import {DiscussionComment} from '../models/task-comment/discussion-comment';
+import {ExtensionComment} from '../models/task-comment/extension-comment';
+import {RequestOptions} from 'ngx-entity-service/lib/request-options';
+import {HttpClient} from '@angular/common/http';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {EmojiService} from 'src/app/common/services/emoji.service';
+import {MappingFunctions} from './mapping-fn';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {ScormExtensionComment} from '../models/task-comment/scorm-extension-comment';
 
 @Injectable()
 export class TaskCommentService extends CachedEntityService<TaskComment> {
   public readonly commentAdded$: EventEmitter<TaskComment> = new EventEmitter();
 
-  private readonly commentEndpointFormat = 'projects/:projectId:/task_def_id/:taskDefinitionId:/comments/:id:';
-  private readonly discussionEndpointFormat = 'projects/:projectId:/task_def_id/:taskDefinitionId:/discussion_comments';
+  private readonly commentEndpointFormat =
+    'projects/:projectId:/task_def_id/:taskDefinitionId:/comments/:id:';
+  private readonly discussionEndpointFormat =
+    'projects/:projectId:/task_def_id/:taskDefinitionId:/discussion_comments';
   private readonly extensionGrantEndpointFormat =
     'projects/:projectId:/task_def_id/:taskDefinitionId:/assess_extension/:id:';
   private readonly requestExtensionEndpointFormat =
@@ -27,9 +35,10 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     'projects/:projectId:/task_def_id/:taskDefinitionId:/assess_scorm_extension/:id:';
   private readonly scormRequestExtensionEndpointFormat =
     'projects/:projectId:/task_def_id/:taskDefinitionId:/request_scorm_extension';
-  private readonly discussionCommentReplyEndpointFormat = "/projects/:project_id:/task_def_id/:task_definition_id:/comments/:task_comment_id:/discussion_comment/reply";
-  private readonly getDiscussionCommentPromptEndpointFormat = "/projects/:project_id:/task_def_id/:task_definition_id:/comments/:task_comment_id:/discussion_comment/prompt_number/:prompt_number:";
-
+  private readonly discussionCommentReplyEndpointFormat =
+    '/projects/:project_id:/task_def_id/:task_definition_id:/comments/:task_comment_id:/discussion_comment/reply';
+  private readonly getDiscussionCommentPromptEndpointFormat =
+    '/projects/:project_id:/task_def_id/:task_definition_id:/comments/:task_comment_id:/discussion_comment/prompt_number/:prompt_number:';
 
   protected readonly endpointFormat = this.commentEndpointFormat;
 
@@ -48,15 +57,15 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
         keys: 'author',
         toEntityFn: (data: object, key: string, comment: TaskComment) => {
           const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
-          comment.initials = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+          comment.initials = `${user.preferredName[0]}${user.lastName[0]}`.toUpperCase();
           return user;
-        }
+        },
       },
       {
         keys: 'recipient',
         toEntityFn: (data: object, key: string, comment: TaskComment) => {
           return this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
-        }
+        },
       },
       'recipientReadTime',
       'replyToId',
@@ -65,17 +74,17 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
         keys: ['text', 'comment'],
         toEntityFn: (data, key, entity) => {
           return this.emojiService.colonsToNative(data['comment']);
-        }
+        },
       },
       {
         keys: 'createdAt',
-        toEntityFn: MappingFunctions.mapDate
+        toEntityFn: MappingFunctions.mapDate,
       },
       {
         keys: 'type',
-        toEntityOp: (data: object, key: string, comment:TaskComment) => {
+        toEntityOp: (data: object, key: string, comment: TaskComment) => {
           comment.commentType = data[key];
-        }
+        },
       },
       // Extension comments
       'assessed',
@@ -110,13 +119,15 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       },
 
       // Scorm Extension Comments
-      ['taskScormExtensions', 'scorm_extensions']
+      ['taskScormExtensions', 'scorm_extensions'],
+      'overseerAssessmentId',
+      'overseerPassedSteps',
+      'overseerTotalSteps',
+      'overseerInProgress',
+      'overseerStatus',
     );
 
-    this.mapping.addJsonKey(
-      'granted',
-
-    );
+    this.mapping.addJsonKey('granted');
   }
 
   /**
@@ -144,13 +155,17 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
    * @param other Contains the related Tasks used to construct the TaskComments
    * @param options
    */
-  public query(pathIds?: object, other?: object, options?: RequestOptions<TaskComment>): Observable<TaskComment[]> {
+  public query(
+    pathIds?: object,
+    other?: object,
+    options?: RequestOptions<TaskComment>,
+  ): Observable<TaskComment[]> {
     return super.query(pathIds, options).pipe(
       tap((result) => {
         // Access the task and set the number of new comments to 0 - they are now read on the server
         const task = other as any; //TODO: change to Task object
         task.numNewComments = 0;
-      })
+      }),
     );
   }
 
@@ -159,7 +174,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     data: string | File | Blob,
     commentType: string,
     originalComment?: TaskComment,
-    prompts?: Blob[]
+    prompts?: Blob[],
   ): Observable<TaskComment> {
     const pathId = {
       projectId: task.project.id,
@@ -171,7 +186,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       body.append('reply_to_id', originalComment?.id.toString());
     }
 
-    const opts: RequestOptions<TaskComment> = { endpointFormat: this.commentEndpointFormat };
+    const opts: RequestOptions<TaskComment> = {endpointFormat: this.commentEndpointFormat};
 
     // Based on the comment type - add to the body and configure the end point
     if (commentType === 'text' || commentType === 'scorm') {
@@ -193,7 +208,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       tap((tc: TaskComment) => {
         task.refreshCommentData();
         this.commentAdded$.emit(tc);
-      })
+      }),
     );
   }
 
@@ -209,25 +224,29 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
         projectId: extension.project.id,
         taskDefinitionId: extension.task.definition.id,
       },
-      opts
+      opts,
     );
   }
 
-  public requestExtension(reason: string, weeksRequested: number, task: any): Observable<TaskComment> {
+  public requestExtension(
+    reason: string,
+    weeksRequested: number,
+    task: any,
+  ): Observable<TaskComment> {
     const opts: RequestOptions<TaskComment> = {
       endpointFormat: this.requestExtensionEndpointFormat,
       body: {
         comment: reason,
         weeks_requested: weeksRequested,
       },
-      cache: task.commentCache
+      cache: task.commentCache,
     };
     return super.create(
       {
         projectId: task.project.id,
         taskDefinitionId: task.definition.id,
       },
-      opts
+      opts,
     );
   }
 
@@ -264,12 +283,12 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     );
   }
 
-  public postDiscussionReply(comment: TaskComment, replyAudio: Blob): Observable<TaskComment>{
+  public postDiscussionReply(comment: TaskComment, replyAudio: Blob): Observable<TaskComment> {
     const form = new FormData();
     const pathIds = {
       project_id: comment.project.id,
       task_definition_id: comment.task.id,
-      task_comment_id: comment.id
+      task_comment_id: comment.id,
     };
 
     form.append('attachment', replyAudio);

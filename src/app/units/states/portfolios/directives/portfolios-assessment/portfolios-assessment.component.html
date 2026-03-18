@@ -1,0 +1,40 @@
+<div class="p-5">
+  <h2>Grade for {{ project.student.name }}</h2>
+  <p>Assign grade for this project.</p>
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Rationale</mat-label>
+    <textarea matInput [(ngModel)]="project.gradeRationale" rows="5"></textarea>
+  </mat-form-field>
+  @for (group of gradeResults; track group) {
+    <div class="flex gap-2 justify-between items-center mt-5">
+      <div class="w-[200px]">
+        <strong>{{ group.name }}</strong>
+      </div>
+
+      <div class="flex gap-2 flex-1 justify-end">
+        @for (score of group.scores; track score) {
+          <button
+            mat-raised-button
+            [disabled]="!project.gradeRationale"
+            [style.flex]="'0 0 ' + 100 / maxScoresPerRow + '%'"
+            [value]="score"
+            (click)="project.assignGrade(score, project.gradeRationale)"
+            [color]="project.grade === score ? 'primary' : 'default'"
+          >
+            {{ score }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+  <div class="flex justify-end w-full mt-10">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="project.assignGrade(project.grade, project.gradeRationale)"
+      [disabled]="!project.gradeRationale"
+    >
+      Save
+    </button>
+  </div>
+</div>

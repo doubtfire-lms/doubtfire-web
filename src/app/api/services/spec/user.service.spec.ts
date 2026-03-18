@@ -2,17 +2,15 @@ import { TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { User, UserService } from 'src/app/api/models/doubtfire-model';
 import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { analyticsService } from 'src/app/ajs-upgraded-providers';
 
 describe('UserService', () => {
   let userService: UserService;
   let httpMock: HttpTestingController;
-  let analyticsServiceStub: jasmine.SpyObj<any>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
     imports: [],
-    providers: [UserService, { provide: analyticsService, useValue: analyticsServiceStub }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    providers: [UserService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 });
 
     userService = TestBed.inject(UserService);

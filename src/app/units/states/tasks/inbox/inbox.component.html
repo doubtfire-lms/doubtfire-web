@@ -1,3 +1,4 @@
+@if (!isMobileView) {
 <div fxLayout="column" fxFill fxHide fxShow.gt-sm>
   <div fxLayout="row" fxLayoutAlign="center stretch" fxFill>
     <div id="inboxpanel" #inboxpanel class="staff-task-list inbox-panel">
@@ -9,6 +10,7 @@
           [taskData]="taskData"
           [unit]="unit"
           [unitRole]="unitRole"
+          [viewType]="viewType"
         ></df-staff-task-list>
       }
     </div>
@@ -26,7 +28,10 @@
     }
 
     <div fxFlex class="inbox-panel">
-      <f-task-dashboard [task]="taskData.selectedTask" [pdfUrl]="visiblePdfUrl"></f-task-dashboard>
+      <f-inbox-dashboard
+        [task]="taskData?.selectedTask"
+        (visiblePdfUrlChange)="visiblePdfUrl = $event"
+      ></f-inbox-dashboard>
     </div>
     <div
       id="rightResizerEl"
@@ -42,9 +47,9 @@
       <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
     </div>
   </div>
-  <f-footer></f-footer>
+  <f-footer class="z-10" [viewType]="viewType"></f-footer>
 </div>
-
+} @else {
 <div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
   <div id="inboxpanel" #inboxpanel class="inbox-panel mobile" [hidden]="taskSelected">
     @if (taskData) {
@@ -55,6 +60,7 @@
         [taskData]="taskData"
         [unit]="unit"
         [unitRole]="unitRole"
+        [viewType]="viewType"
       ></df-staff-task-list>
     }
   </div>
@@ -71,11 +77,11 @@
       <h3 class="mb-0">{{ taskData?.selectedTask?.project.student.nickname }}</h3>
       <div fxFlex></div>
       <button
-        [disabled]="!this.taskData?.selectedTask?.hasPdf"
+        [disabled]="!visiblePdfUrl"
         mat-icon-button
-        aria-label="Open Submission"
+        aria-label="Open current document"
         (click)="openPdfInNewTab()"
-        matTooltip="Open submission"
+        matTooltip="Open current document"
       >
         <mat-icon>description</mat-icon>
       </button>
@@ -89,8 +95,12 @@
       </button>
     </div>
 
-    <div #commentspanel fxFlex class="inbox-panel task-comment-panel mobile">
-      <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
+    <div fxFlex class="inbox-panel mobile">
+      <f-inbox-dashboard
+        [task]="taskData?.selectedTask"
+        (visiblePdfUrlChange)="visiblePdfUrl = $event"
+      ></f-inbox-dashboard>
     </div>
   </div>
 </div>
+}

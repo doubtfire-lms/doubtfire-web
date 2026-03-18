@@ -1,22 +1,27 @@
-import { Inject, Injectable } from '@angular/core';
-import { analyticsService } from 'src/app/ajs-upgraded-providers';
-import { HttpClient } from '@angular/common/http';
-import { CampusService, Project, Tutorial, Unit, UserService } from 'src/app/api/models/doubtfire-model';
-import { CachedEntityService, RequestOptions } from 'ngx-entity-service';
-import API_URL from 'src/app/config/constants/apiURL';
-import { Observable } from 'rxjs';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {Inject, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {
+  CampusService,
+  Project,
+  Tutorial,
+  Unit,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
+import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {Observable} from 'rxjs';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Injectable()
 export class TutorialService extends CachedEntityService<Tutorial> {
   protected readonly endpointFormat = 'tutorials/:id:';
-  protected readonly switchTutorialEndpointFormat = 'units/:unitId:/tutorials/:tutorialAbbreviation:/enrolments/:projectId:';
+  protected readonly switchTutorialEndpointFormat =
+    'units/:unitId:/tutorials/:tutorialAbbreviation:/enrolments/:projectId:';
 
   constructor(
     httpClient: HttpClient,
     private campusService: CampusService,
     private userService: UserService,
-    @Inject(analyticsService) private AnalyticsService: any,
     private alerts: AlertService,
   ) {
     super(httpClient, API_URL);
@@ -28,7 +33,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       'meetingLocation',
       'abbreviation',
       {
-        keys: ['campus','campus_id'],
+        keys: ['campus', 'campus_id'],
         toEntityOp: (data: object, key: string, entity: Tutorial, params?: any) => {
           this.campusService.get(data['campus_id']).subscribe((campus) => {
             entity.campus = campus;
@@ -36,7 +41,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
         },
         toJsonFn: (entity: Tutorial, key: string) => {
           return entity.campus ? entity.campus.id : -1;
-        }
+        },
       },
       'capacity',
       {
@@ -46,26 +51,26 @@ export class TutorialService extends CachedEntityService<Tutorial> {
         },
         toJsonFn: (entity: Tutorial, key: string) => {
           return entity.tutor?.id;
-        }
+        },
       },
 
       'numStudents',
       {
-        keys: ['tutorialStream','tutorial_stream_abbr'],
+        keys: ['tutorialStream', 'tutorial_stream_abbr'],
         toEntityFn: (data: object, key: string, entity: Tutorial, params?: any) => {
           return entity.unit.tutorialStreamForAbbr(data[key]);
         },
         toJsonFn: (entity: Tutorial, key: string) => {
           return entity.tutorialStream ? entity.tutorialStream.abbreviation : null;
-        }
+        },
       },
 
       {
         keys: ['unit', 'unit_id'],
         toJsonFn: (entity: Tutorial, key: string) => {
           return entity.unit?.id;
-        }
-      }
+        },
+      },
     );
 
     this.mapping.mapAllKeysToJsonExcept('numStudents');
@@ -94,7 +99,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       endpointFormat: this.switchTutorialEndpointFormat,
       cache: project.tutorialEnrolmentsCache,
       sourceCache: project.unit.tutorialsCache,
-      body: {}
+      body: {},
     };
 
     var observer: Observable<any>;
@@ -110,7 +115,9 @@ export class TutorialService extends CachedEntityService<Tutorial> {
         if (isEnrol) {
           project.tutorialEnrolmentsCache.clear();
           for (const enrolment of value.enrolments) {
-            project.tutorialEnrolmentsCache.add(project.unit.tutorialFromId(enrolment['tutorial_id']));
+            project.tutorialEnrolmentsCache.add(
+              project.unit.tutorialFromId(enrolment['tutorial_id']),
+            );
           }
         } else {
           project.tutorialEnrolmentsCache.delete(tutorial);
@@ -118,8 +125,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       },
       error: (error) => {
         this.alerts.error(`Failed to update tutorial enrolment. ${error}`, 8000);
-      }
+      },
     });
   }
-
 }

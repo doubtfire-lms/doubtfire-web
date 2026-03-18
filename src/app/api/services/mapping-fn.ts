@@ -61,6 +61,28 @@ export class MappingFunctions {
   }
 
   /**
+   * Add a number of days to a date.
+   *
+   * @param date starting date
+   * @param days days to add
+   * @returns the date that is `days` days after `date`
+   */
+  public static addDays(date: Date, days: number): Date {
+    return new Date(date.getTime() + MappingFunctions.dayMs(days));
+  }
+
+  /**
+   * Add a number of weeks to a date.
+   *
+   * @param date starting date
+   * @param weeks days to add
+   * @returns the date that is `days` days after `date`
+   */
+  public static addWeeks(date: Date, weeks: number): Date {
+    return new Date(date.getTime() + MappingFunctions.weeksMs(weeks));
+  }
+
+  /**
    * Calculate the time between two dates
    *
    * @param date1 days from this date

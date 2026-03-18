@@ -5,15 +5,35 @@ import {WelcomeComponent} from './welcome/welcome.component';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
-import { UnauthorisedComponent } from './errors/states/unauthorised/unauthorised.component';
+import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
+import {TimeoutComponent} from './errors/states/timeout/timeout.component';
 import {FUsersComponent} from './admin/states/users/users.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
 import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
+import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-state.component';
+import {ProjectGroupsStateComponent} from './projects/states/groups/project-groups-state.component';
 import {UnitRootState} from './units/unit-root-state.component';
 import {ProjectRootState} from './projects/states/project-root-state.component';
-import { TaskViewerState } from './units/task-viewer/task-viewer-state.component';
+import {TaskViewerState} from './units/task-viewer/task-viewer-state.component';
+import {
+  UnitTaskRouteMode,
+  UnitTaskInboxStateComponent,
+} from './units/states/tasks/inbox/unit-task-inbox-state.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
-import { Ng2ViewDeclaration } from '@uirouter/angular';
+import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
+import {SuccessCloseComponent} from './common/success-close/success-close.component';
+import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
+import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
+import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
+import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {Ng2ViewDeclaration} from '@uirouter/angular';
+import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
+import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
+import {UnitAdminState} from './units/states/edit/unit-admin-state.component';
+import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
+import {RolloverComponent} from './units/states/rollover/rollover.component';
+import {StudentsListState} from './units/states/students-list/students-list.component';
+import {UnitGroupsState} from './units/states/groups/unit-groups/unit-groups.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -64,7 +84,7 @@ const HomeState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'Home Page'
+    pageTitle: 'Home Page',
   },
 };
 
@@ -99,63 +119,119 @@ const HomeState: NgHybridStateDeclaration = {
 //   },
 // };
 
-/**
- * Define the new inbox state.
- */
-// const InboxState: NgHybridStateDeclaration = {
-//   name: 'inbox',
-//   url: '/units/:unit_id/inbox/:task_key',
+const unitTaskRoleWhitelist = ['Tutor', 'Convenor', 'Admin', 'Auditor'];
 
-//   params: {
-//     // unitRole: UnitRole,
-//     // taskKey: null,
-//     // taskData:
-//     // unit,
-//   },
-//   views: {
-//     main: {
-//       component: InboxComponent,
-//     },
-//   },
-//   data: {
-//     task: 'Task Inbox',
-//     pageTitle: '_Home_',
-//     roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
-//   },
-//   resolve: {
-//     unit$: function ($stateParams) {
-//       const unitService = AppInjector.get(UnitService);
-//       const globalState = AppInjector.get(GlobalStateService);
-//       globalState.onLoad(() => {});
-//       console.log($stateParams);
-//       return unitService.get({ id: $stateParams.unit_id });
-//     },
-//     unitRole$: function ($stateParams) {
-//       const globalStateService = AppInjector.get(GlobalStateService);
+const UnitTaskInboxState: NgHybridStateDeclaration = {
+  name: 'units2/tasks/inbox',
+  parent: 'unit-root-state',
+  url: '/tasks/inbox/{taskKey:any}',
+  params: {
+    taskKey: {value: null, squash: true, dynamic: true},
+  },
+  resolve: {
+    routeMode: function (): UnitTaskRouteMode {
+      return 'inbox';
+    },
+  },
+  views: {
+    unitView: {
+      component: UnitTaskInboxStateComponent,
+    },
+  },
+  data: {
+    task: 'Task Inbox',
+    pageTitle: '_Home_',
+    roleWhitelist: unitTaskRoleWhitelist,
+  },
+};
 
-//       const result = globalStateService.loadedUnitRoles.values.pipe(
-//         map((unitRoles) => unitRoles.find((unitRole) => unitRole.id == $stateParams.unit_id))
-//       );
-//       return result;
-//     },
-//     taskData$: function () {
-//       const taskService = AppInjector.get(TaskService);
-//       const taskData = {
-//         taskKey: null,
-//         source: null,
-//         selectedTask: null,
-//         onSelectedTaskChange: (task) =>{
-//           const taskKey = task?.taskKey()
-//           $scope.taskData.taskKey = taskKey
-//           setTaskKeyAsUrlParams(task);
-//         }
-//       }
-//       taskData.source = taskService.queryTasksForTaskInbox.bind(taskService);
-//       taskData.taskDefMode = false;
-//       return of(taskData);
-//     },
-//   },
-// };
+const UnitTaskDefinitionState: NgHybridStateDeclaration = {
+  name: 'units2/tasks/definition',
+  parent: 'unit-root-state',
+  url: '/tasks/definition/{taskKey:any}',
+  params: {
+    taskKey: {value: null, squash: true, dynamic: true},
+  },
+  resolve: {
+    routeMode: function (): UnitTaskRouteMode {
+      return 'definition';
+    },
+  },
+  views: {
+    unitView: {
+      component: UnitTaskInboxStateComponent,
+    },
+  },
+  data: {
+    task: 'Task Explorer',
+    pageTitle: '_Home_',
+    roleWhitelist: unitTaskRoleWhitelist,
+  },
+};
+
+const UnitTaskModerationState: NgHybridStateDeclaration = {
+  name: 'units2/tasks/moderation',
+  parent: 'unit-root-state',
+  url: '/tasks/moderation/{taskKey:any}',
+  params: {
+    taskKey: {value: null, squash: true, dynamic: true},
+  },
+  resolve: {
+    routeMode: function (): UnitTaskRouteMode {
+      return 'moderation';
+    },
+  },
+  views: {
+    unitView: {
+      component: UnitTaskInboxStateComponent,
+    },
+  },
+  data: {
+    task: 'Task Moderation',
+    pageTitle: '_Home_',
+    roleWhitelist: unitTaskRoleWhitelist,
+  },
+};
+
+const UnitTaskOverflowState: NgHybridStateDeclaration = {
+  name: 'units2/tasks/overflow',
+  parent: 'unit-root-state',
+  url: '/tasks/overflow/{taskKey:any}',
+  params: {
+    taskKey: {value: null, squash: true, dynamic: true},
+  },
+  resolve: {
+    routeMode: function (): UnitTaskRouteMode {
+      return 'overflow';
+    },
+  },
+  views: {
+    unitView: {
+      component: UnitTaskInboxStateComponent,
+    },
+  },
+  data: {
+    task: 'Task Overflow',
+    pageTitle: '_Home_',
+    roleWhitelist: unitTaskRoleWhitelist,
+  },
+};
+
+const UnitAnalyticsState: NgHybridStateDeclaration = {
+  name: 'units2/analytics',
+  parent: 'unit-root-state',
+  url: '/analytics',
+  views: {
+    unitView: {
+      component: UnitAnalyticsComponent,
+    },
+  },
+  data: {
+    task: 'Unit Analytics',
+    pageTitle: '_Home_',
+    roleWhitelist: unitTaskRoleWhitelist,
+  },
+};
 
 /**
  * Define the welcome state.
@@ -169,7 +245,7 @@ const WelcomeState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'Welcome'
+    pageTitle: 'Welcome',
   },
 };
 
@@ -178,7 +254,7 @@ const WelcomeState: NgHybridStateDeclaration = {
  */
 const SignInState: NgHybridStateDeclaration = {
   name: 'sign_in',
-  url: '/sign_in?dest&params&authToken&username',
+  url: '/sign_in?authToken&username',
   views: {
     main: {
       component: SignInComponent,
@@ -186,6 +262,20 @@ const SignInState: NgHybridStateDeclaration = {
   },
   data: {
     pageTitle: 'Sign In',
+  },
+  resolve: {
+    username: [
+      '$stateParams',
+      function ($stateParams: {username: string}) {
+        return $stateParams.username;
+      },
+    ],
+    authToken: [
+      '$stateParams',
+      function ($stateParams: {authToken: string}) {
+        return $stateParams.authToken;
+      },
+    ],
   },
 };
 
@@ -201,7 +291,7 @@ const EditProfileState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'Edit Profile'
+    pageTitle: 'Edit Profile',
   },
 };
 
@@ -214,7 +304,7 @@ const EulaState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'End User License Agreement'
+    pageTitle: 'End User License Agreement',
   },
 };
 
@@ -232,7 +322,7 @@ const ViewAllProjectsState: NgHybridStateDeclaration = {
     },
   },
   data: {
-    pageTitle: 'All Units'
+    pageTitle: 'All Units',
   },
 };
 
@@ -258,16 +348,50 @@ const AdministerUnits: NgHybridStateDeclaration = {
 
 // projectDashboardState which gets the project from the abstract state above
 const ProjectDashboardState: NgHybridStateDeclaration = {
-  name: 'dashboard2',
+  name: 'projects2/dashboard2',
   parent: 'projects2',
-  url: '/dashboard2',
+  url: '/dashboard2/:taskAbbreviation?',
+  params: {
+    taskAbbreviation: {value: null, squash: true, dynamic: true},
+  },
   views: {
     projectView: {
       component: ProjectDashboardComponent,
     },
   },
   data: {
+    task: 'Dashboard',
     pageTitle: 'Unit Dashboard',
+  },
+};
+
+const PortfolioCreationState: NgHybridStateDeclaration = {
+  name: 'projects2/portfolio2',
+  parent: 'projects2',
+  url: '/portfolio2',
+  views: {
+    projectView: {
+      component: PortfolioStateComponent,
+    },
+  },
+  data: {
+    task: 'Portfolio Creation',
+    pageTitle: '_Home_',
+  },
+};
+
+const ProjectGroupsState: NgHybridStateDeclaration = {
+  name: 'projects2/groups2',
+  parent: 'projects2',
+  url: '/groups2',
+  views: {
+    projectView: {
+      component: ProjectGroupsStateComponent,
+    },
+  },
+  data: {
+    task: 'Groups List',
+    pageTitle: '_Home_',
   },
 };
 
@@ -309,9 +433,23 @@ const UnauthoriedState: NgHybridStateDeclaration = {
   },
   data: {
     // Add data used by header
-    pageTitle: 'Unauthorised'
+    pageTitle: 'Unauthorised',
   },
 };
+
+const TimeoutState: NgHybridStateDeclaration = {
+  name: 'timeout',
+  url: '/timeout',
+  views: {
+    main: {
+      component: TimeoutComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Timeout',
+  },
+};
+
 /**
  * Define the SCORM Player state.
  */
@@ -323,13 +461,13 @@ const ScormPlayerNormalState: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams: {project_id: number}) {
         return $stateParams.project_id;
-      }
+      },
     ],
     taskDefId: [
       '$stateParams',
       function ($stateParams: {task_definition_id: number}) {
         return $stateParams.task_definition_id;
-      }
+      },
     ],
     mode: function () {
       return 'normal';
@@ -357,19 +495,19 @@ const ScormPlayerStudentReviewState: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams) {
         return $stateParams.project_id;
-      }
+      },
     ],
     taskDefId: [
       '$stateParams',
       function ($stateParams) {
         return $stateParams.task_definition_id;
-      }
+      },
     ],
     testAttemptId: [
       '$stateParams',
       function ($stateParams) {
         return $stateParams.test_attempt_id;
-      }
+      },
     ],
     mode: function () {
       return 'review';
@@ -394,7 +532,7 @@ const ScormPlayerReviewState: NgHybridStateDeclaration = {
       '$stateParams',
       function ($stateParams) {
         return $stateParams.task_definition_id;
-      }
+      },
     ],
     mode: function () {
       return 'preview';
@@ -408,6 +546,224 @@ const ScormPlayerReviewState: NgHybridStateDeclaration = {
   data: {
     pageTitle: 'Preview Scorm Test',
     roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
+  },
+};
+
+const SuccessCloseState: NgHybridStateDeclaration = {
+  name: 'success-close',
+  url: '/success-close',
+  views: {
+    main: {
+      component: SuccessCloseComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Home Page',
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+/**
+ * Allow the uesr to plan the task due dates for their project.
+ */
+const projectPlanState: NgHybridStateDeclaration = {
+  name: 'projects2/plan2',
+  parent: 'projects2',
+  url: '/plan2?:taskDef?',
+  params: {
+    taskDef: {value: null, squash: true, dynamic: true},
+  },
+  views: {
+    projectView: {
+      component: ProjectPlanComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Task Plan',
+    task: 'Plan Tasks',
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+const TutorDiscussionState: NgHybridStateDeclaration = {
+  name: 'tutor-discussion',
+  url: '/tutor-discussion?unitId&username',
+  views: {
+    main: {
+      component: TutorDiscussionComponent,
+    },
+  },
+  resolve: {
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+    username: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.username;
+      },
+    ],
+  },
+  data: {
+    pageTitle: 'Discussion',
+    task: 'Discussion',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+const TutorialState: NgHybridStateDeclaration = {
+  name: 'projects2/tutorials2',
+  parent: 'projects2',
+  url: '/tutorials2',
+  views: {
+    projectView: {
+      component: TutorialsComponent,
+    },
+  },
+  data: {
+    task: 'Tutorial List',
+    pageTitle: '_Home_',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Student', 'Auditor'],
+  },
+};
+
+const PortfoliosState: NgHybridStateDeclaration = {
+  name: 'units/students/portfolios',
+  parent: 'unit-root-state',
+  url: '/students/portfolios',
+  views: {
+    unitView: {
+      component: PortfoliosComponent,
+    },
+  },
+  data: {
+    task: 'Student Portfolios',
+    pageTitle: 'Student Portfolios',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+const TutorAttendance: NgHybridStateDeclaration = {
+  name: 'tutor-attendance',
+  url: '/tutor-attendance?unitId&attendance',
+  resolve: {
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+    attendance: [
+      '$stateParams',
+      function ($stateParams) {
+        if ($stateParams.attendance == 'true' || $stateParams.attendance === true) {
+          return true;
+        }
+        return false;
+      },
+    ],
+  },
+  views: {
+    main: {
+      component: TutorDiscussionComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Check-in',
+    task: 'Check-in',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+const RolloverState: NgHybridStateDeclaration = {
+  name: 'units/rollover',
+  url: '/units/:unitId/rollover',
+  resolve: {
+    unitId: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.unitId;
+      },
+    ],
+  },
+  views: {
+    main: {
+      component: RolloverComponent,
+    },
+  },
+  data: {
+    task: 'Unit Rollover',
+    pageTitle: 'Unit Rollover',
+    roleWhitelist: ['Convenor', 'Admin'],
+  },
+};
+
+const jplagReportViewerState: NgHybridStateDeclaration = {
+  name: 'jplag-report-viewer',
+  url: '/jplag-report-viewer',
+  views: {
+    main: {
+      component: JplagReportViewerComponent,
+    },
+  },
+  data: {
+    pageTitle: 'JPlag Report Viewer',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+// Lti States
+
+/**
+ * Define the LTI dashboard state.
+ */
+const LtiDashboardState: NgHybridStateDeclaration = {
+  name: 'lti',
+  url: '/lti?ltik',
+  resolve: {
+    ltik: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.ltik;
+      },
+    ],
+  },
+  views: {
+    main: {
+      component: LtiDashboardComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Home Page',
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+/**
+ * Renders the content selection form shown when "Select Content" is clicked in Moodle's external tool setup.
+ */
+const LtiUnitLinkState: NgHybridStateDeclaration = {
+  name: 'lti/link',
+  url: '/lti/link?ltik',
+  resolve: {
+    ltik: [
+      '$stateParams',
+      function ($stateParams) {
+        return $stateParams.ltik;
+      },
+    ],
+  },
+  views: {
+    main: {
+      component: LtiUnitLinkComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Select Content',
+    roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
 
@@ -426,11 +782,32 @@ export const doubtfireStates = [
   ViewAllUnits,
   AdministerUnits,
   UnauthoriedState,
+  TimeoutState,
   ProjectRootState,
   ProjectDashboardState,
+  PortfolioCreationState,
+  ProjectGroupsState,
   UnitRootState,
   TaskViewerState,
+  UnitTaskInboxState,
+  UnitTaskDefinitionState,
+  UnitTaskModerationState,
+  UnitTaskOverflowState,
+  UnitAnalyticsState,
   ScormPlayerNormalState,
   ScormPlayerReviewState,
   ScormPlayerStudentReviewState,
+  SuccessCloseState,
+  projectPlanState,
+  TutorDiscussionState,
+  jplagReportViewerState,
+  LtiDashboardState,
+  LtiUnitLinkState,
+  TutorAttendance,
+  TutorialState,
+  UnitAdminState,
+  StudentsListState,
+  UnitGroupsState,
+  PortfoliosState,
+  RolloverState,
 ];

@@ -7,19 +7,23 @@ import {
   TaskStatusUiData,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import { Injectable } from '@angular/core';
-import { CachedEntityService, EntityCache, RequestOptions } from 'ngx-entity-service';
-import { HttpClient } from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiURL';
-import { MappingFunctions } from './mapping-fn';
-import { Observable, map, tap } from 'rxjs';
+import {EventEmitter, Injectable} from '@angular/core';
+import {CachedEntityService, EntityCache, RequestOptions} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {MappingFunctions} from './mapping-fn';
+import {Observable, map, tap} from 'rxjs';
 
 @Injectable()
 export class TaskService extends CachedEntityService<Task> {
+  public readonly taskStatusUpdated$: EventEmitter<Task> = new EventEmitter();
+
   protected readonly endpointFormat = '/projects/:projectId:/task_def_id/:taskDefId:';
 
   private readonly taskInboxEndpoint = '/units/:id:/tasks/inbox';
   private readonly taskExplorerEndpoint = '/units/:id:/task_definitions/:task_def_id:/tasks';
+  private readonly taskModerationEndpoint = '/units/:id:/tasks/moderation';
+  private readonly taskOverflowEndpoint = '/units/:id:/tasks/overflow';
   private readonly refreshTaskEndpoint = 'projects/:projectId:/refresh_tasks/:taskDefinitionId:';
 
   constructor(httpClient: HttpClient) {
@@ -45,11 +49,19 @@ export class TaskService extends CachedEntityService<Task> {
         keys: 'dueDate',
         toEntityFn: MappingFunctions.mapDateToEndOfDay,
       },
+      {
+        keys: 'targetStartDate',
+        toEntityFn: MappingFunctions.mapDateToEndOfDay,
+      },
+      {
+        keys: 'targetDueDate',
+        toEntityFn: MappingFunctions.mapDateToEndOfDay,
+      },
       'extensions',
       'scormExtensions',
       {
         keys: 'submissionDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
+        toEntityFn: MappingFunctions.mapDate,
       },
       {
         keys: 'completionDate',
@@ -86,7 +98,8 @@ export class TaskService extends CachedEntityService<Task> {
             }
           });
         },
-      }
+      },
+      'moderationType',
     );
 
     this.mapping.addJsonKey('qualityPts', 'grade', 'includeInPortfolio', 'trigger');
@@ -96,7 +109,11 @@ export class TaskService extends CachedEntityService<Task> {
     return new Task(other as Project);
   }
 
-  public queryTasksForTaskInbox(unit: Unit, taskDef?: TaskDefinition | number): Observable<Task[]> {
+  public queryTasksForTaskInbox(
+    unit: Unit,
+    taskDef?: TaskDefinition | number,
+    fetchMyStudentsOnly?: boolean,
+  ): Observable<Task[]> {
     const cache: EntityCache<Task> = new EntityCache<Task>();
 
     return this.query(
@@ -107,15 +124,21 @@ export class TaskService extends CachedEntityService<Task> {
         endpointFormat: this.taskInboxEndpoint,
         cache: cache,
         constructorParams: unit,
-      }
+        params: {
+          my_students_only: fetchMyStudentsOnly,
+        },
+      },
     ).pipe(
       tap((tasks: Task[]) => {
         unit.incorporateTasks(tasks);
-      })
+      }),
     );
   }
 
-  public queryTasksForTaskExplorer(unit: Unit, taskDef?: TaskDefinition | number): Observable<Task[]> {
+  public queryTasksForTaskExplorer(
+    unit: Unit,
+    taskDef?: TaskDefinition | number,
+  ): Observable<Task[]> {
     const cache: EntityCache<Task> = new EntityCache<Task>();
     return this.query(
       {
@@ -126,12 +149,48 @@ export class TaskService extends CachedEntityService<Task> {
         endpointFormat: this.taskExplorerEndpoint,
         cache: cache,
         constructorParams: unit,
-      }
+      },
     ).pipe(
       map((tasks: Task[]) => {
         unit.incorporateTasks(tasks);
         return unit.fillWithUnStartedTasks(tasks, taskDef);
-      })
+      }),
+    );
+  }
+
+  public queryTasksForMentorModeration(unit: Unit): Observable<Task[]> {
+    const cache: EntityCache<Task> = new EntityCache<Task>();
+    return this.query(
+      {
+        id: unit.id,
+      },
+      {
+        endpointFormat: this.taskModerationEndpoint,
+        cache: cache,
+        constructorParams: unit,
+      },
+    ).pipe(
+      tap((tasks: Task[]) => {
+        unit.incorporateTasks(tasks);
+      }),
+    );
+  }
+
+  public queryTasksForOverflow(unit: Unit): Observable<Task[]> {
+    const cache: EntityCache<Task> = new EntityCache<Task>();
+    return this.query(
+      {
+        id: unit.id,
+      },
+      {
+        endpointFormat: this.taskOverflowEndpoint,
+        cache: cache,
+        constructorParams: unit,
+      },
+    ).pipe(
+      tap((tasks: Task[]) => {
+        unit.incorporateTasks(tasks);
+      }),
     );
   }
 
@@ -160,6 +219,7 @@ export class TaskService extends CachedEntityService<Task> {
   public readonly stateThatAllowsExtension = TaskStatus.STATE_THAT_ALLOWS_EXTENSION;
   public readonly pdfRegeneratableStatuses = TaskStatus.PDF_REGENERATABLE_STATES;
   public readonly submittableStatuses = TaskStatus.SUBMITTABLE_STATUSES;
+  public readonly feedbackTemplateStatuses = TaskStatus.FEEDBACK_TEMPLATE_STATUSES;
   public readonly completeStatus: TaskStatusEnum = 'complete';
   public readonly learningWeight: Map<TaskStatusEnum, number> = TaskStatus.LEARNING_WEIGHT;
   public readonly statusAcronym: Map<TaskStatusEnum, string> = TaskStatus.STATUS_ACRONYM;
@@ -174,6 +234,10 @@ export class TaskService extends CachedEntityService<Task> {
     return TaskStatus.statusClass(status);
   }
 
+  public notifyStatusChange(task: Task): void {
+    this.taskStatusUpdated$.emit(task);
+  }
+
   public readonly statusColors: Map<string, string> = TaskStatus.STATUS_COLORS;
   public readonly switchableStates = TaskStatus.SWITCHABLE_STATES;
 
@@ -181,7 +245,7 @@ export class TaskService extends CachedEntityService<Task> {
     return TaskStatus.STATUS_LABELS.get(status);
   }
 
-  public helpDescription(status: TaskStatusEnum): { detail: string; reason: string; action: string } {
+  public helpDescription(status: TaskStatusEnum): {detail: string; reason: string; action: string} {
     return TaskStatus.HELP_DESCRIPTIONS.get(status);
   }
 
@@ -189,7 +253,7 @@ export class TaskService extends CachedEntityService<Task> {
     return TaskStatus.statusData(data);
   }
 
-  public taskKeyFromString(taskKeyString: string): { studentId: string; taskDefAbbr: string } {
+  public taskKeyFromString(taskKeyString: string): {studentId: string; taskDefAbbr: string} {
     const taskKeyComponents = taskKeyString?.split('/');
     if (taskKeyComponents) {
       const studentId = taskKeyComponents[0];
@@ -201,5 +265,37 @@ export class TaskService extends CachedEntityService<Task> {
     }
 
     return null;
+  }
+
+  public checkInTaskForStudent(task: Task): Observable<void> {
+    const options: RequestOptions<Task> = {
+      entity: task,
+      cache: task.project.taskCache,
+      endpointFormat: `${this.endpointFormat}/check_in`,
+    };
+
+    return this.post(
+      {
+        projectId: task.project.id,
+        taskDefId: task.definition.id,
+      },
+      options,
+    );
+  }
+
+  public claimTask(task: Task): Observable<boolean> {
+    const options: RequestOptions<Task> = {
+      entity: task,
+      cache: task.project.taskCache,
+      endpointFormat: `${this.endpointFormat}/claim_overflow_task`,
+    };
+
+    return this.post(
+      {
+        projectId: task.project.id,
+        taskDefId: task.definition.id,
+      },
+      options,
+    );
   }
 }

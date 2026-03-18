@@ -20,7 +20,7 @@
     <div [hidden]="loadingUnitRoles" class="flex flex-row flex-wrap items-center">
       <div *ngFor="let unitRole of unitRoles | isActiveUnitRole as filteredUnitRoles">
         <div
-          uiSref="units/tasks/inbox"
+          uiSref="units2/tasks/inbox"
           [uiParams]="{unitId: unitRole.unit?.id}"
           class="removeStyle"
           *ngIf="!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active"
@@ -89,8 +89,8 @@
         <div *ngFor="let project of projects">
           <div
             *ngIf="project.unit.isActive"
-            uiSref="dashboard2"
-            [uiParams]="{projectId: project.id, taskAbbr: ''}"
+            uiSref="projects2/dashboard2"
+            [uiParams]="{projectId: project.id, taskAbbreviation: ''}"
             class="removeStyle"
           >
             <mat-card class="unit-card">

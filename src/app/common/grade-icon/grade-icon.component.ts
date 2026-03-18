@@ -1,25 +1,35 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { GradeService } from '../services/grade.service';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {GradeService} from '../services/grade.service';
 
 @Component({
-  selector: 'grade-icon',
-  templateUrl: 'grade-icon.component.html',
-  styleUrls: ['grade-icon.component.scss'],
+  selector: 'f-grade-icon',
+  templateUrl: './grade-icon.component.html',
+  styleUrls: ['./grade-icon.component.scss'],
 })
-export class GradeIconComponent implements OnInit {
-  @Input() grade: string | number = 'F';
-  @Input() index: number;
+export class GradeIconComponent implements OnInit, OnChanges {
+  @Input() grade?: number | string;
+  @Input() colorful: boolean = false;
 
-  gradeText: string;
-  gradeLetter: string;
+  gradeText: string = 'Grade';
+  gradeLetter: string = 'G';
 
   constructor(private gradeService: GradeService) {}
 
   ngOnInit(): void {
-    if (this.index == undefined) {
-      this.index = this.gradeService.gradeNumbers[this.grade] || this.grade;
+    this.updateGrade();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['grade']) {
+      this.updateGrade();
     }
-    this.gradeText = this.gradeService.grades[this.index];
-    this.gradeLetter = this.gradeService.gradeAcronyms[this.gradeText];
+  }
+
+  private updateGrade(): void {
+    const grade: number =
+      typeof this.grade === 'string' ? this.gradeService.stringToGrade(this.grade) : this.grade;
+    this.gradeText = this.gradeService.grades[grade] || 'Grade';
+    this.gradeLetter = this.gradeService.gradeAcronyms[grade] || 'G';
   }
 }

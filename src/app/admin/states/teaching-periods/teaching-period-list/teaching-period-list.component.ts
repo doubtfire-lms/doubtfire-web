@@ -1,14 +1,14 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { TeachingPeriodBreak } from 'src/app/api/models/teaching-period';
-import { TeachingPeriod } from 'src/app/api/models/teaching-period';
-import { TeachingPeriodBreakService } from 'src/app/api/services/teaching-period-break.service';
-import { TeachingPeriodService } from 'src/app/api/services/teaching-period.service';
-import { TeachingPeriodUnitImportService } from '../teaching-period-unit-import/teaching-period-unit-import.dialog';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
+import {TeachingPeriod} from 'src/app/api/models/teaching-period';
+import {TeachingPeriodBreakService} from 'src/app/api/services/teaching-period-break.service';
+import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
+import {TeachingPeriodUnitImportService} from '../teaching-period-unit-import/teaching-period-unit-import.dialog';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'f-teaching-period-list',
@@ -53,7 +53,7 @@ export class TeachingPeriodListComponent implements OnInit {
 
   selectTeachingPeriod(selectedTeachingPeriod: TeachingPeriod) {
     this.teachingPeriodsService.get(selectedTeachingPeriod.id).subscribe((teachingPeriod) => {
-      this.dialog.open(NewTeachingPeriodDialogComponent, { data: { teachingPeriod: teachingPeriod } });
+      this.dialog.open(NewTeachingPeriodDialogComponent, {data: {teachingPeriod: teachingPeriod}});
     });
   }
 
@@ -101,18 +101,24 @@ export class NewTeachingPeriodDialogComponent {
     private dialogRef: MatDialogRef<NewTeachingPeriodDialogComponent>,
     public teachingPeriodService: TeachingPeriodService,
     public teachingPeriodBreakService: TeachingPeriodBreakService,
-    private _snackBar: MatSnackBar
+    public alertService: AlertService,
   ) {}
   public newOrSelectedTeachingPeriod = this.data.teachingPeriod || new TeachingPeriod();
 
   public tempBreak = new TeachingPeriodBreak();
 
   addTeachingBreak() {
-    this.newOrSelectedTeachingPeriod.addBreak(this.tempBreak.startDate, this.tempBreak.numberOfWeeks).subscribe({
-      next: (teachingPeriodBreak) => {
-        console.log(teachingPeriodBreak);
-      },
-    });
+    this.newOrSelectedTeachingPeriod
+      .addBreak(this.tempBreak.startDate, this.tempBreak.numberOfWeeks)
+      .subscribe({
+        next: (teachingPeriodBreak) => {
+          this.alertService.success('Break added');
+          console.log(teachingPeriodBreak);
+        },
+        error: (response) => {
+          this.alertService.error(`Error adding break. ${response}`);
+        },
+      });
   }
 
   deleteBreak(teachingPeriod: TeachingPeriod, teachingBreak: TeachingPeriodBreak): void {
@@ -120,26 +126,25 @@ export class NewTeachingPeriodDialogComponent {
       next: (teachingPeriodBreak) => {
         console.log(teachingPeriodBreak);
       },
-      error: (response) => {},
+      error: (response) => {
+        this.alertService.error(`Error deleting break. ${response}`);
+      },
     });
   }
 
   submitTeachingPeriod() {
-    // todo: use alert service
-    this.teachingPeriodService.store(this.newOrSelectedTeachingPeriod).subscribe({
+    // Check if we are updating or creating a new teaching period
+    const observer = this.newOrSelectedTeachingPeriod.id
+      ? this.teachingPeriodService.update(this.newOrSelectedTeachingPeriod)
+      : this.teachingPeriodService.store(this.newOrSelectedTeachingPeriod);
+
+    // Save the teaching period
+    observer.subscribe({
       next: (teachingPeriod) => {
-        this._snackBar.open(`${teachingPeriod.name} saved`, 'dismiss', {
-          duration: 2000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-        });
+        this.alertService.success(`${teachingPeriod.name} saved`);
       },
       error: (response) => {
-        this._snackBar.open(response, 'dismiss', {
-          duration: 5000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-        });
+        this.alertService.error(`Error saving teaching period. ${response}`);
       },
     });
   }

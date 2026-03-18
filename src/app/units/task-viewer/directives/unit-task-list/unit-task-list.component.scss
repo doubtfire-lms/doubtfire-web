@@ -72,7 +72,7 @@ $my-palette: mat.m2-define-palette($md-formatif);
   cursor: pointer;
 }
 
-.mat-mdc-list-item .item-content.selected {
+.mat-mdc-list-item.selected {
   background-color: var(--background-gray);
 }
 

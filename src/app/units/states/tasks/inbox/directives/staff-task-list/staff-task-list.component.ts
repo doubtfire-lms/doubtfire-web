@@ -31,6 +31,10 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {HotkeysService} from '@ngneat/hotkeys';
+import {Router} from '@angular/router';
+import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {TasksByTutorPipe} from 'src/app/common/filters/tasks-by-tutor.pipe';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -44,7 +48,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() project: Project;
 
   @Input() taskData: {
-    source: (unit: Unit, taskDef: TaskDefinition | number) => Observable<Task[]>;
+    source: (
+      unit: Unit,
+      taskDef: TaskDefinition | number,
+      fetchMyStudentsOnly?: boolean,
+    ) => Observable<Task[]>;
     selectedTask: Task;
     taskKey: string;
     onSelectedTaskChange: (task: Task) => void;
@@ -52,20 +60,23 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   };
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
-  @Input() filters: {
+  @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
     forceStream: boolean;
     studentName: string;
     tutorialIdSelected: any;
+    unitRoleIdSelected: number | string;
     taskDefinitionIdSelected: number | TaskDefinition;
-  };
+  }>;
   @Input() showSearchOptions = true;
 
   @Input() isNarrow: boolean;
 
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
+
   userHasTutorials: boolean;
-  filteredTasks: any[] = null;
+  filteredTasks: Task[] = null;
 
   studentFilter: {
     id: number | string;
@@ -75,7 +86,14 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     tutorial?: Tutorial;
   }[] = null;
 
-  tasks: any[] = null;
+  tutorGroups: {
+    label: string;
+    options: {id: string | number; inboxDescription: string | undefined}[];
+  }[] = [];
+
+  tasks: Task[] = null;
+
+  // hasJplagReport: boolean = false;
 
   watchingTaskKey: any;
 
@@ -85,6 +103,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   definedTasksPipe = new TasksOfTaskDefinitionPipe();
   tasksInTutorialsPipe = new TasksInTutorialsPipe();
   taskWithStudentNamePipe = new TasksForInboxSearchPipe();
+  tasksByTutorPipe = new TasksByTutorPipe();
   // Let's call having a source of tasksForDefinition plus having a task definition
   // auto-selected with the search options open task def mode -- i.e., the mode
   // for selecting tasks by task definitions
@@ -100,6 +119,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   originalFilteredTasks: any[] = null;
   allowHover = true;
 
+  // Track if all tasks have already been fetched
+  // Avoids redundant API calls when changing tutorial filters
+  fetchedAllTasks: boolean = false;
+
   constructor(
     private selectedTaskService: SelectedTaskService,
     private alertService: AlertService,
@@ -107,18 +130,28 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     public dialog: MatDialog,
     private userService: UserService,
     private hotkeys: HotkeysService,
+    private router: Router,
+    private taskDefinitionService: TaskDefinitionService,
+    private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (
-      ((changes.unit &&
-        !changes.unit?.isFirstChange &&
-        changes.unit.currentValue.id &&
-        changes.unit.previousValue.id !== changes.unit.currentValue.id) ||
-        this.tasks == null) &&
-      this.isTaskDefMode &&
-      this.filters
-    ) {
+    if (changes.taskData && !changes.taskData.isFirstChange() && this.tasks?.length) {
+      this.setTaskDefFromTaskKey(this.taskData.taskKey);
+      this.syncSelectedTaskFromTaskKey();
+    }
+
+    if (!this.isTaskDefMode || !this.filters) {
+      return;
+    }
+
+    const unitChanged =
+      !!changes.unit &&
+      !changes.unit.isFirstChange() &&
+      changes.unit.currentValue?.id &&
+      changes.unit.previousValue?.id !== changes.unit.currentValue?.id;
+
+    if (unitChanged) {
       this.refreshData();
     }
   }
@@ -159,12 +192,28 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.userHasTutorials =
       this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
 
+    const staff = this.unit.staff.slice();
+
+    const byName = (a: UnitRole, b: UnitRole) =>
+      (a.user?.name ?? '').localeCompare(b.user?.name ?? '');
+
+    const mentored = staff
+      .filter((ur) => ur.mentorId === this.unitRole.id)
+      .slice()
+      .sort(byName);
+
+    const allTutors = staff.slice().sort(byName);
+    const shouldDefaultToMyStudents =
+      (this.unitRole.role === 'Tutor' || this.unitRole.role === 'Convenor') &&
+      this.userHasTutorials;
+
     this.filters = Object.assign(
       {
         studentName: null,
-        tutorialIdSelected:
-          (this.unitRole.role === 'Tutor' || 'Convenor') && this.userHasTutorials ? 'mine' : 'all',
+        tutorialIdSelected: shouldDefaultToMyStudents ? 'mine' : 'all',
         tutorials: [],
+        unitRoleIdSelected:
+          mentored.length > 0 && this.viewType === 'moderation' ? 'mentoring_all' : 'all',
         taskDefinitionIdSelected: null,
         taskDefinition: null,
         forceStream: true,
@@ -192,8 +241,34 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         };
       }),
     ];
+    this.tutorGroups = [
+      ...(mentored.length > 0
+        ? [
+            {
+              label: 'My Tutors (Mentoring)',
+              options: [
+                {id: 'mentoring_all', inboxDescription: 'Show All Mine'},
+                ...mentored.map((ur) => ({
+                  id: ur.id,
+                  inboxDescription: ur.user?.name,
+                })),
+              ],
+            },
+          ]
+        : []),
+      {
+        label: 'All Tutors',
+        options: [
+          {id: 'all', inboxDescription: 'Show All'},
+          ...allTutors.map((ur) => ({
+            id: ur.id,
+            inboxDescription: ur.user?.name,
+          })),
+        ],
+      },
+    ];
 
-    this.tutorialIdChanged();
+    this.tutorialIdChanged(false);
 
     this.setTaskDefFromTaskKey(this.taskData.taskKey);
 
@@ -209,22 +284,59 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   downloadSubmissionPdfs() {
     const taskDef = this.filters.taskDefinition;
-    this.fileDownloaderService.downloadFile(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
-        this.unit.id
-      }/task_definitions/${taskDef.id}/student_pdfs`,
-      `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`,
-    );
+    this.taskDefinitionService.zipSubmissionPdfs(taskDef).subscribe({
+      next: (newJob) => {
+        this.sidekiqProgressModalService
+          .show(`Downloading submission pdfs for ${taskDef.abbreviation}`, newJob.id)
+          .subscribe({
+            next: (job) => {
+              this.fileDownloaderService.downloadFile(
+                `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
+                  this.unit.id
+                }/task_definitions/${taskDef.id}/student_pdfs`,
+                `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`,
+              );
+            },
+          });
+      },
+      error: (error) => {
+        this.alertService.error(error, 6000);
+      },
+    });
   }
 
-  downloadSubmissions() {
+  downloadSubmissionFiles() {
+    const taskDef = this.filters.taskDefinition;
+    this.taskDefinitionService.zipSubmissionFiles(taskDef).subscribe({
+      next: (newJob) => {
+        this.sidekiqProgressModalService
+          .show(`Downloading submission files for ${taskDef.abbreviation}`, newJob.id)
+          .subscribe({
+            next: (job) => {
+              this.fileDownloaderService.downloadFile(
+                `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
+                  this.unit.id
+                }/task_definitions/${taskDef.id}/download_submissions`,
+                `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`,
+              );
+            },
+          });
+      },
+      error: (error) => {
+        this.alertService.error(error, 6000);
+      },
+    });
+  }
+
+  downloadJPLAGReport() {
     const taskDef = this.filters.taskDefinition;
     this.fileDownloaderService.downloadFile(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
-        this.unit.id
-      }/task_definitions/${taskDef.id}/download_submissions`,
-      `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`,
+      taskDef.getJplagReportUrl(),
+      `${this.unit.code}-${taskDef.abbreviation}-jplag-report.zip`,
     );
+
+    const url = this.router.serializeUrl(this.router.createUrlTree(['/jplag-report-viewer']));
+    window.open(url, '_blank');
   }
 
   openDialog() {
@@ -246,6 +358,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.filters.forceStream,
       );
     }
+
+    if (this.filters.unitRoleIdSelected) {
+      filteredTasks = this.tasksByTutorPipe.transform(
+        this.unitRole,
+        filteredTasks,
+        this.filters.unitRoleIdSelected,
+      );
+    }
+
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
     this.filteredTasks = filteredTasks;
 
@@ -271,7 +392,16 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     selectEl.focus();
   }
 
-  tutorialIdChanged(): void {
+  unitRoleIdChanged(attemptRefreshData: boolean = true): void {
+    this.applyFilters();
+
+    const isExplorerView = this.isTaskDefMode;
+    if (attemptRefreshData && !this.fetchedAllTasks && !isExplorerView) {
+      this.refreshData();
+    }
+  }
+
+  tutorialIdChanged(attemptRefreshData: boolean = true): void {
     const tutorialId = this.filters.tutorialIdSelected;
 
     const filterOption = this.studentFilter.find((f) => f.id === tutorialId);
@@ -280,14 +410,21 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
     if (tutorialId === 'mine') {
       this.filters.tutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name);
+      this.filters.unitRoleIdSelected = 'all';
     } else if (tutorialId === 'all') {
       // Ignore tutorials filter
       this.filters.tutorials = null;
     } else {
       this.filters.tutorials = [filterOption.tutorial];
+      this.filters.unitRoleIdSelected = 'all';
     }
 
     this.applyFilters();
+
+    const isExplorerView = this.isTaskDefMode;
+    if (attemptRefreshData && !this.fetchedAllTasks && !isExplorerView) {
+      this.refreshData();
+    }
   }
 
   //  Task definition options
@@ -324,32 +461,44 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     return this.tasks.find((t) => t?.hasTaskKey(key));
   }
 
+  private syncSelectedTaskFromTaskKey(): void {
+    if (!this.tasks?.length) {
+      return;
+    }
+
+    const task = this.taskData.taskKey ? this.findTaskForTaskKey(this.taskData.taskKey) : null;
+    this.setSelectedTask(task ?? null);
+  }
+
   // Callback to refresh data from the task source
   private refreshData() {
+    const fetchMyStudentsOnly = this.filters.tutorialIdSelected === 'mine';
+
     this.loading = true;
     // Tasks for feedback or tasks for task, depending on the data source
-    this.taskData.source(this.unit, this.filters?.taskDefinitionIdSelected).subscribe({
-      next: (response) => {
-        this.tasks = response;
-        this.applyFilters();
-        this.loading = false;
+    this.taskData
+      .source(this.unit, this.filters?.taskDefinitionIdSelected, fetchMyStudentsOnly)
+      .subscribe({
+        next: (response) => {
+          this.tasks = response;
+          this.applyFilters();
+          this.loading = false;
 
-        // Load initial set task, either the one provided (by the URL)
-        // then load actual task in now or the first task that applies
-        // to the given set of filters.
-        const task = this.findTaskForTaskKey(this.taskData.taskKey);
-        this.setSelectedTask(task);
+          this.fetchedAllTasks = !fetchMyStudentsOnly && !this.isTaskDefMode;
 
-        // For when URL has been manually changed, set the selected task
-        // using new array of tasks loaded from the new taskKey
-        if (!this.watchingTaskKey) {
-          this.watchingTaskKey = true;
-        }
-      },
-      error: (message) => {
-        this.alertService.error(message, 6000);
-      },
-    });
+          // If the URL carries a task key, load that task once the query results arrive.
+          this.syncSelectedTaskFromTaskKey();
+
+          // For when URL has been manually changed, set the selected task
+          // using new array of tasks loaded from the new taskKey
+          if (!this.watchingTaskKey) {
+            this.watchingTaskKey = true;
+          }
+        },
+        error: (message) => {
+          this.alertService.error(message, 6000);
+        },
+      });
   }
 
   setSelectedTask(task: Task) {
@@ -430,5 +579,27 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   togglePin(task: Task) {
     task.pinned ? task.unpin() : task.pin();
+  }
+
+  getWarningIcon(task: Task): 'warning' | 'overflow' | null {
+    if (!task.submissionDate) return null;
+    if (task.status !== 'ready_for_feedback') {
+      return null;
+    }
+
+    const now = Date.now();
+    const submission = new Date(task.submissionDate).getTime();
+
+    const daysSinceSubmission = (now - submission) / (1000 * 60 * 60 * 24);
+
+    if (daysSinceSubmission >= task.unit.feedbackOverflowThresholdDays) {
+      return 'overflow';
+    }
+
+    if (daysSinceSubmission >= task.unit.feedbackWarningThresholdDays) {
+      return 'warning';
+    }
+
+    return null;
   }
 }

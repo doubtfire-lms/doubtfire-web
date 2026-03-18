@@ -1,0 +1,87 @@
+<div class="flex flex-col gap-2">
+  @if (showTaskAbbr && editMode) {
+    <label>{{ task.definition.name }}</label>
+  }
+  <div class="flex flex-row items-center gap-4">
+    @if (showTaskAbbr) {
+      <label>{{ task.definition.abbreviation }}: </label>
+    } @else {
+      <label>Complete By: </label>
+    }
+    <mat-slider [max]="max" min="0" class="grow">
+      <input
+        matSliderThumb
+        [(ngModel)]="value"
+        (input)="updateExtension($event)"
+        [disabled]="!editMode"
+      />
+    </mat-slider>
+    <label class="grow-0" style="min-width: 4em">{{ task.localDueDateString() }}</label>
+
+    @if (task.unit.allowFlexibleDates) {
+      <button
+        mat-stroked-button
+        uiSref="projects2/plan2"
+        [uiParams]="{projectId: task.project.id, taskDef: task.definition.id}"
+      >
+        Edit in Task Planner
+      </button>
+    }
+    <!-- @if (editMode) {
+      <button
+        mat-icon-button
+        aria-label="Save task due date"
+        matTooltip="Save task due date"
+        (click)="saveDueDate()"
+      >
+        <mat-icon>save</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        aria-label="Cancel editing task due date"
+        matTooltip="Cancel editing task due date"
+        (click)="cancelEdit()"
+      >
+        <mat-icon>cancel</mat-icon>
+      </button>
+    } @else {
+      <button
+        mat-icon-button
+        aria-label="Edit task due date"
+        matTooltip="Change task due date"
+        (click)="editDueDate()"
+        [disabled]="!canEdit()"
+        color=""
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        aria-label="Cancel editing task due date"
+        matTooltip="Cancel editing task due date"
+        (click)="cancelEdit()"
+        disabled="true"
+      >
+        <mat-icon>cancel</mat-icon>
+      </button>
+    } -->
+  </div>
+  <div class="flex flex-row">
+    @if (editMode) {
+      @if (afterDeadline()) {
+        <label class="text-s bg-orange-100 p-2">
+          <strong>Warning: </strong>
+          Your planned due date is after the last date to receive feedback for this task. You will
+          not receive feedback on this task to help you ensure it is up to the required standard.
+        </label>
+      } @else if (closeToDeadline()) {
+        <label class="text-s bg-yellow-100 p-2">
+          <strong>Caution: </strong>
+          Your planned due date is close to the last date to receive feedback for this task. This
+          may make it challenging to have sufficient time to address any feedback you receive.
+        </label>
+      }
+    }
+  </div>
+</div>

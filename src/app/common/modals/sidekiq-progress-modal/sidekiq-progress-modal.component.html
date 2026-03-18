@@ -1,0 +1,37 @@
+<div>
+  <h3 mat-dialog-title>
+    {{ data.title }}
+  </h3>
+  <mat-dialog-content>
+    <div>
+      This job is running in the background. You can close this dialog and monitor progress anytime.
+    </div>
+    <div class="flex justify-between w-full mt-5 mb-2">
+      @if (job?.status === 'complete') {
+        <div>COMPLETE</div>
+      } @else {
+        <div>{{ job?.status.toUpperCase() }}{{ job?.message ? ': ' + job.message : '' }}</div>
+      }
+      <div>
+        {{ job?.status === 'complete' ? job?.totalCount : job?.processedCount }}/{{
+          job?.totalCount
+        }}
+        ({{ job?.status === 'complete' ? '100' : job?.pctComplete }}%)
+      </div>
+    </div>
+    @if (job?.status === 'queued') {
+      <mat-progress-bar mode="buffer" [value]="job?.pctComplete ?? 0"></mat-progress-bar>
+    } @else {
+      <mat-progress-bar
+        mode="determinate"
+        [value]="job?.status === 'complete' ? 100 : job?.pctComplete ?? 0"
+      ></mat-progress-bar>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions class="flex justify-between">
+    <button mat-raised-button (click)="dismissModal()">Dismiss</button>
+    @if (job?.status !== 'working' && job?.result) {
+      <button mat-raised-button color="primary" (click)="viewResult()">View Result</button>
+    }
+  </mat-dialog-actions>
+</div>

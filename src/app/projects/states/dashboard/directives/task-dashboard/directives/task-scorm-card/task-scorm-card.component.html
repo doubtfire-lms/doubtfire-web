@@ -63,7 +63,7 @@
         mat-stroked-button
         (click)="launchScormPlayer()"
         [hidden]="attemptsLeft === 0"
-        [disabled]="user.isStaff"
+        [disabled]="isNotStudent()"
       >
         <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="Launch icon">
           launch

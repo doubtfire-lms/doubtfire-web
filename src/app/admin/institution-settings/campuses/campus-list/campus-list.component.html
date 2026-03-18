@@ -83,6 +83,30 @@
       </td>
     </ng-container>
 
+    <!-- Timezone Column -->
+    <ng-container [formGroup]="formData" matColumnDef="timezone">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Timezone</th>
+      <td mat-cell *matCellDef="let campus">
+        @if (!editing(campus)) {
+          <div>
+            {{ campus.timezone }}
+          </div>
+        } @else {
+          <mat-form-field appearance="outline" class="data-entry">
+            <mat-label>Timezone</mat-label>
+
+            <input matInput formControlName="timezone" />
+          </mat-form-field>
+        }
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <mat-form-field appearance="outline" class="data-entry">
+          <mat-label>Timezone</mat-label>
+          <input matInput formControlName="timezone" placeholder="Eg. Australia/Melbourne" />
+        </mat-form-field>
+      </td>
+    </ng-container>
+
     <!-- Active Column -->
     <ng-container [formGroup]="formData" matColumnDef="active">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Active</th>

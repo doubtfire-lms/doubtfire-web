@@ -1,0 +1,130 @@
+<div class="flex justify-between items-center p-5">
+  <div>
+    <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
+  </div>
+  @if (unit.allowFlexibleDates) {
+    <div class="flex items-center gap-2">
+      <button
+        mat-raised-button
+        (click)="confirmSaveTargetDates()"
+        color="primary"
+        [disabled]="!anyUnsavedChanges()"
+      >
+        Save Dates
+      </button>
+      <button mat-raised-button (click)="confirmResetTargetDates()">Reset To Unit Default</button>
+    </div>
+  }
+</div>
+<ngx-gantt
+  [class.flexible-dates]="overlayLines"
+  #gantt
+  [items]="items"
+  [baselineItems]="unit.allowFlexibleDates ? baselineItems : []"
+  [viewOptions]="viewOptions"
+  [draggable]="project.unit.allowFlexibleDates"
+  [viewType]="viewType"
+  [start]="earliestStartDate"
+  [end]="latestEndDate"
+  [async]="false"
+  [virtualScrollEnabled]="false"
+  [disabledLoadOnScroll]="true"
+  class="h-full overflow-hidden"
+>
+  <ngx-gantt-table>
+    <ngx-gantt-column name="Tasks" width="350px">
+      <ng-template #cell let-item="item">
+        <!-- TODO: redirect to new project dashboard -->
+        <div
+          class="flex items-center justify-between"
+          uiSref="projects/dashboard"
+          [uiParams]="{
+            projectId: project.id,
+            taskAbbr: item.taskDefinition.abbreviation,
+          }"
+        >
+          <div class="flex items-center gap-5 w-full min-w-0">
+            <f-grade-icon
+              [grade]="item.taskDefinition.targetGrade"
+              [colorful]="true"
+            ></f-grade-icon>
+            <div class="truncate w-full flex-1 min-w-0">
+              {{ item.title }}
+            </div>
+          </div>
+          <status-icon [status]="item.task.status"></status-icon>
+        </div>
+      </ng-template>
+    </ngx-gantt-column>
+
+    @if (showDatesColumn) {
+      <ngx-gantt-column name="Start Date" width="110px">
+        <ng-template #cell let-item="item" class="text-center">
+          {{ toDateString(item.start) }}
+        </ng-template>
+      </ngx-gantt-column>
+
+      <ngx-gantt-column name="Target Date" width="110px">
+        <ng-template #cell let-item="item" class="text-center">
+          {{ toDateString(item.end) }}
+        </ng-template>
+      </ngx-gantt-column>
+
+      <ngx-gantt-column name="Deadline" width="110px">
+        <ng-template #cell let-item="item" class="text-center">
+          {{ item.task.localDeadlineDate() ? toDateString(item.task.localDeadlineDate()) : 'N/A' }}
+        </ng-template>
+      </ngx-gantt-column>
+    }
+
+    <ng-template #bar let-item="item">
+      <span
+        (click)="barClick(item)"
+        [attr.data-gantt-id]="item.id"
+        (mouseover)="onBarHover(item)"
+        (mouseleave)="onBarLeave(item)"
+        class="gantt-bar w-full text-white flex gap-2 justify-between items-center p-2 h-[35px]"
+        [ngClass]="getItemClasses(item)"
+        [matTooltip]="getTooltip(item)"
+        matTooltipShowDelay="500"
+        matTooltipPosition="above"
+        ><div class="flex gap-2 items-center">
+          <div class="flex gap-2 items-center">
+            @if (unsavedChanges(item)) {
+              <mat-icon class="scale-95">change_circle</mat-icon>
+            }
+            @if (prerequisiteConflict(item)) {
+              <mat-icon
+                class="scale-90"
+                matTooltip="This task must be completed earlier because other tasks depend on it"
+                >warning</mat-icon
+              >
+            } @else if (isBlockedByPrerequisite(item)) {
+              <mat-icon
+                class="scale-90"
+                matTooltip="You will not be able to complete this task until all prerequisites are met"
+                >warning</mat-icon
+              >
+            }
+            @if (isPastFeedbackDeadline(item)) {
+              <mat-icon
+                class="scale-90"
+                matTooltip="Your planned target date is past the feedback deadline."
+                >dangerous</mat-icon
+              >
+            }
+            @if (isCloseToFeedbackDeadline(item)) {
+              <mat-icon
+                class="scale-90"
+                matTooltip="Your planned target date is close to the last date to receive feedback for this task."
+                >query_builder</mat-icon
+              >
+            }
+          </div>
+
+          &nbsp;&nbsp;{{ item.title }}
+        </div>
+      </span>
+    </ng-template>
+  </ngx-gantt-table>
+</ngx-gantt>

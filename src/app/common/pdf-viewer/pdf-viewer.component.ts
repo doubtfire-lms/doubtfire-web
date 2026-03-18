@@ -1,15 +1,15 @@
 import {HttpResponse} from '@angular/common/http';
 import {
+  AfterViewInit,
   Component,
-  Input,
   Inject,
+  Input,
+  OnChanges,
   OnDestroy,
   SimpleChanges,
-  OnChanges,
   ViewChild,
-  AfterViewInit,
 } from '@angular/core';
-import {PdfViewerComponent} from 'ng2-pdf-viewer';
+import {PDFDocumentProxy, PdfViewerComponent} from 'ng2-pdf-viewer';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {AlertService} from '../services/alert.service';
 
@@ -19,11 +19,20 @@ import {AlertService} from '../services/alert.service';
   styleUrls: ['./pdf-viewer.component.scss'],
 })
 export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit {
+  private readonly ZOOM_MIN = 0.5;
+  private readonly ZOOM_MAX = 2.5;
+
   private _pdfUrl: string;
   public pdfBlobUrl: string;
   public useNativePdfViewer = false;
+  public pdfTotalPages?: number | undefined;
+  public pdfHasRendered: boolean = false;
 
   @Input() pdfUrl: string;
+  @Input() startPage: number = 1;
+
+  public pageNumber: number = 1;
+
   @ViewChild(PdfViewerComponent) private pdfComponent: PdfViewerComponent;
   pdfSearchString: string;
   zoomValue = 1;
@@ -43,6 +52,9 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
 
   ngAfterViewInit(): void {
     this.useNativePdfViewer = localStorage.getItem('useNativePdfViewer') === 'true';
+    const storedZoomValue = parseFloat(localStorage.getItem('pdfViewerZoom')) || 1;
+    // Clamp zoom value between ZOOM_MIN and ZOOM_MAX
+    this.zoomValue = Math.min(Math.max(storedZoomValue, this.ZOOM_MIN), this.ZOOM_MAX);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -60,7 +72,12 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
       // Get the new blob
       this._pdfUrl = value;
       this.loaded = false;
-      this.downloadBlob(value);
+      this.pdfHasRendered = false;
+      if (value?.startsWith('blob:')) {
+        this.pdfBlobUrl = value;
+      } else {
+        this.downloadBlob(value);
+      }
     }
   }
 
@@ -75,14 +92,24 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
     });
   }
 
+  scrollToPage(pageNumber: number) {
+    if (pageNumber <= this.pdfComponent.pdfViewer.pagesCount) {
+      this.pdfComponent.pdfViewer.scrollPageIntoView({
+        pageNumber,
+      });
+    }
+  }
+
   public zoomIn() {
-    if (this.zoomValue < 2.5) {
+    if (this.zoomValue < this.ZOOM_MAX) {
       this.zoomValue += 0.1;
+      localStorage.setItem('pdfViewerZoom', this.zoomValue.toString());
     }
   }
   public zoomOut() {
-    if (this.zoomValue > 0.5) {
+    if (this.zoomValue > this.ZOOM_MIN) {
       this.zoomValue -= 0.1;
+      localStorage.setItem('pdfViewerZoom', this.zoomValue.toString());
     }
   }
 
@@ -107,8 +134,26 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
     );
   }
 
-  onLoaded() {
+  onLoaded(event: PDFDocumentProxy) {
     this.loaded = true;
     window.dispatchEvent(new Event('resize'));
+    this.pdfTotalPages = event.numPages;
+  }
+
+  onTextLayerRendered() {
+    if (this.pdfHasRendered) {
+      return;
+    }
+    this.pdfHasRendered = true;
+    setTimeout(() => {
+      if (
+        this.startPage &&
+        this.startPage > 1 &&
+        this.pdfTotalPages &&
+        this.startPage <= this.pdfTotalPages
+      ) {
+        this.pageNumber = Number(this.startPage);
+      }
+    });
   }
 }

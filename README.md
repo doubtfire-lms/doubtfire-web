@@ -12,11 +12,37 @@ A modern, lightweight learning management system.
 
 ## Migration Progress
 
-SUMMARY:
+Important: When completing a frontend migration, please update the below list regarding the component you have migrated.
 
-73 / 132 components migrated
+### SUMMARY:
 
-MIGRATED:
+- `89 / 183` components migrated
+- `19` components no longer in the doubtfire-lms/9.x branch
+
+### NO LONGER IN doubtfire-lms/9.x
+
+- [x] ./src/app/projects/states/all/directives/all-projects-list/all-projects-list.coffee
+- [x] ./src/app/projects/states/all/all.coffee
+- [x] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
+- [x] ./src/app/tasks/task-definition-selector/task-definition-selector.coffee
+- [x] ./src/app/tasks/task-status-selector/task-status-selector.coffee
+- [x] ./src/app/config/debug/debug.coffee
+- [x] ./src/app/projects/states/all/directives/directives.coffee
+- [x] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.coffee
+- [x] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.coffee
+- [x] ./src/app/admin/states/states.coffee
+- [x] ./src/app/admin/admin.coffee
+- [x] ./src/app/units/states/tasks/viewer/directives/directives.coffee
+- [x] ./src/app/units/states/tasks/viewer/viewer.coffee
+- [x] ./src/app/units/states/all/directives/all-units-list/all-units-list.coffee
+- [x] ./src/app/units/states/all/directives/directives.coffee
+- [x] ./src/app/units/states/all/all.coffee
+- [x] ./src/app/common/alert-list/alert-list.coffee
+- [x] ./src/app/common/modals/progress-modal/progress-modal.coffee
+- [x] ./src/app/errors/states/not-found/not-found.coffee
+- [x] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
+
+### MIGRATED:
 
 - [x] ./src/app/home/splash-screen/splash-screen.component.ts
 - [x] ./src/app/home/states/home/home.component.ts
@@ -25,6 +51,7 @@ MIGRATED:
 - [x] ./src/app/tasks/task-comments-viewer/extension-comment/extension-comment.component.ts
 - [x] ./src/app/tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component.ts
 - [x] ./src/app/tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component.ts
+- [x] ./src/app/tasks/project-tasks-list/project-tasks-list.coffee
 - [x] ./src/app/tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component.ts
 - [x] ./src/app/tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component.ts
 - [x] ./src/app/tasks/task-comments-viewer/task-comments-viewer.component.ts
@@ -46,10 +73,10 @@ MIGRATED:
 - [x] ./src/app/admin/tii-action-log/tii-action-log.component.ts
 - [x] ./src/app/admin/states/teaching-periods/teaching-period-list/teaching-period-list.component.ts
 - [x] ./src/app/admin/states/teaching-periods/teaching-period-unit-import/teaching-period-unit-import.dialog.ts
+- [x] ./src/app/admin/modals/create-unit-modal/create-new-unit-modal.component.ts
 - [x] ./src/app/eula/accept-eula/accept-eula.component.ts
 - [x] ./src/app/welcome/welcome.component.ts
 - [x] ./src/app/units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component.ts
-- [x] ./src/app/units/states/tasks/inbox/inbox.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-students-editor/unit-students-editor.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component.ts
@@ -64,6 +91,7 @@ MIGRATED:
 - [x] ./src/app/units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-general/task-definition-general.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component.ts
+- [x] ./src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.component.ts
 - [x] ./src/app/units/states/analytics/unit-analytics-route.component.ts
 - [x] ./src/app/common/footer/footer.component.ts
 - [x] ./src/app/common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder.ts
@@ -91,139 +119,122 @@ MIGRATED:
 - [x] ./src/app/common/services/alert.service.ts
 - [x] ./src/app/sessions/states/sign-in/sign-in.component.ts
 - [x] ./src/app/account/edit-profile/edit-profile.component.ts
-
-TODO:
-
-- [ ] ./src/app/visualisations/alignment-bar-chart.coffee
-- [ ] ./src/app/visualisations/summary-task-status-scatter.coffee
-- [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
-- [ ] ./src/app/visualisations/achievement-custom-bar-chart.coffee
-- [ ] ./src/app/visualisations/student-task-status-pie-chart.coffee
-- [ ] ./src/app/visualisations/alignment-bullet-chart.coffee
-- [ ] ./src/app/visualisations/progress-burndown-chart.coffee
-- [ ] ./src/app/visualisations/task-status-pie-chart.coffee
-- [ ] ./src/app/visualisations/achievement-box-plot.coffee
-- [ ] ./src/app/visualisations/task-completion-box-plot.coffee
-- [ ] ./src/app/visualisations/visualisations.coffee
-- [ ] ./src/app/tasks/task-status-selector/task-status-selector.coffee
-- [ ] ./src/app/tasks/tasks.coffee
-- [ ] ./src/app/tasks/modals/modals.coffee
-- [ ] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal.coffee
-- [ ] ./src/app/tasks/modals/grade-task-modal/grade-task-modal.coffee
-- [ ] ./src/app/tasks/task-definition-selector/task-definition-selector.coffee
-- [ ] ./src/app/tasks/project-tasks-list/project-tasks-list.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee
-- [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee
-- [ ] ./src/app/config/privacy-policy/privacy-policy.coffee
-- [ ] ./src/app/config/config.coffee
-- [ ] ./src/app/config/runtime/runtime.coffee
-- [ ] ./src/app/config/root-controller/root-controller.coffee
-- [ ] ./src/app/config/local-storage/local-storage.coffee
-- [ ] ./src/app/config/routing/routing.coffee
-- [ ] ./src/app/config/vendor-dependencies/vendor-dependencies.coffee
-- [ ] ./src/app/config/analytics/analytics.coffee
-- [ ] ./src/app/config/debug/debug.coffee
-- [ ] ./src/app/projects/projects.coffee
-- [ ] ./src/app/projects/project-progress-dashboard/project-progress-dashboard.coffee
-- [ ] ./src/app/projects/states/states.coffee
-- [ ] ./src/app/projects/states/all/directives/directives.coffee
-- [ ] ./src/app/projects/states/all/directives/all-projects-list/all-projects-list.coffee
-- [ ] ./src/app/projects/states/all/all.coffee
-- [ ] ./src/app/projects/states/groups/groups.coffee
-- [ ] ./src/app/projects/states/feedback/feedback.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/student-task-list/student-task-list.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
-- [ ] ./src/app/projects/states/dashboard/dashboard.coffee
-- [ ] ./src/app/projects/states/outcomes/outcomes.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/directives.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.coffee
-- [ ] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee
-- [ ] ./src/app/projects/states/portfolio/portfolio.coffee
-- [ ] ./src/app/projects/states/index/index.coffee
-- [ ] ./src/app/projects/states/tutorials/tutorials.coffee
-- [ ] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee
-- [ ] ./src/app/admin/modals/modals.coffee
-- [ ] ./src/app/admin/modals/create-unit-modal/create-unit-modal.coffee
-- [ ] ./src/app/admin/states/states.coffee
-- [ ] ./src/app/admin/states/units/units.coffee
-- [ ] ./src/app/admin/states/users/users.coffee
-- [ ] ./src/app/admin/admin.coffee
-- [ ] ./src/app/groups/group-selector/group-selector.coffee
-- [ ] ./src/app/groups/group-set-manager/group-set-manager.coffee
-- [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
-- [ ] ./src/app/groups/group-member-list/group-member-list.coffee
-- [ ] ./src/app/groups/group-set-selector/group-set-selector.coffee
-- [ ] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
-- [ ] ./src/app/groups/groups.coffee
-- [ ] ./src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.coffee
-- [ ] ./src/app/units/modals/modals.coffee
-- [ ] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee
-- [ ] ./src/app/units/units.coffee
-- [ ] ./src/app/units/states/states.coffee
-- [ ] ./src/app/units/states/tasks/inbox/inbox.coffee
-- [ ] ./src/app/units/states/tasks/tasks.coffee
-- [ ] ./src/app/units/states/tasks/viewer/directives/directives.coffee
-- [ ] ./src/app/units/states/tasks/viewer/directives/task-sheet-view/task-sheet-view.coffee
-- [ ] ./src/app/units/states/tasks/viewer/directives/task-details-view/task-details-view.coffee
-- [ ] ./src/app/units/states/tasks/viewer/directives/unit-task-list/unit-task-list.coffee
-- [ ] ./src/app/units/states/tasks/viewer/viewer.coffee
-- [ ] ./src/app/units/states/tasks/definition/definition.coffee
-- [ ] ./src/app/units/states/portfolios/portfolios.coffee
-- [ ] ./src/app/units/states/all/directives/all-units-list/all-units-list.coffee
-- [ ] ./src/app/units/states/all/directives/directives.coffee
-- [ ] ./src/app/units/states/all/all.coffee
-- [ ] ./src/app/units/states/groups/groups.coffee
-- [ ] ./src/app/units/states/edit/directives/directives.coffee
-- [ ] ./src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.coffee
-- [ ] ./src/app/units/states/edit/directives/unit-details-editor/unit-details-editor.coffee
-- [ ] ./src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.coffee
-- [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee
-- [ ] ./src/app/units/states/edit/edit.coffee
-- [ ] ./src/app/units/states/rollover/directives/directives.coffee
-- [ ] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
-- [ ] ./src/app/units/states/rollover/rollover.coffee
-- [ ] ./src/app/units/states/index/index.coffee
-- [ ] ./src/app/units/states/students-list/students-list.coffee
-- [ ] ./src/app/units/states/analytics/analytics.coffee
+- [x] ./src/app/tasks/modals/grade-task-modal/grade-task-modal.component.ts
+- [x] ./src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component.ts
+- [x] ./src/app/visualisations/progress-burndown-chart/progressburndownchart.component.ts
+- [x] ./src/app/config/privacy-policy/privacy-policy.coffee
+- [x] ./src/app/units/states/tasks/viewer/directives/task-sheet-view/task-sheet-view.coffee
+- [x] ./src/app/units/states/tasks/viewer/directives/task-details-view/task-details-view.coffee
+- [x] ./src/app/units/states/tasks/viewer/directives/unit-task-list/unit-task-list.coffee
+- [x] ./src/app/projects/states/dashboard/directives/student-task-list/student-task-list.coffee
+- [x] ./src/app/units/states/tasks/inbox/inbox.coffee
+- [x] ./src/app/admin/states/units/units.component.ts
+- [x] ./src/app/admin/states/users/users.component.ts
+- [x] ./src/app/common/grade-icon/grade-icon.component.ts
+- [x] ./src/app/common/services/grade.service.ts
+- [x] ./src/app/common/services/alert.service.ts
+- [x] ./src/app/errors/states/unauthorised/unauthorised.component.ts
+- [x] ./src/app/groups/group-set-selector/group-set-selector.component.ts
+- [x] ./src/app/admin/modals/create-unit-modal/create-unit-modal.coffee
+- [x] ./src/app/common/services/date.service.ts
+- [x] ./src/app/units/states/edit/directives/unit-details-editor/unit-details-editor.coffee (IN 10.0.x)
+- [x] ./src/app/groups/group-member-list/group-member-list.coffee
+- [x] ./src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.coffee
+- [x] ./src/app/common/modals/confirmation-modal/confirmation-modal.coffee
+- [x] ./src/app/common/modals/comments-modal/comments-modal.coffee (IN 10.0.x)
+- [x] ./src/app/groups/group-selector/group-selector.coffee
+- [x] ./src/app/groups/group-set-manager/group-set-manager.coffee
+- [x] ./src/app/common/file-uploader/file-uploader.coffee
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.coffee
+- [x] ./src/app/sessions/auth/http-auth-injector.coffee
+- [x] ./src/app/sessions/sessions.coffee
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.coffee
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.coffee
+- [x] ./src/app/projects/project-progress-dashboard/project-progress-dashboard.coffee
+- [x] ./src/app/units/states/portfolios/portfolios.coffee
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.coffee
+- [x] ./src/app/config/local-storage/local-storage.coffee (Removed in 10.0.x)
+- [x] ./src/app/projects/states/tutorials/tutorials.coffee
+- [x] ./src/app/admin/modals/modals.coffee
+- [x] ./src/app/common/services/date-service.coffee
+- [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.coffee (Removed in 10.0.x)
+- [x] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.coffee (Removed in 10.0.x)
+- [x] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.coffee (Removed in 10.0.x)
+- [x] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee (Removed in 10.0.x)
+- [x] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.coffee (Removed in 10.0.x)
+- [x] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment.coffee (Removed in 10.0.x)
+- [x] ./src/app/projects/project-outcome-alignment/project-outcome-alignment.coffee (Removed in 10.0.x)
+- [x] ./src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.coffee (Removed in 10.0.x)
+- [x] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee (Removed in 10.0.x)
+- [x] ./src/app/projects/states/outcomes/outcomes.coffee (Removed in 10.0.x)
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-tasks-step/portfolio-tasks-step.coffee (Removed in 10.0.x)
+- [x] ./src/app/units/states/rollover/directives/directives.coffee
+- [x] ./src/app/units/states/rollover/directives/unit-dates-selector/unit-dates-selector.coffee
+- [x] ./src/app/units/states/rollover/rollover.coffee
+- [x] ./src/app/visualisations/task-status-pie-chart.coffee
+- [x] ./src/app/visualisations/student-task-status-pie-chart.coffee
+- [ ] ./src/app/visualisations/achievement-box-plot.coffee (ILO Alignments removed)
+- [ ] ./src/app/visualisations/achievement-custom-bar-chart.coffee (ILO Alignments removed)
+- [ ] ./src/app/visualisations/alignment-bar-chart.coffee (ILO Alignments removed)
+- [ ] ./src/app/visualisations/alignment-bullet-chart.coffee (ILO Alignments removed)
+- [x] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
+- [x] ./src/app/groups/groups.coffee
+- [x] ./src/app/common/modals/csv-result-modal/csv-result-modal.coffee
+- [x] ./src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.coffee
+- [x] ./src/app/units/states/students-list/students-list.coffee
+- [x] ./src/app/common/modals/modals.coffee
+- [x] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal.coffee
+- [x] ./src/app/tasks/modals/modals.coffee
+- [x] ./src/app/tasks/tasks.coffee
+- [x] ./src/app/units/modals/modals.coffee
+- [x] ./src/app/units/states/edit/directives/directives.coffee
+- [x] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Migrate this in 10.0.x)
+- [x] ./src/app/projects/states/portfolio/directives/directives.coffee
+- [x] ./src/app/projects/states/portfolio/portfolio.coffee
+- [x] ./src/app/units/states/tasks/definition/definition.coffee
+- [x] ./src/app/units/states/tasks/tasks.coffee
+- [x] ./src/app/units/states/tasks/moderation.coffee
+- [x] ./src/app/units/states/tasks/overflow.coffee
+- [x] ./src/app/errors/states/timeout/timeout.coffee
+- [x] ./src/app/projects/states/groups/groups.coffee (State only -> "project-groups")
+- [x] ./src/app/units/states/groups/groups.coffee (State only -> "unit-groups")
+- [x] ./src/app/units/states/analytics/analytics.coffee (Just the routing, since the TypeScript f-analytics component has been expanded in 10.0.x)
+- [x] ./src/app/projects/states/feedback/feedback.coffee
+- [x] ./src/app/common/content-editable/content-editable.coffee
+- [x] ./src/app/common/services/outcome-service.coffee
 - [ ] ./src/app/common/filters/filters.coffee
-- [ ] ./src/app/common/content-editable/content-editable.coffee
-- [ ] ./src/app/common/alert-list/alert-list.coffee
-- [ ] ./src/app/common/modals/confirmation-modal/confirmation-modal.coffee
-- [ ] ./src/app/common/modals/comments-modal/comments-modal.coffee
-- [ ] ./src/app/common/modals/modals.coffee
-- [ ] ./src/app/common/modals/csv-result-modal/csv-result-modal.coffee
-- [ ] ./src/app/common/modals/progress-modal/progress-modal.coffee
-- [ ] ./src/app/common/grade-icon/grade-icon.coffee
-- [ ] ./src/app/common/file-uploader/file-uploader.coffee
+- [x] ./src/app/common/services/analytics-service.coffee
+- [x] ./src/app/config/analytics/analytics.coffee
+
+### TODO:
+
 - [ ] ./src/app/common/common.coffee
-- [ ] ./src/app/common/services/grade-service.coffee
-- [ ] ./src/app/common/services/date-service.coffee
-- [ ] ./src/app/common/services/alert-service.coffee
+- [ ] ./src/app/common/services/listener-service.coffee
 - [ ] ./src/app/common/services/media-service.coffee
 - [ ] ./src/app/common/services/recorder-service.coffee
-- [ ] ./src/app/common/services/outcome-service.coffee
-- [ ] ./src/app/common/services/listener-service.coffee
-- [ ] ./src/app/common/services/analytics-service.coffee
 - [ ] ./src/app/common/services/services.coffee
-- [ ] ./src/app/sessions/auth/http-auth-injector.coffee
-- [ ] ./src/app/sessions/sessions.coffee
+- [ ] ./src/app/config/config.coffee
+- [ ] ./src/app/config/root-controller/root-controller.coffee
+- [ ] ./src/app/config/routing/routing.coffee
+- [ ] ./src/app/config/runtime/runtime.coffee
+- [ ] ./src/app/config/vendor-dependencies/vendor-dependencies.coffee
 - [ ] ./src/app/errors/errors.coffee
 - [ ] ./src/app/errors/states/states.coffee
-- [ ] ./src/app/errors/states/unauthorised/unauthorised.coffee
-- [ ] ./src/app/errors/states/not-found/not-found.coffee
-- [ ] ./src/app/errors/states/timeout/timeout.coffee
+- [ ] ./src/app/projects/projects.coffee
+- [ ] ./src/app/projects/states/dashboard/dashboard.coffee
+- [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
+- [ ] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
+- [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
+- [ ] ./src/app/projects/states/index/index.coffee
+- [ ] ./src/app/projects/states/states.coffee
+- [ ] ./src/app/units/states/edit/edit.coffee
+- [ ] ./src/app/units/states/index/index.coffee
+- [ ] ./src/app/units/states/states.coffee
+- [ ] ./src/app/units/units.coffee
+- [ ] ./src/app/visualisations/summary-task-status-scatter.coffee (Unit task status summary)
+- [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
+- [ ] ./src/app/visualisations/task-completion-box-plot.coffee
+- [ ] ./src/app/visualisations/visualisations.coffee
 
 ## Table of Contents
 
