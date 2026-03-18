@@ -6,6 +6,7 @@ import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
+import {TimeoutComponent} from './errors/states/timeout/timeout.component';
 import {FUsersComponent} from './admin/states/users/users.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
 import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
@@ -415,6 +416,20 @@ const UnauthoriedState: NgHybridStateDeclaration = {
     pageTitle: 'Unauthorised',
   },
 };
+
+const TimeoutState: NgHybridStateDeclaration = {
+  name: 'timeout',
+  url: '/timeout',
+  views: {
+    main: {
+      component: TimeoutComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Timeout',
+  },
+};
+
 /**
  * Define the SCORM Player state.
  */
@@ -755,6 +770,7 @@ export const doubtfireStates = [
   ViewAllUnits,
   AdministerUnits,
   UnauthoriedState,
+  TimeoutState,
   ProjectRootState,
   ProjectDashboardState,
   PortfolioCreationState,

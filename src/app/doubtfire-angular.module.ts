@@ -247,6 +247,7 @@ import {SuccessCloseComponent} from './common/success-close/success-close.compon
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {UserBadgeComponent} from './common/user-badge/user-badge.component';
 import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
+import {TimeoutComponent} from './errors/states/timeout/timeout.component';
 import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-card.component';
 import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {SplashScreenComponent} from './home/splash-screen/splash-screen.component';
@@ -535,6 +536,7 @@ const GANTT_CHART_CONFIG = {
     FUnitsComponent,
     CommentsModalComponent,
     UnauthorisedComponent,
+    TimeoutComponent,
     ChartBaseComponent,
     ProgressBurndownChartComponent,
     TaskVisualisationComponent,
