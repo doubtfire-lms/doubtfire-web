@@ -191,6 +191,11 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.coffee (Migrate this in 10.0.x)
 - [x] ./src/app/projects/states/portfolio/directives/directives.coffee
 - [x] ./src/app/projects/states/portfolio/portfolio.coffee
+- [x] ./src/app/units/states/tasks/definition/definition.coffee
+- [x] ./src/app/units/states/tasks/tasks.coffee
+- [x] ./src/app/units/states/tasks/moderation.coffee
+- [x] ./src/app/units/states/tasks/overflow.coffee
+- [x] ./src/app/errors/states/timeout/timeout.coffee
 
 ### TODO:
 
@@ -211,7 +216,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/config/vendor-dependencies/vendor-dependencies.coffee
 - [ ] ./src/app/errors/errors.coffee
 - [ ] ./src/app/errors/states/states.coffee
-- [ ] ./src/app/errors/states/timeout/timeout.coffee
 - [ ] ./src/app/projects/projects.coffee
 - [ ] ./src/app/projects/states/dashboard/dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
@@ -226,10 +230,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/units/states/groups/groups.coffee (State only -> "unit-groups")
 - [ ] ./src/app/units/states/index/index.coffee
 - [ ] ./src/app/units/states/states.coffee
-- [ ] ./src/app/units/states/tasks/definition/definition.coffee
-- [ ] ./src/app/units/states/tasks/tasks.coffee
-- [ ] ./src/app/units/states/tasks/moderation.coffee
-- [ ] ./src/app/units/states/tasks/overflow.coffee
 - [ ] ./src/app/units/units.coffee
 - [ ] ./src/app/visualisations/summary-task-status-scatter.coffee (Unit task status summary)
 - [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
