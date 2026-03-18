@@ -54,7 +54,6 @@ import 'build/src/app/units/states/edit/edit.js';
 import 'build/src/app/units/states/groups/groups.js';
 import 'build/src/app/units/states/index/index.js';
 import 'build/src/app/units/states/states.js';
-import 'build/src/app/units/states/students-list/students-list.js';
 // import 'build/src/app/units/states/tasks/viewer/viewer.js';
 import 'build/src/app/units/units.js';
 import 'build/src/app/visualisations/summary-task-status-scatter.js';

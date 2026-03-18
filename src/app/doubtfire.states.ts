@@ -30,6 +30,7 @@ import {Ng2ViewDeclaration} from '@uirouter/angular';
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
+import {StudentsListState} from './units/states/students-list/students-list.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -792,6 +793,7 @@ export const doubtfireStates = [
   LtiUnitLinkState,
   TutorAttendance,
   TutorialState,
+  StudentsListState,
   PortfoliosState,
   RolloverState,
 ];
