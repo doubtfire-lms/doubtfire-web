@@ -2,10 +2,12 @@ import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/co
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {UIRouter} from '@uirouter/angular';
-import {Subscription} from 'rxjs';
+import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
+import {StateService} from '@uirouter/core';
+import {Observable, Subscription, first} from 'rxjs';
 import {
   Project,
+  ProjectService,
   TaskService,
   TaskStatusEnum,
   Unit,
@@ -13,12 +15,13 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {UnitStudentEnrolmentModalService} from '../../modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 
+// State for both convenors and tutors to access student list
 @Component({
   selector: 'f-students-list',
   templateUrl: './students-list.component.html',
 })
 export class StudentsListComponent implements AfterViewInit, OnDestroy {
-  @Input() unit: Unit;
+  @Input() unit$: Observable<Unit>;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -39,32 +42,45 @@ export class StudentsListComponent implements AfterViewInit, OnDestroy {
   searchText = '';
   staffFilter: 'all' | 'mine' = 'all';
   filteredSuggestions: string[] = [];
+  unit: Unit;
 
   private subscriptions: Subscription[] = [];
   private sortState: Sort = {active: 'name', direction: 'asc'};
 
   constructor(
     private enrolModal: UnitStudentEnrolmentModalService,
-    private router: UIRouter,
+    private stateService: StateService,
     private userService: UserService,
     private taskService: TaskService,
+    private projectService: ProjectService,
   ) {}
 
   ngAfterViewInit(): void {
-    this.staffFilter = this.unit?.myRole === 'Tutor' ? 'mine' : 'all';
     this.sort.active = this.sortState.active;
     this.sort.direction = this.sortState.direction;
     this.dataSource.paginator = this.paginator;
 
     this.subscriptions.push(
-      this.unit.studentCache.values.subscribe(() => {
+      this.unit$?.pipe(first()).subscribe((unit) => {
+        if (!unit) {
+          return;
+        }
+
+        this.unit = unit;
+        this.staffFilter = unit.myRole === 'Tutor' ? 'mine' : 'all';
+
+        this.subscriptions.push(
+          this.unit.studentCache.values.subscribe(() => {
+            this.updateSuggestions();
+            this.updateDataSource();
+          }),
+        );
+
         this.updateSuggestions();
         this.updateDataSource();
+        this.projectService.loadStudents(this.unit).pipe(first()).subscribe();
       }),
     );
-
-    this.updateSuggestions();
-    this.updateDataSource();
   }
 
   ngOnDestroy(): void {
@@ -92,10 +108,9 @@ export class StudentsListComponent implements AfterViewInit, OnDestroy {
   }
 
   public viewStudent(project: Project): void {
-    this.router.stateService.go('projects/dashboard', {
+    this.stateService.go('projects2/dashboard2', {
       projectId: project.id,
-      tutor: true,
-      taskAbbr: '',
+      taskAbbreviation: null,
     });
   }
 
@@ -250,3 +265,19 @@ export class StudentsListComponent implements AfterViewInit, OnDestroy {
     return normalized;
   }
 }
+
+export const StudentsListState: NgHybridStateDeclaration = {
+  name: 'units/students/list',
+  parent: 'unit-root-state',
+  url: '/students',
+  views: {
+    unitView: {
+      component: StudentsListComponent,
+    },
+  },
+  data: {
+    task: 'Student List',
+    pageTitle: '_Home_',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
