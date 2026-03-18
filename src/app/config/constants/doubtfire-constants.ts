@@ -1,21 +1,31 @@
-import { HttpClient, HttpBackend } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {HttpClient, HttpBackend} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 
-import API_URL from 'src/app/config/constants/apiURL';
+import API_URL from 'src/app/config/constants/apiUrl';
+import HOST_URL from 'src/app/config/constants/hostUrl';
 
 interface SettingsResponseFormat {
   externalName: string;
+  hasLogo: boolean;
+  logoUrl: string;
+  logoLinkUrl: string;
   overseerEnabled: boolean;
   tiiEnabled: boolean;
   d2lEnabled: boolean;
+}
+
+export interface LogoSettings {
+  hasLogo: boolean;
+  logoUrl: string;
+  logoLinkUrl: string;
 }
 
 interface SignOutUrlResponseFormat {
   auth_signout_url: string;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class DoubtfireConstants {
   private http: HttpClient;
 
@@ -25,6 +35,7 @@ export class DoubtfireConstants {
     'jakerenzella', // Jake Renzella
   ];
 
+  public HOST_URL: string = HOST_URL;
   public API_URL: string = API_URL;
 
   // Where should we redirect users on signout?
@@ -42,6 +53,15 @@ export class DoubtfireConstants {
    * Whether or not the D2L integration is enabled.
    */
   public IsD2LEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  /**
+   * Details on the logo
+   */
+  public LogoSettings: BehaviorSubject<LogoSettings> = new BehaviorSubject<LogoSettings>({
+    hasLogo: false,
+    logoUrl: '/assets/images/institution-logo.png',
+    logoLinkUrl: '/',
+  });
 
   /**
    * Whether or not the TurnItIn integration is enabled.
@@ -62,7 +82,7 @@ export class DoubtfireConstants {
 
     this.http.get<SignOutUrlResponseFormat>(url).subscribe(
       (result) => (this.SignoutURL = result.auth_signout_url),
-      (error) => console.error(error)
+      (error) => console.error(error),
     );
   }
 
@@ -73,6 +93,12 @@ export class DoubtfireConstants {
       this.IsOverseerEnabled.next(result.overseerEnabled);
       this.IsTiiEnabled.next(result.tiiEnabled);
       this.IsD2LEnabled.next(result.d2lEnabled);
+
+      this.LogoSettings.next({
+        hasLogo: result.hasLogo,
+        logoUrl: result.logoUrl,
+        logoLinkUrl: result.logoLinkUrl,
+      });
     });
   }
 }

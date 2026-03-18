@@ -106,25 +106,25 @@ $md-formatif-warn: (
 $font-family-primary: "'Grotesk'";
 $font-family-accent: "Inter, 'open-sans', 'Roboto'";
 
-$mat-typography-primary-config: mat.define-typography-config(
-  $headline-1: mat.define-typography-level(112px, 112px, 300, $font-family-primary, $letter-spacing: -0.05em),
-  $headline-2: mat.define-typography-level(56px, 56px, 400, $font-family-primary, $letter-spacing: -0.02em),
-  $headline-3: mat.define-typography-level(45px, 48px, 400, $font-family-primary, $letter-spacing: -0.005em),
-  $headline-4: mat.define-typography-level(34px, 40px, 400, $font-family-primary),
-  $headline-5: mat.define-typography-level(24px, 32px, 400, $font-family-primary),
-  $headline-6: mat.define-typography-level(20px, 32px, 500, $font-family-primary),
-  $subtitle-1: mat.define-typography-level(16px, 28px, 400, $font-family-primary),
-  $body-1: mat.define-typography-level(15px, 24px, 400, $font-family-accent),
-  $subtitle-2: mat.define-typography-level(14px, 24px, 500, $font-family-accent),
-  $body-2: mat.define-typography-level(14px, 20px, 400, $font-family-accent),
-  $caption: mat.define-typography-level(12px, 20px, 400, $font-family-accent),
-  $button: mat.define-typography-level(14px, 14px, 500, $font-family-accent),
+$mat-typography-primary-config: mat.m2-define-typography-config(
+  $headline-1: mat.m2-define-typography-level(112px, 112px, 300, $font-family-primary, $letter-spacing: -0.05em),
+  $headline-2: mat.m2-define-typography-level(56px, 56px, 400, $font-family-primary, $letter-spacing: -0.02em),
+  $headline-3: mat.m2-define-typography-level(45px, 48px, 400, $font-family-primary, $letter-spacing: -0.005em),
+  $headline-4: mat.m2-define-typography-level(34px, 40px, 400, $font-family-primary),
+  $headline-5: mat.m2-define-typography-level(24px, 32px, 400, $font-family-primary),
+  $headline-6: mat.m2-define-typography-level(20px, 32px, 500, $font-family-primary),
+  $subtitle-1: mat.m2-define-typography-level(16px, 28px, 400, $font-family-primary),
+  $body-1: mat.m2-define-typography-level(15px, 24px, 400, $font-family-accent),
+  $subtitle-2: mat.m2-define-typography-level(14px, 24px, 500, $font-family-accent),
+  $body-2: mat.m2-define-typography-level(14px, 20px, 400, $font-family-accent),
+  $caption: mat.m2-define-typography-level(12px, 20px, 400, $font-family-accent),
+  $button: mat.m2-define-typography-level(14px, 14px, 500, $font-family-accent),
 );
-$primary: mat.define-palette($md-formatif);
-$accent: mat.define-palette($md-formatif-accent);
-$warn: mat.define-palette($md-formatif-warn);
+$primary: mat.m2-define-palette($md-formatif);
+$accent: mat.m2-define-palette($md-formatif-accent);
+$warn: mat.m2-define-palette($md-formatif-warn);
 
-$theme: mat.define-light-theme(
+$theme: mat.m2-define-light-theme(
   (
     color: (
       primary: $primary,
@@ -135,9 +135,9 @@ $theme: mat.define-light-theme(
   )
 );
 
-$color-config: mat.get-color-config($theme);
+$color-config: mat.m2-get-color-config($theme);
 $primary-palette: map.get($color-config, 'primary');
-$primary-color: mat.get-color-from-palette($primary-palette, 500);
+$primary-color: mat.m2-get-color-from-palette($primary-palette, 500);
 $accent-palette: map.get($color-config, 'accent');
 $warn-palette: map.get($color-config, 'warn');
 $is-dark-theme: map.get($color-config, 'is-dark');

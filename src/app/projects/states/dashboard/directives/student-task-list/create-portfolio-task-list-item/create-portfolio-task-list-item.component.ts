@@ -22,6 +22,6 @@ export class CreatePortfolioTaskListItemComponent {
   }
 
   public switchToPortfolioCreation() {
-    this.router.stateService.go('projects/portfolio');
+    this.router.stateService.go('projects2/portfolio2', {projectId: this.project.id});
   }
 }

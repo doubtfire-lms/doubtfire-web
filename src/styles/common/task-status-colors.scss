@@ -3,7 +3,7 @@
 //
 // ********************************************************
 // IMPORTANT: Task status colours must also be matched
-// in the task-service.coffee file
+// in the task-status.ts file
 // ********************************************************
 //
 
@@ -82,6 +82,18 @@ $task-status-colors: (
     base: #d93713,
     dark: darken(#d93713, 15%),
     light: lighten(#d93713, 15%),
+    fore: $task-status-foreground-color-light,
+  ),
+  assess-in-portfolio: (
+    base: #f2d85c,
+    dark: darken(#f2d85c, 15%),
+    light: lighten(#f2d85c, 15%),
+    fore: $task-status-foreground-color-dark,
+  ),
+  attention-required: (
+    base: #f1814d,
+    dark: darken(#f1814d, 15%),
+    light: lighten(#f1814d, 15%),
     fore: $task-status-foreground-color-light,
   ),
 );

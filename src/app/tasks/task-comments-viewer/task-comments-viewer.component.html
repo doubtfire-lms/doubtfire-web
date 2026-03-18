@@ -1,5 +1,16 @@
-<div class="comments-panel h-full" appDragDrop (fileDropped)="uploadFiles($event)" fxLayout="column">
-  <div fxFlex class="comments-body" #commentsBody fxLayout="column" style="place-content: stretch !important">
+<div
+  class="comments-panel h-full min-h-[350px]"
+  appDragDrop
+  (fileDropped)="uploadFiles($event)"
+  fxLayout="column"
+>
+  <div
+    fxFlex
+    class="comments-body"
+    #commentsBody
+    fxLayout="column"
+    style="place-content: stretch !important"
+  >
     <div [hidden]="!loading" class="h-full" fxLayout="row" fxLayoutAlign="center center">
       <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
     </div>
@@ -27,7 +38,7 @@
             *ngIf="comment.shouldShowTimestamp"
             [ngClass]="{own: comment.authorIsMe}"
           >
-            {{ comment.author.firstName }} {{ comment.author.lastName }}
+            {{ comment.author.preferredName }} {{ comment.author.lastName }}
             {{ comment.createdAt | humanizedDate }}
           </p>
           <div
@@ -60,11 +71,87 @@
               fxLayoutAlign="start center"
               [ngSwitch]="comment.commentType"
             >
-              <div *ngSwitchCase="'status'" class="comment-status">
+              <div
+                *ngSwitchCase="'status'"
+                class="comment-status"
+                [matTooltip]="comment.createdAt | humanizedDate"
+                matTooltipPosition="above"
+                matTooltipShowDelay="1000"
+              >
                 <hr class="hr-text" [attr.data-content]="comment.text" />
               </div>
 
-              <div *ngSwitchCase="'assessment'" class="comment-assessment">
+              <div
+                *ngSwitchCase="'discussed_in_class'"
+                class="w-full flex flex-col items-center my-2"
+                [matTooltip]="comment.createdAt | humanizedDate"
+                matTooltipPosition="above"
+                matTooltipShowDelay="1000"
+              >
+                <mat-card class="w-full self-end" appearance="outlined">
+                  <mat-card-header>
+                    <mat-icon class="m-auto" style="color: #9696969d">group</mat-icon>
+                  </mat-card-header>
+
+                  <mat-card-content
+                    style="color: #9696969d"
+                    class="flex flex-col justify-center items-center"
+                  >
+                    {{ comment.text }}
+                  </mat-card-content>
+                </mat-card>
+              </div>
+
+              <div
+                *ngSwitchCase="'feedback_review_request'"
+                class="w-full flex flex-col items-center my-2"
+                [matTooltip]="comment.createdAt | humanizedDate"
+                matTooltipPosition="above"
+                matTooltipShowDelay="1000"
+              >
+                <mat-card class="w-full self-end" appearance="outlined">
+                  <mat-card-header>
+                    <mat-icon class="m-auto" style="color: #9696969d">comment</mat-icon>
+                  </mat-card-header>
+
+                  <mat-card-content
+                    style="color: #9696969d"
+                    class="flex flex-col justify-center items-center"
+                  >
+                    {{ comment.text }}
+                  </mat-card-content>
+                </mat-card>
+              </div>
+
+              <div
+                *ngSwitchCase="'checked_in'"
+                class="w-full flex flex-col items-center my-2"
+                [matTooltip]="comment.createdAt | humanizedDate"
+                matTooltipPosition="above"
+                matTooltipShowDelay="1000"
+              >
+                <mat-card class="w-full self-end" appearance="outlined">
+                  <mat-card-header>
+                    <mat-icon class="m-auto" style="color: #9696969d">how_to_reg</mat-icon>
+                  </mat-card-header>
+
+                  <mat-card-content
+                    style="color: #9696969d"
+                    class="flex flex-col justify-center items-center"
+                  >
+                    {{ comment.text }}
+                  </mat-card-content>
+                </mat-card>
+              </div>
+
+              <div *ngSwitchCase="'plan'" class="comment-status">
+                <hr class="hr-text" [attr.data-content]="comment.text" />
+              </div>
+
+              <div
+                *ngSwitchCase="'assessment'"
+                class="comment-assessment overflow-x-scroll max-w-[350px] mx-auto"
+              >
                 <app-task-assessment-comment
                   [task]="task"
                   [comment]="comment"
@@ -100,7 +187,13 @@
                   </f-scorm-extension-comment>
                 </div>
 
-                <div *ngSwitchCase="'text'" class="comment-text">
+                <div
+                  *ngSwitchCase="'text'"
+                  class="comment-text"
+                  [matTooltip]="comment.createdAt | humanizedDate"
+                  matTooltipPosition="above"
+                  matTooltipShowDelay="1000"
+                >
                   <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
                 </div>
 

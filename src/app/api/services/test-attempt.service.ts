@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CachedEntityService} from 'ngx-entity-service';
-import API_URL from 'src/app/config/constants/apiURL';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {Task, TestAttempt} from 'src/app/api/models/doubtfire-model';
 import {Observable} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';

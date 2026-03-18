@@ -2,6 +2,780 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-21](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-20...v10.0.1-21) (2026-03-13)
+
+### [10.0.1-20](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-19...v10.0.1-20) (2026-03-13)
+
+### [10.0.1-19](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-18...v10.0.1-19) (2026-03-13)
+
+
+### Features
+
+* view submission history + zip file editor ([#1104](https://github.com/b0ink/doubtfire-deploy/issues/1104)) ([d706f09](https://github.com/b0ink/doubtfire-deploy/commit/d706f0918285a2c6d69c6240a93b41e88506f771))
+
+### [10.0.1-18](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-17...v10.0.1-18) (2026-03-11)
+
+
+### Bug Fixes
+
+* convert emojis in submission comment to string with colons ([#1105](https://github.com/b0ink/doubtfire-deploy/issues/1105)) ([7c508cb](https://github.com/b0ink/doubtfire-deploy/commit/7c508cba8695fcd7b6df4aaa53a70066ecb137f3))
+* dont subtract tutor note count for reading your own notes ([8fe6171](https://github.com/b0ink/doubtfire-deploy/commit/8fe61718c0e263fa965b861763337af27c175b36))
+
+### [10.0.1-17](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-16...v10.0.1-17) (2026-03-06)
+
+
+### Bug Fixes
+
+* empty prompts layout ([c77325a](https://github.com/b0ink/doubtfire-deploy/commit/c77325a2992d0b326bdeb27cd00a955aaa19811c))
+
+### [10.0.1-16](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-15...v10.0.1-16) (2026-03-04)
+
+### [10.0.1-15](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-14...v10.0.1-15) (2026-03-04)
+
+### [10.0.1-14](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-13...v10.0.1-14) (2026-03-03)
+
+
+### Features
+
+* view tutor notes from unit staff editor ([011980d](https://github.com/b0ink/doubtfire-deploy/commit/011980ddebb4caddaebb380aae4825930c077122))
+
+### [10.0.1-13](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-12...v10.0.1-13) (2026-03-02)
+
+
+### Features
+
+* add snooze moderation action ([#1096](https://github.com/b0ink/doubtfire-deploy/issues/1096)) ([bdcefda](https://github.com/b0ink/doubtfire-deploy/commit/bdcefda81e4acdef56ebe9f228632f26a904287c))
+
+### [10.0.1-12](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-11...v10.0.1-12) (2026-03-02)
+
+### [10.0.1-11](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-10...v10.0.1-11) (2026-02-28)
+
+
+### Bug Fixes
+
+* ensure deadline is returned ([6629a5f](https://github.com/b0ink/doubtfire-deploy/commit/6629a5f4b9834009dabf19a60a36c1289126034d))
+
+### [10.0.1-10](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-9...v10.0.1-10) (2026-02-26)
+
+
+### Features
+
+* display available storage for docker images ([#1092](https://github.com/b0ink/doubtfire-deploy/issues/1092)) ([81ebd34](https://github.com/b0ink/doubtfire-deploy/commit/81ebd3488d20a1e057c24b37190f4eea99bad9ec))
+
+### [10.0.1-9](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-8...v10.0.1-9) (2026-02-25)
+
+
+### Bug Fixes
+
+* typo ([4ecfe27](https://github.com/b0ink/doubtfire-deploy/commit/4ecfe27c91104c746ac8a4f9059030d5475776bb))
+
+### [10.0.1-8](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-7...v10.0.1-8) (2026-02-25)
+
+
+### Features
+
+* overflow marking ([#1086](https://github.com/b0ink/doubtfire-deploy/issues/1086)) ([e047988](https://github.com/b0ink/doubtfire-deploy/commit/e047988c4fff787852d1cc5a041cb48e11ee57f8))
+
+### [10.0.1-7](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-6...v10.0.1-7) (2026-02-25)
+
+
+### Bug Fixes
+
+* ensure timestamp is normalised to start of day ([671c391](https://github.com/b0ink/doubtfire-deploy/commit/671c3916797dc5ab680b9dac52ae68626e49d351))
+
+### [10.0.1-6](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-5...v10.0.1-6) (2026-02-24)
+
+### [10.0.1-5](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-4...v10.0.1-5) (2026-02-24)
+
+
+### Features
+
+* per grade start dates ([#1090](https://github.com/b0ink/doubtfire-deploy/issues/1090)) ([a35019a](https://github.com/b0ink/doubtfire-deploy/commit/a35019aa4011fce7808da8cc1481fae7635aac69))
+
+### [10.0.1-4](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-3...v10.0.1-4) (2026-02-23)
+
+
+### Features
+
+* allow custom target dates per target grade ([#1089](https://github.com/b0ink/doubtfire-deploy/issues/1089)) ([79b5af6](https://github.com/b0ink/doubtfire-deploy/commit/79b5af6bf05419e05dbef69e6ef1f72bfc85097c))
+
+### [10.0.1-3](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-2...v10.0.1-3) (2026-02-21)
+
+### [10.0.1-2](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-1...v10.0.1-2) (2026-02-19)
+
+
+### Bug Fixes
+
+* set min width for mentor dropdown ([75cc1b3](https://github.com/b0ink/doubtfire-deploy/commit/75cc1b3569d17cd54e71f86874addb4bc34d566f))
+
+### [10.0.1-1](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-0...v10.0.1-1) (2026-02-18)
+
+
+### Features
+
+* tutor notes + mentorship + moderation + escalation ([#1068](https://github.com/b0ink/doubtfire-deploy/issues/1068)) ([48f4db7](https://github.com/b0ink/doubtfire-deploy/commit/48f4db730f06e349f5e3c791f1972d23b0f8573f))
+
+
+### Bug Fixes
+
+* ensure tutor notes view extends full height ([c872ed7](https://github.com/b0ink/doubtfire-deploy/commit/c872ed766bf493456da56e33dcda48a90ed3f6ce))
+
+### [10.0.1-0](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0...v10.0.1-0) (2026-02-17)
+
+## [10.0.0](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-73...v10.0.0) (2026-02-12)
+
+## [10.0.0-73](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-72...v10.0.0-73) (2026-02-12)
+
+## [10.0.0-72](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-71...v10.0.0-72) (2026-02-12)
+
+
+### Bug Fixes
+
+* null safe user access ([f6aeecc](https://github.com/b0ink/doubtfire-deploy/commit/f6aeecc6c2c79909ca859422e7d9b3bc65ef6456))
+
+## [10.0.0-71](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-70...v10.0.0-71) (2026-02-11)
+
+
+### Features
+
+* download staff notes csv ([#1062](https://github.com/b0ink/doubtfire-deploy/issues/1062)) ([6dcfe95](https://github.com/b0ink/doubtfire-deploy/commit/6dcfe952f0415fb1327b738137f817a0fcfa0488))
+* migrate to jplag report viewer v6.3.0 ([#1082](https://github.com/b0ink/doubtfire-deploy/issues/1082)) ([697588b](https://github.com/b0ink/doubtfire-deploy/commit/697588b98e28ec663f4982c49f18fe8109ba7c34))
+
+## [10.0.0-70](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-69...v10.0.0-70) (2026-01-05)
+
+
+### Bug Fixes
+
+* skip query for unsaved task definition ([a6bdd22](https://github.com/b0ink/doubtfire-deploy/commit/a6bdd22ff864e72c679fae1844345963447fdf08))
+
+## [10.0.0-69](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-68...v10.0.0-69) (2026-01-05)
+
+
+### Features
+
+* attention required task status ([#1061](https://github.com/b0ink/doubtfire-deploy/issues/1061)) ([15365ed](https://github.com/b0ink/doubtfire-deploy/commit/15365ed4f42af790af9a9ae24dae42f041dff1df))
+* display number of stuff notes in tutor discussion ([2674d4e](https://github.com/b0ink/doubtfire-deploy/commit/2674d4e5ade26e5420b87518f4cd9da909ec7246))
+* overseer pipeline ([#1064](https://github.com/b0ink/doubtfire-deploy/issues/1064)) ([7cb8fc7](https://github.com/b0ink/doubtfire-deploy/commit/7cb8fc7471f0402c562fb8a0b87df672ceb22ea3))
+* project task planner gantt chart ([#1051](https://github.com/b0ink/doubtfire-deploy/issues/1051)) ([4f60792](https://github.com/b0ink/doubtfire-deploy/commit/4f607926e3ac305316a05607fda7f7bff7faec00))
+
+## [10.0.0-68](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-67...v10.0.0-68) (2025-12-08)
+
+
+### Bug Fixes
+
+* only trim if valid ([fbc63b0](https://github.com/b0ink/doubtfire-deploy/commit/fbc63b0308d87d921e1d74788e8da6031443e57e))
+
+## [10.0.0-67](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-66...v10.0.0-67) (2025-12-03)
+
+
+### Features
+
+* allow sidekiq web access ([#1053](https://github.com/b0ink/doubtfire-deploy/issues/1053)) ([6651279](https://github.com/b0ink/doubtfire-deploy/commit/6651279c49f431dbddf6fd5d810440ae7b3b9898))
+
+## [10.0.0-66](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-65...v10.0.0-66) (2025-12-03)
+
+
+### Features
+
+* discussion prompts ([#1042](https://github.com/b0ink/doubtfire-deploy/issues/1042)) ([730ffd0](https://github.com/b0ink/doubtfire-deploy/commit/730ffd0c3f79a5ad42c0c59c2f2c2a901ab0d702))
+
+
+### Bug Fixes
+
+* correctly set rollover end date ([0611be0](https://github.com/b0ink/doubtfire-deploy/commit/0611be04e8fe7e75ae07504945a2984839475e3a))
+
+## [10.0.0-65](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-64...v10.0.0-65) (2025-11-25)
+
+
+### Bug Fixes
+
+* typo ([bdcd75d](https://github.com/b0ink/doubtfire-deploy/commit/bdcd75d91d5ddc7d9a60317bd91289a7242251e1))
+
+## [10.0.0-64](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-63...v10.0.0-64) (2025-11-25)
+
+
+### Bug Fixes
+
+* avoid calling window to open project in new tab ([9ab015d](https://github.com/b0ink/doubtfire-deploy/commit/9ab015d168cf7e421500910766b9e6fb0bf907f5))
+* use new google fonts api for proper weight loading ([#1039](https://github.com/b0ink/doubtfire-deploy/issues/1039)) ([40f2640](https://github.com/b0ink/doubtfire-deploy/commit/40f2640e6579536cef8e82e9476733083b82bac1))
+
+## [10.0.0-63](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-62...v10.0.0-63) (2025-11-10)
+
+
+### Features
+
+* open project dashboard from portfolios view ([5b4b097](https://github.com/b0ink/doubtfire-deploy/commit/5b4b097a9b189e5a816695cce7438104f1144283)), closes [#1040](https://github.com/b0ink/doubtfire-deploy/issues/1040)
+
+## [10.0.0-62](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-61...v10.0.0-62) (2025-11-06)
+
+
+### Features
+
+* restrict assessments to tutors in the same tutorial stream ([#1033](https://github.com/b0ink/doubtfire-deploy/issues/1033)) ([29fbc14](https://github.com/b0ink/doubtfire-deploy/commit/29fbc1498b0d48811cb59c5f2a66871fbac06849))
+
+## [10.0.0-61](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-60...v10.0.0-61) (2025-11-06)
+
+## [10.0.0-60](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-59...v10.0.0-60) (2025-11-05)
+
+
+### Features
+
+* upload grades csv ([#1038](https://github.com/b0ink/doubtfire-deploy/issues/1038)) ([c67ceaa](https://github.com/b0ink/doubtfire-deploy/commit/c67ceaa84d02bb71626890fc28bb4aaea164b952))
+
+## [10.0.0-59](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-58...v10.0.0-59) (2025-11-04)
+
+
+### Bug Fixes
+
+* require comment for new evidence ([58ec499](https://github.com/b0ink/doubtfire-deploy/commit/58ec499a8d59c7202f591de661551d8a32c37527))
+* require comment for new evidence ([c5397fc](https://github.com/b0ink/doubtfire-deploy/commit/c5397fc5c444e76b431aa5d6487553c60e711c2e))
+
+## [10.0.0-58](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-57...v10.0.0-58) (2025-11-01)
+
+## [10.0.0-57](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-56...v10.0.0-57) (2025-10-30)
+
+
+### Features
+
+* open similarities from project dashboard ([#1035](https://github.com/b0ink/doubtfire-deploy/issues/1035)) ([ec0af0c](https://github.com/b0ink/doubtfire-deploy/commit/ec0af0cbe47392d6542d9741e1131954195d407f))
+
+
+### Bug Fixes
+
+* enable submission button for 'need help' trigger ([#1034](https://github.com/b0ink/doubtfire-deploy/issues/1034)) ([07de5b1](https://github.com/b0ink/doubtfire-deploy/commit/07de5b1e34f78f83c1418399f45e8c754aea530a))
+* typo ([2712a68](https://github.com/b0ink/doubtfire-deploy/commit/2712a68f6031794c571a7ee5866c653bf67de1dd))
+
+## [10.0.0-56](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-55...v10.0.0-56) (2025-10-23)
+
+
+### Bug Fixes
+
+* ensure grade has been selected ([32e03d1](https://github.com/b0ink/doubtfire-deploy/commit/32e03d111e61df42a9c67cb9e68d271f9300d5bc))
+
+## [10.0.0-55](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-54...v10.0.0-55) (2025-10-20)
+
+
+### Features
+
+* display task count in inbox ([#1025](https://github.com/b0ink/doubtfire-deploy/issues/1025)) ([3858e37](https://github.com/b0ink/doubtfire-deploy/commit/3858e3792fef3f0542d954e213987484ac97a990))
+
+
+### Bug Fixes
+
+* display correct marking session details ([c49ffed](https://github.com/b0ink/doubtfire-deploy/commit/c49ffeddedb2b79c39252770692e7df9dcd97bfc))
+* typo ([8a1dd1a](https://github.com/b0ink/doubtfire-deploy/commit/8a1dd1ac806c5acbbf8d1ccf7bdcb6af1c68dd14))
+
+## [10.0.0-54](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-53...v10.0.0-54) (2025-10-17)
+
+## [10.0.0-53](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-52...v10.0.0-53) (2025-10-17)
+
+## [10.0.0-52](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-51...v10.0.0-52) (2025-10-17)
+
+
+### Features
+
+* campus timezone ([#1022](https://github.com/b0ink/doubtfire-deploy/issues/1022)) ([4384b37](https://github.com/b0ink/doubtfire-deploy/commit/4384b376eaedf8ab66febec4c0ada53111311ff0))
+* download marking sessions for tutor ([e3fbe44](https://github.com/b0ink/doubtfire-deploy/commit/e3fbe4404661eb16b9c0e5ba19a1369dac1fb5b0))
+
+
+### Bug Fixes
+
+* display tutor name ([8956020](https://github.com/b0ink/doubtfire-deploy/commit/89560205d7316c53d77f376b5f7cfff5bf99e9c6))
+* filter out students from unit staff editor ([#1018](https://github.com/b0ink/doubtfire-deploy/issues/1018)) ([5c0c997](https://github.com/b0ink/doubtfire-deploy/commit/5c0c9974569e720a6c95aa8333c2a38d0ab4a1b0))
+* re-enable user filtering on click ([697daf2](https://github.com/b0ink/doubtfire-deploy/commit/697daf26693f20f61dcfbbeb0597a02715c9512d))
+
+## [10.0.0-51](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-50...v10.0.0-51) (2025-10-14)
+
+
+### Bug Fixes
+
+* unlock tasks when prerequisite requires rff and task is in aip state ([173d8c2](https://github.com/b0ink/doubtfire-deploy/commit/173d8c25375e231b25e64a04c1e3d2aedf741300))
+
+## [10.0.0-50](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-49...v10.0.0-50) (2025-10-13)
+
+
+### Features
+
+* jplag base code ([#1010](https://github.com/b0ink/doubtfire-deploy/issues/1010)) ([9a7a860](https://github.com/b0ink/doubtfire-deploy/commit/9a7a860fe799e351831e2a3f9701792792b76b38))
+
+## [10.0.0-49](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-48...v10.0.0-49) (2025-10-12)
+
+
+### Features
+
+* display session start and end time ([bb548b9](https://github.com/b0ink/doubtfire-deploy/commit/bb548b92d04bb7b8665444e7935317bc4b6a0981))
+
+## [10.0.0-48](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-47...v10.0.0-48) (2025-10-12)
+
+
+### Features
+
+* add tutor times summary download ([#1015](https://github.com/b0ink/doubtfire-deploy/issues/1015)) ([2b4afe2](https://github.com/b0ink/doubtfire-deploy/commit/2b4afe24e3f8139fec23337facc7656eec9a9d3a))
+
+
+### Bug Fixes
+
+* add assess in portfolio tasks as completed tasks in burndown chart ([8d36c94](https://github.com/b0ink/doubtfire-deploy/commit/8d36c94f03563a0924cfeb7d2d9e8dd911b65960))
+
+## [10.0.0-47](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-46...v10.0.0-47) (2025-09-25)
+
+
+### Features
+
+* add observer only ui ([bfbcee9](https://github.com/b0ink/doubtfire-deploy/commit/bfbcee98cfa4888241c5956372d004ec1cd813cb))
+
+## [10.0.0-46](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-45...v10.0.0-46) (2025-09-24)
+
+## [10.0.0-45](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-44...v10.0.0-45) (2025-09-22)
+
+
+### Bug Fixes
+
+* check for valid unit ([bfae1ad](https://github.com/b0ink/doubtfire-deploy/commit/bfae1ad69bb767cdad47dd8fac35cc84e5134534))
+
+## [10.0.0-44](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-43...v10.0.0-44) (2025-09-18)
+
+## [10.0.0-43](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-42...v10.0.0-43) (2025-09-17)
+
+
+### Bug Fixes
+
+* remove /api from host url ([5889edc](https://github.com/b0ink/doubtfire-deploy/commit/5889edc35bb427dfd4defefa7b77e8c81cd6dd7c))
+
+## [10.0.0-42](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-41...v10.0.0-42) (2025-09-17)
+
+
+### Features
+
+* display result of student imports ([e0503f4](https://github.com/b0ink/doubtfire-deploy/commit/e0503f424dfbef49e68b4e2f697e8d135120634e))
+* enable unit linking to lms context using deeplink ([73de1f1](https://github.com/b0ink/doubtfire-deploy/commit/73de1f1c68223c863c35198b773f0bdeaa1f549e))
+* init lti integration ([248be93](https://github.com/b0ink/doubtfire-deploy/commit/248be93e7c8b5ff060957e500b6a4943882f456c))
+* sync enrolments for all lti members ([5ec499f](https://github.com/b0ink/doubtfire-deploy/commit/5ec499f37b93f2b4bd56d145501fd55ab6af45e6))
+* sync grades for all members ([0f5daa8](https://github.com/b0ink/doubtfire-deploy/commit/0f5daa852f4c3750367f7d2c3f9b0c07ffbfed3f))
+* unauthorised lti banner ([12e65d8](https://github.com/b0ink/doubtfire-deploy/commit/12e65d8f1609f2030b25347beb1c0e06f513f65c))
+
+
+### Bug Fixes
+
+* forward correct lti token ([e95544e](https://github.com/b0ink/doubtfire-deploy/commit/e95544e2e158affefafd2fc0fe9657bf47c200db))
+
+## [10.0.0-41](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-40...v10.0.0-41) (2025-09-15)
+
+## [10.0.0-40](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-39...v10.0.0-40) (2025-09-15)
+
+
+### Features
+
+* assess in portfolio status ([ada4a21](https://github.com/b0ink/doubtfire-deploy/commit/ada4a21c945018abeb9ca1169e48fdd822a27322))
+* ensure complete button updates aip only tasks to working on it ([c8dd020](https://github.com/b0ink/doubtfire-deploy/commit/c8dd020a5e572765f7710c266ae2b20563ab05c2))
+* send automated message when set back to working on it ([a858d3a](https://github.com/b0ink/doubtfire-deploy/commit/a858d3a7b2f41ac7478d4917d2d2f6c68a167e6e))
+* submission type modal ([52f7d40](https://github.com/b0ink/doubtfire-deploy/commit/52f7d404ef154ff27c0ba887c8321360df95ddb6))
+
+
+### Bug Fixes
+
+* typo ([2a2e4a4](https://github.com/b0ink/doubtfire-deploy/commit/2a2e4a41e6ea20152632a9f82ca1723d9a6b56cc))
+* wording ([6291bd6](https://github.com/b0ink/doubtfire-deploy/commit/6291bd61ccc4ff45c708300d0a5014a59a565414))
+
+## [10.0.0-39](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-38...v10.0.0-39) (2025-09-10)
+
+
+### Features
+
+* display warning above task sheet for incomplete prerequisites ([86433bb](https://github.com/b0ink/doubtfire-deploy/commit/86433bb18e6ff9b024d7c397b8744618721b602f))
+
+## [10.0.0-38](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-37...v10.0.0-38) (2025-09-09)
+
+
+### Bug Fixes
+
+* ensure task prerequisites are correctly cached ([3945f4e](https://github.com/b0ink/doubtfire-deploy/commit/3945f4e2ecff1a1d79662c099baf745bfd6f4b7d))
+
+## [10.0.0-37](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-36...v10.0.0-37) (2025-09-09)
+
+## [10.0.0-36](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-35...v10.0.0-36) (2025-09-09)
+
+## [10.0.0-35](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-34...v10.0.0-35) (2025-09-09)
+
+
+### Features
+
+* add task prerequisites ([d5c1a51](https://github.com/b0ink/doubtfire-deploy/commit/d5c1a51dc049b025ae85b2ef6513630a197eabee))
+* cross out prerequisite tasks that have been submitted ([7e1a7db](https://github.com/b0ink/doubtfire-deploy/commit/7e1a7dbd3351dbcc8230f115554d6afdfaca0f70))
+* show list of prerequisites in task dashboard ([111f60a](https://github.com/b0ink/doubtfire-deploy/commit/111f60a4272abcf683c50b711bd43a1f772153ec))
+
+
+### Bug Fixes
+
+* typo ([e0c867f](https://github.com/b0ink/doubtfire-deploy/commit/e0c867fc7f24301d414ed584b6859e09d95c652c))
+
+## [10.0.0-34](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-33...v10.0.0-34) (2025-09-08)
+
+
+### Features
+
+* task assessment counts csv ([c2c6002](https://github.com/b0ink/doubtfire-deploy/commit/c2c6002cef6e5a75f722c964bf2843cf662380f4))
+
+
+### Bug Fixes
+
+* allow scrolling in edit profile form dialog ([ee2b908](https://github.com/b0ink/doubtfire-deploy/commit/ee2b9085a931df551408cd12dbc8187c04d088fc))
+
+## [10.0.0-33](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-32...v10.0.0-33) (2025-09-04)
+
+## [10.0.0-32](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-31...v10.0.0-32) (2025-09-02)
+
+## [10.0.0-31](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-30...v10.0.0-31) (2025-08-27)
+
+
+### Bug Fixes
+
+* use new checked_in comment type ([3033c6c](https://github.com/b0ink/doubtfire-deploy/commit/3033c6ca3c27ad4fc0a7ce4bda3ac44df09516e3))
+
+## [10.0.0-30](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-29...v10.0.0-30) (2025-08-27)
+
+## [10.0.0-29](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-28...v10.0.0-29) (2025-08-27)
+
+## [10.0.0-28](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-27...v10.0.0-28) (2025-08-27)
+
+## [10.0.0-27](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-26...v10.0.0-27) (2025-08-27)
+
+
+### Features
+
+* add option for qr footer text ([9e9b9db](https://github.com/b0ink/doubtfire-deploy/commit/9e9b9dbfb13d7531cb5387060407e23c25212cca))
+* support viewing qr for selected student in tutor view ([1f7fa51](https://github.com/b0ink/doubtfire-deploy/commit/1f7fa51d65767b3186e6eda8970a408cf0e6c847))
+
+
+### Bug Fixes
+
+* add padding when edit profile form displayed as modal ([a3f3b97](https://github.com/b0ink/doubtfire-deploy/commit/a3f3b977251a206b268c369c370934ff69b574d3))
+* show student id ([d1eeefb](https://github.com/b0ink/doubtfire-deploy/commit/d1eeefbea53cb13385bef2b3ba6b04d2f606c391))
+
+## [10.0.0-26](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-25...v10.0.0-26) (2025-08-27)
+
+
+### Features
+
+* add attendance marked task comment ([1559e81](https://github.com/b0ink/doubtfire-deploy/commit/1559e8104c8c4bc137df4f46a0a5ed0e345260af))
+* add tutor discussion to unit dropdown ([90f4149](https://github.com/b0ink/doubtfire-deploy/commit/90f41493313d6a3ad9bdafdd4cd4865c80e94ca2))
+* redirect back to inbox if unit context exists ([b7f4ab9](https://github.com/b0ink/doubtfire-deploy/commit/b7f4ab9e7801fbb33ffc6b4e02bf6613e6d7a524))
+
+
+### Bug Fixes
+
+* enforce minimum height on task comments viewer ([a7588e6](https://github.com/b0ink/doubtfire-deploy/commit/a7588e6f007381c04a570650257cd6f2ff93e5ae))
+* set max width on main container ([d1e5ab1](https://github.com/b0ink/doubtfire-deploy/commit/d1e5ab1427352fcf1b0fdd920cb9838a4f8799a0))
+
+## [10.0.0-25](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-24...v10.0.0-25) (2025-08-26)
+
+
+### Bug Fixes
+
+* only clear draft comment after successfully sending message ([2556355](https://github.com/b0ink/doubtfire-deploy/commit/2556355b0c3e1770fab021ed7d46e462882025b3))
+
+## [10.0.0-24](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-23...v10.0.0-24) (2025-08-21)
+
+## [10.0.0-23](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-22...v10.0.0-23) (2025-08-14)
+
+## [10.0.0-22](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-21...v10.0.0-22) (2025-08-14)
+
+
+### Features
+
+* download tasks awaiting feedback csv ([4a94373](https://github.com/b0ink/doubtfire-deploy/commit/4a943736689e41c405a831ca88a1303fb7c00385))
+
+
+### Bug Fixes
+
+* add return statement ([b8779e7](https://github.com/b0ink/doubtfire-deploy/commit/b8779e70d4decdc837caa8c84e8e8e2dfd3faf7f))
+* show full progress when sidekiq job is complete ([6a60d94](https://github.com/b0ink/doubtfire-deploy/commit/6a60d94b896d173a5008badd1b45bc7f45eee808))
+
+## [10.0.0-21](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-20...v10.0.0-21) (2025-08-12)
+
+
+### Bug Fixes
+
+* clear notification after fetching task comments ([c2d1536](https://github.com/b0ink/doubtfire-deploy/commit/c2d15367d9c53cb426dd12e73dc8d0b779a7f563))
+
+## [10.0.0-20](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-19...v10.0.0-20) (2025-08-11)
+
+## [10.0.0-19](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-18...v10.0.0-19) (2025-08-07)
+
+
+### Features
+
+* mark as discussed button in mobile tutor discussion ([9e62214](https://github.com/b0ink/doubtfire-deploy/commit/9e62214df772355048f4c7c7ffc13f3181f746e2))
+
+## [10.0.0-18](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-17...v10.0.0-18) (2025-07-31)
+
+
+### Bug Fixes
+
+* ensure no progress returns 0 ([9cb1f1a](https://github.com/b0ink/doubtfire-deploy/commit/9cb1f1ab770ac798ec8ecc555ceb73024bc98649))
+
+## [10.0.0-17](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-16...v10.0.0-17) (2025-07-31)
+
+
+### Features
+
+* return task to not started status ([bce1483](https://github.com/b0ink/doubtfire-deploy/commit/bce1483296064bafd44bc538f83731809d816a05))
+
+
+### Bug Fixes
+
+* check if project task stats exist ([e59af80](https://github.com/b0ink/doubtfire-deploy/commit/e59af803f8440338b0210b6a437537372f5dac5b))
+* ensure new comments are fetched for selected project only ([3b0e387](https://github.com/b0ink/doubtfire-deploy/commit/3b0e3877e05f162143fc78065cee9a191d0755f4))
+* ensure whitespace is trimmed ([fe687df](https://github.com/b0ink/doubtfire-deploy/commit/fe687df8b035ef851b9d147e01f575187f428a8c))
+* prevent additional inbox queries ([0d35f7f](https://github.com/b0ink/doubtfire-deploy/commit/0d35f7f4ef2e87dd078edf20e509c8f6efc5c216))
+
+## [10.0.0-16](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-15...v10.0.0-16) (2025-07-29)
+
+## [10.0.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-14...v10.0.0-15) (2025-07-29)
+
+
+### Bug Fixes
+
+* correctly load start page ([e297f26](https://github.com/b0ink/doubtfire-deploy/commit/e297f261e3df19faf11be9fde6515ce75434c320))
+* map correct variables ([b180799](https://github.com/b0ink/doubtfire-deploy/commit/b180799efd716d802cf83ce08b6df0639d9055b6))
+* prevent report button from expanding accordion ([e715415](https://github.com/b0ink/doubtfire-deploy/commit/e7154157ff1b88817141bae5b1b3de9fd37171f0))
+
+## [10.0.0-14](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-13...v10.0.0-14) (2025-07-28)
+
+
+### Features
+
+* portfolio zip downloading via sidekiq ([9000830](https://github.com/b0ink/doubtfire-deploy/commit/9000830e5e98bc0b921d618c034471eeddf996b4))
+* show list of active sidekiq jobs ([aa85665](https://github.com/b0ink/doubtfire-deploy/commit/aa85665670a23fea556c6420f139e7e7853d16ba))
+* show maintenance ui when api fails ([29bb95f](https://github.com/b0ink/doubtfire-deploy/commit/29bb95f5974dc8f258b204957a212a8399ad2d6e))
+* sidekiq progress modal component ([b9691e7](https://github.com/b0ink/doubtfire-deploy/commit/b9691e793204e84fae323610a7b555b15e065514))
+
+
+### Bug Fixes
+
+* fallback to task definition due date ([bef0a9c](https://github.com/b0ink/doubtfire-deploy/commit/bef0a9cbfefc58407f851d3ca73b90af6b81151f))
+
+## [10.0.0-13](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-12...v10.0.0-13) (2025-07-16)
+
+
+### Bug Fixes
+
+* display task-date-slider only when task exists ([c886034](https://github.com/macite/doubtfire-deploy/commit/c886034d4bf69851f4b06599a45bd1b135c3fff2))
+
+## [10.0.0-12](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-11...v10.0.0-12) (2025-07-15)
+
+
+### Bug Fixes
+
+* exclude jplag route from ngsw cache ([69b55bb](https://github.com/macite/doubtfire-deploy/commit/69b55bb85d8583b6935e08c91aad63e98e6ce887))
+
+## [10.0.0-11](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-10...v10.0.0-11) (2025-07-15)
+
+## [10.0.0-10](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-9...v10.0.0-10) (2025-07-15)
+
+## [10.0.0-9](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-8...v10.0.0-9) (2025-07-15)
+
+## [10.0.0-8](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-7...v10.0.0-8) (2025-07-15)
+
+## [10.0.0-7](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-6...v10.0.0-7) (2025-07-14)
+
+
+### Features
+
+* add icon to discussed in class update ([c11cec0](https://github.com/macite/doubtfire-deploy/commit/c11cec02ece3b6bf7c2e36998ee2fa2a3572bc58))
+* add jplag report download button to student submission tutor teacher footer view ([2ec1b06](https://github.com/macite/doubtfire-deploy/commit/2ec1b06b5330c5e142cc3fc01c49c2aded5411cb))
+* add tutor discussion qr scanning ([e549c4e](https://github.com/macite/doubtfire-deploy/commit/e549c4e0ac9377bd864c81122cffce004681c845))
+* auto send dicussed in class comment ([fbf90c7](https://github.com/macite/doubtfire-deploy/commit/fbf90c7fdfa440f565e2c8abae4ae62bc1fe70eb))
+* **comments:** enhanced drafting for messages using localStorage ([f331734](https://github.com/macite/doubtfire-deploy/commit/f33173409f0804da4de24e1e6ec53971896b28e9))
+* **comments:** enhanced drafting for messages using localStorage ([b6f6831](https://github.com/macite/doubtfire-deploy/commit/b6f683175db6ab9549b8b4481ab54bb89700016a))
+* edit staff note ([b2d8ba4](https://github.com/macite/doubtfire-deploy/commit/b2d8ba41b1dc467a03728d5df4ede6ac6fb3c9a1))
+* fetch new comments on task switching and status updates ([1b7da69](https://github.com/macite/doubtfire-deploy/commit/1b7da692423acaf53b96229b665b971360bacc89))
+* force scanner to use back camera, enhance ux ([e5799b1](https://github.com/macite/doubtfire-deploy/commit/e5799b18ec0603123b6a99b3733919d2611b4fbd))
+* highlight selected task ([25b361f](https://github.com/macite/doubtfire-deploy/commit/25b361f699ad54e45c32167ccae230635a6b2758))
+* indicate reply has been deleted ([c3e288a](https://github.com/macite/doubtfire-deploy/commit/c3e288ae95e2fa5fd43bdf3922e81501f26e1baf))
+* init qr tutor marking state ([41d1d61](https://github.com/macite/doubtfire-deploy/commit/41d1d61a417573e33c4344898ae6d7562c459004))
+* init reply to button ([100a533](https://github.com/macite/doubtfire-deploy/commit/100a5335aa7f37f4477b9d9b8f43806ca32c640b))
+* init staff notes ([c7eed99](https://github.com/macite/doubtfire-deploy/commit/c7eed9903bcc4463f4d0b52889e0d3d9045b03ba))
+* jplag report download button in task explorer view ([16670a2](https://github.com/macite/doubtfire-deploy/commit/16670a27d5dc544ae828da85cda48358cab4d75e))
+* link note that is being replied to ([27726b3](https://github.com/macite/doubtfire-deploy/commit/27726b3f1368031c24bf069bde4f930dd02c1e80))
+* load jplag report viewer into iframe ([1360438](https://github.com/macite/doubtfire-deploy/commit/13604383b403dbf82b013786127a72fab08ac895))
+* localized date time pipe ([5cf752b](https://github.com/macite/doubtfire-deploy/commit/5cf752baf1b9de6105ea2a951ec75818ce1e0cfc))
+* mark task as discussed ([a54f94f](https://github.com/macite/doubtfire-deploy/commit/a54f94f045b4280d0f13304a6b5728b62fc4107e))
+* message tooltip timestamps ([2d79007](https://github.com/macite/doubtfire-deploy/commit/2d79007c033d56218326f55dd8d6821e17fec74f))
+* native jplag report viewer state ([8f6bc6a](https://github.com/macite/doubtfire-deploy/commit/8f6bc6ae5b80502b5d81b65bab2be3aaa56ce42f))
+* qr code generation for student projects ([6f8b94f](https://github.com/macite/doubtfire-deploy/commit/6f8b94f7c0b48d292dfe28871ff7ae7fda86b2b9))
+* redirect back to home if exiting the scanner ([71f09ae](https://github.com/macite/doubtfire-deploy/commit/71f09ae77da6f0a2f5ed135071c92c110940c2f5))
+* reply to ui ([40078df](https://github.com/macite/doubtfire-deploy/commit/40078df477bd300c9b8897976d10658fb91a6d04))
+* show number of notes project has ([f3d4c4c](https://github.com/macite/doubtfire-deploy/commit/f3d4c4c00128ca00dec18ea9950c01df25b75b61))
+* staff note deletion ([0ab1ebf](https://github.com/macite/doubtfire-deploy/commit/0ab1ebff3964d8665d9560bf3007a2d30109ee37))
+* switch to staff note tab view ([65f8c71](https://github.com/macite/doubtfire-deploy/commit/65f8c71bd37ef71481bd14f591af263470987a6e))
+* task and unit ilos ui ([1cef438](https://github.com/macite/doubtfire-deploy/commit/1cef438b458efcee4adce01cc81648d32bb97f35))
+* view filtered tasks only button ([a4e422d](https://github.com/macite/doubtfire-deploy/commit/a4e422dcf3dfa329b83cd7e3d521fc3665c9c45f))
+* view staff notes in portfolio assessment ([020ab5b](https://github.com/macite/doubtfire-deploy/commit/020ab5b9a98a401835e41bee7abc3dee70978c07))
+
+
+### Bug Fixes
+
+* allow oversized images to be scrollable ([8ff67d2](https://github.com/macite/doubtfire-deploy/commit/8ff67d2f8e483813bc3af0dc2429b58fe16f8f2b))
+* avoid fetching twice if no comments are cached yet ([d219d49](https://github.com/macite/doubtfire-deploy/commit/d219d49ca6457119084d4c3d2cb39343dece5aa0))
+* decode url from qr code ([31822ab](https://github.com/macite/doubtfire-deploy/commit/31822abaa4c66e2dcbc3ab74c71fe0f6e9b5861d))
+* discussed context type ([d87e620](https://github.com/macite/doubtfire-deploy/commit/d87e620ab54aa75f03d8295f0319798214ad39f0))
+* display load more button only if there are more tasks ([84d5bca](https://github.com/macite/doubtfire-deploy/commit/84d5bcaa4f6329ed34f30a58d88e18fce9c3a76d))
+* enable unit name text wrapping ([5f779b8](https://github.com/macite/doubtfire-deploy/commit/5f779b8cb626ada2e8b6488812424813cc5e9913))
+* ensure jplag iframe extends to full height ([7ae6466](https://github.com/macite/doubtfire-deploy/commit/7ae6466e6586ceaf58edec8a741c9e2f8a737c0c))
+* ensure scanner doesn't break on ios ([a0b010e](https://github.com/macite/doubtfire-deploy/commit/a0b010ef31161b6cf2ab1038deb82c199ffb9ecb))
+* improve task similarity notice ui ([ba26841](https://github.com/macite/doubtfire-deploy/commit/ba2684192c2a8a139237affc4c0702af901f1808))
+* match comments-modals's original max width ([7edb445](https://github.com/macite/doubtfire-deploy/commit/7edb445d7bc5f61daba1b47a3a36b633b551267e))
+* merge conflict ([e599fe3](https://github.com/macite/doubtfire-deploy/commit/e599fe35ec338cfd7f5ffc419a3379d3f3160312))
+* show edit icon for authors only ([a83a875](https://github.com/macite/doubtfire-deploy/commit/a83a875f25efbe9297fe76d773ef4ff55456bcf8))
+* support markdown ([3ac10f6](https://github.com/macite/doubtfire-deploy/commit/3ac10f6cab39dab42ce19f61029488d220786703))
+* **task-comment-composer:** deleting the key when text is empty ([6ef91e0](https://github.com/macite/doubtfire-deploy/commit/6ef91e0ddb119e03dbaf2b6e53e450e5bcc58b8b))
+* update discussion route ([b5c35d9](https://github.com/macite/doubtfire-deploy/commit/b5c35d9cb0be11a6c6cbd49d9e6aee37bb5b83cd))
+* welcome page redirect issues ([14ad26e](https://github.com/macite/doubtfire-deploy/commit/14ad26e8ed4acf6f77043447a2691360fd62ce51))
+
+## [10.0.0-6](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-5...v10.0.0-6) (2025-06-13)
+
+
+### Features
+
+* add spec con and flexible dates ([a874cff](https://github.com/macite/doubtfire-deploy/commit/a874cff846e788a1820da7e19899ecb20a113888))
+
+
+### Bug Fixes
+
+* only get task feedback templates if staff ([8341b93](https://github.com/macite/doubtfire-deploy/commit/8341b933487ccd451a15cb8f7ec6afc1695cb121))
+* remove unnecessary safe pipe ([c92242a](https://github.com/macite/doubtfire-deploy/commit/c92242ad9afb0a934d4e8fb00afee0c69782c625))
+
+## [10.0.0-5](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-4...v10.0.0-5) (2025-05-30)
+
+
+### Bug Fixes
+
+* correct broken transition hooks ([d237eda](https://github.com/macite/doubtfire-deploy/commit/d237eda82dd989fc1b69d6e4236932050bc5b1a4))
+* delay authorisation code until after authentication ([34410d4](https://github.com/macite/doubtfire-deploy/commit/34410d4afdf5bd73d9c244a6f40c7fb78b714e63))
+* ensure transition in student pages update pdf view ([68a2f38](https://github.com/macite/doubtfire-deploy/commit/68a2f38167c792974aafd907f04fcf9e8b5bf091))
+* simplify setting of auto redirect on login ([60dbceb](https://github.com/macite/doubtfire-deploy/commit/60dbceb2a104894b4eff157c038446796bf01708))
+
+## [10.0.0-4](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-3...v10.0.0-4) (2025-04-15)
+
+
+### Bug Fixes
+
+* ensure sign in waits for global load ([fb6e61f](https://github.com/macite/doubtfire-deploy/commit/fb6e61f874797cd48e77f2a8d0a32f345f5b785b))
+
+## [10.0.0-3](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-2...v10.0.0-3) (2025-04-10)
+
+
+### Bug Fixes
+
+* correct auth callback ([2e087d2](https://github.com/macite/doubtfire-deploy/commit/2e087d267c8bfde633550823aed460379a643ad9))
+
+## [10.0.0-2](https://github.com/macite/doubtfire-deploy/compare/v10.0.0-1...v10.0.0-2) (2025-04-10)
+
+
+### Bug Fixes
+
+* correct handling of errors on auth ([622768a](https://github.com/macite/doubtfire-deploy/commit/622768a06112910d5ba79061689fc0ba486982a5))
+
+## [10.0.0-1](https://github.com/macite/doubtfire-deploy/compare/v8.0.37...v10.0.0-1) (2025-04-10)
+
+
+### Features
+
+* add comment text to comment area ([5c45415](https://github.com/macite/doubtfire-deploy/commit/5c45415eafb38e221963781e4575480294d74e09))
+* add connected learning outcomes ([9532d9f](https://github.com/macite/doubtfire-deploy/commit/9532d9ffe620d67d7bc83137d59e0a91ecf8a73a))
+* add editor for task feedback templates ([3da7a4b](https://github.com/macite/doubtfire-deploy/commit/3da7a4b54a5892ea99cd365ae439677b0f52ed6f))
+* add feedback template picker to comment composer ([9acc365](https://github.com/macite/doubtfire-deploy/commit/9acc36502dc3fd2365817f73ccc742dd3947e293))
+* add field to connect outcomes ([db2d2bc](https://github.com/macite/doubtfire-deploy/commit/db2d2bc32b19165bac8ff6ba0282a16adffbb815))
+* add glo editor ([4efe876](https://github.com/macite/doubtfire-deploy/commit/4efe87694a426c4b6a55ef943576fe47498166e5))
+* add greeting and summary chip ([ed68317](https://github.com/macite/doubtfire-deploy/commit/ed683174ab7b330a48b2aeacdd65012396357479))
+* add option for institution logo ([5141529](https://github.com/macite/doubtfire-deploy/commit/5141529b1ed37f8ca254e89e1b91edac3139f166))
+* add startpage property to auto scroll to on pdf render ([90830cd](https://github.com/macite/doubtfire-deploy/commit/90830cdba73bcfe564362015b5abaf2c40810f5f))
+* combine outcome and template editor ([c12536b](https://github.com/macite/doubtfire-deploy/commit/c12536bc4375b1ae5f19d4e54d0783b6948921eb))
+* edit feedback chips ([04f8dce](https://github.com/macite/doubtfire-deploy/commit/04f8dce30f79d86637abd6db2aa9fa3aa14d1de2))
+* **feedback-template:** add hierarchical sorting for feedback templates ([8db1844](https://github.com/macite/doubtfire-deploy/commit/8db1844402d080902a9d3938ecc04dd7a2f0340f))
+* **feedback-template:** improve sorting logic for feedback templates ([d3f156a](https://github.com/macite/doubtfire-deploy/commit/d3f156a640e6a3da99c147c4c2303a1af3050f8f))
+* **feedback-template:** merge upstream changes ([0fb1d8a](https://github.com/macite/doubtfire-deploy/commit/0fb1d8abfa3264befddd97e1ce0832359866919d))
+* fetch feedback chips when selecting task in unit editor ([9caeda4](https://github.com/macite/doubtfire-deploy/commit/9caeda4e71946ddb7907027ebf7a54397f11606f))
+* init pdf viewer on page 2 for student submissions ([45cc89e](https://github.com/macite/doubtfire-deploy/commit/45cc89e18cff8fcde66480448eea178940d316a2))
+* make template editor reusable across contexts ([a42f177](https://github.com/macite/doubtfire-deploy/commit/a42f177f61b3f7166edf3b9c93dfd2dcd3949df7))
+* modify fields and operate on learning outcomes ([65ffc4f](https://github.com/macite/doubtfire-deploy/commit/65ffc4f8d61a9d0b2cc7c5f8d13db932436fc4f5))
+* persistent pdf zoom level ([1348da2](https://github.com/macite/doubtfire-deploy/commit/1348da2d345b080002a62a24d717fac15c4b0a92))
+* rebuild auth with refresh token ([5d3a36e](https://github.com/macite/doubtfire-deploy/commit/5d3a36e8f16e8993c5607241112c490361a31c97))
+* show chips on picker ([e54216f](https://github.com/macite/doubtfire-deploy/commit/e54216f8472b67cf9f2ff69c9bcb3355efa90081))
+* suggest task status according to feedback ([95796da](https://github.com/macite/doubtfire-deploy/commit/95796da4e7855bcd76023754d95cec8d033668fc))
+
+
+### Bug Fixes
+
+* adjust ui for nested csv modal ([d7fac6f](https://github.com/macite/doubtfire-deploy/commit/d7fac6f0fb23f060373fd4c40f5e82b960098c77))
+* check difference before updating linked outcomes ([aa0bc76](https://github.com/macite/doubtfire-deploy/commit/aa0bc76d32656dc14d28ebca520e4f90d6d9434e))
+* check for unit context for template csv name ([6ecec84](https://github.com/macite/doubtfire-deploy/commit/6ecec8483222304161f9cda87a8bdf3ecd774bcb))
+* comment console logs ([e86162d](https://github.com/macite/doubtfire-deploy/commit/e86162d1592d8418bab3c889b1d0bbfe3662b86d))
+* correct a typo in /edit_profile ([4b7901f](https://github.com/macite/doubtfire-deploy/commit/4b7901fd03d9652230aecb52791313f052d7b53d))
+* correct string manipulation for task period formatting ([aa06cbf](https://github.com/macite/doubtfire-deploy/commit/aa06cbf3a08efa02f508062d47c127289fc8c6fa))
+* display feedback picker chips in color ([6ae0771](https://github.com/macite/doubtfire-deploy/commit/6ae077149d16e5af538d432a9ce2db974298b549))
+* display nested feedback groups in picker ([db93b18](https://github.com/macite/doubtfire-deploy/commit/db93b187cfe6e197a3b6243445809ec6d767d4bd))
+* display task status in coloured chip in feedback editor ([73986e8](https://github.com/macite/doubtfire-deploy/commit/73986e89839603b19f643404e5a48964ac9a3c1b))
+* exclude greeting and summary from selected ([1978e54](https://github.com/macite/doubtfire-deploy/commit/1978e5410f6aa9314252ae3cf922917033f551f0))
+* feedback picker search ([3a5e02e](https://github.com/macite/doubtfire-deploy/commit/3a5e02e2f7864b9e1ea4f8d49ce69d23addbcc5a))
+* **feedback-template-editor:** add missing operator ([a1f220c](https://github.com/macite/doubtfire-deploy/commit/a1f220c9f5462a2b91035eb936f3ff25b7d4cd67))
+* **feedback-template-editor:** improve feedback template sorting logic ([bd48c40](https://github.com/macite/doubtfire-deploy/commit/bd48c40c4c3b0a3d67d41373b624ed8b3b754f4a))
+* **feedback-template:** ensure sorting defaults are applied ([96f7555](https://github.com/macite/doubtfire-deploy/commit/96f7555f9dfcf4c62ee3dd54b9e9e74087bec47a))
+* focus on composer input after selecting chip ([95afdff](https://github.com/macite/doubtfire-deploy/commit/95afdff12aac914bb8af8727f8b8d960bc3b072c))
+* hide feedback group comment text ([55a6625](https://github.com/macite/doubtfire-deploy/commit/55a662584c4b8b6123335bcbc5149a9f0f0701d8))
+* hide picker on task change ([198b7f9](https://github.com/macite/doubtfire-deploy/commit/198b7f9d0ccad631059ed5e1ad5487604582074b))
+* hide summary instead of comment text for groups ([7644cba](https://github.com/macite/doubtfire-deploy/commit/7644cba92f92f5c261501c1907f7f5418538e3a7))
+* hide template editor on outcome switch ([a3706e9](https://github.com/macite/doubtfire-deploy/commit/a3706e9394b78edf9ec15030246c98acca9d3852))
+* lock ng2-pdf-viewer to 10.2.2 ([2cf6215](https://github.com/macite/doubtfire-deploy/commit/2cf62152524ec728c73aaa23f678bbce9ae6b4d1))
+* only get feedback chips if staff ([7f4381e](https://github.com/macite/doubtfire-deploy/commit/7f4381e1179400642821068d1acdba346a2969a2))
+* organise outcome and feedback csv functionality ([641f1d9](https://github.com/macite/doubtfire-deploy/commit/641f1d9f75177d48b3911c300e23c901e0a603e1))
+* prevent saving empty items ([0eed547](https://github.com/macite/doubtfire-deploy/commit/0eed5477940db511cee09bbdb7ccb0adde57cbbf))
+* refine feedback editor ([f410cfe](https://github.com/macite/doubtfire-deploy/commit/f410cfe47b0c242f1a164c6345bc4d29f5659f6a))
+* refresh context when changing task defs ([c078bcf](https://github.com/macite/doubtfire-deploy/commit/c078bcf40198c5495d4c94354fab411d3e0ee934))
+* remove duplicate alert ([955d0a1](https://github.com/macite/doubtfire-deploy/commit/955d0a17ae23be77954145ba189ac8bb0aa90da0))
+* remove glo outcome specific csv buttons ([579c491](https://github.com/macite/doubtfire-deploy/commit/579c49170808a6fcca1bfd67f0923f0339255463))
+* remove selected outcomes from dropdown ([5494384](https://github.com/macite/doubtfire-deploy/commit/5494384f1a4becf462dd031e89fae2734ed46e55))
+* reply to position and wrapping ([e065c46](https://github.com/macite/doubtfire-deploy/commit/e065c46c3fe6689a7b295a3f91a576eabc11f7bd))
+* reset template table for new outcome ([7585c1c](https://github.com/macite/doubtfire-deploy/commit/7585c1c60ca8fe168084ec3d857aec4856bfb0db))
+* save connected outcomes ([eb3cf6d](https://github.com/macite/doubtfire-deploy/commit/eb3cf6daf99b893642336efb48ed58bc9c8b8207))
+* save linked outcomes upon selection ([07f103d](https://github.com/macite/doubtfire-deploy/commit/07f103de46defa2a78f5d7c43030e67255c0d5fe))
+* save to proper cache and clean up ([80edff2](https://github.com/macite/doubtfire-deploy/commit/80edff2ef04137b3d38ccdd252788cfb40f458f0))
+* show description for connected outcome selection ([0f2c164](https://github.com/macite/doubtfire-deploy/commit/0f2c164579491298b81849cc110301229f2ca5af))
+* show picker above composer and below comments ([ef524f1](https://github.com/macite/doubtfire-deploy/commit/ef524f1b048b3bfe1781307a34e1a5fe364943a4))
+* show proper selected outcome or template ([0ac3881](https://github.com/macite/doubtfire-deploy/commit/0ac3881e7f6d0f5b7ddeb85e5e8f9e6835c5dba6))
+* support hot reloading on windows ([247330e](https://github.com/macite/doubtfire-deploy/commit/247330e46d74186519dbcbbef8378b508eaca83f))
+* support windows build ([3594528](https://github.com/macite/doubtfire-deploy/commit/35945288c73052afd28209a7381335af2b14ba10))
+* template editor not showing if new ([6cfe379](https://github.com/macite/doubtfire-deploy/commit/6cfe37999fa7f484e1b89f4dbe657b99907adae1))
+* tlo csv url ([73588d8](https://github.com/macite/doubtfire-deploy/commit/73588d886118861bbd3e5ae380cddc7baa532dbb))
+* update packages ([e5a57f8](https://github.com/macite/doubtfire-deploy/commit/e5a57f8ba3669345a272b308b0c892fdab4843ef))
+* upon save update entity in frontend ([a128744](https://github.com/macite/doubtfire-deploy/commit/a1287449b945295ced60e86a21bcaab67ed0f9bd))
+* use icon instead of color for template task status ([11a3993](https://github.com/macite/doubtfire-deploy/commit/11a399324ee64af901f44f28de3526cbd7650bac))
+* use task status color for recommended button ([174cde0](https://github.com/macite/doubtfire-deploy/commit/174cde0022d0c728d2c6408d40129d6c343aa91d))
+
+### [8.0.37](https://github.com/macite/doubtfire-deploy/compare/v8.0.36...v8.0.37) (2025-03-10)
+
+
+### Bug Fixes
+
+* ensure overseer download get resources zip ([a1e4d71](https://github.com/macite/doubtfire-deploy/commit/a1e4d71b34733bc53cd2cfa63ee1e70f8f43386f))
+
+### [8.0.36](https://github.com/macite/doubtfire-deploy/compare/v8.0.35...v8.0.36) (2025-03-07)
+
+
+### Bug Fixes
+
+* overseer image admin in unit and task ([72c89b3](https://github.com/macite/doubtfire-deploy/commit/72c89b30cca426d56c7efbbac34e00fd734fe714))
+
+### [8.0.35](https://github.com/macite/doubtfire-deploy/compare/v8.0.34...v8.0.35) (2025-02-28)
+
+
+### Bug Fixes
+
+* correct ability to edit teaching periods ([ce37bf2](https://github.com/macite/doubtfire-deploy/commit/ce37bf27689744a6f43be46912be0d14e2cdbc6b))
+* ensure an old grade is present in portfolio assessment ([7daacd1](https://github.com/macite/doubtfire-deploy/commit/7daacd1bf0af050aeb6db503d963e574f68b9a94))
+* ensure overseer images can be edited ([3479b7a](https://github.com/macite/doubtfire-deploy/commit/3479b7af589b9ba986ddbb7dc8a84fd0be3e66e6))
+
 ### [8.0.34](https://github.com/macite/doubtfire-deploy/compare/v8.0.33...v8.0.34) (2025-02-12)
 
 

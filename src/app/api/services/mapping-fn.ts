@@ -61,6 +61,28 @@ export class MappingFunctions {
   }
 
   /**
+   * Add a number of days to a date.
+   *
+   * @param date starting date
+   * @param days days to add
+   * @returns the date that is `days` days after `date`
+   */
+  public static addDays(date: Date, days: number): Date {
+    return new Date(date.getTime() + MappingFunctions.dayMs(days));
+  }
+
+  /**
+   * Add a number of weeks to a date.
+   *
+   * @param date starting date
+   * @param weeks days to add
+   * @returns the date that is `days` days after `date`
+   */
+  public static addWeeks(date: Date, weeks: number): Date {
+    return new Date(date.getTime() + MappingFunctions.weeksMs(weeks));
+  }
+
+  /**
    * Calculate the time between two dates
    *
    * @param date1 days from this date
@@ -93,5 +115,16 @@ export class MappingFunctions {
   public static weeksBetween(date1: Date, date2: Date): number {
     const diff = this.daysBetween(date1, date2);
     return Math.ceil(diff / 7);
+  }
+
+  /**
+   * Calculate the date that is a number of days after a given date
+   *
+   * @param date start date
+   * @param days number of days to add
+   * @returns the date that is that many days after the start date
+   */
+  public static daysAfter(date: Date, days: number): Date {
+    return new Date(date.getTime() + this.dayMs(days));
   }
 }

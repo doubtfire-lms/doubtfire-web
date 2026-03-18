@@ -5,7 +5,7 @@
       [shiftBetweenBadges]="false"
       [width]="80"
       [unit_code]="unit?.code"
-      matTooltip="{{ unit.name }}"
+      matTooltip="{{ unit?.name }}"
       [matMenuTriggerFor]="menu"
       #menuState="matMenuTrigger"
     >
@@ -44,7 +44,7 @@
   @for (unitRole of unitRoles; track unitRole) {
     @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
       <div
-        uiSref="units/tasks/inbox"
+        uiSref="units2/tasks/inbox"
         [uiParams]="{unitId: unitRole.unit.id}"
         mat-menu-item
         class="w-full"
@@ -63,8 +63,8 @@
   @for (project of projects; track project) {
     @if (!project.unit.teachingPeriod || project.unit.teachingPeriod.active) {
       <button
-        uiSref="projects/dashboard"
-        [uiParams]="{projectId: project.id, taskAbbr: ''}"
+        uiSref="projects2/dashboard2"
+        [uiParams]="{projectId: project.id, taskAbbreviation: ''}"
         class="flex items-center mb-2"
         mat-menu-item
       >

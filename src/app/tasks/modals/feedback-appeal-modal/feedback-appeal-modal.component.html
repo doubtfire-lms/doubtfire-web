@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>Request Feedback Review</h2>
+<mat-dialog-content>
+  <p>
+    If you believe the feedback or marking on this task does not accurately reflect your work, you
+    may request a review. This allows another tutor to reassess the feedback and determine whether
+    it should be confirmed or revised.
+  </p>
+
+  <p>
+    You have
+    <b>
+      {{ task.project.escalationAttemptsRemaining }} review request{{
+        task.project.escalationAttemptsRemaining !== 1 ? 's' : ''
+      }}
+    </b>
+    remaining for this unit. If the original feedback is revised as a result of this review, the
+    request will not be counted against your remaining total.
+  </p>
+
+  <mat-form-field appearance="outline" class="w-full mt-4">
+    <mat-label>Reason for review request</mat-label>
+    <textarea
+      matInput
+      rows="4"
+      maxlength="1000"
+      [(ngModel)]="reviewComment"
+      placeholder="Briefly explain why you believe this feedback should be reviewed. Refer to specific criteria if relevant."
+    ></textarea>
+    <div class="flex justify-end">
+      <mat-hint> {{ reviewComment?.length || 0 }}/1000 </mat-hint>
+    </div>
+  </mat-form-field>
+  <p class="opacity-70">Review decisions are final once resolved.</p>
+
+  <mat-dialog-actions class="flex justify-between">
+    <button mat-raised-button (click)="dismissModal()">Cancel</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="submit()"
+      [disabled]="!reviewComment || submitting"
+    >
+      Submit
+    </button>
+  </mat-dialog-actions>
+</mat-dialog-content>

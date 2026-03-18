@@ -1,27 +1,42 @@
-<div class="submission-wrap">
-  <div class="submission-main">
-    <div class="submission-sidenav panel panel-primary">
-      <div class="panel-heading panel-title submission-heading">Submissions</div>
-      <mat-list class="list-group">
+<div class="">
+  <div class="flex">
+    <div class="w-[300px]">
+      <div class="">Submissions</div>
+      <mat-list class="">
         @for (tab of tabs; track tab) {
-  <mat-list-item class="list-group-item"
-          [class.selected]="tab.timestampString === selectedTab.timestampString"
-         
-          (click)="openSubmission(tab)">
-          <div style="-webkit-box-flex: 1; flex: 1;">{{tab.timestamp | date: 'dd/MM/yy, hh:mm a'}}</div>
-           &nbsp; <status-icon [status]="tab.taskStatus" ></status-icon>
-        </mat-list-item>
-}
+          <mat-list-item
+            [class.selected]="tab.timestampString === selectedTab.timestampString"
+            (click)="openSubmission(tab)"
+          >
+            <div class="flex gap-5 justify-between items-center">
+              <div>
+                {{ tab.timestamp | humanizedDate }}
+              </div>
+              @if (tab.status === 'pre_queued') {
+                <mat-icon>schedule</mat-icon>
+              } @else {
+                <status-icon [status]="tab.taskStatus"></status-icon>
+              }
+            </div>
+          </mat-list-item>
+        }
       </mat-list>
     </div>
-    <div class="submisson-result">
+    <div class="w-full">
       <mat-tab-group dynamicHeight>
         @for (selTab of selectedTab.content; track selTab) {
-  <mat-tab label="{{selTab.label}}">
-          <pre class="terminal-output">{{selTab.result}} </pre>
-          <button mat-button mat-flat-button [hidden]="selTab.label !== 'Error'" (click)="triggerOverseer(selectedTab)">Run Again</button>
-        </mat-tab>
-}
+          <mat-tab label="{{ selTab.label }}">
+            <pre class="terminal-output">{{ selTab.result }} </pre>
+            <button
+              mat-button
+              mat-flat-button
+              [hidden]="selTab.label !== 'Error'"
+              (click)="triggerOverseer(selectedTab)"
+            >
+              Run Again
+            </button>
+          </mat-tab>
+        }
       </mat-tab-group>
     </div>
   </div>

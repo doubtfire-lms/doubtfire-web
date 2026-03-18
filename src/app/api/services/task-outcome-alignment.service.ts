@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { CachedEntityService } from 'ngx-entity-service';
-import { Project, TaskOutcomeAlignment, Unit } from 'src/app/api/models/doubtfire-model';
-import { Injectable } from '@angular/core';
-import API_URL from 'src/app/config/constants/apiURL';
-import { UnitTutorialsListComponent } from 'src/app/units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
+import {HttpClient} from '@angular/common/http';
+import {CachedEntityService} from 'ngx-entity-service';
+import {Project, TaskOutcomeAlignment, Unit} from 'src/app/api/models/doubtfire-model';
+import {Injectable} from '@angular/core';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {UnitTutorialsListComponent} from 'src/app/units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 
 @Injectable()
 export class TaskOutcomeAlignmentService extends CachedEntityService<TaskOutcomeAlignment> {
@@ -24,7 +24,7 @@ export class TaskOutcomeAlignmentService extends CachedEntityService<TaskOutcome
         },
         toJsonFn: (entity: TaskOutcomeAlignment, key: string) => {
           return entity.learningOutcome.id;
-        }
+        },
       },
       {
         keys: ['taskDefinition', 'task_definition_id'],
@@ -34,7 +34,7 @@ export class TaskOutcomeAlignmentService extends CachedEntityService<TaskOutcome
         },
         toJsonFn: (entity: TaskOutcomeAlignment, key: string) => {
           return entity.taskDefinition.id;
-        }
+        },
       },
       {
         keys: ['task', 'task_id'],
@@ -44,14 +44,14 @@ export class TaskOutcomeAlignmentService extends CachedEntityService<TaskOutcome
         },
         toJsonFn: (entity: TaskOutcomeAlignment, key: string) => {
           return entity.task?.id;
-        }
-      }
+        },
+      },
     );
 
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
   public override createInstanceFrom(json: any, other?: any): TaskOutcomeAlignment {
-    return new TaskOutcomeAlignment(other as (Unit | Project));
+    return new TaskOutcomeAlignment(other as Unit | Project);
   }
 }

@@ -32,6 +32,9 @@
   &.time-exceeded {
     @include status-icon('time-exceeded');
   }
+  &.assess-in-portfolio {
+    @include status-icon('assess-in-portfolio');
+  }
   &.redo {
     @include status-icon('redo');
   }
@@ -46,5 +49,8 @@
   }
   &.fail {
     @include status-icon('fail');
+  }
+  &.attention-required {
+    @include status-icon('attention-required');
   }
 }

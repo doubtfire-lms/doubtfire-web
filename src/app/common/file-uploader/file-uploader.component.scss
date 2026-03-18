@@ -1,0 +1,16 @@
+file-upload .mat-icon,
+.complete .mat-icon {
+  font-size: 50px;
+  height: 50px;
+  width: 50px;
+}
+
+.uploading .mat-icon {
+  font-size: 75px;
+  height: 75px;
+  width: 75px;
+}
+
+::ng-deep file-upload .upload-input {
+  width: 100%;
+}

@@ -6,7 +6,7 @@
 @import '../../../../../../../styles/mixins/task-list.scss';
 @import '../../../../../../../styles/mixins/scrollable.scss';
 
-$my-palette: mat.define-palette($md-formatif);
+$my-palette: mat.m2-define-palette($md-formatif);
 
 :host {
   --background-gray: rgba(0, 0, 0, 0.04);
@@ -177,7 +177,7 @@ user-icon {
   background-color: transparent;
 
   &.active {
-    background-color: mat.get-color-from-palette($my-palette, 500);
+    background-color: mat.m2-get-color-from-palette($my-palette, 500);
   }
 
   &.active.similarities {

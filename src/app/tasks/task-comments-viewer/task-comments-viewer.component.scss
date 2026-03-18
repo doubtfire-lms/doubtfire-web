@@ -230,7 +230,7 @@ $comment-inner-border-radius: 4px;
         overflow-y: hidden;
         -webkit-box-orient: vertical;
         -webkit-font-smoothing: antialiased;
-        overflow-wrap: break-word;
+        overflow-wrap: anywhere;
         text-align: left;
         text-rendering: optimizelegibility;
         user-select: text;

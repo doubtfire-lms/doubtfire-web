@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { TransitionService } from '@uirouter/angular';
-import { UserService } from '../api/services/user.service';
-import { DoubtfireAngularModule } from '../doubtfire-angular.module';
-import { GlobalStateService } from '../projects/states/index/global-state.service';
-import { DoubtfireConstants } from '../config/constants/doubtfire-constants';
+import {Injectable} from '@angular/core';
+import {TransitionService} from '@uirouter/angular';
+import {AuthenticationService} from '../api/services/authentication.service';
+import {UserService} from '../api/services/user.service';
+import {DoubtfireConstants} from '../config/constants/doubtfire-constants';
+import {DoubtfireAngularModule} from '../doubtfire-angular.module';
+import {GlobalStateService} from '../projects/states/index/global-state.service';
 
 /**
  * The TransitionHooksService is responsible for intercepting transitions between states.
@@ -20,7 +21,8 @@ export class TransitionHooksService {
     private userService: UserService,
     private transitions: TransitionService,
     private globalState: GlobalStateService,
-    private constants: DoubtfireConstants
+    private constants: DoubtfireConstants,
+    private authenticationService: AuthenticationService,
   ) {
     // Get the tii settings...
     this.constants.IsTiiEnabled.subscribe((enabled) => {
@@ -29,8 +31,12 @@ export class TransitionHooksService {
 
     // Hook into "onBefore" to check transitions before they occur
     this.transitions.onBefore({}, (transition) => {
+      // log all possible states
+      // console.log(transition.router.stateRegistry.get())
+
       // Where is the transition coming from and going to?
       const toState = transition.to().name;
+      const toStateData = transition.to().data;
       // const fromState = transition.from().name;
 
       // Setup the global state
@@ -38,6 +44,24 @@ export class TransitionHooksService {
         this.globalState.setInboxState();
       } else {
         this.globalState.setNotInboxState();
+      }
+
+      const awaitingInitialAuth =
+        this.globalState.isLoadingSubject.value && !this.authenticationService.isAuthenticated();
+
+      // Avoid redirecting during a hard refresh before the refresh-token login has completed.
+      // Once auth settles, the afterAuthCall check below will enforce the whitelist.
+      if (
+        !awaitingInitialAuth &&
+        toStateData.roleWhitelist &&
+        !this.authenticationService.isAuthorised(toStateData.roleWhitelist)
+      ) {
+        if (authenticationService.isAuthenticated()) {
+          return transition.router.stateService.target('unauthorised');
+        } else if (toState !== 'sign_in') {
+          return transition.router.stateService.target('sign_in');
+        }
+        return false;
       }
 
       // Adjust settings such as headers
@@ -49,10 +73,13 @@ export class TransitionHooksService {
           this.globalState.hideHeader();
           break;
         case 'welcome':
-          // block acess to welcome once run
-          if (this.userService.currentUser.hasRunFirstTimeSetup || this.userService.isAnonymousUser()) {
-            return false;
+          if (
+            authenticationService.isAuthenticated() &&
+            userService.currentUser.hasRunFirstTimeSetup
+          ) {
+            return transition.router.stateService.target('home');
           }
+
           this.globalState.hideHeader();
           break;
         case 'home':
@@ -62,32 +89,52 @@ export class TransitionHooksService {
           break;
       }
 
-      // Redirect to welcome if user has not run first time setup
-      if (
-        !this.userService.isAnonymousUser() &&
-        !userService.currentUser.hasRunFirstTimeSetup &&
-        toState !== 'welcome'
-      ) {
-        return transition.router.stateService.target('welcome');
-      }
+      // After auth... check the following
+      this.authenticationService.afterAuthCall(() => {
+        // Check authorization whitelist
+        if (
+          toStateData.roleWhitelist &&
+          !this.authenticationService.isAuthorised(toStateData.roleWhitelist)
+        ) {
+          if (authenticationService.isAuthenticated()) {
+            return transition.router.stateService.go('unauthorised');
+          } else if (toState !== 'sign_in') {
+            return transition.router.stateService.go('sign_in');
+          }
+        }
+        // Redirect to welcome if user has not run first time setup
+        if (
+          !this.userService.isAnonymousUser() &&
+          !userService.currentUser.hasRunFirstTimeSetup &&
+          toState !== 'welcome'
+        ) {
+          return transition.router.stateService.go('welcome');
+        }
 
-      // Redirect to eula if user has not accepted eula
-      // they are loged in, have run first time setup,
-      // but not accepted eula
-      if ( this.tiiEnabled &&
-        !this.userService.isAnonymousUser() &&
-        userService.currentUser.hasRunFirstTimeSetup &&
-        !userService.currentUser.acceptedTiiEula &&
-        toState !== 'eula'
-      ) {
-        return transition.router.stateService.target('eula');
-      }
+        // Block access to welcome after account setup
+        if (userService.currentUser.hasRunFirstTimeSetup && toState === 'welcome') {
+          return transition.router.stateService.go('home');
+        }
+
+        // Redirect to eula if user has not accepted eula
+        // they are loged in, have run first time setup,
+        // but not accepted eula
+        if (
+          this.tiiEnabled &&
+          !this.userService.isAnonymousUser() &&
+          userService.currentUser.hasRunFirstTimeSetup &&
+          !userService.currentUser.acceptedTiiEula &&
+          toState !== 'eula'
+        ) {
+          return transition.router.stateService.go('eula');
+        }
+      });
     });
   }
 
   // function to return true if navigating to inbox or task definition
   private isInboxState(toState: string): boolean {
     // return toState.startsWith('units/tasks/inbox') || toState.endsWith('tasks/definition');
-    return toState.startsWith('units/tasks') || toState.endsWith('tasks/definition');
+    return toState.startsWith('units/tasks') || toState.startsWith('units2/tasks/');
   }
 }

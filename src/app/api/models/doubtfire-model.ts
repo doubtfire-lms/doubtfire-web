@@ -37,13 +37,13 @@ export * from './scorm-player-context';
 export * from './test-attempt';
 export * from './task-comment/scorm-comment';
 export * from './task-comment/scorm-extension-comment';
+export * from './feedback-template';
 
 // Users -- are students or staff
 export * from './user/user';
 
 // WebCal -- calendars used to track task due dates
 export * from './webcal/webcal';
-
 
 export * from '../services/authentication.service';
 export * from '../services/unit.service';
@@ -61,5 +61,7 @@ export * from '../services/teaching-period-break.service';
 export * from '../services/learning-outcome.service';
 export * from '../services/group-set.service';
 export * from '../services/task-similarity.service';
+export * from '../../common/services/grade.service';
 export * from '../services/test-attempt.service';
 export * from '../models/d2l/d2l_assessment_mapping.service';
+export * from '../services/feedback-template.service';

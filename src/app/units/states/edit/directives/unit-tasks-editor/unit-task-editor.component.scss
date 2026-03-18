@@ -1,6 +1,16 @@
-.mat-toolbar {
-  background-color: white;
-  // position: fixed;
-  // bottom: 0;
-  // width: 100%;
+::ng-deep input.mat-mdc-input-element.fallback-date {
+  font-style: italic;
+  color: #bfbfbf !important;
+  -webkit-text-fill-color: #bfbfbf !important; /* fixes some WebKit cases */
+}
+
+::ng-deep .date-error .mdc-notched-outline__leading,
+::ng-deep .date-error .mdc-notched-outline__notch,
+::ng-deep .date-error .mdc-notched-outline__trailing {
+  border-color: #ef4444 !important; // tailwind red-500
+}
+
+::ng-deep .date-error .mat-mdc-input-element {
+  color: #ef4444 !important;
+  -webkit-text-fill-color: #ef4444 !important;
 }

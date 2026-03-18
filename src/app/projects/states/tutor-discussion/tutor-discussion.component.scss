@@ -1,0 +1,115 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+// $my-palette: mat.define-palette(mat.$indigo-palette);
+@import '../../../../theme.scss';
+@import '../../../../styles/mixins/task-list.scss';
+@import '../../../../styles/mixins/scrollable.scss';
+
+// $my-palette: mat.define-palette($md-formatif);
+
+:host {
+  --background-gray: rgba(0, 0, 0, 0.04);
+  padding-right: 8px;
+  border-right-color: rgba(0, 0, 0, 0.1);
+  border-right-style: solid;
+  border-right-width: 1px;
+}
+
+:host ::ng-deep div.mat-expansion-panel-body {
+  padding-right: 0 !important;
+}
+
+user-icon {
+  margin-right: 10px;
+}
+
+.mat-mdc-list-item {
+  border: none;
+}
+
+.mat-mdc-list-item .notification {
+  height: 8px;
+  width: 8px;
+  margin-right: 8px;
+
+  border-radius: 50%;
+  display: inline-block;
+
+  background-color: transparent;
+
+  &.active {
+    // background-color: mat.get-color-from-palette($my-palette, 500);
+    background-color: #3939ff;
+  }
+
+  &.active.similarities {
+    background-color: #f44336;
+  }
+}
+
+.mat-mdc-list-item .item-content {
+  height: 60px;
+  border-radius: 20px;
+}
+
+.mat-mdc-list-item .item-content:hover {
+  cursor: pointer;
+}
+
+// .tasks-viewport.list-group-item-text-extended {
+//   margin-top: 0.5em;
+//   line-height: 1.3;
+
+//   p {
+//     margin-bottom: 0;
+//     padding: 0;
+//     color: gray;
+//   }
+// }
+
+.mdc-list-item__start.mat-mdc-list-option-checkbox-before {
+  margin-right: 0 !important;
+  padding: 0 !important;
+}
+
+.medium-icon-button {
+  width: 75px !important;
+  height: 75px !important;
+}
+
+// Hide auto-injected QR scanner elements that are not needed in the UI
+// We only hide this if we found a "back camera" on user's device
+.qr-reader-hide-bloat #qr-reader__header_message,
+.qr-reader-hide-bloat #qr-reader__dashboard_section,
+.qr-reader-hide-bloat #qr-reader__dashboard_section_csr,
+.qr-reader-hide-bloat #qr-reader > div:not([id]):not([class]),
+.qr-reader-hide-bloat #qr-reader__scan_region > div:not([id]):not([class]),
+.qr-reader-hide-bloat #html5-qrcode-button-camera-stop,
+.qr-reader-hide-bloat #html5-qrcode-button-camera-start {
+  display: none !important;
+}
+
+#qr-reader img,
+#html5-qrcode-anchor-scan-type-change {
+  display: none !important;
+}
+
+#html5-qrcode-button-camera-stop,
+#html5-qrcode-button-camera-start {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow w-full uppercase;
+  max-width: 1000px;
+  height: 45px;
+  margin-top: 15px;
+}
+
+#html5-qrcode-button-camera-permission {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow w-full uppercase;
+  width: 100%;
+  max-width: 250px;
+  height: 60px;
+}
+
+.comment-user-icon-wrapper.ng-star-inserted {
+  width: auto !important;
+}
