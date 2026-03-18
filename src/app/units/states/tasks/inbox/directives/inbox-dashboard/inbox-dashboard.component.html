@@ -9,8 +9,32 @@
       >
         <mat-tab label="Submission"></mat-tab>
         <mat-tab label="Task Sheet" [disabled]="!task.definition.hasTaskSheet"></mat-tab>
-        <mat-tab label="Staff Notes"></mat-tab>
-        <mat-tab label="Similarities"></mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="inline-flex items-center gap-2">
+              Staff Notes
+              @if (task.project.staffNoteCount) {
+                <span
+                  class="ml-1 inline-flex h-[22px] w-[22px] items-center justify-center rounded-full text-[12px] font-[600] p-0 leading-[22px] text-white"
+                  style="background-color: #3939ff"
+                >
+                  {{ task.project.staffNoteCount }}
+                </span>
+              }
+            </span>
+          </ng-template>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="inline-flex items-center gap-2">
+              Similarities
+              @if (task.similaritiesDetected) {
+                <mat-icon class="text-red-500">warning</mat-icon>
+              }
+            </span>
+          </ng-template>
+        </mat-tab>
+
         <mat-tab label="Overseer" [disabled]="!overseerEnabled"></mat-tab>
       </mat-tab-group>
 
