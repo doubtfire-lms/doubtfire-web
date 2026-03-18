@@ -31,6 +31,7 @@ import {TutorialsComponent} from './projects/states/tutorials/tutorials.componen
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {StudentsListState} from './units/states/students-list/students-list.component';
+import {UnitGroupsState} from './units/states/groups/unit-groups/unit-groups.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -786,6 +787,7 @@ export const doubtfireStates = [
   TutorAttendance,
   TutorialState,
   StudentsListState,
+  UnitGroupsState,
   PortfoliosState,
   RolloverState,
 ];
