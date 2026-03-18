@@ -34,7 +34,7 @@
       </button>
       <span>
         <mat-divider></mat-divider>
-        <button mat-menu-item uiSref="units/analytics" [uiParams]="{unitId: currentUnit.id}">
+        <button mat-menu-item uiSref="units2/analytics" [uiParams]="{unitId: currentUnit.id}">
           <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
         </button>
         @if (currentUnit.currentUserCanViewUnitAdmin) {
@@ -161,7 +161,7 @@
         </button>
         <mat-divider></mat-divider>
         <!-- <p class="task-dropdown-heading">Unit</p> -->
-        <button uiSref="units/analytics" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+        <button uiSref="units2/analytics" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
         </button>
         <button

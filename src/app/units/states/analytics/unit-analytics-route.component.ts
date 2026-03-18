@@ -1,7 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {CalendarEvent} from 'angular-calendar';
-import {Observable} from 'rxjs';
+import {Observable, first} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
 import {UserService} from 'src/app/api/services/user.service';
@@ -14,8 +12,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'unit-analytics-route.component.html',
   styleUrls: ['unit-analytics-route.component.scss'],
 })
-export class UnitAnalyticsComponent {
-  @Input() unit: Unit;
+export class UnitAnalyticsComponent implements OnInit {
+  @Input() public unit$: Observable<Unit>;
+
+  public unit: Unit;
 
   constructor(
     private sidekiqProgressModalService: SidekiqProgressModalService,
@@ -25,8 +25,14 @@ export class UnitAnalyticsComponent {
     private alertService: AlertService,
   ) {}
 
+  ngOnInit(): void {
+    this.unit$?.pipe(first()).subscribe((unit) => {
+      this.unit = unit;
+    });
+  }
+
   get role() {
-    return this.unit.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
+    return this.unit?.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
   }
 
   public getTaskCompletionCsv() {

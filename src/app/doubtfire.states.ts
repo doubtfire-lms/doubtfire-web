@@ -28,6 +28,7 @@ import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.c
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {Ng2ViewDeclaration} from '@uirouter/angular';
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
+import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {StudentsListState} from './units/states/students-list/students-list.component';
@@ -210,6 +211,22 @@ const UnitTaskOverflowState: NgHybridStateDeclaration = {
   },
   data: {
     task: 'Task Overflow',
+    pageTitle: '_Home_',
+    roleWhitelist: unitTaskRoleWhitelist,
+  },
+};
+
+const UnitAnalyticsState: NgHybridStateDeclaration = {
+  name: 'units2/analytics',
+  parent: 'unit-root-state',
+  url: '/analytics',
+  views: {
+    unitView: {
+      component: UnitAnalyticsComponent,
+    },
+  },
+  data: {
+    task: 'Unit Analytics',
     pageTitle: '_Home_',
     roleWhitelist: unitTaskRoleWhitelist,
   },
@@ -775,6 +792,7 @@ export const doubtfireStates = [
   UnitTaskDefinitionState,
   UnitTaskModerationState,
   UnitTaskOverflowState,
+  UnitAnalyticsState,
   ScormPlayerNormalState,
   ScormPlayerReviewState,
   ScormPlayerStudentReviewState,

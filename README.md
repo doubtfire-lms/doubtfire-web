@@ -198,6 +198,7 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/errors/states/timeout/timeout.coffee
 - [x] ./src/app/projects/states/groups/groups.coffee (State only -> "project-groups")
 - [x] ./src/app/units/states/groups/groups.coffee (State only -> "unit-groups")
+- [x] ./src/app/config/analytics/analytics.coffee
 
 ### TODO:
 
@@ -210,7 +211,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/common/services/outcome-service.coffee
 - [ ] ./src/app/common/services/recorder-service.coffee
 - [ ] ./src/app/common/services/services.coffee
-- [ ] ./src/app/config/analytics/analytics.coffee
 - [ ] ./src/app/config/config.coffee
 - [ ] ./src/app/config/root-controller/root-controller.coffee
 - [ ] ./src/app/config/routing/routing.coffee
