@@ -2,30 +2,6 @@
   <h2>Mark portfolios</h2>
   <p>Assess student portfolios</p>
   <div class="flex justify-between items-center">
-    <div class="flex gap-2 items-center justify-start">
-      <button mat-button (click)="downloadGrades()">
-        <mat-icon>download</mat-icon>Download Grades
-      </button>
-
-      <button
-        mat-button
-        (click)="downloadPortfolios()"
-        matTooltip="Downloading all portfolios may take a long time"
-        matTooltipShowDelay="500"
-        matTooltipPosition="above"
-      >
-        <mat-icon>download</mat-icon>Download Portfolios
-      </button>
-
-      <f-download-staff-notes [unit]="unit"></f-download-staff-notes>
-      <f-upload-grades [unit]="unit"></f-upload-grades>
-
-      @if (hasD2lMapping()) {
-        <button mat-button (click)="transferToD2l()">
-          <mat-icon>upload</mat-icon>Transfer Grades to D2L
-        </button>
-      }
-    </div>
     <div class="flex flex-row items-center justify-end gap-5">
       <mat-form-field appearance="outline" class="mt-[22px]">
         <mat-label>Filter</mat-label>
@@ -93,6 +69,30 @@
         }
       </mat-button-toggle-group>
     </div>
+  </div>
+  <div class="flex gap-2 items-center justify-start mb-2">
+    <button mat-button (click)="downloadGrades()">
+      <mat-icon>download</mat-icon>Download Grades
+    </button>
+
+    <button
+      mat-button
+      (click)="downloadPortfolios()"
+      matTooltip="Downloading all portfolios may take a long time"
+      matTooltipShowDelay="500"
+      matTooltipPosition="above"
+    >
+      <mat-icon>download</mat-icon>Download Portfolios
+    </button>
+
+    <f-download-staff-notes [unit]="unit"></f-download-staff-notes>
+    <f-upload-grades [unit]="unit"></f-upload-grades>
+
+    @if (hasD2lMapping()) {
+      <button mat-button (click)="transferToD2l()">
+        <mat-icon>upload</mat-icon>Transfer Grades to D2L
+      </button>
+    }
   </div>
 
   <table
