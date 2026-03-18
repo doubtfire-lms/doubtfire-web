@@ -65,7 +65,9 @@
       </ng-template>
 
       <ng-template [ngSwitchCase]="InboxDashboardTab.staffNotes">
-        <div class="h-full"></div>
+        <div class="h-full">
+          <f-staff-notes-view [project]="task?.project"></f-staff-notes-view>
+        </div>
       </ng-template>
 
       <ng-template [ngSwitchCase]="InboxDashboardTab.similarities">
