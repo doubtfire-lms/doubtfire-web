@@ -29,6 +29,7 @@ import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.co
 import {Ng2ViewDeclaration} from '@uirouter/angular';
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
+import {UnitAdminState} from './units/states/edit/unit-admin-state.component';
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {StudentsListState} from './units/states/students-list/students-list.component';
@@ -804,6 +805,7 @@ export const doubtfireStates = [
   LtiUnitLinkState,
   TutorAttendance,
   TutorialState,
+  UnitAdminState,
   StudentsListState,
   UnitGroupsState,
   PortfoliosState,

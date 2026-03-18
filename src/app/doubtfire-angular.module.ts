@@ -332,6 +332,7 @@ import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal
 import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
 import {UploadSubmissionModalComponent} from './tasks/modals/upload-submission-modal/upload-submission-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
+import {UnitAdminStateComponent} from './units/states/edit/unit-admin-state.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
@@ -545,6 +546,7 @@ const GANTT_CHART_CONFIG = {
     TaskScormCardComponent,
     ScormExtensionCommentComponent,
     ScormExtensionModalComponent,
+    UnitAdminStateComponent,
     FeedbackTemplateEditorComponent,
     LearningOutcomeEditorComponent,
     TaskFeedbackTemplatesComponent,

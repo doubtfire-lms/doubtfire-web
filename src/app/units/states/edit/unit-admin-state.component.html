@@ -1,0 +1,85 @@
+<div class="flex h-full w-full flex-col">
+  <mat-tab-group
+    class="container w-full mb-10 max-w-[900px]"
+    [selectedIndex]="currentIndex"
+    dynamicHeight
+    (selectedTabChange)="onTabChange($event)"
+  >
+    @for (tab of tabs; track tab.routeSegment) {
+      <mat-tab [label]="tab.label"></mat-tab>
+    }
+  </mat-tab-group>
+
+  <div class="min-h-0 flex-1" [ngSwitch]="currentTab.routeSegment">
+    <ng-template [ngSwitchCase]="'details'">
+      @if (unit) {
+        <div class="max-w-[90vw] mx-auto">
+          <f-unit-details-editor [unit]="unit"></f-unit-details-editor>
+        </div>
+      }
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="'learning-outcomes'">
+      @if (unit) {
+        <div class="max-w-[90vw] mx-auto">
+          <div class="header">
+            <h3>Learning Outcomes</h3>
+            <p>Manage unit outcomes and related feedback templates.</p>
+          </div>
+          <f-learning-outcome-editor [context]="unit"></f-learning-outcome-editor>
+        </div>
+      }
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="'staff'">
+      @if (unit) {
+        <div class="max-w-[90vw] mx-auto">
+          <unit-staff-editor [unit]="unit" [staff]="staff"></unit-staff-editor>
+        </div>
+      }
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="'tutorials'">
+      @if (unit) {
+        <div class="max-w-[90vw] mx-auto">
+          <div class="header">
+            <h3>Tutorials</h3>
+            <p>Manage tutorial streams and classes for this unit.</p>
+          </div>
+          <unit-tutorials-manager [unit]="unit"></unit-tutorials-manager>
+        </div>
+      }
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="'students'">
+      @if (unit) {
+        <div class="max-w-[90vw] mx-auto">
+          <unit-students-editor [unit]="unit"></unit-students-editor>
+        </div>
+      }
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="'tasks'">
+      @if (unit) {
+        <div class="max-w-[90vw] mx-auto">
+          <f-unit-task-editor [unit]="unit"></f-unit-task-editor>
+        </div>
+      }
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="'groups'">
+      @if (unit) {
+        <div class="max-w-[90vw] mx-auto">
+          <div class="header">
+            <h3>Groups</h3>
+            <p>Configure group sets and manage team-based activities.</p>
+          </div>
+          <f-unit-group-set-editor
+            [unit]="unit"
+            [unitRole]="assessingUnitRole"
+          ></f-unit-group-set-editor>
+        </div>
+      }
+    </ng-template>
+  </div>
+</div>
