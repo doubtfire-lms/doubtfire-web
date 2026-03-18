@@ -199,6 +199,7 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/projects/states/groups/groups.coffee (State only -> "project-groups")
 - [x] ./src/app/units/states/groups/groups.coffee (State only -> "unit-groups")
 - [x] ./src/app/units/states/analytics/analytics.coffee (Just the routing, since the TypeScript f-analytics component has been expanded in 10.0.x)
+- [x] ./src/app/projects/states/feedback/feedback.coffee
 
 ### TODO:
 
@@ -223,7 +224,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
-- [ ] ./src/app/projects/states/feedback/feedback.coffee
 - [ ] ./src/app/projects/states/index/index.coffee
 - [ ] ./src/app/projects/states/states.coffee
 - [ ] ./src/app/config/analytics/analytics.coffee
