@@ -31,7 +31,6 @@ import 'build/src/app/common/common.js';
 import 'build/src/app/common/services/listener-service.js';
 import 'build/src/app/common/services/recorder-service.js';
 import 'build/src/app/common/services/services.js';
-import 'build/src/app/config/analytics/analytics.js';
 import 'build/src/app/config/config.js';
 import 'build/src/app/config/root-controller/root-controller.js';
 import 'build/src/app/config/routing/routing.js';

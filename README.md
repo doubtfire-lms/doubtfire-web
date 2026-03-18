@@ -204,6 +204,7 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/common/services/outcome-service.coffee
 - [ ] ./src/app/common/filters/filters.coffee
 - [x] ./src/app/common/services/analytics-service.coffee
+- [x] ./src/app/config/analytics/analytics.coffee
 
 ### TODO:
 
@@ -226,7 +227,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
 - [ ] ./src/app/projects/states/index/index.coffee
 - [ ] ./src/app/projects/states/states.coffee
-- [ ] ./src/app/config/analytics/analytics.coffee
 - [ ] ./src/app/units/states/edit/edit.coffee
 - [ ] ./src/app/units/states/index/index.coffee
 - [ ] ./src/app/units/states/states.coffee
