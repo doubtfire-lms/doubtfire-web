@@ -1,12 +1,11 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatTabGroup} from '@angular/material/tabs';
 import {StateService} from '@uirouter/core';
+import {Observable, first} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
-import {UnitService} from 'src/app/api/services/unit.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 @Component({
   selector: 'f-portfolios',
@@ -14,8 +13,7 @@ import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global
   styleUrl: './portfolios.component.scss',
 })
 export class PortfoliosComponent implements OnInit {
-  // Passed from doubtfire.states.ts
-  @Input() unitId: number;
+  @Input() unit$: Observable<Unit>;
 
   // Exposed to child components
   public unit: Unit = null;
@@ -24,8 +22,6 @@ export class PortfoliosComponent implements OnInit {
   @ViewChild('tabs') tabs!: MatTabGroup;
 
   constructor(
-    private globalStateService: GlobalStateService,
-    private unitService: UnitService,
     private projectService: ProjectService,
     private stateService: StateService,
     private alertService: AlertService,
@@ -47,11 +43,8 @@ export class PortfoliosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // TODO 10.0.x: Unit and student loading needs to be moved to the parent controller (units/{unitId}) when everything is migrated
-    this.unitService.get(this.unitId).subscribe({
+    this.unit$?.pipe(first()).subscribe({
       next: (unit) => {
-        this.globalStateService.setView(ViewType.UNIT, unit);
-
         this.projectService.loadStudents(unit, false).subscribe({
           next: () => {
             this.unit = unit;

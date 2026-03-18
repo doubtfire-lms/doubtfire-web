@@ -611,20 +611,12 @@ const TutorialState: NgHybridStateDeclaration = {
   },
 };
 
-// TODO 10.0.x: this will need to go under the unit parent state
 const PortfoliosState: NgHybridStateDeclaration = {
   name: 'units/students/portfolios',
-  url: '/units/:unitId/students/portfolios',
-  resolve: {
-    unitId: [
-      '$stateParams',
-      function ($stateParams) {
-        return $stateParams.unitId;
-      },
-    ],
-  },
+  parent: 'unit-root-state',
+  url: '/students/portfolios',
   views: {
-    main: {
+    unitView: {
       component: PortfoliosComponent,
     },
   },
