@@ -46,8 +46,13 @@ export class TransitionHooksService {
         this.globalState.setNotInboxState();
       }
 
-      // Check authorization whitelist
+      const awaitingInitialAuth =
+        this.globalState.isLoadingSubject.value && !this.authenticationService.isAuthenticated();
+
+      // Avoid redirecting during a hard refresh before the refresh-token login has completed.
+      // Once auth settles, the afterAuthCall check below will enforce the whitelist.
       if (
+        !awaitingInitialAuth &&
         toStateData.roleWhitelist &&
         !this.authenticationService.isAuthorised(toStateData.roleWhitelist)
       ) {
