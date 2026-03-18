@@ -201,6 +201,7 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/units/states/analytics/analytics.coffee (Just the routing, since the TypeScript f-analytics component has been expanded in 10.0.x)
 - [x] ./src/app/projects/states/feedback/feedback.coffee
 - [x] ./src/app/common/content-editable/content-editable.coffee
+- [x] ./src/app/common/services/outcome-service.coffee
 
 ### TODO:
 
@@ -209,7 +210,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/common/services/analytics-service.coffee
 - [ ] ./src/app/common/services/listener-service.coffee
 - [ ] ./src/app/common/services/media-service.coffee
-- [ ] ./src/app/common/services/outcome-service.coffee
 - [ ] ./src/app/common/services/recorder-service.coffee
 - [ ] ./src/app/common/services/services.coffee
 - [ ] ./src/app/config/config.coffee
