@@ -24,19 +24,19 @@ export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
   @Input() taskData: {selectedTask: Task; any};
-  @Input() filters: {
+  @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
     forceStream: boolean;
     studentName: string;
     tutorialIdSelected: any;
     taskDefinitionIdSelected: number | TaskDefinition;
-  };
+  }>;
   @Input() showSearchOptions: boolean;
   @ViewChild('inboxpanel') inboxPanel: ElementRef;
   @ViewChild('commentspanel') commentspanel: ElementRef;
 
-  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
 
   subs$: Observable<unknown>;
 

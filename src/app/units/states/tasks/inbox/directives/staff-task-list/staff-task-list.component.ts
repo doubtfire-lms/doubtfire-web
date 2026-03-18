@@ -60,7 +60,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   };
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
-  @Input() filters: {
+  @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
     forceStream: boolean;
@@ -68,12 +68,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     tutorialIdSelected: any;
     unitRoleIdSelected: number | string;
     taskDefinitionIdSelected: number | TaskDefinition;
-  };
+  }>;
   @Input() showSearchOptions = true;
 
   @Input() isNarrow: boolean;
 
-  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
 
   userHasTutorials: boolean;
   filteredTasks: Task[] = null;
@@ -136,15 +136,22 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (
-      ((changes.unit &&
-        !changes.unit?.isFirstChange &&
-        changes.unit.currentValue.id &&
-        changes.unit.previousValue.id !== changes.unit.currentValue.id) ||
-        this.tasks == null) &&
-      this.isTaskDefMode &&
-      this.filters
-    ) {
+    if (changes.taskData && !changes.taskData.isFirstChange() && this.tasks?.length) {
+      this.setTaskDefFromTaskKey(this.taskData.taskKey);
+      this.syncSelectedTaskFromTaskKey();
+    }
+
+    if (!this.isTaskDefMode || !this.filters) {
+      return;
+    }
+
+    const unitChanged =
+      !!changes.unit &&
+      !changes.unit.isFirstChange() &&
+      changes.unit.currentValue?.id &&
+      changes.unit.previousValue?.id !== changes.unit.currentValue?.id;
+
+    if (unitChanged) {
       this.refreshData();
     }
   }
@@ -196,12 +203,14 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       .sort(byName);
 
     const allTutors = staff.slice().sort(byName);
+    const shouldDefaultToMyStudents =
+      (this.unitRole.role === 'Tutor' || this.unitRole.role === 'Convenor') &&
+      this.userHasTutorials;
 
     this.filters = Object.assign(
       {
         studentName: null,
-        tutorialIdSelected:
-          (this.unitRole.role === 'Tutor' || 'Convenor') && this.userHasTutorials ? 'mine' : 'all',
+        tutorialIdSelected: shouldDefaultToMyStudents ? 'mine' : 'all',
         tutorials: [],
         unitRoleIdSelected:
           mentored.length > 0 && this.viewType === 'moderation' ? 'mentoring_all' : 'all',
@@ -452,6 +461,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     return this.tasks.find((t) => t?.hasTaskKey(key));
   }
 
+  private syncSelectedTaskFromTaskKey(): void {
+    if (!this.tasks?.length) {
+      return;
+    }
+
+    const task = this.taskData.taskKey ? this.findTaskForTaskKey(this.taskData.taskKey) : null;
+    this.setSelectedTask(task ?? null);
+  }
+
   // Callback to refresh data from the task source
   private refreshData() {
     const fetchMyStudentsOnly = this.filters.tutorialIdSelected === 'mine';
@@ -468,22 +486,19 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
           this.fetchedAllTasks = !fetchMyStudentsOnly && !this.isTaskDefMode;
 
-        // Load initial set task, either the one provided (by the URL)
-        // then load actual task in now or the first task that applies
-        // to the given set of filters.
-        const task = this.findTaskForTaskKey(this.taskData.taskKey);
-        this.setSelectedTask(task);
+          // If the URL carries a task key, load that task once the query results arrive.
+          this.syncSelectedTaskFromTaskKey();
 
-        // For when URL has been manually changed, set the selected task
-        // using new array of tasks loaded from the new taskKey
-        if (!this.watchingTaskKey) {
-          this.watchingTaskKey = true;
-        }
-      },
-      error: (message) => {
-        this.alertService.error(message, 6000);
-      },
-    });
+          // For when URL has been manually changed, set the selected task
+          // using new array of tasks loaded from the new taskKey
+          if (!this.watchingTaskKey) {
+            this.watchingTaskKey = true;
+          }
+        },
+        error: (message) => {
+          this.alertService.error(message, 6000);
+        },
+      });
   }
 
   setSelectedTask(task: Task) {

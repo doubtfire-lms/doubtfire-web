@@ -369,6 +369,7 @@ import {PortfoliosProjectProgressComponent} from './units/states/portfolios/dire
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/task-status-pie-chart.component';
+import {UnitTaskInboxStateComponent} from './units/states/tasks/inbox/unit-task-inbox-state.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -613,6 +614,7 @@ const GANTT_CHART_CONFIG = {
     CsvResultModalComponent,
     CsvUploadModalComponent,
     UnitGroupSetEditorComponent,
+    UnitTaskInboxStateComponent,
   ],
   providers: [
     // Services we provide

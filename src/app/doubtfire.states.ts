@@ -15,6 +15,10 @@ import {ProjectGroupsStateComponent} from './projects/states/groups/project-grou
 import {UnitRootState} from './units/unit-root-state.component';
 import {ProjectRootState} from './projects/states/project-root-state.component';
 import {TaskViewerState} from './units/task-viewer/task-viewer-state.component';
+import {
+  UnitTaskRouteMode,
+  UnitTaskInboxStateComponent,
+} from './units/states/tasks/inbox/unit-task-inbox-state.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
@@ -111,63 +115,103 @@ const HomeState: NgHybridStateDeclaration = {
 //   },
 // };
 
-/**
- * Define the new inbox state.
- */
-// const InboxState: NgHybridStateDeclaration = {
-//   name: 'inbox',
-//   url: '/units/:unit_id/inbox/:task_key',
+const unitTaskRoleWhitelist = ['Tutor', 'Convenor', 'Admin', 'Auditor'];
 
-//   params: {
-//     // unitRole: UnitRole,
-//     // taskKey: null,
-//     // taskData:
-//     // unit,
-//   },
-//   views: {
-//     main: {
-//       component: InboxComponent,
-//     },
-//   },
-//   data: {
-//     task: 'Task Inbox',
-//     pageTitle: '_Home_',
-//     roleWhitelist: ['Tutor', 'Convenor', 'Admin'],
-//   },
-//   resolve: {
-//     unit$: function ($stateParams) {
-//       const unitService = AppInjector.get(UnitService);
-//       const globalState = AppInjector.get(GlobalStateService);
-//       globalState.onLoad(() => {});
-//       console.log($stateParams);
-//       return unitService.get({ id: $stateParams.unit_id });
-//     },
-//     unitRole$: function ($stateParams) {
-//       const globalStateService = AppInjector.get(GlobalStateService);
+const UnitTaskInboxState: NgHybridStateDeclaration = {
+  name: 'units2/tasks/inbox',
+  parent: 'unit-root-state',
+  url: '/tasks/inbox/{taskKey:any}',
+  params: {
+    taskKey: {value: null, squash: true, dynamic: true},
+  },
+  resolve: {
+    routeMode: function (): UnitTaskRouteMode {
+      return 'inbox';
+    },
+  },
+  views: {
+    unitView: {
+      component: UnitTaskInboxStateComponent,
+    },
+  },
+  data: {
+    task: 'Task Inbox',
+    pageTitle: '_Home_',
+    roleWhitelist: unitTaskRoleWhitelist,
+  },
+};
 
-//       const result = globalStateService.loadedUnitRoles.values.pipe(
-//         map((unitRoles) => unitRoles.find((unitRole) => unitRole.id == $stateParams.unit_id))
-//       );
-//       return result;
-//     },
-//     taskData$: function () {
-//       const taskService = AppInjector.get(TaskService);
-//       const taskData = {
-//         taskKey: null,
-//         source: null,
-//         selectedTask: null,
-//         onSelectedTaskChange: (task) =>{
-//           const taskKey = task?.taskKey()
-//           $scope.taskData.taskKey = taskKey
-//           setTaskKeyAsUrlParams(task);
-//         }
-//       }
-//       taskData.source = taskService.queryTasksForTaskInbox.bind(taskService);
-//       taskData.taskDefMode = false;
-//       return of(taskData);
-//     },
-//   },
-// };
+const UnitTaskDefinitionState: NgHybridStateDeclaration = {
+  name: 'units2/tasks/definition',
+  parent: 'unit-root-state',
+  url: '/tasks/definition/{taskKey:any}',
+  params: {
+    taskKey: {value: null, squash: true, dynamic: true},
+  },
+  resolve: {
+    routeMode: function (): UnitTaskRouteMode {
+      return 'definition';
+    },
+  },
+  views: {
+    unitView: {
+      component: UnitTaskInboxStateComponent,
+    },
+  },
+  data: {
+    task: 'Task Explorer',
+    pageTitle: '_Home_',
+    roleWhitelist: unitTaskRoleWhitelist,
+  },
+};
+
+const UnitTaskModerationState: NgHybridStateDeclaration = {
+  name: 'units2/tasks/moderation',
+  parent: 'unit-root-state',
+  url: '/tasks/moderation/{taskKey:any}',
+  params: {
+    taskKey: {value: null, squash: true, dynamic: true},
+  },
+  resolve: {
+    routeMode: function (): UnitTaskRouteMode {
+      return 'moderation';
+    },
+  },
+  views: {
+    unitView: {
+      component: UnitTaskInboxStateComponent,
+    },
+  },
+  data: {
+    task: 'Task Moderation',
+    pageTitle: '_Home_',
+    roleWhitelist: unitTaskRoleWhitelist,
+  },
+};
+
+const UnitTaskOverflowState: NgHybridStateDeclaration = {
+  name: 'units2/tasks/overflow',
+  parent: 'unit-root-state',
+  url: '/tasks/overflow/{taskKey:any}',
+  params: {
+    taskKey: {value: null, squash: true, dynamic: true},
+  },
+  resolve: {
+    routeMode: function (): UnitTaskRouteMode {
+      return 'overflow';
+    },
+  },
+  views: {
+    unitView: {
+      component: UnitTaskInboxStateComponent,
+    },
+  },
+  data: {
+    task: 'Task Overflow',
+    pageTitle: '_Home_',
+    roleWhitelist: unitTaskRoleWhitelist,
+  },
+};
 
 /**
  * Define the welcome state.
@@ -733,6 +777,10 @@ export const doubtfireStates = [
   ProjectGroupsState,
   UnitRootState,
   TaskViewerState,
+  UnitTaskInboxState,
+  UnitTaskDefinitionState,
+  UnitTaskModerationState,
+  UnitTaskOverflowState,
   ScormPlayerNormalState,
   ScormPlayerReviewState,
   ScormPlayerStudentReviewState,

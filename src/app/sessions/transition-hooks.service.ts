@@ -46,8 +46,13 @@ export class TransitionHooksService {
         this.globalState.setNotInboxState();
       }
 
-      // Check authorization whitelist
+      const awaitingInitialAuth =
+        this.globalState.isLoadingSubject.value && !this.authenticationService.isAuthenticated();
+
+      // Avoid redirecting during a hard refresh before the refresh-token login has completed.
+      // Once auth settles, the afterAuthCall check below will enforce the whitelist.
       if (
+        !awaitingInitialAuth &&
         toStateData.roleWhitelist &&
         !this.authenticationService.isAuthorised(toStateData.roleWhitelist)
       ) {
@@ -130,6 +135,6 @@ export class TransitionHooksService {
   // function to return true if navigating to inbox or task definition
   private isInboxState(toState: string): boolean {
     // return toState.startsWith('units/tasks/inbox') || toState.endsWith('tasks/definition');
-    return toState.startsWith('units/tasks') || toState.endsWith('tasks/definition');
+    return toState.startsWith('units/tasks') || toState.startsWith('units2/tasks/');
   }
 }
