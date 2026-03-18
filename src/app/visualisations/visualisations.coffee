@@ -5,7 +5,7 @@ angular.module('doubtfire.visualisations', [
   'doubtfire.visualisations.task-completion-box-plot'
 ])
 
-.factory('Visualisation', ($interval, analyticsService) ->
+.factory('Visualisation', ($interval) ->
   Visualisation = (type, visualisationName, opts, conf, titleOpts, subtitleOpts) ->
     DEFAULT_OPTS =
       objectequality: yes
@@ -47,9 +47,6 @@ angular.module('doubtfire.visualisations', [
     dirtyOpts.type = type
 
     dirtyConf = angular.extend {}, DEFAULT_CONF, conf
-
-    # Google tracking
-    analyticsService.event 'Visualisations', 'Created Visualisation', visualisationName
 
     [ { chart: dirtyOpts, title: titleOpts, subtitle: subtitleOpts },  dirtyConf ]
 

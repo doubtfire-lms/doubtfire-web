@@ -66,7 +66,6 @@ import {
 } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import {
   aboutDoubtfireModalProvider,
-  analyticsServiceProvider,
   AudioRecorderProvider,
   AudioRecorderServiceProvider,
   calendarModalProvider,
@@ -656,7 +655,6 @@ const GANTT_CHART_CONFIG = {
     calendarModalProvider,
     aboutDoubtfireModalProvider,
     gradeTaskModalProvider,
-    analyticsServiceProvider,
     dateServiceProvider,
     {provide: MAT_DATE_LOCALE, useValue: enAU},
     {provide: DateAdapter, useClass: DateFnsAdapter, deps: [MAT_DATE_LOCALE]},

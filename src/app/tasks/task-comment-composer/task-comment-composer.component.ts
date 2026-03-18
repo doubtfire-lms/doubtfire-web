@@ -20,7 +20,6 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
 import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
 import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {analyticsService} from 'src/app/ajs-upgraded-providers';
 import {
   FeedbackTemplate,
   Task,
@@ -113,7 +112,6 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
     private emojiSearch: EmojiSearch,
     private emojiService: EmojiService,
     private commentsViewer: TaskCommentsViewerComponent,
-    @Inject(analyticsService) private analytics,
     private alerts: AlertService,
     @Inject(TaskCommentService) private taskCommentService: TaskCommentService,
     private cdRef: ChangeDetectorRef,

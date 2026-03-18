@@ -203,11 +203,11 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/common/content-editable/content-editable.coffee
 - [x] ./src/app/common/services/outcome-service.coffee
 - [ ] ./src/app/common/filters/filters.coffee
+- [x] ./src/app/common/services/analytics-service.coffee
 
 ### TODO:
 
 - [ ] ./src/app/common/common.coffee
-- [ ] ./src/app/common/services/analytics-service.coffee
 - [ ] ./src/app/common/services/listener-service.coffee
 - [ ] ./src/app/common/services/media-service.coffee
 - [ ] ./src/app/common/services/recorder-service.coffee

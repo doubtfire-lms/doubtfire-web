@@ -6,8 +6,7 @@ import {
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {CachedEntityService} from 'ngx-entity-service';
-import {Inject, Injectable} from '@angular/core';
-import {analyticsService} from 'src/app/ajs-upgraded-providers';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiUrl';
 
@@ -20,7 +19,6 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
     private userService: UserService,
     private unitService: UnitService,
     private teachingPeriodService: TeachingPeriodService,
-    @Inject(analyticsService) private AnalyticsService: any,
   ) {
     super(httpClient, API_URL);
 

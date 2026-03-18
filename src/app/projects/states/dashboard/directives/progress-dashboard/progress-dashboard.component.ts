@@ -1,6 +1,5 @@
-import {Component, Input, Output, EventEmitter, OnInit, Inject} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {analyticsService} from 'src/app/ajs-upgraded-providers';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {Project} from 'src/app/api/models/project';
@@ -27,7 +26,6 @@ export class ProgressDashboardComponent implements OnInit {
   constructor(
     private gradeService: GradeService,
     private projectService: ProjectService,
-    @Inject(analyticsService) private AnalyticsService,
     private alertService: AlertService,
   ) {}
 
@@ -44,11 +42,6 @@ export class ProgressDashboardComponent implements OnInit {
         project.refreshBurndownChartData();
         this.updateTaskCompletionValues();
         this.doUpdateTargetGrade.emit();
-        this.AnalyticsService.event(
-          'Student Project View - Progress Dashboard',
-          'Grade Changed',
-          this.grades.names[newGrade],
-        );
         this.alertService.success('Updated target grade successfully', 2000);
       },
       (error) => {

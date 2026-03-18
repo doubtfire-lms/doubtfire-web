@@ -1,6 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {analyticsService} from 'src/app/ajs-upgraded-providers';
 import {DateService} from 'src/app/common/services/date.service';
 import {UIRouter} from '@uirouter/angular';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
@@ -28,7 +27,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     private constants: DoubtfireConstants,
     private globalState: GlobalStateService,
     private userService: UserService,
-    @Inject(analyticsService) private AnalyticsService: any,
     @Inject(DateService) private DateService: DateService,
     @Inject(UIRouter) private router: UIRouter,
   ) {
@@ -47,7 +45,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.AnalyticsService.event('Home', 'Viewed Home page');
     this.globalState.setView(ViewType.OTHER);
 
     this.loadingUnitRoles = true;
