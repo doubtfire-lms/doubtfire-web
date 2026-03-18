@@ -1,6 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {TransitionService} from '@uirouter/angular';
-import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
 import {StateService} from '@uirouter/core';
 import {Observable, first} from 'rxjs';
 import {
@@ -15,15 +14,15 @@ import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
-type UnitTaskRouteMode = 'inbox' | 'definition' | 'moderation' | 'overflow';
-type UnitTaskViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
+export type UnitTaskViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
+export type UnitTaskRouteMode = 'inbox' | 'definition' | 'moderation' | 'overflow';
 
-interface TaskKey {
+export interface TaskKey {
   studentId: string | number;
   taskDefAbbr: string;
 }
 
-interface TaskFilters {
+export interface TaskFilters {
   taskDefinition: TaskDefinition | null;
   tutorials: Tutorial[] | null;
   forceStream: boolean;
@@ -33,6 +32,12 @@ interface TaskFilters {
   taskDefinitionIdSelected: number | TaskDefinition | null;
 }
 
+type TaskSource = (
+  unit: Unit,
+  taskDef?: TaskDefinition | number,
+  fetchMyStudentsOnly?: boolean,
+) => Observable<Task[]>;
+
 @Component({
   selector: 'f-unit-task-inbox-state',
   templateUrl: './unit-task-inbox-state.component.html',
@@ -41,29 +46,17 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   @Input() public unit$: Observable<Unit>;
   @Input() public routeMode: UnitTaskRouteMode = 'inbox';
 
-  public unit: Unit;
-  public unitRole: UnitRole;
   public viewType: UnitTaskViewType = 'inbox';
   public showSearchOptions = true;
-  public studentsLoaded = false;
 
-  public filters: TaskFilters = {
-    taskDefinition: null,
-    tutorials: null,
-    forceStream: true,
-    studentName: null,
-    tutorialIdSelected: 'all',
-    unitRoleIdSelected: 'all',
-    taskDefinitionIdSelected: null,
-  };
+  public unit: Unit;
+  public unitRole: UnitRole;
+  public studentsLoaded = false;
+  public filters: Partial<TaskFilters> = {};
 
   public taskData: {
     taskKey: TaskKey | null;
-    source: (
-      unit: Unit,
-      taskDef?: TaskDefinition | number,
-      fetchMyStudentsOnly?: boolean,
-    ) => Observable<Task[]>;
+    source: TaskSource;
     selectedTask: Task | null;
     onSelectedTaskChange: (task: Task | null) => void;
     taskDefMode: boolean;
@@ -97,7 +90,10 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     this.unit$.pipe(first()).subscribe((unit) => {
       this.unit = unit;
       this.unitRole = this.findUnitRole(unit.id);
-      this.applyUnitDefaultsForRouteMode(unit);
+      this.filters = {
+        ...this.filters,
+        ...this.getFilterOverrides(unit),
+      };
 
       this.projectService
         .loadStudents(unit)
@@ -107,7 +103,6 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
             this.studentsLoaded = true;
           },
           error: () => {
-            // Allow route to render even if student preloading fails.
             this.studentsLoaded = true;
           },
         });
@@ -127,29 +122,41 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     this.deregisterStateSuccessHook?.();
   }
 
-  private configureRouteMode(): void {
+  private getTaskSource(): TaskSource {
     switch (this.routeMode) {
       case 'definition':
-        this.taskData.source = this.taskService.queryTasksForTaskExplorer.bind(this.taskService);
+        return this.taskService.queryTasksForTaskExplorer.bind(this.taskService);
+      case 'moderation':
+        return this.taskService.queryTasksForMentorModeration.bind(this.taskService);
+      case 'overflow':
+        return this.taskService.queryTasksForOverflow.bind(this.taskService);
+      case 'inbox':
+      default:
+        return this.taskService.queryTasksForTaskInbox.bind(this.taskService);
+    }
+  }
+
+  private configureRouteMode(): void {
+    this.taskData.source = this.getTaskSource();
+
+    switch (this.routeMode) {
+      case 'definition':
         this.viewType = 'explorer';
         this.showSearchOptions = true;
         this.taskData.taskDefMode = true;
         break;
       case 'moderation':
-        this.taskData.source = this.taskService.queryTasksForMentorModeration.bind(this.taskService);
         this.viewType = 'moderation';
         this.showSearchOptions = false;
         this.taskData.taskDefMode = false;
         break;
       case 'overflow':
-        this.taskData.source = this.taskService.queryTasksForOverflow.bind(this.taskService);
         this.viewType = 'overflow';
         this.showSearchOptions = false;
         this.taskData.taskDefMode = false;
         break;
       case 'inbox':
       default:
-        this.taskData.source = this.taskService.queryTasksForTaskInbox.bind(this.taskService);
         this.viewType = 'inbox';
         this.showSearchOptions = true;
         this.taskData.taskDefMode = false;
@@ -157,22 +164,23 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private applyUnitDefaultsForRouteMode(unit: Unit): void {
-    if (this.routeMode === 'definition') {
-      this.filters = {
-        ...this.filters,
-        taskDefinitionIdSelected: unit.taskDefinitions?.[0]?.id ?? null,
-      };
-      return;
-    }
-
-    if (this.routeMode === 'moderation' || this.routeMode === 'overflow') {
-      this.filters = {
-        ...this.filters,
-        tutorialIdSelected: 'all',
-        taskDefinition: null,
-        taskDefinitionIdSelected: null,
-      };
+  private getFilterOverrides(unit: Unit): Partial<TaskFilters> {
+    switch (this.routeMode) {
+      case 'definition':
+        return {
+          tutorialIdSelected: 'all',
+          taskDefinitionIdSelected: unit.taskDefinitions?.[0]?.id ?? null,
+        };
+      case 'moderation':
+      case 'overflow':
+        return {
+          tutorialIdSelected: 'all',
+          taskDefinition: null,
+          taskDefinitionIdSelected: null,
+        };
+      case 'inbox':
+      default:
+        return {};
     }
   }
 
@@ -219,62 +227,3 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     this.taskData.taskKey = this.taskService.taskKeyFromString(taskKeyString);
   }
 }
-
-function createUnitTaskState(
-  name: string,
-  url: string,
-  task: string,
-  routeMode: UnitTaskRouteMode,
-): NgHybridStateDeclaration {
-  return {
-    name,
-    parent: 'unit-root-state',
-    url,
-    params: {
-      taskKey: {value: null, squash: true, dynamic: true},
-    },
-    resolve: {
-      routeMode: function () {
-        return routeMode;
-      },
-    },
-    views: {
-      unitView: {
-        component: UnitTaskInboxStateComponent,
-      },
-    },
-    data: {
-      task,
-      pageTitle: '_Home_',
-      roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
-    },
-  };
-}
-
-export const UnitTaskInboxState: NgHybridStateDeclaration = createUnitTaskState(
-  'units2/tasks/inbox',
-  '/tasks/inbox/{taskKey:any}',
-  'Task Inbox',
-  'inbox',
-);
-
-export const UnitTaskDefinitionState: NgHybridStateDeclaration = createUnitTaskState(
-  'units2/tasks/definition',
-  '/tasks/definition/{taskKey:any}',
-  'Task Explorer',
-  'definition',
-);
-
-export const UnitTaskModerationState: NgHybridStateDeclaration = createUnitTaskState(
-  'units2/tasks/moderation',
-  '/tasks/moderation/{taskKey:any}',
-  'Task Moderation',
-  'moderation',
-);
-
-export const UnitTaskOverflowState: NgHybridStateDeclaration = createUnitTaskState(
-  'units2/tasks/overflow',
-  '/tasks/overflow/{taskKey:any}',
-  'Task Overflow',
-  'overflow',
-);

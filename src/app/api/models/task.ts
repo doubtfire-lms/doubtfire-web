@@ -170,7 +170,15 @@ export class Task extends Entity {
   }
 
   public hasTaskKey(key: {studentId: number; taskDefAbbr: string}): boolean {
-    return this.taskKey() === key;
+    if (!key) {
+      return false;
+    }
+
+    const taskKey = this.taskKey();
+    return (
+      taskKey?.studentId?.toString() === key.studentId?.toString() &&
+      taskKey?.taskDefAbbr === key.taskDefAbbr
+    );
   }
 
   public taskKeyToUrlString(): string {
