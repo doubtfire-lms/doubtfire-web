@@ -1,6 +1,6 @@
 <div class="flex h-full w-full flex-col">
   <mat-tab-group
-    class="container w-full mb-10 max-w-[900px]"
+    class="w-full mb-10 max-w-[900px] mx-auto"
     [selectedIndex]="currentIndex"
     dynamicHeight
     (selectedTabChange)="onTabChange($event)"
@@ -23,7 +23,7 @@
       @if (unit) {
         <div class="max-w-[90vw] mx-auto">
           <div class="header">
-            <h3>Learning Outcomes</h3>
+            <h3>Unit Learning Outcomes</h3>
             <p>Manage unit outcomes and related feedback templates.</p>
           </div>
           <f-learning-outcome-editor [context]="unit"></f-learning-outcome-editor>
