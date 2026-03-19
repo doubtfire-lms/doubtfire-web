@@ -67,7 +67,6 @@ import {
 import {
   aboutDoubtfireModalProvider,
   AudioRecorderProvider,
-  AudioRecorderServiceProvider,
   calendarModalProvider,
   commentsModalProvider,
   ConfirmationModalProvider,
@@ -662,7 +661,6 @@ const GANTT_CHART_CONFIG = {
     UnitStudentEnrolmentModalProvider,
     TaskCommentService,
     AudioRecorderProvider,
-    AudioRecorderServiceProvider,
     plagiarismReportModalProvider,
     ConfirmationModalProvider,
     {

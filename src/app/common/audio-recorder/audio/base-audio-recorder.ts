@@ -1,8 +1,9 @@
 import { OnInit, Directive } from '@angular/core';
+import { MediaRecorderService } from 'src/app/common/services/recorder-service';
 
 @Directive()
 export abstract class BaseAudioRecorderComponent implements OnInit {
-  protected mediaRecorder: any = null;
+  protected mediaRecorder: MediaRecorderService = null;
   public recordingAvailable: boolean = false;
   public isRecording: boolean = false;
   protected isPlaying: boolean = false;
@@ -18,7 +19,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     return Boolean(navigator && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   }
 
-  constructor(private mediaRecorderService: any) {}
+  constructor(private recorderService: MediaRecorderService) {}
 
   ngOnInit(): void {
     this.isSending = false;
@@ -29,7 +30,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
 
   protected init(): void {
     this.blob = new Blob();
-    this.mediaRecorder = new this.mediaRecorderService();
+    this.mediaRecorder = this.recorderService;
     // Required for recording multiple times
     this.mediaRecorder.config.stopTracksAndCloseCtxWhenFinished = true;
     // Required for visualising the stream

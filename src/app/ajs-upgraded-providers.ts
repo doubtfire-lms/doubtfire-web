@@ -5,7 +5,6 @@ import {InjectionToken} from '@angular/core';
 export const gradeTaskModal = new InjectionToken('gradeTaskModal');
 export const dateService = new InjectionToken('dateService');
 export const audioRecorder = new InjectionToken('audioRecorder');
-export const audioRecorderService = new InjectionToken('recorderService');
 export const confirmationModal = new InjectionToken('ConfirmationModal');
 export const unitStudentEnrolmentModal = new InjectionToken('UnitStudentEnrolmentModalAngular');
 export const commentsModal = new InjectionToken('CommentsModal');
@@ -82,12 +81,6 @@ export const dateServiceProvider = {
 export const AudioRecorderProvider = {
   provide: audioRecorder,
   useFactory: (i) => i.get('audioRecorder'),
-  deps: ['$injector'],
-};
-
-export const AudioRecorderServiceProvider = {
-  provide: audioRecorderService,
-  useFactory: (i) => i.get('recorderService'),
   deps: ['$injector'],
 };
 
