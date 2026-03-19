@@ -332,6 +332,7 @@ export class Project extends Entity {
 
     projectService.get(this, options).subscribe((response) => {
       // Legacy AngularJS visualisation refresh hook removed with upgraded providers.
+      // (AppInjector.get(visualisations) as any).refreshAll();
     });
   }
 
