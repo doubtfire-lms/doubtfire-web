@@ -205,13 +205,13 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/common/filters/filters.coffee
 - [x] ./src/app/common/services/analytics-service.coffee
 - [x] ./src/app/config/analytics/analytics.coffee
+- [x] ./src/app/common/services/recorder-service.coffee
 
 ### TODO:
 
 - [ ] ./src/app/common/common.coffee
 - [ ] ./src/app/common/services/listener-service.coffee
 - [ ] ./src/app/common/services/media-service.coffee
-- [ ] ./src/app/common/services/recorder-service.coffee
 - [ ] ./src/app/common/services/services.coffee
 - [ ] ./src/app/config/config.coffee
 - [ ] ./src/app/config/root-controller/root-controller.coffee
