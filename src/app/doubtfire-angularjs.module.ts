@@ -5,7 +5,7 @@
 // # tree inside app/
 // #
 
-import {downgradeComponent, downgradeInjectable} from '@angular/upgrade/static';
+import {downgradeComponent} from '@angular/upgrade/static';
 import * as angular from 'angular';
 
 // Here are the old angular node modules, previously loaded via grunt
@@ -21,7 +21,6 @@ import 'build/src/app/config/config.js';
 
 import {HeaderComponent} from './common/header/header.component';
 import {SplashScreenComponent} from './home/splash-screen/splash-screen.component';
-import {TransitionHooksService} from './sessions/transition-hooks.service';
 
 export const DoubtfireAngularJSModule = angular.module('doubtfire', ['doubtfire.config']).config([
   '$locationProvider',
@@ -49,11 +48,4 @@ DoubtfireAngularJSModule.directive('appHeader', downgradeComponent({component: H
 DoubtfireAngularJSModule.directive(
   'splashScreen',
   downgradeComponent({component: SplashScreenComponent}),
-);
-
-// factory -> service
-
-DoubtfireAngularJSModule.factory(
-  'TransitionHooksService',
-  downgradeInjectable(TransitionHooksService),
 );
