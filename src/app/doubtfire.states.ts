@@ -26,7 +26,6 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
-import {Ng2ViewDeclaration} from '@uirouter/angular';
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {UnitAdminState} from './units/states/edit/unit-admin-state.component';
@@ -420,12 +419,6 @@ const UnauthoriedState: NgHybridStateDeclaration = {
   name: 'unauthorised',
   url: '/unauthorised', // You get here with this url
   views: {
-    // These are the 2 views - the header and main from the body of DF
-    header: {
-      // Header is still angularjs
-      controller: 'BasicHeaderCtrl', // This is the angularjs controller
-      templateUrl: 'common/header/header.tpl.html', // and the related template html
-    } as unknown as Ng2ViewDeclaration, // Need dodgy cast to get compiler to ignore type data
     main: {
       // Main body links to angular component
       component: UnauthorisedComponent,
