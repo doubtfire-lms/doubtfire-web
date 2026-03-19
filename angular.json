@@ -48,10 +48,6 @@
               "./node_modules/bootstrap/dist/css/bootstrap.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "./build/assets/doubtfire.css",
-              "./build/assets/node_modules/angular-xeditable/dist/css/xeditable.css",
-              "./build/assets/node_modules/codemirror/lib/codemirror.css",
-              "./build/assets/node_modules/codemirror/theme/xq-light.css",
-              "./build/assets/node_modules/nvd3/build/nv.d3.css",
               "node_modules/@ctrl/ngx-emoji-mart/picker.css",
               "node_modules/@worktile/gantt/styles/index.scss"
             ],
@@ -60,11 +56,7 @@
               "node_modules/d3/d3.js",
               "node_modules/lodash/lodash.js",
               "node_modules/underscore.string/dist/underscore.string.min.js",
-              "node_modules/nvd3/build/nv.d3.js",
               "node_modules/es5-shim/es5-shim.js",
-              "node_modules/codemirror/lib/codemirror.js",
-              "node_modules/codemirror/addon/display/placeholder.js",
-              "node_modules/codemirror/mode/markdown/markdown.js",
               "node_modules/canvas-confetti/dist/confetti.browser.js"
             ],
             "extractLicenses": false,
