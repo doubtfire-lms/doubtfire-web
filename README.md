@@ -206,6 +206,13 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/common/services/analytics-service.coffee
 - [x] ./src/app/config/analytics/analytics.coffee
 - [x] ./src/app/common/services/recorder-service.coffee
+- [x] ./src/app/projects/projects.coffee
+- [x] ./src/app/projects/states/dashboard/dashboard.coffee
+- [x] ./src/app/projects/states/dashboard/directives/directives.coffee
+- [x] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
+- [x] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
+- [x] ./src/app/projects/states/index/index.coffee
+- [x] ./src/app/projects/states/states.coffee
 
 ### TODO:
 
@@ -220,13 +227,6 @@ Important: When completing a frontend migration, please update the below list re
 - [ ] ./src/app/config/vendor-dependencies/vendor-dependencies.coffee
 - [ ] ./src/app/errors/errors.coffee
 - [ ] ./src/app/errors/states/states.coffee
-- [ ] ./src/app/projects/projects.coffee
-- [ ] ./src/app/projects/states/dashboard/dashboard.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
-- [ ] ./src/app/projects/states/index/index.coffee
-- [ ] ./src/app/projects/states/states.coffee
 - [ ] ./src/app/units/states/edit/edit.coffee
 - [ ] ./src/app/units/states/index/index.coffee
 - [ ] ./src/app/units/states/states.coffee
