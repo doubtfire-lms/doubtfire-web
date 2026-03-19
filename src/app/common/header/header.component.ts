@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {aboutDoubtfireModal, calendarModal} from 'src/app/ajs-upgraded-providers';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CheckForUpdateService} from 'src/app/sessions/service-worker-updater/check-for-update.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 import {IsActiveUnitRole} from '../pipes/is-active-unit-role.pipe';
@@ -21,6 +20,8 @@ import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs
 import {QrModalService} from '../modals/qr-modal/qr-modal.service';
 import {StateService} from '@uirouter/core';
 import {TutorNotesModalService} from '../modals/tutor-notes-modal/tutor-notes-modal.service';
+import {CalendarModalService} from '../modals/calendar-modal/calendar-modal.service';
+import {AboutDoubtfireModal} from '../modals/about-doubtfire-modal/about-doubtfire-modal.component';
 
 @Component({
   selector: 'app-header',
@@ -53,8 +54,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   sidekiqJobs: SidekiqJobEntry[] = [];
 
   constructor(
-    @Inject(calendarModal) private CalendarModal,
-    @Inject(aboutDoubtfireModal) private AboutDoubtfireModal,
+    private calendarModal: CalendarModalService,
+    private aboutDoubtfireModal: AboutDoubtfireModal,
     private isActiveUnitRole: IsActiveUnitRole,
     private checkForUpdateService: CheckForUpdateService,
     protected globalState: GlobalStateService,
@@ -223,11 +224,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   openAboutModal(): void {
-    this.AboutDoubtfireModal.show();
+    this.aboutDoubtfireModal.show();
   }
 
   openCalendar(): void {
-    this.CalendarModal.show();
+    this.calendarModal.show(null);
   }
 
   signOut(): void {

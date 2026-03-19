@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatMenuModule } from '@angular/material/menu';
-import { dateService } from 'src/app/ajs-upgraded-providers';
+import { DateService } from 'src/app/common/services/date.service';
 
 import { UnitDropdownComponent } from './unit-dropdown.component';
 
@@ -17,7 +17,7 @@ describe('UnitDropdownComponent', () => {
       TestBed.configureTestingModule({
         declarations: [UnitDropdownComponent],
         imports: [MatMenuModule],
-        providers: [{ provide: dateService, useValue: dateServiceStub }],
+        providers: [{ provide: DateService, useValue: dateServiceStub }],
       }).compileComponents();
     })
   );

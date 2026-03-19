@@ -3,7 +3,6 @@ import {TransitionService} from '@uirouter/angular';
 import {AuthenticationService} from '../api/services/authentication.service';
 import {UserService} from '../api/services/user.service';
 import {DoubtfireConstants} from '../config/constants/doubtfire-constants';
-import {DoubtfireAngularModule} from '../doubtfire-angular.module';
 import {GlobalStateService} from '../projects/states/index/global-state.service';
 
 /**
@@ -12,7 +11,7 @@ import {GlobalStateService} from '../projects/states/index/global-state.service'
  * to the welcome page if the user has not completed first time setup, and accepting the eula.
  */
 @Injectable({
-  providedIn: DoubtfireAngularModule,
+  providedIn: 'root',
 })
 export class TransitionHooksService {
   private tiiEnabled = false;

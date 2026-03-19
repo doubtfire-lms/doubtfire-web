@@ -2,14 +2,12 @@ import {
   Component,
   OnInit,
   Input,
-  Inject,
   OnChanges,
   SimpleChanges,
   ViewChild,
   ElementRef,
   OnDestroy,
 } from '@angular/core';
-import {commentsModal} from 'src/app/ajs-upgraded-providers';
 import {
   Task,
   Project,
@@ -55,7 +53,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
     private userService: UserService,
     private taskService: TaskService,
     private constants: DoubtfireConstants,
-    @Inject(commentsModal) private commentsModalRef: CommentsModalService,
+    private commentsModalRef: CommentsModalService,
     private alerts: AlertService,
   ) {
     const self = this;

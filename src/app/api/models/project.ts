@@ -1,7 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Entity, EntityCache, RequestOptions} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
-import {visualisations} from 'src/app/ajs-upgraded-providers';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
@@ -332,7 +331,8 @@ export class Project extends Entity {
     };
 
     projectService.get(this, options).subscribe((response) => {
-      (AppInjector.get(visualisations) as any).refreshAll();
+      // Legacy AngularJS visualisation refresh hook removed with upgraded providers.
+      // (AppInjector.get(visualisations) as any).refreshAll();
     });
   }
 

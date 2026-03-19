@@ -214,23 +214,23 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/projects/states/index/index.coffee
 - [x] ./src/app/projects/states/states.coffee
 - [ ] ./src/app/common/services/listener-service.coffee
+- [x] ./src/app/config/root-controller/root-controller.coffee
+- [ ] ./src/app/config/vendor-dependencies/vendor-dependencies.coffee
+- [x] ./src/app/common/services/media-service.coffee
+- [x] ./src/app/common/services/services.coffee
+- [x] ./src/app/common/common.coffee
+- [x] ./src/app/config/routing/routing.coffee
+- [x] ./src/app/config/runtime/runtime.coffee
+- [x] ./src/app/errors/errors.coffee
+- [x] ./src/app/errors/states/states.coffee
+- [x] ./src/app/units/states/edit/edit.coffee
+- [x] ./src/app/units/states/index/index.coffee
+- [x] ./src/app/units/states/states.coffee
+- [x] ./src/app/units/units.coffee
 
 ### TODO:
 
-- [ ] ./src/app/common/common.coffee
-- [ ] ./src/app/common/services/media-service.coffee
-- [ ] ./src/app/common/services/services.coffee
 - [ ] ./src/app/config/config.coffee
-- [ ] ./src/app/config/root-controller/root-controller.coffee
-- [ ] ./src/app/config/routing/routing.coffee
-- [ ] ./src/app/config/runtime/runtime.coffee
-- [ ] ./src/app/config/vendor-dependencies/vendor-dependencies.coffee
-- [ ] ./src/app/errors/errors.coffee
-- [ ] ./src/app/errors/states/states.coffee
-- [ ] ./src/app/units/states/edit/edit.coffee
-- [ ] ./src/app/units/states/index/index.coffee
-- [ ] ./src/app/units/states/states.coffee
-- [ ] ./src/app/units/units.coffee
 - [ ] ./src/app/visualisations/summary-task-status-scatter.coffee (Unit task status summary)
 - [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
 - [ ] ./src/app/visualisations/task-completion-box-plot.coffee

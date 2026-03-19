@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {AfterViewInit, Component, Inject, Input, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -13,7 +13,7 @@ import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {SpecConModalService} from 'src/app/common/modals/spec-con-modal/spec-con-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {unitStudentEnrolmentModal} from './../../../../../ajs-upgraded-providers';
+import {UnitStudentEnrolmentModalService} from 'src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 
 @Component({
   selector: 'unit-students-editor',
@@ -45,7 +45,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
   // that maps all of the form controls that this form consists of.
   constructor(
     private httpClient: HttpClient,
-    @Inject(unitStudentEnrolmentModal) private enrolModal: any,
+    private enrolModal: UnitStudentEnrolmentModalService,
     private alerts: AlertService,
     private csvUploadModal: CsvUploadModalService,
     private csvResultModal: CsvResultModalService,

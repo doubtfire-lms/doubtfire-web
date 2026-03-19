@@ -6,8 +6,6 @@
 # them
 #
 angular.module('doubtfire.config', [
-  'doubtfire.config.vendor-dependencies'
-  'doubtfire.config.routing'
-  'doubtfire.config.runtime'
-  'doubtfire.config.root-controller'
+  'ui.router'
+  'ui.router.upgrade'
 ])

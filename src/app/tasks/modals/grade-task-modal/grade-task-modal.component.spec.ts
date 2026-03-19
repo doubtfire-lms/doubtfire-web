@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { GradeTaskModalComponent } from './grade-task-modal.component';
-import { gradeService } from 'src/app/ajs-upgraded-providers';
+import { GradeService } from 'src/app/common/services/grade.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 describe('GradeTaskModalComponent', () => {
@@ -47,7 +47,7 @@ describe('GradeTaskModalComponent', () => {
       TestBed.configureTestingModule({
         declarations: [GradeTaskModalComponent],
         providers: [
-          { provide: gradeService, useValue: gradeServiceStub },
+          { provide: GradeService, useValue: gradeServiceStub },
           { provide: MatDialogRef, useValue: dialogRefMock },
           { provide: MAT_DIALOG_DATA, useValue: dialogDataStub },
         ],
