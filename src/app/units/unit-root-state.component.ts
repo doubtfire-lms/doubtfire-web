@@ -14,7 +14,7 @@ import {
 } from 'rxjs';
 import {Unit, UnitService, UserService} from 'src/app/api/models/doubtfire-model';
 import { AppInjector } from '../app-injector';
-import { NgHybridStateDeclaration } from '@uirouter/angular-hybrid';
+import { Ng2StateDeclaration } from '@uirouter/angular';
 import { GlobalStateService, ViewType } from '../projects/states/index/global-state.service';
 import { StateService } from '@uirouter/core';
 import { AlertService } from '../common/services/alert.service';
@@ -28,7 +28,7 @@ export class UnitRootStateComponent {
   @Input() public unit$: Observable<Unit>;
 }
 
-export const UnitRootState: NgHybridStateDeclaration = {
+export const UnitRootState: Ng2StateDeclaration = {
   name: 'unit-root-state',
   url: '/units2/:unitId',
   abstract: true,
@@ -75,7 +75,7 @@ export const UnitRootState: NgHybridStateDeclaration = {
           unitService.get(unitId).subscribe({
             next: (unit: Unit) => {
               observer.next(unit);
-              globalState.setView(ViewType.UNIT, unitRole);
+              globalState.setView(ViewType.UNIT, unit);
               observer.complete();
             },
             error: (err) => {

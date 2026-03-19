@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {StateService} from '@uirouter/core';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {Unit} from 'src/app/api/models/unit';
@@ -28,6 +29,7 @@ export class RolloverComponent implements OnInit {
     private globalStateService: GlobalStateService,
     private unitService: UnitService,
     private alertService: AlertService,
+    private router: Router,
     private state: StateService,
     private teachingPeriodService: TeachingPeriodService,
   ) {}
@@ -43,7 +45,7 @@ export class RolloverComponent implements OnInit {
         },
         error: (error) => {
           this.alertService.error(`Failed to load unit: ${error}`, 6000);
-          this.state.go('home');
+          this.router.navigateByUrl('/home');
         },
       });
     });

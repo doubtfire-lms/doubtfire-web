@@ -12,13 +12,14 @@ import {
   UnitRole,
   User,
 } from 'src/app/api/models/doubtfire-model';
-import {Subscription} from 'rxjs';
+import {asapScheduler, observeOn, Subscription} from 'rxjs';
 import {MediaObserver} from 'ng-flex-layout';
 import {DoubtfireConstants, LogoSettings} from 'src/app/config/constants/doubtfire-constants';
 import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
 import {QrModalService} from '../modals/qr-modal/qr-modal.service';
 import {StateService} from '@uirouter/core';
+import {TransitionService} from '@uirouter/angular';
 import {TutorNotesModalService} from '../modals/tutor-notes-modal/tutor-notes-modal.service';
 import {CalendarModalService} from '../modals/calendar-modal/calendar-modal.service';
 import {AboutDoubtfireModal} from '../modals/about-doubtfire-modal/about-doubtfire-modal.component';
@@ -50,6 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     logoUrl: null,
   };
   private subscriptions: Subscription[] = [];
+  private deregisterTransitionHook?: () => void;
 
   sidekiqJobs: SidekiqJobEntry[] = [];
 
@@ -66,6 +68,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sidekiqJobService: SidekiqJobService,
     private sidekiqJobsModalService: SidekiqJobsModalService,
     private qrModalService: QrModalService,
+    private transitionService: TransitionService,
     private stateService: StateService,
     private tutorNotesModal: TutorNotesModalService,
   ) {}
@@ -113,7 +116,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // get the current active unit or project
     this.subscriptions.push(
-      this.globalState.currentViewAndEntitySubject$.subscribe({
+      this.globalState.currentViewAndEntitySubject$.pipe(observeOn(asapScheduler)).subscribe({
         next: (currentViewAndEntity) => {
           this.currentView = currentViewAndEntity?.viewType;
 
@@ -152,6 +155,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.sidekiqJobService.sidekiqJobsSubject.subscribe((jobs) => {
       this.sidekiqJobs = [...jobs];
     });
+
+    const deregister = this.transitionService.onSuccess({to: '**'}, (transition) => {
+      const unitId = Number(transition.params().unitId);
+      if (!Number.isInteger(unitId)) {
+        return;
+      }
+
+      const unit = this.globalState.loadedUnits.currentValues.find((loadedUnit) => loadedUnit.id === unitId);
+      if (unit) {
+        this.currentView = ViewType.UNIT;
+        this.updateSelectedUnit(unit);
+        return;
+      }
+
+      const unitRole = this.globalState.loadedUnitRoles.currentValues.find(
+        (loadedUnitRole) => loadedUnitRole.unit.id === unitId,
+      );
+      if (unitRole) {
+        this.currentView = ViewType.UNIT;
+        this.updateSelectedUnitRole(unitRole);
+      }
+    });
+
+    this.deregisterTransitionHook = deregister as () => void;
   }
 
   showMyQr() {
@@ -184,6 +211,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.deregisterTransitionHook?.();
   }
 
   isUniqueRole = (unit) => {

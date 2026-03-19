@@ -2,10 +2,10 @@ import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {DoBootstrap, Injector, NgModule} from '@angular/core';
+import {ApplicationRef, DoBootstrap, Injector, NgModule} from '@angular/core';
 import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {UpgradeModule} from '@angular/upgrade/static';
+import {RouterModule, UrlHandlingStrategy} from '@angular/router';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {AppInjector, setAppInjector} from './app-injector';
@@ -39,7 +39,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {UIRouterUpgradeModule} from '@uirouter/angular-hybrid';
+import {UIRouterModule} from '@uirouter/angular';
 import player from 'lottie-web';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
 import {LottieComponent, provideLottieOptions} from 'ngx-lottie';
@@ -59,7 +59,6 @@ import {
 import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
 import {FTaskBadgeComponent} from 'src/app/common/task-badge/task-badge.component';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {DoubtfireAngularJSModule} from 'src/app/doubtfire-angularjs.module';
 import {
   DiscussionComposerDialog,
   TaskCommentComposerComponent,
@@ -231,6 +230,8 @@ import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {UserBadgeComponent} from './common/user-badge/user-badge.component';
+import {AngularRouterHostComponent} from './angular-router-host.component';
+import {DoubtfireShellComponent} from './doubtfire-shell.component';
 import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
 import {TimeoutComponent} from './errors/states/timeout/timeout.component';
 import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-card.component';
@@ -286,6 +287,8 @@ import {FTaskSheetViewComponent} from './units/task-viewer/directives/task-sheet
 import {FUnitTaskListComponent} from './units/task-viewer/directives/unit-task-list/unit-task-list.component';
 import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
 import {UnitRootStateComponent} from './units/unit-root-state.component';
+import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
+import {topLevelRoutes, TopLevelUrlHandlingStrategy} from './top-level-routing';
 import {ProgressBurndownChartComponent} from './visualisations/progress-burndown-chart/progress-burndown-chart.component';
 import {TaskVisualisationComponent} from './visualisations/task-visualisation/task-visualisation.component';
 import {WelcomeComponent} from './welcome/welcome.component';
@@ -398,6 +401,8 @@ const GANTT_CHART_CONFIG = {
 @NgModule({
   // Components we declare
   declarations: [
+    AngularRouterHostComponent,
+    DoubtfireShellComponent,
     TaskStatusPieChartComponent,
     AlertComponent,
     ProgressDashboardComponent,
@@ -602,6 +607,7 @@ const GANTT_CHART_CONFIG = {
     CsvUploadModalComponent,
     UnitGroupSetEditorComponent,
     UnitTaskInboxStateComponent,
+    LegacyRoutePlaceholderComponent,
   ],
   providers: [
     // Services we provide
@@ -684,11 +690,15 @@ const GANTT_CHART_CONFIG = {
     TutorNoteService,
     CsvResultModalService,
     CsvUploadModalService,
+    {provide: UrlHandlingStrategy, useClass: TopLevelUrlHandlingStrategy},
   ],
   imports: [
     FlexLayoutModule,
     BrowserModule,
     BrowserAnimationsModule,
+    RouterModule.forRoot(topLevelRoutes, {
+      initialNavigation: 'enabledNonBlocking',
+    }),
     FormsModule,
     HttpClientModule,
     ClipboardModule,
@@ -725,7 +735,6 @@ const GANTT_CHART_CONFIG = {
     MatExpansionModule,
     MatGridListModule,
     MatTabsModule,
-    UpgradeModule,
     MatTableModule,
     MatChipsModule,
     MatSnackBarModule,
@@ -735,7 +744,10 @@ const GANTT_CHART_CONFIG = {
     NgxChartsModule,
     PdfViewerModule,
     LottieComponent,
-    UIRouterUpgradeModule.forRoot({states: doubtfireStates}),
+    UIRouterModule.forRoot({
+      states: doubtfireStates,
+      otherwise: '/home',
+    }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: () => interval(6000).pipe(take(1)),
@@ -754,7 +766,7 @@ const GANTT_CHART_CONFIG = {
 export class DoubtfireAngularModule implements DoBootstrap {
   constructor(
     injector: Injector,
-    private upgrade: UpgradeModule,
+    private appRef: ApplicationRef,
     private constants: DoubtfireConstants,
     private title: Title,
     private updater: CheckForUpdateService,
@@ -775,9 +787,7 @@ export class DoubtfireAngularModule implements DoBootstrap {
   }
 
   ngDoBootstrap(): void {
-    this.upgrade.bootstrap(document.body, [DoubtfireAngularJSModule.name], {
-      strictDi: false,
-    });
+    this.appRef.bootstrap(DoubtfireShellComponent);
     AppInjector.get(TransitionHooksService);
   }
 }

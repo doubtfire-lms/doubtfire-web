@@ -1,12 +1,5 @@
-import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
+import {Ng2StateDeclaration} from '@uirouter/angular';
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
-import {HomeComponent} from './home/states/home/home.component';
-import {WelcomeComponent} from './welcome/welcome.component';
-import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
-import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
-import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
-import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
-import {TimeoutComponent} from './errors/states/timeout/timeout.component';
 import {FUsersComponent} from './admin/states/users/users.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
 import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
@@ -33,6 +26,7 @@ import {PortfoliosComponent} from './units/states/portfolios/portfolios.componen
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {StudentsListState} from './units/states/students-list/students-list.component';
 import {UnitGroupsState} from './units/states/groups/unit-groups/unit-groups.component';
+import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
 
 /*
  * Use this file to store any states that are sourced by angular components.
@@ -41,7 +35,7 @@ import {UnitGroupsState} from './units/states/groups/unit-groups/unit-groups.com
 /**
  * Define the institution settings state - used to edit campus data.
  */
-const institutionSettingsState: NgHybridStateDeclaration = {
+const institutionSettingsState: Ng2StateDeclaration = {
   name: 'institutionsettings', // This is the name of the state to jump to - so ui-sref="institutionsettings" to jump here
   url: '/admin/institution-settings', // You get here with this url
   views: {
@@ -56,7 +50,7 @@ const institutionSettingsState: NgHybridStateDeclaration = {
   },
 };
 
-const usersState: NgHybridStateDeclaration = {
+const usersState: Ng2StateDeclaration = {
   name: 'admin/users', // This is the name of the state to jump to - so ui-sref="users" to jump here
   url: '/admin/users', // You get here with this url
   views: {
@@ -74,12 +68,12 @@ const usersState: NgHybridStateDeclaration = {
 /**
  * Define the new home state.
  */
-const HomeState: NgHybridStateDeclaration = {
+const HomeState: Ng2StateDeclaration = {
   name: 'home',
   url: '/home',
   views: {
     main: {
-      component: HomeComponent,
+      component: LegacyRoutePlaceholderComponent,
     },
   },
   data: {
@@ -120,7 +114,7 @@ const HomeState: NgHybridStateDeclaration = {
 
 const unitTaskRoleWhitelist = ['Tutor', 'Convenor', 'Admin', 'Auditor'];
 
-const UnitTaskInboxState: NgHybridStateDeclaration = {
+const UnitTaskInboxState: Ng2StateDeclaration = {
   name: 'units2/tasks/inbox',
   parent: 'unit-root-state',
   url: '/tasks/inbox/{taskKey:any}',
@@ -144,7 +138,7 @@ const UnitTaskInboxState: NgHybridStateDeclaration = {
   },
 };
 
-const UnitTaskDefinitionState: NgHybridStateDeclaration = {
+const UnitTaskDefinitionState: Ng2StateDeclaration = {
   name: 'units2/tasks/definition',
   parent: 'unit-root-state',
   url: '/tasks/definition/{taskKey:any}',
@@ -168,7 +162,7 @@ const UnitTaskDefinitionState: NgHybridStateDeclaration = {
   },
 };
 
-const UnitTaskModerationState: NgHybridStateDeclaration = {
+const UnitTaskModerationState: Ng2StateDeclaration = {
   name: 'units2/tasks/moderation',
   parent: 'unit-root-state',
   url: '/tasks/moderation/{taskKey:any}',
@@ -192,7 +186,7 @@ const UnitTaskModerationState: NgHybridStateDeclaration = {
   },
 };
 
-const UnitTaskOverflowState: NgHybridStateDeclaration = {
+const UnitTaskOverflowState: Ng2StateDeclaration = {
   name: 'units2/tasks/overflow',
   parent: 'unit-root-state',
   url: '/tasks/overflow/{taskKey:any}',
@@ -216,7 +210,7 @@ const UnitTaskOverflowState: NgHybridStateDeclaration = {
   },
 };
 
-const UnitAnalyticsState: NgHybridStateDeclaration = {
+const UnitAnalyticsState: Ng2StateDeclaration = {
   name: 'units2/analytics',
   parent: 'unit-root-state',
   url: '/analytics',
@@ -235,12 +229,12 @@ const UnitAnalyticsState: NgHybridStateDeclaration = {
 /**
  * Define the welcome state.
  */
-const WelcomeState: NgHybridStateDeclaration = {
+const WelcomeState: Ng2StateDeclaration = {
   name: 'welcome',
   url: '/welcome',
   views: {
     main: {
-      component: WelcomeComponent,
+      component: LegacyRoutePlaceholderComponent,
     },
   },
   data: {
@@ -251,12 +245,12 @@ const WelcomeState: NgHybridStateDeclaration = {
 /**
  * Define the Sign In state.
  */
-const SignInState: NgHybridStateDeclaration = {
+const SignInState: Ng2StateDeclaration = {
   name: 'sign_in',
   url: '/sign_in?authToken&username',
   views: {
     main: {
-      component: SignInComponent,
+      component: LegacyRoutePlaceholderComponent,
     },
   },
   data: {
@@ -281,12 +275,12 @@ const SignInState: NgHybridStateDeclaration = {
 /**
  * Define the Edit Profile state.
  */
-const EditProfileState: NgHybridStateDeclaration = {
+const EditProfileState: Ng2StateDeclaration = {
   name: 'edit_profile',
   url: '/edit_profile',
   views: {
     main: {
-      component: EditProfileComponent,
+      component: LegacyRoutePlaceholderComponent,
     },
   },
   data: {
@@ -294,12 +288,12 @@ const EditProfileState: NgHybridStateDeclaration = {
   },
 };
 
-const EulaState: NgHybridStateDeclaration = {
+const EulaState: Ng2StateDeclaration = {
   name: 'eula',
   url: '/eula',
   views: {
     main: {
-      component: AcceptEulaComponent,
+      component: LegacyRoutePlaceholderComponent,
     },
   },
   data: {
@@ -307,7 +301,7 @@ const EulaState: NgHybridStateDeclaration = {
   },
 };
 
-const ViewAllProjectsState: NgHybridStateDeclaration = {
+const ViewAllProjectsState: Ng2StateDeclaration = {
   name: 'view-all-projects',
   url: '/view-all-projects',
   resolve: {
@@ -325,7 +319,7 @@ const ViewAllProjectsState: NgHybridStateDeclaration = {
   },
 };
 
-const AdministerUnits: NgHybridStateDeclaration = {
+const AdministerUnits: Ng2StateDeclaration = {
   name: 'admin/units', // This is the name of the state to jump to - so ui-sref="users" to jump here
   url: '/admin/units', // You get here with this url
   resolve: {
@@ -346,7 +340,7 @@ const AdministerUnits: NgHybridStateDeclaration = {
 };
 
 // projectDashboardState which gets the project from the abstract state above
-const ProjectDashboardState: NgHybridStateDeclaration = {
+const ProjectDashboardState: Ng2StateDeclaration = {
   name: 'projects2/dashboard2',
   parent: 'projects2',
   url: '/dashboard2/:taskAbbreviation?',
@@ -364,7 +358,7 @@ const ProjectDashboardState: NgHybridStateDeclaration = {
   },
 };
 
-const PortfolioCreationState: NgHybridStateDeclaration = {
+const PortfolioCreationState: Ng2StateDeclaration = {
   name: 'projects2/portfolio2',
   parent: 'projects2',
   url: '/portfolio2',
@@ -379,7 +373,7 @@ const PortfolioCreationState: NgHybridStateDeclaration = {
   },
 };
 
-const ProjectGroupsState: NgHybridStateDeclaration = {
+const ProjectGroupsState: Ng2StateDeclaration = {
   name: 'projects2/groups2',
   parent: 'projects2',
   url: '/groups2',
@@ -394,7 +388,7 @@ const ProjectGroupsState: NgHybridStateDeclaration = {
   },
 };
 
-const ViewAllUnits: NgHybridStateDeclaration = {
+const ViewAllUnits: Ng2StateDeclaration = {
   name: 'view-all-units',
   url: '/view-all-units',
   // passes 'mode' as @Input to the component
@@ -415,13 +409,13 @@ const ViewAllUnits: NgHybridStateDeclaration = {
   },
 };
 
-const UnauthoriedState: NgHybridStateDeclaration = {
+const UnauthoriedState: Ng2StateDeclaration = {
   name: 'unauthorised',
   url: '/unauthorised', // You get here with this url
   views: {
     main: {
       // Main body links to angular component
-      component: UnauthorisedComponent,
+      component: LegacyRoutePlaceholderComponent,
     },
   },
   data: {
@@ -430,12 +424,12 @@ const UnauthoriedState: NgHybridStateDeclaration = {
   },
 };
 
-const TimeoutState: NgHybridStateDeclaration = {
+const TimeoutState: Ng2StateDeclaration = {
   name: 'timeout',
   url: '/timeout',
   views: {
     main: {
-      component: TimeoutComponent,
+      component: LegacyRoutePlaceholderComponent,
     },
   },
   data: {
@@ -446,7 +440,7 @@ const TimeoutState: NgHybridStateDeclaration = {
 /**
  * Define the SCORM Player state.
  */
-const ScormPlayerNormalState: NgHybridStateDeclaration = {
+const ScormPlayerNormalState: Ng2StateDeclaration = {
   name: 'scorm-player-normal',
   url: '/projects/:project_id/task_def_id/:task_definition_id/scorm-player/normal',
   resolve: {
@@ -480,7 +474,7 @@ const ScormPlayerNormalState: NgHybridStateDeclaration = {
 /**
  * Define the SCORM Player state.
  */
-const ScormPlayerStudentReviewState: NgHybridStateDeclaration = {
+const ScormPlayerStudentReviewState: Ng2StateDeclaration = {
   name: 'scorm-player-student-review',
   url: '/projects/:project_id/task_def_id/:task_definition_id/scorm-player/review/:test_attempt_id',
   resolve: {
@@ -517,7 +511,7 @@ const ScormPlayerStudentReviewState: NgHybridStateDeclaration = {
   },
 };
 
-const ScormPlayerReviewState: NgHybridStateDeclaration = {
+const ScormPlayerReviewState: Ng2StateDeclaration = {
   name: 'scorm-preview',
   url: '/task_def_id/:task_definition_id/preview-scorm',
   resolve: {
@@ -542,7 +536,7 @@ const ScormPlayerReviewState: NgHybridStateDeclaration = {
   },
 };
 
-const SuccessCloseState: NgHybridStateDeclaration = {
+const SuccessCloseState: Ng2StateDeclaration = {
   name: 'success-close',
   url: '/success-close',
   views: {
@@ -559,7 +553,7 @@ const SuccessCloseState: NgHybridStateDeclaration = {
 /**
  * Allow the uesr to plan the task due dates for their project.
  */
-const projectPlanState: NgHybridStateDeclaration = {
+const projectPlanState: Ng2StateDeclaration = {
   name: 'projects2/plan2',
   parent: 'projects2',
   url: '/plan2?:taskDef?',
@@ -578,7 +572,7 @@ const projectPlanState: NgHybridStateDeclaration = {
   },
 };
 
-const TutorDiscussionState: NgHybridStateDeclaration = {
+const TutorDiscussionState: Ng2StateDeclaration = {
   name: 'tutor-discussion',
   url: '/tutor-discussion?unitId&username',
   views: {
@@ -607,7 +601,7 @@ const TutorDiscussionState: NgHybridStateDeclaration = {
   },
 };
 
-const TutorialState: NgHybridStateDeclaration = {
+const TutorialState: Ng2StateDeclaration = {
   name: 'projects2/tutorials2',
   parent: 'projects2',
   url: '/tutorials2',
@@ -623,7 +617,7 @@ const TutorialState: NgHybridStateDeclaration = {
   },
 };
 
-const PortfoliosState: NgHybridStateDeclaration = {
+const PortfoliosState: Ng2StateDeclaration = {
   name: 'units/students/portfolios',
   parent: 'unit-root-state',
   url: '/students/portfolios',
@@ -639,7 +633,7 @@ const PortfoliosState: NgHybridStateDeclaration = {
   },
 };
 
-const TutorAttendance: NgHybridStateDeclaration = {
+const TutorAttendance: Ng2StateDeclaration = {
   name: 'tutor-attendance',
   url: '/tutor-attendance?unitId&attendance',
   resolve: {
@@ -671,7 +665,7 @@ const TutorAttendance: NgHybridStateDeclaration = {
   },
 };
 
-const RolloverState: NgHybridStateDeclaration = {
+const RolloverState: Ng2StateDeclaration = {
   name: 'units/rollover',
   url: '/units/:unitId/rollover',
   resolve: {
@@ -694,7 +688,7 @@ const RolloverState: NgHybridStateDeclaration = {
   },
 };
 
-const jplagReportViewerState: NgHybridStateDeclaration = {
+const jplagReportViewerState: Ng2StateDeclaration = {
   name: 'jplag-report-viewer',
   url: '/jplag-report-viewer',
   views: {
@@ -713,7 +707,7 @@ const jplagReportViewerState: NgHybridStateDeclaration = {
 /**
  * Define the LTI dashboard state.
  */
-const LtiDashboardState: NgHybridStateDeclaration = {
+const LtiDashboardState: Ng2StateDeclaration = {
   name: 'lti',
   url: '/lti?ltik',
   resolve: {
@@ -738,7 +732,7 @@ const LtiDashboardState: NgHybridStateDeclaration = {
 /**
  * Renders the content selection form shown when "Select Content" is clicked in Moodle's external tool setup.
  */
-const LtiUnitLinkState: NgHybridStateDeclaration = {
+const LtiUnitLinkState: Ng2StateDeclaration = {
   name: 'lti/link',
   url: '/lti/link?ltik',
   resolve: {

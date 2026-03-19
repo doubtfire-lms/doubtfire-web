@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
+import {Ng2StateDeclaration} from '@uirouter/angular';
 import {Observable, Subscription} from 'rxjs';
 import {GroupSet, Unit, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
@@ -70,7 +70,7 @@ export class UnitGroupsComponent implements OnInit, OnDestroy {
   }
 }
 
-export const UnitGroupsState: NgHybridStateDeclaration = {
+export const UnitGroupsState: Ng2StateDeclaration = {
   name: 'units/students/groups',
   parent: 'unit-root-state',
   url: '/students/groups',

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatTabGroup} from '@angular/material/tabs';
-import {StateService} from '@uirouter/core';
+import {Router} from '@angular/router';
 import {Observable, first} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
@@ -23,7 +23,7 @@ export class PortfoliosComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    private stateService: StateService,
+    private router: Router,
     private alertService: AlertService,
   ) {}
 
@@ -52,13 +52,13 @@ export class PortfoliosComponent implements OnInit {
           },
           error: (error) => {
             this.alertService.error(`Failed to load unit: ${error}`, 6000);
-            this.stateService.go('home');
+            this.router.navigateByUrl('/home');
           },
         });
       },
       error: (error) => {
         this.alertService.error(`Failed to load unit: ${error}`, 6000);
-        this.stateService.go('home');
+        this.router.navigateByUrl('/home');
       },
     });
   }

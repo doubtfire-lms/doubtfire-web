@@ -1,7 +1,7 @@
 import {Component, Inject, Input, OnInit, Optional} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {StateService} from '@uirouter/core';
+import {Router} from '@angular/router';
 import {User} from 'src/app/api/models/user/user';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {UserService} from 'src/app/api/services/user.service';
@@ -16,7 +16,7 @@ export class EditProfileFormComponent implements OnInit {
   constructor(
     private constants: DoubtfireConstants,
     private userService: UserService,
-    private state: StateService,
+    private router: Router,
     private authService: AuthenticationService,
     @Optional()
     @Inject(MAT_DIALOG_DATA)
@@ -102,7 +102,7 @@ export class EditProfileFormComponent implements OnInit {
       this.userService.update(this.user).subscribe({
         next: (updatedUser) => {
           if (this.mode === 'create') {
-            this.state.go('home');
+            this.router.navigateByUrl('/home');
           } else {
             this.user = updatedUser;
             this.initialFirstName = this.user.firstName;

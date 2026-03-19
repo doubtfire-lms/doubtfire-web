@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Router} from '@angular/router';
 import {MatSelectionList} from '@angular/material/list';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {StateService, UIRouter} from '@uirouter/core';
@@ -65,6 +66,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
     private projectService: ProjectService,
     private gradeService: GradeService,
     private state: StateService,
+    private router: Router,
     private alertService: AlertService,
     private route: UIRouter,
     private taskCommentService: TaskCommentService,
@@ -109,7 +111,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public ngAfterViewInit(): void {
     this.authService.afterAuthCall((result) => {
       if (!result) {
-        return this.state.go('sign_in');
+        return this.router.navigateByUrl('/sign_in');
       } else {
         if (this.userService.currentUser.systemRole === 'Student') {
           // Avoid prompting students for camera permissions before redirecting to unauthorised state
@@ -169,7 +171,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
           unitId: this.unitId,
         });
       } else {
-        this.route.stateService.go('home');
+        this.router.navigateByUrl('/home');
       }
     } else {
       // Close the camera view

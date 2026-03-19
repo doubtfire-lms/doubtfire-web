@@ -3,7 +3,7 @@ import {Component, Input} from '@angular/core';
 import {AsyncSubject, Observable, Subscriber, first} from 'rxjs';
 import {Project, ProjectService} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
-import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
+import {Ng2StateDeclaration} from '@uirouter/angular';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class ProjectRootStateComponent {
   @Input() public project$: Observable<Project>;
 }
 
-export const ProjectRootState: NgHybridStateDeclaration = {
+export const ProjectRootState: Ng2StateDeclaration = {
   name: 'projects2',
   url: '/projects2/:projectId',
   abstract: true,

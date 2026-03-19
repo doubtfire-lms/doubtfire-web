@@ -1,6 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {StateService, UIRouter, UIRouterGlobals} from '@uirouter/angular';
+import {Router} from '@angular/router';
+import {UIRouterGlobals} from '@uirouter/angular';
 import {AsyncSubject, catchError, map, Observable, throwError} from 'rxjs';
 import {User, UserService} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
@@ -44,9 +45,8 @@ export class AuthenticationService {
     private httpClient: HttpClient,
     private userService: UserService,
     private alertService: AlertService,
-    private state: StateService,
+    private angularRouter: Router,
     private doubtfireConstants: DoubtfireConstants,
-    private router: UIRouter,
     private uiRouterGlobals: UIRouterGlobals,
   ) {
     this.AUTH_URL = `${this.doubtfireConstants.API_URL}/auth`;
@@ -274,7 +274,7 @@ export class AuthenticationService {
       if (ssoSignOut && this.doubtfireConstants.SignoutURL) {
         window.location.assign(this.doubtfireConstants.SignoutURL);
       } else {
-        this.state.go('sign_in');
+        this.angularRouter.navigateByUrl('/sign_in');
       }
     };
 
@@ -290,9 +290,9 @@ export class AuthenticationService {
   }
 
   public timeoutAuthentication(): void {
-    if (this.uiRouterGlobals.current.name !== 'timeout') {
+    if (this.uiRouterGlobals.current.name !== 'timeout' && window.location.pathname !== '/timeout') {
       this.alertService.error('Authentication timed out', 6000);
-      setTimeout(() => this.router.stateService.go('timeout'), 500);
+      setTimeout(() => this.angularRouter.navigateByUrl('/timeout'), 500);
     }
   }
 

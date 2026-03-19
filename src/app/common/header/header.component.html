@@ -11,9 +11,8 @@
         </a>
       }
 
-      <a uiSref="home" class="pt-4">
+      <a routerLink="/home" class="pt-4">
         <mat-icon
-          uiSref="home"
           style="margin-right: 20px; margin-left: 20px"
           svgIcon="formatif-logo"
           class="formatif-icon"
@@ -93,7 +92,7 @@
       <user-icon [size]="32" [user]="currentUser"></user-icon>
     </button>
     <mat-menu #menu2="matMenu">
-      <button mat-menu-item uiSref="edit_profile">
+      <button mat-menu-item routerLink="/edit_profile">
         <mat-icon matListItemIcon aria-label="Edit profile">person</mat-icon>
         My Profile
       </button>

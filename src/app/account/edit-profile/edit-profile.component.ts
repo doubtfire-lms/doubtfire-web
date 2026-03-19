@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {StateService} from '@uirouter/core';
+import {Router} from '@angular/router';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 
 @Component({
@@ -12,14 +12,14 @@ export class EditProfileComponent implements OnInit {
 
   constructor(
     private authenticationService: AuthenticationService,
-    private state: StateService,
+    private router: Router,
   ) {}
 
   public ngOnInit(): void {
     this.loading = true;
     this.authenticationService.afterAuthCall((result) => {
       if (!result) {
-        return this.state.go('sign_in');
+        return this.router.navigateByUrl('/sign_in');
       }
       this.loading = false;
     });

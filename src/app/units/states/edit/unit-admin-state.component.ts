@@ -5,7 +5,7 @@ import {StateService} from '@uirouter/core';
 import {Observable, Subscription, first} from 'rxjs';
 import {Unit, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
-import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
+import {Ng2StateDeclaration} from '@uirouter/angular';
 
 type UnitAdminTabKey =
   | 'details'
@@ -140,7 +140,7 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   }
 }
 
-export const UnitAdminState: NgHybridStateDeclaration = {
+export const UnitAdminState: Ng2StateDeclaration = {
   name: 'units/admin',
   parent: 'unit-root-state',
   url: '/admin/:tab',

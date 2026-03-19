@@ -3,7 +3,7 @@ import {Component, Input} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
 import {StateService} from '@uirouter/core';
-import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
+import {Ng2StateDeclaration} from '@uirouter/angular';
 
 @Component({
   selector: 'f-task-viewer-state',
@@ -37,7 +37,7 @@ export class TaskViewerStateComponent {
   }
 }
 
-export const TaskViewerState: NgHybridStateDeclaration = {
+export const TaskViewerState: Ng2StateDeclaration = {
   name: 'units2/tasks',
   url: '/tasks/:taskAbbreviation?',
   params: {

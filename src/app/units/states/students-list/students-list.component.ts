@@ -2,7 +2,7 @@ import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/co
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
+import {Ng2StateDeclaration} from '@uirouter/angular';
 import {StateService} from '@uirouter/core';
 import {Observable, Subscription, first} from 'rxjs';
 import {
@@ -266,7 +266,7 @@ export class StudentsListComponent implements AfterViewInit, OnDestroy {
   }
 }
 
-export const StudentsListState: NgHybridStateDeclaration = {
+export const StudentsListState: Ng2StateDeclaration = {
   name: 'units/students/list',
   parent: 'unit-root-state',
   url: '/students',

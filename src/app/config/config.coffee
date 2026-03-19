@@ -6,6 +6,6 @@
 # them
 #
 angular.module('doubtfire.config', [
-  'ui.router'
-  'ui.router.upgrade'
+  # 'ui.router'
+  # 'ui.router.upgrade'
 ])
