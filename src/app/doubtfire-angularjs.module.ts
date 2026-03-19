@@ -27,9 +27,6 @@ import 'ng-file-upload/dist/ng-file-upload-all.min.js';
 // Ok... here is what we need to convert!
 
 import 'build/assets/wav-worker.js';
-import 'build/src/app/common/common.js';
-import 'build/src/app/common/services/listener-service.js';
-import 'build/src/app/common/services/services.js';
 import 'build/src/app/config/config.js';
 import 'build/src/app/config/root-controller/root-controller.js';
 import 'build/src/app/config/routing/routing.js';

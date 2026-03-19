@@ -213,11 +213,11 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee
 - [x] ./src/app/projects/states/index/index.coffee
 - [x] ./src/app/projects/states/states.coffee
+- [ ] ./src/app/common/services/listener-service.coffee
 
 ### TODO:
 
 - [ ] ./src/app/common/common.coffee
-- [ ] ./src/app/common/services/listener-service.coffee
 - [ ] ./src/app/common/services/media-service.coffee
 - [ ] ./src/app/common/services/services.coffee
 - [ ] ./src/app/config/config.coffee
