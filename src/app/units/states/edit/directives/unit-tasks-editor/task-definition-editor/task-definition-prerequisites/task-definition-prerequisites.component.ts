@@ -152,7 +152,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
       // Higher target grades can not be a prerequisite
       .filter((td) => td.targetGrade <= this.taskDefinition.targetGrade)
       // Tasks with a later due date can not be a prerequisite
-      .filter((td) => td.targetDate <= this.taskDefinition.targetDate)
+      // .filter((td) => td.targetDate <= this.taskDefinition.targetDate)
       // Search filter
       .filter(
         (td) =>

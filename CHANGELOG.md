@@ -2,6 +2,145 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-21](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-20...v10.0.1-21) (2026-03-13)
+
+### [10.0.1-20](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-19...v10.0.1-20) (2026-03-13)
+
+### [10.0.1-19](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-18...v10.0.1-19) (2026-03-13)
+
+
+### Features
+
+* view submission history + zip file editor ([#1104](https://github.com/b0ink/doubtfire-deploy/issues/1104)) ([d706f09](https://github.com/b0ink/doubtfire-deploy/commit/d706f0918285a2c6d69c6240a93b41e88506f771))
+
+### [10.0.1-18](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-17...v10.0.1-18) (2026-03-11)
+
+
+### Bug Fixes
+
+* convert emojis in submission comment to string with colons ([#1105](https://github.com/b0ink/doubtfire-deploy/issues/1105)) ([7c508cb](https://github.com/b0ink/doubtfire-deploy/commit/7c508cba8695fcd7b6df4aaa53a70066ecb137f3))
+* dont subtract tutor note count for reading your own notes ([8fe6171](https://github.com/b0ink/doubtfire-deploy/commit/8fe61718c0e263fa965b861763337af27c175b36))
+
+### [10.0.1-17](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-16...v10.0.1-17) (2026-03-06)
+
+
+### Bug Fixes
+
+* empty prompts layout ([c77325a](https://github.com/b0ink/doubtfire-deploy/commit/c77325a2992d0b326bdeb27cd00a955aaa19811c))
+
+### [10.0.1-16](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-15...v10.0.1-16) (2026-03-04)
+
+### [10.0.1-15](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-14...v10.0.1-15) (2026-03-04)
+
+### [10.0.1-14](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-13...v10.0.1-14) (2026-03-03)
+
+
+### Features
+
+* view tutor notes from unit staff editor ([011980d](https://github.com/b0ink/doubtfire-deploy/commit/011980ddebb4caddaebb380aae4825930c077122))
+
+### [10.0.1-13](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-12...v10.0.1-13) (2026-03-02)
+
+
+### Features
+
+* add snooze moderation action ([#1096](https://github.com/b0ink/doubtfire-deploy/issues/1096)) ([bdcefda](https://github.com/b0ink/doubtfire-deploy/commit/bdcefda81e4acdef56ebe9f228632f26a904287c))
+
+### [10.0.1-12](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-11...v10.0.1-12) (2026-03-02)
+
+### [10.0.1-11](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-10...v10.0.1-11) (2026-02-28)
+
+
+### Bug Fixes
+
+* ensure deadline is returned ([6629a5f](https://github.com/b0ink/doubtfire-deploy/commit/6629a5f4b9834009dabf19a60a36c1289126034d))
+
+### [10.0.1-10](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-9...v10.0.1-10) (2026-02-26)
+
+
+### Features
+
+* display available storage for docker images ([#1092](https://github.com/b0ink/doubtfire-deploy/issues/1092)) ([81ebd34](https://github.com/b0ink/doubtfire-deploy/commit/81ebd3488d20a1e057c24b37190f4eea99bad9ec))
+
+### [10.0.1-9](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-8...v10.0.1-9) (2026-02-25)
+
+
+### Bug Fixes
+
+* typo ([4ecfe27](https://github.com/b0ink/doubtfire-deploy/commit/4ecfe27c91104c746ac8a4f9059030d5475776bb))
+
+### [10.0.1-8](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-7...v10.0.1-8) (2026-02-25)
+
+
+### Features
+
+* overflow marking ([#1086](https://github.com/b0ink/doubtfire-deploy/issues/1086)) ([e047988](https://github.com/b0ink/doubtfire-deploy/commit/e047988c4fff787852d1cc5a041cb48e11ee57f8))
+
+### [10.0.1-7](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-6...v10.0.1-7) (2026-02-25)
+
+
+### Bug Fixes
+
+* ensure timestamp is normalised to start of day ([671c391](https://github.com/b0ink/doubtfire-deploy/commit/671c3916797dc5ab680b9dac52ae68626e49d351))
+
+### [10.0.1-6](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-5...v10.0.1-6) (2026-02-24)
+
+### [10.0.1-5](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-4...v10.0.1-5) (2026-02-24)
+
+
+### Features
+
+* per grade start dates ([#1090](https://github.com/b0ink/doubtfire-deploy/issues/1090)) ([a35019a](https://github.com/b0ink/doubtfire-deploy/commit/a35019aa4011fce7808da8cc1481fae7635aac69))
+
+### [10.0.1-4](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-3...v10.0.1-4) (2026-02-23)
+
+
+### Features
+
+* allow custom target dates per target grade ([#1089](https://github.com/b0ink/doubtfire-deploy/issues/1089)) ([79b5af6](https://github.com/b0ink/doubtfire-deploy/commit/79b5af6bf05419e05dbef69e6ef1f72bfc85097c))
+
+### [10.0.1-3](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-2...v10.0.1-3) (2026-02-21)
+
+### [10.0.1-2](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-1...v10.0.1-2) (2026-02-19)
+
+
+### Bug Fixes
+
+* set min width for mentor dropdown ([75cc1b3](https://github.com/b0ink/doubtfire-deploy/commit/75cc1b3569d17cd54e71f86874addb4bc34d566f))
+
+### [10.0.1-1](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-0...v10.0.1-1) (2026-02-18)
+
+
+### Features
+
+* tutor notes + mentorship + moderation + escalation ([#1068](https://github.com/b0ink/doubtfire-deploy/issues/1068)) ([48f4db7](https://github.com/b0ink/doubtfire-deploy/commit/48f4db730f06e349f5e3c791f1972d23b0f8573f))
+
+
+### Bug Fixes
+
+* ensure tutor notes view extends full height ([c872ed7](https://github.com/b0ink/doubtfire-deploy/commit/c872ed766bf493456da56e33dcda48a90ed3f6ce))
+
+### [10.0.1-0](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0...v10.0.1-0) (2026-02-17)
+
+## [10.0.0](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-73...v10.0.0) (2026-02-12)
+
+## [10.0.0-73](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-72...v10.0.0-73) (2026-02-12)
+
+## [10.0.0-72](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-71...v10.0.0-72) (2026-02-12)
+
+
+### Bug Fixes
+
+* null safe user access ([f6aeecc](https://github.com/b0ink/doubtfire-deploy/commit/f6aeecc6c2c79909ca859422e7d9b3bc65ef6456))
+
+## [10.0.0-71](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-70...v10.0.0-71) (2026-02-11)
+
+
+### Features
+
+* download staff notes csv ([#1062](https://github.com/b0ink/doubtfire-deploy/issues/1062)) ([6dcfe95](https://github.com/b0ink/doubtfire-deploy/commit/6dcfe952f0415fb1327b738137f817a0fcfa0488))
+* migrate to jplag report viewer v6.3.0 ([#1082](https://github.com/b0ink/doubtfire-deploy/issues/1082)) ([697588b](https://github.com/b0ink/doubtfire-deploy/commit/697588b98e28ec663f4982c49f18fe8109ba7c34))
+
 ## [10.0.0-70](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.0-69...v10.0.0-70) (2026-01-05)
 
 

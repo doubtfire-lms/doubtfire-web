@@ -12,9 +12,12 @@
       <mat-expansion-panel-header class="flex justify-between items-center">
         <mat-panel-title class="flex items-center gap-5">
           <status-icon [status]="oa.taskStatus"> </status-icon>
-          Submission {{ idx + 1 }}: {{ oa.timestamp | humanizedDate }}
+          Submission {{ overseerAssessments.length - idx }}: {{ oa.timestamp | humanizedDate }}
           @if (idx === 0) {
             <span class="text-gray-500">(Most recent)</span>
+          }
+          @if (isComparisonSource(oa)) {
+            <span class="text-blue-600">(Selected for comparison)</span>
           }
         </mat-panel-title>
         @if (oa.reportReady) {
@@ -24,6 +27,43 @@
               <mat-icon color="primary">done</mat-icon>
             } @else {
               <mat-icon color="warn">cancel</mat-icon>
+            }
+            @if (oa.hasSubmissionFiles && currentUnitRole) {
+              <button
+                mat-icon-button
+                aria-label="Submission options"
+                [matMenuTriggerFor]="menu"
+                #submissionMenuTrigger="matMenuTrigger"
+                (click)="viewSubmissionOptions($event)"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <div fxFlex></div>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="viewSubmissionFiles(oa, $event)">
+                  <mat-icon>folder_zip</mat-icon>
+                  View Submission Files
+                </button>
+                @if (hasComparisonSourceFor(oa)) {
+                  <button mat-menu-item (click)="compareWithSelected(oa, $event)">
+                    <mat-icon>compare_arrows</mat-icon>
+                    Compare With Selected
+                  </button>
+                } @else if (isComparisonSource(oa)) {
+                  <button mat-menu-item (click)="clearComparisonSource($event)">
+                    <mat-icon>close</mat-icon>
+                    Clear Compare Selection
+                  </button>
+                } @else {
+                  <button
+                    mat-menu-item
+                    (click)="selectComparisonSource(oa, $event, submissionMenuTrigger)"
+                  >
+                    <mat-icon>task_alt</mat-icon>
+                    Select For Comparison
+                  </button>
+                }
+              </mat-menu>
             }
           </div>
         } @else {

@@ -73,7 +73,11 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
       this._pdfUrl = value;
       this.loaded = false;
       this.pdfHasRendered = false;
-      this.downloadBlob(value);
+      if (value?.startsWith('blob:')) {
+        this.pdfBlobUrl = value;
+      } else {
+        this.downloadBlob(value);
+      }
     }
   }
 

@@ -17,6 +17,8 @@ export class OverseerStep extends Entity {
   displayDescription: string;
 
   runCommand: string;
+  decodedRunCommand: string;
+
   commandLanguage: string;
   timeout: number;
   sortOrder: number;

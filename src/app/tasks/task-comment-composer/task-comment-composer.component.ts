@@ -529,7 +529,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       },
       error: (error: ApiError) => {
         this.isSending = false;
-        this.alerts.error(error.error || error.message || 'Failed to add comment', 2000);
+        this.alerts.error(error.error || error.message || `Failed to add comment: ${error}`, 6000);
       },
     });
   }

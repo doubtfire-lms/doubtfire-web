@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { UIRouter } from '@uirouter/core';
-import { Project, Unit, UnitRole } from 'src/app/api/models/doubtfire-model';
-import { ViewType } from 'src/app/projects/states/index/global-state.service';
+import {Component, Input} from '@angular/core';
+import {UIRouter} from '@uirouter/core';
+import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
+import {ViewType} from 'src/app/projects/states/index/global-state.service';
+import {TutorNotesModalService} from '../../modals/tutor-notes-modal/tutor-notes-modal.service';
 
 @Component({
   selector: 'task-dropdown',
@@ -24,6 +25,8 @@ export class TaskDropdownComponent {
     'Student List': 'Students',
     'Student Portfolios': 'Portfolios',
     'Task Explorer': 'Task Explorer',
+    'Task Moderation': 'Task Moderation',
+    'Task Overflow': 'Task Overflow',
     'Task Inbox': 'Inbox',
     'Task Lists': 'Tasks',
     'Tutorial List': 'Tutorials',
@@ -32,12 +35,29 @@ export class TaskDropdownComponent {
     'Staff Grant Extension': 'Extension',
   };
 
-  taskDropdownData: { title: string; target: string; visible: any }[];
-  constructor(private router: UIRouter) {
-    this.router.transitionService.onSuccess({ to: '**' }, (trans) => {
+  taskDropdownData: {title: string; target: string; visible: any}[];
+  constructor(
+    private router: UIRouter,
+    private tutorNotesModal: TutorNotesModalService,
+  ) {
+    this.router.transitionService.onSuccess({to: '**'}, (trans) => {
       this.currentActivity = trans.to().data.task;
       this.menuText = this.taskToShortName?.[this.currentActivity] ?? this.currentActivity;
     });
   }
 
+  public get canMarkOverflowTask() {
+    // this.unitRole does not have permission-based fields exposed such as canMarkOverflowTasks
+    // so we must access them via the unit data
+    const staff = this.currentUnit.staff.find((ur) => ur.id === this.unitRole.id);
+    return staff?.canMarkOverflowTasks;
+  }
+
+  public get isMentor(): boolean {
+    return this.currentUnit.staff.some((ur) => ur.mentorId === this.unitRole.id);
+  }
+
+  openTutorNotes() {
+    this.tutorNotesModal.show(null, this.unitRole);
+  }
 }

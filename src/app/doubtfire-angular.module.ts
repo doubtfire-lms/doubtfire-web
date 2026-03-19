@@ -36,7 +36,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatChipsModule} from '@angular/material/chips';
+import {MatChipListbox, MatChipsModule} from '@angular/material/chips';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
 import {UIRouterUpgradeModule} from '@uirouter/angular-hybrid';
@@ -218,6 +218,7 @@ import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teach
 import {FChipComponent} from './common/f-chip/f-chip.component';
 import {TaskSimilarityViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
 import {FileViewerComponent} from './common/file-viewer/file-viewer.component';
+import {ArchiveViewerComponent} from './common/archive-viewer/archive-viewer.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
 import {TaskDefinitionGeneralComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-general/task-definition-general.component';
 import {TaskDefinitionWhoComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
@@ -306,13 +307,23 @@ import {DiscussionPromptService} from './api/services/discussion-prompt.service'
 import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
 import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
 import {DiscussionPromptsViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/discussion-prompts-view/discussion-prompts-view.component';
+import {DownloadStaffNotesComponent} from './units/states/portfolios/download-staff-notes/download-staff-notes.component';
 import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-planner.component';
 import {TaskPlannerPrerequisitesModalComponent} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.component';
 import {TaskPlannerPrerequisitesModalService} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
 import {OverseerStepService} from './api/services/overseer-step.service';
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
+import {SubmissionFilesModalComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/submission-files-modal/submission-files-modal.component';
 import {OverseerStepResultService} from './api/services/overseer-step-result.service';
+import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
+import {TutorNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/tutor-notes-view/tutor-notes-view.component';
+import {TutorNoteService} from './api/services/tutor-note.service';
+import {ModerationComponent} from './units/states/tasks/inbox/directives/moderation/moderation.component';
+import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-notes-modal.component';
+import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
+import {ConfirmModerationModalComponent} from './units/states/tasks/inbox/directives/moderation/confirm-moderation-modal/confirm-moderation-modal.component';
+import {TaskClaimComponent} from './units/states/tasks/inbox/directives/task-claim/task-claim.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -458,6 +469,7 @@ const GANTT_CHART_CONFIG = {
     UnitCodeComponent,
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
+    ArchiveViewerComponent,
     AlertComponent,
     FUnitTaskListComponent,
     FTaskDetailsViewComponent,
@@ -507,9 +519,18 @@ const GANTT_CHART_CONFIG = {
     TaskDefinitionDiscussionPromptsComponent,
     DiscussionPromptsViewComponent,
     TaskPlannerComponent,
+    DownloadStaffNotesComponent,
     TaskPlannerCardComponent,
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
+    SubmissionFilesModalComponent,
+    TutorNotesComponent,
+    TutorNotesViewComponent,
+    ModerationComponent,
+    TutorNotesModalComponent,
+    FeedbackAppealModalComponent,
+    ConfirmModerationModalComponent,
+    TaskClaimComponent,
   ],
   providers: [
     // Services we provide
@@ -605,6 +626,7 @@ const GANTT_CHART_CONFIG = {
     TaskPlannerPrerequisitesModalService,
     OverseerStepService,
     OverseerStepResultService,
+    TutorNoteService,
   ],
   imports: [
     FlexLayoutModule,
@@ -669,9 +691,11 @@ const GANTT_CHART_CONFIG = {
     MatDialogModuleNew,
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
     CodeEditorModule.forRoot(),
+    MatSidenavModule,
     NgxGanttModule,
     MatSidenavModule,
     MonacoEditorModule.forRoot(),
+    MatChipListbox,
   ],
 })
 

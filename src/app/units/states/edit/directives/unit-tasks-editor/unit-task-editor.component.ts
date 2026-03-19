@@ -1,15 +1,20 @@
-import { AfterViewInit, Component, Inject, Input, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
-import { confirmationModal, csvResultModalService, csvUploadModalService } from 'src/app/ajs-upgraded-providers';
-import { TaskDefinition } from 'src/app/api/models/task-definition';
-import { Unit } from 'src/app/api/models/unit';
-import { TaskDefinitionService } from 'src/app/api/services/task-definition.service';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { addWeeks } from 'date-fns';
-import { FeedbackTemplateService } from 'src/app/api/services/feedback-template.service';
+import {AfterViewInit, Component, Inject, Input} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {addWeeks} from 'date-fns';
+import {Subscription} from 'rxjs';
+import {
+  confirmationModal,
+  csvResultModalService,
+  csvUploadModalService,
+} from 'src/app/ajs-upgraded-providers';
+import {Grade} from 'src/app/api/models/grade';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Unit} from 'src/app/api/models/unit';
+import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
+import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+
+type GradeCol = 'p' | 'c' | 'd' | 'hd';
 
 @Component({
   selector: 'f-unit-task-editor',
@@ -17,16 +22,118 @@ import { FeedbackTemplateService } from 'src/app/api/services/feedback-template.
   styleUrls: ['unit-task-editor.component.scss'],
 })
 export class UnitTaskEditorComponent implements AfterViewInit {
-  @ViewChild(MatTable, { static: false }) table: MatTable<TaskDefinition>;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-
   @Input() unit: Unit;
 
   public taskDefinitionSource: MatTableDataSource<TaskDefinition>;
-  public columns: string[] = ['name', 'grade', 'startDate', 'targetDate', 'deadlineDate', 'taskDefAction'];
   public filter: string;
   public selectedTaskDefinition: TaskDefinition;
+  public isTaskListCollapsed: boolean = false;
+
+  public gradeColumns: string[] = ['p', 'c', 'd', 'hd'];
+  public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
+  public dueDateSource: MatTableDataSource<TaskDefinition>;
+
+  public manageDueDates: boolean;
+
+  protected gradeNames: string[] = Grade.GRADES;
+
+  isStartAfterTarget(td: TaskDefinition, g: GradeCol): boolean {
+    const start = this.getGradeStartDate(td, g);
+    const target = this.getGradeDueDate(td, g);
+    if (!start || !target) return false;
+    return new Date(start).getTime() > new Date(target).getTime();
+  }
+
+  getGradeStartDate(td: TaskDefinition, g: GradeCol): Date | null {
+    switch (g) {
+      case 'p':
+        return td.startDate ?? td.startDate; // fallback to existing startDate
+      case 'c':
+        return td.cStartDate ?? td.startDate;
+      case 'd':
+        return td.dStartDate ?? td.startDate;
+      case 'hd':
+        return td.hdStartDate ?? td.startDate;
+    }
+  }
+
+  isFallbackStartDate(td: TaskDefinition, g: GradeCol): boolean {
+    switch (g) {
+      case 'p':
+        return false; // P is always real
+      case 'c':
+        return !td.cStartDate;
+      case 'd':
+        return !td.dStartDate;
+      case 'hd':
+        return !td.hdStartDate;
+    }
+  }
+
+  setGradeStartDate(td: TaskDefinition, g: GradeCol, value: Date | null): void {
+    switch (g) {
+      case 'p':
+        td.startDate = value;
+        break;
+      case 'c':
+        td.cStartDate = value;
+        break;
+      case 'd':
+        td.dStartDate = value;
+        break;
+      case 'hd':
+        td.hdStartDate = value;
+        break;
+    }
+
+    this.saveTaskDefinition(td);
+  }
+
+  getGradeDueDate(td: TaskDefinition, g: GradeCol): Date | null {
+    switch (g) {
+      case 'p':
+        // return td.pTargetDate ?? td.dueDate ?? null; // fallback to existing dueDate
+        return td.targetDate ?? td.targetDate; // fallback to existing targetDate
+      case 'c':
+        return td.cTargetDate ?? td.targetDate;
+      case 'd':
+        return td.dTargetDate ?? td.targetDate;
+      case 'hd':
+        return td.hdTargetDate ?? td.targetDate;
+    }
+  }
+
+  isFallbackTargetDate(td: TaskDefinition, g: GradeCol): boolean {
+    switch (g) {
+      case 'p':
+        return false; // P is always real
+      case 'c':
+        return !td.cTargetDate;
+      case 'd':
+        return !td.dTargetDate;
+      case 'hd':
+        return !td.hdTargetDate;
+    }
+  }
+
+  setGradeDueDate(td: TaskDefinition, g: GradeCol, value: Date | null): void {
+    switch (g) {
+      case 'p':
+        td.targetDate = value;
+        break;
+      case 'c':
+        td.cTargetDate = value;
+        break;
+      case 'd':
+        td.dTargetDate = value;
+        break;
+      case 'hd':
+        td.hdTargetDate = value;
+        break;
+    }
+
+    this.saveTaskDefinition(td);
+  }
 
   constructor(
     private taskDefinitionService: TaskDefinitionService,
@@ -34,24 +141,28 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     private alerts: AlertService,
     @Inject(csvResultModalService) private csvResultModalService: any,
     @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(confirmationModal) private confirmationModal: any
+    @Inject(confirmationModal) private confirmationModal: any,
   ) {}
 
   ngAfterViewInit(): void {
     this.subscriptions.push(
       this.unit.taskDefinitionCache.values.subscribe((taskDefinitions) => {
         this.taskDefinitionSource = new MatTableDataSource<TaskDefinition>(taskDefinitions);
-        this.taskDefinitionSource.paginator = this.paginator;
-        this.taskDefinitionSource.sort = this.sort;
-        this.taskDefinitionSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
-      })
+        this.taskDefinitionSource.filterPredicate = (data: any, filter: string) =>
+          data.matches(filter);
+      }),
     );
   }
 
   public saveTaskDefinition(taskDefinition: TaskDefinition) {
-    taskDefinition.save().subscribe(() => {
-      this.alerts.success('Task Saved');
-      taskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
+    taskDefinition.save().subscribe({
+      next: () => {
+        this.alerts.success('Task Saved');
+        taskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
+      },
+      error: (error) => {
+        this.alerts.error(`Failed to update task: ${error}`, 6000);
+      },
     });
   }
 
@@ -62,62 +173,37 @@ export class UnitTaskEditorComponent implements AfterViewInit {
 
   public selectTaskDefinition(taskDefinition: TaskDefinition) {
     if (this.selectedTaskDefinition === taskDefinition) {
-      this.selectedTaskDefinition = null;
-    } else {
-      this.selectedTaskDefinition = taskDefinition;
-
-      // Record original save data if none present
-      if (!this.selectedTaskDefinition.hasOriginalSaveData) {
-        this.selectedTaskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
-      }
-
-      this.feedbackTemplateService
-        .query({contextType: 'task_definitions', contextId: this.selectedTaskDefinition.id}, {})
-        .subscribe({
-          error: () => this.alerts.error('Error loading task feedback templates.'),
-        });
-    }
-  }
-
-  public sortData(sort: Sort) {
-    const data = this.taskDefinitionSource.data;
-
-    if (!sort.active || sort.direction === '') {
-      this.taskDefinitionSource.data = data;
       return;
     }
 
-    this.taskDefinitionSource.data = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name':
-          return this.compare(a.abbreviation, b.abbreviation, isAsc);
-        case 'grade':
-          return this.compare(a.targetGrade, b.targetGrade, isAsc);
-        case 'startDate':
-          return this.compare(a.startDate.getTime(), b.startDate.getTime(), isAsc);
-        case 'targetDate':
-          return this.compare(a.targetDate.getTime(), b.targetDate.getTime(), isAsc);
-        case 'deadlineDate':
-          return this.compare(a.dueDate.getTime(), b.dueDate.getTime(), isAsc);
-        default:
-          return 0;
-      }
-    });
+    this.selectedTaskDefinition = taskDefinition;
+
+    // Record original save data if none present
+    if (!this.selectedTaskDefinition.hasOriginalSaveData) {
+      this.selectedTaskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
+    }
+
+    this.feedbackTemplateService
+      .query({contextType: 'task_definitions', contextId: this.selectedTaskDefinition.id}, {})
+      .subscribe({
+        error: () => this.alerts.error('Error loading task feedback templates.'),
+      });
   }
 
-  public compare(a: number | string, b: number | string, isAsc: boolean): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  public isSelectedTaskDefinition(taskDefinition: TaskDefinition): boolean {
+    return this.selectedTaskDefinition === taskDefinition;
+  }
+
+  public toggleTaskListCollapsed(): void {
+    this.isTaskListCollapsed = !this.isTaskListCollapsed;
   }
 
   applyFilter(filterValue: string) {
+    if (!this.taskDefinitionSource) return;
+
     this.taskDefinitionSource.filter = filterValue.trim().toLowerCase();
 
     this.selectedTaskDefinition = null;
-
-    if (this.taskDefinitionSource.paginator) {
-      this.taskDefinitionSource.paginator.firstPage();
-    }
   }
 
   private guessTaskAbbreviation() {
@@ -154,7 +240,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     this.csvUploadModal.show(
       'Upload Task Definitions as CSV',
       'Test message',
-      { file: { name: 'Task Definition CSV Data', type: 'csv' } },
+      {file: {name: 'Task Definition CSV Data', type: 'csv'}},
       this.unit.getTaskDefinitionBatchUploadUrl(),
       (response: any) => {
         // at least one student?
@@ -162,7 +248,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
         if (response.success.length > 0) {
           this.unit.refresh();
         }
-      }
+      },
     );
   }
 
@@ -170,7 +256,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     this.csvUploadModal.show(
       'Upload Task Sheets and Resources as Zip',
       'Test message',
-      { file: { name: 'Task Sheets and Resources', type: 'zip' } },
+      {file: {name: 'Task Sheets and Resources', type: 'zip'}},
       this.unit.taskUploadUrl,
       (response: any) => {
         // at least one student?
@@ -178,7 +264,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
         if (response.success.length > 0) {
           this.unit.refresh();
         }
-      }
+      },
     );
   }
 

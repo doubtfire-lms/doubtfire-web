@@ -1,10 +1,12 @@
-import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
+import {UnitRole} from 'src/app/api/models/unit-role';
+import {UserService} from 'src/app/api/services/user.service';
 
 @Component({
   selector: 'f-footer',
@@ -17,10 +19,14 @@ export class FooterComponent implements OnInit {
     public taskService: TaskService,
     private fileDownloader: FileDownloaderService,
     private taskAssessmentModal: TaskAssessmentModalService,
+    private userService: UserService,
   ) {}
+
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;
+  public showModerationStatusButtons = false;
 
   @ViewChild('similaritiesButton', {static: false, read: ElementRef})
   similaritiesButton: ElementRef;
@@ -48,12 +54,38 @@ export class FooterComponent implements OnInit {
       (this.warningText?.nativeElement.getBoundingClientRect().width + totalPaddingOffset) / 2;
   }
 
+  public get canAccessTutorNotes(): boolean {
+    const tutor = this.selectedTask.tutor;
+    if (!tutor) {
+      return false;
+    }
+
+    if (!this.currentUnitRole) {
+      return false;
+    }
+
+    // Ensure the unit is mapped correctly to access the mentor
+    tutor.unit = this.selectedTask.unit;
+
+    const canAccess =
+      this.currentUnitRole.role === 'Convenor' ||
+      this.currentUnitRole.role === 'Admin' ||
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id);
+
+    return canAccess;
+  }
+
+  public viewTutorNotes() {
+    this.selectedTaskService.showTutorNotes();
+  }
+
   ngOnInit(): void {
     // watch for changes to the selected task
     this.selectedTask$ = this.selectedTaskService.selectedTask$;
 
     this.selectedTask$.subscribe((task) => {
       this.selectedTask = task;
+
       // We need to timeout to give the DOM a chance to place the elements
       setTimeout(() => {
         this.findSimilaritiesButton();
@@ -123,5 +155,40 @@ export class FooterComponent implements OnInit {
       this.selectedTask.definition.getJplagReportUrl(),
       `${this.selectedTask.definition.abbreviation}-jplag-report`,
     );
+  }
+
+  public get currentUnitRole(): UnitRole | undefined {
+    const currentUser = this.userService.currentUser;
+    return this.selectedTask.unit.staff.find((ur) => ur.user.id === currentUser.id);
+  }
+
+  public get actionButtonEnabled(): boolean {
+    if (!this.selectedTask) {
+      return false;
+    }
+
+    if (this.selectedTask.loadingSubmissionDetails) {
+      return false;
+    }
+
+    if (this.viewType === 'overflow' || this.selectedTask.claimedByUnitRoleId) {
+      if (this.currentUnitRole.id !== this.selectedTask.claimedByUnitRoleId) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  public get completeButtonEnabled(): boolean {
+    return this.actionButtonEnabled && !!this.selectedTask?.canMarkComplete;
+  }
+
+  public get hideMainActionButtonsForModeration(): boolean {
+    return this.viewType === 'moderation' && !this.showModerationStatusButtons;
+  }
+
+  public toggleModerationStatusButtons() {
+    this.showModerationStatusButtons = !this.showModerationStatusButtons;
   }
 }

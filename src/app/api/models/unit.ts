@@ -76,6 +76,9 @@ export class Unit extends Entity {
   allowStudentChangeTutorial: boolean;
   markLateSubmissionsAsAssessInPortfolio: boolean;
 
+  feedbackWarningThresholdDays: number;
+  feedbackOverflowThresholdDays: number;
+
   d2lMapping: D2lAssessmentMapping;
 
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
@@ -720,6 +723,17 @@ export class Unit extends Entity {
       tap((mappings) => {
         this.d2lMapping = mappings;
       }),
+    );
+  }
+
+  public get staffNotesCsvDownloadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/staff_notes`;
+  }
+
+  public downloadStaffNotesCsv(): void {
+    AppInjector.get(FileDownloaderService).downloadFile(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/staff_notes`,
+      `${this.name}-StaffNotes.csv`,
     );
   }
 

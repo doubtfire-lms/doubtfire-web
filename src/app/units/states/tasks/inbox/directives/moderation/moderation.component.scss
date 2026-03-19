@@ -1,0 +1,27 @@
+.center-buttons {
+  text-align: center;
+
+  .button {
+    // margin: 0 6px;
+    transform: scale(0.8);
+    border-radius: 100%;
+  }
+
+  .large-button {
+    transform: scale(1.15);
+    background-color: white;
+  }
+
+  .large-button:hover {
+    background-color: #f5f5f5;
+  }
+
+  .extra-large-button {
+    padding-top: 7px;
+    transform: scale(1.25);
+  }
+
+  .extra-large-button:hover {
+    filter: brightness(0.85);
+  }
+}

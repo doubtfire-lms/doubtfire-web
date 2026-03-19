@@ -16,12 +16,13 @@ export class SubmissionTypeModalService {
     const _dialogRef = this.dialog.open<SubmissionTypeModalComponent, SubmissionTypeModalData>(
       SubmissionTypeModalComponent,
       {
+        autoFocus: false,
         data: {
           task: task,
         },
         position: {top: '2.5%'},
         width: '100%',
-        maxWidth: '650px',
+        maxWidth: '700px',
       },
     );
   }

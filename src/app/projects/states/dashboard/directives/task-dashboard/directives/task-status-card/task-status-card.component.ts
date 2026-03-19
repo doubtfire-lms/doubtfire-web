@@ -12,6 +12,7 @@ import {MatDialog} from '@angular/material/dialog';
 // import {GrantExtensionFormComponent} from 'src/app/admin/modals/grant-extension-form/grant-extension-form.component';
 import {UserService} from 'src/app/api/services/user.service';
 import {Project} from 'src/app/api/models/project';
+import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
@@ -29,6 +30,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private submissionTypeModalService: SubmissionTypeModalService,
     private userService: UserService,
     private dialog: MatDialog,
+    private feedbackAppealService: FeedbackAppealModalService,
   ) {}
 
   @Input() task: Task;
@@ -55,7 +57,15 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   reapplyTriggers(): void {
     // if tutor is in queryParam
     if (this.router.globals.params.tutor != null) {
-      this.triggers = this.taskService.statusKeys.map((k) => this.taskService.statusData(k));
+      this.triggers = this.taskService.statusKeys
+        .map((k) => this.taskService.statusData(k))
+        .filter((trigger) => {
+          if (trigger.status !== 'complete') {
+            return true;
+          }
+
+          return this.task.canMarkComplete || this.task.status === 'complete';
+        });
     } else {
       const studentTriggers = _.map(
         this.taskService.switchableStates.student as TaskStatusEnum[],
@@ -80,6 +90,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   }
 
   triggerTransition(trigger: TaskStatusEnum): void {
+    if (trigger === 'complete' && !this.task.canMarkComplete) {
+      return;
+    }
+
     if (trigger === 'ready_for_feedback') {
       this.uploadSubmission();
     } else {
@@ -112,5 +126,9 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     this.extensions.show(this.task, () => {
       this.task.refresh();
     });
+  }
+
+  openFeedbackAppealModal(): void {
+    this.feedbackAppealService.show(this.task);
   }
 }

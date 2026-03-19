@@ -25,6 +25,16 @@
   </div>
 
   <div class="flex-grow flex flex-row gap-5 items-center">
+    <mat-checkbox class="basis-1/2" matInput [(ngModel)]="taskDefinition.requiresDiscussion">
+      Requires Discussion
+    </mat-checkbox>
+    <span class="basis-1/2">
+      Tutors cannot mark this task as complete unless it has first been marked as discussed in
+      class.
+    </span>
+  </div>
+
+  <div class="flex-grow flex flex-row gap-5 items-center">
     <mat-checkbox class="basis-1/2" matInput [(ngModel)]="taskDefinition.isGraded"
       >Graded</mat-checkbox
     >
