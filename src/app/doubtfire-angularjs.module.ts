@@ -9,36 +9,14 @@ import {downgradeComponent, downgradeInjectable} from '@angular/upgrade/static';
 import * as angular from 'angular';
 
 // Here are the old angular node modules, previously loaded via grunt
+
 //#region
-import 'angular-filter/dist/angular-filter.js';
-import 'angular-markdown-filter/markdown.js';
-import 'angular-md5/angular-md5.js';
-import 'angular-nvd3/dist/angular-nvd3.js';
-import 'angular-resource/angular-resource.js';
-import 'angular-sanitize/angular-sanitize.js';
-import 'angular-ui-bootstrap/ui-bootstrap-tpls.js';
-import 'angular-ui-codemirror/src/ui-codemirror.js';
-import 'angular-xeditable/dist/js/xeditable.js';
-import 'angulartics-google-analytics/lib/angulartics-google-analytics.js';
-import 'angulartics/dist/angulartics.min.js';
-import 'ng-csv/build/ng-csv.js';
-import 'ng-file-upload/dist/ng-file-upload-all.min.js';
 
 // Ok... here is what we need to convert!
 
 import 'build/assets/wav-worker.js';
 import 'build/src/app/config/config.js';
-import 'build/src/app/config/root-controller/root-controller.js';
-import 'build/src/app/config/routing/routing.js';
-import 'build/src/app/config/runtime/runtime.js';
-import 'build/src/app/config/vendor-dependencies/vendor-dependencies.js';
-import 'build/src/common/i18n/localize.js';
-import 'build/src/common/utilService/utilService.js';
-import 'build/src/i18n/resources-locale_default.js';
-import 'build/src/i18n/resources-locale_en-AU.js';
-import 'build/src/i18n/resources-locale_en-GB.js';
-import 'build/src/i18n/resources-locale_en-US.js';
-import 'build/templates-app.js';
+
 //#endregion
 
 import {AboutDoubtfireModal} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
