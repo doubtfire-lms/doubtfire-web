@@ -35,10 +35,6 @@ import 'build/src/app/config/root-controller/root-controller.js';
 import 'build/src/app/config/routing/routing.js';
 import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/vendor-dependencies/vendor-dependencies.js';
-import 'build/src/app/units/states/index/index.js';
-import 'build/src/app/units/states/states.js';
-// import 'build/src/app/units/states/tasks/viewer/viewer.js';
-import 'build/src/app/units/units.js';
 import 'build/src/app/visualisations/summary-task-status-scatter.js';
 import 'build/src/app/visualisations/target-grade-pie-chart.js';
 import 'build/src/app/visualisations/task-completion-box-plot.js';
@@ -189,12 +185,7 @@ import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-g
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 
 export const DoubtfireAngularJSModule = angular
-  .module('doubtfire', [
-    'doubtfire.config',
-    'doubtfire.common',
-    'doubtfire.units',
-    'doubtfire.visualisations',
-  ])
+  .module('doubtfire', ['doubtfire.config', 'doubtfire.common', 'doubtfire.visualisations'])
   .config([
     '$locationProvider',
     ($locationProvider) => {
