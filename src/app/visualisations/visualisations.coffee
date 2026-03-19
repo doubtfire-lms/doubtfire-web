@@ -1,3 +1,6 @@
+# Component is no longer used and is unlinked from the app
+# This file is left for reference, as these need to be migrated to be used in the Unit Analytics section
+
 angular.module('doubtfire.visualisations', [
   'doubtfire.visualisations.summary-task-status-scatter'
   'doubtfire.visualisations.task-status-pie-chart'

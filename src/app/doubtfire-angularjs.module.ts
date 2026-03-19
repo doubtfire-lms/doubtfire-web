@@ -32,11 +32,6 @@ import 'build/src/app/config/root-controller/root-controller.js';
 import 'build/src/app/config/routing/routing.js';
 import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/vendor-dependencies/vendor-dependencies.js';
-import 'build/src/app/visualisations/summary-task-status-scatter.js';
-import 'build/src/app/visualisations/target-grade-pie-chart.js';
-import 'build/src/app/visualisations/task-completion-box-plot.js';
-import 'build/src/app/visualisations/task-status-pie-chart.js';
-import 'build/src/app/visualisations/visualisations.js';
 import 'build/src/common/i18n/localize.js';
 import 'build/src/common/utilService/utilService.js';
 import 'build/src/i18n/resources-locale_default.js';
@@ -181,14 +176,12 @@ import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directi
 import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 
-export const DoubtfireAngularJSModule = angular
-  .module('doubtfire', ['doubtfire.config', 'doubtfire.common', 'doubtfire.visualisations'])
-  .config([
-    '$locationProvider',
-    ($locationProvider) => {
-      $locationProvider.html5Mode(true);
-    },
-  ]);
+export const DoubtfireAngularJSModule = angular.module('doubtfire', ['doubtfire.config']).config([
+  '$locationProvider',
+  ($locationProvider) => {
+    $locationProvider.html5Mode(true);
+  },
+]);
 
 // Downgrade angular modules that we need...
 // factory -> service
