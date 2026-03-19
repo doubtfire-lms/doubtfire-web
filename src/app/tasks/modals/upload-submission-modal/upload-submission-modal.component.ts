@@ -1,7 +1,5 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import * as angular from 'angular';
-import {rootScope} from 'src/app/ajs-upgraded-providers';
 import {MemberContribution} from 'src/app/api/models/groups/group';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
@@ -104,7 +102,6 @@ export class UploadSubmissionModalComponent implements OnInit {
     private privacyPolicyService: PrivacyPolicy,
     private alertService: AlertService,
     private emojiService: EmojiService,
-    @Inject(rootScope) private $rootScope: angular.IRootScopeService,
   ) {}
 
   ngOnInit(): void {
@@ -287,7 +284,6 @@ export class UploadSubmissionModalComponent implements OnInit {
 
     const response = this.uploadResponse;
     this.dialogRef.close({value: this.task});
-    this.$rootScope.$broadcast('TaskSubmissionUploadComplete', this.task);
 
     window.setTimeout(() => {
       if (this.data.isTestSubmission) {

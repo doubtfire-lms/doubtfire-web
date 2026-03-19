@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { GradeIconComponent } from './grade-icon.component';
-import { gradeService } from 'src/app/ajs-upgraded-providers';
+import { GradeService } from 'src/app/common/services/grade.service';
 
 describe('GradeIconComponent', () => {
   let component: GradeIconComponent;
@@ -29,7 +29,7 @@ describe('GradeIconComponent', () => {
 
       TestBed.configureTestingModule({
         declarations: [GradeIconComponent],
-        providers: [{ provide: gradeService, useValue: gradeServiceStub }],
+        providers: [{ provide: GradeService, useValue: gradeServiceStub }],
       }).compileComponents();
     })
   );

@@ -1,5 +1,4 @@
-import {Component, Input, Inject} from '@angular/core';
-import {confirmationModal} from 'src/app/ajs-upgraded-providers';
+import {Component, Input} from '@angular/core';
 import {
   Task,
   ScormComment,
@@ -7,6 +6,7 @@ import {
   UserService,
   TestAttemptService,
 } from 'src/app/api/models/doubtfire-model';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
   selector: 'f-scorm-comment',
@@ -22,7 +22,7 @@ export class ScormCommentComponent {
   constructor(
     private userService: UserService,
     private testAttemptService: TestAttemptService,
-    @Inject(confirmationModal) private confirmationModal: any,
+    private confirmationModal: ConfirmationModalService,
   ) {
     this.user = this.userService.currentUser;
   }

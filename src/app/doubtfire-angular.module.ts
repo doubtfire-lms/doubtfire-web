@@ -64,19 +64,6 @@ import {
   DiscussionComposerDialog,
   TaskCommentComposerComponent,
 } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
-import {
-  aboutDoubtfireModalProvider,
-  AudioRecorderProvider,
-  calendarModalProvider,
-  commentsModalProvider,
-  ConfirmationModalProvider,
-  dateServiceProvider,
-  gradeTaskModalProvider,
-  plagiarismReportModalProvider,
-  rootScopeProvider,
-  UnitStudentEnrolmentModalProvider,
-  visualisationsProvider,
-} from './ajs-upgraded-providers';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
 import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-tasks-list.component';
 import {
@@ -648,21 +635,11 @@ const GANTT_CHART_CONFIG = {
     FileDownloaderService,
     CheckForUpdateService,
     TaskOutcomeAlignmentService,
-    visualisationsProvider,
-    commentsModalProvider,
-    rootScopeProvider,
-    calendarModalProvider,
-    aboutDoubtfireModalProvider,
-    gradeTaskModalProvider,
-    dateServiceProvider,
+    // rootScopeProvider,
     {provide: MAT_DATE_LOCALE, useValue: enAU},
     {provide: DateAdapter, useClass: DateFnsAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT},
-    UnitStudentEnrolmentModalProvider,
     TaskCommentService,
-    AudioRecorderProvider,
-    plagiarismReportModalProvider,
-    ConfirmationModalProvider,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpAuthenticationInterceptor,

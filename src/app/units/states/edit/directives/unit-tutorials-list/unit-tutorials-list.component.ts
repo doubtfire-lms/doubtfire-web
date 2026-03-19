@@ -1,5 +1,4 @@
-import { Component, Input, Inject, ViewChild, AfterViewInit } from '@angular/core';
-import { confirmationModal } from 'src/app/ajs-upgraded-providers';
+import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import {
@@ -16,6 +15,7 @@ import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.comp
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { RequestOptions } from 'ngx-entity-service';
 import { AlertService } from 'src/app/common/services/alert.service';
+import { ConfirmationModalService } from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
   selector: 'df-unit-tutorials-list',
@@ -46,7 +46,7 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     private tutorialService: TutorialService,
     private tutorialStreamService: TutorialStreamService,
     private campusService: CampusService,
-    @Inject(confirmationModal) private confirmationModal: any,
+    private confirmationModal: ConfirmationModalService,
     private alerts: AlertService,
   ) {
     super(

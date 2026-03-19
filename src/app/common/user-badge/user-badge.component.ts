@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { UIRouter } from '@uirouter/angular';
-import { Task } from 'src/app/api/models/doubtfire-model';
+import {Component, Input} from '@angular/core';
+import {UIRouter} from '@uirouter/angular';
+import {Task} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-user-badge',
@@ -20,7 +20,7 @@ export class UserBadgeComponent {
   }
 
   goToStudent(): void {
-    this.router.stateService.go('projects/dashboard', {
+    this.router.stateService.go('projects2/dashboard2', {
       projectId: this.selectedTask.project.id,
       tutor: true,
       taskAbbr: '',
@@ -28,7 +28,7 @@ export class UserBadgeComponent {
   }
 
   goToStudentTask(): void {
-    this.router.stateService.go('projects/dashboard', {
+    this.router.stateService.go('projects2/dashboard2', {
       projectId: this.selectedTask.project.id,
       taskAbbr: this.selectedTask.definition.abbreviation,
       tutor: true,
