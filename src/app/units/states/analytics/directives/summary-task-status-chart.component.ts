@@ -139,7 +139,7 @@ export class SummaryTaskStatusChartComponent {
   ngOnInit(): void {
     this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
 
-    this.colorScheme.domain = [...this.taskService.statusColors.values()];
+    this.colorScheme.domain = [...this.taskService.statusLabels.keys()].map((label) => this.taskService.statusColors.get(label) || '#000000');
     this.refreshData();
   }
 
