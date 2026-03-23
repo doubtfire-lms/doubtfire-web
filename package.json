@@ -115,7 +115,7 @@
     "@types/canvas-confetti": "^1.6.0",
     "@types/d3": "^3.5.17",
     "@types/file-saver": "^2.0.1",
-    "@types/jasmine": "~3.9.1",
+    "@types/jasmine": "~6.0.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/lodash": "^4.14.115",
     "@types/node": "^20.9.0",
