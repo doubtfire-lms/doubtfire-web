@@ -42,7 +42,7 @@
     "@angular/router": "^17.3.6",
     "@angular/service-worker": "^17.3.6",
     "@angular/upgrade": "^17.3.6",
-    "@ctrl/ngx-emoji-mart": "^9.2.0",
+    "@ctrl/ngx-emoji-mart": "^9.3.0",
     "@ngneat/hotkeys": "^4.0.0",
     "@ngstack/code-editor": "7.3.0",
     "@uirouter/angular": "^13.0",
