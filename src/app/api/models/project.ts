@@ -45,6 +45,7 @@ export class Project extends Entity {
   public portfolioStatus: number;
   public portfolioFiles: {kind: string; name: string; idx: number}[];
   public escalationAttemptsRemaining: number;
+  public portfolioSubmissionDate: Date;
 
   public taskStats: {
     key: TaskStatusEnum;

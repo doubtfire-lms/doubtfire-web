@@ -1,4 +1,4 @@
-<div id="student-portfolios" class="container">
+<div id="student-portfolios" class="w-full max-w-[1600px] mx-auto">
   <tabset>
     <tab
       ng-repeat="tab in tabs | toArray | orderBy: 'seq'"
@@ -158,6 +158,15 @@
               </a>
             </th>
             <th>
+              <a ng-click="sortOrder='portfolioSubmissionDate'; reverse=!reverse">
+                Submission Date
+                <i
+                  ng-show="sortOrder=='portfolioSubmissionDate'"
+                  class="fa fa-caret-{{reverse ? 'down' : 'up'}}"
+                ></i>
+              </a>
+            </th>
+            <th>
               <a ng-click="sortOrder='orderScale'; reverse=!reverse">
                 Stats<i
                   ng-show="sortOrder=='orderScale'"
@@ -199,6 +208,7 @@
             <td class="flags-data">
               <f-grade-icon [grade]="student.submittedGrade"></f-grade-icon>
             </td>
+            <td>{{student.portfolioSubmissionDate | date: 'EEE d MMM y, h:mm a'}}</td>
             <td class="task-progress-bar">
               <progress class="task-progress" animate="true">
                 <bar
