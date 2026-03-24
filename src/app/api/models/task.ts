@@ -826,7 +826,11 @@ export class Task extends Entity {
       });
   }
 
-  public updateTaskStatus(status: TaskStatusEnum, markAsDiscussed?: boolean) {
+  public updateTaskStatus(
+    status: TaskStatusEnum,
+    markAsDiscussed?: boolean,
+    triggerRecursiveFix?: boolean,
+  ) {
     const oldStatus = this.status;
     const alerts: AlertService = AppInjector.get(AlertService);
 
@@ -849,6 +853,10 @@ export class Task extends Entity {
 
       if (markAsDiscussed === true) {
         options.body['discussed'] = true;
+      }
+
+      if (triggerRecursiveFix === true) {
+        options.body['trigger_recursive_fix'] = true;
       }
 
       const hasId: boolean = this.id > 0;

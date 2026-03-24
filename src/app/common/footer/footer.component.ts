@@ -1,12 +1,17 @@
 import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, firstValueFrom} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {UserService} from 'src/app/api/services/user.service';
+import {ProjectService} from 'src/app/api/services/project.service';
+import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
+import {AlertService} from '../services/alert.service';
 
 @Component({
   selector: 'f-footer',
@@ -20,6 +25,9 @@ export class FooterComponent implements OnInit {
     private fileDownloader: FileDownloaderService,
     private taskAssessmentModal: TaskAssessmentModalService,
     private userService: UserService,
+    private projectService: ProjectService,
+    private confirmationModalService: ConfirmationModalService,
+    private alertService: AlertService,
   ) {}
 
   @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
@@ -190,5 +198,91 @@ export class FooterComponent implements OnInit {
 
   public toggleModerationStatusButtons() {
     this.showModerationStatusButtons = !this.showModerationStatusButtons;
+  }
+
+  private mapTaskPrerequisites(prerequisites: TaskPrerequisite[], task: Task): TaskPrerequisite[] {
+    const definitions = task.unit.taskDefinitions;
+
+    return prerequisites.map((prerequisite) => {
+      prerequisite.taskDefinition = definitions.find(
+        (td) => td.id === prerequisite.taskDefinitionId,
+      );
+      prerequisite.prerequisite = definitions.find((td) => td.id === prerequisite.prerequisiteId);
+      return prerequisite;
+    });
+  }
+
+  private buildTaskForDefinition(task: Task, definition: TaskDefinition): Task {
+    const dependentTask = new Task(task.project);
+    dependentTask.project = task.project;
+    dependentTask.definition = definition;
+    return dependentTask;
+  }
+
+  private async dependentTaskNeedsRecursiveFix(
+    task: Task,
+    definition: TaskDefinition,
+  ): Promise<boolean> {
+    const cachedTask = task.project.findTaskForDefinition(definition.id);
+    if (cachedTask) {
+      return cachedTask.status === 'ready_for_feedback';
+    }
+
+    const dependentTask = this.buildTaskForDefinition(task, definition);
+    const taskWithSubmissionDetails = await firstValueFrom(dependentTask.getSubmissionDetails());
+    return taskWithSubmissionDetails.status === 'ready_for_feedback';
+  }
+
+  private async hasReadyForFeedbackDependents(task: Task): Promise<boolean> {
+    const allPrerequisites = await firstValueFrom(task.unit.getTaskPrerequisites());
+    const dependentPrerequisites = this.mapTaskPrerequisites(allPrerequisites, task).filter(
+      (prerequisite) => prerequisite.prerequisiteId === task.definition.id,
+    );
+
+    for (const prerequisite of dependentPrerequisites) {
+      if (!prerequisite.taskDefinition) {
+        continue;
+      }
+
+      const shouldTriggerRecursiveFix = await this.dependentTaskNeedsRecursiveFix(
+        task,
+        prerequisite.taskDefinition,
+      );
+      if (shouldTriggerRecursiveFix) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  async markAsResubmit(task: Task) {
+    if (!task?.definition || !task?.project) {
+      return;
+    }
+
+    try {
+      const hasReadyDependents = await this.hasReadyForFeedbackDependents(task);
+      if (!hasReadyDependents) {
+        task.updateTaskStatus('fix_and_resubmit');
+        return;
+      }
+
+      this.confirmationModalService.show(
+        'Move dependent tasks to Fix and Resubmit?',
+        'One or more dependent tasks for this student are still Ready for Feedback. Do you want to move those dependent tasks to Fix and Resubmit as well?',
+        () => {
+          task.updateTaskStatus('fix_and_resubmit', false, true);
+        },
+        () => {
+          task.updateTaskStatus('fix_and_resubmit');
+        },
+        'Yes, include dependent tasks',
+        'No, just this task',
+      );
+    } catch (error) {
+      this.alertService.error(`Failed to check dependent task statuses: ${error}`, 6000);
+      task.updateTaskStatus('fix_and_resubmit');
+    }
   }
 }
