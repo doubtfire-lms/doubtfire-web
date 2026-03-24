@@ -63,7 +63,7 @@
     "angular-ui-bootstrap": "0.13.4",
     "angular-ui-codemirror": "0.3.0",
     "angular-xeditable": "0.9.0",
-    "angulartics": "~1.0.3",
+    "angulartics": "~1.6.0",
     "angulartics-google-analytics": "0.1.4",
     "bootstrap": "~3.4",
     "bootstrap-sass": "~3.4",
