@@ -46,7 +46,7 @@
     "@ngneat/hotkeys": "^4.0.0",
     "@ngstack/code-editor": "7.3.0",
     "@uirouter/angular": "^13.0",
-    "@uirouter/angular-hybrid": "^17.1.0",
+    "@uirouter/angular-hybrid": "^20.0.0",
     "@uirouter/angularjs": "^1.0.30",
     "@uirouter/core": "^6.1.0",
     "@uirouter/rx": "^1.0.0",
