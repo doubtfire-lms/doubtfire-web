@@ -7,6 +7,9 @@ import {FileDownloaderService} from '../file-downloader/file-downloader.service'
 import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {UserService} from 'src/app/api/services/user.service';
+import {ProjectService} from 'src/app/api/services/project.service';
+import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
+import {AlertService} from '../services/alert.service';
 
 @Component({
   selector: 'f-footer',
@@ -20,6 +23,9 @@ export class FooterComponent implements OnInit {
     private fileDownloader: FileDownloaderService,
     private taskAssessmentModal: TaskAssessmentModalService,
     private userService: UserService,
+    private projectService: ProjectService,
+    private confirmationModalService: ConfirmationModalService,
+    private alertService: AlertService,
   ) {}
 
   @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
@@ -190,5 +196,35 @@ export class FooterComponent implements OnInit {
 
   public toggleModerationStatusButtons() {
     this.showModerationStatusButtons = !this.showModerationStatusButtons;
+  }
+
+  async markAsResubmit(task: Task) {
+    if (!task?.definition || !task?.project) {
+      return;
+    }
+
+    try {
+      const hasReadyDependents = await task.hasReadyForFeedbackDependents();
+      if (!hasReadyDependents) {
+        task.updateTaskStatus('fix_and_resubmit');
+        return;
+      }
+
+      this.confirmationModalService.show(
+        'Move dependent tasks to Fix and Resubmit?',
+        'This task is a prerequisite for one or more other tasks submitted by this student that are Ready for Feedback. Do you want to move those tasks to Fix and Resubmit as well?',
+        () => {
+          task.updateTaskStatus('fix_and_resubmit', false, true);
+        },
+        () => {
+          task.updateTaskStatus('fix_and_resubmit');
+        },
+        'Yes, update dependent tasks',
+        'No, just this task',
+      );
+    } catch (error) {
+      this.alertService.error(`Failed to check dependent task statuses: ${error}`, 6000);
+      task.updateTaskStatus('fix_and_resubmit');
+    }
   }
 }
