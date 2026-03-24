@@ -17,6 +17,7 @@ import {
   UnitService,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
@@ -66,6 +67,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
     private gradeService: GradeService,
     private state: StateService,
     private alertService: AlertService,
+    private confirmationModalService: ConfirmationModalService,
     private route: UIRouter,
     private taskCommentService: TaskCommentService,
     private taskService: TaskService,
@@ -262,7 +264,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
     this.selectedTask = task;
   }
 
-  public setSelectedTasksStatus(status: TaskStatusEnum) {
+  public async setSelectedTasksStatus(status: TaskStatusEnum) {
     const selectedTasks = this.tasksList.selectedOptions.selected.map((taskOption) => {
       return taskOption.value as Task;
     });
@@ -279,6 +281,44 @@ export class TutorDiscussionComponent implements AfterViewInit {
       }
     }
 
+    if (status === 'fix_and_resubmit') {
+      try {
+        const hasReadyDependents = (
+          await Promise.all(
+            selectedTasks.map((task) =>
+              task?.definition && task?.project ? task.hasReadyForFeedbackDependents() : false,
+            ),
+          )
+        ).some(Boolean);
+
+        if (hasReadyDependents) {
+          this.confirmationModalService.show(
+            'Move dependent tasks to Fix and Resubmit?',
+            'One or more selected tasks are prerequisites for other tasks submitted by this student that are Ready for Feedback. Do you want to move those tasks to Fix and Resubmit as well?',
+            () => {
+              this.updateSelectedTasksStatus(selectedTasks, status, true);
+            },
+            () => {
+              this.updateSelectedTasksStatus(selectedTasks, status, false);
+            },
+            'Yes, update dependent tasks',
+            'No, just selected tasks',
+          );
+          return;
+        }
+      } catch (error) {
+        this.alertService.error(`Failed to check dependent task statuses: ${error}`, 6000);
+      }
+    }
+
+    this.updateSelectedTasksStatus(selectedTasks, status, false);
+  }
+
+  private updateSelectedTasksStatus(
+    selectedTasks: Task[],
+    status: TaskStatusEnum,
+    moveDependentTasks: boolean,
+  ) {
     for (const task of selectedTasks) {
       if (
         status === 'complete' &&
@@ -290,6 +330,8 @@ export class TutorDiscussionComponent implements AfterViewInit {
 
       if (task.definition.assessInPortfolioOnly) {
         task.updateTaskStatus(status === 'complete' ? 'working_on_it' : status, true);
+      } else if (status === 'fix_and_resubmit') {
+        task.updateTaskStatus(status, true, moveDependentTasks);
       } else {
         task.updateTaskStatus(status, true);
       }
