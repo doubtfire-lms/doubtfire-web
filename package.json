@@ -38,7 +38,7 @@
     "@angular/material": "^17.3.10",
     "@angular/material-date-fns-adapter": "^17.3.10",
     "@angular/platform-browser": "^17.3.6",
-    "@angular/platform-browser-dynamic": "^17.3.6",
+    "@angular/platform-browser-dynamic": "^21.2.5",
     "@angular/router": "^17.3.6",
     "@angular/service-worker": "^17.3.6",
     "@angular/upgrade": "^17.3.6",
