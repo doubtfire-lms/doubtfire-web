@@ -1,8 +1,6 @@
 import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
-import {Observable, firstValueFrom} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
-import {TaskDefinition} from 'src/app/api/models/task-definition';
-import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
@@ -200,69 +198,13 @@ export class FooterComponent implements OnInit {
     this.showModerationStatusButtons = !this.showModerationStatusButtons;
   }
 
-  private mapTaskPrerequisites(prerequisites: TaskPrerequisite[], task: Task): TaskPrerequisite[] {
-    const definitions = task.unit.taskDefinitions;
-
-    return prerequisites.map((prerequisite) => {
-      prerequisite.taskDefinition = definitions.find(
-        (td) => td.id === prerequisite.taskDefinitionId,
-      );
-      prerequisite.prerequisite = definitions.find((td) => td.id === prerequisite.prerequisiteId);
-      return prerequisite;
-    });
-  }
-
-  private buildTaskForDefinition(task: Task, definition: TaskDefinition): Task {
-    const dependentTask = new Task(task.project);
-    dependentTask.project = task.project;
-    dependentTask.definition = definition;
-    return dependentTask;
-  }
-
-  private async dependentTaskNeedsRecursiveFix(
-    task: Task,
-    definition: TaskDefinition,
-  ): Promise<boolean> {
-    const cachedTask = task.project.findTaskForDefinition(definition.id);
-    if (cachedTask) {
-      return cachedTask.status === 'ready_for_feedback';
-    }
-
-    const dependentTask = this.buildTaskForDefinition(task, definition);
-    const taskWithSubmissionDetails = await firstValueFrom(dependentTask.getSubmissionDetails());
-    return taskWithSubmissionDetails.status === 'ready_for_feedback';
-  }
-
-  private async hasReadyForFeedbackDependents(task: Task): Promise<boolean> {
-    const allPrerequisites = await firstValueFrom(task.unit.getTaskPrerequisites());
-    const dependentPrerequisites = this.mapTaskPrerequisites(allPrerequisites, task).filter(
-      (prerequisite) => prerequisite.prerequisiteId === task.definition.id,
-    );
-
-    for (const prerequisite of dependentPrerequisites) {
-      if (!prerequisite.taskDefinition) {
-        continue;
-      }
-
-      const shouldTriggerRecursiveFix = await this.dependentTaskNeedsRecursiveFix(
-        task,
-        prerequisite.taskDefinition,
-      );
-      if (shouldTriggerRecursiveFix) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   async markAsResubmit(task: Task) {
     if (!task?.definition || !task?.project) {
       return;
     }
 
     try {
-      const hasReadyDependents = await this.hasReadyForFeedbackDependents(task);
+      const hasReadyDependents = await task.hasReadyForFeedbackDependents();
       if (!hasReadyDependents) {
         task.updateTaskStatus('fix_and_resubmit');
         return;
@@ -270,14 +212,14 @@ export class FooterComponent implements OnInit {
 
       this.confirmationModalService.show(
         'Move dependent tasks to Fix and Resubmit?',
-        'One or more dependent tasks for this student are still Ready for Feedback. Do you want to move those dependent tasks to Fix and Resubmit as well?',
+        'This task is a prerequisite for one or more other tasks submitted by this student that are Ready for Feedback. Do you want to move those tasks to Fix and Resubmit as well?',
         () => {
           task.updateTaskStatus('fix_and_resubmit', false, true);
         },
         () => {
           task.updateTaskStatus('fix_and_resubmit');
         },
-        'Yes, include dependent tasks',
+        'Yes, update dependent tasks',
         'No, just this task',
       );
     } catch (error) {

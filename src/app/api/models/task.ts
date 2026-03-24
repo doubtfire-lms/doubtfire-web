@@ -24,10 +24,11 @@ import {
 import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, map} from 'rxjs';
+import {Observable, firstValueFrom, map} from 'rxjs';
 import {gradeTaskModal, uploadSubmissionModal} from 'src/app/ajs-upgraded-providers';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MappingFunctions} from '../services/mapping-fn';
+import {TaskPrerequisite} from './task-prerequisite';
 
 export const FeedbackModerationAction = {
   ShowMore: 'show_more',
@@ -679,6 +680,58 @@ export class Task extends Entity {
           return this;
         }),
       );
+  }
+
+  private mapUnitTaskPrerequisites(prerequisites: TaskPrerequisite[]): TaskPrerequisite[] {
+    const definitions = this.unit.taskDefinitions;
+
+    return prerequisites.map((prerequisite) => {
+      prerequisite.taskDefinition = definitions.find(
+        (td) => td.id === prerequisite.taskDefinitionId,
+      );
+      prerequisite.prerequisite = definitions.find((td) => td.id === prerequisite.prerequisiteId);
+      return prerequisite;
+    });
+  }
+
+  private buildProjectTaskForDefinition(definition: TaskDefinition): Task {
+    const dependentTask = new Task(this.project);
+    dependentTask.project = this.project;
+    dependentTask.definition = definition;
+    return dependentTask;
+  }
+
+  private async dependentTaskNeedsRecursiveFix(definition: TaskDefinition): Promise<boolean> {
+    const cachedTask = this.project.findTaskForDefinition(definition.id);
+    if (cachedTask) {
+      return cachedTask.status === 'ready_for_feedback';
+    }
+
+    const dependentTask = this.buildProjectTaskForDefinition(definition);
+    const taskWithSubmissionDetails = await firstValueFrom(dependentTask.getSubmissionDetails());
+    return taskWithSubmissionDetails.status === 'ready_for_feedback';
+  }
+
+  public async hasReadyForFeedbackDependents(): Promise<boolean> {
+    const allPrerequisites = await firstValueFrom(this.unit.getTaskPrerequisites());
+    const dependentPrerequisites = this.mapUnitTaskPrerequisites(allPrerequisites).filter(
+      (prerequisite) => prerequisite.prerequisiteId === this.definition.id,
+    );
+
+    for (const prerequisite of dependentPrerequisites) {
+      if (!prerequisite.taskDefinition) {
+        continue;
+      }
+
+      const shouldTriggerRecursiveFix = await this.dependentTaskNeedsRecursiveFix(
+        prerequisite.taskDefinition,
+      );
+      if (shouldTriggerRecursiveFix) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public get overseerEnabled(): boolean {
