@@ -190,7 +190,9 @@ export class Task extends Entity {
       teachingBreaks,
     );
 
-    return Math.max(0, nowTime - submissionTime - pausedMilliseconds) / millisecondsPerDay;
+    return Math.floor(
+      Math.max(0, nowTime - submissionTime - pausedMilliseconds) / millisecondsPerDay,
+    );
   }
 
   /**
