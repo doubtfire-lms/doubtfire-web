@@ -120,7 +120,7 @@
     "@types/lodash": "^4.14.115",
     "@types/node": "^20.9.0",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
+    "@typescript-eslint/parser": "^8.57.2",
     "autoprefixer": "~6",
     "canonical-path": "0.0.2",
     "concurrently": "^3.2.0",
