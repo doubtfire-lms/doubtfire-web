@@ -1,0 +1,224 @@
+#student-portfolios {
+  .toolbar {
+    margin-bottom: 1rem;
+  }
+
+  .toolbar-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+  }
+
+  .search-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+  }
+
+  .download-btn {
+    height: 56px;
+  }
+
+  .empty-state {
+    padding: 1.25rem 0;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  table.f-table {
+    width: 100%;
+  }
+
+  .clickable {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .clickable-row {
+    cursor: pointer;
+  }
+
+  .selected-row {
+    background-color: rgba(63, 81, 181, 0.1); // material primary-ish
+  }
+
+  .sort-indicator {
+    font-size: 0.9em;
+    opacity: 0.75;
+    margin-left: 0.5rem;
+  }
+
+  .grade-icon-circle {
+    width: 2.25em;
+    height: 2.25em;
+    border-radius: 100%;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 100;
+    font-size: 0.95em;
+  }
+
+  .grade-icon-circle.small {
+    width: 1.85em;
+    height: 1.85em;
+    font-size: 0.85em;
+  }
+
+  .task-progress-stack {
+    width: 120px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: 12px;
+    border-radius: 999px;
+    overflow: hidden;
+    background-color: #eaeaea;
+  }
+
+  .task-progress-segment {
+    height: 100%;
+    min-width: 1px;
+  }
+
+  // Progress panel
+  .panel {
+    width: 100%;
+    padding: 1rem 0;
+  }
+
+  .panel-header {
+    padding: 0.25rem 1rem;
+  }
+
+  .panel-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  .panel-subtitle {
+    margin: 0.25rem 0 0;
+    opacity: 0.7;
+  }
+
+  .panel-body {
+    padding: 0.25rem 1rem 1rem;
+  }
+
+  .target-grade-title,
+  .progress-summary-title {
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .target-grade-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .progress-summary-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .progress-summary-item {
+    padding: 0.25rem 0;
+  }
+
+  .progress-summary-item-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .status-dot {
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 999px;
+  }
+
+  .status-label {
+    flex: 1;
+    text-transform: capitalize;
+    opacity: 0.85;
+  }
+
+  .status-value {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-line {
+    margin-top: 0.35rem;
+    height: 10px;
+    border-radius: 999px;
+    background-color: #f0f0f0;
+    overflow: hidden;
+  }
+
+  .progress-line-fill {
+    height: 100%;
+  }
+
+  // Assess panel
+  .alignment-rater {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .grade-buckets {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .grade-bucket {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
+  .grade-bucket-title {
+    width: 10rem;
+    font-weight: 800;
+    opacity: 0.9;
+  }
+
+  .grade-bucket-scores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .grade-selected {
+    background-color: rgba(63, 81, 181, 0.2);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .save-btn {
+    min-width: 8rem;
+  }
+}
+

@@ -210,6 +210,7 @@ import {FooterComponent} from './common/footer/footer.component';
 import {TaskAssessmentCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
 import {TaskSubmissionCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import {InboxComponent} from './units/states/tasks/inbox/inbox.component';
+import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
@@ -372,6 +373,7 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({component: TasksViewerComponent}),
 );
 DoubtfireAngularJSModule.directive('fInbox', downgradeComponent({component: InboxComponent}));
+DoubtfireAngularJSModule.directive('fPortfolios', downgradeComponent({component: PortfoliosComponent}));
 DoubtfireAngularJSModule.directive(
   'fTaskDueCard',
   downgradeComponent({component: TaskDueCardComponent}),

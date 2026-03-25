@@ -1,0 +1,336 @@
+<div id="student-portfolios" class="container">
+  <mat-tab-group
+    (selectedTabChange)="onTabChanged($event.index)"
+    animationDuration="0ms"
+  >
+    <mat-tab [disabled]="false">
+      <ng-template mat-tab-label>
+        <div class="tab-title">{{ tabs.selectStudent.title }}</div>
+      </ng-template>
+
+      <!-- Select Student Tab -->
+      <div class="select-student-wrap">
+        <div class="toolbar">
+          <div class="toolbar-row">
+            <mat-button-toggle-group
+              [value]="portfolioFilter"
+              (change)="onPortfolioFilterChange($event.value)"
+              aria-label="Portfolio filter"
+              class="filter-group"
+            >
+              <mat-button-toggle value="allStudents">
+                <i class="fa fa-globe"></i>
+              </mat-button-toggle>
+              <mat-button-toggle value="withPortfolio">
+                <i class="fa fa-book"></i>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+
+            <mat-button-toggle-group
+              [value]="studentFilter"
+              (change)="onStudentFilterChange($event.value)"
+              aria-label="Student filter"
+              class="filter-group"
+            >
+              <mat-button-toggle value="allStudents">
+                <i class="fa fa-university"></i>
+              </mat-button-toggle>
+              <mat-button-toggle value="myStudents">
+                <i class="fa fa-pencil"></i>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+
+            <mat-button-toggle-group
+              [value]="filterOptions.selectedGrade"
+              (change)="onSubmittedGradeChange($event.value)"
+              aria-label="Submitted grade filter"
+              class="filter-group"
+            >
+              <mat-button-toggle [value]="-1" class="grade-toggle">All</mat-button-toggle>
+              <mat-button-toggle
+                *ngFor="let grade of gradeValues"
+                [value]="grade"
+                class="grade-toggle"
+              >
+                <span class="grade-icon-circle" [style.background-color]="gradeColor(grade)" aria-hidden="true">{{
+                  gradeAcronym(grade)
+                }}</span>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+          <div class="search-row">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Search</mat-label>
+              <input matInput type="search" [(ngModel)]="search" (ngModelChange)="onSearchChange()" />
+            </mat-form-field>
+            <button mat-flat-button color="primary" (click)="onDownloadGrades()" class="download-btn">
+              <i class="fa fa-download"></i>
+              Download Grades
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="totalItems === 0" class="empty-state">
+          <p>No portfolios found</p>
+        </div>
+
+        <div *ngIf="totalItems > 0">
+          <table mat-table [dataSource]="dataSource" class="f-table">
+            <ng-container matColumnDef="student">
+              <th mat-header-cell *matHeaderCellDef (click)="toggleSort('studentId')" class="clickable">
+                Student
+                <span class="sort-indicator" *ngIf="sortOrder === 'studentId'">{{ sortReverse ? '↓' : '↑' }}</span>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.student.studentId || row.student.username }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef (click)="toggleSort('name')" class="clickable">
+                Name
+                <span class="sort-indicator" *ngIf="sortOrder === 'name'">{{ sortReverse ? '↓' : '↑' }}</span>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.student.name }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tutor">
+              <th mat-header-cell *matHeaderCellDef (click)="toggleSort('tutorNames')" class="clickable">
+                Tutor
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.tutorNames() }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tutorial">
+              <th mat-header-cell *matHeaderCellDef (click)="toggleSort('tutorial')" class="clickable">
+                Tutorial
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.shortTutorialDescription() }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="targetGrade">
+              <th mat-header-cell *matHeaderCellDef (click)="toggleSort('targetGrade')" class="clickable">
+                Target
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <span class="grade-icon-circle" [style.background-color]="gradeColor(row.targetGrade)">
+                  {{ gradeAcronym(row.targetGrade) }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="submittedGrade">
+              <th mat-header-cell *matHeaderCellDef (click)="toggleSort('submittedGrade')" class="clickable">
+                Submitted as
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <span class="grade-icon-circle" [style.background-color]="gradeColor(row.submittedGrade)">
+                  {{ gradeAcronym(row.submittedGrade) }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="progress">
+              <th mat-header-cell *matHeaderCellDef (click)="toggleSort('orderScale')" class="clickable">
+                Stats
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <div class="task-progress-stack" *ngIf="row.taskStats?.length">
+                  <div
+                    class="task-progress-segment"
+                    *ngFor="let bar of row.taskStats"
+                    [style.width.%]="bar.value"
+                    [style.background-color]="taskSegmentColor(bar.key)"
+                  ></div>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="hasPortfolio">
+              <th mat-header-cell *matHeaderCellDef>Portfolio?</th>
+              <td mat-cell *matCellDef="let row">
+                {{ (row.hasPortfolio || (row.portfolioStatus ?? 0) > 0) ? 'Yes' : 'No' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="grade">
+              <th mat-header-cell *matHeaderCellDef>Grade</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.grade ?? '-' }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              (click)="selectStudent(row)"
+              [ngClass]="{ 'selected-row': selectedStudent?.id === row.id }"
+              [class.clickable-row]="true"
+            ></tr>
+          </table>
+
+          <mat-paginator
+            [length]="totalItems"
+            [pageIndex]="pageIndex"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="pageChanged($event)"
+          ></mat-paginator>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab [disabled]="!selectedStudent" label="View Progress">
+      <ng-template matTabContent>
+        <div *ngIf="loadingProject" class="empty-state">
+          <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
+          <p class="mt-3">Loading student project…</p>
+        </div>
+
+        <div *ngIf="project && !loadingProject" class="panel">
+        <div class="panel-header">
+          <h3 class="panel-title">Review Progress of {{ selectedStudent?.student.name }}</h3>
+          <p class="panel-subtitle">Progress through the unit's tasks.</p>
+        </div>
+
+        <div class="panel-body">
+          <div class="target-grade">
+            <div class="target-grade-title">Target Grade</div>
+            <div class="target-grade-options">
+              <button
+                mat-stroked-button
+                *ngFor="let grade of gradeService.allGradeValues"
+                [color]="grade === project.targetGrade ? 'primary' : 'accent'"
+                (click)="setTargetGrade(grade)"
+              >
+                <span class="grade-icon-circle small" [style.background-color]="gradeColor(grade)">{{
+                  gradeAcronym(grade)
+                }}</span>
+                <span class="ml-2">{{ gradeService.grades[String(grade)] }}</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="progress-summary">
+            <div class="progress-summary-title">Task Status Summary</div>
+            <div class="progress-summary-grid">
+              <div class="progress-summary-item" *ngFor="let bar of project.taskStats">
+                <div class="progress-summary-item-head">
+                  <span class="status-dot" [style.background-color]="taskSegmentColor(bar.key)"></span>
+                  <span class="status-label">{{ bar.key }}</span>
+                  <span class="status-value">{{ bar.value }}%</span>
+                </div>
+                <div class="progress-line">
+                  <div class="progress-line-fill" [style.width.%]="bar.value"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab [disabled]="!selectedStudent" label="View Portfolio">
+      <ng-template matTabContent>
+        <div *ngIf="loadingProject" class="empty-state">
+          <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
+          <p class="mt-3">Loading student project…</p>
+        </div>
+
+        <div *ngIf="project && !loadingProject" class="panel">
+        <div class="panel-header">
+          <h3 class="panel-title">Review Portfolio of {{ selectedStudent?.student.name }}</h3>
+          <p class="panel-subtitle">View or download portfolio for assessment.</p>
+        </div>
+
+        <div class="panel-body">
+          <div *ngIf="!project.portfolioAvailable" class="empty-state">
+            <p>No Portfolio Submitted</p>
+          </div>
+
+          <div *ngIf="project.portfolioAvailable">
+            <pdf-viewer-panel
+              [pdfUrl]="project.portfolioUrl()"
+              [footerText]="'Portfolio PDF'"
+              [hideFooter]="false"
+              [resourcesUrl]="''"
+            ></pdf-viewer-panel>
+          </div>
+        </div>
+      </div>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab [disabled]="!selectedStudent" label="Assess Portfolio">
+      <ng-template matTabContent>
+        <div *ngIf="loadingProject" class="empty-state">
+          <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
+          <p class="mt-3">Loading student project…</p>
+        </div>
+
+        <div *ngIf="project && !loadingProject" class="panel">
+        <div class="panel-header">
+          <h3 class="panel-title">Grade for {{ selectedStudent?.student.name }}</h3>
+          <p class="panel-subtitle">Assign grade and rationale for this work.</p>
+        </div>
+
+        <div class="panel-body alignment-rater">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Grade rationale</mat-label>
+            <textarea
+              matInput
+              rows="6"
+              [(ngModel)]="project.gradeRationale"
+              placeholder="Enter a short rationale"
+            ></textarea>
+          </mat-form-field>
+
+          <div class="grade-buckets">
+            <div *ngFor="let bucket of gradeResults" class="grade-bucket">
+              <div class="grade-bucket-title">{{ bucket.name }}</div>
+              <div class="grade-bucket-scores">
+                <button
+                  mat-raised-button
+                  *ngFor="let score of bucket.scores"
+                  color="primary"
+                  [disabled]="!project.gradeRationale?.trim()"
+                  (click)="assignGradeAndRefresh(score)"
+                  [ngClass]="{ 'grade-selected': project.grade === score }"
+                >
+                  {{ score }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button
+              mat-flat-button
+              color="primary"
+              class="save-btn"
+              [disabled]="!project.gradeRationale?.trim() || project.grade == null"
+              (click)="saveGrade()"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+
+  <div *ngIf="showNoStudentMessage" class="empty-state">
+    <p>Select student to view portfolio and assign grade.</p>
+  </div>
+</div>
+
