@@ -17,6 +17,8 @@ export class TaskDefinition extends Entity {
   name: string;
   description: string;
   weighting: number;
+  estimated_days: number = null;
+  estimated_hours: number = null;
   targetGrade: number;
   targetDate: Date;
   dueDate: Date;
@@ -56,7 +58,7 @@ export class TaskDefinition extends Entity {
    */
   public save(): Observable<TaskDefinition> {
     const svc = AppInjector.get(TaskDefinitionService);
-
+    console.log(this);
     if (this.isNew) {
       // TODO: add progress modal
       return svc.create(

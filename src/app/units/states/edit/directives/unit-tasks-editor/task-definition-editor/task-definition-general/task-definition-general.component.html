@@ -28,3 +28,31 @@
   <mat-label>Task description</mat-label>
   <textarea matInput [(ngModel)]="taskDefinition.description" required> </textarea>
 </mat-form-field>
+
+<div class="space-y-2">
+  <div>Expected duration</div>
+  <div class="flex gap-2">
+    <mat-form-field appearance="outline" class="flex flex-grow">
+      <mat-label>Days</mat-label>
+      <input
+        matInput
+        type="number"
+        placeholder="0"
+        [(ngModel)]="taskDefinition.estimated_days"
+        [min]="0"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="flex flex-grow">
+      <mat-label>Hours</mat-label>
+      <input
+        matInput
+        type="number"
+        placeholder="0"
+        [(ngModel)]="taskDefinition.estimated_hours"
+        [min]="0"
+        [max]="23"
+      />
+    </mat-form-field>
+  </div>
+</div>
