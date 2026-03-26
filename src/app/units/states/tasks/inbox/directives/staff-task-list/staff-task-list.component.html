@@ -269,7 +269,11 @@
                       </mat-icon>
                     } @else if (getWarningIcon(task) === 'overflow') {
                       <mat-icon
-                        matTooltip="Feedback overdue — this task has been escalated for urgent review."
+                        [matTooltip]="
+                          'Feedback overdue by ' +
+                          task.daysSinceSubmission() +
+                          ' days — this task has been escalated for urgent review.'
+                        "
                         class="shrink-0 text-red-500"
                       >
                         watch_later
