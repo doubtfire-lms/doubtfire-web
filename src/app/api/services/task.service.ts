@@ -188,6 +188,9 @@ export class TaskService extends CachedEntityService<Task> {
         constructorParams: unit,
       },
     ).pipe(
+      map((tasks: Task[]) =>
+        tasks.filter((t) => t.daysSinceSubmission() >= t.unit.feedbackOverflowThresholdDays),
+      ),
       tap((tasks: Task[]) => {
         unit.incorporateTasks(tasks);
       }),
