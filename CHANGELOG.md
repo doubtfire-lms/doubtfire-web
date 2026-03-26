@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-25](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-24...v10.0.1-25) (2026-03-26)
+
+
+### Features
+
+* display sso redirecting state ([248c992](https://github.com/b0ink/doubtfire-deploy/commit/248c992f46488f61916e00a87ca32ed987721f31))
+* pause feedback threshold during teaching period breaks ([#1138](https://github.com/b0ink/doubtfire-deploy/issues/1138)) ([12fbf81](https://github.com/b0ink/doubtfire-deploy/commit/12fbf8147107dc185a9a9cbea940efac93a0f316))
+
 ### [10.0.1-24](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-23...v10.0.1-24) (2026-03-24)
 
 
