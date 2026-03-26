@@ -572,10 +572,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       return null;
     }
 
-    const now = Date.now();
-    const submission = new Date(task.submissionDate).getTime();
-
-    const daysSinceSubmission = (now - submission) / (1000 * 60 * 60 * 24);
+    const daysSinceSubmission = task.daysSinceSubmission();
 
     if (daysSinceSubmission >= task.unit.feedbackOverflowThresholdDays) {
       return 'overflow';
