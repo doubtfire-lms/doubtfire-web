@@ -9,6 +9,7 @@ import {UnitRole} from 'src/app/api/models/unit-role';
 import {UserService} from 'src/app/api/services/user.service';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
+import {DiscussedInClassReasonModalService} from '../modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
 import {AlertService} from '../services/alert.service';
 
 @Component({
@@ -17,6 +18,8 @@ import {AlertService} from '../services/alert.service';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
+  private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;
+
   constructor(
     public selectedTaskService: SelectedTaskService,
     public taskService: TaskService,
@@ -25,6 +28,7 @@ export class FooterComponent implements OnInit {
     private userService: UserService,
     private projectService: ProjectService,
     private confirmationModalService: ConfirmationModalService,
+    private discussedInClassReasonModal: DiscussedInClassReasonModalService,
     private alertService: AlertService,
   ) {}
 
@@ -226,5 +230,26 @@ export class FooterComponent implements OnInit {
       this.alertService.error(`Failed to check dependent task statuses: ${error}`, 6000);
       task.updateTaskStatus('fix_and_resubmit');
     }
+  }
+
+  public markSelectedTaskAsDiscussed() {
+    if (!this.selectedTask) {
+      return;
+    }
+
+    this.discussedInClassReasonModal
+      .show(
+        'Mark Discussed in Class',
+        `Add a tutor note explaining why ${this.selectedTask.definition.abbreviation} is being marked as discussed in class.`,
+        this.discussedInClassNotePrefix,
+      )
+      .afterClosed()
+      .subscribe((reason) => {
+        if (!reason) {
+          return;
+        }
+
+        this.selectedTask.markAsDiscussed(reason);
+      });
   }
 }

@@ -103,6 +103,7 @@ import {ExtensionModalComponent} from './common/modals/extension-modal/extension
 import {CalendarModalComponent} from './common/modals/calendar-modal/calendar-modal.component';
 import {CommentsModalComponent} from './common/modals/comments-modal/comments-modal.component';
 import {ConfirmationModalComponent} from './common/modals/confirmation-modal/confirmation-modal.component';
+import {DiscussedInClassReasonModalComponent} from './common/modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {
@@ -388,6 +389,7 @@ const GANTT_CHART_CONFIG = {
     SpecConModalComponent,
     CalendarModalComponent,
     ConfirmationModalComponent,
+    DiscussedInClassReasonModalComponent,
     InstitutionSettingsComponent,
     ProjectPlanComponent,
     SuccessCloseComponent,
