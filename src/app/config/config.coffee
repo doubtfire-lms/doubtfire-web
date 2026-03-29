@@ -10,7 +10,6 @@ angular.module('doubtfire.config', [
   'doubtfire.config.routing'
   'doubtfire.config.analytics'
   'doubtfire.config.runtime'
-  'doubtfire.config.root-controller'
   'doubtfire.config.debug'
   'doubtfire.config.privacy-policy'
 ])
