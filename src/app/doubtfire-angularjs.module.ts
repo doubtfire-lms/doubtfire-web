@@ -53,7 +53,6 @@ import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-il
 import 'build/src/app/config/privacy-policy/privacy-policy.js';
 import 'build/src/app/config/runtime/runtime.js';
 import 'build/src/app/config/config.js';
-import 'build/src/app/config/root-controller/root-controller.js';
 import 'build/src/app/config/routing/routing.js';
 import 'build/src/app/config/vendor-dependencies/vendor-dependencies.js';
 import 'build/src/app/config/analytics/analytics.js';
@@ -241,6 +240,7 @@ import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-pla
 import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
+import {RootControllerComponent} from './config/root-controller/root-controller.component';
 
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
@@ -348,6 +348,10 @@ DoubtfireAngularJSModule.factory(
 DoubtfireAngularJSModule.directive(
   'taskCommentComposer',
   downgradeComponent({component: TaskCommentComposerComponent}),
+);
+DoubtfireAngularJSModule.directive(
+  'appCtrl',
+  downgradeComponent({component: RootControllerComponent}),
 );
 DoubtfireAngularJSModule.directive(
   'objectSelect',
