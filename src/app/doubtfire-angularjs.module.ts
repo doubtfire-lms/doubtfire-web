@@ -260,7 +260,11 @@ export const DoubtfireAngularJSModule = angular
       $locationProvider.html5Mode(true);
     },
   ]);
-
+DoubtfireAngularJSModule.controller('AppCtrl', [
+  function () {
+    // Root controller - intentionally empty, replaced by Angular
+  },
+]);
 // Downgrade angular modules that we need...
 // factory -> service
 DoubtfireAngularJSModule.factory('AboutDoubtfireModal', downgradeInjectable(AboutDoubtfireModal));
