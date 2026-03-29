@@ -26,6 +26,11 @@
       transform: scale(1.14);
     }
 
+    .button:not(.large-button):not(.extra-large-button).status-chip:hover {
+      background-color: var(--status-chip-bg);
+      color: #fff;
+    }
+
     .large-button {
       width: 57px;
       height: 57px;
@@ -38,22 +43,44 @@
     }
 
     .large-button.status-chip {
-      background-color: var(--status-chip-bg);
+      background-color: white;
+      color: #000;
     }
 
     .large-button.status-chip:hover {
       background-color: var(--status-chip-bg);
+      color: #fff;
+    }
+
+    .large-button.status-chip.fix-and-resubmit:hover {
+      color: #000;
     }
 
     .large-button.status-chip:disabled,
     .large-button.status-chip.mat-mdc-button-disabled,
     .large-button.status-chip.mdc-icon-button--disabled {
-      background-color: transparent;
+      background-color: rgba(255, 255, 255, 0.55);
+      opacity: 0.55;
+      color: rgba(0, 0, 0, 0.25);
     }
 
     .extra-large-button {
       padding-top: 7px;
       transform: scale(1.08);
+    }
+
+    .extra-large-button.status-chip {
+      background-color: white;
+      color: #000;
+    }
+
+    .extra-large-button.status-chip:hover {
+      background-color: var(--status-chip-bg);
+      color: #fff;
+    }
+
+    .extra-large-button.status-chip.fix-and-resubmit:hover {
+      color: #000;
     }
 
     .extra-large-button:hover {
@@ -81,8 +108,8 @@
 
 @mixin status-icon($status) {
   --status-chip-bg: #{task-status-color($status)};
-  background-color: var(--status-chip-bg);
-  color: #fff;
+  background-color: transparent;
+  color: var(--status-chip-bg);
 }
 
 .status-chip {
@@ -91,8 +118,8 @@
     background-color 120ms ease;
 
   &:hover {
-    background-color: var(--status-chip-bg);
-    filter: brightness(0.9);
+    background-color: transparent;
+    filter: none;
   }
 
   &.feedback-exceeded {
@@ -100,12 +127,19 @@
   }
   &.redo {
     @include status-icon('redo');
+    color: #000;
   }
   &.attention-required {
     @include status-icon('attention-required');
   }
   &.fix-and-resubmit {
     @include status-icon('fix-and-resubmit');
+    color: #000;
+  }
+
+  &.large-button.fix-and-resubmit:hover,
+  &.extra-large-button.fix-and-resubmit:hover,
+  &.button:not(.large-button):not(.extra-large-button).fix-and-resubmit:hover {
     color: #000;
   }
   &.discuss {
@@ -116,6 +150,7 @@
   }
   &.complete {
     @include status-icon('complete');
+    color: #000;
   }
   &.assess-in-portfolio {
     @include status-icon('assess-in-portfolio');
@@ -125,7 +160,17 @@
   &.mat-mdc-button-disabled,
   &.mdc-icon-button--disabled {
     background-color: transparent;
-    color: rgba(0, 0, 0, 0.26);
+    color: rgba(0, 0, 0, 0.25);
     filter: none;
+    opacity: 1;
+  }
+
+  &.fix-and-resubmit:disabled,
+  &.fix-and-resubmit.mat-mdc-button-disabled,
+  &.fix-and-resubmit.mdc-icon-button--disabled,
+  &.discuss:disabled,
+  &.discuss.mat-mdc-button-disabled,
+  &.discuss.mdc-icon-button--disabled {
+    color: rgba(0, 0, 0, 0.25);
   }
 }
