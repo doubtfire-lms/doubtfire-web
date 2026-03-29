@@ -6,16 +6,30 @@
   }
 
   .center-buttons {
+    align-items: center;
     text-align: center;
 
     .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
       margin: 0 6px;
-      transform: scale(0.8);
+      width: 58px;
+      height: 58px;
+      transform: scale(0.75);
       border-radius: 100%;
     }
 
+    .button:not(.large-button):not(.extra-large-button) mat-icon,
+    .button:not(.large-button):not(.extra-large-button) i {
+      transform: scale(1.14);
+    }
+
     .large-button {
-      transform: scale(1.15);
+      width: 57px;
+      height: 57px;
+      transform: scale(1);
       background-color: white;
     }
 
@@ -23,9 +37,23 @@
       background-color: #f5f5f5;
     }
 
+    .large-button.status-chip {
+      background-color: var(--status-chip-bg);
+    }
+
+    .large-button.status-chip:hover {
+      background-color: var(--status-chip-bg);
+    }
+
+    .large-button.status-chip:disabled,
+    .large-button.status-chip.mat-mdc-button-disabled,
+    .large-button.status-chip.mdc-icon-button--disabled {
+      background-color: transparent;
+    }
+
     .extra-large-button {
       padding-top: 7px;
-      transform: scale(1.25);
+      transform: scale(1.08);
     }
 
     .extra-large-button:hover {
@@ -52,27 +80,52 @@
 @import '../../../styles/mixins/task-status-colors-generator.scss';
 
 @mixin status-icon($status) {
-  background-color: task-status-color($status);
-  color: task-status-color($status, fore);
+  --status-chip-bg: #{task-status-color($status)};
+  background-color: var(--status-chip-bg);
+  color: #fff;
 }
 
 .status-chip {
+  transition:
+    filter 120ms ease,
+    background-color 120ms ease;
+
+  &:hover {
+    background-color: var(--status-chip-bg);
+    filter: brightness(0.9);
+  }
+
   &.feedback-exceeded {
     @include status-icon('feedback-exceeded');
   }
   &.redo {
     @include status-icon('redo');
   }
+  &.attention-required {
+    @include status-icon('attention-required');
+  }
   &.fix-and-resubmit {
     @include status-icon('fix-and-resubmit');
+    color: #000;
   }
   &.discuss {
     @include status-icon('discuss');
+  }
+  &.working-on-it {
+    @include status-icon('working-on-it');
   }
   &.complete {
     @include status-icon('complete');
   }
   &.assess-in-portfolio {
     @include status-icon('assess-in-portfolio');
+  }
+
+  &:disabled,
+  &.mat-mdc-button-disabled,
+  &.mdc-icon-button--disabled {
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.26);
+    filter: none;
   }
 }
