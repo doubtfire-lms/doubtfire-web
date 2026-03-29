@@ -62,6 +62,7 @@ import {
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {FTaskBadgeComponent} from 'src/app/common/task-badge/task-badge.component';
 import {DoubtfireAngularJSModule} from 'src/app/doubtfire-angularjs.module';
+import {RootControllerComponent} from './config/root-controller/root-controller.component';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
 import {
   visualisationsProvider,
@@ -517,6 +518,7 @@ const GANTT_CHART_CONFIG = {
     FeedbackAppealModalComponent,
     ConfirmModerationModalComponent,
     TaskClaimComponent,
+    RootControllerComponent,
   ],
   providers: [
     // Services we provide
