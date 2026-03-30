@@ -58,7 +58,6 @@ export class TaskDefinition extends Entity {
    */
   public save(): Observable<TaskDefinition> {
     const svc = AppInjector.get(TaskDefinitionService);
-    console.log(this);
     if (this.isNew) {
       // TODO: add progress modal
       return svc.create(

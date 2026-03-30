@@ -20,6 +20,8 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'name',
       'description',
       'weighting',
+      'estimated_days',
+      'estimated_hours',
       'targetGrade',
       'mossLanguage',
       {
