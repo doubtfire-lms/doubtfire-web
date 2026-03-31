@@ -44,7 +44,8 @@
         matTooltip="Mark as Resubmit"
         matTooltipPosition="above"
         aria-label=""
-        class="button large-button status-chip fix-and-resubmit"
+        class="button status-chip fix-and-resubmit"
+        [class.large-button]="!(selectedTask && selectedTask.suggestedTaskStatus)"
         (click)="markAsResubmit(selectedTask)"
       >
         <mat-icon>construction</mat-icon>
@@ -58,7 +59,7 @@
           }}"
           matTooltipPosition="above"
           aria-label=""
-          class="button extra-large-button status-chip"
+          class="button extra-large-button status-chip suggested-task-status"
           (click)="selectedTask?.updateTaskStatus(selectedTask.suggestedTaskStatus)"
           [ngClass]="taskService.statusData(selectedTask.suggestedTaskStatus).class"
           [disabled]="
@@ -66,7 +67,9 @@
             (selectedTask?.suggestedTaskStatus === 'complete' && !selectedTask?.canMarkComplete)
           "
         >
-          <i class="fa {{ taskService.statusData(selectedTask.suggestedTaskStatus).icon }}"></i>
+          <mat-icon>
+            {{ taskService.statusData(selectedTask.suggestedTaskStatus).materialIcon }}
+          </mat-icon>
         </button>
       }
 
@@ -76,7 +79,8 @@
         matTooltip="Mark as Discuss"
         matTooltipPosition="above"
         aria-label=""
-        class="button large-button status-chip discuss"
+        class="button status-chip discuss"
+        [class.large-button]="!(selectedTask && selectedTask.suggestedTaskStatus)"
         (click)="selectedTask?.updateTaskStatus('discuss')"
       >
         <mat-icon>question_answer</mat-icon>

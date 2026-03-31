@@ -74,6 +74,26 @@
       color: #000;
     }
 
+    .extra-large-button.status-chip.suggested-task-status {
+      background-color: var(--status-chip-bg);
+      color: #fff;
+      filter: none;
+    }
+
+    .extra-large-button.status-chip.suggested-task-status.fix-and-resubmit {
+      color: #000;
+    }
+
+    .extra-large-button.status-chip.suggested-task-status:hover {
+      background-color: var(--status-chip-bg);
+      color: #fff;
+      filter: none;
+    }
+
+    .extra-large-button.status-chip.suggested-task-status.fix-and-resubmit:hover {
+      color: #000;
+    }
+
     .extra-large-button.status-chip:hover {
       background-color: var(--status-chip-bg);
       color: #fff;
@@ -144,6 +164,7 @@
   }
   &.discuss {
     @include status-icon('discuss');
+    color: #000;
   }
   &.working-on-it {
     @include status-icon('working-on-it');
