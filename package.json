@@ -147,7 +147,7 @@
     "grunt-ng-annotate": "^3.0.0",
     "grunt-postcss": "~0.8",
     "grunt-preprocess": "5.1.0",
-    "grunt-sass": "^3.0.2",
+    "grunt-sass": "^4.1.0",
     "grunt-sass-globbing": "^1.4.0",
     "husky": "~8",
     "ip": "^1.1.2",
