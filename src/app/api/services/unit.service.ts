@@ -289,6 +289,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'allowStudentChangeTutorial',
       'feedbackWarningThresholdDays',
       'feedbackOverflowThresholdDays',
+      'enforceFeedbackBeforeDiscussedInClass',
     );
   }
 
