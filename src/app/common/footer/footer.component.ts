@@ -237,6 +237,11 @@ export class FooterComponent implements OnInit {
       return;
     }
 
+    if (!this.selectedTask.unit.enforceFeedbackBeforeDiscussedInClass) {
+      this.selectedTask.markAsDiscussed();
+      return;
+    }
+
     this.discussedInClassReasonModal
       .show(
         'Mark Discussed in Class',

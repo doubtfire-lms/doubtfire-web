@@ -356,6 +356,14 @@ export class TutorDiscussionComponent implements AfterViewInit {
 
   public markSelectedTasksDicussed() {
     const selectedTasks = this.tasksList.selectedOptions.selected;
+    if (!this.unit?.enforceFeedbackBeforeDiscussedInClass) {
+      for (const taskOption of selectedTasks) {
+        const task = taskOption.value as Task;
+        task.markAsDiscussed();
+      }
+      return;
+    }
+
     this.discussedInClassReasonModal
       .show(
         'Mark Discussed in Class',
@@ -458,10 +466,25 @@ export class TutorDiscussionComponent implements AfterViewInit {
     this.filteredTasks = [...this.allTasks];
   }
 
+  private filteredDiscussionTasks(tasks: readonly Task[]): Task[] {
+    return tasks.filter((task) => {
+      if (!this.statusesToInclude.includes(task.status)) {
+        return false;
+      }
+
+      if (
+        this.unit?.enforceFeedbackBeforeDiscussedInClass &&
+        task.status === 'ready_for_feedback'
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  }
+
   public viewAllFilteredTasks() {
-    const discussionTasks = this.project?.tasks.filter((task) =>
-      this.statusesToInclude.includes(task.status),
-    );
+    const discussionTasks = this.filteredDiscussionTasks(this.project?.tasks ?? []);
     this.filteredTasks = [...discussionTasks];
   }
 
@@ -480,9 +503,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
         return this.getProject(this.unit, student.id);
       })
       .then((project) => {
-        const discussionTasks = project.tasks.filter((task) =>
-          this.statusesToInclude.includes(task.status),
-        );
+        const discussionTasks = this.filteredDiscussionTasks(project.tasks);
         if (!this.attendance) {
           this.filteredTasks = [...discussionTasks];
           this.allTasks = [
