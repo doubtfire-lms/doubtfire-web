@@ -174,13 +174,13 @@ export class Task extends Entity {
       return 'Discussed in Class is only available after setting this task to Discuss or Fix and Resubmit.';
     }
 
-    if (!this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isManualFeedback)) {
-      return 'Add a manual feedback comment after the latest Ready for Feedback before marking this task as Discussed in Class.';
-    }
+    // if (!this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isManualFeedback)) {
+    //   return 'Add a manual feedback comment after the latest Ready for Feedback before marking this task as Discussed in Class.';
+    // }
 
-    if (this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isAutomated)) {
-      return 'Discussed in Class is blocked while automated comments exist after the latest Ready for Feedback.';
-    }
+    // if (this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isAutomated)) {
+    //   return 'Discussed in Class is blocked while automated comments exist after the latest Ready for Feedback.';
+    // }
 
     return null;
   }
