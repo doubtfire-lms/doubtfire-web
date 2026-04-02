@@ -23,6 +23,7 @@ import {
 } from './doubtfire-model';
 import { TaskOutcomeAlignment } from './task-outcome-alignment';
 import { AlertService } from 'src/app/common/services/alert.service';
+import { StaffNote } from './staff-note';
 
 export class Project extends Entity {
   public id: number;
@@ -38,9 +39,13 @@ export class Project extends Entity {
   public portfolioAvailable: boolean;
   public usesDraftLearningSummary: boolean;
 
+  public specConDays: number = 0;
+
   public hasPortfolio: boolean;
   public portfolioStatus: number;
-  public portfolioFiles: { kind: string; name: string; idx: number }[];
+  public portfolioFiles: {kind: string; name: string; idx: number}[];
+  public escalationAttemptsRemaining: number;
+  public portfolioSubmissionDate: Date;
 
   public taskStats: {
     key: TaskStatusEnum;
@@ -50,6 +55,7 @@ export class Project extends Entity {
 
   public burndownChartData: { key: string; values: number[] }[];
   public readonly taskCache: EntityCache<Task> = new EntityCache<Task>();
+  public readonly staffNoteCache: EntityCache<StaffNote> = new EntityCache<StaffNote>();
   public readonly tutorialEnrolmentsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
   public readonly groupCache: EntityCache<Group> = new EntityCache<Group>();
   public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> =
@@ -59,6 +65,8 @@ export class Project extends Entity {
   public gradeRationale: string;
 
   public similarityFlag: boolean = false;
+
+  public staffNoteCount: number;
 
   public constructor(unit?: Unit) {
     super();
@@ -177,13 +185,13 @@ export class Project extends Entity {
 
   public calcTopTasks() {
     // We will assign current weight to tasks...
-    var currentWeight: number = 0;
+    let currentWeight: number = 0;
 
     // Assign weights to tasks in final state - complete, fail, etc
     const sortedCompletedTasks: Task[] = this.taskCache.currentValues
       .filter((task) => task.inFinalState())
       .sort((a, b) => a.definition.seq - b.definition.seq)
-      .sort((a, b) => a.definition.startDate.getTime() - b.definition.startDate.getTime());
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     sortedCompletedTasks.forEach((task) => {
       task.topWeight = currentWeight;
@@ -193,8 +201,8 @@ export class Project extends Entity {
     // Sort valid top tasks by start date - tasks in non-final state
     const sortedTasks: Task[] = this.taskCache.currentValues
       .filter((task) => task.isValidTopTask())
-      .sort((a, b) => a.definition.seq - b.definition.seq)
-      .sort((a, b) => a.definition.startDate.getTime() - b.definition.startDate.getTime());
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+      .sort((a, b) => a.definition.seq - b.definition.seq);
 
     const overdueTasks: Task[] = sortedTasks.filter((task) => task.daysUntilDueDate() <= 7);
 
@@ -215,7 +223,7 @@ export class Project extends Entity {
     const toAdd: Task[] = sortedTasks
       .filter((task) => task.daysUntilDueDate() > 7)
       .sort((a, b) => a.definition.targetGrade - b.definition.targetGrade)
-      .sort((a, b) => a.definition.startDate.getTime() - b.definition.startDate.getTime());
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     // Sort by the targetGrade. Pass task are done first if same due date as others.
 
@@ -229,7 +237,7 @@ export class Project extends Entity {
   public assignGrade(score: number, rationale: string): void {
     const alerts = AppInjector.get(AlertService);
     const projectService: ProjectService = AppInjector.get(ProjectService);
-    const oldGrade: number = this.grade;
+    const oldGrade: number = this.grade || 0;
     this.grade = score;
     this.gradeRationale = rationale;
 
@@ -407,7 +415,7 @@ export class Project extends Entity {
     const tasks = this.tasks;
 
     const readyOrCompleteTasks = tasks.filter((task) =>
-      ['ready_for_feedback', 'discuss', 'demonstrate', 'complete'].includes(task.status),
+      ['ready_for_feedback', 'discuss', 'demonstrate', 'complete', 'assess_in_portfolio'].includes(task.status),
     );
     let lastTargetDate: Date;
 
@@ -512,5 +520,36 @@ export class Project extends Entity {
     });
 
     this.burndownChartData = result;
+  }
+
+  public applySpecCon(days: number): Observable<Project> {
+    const projectService: ProjectService = AppInjector.get(ProjectService);
+    return projectService.update(this, {body: {spec_con_days: days}, endpointFormat: 'projects/:id:/spec_con'}).pipe(
+      tap((project: Project) => {
+        project.specConDays = days;
+      }),
+    );
+  }
+
+  public tasksIncludedInPortfolioUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.id}/portfolio_tasks`;
+  }
+
+  public getTasksIncludedInPortfolio(): Observable<number[]> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.get<number[]>(this.tasksIncludedInPortfolioUrl());
+  }
+
+  public resetTargetDates(): Observable<Project> {
+    const projectService: ProjectService = AppInjector.get(ProjectService);
+    return projectService.update(
+      {
+        projectId: this.id,
+      },
+      {
+        endpointFormat: '/projects/:projectId:/reset_target_dates',
+        entity: this,
+      },
+    );
   }
 }

@@ -1,0 +1,83 @@
+<mat-dialog-content class="mat-typography">
+  <div class="modal-header">
+    <h1>D2L Grade Transfer</h1>
+  </div>
+  <div class="modal-body" [hidden]="hasD2lMapping()">
+    <p>
+      There are no D2L mapping details for this unit. Please update in the Unit Administration page.
+    </p>
+  </div>
+  <div class="modal-body" [hidden]="!hasD2lMapping()">
+    <p>
+      Make sure that all student grades are ready to be transferred. Then run the following actions
+      in order.
+    </p>
+
+    <ol>
+      <li class="flex flex-row items-center">
+        <button mat-icon-button color="primary" (click)="openD2l()">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+        <div>
+          <strong>1. Login to D2L</strong>.
+          <p>
+            This will open a new window, where you need to login to D2L to authenticate for the
+            grade transfer process.
+          </p>
+        </div>
+      </li>
+      <li class="flex flex-row items-center">
+        <button mat-icon-button color="primary" (click)="startTransfer()">
+          <mat-icon>start</mat-icon>
+        </button>
+        <div>
+          <strong>2. Begin Grade Transfer</strong>
+          <p>This will start transferring grades to D2L. This may take a few minutes.</p>
+        </div>
+      </li>
+      <li class="flex flex-row items-center" [hidden]="!hasWeight()">
+        <button mat-icon-button color="primary" (click)="openWeightPage()">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+        <div>
+          <strong>3. Update the weight</strong>
+          <p>
+            Use the following button to open D2L. Update the weight based on the weight of the
+            portfolio in the unit. If this is the only assessment consider changing to a Points
+            grading scheme in D2L.
+          </p>
+        </div>
+      </li>
+      <li class="flex flex-row items-center">
+        <button mat-icon-button color="primary">
+          <mat-icon>hourglass_empty</mat-icon>
+        </button>
+        <div>
+          <strong
+            ><span [hidden]="hasWeight()">3</span><span [hidden]="!hasWeight()">4</span>. Wait for
+            Email</strong
+          >
+          <p>Once the transfer is complete, you will receive an email with the results.</p>
+        </div>
+      </li>
+      <li class="flex flex-row items-center">
+        <button mat-icon-button color="primary" (click)="downloadRecord()">
+          <mat-icon>download</mat-icon>
+        </button>
+        <div>
+          <strong
+            ><span [hidden]="hasWeight()">4</span><span [hidden]="!hasWeight()">5</span>. Download
+            record</strong
+          >
+          <p>
+            Once the transfer is complete, you can download the record of the transfer. This will
+            show you any errors that may have occurred.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

@@ -130,7 +130,7 @@
           <td class="text-left" ng-click="viewStudent(project)">
             <span class="flags">
               <span class="flag">
-                <grade-icon grade="project.targetGrade"></grade-icon>
+                <f-grade-icon [grade]="project.targetGrade"></f-grade-icon>
               </span>
               <span ng-show="project.similarityFlag" class="flag">
                 <i class="fa fa-eye fa-2x" ></i>

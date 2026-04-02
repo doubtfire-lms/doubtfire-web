@@ -1,0 +1,243 @@
+<div class="w-full max-w-[1280px] mx-auto flex flex-col gap-5">
+  <div class="header">
+    <h3>Unit Details</h3>
+    <p>Edit and configure all details and settings for this unit.</p>
+  </div>
+  <mat-card appearance="outlined" class="p-[16px] gap-2">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Code</mat-label>
+      <input matInput required [(ngModel)]="unit.code" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Name</mat-label>
+      <input matInput required [(ngModel)]="unit.name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Description</mat-label>
+      <textarea matInput required [(ngModel)]="unit.description"></textarea>
+    </mat-form-field>
+  </mat-card>
+
+  <mat-card appearance="outlined" class="p-[16px] gap-2">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Teaching Period</mat-label>
+      <mat-select [(ngModel)]="unit.teachingPeriod" placeholder="Select Teaching Period">
+        <mat-option [value]="undefined">None</mat-option>
+        @for (period of teachingPeriods; track period) {
+          <mat-option [value]="period">{{ period.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="flex w-full gap-5">
+      @if (!unit.teachingPeriod) {
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startdatepicker" [(ngModel)]="unit.startDate" />
+          <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
+          <mat-datepicker #startdatepicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="enddatepicker" [(ngModel)]="unit.endDate" />
+          <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
+          <mat-datepicker #enddatepicker></mat-datepicker>
+        </mat-form-field>
+      } @else {
+        <mat-form-field appearance="outline" class="w-full" disabled>
+          <mat-label>{{ unit.teachingPeriod.name }} Start Date</mat-label>
+          <input matInput [value]="unit.teachingPeriod?.startDate | date" disabled readonly />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full" disabled>
+          <mat-label>{{ unit.teachingPeriod.name }} End Date</mat-label>
+          <input matInput [value]="unit.teachingPeriod?.endDate | date" disabled readonly />
+        </mat-form-field>
+      }
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Portfolio Auto-Generation Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="potfoliogendatepicker"
+        [(ngModel)]="unit.portfolioAutoGenerationDate"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="potfoliogendatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #potfoliogendatepicker> </mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Draft Learning Summary</mat-label>
+      <mat-select [(ngModel)]="unit.draftTaskDefinition" placeholder="Select Learning Summary Task">
+        <mat-option [value]="undefined">None</mat-option>
+        @for (td of taskDefinitions; track td) {
+          <mat-option [value]="td">{{ td.abbreviation }} - {{ td.name }}</mat-option>
+        }
+      </mat-select>
+      <mat-hint>
+        When a draft learning summary task is selected, this will ensure a students uploaded draft
+        is automatically added to the students portfolio.
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Extension duration onresubmit </mat-label>
+      <input matInput required [(ngModel)]="unit.extensionWeeksOnResubmitRequest" />
+      <mat-hint>
+        When tutors request resubmission of a task, this setting determines how many weeks the task
+        will be extended to allow students to fix and resubmit their work.
+      </mat-hint>
+    </mat-form-field>
+
+    <div class="flex w-full gap-5">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Feedback warning after (days)</mat-label>
+        <input
+          matInput
+          type="number"
+          min="0"
+          required
+          [(ngModel)]="unit.feedbackWarningThresholdDays"
+        />
+        <mat-hint>
+          Tasks in inbox are highlighted if feedback isn’t given within this many days of
+          submission.
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Show task in overflow queue after (days)</mat-label>
+        <input
+          matInput
+          type="number"
+          min="0"
+          required
+          [(ngModel)]="unit.feedbackOverflowThresholdDays"
+        />
+        <mat-hint>
+          Tasks without feedback for this many days will appear in the overflow queue.
+        </mat-hint>
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <mat-card appearance="outlined" class="flex flex-col gap-5 p-[16px]">
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.allowFlexibleDates"
+        >Allow flexible dates</mat-slide-toggle
+      >
+      <p>Allows students to set planned due dates, without using extensions.</p>
+    </div>
+
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.allowStudentExtensionRequests"
+        >Allow student extensions</mat-slide-toggle
+      >
+      <p>When false only staff can request extensions on behalf of students.</p>
+    </div>
+
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.autoApplyExtensionBeforeDeadline"
+        >Auto apply extensions</mat-slide-toggle
+      >
+      <p>
+        When true, extensions will be automatically applied when they result in a date that is
+        between the task's due date and deadline.
+      </p>
+    </div>
+
+    <div>
+      <mat-slide-toggle
+        (change)="onToggleAssessInPortfolio($event)"
+        [(ngModel)]="unit.markLateSubmissionsAsAssessInPortfolio"
+        >Has tasks assessed in portfolio</mat-slide-toggle
+      >
+      <p>
+        When enabled, late submissions will not be automatically marked as "Time Exceeded" or
+        "Feedback Exceeded", and will instead appear as "Assess in Portfolio". Tutors can still sign
+        off tasks as complete unless the task definition has the "Assess in Portfolio Only" option
+        enabled.
+      </p>
+    </div>
+
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.allowStudentChangeTutorial"
+        >Allow students to change tutorial</mat-slide-toggle
+      >
+      <p>When false only staff can change student tutorials.</p>
+    </div>
+
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.sendNotifications"
+        >Send notification emails</mat-slide-toggle
+      >
+      <p>
+        When true, emails will be set to students each week to indicate progress and suggest future
+        tasks for them to work on.
+      </p>
+    </div>
+
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.enableSyncEnrolments"
+        >Synchronise enrolments</mat-slide-toggle
+      >
+      <p>
+        When true student enrolments will be synchronised with other systems where this is possible.
+      </p>
+    </div>
+
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.enableSyncTimetable"
+        >Synchronise timetable</mat-slide-toggle
+      >
+      <p>
+        When true timetable data will be synchronised with other systems where this is possible.
+      </p>
+    </div>
+
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.active">Active</mat-slide-toggle>
+      <p>Set to false to hide unit from students and tutors.</p>
+    </div>
+  </mat-card>
+
+  @if (overseerEnabled.value) {
+    <mat-card class="p-[16px] gap-2">
+      <div>
+        <mat-slide-toggle [(ngModel)]="unit.assessmentEnabled"
+          >Overseer assessment</mat-slide-toggle
+        >
+        <p>If true, unit tasks will be able to make use of Overseer automated checking.</p>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Overseer Docker Image</mat-label>
+        <mat-select [(ngModel)]="unit.overseerImage">
+          @for (image of dockerImages; track image) {
+            <mat-option [value]="image">{{ image.description }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint
+          >Use this to select the default container used to check tasks with Overseer.</mat-hint
+        >
+      </mat-form-field>
+    </mat-card>
+  }
+
+  <div class="flex justify-end w-full gap-5">
+    <button mat-raised-button (click)="addD2lData()" [hidden]="!d2lEnabled.value">
+      D2L Details
+    </button>
+    <button
+      mat-raised-button
+      matTooltip="Rollover the unit into a new teaching period"
+      matTooltipShowDelay="1000"
+      uiSref="units/rollover"
+    >
+      Copy
+    </button>
+    <button mat-raised-button color="primary" (click)="saveUnit()">Update</button>
+  </div>
+</div>

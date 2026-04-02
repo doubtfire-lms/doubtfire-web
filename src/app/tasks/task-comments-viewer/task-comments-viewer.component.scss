@@ -140,11 +140,11 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  .comment-container .comment-extension {
+  .comment-container .comment-extension, .comment-container .comment-scorm-extension {
     width: 100%;
   }
 
-  .comment-container .comment-assessment {
+  .comment-container .comment-assessment, .comment-container .comment-scorm {
     width: 100%;
   }
 
@@ -230,7 +230,7 @@ $comment-inner-border-radius: 4px;
         overflow-y: hidden;
         -webkit-box-orient: vertical;
         -webkit-font-smoothing: antialiased;
-        overflow-wrap: break-word;
+        overflow-wrap: anywhere;
         text-align: left;
         text-rendering: optimizelegibility;
         user-select: text;
@@ -354,7 +354,7 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  .comment .extension-bubble {
+  .comment .extension-bubble, .comment .scorm_extension-bubble {
     width: 100%;
     background-color: transparent;
   }

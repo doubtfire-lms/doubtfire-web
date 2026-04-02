@@ -12,6 +12,30 @@
   align-items: center;
 }
 
+#actionBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+object {
+  height: 100%;
+  min-width: 100%;
+  width: 100%;
+}
+
+#pdfViewActions {
+  padding-top: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+
+  button {
+    margin-bottom: 28px;
+  }
+}
+
 #pdfActions {
   padding-top: 1rem;
   padding-right: 1rem;

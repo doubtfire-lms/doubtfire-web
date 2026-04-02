@@ -7,20 +7,50 @@
   </mat-card-header>
   <mat-card-content>
     <div class="markdown-to-pdf" [innerHTML]="taskDef?.description | marked"></div>
+    @if (task) {
+      <f-task-date-slider [task]="task" />
+    }
     <ul>
       <li>{{ grades.names[taskDef?.targetGrade] }} Task</li>
-      <li>Start Date &mdash; Aim to start this task by {{ startDate() | date: 'EEE d MMM' }}.</li>
-      <li [hidden]="!task?.extensions || task?.extensions <= 0">
-        Extension &mdash; You have an extension for
-        {{ task?.extensions }} week{{ task?.extensions > 1 ? 's' : '' }}.
-      </li>
-      <li>Due Date &mdash; Aim to complete by {{ dueDate() | date: 'EEE d MMM' }}.</li>
+
+      @if (taskDef.unit.allowFlexibleDates) {
+        <li>I'm planning to <b>start</b> this task by {{ startDate() | date: 'EEE d MMM' }}.</li>
+        <li [hidden]="!task?.extensions || task?.extensions <= 0">
+          The due date has been <b>extended</b> by {{ task?.extensions }} week{{
+            task?.extensions > 1 ? 's' : ''
+          }}.
+        </li>
+        <li>I'm aiming to <b>submit</b> this task by {{ dueDate() | date: 'EEE d MMM' }}.</li>
+        <li>
+          To receive <b>feedback</b>, I must submit this task by
+          {{ feedbackDate() | date: 'EEE d MMM' }}.
+        </li>
+      } @else {
+        <li>
+          Start Date &mdash; I'm aiming to <b>start</b> this task by
+          {{ startDate() | date: 'EEE d MMM' }}.
+        </li>
+        <li [hidden]="!task?.extensions || task?.extensions <= 0">
+          Extension &mdash; The due date has been extended by
+          {{ task?.extensions }} week{{ task?.extensions > 1 ? 's' : '' }}.
+        </li>
+        <li>
+          Due Date &mdash; I'm aiming to <b>submit</b> this task by
+          {{ dueDate() | date: 'EEE d MMM' }}.
+        </li>
+      }
     </ul>
   </mat-card-content>
   <mat-card-actions
     class="space-x-2"
     [hidden]="!(taskDef?.hasTaskSheet || taskDef?.hasTaskResources)"
   >
+    <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="viewTaskSheet()">
+      <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="View icon"
+        >description</mat-icon
+      >
+      Task Sheet
+    </button>
     <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="downloadTaskSheet()">
       <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="Download icon"
         >download</mat-icon

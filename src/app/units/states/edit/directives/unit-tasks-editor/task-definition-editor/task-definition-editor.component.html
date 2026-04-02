@@ -1,146 +1,175 @@
-<div class="flex-col pr-32">
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        1
-      </div>
-    </div>
+<div id="task-def-head" class="w-full sticky top-0 bg-white z-10 pb-3">
+  <h3>Details for {{ taskDefinition.abbreviation }} - {{ taskDefinition.name }}</h3>
+  <mat-divider></mat-divider>
+</div>
 
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Task details</h3>
-      <p class="font-normal text-gray-700">Name the task and set target grade</p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-        <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
-      </div>
+<div class="flex flex-col items-start gap-4 md:flex-row">
+  <aside class="sticky top-0 z-[9] w-full self-start md:top-20 md:w-[240px] md:shrink-0">
+    <div class="flex flex-col gap-1 overflow-y-auto overflow-x-hidden rounded-xl bg-white p-2">
+      @for (section of visibleSections; track section.id) {
+        <button
+          type="button"
+          class="w-full whitespace-nowrap border-0 rounded-lg bg-transparent cursor-pointer px-3 py-5 text-left transition-colors"
+          [ngClass]="{
+            'font-semibold': activeSectionId === section.id,
+            'text-gray-700 hover:bg-gray-100': activeSectionId !== section.id,
+          }"
+          [style.backgroundColor]="activeSectionId === section.id ? '#e7e7ff' : null"
+          [style.color]="
+            activeSectionId === section.id ? 'var(--mdc-theme-primary, #3939ff)' : null
+          "
+          (click)="scrollToSection(section.id)"
+        >
+          {{ section.label }}
+        </button>
+      }
     </div>
-  </div>
+  </aside>
 
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        2
-      </div>
-    </div>
+  <div class="w-full flex-1 pr-1 pb-48 md:pb-64" #sectionScrollContainer>
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="task-details"
+    >
+      <h3>Task Details</h3>
+      <p class="font-normal text-gray-500 pb-2">Name the task and set target grade</p>
+      <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
+    </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Inbox</h3>
-      <p class="font-normal text-gray-700">
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="task-learning-outcomes"
+    >
+      <h3>Task Learning Outcomes</h3>
+      <p class="font-normal text-gray-500 pb-2">Add learning outcomes for this task</p>
+      <f-learning-outcome-editor [context]="taskDefinition"></f-learning-outcome-editor>
+    </section>
+    <mat-divider class="my-[25px]"></mat-divider>
+
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="inbox"
+    >
+      <h3>Inbox</h3>
+      <p class="font-normal text-gray-500 pb-2">
         Who assesses {{ unit.hasGroupwork() ? 'and submits ' : '' }}this task?
       </p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-        <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
-      </div>
-    </div>
-  </div>
+      <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
+    </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        3
-      </div>
-    </div>
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="due-dates"
+    >
+      <h3>Due Dates</h3>
+      <p class="font-normal text-gray-500 pb-2">When is the task due?</p>
+      <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
+    </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Due dates</h3>
-      <p class="font-normal text-gray-700">When is this task due?</p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-        <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
-      </div>
-    </div>
-  </div>
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="upload-requirements"
+    >
+      <h3>Upload Requirements</h3>
+      <p class="font-normal text-gray-500 pb-2">What do students need to upload?</p>
+      <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
+    </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        4
-      </div>
-    </div>
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="task-resources"
+    >
+      <h3>Task Resources</h3>
+      <p class="font-normal text-gray-500 pb-2">Upload task descriptions and resources</p>
+      <f-task-definition-resources [taskDefinition]="taskDefinition"></f-task-definition-resources>
+    </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Upload requirements</h3>
-      <p class="font-normal text-gray-700">What do students need to upload?</p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-        <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        5
-      </div>
-    </div>
-
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">
-        Task description and resources
-      </h3>
-      <p class="font-normal text-gray-700">Upload task descriptions and resources</p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-        <f-task-definition-resources
-          [taskDefinition]="taskDefinition"
-        ></f-task-definition-resources>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
-      >
-        6
-      </div>
-    </div>
-
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">
-        Task assessment automation
-      </h3>
-      <p class="font-normal text-gray-700" *ngIf="!overseerEnabled">Automation is not enabled</p>
-      <p class="font-normal text-gray-700" *ngIf="overseerEnabled">
-        Configure automated assessment
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="prerequisite-tasks"
+    >
+      <h3>Prerequisite Tasks</h3>
+      <p class="font-normal text-gray-500 pb-2">
+        Select which tasks need to be submitted before
+        <span class="font-bold">{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</span>
+        can be submitted
       </p>
-      <div class="bg-white border border-gray-200 rounded-xl shadow p-6" *ngIf="overseerEnabled">
-        <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
-      </div>
-    </div>
-  </div>
+      <f-task-definition-prerequisites [taskDefinition]="taskDefinition" [staffView]="true">
+      </f-task-definition-prerequisites>
+    </section>
+    <mat-divider class="my-[25px]"></mat-divider>
 
-  <div class="flex mt-10">
-    <div class="mr-6">
-      <div
-        class="font-bold text-formatif-blue text-3xl rounded-full bg-formatif-blue-lighter flex items-center justify-center w-16 h-16"
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="discussion-prompts"
+    >
+      <h3>Discussion Prompts</h3>
+      <p class="font-normal text-gray-500 pb-2">
+        Discussion prompts for tutors to use when discussing student tasks in class
+      </p>
+      <f-task-definition-discussion-prompts [taskDefinition]="taskDefinition" [staffView]="true">
+      </f-task-definition-discussion-prompts>
+    </section>
+    <mat-divider class="my-[25px]"></mat-divider>
+
+    @if (overseerEnabled) {
+      <section
+        class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+        #sectionElement
+        data-section-id="task-assessment-automation"
       >
-        7
-      </div>
-    </div>
+        <h3>Task Assessment Automation</h3>
+        <p class="font-normal text-gray-500 pb-2">Configure automated assessment</p>
+        <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
+      </section>
+      <mat-divider class="my-[25px]"></mat-divider>
+    }
 
-    <div class="w-full">
-      <h3 class="mb-1 text-2xl font-bold tracking-tight text-gray-900">Optional settings</h3>
-      <p class="font-normal text-gray-700">Configure automated assessment</p>
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> Options </mat-panel-title>
-          </mat-expansion-panel-header>
-          <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="scorm-test"
+    >
+      <h3>SCORM Test</h3>
+      <p class="font-normal text-gray-500 pb-2">
+        Upload the corresponding SCORM 2004 test (e.g. Numbas)
+      </p>
+      <f-task-definition-scorm [taskDefinition]="taskDefinition"></f-task-definition-scorm>
+    </section>
+    <mat-divider class="my-[25px]"></mat-divider>
+
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
+      data-section-id="optional-settings"
+    >
+      <h3>Optional Settings</h3>
+      <p class="font-normal text-gray-500 pb-2">Apply other options</p>
+      <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
+    </section>
+
+    <!-- 725px is enough space to ensure the last section ("Optional Settings") can be scrolled to the top of the browser -->
+    <!-- This value may need to change as we add or modify task-definition-editor components -->
+    <div class="h-[725px]" aria-hidden="true"></div>
   </div>
 </div>
-<div class="w-full flex flex-row place-content-end sticky bottom-16 z-10">
-  <button mat-fab color="primary" (click)="save()"><mat-icon>save</mat-icon></button>
+<div class="fixed bottom-[50px] right-[50px] z-50">
+  <div>
+    <button mat-fab color="primary" (click)="save()">
+      <mat-icon>save</mat-icon>
+    </button>
+  </div>
 </div>

@@ -3,16 +3,19 @@ import {
   csvResultModalService,
   unitStudentEnrolmentModal,
 } from './../../../../../ajs-upgraded-providers';
-import { ViewChild, Component, Input, Inject, AfterViewInit, OnDestroy } from '@angular/core';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { HttpClient } from '@angular/common/http';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
-import { Project, ProjectService, Unit } from 'src/app/api/models/doubtfire-model';
-import { UIRouter } from '@uirouter/angular';
-import { Subscription } from 'rxjs';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {ViewChild, Component, Input, Inject, AfterViewInit, OnDestroy} from '@angular/core';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {HttpClient} from '@angular/common/http';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {Project, ProjectService, Unit} from 'src/app/api/models/doubtfire-model';
+import {UIRouter} from '@uirouter/angular';
+import {Subscription} from 'rxjs';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {SpecConModalService} from 'src/app/common/modals/spec-con-modal/spec-con-modal.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 
 @Component({
   selector: 'unit-students-editor',
@@ -20,15 +23,24 @@ import { AlertService } from 'src/app/common/services/alert.service';
   styleUrls: ['unit-students-editor.component.scss'],
 })
 export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
-  @ViewChild(MatTable, { static: false }) table: MatTable<Project>;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatTable, {static: false}) table: MatTable<Project>;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   @Input() unit: Unit;
 
   private subscriptions: Subscription[] = [];
 
-  columns: string[] = ['username', 'firstName', 'lastName', 'email', 'campus', 'tutorial', 'enrolled', 'goto'];
+  columns: string[] = [
+    'username',
+    'firstName',
+    'lastName',
+    'email',
+    'campus',
+    'tutorial',
+    'enrolled',
+    'goto',
+  ];
   dataSource: MatTableDataSource<Project>;
 
   // Calls the parent's constructor, passing in an object
@@ -41,7 +53,9 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     @Inject(csvResultModalService) private csvResultModal: any,
     private fileDownloader: FileDownloaderService,
     private router: UIRouter,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private specConModalService: SpecConModalService,
+    private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
 
   // The paginator is inside the table
@@ -54,13 +68,13 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     this.subscriptions.push(
       this.unit.studentCache.values.subscribe((students) => {
         this.dataSource.data = students;
-      })
+      }),
     );
 
     this.subscriptions.push(
       this.projectService.loadStudents(this.unit, true).subscribe(() => {
         // projects included in unit...
-      })
+      }),
     );
   }
 
@@ -104,7 +118,11 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   public gotoStudent(student: Project) {
-    this.router.stateService.go('projects/dashboard', { projectId: student.id, tutor: true, taskAbbr: '' });
+    this.router.stateService.go('projects/dashboard', {
+      projectId: student.id,
+      tutor: true,
+      taskAbbr: '',
+    });
   }
 
   enrolStudent() {
@@ -115,15 +133,28 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     this.csvUploadModal.show(
       'Upload Students to Enrol',
       'Test message',
-      { file: { name: 'Enrol CSV Data', type: 'csv' } },
+      {file: {name: 'Enrol CSV Data', type: 'csv'}},
       this.unit.enrolStudentsCSVUrl,
-      (response: any) => {
-        // at least one student?
-        this.csvResultModal.show('Enrol Student CSV Results', response);
-        if (response.success.length > 0) {
-          this.unit.refreshStudents(true);
+      (response: SidekiqJob) => {
+        if (!response || !response.id) {
+          return this.alerts.error('Failed to start student import job', 6000);
         }
-      }
+        this.sidekiqProgressModalService
+          .show(`Importing Students: ${this.unit.code}`, response.id)
+          .subscribe({
+            next: (job) => {
+              const result = JSON.parse(job.result);
+              this.csvResultModal.show('Enrol Student CSV Results', result);
+              // at least one student?
+              if (result.success.length > 0) {
+                this.unit.refreshStudents(true);
+              }
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+      },
     );
   }
 
@@ -131,7 +162,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     this.csvUploadModal.show(
       'Upload Students to Withdraw',
       'Test message',
-      { file: { name: 'Withdraw CSV Data', type: 'csv' } },
+      {file: {name: 'Withdraw CSV Data', type: 'csv'}},
       this.unit.withdrawStudentsCSVUrl,
       (response: any) => {
         // at least one student?
@@ -139,7 +170,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
         if (response.success.length > 0) {
           this.unit.refreshStudents(true);
         }
-      }
+      },
     );
   }
 
@@ -147,5 +178,9 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     const url: string = this.unit.enrolStudentsCSVUrl;
 
     this.fileDownloader.downloadFile(url, `${this.unit.code}-students.csv`);
+  }
+
+  public updateSpecCon(student: Project) {
+    this.specConModalService.show(student);
   }
 }

@@ -1,6 +1,18 @@
 <div class="w-full h-full overflow-auto">
   <div [hidden]="!taskDef">
-    <f-task-description-card [taskDef]="taskDef" [unit]="unit"></f-task-description-card>
+    <mat-expansion-panel
+      [expanded]="true"
+      (opened)="panelOpenState.set(true)"
+      (closed)="panelOpenState.set(false)"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title> Task Details </mat-panel-title>
+        <mat-panel-description>
+          {{ panelOpenState() ? 'Hide' : 'Show' }} task details
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <f-task-description-card [taskDef]="taskDef" [unit]="unit"></f-task-description-card>
+    </mat-expansion-panel>
   </div>
 
   <div [hidden]="taskDef" fxFlexFill fxLayout="column" fxLayoutAlign="center center">

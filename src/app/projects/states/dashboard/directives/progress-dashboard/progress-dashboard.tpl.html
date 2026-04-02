@@ -5,6 +5,11 @@
     </h4>
   </div><!--/panel-heading-->
   <div class="panel-body">
+    <div class="col-sm-12 col-xl-12">
+      <div class="card">
+        <f-task-planner-card [project]="project"></f-task-planner-card>
+      </div>
+    </div>
     <div class="col-sm-12 col-xl-6">
       <div class="card card-default card-sm card-target-grade">
         <div class="card-heading">
@@ -16,9 +21,26 @@
             ng-model="project.targetGrade"
             ng-options="grade as grades.names[grade] for grade in grades.values"
             ng-if="$index != 4"
-            ng-change="updateTargetGrade(project.targetGrade)"></select>
-        </div><!--/target-grade-body-->
-      </div><!--/target-grade-card-->
+            disabled
+          ></select>
+          <!-- <div class="ml-1 py-2 opacity-70">To change your target grade, use the Task Planner.</div> -->
+          <div class="ml-1 py-2 opacity-70">
+            To change your target grade, use the
+            <a
+              ui-sref="project/plan"
+              [ui-params]="{projectId: project.id}"
+              class="underline cursor-pointer"
+            >
+              Task Planner
+            </a>
+          </div>
+        </div>
+        <!--/target-grade-body-->
+      </div>
+      <!--/target-grade-card-->
+      <div class="card">
+        <f-task-ilos-card [unit]="project.unit" [ilo-context-type]="'Unit'"></f-task-ilos-card>
+      </div>
       <div class="card card-default card-lg card-burndown">
         <div class="card-heading">
           <h4>Progress Burndown</h4>

@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { TaskComment } from 'src/app/api/models/doubtfire-model';
-import { TaskCommentComposerData } from '../../task-comment-composer/task-comment-composer.component';
+import {Component, OnInit, Input} from '@angular/core';
+import {TaskComment} from 'src/app/api/models/doubtfire-model';
+import {TaskCommentComposerData} from '../../task-comment-composer/task-comment-composer.component';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
   selector: 'comment-bubble-action',
@@ -11,7 +12,7 @@ export class CommentBubbleActionComponent implements OnInit {
   @Input() comment: TaskComment;
   @Input() sharedData: TaskCommentComposerData;
 
-  constructor() {}
+  constructor(private confirmationModalService: ConfirmationModalService) {}
   ngOnInit() {}
 
   reply() {
@@ -19,6 +20,12 @@ export class CommentBubbleActionComponent implements OnInit {
   }
 
   delete() {
-    this.comment.delete();
+    this.confirmationModalService.show(
+      `Delete comment`,
+      `Are you sure you want to delete this comment?`,
+      () => {
+        this.comment.delete();
+      },
+    );
   }
 }

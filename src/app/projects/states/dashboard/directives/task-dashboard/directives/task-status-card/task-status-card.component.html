@@ -1,44 +1,74 @@
 <mat-card appearance="outlined">
   @if (triggers?.length > 0) {
-  <mat-form-field class="px-4 pt-4" appearance="outline">
-    <mat-select [value]="task?.status" (selectionChange)="triggerTransition($event.value)">
-      <mat-select-trigger>
-        <span style="display: inline-flex">
-          <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
-          <h2 class="mb-0">{{ task?.statusLabel() }}</h2>
-        </span>
-      </mat-select-trigger>
-      @for (trigger of triggers; track trigger) {
-      <mat-option [value]="trigger.status">
-        <status-icon [status]="trigger.status" [showTooltip]="false"></status-icon>
-        <span style="display: inline-flex; margin-left: 10px"
-          ><h5>{{ trigger.label }}</h5></span
-        >
-      </mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-  } @if (triggers?.length < 0) {
-  <mat-card-title>
-    <span style="display: inline-flex">
-      <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
-      <h5>{{ task?.statusLabel() }}</h5>
-    </span>
-  </mat-card-title>
+    <mat-form-field class="px-4 pt-4" appearance="outline">
+      <mat-select
+        [value]="task?.status"
+        (selectionChange)="triggerTransition($event.value)"
+        [disabled]="task?.blockedByPrerequisiteTasks()"
+      >
+        <mat-select-trigger>
+          <span style="display: inline-flex">
+            <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
+            <h2 class="mb-0">{{ task?.statusLabel() }}</h2>
+          </span>
+        </mat-select-trigger>
+        @for (trigger of triggers; track trigger) {
+          <mat-option [value]="trigger.status">
+            <status-icon [status]="trigger.status" [showTooltip]="false"></status-icon>
+            <span style="display: inline-flex; margin-left: 10px"
+              ><h5>{{ trigger.label }}</h5></span
+            >
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+  @if (triggers?.length < 0) {
+    <mat-card-title>
+      <span style="display: inline-flex">
+        <status-icon [status]="task?.status" style="margin-right: 10px"></status-icon>
+        <h5>{{ task?.statusLabel() }}</h5>
+      </span>
+    </mat-card-title>
   }
 
   <mat-card-content>
     <p>{{ task?.statusHelp().reason }} {{ task?.statusHelp().action }}</p>
+    @if (task?.blockedByPrerequisiteTasks()) {
+      <p>
+        To submit this task, you must first complete all tasks that are listed as prerequisites.
+      </p>
+    }
   </mat-card-content>
 
-  @if ( task?.unit.currentUserIsStaff || task?.canApplyForExtension() || (task?.inSubmittedState() &&
-  task?.requiresFileUpload()) ) {
-  <mat-card-actions class="space-x-2">
-    @if (task?.canApplyForExtension()) {
-    <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
-    } @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
-    <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
-    }
+  <mat-card-actions class="justify-between w-full">
+    <div class="space-x-2">
+      <button
+        mat-stroked-button
+        (click)="uploadSubmission()"
+        [disabled]="
+          isReadyForFeedback() || task?.blockedByPrerequisiteTasks() || isSubmittedForPortfolio()
+        "
+      >
+        Upload Submission
+      </button>
+
+      @if (task?.canApplyForExtension()) {
+        <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
+      }
+      @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
+        <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
+      }
+    </div>
+
+    <div>
+      <button mat-icon-button aria-label="More task options" [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <div fxFlex></div>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="openFeedbackAppealModal()">Request Feedback Review</button>
+      </mat-menu>
+    </div>
   </mat-card-actions>
-  }
 </mat-card>

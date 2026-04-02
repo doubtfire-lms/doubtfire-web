@@ -1,11 +1,11 @@
-import { Component, Inject, Input, OnInit, Optional } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { StateService } from '@uirouter/core';
-import { User } from 'src/app/api/models/user/user';
-import { AuthenticationService } from 'src/app/api/services/authentication.service';
-import { UserService } from 'src/app/api/services/user.service';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import {Component, Inject, Input, OnInit, Optional} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {StateService} from '@uirouter/core';
+import {User} from 'src/app/api/models/user/user';
+import {AuthenticationService} from 'src/app/api/services/authentication.service';
+import {UserService} from 'src/app/api/services/user.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
   selector: 'f-edit-profile-form',
@@ -18,8 +18,10 @@ export class EditProfileFormComponent implements OnInit {
     private userService: UserService,
     private state: StateService,
     private authService: AuthenticationService,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: { user: User; mode: 'edit' | 'create' | 'new' },
-    private _snackBar: MatSnackBar
+    @Optional()
+    @Inject(MAT_DIALOG_DATA)
+    public data: {user: User; mode: 'edit' | 'create' | 'new'; modal: boolean},
+    private _snackBar: MatSnackBar,
   ) {
     this.user = data?.user || this.userService.currentUser;
   }
@@ -31,11 +33,12 @@ export class EditProfileFormComponent implements OnInit {
    * new is used for creating a new user
    */
   @Input() mode: 'edit' | 'create' | 'new';
+  @Input() modal: boolean = false;
 
   public user: User;
   public externalName = this.constants.ExternalName;
   public initialFirstName: string;
-  public formPronouns = { pronouns: '' };
+  public formPronouns = {pronouns: ''};
   public get customPronouns(): boolean {
     return this.formPronouns.pronouns === '__customPronouns';
   }
@@ -44,9 +47,8 @@ export class EditProfileFormComponent implements OnInit {
     if (this.data?.mode) {
       this.mode = this.data.mode;
     }
-
-    if (this.userService.isAnonymousUser()) {
-      this.state.go('sign_in');
+    if (this.data?.modal) {
+      this.modal = this.data.modal;
     }
 
     this.user.optInToResearch = false;

@@ -36,17 +36,25 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatChipsModule} from '@angular/material/chips';
+import {MatChipListbox, MatChipsModule} from '@angular/material/chips';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
 import {UIRouterUpgradeModule} from '@uirouter/angular-hybrid';
 import {MatDialogModule as MatDialogModuleNew} from '@angular/material/dialog';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {AlertComponent} from 'src/app/common/services/alert.service';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 import {setTheme} from 'ngx-bootstrap/utils';
 
+import {CodeEditorModule} from '@ngstack/code-editor';
+import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
+
 import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
+import {
+  D2lUnitDetailsFormComponent,
+  D2lUnitDetailsModal,
+} from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
 import {
   AboutDoubtfireModal,
   AboutDoubtfireModalContent,
@@ -93,10 +101,23 @@ import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import {ExtensionModalComponent} from './common/modals/extension-modal/extension-modal.component';
 import {CalendarModalComponent} from './common/modals/calendar-modal/calendar-modal.component';
+import {CommentsModalComponent} from './common/modals/comments-modal/comments-modal.component';
+import {ConfirmationModalComponent} from './common/modals/confirmation-modal/confirmation-modal.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MAT_DATE_LOCALE, MatOptionModule} from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatOptionModule,
+} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+
+import {DateFnsAdapter, MAT_DATE_FNS_FORMATS} from '@angular/material-date-fns-adapter';
+import {enAU} from 'date-fns/locale';
+import {CalendarModule, DateAdapter as CalendarDateAdapter} from 'angular-calendar';
+import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
+
 import {doubtfireStates} from './doubtfire.states';
 import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -154,6 +175,7 @@ import {
   WebcalService,
   LearningOutcomeService,
   TaskSimilarityService,
+  D2lAssessmentMappingService,
 } from './api/models/doubtfire-model';
 import {FileDownloaderService} from './common/file-downloader/file-downloader.service';
 import {PdfImageCommentComponent} from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
@@ -165,6 +187,7 @@ import {TaskAssessmentModalComponent} from './common/modals/task-assessment-moda
 import {TaskSubmissionHistoryComponent} from './tasks/task-submission-history/task-submission-history.component';
 import {HomeComponent} from './home/states/home/home.component';
 import {IsActiveUnitRole} from './common/pipes/is-active-unit-role.pipe';
+import {GradeIconComponent} from './common/grade-icon/grade-icon.component';
 import {HeaderComponent} from './common/header/header.component';
 import {UnitDropdownComponent} from './common/header/unit-dropdown/unit-dropdown.component';
 import {TaskDropdownComponent} from './common/header/task-dropdown/task-dropdown.component';
@@ -196,6 +219,7 @@ import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teach
 import {FChipComponent} from './common/f-chip/f-chip.component';
 import {TaskSimilarityViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
 import {FileViewerComponent} from './common/file-viewer/file-viewer.component';
+import {ArchiveViewerComponent} from './common/archive-viewer/archive-viewer.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
 import {TaskDefinitionGeneralComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-general/task-definition-general.component';
 import {TaskDefinitionWhoComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
@@ -204,6 +228,7 @@ import {TaskDefinitionUploadComponent} from './units/states/edit/directives/unit
 import {TaskDefinitionOptionsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-options/task-definition-options.component';
 import {TaskDefinitionResourcesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 import {TaskDefinitionOverseerComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/task-definition-overseer.component';
+import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-scorm/task-definition-scorm.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {FileDropComponent} from './common/file-drop/file-drop.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
@@ -225,18 +250,133 @@ import {FTaskSheetViewComponent} from './units/states/tasks/viewer/directives/f-
 import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-viewer.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {GradeService} from './common/services/grade.service';
+import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
+import {ScormAdapterService} from './api/services/scorm-adapter.service';
+import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
+import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
+import {TestAttemptService} from './api/services/test-attempt.service';
+import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
+import {ScormExtensionModalComponent} from './common/modals/scorm-extension-modal/scorm-extension-modal.component';
+import {
+  D2lTransferComponent,
+  D2lTransferModal,
+} from './units/states/portfolios/d2l-transfer-modal/d2l-transfer.component';
+import {SuccessCloseComponent} from './common/success-close/success-close.component';
+import {FeedbackTemplateService} from './api/services/feedback-template.service';
+import {FeedbackTemplateEditorComponent} from './common/feedback-template-editor/feedback-template-editor.component';
+import {LearningOutcomeEditorComponent} from './common/learning-outcome-editor/learning-outcome-editor.component';
+import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task-feedback-templates/task-feedback-templates.component';
+import {NestedCsvDownloadModalComponent} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.component';
+import {NestedCsvDownloadModalService} from './common/learning-outcome-editor/nested-csv-download-modal/nested-csv-download-modal.service';
+import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
+import {QrModalComponent} from './common/modals/qr-modal/qr-modal.component';
+import {TaskIlosCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-ilos-card/task-ilos-card.component';
+import {TaskDateSliderComponent} from './common/modals/date-change-modal/task-date-slider.component';
+import {SpecConModalComponent} from './common/modals/spec-con-modal/spec-con-modal.component';
+import {SpecConModalService} from './common/modals/spec-con-modal/spec-con-modal.service';
+import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
+import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
+import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
+import {StaffNoteService} from './api/services/staff-note.service';
+import {LocalizedDatePipe} from './common/pipes/localized-date.pipe';
+import {StaffNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/staff-notes-view/staff-notes-view.component';
+import {SubmissionTypeModalComponent} from './tasks/modals/submission-type-modal/submission-type-modal.component';
+import {SidekiqProgressModalComponent} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.component';
+import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/sidekiq-jobs-modal.component';
+import {SidekiqJobService} from './api/services/sidekiq-job.service';
+import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-card.component';
+import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
+import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {LtiService} from './api/services/lti.service';
+import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
+import {TaskPrerequisitesCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
+import {TaskPrerequisiteService} from './api/services/task-prerequisite.service';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
+import {GroupSetSelectorComponent} from './groups/group-set-selector/group-set-selector.component';
+import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
+import {PortfolioGradeSelectStepComponent} from './projects/states/portfolio/directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
+import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
+import {MarkingSessionService} from './api/services/marking-session.service';
+import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
+import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
+import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
+import {GANTT_GLOBAL_CONFIG, GanttLinkLineType, NgxGanttModule} from '@worktile/gantt';
+import {DiscussionPromptService} from './api/services/discussion-prompt.service';
+import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
+import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
+import {DiscussionPromptsViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/discussion-prompts-view/discussion-prompts-view.component';
+import {DownloadStaffNotesComponent} from './units/states/portfolios/download-staff-notes/download-staff-notes.component';
+import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-planner.component';
+import {TaskPlannerPrerequisitesModalComponent} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.component';
+import {TaskPlannerPrerequisitesModalService} from './projects/states/plan/task-planner/task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
+import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
+import {OverseerStepService} from './api/services/overseer-step.service';
+import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
+import {SubmissionFilesModalComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/submission-files-modal/submission-files-modal.component';
+import {OverseerStepResultService} from './api/services/overseer-step-result.service';
+import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
+import {TutorNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/tutor-notes-view/tutor-notes-view.component';
+import {TutorNoteService} from './api/services/tutor-note.service';
+import {ModerationComponent} from './units/states/tasks/inbox/directives/moderation/moderation.component';
+import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-notes-modal.component';
+import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
+import {ConfirmModerationModalComponent} from './units/states/tasks/inbox/directives/moderation/confirm-moderation-modal/confirm-moderation-modal.component';
+import {TaskClaimComponent} from './units/states/tasks/inbox/directives/task-claim/task-claim.component';
+
+// See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
+const MY_DATE_FORMAT = {
+  parse: {
+    dateInput: 'dd/MM/yyyy', // this is how your date will be parsed from Input
+  },
+  display: {
+    dateInput: 'dd/MM/yyyy', // this is how your date will get displayed on the Input
+    monthYearLabel: 'MMMM yyyy',
+    dateA11yLabel: 'do MMMM yyyy',
+    monthYearA11yLabel: 'MMMM yyyy',
+  },
+};
+
+const GANTT_CHART_CONFIG = {
+  provide: GANTT_GLOBAL_CONFIG,
+  useValue: {
+    // locale: 'en-US',
+    dateFormat: {
+      // timeZone: 'UTC',
+      weekStartsOn: 1,
+      week: 'w',
+      year: 'yyyy',
+      month: 'MMMM',
+      yearMonth: 'yyyy MMM',
+      yearQuarter: 'yyyy',
+    },
+    linkOptions: {
+      showArrow: true,
+      lineType: GanttLinkLineType.curve,
+    },
+    styleOptions: {
+      // lineHeight: '25',
+      // barHeight: '23',
+      // headerHeight: '50px',
+    },
+  },
+};
 
 @NgModule({
   // Components we declare
   declarations: [
     AlertComponent,
     AboutDoubtfireModalContent,
+    D2lUnitDetailsFormComponent,
+    D2lTransferComponent,
     TeachingPeriodUnitImportDialogComponent,
     TaskCommentComposerComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
     DiscussionPromptComposerComponent,
     IntelligentDiscussionPlayerComponent,
+    TaskDateSliderComponent,
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
@@ -246,8 +386,12 @@ import {GradeService} from './common/services/grade.service';
     ActivityTypeListComponent,
     OverseerImageListComponent,
     ExtensionModalComponent,
+    SpecConModalComponent,
     CalendarModalComponent,
+    ConfirmationModalComponent,
     InstitutionSettingsComponent,
+    ProjectPlanComponent,
+    SuccessCloseComponent,
     HomeComponent,
     CommentBubbleActionComponent,
     UnitTutorialsListComponent,
@@ -263,6 +407,7 @@ import {GradeService} from './common/services/grade.service';
     TaskDefinitionOptionsComponent,
     TaskDefinitionResourcesComponent,
     TaskDefinitionOverseerComponent,
+    TaskDefinitionScormComponent,
     UnitAnalyticsComponent,
     StudentTutorialSelectComponent,
     StudentCampusSelectComponent,
@@ -290,6 +435,7 @@ import {GradeService} from './common/services/grade.service';
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
     TaskSubmissionHistoryComponent,
+    GradeIconComponent,
     HeaderComponent,
     UnitDropdownComponent,
     TaskDropdownComponent,
@@ -319,6 +465,7 @@ import {GradeService} from './common/services/grade.service';
     UnitCodeComponent,
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
+    ArchiveViewerComponent,
     AlertComponent,
     FUnitTaskListComponent,
     FTaskDetailsViewComponent,
@@ -327,9 +474,58 @@ import {GradeService} from './common/services/grade.service';
     FUsersComponent,
     FTaskBadgeComponent,
     FUnitsComponent,
+    CommentsModalComponent,
+    ScormPlayerComponent,
+    ScormCommentComponent,
+    TaskScormCardComponent,
+    ScormExtensionCommentComponent,
+    ScormExtensionModalComponent,
+    FeedbackTemplateEditorComponent,
+    LearningOutcomeEditorComponent,
+    TaskFeedbackTemplatesComponent,
+    NestedCsvDownloadModalComponent,
+    TutorDiscussionComponent,
+    TaskIlosCardComponent,
+    JplagReportViewerComponent,
+    StaffNotesComponent,
+    StaffNotesViewComponent,
+    QrModalComponent,
+    LocalizedDatePipe,
+    SubmissionTypeModalComponent,
+    SidekiqProgressModalComponent,
+    SidekiqJobsModalComponent,
+    UnavailableCardComponent,
+    LtiDashboardComponent,
+    LtiUnitLinkComponent,
+    TaskDefinitionPrerequisitesComponent,
+    TaskPrerequisitesCardComponent,
+    UnitStaffEditorComponent,
+    GroupSetSelectorComponent,
+    UnitDetailsEditorComponent,
+    PortfolioGradeSelectStepComponent,
+    AnalyticsTutorTimesComponent,
+    PortfolioIncludedTasksComponent,
+    OverseerScriptEditorModalComponent,
+    UploadGradesComponent,
+    DiscussionPromptsComponent,
+    TaskDefinitionDiscussionPromptsComponent,
+    DiscussionPromptsViewComponent,
+    TaskPlannerComponent,
+    DownloadStaffNotesComponent,
+    TaskPlannerCardComponent,
+    TaskPlannerPrerequisitesModalComponent,
+    TaskOverseerReportComponent,
+    SubmissionFilesModalComponent,
+    TutorNotesComponent,
+    TutorNotesViewComponent,
+    ModerationComponent,
+    TutorNotesModalComponent,
+    FeedbackAppealModalComponent,
+    ConfirmModerationModalComponent,
+    TaskClaimComponent,
   ],
-  // Services we provide
   providers: [
+    // Services we provide
     AlertService,
     MarkedPipe,
     CampusService,
@@ -337,6 +533,7 @@ import {GradeService} from './common/services/grade.service';
     GroupSetService,
     GroupService,
     UnitService,
+    D2lAssessmentMappingService,
     ProjectService,
     UnitRoleService,
     LearningOutcomeService,
@@ -370,7 +567,9 @@ import {GradeService} from './common/services/grade.service';
     dateServiceProvider,
     CsvUploadModalProvider,
     CsvResultModalProvider,
-    {provide: MAT_DATE_LOCALE, useValue: 'en-AU'},
+    {provide: MAT_DATE_LOCALE, useValue: enAU},
+    {provide: DateAdapter, useClass: DateFnsAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT},
     UnitStudentEnrolmentModalProvider,
     TaskCommentService,
     AudioRecorderProvider,
@@ -392,15 +591,33 @@ import {GradeService} from './common/services/grade.service';
     },
     AboutDoubtfireModal,
     AboutDoubtfireModalService,
+    SpecConModalService,
     DoubtfireConstants,
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,
     TasksForInboxSearchPipe,
     IsActiveUnitRole,
+    D2lUnitDetailsModal,
+    D2lTransferModal,
     CreateNewUnitModal,
+    ScormAdapterService,
+    TestAttemptService,
     provideLottieOptions({
       player: () => player,
     }),
+    FeedbackTemplateService,
+    NestedCsvDownloadModalService,
+    StaffNoteService,
+    SidekiqJobService,
+    LtiService,
+    TaskPrerequisiteService,
+    MarkingSessionService,
+    DiscussionPromptService,
+    GANTT_CHART_CONFIG,
+    TaskPlannerPrerequisitesModalService,
+    OverseerStepService,
+    OverseerStepResultService,
+    TutorNoteService,
   ],
   imports: [
     FlexLayoutModule,
@@ -462,6 +679,13 @@ import {GradeService} from './common/services/grade.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModuleNew,
+    CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
+    CodeEditorModule.forRoot(),
+    MatSidenavModule,
+    NgxGanttModule,
+    MatSidenavModule,
+    MonacoEditorModule.forRoot(),
+    MatChipListbox,
   ],
 })
 

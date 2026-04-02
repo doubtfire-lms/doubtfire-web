@@ -10,7 +10,12 @@ import { Unit } from 'src/app/api/models/unit';
 export class TaskDefinitionWhoComponent {
   @Input() taskDefinition: TaskDefinition;
 
+  showAllTutorials: boolean = false;
   public get unit(): Unit {
     return this.taskDefinition?.unit;
+  }
+
+  onTutorialStreamChange() {
+    this.showAllTutorials = false;
   }
 }

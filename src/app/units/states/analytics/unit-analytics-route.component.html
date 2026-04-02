@@ -1,4 +1,22 @@
 <h1>Unit Statistics</h1>
 
-<button mat-button (click)="unit.downloadTaskCompletionCsv()">Task Completion Stats</button>
-<button mat-button (click)="unit.downloadTutorAssessmentCsv()">Tutor Assessment Stats</button>
+<div class="flex flex-col gap-4">
+  <mat-card appearance="outlined" class="mt-4 p-[16px]">
+    <mat-card-content class="flex gap-2">
+      <button mat-button (click)="getTaskCompletionCsv()">
+        <mat-icon>download</mat-icon> Task Completion Stats
+      </button>
+      <button mat-button (click)="getTutorAssessmentCsv()">
+        <mat-icon>download</mat-icon> Tutor Assessment Stats
+      </button>
+      <button mat-button (click)="getTasksAwaitingFeedbackCsv()">
+        <mat-icon>download</mat-icon> Tasks Awaiting Feedback
+      </button>
+      <button mat-button (click)="getTaskAssessmentCountCsv()">
+        <mat-icon>download</mat-icon> Task Assessment Counts
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <f-analytics-tutor-times [unit]="unit" [downloadCsvFn]="downloadCsv"></f-analytics-tutor-times>
+</div>

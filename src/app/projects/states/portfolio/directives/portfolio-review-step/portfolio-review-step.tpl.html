@@ -51,19 +51,15 @@
           <li ng-repeat="file in extraFiles()"><i class="fa fa-file-{{file.kind}}-o"></i> {{file.name}}</li>
         </ol>
       </div>
-      <div ng-show="selectedTasks().length > 0">
-        <p>
-          You have included <strong>{{selectedTasks().length}} tasks</strong> in your portfolio. If you wish to add or
-          remove some of these tasks, please review the <em>Select Tasks</em> step to adjust your alignments of each
-          task to the unit's learning outcomes. Each task will be attached in the order below:
-        </p>
-        <ol>
-          <li ng-repeat="task in selectedTasks()">
-            <label class="label label-info">{{task.definition.abbreviation}}</label>
-            {{task.definition.name}}
-          </li>
-        </ol>
-      </div>
+      <p>
+        Only submitted tasks will be included in your portfolio. If a task is missing from the list,
+        ensure that you have submitted it before compiling your portfolio. All feedback and comments
+        for each task will appear in the final portfolio, so you can add any additional comments now
+        if there's something you'd like to address.
+        <p>The following tasks will be included
+        automatically in this order:</p>
+      </p>
+      <f-portfolio-included-tasks [project]="project"></f-portfolio-included-tasks>
     </div>
     <div class="card card-default" ng-show="canCompilePortfolio">
       <div class="card-heading">
@@ -91,7 +87,14 @@
       <div class="card-heading">
         <h4>Download Portfolio</h4>
       </div>
-      <div class="card-body">This is the <strong>exact same document</strong> your assessor will see</div>
+      <div class="card-body">
+        <p class="p-2">
+          This is the <strong>exact same document</strong> your assessor will see.
+        </p>
+        <p class="p-2">
+          <strong>You're done!</strong> There's nothing left for you to do. Your portfolio has been submitted.
+        </p>
+      </div>
       <div class="card-footer">
         <button class="btn btn-danger" ng-click="deletePortfolio()">
           <i class="fa fa-trash-o"></i> Delete Portfolio

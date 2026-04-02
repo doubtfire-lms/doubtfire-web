@@ -5,6 +5,12 @@
     style="min-height: 85px"
   >
     @if (!media.isActive('xs')) {
+      @if (logoSettings.hasLogo) {
+        <a [href]="logoSettings.logoLinkUrl" class="mx-6">
+          <img [src]="logoSettings.logoUrl" style="height: 32px" />
+        </a>
+      }
+
       <a uiSref="home" class="pt-4">
         <mat-icon
           uiSref="home"
@@ -33,7 +39,25 @@
     ></task-dropdown>
 
     <span class="grow"></span>
-
+    @if (sidekiqJobs.length) {
+      <button mat-icon-button (click)="showSidekiqJob()">
+        <div [matBadge]="sidekiqJobs.length" matBadgeSize="small" class="z-50"></div>
+        <mat-icon>cloud_sync_outline</mat-icon>
+      </button>
+    }
+    @if (currentUnit && currentUnitRole && currentUnitRole.tutorNoteCount > 0) {
+      <!-- TODO: Replace this with a more standardised notification system -->
+      <button mat-icon-button (click)="openTutorNotes()" matTooltip="Tutor Notes">
+        <mat-icon [matBadge]="currentUnitRole.tutorNoteCount" matBadgeSize="small"
+          >feedback</mat-icon
+        >
+      </button>
+    }
+    @if (currentUnit) {
+      <button mat-icon-button (click)="showMyQr()">
+        <mat-icon>qr_code_scanner</mat-icon>
+      </button>
+    }
     @if (currentUser.role === 'Admin' || currentUser.role === 'Convenor') {
       <button
         #menuState="matMenuTrigger"
@@ -66,12 +90,12 @@
     </mat-menu>
 
     <button mat-button [matMenuTriggerFor]="menu2">
-      <user-icon [size]="32"></user-icon>
+      <user-icon [size]="32" [user]="currentUser"></user-icon>
     </button>
     <mat-menu #menu2="matMenu">
       <button mat-menu-item uiSref="edit_profile">
         <mat-icon matListItemIcon aria-label="Edit profile">person</mat-icon>
-        Edit Profile
+        My Profile
       </button>
       <button mat-menu-item (click)="openCalendar()">
         <mat-icon matListItemIcon aria-label="Edit calendar">calendar_month</mat-icon>

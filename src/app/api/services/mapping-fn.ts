@@ -1,23 +1,34 @@
+import moment from 'moment';
+
 export class MappingFunctions {
-  public static mapDateToEndOfDay(data, key, entity, params?) {
+  public static mapDateToEndOfDay(data, key, _entity, _params?) {
     const jsonDate = new Date(data[key]);
-    return new Date(jsonDate.getFullYear(), jsonDate.getMonth(), jsonDate.getDate(), 23, 59, 59, 999);
+    return new Date(
+      jsonDate.getFullYear(),
+      jsonDate.getMonth(),
+      jsonDate.getDate(),
+      23, // all dates map to end of day
+      59,
+      59,
+      999,
+    );
   }
 
-  public static mapDateToDay(data, key, entity, params?) {
+  public static mapDateToDay(data, key: string, _entity, _params?) {
     const jsonDate = new Date(data[key]);
     return new Date(jsonDate.getFullYear(), jsonDate.getMonth(), jsonDate.getDate());
   }
 
-  public static mapDate(data, key, entity, params?) {
+  public static mapDate(data, key: string, _entity, _params?) {
     return new Date(data[key]);
   }
 
   public static mapDayToJson<T>(entity: T, key: string): string {
     if (entity[key]) {
-      const month = entity[key].getMonth() + 1;
-      const day = entity[key].getDate();
-      return `${entity[key].getFullYear()}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+      const dateValue = moment.isMoment(entity[key]) ? entity[key].toDate() : entity[key];
+      const month = dateValue.getMonth() + 1;
+      const day = dateValue.getDate();
+      return `${dateValue.getFullYear()}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
     } else {
       return undefined;
     }
@@ -50,12 +61,34 @@ export class MappingFunctions {
   }
 
   /**
-     * Calculate the time between two dates
-     *
-     * @param date1 days from this date
-     * @param date2 to this date
-     * @returns the time from date1 to date2
-     */
+   * Add a number of days to a date.
+   *
+   * @param date starting date
+   * @param days days to add
+   * @returns the date that is `days` days after `date`
+   */
+  public static addDays(date: Date, days: number): Date {
+    return new Date(date.getTime() + MappingFunctions.dayMs(days));
+  }
+
+  /**
+   * Add a number of weeks to a date.
+   *
+   * @param date starting date
+   * @param weeks days to add
+   * @returns the date that is `days` days after `date`
+   */
+  public static addWeeks(date: Date, weeks: number): Date {
+    return new Date(date.getTime() + MappingFunctions.weeksMs(weeks));
+  }
+
+  /**
+   * Calculate the time between two dates
+   *
+   * @param date1 days from this date
+   * @param date2 to this date
+   * @returns the time from date1 to date2
+   */
   public static timeBetween(date1: Date, date2: Date): number {
     return date2.getTime() - date1.getTime();
   }
@@ -67,7 +100,7 @@ export class MappingFunctions {
    * @param date2 to this date
    * @returns the days from date1 to date2
    */
-   public static daysBetween(date1: Date, date2: Date): number {
+  public static daysBetween(date1: Date, date2: Date): number {
     const diff = this.timeBetween(date1, date2);
     return Math.ceil(diff / (1000 * 3600 * 24));
   }

@@ -1,0 +1,114 @@
+<mat-card appearance="outlined" class="p-[16px]">
+  <mat-card-header class="flex justify-between mb-4">
+    <mat-card-title>
+      <h2>Tutor Times Session Summary</h2>
+    </mat-card-title>
+
+    <div class="flex gap-2">
+      @if (role === 'Convenor') {
+        <button
+          mat-button
+          (click)="getTutorTimesSummary()"
+          matTooltip="Download CSV summary for the selected date range"
+          matTooltipShowDelay="1000"
+          matTooltipPosition="above"
+        >
+          <mat-icon>download</mat-icon> Download Summary
+        </button>
+      }
+
+      <button
+        mat-button
+        (click)="getMyTutorTimesSessions()"
+        matTooltip="Download CSV of your tutor sessions for the selected date range"
+        matTooltipShowDelay="1000"
+        matTooltipPosition="above"
+      >
+        <mat-icon>download</mat-icon> Download My Sessions
+      </button>
+    </div>
+  </mat-card-header>
+
+  <div class="flex flex-col items-center justify-center">
+    <div class="flex flex-row gap-2 mb-5">
+      <button mat-raised-button color="primary" (click)="goPreviousWeek()" class="w-40">
+        Previous
+      </button>
+      <button mat-raised-button (click)="goTodayWeek()">Today</button>
+      <button mat-raised-button color="primary" (click)="goNextWeek()" class="w-40">Next</button>
+    </div>
+    <div class="flex flex-row gap-2 mb-5">
+      <mat-form-field appearance="outline">
+        <mat-label>Choose a date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="startdatepicker"
+          [(ngModel)]="tutorTimeSummaryStartDate"
+          (dateChange)="onDateChange($event)"
+        />
+        <mat-hint>Sessions from this day onward</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #startdatepicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Choose a date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="enddatepicker"
+          [(ngModel)]="tutorTimeSummaryEndDate"
+          (dateChange)="onDateChange($event)"
+        />
+        <mat-hint>Sessions up to this day</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #enddatepicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="flex w-full justify-end mb-2">
+      <mat-slide-toggle
+        labelPosition="before"
+        [(ngModel)]="hideSessionsDuringTutorials"
+        (toggleChange)="onToggleChangeHideSessionsDuringTutorial()"
+        >Hide sessions during tutorials</mat-slide-toggle
+      >
+    </div>
+  </div>
+
+  <ng-template #eventTooltipTemplate let-event="event">
+    <div class="z-50 bg-[rgba(25,25,25,0.8)] text-white p-2 rounded">
+      <strong
+        >{{ event.tutorName }} ({{ event.duration }} minutes)
+        {{ event.duringTutorial ? 'T' : '' }}</strong
+      ><br />
+      {{ event.startHour }} — {{ event.endHour }}<br />
+      Assessments: {{ event.assessments || 0 }}<br />
+      Comments: {{ event.commentsAdded || 0 }}<br />
+      Submissions opened: {{ event.submissionsOpened || 0 }} <br />
+      During Tutorial?: {{ event.duringTutorial ? 'yes' : 'no' }}
+    </div>
+  </ng-template>
+
+  <div class="relative">
+    @if (isLoading) {
+      <mat-progress-spinner
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50"
+        mode="indeterminate"
+      >
+      </mat-progress-spinner>
+    }
+
+    <mwl-calendar-week-view
+      [viewDate]="viewDate"
+      [events]="filteredEvents"
+      (eventClicked)="eventClicked($event)"
+      [tooltipTemplate]="eventTooltipTemplate"
+      [hourDuration]="60"
+      [hourSegments]="4"
+      [weekStartsOn]="0"
+      [hourSegmentHeight]="15"
+      [minimumEventHeight]="5"
+      [daysInWeek]="daysInWeek"
+      (beforeViewRender)="beforeViewRender($event)"
+    />
+  </div>
+</mat-card>

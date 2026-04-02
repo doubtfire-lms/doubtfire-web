@@ -1,4 +1,4 @@
-import {Component, Input, Inject} from '@angular/core';
+import {Component, Input, Inject, EventEmitter, Output} from '@angular/core';
 
 import {Task, TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
@@ -10,6 +10,8 @@ import {GradeService} from 'src/app/common/services/grade.service';
   styleUrls: ['task-description-card.component.scss'],
 })
 export class TaskDescriptionCardComponent {
+  @Output() switchView$: EventEmitter<string> = new EventEmitter();
+
   @Input() task: Task;
   @Input() taskDef: TaskDefinition;
   @Input() unit: Unit;
@@ -33,6 +35,10 @@ export class TaskDescriptionCardComponent {
     );
   }
 
+  public viewTaskSheet() {
+    this.switchView$.emit('task');
+  }
+
   public downloadResources() {
     this.fileDownloader.downloadFile(
       this.taskDef.getTaskResourcesUrl(true),
@@ -47,7 +53,14 @@ export class TaskDescriptionCardComponent {
   }
 
   public startDate(): Date {
-    return this.taskDef?.startDate;
+    return this.task?.startDate ?? this.taskDef?.startDate;
+  }
+
+  public feedbackDate(): Date {
+    if (this.task) {
+      return this.task.localDeadlineDate();
+    }
+    return this.taskDef.localDeadlineDate();
   }
 
   public shouldShowDeadline(): boolean {

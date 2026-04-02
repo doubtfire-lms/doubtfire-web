@@ -78,6 +78,12 @@
       &.time-exceeded {
         @include custom-box-shadow(lighten(task-status-color('time-exceeded'), 15%));
       }
+      &.assess-in-portfolio {
+        @include custom-box-shadow(lighten(task-status-color('assess-in-portfolio'), 15%));
+      }
+      &.attention-required {
+        @include custom-box-shadow(lighten(task-status-color('attention-required'), 15%));
+      }
     }
     &.selected {
       &.ready-for-feedback {
@@ -115,6 +121,12 @@
       }
       &.time-exceeded {
         @include custom-box-shadow(task-status-color('time-exceeded'));
+      }
+      &.assess-in-portfolio {
+        @include custom-box-shadow(task-status-color('assess-in-portfolio'));
+      }
+      &.attention-required {
+        @include custom-box-shadow(task-status-color('attention-required'));
       }
     }
     .task-badges {

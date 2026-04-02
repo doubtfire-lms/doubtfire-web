@@ -14,7 +14,7 @@ A modern, lightweight learning management system.
 
 SUMMARY:
 
-73 / 132 components migrated
+74 / 132 components migrated
 
 MIGRATED:
 
@@ -64,6 +64,7 @@ MIGRATED:
 - [x] ./src/app/units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-general/task-definition-general.component.ts
 - [x] ./src/app/units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component.ts
+- [x] ./src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.component.ts
 - [x] ./src/app/units/states/analytics/unit-analytics-route.component.ts
 - [x] ./src/app/common/footer/footer.component.ts
 - [x] ./src/app/common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder.ts
@@ -91,6 +92,8 @@ MIGRATED:
 - [x] ./src/app/common/services/alert.service.ts
 - [x] ./src/app/sessions/states/sign-in/sign-in.component.ts
 - [x] ./src/app/account/edit-profile/edit-profile.component.ts
+- [x] ./src/app/groups/group-set-selector/group-set-selector.component.ts
+- [x] ./src/app/admin/modals/create-unit-modal/create-unit-modal.coffee
 
 TODO:
 
@@ -164,7 +167,6 @@ TODO:
 - [ ] ./src/app/groups/group-set-manager/group-set-manager.coffee
 - [ ] ./src/app/groups/group-member-contribution-assigner/group-member-contribution-assigner.coffee
 - [ ] ./src/app/groups/group-member-list/group-member-list.coffee
-- [ ] ./src/app/groups/group-set-selector/group-set-selector.coffee
 - [ ] ./src/app/groups/tutor-group-manager/tutor-group-manager.coffee
 - [ ] ./src/app/groups/groups.coffee
 - [ ] ./src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.coffee
@@ -188,7 +190,6 @@ TODO:
 - [ ] ./src/app/units/states/edit/directives/directives.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-details-editor/unit-details-editor.coffee
-- [ ] ./src/app/units/states/edit/directives/unit-staff-editor/unit-staff-editor.coffee
 - [ ] ./src/app/units/states/edit/directives/unit-ilo-editor/unit-ilo-editor.coffee
 - [ ] ./src/app/units/states/edit/edit.coffee
 - [ ] ./src/app/units/states/rollover/directives/directives.coffee

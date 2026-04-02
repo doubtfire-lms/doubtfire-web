@@ -38,6 +38,12 @@
   &.time-exceeded {
     @include task-status-color-time-exceeded;
   }
+  &.assess-in-portfolio {
+    @include task-status-color-assess-in-portfolio;
+  }
+  &.attention-required {
+    @include task-status-color-attention-required;
+  }
 
   &.ready-for-feedback:hover {
     background-color: task-status-color('ready-for-feedback');
@@ -74,6 +80,12 @@
   }
   &.time-exceeded:hover {
     background-color: task-status-color('time-exceeded');
+  }
+  &.assess-in-portfolio:hover {
+    background-color: task-status-color('assess-in-portfolio');
+  }
+  &.attention-required:hover {
+    background-color: task-status-color('attention-required');
   }
 }
 
@@ -138,6 +150,16 @@
   &.time-exceeded:hover {
     @include task-status-color-time-exceeded;
   }
+  &.assess-in-portfolio,
+  &.assess-in-portfolio.active,
+  &.assess-in-portfolio:hover {
+    @include task-status-color-assess-in-portfolio;
+  }
+  &.attention-required,
+  &.attention-required.active,
+  &.attention-required:hover {
+    @include task-status-color-attention-required;
+  }
 
   &.ready-for-feedback {
     background-color: lighten(task-status-color('ready-for-feedback'), 15%);
@@ -174,6 +196,12 @@
   }
   &.time-exceeded {
     background-color: lighten(task-status-color('time-exceeded'), 15%);
+  }
+  &.assess-in-portfolio {
+    background-color: lighten(task-status-color('assess-in-portfolio'), 15%);
+  }
+  &.attention-required {
+    background-color: lighten(task-status-color('attention-required'), 15%);
   }
 }
 

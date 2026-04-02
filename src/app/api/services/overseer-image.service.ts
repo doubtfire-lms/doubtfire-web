@@ -1,9 +1,10 @@
-import { CachedEntityService } from 'ngx-entity-service';
-import { Observable, switchMap } from 'rxjs';
-import { OverseerImage } from 'src/app/api/models/doubtfire-model';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiURL';
+import {CachedEntityService} from 'ngx-entity-service';
+import {Observable, switchMap} from 'rxjs';
+import {OverseerImage} from 'src/app/api/models/doubtfire-model';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {SidekiqJob} from '../models/sidekiq-job';
 
 @Injectable()
 export class OverseerImageService extends CachedEntityService<OverseerImage> {
@@ -19,20 +20,16 @@ export class OverseerImageService extends CachedEntityService<OverseerImage> {
       'tag',
       'pulledImageText',
       'pulledImageStatus',
-      'lastPulledDate'
+      'lastPulledDate',
     );
 
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public pullDockerImage(image: OverseerImage): Observable<OverseerImage> {
+  public pullDockerImage(image: OverseerImage): Observable<SidekiqJob> {
     return super.put(image, {
-      endpointFormat: this.pullImageEndpointFormat
-    }).pipe(
-      switchMap(response => {
-        return super.update(image);
-      })
-    )
+      endpointFormat: this.pullImageEndpointFormat,
+    });
   }
 
   public createInstanceFrom(json: object, other?: any): OverseerImage {

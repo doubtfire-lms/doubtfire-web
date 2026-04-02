@@ -15,6 +15,11 @@ import {
   TaskCommentService,
   TaskSimilarity,
   TaskSimilarityService,
+  TestAttempt,
+  TestAttemptService,
+  ScormComment,
+  UnitRoleService,
+  UnitRole,
 } from './doubtfire-model';
 import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
@@ -24,12 +29,26 @@ import {gradeTaskModal, uploadSubmissionModal} from 'src/app/ajs-upgraded-provid
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MappingFunctions} from '../services/mapping-fn';
 
+export const FeedbackModerationAction = {
+  ShowMore: 'show_more',
+  ShowLess: 'show_less',
+  DismissOk: 'dismiss_ok',
+  DismissGood: 'dismiss_good',
+  Upheld: 'upheld',
+  Overturn: 'overturn',
+  Snooze: 'snooze',
+} as const;
+
+export type FeedbackModerationActionType =
+  (typeof FeedbackModerationAction)[keyof typeof FeedbackModerationAction];
+
 export class Task extends Entity {
   id: number;
 
   status: TaskStatusEnum = 'not_started';
   dueDate: Date;
   extensions: number;
+  scormExtensions: number;
   submissionDate: Date;
   completionDate: Date;
   timesAssessed: number;
@@ -40,19 +59,30 @@ export class Task extends Entity {
   numNewComments: number = 0;
   hasExtensions: boolean;
 
+  moderationType: 'random_sample' | 'escalation' | 'first_feedback';
+
   project: Project;
   definition: TaskDefinition;
 
   //TODO: map task submission details
   hasPdf: boolean = false;
   processingPdf: boolean = false;
+  claimedByUnitRoleId: number | null;
+
+  loadingSubmissionDetails: boolean = false;
 
   pinned: boolean = false;
+
+  targetStartDate: Date;
+  targetDueDate: Date;
 
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
 
   public readonly similarityCache: EntityCache<TaskSimilarity> = new EntityCache<TaskSimilarity>();
+  public readonly testAttemptCache: EntityCache<TestAttempt> = new EntityCache<TestAttempt>();
+
+  suggestedTaskStatus;
 
   private _unit: Unit;
 
@@ -81,6 +111,28 @@ export class Task extends Entity {
 
   public get comments(): readonly TaskComment[] {
     return this.commentCache.currentValues;
+  }
+
+  public get hasDiscussedInClassComment(): boolean {
+    return this.comments.some((comment) => comment.commentType === 'discussed_in_class');
+  }
+
+  public get requiresDiscussionForComplete(): boolean {
+    return !!this.definition?.requiresDiscussion;
+  }
+
+  public get canMarkComplete(): boolean {
+    return !this.requiresDiscussionForComplete || this.hasDiscussedInClassComment;
+  }
+
+  public get tutor(): UnitRole {
+    const enrolments = this.project.tutorialEnrolmentsCache.currentValues.filter(
+      (t) => t.tutorialStream.name === this.definition.tutorialStream.name,
+    );
+    if (enrolments.length === 1) {
+      const user = enrolments[0].tutor;
+      return this.unit.staff.find((ur) => ur.user.id === user.id);
+    }
   }
 
   public addComment(textString): void {
@@ -160,11 +212,29 @@ export class Task extends Entity {
   }
 
   public localDueDate(): Date {
+    if (this.unit.allowFlexibleDates) {
+      if (this.targetDueDate) {
+        // Student's custom planned date
+        return this.targetDueDate;
+      }
+
+      // Unit target dates per grade guidelines
+      if (this.project.targetGrade === 1 && this.definition.cTargetDate) {
+        return this.definition.cTargetDate;
+      }
+      if (this.project.targetGrade === 2 && this.definition.dTargetDate) {
+        return this.definition.dTargetDate;
+      }
+      if (this.project.targetGrade === 3 && this.definition.hdTargetDate) {
+        return this.definition.hdTargetDate;
+      }
+    }
+
     if (this.dueDate) {
       return this.dueDate;
-    } else {
-      return this.definition.localDueDate();
     }
+
+    return this.definition.localDueDate();
   }
 
   public localDueDateString(): string {
@@ -172,8 +242,80 @@ export class Task extends Entity {
     return formatDate(this.localDueDate(), 'd MMM', locale);
   }
 
+  public localDeadlineDateString(): string {
+    const locale: string = AppInjector.get(LOCALE_ID);
+    return formatDate(this.localDeadlineDate(), 'd MMM', locale);
+  }
+
+  public get dueWeek(): number {
+    const startDate: Date = this.unit.startDate;
+    const dueDate: Date = this.localDueDate();
+    const diffInMs: number = dueDate.getTime() - startDate.getTime();
+    const diffInDays: number = Math.ceil(diffInMs / (1000 * 3600 * 24));
+
+    return Math.ceil(diffInDays / 7);
+  }
+
+  /**
+   * Set the task to be due in a specific week.
+   *
+   * @returns the new due week
+   */
+  public set dueWeek(week: number) {
+    // Get original due week and current due week
+    const tdDueWeek: number = this.definition.dueWeek;
+    const currentDueWeek = this.dueWeek;
+
+    // Determine how long the extension needs to be
+    this.extensions = week - tdDueWeek;
+
+    // Map to ms to adjust due date
+    const currentWeekDueMs = MappingFunctions.weeksMs(currentDueWeek);
+    const newWeekDueMs = MappingFunctions.weeksMs(week);
+
+    // Adjust due date based on difference in current and new due weeks
+    this.dueDate = new Date(this.localDueDate().getTime() - currentWeekDueMs + newWeekDueMs);
+  }
+
   public localDeadlineDate(): Date {
-    return this.definition.localDeadlineDate();
+    return MappingFunctions.addDays(this.definition.localDeadlineDate(), this.project.specConDays);
+  }
+
+  public savePlannedDate(): Observable<Task> {
+    const taskService: TaskService = AppInjector.get(TaskService);
+
+    return taskService.update(
+      {
+        projectId: this.project.id,
+        taskDefId: this.definition.id,
+      },
+      {
+        endpointFormat: '/projects/:projectId:/task_def_id/:taskDefId:/plan',
+        entity: this,
+        body: {
+          extensions: this.extensions,
+        },
+      },
+    );
+  }
+
+  public saveTargetDates(startDate: Date | string, dueDate: Date | string): Observable<Task> {
+    const taskService: TaskService = AppInjector.get(TaskService);
+
+    return taskService.update(
+      {
+        projectId: this.project.id,
+        taskDefId: this.definition.id,
+      },
+      {
+        endpointFormat: '/projects/:projectId:/task_def_id/:taskDefId:/target_dates',
+        entity: this,
+        body: {
+          target_start_date: startDate,
+          target_due_date: dueDate,
+        },
+      },
+    );
   }
 
   /**
@@ -236,12 +378,39 @@ export class Task extends Entity {
     return this.daysUntilDueDate() == 0 && !this.inSubmittedState();
   }
 
+  public get startDate(): Date {
+    if (this.unit.allowFlexibleDates) {
+      if (this.targetStartDate) {
+        return this.targetStartDate;
+      }
+
+      // Unit start dates per grade guidelines
+      if (this.project.targetGrade === 1 && this.definition.cStartDate) {
+        return this.definition.cStartDate;
+      }
+      if (this.project.targetGrade === 2 && this.definition.dStartDate) {
+        return this.definition.dStartDate;
+      }
+      if (this.project.targetGrade === 3 && this.definition.hdStartDate) {
+        return this.definition.hdStartDate;
+      }
+    }
+
+    if (this.extensions < 0) {
+      // If the task has an extension, the start date is the due date minus the extension
+      return MappingFunctions.addWeeks(this.definition.startDate, this.extensions);
+    } else {
+      // If the task does not have an extension, the start date is the definition's start date
+      return this.definition.startDate;
+    }
+  }
+
   public timeUntilStartDate(): number {
-    return this.timeBetween(new Date(), this.definition.startDate);
+    return this.timeBetween(new Date(), this.startDate);
   }
 
   public daysUntilStartDate() {
-    return this.daysBetween(new Date(), this.definition.startDate);
+    return this.daysBetween(new Date(), this.startDate);
   }
 
   public isBeforeStartDate(): boolean {
@@ -275,9 +444,7 @@ export class Task extends Entity {
         // Always show in days, Hours, Minutes and Seconds.
         return `${diff} ${data.period.charAt(0).toUpperCase() + data.period.substring(1)}`;
       } else if (diff === 1 && data.period !== 'weeks') {
-        return `1 ${
-          data.period.charAt(0).toUpperCase() + data.period.substring(1, data.period.length - 2)
-        }`;
+        return `1 ${data.period.charAt(0).toUpperCase() + data.period.slice(1, -1)}`;
       }
     }
 
@@ -381,6 +548,14 @@ export class Task extends Entity {
       if (comments[i].replyToId) {
         comments[i].originalComment = comments.find((tc) => tc.id === comments[i].replyToId);
       }
+
+      // Scorm series
+      if (comments[i].commentType === 'scorm') {
+        comments[i].firstInSeries = i === 0 || comments[i - 1].commentType !== 'scorm';
+        (comments[i] as ScormComment).lastInScormSeries =
+          i + 1 === comments.length || comments[i + 1]?.commentType !== 'scorm';
+        if (!comments[i].firstInSeries) comments[i].shouldShowTimestamp = false;
+      }
     }
 
     comments[comments.length - 1].shouldShowAvatar = true;
@@ -396,7 +571,7 @@ export class Task extends Entity {
 
   public taskKeyToIdString(): string {
     const key = this.taskKey();
-    return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(/[.#]/g, '-');
+    return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(/[.# ]/g, '-');
   }
 
   public get similaritiesDetected(): boolean {
@@ -482,7 +657,7 @@ export class Task extends Entity {
 
   public getSubmissionDetails(): Observable<Task> {
     const http: HttpClient = AppInjector.get(HttpClient);
-
+    this.loadingSubmissionDetails = true;
     return http
       .get(
         `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/task_def_id/${
@@ -491,20 +666,50 @@ export class Task extends Entity {
       )
       .pipe(
         map((response: object) => {
+          this.loadingSubmissionDetails = false;
           this.hasPdf = response['has_pdf'];
           this.processingPdf = response['processing_pdf'];
           this.submissionDate = MappingFunctions.mapDate(response, 'submission_date', this);
+          if (response['task_status'] && TaskStatus.STATUS_KEYS.includes(response['task_status'])) {
+            this.status = response['task_status'];
+          }
+          if ('claimed_by_unit_role_id' in response) {
+            this.claimedByUnitRoleId = response['claimed_by_unit_role_id'] as number | null;
+          }
           return this;
         }),
       );
   }
 
   public get overseerEnabled(): boolean {
-    return (
-      this.unit.overseerEnabled &&
-      this.definition.assessmentEnabled &&
-      this.definition.hasTaskAssessmentResources
-    );
+    return this.unit.overseerEnabled && this.definition.assessmentEnabled;
+  }
+
+  public get scormEnabled(): boolean {
+    return this.definition.scormEnabled && this.definition.hasScormData;
+  }
+
+  public get scormPassed(): boolean {
+    if (this.latestCompletedTestAttempt) {
+      return this.latestCompletedTestAttempt.successStatus;
+    }
+    return false;
+  }
+
+  /**
+   * Launch the SCORM player for this task in a new window.
+   */
+  public launchScormPlayer(): void {
+    const url = `#/projects/${this.project.id}/task_def_id/${this.taskDefId}/scorm-player/normal`;
+    window.open(url, '_blank');
+  }
+
+  public get isReadyForUpload(): boolean {
+    return !this.scormEnabled || this.definition.scormBypassTest || this.scormPassed;
+  }
+
+  public get latestCompletedTestAttempt(): TestAttempt {
+    return this.testAttemptCache.currentValues.find((attempt) => attempt.terminated);
   }
 
   public submissionUrl(asAttachment: boolean = false): string {
@@ -571,7 +776,7 @@ export class Task extends Entity {
         }
         const alerts: any = AppInjector.get(AlertService);
         alerts.message('Submission cancelled. Status was reverted.', 6000);
-      }
+      },
     );
   }
 
@@ -590,9 +795,45 @@ export class Task extends Entity {
     }
   }
 
-  public updateTaskStatus(status: TaskStatusEnum) {
+  public markAsDiscussed() {
+    const alerts: AlertService = AppInjector.get(AlertService);
+    const taskService: TaskService = AppInjector.get(TaskService);
+
+    const options: RequestOptions<Task> = {
+      entity: this,
+      cache: this.project.taskCache,
+      body: {
+        discussed: true,
+      },
+    };
+
+    taskService
+      .update(
+        {
+          projectId: this.project.id,
+          taskDefId: this.definition.id,
+        },
+        options,
+      )
+      .subscribe({
+        next: (_response) => {
+          taskService.notifyStatusChange(this);
+          alerts.success('Task successfully marked as discussed in class.', 4000);
+        },
+        error: (error) => {
+          alerts.error(error, 6000);
+        },
+      });
+  }
+
+  public updateTaskStatus(status: TaskStatusEnum, markAsDiscussed?: boolean) {
     const oldStatus = this.status;
     const alerts: AlertService = AppInjector.get(AlertService);
+
+    if (status === 'complete' && !this.canMarkComplete) {
+      alerts.error('This task must be discussed in class before it can marked complete.', 6000);
+      return;
+    }
 
     const updateFunc = () => {
       const taskService: TaskService = AppInjector.get(TaskService);
@@ -605,6 +846,11 @@ export class Task extends Entity {
           quality_pts: this.qualityPts,
         },
       };
+
+      if (markAsDiscussed === true) {
+        options.body['discussed'] = true;
+      }
+
       const hasId: boolean = this.id > 0;
 
       taskService
@@ -622,6 +868,7 @@ export class Task extends Entity {
               this.project.taskCache.add(this);
             }
             this.processTaskStatusChange(status, alerts);
+            taskService.notifyStatusChange(this);
           },
           error: (error) => {
             this.status = oldStatus;
@@ -659,12 +906,16 @@ export class Task extends Entity {
 
   public triggerTransition(status: TaskStatusEnum): void {
     if (this.status === status) return;
+    const alerts: AlertService = AppInjector.get(AlertService);
 
     const requiresFileUpload =
-      ['ready_for_feedback', 'need_help'].includes(status) && this.requiresFileUpload();
+      ['ready_for_feedback', 'need_help', 'assess_in_portfolio'].includes(status) &&
+      this.requiresFileUpload();
 
-    if (requiresFileUpload) {
+    if (requiresFileUpload && this.isReadyForUpload) {
       this.presentTaskSubmissionModal(status);
+    } else if (requiresFileUpload && !this.isReadyForUpload) {
+      alerts.error('Complete Knowledge Check first to submit files', 6000);
     } else {
       this.updateTaskStatus(status);
     }
@@ -718,7 +969,8 @@ export class Task extends Entity {
 
   public canApplyForExtension(): boolean {
     return (
-      this.unit.allowStudentExtensionRequests &&
+      (this.unit.allowStudentExtensionRequests || this.unit.currentUserIsStaff) &&
+      !this.unit.allowFlexibleDates &&
       this.inStateThatAllowsExtension() &&
       (!this.isPastDeadline() || this.wasSubmittedOnTime()) &&
       this.maxWeeksCanExtend() > 0
@@ -733,9 +985,7 @@ export class Task extends Entity {
   }
 
   public maxWeeksCanExtend(): number {
-    return Math.ceil(
-      this.daysBetween(this.localDueDate(), this.definition.localDeadlineDate()) / 7,
-    );
+    return Math.ceil(this.daysBetween(this.localDueDate(), this.localDeadlineDate()) / 7);
   }
 
   /**
@@ -763,5 +1013,90 @@ export class Task extends Entity {
         constructorParams: this,
       },
     );
+  }
+
+  /**
+   * Fetch the SCORM test attempts for this task.
+   */
+  public fetchTestAttempts(): Observable<TestAttempt[]> {
+    const testAttemptService: TestAttemptService = AppInjector.get(TestAttemptService);
+    return testAttemptService.query(
+      {
+        project_id: this.project.id,
+        task_def_id: this.taskDefId,
+      },
+      {
+        cache: this.testAttemptCache,
+        constructorParams: this,
+      },
+    );
+  }
+
+  public hasPrerequisiteTasks(): boolean {
+    if (!this.project) {
+      return false;
+    }
+    return this.definition.taskPrerequisitesCache.currentValues.length > 0;
+  }
+
+  /**
+   * Returns true if this task has prerequisite tasks that are not in a submitted state
+   */
+  public blockedByPrerequisiteTasks(): boolean {
+    if (!this.project) {
+      return false;
+    }
+
+    const prereqs = this.definition.taskPrerequisitesCache.currentValues;
+    if (!prereqs.length) {
+      return false;
+    }
+
+    for (const prerequisiteLink of prereqs) {
+      const prerequisiteTask = prerequisiteLink.prerequisite;
+      const task = this.project.tasks.find((t) => t.definition.id === prerequisiteTask.id);
+
+      // If the task doesnt exist or its state has not met the minimum require state, block submission
+      if (!task || !prerequisiteLink.hasMetRequiredState(this.project)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public moderateFeedback(
+    action: FeedbackModerationActionType,
+    applyToAll: boolean = false,
+  ): Observable<boolean> {
+    const unitRoleService: UnitRoleService = AppInjector.get(UnitRoleService);
+
+    const tutor = this.tutor;
+    if (!tutor) {
+      return;
+    }
+
+    return unitRoleService.post(
+      {
+        id: tutor.id,
+        taskId: this.id,
+      },
+      {
+        endpointFormat: '/unit_roles/:id:/moderation/:taskId:',
+        body: {
+          action,
+          apply_to_all: applyToAll,
+        },
+      },
+    );
+  }
+
+  public requestFeedbackReview(): Observable<boolean> {
+    const httpClient: HttpClient = AppInjector.get(HttpClient);
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${
+      this.project.id
+    }/task_def_id/${this.definition.id}/feedback_review`;
+
+    return httpClient.post<boolean>(url, {});
   }
 }

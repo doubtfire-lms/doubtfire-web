@@ -47,9 +47,6 @@ angular.module('doubtfire.units.states.edit', [
     tasksTab:
       title: "Tasks"
       seq:   5
-    taskAlignmentTab:
-      title: "Task Alignment"
-      seq:   5
     groupsTab:
       title: "Groups"
       seq:   6

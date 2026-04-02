@@ -13,7 +13,11 @@
 <div class="flex flex-row gap-10">
   <mat-form-field appearance="outline" class="basis-1/2">
     <mat-label>Tutorial Stream - Which tutor provides feedback?</mat-label>
-    <mat-select required [(value)]="taskDefinition.tutorialStream">
+    <mat-select
+      required
+      [(value)]="taskDefinition.tutorialStream"
+      (selectionChange)="onTutorialStreamChange()"
+    >
       @for (stream of unit.tutorialStreams; track stream) {
   <mat-option [value]="stream">{{ stream.name }}</mat-option>
 }
@@ -23,11 +27,38 @@
   <span class="flex-grow">
     <strong class="">Related tutorials</strong>
     <ul>
-      @for (tutorial of taskDefinition.tutorialStream?.tutorialsIn(unit); track tutorial) {
-  <li>
-        {{ tutorial?.abbreviation }} {{ tutorial.tutor?.name }}
-      </li>
-}
+      @for (
+        tutorial of taskDefinition.tutorialStream?.tutorialsIn(unit)
+          | slice: 0 : (showAllTutorials ? undefined : 3);
+        track tutorial
+      ) {
+        <li>{{ tutorial?.abbreviation }} {{ tutorial.tutor?.name }}</li>
+      }
+
+      @if (!showAllTutorials && taskDefinition.tutorialStream?.tutorialsIn(unit)?.length > 3) {
+        <li class="mt-1">
+          +{{ taskDefinition.tutorialStream.tutorialsIn(unit).length - 3 }} more tutorials
+        </li>
+      }
+      @if (taskDefinition.tutorialStream?.tutorialsIn(unit).length > 3) {
+        <div class="mt-4">
+          @if (!showAllTutorials) {
+            <button mat-button color="primary" (click)="showAllTutorials = true">
+              View all tutorials
+            </button>
+          } @else {
+            <button mat-button color="warn" (click)="showAllTutorials = false">
+              Collapse list
+            </button>
+          }
+        </div>
+      }
     </ul>
   </span>
+</div>
+
+<div>
+  <mat-slide-toggle [(ngModel)]="taskDefinition.lockAssessmentsToTutorialStream"
+    >Only allow tutors in this tutorial stream to assess this task</mat-slide-toggle
+  >
 </div>
