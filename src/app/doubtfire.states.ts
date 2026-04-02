@@ -15,6 +15,7 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {TimeoutComponent} from './errors/states/timeout/timeout.component';
 /*
  * Use this file to store any states that are sourced by angular components.
  */
@@ -574,6 +575,19 @@ const LtiUnitLinkState: NgHybridStateDeclaration = {
   },
 };
 
+const TimeoutState: NgHybridStateDeclaration = {
+  name: 'timeout',
+  url: '/timeout?dest&params',
+  views: {
+    main: {
+      component: TimeoutComponent,
+    },
+  },
+  data: {
+    pageTitle: '_Timeout_',
+  },
+};
+
 /**
  * Export the list of states we have created in angular
  */
@@ -592,6 +606,7 @@ export const doubtfireStates = [
   ScormPlayerNormalState,
   ScormPlayerReviewState,
   ScormPlayerStudentReviewState,
+  TimeoutState,
   SuccessCloseState,
   projectPlanState,
   TutorDiscussionState,

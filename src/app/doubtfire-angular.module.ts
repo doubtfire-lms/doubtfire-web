@@ -250,6 +250,7 @@ import {TasksViewerComponent} from './units/states/tasks/tasks-viewer/tasks-view
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {GradeService} from './common/services/grade.service';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
+import {TimeoutComponent} from './errors/states/timeout/timeout.component';
 import {ScormAdapterService} from './api/services/scorm-adapter.service';
 import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
 import {TaskScormCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-scorm-card/task-scorm-card.component';
@@ -475,6 +476,7 @@ const GANTT_CHART_CONFIG = {
     CommentsModalComponent,
     ScormPlayerComponent,
     ScormCommentComponent,
+    TimeoutComponent,
     TaskScormCardComponent,
     ScormExtensionCommentComponent,
     ScormExtensionModalComponent,
