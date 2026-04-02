@@ -64,16 +64,26 @@
               <mat-label>Search</mat-label>
               <input matInput type="search" [(ngModel)]="search" (ngModelChange)="onSearchChange()" />
             </mat-form-field>
+            <div class="toolbar-actions">
+              <button mat-stroked-button (click)="onDownloadPortfolios()" class="download-btn">
+                <i class="fa fa-download"></i>
+                Download All Portfolios
+              </button>
             <button mat-flat-button color="primary" (click)="onDownloadGrades()" class="download-btn">
               <i class="fa fa-download"></i>
               Download Grades
             </button>
+            </div>
           </div>
         </div>
 
         <div *ngIf="totalItems === 0" class="empty-state">
           <p>No portfolios found</p>
         </div>
+
+        <p *ngIf="showFilteredCountText" class="filtered-count-text">
+          Showing {{ totalItems }} of {{ totalEnrolledStudents }} students enrolled.
+        </p>
 
         <div *ngIf="totalItems > 0">
           <table mat-table [dataSource]="dataSource" class="f-table">

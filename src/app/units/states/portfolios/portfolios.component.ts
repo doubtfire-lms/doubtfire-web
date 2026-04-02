@@ -84,6 +84,7 @@ export class PortfoliosComponent implements OnInit, OnChanges, OnDestroy {
   public pageSizeOptions = [5, 10, 25];
   public pageIndex = 0;
   public totalItems = 0;
+  public totalEnrolledStudents = 0;
 
   private subscriptions: Subscription[] = [];
 
@@ -176,6 +177,11 @@ export class PortfoliosComponent implements OnInit, OnChanges, OnDestroy {
     this.fileDownloader.downloadFile(this.unit.gradesUrl, `${this.unit.code}-grades.csv`);
   }
 
+  public onDownloadPortfolios(): void {
+    if (!this.unit) return;
+    this.fileDownloader.downloadFile(this.unit.portfoliosUrl, `${this.unit.code}-portfolios.zip`);
+  }
+
   public setActiveTab(tabKey: StudentTabKey): void {
     if (this.activeTab === tabKey) return;
     this.activeTab = tabKey;
@@ -231,6 +237,7 @@ export class PortfoliosComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     let rows = this.unit.students.slice();
+    this.totalEnrolledStudents = this.unit.students.length;
 
     // Portfolio filter (legacy: hasPortfolio includes in-progress portfolios too).
     rows = rows.filter((p) => {
@@ -388,6 +395,10 @@ export class PortfoliosComponent implements OnInit, OnChanges, OnDestroy {
 
   public get selectedStudentLabel(): string {
     return this.selectedStudent?.student?.name ?? '';
+  }
+
+  public get showFilteredCountText(): boolean {
+    return this.totalItems > 0 && this.totalItems < this.totalEnrolledStudents;
   }
 
   public onSearchChange(): void {
