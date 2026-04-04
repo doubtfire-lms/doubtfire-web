@@ -30,7 +30,17 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    align-items: center;
     justify-content: flex-end;
+  }
+
+  .download-staff-notes-wrap {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .staff-notes-panel-body {
+    min-height: 280px;
   }
 
   .download-btn {

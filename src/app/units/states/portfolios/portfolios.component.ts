@@ -14,7 +14,12 @@ import { TaskService } from 'src/app/api/services/task.service';
 import { Subscription } from 'rxjs';
 import { visualisations } from 'src/app/ajs-upgraded-providers';
 
-type StudentTabKey = 'selectStudent' | 'viewProgress' | 'viewPortfolio' | 'assessPortfolio';
+type StudentTabKey =
+  | 'selectStudent'
+  | 'viewProgress'
+  | 'viewStaffNotes'
+  | 'viewPortfolio'
+  | 'assessPortfolio';
 
 type GradeBucket = { name: string; scores: number[] };
 
@@ -34,9 +39,23 @@ export class PortfoliosComponent implements OnInit, OnChanges, OnDestroy {
   public readonly tabs = {
     selectStudent: { title: 'Select Student', subtitle: 'Select the student to assess', key: 'selectStudent' as StudentTabKey },
     viewProgress: { title: 'View Progress', subtitle: 'See the progress of the student', key: 'viewProgress' as StudentTabKey },
+    viewStaffNotes: {
+      title: 'View Staff Notes',
+      subtitle: 'See notes about the student added by staff',
+      key: 'viewStaffNotes' as StudentTabKey,
+    },
     viewPortfolio: { title: 'View Portfolio', subtitle: 'See the portfolio of the student', key: 'viewPortfolio' as StudentTabKey },
     assessPortfolio: { title: 'Assess Portfolio', subtitle: 'Enter a grade for the student', key: 'assessPortfolio' as StudentTabKey },
   };
+
+  /** Tab index order must match `mat-tab` order in the template. */
+  private readonly tabOrder: StudentTabKey[] = [
+    'selectStudent',
+    'viewProgress',
+    'viewStaffNotes',
+    'viewPortfolio',
+    'assessPortfolio',
+  ];
 
   public activeTab: StudentTabKey = 'selectStudent';
 
@@ -121,6 +140,13 @@ export class PortfoliosComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['unit']?.currentValue) {
+      const prev = changes['unit'].previousValue as Unit | undefined;
+      const cur = changes['unit'].currentValue as Unit;
+      if (!prev || prev.id !== cur.id) {
+        cur.loadD2lMapping?.().subscribe();
+      }
+    }
     if (changes['unit'] || changes['unitRole']) {
       this.applyFiltersAndSort();
     }
@@ -170,8 +196,7 @@ export class PortfoliosComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public onTabChanged(index: number): void {
-    const tabKey: StudentTabKey =
-      index === 0 ? 'selectStudent' : index === 1 ? 'viewProgress' : index === 2 ? 'viewPortfolio' : 'assessPortfolio';
+    const tabKey = this.tabOrder[index] ?? 'selectStudent';
     this.onTabChange(tabKey);
   }
 

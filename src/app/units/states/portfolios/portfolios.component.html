@@ -66,6 +66,7 @@
               <input matInput type="search" [(ngModel)]="search" (ngModelChange)="onSearchChange()" />
             </mat-form-field>
             <div class="toolbar-actions">
+              <f-download-staff-notes *ngIf="unit" [unit]="unit" class="download-staff-notes-wrap"></f-download-staff-notes>
               <button mat-stroked-button (click)="onDownloadPortfolios()" class="download-btn">
                 <i class="fa fa-download"></i>
                 Download All Portfolios
@@ -217,6 +218,25 @@
               [project]="project"
               [unit]="unit"
             ></f-ajs-project-progress-dashboard>
+          </div>
+        </div>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab [disabled]="!selectedStudent" label="View Staff Notes">
+      <ng-template matTabContent>
+        <div *ngIf="loadingProject" class="empty-state">
+          <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
+          <p class="mt-3">Loading student project…</p>
+        </div>
+
+        <div *ngIf="project && !loadingProject" class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">Review Staff Notes for {{ selectedStudent?.student.name }}</h3>
+            <p class="panel-subtitle">View internal notes recorded by staff about the student.</p>
+          </div>
+          <div class="panel-body staff-notes-panel-body">
+            <f-staff-notes [project]="project"></f-staff-notes>
           </div>
         </div>
       </ng-template>
