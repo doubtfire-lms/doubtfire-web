@@ -10,17 +10,31 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
 .directive('projectProgressDashboard', ->
   restrict: 'E'
   templateUrl: 'projects/project-progress-dashboard/project-progress-dashboard.tpl.html'
+  # Explicit bindings for use inside upgraded Angular hosts (f-portfolios). Link copies from
+  # $parent when attributes are omitted so legacy templates without project="..." still work.
+  scope:
+    project: '<'
+    unit: '<'
   controller: ($scope, $state, $rootScope, $stateParams, newProjectService, alertService, gradeService, newTaskService, listenerService) ->
-    if $stateParams.projectId?
-      $scope.studentProjectId = $stateParams.projectId
-    else if $scope.project?
-      $scope.studentProjectId = $scope.project.id
-
     $scope.grades = gradeService.grades
 
     $scope.currentVisualisation = 'burndown'
 
+    $scope.taskStats = {}
+
+    updateTaskCompletionStats = ->
+      return unless $scope.project?
+      $scope.taskStats.numberOfTasksCompleted = $scope.project.tasksByStatus(newTaskService.completeStatus).length
+      $scope.taskStats.numberOfTasksRemaining = $scope.project.activeTasks().length - $scope.taskStats.numberOfTasksCompleted
+
+    syncStudentProjectId = ->
+      if $stateParams.projectId?
+        $scope.studentProjectId = $stateParams.projectId
+      else if $scope.project?
+        $scope.studentProjectId = $scope.project.id
+
     $scope.chooseGrade = (idx) ->
+      return unless $scope.project?
       $scope.project.targetGrade = idx
       newProjectService.update($scope.project).subscribe(
         (response) ->
@@ -29,18 +43,19 @@ angular.module('doubtfire.projects.project-progress-dashboard',[])
       updateTaskCompletionStats()
 
     $scope.taskCount = ->
-      $scope.unit.taskDefinitionCount
-
-    $scope.taskStats = {}
-
-    # Update move to task and project...
-    updateTaskCompletionStats = ->
-      $scope.taskStats.numberOfTasksCompleted = $scope.project.tasksByStatus(newTaskService.completeStatus).length
-      $scope.taskStats.numberOfTasksRemaining = $scope.project.activeTasks().length - $scope.taskStats.numberOfTasksCompleted
+      $scope.unit?.taskDefinitionCount
 
     $scope.$on 'TaskStatusUpdated', ->
       updateTaskCompletionStats()
 
+    $scope.$watch 'project', (project) ->
+      return unless project?
+      syncStudentProjectId()
+      updateTaskCompletionStats()
 
-    updateTaskCompletionStats()
+  link: (scope, _el, _attrs) ->
+    unless scope.project?
+      scope.project = scope.$parent.project if scope.$parent?
+    unless scope.unit?
+      scope.unit = scope.$parent.unit if scope.$parent?
 )

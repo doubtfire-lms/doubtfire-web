@@ -131,61 +131,9 @@
     padding: 0.25rem 1rem 1rem;
   }
 
-  .target-grade-title,
-  .progress-summary-title {
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-  }
-
-  .target-grade-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.25rem;
-  }
-
-  .progress-summary-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .progress-summary-item {
-    padding: 0.25rem 0;
-  }
-
-  .progress-summary-item-head {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .status-dot {
-    width: 0.9rem;
-    height: 0.9rem;
-    border-radius: 999px;
-  }
-
-  .status-label {
-    flex: 1;
-    text-transform: capitalize;
-    opacity: 0.85;
-  }
-
-  .status-value {
-    font-variant-numeric: tabular-nums;
-  }
-
-  .progress-line {
-    margin-top: 0.35rem;
-    height: 10px;
-    border-radius: 999px;
-    background-color: #f0f0f0;
-    overflow: hidden;
-  }
-
-  .progress-line-fill {
-    height: 100%;
+  .progress-panel-body {
+    overflow-x: auto;
+    padding-top: 0.5rem;
   }
 
   // Assess panel

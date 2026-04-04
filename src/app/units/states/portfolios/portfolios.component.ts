@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, Optional, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { GradeService } from 'src/app/common/services/grade.service';
@@ -12,6 +12,7 @@ import { FileDownloaderService } from 'src/app/common/file-downloader/file-downl
 import { AlertService } from 'src/app/common/services/alert.service';
 import { TaskService } from 'src/app/api/services/task.service';
 import { Subscription } from 'rxjs';
+import { visualisations } from 'src/app/ajs-upgraded-providers';
 
 type StudentTabKey = 'selectStudent' | 'viewProgress' | 'viewPortfolio' | 'assessPortfolio';
 
@@ -97,6 +98,7 @@ export class PortfoliosComponent implements OnInit, OnChanges, OnDestroy {
     private fileDownloader: FileDownloaderService,
     private alerts: AlertService,
     private taskService: TaskService,
+    @Optional() @Inject(visualisations) private readonly visualisationApi: { refreshAll?: () => void } | null,
   ) {}
 
   ngOnInit(): void {
@@ -161,8 +163,9 @@ export class PortfoliosComponent implements OnInit, OnChanges, OnDestroy {
   public onTabChange(tabKey: StudentTabKey): void {
     this.activeTab = tabKey;
     if (tabKey === 'viewProgress' && this.project) {
-      // Ensure project stats are up-to-date when opening the progress panel.
       this.project.refreshBurndownChartData();
+      // Legacy charts (nv/d3) need a refresh after the tab body is shown.
+      setTimeout(() => this.visualisationApi?.refreshAll?.(), 0);
     }
   }
 
@@ -342,30 +345,8 @@ export class PortfoliosComponent implements OnInit, OnChanges, OnDestroy {
     return this.taskService.statusColors.get(taskStatusKey as any) ?? '#CCCCCC';
   }
 
-  public taskProgressSegments(taskStats: { key: string; value: number }[] | undefined): { key: string; value: number }[] {
-    if (!taskStats) return [];
-    // Keep legacy behaviour: hide tiny segments when rendering labels.
-    return taskStats.filter((bar) => bar.value !== undefined);
-  }
-
   public downloadPortfolios(): void {
     // Intentionally left out: legacy button was commented out.
-  }
-
-  public setTargetGrade(grade: number): void {
-    if (!this.project) return;
-    const next = grade;
-    if (this.project.targetGrade === next) return;
-
-    this.project.targetGrade = next;
-    this.projectService.update(this.project).subscribe({
-      next: () => {
-        this.project.refreshBurndownChartData();
-      },
-      error: (message) => {
-        this.alerts.error(message, 6000);
-      },
-    });
   }
 
   public saveGrade(): void {
