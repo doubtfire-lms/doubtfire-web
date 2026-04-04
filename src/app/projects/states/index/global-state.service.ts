@@ -2,7 +2,7 @@ import {Inject, Injectable, OnDestroy} from '@angular/core';
 import {MediaObserver} from 'ng-flex-layout';
 import {UIRouter} from '@uirouter/angular';
 import {EntityCache} from 'ngx-entity-service';
-import {BehaviorSubject, Observable, Subject, skip, take} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, catchError, of, skip, take} from 'rxjs';
 import {
   CampusService,
   LearningOutcomeService,
@@ -122,9 +122,7 @@ export class GlobalStateService implements OnDestroy {
     setTimeout(() => {
       // Try to login using the refresh token
       this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
-        if (result) {
-          this.loadGlobals();
-        } else {
+        if (!result) {
           // Loading is finshed...
           this.isLoadingSubject.next(false);
 
@@ -133,6 +131,7 @@ export class GlobalStateService implements OnDestroy {
             this.router.stateService.go('sign_in');
           }
         }
+        // On success, loadGlobals() runs from AuthenticationService.setupUserFromResponse
       });
     }, 100);
 
@@ -238,28 +237,34 @@ export class GlobalStateService implements OnDestroy {
       });
 
       if (this.userService.currentUser.isStaff) {
+        // Global GLO / feedback-chip endpoints are optional: many API builds do not mount
+        // GET /api/global/outcomes or /api/global/feedback_chips yet. Failing here should not
+        // block login or spam error toasts; task-level data still loads from unit routes.
         this.learningOutcomeService
           .query({}, {endpointFormat: LearningOutcomeService.globalEndpoint})
+          .pipe(
+            catchError((err: unknown) => {
+              console.warn('Global learning outcomes (GLO) bootstrap skipped:', err);
+              return of([]);
+            }),
+          )
           .subscribe({
             next: (_response) => {
               subscriber.next(true);
-            },
-            error: (_response) => {
-              this.alerts.error('Unable to access service. Failed loading GLOs.', 6000);
             },
           });
 
         this.feedbackTemplateService
           .query({}, {endpointFormat: FeedbackTemplateService.globalEndpoint})
+          .pipe(
+            catchError((err: unknown) => {
+              console.warn('Global GLO feedback templates bootstrap skipped:', err);
+              return of([]);
+            }),
+          )
           .subscribe({
             next: (_response) => {
               subscriber.next(true);
-            },
-            error: (_response) => {
-              this.alerts.error(
-                'Unable to access service. Failed loading GLO feedback templates.',
-                6000,
-              );
             },
           });
       }

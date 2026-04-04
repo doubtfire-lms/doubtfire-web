@@ -206,7 +206,7 @@ export class SignInComponent implements OnInit {
    * Perform the actions needed when the user successfully signs in.
    */
   private actionSignInSuccess(): void {
-    this.globalState.loadGlobals();
+    // loadGlobals() already runs inside AuthenticationService.setupUserFromResponse after sign-in
     this.state.go('welcome');
   }
 
@@ -246,7 +246,6 @@ export class SignInComponent implements OnInit {
     this.authService.signIn(signInCredentials).subscribe({
       next: () => {
         if (this.isLtiLogin) {
-          this.globalState.loadGlobals();
           const params = getUrlParams(document.location.href);
           this.state.go('lti', {
             ltik: params.ltik,
