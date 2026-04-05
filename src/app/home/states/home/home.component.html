@@ -117,18 +117,34 @@
             </mat-card>
           </div>
         </div>
-        <a uiSref="view-all-projects">
-          <button
-            matTooltip="View previous units"
-            matTooltipPosition="above"
-            color="primary"
-            mat-fab
-            extended
-            aria-label="view all projects"
-          >
-            <mat-icon style="color: white">history</mat-icon> View all
-          </button>
-        </a>
+        <!--Start for two buttons All for dashboard and All for all prev Units-->
+        <div class="flex flex-col justify-around items-center h-60">
+          <a uiSref="view-all-projects">
+            <button
+              matTooltip="View previous units"
+              matTooltipPosition="above"
+              color="primary"
+              mat-fab
+              extended
+              aria-label="view all projects"
+            >
+              <mat-icon style="color: white">history</mat-icon> View all
+            </button>
+          </a>
+          <a uiSref="view-all-projects">
+            <button
+              matTooltip="View current units"
+              matTooltipPosition="above"
+              color="primary"
+              mat-fab
+              extended
+              aria-label="view all projects"
+            >
+              <mat-icon style="color: white">dashboard</mat-icon> View all
+            </button>
+          </a>
+        </div>
+        <!--end here so far-->
       </div>
     </div>
   </div>
