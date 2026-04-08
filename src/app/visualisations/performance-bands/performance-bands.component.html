@@ -1,0 +1,17 @@
+<h2>Performance Bands</h2>
+<div>
+  <h3>High Performers</h3>
+  <ul>
+    <li *ngFor="let student of bands.high">{{ student.id }} - {{ student.grade }}</li>
+  </ul>
+
+  <h3>Medium Performers</h3>
+  <ul>
+    <li *ngFor="let student of bands.medium">{{ student.id }} - {{ student.grade }}</li>
+  </ul>
+
+  <h3>Low Performers</h3>
+  <ul>
+    <li *ngFor="let student of bands.low">{{ student.id }} - {{ student.grade }}</li>
+  </ul>
+</div>
