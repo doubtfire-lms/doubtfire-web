@@ -504,6 +504,7 @@ const GANTT_CHART_CONFIG = {
     TaskPlannerCardComponent,
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
+    SummaryTaskStatusChartComponent
   ],
   providers: [
     // Services we provide
@@ -664,7 +665,6 @@ const GANTT_CHART_CONFIG = {
     NgxGanttModule,
     MatSidenavModule,
     MonacoEditorModule.forRoot(),
-    SummaryTaskStatusChartComponent,
     NgxChartsModule,
   ],
 })

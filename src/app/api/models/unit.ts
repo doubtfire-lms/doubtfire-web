@@ -742,4 +742,40 @@ export class Unit extends Entity {
     const prerequisiteService = AppInjector.get(TaskPrerequisiteService);
     return prerequisiteService.getUnitPrerequisites(this.id);
   }
+
+  public getTaskCompletionSnapshots(
+    startDate?: Date,
+    endDate?: Date,
+    limit: number = 365
+  ): Observable<any[]> {
+    let params = new HttpParams();
+
+    if (startDate) {
+      params = params.set(
+        'start_date',
+        `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    if (endDate) {
+      params = params.set(
+        'end_date',
+        `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
+      );
+    }
+
+    params = params.set('limit', limit.toString());
+
+    return AppInjector.get(HttpClient).get<any[]>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots`,
+      { params },
+    );
+  }
+
+  public captureTaskCompletionSnapshot(): Observable<any> {
+    return AppInjector.get(HttpClient).post<any>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots/capture`,
+      {},
+    );
+  }
 }
