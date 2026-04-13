@@ -989,9 +989,14 @@ export class Task extends Entity {
       return;
     }
 
-    if (status === 'fix_and_resubmit') {
+    if (status === 'complete' || status === 'fix_and_resubmit') {
       if (!this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isManualFeedback)) {
-        alerts.error('Feedback must be given before moving this task to Fix and Resubmit', 6000);
+        alerts.error(
+          status === 'complete'
+            ? 'Feedback must be given before moving this task to Complete'
+            : 'Feedback must be given before moving this task to Fix and Resubmit',
+          6000,
+        );
         return;
       }
     }
