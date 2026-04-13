@@ -2,13 +2,14 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {UnitRoleService} from 'src/app/api/services/unit-role.service';
 import {Unit} from 'src/app/api/models/unit';
-import {User} from 'src/app/api/models/doubtfire-model';
+import {Tutorial, User} from 'src/app/api/models/doubtfire-model';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {MatSelectChange} from '@angular/material/select';
 import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
+import {UserService} from 'src/app/api/services/user.service';
 
 @Component({
   selector: 'unit-staff-editor',
@@ -39,6 +40,7 @@ export class UnitStaffEditorComponent implements OnInit {
   constructor(
     private alertService: AlertService,
     private unitRoleService: UnitRoleService,
+    private userService: UserService,
     private confirmationModalService: ConfirmationModalService,
     private tutorNotesModal: TutorNotesModalService,
   ) {}
@@ -210,6 +212,47 @@ export class UnitStaffEditorComponent implements OnInit {
    * @returns void
    */
   removeStaff(staff: UnitRole) {
+    const assignedTutorials = this.tutorialsForUnitRole(staff);
+
+    if (assignedTutorials.length > 0) {
+      const targetRole = this.reassignmentTargetFor(staff);
+
+      if (!targetRole) {
+        this.alertService.error(
+          'Unable to reassign tutorials because there is no valid staff member to receive them.',
+          6000,
+        );
+        return;
+      }
+
+      const tutorialList = assignedTutorials.map((tutorial) => tutorial.abbreviation).join(', ');
+
+      this.confirmationModalService.show(
+        'Reassign Tutorials',
+        `You cannot remove ${staff.user.name} from the unit as they tutor the following tutorials: ${tutorialList}.`,
+        () => {
+          this.unitRoleService
+            .delete(staff, {
+              cache: this.unit.staffCache,
+              params: {reassign_to_unit_role_id: targetRole.id},
+            })
+            .subscribe({
+              next: () => {
+                assignedTutorials.forEach((tutorial) => {
+                  tutorial.tutor = targetRole.user;
+                });
+                this.alertService.success('Staff member removed and tutorials reassigned', 2000);
+              },
+              error: (response) => this.alertService.error(response, 6000),
+            });
+        },
+        undefined,
+        'Reassign to me',
+        'Cancel',
+      );
+      return;
+    }
+
     this.confirmationModalService.show(
       'Remove staff member',
       `Are you sure you want to remove ${staff.user.name} from ${this.unit.code} ${this.unit.name}?`,
@@ -220,6 +263,27 @@ export class UnitStaffEditorComponent implements OnInit {
         });
       },
     );
+  }
+
+  private tutorialsForUnitRole(unitRole: UnitRole): Tutorial[] {
+    return this.unit.tutorials.filter((tutorial) => tutorial.tutor?.id === unitRole.user.id);
+  }
+
+  private reassignmentTargetFor(unitRole: UnitRole): UnitRole | undefined {
+    const currentUserRole = this.unit.staff.find(
+      (staffRole) =>
+        staffRole.user.id === this.userService.currentUser.id && staffRole.id !== unitRole.id,
+    );
+
+    if (currentUserRole) {
+      return currentUserRole;
+    }
+
+    if (this.unit.mainConvenor?.id && this.unit.mainConvenor.id !== unitRole.id) {
+      return this.unit.mainConvenor;
+    }
+
+    return undefined;
   }
 
   groupSetName(id: number) {
