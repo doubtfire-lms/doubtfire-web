@@ -12,7 +12,7 @@
   }
 
   <ng-template #statusActionButtons>
-    <span class="center-buttons flex justify-around gap-5">
+    <span class="center-buttons flex justify-around gap-2">
       <div>
         <button
           [disabled]="!actionButtonEnabled"
@@ -20,23 +20,23 @@
           matTooltip="Mark as Redo"
           matTooltipPosition="above"
           aria-label=""
-          class="button"
+          class="button status-chip redo"
           (click)="selectedTask?.updateTaskStatus('redo')"
         >
           <mat-icon>undo</mat-icon>
         </button>
-
+        <!--
         <button
           [disabled]="!actionButtonEnabled"
           mat-icon-button
           matTooltip="Mark as Attention Required"
           matTooltipPosition="above"
           aria-label=""
-          class="button"
+          class="button status-chip attention-required"
           (click)="selectedTask?.updateTaskStatus('attention_required')"
         >
           <mat-icon>sms_failed</mat-icon>
-        </button>
+        </button> -->
       </div>
       <button
         [disabled]="!actionButtonEnabled"
@@ -44,7 +44,8 @@
         matTooltip="Mark as Resubmit"
         matTooltipPosition="above"
         aria-label=""
-        class="button large-button"
+        class="button status-chip fix-and-resubmit"
+        [class.large-button]="!(selectedTask && selectedTask.suggestedTaskStatus)"
         (click)="markAsResubmit(selectedTask)"
       >
         <mat-icon>construction</mat-icon>
@@ -58,7 +59,7 @@
           }}"
           matTooltipPosition="above"
           aria-label=""
-          class="button extra-large-button status-chip"
+          class="button extra-large-button status-chip suggested-task-status"
           (click)="selectedTask?.updateTaskStatus(selectedTask.suggestedTaskStatus)"
           [ngClass]="taskService.statusData(selectedTask.suggestedTaskStatus).class"
           [disabled]="
@@ -66,7 +67,9 @@
             (selectedTask?.suggestedTaskStatus === 'complete' && !selectedTask?.canMarkComplete)
           "
         >
-          <i class="fa {{ taskService.statusData(selectedTask.suggestedTaskStatus).icon }}"></i>
+          <mat-icon>
+            {{ taskService.statusData(selectedTask.suggestedTaskStatus).materialIcon }}
+          </mat-icon>
         </button>
       }
 
@@ -76,7 +79,8 @@
         matTooltip="Mark as Discuss"
         matTooltipPosition="above"
         aria-label=""
-        class="button large-button"
+        class="button status-chip discuss"
+        [class.large-button]="!(selectedTask && selectedTask.suggestedTaskStatus)"
         (click)="selectedTask?.updateTaskStatus('discuss')"
       >
         <mat-icon>question_answer</mat-icon>
@@ -89,7 +93,7 @@
           matTooltip="Mark as Working On It"
           matTooltipPosition="above"
           aria-label="Mark as Working On It"
-          class="button large-button"
+          class="button large-button status-chip working-on-it"
           (click)="markTaskWorkingOnIt(selectedTask)"
         >
           <mat-icon>bolt</mat-icon>
@@ -108,7 +112,7 @@
             matTooltip="Mark as Complete"
             matTooltipPosition="above"
             aria-label="Mark as Complete"
-            class="button"
+            class="button status-chip complete"
             (click)="selectedTask?.updateTaskStatus('complete')"
           >
             <mat-icon>done</mat-icon>
@@ -306,11 +310,15 @@
             Return to Not Started
           </button>
         }
+        <button mat-menu-item (click)="selectedTask?.updateTaskStatus('attention_required')">
+          <mat-icon matListItemIcon aria-label="Mark as Attention Required">sms_failed</mat-icon>
+          Mark as Attention Required
+        </button>
         <button mat-menu-item (click)="selectedTask?.updateTaskStatus('feedback_exceeded')">
           <mat-icon matListItemIcon aria-label="Switch to Feedback Exceeded"
             >running_with_errors</mat-icon
           >
-          Mark as feedback exceeded
+          Mark as Feedback Exceeded
         </button>
         <button
           mat-menu-item

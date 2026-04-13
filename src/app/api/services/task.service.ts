@@ -231,6 +231,7 @@ export class TaskService extends CachedEntityService<Task> {
   public readonly statusSeq = TaskStatus.STATUS_SEQ;
   public readonly helpDescriptions = TaskStatus.HELP_DESCRIPTIONS;
   public readonly statusIcons: Map<TaskStatusEnum, string> = TaskStatus.STATUS_ICONS;
+  public readonly statusMaterialIcons: Map<TaskStatusEnum, string> = TaskStatus.STATUS_MATERIAL_ICONS;
   public readonly rejectFutureStates = TaskStatus.REJECT_FUTURE_STATES;
 
   public statusClass(status: TaskStatusEnum): string {
