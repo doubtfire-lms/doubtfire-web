@@ -7,7 +7,7 @@
 
 import * as angular from 'angular';
 import {downgradeInjectable, downgradeComponent} from '@angular/upgrade/static';
-
+import {TasksComponent} from './tasks/tasks.component';
 // Here are the old angular node modules, previously loaded via grunt
 //#region
 import 'angular-resource/angular-resource.js';
@@ -42,7 +42,6 @@ import 'build/src/app/visualisations/achievement-box-plot.js';
 import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-modal.js';
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
 import 'build/src/app/tasks/modals/modals.js';
-import 'build/src/app/tasks/tasks.js';
 import 'build/src/app/tasks/project-tasks-list/project-tasks-list.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.js';
@@ -613,3 +612,4 @@ DoubtfireAngularJSModule.directive(
   'fTutorNotes',
   downgradeComponent({component: TutorNotesComponent}),
 );
+DoubtfireAngularJSModule.directive('tasks', downgradeComponent({component: TasksComponent}));
