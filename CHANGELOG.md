@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.27](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-26...v10.0.27) (2026-04-13)
+
+
+### Features
+
+* confirmation modal to reassign tutorials when removing staff ([5f90e90](https://github.com/b0ink/doubtfire-deploy/commit/5f90e9085d69913eced55ad54ce9ac09431d3822))
+
 ### [10.0.1-26](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-25...v10.0.1-26) (2026-03-26)
 
 ### [10.0.1-25](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-24...v10.0.1-25) (2026-03-26)
