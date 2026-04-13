@@ -165,26 +165,6 @@ export class Task extends Entity {
     });
   }
 
-  public getDiscussedInClassBlockReason(): string | null {
-    if (!this.unit.enforceFeedbackBeforeDiscussedInClass) {
-      return null;
-    }
-
-    if (!['fix_and_resubmit', 'discuss'].includes(this.status)) {
-      return 'Discussed in Class is only available after setting this task to Discuss or Fix and Resubmit.';
-    }
-
-    // if (!this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isManualFeedback)) {
-    //   return 'Add a manual feedback comment after the latest Ready for Feedback before marking this task as Discussed in Class.';
-    // }
-
-    // if (this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isAutomated)) {
-    //   return 'Discussed in Class is blocked while automated comments exist after the latest Ready for Feedback.';
-    // }
-
-    return null;
-  }
-
   public get unit(): Unit {
     if (this._unit) return this._unit;
     return this.project.unit;
@@ -932,12 +912,6 @@ export class Task extends Entity {
   public async markAsDiscussed(reasonText?: string) {
     const alerts: AlertService = AppInjector.get(AlertService);
     const taskService: TaskService = AppInjector.get(TaskService);
-    const blockReason = this.getDiscussedInClassBlockReason();
-
-    if (blockReason) {
-      alerts.error(blockReason, 6000);
-      return;
-    }
 
     const markDiscussed = () => {
       const options: RequestOptions<Task> = {
