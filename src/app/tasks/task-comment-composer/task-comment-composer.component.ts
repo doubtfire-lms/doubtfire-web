@@ -550,8 +550,38 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
     this.uploader.nativeElement.click();
   }
 
-  uploadFiles(event) {
-    [...event].forEach((file) => {
+  handlePaste(event: ClipboardEvent) {
+    const files = this.getClipboardFiles(event);
+
+    if (files.length === 0) {
+      return;
+    }
+
+    const existingText = this.input?.first?.nativeElement?.innerText ?? '';
+    event.preventDefault();
+    this.clearPastedPlaceholderContent(existingText);
+    this.uploadFiles(files);
+  }
+
+  handleBeforeInput(event: InputEvent) {
+    if (event.inputType !== 'insertFromPaste') {
+      return;
+    }
+
+    const files = Array.from(event.dataTransfer?.files ?? []);
+
+    if (files.length === 0) {
+      return;
+    }
+
+    const existingText = this.input?.first?.nativeElement?.innerText ?? '';
+    event.preventDefault();
+    this.clearPastedPlaceholderContent(existingText);
+    this.uploadFiles(files);
+  }
+
+  uploadFiles(files: ArrayLike<File>) {
+    Array.from(files).forEach((file) => {
       if (
         ACCEPTED_FILE_TYPES.includes(file.type) ||
         file.type.startsWith('audio/') ||
@@ -561,6 +591,38 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       } else {
         this.alerts.error('Cannot upload that file - only images, audio, and PDFs.', 4000);
       }
+    });
+  }
+
+  private getClipboardFiles(event: ClipboardEvent): File[] {
+    const clipboardData = event.clipboardData;
+
+    if (!clipboardData) {
+      return [];
+    }
+
+    const directFiles = Array.from(clipboardData.files ?? []);
+    if (directFiles.length > 0) {
+      return directFiles;
+    }
+
+    return Array.from(clipboardData.items ?? [])
+      .filter((item) => item.kind === 'file')
+      .map((item) => item.getAsFile())
+      .filter((file): file is File => file != null);
+  }
+
+  private clearPastedPlaceholderContent(existingText: string) {
+    if (!this.input?.first?.nativeElement) {
+      return;
+    }
+
+    // Let the browser finish the paste event lifecycle, then restore the pre-paste text
+    // so clipboard attachment placeholders do not replace an in-progress draft.
+    setTimeout(() => {
+      this.input.first.nativeElement.innerText = existingText;
+      this.saveCurrentDraft();
+      this.cdRef.detectChanges();
     });
   }
 
