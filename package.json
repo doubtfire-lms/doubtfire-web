@@ -50,7 +50,7 @@
     "@uirouter/angularjs": "^1.0.30",
     "@uirouter/core": "^6.1.0",
     "@uirouter/rx": "^1.0.0",
-    "@worktile/gantt": "^18.0.5",
+    "@worktile/gantt": "^21.0.0",
     "angular": "1.5.11",
     "angular-calendar": "^0.31.1",
     "angular-filter": "0.5.17",
