@@ -15,6 +15,8 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {TimeoutComponent} from './errors/states/timeout/timeout.component';
+import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
 /*
  * Use this file to store any states that are sourced by angular components.
  */
@@ -575,6 +577,38 @@ const LtiUnitLinkState: NgHybridStateDeclaration = {
 };
 
 /**
+ * Define the Timeout state.
+ */
+const TimeoutState: NgHybridStateDeclaration = {
+  name: 'timeout',
+  url: '/timeout',
+  views: {
+    main: {
+      component: TimeoutComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Timeout',
+  },
+};
+
+/**
+ * Define the Unauthorised state.
+ */
+const UnauthorisedState: NgHybridStateDeclaration = {
+  name: 'unauthorised',
+  url: '/unauthorised',
+  views: {
+    main: {
+      component: UnauthorisedComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Unauthorised',
+  },
+};
+
+/**
  * Export the list of states we have created in angular
  */
 export const doubtfireStates = [
@@ -599,4 +633,6 @@ export const doubtfireStates = [
   LtiDashboardState,
   LtiUnitLinkState,
   TutorAttendance,
+  TimeoutState,
+  UnauthorisedState,
 ];

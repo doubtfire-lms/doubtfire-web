@@ -14,7 +14,7 @@ A modern, lightweight learning management system.
 
 SUMMARY:
 
-74 / 132 components migrated
+76 / 132 components migrated
 
 MIGRATED:
 
@@ -94,6 +94,8 @@ MIGRATED:
 - [x] ./src/app/account/edit-profile/edit-profile.component.ts
 - [x] ./src/app/groups/group-set-selector/group-set-selector.component.ts
 - [x] ./src/app/admin/modals/create-unit-modal/create-unit-modal.coffee
+- [x] ./src/app/errors/states/timeout/timeout.component.ts
+- [x] ./src/app/errors/states/unauthorised/unauthorised.component.ts
 
 TODO:
 
@@ -222,9 +224,7 @@ TODO:
 - [ ] ./src/app/sessions/sessions.coffee
 - [ ] ./src/app/errors/errors.coffee
 - [ ] ./src/app/errors/states/states.coffee
-- [ ] ./src/app/errors/states/unauthorised/unauthorised.coffee
 - [ ] ./src/app/errors/states/not-found/not-found.coffee
-- [ ] ./src/app/errors/states/timeout/timeout.coffee
 
 ## Table of Contents
 

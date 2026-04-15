@@ -285,6 +285,8 @@ import {SidekiqProgressModalComponent} from './common/modals/sidekiq-progress-mo
 import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/sidekiq-jobs-modal.component';
 import {SidekiqJobService} from './api/services/sidekiq-job.service';
 import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-card.component';
+import {TimeoutComponent} from './errors/states/timeout/timeout.component';
+import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LtiService} from './api/services/lti.service';
@@ -495,6 +497,8 @@ const GANTT_CHART_CONFIG = {
     SidekiqProgressModalComponent,
     SidekiqJobsModalComponent,
     UnavailableCardComponent,
+    TimeoutComponent,
+    UnauthorisedComponent,
     LtiDashboardComponent,
     LtiUnitLinkComponent,
     TaskDefinitionPrerequisitesComponent,

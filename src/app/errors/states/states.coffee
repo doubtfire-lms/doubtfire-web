@@ -1,4 +1,1 @@
-angular.module("doubtfire.errors.states", [
-  "doubtfire.errors.states.timeout"
-  "doubtfire.errors.states.unauthorised"
-])
+angular.module("doubtfire.errors.states", [])
