@@ -79,7 +79,7 @@
     "html5-qrcode": "^2.3.8",
     "jquery": "2.1.4",
     "jszip": "^3.10.1",
-    "lodash": "~4.17",
+    "lodash": "~4.18",
     "lottie-web": "^5.13.0",
     "marked": "^11.1.0",
     "moment": "^2.29.4",
