@@ -1,0 +1,37 @@
+<div class="peer-progress">
+  <h1 class="mat-headline">Peer Progress Indicator</h1>
+
+  <!-- Privacy Controls -->
+  <mat-slide-toggle [(ngModel)]="privacy.share">Share my progress anonymously</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="privacy.view">View peer progress data</mat-slide-toggle>
+
+  <!-- Summary -->
+  <div class="summary">
+    <h2>Your Progress Summary</h2>
+    <p>{{ progressSummary.completed }}/{{ progressSummary.total }} Tasks Completed</p>
+    <p>{{ progressSummary.classAverage }}/{{ progressSummary.total }} Class Average</p>
+    <p>{{ progressSummary.percentile }}</p>
+    <p>{{ progressSummary.band }} Performance Band</p>
+  </div>
+
+  <!-- Distribution Chart -->
+  <h3>Performance Band Distribution</h3>
+  <ul>
+    <li *ngFor="let d of distribution">{{ d.band }}: {{ d.pct }}%</li>
+  </ul>
+
+  <!-- Progress Over Time -->
+  <h3>Progress Over Time</h3>
+  <p>[Line chart placeholder comparing You vs Class Average]</p>
+
+  <!-- Task Completion by Peers -->
+  <h3>Task Completion by Peers</h3>
+  <ul>
+    <li *ngFor="let task of tasks">{{ task }}: [completion % placeholder]</li>
+  </ul>
+
+  <!-- Disabled State -->
+  <div *ngIf="!privacy.view" class="disabled">
+    <p>Peer Progress Hidden. Enable 'View peer progress data' to see comparisons.</p>
+  </div>
+</div>

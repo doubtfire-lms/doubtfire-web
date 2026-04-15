@@ -173,6 +173,19 @@
                 <mat-icon style="color: black; margin-right: 6px">people</mat-icon>Users</a
               ></mat-list-item
             >
+            <mat-list-item [hidden]="!ifAdmin && !ifConvenor" role="listitem">
+              <a
+                fxLayout="row"
+                fxLayoutAlign="start"
+                class="removeStyle"
+                mat-button
+                style="width: 100%"
+                uiSref="peerProgress"
+              >
+                <mat-icon style="color: black; margin-right: 6px">insights</mat-icon>
+                Peer Progress Indicator
+              </a>
+            </mat-list-item>
           </mat-list>
         </mat-card>
       </div>
