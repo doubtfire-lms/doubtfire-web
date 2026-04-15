@@ -33,7 +33,7 @@
     "@angular/cli": "^17.3.6",
     "@angular/common": "^17.3.6",
     "@angular/compiler": "^17.3.6",
-    "@angular/core": "^17.3.6",
+    "@angular/core": "^21.2.8",
     "@angular/forms": "^17.3.6",
     "@angular/material": "^17.3.10",
     "@angular/material-date-fns-adapter": "^17.3.10",
