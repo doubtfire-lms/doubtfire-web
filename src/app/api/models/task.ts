@@ -20,7 +20,9 @@ import {
   ScormComment,
   UnitRoleService,
   UnitRole,
+  UserService,
 } from './doubtfire-model';
+import {TutorNoteService} from '../services/tutor-note.service';
 import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
@@ -126,6 +128,10 @@ export class Task extends Entity {
     return !this.requiresDiscussionForComplete || this.hasDiscussedInClassComment;
   }
 
+  public get latestReadyForFeedbackAt(): Date | null {
+    return this.submissionDate ? new Date(this.submissionDate) : null;
+  }
+
   public get tutor(): UnitRole {
     const enrolments = this.project.tutorialEnrolmentsCache.currentValues.filter(
       (t) => t.tutorialStream.name === this.definition.tutorialStream.name,
@@ -145,6 +151,18 @@ export class Task extends Entity {
           console.log(error);
         },
       });
+  }
+
+  private commentsSinceLatestReadyForFeedback(): readonly TaskComment[] {
+    const latestReadyForFeedbackAt = this.latestReadyForFeedbackAt?.getTime();
+    if (!latestReadyForFeedbackAt) {
+      return this.comments;
+    }
+
+    return this.comments.filter((comment) => {
+      const createdAt = comment.createdAt ? new Date(comment.createdAt).getTime() : NaN;
+      return Number.isFinite(createdAt) && createdAt >= latestReadyForFeedbackAt;
+    });
   }
 
   public get unit(): Unit {
@@ -891,38 +909,74 @@ export class Task extends Entity {
     }
   }
 
-  public markAsDiscussed() {
+  public async markAsDiscussed(reasonText?: string) {
     const alerts: AlertService = AppInjector.get(AlertService);
     const taskService: TaskService = AppInjector.get(TaskService);
 
-    const options: RequestOptions<Task> = {
-      entity: this,
-      cache: this.project.taskCache,
-      body: {
-        discussed: true,
-      },
+    const markDiscussed = () => {
+      const options: RequestOptions<Task> = {
+        entity: this,
+        cache: this.project.taskCache,
+        body: {
+          discussed: true,
+        },
+      };
+
+      taskService
+        .update(
+          {
+            projectId: this.project.id,
+            taskDefId: this.definition.id,
+          },
+          options,
+        )
+        .subscribe({
+          next: (_response) => {
+            taskService.notifyStatusChange(this);
+            alerts.success('Task successfully marked as discussed in class.', 4000);
+          },
+          error: (error) => {
+            alerts.error(error, 6000);
+          },
+        });
     };
 
-    taskService
-      .update(
-        {
-          projectId: this.project.id,
-          taskDefId: this.definition.id,
-        },
-        options,
-      )
-      .subscribe({
-        next: (_response) => {
-          taskService.notifyStatusChange(this);
-          alerts.success('Task successfully marked as discussed in class.', 4000);
-        },
-        error: (error) => {
-          alerts.error(error, 6000);
-        },
-      });
+    if (reasonText) {
+      const prefix = `I'm manually marking this discussed in class because...`;
+      const trimmedReason = reasonText.trim();
+      const noteText = trimmedReason.startsWith(prefix)
+        ? trimmedReason
+        : `${prefix} ${trimmedReason}`;
+      const currentUser = AppInjector.get(UserService).currentUser;
+      const currentUnitRole = this.unit.staff.find(
+        (unitRole) => unitRole.user.id === currentUser.id,
+      );
+
+      if (!currentUnitRole) {
+        alerts.error(
+          'Unable to find your staff role, so the tutor note could not be recorded.',
+          6000,
+        );
+        return;
+      }
+
+      AppInjector.get(TutorNoteService)
+        .addNote(currentUnitRole, noteText, this)
+        .subscribe({
+          next: () => {
+            markDiscussed();
+          },
+          error: (error) => {
+            alerts.error(`Unable to save the required tutor note: ${error}`, 6000);
+          },
+        });
+      return;
+    }
+
+    markDiscussed();
   }
 
-  public updateTaskStatus(
+  public async updateTaskStatus(
     status: TaskStatusEnum,
     markAsDiscussed?: boolean,
     triggerRecursiveFix?: boolean,
@@ -933,6 +987,18 @@ export class Task extends Entity {
     if (status === 'complete' && !this.canMarkComplete) {
       alerts.error('This task must be discussed in class before it can marked complete.', 6000);
       return;
+    }
+
+    if (status === 'complete' || status === 'fix_and_resubmit') {
+      if (!this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isManualFeedback)) {
+        alerts.error(
+          status === 'complete'
+            ? 'Feedback must be given before moving this task to Complete'
+            : 'Feedback must be given before moving this task to Fix and Resubmit',
+          6000,
+        );
+        return;
+      }
     }
 
     const updateFunc = () => {
@@ -1008,7 +1074,7 @@ export class Task extends Entity {
     }
   }
 
-  public triggerTransition(status: TaskStatusEnum): void {
+  public async triggerTransition(status: TaskStatusEnum): Promise<void> {
     if (this.status === status) return;
     const alerts: AlertService = AppInjector.get(AlertService);
 
@@ -1021,7 +1087,7 @@ export class Task extends Entity {
     } else if (requiresFileUpload && !this.isReadyForUpload) {
       alerts.error('Complete Knowledge Check first to submit files', 6000);
     } else {
-      this.updateTaskStatus(status);
+      await this.updateTaskStatus(status);
     }
   }
 

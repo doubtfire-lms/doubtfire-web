@@ -18,6 +18,7 @@ import {
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {DiscussedInClassReasonModalService} from 'src/app/common/modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
@@ -33,6 +34,8 @@ enum TutorDiscussionTabView {
   encapsulation: ViewEncapsulation.None, // enables custom material-ui css
 })
 export class TutorDiscussionComponent implements AfterViewInit {
+  private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;
+
   @Input() unitId: number;
   @Input() username: string;
   @Input() attendance: boolean;
@@ -68,6 +71,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
     private state: StateService,
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
+    private discussedInClassReasonModal: DiscussedInClassReasonModalService,
     private route: UIRouter,
     private taskCommentService: TaskCommentService,
     private taskService: TaskService,
@@ -352,10 +356,33 @@ export class TutorDiscussionComponent implements AfterViewInit {
 
   public markSelectedTasksDicussed() {
     const selectedTasks = this.tasksList.selectedOptions.selected;
-    for (const taskOption of selectedTasks) {
-      const task = taskOption.value as Task;
-      task.markAsDiscussed();
+    if (!this.unit?.enforceFeedbackBeforeDiscussedInClass) {
+      for (const taskOption of selectedTasks) {
+        const task = taskOption.value as Task;
+        task.markAsDiscussed();
+      }
+      return;
     }
+
+    this.discussedInClassReasonModal
+      .show(
+        'Mark Discussed in Class',
+        `Add a tutor note explaining why ${selectedTasks.length} task${
+          selectedTasks.length === 1 ? '' : 's'
+        } ${selectedTasks.length === 1 ? 'is' : 'are'} being marked as discussed in class.`,
+        this.discussedInClassNotePrefix,
+      )
+      .afterClosed()
+      .subscribe((reason) => {
+        if (!reason) {
+          return;
+        }
+
+        for (const taskOption of selectedTasks) {
+          const task = taskOption.value as Task;
+          task.markAsDiscussed(reason);
+        }
+      });
   }
 
   public markSelectedTasksCheckedIn() {
@@ -439,10 +466,25 @@ export class TutorDiscussionComponent implements AfterViewInit {
     this.filteredTasks = [...this.allTasks];
   }
 
+  private filteredDiscussionTasks(tasks: readonly Task[]): Task[] {
+    return tasks.filter((task) => {
+      if (!this.statusesToInclude.includes(task.status)) {
+        return false;
+      }
+
+      if (
+        this.unit?.enforceFeedbackBeforeDiscussedInClass &&
+        task.status === 'ready_for_feedback'
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  }
+
   public viewAllFilteredTasks() {
-    const discussionTasks = this.project?.tasks.filter((task) =>
-      this.statusesToInclude.includes(task.status),
-    );
+    const discussionTasks = this.filteredDiscussionTasks(this.project?.tasks ?? []);
     this.filteredTasks = [...discussionTasks];
   }
 
@@ -461,9 +503,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
         return this.getProject(this.unit, student.id);
       })
       .then((project) => {
-        const discussionTasks = project.tasks.filter((task) =>
-          this.statusesToInclude.includes(task.status),
-        );
+        const discussionTasks = this.filteredDiscussionTasks(project.tasks);
         if (!this.attendance) {
           this.filteredTasks = [...discussionTasks];
           this.allTasks = [
