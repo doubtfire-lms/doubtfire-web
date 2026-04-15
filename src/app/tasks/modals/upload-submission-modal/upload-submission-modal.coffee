@@ -36,6 +36,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
   $scope.privacyPolicy = PrivacyPolicy
   # Expose task to scope
   $scope.task = task
+  $scope.uploadSubmitLocked = false
 
   # Set up submission types
   submissionTypes = _.chain(newTaskService.submittableStatuses).map((status) ->
@@ -86,8 +87,11 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
         $modalInstance.close(task)
         alertService.error("Upload failed. Please try again, or contact your tutor if the issue continues.", 8000)
 
-    onFailureCancel: $modalInstance.dismiss
+    onFailureCancel: ->
+      $scope.uploadSubmitLocked = false
+      $modalInstance.dismiss()
     onComplete: ->
+      $scope.uploadSubmitLocked = false
       return unless $scope.uploader.response? and $scope.uploader.response.id?
       $modalInstance.close(task)
       # unless $scope.task.isTestSubmission
@@ -179,7 +183,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       false
     submit: ->
       # Disable if no comment is supplied with need_help, or if submitting for feedback and task is assess in portfolio only
-      !$scope.uploader.isReady or ($scope.comment.trim().length < 25 && ((($scope.submissionType == 'ready_for_feedback' || $scope.submissionType == 'reupload_evidence') && $scope.task.definition.assessInPortfolioOnly) || $scope.submissionType == 'need_help') )
+      $scope.uploadSubmitLocked or !$scope.uploader.isReady or ($scope.comment.trim().length < 25 && ((($scope.submissionType == 'ready_for_feedback' || $scope.submissionType == 'reupload_evidence') && $scope.task.definition.assessInPortfolioOnly) || $scope.submissionType == 'need_help') )
     cancel: ->
       # Can't cancel whilst uploading
       $scope.uploader.isUploading
@@ -203,6 +207,9 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 
   # Click upload on UI
   $scope.uploadButtonClicked = ->
+    return if $scope.uploadSubmitLocked || $scope.uploader.isUploading
+
+    $scope.uploadSubmitLocked = true
     # Move files to the end to simulate as though state move
     states.shown = _.without(states.shown, 'files')
     states.shown.push('files')
