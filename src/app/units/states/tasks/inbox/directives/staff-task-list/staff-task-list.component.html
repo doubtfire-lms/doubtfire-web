@@ -259,7 +259,14 @@
                 <user-icon class="self-center" [user]="task.project.student" [size]="30">
                 </user-icon>
                 <div class="task-list-data truncate flex-1" [hidden]="isNarrow">
-                  <h4 class="student-name flex items-center gap-1">
+                  <h4 class="student-name flex min-w-0 items-center gap-1">
+                    @if (task.moderationType === 'escalation') {
+                      <mat-icon
+                        matTooltip="This task has been escalated by the student"
+                        class="shrink-0 text-amber-500"
+                        >gavel</mat-icon
+                      >
+                    }
                     @if (getWarningIcon(task) === 'warning') {
                       <mat-icon
                         matTooltip="Feedback due soon — please review before it escalates."
@@ -280,7 +287,7 @@
                       </mat-icon>
                     }
 
-                    {{ task.project.student.name }}
+                    <span class="truncate">{{ task.project.student.name }}</span>
                   </h4>
                   <div class="task-details truncate">
                     {{ task.definition.abbreviation }} -
