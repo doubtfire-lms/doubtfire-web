@@ -586,6 +586,16 @@ export class Unit extends Entity {
     }`;
   }
 
+  public getBatchFeedbackCsvUploadUrl(taskDefinition: TaskDefinition | number): string {
+    const params = new URLSearchParams({unit_id: `${this.id}`});
+    const taskDefinitionId =
+      taskDefinition instanceof TaskDefinition ? taskDefinition.id : taskDefinition;
+
+    params.set('task_definition_id', `${taskDefinitionId}`);
+
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/batch_feedback_csv.json?${params.toString()}`;
+  }
+
   public getTaskDefinitionBatchUploadUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/task_definitions?unit_id=${this.id}`;
   }

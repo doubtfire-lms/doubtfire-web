@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Upload Batch Feedback CSV</h2>
+
+<mat-dialog-content class="flex flex-col gap-4">
+  <div class="flex items-start gap-3">
+    <mat-icon class="mt-0.5">fact_check</mat-icon>
+    <p class="m-0">
+      Prepare a batch feedback CSV for <span class="font-medium">{{ taskLabel }}</span
+      >.
+    </p>
+  </div>
+
+  <mat-list class="py-0">
+    <mat-list-item>
+      <span matListItemTitle>Student match</span>
+      <span matListItemLine>Include either <code>Student ID</code> or <code>Username</code>.</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span matListItemTitle>Status update</span>
+      <span matListItemLine>Include a <code>Status</code> column with the new task outcome.</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span matListItemTitle>Feedback comment</span>
+      <span matListItemLine>Include a <code>Comment</code> column for the feedback text.</span>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" type="button" (click)="continueToUpload()">
+    Upload CSV
+  </button>
+  <button mat-button type="button" (click)="close()">Close</button>
+</mat-dialog-actions>

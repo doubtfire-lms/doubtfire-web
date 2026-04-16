@@ -149,6 +149,7 @@ import {fPdfViewerComponent} from './common/pdf-viewer/pdf-viewer.component';
 import {SafePipe} from './common/pipes/safe.pipe';
 import {PdfViewerPanelComponent} from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import {StaffTaskListComponent} from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
+import {BatchFeedbackWorkflowDialogComponent} from './units/states/tasks/inbox/directives/staff-task-list/batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 import {FiltersPipe} from './common/filters/filters.pipe';
 import {TasksOfTaskDefinitionPipe} from './common/filters/tasks-of-task-definition.pipe';
 import {TasksInTutorialsPipe} from './common/filters/tasks-in-tutorials.pipe';
@@ -427,6 +428,7 @@ const GANTT_CHART_CONFIG = {
     SafePipe,
     PdfViewerPanelComponent,
     StaffTaskListComponent,
+    BatchFeedbackWorkflowDialogComponent,
     TaskSimilarityViewComponent,
     FiltersPipe,
     TasksOfTaskDefinitionPipe,

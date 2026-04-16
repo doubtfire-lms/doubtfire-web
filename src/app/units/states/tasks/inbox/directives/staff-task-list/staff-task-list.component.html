@@ -79,6 +79,12 @@
           <mat-icon>download</mat-icon>
           <span>Bulk Export Submission Files</span>
         </button>
+        @if (unitRole?.role === 'Convenor') {
+          <button mat-menu-item (click)="openBatchFeedbackDialog()">
+            <mat-icon>upload_file</mat-icon>
+            <span>Upload Batch Feedback CSV</span>
+          </button>
+        }
         <button
           mat-menu-item
           (click)="downloadJPLAGReport()"
