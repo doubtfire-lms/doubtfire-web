@@ -245,7 +245,6 @@ export const DoubtfireAngularJSModule = angular
     'doubtfire.config',
     'doubtfire.sessions',
     'doubtfire.common',
-    'doubtfire.errors',
     'doubtfire.units',
     'doubtfire.tasks',
     'doubtfire.projects',
