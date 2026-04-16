@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-29](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-28...v10.0.1-29) (2026-04-15)
+
+
+### Features
+
+* discussed in class refactor ([#1145](https://github.com/b0ink/doubtfire-deploy/issues/1145)) ([4d8bb5b](https://github.com/b0ink/doubtfire-deploy/commit/4d8bb5b82d89caa02ed4936819be601b3f6977fc))
+
+### [10.0.1-28](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-27...v10.0.1-28) (2026-04-13)
+
+### [10.0.1-27](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.27...v10.0.1-27) (2026-04-13)
+
+### [10.0.27](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-26...v10.0.27) (2026-04-13)
+
+
+### Features
+
+* confirmation modal to reassign tutorials when removing staff ([5f90e90](https://github.com/b0ink/doubtfire-deploy/commit/5f90e9085d69913eced55ad54ce9ac09431d3822))
+
+### [10.0.1-26](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-25...v10.0.1-26) (2026-03-26)
+
+### [10.0.1-25](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-24...v10.0.1-25) (2026-03-26)
+
+
+### Features
+
+* display sso redirecting state ([248c992](https://github.com/b0ink/doubtfire-deploy/commit/248c992f46488f61916e00a87ca32ed987721f31))
+* pause feedback threshold during teaching period breaks ([#1138](https://github.com/b0ink/doubtfire-deploy/issues/1138)) ([12fbf81](https://github.com/b0ink/doubtfire-deploy/commit/12fbf8147107dc185a9a9cbea940efac93a0f316))
+
+### [10.0.1-24](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-23...v10.0.1-24) (2026-03-24)
+
+
+### Features
+
+* confirm recursive fix in mobile tutor view ([b64601a](https://github.com/b0ink/doubtfire-deploy/commit/b64601a425c7a64bccfaf47c1e4fccb0343b1589))
+
+### [10.0.1-23](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-22...v10.0.1-23) (2026-03-24)
+
 ### [10.0.1-22](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-21...v10.0.1-22) (2026-03-23)
 
 

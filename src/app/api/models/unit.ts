@@ -75,6 +75,7 @@ export class Unit extends Entity {
   extensionWeeksOnResubmitRequest: number;
   allowStudentChangeTutorial: boolean;
   markLateSubmissionsAsAssessInPortfolio: boolean;
+  enforceFeedbackBeforeDiscussedInClass: boolean;
 
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
