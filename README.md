@@ -14,7 +14,7 @@ A modern, lightweight learning management system.
 
 SUMMARY:
 
-74 / 132 components migrated
+80 / 132 components migrated
 
 MIGRATED:
 
@@ -101,9 +101,9 @@ TODO:
 - [ ] ./src/app/visualisations/summary-task-status-scatter.coffee
 - [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
 - [ ] ./src/app/visualisations/achievement-custom-bar-chart.coffee
-- [ ] ./src/app/visualisations/student-task-status-pie-chart.coffee
+- [x] ./src/app/visualisations/student-task-status-pie-chart/student-task-status-pie-chart.component.ts
 - [ ] ./src/app/visualisations/alignment-bullet-chart.coffee
-- [ ] ./src/app/visualisations/progress-burndown-chart.coffee
+- [x] ./src/app/visualisations/progress-burndown-chart/progress-burndown-chart.component.ts
 - [ ] ./src/app/visualisations/task-status-pie-chart.coffee
 - [ ] ./src/app/visualisations/achievement-box-plot.coffee
 - [ ] ./src/app/visualisations/task-completion-box-plot.coffee
@@ -114,7 +114,7 @@ TODO:
 - [ ] ./src/app/tasks/modals/upload-submission-modal/upload-submission-modal.coffee
 - [ ] ./src/app/tasks/modals/grade-task-modal/grade-task-modal.coffee
 - [ ] ./src/app/tasks/task-definition-selector/task-definition-selector.coffee
-- [ ] ./src/app/tasks/project-tasks-list/project-tasks-list.coffee
+- [x] ./src/app/tasks/project-tasks-list/project-tasks-list.coffee (removed - dead code)
 - [ ] ./src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.coffee
 - [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/task-ilo-alignment-modal.coffee
 - [ ] ./src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.coffee
@@ -131,7 +131,7 @@ TODO:
 - [ ] ./src/app/config/analytics/analytics.coffee
 - [ ] ./src/app/config/debug/debug.coffee
 - [ ] ./src/app/projects/projects.coffee
-- [ ] ./src/app/projects/project-progress-dashboard/project-progress-dashboard.coffee
+- [x] ./src/app/projects/project-progress-dashboard/project-progress-dashboard.coffee (removed - dead code)
 - [ ] ./src/app/projects/states/states.coffee
 - [ ] ./src/app/projects/states/all/directives/directives.coffee
 - [ ] ./src/app/projects/states/all/directives/all-projects-list/all-projects-list.coffee
@@ -139,8 +139,8 @@ TODO:
 - [ ] ./src/app/projects/states/groups/groups.coffee
 - [ ] ./src/app/projects/states/feedback/feedback.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/directives.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.coffee
-- [ ] ./src/app/projects/states/dashboard/directives/student-task-list/student-task-list.coffee
+- [x] ./src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.component.ts
+- [x] ./src/app/projects/states/dashboard/directives/student-task-list/student-task-list.component.ts
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/directives.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/directives/task-outcomes-card/task-outcomes-card.coffee
 - [ ] ./src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.coffee

@@ -11,6 +11,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './styles/mixins/task-list.scss';
+student-task-list, f-student-task-list {
+  @include task-list();
+}
+
 .mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
   .mdc-notched-outline__notch {
   border-right-style: hidden;

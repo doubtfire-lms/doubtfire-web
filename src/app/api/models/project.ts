@@ -53,7 +53,7 @@ export class Project extends Entity {
   }[];
   public orderScale: number;
 
-  public burndownChartData: { key: string; values: number[] }[];
+  public burndownChartData: { key: string; values: number[][]; color?: string; classed?: string }[];
   public readonly taskCache: EntityCache<Task> = new EntityCache<Task>();
   public readonly staffNoteCache: EntityCache<StaffNote> = new EntityCache<StaffNote>();
   public readonly tutorialEnrolmentsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
@@ -378,7 +378,7 @@ export class Project extends Entity {
   }
 
   public refreshBurndownChartData(): void {
-    const result: { key: string; values: number[] }[] = [];
+    const result: { key: string; values: number[][]; color?: string; classed?: string }[] = [];
 
     // Setup the dictionaries to contain the keys and values
     // key = series name

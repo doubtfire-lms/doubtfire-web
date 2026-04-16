@@ -1,0 +1,67 @@
+<div class="panel panel-default panel-scrollable" *ngIf="project?.activeTasks">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      Progress Dashboard <span *ngIf="tutor">for {{ project.student.name }}</span>
+    </h4>
+  </div>
+  <div class="panel-body">
+    <div class="col-sm-12 col-xl-12">
+      <div class="card">
+        <f-task-planner-card [project]="project"></f-task-planner-card>
+      </div>
+    </div>
+    <div class="col-sm-12 col-xl-6">
+      <div class="card card-default card-sm card-target-grade">
+        <div class="card-heading">
+          <h4>Target Grade</h4>
+        </div>
+        <div class="card-body">
+          <select class="form-control input-lg" [ngModel]="project.targetGrade" disabled>
+            <option *ngFor="let grade of grades.values" [ngValue]="grade">
+              {{ grades.names[grade] }}
+            </option>
+          </select>
+          <div class="ml-1 py-2 opacity-70">
+            To change your target grade, use the
+            <a uiSref="project/plan" class="underline cursor-pointer">Task Planner</a>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <f-task-ilos-card [unit]="project.unit" [iloContextType]="'Unit'"></f-task-ilos-card>
+      </div>
+      <div class="card card-default card-lg card-burndown">
+        <div class="card-heading">
+          <h4>Progress Burndown</h4>
+          <div class="text-muted">
+            The burndown chart shows how much work remains for you to achieve your target grade.
+          </div>
+        </div>
+        <div class="card-body">
+          <f-progress-burndown-chart
+            [project]="project"
+            [unit]="project.unit"
+          ></f-progress-burndown-chart>
+        </div>
+        <div class="card-footer">
+          Aim to keep your
+          <strong style="color: #e01b5d">Complete</strong>
+          line close to or ahead of the
+          <strong class="text-muted">Target</strong>
+          line to keep on track.
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 col-xl-6">
+      <div class="card card-default card-lg card-pie-chart">
+        <div class="card-heading">
+          <h4>Task Statuses</h4>
+          <div class="text-muted">Breakdown summary of each of your task statuses.</div>
+        </div>
+        <div class="card-body">
+          <f-student-task-status-pie-chart [project]="project"></f-student-task-status-pie-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

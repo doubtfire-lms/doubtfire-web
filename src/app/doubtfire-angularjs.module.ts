@@ -29,8 +29,6 @@ import 'angular-md5/angular-md5.js';
 import 'build/templates-app.js';
 import 'build/assets/wav-worker.js';
 import 'build/src/app/visualisations/summary-task-status-scatter.js';
-import 'build/src/app/visualisations/student-task-status-pie-chart.js';
-import 'build/src/app/visualisations/progress-burndown-chart.js';
 import 'build/src/app/visualisations/target-grade-pie-chart.js';
 import 'build/src/app/visualisations/task-status-pie-chart.js';
 import 'build/src/app/visualisations/task-completion-box-plot.js';
@@ -43,7 +41,6 @@ import 'build/src/app/tasks/modals/upload-submission-modal/upload-submission-mod
 import 'build/src/app/tasks/modals/grade-task-modal/grade-task-modal.js';
 import 'build/src/app/tasks/modals/modals.js';
 import 'build/src/app/tasks/tasks.js';
-import 'build/src/app/tasks/project-tasks-list/project-tasks-list.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-rater/task-ilo-alignment-rater.js';
 import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment.js';
@@ -59,12 +56,9 @@ import 'build/src/app/config/vendor-dependencies/vendor-dependencies.js';
 import 'build/src/app/config/analytics/analytics.js';
 import 'build/src/app/config/debug/debug.js';
 import 'build/src/app/projects/projects.js';
-import 'build/src/app/projects/project-progress-dashboard/project-progress-dashboard.js';
 import 'build/src/app/projects/states/groups/groups.js';
 import 'build/src/app/projects/states/feedback/feedback.js';
 import 'build/src/app/projects/states/states.js';
-import 'build/src/app/projects/states/dashboard/directives/progress-dashboard/progress-dashboard.js';
-import 'build/src/app/projects/states/dashboard/directives/student-task-list/student-task-list.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.js';
 import 'build/src/app/projects/states/dashboard/dashboard.js';
@@ -241,6 +235,8 @@ import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-pla
 import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
+import {StudentTaskListComponent} from './projects/states/dashboard/directives/student-task-list/student-task-list.component';
+import {ProgressDashboardComponent} from './projects/states/dashboard/directives/progress-dashboard/progress-dashboard.component';
 
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
@@ -613,3 +609,14 @@ DoubtfireAngularJSModule.directive(
   'fTutorNotes',
   downgradeComponent({component: TutorNotesComponent}),
 );
+
+DoubtfireAngularJSModule.directive(
+  'studentTaskList',
+  downgradeComponent({component: StudentTaskListComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'progressDashboard',
+  downgradeComponent({component: ProgressDashboardComponent}),
+);
+
