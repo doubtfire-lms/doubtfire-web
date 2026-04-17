@@ -152,6 +152,47 @@ export class Task extends Entity {
     return this.project.unit;
   }
 
+  private getBreakOverlapMilliseconds(
+    startTime: number,
+    endTime: number,
+    breaks: readonly {startDate: Date; numberOfWeeks: number}[],
+  ): number {
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+
+    return breaks.reduce((overlap, teachingBreak) => {
+      const breakStart = new Date(teachingBreak.startDate).getTime();
+      const breakDuration = (teachingBreak.numberOfWeeks ?? 0) * 7 * millisecondsPerDay;
+      const breakEnd = breakStart + breakDuration;
+
+      if (!Number.isFinite(breakStart) || breakDuration <= 0) {
+        return overlap;
+      }
+
+      const overlapStart = Math.max(startTime, breakStart);
+      const overlapEnd = Math.min(endTime, breakEnd);
+
+      return overlap + Math.max(0, overlapEnd - overlapStart);
+    }, 0);
+  }
+
+  public daysSinceSubmission(nowTime = Date.now()): number {
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+    const submissionTime = new Date(this.submissionDate).getTime();
+
+    if (!Number.isFinite(submissionTime) || nowTime <= submissionTime) {
+      return 0;
+    }
+
+    const teachingBreaks = this.unit.teachingPeriod?.breaks ?? [];
+    const pausedMilliseconds = this.getBreakOverlapMilliseconds(
+      submissionTime,
+      nowTime,
+      teachingBreaks,
+    );
+
+    return Math.max(0, nowTime - submissionTime - pausedMilliseconds) / millisecondsPerDay;
+  }
+
   /**
    * Determine if a task matches a given search text.
    *
