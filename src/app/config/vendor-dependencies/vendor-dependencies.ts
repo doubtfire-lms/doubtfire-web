@@ -1,7 +1,9 @@
 // Use this module to define all third-party dependencies
 // that are used in Doubtfire
 
-export const vendorDependencies: string[] = [
+import * as angular from 'angular';
+
+export const vendorDependencies = angular.module('doubtfire.config.vendor-dependencies', [
   // ng*
   'ngCsv',
   'ngSanitize',
@@ -26,4 +28,4 @@ export const vendorDependencies: string[] = [
   // analytics
   'angulartics',
   'angulartics.google.analytics',
-];
+]);
