@@ -15,21 +15,8 @@
   </div>
 
   <div>
-    <p class="m-0">
-      Each username folder should contain files that match the task upload requirements.
-    </p>
-    <p class="m-0">
-      @if (uploadRequirementNames.length > 0) {
-        @for (requirementName of uploadRequirementNames; track requirementName; let last = $last) {
-          <code>{{ requirementName }}</code>
-          @if (!last) {
-            <span> | </span>
-          }
-        }
-      } @else {
-        <span>none listed for this task.</span>
-      }
-    </p>
+    <p class="m-0">Each username folder should contain a PDF named after the student username.</p>
+    <p class="m-0">We expect files to follow the pattern <code>username/username.pdf</code>.</p>
   </div>
 
   <div>

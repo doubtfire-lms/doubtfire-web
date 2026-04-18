@@ -26,14 +26,6 @@ export class BatchFeedbackWorkflowDialogComponent {
     return `${this.data.taskDefinition.abbreviation} ${this.data.taskDefinition.name}`;
   }
 
-  get uploadRequirementNames(): string[] {
-    return (
-      this.data.taskDefinition?.uploadRequirements
-        ?.map((requirement) => requirement.name)
-        .filter((name): name is string => !!name) ?? []
-    );
-  }
-
   continueToUpload(): void {
     this.dialogRef.close({openUpload: true});
   }
