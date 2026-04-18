@@ -348,12 +348,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       }
 
       this.csvUploadModal.show(
-        `Upload ${taskDefinition.abbreviation} Batch Feedback CSV`,
+        `Upload ${taskDefinition.abbreviation} Batch Feedback Zip`,
         '',
         {
-          file: {name: 'Batch Feedback CSV', type: 'csv'},
+          file: {name: 'Batch Feedback Zip', type: 'zip'},
         },
-        this.unit.getBatchFeedbackCsvUploadUrl(taskDefinition),
+        this.unit.getBatchFeedbackUploadUrl(taskDefinition),
         (response: any) => {
           if (!response) {
             this.alertService.error('Batch feedback upload failed.', 6000);

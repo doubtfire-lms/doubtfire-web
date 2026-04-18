@@ -586,7 +586,7 @@ export class Unit extends Entity {
     }`;
   }
 
-  public getBatchFeedbackCsvUploadUrl(taskDefinition: TaskDefinition | number): string {
+  public getBatchFeedbackUploadUrl(taskDefinition: TaskDefinition | number): string {
     const params = new URLSearchParams({unit_id: `${this.id}`});
     const taskDefinitionId =
       taskDefinition instanceof TaskDefinition ? taskDefinition.id : taskDefinition;
