@@ -19,6 +19,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {csvResultModalService, csvUploadModalService} from 'src/app/ajs-upgraded-providers';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {
   Tutorial,
   UserService,
@@ -354,14 +355,24 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
           file: {name: 'Batch Feedback Zip', type: 'zip'},
         },
         this.unit.getBatchFeedbackUploadUrl(taskDefinition),
-        (response: any) => {
-          if (!response) {
+        (response: SidekiqJob) => {
+          if (!response?.id) {
             this.alertService.error('Batch feedback upload failed.', 6000);
             return;
           }
 
-          this.csvResultModal.show('Batch Feedback Upload Results', response);
-          this.refreshData();
+          this.sidekiqProgressModalService
+            .show(`Uploading ${taskDefinition.abbreviation} Batch Feedback`, response.id)
+            .subscribe({
+              next: (job) => {
+                this.csvResultModal.show('Batch Feedback Upload Results', JSON.parse(job.result));
+                this.refreshData();
+              },
+              error: (error) => {
+                console.error(error);
+                this.alertService.error('Batch feedback upload failed.', 6000);
+              },
+            });
         },
       );
     });
