@@ -5,7 +5,7 @@
     <mat-icon class="mt-0.5">fact_check</mat-icon>
     <div>
       <p class="m-0">
-        Prepare a batch feedback zip for <span class="font-medium">{{ taskLabel }}</span
+        Prepare a batch feedback zip for <span>{{ taskLabel }}</span
         >.
       </p>
       <p class="m-0">
@@ -14,27 +14,31 @@
     </div>
   </div>
 
-  <mat-list class="py-0">
-    <mat-list-item>
-      <span matListItemTitle>Student match</span>
-      <span matListItemLine>Include either <code>Student ID</code> or <code>Username</code>.</span>
-    </mat-list-item>
-    <mat-list-item>
-      <span matListItemTitle>Status update</span>
-      <span matListItemLine>Include a <code>Status</code> column with the new task outcome.</span>
-    </mat-list-item>
-    <mat-list-item>
-      <span matListItemTitle>Zip contents</span>
-      <span matListItemLine>
-        Put files inside each student's username folder that match the task upload requirements,
-        such as <code>test-scan.pdf</code>.
-      </span>
-    </mat-list-item>
-    <mat-list-item>
-      <span matListItemTitle>Feedback comment</span>
-      <span matListItemLine>Include a <code>Comment</code> column for the feedback text.</span>
-    </mat-list-item>
-  </mat-list>
+  <div>
+    <p class="m-0">
+      Each username folder should contain files that match the task upload requirements.
+    </p>
+    <p class="m-0">
+      @if (uploadRequirementNames.length > 0) {
+        @for (requirementName of uploadRequirementNames; track requirementName; let last = $last) {
+          <code>{{ requirementName }}</code>
+          @if (!last) {
+            <span> | </span>
+          }
+        }
+      } @else {
+        <span>none listed for this task.</span>
+      }
+    </p>
+  </div>
+
+  <div>
+    <p class="m-0">CSV Columns</p>
+    <p class="m-0">
+      <code>Student Username</code> | <code>Student ID</code> | <code>Status</code> |
+      <code>Comment</code>
+    </p>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

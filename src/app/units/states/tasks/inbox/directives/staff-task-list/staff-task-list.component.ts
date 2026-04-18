@@ -334,7 +334,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
     const dialogRef = this.dialog.open(BatchFeedbackWorkflowDialogComponent, {
       width: '100%',
-      maxWidth: '720px',
+      maxWidth: '840px',
       data: {
         unit: this.unit,
         taskDefinition,
