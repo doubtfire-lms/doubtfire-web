@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-30](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-29...v10.0.1-30) (2026-04-18)
+
+
+### Features
+
+* batch upload feedback csv ([#1175](https://github.com/b0ink/doubtfire-deploy/issues/1175)) ([9f95987](https://github.com/b0ink/doubtfire-deploy/commit/9f959877b6f47d878d87b468f4aab73f536d598b))
+* display icon for tasks escalated by student ([dfcfd47](https://github.com/b0ink/doubtfire-deploy/commit/dfcfd472305ef2971fa72734c18e77253b98fa11))
+* enable task pinning in explorer ([1647e2b](https://github.com/b0ink/doubtfire-deploy/commit/1647e2bcc86ac6fb08c82be9795a06939c57bb6e))
+
+
+### Bug Fixes
+
+* debounce duplicate task submission requests ([80f92e2](https://github.com/b0ink/doubtfire-deploy/commit/80f92e2277c48978e1738340063a7223c04fddb8))
+
 ### [10.0.1-29](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-28...v10.0.1-29) (2026-04-15)
 
 
