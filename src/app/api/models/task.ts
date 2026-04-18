@@ -1109,12 +1109,13 @@ export class Task extends Entity {
     return this.project.getGroupForTask(this);
   }
 
-  public pin(): void {
+  public pin(onSuccess?: () => void): void {
     const http = AppInjector.get(HttpClient);
 
     http.post(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`, {}).subscribe({
       next: (data) => {
         this.pinned = true;
+        onSuccess?.();
       },
       error: (message) => {
         (AppInjector.get(AlertService) as AlertService).error(message, 6000);
@@ -1122,7 +1123,7 @@ export class Task extends Entity {
     });
   }
 
-  public unpin(): void {
+  public unpin(onSuccess?: () => void): void {
     const http = AppInjector.get(HttpClient);
 
     http
@@ -1130,6 +1131,7 @@ export class Task extends Entity {
       .subscribe({
         next: (_data) => {
           this.pinned = false;
+          onSuccess?.();
         },
         error: (message) => {
           (AppInjector.get(AlertService) as AlertService).error(message, 6000);

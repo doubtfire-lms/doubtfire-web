@@ -359,6 +359,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
+    filteredTasks = this.sortPinnedTasksFirst(filteredTasks);
     this.filteredTasks = filteredTasks;
 
     if (this.filteredTasks != null) {
@@ -563,7 +564,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   togglePin(task: Task) {
-    task.pinned ? task.unpin() : task.pin();
+    if (task.id === undefined) {
+      // Can't pin a task that doesn't actually exist yet
+      this.alertService.error(`This task can't be pinned yet`, 3000);
+      return;
+    }
+    const refreshOrdering = () => this.applyFilters();
+    task.pinned ? task.unpin(refreshOrdering) : task.pin(refreshOrdering);
   }
 
   getWarningIcon(task: Task): 'warning' | 'overflow' | null {
@@ -583,5 +590,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     return null;
+  }
+
+  private sortPinnedTasksFirst(tasks: Task[]): Task[] {
+    if (!this.isTaskDefMode || !tasks?.length) {
+      return tasks;
+    }
+
+    return [...tasks].sort((a, b) => Number(b.pinned) - Number(a.pinned));
   }
 }
