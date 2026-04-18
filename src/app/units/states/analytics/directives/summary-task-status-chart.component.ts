@@ -5,10 +5,26 @@ import { Unit } from 'src/app/api/models/unit';
 import {TooltipService} from '@swimlane/ngx-charts';
 import { TaskStatusEnum } from 'src/app/api/models/doubtfire-model';
 
-interface TaskCompletionSnapshot {
+type TaskCompletionSnapshot = {
   snapshot_date: string;
   captured_at: string;
-  stats: Record<string, Record<string, Record<string, Record<string, number>>>>;
+  stats: CampusStats;
+}
+
+type TaskStatusCounts = {
+  [status: string]: number;
+}
+
+type TaskCodeStats = {
+  [taskCode: string]: TaskStatusCounts;
+}
+
+type ClassStats = {
+  [classCode: string]: TaskCodeStats;
+}
+
+type CampusStats = {
+  [campusName: string]: ClassStats;
 }
 
 @Component({
