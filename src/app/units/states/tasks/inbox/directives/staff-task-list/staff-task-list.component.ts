@@ -10,11 +10,13 @@ import {
   ViewChild,
   TemplateRef,
   OnDestroy,
+  Inject,
 } from '@angular/core';
 import {TasksOfTaskDefinitionPipe} from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import {TasksInTutorialsPipe} from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import {TasksForInboxSearchPipe} from 'src/app/common/filters/tasks-for-inbox-search.pipe';
 import {MatDialog} from '@angular/material/dialog';
+import {csvResultModalService, csvUploadModalService} from 'src/app/ajs-upgraded-providers';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {
@@ -35,6 +37,7 @@ import {Router} from '@angular/router';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {TasksByTutorPipe} from 'src/app/common/filters/tasks-by-tutor.pipe';
+import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -128,6 +131,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     private alertService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
+    @Inject(csvUploadModalService) private csvUploadModal: any,
+    @Inject(csvResultModalService) private csvResultModal: any,
     private userService: UserService,
     private hotkeys: HotkeysService,
     private router: Router,
@@ -316,6 +321,49 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       error: (error) => {
         this.alertService.error(error, 6000);
       },
+    });
+  }
+
+  openBatchFeedbackDialog() {
+    const taskDefinition = this.filters.taskDefinition ?? undefined;
+
+    if (!taskDefinition) {
+      this.alertService.error('Select a task definition before uploading batch feedback.', 5000);
+      return;
+    }
+
+    const dialogRef = this.dialog.open(BatchFeedbackWorkflowDialogComponent, {
+      width: '100%',
+      maxWidth: '840px',
+      data: {
+        unit: this.unit,
+        taskDefinition,
+        myStudentsOnly: this.filters.tutorialIdSelected === 'mine',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result?.openUpload) {
+        return;
+      }
+
+      this.csvUploadModal.show(
+        `Upload ${taskDefinition.abbreviation} Batch Feedback Zip`,
+        '',
+        {
+          file: {name: 'Batch Feedback Zip', type: 'zip'},
+        },
+        this.unit.getBatchFeedbackUploadUrl(taskDefinition),
+        (response: any) => {
+          if (!response) {
+            this.alertService.error('Batch feedback upload failed.', 6000);
+            return;
+          }
+
+          this.csvResultModal.show('Batch Feedback Upload Results', response);
+          this.refreshData();
+        },
+      );
     });
   }
 

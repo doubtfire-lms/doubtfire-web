@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>Upload Batch Feedback Zip &mdash; {{ taskLabel }}</h2>
+
+<mat-dialog-content class="flex flex-col gap-4">
+  <div class="flex items-start gap-3">
+    <mat-icon class="mt-0.5">fact_check</mat-icon>
+    <div>
+      <p class="m-0">
+        Prepare a batch feedback zip for <span>{{ taskLabel }}</span
+        >.
+      </p>
+      <p class="m-0">
+        Include a <code>marks.csv</code> file and a folder for each student using their username.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <p class="m-0">
+      Each username folder should contain files that match the task upload requirements.
+    </p>
+    <p class="m-0">
+      @if (uploadRequirementNames.length > 0) {
+        @for (requirementName of uploadRequirementNames; track requirementName; let last = $last) {
+          <code>{{ requirementName }}</code>
+          @if (!last) {
+            <span> | </span>
+          }
+        }
+      } @else {
+        <span>none listed for this task.</span>
+      }
+    </p>
+  </div>
+
+  <div>
+    <p class="m-0">marks.csv Columns</p>
+    <p class="m-0">
+      <code>Student Username</code> | <code>Student ID</code> | <code>Status</code> |
+      <code>Comment</code>
+    </p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" type="button" (click)="continueToUpload()">
+    Upload Zip
+  </button>
+  <button mat-button type="button" (click)="close()">Close</button>
+</mat-dialog-actions>
