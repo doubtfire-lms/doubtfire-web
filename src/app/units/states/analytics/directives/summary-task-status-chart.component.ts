@@ -3,6 +3,8 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {Unit} from 'src/app/api/models/unit';
 import {TooltipService} from '@swimlane/ngx-charts';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {
   TaskCompletionSnapshot,
   TaskCodeStats,
@@ -56,6 +58,8 @@ export class SummaryTaskStatusChartComponent {
   constructor(
     private gradeService: GradeService,
     private taskService: TaskService,
+    private alertService: AlertService,
+    private sidekiqProgressModalService: SidekiqProgressModalService,
     private chartToolTipService: TooltipService,
     private viewContainerRef: ViewContainerRef,
     private injectorObj: Injector,
@@ -165,9 +169,19 @@ export class SummaryTaskStatusChartComponent {
 
   captureNow(): void {
     this.unit.captureTaskCompletionSnapshot().subscribe({
-      next: (snapshot) => {
-        console.log('Snapshot captured successfully', 4000);
-        this.loadRecentSnapshot();
+      next: (job) => {
+        if (!job?.id) {
+          this.alertService.error('Failed to capture task completion snapshot.', 6000);
+          return;
+        }
+
+        this.sidekiqProgressModalService
+          .show(`Capturing task completion snapshot for ${this.unit.code}`, job.id)
+          .subscribe({
+            next: () => {
+              this.loadRecentSnapshot();
+            },
+          });
       },
       error: (error) => {
         console.log('Snapshot capture failed', error);
