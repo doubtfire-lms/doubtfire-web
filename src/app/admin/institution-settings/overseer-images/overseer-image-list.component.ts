@@ -1,12 +1,13 @@
+import {HttpClient} from '@angular/common/http';
 import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatTable} from '@angular/material/table';
+import {UntypedFormControl, Validators} from '@angular/forms';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {OverseerImage, OverseerImageService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {MatSort, Sort} from '@angular/material/sort';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {MatDialog} from '@angular/material/dialog';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'overseer-image-list',
@@ -28,6 +29,8 @@ export class OverseerImageListComponent
   dataSource = new MatTableDataSource(this.overseerImages);
   loading = false;
 
+  public diskSpace: number | null = null;
+
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
   constructor(
@@ -35,6 +38,7 @@ export class OverseerImageListComponent
     private alerts: AlertService,
     private dialog: MatDialog,
     private sidekiqProgressModalService: SidekiqProgressModalService,
+    private httpClient: HttpClient,
   ) {
     super(
       {
@@ -49,6 +53,12 @@ export class OverseerImageListComponent
     // Get all the overseer images and add them to the table
     this.overseerImageService.fetchAll().subscribe((response) => {
       this.pushToTable(response);
+    });
+
+    this.httpClient.get<number>('/api/admin/disk_space').subscribe({
+      next: (diskSpace) => {
+        this.diskSpace = diskSpace;
+      },
     });
   }
 

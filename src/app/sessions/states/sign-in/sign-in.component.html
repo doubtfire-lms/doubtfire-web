@@ -57,7 +57,14 @@
               type="form"
               [disabled]="form.invalid"
             >
-              Sign In
+              <div class="flex items-center gap-2">
+                @if (redirectingSSO) {
+                  Signing In...
+                  <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                  Sign In
+                }
+              </div>
             </button>
           </form>
         </div>

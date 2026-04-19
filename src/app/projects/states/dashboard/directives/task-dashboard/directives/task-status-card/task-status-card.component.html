@@ -41,25 +41,34 @@
     }
   </mat-card-content>
 
-  <mat-card-actions class="space-x-2">
-    <button
-      mat-stroked-button
-      (click)="uploadSubmission()"
-      [disabled]="
-        isReadyForFeedback() || task?.blockedByPrerequisiteTasks() || isSubmittedForPortfolio()
-      "
-    >
-      Upload Submission
-    </button>
+  <mat-card-actions class="justify-between w-full">
+    <div class="space-x-2">
+      <button
+        mat-stroked-button
+        (click)="uploadSubmission()"
+        [disabled]="
+          isReadyForFeedback() || task?.blockedByPrerequisiteTasks() || isSubmittedForPortfolio()
+        "
+      >
+        Upload Submission
+      </button>
 
-    @if (task?.canApplyForExtension()) {
-      <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
-    }
-    @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
-      <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
-    }
-    <button mat-raised-button color="primary" (click)="openDiscussionQrCode()">
-      Show Discussion QR
-    </button>
+      @if (task?.canApplyForExtension()) {
+        <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
+      }
+      @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
+        <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
+      }
+    </div>
+
+    <div>
+      <button mat-icon-button aria-label="More task options" [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <div fxFlex></div>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="openFeedbackAppealModal()">Request Feedback Review</button>
+      </mat-menu>
+    </div>
   </mat-card-actions>
 </mat-card>

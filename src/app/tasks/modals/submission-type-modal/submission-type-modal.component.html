@@ -1,36 +1,65 @@
 <h2 mat-dialog-title>Select submission type</h2>
 <mat-dialog-content>
   <p>
-    This task will not be marked as complete by your tutor, and will instead be assessed in your
-    final portfolio.
+    This task won't be marked as complete by your tutor. It will be assessed as part of your final
+    portfolio.
   </p>
   <p>
-    You may submit it for tutor feedback before the deadline, but you'll still need to resubmit it
-    for your portfolio when you are ready.
+    You can submit it for feedback before the deadline, but you'll need to resubmit it later for
+    portfolio assessment.
   </p>
   <div class="p-5 flex justify-center gap-5">
     <button
       matTooltip="Receive feedback from your tutor"
       mat-raised-button
       class="h-[175px] w-[175px] flex flex-col text-align p-2 items-center gap-3"
-      color="primary"
-      (click)="triggerTransition('ready_for_feedback')"
+      [color]="selectedTransition === 'ready_for_feedback' ? 'primary' : 'default'"
+      (click)="selectRff()"
     >
       <mat-icon class="icon-size">grading</mat-icon>
-      <div class="text-center">Submit for Feedback</div>
+      <div class="text-center">I would like feedback</div>
     </button>
     <button
       matTooltip="Submit directly for portfolio assessment"
       mat-raised-button
       class="h-[175px] w-[175px] flex flex-col text-align p-2 items-center gap-3"
-      (click)="triggerTransition('assess_in_portfolio')"
+      [color]="selectedTransition === 'assess_in_portfolio' ? 'primary' : 'default'"
+      (click)="selectAip()"
     >
       <mat-icon class="icon-size">auto_stories</mat-icon>
 
-      <div class="text-center">Skip Feedback</div>
+      <div class="text-center">I'm done!</div>
     </button>
   </div>
+  @if (selectedTransition === 'ready_for_feedback') {
+    <p>
+      You've made progress on this task and would like feedback, clarification, or to discuss
+      questions with your tutor.
+    </p>
+    <p>
+      If submitted before the deadline, your tutor will review it and provide feedback. After making
+      changes, you'll need to resubmit it before the portfolio deadline, using the
+      <strong>I’m done!</strong> button.
+    </p>
+  } @else if (selectedTransition === 'assess_in_portfolio') {
+    <p>
+      You’re done with this task and satisfied with your submission. You don’t require any further
+      feedback.
+    </p>
+    <p>
+      This submission will not be reviewed again by your tutor and will be assessed directly in your
+      final portfolio. You can resubmit as many times as you like until the portfolio deadline.
+    </p>
+  }
 </mat-dialog-content>
-<mat-dialog-actions class="flex justify-end">
-  <button mat-button [mat-dialog-close]>Cancel</button>
+<mat-dialog-actions class="flex justify-between">
+  <button mat-raised-button [mat-dialog-close]>Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="selectedTransition === null"
+    (click)="submit()"
+  >
+    Submit
+  </button>
 </mat-dialog-actions>

@@ -255,6 +255,9 @@ export class UnitService extends CachedEntityService<Unit> {
         },
       },
       // 'groupMemberships', - map to group memberships
+      'feedbackWarningThresholdDays',
+      'feedbackOverflowThresholdDays',
+      'enforceFeedbackBeforeDiscussedInClass',
     );
 
     this.mapping.addJsonKey(
@@ -284,6 +287,9 @@ export class UnitService extends CachedEntityService<Unit> {
       'allowStudentExtensionRequests',
       'extensionWeeksOnResubmitRequest',
       'allowStudentChangeTutorial',
+      'feedbackWarningThresholdDays',
+      'feedbackOverflowThresholdDays',
+      'enforceFeedbackBeforeDiscussedInClass',
     );
   }
 

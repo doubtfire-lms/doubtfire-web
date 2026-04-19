@@ -10,13 +10,16 @@ import {
   ViewChild,
   TemplateRef,
   OnDestroy,
+  Inject,
 } from '@angular/core';
 import {TasksOfTaskDefinitionPipe} from 'src/app/common/filters/tasks-of-task-definition.pipe';
 import {TasksInTutorialsPipe} from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import {TasksForInboxSearchPipe} from 'src/app/common/filters/tasks-for-inbox-search.pipe';
 import {MatDialog} from '@angular/material/dialog';
+import {csvResultModalService, csvUploadModalService} from 'src/app/ajs-upgraded-providers';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {
   Tutorial,
   UserService,
@@ -34,6 +37,8 @@ import {HotkeysService} from '@ngneat/hotkeys';
 import {Router} from '@angular/router';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {TasksByTutorPipe} from 'src/app/common/filters/tasks-by-tutor.pipe';
+import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -65,14 +70,17 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     forceStream: boolean;
     studentName: string;
     tutorialIdSelected: any;
+    unitRoleIdSelected: number | string;
     taskDefinitionIdSelected: number | TaskDefinition;
   };
   @Input() showSearchOptions = true;
 
   @Input() isNarrow: boolean;
 
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
+
   userHasTutorials: boolean;
-  filteredTasks: any[] = null;
+  filteredTasks: Task[] = null;
 
   studentFilter: {
     id: number | string;
@@ -82,7 +90,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     tutorial?: Tutorial;
   }[] = null;
 
-  tasks: any[] = null;
+  tutorGroups: {
+    label: string;
+    options: {id: string | number; inboxDescription: string | undefined}[];
+  }[] = [];
+
+  tasks: Task[] = null;
 
   // hasJplagReport: boolean = false;
 
@@ -94,6 +107,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   definedTasksPipe = new TasksOfTaskDefinitionPipe();
   tasksInTutorialsPipe = new TasksInTutorialsPipe();
   taskWithStudentNamePipe = new TasksForInboxSearchPipe();
+  tasksByTutorPipe = new TasksByTutorPipe();
   // Let's call having a source of tasksForDefinition plus having a task definition
   // auto-selected with the search options open task def mode -- i.e., the mode
   // for selecting tasks by task definitions
@@ -118,6 +132,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     private alertService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
+    @Inject(csvUploadModalService) private csvUploadModal: any,
+    @Inject(csvResultModalService) private csvResultModal: any,
     private userService: UserService,
     private hotkeys: HotkeysService,
     private router: Router,
@@ -175,12 +191,26 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.userHasTutorials =
       this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
 
+    const staff = this.unit.staff.slice();
+
+    const byName = (a: UnitRole, b: UnitRole) =>
+      (a.user?.name ?? '').localeCompare(b.user?.name ?? '');
+
+    const mentored = staff
+      .filter((ur) => ur.mentorId === this.unitRole.id)
+      .slice()
+      .sort(byName);
+
+    const allTutors = staff.slice().sort(byName);
+
     this.filters = Object.assign(
       {
         studentName: null,
         tutorialIdSelected:
           (this.unitRole.role === 'Tutor' || 'Convenor') && this.userHasTutorials ? 'mine' : 'all',
         tutorials: [],
+        unitRoleIdSelected:
+          mentored.length > 0 && this.viewType === 'moderation' ? 'mentoring_all' : 'all',
         taskDefinitionIdSelected: null,
         taskDefinition: null,
         forceStream: true,
@@ -207,6 +237,32 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
           tutorial: t,
         };
       }),
+    ];
+    this.tutorGroups = [
+      ...(mentored.length > 0
+        ? [
+            {
+              label: 'My Tutors (Mentoring)',
+              options: [
+                {id: 'mentoring_all', inboxDescription: 'Show All Mine'},
+                ...mentored.map((ur) => ({
+                  id: ur.id,
+                  inboxDescription: ur.user?.name,
+                })),
+              ],
+            },
+          ]
+        : []),
+      {
+        label: 'All Tutors',
+        options: [
+          {id: 'all', inboxDescription: 'Show All'},
+          ...allTutors.map((ur) => ({
+            id: ur.id,
+            inboxDescription: ur.user?.name,
+          })),
+        ],
+      },
     ];
 
     this.tutorialIdChanged(false);
@@ -269,6 +325,59 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  openBatchFeedbackDialog() {
+    const taskDefinition = this.filters.taskDefinition ?? undefined;
+
+    if (!taskDefinition) {
+      this.alertService.error('Select a task definition before uploading batch feedback.', 5000);
+      return;
+    }
+
+    const dialogRef = this.dialog.open(BatchFeedbackWorkflowDialogComponent, {
+      width: '100%',
+      maxWidth: '840px',
+      data: {
+        unit: this.unit,
+        taskDefinition,
+        myStudentsOnly: this.filters.tutorialIdSelected === 'mine',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result?.openUpload) {
+        return;
+      }
+
+      this.csvUploadModal.show(
+        `Upload ${taskDefinition.abbreviation} Batch Feedback Zip`,
+        '',
+        {
+          file: {name: 'Batch Feedback Zip', type: 'zip'},
+        },
+        this.unit.getBatchFeedbackUploadUrl(taskDefinition),
+        (response: SidekiqJob) => {
+          if (!response?.id) {
+            this.alertService.error('Batch feedback upload failed.', 6000);
+            return;
+          }
+
+          this.sidekiqProgressModalService
+            .show(`Uploading ${taskDefinition.abbreviation} Batch Feedback`, response.id)
+            .subscribe({
+              next: (job) => {
+                this.csvResultModal.show('Batch Feedback Upload Results', JSON.parse(job.result));
+                this.refreshData();
+              },
+              error: (error) => {
+                console.error(error);
+                this.alertService.error('Batch feedback upload failed.', 6000);
+              },
+            });
+        },
+      );
+    });
+  }
+
   downloadJPLAGReport() {
     const taskDef = this.filters.taskDefinition;
     this.fileDownloaderService.downloadFile(
@@ -299,7 +408,17 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.filters.forceStream,
       );
     }
+
+    if (this.filters.unitRoleIdSelected) {
+      filteredTasks = this.tasksByTutorPipe.transform(
+        this.unitRole,
+        filteredTasks,
+        this.filters.unitRoleIdSelected,
+      );
+    }
+
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
+    filteredTasks = this.sortPinnedTasksFirst(filteredTasks);
     this.filteredTasks = filteredTasks;
 
     if (this.filteredTasks != null) {
@@ -324,6 +443,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     selectEl.focus();
   }
 
+  unitRoleIdChanged(attemptRefreshData: boolean = true): void {
+    this.applyFilters();
+
+    const isExplorerView = this.isTaskDefMode;
+    if (attemptRefreshData && !this.fetchedAllTasks && !isExplorerView) {
+      this.refreshData();
+    }
+  }
+
   tutorialIdChanged(attemptRefreshData: boolean = true): void {
     const tutorialId = this.filters.tutorialIdSelected;
 
@@ -333,11 +461,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
     if (tutorialId === 'mine') {
       this.filters.tutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name);
+      this.filters.unitRoleIdSelected = 'all';
     } else if (tutorialId === 'all') {
       // Ignore tutorials filter
       this.filters.tutorials = null;
     } else {
       this.filters.tutorials = [filterOption.tutorial];
+      this.filters.unitRoleIdSelected = 'all';
     }
 
     this.applyFilters();
@@ -493,6 +623,39 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   togglePin(task: Task) {
-    task.pinned ? task.unpin() : task.pin();
+    if (task.id === undefined) {
+      // Can't pin a task that doesn't actually exist yet
+      this.alertService.error(`This task can't be pinned yet`, 3000);
+      return;
+    }
+    const refreshOrdering = () => this.applyFilters();
+    task.pinned ? task.unpin(refreshOrdering) : task.pin(refreshOrdering);
+  }
+
+  getWarningIcon(task: Task): 'warning' | 'overflow' | null {
+    if (!task.submissionDate) return null;
+    if (task.status !== 'ready_for_feedback') {
+      return null;
+    }
+
+    const daysSinceSubmission = task.daysSinceSubmission();
+
+    if (daysSinceSubmission >= task.unit.feedbackOverflowThresholdDays) {
+      return 'overflow';
+    }
+
+    if (daysSinceSubmission >= task.unit.feedbackWarningThresholdDays) {
+      return 'warning';
+    }
+
+    return null;
+  }
+
+  private sortPinnedTasksFirst(tasks: Task[]): Task[] {
+    if (!this.isTaskDefMode || !tasks?.length) {
+      return tasks;
+    }
+
+    return [...tasks].sort((a, b) => Number(b.pinned) - Number(a.pinned));
   }
 }

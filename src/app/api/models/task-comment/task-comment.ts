@@ -57,6 +57,24 @@ export class TaskComment extends Entity {
     return ['text', 'discussion', 'audio', 'image', 'pdf'].includes(this.commentType);
   }
 
+  public get isStaffAuthored(): boolean {
+    return (
+      this.task?.unit?.staff?.some((unitRole) => unitRole.user.id === this.author?.id) ?? false
+    );
+  }
+
+  public get isAutomated(): boolean {
+    if (!this.isBubbleComment) {
+      return true;
+    }
+
+    return this.text?.trim().startsWith('**Automated Message:**') ?? false;
+  }
+
+  public get isManualFeedback(): boolean {
+    return this.isStaffAuthored && !this.isAutomated;
+  }
+
   public get project(): Project {
     return this.task.project;
   }

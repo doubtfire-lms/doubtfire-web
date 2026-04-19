@@ -90,6 +90,37 @@
         will be extended to allow students to fix and resubmit their work.
       </mat-hint>
     </mat-form-field>
+
+    <div class="flex w-full gap-5">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Feedback warning after (days)</mat-label>
+        <input
+          matInput
+          type="number"
+          min="0"
+          required
+          [(ngModel)]="unit.feedbackWarningThresholdDays"
+        />
+        <mat-hint>
+          Tasks in inbox are highlighted if feedback isn’t given within this many days of
+          submission.
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Show task in overflow queue after (days)</mat-label>
+        <input
+          matInput
+          type="number"
+          min="0"
+          required
+          [(ngModel)]="unit.feedbackOverflowThresholdDays"
+        />
+        <mat-hint>
+          Tasks without feedback for this many days will appear in the overflow queue.
+        </mat-hint>
+      </mat-form-field>
+    </div>
   </mat-card>
 
   <mat-card appearance="outlined" class="flex flex-col gap-5 p-[16px]">
@@ -136,6 +167,16 @@
         >Allow students to change tutorial</mat-slide-toggle
       >
       <p>When false only staff can change student tutorials.</p>
+    </div>
+
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.enforceFeedbackBeforeDiscussedInClass"
+        >Require feedback before discussed in class</mat-slide-toggle
+      >
+      <p>
+        When true, tutors must record feedback before they can mark discussion tasks as discussed in
+        class.
+      </p>
     </div>
 
     <div>

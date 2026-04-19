@@ -190,7 +190,7 @@
           <button
             class="bg-green-400 medium-icon-button"
             mat-fab
-            [disabled]="!tasks.selectedOptions.selected.length"
+            [disabled]="!canMarkSelectedTasksComplete"
             (click)="setSelectedTasksStatus('complete')"
           >
             <!-- Mark as Complete -->

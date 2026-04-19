@@ -95,6 +95,8 @@ import 'build/src/app/units/states/tasks/tasks.js';
 import 'build/src/app/units/states/tasks/viewer/directives/directives.js';
 import 'build/src/app/units/states/tasks/viewer/viewer.js';
 import 'build/src/app/units/states/tasks/definition/definition.js';
+import 'build/src/app/units/states/tasks/moderation/moderation.js';
+import 'build/src/app/units/states/tasks/overflow/overflow.js';
 import 'build/src/app/units/states/portfolios/portfolios.js';
 import 'build/src/app/units/states/groups/groups.js';
 import 'build/src/app/units/states/states.js';
@@ -238,6 +240,7 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {TaskPlannerComponent} from './projects/states/plan/task-planner/task-planner.component';
 import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
+import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
 
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
@@ -604,4 +607,9 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fTaskOverseerReport',
   downgradeComponent({component: TaskOverseerReportComponent}),
+);
+
+DoubtfireAngularJSModule.directive(
+  'fTutorNotes',
+  downgradeComponent({component: TutorNotesComponent}),
 );

@@ -11,43 +11,42 @@
     </div>
   }
 
-  <div class="flex w-full">
-    <f-user-badge fxFlex fxFlexAlign="start start" [selectedTask]="selectedTask"></f-user-badge>
-
-    <span class="center-buttons flex justify-around gap-5">
+  <ng-template #statusActionButtons>
+    <span class="center-buttons flex justify-around gap-2">
       <div>
         <button
-          [disabled]="selectedTask === undefined"
+          [disabled]="!actionButtonEnabled"
           mat-icon-button
           matTooltip="Mark as Redo"
           matTooltipPosition="above"
           aria-label=""
-          class="button"
+          class="button status-chip redo"
           (click)="selectedTask?.updateTaskStatus('redo')"
         >
           <mat-icon>undo</mat-icon>
         </button>
-
+        <!--
         <button
-          [disabled]="selectedTask === undefined"
+          [disabled]="!actionButtonEnabled"
           mat-icon-button
           matTooltip="Mark as Attention Required"
           matTooltipPosition="above"
           aria-label=""
-          class="button"
+          class="button status-chip attention-required"
           (click)="selectedTask?.updateTaskStatus('attention_required')"
         >
           <mat-icon>sms_failed</mat-icon>
-        </button>
+        </button> -->
       </div>
       <button
-        [disabled]="selectedTask === undefined"
+        [disabled]="!actionButtonEnabled"
         mat-icon-button
         matTooltip="Mark as Resubmit"
         matTooltipPosition="above"
         aria-label=""
-        class="button large-button"
-        (click)="selectedTask?.updateTaskStatus('fix')"
+        class="button status-chip fix-and-resubmit"
+        [class.large-button]="!(selectedTask && selectedTask.suggestedTaskStatus)"
+        (click)="markAsResubmit(selectedTask)"
       >
         <mat-icon>construction</mat-icon>
       </button>
@@ -60,67 +59,125 @@
           }}"
           matTooltipPosition="above"
           aria-label=""
-          class="button extra-large-button status-chip"
+          class="button extra-large-button status-chip suggested-task-status"
           (click)="selectedTask?.updateTaskStatus(selectedTask.suggestedTaskStatus)"
           [ngClass]="taskService.statusData(selectedTask.suggestedTaskStatus).class"
+          [disabled]="
+            !actionButtonEnabled ||
+            (selectedTask?.suggestedTaskStatus === 'complete' && !selectedTask?.canMarkComplete)
+          "
         >
-          <i class="fa {{ taskService.statusData(selectedTask.suggestedTaskStatus).icon }}"></i>
-        </button>
-      }
-      @if (selectedTask?.definition?.assessInPortfolioOnly) {
-        <button
-          [disabled]="selectedTask === undefined"
-          mat-icon-button
-          matTooltip="Mark as Working On It"
-          matTooltipPosition="above"
-          aria-label="Mark as Working On It"
-          class="button large-button"
-          (click)="markTaskWorkingOnIt(selectedTask)"
-        >
-          <mat-icon>bolt</mat-icon>
-        </button>
-      } @else {
-        <button
-          [disabled]="selectedTask === undefined"
-          mat-icon-button
-          matTooltip="Mark as Complete"
-          matTooltipPosition="above"
-          aria-label="Mark as Complete"
-          class="button large-button"
-          (click)="selectedTask?.updateTaskStatus('complete')"
-        >
-          <mat-icon>done</mat-icon>
+          <mat-icon>
+            {{ taskService.statusData(selectedTask.suggestedTaskStatus).materialIcon }}
+          </mat-icon>
         </button>
       }
 
       <button
-        [disabled]="selectedTask === undefined"
+        [disabled]="!actionButtonEnabled"
         mat-icon-button
         matTooltip="Mark as Discuss"
         matTooltipPosition="above"
         aria-label=""
-        class="button"
+        class="button status-chip discuss"
+        [class.large-button]="!(selectedTask && selectedTask.suggestedTaskStatus)"
         (click)="selectedTask?.updateTaskStatus('discuss')"
       >
         <mat-icon>question_answer</mat-icon>
       </button>
 
-      <mat-divider [vertical]="true"></mat-divider>
-
-      <div class="w-[120px] flex justify-start">
+      @if (selectedTask?.definition?.assessInPortfolioOnly) {
         <button
-          [disabled]="selectedTask === undefined"
+          [disabled]="!actionButtonEnabled"
           mat-icon-button
-          matTooltip="Discussed in class"
+          matTooltip="Mark as Working On It"
           matTooltipPosition="above"
-          aria-label=""
-          class="button ml-5"
-          (click)="selectedTask?.markAsDiscussed()"
+          aria-label="Mark as Working On It"
+          class="button large-button status-chip working-on-it"
+          (click)="markTaskWorkingOnIt(selectedTask)"
         >
-          <mat-icon>group</mat-icon>
+          <mat-icon>bolt</mat-icon>
         </button>
-      </div>
+      } @else {
+        <div
+          [matTooltip]="
+            !selectedTask?.canMarkComplete
+              ? 'This task must be discussed in class before it can marked complete'
+              : ''
+          "
+        >
+          <button
+            [disabled]="!completeButtonEnabled"
+            mat-icon-button
+            matTooltip="Mark as Complete"
+            matTooltipPosition="above"
+            aria-label="Mark as Complete"
+            class="button status-chip complete"
+            (click)="selectedTask?.updateTaskStatus('complete')"
+          >
+            <mat-icon>done</mat-icon>
+          </button>
+        </div>
+      }
     </span>
+  </ng-template>
+
+  <div class="flex w-full">
+    <f-user-badge fxFlex fxFlexAlign="start start" [selectedTask]="selectedTask"></f-user-badge>
+    <div
+      class="flex items-center"
+      [ngClass]="hideMainActionButtonsForModeration ? 'w-full justify-center' : 'justify-between'"
+    >
+      @if (viewType !== 'moderation' && !hideMainActionButtonsForModeration) {
+        <ng-container [ngTemplateOutlet]="statusActionButtons"></ng-container>
+      }
+
+      @if (selectedTask && !selectedTask.loadingSubmissionDetails) {
+        @if (viewType === 'moderation') {
+          <div
+            class="flex items-center"
+            [ngClass]="hideMainActionButtonsForModeration ? 'w-full justify-center' : ''"
+          >
+            <div class="relative flex items-center">
+              @if (!hideMainActionButtonsForModeration) {
+                <ng-container [ngTemplateOutlet]="statusActionButtons"></ng-container>
+                <mat-divider class="mx-4" [vertical]="true"></mat-divider>
+              } @else {
+                <f-moderation class="pl-[125px] ml-[100px]" [task]="selectedTask"></f-moderation>
+              }
+
+              <button
+                [disabled]="selectedTask === undefined"
+                mat-icon-button
+                matTooltip="Action options"
+                matTooltipPosition="above"
+                aria-label=""
+                class="button small-button"
+                [matMenuTriggerFor]="actionMenu"
+              >
+                <mat-icon class="small-icon">more_vert</mat-icon>
+              </button>
+
+              <mat-menu #actionMenu="matMenu" yPosition="above">
+                @if (hideMainActionButtonsForModeration) {
+                  <button mat-menu-item (click)="toggleModerationStatusButtons()">
+                    <mat-icon matListItemIcon>chat</mat-icon>
+                    View Status Buttons
+                  </button>
+                } @else {
+                  <button mat-menu-item (click)="toggleModerationStatusButtons()">
+                    <mat-icon matListItemIcon>gavel</mat-icon>View Moderation Buttons
+                  </button>
+                }
+              </mat-menu>
+            </div>
+          </div>
+        }
+        @if (viewType === 'overflow' || selectedTask.claimedByUnitRoleId) {
+          <f-task-claim [selectedTask]="selectedTask"></f-task-claim>
+        }
+      }
+    </div>
 
     <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
       @if (selectedTask?.similaritiesDetected) {
@@ -154,6 +211,21 @@
           >
             <mat-icon class="small-icon">forum</mat-icon>
           </button>
+        }
+
+        @if (canAccessTutorNotes) {
+          <div class="relative inline-block">
+            <button
+              mat-icon-button
+              matTooltip="Open Tutor Notes"
+              matTooltipPosition="above"
+              class="button small-button"
+              [disabled]="!selectedTask.tutor"
+              (click)="viewTutorNotes()"
+            >
+              <mat-icon class="small-icon">local_library</mat-icon>
+            </button>
+          </div>
         }
 
         <div class="relative inline-block">
@@ -221,6 +293,11 @@
           View overseer
         </button>
         <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="markSelectedTaskAsDiscussed()">
+          <mat-icon matListItemIcon aria-label="Mark task as discussed">group</mat-icon>
+          Mark Discussed in Class
+        </button>
         <button mat-menu-item (click)="selectedTask?.updateTaskStatus('assess_in_portfolio')">
           <mat-icon matListItemIcon aria-label="Switch to Assess in Portfolio"
             >folder_open</mat-icon
@@ -233,16 +310,20 @@
             Return to Not Started
           </button>
         }
+        <button mat-menu-item (click)="selectedTask?.updateTaskStatus('attention_required')">
+          <mat-icon matListItemIcon aria-label="Mark as Attention Required">sms_failed</mat-icon>
+          Mark as Attention Required
+        </button>
         <button mat-menu-item (click)="selectedTask?.updateTaskStatus('feedback_exceeded')">
           <mat-icon matListItemIcon aria-label="Switch to Feedback Exceeded"
             >running_with_errors</mat-icon
           >
-          Mark as feedback exceeded
+          Mark as Feedback Exceeded
         </button>
         <button
           mat-menu-item
           (click)="selectedTask?.updateTaskStatus('fail')"
-          [disabled]="selectedTask === undefined"
+          [disabled]="!actionButtonEnabled"
         >
           <mat-icon matListItemIcon aria-label="Fail icon" fontIcon="cancel"></mat-icon>
           Mark as fail

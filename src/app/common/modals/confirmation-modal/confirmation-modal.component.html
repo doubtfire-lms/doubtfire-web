@@ -13,8 +13,8 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-raised-button color="primary" (click)="confirmAction()">
-      <i class="fa fa-check"></i> Confirm
+      <i class="fa fa-check"></i> {{ confirmText }}
     </button>
-    <button mat-button color="warn" (click)="cancelAction()">Cancel</button>
+    <button mat-button color="warn" (click)="cancelAction()">{{ cancelText }}</button>
   </mat-dialog-actions>
 </div>

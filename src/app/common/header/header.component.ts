@@ -13,6 +13,7 @@ import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-j
 import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
 import {QrModalService} from '../modals/qr-modal/qr-modal.service';
 import {StateService} from '@uirouter/core';
+import {TutorNotesModalService} from '../modals/tutor-notes-modal/tutor-notes-modal.service';
 
 @Component({
   selector: 'app-header',
@@ -58,6 +59,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sidekiqJobsModalService: SidekiqJobsModalService,
     private qrModalService: QrModalService,
     private stateService: StateService,
+    private tutorNotesModal: TutorNotesModalService,
   ) {}
 
   ngOnInit(): void {
@@ -209,5 +211,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   get currentUser(): User {
     return this.userService.currentUser;
+  }
+
+  openTutorNotes() {
+    this.tutorNotesModal.show(null, this.currentUnitRole);
   }
 }

@@ -79,6 +79,12 @@
           <mat-icon>download</mat-icon>
           <span>Bulk Export Submission Files</span>
         </button>
+        @if (unitRole?.role === 'Convenor') {
+          <button mat-menu-item (click)="openBatchFeedbackDialog()">
+            <mat-icon>upload_file</mat-icon>
+            <span>Upload Batch Feedback Zip</span>
+          </button>
+        }
         <button
           mat-menu-item
           (click)="downloadJPLAGReport()"
@@ -150,6 +156,30 @@
               aria-label="Sort by tutorial icon"
               (click)="toggleTutorialSort()"
             >
+              <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
+            </button>
+          </div>
+          <div class="flex flex-row justify-between items-center">
+            <mat-form-field class="flex-1">
+              <mat-label>Tutors</mat-label>
+              <mat-select
+                [disabled]="filters.tutorialIdSelected !== 'all'"
+                [(ngModel)]="filters.unitRoleIdSelected"
+                name="tutor"
+                (selectionChange)="unitRoleIdChanged()"
+              >
+                @for (g of tutorGroups; track g.label) {
+                  <mat-optgroup [label]="g.label">
+                    @for (t of g.options; track t.id) {
+                      <mat-option [value]="t.id">
+                        <span class="truncate">{{ t.inboxDescription }}</span>
+                      </mat-option>
+                    }
+                  </mat-optgroup>
+                }
+              </mat-select>
+            </mat-form-field>
+            <button disabled mat-icon-button aria-label="Sort by tutor icon">
               <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
             </button>
           </div>
@@ -235,7 +265,36 @@
                 <user-icon class="self-center" [user]="task.project.student" [size]="30">
                 </user-icon>
                 <div class="task-list-data truncate flex-1" [hidden]="isNarrow">
-                  <h4 class="student-name">{{ task.project.student.name }}</h4>
+                  <h4 class="student-name flex min-w-0 items-center gap-1">
+                    @if (task.moderationType === 'escalation') {
+                      <mat-icon
+                        matTooltip="This task has been escalated by the student"
+                        class="shrink-0 text-amber-500"
+                        >gavel</mat-icon
+                      >
+                    }
+                    @if (getWarningIcon(task) === 'warning') {
+                      <mat-icon
+                        matTooltip="Feedback due soon — please review before it escalates."
+                        class="shrink-0 text-amber-500"
+                      >
+                        warning
+                      </mat-icon>
+                    } @else if (getWarningIcon(task) === 'overflow') {
+                      <mat-icon
+                        [matTooltip]="
+                          'Feedback overdue by ' +
+                          task.daysSinceSubmission() +
+                          ' days — this task has been escalated for urgent review.'
+                        "
+                        class="shrink-0 text-red-500"
+                      >
+                        watch_later
+                      </mat-icon>
+                    }
+
+                    <span class="truncate">{{ task.project.student.name }}</span>
+                  </h4>
                   <div class="task-details truncate">
                     {{ task.definition.abbreviation }} -
                     {{ task.definition.name }}
@@ -265,42 +324,40 @@
                   [status]="task.status"
                   class="ml-3"
                 ></status-icon>
-                @if (!isTaskDefMode) {
-                  <div class="overflow" [hidden]="isNarrow">
-                    <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
-                      <!-- <mat-icon class="warn-icon" *ngIf="task.similaritiesDetected">remove_red_eye</mat-icon> -->
+                <div class="overflow" [hidden]="isNarrow">
+                  <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
+                    <!-- <mat-icon class="warn-icon" *ngIf="task.similaritiesDetected">remove_red_eye</mat-icon> -->
 
-                      @if (task.pinned) {
-                        <div class="pin-container">
-                          <mat-icon>push_pin</mat-icon>
-                        </div>
-                      }
+                    @if (task.pinned) {
+                      <div class="pin-container">
+                        <mat-icon>push_pin</mat-icon>
+                      </div>
+                    }
+                  </button>
+                  <button
+                    [hidden]="!task.hover"
+                    mat-icon-button
+                    aria-label="task overflow"
+                    [matMenuTriggerFor]="overflowMenu"
+                    (menuOpened)="setSelectedTask(task); task.optionsOpened = true"
+                    (menuClosed)="task.hover = false; task.optionsOpened = false"
+                    matTooltip="Submission options"
+                    matTooltipPosition="right"
+                    matTooltipShowDelay="400"
+                  >
+                    <mat-icon>more_horiz</mat-icon>
+                  </button>
+                  <mat-menu #overflowMenu="matMenu" yPosition="below">
+                    <button mat-menu-item (click)="togglePin(task)" class="flex items-center">
+                      <mat-icon class="mr-0">
+                        {{ task.pinned ? 'remove_circle' : 'add_alert' }}
+                      </mat-icon>
+                      <span class="ml-5"
+                        >{{ task.pinned ? 'Unpin from inbox' : 'Pin to inbox' }}
+                      </span>
                     </button>
-                    <button
-                      [hidden]="!task.hover"
-                      mat-icon-button
-                      aria-label="task overflow"
-                      [matMenuTriggerFor]="overflowMenu"
-                      (menuOpened)="setSelectedTask(task); task.optionsOpened = true"
-                      (menuClosed)="task.hover = false; task.optionsOpened = false"
-                      matTooltip="Submission options"
-                      matTooltipPosition="right"
-                      matTooltipShowDelay="400"
-                    >
-                      <mat-icon>more_horiz</mat-icon>
-                    </button>
-                    <mat-menu #overflowMenu="matMenu" yPosition="below">
-                      <button mat-menu-item (click)="togglePin(task)" class="flex items-center">
-                        <mat-icon class="mr-0">
-                          {{ task.pinned ? 'remove_circle' : 'add_alert' }}
-                        </mat-icon>
-                        <span class="ml-5"
-                          >{{ task.pinned ? 'Unpin from inbox' : 'Pin to inbox' }}
-                        </span>
-                      </button>
-                    </mat-menu>
-                  </div>
-                }
+                  </mat-menu>
+                </div>
               </div>
               <!--/badges-->
             </div>
