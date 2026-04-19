@@ -155,6 +155,14 @@ export class SummaryTaskStatusChartComponent {
     return grouped;
   }
 
+  private extractErrorMessage(error: any, fallback: string): string {
+    if (typeof error === 'string' && error.trim().length > 0) {
+      return error;
+    }
+
+    return fallback;
+  }
+
   loadRecentSnapshot(): void {
     this.unit.getTaskCompletionSnapshots(undefined, undefined, 1).subscribe({
       next: (data) => {
@@ -163,6 +171,11 @@ export class SummaryTaskStatusChartComponent {
       },
       error: (error) => {
         console.log('Snapshot load failed', error);
+        const errorMessage = this.extractErrorMessage(
+          error,
+          'Failed to load task completion snapshot.',
+        );
+        this.alertService.error(errorMessage, 6000);
       },
     });
   }
@@ -185,6 +198,11 @@ export class SummaryTaskStatusChartComponent {
       },
       error: (error) => {
         console.log('Snapshot capture failed', error);
+        const errorMessage = this.extractErrorMessage(
+          error,
+          'Failed to capture task completion snapshot.',
+        );
+        this.alertService.error(errorMessage, 6000);
       },
     });
   }
