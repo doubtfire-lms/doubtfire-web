@@ -772,8 +772,8 @@ export class Unit extends Entity {
     );
   }
 
-  public captureTaskCompletionSnapshot(): Observable<any> {
-    return AppInjector.get(HttpClient).post<any>(
+  public captureTaskCompletionSnapshot(): Observable<SidekiqJob> {
+    return AppInjector.get(HttpClient).post<SidekiqJob>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots/capture`,
       {},
     );
