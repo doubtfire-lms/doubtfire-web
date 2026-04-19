@@ -2,19 +2,16 @@
   <mat-card-title>
     <h2>Task Completion Status</h2>
   </mat-card-title>
-  <mat-card-content class="flex gap-2">
-    <button mat-raised-button (click)="captureNow()">
-      <mat-icon>camera</mat-icon>
-      Capture Completion Snapshot Now
-    </button>
-  </mat-card-content>
-  <div class="p-[16px]">
-    <mat-form-field appearance="outline">
+  <div class="p-[16px] flex items-center gap-2">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-select [(ngModel)]="campusFilter" (selectionChange)="refreshData()">
         <mat-option value="all">All</mat-option>
         <mat-option *ngFor="let campus of campuses" [value]="campus">{{ campus }}</mat-option>
       </mat-select>
     </mat-form-field>
+    <button mat-icon-button class="self-center" (click)="captureNow()" aria-label="Capture completion snapshot now">
+      <mat-icon>refresh</mat-icon>
+    </button>
   </div>
   <div class="h-[500px]">
     <ngx-charts-bar-vertical-normalized
