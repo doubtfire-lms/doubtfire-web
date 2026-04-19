@@ -1,41 +1,31 @@
 <mat-card appearance="outlined" class="p-[16px]">
   <mat-card-title>
-      <h2>Task Completion Status</h2>
-    </mat-card-title>
-    <mat-card-content class="flex gap-2">
-      <button mat-raised-button (click)="refreshData()">
-        <mat-icon>refresh</mat-icon>
-        Refresh Data
-      </button>
-      <button mat-raised-button (click)="captureNow()">
-        <mat-icon>camera</mat-icon>
-        Capture Completion Snapshot Now
-      </button>
-    </mat-card-content>
-    <div class = "p-[16px]">
+    <h2>Task Completion Status</h2>
+  </mat-card-title>
+  <div class="p-[16px]">
     <mat-form-field appearance="outline">
       <mat-select [(ngModel)]="campusFilter" (selectionChange)="refreshData()">
         <mat-option value="all">All</mat-option>
-        <mat-option *ngFor="let campus of campuses" [value]="campus">{{campus}}</mat-option>
+        <mat-option *ngFor="let campus of campuses" [value]="campus">{{ campus }}</mat-option>
       </mat-select>
     </mat-form-field>
-    </div>
-    <div class="h-[500px]">
-  <ngx-charts-bar-vertical-normalized
-    [scheme]="colorScheme"
-    [results]="data"
-    [gradient]="gradient"
-    [xAxis]="showXAxis"
-    [yAxis]="showYAxis"
-    [legend]="showLegend"
-    [showXAxisLabel]="showXAxisLabel"
-    [showYAxisLabel]="showYAxisLabel"
-    [xAxisLabel]="xAxisLabel"
-    [yAxisLabel]="yAxisLabel"
-    [animations]="animations"
-    (select)="onSelect($event)"
-    [tooltipDisabled]="false"
-  >
-  </ngx-charts-bar-vertical-normalized>
-</div>
+  </div>
+  <div class="h-[500px]">
+    <ngx-charts-bar-vertical-normalized
+      [scheme]="colorScheme"
+      [results]="data"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [animations]="animations"
+      (select)="onSelect($event)"
+      [tooltipDisabled]="false"
+    >
+    </ngx-charts-bar-vertical-normalized>
+  </div>
 </mat-card>
