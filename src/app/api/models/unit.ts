@@ -25,6 +25,7 @@ import {
   D2lAssessmentMappingService,
   OverseerImage,
   OverseerImageService,
+  TaskCompletionSnapshot,
 } from './doubtfire-model';
 import {LearningOutcome} from './learning-outcome';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -747,7 +748,7 @@ export class Unit extends Entity {
     startDate?: Date,
     endDate?: Date,
     limit: number = 365
-  ): Observable<any[]> {
+  ): Observable<TaskCompletionSnapshot[]> {
     let params = new HttpParams();
 
     if (startDate) {

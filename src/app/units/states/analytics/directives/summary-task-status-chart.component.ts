@@ -3,35 +3,13 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {Unit} from 'src/app/api/models/unit';
 import {TooltipService} from '@swimlane/ngx-charts';
-import {TaskStatusEnum} from 'src/app/api/models/doubtfire-model';
-
-type TaskCompletionSnapshot = {
-  snapshot_date: string;
-  captured_at: string;
-  stats: CampusStats;
-};
-
-type TaskStatusCounts = {
-  [status: string]: number;
-  // e.g. complete?: number;
-  //      not_started?: number;
-  //      ready_for_feedback?: number;
-};
-
-type TaskCodeStats = {
-  [taskCode: string]: TaskStatusCounts;
-  // e.g. "T1": {complete: 10, not_started: 5, ready_for_feedback: 3}
-};
-
-type TutorialStats = {
-  [tutorialCode: string]: TaskCodeStats;
-  // e.g. "LA1-01"
-};
-
-type CampusStats = {
-  [campusName: string]: TutorialStats;
-  // e.g. "Online", "Burwood"
-};
+import {
+  TaskCompletionSnapshot,
+  TaskCodeStats,
+  TaskStatusCounts,
+  TutorialStats,
+  TaskStatusEnum,
+} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-summary-task-status-chart',
@@ -45,7 +23,6 @@ export class SummaryTaskStatusChartComponent {
   snapshots: TaskCompletionSnapshot[] = [];
   campuses: string[] = [];
   tutorials: string[] = [];
-  // view: any[] = [700, 300];
 
   // options
   showXAxis: boolean = true;
