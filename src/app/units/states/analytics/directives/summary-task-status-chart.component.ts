@@ -5,6 +5,7 @@ import {Unit} from 'src/app/api/models/unit';
 import {TooltipService} from '@swimlane/ngx-charts';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {
   TaskCompletionSnapshot,
   TaskCodeStats,
@@ -12,6 +13,8 @@ import {
   TutorialStats,
   TaskStatusEnum,
 } from 'src/app/api/models/doubtfire-model';
+import {filter, map, take} from 'rxjs/operators';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 
 @Component({
   selector: 'f-summary-task-status-chart',
@@ -60,6 +63,7 @@ export class SummaryTaskStatusChartComponent {
     private taskService: TaskService,
     private alertService: AlertService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
+    private sidekiqJobService: SidekiqJobService,
     private chartToolTipService: TooltipService,
     private viewContainerRef: ViewContainerRef,
     private injectorObj: Injector,
@@ -188,12 +192,25 @@ export class SummaryTaskStatusChartComponent {
           return;
         }
 
-        this.sidekiqProgressModalService
-          .show(`Capturing task completion snapshot for ${this.unit.code}`, job.id)
-          .subscribe({
-            next: () => {
+        this.sidekiqProgressModalService.show(
+          `Capturing task completion snapshot for ${this.unit.code}`,
+          job.id,
+        );
+
+        this.sidekiqJobService.sidekiqJobsSubject
+          .pipe(
+            map((jobs) => jobs.find((entry) => entry.job?.id === job.id)?.job),
+            filter(
+              (trackedJob): trackedJob is SidekiqJob =>
+                !!trackedJob &&
+                ['complete', 'failed', 'stopped', 'interrupted'].includes(trackedJob.status),
+            ),
+            take(1),
+          )
+          .subscribe((trackedJob) => {
+            if (trackedJob.status === 'complete') {
               this.loadRecentSnapshot();
-            },
+            }
           });
       },
       error: (error) => {
