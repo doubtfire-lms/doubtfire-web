@@ -1,6 +1,6 @@
 export type TaskCompletionSnapshot = {
   snapshot_date: string;
-  captured_at: string;
+  snapshot_timestamp: string;
   stats: CampusStats;
 };
 
