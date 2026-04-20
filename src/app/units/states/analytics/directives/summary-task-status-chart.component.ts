@@ -45,6 +45,7 @@ export class SummaryTaskStatusChartComponent {
   };
 
   dataSource: TaskCodeStats = {};
+  private autoCaptureAttempted: boolean = false;
 
   private readonly statusMapping: Map<string, TaskStatusEnum[]> = new Map([
     ['Complete', ['complete']],
@@ -172,6 +173,11 @@ export class SummaryTaskStatusChartComponent {
       next: (data) => {
         this.snapshots = data as TaskCompletionSnapshot[];
         this.refreshData();
+
+        if (this.snapshots.length === 0 && !this.autoCaptureAttempted) {
+          this.autoCaptureAttempted = true;
+          this.captureNow();
+        }
       },
       error: (error) => {
         console.log('Snapshot load failed', error);
