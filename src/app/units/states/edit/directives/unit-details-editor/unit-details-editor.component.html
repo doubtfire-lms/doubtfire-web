@@ -170,6 +170,16 @@
     </div>
 
     <div>
+      <mat-slide-toggle [(ngModel)]="unit.enforceFeedbackBeforeDiscussedInClass"
+        >Require feedback before discussed in class</mat-slide-toggle
+      >
+      <p>
+        When true, tutors must record feedback before they can mark discussion tasks as discussed in
+        class.
+      </p>
+    </div>
+
+    <div>
       <mat-slide-toggle [(ngModel)]="unit.sendNotifications"
         >Send notification emails</mat-slide-toggle
       >

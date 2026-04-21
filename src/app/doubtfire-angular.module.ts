@@ -52,6 +52,17 @@ import {CodeEditorModule} from '@ngstack/code-editor';
 import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatOptionModule,
+} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRadioModule} from '@angular/material/radio';
+import {FlexLayoutModule} from 'ng-flex-layout';
 import {
   AboutDoubtfireModal,
   AboutDoubtfireModalContent,
@@ -64,31 +75,16 @@ import {
   DiscussionComposerDialog,
   TaskCommentComposerComponent,
 } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
-import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
-import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-tasks-list.component';
-import {
-  D2lUnitDetailsFormComponent,
-  D2lUnitDetailsModal,
-} from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
-
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-  MatOptionModule,
-} from '@angular/material/core';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatRadioModule} from '@angular/material/radio';
-import {FlexLayoutModule} from 'ng-flex-layout';
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import {AudioCommentRecorderComponent} from './common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder';
 import {MicrophoneTesterComponent} from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import {CalendarModalComponent} from './common/modals/calendar-modal/calendar-modal.component';
 import {CommentsModalComponent} from './common/modals/comments-modal/comments-modal.component';
 import {ConfirmationModalComponent} from './common/modals/confirmation-modal/confirmation-modal.component';
+import {DiscussedInClassReasonModalComponent} from './common/modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.component';
 import {ExtensionModalComponent} from './common/modals/extension-modal/extension-modal.component';
+import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
+import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-tasks-list.component';
 import {DiscussionPromptComposerComponent} from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import {
@@ -96,6 +92,10 @@ import {
   IntelligentDiscussionPlayerComponent,
 } from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-player.component';
 import {IntelligentDiscussionRecorderComponent} from './tasks/task-comments-viewer/intelligent-discussion-player/intelligent-discussion-recorder/intelligent-discussion-recorder.component';
+import {
+  D2lUnitDetailsFormComponent,
+  D2lUnitDetailsModal,
+} from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
 
 import {DateFnsAdapter} from '@angular/material-date-fns-adapter';
 import {DateAdapter as CalendarDateAdapter, CalendarModule} from 'angular-calendar';
@@ -166,6 +166,7 @@ import {UnitStudentsEditorComponent} from './units/states/edit/directives/unit-s
 import {UnitTutorialsListComponent} from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import {UnitTutorialsManagerComponent} from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
 import {StudentsListComponent} from './units/states/students-list/students-list.component';
+import {BatchFeedbackWorkflowDialogComponent} from './units/states/tasks/inbox/directives/staff-task-list/batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 import {StaffTaskListComponent} from './units/states/tasks/inbox/directives/staff-task-list/staff-task-list.component';
 
 import {TaskAssessmentModalComponent} from './common/modals/task-assessment-modal/task-assessment-modal.component';
@@ -231,8 +232,8 @@ import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {UserBadgeComponent} from './common/user-badge/user-badge.component';
-import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
 import {TimeoutComponent} from './errors/states/timeout/timeout.component';
+import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
 import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-card.component';
 import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {SplashScreenComponent} from './home/splash-screen/splash-screen.component';
@@ -317,11 +318,11 @@ import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal
 import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
 import {UploadSubmissionModalComponent} from './tasks/modals/upload-submission-modal/upload-submission-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
-import {UnitAdminStateComponent} from './units/states/edit/unit-admin-state.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {TaskDefinitionDiscussionPromptsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-discussion-prompts/task-definition-discussion-prompts.component';
 import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
+import {UnitAdminStateComponent} from './units/states/edit/unit-admin-state.component';
 import {DownloadStaffNotesComponent} from './units/states/portfolios/download-staff-notes/download-staff-notes.component';
 import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
 import {ConfirmModerationModalComponent} from './units/states/tasks/inbox/directives/moderation/confirm-moderation-modal/confirm-moderation-modal.component';
@@ -338,12 +339,12 @@ import {GroupMemberContributionAssignerComponent} from './groups/group-member-co
 import {GroupMemberListComponent} from './groups/group-member-list/group-member-list.component';
 import {GroupSelectorComponent} from './groups/group-selector/group-selector.component';
 import {GroupSetManagerComponent} from './groups/group-set-manager/group-set-manager.component';
-import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 import {ProjectGroupsStateComponent} from './projects/states/groups/project-groups-state.component';
+import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
 import {PortfolioAddExtraFilesStepComponent} from './projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.component';
-import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-state.component';
 import {PortfolioLearningSummaryReportStepComponent} from './projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.component';
 import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
+import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-state.component';
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
@@ -354,8 +355,8 @@ import {PortfoliosPortfolioViewComponent} from './units/states/portfolios/direct
 import {PortfoliosProjectProgressComponent} from './units/states/portfolios/directives/portfolios-project-progress/portfolios-project-progress.component';
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
-import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/task-status-pie-chart.component';
 import {UnitTaskInboxStateComponent} from './units/states/tasks/inbox/unit-task-inbox-state.component';
+import {TaskStatusPieChartComponent} from './visualisations/task-status-pie-chart/task-status-pie-chart.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -425,6 +426,7 @@ const GANTT_CHART_CONFIG = {
     SpecConModalComponent,
     CalendarModalComponent,
     ConfirmationModalComponent,
+    DiscussedInClassReasonModalComponent,
     InstitutionSettingsComponent,
     ProjectPlanComponent,
     SuccessCloseComponent,
@@ -464,6 +466,7 @@ const GANTT_CHART_CONFIG = {
     SafePipe,
     PdfViewerPanelComponent,
     StaffTaskListComponent,
+    BatchFeedbackWorkflowDialogComponent,
     TaskSimilarityViewComponent,
     TasksForGroupsetPipe,
     OrderByPipe,

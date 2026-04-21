@@ -11,10 +11,12 @@
       You can choose to download your <em [hidden]="!submission?.isProcessing">previous</em>
       submission or the files you uploaded below.
     </p>
-    <p [hidden]="!submission?.isUploaded">
-      You uploaded this submission <strong>{{ task.submissionDate | date: 'dd/MM/yyyy' }}</strong
-      >.
-    </p>
+    @if (submission?.isUploaded && task.submissionDate) {
+      <p>
+        You uploaded this submission <strong>{{ task.submissionDate | date: 'dd/MM/yyyy' }}</strong
+        >.
+      </p>
+    }
     <p [hidden]="!canRegeneratePdf">
       If you feel there has been an error in your submission, you can request to regenerate your submission under the
       "Actions" dropdown menu.
