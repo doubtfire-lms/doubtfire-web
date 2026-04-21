@@ -87,6 +87,7 @@ export class UploadSubmissionModalComponent implements OnInit {
   public showPlagiarism = false;
   public isUploaderReady = false;
   public uploadStarted = false;
+  public uploadSubmitLocked = false;
 
   private uploadResponse: UploadSubmissionResponse | null = null;
   private startUpload?: () => void;
@@ -187,6 +188,7 @@ export class UploadSubmissionModalComponent implements OnInit {
 
   public shouldDisableSubmit(): boolean {
     return (
+      this.uploadSubmitLocked ||
       (this.showGroupSection && !this.hasRatedTeamMember) ||
       !this.isUploaderReady ||
       (this.requiresComment && this.comment.trim().length < this.minCommentLength)
@@ -219,6 +221,7 @@ export class UploadSubmissionModalComponent implements OnInit {
   }
 
   public cancel = (): void => {
+    this.uploadSubmitLocked = false;
     this.dialogRef.close({dismissed: true});
   };
 
@@ -278,6 +281,8 @@ export class UploadSubmissionModalComponent implements OnInit {
   };
 
   public onUploadComplete = (): void => {
+    this.uploadSubmitLocked = false;
+
     if (!this.uploadResponse?.id) {
       return;
     }
@@ -301,6 +306,11 @@ export class UploadSubmissionModalComponent implements OnInit {
   };
 
   public uploadButtonClicked(): void {
+    if (this.uploadSubmitLocked || this.isUploading) {
+      return;
+    }
+
+    this.uploadSubmitLocked = true;
     this.uploadStarted = true;
     this.currentStage = 'details';
     this.startUpload?.();
@@ -327,6 +337,7 @@ export class UploadSubmissionModalComponent implements OnInit {
 
   private resetUploadState(): void {
     this.uploadStarted = false;
+    this.uploadSubmitLocked = false;
     this.uploadResponse = null;
     this.currentStage = this.showGroupSection ? 'group' : 'details';
   }

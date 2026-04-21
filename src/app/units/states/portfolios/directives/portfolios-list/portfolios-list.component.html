@@ -147,6 +147,13 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="submission-date" sticky>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Submission Date</th>
+      <td mat-cell *matCellDef="let project">
+        {{ project.portfolioSubmissionDate | date: 'EEE d MMM y, h:mm a' }}
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="has-portfolio" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Has Portfolio</th>
       <td mat-cell *matCellDef="let project">

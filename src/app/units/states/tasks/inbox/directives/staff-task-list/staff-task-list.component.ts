@@ -16,7 +16,6 @@ import {TasksOfTaskDefinitionPipe} from 'src/app/common/filters/tasks-of-task-de
 import {TasksInTutorialsPipe} from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import {TasksForInboxSearchPipe} from 'src/app/common/filters/tasks-for-inbox-search.pipe';
 import {MatDialog} from '@angular/material/dialog';
-import {csvResultModalService, csvUploadModalService} from 'src/app/ajs-upgraded-providers';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -39,6 +38,8 @@ import {TaskDefinitionService} from 'src/app/api/services/task-definition.servic
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {TasksByTutorPipe} from 'src/app/common/filters/tasks-by-tutor.pipe';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
+import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
+import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 
 @Component({
   selector: 'df-staff-task-list',
@@ -132,8 +133,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     private alertService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
-    @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(csvResultModalService) private csvResultModal: any,
+    private csvUploadModal: CsvUploadModalService,
+    private csvResultModal: CsvResultModalService,
     private userService: UserService,
     private hotkeys: HotkeysService,
     private router: Router,
