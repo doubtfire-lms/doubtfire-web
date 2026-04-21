@@ -9,7 +9,6 @@ import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {
   TaskCompletionSnapshot,
   TaskCodeStats,
-  TaskStatusCounts,
   TutorialStats,
   TaskStatusEnum,
 } from 'src/app/api/models/doubtfire-model';
@@ -47,17 +46,17 @@ export class SummaryTaskStatusChartComponent {
   dataSource: TaskCodeStats = {};
   private autoCaptureAttempted: boolean = false;
 
-  private readonly statusMapping: Map<string, TaskStatusEnum[]> = new Map([
-    ['Complete', ['complete']],
-    ['Assess in Portfolio', ['assess_in_portfolio']],
-    ['Discuss/Demonstrate', ['discuss', 'demonstrate']],
-    ['Fix and Resubmit/Redo', ['redo', 'fix_and_resubmit']],
-    ['Ready for Feedback', ['ready_for_feedback']],
-    ['Working on It', ['working_on_it']],
-    ['Need Help/Attention Required', ['need_help', 'attention_required']],
-    ['Fail/Time/Feedback Exceeded', ['fail', 'feedback_exceeded', 'time_exceeded']],
-    ['Not Started', ['not_started']],
-  ]);
+  private readonly statusMapping: TaskStatusEnum[] = [
+    'complete',
+    'assess_in_portfolio',
+    'discuss', 'demonstrate',
+    'redo', 'fix_and_resubmit',
+    'ready_for_feedback',
+    'working_on_it',
+    'need_help', 'attention_required',
+    'fail', 'feedback_exceeded', 'time_exceeded',
+    'not_started',
+  ];
 
   constructor(
     private gradeService: GradeService,
@@ -84,8 +83,8 @@ export class SummaryTaskStatusChartComponent {
   ngOnInit(): void {
     this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
 
-    this.colorScheme.domain = [...this.statusMapping.values()].map(
-      (labels) => this.taskService.statusColors.get(labels[0]) || '#000000',
+    this.colorScheme.domain = this.statusMapping.map(
+      (labels) => this.taskService.statusColors.get(labels) || '#000000',
     );
     this.loadRecentSnapshot();
   }
@@ -130,7 +129,10 @@ export class SummaryTaskStatusChartComponent {
     // build chart series
     const data = Object.entries(this.dataSource).map(([taskDef, counts]) => ({
       name: taskDef,
-      series: this.groupStatuses(counts),
+      series: this.statusMapping.map((status) => ({
+        name: this.taskService.statusLabels.get(status) || status,
+        value: counts[status] || 0,
+      })),
     }));
 
     this.data = data;
@@ -150,14 +152,6 @@ export class SummaryTaskStatusChartComponent {
 
   onSelect(event: any) {
     console.log(event);
-  }
-
-  private groupStatuses(data: TaskStatusCounts): {name: string; value: number}[] {
-    const grouped = Array.from(this.statusMapping.entries()).map(([group, statuses]) => ({
-      name: group,
-      value: statuses.reduce((sum: number, status: string) => sum + (data[status] ?? 0), 0),
-    }));
-    return grouped;
   }
 
   private extractErrorMessage(error: any, fallback: string): string {
