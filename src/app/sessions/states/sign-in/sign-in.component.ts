@@ -55,6 +55,8 @@ export class SignInComponent implements OnInit {
   public isLoading: boolean = true;
   public authMethodFailed: boolean = false;
 
+  public redirectingSSO: boolean = false;
+
   // Get query params from the resolve in the router state
   @Input() username: string;
   @Input() authToken: string;
@@ -166,10 +168,13 @@ export class SignInComponent implements OnInit {
             });
         } else if (this.SSOLoginUrl) {
           if (this.autoLogin) {
+            this.redirectingSSO = true;
             return wait.then(() => {
               // Double check in case changed in the meantime
               if (this.autoLogin) {
                 this.redirectToSSO();
+              } else {
+                this.redirectingSSO = false;
               }
             });
           } else {

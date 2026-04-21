@@ -19,6 +19,30 @@ export class UserBadgeComponent {
     return this.selectedTask == null;
   }
 
+  get studentRouteParams(): {projectId: number; tutor: boolean; taskAbbr: string} | undefined {
+    if (this.unselected) {
+      return undefined;
+    }
+
+    return {
+      projectId: this.selectedTask.project.id,
+      tutor: true,
+      taskAbbr: '',
+    };
+  }
+
+  get studentTaskRouteParams(): {projectId: number; tutor: boolean; taskAbbr: string} | undefined {
+    if (this.unselected) {
+      return undefined;
+    }
+
+    return {
+      projectId: this.selectedTask.project.id,
+      taskAbbr: this.selectedTask.definition.abbreviation,
+      tutor: true,
+    };
+  }
+
   goToStudent(): void {
     this.router.stateService.go('projects2/dashboard2', {
       projectId: this.selectedTask.project.id,

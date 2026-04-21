@@ -20,15 +20,18 @@ import {
   ScormComment,
   UnitRoleService,
   UnitRole,
+  UserService,
 } from './doubtfire-model';
+import {TutorNoteService} from '../services/tutor-note.service';
 import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import {Observable, map} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Observable, firstValueFrom, map} from 'rxjs';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MappingFunctions} from '../services/mapping-fn';
-import { GradeTaskModalService } from 'src/app/tasks/modals/grade-task-modal/grade-task-modal.service';
+import {GradeTaskModalService} from 'src/app/tasks/modals/grade-task-modal/grade-task-modal.service';
 import {UploadSubmissionModalService} from 'src/app/tasks/modals/upload-submission-modal/upload-submission-modal.service';
+import {TaskPrerequisite} from './task-prerequisite';
 
 export const FeedbackModerationAction = {
   ShowMore: 'show_more',
@@ -126,6 +129,10 @@ export class Task extends Entity {
     return !this.requiresDiscussionForComplete || this.hasDiscussedInClassComment;
   }
 
+  public get latestReadyForFeedbackAt(): Date | null {
+    return this.submissionDate ? new Date(this.submissionDate) : null;
+  }
+
   public get tutor(): UnitRole {
     const enrolments = this.project.tutorialEnrolmentsCache.currentValues.filter(
       (t) => t.tutorialStream.name === this.definition.tutorialStream.name,
@@ -147,9 +154,64 @@ export class Task extends Entity {
       });
   }
 
+  private commentsSinceLatestReadyForFeedback(): readonly TaskComment[] {
+    const latestReadyForFeedbackAt = this.latestReadyForFeedbackAt?.getTime();
+    if (!latestReadyForFeedbackAt) {
+      return this.comments;
+    }
+
+    return this.comments.filter((comment) => {
+      const createdAt = comment.createdAt ? new Date(comment.createdAt).getTime() : NaN;
+      return Number.isFinite(createdAt) && createdAt >= latestReadyForFeedbackAt;
+    });
+  }
+
   public get unit(): Unit {
     if (this._unit) return this._unit;
     return this.project.unit;
+  }
+
+  private getBreakOverlapMilliseconds(
+    startTime: number,
+    endTime: number,
+    breaks: readonly {startDate: Date; numberOfWeeks: number}[],
+  ): number {
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+
+    return breaks.reduce((overlap, teachingBreak) => {
+      const breakStart = new Date(teachingBreak.startDate).getTime();
+      const breakDuration = (teachingBreak.numberOfWeeks ?? 0) * 7 * millisecondsPerDay;
+      const breakEnd = breakStart + breakDuration;
+
+      if (!Number.isFinite(breakStart) || breakDuration <= 0) {
+        return overlap;
+      }
+
+      const overlapStart = Math.max(startTime, breakStart);
+      const overlapEnd = Math.min(endTime, breakEnd);
+
+      return overlap + Math.max(0, overlapEnd - overlapStart);
+    }, 0);
+  }
+
+  public daysSinceSubmission(nowTime = Date.now()): number {
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+    const submissionTime = new Date(this.submissionDate).getTime();
+
+    if (!Number.isFinite(submissionTime) || nowTime <= submissionTime) {
+      return 0;
+    }
+
+    const teachingBreaks = this.unit.teachingPeriod?.breaks ?? [];
+    const pausedMilliseconds = this.getBreakOverlapMilliseconds(
+      submissionTime,
+      nowTime,
+      teachingBreaks,
+    );
+
+    return Math.floor(
+      Math.max(0, nowTime - submissionTime - pausedMilliseconds) / millisecondsPerDay,
+    );
   }
 
   /**
@@ -690,6 +752,58 @@ export class Task extends Entity {
       );
   }
 
+  private mapUnitTaskPrerequisites(prerequisites: TaskPrerequisite[]): TaskPrerequisite[] {
+    const definitions = this.unit.taskDefinitions;
+
+    return prerequisites.map((prerequisite) => {
+      prerequisite.taskDefinition = definitions.find(
+        (td) => td.id === prerequisite.taskDefinitionId,
+      );
+      prerequisite.prerequisite = definitions.find((td) => td.id === prerequisite.prerequisiteId);
+      return prerequisite;
+    });
+  }
+
+  private buildProjectTaskForDefinition(definition: TaskDefinition): Task {
+    const dependentTask = new Task(this.project);
+    dependentTask.project = this.project;
+    dependentTask.definition = definition;
+    return dependentTask;
+  }
+
+  private async dependentTaskNeedsRecursiveFix(definition: TaskDefinition): Promise<boolean> {
+    const cachedTask = this.project.findTaskForDefinition(definition.id);
+    if (cachedTask) {
+      return cachedTask.status === 'ready_for_feedback';
+    }
+
+    const dependentTask = this.buildProjectTaskForDefinition(definition);
+    const taskWithSubmissionDetails = await firstValueFrom(dependentTask.getSubmissionDetails());
+    return taskWithSubmissionDetails.status === 'ready_for_feedback';
+  }
+
+  public async hasReadyForFeedbackDependents(): Promise<boolean> {
+    const allPrerequisites = await firstValueFrom(this.unit.getTaskPrerequisites());
+    const dependentPrerequisites = this.mapUnitTaskPrerequisites(allPrerequisites).filter(
+      (prerequisite) => prerequisite.prerequisiteId === this.definition.id,
+    );
+
+    for (const prerequisite of dependentPrerequisites) {
+      if (!prerequisite.taskDefinition) {
+        continue;
+      }
+
+      const shouldTriggerRecursiveFix = await this.dependentTaskNeedsRecursiveFix(
+        prerequisite.taskDefinition,
+      );
+      if (shouldTriggerRecursiveFix) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public get overseerEnabled(): boolean {
     return this.unit.overseerEnabled && this.definition.assessmentEnabled;
   }
@@ -804,44 +918,98 @@ export class Task extends Entity {
     }
   }
 
-  public markAsDiscussed() {
+  public async markAsDiscussed(reasonText?: string) {
     const alerts: AlertService = AppInjector.get(AlertService);
     const taskService: TaskService = AppInjector.get(TaskService);
 
-    const options: RequestOptions<Task> = {
-      entity: this,
-      cache: this.project.taskCache,
-      body: {
-        discussed: true,
-      },
+    const markDiscussed = () => {
+      const options: RequestOptions<Task> = {
+        entity: this,
+        cache: this.project.taskCache,
+        body: {
+          discussed: true,
+        },
+      };
+
+      taskService
+        .update(
+          {
+            projectId: this.project.id,
+            taskDefId: this.definition.id,
+          },
+          options,
+        )
+        .subscribe({
+          next: (_response) => {
+            taskService.notifyStatusChange(this);
+            alerts.success('Task successfully marked as discussed in class.', 4000);
+          },
+          error: (error) => {
+            alerts.error(error, 6000);
+          },
+        });
     };
 
-    taskService
-      .update(
-        {
-          projectId: this.project.id,
-          taskDefId: this.definition.id,
-        },
-        options,
-      )
-      .subscribe({
-        next: (_response) => {
-          taskService.notifyStatusChange(this);
-          alerts.success('Task successfully marked as discussed in class.', 4000);
-        },
-        error: (error) => {
-          alerts.error(error, 6000);
-        },
-      });
+    if (reasonText) {
+      const prefix = `I'm manually marking this discussed in class because...`;
+      const trimmedReason = reasonText.trim();
+      const noteText = trimmedReason.startsWith(prefix)
+        ? trimmedReason
+        : `${prefix} ${trimmedReason}`;
+      const currentUser = AppInjector.get(UserService).currentUser;
+      const currentUnitRole = this.unit.staff.find(
+        (unitRole) => unitRole.user.id === currentUser.id,
+      );
+
+      if (!currentUnitRole) {
+        alerts.error(
+          'Unable to find your staff role, so the tutor note could not be recorded.',
+          6000,
+        );
+        return;
+      }
+
+      AppInjector.get(TutorNoteService)
+        .addNote(currentUnitRole, noteText, this)
+        .subscribe({
+          next: () => {
+            markDiscussed();
+          },
+          error: (error) => {
+            alerts.error(`Unable to save the required tutor note: ${error}`, 6000);
+          },
+        });
+      return;
+    }
+
+    markDiscussed();
   }
 
-  public updateTaskStatus(status: TaskStatusEnum, markAsDiscussed?: boolean) {
+  public async updateTaskStatus(
+    status: TaskStatusEnum,
+    markAsDiscussed?: boolean,
+    triggerRecursiveFix?: boolean,
+  ) {
     const oldStatus = this.status;
     const alerts: AlertService = AppInjector.get(AlertService);
 
     if (status === 'complete' && !this.canMarkComplete) {
       alerts.error('This task must be discussed in class before it can marked complete.', 6000);
       return;
+    }
+
+    if (status === 'complete' || status === 'fix_and_resubmit' || status === 'redo') {
+      if (!this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isManualFeedback)) {
+        alerts.error(
+          status === 'complete'
+            ? 'Feedback must be given before moving this task to Complete'
+            : status === 'fix_and_resubmit'
+              ? 'Feedback must be given before moving this task to Fix and Resubmit'
+              : 'Feedback must be given before moving this task to Redo',
+          6000,
+        );
+        return;
+      }
     }
 
     const updateFunc = () => {
@@ -858,6 +1026,10 @@ export class Task extends Entity {
 
       if (markAsDiscussed === true) {
         options.body['discussed'] = true;
+      }
+
+      if (triggerRecursiveFix === true) {
+        options.body['trigger_recursive_fix'] = true;
       }
 
       const hasId: boolean = this.id > 0;
@@ -887,9 +1059,13 @@ export class Task extends Entity {
     }; // end update function
 
     // Must provide grade if graded and in a final complete state - so use callback to run update function
-    if ((this.definition.isGraded || this.definition.maxQualityPts > 0) && TaskStatus.GRADEABLE_STATUSES.includes(status)) {
+    if (
+      (this.definition.isGraded || this.definition.maxQualityPts > 0) &&
+      TaskStatus.GRADEABLE_STATUSES.includes(status)
+    ) {
       const gradeModal: GradeTaskModalService = AppInjector.get(GradeTaskModalService);
-      gradeModal.show(this,
+      gradeModal.show(
+        this,
         // Grade was selected (modal closed with result)
         (response) => {
           this.grade = response.grade;
@@ -907,7 +1083,7 @@ export class Task extends Entity {
     }
   }
 
-  public triggerTransition(status: TaskStatusEnum): void {
+  public async triggerTransition(status: TaskStatusEnum): Promise<void> {
     if (this.status === status) return;
     const alerts: AlertService = AppInjector.get(AlertService);
 
@@ -920,7 +1096,7 @@ export class Task extends Entity {
     } else if (requiresFileUpload && !this.isReadyForUpload) {
       alerts.error('Complete Knowledge Check first to submit files', 6000);
     } else {
-      this.updateTaskStatus(status);
+      await this.updateTaskStatus(status);
     }
   }
 
@@ -942,12 +1118,13 @@ export class Task extends Entity {
     return this.project.getGroupForTask(this);
   }
 
-  public pin(): void {
+  public pin(onSuccess?: () => void): void {
     const http = AppInjector.get(HttpClient);
 
     http.post(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`, {}).subscribe({
       next: (data) => {
         this.pinned = true;
+        onSuccess?.();
       },
       error: (message) => {
         (AppInjector.get(AlertService) as AlertService).error(message, 6000);
@@ -955,7 +1132,7 @@ export class Task extends Entity {
     });
   }
 
-  public unpin(): void {
+  public unpin(onSuccess?: () => void): void {
     const http = AppInjector.get(HttpClient);
 
     http
@@ -963,6 +1140,7 @@ export class Task extends Entity {
       .subscribe({
         next: (_data) => {
           this.pinned = false;
+          onSuccess?.();
         },
         error: (message) => {
           (AppInjector.get(AlertService) as AlertService).error(message, 6000);

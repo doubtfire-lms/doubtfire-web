@@ -126,6 +126,7 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
       'tutorial',
       'target',
       'submitted-as',
+      'submission-date',
       ...(this.portfolioFilter === 'all' ? ['has-portfolio'] : []),
       'stats',
       'grade',
@@ -219,6 +220,12 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
           return this.sortCompare(a.targetGrade, b.targetGrade, sort.direction === 'asc');
         case 'submitted-as':
           return this.sortCompare(a.submittedGrade, b.submittedGrade, sort.direction === 'asc');
+        case 'submission-date':
+          return this.sortCompare(
+            a.portfolioSubmissionDate?.getTime() ?? 0,
+            b.portfolioSubmissionDate?.getTime() ?? 0,
+            sort.direction === 'asc',
+          );
         case 'has-portfolio':
           return this.sortCompare(
             a.hasPortfolio.toString(),

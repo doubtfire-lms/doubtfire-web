@@ -2,6 +2,75 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-32](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-31...v10.0.1-32) (2026-04-18)
+
+### [10.0.1-31](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-30...v10.0.1-31) (2026-04-18)
+
+### [10.0.1-30](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-29...v10.0.1-30) (2026-04-18)
+
+
+### Features
+
+* batch upload feedback csv ([#1175](https://github.com/b0ink/doubtfire-deploy/issues/1175)) ([9f95987](https://github.com/b0ink/doubtfire-deploy/commit/9f959877b6f47d878d87b468f4aab73f536d598b))
+* display icon for tasks escalated by student ([dfcfd47](https://github.com/b0ink/doubtfire-deploy/commit/dfcfd472305ef2971fa72734c18e77253b98fa11))
+* enable task pinning in explorer ([1647e2b](https://github.com/b0ink/doubtfire-deploy/commit/1647e2bcc86ac6fb08c82be9795a06939c57bb6e))
+
+
+### Bug Fixes
+
+* debounce duplicate task submission requests ([80f92e2](https://github.com/b0ink/doubtfire-deploy/commit/80f92e2277c48978e1738340063a7223c04fddb8))
+
+### [10.0.1-29](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-28...v10.0.1-29) (2026-04-15)
+
+
+### Features
+
+* discussed in class refactor ([#1145](https://github.com/b0ink/doubtfire-deploy/issues/1145)) ([4d8bb5b](https://github.com/b0ink/doubtfire-deploy/commit/4d8bb5b82d89caa02ed4936819be601b3f6977fc))
+
+### [10.0.1-28](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-27...v10.0.1-28) (2026-04-13)
+
+### [10.0.1-27](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.27...v10.0.1-27) (2026-04-13)
+
+### [10.0.27](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-26...v10.0.27) (2026-04-13)
+
+
+### Features
+
+* confirmation modal to reassign tutorials when removing staff ([5f90e90](https://github.com/b0ink/doubtfire-deploy/commit/5f90e9085d69913eced55ad54ce9ac09431d3822))
+
+### [10.0.1-26](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-25...v10.0.1-26) (2026-03-26)
+
+### [10.0.1-25](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-24...v10.0.1-25) (2026-03-26)
+
+
+### Features
+
+* display sso redirecting state ([248c992](https://github.com/b0ink/doubtfire-deploy/commit/248c992f46488f61916e00a87ca32ed987721f31))
+* pause feedback threshold during teaching period breaks ([#1138](https://github.com/b0ink/doubtfire-deploy/issues/1138)) ([12fbf81](https://github.com/b0ink/doubtfire-deploy/commit/12fbf8147107dc185a9a9cbea940efac93a0f316))
+
+### [10.0.1-24](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-23...v10.0.1-24) (2026-03-24)
+
+
+### Features
+
+* confirm recursive fix in mobile tutor view ([b64601a](https://github.com/b0ink/doubtfire-deploy/commit/b64601a425c7a64bccfaf47c1e4fccb0343b1589))
+
+### [10.0.1-23](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-22...v10.0.1-23) (2026-03-24)
+
+### [10.0.1-22](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-21...v10.0.1-22) (2026-03-23)
+
+
+### Features
+
+* display portfolio submission time ([d717b27](https://github.com/b0ink/doubtfire-deploy/commit/d717b270eb80c0b0245e6b39f0b3f0567c379512))
+* require discussion before marking complete ([#1103](https://github.com/b0ink/doubtfire-deploy/issues/1103)) ([86ae886](https://github.com/b0ink/doubtfire-deploy/commit/86ae8865268ee19e4b3430ff679358cc075e1346))
+
+
+### Bug Fixes
+
+* avoid rendering the staff list twice ([9e5be59](https://github.com/b0ink/doubtfire-deploy/commit/9e5be591b9a0cf72d01efa5e28e5b2b9e7eba043))
+* only render if submission date is valid ([04986a0](https://github.com/b0ink/doubtfire-deploy/commit/04986a0e501f0185dbd199b8d2554133217f7e75))
+
 ### [10.0.1-21](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-20...v10.0.1-21) (2026-03-13)
 
 ### [10.0.1-20](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-19...v10.0.1-20) (2026-03-13)
