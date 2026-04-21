@@ -131,16 +131,27 @@ export class SummaryTaskStatusChartComponent {
         ? this.aggregateCampusData(recentSnapshot[this.campusFilter])
         : mergedData;
 
-    // build chart series
-    const data = Object.entries(this.dataSource).map(([taskDef, counts]) => ({
-      name: taskDef,
-      series: this.statusMapping.map((status) => ({
-        name: this.taskService.statusLabels.get(status) || status,
-        value: counts[status] || 0,
-      })),
-    }));
+    this.data = this.buildChartData(this.dataSource);
+  }
 
-    this.data = data;
+  private buildChartData(taskStats: TaskCodeStats): any[] {
+    const taskSeqByCode = new Map(
+      this.unit.taskDefinitions.map((taskDefinition) => [taskDefinition.abbreviation, taskDefinition.seq]),
+    );
+
+    return Object.entries(taskStats)
+      .sort(([taskCodeA], [taskCodeB]) => {
+        const seqA = taskSeqByCode.get(taskCodeA) ?? Number.MAX_SAFE_INTEGER;
+        const seqB = taskSeqByCode.get(taskCodeB) ?? Number.MAX_SAFE_INTEGER;
+        return seqA - seqB;
+      })
+      .map(([taskDef, counts]) => ({
+        name: taskDef,
+        series: this.statusMapping.map((status) => ({
+          name: this.taskService.statusLabels.get(status) || status,
+          value: counts[status] || 0,
+        })),
+      }));
   }
 
   private aggregateCampusData(campusData: TutorialStats): TaskCodeStats {
