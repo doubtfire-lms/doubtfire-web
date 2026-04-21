@@ -1,0 +1,7 @@
+:host ::ng-deep .reverse-legend-order .legend-labels {
+  transform: scaleY(-1);
+}
+
+:host ::ng-deep .reverse-legend-order .legend-label {
+  transform: scaleY(-1);
+}

@@ -49,12 +49,17 @@ export class SummaryTaskStatusChartComponent {
   private readonly statusMapping: TaskStatusEnum[] = [
     'complete',
     'assess_in_portfolio',
-    'discuss', 'demonstrate',
-    'redo', 'fix_and_resubmit',
+    'discuss',
+    'demonstrate',
+    'redo',
+    'fix_and_resubmit',
     'ready_for_feedback',
     'working_on_it',
-    'need_help', 'attention_required',
-    'fail', 'feedback_exceeded', 'time_exceeded',
+    'need_help',
+    'attention_required',
+    'time_exceeded',
+    'feedback_exceeded',
+    'fail',
     'not_started',
   ];
 

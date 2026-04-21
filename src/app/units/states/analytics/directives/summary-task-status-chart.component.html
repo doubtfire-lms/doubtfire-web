@@ -9,12 +9,18 @@
         <mat-option *ngFor="let campus of campuses" [value]="campus">{{ campus }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <button mat-icon-button class="self-center" (click)="captureNow()" aria-label="Capture completion snapshot now">
+    <button
+      mat-icon-button
+      class="self-center"
+      (click)="captureNow()"
+      aria-label="Capture completion snapshot now"
+    >
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
   <div class="h-[500px]">
     <ngx-charts-bar-vertical-normalized
+      class="reverse-legend-order"
       [scheme]="colorScheme"
       [results]="data"
       [gradient]="gradient"
