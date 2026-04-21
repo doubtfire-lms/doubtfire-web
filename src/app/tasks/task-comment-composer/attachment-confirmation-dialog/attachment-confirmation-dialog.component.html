@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>Post Attachment?</h2>
+<mat-dialog-content>
+  <p>This attachment is ready to post as a task comment.</p>
+
+  <div
+    class="mx-auto flex min-h-[180px] w-full max-w-[520px] items-center justify-center overflow-hidden rounded-xl bg-black/5"
+  >
+    @if (isImage) {
+      <img
+        class="aspect-square w-full max-w-[520px] object-contain object-center"
+        [src]="previewUrl"
+        [alt]="file.name"
+      />
+    } @else if (isPdf) {
+      <div class="flex items-center gap-3 p-5">
+        <mat-icon class="h-8 w-8 text-[2rem]">picture_as_pdf</mat-icon>
+        <div class="flex flex-col gap-0.5 break-all">
+          <strong>{{ file.name }}</strong>
+          <span>PDF document</span>
+        </div>
+      </div>
+    } @else if (isAudio) {
+      <div class="w-full p-5">
+        <div class="flex items-center gap-3">
+          <mat-icon class="h-8 w-8 text-[2rem]">audio_file</mat-icon>
+          <div class="flex flex-col gap-0.5 break-all">
+            <strong>{{ file.name }}</strong>
+            <span>{{ file.type || 'Audio file' }}</span>
+          </div>
+        </div>
+        <audio class="mt-4 w-full" [src]="previewUrl" controls></audio>
+      </div>
+    } @else {
+      <div class="flex items-center gap-3 p-5">
+        <mat-icon class="h-8 w-8 text-[2rem]">attach_file</mat-icon>
+        <div class="flex flex-col gap-0.5 break-all">
+          <strong>{{ file.name }}</strong>
+          <span>{{ file.type || 'Attachment' }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <p class="mt-3 break-all text-[1rem] opacity-80">
+    {{ file.name }}
+    @if (file.size) {
+      <span>({{ formatFileSize(file.size) }})</span>
+    }
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dismiss(false)">Cancel</button>
+  <button mat-raised-button color="primary" (click)="dismiss(true)">Post Attachment</button>
+</mat-dialog-actions>

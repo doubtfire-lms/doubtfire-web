@@ -30,6 +30,7 @@ import {
 import {AlertService} from 'src/app/common/services/alert.service';
 import {EmojiService} from 'src/app/common/services/emoji.service';
 import {TaskCommentsViewerComponent} from '../task-comments-viewer/task-comments-viewer.component';
+import {AttachmentConfirmationDialogComponent} from './attachment-confirmation-dialog/attachment-confirmation-dialog.component';
 
 interface ApiError {
   error?: string;
@@ -581,17 +582,22 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   }
 
   uploadFiles(files: ArrayLike<File>) {
+    const acceptedFiles: File[] = [];
+
     Array.from(files).forEach((file) => {
       if (
         ACCEPTED_FILE_TYPES.includes(file.type) ||
         file.type.startsWith('audio/') ||
         file.type.startsWith('image/')
       ) {
-        this.postAttachmentComment(file);
+        acceptedFiles.push(file);
       } else {
         this.alerts.error('Cannot upload that file - only images, audio, and PDFs.', 4000);
       }
     });
+
+    this.confirmAttachmentsSequentially(acceptedFiles);
+    this.resetUploader();
   }
 
   private getClipboardFiles(event: ClipboardEvent): File[] {
@@ -636,6 +642,34 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
         this.alerts.error(error || error?.message, 2000);
       },
     );
+  }
+
+  private confirmAttachmentsSequentially(files: File[], index: number = 0) {
+    if (index >= files.length) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(AttachmentConfirmationDialogComponent, {
+      data: {
+        file: files[index],
+      },
+      maxWidth: '720px',
+      width: 'min(92vw, 720px)',
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.postAttachmentComment(files[index]);
+      }
+
+      this.confirmAttachmentsSequentially(files, index + 1);
+    });
+  }
+
+  private resetUploader() {
+    if (this.uploader?.nativeElement) {
+      this.uploader.nativeElement.value = '';
+    }
   }
 
   showFeedbackPicker() {
