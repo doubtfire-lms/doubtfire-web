@@ -4,7 +4,7 @@
 #
 # The order in which the modules load here is IMPORTANT so do not rearrange
 # them
-#
+# 
 angular.module('doubtfire.config', [
   'doubtfire.config.vendor-dependencies'
   'doubtfire.config.routing'

@@ -6,3 +6,4 @@ angular.module('doubtfire.config.root-controller', [])
 .controller("AppCtrl", (GlobalStateService) ->
 
 )
+ 

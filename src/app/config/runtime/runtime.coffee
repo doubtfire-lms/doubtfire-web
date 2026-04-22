@@ -1,6 +1,6 @@
 #
 # Runtime settings for when Doubtfire is about to launch
-#
+# 
 angular.module('doubtfire.config.runtime', [])
 
 .run(($rootScope, $state, $filter, $location, authenticationService, editableOptions, editableThemes, $transitions) ->

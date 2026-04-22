@@ -11,3 +11,4 @@ angular.module('doubtfire.config.routing', [])
   # TODO: (@alexcu) probably change it to map to /dashboard at some point.
   $urlRouterProvider.when "/", "/home"
 )
+ 
