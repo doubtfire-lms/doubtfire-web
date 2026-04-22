@@ -158,6 +158,8 @@
         [attr.contenteditable]="contentEditableValue() && !recording"
         (keydown.enter)="send($event)"
         (keydown)="keyTyped()"
+        (beforeinput)="handleBeforeInput($event)"
+        (paste)="handlePaste($event)"
         (input)="onInputChange($event)"
         placeholder="Aa"
         name="commentComposer"

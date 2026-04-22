@@ -30,6 +30,7 @@ import {
 import {AlertService} from 'src/app/common/services/alert.service';
 import {EmojiService} from 'src/app/common/services/emoji.service';
 import {TaskCommentsViewerComponent} from '../task-comments-viewer/task-comments-viewer.component';
+import {AttachmentConfirmationDialogComponent} from './attachment-confirmation-dialog/attachment-confirmation-dialog.component';
 
 interface ApiError {
   error?: string;
@@ -550,17 +551,84 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
     this.uploader.nativeElement.click();
   }
 
-  uploadFiles(event) {
-    [...event].forEach((file) => {
+  handlePaste(event: ClipboardEvent) {
+    const files = this.getClipboardFiles(event);
+
+    if (files.length === 0) {
+      return;
+    }
+
+    const existingText = this.input?.first?.nativeElement?.innerText ?? '';
+    event.preventDefault();
+    this.clearPastedPlaceholderContent(existingText);
+    this.uploadFiles(files);
+  }
+
+  handleBeforeInput(event: InputEvent) {
+    if (event.inputType !== 'insertFromPaste') {
+      return;
+    }
+
+    const files = Array.from(event.dataTransfer?.files ?? []);
+
+    if (files.length === 0) {
+      return;
+    }
+
+    const existingText = this.input?.first?.nativeElement?.innerText ?? '';
+    event.preventDefault();
+    this.clearPastedPlaceholderContent(existingText);
+    this.uploadFiles(files);
+  }
+
+  uploadFiles(files: ArrayLike<File>) {
+    const acceptedFiles: File[] = [];
+
+    Array.from(files).forEach((file) => {
       if (
         ACCEPTED_FILE_TYPES.includes(file.type) ||
         file.type.startsWith('audio/') ||
         file.type.startsWith('image/')
       ) {
-        this.postAttachmentComment(file);
+        acceptedFiles.push(file);
       } else {
         this.alerts.error('Cannot upload that file - only images, audio, and PDFs.', 4000);
       }
+    });
+
+    this.confirmAttachmentsSequentially(acceptedFiles);
+    this.resetUploader();
+  }
+
+  private getClipboardFiles(event: ClipboardEvent): File[] {
+    const clipboardData = event.clipboardData;
+
+    if (!clipboardData) {
+      return [];
+    }
+
+    const directFiles = Array.from(clipboardData.files ?? []);
+    if (directFiles.length > 0) {
+      return directFiles;
+    }
+
+    return Array.from(clipboardData.items ?? [])
+      .filter((item) => item.kind === 'file')
+      .map((item) => item.getAsFile())
+      .filter((file): file is File => file != null);
+  }
+
+  private clearPastedPlaceholderContent(existingText: string) {
+    if (!this.input?.first?.nativeElement) {
+      return;
+    }
+
+    // Let the browser finish the paste event lifecycle, then restore the pre-paste text
+    // so clipboard attachment placeholders do not replace an in-progress draft.
+    setTimeout(() => {
+      this.input.first.nativeElement.innerText = existingText;
+      this.saveCurrentDraft();
+      this.cdRef.detectChanges();
     });
   }
 
@@ -574,6 +642,34 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
         this.alerts.error(error || error?.message, 2000);
       },
     );
+  }
+
+  private confirmAttachmentsSequentially(files: File[], index: number = 0) {
+    if (index >= files.length) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(AttachmentConfirmationDialogComponent, {
+      data: {
+        file: files[index],
+      },
+      maxWidth: '720px',
+      width: 'min(92vw, 720px)',
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.postAttachmentComment(files[index]);
+      }
+
+      this.confirmAttachmentsSequentially(files, index + 1);
+    });
+  }
+
+  private resetUploader() {
+    if (this.uploader?.nativeElement) {
+      this.uploader.nativeElement.value = '';
+    }
   }
 
   showFeedbackPicker() {

@@ -85,6 +85,7 @@ import {
   TaskCommentComposerComponent,
   DiscussionComposerDialog,
 } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
+import {AttachmentConfirmationDialogComponent} from 'src/app/tasks/task-comment-composer/attachment-confirmation-dialog/attachment-confirmation-dialog.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {AudioCommentRecorderComponent} from './common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder';
@@ -373,6 +374,7 @@ const GANTT_CHART_CONFIG = {
     D2lTransferComponent,
     TeachingPeriodUnitImportDialogComponent,
     TaskCommentComposerComponent,
+    AttachmentConfirmationDialogComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
     DiscussionPromptComposerComponent,
