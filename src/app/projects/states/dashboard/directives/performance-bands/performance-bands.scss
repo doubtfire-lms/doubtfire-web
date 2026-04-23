@@ -1,0 +1,179 @@
+/* Premium Performance Bands Design */
+.card-performance-bands {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Premium shadow */
+  border: 1px solid rgba(0,0,0,0.05);
+  background: #ffffff;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); /* Hover elevation */
+  }
+
+  .performance-bands-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    
+    .performance-bands-title {
+      margin: 0 0 4px 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    
+    .text-muted {
+      font-size: 0.85rem;
+      color: #7f8c8d;
+    }
+  }
+
+  .performance-bands-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    
+    &.is-hidden {
+      display: none;
+    }
+  }
+
+  .performance-band-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 50px;
+    align-items: center;
+    gap: 16px;
+    
+    &:hover .performance-band-fill {
+      filter: brightness(1.1);
+    }
+  }
+
+  .performance-band-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #34495e;
+  }
+
+  .performance-band-track {
+    width: 100%;
+    height: 14px;
+    background: #f0f3f6;
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* subtle inner shadow */
+  }
+
+  .performance-band-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); /* Smooth spring-like animation */
+    position: relative;
+    overflow: hidden;
+
+    /* Subtle sheen effect */
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+      transform: translateX(-100%);
+      animation: sheen 3s infinite;
+    }
+  }
+
+  @keyframes sheen {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Rich Color Palettes */
+  .high-distinction {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    box-shadow: 0 2px 8px rgba(46, 204, 113, 0.4);
+  }
+
+  .above-average {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.4);
+  }
+
+  .average {
+    background: linear-gradient(135deg, #f1c40f, #f39c12);
+    box-shadow: 0 2px 8px rgba(241, 196, 15, 0.4);
+  }
+
+  .below-average {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+  }
+
+  .performance-band-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: right;
+  }
+
+  /* toggle styling inherited or tweaked */
+  .performance-toggle {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+    margin: 0;
+  }
+
+  .performance-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .performance-toggle-slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    background: #cbd5e1;
+    border-radius: 999px;
+    transition: 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  }
+
+  .performance-toggle-slider:before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 2px;
+    bottom: 2px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .performance-toggle input:checked + .performance-toggle-slider {
+    background: #3b82f6;
+  }
+
+  .performance-toggle input:checked + .performance-toggle-slider:before {
+    transform: translateX(24px);
+  }
+
+  @media (max-width: 991px) {
+    .performance-band-row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    .performance-band-value {
+      text-align: left;
+    }
+  }
+}

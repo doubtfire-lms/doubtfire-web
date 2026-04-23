@@ -4,12 +4,14 @@
       Progress Dashboard <span ng-show="tutor">for {{project.student.name}}</span>
     </h4>
   </div><!--/panel-heading-->
+
   <div class="panel-body">
     <div class="col-sm-12 col-xl-6">
       <div class="card card-default card-sm card-target-grade">
         <div class="card-heading">
           <h4>Target Grade</h4>
         </div><!--/target-grade-heading-->
+
         <div class="card-body">
           <select
             class="form-control input-lg"
@@ -19,6 +21,7 @@
             ng-change="updateTargetGrade(project.targetGrade)"></select>
         </div><!--/target-grade-body-->
       </div><!--/target-grade-card-->
+
       <div class="card card-default card-lg card-burndown">
         <div class="card-heading">
           <h4>Progress Burndown</h4>
@@ -26,9 +29,11 @@
             The burndown chart shows how much work remains for you to achieve your target grade.
           </div>
         </div><!--/burndown-heading-->
+
         <div class="card-body">
           <progress-burndown-chart project="project" unit="project.unit"></progress-burndown-chart>
         </div><!--/burndown-body-->
+
         <div class="card-footer">
           Aim to keep your
           <strong style="color: #e01b5d">Complete</strong>
@@ -38,6 +43,7 @@
         </div><!--/burndown-footer-->
       </div><!--/burndown-card-->
     </div><!--/burndown-column-->
+
     <div class="col-sm-12 col-xl-6">
       <div class="card card-default card-lg card-pie-chart">
         <div class="card-heading">
@@ -46,6 +52,7 @@
             Breakdown summary of each of your task statuses.
           </div>
         </div><!--/pie-chart-heading-->
+
         <div class="card-body">
           <student-task-status-pie-chart
             project="project"
@@ -53,6 +60,9 @@
           </student-task-status-pie-chart>
         </div><!--/pie-chart-body-->
       </div><!--/pie-chart-card-->
+
+      <!-- Visualisation of Performance Bands -->
+      <performance-bands project="project"></performance-bands>
     </div><!--/pie-chart-column-->
   </div><!--/panel-body-->
 </div>

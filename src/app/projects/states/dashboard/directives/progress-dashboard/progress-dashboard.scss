@@ -1,0 +1,125 @@
+.card-performance-bands {
+  margin-top: 16px;
+}
+
+.performance-bands-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.performance-band-row {
+  display: grid;
+  grid-template-columns: 170px 1fr 60px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.performance-band-row:last-child {
+  margin-bottom: 0;
+}
+
+.performance-band-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.performance-band-track {
+  width: 100%;
+  height: 34px;
+  background: #e9e9e9;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.performance-band-fill {
+  height: 100%;
+  border-radius: 7px;
+  transition: width 0.3s ease;
+}
+
+.performance-band-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  text-align: left;
+}
+
+.high-distinction {
+  background: #196d1d;
+}
+
+.above-average {
+  background: #53b94f;
+}
+
+.average {
+  background: #ffa000;
+}
+
+.below-average {
+  background: #f44336;
+}
+
+.performance-toggle {
+  position: relative;
+  display: inline-block;
+  width: 62px;
+  height: 34px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.performance-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.performance-toggle-slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background: #d3d3d3;
+  border-radius: 999px;
+  transition: 0.3s ease;
+}
+
+.performance-toggle-slider:before {
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  left: 4px;
+  top: 4px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.performance-toggle input:checked + .performance-toggle-slider {
+  background: #55b957;
+}
+
+.performance-toggle input:checked + .performance-toggle-slider:before {
+  transform: translateX(28px);
+}
+
+@media (max-width: 991px) {
+  .performance-band-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .performance-band-track {
+    height: 30px;
+  }
+
+  .performance-band-value {
+    text-align: left;
+  }
+}

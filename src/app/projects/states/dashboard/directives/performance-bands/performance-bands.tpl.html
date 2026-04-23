@@ -1,0 +1,37 @@
+<div class="card card-default card-lg card-performance-bands">
+  <div class="card-heading performance-bands-heading">
+    <div>
+      <h4 class="performance-bands-title">Performance Bands</h4>
+      <div class="text-muted">
+        Distribution of performance levels across graded tasks.
+      </div>
+    </div>
+
+    <label class="performance-toggle">
+      <input type="checkbox" ng-model="showResults" />
+      <span class="performance-toggle-slider"></span>
+    </label>
+  </div><!--/performance-bands-heading-->
+
+  <div class="card-body performance-bands-body" ng-class="{ 'is-hidden': !showResults }">
+    <div
+      class="performance-band-row"
+      ng-repeat="band in performanceBands track by $index"
+    >
+      <div class="performance-band-label">{{ band.label }}</div>
+
+      <div class="performance-band-track">
+        <div
+          class="performance-band-fill {{ band.colorClass }}"
+          ng-style="{ width: band.value + '%' }"
+        ></div>
+      </div>
+
+      <div class="performance-band-value">{{ band.value }}%</div>
+    </div>
+  </div>
+
+  <div class="card-body text-muted text-center" ng-if="!showResults" style="padding-top: 1rem; padding-bottom: 1rem;">
+    <i class="fa fa-eye-slash" style="margin-right: 8px;"></i> Results are currently hidden
+  </div>
+</div>
