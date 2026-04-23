@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-33](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-32...v10.0.1-33) (2026-04-23)
+
+
+### Features
+
+* allow paste attachment comment ([#1165](https://github.com/b0ink/doubtfire-deploy/issues/1165)) ([0f24980](https://github.com/b0ink/doubtfire-deploy/commit/0f24980e6edcc5d0f81e015990adaf14afea400e))
+
+
+### Bug Fixes
+
+* open report in turnitin ([091aaf8](https://github.com/b0ink/doubtfire-deploy/commit/091aaf8ba744bbf677f9b8f51a58bc16b7d631ab))
+
 ### [10.0.1-32](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-31...v10.0.1-32) (2026-04-18)
 
 ### [10.0.1-31](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-30...v10.0.1-31) (2026-04-18)
