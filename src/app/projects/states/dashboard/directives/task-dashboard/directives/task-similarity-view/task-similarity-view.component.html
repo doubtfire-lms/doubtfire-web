@@ -40,12 +40,12 @@
                   >
                     <mat-icon>summarize</mat-icon>
                   </button>
-                } @else {
+                } @else if (similarity.type === 'TiiTaskSimilarity') {
                   <button
-                    matTooltip="View similarity for this part"
+                    matTooltip="View report in TurnItIn"
                     mat-icon-button
-                    aria-label="View Similarity"
-                    (click)="openViewer($event, similarity, part)"
+                    aria-label="View report"
+                    (click)="openReport($event, similarity)"
                   >
                     <mat-icon>summarize</mat-icon>
                   </button>
