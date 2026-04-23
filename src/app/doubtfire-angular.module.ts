@@ -194,6 +194,8 @@ import {ProjectProgressBarComponent} from './common/project-progress-bar/project
 import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import {FChipComponent} from './common/f-chip/f-chip.component';
 import {TaskSimilarityViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
+import {PeerProgressComponent} from './projects/states/peer-progress/peer-progress.component';
+import {PeersAnonymizedComponent} from './projects/states/peer-progress/peers-anonymized/peers-anonymized.component';
 import {FileViewerComponent} from './common/file-viewer/file-viewer.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
 import {TaskDefinitionGeneralComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-general/task-definition-general.component';
@@ -281,6 +283,8 @@ import {GradeService} from './common/services/grade.service';
     PdfViewerPanelComponent,
     StaffTaskListComponent,
     TaskSimilarityViewComponent,
+    PeerProgressComponent,
+    PeersAnonymizedComponent,
     FiltersPipe,
     TasksOfTaskDefinitionPipe,
     TasksInTutorialsPipe,

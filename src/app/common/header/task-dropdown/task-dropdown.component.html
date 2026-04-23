@@ -96,6 +96,15 @@
           <mat-icon aria-label="Tutorial List icon" fontIcon="meeting_room"></mat-icon> Tutorial
           List
         </button>
+        <mat-divider></mat-divider>
+        <button
+          uiSref="projects/peer-progress"
+          [uiParams]="{projectId: currentProject.id}"
+          mat-menu-item
+        >
+          <mat-icon aria-label="Peer Progress icon" fontIcon="insights"></mat-icon>
+          Peer Progress
+        </button>
       }
       @if (unitRole && currentView === 'UNIT') {
         <!-- <p class="task-dropdown-heading">Tasks</p> -->
@@ -114,11 +123,7 @@
         </button>
         <mat-divider></mat-divider>
         <!-- <p class="task-dropdown-heading">Students</p> -->
-        <button
-          uiSref="units/students/list"
-          [uiParams]="{unitId: unitRole.unit.id}"
-          mat-menu-item
-        >
+        <button uiSref="units/students/list" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Students list" fontIcon="group"></mat-icon> Students
         </button>
         <button
@@ -133,10 +138,7 @@
           [uiParams]="{unitId: unitRole.unit.id}"
           mat-menu-item
         >
-          <mat-icon
-            aria-label="Student portfolios icon"
-            fontIcon="collections_bookmark"
-          ></mat-icon>
+          <mat-icon aria-label="Student portfolios icon" fontIcon="collections_bookmark"></mat-icon>
           Portfolios
         </button>
         <mat-divider></mat-divider>
@@ -144,7 +146,9 @@
         <button uiSref="units/analytics" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
           <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
         </button>
-        @if (unitRole.role === 'Convenor' || unitRole.role === 'Admin' || unitRole.role === 'Auditor') {
+        @if (
+          unitRole.role === 'Convenor' || unitRole.role === 'Admin' || unitRole.role === 'Auditor'
+        ) {
           <button uiSref="units/admin" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
             <mat-icon aria-label="Unit Administration" fontIcon="admin_panel_settings"></mat-icon>
             Administration

@@ -1,0 +1,101 @@
+.peer-progress-page {
+  padding: 16px;
+}
+
+.peer-progress-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 24px;
+}
+
+.peer-progress-eyebrow {
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.peer-progress-card h1 {
+  color: #111827;
+  font-size: 28px;
+  margin: 0 0 16px;
+}
+
+.peer-progress-copy {
+  color: #4b5563;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+
+.peer-progress-summary {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin: 24px 0;
+}
+
+.peer-progress-metric {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.metric-label {
+  color: #64748b;
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.peer-progress-metric strong {
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.progress-panel {
+  background: linear-gradient(135deg, #eff6ff, #f8fafc);
+  border-radius: 12px;
+  margin-top: 24px;
+  padding: 20px;
+}
+
+.progress-panel-heading {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.progress-panel-heading h2 {
+  color: #0f172a;
+  font-size: 20px;
+  margin: 0 0 4px;
+}
+
+.progress-panel-heading p {
+  color: #475569;
+  margin: 0;
+}
+
+.progress-panel-heading strong {
+  color: #1d4ed8;
+  font-size: 24px;
+}
+
+.peer-progress-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}

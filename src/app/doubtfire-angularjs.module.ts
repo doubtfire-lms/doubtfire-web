@@ -73,6 +73,8 @@ import 'build/src/app/projects/states/dashboard/directives/directives.js';
 import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-dashboard.js';
 import 'build/src/app/projects/states/dashboard/dashboard.js';
 import 'build/src/app/projects/states/outcomes/outcomes.js';
+import 'build/src/app/projects/states/peer-progress/peer-progress.js';
+import 'build/src/app/projects/states/peer-progress/peers-anonymized/peers-anonymized.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.js';
@@ -208,6 +210,8 @@ import {TaskStatusCardComponent} from './projects/states/dashboard/directives/ta
 import {TaskDueCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-due-card/task-due-card.component';
 import {FooterComponent} from './common/footer/footer.component';
 import {TaskAssessmentCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
+import {PeerProgressComponent} from './projects/states/peer-progress/peer-progress.component';
+import {PeersAnonymizedComponent} from './projects/states/peer-progress/peers-anonymized/peers-anonymized.component';
 import {TaskSubmissionCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import {InboxComponent} from './units/states/tasks/inbox/inbox.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
@@ -380,6 +384,14 @@ DoubtfireAngularJSModule.directive('fUsers', downgradeComponent({component: FUse
 DoubtfireAngularJSModule.directive(
   'fTaskAssessmentCard',
   downgradeComponent({component: TaskAssessmentCardComponent}),
+);
+DoubtfireAngularJSModule.directive(
+  'fPeerProgress',
+  downgradeComponent({component: PeerProgressComponent}),
+);
+DoubtfireAngularJSModule.directive(
+  'fPeersAnonymized',
+  downgradeComponent({component: PeersAnonymizedComponent}),
 );
 DoubtfireAngularJSModule.directive(
   'institutionSettings',

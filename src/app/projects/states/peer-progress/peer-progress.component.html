@@ -1,0 +1,46 @@
+<div class="peer-progress-page">
+  <div class="peer-progress-card">
+    <p class="peer-progress-eyebrow">Peer Progress</p>
+    <h1>{{ project?.unit?.name || 'Current Unit' }}</h1>
+    <p class="peer-progress-copy">
+      This sample view compares your project progress with the wider cohort using anonymized peer
+      data.
+    </p>
+
+    <div class="peer-progress-summary" *ngIf="summary">
+      <div class="peer-progress-metric">
+        <span class="metric-label">Your anonymized profile</span>
+        <strong>{{ summary.yourAlias }} (You)</strong>
+      </div>
+      <div class="peer-progress-metric">
+        <span class="metric-label">Cohort average</span>
+        <strong>{{ summary.cohortAverage }}%</strong>
+      </div>
+      <div class="peer-progress-metric">
+        <span class="metric-label">Peers ahead</span>
+        <strong>{{ summary.peersAhead }} of {{ summary.totalPeers }}</strong>
+      </div>
+      <div class="peer-progress-metric">
+        <span class="metric-label">Highest sample progress</span>
+        <strong>{{ summary.strongestProgress }}%</strong>
+      </div>
+    </div>
+
+    <div class="progress-panel" *ngIf="summary">
+      <div class="progress-panel-heading">
+        <div>
+          <h2>Sample Peer Progress Bar</h2>
+          <p>Current progress for your anonymized peer profile.</p>
+        </div>
+        <strong>{{ summary.yourProgress }}%</strong>
+      </div>
+      <mat-progress-bar mode="determinate" [value]="summary.yourProgress"></mat-progress-bar>
+    </div>
+
+    <div class="peer-progress-actions">
+      <button mat-flat-button color="primary" (click)="goToAnonymizedPeers()">
+        View Anonymized Peer Progress
+      </button>
+    </div>
+  </div>
+</div>

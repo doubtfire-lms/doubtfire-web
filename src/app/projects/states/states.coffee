@@ -5,4 +5,6 @@ angular.module('doubtfire.projects.states', [
   'doubtfire.projects.states.portfolio'
   'doubtfire.projects.states.groups'
   'doubtfire.projects.states.outcomes'
+  'doubtfire.projects.states.peer-progress'
+  'doubtfire.projects.states.peers-anonymized'
 ])

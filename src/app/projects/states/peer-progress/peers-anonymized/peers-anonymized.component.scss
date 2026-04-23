@@ -1,0 +1,89 @@
+.peers-anonymized-page {
+  padding: 16px;
+}
+
+.peers-anonymized-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 24px;
+}
+
+.page-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-eyebrow {
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.page-header h1 {
+  color: #111827;
+  font-size: 28px;
+  margin: 0 0 8px;
+}
+
+.page-header p {
+  color: #4b5563;
+  margin: 0;
+  max-width: 640px;
+}
+
+.peer-row {
+  align-items: center;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(160px, 220px) 1fr 64px;
+  padding: 14px 0;
+}
+
+.peer-row + .peer-row {
+  border-top: 1px solid #e5e7eb;
+}
+
+.peer-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.peer-copy strong {
+  color: #0f172a;
+}
+
+.peer-copy span {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.peer-value {
+  color: #1d4ed8;
+  font-weight: 700;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+  }
+
+  .peer-row {
+    grid-template-columns: 1fr;
+  }
+
+  .peer-value {
+    text-align: left;
+  }
+}
