@@ -59,9 +59,8 @@ angular.module('doubtfire.projects.states.dashboard.directives.performance-bands
         $scope.performanceBands[2].value = 0
         $scope.performanceBands[3].value = 0
 
-    $scope.$watch 'project.tasks', ->
+    $scope.$watchCollection 'project.tasks', ->
       $scope.calculateBands()
-    , true
 
     $scope.$on 'TaskStatusUpdated', ->
       $scope.calculateBands()

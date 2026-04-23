@@ -73,6 +73,7 @@ import 'build/src/app/projects/states/dashboard/directives/task-dashboard/task-d
 import 'build/src/app/projects/states/dashboard/directives/performance-bands/performance-bands.js';
 import 'build/src/app/projects/states/dashboard/directives/directives.js';
 import 'build/src/app/projects/states/dashboard/dashboard.js';
+import 'build/src/app/projects/states/performance-bands/performance-bands.js';
 import 'build/src/app/projects/states/outcomes/outcomes.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-review-step/portfolio-review-step.js';
 import 'build/src/app/projects/states/portfolio/directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.js';

@@ -73,6 +73,14 @@
           Outcomes
         </button>
         <button
+          uiSref="projects/performance-bands"
+          [uiParams]="{projectId: currentProject.id, taskAbbr: ''}"
+          mat-menu-item
+        >
+          <mat-icon aria-label="Performance Bands icon" fontIcon="bar_chart"></mat-icon> Performance
+          Bands
+        </button>
+        <button
           uiSref="projects/portfolio"
           [uiParams]="{projectId: currentProject.id, taskAbbr: ''}"
           mat-menu-item

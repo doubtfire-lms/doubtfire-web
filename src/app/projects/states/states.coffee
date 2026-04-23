@@ -5,4 +5,5 @@ angular.module('doubtfire.projects.states', [
   'doubtfire.projects.states.portfolio'
   'doubtfire.projects.states.groups'
   'doubtfire.projects.states.outcomes'
+  'doubtfire.projects.states.performance-bands'
 ])
