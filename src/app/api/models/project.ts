@@ -404,7 +404,7 @@ export class Project extends Entity {
     const targetTasks = this.unit.taskDefinitionsForGrade(this.targetGrade);
 
     // get total value of all tasks assigned to this project
-    const total = targetTasks.map((td) => td.weighting).reduce((prev, current, idx, array) => prev + current, 0);
+    const total = targetTasks.map((td) => td.estimated_hours).reduce((prev, current, idx, array) => prev + current, 0);
 
     // exit if no tasks or no weights
     if (targetTasks.length === 0 || total === 0) {
@@ -444,7 +444,7 @@ export class Project extends Entity {
       const weeksElapsed = MappingFunctions.weeksBetween(this.unit.startDate, today);
       if (weeksElapsed > 0) {
         const completedTasksWeight = readyOrCompleteTasks
-          .map((t) => t.definition.weighting)
+          .map((t) => t.definition.estimated_hours)
           .reduce((prev, current, idx, arr) => prev + current, 0);
         completionRate = completedTasksWeight / weeksElapsed;
       }
@@ -465,7 +465,7 @@ export class Project extends Entity {
         date.getTime(),
         (targetTasks
           .filter((taskDef) => taskDef.targetDate >= date)
-          .map((td) => td.weighting)
+          .map((td) => td.estimated_hours)
           .reduce((prev, current) => prev + current, 0) || 0) / total,
       ];
 
@@ -475,7 +475,7 @@ export class Project extends Entity {
         (total -
           doneTasks
             .filter((task) => task.submissionDate && task.submissionDate <= date)
-            .map((task) => task.definition.weighting)
+            .map((task) => task.definition.estimated_hours)
             .reduce((prev, current) => prev + current, 0)) /
           total,
       ];
@@ -486,7 +486,7 @@ export class Project extends Entity {
         (total -
           completedTasks
             .filter((task) => task.completionDate <= date)
-            .map((task) => task.definition.weighting)
+            .map((task) => task.definition.estimated_hours)
             .reduce((prev, current) => prev + current, 0)) /
           total,
       ];

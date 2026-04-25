@@ -34,7 +34,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'abbreviation',
       'name',
       'description',
-      'weighting',
+      'estimated_hours',
       'targetGrade',
       'similarityLanguage',
       'hasJplagReport',

@@ -27,7 +27,7 @@ export class TaskDefinition extends Entity {
   abbreviation: string;
   name: string;
   description: string;
-  weighting: number;
+  estimated_hours: number;
   targetGrade: number;
   targetDate: Date;
   dueDate: Date;
