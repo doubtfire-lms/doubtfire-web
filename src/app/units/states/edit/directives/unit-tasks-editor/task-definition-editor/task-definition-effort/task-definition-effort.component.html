@@ -1,0 +1,32 @@
+<!-- Row 1: Enable prediction -->
+<div class="mb-4">
+  <mat-checkbox [(ngModel)]="enablePrediction">Enable effort prediction</mat-checkbox>
+</div>
+
+<!-- Row 2: Button -->
+<div class="mb-4">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="runPrediction()"
+    [disabled]="!enablePrediction"
+  >
+    Run prediction
+  </button>
+</div>
+
+<!-- Row 3: Manual input -->
+<div class="mb-4 gap-4">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Predicted Effort</mat-label>
+
+    <input
+      matInput
+      type="number"
+      [(ngModel)]="taskDefinition.predicted_effort"
+      [disabled]="enablePrediction"
+      min="1"
+      max="100"
+    />
+  </mat-form-field>
+</div>

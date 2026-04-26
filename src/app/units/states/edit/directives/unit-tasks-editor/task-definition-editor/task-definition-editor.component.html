@@ -114,6 +114,20 @@
     <section
       class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
       #sectionElement
+      data-section-id="effort-prediction"
+    >
+      <h3>Effort Prediction</h3>
+      <p class="font-normal text-gray-500 pb-2">
+        Use a regression model to determine the effort required for a task based on task definition values
+      </p>
+      <f-task-definition-effort [taskDefinition]="taskDefinition" [staffView]="true">
+      </f-task-definition-effort>
+    </section>
+
+    <mat-divider class="my-[25px]"></mat-divider>
+    <section
+      class="mb-0 rounded-xl bg-white p-4 scroll-mt-28"
+      #sectionElement
       data-section-id="discussion-prompts"
     >
       <h3>Discussion Prompts</h3>

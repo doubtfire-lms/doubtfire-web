@@ -27,6 +27,7 @@ type TaskDefinitionSectionId =
   | 'upload-requirements'
   | 'task-resources'
   | 'prerequisite-tasks'
+  | 'effort-prediction'
   | 'discussion-prompts'
   | 'task-assessment-automation'
   | 'scorm-test'
@@ -58,6 +59,7 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
     {id: 'upload-requirements', label: 'Upload Requirements'},
     {id: 'task-resources', label: 'Task Resources'},
     {id: 'prerequisite-tasks', label: 'Prerequisite Tasks'},
+    {id: 'effort-prediction', label: 'Effort Prediction'},
     {id: 'discussion-prompts', label: 'Discussion Prompts'},
     {id: 'task-assessment-automation', label: 'Task Assessment Automation'},
     {id: 'scorm-test', label: 'SCORM Test'},

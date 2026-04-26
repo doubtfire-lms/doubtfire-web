@@ -35,6 +35,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'name',
       'description',
       'estimated_hours',
+      'predicted_effort',
       'targetGrade',
       'similarityLanguage',
       'hasJplagReport',
@@ -272,5 +273,11 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/submission/units/${taskDefinition.unit.id}/task_definitions/${taskDefinition.id}/student_pdfs/zip`;
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get<SidekiqJob>(url);
+  }
+
+  public predictEffort(taskDefinition: TaskDefinition): Observable<SidekiqJob> {
+    const http = AppInjector.get(HttpClient);
+
+    return http.post<SidekiqJob>(taskDefinition.predictEffortUrl, {});
   }
 }
