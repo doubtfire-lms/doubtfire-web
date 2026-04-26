@@ -1,0 +1,85 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="filters.taskName"
+      (ngModelChange)="taskNameChanged()"
+      placeholder="Search tasks..."
+    />
+  </div>
+  <ul class="list-group">
+    <li
+      class="list-group-item list-group-item-task clearfix {{project.portfolioTaskStatusClass()}}"
+      *ngIf="showCreatePortfolio && nearEnd()"
+    >
+      <create-portfolio-task-list-item [project]="project" [setSelectedTask]="setSelectedTask">
+      </create-portfolio-task-list-item>
+    </li>
+
+    <li
+      class="list-group-item list-group-item-task clearfix {{task.statusClass()}}"
+      [id]="task.taskKeyToIdString()"
+      (click)="setSelectedTask(task)"
+      [class.selected]="isSelectedTask(task)"
+      *ngFor="let task of filteredTasks; trackBy: trackByTaskId"
+    >
+      <div class="task-data">
+        <h4 style="margin-bottom: 0" class="list-group-item-heading">{{task.definition.name}}</h4>
+        <p style="margin-bottom: 0" class="list-group-item-text">
+          <i class="fa fa-users" aria-hidden="true" *ngIf="task.isGroupTask()"></i>
+          <i class="fa fa-user" aria-hidden="true" *ngIf="!task.isGroupTask()"></i> {{task.definition.abbreviation}} -
+          {{gradeNames[task.definition.targetGrade]}} Task
+          <span class="due-time" *ngIf="task.isBeforeStartDate() && !task.inSubmittedState()">
+            <i class="fa fa-hourglass-start"></i> {{task.timeToStart()}}
+          </span>
+          <span class="due-time" *ngIf="!task.isBeforeStartDate() && !task.inSubmittedState()">
+            <i class="fa fa-hourglass-end"></i> {{task.timeToDue()}}
+          </span>
+        </p>
+      </div>
+      <!--/task-data-->
+      <div class="task-badges">
+        <status-icon [status]="task.status"></status-icon>
+        <div class="task-superscript-badges">
+          <span class="task-superscript-badge new-comments-badge" *ngIf="task.numNewComments > 0">
+            {{task.numNewComments}}
+          </span>
+          <span class="task-superscript-badge plagiarism-detected-badge" *ngIf="task.similaritiesDetected">
+            <i class="fa fa-eye"></i>
+          </span>
+        </div>
+        <div class="task-subscript-badges">
+          <span class="task-subscript-badge grade-badge" *ngIf="task.hasGrade()"> {{task.gradeDesc()}} </span>
+          <span class="task-subscript-badge quality-badge" *ngIf="task.hasQualityPoints()">
+            <sup>{{task.qualityQts}}</sup>&frasl;<sub>{{task.definition.maxQualityPts}}</sub>
+          </span>
+          <span class="task-subscript-badge soon-badge" *ngIf="task.isDueSoon() && !task.inFinalState()">
+            <i class="fa fa-clock-o"></i>
+          </span>
+          <span
+            class="task-subscript-badge due-badge"
+            *ngIf="task.betweenDueDateAndDeadlineDate() && !task.isPastDeadline() && !task.inFinalState()"
+          >
+            <i class="fa fa-clock-o"></i>
+          </span>
+          <span class="task-subscript-badge due-badge" *ngIf="task.isPastDeadline() && !task.inFinalState()">
+            <i class="fa fa-clock-o"></i><strong>!</strong>
+          </span>
+        </div>
+      </div>
+      <!--/badges-->
+    </li>
+    <!--/task-->
+    <li
+      class="list-group-item list-group-item-task clearfix {{project.portfolioTaskStatusClass()}}"
+      *ngIf="showCreatePortfolio && !nearEnd()"
+    >
+      <create-portfolio-task-list-item [project]="project" [setSelectedTask]="setSelectedTask">
+      </create-portfolio-task-list-item>
+    </li>
+    <li *ngIf="filteredTasks.length == 0 && !showCreatePortfolio" class="list-group-item text-center text-muted">
+      No tasks to display.
+    </li>
+  </ul>
+</div>
