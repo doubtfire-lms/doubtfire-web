@@ -26,7 +26,6 @@ export class StudentTaskListComponent implements OnInit {
   ngOnInit() {
     // Check taskData exists but don't throw error - handle gracefully
     if (!this.taskData) {
-      console.warn('StudentTaskList - taskData not provided, creating default');
       this.taskData = {
         selectedTask: null,
         selectedTaskAbbr: null,
@@ -90,14 +89,26 @@ export class StudentTaskListComponent implements OnInit {
   }
 
   setSelectedTask(task: any) {
+    // Ensure taskData exists
+    if (!this.taskData) {
+      this.taskData = {
+        selectedTask: null,
+        selectedTaskAbbr: null,
+        onSelectedTaskChange: null
+      };
+    }
+    
     // Clicking on already selected task will disable that selection
     if (this.isSelectedTask(task)) {
       task = null;
     }
+    
     this.taskData.selectedTask = task;
-    if (this.taskData.onSelectedTaskChange) {
+    
+    if (this.taskData.onSelectedTaskChange && typeof this.taskData.onSelectedTaskChange === 'function') {
       this.taskData.onSelectedTaskChange(task);
     }
+    
     if (task) {
       this.scrollToTaskInList(task);
     }
