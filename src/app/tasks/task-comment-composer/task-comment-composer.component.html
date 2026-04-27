@@ -27,6 +27,23 @@
   </div>
 }
 
+@if (task) {
+  <div id="replyContainer" [hidden]="editingComment === null">
+    <div class="replying-wrap" style="width: 100%">
+      <button
+        id="cancelEditButton"
+        (click)="cancelEdit()"
+        mat-icon-button
+        aria-label="Cancel editing"
+      >
+        <mat-icon aria-label="Quit cross icon">close</mat-icon>
+      </button>
+      Editing your comment
+    </div>
+    <p>Changes can only be saved within 10 minutes of posting.</p>
+  </div>
+}
+
 <mat-action-list
   [hidden]="!emojiSearchMode || !(emojiSearchResults?.length > 0)"
   dense
@@ -95,6 +112,7 @@
 
         @if (isStaff) {
           <button
+            *ngIf="!isEditing"
             [hidden]="$userIsTyping | async"
             matTooltip="Create a Real Talk discussion"
             matTooltipShowDelay="400"
@@ -109,6 +127,7 @@
         }
 
         <button
+          *ngIf="!isEditing"
           [hidden]="$userIsTyping | async"
           matTooltip="Attach a file"
           matTooltipShowDelay="400"
@@ -130,6 +149,7 @@
         </button>
 
         <button
+          *ngIf="!isEditing"
           [hidden]="$userIsTyping | async"
           matTooltip="Send a recording"
           matTooltipShowDelay="400"
@@ -173,6 +193,16 @@
       }
       <div id="innerButtons" [hidden]="recording">
         <mat-icon
+          *ngIf="isEditing"
+          matTooltip="Save edited comment"
+          matTooltipShowDelay="400"
+          id="emojiButton"
+          (click)="saveEditedComment()"
+          aria-label="Save edited comment"
+        >
+          check</mat-icon
+        >
+        <mat-icon
           matTooltip="Choose an emoji"
           matTooltipShowDelay="400"
           id="emojiButton"
@@ -184,6 +214,7 @@
       </div>
       <div id="innerButtons" [hidden]="recording || !isStaff">
         <mat-icon
+          *ngIf="!isEditing"
           matTooltip="Choose feedback templates"
           matTooltipShowDelay="400"
           id="feedbackTemplateButton"

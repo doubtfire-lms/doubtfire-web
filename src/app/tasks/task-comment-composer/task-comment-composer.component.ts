@@ -45,6 +45,7 @@ interface ApiError {
 
 export interface TaskCommentComposerData {
   originalComment: TaskComment;
+  editingComment: TaskComment;
 }
 
 const ACCEPTED_FILE_TYPES = [
@@ -88,6 +89,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   private submittedTaskIds: Set<number | string> = new Set();
 
   public isSending: boolean = false;
+  private draftBeforeEdit: string = '';
 
   comment = {
     text: '',
@@ -140,6 +142,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       const newTask = changes.task.currentValue as Task;
       // Check if the task has changed
 
+      this.cancelEdit();
       this.cancelReply();
 
       this.clearInput();
@@ -175,6 +178,10 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
 
   // Update onInputChange to reset submitted status
   onInputChange(event: Event) {
+    if (this.isEditing) {
+      return;
+    }
+
     const target = event.target as HTMLElement;
     const text = target.innerText;
     const raw = target.innerText;
@@ -322,11 +329,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       change.forEachChangedItem((item) => {
         // If it has changed to be an actual comment
         if (item != null) {
-          // Set the input field as focused, so the user can start typing
-          // timeout is required
-          setTimeout(() => {
-            this.input.first.nativeElement.focus();
-          });
+          this.syncComposerState();
         }
       });
     }
@@ -336,12 +339,25 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
     return this.sharedData.originalComment;
   }
 
+  get editingComment(): TaskComment {
+    return this.sharedData.editingComment;
+  }
+
+  get isEditing(): boolean {
+    return this.editingComment != null;
+  }
+
   get isStaff() {
     return this.task?.unit?.currentUserIsStaff;
   }
 
   cancelReply() {
     this.sharedData.originalComment = null;
+  }
+
+  cancelEdit() {
+    this.sharedData.editingComment = null;
+    this.restoreDraftAfterEdit();
   }
 
   contentEditableValue() {
@@ -373,7 +389,11 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
     this.emojiSearchMode = false;
     this.showEmojiPicker = false;
     if (this.input.first.nativeElement.innerText.trim() !== '') {
-      this.addComment();
+      if (this.isEditing) {
+        this.saveEditedComment();
+      } else {
+        this.addComment();
+      }
     }
   }
 
@@ -535,6 +555,31 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
     });
   }
 
+  saveEditedComment() {
+    if (this.isSending || !this.editingComment) {
+      return;
+    }
+
+    this.isSending = true;
+    const text = this.emojiService.nativeEmojiToColons(this.input.first.nativeElement.innerText);
+
+    this.taskCommentService.editComment(this.editingComment, text).subscribe({
+      next: (_tc: TaskComment) => {
+        this.isSending = false;
+        this.sharedData.editingComment = null;
+        this.draftBeforeEdit = '';
+        this.clearInput();
+      },
+      error: (error: ApiError) => {
+        this.isSending = false;
+        this.alerts.error(
+          error.error || error.message || `Failed to edit comment: ${error}`,
+          6000,
+        );
+      },
+    });
+  }
+
   addCommentWithType(comment: string, type: string) {
     this.taskCommentService.addComment(this.task, comment, type).subscribe({
       next: (success: TaskComment) => {
@@ -675,6 +720,50 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   showFeedbackPicker() {
     this.showFeedbackTemplatePicker = !this.showFeedbackTemplatePicker;
     this.commentsViewer.scrollDown();
+  }
+
+  private syncComposerState() {
+    if (this.isEditing) {
+      this.beginEditingComment();
+      return;
+    }
+
+    setTimeout(() => {
+      this.input.first.nativeElement.focus();
+    });
+  }
+
+  private beginEditingComment() {
+    const currentText = this.input?.first?.nativeElement?.innerText ?? '';
+    const nextText = this.editingComment?.text ?? '';
+
+    if (this.sharedData.originalComment != null) {
+      this.sharedData.originalComment = null;
+    }
+
+    if (currentText !== nextText) {
+      this.draftBeforeEdit = currentText;
+      this.setComposerText(nextText);
+    }
+
+    setTimeout(() => {
+      this.input.first.nativeElement.focus();
+    });
+  }
+
+  private restoreDraftAfterEdit() {
+    const draft = this.draftBeforeEdit;
+    this.draftBeforeEdit = '';
+    this.setComposerText(draft);
+  }
+
+  private setComposerText(text: string) {
+    if (!this.input?.first?.nativeElement) {
+      return;
+    }
+
+    this.input.first.nativeElement.innerText = text;
+    this.cdRef.detectChanges();
   }
 }
 

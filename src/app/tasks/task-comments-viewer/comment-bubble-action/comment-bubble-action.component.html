@@ -1,4 +1,4 @@
-<div id="overflowContainer">
+<div id="overflowContainer" class="flex gap-2">
   <!-- <button type="button" (click)="react()" matTooltip="React to this comment" mat-icon-button
     aria-label="React to this comment">
     <mat-icon>tag_faces</mat-icon>
@@ -14,11 +14,21 @@
   >
   <mat-icon
     type="button"
+    (click)="edit()"
+    matTooltip="Edit this comment"
+    matTooltipPosition="above"
+    aria-label="Edit this comment"
+    [hidden]="!comment.currentUserCanEdit"
+  >
+    edit</mat-icon
+  >
+  <mat-icon
+    type="button"
     (click)="delete()"
     matTooltip="Delete this comment"
     matTooltipPosition="above"
     aria-label="Example icon-button with a heart icon"
-    [hidden]="!comment.currentUserCanEdit"
+    [hidden]="!comment.currentUserCanDelete"
   >
     delete</mat-icon
   >
