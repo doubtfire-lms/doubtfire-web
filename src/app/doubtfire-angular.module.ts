@@ -1,6 +1,10 @@
 import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
-
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatButtonModule} from '@angular/material/button';
 import {NgModule, Injector, DoBootstrap} from '@angular/core';
 import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
 import {UpgradeModule} from '@angular/upgrade/static';
@@ -10,20 +14,18 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // Lottie animation module
 // import {LottieModule, LottieCacheModule} from 'ngx-lottie';
+import {FStudentsListComponent} from './units/states/students-list/students-list.component';
 import {provideLottieOptions, LottieComponent} from 'ngx-lottie';
 import player from 'lottie-web';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatSelectModule} from '@angular/material/select';
-import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatListModule} from '@angular/material/list';
@@ -33,7 +35,6 @@ import {MatSliderModule} from '@angular/material/slider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatChipListbox, MatChipsModule} from '@angular/material/chips';
@@ -85,9 +86,8 @@ import {
   TaskCommentComposerComponent,
   DiscussionComposerDialog,
 } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
-import {AttachmentConfirmationDialogComponent} from 'src/app/tasks/task-comment-composer/attachment-confirmation-dialog/attachment-confirmation-dialog.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
+import {AttachmentConfirmationDialogComponent} from 'src/app/tasks/task-comment-composer/attachment-confirmation-dialog/attachment-confirmation-dialog.component';
 import {AudioCommentRecorderComponent} from './common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder';
 import {DiscussionPromptComposerComponent} from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -171,10 +171,10 @@ import {
   TutorialService,
   TutorialStreamService,
   UnitService,
+  UserService,
   TaskService,
   ProjectService,
   UnitRoleService,
-  UserService,
   WebcalService,
   LearningOutcomeService,
   TaskSimilarityService,
@@ -369,6 +369,7 @@ const GANTT_CHART_CONFIG = {
 @NgModule({
   // Components we declare
   declarations: [
+    FStudentsListComponent,
     AlertComponent,
     AboutDoubtfireModalContent,
     D2lUnitDetailsFormComponent,

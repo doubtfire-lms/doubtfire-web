@@ -15,6 +15,25 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {FStudentsListComponent} from './units/states/students-list/students-list.component';
+
+type LegacyTransition = {
+  params: () => {unitId: string | number};
+  injector: () => {
+    get: (serviceName: string) => {
+      get?: (id: number) => {
+        subscribe: (handlers: {
+          next: (unit: unknown) => void;
+          error: (error: unknown) => void;
+        }) => void;
+      };
+      loadStudents?: (unit: unknown) => {
+        subscribe: (handlers: {next: () => void; error: () => void}) => void;
+      };
+    };
+  };
+};
+
 /*
  * Use this file to store any states that are sourced by angular components.
  */
@@ -34,6 +53,44 @@ const institutionSettingsState: NgHybridStateDeclaration = {
   data: {
     pageTitle: 'Institution Settings',
     roleWhiteList: ['Admin'],
+  },
+};
+
+const StudentsListState: NgHybridStateDeclaration = {
+  name: 'units/students/list',
+  parent: 'units/index',
+  url: '/students',
+  component: FStudentsListComponent,
+  resolve: [
+    {
+      token: 'unit',
+      deps: ['$transition$'],
+      resolveFn: (transition: LegacyTransition) => {
+        const unitId = Number(transition.params().unitId);
+        const newUnitService = transition.injector().get('newUnitService');
+        const newProjectService = transition.injector().get('newProjectService');
+
+        return new Promise((resolve, reject) => {
+          newUnitService.get(unitId).subscribe({
+            next: (unit: unknown) => {
+              newProjectService.loadStudents(unit).subscribe({
+                next: () => resolve(unit),
+                error: () => resolve(unit),
+              });
+            },
+            error: reject,
+          });
+        });
+      },
+    },
+  ],
+  bindings: {
+    unit: 'unit',
+  },
+  data: {
+    task: 'Student List',
+    pageTitle: '_Home_',
+    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
   },
 };
 
@@ -586,6 +643,7 @@ export const doubtfireStates = [
   EditProfileState,
   EulaState,
   usersState,
+  StudentsListState,
   ViewAllProjectsState,
   ViewAllUnits,
   AdministerUnits,

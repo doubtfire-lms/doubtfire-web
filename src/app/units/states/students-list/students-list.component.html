@@ -1,0 +1,310 @@
+<div id="students-list" class="container mx-auto p-4">
+  <div
+    class="w-full flex items-center mb-4 border-8 border-blue-500 rounded p-1"
+    id="students-list-search-bar"
+  >
+    <input
+      type="search"
+      id="students-list-search"
+      placeholder="Search for students or tutors…"
+      class="flex-1 px-4 py-2 placeholder-gray-500 focus:outline-none focus:ring-0 bg-white"
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchTextChange($event)"
+      [matAutocomplete]="auto"
+    />
+
+    <button
+      type="button"
+      (click)="showSearchOptions = !showSearchOptions"
+      aria-label="Toggle search options"
+      [attr.aria-expanded]="showSearchOptions"
+      class="h-full flex items-center justify-center border-1 border-gray-300 rounded-r focus:outline-none focus:ring-0 bg-white"
+    >
+      <mat-icon>
+        {{ showSearchOptions ? 'expand_less' : 'expand_more' }}
+      </mat-icon>
+    </button>
+  </div>
+
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option
+      *ngFor="let text of filteredTypeaheadData"
+      [value]="text"
+      (onSelectionChange)="onSearchTextChange(text)"
+    >
+      {{ text }}
+    </mat-option>
+  </mat-autocomplete>
+
+  <div
+    *ngIf="showSearchOptions"
+    id="students-list-search-options"
+    class="border rounded p-4 mb-4 bg-gray-50 shadow-sm"
+  >
+    <fieldset id="students-list-filter">
+      <legend class="text-lg font-semibold mb-2">Show Students From…</legend>
+      <div class="inline-flex rounded-md shadow-sm" role="group">
+        <button
+          type="button"
+          id="students-list-filter-all"
+          (click)="staffFilterChanged('all')"
+          [ngClass]="{
+            'bg-gray-300 text-gray-800': staffFilter === 'all',
+            'bg-gray-100 text-gray-800': staffFilter !== 'all'
+          }"
+          [attr.aria-pressed]="staffFilter === 'all'"
+          class="px-4 py-2 border border-gray-300 rounded-l-md"
+        >
+          <mat-icon inline>school</mat-icon>
+          All Tutorials
+        </button>
+        <button
+          type="button"
+          id="students-list-filter-mine"
+          (click)="staffFilterChanged('mine')"
+          [ngClass]="{
+            'bg-gray-300 text-gray-800': staffFilter === 'mine',
+            'bg-gray-100 text-gray-800': staffFilter !== 'mine'
+          }"
+          [attr.aria-pressed]="staffFilter === 'mine'"
+          class="px-4 py-2 border-t border-b border-r border-gray-300 rounded-r-md -ml-px"
+        >
+          <mat-icon inline>edit</mat-icon>
+          My Tutorials
+        </button>
+      </div>
+    </fieldset>
+
+    <fieldset id="students-list-flag-sort" class="mt-4">
+      <legend class="text-lg font-semibold mb-2">Sort Flags By…</legend>
+      <div class="inline-flex rounded-md shadow-sm" role="group">
+        <button
+          type="button"
+          id="students-list-sort-grade"
+          (click)="sortTableBy('targetGrade')"
+          [ngClass]="{
+            'relative z-10 bg-gray-300 text-gray-800 border-2 border-black':
+              tableSort.order === 'targetGrade',
+            'bg-gray-100 text-gray-800 border-gray-300': tableSort.order !== 'targetGrade'
+          }"
+          [attr.aria-pressed]="tableSort.order === 'targetGrade'"
+          class="px-4 py-2 rounded-l-md"
+        >
+          <mat-icon inline>check</mat-icon>
+          Grade
+        </button>
+        <button
+          type="button"
+          id="students-list-sort-plagiarism"
+          (click)="sortTableBy('similarityFlag')"
+          [ngClass]="{
+            'relative z-10 bg-gray-300 text-gray-800 border-2 border-black':
+              tableSort.order === 'similarityFlag',
+            'bg-gray-100 text-gray-800 border-gray-300': tableSort.order !== 'similarityFlag'
+          }"
+          [attr.aria-pressed]="tableSort.order === 'similarityFlag'"
+          class="px-4 py-2 -ml-px"
+        >
+          <mat-icon inline>visibility</mat-icon>
+          Plagiarism
+        </button>
+        <button
+          type="button"
+          id="students-list-sort-portfolio"
+          (click)="sortTableBy('portfolioStatus')"
+          [ngClass]="{
+            'relative z-10bg-gray-300 text-gray-800 border-2 border-black':
+              tableSort.order === 'portfolioStatus',
+            'bg-gray-100 text-gray-800 border-gray-300': tableSort.order !== 'portfolioStatus'
+          }"
+          [attr.aria-pressed]="tableSort.order === 'portfolioStatus'"
+          class="px-4 py-2rounded-r-md -ml-px"
+        >
+          <mat-icon inline>menu_book</mat-icon>
+          Portfolio Status
+        </button>
+      </div>
+      <p class="text-lg text-gray-500 mt-2 font-medium">
+        Click a flag sort button twice to reverse its sort order.
+      </p>
+    </fieldset>
+  </div>
+
+  <div *ngIf="filteredProjects.length === 0" id="students-list-no-results" class="mb-4">
+    <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-700 p-4" role="alert">
+      <p class="font-bold">No students found</p>
+      <p>No students were found using the filters specified.</p>
+    </div>
+  </div>
+
+  <table
+    *ngIf="filteredProjects.length > 0"
+    id="students-list-table"
+    class="min-w-full divide-y divide-gray-200 mb-4"
+  >
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="sticky left-0 px-3 py-2"></th>
+        <th class="px-3 py-2 cursor-pointer" (click)="sortTableBy('student.username')">
+          Username
+          <mat-icon
+            inline
+            *ngIf="tableSort.order === 'student.username'"
+            class="align-middle text-lg font-semibold ml-1"
+          >
+            {{ tableSort.reverse ? 'expand_more' : 'expand_less' }}
+          </mat-icon>
+        </th>
+        <th class="px-3 py-2 cursor-pointer" (click)="sortTableBy('student.name')">
+          Name
+          <mat-icon
+            inline
+            *ngIf="tableSort.order === 'student.name'"
+            class="align-middle text-lg font-semibold ml-1"
+          >
+            {{ tableSort.reverse ? 'expand_more' : 'expand_less' }}
+          </mat-icon>
+        </th>
+        <th class="px-3 py-2 cursor-pointer" (click)="sortTableBy('orderScale')">
+          Stats
+          <mat-icon
+            inline
+            *ngIf="tableSort.order === 'orderScale'"
+            class="align-middle text-lg font-semibold ml-1"
+          >
+            {{ tableSort.reverse ? 'expand_more' : 'expand_less' }}
+          </mat-icon>
+        </th>
+        <th class="px-3 py-2 text-center cursor-pointer" (click)="sortTableBy('flags')">
+          Flags
+          <mat-icon
+            inline
+            *ngIf="
+              tableSort.order === 'similarityFlag' ||
+              tableSort.order === 'targetGrade' ||
+              tableSort.order === 'portfolioStatus'
+            "
+            class="align-middle text-lg font-semibold ml-1"
+          >
+            {{ tableSort.reverse ? 'expand_more' : 'expand_less' }}
+          </mat-icon>
+        </th>
+        <th class="px-3 py-2 cursor-pointer" (click)="sortTableBy('campus.name')">
+          Campus
+          <mat-icon
+            inline
+            *ngIf="tableSort.order === 'campus.name'"
+            class="align-middle text-lg font-semibold ml-1"
+          >
+            {{ tableSort.reverse ? 'expand_more' : 'expand_less' }}
+          </mat-icon>
+        </th>
+        <th class="px-3 py-2 cursor-pointer" (click)="sortTableBy('tutorial.abbreviation')">
+          Tutorial
+          <mat-icon
+            inline
+            *ngIf="tableSort.order === 'tutorial.abbreviation'"
+            class="align-middle text-lg font-semibold ml-1"
+          >
+            {{ tableSort.reverse ? 'expand_more' : 'expand_less' }}
+          </mat-icon>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <tr *ngFor="let project of filteredProjects" class="hover:bg-gray-50 cursor-pointer">
+        <td class="px-3 py-2" (click)="viewStudent(project)">
+          <user-icon [size]="30" [user]="project.student"></user-icon>
+        </td>
+        <td class="px-3 py-2" (click)="viewStudent(project)">
+          {{ project.student.username || 'N/A' }}
+        </td>
+        <td class="px-3 py-2" (click)="viewStudent(project)">
+          <span class="truncate">{{ project.student.name }}</span>
+        </td>
+        <td class="px-3 py-2 text-center" (click)="viewStudent(project)">
+          <div class="w-full bg-gray-300 rounded-full h-6 overflow-hidden flex">
+            <ng-container *ngFor="let bar of visibleTaskStats(project)">
+              <div
+                class="h-full flex items-center justify-center text-xs"
+                [style.width.%]="bar.value"
+                [ngClass]="statusClass(bar.key)"
+              >
+                <span
+                  *ngIf="showProgressText(bar)"
+                  class="whitespace-nowrap px-1"
+                  [ngClass]="{
+                    'text-gray-800 font-semibold': isInactiveProgress(bar.key),
+                    'text-white': !isInactiveProgress(bar.key)
+                  }"
+                >
+                  {{ bar.value }}%
+                </span>
+              </div>
+            </ng-container>
+          </div>
+        </td>
+
+        <td class="px-3 py-2 text-center" (click)="viewStudent(project)">
+          <span class="inline-flex items-center justify-center gap-2">
+            <span
+              *ngIf="project.similarityFlag"
+              class="inline-flex items-center justify-center rounded-full bg-gray-900 text-white w-8 h-8"
+            >
+              <mat-icon inline>visibility</mat-icon>
+            </span>
+
+            <span class="flag">
+              <f-grade-icon [grade]="project.targetGrade"></f-grade-icon>
+            </span>
+          </span>
+        </td>
+        <td class="px-3 py-2">
+          <student-campus-select
+            [unit]="unit"
+            [student]="project"
+            [update]="true"
+          ></student-campus-select>
+        </td>
+        <td class="px-3 py-2 pr-4">
+          <student-tutorial-select [unit]="unit" [student]="project"></student-tutorial-select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="flex justify-end items-center space-x-2 mb-4" id="students-list-footer">
+    <button
+      mat-stroked-button
+      id="students-list-export"
+      (click)="downloadCSV()"
+      class="flex items-center justify-center space-x-2"
+    >
+      <mat-icon class="-translate-y-0.5">file_download</mat-icon>
+      Export CSV
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      id="students-list-enrol"
+      (click)="showEnrolModal()"
+      class="flex items-center justify-center space-x-2"
+    >
+      <mat-icon class="-translate-y-0.5">person_add</mat-icon>
+      Enrol Student
+    </button>
+  </div>
+
+  <mat-paginator
+    *ngIf="filteredProjects.length > 0"
+    id="students-list-paginator"
+    [length]="pagination.totalSize"
+    [pageSize]="pagination.pageSize"
+    [pageSizeOptions]="[5, 10, 15, 20]"
+    (page)="
+      pagination.currentPage = $event.pageIndex + 1;
+      pagination.pageSize = $event.pageSize;
+      applyFilters()
+    "
+  ></mat-paginator>
+</div>
