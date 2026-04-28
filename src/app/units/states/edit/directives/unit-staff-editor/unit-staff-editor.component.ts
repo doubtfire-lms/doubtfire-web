@@ -11,7 +11,7 @@ import {MatSelectChange} from '@angular/material/select';
 import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {BulkImportStaffModalService} from './bulk-import-staff-modal/bulk-import-staff-modal.service';
-import {csvResultModalService} from 'src/app/ajs-upgraded-providers';
+import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 
 interface CsvResultRow {
   row: string;
@@ -61,7 +61,7 @@ export class UnitStaffEditorComponent implements OnInit {
     private confirmationModalService: ConfirmationModalService,
     private tutorNotesModal: TutorNotesModalService,
     private bulkImportStaffModal: BulkImportStaffModalService,
-    @Inject(csvResultModalService) private csvResultModal: CsvResultModal,
+    private csvResultModal: CsvResultModalService,
   ) {}
 
   ngOnInit(): void {
