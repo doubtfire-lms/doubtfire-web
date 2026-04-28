@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-35](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-34...v10.0.1-35) (2026-04-28)
+
+
+### Features
+
+* bulk import staff via emails ([#1195](https://github.com/b0ink/doubtfire-deploy/issues/1195)) ([c91ab47](https://github.com/b0ink/doubtfire-deploy/commit/c91ab478ae1d1cd459040290f6f7a44c7dce3efe))
+* edit comments ([#1194](https://github.com/b0ink/doubtfire-deploy/issues/1194)) ([976b6ac](https://github.com/b0ink/doubtfire-deploy/commit/976b6ac4fa3bd2d5e954eebcae3fcb40dd8d1f0e))
+
+
+### Bug Fixes
+
+* task route transition race when switching from inbox ([63c52dc](https://github.com/b0ink/doubtfire-deploy/commit/63c52dc4cdb2f2fbc701f69c64b7273f5778c868))
+
+### [10.0.1-34](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-33...v10.0.1-34) (2026-04-27)
+
+### [10.0.1-33](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-32...v10.0.1-33) (2026-04-23)
+
+
+### Features
+
+* allow paste attachment comment ([#1165](https://github.com/b0ink/doubtfire-deploy/issues/1165)) ([0f24980](https://github.com/b0ink/doubtfire-deploy/commit/0f24980e6edcc5d0f81e015990adaf14afea400e))
+
+
+### Bug Fixes
+
+* open report in turnitin ([091aaf8](https://github.com/b0ink/doubtfire-deploy/commit/091aaf8ba744bbf677f9b8f51a58bc16b7d631ab))
+
 ### [10.0.1-32](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-31...v10.0.1-32) (2026-04-18)
 
 ### [10.0.1-31](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-30...v10.0.1-31) (2026-04-18)
