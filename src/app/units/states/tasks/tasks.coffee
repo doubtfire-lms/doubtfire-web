@@ -52,9 +52,10 @@ angular.module('doubtfire.units.states.tasks', [
     # inside the task inbox list
     $scope.taskData.taskKey = newTaskService.taskKeyFromString(taskKeyString)
 
-  # Child states will use taskKey to notify what task has been
-  # selected by the child on first load.
-  taskKey = $transition$.params().taskKey
+  # During rapid route changes in the hybrid router, the controller can be
+  # instantiated without an active transition. Fall back to the state's
+  # current params so the route still initializes safely.
+  taskKey = $transition$?.params?().taskKey ? $state.params.taskKey
   setTaskKeyFromUrlParams(taskKey)
 
   # Whenever the state is changed, we look at the taskKey in the URL params

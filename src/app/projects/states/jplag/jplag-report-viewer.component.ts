@@ -65,7 +65,7 @@ export class JplagReportViewerComponent {
       getScroller(doc)?.scrollBy(0, 600);
 
       elapsed += 50;
-      if (elapsed >= 5000) {
+      if (elapsed >= 10000) {
         clearInterval(interval);
         this.alertService.error('Could not open JPlag comparison.', 6000);
       }
