@@ -16,7 +16,13 @@ export class CommentBubbleActionComponent implements OnInit {
   ngOnInit() {}
 
   reply() {
+    this.sharedData.editingComment = null;
     this.sharedData.originalComment = this.comment;
+  }
+
+  edit() {
+    this.sharedData.originalComment = null;
+    this.sharedData.editingComment = this.comment;
   }
 
   delete() {

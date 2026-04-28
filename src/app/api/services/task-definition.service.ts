@@ -146,6 +146,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       {
         keys: 'overseerSteps',
         toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
+          taskDefinition.overseerStepsCache.clear();
           data[key]?.forEach((overseerStep) => {
             taskDefinition.overseerStepsCache.getOrCreate(
               overseerStep['id'],

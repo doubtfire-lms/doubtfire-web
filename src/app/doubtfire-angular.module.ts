@@ -70,6 +70,7 @@ import {
 import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
 import {FTaskBadgeComponent} from 'src/app/common/task-badge/task-badge.component';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {AttachmentConfirmationDialogComponent} from 'src/app/tasks/task-comment-composer/attachment-confirmation-dialog/attachment-confirmation-dialog.component';
 import {
   DiscussionComposerDialog,
   TaskCommentComposerComponent,
@@ -351,6 +352,7 @@ import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-sta
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
+import {BulkImportStaffModalComponent} from './units/states/edit/directives/unit-staff-editor/bulk-import-staff-modal/bulk-import-staff-modal.component';
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 import {PortfoliosAssessmentComponent} from './units/states/portfolios/directives/portfolios-assessment/portfolios-assessment.component';
 import {PortfoliosListComponent} from './units/states/portfolios/directives/portfolios-list/portfolios-list.component';
@@ -414,6 +416,7 @@ const GANTT_CHART_CONFIG = {
     TeachingPeriodUnitImportDialogComponent,
     ProjectTasksListComponent,
     TaskCommentComposerComponent,
+    AttachmentConfirmationDialogComponent,
     AudioCommentRecorderComponent,
     MicrophoneTesterComponent,
     DiscussionPromptComposerComponent,
@@ -560,6 +563,7 @@ const GANTT_CHART_CONFIG = {
     TaskDefinitionPrerequisitesComponent,
     TaskPrerequisitesCardComponent,
     UnitStaffEditorComponent,
+    BulkImportStaffModalComponent,
     GroupSetSelectorComponent,
     UnitDetailsEditorComponent,
     PortfolioGradeSelectStepComponent,

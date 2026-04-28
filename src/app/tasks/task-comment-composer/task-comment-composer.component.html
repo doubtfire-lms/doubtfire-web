@@ -27,6 +27,23 @@
   </div>
 }
 
+@if (task) {
+  <div id="replyContainer" [hidden]="editingComment === null">
+    <div class="replying-wrap" style="width: 100%">
+      <button
+        id="cancelEditButton"
+        (click)="cancelEdit()"
+        mat-icon-button
+        aria-label="Cancel editing"
+      >
+        <mat-icon aria-label="Quit cross icon">close</mat-icon>
+      </button>
+      Editing your comment
+    </div>
+    <p>Changes can only be saved within 10 minutes of posting.</p>
+  </div>
+}
+
 <mat-action-list
   [hidden]="!emojiSearchMode || !(emojiSearchResults?.length > 0)"
   dense
@@ -94,53 +111,59 @@
         </button> -->
 
         @if (isStaff) {
+          @if (!isEditing) {
+            <button
+              [hidden]="$userIsTyping | async"
+              matTooltip="Create a Real Talk discussion"
+              matTooltipShowDelay="400"
+              mat-icon-button
+              class="btn-no-outline"
+              type="button"
+              aria-label="launch real talk took"
+              (click)="openDiscussionComposer()"
+            >
+              <mat-icon class="message-inbox-icon">mark_chat_read</mat-icon>
+            </button>
+          }
+        }
+
+        @if (!isEditing) {
           <button
             [hidden]="$userIsTyping | async"
-            matTooltip="Create a Real Talk discussion"
+            matTooltip="Attach a file"
             matTooltipShowDelay="400"
             mat-icon-button
             class="btn-no-outline"
             type="button"
-            aria-label="launch real talk took"
-            (click)="openDiscussionComposer()"
+            (click)="openFile()"
+            aria-label="attach a file icon button"
           >
-            <mat-icon class="message-inbox-icon">mark_chat_read</mat-icon>
+            <mat-icon class="message-inbox-icon">attach_file</mat-icon>
+            <input
+              #uploader
+              type="file"
+              multiple="multiple"
+              accept="audio/*,image/*,.pdf"
+              style="display: none"
+              (change)="uploadFiles($event.target.files)"
+            />
           </button>
         }
 
-        <button
-          [hidden]="$userIsTyping | async"
-          matTooltip="Attach a file"
-          matTooltipShowDelay="400"
-          mat-icon-button
-          class="btn-no-outline"
-          type="button"
-          (click)="openFile()"
-          aria-label="attach a file icon button"
-        >
-          <mat-icon class="message-inbox-icon">attach_file</mat-icon>
-          <input
-            #uploader
-            type="file"
-            multiple="multiple"
-            accept="audio/*,image/*,.pdf"
-            style="display: none"
-            (change)="uploadFiles($event.target.files)"
-          />
-        </button>
-
-        <button
-          [hidden]="$userIsTyping | async"
-          matTooltip="Send a recording"
-          matTooltipShowDelay="400"
-          mat-icon-button
-          class="btn-no-outline"
-          type="button"
-          aria-label="audio recording button"
-          (click)="recordingMode()"
-        >
-          <mat-icon class="message-inbox-icon">mic</mat-icon>
-        </button>
+        @if (!isEditing) {
+          <button
+            [hidden]="$userIsTyping | async"
+            matTooltip="Send a recording"
+            matTooltipShowDelay="400"
+            mat-icon-button
+            class="btn-no-outline"
+            type="button"
+            aria-label="audio recording button"
+            (click)="recordingMode()"
+          >
+            <mat-icon class="message-inbox-icon">mic</mat-icon>
+          </button>
+        }
       </div>
     </div>
     <div
@@ -158,6 +181,8 @@
         [attr.contenteditable]="contentEditableValue() && !recording"
         (keydown.enter)="send($event)"
         (keydown)="keyTyped()"
+        (beforeinput)="handleBeforeInput($event)"
+        (paste)="handlePaste($event)"
         (input)="onInputChange($event)"
         placeholder="Aa"
         name="commentComposer"
@@ -170,6 +195,17 @@
         ></audio-comment-recorder>
       }
       <div id="innerButtons" [hidden]="recording">
+        @if (isEditing) {
+          <mat-icon
+            matTooltip="Save edited comment"
+            matTooltipShowDelay="400"
+            id="emojiButton"
+            (click)="saveEditedComment()"
+            aria-label="Save edited comment"
+          >
+            check</mat-icon
+          >
+        }
         <mat-icon
           matTooltip="Choose an emoji"
           matTooltipShowDelay="400"
@@ -181,15 +217,17 @@
         >
       </div>
       <div id="innerButtons" [hidden]="recording || !isStaff">
-        <mat-icon
-          matTooltip="Choose feedback templates"
-          matTooltipShowDelay="400"
-          id="feedbackTemplateButton"
-          (click)="showFeedbackPicker()"
-          aria-label="Feedback template button"
-        >
-          task</mat-icon
-        >
+        @if (!isEditing) {
+          <mat-icon
+            matTooltip="Choose feedback templates"
+            matTooltipShowDelay="400"
+            id="feedbackTemplateButton"
+            (click)="showFeedbackPicker()"
+            aria-label="Feedback template button"
+          >
+            task</mat-icon
+          >
+        }
       </div>
     </div>
   </div>
