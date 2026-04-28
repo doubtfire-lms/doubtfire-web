@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {UnitRoleService} from 'src/app/api/services/unit-role.service';
 import {Unit} from 'src/app/api/models/unit';
@@ -10,6 +10,23 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {MatSelectChange} from '@angular/material/select';
 import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 import {UserService} from 'src/app/api/services/user.service';
+import {BulkImportStaffModalService} from './bulk-import-staff-modal/bulk-import-staff-modal.service';
+import {csvResultModalService} from 'src/app/ajs-upgraded-providers';
+
+interface CsvResultRow {
+  row: string;
+  message: string;
+}
+
+interface CsvResultResponse {
+  success: CsvResultRow[];
+  errors: CsvResultRow[];
+  ignored: CsvResultRow[];
+}
+
+interface CsvResultModal {
+  show(title: string, response: CsvResultResponse): void;
+}
 
 @Component({
   selector: 'unit-staff-editor',
@@ -43,6 +60,8 @@ export class UnitStaffEditorComponent implements OnInit {
     private userService: UserService,
     private confirmationModalService: ConfirmationModalService,
     private tutorNotesModal: TutorNotesModalService,
+    private bulkImportStaffModal: BulkImportStaffModalService,
+    @Inject(csvResultModalService) private csvResultModal: CsvResultModal,
   ) {}
 
   ngOnInit(): void {
@@ -172,6 +191,19 @@ export class UnitStaffEditorComponent implements OnInit {
     }
   }
 
+  openBulkImportModal() {
+    this.bulkImportStaffModal
+      .show()
+      .afterClosed()
+      .subscribe((emailList) => {
+        if (!emailList) {
+          return;
+        }
+
+        this.bulkImportStaffFromEmailList(emailList);
+      });
+  }
+
   /**
    * Used in filtering the staff list. The `searchTerm` is bound to the auto-complete input in this class's template.
    *
@@ -293,5 +325,112 @@ export class UnitStaffEditorComponent implements OnInit {
   openTutorNotes(unitRole: UnitRole) {
     unitRole.unit = this.unit; // HACK: ensure unit is mapped within the UnitRole
     this.tutorNotesModal.show(null, unitRole);
+  }
+
+  private bulkImportStaffFromEmailList(emailList: string): void {
+    const parsedEmails = this.parseEmailList(emailList);
+
+    if (parsedEmails.length === 0) {
+      this.alertService.error('Please enter at least one valid email address.', 6000);
+      return;
+    }
+
+    const existingStaffEmails = new Set<string>(
+      this.unit.staff
+        .map((unitRole) => unitRole.user.email?.trim().toLowerCase())
+        .filter((email): email is string => !!email),
+    );
+    const staffByEmail = new Map(
+      this.staff
+        .filter((staff) => staff.isStaff && staff.email)
+        .map((staff) => [staff.email.trim().toLowerCase(), staff] as const),
+    );
+
+    const alreadyAssignedEmails = parsedEmails.filter((email) => existingStaffEmails.has(email));
+    const matchedUsers = parsedEmails
+      .filter((email) => !existingStaffEmails.has(email))
+      .map((email) => staffByEmail.get(email))
+      .filter((staff): staff is User => !!staff);
+    const unmatchedEmails = parsedEmails.filter(
+      (email) => !existingStaffEmails.has(email) && !staffByEmail.has(email),
+    );
+    const ignoredRows = alreadyAssignedEmails.map((email) =>
+      this.csvResultRow(email, 'Staff member is already assigned to this unit'),
+    );
+    const unmatchedRows = unmatchedEmails.map((email) =>
+      this.csvResultRow(email, 'No matching staff user was found'),
+    );
+
+    if (matchedUsers.length === 0) {
+      this.csvResultModal.show(
+        'Bulk staff import results',
+        this.csvResultResponse([], unmatchedRows, ignoredRows),
+      );
+      return;
+    }
+
+    this.addStaffUsersSequentially(matchedUsers, [], [], ({addedEmails, failedEmails}) => {
+      const successRows = addedEmails.map((email) =>
+        this.csvResultRow(email, 'Staff member added'),
+      );
+      const failedRows = failedEmails.map((email) =>
+        this.csvResultRow(email, 'Could not add staff member to this unit'),
+      );
+
+      this.csvResultModal.show(
+        'Bulk staff import results',
+        this.csvResultResponse(successRows, [...unmatchedRows, ...failedRows], ignoredRows),
+      );
+    });
+  }
+
+  private addStaffUsersSequentially(
+    users: User[],
+    addedEmails: string[],
+    failedEmails: string[],
+    onComplete: (result: {addedEmails: string[]; failedEmails: string[]}) => void,
+  ): void {
+    if (users.length === 0) {
+      onComplete({addedEmails, failedEmails});
+      return;
+    }
+
+    const [nextUser, ...remainingUsers] = users;
+
+    this.unit.addStaff(nextUser).subscribe({
+      next: () => {
+        addedEmails.push(nextUser.email);
+        this.addStaffUsersSequentially(remainingUsers, addedEmails, failedEmails, onComplete);
+      },
+      error: () => {
+        failedEmails.push(nextUser.email);
+        this.addStaffUsersSequentially(remainingUsers, addedEmails, failedEmails, onComplete);
+      },
+    });
+  }
+
+  private parseEmailList(emailList: string): string[] {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    return Array.from(
+      new Set(
+        emailList
+          .split(/\r?\n/)
+          .map((email) => email.trim().toLowerCase())
+          .filter((email) => emailPattern.test(email)),
+      ),
+    );
+  }
+
+  private csvResultRow(row: string, message: string): CsvResultRow {
+    return {row, message};
+  }
+
+  private csvResultResponse(
+    success: CsvResultRow[],
+    errors: CsvResultRow[],
+    ignored: CsvResultRow[],
+  ): CsvResultResponse {
+    return {success, errors, ignored};
   }
 }
