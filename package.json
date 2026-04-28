@@ -126,7 +126,7 @@
     "concurrently": "^3.2.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jsdoc": "39.3.6",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-prettier": "^5.0.1",
