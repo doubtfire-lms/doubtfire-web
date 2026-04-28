@@ -747,7 +747,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
     }
 
     setTimeout(() => {
-      this.input.first.nativeElement.focus();
+      this.focusComposerAtEnd();
     });
   }
 
@@ -764,6 +764,27 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
 
     this.input.first.nativeElement.innerText = text;
     this.cdRef.detectChanges();
+  }
+
+  private focusComposerAtEnd() {
+    const element = this.input?.first?.nativeElement;
+    if (!element) {
+      return;
+    }
+
+    element.focus();
+
+    const selection = window.getSelection();
+    if (!selection) {
+      return;
+    }
+
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    range.collapse(false);
+
+    selection.removeAllRanges();
+    selection.addRange(range);
   }
 }
 
