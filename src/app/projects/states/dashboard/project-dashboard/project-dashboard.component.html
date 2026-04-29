@@ -7,6 +7,7 @@
         #leftPanel
         *ngIf="project.unit.taskDefinitions.length > 0"
         [mode]="'project'"
+        [project]="project"
         [taskDefinitions]="project.unit.taskDefinitionsForGrade(project.targetGrade)"
         [tasks]="project.tasks"
         [selectedTaskDefinition$]="selectedTaskDefinition$"

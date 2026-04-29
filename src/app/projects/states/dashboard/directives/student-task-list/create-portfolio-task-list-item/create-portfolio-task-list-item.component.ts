@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {Router} from '@angular/router';
 import { Project, Task } from 'src/app/api/models/doubtfire-model';
 
 @Component({
@@ -11,17 +10,11 @@ export class CreatePortfolioTaskListItemComponent {
   @Input() setSelectedTask: Task;
   @Input() project: Project;
 
-  constructor(private router: Router) {}
-
   public status(): string {
     return this.project.portfolioTaskStatus();
   }
 
   public statusClass(): string {
     return this.project.portfolioTaskStatusClass();
-  }
-
-  public switchToPortfolioCreation() {
-    this.router.navigate(['/projects', this.project.id, 'portfolio']);
   }
 }

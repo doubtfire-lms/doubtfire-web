@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Grade} from 'src/app/api/models/grade';
-import {TaskDefinition, Task} from 'src/app/api/models/doubtfire-model';
+import {Project, TaskDefinition, Task} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
 import {BehaviorSubject} from 'rxjs';
 
@@ -12,6 +12,7 @@ import {BehaviorSubject} from 'rxjs';
 })
 export class FUnitTaskListComponent implements OnChanges, OnInit {
   @Input() mode: 'project' | 'all-tasks';
+  @Input() project: Project;
   @Input() taskDefinitions: TaskDefinition[];
   @Input() tasks: Task[];
 
