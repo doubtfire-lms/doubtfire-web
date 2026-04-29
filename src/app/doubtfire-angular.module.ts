@@ -45,8 +45,6 @@ import {LottieComponent, provideLottieOptions} from 'ngx-lottie';
 import {AlertComponent, AlertService} from 'src/app/common/services/alert.service';
 import {ProgressDashboardComponent} from './projects/states/dashboard/directives/progress-dashboard/progress-dashboard.component';
 
-import {setTheme} from 'ngx-bootstrap/utils';
-
 import {CodeEditorModule} from '@ngstack/code-editor';
 import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 
@@ -771,7 +769,6 @@ export class DoubtfireAngularModule {
     private domSanitizer: DomSanitizer,
   ) {
     setAppInjector(injector);
-    setTheme('bs3'); // or 'bs4'
 
     this.constants.ExternalName.subscribe((result) => {
       this.title.setTitle(result);
