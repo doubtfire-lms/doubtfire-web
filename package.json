@@ -84,7 +84,7 @@
     "marked": "^11.1.0",
     "moment": "^2.29.4",
     "monaco-editor": "^0.44.0",
-    "ng-csv": "0.2.3",
+    "ng-csv": "0.3.6",
     "ng-file-upload": "~5.0.9",
     "ng-flex-layout": "^17.3.7-beta.1",
     "ng2-pdf-viewer": "10.2.2",
