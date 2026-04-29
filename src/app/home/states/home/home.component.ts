@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {DateService} from 'src/app/common/services/date.service';
 import {Router} from '@angular/router';
@@ -23,14 +23,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   loadingProjects: boolean;
 
   constructor(
-    private renderer: Renderer2,
     private constants: DoubtfireConstants,
     private globalState: GlobalStateService,
     private userService: UserService,
     @Inject(DateService) private DateService: DateService,
     private router: Router,
   ) {
-    // this.renderer.setStyle(document.body, 'background-color', '#f0f2f5');
     // projects and units are loaded as part of global state service at login
   }
 
@@ -40,7 +38,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   ngOnDestroy(): void {
-    // this.renderer.setStyle(document.body, 'background-color', '#fff');
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
