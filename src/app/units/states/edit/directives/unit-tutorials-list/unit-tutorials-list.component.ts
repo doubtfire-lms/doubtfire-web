@@ -32,7 +32,8 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
 
   campuses: Campus[] = new Array<Campus>();
   columns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
-  tutorials: Tutorial[];
+  tutorials: Tutorial[] = [];
+  dataSource = new MatTableDataSource<Tutorial>();
 
   private editingStream: boolean = false;
 
