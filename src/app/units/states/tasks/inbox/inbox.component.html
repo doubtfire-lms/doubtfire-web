@@ -1,6 +1,6 @@
 @if (!isMobileView) {
-<div fxLayout="column" fxFill fxHide fxShow.gt-sm>
-  <div fxLayout="row" fxLayoutAlign="center stretch" fxFill>
+<div fxLayout="column" fxFill fxHide fxShow.gt-sm class="min-h-0">
+  <div fxLayout="row" fxLayoutAlign="center stretch" fxFlex class="min-h-0">
     <div id="inboxpanel" #inboxpanel class="staff-task-list inbox-panel">
       @if (taskData) {
         <df-staff-task-list
@@ -47,7 +47,7 @@
       <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
     </div>
   </div>
-  <f-footer class="z-10" [viewType]="viewType"></f-footer>
+  <f-footer class="z-10 shrink-0" [viewType]="viewType"></f-footer>
 </div>
 } @else {
 <div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
