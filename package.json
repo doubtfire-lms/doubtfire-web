@@ -62,7 +62,7 @@
     "angular-sanitize": "1.5.11",
     "angular-ui-bootstrap": "0.13.4",
     "angular-ui-codemirror": "0.3.0",
-    "angular-xeditable": "0.9.0",
+    "angular-xeditable": "0.10.2",
     "angulartics": "~1.0.3",
     "angulartics-google-analytics": "0.1.4",
     "bootstrap": "~3.4",
