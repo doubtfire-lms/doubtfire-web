@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnDestroy} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {addWeeks} from 'date-fns';
 import {Subscription} from 'rxjs';
@@ -19,19 +19,19 @@ type GradeCol = 'p' | 'c' | 'd' | 'hd';
   templateUrl: 'unit-task-editor.component.html',
   styleUrls: ['unit-task-editor.component.scss'],
 })
-export class UnitTaskEditorComponent implements AfterViewInit, OnDestroy {
+export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
 
-  public taskDefinitionSource: MatTableDataSource<TaskDefinition>;
-  public filter: string;
+  public taskDefinitionSource = new MatTableDataSource<TaskDefinition>([]);
+  public filter: string = '';
   public selectedTaskDefinition: TaskDefinition;
   public isTaskListCollapsed: boolean = false;
 
   public gradeColumns: string[] = ['p', 'c', 'd', 'hd'];
   public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
-  public dueDateSource: MatTableDataSource<TaskDefinition>;
+  public dueDateSource = new MatTableDataSource<TaskDefinition>([]);
 
-  public manageDueDates: boolean;
+  public manageDueDates: boolean = false;
 
   protected gradeNames: string[] = Grade.GRADES;
 
@@ -140,14 +140,15 @@ export class UnitTaskEditorComponent implements AfterViewInit, OnDestroy {
     private csvResultModalService: CsvResultModalService,
     private csvUploadModal: CsvUploadModalService,
     private confirmationModal: ConfirmationModalService,
-  ) {}
+  ) {
+    this.taskDefinitionSource.filterPredicate = (data: TaskDefinition, filter: string) =>
+      data.matches(filter);
+  }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.subscriptions.push(
       this.unit.taskDefinitionCache.values.subscribe((taskDefinitions) => {
-        this.taskDefinitionSource = new MatTableDataSource<TaskDefinition>(taskDefinitions);
-        this.taskDefinitionSource.filterPredicate = (data: any, filter: string) =>
-          data.matches(filter);
+        this.taskDefinitionSource.data = taskDefinitions;
       }),
     );
   }
