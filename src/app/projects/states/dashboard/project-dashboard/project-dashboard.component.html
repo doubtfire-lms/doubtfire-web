@@ -25,15 +25,15 @@
       </div>
     }
 
-    @if (selectedTaskDefinition$.value) {
+    @if (selectedTaskDefinition$ | async; as selectedTaskDefinition) {
       <div class="flex-1 p-2 bg-white rounded-lg">
         <f-task-dashboard
-          [task]="project.findTaskForDefinition(selectedTaskDefinition$.value.id)"
+          [task]="project.findTaskForDefinition(selectedTaskDefinition.id)"
         ></f-task-dashboard>
       </div>
       <div #commentspanel class="flex-none w-1/4 p-2 bg-white rounded-lg">
         <task-comments-viewer
-          [task]="project.findTaskForDefinition(selectedTaskDefinition$.value.id)"
+          [task]="project.findTaskForDefinition(selectedTaskDefinition.id)"
         >
         </task-comments-viewer>
       </div>

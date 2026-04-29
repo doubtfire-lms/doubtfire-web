@@ -71,17 +71,17 @@
     }
     <mat-menu #menu="matMenu">
       @if (currentUser.role === 'Admin') {
-        <button mat-menu-item uiSref="institutionsettings">
+        <button mat-menu-item routerLink="/admin/institution-settings">
           <mat-icon matListItemIcon>business</mat-icon>
           Institution Settings
         </button>
       }
-      <button mat-menu-item uiSref="admin/units">
+      <button mat-menu-item routerLink="/admin/units">
         <mat-icon matListItemIcon>school</mat-icon>
         Manage Units
       </button>
       @if (currentUser.role === 'Admin') {
-        <button mat-menu-item uiSref="admin/users">
+        <button mat-menu-item routerLink="/admin/users">
           <mat-icon matListItemIcon>people</mat-icon>
           Manage Users
         </button>

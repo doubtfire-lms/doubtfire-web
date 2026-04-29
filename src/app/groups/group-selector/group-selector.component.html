@@ -196,7 +196,7 @@
     <p>
       Can't see the group you need to join? Groups shown are limited to those in your allocated
       tutorials. Use the
-      <a ui-sref="projects2/tutorials2({projectId: project.id})">Tutorial List</a> to check and update
+      <a [routerLink]="['/projects', project.id, 'tutorials']">Tutorial List</a> to check and update
       your tutorial enrolment if needed.
     </p>
   }

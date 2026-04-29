@@ -37,11 +37,7 @@
         <!-- TODO: redirect to new project dashboard -->
         <div
           class="flex items-center justify-between"
-          uiSref="projects/dashboard"
-          [uiParams]="{
-            projectId: project.id,
-            taskAbbr: item.taskDefinition.abbreviation,
-          }"
+          [routerLink]="['/projects', project.id, 'dashboard', item.taskDefinition.abbreviation]"
         >
           <div class="flex items-center gap-5 w-full min-w-0">
             <f-grade-icon

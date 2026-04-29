@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Ng2StateDeclaration} from '@uirouter/angular';
-import {Observable, Subscription} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {Observable, Subscription, of} from 'rxjs';
 import {GroupSet, Unit, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
@@ -23,9 +23,11 @@ export class UnitGroupsComponent implements OnInit, OnDestroy {
   constructor(
     private globalStateService: GlobalStateService,
     private userService: UserService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
     this.unitSub = this.unit$?.subscribe((unit) => {
       if (!unit) {
         return;
@@ -69,19 +71,3 @@ export class UnitGroupsComponent implements OnInit, OnDestroy {
     return unitRole;
   }
 }
-
-export const UnitGroupsState: Ng2StateDeclaration = {
-  name: 'units/students/groups',
-  parent: 'unit-root-state',
-  url: '/students/groups',
-  views: {
-    unitView: {
-      component: UnitGroupsComponent,
-    },
-  },
-  data: {
-    task: 'Student Groups',
-    pageTitle: '_Home_',
-    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
-  },
-};

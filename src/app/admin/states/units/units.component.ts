@@ -1,4 +1,5 @@
 import {Component, AfterViewInit, ViewChild, Input, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -63,11 +64,13 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
     private createUnitDialog: CreateNewUnitModal,
     private globalStateService: GlobalStateService,
     private unitService: UnitService,
+    private route: ActivatedRoute,
   ) {}
 
   units: IUnitOrProject[] = [];
 
   ngOnInit(): void {
+    this.mode = this.mode ?? this.route.snapshot.data.mode;
     if (this.mode === 'tutor') {
       this.title = 'View all units you teach';
 

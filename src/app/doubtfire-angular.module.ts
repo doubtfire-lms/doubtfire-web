@@ -2,13 +2,13 @@ import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {ApplicationRef, DoBootstrap, Injector, NgModule} from '@angular/core';
+import {Injector, NgModule} from '@angular/core';
 import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterModule, UrlHandlingStrategy} from '@angular/router';
+import {RouterModule} from '@angular/router';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
-import {AppInjector, setAppInjector} from './app-injector';
+import {setAppInjector} from './app-injector';
 
 // Lottie animation module
 // import {LottieModule, LottieCacheModule} from 'ngx-lottie';
@@ -39,7 +39,6 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {UIRouterModule} from '@uirouter/angular';
 import player from 'lottie-web';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
 import {LottieComponent, provideLottieOptions} from 'ngx-lottie';
@@ -152,7 +151,6 @@ import {SafePipe} from './common/pipes/safe.pipe';
 import {EmojiService} from './common/services/emoji.service';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {UserIconComponent} from './common/user-icon/user-icon.component';
-import {doubtfireStates} from './doubtfire.states';
 import {CreatePortfolioTaskListItemComponent} from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 import {TaskListItemComponent} from './projects/states/dashboard/directives/student-task-list/task-list-item/task-list-item.component';
 import {TaskDescriptionCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component';
@@ -187,7 +185,7 @@ import {
 import {FUnitsComponent} from './admin/states/units/units.component';
 import {FUsersComponent} from './admin/states/users/users.component';
 import {TiiActionLogComponent} from './admin/tii-action-log/tii-action-log.component';
-import {AngularRouterHostComponent} from './angular-router-host.component';
+import {AppComponent} from './app.component';
 import {FeedbackTemplateService} from './api/services/feedback-template.service';
 import {GroupService} from './api/services/group.service';
 import {LtiService} from './api/services/lti.service';
@@ -233,7 +231,6 @@ import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {UserBadgeComponent} from './common/user-badge/user-badge.component';
-import {DoubtfireShellComponent} from './doubtfire-shell.component';
 import {TimeoutComponent} from './errors/states/timeout/timeout.component';
 import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
 import {UnavailableCardComponent} from './errors/unavailable-card/unavailable-card.component';
@@ -261,13 +258,12 @@ import {ProjectRootStateComponent} from './projects/states/project-root-state.co
 import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
-import {TransitionHooksService} from './sessions/transition-hooks.service';
 import {SubmissionTypeModalComponent} from './tasks/modals/submission-type-modal/submission-type-modal.component';
 import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task-feedback-templates/task-feedback-templates.component';
 import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
 import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
 import {TaskSubmissionHistoryComponent} from './tasks/task-submission-history/task-submission-history.component';
-import {topLevelRoutes, TopLevelUrlHandlingStrategy} from './top-level-routing';
+import {routes} from './app.routes';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {TaskDefinitionDatesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-dates/task-definition-dates.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
@@ -404,8 +400,7 @@ const GANTT_CHART_CONFIG = {
 @NgModule({
   // Components we declare
   declarations: [
-    AngularRouterHostComponent,
-    DoubtfireShellComponent,
+    AppComponent,
     TaskStatusPieChartComponent,
     AlertComponent,
     ProgressDashboardComponent,
@@ -697,13 +692,12 @@ const GANTT_CHART_CONFIG = {
     TutorNoteService,
     CsvResultModalService,
     CsvUploadModalService,
-    {provide: UrlHandlingStrategy, useClass: TopLevelUrlHandlingStrategy},
   ],
   imports: [
     FlexLayoutModule,
     BrowserModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(topLevelRoutes, {
+    RouterModule.forRoot(routes, {
       initialNavigation: 'enabledNonBlocking',
     }),
     FormsModule,
@@ -751,10 +745,6 @@ const GANTT_CHART_CONFIG = {
     NgxChartsModule,
     PdfViewerModule,
     LottieComponent,
-    UIRouterModule.forRoot({
-      states: doubtfireStates,
-      otherwise: '/home',
-    }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: () => interval(6000).pipe(take(1)),
@@ -766,14 +756,14 @@ const GANTT_CHART_CONFIG = {
     MatChipListbox,
     FileUploadModule,
   ],
+  bootstrap: [AppComponent],
 })
 
 // There is no longer any requirement for an EntryComponents section
 // since Angular 9 introduced the IVY renderer
-export class DoubtfireAngularModule implements DoBootstrap {
+export class DoubtfireAngularModule {
   constructor(
     injector: Injector,
-    private appRef: ApplicationRef,
     private constants: DoubtfireConstants,
     private title: Title,
     private updater: CheckForUpdateService,
@@ -791,10 +781,5 @@ export class DoubtfireAngularModule implements DoBootstrap {
       'formatif-logo',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/logo.svg'),
     );
-  }
-
-  ngDoBootstrap(): void {
-    this.appRef.bootstrap(DoubtfireShellComponent);
-    AppInjector.get(TransitionHooksService);
   }
 }

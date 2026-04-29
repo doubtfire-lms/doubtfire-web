@@ -1,7 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {UIRouterGlobals} from '@uirouter/angular';
 import {AsyncSubject, catchError, map, Observable, throwError} from 'rxjs';
 import {User, UserService} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
@@ -47,7 +46,6 @@ export class AuthenticationService {
     private alertService: AlertService,
     private angularRouter: Router,
     private doubtfireConstants: DoubtfireConstants,
-    private uiRouterGlobals: UIRouterGlobals,
   ) {
     this.AUTH_URL = `${this.doubtfireConstants.API_URL}/auth`;
     // Ensure any only user data is removed from local storage
@@ -290,7 +288,7 @@ export class AuthenticationService {
   }
 
   public timeoutAuthentication(): void {
-    if (this.uiRouterGlobals.current.name !== 'timeout' && window.location.pathname !== '/timeout') {
+    if (window.location.pathname !== '/timeout') {
       this.alertService.error('Authentication timed out', 6000);
       setTimeout(() => this.angularRouter.navigateByUrl('/timeout'), 500);
     }

@@ -1,7 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {StateService} from '@uirouter/core';
 import {BehaviorSubject} from 'rxjs';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {UserService} from 'src/app/api/services/user.service';
@@ -67,7 +66,6 @@ export class SignInComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private userService: UserService,
-    private state: StateService,
     private router: Router,
     private route: ActivatedRoute,
     private constants: DoubtfireConstants,
@@ -85,9 +83,7 @@ export class SignInComponent implements OnInit {
         if (params.isLtiLogin && params.ltik) {
           this.globalState.hideHeader();
           this.userService.currentUser.ltik = params.ltik;
-          return this.state.go('lti', {
-            ltik: params.ltik,
-          });
+          return this.router.navigate(['/lti'], {queryParams: {ltik: params.ltik}});
         } else {
           this.globalState.goHome();
           return this.router.navigateByUrl('/welcome');
@@ -256,9 +252,7 @@ export class SignInComponent implements OnInit {
         if (this.isLtiLogin) {
           this.globalState.loadGlobals();
           const params = getUrlParams(document.location.href);
-          this.state.go('lti', {
-            ltik: params.ltik,
-          });
+          this.router.navigate(['/lti'], {queryParams: {ltik: params.ltik}});
         } else {
           this.actionSignInSuccess();
         }

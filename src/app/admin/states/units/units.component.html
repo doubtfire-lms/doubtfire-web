@@ -101,24 +101,21 @@
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns"
-          uiSref="units2/tasks/inbox"
-          [uiParams]="{unitId: row.id}"
+          [routerLink]="['/units', row.id, 'tasks', 'inbox']"
         ></tr>
       }
       @if (mode === 'admin') {
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns"
-          uiSref="units/admin"
-          [uiParams]="{unitId: row.id}"
+          [routerLink]="['/units', row.id, 'admin']"
         ></tr>
       }
       @if (mode === 'student') {
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns"
-          uiSref="projects2/dashboard2"
-          [uiParams]="{projectId: row.id, taskAbbreviation: ''}"
+          [routerLink]="['/projects', row.id, 'dashboard']"
         ></tr>
       }
     </table>

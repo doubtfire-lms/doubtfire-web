@@ -1,11 +1,9 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatTabChangeEvent} from '@angular/material/tabs';
-import {TransitionService} from '@uirouter/angular';
-import {StateService} from '@uirouter/core';
-import {Observable, Subscription, first} from 'rxjs';
+import {Observable, Subscription, first, of} from 'rxjs';
 import {Unit, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
-import {Ng2StateDeclaration} from '@uirouter/angular';
 
 type UnitAdminTabKey =
   | 'details'
@@ -44,18 +42,18 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   public currentTab: UnitAdminTab = this.tabs[0];
 
   private subscriptions: Subscription[] = [];
-  private deregisterStateSuccessHook?: () => void;
 
   constructor(
-    private stateService: StateService,
-    private transitionService: TransitionService,
+    private route: ActivatedRoute,
+    private router: Router,
     private userService: UserService,
     private globalStateService: GlobalStateService,
   ) {}
 
   public ngOnInit(): void {
-    this.updateCurrentTabFromState(this.stateService.params.tab);
+    this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'));
 
+    this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
     if (this.unit$) {
       this.subscriptions.push(
         this.unit$.pipe(first()).subscribe((unit) => {
@@ -70,18 +68,13 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
       );
     }
 
-    const deregister = this.transitionService.onSuccess({to: '**'}, (transition) => {
-      if (transition.to().name === 'units/admin') {
-        this.updateCurrentTabFromState(transition.params().tab);
-      }
-    });
-
-    this.deregisterStateSuccessHook = deregister as () => void;
+    this.subscriptions.push(
+      this.route.paramMap.subscribe((params) => this.updateCurrentTabFromState(params.get('tab'))),
+    );
   }
 
   public ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
-    this.deregisterStateSuccessHook?.();
   }
 
   public get currentIndex(): number {
@@ -92,7 +85,13 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   public onTabChange(event: MatTabChangeEvent): void {
     const nextTab = this.tabs[event.index] ?? this.tabs[0];
     this.currentTab = nextTab;
-    this.stateService.go('.', {tab: nextTab.routeSegment}, {notify: false, location: 'replace'});
+    if (this.route.parent?.snapshot.data.unit) {
+      this.router.navigate(
+        ['/units', this.route.parent.snapshot.paramMap.get('unitId'), 'admin', nextTab.routeSegment],
+        {replaceUrl: true},
+      );
+      return;
+    }
   }
 
   private updateCurrentTabFromState(tabParam?: string | null): void {
@@ -139,22 +138,3 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
     );
   }
 }
-
-export const UnitAdminState: Ng2StateDeclaration = {
-  name: 'units/admin',
-  parent: 'unit-root-state',
-  url: '/admin/:tab',
-  params: {
-    tab: {value: 'details', squash: true, dynamic: true},
-  },
-  views: {
-    unitView: {
-      component: UnitAdminStateComponent,
-    },
-  },
-  data: {
-    task: 'Unit Administration',
-    pageTitle: '_Unit Administration_',
-    roleWhitelist: ['Convenor', 'Admin', 'Auditor'],
-  },
-};

@@ -244,7 +244,7 @@
       mat-raised-button
       matTooltip="Rollover the unit into a new teaching period"
       matTooltipShowDelay="1000"
-      uiSref="units/rollover"
+      [routerLink]="['/units', unit.id, 'rollover']"
     >
       Copy
     </button>

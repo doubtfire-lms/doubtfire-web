@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {UIRouter} from '@uirouter/core';
+import {ActivatedRoute} from '@angular/router';
 import * as _ from 'lodash';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum, TaskStatusUiData} from 'src/app/api/models/task-status';
@@ -23,7 +23,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   constructor(
     private extensions: ExtensionModalService,
     private taskService: TaskService,
-    private router: UIRouter,
+    private route: ActivatedRoute,
     private qrModalService: QrModalService,
     private doubtfireConstants: DoubtfireConstants,
     private submissionTypeModalService: SubmissionTypeModalService,
@@ -54,7 +54,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
 
   reapplyTriggers(): void {
     // if tutor is in queryParam
-    if (this.router.globals.params.tutor != null) {
+    if (this.route.snapshot.queryParamMap.has('tutor')) {
       this.triggers = this.taskService.statusKeys
         .map((k) => this.taskService.statusData(k))
         .filter((trigger) => {

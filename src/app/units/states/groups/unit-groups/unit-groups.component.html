@@ -14,7 +14,7 @@
       first for groups to be created. This can be found under the groups tab in the unit
       administration settings.
     </p>
-    <button mat-raised-button uiSref="units/admin" [uiParams]="{unitId: unit.id}">
+    <button mat-raised-button [routerLink]="['/units', unit.id, 'admin', 'groups']">
       Unit Administration
     </button>
   </div>

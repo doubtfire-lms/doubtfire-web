@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
 import {Component, Input, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {
   BehaviorSubject,
   Observable,
@@ -43,6 +44,7 @@ export class ProjectDashboardComponent implements OnInit {
     private currentUser: UserService,
     private projectService: ProjectService,
     private globalStateService: GlobalStateService,
+    private route: ActivatedRoute,
   ) {}
 
   public leftWidth = 400;
@@ -77,10 +79,7 @@ export class ProjectDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // projectTasks = this.projectService.loadProject
-    this.project$.subscribe((project) => {
-      console.log(project);
-    });
+    this.project$ = this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
 
     this.dragMoveAudited$ = this.dragMove$.pipe(
       withLatestFrom(this.leftComponentStartSize$),

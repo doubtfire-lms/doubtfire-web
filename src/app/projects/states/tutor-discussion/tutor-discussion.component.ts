@@ -1,8 +1,7 @@
 import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatSelectionList} from '@angular/material/list';
 import {MatTabChangeEvent} from '@angular/material/tabs';
-import {StateService, UIRouter} from '@uirouter/core';
 import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
 import {
   AuthenticationService,
@@ -69,12 +68,11 @@ export class TutorDiscussionComponent implements AfterViewInit {
     private userService: UserService,
     private projectService: ProjectService,
     private gradeService: GradeService,
-    private state: StateService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
     private discussedInClassReasonModal: DiscussedInClassReasonModalService,
-    private route: UIRouter,
     private taskCommentService: TaskCommentService,
     private taskService: TaskService,
   ) {}
@@ -115,6 +113,18 @@ export class TutorDiscussionComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
+    this.unitId =
+      this.unitId ??
+      Number(
+        this.activatedRoute.parent?.snapshot.paramMap.get('unitId') ??
+          this.activatedRoute.snapshot.queryParamMap.get('unitId'),
+      );
+    this.username = this.username ?? this.activatedRoute.snapshot.queryParamMap.get('username');
+    this.attendance =
+      this.attendance ??
+      this.activatedRoute.snapshot.data.attendance ??
+      this.activatedRoute.snapshot.queryParamMap.get('attendance') === 'true';
+
     this.authService.afterAuthCall((result) => {
       if (!result) {
         return this.router.navigateByUrl('/sign_in');
@@ -173,9 +183,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
     if (!this.project) {
       // Exiting the route entirely
       if (this.unitId) {
-        this.route.stateService.go('units2/tasks/inbox', {
-          unitId: this.unitId,
-        });
+        this.router.navigate(['/units', this.unitId, 'tasks', 'inbox']);
       } else {
         this.router.navigateByUrl('/home');
       }
