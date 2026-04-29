@@ -618,6 +618,12 @@ export class Unit extends Entity {
     );
   }
 
+  public downloadOverflowTaskClaimsCsv(): Observable<SidekiqJob> {
+    return AppInjector.get(HttpClient).get<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/overflow_task_claims`,
+    );
+  }
+
   public downloadTutorAssessmentCsv(): Observable<SidekiqJob> {
     return AppInjector.get(HttpClient).get<SidekiqJob>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments`,

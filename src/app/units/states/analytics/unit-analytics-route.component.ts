@@ -61,6 +61,14 @@ export class UnitAnalyticsComponent {
     );
   }
 
+  public getOverflowTaskClaimsCsv() {
+    this.downloadCsv(
+      this.unit.downloadOverflowTaskClaimsCsv(),
+      'Overflow Task Claims CSV',
+      `${this.unit.code}-overflow-task-claims.csv`,
+    );
+  }
+
   public downloadCsv(newJob: Observable<SidekiqJob>, title: string, filename: string) {
     newJob.subscribe({
       next: (job) => {
