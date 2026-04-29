@@ -6,9 +6,10 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 enum InboxDashboardTab {
   submission = 0,
   taskSheet = 1,
-  staffNotes = 2,
-  similarities = 3,
-  overseer = 4,
+  similarities = 2,
+  overseer = 3,
+  staffNotes = 4,
+  tutorNotes = 5,
 }
 
 @Component({

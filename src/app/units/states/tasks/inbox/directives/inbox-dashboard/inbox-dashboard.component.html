@@ -12,6 +12,18 @@
         <mat-tab>
           <ng-template mat-tab-label>
             <span class="inline-flex items-center gap-2">
+              Similarities
+              @if (task.similaritiesDetected) {
+                <mat-icon class="text-red-500">warning</mat-icon>
+              }
+            </span>
+          </ng-template>
+        </mat-tab>
+
+        <mat-tab label="Overseer" [disabled]="!overseerEnabled"></mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="inline-flex items-center gap-2">
               Staff Notes
               @if (task.project.staffNoteCount) {
                 <span
@@ -24,18 +36,7 @@
             </span>
           </ng-template>
         </mat-tab>
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <span class="inline-flex items-center gap-2">
-              Similarities
-              @if (task.similaritiesDetected) {
-                <mat-icon class="text-red-500">warning</mat-icon>
-              }
-            </span>
-          </ng-template>
-        </mat-tab>
-
-        <mat-tab label="Overseer" [disabled]="!overseerEnabled"></mat-tab>
+        <mat-tab label="Tutor Notes"></mat-tab>
       </mat-tab-group>
 
       <button
@@ -91,6 +92,12 @@
       <ng-template [ngSwitchCase]="InboxDashboardTab.staffNotes">
         <div class="h-full">
           <f-staff-notes-view [project]="task?.project"></f-staff-notes-view>
+        </div>
+      </ng-template>
+
+      <ng-template [ngSwitchCase]="InboxDashboardTab.tutorNotes">
+        <div class="h-full overflow-auto">
+          <f-tutor-notes-view [task]="task"></f-tutor-notes-view>
         </div>
       </ng-template>
 
