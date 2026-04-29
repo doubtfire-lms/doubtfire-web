@@ -42,6 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.globalState.showHeader();
     this.globalState.setView(ViewType.OTHER);
 
     this.loadingUnitRoles = true;
