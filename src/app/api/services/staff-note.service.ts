@@ -8,7 +8,7 @@ import {Observable, tap} from 'rxjs';
 
 @Injectable()
 export class StaffNoteService extends CachedEntityService<StaffNote> {
-  public readonly staffNoteAdded$: EventEmitter<StaffNote> = new EventEmitter();
+  public readonly staffNoteAdded$ = new EventEmitter<StaffNote>();
 
   protected readonly endpointFormat = 'projects/:projectId:/staff_notes/:id:';
 

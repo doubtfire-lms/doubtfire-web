@@ -1,6 +1,6 @@
-import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
+import {Component, Input, ViewChild, AfterViewInit} from '@angular/core';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTableDataSource, MatTable} from '@angular/material/table';
 import {
   Tutorial,
   TutorialService,
@@ -11,28 +11,49 @@ import {
   TutorialStreamService,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
-import { UntypedFormControl, Validators } from '@angular/forms';
-import { RequestOptions } from 'ngx-entity-service';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { ConfirmationModalService } from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
+import {UntypedFormControl, Validators} from '@angular/forms';
+import {RequestOptions} from 'ngx-entity-service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
-    selector: 'df-unit-tutorials-list',
-    templateUrl: 'unit-tutorials-list.component.html',
-    styleUrls: ['unit-tutorials-list.component.scss'],
-    standalone: false
+  selector: 'df-unit-tutorials-list',
+  templateUrl: 'unit-tutorials-list.component.html',
+  styleUrls: ['unit-tutorials-list.component.scss'],
+  standalone: false,
 })
-export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> implements AfterViewInit {
-  @ViewChild(MatTable, { static: true }) table: MatTable<any>;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+export class UnitTutorialsListComponent
+  extends EntityFormComponent<Tutorial>
+  implements AfterViewInit
+{
+  @ViewChild(MatTable, {static: true}) table: MatTable<any>;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   @Input() stream: TutorialStream;
   @Input() unit: Unit;
 
-  days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Asynchronous'];
+  days: string[] = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+    'Asynchronous',
+  ];
 
   campuses: Campus[] = new Array<Campus>();
-  columns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
+  columns: string[] = [
+    'abbreviation',
+    'campus',
+    'location',
+    'day',
+    'time',
+    'tutor',
+    'capacity',
+    'options',
+  ];
   tutorials: Tutorial[] = [];
   dataSource = new MatTableDataSource<Tutorial>();
 
@@ -82,14 +103,15 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
 
   private filterTutorials(): void {
     this.tutorials = this.unit.tutorials.filter(
-      (tutorial) => tutorial.tutorialStream === this.stream || (!tutorial.tutorialStream && !this.stream),
+      (tutorial) =>
+        tutorial.tutorialStream === this.stream || (!tutorial.tutorialStream && !this.stream),
     );
     this.dataSource.data = this.tutorials;
   }
 
   public saveStream(): void {
     this.tutorialStreamService
-      .update({ abbreviation: this.origStreamAbbr, unit_id: this.unit.id }, { entity: this.stream })
+      .update({abbreviation: this.origStreamAbbr, unit_id: this.unit.id}, {entity: this.stream})
       .subscribe({
         next: (stream: TutorialStream) => {
           this.stream = stream;
@@ -198,7 +220,9 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   /**
    * Ensure that the unit is passed to the Tutorial entity when create it called.
    */
-  protected override optionsOnRequest(kind: 'create' | 'update' | 'delete'): RequestOptions<Tutorial> {
+  protected override optionsOnRequest(
+    kind: 'create' | 'update' | 'delete',
+  ): RequestOptions<Tutorial> {
     return {
       constructorParams: this.unit,
       cache: this.unit.tutorialsCache,
@@ -223,7 +247,11 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'campus':
-          return this.sortCompare(a.campus ? a.campus.abbreviation : '', b.campus ? b.campus.abbreviation : '', isAsc);
+          return this.sortCompare(
+            a.campus ? a.campus.abbreviation : '',
+            b.campus ? b.campus.abbreviation : '',
+            isAsc,
+          );
         case 'tutor':
           return this.sortCompare(a.tutor.name, b.tutor.name, isAsc);
         default:

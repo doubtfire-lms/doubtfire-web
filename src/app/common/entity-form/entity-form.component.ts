@@ -1,10 +1,10 @@
-import { AfterViewInit, Directive } from '@angular/core';
-import { UntypedFormGroup, AbstractControl } from '@angular/forms';
-import { Entity, RequestOptions } from 'ngx-entity-service';
-import { EntityService } from 'ngx-entity-service';
-import { Observable, tap } from 'rxjs';
-import { Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import {AfterViewInit, Directive} from '@angular/core';
+import {UntypedFormGroup, AbstractControl} from '@angular/forms';
+import {Entity, RequestOptions} from 'ngx-entity-service';
+import {EntityService} from 'ngx-entity-service';
+import {Observable, tap} from 'rxjs';
+import {Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
@@ -47,7 +47,10 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    *
    * @param controls the FormControls that will make up the form.
    */
-  constructor(controls: { [key: string]: AbstractControl }, protected entityName: string) {
+  constructor(
+    controls: Record<string, AbstractControl>,
+    protected entityName: string,
+  ) {
     this.formData = new UntypedFormGroup(controls);
     // Iterate over the FormControls passed in and assign the default values
     // For each based on the values that they are constructed with
@@ -138,14 +141,14 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
         response = service.create(data, this.optionsOnRequest('create'));
       } else {
         // Nothing has changed if the selected value, so we want to inform the user
-        alertService.error( `${this.entityName} was not changed`, 6000);
+        alertService.error(`${this.entityName} was not changed`, 6000);
         return;
       }
 
       // Handle the response
       response.subscribe({
         next: (result: T) => {
-          alertService.success( `${this.entityName} saved`, 2000);
+          alertService.success(`${this.entityName} saved`, 2000);
           // Success is implemented on all inheriting instances and is used
           // to handle the response appropriately for the context of the form
           success(result, this.selected ? false : true);
@@ -163,7 +166,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
           if (this.selected) {
             this.restoreFromBackup();
           }
-          alertService.error( `${this.entityName} save failed: ${error}`, 6000);
+          alertService.error(`${this.entityName} save failed: ${error}`, 6000);
         },
       });
     } else {
@@ -179,7 +182,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
         this.cancelEdit();
         entities.splice(entities.indexOf(entity), 1);
         this.dataSource.data = entities;
-      })
+      }),
     );
   }
 

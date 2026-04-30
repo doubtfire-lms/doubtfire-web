@@ -15,7 +15,7 @@ export interface SidekiqJobEntry {
 export class SidekiqJobService extends CachedEntityService<SidekiqJob> {
   protected readonly endpointFormat = 'sidekiq/:id:';
 
-  public jobEntries: Map<string, SidekiqJobEntry> = new Map();
+  public jobEntries = new Map<string, SidekiqJobEntry>();
 
   // Allow components to track changes to jobEntries
   public sidekiqJobsSubject = new BehaviorSubject<SidekiqJobEntry[]>([]);

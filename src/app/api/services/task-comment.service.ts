@@ -20,7 +20,7 @@ import {ScormExtensionComment} from '../models/task-comment/scorm-extension-comm
 
 @Injectable()
 export class TaskCommentService extends CachedEntityService<TaskComment> {
-  public readonly commentAdded$: EventEmitter<TaskComment> = new EventEmitter();
+  public readonly commentAdded$ = new EventEmitter<TaskComment>();
 
   private readonly commentEndpointFormat =
     'projects/:projectId:/task_def_id/:taskDefinitionId:/comments/:id:';

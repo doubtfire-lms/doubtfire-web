@@ -1,4 +1,4 @@
-import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
+import {CachedEntityService, MappingProcess, RequestOptions} from 'ngx-entity-service';
 import {
   CampusService,
   Project,
@@ -14,12 +14,6 @@ import {Observable} from 'rxjs';
 import {TaskService} from './task.service';
 import {TaskOutcomeAlignmentService} from './task-outcome-alignment.service';
 import {GroupService} from './group.service';
-
-interface MappingProcessLike<T> {
-  data: object;
-  entity: T;
-  continue(): void;
-}
 
 @Injectable()
 export class ProjectService extends CachedEntityService<Project> {
@@ -142,7 +136,7 @@ export class ProjectService extends CachedEntityService<Project> {
       },
       {
         keys: 'unitId',
-        toEntityOpAsync: (process: MappingProcessLike<Project>) => {
+        toEntityOpAsync: (process: MappingProcess<Project>) => {
           const unitService: UnitService = AppInjector.get(UnitService);
           const unitId = process.data['unit_id'];
           // Load what we have... or a a stub for now...

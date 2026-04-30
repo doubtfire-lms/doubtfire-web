@@ -102,7 +102,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       body: {},
     };
 
-    var observer: Observable<any>;
+    let observer: Observable<any>;
     if (isEnrol) {
       observer = this.post(pathIds, options);
     } else {
