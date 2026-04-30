@@ -7,7 +7,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {FileUploadControl} from '@iplab/ngx-file-upload';
 import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
@@ -78,10 +77,10 @@ export const ACCEPTED_TYPES = {
 } as const;
 
 @Component({
-    selector: 'f-file-uploader',
-    templateUrl: './file-uploader.component.html',
-    styleUrls: ['./file-uploader.component.scss'],
-    standalone: false
+  selector: 'f-file-uploader',
+  templateUrl: './file-uploader.component.html',
+  styleUrls: ['./file-uploader.component.scss'],
+  standalone: false,
 })
 export class FileUploaderComponent implements OnInit, OnChanges {
   @Input() files: FileData[];
@@ -117,7 +116,6 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   public showUploader: boolean = false;
   public uploadingInfo: UploadingInfo = null;
 
-  public fileUploadControl = new FileUploadControl({listVisible: false, discardInvalid: true});
   public shownUploadZones: UploadZone[] = [];
   public uploadZones: UploadZone[] = [];
   public dropSupported: boolean = true;
@@ -132,12 +130,6 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.showUploader = !this.asButton;
     this.createUploadZones(this.files);
-
-    this.fileUploadControl.valueChanges.subscribe(() => {
-      setTimeout(() => {
-        this.validateFiles();
-      });
-    });
 
     this.uploadReady.emit(this.initiateUploadInternal.bind(this));
 
@@ -162,6 +154,40 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   public backToUpload() {
     this.isUploading = false;
     this.uploadingInfo = null;
+  }
+
+  public onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  public onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  public onFileDropped(event: DragEvent, upload: UploadZone) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const file = event.dataTransfer?.files?.[0];
+    if (file) {
+      this.setUploadFile(upload, file);
+    }
+  }
+
+  public onFileSelected(event: Event, upload: UploadZone) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+      this.setUploadFile(upload, file);
+    }
+    input.value = '';
+  }
+
+  private setUploadFile(upload: UploadZone, file: File) {
+    upload.model = [file];
+    this.validateFiles();
   }
 
   validateFiles() {

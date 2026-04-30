@@ -23,44 +23,41 @@
             }
 
             <div [hidden]="upload.model || upload.model?.length">
-              <file-upload
-                [control]="fileUploadControl"
-                [multiple]="false"
-                [filesLimit]="1"
-                [(ngModel)]="upload.model"
-                [enable]="!upload.model || !upload.model.length"
-                [accept]="upload.accept"
-                class="min-h-[250px] w-full"
+              <button
+                type="button"
+                class="file-drop-zone min-h-[250px] w-full"
+                (click)="fileInput.click()"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onFileDropped($event, upload)"
               >
-                <ng-template let-file #placeholder>
-                  <div class="w-full flex flex-col justify-center items-center p-10">
-                    @if (!upload.display.error) {
-                      <mat-icon>{{ upload.display.icon }}</mat-icon>
-                      @if (dropSupported) {
-                        <p class="text-center select-none">
-                          Drop {{ upload.display.type }} file here <br /><small
-                            >or click to select</small
-                          >
-                        </p>
-                      } @else {
-                        <p class="select-none">Click to select {{ upload.display.type }} file</p>
-                      }
-                    } @else {
-                      <div
-                        class="!text-red-500 !w-full flex flex-col justify-center items-center text-2xl"
-                      >
-                        <mat-icon>block</mat-icon>
-                        <p>Invalid file provided</p>
-                        <small class="w-full text-center"
-                          >Accepted: {{ upload.accept.split(',').join(', ') }}</small
-                        >
-                      </div>
-                    }
-                  </div>
-                </ng-template>
+                @if (!upload.display.error) {
+                  <mat-icon>{{ upload.display.icon }}</mat-icon>
+                  @if (dropSupported) {
+                    <span class="text-center select-none">
+                      Drop {{ upload.display.type }} file here <br /><small>or click to select</small>
+                    </span>
+                  } @else {
+                    <span class="select-none">Click to select {{ upload.display.type }} file</span>
+                  }
+                } @else {
+                  <span class="!text-red-500 !w-full flex flex-col justify-center items-center text-2xl">
+                    <mat-icon>block</mat-icon>
+                    <span>Invalid file provided</span>
+                    <small class="w-full text-center"
+                      >Accepted: {{ upload.accept.split(',').join(', ') }}</small
+                    >
+                  </span>
+                }
+              </button>
 
-                <ng-template let-control="control" #button> Browse for file </ng-template>
-              </file-upload>
+              <input
+                #fileInput
+                type="file"
+                class="file-input"
+                [accept]="upload.accept"
+                (change)="onFileSelected($event, upload)"
+              />
             </div>
 
             @if (!singleDropZone && upload.model?.length > 0) {
