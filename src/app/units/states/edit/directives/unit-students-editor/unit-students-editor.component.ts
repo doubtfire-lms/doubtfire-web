@@ -1,9 +1,9 @@
 import {HttpClient} from '@angular/common/http';
-import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {UIRouter} from '@uirouter/angular';
+import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Project, ProjectService, Unit} from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -20,7 +20,7 @@ import {UnitStudentEnrolmentModalService} from 'src/app/units/modals/unit-studen
   templateUrl: 'unit-students-editor.component.html',
   styleUrls: ['unit-students-editor.component.scss'],
 })
-export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
+export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatTable, {static: false}) table: MatTable<Project>;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -39,7 +39,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     'enrolled',
     'goto',
   ];
-  dataSource: MatTableDataSource<Project>;
+  dataSource = new MatTableDataSource<Project>([]);
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
@@ -50,17 +50,14 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     private csvUploadModal: CsvUploadModalService,
     private csvResultModal: CsvResultModalService,
     private fileDownloader: FileDownloaderService,
-    private router: UIRouter,
+    private router: Router,
     private projectService: ProjectService,
     private specConModalService: SpecConModalService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
 
-  // The paginator is inside the table
-  ngAfterViewInit() {
-    this.dataSource = new MatTableDataSource(this.unit.studentCache.currentValuesClone());
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  ngOnInit(): void {
+    this.dataSource.data = this.unit.studentCache.currentValuesClone();
     this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
 
     this.subscriptions.push(
@@ -74,6 +71,12 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
         // projects included in unit...
       }),
     );
+  }
+
+  // The paginator is inside the table
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnDestroy(): void {
@@ -116,11 +119,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   public gotoStudent(student: Project) {
-    this.router.stateService.go('projects/dashboard', {
-      projectId: student.id,
-      tutor: true,
-      taskAbbr: '',
-    });
+    this.router.navigate(['/projects', student.id, 'dashboard'], {queryParams: {tutor: true}});
   }
 
   enrolStudent() {

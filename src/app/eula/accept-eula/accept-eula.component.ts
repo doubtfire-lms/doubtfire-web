@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {StateService} from '@uirouter/core';
+import {Router} from '@angular/router';
 import {Observable, ReplaySubject, take} from 'rxjs';
 import {UserService} from 'src/app/api/models/doubtfire-model';
 import {TiiService} from 'src/app/api/services/tii.service';
@@ -22,13 +22,13 @@ export class AcceptEulaComponent {
     private tiiService: TiiService,
     private userService: UserService,
     private alertService: AlertService,
-    private state: StateService,
+    private router: Router,
   ) {
     this.constants.IsTiiEnabled.subscribe((enabled) => {
       if (enabled) {
         this.getEulaHtml();
       } else {
-        this.state.go('home');
+        this.router.navigateByUrl('/home');
       }
     });
 
@@ -45,7 +45,7 @@ export class AcceptEulaComponent {
   public acceptEula(): void {
     this.userService.currentUser.acceptTiiEula().subscribe(() => {
       this.alertService.success('You have accepted the EULAs');
-      this.state.go('home');
+      this.router.navigateByUrl('/home');
     });
   }
 

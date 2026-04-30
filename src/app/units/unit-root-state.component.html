@@ -1,5 +1,5 @@
-@if (unit$ | async) {
-  <div ui-view="unitView"></div>
+@if (unit || (unit$ | async)) {
+  <router-outlet></router-outlet>
 } @else {
   <div
     class="flex min-h-[16rem] flex-col items-center justify-center gap-5 mt-14 text-center text-slate-800"

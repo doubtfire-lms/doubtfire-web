@@ -1,7 +1,6 @@
 import {CdkDragEnd, CdkDragStart, CdkDragMove} from '@angular/cdk/drag-drop';
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MediaObserver} from 'ng-flex-layout';
-import {UIRouter} from '@uirouter/angular';
 import {auditTime, merge, Observable, of, Subject, tap, withLatestFrom} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {Unit} from 'src/app/api/models/unit';
@@ -14,6 +13,7 @@ import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Tutorial} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'f-inbox',
@@ -64,7 +64,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     private selectedTask: SelectedTaskService,
     public mediaObserver: MediaObserver,
     public fileDownloader: FileDownloaderService,
-    private router: UIRouter,
+    private router: Router,
     public dialog: MatDialog,
     private userService: UserService,
     private constants: DoubtfireConstants,
@@ -184,11 +184,12 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   goToStudent(): void {
-    this.router.stateService.go('projects/dashboard', {
-      projectId: this.taskData.selectedTask.project.id,
-      tutor: true,
-      taskAbbr: '',
-    });
+    // this.router.navigateByUrl('projects/dashboard', {
+    //   projectId: this.taskData.selectedTask.project.id,
+    //   tutor: true,
+    //   taskAbbr: '',
+    // });
+    this.router.navigate(['/projects', this.taskData.selectedTask.project.id, 'dashboard']);
   }
 
   openPdfInNewTab(): void {

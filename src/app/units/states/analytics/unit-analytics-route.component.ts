@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Observable, first} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {Observable, first, of} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
 import {UserService} from 'src/app/api/services/user.service';
@@ -23,9 +24,11 @@ export class UnitAnalyticsComponent implements OnInit {
     private fileDownloaderService: FileDownloaderService,
     private userService: UserService,
     private alertService: AlertService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
     this.unit$?.pipe(first()).subscribe((unit) => {
       this.unit = unit;
     });

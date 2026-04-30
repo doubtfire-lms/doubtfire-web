@@ -10,6 +10,7 @@ import {
   model,
   OnChanges,
   OnDestroy,
+  OnInit,
   signal,
   SimpleChanges,
   ViewChild,
@@ -44,14 +45,14 @@ import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-
   selector: 'f-learning-outcome-editor',
   templateUrl: 'learning-outcome-editor.component.html',
 })
-export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
   @Input() context?: TaskDefinition | Unit;
 
   @ViewChild('outcomeTable', {static: false}) outcomeTable: MatTable<LearningOutcome>;
   @ViewChild(MatSort, {static: false}) outcomeSort: MatSort;
   @ViewChild(MatPaginator, {static: false}) outcomePaginator: MatPaginator;
 
-  public outcomeSource: MatTableDataSource<LearningOutcome>;
+  public outcomeSource = new MatTableDataSource<LearningOutcome>([]);
   public outcomeColumns: string[] = [
     'abbreviation',
     'shortDescription',
@@ -78,6 +79,15 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
     private csvUploadModal: CsvUploadModalService,
     private confirmationModal: ConfirmationModalService,
   ) {
+    this.outcomeSource.filterPredicate = (data: LearningOutcome, filter: string) => {
+      const filterValue = filter.trim().toLowerCase();
+      return (
+        data.abbreviation.toLowerCase().includes(filterValue) ||
+        data.shortDescription.toLowerCase().includes(filterValue) ||
+        data.fullOutcomeDescription.toLowerCase().includes(filterValue)
+      );
+    };
+
     effect(() => {
       const linkedOutcomes = this.selectedConnectedOutcomes().map((outcome) => outcome.id);
       if (
@@ -88,14 +98,23 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
     });
   }
 
+  ngOnInit(): void {
+    this.subscribeToLearningOutcomes();
+  }
+
   ngAfterViewInit(): void {
+    this.outcomeSource.paginator = this.outcomePaginator;
+    this.outcomeSource.sort = this.outcomeSort;
+  }
+
+  private subscribeToLearningOutcomes(): void {
     this.setAbbreviationPrefix();
 
     if (!this.context) {
       this.subscriptions.push(
         this.learningOutcomeService.cache.values.subscribe((outcomes) => {
           const glos = outcomes.filter((outcome) => outcome.contextType === null);
-          this.initialiseTable(glos);
+          this.outcomeSource.data = glos;
         }),
       );
       return;
@@ -103,7 +122,7 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
 
     this.subscriptions.push(
       this.context.learningOutcomesCache.values.subscribe((learningOutcomes) => {
-        this.initialiseTable(learningOutcomes);
+        this.outcomeSource.data = learningOutcomes;
       }),
     );
 
@@ -125,13 +144,6 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
 
   ngOnChanges(changes: SimpleChanges): void {
     this.setAbbreviationPrefix();
-
-    this.subscriptions.push(
-      this.context.learningOutcomesCache.values.subscribe((learningOutcomes) => {
-        this.initialiseTable(learningOutcomes);
-      }),
-    );
-
     this.selectedOutcome = null;
   }
 
@@ -143,20 +155,6 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
     if (!this.context) this.abbreviationPrefix = 'GLO';
     else if (this.context instanceof TaskDefinition) this.abbreviationPrefix = 'TLO';
     else if (this.context instanceof Unit) this.abbreviationPrefix = 'ULO';
-  }
-
-  initialiseTable(learningOutcomes: LearningOutcome[]) {
-    this.outcomeSource = new MatTableDataSource<LearningOutcome>(learningOutcomes);
-    this.outcomeSource.paginator = this.outcomePaginator;
-    this.outcomeSource.sort = this.outcomeSort;
-    this.outcomeSource.filterPredicate = (data: LearningOutcome, filter: string) => {
-      const filterValue = filter.trim().toLowerCase();
-      return (
-        data.abbreviation.toLowerCase().includes(filterValue) ||
-        data.shortDescription.toLowerCase().includes(filterValue) ||
-        data.fullOutcomeDescription.toLowerCase().includes(filterValue)
-      );
-    };
   }
 
   public saveLearningOutcome(learningOutcome: LearningOutcome) {

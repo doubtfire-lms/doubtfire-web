@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {Component, Input} from '@angular/core';
-import {AsyncSubject, Observable, Subscriber, first} from 'rxjs';
-import {Project, ProjectService} from 'src/app/api/models/doubtfire-model';
-import {AppInjector} from 'src/app/app-injector';
-import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {Observable, of} from 'rxjs';
+import {Project} from 'src/app/api/models/doubtfire-model';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'f-project-root-state',
@@ -13,49 +11,15 @@ import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global
 })
 export class ProjectRootStateComponent {
   @Input() public project$: Observable<Project>;
+
+  constructor(private activatedRoute: ActivatedRoute) {
+    const project = this.activatedRoute.snapshot.data.project as Project;
+    this.project$ = this.project$ ?? (project ? of(project) : undefined);
+  }
+
+  onActivate(component: {project$?: Observable<Project>}): void {
+    if ('project$' in component) {
+      component.project$ = this.project$;
+    }
+  }
 }
-
-export const ProjectRootState: NgHybridStateDeclaration = {
-  name: 'projects2',
-  url: '/projects2/:projectId',
-  abstract: true,
-  data: {
-    pageTitle: 'Unit Studied',
-  },
-  views: {
-    main: {
-      component: ProjectRootStateComponent,
-    },
-  },
-  resolve: {
-    project$: function ($stateParams) {
-      const projectService = AppInjector.get(ProjectService);
-      const globalState = AppInjector.get(GlobalStateService);
-      const projectId = parseInt($stateParams.projectId);
-
-      const result = new AsyncSubject<Project>();
-
-      const mappingCompleteCallback = (entity: Project) => {
-        result.next(entity);
-        result.complete();
-      };
-
-      // Async call to load the project
-      globalState.onLoad(() => {
-        projectService
-          .get(
-            {id: projectId},
-            {cacheBehaviourOnGet: 'cacheQuery', mappingCompleteCallback: mappingCompleteCallback},
-          )
-          .subscribe({
-            next: (project: Project) => {
-              // Do nothing - the mappingCompleteCallback will be called when complete
-              globalState.setView(ViewType.PROJECT, project);
-            },
-          });
-      });
-
-      return result;
-    },
-  },
-};

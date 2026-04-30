@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatTabGroup} from '@angular/material/tabs';
-import {StateService} from '@uirouter/core';
-import {Observable, first} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, first, of} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
@@ -23,7 +23,8 @@ export class PortfoliosComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    private stateService: StateService,
+    private router: Router,
+    private route: ActivatedRoute,
     private alertService: AlertService,
   ) {}
 
@@ -43,6 +44,7 @@ export class PortfoliosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
     this.unit$?.pipe(first()).subscribe({
       next: (unit) => {
         this.projectService.loadStudents(unit, false).subscribe({
@@ -52,13 +54,13 @@ export class PortfoliosComponent implements OnInit {
           },
           error: (error) => {
             this.alertService.error(`Failed to load unit: ${error}`, 6000);
-            this.stateService.go('home');
+            this.router.navigateByUrl('/home');
           },
         });
       },
       error: (error) => {
         this.alertService.error(`Failed to load unit: ${error}`, 6000);
-        this.stateService.go('home');
+        this.router.navigateByUrl('/home');
       },
     });
   }

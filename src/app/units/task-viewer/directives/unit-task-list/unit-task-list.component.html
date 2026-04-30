@@ -63,6 +63,16 @@
       } @empty {
         <div class="text-center text-muted">No tasks to display</div>
       }
+
+      @if (mode === 'project' && project) {
+        <mat-list-item
+          class="flex w-full item-content items-center hover:bg-gray-50 p-2 h-[65px] cursor-pointer border-b border-gray-200"
+          [disableRipple]="true"
+          [ngClass]="project.portfolioTaskStatusClass()"
+        >
+          <create-portfolio-task-list-item [project]="project"></create-portfolio-task-list-item>
+        </mat-list-item>
+      }
     </mat-nav-list>
   </div>
 </div>

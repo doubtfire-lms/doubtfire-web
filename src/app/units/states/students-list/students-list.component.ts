@@ -1,10 +1,9 @@
-import {AfterViewInit, Component, Input, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
-import {StateService} from '@uirouter/core';
-import {Observable, Subscription, first} from 'rxjs';
+import {Observable, Subscription, first, of} from 'rxjs';
 import {
   Project,
   ProjectService,
@@ -20,7 +19,7 @@ import {UnitStudentEnrolmentModalService} from '../../modals/unit-student-enrolm
   selector: 'f-students-list',
   templateUrl: './students-list.component.html',
 })
-export class StudentsListComponent implements AfterViewInit, OnDestroy {
+export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() unit$: Observable<Unit>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -45,21 +44,19 @@ export class StudentsListComponent implements AfterViewInit, OnDestroy {
   unit: Unit;
 
   private subscriptions: Subscription[] = [];
-  private sortState: Sort = {active: 'name', direction: 'asc'};
+  public sortState: Sort = {active: 'name', direction: 'asc'};
 
   constructor(
     private enrolModal: UnitStudentEnrolmentModalService,
-    private stateService: StateService,
+    private router: Router,
+    private route: ActivatedRoute,
     private userService: UserService,
     private taskService: TaskService,
     private projectService: ProjectService,
   ) {}
 
-  ngAfterViewInit(): void {
-    this.sort.active = this.sortState.active;
-    this.sort.direction = this.sortState.direction;
-    this.dataSource.paginator = this.paginator;
-
+  ngOnInit(): void {
+    this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
     this.subscriptions.push(
       this.unit$?.pipe(first()).subscribe((unit) => {
         if (!unit) {
@@ -81,6 +78,10 @@ export class StudentsListComponent implements AfterViewInit, OnDestroy {
         this.projectService.loadStudents(this.unit).pipe(first()).subscribe();
       }),
     );
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnDestroy(): void {
@@ -108,10 +109,7 @@ export class StudentsListComponent implements AfterViewInit, OnDestroy {
   }
 
   public viewStudent(project: Project): void {
-    this.stateService.go('projects2/dashboard2', {
-      projectId: project.id,
-      taskAbbreviation: null,
-    });
+    this.router.navigate(['/projects', project.id, 'dashboard']);
   }
 
   public showEnrolModal(): void {
@@ -265,19 +263,3 @@ export class StudentsListComponent implements AfterViewInit, OnDestroy {
     return normalized;
   }
 }
-
-export const StudentsListState: NgHybridStateDeclaration = {
-  name: 'units/students/list',
-  parent: 'unit-root-state',
-  url: '/students',
-  views: {
-    unitView: {
-      component: StudentsListComponent,
-    },
-  },
-  data: {
-    task: 'Student List',
-    pageTitle: '_Home_',
-    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
-  },
-};

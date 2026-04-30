@@ -1,5 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subscription} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {Observable, Subscription, of} from 'rxjs';
 import {GroupSet, Project} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from '../index/global-state.service';
 
@@ -16,9 +17,14 @@ export class ProjectGroupsStateComponent implements OnInit, OnDestroy {
 
   private projectSub?: Subscription;
 
-  constructor(private globalStateService: GlobalStateService) {}
+  constructor(
+    private globalStateService: GlobalStateService,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
+    this.project$ = this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
+
     this.projectSub = this.project$?.subscribe((project) => {
       if (!project) {
         return;

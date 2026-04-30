@@ -1,7 +1,7 @@
 <div class="flex flex-row justify-start items-start">
   <a
-    [uiSref]="unselected ? null : 'projects2/dashboard2'"
-    [uiParams]="studentRouteParams"
+    [routerLink]="studentDashboardRoute"
+    [queryParams]="unselected ? null : {tutor: true}"
     style="display: flex"
   >
     <user-icon
@@ -15,8 +15,8 @@
     <div style="margin-top: 6px" id="placeholder1" [hidden]="!unselected"></div>
     <div id="placeholder2" [hidden]="!unselected"></div>
     <a
-      [uiSref]="unselected ? null : 'projects2/dashboard2'"
-      [uiParams]="studentRouteParams"
+      [routerLink]="studentDashboardRoute"
+      [queryParams]="unselected ? null : {tutor: true}"
       style="display: flex"
     >
       <h4 style="margin-bottom: 1px" class="mat-h4">
@@ -24,8 +24,8 @@
       </h4>
     </a>
     <a
-      [uiSref]="unselected ? null : 'projects/dashboard'"
-      [uiParams]="studentTaskRouteParams"
+      [routerLink]="studentTaskRoute"
+      [queryParams]="unselected ? null : {tutor: true}"
       style="display: flex"
     >
       <p class="mat-caption">{{ selectedTask?.definition.name }}</p>

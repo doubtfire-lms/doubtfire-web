@@ -37,6 +37,7 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
     private alerts: AlertService,
   ) {
     this.dataload = false;
+    this.dataSource = new MatTableDataSource<User>([]);
   }
 
   ngOnInit(): void {
@@ -49,7 +50,7 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource = new MatTableDataSource(this.userService.cache.currentValuesClone());
+    this.dataSource.data = this.userService.cache.currentValuesClone();
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.filterPredicate = (data, filter: string) => data.matches(filter);

@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {UIRouter} from '@uirouter/core';
+import {ActivatedRoute} from '@angular/router';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
@@ -20,7 +20,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   public DashboardViews = DashboardViews;
 
   public taskStatusData: any;
-  public tutor = this.router.globals.params.tutor;
+  public tutor = false;
   public urls: {
     taskSubmissionPdfAttachmentUrl: string;
     taskFilesUrl: string;
@@ -54,11 +54,12 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private taskService: TaskService,
     private taskAssessmentModal: TaskAssessmentModalService,
     private fileDownloader: FileDownloaderService,
-    private router: UIRouter,
+    private route: ActivatedRoute,
     public selectedTaskService: SelectedTaskService,
   ) {}
 
   ngOnInit(): void {
+    this.tutor = this.route.snapshot.queryParamMap.has('tutor');
     this.setSelectedDashboardView(DashboardViews.details);
     this.selectedTaskService.currentView$.subscribe((view) => {
       this.currentView = view;

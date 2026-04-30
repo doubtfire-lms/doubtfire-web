@@ -37,8 +37,7 @@
             <div class="ml-1 py-2 opacity-70">
               To change your target grade, use the
               <a
-                uiSref="projects2/plan2"
-                [uiParams]="{projectId: project.id}"
+                [routerLink]="['/projects', project.id, 'plan']"
                 class="underline cursor-pointer"
               >
                 Task Planner

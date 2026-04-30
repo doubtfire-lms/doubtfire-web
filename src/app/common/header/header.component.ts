@@ -12,16 +12,16 @@ import {
   UnitRole,
   User,
 } from 'src/app/api/models/doubtfire-model';
-import {Subscription} from 'rxjs';
+import {asapScheduler, observeOn, Subscription} from 'rxjs';
 import {MediaObserver} from 'ng-flex-layout';
 import {DoubtfireConstants, LogoSettings} from 'src/app/config/constants/doubtfire-constants';
 import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
 import {QrModalService} from '../modals/qr-modal/qr-modal.service';
-import {StateService} from '@uirouter/core';
 import {TutorNotesModalService} from '../modals/tutor-notes-modal/tutor-notes-modal.service';
 import {CalendarModalService} from '../modals/calendar-modal/calendar-modal.service';
 import {AboutDoubtfireModal} from '../modals/about-doubtfire-modal/about-doubtfire-modal.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sidekiqJobService: SidekiqJobService,
     private sidekiqJobsModalService: SidekiqJobsModalService,
     private qrModalService: QrModalService,
-    private stateService: StateService,
+    private router: Router,
     private tutorNotesModal: TutorNotesModalService,
   ) {}
 
@@ -113,7 +113,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // get the current active unit or project
     this.subscriptions.push(
-      this.globalState.currentViewAndEntitySubject$.subscribe({
+      this.globalState.currentViewAndEntitySubject$.pipe(observeOn(asapScheduler)).subscribe({
         next: (currentViewAndEntity) => {
           this.currentView = currentViewAndEntity?.viewType;
 
@@ -152,6 +152,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.sidekiqJobService.sidekiqJobsSubject.subscribe((jobs) => {
       this.sidekiqJobs = [...jobs];
     });
+
   }
 
   showMyQr() {
@@ -172,9 +173,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         true,
       );
     } else {
-      this.stateService.go('tutor-discussion', {
-        unitId: this.currentUnit.id,
-      });
+      this.router.navigate(['/units', this.currentUnit.id, 'discussion']);
     }
   }
 

@@ -32,7 +32,8 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
 
   campuses: Campus[] = new Array<Campus>();
   columns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
-  tutorials: Tutorial[];
+  tutorials: Tutorial[] = [];
+  dataSource = new MatTableDataSource<Tutorial>();
 
   private editingStream: boolean = false;
 
@@ -73,7 +74,6 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
       this.campuses.push(...campuses);
     });
 
-    this.dataSource = new MatTableDataSource();
     this.filterTutorials();
 
     this.unit.tutorialsCache.values.subscribe((_t) => this.filterTutorials());
@@ -104,7 +104,6 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   }
 
   public setEditStream(value: boolean): void {
-    console.log('set edit stream', value)
     if (!value) {
       this.stream.abbreviation = this.origStreamAbbr;
       this.stream.name = this.origName;

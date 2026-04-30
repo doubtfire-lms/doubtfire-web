@@ -1,7 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {TransitionService} from '@uirouter/angular';
-import {StateService} from '@uirouter/core';
-import {Observable, first} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, first, of} from 'rxjs';
 import {
   ProjectService,
   TaskDefinition,
@@ -72,20 +71,24 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     taskDefMode: false,
   };
 
-  private deregisterStateSuccessHook?: () => void;
-
   constructor(
     private taskService: TaskService,
-    private stateService: StateService,
-    private transitionService: TransitionService,
     private globalStateService: GlobalStateService,
     private userService: UserService,
     private projectService: ProjectService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
+    this.routeMode = this.route.snapshot.data.routeMode ?? this.routeMode;
     this.configureRouteMode();
-    this.setTaskKeyFromUrlParams(this.stateService.params.taskKey);
+    this.setTaskKeyFromRoute();
+
+    const routeUnit = this.route.parent?.parent?.snapshot.data.unit;
+    if (!this.unit$ && routeUnit) {
+      this.unit$ = of(routeUnit);
+    }
 
     this.unit$.pipe(first()).subscribe((unit) => {
       this.unit = unit;
@@ -108,19 +111,16 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
         });
     });
 
-    const deregister = this.transitionService.onSuccess({to: '**'}, (transition) => {
-      const stateName = transition.to().name;
-      if (stateName.startsWith('units2/tasks/')) {
-        this.setTaskKeyFromUrlParams(transition.params().taskKey);
-      }
+    this.route.paramMap.subscribe(() => {
+      this.setTaskKeyFromRoute();
     });
 
-    this.deregisterStateSuccessHook = deregister as () => void;
+    this.route.queryParamMap.subscribe(() => {
+      this.setTaskKeyFromRoute();
+    });
   }
 
-  ngOnDestroy(): void {
-    this.deregisterStateSuccessHook?.();
-  }
+  ngOnDestroy(): void {}
 
   private getTaskSource(): TaskSource {
     switch (this.routeMode) {
@@ -165,22 +165,24 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   }
 
   private getFilterOverrides(unit: Unit): Partial<TaskFilters> {
+    const selectedStudents = this.route.snapshot.queryParamMap.get('students');
+
     switch (this.routeMode) {
       case 'definition':
         return {
-          tutorialIdSelected: 'all',
+          tutorialIdSelected: selectedStudents ?? 'all',
           taskDefinitionIdSelected: unit.taskDefinitions?.[0]?.id ?? null,
         };
       case 'moderation':
       case 'overflow':
         return {
-          tutorialIdSelected: 'all',
+          tutorialIdSelected: selectedStudents ?? 'all',
           taskDefinition: null,
           taskDefinitionIdSelected: null,
         };
       case 'inbox':
       default:
-        return {};
+        return selectedStudents ? {tutorialIdSelected: selectedStudents} : {};
     }
   }
 
@@ -214,16 +216,61 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
 
   private setTaskKeyAsUrlParams(task: Task | null): void {
     const nextTaskKey = task?.taskKeyToUrlString() ?? null;
-    const currentTaskKey = this.stateService.params.taskKey ?? null;
+    const currentTaskKey = this.currentTaskKeyFromRoute();
 
     if (currentTaskKey === nextTaskKey) {
       return;
     }
 
-    this.stateService.go('.', {taskKey: nextTaskKey}, {notify: false, location: 'replace'});
+    if (this.route.parent?.parent?.snapshot.data.unit) {
+      const [studentId, taskDefAbbr] = nextTaskKey?.split('/') ?? [null, null];
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        replaceUrl: true,
+        queryParams: {
+          students: this.filters.tutorialIdSelected ?? null,
+          studentId,
+          taskDefAbbr,
+        },
+        queryParamsHandling: 'merge',
+      });
+      return;
+    }
   }
 
   private setTaskKeyFromUrlParams(taskKeyString?: string): void {
     this.taskData.taskKey = this.taskService.taskKeyFromString(taskKeyString);
+  }
+
+  private setTaskKeyFromRoute(): void {
+    const studentId =
+      this.route.snapshot.queryParamMap.get('studentId') ??
+      this.route.snapshot.paramMap.get('studentId');
+    const taskDefAbbr =
+      this.route.snapshot.queryParamMap.get('taskDefAbbr') ??
+      this.route.snapshot.paramMap.get('taskDefAbbr');
+
+    if (studentId && taskDefAbbr) {
+      this.taskData.taskKey = {studentId, taskDefAbbr};
+      return;
+    }
+
+    this.setTaskKeyFromUrlParams();
+  }
+
+  private currentTaskKeyFromRoute(): string | null {
+    const studentId =
+      this.route.snapshot.queryParamMap.get('studentId') ??
+      this.route.snapshot.paramMap.get('studentId');
+    const taskDefAbbr =
+      this.route.snapshot.queryParamMap.get('taskDefAbbr') ??
+      this.route.snapshot.paramMap.get('taskDefAbbr');
+
+    if (!studentId || !taskDefAbbr) {
+      return null;
+    }
+
+    return `${studentId}/${taskDefAbbr}`;
   }
 }

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {StateService} from '@uirouter/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {Unit} from 'src/app/api/models/unit';
 import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
@@ -28,10 +28,12 @@ export class RolloverComponent implements OnInit {
     private globalStateService: GlobalStateService,
     private unitService: UnitService,
     private alertService: AlertService,
-    private state: StateService,
+    private router: Router,
+    private route: ActivatedRoute,
     private teachingPeriodService: TeachingPeriodService,
   ) {}
   ngOnInit(): void {
+    this.unitId = this.unitId ?? Number(this.route.parent?.snapshot.paramMap.get('unitId'));
     this.globalStateService.onLoad(() => {
       this.unitService.get(this.unitId).subscribe({
         next: (unit) => {
@@ -43,7 +45,7 @@ export class RolloverComponent implements OnInit {
         },
         error: (error) => {
           this.alertService.error(`Failed to load unit: ${error}`, 6000);
-          this.state.go('home');
+          this.router.navigateByUrl('/home');
         },
       });
     });
@@ -67,7 +69,12 @@ export class RolloverComponent implements OnInit {
     this.unit.rolloverTo(body).subscribe({
       next: (response) => {
         this.alertService.success(`Unit created`, 2000);
-        this.state.go('units/admin', {unitId: response.id});
+        if (this.route.parent?.snapshot.data.unit) {
+          this.router.navigate(['/units', response.id, 'admin']);
+          return;
+        }
+
+        this.router.navigate(['/units', response.id, 'admin']);
       },
       error: (error) => {
         this.alertService.error(`Error creating unit: ${error}`, 6000);

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {Component, Input} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {of} from 'rxjs';
 import {TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
-import {StateService} from '@uirouter/core';
-import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
 
 @Component({
   selector: 'f-task-viewer-state',
@@ -13,7 +13,20 @@ import {NgHybridStateDeclaration} from '@uirouter/angular-hybrid';
 export class TaskViewerStateComponent {
   @Input() public unit$: Observable<Unit>;
 
-  constructor(private stateService: StateService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
+    this.unit$ = of(this.route.parent.snapshot.data.unit);
+    const taskAbbreviation = this.route.snapshot.paramMap.get('taskAbbreviation');
+    if (taskAbbreviation) {
+      this.unit$.subscribe((unit) => {
+        this.selectedTaskDefinition$.next(
+          unit.taskDefinitions.find((taskDef) => taskDef.abbreviation === taskAbbreviation) ?? null,
+        );
+      });
+    }
+  }
 
   /**
  * Monitor and publish the selected task definition for child components.
@@ -33,24 +46,9 @@ export class TaskViewerStateComponent {
 
   public clearTaskSelection(): void {
     this.selectedTaskDefinition$.next(null);
-    this.stateService.go('.', {taskAbbreviation: null}, {location: 'replace'});
+    if (this.route.parent?.snapshot.data.unit) {
+      this.router.navigate(['../tasks'], {relativeTo: this.route, replaceUrl: true});
+      return;
+    }
   }
 }
-
-export const TaskViewerState: NgHybridStateDeclaration = {
-  name: 'units2/tasks',
-  url: '/tasks/:taskAbbreviation?',
-  params: {
-    taskAbbreviation: {value: null, squash: true, dynamic: true},
-  },
-  parent: 'unit-root-state',
-  data: {
-    pageTitle: 'Unit Tasks',
-    roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
-  },
-  views: {
-    unitView: {
-      component: TaskViewerStateComponent,
-    },
-  },
-};

@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, Input} from '@angular/core';
-import {StateService} from '@uirouter/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CreateNewUnitModal} from 'src/app/admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -23,7 +23,8 @@ export class LtiUnitLinkComponent implements AfterViewInit {
     private alertsService: AlertService,
     private ltiService: LtiService,
     private userService: UserService,
-    private stateService: StateService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   @Input() ltik: string;
@@ -36,6 +37,7 @@ export class LtiUnitLinkComponent implements AfterViewInit {
   public loadingUnits: boolean;
 
   ngAfterViewInit(): void {
+    this.ltik = this.ltik ?? this.route.snapshot.queryParamMap.get('ltik');
     this.loadingUnits = true;
 
     // Scroll to the bottom of the page in case the header is visible
@@ -89,9 +91,7 @@ export class LtiUnitLinkComponent implements AfterViewInit {
 
           this.alertsService.success(`Successfully linked ${unit.code}`, 5000);
 
-          this.stateService.go('lti', {
-            ltik: this.ltik,
-          });
+          this.router.navigate(['/lti'], {queryParams: {ltik: this.ltik}});
         },
         error: (error) => {
           console.log(error);

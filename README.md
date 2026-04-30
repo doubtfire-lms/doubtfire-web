@@ -227,10 +227,10 @@ Important: When completing a frontend migration, please update the below list re
 - [x] ./src/app/units/states/index/index.coffee
 - [x] ./src/app/units/states/states.coffee
 - [x] ./src/app/units/units.coffee
+- [x] ./src/app/config/config.coffee
 
 ### TODO:
 
-- [ ] ./src/app/config/config.coffee
 - [ ] ./src/app/visualisations/summary-task-status-scatter.coffee (Unit task status summary)
 - [ ] ./src/app/visualisations/target-grade-pie-chart.coffee
 - [ ] ./src/app/visualisations/task-completion-box-plot.coffee

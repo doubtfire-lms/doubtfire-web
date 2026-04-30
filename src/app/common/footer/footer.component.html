@@ -213,7 +213,7 @@
           </button>
         }
 
-        @if (canAccessTutorNotes) {
+        <!-- @if (canAccessTutorNotes) {
           <div class="relative inline-block">
             <button
               mat-icon-button
@@ -226,9 +226,9 @@
               <mat-icon class="small-icon">local_library</mat-icon>
             </button>
           </div>
-        }
+        } -->
 
-        <div class="relative inline-block">
+        <!-- <div class="relative inline-block">
           @if (selectedTask.project.staffNoteCount > 0) {
             <div [matBadge]="selectedTask.project.staffNoteCount"></div>
           }
@@ -248,7 +248,7 @@
           >
             <mat-icon class="small-icon">comment</mat-icon>
           </button>
-        </div>
+        </div> -->
       }
 
       <button
@@ -264,7 +264,7 @@
       </button>
 
       <mat-menu #aboveMenu="matMenu" yPosition="above">
-        <button
+        <!-- <button
           mat-menu-item
           (click)="viewTaskSheet()"
           [disabled]="!selectedTaskService.hasTaskSheet"
@@ -292,7 +292,7 @@
           <mat-icon matListItemIcon aria-label="View Overseer">preview</mat-icon>
           View overseer
         </button>
-        <mat-divider></mat-divider>
+        <mat-divider></mat-divider> -->
 
         <button mat-menu-item (click)="markSelectedTaskAsDiscussed()">
           <mat-icon matListItemIcon aria-label="Mark task as discussed">group</mat-icon>

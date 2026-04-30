@@ -1,6 +1,6 @@
-import {Inject, Injectable, OnDestroy} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
 import {MediaObserver} from 'ng-flex-layout';
-import {UIRouter} from '@uirouter/angular';
 import {EntityCache} from 'ngx-entity-service';
 import {BehaviorSubject, Observable, Subject, skip, take} from 'rxjs';
 import {
@@ -110,7 +110,7 @@ export class GlobalStateService implements OnDestroy {
     private teachingPeriodService: TeachingPeriodService,
     private learningOutcomeService: LearningOutcomeService,
     private feedbackTemplateService: FeedbackTemplateService,
-    @Inject(UIRouter) private router: UIRouter,
+    private router: Router,
     private alerts: AlertService,
     private mediaObserver: MediaObserver,
   ) {
@@ -129,8 +129,8 @@ export class GlobalStateService implements OnDestroy {
           this.isLoadingSubject.next(false);
 
           // and if we are not going to the sign in page, then redirect to it
-          if (this.router.globals.current.name !== 'sign_in') {
-            this.router.stateService.go('sign_in');
+          if (window.location.pathname !== '/sign_in') {
+            this.router.navigateByUrl('/sign_in');
           }
         }
       });

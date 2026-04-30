@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, Inject, Input} from '@angular/core';
-import {StateService, UIRouter} from '@uirouter/angular';
+import {AfterViewInit, Component, Input} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -18,11 +18,11 @@ import {AlertService} from 'src/app/common/services/alert.service';
 })
 export class LtiDashboardComponent implements AfterViewInit {
   constructor(
-    @Inject(UIRouter) private router: UIRouter,
+    private router: Router,
+    private route: ActivatedRoute,
     private ltiService: LtiService,
     private userService: UserService,
     private authenticationService: AuthenticationService,
-    private stateService: StateService,
     private alertsService: AlertService,
     private unitService: UnitService,
     private projectService: ProjectService,
@@ -45,6 +45,8 @@ export class LtiDashboardComponent implements AfterViewInit {
   isSyncingEnrolments: boolean;
 
   ngAfterViewInit(): void {
+    this.ltik = this.ltik ?? this.route.snapshot.queryParamMap.get('ltik');
+
     // Scroll to the bottom of the page in case the header is visible
     // Ensures our action buttons are centered
     setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
@@ -97,9 +99,7 @@ export class LtiDashboardComponent implements AfterViewInit {
   }
 
   goToLinkUnit(): void {
-    this.stateService.go('lti/link', {
-      ltik: this.ltik,
-    });
+    this.router.navigate(['/lti/link'], {queryParams: {ltik: this.ltik}});
   }
 
   removeLink(): void {

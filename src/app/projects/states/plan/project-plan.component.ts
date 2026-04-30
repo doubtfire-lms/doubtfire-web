@@ -1,6 +1,7 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {MatSelectChange} from '@angular/material/select';
-import {Observable, Subscription} from 'rxjs';
+import {Observable, Subscription, of} from 'rxjs';
 import {Project, ProjectService} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
@@ -42,9 +43,12 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
     private gradeService: GradeService,
     private projectService: ProjectService,
     private alertService: AlertService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.project$ = this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
+
     this.projectSub = this.project$?.subscribe((project) => {
       if (!project) {
         return;

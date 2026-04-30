@@ -1,0 +1,262 @@
+import {Routes} from '@angular/router';
+import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
+import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
+import {TimeoutComponent} from './errors/states/timeout/timeout.component';
+import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
+import {HomeComponent} from './home/states/home/home.component';
+import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
+import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
+import {SuccessCloseComponent} from './common/success-close/success-close.component';
+import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
+import {FUnitsComponent} from './admin/states/units/units.component';
+import {FUsersComponent} from './admin/states/users/users.component';
+import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
+import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
+import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
+import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
+import {ProjectGroupsStateComponent} from './projects/states/groups/project-groups-state.component';
+import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
+import {ProjectRootStateComponent} from './projects/states/project-root-state.component';
+import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-state.component';
+import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
+import {resolveProject} from './projects/project.resolver';
+import {UnitAdminStateComponent} from './units/states/edit/unit-admin-state.component';
+import {RolloverComponent} from './units/states/rollover/rollover.component';
+import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
+import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
+import {StudentsListComponent} from './units/states/students-list/students-list.component';
+import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
+import {UnitTaskInboxStateComponent} from './units/states/tasks/inbox/unit-task-inbox-state.component';
+import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
+import {resolveUnit} from './units/unit.resolver';
+import {UnitRootStateComponent} from './units/unit-root-state.component';
+import {WelcomeComponent} from './welcome/welcome.component';
+
+export const routes: Routes = [
+  {path: '', pathMatch: 'full', redirectTo: 'home'},
+  {path: 'home', component: HomeComponent},
+  {path: 'sign_in', component: SignInComponent},
+  {path: 'welcome', component: WelcomeComponent},
+  {path: 'unauthorised', component: UnauthorisedComponent},
+  {path: 'timeout', component: TimeoutComponent},
+  {path: 'success-close', component: SuccessCloseComponent},
+  {path: 'edit_profile', component: EditProfileComponent},
+  {path: 'eula', component: AcceptEulaComponent},
+  {path: 'lti', component: LtiDashboardComponent},
+  {path: 'lti/link', component: LtiUnitLinkComponent},
+  {path: 'jplag-report-viewer', component: JplagReportViewerComponent},
+  {
+    path: 'projects/:projectId/task_def_id/:taskDefId/scorm-player/normal',
+    component: ScormPlayerComponent,
+    data: {mode: 'normal'},
+  },
+  {
+    path: 'projects/:projectId/task_def_id/:taskDefId/scorm-player/review/:testAttemptId',
+    component: ScormPlayerComponent,
+    data: {mode: 'review'},
+  },
+  {
+    path: 'task_def_id/:taskDefId/preview-scorm',
+    component: ScormPlayerComponent,
+    data: {mode: 'preview'},
+  },
+  {path: 'view-all-units', component: FUnitsComponent, data: {mode: 'tutor'}},
+  {path: 'view-all-projects', component: FUnitsComponent, data: {mode: 'student'}},
+  {path: 'admin/units', component: FUnitsComponent, data: {mode: 'admin'}},
+  {path: 'admin/users', component: FUsersComponent},
+  {path: 'admin/institution-settings', component: InstitutionSettingsComponent},
+  {path: 'tutor-discussion', component: TutorDiscussionComponent, data: {task: 'Discussion'}},
+  {path: 'tutor-attendance', component: TutorDiscussionComponent, data: {attendance: true, task: 'Check-in'}},
+  {path: 'projects2/:projectId', pathMatch: 'full', redirectTo: 'projects/:projectId/dashboard'},
+  {
+    path: 'projects2/:projectId/dashboard2',
+    pathMatch: 'full',
+    redirectTo: 'projects/:projectId/dashboard',
+  },
+  {
+    path: 'projects2/:projectId/dashboard2/:taskAbbreviation',
+    redirectTo: 'projects/:projectId/dashboard/:taskAbbreviation',
+  },
+  {path: 'projects2/:projectId/plan2', redirectTo: 'projects/:projectId/plan'},
+  {path: 'projects2/:projectId/portfolio2', redirectTo: 'projects/:projectId/portfolio'},
+  {path: 'projects2/:projectId/groups2', redirectTo: 'projects/:projectId/groups'},
+  {path: 'projects2/:projectId/tutorials2', redirectTo: 'projects/:projectId/tutorials'},
+  {path: 'units2/:unitId', pathMatch: 'full', redirectTo: 'units/:unitId/tasks/inbox'},
+  {path: 'units2/:unitId/tasks', pathMatch: 'full', redirectTo: 'units/:unitId/tasks/inbox'},
+  {path: 'units2/:unitId/analytics', redirectTo: 'units/:unitId/analytics'},
+  {path: 'units2/:unitId/admin', pathMatch: 'full', redirectTo: 'units/:unitId/admin'},
+  {path: 'units2/:unitId/admin/:tab', redirectTo: 'units/:unitId/admin/:tab'},
+  {path: 'units2/:unitId/students', pathMatch: 'full', redirectTo: 'units/:unitId/students'},
+  {path: 'units2/:unitId/students/groups', redirectTo: 'units/:unitId/students/groups'},
+  {path: 'units2/:unitId/students/portfolios', redirectTo: 'units/:unitId/students/portfolios'},
+  {
+    path: 'units2/:unitId/tasks/inbox',
+    pathMatch: 'full',
+    redirectTo: 'units/:unitId/tasks/inbox',
+  },
+  {
+    path: 'units2/:unitId/tasks/inbox/:studentId/:taskDefAbbr',
+    redirectTo: 'units/:unitId/tasks/inbox/:studentId/:taskDefAbbr',
+  },
+  {
+    path: 'units2/:unitId/tasks/definition',
+    pathMatch: 'full',
+    redirectTo: 'units/:unitId/tasks/definition',
+  },
+  {
+    path: 'units2/:unitId/tasks/definition/:studentId/:taskDefAbbr',
+    redirectTo: 'units/:unitId/tasks/definition/:studentId/:taskDefAbbr',
+  },
+  {
+    path: 'units2/:unitId/tasks/moderation',
+    pathMatch: 'full',
+    redirectTo: 'units/:unitId/tasks/moderation',
+  },
+  {
+    path: 'units2/:unitId/tasks/moderation/:studentId/:taskDefAbbr',
+    redirectTo: 'units/:unitId/tasks/moderation/:studentId/:taskDefAbbr',
+  },
+  {
+    path: 'units2/:unitId/tasks/overflow',
+    pathMatch: 'full',
+    redirectTo: 'units/:unitId/tasks/overflow',
+  },
+  {
+    path: 'units2/:unitId/tasks/overflow/:studentId/:taskDefAbbr',
+    redirectTo: 'units/:unitId/tasks/overflow/:studentId/:taskDefAbbr',
+  },
+  {
+    path: 'units',
+    children: [
+      {path: '', pathMatch: 'full', redirectTo: '/home'},
+      {
+        path: ':unitId',
+        component: UnitRootStateComponent,
+        resolve: {
+          unit: resolveUnit,
+        },
+        children: [
+          {path: '', pathMatch: 'full', redirectTo: 'tasks/inbox'},
+          {path: 'analytics', component: UnitAnalyticsComponent, data: {task: 'Unit Analytics'}},
+          {path: 'students/groups', component: UnitGroupsComponent, data: {task: 'Student Groups'}},
+          {
+            path: 'students/portfolios',
+            component: PortfoliosComponent,
+            data: {task: 'Student Portfolios'},
+          },
+          {path: 'students', component: StudentsListComponent, data: {task: 'Student List'}},
+          {
+            path: 'admin',
+            component: UnitAdminStateComponent,
+            data: {task: 'Unit Administration'},
+          },
+          {
+            path: 'admin/:tab',
+            component: UnitAdminStateComponent,
+            data: {task: 'Unit Administration'},
+          },
+          {path: 'rollover', component: RolloverComponent, data: {task: 'Unit Rollover'}},
+          {path: 'discussion', component: TutorDiscussionComponent, data: {task: 'Discussion'}},
+          {
+            path: 'check-in',
+            component: TutorDiscussionComponent,
+            data: {attendance: true, task: 'Check-in'},
+          },
+          {
+            path: 'tasks',
+            pathMatch: 'full',
+            component: TaskViewerStateComponent,
+            data: {task: 'Task Lists'},
+          },
+          {
+            path: 'tasks',
+            children: [
+              {path: '', pathMatch: 'full', redirectTo: 'inbox'},
+              {
+                path: 'inbox',
+                component: UnitTaskInboxStateComponent,
+                data: {routeMode: 'inbox', task: 'Task Inbox'},
+              },
+              {
+                path: 'inbox/:studentId/:taskDefAbbr',
+                component: UnitTaskInboxStateComponent,
+                data: {routeMode: 'inbox', task: 'Task Inbox'},
+              },
+              {
+                path: 'definition',
+                component: UnitTaskInboxStateComponent,
+                data: {routeMode: 'definition', task: 'Task Explorer'},
+              },
+              {
+                path: 'definition/:studentId/:taskDefAbbr',
+                component: UnitTaskInboxStateComponent,
+                data: {routeMode: 'definition', task: 'Task Explorer'},
+              },
+              {
+                path: 'moderation',
+                component: UnitTaskInboxStateComponent,
+                data: {routeMode: 'moderation', task: 'Task Moderation'},
+              },
+              {
+                path: 'moderation/:studentId/:taskDefAbbr',
+                component: UnitTaskInboxStateComponent,
+                data: {routeMode: 'moderation', task: 'Task Moderation'},
+              },
+              {
+                path: 'overflow',
+                component: UnitTaskInboxStateComponent,
+                data: {routeMode: 'overflow', task: 'Task Overflow'},
+              },
+              {
+                path: 'overflow/:studentId/:taskDefAbbr',
+                component: UnitTaskInboxStateComponent,
+                data: {routeMode: 'overflow', task: 'Task Overflow'},
+              },
+            ],
+          },
+          {
+            path: 'tasks/:taskAbbreviation',
+            component: TaskViewerStateComponent,
+            data: {task: 'Task Lists'},
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: 'projects',
+    children: [
+      {path: '', pathMatch: 'full', redirectTo: '/home'},
+      {
+        path: ':projectId',
+        component: ProjectRootStateComponent,
+        resolve: {
+          project: resolveProject,
+        },
+        children: [
+          {path: '', pathMatch: 'full', redirectTo: 'dashboard'},
+          {
+            path: 'dashboard',
+            component: ProjectDashboardComponent,
+            data: {task: 'Dashboard'},
+          },
+          {
+            path: 'dashboard/:taskAbbreviation',
+            component: ProjectDashboardComponent,
+            data: {task: 'Dashboard'},
+          },
+          {path: 'plan', component: ProjectPlanComponent, data: {task: 'Plan Tasks'}},
+          {
+            path: 'portfolio',
+            component: PortfolioStateComponent,
+            data: {task: 'Portfolio Creation'},
+          },
+          {path: 'groups', component: ProjectGroupsStateComponent, data: {task: 'Groups List'}},
+          {path: 'tutorials', component: TutorialsComponent, data: {task: 'Tutorial List'}},
+        ],
+      },
+    ],
+  },
+  {path: '**', redirectTo: 'home'},
+];

@@ -33,7 +33,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {HotkeysService} from '@ngneat/hotkeys';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {TasksByTutorPipe} from 'src/app/common/filters/tasks-by-tutor.pipe';
@@ -138,6 +138,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     private userService: UserService,
     private hotkeys: HotkeysService,
     private router: Router,
+    private route: ActivatedRoute,
     private taskDefinitionService: TaskDefinitionService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
@@ -438,8 +439,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.taskDefSort = 0;
     this.tutorialSort = 0;
 
-    // Fix selected task.
-    if (this.taskData.selectedTask && filteredTasks?.includes(this.taskData.selectedTask)) {
+    // Clear selected task only when the active filters hide it.
+    if (
+      this.taskData.selectedTask &&
+      !filteredTasks?.some((task) => task?.hasTaskKey(this.taskData.selectedTask.taskKey()))
+    ) {
       this.setSelectedTask(null);
     }
   }
@@ -462,10 +466,27 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  tutorialIdChanged(attemptRefreshData: boolean = true): void {
-    const tutorialId = this.filters.tutorialIdSelected;
+  tutorialIdChanged(
+    attemptRefreshData: boolean = true,
+    selectedTutorialId: string | number = this.filters.tutorialIdSelected,
+  ): void {
+    this.filters.tutorialIdSelected = selectedTutorialId;
+    const tutorialId = selectedTutorialId;
 
-    const filterOption = this.studentFilter.find((f) => f.id === tutorialId);
+    if (attemptRefreshData) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {students: tutorialId},
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    }
+
+    const filterOption = this.studentFilter.find((f) => String(f.id) === String(tutorialId));
+
+    if (!filterOption) {
+      return;
+    }
 
     this.filters.forceStream = filterOption.forceStream;
 
@@ -527,8 +548,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
-    const task = this.taskData.taskKey ? this.findTaskForTaskKey(this.taskData.taskKey) : null;
-    this.setSelectedTask(task ?? null);
+    if (!this.taskData.taskKey) {
+      this.setSelectedTask(null);
+      return;
+    }
+
+    const task = this.findTaskForTaskKey(this.taskData.taskKey);
+    if (task) {
+      this.setSelectedTask(task);
+    }
   }
 
   // Callback to refresh data from the task source

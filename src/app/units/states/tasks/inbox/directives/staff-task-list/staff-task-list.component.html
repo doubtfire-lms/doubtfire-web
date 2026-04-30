@@ -141,7 +141,7 @@
               <mat-select
                 [(ngModel)]="filters.tutorialIdSelected"
                 name="tutorial"
-                (selectionChange)="tutorialIdChanged()"
+                (selectionChange)="tutorialIdChanged(true, $event.value)"
               >
                 @for (t of studentFilter; track t) {
                   <mat-option [value]="t.id">

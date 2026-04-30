@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {UIRouter} from '@uirouter/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   GanttBaselineItem,
   GanttDate,
@@ -66,7 +66,8 @@ export class TaskPlannerComponent implements OnInit {
     private confirmationModalService: ConfirmationModalService,
     private taskPlannerPrerequisitesModal: TaskPlannerPrerequisitesModalService,
     private taskPrerequisiteService: TaskPrerequisiteService,
-    private router: UIRouter,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   public get gradeValues() {
@@ -566,8 +567,9 @@ export class TaskPlannerComponent implements OnInit {
       this.ganttComponent.scrollToToday();
     }
 
-    if (this.router.globals.params.taskDef && scroll) {
-      const taskItem = this.items.find((item) => item.id === this.router.globals.params.taskDef);
+    const taskDef = this.route.snapshot.queryParamMap.get('taskDef');
+    if (taskDef && scroll) {
+      const taskItem = this.items.find((item) => item.id === taskDef);
       if (taskItem) {
         this.ganttComponent.scrollToDate(taskItem.start);
         taskItem.highlighted = true;
@@ -585,11 +587,12 @@ export class TaskPlannerComponent implements OnInit {
         setTimeout(() => (taskItem.highlighted = false), 1000);
         setTimeout(() => (this.animateBackground = false), 2000);
       }
-      this.router.stateService.go(
-        this.router.globals.current.name,
-        {taskDef: null},
-        {location: 'replace', notify: false, reload: false},
-      );
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {taskDef: null},
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
     }
   }
 

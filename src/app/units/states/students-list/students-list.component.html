@@ -37,6 +37,8 @@
       mat-table
       [dataSource]="dataSource"
       matSort
+      [matSortActive]="sortState.active"
+      [matSortDirection]="sortState.direction"
       (matSortChange)="sortTableData($event)"
       class="min-w-full"
     >

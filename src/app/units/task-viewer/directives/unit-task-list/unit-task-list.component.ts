@@ -1,9 +1,9 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Grade} from 'src/app/api/models/grade';
-import {TaskDefinition, Task} from 'src/app/api/models/doubtfire-model';
+import {Project, TaskDefinition, Task} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
 import {BehaviorSubject} from 'rxjs';
-import {StateService, UIRouter} from '@uirouter/core';
 
 @Component({
   selector: 'f-unit-task-list',
@@ -12,6 +12,7 @@ import {StateService, UIRouter} from '@uirouter/core';
 })
 export class FUnitTaskListComponent implements OnChanges, OnInit {
   @Input() mode: 'project' | 'all-tasks';
+  @Input() project: Project;
   @Input() taskDefinitions: TaskDefinition[];
   @Input() tasks: Task[];
 
@@ -27,8 +28,8 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   protected gradeNames: string[] = Grade.GRADES;
 
   constructor(
-    private router: UIRouter,
-    private stateService: StateService,
+    private angularRouter: Router,
+    private route: ActivatedRoute,
   ) {}
 
   applyFilters() {
@@ -93,28 +94,53 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
 
     // Load selected task from URL
     const current = this.selectedTaskDefinition$.value;
-    const param = this.router.globals.params.taskAbbreviation;
+    const param = this.route.snapshot.paramMap.get('taskAbbreviation');
 
-    if (param) {
-      const taskDef = this.taskDefinitions.find((t) => t.abbreviation === param);
+    queueMicrotask(() => {
+      if (param) {
+        const taskDef = this.taskDefinitions.find((t) => t.abbreviation === param);
 
-      if (taskDef !== current) {
-        this.selectedTaskDefinition$.next(taskDef);
-      }
-    } else {
-      if (current !== null) {
+        if (taskDef !== current) {
+          this.selectedTaskDefinition$.next(taskDef);
+        }
+      } else if (current !== null) {
         this.selectedTaskDefinition$.next(null);
       }
-    }
+    });
   }
 
   setSelectedTaskDefinition(taskDef: TaskDefinition) {
     if (this.isSelectedTaskDefinition(taskDef)) {
       this.selectedTaskDefinition$.next(null);
-      this.stateService.go('.', {taskAbbreviation: null}, {location: 'replace'});
+      const unitId = this.route.parent?.snapshot.paramMap.get('unitId');
+      if (this.route.parent?.snapshot.data.unit && unitId) {
+        this.angularRouter.navigate(['/units', this.route.parent.snapshot.paramMap.get('unitId'), 'tasks'], {
+          replaceUrl: true,
+        });
+        return;
+      }
+
+      const projectId = this.route.parent?.snapshot.paramMap.get('projectId');
+      if (this.route.parent?.snapshot.data.project && projectId) {
+        this.angularRouter.navigate(['/projects', projectId, 'dashboard'], {replaceUrl: true});
+      }
     } else {
       this.selectedTaskDefinition$.next(taskDef);
-      this.stateService.go('.', {taskAbbreviation: taskDef.abbreviation}, {location: 'replace'});
+      const unitId = this.route.parent?.snapshot.paramMap.get('unitId');
+      if (this.route.parent?.snapshot.data.unit && unitId) {
+        this.angularRouter.navigate(
+          ['/units', unitId, 'tasks', taskDef.abbreviation],
+          {replaceUrl: true},
+        );
+        return;
+      }
+
+      const projectId = this.route.parent?.snapshot.paramMap.get('projectId');
+      if (this.route.parent?.snapshot.data.project && projectId) {
+        this.angularRouter.navigate(['/projects', projectId, 'dashboard', taskDef.abbreviation], {
+          replaceUrl: true,
+        });
+      }
     }
 
     // this.selectedTaskDefinition.emit(taskDef);
