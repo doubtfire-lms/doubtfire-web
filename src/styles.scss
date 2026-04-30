@@ -2,7 +2,8 @@
 @use '@angular/material' as mat;
 @use '@worktile/gantt/styles/index';
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 @import './theme.scss';
 @import '../node_modules/angular-calendar/css/angular-calendar.css';
