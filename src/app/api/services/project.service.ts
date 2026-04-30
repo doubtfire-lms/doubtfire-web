@@ -12,9 +12,14 @@ import API_URL from 'src/app/config/constants/apiUrl';
 import {AppInjector} from 'src/app/app-injector';
 import {Observable} from 'rxjs';
 import {TaskService} from './task.service';
-import {MappingProcess} from 'ngx-entity-service/lib/mapping-process';
 import {TaskOutcomeAlignmentService} from './task-outcome-alignment.service';
 import {GroupService} from './group.service';
+
+interface MappingProcessLike<T> {
+  data: object;
+  entity: T;
+  continue(): void;
+}
 
 @Injectable()
 export class ProjectService extends CachedEntityService<Project> {
@@ -137,7 +142,7 @@ export class ProjectService extends CachedEntityService<Project> {
       },
       {
         keys: 'unitId',
-        toEntityOpAsync: (process: MappingProcess<Project>) => {
+        toEntityOpAsync: (process: MappingProcessLike<Project>) => {
           const unitService: UnitService = AppInjector.get(UnitService);
           const unitId = process.data['unit_id'];
           // Load what we have... or a a stub for now...

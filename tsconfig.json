@@ -8,7 +8,7 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": false,
@@ -16,8 +16,14 @@
     "strict": false,
     "strictPropertyInitialization": false,
     "target": "ES2022",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2020", "dom", "ES2021.String"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2020",
+      "dom",
+      "ES2021.String"
+    ],
     "useDefineForClassFields": false,
     "skipLibCheck": true
   },

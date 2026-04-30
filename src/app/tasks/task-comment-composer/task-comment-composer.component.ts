@@ -18,7 +18,7 @@ import {
 } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
-import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji/';
+import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {
   FeedbackTemplate,
