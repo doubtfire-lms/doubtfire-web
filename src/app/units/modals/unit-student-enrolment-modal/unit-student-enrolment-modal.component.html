@@ -21,7 +21,9 @@
         <mat-form-field appearance="fill">
           <mat-label>Select Campus</mat-label>
           <mat-select [(ngModel)]="selectedCampus">
-            <mat-option *ngFor="let campus of campuses" [value]="campus">{{ campus.name }}</mat-option>
+            @for (campus of campuses; track campus) {
+              <mat-option [value]="campus">{{ campus.name }}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
       </div>
@@ -29,6 +31,11 @@
   </mat-card-content>
   <mat-divider></mat-divider>
   <mat-card-actions class="card-actions">
-    <input type="button" (click)="enrolStudent(studentIdOrEmail, selectedCampus)" class="btn btn-primary" value="Save" />
+    <input
+      type="button"
+      (click)="enrolStudent(studentIdOrEmail, selectedCampus)"
+      class="btn btn-primary"
+      value="Save"
+    />
   </mat-card-actions>
 </mat-card>

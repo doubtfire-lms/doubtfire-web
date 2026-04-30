@@ -60,56 +60,53 @@
       </mat-menu>
     </div>
 
-    <div class="min-h-0 flex-1 overflow-hidden" [ngSwitch]="currentTab">
-      <ng-template [ngSwitchCase]="InboxDashboardTab.submission">
-        <div class="h-full">
-          @if (task.hasPdf) {
-            <f-pdf-viewer [pdfUrl]="task.submissionUrl()"></f-pdf-viewer>
-          } @else {
-            <div class="flex h-full flex-col items-center justify-center">
-              <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">
-                description_off
-              </mat-icon>
-            </div>
-          }
-        </div>
-      </ng-template>
-
-      <ng-template [ngSwitchCase]="InboxDashboardTab.taskSheet">
-        <div class="h-full">
-          @if (task.definition.hasTaskSheet) {
-            <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()"></f-pdf-viewer>
-          } @else {
-            <div class="flex h-full flex-col items-center justify-center">
-              <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">
-                subtitles_off
-              </mat-icon>
-            </div>
-          }
-        </div>
-      </ng-template>
-
-      <ng-template [ngSwitchCase]="InboxDashboardTab.staffNotes">
-        <div class="h-full">
-          <f-staff-notes-view [project]="task?.project"></f-staff-notes-view>
-        </div>
-      </ng-template>
-
-      <ng-template [ngSwitchCase]="InboxDashboardTab.tutorNotes">
-        <div class="h-full overflow-auto">
-          <f-tutor-notes-view [task]="task"></f-tutor-notes-view>
-        </div>
-      </ng-template>
-
-      <ng-template [ngSwitchCase]="InboxDashboardTab.similarities">
-        <div class="h-full overflow-auto">
-          <f-task-similarity-view [task]="task"></f-task-similarity-view>
-        </div>
-      </ng-template>
-
-      <ng-template [ngSwitchCase]="InboxDashboardTab.overseer">
-        <div class="h-full"></div>
-      </ng-template>
+    <div class="min-h-0 flex-1 overflow-hidden">
+      @switch (currentTab) {
+        @case (InboxDashboardTab.submission) {
+          <div class="h-full">
+            @if (task.hasPdf) {
+              <f-pdf-viewer [pdfUrl]="task.submissionUrl()"></f-pdf-viewer>
+            } @else {
+              <div class="flex h-full flex-col items-center justify-center">
+                <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">
+                  description_off
+                </mat-icon>
+              </div>
+            }
+          </div>
+        }
+        @case (InboxDashboardTab.taskSheet) {
+          <div class="h-full">
+            @if (task.definition.hasTaskSheet) {
+              <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()"></f-pdf-viewer>
+            } @else {
+              <div class="flex h-full flex-col items-center justify-center">
+                <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">
+                  subtitles_off
+                </mat-icon>
+              </div>
+            }
+          </div>
+        }
+        @case (InboxDashboardTab.staffNotes) {
+          <div class="h-full">
+            <f-staff-notes-view [project]="task?.project"></f-staff-notes-view>
+          </div>
+        }
+        @case (InboxDashboardTab.tutorNotes) {
+          <div class="h-full overflow-auto">
+            <f-tutor-notes-view [task]="task"></f-tutor-notes-view>
+          </div>
+        }
+        @case (InboxDashboardTab.similarities) {
+          <div class="h-full overflow-auto">
+            <f-task-similarity-view [task]="task"></f-task-similarity-view>
+          </div>
+        }
+        @case (InboxDashboardTab.overseer) {
+          <div class="h-full"></div>
+        }
+      }
     </div>
   } @else {
     <div class="flex h-full flex-col items-center justify-center">
