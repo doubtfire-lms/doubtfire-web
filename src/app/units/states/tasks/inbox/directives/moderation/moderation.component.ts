@@ -5,9 +5,10 @@ import {ConfirmModerationModalService} from './confirm-moderation-modal/confirm-
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'f-moderation',
-  templateUrl: './moderation.component.html',
-  styleUrl: './moderation.component.scss',
+    selector: 'f-moderation',
+    templateUrl: './moderation.component.html',
+    styleUrl: './moderation.component.scss',
+    standalone: false
 })
 export class ModerationComponent {
   @Input() task: Task;

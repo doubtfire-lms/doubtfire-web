@@ -3,9 +3,10 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {GradeService} from '../services/grade.service';
 
 @Component({
-  selector: 'f-grade-icon',
-  templateUrl: './grade-icon.component.html',
-  styleUrls: ['./grade-icon.component.scss'],
+    selector: 'f-grade-icon',
+    templateUrl: './grade-icon.component.html',
+    styleUrls: ['./grade-icon.component.scss'],
+    standalone: false
 })
 export class GradeIconComponent implements OnInit, OnChanges {
   @Input() grade?: number | string;

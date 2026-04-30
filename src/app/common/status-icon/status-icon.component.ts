@@ -2,9 +2,10 @@ import { Component, Input, Inject, OnInit } from '@angular/core';
 import { TaskStatus, TaskStatusEnum } from 'src/app/api/models/task-status';
 
 @Component({
-  selector: 'status-icon',
-  templateUrl: './status-icon.component.html',
-  styleUrls: ['./status-icon.component.scss'],
+    selector: 'status-icon',
+    templateUrl: './status-icon.component.html',
+    styleUrls: ['./status-icon.component.scss'],
+    standalone: false
 })
 export class StatusIconComponent implements OnInit {
   @Input() status: TaskStatusEnum = 'not_started';

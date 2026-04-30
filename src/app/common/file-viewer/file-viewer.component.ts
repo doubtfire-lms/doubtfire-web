@@ -8,9 +8,10 @@ import { AlertService } from '../services/alert.service';
  * The file viewer downloads a file from a URL and displays it's contents.
  */
 @Component({
-  selector: 'f-file-viewer',
-  templateUrl: './file-viewer.component.html',
-  styleUrls: ['./file-viewer.component.scss'],
+    selector: 'f-file-viewer',
+    templateUrl: './file-viewer.component.html',
+    styleUrls: ['./file-viewer.component.scss'],
+    standalone: false
 })
 export class FileViewerComponent implements OnDestroy, OnChanges {
   /**

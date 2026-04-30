@@ -11,9 +11,10 @@ import { FileDownloaderService } from 'src/app/common/file-downloader/file-downl
 import { AlertService } from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
+    selector: 'f-users',
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss'],
+    standalone: false
 })
 export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatTable, { static: false }) table: MatTable<User>;

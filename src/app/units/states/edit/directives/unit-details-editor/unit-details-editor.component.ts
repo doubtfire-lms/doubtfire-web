@@ -13,9 +13,10 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {D2lUnitDetailsModal} from './d2l-details-form/d2l-unit-details-form.component';
 
 @Component({
-  selector: 'f-unit-details-editor',
-  templateUrl: 'unit-details-editor.component.html',
-  styleUrls: ['unit-details-editor.component.scss'],
+    selector: 'f-unit-details-editor',
+    templateUrl: 'unit-details-editor.component.html',
+    styleUrls: ['unit-details-editor.component.scss'],
+    standalone: false
 })
 export class UnitDetailsEditorComponent implements OnInit {
   @Input() unit: Unit;

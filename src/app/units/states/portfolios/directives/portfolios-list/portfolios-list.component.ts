@@ -24,9 +24,10 @@ import {GradeService} from 'src/app/common/services/grade.service';
 import {D2lTransferModal} from '../../d2l-transfer-modal/d2l-transfer.component';
 
 @Component({
-  selector: 'f-portfolios-list',
-  templateUrl: './portfolios-list.component.html',
-  styleUrl: './portfolios-list.component.scss',
+    selector: 'f-portfolios-list',
+    templateUrl: './portfolios-list.component.html',
+    styleUrl: './portfolios-list.component.scss',
+    standalone: false
 })
 export class PortfoliosListComponent implements OnInit, AfterViewInit {
   @Input() unit: Unit;

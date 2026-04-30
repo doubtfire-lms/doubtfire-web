@@ -5,9 +5,10 @@ import {GroupSet, Project} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from '../index/global-state.service';
 
 @Component({
-  selector: 'f-project-groups-state',
-  templateUrl: './project-groups-state.component.html',
-  styleUrls: ['./project-groups-state.component.scss'],
+    selector: 'f-project-groups-state',
+    templateUrl: './project-groups-state.component.html',
+    styleUrls: ['./project-groups-state.component.scss'],
+    standalone: false
 })
 export class ProjectGroupsStateComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;

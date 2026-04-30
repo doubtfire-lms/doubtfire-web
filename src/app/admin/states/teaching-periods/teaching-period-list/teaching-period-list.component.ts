@@ -11,9 +11,10 @@ import {TeachingPeriodUnitImportService} from '../teaching-period-unit-import/te
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-teaching-period-list',
-  templateUrl: './teaching-period-list.component.html',
-  styleUrls: ['./teaching-period-list.component.scss'],
+    selector: 'f-teaching-period-list',
+    templateUrl: './teaching-period-list.component.html',
+    styleUrls: ['./teaching-period-list.component.scss'],
+    standalone: false
 })
 export class TeachingPeriodListComponent implements OnInit {
   @ViewChild(MatSort) sort = new MatSort();
@@ -92,8 +93,9 @@ export class TeachingPeriodListComponent implements OnInit {
 }
 
 @Component({
-  selector: 'f-new-teaching-period-dialog',
-  templateUrl: 'new-teaching-period-dialog.component.html',
+    selector: 'f-new-teaching-period-dialog',
+    templateUrl: 'new-teaching-period-dialog.component.html',
+    standalone: false
 })
 export class NewTeachingPeriodDialogComponent {
   constructor(

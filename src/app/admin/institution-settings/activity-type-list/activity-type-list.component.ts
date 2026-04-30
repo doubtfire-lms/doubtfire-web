@@ -7,9 +7,10 @@ import {MatSort, Sort} from '@angular/material/sort';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'activity-type-list',
-  templateUrl: 'activity-type-list.component.html',
-  styleUrls: ['activity-type-list.component.scss'],
+    selector: 'activity-type-list',
+    templateUrl: 'activity-type-list.component.html',
+    styleUrls: ['activity-type-list.component.scss'],
+    standalone: false
 })
 export class ActivityTypeListComponent extends EntityFormComponent<ActivityType> {
   @ViewChild(MatTable, {static: true}) table: MatTable<any>;

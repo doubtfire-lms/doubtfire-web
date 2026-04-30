@@ -7,9 +7,10 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-discussion-prompts',
-  templateUrl: './discussion-prompts.component.html',
-  styleUrl: './discussion-prompts.component.scss',
+    selector: 'f-discussion-prompts',
+    templateUrl: './discussion-prompts.component.html',
+    styleUrl: './discussion-prompts.component.scss',
+    standalone: false
 })
 export class DiscussionPromptsComponent implements OnInit {
   @ViewChild('staffNotesContainer') staffNotesContainer!: ElementRef;

@@ -5,9 +5,10 @@ import {AlertService} from '../../services/alert.service';
 import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal.service';
 
 @Component({
-  selector: 'f-task-date-slider',
-  styleUrl: './task-date-slider.component.scss',
-  templateUrl: './task-date-slider.component.html',
+    selector: 'f-task-date-slider',
+    styleUrl: './task-date-slider.component.scss',
+    templateUrl: './task-date-slider.component.html',
+    standalone: false
 })
 export class TaskDateSliderComponent implements OnChanges {
   @Input() task: Task;

@@ -5,10 +5,11 @@ import { DiscussionComment, Task } from 'src/app/api/models/doubtfire-model';
 import { MediaRecorderService } from 'src/app/common/services/recorder-service';
 
 @Component({
-  selector: 'intelligent-discussion-recorder',
-  templateUrl: './intelligent-discussion-recorder.component.html',
-  styleUrls: ['./intelligent-discussion-recorder.component.css'],
-  providers: [MediaRecorderService],
+    selector: 'intelligent-discussion-recorder',
+    templateUrl: './intelligent-discussion-recorder.component.html',
+    styleUrls: ['./intelligent-discussion-recorder.component.css'],
+    providers: [MediaRecorderService],
+    standalone: false
 })
 export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderComponent implements AfterViewInit {
   @Input() discussion: DiscussionComment;

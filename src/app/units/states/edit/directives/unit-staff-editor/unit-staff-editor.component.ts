@@ -18,8 +18,9 @@ import {
 } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 
 @Component({
-  selector: 'unit-staff-editor',
-  templateUrl: 'unit-staff-editor.component.html',
+    selector: 'unit-staff-editor',
+    templateUrl: 'unit-staff-editor.component.html',
+    standalone: false
 })
 export class UnitStaffEditorComponent implements OnInit {
   @Input() unit: Unit;

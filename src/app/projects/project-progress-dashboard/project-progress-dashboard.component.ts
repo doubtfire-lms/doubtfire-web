@@ -6,9 +6,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
-  selector: 'f-project-progress-dashboard',
-  templateUrl: './project-progress-dashboard.component.html',
-  styleUrl: './project-progress-dashboard.component.scss',
+    selector: 'f-project-progress-dashboard',
+    templateUrl: './project-progress-dashboard.component.html',
+    styleUrl: './project-progress-dashboard.component.scss',
+    standalone: false
 })
 export class ProjectProgressDashboardComponent implements OnInit {
   @Input() project$: Observable<Project>;

@@ -18,9 +18,10 @@ import { AlertService } from 'src/app/common/services/alert.service';
 import { ConfirmationModalService } from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
-  selector: 'df-unit-tutorials-list',
-  templateUrl: 'unit-tutorials-list.component.html',
-  styleUrls: ['unit-tutorials-list.component.scss'],
+    selector: 'df-unit-tutorials-list',
+    templateUrl: 'unit-tutorials-list.component.html',
+    styleUrls: ['unit-tutorials-list.component.scss'],
+    standalone: false
 })
 export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;

@@ -4,9 +4,10 @@ import { Task } from 'src/app/api/models/doubtfire-model';
 import { MediaRecorderService } from 'src/app/common/services/recorder-service';
 
 @Component({
-  selector: 'microphone-tester',
-  templateUrl: './microphone-tester-component.html',
-  providers: [MediaRecorderService],
+    selector: 'microphone-tester',
+    templateUrl: './microphone-tester-component.html',
+    providers: [MediaRecorderService],
+    standalone: false
 })
 export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implements AfterViewInit {
   @Input() task: Task;

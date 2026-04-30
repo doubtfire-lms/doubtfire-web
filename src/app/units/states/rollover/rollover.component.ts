@@ -8,9 +8,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 @Component({
-  selector: 'f-rollover',
-  templateUrl: './rollover.component.html',
-  styleUrl: './rollover.component.scss',
+    selector: 'f-rollover',
+    templateUrl: './rollover.component.html',
+    styleUrl: './rollover.component.scss',
+    standalone: false
 })
 export class RolloverComponent implements OnInit {
   @Input() unitId: number;

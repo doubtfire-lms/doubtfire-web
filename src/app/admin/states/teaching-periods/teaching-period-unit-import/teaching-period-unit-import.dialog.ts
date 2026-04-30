@@ -41,9 +41,10 @@ export class TeachingPeriodUnitImportService {
  * This dialog allows the user to enter a number of units to be rolled over into the a teaching period.
  */
 @Component({
-  selector: 'f-teaching-period-unit-import',
-  templateUrl: 'teaching-period-unit-import.dialog.html',
-  styleUrls: ['teaching-period-unit-import.dialog.scss'],
+    selector: 'f-teaching-period-unit-import',
+    templateUrl: 'teaching-period-unit-import.dialog.html',
+    styleUrls: ['teaching-period-unit-import.dialog.scss'],
+    standalone: false
 })
 export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<UnitImportData>;

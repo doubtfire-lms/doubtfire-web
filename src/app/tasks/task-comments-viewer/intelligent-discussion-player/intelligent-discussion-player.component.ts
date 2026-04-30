@@ -8,10 +8,11 @@ import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion
 import { AudioPlayerComponent } from 'src/app/common/audio-player/audio-player.component';
 import { Task, DiscussionComment } from 'src/app/api/models/doubtfire-model';
 @Component({
-  selector: 'intelligent-discussion-player',
-  templateUrl: './intelligent-discussion-player.component.html',
-  styleUrls: ['./intelligent-discussion-player.component.scss'],
-  providers: [IntelligentDiscussionPlayerService],
+    selector: 'intelligent-discussion-player',
+    templateUrl: './intelligent-discussion-player.component.html',
+    styleUrls: ['./intelligent-discussion-player.component.scss'],
+    providers: [IntelligentDiscussionPlayerService],
+    standalone: false
 })
 export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   @Input() discussion: DiscussionComment;
@@ -67,10 +68,11 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
 // The Dialog Component
 // eslint-disable-next-line max-classes-per-file
 @Component({
-  selector: 'intelligent-discussion-dialog',
-  templateUrl: 'intelligent-discussion-dialog.html',
-  styleUrls: ['./intelligent-discussion-player.component.scss'],
-  providers: [IntelligentDiscussionPlayerService],
+    selector: 'intelligent-discussion-dialog',
+    templateUrl: 'intelligent-discussion-dialog.html',
+    styleUrls: ['./intelligent-discussion-player.component.scss'],
+    providers: [IntelligentDiscussionPlayerService],
+    standalone: false
 })
 export class IntelligentDiscussionDialog implements OnInit {
   confirmed = false;

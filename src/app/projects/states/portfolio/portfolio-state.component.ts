@@ -11,9 +11,10 @@ interface PortfolioStepTab {
 }
 
 @Component({
-  selector: 'f-portfolio-state',
-  templateUrl: './portfolio-state.component.html',
-  styleUrls: ['./portfolio-state.component.scss'],
+    selector: 'f-portfolio-state',
+    templateUrl: './portfolio-state.component.html',
+    styleUrls: ['./portfolio-state.component.scss'],
+    standalone: false
 })
 export class PortfolioStateComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;

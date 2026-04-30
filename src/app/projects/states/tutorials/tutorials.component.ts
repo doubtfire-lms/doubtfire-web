@@ -6,9 +6,10 @@ import {Observable, Subscription, of} from 'rxjs';
 import {Project, Tutorial, Unit} from 'src/app/api/models/doubtfire-model';
 
 @Component({
-  selector: 'f-tutorials',
-  templateUrl: './tutorials.component.html',
-  styleUrls: ['./tutorials.component.scss'],
+    selector: 'f-tutorials',
+    templateUrl: './tutorials.component.html',
+    styleUrls: ['./tutorials.component.scss'],
+    standalone: false
 })
 export class TutorialsComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;

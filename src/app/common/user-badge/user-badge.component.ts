@@ -2,9 +2,10 @@ import {Component, Input} from '@angular/core';
 import {Task} from 'src/app/api/models/doubtfire-model';
 
 @Component({
-  selector: 'f-user-badge',
-  templateUrl: './user-badge.component.html',
-  styleUrls: ['./user-badge.component.scss'],
+    selector: 'f-user-badge',
+    templateUrl: './user-badge.component.html',
+    styleUrls: ['./user-badge.component.scss'],
+    standalone: false
 })
 export class UserBadgeComponent {
   @Input() selectedTask: Task;

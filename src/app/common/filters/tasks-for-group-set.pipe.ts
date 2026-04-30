@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Task, GroupSet } from 'src/app/api/models/doubtfire-model';
 
 @Pipe({
-  name: 'tasksForGroupset'
+    name: 'tasksForGroupset',
+    standalone: false
 })
 export class TasksForGroupsetPipe implements PipeTransform {
   transform(tasks: Task[], groupSet: GroupSet): Task[] {

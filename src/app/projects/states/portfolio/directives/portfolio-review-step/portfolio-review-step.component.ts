@@ -10,9 +10,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
-  selector: 'f-portfolio-review-step',
-  templateUrl: 'portfolio-review-step.component.html',
-  styleUrls: ['portfolio-review-step.component.scss'],
+    selector: 'f-portfolio-review-step',
+    templateUrl: 'portfolio-review-step.component.html',
+    styleUrls: ['portfolio-review-step.component.scss'],
+    standalone: false
 })
 export class PortfolioReviewStepComponent implements OnInit {
   @Input() project: Project;

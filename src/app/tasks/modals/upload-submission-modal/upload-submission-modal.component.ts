@@ -55,8 +55,9 @@ export type UploadSubmissionModalResult =
   | UploadSubmissionModalDismissResult;
 
 @Component({
-  selector: 'f-upload-submission-modal',
-  templateUrl: './upload-submission-modal.component.html',
+    selector: 'f-upload-submission-modal',
+    templateUrl: './upload-submission-modal.component.html',
+    standalone: false
 })
 export class UploadSubmissionModalComponent implements OnInit {
   @ViewChild(FileUploaderComponent) private fileUploader?: FileUploaderComponent;

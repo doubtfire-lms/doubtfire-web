@@ -15,9 +15,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
 type GradeCol = 'p' | 'c' | 'd' | 'hd';
 
 @Component({
-  selector: 'f-unit-task-editor',
-  templateUrl: 'unit-task-editor.component.html',
-  styleUrls: ['unit-task-editor.component.scss'],
+    selector: 'f-unit-task-editor',
+    templateUrl: 'unit-task-editor.component.html',
+    styleUrls: ['unit-task-editor.component.scss'],
+    standalone: false
 })
 export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;

@@ -6,9 +6,10 @@ import {GroupService} from 'src/app/api/services/group.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-group-set-manager',
-  templateUrl: './group-set-manager.component.html',
-  styleUrls: ['./group-set-manager.component.scss'],
+    selector: 'f-group-set-manager',
+    templateUrl: './group-set-manager.component.html',
+    styleUrls: ['./group-set-manager.component.scss'],
+    standalone: false
 })
 export class GroupSetManagerComponent implements OnInit {
   @Input() project: Project;

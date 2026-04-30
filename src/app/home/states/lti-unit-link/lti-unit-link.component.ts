@@ -10,9 +10,10 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-lti-unit-link',
-  templateUrl: 'lti-unit-link.component.html',
-  styleUrls: ['lti-unit-link.component.scss'],
+    selector: 'f-lti-unit-link',
+    templateUrl: 'lti-unit-link.component.html',
+    styleUrls: ['lti-unit-link.component.scss'],
+    standalone: false
 })
 export class LtiUnitLinkComponent implements AfterViewInit {
   constructor(

@@ -7,9 +7,10 @@ import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire
 import {Subscription} from 'rxjs';
 
 @Component({
-  selector: 'home',
-  templateUrl: 'home.component.html',
-  styleUrls: ['home.component.scss'],
+    selector: 'home',
+    templateUrl: 'home.component.html',
+    styleUrls: ['home.component.scss'],
+    standalone: false
 })
 export class HomeComponent implements OnInit, OnDestroy {
   projects: Project[];

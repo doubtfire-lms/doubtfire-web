@@ -10,9 +10,10 @@ import {TaskSubmissionService} from 'src/app/common/services/task-submission.ser
 import {SubmissionFilesModalComponent} from './submission-files-modal/submission-files-modal.component';
 
 @Component({
-  selector: 'f-task-overseer-report',
-  templateUrl: './task-overseer-report.component.html',
-  styleUrl: './task-overseer-report.component.scss',
+    selector: 'f-task-overseer-report',
+    templateUrl: './task-overseer-report.component.html',
+    styleUrl: './task-overseer-report.component.scss',
+    standalone: false
 })
 export class TaskOverseerReportComponent implements OnInit {
   @Input() task: Task;

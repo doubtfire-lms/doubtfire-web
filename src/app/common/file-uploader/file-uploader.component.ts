@@ -78,9 +78,10 @@ export const ACCEPTED_TYPES = {
 } as const;
 
 @Component({
-  selector: 'f-file-uploader',
-  templateUrl: './file-uploader.component.html',
-  styleUrls: ['./file-uploader.component.scss'],
+    selector: 'f-file-uploader',
+    templateUrl: './file-uploader.component.html',
+    styleUrls: ['./file-uploader.component.scss'],
+    standalone: false
 })
 export class FileUploaderComponent implements OnInit, OnChanges {
   @Input() files: FileData[];

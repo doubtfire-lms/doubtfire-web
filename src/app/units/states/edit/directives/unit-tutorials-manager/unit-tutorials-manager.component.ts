@@ -8,9 +8,10 @@ import {
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'unit-tutorials-manager',
-  templateUrl: 'unit-tutorials-manager.component.html',
-  styleUrls: ['unit-tutorials-manager.component.scss'],
+    selector: 'unit-tutorials-manager',
+    templateUrl: 'unit-tutorials-manager.component.html',
+    styleUrls: ['unit-tutorials-manager.component.scss'],
+    standalone: false
 })
 export class UnitTutorialsManagerComponent {
   @Input() unit: Unit;

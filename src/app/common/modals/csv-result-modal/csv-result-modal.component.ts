@@ -17,9 +17,10 @@ interface CsvDisplayRow {
 }
 
 @Component({
-  selector: 'f-csv-result-modal',
-  templateUrl: './csv-result-modal.component.html',
-  styleUrls: ['./csv-result-modal.component.scss'],
+    selector: 'f-csv-result-modal',
+    templateUrl: './csv-result-modal.component.html',
+    styleUrls: ['./csv-result-modal.component.scss'],
+    standalone: false
 })
 export class CsvResultModalComponent implements AfterViewInit {
   public readonly pageSize = 10;

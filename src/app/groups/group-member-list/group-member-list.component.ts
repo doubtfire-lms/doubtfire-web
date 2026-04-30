@@ -7,9 +7,10 @@ import {Unit} from 'src/app/api/models/unit';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-group-member-list',
-  templateUrl: './group-member-list.component.html',
-  styleUrls: ['./group-member-list.component.scss'],
+    selector: 'f-group-member-list',
+    templateUrl: './group-member-list.component.html',
+    styleUrls: ['./group-member-list.component.scss'],
+    standalone: false
 })
 export class GroupMemberListComponent implements OnInit, OnChanges {
   @Input() unit: Unit;

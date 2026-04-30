@@ -11,9 +11,10 @@ import {Unit} from 'src/app/api/models/unit';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-d2l-unit-details-form',
-  templateUrl: 'd2l-unit-details-form.component.html',
-  styleUrl: 'd2l-unit-details-form.component.scss',
+    selector: 'f-d2l-unit-details-form',
+    templateUrl: 'd2l-unit-details-form.component.html',
+    styleUrl: 'd2l-unit-details-form.component.scss',
+    standalone: false
 })
 export class D2lUnitDetailsFormComponent implements OnInit {
   public d2lDataMapping: D2lAssessmentMapping = new D2lAssessmentMapping(this.data);

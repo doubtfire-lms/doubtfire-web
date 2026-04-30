@@ -15,9 +15,10 @@ import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 
 @Component({
-  selector: 'f-group-member-contribution-assigner',
-  templateUrl: './group-member-contribution-assigner.component.html',
-  styleUrls: ['./group-member-contribution-assigner.component.scss'],
+    selector: 'f-group-member-contribution-assigner',
+    templateUrl: './group-member-contribution-assigner.component.html',
+    styleUrls: ['./group-member-contribution-assigner.component.scss'],
+    standalone: false
 })
 export class GroupMemberContributionAssignerComponent implements OnInit, OnChanges {
   @Input() isTestSubmission: boolean;

@@ -22,9 +22,10 @@ export interface SubmissionFilesModalData {
 }
 
 @Component({
-  selector: 'f-submission-files-modal',
-  templateUrl: './submission-files-modal.component.html',
-  styleUrls: ['./submission-files-modal.component.scss'],
+    selector: 'f-submission-files-modal',
+    templateUrl: './submission-files-modal.component.html',
+    styleUrls: ['./submission-files-modal.component.scss'],
+    standalone: false
 })
 export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   private readonly diffOriginalUri = monaco.Uri.parse('inmemory://submission-compare/original');

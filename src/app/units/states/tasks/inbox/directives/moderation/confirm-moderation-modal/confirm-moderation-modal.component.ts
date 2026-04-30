@@ -7,9 +7,10 @@ import {FeedbackModerationActionType} from 'src/app/api/models/task';
 import {Task} from 'src/app/api/models/task';
 
 @Component({
-  selector: 'f-confirm-moderation-modal',
-  templateUrl: './confirm-moderation-modal.component.html',
-  styleUrl: './confirm-moderation-modal.component.scss',
+    selector: 'f-confirm-moderation-modal',
+    templateUrl: './confirm-moderation-modal.component.html',
+    styleUrl: './confirm-moderation-modal.component.scss',
+    standalone: false
 })
 export class ConfirmModerationModalComponent implements OnInit {
   task: Task;

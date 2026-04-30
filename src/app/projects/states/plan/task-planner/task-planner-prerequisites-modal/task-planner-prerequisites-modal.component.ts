@@ -12,9 +12,10 @@ export interface TaskPlannerPrerequisitesModalData {
 }
 
 @Component({
-  selector: 'f-task-planner-prerequisites-modal',
-  templateUrl: './task-planner-prerequisites-modal.component.html',
-  styleUrl: './task-planner-prerequisites-modal.component.scss',
+    selector: 'f-task-planner-prerequisites-modal',
+    templateUrl: './task-planner-prerequisites-modal.component.html',
+    styleUrl: './task-planner-prerequisites-modal.component.scss',
+    standalone: false
 })
 export class TaskPlannerPrerequisitesModalComponent implements OnInit {
   @Input() taskDefinition: TaskDefinition;

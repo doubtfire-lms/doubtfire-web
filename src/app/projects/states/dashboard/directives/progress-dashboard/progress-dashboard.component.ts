@@ -5,9 +5,10 @@ import {ProjectService} from 'src/app/api/services/project.service';
 import {Project} from 'src/app/api/models/project';
 
 @Component({
-  selector: 'f-progress-dashboard',
-  templateUrl: './progress-dashboard.component.html',
-  styleUrls: ['./progress-dashboard.component.scss'],
+    selector: 'f-progress-dashboard',
+    templateUrl: './progress-dashboard.component.html',
+    styleUrls: ['./progress-dashboard.component.scss'],
+    standalone: false
 })
 export class ProgressDashboardComponent implements OnInit {
   @Input() project: Project;

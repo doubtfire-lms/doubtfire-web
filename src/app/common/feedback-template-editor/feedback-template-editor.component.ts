@@ -21,8 +21,9 @@ import {
 import {CsvUploadModalService} from '../modals/csv-upload-modal/csv-upload-modal.service';
 
 @Component({
-  selector: 'f-feedback-template-editor',
-  templateUrl: 'feedback-template-editor.component.html',
+    selector: 'f-feedback-template-editor',
+    templateUrl: 'feedback-template-editor.component.html',
+    standalone: false
 })
 export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit {
   @Input() context?: TaskDefinition | Unit;

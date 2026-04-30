@@ -6,9 +6,10 @@ import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'task-submission-history',
-  templateUrl: './task-submission-history.component.html',
-  styleUrls: ['./task-submission-history.component.scss'],
+    selector: 'task-submission-history',
+    templateUrl: './task-submission-history.component.html',
+    styleUrls: ['./task-submission-history.component.scss'],
+    standalone: false
 })
 export class TaskSubmissionHistoryComponent implements OnInit {
   @Input() task: Task;

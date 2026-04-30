@@ -6,9 +6,10 @@ import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-nam
 import {BehaviorSubject} from 'rxjs';
 
 @Component({
-  selector: 'f-unit-task-list',
-  templateUrl: './unit-task-list.component.html',
-  styleUrls: ['./unit-task-list.component.scss'],
+    selector: 'f-unit-task-list',
+    templateUrl: './unit-task-list.component.html',
+    styleUrls: ['./unit-task-list.component.scss'],
+    standalone: false
 })
 export class FUnitTaskListComponent implements OnChanges, OnInit {
   @Input() mode: 'project' | 'all-tasks';

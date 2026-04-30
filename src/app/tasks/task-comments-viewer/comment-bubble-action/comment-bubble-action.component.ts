@@ -4,9 +4,10 @@ import {TaskCommentComposerData} from '../../task-comment-composer/task-comment-
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
-  selector: 'comment-bubble-action',
-  templateUrl: './comment-bubble-action.component.html',
-  styleUrls: ['./comment-bubble-action.component.scss'],
+    selector: 'comment-bubble-action',
+    templateUrl: './comment-bubble-action.component.html',
+    styleUrls: ['./comment-bubble-action.component.scss'],
+    standalone: false
 })
 export class CommentBubbleActionComponent implements OnInit {
   @Input() comment: TaskComment;

@@ -6,9 +6,10 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-tutor-notes',
-  templateUrl: './tutor-notes.component.html',
-  styleUrl: './tutor-notes.component.scss',
+    selector: 'f-tutor-notes',
+    templateUrl: './tutor-notes.component.html',
+    styleUrl: './tutor-notes.component.scss',
+    standalone: false
 })
 export class TutorNotesComponent implements OnInit {
   @ViewChild('tutorNotesContainer') tutorNotesContainer!: ElementRef;

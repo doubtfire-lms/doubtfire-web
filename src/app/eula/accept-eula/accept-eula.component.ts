@@ -7,9 +7,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
-  selector: 'f-accept-eula',
-  templateUrl: './accept-eula.component.html',
-  styleUrls: ['./accept-eula.component.scss'],
+    selector: 'f-accept-eula',
+    templateUrl: './accept-eula.component.html',
+    styleUrls: ['./accept-eula.component.scss'],
+    standalone: false
 })
 export class AcceptEulaComponent {
   public toolName: Observable<string>;

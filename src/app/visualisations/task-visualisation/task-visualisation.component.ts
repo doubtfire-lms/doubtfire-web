@@ -2,9 +2,10 @@ import {Component, OnInit, Input, SimpleChanges} from '@angular/core';
 import {Color} from 'd3';
 import {Project, TaskStatus, TaskStatusEnum} from 'src/app/api/models/doubtfire-model';
 @Component({
-  selector: 'f-task-visualisation',
-  templateUrl: './task-visualisation.component.html',
-  styleUrls: ['./task-visualisation.component.scss'],
+    selector: 'f-task-visualisation',
+    templateUrl: './task-visualisation.component.html',
+    styleUrls: ['./task-visualisation.component.scss'],
+    standalone: false
 })
 export class TaskVisualisationComponent implements OnInit {
   @Input() project: Project;

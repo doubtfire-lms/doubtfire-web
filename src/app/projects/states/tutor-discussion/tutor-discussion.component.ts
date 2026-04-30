@@ -28,10 +28,11 @@ enum TutorDiscussionTabView {
   SHOW_DISCUSSION_PROMPTS,
 }
 @Component({
-  selector: 'f-tutor-discussion',
-  templateUrl: './tutor-discussion.component.html',
-  styleUrl: './tutor-discussion.component.scss',
-  encapsulation: ViewEncapsulation.None, // enables custom material-ui css
+    selector: 'f-tutor-discussion',
+    templateUrl: './tutor-discussion.component.html',
+    styleUrl: './tutor-discussion.component.scss',
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class TutorDiscussionComponent implements AfterViewInit {
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;

@@ -5,8 +5,9 @@ import { TeachingPeriodService } from 'src/app/api/services/teaching-period.serv
 import { UnitService } from 'src/app/api/services/unit.service';
 import { AlertService } from 'src/app/common/services/alert.service';
 @Component({
-  selector: 'create-new-unit-modal-content',
-  templateUrl: 'create-new-unit-modal-content.component.html',
+    selector: 'create-new-unit-modal-content',
+    templateUrl: 'create-new-unit-modal-content.component.html',
+    standalone: false
 })
 export class CreateNewUnitModalContentComponent implements OnInit {
   constructor(

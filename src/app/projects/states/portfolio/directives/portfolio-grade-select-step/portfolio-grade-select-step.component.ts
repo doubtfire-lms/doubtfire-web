@@ -5,9 +5,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
-  selector: 'f-portfolio-grade-select-step',
-  templateUrl: 'portfolio-grade-select-step.component.html',
-  styleUrls: ['portfolio-grade-select-step.component.scss'],
+    selector: 'f-portfolio-grade-select-step',
+    templateUrl: 'portfolio-grade-select-step.component.html',
+    styleUrls: ['portfolio-grade-select-step.component.scss'],
+    standalone: false
 })
 export class PortfolioGradeSelectStepComponent {
   @Input() project: Project;

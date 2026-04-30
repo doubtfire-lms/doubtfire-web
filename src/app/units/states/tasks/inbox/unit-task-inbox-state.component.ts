@@ -38,8 +38,9 @@ type TaskSource = (
 ) => Observable<Task[]>;
 
 @Component({
-  selector: 'f-unit-task-inbox-state',
-  templateUrl: './unit-task-inbox-state.component.html',
+    selector: 'f-unit-task-inbox-state',
+    templateUrl: './unit-task-inbox-state.component.html',
+    standalone: false
 })
 export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   @Input() public unit$: Observable<Unit>;

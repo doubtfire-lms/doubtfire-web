@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import moment from 'moment';
 
 @Pipe({
-  name: 'humanizedDate',
+    name: 'humanizedDate',
+    standalone: false
 })
 export class HumanizedDatePipe implements PipeTransform {
   transform(value: unknown, ...args: unknown[]): unknown {

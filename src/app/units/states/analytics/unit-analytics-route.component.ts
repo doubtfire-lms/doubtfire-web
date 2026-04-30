@@ -9,9 +9,10 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-unit-analytics',
-  templateUrl: 'unit-analytics-route.component.html',
-  styleUrls: ['unit-analytics-route.component.scss'],
+    selector: 'f-unit-analytics',
+    templateUrl: 'unit-analytics-route.component.html',
+    styleUrls: ['unit-analytics-route.component.scss'],
+    standalone: false
 })
 export class UnitAnalyticsComponent implements OnInit {
   @Input() public unit$: Observable<Unit>;

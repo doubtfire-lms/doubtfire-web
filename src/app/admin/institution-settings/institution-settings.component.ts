@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
-  selector: 'institution-settings',
-  templateUrl: 'institution-settings.component.html',
-  styleUrls: ['institution-settings.component.scss']
+    selector: 'institution-settings',
+    templateUrl: 'institution-settings.component.html',
+    styleUrls: ['institution-settings.component.scss'],
+    standalone: false
 })
 export class InstitutionSettingsComponent {
 

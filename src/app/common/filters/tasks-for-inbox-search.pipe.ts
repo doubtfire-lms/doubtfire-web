@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Task } from 'src/app/api/models/task';
 
 @Pipe({
-  name: 'tasksWithStudentName',
+    name: 'tasksWithStudentName',
+    standalone: false
 })
 export class TasksForInboxSearchPipe implements PipeTransform {
   transform(tasks: Task[], searchText: string): Task[] {

@@ -7,9 +7,10 @@ import {TaskDefinitionService} from 'src/app/api/services/task-definition.servic
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 
 @Component({
-  selector: 'f-task-definition-scorm',
-  templateUrl: 'task-definition-scorm.component.html',
-  styleUrls: ['task-definition-scorm.component.scss'],
+    selector: 'f-task-definition-scorm',
+    templateUrl: 'task-definition-scorm.component.html',
+    styleUrls: ['task-definition-scorm.component.scss'],
+    standalone: false
 })
 export class TaskDefinitionScormComponent {
   @Input() taskDefinition: TaskDefinition;

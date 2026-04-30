@@ -14,9 +14,10 @@ import {FileDownloaderService} from '../file-downloader/file-downloader.service'
 import {AlertService} from '../services/alert.service';
 
 @Component({
-  selector: 'f-pdf-viewer',
-  templateUrl: './pdf-viewer.component.html',
-  styleUrls: ['./pdf-viewer.component.scss'],
+    selector: 'f-pdf-viewer',
+    templateUrl: './pdf-viewer.component.html',
+    styleUrls: ['./pdf-viewer.component.scss'],
+    standalone: false
 })
 export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit {
   private readonly ZOOM_MIN = 0.5;

@@ -36,9 +36,10 @@ interface ArchiveFileTreeNode {
 }
 
 @Component({
-  selector: 'f-archive-viewer',
-  templateUrl: './archive-viewer.component.html',
-  styleUrls: ['./archive-viewer.component.scss'],
+    selector: 'f-archive-viewer',
+    templateUrl: './archive-viewer.component.html',
+    styleUrls: ['./archive-viewer.component.scss'],
+    standalone: false
 })
 export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Input() archiveFile: File | Blob | null = null;

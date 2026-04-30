@@ -12,9 +12,10 @@ export interface ConfirmationModalData {
 }
 
 @Component({
-  selector: 'confirmation-modal',
-  templateUrl: './confirmation-modal.component.html',
-  styleUrls: ['./confirmation-modal.component.scss'],
+    selector: 'confirmation-modal',
+    templateUrl: './confirmation-modal.component.html',
+    styleUrls: ['./confirmation-modal.component.scss'],
+    standalone: false
 })
 export class ConfirmationModalComponent implements OnInit {
   @Input() title: string;

@@ -4,22 +4,23 @@ import {Subscription} from 'rxjs';
 import {UnitCodeService} from './unit-code.service';
 
 @Component({
-  selector: 'f-unit-code',
-  templateUrl: './unit-code.component.html',
-  styleUrls: ['./unit-code.component.css'],
-  animations: [
-    trigger('flip', [
-      state('in', style({transform: 'translateX(0%)', opacity: 1})),
-      state('out', style({transform: 'translateX(-100%)', opacity: 0})),
-      transition('void => in', [
-        style({transform: 'translateX(100%)', opacity: 0}),
-        animate('500ms ease-in-out'),
-      ]),
-      transition('in => out', [
-        animate('500ms ease-in-out', style({transform: 'translateX(-100%)', opacity: 0})),
-      ]),
-    ]),
-  ],
+    selector: 'f-unit-code',
+    templateUrl: './unit-code.component.html',
+    styleUrls: ['./unit-code.component.css'],
+    animations: [
+        trigger('flip', [
+            state('in', style({ transform: 'translateX(0%)', opacity: 1 })),
+            state('out', style({ transform: 'translateX(-100%)', opacity: 0 })),
+            transition('void => in', [
+                style({ transform: 'translateX(100%)', opacity: 0 }),
+                animate('500ms ease-in-out'),
+            ]),
+            transition('in => out', [
+                animate('500ms ease-in-out', style({ transform: 'translateX(-100%)', opacity: 0 })),
+            ]),
+        ]),
+    ],
+    standalone: false
 })
 export class UnitCodeComponent implements OnInit, OnDestroy {
   @Input() unit_code: string;

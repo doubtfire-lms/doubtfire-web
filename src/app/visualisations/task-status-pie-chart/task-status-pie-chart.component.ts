@@ -3,9 +3,10 @@ import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
 import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
 
 @Component({
-  selector: 'f-task-status-pie-chart',
-  templateUrl: './task-status-pie-chart.component.html',
-  styleUrls: ['./task-status-pie-chart.component.scss'],
+    selector: 'f-task-status-pie-chart',
+    templateUrl: './task-status-pie-chart.component.html',
+    styleUrls: ['./task-status-pie-chart.component.scss'],
+    standalone: false
 })
 export class TaskStatusPieChartComponent extends ChartBaseComponent implements OnInit {
   @Input() project: Project;

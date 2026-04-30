@@ -5,9 +5,10 @@ import {Observable} from 'rxjs';
 import {Unit} from 'src/app/api/models/doubtfire-model';
 
 @Component({
-  selector: 'f-unit-root-state',
-  templateUrl: './unit-root-state.component.html',
-  styleUrl: './unit-root-state.component.css',
+    selector: 'f-unit-root-state',
+    templateUrl: './unit-root-state.component.html',
+    styleUrl: './unit-root-state.component.css',
+    standalone: false
 })
 export class UnitRootStateComponent implements OnInit {
   @Input() public unit$: Observable<Unit>;

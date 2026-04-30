@@ -10,9 +10,10 @@ import {DashboardViews} from '../../selected-task.service';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 
 @Component({
-  selector: 'f-task-dashboard',
-  templateUrl: './task-dashboard.component.html',
-  styleUrls: ['./task-dashboard.component.scss'],
+    selector: 'f-task-dashboard',
+    templateUrl: './task-dashboard.component.html',
+    styleUrls: ['./task-dashboard.component.scss'],
+    standalone: false
 })
 export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;

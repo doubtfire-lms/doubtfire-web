@@ -28,10 +28,11 @@ interface SessionEvent {
 }
 
 @Component({
-  selector: 'f-analytics-tutor-times',
-  templateUrl: 'analytics-tutor-times.component.html',
-  styleUrls: ['analytics-tutor-times.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'f-analytics-tutor-times',
+    templateUrl: 'analytics-tutor-times.component.html',
+    styleUrls: ['analytics-tutor-times.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class AnalyticsTutorTimesComponent implements OnInit {
   @Input() unit: Unit;

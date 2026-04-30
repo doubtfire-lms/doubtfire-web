@@ -2,8 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../../api/services/authentication.service';
 
 @Component({
-  selector: 'f-timeout',
-  templateUrl: 'timeout.component.html',
+    selector: 'f-timeout',
+    templateUrl: 'timeout.component.html',
+    standalone: false
 })
 export class TimeoutComponent implements OnInit, OnDestroy {
   private timeoutHandle: ReturnType<typeof setTimeout> | null = null;
