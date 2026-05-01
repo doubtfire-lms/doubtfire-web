@@ -166,7 +166,13 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
       this.feedbackTemplateService
         .query({contextType: 'task_definitions', contextId: task.definition.id}, {})
         .subscribe({
-          error: () => this.alerts.error('Error loading task feedback templates.'),
+          error: (err: any) => {
+            // Feedback templates are optional and may not exist for all tasks/contexts.
+            // Avoid flashing an error toast on expected "not found"/auth cases.
+            const status = err?.status;
+            if (status === 404 || status === 403) return;
+            this.alerts.error('Error loading task feedback templates.');
+          },
         });
     }
   }

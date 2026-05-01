@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, Optional } from '@angular/core';
 import { GradeService } from 'src/app/common/services/grade.service';
 
 @Component({
@@ -18,7 +18,10 @@ export class StudentTaskListComponent implements OnInit {
   showCreatePortfolio: boolean = false;
   gradeNames: any;
 
-  constructor(private gradeService: GradeService) {
+  constructor(
+    private gradeService: GradeService,
+    @Optional() @Inject('$rootScope') private $rootScope?: any,
+  ) {
     // Expose grade service names
     this.gradeNames = this.gradeService.grades;
   }
@@ -40,9 +43,6 @@ export class StudentTaskListComponent implements OnInit {
     
     // Apply filters first-time
     this.applyFilters();
-    
-    // Set refreshTasks function
-    this.refreshTasks = this.applyFilters;
     
     // Scroll to selected task after timeout
     setTimeout(() => {
@@ -108,9 +108,38 @@ export class StudentTaskListComponent implements OnInit {
     if (this.taskData.onSelectedTaskChange && typeof this.taskData.onSelectedTaskChange === 'function') {
       this.taskData.onSelectedTaskChange(task);
     }
+
+    // Ensure the AngularJS dashboard state sees the selection even if input binding
+    // semantics differ between AJS/Angular templates.
+    try {
+      this.$rootScope?.$broadcast?.('StudentTaskSelected', task);
+    } catch {
+      // noop
+    }
+
+    // This component is used inside an AngularJS template. Click handlers in Angular
+    // won't automatically trigger an AngularJS digest, so ensure the AJS `ng-if`
+    // blocks watching `taskData.selectedTask` update immediately.
+    this.triggerAngularJsDigest();
     
     if (task) {
       this.scrollToTaskInList(task);
+    }
+  }
+
+  private triggerAngularJsDigest() {
+    try {
+      if (this.$rootScope?.$applyAsync) {
+        this.$rootScope.$applyAsync();
+        return;
+      }
+
+      // Fallback for cases where AngularJS services aren't exposed as injectables.
+      const ng = (globalThis as any)?.angular;
+      const $rootScope = ng?.element?.(document.body)?.injector?.()?.get?.('$rootScope');
+      $rootScope?.$applyAsync?.();
+    } catch {
+      // noop - app can run without angularjs injector in some contexts
     }
   }
 

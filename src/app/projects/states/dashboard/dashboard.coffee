@@ -31,6 +31,12 @@ angular.module('doubtfire.projects.states.dashboard', [
       setTaskAbbrAsUrlParams(task)
   }
 
+  # Ensure selection events from the Angular (downgraded) task list update the
+  # AngularJS scope, so `ng-if="taskData.selectedTask"` panels render.
+  listeners.push $scope.$on('StudentTaskSelected', (_event, task) ->
+    $scope.taskData.selectedTask = task
+  )
+
   # Sets URL parameters for the task key
   setTaskAbbrAsUrlParams = (task) ->
     taskAbbr = if _.isString(task) then task else task?.definition.abbreviation

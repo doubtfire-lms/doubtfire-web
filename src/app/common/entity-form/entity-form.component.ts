@@ -5,6 +5,8 @@ import { EntityService } from 'ngx-entity-service';
 import { Observable, tap } from 'rxjs';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { AppInjector } from 'src/app/app-injector';
+import { AlertService } from 'src/app/common/services/alert.service';
 
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
@@ -57,6 +59,10 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
   }
 
   ngAfterViewInit() {}
+
+  protected get dfAlertService(): AlertService {
+    return AppInjector.get(AlertService);
+  }
 
   /**
    * Cancel edit of current selected value.
@@ -138,14 +144,14 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
         response = service.create(data, this.optionsOnRequest('create'));
       } else {
         // Nothing has changed if the selected value, so we want to inform the user
-        alertService.error( `${this.entityName} was not changed`, 6000);
+        this.dfAlertService.error(`${this.entityName} was not changed`, 6000);
         return;
       }
 
       // Handle the response
       response.subscribe({
         next: (result: T) => {
-          alertService.success( `${this.entityName} saved`, 2000);
+          this.dfAlertService.success(`${this.entityName} saved`, 2000);
           // Success is implemented on all inheriting instances and is used
           // to handle the response appropriately for the context of the form
           success(result, this.selected ? false : true);
@@ -163,7 +169,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
           if (this.selected) {
             this.restoreFromBackup();
           }
-          alertService.error( `${this.entityName} save failed: ${error}`, 6000);
+          this.dfAlertService.error(`${this.entityName} save failed: ${error}`, 6000);
         },
       });
     } else {
