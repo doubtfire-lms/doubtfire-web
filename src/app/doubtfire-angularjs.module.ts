@@ -205,6 +205,7 @@ import {TaskSubmissionCardComponent} from './projects/states/dashboard/directive
 import {InboxComponent} from './units/states/tasks/inbox/inbox.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
+import {UnitGroupsStateComponent} from './units/states/groups/groups.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
 import {CreateNewUnitModal} from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {FUsersComponent} from './admin/states/f-users/f-users.component';
@@ -379,6 +380,10 @@ DoubtfireAngularJSModule.directive(
 DoubtfireAngularJSModule.directive(
   'fUnitAnalytics',
   downgradeComponent({component: UnitAnalyticsComponent}),
+);
+DoubtfireAngularJSModule.directive(
+  'fUnitGroups',
+  downgradeComponent({component: UnitGroupsStateComponent}),
 );
 DoubtfireAngularJSModule.directive(
   'extensionComment',

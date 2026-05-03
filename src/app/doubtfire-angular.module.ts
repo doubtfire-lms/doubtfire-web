@@ -229,6 +229,7 @@ import {TaskDefinitionResourcesComponent} from './units/states/edit/directives/u
 import {TaskDefinitionOverseerComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/task-definition-overseer.component';
 import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-scorm/task-definition-scorm.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
+import {UnitGroupsStateComponent} from './units/states/groups/groups.component';
 import {FileDropComponent} from './common/file-drop/file-drop.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
 import {FUsersComponent} from './admin/states/f-users/f-users.component';
@@ -408,6 +409,7 @@ const GANTT_CHART_CONFIG = {
     TaskDefinitionOverseerComponent,
     TaskDefinitionScormComponent,
     UnitAnalyticsComponent,
+    UnitGroupsStateComponent,
     StudentTutorialSelectComponent,
     StudentCampusSelectComponent,
     TaskListItemComponent,

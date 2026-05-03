@@ -6,15 +6,10 @@ angular.module('doubtfire.units.states.groups', [])
   $stateProvider.state 'units/students/groups', {
     parent: 'units/index'
     url: '/students/groups'
-    templateUrl: "units/states/groups/groups.tpl.html"
-    controller: "UnitGroupsStateCtrl"
+    template: "<f-unit-groups [unit]='unit' [unit-role]='unitRole'></f-unit-groups>"
     data:
       task: "Student Groups"
       pageTitle: "_Home_"
       roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor']
    }
-)
-.controller("UnitGroupsStateCtrl", ($scope) ->
-  # No controller needed if there is no groupwork
-  return unless $scope.unit.hasGroupwork()
 )
