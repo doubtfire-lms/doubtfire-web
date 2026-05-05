@@ -15,7 +15,7 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
-import { CrossDashboardComponent } from './dashboard/f-cross-dashboard.component';
+import {CrossDashboardComponent} from './dashboard/f-cross-dashboard.component';
 /*
  * Use this file to store any states that are sourced by angular components.
  */

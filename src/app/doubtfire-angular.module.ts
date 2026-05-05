@@ -324,7 +324,7 @@ import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
 import {ConfirmModerationModalComponent} from './units/states/tasks/inbox/directives/moderation/confirm-moderation-modal/confirm-moderation-modal.component';
 import {TaskClaimComponent} from './units/states/tasks/inbox/directives/task-claim/task-claim.component';
-import { CrossDashboardComponent } from './dashboard/f-cross-dashboard.component';
+import {CrossDashboardComponent} from './dashboard/f-cross-dashboard.component';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
