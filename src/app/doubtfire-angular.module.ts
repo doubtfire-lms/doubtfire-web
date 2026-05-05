@@ -328,6 +328,10 @@ import {ConfirmModerationModalComponent} from './units/states/tasks/inbox/direct
 import {TaskClaimComponent} from './units/states/tasks/inbox/directives/task-claim/task-claim.component';
 import {BulkImportStaffModalComponent} from './units/states/edit/directives/unit-staff-editor/bulk-import-staff-modal/bulk-import-staff-modal.component';
 import {UnitCommunicationsEditorComponent} from './units/states/edit/directives/unit-communications-editor/unit-communications-editor.component';
+import {CommunicationActionService} from './api/services/communication-action.service';
+import {CommunicationConditionService} from './api/services/communication-condition.service';
+import {CommunicationRuleService} from './api/services/communication-rule.service';
+import {CommunicationSetService} from './api/services/communication-set.service';
 
 // See https://stackoverflow.com/questions/55721254/how-to-change-mat-datepicker-date-format-to-dd-mm-yyyy-in-simplest-way/58189036#58189036
 const MY_DATE_FORMAT = {
@@ -626,6 +630,10 @@ const GANTT_CHART_CONFIG = {
     OverseerStepService,
     OverseerStepResultService,
     TutorNoteService,
+    CommunicationActionService,
+    CommunicationConditionService,
+    CommunicationRuleService,
+    CommunicationSetService,
   ],
   imports: [
     FlexLayoutModule,

@@ -1,1 +1,603 @@
-<p>unit-communications-editor works!</p>
+<div style="display: flex; flex-direction: column; gap: 16px">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Communication sets</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap">
+        <mat-form-field appearance="outline">
+          <mat-label>Set name</mat-label>
+          <input matInput [(ngModel)]="newSet.name" />
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="addSet()" [disabled]="!newSet.name">
+          <mat-icon>add</mat-icon>
+          Add set
+        </button>
+
+        @if (sets.length) {
+          <mat-form-field appearance="outline" class="min-w-[320px]">
+            <mat-label>Editing set</mat-label>
+            <mat-select [(ngModel)]="selectedSetId" (selectionChange)="selectSet()">
+              @for (set of sets; track set.id) {
+                <mat-option [value]="set.id">
+                  {{ set.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Communication rules</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap">
+        <mat-form-field appearance="outline">
+          <mat-label>Rule name</mat-label>
+          <input matInput [(ngModel)]="newRule.name" />
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="addRule()"
+          [disabled]="!newRule.name || !selectedSetId"
+        >
+          <mat-icon>add</mat-icon>
+          Add rule
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  @if (loading) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  <mat-accordion>
+    @for (rule of rules; track rule.id) {
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ rule.name }}</mat-panel-title>
+          <mat-panel-description>
+            {{ rule.operator === 'and' ? 'All conditions' : 'Any condition' }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center">
+              <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap">
+                <span>Apply action to all projects that match:</span>
+                <mat-form-field appearance="outline" class="min-w-[450px]">
+                  <mat-label>Conditions</mat-label>
+                  <mat-select
+                    [(ngModel)]="rule.operator"
+                    (selectionChange)="updateRuleOperator(rule)"
+                  >
+                    @for (option of logicalOperatorOptions; track option.value) {
+                      <mat-option [value]="option.value">
+                        {{ option.label }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <button mat-button color="warn" (click)="deleteRule(rule)">
+                <mat-icon>delete</mat-icon>
+                Delete rule
+              </button>
+            </div>
+
+            <h4>Conditions</h4>
+
+            <mat-list>
+              @for (condition of rule.conditions; track condition.id) {
+                <mat-list-item>
+                  <span matListItemTitle>{{ conditionTypeLabel(condition.type) }}</span>
+                  <span matListItemLine class="text-black/70">
+                    @switch (condition.type) {
+                      @case ('TargetGradeCondition') {
+                        Students with a
+                        <strong class="font-semibold text-black/90">Target Grade</strong>
+                        <span
+                          class="inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800 mx-1"
+                        >
+                          {{ operatorLabel(condition.operator) }}
+                        </span>
+                        <span
+                          class="inline-block rounded bg-red-50 p-2 leading-6 text-red-800 mx-1"
+                        >
+                          {{ targetGradeName(condition.target_grade) }}
+                        </span>
+                      }
+
+                      @case ('TaskDefinitionStatusCondition') {
+                        Students that have
+                        <strong class="font-semibold text-black/90">
+                          {{ taskDefinitionLabel(condition.task_definition_id) }}
+                        </strong>
+                        <span
+                          class="inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800 mx-1"
+                        >
+                          {{ taskStatusPredicate(condition.operator) }}
+                        </span>
+                        <span
+                          class="inline-block rounded bg-red-50 p-2 leading-6 text-red-800 mx-1"
+                        >
+                          {{ taskStatusesLabel(condition.task_statuses) }}
+                        </span>
+                      }
+
+                      @case ('TaskStatusCountCondition') {
+                        Students with
+                        <strong class="font-semibold text-black/90">Task Status Count</strong>
+                        <span
+                          class="inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800 mx-1"
+                        >
+                          {{ operatorLabel(condition.operator) }}
+                        </span>
+                        <span
+                          class="inline-block rounded bg-red-50 p-2 leading-6 text-red-800 mx-1"
+                        >
+                          {{ condition.task_status_count }}
+                        </span>
+                        <span
+                          class="inline-block rounded bg-red-50 p-2 leading-6 text-red-800 mx-1"
+                        >
+                          {{ targetGradeName(condition.task_target_grade) }}
+                        </span>
+                        tasks in
+                        <span
+                          class="inline-block rounded bg-red-50 p-2 leading-6 text-red-800 mx-1"
+                        >
+                          {{ taskStatusesLabel(condition.task_statuses) }}
+                        </span>
+                      }
+
+                      @case ('LoginStatusCondition') {
+                        Students with a
+                        <strong class="font-semibold text-black/90">Last Sign In</strong>
+                        <span
+                          class="inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800 mx-1"
+                        >
+                          {{ operatorLabel(condition.operator) }}
+                        </span>
+                        <span
+                          class="inline-block rounded bg-red-50 p-2 leading-6 text-red-800 mx-1"
+                        >
+                          {{ dateLabel(condition.last_sign_in_at) }}
+                        </span>
+                      }
+
+                      @case ('TutorialEnrolmentCondition') {
+                        Students
+                        <span
+                          class="inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800 mx-1"
+                        >
+                          {{ enrolmentPredicate(condition.operator) }}
+                        </span>
+                        <strong class="font-semibold text-black/90 mx-1">
+                          {{ tutorialLabel(condition.tutorial_id) }}
+                        </strong>
+                      }
+
+                      @case ('TutorialStreamEnrolmentCondition') {
+                        Students
+                        <span
+                          class="inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800 mx-1"
+                        >
+                          {{ enrolmentPredicate(condition.operator) }}
+                        </span>
+                        <strong class="font-semibold text-black/90 mx-1">
+                          {{ tutorialStreamLabel(condition.tutorial_stream_id) }}
+                        </strong>
+                      }
+
+                      @case ('CampusCondition') {
+                        Students
+                        <span
+                          class="inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800 mx-1"
+                        >
+                          {{ enrolmentPredicate(condition.operator) }}
+                        </span>
+                        <span
+                          class="inline-block rounded bg-red-50 p-2 leading-6 text-red-800 mx-1"
+                        >
+                          {{ campusLabel(condition.campus_id) }}
+                        </span>
+                      }
+
+                      @default {
+                        {{ operatorLabel(condition.operator) }} {{ labelFor(condition) }}
+                      }
+                    }
+                  </span>
+                  <button
+                    mat-icon-button
+                    matListItemMeta
+                    (click)="deleteCondition(rule, condition)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </mat-list-item>
+              }
+            </mat-list>
+
+            @if (conditionFormOpen[rule.id]) {
+              <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap">
+                <mat-form-field appearance="outline">
+                  <mat-label>Condition</mat-label>
+                  <mat-select
+                    [(ngModel)]="conditionFor(rule).type"
+                    (selectionChange)="onConditionTypeChange(rule)"
+                  >
+                    @for (type of conditionTypes; track type) {
+                      <mat-option [value]="type">
+                        {{ conditionTypeLabel(type) }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                @if (conditionFor(rule).type === 'TaskDefinitionStatusCondition') {
+                  <mat-form-field appearance="outline" class="min-w-[450px]">
+                    <mat-label>Task</mat-label>
+                    <mat-select [(ngModel)]="conditionFor(rule).task_definition_id">
+                      @for (taskDefinition of taskDefinitions; track taskDefinition.id) {
+                        <mat-option [value]="taskDefinition.id">
+                          {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
+                        </mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                }
+
+                <mat-form-field appearance="outline" class="min-w-[300px]">
+                  <mat-label>Operator</mat-label>
+                  <mat-select [(ngModel)]="conditionFor(rule).operator">
+                    @for (operator of operatorsFor(conditionFor(rule).type); track operator) {
+                      <mat-option [value]="operator">
+                        {{ operatorLabel(operator) }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                @if (conditionFor(rule).type === 'TaskStatusCountCondition') {
+                  <mat-form-field appearance="outline" class="w-32">
+                    <mat-label>Count</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      min="0"
+                      [(ngModel)]="conditionFor(rule).task_status_count"
+                    />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Task grade</mat-label>
+                    <mat-select [(ngModel)]="conditionFor(rule).task_target_grade">
+                      @for (grade of targetGrades; track grade.value) {
+                        <mat-option [value]="grade.value">
+                          {{ grade.label }}
+                        </mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                }
+
+                @switch (conditionFor(rule).type) {
+                  @case ('TargetGradeCondition') {
+                    <mat-form-field appearance="outline">
+                      <mat-label>Target grade</mat-label>
+                      <mat-select [(ngModel)]="conditionFor(rule).target_grade">
+                        @for (grade of targetGrades; track grade.value) {
+                          <mat-option [value]="grade.value">
+                            {{ grade.label }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  }
+
+                  @case ('TaskDefinitionStatusCondition') {
+                    <mat-form-field appearance="outline">
+                      <mat-label>Statuses</mat-label>
+                      <mat-select [(ngModel)]="conditionFor(rule).task_statuses" multiple>
+                        @for (status of taskStatuses; track status) {
+                          <mat-option [value]="status">
+                            {{ taskStatusLabel(status) }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  }
+
+                  @case ('TaskStatusCountCondition') {
+                    <mat-form-field appearance="outline" class="min-w-[320px]">
+                      <mat-label>Statuses</mat-label>
+                      <mat-select [(ngModel)]="conditionFor(rule).task_statuses" multiple>
+                        @for (status of taskStatuses; track status) {
+                          <mat-option [value]="status">
+                            {{ taskStatusLabel(status) }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  }
+
+                  @case ('LoginStatusCondition') {
+                    <mat-form-field appearance="outline">
+                      <mat-label>Last sign in</mat-label>
+                      <input
+                        matInput
+                        type="datetime-local"
+                        [(ngModel)]="conditionFor(rule).last_sign_in_at"
+                      />
+                    </mat-form-field>
+                  }
+
+                  @case ('TutorialEnrolmentCondition') {
+                    <mat-form-field appearance="outline" class="min-w-[550px]">
+                      <mat-label>Tutorial</mat-label>
+                      <mat-select [(ngModel)]="conditionFor(rule).tutorial_id">
+                        @for (tutorial of tutorials; track tutorial.id) {
+                          <mat-option [value]="tutorial.id">
+                            {{ tutorial.abbreviation }} {{ tutorial.description }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  }
+
+                  @case ('TutorialStreamEnrolmentCondition') {
+                    <mat-form-field appearance="outline" class="min-w-[350px]">
+                      <mat-label>Tutorial stream</mat-label>
+                      <mat-select [(ngModel)]="conditionFor(rule).tutorial_stream_id">
+                        @for (stream of tutorialStreams; track stream.id) {
+                          <mat-option [value]="stream.id">
+                            {{ stream.abbreviation }} {{ stream.name }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  }
+
+                  @case ('CampusCondition') {
+                    <mat-form-field appearance="outline">
+                      <mat-label>Campus</mat-label>
+                      <mat-select [(ngModel)]="conditionFor(rule).campus_id">
+                        @for (campus of campuses; track campus.id) {
+                          <mat-option [value]="campus.id">
+                            {{ campus.abbreviation }} {{ campus.name }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  }
+                }
+
+                <button mat-stroked-button color="primary" (click)="addCondition(rule)">
+                  <mat-icon>save</mat-icon>
+                  Save condition
+                </button>
+
+                <button mat-button (click)="cancelCondition(rule)">Cancel</button>
+              </div>
+            } @else {
+              <button mat-stroked-button color="primary" (click)="showConditionForm(rule)">
+                <mat-icon>add</mat-icon>
+                Add condition
+              </button>
+            }
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <mat-tab-group
+            [selectedIndex]="previewTabIndex[rule.id] || 0"
+            (selectedTabChange)="onRuleTabChange(rule, $event.index)"
+            dynamicHeight
+          >
+            <mat-tab label="Actions">
+              <div class="py-4">
+                <mat-list>
+                  @for (action of rule.actions; track action.id) {
+                    <mat-list-item>
+                      <span matListItemTitle>{{ actionTypeLabel(action.type) }}</span>
+                      <span matListItemLine>{{ labelFor(action) }}</span>
+                      <button mat-icon-button matListItemMeta (click)="deleteAction(rule, action)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-list-item>
+                  }
+                </mat-list>
+
+                @if (actionFormOpen[rule.id]) {
+                  <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Action</mat-label>
+                      <mat-select
+                        [(ngModel)]="actionFor(rule).type"
+                        (selectionChange)="onActionTypeChange(rule)"
+                      >
+                        @for (type of actionTypes; track type) {
+                          <mat-option [value]="type">
+                            {{ actionTypeLabel(type) }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+
+                    @switch (actionFor(rule).type) {
+                      @case ('EmailStudentAction') {
+                        <div class="flex min-w-[520px] flex-col gap-3">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Subject</mat-label>
+                            <input matInput [(ngModel)]="actionFor(rule).subject" />
+                          </mat-form-field>
+
+                          <mat-form-field appearance="outline">
+                            <mat-label>Body</mat-label>
+                            <textarea
+                              matInput
+                              rows="8"
+                              [(ngModel)]="actionFor(rule).body"
+                            ></textarea>
+                          </mat-form-field>
+                        </div>
+                      }
+
+                      @case ('EmailStaffAction') {
+                        <div class="flex min-w-[520px] flex-col gap-3">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Subject</mat-label>
+                            <input matInput [(ngModel)]="actionFor(rule).subject" />
+                          </mat-form-field>
+
+                          <mat-form-field appearance="outline">
+                            <mat-label>Body</mat-label>
+                            <textarea
+                              matInput
+                              rows="8"
+                              [(ngModel)]="actionFor(rule).body"
+                            ></textarea>
+                          </mat-form-field>
+
+                          <div class="flex gap-4">
+                            <mat-checkbox [(ngModel)]="actionFor(rule).email_tutors"
+                              >Tutors</mat-checkbox
+                            >
+                            <mat-checkbox [(ngModel)]="actionFor(rule).email_convenors"
+                              >Convenors</mat-checkbox
+                            >
+                          </div>
+                        </div>
+                      }
+
+                      @case ('ChangeTargetGradeAction') {
+                        <mat-form-field appearance="outline">
+                          <mat-label>Target grade</mat-label>
+                          <mat-select [(ngModel)]="actionFor(rule).target_grade">
+                            @for (grade of targetGrades; track grade.value) {
+                              <mat-option [value]="grade.value">
+                                {{ grade.label }}
+                              </mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                      }
+                    }
+
+                    <button mat-stroked-button color="primary" (click)="addAction(rule)">
+                      <mat-icon>save</mat-icon>
+                      Save action
+                    </button>
+
+                    <button mat-button (click)="cancelAction(rule)">Cancel</button>
+                  </div>
+                } @else {
+                  <button mat-stroked-button color="primary" (click)="showActionForm(rule)">
+                    <mat-icon>add</mat-icon>
+                    Add action
+                  </button>
+                }
+              </div>
+            </mat-tab>
+
+            <mat-tab [label]="studentsTabLabel(rule)">
+              <div class="flex flex-col gap-4 py-4">
+                <div class="flex justify-end">
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    (click)="previewRule(rule, true)"
+                    [disabled]="previewLoading[rule.id]"
+                  >
+                    <mat-icon>refresh</mat-icon>
+                    Refresh students
+                  </button>
+                </div>
+
+                @if (previewLoading[rule.id]) {
+                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                } @else if (previewLoaded[rule.id]) {
+                  <div class="flex flex-col gap-6">
+                    @for (allocation of previewAllocationsFor(rule); track allocation.rule_id) {
+                      <div class="flex flex-col gap-3">
+                        <div class="font-medium">
+                          @if (isTargetPreviewAllocation(rule, allocation)) {
+                            Selected for {{ allocation.rule_name }} ({{
+                              allocation.students.length
+                            }})
+                          } @else {
+                            Already claimed by {{ allocation.rule_name }} ({{
+                              allocation.students.length
+                            }})
+                          }
+                        </div>
+
+                        @if (allocation.students.length === 0) {
+                          <div class="text-black/70">No students in this step.</div>
+                        } @else {
+                          <div class="overflow-x-auto">
+                            <table class="min-w-full border-collapse">
+                              <thead>
+                                <tr class="border-b text-left">
+                                  <th class="px-3 py-2">Username</th>
+                                  <th class="px-3 py-2">Student ID</th>
+                                  <th class="px-3 py-2">Target Grade</th>
+                                  <th class="px-3 py-2">Last Sign In</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @for (student of allocation.students; track $index) {
+                                  <tr class="border-b last:border-b-0">
+                                    <td class="px-3 py-2">{{ student.username || '-' }}</td>
+                                    <td class="px-3 py-2">{{ student.student_id || '-' }}</td>
+                                    <td class="px-3 py-2">
+                                      {{
+                                        student.target_grade
+                                          ? targetGradeName(student.target_grade)
+                                          : '-'
+                                      }}
+                                    </td>
+                                    <td class="px-3 py-2">
+                                      {{
+                                        student.last_sign_in_at
+                                          ? dateLabel(student.last_sign_in_at)
+                                          : '-'
+                                      }}
+                                    </td>
+                                  </tr>
+                                }
+                              </tbody>
+                            </table>
+                          </div>
+                        }
+                      </div>
+                    }
+
+                    @if (studentsFor(rule).length === 0) {
+                      <div class="text-black/70">No students currently match this rule.</div>
+                    }
+                  </div>
+                } @else {
+                  <div class="text-black/70">
+                    Open this tab to load the current student matches for the rule.
+                  </div>
+                }
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </mat-expansion-panel>
+    }
+  </mat-accordion>
+</div>

@@ -11,7 +11,7 @@ export class TutorialStreamService extends CachedEntityService<TutorialStream> {
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
 
-    this.mapping.addKeys('name', 'abbreviation', 'activityType');
+    this.mapping.addKeys('id', 'name', 'abbreviation', 'activityType');
 
     this.mapping.mapAllKeysToJson();
   }
