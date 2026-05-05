@@ -81,6 +81,8 @@ export class Unit extends Entity {
 
   d2lMapping: D2lAssessmentMapping;
 
+  allowEffortPredictions: boolean;
+
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
   public readonly tutorialStreamsCache: EntityCache<TutorialStream> =

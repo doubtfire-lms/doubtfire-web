@@ -201,6 +201,11 @@
       <mat-slide-toggle [(ngModel)]="unit.active">Active</mat-slide-toggle>
       <p>Set to false to hide unit from students and tutors.</p>
     </div>
+
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.allowEffortPredictions">Allow AI Effort Prediction</mat-slide-toggle>
+      <p>Set to false to disable running AI effort predictions on tasks belonging to this unit.</p>
+    </div>
   </mat-card>
 
   @if (overseerEnabled.value) {
