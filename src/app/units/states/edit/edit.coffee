@@ -50,6 +50,9 @@ angular.module('doubtfire.units.states.edit', [
     groupsTab:
       title: "Groups"
       seq:   6
+    communicationTab:
+      title: "Communications"
+      seq:   7
 
   # Set the active tab
   $scope.setActiveTab = (tab) ->
