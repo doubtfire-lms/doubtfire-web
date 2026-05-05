@@ -51,10 +51,7 @@ import 'build/src/app/tasks/task-ilo-alignment/modals/task-ilo-alignment-modal/t
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-editor/task-ilo-alignment-editor.js';
 import 'build/src/app/tasks/task-ilo-alignment/task-ilo-alignment-viewer/task-ilo-alignment-viewer.js';
 import 'build/src/app/config/privacy-policy/privacy-policy.js';
-import 'build/src/app/config/runtime/runtime.js';
-import 'build/src/app/config/config.js';
-import 'build/src/app/config/root-controller/root-controller.js';
-import 'build/src/app/config/routing/routing.js';
+
 import 'build/src/app/config/vendor-dependencies/vendor-dependencies.js';
 import 'build/src/app/config/analytics/analytics.js';
 import 'build/src/app/config/debug/debug.js';
@@ -244,7 +241,10 @@ import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.com
 
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
-    'doubtfire.config',
+    'doubtfire.config.vendor-dependencies',
+'doubtfire.config.analytics',
+'doubtfire.config.debug',
+'doubtfire.config.privacy-policy',,
     'doubtfire.sessions',
     'doubtfire.common',
     'doubtfire.errors',
