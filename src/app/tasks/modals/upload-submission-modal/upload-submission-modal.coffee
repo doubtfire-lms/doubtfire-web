@@ -3,7 +3,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
 #
 # A modal to run through uploading a submission
 #
-.factory('UploadSubmissionModal', ($modal, alertService) ->
+.factory('UploadSubmissionModal', ($uibModal, alertService) ->
   UploadSubmissionModal = {}
   #
   # Open a grade task modal with the provided task
@@ -20,7 +20,7 @@ angular.module('doubtfire.tasks.modals.upload-submission-modal', [])
       # task.project = -> project
       task.isTestSubmission = isTestSubmission
 
-    $modal.open
+    $uibModal.open
       templateUrl: 'tasks/modals/upload-submission-modal/upload-submission-modal.tpl.html'
       controller: 'UploadSubmissionModalCtrl'
       size: 'lg'
