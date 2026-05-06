@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {CommunicationSet} from '../models/communication';
+import {CommunicationSet, CommunicationSetPreviewResponse} from '../models/communication';
 
 @Injectable()
 export class CommunicationSetService {
@@ -27,6 +27,15 @@ export class CommunicationSetService {
 
   public deleteForUnit(unitId: number, setId: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.endpoint(unitId)}/${setId}`);
+  }
+
+  public getForUnitById(
+    unitId: number,
+    setId: number,
+  ): Observable<CommunicationSetPreviewResponse> {
+    return this.httpClient.get<CommunicationSetPreviewResponse>(
+      `${this.endpoint(unitId)}/${setId}`,
+    );
   }
 
   private endpoint(unitId: number): string {

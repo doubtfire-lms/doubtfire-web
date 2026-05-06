@@ -5,7 +5,13 @@
       <input matInput [(ngModel)]="newSet.name" />
     </mat-form-field>
 
-    <button mat-flat-button color="primary" (click)="addSet()" [disabled]="!newSet.name">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="addSet()"
+      [disabled]="!newSet.name"
+      class="mb-[22px]"
+    >
       <mat-icon>add</mat-icon>
       Add set
     </button>
@@ -117,7 +123,7 @@
                     </mat-select>
                   </mat-form-field>
 
-                  <button mat-flat-button color="warn" (click)="deleteRule(rule)">
+                  <button mat-flat-button color="warn" (click)="deleteRule(rule)" class="mb-[22px]">
                     Delete rule
                   </button>
                 </div>
@@ -448,9 +454,11 @@
                   <div class="flex flex-col gap-4 p-6">
                     <mat-list>
                       @for (action of rule.actions; track action.id) {
-                        <mat-list-item>
+                        <mat-list-item class="!h-auto items-start py-2">
                           <span matListItemTitle>{{ actionTypeLabel(action.type) }}</span>
-                          <span matListItemLine>{{ labelFor(action) }}</span>
+                          <span matListItemLine class="whitespace-pre-line">{{
+                            labelFor(action)
+                          }}</span>
                           <button
                             mat-icon-button
                             matListItemMeta
@@ -463,7 +471,7 @@
                     </mat-list>
 
                     @if (actionFormOpen[rule.id]) {
-                      <div class="flex flex-wrap items-center gap-3">
+                      <div class="flex flex-wrap flex-col items-center gap-3">
                         <mat-form-field appearance="outline">
                           <mat-label>Action</mat-label>
                           <mat-select
@@ -480,20 +488,79 @@
 
                         @switch (actionFor(rule).type) {
                           @case ('EmailStudentAction') {
-                            <div class="flex min-w-[520px] flex-col gap-3">
+                            <div class="flex w-full min-w-[520px] flex-col gap-3">
                               <mat-form-field appearance="outline">
                                 <mat-label>Subject</mat-label>
                                 <input matInput [(ngModel)]="actionFor(rule).subject" />
+                                <button
+                                  mat-icon-button
+                                  matSuffix
+                                  [matMenuTriggerFor]="subjectVariableMenu"
+                                >
+                                  <mat-icon>add_circle</mat-icon>
+                                </button>
                               </mat-form-field>
+                              <mat-menu #subjectVariableMenu="matMenu">
+                                @for (variable of emailVariables; track variable.token) {
+                                  <button
+                                    mat-menu-item
+                                    (click)="insertActionVariable(rule, 'subject', variable.token)"
+                                  >
+                                    {{ variable.label }}
+                                  </button>
+                                }
+                              </mat-menu>
 
-                              <mat-form-field appearance="outline">
-                                <mat-label>Body</mat-label>
-                                <textarea
-                                  matInput
-                                  rows="8"
-                                  [(ngModel)]="actionFor(rule).body"
-                                ></textarea>
-                              </mat-form-field>
+                              @if (actionFor(rule).subject) {
+                                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                  <div class="mb-2 font-medium">Subject Preview</div>
+                                  <div
+                                    [innerHTML]="
+                                      renderTemplatePreview(actionFor(rule).subject, rule)
+                                    "
+                                  ></div>
+                                </div>
+                              }
+
+                              <div class="gap-3 flex">
+                                <mat-form-field appearance="outline" class="w-full">
+                                  <mat-label>Body</mat-label>
+                                  <textarea
+                                    matInput
+                                    rows="8"
+                                    [(ngModel)]="actionFor(rule).body"
+                                  ></textarea>
+                                  <button
+                                    mat-icon-button
+                                    matSuffix
+                                    [matMenuTriggerFor]="bodyVariableMenu"
+                                  >
+                                    <mat-icon>add_circle</mat-icon>
+                                  </button>
+                                </mat-form-field>
+                                @if (actionFor(rule).body) {
+                                  <div
+                                    class="rounded border border-slate-200 bg-slate-50 p-3 w-full"
+                                  >
+                                    <div class="mb-2 font-medium">Body Preview</div>
+                                    <div
+                                      [innerHTML]="
+                                        renderTemplatePreview(actionFor(rule).body, rule)
+                                      "
+                                    ></div>
+                                  </div>
+                                }
+                              </div>
+                              <mat-menu #bodyVariableMenu="matMenu">
+                                @for (variable of emailVariables; track variable.token) {
+                                  <button
+                                    mat-menu-item
+                                    (click)="insertActionVariable(rule, 'body', variable.token)"
+                                  >
+                                    {{ variable.label }}
+                                  </button>
+                                }
+                              </mat-menu>
                             </div>
                           }
 
@@ -502,16 +569,73 @@
                               <mat-form-field appearance="outline">
                                 <mat-label>Subject</mat-label>
                                 <input matInput [(ngModel)]="actionFor(rule).subject" />
+                                <button
+                                  mat-icon-button
+                                  matSuffix
+                                  [matMenuTriggerFor]="staffSubjectVariableMenu"
+                                >
+                                  <mat-icon>add_circle</mat-icon>
+                                </button>
                               </mat-form-field>
+                              <mat-menu #staffSubjectVariableMenu="matMenu">
+                                @for (variable of emailVariables; track variable.token) {
+                                  <button
+                                    mat-menu-item
+                                    (click)="insertActionVariable(rule, 'subject', variable.token)"
+                                  >
+                                    {{ variable.label }}
+                                  </button>
+                                }
+                              </mat-menu>
 
-                              <mat-form-field appearance="outline">
-                                <mat-label>Body</mat-label>
-                                <textarea
-                                  matInput
-                                  rows="8"
-                                  [(ngModel)]="actionFor(rule).body"
-                                ></textarea>
-                              </mat-form-field>
+                              @if (actionFor(rule).subject) {
+                                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                  <div class="mb-2 font-medium">Subject Preview</div>
+                                  <div
+                                    [innerHTML]="
+                                      renderTemplatePreview(actionFor(rule).subject, rule)
+                                    "
+                                  ></div>
+                                </div>
+                              }
+
+                              <div class="grid gap-3 md:grid-cols-2">
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Body</mat-label>
+                                  <textarea
+                                    matInput
+                                    rows="8"
+                                    [(ngModel)]="actionFor(rule).body"
+                                  ></textarea>
+                                  <button
+                                    mat-icon-button
+                                    matSuffix
+                                    [matMenuTriggerFor]="staffBodyVariableMenu"
+                                  >
+                                    <mat-icon>add_circle</mat-icon>
+                                  </button>
+                                </mat-form-field>
+                                @if (actionFor(rule).body) {
+                                  <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                    <div class="mb-2 font-medium">Body Preview</div>
+                                    <div
+                                      [innerHTML]="
+                                        renderTemplatePreview(actionFor(rule).body, rule)
+                                      "
+                                    ></div>
+                                  </div>
+                                }
+                              </div>
+                              <mat-menu #staffBodyVariableMenu="matMenu">
+                                @for (variable of emailVariables; track variable.token) {
+                                  <button
+                                    mat-menu-item
+                                    (click)="insertActionVariable(rule, 'body', variable.token)"
+                                  >
+                                    {{ variable.label }}
+                                  </button>
+                                }
+                              </mat-menu>
 
                               <div class="flex gap-4">
                                 <mat-checkbox [(ngModel)]="actionFor(rule).email_tutors"
@@ -581,6 +705,34 @@
                         <div class="text-black/70">No students currently match this rule.</div>
                       } @else {
                         <table mat-table [dataSource]="studentsFor(rule)" class="w-full">
+                          <ng-container matColumnDef="preferred_name">
+                            <th mat-header-cell *matHeaderCellDef>Preferred Name</th>
+                            <td mat-cell *matCellDef="let student">
+                              {{ student.preferred_name || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="first_name">
+                            <th mat-header-cell *matHeaderCellDef>First Name</th>
+                            <td mat-cell *matCellDef="let student">
+                              {{ student.first_name || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="last_name">
+                            <th mat-header-cell *matHeaderCellDef>Last Name</th>
+                            <td mat-cell *matCellDef="let student">
+                              {{ student.last_name || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="full_name">
+                            <th mat-header-cell *matHeaderCellDef>Full Name</th>
+                            <td mat-cell *matCellDef="let student">
+                              {{ student.full_name || '-' }}
+                            </td>
+                          </ng-container>
+
                           <ng-container matColumnDef="username">
                             <th mat-header-cell *matHeaderCellDef>Username</th>
                             <td mat-cell *matCellDef="let student">
@@ -592,6 +744,13 @@
                             <th mat-header-cell *matHeaderCellDef>Student ID</th>
                             <td mat-cell *matCellDef="let student">
                               {{ student.student_id || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="campus">
+                            <th mat-header-cell *matHeaderCellDef>Campus</th>
+                            <td mat-cell *matCellDef="let student">
+                              {{ student.campus || '-' }}
                             </td>
                           </ng-container>
 

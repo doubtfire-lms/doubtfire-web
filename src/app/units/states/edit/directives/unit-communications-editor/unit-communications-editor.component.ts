@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {forkJoin, Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {
   Campus,
   CampusService,
@@ -10,6 +10,7 @@ import {
   CommunicationRule,
   CommunicationRulePreviewAllocation,
   CommunicationRulePreviewResponse,
+  CommunicationSetPreviewResponse,
   CommunicationRulePreviewStudent,
   CommunicationRuleService,
   CommunicationSet,
@@ -40,7 +41,17 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   tutorialStreams: readonly TutorialStream[] = [];
   loading = false;
   setPreviewLoading = false;
-  readonly previewStudentColumns = ['username', 'student_id', 'target_grade', 'last_sign_in_at'];
+  readonly previewStudentColumns = [
+    'preferred_name',
+    'first_name',
+    'last_name',
+    'full_name',
+    'username',
+    'student_id',
+    'campus',
+    'target_grade',
+    'last_sign_in_at',
+  ];
 
   readonly logicalOperators = ['and', 'or'];
   readonly logicalOperatorOptions = [
@@ -112,6 +123,18 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     3: 'Distinction',
     4: 'High Distinction',
   };
+  readonly emailVariables = [
+    {token: '{{student.first_name}}', label: 'Student First Name'},
+    {token: '{{student.last_name}}', label: 'Student Last Name'},
+    {token: '{{student.preferred_name}}', label: 'Student Preferred Name'},
+    {token: '{{student.full_name}}', label: 'Student Full Name'},
+    {token: '{{student.username}}', label: 'Student Username'},
+    {token: '{{student.student_id}}', label: 'Student ID'},
+    {token: '{{unit.code}}', label: 'Unit Code'},
+    {token: '{{unit.name}}', label: 'Unit Name'},
+    {token: '{{rule.name}}', label: 'Rule Name'},
+    {token: '{{target_grade}}', label: 'Target Grade'},
+  ];
   readonly taskStatuses = [
     'not_started',
     'complete',
@@ -379,13 +402,12 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   labelFor(record: CommunicationCondition | CommunicationAction): string {
+    const hiddenKeys = this.hiddenKeysForRecord(record);
+
     return Object.entries(record)
       .filter(
         ([key, value]) =>
-          !['id', 'type', 'communication_rule_id', 'operator'].includes(key) &&
-          value !== undefined &&
-          value !== null &&
-          value !== '',
+          !hiddenKeys.includes(key) && value !== undefined && value !== null && value !== '',
       )
       .map(([key, value]) => `${this.prettyKey(key)}: ${this.prettyValue(key, value)}`)
       .join(', ');
@@ -425,6 +447,26 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   taskStatusesLabel(taskStatuses: string[] = []): string {
     return taskStatuses.map((status) => this.taskStatusLabel(status)).join(', ');
+  }
+
+  insertActionVariable(rule: CommunicationRule, field: 'subject' | 'body', token: string): void {
+    const action = this.actionFor(rule);
+    const currentValue = action[field] ?? '';
+    const separator =
+      currentValue && !currentValue.endsWith(' ') && !currentValue.endsWith('\n') ? ' ' : '';
+    action[field] = `${currentValue}${separator}${token}`;
+  }
+
+  renderTemplatePreview(value: string | undefined, rule: CommunicationRule): string {
+    if (!value) return '';
+
+    const escaped = this.escapeHtml(value);
+    const rendered = escaped.replace(/\{\{[\w.]+\}\}/g, (token) => {
+      const replacement = this.resolveTemplateVariable(token, rule) || token;
+      return `<span class="rounded bg-blue-50 px-1 text-blue-800">${this.escapeHtml(replacement)}</span>`;
+    });
+
+    return rendered.replace(/\n/g, '<br />');
   }
 
   refreshPreview(rule: CommunicationRule): void {
@@ -552,39 +594,62 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   private loadPreviewForSet(set: CommunicationSet): void {
-    const rules = set.rules ?? [];
-
-    if (!this.unit || rules.length === 0) {
+    if (!this.unit) {
       this.setPreviewLoading = false;
       return;
     }
 
     this.setPreviewLoading = true;
-    rules.forEach((rule) => {
+    this.setService.getForUnitById(this.unit.id, set.id).subscribe({
+      next: (setResponse) => {
+        this.applySetPreviewResponse(setResponse);
+        this.setPreviewLoading = false;
+      },
+      error: (error) => {
+        this.setPreviewLoading = false;
+        this.showError(error);
+      },
+    });
+  }
+
+  private applySetPreviewResponse(setResponse: CommunicationSetPreviewResponse): void {
+    const rules = (setResponse.rules || []).map((rule) => new CommunicationRule(rule));
+    const updatedSet = new CommunicationSet({
+      id: setResponse.id,
+      unit_id: setResponse.unit_id,
+      name: setResponse.name,
+      active: setResponse.active,
+      rules,
+    });
+    const setIndex = this.sets.findIndex((set) => set.id === updatedSet.id);
+    if (setIndex >= 0) {
+      this.sets[setIndex] = updatedSet;
+    }
+
+    if (this.selectedSetId === updatedSet.id) {
+      this.rules = rules;
+      if (!this.rules.some((rule) => rule.id === this.selectedRuleId)) {
+        this.selectedRuleId = this.rules[0]?.id;
+      }
+    }
+
+    this.rules.forEach((rule) => {
       this.previewLoading[rule.id] = true;
     });
 
-    forkJoin(rules.map((rule) => this.ruleService.previewForUnit(this.unit.id, rule.id))).subscribe(
-      {
-        next: (previews) => {
-          previews.forEach((preview, index) => {
-            const rule = rules[index];
-            this.previewAllocations[rule.id] = preview.allocations || [];
-            this.previewStudents[rule.id] = this.studentsForPreviewRule(rule.id, preview);
-            this.previewLoaded[rule.id] = true;
-            this.previewLoading[rule.id] = false;
-          });
-          this.setPreviewLoading = false;
-        },
-        error: (error) => {
-          rules.forEach((rule) => {
-            this.previewLoading[rule.id] = false;
-          });
-          this.setPreviewLoading = false;
-          this.showError(error);
-        },
-      },
-    );
+    setResponse.previews.forEach((preview) => {
+      this.previewAllocations[preview.target_rule_id] = preview.allocations || [];
+      this.previewStudents[preview.target_rule_id] = this.studentsForPreviewRule(
+        preview.target_rule_id,
+        preview,
+      );
+      this.previewLoaded[preview.target_rule_id] = true;
+      this.previewLoading[preview.target_rule_id] = false;
+    });
+
+    this.rules.forEach((rule) => {
+      this.previewLoading[rule.id] = false;
+    });
   }
 
   private studentsForPreviewRule(
@@ -603,6 +668,12 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       .reduce((sum, allocation) => sum + allocation.students.length, 0);
 
     return Math.max(0, totalStudents - claimedByPreviousRules);
+  }
+
+  private sampleStudentForRule(
+    rule: CommunicationRule,
+  ): CommunicationRulePreviewStudent | undefined {
+    return this.studentsFor(rule)[0];
   }
 
   private showError(error: any): void {
@@ -648,6 +719,65 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     }
 
     return `${value}`;
+  }
+
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  private resolveTemplateVariable(token: string, rule: CommunicationRule): string | undefined {
+    const student = this.sampleStudentForRule(rule);
+
+    switch (token) {
+      case '{{student.first_name}}':
+        return student?.first_name;
+      case '{{student.last_name}}':
+        return student?.last_name;
+      case '{{student.preferred_name}}':
+        return student?.preferred_name || student?.first_name;
+      case '{{student.full_name}}':
+        return (
+          student?.full_name || [student?.first_name, student?.last_name].filter(Boolean).join(' ')
+        );
+      case '{{student.username}}':
+        return student?.username;
+      case '{{student.student_id}}':
+        return student?.student_id;
+      case '{{unit.code}}':
+        return this.unit?.code;
+      case '{{unit.name}}':
+        return this.unit?.name;
+      case '{{rule.name}}':
+        return rule.name;
+      case '{{target_grade}}':
+        return student?.target_grade ? this.targetGradeName(student.target_grade) : undefined;
+      default:
+        return undefined;
+    }
+  }
+
+  private hiddenKeysForRecord(record: CommunicationCondition | CommunicationAction): string[] {
+    const baseHiddenKeys = ['id', 'type', 'communication_rule_id', 'operator'];
+
+    if (!('type' in record)) {
+      return baseHiddenKeys;
+    }
+
+    switch (record.type) {
+      case 'ChangeTargetGradeAction':
+        return [...baseHiddenKeys, 'subject', 'body', 'email_tutors', 'email_convenors'];
+      case 'EmailStudentAction':
+        return [...baseHiddenKeys, 'target_grade', 'email_tutors', 'email_convenors'];
+      case 'EmailStaffAction':
+        return [...baseHiddenKeys, 'target_grade'];
+      default:
+        return baseHiddenKeys;
+    }
   }
 
   private titleize(value: string): string {

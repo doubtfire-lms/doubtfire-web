@@ -22,8 +22,13 @@ export class CommunicationCondition extends Entity {
 }
 
 export interface CommunicationRulePreviewStudent {
+  first_name?: string;
+  last_name?: string;
+  preferred_name?: string;
+  full_name?: string;
   username?: string;
   student_id?: string;
+  campus?: string;
   target_grade?: number;
   last_sign_in_at?: string;
 }
@@ -38,6 +43,15 @@ export interface CommunicationRulePreviewAllocation {
 export interface CommunicationRulePreviewResponse {
   target_rule_id: number;
   allocations: CommunicationRulePreviewAllocation[];
+}
+
+export interface CommunicationSetPreviewResponse {
+  id: number;
+  unit_id: number;
+  name: string;
+  active: boolean;
+  rules: Partial<CommunicationRule>[];
+  previews: CommunicationRulePreviewResponse[];
 }
 
 export class CommunicationAction extends Entity {
