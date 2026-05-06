@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {Subscription} from 'rxjs';
+import {forkJoin, Subscription} from 'rxjs';
 import {
   Campus,
   CampusService,
@@ -32,12 +32,15 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   sets: CommunicationSet[] = [];
   selectedSetId?: number;
+  selectedRuleId?: number;
   rules: CommunicationRule[] = [];
   campuses: Campus[] = [];
   taskDefinitions: readonly TaskDefinition[] = [];
   tutorials: readonly Tutorial[] = [];
   tutorialStreams: readonly TutorialStream[] = [];
   loading = false;
+  setPreviewLoading = false;
+  readonly previewStudentColumns = ['username', 'student_id', 'target_grade', 'last_sign_in_at'];
 
   readonly logicalOperators = ['and', 'or'];
   readonly logicalOperatorOptions = [
@@ -190,7 +193,13 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   selectSet(): void {
-    this.rules = this.selectedSet()?.rules ?? [];
+    const set = this.selectedSet();
+    this.rules = set?.rules ?? [];
+    this.selectedRuleId = this.rules[0]?.id;
+
+    if (set) {
+      this.loadPreviewForSet(set);
+    }
   }
 
   ngOnDestroy(): void {
@@ -207,6 +216,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         this.rules.push(rule);
         set.rules = this.rules;
         this.newRule = this.blankRule();
+        this.selectedRuleId = rule.id;
+        this.loadPreviewForSet(set);
       },
       error: (error) => this.showError(error),
     });
@@ -217,7 +228,11 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       next: () => {
         this.rules = this.rules.filter((item) => item.id !== rule.id);
         const set = this.selectedSet();
-        if (set) set.rules = this.rules;
+        if (set) {
+          set.rules = this.rules;
+          this.selectedRuleId = this.rules[0]?.id;
+          this.loadPreviewForSet(set);
+        }
       },
       error: (error) => this.showError(error),
     });
@@ -234,23 +249,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   previewRule(rule: CommunicationRule, activateStudentsTab = true): void {
-    this.previewLoading[rule.id] = true;
-
-    this.ruleService.previewForUnit(this.unit.id, rule.id).subscribe({
-      next: (preview) => {
-        this.previewAllocations[rule.id] = preview.allocations || [];
-        this.previewStudents[rule.id] = this.studentsForPreviewRule(rule.id, preview);
-        this.previewLoaded[rule.id] = true;
-        this.previewLoading[rule.id] = false;
-        if (activateStudentsTab) {
-          this.previewTabIndex[rule.id] = 1;
-        }
-      },
-      error: (error) => {
-        this.previewLoading[rule.id] = false;
-        this.showError(error);
-      },
-    });
+    if (activateStudentsTab) {
+      this.previewTabIndex[rule.id] = 2;
+    }
   }
 
   addCondition(rule: CommunicationRule): void {
@@ -329,12 +330,16 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return this.newActions[rule.id];
   }
 
+  selectRule(rule: CommunicationRule): void {
+    this.selectedRuleId = rule.id;
+  }
+
+  selectedRule(): CommunicationRule | undefined {
+    return this.rules.find((rule) => rule.id === this.selectedRuleId);
+  }
+
   onRuleTabChange(rule: CommunicationRule, index: number): void {
     this.previewTabIndex[rule.id] = index;
-
-    if (index === 1 && !this.previewLoaded[rule.id] && !this.previewLoading[rule.id]) {
-      this.previewRule(rule, false);
-    }
   }
 
   studentsFor(rule: CommunicationRule): CommunicationRulePreviewStudent[] {
@@ -354,7 +359,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   studentsTabLabel(rule: CommunicationRule): string {
     const matchedCount = this.previewLoaded[rule.id] ? this.studentsFor(rule).length : 0;
-    const totalStudents = this.unit?.students?.length ?? 0;
+    const totalStudents = this.availableStudentsForRule(rule);
 
     return `Students (${matchedCount}/${totalStudents})`;
   }
@@ -423,7 +428,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   refreshPreview(rule: CommunicationRule): void {
-    this.previewRule(rule, this.previewTabIndex[rule.id] === 1);
+    const set = this.selectedSet();
+    if (set) {
+      this.loadPreviewForSet(set);
+    }
   }
 
   taskStatusPredicate(operator: string): string {
@@ -524,7 +532,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return {name: '', active: true};
   }
 
-  private selectedSet(): CommunicationSet | undefined {
+  selectedSet(): CommunicationSet | undefined {
     return this.sets.find((set) => set.id === this.selectedSetId);
   }
 
@@ -543,11 +551,58 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     };
   }
 
+  private loadPreviewForSet(set: CommunicationSet): void {
+    const rules = set.rules ?? [];
+
+    if (!this.unit || rules.length === 0) {
+      this.setPreviewLoading = false;
+      return;
+    }
+
+    this.setPreviewLoading = true;
+    rules.forEach((rule) => {
+      this.previewLoading[rule.id] = true;
+    });
+
+    forkJoin(rules.map((rule) => this.ruleService.previewForUnit(this.unit.id, rule.id))).subscribe(
+      {
+        next: (previews) => {
+          previews.forEach((preview, index) => {
+            const rule = rules[index];
+            this.previewAllocations[rule.id] = preview.allocations || [];
+            this.previewStudents[rule.id] = this.studentsForPreviewRule(rule.id, preview);
+            this.previewLoaded[rule.id] = true;
+            this.previewLoading[rule.id] = false;
+          });
+          this.setPreviewLoading = false;
+        },
+        error: (error) => {
+          rules.forEach((rule) => {
+            this.previewLoading[rule.id] = false;
+          });
+          this.setPreviewLoading = false;
+          this.showError(error);
+        },
+      },
+    );
+  }
+
   private studentsForPreviewRule(
     ruleId: number,
     preview: CommunicationRulePreviewResponse,
   ): CommunicationRulePreviewStudent[] {
     return preview.allocations.find((allocation) => allocation.rule_id === ruleId)?.students || [];
+  }
+
+  private availableStudentsForRule(rule: CommunicationRule): number {
+    const totalStudents = this.unit?.students?.length ?? 0;
+    if (!this.previewLoaded[rule.id]) return totalStudents;
+
+    const claimedByPreviousRules = this.previewAllocationsFor(rule)
+      .filter((allocation) => allocation.rule_id !== rule.id)
+      .reduce((sum, allocation) => sum + allocation.students.length, 0);
+
+    return Math.max(0, totalStudents - claimedByPreviousRules);
   }
 
   private showError(error: any): void {
