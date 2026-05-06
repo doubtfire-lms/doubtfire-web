@@ -244,7 +244,7 @@ export const DoubtfireAngularJSModule = angular
     'doubtfire.config.vendor-dependencies',
 'doubtfire.config.analytics',
 'doubtfire.config.debug',
-'doubtfire.config.privacy-policy',,
+'doubtfire.config.privacy-policy',
     'doubtfire.sessions',
     'doubtfire.common',
     'doubtfire.errors',
