@@ -30,7 +30,7 @@ export class CommunicationRuleService {
   public updateForUnit(
     unitId: number,
     ruleId: number,
-    rule: Partial<Pick<CommunicationRule, 'name' | 'operator'>>,
+    rule: Partial<Pick<CommunicationRule, 'name' | 'operator' | 'send_log_to_convenors'>>,
   ): Observable<CommunicationRule> {
     return this.httpClient
       .put<Partial<CommunicationRule>>(`${this.endpoint(unitId)}/${ruleId}`, {

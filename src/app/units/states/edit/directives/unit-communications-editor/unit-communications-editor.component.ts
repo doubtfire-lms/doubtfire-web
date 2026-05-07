@@ -143,10 +143,13 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     {token: '{{student.full_name}}', label: 'Student Full Name'},
     {token: '{{student.username}}', label: 'Student Username'},
     {token: '{{student.student_id}}', label: 'Student ID'},
+    {token: '{{affected_students_count}}', label: 'Affected Students Count'},
     {token: '{{unit.code}}', label: 'Unit Code'},
     {token: '{{unit.name}}', label: 'Unit Name'},
     {token: '{{rule.name}}', label: 'Rule Name'},
     {token: '{{target_grade}}', label: 'Target Grade'},
+    {token: '{{conditions_summary}}', label: 'Conditions Summary'},
+    {token: '{{actions_summary}}', label: 'Actions Summary'},
   ];
   readonly taskStatuses = [
     'not_started',
@@ -311,11 +314,16 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   updateRule(rule: CommunicationRule): void {
     this.ruleService
-      .updateForUnit(this.unit.id, rule.id, {name: rule.name, operator: rule.operator})
+      .updateForUnit(this.unit.id, rule.id, {
+        name: rule.name,
+        operator: rule.operator,
+        send_log_to_convenors: rule.send_log_to_convenors,
+      })
       .subscribe({
         next: (updated) => {
           rule.name = updated.name;
           rule.operator = updated.operator;
+          rule.send_log_to_convenors = updated.send_log_to_convenors;
           const set = this.selectedSet();
           if (set) {
             set.rules = this.rules;
@@ -432,7 +440,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     });
   }
 
-  showActionForm(rule: CommunicationRule): void {
+  showActionForm(rule: CommunicationRule, mode: 'standard' | 'post_execution' = 'standard'): void {
     this.newActions[rule.id] = this.blankAction();
     this.actionFormOpen[rule.id] = true;
     this.editingActionId[rule.id] = undefined;
@@ -583,6 +591,19 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return this.actionTypeLabels[type] || type;
   }
 
+  actionSummary(action: CommunicationAction): string {
+    switch (action.type) {
+      case 'ChangeTargetGradeAction':
+        return `Change student's target grade to ${this.targetGradeName(action.target_grade)}`;
+      case 'EmailStudentAction':
+        return 'Send email to student';
+      case 'EmailStaffAction':
+        return `Send email to ${this.staffAudienceLabel(action)}`;
+      default:
+        return this.actionTypeLabel(action.type);
+    }
+  }
+
   targetGradeName(targetGrade: number | undefined): string {
     if (targetGrade === undefined || targetGrade === null) return '';
 
@@ -605,6 +626,13 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   taskStatusesLabel(taskStatuses: string[] = []): string {
     return taskStatuses.map((status) => this.taskStatusLabel(status)).join(', ');
+  }
+
+  staffAudienceLabel(action: Partial<CommunicationAction>): string {
+    const audiences: string[] = [];
+    if (action.email_tutors) audiences.push('tutors');
+    if (action.email_convenors) audiences.push('convenors');
+    return audiences.join(' and ') || 'staff';
   }
 
   insertActionVariable(rule: CommunicationRule, field: 'subject' | 'body', token: string): void {
@@ -684,7 +712,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   onActionTypeChange(rule: CommunicationRule): void {
     const current = this.actionFor(rule);
     this.newActions[rule.id] = {
-      type: current.type,
+      type: current.type || 'EmailStudentAction',
       email_tutors: false,
       email_convenors: false,
     };
@@ -928,6 +956,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         return student?.username;
       case '{{student.student_id}}':
         return student?.student_id;
+      case '{{affected_students_count}}':
+        return this.studentsFor(rule).length.toString();
       case '{{unit.code}}':
         return this.unit?.code;
       case '{{unit.name}}':
@@ -935,7 +965,13 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       case '{{rule.name}}':
         return rule.name;
       case '{{target_grade}}':
-        return student?.target_grade ? this.targetGradeName(student.target_grade) : undefined;
+        return student?.target_grade !== undefined && student?.target_grade !== null
+          ? this.targetGradeName(student.target_grade)
+          : undefined;
+      case '{{conditions_summary}}':
+        return this.conditionsSummary(rule);
+      case '{{actions_summary}}':
+        return this.actionsSummary(rule);
       default:
         return undefined;
     }
@@ -958,6 +994,21 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       default:
         return baseHiddenKeys;
     }
+  }
+
+  conditionsSummary(rule: CommunicationRule): string {
+    return (rule.conditions || [])
+      .map(
+        (condition) =>
+          `- ${this.conditionTypeLabel(condition.type)}: ${this.labelFor(condition)}`.trim(),
+      )
+      .join('\n');
+  }
+
+  actionsSummary(rule: CommunicationRule): string {
+    return (rule.actions || [])
+      .map((action) => `- ${this.actionTypeLabel(action.type)}`)
+      .join('\n');
   }
 
   private titleize(value: string): string {

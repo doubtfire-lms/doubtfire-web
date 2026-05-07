@@ -77,6 +77,7 @@ export class CommunicationRule extends Entity {
   operator: 'and' | 'or';
   position: number;
   active: boolean;
+  send_log_to_convenors: boolean;
   conditions: CommunicationCondition[] = [];
   actions: CommunicationAction[] = [];
 
