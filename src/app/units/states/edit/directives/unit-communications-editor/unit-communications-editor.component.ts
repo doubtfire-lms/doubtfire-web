@@ -152,8 +152,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     'attention_required',
   ];
 
-  newSet = this.blankSet();
-  newRule = this.blankRule();
   newConditions: Record<number, Partial<CommunicationCondition>> = {};
   conditionFormOpen: Record<number, boolean> = {};
   editingConditionId: Record<number, number | undefined> = {};
@@ -195,10 +193,14 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   addSet(): void {
     if (!this.unit) return;
 
-    this.setService.createForUnit(this.unit.id, this.newSet).subscribe({
+    const newSet = {
+      name: this.defaultSetName(),
+      active: true,
+    } as Pick<CommunicationSet, 'name'> & Partial<Pick<CommunicationSet, 'active'>>;
+
+    this.setService.createForUnit(this.unit.id, newSet).subscribe({
       next: (set) => {
         this.sets.push(set);
-        this.newSet = this.blankSet();
         this.selectedSetId = set.id;
         this.selectSet();
       },
@@ -236,11 +238,15 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     const set = this.selectedSet();
     if (!set) return;
 
-    this.ruleService.createForSet(this.unit.id, set.id, this.newRule).subscribe({
+    const newRule = {
+      name: this.defaultRuleName(),
+      operator: 'and',
+    } as Pick<CommunicationRule, 'name' | 'operator'>;
+
+    this.ruleService.createForSet(this.unit.id, set.id, newRule).subscribe({
       next: (rule) => {
         this.rules.push(rule);
         set.rules = this.rules;
-        this.newRule = this.blankRule();
         this.selectedRuleId = rule.id;
         this.loadPreviewForSet(set);
       },
@@ -639,12 +645,12 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     );
   }
 
-  private blankRule(): Pick<CommunicationRule, 'name' | 'operator'> {
-    return {name: '', operator: 'and'};
+  private defaultRuleName(): string {
+    return `Rule ${this.rules.length + 1}`;
   }
 
-  private blankSet(): Pick<CommunicationSet, 'name'> & Partial<Pick<CommunicationSet, 'active'>> {
-    return {name: '', active: true};
+  private defaultSetName(): string {
+    return `Set ${this.sets.length + 1}`;
   }
 
   selectedSet(): CommunicationSet | undefined {

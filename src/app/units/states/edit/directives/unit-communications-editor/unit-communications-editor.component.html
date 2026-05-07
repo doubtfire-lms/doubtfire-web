@@ -1,17 +1,10 @@
 <div class="flex flex-col gap-4">
+  <div>
+    <h3>Communication System</h3>
+    <p>Create communication sets and rules to target students and automate follow-up actions.</p>
+  </div>
   <div class="flex flex-wrap items-center gap-3">
-    <mat-form-field appearance="outline" class="min-w-[320px]">
-      <mat-label>Set name</mat-label>
-      <input matInput [(ngModel)]="newSet.name" />
-    </mat-form-field>
-
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="addSet()"
-      [disabled]="!newSet.name"
-      class="mb-[22px]"
-    >
+    <button mat-flat-button color="primary" (click)="addSet()">
       <mat-icon>add</mat-icon>
       Add set
     </button>
@@ -22,9 +15,9 @@
   }
 
   <mat-drawer-container class="min-h-[48rem] border border-gray-300">
-    <mat-drawer mode="side" opened class="min-w-[300px] border-r border-gray-300">
+    <mat-drawer mode="side" opened class="min-w-[150px] border-r border-gray-300">
       <div
-        class="w-[300px] min-h-[50px] border-b border-gray-300 bg-gray-300 px-[20px] flex items-center"
+        class="w-full min-h-[50px] border-b border-gray-300 bg-gray-300 px-[20px] flex items-center"
       >
         Communication Sets
       </div>
@@ -38,7 +31,6 @@
             (click)="selectedSetId = set.id; selectSet()"
           >
             <span class="truncate text-left">{{ set.name }}</span>
-            <mat-icon class="text-gray-500">chevron_right</mat-icon>
           </button>
         }
       </div>
@@ -51,29 +43,10 @@
             <div
               class="min-h-[50px] border-b border-gray-300 bg-gray-300 px-[20px] flex items-center justify-between"
             >
-              <div class="truncate">{{ set.name }}</div>
+              <div class="truncate">Rules for {{ set.name }}</div>
               <button mat-icon-button color="warn" (click)="deleteSet(set)">
                 <mat-icon>delete</mat-icon>
               </button>
-            </div>
-
-            <div class="border-b border-gray-200 p-4">
-              <div class="flex flex-col gap-3">
-                <mat-form-field appearance="outline">
-                  <mat-label>Rule name</mat-label>
-                  <input matInput [(ngModel)]="newRule.name" />
-                </mat-form-field>
-
-                <button
-                  mat-flat-button
-                  color="primary"
-                  (click)="addRule()"
-                  [disabled]="!newRule.name || !selectedSetId"
-                >
-                  <mat-icon>add</mat-icon>
-                  Add rule
-                </button>
-              </div>
             </div>
 
             <div class="flex flex-col">
@@ -93,6 +66,19 @@
                   <div class="text-black/70">{{ studentsTabLabel(rule) }}</div>
                 </button>
               }
+
+              <div class="border-t border-gray-200 p-4">
+                <button
+                  mat-flat-button
+                  color="primary"
+                  class="w-full"
+                  (click)="addRule()"
+                  [disabled]="!selectedSetId"
+                >
+                  <mat-icon>add</mat-icon>
+                  Add rule
+                </button>
+              </div>
             </div>
           </div>
 
@@ -103,13 +89,13 @@
 
             @if (selectedRule(); as rule) {
               <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-                <div class="min-w-0 flex-1">
-                  <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Rule name</mat-label>
-                    <input matInput [(ngModel)]="rule.name" />
-                  </mat-form-field>
-                  <div class="text-black/60">{{ studentsTabLabel(rule) }}</div>
-                </div>
+                <!-- <div class="min-w-0 flex-1"> -->
+                <mat-form-field appearance="outline" class="w-full max-w-[450px]">
+                  <mat-label>Rule name</mat-label>
+                  <input matInput [(ngModel)]="rule.name" />
+                </mat-form-field>
+                <!-- <div class="text-black/60">{{ studentsTabLabel(rule) }}</div> -->
+                <!-- </div> -->
 
                 <div class="flex items-center gap-3">
                   <mat-form-field appearance="outline" class="min-w-[320px]">
@@ -315,11 +301,14 @@
                                 mat-flat-button
                                 color="primary"
                                 (click)="updateCondition(rule)"
+                                class="mb-[22px]"
                               >
                                 <mat-icon>save</mat-icon>
                                 Save
                               </button>
-                              <button mat-button (click)="cancelCondition(rule)">Cancel</button>
+                              <button mat-button (click)="cancelCondition(rule)" class="mb-[22px]">
+                                Cancel
+                              </button>
                             </div>
                           } @else {
                             <div class="flex w-full items-start justify-between gap-3">
@@ -621,15 +610,18 @@
                           (click)="
                             editingConditionId[rule.id] ? updateCondition(rule) : addCondition(rule)
                           "
+                          class="mb-[22px]"
                         >
                           <mat-icon>save</mat-icon>
                           {{ editingConditionId[rule.id] ? 'Update' : 'Save' }}
                         </button>
 
-                        <button mat-button (click)="cancelCondition(rule)">Cancel</button>
+                        <button mat-button (click)="cancelCondition(rule)" class="mb-[22px]">
+                          Cancel
+                        </button>
                       </div>
                     } @else {
-                      <div class="flex justify-end">
+                      <div class="flex justify-center">
                         <button
                           mat-stroked-button
                           color="primary"
@@ -1074,10 +1066,12 @@
                           {{ editingActionId[rule.id] ? 'Update action' : 'Save action' }}
                         </button>
 
-                        <button mat-button (click)="cancelAction(rule)">Cancel</button>
+                        <button mat-button (click)="cancelAction(rule)" class="mb-[22px]">
+                          Cancel
+                        </button>
                       </div>
                     } @else {
-                      <div class="flex justify-end">
+                      <div class="flex justify-center">
                         <button mat-stroked-button color="primary" (click)="showActionForm(rule)">
                           <mat-icon>add</mat-icon>
                           Add action
