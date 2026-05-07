@@ -24,20 +24,33 @@
 
       <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl" class="py-2">
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-          <button
-            mat-button
-            class="min-h-[64px] w-full justify-between border-b border-gray-200 px-4"
+          <div
+            class="min-h-[64px] w-full border-b border-gray-200 px-4"
             [ngClass]="{'bg-gray-100': isSelectedRuleNode(node)}"
-            (click)="selectRuleNode(node.set!, node.rule!)"
           >
-            <div class="min-w-0 text-left">
-              <div class="truncate font-medium">{{ node.rule?.name }}</div>
-              <div class="text-black/30">
-                {{ node.rule?.operator === 'and' ? 'All conditions' : 'Any condition' }}
-              </div>
-              <div class="text-black/70">{{ studentsTabLabel(node.rule!) }}</div>
+            <div class="flex items-center justify-between gap-3">
+              <button
+                mat-button
+                class="min-h-[64px] min-w-0 flex-1 justify-start px-0"
+                (click)="selectRuleNode(node.set!, node.rule!)"
+              >
+                <div class="min-w-0 text-left">
+                  <div class="truncate font-medium">{{ node.rule?.name }}</div>
+                  <div class="text-black/30">
+                    {{ node.rule?.operator === 'and' ? 'All conditions' : 'Any condition' }}
+                  </div>
+                  <div class="text-black/70">{{ studentsTabLabel(node.rule!) }}</div>
+                </div>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="deleteRule(node.rule!); $event.stopPropagation()"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
             </div>
-          </button>
+          </div>
         </mat-tree-node>
 
         <mat-nested-tree-node *matTreeNodeDef="let node; when: hasTreeChild">
@@ -92,7 +105,30 @@
           <div
             class="min-h-[50px] border-b border-gray-300 bg-gray-300 px-[20px] flex items-center justify-between"
           >
-            <div class="truncate">{{ set.name }}</div>
+            <div class="flex min-w-0 flex-1 items-center gap-2 py-5">
+              @if (editingSetNameId === set.id) {
+                <mat-form-field appearance="outline" class="w-full max-w-[450px]">
+                  <mat-label>Set name</mat-label>
+                  <input matInput [(ngModel)]="setNameDraft" />
+                </mat-form-field>
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="saveSetName(set)"
+                  class="mb-[22px]"
+                >
+                  <mat-icon>save</mat-icon>
+                </button>
+                <button mat-icon-button (click)="cancelEditSetName()" class="mb-[22px]">
+                  <mat-icon>close</mat-icon>
+                </button>
+              } @else {
+                <div class="truncate">{{ set.name }}</div>
+                <button mat-icon-button (click)="beginEditSetName(set)" class="opacity-50 scale-75">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+            </div>
             <div class="flex gap-2 items-center">
               <button mat-raised-button (click)="executeSet(set)">Execute Set</button>
               <button mat-icon-button color="warn" (click)="deleteSet(set)">
@@ -108,30 +144,39 @@
 
             @if (selectedRule(); as rule) {
               <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-                <!-- <div class="min-w-0 flex-1"> -->
                 <div class="flex items-center gap-2 w-full">
-                  <mat-form-field appearance="outline" class="w-full max-w-[450px]">
-                    <mat-label>Rule name</mat-label>
-                    <input matInput [(ngModel)]="rule.name" />
-                  </mat-form-field>
-                  <button
-                    mat-flat-button
-                    color="primary"
-                    (click)="updateRule(rule)"
-                    class="mb-[22px]"
-                  >
-                    Save rule
-                  </button>
-
-                  <button mat-flat-button color="warn" (click)="deleteRule(rule)" class="mb-[22px]">
-                    Delete rule
-                  </button>
+                  @if (editingRuleNameId === rule.id) {
+                    <mat-form-field appearance="outline" class="w-full max-w-[450px]">
+                      <mat-label>Rule name</mat-label>
+                      <input matInput [(ngModel)]="ruleNameDraft" />
+                    </mat-form-field>
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="saveRuleName(rule)"
+                      class="mb-[22px]"
+                    >
+                      <mat-icon>save</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="cancelEditRuleName()" class="mb-[22px]">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  } @else {
+                    <div class="flex items-center gap-2">
+                      <div class="font-medium">{{ rule.name }}</div>
+                      <button
+                        mat-icon-button
+                        (click)="beginEditRuleName(rule)"
+                        class="opacity-50 scale-75"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </div>
+                  }
                 </div>
 
                 <div class="flex items-center gap-3 min-w-fit">
-                  <button mat-raised-button class="mb-[22px]" (click)="executeRule(rule)">
-                    Execute Rule
-                  </button>
+                  <button mat-raised-button (click)="executeRule(rule)">Execute Rule</button>
                 </div>
               </div>
 

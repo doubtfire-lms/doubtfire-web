@@ -30,6 +30,18 @@ export class CommunicationSetService {
     return this.httpClient.delete<void>(`${this.endpoint(unitId)}/${setId}`);
   }
 
+  public updateForUnit(
+    unitId: number,
+    setId: number,
+    set: Partial<Pick<CommunicationSet, 'name' | 'active'>>,
+  ): Observable<CommunicationSet> {
+    return this.httpClient
+      .put<Partial<CommunicationSet>>(`${this.endpoint(unitId)}/${setId}`, {
+        communication_set: set,
+      })
+      .pipe(map((updated) => new CommunicationSet(updated)));
+  }
+
   public getForUnitById(
     unitId: number,
     setId: number,

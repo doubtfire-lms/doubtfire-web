@@ -179,6 +179,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   previewLoaded: Record<number, boolean> = {};
   previewStudents: Record<number, CommunicationRulePreviewStudent[]> = {};
   previewAllocations: Record<number, CommunicationRulePreviewAllocation[]> = {};
+  editingSetNameId?: number;
+  editingRuleNameId?: number;
+  setNameDraft = '';
+  ruleNameDraft = '';
   readonly treeControl = new NestedTreeControl<CommunicationTreeNode>((node) => node.children);
   readonly treeDataSource = new MatTreeNestedDataSource<CommunicationTreeNode>();
   private expandedSetIds = new Set<number>();
@@ -238,6 +242,34 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
           this.selectedSetId = undefined;
         }
         this.selectSet();
+      },
+      error: (error) => this.showError(error),
+    });
+  }
+
+  beginEditSetName(set: CommunicationSet): void {
+    this.editingSetNameId = set.id;
+    this.setNameDraft = set.name;
+  }
+
+  cancelEditSetName(): void {
+    this.editingSetNameId = undefined;
+    this.setNameDraft = '';
+  }
+
+  saveSetName(set: CommunicationSet): void {
+    const name = this.setNameDraft.trim();
+    if (!name) return;
+
+    this.setService.updateForUnit(this.unit.id, set.id, {name}).subscribe({
+      next: (updated) => {
+        set.name = updated.name;
+        const matchingSet = this.sets.find((item) => item.id === set.id);
+        if (matchingSet) {
+          matchingSet.name = updated.name;
+        }
+        this.cancelEditSetName();
+        this.rebuildTree();
       },
       error: (error) => this.showError(error),
     });
@@ -329,6 +361,40 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
             set.rules = this.rules;
           }
           this.refreshPreview(rule);
+        },
+        error: (error) => this.showError(error),
+      });
+  }
+
+  beginEditRuleName(rule: CommunicationRule): void {
+    this.editingRuleNameId = rule.id;
+    this.ruleNameDraft = rule.name;
+  }
+
+  cancelEditRuleName(): void {
+    this.editingRuleNameId = undefined;
+    this.ruleNameDraft = '';
+  }
+
+  saveRuleName(rule: CommunicationRule): void {
+    const name = this.ruleNameDraft.trim();
+    if (!name) return;
+
+    this.ruleService
+      .updateForUnit(this.unit.id, rule.id, {
+        name,
+        operator: rule.operator,
+        send_log_to_convenors: rule.send_log_to_convenors,
+      })
+      .subscribe({
+        next: (updated) => {
+          rule.name = updated.name;
+          const set = this.selectedSet();
+          if (set) {
+            set.rules = this.rules;
+          }
+          this.cancelEditRuleName();
+          this.rebuildTree();
         },
         error: (error) => this.showError(error),
       });
