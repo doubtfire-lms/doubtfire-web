@@ -30,6 +30,19 @@ export class CommunicationActionService {
     return this.httpClient.delete<void>(`${this.endpoint(unitId, ruleId)}/${actionId}`);
   }
 
+  public update(
+    unitId: number,
+    ruleId: number,
+    actionId: number,
+    action: Partial<CommunicationAction>,
+  ): Observable<CommunicationAction> {
+    return this.httpClient
+      .put<Partial<CommunicationAction>>(`${this.endpoint(unitId, ruleId)}/${actionId}`, {
+        communication_action: action,
+      })
+      .pipe(map((updated) => new CommunicationAction(updated)));
+  }
+
   private endpoint(unitId: number, ruleId: number): string {
     return `${API_URL}/units/${unitId}/communication_rules/${ruleId}/actions`;
   }

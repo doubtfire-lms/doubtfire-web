@@ -32,6 +32,19 @@ export class CommunicationConditionService {
     return this.httpClient.delete<void>(`${this.endpoint(unitId, ruleId)}/${conditionId}`);
   }
 
+  public update(
+    unitId: number,
+    ruleId: number,
+    conditionId: number,
+    condition: Partial<CommunicationCondition>,
+  ): Observable<CommunicationCondition> {
+    return this.httpClient
+      .put<Partial<CommunicationCondition>>(`${this.endpoint(unitId, ruleId)}/${conditionId}`, {
+        communication_condition: condition,
+      })
+      .pipe(map((updated) => new CommunicationCondition(updated)));
+  }
+
   private endpoint(unitId: number, ruleId: number): string {
     return `${API_URL}/units/${unitId}/communication_rules/${ruleId}/conditions`;
   }

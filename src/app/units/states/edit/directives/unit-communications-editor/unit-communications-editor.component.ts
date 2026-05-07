@@ -156,8 +156,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   newRule = this.blankRule();
   newConditions: Record<number, Partial<CommunicationCondition>> = {};
   conditionFormOpen: Record<number, boolean> = {};
+  editingConditionId: Record<number, number | undefined> = {};
   newActions: Record<number, Partial<CommunicationAction>> = {};
   actionFormOpen: Record<number, boolean> = {};
+  editingActionId: Record<number, number | undefined> = {};
   previewTabIndex: Record<number, number> = {};
   previewLoading: Record<number, boolean> = {};
   previewLoaded: Record<number, boolean> = {};
@@ -271,6 +273,23 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     });
   }
 
+  updateRule(rule: CommunicationRule): void {
+    this.ruleService
+      .updateForUnit(this.unit.id, rule.id, {name: rule.name, operator: rule.operator})
+      .subscribe({
+        next: (updated) => {
+          rule.name = updated.name;
+          rule.operator = updated.operator;
+          const set = this.selectedSet();
+          if (set) {
+            set.rules = this.rules;
+          }
+          this.refreshPreview(rule);
+        },
+        error: (error) => this.showError(error),
+      });
+  }
+
   previewRule(rule: CommunicationRule, activateStudentsTab = true): void {
     if (activateStudentsTab) {
       this.previewTabIndex[rule.id] = 2;
@@ -285,6 +304,24 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         rule.conditions.push(created);
         this.newConditions[rule.id] = this.blankCondition();
         this.conditionFormOpen[rule.id] = false;
+        this.editingConditionId[rule.id] = undefined;
+        this.refreshPreview(rule);
+      },
+      error: (error) => this.showError(error),
+    });
+  }
+
+  updateCondition(rule: CommunicationRule): void {
+    const conditionId = this.editingConditionId[rule.id];
+    if (!conditionId) return;
+
+    const condition = this.newConditions[rule.id] || this.blankCondition();
+    this.conditionService.update(this.unit.id, rule.id, conditionId, condition).subscribe({
+      next: (updated) => {
+        rule.conditions = rule.conditions.map((item) => (item.id === updated.id ? updated : item));
+        this.newConditions[rule.id] = this.blankCondition();
+        this.conditionFormOpen[rule.id] = false;
+        this.editingConditionId[rule.id] = undefined;
         this.refreshPreview(rule);
       },
       error: (error) => this.showError(error),
@@ -294,11 +331,22 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   showConditionForm(rule: CommunicationRule): void {
     this.newConditions[rule.id] = this.blankCondition();
     this.conditionFormOpen[rule.id] = true;
+    this.editingConditionId[rule.id] = undefined;
   }
 
   cancelCondition(rule: CommunicationRule): void {
     this.newConditions[rule.id] = this.blankCondition();
     this.conditionFormOpen[rule.id] = false;
+    this.editingConditionId[rule.id] = undefined;
+  }
+
+  editCondition(rule: CommunicationRule, condition: CommunicationCondition): void {
+    this.newConditions[rule.id] = {
+      ...condition,
+      task_statuses: condition.task_statuses ? [...condition.task_statuses] : [],
+    };
+    this.conditionFormOpen[rule.id] = true;
+    this.editingConditionId[rule.id] = condition.id;
   }
 
   deleteCondition(rule: CommunicationRule, condition: CommunicationCondition): void {
@@ -319,6 +367,23 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         rule.actions.push(created);
         this.newActions[rule.id] = this.blankAction();
         this.actionFormOpen[rule.id] = false;
+        this.editingActionId[rule.id] = undefined;
+      },
+      error: (error) => this.showError(error),
+    });
+  }
+
+  updateAction(rule: CommunicationRule): void {
+    const actionId = this.editingActionId[rule.id];
+    if (!actionId) return;
+
+    const action = this.newActions[rule.id] || this.blankAction();
+    this.actionService.update(this.unit.id, rule.id, actionId, action).subscribe({
+      next: (updated) => {
+        rule.actions = rule.actions.map((item) => (item.id === updated.id ? updated : item));
+        this.newActions[rule.id] = this.blankAction();
+        this.actionFormOpen[rule.id] = false;
+        this.editingActionId[rule.id] = undefined;
       },
       error: (error) => this.showError(error),
     });
@@ -327,11 +392,19 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   showActionForm(rule: CommunicationRule): void {
     this.newActions[rule.id] = this.blankAction();
     this.actionFormOpen[rule.id] = true;
+    this.editingActionId[rule.id] = undefined;
   }
 
   cancelAction(rule: CommunicationRule): void {
     this.newActions[rule.id] = this.blankAction();
     this.actionFormOpen[rule.id] = false;
+    this.editingActionId[rule.id] = undefined;
+  }
+
+  editAction(rule: CommunicationRule, action: CommunicationAction): void {
+    this.newActions[rule.id] = {...action};
+    this.actionFormOpen[rule.id] = true;
+    this.editingActionId[rule.id] = action.id;
   }
 
   deleteAction(rule: CommunicationRule, action: CommunicationAction): void {
