@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {CommunicationRule, CommunicationRulePreviewResponse} from '../models/communication';
+import {SidekiqJob} from '../models/sidekiq-job';
 
 @Injectable()
 export class CommunicationRuleService {
@@ -50,6 +51,10 @@ export class CommunicationRuleService {
       `${this.endpoint(unitId)}/${ruleId}/preview`,
       {},
     );
+  }
+
+  public executeForUnit(unitId: number, ruleId: number): Observable<SidekiqJob> {
+    return this.httpClient.post<SidekiqJob>(`${this.endpoint(unitId)}/${ruleId}/execute`, {});
   }
 
   private endpoint(unitId: number): string {

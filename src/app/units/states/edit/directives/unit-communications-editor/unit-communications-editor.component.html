@@ -15,70 +15,89 @@
   }
 
   <mat-drawer-container class="min-h-[48rem] border border-gray-300">
-    <mat-drawer mode="side" opened class="min-w-[150px] border-r border-gray-300">
+    <mat-drawer mode="side" opened class="w-[320px] border-r border-gray-300">
       <div
         class="w-full min-h-[50px] border-b border-gray-300 bg-gray-300 px-[20px] flex items-center"
       >
-        Communication Sets
+        Communication Sets & Rules
       </div>
 
-      <div class="flex flex-col">
-        @for (set of sets; track set.id) {
+      <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl" class="py-2">
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
           <button
             mat-button
-            class="min-h-[56px] justify-between border-b border-gray-200 px-4"
-            [ngClass]="{'bg-gray-100': selectedSetId === set.id}"
-            (click)="selectedSetId = set.id; selectSet()"
+            class="min-h-[64px] w-full justify-between border-b border-gray-200 px-4"
+            [ngClass]="{'bg-gray-100': isSelectedRuleNode(node)}"
+            (click)="selectRuleNode(node.set!, node.rule!)"
           >
-            <span class="truncate text-left">{{ set.name }}</span>
+            <div class="min-w-0 text-left">
+              <div class="truncate font-medium">{{ node.rule?.name }}</div>
+              <div class="text-black/30">
+                {{ node.rule?.operator === 'and' ? 'All conditions' : 'Any condition' }}
+              </div>
+              <div class="text-black/70">{{ studentsTabLabel(node.rule!) }}</div>
+            </div>
           </button>
-        }
-      </div>
+        </mat-tree-node>
+
+        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasTreeChild">
+          <div class="border-b border-gray-200">
+            <div
+              class="flex min-h-[56px] items-center gap-2 px-2"
+              [ngClass]="{'bg-gray-100': isSelectedSetNode(node)}"
+            >
+              <button mat-icon-button (click)="toggleSetNode(node, $event)">
+                <mat-icon>
+                  {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+                </mat-icon>
+              </button>
+
+              <button
+                mat-button
+                class="min-w-0 flex-1 justify-start px-2"
+                (click)="selectSetNode(node.set!)"
+              >
+                <span class="truncate text-left">{{ node.set?.name }}</span>
+              </button>
+            </div>
+
+            @if (treeControl.isExpanded(node)) {
+              <div>
+                <ng-container matTreeNodeOutlet></ng-container>
+
+                @if (selectedSetId === node.set?.id) {
+                  <div class="border-t border-gray-200 p-4">
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      class="w-full"
+                      (click)="addRule()"
+                      [disabled]="!selectedSetId"
+                    >
+                      <mat-icon>add</mat-icon>
+                      Add rule
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </mat-nested-tree-node>
+      </mat-tree>
     </mat-drawer>
 
     <mat-drawer-content>
       @if (selectedSet(); as set) {
-        <div class="grid min-h-[48rem] grid-cols-[320px,minmax(0,1fr)]">
-          <div class="border-r border-gray-300">
-            <div
-              class="min-h-[50px] border-b border-gray-300 bg-gray-300 px-[20px] flex items-center justify-between"
-            >
-              <div class="truncate">Rules for {{ set.name }}</div>
+        <div class="flex min-h-[48rem] flex-col">
+          <div
+            class="min-h-[50px] border-b border-gray-300 bg-gray-300 px-[20px] flex items-center justify-between"
+          >
+            <div class="truncate">{{ set.name }}</div>
+            <div class="flex gap-2 items-center">
+              <button mat-raised-button (click)="executeSet(set)">Execute Set</button>
               <button mat-icon-button color="warn" (click)="deleteSet(set)">
                 <mat-icon>delete</mat-icon>
               </button>
-            </div>
-
-            <div class="flex flex-col">
-              @for (rule of rules; track rule.id) {
-                <button
-                  mat-button
-                  class="min-h-[64px] justify-between border-b border-gray-200 px-4"
-                  [ngClass]="{'bg-gray-100': selectedRuleId === rule.id}"
-                  (click)="selectRule(rule)"
-                >
-                  <div class="min-w-0 text-left">
-                    <div class="truncate font-medium">{{ rule.name }}</div>
-                    <div class="text-black/30">
-                      {{ rule.operator === 'and' ? 'All conditions' : 'Any condition' }}
-                    </div>
-                  </div>
-                  <div class="text-black/70">{{ studentsTabLabel(rule) }}</div>
-                </button>
-              }
-
-              <div class="border-t border-gray-200 p-4">
-                <button
-                  mat-flat-button
-                  color="primary"
-                  class="w-full"
-                  (click)="addRule()"
-                  [disabled]="!selectedSetId"
-                >
-                  <mat-icon>add</mat-icon>
-                  Add rule
-                </button>
-              </div>
             </div>
           </div>
 
@@ -90,10 +109,16 @@
             @if (selectedRule(); as rule) {
               <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
                 <!-- <div class="min-w-0 flex-1"> -->
-                <mat-form-field appearance="outline" class="w-full max-w-[450px]">
-                  <mat-label>Rule name</mat-label>
-                  <input matInput [(ngModel)]="rule.name" />
-                </mat-form-field>
+                <div class="flex items-center gap-2 w-full">
+                  <mat-form-field appearance="outline" class="w-full max-w-[450px]">
+                    <mat-label>Rule name</mat-label>
+                    <input matInput [(ngModel)]="rule.name" />
+                  </mat-form-field>
+                  <button mat-raised-button class="mb-[22px]" (click)="executeRule(rule)">
+                    Execute Rule
+                  </button>
+                </div>
+
                 <!-- <div class="text-black/60">{{ studentsTabLabel(rule) }}</div> -->
                 <!-- </div> -->
 
@@ -1071,7 +1096,7 @@
                         </button>
                       </div>
                     } @else {
-                      <div class="flex justify-center">
+                      <div class="flex justify-center items-center">
                         <button mat-stroked-button color="primary" (click)="showActionForm(rule)">
                           <mat-icon>add</mat-icon>
                           Add action
@@ -1186,7 +1211,7 @@
                 </mat-tab>
               </mat-tab-group>
             } @else {
-              <div class="flex h-full items-center justify-center text-black/60">
+              <div class="flex h-full items-center justify-center text-black/60 mt-5">
                 Select a communication rule to edit its conditions, actions, and preview.
               </div>
             }

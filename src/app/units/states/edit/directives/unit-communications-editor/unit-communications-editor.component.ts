@@ -1,4 +1,6 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {NestedTreeControl} from '@angular/cdk/tree';
+import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {Subscription} from 'rxjs';
 import {
   Campus,
@@ -20,7 +22,18 @@ import {
   TutorialStream,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+
+interface CommunicationTreeNode {
+  type: 'set' | 'rule';
+  id: number;
+  label: string;
+  set?: CommunicationSet;
+  rule?: CommunicationRule;
+  children?: CommunicationTreeNode[];
+}
 
 @Component({
   selector: 'f-unit-communications-editor',
@@ -106,22 +119,22 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     not_enrolled_in: 'Not Enrolled In',
   };
   readonly targetGrades = [
-    {value: 1, label: 'P'},
-    {value: 2, label: 'C'},
-    {value: 3, label: 'D'},
-    {value: 4, label: 'HD'},
+    {value: 0, label: 'P'},
+    {value: 1, label: 'C'},
+    {value: 2, label: 'D'},
+    {value: 3, label: 'HD'},
   ];
   readonly targetGradeLabels: Record<number, string> = {
-    1: 'P',
-    2: 'C',
-    3: 'D',
-    4: 'HD',
+    0: 'P',
+    1: 'C',
+    2: 'D',
+    3: 'HD',
   };
   readonly targetGradeNames: Record<number, string> = {
-    1: 'Pass',
-    2: 'Credit',
-    3: 'Distinction',
-    4: 'High Distinction',
+    0: 'Pass',
+    1: 'Credit',
+    2: 'Distinction',
+    3: 'High Distinction',
   };
   readonly emailVariables = [
     {token: '{{student.first_name}}', label: 'Student First Name'},
@@ -163,6 +176,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   previewLoaded: Record<number, boolean> = {};
   previewStudents: Record<number, CommunicationRulePreviewStudent[]> = {};
   previewAllocations: Record<number, CommunicationRulePreviewAllocation[]> = {};
+  readonly treeControl = new NestedTreeControl<CommunicationTreeNode>((node) => node.children);
+  readonly treeDataSource = new MatTreeNestedDataSource<CommunicationTreeNode>();
+  private expandedSetIds = new Set<number>();
 
   private subscriptions: Subscription[] = [];
 
@@ -173,6 +189,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     private setService: CommunicationSetService,
     private campusService: CampusService,
     private alerts: AlertService,
+    private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
 
   ngOnInit(): void {
@@ -201,6 +218,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.setService.createForUnit(this.unit.id, newSet).subscribe({
       next: (set) => {
         this.sets.push(set);
+        this.expandedSetIds.add(set.id);
         this.selectedSetId = set.id;
         this.selectSet();
       },
@@ -212,20 +230,31 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.setService.deleteForUnit(this.unit.id, set.id).subscribe({
       next: () => {
         this.sets = this.sets.filter((item) => item.id !== set.id);
-        this.selectedSetId = this.sets[0]?.id;
+        this.expandedSetIds.delete(set.id);
+        if (this.selectedSetId === set.id) {
+          this.selectedSetId = undefined;
+        }
         this.selectSet();
       },
       error: (error) => this.showError(error),
     });
   }
 
+  executeSet(set: CommunicationSet): void {
+    this.setService.executeForUnit(this.unit.id, set.id).subscribe({
+      next: (job) => this.showExecutionProgress(job, `Executing ${set.name}`),
+      error: (error) => this.showError(error),
+    });
+  }
+
   selectSet(): void {
     const set = this.selectedSet();
-    this.rules = set?.rules ?? [];
-    this.selectedRuleId = this.rules[0]?.id;
-
     if (set) {
-      this.loadPreviewForSet(set);
+      this.activateSet(set);
+    } else {
+      this.rules = [];
+      this.selectedRuleId = undefined;
+      this.rebuildTree();
     }
   }
 
@@ -248,6 +277,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         this.rules.push(rule);
         set.rules = this.rules;
         this.selectedRuleId = rule.id;
+        this.expandedSetIds.add(set.id);
         this.loadPreviewForSet(set);
       },
       error: (error) => this.showError(error),
@@ -294,6 +324,13 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         },
         error: (error) => this.showError(error),
       });
+  }
+
+  executeRule(rule: CommunicationRule): void {
+    this.ruleService.executeForUnit(this.unit.id, rule.id).subscribe({
+      next: (job) => this.showExecutionProgress(job, `Executing ${rule.name}`),
+      error: (error) => this.showError(error),
+    });
   }
 
   previewRule(rule: CommunicationRule, activateStudentsTab = true): void {
@@ -433,6 +470,48 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   selectRule(rule: CommunicationRule): void {
+    this.selectedRuleId = rule.id;
+  }
+
+  hasTreeChild = (_: number, node: CommunicationTreeNode): boolean => node.type === 'set';
+
+  isSelectedSetNode(node: CommunicationTreeNode): boolean {
+    return node.type === 'set' && node.id === this.selectedSetId;
+  }
+
+  isSelectedRuleNode(node: CommunicationTreeNode): boolean {
+    return node.type === 'rule' && node.id === this.selectedRuleId;
+  }
+
+  toggleSetNode(node: CommunicationTreeNode, event?: Event): void {
+    event?.stopPropagation();
+    if (!node.set) return;
+
+    if (this.treeControl.isExpanded(node)) {
+      this.treeControl.collapse(node);
+      this.expandedSetIds.delete(node.set.id);
+    } else {
+      this.treeControl.expand(node);
+      this.expandedSetIds.add(node.set.id);
+    }
+  }
+
+  selectSetNode(set: CommunicationSet): void {
+    this.selectedSetId = set.id;
+    this.expandedSetIds.add(set.id);
+    this.activateSet(set);
+  }
+
+  selectRuleNode(set: CommunicationSet, rule: CommunicationRule): void {
+    const setChanged = this.selectedSetId !== set.id;
+    this.selectedSetId = set.id;
+    this.expandedSetIds.add(set.id);
+
+    if (setChanged) {
+      this.activateSet(set, rule.id);
+      return;
+    }
+
     this.selectedRuleId = rule.id;
   }
 
@@ -618,7 +697,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.setService.getForUnit(this.unit.id).subscribe({
       next: (sets) => {
         this.sets = sets;
-        this.selectedSetId ||= sets[0]?.id;
+        if (this.selectedSetId) {
+          this.expandedSetIds.add(this.selectedSetId);
+        }
+        this.rebuildTree();
         this.selectSet();
         this.loading = false;
       },
@@ -651,6 +733,12 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   private defaultSetName(): string {
     return `Set ${this.sets.length + 1}`;
+  }
+
+  private activateSet(set: CommunicationSet, selectedRuleId?: number): void {
+    this.rules = set.rules ?? [];
+    this.selectedRuleId = selectedRuleId ?? this.rules[0]?.id;
+    this.loadPreviewForSet(set);
   }
 
   selectedSet(): CommunicationSet | undefined {
@@ -729,6 +817,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.rules.forEach((rule) => {
       this.previewLoading[rule.id] = false;
     });
+
+    this.rebuildTree();
   }
 
   private studentsForPreviewRule(
@@ -757,6 +847,17 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   private showError(error: any): void {
     this.alerts.error(error?.message || error?.error || error || 'Communication update failed');
+  }
+
+  private showExecutionProgress(job: SidekiqJob, title: string): void {
+    if (!job?.id) {
+      this.alerts.error('Failed to start communication execution', 6000);
+      return;
+    }
+
+    this.sidekiqProgressModalService.show(title, job.id).subscribe({
+      error: (error) => this.showError(error),
+    });
   }
 
   private prettyKey(key: string): string {
@@ -864,5 +965,28 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       ?.split('_')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
+
+  private rebuildTree(): void {
+    const treeData = this.sets.map((set) => ({
+      type: 'set' as const,
+      id: set.id,
+      label: set.name,
+      set,
+      children: (set.rules ?? []).map((rule) => ({
+        type: 'rule' as const,
+        id: rule.id,
+        label: rule.name,
+        set,
+        rule,
+      })),
+    }));
+
+    this.treeDataSource.data = treeData;
+    treeData.forEach((node) => {
+      if (this.expandedSetIds.has(node.id) || node.id === this.selectedSetId) {
+        this.treeControl.expand(node);
+      }
+    });
   }
 }

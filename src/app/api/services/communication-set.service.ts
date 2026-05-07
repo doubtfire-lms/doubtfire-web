@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {CommunicationSet, CommunicationSetPreviewResponse} from '../models/communication';
+import {SidekiqJob} from '../models/sidekiq-job';
 
 @Injectable()
 export class CommunicationSetService {
@@ -36,6 +37,10 @@ export class CommunicationSetService {
     return this.httpClient.get<CommunicationSetPreviewResponse>(
       `${this.endpoint(unitId)}/${setId}`,
     );
+  }
+
+  public executeForUnit(unitId: number, setId: number): Observable<SidekiqJob> {
+    return this.httpClient.post<SidekiqJob>(`${this.endpoint(unitId)}/${setId}/execute`, {});
   }
 
   private endpoint(unitId: number): string {

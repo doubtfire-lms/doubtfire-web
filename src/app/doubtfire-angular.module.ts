@@ -123,6 +123,7 @@ import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {doubtfireStates} from './doubtfire.states';
 import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatTreeModule} from '@angular/material/tree';
 import {MatSortModule} from '@angular/material/sort';
 import {ActivityTypeListComponent} from './admin/institution-settings/activity-type-list/activity-type-list.component';
 import {UnitStudentsEditorComponent} from './units/states/edit/directives/unit-students-editor/unit-students-editor.component';
@@ -677,6 +678,7 @@ const GANTT_CHART_CONFIG = {
     MatSelectModule,
     MatToolbarModule,
     MatTabsModule,
+    MatTreeModule,
     UpgradeModule,
     MatTableModule,
     MatTabsModule,
