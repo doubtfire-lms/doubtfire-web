@@ -41,6 +41,21 @@
   max-width: 640px;
 }
 
+.pagination-toolbar {
+  align-items: center;
+  color: #4b5563;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.pagination-actions {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
 .peer-row {
   align-items: center;
   display: grid;
@@ -74,8 +89,19 @@
   text-align: right;
 }
 
+.empty-state {
+  color: #64748b;
+  margin: 24px 0 0;
+}
+
 @media (max-width: 768px) {
   .page-header {
+    flex-direction: column;
+  }
+
+  .pagination-toolbar,
+  .pagination-actions {
+    align-items: flex-start;
     flex-direction: column;
   }
 

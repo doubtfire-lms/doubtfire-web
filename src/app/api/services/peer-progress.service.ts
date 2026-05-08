@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { Project } from 'src/app/api/models/doubtfire-model';
+import API_URL from 'src/app/config/constants/apiURL';
 
 export interface PeerProgressSummary {
   cohortAverage: number;
@@ -17,14 +20,31 @@ export interface AnonymizedPeerProgress {
   isCurrentStudent: boolean;
 }
 
+interface PeerProgressApiResponse {
+  alias: string;
+  progress: number;
+  band_label: string;
+  is_current_student: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class PeerProgressService {
-  private readonly sampleProgress = [92, 88, 84, 81, 78, 75, 72, 69];
+  constructor(private httpClient: HttpClient) {}
 
-  getSummary(project?: Project): PeerProgressSummary {
-    const peers = this.getAnonymizedPeers(project);
+  getSummaryFromPeers(peers: AnonymizedPeerProgress[]): PeerProgressSummary {
+    if (peers.length === 0) {
+      return {
+        cohortAverage: 0,
+        yourProgress: 0,
+        peersAhead: 0,
+        strongestProgress: 0,
+        totalPeers: 0,
+        yourAlias: 'Peer 01',
+      };
+    }
+
     const currentPeer = peers.find((peer) => peer.isCurrentStudent) ?? peers[0];
     const strongestProgress = Math.max(...peers.map((peer) => peer.progress));
     const cohortAverage = Math.round(
@@ -41,26 +61,18 @@ export class PeerProgressService {
     };
   }
 
-  getAnonymizedPeers(project?: Project): AnonymizedPeerProgress[] {
-    const offset = (project?.id ?? 0) % this.sampleProgress.length;
-    const currentIndex = offset % this.sampleProgress.length;
-
-    return this.sampleProgress.map((_, index) => {
-      const progress = this.sampleProgress[(index + offset) % this.sampleProgress.length];
-
-      return {
-        alias: `Peer ${String(index + 1).padStart(2, '0')}`,
-        progress,
-        bandLabel: this.toBandLabel(progress),
-        isCurrentStudent: index === currentIndex,
-      };
-    });
-  }
-
-  private toBandLabel(progress: number): string {
-    if (progress >= 85) return 'Leading';
-    if (progress >= 75) return 'On Track';
-    if (progress >= 65) return 'Building';
-    return 'Needs Support';
+  getAnonymizedPeers(project?: Project): Observable<AnonymizedPeerProgress[]> {
+    return this.httpClient
+      .get<PeerProgressApiResponse[]>(`${API_URL}/projects/${project?.id}/peer_progress`)
+      .pipe(
+        map((peers) =>
+          peers.map((peer) => ({
+            alias: peer.alias,
+            progress: peer.progress,
+            bandLabel: peer.band_label,
+            isCurrentStudent: peer.is_current_student,
+          })),
+        ),
+      );
   }
 }

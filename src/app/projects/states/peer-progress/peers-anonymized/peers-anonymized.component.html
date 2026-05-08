@@ -5,14 +5,31 @@
         <p class="page-eyebrow">Anonymized Cohort View</p>
         <h1>Individual Peer Progress</h1>
         <p>
-          Student identities are hidden. Each learner is shown as an anonymized peer label with a
-          sample progress value.
+          Student identities are hidden. Each learner is shown as an anonymized peer label with
+          real progress data from this unit.
         </p>
       </div>
       <button mat-stroked-button (click)="goBack()">Back to Peer Progress</button>
     </div>
 
-    <div class="peer-row" *ngFor="let peer of peers">
+    <div class="pagination-toolbar" *ngIf="peers.length > 0">
+      <span>Showing {{ startPeerIndex }}-{{ endPeerIndex }} of {{ peers.length }} peers</span>
+      <div class="pagination-actions">
+        <button mat-stroked-button (click)="previousPage()" [disabled]="currentPage === 0">
+          Previous
+        </button>
+        <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="nextPage()"
+          [disabled]="currentPage >= totalPages - 1">
+          Next
+        </button>
+      </div>
+    </div>
+
+    <div class="peer-row" *ngFor="let peer of paginatedPeers">
       <div class="peer-copy">
         <strong>{{ peer.alias }}<span *ngIf="peer.isCurrentStudent"> (You)</span></strong>
         <span>{{ peer.bandLabel }}</span>
@@ -22,5 +39,7 @@
       </div>
       <div class="peer-value">{{ peer.progress }}%</div>
     </div>
+
+    <p class="empty-state" *ngIf="peers.length === 0">No peer progress data is available right now.</p>
   </div>
 </div>
