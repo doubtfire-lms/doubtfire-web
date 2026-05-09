@@ -15,6 +15,7 @@ import {ProjectPlanComponent} from './projects/states/plan/project-plan.componen
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {CrossDashboardComponent} from './dashboard/f-cross-dashboard.component';
 /*
  * Use this file to store any states that are sourced by angular components.
  */
@@ -66,6 +67,23 @@ const HomeState: NgHybridStateDeclaration = {
   data: {
     pageTitle: 'Home Page',
     roleWhitelist: ['Student', 'Tutor', 'Convenor', 'Admin', 'Auditor'],
+  },
+};
+
+/**
+ * Define the state for the cross-unit dashboard.
+ */
+const CrossDashboard: NgHybridStateDeclaration = {
+  name: 'crossdashboard',
+  url: '/dashboard',
+  views: {
+    main: {
+      component: CrossDashboardComponent,
+    },
+  },
+  data: {
+    pageTitle: 'Dashboard',
+    roleWhitelist: ['Student'],
   },
 };
 
@@ -581,6 +599,7 @@ export const doubtfireStates = [
   institutionSettingsState,
   TeachingPeriodsState,
   HomeState,
+  CrossDashboard,
   WelcomeState,
   SignInState,
   EditProfileState,
