@@ -31,10 +31,16 @@ export const utilService = angular.module('utilService', [])
   // A directive to ensure browser form auto-fill works,
   // since Angular doesn't support it.
   // See: http://stackoverflow.com/a/14966711
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   .directive('autoFillSync', ($timeout: angular.ITimeoutService) => {
     return {
       require: 'ngModel',
-      link: (scope: angular.IScope, elem: any, attrs: any, ngModel: any) => {
+      link: (
+        _scope: angular.IScope,
+        elem: angular.IAugmentedJQuery,
+        _attrs: angular.IAttributes,
+        ngModel: angular.INgModelController
+      ) => {
         const origVal = elem.val();
         $timeout(() => {
           const newVal = elem.val();
