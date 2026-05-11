@@ -40,6 +40,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
 
   sharedCommentComposerData: TaskCommentComposerData = {
     originalComment: null,
+    editingComment: null,
   };
 
   @Input() comment?: TaskComment;

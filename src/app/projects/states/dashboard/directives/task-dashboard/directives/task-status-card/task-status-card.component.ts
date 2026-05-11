@@ -12,6 +12,7 @@ import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-m
 import {Project} from 'src/app/api/models/project';
 import {UserService} from 'src/app/api/services/user.service';
 import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
+import {UnitRole} from 'src/app/api/models/unit-role';
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
@@ -55,7 +56,15 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   reapplyTriggers(): void {
     // if tutor is in queryParam
     if (this.router.globals.params.tutor != null) {
-      this.triggers = this.taskService.statusKeys.map((k) => this.taskService.statusData(k));
+      this.triggers = this.taskService.statusKeys
+        .map((k) => this.taskService.statusData(k))
+        .filter((trigger) => {
+          if (trigger.status !== 'complete') {
+            return true;
+          }
+
+          return this.task.canMarkComplete || this.task.status === 'complete';
+        });
     } else {
       const studentTriggers = _.map(
         this.taskService.switchableStates.student as TaskStatusEnum[],
@@ -80,6 +89,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   }
 
   triggerTransition(trigger: TaskStatusEnum): void {
+    if (trigger === 'complete' && !this.task.canMarkComplete) {
+      return;
+    }
+
     if (trigger === 'ready_for_feedback') {
       this.uploadSubmission();
     } else {
@@ -116,5 +129,14 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
 
   openFeedbackAppealModal(): void {
     this.feedbackAppealService.show(this.task);
+  }
+
+  public get currentUnitRole(): UnitRole | undefined {
+    const currentUser = this.userService.currentUser;
+    return this.project.unit.staff.find((ur) => ur.user.id === currentUser.id);
+  }
+
+  public get isTutor(): boolean {
+    return this.currentUnitRole.role === 'Convenor' || this.currentUnitRole.role === 'Tutor';
   }
 }

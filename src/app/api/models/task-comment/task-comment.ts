@@ -7,6 +7,8 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 export class TaskComment extends Entity {
+  private static readonly EDIT_WINDOW_MS = 10 * 60 * 1000;
+
   // Linked objects
   task: Task;
   originalComment: TaskComment = null;
@@ -57,11 +59,38 @@ export class TaskComment extends Entity {
     return ['text', 'discussion', 'audio', 'image', 'pdf'].includes(this.commentType);
   }
 
+  public get isStaffAuthored(): boolean {
+    return (
+      this.task?.unit?.staff?.some((unitRole) => unitRole.user.id === this.author?.id) ?? false
+    );
+  }
+
+  public get isAutomated(): boolean {
+    if (!this.isBubbleComment) {
+      return true;
+    }
+
+    return this.text?.trim().startsWith('**Automated Message:**') ?? false;
+  }
+
+  public get isManualFeedback(): boolean {
+    return this.isStaffAuthored && !this.isAutomated;
+  }
+
   public get project(): Project {
     return this.task.project;
   }
 
   public get currentUserCanEdit() {
+    return (
+      this.authorIsMe &&
+      this.commentType === 'text' &&
+      this.createdAt instanceof Date &&
+      new Date().getTime() - this.createdAt.getTime() <= TaskComment.EDIT_WINDOW_MS
+    );
+  }
+
+  public get currentUserCanDelete() {
     return this.authorIsMe || this.project?.unit.currentUserIsStaff;
   }
 

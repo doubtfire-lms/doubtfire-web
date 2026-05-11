@@ -55,6 +55,10 @@ export class InboxComponent implements OnInit, OnDestroy {
     return this.inboxPanel?.nativeElement.getBoundingClientRect().width < 150;
   }
 
+  get isMobileView(): boolean {
+    return this.mediaObserver.isActive('lt-md');
+  }
+
   constructor(
     private hotkeys: HotkeysService,
     private selectedTask: SelectedTaskService,
@@ -102,9 +106,18 @@ export class InboxComponent implements OnInit, OnDestroy {
           keys: 'control.Shift.c',
           description: 'Mark selected task as complete',
         })
-        .subscribe(() =>
-          this.selectedTask.selectedTask?.updateTaskStatus('complete')
-      );
+        .subscribe(() => {
+          const task = this.selectedTask.selectedTask;
+          if (!task) {
+            return;
+          }
+
+          if (!task.canMarkComplete) {
+            return;
+          }
+
+          task.updateTaskStatus('complete');
+        });
     }
 
     if (!registeredHotkeys.includes('control.shift.d')) {

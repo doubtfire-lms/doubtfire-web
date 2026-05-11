@@ -39,6 +39,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'similarityLanguage',
       'hasJplagReport',
       'assessInPortfolioOnly',
+      'requiresDiscussion',
       {
         keys: 'targetDate',
         toEntityFn: MappingFunctions.mapDateToEndOfDay,
@@ -145,6 +146,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       {
         keys: 'overseerSteps',
         toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
+          taskDefinition.overseerStepsCache.clear();
           data[key]?.forEach((overseerStep) => {
             taskDefinition.overseerStepsCache.getOrCreate(
               overseerStep['id'],

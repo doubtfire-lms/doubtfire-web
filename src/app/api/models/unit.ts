@@ -75,6 +75,7 @@ export class Unit extends Entity {
   extensionWeeksOnResubmitRequest: number;
   allowStudentChangeTutorial: boolean;
   markLateSubmissionsAsAssessInPortfolio: boolean;
+  enforceFeedbackBeforeDiscussedInClass: boolean;
 
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
@@ -583,6 +584,16 @@ export class Unit extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/assess.json?unit_id=${
       this.id
     }`;
+  }
+
+  public getBatchFeedbackUploadUrl(taskDefinition: TaskDefinition | number): string {
+    const params = new URLSearchParams({unit_id: `${this.id}`});
+    const taskDefinitionId =
+      taskDefinition instanceof TaskDefinition ? taskDefinition.id : taskDefinition;
+
+    params.set('task_definition_id', `${taskDefinitionId}`);
+
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/batch_feedback_csv.json?${params.toString()}`;
   }
 
   public getTaskDefinitionBatchUploadUrl(): string {

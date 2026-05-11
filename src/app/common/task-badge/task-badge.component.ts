@@ -9,6 +9,7 @@ import {TaskDefinition} from 'src/app/api/models/task-definition';
 export class FTaskBadgeComponent implements OnInit {
   @Input() taskDef: TaskDefinition;
   @Input() size = 100;
+  @Input() highlight = false;
 
   lineHeight = 12;
 

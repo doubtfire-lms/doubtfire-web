@@ -228,6 +228,33 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     );
   }
 
+  public editComment(comment: TaskComment, text: string): Observable<TaskComment> {
+    const opts: RequestOptions<TaskComment> = {
+      endpointFormat: this.commentEndpointFormat,
+      entity: comment,
+      body: {
+        comment: text,
+      },
+      cache: comment.task.commentCache,
+      constructorParams: comment.task,
+    };
+
+    return super
+      .update(
+        {
+          id: comment.id,
+          projectId: comment.project.id,
+          taskDefinitionId: comment.task.definition.id,
+        },
+        opts,
+      )
+      .pipe(
+        tap((_updatedComment: TaskComment) => {
+          comment.task.refreshCommentData();
+        }),
+      );
+  }
+
   public requestExtension(
     reason: string,
     weeksRequested: number,

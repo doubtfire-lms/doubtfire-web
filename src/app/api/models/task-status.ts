@@ -19,6 +19,7 @@ export type TaskStatusEnum =
 export type TaskStatusUiData = {
   status: TaskStatusEnum;
   icon: string;
+  materialIcon: string;
   label: string;
   class: string;
   help: {detail: string; reason: string; action: string};
@@ -237,6 +238,24 @@ export class TaskStatus {
     ['attention_required', 'fa fa-commenting'],
   ]);
 
+  // Material icons used by newer UI elements.
+  public static readonly STATUS_MATERIAL_ICONS = new Map<TaskStatusEnum, string>([
+    ['ready_for_feedback', 'thumb_up'],
+    ['not_started', 'pause'],
+    ['working_on_it', 'bolt'],
+    ['need_help', 'help'],
+    ['redo', 'undo'],
+    ['feedback_exceeded', 'visibility_off'],
+    ['fix_and_resubmit', 'construction'],
+    ['discuss', 'question_answer'],
+    ['demonstrate', 'record_voice_over'],
+    ['complete', 'done'],
+    ['fail', 'close'],
+    ['time_exceeded', 'schedule'],
+    ['assess_in_portfolio', 'folder_open'],
+    ['attention_required', 'sms_failed'],
+  ]);
+
   // Please make sure this matches task-status-colors.less
   public static readonly STATUS_COLORS = new Map<TaskStatusEnum, string>([
     ['ready_for_feedback', '#0079D8'],
@@ -439,6 +458,7 @@ export class TaskStatus {
     return {
       status: status,
       icon: TaskStatus.STATUS_ICONS.get(status),
+      materialIcon: TaskStatus.STATUS_MATERIAL_ICONS.get(status),
       label: TaskStatus.STATUS_LABELS.get(status),
       class: TaskStatus.statusClass(status),
       help: TaskStatus.HELP_DESCRIPTIONS.get(status),

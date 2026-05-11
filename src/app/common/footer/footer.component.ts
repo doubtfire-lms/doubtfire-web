@@ -7,6 +7,10 @@ import {FileDownloaderService} from '../file-downloader/file-downloader.service'
 import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {UserService} from 'src/app/api/services/user.service';
+import {ProjectService} from 'src/app/api/services/project.service';
+import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
+import {DiscussedInClassReasonModalService} from '../modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
+import {AlertService} from '../services/alert.service';
 
 @Component({
   selector: 'f-footer',
@@ -14,18 +18,25 @@ import {UserService} from 'src/app/api/services/user.service';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
+  private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;
+
   constructor(
     public selectedTaskService: SelectedTaskService,
     public taskService: TaskService,
     private fileDownloader: FileDownloaderService,
     private taskAssessmentModal: TaskAssessmentModalService,
     private userService: UserService,
+    private projectService: ProjectService,
+    private confirmationModalService: ConfirmationModalService,
+    private discussedInClassReasonModal: DiscussedInClassReasonModalService,
+    private alertService: AlertService,
   ) {}
 
   @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
 
   selectedTask$: Observable<Task>;
   selectedTask: Task;
+  public showModerationStatusButtons = false;
 
   @ViewChild('similaritiesButton', {static: false, read: ElementRef})
   similaritiesButton: ElementRef;
@@ -69,8 +80,7 @@ export class FooterComponent implements OnInit {
     const canAccess =
       this.currentUnitRole.role === 'Convenor' ||
       this.currentUnitRole.role === 'Admin' ||
-      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id) ||
-      tutor.id === this.currentUnitRole.id;
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id);
 
     return canAccess;
   }
@@ -178,5 +188,73 @@ export class FooterComponent implements OnInit {
     }
 
     return true;
+  }
+
+  public get completeButtonEnabled(): boolean {
+    return this.actionButtonEnabled && !!this.selectedTask?.canMarkComplete;
+  }
+
+  public get hideMainActionButtonsForModeration(): boolean {
+    return this.viewType === 'moderation' && !this.showModerationStatusButtons;
+  }
+
+  public toggleModerationStatusButtons() {
+    this.showModerationStatusButtons = !this.showModerationStatusButtons;
+  }
+
+  async markAsResubmit(task: Task) {
+    if (!task?.definition || !task?.project) {
+      return;
+    }
+
+    try {
+      const hasReadyDependents = await task.hasReadyForFeedbackDependents();
+      if (!hasReadyDependents) {
+        task.updateTaskStatus('fix_and_resubmit');
+        return;
+      }
+
+      this.confirmationModalService.show(
+        'Move dependent tasks to Fix and Resubmit?',
+        'This task is a prerequisite for one or more other tasks submitted by this student that are Ready for Feedback. Do you want to move those tasks to Fix and Resubmit as well?',
+        () => {
+          task.updateTaskStatus('fix_and_resubmit', false, true);
+        },
+        () => {
+          task.updateTaskStatus('fix_and_resubmit');
+        },
+        'Yes, update dependent tasks',
+        'No, just this task',
+      );
+    } catch (error) {
+      this.alertService.error(`Failed to check dependent task statuses: ${error}`, 6000);
+      task.updateTaskStatus('fix_and_resubmit');
+    }
+  }
+
+  public markSelectedTaskAsDiscussed() {
+    if (!this.selectedTask) {
+      return;
+    }
+
+    if (!this.selectedTask.unit.enforceFeedbackBeforeDiscussedInClass) {
+      this.selectedTask.markAsDiscussed();
+      return;
+    }
+
+    this.discussedInClassReasonModal
+      .show(
+        'Mark Discussed in Class',
+        `Add a tutor note explaining why ${this.selectedTask.definition.abbreviation} is being marked as discussed in class.`,
+        this.discussedInClassNotePrefix,
+      )
+      .afterClosed()
+      .subscribe((reason) => {
+        if (!reason) {
+          return;
+        }
+
+        this.selectedTask.markAsDiscussed(reason);
+      });
   }
 }
