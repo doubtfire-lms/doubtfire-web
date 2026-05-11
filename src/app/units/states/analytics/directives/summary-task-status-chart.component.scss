@@ -1,3 +1,4 @@
+// reverses the order of the legend labels, so that they match the order of the bars in the chart
 :host ::ng-deep .reverse-legend-order .legend-labels {
   transform: scaleY(-1);
 }
