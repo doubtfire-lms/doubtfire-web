@@ -6,7 +6,9 @@
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-select [(ngModel)]="campusFilter" (selectionChange)="refreshData()">
         <mat-option value="all">All</mat-option>
-        <mat-option *ngFor="let campus of campuses" [value]="campus">{{ campus }}</mat-option>
+        @for (campus of campuses; track campus) {
+          <mat-option [value]="campus">{{ campus }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <button
