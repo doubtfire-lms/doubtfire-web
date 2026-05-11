@@ -4,7 +4,7 @@
       <mat-select
         [value]="task?.status"
         (selectionChange)="triggerTransition($event.value)"
-        [disabled]="task?.blockedByPrerequisiteTasks()"
+        [disabled]="task?.blockedByPrerequisiteTasks() && !isTutor"
       >
         <mat-select-trigger>
           <span style="display: inline-flex">
@@ -47,7 +47,9 @@
         mat-stroked-button
         (click)="uploadSubmission()"
         [disabled]="
-          isReadyForFeedback() || task?.blockedByPrerequisiteTasks() || isSubmittedForPortfolio()
+          isReadyForFeedback() ||
+          (task?.blockedByPrerequisiteTasks() && !isTutor) ||
+          isSubmittedForPortfolio()
         "
       >
         Upload Submission
