@@ -91,7 +91,6 @@ import 'build/src/app/units/modals/unit-ilo-edit-modal/unit-ilo-edit-modal.js';
 import 'build/src/app/units/modals/modals.js';
 import 'build/src/app/units/units.js';
 import 'build/src/app/units/states/tasks/inbox/inbox.js';
-import 'build/src/app/units/states/tasks/tasks.js';
 import 'build/src/app/units/states/tasks/viewer/directives/directives.js';
 import 'build/src/app/units/states/tasks/viewer/viewer.js';
 import 'build/src/app/units/states/tasks/definition/definition.js';
@@ -203,6 +202,7 @@ import {FooterComponent} from './common/footer/footer.component';
 import {TaskAssessmentCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-assessment-card/task-assessment-card.component';
 import {TaskSubmissionCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import {InboxComponent} from './units/states/tasks/inbox/inbox.component';
+import {UnitsTasksStateComponent} from './units/states/tasks/tasks.component';
 import {TaskDefinitionEditorComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-editor.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
@@ -417,6 +417,10 @@ DoubtfireAngularJSModule.directive(
   downgradeComponent({component: TasksViewerComponent}),
 );
 DoubtfireAngularJSModule.directive('fInbox', downgradeComponent({component: InboxComponent}));
+DoubtfireAngularJSModule.directive(
+  'unitsTasksState',
+  downgradeComponent({component: UnitsTasksStateComponent}),
+);
 DoubtfireAngularJSModule.directive(
   'fTaskDueCard',
   downgradeComponent({component: TaskDueCardComponent}),
