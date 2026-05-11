@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { StateService, TransitionService, Transition } from '@uirouter/angular';
-import { NewTaskService } from 'src/app/api/services/new-task.service';
+import { TaskService } from 'src/app/api/services/task.service';
 
 @Component({
   selector: 'units-tasks-state',
@@ -21,7 +21,7 @@ export class UnitsTasksStateComponent implements OnInit, OnDestroy {
   constructor(
     private stateService: StateService,
     private transitionService: TransitionService,
-    private newTaskService: NewTaskService,
+    private taskService: TaskService,
   ) {}
 
   ngOnInit(): void {
@@ -79,6 +79,6 @@ export class UnitsTasksStateComponent implements OnInit, OnDestroy {
 
   private setTaskKeyFromUrlParams(taskKeyString: string | null): void {
     // Bug fix 1 & 2: null-safe + forced string before passing to service
-    this.taskData.taskKey = this.newTaskService.taskKeyFromString(taskKeyString ?? '');
+    this.taskData.taskKey = this.taskService.taskKeyFromString(taskKeyString ?? '');
   }
 }

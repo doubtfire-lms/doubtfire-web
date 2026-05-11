@@ -242,6 +242,14 @@ import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/p
 import {TaskOverseerReportComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
 
+angular.module('doubtfire.units.states.tasks', [
+  'doubtfire.units.states.tasks.inbox',
+  'doubtfire.units.states.tasks.definition',
+  'doubtfire.units.states.tasks.moderation',
+  'doubtfire.units.states.tasks.overflow',
+  'doubtfire.units.states.tasks.viewer',
+]);
+
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
     'doubtfire.config',
