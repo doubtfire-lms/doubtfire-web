@@ -122,9 +122,7 @@ export class GlobalStateService implements OnDestroy {
     setTimeout(() => {
       // Try to login using the refresh token
       this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
-        if (result) {
-          this.loadGlobals();
-        } else {
+        if (!result) {
           // Loading is finshed...
           this.isLoadingSubject.next(false);
 
