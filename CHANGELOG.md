@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.1-37](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-36...v10.0.1-37) (2026-05-12)
+
+
+### Bug Fixes
+
+* unlock task status selection for staff ([#1222](https://github.com/b0ink/doubtfire-deploy/issues/1222)) ([e4080d0](https://github.com/b0ink/doubtfire-deploy/commit/e4080d03a629654518bc362f48e8e0fbb790dd96))
+
 ### [10.0.1-36](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-35...v10.0.1-36) (2026-05-05)
 
 ### [10.0.1-35](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-34...v10.0.1-35) (2026-04-28)
