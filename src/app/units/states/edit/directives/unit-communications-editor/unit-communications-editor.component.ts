@@ -1,5 +1,13 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {NestedTreeControl} from '@angular/cdk/tree';
+import {MatDialog} from '@angular/material/dialog';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {Subscription} from 'rxjs';
 import {
@@ -12,10 +20,11 @@ import {
   CommunicationRule,
   CommunicationRulePreviewAllocation,
   CommunicationRulePreviewResponse,
-  CommunicationSetPreviewResponse,
   CommunicationRulePreviewStudent,
   CommunicationRuleService,
   CommunicationSet,
+  CommunicationSetPreviewResponse,
+  CommunicationSetSchedule,
   CommunicationSetService,
   TaskDefinition,
   Tutorial,
@@ -26,6 +35,10 @@ import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {
+  CommunicationScheduleModalComponent,
+  CommunicationScheduleModalData,
+} from './communication-schedule-modal/communication-schedule-modal.component';
 
 interface CommunicationTreeNode {
   type: 'set' | 'rule';
@@ -190,11 +203,16 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   private subscriptions: Subscription[] = [];
 
+  get currentUnitWeek(): number | null {
+    return this.unit?.weekNumber(new Date()) ?? null;
+  }
+
   constructor(
     private ruleService: CommunicationRuleService,
     private conditionService: CommunicationConditionService,
     private actionService: CommunicationActionService,
     private setService: CommunicationSetService,
+    private dialog: MatDialog,
     private campusService: CampusService,
     private alerts: AlertService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
@@ -292,6 +310,55 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       next: (job) => this.showExecutionProgress(job, `Executing ${set.name}`),
       error: (error) => this.showError(error),
     });
+  }
+
+  addSchedule(set: CommunicationSet): void {
+    this.openScheduleModal(set);
+  }
+
+  editSchedule(set: CommunicationSet, schedule: CommunicationSetSchedule): void {
+    this.openScheduleModal(set, schedule);
+  }
+
+  deleteSchedule(set: CommunicationSet, schedule: CommunicationSetSchedule): void {
+    const updatedSchedules = (set.schedules || []).filter(
+      (item) => (item.id || item.client_key) !== (schedule.id || schedule.client_key),
+    );
+    this.persistSchedules(set, updatedSchedules, 'Schedule removed');
+  }
+
+  scheduleTrackId(schedule: CommunicationSetSchedule): string | number {
+    return (
+      schedule.id ||
+      schedule.client_key ||
+      `${schedule.name || 'schedule'}-${schedule.anchor_week}-${schedule.anchor_day}`
+    );
+  }
+
+  scheduleSummary(schedule: CommunicationSetSchedule): string {
+    const cadence = this.scheduleCadence(schedule);
+    const ending = this.scheduleEnding(schedule);
+    return [cadence, ending].filter(Boolean).join(' | ');
+  }
+
+  scheduleAnchorSummary(schedule: CommunicationSetSchedule): string {
+    return `Week ${schedule.anchor_week || 1} on ${schedule.anchor_day || 'Monday'}`;
+  }
+
+  scheduleTimeSummary(schedule: CommunicationSetSchedule): string {
+    return `${this.formatTime(schedule.hour, schedule.minute)} ${schedule.timezone || 'UTC'}`;
+  }
+
+  scheduleNextRunSummary(schedule: CommunicationSetSchedule): string {
+    return schedule.next_run_at ? this.dateLabel(schedule.next_run_at) : 'Not scheduled';
+  }
+
+  scheduleLastRunSummary(schedule: CommunicationSetSchedule): string {
+    return schedule.last_run_at ? this.dateLabel(schedule.last_run_at) : 'Not yet run';
+  }
+
+  iceCubePreview(schedule: CommunicationSetSchedule): string {
+    return JSON.stringify(schedule.ice_cube_schedule || {}, null, 2);
   }
 
   selectSet(): void {
@@ -851,6 +918,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return `Set ${this.sets.length + 1}`;
   }
 
+  private defaultScheduleName(set: CommunicationSet): string {
+    return `Schedule ${(set.schedules?.length || 0) + 1}`;
+  }
+
   private activateSet(set: CommunicationSet, selectedRuleId?: number): void {
     this.rules = set.rules ?? [];
     this.selectedRuleId = selectedRuleId ?? this.rules[0]?.id;
@@ -876,6 +947,27 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     };
   }
 
+  private blankSchedule(set: CommunicationSet): CommunicationSetSchedule {
+    return new CommunicationSetSchedule({
+      client_key: this.newScheduleClientKey(),
+      communication_set_id: set.id,
+      name: this.defaultScheduleName(set),
+      active: true,
+      anchor_week: 1,
+      anchor_day: 'Monday',
+      recurrence: 'none',
+      interval: 1,
+      timezone: 'UTC',
+      hour: 8,
+      minute: 0,
+      ice_cube_schedule: {
+        timezone: 'UTC',
+        recurrence: 'none',
+        rules: [{type: 'one_off'}],
+      },
+    });
+  }
+
   private loadPreviewForSet(set: CommunicationSet): void {
     if (!this.unit) {
       this.setPreviewLoading = false;
@@ -897,11 +989,17 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   private applySetPreviewResponse(setResponse: CommunicationSetPreviewResponse): void {
     const rules = (setResponse.rules || []).map((rule) => new CommunicationRule(rule));
+    const existingSet = this.sets.find((set) => set.id === setResponse.id);
+    const schedules =
+      setResponse.schedules !== undefined
+        ? (setResponse.schedules || []).map((schedule) => new CommunicationSetSchedule(schedule))
+        : existingSet?.schedules || [];
     const updatedSet = new CommunicationSet({
       id: setResponse.id,
       unit_id: setResponse.unit_id,
       name: setResponse.name,
       active: setResponse.active,
+      schedules,
       rules,
     });
     const setIndex = this.sets.findIndex((set) => set.id === updatedSet.id);
@@ -959,6 +1057,84 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     rule: CommunicationRule,
   ): CommunicationRulePreviewStudent | undefined {
     return this.studentsFor(rule)[0];
+  }
+
+  private openScheduleModal(
+    set: CommunicationSet,
+    schedule?: CommunicationSetSchedule,
+  ): void {
+    const dialogRef = this.dialog.open(CommunicationScheduleModalComponent, {
+      width: '960px',
+      maxWidth: '96vw',
+      data: {
+        schedule: schedule
+          ? new CommunicationSetSchedule({
+              ...schedule,
+            })
+          : this.blankSchedule(set),
+        unit: this.unit,
+      } satisfies CommunicationScheduleModalData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) return;
+
+      const hydrated = new CommunicationSetSchedule({
+        ...result,
+        client_key: schedule?.client_key || result.client_key || this.newScheduleClientKey(),
+        communication_set_id: set.id,
+      });
+
+      const schedules = [...(set.schedules || [])];
+      const existingIndex = schedules.findIndex(
+        (item) => (item.id || item.client_key) === (schedule?.id || schedule?.client_key),
+      );
+
+      if (existingIndex >= 0) {
+        schedules[existingIndex] = hydrated;
+      } else {
+        schedules.push(hydrated);
+      }
+
+      this.persistSchedules(set, schedules, 'Schedule saved');
+    });
+  }
+
+  private persistSchedules(
+    set: CommunicationSet,
+    schedules: CommunicationSetSchedule[],
+    successMessage: string,
+  ): void {
+    this.setService
+      .updateForUnit(this.unit.id, set.id, {
+        name: set.name,
+        active: set.active,
+        schedules: schedules.map((schedule) => ({
+          id: schedule.id,
+          name: schedule.name,
+          active: schedule.active,
+          anchor_week: schedule.anchor_week,
+          anchor_day: schedule.anchor_day,
+          hour: schedule.hour,
+          minute: schedule.minute,
+          timezone: schedule.timezone,
+          recurrence: schedule.recurrence,
+          interval: schedule.interval,
+          repeat_count: schedule.repeat_count,
+          until_at: schedule.until_at,
+        })),
+      })
+      .subscribe({
+        next: (updatedSet) => {
+          set.schedules = updatedSet.schedules || [];
+          const setIndex = this.sets.findIndex((item) => item.id === set.id);
+          if (setIndex >= 0) {
+            this.sets[setIndex].schedules = updatedSet.schedules || [];
+          }
+          this.alerts.success(successMessage);
+        },
+        error: (error) => this.showError(error),
+      });
   }
 
   private showError(error: any): void {
@@ -1103,6 +1279,39 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       ?.split('_')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
+
+  private scheduleCadence(schedule: CommunicationSetSchedule): string {
+    switch (schedule.recurrence) {
+      case 'daily':
+        return `Daily every ${schedule.interval || 1} day(s)`;
+      case 'weekly':
+        return `Weekly every ${schedule.interval || 1} week(s) from ${schedule.anchor_day || 'Monday'}`;
+      case 'monthly':
+        return `Monthly every ${schedule.interval || 1} month(s) from Week ${schedule.anchor_week || 1} ${schedule.anchor_day || 'Monday'}`;
+      default:
+        return 'One-off run';
+    }
+  }
+
+  private scheduleEnding(schedule: CommunicationSetSchedule): string {
+    if (schedule.repeat_count) {
+      return `Stops after ${schedule.repeat_count} run(s)`;
+    }
+
+    if (schedule.until_at) {
+      return `Stops at ${this.dateLabel(schedule.until_at)}`;
+    }
+
+    return 'No expiry';
+  }
+
+  private formatTime(hour = 0, minute = 0): string {
+    return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+  }
+
+  private newScheduleClientKey(): string {
+    return `schedule-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   }
 
   private rebuildTree(): void {

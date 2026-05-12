@@ -2,7 +2,11 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {CommunicationSet, CommunicationSetPreviewResponse} from '../models/communication';
+import {
+  CommunicationSet,
+  CommunicationSetPreviewResponse,
+  CommunicationSetSchedule,
+} from '../models/communication';
 import {SidekiqJob} from '../models/sidekiq-job';
 
 @Injectable()
@@ -33,7 +37,9 @@ export class CommunicationSetService {
   public updateForUnit(
     unitId: number,
     setId: number,
-    set: Partial<Pick<CommunicationSet, 'name' | 'active'>>,
+    set: Partial<Pick<CommunicationSet, 'name' | 'active'>> & {
+      schedules?: Partial<CommunicationSetSchedule>[];
+    },
   ): Observable<CommunicationSet> {
     return this.httpClient
       .put<Partial<CommunicationSet>>(`${this.endpoint(unitId)}/${setId}`, {

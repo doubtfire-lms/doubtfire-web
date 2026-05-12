@@ -1,5 +1,33 @@
 import {Entity} from 'ngx-entity-service';
 
+export type CommunicationScheduleRecurrence = 'none' | 'daily' | 'weekly' | 'monthly';
+
+export class CommunicationSetSchedule extends Entity {
+  id?: number;
+  client_key?: string;
+  communication_set_id?: number;
+  name?: string;
+  active = true;
+  anchor_week = 1;
+  anchor_day = 'Monday';
+  hour = 8;
+  minute = 0;
+  timezone = 'UTC';
+  recurrence: CommunicationScheduleRecurrence = 'none';
+  interval = 1;
+  repeat_count?: number;
+  until_at?: string;
+  ice_cube_schedule?: Record<string, unknown>;
+  next_run_at?: string;
+  last_run_at?: string;
+  last_enqueued_at?: string;
+
+  constructor(json?: Partial<CommunicationSetSchedule>) {
+    super();
+    Object.assign(this, json);
+  }
+}
+
 export class CommunicationCondition extends Entity {
   id: number;
   type: string;
@@ -50,6 +78,7 @@ export interface CommunicationSetPreviewResponse {
   unit_id: number;
   name: string;
   active: boolean;
+  schedules?: Partial<CommunicationSetSchedule>[];
   rules: Partial<CommunicationRule>[];
   previews: CommunicationRulePreviewResponse[];
 }
@@ -96,12 +125,15 @@ export class CommunicationSet extends Entity {
   unit_id: number;
   name: string;
   active: boolean;
+  schedules: CommunicationSetSchedule[] = [];
   rules: CommunicationRule[] = [];
 
   constructor(json?: Partial<CommunicationSet>) {
     super();
     Object.assign(this, json);
 
+    this.schedules =
+      json?.schedules?.map((schedule) => new CommunicationSetSchedule(schedule)) ?? [];
     this.rules = json?.rules?.map((rule) => new CommunicationRule(rule)) ?? [];
   }
 }

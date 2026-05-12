@@ -253,6 +253,38 @@ export class Unit extends Entity {
   }
 
   /**
+   * Calculate the teaching week number for a given date.
+   * Mirrors the Rails fallback in Unit#week_number when a teaching period
+   * helper is not being used on the frontend.
+   */
+  public weekNumber(date: Date | string): number | null {
+    if (!date || !this.startDate) return null;
+
+    if (this.teachingPeriod) {
+      return this.teachingPeriod.weekNumber(date);
+    }
+
+    const targetDate = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(targetDate.valueOf())) return null;
+    const normalizedTargetDate = new Date(
+      targetDate.getFullYear(),
+      targetDate.getMonth(),
+      targetDate.getDate(),
+    );
+    const normalizedStartDate = new Date(
+      this.startDate.getFullYear(),
+      this.startDate.getMonth(),
+      this.startDate.getDate(),
+    );
+    const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+    return (
+      Math.floor(
+        (normalizedTargetDate.valueOf() - normalizedStartDate.valueOf()) / millisecondsPerWeek,
+      ) + 1
+    );
+  }
+
+  /**
    * Calculate how much time has elapsed in the teaching period, based on the start and
    * end date of the unit relative to the current date.
    *
@@ -270,8 +302,12 @@ export class Unit extends Entity {
     return Math.round((startToNow / totalDuration) * 100);
   }
 
-  public rolloverTo(body: {new_unit_code?: string, start_date: Date; end_date: Date}): Observable<Unit>;
-  public rolloverTo(body: {new_unit_code?: string, teaching_period_id: number}): Observable<Unit>;
+  public rolloverTo(body: {
+    new_unit_code?: string;
+    start_date: Date;
+    end_date: Date;
+  }): Observable<Unit>;
+  public rolloverTo(body: {new_unit_code?: string; teaching_period_id: number}): Observable<Unit>;
   public rolloverTo(body: any): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
 

@@ -328,6 +328,7 @@ import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal
 import {ConfirmModerationModalComponent} from './units/states/tasks/inbox/directives/moderation/confirm-moderation-modal/confirm-moderation-modal.component';
 import {TaskClaimComponent} from './units/states/tasks/inbox/directives/task-claim/task-claim.component';
 import {BulkImportStaffModalComponent} from './units/states/edit/directives/unit-staff-editor/bulk-import-staff-modal/bulk-import-staff-modal.component';
+import {CommunicationScheduleModalComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedule-modal.component';
 import {UnitCommunicationsEditorComponent} from './units/states/edit/directives/unit-communications-editor/unit-communications-editor.component';
 import {CommunicationActionService} from './api/services/communication-action.service';
 import {CommunicationConditionService} from './api/services/communication-condition.service';
@@ -535,6 +536,7 @@ const GANTT_CHART_CONFIG = {
     FeedbackAppealModalComponent,
     ConfirmModerationModalComponent,
     TaskClaimComponent,
+    CommunicationScheduleModalComponent,
     UnitCommunicationsEditorComponent,
   ],
   providers: [
