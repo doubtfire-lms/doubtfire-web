@@ -25,6 +25,7 @@ import {
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 interface CommunicationTreeNode {
   type: 'set' | 'rule';
@@ -197,6 +198,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     private campusService: CampusService,
     private alerts: AlertService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
+    private confirmationModalService: ConfirmationModalService,
   ) {}
 
   ngOnInit(): void {
@@ -273,6 +275,16 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       },
       error: (error) => this.showError(error),
     });
+  }
+
+  confirmExecuteSet(set: CommunicationSet): void {
+    this.confirmationModalService.show(
+      'Execute Set?',
+      'This will execute every rule in this set, in sequence. Once a student is matched by an earlier rule, they are removed from consideration for the remaining rules, so each student can only be picked up once during the set run.',
+      () => this.executeSet(set),
+      undefined,
+      'Execute Set',
+    );
   }
 
   executeSet(set: CommunicationSet): void {
@@ -398,6 +410,16 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         },
         error: (error) => this.showError(error),
       });
+  }
+
+  confirmExecuteRule(rule: CommunicationRule): void {
+    this.confirmationModalService.show(
+      'Execute Rule?',
+      'This will execute only this rule. However, any earlier rules in the set are still taken into account first, so students who would already have been matched earlier are excluded before this rule is applied.',
+      () => this.executeRule(rule),
+      undefined,
+      'Execute Rule',
+    );
   }
 
   executeRule(rule: CommunicationRule): void {
@@ -1064,9 +1086,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   conditionsSummary(rule: CommunicationRule): string {
     return (rule.conditions || [])
-      .map(
-        (condition) =>
-          `- ${this.conditionTypeLabel(condition.type)}: ${this.labelFor(condition)}`.trim(),
+      .map((condition) =>
+        `- ${this.conditionTypeLabel(condition.type)}: ${this.labelFor(condition)}`.trim(),
       )
       .join('\n');
   }

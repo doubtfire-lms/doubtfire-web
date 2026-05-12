@@ -130,7 +130,7 @@
               }
             </div>
             <div class="flex gap-2 items-center">
-              <button mat-raised-button (click)="executeSet(set)">Execute Set</button>
+              <button mat-raised-button (click)="confirmExecuteSet(set)">Execute Set</button>
               <button mat-icon-button color="warn" (click)="deleteSet(set)">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -176,7 +176,7 @@
                 </div>
 
                 <div class="flex items-center gap-3 min-w-fit">
-                  <button mat-raised-button (click)="executeRule(rule)">Execute Rule</button>
+                  <button mat-raised-button (click)="confirmExecuteRule(rule)">Execute Rule</button>
                 </div>
               </div>
 
