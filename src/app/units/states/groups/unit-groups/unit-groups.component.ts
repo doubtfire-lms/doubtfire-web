@@ -7,9 +7,10 @@ import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global
 // This component is only displayed to staff
 // Students will be shown the projects/states/groups (project-groups) component
 @Component({
-  selector: 'f-unit-groups',
-  templateUrl: './unit-groups.component.html',
-  styleUrl: './unit-groups.component.scss',
+    selector: 'f-unit-groups',
+    templateUrl: './unit-groups.component.html',
+    styleUrl: './unit-groups.component.scss',
+    standalone: false
 })
 export class UnitGroupsComponent implements OnInit, OnDestroy {
   @Input() unit$: Observable<Unit>;

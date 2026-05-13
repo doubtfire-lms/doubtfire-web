@@ -12,9 +12,10 @@ import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.se
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-task-definition-prerequisites',
-  templateUrl: 'task-definition-prerequisites.component.html',
-  styleUrls: ['task-definition-prerequisites.component.scss'],
+    selector: 'f-task-definition-prerequisites',
+    templateUrl: 'task-definition-prerequisites.component.html',
+    styleUrls: ['task-definition-prerequisites.component.scss'],
+    standalone: false
 })
 export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   @Input() taskDefinition: TaskDefinition;

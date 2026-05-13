@@ -2,7 +2,8 @@ import {Pipe, PipeTransform} from '@angular/core';
 import * as marked from 'marked';
 
 @Pipe({
-  name: 'marked',
+    name: 'marked',
+    standalone: false
 })
 export class MarkedPipe implements PipeTransform {
   // Set the options for the markdown renderer

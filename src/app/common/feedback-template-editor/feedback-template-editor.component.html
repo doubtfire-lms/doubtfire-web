@@ -19,12 +19,12 @@
             (click)="selectFeedbackTemplate(feedbackTemplate)"
             class="pr-0"
           >
-            <ng-container *ngIf="feedbackTemplate.type === 'group'">
+            @if (feedbackTemplate.type === 'group') {
               <mat-icon>folder</mat-icon>
-            </ng-container>
-            <ng-container *ngIf="feedbackTemplate.type === 'template'">
+            }
+            @if (feedbackTemplate.type === 'template') {
               <mat-icon>description</mat-icon>
-            </ng-container>
+            }
           </td>
         </ng-container>
         <ng-container matColumnDef="parent" sticky>
@@ -176,9 +176,11 @@
             <mat-form-field appearance="outline" class="basis-1/5">
               <mat-label>Parent</mat-label>
               <mat-select [(ngModel)]="selectedTemplate.parentChipId">
-                <mat-option *ngFor="let parent of getPossibleParents()" [value]="parent.id">
-                  {{ parent.chipText }}
-                </mat-option>
+                @for (parent of getPossibleParents(); track parent) {
+                  <mat-option [value]="parent.id">
+                    {{ parent.chipText }}
+                  </mat-option>
+                }
               </mat-select>
             </mat-form-field>
 
@@ -236,12 +238,11 @@
                 <mat-label>Task Status</mat-label>
                 <mat-select [(ngModel)]="selectedTemplate.taskStatus">
                   <mat-option [value]="null"></mat-option>
-                  <mat-option
-                    *ngFor="let status of taskService.feedbackTemplateStatuses"
-                    [value]="status"
-                  >
-                    {{ taskService.statusData(status).label }}
-                  </mat-option>
+                  @for (status of taskService.feedbackTemplateStatuses; track status) {
+                    <mat-option [value]="status">
+                      {{ taskService.statusData(status).label }}
+                    </mat-option>
+                  }
                 </mat-select>
               </mat-form-field>
             </div>

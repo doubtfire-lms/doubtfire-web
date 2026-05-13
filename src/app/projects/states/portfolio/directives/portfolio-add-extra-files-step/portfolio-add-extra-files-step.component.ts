@@ -4,9 +4,10 @@ import {Project} from 'src/app/api/models/project';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-portfolio-add-extra-files-step',
-  templateUrl: 'portfolio-add-extra-files-step.component.html',
-  styleUrls: ['portfolio-add-extra-files-step.component.scss'],
+    selector: 'f-portfolio-add-extra-files-step',
+    templateUrl: 'portfolio-add-extra-files-step.component.html',
+    styleUrls: ['portfolio-add-extra-files-step.component.scss'],
+    standalone: false
 })
 export class PortfolioAddExtraFilesStepComponent implements OnInit {
   @Input() project: Project;

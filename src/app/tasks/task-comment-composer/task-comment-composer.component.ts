@@ -18,7 +18,7 @@ import {
 } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
-import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji/';
+import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {
   FeedbackTemplate,
@@ -67,15 +67,16 @@ const ACCEPTED_FILE_TYPES = [
  * The task comment composer is responsible for creating and adding comments to a given task.
  */
 @Component({
-  selector: 'task-comment-composer',
-  templateUrl: './task-comment-composer.component.html',
-  styleUrls: ['./task-comment-composer.component.scss'],
-  animations: [
-    trigger('shrinkgrow', [
-      transition('true => false', [style({width: 38.4}), animate('150ms 0ms ease-in-out')]),
-      transition('false => true', [style({width: 80}), animate('150ms 0ms ease-in-out')]),
-    ]),
-  ],
+    selector: 'task-comment-composer',
+    templateUrl: './task-comment-composer.component.html',
+    styleUrls: ['./task-comment-composer.component.scss'],
+    animations: [
+        trigger('shrinkgrow', [
+            transition('true => false', [style({ width: 38.4 }), animate('150ms 0ms ease-in-out')]),
+            transition('false => true', [style({ width: 80 }), animate('150ms 0ms ease-in-out')]),
+        ]),
+    ],
+    standalone: false
 })
 export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCheck, OnChanges {
   @Input() task: Task;
@@ -789,9 +790,10 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
 // The discussion prompt composer dialog Component
 // eslint-disable-next-line max-classes-per-file
 @Component({
-  selector: 'discussion-prompt-composer-dialog.html',
-  templateUrl: 'discussion-prompt-composer-dialog.html',
-  styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
+    selector: 'discussion-prompt-composer-dialog.html',
+    templateUrl: 'discussion-prompt-composer-dialog.html',
+    styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
+    standalone: false
 })
 export class DiscussionComposerDialog implements OnInit {
   constructor(

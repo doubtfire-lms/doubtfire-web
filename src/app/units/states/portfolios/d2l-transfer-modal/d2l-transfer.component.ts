@@ -12,9 +12,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
-  selector: 'f-d2l-transfer',
-  templateUrl: 'd2l-transfer.component.html',
-  styleUrl: 'd2l-transfer.component.scss',
+    selector: 'f-d2l-transfer',
+    templateUrl: 'd2l-transfer.component.html',
+    styleUrl: 'd2l-transfer.component.scss',
+    standalone: false
 })
 export class D2lTransferComponent implements OnInit {
   public d2lDataMapping: D2lAssessmentMapping = new D2lAssessmentMapping(this.data);

@@ -27,11 +27,13 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-stroked-button color="warn" (click)="delete()" *ngIf="d2lDataMapping.id">
-    Delete
-  </button>
+  @if (d2lDataMapping.id) {
+    <button mat-stroked-button color="warn" (click)="delete()">Delete</button>
+  }
   <button mat-stroked-button (click)="saveAndClose()" class="pull-right">
-    <span *ngIf="d2lDataMapping.hasChanges(d2lAssessmentMappingService.mapping)">Save and </span
-    >Close
+    @if (d2lDataMapping.hasChanges(d2lAssessmentMappingService.mapping)) {
+      <span>Save and </span>
+    }
+    Close
   </button>
 </mat-dialog-actions>

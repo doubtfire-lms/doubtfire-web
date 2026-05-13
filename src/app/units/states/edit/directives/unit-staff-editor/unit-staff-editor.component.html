@@ -132,9 +132,11 @@
         (optionSelected)="addSelectedStaff($event.option.value)"
         [displayWith]="displayStaffName"
       >
-        <mat-option *ngFor="let staff of filteredStaff" [value]="staff">
-          {{ staff.name }}
-        </mat-option>
+        @for (staff of filteredStaff; track staff) {
+          <mat-option [value]="staff">
+            {{ staff.name }}
+          </mat-option>
+        }
       </mat-autocomplete>
     </mat-form-field>
 

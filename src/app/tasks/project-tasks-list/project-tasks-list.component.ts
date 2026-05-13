@@ -2,9 +2,10 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Project, Unit, Task, TaskService, TaskStatusEnum, GradeService} from 'src/app/api/models/doubtfire-model';
 
 @Component({
-  selector: 'f-project-tasks-list',
-  templateUrl: './project-tasks-list.component.html',
-  styleUrls: ['./project-tasks-list.component.scss'],
+    selector: 'f-project-tasks-list',
+    templateUrl: './project-tasks-list.component.html',
+    styleUrls: ['./project-tasks-list.component.scss'],
+    standalone: false
 })
 export class ProjectTasksListComponent implements OnInit {
   @Input() unit?: Unit;

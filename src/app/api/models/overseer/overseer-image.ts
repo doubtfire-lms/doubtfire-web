@@ -1,5 +1,5 @@
-import { StringNullableChain } from 'lodash';
-import { Entity, EntityMapping } from 'ngx-entity-service';
+import {StringNullableChain} from 'lodash';
+import {Entity, EntityMapping} from 'ngx-entity-service';
 
 export class OverseerImage extends Entity {
   id: number;
@@ -9,7 +9,10 @@ export class OverseerImage extends Entity {
   pulledImageStatus: string;
   lastPulledDate: string;
 
-  public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+  public override toJson<T extends Entity>(
+    mappingData: EntityMapping<T>,
+    ignoreKeys?: string[],
+  ): object {
     return {
       overseer_image: super.toJson(mappingData, ignoreKeys),
     };

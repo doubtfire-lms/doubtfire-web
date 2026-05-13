@@ -3,9 +3,10 @@ import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 
 @Component({
-  selector: 'f-task-details-view',
-  templateUrl: './task-details-view.component.html',
-  styleUrls: ['./task-details-view.component.scss'],
+    selector: 'f-task-details-view',
+    templateUrl: './task-details-view.component.html',
+    styleUrls: ['./task-details-view.component.scss'],
+    standalone: false
 })
 export class FTaskDetailsViewComponent {
   @Input() taskDef: TaskDefinition;

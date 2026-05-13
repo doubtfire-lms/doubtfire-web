@@ -7,9 +7,10 @@ import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.compon
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'campus-list',
-  templateUrl: 'campus-list.component.html',
-  styleUrls: ['campus-list.component.scss'],
+    selector: 'campus-list',
+    templateUrl: 'campus-list.component.html',
+    styleUrls: ['campus-list.component.scss'],
+    standalone: false
 })
 export class CampusListComponent extends EntityFormComponent<Campus> {
   @ViewChild(MatTable, {static: true}) table: MatTable<Campus>;

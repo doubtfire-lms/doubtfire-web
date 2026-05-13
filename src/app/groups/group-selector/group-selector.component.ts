@@ -20,9 +20,10 @@ import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.compon
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-group-selector',
-  templateUrl: './group-selector.component.html',
-  styleUrls: ['./group-selector.component.scss'],
+    selector: 'f-group-selector',
+    templateUrl: './group-selector.component.html',
+    styleUrls: ['./group-selector.component.scss'],
+    standalone: false
 })
 export class GroupSelectorComponent
   extends EntityFormComponent<Group>

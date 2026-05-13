@@ -8,9 +8,10 @@ import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-portfolios',
-  templateUrl: './portfolios.component.html',
-  styleUrl: './portfolios.component.scss',
+    selector: 'f-portfolios',
+    templateUrl: './portfolios.component.html',
+    styleUrl: './portfolios.component.scss',
+    standalone: false
 })
 export class PortfoliosComponent implements OnInit {
   @Input() unit$: Observable<Unit>;

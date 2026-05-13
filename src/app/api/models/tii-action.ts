@@ -1,6 +1,6 @@
-import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
-import { Observable } from 'rxjs';
-import { Unit } from './doubtfire-model';
+import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
+import {Observable} from 'rxjs';
+import {Unit} from './doubtfire-model';
 
 export class TiiAction extends Entity {
   id: number;
@@ -14,5 +14,4 @@ export class TiiAction extends Entity {
   log: string;
 
   description: string;
-
 }

@@ -11,15 +11,19 @@ import {TaskPrerequisite} from './task-prerequisite';
 import {DiscussionPrompt} from './discussion-prompt';
 import {OverseerStep} from './overseer/overseer-step';
 
-export type UploadRequirement = {
+export interface UploadRequirement {
   key: string;
   name: string;
   type: string;
   tiiCheck?: boolean;
   tiiPct?: number;
-};
+}
 
-export type SimilarityCheck = {key: string; type: string; pattern: string};
+export interface SimilarityCheck {
+  key: string;
+  type: string;
+  pattern: string;
+}
 
 export class TaskDefinition extends Entity {
   id: number;

@@ -141,9 +141,11 @@ $light-theme: mat.define-theme((
     primary: $_primary,
     tertiary: $_tertiary,
     use-system-variables: true,
+    system-variables-prefix: sys,
   ),
   typography: (
     use-system-variables: true,
+    system-variables-prefix: sys,
     plain-family: "Inter, 'open-sans', 'Roboto'",
     brand-family: "'Grotesk'",
     bold-weight: 900,
@@ -157,9 +159,11 @@ $dark-theme: mat.define-theme((
     primary: $_primary,
     tertiary: $_tertiary,
     use-system-variables: true,
+    system-variables-prefix: sys,
   ),
   typography: (
     use-system-variables: true,
+    system-variables-prefix: sys,
     plain-family: "Inter, 'open-sans', 'Roboto'",
     brand-family: "'Grotesk'",
     bold-weight: 900,

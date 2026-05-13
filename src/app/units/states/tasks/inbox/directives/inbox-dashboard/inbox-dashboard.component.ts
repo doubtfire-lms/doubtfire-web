@@ -13,9 +13,10 @@ enum InboxDashboardTab {
 }
 
 @Component({
-  selector: 'f-inbox-dashboard',
-  templateUrl: './inbox-dashboard.component.html',
-  host: {'class': 'block h-full'},
+    selector: 'f-inbox-dashboard',
+    templateUrl: './inbox-dashboard.component.html',
+    host: { 'class': 'block h-full' },
+    standalone: false
 })
 export class InboxDashboardComponent implements OnChanges {
   @Input() task: Task;

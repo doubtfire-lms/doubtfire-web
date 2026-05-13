@@ -1,7 +1,10 @@
 <div class="bg-white shadow-md rounded-lg overflow-hidden max-[991px]:mt-6 min-[992px]:mt-0">
   <div class="bg-neutral-100 px-6 items-center">
     <h4 class="font-semibold text-gray-800 py-6">
-      Progress Dashboard <span *ngIf="tutor">for {{ project.student.name }}</span>
+      Progress Dashboard
+      @if (tutor) {
+        <span>for {{ project.student.name }}</span>
+      }
     </h4>
   </div>
   <div class="p-6 grid grid-cols-1 xl:grid-cols-2 gap-6 items-stretch">
@@ -29,17 +32,16 @@
                 (selectionChange)="updateTargetGrade($event.value)"
                 disabled
               >
-                <mat-option *ngFor="let grade of grades.values" [value]="grade">
-                  {{ grades.names[grade] }}
-                </mat-option>
+                @for (grade of grades.values; track grade) {
+                  <mat-option [value]="grade">
+                    {{ grades.names[grade] }}
+                  </mat-option>
+                }
               </mat-select>
             </mat-form-field>
             <div class="ml-1 py-2 opacity-70">
               To change your target grade, use the
-              <a
-                [routerLink]="['/projects', project.id, 'plan']"
-                class="underline cursor-pointer"
-              >
+              <a [routerLink]="['/projects', project.id, 'plan']" class="underline cursor-pointer">
                 Task Planner
               </a>
             </div>

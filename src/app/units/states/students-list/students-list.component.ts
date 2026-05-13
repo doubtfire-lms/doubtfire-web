@@ -16,8 +16,9 @@ import {UnitStudentEnrolmentModalService} from '../../modals/unit-student-enrolm
 
 // State for both convenors and tutors to access student list
 @Component({
-  selector: 'f-students-list',
-  templateUrl: './students-list.component.html',
+    selector: 'f-students-list',
+    templateUrl: './students-list.component.html',
+    standalone: false
 })
 export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() unit$: Observable<Unit>;

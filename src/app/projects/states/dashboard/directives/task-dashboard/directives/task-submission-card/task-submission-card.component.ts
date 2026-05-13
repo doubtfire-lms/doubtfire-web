@@ -5,9 +5,10 @@ import { FileDownloaderService } from 'src/app/common/file-downloader/file-downl
 import { AlertService } from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-task-submission-card',
-  templateUrl: './task-submission-card.component.html',
-  styleUrls: ['./task-submission-card.component.scss'],
+    selector: 'f-task-submission-card',
+    templateUrl: './task-submission-card.component.html',
+    styleUrls: ['./task-submission-card.component.scss'],
+    standalone: false
 })
 export class TaskSubmissionCardComponent implements OnChanges, OnInit {
   @Input() task: Task;

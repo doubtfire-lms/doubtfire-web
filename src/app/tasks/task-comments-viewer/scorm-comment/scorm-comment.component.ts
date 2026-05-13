@@ -9,9 +9,10 @@ import {
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 
 @Component({
-  selector: 'f-scorm-comment',
-  templateUrl: './scorm-comment.component.html',
-  styleUrls: ['./scorm-comment.component.scss'],
+    selector: 'f-scorm-comment',
+    templateUrl: './scorm-comment.component.html',
+    styleUrls: ['./scorm-comment.component.scss'],
+    standalone: false
 })
 export class ScormCommentComponent {
   @Input() task: Task;

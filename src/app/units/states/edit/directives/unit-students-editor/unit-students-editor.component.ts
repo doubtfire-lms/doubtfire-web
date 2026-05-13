@@ -16,9 +16,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {UnitStudentEnrolmentModalService} from 'src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 
 @Component({
-  selector: 'unit-students-editor',
-  templateUrl: 'unit-students-editor.component.html',
-  styleUrls: ['unit-students-editor.component.scss'],
+    selector: 'unit-students-editor',
+    templateUrl: 'unit-students-editor.component.html',
+    styleUrls: ['unit-students-editor.component.scss'],
+    standalone: false
 })
 export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatTable, {static: false}) table: MatTable<Project>;

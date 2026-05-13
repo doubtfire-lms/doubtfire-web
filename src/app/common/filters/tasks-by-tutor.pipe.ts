@@ -2,7 +2,8 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {Task, UnitRole} from '../../api/models/doubtfire-model';
 
 @Pipe({
-  name: 'tasksByTutor',
+    name: 'tasksByTutor',
+    standalone: false
 })
 export class TasksByTutorPipe implements PipeTransform {
   transform(currentUnitRole: UnitRole, tasks: Task[], unitRoleId?: number | string): Task[] {

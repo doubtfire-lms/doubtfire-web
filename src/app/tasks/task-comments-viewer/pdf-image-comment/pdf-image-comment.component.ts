@@ -5,9 +5,10 @@ import {CommentsModalService} from 'src/app/common/modals/comments-modal/comment
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'pdf-image-comment',
-  templateUrl: './pdf-image-comment.component.html',
-  styleUrls: [],
+    selector: 'pdf-image-comment',
+    templateUrl: './pdf-image-comment.component.html',
+    styleUrls: [],
+    standalone: false
 })
 export class PdfImageCommentComponent implements OnInit, OnDestroy {
   @Input() comment: TaskComment;

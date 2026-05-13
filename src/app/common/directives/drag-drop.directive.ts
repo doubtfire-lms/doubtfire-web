@@ -7,7 +7,8 @@ import { Directive, Output, EventEmitter, HostBinding, HostListener } from '@ang
  * class will be applied to the element.
  */
 @Directive({
-  selector: '[appDragDrop]',
+    selector: '[appDragDrop]',
+    standalone: false
 })
 export class DragDropDirective {
   @Output() fileDropped = new EventEmitter<FileList>();

@@ -42,8 +42,9 @@ import {CsvUploadModalService} from '../modals/csv-upload-modal/csv-upload-modal
 import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-csv-download-modal.service';
 
 @Component({
-  selector: 'f-learning-outcome-editor',
-  templateUrl: 'learning-outcome-editor.component.html',
+    selector: 'f-learning-outcome-editor',
+    templateUrl: 'learning-outcome-editor.component.html',
+    standalone: false
 })
 export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
   @Input() context?: TaskDefinition | Unit;

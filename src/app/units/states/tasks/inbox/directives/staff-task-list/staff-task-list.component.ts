@@ -42,9 +42,10 @@ import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-
 import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 
 @Component({
-  selector: 'df-staff-task-list',
-  templateUrl: './staff-task-list.component.html',
-  styleUrls: ['./staff-task-list.component.scss'],
+    selector: 'df-staff-task-list',
+    templateUrl: './staff-task-list.component.html',
+    styleUrls: ['./staff-task-list.component.scss'],
+    standalone: false
 })
 export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('searchDialog') searchDialog: TemplateRef<any>;

@@ -3,9 +3,10 @@ import {Task, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {ScormExtensionModalService} from 'src/app/common/modals/scorm-extension-modal/scorm-extension-modal.service';
 
 @Component({
-  selector: 'f-task-scorm-card',
-  templateUrl: './task-scorm-card.component.html',
-  styleUrls: ['./task-scorm-card.component.scss'],
+    selector: 'f-task-scorm-card',
+    templateUrl: './task-scorm-card.component.html',
+    styleUrls: ['./task-scorm-card.component.scss'],
+    standalone: false
 })
 export class TaskScormCardComponent implements OnChanges {
   @Input() task: Task;

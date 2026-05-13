@@ -1,4 +1,4 @@
-import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
+import {CachedEntityService, MappingProcess, RequestOptions} from 'ngx-entity-service';
 import {
   CampusService,
   Project,
@@ -12,7 +12,6 @@ import API_URL from 'src/app/config/constants/apiUrl';
 import {AppInjector} from 'src/app/app-injector';
 import {Observable} from 'rxjs';
 import {TaskService} from './task.service';
-import {MappingProcess} from 'ngx-entity-service/lib/mapping-process';
 import {TaskOutcomeAlignmentService} from './task-outcome-alignment.service';
 import {GroupService} from './group.service';
 

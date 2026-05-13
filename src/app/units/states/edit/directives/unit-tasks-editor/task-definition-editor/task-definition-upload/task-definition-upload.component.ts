@@ -5,9 +5,10 @@ import { Unit } from 'src/app/api/models/unit';
 import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
-  selector: 'f-task-definition-upload',
-  templateUrl: 'task-definition-upload.component.html',
-  styleUrls: ['task-definition-upload.component.scss'],
+    selector: 'f-task-definition-upload',
+    templateUrl: 'task-definition-upload.component.html',
+    styleUrls: ['task-definition-upload.component.scss'],
+    standalone: false
 })
 export class TaskDefinitionUploadComponent {
   @Input() public taskDefinition: TaskDefinition;

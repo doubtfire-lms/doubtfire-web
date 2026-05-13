@@ -3,9 +3,10 @@ import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 
 @Component({
-  selector: 'f-portfolios-assessment',
-  templateUrl: './portfolios-assessment.component.html',
-  styleUrl: './portfolios-assessment.component.scss',
+    selector: 'f-portfolios-assessment',
+    templateUrl: './portfolios-assessment.component.html',
+    styleUrl: './portfolios-assessment.component.scss',
+    standalone: false
 })
 export class PortfoliosAssessmentComponent {
   @Input() project: Project;

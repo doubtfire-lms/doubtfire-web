@@ -20,8 +20,9 @@ interface UnitAdminTab {
 }
 
 @Component({
-  selector: 'f-unit-admin-state',
-  templateUrl: './unit-admin-state.component.html',
+    selector: 'f-unit-admin-state',
+    templateUrl: './unit-admin-state.component.html',
+    standalone: false
 })
 export class UnitAdminStateComponent implements OnInit, OnDestroy {
   @Input() public unit$: Observable<Unit>;

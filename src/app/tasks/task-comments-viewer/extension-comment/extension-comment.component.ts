@@ -4,9 +4,10 @@ import {ExtensionComment} from 'src/app/api/models/task-comment/extension-commen
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'extension-comment',
-  templateUrl: './extension-comment.component.html',
-  styleUrls: ['./extension-comment.component.scss'],
+    selector: 'extension-comment',
+    templateUrl: './extension-comment.component.html',
+    styleUrls: ['./extension-comment.component.scss'],
+    standalone: false
 })
 export class ExtensionCommentComponent implements OnInit {
   @Input() comment: ExtensionComment;

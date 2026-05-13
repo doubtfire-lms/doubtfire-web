@@ -7,9 +7,10 @@ import { TiiActionService } from 'src/app/api/services/tii-action.service';
 import { AlertService } from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-tii-action-log',
-  templateUrl: './tii-action-log.component.html',
-  styleUrls: ['./tii-action-log.component.scss']
+    selector: 'f-tii-action-log',
+    templateUrl: './tii-action-log.component.html',
+    styleUrls: ['./tii-action-log.component.scss'],
+    standalone: false
 })
 export class TiiActionLogComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: false }) table: MatTable<TiiAction>;

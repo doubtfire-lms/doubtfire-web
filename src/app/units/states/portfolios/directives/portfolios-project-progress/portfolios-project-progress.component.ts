@@ -7,9 +7,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
-  selector: 'f-portfolios-project-progress',
-  templateUrl: './portfolios-project-progress.component.html',
-  styleUrl: './portfolios-project-progress.component.scss',
+    selector: 'f-portfolios-project-progress',
+    templateUrl: './portfolios-project-progress.component.html',
+    styleUrl: './portfolios-project-progress.component.scss',
+    standalone: false
 })
 export class PortfoliosProjectProgressComponent {
   @Input() project: Project;

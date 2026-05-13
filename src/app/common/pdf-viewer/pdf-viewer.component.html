@@ -50,7 +50,9 @@
 
   @if (pdfBlobUrl) {
     @if (useNativePdfViewer) {
-      <object [data]="pdfBlobUrl | safe" *ngIf="pdfBlobUrl"></object>
+      @if (pdfBlobUrl) {
+        <object [data]="pdfBlobUrl | safe"></object>
+      }
     } @else {
       <pdf-viewer
         [zoom]="zoomValue"

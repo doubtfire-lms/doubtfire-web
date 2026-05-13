@@ -38,9 +38,10 @@ interface TaskDefinitionSection {
 }
 
 @Component({
-  selector: 'f-task-definition-editor',
-  templateUrl: 'task-definition-editor.component.html',
-  styleUrls: ['task-definition-editor.component.scss'],
+    selector: 'f-task-definition-editor',
+    templateUrl: 'task-definition-editor.component.html',
+    styleUrls: ['task-definition-editor.component.scss'],
+    standalone: false
 })
 export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() taskDefinition: TaskDefinition;

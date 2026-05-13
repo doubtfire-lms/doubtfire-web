@@ -8,9 +8,10 @@ export interface SubmissionTypeModalData {
 }
 
 @Component({
-  selector: 'f-submission-type-modal',
-  templateUrl: './submission-type-modal.component.html',
-  styleUrls: ['./submission-type-modal.component.scss'],
+    selector: 'f-submission-type-modal',
+    templateUrl: './submission-type-modal.component.html',
+    styleUrls: ['./submission-type-modal.component.scss'],
+    standalone: false
 })
 export class SubmissionTypeModalComponent {
   selectedTransition: 'ready_for_feedback' | 'assess_in_portfolio' = null;

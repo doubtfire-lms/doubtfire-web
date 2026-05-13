@@ -21,10 +21,11 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 
 @Component({
-  selector: 'f-task-feedback-templates',
-  styleUrl: './task-feedback-templates.component.scss',
-  templateUrl: './task-feedback-templates.component.html',
-  encapsulation: ViewEncapsulation.None,
+    selector: 'f-task-feedback-templates',
+    styleUrl: './task-feedback-templates.component.scss',
+    templateUrl: './task-feedback-templates.component.html',
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   @Input() task: Task;

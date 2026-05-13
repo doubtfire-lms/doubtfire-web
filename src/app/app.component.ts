@@ -3,8 +3,9 @@ import {NavigationEnd, Router} from '@angular/router';
 import {Subscription, filter} from 'rxjs';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
   private routerSub?: Subscription;

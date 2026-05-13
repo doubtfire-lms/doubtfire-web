@@ -38,8 +38,8 @@
     </mat-menu>
   </div>
 
-  <ng-container [ngSwitch]="currentView">
-    <ng-template [ngSwitchCase]="DashboardViews.details">
+  @switch (currentView) {
+    @case (DashboardViews.details) {
       <div class="flex flex-col gap-5 p-5">
         <f-task-ilos-card
           [taskDef]="task.definition"
@@ -57,25 +57,21 @@
         <f-task-scorm-card [task]="task"></f-task-scorm-card>
         <f-task-status-card [task]="task"></f-task-status-card>
         <f-task-due-card [task]="task"></f-task-due-card>
-
         <f-task-assessment-card [task]="task"></f-task-assessment-card>
         <f-task-submission-card [task]="task"></f-task-submission-card>
       </div>
-    </ng-template>
-
+    }
     <!-- <ng-template [ngSwitchCase]="DashboardViews.task">
-      <ng-container
-        *ngIf="selectedTaskService.hasTaskSheet; then pdfViewer; else noPdfUrl"
-      ></ng-container>
-    </ng-template>
-
-    <ng-template [ngSwitchCase]="DashboardViews.submission">
-      <ng-container
-        *ngIf="selectedTaskService.hasSubmissionPdf; then pdfViewer; else noPdfUrl"
-      ></ng-container>
-    </ng-template> -->
-
-    <ng-template [ngSwitchCase]="DashboardViews.task">
+    <ng-container
+      *ngIf="selectedTaskService.hasTaskSheet; then pdfViewer; else noPdfUrl"
+    ></ng-container>
+  </ng-template>
+  <ng-template [ngSwitchCase]="DashboardViews.submission">
+    <ng-container
+      *ngIf="selectedTaskService.hasSubmissionPdf; then pdfViewer; else noPdfUrl"
+    ></ng-container>
+  </ng-template> -->
+    @case (DashboardViews.task) {
       @if (task && task.blockedByPrerequisiteTasks()) {
         <div
           class="flex items-center text-center px-4 py-3 bg-yellow-100 border-l-4 border-r-4 border-yellow-500 text-yellow-700"
@@ -96,9 +92,8 @@
           <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
         </div>
       }
-    </ng-template>
-
-    <ng-template [ngSwitchCase]="DashboardViews.submission">
+    }
+    @case (DashboardViews.submission) {
       @if (task.hasPdf) {
         <f-pdf-viewer [pdfUrl]="task.submissionUrl()" [startPage]="2"></f-pdf-viewer>
       } @else {
@@ -106,36 +101,31 @@
           <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
         </div>
       }
-    </ng-template>
-
-    <ng-template [ngSwitchCase]="DashboardViews.similarity">
+    }
+    @case (DashboardViews.similarity) {
       <f-task-similarity-view [task]="task"></f-task-similarity-view>
-    </ng-template>
-
-    <ng-template [ngSwitchCase]="DashboardViews.overseer">
+    }
+    @case (DashboardViews.overseer) {
       <f-task-overseer-report [task]="task"></f-task-overseer-report>
-    </ng-template>
-
-    <ng-template [ngSwitchCase]="DashboardViews.staff_notes">
+    }
+    @case (DashboardViews.staff_notes) {
       <f-staff-notes-view [project]="task.project"></f-staff-notes-view>
-    </ng-template>
-
-    <ng-template [ngSwitchCase]="DashboardViews.tutor_notes">
+    }
+    @case (DashboardViews.tutor_notes) {
       <f-tutor-notes-view [task]="task" [unitRole]="unitRole"></f-tutor-notes-view>
-    </ng-template>
-
-    <ng-template [ngSwitchCase]="DashboardViews.discussion_prompts">
+    }
+    @case (DashboardViews.discussion_prompts) {
       <f-discussion-prompts-view
         [project]="task.project"
         [taskDefinition]="task.definition"
       ></f-discussion-prompts-view>
-    </ng-template>
-  </ng-container>
+    }
+  }
 
   <!-- The PDF Viewer -->
   <!-- <ng-template #pdfViewer>
-    <f-pdf-viewer [pdfUrl]="pdfUrl" [startPage]="2"></f-pdf-viewer>
-  </ng-template> -->
+<f-pdf-viewer [pdfUrl]="pdfUrl" [startPage]="2"></f-pdf-viewer>
+</ng-template> -->
 
   <!-- Render if no PDF URL is available for the current view -->
   <ng-template #noPdfUrl>

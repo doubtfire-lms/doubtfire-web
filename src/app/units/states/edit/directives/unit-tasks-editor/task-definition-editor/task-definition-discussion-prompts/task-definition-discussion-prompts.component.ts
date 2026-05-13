@@ -14,9 +14,10 @@ import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.compon
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-task-definition-discussion-prompts',
-  templateUrl: 'task-definition-discussion-prompts.component.html',
-  styleUrls: ['task-definition-discussion-prompts.component.scss'],
+    selector: 'f-task-definition-discussion-prompts',
+    templateUrl: 'task-definition-discussion-prompts.component.html',
+    styleUrls: ['task-definition-discussion-prompts.component.scss'],
+    standalone: false
 })
 export class TaskDefinitionDiscussionPromptsComponent
   extends EntityFormComponent<DiscussionPrompt>

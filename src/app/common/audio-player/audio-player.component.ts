@@ -5,9 +5,10 @@ import { FileDownloaderService } from '../file-downloader/file-downloader.servic
 import { AlertService } from '../services/alert.service';
 
 @Component({
-  selector: 'audio-player',
-  templateUrl: './audio-player.component.html',
-  styleUrls: ['./audio-player.component.scss'],
+    selector: 'audio-player',
+    templateUrl: './audio-player.component.html',
+    styleUrls: ['./audio-player.component.scss'],
+    standalone: false
 })
 export class AudioPlayerComponent implements OnDestroy {
   @Input() project: Project;

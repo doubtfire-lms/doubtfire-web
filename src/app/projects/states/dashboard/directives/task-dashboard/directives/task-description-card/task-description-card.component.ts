@@ -5,9 +5,10 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
-  selector: 'f-task-description-card',
-  templateUrl: 'task-description-card.component.html',
-  styleUrls: ['task-description-card.component.scss'],
+    selector: 'f-task-description-card',
+    templateUrl: 'task-description-card.component.html',
+    styleUrls: ['task-description-card.component.scss'],
+    standalone: false
 })
 export class TaskDescriptionCardComponent {
   @Output() switchView$: EventEmitter<string> = new EventEmitter();

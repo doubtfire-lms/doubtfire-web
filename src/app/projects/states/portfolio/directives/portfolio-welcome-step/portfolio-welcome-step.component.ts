@@ -2,9 +2,10 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
-  selector: 'f-portfolio-welcome-step',
-  templateUrl: 'portfolio-welcome-step.component.html',
-  styleUrls: ['portfolio-welcome-step.component.scss'],
+    selector: 'f-portfolio-welcome-step',
+    templateUrl: 'portfolio-welcome-step.component.html',
+    styleUrls: ['portfolio-welcome-step.component.scss'],
+    standalone: false
 })
 export class PortfolioWelcomeStepComponent implements OnInit {
   @Input() onAdvanceActiveTab?: (index: 1 | -1) => void;

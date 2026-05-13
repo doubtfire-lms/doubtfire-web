@@ -9,7 +9,8 @@ import { AppInjector } from "src/app/app-injector";
  * Child classes need to extend this class and call super() in the constructor, passing in the ViewContainerRef.
  */
 @Component({
-  template: `<p>chart-base-component works!</p>`,
+    template: `<p>chart-base-component works!</p>`,
+    standalone: false
 })
 export class ChartBaseComponent {
   constructor(public viewContainerRef: ViewContainerRef) {

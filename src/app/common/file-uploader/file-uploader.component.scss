@@ -1,4 +1,4 @@
-file-upload .mat-icon,
+.file-drop-zone .mat-icon,
 .complete .mat-icon {
   font-size: 50px;
   height: 50px;
@@ -11,6 +11,27 @@ file-upload .mat-icon,
   width: 75px;
 }
 
-::ng-deep file-upload .upload-input {
-  width: 100%;
+.file-drop-zone {
+  align-items: center;
+  background: transparent;
+  border: 2px dashed rgba(0, 0, 0, 0.24);
+  border-radius: 8px;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font: inherit;
+  justify-content: center;
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.file-drop-zone:hover,
+.file-drop-zone:focus-visible {
+  border-color: currentColor;
+  outline: none;
+}
+
+.file-input {
+  display: none;
 }

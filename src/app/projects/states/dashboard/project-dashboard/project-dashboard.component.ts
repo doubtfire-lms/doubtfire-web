@@ -18,9 +18,10 @@ import {UserService} from 'src/app/api/services/user.service';
 import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 
 @Component({
-  selector: 'f-project-dashboard',
-  templateUrl: './project-dashboard.component.html',
-  styleUrl: './project-dashboard.component.scss',
+    selector: 'f-project-dashboard',
+    templateUrl: './project-dashboard.component.html',
+    styleUrl: './project-dashboard.component.scss',
+    standalone: false
 })
 export class ProjectDashboardComponent implements OnInit {
   @Input() public project$: Observable<Project>;

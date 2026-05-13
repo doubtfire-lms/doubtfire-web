@@ -19,9 +19,10 @@ export interface CsvUploadModalData {
 }
 
 @Component({
-  selector: 'f-csv-upload-modal',
-  templateUrl: './csv-upload-modal.component.html',
-  styleUrls: ['./csv-upload-modal.component.scss'],
+    selector: 'f-csv-upload-modal',
+    templateUrl: './csv-upload-modal.component.html',
+    styleUrls: ['./csv-upload-modal.component.scss'],
+    standalone: false
 })
 export class CsvUploadModalComponent {
   constructor(

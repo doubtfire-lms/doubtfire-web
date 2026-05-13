@@ -3,9 +3,10 @@ import {TooltipService} from '@swimlane/ngx-charts';
 import {Project} from 'src/app/api/models/project';
 
 @Component({
-  selector: 'f-project-progress-gauge',
-  templateUrl: './project-progress-gauge.component.html',
-  styleUrl: './project-progress-gauge.component.css',
+    selector: 'f-project-progress-gauge',
+    templateUrl: './project-progress-gauge.component.html',
+    styleUrl: './project-progress-gauge.component.css',
+    standalone: false
 })
 export class ProjectProgressGaugeComponent implements OnInit {
   @Input() project: Project;

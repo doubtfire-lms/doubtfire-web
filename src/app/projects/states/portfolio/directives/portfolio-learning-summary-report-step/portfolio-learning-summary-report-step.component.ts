@@ -4,9 +4,10 @@ import {Unit} from 'src/app/api/models/unit';
 import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
-  selector: 'f-portfolio-learning-summary-report-step',
-  templateUrl: 'portfolio-learning-summary-report-step.component.html',
-  styleUrls: ['portfolio-learning-summary-report-step.component.scss'],
+    selector: 'f-portfolio-learning-summary-report-step',
+    templateUrl: 'portfolio-learning-summary-report-step.component.html',
+    styleUrls: ['portfolio-learning-summary-report-step.component.scss'],
+    standalone: false
 })
 export class PortfolioLearningSummaryReportStepComponent {
   @Input() unit: Unit;

@@ -8,9 +8,10 @@ import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
-  selector: 'f-edit-profile-form',
-  templateUrl: './edit-profile-form.component.html',
-  styleUrls: ['./edit-profile-form.component.scss'],
+    selector: 'f-edit-profile-form',
+    templateUrl: './edit-profile-form.component.html',
+    styleUrls: ['./edit-profile-form.component.scss'],
+    standalone: false
 })
 export class EditProfileFormComponent implements OnInit {
   constructor(

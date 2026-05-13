@@ -4,9 +4,10 @@ import {Unit} from 'src/app/api/models/unit';
 
 // This component is only displayed to students (projects)
 @Component({
-  selector: 'f-project-groups',
-  templateUrl: './project-groups.component.html',
-  styleUrl: './project-groups.component.scss',
+    selector: 'f-project-groups',
+    templateUrl: './project-groups.component.html',
+    styleUrl: './project-groups.component.scss',
+    standalone: false
 })
 export class ProjectGroupsComponent {
   @Input() unit: Unit;

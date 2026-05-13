@@ -4,8 +4,9 @@ import {Project} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from '../../services/alert.service';
 
 @Component({
-  selector: 'f-spec-con-modal',
-  templateUrl: './spec-con-modal.component.html',
+    selector: 'f-spec-con-modal',
+    templateUrl: './spec-con-modal.component.html',
+    standalone: false
 })
 export class SpecConModalComponent {
   public days: number = 0;

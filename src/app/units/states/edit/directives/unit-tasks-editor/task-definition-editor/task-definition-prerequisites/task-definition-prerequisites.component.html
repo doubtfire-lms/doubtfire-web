@@ -39,9 +39,11 @@
                 matTooltipShowDelay="1000"
                 (selectionChange)="updateTaskPrerequisite(link)"
               >
-                <mat-option *ngFor="let state of stateOptions" [value]="state.value">
-                  {{ state.label }}
-                </mat-option>
+                @for (state of stateOptions; track state) {
+                  <mat-option [value]="state.value">
+                    {{ state.label }}
+                  </mat-option>
+                }
               </mat-select>
             }
           }

@@ -43,8 +43,8 @@ export class AlertService {
 }
 
 @Component({
-  selector: 'f-alert',
-  template: `<span class="flex space-x-4 items-center center-items">
+    selector: 'f-alert',
+    template: `<span class="flex space-x-4 items-center center-items">
     <span class="flex">
       <mat-icon>{{ data?.icon }}</mat-icon>
     </span>
@@ -54,6 +54,7 @@ export class AlertService {
       <button mat-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">Close</button>
     </span></span
   >`,
+    standalone: false
 })
 export class AlertComponent {
   snackBarRef = inject(MatSnackBarRef);

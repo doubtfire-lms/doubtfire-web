@@ -1,7 +1,7 @@
-import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
-import { Observable } from 'rxjs';
-import { AppInjector } from 'src/app/app-injector';
-import { TeachingPeriodBreakService, TeachingPeriodService, Unit } from './doubtfire-model';
+import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
+import {Observable} from 'rxjs';
+import {AppInjector} from 'src/app/app-injector';
+import {TeachingPeriodBreakService, TeachingPeriodService, Unit} from './doubtfire-model';
 
 export class TeachingPeriodBreak extends Entity {
   id: number;
@@ -27,7 +27,10 @@ export class TeachingPeriod extends Entity {
    * @param ignoreKeys
    * @returns
    */
-  public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+  public override toJson<T extends Entity>(
+    mappingData: EntityMapping<T>,
+    ignoreKeys?: string[],
+  ): object {
     return {
       teaching_period: super.toJson(mappingData, ignoreKeys),
     };
@@ -69,7 +72,10 @@ export class TeachingPeriod extends Entity {
     breakEntity.numberOfWeeks = weeks;
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
 
-    return breakService.create({ teaching_period_id: this.id }, { cache: this.breaksCache, entity: breakEntity });
+    return breakService.create(
+      {teaching_period_id: this.id},
+      {cache: this.breaksCache, entity: breakEntity},
+    );
   }
 
   /**
@@ -79,10 +85,17 @@ export class TeachingPeriod extends Entity {
    */
   public removeBreak(teachingBreakID: number): Observable<TeachingPeriodBreak> {
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
-    return breakService.delete({ teaching_period_id: this.id, id: teachingBreakID }, { cache: this.breaksCache });
+    return breakService.delete(
+      {teaching_period_id: this.id, id: teachingBreakID},
+      {cache: this.breaksCache},
+    );
   }
 
-  public rollover(newPeriod: TeachingPeriod, rolloverInactive: boolean, searchForward: boolean): Observable<boolean> {
+  public rollover(
+    newPeriod: TeachingPeriod,
+    rolloverInactive: boolean,
+    searchForward: boolean,
+  ): Observable<boolean> {
     const teachingPeriodService: TeachingPeriodService = AppInjector.get(TeachingPeriodService);
 
     return teachingPeriodService.post<boolean>(
@@ -94,7 +107,7 @@ export class TeachingPeriod extends Entity {
       },
       {
         endpointFormat: TeachingPeriodService.rolloverEndpointFormat,
-      }
+      },
     );
   }
 }

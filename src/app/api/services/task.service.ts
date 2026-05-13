@@ -16,7 +16,7 @@ import {Observable, map, tap} from 'rxjs';
 
 @Injectable()
 export class TaskService extends CachedEntityService<Task> {
-  public readonly taskStatusUpdated$: EventEmitter<Task> = new EventEmitter();
+  public readonly taskStatusUpdated$ = new EventEmitter<Task>();
 
   protected readonly endpointFormat = '/projects/:projectId:/task_def_id/:taskDefId:';
 
@@ -231,7 +231,8 @@ export class TaskService extends CachedEntityService<Task> {
   public readonly statusSeq = TaskStatus.STATUS_SEQ;
   public readonly helpDescriptions = TaskStatus.HELP_DESCRIPTIONS;
   public readonly statusIcons: Map<TaskStatusEnum, string> = TaskStatus.STATUS_ICONS;
-  public readonly statusMaterialIcons: Map<TaskStatusEnum, string> = TaskStatus.STATUS_MATERIAL_ICONS;
+  public readonly statusMaterialIcons: Map<TaskStatusEnum, string> =
+    TaskStatus.STATUS_MATERIAL_ICONS;
   public readonly rejectFutureStates = TaskStatus.REJECT_FUTURE_STATES;
 
   public statusClass(status: TaskStatusEnum): string {

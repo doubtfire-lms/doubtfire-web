@@ -8,9 +8,10 @@ import {GradeService} from 'src/app/common/services/grade.service';
 import {TaskPlannerComponent} from './task-planner/task-planner.component';
 
 @Component({
-  selector: 'f-project-plan',
-  templateUrl: 'project-plan.component.html',
-  styleUrls: ['project-plan.component.scss'],
+    selector: 'f-project-plan',
+    templateUrl: 'project-plan.component.html',
+    styleUrls: ['project-plan.component.scss'],
+    standalone: false
 })
 export class ProjectPlanComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;

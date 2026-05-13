@@ -34,9 +34,10 @@ export interface TaskAssessmentComment {
 }
 
 @Component({
-  selector: 'app-task-assessment-comment',
-  templateUrl: './task-assessment-comment.component.html',
-  styleUrls: ['./task-assessment-comment.component.scss'],
+    selector: 'app-task-assessment-comment',
+    templateUrl: './task-assessment-comment.component.html',
+    styleUrls: ['./task-assessment-comment.component.scss'],
+    standalone: false
 })
 export class TaskAssessmentCommentComponent implements OnInit {
   @Input() task: Task;

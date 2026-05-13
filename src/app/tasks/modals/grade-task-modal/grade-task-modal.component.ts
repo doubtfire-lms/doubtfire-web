@@ -3,9 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Task, GradeService } from 'src/app/api/models/doubtfire-model';
 
 @Component({
-  selector: 'grade-task-modal',
-  templateUrl: './grade-task-modal.component.html',
-  styleUrls: ['./grade-task-modal.component.scss'],
+    selector: 'grade-task-modal',
+    templateUrl: './grade-task-modal.component.html',
+    styleUrls: ['./grade-task-modal.component.scss'],
+    standalone: false
 })
 export class GradeTaskModalComponent implements OnInit {
   task: Task;

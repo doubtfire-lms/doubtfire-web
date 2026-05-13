@@ -7,9 +7,10 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-upload-grades',
-  templateUrl: 'upload-grades.component.html',
-  styleUrl: 'upload-grades.component.scss',
+    selector: 'f-upload-grades',
+    templateUrl: 'upload-grades.component.html',
+    styleUrl: 'upload-grades.component.scss',
+    standalone: false
 })
 export class UploadGradesComponent implements OnInit {
   @Input() unit: Unit;

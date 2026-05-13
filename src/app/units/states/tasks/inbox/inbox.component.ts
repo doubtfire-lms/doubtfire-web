@@ -16,9 +16,10 @@ import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'f-inbox',
-  templateUrl: './inbox.component.html',
-  styleUrls: ['./inbox.component.scss'],
+    selector: 'f-inbox',
+    templateUrl: './inbox.component.html',
+    styleUrls: ['./inbox.component.scss'],
+    standalone: false
 })
 export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;

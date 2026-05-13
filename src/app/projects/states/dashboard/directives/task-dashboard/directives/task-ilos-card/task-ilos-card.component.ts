@@ -5,9 +5,10 @@ import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 
 @Component({
-  selector: 'f-task-ilos-card',
-  templateUrl: './task-ilos-card.component.html',
-  styleUrls: ['./task-ilos-card.component.scss'],
+    selector: 'f-task-ilos-card',
+    templateUrl: './task-ilos-card.component.html',
+    styleUrls: ['./task-ilos-card.component.scss'],
+    standalone: false
 })
 export class TaskIlosCardComponent implements OnInit, OnChanges {
   @Input() iloContextType: 'Unit' | 'TaskDefinition' | 'Course' | 'Global';

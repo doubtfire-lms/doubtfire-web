@@ -5,10 +5,11 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 
 @Component({
-  selector: 'discussion-prompt-composer',
-  templateUrl: './discussion-prompt-composer.component.html',
-  styleUrls: ['./discussion-prompt-composer.component.scss'],
-  providers: [MediaRecorderService],
+    selector: 'discussion-prompt-composer',
+    templateUrl: './discussion-prompt-composer.component.html',
+    styleUrls: ['./discussion-prompt-composer.component.scss'],
+    providers: [MediaRecorderService],
+    standalone: false
 })
 export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponent {
   @Input() task: Task;

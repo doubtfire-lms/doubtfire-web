@@ -2,9 +2,10 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import { FileDownloaderService } from '../file-downloader/file-downloader.service';
 
 @Component({
-  selector: 'pdf-viewer-panel',
-  templateUrl: './pdf-viewer-panel.component.html',
-  styleUrls: ['./pdf-viewer-panel.component.scss'],
+    selector: 'pdf-viewer-panel',
+    templateUrl: './pdf-viewer-panel.component.html',
+    styleUrls: ['./pdf-viewer-panel.component.scss'],
+    standalone: false
 })
 export class PdfViewerPanelComponent implements OnInit {
   @Input() pdfUrl: string;

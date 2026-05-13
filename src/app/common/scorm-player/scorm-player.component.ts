@@ -27,9 +27,10 @@ declare global {
 }
 
 @Component({
-  selector: 'f-scorm-player',
-  templateUrl: './scorm-player.component.html',
-  styleUrls: ['./scorm-player.component.scss'],
+    selector: 'f-scorm-player',
+    templateUrl: './scorm-player.component.html',
+    styleUrls: ['./scorm-player.component.scss'],
+    standalone: false
 })
 export class ScormPlayerComponent implements OnInit {
   context: ScormPlayerContext;

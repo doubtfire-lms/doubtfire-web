@@ -6,9 +6,10 @@ import {TutorNotesModalService} from '../../modals/tutor-notes-modal/tutor-notes
 import {filter} from 'rxjs';
 
 @Component({
-  selector: 'task-dropdown',
-  templateUrl: './task-dropdown.component.html',
-  styleUrls: ['./task-dropdown.component.scss'],
+    selector: 'task-dropdown',
+    templateUrl: './task-dropdown.component.html',
+    styleUrls: ['./task-dropdown.component.scss'],
+    standalone: false
 })
 export class TaskDropdownComponent {
   currentActivity: string;

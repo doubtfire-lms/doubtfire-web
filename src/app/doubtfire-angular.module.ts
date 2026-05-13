@@ -6,7 +6,6 @@ import {Injector, NgModule} from '@angular/core';
 import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
-import {FileUploadModule} from '@iplab/ngx-file-upload';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {setAppInjector} from './app-injector';
 
@@ -752,7 +751,6 @@ const GANTT_CHART_CONFIG = {
     NgxGanttModule,
     MonacoEditorModule.forRoot(),
     MatChipListbox,
-    FileUploadModule,
   ],
   bootstrap: [AppComponent],
 })

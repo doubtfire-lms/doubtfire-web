@@ -6,9 +6,10 @@ import {of} from 'rxjs';
 import {TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
 
 @Component({
-  selector: 'f-task-viewer-state',
-  templateUrl: './task-viewer-state.component.html',
-  styleUrl: './task-viewer-state.component.scss',
+    selector: 'f-task-viewer-state',
+    templateUrl: './task-viewer-state.component.html',
+    styleUrl: './task-viewer-state.component.scss',
+    standalone: false
 })
 export class TaskViewerStateComponent {
   @Input() public unit$: Observable<Unit>;

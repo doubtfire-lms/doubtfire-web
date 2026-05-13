@@ -28,9 +28,10 @@ interface TaskGanttItem extends GanttItem {
 }
 
 @Component({
-  selector: 'f-task-planner',
-  templateUrl: './task-planner.component.html',
-  styleUrl: './task-planner.component.scss',
+    selector: 'f-task-planner',
+    templateUrl: './task-planner.component.html',
+    styleUrl: './task-planner.component.scss',
+    standalone: false
 })
 export class TaskPlannerComponent implements OnInit {
   // Show a warning if the task's target end date is within this many days of the feedback deadline

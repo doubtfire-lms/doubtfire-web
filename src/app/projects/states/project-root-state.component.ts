@@ -5,9 +5,10 @@ import {Project} from 'src/app/api/models/doubtfire-model';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'f-project-root-state',
-  templateUrl: './project-root-state.component.html',
-  styleUrl: './project-root-state.component.css',
+    selector: 'f-project-root-state',
+    templateUrl: './project-root-state.component.html',
+    styleUrl: './project-root-state.component.css',
+    standalone: false
 })
 export class ProjectRootStateComponent {
   @Input() public project$: Observable<Project>;

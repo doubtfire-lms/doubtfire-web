@@ -2,8 +2,9 @@ import {Component} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
-  selector: 'bulk-import-staff-modal',
-  templateUrl: './bulk-import-staff-modal.component.html',
+    selector: 'bulk-import-staff-modal',
+    templateUrl: './bulk-import-staff-modal.component.html',
+    standalone: false
 })
 export class BulkImportStaffModalComponent {
   public emailList = '';

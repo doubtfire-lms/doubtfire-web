@@ -14,9 +14,10 @@ interface GroupSetEditModel {
 }
 
 @Component({
-  selector: 'f-unit-group-set-editor',
-  templateUrl: './unit-group-set-editor.component.html',
-  styleUrls: ['./unit-group-set-editor.component.scss'],
+    selector: 'f-unit-group-set-editor',
+    templateUrl: './unit-group-set-editor.component.html',
+    styleUrls: ['./unit-group-set-editor.component.scss'],
+    standalone: false
 })
 export class UnitGroupSetEditorComponent implements OnInit {
   @Input() unit: Unit;

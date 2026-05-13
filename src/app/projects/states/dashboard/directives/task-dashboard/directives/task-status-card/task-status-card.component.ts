@@ -13,9 +13,10 @@ import {Project} from 'src/app/api/models/project';
 import {UserService} from 'src/app/api/services/user.service';
 import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 @Component({
-  selector: 'f-task-status-card',
-  templateUrl: './task-status-card.component.html',
-  styleUrls: ['./task-status-card.component.scss'],
+    selector: 'f-task-status-card',
+    templateUrl: './task-status-card.component.html',
+    styleUrls: ['./task-status-card.component.scss'],
+    standalone: false
 })
 export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   triggers: TaskStatusUiData[];

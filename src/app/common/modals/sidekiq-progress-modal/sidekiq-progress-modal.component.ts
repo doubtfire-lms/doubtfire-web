@@ -15,9 +15,10 @@ export interface SidekiqProgressModalData {
 }
 
 @Component({
-  selector: 'f-sidekiq-progress-modal',
-  templateUrl: './sidekiq-progress-modal.component.html',
-  styleUrl: './sidekiq-progress-modal.component.scss',
+    selector: 'f-sidekiq-progress-modal',
+    templateUrl: './sidekiq-progress-modal.component.html',
+    styleUrl: './sidekiq-progress-modal.component.scss',
+    standalone: false
 })
 export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
   private readonly pollingInterval: number = 1250;
