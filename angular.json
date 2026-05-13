@@ -85,7 +85,8 @@
               "outputHashing": "bundles",
               "sourceMap": false,
               "extractLicenses": true,
-              "serviceWorker": "ngsw-config.json"
+              "baseHref": "/beta/",
+              "deployUrl": "/beta/"
             },
             "development": {
               "optimization": false,
