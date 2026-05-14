@@ -916,6 +916,9 @@ export class Task extends Entity {
     } else {
       alerts.success(`Status changed to ${this.statusLabel()}.`);
     }
+    this.getSubmissionDetails().subscribe();
+    const taskService: TaskService = AppInjector.get(TaskService);
+    taskService.notifyStatusChange(this);
   }
 
   public async markAsDiscussed(reasonText?: string) {

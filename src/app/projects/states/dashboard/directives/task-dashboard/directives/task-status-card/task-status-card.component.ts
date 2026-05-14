@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import * as _ from 'lodash';
+import {Subscription} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum, TaskStatusUiData} from 'src/app/api/models/task-status';
 import {TaskService} from 'src/app/api/services/task.service';
@@ -14,14 +15,16 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 import {UnitRole} from 'src/app/api/models/unit-role';
 @Component({
-    selector: 'f-task-status-card',
-    templateUrl: './task-status-card.component.html',
-    styleUrls: ['./task-status-card.component.scss'],
-    standalone: false
+  selector: 'f-task-status-card',
+  templateUrl: './task-status-card.component.html',
+  styleUrls: ['./task-status-card.component.scss'],
+  standalone: false,
 })
-export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
+export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDestroy {
   triggers: TaskStatusUiData[];
   textCss: string;
+  private taskStatusSub: Subscription;
+
   constructor(
     private extensions: ExtensionModalService,
     private taskService: TaskService,
@@ -31,7 +34,13 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private submissionTypeModalService: SubmissionTypeModalService,
     private userService: UserService,
     private feedbackAppealService: FeedbackAppealModalService,
-  ) {}
+  ) {
+    this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
+      if (this.isCurrentTask(task)) {
+        this.reapplyTriggers();
+      }
+    });
+  }
 
   @Input() task: Task;
   taskStatusColor: string;
@@ -52,6 +61,19 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit(): void {
     document.getElementsByTagName('style')[0].append(this.textCss);
+  }
+
+  ngOnDestroy(): void {
+    this.taskStatusSub?.unsubscribe();
+  }
+
+  private isCurrentTask(task: Task): boolean {
+    return (
+      task &&
+      this.task &&
+      task.project?.id === this.task.project?.id &&
+      task.definition?.id === this.task.definition?.id
+    );
   }
 
   reapplyTriggers(): void {
