@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
+import {UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
+import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 
 enum InboxDashboardTab {
@@ -13,10 +15,10 @@ enum InboxDashboardTab {
 }
 
 @Component({
-    selector: 'f-inbox-dashboard',
-    templateUrl: './inbox-dashboard.component.html',
-    host: { 'class': 'block h-full' },
-    standalone: false
+  selector: 'f-inbox-dashboard',
+  templateUrl: './inbox-dashboard.component.html',
+  host: {'class': 'block h-full'},
+  standalone: false,
 })
 export class InboxDashboardComponent implements OnChanges {
   @Input() task: Task;
@@ -26,7 +28,10 @@ export class InboxDashboardComponent implements OnChanges {
   public currentTab: InboxDashboardTab = InboxDashboardTab.submission;
   public currentIndex = InboxDashboardTab.submission;
 
-  constructor(private fileDownloader: FileDownloaderService) {}
+  constructor(
+    private fileDownloader: FileDownloaderService,
+    private userService: UserService,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.task) {
@@ -87,5 +92,31 @@ export class InboxDashboardComponent implements OnChanges {
       default:
         return null;
     }
+  }
+
+  public get currentUnitRole(): UnitRole | undefined {
+    const currentUser = this.userService.currentUser;
+    return this.task.unit.staff.find((ur) => ur.user.id === currentUser.id);
+  }
+
+  public get canAccessTutorNotes(): boolean {
+    const tutor = this.task.tutor;
+    if (!tutor) {
+      return false;
+    }
+
+    if (!this.currentUnitRole) {
+      return false;
+    }
+
+    // Ensure the unit is mapped correctly to access the mentor
+    tutor.unit = this.task.unit;
+
+    const canAccess =
+      this.currentUnitRole.role === 'Convenor' ||
+      this.currentUnitRole.role === 'Admin' ||
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id);
+
+    return canAccess;
   }
 }

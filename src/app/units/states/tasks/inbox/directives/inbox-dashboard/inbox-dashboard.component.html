@@ -36,7 +36,9 @@
             </span>
           </ng-template>
         </mat-tab>
-        <mat-tab label="Tutor Notes"></mat-tab>
+        @if (canAccessTutorNotes) {
+          <mat-tab label="Tutor Notes"></mat-tab>
+        }
       </mat-tab-group>
 
       <button
@@ -95,7 +97,9 @@
         }
         @case (InboxDashboardTab.tutorNotes) {
           <div class="h-full overflow-auto">
-            <f-tutor-notes-view [task]="task"></f-tutor-notes-view>
+            @if (canAccessTutorNotes) {
+              <f-tutor-notes-view [task]="task"></f-tutor-notes-view>
+            }
           </div>
         }
         @case (InboxDashboardTab.similarities) {
