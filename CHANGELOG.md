@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-3](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-2...v11.0.0-3) (2026-05-14)
+
+
+### Bug Fixes
+
+* add padding ([94f4216](https://github.com/b0ink/doubtfire-deploy/commit/94f4216e588d6dfb6abc4d10804971cb0e8f8678))
+* unlock task status selection for staff ([#1222](https://github.com/b0ink/doubtfire-deploy/issues/1222)) ([e4080d0](https://github.com/b0ink/doubtfire-deploy/commit/e4080d03a629654518bc362f48e8e0fbb790dd96))
+
 ## [11.0.0-2](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-1...v11.0.0-2) (2026-05-13)
 
 ## [11.0.0-1](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-21...v11.0.0-1) (2026-05-13)
