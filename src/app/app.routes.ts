@@ -93,64 +93,6 @@ export const routes: Routes = [
     component: TutorDiscussionComponent,
     data: {attendance: true, task: 'Check-in'},
   },
-  {path: 'projects2/:projectId', pathMatch: 'full', redirectTo: 'projects/:projectId/dashboard'},
-  {
-    path: 'projects2/:projectId/dashboard2',
-    pathMatch: 'full',
-    redirectTo: 'projects/:projectId/dashboard',
-  },
-  {
-    path: 'projects2/:projectId/dashboard2/:taskAbbreviation',
-    redirectTo: 'projects/:projectId/dashboard/:taskAbbreviation',
-  },
-  {path: 'projects2/:projectId/plan2', redirectTo: 'projects/:projectId/plan'},
-  {path: 'projects2/:projectId/portfolio2', redirectTo: 'projects/:projectId/portfolio'},
-  {path: 'projects2/:projectId/groups2', redirectTo: 'projects/:projectId/groups'},
-  {path: 'projects2/:projectId/tutorials2', redirectTo: 'projects/:projectId/tutorials'},
-  {path: 'units2/:unitId', pathMatch: 'full', redirectTo: 'units/:unitId/tasks/inbox'},
-  {path: 'units2/:unitId/tasks', pathMatch: 'full', redirectTo: 'units/:unitId/tasks/inbox'},
-  {path: 'units2/:unitId/analytics', redirectTo: 'units/:unitId/analytics'},
-  {path: 'units2/:unitId/admin', pathMatch: 'full', redirectTo: 'units/:unitId/admin'},
-  {path: 'units2/:unitId/admin/:tab', redirectTo: 'units/:unitId/admin/:tab'},
-  {path: 'units2/:unitId/students', pathMatch: 'full', redirectTo: 'units/:unitId/students'},
-  {path: 'units2/:unitId/students/groups', redirectTo: 'units/:unitId/students/groups'},
-  {path: 'units2/:unitId/students/portfolios', redirectTo: 'units/:unitId/students/portfolios'},
-  {
-    path: 'units2/:unitId/tasks/inbox',
-    pathMatch: 'full',
-    redirectTo: 'units/:unitId/tasks/inbox',
-  },
-  {
-    path: 'units2/:unitId/tasks/inbox/:studentId/:taskDefAbbr',
-    redirectTo: 'units/:unitId/tasks/inbox/:studentId/:taskDefAbbr',
-  },
-  {
-    path: 'units2/:unitId/tasks/definition',
-    pathMatch: 'full',
-    redirectTo: 'units/:unitId/tasks/definition',
-  },
-  {
-    path: 'units2/:unitId/tasks/definition/:studentId/:taskDefAbbr',
-    redirectTo: 'units/:unitId/tasks/definition/:studentId/:taskDefAbbr',
-  },
-  {
-    path: 'units2/:unitId/tasks/moderation',
-    pathMatch: 'full',
-    redirectTo: 'units/:unitId/tasks/moderation',
-  },
-  {
-    path: 'units2/:unitId/tasks/moderation/:studentId/:taskDefAbbr',
-    redirectTo: 'units/:unitId/tasks/moderation/:studentId/:taskDefAbbr',
-  },
-  {
-    path: 'units2/:unitId/tasks/overflow',
-    pathMatch: 'full',
-    redirectTo: 'units/:unitId/tasks/overflow',
-  },
-  {
-    path: 'units2/:unitId/tasks/overflow/:studentId/:taskDefAbbr',
-    redirectTo: 'units/:unitId/tasks/overflow/:studentId/:taskDefAbbr',
-  },
   {
     path: 'units',
     children: [
