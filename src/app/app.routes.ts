@@ -32,6 +32,7 @@ import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.co
 import {resolveUnit} from './units/unit.resolver';
 import {UnitRootStateComponent} from './units/unit-root-state.component';
 import {WelcomeComponent} from './welcome/welcome.component';
+import {roleWhitelistGuard} from './common/guards/role-whitelist.guard';
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -63,11 +64,35 @@ export const routes: Routes = [
   },
   {path: 'view-all-units', component: FUnitsComponent, data: {mode: 'tutor'}},
   {path: 'view-all-projects', component: FUnitsComponent, data: {mode: 'student'}},
-  {path: 'admin/units', component: FUnitsComponent, data: {mode: 'admin'}},
-  {path: 'admin/users', component: FUsersComponent},
-  {path: 'admin/institution-settings', component: InstitutionSettingsComponent},
-  {path: 'tutor-discussion', component: TutorDiscussionComponent, data: {task: 'Discussion'}},
-  {path: 'tutor-attendance', component: TutorDiscussionComponent, data: {attendance: true, task: 'Check-in'}},
+  {
+    path: 'admin/units',
+    component: FUnitsComponent,
+    canActivate: [roleWhitelistGuard],
+    data: {mode: 'admin', roleWhitelist: ['Admin', 'Auditor', 'Convenor']},
+  },
+  {
+    path: 'admin/users',
+    component: FUsersComponent,
+    canActivate: [roleWhitelistGuard],
+    data: {roleWhitelist: ['Admin', 'Auditor']},
+  },
+  {
+    path: 'admin/institution-settings',
+    component: InstitutionSettingsComponent,
+    canActivate: [roleWhitelistGuard],
+    data: {roleWhitelist: ['Admin', 'Auditor']},
+  },
+  {
+    path: 'tutor-discussion',
+    component: TutorDiscussionComponent,
+    canActivate: [roleWhitelistGuard],
+    data: {task: 'Discussion', roleWhitelist: ['Admin', 'Auditor', 'Tutor']},
+  },
+  {
+    path: 'tutor-attendance',
+    component: TutorDiscussionComponent,
+    data: {attendance: true, task: 'Check-in'},
+  },
   {path: 'projects2/:projectId', pathMatch: 'full', redirectTo: 'projects/:projectId/dashboard'},
   {
     path: 'projects2/:projectId/dashboard2',
@@ -149,12 +174,14 @@ export const routes: Routes = [
           {
             path: 'admin',
             component: UnitAdminStateComponent,
-            data: {task: 'Unit Administration'},
+            canActivate: [roleWhitelistGuard],
+            data: {task: 'Unit Administration', roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
           },
           {
             path: 'admin/:tab',
             component: UnitAdminStateComponent,
-            data: {task: 'Unit Administration'},
+            canActivate: [roleWhitelistGuard],
+            data: {task: 'Unit Administration', roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
           },
           {path: 'rollover', component: RolloverComponent, data: {task: 'Unit Rollover'}},
           {path: 'discussion', component: TutorDiscussionComponent, data: {task: 'Discussion'}},
@@ -167,10 +194,14 @@ export const routes: Routes = [
             path: 'tasks',
             pathMatch: 'full',
             component: TaskViewerStateComponent,
-            data: {task: 'Task Lists'},
+            data: {task: 'Task Lists', roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
+            canActivate: [roleWhitelistGuard],
           },
           {
             path: 'tasks',
+            canActivate: [roleWhitelistGuard],
+            data: {roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
+
             children: [
               {path: '', pathMatch: 'full', redirectTo: 'inbox'},
               {
