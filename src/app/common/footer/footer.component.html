@@ -147,7 +147,7 @@
               }
 
               <button
-                [disabled]="selectedTask === undefined"
+                [disabled]="!selectedTask"
                 mat-icon-button
                 matTooltip="Action options"
                 matTooltipPosition="above"
@@ -252,7 +252,7 @@
       }
 
       <button
-        [disabled]="selectedTask === undefined"
+        [disabled]="!selectedTask"
         mat-icon-button
         matTooltip="Submission Options"
         matTooltipPosition="above"
@@ -330,7 +330,7 @@
         </button>
       </mat-menu>
       <button
-        [disabled]="selectedTask === undefined"
+        [disabled]="!selectedTask"
         mat-icon-button
         matTooltip="Download submitted files"
         matTooltipPosition="above"
@@ -341,7 +341,7 @@
         <mat-icon class="small-icon">sim_card_download</mat-icon>
       </button>
       <button
-        [disabled]="selectedTask === undefined"
+        [disabled]="!selectedTask"
         mat-icon-button
         matTooltip="Download Submission"
         matTooltipPosition="above"
@@ -359,7 +359,7 @@
               selectedTask.project.targetGradeWord
             : 'Progress unavailable'
         "
-        [matTooltipDisabled]="selectedTask === undefined"
+        [matTooltipDisabled]="!selectedTask"
         [progress]="selectedTask?.project?.taskStats ?? 0"
       ></f-project-progress-bar>
       <mat-chip-listbox aria-label="Target Grade Symbol" class="pointer-events-none">
