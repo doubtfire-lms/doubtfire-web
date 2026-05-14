@@ -82,6 +82,8 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.globalStateService.setInboxState();
+
     this.routeMode = this.route.snapshot.data.routeMode ?? this.routeMode;
     this.configureRouteMode();
     this.setTaskKeyFromRoute();
@@ -121,7 +123,9 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.globalStateService.setNotInboxState();
+  }
 
   private getTaskSource(): TaskSource {
     switch (this.routeMode) {
