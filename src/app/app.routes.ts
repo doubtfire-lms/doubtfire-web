@@ -200,7 +200,7 @@ export const routes: Routes = [
           {
             path: 'tasks',
             canActivate: [roleWhitelistGuard],
-            data: {roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
+            data: {roleWhitelist: ['Convenor', 'Admin', 'Auditor', 'Tutor']},
 
             children: [
               {path: '', pathMatch: 'full', redirectTo: 'inbox'},
