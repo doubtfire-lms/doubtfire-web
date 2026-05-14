@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-4](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-3...v11.0.0-4) (2026-05-14)
+
+
+### Features
+
+* add route auth guards ([fb2e781](https://github.com/b0ink/doubtfire-deploy/commit/fb2e78113b13782dbbafe38c21f27c5d63be69c6))
+
+
+### Bug Fixes
+
+* enable inbox access for tutors ([05d3eda](https://github.com/b0ink/doubtfire-deploy/commit/05d3eda76bdcfb491649f5d83e69213db3de0885))
+
 ## [11.0.0-3](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-2...v11.0.0-3) (2026-05-14)
 
 
