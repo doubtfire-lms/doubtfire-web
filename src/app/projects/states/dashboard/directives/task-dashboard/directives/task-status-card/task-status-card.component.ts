@@ -137,6 +137,6 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
   }
 
   public get isTutor(): boolean {
-    return this.currentUnitRole.role === 'Convenor' || this.currentUnitRole.role === 'Tutor';
+    return this.currentUnitRole?.role === 'Convenor' || this.currentUnitRole?.role === 'Tutor';
   }
 }
