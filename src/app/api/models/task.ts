@@ -527,7 +527,7 @@ export class Task extends Entity {
     if (days < 0) {
       return 'Past Due Date';
     } else if (days < 11) {
-      return `Due in ${days} day${days > 1 ? 's' : ''}`;
+      return `Due in ${this.timeUntilDueDateDescription()}`;
     } else {
       return `${Math.floor(days / 7)}w`;
     }
