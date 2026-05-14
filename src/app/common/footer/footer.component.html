@@ -1,5 +1,5 @@
 <mat-toolbar class="footer flex-col w-full h-full justify-center p-0">
-  @if (selectedTask?.similaritiesDetected) {
+  <!-- @if (selectedTask?.similaritiesDetected) {
     <div class="bg-red-500 grow w-full rounded-xl h-8 mb-5 mt-4 text-white text-lg font-bold">
       <p
         style="position: relative"
@@ -9,7 +9,7 @@
         Similarities flagged for {{ selectedTask?.project?.student.name }}
       </p>
     </div>
-  }
+  } -->
 
   <ng-template #statusActionButtons>
     <span class="center-buttons flex justify-around gap-2">
@@ -180,7 +180,7 @@
     </div>
 
     <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
-      @if (selectedTask?.similaritiesDetected) {
+      <!-- @if (selectedTask?.similaritiesDetected) {
         <div class="relative inline-block">
           <div
             class="absolute -top-[1.3rem] left-1/2 -translate-x-1/2 w-0 h-0 border-x-[15px] border-x-transparent border-t-[20px] border-t-red-500"
@@ -198,7 +198,7 @@
             <mat-icon class="small-icon">crisis_alert</mat-icon>
           </button>
         </div>
-      }
+      } -->
       @if (selectedTask?.project) {
         @if (selectedTask?.definition.discussionPromptsCount) {
           <button
