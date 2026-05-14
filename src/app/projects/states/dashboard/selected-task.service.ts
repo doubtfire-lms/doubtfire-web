@@ -51,6 +51,13 @@ export class SelectedTaskService {
     } else {
       this.task$.next(task);
 
+      if (!task) {
+        this.currentPdfUrl$.next(null);
+        this.currentView$.next(DashboardViews.submission);
+        this.checkFooterHeight();
+        return;
+      }
+
       task?.getSubmissionDetails().subscribe();
     }
     this.checkFooterHeight();

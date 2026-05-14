@@ -12,6 +12,7 @@ import {
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 
 export type UnitTaskViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
 export type UnitTaskRouteMode = 'inbox' | 'definition' | 'moderation' | 'overflow';
@@ -79,10 +80,12 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     private projectService: ProjectService,
     private route: ActivatedRoute,
     private router: Router,
+    private selectedTaskService: SelectedTaskService,
   ) {}
 
   ngOnInit(): void {
     this.globalStateService.setInboxState();
+    this.clearSelectedTask();
 
     this.routeMode = this.route.snapshot.data.routeMode ?? this.routeMode;
     this.configureRouteMode();
@@ -125,6 +128,13 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.globalStateService.setNotInboxState();
+    this.clearSelectedTask();
+  }
+
+  private clearSelectedTask(): void {
+    this.taskData.selectedTask = null;
+    this.taskData.taskKey = null;
+    this.selectedTaskService.setSelectedTask(null);
   }
 
   private getTaskSource(): TaskSource {
