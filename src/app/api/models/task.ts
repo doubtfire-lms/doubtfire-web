@@ -998,20 +998,6 @@ export class Task extends Entity {
       return;
     }
 
-    if (status === 'complete' || status === 'fix_and_resubmit' || status === 'redo') {
-      if (!this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isManualFeedback)) {
-        alerts.error(
-          status === 'complete'
-            ? 'Feedback must be given before moving this task to Complete'
-            : status === 'fix_and_resubmit'
-              ? 'Feedback must be given before moving this task to Fix and Resubmit'
-              : 'Feedback must be given before moving this task to Redo',
-          6000,
-        );
-        return;
-      }
-    }
-
     const updateFunc = () => {
       const taskService: TaskService = AppInjector.get(TaskService);
       const options: RequestOptions<Task> = {
