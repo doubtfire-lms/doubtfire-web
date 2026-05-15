@@ -213,6 +213,7 @@ import {TaskAssessmentCardComponent} from './projects/states/dashboard/directive
 import {TaskSubmissionCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-submission-card/task-submission-card.component';
 import {TaskDashboardComponent} from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
 import {InboxComponent} from './units/states/tasks/inbox/inbox.component';
+import {TaskDefinitionStateComponent} from './units/states/tasks/definition/definition.component';
 import {ProjectProgressBarComponent} from './common/project-progress-bar/project-progress-bar.component';
 import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teaching-period-list/teaching-period-list.component';
 import {FChipComponent} from './common/f-chip/f-chip.component';
@@ -454,6 +455,7 @@ const GANTT_CHART_CONFIG = {
     TaskSubmissionCardComponent,
     TaskDashboardComponent,
     InboxComponent,
+    TaskDefinitionStateComponent,
     ProjectProgressBarComponent,
     TeachingPeriodListComponent,
     CreateNewUnitModal,
