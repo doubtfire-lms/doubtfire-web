@@ -1,0 +1,13 @@
+<div class="flex flex-row">
+  <div class="w-4 mr-6 shrink-0" [style.background-color]="task.color"></div>
+  <div class="py-4 flex flex-col flex-grow shrink min-w-0">
+    <h4 class="mb-1 truncate flex-grow min-w-0">{{ task.title }}</h4>
+    <p class="mb-0">{{ task.subtitle }}</p>
+  </div>
+  <div class="flex flex-row ml-2 mr-6 items-center justify-end gap-4">
+    <div *ngIf="task.comments > 0" class="flex h-8 w-8 bg-red-500 rounded-full">
+      <span class="text-white text-xl font-medium m-auto">{{ task.comments }}</span>
+    </div>
+    <mat-icon>keyboard_arrow_down</mat-icon>
+  </div>
+</div>
