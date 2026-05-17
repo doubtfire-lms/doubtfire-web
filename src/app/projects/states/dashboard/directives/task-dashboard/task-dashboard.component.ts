@@ -1,7 +1,9 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
+import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
@@ -47,6 +49,15 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
       case 3:
         this.setSelectedDashboardView(DashboardViews.similarity);
         break;
+      case 4:
+        this.setSelectedDashboardView(DashboardViews.overseer);
+        break;
+      case 5:
+        this.setSelectedDashboardView(DashboardViews.staff_notes);
+        break;
+      case 6:
+        this.setSelectedDashboardView(DashboardViews.tutor_notes);
+        break;
     }
   }
 
@@ -56,6 +67,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private taskAssessmentModal: TaskAssessmentModalService,
     private fileDownloader: FileDownloaderService,
     private route: ActivatedRoute,
+    private userService: UserService,
     public selectedTaskService: SelectedTaskService,
   ) {}
 
@@ -63,8 +75,8 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     this.tutor = this.route.snapshot.queryParamMap.has('tutor');
     this.setSelectedDashboardView(DashboardViews.details);
     this.selectedTaskService.currentView$.subscribe((view) => {
-      this.currentView = view;
-      this.currentIndex = this.tabIndexForView(view);
+      this.currentView = this.canAccessDashboardView(view) ? view : DashboardViews.details;
+      this.currentIndex = this.tabIndexForView(this.currentView);
     });
 
     this.taskStatusData = {
@@ -91,9 +103,10 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   }
 
   setSelectedDashboardView(view: DashboardViews): void {
-    this.selectedTaskService.currentView$.next(view);
-    this.currentView = view;
-    this.currentIndex = this.tabIndexForView(view);
+    const nextView = this.canAccessDashboardView(view) ? view : DashboardViews.details;
+    this.selectedTaskService.currentView$.next(nextView);
+    this.currentView = nextView;
+    this.currentIndex = this.tabIndexForView(nextView);
   }
 
   private tabIndexForView(view: DashboardViews): number {
@@ -102,13 +115,67 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
         return 1;
       case DashboardViews.submission:
         return 2;
+      case DashboardViews.similarity:
+        return this.canAccessStaffViews ? 3 : 0;
+      case DashboardViews.overseer:
+        return this.canAccessStaffViews ? 4 : 0;
+      case DashboardViews.staff_notes:
+        return this.canAccessStaffViews ? 5 : 0;
+      case DashboardViews.tutor_notes:
+        return this.canAccessTutorNotes ? 6 : 0;
       default:
         return 0;
     }
   }
 
+  private canAccessDashboardView(view: DashboardViews): boolean {
+    switch (view) {
+      case DashboardViews.similarity:
+      case DashboardViews.overseer:
+      case DashboardViews.staff_notes:
+      case DashboardViews.discussion_prompts:
+        return this.canAccessStaffViews;
+      case DashboardViews.tutor_notes:
+        return this.canAccessTutorNotes;
+      default:
+        return true;
+    }
+  }
+
   public get overseerEnabled() {
     return this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled;
+  }
+
+  public get canAccessStaffViews(): boolean {
+    return this.tutor || !!this.currentUnitRole;
+  }
+
+  public get currentUnitRole(): UnitRole | undefined {
+    const currentUser = this.userService.currentUser;
+    if (!currentUser) {
+      return undefined;
+    }
+
+    return this.task?.unit?.staff?.find((ur) => ur.user?.id === currentUser.id);
+  }
+
+  public get canAccessTutorNotes(): boolean {
+    const tutor = this.task?.tutor;
+    if (!tutor) {
+      return false;
+    }
+
+    if (!this.currentUnitRole) {
+      return false;
+    }
+
+    tutor.unit = this.task.unit;
+
+    return (
+      this.currentUnitRole.role === 'Convenor' ||
+      this.currentUnitRole.role === 'Admin' ||
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id)
+    );
   }
 
   showSubmissionHistoryModal() {

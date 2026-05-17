@@ -18,6 +18,37 @@
           </span>
         </ng-template>
       </mat-tab>
+      @if (canAccessStaffViews) {
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="inline-flex items-center gap-2">
+              Similarities
+              @if (task.similaritiesDetected) {
+                <mat-icon class="text-red-500">warning</mat-icon>
+              }
+            </span>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Overseer" [disabled]="!overseerEnabled"></mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="inline-flex items-center gap-2">
+              Staff Notes
+              @if (task.project.staffNoteCount) {
+                <span
+                  class="ml-1 inline-flex h-[22px] w-[22px] items-center justify-center rounded-full text-[12px] font-[600] p-0 leading-[22px] text-white"
+                  style="background-color: #3939ff"
+                >
+                  {{ task.project.staffNoteCount }}
+                </span>
+              }
+            </span>
+          </ng-template>
+        </mat-tab>
+        @if (canAccessTutorNotes) {
+          <mat-tab label="Tutor Notes"></mat-tab>
+        }
+      }
     </mat-tab-group>
 
     <button
@@ -112,22 +143,40 @@
       }
     }
     @case (DashboardViews.similarity) {
-      <f-task-similarity-view [task]="task"></f-task-similarity-view>
+      @if (canAccessStaffViews) {
+        <div class="h-full overflow-auto">
+          <f-task-similarity-view [task]="task"></f-task-similarity-view>
+        </div>
+      }
     }
     @case (DashboardViews.overseer) {
-      <f-task-overseer-report [task]="task"></f-task-overseer-report>
+      @if (canAccessStaffViews) {
+        <div class="h-full overflow-auto">
+          <f-task-overseer-report [task]="task"></f-task-overseer-report>
+        </div>
+      }
     }
     @case (DashboardViews.staff_notes) {
-      <f-staff-notes-view [project]="task.project"></f-staff-notes-view>
+      @if (canAccessStaffViews) {
+        <div class="h-full">
+          <f-staff-notes-view [project]="task.project"></f-staff-notes-view>
+        </div>
+      }
     }
     @case (DashboardViews.tutor_notes) {
-      <f-tutor-notes-view [task]="task" [unitRole]="unitRole"></f-tutor-notes-view>
+      <div class="h-full overflow-auto">
+        @if (canAccessTutorNotes) {
+          <f-tutor-notes-view [task]="task"></f-tutor-notes-view>
+        }
+      </div>
     }
     @case (DashboardViews.discussion_prompts) {
-      <f-discussion-prompts-view
-        [project]="task.project"
-        [taskDefinition]="task.definition"
-      ></f-discussion-prompts-view>
+      @if (canAccessStaffViews) {
+        <f-discussion-prompts-view
+          [project]="task.project"
+          [taskDefinition]="task.definition"
+        ></f-discussion-prompts-view>
+      }
     }
   }
 
