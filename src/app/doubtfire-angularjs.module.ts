@@ -254,7 +254,7 @@ angular.module('doubtfire.units.states.tasks', [
     abstract: true,
     parent: 'units/index',
     url: '/tasks',
-    template: '<units-tasks-state></units-tasks-state>',
+    template: '<f-units-tasks-state></f-units-tasks-state>',
     data: {
       pageTitle: '_Home_',
       roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
