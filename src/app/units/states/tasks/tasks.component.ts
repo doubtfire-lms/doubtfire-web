@@ -16,7 +16,7 @@ export class UnitsTasksStateComponent implements OnInit, OnDestroy {
     onSelectedTaskChange: (task: unknown) => void;
   };
 
-  private deregisterTransition: () => void;
+  private deregisterTransition: Function;
 
   constructor(
     private stateService: StateService,
