@@ -3,20 +3,20 @@ import { StateService, TransitionService, Transition } from '@uirouter/angular';
 import { TaskService } from 'src/app/api/services/task.service';
 
 @Component({
-  selector: 'units-tasks-state',
+  selector: 'f-units-tasks-state',
   templateUrl: 'tasks.component.html',
   styleUrls: ['tasks.component.scss'],
 })
 export class UnitsTasksStateComponent implements OnInit, OnDestroy {
   taskData: {
-    taskKey: any;
-    source: any;
-    selectedTask: any;
+    taskKey: unknown;
+    source: unknown;
+    selectedTask: unknown;
     taskDefMode: boolean;
-    onSelectedTaskChange: (task: any) => void;
+    onSelectedTaskChange: (task: unknown) => void;
   };
 
-  private deregisterTransition: Function;
+  private deregisterTransition: () => void;
 
   constructor(
     private stateService: StateService,
@@ -30,9 +30,9 @@ export class UnitsTasksStateComponent implements OnInit, OnDestroy {
       source: null,
       selectedTask: null,
       taskDefMode: false,
-      onSelectedTaskChange: (task: any) => {
+      onSelectedTaskChange: (task: unknown) => {
         // Bug fix 4: cleaner taskKey assignment — only call taskKey() if task exists
-        this.taskData.taskKey = task?.taskKey() ?? null;
+        this.taskData.taskKey = (task as {taskKey: () => unknown})?.taskKey() ?? null;
         // Bug fix 3: avoid redundant $state.go — only navigate if task exists
         if (task) {
           this.setTaskKeyAsUrlParams(task);
@@ -46,7 +46,7 @@ export class UnitsTasksStateComponent implements OnInit, OnDestroy {
     this.setTaskKeyFromUrlParams(initialKey);
 
     // Listen for state transitions to keep taskKey in sync
-    this.deregisterTransition = this.transitionService.onStart({}, (trans: Transition) => {
+    this.deregisterTransition = this.transitionService.onStart({to: 'units/tasks.**'}, (trans: Transition) => {
       const toParams = trans.params('to');
       const fromState = trans.from();
       const toState = trans.to();
@@ -69,16 +69,17 @@ export class UnitsTasksStateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setTaskKeyAsUrlParams(task: any): void {
+  private setTaskKeyAsUrlParams(task: unknown): void {
     this.stateService.go(
       this.stateService.$current.name,
-      { taskKey: task?.taskKeyToUrlString() },
-      { notify: false }
+      {taskKey: (task as {taskKeyToUrlString: () => string})?.taskKeyToUrlString()},
+      {notify: false },
     );
   }
 
   private setTaskKeyFromUrlParams(taskKeyString: string | null): void {
-    // Bug fix 1 & 2: null-safe + forced string before passing to service
-    this.taskData.taskKey = this.taskService.taskKeyFromString(taskKeyString ?? '');
+    if (taskKeyString) {
+      this.taskData.taskKey = this.taskService.taskKeyFromString(taskKeyString);
+    }
   }
 }

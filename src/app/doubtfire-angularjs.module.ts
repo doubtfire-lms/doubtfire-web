@@ -254,46 +254,13 @@ angular.module('doubtfire.units.states.tasks', [
     abstract: true,
     parent: 'units/index',
     url: '/tasks',
-    controller: 'UnitsTasksStateCtrl',
-    template: '<ui-view/>',
+    template: '<units-tasks-state></units-tasks-state>',
     data: {
       pageTitle: '_Home_',
       roleWhitelist: ['Tutor', 'Convenor', 'Admin', 'Auditor'],
     },
   });
-})
-.controller('UnitsTasksStateCtrl', ['$scope', '$state', 'newTaskService', 'listenerService', '$transition$',
-  function($scope: any, $state: any, newTaskService: any, listenerService: any, $transition$: any) {
-    const listeners = listenerService.listenTo($scope);
-
-    $scope.taskData = {
-      taskKey: null,
-      source: null,
-      selectedTask: null,
-      taskDefMode: false,
-      onSelectedTaskChange: (task: any) => {
-        $scope.taskData.taskKey = task?.taskKey() ?? null;
-        if (task) {
-          $state.go($state.$current, {taskKey: task?.taskKeyToUrlString()}, {notify: false});
-        }
-      },
-    };
-
-    const taskKey = $transition$.params().taskKey;
-    if (taskKey) {
-      $scope.taskData.taskKey = newTaskService.taskKeyFromString(String(taskKey));
-    }
-
-    listeners.push($scope.$on('$stateChangeStart', ($event: any, toState: any, toParams: any, fromState: any, fromParams: any) => {
-      if (toParams.taskKey != null) {
-        $scope.taskData.taskKey = newTaskService.taskKeyFromString(String(toParams.taskKey));
-      }
-      if (fromState?.name && fromState.name === toState?.name && fromParams.unitId === toParams.unitId) {
-        $event.preventDefault();
-      }
-    }));
-  }
-]);
+});
 
 export const DoubtfireAngularJSModule = angular
   .module('doubtfire', [
