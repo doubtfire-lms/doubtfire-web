@@ -1,22 +1,391 @@
-.task-item {
-  padding: 12px;
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+// ---- Variables ----
+$brand-indigo : #3730d8;
+$white        : #ffffff;
+$gray-50      : #f9fafb;
+$gray-100     : #f3f4f6;
+$gray-200     : #e5e7eb;
+$gray-400     : #9ca3af;
+$gray-500     : #6b7280;
+$gray-700     : #374151;
+$gray-900     : #111827;
 
-  &:hover {
-    background: #f5f5f5;
+$red          : #ef4444;
+$orange       : #f97316;
+$green        : #22c55e;
+$teal         : #14b8a6;
+$blue         : #3b82f6;
+
+$font-stack   : 'Segoe UI', system-ui, -apple-system, sans-serif;
+$radius-sm    : 4px;
+$radius-md    : 6px;
+$radius-lg    : 8px;
+$shadow-card  : 0 2px 8px rgba(0, 0, 0, 0.10);
+
+// ---- Reset ----
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-stack;
+  background: $gray-100;
+  min-height: 100vh;
+  color: $gray-900;
+}
+
+button {
+  font-family: $font-stack;
+  cursor: pointer;
+}
+
+// ============================================================
+// NAVBAR
+// ============================================================
+.navbar {
+  background: $white;
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid $gray-200;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  &__logo {
+    display: flex;
+    align-items: center;
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: $gray-200;
+    color: $gray-700;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover { background: $gray-400; }
   }
 }
 
-.task-details {
+// ============================================================
+// BOARD  (horizontal scroll container)
+// ============================================================
+.board {
   display: flex;
-  justify-content: space-between;
-  font-size: 12px;
+  gap: 20px;
+  padding: 28px 24px;
+  overflow-x: auto;
+  align-items: flex-start;
+  min-height: calc(100vh - 64px);
 }
 
-.task-type {
-  font-weight: bold;
+// ============================================================
+// COLUMN
+// ============================================================
+.column {
+  flex: 0 0 340px;
+  min-width: 280px;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+  background: $white;
+  display: flex;
+  flex-direction: column;
+
+  // ---- Header bar ----
+  &__header {
+    background: $brand-indigo;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__title {
+    color: $white;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+
+  &__search {
+    flex: 1;
+    padding: 5px 10px;
+    border-radius: $radius-md;
+    border: none;
+    font-size: 13px;
+    background: rgba($white, 0.18);
+    color: $white;
+    outline: none;
+    font-family: $font-stack;
+    transition: background 0.15s;
+
+    &::placeholder { color: rgba($white, 0.65); }
+    &:focus        { background: rgba($white, 0.28); }
+  }
+
+  &__icon-btn {
+    background: none;
+    border: none;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    opacity: 0.85;
+    border-radius: $radius-sm;
+    transition: opacity 0.15s;
+
+    &:hover { opacity: 1; }
+  }
+
+  // ---- Scrollable task list ----
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    background: $gray-50;
+    max-height: calc(100vh - 130px);
+
+    // Thin scrollbar
+    scrollbar-width: thin;
+    scrollbar-color: $gray-200 transparent;
+
+    &::-webkit-scrollbar       { width: 4px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: $gray-200; border-radius: 2px; }
+  }
+}
+
+// ============================================================
+// TASK ITEM  — your existing structure
+// ============================================================
+.task-item {
+  display: flex;
+  align-items: stretch;       // makes task-color fill full height
+  background: $white;
+  margin-bottom: 1px;
+  transition: background 0.1s;
+
+  &:hover { background: $gray-50; }
+
+  // ---- Expanded state ----
+  &--expanded {
+    .task-expanded-body { display: block; }
+    .task-arrow         { transform: rotate(180deg); }
+  }
+}
+
+// ============================================================
+// TASK COLOR BAR  (left accent stripe)
+// ============================================================
+.task-color {
+  width: 4px;
+  flex-shrink: 0;
+  border-radius: 0;           // flush, no rounding on single-side border
+
+  &--orange { background: $orange; }
+  &--green  { background: $green; }
+  &--blue   { background: $blue; }
+  &--teal   { background: $teal; }
+  &--gray   { background: $gray-400; }
+}
+
+// ============================================================
+// TASK CONTENT
+// ============================================================
+.task-content {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 10px 10px 14px;
+}
+
+// ---- Header row (title + alert badges) ----
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  user-select: none;
+
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: $gray-900;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// ---- Details row (subtext, priority badge, time) ----
+.task-details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: 13px;
+  color: $gray-500;
+}
+
+// ---- Time indicator ----
+.task-time {
+  font-size: 13px;
+  color: $gray-500;
+}
+
+// ============================================================
+// TASK ALERT  (circular badge — top-right of header)
+// .task-alert--comment  → plain number (red circle)
+// .task-alert--blocked  → !! (red circle, larger)
+// ============================================================
+.task-alert {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: $white;
+  flex-shrink: 0;
+  border-radius: 50%;
+
+  &--comment {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+    background: $red;
+  }
+
+  &--blocked {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+    background: $red;
+  }
+}
+
+// ============================================================
+// TASK BADGE  (pill — inside .task-details row)
+// .task-badge--red    → priority 1–2
+// .task-badge--orange → priority 3–5
+// .task-badge--gray   → priority 6+
+// ============================================================
+.task-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+  color: $white;
+  border-radius: 10px;
+  padding: 0 6px;
+  min-width: 22px;
+  height: 18px;
+  flex-shrink: 0;
+
+  &--red    { background: $red; }
+  &--orange { background: $orange; }
+  &--gray   { background: $gray-400; }
+}
+
+// ============================================================
+// TASK ARROW  (collapse/expand chevron)
+// ============================================================
+.task-arrow {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 12px 0 4px;
+  font-size: 20px;
+  color: $gray-500;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+
+  // Flips when expanded (via JS toggling task-item--expanded,
+  // or directly via task-arrow--up)
+  &--up { transform: rotate(180deg); }
+}
+
+// ============================================================
+// EXPANDED BODY  (hidden by default, shown when --expanded)
+// ============================================================
+.task-expanded-body {
+  display: none;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid $gray-100;
+}
+
+.task-working-on {
+  font-weight: 700;
+  font-size: 14px;
+  color: $gray-900;
+  margin-bottom: 6px;
+}
+
+.task-description {
+  font-size: 14px;
+  color: $gray-700;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.task-due {
+  font-size: 14px;
+  color: $gray-700;
+  margin-bottom: 14px;
+
+  strong { font-weight: 700; }
+}
+
+.task-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.task-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: $radius-md;
+  border: 1px solid $gray-200;
+  background: $white;
+  font-size: 13px;
+  color: $gray-700;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: $gray-50;
+    border-color: $gray-400;
+  }
+}
+
+// ============================================================
+// RESPONSIVE
+// ============================================================
+@media (max-width: 768px) {
+  .board {
+    padding: 16px 12px;
+    gap: 14px;
+  }
+
+  .column {
+    flex: 0 0 300px;
+  }
 }

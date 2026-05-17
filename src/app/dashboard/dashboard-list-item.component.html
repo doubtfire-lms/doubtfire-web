@@ -1,8 +1,353 @@
-<div class="task-item" (click)="goToTask()">
-  <h4>{{ task?.title }}</h4>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OnTrack</title>
+  <link rel="stylesheet" href="ontrack.css" />
+  <!-- If using SCSS: link ontrack.css after compiling ontrack.scss -->
+</head>
+<body>
 
-  <div class="task-details">
-    <span>Task {{ task?.number }}</span>
-    <span class="task-type">{{ task?.type }}</span>
-  </div>
-</div>
+  <!-- NAV -->
+  <nav class="navbar">
+    <div class="navbar__logo">
+      <svg width="44" height="32" viewBox="0 0 44 32" fill="none">
+        <path d="M8 24 L16 8 L22 18 L28 8 L36 24" stroke="#3730d8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M14 24 L22 10 L30 24" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="navbar__avatar">LT</div>
+  </nav>
+
+  <!-- BOARD -->
+  <main class="board">
+
+    <!-- ===================== COLUMN: SIT101 ===================== -->
+    <div class="column">
+      <div class="column__header">
+        <span class="column__title">SIT101</span>
+        <input class="column__search" type="text" placeholder="Search tasks..." oninput="filterTasks(this)" />
+        <button class="column__icon-btn" aria-label="Filter">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M6 10h8M9 15h2" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <button class="column__icon-btn" aria-label="Sort">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M4 6h12M4 10h8M4 14h4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="column__body">
+
+        <!-- Task 1 — comment badge -->
+        <div class="task-item">
+          <div class="task-color task-color--orange"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+              <span class="task-alert task-alert--comment">2</span>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-time">⌛ 1d</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 2 — expanded -->
+        <div class="task-item task-item--expanded">
+          <div class="task-color task-color--orange"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+            </div>
+            <div class="task-expanded-body">
+              <p class="task-working-on">Working On It</p>
+              <p class="task-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              <p class="task-due">Submit by <strong>Thu 16 Apr</strong></p>
+              <div class="task-btns">
+                <button class="task-btn">📄 Task Sheet</button>
+                <button class="task-btn">⬇ Resources</button>
+                <button class="task-btn">→ More info</button>
+              </div>
+            </div>
+          </div>
+          <div class="task-arrow task-arrow--up">&#8964;</div>
+        </div>
+
+        <!-- Task 3 — priority badge -->
+        <div class="task-item">
+          <div class="task-color task-color--orange"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-badge task-badge--orange">#4</span>
+              <span class="task-time">⌛ 1w</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 4 -->
+        <div class="task-item">
+          <div class="task-color task-color--orange"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-time">⌛ 1w</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== COLUMN: SIT102 ===================== -->
+    <div class="column">
+      <div class="column__header">
+        <span class="column__title">SIT102</span>
+        <input class="column__search" type="text" placeholder="Search tasks..." oninput="filterTasks(this)" />
+        <button class="column__icon-btn" aria-label="Filter">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M6 10h8M9 15h2" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <button class="column__icon-btn" aria-label="Sort">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M4 6h12M4 10h8M4 14h4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="column__body">
+
+        <!-- Task 1 — no badge -->
+        <div class="task-item">
+          <div class="task-color task-color--green"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 2 — blocked + priority -->
+        <div class="task-item">
+          <div class="task-color task-color--blue"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+              <span class="task-alert task-alert--blocked">!!</span>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-badge task-badge--red">#2</span>
+              <span class="task-time">⌛ 1w</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 3 — blocked + priority -->
+        <div class="task-item">
+          <div class="task-color task-color--orange"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+              <span class="task-alert task-alert--blocked">!!</span>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-badge task-badge--red">#1</span>
+              <span class="task-time">⌛ 1d</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 4 — comment badge -->
+        <div class="task-item">
+          <div class="task-color task-color--teal"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+              <span class="task-alert task-alert--comment">2</span>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-badge task-badge--gray">#6</span>
+              <span class="task-time">⌛ 1w</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 5 -->
+        <div class="task-item">
+          <div class="task-color task-color--gray"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-badge task-badge--gray">#7</span>
+              <span class="task-time">⌛ 1w</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 6 -->
+        <div class="task-item">
+          <div class="task-color task-color--gray"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-badge task-badge--orange">#5</span>
+              <span class="task-time">⌛ 1w</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== COLUMN: SIT103 ===================== -->
+    <div class="column">
+      <div class="column__header">
+        <span class="column__title">SIT103</span>
+        <input class="column__search" type="text" placeholder="Search tasks..." oninput="filterTasks(this)" />
+        <button class="column__icon-btn" aria-label="Filter">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M6 10h8M9 15h2" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <button class="column__icon-btn" aria-label="Sort">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M4 6h12M4 10h8M4 14h4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="column__body">
+
+        <!-- Task 1 — blocked + comment -->
+        <div class="task-item">
+          <div class="task-color task-color--orange"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+              <span class="task-alert task-alert--blocked">!!</span>
+              <span class="task-alert task-alert--comment">2</span>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-time">⌛ 1d</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 2 -->
+        <div class="task-item">
+          <div class="task-color task-color--gray"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-badge task-badge--orange">#3</span>
+              <span class="task-time">⌛ 1w</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 3 -->
+        <div class="task-item">
+          <div class="task-color task-color--gray"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-badge task-badge--gray">#8</span>
+              <span class="task-time">⌛ 1w</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 4 -->
+        <div class="task-item">
+          <div class="task-color task-color--gray"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-badge task-badge--gray">#9</span>
+              <span class="task-time">⌛ 1w</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+        <!-- Task 5 -->
+        <div class="task-item">
+          <div class="task-color task-color--gray"></div>
+          <div class="task-content">
+            <div class="task-header">
+              <h4>Task Name</h4>
+            </div>
+            <div class="task-details">
+              <span>1.1P - Pass Task</span>
+              <span class="task-badge task-badge--gray">#10</span>
+              <span class="task-time">⌛ 1w</span>
+            </div>
+          </div>
+          <div class="task-arrow">&#8964;</div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Toggle expand/collapse
+    document.querySelectorAll('.task-item').forEach(item => {
+      const header = item.querySelector('.task-header');
+      const arrow = item.querySelector('.task-arrow');
+      header.style.cursor = 'pointer';
+      header.addEventListener('click', () => {
+        item.classList.toggle('task-item--expanded');
+        arrow.classList.toggle('task-arrow--up');
+      });
+    });
+
+    // Search filter per column
+    function filterTasks(input) {
+      const query = input.value.toLowerCase();
+      const column = input.closest('.column');
+      column.querySelectorAll('.task-item').forEach(item => {
+        const h4 = item.querySelector('h4')?.textContent.toLowerCase() || '';
+        const sub = item.querySelector('.task-details span')?.textContent.toLowerCase() || '';
+        item.style.display = (h4.includes(query) || sub.includes(query)) ? '' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>
