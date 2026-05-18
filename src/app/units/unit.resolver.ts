@@ -36,6 +36,7 @@ export const resolveUnit: ResolveFn<Unit> = (route, state) => {
         globalState.setView(ViewType.UNIT, routeEntity(unit, unitRole));
         observer.next(unit);
         observer.complete();
+        return;
       }
 
       unitService.get(unitId).subscribe({

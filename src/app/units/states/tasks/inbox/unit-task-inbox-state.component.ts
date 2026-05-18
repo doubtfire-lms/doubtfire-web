@@ -7,6 +7,7 @@ import {
   Tutorial,
   Unit,
   UnitRole,
+  UnitService,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
@@ -81,6 +82,7 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     private taskService: TaskService,
     private globalStateService: GlobalStateService,
     private userService: UserService,
+    private unitService: UnitService,
     private projectService: ProjectService,
     private route: ActivatedRoute,
     private router: Router,
@@ -100,25 +102,11 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
       this.unit$ = of(routeUnit);
     }
 
-    this.unit$.pipe(first()).subscribe((unit) => {
-      this.unit = unit;
-      this.unitRole = this.findUnitRole(unit.id);
-      this.filters = {
-        ...this.filters,
-        ...this.getFilterOverrides(unit),
-      };
-
-      this.projectService
-        .loadStudents(unit)
+    this.unit$.pipe(first()).subscribe((routeUnit) => {
+      this.unitService
+        .fetch(routeUnit.id)
         .pipe(first())
-        .subscribe({
-          next: () => {
-            this.studentsLoaded = true;
-          },
-          error: () => {
-            this.studentsLoaded = true;
-          },
-        });
+        .subscribe((unit) => this.loadInboxData(unit));
     });
 
     this.route.paramMap.subscribe(() => {
@@ -181,6 +169,34 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
         this.taskData.taskDefMode = false;
         break;
     }
+  }
+
+  private loadInboxData(unit: Unit): void {
+    this.unit = unit;
+    this.unitRole = this.findUnitRole(unit.id);
+    if (this.unitRole) {
+      this.unitRole.unit = unit;
+      this.globalStateService.setView(ViewType.UNIT, this.unitRole);
+    } else {
+      this.globalStateService.setView(ViewType.UNIT, unit);
+    }
+
+    this.filters = {
+      ...this.filters,
+      ...this.getFilterOverrides(unit),
+    };
+
+    this.projectService
+      .loadStudents(unit)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.studentsLoaded = true;
+        },
+        error: () => {
+          this.studentsLoaded = true;
+        },
+      });
   }
 
   private getFilterOverrides(unit: Unit): Partial<TaskFilters> {
