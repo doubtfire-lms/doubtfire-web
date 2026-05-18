@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-9](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-8...v11.0.0-9) (2026-05-18)
+
+
+### Bug Fixes
+
+* ensure unit is loaded first before querying inbox ([6d7c9fb](https://github.com/b0ink/doubtfire-deploy/commit/6d7c9fb8ff7fe714844ebc8f0e04f2ef9a40d4d0))
+
 ## [11.0.0-8](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-7...v11.0.0-8) (2026-05-18)
 
 ## [11.0.0-7](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-6...v11.0.0-7) (2026-05-17)
