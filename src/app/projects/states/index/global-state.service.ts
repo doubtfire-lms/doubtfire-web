@@ -292,18 +292,24 @@ export class GlobalStateService implements OnDestroy {
       next: (_unitRoles: UnitRole[]) => {
         // unit roles are now in the cache
 
-        this.projectService.query(undefined, {params: {include_in_active: false}}).subscribe({
-          next: (_projects: Project[]) => {
-            // projects updated in cache
-
-            setTimeout(() => {
-              this.isLoadingSubject.next(false);
-            }, 800);
-          },
-          error: (_response) => {
-            this.alerts.error('Unable to access the units you study.', 6000);
-          },
-        });
+        this.projectService
+          .query(undefined, {
+            params: {
+              include_inactive: false,
+              include_task_definitions: true,
+            },
+          })
+          .subscribe({
+            next: (_projects: Project[]) => {
+              // projects updated in cache
+              setTimeout(() => {
+                this.isLoadingSubject.next(false);
+              }, 800);
+            },
+            error: (_response) => {
+              this.alerts.error('Unable to access the units you study.', 6000);
+            },
+          });
       },
       error: (_response) => {
         this.alerts.error('Unable to access your units.', 6000);

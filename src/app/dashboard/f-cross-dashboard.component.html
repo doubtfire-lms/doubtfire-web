@@ -1,0 +1,28 @@
+<div class="panel-full-screen flex flex-row gap-8 px-16 overflow-x-auto">
+  <div *ngFor="let unit of units">
+    <div class="flex flex-col h-full w-[34rem] shadow">
+      <div class="shrink-0 flex flex-row gap-4 w-full bg-formatif-blue p-4 rounded-t-lg">
+        <h3 class="m-0 flex-grow text-white truncate min-w-0">{{ unit.code }}</h3>
+        <input
+          type="text"
+          class="h-full w-64 p-2 px-4 text-md rounded-md"
+          placeholder="Search tasks..."
+        />
+        <mat-icon style="color: white">sort</mat-icon>
+        <mat-icon style="color: white">filter_list_alt</mat-icon>
+      </div>
+
+      <div class="flex flex-col overflow-y-auto">
+        <div *ngFor="let task of unit.tasks">
+          <div
+            class="border-b-[1px] border-gray-300"
+            uiSref="projects/dashboard"
+            [uiParams]="{projectId: unit.projectId, taskAbbr: task.abbreviation}"
+          >
+            <f-dashboard-list-item [task]="task"></f-dashboard-list-item>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
