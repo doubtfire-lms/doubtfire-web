@@ -58,6 +58,8 @@ module.exports = tseslint.config(
       // Apply the Angular template rules which focus on accessibility of our apps
       ...angular.configs.templateAccessibility,
     ],
-    rules: {},
+    rules: {
+      '@angular-eslint/template/mouse-events-have-key-events': 'off',
+    },
   },
 );
