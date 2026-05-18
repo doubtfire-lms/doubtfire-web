@@ -1,18 +1,60 @@
+<ng-template #TaskListSkeleton>
+  <div class="task-list-skeleton flex h-full flex-col p-2">
+    <div class="mb-3 rounded-2xl bg-white p-2">
+      <div class="flex items-center gap-3">
+        <ngx-skeleton-loader
+          appearance="circle"
+          [theme]="{width: '32px', height: '32px', margin: '0'}"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          class="min-w-0 flex-1"
+          [theme]="{height: '16px', width: '100%', 'border-radius': '999px', margin: '0'}"
+        ></ngx-skeleton-loader>
+      </div>
+    </div>
+
+    <div class="min-h-0 flex-1 overflow-hidden rounded-lg bg-white">
+      @for (row of skeletonRows; track row) {
+        <div
+          class="skeleton-task-row flex h-[65px] items-center gap-3 border-b border-gray-200 px-3"
+        >
+          <div class="min-w-0 flex-1">
+            <ngx-skeleton-loader
+              [theme]="{height: '12px', width: '82%', 'border-radius': '999px', margin: '0 0 8px'}"
+            ></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{height: '10px', width: '58%', 'border-radius': '999px', margin: '0'}"
+            ></ngx-skeleton-loader>
+          </div>
+          <ngx-skeleton-loader
+            appearance="circle"
+            [theme]="{width: '34px', height: '34px', margin: '0'}"
+          ></ngx-skeleton-loader>
+        </div>
+      }
+    </div>
+  </div>
+</ng-template>
+
 @if (project$ | async; as project) {
   <div class="w-full h-[calc(100vh-100px)] overflow-hidden">
     <div class="flex flex-row h-full min-h-0" #boundary>
       @if (subs$ | async) {
-        @if (project.unit.taskDefinitions.length > 0) {
+        @if (isProjectTaskListReady(project)) {
           <f-unit-task-list
             class="flex-none p-2 h-full min-h-0"
             [style.width.px]="leftWidth"
             #leftPanel
             [mode]="'project'"
             [project]="project"
-            [taskDefinitions]="project.unit.taskDefinitionsForGrade(project.targetGrade)"
+            [taskDefinitions]="taskDefinitionsForProject(project)"
             [tasks]="project.tasks"
             [selectedTaskDefinition$]="selectedTaskDefinition$"
           ></f-unit-task-list>
+        } @else {
+          <div class="flex-none h-full min-h-0" [style.width.px]="leftWidth">
+            <ng-container *ngTemplateOutlet="TaskListSkeleton"></ng-container>
+          </div>
         }
         <div class="relative flex-none" [style.width.px]="10">
           <div
@@ -36,6 +78,25 @@
         <div #commentspanel class="flex-none w-1/4 p-2 bg-white rounded-lg">
           <task-comments-viewer [task]="project.findTaskForDefinition(selectedTaskDefinition.id)">
           </task-comments-viewer>
+        </div>
+      } @else if (!isProjectTaskListReady(project)) {
+        <div class="flex-1 p-2 min-h-0 overflow-y-auto">
+          <div class="dashboard-skeleton h-full rounded-lg bg-white p-4">
+            <ngx-skeleton-loader
+              [theme]="{
+                height: '28px',
+                width: '220px',
+                'border-radius': '999px',
+                margin: '0 0 20px',
+              }"
+            ></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{height: '140px', width: '100%', 'border-radius': '8px', margin: '0 0 16px'}"
+            ></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{height: '220px', width: '100%', 'border-radius': '8px', margin: '0'}"
+            ></ngx-skeleton-loader>
+          </div>
         </div>
       } @else {
         <div class="flex-1 p-2 min-h-0 overflow-y-auto">

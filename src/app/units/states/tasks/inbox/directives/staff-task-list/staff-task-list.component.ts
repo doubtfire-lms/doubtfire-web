@@ -105,6 +105,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   panelOpenState = false;
   loading = true;
+  skeletonRows = Array.from({length: 12}, (_, index) => index);
 
   definedTasksPipe = new TasksOfTaskDefinitionPipe();
   tasksInTutorialsPipe = new TasksInTutorialsPipe();
@@ -587,6 +588,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         },
         error: (message) => {
           this.alertService.error(message, 6000);
+          this.loading = false;
         },
       });
   }

@@ -1,32 +1,42 @@
 import {ResolveFn} from '@angular/router';
-import {AsyncSubject} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Project, ProjectService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from './states/index/global-state.service';
 import {inject} from '@angular/core';
 
-export const resolveProject: ResolveFn<Project> = (route) => {
+export const resolveProject: ResolveFn<Project> = (route, state) => {
   const projectService = inject(ProjectService);
   const globalState = inject(GlobalStateService);
   const projectId = Number(route.paramMap.get('projectId'));
-  const result = new AsyncSubject<Project>();
+  const resolveProgressively = state.url.split('?')[0].includes('/dashboard');
 
-  const mappingCompleteCallback = (project: Project) => {
-    globalState.setView(ViewType.PROJECT, project);
-    result.next(project);
-    result.complete();
-  };
+  return new Observable<Project>((observer) => {
+    const mappingCompleteCallback = (project: Project) => {
+      globalState.setView(ViewType.PROJECT, project);
+      if (!resolveProgressively) {
+        observer.next(project);
+        observer.complete();
+      }
+    };
 
-  globalState.onLoad(() => {
-    projectService
-      .get(
-        {id: projectId},
-        {
-          cacheBehaviourOnGet: 'cacheQuery',
-          mappingCompleteCallback,
-        },
-      )
-      .subscribe();
+    globalState.onLoad(() => {
+      if (resolveProgressively) {
+        observer.next(projectService.cache.getOrCreate(projectId, projectService, {id: projectId}));
+        observer.complete();
+        return;
+      }
+
+      projectService
+        .get(
+          {id: projectId},
+          {
+            cacheBehaviourOnGet: 'cacheQuery',
+            mappingCompleteCallback,
+          },
+        )
+        .subscribe({
+          error: (error) => observer.error(error),
+        });
+    });
   });
-
-  return result;
 };

@@ -5,7 +5,7 @@ import {Unit, UnitRole, UnitService, UserService} from 'src/app/api/models/doubt
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
-export const resolveUnit: ResolveFn<Unit> = (route) => {
+export const resolveUnit: ResolveFn<Unit> = (route, state) => {
   const unitService = inject(UnitService);
   const globalState = inject(GlobalStateService);
   const userService = inject(UserService);
@@ -29,17 +29,30 @@ export const resolveUnit: ResolveFn<Unit> = (route) => {
         );
       }
 
+      const resolveProgressively = state.url.split('?')[0].includes('/tasks');
+      if (resolveProgressively) {
+        const unit =
+          unitRole?.unit ?? unitService.cache.getOrCreate(unitId, unitService, {id: unitId});
+        globalState.setView(ViewType.UNIT, routeEntity(unit, unitRole));
+        observer.next(unit);
+        observer.complete();
+      }
+
       unitService.get(unitId).subscribe({
         next: (unit) => {
           globalState.setView(ViewType.UNIT, routeEntity(unit, unitRole));
-          observer.next(unit);
-          observer.complete();
+          if (!resolveProgressively) {
+            observer.next(unit);
+            observer.complete();
+          }
         },
         error: (err) => {
           if (unitRole?.unit) {
             globalState.setView(ViewType.UNIT, unitRole);
-            observer.next(unitRole.unit);
-            observer.complete();
+            if (!resolveProgressively) {
+              observer.next(unitRole.unit);
+              observer.complete();
+            }
             return;
           }
 

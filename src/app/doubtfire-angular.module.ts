@@ -41,6 +41,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import player from 'lottie-web';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
 import {LottieComponent, provideLottieOptions} from 'ngx-lottie';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 import {AlertComponent, AlertService} from 'src/app/common/services/alert.service';
 import {ProgressDashboardComponent} from './projects/states/dashboard/directives/progress-dashboard/progress-dashboard.component';
 
@@ -751,6 +752,7 @@ const GANTT_CHART_CONFIG = {
     NgxGanttModule,
     MonacoEditorModule.forRoot(),
     MatChipListbox,
+    NgxSkeletonLoaderModule,
   ],
   bootstrap: [AppComponent],
 })

@@ -7,21 +7,23 @@ import {
   Observable,
   Subject,
   auditTime,
+  first,
   merge,
   of,
   tap,
   withLatestFrom,
 } from 'rxjs';
 import {ProjectService} from 'src/app/api/services/project.service';
+import {UnitService} from 'src/app/api/services/unit.service';
 import {GlobalStateService, ViewType} from '../../index/global-state.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 
 @Component({
-    selector: 'f-project-dashboard',
-    templateUrl: './project-dashboard.component.html',
-    styleUrl: './project-dashboard.component.scss',
-    standalone: false
+  selector: 'f-project-dashboard',
+  templateUrl: './project-dashboard.component.html',
+  styleUrl: './project-dashboard.component.scss',
+  standalone: false,
 })
 export class ProjectDashboardComponent implements OnInit {
   @Input() public project$: Observable<Project>;
@@ -34,16 +36,20 @@ export class ProjectDashboardComponent implements OnInit {
     new BehaviorSubject<TaskDefinition>(null);
 
   subs$: Observable<unknown>;
+  readonly skeletonRows = Array.from({length: 10}, (_, index) => index);
+  private readonly projectSubject = new BehaviorSubject<Project>(null);
 
   private leftComponentStartSize$ = new Subject<number>();
   private dragMove$ = new Subject<{event: CdkDragMove; div: HTMLDivElement}>();
   private dragMoveAudited$;
+  private projectReady = false;
 
   projectTasks = [];
 
   constructor(
     private currentUser: UserService,
     private projectService: ProjectService,
+    private unitService: UnitService,
     private globalStateService: GlobalStateService,
     private route: ActivatedRoute,
   ) {}
@@ -53,6 +59,24 @@ export class ProjectDashboardComponent implements OnInit {
   public startWidth = 0;
 
   public startLeftX = 0;
+
+  public isProjectTaskListReady(project: Project): boolean {
+    return (
+      this.projectReady &&
+      !!project?.id &&
+      !!project.unit?.id &&
+      project.targetGrade !== undefined &&
+      project.targetGrade !== null
+    );
+  }
+
+  public taskDefinitionsForProject(project: Project): TaskDefinition[] {
+    if (!this.isProjectTaskListReady(project)) {
+      return [];
+    }
+
+    return project.unit.taskDefinitionsForGrade(project.targetGrade);
+  }
 
   startedDragging(event: CdkDragStart, boundary: HTMLElement) {
     const rect = boundary.getBoundingClientRect();
@@ -80,7 +104,15 @@ export class ProjectDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.project$ = this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
+    const initialProject$ =
+      this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
+    this.project$ = this.projectSubject.asObservable();
+    initialProject$.pipe(first()).subscribe((project) => {
+      this.projectSubject.next(project);
+      this.loadProject(
+        project?.id ?? Number(this.route.parent?.snapshot.paramMap.get('projectId')),
+      );
+    });
 
     this.dragMoveAudited$ = this.dragMove$.pipe(
       withLatestFrom(this.leftComponentStartSize$),
@@ -111,5 +143,46 @@ export class ProjectDashboardComponent implements OnInit {
     );
     this.subs$ = merge(this.dragMoveAudited$, of(true));
     window.dispatchEvent(new Event('resize'));
+  }
+
+  private loadProject(projectId: number): void {
+    if (!projectId) {
+      return;
+    }
+
+    this.projectService
+      .get(
+        {id: projectId},
+        {
+          cacheBehaviourOnGet: 'cacheQuery',
+          mappingCompleteCallback: (project: Project) => this.loadUnit(project),
+        },
+      )
+      .subscribe();
+  }
+
+  private loadUnit(project: Project): void {
+    const unitId = project.unit?.id;
+    if (!unitId) {
+      this.showLoadedProject(project);
+      return;
+    }
+
+    this.unitService.get(unitId).subscribe({
+      next: (unit) => {
+        project.unit = unit;
+        unit.studentCache.add(project);
+        this.showLoadedProject(project);
+      },
+      error: () => {
+        this.showLoadedProject(project);
+      },
+    });
+  }
+
+  private showLoadedProject(project: Project): void {
+    this.projectReady = true;
+    this.globalStateService.setView(ViewType.PROJECT, project);
+    this.projectSubject.next(project);
   }
 }

@@ -1,13 +1,10 @@
-@if (unit && unitRole && studentsLoaded) {
   <f-inbox
     class="flex h-[calc((var(--vh,1vh)*100)-85px)]"
     [unit]="unit"
     [taskData]="taskData"
     [unitRole]="unitRole"
-    [task]="task"
-    [project]="project"
     [filters]="filters"
     [showSearchOptions]="showSearchOptions"
     [viewType]="viewType"
+    [loading]="inboxLoading"
   ></f-inbox>
-}

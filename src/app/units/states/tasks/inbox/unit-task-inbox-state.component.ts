@@ -39,9 +39,9 @@ type TaskSource = (
 ) => Observable<Task[]>;
 
 @Component({
-    selector: 'f-unit-task-inbox-state',
-    templateUrl: './unit-task-inbox-state.component.html',
-    standalone: false
+  selector: 'f-unit-task-inbox-state',
+  templateUrl: './unit-task-inbox-state.component.html',
+  standalone: false,
 })
 export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   @Input() public unit$: Observable<Unit>;
@@ -54,6 +54,10 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   public unitRole: UnitRole;
   public studentsLoaded = false;
   public filters: Partial<TaskFilters> = {};
+
+  public get inboxLoading(): boolean {
+    return !(this.unit && this.unitRole && this.studentsLoaded);
+  }
 
   public taskData: {
     taskKey: TaskKey | null;
@@ -173,7 +177,7 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
       case 'inbox':
       default:
         this.viewType = 'inbox';
-        this.showSearchOptions = true;
+        this.showSearchOptions = false;
         this.taskData.taskDefMode = false;
         break;
     }
@@ -217,7 +221,8 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
 
     if (
       !unitRole &&
-      (this.userService.currentUser.role === 'Admin' || this.userService.currentUser.role === 'Auditor')
+      (this.userService.currentUser.role === 'Admin' ||
+        this.userService.currentUser.role === 'Auditor')
     ) {
       unitRole = this.userService.adminOrAuditorRoleFor(
         this.userService.currentUser.role,

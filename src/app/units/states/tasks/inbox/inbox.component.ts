@@ -25,6 +25,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
   @Input() taskData: {selectedTask: Task; any};
+  @Input() loading = false;
   @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
