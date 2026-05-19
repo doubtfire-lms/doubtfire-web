@@ -108,7 +108,9 @@
           </div>
         }
         @case (InboxDashboardTab.overseer) {
-          <div class="h-full"></div>
+          <div class="h-full">
+            <f-task-overseer-report [task]="task"></f-task-overseer-report>
+          </div>
         }
       }
     </div>
