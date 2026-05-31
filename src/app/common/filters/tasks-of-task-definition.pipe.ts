@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Task, TaskDefinition } from 'src/app/api/models/doubtfire-model';
 
 @Pipe({
-  name: 'tasksOfTaskDefinition',
+    name: 'tasksOfTaskDefinition',
+    standalone: false
 })
 export class TasksOfTaskDefinitionPipe implements PipeTransform {
   transform(tasks: Task[], taskDefinition: TaskDefinition): Task[] {

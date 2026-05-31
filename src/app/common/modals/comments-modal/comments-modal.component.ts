@@ -8,9 +8,10 @@ export interface CommentsModalData {
 }
 
 @Component({
-  selector: 'comments-modal',
-  templateUrl: './comments-modal.component.html',
-  styleUrls: ['./comments-modal.component.scss'],
+    selector: 'comments-modal',
+    templateUrl: './comments-modal.component.html',
+    styleUrls: ['./comments-modal.component.scss'],
+    standalone: false
 })
 export class CommentsModalComponent implements OnInit {
   @Input() taskComment: TaskComment;

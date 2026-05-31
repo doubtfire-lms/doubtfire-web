@@ -5,7 +5,6 @@ import {Injectable} from '@angular/core';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {AppInjector} from 'src/app/app-injector';
 import {MappingFunctions} from './mapping-fn';
-import {MappingProcess} from 'ngx-entity-service/lib/mapping-process';
 
 @Injectable()
 export class TiiActionService extends CachedEntityService<TiiAction> {

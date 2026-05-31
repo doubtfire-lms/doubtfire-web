@@ -64,6 +64,7 @@ export class UnitService extends CachedEntityService<Unit> {
         },
       },
       {
+        // keys: 'unitRoles',
         keys: 'staff',
         toEntityOp: (data, key, entity) => {
           const unitRoleService = AppInjector.get(UnitRoleService);
@@ -77,7 +78,7 @@ export class UnitService extends CachedEntityService<Unit> {
       {
         keys: ['mainConvenor', 'main_convenor_id'],
         toEntityFn: (data, key, entity) => {
-          let result = entity.staffCache.get(data[key]);
+          const result = entity.staffCache.get(data[key]);
           entity.mainConvenorUser = result?.user;
           return result;
         },
@@ -218,7 +219,7 @@ export class UnitService extends CachedEntityService<Unit> {
       {
         keys: 'taskDefinitions',
         toEntityOp: (data, key, unit) => {
-          var seq: number = 0;
+          let seq: number = 0;
           data['task_definitions'].forEach((taskDefinitionJson: object) => {
             const td = unit.taskDefinitionCache.getOrCreate(
               taskDefinitionJson['id'],

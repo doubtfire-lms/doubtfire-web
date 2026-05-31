@@ -10,9 +10,10 @@ import {JplagReportViewerComponent} from 'src/app/projects/states/jplag/jplag-re
 import {SelectedTaskService} from '../../../../selected-task.service';
 
 @Component({
-  selector: 'f-task-similarity-view',
-  templateUrl: './task-similarity-view.component.html',
-  styleUrls: ['./task-similarity-view.component.scss'],
+    selector: 'f-task-similarity-view',
+    templateUrl: './task-similarity-view.component.html',
+    styleUrls: ['./task-similarity-view.component.scss'],
+    standalone: false
 })
 export class TaskSimilarityViewComponent implements OnChanges {
   @Input() task: Task;

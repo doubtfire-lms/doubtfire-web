@@ -3,9 +3,10 @@ import {Unit} from 'src/app/api/models/unit';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-download-staff-notes',
-  templateUrl: 'download-staff-notes.component.html',
-  styleUrl: 'download-staff-notes.component.scss',
+    selector: 'f-download-staff-notes',
+    templateUrl: 'download-staff-notes.component.html',
+    styleUrl: 'download-staff-notes.component.scss',
+    standalone: false
 })
 export class DownloadStaffNotesComponent implements OnInit {
   @Input() unit: Unit;

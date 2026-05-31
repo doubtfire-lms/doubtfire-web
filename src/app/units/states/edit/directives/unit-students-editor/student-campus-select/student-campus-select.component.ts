@@ -4,9 +4,10 @@ import { MatSelectChange } from '@angular/material/select';
 import { AlertService } from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'student-campus-select',
-  templateUrl: 'student-campus-select.component.html',
-  styleUrls: ['student-campus-select.component.scss'],
+    selector: 'student-campus-select',
+    templateUrl: 'student-campus-select.component.html',
+    styleUrls: ['student-campus-select.component.scss'],
+    standalone: false
 })
 export class StudentCampusSelectComponent implements OnInit {
   @Input() unit: Unit;

@@ -11,26 +11,16 @@ import {MatSelectChange} from '@angular/material/select';
 import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {BulkImportStaffModalService} from './bulk-import-staff-modal/bulk-import-staff-modal.service';
-import {csvResultModalService} from 'src/app/ajs-upgraded-providers';
-
-interface CsvResultRow {
-  row: string;
-  message: string;
-}
-
-interface CsvResultResponse {
-  success: CsvResultRow[];
-  errors: CsvResultRow[];
-  ignored: CsvResultRow[];
-}
-
-interface CsvResultModal {
-  show(title: string, response: CsvResultResponse): void;
-}
+import {
+  CsvResult,
+  CsvResultModalService,
+  CsvRow,
+} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 
 @Component({
-  selector: 'unit-staff-editor',
-  templateUrl: 'unit-staff-editor.component.html',
+    selector: 'unit-staff-editor',
+    templateUrl: 'unit-staff-editor.component.html',
+    standalone: false
 })
 export class UnitStaffEditorComponent implements OnInit {
   @Input() unit: Unit;
@@ -61,7 +51,7 @@ export class UnitStaffEditorComponent implements OnInit {
     private confirmationModalService: ConfirmationModalService,
     private tutorNotesModal: TutorNotesModalService,
     private bulkImportStaffModal: BulkImportStaffModalService,
-    @Inject(csvResultModalService) private csvResultModal: CsvResultModal,
+    private csvResultModal: CsvResultModalService,
   ) {}
 
   ngOnInit(): void {
@@ -319,7 +309,7 @@ export class UnitStaffEditorComponent implements OnInit {
   }
 
   groupSetName(id: number) {
-    this.unit.groupSetsCache.get(id).name || 'Individual Work';
+    return this.unit.groupSetsCache.get(id).name || 'Individual Work';
   }
 
   openTutorNotes(unitRole: UnitRole) {
@@ -422,15 +412,11 @@ export class UnitStaffEditorComponent implements OnInit {
     );
   }
 
-  private csvResultRow(row: string, message: string): CsvResultRow {
+  private csvResultRow(row: string, message: string): CsvRow {
     return {row, message};
   }
 
-  private csvResultResponse(
-    success: CsvResultRow[],
-    errors: CsvResultRow[],
-    ignored: CsvResultRow[],
-  ): CsvResultResponse {
+  private csvResultResponse(success: CsvRow[], errors: CsvRow[], ignored: CsvRow[]): CsvResult {
     return {success, errors, ignored};
   }
 }

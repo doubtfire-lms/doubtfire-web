@@ -17,8 +17,9 @@ export class ReasonErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: 'extension-modal',
-  templateUrl: './extension-modal.component.html',
+    selector: 'extension-modal',
+    templateUrl: './extension-modal.component.html',
+    standalone: false
 })
 export class ExtensionModalComponent {
   protected reasonMinLength: number = 15;

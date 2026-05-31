@@ -14,9 +14,9 @@
 }
 
 @mixin task-status-color($status) {
-  color: task-status-color($status, fore);
+  color: task-status-color($status, fore) !important;
   $base-color: task-status-color($status);
-  background-color: $base-color;
+  background-color: $base-color !important;
   @if $status == 'complete' {
     $lighter-color: task-status-color($status, light);
     @include gradient-vertical($lighter-color, $base-color);

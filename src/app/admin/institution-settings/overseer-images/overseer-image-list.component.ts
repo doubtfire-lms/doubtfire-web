@@ -10,9 +10,10 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'overseer-image-list',
-  templateUrl: 'overseer-image-list.component.html',
-  styleUrls: ['overseer-image-list.component.scss'],
+    selector: 'overseer-image-list',
+    templateUrl: 'overseer-image-list.component.html',
+    styleUrls: ['overseer-image-list.component.scss'],
+    standalone: false
 })
 export class OverseerImageListComponent
   extends EntityFormComponent<OverseerImage>

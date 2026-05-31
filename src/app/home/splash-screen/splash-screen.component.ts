@@ -5,9 +5,10 @@ import {GlobalStateService} from 'src/app/projects/states/index/global-state.ser
 import {LoadingService} from './LoadingService.service';
 import {AnimationItem} from 'lottie-web';
 @Component({
-  selector: 'splash-screen',
-  templateUrl: './splash-screen.component.html',
-  styleUrls: ['./splash-screen.component.scss'],
+    selector: 'splash-screen',
+    templateUrl: './splash-screen.component.html',
+    styleUrls: ['./splash-screen.component.scss'],
+    standalone: false
 })
 export class SplashScreenComponent implements OnInit {
   constructor(

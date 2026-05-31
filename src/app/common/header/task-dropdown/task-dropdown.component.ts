@@ -1,13 +1,15 @@
 import {Component, Input} from '@angular/core';
-import {UIRouter} from '@uirouter/core';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {ViewType} from 'src/app/projects/states/index/global-state.service';
 import {TutorNotesModalService} from '../../modals/tutor-notes-modal/tutor-notes-modal.service';
+import {filter} from 'rxjs';
 
 @Component({
-  selector: 'task-dropdown',
-  templateUrl: './task-dropdown.component.html',
-  styleUrls: ['./task-dropdown.component.scss'],
+    selector: 'task-dropdown',
+    templateUrl: './task-dropdown.component.html',
+    styleUrls: ['./task-dropdown.component.scss'],
+    standalone: false
 })
 export class TaskDropdownComponent {
   currentActivity: string;
@@ -36,13 +38,14 @@ export class TaskDropdownComponent {
 
   taskDropdownData: {title: string; target: string; visible: any}[];
   constructor(
-    private router: UIRouter,
+    private angularRouter: Router,
+    private route: ActivatedRoute,
     private tutorNotesModal: TutorNotesModalService,
   ) {
-    this.router.transitionService.onSuccess({to: '**'}, (trans) => {
-      this.currentActivity = trans.to().data.task;
-      this.menuText = this.taskToShortName?.[this.currentActivity] ?? this.currentActivity;
-    });
+    this.angularRouter.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => this.setCurrentActivityFromAngularRoute());
+    this.setCurrentActivityFromAngularRoute();
   }
 
   public get canMarkOverflowTask() {
@@ -58,5 +61,16 @@ export class TaskDropdownComponent {
 
   openTutorNotes() {
     this.tutorNotesModal.show(null, this.unitRole);
+  }
+
+  private setCurrentActivityFromAngularRoute(): void {
+    let route = this.route.root;
+
+    while (route.firstChild) {
+      route = route.firstChild;
+    }
+
+    this.currentActivity = route.snapshot.data.task;
+    this.menuText = this.taskToShortName?.[this.currentActivity] ?? this.currentActivity;
   }
 }

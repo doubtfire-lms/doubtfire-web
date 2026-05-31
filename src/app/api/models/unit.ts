@@ -1,39 +1,39 @@
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GroupService} from '../services/group.service';
+import {MarkingSessionService} from '../services/marking-session.service';
 import {ProjectService} from '../services/project.service';
 import {TaskDefinitionService} from '../services/task-definition.service';
+import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
+import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {
-  User,
-  UnitRole,
-  Task,
-  TeachingPeriod,
-  TaskDefinition,
-  TutorialStream,
-  Tutorial,
-  GroupSet,
-  Group,
-  TaskOutcomeAlignment,
-  GroupMembership,
-  UnitService,
-  Project,
-  TutorialStreamService,
-  UnitRoleService,
+  Campus,
   D2lAssessmentMappingService,
+  Group,
+  GroupMembership,
+  GroupSet,
   OverseerImage,
-  OverseerImageService,
+  Project,
+  Task,
+  TaskDefinition,
+  TaskOutcomeAlignment,
+  TeachingPeriod,
+  Tutorial,
+  TutorialStream,
+  TutorialStreamService,
+  UnitRole,
+  UnitRoleService,
+  UnitService,
+  User,
 } from './doubtfire-model';
 import {LearningOutcome} from './learning-outcome';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
-import {SidekiqJob} from './sidekiq-job';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
 import {MarkingSession} from './marking-session';
-import {MarkingSessionService} from '../services/marking-session.service';
+import {SidekiqJob} from './sidekiq-job';
 import {TaskPrerequisite} from './task-prerequisite';
 
 export class Unit extends Entity {
@@ -97,7 +97,7 @@ export class Unit extends Entity {
 
   public readonly groupSetsCache: EntityCache<GroupSet> = new EntityCache<GroupSet>();
 
-  groupMemberships: Array<GroupMembership>;
+  groupMemberships: GroupMembership[];
 
   readonly studentCache: EntityCache<Project> = new EntityCache<Project>();
 
@@ -173,6 +173,28 @@ export class Unit extends Entity {
 
   public studentEnrolled(id: number): boolean {
     return this.findStudent(id)?.enrolled;
+  }
+
+  /**
+   * Enrol a student within the unit.
+   *
+   * @param idOrEmail The student id or email of the student to enrol.
+   * @param campus The student's campus
+   * @returns an observer of the post with the student project.
+   */
+  public enrolStudent(idOrEmail: string, campus: Campus): Observable<Project> {
+    const projectService = AppInjector.get(ProjectService);
+
+    return projectService.create(
+      {
+        unit_id: this.id,
+        student_num: idOrEmail,
+        campus_id: campus.id,
+      },
+      {
+        cache: this.studentCache,
+      },
+    );
   }
 
   public get currentUserIsStaff(): boolean {
@@ -302,13 +324,11 @@ export class Unit extends Entity {
     return Math.round((startToNow / totalDuration) * 100);
   }
 
-  public rolloverTo(body: {
-    new_unit_code?: string;
-    start_date: Date;
-    end_date: Date;
-  }): Observable<Unit>;
-  public rolloverTo(body: {new_unit_code?: string; teaching_period_id: number}): Observable<Unit>;
-  public rolloverTo(body: any): Observable<Unit> {
+  public rolloverTo(
+    body:
+      | {new_unit_code?: string; start_date: Date; end_date: Date}
+      | {new_unit_code?: string; teaching_period_id: number},
+  ): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
 
     return unitService.create(

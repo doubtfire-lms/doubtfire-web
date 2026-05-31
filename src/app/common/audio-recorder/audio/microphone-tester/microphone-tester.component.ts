@@ -1,16 +1,21 @@
-import { Inject, Input, Component, AfterViewInit } from '@angular/core';
+import { Input, Component, AfterViewInit } from '@angular/core';
 import { BaseAudioRecorderComponent } from '../base-audio-recorder';
-import { audioRecorderService } from 'src/app/ajs-upgraded-providers';
 import { Task } from 'src/app/api/models/doubtfire-model';
+import { MediaRecorderService } from 'src/app/common/services/recorder-service';
 
-@Component({ selector: 'microphone-tester', templateUrl: './microphone-tester-component.html' })
+@Component({
+    selector: 'microphone-tester',
+    templateUrl: './microphone-tester-component.html',
+    providers: [MediaRecorderService],
+    standalone: false
+})
 export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implements AfterViewInit {
   @Input() task: Task;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
   isSending: boolean;
 
-  constructor(@Inject(audioRecorderService) mediaRecorderService: any) {
+  constructor(private mediaRecorderService: MediaRecorderService) {
     super(mediaRecorderService);
   }
 

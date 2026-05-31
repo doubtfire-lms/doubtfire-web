@@ -1,0 +1,161 @@
+<mat-card>
+  <mat-card-content>
+    @if (!showUploader) {
+      <button mat-raised-button color="primary" (click)="showUploader = true" class="w-full">
+        <mat-icon>upload</mat-icon>
+        Begin Upload
+      </button>
+    }
+
+    <div class="flex gap-2">
+      @if (showUploader && uploadingInfo === null && shownUploadZones.length) {
+        <div class="w-full">
+          @for (upload of shownUploadZones; track upload) {
+            @if (!singleDropZone && showName) {
+              <h5>
+                {{ uploadZones.length === 1 ? '' : $index + 1 + ' - ' }}
+                {{ upload.display.name }}
+              </h5>
+            }
+
+            @if (singleDropZone && showName) {
+              <h5>Select {{ upload.display.name }}</h5>
+            }
+
+            <div [hidden]="upload.model || upload.model?.length">
+              <button
+                type="button"
+                class="file-drop-zone min-h-[250px] w-full"
+                (click)="fileInput.click()"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onFileDropped($event, upload)"
+              >
+                @if (!upload.display.error) {
+                  <mat-icon>{{ upload.display.icon }}</mat-icon>
+                  @if (dropSupported) {
+                    <span class="text-center select-none">
+                      Drop {{ upload.display.type }} file here <br /><small>or click to select</small>
+                    </span>
+                  } @else {
+                    <span class="select-none">Click to select {{ upload.display.type }} file</span>
+                  }
+                } @else {
+                  <span class="!text-red-500 !w-full flex flex-col justify-center items-center text-2xl">
+                    <mat-icon>block</mat-icon>
+                    <span>Invalid file provided</span>
+                    <small class="w-full text-center"
+                      >Accepted: {{ upload.accept.split(',').join(', ') }}</small
+                    >
+                  </span>
+                }
+              </button>
+
+              <input
+                #fileInput
+                type="file"
+                class="file-input"
+                [accept]="upload.accept"
+                (change)="onFileSelected($event, upload)"
+              />
+            </div>
+
+            @if (!singleDropZone && upload.model?.length > 0) {
+              <div class="flex items-center gap-5">
+                <mat-icon>{{ upload.display.icon }}</mat-icon>
+                {{ upload.model[0].name }}
+                <button mat-icon-button (click)="clearEnqueuedUpload(upload)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            }
+          }
+        </div>
+      }
+
+      @if (showUploader && singleDropZone && uploadingInfo === null) {
+        <div class="w-full">
+          <h5>Upload Summary</h5>
+
+          @for (upload of uploadZones; track upload) {
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <mat-icon>{{ upload.display.icon }}</mat-icon>
+                <strong>{{ upload.display.name }}</strong>
+              </div>
+
+              @if (upload.model?.length > 0) {
+                <em>{{ upload.model[0].name }}</em>
+                <button mat-icon-button (click)="clearEnqueuedUpload(upload)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              } @else {
+                <em>File Pending</em>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    @if (showUploader && !isUploading) {
+      <div>
+        @if (showUploadButton && readyToUpload() && uploadingInfo === null) {
+          <button mat-raised-button color="primary" (click)="initiateUploadInternal()">
+            <mat-icon>upload</mat-icon>
+            Start Upload
+          </button>
+        }
+
+        @if (asButton) {
+          <button mat-button color="warn" (click)="resetUploader()">Cancel Upload</button>
+        }
+      </div>
+    }
+
+    @if (showUploader && readyToUpload() && isUploading) {
+      @if (!uploadingInfo?.complete) {
+        <div class="uploading w-full min-h-[300px] flex flex-col justify-center items-center gap-5">
+          <div class="flex justify-center items-center gap-2">
+            @for (upload of uploadZones; track upload) {
+              <mat-icon>{{ upload.display.icon }}</mat-icon>
+            }
+            <mat-icon>arrow_right_alt</mat-icon>
+            <i class="logo w-[75px] h-[75px]"></i>
+          </div>
+
+          <mat-progress-bar mode="determinate" [value]="uploadingInfo?.progress">
+          </mat-progress-bar>
+        </div>
+      }
+
+      @if (uploadingInfo?.complete) {
+        <div class="complete min-h-[300px] flex flex-col justify-center items-center gap-5">
+          <div class="flex justify-center items-center gap-5 w-full">
+            <mat-icon color="{{ uploadingInfo.success ? 'primary' : 'warn' }}">
+              {{ uploadingInfo.success ? 'check_circle' : 'cancel' }}
+            </mat-icon>
+
+            <strong class="text-4xl">
+              File Upload {{ uploadingInfo.success ? 'Successful' : 'Failed' }}
+            </strong>
+          </div>
+
+          @if (!uploadingInfo.success) {
+            <div class="max-w-xl flex flex-col justify-center items-center">
+              <hr class="border-b border-gray-300" />
+              <p><strong>Error Message:</strong> {{ uploadingInfo.error }}</p>
+
+              <div class="flex gap-5">
+                <button mat-button (click)="initiateUploadInternal()" color="primary">
+                  Retry Upload
+                </button>
+                <button mat-button (click)="onClickFailureCancel()">Cancel</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+  </mat-card-content>
+</mat-card>

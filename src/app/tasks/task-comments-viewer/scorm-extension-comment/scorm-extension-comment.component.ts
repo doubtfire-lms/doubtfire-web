@@ -3,9 +3,10 @@ import {ScormExtensionComment, TaskComment, Task} from 'src/app/api/models/doubt
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-scorm-extension-comment',
-  templateUrl: './scorm-extension-comment.component.html',
-  styleUrls: ['./scorm-extension-comment.component.scss'],
+    selector: 'f-scorm-extension-comment',
+    templateUrl: './scorm-extension-comment.component.html',
+    styleUrls: ['./scorm-extension-comment.component.scss'],
+    standalone: false
 })
 export class ScormExtensionCommentComponent implements OnInit {
   @Input() comment: ScormExtensionComment;

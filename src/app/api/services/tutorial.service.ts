@@ -1,5 +1,4 @@
 import {Inject, Injectable} from '@angular/core';
-import {analyticsService} from 'src/app/ajs-upgraded-providers';
 import {HttpClient} from '@angular/common/http';
 import {
   CampusService,
@@ -23,7 +22,6 @@ export class TutorialService extends CachedEntityService<Tutorial> {
     httpClient: HttpClient,
     private campusService: CampusService,
     private userService: UserService,
-    @Inject(analyticsService) private AnalyticsService: any,
     private alerts: AlertService,
   ) {
     super(httpClient, API_URL);
@@ -104,7 +102,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       body: {},
     };
 
-    var observer: Observable<any>;
+    let observer: Observable<any>;
     if (isEnrol) {
       observer = this.post(pathIds, options);
     } else {

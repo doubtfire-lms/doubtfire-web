@@ -4,9 +4,10 @@ import { TaskService } from 'src/app/api/services/task.service';
 import { GradeService } from 'src/app/common/services/grade.service';
 
 @Component({
-  selector: 'f-task-assessment-card',
-  templateUrl: './task-assessment-card.component.html',
-  styleUrls: ['./task-assessment-card.component.scss'],
+    selector: 'f-task-assessment-card',
+    templateUrl: './task-assessment-card.component.html',
+    styleUrls: ['./task-assessment-card.component.scss'],
+    standalone: false
 })
 export class TaskAssessmentCardComponent {
   constructor(private taskService: TaskService, private gradeService: GradeService) {}

@@ -5,6 +5,7 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {GlobalStateService} from '../index/global-state.service';
 
 export enum DashboardViews {
+  details,
   submission,
   task,
   similarity,
@@ -49,6 +50,13 @@ export class SelectedTaskService {
       this.taskService.get(task).subscribe(this.task$);
     } else {
       this.task$.next(task);
+
+      if (!task) {
+        this.currentPdfUrl$.next(null);
+        this.currentView$.next(DashboardViews.submission);
+        this.checkFooterHeight();
+        return;
+      }
 
       task?.getSubmissionDetails().subscribe();
     }

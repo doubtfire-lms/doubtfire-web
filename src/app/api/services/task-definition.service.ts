@@ -72,13 +72,13 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
         },
         toEntityFn: (data: object, key: string, taskDef: TaskDefinition, params?: any) => {
           return (
-            data[key] as Array<{
+            data[key] as {
               key: string;
               name: string;
               type: string;
               tii_check: boolean;
               tii_pct: number;
-            }>
+            }[]
           )?.map((upreq) => {
             return {
               key: upreq.key,

@@ -1,24 +1,33 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { aboutDoubtfireModal, calendarModal } from 'src/app/ajs-upgraded-providers';
-import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/check-for-update.service';
-import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
-import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
-import { UserService } from 'src/app/api/services/user.service';
-import { AuthenticationService, Project, Task, Unit, UnitRole, User } from 'src/app/api/models/doubtfire-model';
-import { Subscription } from 'rxjs';
-import { MediaObserver } from 'ng-flex-layout';
-import { DoubtfireConstants, LogoSettings } from 'src/app/config/constants/doubtfire-constants';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {CheckForUpdateService} from 'src/app/sessions/service-worker-updater/check-for-update.service';
+import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {IsActiveUnitRole} from '../pipes/is-active-unit-role.pipe';
+import {UserService} from 'src/app/api/services/user.service';
+import {
+  AuthenticationService,
+  Project,
+  Task,
+  Unit,
+  UnitRole,
+  User,
+} from 'src/app/api/models/doubtfire-model';
+import {asapScheduler, observeOn, Subscription} from 'rxjs';
+import {MediaObserver} from 'ng-flex-layout';
+import {DoubtfireConstants, LogoSettings} from 'src/app/config/constants/doubtfire-constants';
 import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
 import {QrModalService} from '../modals/qr-modal/qr-modal.service';
-import {StateService} from '@uirouter/core';
 import {TutorNotesModalService} from '../modals/tutor-notes-modal/tutor-notes-modal.service';
+import {CalendarModalService} from '../modals/calendar-modal/calendar-modal.service';
+import {AboutDoubtfireModal} from '../modals/about-doubtfire-modal/about-doubtfire-modal.component';
+import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    standalone: false
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   task: Task;
@@ -46,8 +55,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   sidekiqJobs: SidekiqJobEntry[] = [];
 
   constructor(
-    @Inject(calendarModal) private CalendarModal,
-    @Inject(aboutDoubtfireModal) private AboutDoubtfireModal,
+    private calendarModal: CalendarModalService,
+    private aboutDoubtfireModal: AboutDoubtfireModal,
     private isActiveUnitRole: IsActiveUnitRole,
     private checkForUpdateService: CheckForUpdateService,
     protected globalState: GlobalStateService,
@@ -58,7 +67,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sidekiqJobService: SidekiqJobService,
     private sidekiqJobsModalService: SidekiqJobsModalService,
     private qrModalService: QrModalService,
-    private stateService: StateService,
+    private router: Router,
     private tutorNotesModal: TutorNotesModalService,
   ) {}
 
@@ -94,8 +103,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.globalState.projectsSubject.subscribe({
         next: (projects) => {
-          if (projects == null) return;
-          this.projects = projects.filter((project) => project.unit.myRole === 'Student');
+          if (!projects) return;
+          this.projects = projects.filter((project) => project?.unit?.myRole === 'Student');
         },
         error: (err) => {
           console.log(`Error fetching projects: ${err}`);
@@ -105,14 +114,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // get the current active unit or project
     this.subscriptions.push(
-      this.globalState.currentViewAndEntitySubject$.subscribe({
+      this.globalState.currentViewAndEntitySubject$.pipe(observeOn(asapScheduler)).subscribe({
         next: (currentViewAndEntity) => {
           this.currentView = currentViewAndEntity?.viewType;
 
           if (this.currentView == ViewType.PROJECT) {
             this.updateSelectedProject(currentViewAndEntity.entity as Project);
           } else if (this.currentView == ViewType.UNIT) {
-            this.updateSelectedUnitRole(currentViewAndEntity.entity as UnitRole);
+            if (currentViewAndEntity.entity instanceof UnitRole) {
+              this.updateSelectedUnitRole(currentViewAndEntity.entity as UnitRole);
+            } else if (currentViewAndEntity.entity instanceof Unit) {
+              this.updateSelectedUnit(currentViewAndEntity.entity as Unit);
+            }
           } else {
             this.currentUnit = null;
             this.currentProject = null;
@@ -133,13 +146,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           console.log(`Error getting settings: ${err}`);
-        }
+        },
       }),
     );
 
     this.sidekiqJobService.sidekiqJobsSubject.subscribe((jobs) => {
       this.sidekiqJobs = [...jobs];
     });
+
   }
 
   showMyQr() {
@@ -160,9 +174,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         true,
       );
     } else {
-      this.stateService.go('tutor-discussion', {
-        unitId: this.currentUnit.id,
-      });
+      this.router.navigate(['/units', this.currentUnit.id, 'discussion']);
     }
   }
 
@@ -193,16 +205,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentUnit = unitRole.unit;
   }
 
+  updateSelectedUnit(unit: Unit): void {
+    this.currentUnit = unit;
+    this.currentProject = null;
+
+    this.currentUnitRole = unit.staff.find(
+      (ur) => ur.user?.id === this.userService.currentUser?.id,
+    );
+
+    if (this.currentUnitRole) {
+      // Re-map Unit onto UnitRole object
+      this.currentUnitRole.unit = unit;
+    }
+  }
+
   update(): void {
     this.checkForUpdateService.checkForUpdate();
   }
 
   openAboutModal(): void {
-    this.AboutDoubtfireModal.show();
+    this.aboutDoubtfireModal.show();
   }
 
   openCalendar(): void {
-    this.CalendarModal.show();
+    this.calendarModal.show(null);
   }
 
   signOut(): void {

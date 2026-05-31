@@ -4,13 +4,12 @@
     <p class="mat-lead">Contact your unit convenor or tutor to enrol you in a subject.</p>
   </div>
 
-  <div
-    class="text-center"
-    *ngIf="!notEnrolled && projects?.length === 0 && unitRoles?.length === 0"
-  >
-    <h1 class="mat-headline-5">You are not enrolled in any {{ externalName.value }} units.</h1>
-    <p class="mat-lead">Contact your unit convenor or tutor to enrol you in a subject.</p>
-  </div>
+  @if (!notEnrolled && projects?.length === 0 && unitRoles?.length === 0) {
+    <div class="text-center">
+      <h1 class="mat-headline-5">You are not enrolled in any {{ externalName.value }} units.</h1>
+      <p class="mat-lead">Contact your unit convenor or tutor to enrol you in a subject.</p>
+    </div>
+  }
 
   <div [hidden]="unitRoles?.length === 0">
     <h2>Units you teach</h2>
@@ -19,39 +18,38 @@
     </div>
     <div [hidden]="loadingUnitRoles" class="flex flex-row flex-wrap items-center">
       <div *ngFor="let unitRole of unitRoles | isActiveUnitRole as filteredUnitRoles">
-        <div
-          uiSref="units/tasks/inbox"
-          [uiParams]="{unitId: unitRole.unit?.id}"
-          class="removeStyle"
-          *ngIf="!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active"
-        >
-          <mat-card class="unit-card">
-            <mat-card-header>
-              <mat-card-title class="f-card-title">{{ unitRole.unit?.name }}</mat-card-title>
-              <mat-card-subtitle>{{ unitRole.unit?.code }}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <mat-divider></mat-divider>
-            </mat-card-content>
-            <mat-card-actions>
-              <f-chip>
-                {{ unitRole.teachingPeriod?.name || showDate(unitRole.unit.startDate) }}
-              </f-chip>
-              <f-chip>
-                {{ unitRole.role }}
-              </f-chip>
-            </mat-card-actions>
-            <mat-card-footer
-              matTooltip="{{ unitRole.unit.teachingPeriodProgress }}% through the teaching period."
-            >
-              <mat-progress-bar
-                class="unit-progress-slider"
-                mode="determinate"
-                [value]="unitRole.unit.teachingPeriodProgress"
-              ></mat-progress-bar>
-            </mat-card-footer>
-          </mat-card>
-        </div>
+        @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
+          <div [routerLink]="['/units', unitRole.unit?.id, 'tasks', 'inbox']" class="removeStyle">
+            <mat-card class="unit-card">
+              <mat-card-header>
+                <mat-card-title class="f-card-title">{{ unitRole.unit?.name }}</mat-card-title>
+                <mat-card-subtitle>{{ unitRole.unit?.code }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-divider></mat-divider>
+              </mat-card-content>
+              <mat-card-actions>
+                <f-chip>
+                  {{ unitRole.teachingPeriod?.name || showDate(unitRole.unit.startDate) }}
+                </f-chip>
+                <f-chip>
+                  {{ unitRole.role }}
+                </f-chip>
+              </mat-card-actions>
+              <mat-card-footer
+                matTooltip="{{
+                  unitRole.unit.teachingPeriodProgress
+                }}% through the teaching period."
+              >
+                <mat-progress-bar
+                  class="unit-progress-slider"
+                  mode="determinate"
+                  [value]="unitRole.unit.teachingPeriodProgress"
+                ></mat-progress-bar>
+              </mat-card-footer>
+            </mat-card>
+          </div>
+        }
       </div>
       <mat-card
         appearance="outlined"
@@ -63,7 +61,7 @@
         </mat-card-content></mat-card
       >
 
-      <a uiSref="view-all-units">
+      <a routerLink="/view-all-units">
         <button
           matTooltip="View previous units"
           matTooltipPosition="above"
@@ -86,38 +84,39 @@
       </div>
 
       <div [hidden]="loadingProjects" class="flex flex-row flex-wrap items-center">
-        <div *ngFor="let project of projects">
-          <div
-            *ngIf="project.unit.isActive"
-            uiSref="projects/dashboard"
-            [uiParams]="{projectId: project.id, taskAbbr: ''}"
-            class="removeStyle"
-          >
-            <mat-card class="unit-card">
-              <mat-card-header>
-                <mat-card-title class="f-card-title">{{ project.unit.name }}</mat-card-title>
-                <mat-card-subtitle>{{ project.unit.code }}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <mat-divider></mat-divider>
-              </mat-card-content>
-              <mat-card-actions>
-                <f-chip>
-                  {{ project.unit.teachingPeriod?.name || showDate(project.unit.startDate) }}
-                </f-chip>
-              </mat-card-actions>
-              <mat-card-footer
-                matTooltip="{{ project.unit.teachingPeriodProgress }}% through the teaching period."
-              >
-                <mat-progress-bar
-                  mode="determinate"
-                  [value]="project.unit.teachingPeriodProgress"
-                ></mat-progress-bar>
-              </mat-card-footer>
-            </mat-card>
+        @for (project of projects; track project) {
+          <div>
+            @if (project.unit.isActive) {
+              <div [routerLink]="['/projects', project.id, 'dashboard']" class="removeStyle">
+                <mat-card class="unit-card">
+                  <mat-card-header>
+                    <mat-card-title class="f-card-title">{{ project.unit.name }}</mat-card-title>
+                    <mat-card-subtitle>{{ project.unit.code }}</mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <mat-divider></mat-divider>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <f-chip>
+                      {{ project.unit.teachingPeriod?.name || showDate(project.unit.startDate) }}
+                    </f-chip>
+                  </mat-card-actions>
+                  <mat-card-footer
+                    matTooltip="{{
+                      project.unit.teachingPeriodProgress
+                    }}% through the teaching period."
+                  >
+                    <mat-progress-bar
+                      mode="determinate"
+                      [value]="project.unit.teachingPeriodProgress"
+                    ></mat-progress-bar>
+                  </mat-card-footer>
+                </mat-card>
+              </div>
+            }
           </div>
-        </div>
-        <a uiSref="view-all-projects">
+        }
+        <a routerLink="/view-all-projects">
           <button
             matTooltip="View previous units"
             matTooltipPosition="above"

@@ -1,6 +1,6 @@
-import {Inject, Injectable, OnDestroy} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
 import {MediaObserver} from 'ng-flex-layout';
-import {UIRouter} from '@uirouter/angular';
 import {EntityCache} from 'ngx-entity-service';
 import {BehaviorSubject, Observable, Subject, skip, take} from 'rxjs';
 import {
@@ -71,6 +71,7 @@ export class GlobalStateService implements OnDestroy {
   public currentUserProjects: EntityCache<Project>;
 
   private _showFooter = false;
+  private _isInboxState = false;
   private _showFooterWarning = false;
 
   /**
@@ -110,7 +111,7 @@ export class GlobalStateService implements OnDestroy {
     private teachingPeriodService: TeachingPeriodService,
     private learningOutcomeService: LearningOutcomeService,
     private feedbackTemplateService: FeedbackTemplateService,
-    @Inject(UIRouter) private router: UIRouter,
+    private router: Router,
     private alerts: AlertService,
     private mediaObserver: MediaObserver,
   ) {
@@ -129,8 +130,8 @@ export class GlobalStateService implements OnDestroy {
           this.isLoadingSubject.next(false);
 
           // and if we are not going to the sign in page, then redirect to it
-          if (this.router.globals.current.name !== 'sign_in') {
-            this.router.stateService.go('sign_in');
+          if (window.location.pathname !== '/sign_in') {
+            this.router.navigateByUrl('/sign_in');
           }
         }
       });
@@ -148,7 +149,9 @@ export class GlobalStateService implements OnDestroy {
     setTimeout(() => {
       const vh = window.innerHeight * 0.01;
 
-      if (!this.mediaObserver.isActive('gt-sm') || !this._showFooter) {
+      if (this._isInboxState) {
+        document.body.style.setProperty('--vh', `${vh}px`);
+      } else if (!this.mediaObserver.isActive('gt-sm') || !this._showFooter) {
         document.body.style.setProperty('--vh', `${vh - 0.2}px`);
       } else {
         if (this._showFooter && !this._showFooterWarning) {
@@ -161,13 +164,14 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public get isInboxState(): boolean {
-    return this._showFooter;
+    return this._isInboxState;
   }
 
   public setInboxState() {
-    this._showFooter = true;
-    // set background color to white
+    this._isInboxState = true;
+    // set background color to inbox grey
     document.body.style.setProperty('background-color', '#f5f5f5');
+    this.resetHeight();
   }
 
   public goHome() {
@@ -176,9 +180,10 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public setNotInboxState() {
-    this._showFooter = false;
+    this._isInboxState = false;
     // set background color to white
     document.body.style.setProperty('background-color', '#fff');
+    this.resetHeight();
   }
 
   public showFooter(): void {

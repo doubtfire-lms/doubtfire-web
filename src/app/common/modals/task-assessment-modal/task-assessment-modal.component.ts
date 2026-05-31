@@ -5,9 +5,10 @@ import {Task} from 'src/app/api/models/doubtfire-model';
 import {TaskAssessmentModalData} from './task-assessment-modal.service';
 
 @Component({
-  selector: 'task-assessment-modal',
-  templateUrl: './task-assessment-modal.component.html',
-  styleUrls: ['./task-assessment-modal.component.scss'],
+    selector: 'task-assessment-modal',
+    templateUrl: './task-assessment-modal.component.html',
+    styleUrls: ['./task-assessment-modal.component.scss'],
+    standalone: false
 })
 export class TaskAssessmentModalComponent implements OnInit {
   @Input() task: Task;

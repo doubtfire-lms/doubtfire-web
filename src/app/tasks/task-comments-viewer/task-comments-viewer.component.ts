@@ -2,14 +2,12 @@ import {
   Component,
   OnInit,
   Input,
-  Inject,
   OnChanges,
   SimpleChanges,
   ViewChild,
   ElementRef,
   OnDestroy,
 } from '@angular/core';
-import {commentsModal} from 'src/app/ajs-upgraded-providers';
 import {
   Task,
   Project,
@@ -26,9 +24,10 @@ import {CommentsModalService} from 'src/app/common/modals/comments-modal/comment
 import {Subscription} from 'rxjs';
 
 @Component({
-  selector: 'task-comments-viewer',
-  templateUrl: './task-comments-viewer.component.html',
-  styleUrls: ['./task-comments-viewer.component.scss'],
+    selector: 'task-comments-viewer',
+    templateUrl: './task-comments-viewer.component.html',
+    styleUrls: ['./task-comments-viewer.component.scss'],
+    standalone: false
 })
 export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy {
   // Get the comments body from the HTML template
@@ -56,7 +55,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
     private userService: UserService,
     private taskService: TaskService,
     private constants: DoubtfireConstants,
-    @Inject(commentsModal) private commentsModalRef: CommentsModalService,
+    private commentsModalRef: CommentsModalService,
     private alerts: AlertService,
   ) {
     const self = this;

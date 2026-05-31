@@ -21,8 +21,8 @@
     @if (task.unit.allowFlexibleDates) {
       <button
         mat-stroked-button
-        uiSref="project/plan"
-        [uiParams]="{projectId: task.project.id, taskDef: task.definition.id}"
+        [routerLink]="['/projects', task.project.id, 'plan']"
+        [queryParams]="{taskDef: task.definition.id}"
       >
         Edit in Task Planner
       </button>

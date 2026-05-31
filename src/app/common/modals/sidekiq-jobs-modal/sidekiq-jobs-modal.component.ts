@@ -5,9 +5,10 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from '../../services/alert.service';
 
 @Component({
-  selector: 'f-sidekiq-jobs-modal',
-  templateUrl: './sidekiq-jobs-modal.component.html',
-  styleUrl: './sidekiq-jobs-modal.component.scss',
+    selector: 'f-sidekiq-jobs-modal',
+    templateUrl: './sidekiq-jobs-modal.component.html',
+    styleUrl: './sidekiq-jobs-modal.component.scss',
+    standalone: false
 })
 export class SidekiqJobsModalComponent implements OnInit {
   constructor(

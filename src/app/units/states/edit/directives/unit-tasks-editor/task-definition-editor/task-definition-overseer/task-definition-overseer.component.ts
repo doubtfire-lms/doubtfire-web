@@ -25,9 +25,10 @@ import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/o
 import * as monaco from 'monaco-editor';
 import {MatSelectChange} from '@angular/material/select';
 @Component({
-  selector: 'f-task-definition-overseer',
-  templateUrl: 'task-definition-overseer.component.html',
-  styleUrls: ['task-definition-overseer.component.scss'],
+    selector: 'f-task-definition-overseer',
+    templateUrl: 'task-definition-overseer.component.html',
+    styleUrls: ['task-definition-overseer.component.scss'],
+    standalone: false
 })
 export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   @Input() taskDefinition: TaskDefinition;

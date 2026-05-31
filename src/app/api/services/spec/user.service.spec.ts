@@ -1,19 +1,17 @@
 import { TestBed, tick, fakeAsync } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { User, UserService } from 'src/app/api/models/doubtfire-model';
-import { HttpRequest } from '@angular/common/http';
-import { analyticsService } from 'src/app/ajs-upgraded-providers';
+import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('UserService', () => {
   let userService: UserService;
   let httpMock: HttpTestingController;
-  let analyticsServiceStub: jasmine.SpyObj<any>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [UserService, { provide: analyticsService, useValue: analyticsServiceStub }],
-    });
+    imports: [],
+    providers: [UserService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     userService = TestBed.inject(UserService);
     httpMock = TestBed.inject(HttpTestingController);

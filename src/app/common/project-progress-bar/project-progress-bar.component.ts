@@ -2,9 +2,10 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Project } from 'src/app/api/models/project';
 
 @Component({
-  selector: 'f-project-progress-bar',
-  templateUrl: './project-progress-bar.component.html',
-  styleUrls: ['./project-progress-bar.component.scss'],
+    selector: 'f-project-progress-bar',
+    templateUrl: './project-progress-bar.component.html',
+    styleUrls: ['./project-progress-bar.component.scss'],
+    standalone: false
 })
 export class ProjectProgressBarComponent {
   @Input() progress: any[];

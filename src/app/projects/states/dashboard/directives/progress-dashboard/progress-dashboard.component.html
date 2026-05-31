@@ -1,0 +1,105 @@
+<div class="bg-white shadow-md rounded-lg overflow-hidden max-[991px]:mt-6 min-[992px]:mt-0">
+  <div class="bg-neutral-100 px-6 items-center">
+    <h4 class="font-semibold text-gray-800 py-6">
+      Progress Dashboard
+      @if (tutor) {
+        <span>for {{ project.student.name }}</span>
+      }
+    </h4>
+  </div>
+  <div class="p-6 grid grid-cols-1 xl:grid-cols-2 gap-6 items-stretch">
+    <!-- Task Planner Card -->
+    <div class="w-full h-full xl:col-span-1">
+      <f-task-planner-card [project]="project" class="block w-full h-full"></f-task-planner-card>
+    </div>
+
+    <!-- Target Grade Card -->
+    <div class="h-full xl:col-span-1">
+      <mat-card appearance="outlined" class="h-full flex flex-col">
+        <mat-card-header>
+          <mat-card-title>Target Grade</mat-card-title>
+          <mat-card-subtitle class="mb-4">
+            <p>Your target grade changes which tasks you need to complete.</p>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="flex-1 flex items-center">
+          <div class="w-full">
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>Select Target Grade</mat-label>
+              <mat-select
+                [(value)]="project.targetGrade"
+                (selectionChange)="updateTargetGrade($event.value)"
+                disabled
+              >
+                @for (grade of grades.values; track grade) {
+                  <mat-option [value]="grade">
+                    {{ grades.names[grade] }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <div class="ml-1 py-2 opacity-70">
+              To change your target grade, use the
+              <a [routerLink]="['/projects', project.id, 'plan']" class="underline cursor-pointer">
+                Task Planner
+              </a>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Unit learning outcomes -->
+    <div class="xl:col-span-2">
+      <f-task-ilos-card [unit]="project.unit" [iloContextType]="'Unit'"></f-task-ilos-card>
+    </div>
+
+    <div class="xl:col-span-2 grid grid-cols-1 xl:grid-cols-2 gap-6 items-stretch">
+      <!-- Progress Burndown Card -->
+      <div class="bg-white shadow rounded-lg overflow-hidden h-full flex flex-col">
+        <div class="mb-4">
+          <div class="bg-neutral-100 px-6 items-center">
+            <h4 class="font-semibold text-gray-800 pt-6">Progress Burndown</h4>
+            <p class="text-gray-600 pb-6 font-light">
+              The burndown chart shows how much work remains for you to achieve your target grade.
+            </p>
+          </div>
+        </div>
+        <div class="p-4 flex-1 flex min-h-0">
+          <f-progress-burndown-chart
+            class="w-full h-full"
+            [project]="project"
+            [unit]="project.unit"
+            [grade]="project.targetGrade"
+          ></f-progress-burndown-chart>
+        </div>
+        <div class="mt-4 text-gray-600 p-4 font-light">
+          Aim to keep your
+          <strong class="text-red-500 font-semibold">Complete</strong>
+          line close to or ahead of the
+          <strong class="text-gray-500 font-semibold">Target</strong>
+          line to keep on track.
+        </div>
+      </div>
+
+      <!-- Task Statuses Card -->
+      <div class="bg-white shadow rounded-lg overflow-hidden h-full flex flex-col">
+        <div class="mb-4">
+          <div class="bg-neutral-100 px-6 items-center">
+            <h4 class="font-semibold text-gray-800 pt-6">Task Statuses</h4>
+            <p class="text-gray-600 pb-6 font-light">
+              Breakdown summary of each of your task statuses.
+            </p>
+          </div>
+        </div>
+        <div class="p-4 overflow-x-auto flex-1">
+          <f-task-visualisation
+            [project]="project"
+            [grade]="project.targetGrade"
+          ></f-task-visualisation>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

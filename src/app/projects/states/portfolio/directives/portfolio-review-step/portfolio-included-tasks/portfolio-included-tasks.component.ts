@@ -4,9 +4,10 @@ import {Task} from 'src/app/api/models/task';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-portfolio-included-tasks',
-  templateUrl: 'portfolio-included-tasks.component.html',
-  styleUrls: ['portfolio-included-tasks.component.scss'],
+    selector: 'f-portfolio-included-tasks',
+    templateUrl: 'portfolio-included-tasks.component.html',
+    styleUrls: ['portfolio-included-tasks.component.scss'],
+    standalone: false
 })
 export class PortfolioIncludedTasksComponent implements OnInit {
   @Input() project: Project;

@@ -7,9 +7,10 @@ import { AlertService } from '../services/alert.service';
  * Allow files to be dropped for upload
  */
 @Component({
-  selector: 'f-file-drop',
-  templateUrl: 'file-drop.component.html',
-  styleUrls: ['file-drop.component.scss'],
+    selector: 'f-file-drop',
+    templateUrl: 'file-drop.component.html',
+    styleUrls: ['file-drop.component.scss'],
+    standalone: false
 })
 export class FileDropComponent {
   @Input({ required: true }) mode: 'endpoint' | 'event';

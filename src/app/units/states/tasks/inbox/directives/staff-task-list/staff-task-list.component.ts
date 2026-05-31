@@ -16,7 +16,6 @@ import {TasksOfTaskDefinitionPipe} from 'src/app/common/filters/tasks-of-task-de
 import {TasksInTutorialsPipe} from 'src/app/common/filters/tasks-in-tutorials.pipe';
 import {TasksForInboxSearchPipe} from 'src/app/common/filters/tasks-for-inbox-search.pipe';
 import {MatDialog} from '@angular/material/dialog';
-import {csvResultModalService, csvUploadModalService} from 'src/app/ajs-upgraded-providers';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -34,16 +33,19 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {HotkeysService} from '@ngneat/hotkeys';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {TasksByTutorPipe} from 'src/app/common/filters/tasks-by-tutor.pipe';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
+import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
+import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 
 @Component({
-  selector: 'df-staff-task-list',
-  templateUrl: './staff-task-list.component.html',
-  styleUrls: ['./staff-task-list.component.scss'],
+    selector: 'df-staff-task-list',
+    templateUrl: './staff-task-list.component.html',
+    styleUrls: ['./staff-task-list.component.scss'],
+    standalone: false
 })
 export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('searchDialog') searchDialog: TemplateRef<any>;
@@ -64,7 +66,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   };
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
-  @Input() filters: {
+  @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
     forceStream: boolean;
@@ -72,12 +74,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     tutorialIdSelected: any;
     unitRoleIdSelected: number | string;
     taskDefinitionIdSelected: number | TaskDefinition;
-  };
+  }>;
   @Input() showSearchOptions = true;
 
   @Input() isNarrow: boolean;
 
-  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
 
   userHasTutorials: boolean;
   filteredTasks: Task[] = null;
@@ -103,6 +105,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   panelOpenState = false;
   loading = true;
+  skeletonRows = Array.from({length: 12}, (_, index) => index);
 
   definedTasksPipe = new TasksOfTaskDefinitionPipe();
   tasksInTutorialsPipe = new TasksInTutorialsPipe();
@@ -132,25 +135,33 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     private alertService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     public dialog: MatDialog,
-    @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(csvResultModalService) private csvResultModal: any,
+    private csvUploadModal: CsvUploadModalService,
+    private csvResultModal: CsvResultModalService,
     private userService: UserService,
     private hotkeys: HotkeysService,
     private router: Router,
+    private route: ActivatedRoute,
     private taskDefinitionService: TaskDefinitionService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (
-      ((changes.unit &&
-        !changes.unit?.isFirstChange &&
-        changes.unit.currentValue.id &&
-        changes.unit.previousValue.id !== changes.unit.currentValue.id) ||
-        this.tasks == null) &&
-      this.isTaskDefMode &&
-      this.filters
-    ) {
+    if (changes.taskData && !changes.taskData.isFirstChange() && this.tasks?.length) {
+      this.setTaskDefFromTaskKey(this.taskData.taskKey);
+      this.syncSelectedTaskFromTaskKey();
+    }
+
+    if (!this.isTaskDefMode || !this.filters) {
+      return;
+    }
+
+    const unitChanged =
+      !!changes.unit &&
+      !changes.unit.isFirstChange() &&
+      changes.unit.currentValue?.id &&
+      changes.unit.previousValue?.id !== changes.unit.currentValue?.id;
+
+    if (unitChanged) {
       this.refreshData();
     }
   }
@@ -202,12 +213,14 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       .sort(byName);
 
     const allTutors = staff.slice().sort(byName);
+    const shouldDefaultToMyStudents =
+      (this.unitRole.role === 'Tutor' || this.unitRole.role === 'Convenor') &&
+      this.userHasTutorials;
 
     this.filters = Object.assign(
       {
         studentName: null,
-        tutorialIdSelected:
-          (this.unitRole.role === 'Tutor' || 'Convenor') && this.userHasTutorials ? 'mine' : 'all',
+        tutorialIdSelected: shouldDefaultToMyStudents ? 'mine' : 'all',
         tutorials: [],
         unitRoleIdSelected:
           mentored.length > 0 && this.viewType === 'moderation' ? 'mentoring_all' : 'all',
@@ -428,8 +441,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.taskDefSort = 0;
     this.tutorialSort = 0;
 
-    // Fix selected task.
-    if (this.taskData.selectedTask && filteredTasks?.includes(this.taskData.selectedTask)) {
+    // Clear selected task only when the active filters hide it.
+    if (
+      this.taskData.selectedTask &&
+      !filteredTasks?.some((task) => task?.hasTaskKey(this.taskData.selectedTask.taskKey()))
+    ) {
       this.setSelectedTask(null);
     }
   }
@@ -452,10 +468,27 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  tutorialIdChanged(attemptRefreshData: boolean = true): void {
-    const tutorialId = this.filters.tutorialIdSelected;
+  tutorialIdChanged(
+    attemptRefreshData: boolean = true,
+    selectedTutorialId: string | number = this.filters.tutorialIdSelected,
+  ): void {
+    this.filters.tutorialIdSelected = selectedTutorialId;
+    const tutorialId = selectedTutorialId;
 
-    const filterOption = this.studentFilter.find((f) => f.id === tutorialId);
+    if (attemptRefreshData) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {students: tutorialId},
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    }
+
+    const filterOption = this.studentFilter.find((f) => String(f.id) === String(tutorialId));
+
+    if (!filterOption) {
+      return;
+    }
 
     this.filters.forceStream = filterOption.forceStream;
 
@@ -512,6 +545,22 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     return this.tasks.find((t) => t?.hasTaskKey(key));
   }
 
+  private syncSelectedTaskFromTaskKey(): void {
+    if (!this.tasks?.length) {
+      return;
+    }
+
+    if (!this.taskData.taskKey) {
+      this.setSelectedTask(null);
+      return;
+    }
+
+    const task = this.findTaskForTaskKey(this.taskData.taskKey);
+    if (task) {
+      this.setSelectedTask(task);
+    }
+  }
+
   // Callback to refresh data from the task source
   private refreshData() {
     const fetchMyStudentsOnly = this.filters.tutorialIdSelected === 'mine';
@@ -528,22 +577,20 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
           this.fetchedAllTasks = !fetchMyStudentsOnly && !this.isTaskDefMode;
 
-        // Load initial set task, either the one provided (by the URL)
-        // then load actual task in now or the first task that applies
-        // to the given set of filters.
-        const task = this.findTaskForTaskKey(this.taskData.taskKey);
-        this.setSelectedTask(task);
+          // If the URL carries a task key, load that task once the query results arrive.
+          this.syncSelectedTaskFromTaskKey();
 
-        // For when URL has been manually changed, set the selected task
-        // using new array of tasks loaded from the new taskKey
-        if (!this.watchingTaskKey) {
-          this.watchingTaskKey = true;
-        }
-      },
-      error: (message) => {
-        this.alertService.error(message, 6000);
-      },
-    });
+          // For when URL has been manually changed, set the selected task
+          // using new array of tasks loaded from the new taskKey
+          if (!this.watchingTaskKey) {
+            this.watchingTaskKey = true;
+          }
+        },
+        error: (message) => {
+          this.alertService.error(message, 6000);
+          this.loading = false;
+        },
+      });
   }
 
   setSelectedTask(task: Task) {

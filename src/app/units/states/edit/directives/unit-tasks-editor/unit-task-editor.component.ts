@@ -1,39 +1,38 @@
-import {AfterViewInit, Component, Inject, Input} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {addWeeks} from 'date-fns';
 import {Subscription} from 'rxjs';
-import {
-  confirmationModal,
-  csvResultModalService,
-  csvUploadModalService,
-} from 'src/app/ajs-upgraded-providers';
 import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 type GradeCol = 'p' | 'c' | 'd' | 'hd';
 
 @Component({
-  selector: 'f-unit-task-editor',
-  templateUrl: 'unit-task-editor.component.html',
-  styleUrls: ['unit-task-editor.component.scss'],
+    selector: 'f-unit-task-editor',
+    templateUrl: 'unit-task-editor.component.html',
+    styleUrls: ['unit-task-editor.component.scss'],
+    standalone: false
 })
-export class UnitTaskEditorComponent implements AfterViewInit {
+export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
 
-  public taskDefinitionSource: MatTableDataSource<TaskDefinition>;
-  public filter: string;
+  public taskDefinitionSource = new MatTableDataSource<TaskDefinition>([]);
+  public filter: string = '';
   public selectedTaskDefinition: TaskDefinition;
   public isTaskListCollapsed: boolean = false;
 
   public gradeColumns: string[] = ['p', 'c', 'd', 'hd'];
   public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
-  public dueDateSource: MatTableDataSource<TaskDefinition>;
+  public dueDateSource = new MatTableDataSource<TaskDefinition>([]);
 
-  public manageDueDates: boolean;
+  public manageDueDates: boolean = false;
 
   protected gradeNames: string[] = Grade.GRADES;
 
@@ -139,17 +138,18 @@ export class UnitTaskEditorComponent implements AfterViewInit {
     private taskDefinitionService: TaskDefinitionService,
     private feedbackTemplateService: FeedbackTemplateService,
     private alerts: AlertService,
-    @Inject(csvResultModalService) private csvResultModalService: any,
-    @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(confirmationModal) private confirmationModal: any,
-  ) {}
+    private csvResultModalService: CsvResultModalService,
+    private csvUploadModal: CsvUploadModalService,
+    private confirmationModal: ConfirmationModalService,
+  ) {
+    this.taskDefinitionSource.filterPredicate = (data: TaskDefinition, filter: string) =>
+      data.matches(filter);
+  }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.subscriptions.push(
       this.unit.taskDefinitionCache.values.subscribe((taskDefinitions) => {
-        this.taskDefinitionSource = new MatTableDataSource<TaskDefinition>(taskDefinitions);
-        this.taskDefinitionSource.filterPredicate = (data: any, filter: string) =>
-          data.matches(filter);
+        this.taskDefinitionSource.data = taskDefinitions;
       }),
     );
   }
@@ -239,7 +239,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   public uploadTaskDefinitionsCsv() {
     this.csvUploadModal.show(
       'Upload Task Definitions as CSV',
-      'Test message',
+      'Upload a CSV of task definitions.',
       {file: {name: 'Task Definition CSV Data', type: 'csv'}},
       this.unit.getTaskDefinitionBatchUploadUrl(),
       (response: any) => {
@@ -255,7 +255,7 @@ export class UnitTaskEditorComponent implements AfterViewInit {
   public uploadTaskResourcesZip() {
     this.csvUploadModal.show(
       'Upload Task Sheets and Resources as Zip',
-      'Test message',
+      'Upload a ZIP of task sheets and resources.',
       {file: {name: 'Task Sheets and Resources', type: 'zip'}},
       this.unit.taskUploadUrl,
       (response: any) => {

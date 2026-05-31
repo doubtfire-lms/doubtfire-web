@@ -1,7 +1,6 @@
 import {CdkDragEnd, CdkDragStart, CdkDragMove} from '@angular/cdk/drag-drop';
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MediaObserver} from 'ng-flex-layout';
-import {UIRouter} from '@uirouter/angular';
 import {auditTime, merge, Observable, of, Subject, tap, withLatestFrom} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {Unit} from 'src/app/api/models/unit';
@@ -14,29 +13,32 @@ import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Tutorial} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Router} from '@angular/router';
 
 @Component({
-  selector: 'f-inbox',
-  templateUrl: './inbox.component.html',
-  styleUrls: ['./inbox.component.scss'],
+    selector: 'f-inbox',
+    templateUrl: './inbox.component.html',
+    styleUrls: ['./inbox.component.scss'],
+    standalone: false
 })
 export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
   @Input() taskData: {selectedTask: Task; any};
-  @Input() filters: {
+  @Input() loading = false;
+  @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
     forceStream: boolean;
     studentName: string;
     tutorialIdSelected: any;
     taskDefinitionIdSelected: number | TaskDefinition;
-  };
+  }>;
   @Input() showSearchOptions: boolean;
   @ViewChild('inboxpanel') inboxPanel: ElementRef;
   @ViewChild('commentspanel') commentspanel: ElementRef;
 
-  @Input() viewType: 'inbox' | 'explorer' | 'moderation';
+  @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
 
   subs$: Observable<unknown>;
 
@@ -64,7 +66,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     private selectedTask: SelectedTaskService,
     public mediaObserver: MediaObserver,
     public fileDownloader: FileDownloaderService,
-    private router: UIRouter,
+    private router: Router,
     public dialog: MatDialog,
     private userService: UserService,
     private constants: DoubtfireConstants,
@@ -184,19 +186,26 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   goToStudent(): void {
-    this.router.stateService.go('projects/dashboard', {
-      projectId: this.taskData.selectedTask.project.id,
-      tutor: true,
-      taskAbbr: '',
-    });
+    // this.router.navigateByUrl('projects/dashboard', {
+    //   projectId: this.taskData.selectedTask.project.id,
+    //   tutor: true,
+    //   taskAbbr: '',
+    // });
+    this.router.navigate(['/projects', this.taskData.selectedTask.project.id, 'dashboard']);
   }
 
   openPdfInNewTab(): void {
-    if (this.taskData.selectedTask.hasPdf) {
-      this.fileDownloader.downloadFile(
-        this.visiblePdfUrl,
-        `${this.taskData.selectedTask.definition.abbreviation}.pdf`,
-      );
+    if (!this.visiblePdfUrl || !this.taskData?.selectedTask) {
+      return;
     }
+
+    const task = this.taskData.selectedTask;
+    const taskSheetUrl = task.definition.getTaskPDFUrl();
+    const fileName =
+      this.visiblePdfUrl === taskSheetUrl
+        ? `${task.definition.abbreviation}-task-sheet.pdf`
+        : `${task.definition.abbreviation}.pdf`;
+
+    this.fileDownloader.downloadFile(this.visiblePdfUrl, fileName);
   }
 }

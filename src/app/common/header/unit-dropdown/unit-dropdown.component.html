@@ -5,7 +5,7 @@
       [shiftBetweenBadges]="false"
       [width]="80"
       [unit_code]="unit?.code"
-      matTooltip="{{ unit.name }}"
+      matTooltip="{{ unit?.name }}"
       [matMenuTriggerFor]="menu"
       #menuState="matMenuTrigger"
     >
@@ -24,9 +24,8 @@
 
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
   @if (media.isActive('xs')) {
-    <button uiSref="home" mat-menu-item>
+    <button routerLink="/home" mat-menu-item>
       <mat-icon
-        uiSref="home"
         style="margin-right: 20px"
         svgIcon="formatif-logo"
         class="formatif-icon"
@@ -44,8 +43,7 @@
   @for (unitRole of unitRoles; track unitRole) {
     @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
       <div
-        uiSref="units/tasks/inbox"
-        [uiParams]="{unitId: unitRole.unit.id}"
+        [routerLink]="['/units', unitRole.unit.id, 'tasks', 'inbox']"
         mat-menu-item
         class="w-full"
       >
@@ -63,8 +61,7 @@
   @for (project of projects; track project) {
     @if (!project.unit.teachingPeriod || project.unit.teachingPeriod.active) {
       <button
-        uiSref="projects/dashboard"
-        [uiParams]="{projectId: project.id, taskAbbr: ''}"
+        [routerLink]="['/projects', project.id, 'dashboard']"
         class="flex items-center mb-2"
         mat-menu-item
       >

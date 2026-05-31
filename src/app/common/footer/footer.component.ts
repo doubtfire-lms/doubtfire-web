@@ -13,9 +13,10 @@ import {DiscussedInClassReasonModalService} from '../modals/discussed-in-class-r
 import {AlertService} from '../services/alert.service';
 
 @Component({
-  selector: 'f-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss'],
+    selector: 'f-footer',
+    templateUrl: './footer.component.html',
+    styleUrls: ['./footer.component.scss'],
+    standalone: false
 })
 export class FooterComponent implements OnInit {
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;

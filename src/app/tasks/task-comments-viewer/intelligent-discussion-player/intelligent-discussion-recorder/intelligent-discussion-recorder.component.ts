@@ -1,13 +1,15 @@
 import { Component, Inject, AfterViewInit, Input } from '@angular/core';
 import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
 import { IntelligentDiscussionPlayerService } from '../intelligent-discussion-player.service';
-import { audioRecorderService } from 'src/app/ajs-upgraded-providers';
 import { DiscussionComment, Task } from 'src/app/api/models/doubtfire-model';
+import { MediaRecorderService } from 'src/app/common/services/recorder-service';
 
 @Component({
-  selector: 'intelligent-discussion-recorder',
-  templateUrl: './intelligent-discussion-recorder.component.html',
-  styleUrls: ['./intelligent-discussion-recorder.component.css'],
+    selector: 'intelligent-discussion-recorder',
+    templateUrl: './intelligent-discussion-recorder.component.html',
+    styleUrls: ['./intelligent-discussion-recorder.component.css'],
+    providers: [MediaRecorderService],
+    standalone: false
 })
 export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderComponent implements AfterViewInit {
   @Input() discussion: DiscussionComment;
@@ -17,7 +19,7 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
   isSending: boolean;
 
   constructor(
-    @Inject(audioRecorderService) mediaRecorderService: any,
+    private mediaRecorderService: MediaRecorderService,
     @Inject(IntelligentDiscussionPlayerService) private dps: any
   ) {
     super(mediaRecorderService);

@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {UIRouter} from '@uirouter/core';
+import {AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import * as _ from 'lodash';
+import {Subscription} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum, TaskStatusUiData} from 'src/app/api/models/task-status';
 import {TaskService} from 'src/app/api/services/task.service';
@@ -12,24 +13,34 @@ import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-m
 import {Project} from 'src/app/api/models/project';
 import {UserService} from 'src/app/api/services/user.service';
 import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
+import {UnitRole} from 'src/app/api/models/unit-role';
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
   styleUrls: ['./task-status-card.component.scss'],
+  standalone: false,
 })
-export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
+export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDestroy {
   triggers: TaskStatusUiData[];
   textCss: string;
+  private taskStatusSub: Subscription;
+
   constructor(
     private extensions: ExtensionModalService,
     private taskService: TaskService,
-    private router: UIRouter,
+    private route: ActivatedRoute,
     private qrModalService: QrModalService,
     private doubtfireConstants: DoubtfireConstants,
     private submissionTypeModalService: SubmissionTypeModalService,
     private userService: UserService,
     private feedbackAppealService: FeedbackAppealModalService,
-  ) {}
+  ) {
+    this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
+      if (this.isCurrentTask(task)) {
+        this.reapplyTriggers();
+      }
+    });
+  }
 
   @Input() task: Task;
   taskStatusColor: string;
@@ -52,9 +63,22 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     document.getElementsByTagName('style')[0].append(this.textCss);
   }
 
+  ngOnDestroy(): void {
+    this.taskStatusSub?.unsubscribe();
+  }
+
+  private isCurrentTask(task: Task): boolean {
+    return (
+      task &&
+      this.task &&
+      task.project?.id === this.task.project?.id &&
+      task.definition?.id === this.task.definition?.id
+    );
+  }
+
   reapplyTriggers(): void {
     // if tutor is in queryParam
-    if (this.router.globals.params.tutor != null) {
+    if (this.route.snapshot.queryParamMap.has('tutor')) {
       this.triggers = this.taskService.statusKeys
         .map((k) => this.taskService.statusData(k))
         .filter((trigger) => {
@@ -128,5 +152,14 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
 
   openFeedbackAppealModal(): void {
     this.feedbackAppealService.show(this.task);
+  }
+
+  public get currentUnitRole(): UnitRole | undefined {
+    const currentUser = this.userService.currentUser;
+    return this.project.unit.staff.find((ur) => ur.user.id === currentUser.id);
+  }
+
+  public get isTutor(): boolean {
+    return this.currentUnitRole?.role === 'Convenor' || this.currentUnitRole?.role === 'Tutor';
   }
 }

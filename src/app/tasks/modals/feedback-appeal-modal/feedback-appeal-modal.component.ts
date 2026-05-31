@@ -6,9 +6,10 @@ import {FeedbackAppealModalData} from './feedback-appeal-modal.service';
 import {TaskService} from 'src/app/api/services/task.service';
 
 @Component({
-  selector: 'f-feedback-appeal-modal',
-  templateUrl: './feedback-appeal-modal.component.html',
-  styleUrl: './feedback-appeal-modal.component.scss',
+    selector: 'f-feedback-appeal-modal',
+    templateUrl: './feedback-appeal-modal.component.html',
+    styleUrl: './feedback-appeal-modal.component.scss',
+    standalone: false
 })
 export class FeedbackAppealModalComponent implements OnInit {
   task: Task;

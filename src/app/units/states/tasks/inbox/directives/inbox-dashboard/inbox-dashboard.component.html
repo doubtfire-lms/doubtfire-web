@@ -1,0 +1,123 @@
+<div class="flex h-full w-full flex-col overflow-hidden">
+  @if (task) {
+    <div class="flex w-full items-center gap-2">
+      <mat-tab-group
+        class="w-full"
+        [selectedIndex]="currentIndex"
+        dynamicHeight
+        (selectedTabChange)="onTabChange($event)"
+      >
+        <mat-tab label="Submission"></mat-tab>
+        <mat-tab label="Task Sheet" [disabled]="!task.definition.hasTaskSheet"></mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="inline-flex items-center gap-2">
+              Similarities
+              @if (task.similaritiesDetected) {
+                <mat-icon class="text-red-500">warning</mat-icon>
+              }
+            </span>
+          </ng-template>
+        </mat-tab>
+
+        <mat-tab label="Overseer" [disabled]="!overseerEnabled"></mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="inline-flex items-center gap-2">
+              Staff Notes
+              @if (task.project.staffNoteCount) {
+                <span
+                  class="ml-1 inline-flex h-[22px] w-[22px] items-center justify-center rounded-full text-[12px] font-[600] p-0 leading-[22px] text-white"
+                  style="background-color: #3939ff"
+                >
+                  {{ task.project.staffNoteCount }}
+                </span>
+              }
+            </span>
+          </ng-template>
+        </mat-tab>
+        @if (canAccessTutorNotes) {
+          <mat-tab label="Tutor Notes"></mat-tab>
+        }
+      </mat-tab-group>
+
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="taskMenu"
+        aria-label="Task actions"
+        class="shrink-0 text-gray-600"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #taskMenu="matMenu" xPosition="before">
+        <button mat-menu-item [disabled]="!task.hasPdf" (click)="downloadSubmission()">
+          <mat-icon>download</mat-icon>
+          <span>Download submission PDF</span>
+        </button>
+        <button mat-menu-item [disabled]="!task" (click)="downloadSubmittedFiles()">
+          <mat-icon>folder_zip</mat-icon>
+          <span>Download submitted files</span>
+        </button>
+      </mat-menu>
+    </div>
+
+    <div class="min-h-0 flex-1 overflow-hidden">
+      @switch (currentTab) {
+        @case (InboxDashboardTab.submission) {
+          <div class="h-full">
+            @if (task.hasPdf) {
+              <f-pdf-viewer [pdfUrl]="task.submissionUrl()"></f-pdf-viewer>
+            } @else {
+              <div class="flex h-full flex-col items-center justify-center">
+                <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">
+                  description_off
+                </mat-icon>
+              </div>
+            }
+          </div>
+        }
+        @case (InboxDashboardTab.taskSheet) {
+          <div class="h-full">
+            @if (task.definition.hasTaskSheet) {
+              <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()"></f-pdf-viewer>
+            } @else {
+              <div class="flex h-full flex-col items-center justify-center">
+                <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">
+                  subtitles_off
+                </mat-icon>
+              </div>
+            }
+          </div>
+        }
+        @case (InboxDashboardTab.staffNotes) {
+          <div class="h-full">
+            <f-staff-notes-view [project]="task?.project"></f-staff-notes-view>
+          </div>
+        }
+        @case (InboxDashboardTab.tutorNotes) {
+          <div class="h-full overflow-auto">
+            @if (canAccessTutorNotes) {
+              <f-tutor-notes-view [task]="task"></f-tutor-notes-view>
+            }
+          </div>
+        }
+        @case (InboxDashboardTab.similarities) {
+          <div class="h-full overflow-auto">
+            <f-task-similarity-view [task]="task"></f-task-similarity-view>
+          </div>
+        }
+        @case (InboxDashboardTab.overseer) {
+          <div class="h-full">
+            <f-task-overseer-report [task]="task"></f-task-overseer-report>
+          </div>
+        }
+      }
+    </div>
+  } @else {
+    <div class="flex h-full flex-col items-center justify-center">
+      <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">subtitles_off</mat-icon>
+      <p class="mt-2 text-[#c5c5c5]">Select a task to review</p>
+    </div>
+  }
+</div>

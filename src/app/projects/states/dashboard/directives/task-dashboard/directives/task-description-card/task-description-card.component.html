@@ -13,7 +13,7 @@
     <ul>
       <li>{{ grades.names[taskDef?.targetGrade] }} Task</li>
 
-      @if (taskDef.unit.allowFlexibleDates) {
+      @if (unit?.allowFlexibleDates ?? taskDef?.unit?.allowFlexibleDates) {
         <li>I'm planning to <b>start</b> this task by {{ startDate() | date: 'EEE d MMM' }}.</li>
         <li [hidden]="!task?.extensions || task?.extensions <= 0">
           The due date has been <b>extended</b> by {{ task?.extensions }} week{{
@@ -45,12 +45,12 @@
     class="space-x-2"
     [hidden]="!(taskDef?.hasTaskSheet || taskDef?.hasTaskResources)"
   >
-    <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="viewTaskSheet()">
+    <!-- <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="viewTaskSheet()">
       <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="View icon"
         >description</mat-icon
       >
       Task Sheet
-    </button>
+    </button> -->
     <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="downloadTaskSheet()">
       <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="Download icon"
         >download</mat-icon

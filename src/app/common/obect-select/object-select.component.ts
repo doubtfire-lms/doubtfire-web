@@ -7,9 +7,9 @@ import { MatSelectChange } from '@angular/material/select';
  * @deprecated
  */
 @Component({
-  selector: 'object-select',
-  templateUrl: 'object-select.component.html',
-  // styleUrls: ['object-select.component.scss'],
+    selector: 'object-select',
+    templateUrl: 'object-select.component.html',
+    standalone: false
 })
 export class ObjectSelectComponent<T> {
   @Input() source: { value: T; text: string }[];

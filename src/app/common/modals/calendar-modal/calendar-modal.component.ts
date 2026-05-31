@@ -6,9 +6,10 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AlertService} from '../../services/alert.service';
 
 @Component({
-  selector: 'calendar-modal',
-  templateUrl: './calendar-modal.component.html',
-  styleUrls: ['./calendar-modal.component.scss'],
+    selector: 'calendar-modal',
+    templateUrl: './calendar-modal.component.html',
+    styleUrls: ['./calendar-modal.component.scss'],
+    standalone: false
 })
 export class CalendarModalComponent implements OnInit, AfterViewInit {
   @ViewChild('webcalToggle') webcalToggle: MatSlideToggle;

@@ -1,35 +1,29 @@
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSelectChange} from '@angular/material/select';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {
-  TaskDefinition,
-  Unit,
-  LearningOutcome,
   FeedbackTemplate,
-  TaskService,
   FeedbackTemplateService,
+  LearningOutcome,
+  TaskDefinition,
+  TaskService,
+  Unit,
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {MatSort, Sort} from '@angular/material/sort';
-import {
-  confirmationModal,
-  csvResultModalService,
-  csvUploadModalService,
-} from 'src/app/ajs-upgraded-providers';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
+import {
+  CsvResult,
+  CsvResultModalService,
+} from '../modals/csv-result-modal/csv-result-modal.service';
+import {CsvUploadModalService} from '../modals/csv-upload-modal/csv-upload-modal.service';
 
 @Component({
-  selector: 'f-feedback-template-editor',
-  templateUrl: 'feedback-template-editor.component.html',
+    selector: 'f-feedback-template-editor',
+    templateUrl: 'feedback-template-editor.component.html',
+    standalone: false
 })
 export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit {
   @Input() context?: TaskDefinition | Unit;
@@ -58,9 +52,9 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
     private feedbackTemplateService: FeedbackTemplateService,
     private fileDownloaderService: FileDownloaderService,
     private taskService: TaskService,
-    @Inject(csvResultModalService) private csvResultModalService: any,
-    @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(confirmationModal) private confirmationModal: any,
+    private csvResultModalService: CsvResultModalService,
+    private csvUploadModalService: CsvUploadModalService,
+    private confirmationModal: ConfirmationModalService,
   ) {}
 
   ngAfterViewInit(): void {
@@ -235,12 +229,12 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
   public uploadCsv() {
     const url = this.selectedOutcome.getFeedbackTemplateBatchUploadUrl();
 
-    this.csvUploadModal.show(
+    this.csvUploadModalService.show(
       'Upload Feedback Templates as CSV',
       'Test message',
       {file: {name: 'Feedback Templates CSV Data', type: 'csv'}},
       url,
-      (response: any) => {
+      (response: CsvResult) => {
         this.csvResultModalService.show('Feedback Templates CSV Upload Results', response);
         if (response.success.length > 0) {
           let contextType: 'units' | 'task_definitions';

@@ -141,7 +141,7 @@
               <mat-select
                 [(ngModel)]="filters.tutorialIdSelected"
                 name="tutorial"
-                (selectionChange)="tutorialIdChanged()"
+                (selectionChange)="tutorialIdChanged(true, $event.value)"
               >
                 @for (t of studentFilter; track t) {
                   <mat-option [value]="t.id">
@@ -219,16 +219,57 @@
     </div>
   }
 
-  <div class="center-task-list" [hidden]="!loading || isNarrow">
-    <mat-icon>hourglass_bottom</mat-icon>
-  </div>
+  @if (loading) {
+    <div class="min-h-0 flex-1 overflow-hidden" [ngClass]="isNarrow ? 'pt-0' : 'pt-[10px]'">
+      @for (row of skeletonRows; track row) {
+        <div
+          class="flex h-[60px] items-center"
+          [ngClass]="isNarrow ? 'justify-center gap-0 px-[5px]' : 'gap-[10px] pl-[6px] pr-[8px]'"
+        >
+          <ngx-skeleton-loader
+            class="flex-none"
+            [class.hidden]="isNarrow"
+            appearance="circle"
+            [theme]="{width: '8px', height: '8px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            appearance="circle"
+            [theme]="{width: '30px', height: '30px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <div class="min-w-0 flex-1" [hidden]="isNarrow">
+            <ngx-skeleton-loader
+              [theme]="{
+                height: '10px',
+                width: '78%',
+                'border-radius': '999px',
+                margin: '6px 0',
+              }"
+            ></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{
+                height: '10px',
+                width: '56%',
+                'border-radius': '999px',
+                margin: '6px 0',
+              }"
+            ></ngx-skeleton-loader>
+          </div>
+          <ngx-skeleton-loader
+            [hidden]="isNarrow"
+            appearance="circle"
+            [theme]="{width: '32px', height: '32px', margin: '0'}"
+          ></ngx-skeleton-loader>
+        </div>
+      }
+    </div>
+  }
 
   <div class="center-task-list" [hidden]="loading || filteredTasks?.length !== 0 || isNarrow">
     <mat-icon>done_all</mat-icon>
   </div>
 
   <!--/search-options-->
-  @if (filteredTasks) {
+  @if (filteredTasks && !loading) {
     <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60">
       @if (filteredTasks.length) {
         <div class="w-full text-gray-400 text-center mt-4">{{ filteredTasks.length }} Tasks</div>
@@ -245,7 +286,7 @@
               id="{{ task.taskKeyToIdString() }}"
               [ngClass]="{
                 selected: isSelectedTask(task),
-                'item-content': task.statusClass()
+                'item-content': task.statusClass(),
               }"
             >
               <div
@@ -259,7 +300,7 @@
                   class="notification"
                   [ngClass]="{
                     active: task.numNewComments > 0 || task.similaritiesDetected,
-                    similarities: task.similaritiesDetected
+                    similarities: task.similaritiesDetected,
                   }"
                 ></span>
                 <user-icon class="self-center" [user]="task.project.student" [size]="30">

@@ -1,0 +1,95 @@
+<div class="flex h-full w-full flex-col">
+  <mat-tab-group
+    class="w-full mb-10 max-w-[900px] mx-auto"
+    [selectedIndex]="currentIndex"
+    dynamicHeight
+    (selectedTabChange)="onTabChange($event)"
+  >
+    @for (tab of tabs; track tab.routeSegment) {
+      <mat-tab [label]="tab.label"></mat-tab>
+    }
+  </mat-tab-group>
+
+  <div class="min-h-0 flex-1">
+    @switch (currentTab.routeSegment) {
+      @case ('details') {
+        @if (unit) {
+          <div class="max-w-[90vw] mx-auto">
+            <f-unit-details-editor [unit]="unit"></f-unit-details-editor>
+          </div>
+        }
+      }
+      @case ('learning-outcomes') {
+        @if (unit) {
+          <div class="max-w-[90vw] mx-auto">
+            <div class="header">
+              <h3>Unit Learning Outcomes</h3>
+              <p>Manage unit outcomes and related feedback templates.</p>
+            </div>
+            <f-learning-outcome-editor [context]="unit"></f-learning-outcome-editor>
+          </div>
+        }
+      }
+      @case ('staff') {
+        @if (unit) {
+          <div class="max-w-[90vw] mx-auto">
+            <unit-staff-editor [unit]="unit" [staff]="staff"></unit-staff-editor>
+          </div>
+        }
+      }
+      @case ('tutorials') {
+        @if (unit) {
+          <div class="max-w-[90vw] mx-auto">
+            <div class="header">
+              <h3>Tutorials</h3>
+              <p>Manage tutorial streams and classes for this unit.</p>
+            </div>
+            <unit-tutorials-manager [unit]="unit"></unit-tutorials-manager>
+          </div>
+        }
+      }
+      @case ('students') {
+        @if (unit) {
+          <div class="max-w-[90vw] mx-auto">
+            <unit-students-editor [unit]="unit"></unit-students-editor>
+          </div>
+        }
+      }
+      @case ('tasks') {
+        @if (unit) {
+          <div class="max-w-[90vw] mx-auto">
+            <f-unit-task-editor [unit]="unit"></f-unit-task-editor>
+          </div>
+        }
+      }
+      @case ('groups') {
+        @if (unit) {
+          <div class="max-w-[90vw] mx-auto">
+            <div class="header">
+              <h3>Groups</h3>
+              <p>Configure group sets and manage team-based activities.</p>
+            </div>
+            <f-unit-group-set-editor
+              [unit]="unit"
+              [unitRole]="assessingUnitRole"
+            ></f-unit-group-set-editor>
+          </div>
+        }
+      }
+      @case ('communication') {
+        @if (unit) {
+          <div class="max-w-[90vw] mx-auto">
+            <div class="header">
+              <h3>Communication System</h3>
+              <p>
+                Create communication sets and rules to target students and automate follow-up
+                actions.
+              </p>
+            </div>
+            <f-unit-communications-editor [unit]="unit"></f-unit-communications-editor>
+          </div>
+        }
+      }
+    }
+  </div>
+</div>

@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import LTI_API_URL from 'src/app/config/constants/ltiApiUrl';
 import {Project} from '../models/project';
 import {SidekiqJob} from '../models/sidekiq-job';
+import {CsvResult} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 
 interface info {
   name?: string;
@@ -63,8 +64,8 @@ export class LtiService {
   }
 
   // Sync grades for all members in the context (course)
-  public syncStudentsGrades(): Observable<boolean> {
-    return this.httpClient.post<boolean>(`${LTI_API_URL}/grades`, {});
+  public syncStudentsGrades(): Observable<CsvResult> {
+    return this.httpClient.post<CsvResult>(`${LTI_API_URL}/grades`, {});
   }
 
   // Sync grades for all members in the context (course)

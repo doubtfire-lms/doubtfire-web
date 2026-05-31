@@ -27,9 +27,10 @@ import {Grade} from './grade';
 import {LOCALE_ID} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, firstValueFrom, map} from 'rxjs';
-import {gradeTaskModal, uploadSubmissionModal} from 'src/app/ajs-upgraded-providers';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MappingFunctions} from '../services/mapping-fn';
+import {GradeTaskModalService} from 'src/app/tasks/modals/grade-task-modal/grade-task-modal.service';
+import {UploadSubmissionModalService} from 'src/app/tasks/modals/upload-submission-modal/upload-submission-modal.service';
 import {TaskPrerequisite} from './task-prerequisite';
 
 export const FeedbackModerationAction = {
@@ -231,7 +232,15 @@ export class Task extends Entity {
   }
 
   public hasTaskKey(key: {studentId: number; taskDefAbbr: string}): boolean {
-    return this.taskKey() === key;
+    if (!key) {
+      return false;
+    }
+
+    const taskKey = this.taskKey();
+    return (
+      taskKey?.studentId?.toString() === key.studentId?.toString() &&
+      taskKey?.taskDefAbbr === key.taskDefAbbr
+    );
   }
 
   public taskKeyToUrlString(): string {
@@ -516,9 +525,9 @@ export class Task extends Entity {
   public timeToDue(): string {
     const days = this.daysUntilDueDate();
     if (days < 0) {
-      return '!';
+      return 'Past Due Date';
     } else if (days < 11) {
-      return `${days}d`;
+      return `Due in ${this.timeUntilDueDateDescription()}`;
     } else {
       return `${Math.floor(days / 7)}w`;
     }
@@ -869,7 +878,7 @@ export class Task extends Entity {
     if (!isTestSubmission) {
       this.status = status;
     }
-    const uploadModal: any = AppInjector.get(uploadSubmissionModal);
+    const uploadModal: UploadSubmissionModalService = AppInjector.get(UploadSubmissionModalService);
 
     const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission);
     // Modal failed to present
@@ -907,6 +916,9 @@ export class Task extends Entity {
     } else {
       alerts.success(`Status changed to ${this.statusLabel()}.`);
     }
+    this.getSubmissionDetails().subscribe();
+    const taskService: TaskService = AppInjector.get(TaskService);
+    taskService.notifyStatusChange(this);
   }
 
   public async markAsDiscussed(reasonText?: string) {
@@ -1035,28 +1047,26 @@ export class Task extends Entity {
         });
     }; // end update function
 
-    // Must provide grade if graded and in a final complete state
+    // Must provide grade if graded and in a final complete state - so use callback to run update function
     if (
       (this.definition.isGraded || this.definition.maxQualityPts > 0) &&
       TaskStatus.GRADEABLE_STATUSES.includes(status)
     ) {
-      const gradeModal: any = AppInjector.get(gradeTaskModal);
-      const modal = gradeModal.show(this);
-      if (modal) {
-        modal.result.then(
-          // Grade was selected (modal closed with result)
-          (response) => {
-            this.grade = response.selectedGrade;
-            this.qualityPts = response.qualityPts;
-            updateFunc();
-          },
-          // Grade was not selected (modal was dismissed)
-          () => {
-            this.status = oldStatus;
-            alerts.message('Status reverted, as no grade was specified', 6000);
-          },
-        );
-      }
+      const gradeModal: GradeTaskModalService = AppInjector.get(GradeTaskModalService);
+      gradeModal.show(
+        this,
+        // Grade was selected (modal closed with result)
+        (response) => {
+          this.grade = response.grade;
+          this.qualityPts = response.qualityPts;
+          updateFunc();
+        },
+        // Grade was not selected (modal was dismissed)
+        () => {
+          this.status = oldStatus;
+          alerts.message('Status reverted, as no grade was specified', 6000);
+        },
+      );
     } else {
       updateFunc();
     }

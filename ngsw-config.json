@@ -55,6 +55,8 @@
     "!/JPlag/**",
     "!/JPlag",
     "!/sidekiq/**",
-    "!/sidekiq"
+    "!/sidekiq",
+    "!/beta/**",
+    "!/beta"
   ]
 }

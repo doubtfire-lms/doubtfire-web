@@ -15,8 +15,9 @@ export class ReasonErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: 'f-scorm-extension-modal',
-  templateUrl: './scorm-extension-modal.component.html',
+    selector: 'f-scorm-extension-modal',
+    templateUrl: './scorm-extension-modal.component.html',
+    standalone: false
 })
 export class ScormExtensionModalComponent {
   protected reasonMinLength: number = 15;

@@ -11,8 +11,9 @@ import { AboutDialogData } from './about-dialog-data';
 import { Sort } from '@angular/material/sort';
 
 @Component({
-  selector: 'about-doubtfire-dialog',
-  templateUrl: 'about-doubtfire-modal-content.tpl.html',
+    selector: 'about-doubtfire-dialog',
+    templateUrl: 'about-doubtfire-modal-content.tpl.html',
+    standalone: false
 })
 export class AboutDoubtfireModalContent {
   public displayedColumns: string[] = [

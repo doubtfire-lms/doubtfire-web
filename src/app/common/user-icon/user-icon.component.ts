@@ -5,9 +5,10 @@ import { Md5 } from 'ts-md5/dist/md5';
 declare var d3: any;
 
 @Component({
-  selector: 'user-icon',
-  templateUrl: './user-icon.component.html',
-  styleUrls: ['./user-icon.component.scss'],
+    selector: 'user-icon',
+    templateUrl: './user-icon.component.html',
+    styleUrls: ['./user-icon.component.scss'],
+    standalone: false
 })
 export class UserIconComponent implements AfterViewInit, OnChanges {
   @Input() user: User;

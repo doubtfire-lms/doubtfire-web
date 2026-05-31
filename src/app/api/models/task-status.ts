@@ -205,7 +205,7 @@ export class TaskStatus {
   ]);
 
   public static readonly STATUS_LABELS = new Map<TaskStatusEnum, string>([
-    ['ready_for_feedback', 'Ready for Feedback'],
+    ['ready_for_feedback', 'Awaiting Feedback'],
     ['not_started', 'Not Started'],
     ['working_on_it', 'Working On It'],
     ['need_help', 'Need Help'],
@@ -219,6 +219,22 @@ export class TaskStatus {
     ['time_exceeded', 'Time Exceeded'],
     ['assess_in_portfolio', 'Assess in Portfolio'],
     ['attention_required', 'Attention Required'],
+  ]);
+
+  public static readonly STATUS_NAME_TO_KEY = new Map<string, TaskStatusEnum>([
+    ['Ready for Feedback', 'ready_for_feedback'],
+    ['Awaiting Feedback', 'ready_for_feedback'],
+    ['Not Started', 'not_started'],
+    ['Working On It', 'working_on_it'],
+    ['Need Help', 'need_help'],
+    ['Redo', 'redo'],
+    ['Feedback Exceeded', 'feedback_exceeded'],
+    ['Resubmit', 'fix_and_resubmit'],
+    ['Discuss', 'discuss'],
+    ['Demonstrate', 'demonstrate'],
+    ['Complete', 'complete'],
+    ['Fail', 'fail'],
+    ['Time Exceeded', 'time_exceeded'],
   ]);
 
   public static readonly STATUS_ICONS = new Map<TaskStatusEnum, string>([
