@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {MatDialog} from '@angular/material/dialog';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
@@ -1067,10 +1060,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return this.studentsFor(rule)[0];
   }
 
-  private openScheduleModal(
-    set: CommunicationSet,
-    schedule?: CommunicationSetSchedule,
-  ): void {
+  private openScheduleModal(set: CommunicationSet, schedule?: CommunicationSetSchedule): void {
     const dialogRef = this.dialog.open(CommunicationScheduleModalComponent, {
       width: '960px',
       maxWidth: '96vw',
