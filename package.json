@@ -121,7 +121,7 @@
     "grunt-contrib-concat": "~1.0.1",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-copy": "~1.0.0",
-    "grunt-contrib-jshint": "~1.0.0",
+    "grunt-contrib-jshint": "~3.2.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-env": "0.4.4",
     "grunt-html2js": "^0.6.0",
