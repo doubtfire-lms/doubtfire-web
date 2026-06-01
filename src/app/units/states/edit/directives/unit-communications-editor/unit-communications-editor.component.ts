@@ -26,6 +26,7 @@ import {
   CommunicationSetPreviewResponse,
   CommunicationSetSchedule,
   CommunicationSetService,
+  ProjectService,
   TaskDefinition,
   Tutorial,
   TutorialStream,
@@ -212,6 +213,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     private conditionService: CommunicationConditionService,
     private actionService: CommunicationActionService,
     private setService: CommunicationSetService,
+    private projectService: ProjectService,
     private dialog: MatDialog,
     private campusService: CampusService,
     private alerts: AlertService,
@@ -906,6 +908,12 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.subscriptions.push(
       this.unit.taskDefinitionCache.values.subscribe((taskDefinitions) => {
         this.taskDefinitions = taskDefinitions;
+      }),
+    );
+    this.subscriptions.push(
+      // TODO: use spinner until students are loaded
+      this.projectService.loadStudents(this.unit, false, true).subscribe({
+        error: (error) => this.showError(error),
       }),
     );
   }
