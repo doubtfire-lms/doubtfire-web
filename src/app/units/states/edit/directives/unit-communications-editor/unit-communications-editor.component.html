@@ -77,7 +77,7 @@
               <div>
                 <ng-container matTreeNodeOutlet></ng-container>
 
-                @if (selectedSetId === node.set?.id) {
+                <!-- @if (selectedSetId === node.set?.id) {
                   <div class="border-t border-gray-200 p-4">
                     <button
                       mat-flat-button
@@ -90,7 +90,7 @@
                       Add rule
                     </button>
                   </div>
-                }
+                } -->
               </div>
             }
           </div>
@@ -129,6 +129,15 @@
               }
             </div>
             <div class="flex gap-2 items-center">
+              <button
+                mat-flat-button
+                color="primary"
+                (click)="addRule()"
+                [disabled]="!selectedSetId"
+              >
+                <mat-icon>add</mat-icon>
+                Add rule
+              </button>
               <button mat-stroked-button (click)="addSchedule(set)">
                 <mat-icon>schedule</mat-icon>
                 Add schedule
@@ -153,10 +162,10 @@
                     Build one-off or recurring schedules for this set.
                   </div>
                 </div>
-                <button mat-flat-button color="primary" (click)="addSchedule(set)">
+                <!-- <button mat-flat-button color="primary" (click)="addSchedule(set)">
                   <mat-icon>add</mat-icon>
                   New schedule
-                </button>
+                </button> -->
               </div>
 
               @if ((set.schedules || []).length) {
