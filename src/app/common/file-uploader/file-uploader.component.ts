@@ -69,10 +69,9 @@ export const ACCEPTED_TYPES = {
     name: 'image',
   },
   zip: {
-    extensions: ['zip', 'tar.gz', 'tar'],
-    // icon: 'fa-file-zip-o',
-    icon: 'zip_outlined',
-    name: 'archive',
+    extensions: ['zip', 'tar.gz', 'tgz', 'tar'],
+    icon: 'folder_zip',
+    name: 'zip',
   },
 } as const;
 
@@ -332,7 +331,8 @@ export class FileUploaderComponent implements OnInit, OnChanges {
 
   createUploadZones(files: FileData[]) {
     const zones = Object.entries(files).map(([uploadName, uploadData]) => {
-      const typeData = ACCEPTED_TYPES[uploadData.type];
+      const uploadType = uploadData.type === 'archive' ? 'zip' : uploadData.type;
+      const typeData = ACCEPTED_TYPES[uploadType];
       if (!typeData) throw new Error(`Invalid type provided to File Uploader ${uploadData.type}`);
 
       return {
