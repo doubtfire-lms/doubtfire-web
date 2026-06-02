@@ -104,7 +104,7 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
 
     this.unit$.pipe(first()).subscribe((routeUnit) => {
       this.unitService
-        .fetch(routeUnit.id)
+        .get(routeUnit.id) // Retrieves cached unit date, use .fetch() if we want live unit data
         .pipe(first())
         .subscribe((unit) => this.loadInboxData(unit));
     });
