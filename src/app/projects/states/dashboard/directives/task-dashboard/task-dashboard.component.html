@@ -1,5 +1,5 @@
-<div class="w-full h-full overflow-auto">
-  <div class="flex w-full items-center gap-2">
+<div class="flex h-full w-full flex-col overflow-hidden">
+  <div class="z-10 flex w-full shrink-0 items-center gap-2">
     <mat-tab-group
       class="w-full"
       [(selectedIndex)]="currentIndex"
@@ -78,30 +78,31 @@
     </mat-menu>
   </div>
 
-  @switch (currentView) {
-    @case (DashboardViews.details) {
-      <div class="flex flex-col gap-5 p-5">
-        <f-task-ilos-card
-          [taskDef]="task.definition"
-          [iloContextType]="'TaskDefinition'"
-        ></f-task-ilos-card>
-        <f-task-description-card
-          [taskDef]="task.definition"
-          [task]="task"
-          [unit]="task.unit"
-        ></f-task-description-card>
-        <f-task-prerequisites-card
-          [taskDefinition]="task.definition"
-          [task]="task"
-        ></f-task-prerequisites-card>
-        <f-task-scorm-card [task]="task"></f-task-scorm-card>
-        <f-task-status-card [task]="task"></f-task-status-card>
-        <f-task-due-card [task]="task"></f-task-due-card>
-        <f-task-assessment-card [task]="task"></f-task-assessment-card>
-        <f-task-submission-card [task]="task"></f-task-submission-card>
-      </div>
-    }
-    <!-- <ng-template [ngSwitchCase]="DashboardViews.task">
+  <div class="min-h-0 flex-1 overflow-auto">
+    @switch (currentView) {
+      @case (DashboardViews.details) {
+        <div class="flex flex-col gap-5 p-5">
+          <f-task-ilos-card
+            [taskDef]="task.definition"
+            [iloContextType]="'TaskDefinition'"
+          ></f-task-ilos-card>
+          <f-task-description-card
+            [taskDef]="task.definition"
+            [task]="task"
+            [unit]="task.unit"
+          ></f-task-description-card>
+          <f-task-prerequisites-card
+            [taskDefinition]="task.definition"
+            [task]="task"
+          ></f-task-prerequisites-card>
+          <f-task-scorm-card [task]="task"></f-task-scorm-card>
+          <f-task-status-card [task]="task"></f-task-status-card>
+          <f-task-due-card [task]="task"></f-task-due-card>
+          <f-task-assessment-card [task]="task"></f-task-assessment-card>
+          <f-task-submission-card [task]="task"></f-task-submission-card>
+        </div>
+      }
+      <!-- <ng-template [ngSwitchCase]="DashboardViews.task">
     <ng-container
       *ngIf="selectedTaskService.hasTaskSheet; then pdfViewer; else noPdfUrl"
     ></ng-container>
@@ -111,74 +112,75 @@
       *ngIf="selectedTaskService.hasSubmissionPdf; then pdfViewer; else noPdfUrl"
     ></ng-container>
   </ng-template> -->
-    @case (DashboardViews.task) {
-      @if (task && task.blockedByPrerequisiteTasks()) {
-        <div
-          class="flex items-center text-center px-4 py-3 bg-yellow-100 border-l-4 border-r-4 border-yellow-500 text-yellow-700"
-        >
-          <i class="fa fa-exclamation-triangle mr-2 fa-lg"></i>
-          Warning: This task has
-          {{ task.definition.taskPrerequisitesCache.currentValues.length }} prerequisite{{
-            task.definition.taskPrerequisitesCache.currentValues.length > 1 ? 's' : ''
-          }}
-          that you still need to complete. You won’t be able to submit this task until all
-          prerequisites are met.
-        </div>
-      }
-      @if (task.definition.hasTaskSheet) {
-        <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()" [startPage]="1"></f-pdf-viewer>
-      } @else {
-        <div class="flex flex-col w-full h-full justify-center items-center">
-          <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
-        </div>
-      }
-    }
-    @case (DashboardViews.submission) {
-      @if (task.hasPdf) {
-        <f-pdf-viewer [pdfUrl]="task.submissionUrl()" [startPage]="2"></f-pdf-viewer>
-      } @else {
-        <div class="flex flex-col w-full h-full justify-center items-center">
-          <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
-        </div>
-      }
-    }
-    @case (DashboardViews.similarity) {
-      @if (canAccessStaffViews) {
-        <div class="h-full overflow-auto">
-          <f-task-similarity-view [task]="task"></f-task-similarity-view>
-        </div>
-      }
-    }
-    @case (DashboardViews.overseer) {
-      @if (canAccessStaffViews) {
-        <div class="h-full overflow-auto">
-          <f-task-overseer-report [task]="task"></f-task-overseer-report>
-        </div>
-      }
-    }
-    @case (DashboardViews.staff_notes) {
-      @if (canAccessStaffViews) {
-        <div class="h-full">
-          <f-staff-notes-view [project]="task.project"></f-staff-notes-view>
-        </div>
-      }
-    }
-    @case (DashboardViews.tutor_notes) {
-      <div class="h-full overflow-auto">
-        @if (canAccessTutorNotes) {
-          <f-tutor-notes-view [task]="task"></f-tutor-notes-view>
+      @case (DashboardViews.task) {
+        @if (task && task.blockedByPrerequisiteTasks()) {
+          <div
+            class="flex items-center text-center px-4 py-3 bg-yellow-100 border-l-4 border-r-4 border-yellow-500 text-yellow-700"
+          >
+            <i class="fa fa-exclamation-triangle mr-2 fa-lg"></i>
+            Warning: This task has
+            {{ task.definition.taskPrerequisitesCache.currentValues.length }} prerequisite{{
+              task.definition.taskPrerequisitesCache.currentValues.length > 1 ? 's' : ''
+            }}
+            that you still need to complete. You won’t be able to submit this task until all
+            prerequisites are met.
+          </div>
         }
-      </div>
-    }
-    @case (DashboardViews.discussion_prompts) {
-      @if (canAccessStaffViews) {
-        <f-discussion-prompts-view
-          [project]="task.project"
-          [taskDefinition]="task.definition"
-        ></f-discussion-prompts-view>
+        @if (task.definition.hasTaskSheet) {
+          <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()" [startPage]="1"></f-pdf-viewer>
+        } @else {
+          <div class="flex flex-col w-full h-full justify-center items-center">
+            <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
+          </div>
+        }
+      }
+      @case (DashboardViews.submission) {
+        @if (task.hasPdf) {
+          <f-pdf-viewer [pdfUrl]="task.submissionUrl()" [startPage]="2"></f-pdf-viewer>
+        } @else {
+          <div class="flex flex-col w-full h-full justify-center items-center">
+            <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
+          </div>
+        }
+      }
+      @case (DashboardViews.similarity) {
+        @if (canAccessStaffViews) {
+          <div class="h-full overflow-auto">
+            <f-task-similarity-view [task]="task"></f-task-similarity-view>
+          </div>
+        }
+      }
+      @case (DashboardViews.overseer) {
+        @if (canAccessStaffViews) {
+          <div class="h-full overflow-auto">
+            <f-task-overseer-report [task]="task"></f-task-overseer-report>
+          </div>
+        }
+      }
+      @case (DashboardViews.staff_notes) {
+        @if (canAccessStaffViews) {
+          <div class="h-full">
+            <f-staff-notes-view [project]="task.project"></f-staff-notes-view>
+          </div>
+        }
+      }
+      @case (DashboardViews.tutor_notes) {
+        <div class="h-full overflow-auto">
+          @if (canAccessTutorNotes) {
+            <f-tutor-notes-view [task]="task"></f-tutor-notes-view>
+          }
+        </div>
+      }
+      @case (DashboardViews.discussion_prompts) {
+        @if (canAccessStaffViews) {
+          <f-discussion-prompts-view
+            [project]="task.project"
+            [taskDefinition]="task.definition"
+          ></f-discussion-prompts-view>
+        }
       }
     }
-  }
+  </div>
 
   <!-- The PDF Viewer -->
   <!-- <ng-template #pdfViewer>
