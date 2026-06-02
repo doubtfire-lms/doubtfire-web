@@ -19,6 +19,10 @@ export class TasksInTutorialsPipe implements PipeTransform {
 
     // Filter the tasks to only those where the tutorial for the task is in the list of tutorial ids
     const result = tasks?.filter((task) => {
+      if (task.tutorialId) {
+        return tutorialIds.includes(task.tutorialId);
+      }
+
       // Get the stream for the task... this may be nil or undefined if there are no streams in the unit
       const stream = task.definition.tutorialStream;
 

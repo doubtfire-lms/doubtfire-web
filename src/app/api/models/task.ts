@@ -67,6 +67,7 @@ export class Task extends Entity {
 
   project: Project;
   definition: TaskDefinition;
+  tutorialId: number;
 
   //TODO: map task submission details
   hasPdf: boolean = false;
