@@ -33,6 +33,7 @@ import {resolveUnit} from './units/unit.resolver';
 import {UnitRootStateComponent} from './units/unit-root-state.component';
 import {WelcomeComponent} from './welcome/welcome.component';
 import {roleWhitelistGuard} from './common/guards/role-whitelist.guard';
+import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -61,6 +62,10 @@ export const routes: Routes = [
     path: 'task_def_id/:taskDefId/preview-scorm',
     component: ScormPlayerComponent,
     data: {mode: 'preview'},
+  },
+  {
+    path: 'projects/:projectId/task_def_id/:taskDefId/submission_files/download',
+    component: SubmissionFilesDownloadComponent,
   },
   {path: 'view-all-units', component: FUnitsComponent, data: {mode: 'tutor'}},
   {path: 'view-all-projects', component: FUnitsComponent, data: {mode: 'student'}},
