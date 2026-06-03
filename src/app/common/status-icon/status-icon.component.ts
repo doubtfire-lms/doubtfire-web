@@ -21,7 +21,7 @@ export class StatusIconComponent implements OnInit {
     if (this.showTooltip == null) {
       this.showTooltip = true;
     }
-    this.statusIcon = (status: TaskStatusEnum) => TaskStatus.STATUS_ICONS.get(status);
+    this.statusIcon = (status: TaskStatusEnum) => TaskStatus.STATUS_MATERIAL_ICONS.get(status);
     this.statusLabel = (status: TaskStatusEnum) => TaskStatus.STATUS_LABELS.get(status);
     this.statusClass = (status: TaskStatusEnum) => TaskStatus.statusClass(status);
   }

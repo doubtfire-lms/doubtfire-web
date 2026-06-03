@@ -4,7 +4,7 @@
   <mat-button-toggle-group
     [value]="activeCsvResponseSelection"
     (change)="selectResponse($event.value)"
-    class="mb-5"
+    class="mb-3"
   >
     @for (selection of csvResponseSelections; track selection.key) {
       <mat-button-toggle
@@ -70,7 +70,7 @@
   }
 </mat-dialog-content>
 
-<mat-dialog-actions class="w-full flex items-center gap-2">
+<mat-dialog-actions class="w-full flex items-center gap-1">
   @if (dataSource.data.length > 0) {
     <mat-paginator
       class="flex-1"

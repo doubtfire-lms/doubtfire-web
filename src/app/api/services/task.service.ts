@@ -44,6 +44,7 @@ export class TaskService extends CachedEntityService<Task> {
           entity.definition = entity.project.unit.taskDef(data['task_definition_id']);
         },
       },
+      'tutorialId',
       'status',
       {
         keys: 'dueDate',

@@ -1,4 +1,5 @@
-@import '../common/task-status-colors.scss';
+@use 'sass:map';
+@use 'styles/common/task-status-colors' as *;
 
 //
 // Mixins to use that helps color task statuses
@@ -7,9 +8,9 @@
 @function task-status-color($status, $variant: null) {
   // If variant isn't specified, we get the base by default
   @if $variant == null {
-    @return map-get(map-get($task-status-colors, $status), base);
+    @return map.get(map.get($task-status-colors, $status), base);
   } @else {
-    @return map-get(map-get($task-status-colors, $status), $variant);
+    @return map.get(map.get($task-status-colors, $status), $variant);
   }
 }
 

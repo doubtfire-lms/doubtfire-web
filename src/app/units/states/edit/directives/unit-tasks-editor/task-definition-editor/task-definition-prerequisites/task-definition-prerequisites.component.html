@@ -60,7 +60,7 @@
         </th>
         <td mat-cell *matCellDef="let link">
           @if (staffView) {
-            <td class="py-2 px-3 text-right">
+            <td class="py-1 px-2 text-right">
               <button
                 mat-icon-button
                 aria-label="Remove prerequisite"
@@ -97,7 +97,7 @@
         <button
           mat-raised-button
           color="primary"
-          class="min-w-xl mr-4"
+          class="min-w-xl mr-2.5"
           (click)="addTaskPrerequisite($event)"
           [disabled]="!selectedTaskPrerequisite"
           matSuffix

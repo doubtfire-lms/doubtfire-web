@@ -1,9 +1,9 @@
-<div class="flex justify-between items-center p-5">
+<div class="flex justify-between items-center p-3">
   <div>
     <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
   </div>
   @if (unit.allowFlexibleDates) {
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-1">
       <button
         mat-raised-button
         (click)="confirmSaveTargetDates()"
@@ -39,7 +39,7 @@
           class="flex items-center justify-between"
           [routerLink]="['/projects', project.id, 'dashboard', item.taskDefinition.abbreviation]"
         >
-          <div class="flex items-center gap-5 w-full min-w-0">
+          <div class="flex items-center gap-3 w-full min-w-0">
             <f-grade-icon
               [grade]="item.taskDefinition.targetGrade"
               [colorful]="true"
@@ -79,13 +79,13 @@
         [attr.data-gantt-id]="item.id"
         (mouseover)="onBarHover(item)"
         (mouseleave)="onBarLeave(item)"
-        class="gantt-bar w-full text-white flex gap-2 justify-between items-center p-2 h-[35px]"
+        class="gantt-bar w-full text-white flex gap-1 justify-between items-center p-1 h-[35px]"
         [ngClass]="getItemClasses(item)"
         [matTooltip]="getTooltip(item)"
         matTooltipShowDelay="500"
         matTooltipPosition="above"
-        ><div class="flex gap-2 items-center">
-          <div class="flex gap-2 items-center">
+        ><div class="flex gap-1 items-center">
+          <div class="flex gap-1 items-center">
             @if (unsavedChanges(item)) {
               <mat-icon class="scale-95">change_circle</mat-icon>
             }

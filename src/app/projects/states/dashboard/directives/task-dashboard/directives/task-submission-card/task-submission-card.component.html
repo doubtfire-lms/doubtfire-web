@@ -29,7 +29,7 @@
     </p></mat-card-content
   >
   <mat-card-actions
-    class="space-x-2"
+    class="space-x-1"
     [hidden]="!(task?.hasPdf || task?.inSubmittedState() || canRegeneratePdf)"
   >
     <button mat-stroked-button [hidden]="!task?.hasPdf" (click)="downloadSubmission()">

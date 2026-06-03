@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-12](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-11...v11.0.0-12) (2026-06-02)
+
+
+### Bug Fixes
+
+* correctly apply task tutorial filters ([924c267](https://github.com/b0ink/doubtfire-deploy/commit/924c2676c6739820cc066d046b7ace71ee2d2f9e))
+
 ## [11.0.0-11](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-10...v11.0.0-11) (2026-05-19)
 
 ## [11.0.0-10](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-9...v11.0.0-10) (2026-05-18)

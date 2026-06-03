@@ -1,6 +1,6 @@
 <div class="flex justify-between items-center">
   <h2 mat-dialog-title>Submit {{ task.definition.abbreviation }} {{ task.definition.name }}</h2>
-  <mat-form-field appearance="outline" class="my-4 w-full lg:max-w-sm mr-[24px] mt-[22px]">
+  <mat-form-field appearance="outline" class="my-2.5 w-full lg:max-w-sm mr-[24px] mt-[22px]">
     <mat-label>Submission type</mat-label>
     <mat-select
       [(ngModel)]="submissionType"
@@ -15,10 +15,10 @@
 </div>
 
 <mat-dialog-content>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-2.5">
     @if (isGroupStage && !uploadStarted) {
       <mat-card>
-        <mat-card-content class="flex flex-col gap-3 pt-6">
+        <mat-card-content class="flex flex-col gap-2 pt-3.5">
           <div>
             <h3 class="font-semibold">Team Contribution</h3>
             <p class="text-gray-600">
@@ -39,7 +39,7 @@
     }
 
     <mat-card [class.hidden]="!isDetailsStage && !uploadStarted">
-      <mat-card-content class="flex flex-col gap-3 pt-6">
+      <mat-card-content class="flex flex-col gap-2 pt-3.5">
         @if (!uploadStarted) {
           <div>
             <h3 class="font-semibold">
@@ -80,9 +80,9 @@
     </mat-card>
 
     @if (!uploadStarted && isCommentsStage) {
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2.5">
         <mat-card>
-          <mat-card-content class="flex flex-col gap-4 pt-6">
+          <mat-card-content class="flex flex-col gap-2.5 pt-3.5">
             <div>
               @if (submissionType === 'need_help') {
                 <h3 class="font-semibold">What do you need help with?</h3>
@@ -124,7 +124,7 @@
 
         @if (privacyPolicy.privacy) {
           <mat-card>
-            <mat-card-content class="flex flex-col gap-3 pt-6">
+            <mat-card-content class="flex flex-col gap-2 pt-3.5">
               <div>
                 <h3 class="font-semibold">Declaration</h3>
                 <p class="text-[14px] text-gray-600">{{ privacyPolicy.privacy }}</p>
@@ -141,7 +141,7 @@
                 </button>
 
                 @if (showPlagiarism) {
-                  <div class="mt-2 text-[13px] text-gray-600">
+                  <div class="mt-1 text-[13px] text-gray-600">
                     {{ privacyPolicy.plagiarism }}
                   </div>
                 }

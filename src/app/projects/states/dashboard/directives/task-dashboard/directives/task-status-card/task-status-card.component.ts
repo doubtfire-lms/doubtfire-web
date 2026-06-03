@@ -100,7 +100,6 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
         this.triggers.push(this.taskService.statusData(this.task.status));
       }
     }
-    this.taskService.statusKeys;
   }
 
   public isReadyForFeedback(): boolean {

@@ -272,7 +272,7 @@
   @if (filteredTasks && !loading) {
     <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60">
       @if (filteredTasks.length) {
-        <div class="w-full text-gray-400 text-center mt-4">{{ filteredTasks.length }} Tasks</div>
+        <div class="w-full text-gray-400 text-center mt-2.5">{{ filteredTasks.length }} Tasks</div>
       }
       <mat-list class="m-0 p-0">
         <mat-list-item
@@ -306,7 +306,7 @@
                 <user-icon class="self-center" [user]="task.project.student" [size]="30">
                 </user-icon>
                 <div class="task-list-data truncate flex-1" [hidden]="isNarrow">
-                  <h4 class="student-name flex min-w-0 items-center gap-1">
+                  <h4 class="student-name flex min-w-0 items-center gap-0.5">
                     @if (task.moderationType === 'escalation') {
                       <mat-icon
                         matTooltip="This task has been escalated by the student"
@@ -363,7 +363,7 @@
                   [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts"
                   matBadgePosition="before"
                   [status]="task.status"
-                  class="ml-3"
+                  class="ml-2"
                 ></status-icon>
                 <div class="overflow" [hidden]="isNarrow">
                   <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
@@ -393,7 +393,7 @@
                       <mat-icon class="mr-0">
                         {{ task.pinned ? 'remove_circle' : 'add_alert' }}
                       </mat-icon>
-                      <span class="ml-5"
+                      <span class="ml-3"
                         >{{ task.pinned ? 'Unpin from inbox' : 'Pin to inbox' }}
                       </span>
                     </button>

@@ -1,6 +1,6 @@
 <mat-toolbar class="footer flex-col w-full h-full justify-center p-0">
   <!-- @if (selectedTask?.similaritiesDetected) {
-    <div class="bg-red-500 grow w-full rounded-xl h-8 mb-5 mt-4 text-white text-lg font-bold">
+    <div class="bg-red-500 grow w-full rounded-xl h-5 mb-3 mt-2.5 text-white text-xs font-bold">
       <p
         style="position: relative"
         #warningText
@@ -12,7 +12,7 @@
   } -->
 
   <ng-template #statusActionButtons>
-    <span class="center-buttons flex justify-around gap-2">
+    <span class="center-buttons flex justify-around gap-1">
       @if (selectedTask?.definition?.assessInPortfolioOnly) {
         <button
           [disabled]="!actionButtonEnabled"
@@ -141,7 +141,7 @@
             <div class="relative flex items-center">
               @if (!hideMainActionButtonsForModeration) {
                 <ng-container [ngTemplateOutlet]="statusActionButtons"></ng-container>
-                <mat-divider class="mx-4" [vertical]="true"></mat-divider>
+                <mat-divider class="mx-2.5" [vertical]="true"></mat-divider>
               } @else {
                 <f-moderation class="pl-[125px] ml-[100px]" [task]="selectedTask"></f-moderation>
               }

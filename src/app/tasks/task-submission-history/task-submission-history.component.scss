@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // @import "src/styles/mixins/flex-center";
 //== Media queries breakpoints
 //
@@ -163,7 +165,7 @@ mat-list-item {
     cursor: pointer;
     text-decoration: none;
     background-color: #F5F5F5;
-    @include custom-box-shadow(lighten(#0079D8, 15%));
+    @include custom-box-shadow(color.adjust(#0079D8, $lightness: 15%));
   }
   &.selected {
     background-color: rgb(231, 231, 231);
