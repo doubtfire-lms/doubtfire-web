@@ -6,12 +6,12 @@
   >
     @if (!media.isActive('xs')) {
       @if (logoSettings.hasLogo) {
-        <a [href]="logoSettings.logoLinkUrl" class="mx-6">
+        <a [href]="logoSettings.logoLinkUrl" class="mx-3.5">
           <img [src]="logoSettings.logoUrl" style="height: 32px" />
         </a>
       }
 
-      <a routerLink="/home" class="pt-4">
+      <a routerLink="/home" class="pt-2.5">
         <mat-icon
           style="margin-right: 20px; margin-left: 20px"
           svgIcon="formatif-logo"
@@ -25,7 +25,7 @@
       [unit]="currentUnit"
       [unitRoles]="filteredUnitRoles"
       [projects]="projects"
-      class="mr-2"
+      class="mr-1"
     >
     </unit-dropdown>
 

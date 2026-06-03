@@ -1,5 +1,5 @@
 <div class="container w-full">
-  <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+  <div class="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between">
     <div>
       <h2>Students</h2>
       <p>Browse progress, filter tutorial groups, and manage enrolments.</p>
@@ -146,15 +146,15 @@
       ></tr>
 
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell p-4 text-center" [attr.colspan]="displayedColumns.length">
+        <td class="mat-cell p-2.5 text-center" [attr.colspan]="displayedColumns.length">
           No students were found using the filters specified.
         </td>
       </tr>
     </table>
   </div>
 
-  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-    <div class="flex flex-wrap gap-2">
+  <div class="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:justify-between">
+    <div class="flex flex-wrap gap-1">
       <button mat-stroked-button type="button" (click)="exportCsv()">
         <mat-icon>download</mat-icon>
         Export CSV

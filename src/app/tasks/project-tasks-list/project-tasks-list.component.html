@@ -4,7 +4,7 @@
       @if (!hideGroupSetName) {
         <h5 class="group-set-name">{{ grouping.name }}</h5>
       }
-      <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 outline-1">
+      <div class="grid grid-cols-3 sm:grid-cols-4 gap-1 outline-1">
         @for (
           task of project.tasks
             | tasksForGroupset: grouping.groupSet

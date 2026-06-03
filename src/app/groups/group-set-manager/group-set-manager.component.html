@@ -1,4 +1,4 @@
-<div class="flex w-full gap-5">
+<div class="flex w-full gap-3">
   <f-group-selector
     class="w-full"
     [unit]="unit"
@@ -18,19 +18,19 @@
           @if (!editingGroupName) {
             {{ selectedGroup?.name }}
             @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
-              <button mat-icon-button class="p-2" (click)="startEditingGroupName()">
+              <button mat-icon-button class="p-1" (click)="startEditingGroupName()">
                 <mat-icon>edit</mat-icon>
               </button>
             }
           } @else {
             @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
-              <mat-form-field appearance="outline" class="ml-2 mt-[22px]">
+              <mat-form-field appearance="outline" class="ml-1 mt-[22px]">
                 <input matInput [(ngModel)]="selectedGroup.name" required />
               </mat-form-field>
-              <button mat-icon-button class="p-2" (click)="updateGroup()">
+              <button mat-icon-button class="p-1" (click)="updateGroup()">
                 <mat-icon>save</mat-icon>
               </button>
-              <button mat-icon-button class="p-2" (click)="stopEditinGroupName()">
+              <button mat-icon-button class="p-1" (click)="stopEditinGroupName()">
                 <mat-icon>close</mat-icon>
               </button>
             }
@@ -51,7 +51,7 @@
       </f-group-member-list>
       @if (unitRole) {
         <mat-card-footer class="mt-auto">
-          <mat-form-field appearance="outline" class="w-full px-5 mt-5">
+          <mat-form-field appearance="outline" class="w-full px-3 mt-3">
             <input
               type="text"
               matInput

@@ -44,7 +44,7 @@ export class AlertService {
 
 @Component({
     selector: 'f-alert',
-    template: `<span class="flex space-x-4 items-center center-items">
+    template: `<span class="flex space-x-2.5 items-center center-items">
     <span class="flex">
       <mat-icon>{{ data?.icon }}</mat-icon>
     </span>

@@ -1,4 +1,4 @@
-<div class="flex justify-end mb-5">
+<div class="flex justify-end mb-3">
   <button mat-stroked-button (click)="loadAssessments(true)">Refresh</button>
 </div>
 <mat-accordion>
@@ -10,7 +10,7 @@
       [expanded]="oa.id === loadOverseerAssessmentId && oa.reportReady"
     >
       <mat-expansion-panel-header class="flex justify-between items-center">
-        <mat-panel-title class="flex items-center gap-5">
+        <mat-panel-title class="flex items-center gap-3">
           <status-icon [status]="oa.taskStatus"> </status-icon>
           Submission {{ overseerAssessments.length - idx }}: {{ oa.timestamp | humanizedDate }}
           @if (idx === 0) {
@@ -21,7 +21,7 @@
           }
         </mat-panel-title>
         @if (oa.reportReady) {
-          <div class="flex gap-5 items-center">
+          <div class="flex gap-3 items-center">
             <span class="text-gray-500"> {{ oa.passedSteps }} / {{ oa.totalSteps }}</span>
             @if (oa.passedSteps === oa.totalSteps) {
               <mat-icon color="primary">done</mat-icon>
@@ -67,7 +67,7 @@
             }
           </div>
         } @else {
-          <div class="flex gap-5 uppercase items-center">
+          <div class="flex gap-3 uppercase items-center">
             Tests In Progress
             <mat-progress-spinner [diameter]="25" mode="indeterminate"></mat-progress-spinner>
           </div>
@@ -92,7 +92,7 @@
             <!-- <p>Pass?: {{ result.pass }}</p> -->
 
             @if (!result.pass) {
-              <p class="text-gray-500 text-left w-full tracking-wide p-2 text-normal">
+              <p class="text-gray-500 text-left w-full tracking-wide p-1 text-normal">
                 {{ result.feedbackMessage }}
               </p>
             }
@@ -102,7 +102,7 @@
               result.expectedOutput !== result.stdout &&
               (result.overseerStep?.stepType === 'output_diff' || !result.overseerStep)
             ) {
-              <div class="flex gap-2 mb-5 w-fill justify-center items-center">
+              <div class="flex gap-1 mb-3 w-fill justify-center items-center">
                 <button
                   mat-stroked-button
                   [color]="viewOutput === 'your_output' ? 'primary' : undefined"
@@ -150,24 +150,24 @@
                 }
               } @else if (viewOutput === 'your_output') {
                 <ngx-monaco-editor
-                  class="w-full p-5"
+                  class="w-full p-3"
                   [options]="editorOptions"
                   [(ngModel)]="result.stdout"
                 ></ngx-monaco-editor>
               } @else if (viewOutput === 'expected_output') {
                 <ngx-monaco-editor
-                  class="w-full p-5"
+                  class="w-full p-3"
                   [options]="editorOptions"
                   [(ngModel)]="result.expectedOutput"
                 ></ngx-monaco-editor>
               }
             } @else if (result.stdout) {
               <pre
-                class="max-w-full max-h-72 overflow-scroll whitespace-pre-wrap break-words scrollbar-gutter-stable"
+                class="max-w-full max-h-44 overflow-scroll whitespace-pre-wrap break-words scrollbar-gutter-stable"
               ><code>{{result.stdout}}</code></pre>
             } @else if (result.pass) {
               <div class="uppercase text-gray-400 text-center w-full tracking-wide">SUCCESS</div>
-              <div class="uppercase text-gray-200 text-center w-full tracking-wide p-2 text-normal">
+              <div class="uppercase text-gray-200 text-center w-full tracking-wide p-1 text-normal">
                 (No Output)
               </div>
             }
@@ -186,7 +186,7 @@
                 <mat-panel-title>
                   Step {{ oa.stepResultsCache.currentValues.length + idx + 1 }}:
                   {{ skipped?.displayName ?? '-' }}
-                  <span class="italic ml-5">(Skipped)</span>
+                  <span class="italic ml-3">(Skipped)</span>
                 </mat-panel-title>
 
                 <mat-icon class="opacity-80">pause</mat-icon>

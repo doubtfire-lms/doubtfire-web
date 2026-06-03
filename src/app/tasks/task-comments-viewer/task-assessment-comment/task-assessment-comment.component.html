@@ -5,7 +5,7 @@
       class="flex-grow h-px bg-gradient-to-r from-transparent via-gray-400/60 to-transparent w-full"
     ></div>
 
-    <div class="flex items-center gap-2 px-2 bg-white whitespace-nowrap">
+    <div class="flex items-center gap-1 px-1 bg-white whitespace-nowrap">
       @if (comment.overseerStatus === 'pre_queued') {
         Tests In Progress
       } @else if (comment.overseerStatus === 'passed') {
@@ -22,14 +22,14 @@
 
   @if (comment.overseerStatus === 'passed') {
     <mat-icon
-      class="my-2 text-green-500 opacity-70"
+      class="my-1 text-green-500 opacity-70"
       style="width: 35px; height: 35px; font-size: 35px"
       >check_circle</mat-icon
     >
   } @else if (comment.overseerStatus === 'failed') {
     <mat-icon
       color="warn"
-      class="my-2 opacity-70"
+      class="my-1 opacity-70"
       style="width: 35px; height: 35px; font-size: 35px"
       >highlight_off_outline</mat-icon
     >
@@ -41,7 +41,7 @@
     <button
       mat-stroked-button
       (click)="showTaskAssessmentResult(comment.overseerAssessmentId)"
-      class="mb-2"
+      class="mb-1"
     >
       View report
     </button>

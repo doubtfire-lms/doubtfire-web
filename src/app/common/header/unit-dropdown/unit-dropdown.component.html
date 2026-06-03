@@ -39,7 +39,7 @@
     <mat-divider></mat-divider>
   }
 
-  <h2 mat-subheader [hidden]="unitRoles?.length === 0" class="my-3 ml-6">Units you teach</h2>
+  <h2 mat-subheader [hidden]="unitRoles?.length === 0" class="my-2 ml-3.5">Units you teach</h2>
   @for (unitRole of unitRoles; track unitRole) {
     @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
       <div
@@ -57,12 +57,12 @@
   }
 
   <mat-divider [hidden]="unitRoles?.length === 0 || projects?.length === 0"></mat-divider>
-  <h2 mat-subheader [hidden]="projects?.length === 0" class="my-3 ml-6">Units you study</h2>
+  <h2 mat-subheader [hidden]="projects?.length === 0" class="my-2 ml-3.5">Units you study</h2>
   @for (project of projects; track project) {
     @if (!project.unit.teachingPeriod || project.unit.teachingPeriod.active) {
       <button
         [routerLink]="['/projects', project.id, 'dashboard']"
-        class="flex items-center mb-2"
+        class="flex items-center mb-1"
         mat-menu-item
       >
         <span class="flex flex-row border-box">

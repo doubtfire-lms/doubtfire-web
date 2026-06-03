@@ -24,7 +24,7 @@
     <mat-nav-list #taskDefinitions>
       @for (taskDef of filteredTaskDefinitions; track taskDef) {
         <mat-list-item
-          class="flex w-full items-center p-2 h-[65px] cursor-pointer border-b border-gray-200"
+          class="flex w-full items-center p-1 h-[65px] cursor-pointer border-b border-gray-200"
           [disableRipple]="true"
           (click)="setSelectedTaskDefinition(taskDef)"
           [ngClass]="{
@@ -33,13 +33,13 @@
           }"
         >
           @if (taskDef) {
-            <div class="flex justify-between items-center w-full gap-3">
-              <div class="flex items-center gap-5 flex-1 min-w-0">
-                <div class="flex items-center gap-5 min-w-0 truncate text-ellipsis">
+            <div class="flex justify-between items-center w-full gap-2">
+              <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="flex items-center gap-3 min-w-0 truncate text-ellipsis">
                   <div class="flex flex-col justify-start truncate text-ellipsis">
                     <div class="truncate text-ellipsis">{{ taskDef.name }}</div>
 
-                    <div class="flex items-center gap-1 min-w-0">
+                    <div class="flex items-center gap-0.5 min-w-0">
                       @if (taskDef.isGroupTask()) {
                         <mat-icon class="text-gray-600 scale-75 shrink-0">groups</mat-icon>
                       } @else {
@@ -54,7 +54,7 @@
                       @if (taskListItem(taskDef); as task) {
                         <!-- @if (task.isBeforeStartDate() && !task.inSubmittedState()) {
                           <span
-                            class="flex shrink-0 items-center gap-0.5 text-[12px] text-gray-500"
+                            class="flex shrink-0 items-center gap-px text-[12px] text-gray-500"
                           >
                             <mat-icon class="!h-[16px] !w-[16px] !text-[16px]"
                               >hourglass_top</mat-icon
@@ -64,7 +64,7 @@
                         } -->
                         @if (!task.isBeforeStartDate() && !task.inSubmittedState()) {
                           <span
-                            class="flex shrink-0 items-center gap-0.5 text-[12px] font-bold"
+                            class="flex shrink-0 items-center gap-px text-[12px] font-bold"
                             [ngClass]="{
                               'text-[#da532c]': task.daysUntilDueDate() < 0,
                               'text-[#fab143] font-normal':
@@ -84,11 +84,11 @@
                 </div>
               </div>
               @if (taskListItem(taskDef); as task) {
-                <div class="relative flex shrink-0 items-center justify-center pr-1 mr-2">
+                <div class="relative flex shrink-0 items-center justify-center pr-0.5 mr-1">
                   <status-icon [status]="task.status"></status-icon>
 
                   <div
-                    class="absolute -top-3 right-1 flex items-center gap-0.5 drop-shadow-[0_4px_2px_rgba(0,0,0,0.15)]"
+                    class="absolute -top-2 right-0.5 flex items-center gap-px drop-shadow-[0_4px_2px_rgba(0,0,0,0.15)]"
                   >
                     @if (task.numNewComments > 0) {
                       <span
@@ -110,7 +110,7 @@
                   </div>
 
                   <div
-                    class="absolute -bottom-3 right-1 flex items-center gap-0.5 text-[10px] leading-none"
+                    class="absolute -bottom-2 right-0.5 flex items-center gap-px text-[10px] leading-none"
                   >
                     @if (task.hasGrade()) {
                       <span>
@@ -172,7 +172,7 @@
 
       @if (mode === 'project' && project) {
         <mat-list-item
-          class="flex w-full item-content items-center hover:bg-gray-50 p-2 h-[65px] cursor-pointer border-b border-gray-200"
+          class="flex w-full item-content items-center hover:bg-gray-50 p-1 h-[65px] cursor-pointer border-b border-gray-200"
           [disableRipple]="true"
           [ngClass]="project.portfolioTaskStatusClass()"
         >
