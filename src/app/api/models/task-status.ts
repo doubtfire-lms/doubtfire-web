@@ -268,7 +268,7 @@ export class TaskStatus {
     ['complete', 'done'],
     ['fail', 'close'],
     ['time_exceeded', 'schedule'],
-    ['assess_in_portfolio', 'folder_open'],
+    ['assess_in_portfolio', 'rate_review'],
     ['attention_required', 'sms_failed'],
   ]);
 
