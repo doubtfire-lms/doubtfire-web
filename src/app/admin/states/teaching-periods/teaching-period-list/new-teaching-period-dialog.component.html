@@ -1,5 +1,5 @@
-<div style="min-width: 600px; min-height: 600px flex flex-col" class="pr-12 pl-12 pt-12 pb-12">
-  <mat-tab-group class="mb-8">
+<div style="min-width: 600px; min-height: 600px flex flex-col" class="pr-7 pl-7 pt-7 pb-7">
+  <mat-tab-group class="mb-5">
     <mat-tab label="Edit Teaching Period"> <ng-template [ngTemplateOutlet]="EditTeachingPeriod"></ng-template></mat-tab>
     <mat-tab [disabled]="!newOrSelectedTeachingPeriod.id" label="Edit Breaks">
       <ng-template [ngTemplateOutlet]="EditBreaks"></ng-template>
@@ -9,16 +9,16 @@
       <ng-template [ngTemplateOutlet]="ImportUnits"></ng-template>
     </mat-tab> -->
   </mat-tab-group>
-  <div class="flex justify-end self-end space-x-4 bottom-6">
+  <div class="flex justify-end self-end space-x-2.5 bottom-3.5">
     <button mat-stroked-button class="" mat-dialog-close>Cancel</button>
-    <button mat-flat-button color="primary" class="ml-4" (click)="submitTeachingPeriod()">
+    <button mat-flat-button color="primary" class="ml-2.5" (click)="submitTeachingPeriod()">
       {{ newOrSelectedTeachingPeriod.id ? 'Save' : 'Create' }}
     </button>
   </div>
 </div>
 
 <ng-template #EditTeachingPeriod>
-  <form class="teaching-period-form flex flex-col ml-6 mr-6 pt-12 overflow-hidden">
+  <form class="teaching-period-form flex flex-col ml-3.5 mr-3.5 pt-7 overflow-hidden">
     <mat-form-field appearance="outline">
       <mat-label>Teaching Period Name</mat-label>
       <input type="text" matInput [(ngModel)]="newOrSelectedTeachingPeriod.period" name="name" required />
@@ -68,7 +68,7 @@
 </ng-template>
 
 <ng-template #EditBreaks>
-  <h4 class="pt-8">Teaching Breaks for {{ newOrSelectedTeachingPeriod.name }}</h4>
+  <h4 class="pt-5">Teaching Breaks for {{ newOrSelectedTeachingPeriod.name }}</h4>
   <mat-list>
     @for (break of newOrSelectedTeachingPeriod.breaksCache.values | async; track break) {
     <mat-list-item>
@@ -86,8 +86,8 @@
     }
   </mat-list>
 
-  <form class="ml-6 mr-6 pt-12 overflow-hidden">
-    <span class="flex items-center gap-6">
+  <form class="ml-3.5 mr-3.5 pt-7 overflow-hidden">
+    <span class="flex items-center gap-3.5">
       <mat-form-field appearance="outline">
         <mat-label>Break Start Date</mat-label>
         <input

@@ -97,14 +97,14 @@ user-icon {
 
 #html5-qrcode-button-camera-stop,
 #html5-qrcode-button-camera-start {
-  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow w-full uppercase;
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2.5 rounded shadow w-full uppercase;
   max-width: 1000px;
   height: 45px;
   margin-top: 15px;
 }
 
 #html5-qrcode-button-camera-permission {
-  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow w-full uppercase;
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2.5 rounded shadow w-full uppercase;
   width: 100%;
   max-width: 250px;
   height: 60px;

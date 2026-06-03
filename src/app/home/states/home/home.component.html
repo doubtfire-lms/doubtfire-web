@@ -1,4 +1,4 @@
-<div id="home" class="w-full px-20">
+<div id="home" class="w-full px-12">
   <div class="text-center" [hidden]="!notEnrolled">
     <h1>You are not enrolled in {{ externalName.value }}.</h1>
     <p class="mat-lead">Contact your unit convenor or tutor to enrol you in a subject.</p>
@@ -77,7 +77,7 @@
     </div>
   </div>
   <div [hidden]="notEnrolled">
-    <div class="my-4" [hidden]="projects?.length === 0">
+    <div class="my-2.5" [hidden]="projects?.length === 0">
       <h2>Enrolled units</h2>
       <div [hidden]="!loadingProjects" style="height: 185px">
         <mat-spinner diameter="40" color="accent"></mat-spinner>

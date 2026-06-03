@@ -1,9 +1,9 @@
-<div class="w-full mx-auto flex flex-col gap-5">
+<div class="w-full mx-auto flex flex-col gap-3">
   <div class="header">
     <h3>Unit Details</h3>
     <p>Edit and configure all details and settings for this unit.</p>
   </div>
-  <mat-card appearance="outlined" class="p-[16px] gap-2">
+  <mat-card appearance="outlined" class="p-[16px] gap-1">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Code</mat-label>
       <input matInput required [(ngModel)]="unit.code" />
@@ -20,7 +20,7 @@
     </mat-form-field>
   </mat-card>
 
-  <mat-card appearance="outlined" class="p-[16px] gap-2">
+  <mat-card appearance="outlined" class="p-[16px] gap-1">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Teaching Period</mat-label>
       <mat-select [(ngModel)]="unit.teachingPeriod" placeholder="Select Teaching Period">
@@ -31,7 +31,7 @@
       </mat-select>
     </mat-form-field>
 
-    <div class="flex w-full gap-5">
+    <div class="flex w-full gap-3">
       @if (!unit.teachingPeriod) {
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Start Date</mat-label>
@@ -91,7 +91,7 @@
       </mat-hint>
     </mat-form-field>
 
-    <div class="flex w-full gap-5">
+    <div class="flex w-full gap-3">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Feedback warning after (days)</mat-label>
         <input
@@ -123,7 +123,7 @@
     </div>
   </mat-card>
 
-  <mat-card appearance="outlined" class="flex flex-col gap-5 p-[16px]">
+  <mat-card appearance="outlined" class="flex flex-col gap-3 p-[16px]">
     <div>
       <mat-slide-toggle [(ngModel)]="unit.allowFlexibleDates"
         >Allow flexible dates</mat-slide-toggle
@@ -214,7 +214,7 @@
   </mat-card>
 
   @if (overseerEnabled.value) {
-    <mat-card class="p-[16px] gap-2">
+    <mat-card class="p-[16px] gap-1">
       <div>
         <mat-slide-toggle [(ngModel)]="unit.assessmentEnabled"
           >Overseer assessment</mat-slide-toggle
@@ -236,7 +236,7 @@
     </mat-card>
   }
 
-  <div class="flex justify-end w-full gap-5">
+  <div class="flex justify-end w-full gap-3">
     <button mat-raised-button (click)="addD2lData()" [hidden]="!d2lEnabled.value">
       D2L Details
     </button>

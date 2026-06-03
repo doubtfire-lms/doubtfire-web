@@ -4,13 +4,13 @@
       <mat-card-title>Copy {{ unit?.code }} {{ unit?.nameAndPeriod }}</mat-card-title>
     </mat-card-header>
 
-    <mat-card-content class="py-5">
+    <mat-card-content class="py-3">
       <p>
         Duplicate this unit by copying it to the indicated teaching period, or a custom start and
         end date.
       </p>
 
-      <div class="py-5">
+      <div class="py-3">
         <mat-form-field appearance="outline">
           <mat-label>Teaching Period</mat-label>
           <mat-select [(ngModel)]="teachingPeriod">
@@ -21,7 +21,7 @@
           </mat-select>
         </mat-form-field>
 
-        <div class="flex gap-2">
+        <div class="flex gap-1">
           @if (!teachingPeriod) {
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Start Date</mat-label>

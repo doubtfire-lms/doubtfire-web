@@ -4,28 +4,28 @@
       No staff notes for {{ project.student.preferredName }} {{ project.student.lastName }}
     </div>
   } -->
-  <div #tutorNotesContainer class="flex-1 overflow-auto p-4">
+  <div #tutorNotesContainer class="flex-1 overflow-auto p-2.5">
     @if (!loadingTutorNotes) {
       @for (note of filteredNotes; track note) {
         @if (note.replyToId) {
           <div
-            class="text-md px-2 py-2 select-none rounded-t-md border border-gray-300 flex items-center justify-between"
+            class="text-sm px-1 py-1 select-none rounded-t-md border border-gray-300 flex items-center justify-between"
           >
             <div
               class="flex items-center"
               [ngClass]="note.replyTo && 'hover:text-blue-500 hover:underline cursor-pointer'"
               (click)="scrollToNote(note.replyTo)"
             >
-              <mat-icon class="mr-3">reply</mat-icon>
+              <mat-icon class="mr-2">reply</mat-icon>
               <div class="flex flex-col">
                 @if (note.replyTo) {
                   <span class="font-medium">
                     Replying to {{ note.replyTo.user.preferredName }}
                     {{ note.replyTo.user.lastName }} ({{ note.replyTo.user.nickname }})
                   </span>
-                  <span class="text-base text-gray-600">{{ note.replyTo.note }}</span>
+                  <span class="text-xs text-gray-600">{{ note.replyTo.note }}</span>
                 } @else {
-                  <span class="text-base text-gray-400 italic">Replying to: Deleted note</span>
+                  <span class="text-xs text-gray-400 italic">Replying to: Deleted note</span>
                 }
               </div>
             </div>
@@ -33,11 +33,11 @@
         }
         <mat-card
           [id]="'note-' + note.id"
-          class="mb-4 p-5 pb-12"
+          class="mb-2.5 p-3 pb-7"
           (mouseover)="hoveredNoteId = note.id"
           (mouseout)="hoveredNoteId = null"
         >
-          <div class="flex items-center absolute right-5 bottom-5 gap-5">
+          <div class="flex items-center absolute right-3 bottom-3 gap-3">
             <div [hidden]="hoveredNoteId !== note.id" class="flex items-center">
               @if (note.authorIsMe) {
                 <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
@@ -52,7 +52,7 @@
                 </button>
               }
             } @else {
-              <div class="text-gray-400 italic px-5">Read by tutor</div>
+              <div class="text-gray-400 italic px-3">Read by tutor</div>
             }
           </div>
 
@@ -71,7 +71,7 @@
             </div>
           </div>
 
-          <div class="flex gap-5 py-2">
+          <div class="flex gap-3 py-1">
             @if (note.taskDefinition) {
               <mat-chip class="w-fit"
                 >{{ note.taskDefinition?.abbreviation }} {{ note.taskDefinition.name }}</mat-chip
@@ -89,7 +89,7 @@
             }
           </div>
 
-          <mat-card-content class="py-4">
+          <mat-card-content class="py-2.5">
             @if (editingNote && editingNote.id === note.id) {
               <mat-form-field appearance="outline" class="flex items-center w-full">
                 <mat-label>Update Note</mat-label>
@@ -98,9 +98,9 @@
                   #tutorNoteEditor
                   matInput
                   [(ngModel)]="editingNoteText"
-                  class="resize-none w-full px-2 py-1 placeholder:px-2 placeholder:py-1 overflow-hidden"
+                  class="resize-none w-full px-1 py-0.5 placeholder:px-1 placeholder:py-0.5 overflow-hidden"
                 ></textarea>
-                <div class="flex justify-end gap-2">
+                <div class="flex justify-end gap-1">
                   <button mat-raised-button color="" (click)="cancelEditingNote()">Cancel</button>
                   <button mat-raised-button color="primary" (click)="updateNote(note)">
                     Update Note
@@ -122,8 +122,8 @@
     }
   </div>
 
-  <div class="h-[150px] border-t border-gray-300 p-4">
-    <mat-chip-listbox selectable multiple class="mb-4">
+  <div class="h-[150px] border-t border-gray-300 p-2.5">
+    <mat-chip-listbox selectable multiple class="mb-2.5">
       <mat-chip-option
         value="all"
         [selected]="selectedTaskDefinitions.get('all')"
@@ -143,17 +143,17 @@
 
     @if (replyingToNote) {
       <div
-        class="text-md px-2 py-2 select-none rounded-t-md border border-b-0 border-gray-300 flex items-center justify-between"
+        class="text-sm px-1 py-1 select-none rounded-t-md border border-b-0 border-gray-300 flex items-center justify-between"
       >
         <div class="flex items-center">
-          <mat-icon class="mr-3 mt-1">reply</mat-icon>
+          <mat-icon class="mr-2 mt-0.5">reply</mat-icon>
           <div class="flex flex-col">
             <span class="font-medium">
               Replying to {{ replyingToNote.user.firstName }} {{ replyingToNote.user.lastName }} ({{
                 replyingToNote.user.nickname
               }})
             </span>
-            <span class="text-base text-gray-600">{{ replyingToNote.note }}</span>
+            <span class="text-xs text-gray-600">{{ replyingToNote.note }}</span>
           </div>
         </div>
         <mat-icon class="cursor-pointer" (click)="cancelReplyingToNote()">close</mat-icon>
@@ -165,7 +165,7 @@
       <textarea
         matInput
         [(ngModel)]="noteText"
-        class="resize-none w-full px-2 py-1 placeholder:px-2 placeholder:py-1"
+        class="resize-none w-full px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
       ></textarea>
       <div class="flex justify-end">
         <button mat-raised-button color="primary" (click)="submitNote()">Submit</button>

@@ -1,22 +1,22 @@
 @if (project$ | async; as project) {
-  <div class="w-full h-full grid grid-cols-12 gap-4">
+  <div class="w-full h-full grid grid-cols-12 gap-2.5">
     <!-- Column -->
     <div class="col-span-12 lg:col-span-6">
-      <mat-card class="w-full h-[250px] py-24 px-12">
+      <mat-card class="w-full h-[250px] py-14 px-7">
         <mat-card-content>
-          <!-- <f-unit-code class="w-48" [unit_code]="project.unit.code"></f-unit-code> -->
-          <h1 class="mb-2 text-5xl">
+          <!-- <f-unit-code class="w-28" [unit_code]="project.unit.code"></f-unit-code> -->
+          <h1 class="mb-1 text-3xl">
             {{ project.student.nickname || project.student.firstName }}'s {{ project.unit.name }}
           </h1>
-          <p class="text-2xl">{{ project.unit.description }}</p>
+          <p class="text-base">{{ project.unit.description }}</p>
         </mat-card-content>
       </mat-card>
     </div>
     <div class="col-span-12 lg:col-span-6">
-      <mat-card class="w-full h-[250px] py-24 px-12">
+      <mat-card class="w-full h-[250px] py-14 px-7">
         <mat-card-content class="w-full">
-          <span class="flex flex-row items-center mb-8">
-            <h1 class="text-5xl mb-0 mr-2">Targetting</h1>
+          <span class="flex flex-row items-center mb-5">
+            <h1 class="text-3xl mb-0 mr-1">Targetting</h1>
             <mat-icon matTooltip="Your target grade changes which tasks you need to complete.">
               info</mat-icon
             >

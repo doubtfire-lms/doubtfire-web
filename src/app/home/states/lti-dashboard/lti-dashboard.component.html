@@ -1,5 +1,5 @@
-<div id="home" class="w-full h-screen px-20 justify-center items-center">
-  <div class="flex flex-col gap-5 w-full max-w-2xl mx-auto justify-center h-screen items-center">
+<div id="home" class="w-full h-screen px-12 justify-center items-center">
+  <div class="flex flex-col gap-3 w-full max-w-2xl mx-auto justify-center h-screen items-center">
     <div class="flex justify-center items-center">
       <mat-icon
         svgIcon="formatif-logo"
@@ -7,12 +7,12 @@
         aria-label="Formatif logo"
         class="w-[100px] h-[100px]"
       ></mat-icon>
-      <h1 class="m-0 ml-5 text-6xl">OnTrack</h1>
+      <h1 class="m-0 ml-3 text-4xl">OnTrack</h1>
     </div>
 
     @if (isLoading) {
       @if (unauthorised) {
-        <div class="w-full bg-red-200 text-red-800 p-5 text-center font-semibold rounded-lg">
+        <div class="w-full bg-red-200 text-red-800 p-3 text-center font-semibold rounded-lg">
           An error occurred. Please refresh the page.
         </div>
       } @else {
@@ -20,7 +20,7 @@
         <p>Loading...</p>
       }
     } @else {
-      <div class="flex justify-center gap-5">
+      <div class="flex justify-center gap-3">
         @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
           <button
             mat-fab
@@ -67,14 +67,14 @@
         mat-fab
         extended
         color="primary"
-        class="h-[50px] my-5 w-full max-w-lg"
+        class="h-[50px] my-3 w-full max-w-lg"
         (click)="launchApplication()"
         target="_blank"
       >
         <mat-icon>rocket_launch</mat-icon>
         Launch {{ linkedUnit ? linkedUnit.code : 'OnTrack' }}
       </button>
-      <div class="text-center text-gray-300 mt-4 w-full">
+      <div class="text-center text-gray-300 mt-2.5 w-full">
         @if (linkedUnit) {
           {{ linkedUnit.code }} &mdash; {{ linkedUnit.name }}
           @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {

@@ -2,7 +2,7 @@
   <mat-card-header>
     <div class="flex flex-col w-full">
       <div class="flex flex-row w-full justify-between">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1">
           <mat-card-title>
             Groups for
             @if (!showGroupSetSelector && selectedGroup) {
@@ -21,7 +21,7 @@
           }
         </div>
         @if (unitRole || selectedGroupSet?.allowStudentsToCreateGroups) {
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1">
             <mat-form-field appearance="outline" class="mt-[22px]">
               <input
                 matInput
@@ -51,9 +51,9 @@
   </mat-card-header>
 
   @if (selectedGroupSet && selectedGroupSet.groups.length === 0) {
-    <div class="w-full p-4 flex flex-col justify-center items-center h-full text-gray-400">
+    <div class="w-full p-2.5 flex flex-col justify-center items-center h-full text-gray-400">
       <mat-icon class="scale-125">group_off</mat-icon>
-      <p class="p-4">There are no groups in this set</p>
+      <p class="p-2.5">There are no groups in this set</p>
     </div>
   } @else {
     <table mat-table [dataSource]="dataSource" class="">
@@ -61,7 +61,7 @@
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let group">
           @if (editing(group)) {
-            <mat-form-field appearance="outline" class="p-2 mt-[22px]">
+            <mat-form-field appearance="outline" class="p-1 mt-[22px]">
               <input matInput required formControlName="name" placeholder="Name" />
             </mat-form-field>
           } @else {
@@ -74,7 +74,7 @@
         <th mat-header-cell *matHeaderCellDef>Tutorial</th>
         <td mat-cell *matCellDef="let group">
           @if (editing(group)) {
-            <mat-form-field appearance="outline" class="p-2 mt-[22px]">
+            <mat-form-field appearance="outline" class="p-1 mt-[22px]">
               <mat-select formControlName="tutorial" placeholder="Tutorial">
                 @for (tutorial of unit.tutorials; track tutorial) {
                   <mat-option [value]="tutorial">{{ tutorial.abbreviation }}</mat-option>
@@ -96,7 +96,7 @@
         <td mat-cell *matCellDef="let group">
           @if (unitRole) {
             @if (editing(group)) {
-              <mat-form-field appearance="outline" class="p-2 mt-[22px]">
+              <mat-form-field appearance="outline" class="p-1 mt-[22px]">
                 <input
                   matInput
                   required
@@ -147,9 +147,9 @@
             </div>
           }
           @if (unitRole) {
-            <div class="flex gap-2">
+            <div class="flex gap-1">
               @if (editing(group)) {
-                <div class="flex gap-2">
+                <div class="flex gap-1">
                   <button mat-icon-button (click)="saveEdit($event)">
                     <mat-icon>save</mat-icon>
                   </button>

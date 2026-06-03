@@ -1,7 +1,7 @@
 <mat-card appearance="">
   <mat-card-header>
-    <div class="flex mb-4">
-      <f-task-badge [taskDef]="taskDef" class="mr-4"></f-task-badge>
+    <div class="flex mb-2.5">
+      <f-task-badge [taskDef]="taskDef" class="mr-2.5"></f-task-badge>
       <mat-card-title>{{ taskDef?.name }}</mat-card-title>
     </div>
   </mat-card-header>
@@ -42,7 +42,7 @@
     </ul>
   </mat-card-content>
   <mat-card-actions
-    class="space-x-2"
+    class="space-x-1"
     [hidden]="!(taskDef?.hasTaskSheet || taskDef?.hasTaskResources)"
   >
     <!-- <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="viewTaskSheet()">
