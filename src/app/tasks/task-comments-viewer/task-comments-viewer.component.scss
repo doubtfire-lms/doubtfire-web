@@ -1,4 +1,5 @@
-@import '../../../styles/mixins/scrollable.scss';
+@use 'sass:color';
+@use 'styles/mixins/scrollable' as *;
 
 :host {
   min-width: 230px;
@@ -9,9 +10,9 @@
 }
 
 $comment-bubble-color: #3939ff;
-$comment-bubble-color-darker: darken($comment-bubble-color, 10%);
+$comment-bubble-color-darker: color.adjust($comment-bubble-color, $lightness: -10%);
 $comment-bubble-color-other-user: rgb(241, 240, 240);
-$comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
+$comment-bubble-color-other-user-darker: color.adjust($comment-bubble-color-other-user, $lightness: -10%);
 $comment-author-bubble-size: 38px;
 $comment-text-padding: 12px;
 

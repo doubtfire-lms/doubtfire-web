@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 //
 // Global overrides for panels
 //
@@ -73,7 +75,7 @@
 
 // Search options panel
 .panel-body.panel-collapseable {
-  background-color: lighten($gray-lighter, 2%);
+  background-color: color.adjust($gray-lighter, $lightness: 2%);
 }
 
 // Two panel bodies next to eachother (include those with one nested in custom element)

@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 :host {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -20,7 +22,7 @@ a p {
 }
 
 a p {
-  color: (lighten($color: #000000, $amount: 15));
+  color: color.adjust(#000000, $lightness: 15%);
   font-size: 12px;
 }
 
@@ -42,5 +44,4 @@ a p {
     background: rgba(0, 0, 0, 0.08);
     border-radius: 10px;
 }
-
 

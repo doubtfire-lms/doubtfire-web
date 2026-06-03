@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 //
 // Colors for associated grades
 //
@@ -7,7 +9,7 @@
 // ********************************************************
 //
 
-$grade-color-p:  darken(#FF0000, 10%);
-$grade-color-c:  darken(#FF8000, 5%);
-$grade-color-d:  darken(#0080FF, 10%);
-$grade-color-hd: darken(#80FF00, 15%);
+$grade-color-p:  color.adjust(#FF0000, $lightness: -10%);
+$grade-color-c:  color.adjust(#FF8000, $lightness: -5%);
+$grade-color-d:  color.adjust(#0080FF, $lightness: -10%);
+$grade-color-hd: color.adjust(#80FF00, $lightness: -15%);

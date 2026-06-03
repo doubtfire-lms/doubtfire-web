@@ -1,3 +1,5 @@
+@use 'styles/mixins/task-status-colors-generator' as *;
+
 .footer {
   min-height: 85px;
   background-color: #f5f5f5;
@@ -124,8 +126,6 @@
     margin-right: 25px;
   }
 }
-
-@import '../../../styles/mixins/task-status-colors-generator.scss';
 
 @mixin status-icon($status) {
   --status-chip-bg: #{task-status-color($status)};

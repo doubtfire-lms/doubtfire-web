@@ -1,4 +1,4 @@
-@import '../../../styles/mixins/task-status-colors-generator.scss';
+@use 'styles/mixins/task-status-colors-generator' as *;
 
 :host {
   font-size: 1em;
