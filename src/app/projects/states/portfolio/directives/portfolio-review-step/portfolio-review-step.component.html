@@ -3,18 +3,18 @@
     <mat-card-title>Review Portfolio</mat-card-title>
   </mat-card-header>
 
-  <mat-card-content class="p-5 px-20">
+  <mat-card-content class="p-3 px-12">
     @if (!hasLearningSummaryReport || !hasTasksSelected) {
-      <mat-card appearance="outlined" class="p-2">
+      <mat-card appearance="outlined" class="p-1">
         <mat-card-header class="bg-red-500 text-white">
-          <mat-card-title class="flex items-center gap-2">
+          <mat-card-title class="flex items-center gap-1">
             <mat-icon>warning</mat-icon>
             There are issues with your portfolio
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
           @if (!hasLearningSummaryReport) {
-            <p class="py-3">
+            <p class="py-2">
               Your portfolio <strong>must</strong> include a learning summary report. Upload this
               before you schedule your portfolio to be compiled.
             </p>
@@ -22,14 +22,14 @@
 
           @if (!hasTasksSelected) {
             @if (unitHasILOs) {
-              <p class="py-3">
+              <p class="py-2">
                 Your portfolio <strong>must</strong> include tasks aligned to the unit's
                 <strong>{{ unit?.ilos?.length }} intended learning outcomes</strong>. Please
                 indicate which tasks you think align to the unit's learning outcomes before you
                 schedule your portfolio to be compiled.
               </p>
             } @else {
-              <p class="py-3">
+              <p class="py-2">
                 Your portfolio <strong>must</strong> include tasks that you have completed this
                 teaching period. Please indicate which tasks you would like to include in your
                 portfolio before you schedule your portfolio to be compiled.
@@ -41,12 +41,12 @@
     }
 
     @if (portfolioIsCompiling) {
-      <mat-card appearance="outlined" class="p-2 max-w-5xl mx-auto">
+      <mat-card appearance="outlined" class="p-1 max-w-5xl mx-auto">
         <mat-card-header>
           <mat-card-title>Portfolio Processing</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <p class="py-3">
+          <p class="py-2">
             Your portfolio compilation is scheduled with {{ externalName }}. This process will take
             some time, check back soon to see if your portfolio is available.
           </p>
@@ -69,9 +69,9 @@
           file{{ extraFiles.length > 1 ? 's' : '' }} in the previous step.
         </p>
 
-        <ol class="list-decimal list-inside space-y-2 pb-3">
+        <ol class="list-decimal list-inside space-y-1 pb-2">
           @for (file of extraFiles; track file) {
-            <li class="flex items-center gap-2">
+            <li class="flex items-center gap-1">
               <mat-icon>{{ getIcon(file.kind) }}</mat-icon>
               {{ file.name }}
             </li>
@@ -89,12 +89,12 @@
       <p>The following tasks will be included automatically in this order:</p>
       <f-portfolio-included-tasks [project]="project"></f-portfolio-included-tasks>
 
-      <mat-card appearance="outlined" class="p-2">
+      <mat-card appearance="outlined" class="p-1">
         <mat-card-header>
           <mat-card-title>Create Your Portfolio</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <p class="py-3">
+          <p class="py-2">
             Once you click Create Portfolio, the construction of your portfolio will be scheduled
             with {{ externalName }}. This process will take some time, and you will be emailed when
             your portfolio is ready to review if you have enabled portfolio notifications.
@@ -111,7 +111,7 @@
             mat-raised-button
             color="primary"
             (click)="createPortfolio()"
-            class="w-full m-5 max-w-4xl mx-auto"
+            class="w-full m-3 max-w-4xl mx-auto"
           >
             <mat-icon>menu_book</mat-icon>
             Create My Portfolio
@@ -121,24 +121,24 @@
     }
 
     @if (project?.portfolioAvailable) {
-      <mat-card appearance="outlined" class="p-2">
+      <mat-card appearance="outlined" class="p-1">
         <mat-card-header>
           <mat-card-title>Download Portfolio</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <p class="py-2">
+          <p class="py-1">
             <strong>You're done!</strong> There's nothing left for you to do. Your portfolio has
             been submitted.
           </p>
-          <p class="py-2">
+          <p class="py-1">
             This is the <strong>exact same document</strong> your assessor will see.
           </p>
-          <p class="py-2">
+          <p class="py-1">
             If you need to update any tasks or upload additional files, delete your portfolio and
             compile it again before the submission deadline.
           </p>
         </mat-card-content>
-        <mat-card-actions class="flex gap-3 py-5">
+        <mat-card-actions class="flex gap-2 py-3">
           <button mat-raised-button color="warn" class="text-white" (click)="deletePortfolio()">
             Delete Portfolio
           </button>
@@ -150,7 +150,7 @@
     }
   </mat-card-content>
 
-  <mat-card-footer class="w-full flex justify-start p-5">
+  <mat-card-footer class="w-full flex justify-start p-3">
     <button mat-raised-button (click)="goBack()">Back</button>
   </mat-card-footer>
 </mat-card>

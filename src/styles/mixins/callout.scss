@@ -1,7 +1,9 @@
+@use 'sass:color';
+
 //
 // A callout
 //
-@mixin callout($color, $bgcolor: lighten($color, 35%)) {
+@mixin callout($color, $bgcolor: color.adjust($color, $lightness: 35%)) {
     display: block;
     margin: 20px 0;
     padding: 15px 30px 15px 15px;

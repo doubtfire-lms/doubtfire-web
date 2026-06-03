@@ -3,7 +3,7 @@
     <mat-tab-group
       [selectedIndex]="selectedTabIndex"
       (selectedIndexChange)="onSelectedTabIndexChange($event)"
-      class="mb-5"
+      class="mb-3"
       [dynamicHeight]="true"
     >
       @for (tab of orderedTabs; track tab.seq) {

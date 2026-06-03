@@ -40,7 +40,7 @@ interface UploadingInfo {
 export const ACCEPTED_TYPES = {
   document: {
     extensions: ['pdf', 'ps'],
-    // icon: 'fa-file-pdf-o',
+    // icon: 'picture_as_pdf',
     icon: 'article_outlined',
     name: 'PDF',
   },
@@ -57,14 +57,14 @@ export const ACCEPTED_TYPES = {
       'vb', 'sql', 'txt', 'md', 'jack', 'hack', 'asm', 'hdl', 'tst', 'out', 'cmp', 'vm', 'sh', 'bat',
       'dat', 'ipynb', 'pml', 'vue'
     ],
-    // icon: 'fa-file-code-o',
+    // icon: 'code',
     // icon: 'code',
     icon: 'integration_instructions_outlined',
     name: 'code',
   },
   image: {
     extensions: ['png', 'bmp', 'tiff', 'tif', 'jpeg', 'jpg', 'gif'],
-    // icon: 'fa-file-image-o',
+    // icon: 'image',
     icon: 'image_outlined',
     name: 'image',
   },

@@ -3,7 +3,7 @@
     <mat-card-title>Learning Summary Report</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p class="pt-5">
+    <p class="pt-3">
       Upload the Learning Summary Report, the primary porfolio document which justifies your desired
       grade.
     </p>
@@ -12,7 +12,7 @@
       <strong>summary of what you have learnt in this unit</strong>. It consists of two sections:
     </p>
 
-    <ol class="list-decimal list-inside space-y-2 ml-4 py-5">
+    <ol class="list-decimal list-inside space-y-1 ml-2.5 py-3">
       <li>a self-assessment, and</li>
       <li>your reflections on the unit.</li>
     </ol>
@@ -30,13 +30,13 @@
     @if (
       projectHasDraftLearningSummaryReport && !forceLSRSubmit && !acceptUploadNewLearningSummary
     ) {
-      <div class="flex flex-col justify-center items-center text-center max-w-4xl mx-auto py-5">
-        <div class="submitted flex justify-center items-center gap-5 text-center text-4xl py-5">
+      <div class="flex flex-col justify-center items-center text-center max-w-4xl mx-auto py-3">
+        <div class="submitted flex justify-center items-center gap-3 text-center text-2xl py-3">
           <mat-icon color="primary">check_circle</mat-icon>
           Learning Summary Report Submitted
         </div>
         @if (draftTaskDefinitionWasUsed()) {
-          <div class="w-full text-center text-gray-400 text-xl py-2 max-w-2xl">
+          <div class="w-full text-center text-gray-400 text-xs py-1 max-w-2xl">
             Your learning summary report was automatically submitted from your
             {{ unit.draftTaskDefinition.abbreviation }} {{ unit.draftTaskDefinition.name }}
             submission.
@@ -55,7 +55,7 @@
       "
     >
       <div
-        class="flex justify-center items-center gap-5 bg-yellow-200 border-yellow-500 p-4 rounded mx-auto"
+        class="flex justify-center items-center gap-3 bg-yellow-200 border-yellow-500 p-2.5 rounded mx-auto"
       >
         <mat-icon>warning</mat-icon>
 
@@ -70,9 +70,9 @@
       ></f-file-uploader>
     </div>
   </mat-card-content>
-  <mat-card-footer class="w-full flex justify-between p-5">
+  <mat-card-footer class="w-full flex justify-between p-3">
     <button mat-raised-button (click)="advanceActiveTab(-1)">Back</button>
-    <div class="flex justify-center items-center gap-5">
+    <div class="flex justify-center items-center gap-3">
       @if (!projectHasDraftLearningSummaryReport) {
         <div class="text-gray-400">
           You're missing a Learning Summary Report. Upload one to continue.

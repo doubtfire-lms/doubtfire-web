@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 .card {
   $card-height-lg: 500px;
   $card-height-md: $card-height-lg / 2;
@@ -7,7 +9,7 @@
   $card-header-padding: $card-body-padding $card-footer-padding;
 
   margin-bottom: $card-footer-padding;
-  background-color: darken(#fff, 0.75%);
+  background-color: color.adjust(#fff, $lightness: -0.75%);
   transition: box-shadow .25s;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
               0 1px 5px 0 rgba(0, 0, 0, 0.12),
@@ -23,7 +25,7 @@
     .card-heading {
       color: #fff;
       .text-muted {
-        color: darken(#fff, 1%);
+        color: color.adjust(#fff, $lightness: -1%);
       }
     }
   }

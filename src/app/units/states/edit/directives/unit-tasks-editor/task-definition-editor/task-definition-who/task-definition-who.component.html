@@ -10,7 +10,7 @@
 </mat-form-field>
 }
 
-<div class="flex flex-row gap-10">
+<div class="flex flex-row gap-6">
   <mat-form-field appearance="outline" class="basis-1/2">
     <mat-label>Tutorial Stream - Which tutor provides feedback?</mat-label>
     <mat-select
@@ -36,12 +36,12 @@
       }
 
       @if (!showAllTutorials && taskDefinition.tutorialStream?.tutorialsIn(unit)?.length > 3) {
-        <li class="mt-1">
+        <li class="mt-0.5">
           +{{ taskDefinition.tutorialStream.tutorialsIn(unit).length - 3 }} more tutorials
         </li>
       }
       @if (taskDefinition.tutorialStream?.tutorialsIn(unit).length > 3) {
-        <div class="mt-4">
+        <div class="mt-2.5">
           @if (!showAllTutorials) {
             <button mat-button color="primary" (click)="showAllTutorials = true">
               View all tutorials

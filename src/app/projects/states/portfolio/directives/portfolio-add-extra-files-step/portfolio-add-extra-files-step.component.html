@@ -3,15 +3,15 @@
     <mat-card-title>Upload Other Files</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <p class="py-5">
+    <p class="py-3">
       Now is your chance to upload any extra files to include in your portfolio. They'll appear at
       the very top of your portfolio, before your tasks.
     </p>
-    <div class="pb-5">
+    <div class="pb-3">
       <ol>
         @for (file of extraFiles; track file) {
-          <li class="flex items-center py-2 justify-between border-b-gray-100 border-b-2">
-            <div class="flex items-center justify-between gap-2">
+          <li class="flex items-center py-1 justify-between border-b-gray-100 border-b-2">
+            <div class="flex items-center justify-between gap-1">
               <mat-icon>{{ icons[file.kind] }}</mat-icon>
               {{ file.name }}
             </div>
@@ -45,7 +45,7 @@
     >
     </f-file-uploader>
   </mat-card-content>
-  <mat-card-footer class="w-full flex justify-between p-5">
+  <mat-card-footer class="w-full flex justify-between p-3">
     <button mat-raised-button (click)="advanceActiveTab(-1)">Back</button>
     <button mat-raised-button (click)="advanceActiveTab(1)" color="primary">Next</button>
   </mat-card-footer>

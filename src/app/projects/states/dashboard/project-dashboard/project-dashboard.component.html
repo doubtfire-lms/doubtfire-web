@@ -1,7 +1,7 @@
 <ng-template #TaskListSkeleton>
-  <div class="task-list-skeleton flex h-full flex-col p-2">
-    <div class="mb-3 rounded-2xl bg-white p-2">
-      <div class="flex items-center gap-3">
+  <div class="task-list-skeleton flex h-full flex-col p-1">
+    <div class="mb-2 rounded-2xl bg-white p-1">
+      <div class="flex items-center gap-2">
         <ngx-skeleton-loader
           appearance="circle"
           [theme]="{width: '32px', height: '32px', margin: '0'}"
@@ -16,7 +16,7 @@
     <div class="min-h-0 flex-1 overflow-hidden rounded-lg bg-white">
       @for (row of skeletonRows; track row) {
         <div
-          class="skeleton-task-row flex h-[65px] items-center gap-3 border-b border-gray-200 px-3"
+          class="skeleton-task-row flex h-[65px] items-center gap-2 border-b border-gray-200 px-2"
         >
           <div class="min-w-0 flex-1">
             <ngx-skeleton-loader
@@ -42,7 +42,7 @@
       @if (subs$ | async) {
         @if (isProjectTaskListReady(project)) {
           <f-unit-task-list
-            class="flex-none p-2 h-full min-h-0"
+            class="flex-none p-1 h-full min-h-0"
             [style.width.px]="leftWidth"
             #leftPanel
             [mode]="'project'"
@@ -70,18 +70,18 @@
         </div>
       }
       @if (selectedTaskDefinition$ | async; as selectedTaskDefinition) {
-        <div class="flex-1 p-2 bg-white rounded-lg">
+        <div class="flex-1 p-1 bg-white rounded-lg">
           <f-task-dashboard
             [task]="project.findTaskForDefinition(selectedTaskDefinition.id)"
           ></f-task-dashboard>
         </div>
-        <div #commentspanel class="flex-none w-1/4 p-2 bg-white rounded-lg">
+        <div #commentspanel class="flex-none w-1/4 p-1 bg-white rounded-lg">
           <task-comments-viewer [task]="project.findTaskForDefinition(selectedTaskDefinition.id)">
           </task-comments-viewer>
         </div>
       } @else if (!isProjectTaskListReady(project)) {
-        <div class="flex-1 p-2 min-h-0 overflow-y-auto">
-          <div class="dashboard-skeleton h-full rounded-lg bg-white p-4">
+        <div class="flex-1 p-1 min-h-0 overflow-y-auto">
+          <div class="dashboard-skeleton h-full rounded-lg bg-white p-2.5">
             <ngx-skeleton-loader
               [theme]="{
                 height: '28px',
@@ -99,7 +99,7 @@
           </div>
         </div>
       } @else {
-        <div class="flex-1 p-2 min-h-0 overflow-y-auto">
+        <div class="flex-1 p-1 min-h-0 overflow-y-auto">
           <f-progress-dashboard class="w-full" [project]="project"></f-progress-dashboard>
         </div>
       }

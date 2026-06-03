@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-16](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-15...v11.0.0-16) (2026-06-03)
+
+## [11.0.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-14...v11.0.0-15) (2026-06-03)
+
+
+### Bug Fixes
+
+* display past due date on same day ([cd47f5c](https://github.com/b0ink/doubtfire-deploy/commit/cd47f5c0e4c351e2421afd94647a1297b3b5ec75))
+* prevent reload of task list component when switching back to dashboard ([be780b1](https://github.com/b0ink/doubtfire-deploy/commit/be780b14bc875c05e1083353c6d447315bc179e7))
+
+## [11.0.0-14](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-13...v11.0.0-14) (2026-06-03)
+
+## [11.0.0-13](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-12...v11.0.0-13) (2026-06-03)
+
+## [11.0.0-12](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-11...v11.0.0-12) (2026-06-02)
+
+
+### Bug Fixes
+
+* correctly apply task tutorial filters ([924c267](https://github.com/b0ink/doubtfire-deploy/commit/924c2676c6739820cc066d046b7ace71ee2d2f9e))
+
 ## [11.0.0-11](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-10...v11.0.0-11) (2026-05-19)
 
 ## [11.0.0-10](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-9...v11.0.0-10) (2026-05-18)

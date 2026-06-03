@@ -1,8 +1,8 @@
-<div class="p-5">
+<div class="p-3">
   <h2>Mark portfolios</h2>
   <p>Assess student portfolios</p>
   <div class="flex justify-between items-center">
-    <div class="flex flex-row items-center justify-end gap-5">
+    <div class="flex flex-row items-center justify-end gap-3">
       <mat-form-field appearance="outline" class="mt-[22px]">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Eg. Student ID" #input />
@@ -70,7 +70,7 @@
       </mat-button-toggle-group>
     </div>
   </div>
-  <div class="flex gap-2 items-center justify-start mb-2">
+  <div class="flex gap-1 items-center justify-start mb-1">
     <button mat-button (click)="downloadGrades()">
       <mat-icon>download</mat-icon>Download Grades
     </button>
@@ -177,10 +177,10 @@
               matTooltipDelay="100"
             >
               @if (bar.key === 'not_started') {
-                <span class="text-black text-base"> {{ bar.value }}% </span>
+                <span class="text-black text-xs"> {{ bar.value }}% </span>
               }
               @if (bar.key === 'complete') {
-                <span class="text-white text-base"> {{ bar.value }}% </span>
+                <span class="text-white text-xs"> {{ bar.value }}% </span>
               }
             </div>
           }
@@ -212,7 +212,7 @@
     ></tr>
 
     <tr class="mat-row w-full" *matNoDataRow>
-      <td class="mat-cell w-full text-center p-5" colspan="4">No students found</td>
+      <td class="mat-cell w-full text-center p-3" colspan="4">No students found</td>
     </tr>
   </table>
 

@@ -1,5 +1,5 @@
 <div class="flex h-full w-full flex-col overflow-hidden">
-  <div class="z-10 flex w-full shrink-0 items-center gap-2">
+  <div class="z-10 flex w-full shrink-0 items-center gap-1">
     <mat-tab-group
       class="w-full"
       [(selectedIndex)]="currentIndex"
@@ -10,7 +10,7 @@
       <mat-tab label="Task Sheet" [disabled]="!task.definition.hasTaskSheet"></mat-tab>
       <mat-tab [disabled]="!task.hasPdf && !task.processingPdf">
         <ng-template mat-tab-label>
-          <span class="flex items-center gap-2">
+          <span class="flex items-center gap-1">
             Your Submission
             @if (task.processingPdf) {
               <mat-spinner diameter="16"></mat-spinner>
@@ -21,7 +21,7 @@
       @if (canAccessStaffViews) {
         <mat-tab>
           <ng-template mat-tab-label>
-            <span class="inline-flex items-center gap-2">
+            <span class="inline-flex items-center gap-1">
               Similarities
               @if (task.similaritiesDetected) {
                 <mat-icon class="text-red-500">warning</mat-icon>
@@ -32,11 +32,11 @@
         <mat-tab label="Overseer" [disabled]="!overseerEnabled"></mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
-            <span class="inline-flex items-center gap-2">
+            <span class="inline-flex items-center gap-1">
               Staff Notes
               @if (task.project.staffNoteCount) {
                 <span
-                  class="ml-1 inline-flex h-[22px] w-[22px] items-center justify-center rounded-full text-[12px] font-[600] p-0 leading-[22px] text-white"
+                  class="ml-0.5 inline-flex h-[22px] w-[22px] items-center justify-center rounded-full text-[12px] font-[600] p-0 leading-[22px] text-white"
                   style="background-color: #3939ff"
                 >
                   {{ task.project.staffNoteCount }}
@@ -81,7 +81,7 @@
   <div class="min-h-0 flex-1 overflow-auto">
     @switch (currentView) {
       @case (DashboardViews.details) {
-        <div class="flex flex-col gap-5 p-5">
+        <div class="flex flex-col gap-3 p-3">
           <f-task-ilos-card
             [taskDef]="task.definition"
             [iloContextType]="'TaskDefinition'"
@@ -115,9 +115,9 @@
       @case (DashboardViews.task) {
         @if (task && task.blockedByPrerequisiteTasks()) {
           <div
-            class="flex items-center text-center px-4 py-3 bg-yellow-100 border-l-4 border-r-4 border-yellow-500 text-yellow-700"
+            class="flex items-center text-center px-2.5 py-2 bg-yellow-100 border-l-4 border-r-4 border-yellow-500 text-yellow-700"
           >
-            <i class="fa fa-exclamation-triangle mr-2 fa-lg"></i>
+            <mat-icon class="mr-1">warning</mat-icon>
             Warning: This task has
             {{ task.definition.taskPrerequisitesCache.currentValues.length }} prerequisite{{
               task.definition.taskPrerequisitesCache.currentValues.length > 1 ? 's' : ''

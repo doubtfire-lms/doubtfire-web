@@ -67,6 +67,7 @@ export class Task extends Entity {
 
   project: Project;
   definition: TaskDefinition;
+  tutorialId: number;
 
   //TODO: map task submission details
   hasPdf: boolean = false;
@@ -524,7 +525,7 @@ export class Task extends Entity {
 
   public timeToDue(): string {
     const days = this.daysUntilDueDate();
-    if (days < 0) {
+    if (days <= 0) {
       return 'Past Due Date';
     } else if (days < 11) {
       return `Due in ${this.timeUntilDueDateDescription()}`;
@@ -704,7 +705,7 @@ export class Task extends Entity {
   }
 
   public statusIcon(): string {
-    return TaskStatus.STATUS_ICONS.get(this.status);
+    return TaskStatus.STATUS_MATERIAL_ICONS.get(this.status);
   }
 
   public statusClass(): string {

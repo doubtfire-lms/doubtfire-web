@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, first, of} from 'rxjs';
+import {Observable, first, of, tap} from 'rxjs';
 import {
   ProjectService,
   TaskDefinition,
@@ -45,6 +45,9 @@ type TaskSource = (
   standalone: false,
 })
 export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
+  private static readonly UNIT_REFRESH_INTERVAL_MS = 60_000;
+  private static readonly lastUnitFetchAt = new Map<number, number>();
+
   @Input() public unit$: Observable<Unit>;
   @Input() public routeMode: UnitTaskRouteMode = 'inbox';
 
@@ -103,8 +106,7 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     }
 
     this.unit$.pipe(first()).subscribe((routeUnit) => {
-      this.unitService
-        .fetch(routeUnit.id)
+      this.loadUnit(routeUnit.id)
         .pipe(first())
         .subscribe((unit) => this.loadInboxData(unit));
     });
@@ -127,6 +129,25 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     this.taskData.selectedTask = null;
     this.taskData.taskKey = null;
     this.selectedTaskService.setSelectedTask(null);
+  }
+
+  private loadUnit(unitId: number): Observable<Unit> {
+    if (this.shouldRefreshUnit(unitId)) {
+      return this.unitService
+        .fetch(unitId)
+        .pipe(tap(() => UnitTaskInboxStateComponent.lastUnitFetchAt.set(unitId, Date.now())));
+    }
+
+    return this.unitService.get(unitId);
+  }
+
+  private shouldRefreshUnit(unitId: number): boolean {
+    const lastFetchedAt = UnitTaskInboxStateComponent.lastUnitFetchAt.get(unitId);
+
+    return (
+      !lastFetchedAt ||
+      Date.now() - lastFetchedAt > UnitTaskInboxStateComponent.UNIT_REFRESH_INTERVAL_MS
+    );
   }
 
   private getTaskSource(): TaskSource {

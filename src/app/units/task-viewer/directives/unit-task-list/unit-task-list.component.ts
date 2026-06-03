@@ -1,3 +1,4 @@
+import {Location} from '@angular/common';
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Grade} from 'src/app/api/models/grade';
@@ -29,6 +30,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   protected gradeNames: string[] = Grade.GRADES;
 
   constructor(
+    private location: Location,
     private angularRouter: Router,
     private route: ActivatedRoute,
   ) {}
@@ -117,35 +119,10 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   setSelectedTaskDefinition(taskDef: TaskDefinition) {
     if (this.isSelectedTaskDefinition(taskDef)) {
       this.selectedTaskDefinition$.next(null);
-      const unitId = this.route.parent?.snapshot.paramMap.get('unitId');
-      if (this.route.parent?.snapshot.data.unit && unitId) {
-        this.angularRouter.navigate(['/units', this.route.parent.snapshot.paramMap.get('unitId'), 'tasks'], {
-          replaceUrl: true,
-        });
-        return;
-      }
-
-      const projectId = this.route.parent?.snapshot.paramMap.get('projectId');
-      if (this.route.parent?.snapshot.data.project && projectId) {
-        this.angularRouter.navigate(['/projects', projectId, 'dashboard'], {replaceUrl: true});
-      }
+      this.replaceSelectionUrl(null);
     } else {
       this.selectedTaskDefinition$.next(taskDef);
-      const unitId = this.route.parent?.snapshot.paramMap.get('unitId');
-      if (this.route.parent?.snapshot.data.unit && unitId) {
-        this.angularRouter.navigate(
-          ['/units', unitId, 'tasks', taskDef.abbreviation],
-          {replaceUrl: true},
-        );
-        return;
-      }
-
-      const projectId = this.route.parent?.snapshot.paramMap.get('projectId');
-      if (this.route.parent?.snapshot.data.project && projectId) {
-        this.angularRouter.navigate(['/projects', projectId, 'dashboard', taskDef.abbreviation], {
-          replaceUrl: true,
-        });
-      }
+      this.replaceSelectionUrl(taskDef);
     }
 
     // this.selectedTaskDefinition.emit(taskDef);
@@ -160,5 +137,36 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
 
   public isSelectedTaskDefinition(taskDef: TaskDefinition): boolean {
     return this.selectedTaskDef?.id === taskDef?.id;
+  }
+
+  private replaceSelectionUrl(taskDef: TaskDefinition | null): void {
+    const urlTree = this.buildSelectionUrlTree(taskDef);
+    if (!urlTree) {
+      return;
+    }
+
+    this.location.replaceState(this.angularRouter.serializeUrl(urlTree));
+  }
+
+  private buildSelectionUrlTree(taskDef: TaskDefinition | null) {
+    const unitId = this.route.parent?.snapshot.paramMap.get('unitId');
+    if (this.route.parent?.snapshot.data.unit && unitId) {
+      return this.angularRouter.createUrlTree(
+        taskDef
+          ? ['/units', unitId, 'tasks', taskDef.abbreviation]
+          : ['/units', unitId, 'tasks'],
+      );
+    }
+
+    const projectId = this.route.parent?.snapshot.paramMap.get('projectId');
+    if (this.route.parent?.snapshot.data.project && projectId) {
+      return this.angularRouter.createUrlTree(
+        taskDef
+          ? ['/projects', projectId, 'dashboard', taskDef.abbreviation]
+          : ['/projects', projectId, 'dashboard'],
+      );
+    }
+
+    return null;
   }
 }

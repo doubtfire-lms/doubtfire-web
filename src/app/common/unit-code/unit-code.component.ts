@@ -35,12 +35,20 @@ export class UnitCodeComponent implements OnInit, OnDestroy {
   constructor(private unitCodeService: UnitCodeService) {}
 
   get isDualBadge() {
-    return this.unit_code?.includes('/');
+    return this.unit_code?.includes('/') || this.unit_code?.includes('-');
   }
 
   get unitCodeParts() {
     if (this.shiftBetweenBadges) {
-      return this.isDualBadge ? this.unit_code.split('/') : [this.unit_code];
+      if (this.isDualBadge) {
+        if (this.unit_code.includes('/')) {
+          return this.unit_code.split('/');
+        } else {
+          return this.unit_code.split('-');
+        }
+      } else {
+        return [this.unit_code];
+      }
     }
     return this.unit_code;
   }
