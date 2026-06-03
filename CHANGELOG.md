@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-17](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-16...v11.0.0-17) (2026-06-03)
+
+
+### Features
+
+* support zip file submissions ([#1240](https://github.com/b0ink/doubtfire-deploy/issues/1240)) ([99d546f](https://github.com/b0ink/doubtfire-deploy/commit/99d546f1544feeab31fc6b2434e330b22544b56f))
+
 ## [11.0.0-16](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-15...v11.0.0-16) (2026-06-03)
 
 ## [11.0.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-14...v11.0.0-15) (2026-06-03)
