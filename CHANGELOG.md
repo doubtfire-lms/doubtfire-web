@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-19](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-18...v11.0.0-19) (2026-06-03)
+
+
+### Bug Fixes
+
+* ensure unit is fetched in unit task editor ([54b1cf0](https://github.com/b0ink/doubtfire-deploy/commit/54b1cf03ed662447e7027a61d084f62f2548c996))
+
 ## [11.0.0-18](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-17...v11.0.0-18) (2026-06-03)
 
 ## [11.0.0-17](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-16...v11.0.0-17) (2026-06-03)
