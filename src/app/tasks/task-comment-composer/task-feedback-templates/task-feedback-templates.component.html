@@ -56,10 +56,7 @@
                   <mat-icon matChipAvatar>check_circle</mat-icon>
                 }
                 @if (!isTemplateSelected(template) && template.taskStatus) {
-                  <i
-                    class="fa {{ taskService.statusData(template.taskStatus).icon }}"
-                    matChipAvatar
-                  ></i>
+                  <mat-icon matChipAvatar>{{ taskService.statusData(template.taskStatus).materialIcon }}</mat-icon>
                 }
                 @if (template.type === 'group' && !isGroupExpanded(template)) {
                   <mat-icon matChipAvatar>folder</mat-icon>
@@ -94,10 +91,7 @@
                   <mat-icon matChipAvatar>check_circle</mat-icon>
                 }
                 @if (!isTemplateSelected(template) && template.taskStatus) {
-                  <i
-                    class="fa {{ taskService.statusData(template.taskStatus).icon }}"
-                    matChipAvatar
-                  ></i>
+                  <mat-icon matChipAvatar>{{ taskService.statusData(template.taskStatus).materialIcon }}</mat-icon>
                 }
                 @if (template.type === 'group' && !isGroupExpanded(template)) {
                   <mat-icon matChipAvatar>folder</mat-icon>
@@ -132,10 +126,7 @@
                   <mat-icon matChipAvatar>check_circle</mat-icon>
                 }
                 @if (!isTemplateSelected(template) && template.taskStatus) {
-                  <i
-                    class="fa {{ taskService.statusData(template.taskStatus).icon }}"
-                    matChipAvatar
-                  ></i>
+                  <mat-icon matChipAvatar>{{ taskService.statusData(template.taskStatus).materialIcon }}</mat-icon>
                 }
                 @if (template.type === 'group' && !isGroupExpanded(template)) {
                   <mat-icon matChipAvatar>folder</mat-icon>

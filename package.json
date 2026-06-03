@@ -9,7 +9,7 @@
     "node": ">=20.9.0"
   },
   "scripts": {
-    "build": "run-s -l build:angular1 build:angular18",
+    "build": "ng build",
     "build:angular1": "grunt build",
     "build:angular18": "ng build",
     "lint:fix": "ng lint --fix",
@@ -18,7 +18,7 @@
     "start": "npm-run-all serve:angular18",
     "watch:angular1": "grunt delta",
     "deploy:build2api": "ng build --delete-output-path=true --optimization=true --configuration production --output-path dist",
-    "deploy": "run-s -l build:angular1 deploy:build2api",
+    "deploy": "run-s -l deploy:build2api",
     "prepare": "husky install",
     "test": "ng test",
     "test:ci": "ng test --karma-config=src/karma-ci.conf.js --no-progress"

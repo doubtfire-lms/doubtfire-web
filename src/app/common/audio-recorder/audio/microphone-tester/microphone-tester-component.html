@@ -7,7 +7,7 @@
         <h1>Step 1. Record some audio!</h1>
         <button type="button" id='btnRecord' (click)="recordingToggle()" class="btn-circle-xl">
           <p [hidden]="isRecording">record</p>
-          <i [hidden]="!isRecording" class="fa fa-square"></i>
+          <mat-icon [hidden]="!isRecording">stop</mat-icon>
         </button>
         <audio id='micTesterAudioPlayer'></audio>
       </div>

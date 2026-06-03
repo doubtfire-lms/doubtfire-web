@@ -12,3 +12,6 @@ span[role="slider"] {
 .rating-disabled {
   color: color.adjust($text-muted, $lightness: 30%);
 }
+.rating-star::before {
+  content: 'star';
+}

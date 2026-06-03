@@ -155,6 +155,13 @@
           & + .task-subscript-badge {
             margin-right: -3px;
           }
+          .material-icons,
+          mat-icon {
+            font-size: 12px;
+            height: 12px;
+            line-height: 12px;
+            width: 12px;
+          }
           &.grade-badge {
             background-color: #000000;
             font-size: 9px;

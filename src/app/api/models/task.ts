@@ -525,6 +525,7 @@ export class Task extends Entity {
 
   public timeToDue(): string {
     const days = this.daysUntilDueDate();
+    // TODO: check with <=
     if (days < 0) {
       return 'Past Due Date';
     } else if (days < 11) {
@@ -705,7 +706,7 @@ export class Task extends Entity {
   }
 
   public statusIcon(): string {
-    return TaskStatus.STATUS_ICONS.get(this.status);
+    return TaskStatus.STATUS_MATERIAL_ICONS.get(this.status);
   }
 
   public statusClass(): string {

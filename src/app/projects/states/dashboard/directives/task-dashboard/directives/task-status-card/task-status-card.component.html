@@ -14,10 +14,10 @@
         </mat-select-trigger>
         @for (trigger of triggers; track trigger) {
           <mat-option [value]="trigger.status">
-            <status-icon [status]="trigger.status" [showTooltip]="false"></status-icon>
-            <span style="display: inline-flex; margin-left: 10px"
-              ><h5>{{ trigger.label }}</h5></span
-            >
+            <div class="flex items-center">
+              <status-icon [status]="trigger.status" [showTooltip]="false"></status-icon>
+              <h5 class="m-0 ml-3">{{ trigger.label }}</h5>
+            </div>
           </mat-option>
         }
       </mat-select>

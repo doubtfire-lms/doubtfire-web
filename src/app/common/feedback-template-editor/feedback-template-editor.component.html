@@ -86,7 +86,9 @@
           >
             @if (feedbackTemplate.taskStatus) {
               <mat-chip>
-                <i class="fa {{ taskService.statusData(feedbackTemplate.taskStatus).icon }}"></i>
+                <mat-icon matChipAvatar>
+                  {{ taskService.statusData(feedbackTemplate.taskStatus).materialIcon }}
+                </mat-icon>
                 {{ taskService.statusData(feedbackTemplate.taskStatus).label }}
               </mat-chip>
             }

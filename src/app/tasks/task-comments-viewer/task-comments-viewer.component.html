@@ -174,7 +174,7 @@
                   *ngIf="!!comment.replyToId"
                 >
                   <p class="reply-text">
-                    <i class="fa fa-reply"></i>
+                    <mat-icon inline>reply</mat-icon>
                     {{ comment.originalComment ? comment.originalComment.text : 'comment removed' }}
                   </p>
                 </a>

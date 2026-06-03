@@ -2,6 +2,7 @@
 @use '@angular/material' as mat;
 @use '@worktile/gantt/styles/index';
 @use 'theme' as *;
+@use 'styles/common/typeface';
 
 @include mat.elevation-classes();
 @include mat.app-background();
@@ -11,6 +12,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+// Keep Angular's [hidden] bindings stronger than display utilities such as Tailwind's .flex.
+[hidden] {
+  display: none !important;
+}
 
 $main-view-top-padding: 30px;
 $main-view-bottom-padding: $main-view-top-padding;
