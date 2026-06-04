@@ -81,6 +81,7 @@ import {ConfirmationModalComponent} from './common/modals/confirmation-modal/con
 import {DiscussedInClassReasonModalComponent} from './common/modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.component';
 import {ExtensionModalComponent} from './common/modals/extension-modal/extension-modal.component';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
+import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
 import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-tasks-list.component';
 import {DiscussionPromptComposerComponent} from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
@@ -492,6 +493,7 @@ const GANTT_CHART_CONFIG = {
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
+    SubmissionFilesDownloadComponent,
     ProjectDashboardComponent,
     GradeIconComponent,
     GradeTaskModalComponent,

@@ -256,7 +256,7 @@ export class TaskStatus {
 
   // Material icons used by newer UI elements.
   public static readonly STATUS_MATERIAL_ICONS = new Map<TaskStatusEnum, string>([
-    ['ready_for_feedback', 'thumb_up_alt'],
+    ['ready_for_feedback', 'thumb_up_off_alt'],
     ['not_started', 'pause'],
     ['working_on_it', 'bolt'],
     ['need_help', 'help'],
@@ -268,7 +268,7 @@ export class TaskStatus {
     ['complete', 'done'],
     ['fail', 'close'],
     ['time_exceeded', 'schedule'],
-    ['assess_in_portfolio', 'folder_open'],
+    ['assess_in_portfolio', 'rate_review'],
     ['attention_required', 'sms_failed'],
   ]);
 

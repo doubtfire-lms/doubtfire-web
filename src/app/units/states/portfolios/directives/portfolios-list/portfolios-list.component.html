@@ -164,7 +164,7 @@
     <ng-container matColumnDef="stats" sticky>
       <th mat-header-cell *matHeaderCellDef>Stats</th>
       <td mat-cell *matCellDef="let project">
-        <div class="flex w-[150px] h-[25px] rounded overflow-hidden">
+        <div class="flex w-[400px] h-[25px] rounded overflow-hidden">
           @for (bar of project.taskStats; track bar) {
             <div
               class="h-[25px] overflow-hidden flex justify-center items-center"

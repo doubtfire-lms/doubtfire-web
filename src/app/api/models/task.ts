@@ -525,8 +525,7 @@ export class Task extends Entity {
 
   public timeToDue(): string {
     const days = this.daysUntilDueDate();
-    // TODO: check with <=
-    if (days < 0) {
+    if (days <= 0) {
       return 'Past Due Date';
     } else if (days < 11) {
       return `Due in ${this.timeUntilDueDateDescription()}`;

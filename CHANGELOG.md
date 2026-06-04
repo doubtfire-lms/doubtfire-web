@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-20](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-19...v11.0.0-20) (2026-06-04)
+
+## [11.0.0-19](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-18...v11.0.0-19) (2026-06-03)
+
+
+### Bug Fixes
+
+* ensure unit is fetched in unit task editor ([54b1cf0](https://github.com/b0ink/doubtfire-deploy/commit/54b1cf03ed662447e7027a61d084f62f2548c996))
+
+## [11.0.0-18](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-17...v11.0.0-18) (2026-06-03)
+
+## [11.0.0-17](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-16...v11.0.0-17) (2026-06-03)
+
+
+### Features
+
+* support zip file submissions ([#1240](https://github.com/b0ink/doubtfire-deploy/issues/1240)) ([99d546f](https://github.com/b0ink/doubtfire-deploy/commit/99d546f1544feeab31fc6b2434e330b22544b56f))
+
+## [11.0.0-16](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-15...v11.0.0-16) (2026-06-03)
+
+## [11.0.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-14...v11.0.0-15) (2026-06-03)
+
+
+### Bug Fixes
+
+* display past due date on same day ([cd47f5c](https://github.com/b0ink/doubtfire-deploy/commit/cd47f5c0e4c351e2421afd94647a1297b3b5ec75))
+* prevent reload of task list component when switching back to dashboard ([be780b1](https://github.com/b0ink/doubtfire-deploy/commit/be780b14bc875c05e1083353c6d447315bc179e7))
+
+## [11.0.0-14](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-13...v11.0.0-14) (2026-06-03)
+
+## [11.0.0-13](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-12...v11.0.0-13) (2026-06-03)
+
 ## [11.0.0-12](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-11...v11.0.0-12) (2026-06-02)
 
 

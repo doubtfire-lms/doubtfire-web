@@ -13,7 +13,7 @@ export class PortfolioAddExtraFilesStepComponent implements OnInit {
   @Input() project: Project;
   @Input() onAdvanceActiveTab?: (index: 1 | -1) => void;
 
-  public uploadType: 'document' | 'code' | 'image' = 'document';
+  public uploadType: 'document' | 'code' | 'image' | 'zip' = 'document';
 
   public isUploading: boolean;
 
