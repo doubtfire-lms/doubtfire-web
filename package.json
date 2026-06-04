@@ -73,7 +73,6 @@
     "ngx-lottie": "^11.0.2",
     "ngx-monaco-editor-v2": "^21",
     "ngx-skeleton-loader": "^12.0.0",
-    "npm": "^10.4.0",
     "nvd3": "1.8.6",
     "qrcode": "^1.5.4",
     "rxjs": "~7.8.2",
