@@ -103,6 +103,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   differ: KeyValueDiffer<string, any>;
   showEmojiPicker = false;
   emojiSearchMode = false;
+  // eslint-disable-next-line no-useless-escape
   emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;

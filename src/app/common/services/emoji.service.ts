@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
 import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
 import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {Injectable} from '@angular/core';
@@ -35,6 +34,7 @@ export class EmojiService {
     const emojiList: EmojiData[] = Object.values(this.emojiSearch.emojisList);
     let result = emojiList.find((e) => e.colons === emojiString)?.native;
     if (result === undefined) {
+      // eslint-disable-next-line no-useless-escape
       result = emojiString.replace(/\:/, '<><>');
     }
     return result;
@@ -53,6 +53,7 @@ export class EmojiService {
         return this.mapStringToEmoji(matched);
       });
     }
+    // eslint-disable-next-line no-useless-escape
     const result = s.replace(/\<\>\<\>/, ':');
     return result;
   }
