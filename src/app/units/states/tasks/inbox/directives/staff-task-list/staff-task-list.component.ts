@@ -673,7 +673,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const refreshOrdering = () => this.applyFilters();
-    task.pinned ? task.unpin(refreshOrdering) : task.pin(refreshOrdering);
+    if (task.pinned) {
+      task.unpin(refreshOrdering);
+    } else {
+      task.pin(refreshOrdering);
+    }
   }
 
   getWarningIcon(task: Task): 'warning' | 'overflow' | null {

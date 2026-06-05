@@ -133,7 +133,6 @@ export class StaffNotesComponent implements OnInit {
   public autoResizeStaffNoteEditor() {
     const el = this.staffNoteEditor.nativeElement;
     el.style.height = 'auto';
-    el.offsetHeight;
     el.style.height = el.scrollHeight + 'px';
   }
 

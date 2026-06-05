@@ -75,7 +75,11 @@ export class OverseerImageListComponent
   // to the datasource
   private pushToTable(value: OverseerImage | OverseerImage[]) {
     if (!value) return;
-    value instanceof Array ? this.overseerImages.push(...value) : this.overseerImages.push(value);
+    if (value instanceof Array) {
+      this.overseerImages.push(...value);
+    } else {
+      this.overseerImages.push(value);
+    }
     this.dataSource.sort = this.sort;
   }
 

@@ -631,7 +631,6 @@ export class Task extends Entity {
     }
 
     comments[comments.length - 1].shouldShowAvatar = true;
-    comments;
   }
 
   public taskKey(): {studentId: number; taskDefAbbr: string} {

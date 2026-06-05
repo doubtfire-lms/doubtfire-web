@@ -146,7 +146,11 @@ export class UnitTutorialsListComponent
   // to the datasource
   private pushToTable(value: Tutorial | Tutorial[]) {
     if (!value) return;
-    value instanceof Array ? this.tutorials.push(...value) : this.tutorials.push(value);
+    if (value instanceof Array) {
+      this.tutorials.push(...value);
+    } else {
+      this.tutorials.push(value);
+    }
     this.renderTable();
   }
 

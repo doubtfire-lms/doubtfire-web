@@ -62,7 +62,6 @@ export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
 
     this.sidekiqJobService.getSidekiqJob(this.data.jobId).subscribe({
       next: (job) => {
-        this.sidekiqJobService.sidekiqJobsSubject;
         this.sidekiqJobService.setJob(job.id, this.data.title, this.data.subject, job);
         this.job = job;
         this.pollFailureCount = 0;

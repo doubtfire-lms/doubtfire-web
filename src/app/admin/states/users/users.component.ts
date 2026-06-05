@@ -95,9 +95,9 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
       error_string += error.message + '\n';
     });
 
-    max_full_errors > num_errors
-      ? (error_string += `... and ${max_full_errors - num_errors} more`)
-      : null;
+    if (num_errors > max_full_errors) {
+      error_string += `... and ${num_errors - max_full_errors} more`;
+    }
     this.alerts.error(error_string);
 
     this.userService.query();

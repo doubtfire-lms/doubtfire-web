@@ -161,7 +161,6 @@ export class TutorNotesComponent implements OnInit {
   public autoResizeTutorNoteEditor() {
     const el = this.tutorNoteEditor.nativeElement;
     el.style.height = 'auto';
-    el.offsetHeight;
     el.style.height = el.scrollHeight + 'px';
   }
 

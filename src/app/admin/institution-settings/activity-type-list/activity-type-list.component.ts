@@ -58,7 +58,11 @@ export class ActivityTypeListComponent
   // to the datasource
   private pushToTable(value: ActivityType | ActivityType[]) {
     if (!value) return;
-    value instanceof Array ? this.activityTypes.push(...value) : this.activityTypes.push(value);
+    if (value instanceof Array) {
+      this.activityTypes.push(...value);
+    } else {
+      this.activityTypes.push(value);
+    }
     this.dataSource.sort = this.sort;
     this.table.renderRows();
   }

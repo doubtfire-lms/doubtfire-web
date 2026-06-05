@@ -61,7 +61,11 @@ export class CampusListComponent extends EntityFormComponent<Campus> implements 
   private pushToTable(value: Campus | Campus[]) {
     if (!value) return;
 
-    value instanceof Array ? this.campuses.push(...value) : this.campuses.push(value);
+    if (value instanceof Array) {
+      this.campuses.push(...value);
+    } else {
+      this.campuses.push(value);
+    }
     this.dataSource.sort = this.sort;
   }
 
