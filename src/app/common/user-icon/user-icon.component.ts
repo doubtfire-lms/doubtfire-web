@@ -122,7 +122,7 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
     // clear svg
     d3.select(this.svg?.nativeElement).selectAll('*').remove();
     // if this.unselected is undefined or true
-    if (!this.unselected == null || this.unselected) {
+    if (this.unselected) {
       if (this.svg?.nativeElement) {
         // hide div from DOM (but don't remove it)
         this.svg.nativeElement.style.display = 'none';
