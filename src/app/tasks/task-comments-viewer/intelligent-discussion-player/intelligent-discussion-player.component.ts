@@ -164,14 +164,13 @@ export class IntelligentDiscussionDialog {
     this.guide.text = 'Listening to prompt';
     this.data.audioRef.load();
     this.data.audioRef.play();
-    const _this = this;
     this.data.audioRef.addEventListener('ended', () => {
       setTimeout(() => {
         const audio = new Audio();
         audio.src = '/assets/sounds/discussion-start-signal.wav';
         audio.load();
         audio.play();
-        _this.guide.text = 'Start responding';
+        this.guide.text = 'Start responding';
       }, 400);
     });
   }

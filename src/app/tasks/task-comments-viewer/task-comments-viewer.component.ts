@@ -57,9 +57,8 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
     private commentsModalRef: CommentsModalService,
     private alerts: AlertService,
   ) {
-    const self = this;
     this.commentAddedSub = this.taskCommentService.commentAdded$.subscribe((tc: TaskComment) => {
-      self.scrollDown();
+      this.scrollDown();
     });
 
     this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
@@ -169,9 +168,8 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   }
 
   scrollDown() {
-    const component: TaskCommentsViewerComponent = this;
     setTimeout(() => {
-      const element = component.commentsBody.nativeElement;
+      const element = this.commentsBody.nativeElement;
       element.scrollTop = element.scrollHeight;
     }, 50);
   }
@@ -220,8 +218,6 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
 
   // # Upload image files as comments to a given task
   postAttachmentComment(file) {
-    const self: TaskCommentsViewerComponent = this;
-
     this.taskCommentService.addComment(this.task, file, 'file', null).subscribe(
       (tc: TaskComment) => {},
       (error: any) => {
