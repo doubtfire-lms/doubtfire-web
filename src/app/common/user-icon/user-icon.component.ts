@@ -2,7 +2,7 @@ import {User, UserService} from 'src/app/api/models/doubtfire-model';
 import {Md5} from 'ts-md5/dist/md5';
 import {AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 
-declare var d3: any;
+declare const d3: any;
 
 @Component({
   selector: 'user-icon',

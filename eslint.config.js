@@ -72,7 +72,6 @@ module.exports = tseslint.config(
           varsIgnorePattern: '^_',
         },
       ],
-      'no-var': 'off',
       'prettier/prettier': 'warn',
     },
   },
