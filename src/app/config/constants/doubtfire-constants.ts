@@ -28,7 +28,7 @@ interface SignOutUrlResponseFormat {
 export class DoubtfireConstants {
   private http: HttpClient;
 
-  public mainContributors: ReadonlyArray<string> = [
+  public mainContributors: readonly string[] = [
     'macite', // Andrew Cain
     'alexcu', // Alex Cummaudo
     'jakerenzella', // Jake Renzella
