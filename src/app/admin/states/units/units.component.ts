@@ -11,7 +11,7 @@ import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute} from '@angular/router';
 import {CreateNewUnitModal} from '../../modals/create-new-unit-modal/create-new-unit-modal.component';
 
-type IUnitOrProject = {
+interface IUnitOrProject {
   id: number;
   unit_code: string;
   code: string;
@@ -27,7 +27,7 @@ type IUnitOrProject = {
   matchesTutorialEnrolments?: (filter: string) => boolean;
   matchesGroup?: (filter: string) => boolean;
   matches: (filter: string) => boolean;
-};
+}
 
 @Component({
   selector: 'f-units',
