@@ -74,7 +74,6 @@ module.exports = tseslint.config(
           varsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/no-wrapper-object-types': 'off',
       'no-constant-binary-expression': 'off',
       'no-var': 'off',
       'prefer-const': 'off',

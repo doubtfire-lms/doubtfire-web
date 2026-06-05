@@ -90,7 +90,7 @@ export class FileDropComponent {
               if (data.type == HttpEventType.Response) {
                 if (data.ok) {
                   this.alert.success(`File uploaded successfully`);
-                  this.uploadSuccess.emit(data as HttpResponse<Object>);
+                  this.uploadSuccess.emit(data as HttpResponse<object>);
                 }
               }
             },
