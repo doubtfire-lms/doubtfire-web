@@ -1,5 +1,5 @@
 export class ScormDataModel {
-  dataModel: {[key: string]: any} = {};
+  dataModel: Record<string, any> = {};
   readonly msgPrefix = 'SCORM DataModel: ';
 
   constructor() {
@@ -16,7 +16,7 @@ export class ScormDataModel {
     return this.dataModel[key] ?? '';
   }
 
-  public dump(): {[key: string]: any} {
+  public dump(): Record<string, any> {
     return this.dataModel;
   }
 

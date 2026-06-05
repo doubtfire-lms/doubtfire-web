@@ -20,7 +20,7 @@ export class TaskDropdownComponent {
   @Input() currentView: ViewType;
   @Input() unitRole: UnitRole;
 
-  taskToShortName: {[key: string]: string} = {
+  taskToShortName: Record<string, string> = {
     'Portfolio Creation': 'Portfolio',
     'Staff Tasks': 'Staff Tasks',
     'Student Groups': 'Groups',

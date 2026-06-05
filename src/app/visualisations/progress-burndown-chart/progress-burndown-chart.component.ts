@@ -43,7 +43,7 @@ export class ProgressBurndownChartComponent
   yScaleMin: number = 0;
   yScaleMax: number = 100;
 
-  private seriesVisibility: {[key: string]: boolean} = {};
+  private seriesVisibility: Record<string, boolean> = {};
 
   constructor(public viewContainerRef: ViewContainerRef) {
     super(viewContainerRef);

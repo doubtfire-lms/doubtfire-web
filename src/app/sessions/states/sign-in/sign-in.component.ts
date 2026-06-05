@@ -9,9 +9,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 // Add fallback to check url for query parameters
-interface IParams {
-  [key: string]: string;
-}
+type IParams = Record<string, string>;
 
 const paramReducer = (params: IParams, pair: string): IParams => {
   const [key, value] = `${pair}=`.split('=').map(decodeURIComponent);

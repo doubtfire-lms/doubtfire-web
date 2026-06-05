@@ -6,9 +6,7 @@ export interface CsvUploadFileSpec {
   type: string;
 }
 
-export interface CsvUploadFileMap {
-  [uploadName: string]: CsvUploadFileSpec;
-}
+export type CsvUploadFileMap = Record<string, CsvUploadFileSpec>;
 
 export interface CsvUploadModalData {
   title: string;
