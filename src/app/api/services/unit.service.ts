@@ -20,6 +20,7 @@ import {GroupService} from './group.service';
 import {Observable} from 'rxjs';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {MappingFunctions} from './mapping-fn';
 
 export type IloStats = {
   median: number;
@@ -115,27 +116,21 @@ export class UnitService extends CachedEntityService<Unit> {
         toEntityFn: (data, key, entity, params?) => {
           return new Date(data[key]);
         },
-        toJsonFn: (entity, key) => {
-          return entity.startDate.toISOString().slice(0, 10);
-        },
+        toJsonFn: MappingFunctions.mapDayToJson,
       },
       {
         keys: 'endDate',
         toEntityFn: (data, key, entity, params?) => {
           return new Date(data[key]);
         },
-        toJsonFn: (entity, key) => {
-          return entity.endDate.toISOString().slice(0, 10);
-        },
+        toJsonFn: MappingFunctions.mapDayToJson,
       },
       {
         keys: 'portfolioAutoGenerationDate',
         toEntityFn: (data, key, entity, params?) => {
           return new Date(data[key]);
         },
-        toJsonFn: (entity, key) => {
-          return entity.portfolioAutoGenerationDate?.toISOString().slice(0, 10);
-        },
+        toJsonFn: MappingFunctions.mapDayToJson,
       },
       'assessmentEnabled',
       // 'overseerImageId',
