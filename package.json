@@ -93,7 +93,7 @@
     "@angular/language-service": "^21.2.11",
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20",
-    "@types/angular": "1.5.11",
+    "@types/angular": "1.8.9",
     "@types/canvas-confetti": "^1.6.0",
     "@types/d3": "^3.5.17",
     "@types/file-saver": "^2.0.1",
