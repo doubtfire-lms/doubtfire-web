@@ -1,6 +1,6 @@
 import {Campus, CampusService, Project, Unit} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
 
 @Component({
@@ -9,7 +9,7 @@ import {MatSelectChange} from '@angular/material/select';
   styleUrls: ['student-campus-select.component.scss'],
   standalone: false,
 })
-export class StudentCampusSelectComponent implements OnInit {
+export class StudentCampusSelectComponent implements OnChanges, OnInit {
   @Input() unit: Unit;
   @Input() student: Project;
   @Input() update: boolean;

@@ -1,7 +1,7 @@
 import {Campus, CampusService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -12,7 +12,7 @@ import {MatTable, MatTableDataSource} from '@angular/material/table';
   styleUrls: ['campus-list.component.scss'],
   standalone: false,
 })
-export class CampusListComponent extends EntityFormComponent<Campus> {
+export class CampusListComponent extends EntityFormComponent<Campus> implements AfterViewInit {
   @ViewChild(MatTable, {static: true}) table: MatTable<Campus>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 

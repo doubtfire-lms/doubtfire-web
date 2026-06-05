@@ -1,5 +1,5 @@
 import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
-import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'f-task-visualisation',
@@ -7,7 +7,7 @@ import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
   styleUrls: ['./task-visualisation.component.scss'],
   standalone: false,
 })
-export class TaskVisualisationComponent implements OnInit {
+export class TaskVisualisationComponent implements OnChanges, OnInit {
   @Input() project: Project;
   @Input() grade: number;
 

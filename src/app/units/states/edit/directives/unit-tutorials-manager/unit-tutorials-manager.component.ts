@@ -5,7 +5,7 @@ import {
   Unit,
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'unit-tutorials-manager',
@@ -13,7 +13,7 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['unit-tutorials-manager.component.scss'],
   standalone: false,
 })
-export class UnitTutorialsManagerComponent {
+export class UnitTutorialsManagerComponent implements OnInit {
   @Input() unit: Unit;
 
   activityTypes: ActivityType[] = new Array<ActivityType>();

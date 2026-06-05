@@ -1,6 +1,6 @@
 import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
 import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
-import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'f-task-status-pie-chart',
@@ -8,7 +8,7 @@ import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
   styleUrls: ['./task-status-pie-chart.component.scss'],
   standalone: false,
 })
-export class TaskStatusPieChartComponent extends ChartBaseComponent implements OnInit {
+export class TaskStatusPieChartComponent extends ChartBaseComponent implements OnChanges, OnInit {
   @Input() project: Project;
   @Input() grade: number;
 

@@ -2,7 +2,7 @@ import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfir
 import {BaseAudioRecorderComponent} from 'src/app/common/audio-recorder/audio/base-audio-recorder';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
-import {Component, ElementRef, Inject, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, Input, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'discussion-prompt-composer',
@@ -11,7 +11,10 @@ import {Component, ElementRef, Inject, Input, ViewChild} from '@angular/core';
   providers: [MediaRecorderService],
   standalone: false,
 })
-export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponent {
+export class DiscussionPromptComposerComponent
+  extends BaseAudioRecorderComponent
+  implements AfterViewInit
+{
   @Input() task: Task;
 
   @ViewChild('discussionPromptComposerCanvas', {static: true}) canvasRef: ElementRef;

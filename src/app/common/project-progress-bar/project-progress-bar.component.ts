@@ -1,4 +1,4 @@
-import {Component, Input, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'f-project-progress-bar',
@@ -6,7 +6,7 @@ import {Component, Input, SimpleChanges} from '@angular/core';
   styleUrls: ['./project-progress-bar.component.scss'],
   standalone: false,
 })
-export class ProjectProgressBarComponent {
+export class ProjectProgressBarComponent implements OnChanges {
   @Input() progress: any[];
   public percentProgress: number = 0;
 

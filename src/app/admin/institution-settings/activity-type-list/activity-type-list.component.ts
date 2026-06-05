@@ -1,7 +1,7 @@
 import {ActivityType, ActivityTypeService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -12,7 +12,10 @@ import {MatTable, MatTableDataSource} from '@angular/material/table';
   styleUrls: ['activity-type-list.component.scss'],
   standalone: false,
 })
-export class ActivityTypeListComponent extends EntityFormComponent<ActivityType> {
+export class ActivityTypeListComponent
+  extends EntityFormComponent<ActivityType>
+  implements AfterViewInit
+{
   @ViewChild(MatTable, {static: true}) table: MatTable<any>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 

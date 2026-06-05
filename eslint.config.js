@@ -57,7 +57,6 @@ module.exports = tseslint.config(
     rules: {
       '@angular-eslint/prefer-inject': 'off',
       '@angular-eslint/prefer-standalone': 'off',
-      '@angular-eslint/use-lifecycle-interface': 'off',
       '@typescript-eslint/consistent-generic-constructors': 'off',
       '@typescript-eslint/consistent-indexed-object-style': 'off',
       '@typescript-eslint/consistent-type-assertions': 'off',
