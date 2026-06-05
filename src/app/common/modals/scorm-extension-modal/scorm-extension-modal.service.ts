@@ -10,14 +10,15 @@ export class ScormExtensionModalService {
   constructor(public dialog: MatDialog) {}
 
   public show(task: Task, afterApplication?: any) {
-    let dialogRef: MatDialogRef<ScormExtensionModalComponent, any>;
-
-    dialogRef = this.dialog.open(ScormExtensionModalComponent, {
-      data: {
-        task,
-        afterApplication,
+    const dialogRef: MatDialogRef<ScormExtensionModalComponent, any> = this.dialog.open(
+      ScormExtensionModalComponent,
+      {
+        data: {
+          task,
+          afterApplication,
+        },
       },
-    });
+    );
 
     dialogRef.afterOpened().subscribe((result: any) => {});
 

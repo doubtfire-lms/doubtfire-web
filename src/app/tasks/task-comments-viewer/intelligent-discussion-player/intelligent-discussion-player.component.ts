@@ -51,17 +51,18 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   }
 
   beginDiscussion(): void {
-    let dialogRef: MatDialogRef<IntelligentDiscussionDialog, any>;
-
-    dialogRef = this.dialog.open(IntelligentDiscussionDialog, {
-      data: {
-        dc: this.discussion,
-        task: this.task,
-        audioRef: this.audioPlayer.audio,
+    const dialogRef: MatDialogRef<IntelligentDiscussionDialog, any> = this.dialog.open(
+      IntelligentDiscussionDialog,
+      {
+        data: {
+          dc: this.discussion,
+          task: this.task,
+          audioRef: this.audioPlayer.audio,
+        },
+        maxWidth: '800px',
+        disableClose: true,
       },
-      maxWidth: '800px',
-      disableClose: true,
-    });
+    );
 
     dialogRef.afterOpened().subscribe((result: any) => {});
 

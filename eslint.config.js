@@ -73,7 +73,6 @@ module.exports = tseslint.config(
         },
       ],
       'no-var': 'off',
-      'prefer-const': 'off',
       'prettier/prettier': 'warn',
     },
   },

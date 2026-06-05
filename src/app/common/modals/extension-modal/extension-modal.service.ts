@@ -10,14 +10,15 @@ export class ExtensionModalService {
   constructor(public dialog: MatDialog) {}
 
   public show(task: Task, afterApplication?: any) {
-    let dialogRef: MatDialogRef<ExtensionModalComponent, any>;
-
-    dialogRef = this.dialog.open(ExtensionModalComponent, {
-      data: {
-        task,
-        afterApplication,
+    const dialogRef: MatDialogRef<ExtensionModalComponent, any> = this.dialog.open(
+      ExtensionModalComponent,
+      {
+        data: {
+          task,
+          afterApplication,
+        },
       },
-    });
+    );
 
     dialogRef.afterOpened().subscribe((result: any) => {});
 
