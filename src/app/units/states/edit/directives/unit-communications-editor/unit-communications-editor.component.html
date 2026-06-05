@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-4">
   <div>
-    <p>The current week for this unit is {{ currentUnitWeek }}</p>
+    <p>Current unit week: {{ currentUnitWeek <= 0 ? 'Not started' : currentUnitWeek }}</p>
   </div>
   <div class="flex flex-wrap items-center gap-3">
     <button mat-flat-button color="primary" (click)="addSet()">
