@@ -59,8 +59,6 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
     }
   }
 
-  ngAfterViewInit() {}
-
   /**
    * Cancel edit of current selected value.
    */

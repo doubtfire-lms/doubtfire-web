@@ -5,7 +5,7 @@ import {
   TaskAssessmentResult,
   TaskSubmissionService,
 } from 'src/app/common/services/task-submission.service';
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input} from '@angular/core';
 
 export interface User {
   id: number;
@@ -39,7 +39,7 @@ export interface TaskAssessmentComment {
   styleUrls: ['./task-assessment-comment.component.scss'],
   standalone: false,
 })
-export class TaskAssessmentCommentComponent implements OnInit {
+export class TaskAssessmentCommentComponent {
   @Input() task: Task;
   @Input() comment: TaskAssessmentComment;
 
@@ -52,10 +52,6 @@ export class TaskAssessmentCommentComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handleError(error: any) {
     this.alerts.error('Error: ' + error, 6000);
-  }
-
-  ngOnInit() {
-    // this.update();
   }
 
   get message() {

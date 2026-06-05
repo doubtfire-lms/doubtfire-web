@@ -28,8 +28,6 @@ export class IntelligentDiscussionRecorderComponent
     super(mediaRecorderService);
   }
 
-  ngOnInit() {}
-
   ngAfterViewInit() {
     if (this.canRecord) {
       this.init();

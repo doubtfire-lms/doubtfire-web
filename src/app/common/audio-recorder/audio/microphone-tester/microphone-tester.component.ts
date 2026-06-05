@@ -25,9 +25,6 @@ export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implem
     }
   }
 
-  // We need to override default behaviour of the parent class.
-  ngOnInit() {}
-
   init(): void {
     super.init();
     this.canvas = document.getElementById('micTesterVisualiser') as HTMLCanvasElement;

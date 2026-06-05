@@ -1,6 +1,6 @@
 import {ScormExtensionComment, Task, TaskComment} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'f-scorm-extension-comment',
@@ -8,7 +8,7 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./scorm-extension-comment.component.scss'],
   standalone: false,
 })
-export class ScormExtensionCommentComponent implements OnInit {
+export class ScormExtensionCommentComponent {
   @Input() comment: ScormExtensionComment;
   @Input() task: Task;
 
@@ -17,8 +17,6 @@ export class ScormExtensionCommentComponent implements OnInit {
   private handleError(error: any) {
     this.alerts.error('Error: ' + error.data.error, 6000);
   }
-
-  ngOnInit() {}
 
   get message() {
     const studentName = this.comment.author.name;

@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input} from '@angular/core';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 
 @Component({
@@ -7,14 +7,12 @@ import {FileDownloaderService} from '../file-downloader/file-downloader.service'
   styleUrls: ['./pdf-viewer-panel.component.scss'],
   standalone: false,
 })
-export class PdfViewerPanelComponent implements OnInit {
+export class PdfViewerPanelComponent {
   @Input() pdfUrl: string;
   @Input() footerText: string;
   @Input() resourcesUrl: string;
   @Input() hideFooter: boolean;
   constructor(@Inject(FileDownloaderService) private fileDownloader: FileDownloaderService) {}
-
-  ngOnInit(): void {}
 
   downloadPdf() {
     this.fileDownloader.downloadFile(this.pdfUrl + '?as_attachment=true', 'displayed-pdf.pdf');

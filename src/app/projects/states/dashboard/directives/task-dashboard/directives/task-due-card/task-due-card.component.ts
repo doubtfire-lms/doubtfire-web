@@ -1,5 +1,5 @@
 import {Task} from 'src/app/api/models/task';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'f-task-due-card',
@@ -7,11 +7,9 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./task-due-card.component.scss'],
   standalone: false,
 })
-export class TaskDueCardComponent implements OnInit {
+export class TaskDueCardComponent {
   @Input() task: Task;
   constructor() {}
-
-  ngOnInit(): void {}
 
   public get flexibleDatesEnabled(): boolean {
     return this.task?.unit?.allowFlexibleDates;

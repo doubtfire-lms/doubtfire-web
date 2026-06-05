@@ -55,9 +55,6 @@ module.exports = tseslint.config(
     // Override specific rules for TypeScript files (these will take priority over the extended configs above)
     // TODO: go through each rule and remove each one and fix
     rules: {
-      '@angular-eslint/component-selector': 'off',
-      '@angular-eslint/directive-selector': 'off',
-      '@angular-eslint/no-empty-lifecycle-method': 'off',
       '@angular-eslint/prefer-inject': 'off',
       '@angular-eslint/prefer-standalone': 'off',
       '@angular-eslint/use-lifecycle-interface': 'off',

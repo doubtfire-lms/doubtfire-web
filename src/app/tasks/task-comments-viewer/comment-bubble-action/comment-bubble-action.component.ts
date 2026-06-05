@@ -1,6 +1,6 @@
 import {TaskComment} from 'src/app/api/models/doubtfire-model';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {TaskCommentComposerData} from '../../task-comment-composer/task-comment-composer.component';
 
 @Component({
@@ -9,12 +9,11 @@ import {TaskCommentComposerData} from '../../task-comment-composer/task-comment-
   styleUrls: ['./comment-bubble-action.component.scss'],
   standalone: false,
 })
-export class CommentBubbleActionComponent implements OnInit {
+export class CommentBubbleActionComponent {
   @Input() comment: TaskComment;
   @Input() sharedData: TaskCommentComposerData;
 
   constructor(private confirmationModalService: ConfirmationModalService) {}
-  ngOnInit() {}
 
   reply() {
     this.sharedData.editingComment = null;

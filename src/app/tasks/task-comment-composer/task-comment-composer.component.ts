@@ -78,7 +78,7 @@ const ACCEPTED_FILE_TYPES = [
   ],
   standalone: false,
 })
-export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCheck, OnChanges {
+export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnChanges {
   @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
 
@@ -131,8 +131,6 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       console.error('Error loading submitted tasks:', e);
     }
   }
-
-  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
     this.showFeedbackTemplatePicker = false;
@@ -792,11 +790,9 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
   standalone: false,
 })
-export class DiscussionComposerDialog implements OnInit {
+export class DiscussionComposerDialog {
   constructor(
     public dialogRef: MatDialogRef<DiscussionComposerDialog>,
     @Inject(MAT_DIALOG_DATA) public data: {task: Task},
   ) {}
-
-  ngOnInit() {}
 }

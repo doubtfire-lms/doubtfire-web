@@ -78,7 +78,7 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   providers: [IntelligentDiscussionPlayerService],
   standalone: false,
 })
-export class IntelligentDiscussionDialog implements OnInit {
+export class IntelligentDiscussionDialog {
   confirmed = false;
   timerText: string = '15m:00s';
   ticks: number = 0;
@@ -104,8 +104,6 @@ export class IntelligentDiscussionDialog implements OnInit {
       audioRef: HTMLAudioElement;
     },
   ) {}
-
-  ngOnInit() {}
 
   disableTester() {
     this.testRecorder.stopRecording();

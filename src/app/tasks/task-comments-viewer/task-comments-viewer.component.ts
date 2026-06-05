@@ -17,7 +17,6 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -29,7 +28,7 @@ import {TaskCommentComposerData} from '../task-comment-composer/task-comment-com
   styleUrls: ['./task-comments-viewer.component.scss'],
   standalone: false,
 })
-export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy {
+export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   // Get the comments body from the HTML template
   @ViewChild('commentsBody') commentsBody: ElementRef;
 
@@ -69,8 +68,6 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
       }
     });
   }
-
-  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.taskStatusSub?.unsubscribe();

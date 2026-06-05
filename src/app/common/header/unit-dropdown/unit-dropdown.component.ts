@@ -1,6 +1,6 @@
 import {MediaObserver} from 'ng-flex-layout';
 import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'unit-dropdown',
@@ -8,7 +8,7 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./unit-dropdown.component.scss'],
   standalone: false,
 })
-export class UnitDropdownComponent implements OnInit {
+export class UnitDropdownComponent {
   @Input() unitRoles: UnitRole[];
   @Input() projects: Project[];
   @Input() unit: Unit;
@@ -16,6 +16,4 @@ export class UnitDropdownComponent implements OnInit {
   unitTitle: string;
 
   constructor(public media: MediaObserver) {}
-
-  ngOnInit(): void {}
 }

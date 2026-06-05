@@ -1,7 +1,7 @@
 import {Task, TaskComment} from 'src/app/api/models/doubtfire-model';
 import {ExtensionComment} from 'src/app/api/models/task-comment/extension-comment';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'extension-comment',
@@ -9,7 +9,7 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./extension-comment.component.scss'],
   standalone: false,
 })
-export class ExtensionCommentComponent implements OnInit {
+export class ExtensionCommentComponent {
   @Input() comment: ExtensionComment;
   @Input() task: Task;
 
@@ -18,8 +18,6 @@ export class ExtensionCommentComponent implements OnInit {
   private handleError(error: any) {
     this.alerts.error('Error: ' + error.data.error, 6000);
   }
-
-  ngOnInit() {}
 
   get message() {
     const studentName = this.comment.author.name;
