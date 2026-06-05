@@ -22,9 +22,7 @@
       <mat-spinner [diameter]="56"></mat-spinner>
     </div>
   } @else if (errorMessage) {
-    <div
-      class="flex h-full min-h-[300px] w-full items-center justify-center text-xs text-red-700"
-    >
+    <div class="flex h-full min-h-[300px] w-full items-center justify-center text-xs text-red-700">
       {{ errorMessage }}
     </div>
   } @else if (compareMode) {
@@ -37,7 +35,7 @@
               [ngTemplateOutletContext]="{
                 number: data.assessmentNumber,
                 isMostRecent: data.assessmentIsMostRecent,
-                timestamp: data.assessment.timestamp
+                timestamp: data.assessment.timestamp,
               }"
             ></ng-container>
             <f-archive-viewer
@@ -58,7 +56,7 @@
               [ngTemplateOutletContext]="{
                 number: data.comparedWithNumber,
                 isMostRecent: data.comparedWithIsMostRecent,
-                timestamp: data.comparedWith?.timestamp
+                timestamp: data.comparedWith?.timestamp,
               }"
             ></ng-container>
             @if (primaryArchiveParsed) {
@@ -110,14 +108,14 @@
                 [ngTemplateOutlet]="selectedFilePreviewPane"
                 [ngTemplateOutletContext]="{
                   file: primarySelectedFile,
-                  editorOptions: primarySingleEditorOptions
+                  editorOptions: primarySingleEditorOptions,
                 }"
               ></ng-container>
               <ng-container
                 [ngTemplateOutlet]="selectedFilePreviewPane"
                 [ngTemplateOutletContext]="{
                   file: comparedSelectedFile,
-                  editorOptions: comparedSingleEditorOptions
+                  editorOptions: comparedSingleEditorOptions,
                 }"
               ></ng-container>
             </div>
@@ -138,7 +136,7 @@
         [ngTemplateOutletContext]="{
           number: data.assessmentNumber,
           isMostRecent: data.assessmentIsMostRecent,
-          timestamp: data.assessment.timestamp
+          timestamp: data.assessment.timestamp,
         }"
       ></ng-container>
       <f-archive-viewer

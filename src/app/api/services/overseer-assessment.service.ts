@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
 import {EntityService} from 'ngx-entity-service';
 import {Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {OverseerAssessment} from '../models/overseer/overseer-assessment';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Task} from '../models/doubtfire-model';
+import {OverseerAssessment} from '../models/overseer/overseer-assessment';
 import {OverseerStepResultService} from './overseer-step-result.service';
 
 @Injectable()

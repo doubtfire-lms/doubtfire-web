@@ -1,13 +1,13 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { Campus, CampusService, Project, Unit } from 'src/app/api/models/doubtfire-model';
-import { MatSelectChange } from '@angular/material/select';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {Campus, CampusService, Project, Unit} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
 
 @Component({
-    selector: 'student-campus-select',
-    templateUrl: 'student-campus-select.component.html',
-    styleUrls: ['student-campus-select.component.scss'],
-    standalone: false
+  selector: 'student-campus-select',
+  templateUrl: 'student-campus-select.component.html',
+  styleUrls: ['student-campus-select.component.scss'],
+  standalone: false,
 })
 export class StudentCampusSelectComponent implements OnInit {
   @Input() unit: Unit;
@@ -20,7 +20,7 @@ export class StudentCampusSelectComponent implements OnInit {
   constructor(
     private campusService: CampusService,
     private alerts: AlertService,
-  ) { }
+  ) {}
 
   ngOnChanges() {
     this.originalCampus = this.student.campus;
@@ -42,8 +42,8 @@ export class StudentCampusSelectComponent implements OnInit {
         error: (message) => {
           this.student.campus = this.originalCampus;
           this.alerts.error(message, 6000);
-        }
-      })
+        },
+      });
     }
   }
 }

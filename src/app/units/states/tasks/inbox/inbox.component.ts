@@ -1,25 +1,25 @@
-import {CdkDragEnd, CdkDragStart, CdkDragMove} from '@angular/cdk/drag-drop';
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {HotkeysHelpComponent, HotkeysService} from '@ngneat/hotkeys';
 import {MediaObserver} from 'ng-flex-layout';
-import {auditTime, merge, Observable, of, Subject, tap, withLatestFrom} from 'rxjs';
+import {Observable, Subject, auditTime, merge, of, tap, withLatestFrom} from 'rxjs';
+import {Tutorial} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
-import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
-import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
-import {HotkeysService, HotkeysHelpComponent} from '@ngneat/hotkeys';
-import {MatDialog} from '@angular/material/dialog';
 import {UserService} from 'src/app/api/services/user.service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {Tutorial} from 'src/app/api/models/doubtfire-model';
-import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 
 @Component({
-    selector: 'f-inbox',
-    templateUrl: './inbox.component.html',
-    styleUrls: ['./inbox.component.scss'],
-    standalone: false
+  selector: 'f-inbox',
+  templateUrl: './inbox.component.html',
+  styleUrls: ['./inbox.component.scss'],
+  standalone: false,
 })
 export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;

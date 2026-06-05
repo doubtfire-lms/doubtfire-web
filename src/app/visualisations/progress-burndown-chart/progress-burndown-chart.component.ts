@@ -1,14 +1,14 @@
-import {Component, OnInit, Input, SimpleChanges, LOCALE_ID, ViewContainerRef} from '@angular/core';
 import {Project, Unit} from 'src/app/api/models/doubtfire-model';
-import {formatDate} from '@angular/common';
 import {AppInjector} from 'src/app/app-injector';
 import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
+import {formatDate} from '@angular/common';
+import {Component, Input, LOCALE_ID, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
 
 @Component({
-    selector: 'f-progress-burndown-chart',
-    templateUrl: './progress-burndown-chart.component.html',
-    styleUrls: ['./progress-burndown-chart.component.scss'],
-    standalone: false
+  selector: 'f-progress-burndown-chart',
+  templateUrl: './progress-burndown-chart.component.html',
+  styleUrls: ['./progress-burndown-chart.component.scss'],
+  standalone: false,
 })
 export class ProgressBurndownChartComponent extends ChartBaseComponent implements OnInit {
   @Input() project: Project;

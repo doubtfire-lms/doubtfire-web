@@ -1,21 +1,21 @@
-import {Component, Input, ViewChild, AfterViewInit} from '@angular/core';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource, MatTable} from '@angular/material/table';
+import {RequestOptions} from 'ngx-entity-service';
 import {
-  Tutorial,
-  TutorialService,
   Campus,
   CampusService,
-  User,
+  Tutorial,
+  TutorialService,
   TutorialStream,
   TutorialStreamService,
   Unit,
+  User,
 } from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {RequestOptions} from 'ngx-entity-service';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
+import {UntypedFormControl, Validators} from '@angular/forms';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'df-unit-tutorials-list',

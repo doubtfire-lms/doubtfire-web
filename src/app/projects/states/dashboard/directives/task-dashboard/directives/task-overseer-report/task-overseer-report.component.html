@@ -140,11 +140,11 @@
                     [options]="diffEditorOptions"
                     [originalModel]="{
                       language: 'plaintext',
-                      code: result.expectedOutput
+                      code: result.expectedOutput,
                     }"
                     [modifiedModel]="{
                       language: 'plainttext',
-                      code: result.stdout
+                      code: result.stdout,
                     }"
                   ></ngx-monaco-diff-editor>
                 }

@@ -1,4 +1,3 @@
-import {StringNullableChain} from 'lodash';
 import {Entity, EntityMapping} from 'ngx-entity-service';
 
 export class OverseerImage extends Entity {

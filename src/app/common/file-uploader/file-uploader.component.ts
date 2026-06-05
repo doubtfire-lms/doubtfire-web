@@ -1,3 +1,5 @@
+import {UserService} from 'src/app/api/services/user.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {
   Component,
   EventEmitter,
@@ -7,8 +9,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {UserService} from 'src/app/api/services/user.service';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 interface FileData {
   name: string;

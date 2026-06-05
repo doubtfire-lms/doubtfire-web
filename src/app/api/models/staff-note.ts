@@ -1,8 +1,8 @@
 import {Entity} from 'ngx-entity-service';
-import {Project, Unit, User, UserService} from './doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {StaffNoteService} from '../services/staff-note.service';
+import {Project, User, UserService} from './doubtfire-model';
 
 export class StaffNote extends Entity {
   id: number;

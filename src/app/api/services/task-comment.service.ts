@@ -1,3 +1,5 @@
+import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
+import {Observable} from 'rxjs';
 import {
   ScormComment,
   Task,
@@ -5,18 +7,16 @@ import {
   TestAttemptService,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {EmojiService} from 'src/app/common/services/emoji.service';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {DiscussionComment} from '../models/task-comment/discussion-comment';
 import {ExtensionComment} from '../models/task-comment/extension-comment';
-import {HttpClient} from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiUrl';
-import {EmojiService} from 'src/app/common/services/emoji.service';
-import {MappingFunctions} from './mapping-fn';
-import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {ScormExtensionComment} from '../models/task-comment/scorm-extension-comment';
+import {MappingFunctions} from './mapping-fn';
 
 @Injectable()
 export class TaskCommentService extends CachedEntityService<TaskComment> {

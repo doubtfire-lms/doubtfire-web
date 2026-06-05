@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {MatDialogRef, MatDialog} from '@angular/material/dialog';
-import {SpecConModalComponent} from './spec-con-modal.component';
 import {Project} from 'src/app/api/models/doubtfire-model';
+import {Injectable} from '@angular/core';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {SpecConModalComponent} from './spec-con-modal.component';
 
 @Injectable({
   providedIn: 'root',

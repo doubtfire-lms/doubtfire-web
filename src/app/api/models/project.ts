@@ -1,9 +1,9 @@
-import {HttpClient} from '@angular/common/http';
 import {Entity, EntityCache, RequestOptions} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {HttpClient} from '@angular/common/http';
 import {MappingFunctions} from '../services/mapping-fn';
 import {
   Campus,

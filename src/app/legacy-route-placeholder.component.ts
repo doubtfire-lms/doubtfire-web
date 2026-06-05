@@ -1,15 +1,15 @@
 import {Component} from '@angular/core';
 
 @Component({
-    selector: 'legacy-route-placeholder',
-    template: '',
-    styles: [
-        `
+  selector: 'legacy-route-placeholder',
+  template: '',
+  styles: [
+    `
       :host {
         display: none;
       }
     `,
-    ],
-    standalone: false
+  ],
+  standalone: false,
 })
 export class LegacyRoutePlaceholderComponent {}

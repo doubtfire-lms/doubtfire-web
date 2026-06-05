@@ -1,12 +1,12 @@
+import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthenticationService} from 'src/app/api/services/authentication.service';
 
 @Component({
-    selector: 'f-edit-profile',
-    templateUrl: './edit-profile.component.html',
-    styleUrls: ['./edit-profile.component.scss'],
-    standalone: false
+  selector: 'f-edit-profile',
+  templateUrl: './edit-profile.component.html',
+  styleUrls: ['./edit-profile.component.scss'],
+  standalone: false,
 })
 export class EditProfileComponent implements OnInit {
   public loading: boolean = true;

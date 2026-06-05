@@ -1,15 +1,15 @@
-import {Component, OnInit, Inject, ViewChild, AfterViewInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {Project, ProjectService, Webcal, WebcalService} from 'src/app/api/models/doubtfire-model';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {AlertService} from '../../services/alert.service';
 
 @Component({
-    selector: 'calendar-modal',
-    templateUrl: './calendar-modal.component.html',
-    styleUrls: ['./calendar-modal.component.scss'],
-    standalone: false
+  selector: 'calendar-modal',
+  templateUrl: './calendar-modal.component.html',
+  styleUrls: ['./calendar-modal.component.scss'],
+  standalone: false,
 })
 export class CalendarModalComponent implements OnInit, AfterViewInit {
   @ViewChild('webcalToggle') webcalToggle: MatSlideToggle;

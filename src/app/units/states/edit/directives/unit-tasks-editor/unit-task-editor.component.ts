@@ -1,5 +1,3 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
 import {addWeeks} from 'date-fns';
 import {Subscription} from 'rxjs';
 import {Grade} from 'src/app/api/models/grade';
@@ -11,14 +9,16 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
 
 type GradeCol = 'p' | 'c' | 'd' | 'hd';
 
 @Component({
-    selector: 'f-unit-task-editor',
-    templateUrl: 'unit-task-editor.component.html',
-    styleUrls: ['unit-task-editor.component.scss'],
-    standalone: false
+  selector: 'f-unit-task-editor',
+  templateUrl: 'unit-task-editor.component.html',
+  styleUrls: ['unit-task-editor.component.scss'],
+  standalone: false,
 })
 export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;

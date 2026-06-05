@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
 import {CachedEntityService} from 'ngx-entity-service';
-import {FeedbackTemplate} from '../models/feedback-template';
-import {HttpClient} from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {FeedbackTemplate} from '../models/feedback-template';
 
 @Injectable()
 export class FeedbackTemplateService extends CachedEntityService<FeedbackTemplate> {

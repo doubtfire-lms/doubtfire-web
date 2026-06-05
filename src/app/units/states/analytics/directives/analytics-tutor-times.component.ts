@@ -1,5 +1,3 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
@@ -7,6 +5,8 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
 interface SessionEvent {
   start: Date;
@@ -28,11 +28,11 @@ interface SessionEvent {
 }
 
 @Component({
-    selector: 'f-analytics-tutor-times',
-    templateUrl: 'analytics-tutor-times.component.html',
-    styleUrls: ['analytics-tutor-times.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'f-analytics-tutor-times',
+  templateUrl: 'analytics-tutor-times.component.html',
+  styleUrls: ['analytics-tutor-times.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class AnalyticsTutorTimesComponent implements OnInit {
   @Input() unit: Unit;

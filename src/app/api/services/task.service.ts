@@ -1,3 +1,5 @@
+import {CachedEntityService, EntityCache, RequestOptions} from 'ngx-entity-service';
+import {Observable, map, tap} from 'rxjs';
 import {
   Project,
   Task,
@@ -7,12 +9,10 @@ import {
   TaskStatusUiData,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import {EventEmitter, Injectable} from '@angular/core';
-import {CachedEntityService, EntityCache, RequestOptions} from 'ngx-entity-service';
-import {HttpClient} from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {HttpClient} from '@angular/common/http';
+import {EventEmitter, Injectable} from '@angular/core';
 import {MappingFunctions} from './mapping-fn';
-import {Observable, map, tap} from 'rxjs';
 
 @Injectable()
 export class TaskService extends CachedEntityService<Task> {

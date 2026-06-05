@@ -1,31 +1,31 @@
+import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
+import {
+  FeedbackTemplate,
+  FeedbackTemplateService,
+  LearningOutcome,
+  LearningOutcomeService,
+  Task,
+  TaskService,
+} from 'src/app/api/models/doubtfire-model';
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
   ViewEncapsulation,
-  EventEmitter,
-  OnInit,
 } from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
-import {
-  LearningOutcome,
-  FeedbackTemplate,
-  Task,
-  FeedbackTemplateService,
-  LearningOutcomeService,
-  TaskService,
-} from 'src/app/api/models/doubtfire-model';
 
 @Component({
-    selector: 'f-task-feedback-templates',
-    styleUrl: './task-feedback-templates.component.scss',
-    templateUrl: './task-feedback-templates.component.html',
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'f-task-feedback-templates',
+  styleUrl: './task-feedback-templates.component.scss',
+  templateUrl: './task-feedback-templates.component.html',
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   @Input() task: Task;
@@ -82,7 +82,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     const greetingTemplate = new FeedbackTemplate();
     greetingTemplate.type = 'template';
     greetingTemplate.chipText = 'Greeting';
-    greetingTemplate.description = 'Insert a greeting with the student\'s name.';
+    greetingTemplate.description = "Insert a greeting with the student's name.";
 
     const summaryTemplate = new FeedbackTemplate();
     summaryTemplate.type = 'template';

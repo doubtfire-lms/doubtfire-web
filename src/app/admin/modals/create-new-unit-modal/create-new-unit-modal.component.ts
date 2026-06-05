@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { CreateNewUnitModalContentComponent } from './create-new-unit-modal-content.component';
+import {Component} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {CreateNewUnitModalContentComponent} from './create-new-unit-modal-content.component';
 
 @Component({
-    selector: 'create-new-unit-modal',
-    template: '',
-    standalone: false
+  selector: 'create-new-unit-modal',
+  template: '',
+  standalone: false,
 })
 export class CreateNewUnitModal {
   constructor(public dialog: MatDialog) {}

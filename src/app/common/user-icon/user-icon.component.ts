@@ -1,21 +1,21 @@
-import { Component, Input, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-import { User, UserService } from 'src/app/api/models/doubtfire-model';
-import { Md5 } from 'ts-md5/dist/md5';
+import {User, UserService} from 'src/app/api/models/doubtfire-model';
+import {Md5} from 'ts-md5/dist/md5';
+import {AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 
 declare var d3: any;
 
 @Component({
-    selector: 'user-icon',
-    templateUrl: './user-icon.component.html',
-    styleUrls: ['./user-icon.component.scss'],
-    standalone: false
+  selector: 'user-icon',
+  templateUrl: './user-icon.component.html',
+  styleUrls: ['./user-icon.component.scss'],
+  standalone: false,
 })
 export class UserIconComponent implements AfterViewInit, OnChanges {
   @Input() user: User;
   @Input() unselected: boolean;
   @Input() size = 100;
 
-  @ViewChild('svg') svg: { nativeElement: any };
+  @ViewChild('svg') svg: {nativeElement: any};
 
   lineHeight = 12;
   usingCurrentUser: boolean;
@@ -37,7 +37,8 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
   constructor(private userService: UserService) {}
 
   get backgroundUrl(): string {
-    const hash = this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
+    const hash =
+      this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
     return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size * 4}`;
   }
 
@@ -74,7 +75,7 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
         line.text = lineText1;
       } else {
         lineWidth0 = this.measureWidth(this.words[i]);
-        line = { width: lineWidth0, text: this.words[i] };
+        line = {width: lineWidth0, text: this.words[i]};
         result.push(line);
       }
     }
@@ -161,7 +162,10 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
     const id = this.generateUniqueId();
     const defs = svg.append('defs');
 
-    defs.append('clipPath').attr('id', `image-clip-${id}`).call(appendCircle, this.size, this.radius);
+    defs
+      .append('clipPath')
+      .attr('id', `image-clip-${id}`)
+      .call(appendCircle, this.size, this.radius);
 
     svg
       .append('circle')
@@ -172,7 +176,10 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
 
     svg
       .append('text')
-      .attr('transform', `translate(${this.size / 2},${this.size / 2}) scale(${this.radius / textRadius})`)
+      .attr(
+        'transform',
+        `translate(${this.size / 2},${this.size / 2}) scale(${this.radius / textRadius})`,
+      )
       .selectAll('tspan')
       .data(lines)
       .enter()

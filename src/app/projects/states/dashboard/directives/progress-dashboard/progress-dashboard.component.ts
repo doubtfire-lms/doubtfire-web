@@ -1,14 +1,14 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {GradeService} from 'src/app/common/services/grade.service';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {ProjectService} from 'src/app/api/services/project.service';
 import {Project} from 'src/app/api/models/project';
+import {ProjectService} from 'src/app/api/services/project.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {GradeService} from 'src/app/common/services/grade.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
-    selector: 'f-progress-dashboard',
-    templateUrl: './progress-dashboard.component.html',
-    styleUrls: ['./progress-dashboard.component.scss'],
-    standalone: false
+  selector: 'f-progress-dashboard',
+  templateUrl: './progress-dashboard.component.html',
+  styleUrls: ['./progress-dashboard.component.scss'],
+  standalone: false,
 })
 export class ProgressDashboardComponent implements OnInit {
   @Input() project: Project;

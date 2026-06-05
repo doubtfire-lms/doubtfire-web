@@ -132,7 +132,7 @@
               cdkDrag
               (click)="selectStep(step)"
               [ngClass]="{
-                'bg-gray-100': selectedOverseerStep?.id === step.id
+                'bg-gray-100': selectedOverseerStep?.id === step.id,
               }"
             >
               <mat-icon cdkDragHandle class="cursor-move">drag_indicator</mat-icon>

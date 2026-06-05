@@ -1,19 +1,19 @@
+import {OverseerImage, OverseerImageService} from 'src/app/api/models/doubtfire-model';
+import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {HttpClient} from '@angular/common/http';
 import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {OverseerImage, OverseerImageService} from 'src/app/api/models/doubtfire-model';
-import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
-import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
-import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-    selector: 'overseer-image-list',
-    templateUrl: 'overseer-image-list.component.html',
-    styleUrls: ['overseer-image-list.component.scss'],
-    standalone: false
+  selector: 'overseer-image-list',
+  templateUrl: 'overseer-image-list.component.html',
+  styleUrls: ['overseer-image-list.component.scss'],
+  standalone: false,
 })
 export class OverseerImageListComponent
   extends EntityFormComponent<OverseerImage>

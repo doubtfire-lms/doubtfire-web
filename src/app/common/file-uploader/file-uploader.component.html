@@ -35,13 +35,17 @@
                   <mat-icon>{{ upload.display.icon }}</mat-icon>
                   @if (dropSupported) {
                     <span class="text-center select-none">
-                      Drop {{ upload.display.type }} file here <br /><small>or click to select</small>
+                      Drop {{ upload.display.type }} file here <br /><small
+                        >or click to select</small
+                      >
                     </span>
                   } @else {
                     <span class="select-none">Click to select {{ upload.display.type }} file</span>
                   }
                 } @else {
-                  <span class="!text-red-500 !w-full flex flex-col justify-center items-center text-base">
+                  <span
+                    class="!text-red-500 !w-full flex flex-col justify-center items-center text-base"
+                  >
                     <mat-icon>block</mat-icon>
                     <span>Invalid file provided</span>
                     <small class="w-full text-center"

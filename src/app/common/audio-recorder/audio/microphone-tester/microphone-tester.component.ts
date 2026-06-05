@@ -1,13 +1,13 @@
-import { Input, Component, AfterViewInit } from '@angular/core';
-import { BaseAudioRecorderComponent } from '../base-audio-recorder';
-import { Task } from 'src/app/api/models/doubtfire-model';
-import { MediaRecorderService } from 'src/app/common/services/recorder-service';
+import {Task} from 'src/app/api/models/doubtfire-model';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
+import {AfterViewInit, Component, Input} from '@angular/core';
+import {BaseAudioRecorderComponent} from '../base-audio-recorder';
 
 @Component({
-    selector: 'microphone-tester',
-    templateUrl: './microphone-tester-component.html',
-    providers: [MediaRecorderService],
-    standalone: false
+  selector: 'microphone-tester',
+  templateUrl: './microphone-tester-component.html',
+  providers: [MediaRecorderService],
+  standalone: false,
 })
 export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implements AfterViewInit {
   @Input() task: Task;

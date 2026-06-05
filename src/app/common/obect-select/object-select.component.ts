@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatSelectChange } from '@angular/material/select';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
 
 /**
  * Object select component used to overcome limitations with the angularjs version used.
@@ -7,12 +7,12 @@ import { MatSelectChange } from '@angular/material/select';
  * @deprecated
  */
 @Component({
-    selector: 'object-select',
-    templateUrl: 'object-select.component.html',
-    standalone: false
+  selector: 'object-select',
+  templateUrl: 'object-select.component.html',
+  standalone: false,
 })
 export class ObjectSelectComponent<T> {
-  @Input() source: { value: T; text: string }[];
+  @Input() source: {value: T; text: string}[];
   @Input() target: T;
   @Input() label: string;
   @Input() placeholder: string = null;

@@ -1,9 +1,9 @@
-import {Pipe, PipeTransform} from '@angular/core';
 import * as marked from 'marked';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-    name: 'marked',
-    standalone: false
+  name: 'marked',
+  standalone: false,
 })
 export class MarkedPipe implements PipeTransform {
   // Set the options for the markdown renderer

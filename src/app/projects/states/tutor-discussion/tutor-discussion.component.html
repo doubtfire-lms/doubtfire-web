@@ -99,7 +99,7 @@
                   class="notification"
                   [ngClass]="{
                     active: task.numNewComments > 0 || task.similaritiesDetected,
-                    similarities: task.similaritiesDetected
+                    similarities: task.similaritiesDetected,
                   }"
                 ></span>
                 <user-icon class="self-center" [user]="project?.student" [size]="30"> </user-icon>

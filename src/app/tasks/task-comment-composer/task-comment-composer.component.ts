@@ -1,3 +1,14 @@
+import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
+import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import {BehaviorSubject, Subscription} from 'rxjs';
+import {
+  FeedbackTemplate,
+  Task,
+  TaskComment,
+  TaskCommentService,
+} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {EmojiService} from 'src/app/common/services/emoji.service';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {
   AfterViewInit,
@@ -17,17 +28,6 @@ import {
   ViewChildren,
 } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
-import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
-import {BehaviorSubject, Subscription} from 'rxjs';
-import {
-  FeedbackTemplate,
-  Task,
-  TaskComment,
-  TaskCommentService,
-} from 'src/app/api/models/doubtfire-model';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {EmojiService} from 'src/app/common/services/emoji.service';
 import {TaskCommentsViewerComponent} from '../task-comments-viewer/task-comments-viewer.component';
 import {AttachmentConfirmationDialogComponent} from './attachment-confirmation-dialog/attachment-confirmation-dialog.component';
 
@@ -67,16 +67,16 @@ const ACCEPTED_FILE_TYPES = [
  * The task comment composer is responsible for creating and adding comments to a given task.
  */
 @Component({
-    selector: 'task-comment-composer',
-    templateUrl: './task-comment-composer.component.html',
-    styleUrls: ['./task-comment-composer.component.scss'],
-    animations: [
-        trigger('shrinkgrow', [
-            transition('true => false', [style({ width: 38.4 }), animate('150ms 0ms ease-in-out')]),
-            transition('false => true', [style({ width: 80 }), animate('150ms 0ms ease-in-out')]),
-        ]),
-    ],
-    standalone: false
+  selector: 'task-comment-composer',
+  templateUrl: './task-comment-composer.component.html',
+  styleUrls: ['./task-comment-composer.component.scss'],
+  animations: [
+    trigger('shrinkgrow', [
+      transition('true => false', [style({width: 38.4}), animate('150ms 0ms ease-in-out')]),
+      transition('false => true', [style({width: 80}), animate('150ms 0ms ease-in-out')]),
+    ]),
+  ],
+  standalone: false,
 })
 export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCheck, OnChanges {
   @Input() task: Task;
@@ -571,10 +571,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       },
       error: (error: ApiError) => {
         this.isSending = false;
-        this.alerts.error(
-          error.error || error.message || `Failed to edit comment: ${error}`,
-          6000,
-        );
+        this.alerts.error(error.error || error.message || `Failed to edit comment: ${error}`, 6000);
       },
     });
   }
@@ -790,10 +787,10 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
 // The discussion prompt composer dialog Component
 // eslint-disable-next-line max-classes-per-file
 @Component({
-    selector: 'discussion-prompt-composer-dialog.html',
-    templateUrl: 'discussion-prompt-composer-dialog.html',
-    styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
-    standalone: false
+  selector: 'discussion-prompt-composer-dialog.html',
+  templateUrl: 'discussion-prompt-composer-dialog.html',
+  styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
+  standalone: false,
 })
 export class DiscussionComposerDialog implements OnInit {
   constructor(

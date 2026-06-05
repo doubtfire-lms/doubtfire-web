@@ -1,13 +1,13 @@
-import {Component, Injector, Input} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {Component, Injector, Input} from '@angular/core';
 
 @Component({
-    selector: 'f-portfolio-learning-summary-report-step',
-    templateUrl: 'portfolio-learning-summary-report-step.component.html',
-    styleUrls: ['portfolio-learning-summary-report-step.component.scss'],
-    standalone: false
+  selector: 'f-portfolio-learning-summary-report-step',
+  templateUrl: 'portfolio-learning-summary-report-step.component.html',
+  styleUrls: ['portfolio-learning-summary-report-step.component.scss'],
+  standalone: false,
 })
 export class PortfolioLearningSummaryReportStepComponent {
   @Input() unit: Unit;

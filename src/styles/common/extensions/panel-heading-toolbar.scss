@@ -6,7 +6,9 @@
     & > * {
       width: 100%;
     }
-    .btn-group, .btn, input {
+    .btn-group,
+    .btn,
+    input {
       height: 4em;
       width: 100%;
     }
@@ -17,7 +19,8 @@
       width: 100%;
       text-align: left;
     }
-    .btn-group, .buttons > .btn {
+    .btn-group,
+    .buttons > .btn {
       @media (min-width: $screen-sm-max) {
         margin-right: 1ex;
       }
@@ -33,7 +36,7 @@
           float: right;
           clear: both;
           .btn {
-            flex: 1
+            flex: 1;
           }
           .btn {
             @include flex-center;
@@ -41,7 +44,7 @@
         }
       }
     }
-    form[role="search"] {
+    form[role='search'] {
       float: right;
       margin-right: 1.5ex;
       @media (max-width: $screen-sm) {

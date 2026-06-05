@@ -1,8 +1,3 @@
-import {AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSelectChange} from '@angular/material/select';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {
   FeedbackTemplate,
   FeedbackTemplateService,
@@ -12,6 +7,11 @@ import {
   Unit,
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSelectChange} from '@angular/material/select';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
 import {
@@ -21,9 +21,9 @@ import {
 import {CsvUploadModalService} from '../modals/csv-upload-modal/csv-upload-modal.service';
 
 @Component({
-    selector: 'f-feedback-template-editor',
-    templateUrl: 'feedback-template-editor.component.html',
-    standalone: false
+  selector: 'f-feedback-template-editor',
+  templateUrl: 'feedback-template-editor.component.html',
+  standalone: false,
 })
 export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit {
   @Input() context?: TaskDefinition | Unit;

@@ -1,27 +1,34 @@
-import { Component, AfterViewInit, ViewChild, OnDestroy, OnInit } from '@angular/core';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
-import { User } from 'src/app/api/models/doubtfire-model';
-import { MatPaginator } from '@angular/material/paginator';
-import { UserService } from 'src/app/api/models/doubtfire-model';
-import { EditProfileDialogService } from 'src/app/common/modals/edit-profile-dialog/edit-profile-dialog.service';
-import { Subscription } from 'rxjs';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {Subscription} from 'rxjs';
+import {User} from 'src/app/api/models/doubtfire-model';
+import {UserService} from 'src/app/api/models/doubtfire-model';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {EditProfileDialogService} from 'src/app/common/modals/edit-profile-dialog/edit-profile-dialog.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 
 @Component({
-    selector: 'f-users',
-    templateUrl: './users.component.html',
-    styleUrls: ['./users.component.scss'],
-    standalone: false
+  selector: 'f-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
+  standalone: false,
 })
 export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(MatTable, { static: false }) table: MatTable<User>;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatTable, {static: false}) table: MatTable<User>;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
-  displayedColumns: string[] = ['avatar', 'firstName', 'lastName', 'username', 'email', 'systemRole'];
+  displayedColumns: string[] = [
+    'avatar',
+    'firstName',
+    'lastName',
+    'username',
+    'email',
+    'systemRole',
+  ];
   public dataSource: MatTableDataSource<User>;
   public filter: string;
   dataload: boolean;
@@ -88,7 +95,9 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
       error_string += error.message + '\n';
     });
 
-    max_full_errors > num_errors ? (error_string += `... and ${max_full_errors - num_errors} more`) : null;
+    max_full_errors > num_errors
+      ? (error_string += `... and ${max_full_errors - num_errors} more`)
+      : null;
     this.alerts.error(error_string);
 
     this.userService.query();

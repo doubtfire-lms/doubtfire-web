@@ -1,17 +1,17 @@
-import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
+import {Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 export interface SubmissionTypeModalData {
   task: Task;
 }
 
 @Component({
-    selector: 'f-submission-type-modal',
-    templateUrl: './submission-type-modal.component.html',
-    styleUrls: ['./submission-type-modal.component.scss'],
-    standalone: false
+  selector: 'f-submission-type-modal',
+  templateUrl: './submission-type-modal.component.html',
+  styleUrls: ['./submission-type-modal.component.scss'],
+  standalone: false,
 })
 export class SubmissionTypeModalComponent {
   selectedTransition: 'ready_for_feedback' | 'assess_in_portfolio' = null;

@@ -1,11 +1,11 @@
-import {Component, OnInit, Input, Inject} from '@angular/core';
-import {
-  TaskSubmissionService,
-  TaskAssessmentResult,
-} from 'src/app/common/services/task-submission.service';
-import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {Task} from 'src/app/api/models/doubtfire-model';
+import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {
+  TaskAssessmentResult,
+  TaskSubmissionService,
+} from 'src/app/common/services/task-submission.service';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 
 export interface User {
   id: number;
@@ -34,10 +34,10 @@ export interface TaskAssessmentComment {
 }
 
 @Component({
-    selector: 'app-task-assessment-comment',
-    templateUrl: './task-assessment-comment.component.html',
-    styleUrls: ['./task-assessment-comment.component.scss'],
-    standalone: false
+  selector: 'app-task-assessment-comment',
+  templateUrl: './task-assessment-comment.component.html',
+  styleUrls: ['./task-assessment-comment.component.scss'],
+  standalone: false,
 })
 export class TaskAssessmentCommentComponent implements OnInit {
   @Input() task: Task;

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { CalendarModalComponent } from './calendar-modal.component';
+import {Injectable} from '@angular/core';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {CalendarModalComponent} from './calendar-modal.component';
 
 @Injectable({
   providedIn: 'root',

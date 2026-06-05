@@ -1,8 +1,7 @@
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
   "index": "/index.html",
-  "dataGroups":
-  [
+  "dataGroups": [
     {
       "name": "api",
       "urls": ["/api"],
@@ -18,15 +17,10 @@
       "name": "app",
       "installMode": "prefetch",
       "resources": {
-        "files": [
-          "/favicon.ico",
-          "/index.html",
-          "/manifest.webmanifest",
-          "/*.css",
-          "/*.js"
-        ]
+        "files": ["/favicon.ico", "/index.html", "/manifest.webmanifest", "/*.css", "/*.js"]
       }
-    }, {
+    },
+    {
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",
@@ -36,7 +30,8 @@
           "/*.(eot|svg|cur|jpg|png|png?default=blank&size=25webp|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
-    }, {
+    },
+    {
       "name": "external_assets",
       "resources": {
         "urls": [

@@ -1,33 +1,33 @@
+import {Subscription} from 'rxjs';
 import {
-  Component,
-  OnInit,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild,
-  ElementRef,
-  OnDestroy,
-} from '@angular/core';
-import {
-  Task,
   Project,
+  Task,
   TaskComment,
   TaskCommentService,
-  UserService,
   TaskService,
+  UserService,
 } from 'src/app/api/models/doubtfire-model';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {TaskCommentComposerData} from '../task-comment-composer/task-comment-composer.component';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
-import {Subscription} from 'rxjs';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import {TaskCommentComposerData} from '../task-comment-composer/task-comment-composer.component';
 
 @Component({
-    selector: 'task-comments-viewer',
-    templateUrl: './task-comments-viewer.component.html',
-    styleUrls: ['./task-comments-viewer.component.scss'],
-    standalone: false
+  selector: 'task-comments-viewer',
+  templateUrl: './task-comments-viewer.component.html',
+  styleUrls: ['./task-comments-viewer.component.scss'],
+  standalone: false,
 })
 export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy {
   // Get the comments body from the HTML template

@@ -59,7 +59,9 @@
           <mat-card-title class="flex items-center mb-2.5"
             ><mat-icon>warning</mat-icon>
             @if (flexibleDatesEnabled) {
-              <span class="ml-2.5">Past Target Date By {{ task?.timePastDueDateDescription() }}</span>
+              <span class="ml-2.5"
+                >Past Target Date By {{ task?.timePastDueDateDescription() }}</span
+              >
             } @else {
               <span class="ml-2.5">Past Due Date By {{ task?.timePastDueDateDescription() }}</span>
             }

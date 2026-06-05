@@ -1,19 +1,18 @@
 //
 // Modal to show Doubtfire version info
 //
-import { Injectable, Component, Inject } from '@angular/core';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { AboutDoubtfireModalService } from '../about-doubtfire-modal/about-doubtfire-modal.service';
-import { GithubProfile } from './github-profile';
-
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AboutDialogData } from './about-dialog-data';
-import { Sort } from '@angular/material/sort';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Component, Inject, Injectable} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import {Sort} from '@angular/material/sort';
+import {AboutDoubtfireModalService} from '../about-doubtfire-modal/about-doubtfire-modal.service';
+import {AboutDialogData} from './about-dialog-data';
+import {GithubProfile} from './github-profile';
 
 @Component({
-    selector: 'about-doubtfire-dialog',
-    templateUrl: 'about-doubtfire-modal-content.tpl.html',
-    standalone: false
+  selector: 'about-doubtfire-dialog',
+  templateUrl: 'about-doubtfire-modal-content.tpl.html',
+  standalone: false,
 })
 export class AboutDoubtfireModalContent {
   public displayedColumns: string[] = [
@@ -44,7 +43,7 @@ export class AboutDoubtfireModal {
   constructor(
     public dialog: MatDialog,
     private constants: DoubtfireConstants,
-    private aboutDoubtfireModalService: AboutDoubtfireModalService
+    private aboutDoubtfireModalService: AboutDoubtfireModalService,
   ) {
     this.loaded = false;
     this.aboutDialogData = new AboutDialogData();

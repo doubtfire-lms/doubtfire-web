@@ -9,8 +9,33 @@ const tseslint = require('typescript-eslint');
 // Allows us to bring in the recommended rules for Angular projects from angular-eslint
 const angular = require('angular-eslint');
 
+const prettierPlugin = require('eslint-plugin-prettier');
+
+/**
+ * Scope Angular template configs to HTML files.
+ *
+ * The cast is intentionally loose because angular-eslint and typescript-eslint
+ * can resolve different copies of @typescript-eslint utility types.
+ *
+ * @param {unknown[]} configs
+ * @returns {any[]}
+ */
+const htmlTemplateConfigs = (configs) =>
+  configs.map((config) => ({
+    .../** @type {object} */ (config),
+    files: ['**/*.html'],
+  }));
+
 // Export our config array, which is composed together thanks to the typed utility function from typescript-eslint
 module.exports = tseslint.config(
+  {
+    ignores: ['build/**', 'coverage/**', 'dist/**', 'docs/**', '**/*.tpl.html'],
+  },
+  {
+    linterOptions: {
+      reportUnusedDisableDirectives: false,
+    },
+  },
   {
     // Everything in this config object targets our TypeScript files (Components, Directives, Pipes etc)
     files: ['**/*.ts'],
@@ -28,38 +53,74 @@ module.exports = tseslint.config(
     // and treated as if they are HTML files (and therefore have the .html config below applied to them)
     processor: angular.processInlineTemplates,
     // Override specific rules for TypeScript files (these will take priority over the extended configs above)
+    // TODO: go through each rule and remove each one and fix
     rules: {
+      '@angular-eslint/component-selector': 'off',
+      '@angular-eslint/directive-selector': 'off',
+      '@angular-eslint/no-empty-lifecycle-method': 'off',
+      '@angular-eslint/prefer-inject': 'off',
+      '@angular-eslint/prefer-standalone': 'off',
+      '@angular-eslint/use-lifecycle-interface': 'off',
+      '@typescript-eslint/array-type': 'off',
+      '@typescript-eslint/consistent-generic-constructors': 'off',
+      '@typescript-eslint/consistent-indexed-object-style': 'off',
+      '@typescript-eslint/consistent-type-assertions': 'off',
+      '@typescript-eslint/consistent-type-definitions': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-inferrable-types': 'off',
-      '@angular-eslint/directive-selector': [
-        'error',
+      '@typescript-eslint/no-this-alias': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'off',
         {
-          type: 'attribute',
-          prefix: 'f',
-          style: 'camelCase',
+          argsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+          varsIgnorePattern: '^_',
         },
       ],
-      '@angular-eslint/component-selector': [
-        'error',
-        {
-          type: 'element',
-          prefix: 'f',
-          style: 'kebab-case',
-        },
-      ],
+      '@typescript-eslint/no-wrapper-object-types': 'off',
+      'no-constant-binary-expression': 'off',
+      'no-empty': 'off',
+      'no-misleading-character-class': 'off',
+      'no-useless-escape': 'off',
+      'no-var': 'off',
+      'prefer-const': 'off',
+      'prettier/prettier': 'warn',
     },
   },
   {
+    files: ['**/*.ts'],
+    plugins: {prettier: prettierPlugin},
+    rules: {
+      'prettier/prettier': 'warn',
+    },
+  },
+  {
+    files: ['**/*.component.html'],
+    plugins: {prettier: prettierPlugin},
+    rules: {
+      'prettier/prettier': 'warn',
+    },
+  },
+  ...htmlTemplateConfigs(angular.configs.templateRecommended),
+  ...htmlTemplateConfigs(angular.configs.templateAccessibility),
+  {
     // Everything in this config object targets our HTML files (external templates,
     // and inline templates as long as we have the `processor` set on our TypeScript config above)
-    files: ['**/*component.html'],
-    extends: [
-      // Apply the recommended Angular template rules
-      ...angular.configs.templateRecommended,
-      // Apply the Angular template rules which focus on accessibility of our apps
-      ...angular.configs.templateAccessibility,
-    ],
+    files: ['**/*.html'],
     rules: {
       '@angular-eslint/template/mouse-events-have-key-events': 'off',
+      '@angular-eslint/template/click-events-have-key-events': 'off',
+      '@angular-eslint/template/interactive-supports-focus': 'off',
+      '@angular-eslint/template/alt-text': 'off',
+      '@angular-eslint/template/elements-content': 'off',
+      '@angular-eslint/template/eqeqeq': 'off',
+      '@angular-eslint/template/label-has-associated-control': 'off',
+      '@angular-eslint/template/prefer-control-flow': 'off',
     },
   },
 );

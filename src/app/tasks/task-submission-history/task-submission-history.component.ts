@@ -1,15 +1,15 @@
-import {Component, OnInit, Inject, Input, Output, EventEmitter} from '@angular/core';
-import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 import {Subject} from 'rxjs';
 import {OverseerAssessmentService, Task} from 'src/app/api/models/doubtfire-model';
 import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
-    selector: 'task-submission-history',
-    templateUrl: './task-submission-history.component.html',
-    styleUrls: ['./task-submission-history.component.scss'],
-    standalone: false
+  selector: 'f-task-submission-history',
+  templateUrl: './task-submission-history.component.html',
+  styleUrls: ['./task-submission-history.component.scss'],
+  standalone: false,
 })
 export class TaskSubmissionHistoryComponent implements OnInit {
   @Input() task: Task;

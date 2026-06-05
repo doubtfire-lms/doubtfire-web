@@ -1,26 +1,26 @@
-import {Component, Input} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {filter} from 'rxjs';
 import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {ViewType} from 'src/app/projects/states/index/global-state.service';
+import {Component, Input} from '@angular/core';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {TutorNotesModalService} from '../../modals/tutor-notes-modal/tutor-notes-modal.service';
-import {filter} from 'rxjs';
 
 @Component({
-    selector: 'task-dropdown',
-    templateUrl: './task-dropdown.component.html',
-    styleUrls: ['./task-dropdown.component.scss'],
-    standalone: false
+  selector: 'task-dropdown',
+  templateUrl: './task-dropdown.component.html',
+  styleUrls: ['./task-dropdown.component.scss'],
+  standalone: false,
 })
 export class TaskDropdownComponent {
   currentActivity: string;
   menuText: string;
-  @Input() data: { isTutor: boolean };
+  @Input() data: {isTutor: boolean};
   @Input() currentUnit: Unit;
   @Input() currentProject: Project;
   @Input() currentView: ViewType;
   @Input() unitRole: UnitRole;
 
-  taskToShortName: { [key: string]: string } = {
+  taskToShortName: {[key: string]: string} = {
     'Portfolio Creation': 'Portfolio',
     'Staff Tasks': 'Staff Tasks',
     'Student Groups': 'Groups',

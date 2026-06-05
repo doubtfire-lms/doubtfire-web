@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
+import {Injectable} from '@angular/core';
 import {GlobalStateService} from '../index/global-state.service';
 
 export enum DashboardViews {

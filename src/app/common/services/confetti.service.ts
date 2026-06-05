@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import confetti from 'canvas-confetti';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class ConfettiService {
       angle: angle,
       spread: 80,
       particleCount: 100,
-      origin: { y: y, x: x },
+      origin: {y: y, x: x},
     });
   }
 }

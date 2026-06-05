@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
 import {Task} from 'src/app/api/models/task';
 import {UnitRole} from 'src/app/api/models/unit-role';
+import {Injectable} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {TutorNotesModalComponent} from './tutor-notes-modal.component';
 
 export interface TutorNotesModalData {

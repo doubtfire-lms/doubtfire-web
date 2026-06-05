@@ -1,5 +1,5 @@
 import {Entity} from 'ngx-entity-service';
-import {Unit, Tutorial} from '../doubtfire-model';
+import {Tutorial, Unit} from '../doubtfire-model';
 
 export class TutorialStream extends Entity {
   name: string;

@@ -1,3 +1,5 @@
+import JSZip from 'jszip';
+import {firstValueFrom} from 'rxjs';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {
   Component,
@@ -8,8 +10,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import JSZip from 'jszip';
-import {firstValueFrom} from 'rxjs';
 import {AlertService} from '../services/alert.service';
 import {
   ArchiveFileEntry,
@@ -36,10 +36,10 @@ interface ArchiveFileTreeNode {
 }
 
 @Component({
-    selector: 'f-archive-viewer',
-    templateUrl: './archive-viewer.component.html',
-    styleUrls: ['./archive-viewer.component.scss'],
-    standalone: false
+  selector: 'f-archive-viewer',
+  templateUrl: './archive-viewer.component.html',
+  styleUrls: ['./archive-viewer.component.scss'],
+  standalone: false,
 })
 export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Input() archiveFile: File | Blob | null = null;

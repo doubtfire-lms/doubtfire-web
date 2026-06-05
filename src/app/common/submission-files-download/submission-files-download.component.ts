@@ -1,7 +1,7 @@
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {HttpResponse} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 
 type DownloadState = 'downloading' | 'downloaded' | 'failed';

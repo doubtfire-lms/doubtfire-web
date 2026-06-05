@@ -1,19 +1,19 @@
-import { HttpClient, HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Subscription, throwError } from 'rxjs';
-import { AlertService } from '../services/alert.service';
+import {Subscription, throwError} from 'rxjs';
+import {HttpClient, HttpErrorResponse, HttpEventType, HttpResponse} from '@angular/common/http';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {AlertService} from '../services/alert.service';
 
 /**
  * Allow files to be dropped for upload
  */
 @Component({
-    selector: 'f-file-drop',
-    templateUrl: 'file-drop.component.html',
-    styleUrls: ['file-drop.component.scss'],
-    standalone: false
+  selector: 'f-file-drop',
+  templateUrl: 'file-drop.component.html',
+  styleUrls: ['file-drop.component.scss'],
+  standalone: false,
 })
 export class FileDropComponent {
-  @Input({ required: true }) mode: 'endpoint' | 'event';
+  @Input({required: true}) mode: 'endpoint' | 'event';
 
   /** The name of the file(s) you are asking the user to upload */
   @Input() desiredFileName: string;
@@ -80,21 +80,23 @@ export class FileDropComponent {
         const formData = new FormData();
 
         formData.append('file', this.file);
-        this.http.post(this.endpoint, formData, { reportProgress: true, observe: 'events' }).subscribe(
-          (data) => {
-            if (data.type == HttpEventType.UploadProgress) {
-              this.uploadProgress = Math.round(100 * (data.loaded / data.total));
-            }
-            if (data.type == HttpEventType.Response) {
-              if (data.ok) {
-                this.alert.success(`File uploaded successfully`);
-                this.uploadSuccess.emit(data as HttpResponse<Object>);
+        this.http
+          .post(this.endpoint, formData, {reportProgress: true, observe: 'events'})
+          .subscribe(
+            (data) => {
+              if (data.type == HttpEventType.UploadProgress) {
+                this.uploadProgress = Math.round(100 * (data.loaded / data.total));
               }
-            }
-          },
-          (error) => this.handleError(error),
-          () => this.reset(),
-        );
+              if (data.type == HttpEventType.Response) {
+                if (data.ok) {
+                  this.alert.success(`File uploaded successfully`);
+                  this.uploadSuccess.emit(data as HttpResponse<Object>);
+                }
+              }
+            },
+            (error) => this.handleError(error),
+            () => this.reset(),
+          );
       }
     } else {
       this.filesDropped.emit([this.file]);

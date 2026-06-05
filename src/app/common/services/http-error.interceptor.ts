@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
+import {AuthenticationService, UserService} from 'src/app/api/models/doubtfire-model';
 import {
   HttpErrorResponse,
   HttpEvent,
@@ -7,9 +9,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
 import {catchError, filter, finalize, switchMap, take} from 'rxjs/operators';
-import {AuthenticationService, UserService} from 'src/app/api/models/doubtfire-model';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {

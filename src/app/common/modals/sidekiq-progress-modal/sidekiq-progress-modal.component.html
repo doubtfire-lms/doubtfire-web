@@ -24,7 +24,7 @@
     } @else {
       <mat-progress-bar
         mode="determinate"
-        [value]="job?.status === 'complete' ? 100 : job?.pctComplete ?? 0"
+        [value]="job?.status === 'complete' ? 100 : (job?.pctComplete ?? 0)"
       ></mat-progress-bar>
     }
   </mat-dialog-content>

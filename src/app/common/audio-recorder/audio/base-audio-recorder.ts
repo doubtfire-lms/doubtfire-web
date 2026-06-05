@@ -1,5 +1,5 @@
-import { OnInit, Directive } from '@angular/core';
-import { MediaRecorderService } from 'src/app/common/services/recorder-service';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
+import {Directive, OnInit} from '@angular/core';
 
 @Directive()
 export abstract class BaseAudioRecorderComponent implements OnInit {

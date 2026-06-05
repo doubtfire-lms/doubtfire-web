@@ -1,19 +1,19 @@
-import {AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import * as _ from 'lodash';
 import {Subscription} from 'rxjs';
+import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum, TaskStatusUiData} from 'src/app/api/models/task-status';
+import {UnitRole} from 'src/app/api/models/unit-role';
 import {TaskService} from 'src/app/api/services/task.service';
+import {UserService} from 'src/app/api/services/user.service';
 import {ExtensionModalService} from 'src/app/common/modals/extension-modal/extension-modal.service';
 import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';
-
-import {Project} from 'src/app/api/models/project';
-import {UserService} from 'src/app/api/services/user.service';
 import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
-import {UnitRole} from 'src/app/api/models/unit-role';
+import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';
+import {AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',

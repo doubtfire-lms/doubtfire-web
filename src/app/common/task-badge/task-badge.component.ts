@@ -1,11 +1,11 @@
-import {Component, Input} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Component, Input} from '@angular/core';
 
 @Component({
-    selector: 'f-task-badge',
-    templateUrl: './task-badge.component.html',
-    styleUrl: './task-badge.component.css',
-    standalone: false
+  selector: 'f-task-badge',
+  templateUrl: './task-badge.component.html',
+  styleUrl: './task-badge.component.css',
+  standalone: false,
 })
 export class FTaskBadgeComponent {
   @Input() taskDef: TaskDefinition;

@@ -1,15 +1,15 @@
-import {Component, Inject, Input, ViewChild, ElementRef} from '@angular/core';
+import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
 import {BaseAudioRecorderComponent} from 'src/app/common/audio-recorder/audio/base-audio-recorder';
-import {TaskComment, TaskCommentService, Task} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
+import {Component, ElementRef, Inject, Input, ViewChild} from '@angular/core';
 
 @Component({
-    selector: 'discussion-prompt-composer',
-    templateUrl: './discussion-prompt-composer.component.html',
-    styleUrls: ['./discussion-prompt-composer.component.scss'],
-    providers: [MediaRecorderService],
-    standalone: false
+  selector: 'discussion-prompt-composer',
+  templateUrl: './discussion-prompt-composer.component.html',
+  styleUrls: ['./discussion-prompt-composer.component.scss'],
+  providers: [MediaRecorderService],
+  standalone: false,
 })
 export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponent {
   @Input() task: Task;

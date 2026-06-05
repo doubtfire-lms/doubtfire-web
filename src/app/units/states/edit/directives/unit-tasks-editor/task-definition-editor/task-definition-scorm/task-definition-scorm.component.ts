@@ -1,16 +1,15 @@
-import {Component, Input} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input} from '@angular/core';
 
 @Component({
-    selector: 'f-task-definition-scorm',
-    templateUrl: 'task-definition-scorm.component.html',
-    styleUrls: ['task-definition-scorm.component.scss'],
-    standalone: false
+  selector: 'f-task-definition-scorm',
+  templateUrl: 'task-definition-scorm.component.html',
+  styleUrls: ['task-definition-scorm.component.scss'],
+  standalone: false,
 })
 export class TaskDefinitionScormComponent {
   @Input() taskDefinition: TaskDefinition;

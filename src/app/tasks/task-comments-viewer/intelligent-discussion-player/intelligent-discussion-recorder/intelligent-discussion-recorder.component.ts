@@ -1,17 +1,20 @@
-import { Component, Inject, AfterViewInit, Input } from '@angular/core';
-import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
-import { IntelligentDiscussionPlayerService } from '../intelligent-discussion-player.service';
-import { DiscussionComment, Task } from 'src/app/api/models/doubtfire-model';
-import { MediaRecorderService } from 'src/app/common/services/recorder-service';
+import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
+import {BaseAudioRecorderComponent} from 'src/app/common/audio-recorder/audio/base-audio-recorder';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
+import {AfterViewInit, Component, Inject, Input} from '@angular/core';
+import {IntelligentDiscussionPlayerService} from '../intelligent-discussion-player.service';
 
 @Component({
-    selector: 'intelligent-discussion-recorder',
-    templateUrl: './intelligent-discussion-recorder.component.html',
-    styleUrls: ['./intelligent-discussion-recorder.component.css'],
-    providers: [MediaRecorderService],
-    standalone: false
+  selector: 'intelligent-discussion-recorder',
+  templateUrl: './intelligent-discussion-recorder.component.html',
+  styleUrls: ['./intelligent-discussion-recorder.component.css'],
+  providers: [MediaRecorderService],
+  standalone: false,
 })
-export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderComponent implements AfterViewInit {
+export class IntelligentDiscussionRecorderComponent
+  extends BaseAudioRecorderComponent
+  implements AfterViewInit
+{
   @Input() discussion: DiscussionComment;
   @Input() task: Task;
   canvas: HTMLCanvasElement;
@@ -20,7 +23,7 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
 
   constructor(
     private mediaRecorderService: MediaRecorderService,
-    @Inject(IntelligentDiscussionPlayerService) private dps: any
+    @Inject(IntelligentDiscussionPlayerService) private dps: any,
   ) {
     super(mediaRecorderService);
   }
@@ -62,9 +65,9 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
         () => {
           this.isSending = false;
         },
-        (failure: { data: { error: any } }) => {
+        (failure: {data: {error: any}}) => {
           console.error(failure);
-        }
+        },
       );
       this.blob = {} as Blob;
     }

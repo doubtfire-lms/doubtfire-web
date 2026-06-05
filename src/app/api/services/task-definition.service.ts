@@ -1,21 +1,21 @@
 import {CachedEntityService} from 'ngx-entity-service';
+import {Observable} from 'rxjs';
 import {
   LearningOutcomeService,
   TaskDefinition,
   TaskStatusEnum,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiUrl';
-import {MappingFunctions} from './mapping-fn';
 import {AppInjector} from 'src/app/app-injector';
-import {Observable} from 'rxjs';
-import {TaskPrerequisiteService} from './task-prerequisite.service';
-import {TaskPrerequisite} from '../models/task-prerequisite';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {SidekiqJob} from '../models/sidekiq-job';
+import {TaskPrerequisite} from '../models/task-prerequisite';
+import {MappingFunctions} from './mapping-fn';
 import {OverseerStepService} from './overseer-step.service';
+import {TaskPrerequisiteService} from './task-prerequisite.service';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {

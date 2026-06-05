@@ -1,11 +1,11 @@
+import {Subscription, filter} from 'rxjs';
 import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
-import {Subscription, filter} from 'rxjs';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  standalone: false,
 })
 export class AppComponent implements OnInit, OnDestroy {
   private routerSub?: Subscription;

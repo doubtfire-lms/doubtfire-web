@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {MatDialogRef, MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {NestedCsvDownloadModalComponent} from './nested-csv-download-modal.component';
 
 @Injectable({

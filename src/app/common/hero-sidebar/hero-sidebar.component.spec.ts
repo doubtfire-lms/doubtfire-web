@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { HeroSidebarComponent } from './hero-sidebar.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {HeroSidebarComponent} from './hero-sidebar.component';
 
 describe('HeroSidebarComponent', () => {
   let component: HeroSidebarComponent;
@@ -8,9 +7,8 @@ describe('HeroSidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeroSidebarComponent ]
-    })
-    .compileComponents();
+      declarations: [HeroSidebarComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

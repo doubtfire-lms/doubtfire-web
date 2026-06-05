@@ -1,5 +1,4 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-
 import {EditProfileFormComponent} from './edit-profile-form.component';
 
 describe('EditProfileComponent', () => {

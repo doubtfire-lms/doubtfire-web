@@ -171,7 +171,7 @@
         [style.paddingLeft.px]="8 + depth * 14"
         [ngClass]="{
           'bg-slate-200/80 text-slate-900': selectedTab === node.fileIndex,
-          'text-slate-700': selectedTab !== node.fileIndex
+          'text-slate-700': selectedTab !== node.fileIndex,
         }"
         [title]="node.path"
         (click)="selectTreeNode(node)"

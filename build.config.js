@@ -24,9 +24,9 @@ module.exports = {
     api: {
       src: ['build/src/app/api/api-url.js', 'build/src/app/config/external-name/external-name.js'],
       options: {
-        inline: true
-      }
-    }
+        inline: true,
+      },
+    },
   },
 
   /**
@@ -38,31 +38,15 @@ module.exports = {
    * app's unit tests.
    */
   app_files: {
-    js: [
-      'src/**/*.js',
-      '!src/**/*.spec.js',
-      '!src/assets/**/*.js'
-    ],
-    jsunit: [
-      'src/**/*.spec.js'
-    ],
+    js: ['src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js'],
+    jsunit: ['src/**/*.spec.js'],
 
-    coffee: [
-      'src/**/*.coffee',
-      '!src/**/*.spec.coffee',
-      '!src/**/*.old.coffee'
-    ],
-    coffeeunit: [
-      'src/**/*.spec.coffee'
-    ],
+    coffee: ['src/**/*.coffee', '!src/**/*.spec.coffee', '!src/**/*.old.coffee'],
+    coffeeunit: ['src/**/*.spec.coffee'],
 
-    atpl: [
-      'src/app/**/*.tpl.html'
-    ],
+    atpl: ['src/app/**/*.tpl.html'],
 
-    html: [
-      'src/index.html'
-    ],
+    html: ['src/index.html'],
 
     scss: [
       // Do not modify the order
@@ -70,8 +54,8 @@ module.exports = {
       'src/styles/common/**/*.scss',
       'src/styles/modules/**/*.scss',
       'src/app/**/*.scss',
-      '!src/app/**/*.component.scss'
-    ]
+      '!src/app/**/*.component.scss',
+    ],
   },
 
   /**
@@ -92,26 +76,22 @@ module.exports = {
    */
   vendor_files: {
     compile: {
-      js: [
-      ],
-      jsmap: [
-      ],
+      js: [],
+      jsmap: [],
       scss: [
         'node_modules/bootstrap-sass/**/_bootstrap.scss',
-        'node_modules/font-awesome/**/font-awesome.scss'
+        'node_modules/font-awesome/**/font-awesome.scss',
       ],
     },
     copy: {
-      js: [
-      ],
-      jsmap: [
-      ],
+      js: [],
+      jsmap: [],
       css: [
-        "node_modules/nvd3/build/nv.d3.css",
-        "node_modules/angular-xeditable/dist/css/xeditable.css",
-        "node_modules/codemirror/lib/codemirror.css",
-        "node_modules/codemirror/theme/xq-light.css"
-      ]
-    }
-  }
+        'node_modules/nvd3/build/nv.d3.css',
+        'node_modules/angular-xeditable/dist/css/xeditable.css',
+        'node_modules/codemirror/lib/codemirror.css',
+        'node_modules/codemirror/theme/xq-light.css',
+      ],
+    },
+  },
 };

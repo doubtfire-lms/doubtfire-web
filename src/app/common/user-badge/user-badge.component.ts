@@ -1,11 +1,11 @@
-import {Component, Input} from '@angular/core';
 import {Task} from 'src/app/api/models/doubtfire-model';
+import {Component, Input} from '@angular/core';
 
 @Component({
-    selector: 'f-user-badge',
-    templateUrl: './user-badge.component.html',
-    styleUrls: ['./user-badge.component.scss'],
-    standalone: false
+  selector: 'f-user-badge',
+  templateUrl: './user-badge.component.html',
+  styleUrls: ['./user-badge.component.scss'],
+  standalone: false,
 })
 export class UserBadgeComponent {
   @Input() selectedTask: Task;
@@ -25,6 +25,11 @@ export class UserBadgeComponent {
   get studentTaskRoute(): unknown[] | null {
     return this.unselected
       ? null
-      : ['/projects', this.selectedTask.project.id, 'dashboard', this.selectedTask.definition.abbreviation];
+      : [
+          '/projects',
+          this.selectedTask.project.id,
+          'dashboard',
+          this.selectedTask.definition.abbreviation,
+        ];
   }
 }

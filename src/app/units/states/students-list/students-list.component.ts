@@ -1,8 +1,3 @@
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
 import {Observable, Subscription, first, of} from 'rxjs';
 import {
   Project,
@@ -12,13 +7,18 @@ import {
   Unit,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute, Router} from '@angular/router';
 import {UnitStudentEnrolmentModalService} from '../../modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 
 // State for both convenors and tutors to access student list
 @Component({
-    selector: 'f-students-list',
-    templateUrl: './students-list.component.html',
-    standalone: false
+  selector: 'f-students-list',
+  templateUrl: './students-list.component.html',
+  standalone: false,
 })
 export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() unit$: Observable<Unit>;

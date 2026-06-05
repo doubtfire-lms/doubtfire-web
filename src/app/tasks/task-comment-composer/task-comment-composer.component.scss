@@ -45,7 +45,6 @@ $emoji-color: color.adjust(black, $lightness: 25%);
     word-break: break-word;
     text-wrap: wrap;
     user-select: text;
-
   }
 
   #textField[placeholder]:empty::before {
@@ -63,14 +62,19 @@ $emoji-color: color.adjust(black, $lightness: 25%);
   }
 }
 
-
 #textField.draft-loaded {
   animation: draftFadeIn 0.3s ease-in;
 }
 
 @keyframes draftFadeIn {
-  from { opacity: 0.5; background-color: rgba(0, 0, 255, 0.05); }
-  to { opacity: 1; background-color: transparent; }
+  from {
+    opacity: 0.5;
+    background-color: rgba(0, 0, 255, 0.05);
+  }
+  to {
+    opacity: 1;
+    background-color: transparent;
+  }
 }
 
 .draft-loaded {

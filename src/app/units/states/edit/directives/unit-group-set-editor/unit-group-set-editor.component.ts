@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
 import {GroupSet, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {GroupSetService} from 'src/app/api/services/group-set.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnInit} from '@angular/core';
 
 interface GroupSetEditModel {
   name: string;
@@ -14,10 +14,10 @@ interface GroupSetEditModel {
 }
 
 @Component({
-    selector: 'f-unit-group-set-editor',
-    templateUrl: './unit-group-set-editor.component.html',
-    styleUrls: ['./unit-group-set-editor.component.scss'],
-    standalone: false
+  selector: 'f-unit-group-set-editor',
+  templateUrl: './unit-group-set-editor.component.html',
+  styleUrls: ['./unit-group-set-editor.component.scss'],
+  standalone: false,
 })
 export class UnitGroupSetEditorComponent implements OnInit {
   @Input() unit: Unit;

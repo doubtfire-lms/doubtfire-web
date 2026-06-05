@@ -16,16 +16,17 @@
     [disabled]="uploadProgress"
   >
     @if (uploadProgress) {
-    <mat-spinner [diameter]="18" [strokeWidth]="0.5" mode="indeterminate"></mat-spinner>
-    } @if (!uploadProgress) {
-    <span>Choose file</span>
+      <mat-spinner [diameter]="18" [strokeWidth]="0.5" mode="indeterminate"></mat-spinner>
+    }
+    @if (!uploadProgress) {
+      <span>Choose file</span>
     }
   </button>
   <div class="f-inner-border flex grow items-center rounded-lg rounded-l-none bg-white">
     <div class="flex flex-col w-full">
       <div class="flex ml-2.5 h-[48px] items-center">
         @if (file?.name) {
-        <mat-icon class="mr-1">upload_file</mat-icon>
+          <mat-icon class="mr-1">upload_file</mat-icon>
         }
         <span class="truncate grow max-w-xs mt-[4px]"> {{ file?.name || message }} </span>
         {{ uploadProgress }}
@@ -36,16 +37,18 @@
           (click)="uploadProgress ? cancelUpload() : upload()"
         >
           @if (!uploadProgress) {
-          <mat-icon [ngClass]="{ 'animate-bounce': file?.name }">upload</mat-icon>
-          } @if (uploadProgress) {
-          <mat-icon>cancel</mat-icon>
+            <mat-icon [ngClass]="{'animate-bounce': file?.name}">upload</mat-icon>
+          }
+          @if (uploadProgress) {
+            <mat-icon>cancel</mat-icon>
           }
         </button>
       </div>
       @if (uploadProgress) {
-      <mat-progress-bar mode="determinate" [value]="uploadProgress"> </mat-progress-bar>
-      } @if (!uploadProgress) {
-      <span class="h-[4px]"></span>
+        <mat-progress-bar mode="determinate" [value]="uploadProgress"> </mat-progress-bar>
+      }
+      @if (!uploadProgress) {
+        <span class="h-[4px]"></span>
       }
     </div>
   </div>

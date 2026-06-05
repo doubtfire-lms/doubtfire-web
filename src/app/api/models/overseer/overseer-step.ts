@@ -1,9 +1,9 @@
 import {Entity, EntityMapping} from 'ngx-entity-service';
-import {TaskDefinition} from '../task-definition';
-import {TaskStatus, TaskStatusEnum} from '../task-status';
-import {OverseerStepService} from '../../services/overseer-step.service';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {OverseerStepService} from '../../services/overseer-step.service';
+import {TaskDefinition} from '../task-definition';
+import {TaskStatusEnum} from '../task-status';
 
 export class OverseerStep extends Entity {
   id: number;

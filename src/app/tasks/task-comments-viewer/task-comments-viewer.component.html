@@ -45,7 +45,7 @@
             class="comment"
             [ngClass]="{
               'comment-by-other-user': !comment.authorIsMe,
-              'new-comment': comment.isNew
+              'new-comment': comment.isNew,
             }"
             [fxLayout]="comment.authorIsMe ? 'row-reverse' : 'row'"
             fxLayoutAlign="start end"

@@ -1,18 +1,18 @@
-import { Component, Input } from '@angular/core';
-import { TaskDefinition } from 'src/app/api/models/task-definition';
-import { Unit } from 'src/app/api/models/unit';
-import { GradeService } from 'src/app/common/services/grade.service';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Unit} from 'src/app/api/models/unit';
+import {GradeService} from 'src/app/common/services/grade.service';
+import {Component, Input} from '@angular/core';
 
 @Component({
-    selector: 'f-task-definition-general',
-    templateUrl: 'task-definition-general.component.html',
-    styleUrls: ['task-definition-general.component.scss'],
-    standalone: false
+  selector: 'f-task-definition-general',
+  templateUrl: 'task-definition-general.component.html',
+  styleUrls: ['task-definition-general.component.scss'],
+  standalone: false,
 })
 export class TaskDefinitionGeneralComponent {
   @Input() taskDefinition: TaskDefinition;
 
-  public grades: { value: number; viewValue: string }[];
+  public grades: {value: number; viewValue: string}[];
 
   constructor(private gradeService: GradeService) {
     this.grades = this.gradeService.gradeViewData.filter((grade) => grade.value !== -1);

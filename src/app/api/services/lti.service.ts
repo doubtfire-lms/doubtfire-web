@@ -1,10 +1,10 @@
+import {Observable} from 'rxjs';
+import {CsvResult} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import LTI_API_URL from 'src/app/config/constants/ltiApiUrl';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import LTI_API_URL from 'src/app/config/constants/ltiApiUrl';
 import {Project} from '../models/project';
 import {SidekiqJob} from '../models/sidekiq-job';
-import {CsvResult} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 
 interface info {
   name?: string;

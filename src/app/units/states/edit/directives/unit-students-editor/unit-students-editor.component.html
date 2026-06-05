@@ -12,7 +12,13 @@
       </mat-form-field>
     </div>
   </div>
-  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortTableData($event)" class="f-table">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    (matSortChange)="sortTableData($event)"
+    class="f-table"
+  >
     <!-- Username Column -->
     <ng-container matColumnDef="username" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-white">Username</th>
@@ -49,7 +55,11 @@
     <ng-container matColumnDef="campus">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Campus</th>
       <td mat-cell *matCellDef="let project" class="pt-2.5">
-        <student-campus-select [unit]="unit" [student]="project" [update]="true"></student-campus-select>
+        <student-campus-select
+          [unit]="unit"
+          [student]="project"
+          [update]="true"
+        ></student-campus-select>
       </td>
     </ng-container>
 
@@ -94,7 +104,9 @@
       <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length">
         <mat-toolbar>
           <mat-toolbar-row>
-            <button mat-button target="_blank" (click)="enrolStudent()"><mat-icon inline>person</mat-icon> Enrol</button>
+            <button mat-button target="_blank" (click)="enrolStudent()">
+              <mat-icon inline>person</mat-icon> Enrol
+            </button>
             <span class="spacer"></span>
             <button mat-button target="_blank" (click)="downloadEnrolments()">
               <mat-icon inline>download</mat-icon> Download
@@ -106,7 +118,10 @@
               <mat-icon inline>upload</mat-icon> Batch Withdraw
             </button>
             <span class="spacer"></span>
-            <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            <mat-paginator
+              class="mat-elevation-z0"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+            ></mat-paginator>
           </mat-toolbar-row>
         </mat-toolbar>
       </td>

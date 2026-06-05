@@ -1,7 +1,7 @@
-import { TestBed, tick, fakeAsync } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { User, UserService } from 'src/app/api/models/doubtfire-model';
-import { HttpRequest, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {User, UserService} from 'src/app/api/models/doubtfire-model';
+import {HttpRequest, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
+import {TestBed, fakeAsync, tick} from '@angular/core/testing';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -9,9 +9,13 @@ describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [UserService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [
+        UserService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    });
 
     userService = TestBed.inject(UserService);
     httpMock = TestBed.inject(HttpTestingController);
@@ -38,7 +42,9 @@ describe('UserService', () => {
 
     const expectedUsers: User[] = [u];
 
-    userService.query().subscribe((users) => expect(users).toEqual(expectedUsers, 'expected users'));
+    userService
+      .query()
+      .subscribe((users) => expect(users).toEqual(expectedUsers, 'expected users'));
 
     const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/');

@@ -1,6 +1,5 @@
 import {Component, Inject, Injectable, inject} from '@angular/core';
 import {MAT_SNACK_BAR_DATA, MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
-
 import {ConfettiService} from './confetti.service';
 
 @Injectable({
@@ -43,8 +42,8 @@ export class AlertService {
 }
 
 @Component({
-    selector: 'f-alert',
-    template: `<span class="flex space-x-2.5 items-center center-items">
+  selector: 'f-alert',
+  template: `<span class="flex space-x-2.5 items-center center-items">
     <span class="flex">
       <mat-icon>{{ data?.icon }}</mat-icon>
     </span>
@@ -54,7 +53,7 @@ export class AlertService {
       <button mat-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">Close</button>
     </span></span
   >`,
-    standalone: false
+  standalone: false,
 })
 export class AlertComponent {
   snackBarRef = inject(MatSnackBarRef);

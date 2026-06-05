@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {CachedEntityService} from 'ngx-entity-service';
+import {Observable} from 'rxjs';
 import {
   GroupSetService,
   LearningOutcomeService,
@@ -11,16 +11,16 @@ import {
   Unit,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
-import {CachedEntityService, Entity, EntityMapping} from 'ngx-entity-service';
-import API_URL from 'src/app/config/constants/apiUrl';
-import {UnitRoleService} from './unit-role.service';
-import {AppInjector} from 'src/app/app-injector';
-import {TaskDefinitionService} from './task-definition.service';
-import {GroupService} from './group.service';
-import {Observable} from 'rxjs';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {AppInjector} from 'src/app/app-injector';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {GroupService} from './group.service';
 import {MappingFunctions} from './mapping-fn';
+import {TaskDefinitionService} from './task-definition.service';
+import {UnitRoleService} from './unit-role.service';
 
 export type IloStats = {
   median: number;

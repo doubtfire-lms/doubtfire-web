@@ -1,15 +1,15 @@
-import {Injectable, Inject} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Observable} from 'rxjs';
 import {
-  Task,
   OverseerAssessment,
   OverseerAssessmentService,
   OverseerImage,
   OverseerImageService,
+  Task,
 } from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 
 export interface TaskAssessmentResult {
   id?: number;
