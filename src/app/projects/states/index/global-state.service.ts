@@ -125,6 +125,13 @@ export class GlobalStateService implements OnDestroy {
       this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
         if (result) {
           this.loadGlobals();
+
+          if (
+            this.userService.currentUser.hasRunFirstTimeSetup === false &&
+            window.location.pathname !== '/welcome'
+          ) {
+            this.router.navigateByUrl('/welcome');
+          }
         } else {
           // Loading is finshed...
           this.isLoadingSubject.next(false);

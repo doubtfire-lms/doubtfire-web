@@ -85,9 +85,11 @@ export class SignInComponent implements OnInit {
           this.globalState.hideHeader();
           this.userService.currentUser.ltik = params.ltik;
           return this.router.navigate(['/lti'], {queryParams: {ltik: params.ltik}});
+        } else if (this.userService.currentUser.hasRunFirstTimeSetup === false) {
+          return this.router.navigateByUrl('/welcome');
         } else {
           this.globalState.goHome();
-          return this.router.navigateByUrl('/welcome');
+          return this.router.navigateByUrl('/home');
         }
       }
       this.isLoading = true;
@@ -212,7 +214,9 @@ export class SignInComponent implements OnInit {
    */
   private actionSignInSuccess(): void {
     this.globalState.loadGlobals();
-    this.router.navigateByUrl('/welcome');
+    this.router.navigateByUrl(
+      this.userService.currentUser.hasRunFirstTimeSetup === false ? '/welcome' : '/home',
+    );
   }
 
   /**
