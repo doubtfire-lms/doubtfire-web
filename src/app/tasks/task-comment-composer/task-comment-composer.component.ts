@@ -304,7 +304,9 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
       };
 
       retryWithTimeout();
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   private clearInput() {
