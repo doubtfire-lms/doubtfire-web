@@ -143,7 +143,7 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_changes: SimpleChanges): void {
     this.setAbbreviationPrefix();
     this.selectedOutcome = null;
   }

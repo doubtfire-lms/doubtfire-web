@@ -40,7 +40,7 @@ export class ScormExtensionCommentComponent {
 
   grantExtension() {
     this.comment.grant().subscribe({
-      next: (tc: TaskComment) => {
+      next: (_tc: TaskComment) => {
         this.alerts.success('Attempt request granted', 2000);
       },
       error: (response) => {

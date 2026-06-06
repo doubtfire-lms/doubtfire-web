@@ -62,7 +62,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       },
       {
         keys: 'recipient',
-        toEntityFn: (data: object, key: string, comment: TaskComment) => {
+        toEntityFn: (data: object, key: string, _comment: TaskComment) => {
           return this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
         },
       },
@@ -71,7 +71,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       'isNew',
       {
         keys: ['text', 'comment'],
-        toEntityFn: (data, key, entity) => {
+        toEntityFn: (data, _key, _entity) => {
           return this.emojiService.colonsToNative(data['comment']);
         },
       },
@@ -160,7 +160,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     options?: RequestOptions<TaskComment>,
   ): Observable<TaskComment[]> {
     return super.query(pathIds, options).pipe(
-      tap((result) => {
+      tap((_result) => {
         // Access the task and set the number of new comments to 0 - they are now read on the server
         const task = other as any; //TODO: change to Task object
         task.numNewComments = 0;

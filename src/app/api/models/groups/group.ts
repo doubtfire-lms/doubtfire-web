@@ -86,7 +86,7 @@ export class Group extends Entity {
     httpClient
       .post(`${AppInjector.get(DoubtfireConstants).API_URL}/${this.memberUri(member)}`, {})
       .subscribe({
-        next: (success) => {
+        next: () => {
           // Get old group..
           const grp = member.groupForGroupSet(this.groupSet);
           if (grp) {
@@ -119,7 +119,7 @@ export class Group extends Entity {
     httpClient
       .delete(`${AppInjector.get(DoubtfireConstants).API_URL}/${this.memberUri(member)}`, {})
       .subscribe({
-        next: (success) => {
+        next: () => {
           // Get old group..
           this.projectsCache.delete(member);
           member.groupCache.delete(this);

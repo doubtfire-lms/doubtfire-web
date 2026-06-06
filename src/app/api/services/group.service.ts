@@ -28,7 +28,7 @@ export class GroupService extends CachedEntityService<Group> {
         toEntityFn: (data: object, jsonKey: string, grp: Group) => {
           return grp.unit.tutorialsCache.get(data[jsonKey]);
         },
-        toJsonFn: (group: Group, key: string) => {
+        toJsonFn: (group: Group, _key: string) => {
           return group.tutorial.id;
         },
       },

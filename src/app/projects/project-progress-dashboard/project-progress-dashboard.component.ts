@@ -37,7 +37,7 @@ export class ProjectProgressDashboardComponent implements OnInit {
   protected targetGradeClicked(grade: number): void {
     this.project.targetGrade = grade;
     this.projectService.update(this.project).subscribe({
-      next: (project) => {
+      next: (_project) => {
         this.alertService.success('Target grade updated');
       },
       error: (error) => {

@@ -30,7 +30,7 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
       ['submissionStatus', 'status'],
       {
         keys: ['timestamp', 'submission_timestamp'],
-        toEntityFn: (data, key, entity, params?) => {
+        toEntityFn: (data, _key, _entity, _params?) => {
           return new Date(data['submission_timestamp'] * 1000);
         },
       },

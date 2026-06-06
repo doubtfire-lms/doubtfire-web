@@ -40,7 +40,7 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent im
     this.isSending = true;
     if (this.blob && this.blob.size > 0) {
       this.ts.addComment(this.task, this.blob, 'audio').subscribe({
-        next: (comment: TaskComment) => {
+        next: (_comment: TaskComment) => {
           this.isSending = false;
           this.scrollCommentsDown();
         },

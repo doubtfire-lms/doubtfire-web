@@ -57,7 +57,7 @@ export class DiscussionPromptService extends CachedEntityService<DiscussionPromp
           }
           return entity.taskDefinition;
         },
-        toJsonFn: (entity: DiscussionPrompt, key: string) => {
+        toJsonFn: (entity: DiscussionPrompt, _key: string) => {
           return entity.taskDefinition?.id;
         },
       },

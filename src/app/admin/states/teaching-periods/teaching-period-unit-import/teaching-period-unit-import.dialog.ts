@@ -119,7 +119,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   private loadAllUnits() {
     // Load all units
     this.unitService.query(undefined, {params: {include_in_active: true}}).subscribe({
-      next: (success) => {
+      next: () => {
         return;
       },
       error: (failure) => {
@@ -268,7 +268,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
         },
       })
       .subscribe({
-        next: (newUnit: Unit) => {
+        next: () => {
           unitToImport.done = true;
           this.importUnit(idx + 1);
         },

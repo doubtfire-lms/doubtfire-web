@@ -61,7 +61,7 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
     this.getFeedbackChips();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_changes: SimpleChanges): void {
     this.selectedTemplate = null;
     this.getFeedbackChips();
   }

@@ -3,7 +3,7 @@ import {Subscription, timer} from 'rxjs';
 import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
 import {AudioPlayerComponent} from 'src/app/common/audio-player/audio-player.component';
 import {MicrophoneTesterComponent} from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
-import {AfterViewInit, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, Input, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {IntelligentDiscussionPlayerService} from './intelligent-discussion-player.service';
 import {IntelligentDiscussionRecorderComponent} from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
@@ -64,9 +64,9 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
       },
     );
 
-    dialogRef.afterOpened().subscribe((result: any) => {});
+    dialogRef.afterOpened().subscribe((_result: any) => {});
 
-    dialogRef.afterClosed().subscribe((result: any) => {});
+    dialogRef.afterClosed().subscribe((_result: any) => {});
   }
 }
 
@@ -176,7 +176,7 @@ export class IntelligentDiscussionDialog {
     });
   }
 
-  responseConfirmed(e: any) {
+  responseConfirmed(_e: any) {
     if (this.activePromptId !== this.numberOfPrompts - 1) {
       this.activePromptId++;
       this.setPrompt();

@@ -82,12 +82,12 @@ export class TiiActionLogComponent implements AfterViewInit {
         },
       })
       .subscribe({
-        next: (updatedAction) => {
+        next: () => {
           action.retry = true;
           this.alertService.success('Action has been queued for retry');
         },
         error: (error) => {
-          this.alertService.error('Failed to queue action for retry');
+          this.alertService.error(`Failed to queue action for retry: ${error}`);
         },
       });
   }

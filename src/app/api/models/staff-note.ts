@@ -41,7 +41,7 @@ export class StaffNote extends Entity {
     staffNoteService
       .delete({projectId: this.project.id, id: this.id}, {cache: this.project.staffNoteCache})
       .subscribe({
-        next: (response: object) => {
+        next: () => {
           AppInjector.get(AlertService).error('Successfully deleted staff note', 4000);
           this.project.staffNoteCount--;
           staffNoteService.updateStaffNoteReplies(this.project.staffNoteCache.currentValues);

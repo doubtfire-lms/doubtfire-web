@@ -39,7 +39,7 @@ export class PdfImageCommentComponent implements OnInit, OnDestroy {
 
     this.fileDownloaderService.downloadBlob(
       url,
-      ((blobUrl, response) => {
+      ((blobUrl, _response) => {
         this.resourceUrl = blobUrl;
         if (fn) fn(blobUrl);
       }).bind(this),

@@ -148,7 +148,7 @@ export class Task extends Entity {
     AppInjector.get(TaskCommentService)
       .addComment(this, textString, 'text')
       .subscribe({
-        next: (tc) => {},
+        next: (_tc) => {},
         error: (error) => {
           console.log(error);
         },
@@ -891,7 +891,7 @@ export class Task extends Entity {
 
     modal.result.then(
       // Grade was selected (modal closed with result)
-      (response) => {},
+      (_response) => {},
       // Grade was not selected (modal was dismissed)
       (_dismissed) => {
         if (!isTestSubmission) {
@@ -1032,7 +1032,7 @@ export class Task extends Entity {
           options,
         )
         .subscribe({
-          next: (response) => {
+          next: (_response) => {
             if (!hasId && this.id > 0) {
               this.project.taskCache.delete(this.definition.abbreviation);
               this.project.taskCache.add(this);
@@ -1111,7 +1111,7 @@ export class Task extends Entity {
     const http = AppInjector.get(HttpClient);
 
     http.post(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`, {}).subscribe({
-      next: (data) => {
+      next: (_data) => {
         this.pinned = true;
         onSuccess?.();
       },

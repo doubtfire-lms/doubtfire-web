@@ -10,7 +10,7 @@ export class SpecConModalService {
   constructor(public dialog: MatDialog) {}
 
   public show(project: Project) {
-    const dialogRef: MatDialogRef<SpecConModalComponent, {project: Project}> = this.dialog.open(
+    const _dialogRef: MatDialogRef<SpecConModalComponent, {project: Project}> = this.dialog.open(
       SpecConModalComponent,
       {
         data: {project: project},

@@ -230,7 +230,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
           },
         )
         .subscribe({
-          next: (result) => {
+          next: (_result) => {
             this.alerts.success('Saved overseer step', 3000);
           },
           error: (error) => {
@@ -302,7 +302,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     if (!this.currentUserTask) return;
 
     this.submissions.getLatestSubmissionsTimestamps(this.currentUserTask).subscribe({
-      next: (result: OverseerAssessment[]) => {},
+      next: (_result: OverseerAssessment[]) => {},
       error: (error) => {
         this.alerts.error('Error: ' + error, 6000);
       },

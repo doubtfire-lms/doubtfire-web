@@ -187,7 +187,7 @@ export class SignInComponent implements OnInit {
           return wait.then();
         }
       },
-      error: (err) => {
+      error: (_err) => {
         this.authMethodFailed = true;
         // this.error = err;
 

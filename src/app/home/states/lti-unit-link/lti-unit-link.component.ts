@@ -120,7 +120,7 @@ export class LtiUnitLinkComponent implements AfterViewInit {
           );
           this.loadingUnits = false;
         },
-        error: (error) => {
+        error: (_error) => {
           this.alertsService.error(`Failed to fetch units`, 6000);
         },
       });

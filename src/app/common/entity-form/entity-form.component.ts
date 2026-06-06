@@ -179,7 +179,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
 
   protected delete(entity: T, entities: T[], service: EntityService<T>): Observable<any> {
     return service.delete<any>(entity, this.optionsOnRequest('delete')).pipe(
-      tap((obj) => {
+      tap((_obj) => {
         this.cancelEdit();
         entities.splice(entities.indexOf(entity), 1);
         this.dataSource.data = entities;
@@ -211,7 +211,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    * to the entity constructor when an object is created. This is then passed along
    * in the `create` call as the `other` value to the EntityService's create method.
    */
-  protected optionsOnRequest(kind: 'create' | 'update' | 'delete'): RequestOptions<T> {
+  protected optionsOnRequest(_kind: 'create' | 'update' | 'delete'): RequestOptions<T> {
     return undefined;
   }
 

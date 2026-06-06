@@ -225,7 +225,7 @@ export class UnitTutorialsListComponent
    * Ensure that the unit is passed to the Tutorial entity when create it called.
    */
   protected override optionsOnRequest(
-    kind: 'create' | 'update' | 'delete',
+    _kind: 'create' | 'update' | 'delete',
   ): RequestOptions<Tutorial> {
     return {
       constructorParams: this.unit,

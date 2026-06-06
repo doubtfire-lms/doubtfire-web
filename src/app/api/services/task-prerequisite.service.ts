@@ -20,7 +20,7 @@ export class TaskPrerequisiteService extends CachedEntityService<TaskPrerequisit
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public override createInstanceFrom(json: object, other?: any): TaskPrerequisite {
+  public override createInstanceFrom(json: object, _other?: any): TaskPrerequisite {
     return new TaskPrerequisite(json);
   }
 

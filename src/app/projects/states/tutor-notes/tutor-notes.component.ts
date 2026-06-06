@@ -41,7 +41,7 @@ export class TutorNotesComponent implements OnInit {
     }
 
     this.loadingTutorNotes = true;
-    this.tutorNoteService.loadTutorNotes(this.unitRole).subscribe((notes) => {
+    this.tutorNoteService.loadTutorNotes(this.unitRole).subscribe((_notes) => {
       this.loadingTutorNotes = false;
       this.tutorNoteService.updateTutorNoteReplies(this.unitRole?.tutorNotesCache.currentValues);
       this.scrollDown();

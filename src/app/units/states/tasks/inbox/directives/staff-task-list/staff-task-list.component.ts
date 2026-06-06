@@ -296,7 +296,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.sidekiqProgressModalService
           .show(`Downloading submission pdfs for ${taskDef.abbreviation}`, newJob.id)
           .subscribe({
-            next: (job) => {
+            next: (_job) => {
               this.fileDownloaderService.downloadFile(
                 `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
                   this.unit.id
@@ -319,7 +319,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.sidekiqProgressModalService
           .show(`Downloading submission files for ${taskDef.abbreviation}`, newJob.id)
           .subscribe({
-            next: (job) => {
+            next: (_job) => {
               this.fileDownloaderService.downloadFile(
                 `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
                   this.unit.id
@@ -402,7 +402,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   openDialog() {
     const dialogRef = this.dialog.open(this.searchDialog);
 
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe((_result) => {});
   }
 
   refreshTasks(): void {

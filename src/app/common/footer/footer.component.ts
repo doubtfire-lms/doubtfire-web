@@ -47,7 +47,7 @@ export class FooterComponent implements OnInit {
   public warningTextLeftOffset: number;
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize(_event) {
     // After window resizes, calc the location of the elements again
     this.findSimilaritiesButton();
   }

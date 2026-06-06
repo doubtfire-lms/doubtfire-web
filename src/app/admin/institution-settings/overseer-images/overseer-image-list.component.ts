@@ -107,7 +107,7 @@ export class OverseerImageListComponent
 
   deleteOverseerImage(image: OverseerImage) {
     this.overseerImageService.delete(image).subscribe(
-      ((response) => {
+      ((_response) => {
         this.cancelEdit();
         this.overseerImages.splice(this.overseerImages.indexOf(image), 1);
         this.dataSource.data = this.overseerImages;

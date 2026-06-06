@@ -79,7 +79,7 @@ export class DiscussionPromptComposerComponent
     this.taskCommentService
       .addComment(this.task, undefined, 'discussion', undefined, this.recordings)
       .subscribe(
-        (tc: TaskComment) => {
+        (_tc: TaskComment) => {
           this.isSending = false;
         },
         (failure: any) => {

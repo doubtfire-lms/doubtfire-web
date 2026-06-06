@@ -66,7 +66,7 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
           );
         }
       },
-      error: (response: any) => {
+      error: (_response: any) => {
         this.alerts.error('Request failed, cannot recreate PDF at this time.', 6000);
       },
     });

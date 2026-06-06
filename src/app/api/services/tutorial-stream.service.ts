@@ -16,7 +16,7 @@ export class TutorialStreamService extends CachedEntityService<TutorialStream> {
     this.mapping.mapAllKeysToJson();
   }
 
-  public createInstanceFrom(json: any, other?: any): TutorialStream {
+  public createInstanceFrom(_json: any, _other?: any): TutorialStream {
     return new TutorialStream();
   }
 

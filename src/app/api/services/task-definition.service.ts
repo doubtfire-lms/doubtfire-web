@@ -57,7 +57,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       },
       {
         keys: 'uploadRequirements',
-        toJsonFn: (taskDef: TaskDefinition, key: string) => {
+        toJsonFn: (taskDef: TaskDefinition, _key: string) => {
           return JSON.stringify(
             taskDef.uploadRequirements?.map((upreq) => {
               return {
@@ -70,7 +70,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
             }),
           );
         },
-        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, params?: any) => {
+        toEntityFn: (data: object, key: string, _taskDef: TaskDefinition, _params?: any) => {
           return (
             data[key] as {
               key: string;
@@ -92,10 +92,10 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       },
       {
         keys: ['tutorialStream', 'tutorial_stream_abbr'],
-        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, params?: any) => {
+        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, _params?: any) => {
           return taskDef.unit.tutorialStreamsCache.get(data[key]);
         },
-        toJsonFn: (taskDef: TaskDefinition, key: string) => {
+        toJsonFn: (taskDef: TaskDefinition, _key: string) => {
           return taskDef.tutorialStream?.abbreviation;
         },
       },
@@ -103,14 +103,14 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'restrictStatusUpdates',
       {
         keys: ['groupSet', 'group_set_id'],
-        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, params?: any) => {
+        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, _params?: any) => {
           if (data[key]) {
             return taskDef.unit.groupSetsCache.get(data[key]);
           } else {
             return data[key];
           }
         },
-        toJsonFn: (taskDef: TaskDefinition, key: string) => {
+        toJsonFn: (taskDef: TaskDefinition, _key: string) => {
           return taskDef.groupSet?.id;
         },
       },

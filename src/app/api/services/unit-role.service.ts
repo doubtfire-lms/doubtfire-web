@@ -26,7 +26,7 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
       'id',
       {
         keys: 'unit',
-        toEntityFn: (data, key, entity) => {
+        toEntityFn: (data, _key, _entity) => {
           const unitData = data['unit'];
           const result: Unit = this.unitService.cache.getOrCreate(
             unitData.id,
@@ -36,13 +36,13 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
           result.updateFromJson(unitData, this.unitService.mapping);
           return result;
         },
-        toJsonFn: (entity: UnitRole, key: string) => {
+        toJsonFn: (entity: UnitRole, _key: string) => {
           return entity.unit?.id;
         },
       },
       {
         keys: 'user',
-        toEntityFn: (data: object, key: string, entity: UnitRole, params?: any) => {
+        toEntityFn: (data: object, _key: string, _entity: UnitRole, _params?: any) => {
           return this.userService.cache.getOrCreate(data['user']['id'], userService, data['user']);
         },
       },
@@ -50,13 +50,13 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
       'roleId',
       {
         keys: 'userId',
-        toJsonFn: (entity: UnitRole, key: string) => {
+        toJsonFn: (entity: UnitRole, _key: string) => {
           return entity.user?.id;
         },
       },
       {
         keys: 'unitId',
-        toJsonFn: (entity: UnitRole, key: string) => {
+        toJsonFn: (entity: UnitRole, _key: string) => {
           return entity.unit?.id;
         },
       },
@@ -77,7 +77,7 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
     );
   }
 
-  public createInstanceFrom(json: any, other?: any): UnitRole {
+  public createInstanceFrom(_json: any, _other?: any): UnitRole {
     return new UnitRole();
   }
 }

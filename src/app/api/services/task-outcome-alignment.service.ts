@@ -21,7 +21,7 @@ export class TaskOutcomeAlignmentService extends CachedEntityService<TaskOutcome
           const unit = entity.unit;
           return unit.learningOutcomesCache.get(data[key]);
         },
-        toJsonFn: (entity: TaskOutcomeAlignment, key: string) => {
+        toJsonFn: (entity: TaskOutcomeAlignment, _key: string) => {
           return entity.learningOutcome.id;
         },
       },
@@ -31,7 +31,7 @@ export class TaskOutcomeAlignmentService extends CachedEntityService<TaskOutcome
           const unit = entity.unit;
           return unit.taskDef(data[key]);
         },
-        toJsonFn: (entity: TaskOutcomeAlignment, key: string) => {
+        toJsonFn: (entity: TaskOutcomeAlignment, _key: string) => {
           return entity.taskDefinition.id;
         },
       },
@@ -41,7 +41,7 @@ export class TaskOutcomeAlignmentService extends CachedEntityService<TaskOutcome
           const project = entity.project;
           return project.taskCache.get(data[key]);
         },
-        toJsonFn: (entity: TaskOutcomeAlignment, key: string) => {
+        toJsonFn: (entity: TaskOutcomeAlignment, _key: string) => {
           return entity.task?.id;
         },
       },

@@ -275,7 +275,7 @@ export class ScormAdapterService {
     return errorString;
   }
 
-  GetDiagnostic(errorCode: string): string {
+  GetDiagnostic(_errorCode: string): string {
     // TODO: implement this
     // console.log(`API_1484_11: GetDiagnostic:`, errorCode);
     return 'GetDiagnostic is currently not implemented';

@@ -102,7 +102,7 @@ export class FileViewerComponent implements OnDestroy, OnChanges {
   private downloadBlob(downloadUrl: string): void {
     this.fileDownloader.downloadBlob(
       downloadUrl,
-      (url: string, response: HttpResponse<Blob>) => {
+      (url: string, _response: HttpResponse<Blob>) => {
         this.blobUrl = url;
       },
       (error: any) => {

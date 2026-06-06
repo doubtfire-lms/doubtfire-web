@@ -25,13 +25,13 @@ export class CheckForUpdateService {
           'An update to the app has been found, would you like to refresh now?',
           'refresh',
         );
-        snackBarRef.onAction().subscribe((result) => {
+        snackBarRef.onAction().subscribe((_result) => {
           updates.activateUpdate().then(() => document.location.reload());
         });
       }
     });
 
-    this.updates.unrecoverable.subscribe((event) => {
+    this.updates.unrecoverable.subscribe((_event) => {
       _snackBar.open('An error occurred during update, please refresh the page');
     });
   }

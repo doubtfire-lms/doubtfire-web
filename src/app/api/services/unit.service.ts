@@ -59,7 +59,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'myRole',
       {
         keys: 'unitRole',
-        toEntityFn: (data: object, jsonKey: string, entity: Unit) => {
+        toEntityFn: (data: object, jsonKey: string, _entity: Unit) => {
           const unitRoleService = AppInjector.get(UnitRoleService);
           unitRoleService.cache.get(data[jsonKey]);
         },
@@ -83,16 +83,16 @@ export class UnitService extends CachedEntityService<Unit> {
           entity.mainConvenorUser = result?.user;
           return result;
         },
-        toJsonFn: (unit: Unit, key: string) => {
+        toJsonFn: (unit: Unit, _key: string) => {
           return unit.mainConvenor?.id;
         },
       },
       {
         keys: ['mainConvenorUser', 'main_convenor_user_id'],
-        toEntityFn: (data, key, entity) => {
+        toEntityFn: (data, key, _entity) => {
           return AppInjector.get(UserService).cache.get(data[key]);
         },
-        toJsonFn: (unit: Unit, key: string) => {
+        toJsonFn: (unit: Unit, _key: string) => {
           return unit.mainConvenor?.user.id;
         },
       },
@@ -107,27 +107,27 @@ export class UnitService extends CachedEntityService<Unit> {
             return undefined;
           }
         },
-        toJsonFn: (entity: Unit, key: string) => {
+        toJsonFn: (entity: Unit, _key: string) => {
           return entity.teachingPeriod ? entity.teachingPeriod.id : undefined;
         },
       },
       {
         keys: 'startDate',
-        toEntityFn: (data, key, entity, params?) => {
+        toEntityFn: (data, key, _entity, _params?) => {
           return new Date(data[key]);
         },
         toJsonFn: MappingFunctions.mapDayToJson,
       },
       {
         keys: 'endDate',
-        toEntityFn: (data, key, entity, params?) => {
+        toEntityFn: (data, key, _entity, _params?) => {
           return new Date(data[key]);
         },
         toJsonFn: MappingFunctions.mapDayToJson,
       },
       {
         keys: 'portfolioAutoGenerationDate',
-        toEntityFn: (data, key, entity, params?) => {
+        toEntityFn: (data, key, _entity, _params?) => {
           return new Date(data[key]);
         },
         toJsonFn: MappingFunctions.mapDayToJson,
@@ -231,7 +231,7 @@ export class UnitService extends CachedEntityService<Unit> {
         toEntityFn: (data: object, jsonKey: string, unit: Unit) => {
           return unit.taskDef(data[jsonKey]);
         },
-        toJsonFn: (unit: Unit, key: string) => {
+        toJsonFn: (unit: Unit, _key: string) => {
           return unit.draftTaskDefinition?.id;
         },
       },
@@ -289,7 +289,7 @@ export class UnitService extends CachedEntityService<Unit> {
     );
   }
 
-  public override createInstanceFrom(json: any, other?: any): Unit {
+  public override createInstanceFrom(_json: any, _other?: any): Unit {
     return new Unit();
   }
 

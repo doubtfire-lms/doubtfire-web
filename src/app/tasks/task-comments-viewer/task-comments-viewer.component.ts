@@ -57,7 +57,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
     private commentsModalRef: CommentsModalService,
     private alerts: AlertService,
   ) {
-    this.commentAddedSub = this.taskCommentService.commentAdded$.subscribe((tc: TaskComment) => {
+    this.commentAddedSub = this.taskCommentService.commentAdded$.subscribe((_tc: TaskComment) => {
       this.scrollDown();
     });
 
@@ -219,7 +219,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   // # Upload image files as comments to a given task
   postAttachmentComment(file) {
     this.taskCommentService.addComment(this.task, file, 'file', null).subscribe(
-      (tc: TaskComment) => {},
+      (_tc: TaskComment) => {},
       (error: any) => {
         this.alerts.error(error || error?.message, 2000);
       },

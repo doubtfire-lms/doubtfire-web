@@ -34,22 +34,22 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       'abbreviation',
       {
         keys: ['campus', 'campus_id'],
-        toEntityOp: (data: object, key: string, entity: Tutorial, params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Tutorial, _params?: any) => {
           this.campusService.get(data['campus_id']).subscribe((campus) => {
             entity.campus = campus;
           });
         },
-        toJsonFn: (entity: Tutorial, key: string) => {
+        toJsonFn: (entity: Tutorial, _key: string) => {
           return entity.campus ? entity.campus.id : -1;
         },
       },
       'capacity',
       {
         keys: ['tutor', 'tutor_id'],
-        toEntityFn: (data: object, key: string, entity: Tutorial, params?: any) => {
+        toEntityFn: (data: object, key: string, _entity: Tutorial, _params?: any) => {
           return this.userService.cache.get(data[key]);
         },
-        toJsonFn: (entity: Tutorial, key: string) => {
+        toJsonFn: (entity: Tutorial, _key: string) => {
           return entity.tutor?.id;
         },
       },
@@ -57,17 +57,17 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       'numStudents',
       {
         keys: ['tutorialStream', 'tutorial_stream_abbr'],
-        toEntityFn: (data: object, key: string, entity: Tutorial, params?: any) => {
+        toEntityFn: (data: object, key: string, entity: Tutorial, _params?: any) => {
           return entity.unit.tutorialStreamForAbbr(data[key]);
         },
-        toJsonFn: (entity: Tutorial, key: string) => {
+        toJsonFn: (entity: Tutorial, _key: string) => {
           return entity.tutorialStream ? entity.tutorialStream.abbreviation : null;
         },
       },
 
       {
         keys: ['unit', 'unit_id'],
-        toJsonFn: (entity: Tutorial, key: string) => {
+        toJsonFn: (entity: Tutorial, _key: string) => {
           return entity.unit?.id;
         },
       },

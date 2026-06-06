@@ -79,13 +79,13 @@ export class TaskService extends CachedEntityService<Task> {
       'pinned',
       {
         keys: 'new_stat',
-        toEntityOp: (data: object, key: string, entity: Task, params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Task, _params?: any) => {
           entity.project.taskStats = data['new_stat'];
         },
       },
       {
         keys: 'otherProjects',
-        toEntityOp: (data: object, key: string, entity: Task, params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Task, _params?: any) => {
           data['other_projects'].forEach((details) => {
             const proj = entity.unit.findStudent(details.id);
             if (proj) {
@@ -209,7 +209,7 @@ export class TaskService extends CachedEntityService<Task> {
     };
 
     this.get(pathIds, options).subscribe({
-      next: (value: Task) => {},
+      next: (_value: Task) => {},
       error: (message) => {
         console.log(`Failed to refresh tasks ${message}`);
       },

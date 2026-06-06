@@ -16,7 +16,7 @@ export class ActivityTypeService extends CachedEntityService<ActivityType> {
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public createInstanceFrom(json: object, other?: any): ActivityType {
+  public createInstanceFrom(_json: object, _other?: any): ActivityType {
     return new ActivityType();
   }
 }

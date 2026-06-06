@@ -79,10 +79,10 @@ export class TaskSubmissionHistoryComponent implements OnInit {
 
   triggerOverseer(tab: OverseerAssessment) {
     this.overseerAssessmentService.triggerOverseer(tab).subscribe(
-      (response: OverseerAssessment) => {
+      (_response: OverseerAssessment) => {
         this.alerts.success('Overseer assessment will be run again.', 2000);
       },
-      (response: any) => {
+      (_response: any) => {
         this.alerts.error('Error requesting overseer assessment.', 6000);
       },
     );

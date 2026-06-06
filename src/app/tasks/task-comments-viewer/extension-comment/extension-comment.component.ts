@@ -41,7 +41,7 @@ export class ExtensionCommentComponent {
 
   denyExtension() {
     this.comment.deny().subscribe({
-      next: (tc: TaskComment) => {
+      next: (_tc: TaskComment) => {
         this.alerts.success('Extension updated', 2000);
       },
       error: (response) => {
@@ -52,7 +52,7 @@ export class ExtensionCommentComponent {
 
   grantExtension() {
     this.comment.grant().subscribe({
-      next: (tc: TaskComment) => {
+      next: (_tc: TaskComment) => {
         this.alerts.success('Extension updated', 2000);
       },
       error: (response) => {

@@ -21,7 +21,6 @@ import {
   KeyValueDiffer,
   KeyValueDiffers,
   OnChanges,
-  OnInit,
   QueryList,
   SimpleChanges,
   ViewChild,
@@ -182,7 +181,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
 
     const target = event.target as HTMLElement;
     const text = target.innerText;
-    const raw = target.innerText;
+    const _raw = target.innerText;
 
     // If user is typing something new after submission, reset the submitted status
     if (this.task) {
@@ -206,7 +205,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
         }
       }
 
-      const draftKey = this.getDraftKey(this.task);
+      const _draftKey = this.getDraftKey(this.task);
       // this.taskDraftContents.set(draftKey, raw);
     }
 
@@ -232,7 +231,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   }
 
   // Update saveDraftForTask to use the taskDraftContents map
-  private saveDraftForTask(task: Task, rawFromDom?: string): void {
+  private saveDraftForTask(task: Task, _rawFromDom?: string): void {
     if (!task) {
       return;
     }
@@ -579,7 +578,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
 
   addCommentWithType(comment: string, type: string) {
     this.taskCommentService.addComment(this.task, comment, type).subscribe({
-      next: (success: TaskComment) => {
+      next: (_success: TaskComment) => {
         this.comment.text = '';
         this.commentsViewer.scrollDown();
         console.log('implement - check map comments');
@@ -677,7 +676,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   // # Upload image files as comments to a given task
   postAttachmentComment(file) {
     this.taskCommentService.addComment(this.task, file, 'file', null).subscribe(
-      (tc: TaskComment) => {
+      (_tc: TaskComment) => {
         this.commentsViewer.scrollDown();
       },
       (error: any) => {

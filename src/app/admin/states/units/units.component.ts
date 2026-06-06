@@ -88,7 +88,7 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
 
       this.globalStateService.onLoad(() => {
         this.unitService.query(undefined, {params: {include_in_active: true}}).subscribe({
-          next: (units) => {
+          next: () => {
             this.globalStateService.loadedUnits.values.subscribe(
               (loadedUnits) =>
                 (this.dataSource.data = this.mapUnitOrProjectsToColumns(loadedUnits)),

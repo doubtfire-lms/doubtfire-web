@@ -48,7 +48,7 @@ export class EmojiService {
     let replaced = true;
     while (replaced) {
       replaced = false;
-      s = s.replace(this.colonPairMatch, (matched: string, p1?: string) => {
+      s = s.replace(this.colonPairMatch, (matched: string, _p1?: string) => {
         replaced = true;
         return this.mapStringToEmoji(matched);
       });
@@ -66,7 +66,7 @@ export class EmojiService {
     let replaced = true;
     while (replaced) {
       replaced = false;
-      s = s.replace(this.emojiMatch, (matched: string, p1?: string) => {
+      s = s.replace(this.emojiMatch, (matched: string, _p1?: string) => {
         replaced = true;
         return this.mapEmojiToString(matched);
       });

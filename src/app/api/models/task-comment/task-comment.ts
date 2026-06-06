@@ -101,7 +101,7 @@ export class TaskComment extends Entity {
         {cache: this.task.commentCache},
       )
       .subscribe({
-        next: (response: object) => {
+        next: (_response: object) => {
           // this.task.comments = this.task.comments.filter((e: TaskComment) => e.id !== this.id);
           this.task.refreshCommentData();
         },

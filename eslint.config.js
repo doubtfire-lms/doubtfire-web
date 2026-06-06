@@ -63,7 +63,7 @@ module.exports = tseslint.config(
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-inferrable-types': 'off',
       '@typescript-eslint/no-unused-vars': [
-        'off',
+        'error',
         {
           argsIgnorePattern: '^_',
           caughtErrorsIgnorePattern: '^_',

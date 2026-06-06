@@ -6,7 +6,7 @@ import {Pipe, PipeTransform} from '@angular/core';
   standalone: false,
 })
 export class IsActiveUnitRole implements PipeTransform {
-  transform(array: UnitRole[], ...args: any[]): UnitRole[] {
+  transform(array: UnitRole[], ..._args: any[]): UnitRole[] {
     if (array == null) {
       return;
     }

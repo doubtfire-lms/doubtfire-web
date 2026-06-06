@@ -84,7 +84,7 @@ export class AudioPlayerComponent implements OnDestroy {
 
       this.fileDownloader.downloadBlob(
         url,
-        ((blobUrl: string, response: HttpResponse<Blob>) => {
+        ((blobUrl: string, _response: HttpResponse<Blob>) => {
           this.isLoaded = true;
           this.setSrc(blobUrl);
           this.audio.src = blobUrl;

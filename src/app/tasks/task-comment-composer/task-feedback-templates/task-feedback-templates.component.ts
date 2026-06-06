@@ -92,7 +92,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     this.generalTemplatesSubject.next([greetingTemplate, summaryTemplate]);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_changes: SimpleChanges): void {
     this.selectedTemplates = [];
     this.navigationStackSubject.next(new Map<number, number[]>());
     this.searchTermSubject.next('');

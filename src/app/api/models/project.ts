@@ -331,7 +331,7 @@ export class Project extends Entity {
       cache: this.unit.studentCache,
     };
 
-    projectService.get(this, options).subscribe((response) => {
+    projectService.get(this, options).subscribe(() => {
       // Legacy AngularJS visualisation refresh hook removed with upgraded providers.
       // (AppInjector.get(visualisations) as any).refreshAll();
     });
@@ -423,7 +423,7 @@ export class Project extends Entity {
     // get total value of all tasks assigned to this project
     const total = targetTasks
       .map((td) => td.weighting)
-      .reduce((prev, current, idx, array) => prev + current, 0);
+      .reduce((prev, current, _idx, _array) => prev + current, 0);
 
     // exit if no tasks or no weights
     if (targetTasks.length === 0 || total === 0) {
@@ -438,7 +438,7 @@ export class Project extends Entity {
         task.status,
       ),
     );
-    let lastTargetDate: Date;
+    // let lastTargetDate: Date;
 
     const completedTasks = tasks.filter((task) => task.status === 'complete');
 
@@ -452,11 +452,11 @@ export class Project extends Entity {
 
     // last done task date)
     if (readyOrCompleteTasks.length === 0) {
-      lastTargetDate = this.unit.startDate;
+      // lastTargetDate = this.unit.startDate;
     } else {
-      lastTargetDate = readyOrCompleteTasks
-        .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())
-        .splice(-1)[0].dueDate;
+      // lastTargetDate = readyOrCompleteTasks
+      //   .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())
+      //   .splice(-1)[0].dueDate;
     }
 
     // today is used to determine when to stop adding done tasks
@@ -470,7 +470,7 @@ export class Project extends Entity {
       if (weeksElapsed > 0) {
         const completedTasksWeight = readyOrCompleteTasks
           .map((t) => t.definition.weighting)
-          .reduce((prev, current, idx, arr) => prev + current, 0);
+          .reduce((prev, current, _idx, _arr) => prev + current, 0);
         completionRate = completedTasksWeight / weeksElapsed;
       }
     }

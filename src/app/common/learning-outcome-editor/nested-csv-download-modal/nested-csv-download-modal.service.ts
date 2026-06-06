@@ -9,7 +9,7 @@ export class NestedCsvDownloadModalService {
   constructor(public dialog: MatDialog) {}
 
   public show(url: string, name: string, type: string) {
-    const dialogRef: MatDialogRef<NestedCsvDownloadModalComponent, any> = this.dialog.open(
+    const _dialogRef: MatDialogRef<NestedCsvDownloadModalComponent, any> = this.dialog.open(
       NestedCsvDownloadModalComponent,
       {
         data: {url, name, type},

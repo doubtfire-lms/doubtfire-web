@@ -36,7 +36,7 @@ export class StaffNotesComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.loadingStaffNotes = true;
-    this.staffNoteService.loadStaffNotes(this.project).subscribe((notes) => {
+    this.staffNoteService.loadStaffNotes(this.project).subscribe((_notes) => {
       this.loadingStaffNotes = false;
       this.staffNoteService.updateStaffNoteReplies(this.project?.staffNoteCache.currentValues);
       this.scrollDown();
@@ -63,7 +63,7 @@ export class StaffNotesComponent implements OnInit {
     this.noteText = '';
 
     this.staffNoteService.addNote(this.project, noteText, this.replyingToNote).subscribe({
-      next: (note) => {
+      next: (_note) => {
         this.alertService.success('Succesfully submitted note', 4000);
         this.scrollDown();
         this.project.staffNoteCount++;
@@ -84,7 +84,7 @@ export class StaffNotesComponent implements OnInit {
     }
 
     this.staffNoteService.updateNote(this.project, this.editingNote, noteText).subscribe({
-      next: (note) => {
+      next: (_note) => {
         this.alertService.success('Succesfully updated note', 4000);
         this.editingNote = null;
         this.editingNoteText = '';

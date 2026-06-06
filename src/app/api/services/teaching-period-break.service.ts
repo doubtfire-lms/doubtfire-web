@@ -25,7 +25,7 @@ export class TeachingPeriodBreakService extends CachedEntityService<TeachingPeri
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public override createInstanceFrom(json: any, other?: any): TeachingPeriodBreak {
+  public override createInstanceFrom(_json: any, _other?: any): TeachingPeriodBreak {
     return new TeachingPeriodBreak();
   }
 }

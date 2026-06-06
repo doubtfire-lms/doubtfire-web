@@ -29,7 +29,7 @@ export class FeedbackTemplateService extends CachedEntityService<FeedbackTemplat
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public override createInstanceFrom(json: object, other?: any): FeedbackTemplate {
+  public override createInstanceFrom(_json: object, _other?: any): FeedbackTemplate {
     return new FeedbackTemplate();
   }
 }

@@ -167,7 +167,7 @@ describe('UserService', () => {
     user.receiveFeedbackNotifications = false;
     user.receiveTaskNotifications = false;
 
-    userService.get(1).subscribe((data) => {});
+    userService.get(1).subscribe((_data) => {});
 
     const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/1');
@@ -179,9 +179,9 @@ describe('UserService', () => {
     req.flush(user2);
     tick();
 
-    userService.get(1).subscribe((data) => {});
+    userService.get(1).subscribe((_data) => {});
 
-    httpMock.expectNone((request: HttpRequest<any>): boolean => {
+    httpMock.expectNone((_request: HttpRequest<any>): boolean => {
       return true;
     });
     tick();
@@ -219,7 +219,7 @@ describe('UserService', () => {
     req.flush(user2);
     tick();
 
-    let user3;
+    let _user3;
 
     // 1 request here
     userService.fetch(1).subscribe((data) => {
@@ -238,7 +238,7 @@ describe('UserService', () => {
     user4.firstName = 'fred';
     req.flush(user4);
 
-    httpMock.expectNone((request: HttpRequest<any>): boolean => {
+    httpMock.expectNone((_request: HttpRequest<any>): boolean => {
       return true;
     });
     tick();

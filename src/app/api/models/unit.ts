@@ -220,7 +220,7 @@ export class Unit extends Entity {
     taskDefinitionService
       .delete({unitId: this.id, id: taskDef.id}, {cache: this.taskDefinitionCache, entity: taskDef})
       .subscribe({
-        next: (response) => {
+        next: () => {
           alerts.success('Task Deleted', 2000);
         },
         error: (message) => alerts.error(message, 6000),
@@ -447,7 +447,7 @@ export class Unit extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/grades/csv`;
   }
 
-  public taskStatusFactor(td: TaskDefinition): number {
+  public taskStatusFactor(_td: TaskDefinition): number {
     return 1;
   }
 
