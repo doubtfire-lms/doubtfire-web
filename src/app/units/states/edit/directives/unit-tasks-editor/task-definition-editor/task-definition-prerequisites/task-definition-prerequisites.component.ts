@@ -26,7 +26,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
 
   private prereqSub?: Subscription;
 
-  public dataSource = new MatTableDataSource<TaskPrerequisite>();
+  public dataSource: MatTableDataSource<TaskPrerequisite> = new MatTableDataSource();
 
   selectedTaskPrerequisite: TaskDefinition | null = null;
   searchCtrl = new FormControl('');

@@ -33,14 +33,14 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
   @Input() unit: Unit;
 
   @Output()
-  public studentSelected = new EventEmitter<Project>();
+  public studentSelected: EventEmitter<Project> = new EventEmitter();
 
   displayedColumns: string[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  dataSource = new MatTableDataSource<Project>([]);
+  dataSource: MatTableDataSource<Project> = new MatTableDataSource([]);
 
   public portfolioFilter: 'all' | 'submitted_only' = 'submitted_only';
   public tutorialFilter: 'all' | 'mine' = 'all';

@@ -26,7 +26,8 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
   @Input() task: Task;
   @Input() project: Project;
   @Input() team = {memberContributions: [] as MemberContribution[]};
-  @Output() teamChange = new EventEmitter<{memberContributions: MemberContribution[]}>();
+  @Output() teamChange: EventEmitter<{memberContributions: MemberContribution[]}> =
+    new EventEmitter();
 
   selectedGroupSet: GroupSet;
   selectedGroup: Group;
@@ -42,7 +43,7 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
   };
 
   displayedColumns = ['name', 'target-grade', 'contribution'];
-  dataSource = new MatTableDataSource<MemberContribution>([]);
+  dataSource: MatTableDataSource<MemberContribution> = new MatTableDataSource([]);
 
   ngOnInit(): void {
     this.initializeGroupData();

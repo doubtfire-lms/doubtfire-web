@@ -53,10 +53,10 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Input() saveFieldName = 'file';
   @Input() saveFileName = 'archive.zip';
 
-  @Output() filesLoaded = new EventEmitter<number>();
-  @Output() saveSuccess = new EventEmitter<HttpResponse<unknown>>();
-  @Output() saveError = new EventEmitter<unknown>();
-  @Output() selectedFileChanged = new EventEmitter<ArchiveFileEntry | null>();
+  @Output() filesLoaded: EventEmitter<number> = new EventEmitter();
+  @Output() saveSuccess: EventEmitter<HttpResponse<unknown>> = new EventEmitter();
+  @Output() saveError: EventEmitter<unknown> = new EventEmitter();
+  @Output() selectedFileChanged: EventEmitter<ArchiveFileEntry | null> = new EventEmitter();
 
   public files: ArchiveFileEntry[] = [];
   public selectedTab = 0;

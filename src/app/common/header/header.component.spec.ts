@@ -18,13 +18,13 @@ describe('HeaderComponent', () => {
   let globalStateServiceStub: Partial<GlobalStateService>;
 
   beforeEach(waitForAsync(() => {
-    const showHideHeader = new Subject<boolean>();
-    const unitRolesSubject = new BehaviorSubject<any>(null);
-    const projectsSubject = new BehaviorSubject<any>(null);
-    const currentViewAndEntitySubject$ = new BehaviorSubject<{
+    const showHideHeader: Subject<boolean> = new Subject();
+    const unitRolesSubject: BehaviorSubject<any> = new BehaviorSubject(null);
+    const projectsSubject: BehaviorSubject<any> = new BehaviorSubject(null);
+    const currentViewAndEntitySubject$: BehaviorSubject<{
       viewType: ViewType;
       entity: Unit | Project | UnitRole;
-    }>(null);
+    }> = new BehaviorSubject(null);
 
     // currentUserStub = {
     //   role: 'tutor',

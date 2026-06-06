@@ -16,7 +16,7 @@ import {MappingFunctions} from './mapping-fn';
 
 @Injectable()
 export class TaskService extends CachedEntityService<Task> {
-  public readonly taskStatusUpdated$ = new EventEmitter<Task>();
+  public readonly taskStatusUpdated$: EventEmitter<Task> = new EventEmitter();
 
   protected readonly endpointFormat = '/projects/:projectId:/task_def_id/:taskDefId:';
 

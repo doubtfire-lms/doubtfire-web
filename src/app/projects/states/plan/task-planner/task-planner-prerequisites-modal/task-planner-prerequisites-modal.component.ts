@@ -22,7 +22,7 @@ export class TaskPlannerPrerequisitesModalComponent implements OnInit {
   @Input() project: Project;
   @Input() dependents: TaskPrerequisite[];
 
-  public dataSource = new MatTableDataSource<TaskPrerequisite>();
+  public dataSource: MatTableDataSource<TaskPrerequisite> = new MatTableDataSource();
   public displayedColumns: string[] = ['task-definition', 'current-status', 'required-status'];
 
   public get task() {

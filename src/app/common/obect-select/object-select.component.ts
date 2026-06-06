@@ -16,7 +16,7 @@ export class ObjectSelectComponent<T> {
   @Input() target: T;
   @Input() label: string;
   @Input() placeholder: string = null;
-  @Output() targetChange = new EventEmitter<T>();
+  @Output() targetChange: EventEmitter<T> = new EventEmitter();
 
   selectionChange($event: MatSelectChange) {
     this.target = $event.value;

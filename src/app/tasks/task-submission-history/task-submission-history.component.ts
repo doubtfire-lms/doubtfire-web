@@ -13,7 +13,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class TaskSubmissionHistoryComponent implements OnInit {
   @Input() task: Task;
-  @Output() hasNoData = new EventEmitter<boolean>();
+  @Output() hasNoData: EventEmitter<boolean> = new EventEmitter();
   tabs: OverseerAssessment[];
   // timestamps: string[];
   selectedTab: OverseerAssessment = new OverseerAssessment();

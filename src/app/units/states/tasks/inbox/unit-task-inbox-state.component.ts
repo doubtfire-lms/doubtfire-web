@@ -46,7 +46,7 @@ type TaskSource = (
 })
 export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   private static readonly UNIT_REFRESH_INTERVAL_MS = 60_000;
-  private static readonly lastUnitFetchAt = new Map<number, number>();
+  private static readonly lastUnitFetchAt: Map<number, number> = new Map();
 
   @Input() public unit$: Observable<Unit>;
   @Input() public routeMode: UnitTaskRouteMode = 'inbox';

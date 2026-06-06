@@ -31,7 +31,7 @@ export class TaskDefinitionDiscussionPromptsComponent
 
   private prereqSub?: Subscription;
 
-  public dataSource = new MatTableDataSource<DiscussionPrompt>();
+  public dataSource: MatTableDataSource<DiscussionPrompt> = new MatTableDataSource();
 
   creatingNewDiscussionPrompt: boolean = false;
 

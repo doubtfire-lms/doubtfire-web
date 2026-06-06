@@ -24,8 +24,8 @@ export class CsvResultModalComponent implements AfterViewInit {
   public commonKeys: string[] = [];
   public displayedColumns: string[] = ['message', 'other'];
   public dynamicColumnIds: string[] = [];
-  public dataSource = new MatTableDataSource<CsvDisplayRow>([]);
-  private columnKeyById = new Map<string, string>();
+  public dataSource: MatTableDataSource<CsvDisplayRow> = new MatTableDataSource([]);
+  private columnKeyById: Map<string, string> = new Map();
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
 
@@ -111,7 +111,7 @@ export class CsvResultModalComponent implements AfterViewInit {
   private rebuildTableData(): void {
     const items = this.itemData(this.activeCsvResponseSelection);
     const rowObjects = items.map((item) => this.toRowObject(item.row));
-    const keyCounts = new Map<string, number>();
+    const keyCounts: Map<string, number> = new Map();
 
     rowObjects.forEach((rowObject) => {
       if (!rowObject) {

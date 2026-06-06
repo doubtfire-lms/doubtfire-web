@@ -37,7 +37,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
     'campus',
     'tutorial',
   ];
-  dataSource = new MatTableDataSource<Project>([]);
+  dataSource: MatTableDataSource<Project> = new MatTableDataSource([]);
 
   searchText = '';
   staffFilter: 'all' | 'mine' = 'all';

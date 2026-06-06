@@ -81,7 +81,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
 
-  public $userIsTyping = new BehaviorSubject<boolean>(false);
+  public $userIsTyping: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private draftSaveSubscription = new Subscription();
   private readonly DRAFT_KEY_PREFIX = 'task_comment_draft_';
   public isDraftLoaded = false;

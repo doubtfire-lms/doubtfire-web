@@ -41,7 +41,7 @@ export class UnitStaffEditorComponent implements OnInit {
     'mentor',
     'actions',
   ];
-  dataSource = new MatTableDataSource<UnitRole>();
+  dataSource: MatTableDataSource<UnitRole> = new MatTableDataSource();
 
   // Inject services here
   constructor(
@@ -325,7 +325,7 @@ export class UnitStaffEditorComponent implements OnInit {
       return;
     }
 
-    const existingStaffEmails = new Set<string>(
+    const existingStaffEmails: Set<string> = new Set(
       this.unit.staff
         .map((unitRole) => unitRole.user.email?.trim().toLowerCase())
         .filter((email): email is string => !!email),

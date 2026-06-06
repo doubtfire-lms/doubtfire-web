@@ -42,8 +42,8 @@ export class InboxComponent implements OnInit, OnDestroy {
 
   subs$: Observable<unknown>;
 
-  private inboxStartSize$ = new Subject<number>();
-  private dragMove$ = new Subject<{event: CdkDragMove; div: HTMLDivElement}>();
+  private inboxStartSize$: Subject<number> = new Subject();
+  private dragMove$: Subject<{event: CdkDragMove; div: HTMLDivElement}> = new Subject();
   private dragMoveAudited$;
 
   // protected filters;

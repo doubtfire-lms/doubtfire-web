@@ -58,7 +58,7 @@ module.exports = tseslint.config(
       '@angular-eslint/component-max-inline-declarations': ['error', {template: 0, styles: 0}],
       '@angular-eslint/prefer-inject': 'off',
       '@angular-eslint/prefer-standalone': 'off',
-      '@typescript-eslint/consistent-generic-constructors': 'off',
+      '@typescript-eslint/consistent-generic-constructors': ['error', 'type-annotation'],
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-inferrable-types': 'off',

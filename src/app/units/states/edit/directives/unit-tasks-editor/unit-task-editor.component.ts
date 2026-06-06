@@ -23,14 +23,14 @@ type GradeCol = 'p' | 'c' | 'd' | 'hd';
 export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
 
-  public taskDefinitionSource = new MatTableDataSource<TaskDefinition>([]);
+  public taskDefinitionSource: MatTableDataSource<TaskDefinition> = new MatTableDataSource([]);
   public filter: string = '';
   public selectedTaskDefinition: TaskDefinition;
   public isTaskListCollapsed: boolean = false;
 
   public gradeColumns: string[] = ['p', 'c', 'd', 'hd'];
   public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
-  public dueDateSource = new MatTableDataSource<TaskDefinition>([]);
+  public dueDateSource: MatTableDataSource<TaskDefinition> = new MatTableDataSource([]);
 
   public manageDueDates: boolean = false;
 

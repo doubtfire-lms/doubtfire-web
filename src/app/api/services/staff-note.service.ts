@@ -8,7 +8,7 @@ import {StaffNote} from '../models/staff-note';
 
 @Injectable()
 export class StaffNoteService extends CachedEntityService<StaffNote> {
-  public readonly staffNoteAdded$ = new EventEmitter<StaffNote>();
+  public readonly staffNoteAdded$: EventEmitter<StaffNote> = new EventEmitter();
 
   protected readonly endpointFormat = 'projects/:projectId:/staff_notes/:id:';
 

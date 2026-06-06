@@ -10,7 +10,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 export class GroupSetSelectorComponent implements OnInit {
   @Input() unit: Unit;
   @Input() selectedGroupSet: GroupSet;
-  @Output() selectedGroupSetChange = new EventEmitter<GroupSet>();
+  @Output() selectedGroupSetChange: EventEmitter<GroupSet> = new EventEmitter();
 
   ngOnInit(): void {
     if (!this.unit) {

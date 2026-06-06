@@ -27,8 +27,8 @@ export class FileDropComponent {
   /** The URL of the endpoint to POST the file to if mode is endpoint*/
   @Input() endpoint: string;
   @Input() body: object;
-  @Output() fileChange = new EventEmitter<File>();
-  @Output() uploadSuccess = new EventEmitter<HttpResponse<object>>();
+  @Output() fileChange: EventEmitter<File> = new EventEmitter();
+  @Output() uploadSuccess: EventEmitter<HttpResponse<object>> = new EventEmitter();
 
   protected uploadProgress: number;
   protected uploadSub: Subscription;
@@ -39,7 +39,7 @@ export class FileDropComponent {
   /**
    * Report all files dropped if mode is event
    */
-  @Output() filesDropped = new EventEmitter<File[]>();
+  @Output() filesDropped: EventEmitter<File[]> = new EventEmitter();
 
   constructor(
     private http: HttpClient,

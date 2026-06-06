@@ -18,7 +18,7 @@ export class SidekiqProgressModalService {
   ) {}
 
   public show(title: string, jobId: string) {
-    const subject = new Subject<SidekiqJob>();
+    const subject: Subject<SidekiqJob> = new Subject();
 
     this.sidekiqJobService.setJob(jobId, title, subject);
 

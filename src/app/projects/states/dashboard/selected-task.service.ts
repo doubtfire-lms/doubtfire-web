@@ -24,10 +24,12 @@ export class SelectedTaskService {
     private globalState: GlobalStateService,
   ) {}
 
-  private task$ = new BehaviorSubject<Task>(null);
-  public currentPdfUrl$ = new BehaviorSubject<string>(null);
+  private task$: BehaviorSubject<Task> = new BehaviorSubject(null);
+  public currentPdfUrl$: BehaviorSubject<string> = new BehaviorSubject(null);
 
-  public currentView$ = new BehaviorSubject<DashboardViews>(DashboardViews.submission);
+  public currentView$: BehaviorSubject<DashboardViews> = new BehaviorSubject(
+    DashboardViews.submission,
+  );
 
   public get hasTaskSheet(): boolean {
     return this.task$.value?.definition?.hasTaskSheet;

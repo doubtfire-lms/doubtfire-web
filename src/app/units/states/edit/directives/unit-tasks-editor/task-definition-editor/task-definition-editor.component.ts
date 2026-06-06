@@ -65,7 +65,7 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
     {id: 'optional-settings', label: 'Optional Settings'},
   ];
 
-  private sectionElementMap = new Map<TaskDefinitionSectionId, HTMLElement>();
+  private sectionElementMap: Map<TaskDefinitionSectionId, HTMLElement> = new Map();
   private sectionChangesSubscription?: Subscription;
   private overseerEnabledSubscription?: Subscription;
   private readonly scrollTopOffsetPx: number = 112;

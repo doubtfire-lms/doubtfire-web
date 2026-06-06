@@ -11,7 +11,7 @@ import {Directive, EventEmitter, HostBinding, HostListener, Output} from '@angul
   standalone: false,
 })
 export class DragDropDirective {
-  @Output() fileDropped = new EventEmitter<FileList>();
+  @Output() fileDropped: EventEmitter<FileList> = new EventEmitter();
 
   // @HostBinding('style.background-color') private background = '#f5fcff';
   // @HostBinding('style.opacity') private opacity = '1';

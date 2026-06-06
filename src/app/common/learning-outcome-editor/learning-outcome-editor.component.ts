@@ -53,7 +53,7 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
   @ViewChild(MatSort, {static: false}) outcomeSort: MatSort;
   @ViewChild(MatPaginator, {static: false}) outcomePaginator: MatPaginator;
 
-  public outcomeSource = new MatTableDataSource<LearningOutcome>([]);
+  public outcomeSource: MatTableDataSource<LearningOutcome> = new MatTableDataSource([]);
   public outcomeColumns: string[] = [
     'abbreviation',
     'shortDescription',

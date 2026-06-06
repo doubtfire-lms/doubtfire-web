@@ -20,7 +20,7 @@ export class TeachingPeriodListComponent implements OnInit {
   @ViewChild(MatSort) sort = new MatSort();
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public dataSource = new MatTableDataSource<TeachingPeriod>();
+  public dataSource: MatTableDataSource<TeachingPeriod> = new MatTableDataSource();
 
   displayedColumns: string[] = ['active', 'name', 'startDate', 'endDate', 'activeUntil', 'actions'];
 

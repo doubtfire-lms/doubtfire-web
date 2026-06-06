@@ -16,7 +16,7 @@ export class AcceptEulaComponent {
   public toolName: Observable<string>;
   public eulaHtml: string;
 
-  public iframeDoc$ = new ReplaySubject<any>(1);
+  public iframeDoc$: ReplaySubject<any> = new ReplaySubject(1);
 
   constructor(
     private constants: DoubtfireConstants,

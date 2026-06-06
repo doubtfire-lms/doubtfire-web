@@ -22,7 +22,7 @@ enum InboxDashboardTab {
 })
 export class InboxDashboardComponent implements OnChanges {
   @Input() task: Task;
-  @Output() visiblePdfUrlChange = new EventEmitter<string>();
+  @Output() visiblePdfUrlChange: EventEmitter<string> = new EventEmitter();
 
   public readonly InboxDashboardTab = InboxDashboardTab;
   public currentTab: InboxDashboardTab = InboxDashboardTab.submission;

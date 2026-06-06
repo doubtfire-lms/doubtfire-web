@@ -40,7 +40,7 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
     'enrolled',
     'goto',
   ];
-  dataSource = new MatTableDataSource<Project>([]);
+  dataSource: MatTableDataSource<Project> = new MatTableDataSource([]);
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.

@@ -29,21 +29,21 @@ import {
 })
 export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   @Input() task: Task;
-  @Output() templateSelected = new EventEmitter<FeedbackTemplate>();
+  @Output() templateSelected: EventEmitter<FeedbackTemplate> = new EventEmitter();
 
   categories = ['TLO', 'ULO', 'GLO'];
   selectedTemplates: FeedbackTemplate[] = [];
   hoveredTemplate: FeedbackTemplate;
 
-  private generalTemplatesSubject = new BehaviorSubject<FeedbackTemplate[]>([]);
+  private generalTemplatesSubject: BehaviorSubject<FeedbackTemplate[]> = new BehaviorSubject([]);
   generalTemplates$ = this.generalTemplatesSubject.asObservable();
 
-  private navigationStackSubject = new BehaviorSubject<Map<number, number[]>>(
+  private navigationStackSubject: BehaviorSubject<Map<number, number[]>> = new BehaviorSubject(
     new Map<number, number[]>(),
   );
   navigationStack$ = this.navigationStackSubject.asObservable();
 
-  private searchTermSubject = new BehaviorSubject<string>('');
+  private searchTermSubject: BehaviorSubject<string> = new BehaviorSubject('');
   searchTerm$ = this.searchTermSubject.asObservable();
 
   public genTemplates$ = combineLatest([this.generalTemplates$, this.searchTerm$]).pipe(

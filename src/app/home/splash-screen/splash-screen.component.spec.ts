@@ -10,7 +10,7 @@ describe('SplashScreenComponent', () => {
   let globalStateServiceStub: Partial<GlobalStateService>;
 
   beforeEach(waitForAsync(() => {
-    const isLoadingSubject = new BehaviorSubject<boolean>(true);
+    const isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
     globalStateServiceStub = {
       isLoadingSubject: isLoadingSubject,

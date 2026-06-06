@@ -55,7 +55,7 @@ export class UnitTutorialsListComponent
     'options',
   ];
   tutorials: Tutorial[] = [];
-  dataSource = new MatTableDataSource<Tutorial>();
+  dataSource: MatTableDataSource<Tutorial> = new MatTableDataSource();
 
   private editingStream: boolean = false;
 

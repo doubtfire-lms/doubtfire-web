@@ -20,7 +20,7 @@ import {MappingFunctions} from './mapping-fn';
 
 @Injectable()
 export class TaskCommentService extends CachedEntityService<TaskComment> {
-  public readonly commentAdded$ = new EventEmitter<TaskComment>();
+  public readonly commentAdded$: EventEmitter<TaskComment> = new EventEmitter();
 
   private readonly commentEndpointFormat =
     'projects/:projectId:/task_def_id/:taskDefinitionId:/comments/:id:';

@@ -147,7 +147,7 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
     const sortedTemplates = [...this.templateSource.data].sort(compare);
 
     // Determine maximum depth of the hierarchy (only groups contribute to depth)
-    const depthMap = new Map<number, number>();
+    const depthMap: Map<number, number> = new Map();
     let maxDepth = 0;
 
     const feedbackGroups = sortedTemplates.filter((t) => t.type === 'group');
@@ -167,7 +167,7 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
     });
 
     // Assign sequential order numbers
-    const orderMap = new Map<number, number>();
+    const orderMap: Map<number, number> = new Map();
     let orderIndex = 1;
 
     sortedTemplates.forEach((template) => {

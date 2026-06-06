@@ -193,7 +193,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
       const relatedUnits = this.relatedUnits(code);
       const sourceUnit = relatedUnits.length > 0 ? relatedUnits[0].value : null;
-      const formControl = new FormControl<User>(
+      const formControl: FormControl<User> = new FormControl(
         sourceUnit?.mainConvenor?.user || sourceUnit?.mainConvenorUser,
       );
 

@@ -30,7 +30,7 @@ export class TutorialsComponent implements OnInit, OnDestroy {
     'actions',
   ];
 
-  dataSource = new MatTableDataSource<Tutorial>([]);
+  dataSource: MatTableDataSource<Tutorial> = new MatTableDataSource([]);
 
   private projectSub?: Subscription;
 

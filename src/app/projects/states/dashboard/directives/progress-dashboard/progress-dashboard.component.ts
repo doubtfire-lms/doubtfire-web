@@ -12,7 +12,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class ProgressDashboardComponent implements OnInit {
   @Input() project: Project;
-  @Output() doUpdateTargetGrade = new EventEmitter<void>();
+  @Output() doUpdateTargetGrade: EventEmitter<void> = new EventEmitter();
 
   tutor: boolean;
   grades = {

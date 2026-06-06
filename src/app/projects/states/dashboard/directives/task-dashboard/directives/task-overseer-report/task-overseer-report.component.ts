@@ -144,7 +144,7 @@ export class TaskOverseerReportComponent implements OnInit {
     });
   }
 
-  loadingAssessments = new Set<number>();
+  loadingAssessments: Set<number> = new Set();
 
   onAssessmentOpen(overseerAssesment: OverseerAssessment) {
     if (this.loadOverseerAssessmentId === overseerAssesment.id) {

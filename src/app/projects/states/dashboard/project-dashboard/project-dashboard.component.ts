@@ -37,10 +37,10 @@ export class ProjectDashboardComponent implements OnInit {
 
   subs$: Observable<unknown>;
   readonly skeletonRows = Array.from({length: 10}, (_, index) => index);
-  private readonly projectSubject = new BehaviorSubject<Project>(null);
+  private readonly projectSubject: BehaviorSubject<Project> = new BehaviorSubject(null);
 
-  private leftComponentStartSize$ = new Subject<number>();
-  private dragMove$ = new Subject<{event: CdkDragMove; div: HTMLDivElement}>();
+  private leftComponentStartSize$: Subject<number> = new Subject();
+  private dragMove$: Subject<{event: CdkDragMove; div: HTMLDivElement}> = new Subject();
   private dragMoveAudited$;
   private projectReady = false;
 
