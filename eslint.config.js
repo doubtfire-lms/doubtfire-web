@@ -53,7 +53,6 @@ module.exports = tseslint.config(
     // and treated as if they are HTML files (and therefore have the .html config below applied to them)
     processor: angular.processInlineTemplates,
     // Override specific rules for TypeScript files (these will take priority over the extended configs above)
-    // TODO: go through each rule and remove each one and fix
     rules: {
       '@angular-eslint/component-max-inline-declarations': ['error', {template: 0, styles: 0}],
       '@angular-eslint/prefer-inject': 'off',
