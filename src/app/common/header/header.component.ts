@@ -71,7 +71,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private tutorNotesModal: TutorNotesModalService,
   ) {}
 
+  public externalName: string;
+
   ngOnInit(): void {
+    this.doubtfireConstants.ExternalName.subscribe((externalName) => {
+      this.externalName = externalName;
+    });
     this.subscriptions.push(
       this.globalState.showHideHeader.subscribe({
         next: (shouldShow) => {
