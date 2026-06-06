@@ -16,7 +16,7 @@ export class AcceptEulaComponent {
   public toolName: Observable<string>;
   public eulaHtml: string;
 
-  public iframeDoc$: ReplaySubject<any> = new ReplaySubject(1);
+  public iframeDoc$: ReplaySubject<Document> = new ReplaySubject(1);
 
   constructor(
     private constants: DoubtfireConstants,
@@ -50,11 +50,13 @@ export class AcceptEulaComponent {
     });
   }
 
-  public onIframeLoad(iframe): void {
-    this.iframeDoc$.next(iframe.contentDocument || iframe.contentWindow);
+  public onIframeLoad(iframe: HTMLIFrameElement): void {
+    if (iframe.contentDocument) {
+      this.iframeDoc$.next(iframe.contentDocument);
+    }
   }
 
-  getIframeDoc(): Observable<any> {
+  getIframeDoc(): Observable<Document> {
     return this.iframeDoc$.asObservable();
   }
 

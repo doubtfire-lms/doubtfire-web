@@ -16,11 +16,11 @@ export class TutorialStreamService extends CachedEntityService<TutorialStream> {
     this.mapping.mapAllKeysToJson();
   }
 
-  public createInstanceFrom(_json: any, _other?: any): TutorialStream {
+  public createInstanceFrom(_json: object): TutorialStream {
     return new TutorialStream();
   }
 
-  public override keyForJson(json: any): string {
+  public override keyForJson(json: {abbreviation: string}): string {
     return json['abbreviation'];
   }
 

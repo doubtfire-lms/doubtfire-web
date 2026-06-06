@@ -16,7 +16,7 @@ export class CampusService extends CachedEntityService<Campus> {
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public createInstanceFrom(_json: object, _other?: any): Campus {
+  public createInstanceFrom(_json: object): Campus {
     return new Campus();
   }
 }

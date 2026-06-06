@@ -45,12 +45,12 @@ export class TaskComment extends Entity {
   }
 
   public get authorIsMe(): boolean {
-    const userService: any = AppInjector.get(UserService);
+    const userService: UserService = AppInjector.get(UserService);
     return this.author.id === userService.currentUser.id;
   }
 
   public get recipientIsMe(): boolean {
-    const userService: any = AppInjector.get(UserService);
+    const userService: UserService = AppInjector.get(UserService);
     return this.recipient.id === userService.currentUser.id;
   }
 
@@ -105,8 +105,9 @@ export class TaskComment extends Entity {
           // this.task.comments = this.task.comments.filter((e: TaskComment) => e.id !== this.id);
           this.task.refreshCommentData();
         },
-        error: (error: any) => {
-          AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
+        error: (error: Error) => {
+          const message = error.message || 'Unknown error';
+          AppInjector.get(AlertService).error(message, 2000);
         },
       });
   }

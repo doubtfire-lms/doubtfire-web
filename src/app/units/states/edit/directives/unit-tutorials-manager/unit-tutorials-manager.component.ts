@@ -17,8 +17,6 @@ export class UnitTutorialsManagerComponent implements OnInit {
   @Input() unit: Unit;
 
   activityTypes: ActivityType[] = new Array<ActivityType>();
-  tutorialsByStream: any[] = new Array<any>();
-
   constructor(
     private activityTypeService: ActivityTypeService,
     private alertService: AlertService,

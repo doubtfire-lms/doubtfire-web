@@ -1,8 +1,42 @@
 import {User, UserService} from 'src/app/api/models/doubtfire-model';
 import {Md5} from 'ts-md5/dist/md5';
-import {AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 
-declare const d3: any;
+interface D3Selection {
+  append(name: string): D3Selection;
+  attr(
+    name: string,
+    value: string | number | ((datum: IconLine, index: number) => string | number),
+  ): D3Selection;
+  call(
+    callback: (selection: D3Selection, size: number, radius: number) => void,
+    size: number,
+    radius: number,
+  ): D3Selection;
+  data(data: IconLine[]): D3Selection;
+  enter(): D3Selection;
+  remove(): D3Selection;
+  selectAll(selector: string): D3Selection;
+  style(name: string, value: string): D3Selection;
+  text(value: (datum: IconLine) => string): D3Selection;
+}
+
+interface IconLine {
+  width: number;
+  text: string;
+}
+
+declare const d3: {
+  select(element: SVGElement): D3Selection;
+};
 
 @Component({
   selector: 'user-icon',
@@ -15,7 +49,7 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
   @Input() unselected: boolean;
   @Input() size = 100;
 
-  @ViewChild('svg') svg: {nativeElement: any};
+  @ViewChild('svg') svg: ElementRef<SVGElement>;
 
   lineHeight = 12;
   usingCurrentUser: boolean;
@@ -63,8 +97,8 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
     return Math.max(this.size / 2, 4);
   }
 
-  private generateLines(): any[] {
-    let line;
+  private generateLines(): IconLine[] {
+    let line: IconLine;
     let lineWidth0 = Infinity;
     const result = [];
     for (let i = 0, n = this.words.length; i < n; ++i) {
@@ -151,7 +185,7 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
       .attr('height', this.size)
       .attr('text-anchor', 'middle');
 
-    function appendCircle(selection, size, radius) {
+    function appendCircle(selection: D3Selection, size: number, radius: number) {
       selection
         .append('circle')
         .attr('cx', size / 2)

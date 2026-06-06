@@ -149,7 +149,7 @@ export class Task extends Entity {
       .addComment(this, textString, 'text')
       .subscribe({
         error: (error) => {
-          const alerts: any = AppInjector.get(AlertService);
+          const alerts: AlertService = AppInjector.get(AlertService);
           alerts.error(`Failed to add comment: ${error}`);
         },
       });
@@ -649,14 +649,14 @@ export class Task extends Entity {
     return this.similarityFlag;
   }
 
-  public getSimilarityData(match: number): Observable<unknown> {
+  public getSimilarityData(match: number): Observable<object> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get(
       `${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`,
     );
   }
 
-  public updateSimilarity(match: number, other: any, dismissed: boolean): Observable<any> {
+  public updateSimilarity(match: number, other: object, dismissed: boolean): Observable<object> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.put(
       `${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`,
@@ -899,7 +899,7 @@ export class Task extends Entity {
         if (!isTestSubmission) {
           this.status = oldStatus;
         }
-        const alerts: any = AppInjector.get(AlertService);
+        const alerts: AlertService = AppInjector.get(AlertService);
         alerts.message('Submission cancelled. Status was reverted.', 6000);
       },
     );

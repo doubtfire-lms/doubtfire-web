@@ -29,7 +29,7 @@ export class WebcalService extends EntityService<Webcal> {
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public createInstanceFrom(_json: any, _other?: any): Webcal {
+  public createInstanceFrom(_json: object): Webcal {
     return new Webcal();
   }
 }

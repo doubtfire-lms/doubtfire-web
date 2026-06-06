@@ -105,7 +105,7 @@ export class FileViewerComponent implements OnDestroy, OnChanges {
       (url: string, _response: HttpResponse<Blob>) => {
         this.blobUrl = url;
       },
-      (error: any) => {
+      (error: Error) => {
         this.alertService.error(`Error downloading resource. ${error}`);
       },
     );

@@ -2,7 +2,7 @@ import {CachedEntityService} from 'ngx-entity-service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {TaskPrerequisite} from '../models/task-prerequisite';
+import {TaskPrerequisite, TaskPrerequisiteData} from '../models/task-prerequisite';
 
 @Injectable()
 export class TaskPrerequisiteService extends CachedEntityService<TaskPrerequisite> {
@@ -20,7 +20,7 @@ export class TaskPrerequisiteService extends CachedEntityService<TaskPrerequisit
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public override createInstanceFrom(json: object, _other?: any): TaskPrerequisite {
+  public override createInstanceFrom(json: TaskPrerequisiteData): TaskPrerequisite {
     return new TaskPrerequisite(json);
   }
 

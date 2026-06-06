@@ -2,7 +2,10 @@ import {Subscription} from 'rxjs';
 import {Project, ProjectService, Unit} from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
-import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import {
+  CsvResult,
+  CsvResultModalService,
+} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {SpecConModalService} from 'src/app/common/modals/spec-con-modal/spec-con-modal.service';
@@ -59,7 +62,7 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
 
   ngOnInit(): void {
     this.dataSource.data = this.unit.studentCache.currentValuesClone();
-    this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+    this.dataSource.filterPredicate = (data: Project, filter: string) => data.matches(filter);
 
     this.subscriptions.push(
       this.unit.studentCache.values.subscribe((students) => {
@@ -162,7 +165,7 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
       'Upload a CSV to withdraw students.',
       {file: {name: 'Withdraw CSV Data', type: 'csv'}},
       this.unit.withdrawStudentsCSVUrl,
-      (response: any) => {
+      (response: CsvResult) => {
         // at least one student?
         this.csvResultModal.show('Withdraw Student CSV Results', response);
         if (response.success.length > 0) {

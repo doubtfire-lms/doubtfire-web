@@ -16,7 +16,7 @@ export class ActivityTypeListComponent
   extends EntityFormComponent<ActivityType>
   implements AfterViewInit
 {
-  @ViewChild(MatTable, {static: true}) table: MatTable<any>;
+  @ViewChild(MatTable, {static: true}) table: MatTable<ActivityType>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   // Set up the table

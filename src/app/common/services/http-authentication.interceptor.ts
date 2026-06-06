@@ -9,7 +9,10 @@ import {Injectable} from '@angular/core';
 export class HttpAuthenticationInterceptor implements HttpInterceptor {
   constructor(private userService: UserService) {}
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    request: HttpRequest<object | string | null>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<object | string | null>> {
     if (request.url.startsWith(API_URL) || request.url.startsWith(LTI_API_URL)) {
       request = request.clone({
         setHeaders: {

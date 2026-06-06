@@ -12,6 +12,7 @@ import {
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {HttpErrorResponse} from '@angular/common/http';
 import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatSort, Sort} from '@angular/material/sort';
@@ -27,7 +28,7 @@ export class UnitTutorialsListComponent
   extends EntityFormComponent<Tutorial>
   implements AfterViewInit
 {
-  @ViewChild(MatTable, {static: true}) table: MatTable<any>;
+  @ViewChild(MatTable, {static: true}) table: MatTable<Tutorial>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @Input() stream: TutorialStream;
   @Input() unit: Unit;
@@ -120,7 +121,7 @@ export class UnitTutorialsListComponent
           this.editingStream = false;
           this.alerts.success('Stream updated successfully', 2000);
         },
-        error: (error: any) => {
+        error: (error: HttpErrorResponse) => {
           this.alerts.error('Something went wrong - ' + JSON.stringify(error.error), 6000);
         },
       });
@@ -187,14 +188,14 @@ export class UnitTutorialsListComponent
   // tutorial. The function is bound to the compareFn attribute on the related
   // mat-selects.
   // See: https://angular.io/api/forms/SelectControlValueAccessor
-  compareSelection(aEntity: User | Campus | any, bEntity: User | Campus) {
+  compareSelection(aEntity: User | Campus | {user_id: number}, bEntity: User | Campus) {
     if (!aEntity || !bEntity) {
       return;
     }
     if (bEntity instanceof User) {
-      return aEntity.user_id === bEntity.id;
+      return 'user_id' in aEntity && aEntity.user_id === bEntity.id;
     } else {
-      return aEntity.id === bEntity.id;
+      return 'id' in aEntity && aEntity.id === bEntity.id;
     }
   }
 

@@ -45,7 +45,7 @@ import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-di
   standalone: false,
 })
 export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
-  @ViewChild('searchDialog') searchDialog: TemplateRef<any>;
+  @ViewChild('searchDialog') searchDialog: TemplateRef<object>;
 
   @Input() task: Task;
   @Input() project: Project;
@@ -68,7 +68,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     tutorials: Tutorial[];
     forceStream: boolean;
     studentName: string;
-    tutorialIdSelected: any;
+    tutorialIdSelected: string | number;
     unitRoleIdSelected: number | string;
     taskDefinitionIdSelected: number | TaskDefinition;
   }>;
@@ -98,7 +98,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   // hasJplagReport: boolean = false;
 
-  watchingTaskKey: any;
+  watchingTaskKey: boolean;
 
   panelOpenState = false;
   loading = true;
@@ -120,7 +120,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   taskDefSort = 0;
   tutorialSort = 0;
-  originalFilteredTasks: any[] = null;
+  originalFilteredTasks: Task[] = null;
   allowHover = true;
 
   // Track if all tasks have already been fetched
@@ -449,9 +449,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   openTaskDefs() {
     // Automatically "open" the task definition select element if in task def mode
-    const selectEl: any = document.querySelector(
+    const selectEl = document.querySelector<HTMLSelectElement>(
       'select[ng-model="filters.taskDefinitionIdSelected"]',
-    ) as any;
+    );
+    if (!selectEl) {
+      return;
+    }
     selectEl.size = 10;
     selectEl.focus();
   }
@@ -601,20 +604,20 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private scrollToTaskInList(task) {
-    const taskEl = document.querySelector(`#${task.taskKeyToIdString()}`) as any;
+  private scrollToTaskInList(task: Task) {
+    const taskEl = document.querySelector(`#${task.taskKeyToIdString()}`) as
+      | (HTMLElement & {
+          scrollIntoViewIfNeeded?: (options?: ScrollIntoViewOptions) => void;
+        })
+      | null;
     if (!taskEl) {
       return;
     }
-    const funcName = taskEl.scrollIntoViewIfNeeded
-      ? 'scrollIntoViewIfNeeded'
-      : taskEl.scrollIntoView
-        ? 'scrollIntoView'
-        : '';
-    if (!funcName) {
-      return;
+    if (taskEl.scrollIntoViewIfNeeded) {
+      taskEl.scrollIntoViewIfNeeded({behavior: 'smooth'});
+    } else {
+      taskEl.scrollIntoView({behavior: 'smooth'});
     }
-    taskEl[funcName]({behavior: 'smooth'});
   }
 
   isSelectedTask(task: Task) {

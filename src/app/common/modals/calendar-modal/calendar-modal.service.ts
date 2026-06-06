@@ -1,3 +1,4 @@
+import {Task} from 'src/app/api/models/task';
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {CalendarModalComponent} from './calendar-modal.component';
@@ -8,7 +9,7 @@ import {CalendarModalComponent} from './calendar-modal.component';
 export class CalendarModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(_task: any) {
+  public show(_task?: Task) {
     this.dialog.open(CalendarModalComponent);
   }
 }

@@ -5,7 +5,7 @@ import {GradeIconComponent} from './grade-icon.component';
 describe('GradeIconComponent', () => {
   let component: GradeIconComponent;
   let fixture: ComponentFixture<GradeIconComponent>;
-  let gradeServiceStub: jasmine.SpyObj<any>;
+  let gradeServiceStub: Pick<GradeService, 'grades' | 'gradeAcronyms'>;
 
   beforeEach(waitForAsync(() => {
     gradeServiceStub = {

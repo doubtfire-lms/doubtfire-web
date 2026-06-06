@@ -27,6 +27,15 @@ export interface TestResult {
   is_successful: boolean;
 }
 
+export interface TaskAssessmentResponse {
+  result: string;
+}
+
+export interface SubmissionResult {
+  label: string;
+  result: string;
+}
+
 export interface DockerImageInfo {
   name: string;
   packages?: string[];
@@ -50,22 +59,25 @@ export class TaskSubmissionService {
     private overseerAssessmentService: OverseerAssessmentService,
   ) {}
 
-  public getLatestTaskAssessment(taskInfo: Task): Observable<any> {
+  public getLatestTaskAssessment(taskInfo: Task): Observable<TaskAssessmentResponse> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${
       taskInfo.project.id
     }/task_def_id/${taskInfo.definition.id}/submissions/latest`;
-    return this.http.get<any>(url);
+    return this.http.get<TaskAssessmentResponse>(url);
   }
 
   public getLatestSubmissionsTimestamps(taskInfo: Task): Observable<OverseerAssessment[]> {
     return this.overseerAssessmentService.queryForTask(taskInfo);
   }
 
-  public getSubmissionByTimestamp(taskInfo: Task, timestamp: string): Observable<any> {
+  public getSubmissionByTimestamp(
+    taskInfo: Task,
+    timestamp: string,
+  ): Observable<SubmissionResult[]> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${
       taskInfo.project.id
     }/task_def_id/${taskInfo.definition.id}/submissions/timestamps/${timestamp}`;
-    return this.http.get<any>(url);
+    return this.http.get<SubmissionResult[]>(url);
   }
 
   public getDockerImages(): Observable<OverseerImage[]> {

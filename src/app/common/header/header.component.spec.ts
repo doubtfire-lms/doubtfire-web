@@ -19,8 +19,8 @@ describe('HeaderComponent', () => {
 
   beforeEach(waitForAsync(() => {
     const showHideHeader: Subject<boolean> = new Subject();
-    const unitRolesSubject: BehaviorSubject<any> = new BehaviorSubject(null);
-    const projectsSubject: BehaviorSubject<any> = new BehaviorSubject(null);
+    const unitRolesSubject: BehaviorSubject<UnitRole[]> = new BehaviorSubject(null);
+    const projectsSubject: BehaviorSubject<Project[]> = new BehaviorSubject(null);
     const currentViewAndEntitySubject$: BehaviorSubject<{
       viewType: ViewType;
       entity: Unit | Project | UnitRole;

@@ -307,27 +307,31 @@ export class TaskDefinition extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/jplag_report`;
   }
 
-  public deleteTaskSheet(): Observable<any> {
-    const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete(this.taskSheetUploadUrl).pipe(tap(() => (this.hasTaskSheet = false)));
-  }
-
-  public deleteTaskResources(): Observable<any> {
+  public deleteTaskSheet(): Observable<void> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient
-      .delete(this.taskResourcesUploadUrl)
+      .delete<void>(this.taskSheetUploadUrl)
+      .pipe(tap(() => (this.hasTaskSheet = false)));
+  }
+
+  public deleteTaskResources(): Observable<void> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient
+      .delete<void>(this.taskResourcesUploadUrl)
       .pipe(tap(() => (this.hasTaskResources = false)));
   }
 
-  public deleteScormData(): Observable<any> {
-    const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete(this.scormDataUploadUrl).pipe(tap(() => (this.hasScormData = false)));
-  }
-
-  public deleteOverseerResources(): Observable<any> {
+  public deleteScormData(): Observable<void> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient
-      .delete(this.taskOverseerResourcesUploadUrl)
+      .delete<void>(this.scormDataUploadUrl)
+      .pipe(tap(() => (this.hasScormData = false)));
+  }
+
+  public deleteOverseerResources(): Observable<void> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient
+      .delete<void>(this.taskOverseerResourcesUploadUrl)
       .pipe(tap(() => (this.hasTaskAssessmentResources = false)));
   }
 

@@ -128,11 +128,11 @@ export class SignInComponent implements OnInit {
     // wait 2 seconds with rxjs
     const wait = new Promise((resolve) => setTimeout(resolve, 3000));
     this.http.get(`${this.constants.API_URL}/auth/method`).subscribe({
-      next: (response: any) => {
+      next: (response: {redirect_to?: string}) => {
         this.isLoading = false;
 
         // if there is a string in response.data.redirect_to
-        this.SSOLoginUrl = response.redirect_to || false;
+        this.SSOLoginUrl = response.redirect_to || '';
 
         if (this.authToken) {
           // We have an auth token - so attempt to convert to access token

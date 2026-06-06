@@ -6,9 +6,15 @@ import {GradeTaskModalComponent} from './grade-task-modal.component';
 describe('GradeTaskModalComponent', () => {
   let component: GradeTaskModalComponent;
   let fixture: ComponentFixture<GradeTaskModalComponent>;
-  let gradeServiceStub: jasmine.SpyObj<any>;
-  let dialogRefMock: jasmine.SpyObj<any>;
-  let dialogDataStub: jasmine.SpyObj<any>;
+  let gradeServiceStub: Pick<GradeService, 'grades' | 'gradeAcronyms' | 'allGradeValues'>;
+  let dialogRefMock: {close: () => void};
+  let dialogDataStub: {
+    task: {
+      grade?: number;
+      quality_pts?: number;
+      definition: {max_quality_pts?: number};
+    };
+  };
 
   beforeEach(waitForAsync(() => {
     gradeServiceStub = {

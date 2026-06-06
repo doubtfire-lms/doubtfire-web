@@ -1,6 +1,7 @@
 import {Entity, RequestOptions} from 'ngx-entity-service';
 import {EntityService} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {AfterViewInit, Directive} from '@angular/core';
 import {AbstractControl, UntypedFormGroup} from '@angular/forms';
 import {Sort} from '@angular/material/sort';
@@ -119,7 +120,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    * @param alertService the alert service used to provide alerts.
    * @param success the function, provided by inheritor, that is executed on success of CRUD methods.
    */
-  submit(service: EntityService<T>, alertService: any, success: OnSuccessMethod<T>) {
+  submit(service: EntityService<T>, alertService: AlertService, success: OnSuccessMethod<T>) {
     // response is what we get back from the server
     // when creating or updating
     let response: Observable<T>;
@@ -179,8 +180,8 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
     }
   }
 
-  protected delete(entity: T, entities: T[], service: EntityService<T>): Observable<any> {
-    return service.delete<any>(entity, this.optionsOnRequest('delete')).pipe(
+  protected delete(entity: T, entities: T[], service: EntityService<T>): Observable<void> {
+    return service.delete<void>(entity, this.optionsOnRequest('delete')).pipe(
       tap((_obj) => {
         this.cancelEdit();
         entities.splice(entities.indexOf(entity), 1);

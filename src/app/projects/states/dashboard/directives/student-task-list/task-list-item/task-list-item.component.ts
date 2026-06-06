@@ -10,8 +10,8 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class TaskListItemComponent implements OnInit {
   @Input() task: Task;
-  @Input() setSelectedTask: any;
-  @Input() isSelectedTask: any;
+  @Input() setSelectedTask: (task: Task) => void;
+  @Input() isSelectedTask: (task: Task) => boolean;
 
   public gradeNames: GradeService['grades'];
 

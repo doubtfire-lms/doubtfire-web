@@ -284,7 +284,7 @@ export class Project extends Entity {
     return httpClient.delete<void>(this.portfolioUrl(false));
   }
 
-  public deleteFileFromPortfolio(file: {idx: any; kind: any; name: any}) {
+  public deleteFileFromPortfolio(file: {idx: number; kind: string; name: string}) {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient
       .delete<void>(

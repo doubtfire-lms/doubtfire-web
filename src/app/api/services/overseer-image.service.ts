@@ -32,7 +32,7 @@ export class OverseerImageService extends CachedEntityService<OverseerImage> {
     });
   }
 
-  public createInstanceFrom(_json: object, _other?: any): OverseerImage {
+  public createInstanceFrom(_json: object): OverseerImage {
     return new OverseerImage();
   }
 }

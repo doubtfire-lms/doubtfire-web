@@ -33,7 +33,7 @@ export class TaskSubmissionHistoryComponent implements OnInit {
     });
   }
 
-  private handleError(error: any) {
+  private handleError(error: Error) {
     this.alerts.error('Error: ' + error, 6000);
   }
 
@@ -82,7 +82,7 @@ export class TaskSubmissionHistoryComponent implements OnInit {
       (_response: OverseerAssessment) => {
         this.alerts.success('Overseer assessment will be run again.', 2000);
       },
-      (_response: any) => {
+      (_response: Error) => {
         this.alerts.error('Error requesting overseer assessment.', 6000);
       },
     );

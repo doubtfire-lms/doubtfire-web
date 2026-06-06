@@ -68,7 +68,7 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
     this.cacheBehaviourOnGet = 'cacheQuery';
   }
 
-  public createInstanceFrom(_json: any, _other?: any): TeachingPeriod {
+  public createInstanceFrom(_json: object): TeachingPeriod {
     return new TeachingPeriod();
   }
 }

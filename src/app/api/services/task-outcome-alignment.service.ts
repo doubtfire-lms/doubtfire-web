@@ -50,7 +50,7 @@ export class TaskOutcomeAlignmentService extends CachedEntityService<TaskOutcome
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public override createInstanceFrom(json: any, other?: any): TaskOutcomeAlignment {
-    return new TaskOutcomeAlignment(other as Unit | Project);
+  public override createInstanceFrom(_json: object, other?: Unit | Project): TaskOutcomeAlignment {
+    return new TaskOutcomeAlignment(other);
   }
 }

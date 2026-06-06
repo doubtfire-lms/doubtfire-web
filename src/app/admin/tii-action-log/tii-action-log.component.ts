@@ -39,7 +39,10 @@ export class TiiActionLogComponent implements AfterViewInit {
       this.tiiActionsSource = new MatTableDataSource<TiiAction>(actions);
       this.tiiActionsSource.paginator = this.paginator;
       this.tiiActionsSource.sort = this.sort;
-      this.tiiActionsSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+      this.tiiActionsSource.filterPredicate = (
+        data: TiiAction & {matches(filter: string): boolean},
+        filter: string,
+      ) => data.matches(filter);
     });
   }
 

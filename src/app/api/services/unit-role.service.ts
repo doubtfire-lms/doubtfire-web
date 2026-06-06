@@ -42,7 +42,7 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
       },
       {
         keys: 'user',
-        toEntityFn: (data: object, _key: string, _entity: UnitRole, _params?: any) => {
+        toEntityFn: (data: object) => {
           return this.userService.cache.getOrCreate(data['user']['id'], userService, data['user']);
         },
       },
@@ -77,7 +77,7 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
     );
   }
 
-  public createInstanceFrom(_json: any, _other?: any): UnitRole {
+  public createInstanceFrom(_json: object): UnitRole {
     return new UnitRole();
   }
 }

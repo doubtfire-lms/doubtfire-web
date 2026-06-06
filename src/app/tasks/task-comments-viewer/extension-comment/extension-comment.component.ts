@@ -15,7 +15,7 @@ export class ExtensionCommentComponent {
 
   constructor(private alerts: AlertService) {}
 
-  private handleError(error: any) {
+  private handleError(error: {data: {error: string}}) {
     this.alerts.error('Error: ' + error.data.error, 6000);
   }
 

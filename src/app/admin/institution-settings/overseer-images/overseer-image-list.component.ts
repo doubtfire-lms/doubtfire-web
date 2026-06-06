@@ -19,9 +19,9 @@ export class OverseerImageListComponent
   extends EntityFormComponent<OverseerImage>
   implements AfterViewInit
 {
-  @ViewChild('textDialog') textDialog!: TemplateRef<any>;
+  @ViewChild('textDialog') textDialog!: TemplateRef<object>;
 
-  @ViewChild(MatTable, {static: true}) table: MatTable<any>;
+  @ViewChild(MatTable, {static: true}) table: MatTable<OverseerImage>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   // Set up the table

@@ -33,14 +33,14 @@ export class TaskService extends CachedEntityService<Task> {
       'id',
       {
         keys: 'projectId',
-        toEntityOp: (data: object, jsonKey: string, task: Task, _params?: any) => {
+        toEntityOp: (data: object, jsonKey: string, task: Task) => {
           // Is fetching task outside of project...
           task.project = task.unit.findStudent(data[jsonKey]);
         },
       },
       {
         keys: 'taskDefinitionId',
-        toEntityOp: (data: object, key: string, entity: Task, _params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Task) => {
           entity.definition = entity.project.unit.taskDef(data['task_definition_id']);
         },
       },
@@ -79,13 +79,13 @@ export class TaskService extends CachedEntityService<Task> {
       'pinned',
       {
         keys: 'new_stat',
-        toEntityOp: (data: object, key: string, entity: Task, _params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Task) => {
           entity.project.taskStats = data['new_stat'];
         },
       },
       {
         keys: 'otherProjects',
-        toEntityOp: (data: object, key: string, entity: Task, _params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Task) => {
           data['other_projects'].forEach((details) => {
             const proj = entity.unit.findStudent(details.id);
             if (proj) {
@@ -106,8 +106,8 @@ export class TaskService extends CachedEntityService<Task> {
     this.mapping.addJsonKey('qualityPts', 'grade', 'includeInPortfolio', 'trigger');
   }
 
-  public createInstanceFrom(json: object, other?: any): Task {
-    return new Task(other as Project);
+  public createInstanceFrom(_json: object, other?: Project): Task {
+    return new Task(other);
   }
 
   public queryTasksForTaskInbox(

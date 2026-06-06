@@ -97,7 +97,7 @@ export class AudioPlayerComponent implements OnDestroy {
             fn();
           }
         }).bind(this),
-        ((error: any) => {
+        ((error: Error) => {
           this.alerts.error(`Error loading audio. ${error}`, 6000);
         }).bind(this),
       );

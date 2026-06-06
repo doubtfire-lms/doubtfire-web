@@ -34,7 +34,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       'abbreviation',
       {
         keys: ['campus', 'campus_id'],
-        toEntityOp: (data: object, key: string, entity: Tutorial, _params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Tutorial) => {
           this.campusService.get(data['campus_id']).subscribe((campus) => {
             entity.campus = campus;
           });
@@ -46,7 +46,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       'capacity',
       {
         keys: ['tutor', 'tutor_id'],
-        toEntityFn: (data: object, key: string, _entity: Tutorial, _params?: any) => {
+        toEntityFn: (data: object, key: string) => {
           return this.userService.cache.get(data[key]);
         },
         toJsonFn: (entity: Tutorial, _key: string) => {
@@ -57,7 +57,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       'numStudents',
       {
         keys: ['tutorialStream', 'tutorial_stream_abbr'],
-        toEntityFn: (data: object, key: string, entity: Tutorial, _params?: any) => {
+        toEntityFn: (data: object, key: string, entity: Tutorial) => {
           return entity.unit.tutorialStreamForAbbr(data[key]);
         },
         toJsonFn: (entity: Tutorial, _key: string) => {
@@ -76,11 +76,11 @@ export class TutorialService extends CachedEntityService<Tutorial> {
     this.mapping.mapAllKeysToJsonExcept('numStudents');
   }
 
-  public createInstanceFrom(json: any, other?: any): Tutorial {
-    return new Tutorial(other as Unit);
+  public createInstanceFrom(_json: object, other?: Unit): Tutorial {
+    return new Tutorial(other);
   }
 
-  public override keyForJson(json: any): string | number {
+  public override keyForJson(json: {tutorial_id?: number}): string | number {
     if (json.tutorial_id) {
       return json.tutorial_id;
     } else {
@@ -102,7 +102,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       body: {},
     };
 
-    let observer: Observable<any>;
+    let observer: Observable<{enrolments: {tutorial_id: number}[]}>;
     if (isEnrol) {
       observer = this.post(pathIds, options);
     } else {

@@ -58,7 +58,6 @@ module.exports = tseslint.config(
       '@angular-eslint/prefer-inject': 'off',
       '@angular-eslint/prefer-standalone': 'off',
       '@typescript-eslint/consistent-generic-constructors': ['error', 'type-annotation'],
-      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-inferrable-types': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',

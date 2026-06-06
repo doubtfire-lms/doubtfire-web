@@ -57,7 +57,7 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
     );
   }
 
-  public createInstanceFrom(json: any, other?: any): OverseerAssessment {
+  public createInstanceFrom(_json: object, other?: Task): OverseerAssessment {
     return new OverseerAssessment(other);
   }
 

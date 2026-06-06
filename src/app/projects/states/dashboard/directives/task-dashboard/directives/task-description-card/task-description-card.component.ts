@@ -16,7 +16,10 @@ export class TaskDescriptionCardComponent {
   @Input() taskDef: TaskDefinition;
   @Input() unit: Unit;
 
-  public grades: {names: any; acronyms: any};
+  public grades: {
+    names: GradeService['grades'];
+    acronyms: GradeService['gradeAcronyms'];
+  };
 
   constructor(
     private GradeService: GradeService,

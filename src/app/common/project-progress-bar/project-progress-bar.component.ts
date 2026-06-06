@@ -7,7 +7,7 @@ import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
   standalone: false,
 })
 export class ProjectProgressBarComponent implements OnChanges {
-  @Input() progress: any[];
+  @Input() progress: {value: number}[];
   public percentProgress: number = 0;
 
   ngOnChanges(changes: SimpleChanges) {

@@ -1,8 +1,21 @@
 import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
-import {BaseAudioRecorderComponent} from 'src/app/common/audio-recorder/audio/base-audio-recorder';
+import {
+  BaseAudioRecorderComponent,
+  RecordingEvent,
+} from 'src/app/common/audio-recorder/audio/base-audio-recorder';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 import {AfterViewInit, Component, Inject, Input} from '@angular/core';
 import {IntelligentDiscussionPlayerService} from '../intelligent-discussion-player.service';
+
+interface DiscussionReplyService {
+  addDiscussionReply(
+    task: Task,
+    discussionId: number,
+    recording: Blob,
+    success: () => void,
+    failure: (error: {data: {error: string}}) => void,
+  ): void;
+}
 
 @Component({
   selector: 'intelligent-discussion-recorder',
@@ -23,7 +36,7 @@ export class IntelligentDiscussionRecorderComponent
 
   constructor(
     private mediaRecorderService: MediaRecorderService,
-    @Inject(IntelligentDiscussionPlayerService) private dps: any,
+    @Inject(IntelligentDiscussionPlayerService) private dps: DiscussionReplyService,
   ) {
     super(mediaRecorderService);
   }
@@ -40,7 +53,7 @@ export class IntelligentDiscussionRecorderComponent
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
-  onNewRecording(evt: any): void {
+  onNewRecording(evt: RecordingEvent): void {
     this.blob = evt.detail.recording.blob;
     this.recordingAvailable = true;
     this.sendRecording();
@@ -63,7 +76,7 @@ export class IntelligentDiscussionRecorderComponent
         () => {
           this.isSending = false;
         },
-        (failure: {data: {error: any}}) => {
+        (failure: {data: {error: string}}) => {
           console.error(failure);
         },
       );

@@ -82,12 +82,9 @@ export class DiscussionPromptComposerComponent
         (_tc: TaskComment) => {
           this.isSending = false;
         },
-        (failure: any) => {
-          this.alerts.error(
-            `Failed to create discussion comment. ${
-              failure.data != null ? failure.data.error : failure
-            }`,
-          );
+        (failure: {data?: {error?: string}} | string) => {
+          const message = typeof failure === 'string' ? failure : failure.data?.error || failure;
+          this.alerts.error(`Failed to create discussion comment. ${String(message)}`);
           this.isSending = false;
         },
       );

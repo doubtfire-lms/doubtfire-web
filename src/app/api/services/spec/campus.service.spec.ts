@@ -39,7 +39,7 @@ describe('CampusService', () => {
       .query()
       .subscribe((campuses) => expect(campuses).toEqual(expectedCampuses, 'expected campuses'));
 
-    const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+    const req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/campuses/');
       expect(request.method).toBe('GET');
       return true;

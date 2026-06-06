@@ -6,11 +6,10 @@ import {UnitDropdownComponent} from './unit-dropdown.component';
 describe('UnitDropdownComponent', () => {
   let component: UnitDropdownComponent;
   let fixture: ComponentFixture<UnitDropdownComponent>;
-  let dateServiceStub: jasmine.SpyObj<any>;
+  let dateServiceStub: Pick<DateService, 'showDate'>;
 
   beforeEach(waitForAsync(() => {
-    dateServiceStub = jasmine.createSpy();
-    dateServiceStub.showDate = true;
+    dateServiceStub = {showDate: true};
 
     TestBed.configureTestingModule({
       declarations: [UnitDropdownComponent],

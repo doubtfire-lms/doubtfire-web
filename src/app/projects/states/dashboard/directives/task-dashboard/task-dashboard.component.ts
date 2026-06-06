@@ -22,7 +22,13 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() pdfUrl: string;
   public DashboardViews = DashboardViews;
 
-  public taskStatusData: any;
+  public taskStatusData: {
+    keys: TaskService['markedStatuses'];
+    help: TaskService['helpDescriptions'];
+    icons: TaskService['statusIcons'];
+    labels: TaskService['statusLabels'];
+    class: TaskService['statusClass'];
+  };
   public tutor = false;
   public urls: {
     taskSubmissionPdfAttachmentUrl: string;

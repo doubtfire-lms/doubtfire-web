@@ -30,6 +30,35 @@ export type IloStats = {
   max: number;
 }[];
 
+export interface TaskStatusStat {
+  tutorial_stream_id: number;
+  status: string;
+  num: number;
+}
+
+export type TaskStatusStats = Record<number, Record<number, TaskStatusStat[]>>;
+
+export interface TargetGradeStat {
+  tutorial_id: number;
+  tutorial_stream_id: number;
+  grade: number;
+  num: number;
+}
+
+export interface TaskCompletionSummary {
+  median: number;
+  lower: number;
+  upper: number;
+  min: number;
+  max: number;
+}
+
+export interface TaskCompletionStats {
+  unit: TaskCompletionSummary;
+  tutorial: Record<number, TaskCompletionSummary>;
+  grade: Record<number, TaskCompletionSummary>;
+}
+
 @Injectable()
 export class UnitService extends CachedEntityService<Unit> {
   protected readonly endpointFormat = 'units/:id:';
@@ -289,7 +318,7 @@ export class UnitService extends CachedEntityService<Unit> {
     );
   }
 
-  public override createInstanceFrom(_json: any, _other?: any): Unit {
+  public override createInstanceFrom(_json: object): Unit {
     return new Unit();
   }
 
@@ -307,25 +336,25 @@ export class UnitService extends CachedEntityService<Unit> {
     return httpClient.get<IloStats[]>(url);
   }
 
-  public taskStatusCountByTutorial(unit: Unit): Observable<any> {
+  public taskStatusCountByTutorial(unit: Unit): Observable<TaskStatusStats> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/stats/task_status_pct`;
     const httpClient = AppInjector.get(HttpClient);
 
-    return httpClient.get<any>(url);
+    return httpClient.get<TaskStatusStats>(url);
   }
 
-  public targetGradeStats(unit: Unit): Observable<any> {
+  public targetGradeStats(unit: Unit): Observable<TargetGradeStat[]> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/stats/student_target_grade`;
     const httpClient = AppInjector.get(HttpClient);
 
-    return httpClient.get<any>(url);
+    return httpClient.get<TargetGradeStat[]>(url);
   }
 
-  public taskCompletionStats(unit: Unit): Observable<any> {
+  public taskCompletionStats(unit: Unit): Observable<TaskCompletionStats> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/stats/task_completion_stats`;
     const httpClient = AppInjector.get(HttpClient);
 
-    return httpClient.get<any>(url);
+    return httpClient.get<TaskCompletionStats>(url);
   }
 
   public zipPortfolios(unit: Unit): Observable<SidekiqJob> {

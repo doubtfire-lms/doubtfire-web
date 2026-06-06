@@ -44,7 +44,7 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent im
           this.isSending = false;
           this.scrollCommentsDown();
         },
-        error: (failure: {data: {error: any}}) => {
+        error: (failure: {data: {error: string}}) => {
           this.alerts.error(
             `Failed to post audio. ${failure.data != null ? failure.data.error : undefined}`,
           );

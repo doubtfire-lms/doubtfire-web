@@ -37,7 +37,7 @@ export class GroupService extends CachedEntityService<Group> {
     this.mapping.mapAllKeysToJsonExcept('id', 'groupSet', 'studentCount');
   }
 
-  public createInstanceFrom(json: object, other?: any): Group {
-    return new Group(other as Unit);
+  public createInstanceFrom(_json: object, other?: Unit): Group {
+    return new Group(other);
   }
 }

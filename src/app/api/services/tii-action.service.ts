@@ -35,7 +35,7 @@ export class TiiActionService extends CachedEntityService<TiiAction> {
     // this.cacheBehaviourOnGet = 'cacheQuery';
   }
 
-  public createInstanceFrom(_json: any, _other?: any): TiiAction {
+  public createInstanceFrom(_json: object): TiiAction {
     return new TiiAction();
   }
 }

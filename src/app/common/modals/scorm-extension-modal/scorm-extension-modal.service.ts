@@ -9,8 +9,8 @@ import {ScormExtensionModalComponent} from './scorm-extension-modal.component';
 export class ScormExtensionModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(task: Task, afterApplication?: any) {
-    const dialogRef: MatDialogRef<ScormExtensionModalComponent, any> = this.dialog.open(
+  public show(task: Task, afterApplication?: () => void) {
+    const dialogRef: MatDialogRef<ScormExtensionModalComponent, void> = this.dialog.open(
       ScormExtensionModalComponent,
       {
         data: {

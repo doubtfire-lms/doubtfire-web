@@ -70,7 +70,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
             }),
           );
         },
-        toEntityFn: (data: object, key: string, _taskDef: TaskDefinition, _params?: any) => {
+        toEntityFn: (data: object, key: string) => {
           return (
             data[key] as {
               key: string;
@@ -92,7 +92,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       },
       {
         keys: ['tutorialStream', 'tutorial_stream_abbr'],
-        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, _params?: any) => {
+        toEntityFn: (data: object, key: string, taskDef: TaskDefinition) => {
           return taskDef.unit.tutorialStreamsCache.get(data[key]);
         },
         toJsonFn: (taskDef: TaskDefinition, _key: string) => {
@@ -103,7 +103,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'restrictStatusUpdates',
       {
         keys: ['groupSet', 'group_set_id'],
-        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, _params?: any) => {
+        toEntityFn: (data: object, key: string, taskDef: TaskDefinition) => {
           if (data[key]) {
             return taskDef.unit.groupSetsCache.get(data[key]);
           } else {
@@ -207,8 +207,8 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     );
   }
 
-  public override createInstanceFrom(json: object, other?: any): TaskDefinition {
-    return new TaskDefinition(other as Unit);
+  public override createInstanceFrom(_json: object, other?: Unit): TaskDefinition {
+    return new TaskDefinition(other);
   }
 
   public uploadTaskSheet(taskDefinition: TaskDefinition, file: File): Observable<boolean> {

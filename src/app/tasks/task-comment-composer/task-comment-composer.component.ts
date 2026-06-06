@@ -42,6 +42,7 @@ interface ApiError {
  */
 
 export interface TaskCommentComposerData {
+  [key: string]: TaskComment;
   originalComment: TaskComment;
   editingComment: TaskComment;
 }
@@ -99,7 +100,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   @ViewChildren('cag') cag: QueryList<ElementRef>;
   @ViewChild('uploader') uploader: ElementRef;
 
-  differ: KeyValueDiffer<string, any>;
+  differ: KeyValueDiffer<string, TaskComment>;
   showEmojiPicker = false;
   emojiSearchMode = false;
   // eslint-disable-next-line no-useless-escape
@@ -679,8 +680,8 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
       (_tc: TaskComment) => {
         this.commentsViewer.scrollDown();
       },
-      (error: any) => {
-        this.alerts.error(error || error?.message, 2000);
+      (error: Error) => {
+        this.alerts.error(error.message, 2000);
       },
     );
   }

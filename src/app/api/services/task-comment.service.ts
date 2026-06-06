@@ -132,7 +132,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
   /**
    * Create a Task Comment - use the type to determine the exact object type to return.
    */
-  public createInstanceFrom(json: any, other?: any): TaskComment {
+  public createInstanceFrom(json: {type?: string}, other?: Task): TaskComment {
     switch (json.type) {
       case 'discussion':
         return new DiscussionComment(other);
@@ -162,7 +162,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     return super.query(pathIds, options).pipe(
       tap((_result) => {
         // Access the task and set the number of new comments to 0 - they are now read on the server
-        const task = other as any; //TODO: change to Task object
+        const task = other as Task;
         task.numNewComments = 0;
       }),
     );
@@ -257,7 +257,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
   public requestExtension(
     reason: string,
     weeksRequested: number,
-    task: any,
+    task: Task,
   ): Observable<TaskComment> {
     const opts: RequestOptions<TaskComment> = {
       endpointFormat: this.requestExtensionEndpointFormat,
@@ -292,7 +292,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     );
   }
 
-  public requestScormExtension(reason: string, task: any): Observable<TaskComment> {
+  public requestScormExtension(reason: string, task: Task): Observable<TaskComment> {
     const opts: RequestOptions<TaskComment> = {
       endpointFormat: this.scormRequestExtensionEndpointFormat,
       body: {

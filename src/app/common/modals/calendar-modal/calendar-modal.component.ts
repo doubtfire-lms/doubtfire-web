@@ -30,7 +30,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     private constants: DoubtfireConstants,
     private alerts: AlertService,
     private projectService: ProjectService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: object,
   ) {}
 
   ngOnInit() {

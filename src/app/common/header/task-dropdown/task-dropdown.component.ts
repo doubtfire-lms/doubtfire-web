@@ -36,7 +36,7 @@ export class TaskDropdownComponent {
     'Unit Analytics': 'Analytics',
   };
 
-  taskDropdownData: {title: string; target: string; visible: any}[];
+  taskDropdownData: {title: string; target: string; visible: boolean}[];
   constructor(
     private angularRouter: Router,
     private route: ActivatedRoute,

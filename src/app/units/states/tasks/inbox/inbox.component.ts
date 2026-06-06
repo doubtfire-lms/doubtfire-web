@@ -24,14 +24,14 @@ import {Router} from '@angular/router';
 export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
-  @Input() taskData: {selectedTask: Task; any};
+  @Input() taskData: {selectedTask: Task};
   @Input() loading = false;
   @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
     forceStream: boolean;
     studentName: string;
-    tutorialIdSelected: any;
+    tutorialIdSelected: string | number;
     taskDefinitionIdSelected: number | TaskDefinition;
   }>;
   @Input() showSearchOptions: boolean;

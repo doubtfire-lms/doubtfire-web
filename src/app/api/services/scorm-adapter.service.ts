@@ -200,7 +200,7 @@ export class ScormAdapterService {
     return value;
   }
 
-  SetValue(element: string, value: any): string {
+  SetValue(element: string, value: string): string {
     // console.log(`API_1484_11: SetValue:`, element, value);
 
     // TODO: error reporting

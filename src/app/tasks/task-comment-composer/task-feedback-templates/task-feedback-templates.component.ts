@@ -19,6 +19,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 
 @Component({
   selector: 'f-task-feedback-templates',
@@ -180,7 +181,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   @ViewChild('uloSection') uloSection!: ElementRef;
   @ViewChild('gloSection') gloSection!: ElementRef;
 
-  scrollToSection(event: any) {
+  scrollToSection(event: MatTabChangeEvent) {
     const sections = [this.tloSection, this.uloSection, this.gloSection];
     const selectedSection = sections[event.index];
 

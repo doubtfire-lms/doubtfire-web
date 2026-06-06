@@ -51,7 +51,7 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   }
 
   beginDiscussion(): void {
-    const dialogRef: MatDialogRef<IntelligentDiscussionDialog, any> = this.dialog.open(
+    const dialogRef: MatDialogRef<IntelligentDiscussionDialog, void> = this.dialog.open(
       IntelligentDiscussionDialog,
       {
         data: {
@@ -176,7 +176,7 @@ export class IntelligentDiscussionDialog {
     });
   }
 
-  responseConfirmed(_e: any) {
+  responseConfirmed(_event: Event) {
     if (this.activePromptId !== this.numberOfPrompts - 1) {
       this.activePromptId++;
       this.setPrompt();

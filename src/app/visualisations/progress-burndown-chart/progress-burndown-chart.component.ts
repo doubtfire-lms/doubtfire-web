@@ -12,6 +12,16 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 
+interface BurndownPoint {
+  name: string;
+  value: number;
+}
+
+interface BurndownSeries {
+  name: string;
+  series: BurndownPoint[];
+}
+
 @Component({
   selector: 'f-progress-burndown-chart',
   templateUrl: './progress-burndown-chart.component.html',
@@ -24,10 +34,10 @@ export class ProgressBurndownChartComponent
 {
   @Input() project: Project;
   @Input() unit: Unit;
-  @Input() grade: any;
+  @Input() grade: number;
 
-  data: any[] = [];
-  temp: any[] = [];
+  data: BurndownSeries[] = [];
+  temp: BurndownSeries[] = [];
 
   // options
   legend: boolean = true;
@@ -111,7 +121,7 @@ export class ProgressBurndownChartComponent
     this.data = formattedData;
   }
 
-  onSelect(event): void {
+  onSelect(event: string | BurndownPoint): void {
     if (this.isLegend(event)) {
       const tempData = JSON.parse(JSON.stringify(this.data));
       if (this.isDataShown(event)) {
@@ -131,7 +141,7 @@ export class ProgressBurndownChartComponent
     }
   }
 
-  isLegend(event: any): boolean {
+  isLegend(event: string | BurndownPoint): event is string {
     return typeof event === 'string';
   }
 
@@ -140,7 +150,7 @@ export class ProgressBurndownChartComponent
     return series && series.series.some((point) => point.value !== 0);
   }
 
-  public formatPerc(input) {
+  public formatPerc(input: number) {
     return `${input}%`;
   }
 }

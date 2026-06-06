@@ -46,8 +46,9 @@ export class StaffNote extends Entity {
           this.project.staffNoteCount--;
           staffNoteService.updateStaffNoteReplies(this.project.staffNoteCache.currentValues);
         },
-        error: (error: any) => {
-          AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
+        error: (error: Error) => {
+          const message = error.message || 'Unknown error';
+          AppInjector.get(AlertService).error(message, 2000);
         },
       });
   }

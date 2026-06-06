@@ -6,7 +6,10 @@ import {Unit} from 'src/app/api/models/unit';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
-import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import {
+  CsvResult,
+  CsvResultModalService,
+} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
@@ -242,7 +245,7 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
       'Upload a CSV of task definitions.',
       {file: {name: 'Task Definition CSV Data', type: 'csv'}},
       this.unit.getTaskDefinitionBatchUploadUrl(),
-      (response: any) => {
+      (response: CsvResult) => {
         // at least one student?
         this.csvResultModalService.show('Task Definition Import Results', response);
         if (response.success.length > 0) {
@@ -258,7 +261,7 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
       'Upload a ZIP of task sheets and resources.',
       {file: {name: 'Task Sheets and Resources', type: 'zip'}},
       this.unit.taskUploadUrl,
-      (response: any) => {
+      (response: CsvResult) => {
         // at least one student?
         this.csvResultModalService.show('Task Sheet and Resources Import Results', response);
         if (response.success.length > 0) {

@@ -2,6 +2,11 @@ import {Component, Inject, Injectable, inject} from '@angular/core';
 import {MAT_SNACK_BAR_DATA, MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
 import {ConfettiService} from './confetti.service';
 
+interface AlertData {
+  message: string;
+  icon: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -48,5 +53,5 @@ export class AlertService {
 })
 export class AlertComponent {
   snackBarRef = inject(MatSnackBarRef);
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {}
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: AlertData) {}
 }

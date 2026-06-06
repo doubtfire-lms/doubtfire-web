@@ -5,7 +5,11 @@ import {Pipe, PipeTransform} from '@angular/core';
   standalone: false,
 })
 export class OrderByPipe implements PipeTransform {
-  transform(array: any[], field: string, reverse: boolean = false): any[] {
+  transform<T extends Record<string, string | number>>(
+    array: T[],
+    field: keyof T,
+    reverse: boolean = false,
+  ): T[] {
     if (!array || !field) {
       return array;
     }

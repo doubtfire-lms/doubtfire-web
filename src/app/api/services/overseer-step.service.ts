@@ -23,7 +23,7 @@ export class OverseerStepService extends CachedEntityService<OverseerStep> {
       // 'runCommand',
       {
         keys: 'runCommand',
-        toEntityFn: (data: object, key: string, entity: OverseerStep, _params?: any) => {
+        toEntityFn: (data: object, key: string, entity: OverseerStep) => {
           const raw = data['run_command'];
           if (raw?.startsWith('b64:')) {
             entity.decodedRunCommand = atob(raw.slice(4));
@@ -54,7 +54,7 @@ export class OverseerStepService extends CachedEntityService<OverseerStep> {
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public createInstanceFrom(json: object, other?: any): OverseerStep {
-    return new OverseerStep(other as TaskDefinition);
+  public createInstanceFrom(_json: object, other?: TaskDefinition): OverseerStep {
+    return new OverseerStep(other);
   }
 }
