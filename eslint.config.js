@@ -45,7 +45,7 @@ module.exports = tseslint.config(
       // Apply the recommended TypeScript rules
       ...tseslint.configs.recommended,
       // Optionally apply stylistic rules from typescript-eslint that improve code consistency
-      ...tseslint.configs.stylistic,
+      ...tseslint.configs.recommended,
       // Apply the recommended Angular rules
       ...angular.configs.tsRecommended,
     ],
