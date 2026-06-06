@@ -1,4 +1,4 @@
-<div style="min-width: 600px; min-height: 600px flex flex-col" class="pr-7 pl-7 pt-7 pb-7">
+<div style="min-width: 600px; min-height: 600px flex flex-col" class="p-7">
   <mat-tab-group class="mb-5">
     <mat-tab label="Edit Teaching Period">
       <ng-template [ngTemplateOutlet]="EditTeachingPeriod"></ng-template
@@ -11,7 +11,7 @@
       <ng-template [ngTemplateOutlet]="ImportUnits"></ng-template>
     </mat-tab> -->
   </mat-tab-group>
-  <div class="flex justify-end self-end space-x-2.5 bottom-3.5">
+  <div class="bottom-3.5 flex justify-end space-x-2.5 self-end">
     <button mat-stroked-button class="" mat-dialog-close>Cancel</button>
     <button mat-flat-button color="primary" class="ml-2.5" (click)="submitTeachingPeriod()">
       {{ newOrSelectedTeachingPeriod.id ? 'Save' : 'Create' }}
@@ -20,7 +20,7 @@
 </div>
 
 <ng-template #EditTeachingPeriod>
-  <form class="teaching-period-form flex flex-col ml-3.5 mr-3.5 pt-7 overflow-hidden">
+  <form class="teaching-period-form mx-3.5 flex flex-col overflow-hidden pt-7">
     <mat-form-field appearance="outline">
       <mat-label>Teaching Period Name</mat-label>
       <input
@@ -100,7 +100,7 @@
     }
   </mat-list>
 
-  <form class="ml-3.5 mr-3.5 pt-7 overflow-hidden">
+  <form class="mx-3.5 overflow-hidden pt-7">
     <span class="flex items-center gap-3.5">
       <mat-form-field appearance="outline">
         <mat-label>Break Start Date</mat-label>

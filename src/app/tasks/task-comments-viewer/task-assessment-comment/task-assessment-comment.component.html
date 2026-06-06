@@ -1,11 +1,11 @@
-<div class="flex flex-col justify-center items-center overflow-hidden w-full mx-auto">
+<div class="mx-auto flex w-full flex-col items-center justify-center overflow-hidden">
   <!-- TODO: dont render this comment if we're still in pre_queued and the submission timestamp is over 1 hour etc -->
-  <div class="flex justify-center items-center text-center text-[#9696969d] opacity-80 w-full">
+  <div class="flex w-full items-center justify-center text-center text-[#9696969d] opacity-80">
     <div
-      class="flex-grow h-px bg-gradient-to-r from-transparent via-gray-400/60 to-transparent w-full"
+      class="h-px w-full flex-grow bg-gradient-to-r from-transparent via-gray-400/60 to-transparent"
     ></div>
 
-    <div class="flex items-center gap-1 px-1 bg-white whitespace-nowrap">
+    <div class="flex items-center gap-1 whitespace-nowrap bg-white px-1">
       @if (comment.overseerStatus === 'pre_queued') {
         Tests In Progress
       } @else if (comment.overseerStatus === 'passed') {
@@ -16,7 +16,7 @@
     </div>
 
     <div
-      class="flex-grow h-px bg-gradient-to-r from-transparent via-gray-400/60 to-transparent w-full"
+      class="h-px w-full flex-grow bg-gradient-to-r from-transparent via-gray-400/60 to-transparent"
     ></div>
   </div>
 

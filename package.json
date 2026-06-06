@@ -112,6 +112,7 @@
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-tailwindcss": "^3.18.3",
     "husky": "~8",
     "ip": "^1.1.2",
     "jasmine-core": "~4.1.0",
@@ -127,7 +128,7 @@
     "prettier": "^3.8.3",
     "protractor": "~7.0.0",
     "sass": "^1.48.0",
-    "tailwindcss": "~3.3",
+    "tailwindcss": "~3.4.17",
     "ts-node": "~10.9",
     "typescript": "~5.9.3",
     "underscore": "^1.8.3"

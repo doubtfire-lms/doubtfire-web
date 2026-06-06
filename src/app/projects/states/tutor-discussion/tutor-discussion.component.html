@@ -1,18 +1,18 @@
 <div
   [hidden]="!scanningQr"
-  class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen z-40 bg-gray-500/50 backdrop-blur overflow-hidden"
+  class="absolute left-1/2 top-1/2 z-40 h-screen w-screen -translate-x-1/2 -translate-y-1/2 transform overflow-hidden bg-gray-500/50 backdrop-blur"
 >
   @if (loadingStudentData) {
     <mat-spinner
       color="blue"
-      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 z-50"
+      class="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 transform"
     ></mat-spinner>
   }
   <div [ngClass]="{'qr-reader-hide-bloat': hideQrScannerBloat}">
-    <div id="qr-reader" class="absolute top-1/2 transform -translate-y-1/2 w-full"></div>
+    <div id="qr-reader" class="absolute top-1/2 w-full -translate-y-1/2 transform"></div>
   </div>
   <div
-    class="absolute top-[150px] left-1/2 transform -translate-x-1/2 w-full text-center text-white px-6 py-3 text-sm font-bold pointer-events-none z-10"
+    class="pointer-events-none absolute left-1/2 top-[150px] z-10 w-full -translate-x-1/2 transform px-6 py-3 text-center text-sm font-bold text-white"
   >
     Scan a student's QR code to instantly load their project and mark submissions.
   </div>
@@ -20,17 +20,17 @@
     mat-raised-button
     color="secondary"
     (click)="closeQrReader()"
-    class="max-w-md my-3 absolute bottom-[150px] left-1/2 transform -translate-x-1/2"
+    class="absolute bottom-[150px] left-1/2 my-3 max-w-md -translate-x-1/2 transform"
   >
     {{ project ? 'Cancel' : 'Exit' }}
   </button>
 </div>
 
 <!-- We offset the height by 145px to compensate for the header -->
-<div class="w-full flex flex-col h-[calc(100vh-145px)] max-w-7xl mx-auto">
+<div class="mx-auto flex h-[calc(100vh-145px)] w-full max-w-7xl flex-col">
   @if (attendance && unit) {
     <div class="flex items-center gap-2.5">
-      <mat-form-field appearance="outline" class="w-full mt-[22px]">
+      <mat-form-field appearance="outline" class="mt-[22px] w-full">
         <mat-select
           placeholder="Select a task"
           [(ngModel)]="selectedTaskDefinition"
@@ -47,11 +47,11 @@
     </div>
   }
 
-  <div class="task-inbox flex flex-col flex-1 justify-normal items-center w-full">
-    <div class="flex justify-between w-full relative">
+  <div class="task-inbox flex w-full flex-1 flex-col items-center justify-normal">
+    <div class="relative flex w-full justify-between">
       @if (project && project?.student) {
         <div></div>
-        <div class="absolute left-1/2 transform -translate-x-1/2 text-center">
+        <div class="absolute left-1/2 -translate-x-1/2 transform text-center">
           <div class="text-center">
             {{ project?.student?.firstName }} {{ project?.student?.lastName }}
             @if (project?.student.studentId) {
@@ -72,9 +72,9 @@
     </div>
 
     @if (project && !filteredTasks.length) {
-      <div class="italic text-gray-400 py-6">No tasks to discuss.</div>
+      <div class="py-6 italic text-gray-400">No tasks to discuss.</div>
     }
-    <mat-selection-list class="m-0 p-0 h-min" #tasks>
+    <mat-selection-list class="m-0 h-min p-0" #tasks>
       @for (task of filteredTasks; track task) {
         <mat-list-option
           [value]="task"
@@ -103,9 +103,9 @@
                   }"
                 ></span>
                 <user-icon class="self-center" [user]="project?.student" [size]="30"> </user-icon>
-                <div class="flex-1 mt-0 whitespace-normal break-words" [hidden]="isNarrow">
-                  <h4 class="text-[15px] mb-[2px] mt-[8px]">{{ task.definition.name }}</h4>
-                  <span class="mb-0 text-[12px] inline">
+                <div class="mt-0 flex-1 whitespace-normal break-words" [hidden]="isNarrow">
+                  <h4 class="mb-[2px] mt-[8px] text-[15px]">{{ task.definition.name }}</h4>
+                  <span class="mb-0 inline text-[12px]">
                     {{ task.definition.abbreviation }} -
                     {{ getTargetTradeString(task.definition.targetGrade) }} Task
                   </span>
@@ -144,7 +144,7 @@
       <!--/task-->
     </mat-selection-list>
     @if (project) {
-      <div class="w-full flex justify-center mt-2.5">
+      <div class="mt-2.5 flex w-full justify-center">
         @if (this.allTasks?.length > 0) {
           @if (this.filteredTasks?.length < this.allTasks?.length) {
             <button mat-button color="primary" (click)="viewAllSubmittedTasks()">
@@ -164,10 +164,10 @@
 
   @if (project && filteredTasks.length) {
     <div class="mt-1">
-      <div class="w-full flex justify-center items-center my-2 gap-5">
+      <div class="my-2 flex w-full items-center justify-center gap-5">
         @if (attendance) {
           <button
-            class="bg-gray-100 medium-icon-button"
+            class="medium-icon-button bg-gray-100"
             mat-fab
             color="secondary"
             [disabled]="!tasks.selectedOptions.selected.length"
@@ -178,7 +178,7 @@
           </button>
         } @else {
           <button
-            class="bg-gray-100 medium-icon-button"
+            class="medium-icon-button bg-gray-100"
             mat-fab
             color="secondary"
             [disabled]="!tasks.selectedOptions.selected.length"
@@ -188,7 +188,7 @@
             <mat-icon>construction</mat-icon>
           </button>
           <button
-            class="bg-green-400 medium-icon-button"
+            class="medium-icon-button bg-green-400"
             mat-fab
             [disabled]="!canMarkSelectedTasksComplete"
             (click)="setSelectedTasksStatus('complete')"
@@ -198,7 +198,7 @@
           </button>
 
           <button
-            class="bg-blue-300 medium-icon-button"
+            class="medium-icon-button bg-blue-300"
             mat-fab
             [disabled]="!tasks.selectedOptions.selected.length"
             (click)="markSelectedTasksDicussed()"

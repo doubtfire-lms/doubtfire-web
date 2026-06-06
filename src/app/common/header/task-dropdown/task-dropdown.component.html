@@ -2,7 +2,7 @@
   @if (currentView === 'PROJECT' && currentProject !== null && currentUnit.currentUserIsStaff) {
     <mat-icon class="f-breadcrumb">chevron_right</mat-icon>
     <button #menuState="matMenuTrigger" mat-button [matMenuTriggerFor]="menu">
-      <span class="flex items-center flex-row">
+      <span class="flex flex-row items-center">
         <span> Staff Tasks </span>
         <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
       </span>
@@ -45,7 +45,7 @@
   @if (currentActivity) {
     <mat-icon class="f-breadcrumb">chevron_right</mat-icon>
     <button mat-button [matMenuTriggerFor]="menu2" #menuState="matMenuTrigger">
-      <span class="flex items-center flex-row">
+      <span class="flex flex-row items-center">
         <span>{{ menuText }}</span>
         <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
       </span>

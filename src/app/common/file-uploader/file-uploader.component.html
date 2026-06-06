@@ -34,7 +34,7 @@
                 @if (!upload.display.error) {
                   <mat-icon>{{ upload.display.icon }}</mat-icon>
                   @if (dropSupported) {
-                    <span class="text-center select-none">
+                    <span class="select-none text-center">
                       Drop {{ upload.display.type }} file here <br /><small
                         >or click to select</small
                       >
@@ -44,7 +44,7 @@
                   }
                 } @else {
                   <span
-                    class="!text-red-500 !w-full flex flex-col justify-center items-center text-base"
+                    class="flex !w-full flex-col items-center justify-center text-base !text-red-500"
                   >
                     <mat-icon>block</mat-icon>
                     <span>Invalid file provided</span>
@@ -82,7 +82,7 @@
           <h5>Upload Summary</h5>
 
           @for (upload of uploadZones; track upload) {
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
               <div class="flex items-center gap-1">
                 <mat-icon>{{ upload.display.icon }}</mat-icon>
                 <strong>{{ upload.display.name }}</strong>
@@ -119,13 +119,13 @@
 
     @if (showUploader && readyToUpload() && isUploading) {
       @if (!uploadingInfo?.complete) {
-        <div class="uploading w-full min-h-[300px] flex flex-col justify-center items-center gap-3">
-          <div class="flex justify-center items-center gap-1">
+        <div class="uploading flex min-h-[300px] w-full flex-col items-center justify-center gap-3">
+          <div class="flex items-center justify-center gap-1">
             @for (upload of uploadZones; track upload) {
               <mat-icon>{{ upload.display.icon }}</mat-icon>
             }
             <mat-icon>arrow_right_alt</mat-icon>
-            <i class="logo w-[75px] h-[75px]"></i>
+            <i class="logo h-[75px] w-[75px]"></i>
           </div>
 
           <mat-progress-bar mode="determinate" [value]="uploadingInfo?.progress">
@@ -134,8 +134,8 @@
       }
 
       @if (uploadingInfo?.complete) {
-        <div class="complete min-h-[300px] flex flex-col justify-center items-center gap-3">
-          <div class="flex justify-center items-center gap-3 w-full">
+        <div class="complete flex min-h-[300px] flex-col items-center justify-center gap-3">
+          <div class="flex w-full items-center justify-center gap-3">
             <mat-icon color="{{ uploadingInfo.success ? 'primary' : 'warn' }}">
               {{ uploadingInfo.success ? 'check_circle' : 'cancel' }}
             </mat-icon>
@@ -146,7 +146,7 @@
           </div>
 
           @if (!uploadingInfo.success) {
-            <div class="max-w-xl flex flex-col justify-center items-center">
+            <div class="flex max-w-xl flex-col items-center justify-center">
               <hr class="border-b border-gray-300" />
               <p><strong>Error Message:</strong> {{ uploadingInfo.error }}</p>
 

@@ -8,7 +8,7 @@
             [class.selected]="tab.timestampString === selectedTab.timestampString"
             (click)="openSubmission(tab)"
           >
-            <div class="flex gap-3 justify-between items-center">
+            <div class="flex items-center justify-between gap-3">
               <div>
                 {{ tab.timestamp | humanizedDate }}
               </div>

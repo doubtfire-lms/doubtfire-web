@@ -11,6 +11,8 @@ const angular = require('angular-eslint');
 
 const prettierPlugin = require('eslint-plugin-prettier');
 
+const tailwindcss = require('eslint-plugin-tailwindcss');
+
 /**
  * Scope Angular template configs to HTML files.
  *
@@ -82,7 +84,14 @@ module.exports = tseslint.config(
   {
     files: ['**/*.component.html'],
     plugins: {prettier: prettierPlugin},
+    extends: [...tailwindcss.configs['flat/recommended']],
+    settings: {
+      tailwindcss: {
+        config: {},
+      },
+    },
     rules: {
+      'tailwindcss/no-custom-classname': 'off',
       'prettier/prettier': 'warn',
     },
   },

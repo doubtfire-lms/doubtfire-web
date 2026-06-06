@@ -1,4 +1,4 @@
-<mat-card appearance="outlined" class="max-w-[1100px] mx-auto">
+<mat-card appearance="outlined" class="mx-auto max-w-[1100px]">
   <mat-card-header>
     <mat-card-title>Review Portfolio</mat-card-title>
   </mat-card-header>
@@ -41,7 +41,7 @@
     }
 
     @if (portfolioIsCompiling) {
-      <mat-card appearance="outlined" class="p-1 max-w-5xl mx-auto">
+      <mat-card appearance="outlined" class="mx-auto max-w-5xl p-1">
         <mat-card-header>
           <mat-card-title>Portfolio Processing</mat-card-title>
         </mat-card-header>
@@ -69,7 +69,7 @@
           file{{ extraFiles.length > 1 ? 's' : '' }} in the previous step.
         </p>
 
-        <ol class="list-decimal list-inside space-y-1 pb-2">
+        <ol class="list-inside list-decimal space-y-1 pb-2">
           @for (file of extraFiles; track file) {
             <li class="flex items-center gap-1">
               <mat-icon>{{ getIcon(file.kind) }}</mat-icon>
@@ -111,7 +111,7 @@
             mat-raised-button
             color="primary"
             (click)="createPortfolio()"
-            class="w-full m-3 max-w-4xl mx-auto"
+            class="m-3 mx-auto w-full max-w-4xl"
           >
             <mat-icon>menu_book</mat-icon>
             Create My Portfolio
@@ -150,7 +150,7 @@
     }
   </mat-card-content>
 
-  <mat-card-footer class="w-full flex justify-start p-3">
+  <mat-card-footer class="flex w-full justify-start p-3">
     <button mat-raised-button (click)="goBack()">Back</button>
   </mat-card-footer>
 </mat-card>

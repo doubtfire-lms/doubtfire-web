@@ -13,7 +13,7 @@
       />
     } @else if (isPdf) {
       <div class="flex items-center gap-2 p-3">
-        <mat-icon class="h-5 w-5 text-[2rem]">picture_as_pdf</mat-icon>
+        <mat-icon class="size-5 text-[2rem]">picture_as_pdf</mat-icon>
         <div class="flex flex-col gap-px break-all">
           <strong>{{ file.name }}</strong>
           <span>PDF document</span>
@@ -22,7 +22,7 @@
     } @else if (isAudio) {
       <div class="w-full p-3">
         <div class="flex items-center gap-2">
-          <mat-icon class="h-5 w-5 text-[2rem]">audio_file</mat-icon>
+          <mat-icon class="size-5 text-[2rem]">audio_file</mat-icon>
           <div class="flex flex-col gap-px break-all">
             <strong>{{ file.name }}</strong>
             <span>{{ file.type || 'Audio file' }}</span>
@@ -32,7 +32,7 @@
       </div>
     } @else {
       <div class="flex items-center gap-2 p-3">
-        <mat-icon class="h-5 w-5 text-[2rem]">attach_file</mat-icon>
+        <mat-icon class="size-5 text-[2rem]">attach_file</mat-icon>
         <div class="flex flex-col gap-px break-all">
           <strong>{{ file.name }}</strong>
           <span>{{ file.type || 'Attachment' }}</span>

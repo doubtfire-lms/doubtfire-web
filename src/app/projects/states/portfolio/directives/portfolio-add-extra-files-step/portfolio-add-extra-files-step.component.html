@@ -1,4 +1,4 @@
-<mat-card appearance="outlined" class="max-w-[1100px] mx-auto">
+<mat-card appearance="outlined" class="mx-auto max-w-[1100px]">
   <mat-card-header>
     <mat-card-title>Upload Other Files</mat-card-title>
   </mat-card-header>
@@ -10,7 +10,7 @@
     <div class="pb-3">
       <ol>
         @for (file of extraFiles; track file) {
-          <li class="flex items-center py-1 justify-between border-b-gray-100 border-b-2">
+          <li class="flex items-center justify-between border-b-2 border-b-gray-100 py-1">
             <div class="flex items-center justify-between gap-1">
               <mat-icon>{{ icons[file.kind] }}</mat-icon>
               {{ file.name }}
@@ -24,7 +24,7 @@
         }
       </ol>
     </div>
-    <div class="flex justify-center items-center">
+    <div class="flex items-center justify-center">
       <mat-form-field appearance="outline" class="w-full max-w-2xl">
         <mat-label>Select type of file:</mat-label>
         <mat-select [(ngModel)]="uploadType" (selectionChange)="onTypeChange($event)">
@@ -45,7 +45,7 @@
     >
     </f-file-uploader>
   </mat-card-content>
-  <mat-card-footer class="w-full flex justify-between p-3">
+  <mat-card-footer class="flex w-full justify-between p-3">
     <button mat-raised-button (click)="advanceActiveTab(-1)">Back</button>
     <button mat-raised-button (click)="advanceActiveTab(1)" color="primary">Next</button>
   </mat-card-footer>

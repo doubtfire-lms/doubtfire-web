@@ -7,10 +7,10 @@
   #fileUpload
 />
 
-<div class="flex items-center w-full" appDragDrop (fileDropped)="onFileDragOver($event)">
+<div class="flex w-full items-center" appDragDrop (fileDropped)="onFileDragOver($event)">
   <button
     mat-flat-button
-    class="h-[52px] rounded-r-none border-r-0 rounded-lg shrink-0"
+    class="h-[52px] shrink-0 rounded-lg rounded-r-none border-r-0"
     color="primary"
     (click)="fileUpload.click()"
     [disabled]="uploadProgress"
@@ -23,12 +23,12 @@
     }
   </button>
   <div class="f-inner-border flex grow items-center rounded-lg rounded-l-none bg-white">
-    <div class="flex flex-col w-full">
-      <div class="flex ml-2.5 h-[48px] items-center">
+    <div class="flex w-full flex-col">
+      <div class="ml-2.5 flex h-[48px] items-center">
         @if (file?.name) {
           <mat-icon class="mr-1">upload_file</mat-icon>
         }
-        <span class="truncate grow max-w-xs mt-[4px]"> {{ file?.name || message }} </span>
+        <span class="mt-[4px] max-w-xs grow truncate"> {{ file?.name || message }} </span>
         {{ uploadProgress }}
         <button
           [disabled]="!file?.name"
