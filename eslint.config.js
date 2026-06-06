@@ -104,7 +104,7 @@ module.exports = tseslint.config(
       '@angular-eslint/template/elements-content': 'off',
       '@angular-eslint/template/eqeqeq': 'off',
       '@angular-eslint/template/label-has-associated-control': 'off',
-      '@angular-eslint/template/prefer-control-flow': 'off',
+      '@angular-eslint/template/prefer-control-flow': 'error',
     },
   },
 );
