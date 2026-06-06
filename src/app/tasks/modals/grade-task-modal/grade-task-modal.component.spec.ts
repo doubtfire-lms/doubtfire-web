@@ -40,7 +40,9 @@ describe('GradeTaskModalComponent', () => {
     };
 
     dialogRefMock = {
-      close: () => {},
+      close: () => {
+        /* empty */
+      },
     };
 
     TestBed.configureTestingModule({

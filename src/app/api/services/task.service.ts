@@ -209,7 +209,6 @@ export class TaskService extends CachedEntityService<Task> {
     };
 
     this.get(pathIds, options).subscribe({
-      next: (_value: Task) => {},
       error: (message) => {
         console.log(`Failed to refresh tasks ${message}`);
       },

@@ -15,8 +15,6 @@ export class StatusIconComponent implements OnInit {
   statusLabel: (status: TaskStatusEnum) => string;
   statusClass: (status: TaskStatusEnum) => string;
 
-  constructor() {}
-
   ngOnInit(): void {
     if (this.showTooltip == null) {
       this.showTooltip = true;

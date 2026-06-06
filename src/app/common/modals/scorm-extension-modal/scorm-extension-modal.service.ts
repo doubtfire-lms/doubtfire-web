@@ -20,8 +20,8 @@ export class ScormExtensionModalService {
       },
     );
 
-    dialogRef.afterOpened().subscribe((_result: any) => {});
+    dialogRef.afterOpened().subscribe();
 
-    dialogRef.afterClosed().subscribe((_result: any) => {});
+    dialogRef.afterClosed().subscribe();
   }
 }

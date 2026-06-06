@@ -13,7 +13,9 @@ import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@ang
 declare const __karma__: any;
 
 // Prevent Karma from running prematurely.
-__karma__.loaded = () => {};
+__karma__.loaded = () => {
+  /* empty */
+};
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting(), {

@@ -60,7 +60,9 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
   }
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    /* empty */
+  }
 
   /**
    * Cancel edit of current selected value.

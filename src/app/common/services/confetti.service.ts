@@ -5,8 +5,6 @@ import {Injectable} from '@angular/core';
   providedIn: 'root',
 })
 export class ConfettiService {
-  constructor() {}
-
   public canon(x: number = 0, y: number = 0, angle = 210): void {
     confetti({
       angle: angle,

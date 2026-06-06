@@ -32,5 +32,7 @@ export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implem
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
-  sendRecording(): void {}
+  sendRecording(): void {
+    /* empty */
+  }
 }

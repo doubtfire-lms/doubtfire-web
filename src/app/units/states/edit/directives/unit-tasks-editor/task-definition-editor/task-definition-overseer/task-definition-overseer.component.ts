@@ -1,7 +1,6 @@
 import * as monaco from 'monaco-editor';
 import {Observable} from 'rxjs';
 import {
-  OverseerAssessment,
   OverseerImage,
   OverseerImageService,
   Task,
@@ -302,7 +301,6 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     if (!this.currentUserTask) return;
 
     this.submissions.getLatestSubmissionsTimestamps(this.currentUserTask).subscribe({
-      next: (_result: OverseerAssessment[]) => {},
       error: (error) => {
         this.alerts.error('Error: ' + error, 6000);
       },

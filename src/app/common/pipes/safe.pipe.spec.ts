@@ -1,3 +1,5 @@
 describe('SafePipe', () => {
-  it('create an instance', () => {});
+  it('create an instance', () => {
+    /* empty */
+  });
 });

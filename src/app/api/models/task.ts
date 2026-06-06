@@ -148,9 +148,9 @@ export class Task extends Entity {
     AppInjector.get(TaskCommentService)
       .addComment(this, textString, 'text')
       .subscribe({
-        next: (_tc) => {},
         error: (error) => {
-          console.log(error);
+          const alerts: any = AppInjector.get(AlertService);
+          alerts.error(`Failed to add comment: ${error}`);
         },
       });
   }
@@ -891,7 +891,9 @@ export class Task extends Entity {
 
     modal.result.then(
       // Grade was selected (modal closed with result)
-      (_response) => {},
+      (_response) => {
+        /* empty */
+      },
       // Grade was not selected (modal was dismissed)
       (_dismissed) => {
         if (!isTestSubmission) {

@@ -218,12 +218,11 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
 
   // # Upload image files as comments to a given task
   postAttachmentComment(file) {
-    this.taskCommentService.addComment(this.task, file, 'file', null).subscribe(
-      (_tc: TaskComment) => {},
-      (error: any) => {
+    this.taskCommentService.addComment(this.task, file, 'file', null).subscribe({
+      error: (error) => {
         this.alerts.error(error || error?.message, 2000);
       },
-    );
+    });
   }
 
   scrollToComment(commentID) {

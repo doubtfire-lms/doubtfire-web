@@ -16,6 +16,4 @@ export class LoadingService {
   loadingOff() {
     this.loadingSubject.next(false);
   }
-
-  constructor() {}
 }

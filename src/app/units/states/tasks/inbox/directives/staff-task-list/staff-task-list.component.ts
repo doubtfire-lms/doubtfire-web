@@ -402,7 +402,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   openDialog() {
     const dialogRef = this.dialog.open(this.searchDialog);
 
-    dialogRef.afterClosed().subscribe((_result) => {});
+    dialogRef.afterClosed().subscribe();
   }
 
   refreshTasks(): void {

@@ -10,8 +10,6 @@ export class ProjectProgressBarComponent implements OnChanges {
   @Input() progress: any[];
   public percentProgress: number = 0;
 
-  constructor() {}
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes.progress) {
       if (changes.progress.currentValue) {

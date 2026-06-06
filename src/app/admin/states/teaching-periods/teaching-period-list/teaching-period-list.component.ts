@@ -32,7 +32,7 @@ export class TeachingPeriodListComponent implements OnInit {
 
   ngOnInit(): void {
     // update the Teaching Periods
-    this.teachingPeriodsService.query().subscribe((_) => {});
+    this.teachingPeriodsService.query().subscribe();
 
     // Bind to the Teaching Periods
     this.teachingPeriodsService.cache.values.subscribe((teachingPeriods) => {

@@ -9,7 +9,6 @@ import {Component, Input} from '@angular/core';
 })
 export class TaskDueCardComponent {
   @Input() task: Task;
-  constructor() {}
 
   public get flexibleDatesEnabled(): boolean {
     return this.task?.unit?.allowFlexibleDates;
