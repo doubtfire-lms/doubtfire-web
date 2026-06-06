@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 
 @Component({
   selector: 'legacy-route-placeholder',
-  template: '',
+  templateUrl: './legacy-route-placeholder.component.html',
   styles: [
     `
       :host {

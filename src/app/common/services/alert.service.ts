@@ -43,16 +43,7 @@ export class AlertService {
 
 @Component({
   selector: 'f-alert',
-  template: `<span class="flex space-x-2.5 items-center center-items">
-    <span class="flex">
-      <mat-icon>{{ data?.icon }}</mat-icon>
-    </span>
-    <span class="flex-grow">{{ data?.message }}</span>
-
-    <span matSnackBarActions class="ml-auto">
-      <button mat-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">Close</button>
-    </span></span
-  >`,
+  templateUrl: './alert.component.html',
   standalone: false,
 })
 export class AlertComponent {

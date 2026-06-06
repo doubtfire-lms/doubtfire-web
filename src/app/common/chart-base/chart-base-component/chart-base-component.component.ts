@@ -9,7 +9,7 @@ import {Component, ViewContainerRef} from '@angular/core';
  * Child classes need to extend this class and call super() in the constructor, passing in the ViewContainerRef.
  */
 @Component({
-  template: `<p>chart-base-component works!</p>`,
+  templateUrl: './chart-base-component.component.html',
   standalone: false,
 })
 export class ChartBaseComponent {

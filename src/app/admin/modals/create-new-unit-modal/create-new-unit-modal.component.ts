@@ -4,7 +4,7 @@ import {CreateNewUnitModalContentComponent} from './create-new-unit-modal-conten
 
 @Component({
   selector: 'create-new-unit-modal',
-  template: '',
+  templateUrl: './create-new-unit-modal.component.html',
   standalone: false,
 })
 export class CreateNewUnitModal {
