@@ -13,7 +13,7 @@ export class TaskListItemComponent implements OnInit {
   @Input() setSelectedTask: any;
   @Input() isSelectedTask: any;
 
-  public gradeNames: {};
+  public gradeNames: GradeService['grades'];
 
   constructor(private gs: GradeService) {}
 

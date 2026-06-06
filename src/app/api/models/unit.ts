@@ -101,8 +101,6 @@ export class Unit extends Entity {
 
   readonly studentCache: EntityCache<Project> = new EntityCache<Project>();
 
-  analytics: {} = {};
-
   public override toJson<T extends Entity>(
     mappingData: EntityMapping<T>,
     ignoreKeys?: string[],
