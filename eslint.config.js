@@ -55,7 +55,7 @@ module.exports = tseslint.config(
     // Override specific rules for TypeScript files (these will take priority over the extended configs above)
     // TODO: go through each rule and remove each one and fix
     rules: {
-      '@angular-eslint/component-max-inline-declarations': ['error', {template: 0}],
+      '@angular-eslint/component-max-inline-declarations': ['error', {template: 0, styles: 0}],
       '@angular-eslint/prefer-inject': 'off',
       '@angular-eslint/prefer-standalone': 'off',
       '@typescript-eslint/consistent-generic-constructors': 'off',
