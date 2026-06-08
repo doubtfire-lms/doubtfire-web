@@ -36,7 +36,7 @@
     "@angular/platform-browser": "^21.2.11",
     "@angular/platform-browser-dynamic": "^21.2.11",
     "@angular/router": "^21.2.11",
-    "@angular/service-worker": "^21.2.11",
+    "@angular/service-worker": "^22.0.0",
     "@angular/upgrade": "^21.2.11",
     "@ctrl/ngx-emoji-mart": "^9.3.0",
     "@ngneat/hotkeys": "^4.0.0",
