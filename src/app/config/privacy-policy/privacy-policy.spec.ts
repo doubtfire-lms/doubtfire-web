@@ -1,6 +1,5 @@
-import { TestBed } from '@angular/core/testing';
-
-import {PrivacyPolicy } from './privacy-policy';
+import {TestBed} from '@angular/core/testing';
+import {PrivacyPolicy} from './privacy-policy';
 
 describe('PrivacyPolicy', () => {
   let service: PrivacyPolicy;

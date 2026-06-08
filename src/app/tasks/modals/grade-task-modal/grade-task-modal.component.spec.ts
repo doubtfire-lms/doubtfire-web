@@ -1,59 +1,65 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { GradeTaskModalComponent } from './grade-task-modal.component';
-import { GradeService } from 'src/app/common/services/grade.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {GradeService} from 'src/app/common/services/grade.service';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {GradeTaskModalComponent} from './grade-task-modal.component';
 
 describe('GradeTaskModalComponent', () => {
   let component: GradeTaskModalComponent;
   let fixture: ComponentFixture<GradeTaskModalComponent>;
-  let gradeServiceStub: jasmine.SpyObj<any>;
-  let dialogRefMock: jasmine.SpyObj<any>;
-  let dialogDataStub: jasmine.SpyObj<any>;
+  let gradeServiceStub: Pick<GradeService, 'grades' | 'gradeAcronyms' | 'allGradeValues'>;
+  let dialogRefMock: {close: () => void};
+  let dialogDataStub: {
+    task: {
+      grade?: number;
+      quality_pts?: number;
+      definition: {max_quality_pts?: number};
+    };
+  };
 
-  beforeEach(
-    waitForAsync(() => {
-      gradeServiceStub = {
-        grades: ['Pass', 'Credit', 'Distinction', 'High Distinction'],
-        gradeAcronyms: {
-          Fail: 'F',
-          Pass: 'P',
-          Credit: 'C',
-          Distinction: 'D',
-          'High Distinction': 'HD',
-          0: 'P',
-          1: 'C',
-          2: 'D',
-          3: 'HD',
+  beforeEach(waitForAsync(() => {
+    gradeServiceStub = {
+      grades: ['Pass', 'Credit', 'Distinction', 'High Distinction'],
+      gradeAcronyms: {
+        Fail: 'F',
+        Pass: 'P',
+        Credit: 'C',
+        Distinction: 'D',
+        'High Distinction': 'HD',
+        0: 'P',
+        1: 'C',
+        2: 'D',
+        3: 'HD',
+      },
+      allGradeValues: [-1, 0, 1, 2, 3],
+    };
+    gradeServiceStub.grades[-1] = 'Fail';
+    gradeServiceStub.gradeAcronyms[-1] = 'F';
+
+    dialogDataStub = {
+      task: {
+        grade: undefined,
+        quality_pts: undefined,
+        definition: {
+          max_quality_pts: undefined,
         },
-        allGradeValues: [-1, 0, 1, 2, 3],
-      };
-      gradeServiceStub.grades[-1] = 'Fail';
-      gradeServiceStub.gradeAcronyms[-1] = 'F';
+      },
+    };
 
-      dialogDataStub = {
-        task: {
-          grade: undefined,
-          quality_pts: undefined,
-          definition: {
-            max_quality_pts: undefined,
-          },
-        },
-      };
+    dialogRefMock = {
+      close: () => {
+        /* empty */
+      },
+    };
 
-      dialogRefMock = {
-        close: () => {},
-      };
-
-      TestBed.configureTestingModule({
-        declarations: [GradeTaskModalComponent],
-        providers: [
-          { provide: GradeService, useValue: gradeServiceStub },
-          { provide: MatDialogRef, useValue: dialogRefMock },
-          { provide: MAT_DIALOG_DATA, useValue: dialogDataStub },
-        ],
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      declarations: [GradeTaskModalComponent],
+      providers: [
+        {provide: GradeService, useValue: gradeServiceStub},
+        {provide: MatDialogRef, useValue: dialogRefMock},
+        {provide: MAT_DIALOG_DATA, useValue: dialogDataStub},
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GradeTaskModalComponent);

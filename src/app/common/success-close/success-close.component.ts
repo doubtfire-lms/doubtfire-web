@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
-    selector: 'f-success-close',
-    templateUrl: 'success-close.component.html',
-    styleUrls: ['success-close.component.scss'],
-    standalone: false
+  selector: 'f-success-close',
+  templateUrl: 'success-close.component.html',
+  styleUrls: ['success-close.component.scss'],
+  standalone: false,
 })
 export class SuccessCloseComponent implements OnInit {
   ngOnInit(): void {

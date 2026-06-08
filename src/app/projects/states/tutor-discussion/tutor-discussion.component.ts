@@ -1,7 +1,3 @@
-import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSelectionList} from '@angular/material/list';
-import {MatTabChangeEvent} from '@angular/material/tabs';
 import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
 import {
   AuthenticationService,
@@ -21,6 +17,10 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {DiscussedInClassReasonModalService} from 'src/app/common/modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {MatSelectionList} from '@angular/material/list';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ActivatedRoute, Router} from '@angular/router';
 
 enum TutorDiscussionTabView {
   SHOW_COMMENTS,
@@ -28,11 +28,11 @@ enum TutorDiscussionTabView {
   SHOW_DISCUSSION_PROMPTS,
 }
 @Component({
-    selector: 'f-tutor-discussion',
-    templateUrl: './tutor-discussion.component.html',
-    styleUrl: './tutor-discussion.component.scss',
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'f-tutor-discussion',
+  templateUrl: './tutor-discussion.component.html',
+  styleUrl: './tutor-discussion.component.scss',
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class TutorDiscussionComponent implements AfterViewInit {
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;

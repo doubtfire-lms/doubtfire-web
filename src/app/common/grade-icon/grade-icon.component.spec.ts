@@ -1,38 +1,36 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { GradeIconComponent } from './grade-icon.component';
-import { GradeService } from 'src/app/common/services/grade.service';
+import {GradeService} from 'src/app/common/services/grade.service';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {GradeIconComponent} from './grade-icon.component';
 
 describe('GradeIconComponent', () => {
   let component: GradeIconComponent;
   let fixture: ComponentFixture<GradeIconComponent>;
-  let gradeServiceStub: jasmine.SpyObj<any>;
+  let gradeServiceStub: Pick<GradeService, 'grades' | 'gradeAcronyms'>;
 
-  beforeEach(
-    waitForAsync(() => {
-      gradeServiceStub = {
-        grades: ['Pass', 'Credit', 'Distinction', 'High Distinction'],
-        gradeAcronyms: {
-          Fail: 'F',
-          Pass: 'P',
-          Credit: 'C',
-          Distinction: 'D',
-          'High Distinction': 'HD',
-          0: 'P',
-          1: 'C',
-          2: 'D',
-          3: 'HD',
-        },
-      };
+  beforeEach(waitForAsync(() => {
+    gradeServiceStub = {
+      grades: ['Pass', 'Credit', 'Distinction', 'High Distinction'],
+      gradeAcronyms: {
+        Fail: 'F',
+        Pass: 'P',
+        Credit: 'C',
+        Distinction: 'D',
+        'High Distinction': 'HD',
+        0: 'P',
+        1: 'C',
+        2: 'D',
+        3: 'HD',
+      },
+    };
 
-      gradeServiceStub.grades[-1] = 'Fail';
-      gradeServiceStub.gradeAcronyms[-1] = 'F';
+    gradeServiceStub.grades[-1] = 'Fail';
+    gradeServiceStub.gradeAcronyms[-1] = 'F';
 
-      TestBed.configureTestingModule({
-        declarations: [GradeIconComponent],
-        providers: [{ provide: GradeService, useValue: gradeServiceStub }],
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      declarations: [GradeIconComponent],
+      providers: [{provide: GradeService, useValue: gradeServiceStub}],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GradeIconComponent);

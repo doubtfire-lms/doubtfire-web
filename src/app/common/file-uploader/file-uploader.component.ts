@@ -1,3 +1,5 @@
+import {UserService} from 'src/app/api/services/user.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {
   Component,
   EventEmitter,
@@ -7,8 +9,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {UserService} from 'src/app/api/services/user.service';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 interface FileData {
   name: string;
@@ -107,8 +107,8 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   // Once all parent components such as upload-submission-modal are migrated..
   // .. these *wont* be necessary anymore
   // Parent components should declare the file-uploader using @ViewChild() and directly call initiateUpload()
-  @Output() isReadyChange = new EventEmitter<boolean>();
-  @Output() uploadReady = new EventEmitter<() => void>();
+  @Output() isReadyChange: EventEmitter<boolean> = new EventEmitter();
+  @Output() uploadReady: EventEmitter<() => void> = new EventEmitter();
 
   public readonly ACCEPTED_TYPES = ACCEPTED_TYPES;
 

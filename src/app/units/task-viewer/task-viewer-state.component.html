@@ -13,9 +13,9 @@
         </div>
         <div class="vertical-spacer"></div>
         <!-- Panel 2 -->
-        <div class="vertical-panel w-full h-full">
+        <div class="vertical-panel size-full">
           @if (selectedTaskDefinition$ | async; as selectedTaskDef) {
-            <div class="flex flex-col h-full">
+            <div class="flex h-full flex-col">
               <div class="shrink">
                 <f-task-details-view
                   [taskDef]="selectedTaskDef"

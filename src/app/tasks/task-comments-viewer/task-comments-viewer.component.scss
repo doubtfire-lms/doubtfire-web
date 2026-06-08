@@ -12,7 +12,10 @@
 $comment-bubble-color: #3939ff;
 $comment-bubble-color-darker: color.adjust($comment-bubble-color, $lightness: -10%);
 $comment-bubble-color-other-user: rgb(241, 240, 240);
-$comment-bubble-color-other-user-darker: color.adjust($comment-bubble-color-other-user, $lightness: -10%);
+$comment-bubble-color-other-user-darker: color.adjust(
+  $comment-bubble-color-other-user,
+  $lightness: -10%
+);
 $comment-author-bubble-size: 38px;
 $comment-text-padding: 12px;
 
@@ -79,7 +82,7 @@ $comment-inner-border-radius: 4px;
     // padding-left: 40px;
 
     // &.own {
-      // display: none;
+    // display: none;
     // }
   }
 
@@ -141,11 +144,13 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  .comment-container .comment-extension, .comment-container .comment-scorm-extension {
+  .comment-container .comment-extension,
+  .comment-container .comment-scorm-extension {
     width: 100%;
   }
 
-  .comment-container .comment-assessment, .comment-container .comment-scorm {
+  .comment-container .comment-assessment,
+  .comment-container .comment-scorm {
     width: 100%;
   }
 
@@ -251,7 +256,11 @@ $comment-inner-border-radius: 4px;
   .comment.comment-by-other-user user-icon .user-icon-initials {
     box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
     background: $comment-bubble-color-other-user;
-    background: linear-gradient(to left, $comment-bubble-color-other-user, $comment-bubble-color-other-user-darker);
+    background: linear-gradient(
+      to left,
+      $comment-bubble-color-other-user,
+      $comment-bubble-color-other-user-darker
+    );
     // color: $text-color;
     color: black;
   }
@@ -355,7 +364,8 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  .comment .extension-bubble, .comment .scorm_extension-bubble {
+  .comment .extension-bubble,
+  .comment .scorm_extension-bubble {
     width: 100%;
     background-color: transparent;
   }

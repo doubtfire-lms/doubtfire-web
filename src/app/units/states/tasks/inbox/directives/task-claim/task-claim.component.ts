@@ -1,16 +1,16 @@
-import {Component, Input} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {Task} from 'src/app/api/models/task';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {TaskService} from 'src/app/api/services/task.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'f-task-claim',
-    templateUrl: './task-claim.component.html',
-    styleUrl: './task-claim.component.scss',
-    standalone: false
+  selector: 'f-task-claim',
+  templateUrl: './task-claim.component.html',
+  styleUrl: './task-claim.component.scss',
+  standalone: false,
 })
 export class TaskClaimComponent {
   @Input() selectedTask: Task;

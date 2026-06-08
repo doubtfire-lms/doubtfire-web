@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
+import {Injectable} from '@angular/core';
 import {GlobalStateService} from '../index/global-state.service';
 
 export enum DashboardViews {
@@ -24,10 +24,12 @@ export class SelectedTaskService {
     private globalState: GlobalStateService,
   ) {}
 
-  private task$ = new BehaviorSubject<Task>(null);
-  public currentPdfUrl$ = new BehaviorSubject<string>(null);
+  private task$: BehaviorSubject<Task> = new BehaviorSubject(null);
+  public currentPdfUrl$: BehaviorSubject<string> = new BehaviorSubject(null);
 
-  public currentView$ = new BehaviorSubject<DashboardViews>(DashboardViews.submission);
+  public currentView$: BehaviorSubject<DashboardViews> = new BehaviorSubject(
+    DashboardViews.submission,
+  );
 
   public get hasTaskSheet(): boolean {
     return this.task$.value?.definition?.hasTaskSheet;

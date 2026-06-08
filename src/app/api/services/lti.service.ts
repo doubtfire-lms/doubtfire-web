@@ -1,16 +1,16 @@
+import {Observable} from 'rxjs';
+import {CsvResult} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import LTI_API_URL from 'src/app/config/constants/ltiApiUrl';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import LTI_API_URL from 'src/app/config/constants/ltiApiUrl';
 import {Project} from '../models/project';
 import {SidekiqJob} from '../models/sidekiq-job';
-import {CsvResult} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 
 interface info {
   name?: string;
   email?: string;
   roles?: string[];
-  custom?: any;
+  custom?: Record<string, string>;
   context?:
     | {
         id?: string;
@@ -33,6 +33,19 @@ export interface RetrievedGrade {
 export interface UnitLink {
   contextId?: string;
   unitId: string;
+}
+
+export interface LtiMembers {
+  members: LtiMember[];
+}
+
+export interface LtiMember {
+  email: string;
+  family_name: string;
+  given_name: string;
+  name: string;
+  user_id: string;
+  roles: string[];
 }
 
 @Injectable()
@@ -59,8 +72,8 @@ export class LtiService {
     return this.httpClient.post<Project | null>(`${LTI_API_URL}/enrol`, unit);
   }
 
-  public getMembers(): Observable<any> {
-    return this.httpClient.get<any>(`${LTI_API_URL}/members`);
+  public getMembers(): Observable<LtiMembers> {
+    return this.httpClient.get<LtiMembers>(`${LTI_API_URL}/members`);
   }
 
   // Sync grades for all members in the context (course)

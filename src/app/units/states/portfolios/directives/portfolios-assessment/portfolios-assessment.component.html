@@ -6,12 +6,12 @@
     <textarea matInput [(ngModel)]="project.gradeRationale" rows="5"></textarea>
   </mat-form-field>
   @for (group of gradeResults; track group) {
-    <div class="flex gap-1 justify-between items-center mt-3">
+    <div class="mt-3 flex items-center justify-between gap-1">
       <div class="w-[200px]">
         <strong>{{ group.name }}</strong>
       </div>
 
-      <div class="flex gap-1 flex-1 justify-end">
+      <div class="flex flex-1 justify-end gap-1">
         @for (score of group.scores; track score) {
           <button
             mat-raised-button
@@ -27,7 +27,7 @@
       </div>
     </div>
   }
-  <div class="flex justify-end w-full mt-6">
+  <div class="mt-6 flex w-full justify-end">
     <button
       mat-raised-button
       color="primary"

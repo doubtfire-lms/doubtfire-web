@@ -1,35 +1,34 @@
+import {Subscription} from 'rxjs';
 import {
-  Component,
-  OnInit,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild,
-  ElementRef,
-  OnDestroy,
-} from '@angular/core';
-import {
-  Task,
   Project,
+  Task,
   TaskComment,
   TaskCommentService,
-  UserService,
   TaskService,
+  UserService,
 } from 'src/app/api/models/doubtfire-model';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {TaskCommentComposerData} from '../task-comment-composer/task-comment-composer.component';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
-import {Subscription} from 'rxjs';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import {TaskCommentComposerData} from '../task-comment-composer/task-comment-composer.component';
 
 @Component({
-    selector: 'task-comments-viewer',
-    templateUrl: './task-comments-viewer.component.html',
-    styleUrls: ['./task-comments-viewer.component.scss'],
-    standalone: false
+  selector: 'task-comments-viewer',
+  templateUrl: './task-comments-viewer.component.html',
+  styleUrls: ['./task-comments-viewer.component.scss'],
+  standalone: false,
 })
-export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy {
+export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   // Get the comments body from the HTML template
   @ViewChild('commentsBody') commentsBody: ElementRef;
 
@@ -58,9 +57,8 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
     private commentsModalRef: CommentsModalService,
     private alerts: AlertService,
   ) {
-    const self = this;
-    this.commentAddedSub = this.taskCommentService.commentAdded$.subscribe((tc: TaskComment) => {
-      self.scrollDown();
+    this.commentAddedSub = this.taskCommentService.commentAdded$.subscribe((_tc: TaskComment) => {
+      this.scrollDown();
     });
 
     this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
@@ -69,8 +67,6 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
       }
     });
   }
-
-  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.taskStatusSub?.unsubscribe();
@@ -172,9 +168,8 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
   }
 
   scrollDown() {
-    const component: TaskCommentsViewerComponent = this;
     setTimeout(() => {
-      const element = component.commentsBody.nativeElement;
+      const element = this.commentsBody.nativeElement;
       element.scrollTop = element.scrollHeight;
     }, 50);
   }
@@ -223,14 +218,11 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
 
   // # Upload image files as comments to a given task
   postAttachmentComment(file) {
-    const self: TaskCommentsViewerComponent = this;
-
-    this.taskCommentService.addComment(this.task, file, 'file', null).subscribe(
-      (tc: TaskComment) => {},
-      (error: any) => {
+    this.taskCommentService.addComment(this.task, file, 'file', null).subscribe({
+      error: (error) => {
         this.alerts.error(error || error?.message, 2000);
       },
-    );
+    });
   }
 
   scrollToComment(commentID) {

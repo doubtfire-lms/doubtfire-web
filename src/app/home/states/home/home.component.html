@@ -10,47 +10,48 @@
       <p class="mat-lead">Contact your unit convenor or tutor to enrol you in a subject.</p>
     </div>
   }
-
   <div [hidden]="unitRoles?.length === 0">
     <h2>Units you teach</h2>
     <div [hidden]="!loadingUnitRoles" style="height: 185px">
       <mat-spinner diameter="40" color="accent"></mat-spinner>
     </div>
     <div [hidden]="loadingUnitRoles" class="flex flex-row flex-wrap items-center">
-      <div *ngFor="let unitRole of unitRoles | isActiveUnitRole as filteredUnitRoles">
-        @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
-          <div [routerLink]="['/units', unitRole.unit?.id, 'tasks', 'inbox']" class="removeStyle">
-            <mat-card class="unit-card">
-              <mat-card-header>
-                <mat-card-title class="f-card-title">{{ unitRole.unit?.name }}</mat-card-title>
-                <mat-card-subtitle>{{ unitRole.unit?.code }}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <mat-divider></mat-divider>
-              </mat-card-content>
-              <mat-card-actions>
-                <f-chip>
-                  {{ unitRole.teachingPeriod?.name || showDate(unitRole.unit.startDate) }}
-                </f-chip>
-                <f-chip>
-                  {{ unitRole.role }}
-                </f-chip>
-              </mat-card-actions>
-              <mat-card-footer
-                matTooltip="{{
-                  unitRole.unit.teachingPeriodProgress
-                }}% through the teaching period."
-              >
-                <mat-progress-bar
-                  class="unit-progress-slider"
-                  mode="determinate"
-                  [value]="unitRole.unit.teachingPeriodProgress"
-                ></mat-progress-bar>
-              </mat-card-footer>
-            </mat-card>
-          </div>
-        }
-      </div>
+      @for (unitRole of unitRoles | isActiveUnitRole; track unitRole) {
+        <div>
+          @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
+            <div [routerLink]="['/units', unitRole.unit?.id, 'tasks', 'inbox']" class="removeStyle">
+              <mat-card class="unit-card">
+                <mat-card-header>
+                  <mat-card-title class="f-card-title">{{ unitRole.unit?.name }}</mat-card-title>
+                  <mat-card-subtitle>{{ unitRole.unit?.code }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <mat-divider></mat-divider>
+                </mat-card-content>
+                <mat-card-actions>
+                  <f-chip>
+                    {{ unitRole.teachingPeriod?.name || showDate(unitRole.unit.startDate) }}
+                  </f-chip>
+                  <f-chip>
+                    {{ unitRole.role }}
+                  </f-chip>
+                </mat-card-actions>
+                <mat-card-footer
+                  matTooltip="{{
+                    unitRole.unit.teachingPeriodProgress
+                  }}% through the teaching period."
+                >
+                  <mat-progress-bar
+                    class="unit-progress-slider"
+                    mode="determinate"
+                    [value]="unitRole.unit.teachingPeriodProgress"
+                  ></mat-progress-bar>
+                </mat-card-footer>
+              </mat-card>
+            </div>
+          }
+        </div>
+      }
       <mat-card
         appearance="outlined"
         class="unit-card"
@@ -77,6 +78,9 @@
     </div>
   </div>
   <div [hidden]="notEnrolled">
+    @if (unitRoles.length && projects?.length) {
+      <mat-divider class="my-5"></mat-divider>
+    }
     <div class="my-2.5" [hidden]="projects?.length === 0">
       <h2>Enrolled units</h2>
       <div [hidden]="!loadingProjects" style="height: 185px">

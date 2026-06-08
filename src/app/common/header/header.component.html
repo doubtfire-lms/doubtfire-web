@@ -7,7 +7,7 @@
     @if (!media.isActive('xs')) {
       @if (logoSettings.hasLogo) {
         <a [href]="logoSettings.logoLinkUrl" class="mx-3.5">
-          <img [src]="logoSettings.logoUrl" style="height: 32px" />
+          <img [src]="logoSettings.logoUrl" style="height: 32px" [alt]="externalName + 'logo'" />
         </a>
       }
 

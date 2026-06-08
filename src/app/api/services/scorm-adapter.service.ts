@@ -1,7 +1,7 @@
+import {ScormDataModel, ScormPlayerContext} from 'src/app/api/models/doubtfire-model';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {Injectable} from '@angular/core';
 import {UserService} from './user.service';
-import API_URL from 'src/app/config/constants/apiUrl';
-import {ScormDataModel, ScormPlayerContext} from 'src/app/api/models/doubtfire-model';
 
 @Injectable({
   providedIn: 'root',
@@ -200,7 +200,7 @@ export class ScormAdapterService {
     return value;
   }
 
-  SetValue(element: string, value: any): string {
+  SetValue(element: string, value: string): string {
     // console.log(`API_1484_11: SetValue:`, element, value);
 
     // TODO: error reporting
@@ -275,7 +275,7 @@ export class ScormAdapterService {
     return errorString;
   }
 
-  GetDiagnostic(errorCode: string): string {
+  GetDiagnostic(_errorCode: string): string {
     // TODO: implement this
     // console.log(`API_1484_11: GetDiagnostic:`, errorCode);
     return 'GetDiagnostic is currently not implemented';

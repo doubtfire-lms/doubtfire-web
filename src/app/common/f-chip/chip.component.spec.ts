@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { FChipComponent } from './chip.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {FChipComponent} from './chip.component';
 
 describe('FChipComponent', () => {
   let component: FChipComponent;
@@ -8,9 +7,8 @@ describe('FChipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FChipComponent ]
-    })
-    .compileComponents();
+      declarations: [FChipComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FChipComponent);
     component = fixture.componentInstance;

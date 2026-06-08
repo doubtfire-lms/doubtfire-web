@@ -16,20 +16,18 @@
   <button mat-stroked-button color="warn" mat-dialog-close>Close</button>
 </div>
 
-<div class="flex flex-1 min-h-0 overflow-hidden p-6">
+<div class="flex min-h-0 flex-1 overflow-hidden p-6">
   @if (isLoading) {
-    <div class="w-full h-full min-h-[300px] flex items-center justify-center">
+    <div class="flex size-full min-h-[300px] items-center justify-center">
       <mat-spinner [diameter]="56"></mat-spinner>
     </div>
   } @else if (errorMessage) {
-    <div
-      class="flex h-full min-h-[300px] w-full items-center justify-center text-xs text-red-700"
-    >
+    <div class="flex size-full min-h-[300px] items-center justify-center text-xs text-red-700">
       {{ errorMessage }}
     </div>
   } @else if (compareMode) {
     @if (archiveBlob && comparedArchiveBlob) {
-      <div class="flex h-full min-h-0 w-full flex-col gap-2.5">
+      <div class="flex size-full min-h-0 flex-col gap-2.5">
         <div class="grid min-h-0 w-full grid-cols-1 gap-2.5 lg:grid-cols-2">
           <div class="flex min-h-0 flex-col overflow-hidden rounded">
             <ng-container
@@ -37,11 +35,11 @@
               [ngTemplateOutletContext]="{
                 number: data.assessmentNumber,
                 isMostRecent: data.assessmentIsMostRecent,
-                timestamp: data.assessment.timestamp
+                timestamp: data.assessment.timestamp,
               }"
             ></ng-container>
             <f-archive-viewer
-              class="block h-full min-h-0 w-full overflow-hidden"
+              class="block size-full min-h-0 overflow-hidden"
               [archiveFile]="archiveBlob"
               [uploadRequirementNames]="uploadRequirementNames"
               [readOnly]="true"
@@ -58,12 +56,12 @@
               [ngTemplateOutletContext]="{
                 number: data.comparedWithNumber,
                 isMostRecent: data.comparedWithIsMostRecent,
-                timestamp: data.comparedWith?.timestamp
+                timestamp: data.comparedWith?.timestamp,
               }"
             ></ng-container>
             @if (primaryArchiveParsed) {
               <f-archive-viewer
-                class="block h-full min-h-0 w-full overflow-hidden"
+                class="block size-full min-h-0 overflow-hidden"
                 [archiveFile]="comparedArchiveBlob"
                 [uploadRequirementNames]="uploadRequirementNames"
                 [readOnly]="true"
@@ -82,42 +80,40 @@
 
         <div class="flex min-h-0 flex-1 overflow-hidden rounded">
           @if (!bothSelectionsReady) {
-            <div
-              class="flex h-full w-full items-center justify-center px-2.5 text-xs text-slate-500"
-            >
+            <div class="flex size-full items-center justify-center px-2.5 text-xs text-slate-500">
               Select a file in both submissions to compare.
             </div>
           } @else if (canShowDiffEditor) {
-            <div class="flex h-full w-full min-h-0 flex-col">
+            <div class="flex size-full min-h-0 flex-col">
               <div class="grid w-full grid-cols-1 gap-2.5 px-2 py-1 text-slate-500 lg:grid-cols-2">
-                <div class="min-w-0 overflow-hidden whitespace-nowrap truncate">
+                <div class="min-w-0 overflow-hidden truncate whitespace-nowrap">
                   {{ primarySelectedFile?.path ?? primarySelectedFile?.name }}
                 </div>
-                <div class="min-w-0 overflow-hidden whitespace-nowrap truncate">
+                <div class="min-w-0 overflow-hidden truncate whitespace-nowrap">
                   {{ comparedSelectedFile?.path ?? comparedSelectedFile?.name }}
                 </div>
               </div>
               <ngx-monaco-diff-editor
-                class="block h-full w-full flex-1"
+                class="block size-full flex-1"
                 [options]="diffEditorOptions"
                 [originalModel]="diffOriginalModel"
                 [modifiedModel]="diffModifiedModel"
               ></ngx-monaco-diff-editor>
             </div>
           } @else {
-            <div class="grid h-full w-full grid-cols-1 gap-2.5 p-2.5 lg:grid-cols-2">
+            <div class="grid size-full grid-cols-1 gap-2.5 p-2.5 lg:grid-cols-2">
               <ng-container
                 [ngTemplateOutlet]="selectedFilePreviewPane"
                 [ngTemplateOutletContext]="{
                   file: primarySelectedFile,
-                  editorOptions: primarySingleEditorOptions
+                  editorOptions: primarySingleEditorOptions,
                 }"
               ></ng-container>
               <ng-container
                 [ngTemplateOutlet]="selectedFilePreviewPane"
                 [ngTemplateOutletContext]="{
                   file: comparedSelectedFile,
-                  editorOptions: comparedSingleEditorOptions
+                  editorOptions: comparedSingleEditorOptions,
                 }"
               ></ng-container>
             </div>
@@ -125,33 +121,29 @@
         </div>
       </div>
     } @else {
-      <div
-        class="flex h-full min-h-[300px] w-full items-center justify-center text-xs text-slate-500"
-      >
+      <div class="flex size-full min-h-[300px] items-center justify-center text-xs text-slate-500">
         Unable to load one or both submission archives.
       </div>
     }
   } @else if (archiveBlob) {
-    <div class="flex h-full min-h-0 w-full flex-col overflow-hidden rounded">
+    <div class="flex size-full min-h-0 flex-col overflow-hidden rounded">
       <ng-container
         [ngTemplateOutlet]="submissionHeading"
         [ngTemplateOutletContext]="{
           number: data.assessmentNumber,
           isMostRecent: data.assessmentIsMostRecent,
-          timestamp: data.assessment.timestamp
+          timestamp: data.assessment.timestamp,
         }"
       ></ng-container>
       <f-archive-viewer
-        class="block h-full min-h-0 w-full overflow-hidden"
+        class="block size-full min-h-0 overflow-hidden"
         [archiveFile]="archiveBlob"
         [uploadRequirementNames]="uploadRequirementNames"
         [readOnly]="true"
       ></f-archive-viewer>
     </div>
   } @else {
-    <div
-      class="flex h-full min-h-[300px] w-full items-center justify-center text-xs text-slate-500"
-    >
+    <div class="flex size-full min-h-[300px] items-center justify-center text-xs text-slate-500">
       Unable to load submission files.
     </div>
   }
@@ -173,10 +165,10 @@
 <ng-template #selectedFilePreviewPane let-file="file" let-editorOptions="editorOptions">
   <div class="flex min-h-0 flex-col overflow-hidden rounded">
     <div
-      class="shrink-0 flex items-center gap-1 px-2 py-1 text-slate-500"
+      class="flex shrink-0 items-center gap-1 px-2 py-1 text-slate-500"
       [title]="file?.path ?? ''"
     >
-      <span class="min-w-0 flex-1 overflow-hidden whitespace-nowrap truncate">
+      <span class="min-w-0 flex-1 overflow-hidden truncate whitespace-nowrap">
         {{ file?.path ?? file?.name }}
       </span>
       @if (selectedFilesMatch !== null) {
@@ -191,14 +183,14 @@
     </div>
     @if (isArchiveCodeOrTextFile(file)) {
       <ngx-monaco-editor
-        class="block h-full w-full"
+        class="block size-full"
         [options]="editorOptions"
         [ngModel]="file?.textContent ?? ''"
       ></ngx-monaco-editor>
     } @else if (isArchivePdfFile(file)) {
-      <f-pdf-viewer class="block h-full w-full" [pdfUrl]="file?.blobUrl ?? ''"></f-pdf-viewer>
+      <f-pdf-viewer class="block size-full" [pdfUrl]="file?.blobUrl ?? ''"></f-pdf-viewer>
     } @else if (isArchiveImageFile(file)) {
-      <div class="flex h-full w-full items-center justify-center p-2">
+      <div class="flex size-full items-center justify-center p-2">
         <img
           class="max-h-full max-w-full object-contain"
           [src]="file?.blobUrl"
@@ -206,7 +198,7 @@
         />
       </div>
     } @else {
-      <div class="flex h-full w-full items-center justify-center p-2 text-slate-500">
+      <div class="flex size-full items-center justify-center p-2 text-slate-500">
         Preview not available for this file type.
       </div>
     }

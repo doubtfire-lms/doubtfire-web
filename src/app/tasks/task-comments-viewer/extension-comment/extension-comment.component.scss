@@ -32,7 +32,7 @@ hr {
   height: 1.5em;
   opacity: 0.8;
   &:before {
-    content: "";
+    content: '';
     background: linear-gradient(to right, transparent, #9696969d, transparent);
     position: absolute;
     left: 0;

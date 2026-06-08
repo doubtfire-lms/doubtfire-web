@@ -1,5 +1,3 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {
   GanttBaselineItem,
   GanttDate,
@@ -18,6 +16,8 @@ import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.se
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 
 interface TaskGanttItem extends GanttItem {
@@ -28,10 +28,10 @@ interface TaskGanttItem extends GanttItem {
 }
 
 @Component({
-    selector: 'f-task-planner',
-    templateUrl: './task-planner.component.html',
-    styleUrl: './task-planner.component.scss',
-    standalone: false
+  selector: 'f-task-planner',
+  templateUrl: './task-planner.component.html',
+  styleUrl: './task-planner.component.scss',
+  standalone: false,
 })
 export class TaskPlannerComponent implements OnInit {
   // Show a warning if the task's target end date is within this many days of the feedback deadline

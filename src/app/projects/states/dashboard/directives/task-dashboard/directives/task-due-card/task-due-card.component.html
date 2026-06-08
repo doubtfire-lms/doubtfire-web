@@ -56,10 +56,12 @@
     @if (task?.betweenDueDateAndDeadlineDate()) {
       <mat-card appearance="outlined">
         <mat-card-header class="bg-yellow-600 text-white">
-          <mat-card-title class="flex items-center mb-2.5"
+          <mat-card-title class="mb-2.5 flex items-center"
             ><mat-icon>warning</mat-icon>
             @if (flexibleDatesEnabled) {
-              <span class="ml-2.5">Past Target Date By {{ task?.timePastDueDateDescription() }}</span>
+              <span class="ml-2.5"
+                >Past Target Date By {{ task?.timePastDueDateDescription() }}</span
+              >
             } @else {
               <span class="ml-2.5">Past Due Date By {{ task?.timePastDueDateDescription() }}</span>
             }
@@ -116,7 +118,7 @@
     @if (task?.isPastDeadline()) {
       <mat-card appearance="outlined">
         <mat-card-header class="bg-red-600 text-white">
-          <mat-card-title class="flex items-center mb-2.5"
+          <mat-card-title class="mb-2.5 flex items-center"
             ><mat-icon>error</mat-icon>
             <span class="ml-2.5"
               >Passed Due Date By {{ task?.timePastDueDateDescription() }}</span

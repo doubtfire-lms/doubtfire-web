@@ -1,13 +1,13 @@
-import { Input, Component, AfterViewInit } from '@angular/core';
-import { BaseAudioRecorderComponent } from '../base-audio-recorder';
-import { Task } from 'src/app/api/models/doubtfire-model';
-import { MediaRecorderService } from 'src/app/common/services/recorder-service';
+import {Task} from 'src/app/api/models/doubtfire-model';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
+import {AfterViewInit, Component, Input} from '@angular/core';
+import {BaseAudioRecorderComponent} from '../base-audio-recorder';
 
 @Component({
-    selector: 'microphone-tester',
-    templateUrl: './microphone-tester-component.html',
-    providers: [MediaRecorderService],
-    standalone: false
+  selector: 'microphone-tester',
+  templateUrl: './microphone-tester-component.html',
+  providers: [MediaRecorderService],
+  standalone: false,
 })
 export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implements AfterViewInit {
   @Input() task: Task;
@@ -25,9 +25,6 @@ export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implem
     }
   }
 
-  // We need to override default behaviour of the parent class.
-  ngOnInit() {}
-
   init(): void {
     super.init();
     this.canvas = document.getElementById('micTesterVisualiser') as HTMLCanvasElement;
@@ -35,5 +32,7 @@ export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implem
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
-  sendRecording(): void {}
+  sendRecording(): void {
+    /* empty */
+  }
 }

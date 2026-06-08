@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Component, Input} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {of} from 'rxjs';
 import {TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
+import {Component, Input} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
-    selector: 'f-task-viewer-state',
-    templateUrl: './task-viewer-state.component.html',
-    styleUrl: './task-viewer-state.component.scss',
-    standalone: false
+  selector: 'f-task-viewer-state',
+  templateUrl: './task-viewer-state.component.html',
+  styleUrl: './task-viewer-state.component.scss',
+  standalone: false,
 })
 export class TaskViewerStateComponent {
   @Input() public unit$: Observable<Unit>;
@@ -30,9 +30,9 @@ export class TaskViewerStateComponent {
   }
 
   /**
- * Monitor and publish the selected task definition for child components.
- * We monitor the task definition list for changes in selected task definition.
- */
+   * Monitor and publish the selected task definition for child components.
+   * We monitor the task definition list for changes in selected task definition.
+   */
   selectedTaskDefinition$: BehaviorSubject<TaskDefinition> = new BehaviorSubject<TaskDefinition>(
     null,
   );

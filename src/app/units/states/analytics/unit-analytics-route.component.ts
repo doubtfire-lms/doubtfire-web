@@ -1,5 +1,3 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {Observable, first, of} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
@@ -7,12 +5,14 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
-    selector: 'f-unit-analytics',
-    templateUrl: 'unit-analytics-route.component.html',
-    styleUrls: ['unit-analytics-route.component.scss'],
-    standalone: false
+  selector: 'f-unit-analytics',
+  templateUrl: 'unit-analytics-route.component.html',
+  styleUrls: ['unit-analytics-route.component.scss'],
+  standalone: false,
 })
 export class UnitAnalyticsComponent implements OnInit {
   @Input() public unit$: Observable<Unit>;

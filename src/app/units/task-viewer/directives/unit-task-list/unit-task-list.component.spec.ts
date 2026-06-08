@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { FUnitTaskListComponent } from './unit-task-list.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {FUnitTaskListComponent} from './unit-task-list.component';
 
 describe('FUnitTaskListComponent', () => {
   let component: FUnitTaskListComponent;

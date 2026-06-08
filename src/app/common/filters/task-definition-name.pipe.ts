@@ -1,14 +1,15 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { Task, TaskDefinition } from '../../api/models/doubtfire-model';
+import {Pipe, PipeTransform} from '@angular/core';
+import {TaskDefinition} from '../../api/models/doubtfire-model';
 
 @Pipe({
-    name: 'taskDefinitionName',
-    standalone: false
+  name: 'taskDefinitionName',
+  standalone: false,
 })
 export class TaskDefinitionNamePipe implements PipeTransform {
   transform(taskDefinitions: TaskDefinition[], searchName: string): TaskDefinition[] {
     searchName = searchName.toLowerCase();
-    return taskDefinitions.filter( // use lodash filter?
+    return taskDefinitions.filter(
+      // use lodash filter?
       (td) => {
         return (
           td?.name.toLowerCase().includes(searchName) ||

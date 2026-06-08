@@ -1,11 +1,12 @@
-import {Component, Input} from '@angular/core';
-import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Task} from 'src/app/api/models/task';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Component, Input} from '@angular/core';
+
 @Component({
-    selector: 'f-task-prerequisites-card',
-    templateUrl: './task-prerequisites-card.component.html',
-    styleUrls: ['./task-prerequisites-card.component.scss'],
-    standalone: false
+  selector: 'f-task-prerequisites-card',
+  templateUrl: './task-prerequisites-card.component.html',
+  styleUrls: ['./task-prerequisites-card.component.scss'],
+  standalone: false,
 })
 export class TaskPrerequisitesCardComponent {
   @Input() taskDefinition: TaskDefinition;

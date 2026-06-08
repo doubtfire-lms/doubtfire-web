@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {GlobalStateService} from '../projects/states/index/global-state.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {UserService} from '../api/services/user.service';
+import {GlobalStateService} from '../projects/states/index/global-state.service';
 
 @Component({
   selector: 'f-welcome',

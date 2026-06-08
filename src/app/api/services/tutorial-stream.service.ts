@@ -1,8 +1,8 @@
-import {HttpClient} from '@angular/common/http';
 import {CachedEntityService} from 'ngx-entity-service';
 import {TutorialStream} from 'src/app/api/models/doubtfire-model';
-import {Injectable} from '@angular/core';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class TutorialStreamService extends CachedEntityService<TutorialStream> {
@@ -16,11 +16,11 @@ export class TutorialStreamService extends CachedEntityService<TutorialStream> {
     this.mapping.mapAllKeysToJson();
   }
 
-  public createInstanceFrom(json: any, other?: any): TutorialStream {
+  public createInstanceFrom(_json: object): TutorialStream {
     return new TutorialStream();
   }
 
-  public override keyForJson(json: any): string {
+  public override keyForJson(json: {abbreviation: string}): string {
     return json['abbreviation'];
   }
 

@@ -1,5 +1,5 @@
 <mat-card appearance="outlined">
-  <mat-card-header class="w-full flex justify-between items-center">
+  <mat-card-header class="flex w-full items-center justify-between">
     <mat-card-title class="w-full">
       {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
     </mat-card-title>
@@ -15,7 +15,7 @@
       [task]="task"
     ></f-task-prerequisites-card>
     @if (!task.hasPrerequisiteTasks()) {
-      <div class="p-3 w-full text-center text-gray-400">This task has no prerequisites.</div>
+      <div class="w-full p-3 text-center text-gray-400">This task has no prerequisites.</div>
     }
     <mat-divider class="my-3"></mat-divider>
     @if (dependents.length) {
@@ -71,7 +71,7 @@
         </mat-card-content>
       </mat-card>
     } @else {
-      <div class="p-3 w-full text-center text-gray-400">
+      <div class="w-full p-3 text-center text-gray-400">
         This task is not a prerequisite for any other tasks.
       </div>
     }

@@ -1,9 +1,9 @@
-<div class="w-full mx-auto flex flex-col gap-3">
+<div class="mx-auto flex w-full flex-col gap-3">
   <div class="header">
     <h3>Unit Details</h3>
     <p>Edit and configure all details and settings for this unit.</p>
   </div>
-  <mat-card appearance="outlined" class="p-[16px] gap-1">
+  <mat-card appearance="outlined" class="gap-1 p-[16px]">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Code</mat-label>
       <input matInput required [(ngModel)]="unit.code" />
@@ -20,7 +20,7 @@
     </mat-form-field>
   </mat-card>
 
-  <mat-card appearance="outlined" class="p-[16px] gap-1">
+  <mat-card appearance="outlined" class="gap-1 p-[16px]">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Teaching Period</mat-label>
       <mat-select [(ngModel)]="unit.teachingPeriod" placeholder="Select Teaching Period">
@@ -217,7 +217,7 @@
   </mat-card>
 
   @if (overseerEnabled.value) {
-    <mat-card class="p-[16px] gap-1">
+    <mat-card class="gap-1 p-[16px]">
       <div>
         <mat-slide-toggle [(ngModel)]="unit.assessmentEnabled"
           >Overseer assessment</mat-slide-toggle
@@ -239,7 +239,7 @@
     </mat-card>
   }
 
-  <div class="flex justify-end w-full gap-3">
+  <div class="flex w-full justify-end gap-3">
     <button mat-raised-button (click)="addD2lData()" [hidden]="!d2lEnabled.value">
       D2L Details
     </button>

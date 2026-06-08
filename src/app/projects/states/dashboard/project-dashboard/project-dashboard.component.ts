@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
-import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {
   BehaviorSubject,
   Observable,
@@ -13,11 +10,14 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs';
+import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {UnitService} from 'src/app/api/services/unit.service';
-import {GlobalStateService, ViewType} from '../../index/global-state.service';
 import {UserService} from 'src/app/api/services/user.service';
-import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
+import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
+import {Component, Input, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {GlobalStateService, ViewType} from '../../index/global-state.service';
 
 @Component({
   selector: 'f-project-dashboard',
@@ -37,10 +37,10 @@ export class ProjectDashboardComponent implements OnInit {
 
   subs$: Observable<unknown>;
   readonly skeletonRows = Array.from({length: 10}, (_, index) => index);
-  private readonly projectSubject = new BehaviorSubject<Project>(null);
+  private readonly projectSubject: BehaviorSubject<Project> = new BehaviorSubject(null);
 
-  private leftComponentStartSize$ = new Subject<number>();
-  private dragMove$ = new Subject<{event: CdkDragMove; div: HTMLDivElement}>();
+  private leftComponentStartSize$: Subject<number> = new Subject();
+  private dragMove$: Subject<{event: CdkDragMove; div: HTMLDivElement}> = new Subject();
   private dragMoveAudited$;
   private projectReady = false;
 

@@ -1,15 +1,15 @@
-import {Component, Input, type OnInit} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {Component, Input, type OnInit} from '@angular/core';
 
 @Component({
-    selector: 'f-project-progress-dashboard',
-    templateUrl: './project-progress-dashboard.component.html',
-    styleUrl: './project-progress-dashboard.component.scss',
-    standalone: false
+  selector: 'f-project-progress-dashboard',
+  templateUrl: './project-progress-dashboard.component.html',
+  styleUrl: './project-progress-dashboard.component.scss',
+  standalone: false,
 })
 export class ProjectProgressDashboardComponent implements OnInit {
   @Input() project$: Observable<Project>;
@@ -37,7 +37,7 @@ export class ProjectProgressDashboardComponent implements OnInit {
   protected targetGradeClicked(grade: number): void {
     this.project.targetGrade = grade;
     this.projectService.update(this.project).subscribe({
-      next: (project) => {
+      next: (_project) => {
         this.alertService.success('Target grade updated');
       },
       error: (error) => {

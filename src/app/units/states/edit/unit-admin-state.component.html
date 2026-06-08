@@ -1,6 +1,6 @@
-<div class="flex h-full w-full flex-col">
+<div class="flex size-full flex-col">
   <mat-tab-group
-    class="w-full mb-6 max-w-[900px] mx-auto"
+    class="mx-auto mb-6 w-full max-w-[900px]"
     [selectedIndex]="currentIndex"
     dynamicHeight
     (selectedTabChange)="onTabChange($event)"
@@ -14,14 +14,14 @@
     @switch (currentTab.routeSegment) {
       @case ('details') {
         @if (unit) {
-          <div class="max-w-[90vw] mx-auto">
+          <div class="mx-auto max-w-[90vw]">
             <f-unit-details-editor [unit]="unit"></f-unit-details-editor>
           </div>
         }
       }
       @case ('learning-outcomes') {
         @if (unit) {
-          <div class="max-w-[90vw] mx-auto">
+          <div class="mx-auto max-w-[90vw]">
             <div class="header">
               <h3>Unit Learning Outcomes</h3>
               <p>Manage unit outcomes and related feedback templates.</p>
@@ -32,14 +32,14 @@
       }
       @case ('staff') {
         @if (unit) {
-          <div class="max-w-[90vw] mx-auto">
+          <div class="mx-auto max-w-[90vw]">
             <unit-staff-editor [unit]="unit" [staff]="staff"></unit-staff-editor>
           </div>
         }
       }
       @case ('tutorials') {
         @if (unit) {
-          <div class="max-w-[90vw] mx-auto">
+          <div class="mx-auto max-w-[90vw]">
             <div class="header">
               <h3>Tutorials</h3>
               <p>Manage tutorial streams and classes for this unit.</p>
@@ -50,21 +50,21 @@
       }
       @case ('students') {
         @if (unit) {
-          <div class="max-w-[90vw] mx-auto">
+          <div class="mx-auto max-w-[90vw]">
             <unit-students-editor [unit]="unit"></unit-students-editor>
           </div>
         }
       }
       @case ('tasks') {
         @if (unit) {
-          <div class="max-w-[90vw] mx-auto">
+          <div class="mx-auto max-w-[90vw]">
             <f-unit-task-editor [unit]="unit"></f-unit-task-editor>
           </div>
         }
       }
       @case ('groups') {
         @if (unit) {
-          <div class="max-w-[90vw] mx-auto">
+          <div class="mx-auto max-w-[90vw]">
             <div class="header">
               <h3>Groups</h3>
               <p>Configure group sets and manage team-based activities.</p>

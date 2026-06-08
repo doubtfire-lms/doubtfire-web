@@ -51,7 +51,7 @@
   @if (pdfBlobUrl) {
     @if (useNativePdfViewer) {
       @if (pdfBlobUrl) {
-        <object [data]="pdfBlobUrl | safe"></object>
+        <object [data]="pdfBlobUrl | safe" type="application/pdf">PDF Preview</object>
       }
     } @else {
       <pdf-viewer

@@ -11,7 +11,8 @@
   i:not(:last-child) {
     margin-right: 1ex;
   }
-  i:not(:last-child), i + i:last-child {
+  i:not(:last-child),
+  i + i:last-child {
     display: inline-block;
     width: inherit;
   }

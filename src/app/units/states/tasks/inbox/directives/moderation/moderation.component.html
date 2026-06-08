@@ -1,5 +1,5 @@
 <!-- <div class="flex justify-center py-1">Tutor: {{ task.tutor?.user.name }}</div> -->
-<span class="center-buttons flex justify-around gap-3 mx-3">
+<span class="center-buttons mx-3 flex justify-around gap-3">
   @if (task.moderationType === 'random_sample' || task.moderationType === 'first_feedback') {
     <button
       [disabled]="task === undefined || isModerated(task)"

@@ -1,54 +1,51 @@
 /* eslint-disable no-shadow, @typescript-eslint/no-shadow */
-
+import {HotkeysService} from '@ngneat/hotkeys';
+import {Observable} from 'rxjs';
 import {
-  Component,
-  OnInit,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  HostListener,
-  ViewChild,
-  TemplateRef,
-  OnDestroy,
-  Inject,
-} from '@angular/core';
-import {TasksOfTaskDefinitionPipe} from 'src/app/common/filters/tasks-of-task-definition.pipe';
-import {TasksInTutorialsPipe} from 'src/app/common/filters/tasks-in-tutorials.pipe';
-import {TasksForInboxSearchPipe} from 'src/app/common/filters/tasks-for-inbox-search.pipe';
-import {MatDialog} from '@angular/material/dialog';
-import {Unit} from 'src/app/api/models/unit';
-import {UnitRole} from 'src/app/api/models/unit-role';
-import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
-import {
+  Project,
+  Task,
+  TaskDefinition,
   Tutorial,
   UserService,
-  Task,
-  Project,
-  TaskDefinition,
 } from 'src/app/api/models/doubtfire-model';
-import {Observable} from 'rxjs';
-import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {Unit} from 'src/app/api/models/unit';
+import {UnitRole} from 'src/app/api/models/unit-role';
+import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {AppInjector} from 'src/app/app-injector';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {TasksByTutorPipe} from 'src/app/common/filters/tasks-by-tutor.pipe';
+import {TasksForInboxSearchPipe} from 'src/app/common/filters/tasks-for-inbox-search.pipe';
+import {TasksInTutorialsPipe} from 'src/app/common/filters/tasks-in-tutorials.pipe';
+import {TasksOfTaskDefinitionPipe} from 'src/app/common/filters/tasks-of-task-definition.pipe';
+import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {HotkeysService} from '@ngneat/hotkeys';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
-import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
-import {TasksByTutorPipe} from 'src/app/common/filters/tasks-by-tutor.pipe';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
-import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
-import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 
 @Component({
-    selector: 'df-staff-task-list',
-    templateUrl: './staff-task-list.component.html',
-    styleUrls: ['./staff-task-list.component.scss'],
-    standalone: false
+  selector: 'df-staff-task-list',
+  templateUrl: './staff-task-list.component.html',
+  styleUrls: ['./staff-task-list.component.scss'],
+  standalone: false,
 })
 export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
-  @ViewChild('searchDialog') searchDialog: TemplateRef<any>;
+  @ViewChild('searchDialog') searchDialog: TemplateRef<object>;
 
   @Input() task: Task;
   @Input() project: Project;
@@ -71,7 +68,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     tutorials: Tutorial[];
     forceStream: boolean;
     studentName: string;
-    tutorialIdSelected: any;
+    tutorialIdSelected: string | number;
     unitRoleIdSelected: number | string;
     taskDefinitionIdSelected: number | TaskDefinition;
   }>;
@@ -101,7 +98,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   // hasJplagReport: boolean = false;
 
-  watchingTaskKey: any;
+  watchingTaskKey: boolean;
 
   panelOpenState = false;
   loading = true;
@@ -123,7 +120,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   taskDefSort = 0;
   tutorialSort = 0;
-  originalFilteredTasks: any[] = null;
+  originalFilteredTasks: Task[] = null;
   allowHover = true;
 
   // Track if all tasks have already been fetched
@@ -299,7 +296,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.sidekiqProgressModalService
           .show(`Downloading submission pdfs for ${taskDef.abbreviation}`, newJob.id)
           .subscribe({
-            next: (job) => {
+            next: (_job) => {
               this.fileDownloaderService.downloadFile(
                 `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
                   this.unit.id
@@ -322,7 +319,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.sidekiqProgressModalService
           .show(`Downloading submission files for ${taskDef.abbreviation}`, newJob.id)
           .subscribe({
-            next: (job) => {
+            next: (_job) => {
               this.fileDownloaderService.downloadFile(
                 `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
                   this.unit.id
@@ -405,7 +402,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   openDialog() {
     const dialogRef = this.dialog.open(this.searchDialog);
 
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe();
   }
 
   refreshTasks(): void {
@@ -452,9 +449,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   openTaskDefs() {
     // Automatically "open" the task definition select element if in task def mode
-    const selectEl: any = document.querySelector(
+    const selectEl = document.querySelector<HTMLSelectElement>(
       'select[ng-model="filters.taskDefinitionIdSelected"]',
-    ) as any;
+    );
+    if (!selectEl) {
+      return;
+    }
     selectEl.size = 10;
     selectEl.focus();
   }
@@ -604,20 +604,20 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private scrollToTaskInList(task) {
-    const taskEl = document.querySelector(`#${task.taskKeyToIdString()}`) as any;
+  private scrollToTaskInList(task: Task) {
+    const taskEl = document.querySelector(`#${task.taskKeyToIdString()}`) as
+      | (HTMLElement & {
+          scrollIntoViewIfNeeded?: (options?: ScrollIntoViewOptions) => void;
+        })
+      | null;
     if (!taskEl) {
       return;
     }
-    const funcName = taskEl.scrollIntoViewIfNeeded
-      ? 'scrollIntoViewIfNeeded'
-      : taskEl.scrollIntoView
-        ? 'scrollIntoView'
-        : '';
-    if (!funcName) {
-      return;
+    if (taskEl.scrollIntoViewIfNeeded) {
+      taskEl.scrollIntoViewIfNeeded({behavior: 'smooth'});
+    } else {
+      taskEl.scrollIntoView({behavior: 'smooth'});
     }
-    taskEl[funcName]({behavior: 'smooth'});
   }
 
   isSelectedTask(task: Task) {
@@ -676,7 +676,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const refreshOrdering = () => this.applyFilters();
-    task.pinned ? task.unpin(refreshOrdering) : task.pin(refreshOrdering);
+    if (task.pinned) {
+      task.unpin(refreshOrdering);
+    } else {
+      task.pin(refreshOrdering);
+    }
   }
 
   getWarningIcon(task: Task): 'warning' | 'overflow' | null {

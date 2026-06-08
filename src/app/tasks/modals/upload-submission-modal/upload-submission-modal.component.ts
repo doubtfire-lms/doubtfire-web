@@ -1,5 +1,3 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MemberContribution} from 'src/app/api/models/groups/group';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
@@ -9,6 +7,8 @@ import {FileUploaderComponent} from 'src/app/common/file-uploader/file-uploader.
 import {AlertService} from 'src/app/common/services/alert.service';
 import {EmojiService} from 'src/app/common/services/emoji.service';
 import {PrivacyPolicy} from 'src/app/config/privacy-policy/privacy-policy';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 type UploadStage = 'group' | 'details' | 'comments';
 type UploadSubmissionType = TaskStatusEnum | 'reupload_evidence' | 'test_submission';
@@ -55,9 +55,9 @@ export type UploadSubmissionModalResult =
   | UploadSubmissionModalDismissResult;
 
 @Component({
-    selector: 'f-upload-submission-modal',
-    templateUrl: './upload-submission-modal.component.html',
-    standalone: false
+  selector: 'f-upload-submission-modal',
+  templateUrl: './upload-submission-modal.component.html',
+  standalone: false,
 })
 export class UploadSubmissionModalComponent implements OnInit {
   @ViewChild(FileUploaderComponent) private fileUploader?: FileUploaderComponent;
@@ -65,16 +65,14 @@ export class UploadSubmissionModalComponent implements OnInit {
   public readonly minCommentLength = 25;
   public readonly task = this.data.task;
   public readonly privacyPolicy = this.privacyPolicyService;
-  public readonly fileRequirements: UploadSubmissionFileMap = this.task.definition.uploadRequirements.reduce(
-    (files, file) => {
+  public readonly fileRequirements: UploadSubmissionFileMap =
+    this.task.definition.uploadRequirements.reduce((files, file) => {
       files[file.key] = {
         name: file.name,
         type: file.type,
       };
       return files;
-    },
-    {} as UploadSubmissionFileMap,
-  );
+    }, {} as UploadSubmissionFileMap);
   public readonly uploadUrl = this.data.isTestSubmission
     ? this.task.testSubmissionUrl()
     : this.task.submissionUrl();
@@ -95,10 +93,7 @@ export class UploadSubmissionModalComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: UploadSubmissionModalData,
-    private dialogRef: MatDialogRef<
-      UploadSubmissionModalComponent,
-      UploadSubmissionModalResult
-    >,
+    private dialogRef: MatDialogRef<UploadSubmissionModalComponent, UploadSubmissionModalResult>,
     private taskService: TaskService,
     private projectService: ProjectService,
     private privacyPolicyService: PrivacyPolicy,

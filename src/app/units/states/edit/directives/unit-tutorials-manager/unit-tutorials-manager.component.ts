@@ -1,4 +1,3 @@
-import {Component, Inject, Input} from '@angular/core';
 import {
   ActivityType,
   ActivityTypeService,
@@ -6,19 +5,18 @@ import {
   Unit,
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-    selector: 'unit-tutorials-manager',
-    templateUrl: 'unit-tutorials-manager.component.html',
-    styleUrls: ['unit-tutorials-manager.component.scss'],
-    standalone: false
+  selector: 'unit-tutorials-manager',
+  templateUrl: 'unit-tutorials-manager.component.html',
+  styleUrls: ['unit-tutorials-manager.component.scss'],
+  standalone: false,
 })
-export class UnitTutorialsManagerComponent {
+export class UnitTutorialsManagerComponent implements OnInit {
   @Input() unit: Unit;
 
   activityTypes: ActivityType[] = new Array<ActivityType>();
-  tutorialsByStream: any[] = new Array<any>();
-
   constructor(
     private activityTypeService: ActivityTypeService,
     private alertService: AlertService,

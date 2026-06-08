@@ -1,25 +1,28 @@
+import {Subscription} from 'rxjs';
+import {Project, ProjectService, Unit} from 'src/app/api/models/doubtfire-model';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {
+  CsvResult,
+  CsvResultModalService,
+} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {SpecConModalService} from 'src/app/common/modals/spec-con-modal/spec-con-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {UnitStudentEnrolmentModalService} from 'src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 import {HttpClient} from '@angular/common/http';
 import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {Project, ProjectService, Unit} from 'src/app/api/models/doubtfire-model';
-import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
-import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
-import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
-import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
-import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
-import {SpecConModalService} from 'src/app/common/modals/spec-con-modal/spec-con-modal.service';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {UnitStudentEnrolmentModalService} from 'src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 
 @Component({
-    selector: 'unit-students-editor',
-    templateUrl: 'unit-students-editor.component.html',
-    styleUrls: ['unit-students-editor.component.scss'],
-    standalone: false
+  selector: 'unit-students-editor',
+  templateUrl: 'unit-students-editor.component.html',
+  styleUrls: ['unit-students-editor.component.scss'],
+  standalone: false,
 })
 export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatTable, {static: false}) table: MatTable<Project>;
@@ -40,7 +43,7 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
     'enrolled',
     'goto',
   ];
-  dataSource = new MatTableDataSource<Project>([]);
+  dataSource: MatTableDataSource<Project> = new MatTableDataSource([]);
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
@@ -59,7 +62,7 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
 
   ngOnInit(): void {
     this.dataSource.data = this.unit.studentCache.currentValuesClone();
-    this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
+    this.dataSource.filterPredicate = (data: Project, filter: string) => data.matches(filter);
 
     this.subscriptions.push(
       this.unit.studentCache.values.subscribe((students) => {
@@ -162,7 +165,7 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
       'Upload a CSV to withdraw students.',
       {file: {name: 'Withdraw CSV Data', type: 'csv'}},
       this.unit.withdrawStudentsCSVUrl,
-      (response: any) => {
+      (response: CsvResult) => {
         // at least one student?
         this.csvResultModal.show('Withdraw Student CSV Results', response);
         if (response.success.length > 0) {

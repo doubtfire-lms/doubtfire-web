@@ -1,7 +1,7 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {AppInjector} from 'src/app/app-injector';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {Group, Unit, User} from '../doubtfire-model';
+import {Group, Unit} from '../doubtfire-model';
 
 export class GroupSet extends Entity {
   public id: number;

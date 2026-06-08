@@ -1,13 +1,13 @@
-import {Component, OnInit, Input, SimpleChanges} from '@angular/core';
-import {Color} from 'd3';
-import {Project, TaskStatus, TaskStatusEnum} from 'src/app/api/models/doubtfire-model';
+import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+
 @Component({
-    selector: 'f-task-visualisation',
-    templateUrl: './task-visualisation.component.html',
-    styleUrls: ['./task-visualisation.component.scss'],
-    standalone: false
+  selector: 'f-task-visualisation',
+  templateUrl: './task-visualisation.component.html',
+  styleUrls: ['./task-visualisation.component.scss'],
+  standalone: false,
 })
-export class TaskVisualisationComponent implements OnInit {
+export class TaskVisualisationComponent implements OnChanges, OnInit {
   @Input() project: Project;
   @Input() grade: number;
 

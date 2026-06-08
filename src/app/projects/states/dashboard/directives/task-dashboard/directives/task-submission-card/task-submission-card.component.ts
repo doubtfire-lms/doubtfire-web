@@ -1,8 +1,8 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'f-task-submission-card',
@@ -55,7 +55,7 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
 
   regeneratePdf(): void {
     this.task.recreateSubmissionPdf().subscribe({
-      next: (response: any) => {
+      next: (response: {result: string}) => {
         if (response.result === 'false') {
           this.alerts.error('There was an error regenerating the PDF', 6000);
         } else {
@@ -66,7 +66,7 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
           );
         }
       },
-      error: (response: any) => {
+      error: (_response: Error) => {
         this.alerts.error('Request failed, cannot recreate PDF at this time.', 6000);
       },
     });

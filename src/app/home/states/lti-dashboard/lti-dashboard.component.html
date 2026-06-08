@@ -1,18 +1,18 @@
-<div id="home" class="w-full h-screen px-12 justify-center items-center">
-  <div class="flex flex-col gap-3 w-full max-w-2xl mx-auto justify-center h-screen items-center">
-    <div class="flex justify-center items-center">
+<div id="home" class="h-screen w-full items-center justify-center px-12">
+  <div class="mx-auto flex h-screen w-full max-w-2xl flex-col items-center justify-center gap-3">
+    <div class="flex items-center justify-center">
       <mat-icon
         svgIcon="formatif-logo"
         class="formatif-icon"
         aria-label="Formatif logo"
-        class="w-[100px] h-[100px]"
+        class="h-[100px] w-[100px]"
       ></mat-icon>
       <h1 class="m-0 ml-3 text-4xl">OnTrack</h1>
     </div>
 
     @if (isLoading) {
       @if (unauthorised) {
-        <div class="w-full bg-red-200 text-red-800 p-3 text-center font-semibold rounded-lg">
+        <div class="w-full rounded-lg bg-red-200 p-3 text-center font-semibold text-red-800">
           An error occurred. Please refresh the page.
         </div>
       } @else {
@@ -28,7 +28,7 @@
             matTooltip="Sync enrolments"
             matTooltipPosition="above"
             aria-label=""
-            class="w-[60px] h-[60px] relative"
+            class="relative h-[60px] w-[60px]"
             [ngClass]="{'bg-gray-300': isSyncingEnrolments}"
             color="default"
             (click)="syncEnrolments()"
@@ -36,7 +36,7 @@
             @if (isSyncingEnrolments) {
               <mat-spinner
                 diameter="35"
-                class="z-50 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+                class="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
               ></mat-spinner>
             }
             <mat-icon mat-icon-button>people</mat-icon>
@@ -47,7 +47,7 @@
             matTooltip="Sync grades"
             matTooltipPosition="above"
             aria-label=""
-            class="w-[60px] h-[60px] relative"
+            class="relative h-[60px] w-[60px]"
             [ngClass]="{'bg-gray-300': isSyncingGrades}"
             color="default"
             (click)="syncStudentsGrades()"
@@ -57,7 +57,7 @@
             @if (isSyncingGrades) {
               <mat-spinner
                 diameter="35"
-                class="z-50 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+                class="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
               ></mat-spinner>
             }
           </button>
@@ -67,19 +67,19 @@
         mat-fab
         extended
         color="primary"
-        class="h-[50px] my-3 w-full max-w-lg"
+        class="my-3 h-[50px] w-full max-w-lg"
         (click)="launchApplication()"
         target="_blank"
       >
         <mat-icon>rocket_launch</mat-icon>
         Launch {{ linkedUnit ? linkedUnit.code : 'OnTrack' }}
       </button>
-      <div class="text-center text-gray-300 mt-2.5 w-full">
+      <div class="mt-2.5 w-full text-center text-gray-300">
         @if (linkedUnit) {
           {{ linkedUnit.code }} &mdash; {{ linkedUnit.name }}
           @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
             <br />
-            <button mat-button class="underline text-blue-400" (click)="removeLink()">
+            <button mat-button class="text-blue-400 underline" (click)="removeLink()">
               Unlink
             </button>
           }
@@ -88,7 +88,7 @@
 
           @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
             <br />
-            <button mat-button class="underline text-blue-400" (click)="goToLinkUnit()">
+            <button mat-button class="text-blue-400 underline" (click)="goToLinkUnit()">
               Link it now
             </button>
           } @else {

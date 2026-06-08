@@ -5,11 +5,11 @@
   fxLayoutAlign="center start"
   [ngClass]="{'p-10': modal}"
 >
-  <div class="main-container w-full flex flex-row justify-center items-start">
-    <div class="main flex flex-col justify-start items-start w-full">
+  <div class="main-container flex w-full flex-row items-start justify-center">
+    <div class="main flex w-full flex-col items-start justify-start">
       <!-- avatar -->
-      <div class="flex flex-row justify-between items-center mb-[25px] w-full">
-        <div class="flex flex-row justify-between items-center">
+      <div class="mb-[25px] flex w-full flex-row items-center justify-between">
+        <div class="flex flex-row items-center justify-between">
           <a class="ml-[20px]" href="https://gravatar.com/connect/?source=_signup/" target="_blank">
             <user-icon [size]="80" [user]="user" style="margin-right: 25px"></user-icon
           ></a>
@@ -35,7 +35,7 @@
         <div fxFlex="3"></div> -->
         <mat-form-field fxFlexFill appearance="outline">
           <mat-label>Username</mat-label>
-          <input matInput [(ngModel)]="user.username" name="username" [disabled]="!newUser"/>
+          <input matInput [(ngModel)]="user.username" name="username" [disabled]="!newUser" />
         </mat-form-field>
       </div>
 
@@ -84,10 +84,10 @@
       </mat-form-field>
 
       @if (user.systemRole === 'Student') {
-      <mat-form-field appearance="outline" fxFlexFill>
-        <mat-label>Student ID</mat-label>
-        <input matInput [(ngModel)]="user.studentId" name="student_id" required />
-      </mat-form-field>
+        <mat-form-field appearance="outline" fxFlexFill>
+          <mat-label>Student ID</mat-label>
+          <input matInput [(ngModel)]="user.studentId" name="student_id" required />
+        </mat-form-field>
       }
 
       <mat-form-field appearance="outline" fxFlexFill>
@@ -96,28 +96,43 @@
       </mat-form-field>
 
       @if (canSeeSystemRole) {
-      <mat-form-field fxFlexFill appearance="outline">
-        <mat-label>System Role</mat-label>
-        <mat-select [(ngModel)]="user.systemRole" name="systemRole" [disabled]="!canEditSystemRole">
-          <mat-option value="Admin">Administrator</mat-option>
-          <mat-option value="Convenor">Convenor</mat-option>
-          <mat-option value="Tutor">Tutor</mat-option>
-          <mat-option value="Student">Student</mat-option>
-          <mat-option value="Auditor">Auditor</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field fxFlexFill appearance="outline">
+          <mat-label>System Role</mat-label>
+          <mat-select
+            [(ngModel)]="user.systemRole"
+            name="systemRole"
+            [disabled]="!canEditSystemRole"
+          >
+            <mat-option value="Admin">Administrator</mat-option>
+            <mat-option value="Convenor">Convenor</mat-option>
+            <mat-option value="Tutor">Tutor</mat-option>
+            <mat-option value="Student">Student</mat-option>
+            <mat-option value="Auditor">Auditor</mat-option>
+          </mat-select>
+        </mat-form-field>
       }
 
       <section fxLayout="column" fxFlexFill fxLayoutAlign="center start">
-        <mat-checkbox class="" color="primary" [(ngModel)]="user.receiveFeedbackNotifications" name="feedback_n"
+        <mat-checkbox
+          class=""
+          color="primary"
+          [(ngModel)]="user.receiveFeedbackNotifications"
+          name="feedback_n"
           >Receive notifications for new messages</mat-checkbox
         >
         <div fxFlex></div>
-        <mat-checkbox color="primary" [(ngModel)]="user.receivePortfolioNotifications" name="portfolio_n"
+        <mat-checkbox
+          color="primary"
+          [(ngModel)]="user.receivePortfolioNotifications"
+          name="portfolio_n"
           >Receive notifications when your portfolio is ready</mat-checkbox
         >
         <div fxFlex></div>
-        <mat-checkbox fxFlex color="primary" [(ngModel)]="user.receiveTaskNotifications" name="task_n"
+        <mat-checkbox
+          fxFlex
+          color="primary"
+          [(ngModel)]="user.receiveTaskNotifications"
+          name="task_n"
           >Receive notifications when new tasks are available</mat-checkbox
         >
       </section>
@@ -127,33 +142,52 @@
         </mat-checkbox>
       </section>
 
-      @if(tiiEnabled){
-      <section fxLayout="row" fxFlexFill fxLayoutAlign="start center">
-        <mat-checkbox color="primary" [(ngModel)]="user.acceptedTiiEula" [disableRipple]="true" (click)="$event.preventDefault()" name="acceptedTiiEula" disabled
-          >Accepted TurnItIn EULA
-        </mat-checkbox>
-      </section>
+      @if (tiiEnabled) {
+        <section fxLayout="row" fxFlexFill fxLayoutAlign="start center">
+          <mat-checkbox
+            color="primary"
+            [(ngModel)]="user.acceptedTiiEula"
+            [disableRipple]="true"
+            (click)="$event.preventDefault()"
+            name="acceptedTiiEula"
+            disabled
+            >Accepted TurnItIn EULA
+          </mat-checkbox>
+        </section>
       }
       <div fxLayout="row" fxFlexFill style="padding-top: 12px">
-        <button [hidden]="mode === 'edit' || mode === 'new'" fxFlexAlign="start" type="button" mat-stroked-button (click)="signOut()">
+        <button
+          [hidden]="mode === 'edit' || mode === 'new'"
+          fxFlexAlign="start"
+          type="button"
+          mat-stroked-button
+          (click)="signOut()"
+        >
           Sign Out
         </button>
         <div fxFlex></div>
         @if (mode === 'create') {
-        <button [disabled]="form.invalid" fxFlexAlign="end" type="submit" mat-flat-button color="primary">
-          Confirm Account
-        </button>
-        } @if (mode === 'edit') {
-        <button
-          type="button"
-          [disabled]="form.invalid"
-          fxFlexAlign="end"
-          (click)="submit()"
-          mat-flat-button
-          color="primary"
-        >
-          Save Profile
-        </button>
+          <button
+            [disabled]="form.invalid"
+            fxFlexAlign="end"
+            type="submit"
+            mat-flat-button
+            color="primary"
+          >
+            Confirm Account
+          </button>
+        }
+        @if (mode === 'edit') {
+          <button
+            type="button"
+            [disabled]="form.invalid"
+            fxFlexAlign="end"
+            (click)="submit()"
+            mat-flat-button
+            color="primary"
+          >
+            Save Profile
+          </button>
         }
       </div>
     </div>

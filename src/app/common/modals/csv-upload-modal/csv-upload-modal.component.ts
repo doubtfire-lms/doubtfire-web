@@ -6,9 +6,7 @@ export interface CsvUploadFileSpec {
   type: string;
 }
 
-export interface CsvUploadFileMap {
-  [uploadName: string]: CsvUploadFileSpec;
-}
+export type CsvUploadFileMap = Record<string, CsvUploadFileSpec>;
 
 export interface CsvUploadModalData {
   title: string;
@@ -19,10 +17,10 @@ export interface CsvUploadModalData {
 }
 
 @Component({
-    selector: 'f-csv-upload-modal',
-    templateUrl: './csv-upload-modal.component.html',
-    styleUrls: ['./csv-upload-modal.component.scss'],
-    standalone: false
+  selector: 'f-csv-upload-modal',
+  templateUrl: './csv-upload-modal.component.html',
+  styleUrls: ['./csv-upload-modal.component.scss'],
+  standalone: false,
 })
 export class CsvUploadModalComponent {
   constructor(

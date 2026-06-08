@@ -1,6 +1,3 @@
-import {Component, OnInit, Input, HostListener} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {
   AuthenticationService,
   ScormPlayerContext,
@@ -10,6 +7,9 @@ import {ScormAdapterService} from 'src/app/api/services/scorm-adapter.service';
 import {AppInjector} from 'src/app/app-injector';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {ActivatedRoute} from '@angular/router';
 
 declare global {
   interface Window {
@@ -27,10 +27,10 @@ declare global {
 }
 
 @Component({
-    selector: 'f-scorm-player',
-    templateUrl: './scorm-player.component.html',
-    styleUrls: ['./scorm-player.component.scss'],
-    standalone: false
+  selector: 'f-scorm-player',
+  templateUrl: './scorm-player.component.html',
+  styleUrls: ['./scorm-player.component.scss'],
+  standalone: false,
 })
 export class ScormPlayerComponent implements OnInit {
   context: ScormPlayerContext;

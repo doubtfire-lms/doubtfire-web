@@ -1,21 +1,21 @@
 import {CachedEntityService} from 'ngx-entity-service';
+import {Observable} from 'rxjs';
 import {
   LearningOutcomeService,
   TaskDefinition,
   TaskStatusEnum,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiUrl';
-import {MappingFunctions} from './mapping-fn';
 import {AppInjector} from 'src/app/app-injector';
-import {Observable} from 'rxjs';
-import {TaskPrerequisiteService} from './task-prerequisite.service';
-import {TaskPrerequisite} from '../models/task-prerequisite';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {SidekiqJob} from '../models/sidekiq-job';
+import {TaskPrerequisite} from '../models/task-prerequisite';
+import {MappingFunctions} from './mapping-fn';
 import {OverseerStepService} from './overseer-step.service';
+import {TaskPrerequisiteService} from './task-prerequisite.service';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -57,7 +57,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       },
       {
         keys: 'uploadRequirements',
-        toJsonFn: (taskDef: TaskDefinition, key: string) => {
+        toJsonFn: (taskDef: TaskDefinition, _key: string) => {
           return JSON.stringify(
             taskDef.uploadRequirements?.map((upreq) => {
               return {
@@ -70,7 +70,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
             }),
           );
         },
-        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, params?: any) => {
+        toEntityFn: (data: object, key: string) => {
           return (
             data[key] as {
               key: string;
@@ -92,10 +92,10 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       },
       {
         keys: ['tutorialStream', 'tutorial_stream_abbr'],
-        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, params?: any) => {
+        toEntityFn: (data: object, key: string, taskDef: TaskDefinition) => {
           return taskDef.unit.tutorialStreamsCache.get(data[key]);
         },
-        toJsonFn: (taskDef: TaskDefinition, key: string) => {
+        toJsonFn: (taskDef: TaskDefinition, _key: string) => {
           return taskDef.tutorialStream?.abbreviation;
         },
       },
@@ -103,14 +103,14 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'restrictStatusUpdates',
       {
         keys: ['groupSet', 'group_set_id'],
-        toEntityFn: (data: object, key: string, taskDef: TaskDefinition, params?: any) => {
+        toEntityFn: (data: object, key: string, taskDef: TaskDefinition) => {
           if (data[key]) {
             return taskDef.unit.groupSetsCache.get(data[key]);
           } else {
             return data[key];
           }
         },
-        toJsonFn: (taskDef: TaskDefinition, key: string) => {
+        toJsonFn: (taskDef: TaskDefinition, _key: string) => {
           return taskDef.groupSet?.id;
         },
       },
@@ -207,8 +207,8 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     );
   }
 
-  public override createInstanceFrom(json: object, other?: any): TaskDefinition {
-    return new TaskDefinition(other as Unit);
+  public override createInstanceFrom(_json: object, other?: Unit): TaskDefinition {
+    return new TaskDefinition(other);
   }
 
   public uploadTaskSheet(taskDefinition: TaskDefinition, file: File): Observable<boolean> {

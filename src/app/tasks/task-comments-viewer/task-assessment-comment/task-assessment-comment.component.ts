@@ -1,11 +1,11 @@
-import {Component, OnInit, Input, Inject} from '@angular/core';
-import {
-  TaskSubmissionService,
-  TaskAssessmentResult,
-} from 'src/app/common/services/task-submission.service';
-import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {Task} from 'src/app/api/models/doubtfire-model';
+import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {
+  TaskAssessmentResult,
+  TaskSubmissionService,
+} from 'src/app/common/services/task-submission.service';
+import {Component, Inject, Input} from '@angular/core';
 
 export interface User {
   id: number;
@@ -34,12 +34,12 @@ export interface TaskAssessmentComment {
 }
 
 @Component({
-    selector: 'app-task-assessment-comment',
-    templateUrl: './task-assessment-comment.component.html',
-    styleUrls: ['./task-assessment-comment.component.scss'],
-    standalone: false
+  selector: 'app-task-assessment-comment',
+  templateUrl: './task-assessment-comment.component.html',
+  styleUrls: ['./task-assessment-comment.component.scss'],
+  standalone: false,
 })
-export class TaskAssessmentCommentComponent implements OnInit {
+export class TaskAssessmentCommentComponent {
   @Input() task: Task;
   @Input() comment: TaskAssessmentComment;
 
@@ -52,10 +52,6 @@ export class TaskAssessmentCommentComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handleError(error: any) {
     this.alerts.error('Error: ' + error, 6000);
-  }
-
-  ngOnInit() {
-    // this.update();
   }
 
   get message() {

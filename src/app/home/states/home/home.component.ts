@@ -1,16 +1,16 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {DateService} from 'src/app/common/services/date.service';
-import {Router} from '@angular/router';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
-import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {Subscription} from 'rxjs';
+import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
+import {DateService} from 'src/app/common/services/date.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
-    selector: 'home',
-    templateUrl: 'home.component.html',
-    styleUrls: ['home.component.scss'],
-    standalone: false
+  selector: 'home',
+  templateUrl: 'home.component.html',
+  styleUrls: ['home.component.scss'],
+  standalone: false,
 })
 export class HomeComponent implements OnInit, OnDestroy {
   projects: Project[];
@@ -52,7 +52,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.globalState.unitRolesSubject.subscribe({
         next: (unitRoles) => this.unitRolesLoaded(unitRoles),
-        error: (err) => {},
       }),
     );
 
@@ -62,7 +61,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           projects = projects.filter((project) => project.unit.myRole === 'Student');
           this.projectsLoaded(projects);
         },
-        error: (err) => {},
       }),
     );
 

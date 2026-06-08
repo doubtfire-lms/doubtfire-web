@@ -1,5 +1,3 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, first, of, tap} from 'rxjs';
 import {
   ProjectService,
@@ -12,8 +10,10 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
 export type UnitTaskViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
 export type UnitTaskRouteMode = 'inbox' | 'definition' | 'moderation' | 'overflow';
@@ -46,7 +46,7 @@ type TaskSource = (
 })
 export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   private static readonly UNIT_REFRESH_INTERVAL_MS = 60_000;
-  private static readonly lastUnitFetchAt = new Map<number, number>();
+  private static readonly lastUnitFetchAt: Map<number, number> = new Map();
 
   @Input() public unit$: Observable<Unit>;
   @Input() public routeMode: UnitTaskRouteMode = 'inbox';

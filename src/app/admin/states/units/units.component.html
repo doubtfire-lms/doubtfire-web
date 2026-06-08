@@ -1,11 +1,11 @@
 <div class="flex flex-row gap-5 md:px-16">
-  <div class="flex-grow flex flex-col gap-5 gap-y-0">
+  <div class="flex flex-grow flex-col gap-5 gap-y-0">
     <div class="flex flex-col">
       <div>
         <h3>{{ title }}</h3>
       </div>
       <div>
-        <mat-form-field appearance="outline" class="w-full max-w-[720px] min-w-[160px]">
+        <mat-form-field appearance="outline" class="w-full min-w-[160px] max-w-[720px]">
           <mat-label>Search</mat-label>
           <input matInput (keyup)="applyFilter($event)" />
           <mat-icon matPrefix> search </mat-icon>
@@ -13,7 +13,7 @@
       </div>
     </div>
     <table
-      class="flex-grow f-table selectable"
+      class="f-table selectable flex-grow"
       mat-table
       [dataSource]="dataSource"
       matSort

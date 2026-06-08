@@ -1,9 +1,9 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { Task } from 'src/app/api/models/task';
+import {Task} from 'src/app/api/models/task';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-    name: 'tasksWithStudentName',
-    standalone: false
+  name: 'tasksWithStudentName',
+  standalone: false,
 })
 export class TasksForInboxSearchPipe implements PipeTransform {
   transform(tasks: Task[], searchText: string): Task[] {
@@ -20,8 +20,8 @@ export class TasksForInboxSearchPipe implements PipeTransform {
       searchTerms
         .map((term: string) => task.matches(term))
         .reduce((prev: boolean, current: boolean, currentIndex: number) =>
-          operators[currentIndex - 1] === '&' ? prev && current : prev || current
-        )
+          operators[currentIndex - 1] === '&' ? prev && current : prev || current,
+        ),
     );
   }
 }

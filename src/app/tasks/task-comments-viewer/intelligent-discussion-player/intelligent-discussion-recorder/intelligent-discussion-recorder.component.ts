@@ -1,17 +1,33 @@
-import { Component, Inject, AfterViewInit, Input } from '@angular/core';
-import { BaseAudioRecorderComponent } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
-import { IntelligentDiscussionPlayerService } from '../intelligent-discussion-player.service';
-import { DiscussionComment, Task } from 'src/app/api/models/doubtfire-model';
-import { MediaRecorderService } from 'src/app/common/services/recorder-service';
+import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
+import {
+  BaseAudioRecorderComponent,
+  RecordingEvent,
+} from 'src/app/common/audio-recorder/audio/base-audio-recorder';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
+import {AfterViewInit, Component, Inject, Input} from '@angular/core';
+import {IntelligentDiscussionPlayerService} from '../intelligent-discussion-player.service';
+
+interface DiscussionReplyService {
+  addDiscussionReply(
+    task: Task,
+    discussionId: number,
+    recording: Blob,
+    success: () => void,
+    failure: (error: {data: {error: string}}) => void,
+  ): void;
+}
 
 @Component({
-    selector: 'intelligent-discussion-recorder',
-    templateUrl: './intelligent-discussion-recorder.component.html',
-    styleUrls: ['./intelligent-discussion-recorder.component.css'],
-    providers: [MediaRecorderService],
-    standalone: false
+  selector: 'intelligent-discussion-recorder',
+  templateUrl: './intelligent-discussion-recorder.component.html',
+  styleUrls: ['./intelligent-discussion-recorder.component.css'],
+  providers: [MediaRecorderService],
+  standalone: false,
 })
-export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderComponent implements AfterViewInit {
+export class IntelligentDiscussionRecorderComponent
+  extends BaseAudioRecorderComponent
+  implements AfterViewInit
+{
   @Input() discussion: DiscussionComment;
   @Input() task: Task;
   canvas: HTMLCanvasElement;
@@ -20,12 +36,10 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
 
   constructor(
     private mediaRecorderService: MediaRecorderService,
-    @Inject(IntelligentDiscussionPlayerService) private dps: any
+    @Inject(IntelligentDiscussionPlayerService) private dps: DiscussionReplyService,
   ) {
     super(mediaRecorderService);
   }
-
-  ngOnInit() {}
 
   ngAfterViewInit() {
     if (this.canRecord) {
@@ -39,7 +53,7 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
     this.canvasCtx = this.canvas.getContext('2d');
   }
 
-  onNewRecording(evt: any): void {
+  onNewRecording(evt: RecordingEvent): void {
     this.blob = evt.detail.recording.blob;
     this.recordingAvailable = true;
     this.sendRecording();
@@ -62,9 +76,9 @@ export class IntelligentDiscussionRecorderComponent extends BaseAudioRecorderCom
         () => {
           this.isSending = false;
         },
-        (failure: { data: { error: any } }) => {
+        (failure: {data: {error: string}}) => {
           console.error(failure);
-        }
+        },
       );
       this.blob = {} as Blob;
     }

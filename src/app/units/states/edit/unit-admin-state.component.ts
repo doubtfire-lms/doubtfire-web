@@ -1,9 +1,9 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatTabChangeEvent} from '@angular/material/tabs';
 import {Observable, Subscription, first, of} from 'rxjs';
 import {Unit, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ActivatedRoute, Router} from '@angular/router';
 
 type UnitAdminTabKey =
   | 'details'
@@ -20,9 +20,9 @@ interface UnitAdminTab {
 }
 
 @Component({
-    selector: 'f-unit-admin-state',
-    templateUrl: './unit-admin-state.component.html',
-    standalone: false
+  selector: 'f-unit-admin-state',
+  templateUrl: './unit-admin-state.component.html',
+  standalone: false,
 })
 export class UnitAdminStateComponent implements OnInit, OnDestroy {
   @Input() public unit$: Observable<Unit>;
@@ -88,7 +88,12 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
     this.currentTab = nextTab;
     if (this.route.parent?.snapshot.data.unit) {
       this.router.navigate(
-        ['/units', this.route.parent.snapshot.paramMap.get('unitId'), 'admin', nextTab.routeSegment],
+        [
+          '/units',
+          this.route.parent.snapshot.paramMap.get('unitId'),
+          'admin',
+          nextTab.routeSegment,
+        ],
         {replaceUrl: true},
       );
       return;

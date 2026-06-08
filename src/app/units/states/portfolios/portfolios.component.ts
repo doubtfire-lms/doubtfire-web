@@ -1,17 +1,17 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatTabGroup} from '@angular/material/tabs';
-import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, first, of} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatTabGroup} from '@angular/material/tabs';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
-    selector: 'f-portfolios',
-    templateUrl: './portfolios.component.html',
-    styleUrl: './portfolios.component.scss',
-    standalone: false
+  selector: 'f-portfolios',
+  templateUrl: './portfolios.component.html',
+  styleUrl: './portfolios.component.scss',
+  standalone: false,
 })
 export class PortfoliosComponent implements OnInit {
   @Input() unit$: Observable<Unit>;

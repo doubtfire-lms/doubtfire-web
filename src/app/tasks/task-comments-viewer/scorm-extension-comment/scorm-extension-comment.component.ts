@@ -1,24 +1,22 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {ScormExtensionComment, TaskComment, Task} from 'src/app/api/models/doubtfire-model';
+import {ScormExtensionComment, Task, TaskComment} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input} from '@angular/core';
 
 @Component({
-    selector: 'f-scorm-extension-comment',
-    templateUrl: './scorm-extension-comment.component.html',
-    styleUrls: ['./scorm-extension-comment.component.scss'],
-    standalone: false
+  selector: 'f-scorm-extension-comment',
+  templateUrl: './scorm-extension-comment.component.html',
+  styleUrls: ['./scorm-extension-comment.component.scss'],
+  standalone: false,
 })
-export class ScormExtensionCommentComponent implements OnInit {
+export class ScormExtensionCommentComponent {
   @Input() comment: ScormExtensionComment;
   @Input() task: Task;
 
   constructor(private alerts: AlertService) {}
 
-  private handleError(error: any) {
+  private handleError(error: {data: {error: string}}) {
     this.alerts.error('Error: ' + error.data.error, 6000);
   }
-
-  ngOnInit() {}
 
   get message() {
     const studentName = this.comment.author.name;
@@ -42,7 +40,7 @@ export class ScormExtensionCommentComponent implements OnInit {
 
   grantExtension() {
     this.comment.grant().subscribe({
-      next: (tc: TaskComment) => {
+      next: (_tc: TaskComment) => {
         this.alerts.success('Attempt request granted', 2000);
       },
       error: (response) => {

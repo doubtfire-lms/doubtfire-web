@@ -1,18 +1,18 @@
-import {Component, Input} from '@angular/core';
 import {
-  Task,
   ScormComment,
+  Task,
+  TestAttemptService,
   User,
   UserService,
-  TestAttemptService,
 } from 'src/app/api/models/doubtfire-model';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {Component, Input} from '@angular/core';
 
 @Component({
-    selector: 'f-scorm-comment',
-    templateUrl: './scorm-comment.component.html',
-    styleUrls: ['./scorm-comment.component.scss'],
-    standalone: false
+  selector: 'f-scorm-comment',
+  templateUrl: './scorm-comment.component.html',
+  styleUrls: ['./scorm-comment.component.scss'],
+  standalone: false,
 })
 export class ScormCommentComponent {
   @Input() task: Task;
