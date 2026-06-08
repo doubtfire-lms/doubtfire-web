@@ -906,18 +906,20 @@
                                           <mat-icon>add_circle</mat-icon>
                                         </button>
                                       </mat-form-field>
-                                      @if (actionFor(rule).body) {
-                                        <div
-                                          class="w-full rounded border border-slate-200 bg-slate-50 p-3"
-                                        >
-                                          <div class="mb-2 font-medium">Body Preview</div>
+                                      <div
+                                        class="w-full rounded border border-slate-200 bg-slate-50 p-3"
+                                      >
+                                        <div class="mb-2 font-medium">Body Preview</div>
+                                        @if (actionFor(rule).body) {
                                           <div
                                             [innerHTML]="
                                               renderTemplatePreview(actionFor(rule).body, rule)
                                             "
                                           ></div>
-                                        </div>
-                                      }
+                                        } @else {
+                                          <div class="text-black/40">Preview will appear here.</div>
+                                        }
+                                      </div>
                                     </div>
                                     <mat-menu #bodyVariableMenu="matMenu">
                                       @for (variable of emailVariables; track variable.token) {
@@ -931,6 +933,9 @@
                                         </button>
                                       }
                                     </mat-menu>
+                                    <div class="text-sm text-black/50">
+                                      Sent from the main convenor.
+                                    </div>
                                   </div>
                                 }
                                 @case ('EmailStaffAction') {
@@ -969,7 +974,7 @@
                                       </div>
                                     }
                                     <div class="grid gap-3 md:grid-cols-2">
-                                      <mat-form-field appearance="outline">
+                                      <mat-form-field appearance="outline" class="w-full">
                                         <mat-label>Body</mat-label>
                                         <textarea
                                           matInput
@@ -984,18 +989,18 @@
                                           <mat-icon>add_circle</mat-icon>
                                         </button>
                                       </mat-form-field>
-                                      @if (actionFor(rule).body) {
-                                        <div
-                                          class="rounded border border-slate-200 bg-slate-50 p-3"
-                                        >
-                                          <div class="mb-2 font-medium">Body Preview</div>
+                                      <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                        <div class="mb-2 font-medium">Body Preview</div>
+                                        @if (actionFor(rule).body) {
                                           <div
                                             [innerHTML]="
                                               renderTemplatePreview(actionFor(rule).body, rule)
                                             "
                                           ></div>
-                                        </div>
-                                      }
+                                        } @else {
+                                          <div class="text-black/40">Preview will appear here.</div>
+                                        }
+                                      </div>
                                     </div>
                                     <mat-menu #staffBodyVariableMenu="matMenu">
                                       @for (variable of emailVariables; track variable.token) {
@@ -1016,6 +1021,71 @@
                                       <mat-checkbox [(ngModel)]="actionFor(rule).email_convenors"
                                         >Convenors</mat-checkbox
                                       >
+                                    </div>
+                                    <div class="text-sm text-black/50">
+                                      Sent from the main convenor.
+                                    </div>
+                                  </div>
+                                }
+                                @case ('TaskCommentAction') {
+                                  <div class="flex w-full min-w-[520px] flex-col gap-3">
+                                    <mat-form-field appearance="outline">
+                                      <mat-label>Task</mat-label>
+                                      <mat-select [(ngModel)]="actionFor(rule).task_definition_id">
+                                        @for (
+                                          taskDefinition of taskDefinitions;
+                                          track taskDefinition.id
+                                        ) {
+                                          <mat-option [value]="taskDefinition.id">
+                                            {{ taskDefinition.abbreviation }}
+                                            {{ taskDefinition.name }}
+                                          </mat-option>
+                                        }
+                                      </mat-select>
+                                    </mat-form-field>
+                                    <div class="grid gap-3 md:grid-cols-2">
+                                      <mat-form-field appearance="outline">
+                                        <mat-label>Comment</mat-label>
+                                        <textarea
+                                          matInput
+                                          rows="8"
+                                          [(ngModel)]="actionFor(rule).body"
+                                        ></textarea>
+                                        <button
+                                          mat-icon-button
+                                          matSuffix
+                                          [matMenuTriggerFor]="commentBodyVariableMenu"
+                                        >
+                                          <mat-icon>add_circle</mat-icon>
+                                        </button>
+                                      </mat-form-field>
+                                      <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                        <div class="mb-2 font-medium">Comment Preview</div>
+                                        @if (actionFor(rule).body) {
+                                          <div
+                                            [innerHTML]="
+                                              renderTemplatePreview(actionFor(rule).body, rule)
+                                            "
+                                          ></div>
+                                        } @else {
+                                          <div class="text-black/40">Preview will appear here.</div>
+                                        }
+                                      </div>
+                                    </div>
+                                    <mat-menu #commentBodyVariableMenu="matMenu">
+                                      @for (variable of emailVariables; track variable.token) {
+                                        <button
+                                          mat-menu-item
+                                          (click)="
+                                            insertActionVariable(rule, 'body', variable.token)
+                                          "
+                                        >
+                                          {{ variable.label }}
+                                        </button>
+                                      }
+                                    </mat-menu>
+                                    <div class="text-sm text-black/50">
+                                      Sent from the main convenor.
                                     </div>
                                   </div>
                                 }
@@ -1126,6 +1196,28 @@
                                         </div>
                                       }
                                     }
+                                    @case ('TaskCommentAction') {
+                                      <span>Add comment to</span>
+                                      <span
+                                        class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                                      >
+                                        {{ taskDefinitionLabel(action.task_definition_id) }}
+                                      </span>
+                                      @if (action.body) {
+                                        <div
+                                          class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3"
+                                        >
+                                          <div>
+                                            <div class="mb-1 font-medium text-black/80">
+                                              Comment
+                                            </div>
+                                            <div
+                                              [innerHTML]="renderTemplatePreview(action.body, rule)"
+                                            ></div>
+                                          </div>
+                                        </div>
+                                      }
+                                    }
                                     @default {
                                       {{ actionSummary(action) }}
                                     }
@@ -1214,18 +1306,18 @@
                                     <mat-icon>add_circle</mat-icon>
                                   </button>
                                 </mat-form-field>
-                                @if (actionFor(rule).body) {
-                                  <div
-                                    class="w-full rounded border border-slate-200 bg-slate-50 p-3"
-                                  >
-                                    <div class="mb-2 font-medium">Body Preview</div>
+                                <div class="w-full rounded border border-slate-200 bg-slate-50 p-3">
+                                  <div class="mb-2 font-medium">Body Preview</div>
+                                  @if (actionFor(rule).body) {
                                     <div
                                       [innerHTML]="
                                         renderTemplatePreview(actionFor(rule).body, rule)
                                       "
                                     ></div>
-                                  </div>
-                                }
+                                  } @else {
+                                    <div class="text-black/40">Preview will appear here.</div>
+                                  }
+                                </div>
                               </div>
                               <mat-menu #bodyVariableMenu="matMenu">
                                 @for (variable of emailVariables; track variable.token) {
@@ -1237,11 +1329,12 @@
                                   </button>
                                 }
                               </mat-menu>
+                              <div class="text-sm text-black/50">Sent from the main convenor.</div>
                             </div>
                           }
 
                           @case ('EmailStaffAction') {
-                            <div class="flex min-w-[520px] flex-col gap-3">
+                            <div class="flex w-full min-w-[520px] flex-col gap-3">
                               <mat-form-field appearance="outline">
                                 <mat-label>Subject</mat-label>
                                 <input matInput [(ngModel)]="actionFor(rule).subject" />
@@ -1276,7 +1369,7 @@
                               }
 
                               <div class="grid gap-3 md:grid-cols-2">
-                                <mat-form-field appearance="outline">
+                                <mat-form-field appearance="outline" class="w-full">
                                   <mat-label>Body</mat-label>
                                   <textarea
                                     matInput
@@ -1291,16 +1384,18 @@
                                     <mat-icon>add_circle</mat-icon>
                                   </button>
                                 </mat-form-field>
-                                @if (actionFor(rule).body) {
-                                  <div class="rounded border border-slate-200 bg-slate-50 p-3">
-                                    <div class="mb-2 font-medium">Body Preview</div>
+                                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                  <div class="mb-2 font-medium">Body Preview</div>
+                                  @if (actionFor(rule).body) {
                                     <div
                                       [innerHTML]="
                                         renderTemplatePreview(actionFor(rule).body, rule)
                                       "
                                     ></div>
-                                  </div>
-                                }
+                                  } @else {
+                                    <div class="text-black/40">Preview will appear here.</div>
+                                  }
+                                </div>
                               </div>
                               <mat-menu #staffBodyVariableMenu="matMenu">
                                 @for (variable of emailVariables; track variable.token) {
@@ -1321,6 +1416,65 @@
                                   >Convenors</mat-checkbox
                                 >
                               </div>
+                              <div class="text-sm text-black/50">Sent from the main convenor.</div>
+                            </div>
+                          }
+
+                          @case ('TaskCommentAction') {
+                            <div class="flex w-full min-w-[520px] flex-col gap-3">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Task</mat-label>
+                                <mat-select [(ngModel)]="actionFor(rule).task_definition_id">
+                                  @for (
+                                    taskDefinition of taskDefinitions;
+                                    track taskDefinition.id
+                                  ) {
+                                    <mat-option [value]="taskDefinition.id">
+                                      {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
+                                    </mat-option>
+                                  }
+                                </mat-select>
+                              </mat-form-field>
+                              <div class="grid gap-3 md:grid-cols-2">
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Comment</mat-label>
+                                  <textarea
+                                    matInput
+                                    rows="8"
+                                    [(ngModel)]="actionFor(rule).body"
+                                  ></textarea>
+                                  <button
+                                    mat-icon-button
+                                    matSuffix
+                                    [matMenuTriggerFor]="commentBodyVariableMenu"
+                                  >
+                                    <mat-icon>add_circle</mat-icon>
+                                  </button>
+                                </mat-form-field>
+                                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                  <div class="mb-2 font-medium">Comment Preview</div>
+                                  @if (actionFor(rule).body) {
+                                    <div
+                                      [innerHTML]="
+                                        renderTemplatePreview(actionFor(rule).body, rule)
+                                      "
+                                    ></div>
+                                  } @else {
+                                    <div class="text-black/40">Preview will appear here.</div>
+                                  }
+                                </div>
+                              </div>
+                              <mat-menu #commentBodyVariableMenu="matMenu">
+                                @for (variable of emailVariables; track variable.token) {
+                                  <button
+                                    mat-menu-item
+                                    (click)="insertActionVariable(rule, 'body', variable.token)"
+                                  >
+                                    {{ variable.label }}
+                                  </button>
+                                }
+                              </mat-menu>
+                              <div class="text-sm text-black/50">Sent from the main convenor.</div>
                             </div>
                           }
 

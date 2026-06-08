@@ -89,6 +89,7 @@ export class CommunicationAction extends Entity {
   id: number;
   type: string;
   communication_rule_id: number;
+  task_definition_id?: number;
   subject?: string;
   body?: string;
   email_tutors?: boolean;

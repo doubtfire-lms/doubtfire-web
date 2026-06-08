@@ -100,11 +100,17 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     TutorialStreamEnrolmentCondition: 'Tutorial Stream Enrolment',
     CampusCondition: 'Campus',
   };
-  readonly actionTypes = ['EmailStudentAction', 'EmailStaffAction', 'ChangeTargetGradeAction'];
+  readonly actionTypes = [
+    'EmailStudentAction',
+    'EmailStaffAction',
+    'ChangeTargetGradeAction',
+    'TaskCommentAction',
+  ];
   readonly actionTypeLabels: Record<string, string> = {
     EmailStudentAction: 'Send email to student',
     EmailStaffAction: 'Send email to staff',
     ChangeTargetGradeAction: 'Change Target Grade',
+    TaskCommentAction: 'Task Comment',
   };
   readonly gradeOperators = [
     'greater_than',
@@ -756,6 +762,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         return 'Send email to student';
       case 'EmailStaffAction':
         return `Send email to ${this.staffAudienceLabel(action)}`;
+      case 'TaskCommentAction':
+        return `Add comment to ${this.taskDefinitionLabel(action.task_definition_id)}`;
       default:
         return this.actionTypeLabel(action.type);
     }
@@ -767,7 +775,11 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return this.targetGradeNames[targetGrade] || `${targetGrade}`;
   }
 
-  taskDefinitionLabel(taskDefinitionId: number): string {
+  taskDefinitionLabel(taskDefinitionId: number | undefined): string {
+    if (taskDefinitionId === undefined || taskDefinitionId === null) {
+      return 'Task';
+    }
+
     const taskDefinition = this.taskDefinitions.find((task) => task.id === taskDefinitionId);
 
     if (!taskDefinition) {
@@ -877,6 +889,11 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       email_tutors: false,
       email_convenors: false,
     };
+
+    if (current.type === 'TaskCommentAction') {
+      this.newActions[rule.id].body = '';
+      this.newActions[rule.id].task_definition_id = this.taskDefinitions[0]?.id;
+    }
   }
 
   private loadSets(): void {
@@ -1279,9 +1296,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   actionsSummary(rule: CommunicationRule): string {
-    return (rule.actions || [])
-      .map((action) => `- ${this.actionTypeLabel(action.type)}`)
-      .join('\n');
+    return (rule.actions || []).map((action) => `- ${this.actionSummary(action)}`).join('\n');
   }
 
   private titleize(value: string): string {
