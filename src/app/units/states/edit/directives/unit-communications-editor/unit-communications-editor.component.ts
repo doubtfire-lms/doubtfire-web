@@ -1,7 +1,3 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {NestedTreeControl} from '@angular/cdk/tree';
-import {MatDialog} from '@angular/material/dialog';
-import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {Subscription} from 'rxjs';
 import {
   Campus,
@@ -26,9 +22,13 @@ import {
   Unit,
 } from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {NestedTreeControl} from '@angular/cdk/tree';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {
   CommunicationScheduleModalComponent,
   CommunicationScheduleModalData,
@@ -191,9 +191,12 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   editingRuleNameId?: number;
   setNameDraft = '';
   ruleNameDraft = '';
-  readonly treeControl = new NestedTreeControl<CommunicationTreeNode>((node) => node.children);
-  readonly treeDataSource = new MatTreeNestedDataSource<CommunicationTreeNode>();
-  private expandedSetIds = new Set<number>();
+  readonly treeControl: NestedTreeControl<CommunicationTreeNode> = new NestedTreeControl(
+    (node) => node.children,
+  );
+  readonly treeDataSource: MatTreeNestedDataSource<CommunicationTreeNode> =
+    new MatTreeNestedDataSource();
+  private expandedSetIds: Set<number> = new Set();
 
   private subscriptions: Subscription[] = [];
 
@@ -590,7 +593,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     });
   }
 
-  showActionForm(rule: CommunicationRule, mode: 'standard' | 'post_execution' = 'standard'): void {
+  showActionForm(rule: CommunicationRule, _mode: 'standard' | 'post_execution' = 'standard'): void {
     this.newActions[rule.id] = this.blankAction();
     this.actionFormOpen[rule.id] = true;
     this.editingActionId[rule.id] = undefined;
@@ -805,7 +808,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return rendered.replace(/\n/g, '<br />');
   }
 
-  refreshPreview(rule: CommunicationRule): void {
+  refreshPreview(_rule: CommunicationRule): void {
     const set = this.selectedSet();
     if (set) {
       this.loadPreviewForSet(set);
@@ -1135,7 +1138,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       });
   }
 
-  private showError(error: any): void {
+  private showError(error): void {
     this.alerts.error(error?.message || error?.error || error || 'Communication update failed');
   }
 

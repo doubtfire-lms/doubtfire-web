@@ -1,6 +1,11 @@
+import {
+  Campus,
+  CampusService,
+  CommunicationSetSchedule,
+  Unit,
+} from 'src/app/api/models/doubtfire-model';
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Campus, CampusService, CommunicationSetSchedule, Unit} from 'src/app/api/models/doubtfire-model';
 
 export interface CommunicationScheduleModalData {
   schedule?: CommunicationSetSchedule;

@@ -101,7 +101,7 @@
     <mat-drawer-content>
       @if (selectedSet(); as set) {
         <div class="flex min-h-[48rem] flex-col">
-          <div class="flex px-[20px] items-center justify-between">
+          <div class="flex items-center justify-between px-[20px]">
             <div class="flex min-w-0 flex-1 items-center gap-2 py-5">
               @if (editingSetNameId === set.id) {
                 <mat-form-field appearance="outline" class="w-full max-w-[450px]">
@@ -120,13 +120,13 @@
                   <mat-icon>close</mat-icon>
                 </button>
               } @else {
-                <h3 class="truncate mt-[16px]">{{ set.name }}</h3>
-                <button mat-icon-button (click)="beginEditSetName(set)" class="opacity-50 scale-75">
+                <h3 class="mt-[16px] truncate">{{ set.name }}</h3>
+                <button mat-icon-button (click)="beginEditSetName(set)" class="scale-75 opacity-50">
                   <mat-icon>edit</mat-icon>
                 </button>
               }
             </div>
-            <div class="flex gap-2 items-center">
+            <div class="flex items-center gap-2">
               <button
                 mat-flat-button
                 color="primary"
@@ -234,7 +234,7 @@
 
             @if (selectedRule(); as rule) {
               <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-                <div class="flex items-center gap-2 w-full">
+                <div class="flex w-full items-center gap-2">
                   @if (editingRuleNameId === rule.id) {
                     <mat-form-field appearance="outline" class="w-full max-w-[450px]">
                       <mat-label>Rule name</mat-label>
@@ -257,7 +257,7 @@
                       <button
                         mat-icon-button
                         (click)="beginEditRuleName(rule)"
-                        class="opacity-50 scale-75"
+                        class="scale-75 opacity-50"
                       >
                         <mat-icon>edit</mat-icon>
                       </button>
@@ -265,7 +265,7 @@
                   }
                 </div>
 
-                <div class="flex items-center gap-3 min-w-fit">
+                <div class="flex min-w-fit items-center gap-3">
                   <button mat-raised-button (click)="confirmExecuteRule(rule)">Execute Rule</button>
                 </div>
               </div>
@@ -293,9 +293,9 @@
                       </mat-form-field>
                     </div>
 
-                    <mat-list class="px-3 pt-5 overflow-visible">
+                    <mat-list class="overflow-visible px-3 pt-5">
                       @for (condition of rule.conditions; track condition.id) {
-                        <mat-list-item class="!h-auto items-start py-3 overflow-visible">
+                        <mat-list-item class="!h-auto items-start overflow-visible py-3">
                           @if (editingConditionId[rule.id] === condition.id) {
                             <div class="flex w-full flex-wrap items-start gap-3 pt-2">
                               <mat-form-field appearance="outline">
@@ -798,9 +798,9 @@
 
                 <mat-tab label="Actions">
                   <div class="flex flex-col gap-4 p-6">
-                    <mat-list class="px-3 pt-5 overflow-visible">
+                    <mat-list class="overflow-visible px-3 pt-5">
                       @for (action of rule.actions; track action.id) {
-                        <mat-list-item class="!h-auto items-start py-3 overflow-visible">
+                        <mat-list-item class="!h-auto items-start overflow-visible py-3">
                           @if (editingActionId[rule.id] === action.id) {
                             <div class="flex w-full flex-col gap-3 pt-2">
                               <mat-form-field appearance="outline">
@@ -852,7 +852,7 @@
                                         ></div>
                                       </div>
                                     }
-                                    <div class="gap-3 flex">
+                                    <div class="flex gap-3">
                                       <mat-form-field appearance="outline" class="w-full">
                                         <mat-label>Body</mat-label>
                                         <textarea
@@ -870,7 +870,7 @@
                                       </mat-form-field>
                                       @if (actionFor(rule).body) {
                                         <div
-                                          class="rounded border border-slate-200 bg-slate-50 p-3 w-full"
+                                          class="w-full rounded border border-slate-200 bg-slate-50 p-3"
                                         >
                                           <div class="mb-2 font-medium">Body Preview</div>
                                           <div
@@ -1109,7 +1109,7 @@
                     </mat-list>
 
                     @if (actionFormOpen[rule.id] && !editingActionId[rule.id]) {
-                      <div class="flex flex-wrap flex-col items-center gap-3">
+                      <div class="flex flex-col flex-wrap items-center gap-3">
                         <mat-form-field appearance="outline">
                           <mat-label>Action</mat-label>
                           <mat-select
@@ -1160,7 +1160,7 @@
                                 </div>
                               }
 
-                              <div class="gap-3 flex">
+                              <div class="flex gap-3">
                                 <mat-form-field appearance="outline" class="w-full">
                                   <mat-label>Body</mat-label>
                                   <textarea
@@ -1178,7 +1178,7 @@
                                 </mat-form-field>
                                 @if (actionFor(rule).body) {
                                   <div
-                                    class="rounded border border-slate-200 bg-slate-50 p-3 w-full"
+                                    class="w-full rounded border border-slate-200 bg-slate-50 p-3"
                                   >
                                     <div class="mb-2 font-medium">Body Preview</div>
                                     <div
@@ -1314,7 +1314,7 @@
                         </button>
                       </div>
                     } @else {
-                      <div class="flex justify-center items-center">
+                      <div class="flex items-center justify-center">
                         <button mat-stroked-button color="primary" (click)="showActionForm(rule)">
                           <mat-icon>add</mat-icon>
                           Add action
@@ -1444,7 +1444,7 @@
                 </mat-tab>
               </mat-tab-group>
             } @else {
-              <div class="flex h-full items-center justify-center text-black/60 mt-5">
+              <div class="mt-5 flex h-full items-center justify-center text-black/60">
                 Select a communication rule to edit its conditions, actions, and preview.
               </div>
             }
