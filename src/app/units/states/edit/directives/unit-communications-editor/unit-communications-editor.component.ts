@@ -71,6 +71,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     'student_id',
     'campus',
     'target_grade',
+    'spec_con_days',
     'last_sign_in_at',
   ];
 
@@ -84,6 +85,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     'TaskDefinitionStatusCondition',
     'TaskStatusCountCondition',
     'LoginStatusCondition',
+    'SpecConCondition',
     'TutorialEnrolmentCondition',
     'TutorialStreamEnrolmentCondition',
     'CampusCondition',
@@ -93,6 +95,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     TaskDefinitionStatusCondition: 'Task Status',
     TaskStatusCountCondition: 'Task Status Count',
     LoginStatusCondition: 'Login Status',
+    SpecConCondition: 'Special Consideration',
     TutorialEnrolmentCondition: 'Tutorial Enrolment',
     TutorialStreamEnrolmentCondition: 'Tutorial Stream Enrolment',
     CampusCondition: 'Campus',
@@ -710,6 +713,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     switch (conditionType) {
       case 'TargetGradeCondition':
       case 'TaskStatusCountCondition':
+      case 'SpecConCondition':
         return this.gradeOperators;
       case 'TaskDefinitionStatusCondition':
         return this.equalityOperators;
@@ -859,6 +863,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       this.newConditions[rule.id].task_statuses = [];
       this.newConditions[rule.id].task_status_count = 2;
       this.newConditions[rule.id].task_target_grade = 1;
+    }
+
+    if (current.type === 'SpecConCondition') {
+      this.newConditions[rule.id].spec_con_days = 0;
     }
   }
 
@@ -1162,6 +1170,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       task_status_count: 'Task Status Count',
       task_target_grade: 'Task Target Grade',
       last_sign_in_at: 'Last Sign In',
+      spec_con_days: 'Special Consideration Days',
       tutorial_id: 'Tutorial',
       tutorial_stream_id: 'Tutorial Stream',
       campus_id: 'Campus',

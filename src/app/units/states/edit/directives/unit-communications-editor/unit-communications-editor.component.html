@@ -21,20 +21,20 @@
         Communication Sets & Rules
       </div> -->
 
-      <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl" class="py-2">
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+      <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding class="p-0">
           <div
             class="min-h-[64px] w-full border-b border-gray-200 px-4"
             [ngClass]="{'bg-gray-100': isSelectedRuleNode(node)}"
           >
-            <div class="flex items-center justify-between gap-3">
+            <div class="flex w-full items-center justify-between gap-3">
               <button
                 mat-button
-                class="min-h-[64px] min-w-0 flex-1 justify-start px-0"
+                class="min-h-[64px] w-full min-w-0 flex-1 justify-start px-0"
                 (click)="selectRuleNode(node.set!, node.rule!)"
               >
                 <div class="min-w-0 text-left">
-                  <div class="truncate font-medium">{{ node.rule?.name }}</div>
+                  <div class="truncate font-medium">Rule: {{ node.rule?.name }}</div>
                   <div class="text-black/30">
                     {{ node.rule?.operator === 'and' ? 'All conditions' : 'Any condition' }}
                   </div>
@@ -69,7 +69,7 @@
                 class="min-w-0 flex-1 justify-start px-2"
                 (click)="selectSetNode(node.set!)"
               >
-                <span class="truncate text-left">{{ node.set?.name }}</span>
+                <span class="truncate text-left">Set: {{ node.set?.name }}</span>
               </button>
             </div>
 
@@ -418,6 +418,17 @@
                                     />
                                   </mat-form-field>
                                 }
+                                @case ('SpecConCondition') {
+                                  <mat-form-field appearance="outline" class="w-32">
+                                    <mat-label>Days</mat-label>
+                                    <input
+                                      matInput
+                                      type="number"
+                                      step="1"
+                                      [(ngModel)]="conditionFor(rule).spec_con_days"
+                                    />
+                                  </mat-form-field>
+                                }
                                 @case ('TutorialEnrolmentCondition') {
                                   <mat-form-field appearance="outline" class="min-w-[550px]">
                                     <mat-label>Tutorial</mat-label>
@@ -550,6 +561,22 @@
                                         class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
                                       >
                                         {{ dateLabel(condition.last_sign_in_at) }}
+                                      </span>
+                                    }
+                                    @case ('SpecConCondition') {
+                                      Students with
+                                      <strong class="font-semibold text-black/90"
+                                        >Special Consideration Days</strong
+                                      >
+                                      <span
+                                        class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                                      >
+                                        {{ operatorLabel(condition.operator) }}
+                                      </span>
+                                      <span
+                                        class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
+                                      >
+                                        {{ condition.spec_con_days }}
                                       </span>
                                     }
                                     @case ('TutorialEnrolmentCondition') {
@@ -721,6 +748,17 @@
                                 matInput
                                 type="datetime-local"
                                 [(ngModel)]="conditionFor(rule).last_sign_in_at"
+                              />
+                            </mat-form-field>
+                          }
+                          @case ('SpecConCondition') {
+                            <mat-form-field appearance="outline" class="w-32">
+                              <mat-label>Days</mat-label>
+                              <input
+                                matInput
+                                type="number"
+                                step="1"
+                                [(ngModel)]="conditionFor(rule).spec_con_days"
                               />
                             </mat-form-field>
                           }
@@ -1419,6 +1457,13 @@
                               {{
                                 student.target_grade ? targetGradeName(student.target_grade) : '-'
                               }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="spec_con_days">
+                            <th mat-header-cell *matHeaderCellDef>Spec Con Days</th>
+                            <td mat-cell *matCellDef="let student">
+                              {{ student.spec_con_days ?? '-' }}
                             </td>
                           </ng-container>
 

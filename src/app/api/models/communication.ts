@@ -39,6 +39,7 @@ export class CommunicationCondition extends Entity {
   task_status_count?: number;
   task_target_grade?: number;
   last_sign_in_at?: string;
+  spec_con_days?: number;
   tutorial_id?: number;
   tutorial_stream_id?: number;
   campus_id?: number;
@@ -58,6 +59,7 @@ export interface CommunicationRulePreviewStudent {
   student_id?: string;
   campus?: string;
   target_grade?: number;
+  spec_con_days?: number;
   last_sign_in_at?: string;
 }
 
