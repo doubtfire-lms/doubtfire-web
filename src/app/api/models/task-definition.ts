@@ -1,15 +1,15 @@
-import {HttpClient} from '@angular/common/http';
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {HttpClient} from '@angular/common/http';
 import {TaskDefinitionService} from '../services/task-definition.service';
+import {DiscussionPrompt} from './discussion-prompt';
 import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
 import {Task} from './doubtfire-model';
-import {TaskPrerequisite} from './task-prerequisite';
-import {DiscussionPrompt} from './discussion-prompt';
 import {OverseerStep} from './overseer/overseer-step';
+import {TaskPrerequisite} from './task-prerequisite';
 
 export interface UploadRequirement {
   key: string;
@@ -307,27 +307,31 @@ export class TaskDefinition extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.unit.id}/task_definitions/${this.id}/jplag_report`;
   }
 
-  public deleteTaskSheet(): Observable<any> {
-    const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete(this.taskSheetUploadUrl).pipe(tap(() => (this.hasTaskSheet = false)));
-  }
-
-  public deleteTaskResources(): Observable<any> {
+  public deleteTaskSheet(): Observable<void> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient
-      .delete(this.taskResourcesUploadUrl)
+      .delete<void>(this.taskSheetUploadUrl)
+      .pipe(tap(() => (this.hasTaskSheet = false)));
+  }
+
+  public deleteTaskResources(): Observable<void> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient
+      .delete<void>(this.taskResourcesUploadUrl)
       .pipe(tap(() => (this.hasTaskResources = false)));
   }
 
-  public deleteScormData(): Observable<any> {
-    const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete(this.scormDataUploadUrl).pipe(tap(() => (this.hasScormData = false)));
-  }
-
-  public deleteOverseerResources(): Observable<any> {
+  public deleteScormData(): Observable<void> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient
-      .delete(this.taskOverseerResourcesUploadUrl)
+      .delete<void>(this.scormDataUploadUrl)
+      .pipe(tap(() => (this.hasScormData = false)));
+  }
+
+  public deleteOverseerResources(): Observable<void> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient
+      .delete<void>(this.taskOverseerResourcesUploadUrl)
       .pipe(tap(() => (this.hasTaskAssessmentResources = false)));
   }
 

@@ -1,29 +1,37 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { TiiAction } from 'src/app/api/models/doubtfire-model';
-import { TiiActionService } from 'src/app/api/services/tii-action.service';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {TiiAction} from 'src/app/api/models/doubtfire-model';
+import {TiiActionService} from 'src/app/api/services/tii-action.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 
 @Component({
-    selector: 'f-tii-action-log',
-    templateUrl: './tii-action-log.component.html',
-    styleUrls: ['./tii-action-log.component.scss'],
-    standalone: false
+  selector: 'f-tii-action-log',
+  templateUrl: './tii-action-log.component.html',
+  styleUrls: ['./tii-action-log.component.scss'],
+  standalone: false,
 })
 export class TiiActionLogComponent implements AfterViewInit {
-  @ViewChild(MatTable, { static: false }) table: MatTable<TiiAction>;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatTable, {static: false}) table: MatTable<TiiAction>;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   public tiiActionsSource: MatTableDataSource<TiiAction>;
-  public columns: string[] = ['type', 'lastRun', 'retries', 'retry', 'errorMessage', 'tiiActionTools']; //, 'complete', 'retries', 'lastRun', 'errorCode', 'log', 'tiiActionAction'];
+  public columns: string[] = [
+    'type',
+    'lastRun',
+    'retries',
+    'retry',
+    'errorMessage',
+    'tiiActionTools',
+  ]; //, 'complete', 'retries', 'lastRun', 'errorCode', 'log', 'tiiActionAction'];
   public filter: string;
 
-  constructor(private tiiActionService: TiiActionService, private alertService: AlertService) {
-
-  }
+  constructor(
+    private tiiActionService: TiiActionService,
+    private alertService: AlertService,
+  ) {}
 
   ngAfterViewInit(): void {
     this.tiiActionService.query().subscribe((actions) => {
@@ -31,8 +39,10 @@ export class TiiActionLogComponent implements AfterViewInit {
       this.tiiActionsSource = new MatTableDataSource<TiiAction>(actions);
       this.tiiActionsSource.paginator = this.paginator;
       this.tiiActionsSource.sort = this.sort;
-      this.tiiActionsSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
-
+      this.tiiActionsSource.filterPredicate = (
+        data: TiiAction & {matches(filter: string): boolean},
+        filter: string,
+      ) => data.matches(filter);
     });
   }
 
@@ -68,20 +78,20 @@ export class TiiActionLogComponent implements AfterViewInit {
   }
 
   public retryAction(action: TiiAction) {
-    this.tiiActionService.put(action, {
-      body: {
-        action: 'retry'
-      }
-    }).subscribe({
-      next: (updatedAction) => {
-        action.retry = true;
-        this.alertService.success('Action has been queued for retry');
-      },
-      error: (error) => {
-        this.alertService.error('Failed to queue action for retry');
-      }
-    });
+    this.tiiActionService
+      .put(action, {
+        body: {
+          action: 'retry',
+        },
+      })
+      .subscribe({
+        next: () => {
+          action.retry = true;
+          this.alertService.success('Action has been queued for retry');
+        },
+        error: (error) => {
+          this.alertService.error(`Failed to queue action for retry: ${error}`);
+        },
+      });
   }
-
-
 }

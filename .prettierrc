@@ -1,9 +1,22 @@
 {
   "printWidth": 100,
   "tabWidth": 2,
-  "tabs": false,
   "singleQuote": true,
-  "semicolon": true,
+  "semi": true,
   "quoteProps": "preserve",
-  "bracketSpacing": false
+  "endOfLine": "lf",
+  "trailingComma": "all",
+  "bracketSpacing": false,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "^@angular/(.*)$",
+    "^rxjs/(.*)$",
+    "^@gov/(.*)$",
+    "^@core/(.*)$",
+    "^@shared/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": false,
+  "importOrderSortSpecifiers": true,
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"]
 }

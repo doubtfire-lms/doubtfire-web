@@ -1,4 +1,4 @@
-<div class="flex h-full w-full flex-col overflow-hidden">
+<div class="flex size-full flex-col overflow-hidden">
   <div class="z-10 flex w-full shrink-0 items-center gap-1">
     <mat-tab-group
       class="w-full"
@@ -36,7 +36,7 @@
               Staff Notes
               @if (task.project.staffNoteCount) {
                 <span
-                  class="ml-0.5 inline-flex h-[22px] w-[22px] items-center justify-center rounded-full text-[12px] font-[600] p-0 leading-[22px] text-white"
+                  class="ml-0.5 inline-flex h-[22px] w-[22px] items-center justify-center rounded-full p-0 text-[12px] font-[600] leading-[22px] text-white"
                   style="background-color: #3939ff"
                 >
                   {{ task.project.staffNoteCount }}
@@ -115,7 +115,7 @@
       @case (DashboardViews.task) {
         @if (task && task.blockedByPrerequisiteTasks()) {
           <div
-            class="flex items-center text-center px-2.5 py-2 bg-yellow-100 border-l-4 border-r-4 border-yellow-500 text-yellow-700"
+            class="flex items-center border-x-4 border-yellow-500 bg-yellow-100 px-2.5 py-2 text-center text-yellow-700"
           >
             <mat-icon class="mr-1">warning</mat-icon>
             Warning: This task has
@@ -129,7 +129,7 @@
         @if (task.definition.hasTaskSheet) {
           <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()" [startPage]="1"></f-pdf-viewer>
         } @else {
-          <div class="flex flex-col w-full h-full justify-center items-center">
+          <div class="flex size-full flex-col items-center justify-center">
             <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
           </div>
         }
@@ -138,7 +138,7 @@
         @if (task.hasPdf) {
           <f-pdf-viewer [pdfUrl]="task.submissionUrl()" [startPage]="2"></f-pdf-viewer>
         } @else {
-          <div class="flex flex-col w-full h-full justify-center items-center">
+          <div class="flex size-full flex-col items-center justify-center">
             <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
           </div>
         }
@@ -189,7 +189,7 @@
 
   <!-- Render if no PDF URL is available for the current view -->
   <ng-template #noPdfUrl>
-    <div class="flex flex-col w-full h-full justify-center items-center">
+    <div class="flex size-full flex-col items-center justify-center">
       <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
     </div>
   </ng-template>

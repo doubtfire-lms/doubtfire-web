@@ -5,7 +5,7 @@
     [ngClass]="{expanded: showSearchOptions, mobile: mobile}"
   >
     <div class="flex items-center">
-      <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
+      <button mat-icon-button aria-label="Search Icon" disabled class="flex flex-none items-center">
         <mat-icon class="flex items-center" disabled>search</mat-icon>
       </button>
 
@@ -22,7 +22,7 @@
       </div>
       @if (collapsable) {
         <button
-          class="flex-none flex items-center"
+          class="flex flex-none items-center"
           matTooltip="Filter options"
           matTooltipPosition="below"
           matTooltipShowDelay="400"
@@ -35,7 +35,7 @@
       }
       @if (!isTaskDefMode) {
         <button
-          class="flex-none flex items-center"
+          class="flex flex-none items-center"
           matTooltip="Refresh the task inbox"
           matTooltipPosition="below"
           matTooltipShowDelay="400"
@@ -104,7 +104,7 @@
       >
         <form class="search-options">
           <div class="task-definition">
-            <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-row items-center justify-between">
               <mat-form-field class="flex-1">
                 <mat-label>Task</mat-label>
                 <mat-select
@@ -135,7 +135,7 @@
             </div>
           </div>
           <!--/task-definition-->
-          <div class="flex flex-row justify-between items-center">
+          <div class="flex flex-row items-center justify-between">
             <mat-form-field class="flex-1">
               <mat-label>Students</mat-label>
               <mat-select
@@ -159,7 +159,7 @@
               <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
             </button>
           </div>
-          <div class="flex flex-row justify-between items-center">
+          <div class="flex flex-row items-center justify-between">
             <mat-form-field class="flex-1">
               <mat-label>Tutors</mat-label>
               <mat-select
@@ -272,7 +272,7 @@
   @if (filteredTasks && !loading) {
     <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60">
       @if (filteredTasks.length) {
-        <div class="w-full text-gray-400 text-center mt-2.5">{{ filteredTasks.length }} Tasks</div>
+        <div class="mt-2.5 w-full text-center text-gray-400">{{ filteredTasks.length }} Tasks</div>
       }
       <mat-list class="m-0 p-0">
         <mat-list-item
@@ -305,7 +305,7 @@
                 ></span>
                 <user-icon class="self-center" [user]="task.project.student" [size]="30">
                 </user-icon>
-                <div class="task-list-data truncate flex-1" [hidden]="isNarrow">
+                <div class="task-list-data flex-1 truncate" [hidden]="isNarrow">
                   <h4 class="student-name flex min-w-0 items-center gap-0.5">
                     @if (task.moderationType === 'escalation') {
                       <mat-icon

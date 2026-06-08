@@ -1,7 +1,7 @@
 @use 'sass:color';
 
 // The generated <rating> from ui-bootstrap becomes this
-span[role="slider"] {
+span[role='slider'] {
   outline: none;
 }
 .rating-outline {

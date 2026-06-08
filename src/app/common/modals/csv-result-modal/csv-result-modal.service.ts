@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {CsvResultModalComponent} from './csv-result-modal.component';
 import {AlertService} from '../../services/alert.service';
+import {CsvResultModalComponent} from './csv-result-modal.component';
 
 export interface CsvRow {
   row: unknown;

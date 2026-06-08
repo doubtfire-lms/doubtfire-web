@@ -1,10 +1,10 @@
-import {HttpClient, HttpParams} from '@angular/common/http';
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {GroupService} from '../services/group.service';
 import {MarkingSessionService} from '../services/marking-session.service';
 import {ProjectService} from '../services/project.service';
@@ -100,8 +100,6 @@ export class Unit extends Entity {
   groupMemberships: GroupMembership[];
 
   readonly studentCache: EntityCache<Project> = new EntityCache<Project>();
-
-  analytics: {} = {};
 
   public override toJson<T extends Entity>(
     mappingData: EntityMapping<T>,
@@ -220,7 +218,7 @@ export class Unit extends Entity {
     taskDefinitionService
       .delete({unitId: this.id, id: taskDef.id}, {cache: this.taskDefinitionCache, entity: taskDef})
       .subscribe({
-        next: (response) => {
+        next: () => {
           alerts.success('Task Deleted', 2000);
         },
         error: (message) => alerts.error(message, 6000),
@@ -479,7 +477,7 @@ export class Unit extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/grades/csv`;
   }
 
-  public taskStatusFactor(td: TaskDefinition): number {
+  public taskStatusFactor(_td: TaskDefinition): number {
     return 1;
   }
 

@@ -29,7 +29,9 @@ mat-action-list {
   border-radius: 72px;
   color: #fff;
   height: 40px;
-  transition: width 0.1s, height 0.1s;
+  transition:
+    width 0.1s,
+    height 0.1s;
   width: 40px;
   border: none;
   outline: none;
@@ -80,7 +82,7 @@ mat-action-list {
 }
 
 :host .introduction-text p {
-  font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif";
+  font-family: 'Helvetica Neue', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif';
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   line-height: 1.1;
@@ -93,7 +95,7 @@ mat-action-list {
 
 :host #discussionRecorderContainer {
   line-height: 1.2em;
-  font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif";
+  font-family: 'Helvetica Neue', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif';
 
   p {
     font-size: 1.2em;

@@ -1,9 +1,9 @@
 @if (loading) {
-  <div class="w-full flex justify-center items-center h-full text-gray-400 italic">
+  <div class="flex size-full items-center justify-center italic text-gray-400">
     Loading members...
   </div>
 } @else if (!selectedGroup || selectedGroup.members.length === 0) {
-  <div class="w-full p-2.5 flex flex-col justify-center items-center h-full text-gray-400">
+  <div class="flex size-full flex-col items-center justify-center p-2.5 text-gray-400">
     <mat-icon class="scale-125">group_off</mat-icon>
     <p class="p-2.5">There are no members in this group</p>
   </div>

@@ -1,4 +1,4 @@
-<div class="flex flex-row justify-start items-start">
+<div class="flex flex-row items-start justify-start">
   <a
     [routerLink]="studentDashboardRoute"
     [queryParams]="unselected ? null : {tutor: true}"
@@ -11,7 +11,7 @@
       style="margin-right: 8px"
     ></user-icon>
   </a>
-  <div class="flex-col justify-center items-start" style="line-height: 0.5em; margin-top: 4px">
+  <div class="flex-col items-start justify-center" style="line-height: 0.5em; margin-top: 4px">
     <div style="margin-top: 6px" id="placeholder1" [hidden]="!unselected"></div>
     <div id="placeholder2" [hidden]="!unselected"></div>
     <a

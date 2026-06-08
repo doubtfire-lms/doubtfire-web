@@ -1,4 +1,4 @@
-<div class="flex justify-end mb-3">
+<div class="mb-3 flex justify-end">
   <button mat-stroked-button (click)="loadAssessments(true)">Refresh</button>
 </div>
 <mat-accordion>
@@ -9,7 +9,7 @@
       [disabled]="!oa.reportReady"
       [expanded]="oa.id === loadOverseerAssessmentId && oa.reportReady"
     >
-      <mat-expansion-panel-header class="flex justify-between items-center">
+      <mat-expansion-panel-header class="flex items-center justify-between">
         <mat-panel-title class="flex items-center gap-3">
           <status-icon [status]="oa.taskStatus"> </status-icon>
           Submission {{ overseerAssessments.length - idx }}: {{ oa.timestamp | humanizedDate }}
@@ -21,7 +21,7 @@
           }
         </mat-panel-title>
         @if (oa.reportReady) {
-          <div class="flex gap-3 items-center">
+          <div class="flex items-center gap-3">
             <span class="text-gray-500"> {{ oa.passedSteps }} / {{ oa.totalSteps }}</span>
             @if (oa.passedSteps === oa.totalSteps) {
               <mat-icon color="primary">done</mat-icon>
@@ -67,7 +67,7 @@
             }
           </div>
         } @else {
-          <div class="flex gap-3 uppercase items-center">
+          <div class="flex items-center gap-3 uppercase">
             Tests In Progress
             <mat-progress-spinner [diameter]="25" mode="indeterminate"></mat-progress-spinner>
           </div>
@@ -77,7 +77,7 @@
       <mat-accordion>
         @for (result of oa.stepResultsCache.values | async; track result.id; let idx = $index) {
           <mat-expansion-panel>
-            <mat-expansion-panel-header class="flex justify-between items-center">
+            <mat-expansion-panel-header class="flex items-center justify-between">
               <mat-panel-title>
                 Step {{ idx + 1 }}: {{ result.overseerStep?.displayName }}</mat-panel-title
               >
@@ -92,7 +92,7 @@
             <!-- <p>Pass?: {{ result.pass }}</p> -->
 
             @if (!result.pass) {
-              <p class="text-gray-500 text-left w-full tracking-wide p-1 text-normal">
+              <p class="text-normal w-full p-1 text-left tracking-wide text-gray-500">
                 {{ result.feedbackMessage }}
               </p>
             }
@@ -102,7 +102,7 @@
               result.expectedOutput !== result.stdout &&
               (result.overseerStep?.stepType === 'output_diff' || !result.overseerStep)
             ) {
-              <div class="flex gap-1 mb-3 w-fill justify-center items-center">
+              <div class="w-fill mb-3 flex items-center justify-center gap-1">
                 <button
                   mat-stroked-button
                   [color]="viewOutput === 'your_output' ? 'primary' : undefined"
@@ -140,11 +140,11 @@
                     [options]="diffEditorOptions"
                     [originalModel]="{
                       language: 'plaintext',
-                      code: result.expectedOutput
+                      code: result.expectedOutput,
                     }"
                     [modifiedModel]="{
                       language: 'plainttext',
-                      code: result.stdout
+                      code: result.stdout,
                     }"
                   ></ngx-monaco-diff-editor>
                 }
@@ -163,18 +163,18 @@
               }
             } @else if (result.stdout) {
               <pre
-                class="max-w-full max-h-44 overflow-scroll whitespace-pre-wrap break-words scrollbar-gutter-stable"
+                class="scrollbar-gutter-stable max-h-44 max-w-full overflow-scroll whitespace-pre-wrap break-words"
               ><code>{{result.stdout}}</code></pre>
             } @else if (result.pass) {
-              <div class="uppercase text-gray-400 text-center w-full tracking-wide">SUCCESS</div>
-              <div class="uppercase text-gray-200 text-center w-full tracking-wide p-1 text-normal">
+              <div class="w-full text-center uppercase tracking-wide text-gray-400">SUCCESS</div>
+              <div class="text-normal w-full p-1 text-center uppercase tracking-wide text-gray-200">
                 (No Output)
               </div>
             }
           </mat-expansion-panel>
         }
         @if (loadingAssessments.has(oa.id)) {
-          <div class="w-full flex justify-center items-center">
+          <div class="flex w-full items-center justify-center">
             <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
           </div>
         } @else {
@@ -182,11 +182,11 @@
             <!-- TODO: filter oa.stepsSkipped, if this overseer assessment passed, then we can ignore this (dont render) skipped step -->
             <!-- TODO: because it proably means the test was added after the assessment -->
             <mat-expansion-panel disabled>
-              <mat-expansion-panel-header class="flex justify-between items-center">
+              <mat-expansion-panel-header class="flex items-center justify-between">
                 <mat-panel-title>
                   Step {{ oa.stepResultsCache.currentValues.length + idx + 1 }}:
                   {{ skipped?.displayName ?? '-' }}
-                  <span class="italic ml-3">(Skipped)</span>
+                  <span class="ml-3 italic">(Skipped)</span>
                 </mat-panel-title>
 
                 <mat-icon class="opacity-80">pause</mat-icon>
@@ -197,7 +197,7 @@
       </mat-accordion>
     </mat-expansion-panel>
   } @empty {
-    <div class="flex flex-col w-full h-full justify-center items-center text-[#c5c5c5]">
+    <div class="flex size-full flex-col items-center justify-center text-[#c5c5c5]">
       <mat-icon style="height: 120px; width: 120px; font-size: 120px; color: #c5c5c5"
         >subtitles_off</mat-icon
       >

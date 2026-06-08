@@ -5,7 +5,11 @@
       <th mat-header-cell *matHeaderCellDef>Unit Code</th>
       <td mat-cell *matCellDef="let unitToImport">
         <mat-form-field appearance="outline">
-          <input matInput [(ngModel)]="unitToImport.unitCode" (input)="codeChange($event.target.value, unitToImport)" />
+          <input
+            matInput
+            [(ngModel)]="unitToImport.unitCode"
+            (input)="codeChange($event.target.value, unitToImport)"
+          />
         </mat-form-field>
       </td>
     </ng-container>

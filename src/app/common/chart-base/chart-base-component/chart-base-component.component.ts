@@ -1,6 +1,6 @@
-import { Component, ViewContainerRef } from '@angular/core';
-import { TooltipService } from '@swimlane/ngx-charts';
-import { AppInjector } from "src/app/app-injector";
+import {TooltipService} from '@swimlane/ngx-charts';
+import {AppInjector} from 'src/app/app-injector';
+import {Component, ViewContainerRef} from '@angular/core';
 
 /**
  * @title chart-base-component
@@ -9,8 +9,8 @@ import { AppInjector } from "src/app/app-injector";
  * Child classes need to extend this class and call super() in the constructor, passing in the ViewContainerRef.
  */
 @Component({
-    template: `<p>chart-base-component works!</p>`,
-    standalone: false
+  templateUrl: './chart-base-component.component.html',
+  standalone: false,
 })
 export class ChartBaseComponent {
   constructor(public viewContainerRef: ViewContainerRef) {

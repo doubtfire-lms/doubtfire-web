@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { TaskSubmissionCardComponent } from './task-submission-card.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {TaskSubmissionCardComponent} from './task-submission-card.component';
 
 describe('TaskSubmissionCardComponent', () => {
   let component: TaskSubmissionCardComponent;
@@ -8,9 +7,8 @@ describe('TaskSubmissionCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TaskSubmissionCardComponent ]
-    })
-    .compileComponents();
+      declarations: [TaskSubmissionCardComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TaskSubmissionCardComponent);
     component = fixture.componentInstance;

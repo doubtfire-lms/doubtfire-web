@@ -5,6 +5,12 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
 import {Project, TaskDefinition, TaskStatus, TaskStatusEnum} from './doubtfire-model';
 
+export interface TaskPrerequisiteData {
+  taskDefinitionId: number;
+  prerequisiteId: number;
+  taskStatus: TaskStatusEnum;
+}
+
 export class TaskPrerequisite extends Entity {
   id: number;
 
@@ -28,7 +34,7 @@ export class TaskPrerequisite extends Entity {
     complete: 3,
   };
 
-  constructor(json: any) {
+  constructor(json: TaskPrerequisiteData) {
     super();
     this.taskDefinitionId = json.taskDefinitionId;
     this.prerequisiteId = json.prerequisiteId;
@@ -61,12 +67,12 @@ export class TaskPrerequisite extends Entity {
     return false;
   }
 
-  public delete(): Observable<unknown> {
+  public delete(): Observable<void> {
     const taskPrerequisiteService: TaskPrerequisiteService =
       AppInjector.get(TaskPrerequisiteService);
 
     return taskPrerequisiteService
-      .delete(
+      .delete<void>(
         {
           unitId: this.taskDefinition.unit.id,
           taskDefId: this.taskDefinitionId,

@@ -3,7 +3,7 @@
   <mat-dialog-content>
     <div>
       @for (jobEntry of sidekiqJobs; track jobEntry) {
-        <div class="flex justify-between items-center p-1">
+        <div class="flex items-center justify-between p-1">
           <div>{{ jobEntry.title }}</div>
           <div class="flex items-center">
             <div class="mr-6 text-center">{{ jobEntry.job?.status?.toUpperCase() }}</div>

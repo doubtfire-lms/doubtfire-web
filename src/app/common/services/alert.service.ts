@@ -1,7 +1,11 @@
 import {Component, Inject, Injectable, inject} from '@angular/core';
 import {MAT_SNACK_BAR_DATA, MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
-
 import {ConfettiService} from './confetti.service';
+
+interface AlertData {
+  message: string;
+  icon: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -43,20 +47,11 @@ export class AlertService {
 }
 
 @Component({
-    selector: 'f-alert',
-    template: `<span class="flex space-x-2.5 items-center center-items">
-    <span class="flex">
-      <mat-icon>{{ data?.icon }}</mat-icon>
-    </span>
-    <span class="flex-grow">{{ data?.message }}</span>
-
-    <span matSnackBarActions class="ml-auto">
-      <button mat-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">Close</button>
-    </span></span
-  >`,
-    standalone: false
+  selector: 'f-alert',
+  templateUrl: './alert.component.html',
+  standalone: false,
 })
 export class AlertComponent {
   snackBarRef = inject(MatSnackBarRef);
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {}
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: AlertData) {}
 }

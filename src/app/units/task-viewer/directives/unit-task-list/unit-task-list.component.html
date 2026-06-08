@@ -2,7 +2,7 @@
   <!-- Search Box -->
   <div class="omnisearch rounded-t-2xl md:rounded-2xl">
     <div class="flex items-center">
-      <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
+      <button mat-icon-button aria-label="Search Icon" disabled class="flex flex-none items-center">
         <mat-icon class="flex items-center" disabled>search</mat-icon>
       </button>
       <div class="grow">
@@ -20,11 +20,11 @@
   </div>
 
   <!-- Scrollable Unit Task List -->
-  <div class="h-screen scrollable" itemSize="60">
+  <div class="scrollable h-screen" itemSize="60">
     <mat-nav-list #taskDefinitions>
       @for (taskDef of filteredTaskDefinitions; track taskDef) {
         <mat-list-item
-          class="flex w-full items-center p-1 h-[65px] cursor-pointer border-b border-gray-200"
+          class="flex h-[65px] w-full cursor-pointer items-center border-b border-gray-200 p-1"
           [disableRipple]="true"
           (click)="setSelectedTaskDefinition(taskDef)"
           [ngClass]="{
@@ -33,20 +33,20 @@
           }"
         >
           @if (taskDef) {
-            <div class="flex justify-between items-center w-full gap-2">
-              <div class="flex items-center gap-3 flex-1 min-w-0">
-                <div class="flex items-center gap-3 min-w-0 truncate text-ellipsis">
+            <div class="flex w-full items-center justify-between gap-2">
+              <div class="flex min-w-0 flex-1 items-center gap-3">
+                <div class="flex min-w-0 items-center gap-3 truncate text-ellipsis">
                   <div class="flex flex-col justify-start truncate text-ellipsis">
                     <div class="truncate text-ellipsis">{{ taskDef.name }}</div>
 
-                    <div class="flex items-center gap-0.5 min-w-0">
+                    <div class="flex min-w-0 items-center gap-0.5">
                       @if (taskDef.isGroupTask()) {
-                        <mat-icon class="text-gray-600 scale-75 shrink-0">groups</mat-icon>
+                        <mat-icon class="shrink-0 scale-75 text-gray-600">groups</mat-icon>
                       } @else {
-                        <mat-icon class="text-gray-600 scale-75 shrink-0">person</mat-icon>
+                        <mat-icon class="shrink-0 scale-75 text-gray-600">person</mat-icon>
                       }
 
-                      <div class="text-[14px] text-gray-500 truncate leading-none">
+                      <div class="truncate text-[14px] leading-none text-gray-500">
                         {{ taskDef.abbreviation }}
                         -
                         {{ gradeNames[taskDef.targetGrade] }} Task
@@ -84,7 +84,7 @@
                 </div>
               </div>
               @if (taskListItem(taskDef); as task) {
-                <div class="relative flex shrink-0 items-center justify-center pr-0.5 mr-1">
+                <div class="relative mr-1 flex shrink-0 items-center justify-center pr-0.5">
                   <status-icon [status]="task.status"></status-icon>
 
                   <div
@@ -92,17 +92,17 @@
                   >
                     @if (task.numNewComments > 0) {
                       <span
-                        class="text-[12px] leading-none bg-blue-500 text-white w-[20px] h-[20px] flex justify-center items-center font-bold rounded-full"
+                        class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-blue-500 text-[12px] font-bold leading-none text-white"
                       >
                         {{ task.numNewComments }}
                       </span>
                     }
                     @if (task.similaritiesDetected) {
                       <span
-                        class="flex justify-center items-center bg-[#da532c] rounded-full w-[20px] h-[20px]"
+                        class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#da532c]"
                         matTooltip="Similarities Detected"
                       >
-                        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] text-white font-bold"
+                        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white"
                           >visibility</mat-icon
                         >
                       </span>
@@ -119,20 +119,20 @@
                     }
                     @if (task.hasQualityPoints()) {
                       <span
-                        class="flex justify-center items-center bg-[#e10963] rounded-full w-[22px] h-[22px] font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+                        class="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#e10963] font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
                       >
-                        <span class="text-[8px] mb-[6px] mr-[1px]">{{ task.qualityPts }}</span>
+                        <span class="mb-[6px] mr-px text-[8px]">{{ task.qualityPts }}</span>
                         <span class="font-extrabold"> &frasl; </span>
-                        <span class="text-[8px] mt-[6px] ml-[1px]">{{
+                        <span class="ml-px mt-[6px] text-[8px]">{{
                           task.definition.maxQualityPts
                         }}</span>
                       </span>
                     }
                     @if (task.isDueSoon() && !task.inFinalState()) {
                       <span
-                        class="flex justify-center items-center bg-[#fab143] rounded-full w-[20px] h-[20px] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+                        class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#fab143] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
                       >
-                        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] text-black font-bold"
+                        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-black"
                           >schedule</mat-icon
                         >
                       </span>
@@ -143,21 +143,21 @@
                       !task.inFinalState()
                     ) {
                       <span
-                        class="flex justify-center items-center bg-[#da532c] rounded-full w-[20px] h-[20px] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+                        class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#da532c] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
                       >
-                        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] text-white font-bold"
+                        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white"
                           >schedule</mat-icon
                         >
                       </span>
                     }
                     @if (task.isPastDeadline() && !task.inFinalState()) {
                       <span
-                        class="flex justify-center items-center bg-[#da532c] rounded-full w-[20px] h-[20px] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+                        class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#da532c] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
                       >
-                        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] text-white font-bold"
+                        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white"
                           >schedule</mat-icon
                         >
-                        <strong class="text-white h-min font-bold">!</strong>
+                        <strong class="h-min font-bold text-white">!</strong>
                       </span>
                     }
                   </div>
@@ -167,12 +167,12 @@
           }
         </mat-list-item>
       } @empty {
-        <div class="text-center text-muted">No tasks to display</div>
+        <div class="text-muted text-center">No tasks to display</div>
       }
 
       @if (mode === 'project' && project) {
         <mat-list-item
-          class="flex w-full item-content items-center hover:bg-gray-50 p-1 h-[65px] cursor-pointer border-b border-gray-200"
+          class="item-content flex h-[65px] w-full cursor-pointer items-center border-b border-gray-200 p-1 hover:bg-gray-50"
           [disableRipple]="true"
           [ngClass]="project.portfolioTaskStatusClass()"
         >

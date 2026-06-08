@@ -1,14 +1,14 @@
-import {Component, Input} from '@angular/core';
 import {FeedbackModerationActionType, Task} from 'src/app/api/models/task';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {ConfirmModerationModalService} from './confirm-moderation-modal/confirm-moderation-modal.service';
+import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
+import {ConfirmModerationModalService} from './confirm-moderation-modal/confirm-moderation-modal.service';
 
 @Component({
-    selector: 'f-moderation',
-    templateUrl: './moderation.component.html',
-    styleUrl: './moderation.component.scss',
-    standalone: false
+  selector: 'f-moderation',
+  templateUrl: './moderation.component.html',
+  styleUrl: './moderation.component.scss',
+  standalone: false,
 })
 export class ModerationComponent {
   @Input() task: Task;

@@ -1,12 +1,12 @@
-import {Component, Inject} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Project} from 'src/app/api/models/doubtfire-model';
+import {Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AlertService} from '../../services/alert.service';
 
 @Component({
-    selector: 'f-spec-con-modal',
-    templateUrl: './spec-con-modal.component.html',
-    standalone: false
+  selector: 'f-spec-con-modal',
+  templateUrl: './spec-con-modal.component.html',
+  standalone: false,
 })
 export class SpecConModalComponent {
   public days: number = 0;

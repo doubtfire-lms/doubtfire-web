@@ -1,4 +1,4 @@
-<mat-toolbar class="footer flex-col w-full h-full justify-center p-0">
+<mat-toolbar class="footer size-full flex-col justify-center p-0">
   <!-- @if (selectedTask?.similaritiesDetected) {
     <div class="bg-red-500 grow w-full rounded-xl h-5 mb-3 mt-2.5 text-white text-xs font-bold">
       <p
@@ -143,7 +143,7 @@
                 <ng-container [ngTemplateOutlet]="statusActionButtons"></ng-container>
                 <mat-divider class="mx-2.5" [vertical]="true"></mat-divider>
               } @else {
-                <f-moderation class="pl-[125px] ml-[100px]" [task]="selectedTask"></f-moderation>
+                <f-moderation class="ml-[100px] pl-[125px]" [task]="selectedTask"></f-moderation>
               }
 
               <button

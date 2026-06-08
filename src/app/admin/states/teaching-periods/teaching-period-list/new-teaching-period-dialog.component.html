@@ -1,6 +1,8 @@
-<div style="min-width: 600px; min-height: 600px flex flex-col" class="pr-7 pl-7 pt-7 pb-7">
+<div style="min-width: 600px; min-height: 600px flex flex-col" class="p-7">
   <mat-tab-group class="mb-5">
-    <mat-tab label="Edit Teaching Period"> <ng-template [ngTemplateOutlet]="EditTeachingPeriod"></ng-template></mat-tab>
+    <mat-tab label="Edit Teaching Period">
+      <ng-template [ngTemplateOutlet]="EditTeachingPeriod"></ng-template
+    ></mat-tab>
     <mat-tab [disabled]="!newOrSelectedTeachingPeriod.id" label="Edit Breaks">
       <ng-template [ngTemplateOutlet]="EditBreaks"></ng-template>
     </mat-tab>
@@ -9,7 +11,7 @@
       <ng-template [ngTemplateOutlet]="ImportUnits"></ng-template>
     </mat-tab> -->
   </mat-tab-group>
-  <div class="flex justify-end self-end space-x-2.5 bottom-3.5">
+  <div class="bottom-3.5 flex justify-end space-x-2.5 self-end">
     <button mat-stroked-button class="" mat-dialog-close>Cancel</button>
     <button mat-flat-button color="primary" class="ml-2.5" (click)="submitTeachingPeriod()">
       {{ newOrSelectedTeachingPeriod.id ? 'Save' : 'Create' }}
@@ -18,14 +20,26 @@
 </div>
 
 <ng-template #EditTeachingPeriod>
-  <form class="teaching-period-form flex flex-col ml-3.5 mr-3.5 pt-7 overflow-hidden">
+  <form class="teaching-period-form mx-3.5 flex flex-col overflow-hidden pt-7">
     <mat-form-field appearance="outline">
       <mat-label>Teaching Period Name</mat-label>
-      <input type="text" matInput [(ngModel)]="newOrSelectedTeachingPeriod.period" name="name" required />
+      <input
+        type="text"
+        matInput
+        [(ngModel)]="newOrSelectedTeachingPeriod.period"
+        name="name"
+        required
+      />
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Teaching Period Year</mat-label>
-      <input type="number" matInput [(ngModel)]="newOrSelectedTeachingPeriod.year" name="year" required />
+      <input
+        type="number"
+        matInput
+        [(ngModel)]="newOrSelectedTeachingPeriod.year"
+        name="year"
+        required
+      />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -71,22 +85,22 @@
   <h4 class="pt-5">Teaching Breaks for {{ newOrSelectedTeachingPeriod.name }}</h4>
   <mat-list>
     @for (break of newOrSelectedTeachingPeriod.breaksCache.values | async; track break) {
-    <mat-list-item>
-      <span class="flex items-center">
-        <span>
-          <span matListItemTitle>{{ break.startDate | date }}</span>
-          <span matListItemLine>{{ break.numberOfWeeks }} week(s)</span>
+      <mat-list-item>
+        <span class="flex items-center">
+          <span>
+            <span matListItemTitle>{{ break.startDate | date }}</span>
+            <span matListItemLine>{{ break.numberOfWeeks }} week(s)</span>
+          </span>
+          <span class="grow"></span>
+          <button mat-icon-button (click)="deleteBreak(newOrSelectedTeachingPeriod, break)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </span>
-        <span class="grow"></span>
-        <button mat-icon-button (click)="deleteBreak(newOrSelectedTeachingPeriod, break)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </span>
-    </mat-list-item>
+      </mat-list-item>
     }
   </mat-list>
 
-  <form class="ml-3.5 mr-3.5 pt-7 overflow-hidden">
+  <form class="mx-3.5 overflow-hidden pt-7">
     <span class="flex items-center gap-3.5">
       <mat-form-field appearance="outline">
         <mat-label>Break Start Date</mat-label>
@@ -105,7 +119,13 @@
       <!-- <span class="grow"></span> -->
       <mat-form-field appearance="outline">
         <mat-label>Number of weeks</mat-label>
-        <input type="number" matInput [(ngModel)]="tempBreak.numberOfWeeks" name="breakNumWeeks" required />
+        <input
+          type="number"
+          matInput
+          [(ngModel)]="tempBreak.numberOfWeeks"
+          name="breakNumWeeks"
+          required
+        />
       </mat-form-field>
 
       <button

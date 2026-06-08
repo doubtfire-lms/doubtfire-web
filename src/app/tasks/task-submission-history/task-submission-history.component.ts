@@ -1,19 +1,19 @@
-import {Component, OnInit, Inject, Input, Output, EventEmitter} from '@angular/core';
-import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 import {Subject} from 'rxjs';
 import {OverseerAssessmentService, Task} from 'src/app/api/models/doubtfire-model';
 import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
-    selector: 'task-submission-history',
-    templateUrl: './task-submission-history.component.html',
-    styleUrls: ['./task-submission-history.component.scss'],
-    standalone: false
+  selector: 'f-task-submission-history',
+  templateUrl: './task-submission-history.component.html',
+  styleUrls: ['./task-submission-history.component.scss'],
+  standalone: false,
 })
 export class TaskSubmissionHistoryComponent implements OnInit {
   @Input() task: Task;
-  @Output() hasNoData = new EventEmitter<boolean>();
+  @Output() hasNoData: EventEmitter<boolean> = new EventEmitter();
   tabs: OverseerAssessment[];
   // timestamps: string[];
   selectedTab: OverseerAssessment = new OverseerAssessment();
@@ -33,7 +33,7 @@ export class TaskSubmissionHistoryComponent implements OnInit {
     });
   }
 
-  private handleError(error: any) {
+  private handleError(error: Error) {
     this.alerts.error('Error: ' + error, 6000);
   }
 
@@ -79,10 +79,10 @@ export class TaskSubmissionHistoryComponent implements OnInit {
 
   triggerOverseer(tab: OverseerAssessment) {
     this.overseerAssessmentService.triggerOverseer(tab).subscribe(
-      (response: OverseerAssessment) => {
+      (_response: OverseerAssessment) => {
         this.alerts.success('Overseer assessment will be run again.', 2000);
       },
-      (response: any) => {
+      (_response: Error) => {
         this.alerts.error('Error requesting overseer assessment.', 6000);
       },
     );

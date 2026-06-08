@@ -6,9 +6,9 @@ export interface AttachmentConfirmationDialogData {
 }
 
 @Component({
-    selector: 'f-attachment-confirmation-dialog',
-    templateUrl: './attachment-confirmation-dialog.component.html',
-    standalone: false
+  selector: 'f-attachment-confirmation-dialog',
+  templateUrl: './attachment-confirmation-dialog.component.html',
+  standalone: false,
 })
 export class AttachmentConfirmationDialogComponent implements OnInit, OnDestroy {
   public file: File;

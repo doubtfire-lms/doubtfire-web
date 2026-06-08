@@ -1,16 +1,16 @@
-import { Input, Component } from '@angular/core';
-import { BaseAudioRecorderComponent } from '../base-audio-recorder';
-import { TaskComment, TaskCommentService, Task } from 'src/app/api/models/doubtfire-model';
-import { AlertService } from 'src/app/common/services/alert.service';
-import { MediaRecorderService } from 'src/app/common/services/recorder-service';
+import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
+import {Component, Input, OnInit} from '@angular/core';
+import {BaseAudioRecorderComponent} from '../base-audio-recorder';
 
 @Component({
-    selector: 'audio-comment-recorder',
-    templateUrl: './audio-comment-recorder.html',
-    providers: [MediaRecorderService],
-    standalone: false
+  selector: 'audio-comment-recorder',
+  templateUrl: './audio-comment-recorder.html',
+  providers: [MediaRecorderService],
+  standalone: false,
 })
-export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
+export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent implements OnInit {
   @Input() task: Task;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
@@ -40,14 +40,16 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
     this.isSending = true;
     if (this.blob && this.blob.size > 0) {
       this.ts.addComment(this.task, this.blob, 'audio').subscribe({
-        next: (comment: TaskComment) => {
+        next: (_comment: TaskComment) => {
           this.isSending = false;
           this.scrollCommentsDown();
         },
-        error: (failure: { data: { error: any } }) => {
-          this.alerts.error(`Failed to post audio. ${failure.data != null ? failure.data.error : undefined}`);
+        error: (failure: {data: {error: string}}) => {
+          this.alerts.error(
+            `Failed to post audio. ${failure.data != null ? failure.data.error : undefined}`,
+          );
           this.isSending = false;
-        }
+        },
       });
 
       this.blob = {} as Blob;

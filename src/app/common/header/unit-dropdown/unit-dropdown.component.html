@@ -47,8 +47,8 @@
         mat-menu-item
         class="w-full"
       >
-        <div class="flex items-center w-full">
-          <div class="flex-none unitName truncate max-w-[220px]">{{ unitRole.unit.name }}</div>
+        <div class="flex w-full items-center">
+          <div class="unitName max-w-[220px] flex-none truncate">{{ unitRole.unit.name }}</div>
           <div class="grow"></div>
           <f-unit-code [width]="80" [unit_code]="unitRole.unit.code"></f-unit-code>
         </div>
@@ -62,12 +62,12 @@
     @if (!project.unit.teachingPeriod || project.unit.teachingPeriod.active) {
       <button
         [routerLink]="['/projects', project.id, 'dashboard']"
-        class="flex items-center mb-1"
+        class="mb-1 flex items-center"
         mat-menu-item
       >
-        <span class="flex flex-row border-box">
+        <span class="border-box flex flex-row">
           <div class="unitName">{{ project.unit.name }}</div>
-          <span class="flex-1 border-box"></span>
+          <span class="border-box flex-1"></span>
           <f-unit-code [width]="80" [unit_code]="project.unit.code"></f-unit-code>
         </span>
       </button>

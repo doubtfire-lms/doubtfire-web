@@ -1,21 +1,22 @@
-import {Component, Input, ViewChild, AfterViewInit} from '@angular/core';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource, MatTable} from '@angular/material/table';
+import {RequestOptions} from 'ngx-entity-service';
 import {
-  Tutorial,
-  TutorialService,
   Campus,
   CampusService,
-  User,
+  Tutorial,
+  TutorialService,
   TutorialStream,
   TutorialStreamService,
   Unit,
+  User,
 } from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {RequestOptions} from 'ngx-entity-service';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
+import {UntypedFormControl, Validators} from '@angular/forms';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'df-unit-tutorials-list',
@@ -27,7 +28,7 @@ export class UnitTutorialsListComponent
   extends EntityFormComponent<Tutorial>
   implements AfterViewInit
 {
-  @ViewChild(MatTable, {static: true}) table: MatTable<any>;
+  @ViewChild(MatTable, {static: true}) table: MatTable<Tutorial>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @Input() stream: TutorialStream;
   @Input() unit: Unit;
@@ -55,7 +56,7 @@ export class UnitTutorialsListComponent
     'options',
   ];
   tutorials: Tutorial[] = [];
-  dataSource = new MatTableDataSource<Tutorial>();
+  dataSource: MatTableDataSource<Tutorial> = new MatTableDataSource();
 
   private editingStream: boolean = false;
 
@@ -120,7 +121,7 @@ export class UnitTutorialsListComponent
           this.editingStream = false;
           this.alerts.success('Stream updated successfully', 2000);
         },
-        error: (error: any) => {
+        error: (error: HttpErrorResponse) => {
           this.alerts.error('Something went wrong - ' + JSON.stringify(error.error), 6000);
         },
       });
@@ -146,7 +147,11 @@ export class UnitTutorialsListComponent
   // to the datasource
   private pushToTable(value: Tutorial | Tutorial[]) {
     if (!value) return;
-    value instanceof Array ? this.tutorials.push(...value) : this.tutorials.push(value);
+    if (value instanceof Array) {
+      this.tutorials.push(...value);
+    } else {
+      this.tutorials.push(value);
+    }
     this.renderTable();
   }
 
@@ -183,14 +188,14 @@ export class UnitTutorialsListComponent
   // tutorial. The function is bound to the compareFn attribute on the related
   // mat-selects.
   // See: https://angular.io/api/forms/SelectControlValueAccessor
-  compareSelection(aEntity: User | Campus | any, bEntity: User | Campus) {
+  compareSelection(aEntity: User | Campus | {user_id: number}, bEntity: User | Campus) {
     if (!aEntity || !bEntity) {
       return;
     }
     if (bEntity instanceof User) {
-      return aEntity.user_id === bEntity.id;
+      return 'user_id' in aEntity && aEntity.user_id === bEntity.id;
     } else {
-      return aEntity.id === bEntity.id;
+      return 'id' in aEntity && aEntity.id === bEntity.id;
     }
   }
 
@@ -221,7 +226,7 @@ export class UnitTutorialsListComponent
    * Ensure that the unit is passed to the Tutorial entity when create it called.
    */
   protected override optionsOnRequest(
-    kind: 'create' | 'update' | 'delete',
+    _kind: 'create' | 'update' | 'delete',
   ): RequestOptions<Tutorial> {
     return {
       constructorParams: this.unit,

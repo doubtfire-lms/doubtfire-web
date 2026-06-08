@@ -9,8 +9,35 @@ const tseslint = require('typescript-eslint');
 // Allows us to bring in the recommended rules for Angular projects from angular-eslint
 const angular = require('angular-eslint');
 
+const prettierPlugin = require('eslint-plugin-prettier');
+
+const tailwindcss = require('eslint-plugin-tailwindcss');
+
+/**
+ * Scope Angular template configs to HTML files.
+ *
+ * The cast is intentionally loose because angular-eslint and typescript-eslint
+ * can resolve different copies of @typescript-eslint utility types.
+ *
+ * @param {unknown[]} configs
+ * @returns {any[]}
+ */
+const htmlTemplateConfigs = (configs) =>
+  configs.map((config) => ({
+    .../** @type {object} */ (config),
+    files: ['**/*.html'],
+  }));
+
 // Export our config array, which is composed together thanks to the typed utility function from typescript-eslint
 module.exports = tseslint.config(
+  {
+    ignores: ['build/**', 'coverage/**', 'dist/**', 'docs/**', '**/*.tpl.html'],
+  },
+  {
+    linterOptions: {
+      reportUnusedDisableDirectives: false,
+    },
+  },
   {
     // Everything in this config object targets our TypeScript files (Components, Directives, Pipes etc)
     files: ['**/*.ts'],
@@ -20,7 +47,7 @@ module.exports = tseslint.config(
       // Apply the recommended TypeScript rules
       ...tseslint.configs.recommended,
       // Optionally apply stylistic rules from typescript-eslint that improve code consistency
-      ...tseslint.configs.stylistic,
+      ...tseslint.configs.recommended,
       // Apply the recommended Angular rules
       ...angular.configs.tsRecommended,
     ],
@@ -29,37 +56,58 @@ module.exports = tseslint.config(
     processor: angular.processInlineTemplates,
     // Override specific rules for TypeScript files (these will take priority over the extended configs above)
     rules: {
+      '@angular-eslint/component-max-inline-declarations': ['error', {template: 0, styles: 0}],
+      '@angular-eslint/prefer-inject': 'off',
+      '@angular-eslint/prefer-standalone': 'off',
+      '@typescript-eslint/consistent-generic-constructors': ['error', 'type-annotation'],
       '@typescript-eslint/no-inferrable-types': 'off',
-      '@angular-eslint/directive-selector': [
+      '@typescript-eslint/no-unused-vars': [
         'error',
         {
-          type: 'attribute',
-          prefix: 'f',
-          style: 'camelCase',
+          argsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+          varsIgnorePattern: '^_',
         },
       ],
-      '@angular-eslint/component-selector': [
-        'error',
-        {
-          type: 'element',
-          prefix: 'f',
-          style: 'kebab-case',
-        },
-      ],
+      'prettier/prettier': 'warn',
     },
   },
   {
+    files: ['**/*.ts'],
+    plugins: {prettier: prettierPlugin},
+    rules: {
+      'prettier/prettier': 'warn',
+    },
+  },
+  {
+    files: ['**/*.component.html'],
+    plugins: {prettier: prettierPlugin},
+    extends: [...tailwindcss.configs['flat/recommended']],
+    settings: {
+      tailwindcss: {
+        config: {},
+      },
+    },
+    rules: {
+      'tailwindcss/no-custom-classname': 'off',
+      'prettier/prettier': 'warn',
+    },
+  },
+  ...htmlTemplateConfigs(angular.configs.templateRecommended),
+  ...htmlTemplateConfigs(angular.configs.templateAccessibility),
+  {
     // Everything in this config object targets our HTML files (external templates,
     // and inline templates as long as we have the `processor` set on our TypeScript config above)
-    files: ['**/*component.html'],
-    extends: [
-      // Apply the recommended Angular template rules
-      ...angular.configs.templateRecommended,
-      // Apply the Angular template rules which focus on accessibility of our apps
-      ...angular.configs.templateAccessibility,
-    ],
+    files: ['**/*.html'],
     rules: {
+      '@angular-eslint/template/prefer-control-flow': 'error',
+      // TODO: remove below eslint rule ignores to improve accessibility
+      '@angular-eslint/template/label-has-associated-control': 'off',
       '@angular-eslint/template/mouse-events-have-key-events': 'off',
+      '@angular-eslint/template/click-events-have-key-events': 'off',
+      '@angular-eslint/template/interactive-supports-focus': 'off',
     },
   },
 );

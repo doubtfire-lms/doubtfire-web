@@ -1,5 +1,5 @@
-import * as monaco from 'monaco-editor';
 import JSZip from 'jszip';
+import * as monaco from 'monaco-editor';
 
 export type ArchiveFileKind = 'code' | 'image' | 'pdf' | 'text' | 'binary';
 

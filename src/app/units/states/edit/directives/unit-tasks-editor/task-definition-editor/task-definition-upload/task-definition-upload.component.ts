@@ -1,14 +1,14 @@
-import { Component, Input, ViewChild } from '@angular/core';
-import { MatTable } from '@angular/material/table';
-import { TaskDefinition, UploadRequirement } from 'src/app/api/models/task-definition';
-import { Unit } from 'src/app/api/models/unit';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import {TaskDefinition, UploadRequirement} from 'src/app/api/models/task-definition';
+import {Unit} from 'src/app/api/models/unit';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Component, Input, ViewChild} from '@angular/core';
+import {MatTable} from '@angular/material/table';
 
 @Component({
-    selector: 'f-task-definition-upload',
-    templateUrl: 'task-definition-upload.component.html',
-    styleUrls: ['task-definition-upload.component.scss'],
-    standalone: false
+  selector: 'f-task-definition-upload',
+  templateUrl: 'task-definition-upload.component.html',
+  styleUrls: ['task-definition-upload.component.scss'],
+  standalone: false,
 })
 export class TaskDefinitionUploadComponent {
   @Input() public taskDefinition: TaskDefinition;

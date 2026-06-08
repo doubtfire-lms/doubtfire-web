@@ -1,8 +1,9 @@
-import {AfterViewInit, Directive} from '@angular/core';
-import {UntypedFormGroup, AbstractControl} from '@angular/forms';
 import {Entity, RequestOptions} from 'ngx-entity-service';
 import {EntityService} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {AfterViewInit, Directive} from '@angular/core';
+import {AbstractControl, UntypedFormGroup} from '@angular/forms';
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 
@@ -59,7 +60,10 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
     }
   }
 
-  ngAfterViewInit() {}
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
+  ngAfterViewInit() {
+    /* empty */
+  }
 
   /**
    * Cancel edit of current selected value.
@@ -116,7 +120,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    * @param alertService the alert service used to provide alerts.
    * @param success the function, provided by inheritor, that is executed on success of CRUD methods.
    */
-  submit(service: EntityService<T>, alertService: any, success: OnSuccessMethod<T>) {
+  submit(service: EntityService<T>, alertService: AlertService, success: OnSuccessMethod<T>) {
     // response is what we get back from the server
     // when creating or updating
     let response: Observable<T>;
@@ -176,9 +180,9 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
     }
   }
 
-  protected delete(entity: T, entities: T[], service: EntityService<T>): Observable<any> {
-    return service.delete<any>(entity, this.optionsOnRequest('delete')).pipe(
-      tap((obj) => {
+  protected delete(entity: T, entities: T[], service: EntityService<T>): Observable<void> {
+    return service.delete<void>(entity, this.optionsOnRequest('delete')).pipe(
+      tap((_obj) => {
         this.cancelEdit();
         entities.splice(entities.indexOf(entity), 1);
         this.dataSource.data = entities;
@@ -210,7 +214,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    * to the entity constructor when an object is created. This is then passed along
    * in the `create` call as the `other` value to the EntityService's create method.
    */
-  protected optionsOnRequest(kind: 'create' | 'update' | 'delete'): RequestOptions<T> {
+  protected optionsOnRequest(_kind: 'create' | 'update' | 'delete'): RequestOptions<T> {
     return undefined;
   }
 

@@ -2,11 +2,7 @@ import {AfterViewInit, Component, Inject, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
-import {
-  CsvResult,
-  CsvResultModalData,
-  CsvRow,
-} from './csv-result-modal.service';
+import {CsvResult, CsvResultModalData, CsvRow} from './csv-result-modal.service';
 
 type CsvResultSelection = 'success' | 'errors' | 'ignored';
 
@@ -17,10 +13,10 @@ interface CsvDisplayRow {
 }
 
 @Component({
-    selector: 'f-csv-result-modal',
-    templateUrl: './csv-result-modal.component.html',
-    styleUrls: ['./csv-result-modal.component.scss'],
-    standalone: false
+  selector: 'f-csv-result-modal',
+  templateUrl: './csv-result-modal.component.html',
+  styleUrls: ['./csv-result-modal.component.scss'],
+  standalone: false,
 })
 export class CsvResultModalComponent implements AfterViewInit {
   public readonly pageSize = 10;
@@ -28,12 +24,12 @@ export class CsvResultModalComponent implements AfterViewInit {
   public commonKeys: string[] = [];
   public displayedColumns: string[] = ['message', 'other'];
   public dynamicColumnIds: string[] = [];
-  public dataSource = new MatTableDataSource<CsvDisplayRow>([]);
-  private columnKeyById = new Map<string, string>();
+  public dataSource: MatTableDataSource<CsvDisplayRow> = new MatTableDataSource([]);
+  private columnKeyById: Map<string, string> = new Map();
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
 
-  public readonly csvResponseSelections: { key: CsvResultSelection; label: string }[] = [
+  public readonly csvResponseSelections: {key: CsvResultSelection; label: string}[] = [
     {key: 'success', label: 'Success'},
     {key: 'errors', label: 'Errors'},
     {key: 'ignored', label: 'Ignored'},
@@ -115,7 +111,7 @@ export class CsvResultModalComponent implements AfterViewInit {
   private rebuildTableData(): void {
     const items = this.itemData(this.activeCsvResponseSelection);
     const rowObjects = items.map((item) => this.toRowObject(item.row));
-    const keyCounts = new Map<string, number>();
+    const keyCounts: Map<string, number> = new Map();
 
     rowObjects.forEach((rowObject) => {
       if (!rowObject) {
@@ -186,9 +182,7 @@ export class CsvResultModalComponent implements AfterViewInit {
     if (Array.isArray(row)) {
       const entries = row.filter(
         (entry): entry is [string, unknown] =>
-          Array.isArray(entry) &&
-          entry.length >= 2 &&
-          typeof entry[0] === 'string',
+          Array.isArray(entry) && entry.length >= 2 && typeof entry[0] === 'string',
       );
 
       if (entries.length === row.length && entries.length > 0) {

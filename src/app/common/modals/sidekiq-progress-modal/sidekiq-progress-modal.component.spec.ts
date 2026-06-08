@@ -1,5 +1,4 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-
 import {SidekiqProgressModalComponent} from './sidekiq-progress-modal.component';
 
 describe('SidekiqProgressModalComponent', () => {

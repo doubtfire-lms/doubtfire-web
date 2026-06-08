@@ -1,25 +1,3 @@
-import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {
-  AfterViewInit,
-  Component,
-  computed,
-  effect,
-  inject,
-  Input,
-  model,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  signal,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {isEqual} from 'lodash';
 import {Subscription} from 'rxjs';
 import {
@@ -32,6 +10,28 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {LiveAnnouncer} from '@angular/cdk/a11y';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+  computed,
+  effect,
+  inject,
+  model,
+  signal,
+} from '@angular/core';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatChipInputEvent} from '@angular/material/chips';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
 import {
@@ -42,9 +42,9 @@ import {CsvUploadModalService} from '../modals/csv-upload-modal/csv-upload-modal
 import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-csv-download-modal.service';
 
 @Component({
-    selector: 'f-learning-outcome-editor',
-    templateUrl: 'learning-outcome-editor.component.html',
-    standalone: false
+  selector: 'f-learning-outcome-editor',
+  templateUrl: 'learning-outcome-editor.component.html',
+  standalone: false,
 })
 export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
   @Input() context?: TaskDefinition | Unit;
@@ -53,7 +53,7 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
   @ViewChild(MatSort, {static: false}) outcomeSort: MatSort;
   @ViewChild(MatPaginator, {static: false}) outcomePaginator: MatPaginator;
 
-  public outcomeSource = new MatTableDataSource<LearningOutcome>([]);
+  public outcomeSource: MatTableDataSource<LearningOutcome> = new MatTableDataSource([]);
   public outcomeColumns: string[] = [
     'abbreviation',
     'shortDescription',
@@ -143,7 +143,7 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_changes: SimpleChanges): void {
     this.setAbbreviationPrefix();
     this.selectedOutcome = null;
   }

@@ -1,6 +1,6 @@
-import {Component, Input, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {TaskComment} from 'src/app/api/models/doubtfire-model';
+import {Component, Inject, Input, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface CommentsModalData {
   comment: TaskComment;
@@ -8,10 +8,10 @@ export interface CommentsModalData {
 }
 
 @Component({
-    selector: 'comments-modal',
-    templateUrl: './comments-modal.component.html',
-    styleUrls: ['./comments-modal.component.scss'],
-    standalone: false
+  selector: 'comments-modal',
+  templateUrl: './comments-modal.component.html',
+  styleUrls: ['./comments-modal.component.scss'],
+  standalone: false,
 })
 export class CommentsModalComponent implements OnInit {
   @Input() taskComment: TaskComment;

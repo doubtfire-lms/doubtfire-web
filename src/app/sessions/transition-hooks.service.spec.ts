@@ -1,6 +1,5 @@
-import { TestBed } from '@angular/core/testing';
-
-import { TransitionHooksService } from './transition-hooks.service';
+import {TestBed} from '@angular/core/testing';
+import {TransitionHooksService} from './transition-hooks.service';
 
 describe('TransitionHooksService', () => {
   let service: TransitionHooksService;

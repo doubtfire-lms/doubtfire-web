@@ -1,4 +1,4 @@
-import { Directive, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
+import {Directive, EventEmitter, HostBinding, HostListener, Output} from '@angular/core';
 
 /**
  * The "appDragDrop" directive can be added to angular components to allow them to act as
@@ -7,11 +7,11 @@ import { Directive, Output, EventEmitter, HostBinding, HostListener } from '@ang
  * class will be applied to the element.
  */
 @Directive({
-    selector: '[appDragDrop]',
-    standalone: false
+  selector: '[appDragDrop]',
+  standalone: false,
 })
 export class DragDropDirective {
-  @Output() fileDropped = new EventEmitter<FileList>();
+  @Output() fileDropped: EventEmitter<FileList> = new EventEmitter();
 
   // @HostBinding('style.background-color') private background = '#f5fcff';
   // @HostBinding('style.opacity') private opacity = '1';

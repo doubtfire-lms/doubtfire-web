@@ -1,13 +1,13 @@
 @if (unit.hasGroupwork()) {
-<mat-form-field appearance="outline" class="flex flex-grow">
-  <mat-label>Is this an individual or group task? Select group that submits</mat-label>
-  <mat-select required [(value)]="taskDefinition.groupSet">
-    @for (gs of unit.groupSets; track gs) {
-  <mat-option [value]="gs">{{ gs.name }}</mat-option>
-}
-    <mat-option value="null">None - Individual Submission</mat-option>
-  </mat-select>
-</mat-form-field>
+  <mat-form-field appearance="outline" class="flex flex-grow">
+    <mat-label>Is this an individual or group task? Select group that submits</mat-label>
+    <mat-select required [(value)]="taskDefinition.groupSet">
+      @for (gs of unit.groupSets; track gs) {
+        <mat-option [value]="gs">{{ gs.name }}</mat-option>
+      }
+      <mat-option value="null">None - Individual Submission</mat-option>
+    </mat-select>
+  </mat-form-field>
 }
 
 <div class="flex flex-row gap-6">
@@ -19,8 +19,8 @@
       (selectionChange)="onTutorialStreamChange()"
     >
       @for (stream of unit.tutorialStreams; track stream) {
-  <mat-option [value]="stream">{{ stream.name }}</mat-option>
-}
+        <mat-option [value]="stream">{{ stream.name }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 

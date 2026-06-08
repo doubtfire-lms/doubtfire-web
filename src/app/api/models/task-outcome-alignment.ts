@@ -1,5 +1,5 @@
 import {Entity} from 'ngx-entity-service';
-import {Project, Unit, TaskDefinition, Task} from './doubtfire-model';
+import {Project, Task, TaskDefinition, Unit} from './doubtfire-model';
 import {LearningOutcome} from './learning-outcome';
 
 export class TaskOutcomeAlignment extends Entity {

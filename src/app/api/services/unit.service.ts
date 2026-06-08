@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {CachedEntityService} from 'ngx-entity-service';
+import {Observable} from 'rxjs';
 import {
   GroupSetService,
   LearningOutcomeService,
@@ -11,15 +11,16 @@ import {
   Unit,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
-import {CachedEntityService, Entity, EntityMapping} from 'ngx-entity-service';
-import API_URL from 'src/app/config/constants/apiUrl';
-import {UnitRoleService} from './unit-role.service';
-import {AppInjector} from 'src/app/app-injector';
-import {TaskDefinitionService} from './task-definition.service';
-import {GroupService} from './group.service';
-import {Observable} from 'rxjs';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {AppInjector} from 'src/app/app-injector';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {GroupService} from './group.service';
+import {MappingFunctions} from './mapping-fn';
+import {TaskDefinitionService} from './task-definition.service';
+import {UnitRoleService} from './unit-role.service';
 
 export type IloStats = {
   median: number;
@@ -28,6 +29,35 @@ export type IloStats = {
   min: number;
   max: number;
 }[];
+
+export interface TaskStatusStat {
+  tutorial_stream_id: number;
+  status: string;
+  num: number;
+}
+
+export type TaskStatusStats = Record<number, Record<number, TaskStatusStat[]>>;
+
+export interface TargetGradeStat {
+  tutorial_id: number;
+  tutorial_stream_id: number;
+  grade: number;
+  num: number;
+}
+
+export interface TaskCompletionSummary {
+  median: number;
+  lower: number;
+  upper: number;
+  min: number;
+  max: number;
+}
+
+export interface TaskCompletionStats {
+  unit: TaskCompletionSummary;
+  tutorial: Record<number, TaskCompletionSummary>;
+  grade: Record<number, TaskCompletionSummary>;
+}
 
 @Injectable()
 export class UnitService extends CachedEntityService<Unit> {
@@ -58,7 +88,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'myRole',
       {
         keys: 'unitRole',
-        toEntityFn: (data: object, jsonKey: string, entity: Unit) => {
+        toEntityFn: (data: object, jsonKey: string, _entity: Unit) => {
           const unitRoleService = AppInjector.get(UnitRoleService);
           unitRoleService.cache.get(data[jsonKey]);
         },
@@ -82,16 +112,16 @@ export class UnitService extends CachedEntityService<Unit> {
           entity.mainConvenorUser = result?.user;
           return result;
         },
-        toJsonFn: (unit: Unit, key: string) => {
+        toJsonFn: (unit: Unit, _key: string) => {
           return unit.mainConvenor?.id;
         },
       },
       {
         keys: ['mainConvenorUser', 'main_convenor_user_id'],
-        toEntityFn: (data, key, entity) => {
+        toEntityFn: (data, key, _entity) => {
           return AppInjector.get(UserService).cache.get(data[key]);
         },
-        toJsonFn: (unit: Unit, key: string) => {
+        toJsonFn: (unit: Unit, _key: string) => {
           return unit.mainConvenor?.user.id;
         },
       },
@@ -106,36 +136,30 @@ export class UnitService extends CachedEntityService<Unit> {
             return undefined;
           }
         },
-        toJsonFn: (entity: Unit, key: string) => {
+        toJsonFn: (entity: Unit, _key: string) => {
           return entity.teachingPeriod ? entity.teachingPeriod.id : undefined;
         },
       },
       {
         keys: 'startDate',
-        toEntityFn: (data, key, entity, params?) => {
+        toEntityFn: (data, key, _entity, _params?) => {
           return new Date(data[key]);
         },
-        toJsonFn: (entity, key) => {
-          return entity.startDate.toISOString().slice(0, 10);
-        },
+        toJsonFn: MappingFunctions.mapDayToJson,
       },
       {
         keys: 'endDate',
-        toEntityFn: (data, key, entity, params?) => {
+        toEntityFn: (data, key, _entity, _params?) => {
           return new Date(data[key]);
         },
-        toJsonFn: (entity, key) => {
-          return entity.endDate.toISOString().slice(0, 10);
-        },
+        toJsonFn: MappingFunctions.mapDayToJson,
       },
       {
         keys: 'portfolioAutoGenerationDate',
-        toEntityFn: (data, key, entity, params?) => {
+        toEntityFn: (data, key, _entity, _params?) => {
           return new Date(data[key]);
         },
-        toJsonFn: (entity, key) => {
-          return entity.portfolioAutoGenerationDate?.toISOString().slice(0, 10);
-        },
+        toJsonFn: MappingFunctions.mapDayToJson,
       },
       'assessmentEnabled',
       // 'overseerImageId',
@@ -236,7 +260,7 @@ export class UnitService extends CachedEntityService<Unit> {
         toEntityFn: (data: object, jsonKey: string, unit: Unit) => {
           return unit.taskDef(data[jsonKey]);
         },
-        toJsonFn: (unit: Unit, key: string) => {
+        toJsonFn: (unit: Unit, _key: string) => {
           return unit.draftTaskDefinition?.id;
         },
       },
@@ -294,7 +318,7 @@ export class UnitService extends CachedEntityService<Unit> {
     );
   }
 
-  public override createInstanceFrom(json: any, other?: any): Unit {
+  public override createInstanceFrom(_json: object): Unit {
     return new Unit();
   }
 
@@ -312,25 +336,25 @@ export class UnitService extends CachedEntityService<Unit> {
     return httpClient.get<IloStats[]>(url);
   }
 
-  public taskStatusCountByTutorial(unit: Unit): Observable<any> {
+  public taskStatusCountByTutorial(unit: Unit): Observable<TaskStatusStats> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/stats/task_status_pct`;
     const httpClient = AppInjector.get(HttpClient);
 
-    return httpClient.get<any>(url);
+    return httpClient.get<TaskStatusStats>(url);
   }
 
-  public targetGradeStats(unit: Unit): Observable<any> {
+  public targetGradeStats(unit: Unit): Observable<TargetGradeStat[]> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/stats/student_target_grade`;
     const httpClient = AppInjector.get(HttpClient);
 
-    return httpClient.get<any>(url);
+    return httpClient.get<TargetGradeStat[]>(url);
   }
 
-  public taskCompletionStats(unit: Unit): Observable<any> {
+  public taskCompletionStats(unit: Unit): Observable<TaskCompletionStats> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${unit.id}/stats/task_completion_stats`;
     const httpClient = AppInjector.get(HttpClient);
 
-    return httpClient.get<any>(url);
+    return httpClient.get<TaskCompletionStats>(url);
   }
 
   public zipPortfolios(unit: Unit): Observable<SidekiqJob> {

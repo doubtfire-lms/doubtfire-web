@@ -1,5 +1,3 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {Router} from '@angular/router';
 import {MediaObserver} from 'ng-flex-layout';
 import {EntityCache} from 'ngx-entity-service';
 import {BehaviorSubject, Observable, Subject, skip, take} from 'rxjs';
@@ -16,8 +14,10 @@ import {
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {Injectable, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
 
 /**
  * The different types of views that can be shown. Used by the header to determine details to show.
@@ -125,6 +125,13 @@ export class GlobalStateService implements OnDestroy {
       this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
         if (result) {
           this.loadGlobals();
+
+          if (
+            this.userService.currentUser.hasRunFirstTimeSetup === false &&
+            window.location.pathname !== '/welcome'
+          ) {
+            this.router.navigateByUrl('/welcome');
+          }
         } else {
           // Loading is finshed...
           this.isLoadingSubject.next(false);

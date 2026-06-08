@@ -1,8 +1,8 @@
 @if (project$ | async; as project) {
-  <div class="w-full h-full grid grid-cols-12 gap-2.5">
+  <div class="grid size-full grid-cols-12 gap-2.5">
     <!-- Column -->
     <div class="col-span-12 lg:col-span-6">
-      <mat-card class="w-full h-[250px] py-14 px-7">
+      <mat-card class="h-[250px] w-full px-7 py-14">
         <mat-card-content>
           <!-- <f-unit-code class="w-28" [unit_code]="project.unit.code"></f-unit-code> -->
           <h1 class="mb-1 text-3xl">
@@ -13,10 +13,10 @@
       </mat-card>
     </div>
     <div class="col-span-12 lg:col-span-6">
-      <mat-card class="w-full h-[250px] py-14 px-7">
+      <mat-card class="h-[250px] w-full px-7 py-14">
         <mat-card-content class="w-full">
-          <span class="flex flex-row items-center mb-5">
-            <h1 class="text-3xl mb-0 mr-1">Targetting</h1>
+          <span class="mb-5 flex flex-row items-center">
+            <h1 class="mb-0 mr-1 text-3xl">Targetting</h1>
             <mat-icon matTooltip="Your target grade changes which tasks you need to complete.">
               info</mat-icon
             >
@@ -37,12 +37,12 @@
     </div>
     <!-- Column -->
     <div class="col-span-12 md:col-span-12 xl:col-span-12">
-      <mat-card class="w-full h-full">
+      <mat-card class="size-full">
         <mat-card-header>
           <mat-card-title>Your progress</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div class="w-full h-full flex items-center justify-center">
+          <div class="flex size-full items-center justify-center">
             <!-- <f-project-progress-gauge [project]="project"></f-project-progress-gauge> -->
             <f-progress-burndown-chart
               [project]="project"

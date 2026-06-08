@@ -1,12 +1,12 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { UnitRole } from 'src/app/api/models/unit-role';
+import {UnitRole} from 'src/app/api/models/unit-role';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-    name: 'isActiveUnitRole',
-    standalone: false
+  name: 'isActiveUnitRole',
+  standalone: false,
 })
 export class IsActiveUnitRole implements PipeTransform {
-  transform(array: UnitRole[], ...args: any[]): UnitRole[] {
+  transform(array: UnitRole[]): UnitRole[] {
     if (array == null) {
       return;
     }

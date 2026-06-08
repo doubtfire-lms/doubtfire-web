@@ -1,5 +1,14 @@
-import { OnInit, Directive } from '@angular/core';
-import { MediaRecorderService } from 'src/app/common/services/recorder-service';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
+import {Directive, OnInit} from '@angular/core';
+
+export interface RecordingEvent extends Event {
+  detail: {
+    recording: {
+      blob: Blob;
+      blobUrl: string;
+    };
+  };
+}
 
 @Directive()
 export abstract class BaseAudioRecorderComponent implements OnInit {
@@ -35,7 +44,9 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     this.mediaRecorder.config.stopTracksAndCloseCtxWhenFinished = true;
     // Required for visualising the stream
     this.mediaRecorder.config.createAnalyserNode = true;
-    this.mediaRecorder.em.addEventListener('recording', (evt: any) => this.onNewRecording(evt));
+    this.mediaRecorder.em.addEventListener('recording', (evt: Event) =>
+      this.onNewRecording(evt as RecordingEvent),
+    );
   }
 
   playStop(): void {
@@ -85,7 +96,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     this.mediaRecorder.processChunks();
   }
 
-  onNewRecording(evt: any): void {
+  onNewRecording(evt: RecordingEvent): void {
     this.blob = evt.detail.recording.blob;
     this.audio.src = evt.detail.recording.blobUrl;
     this.audio.load();

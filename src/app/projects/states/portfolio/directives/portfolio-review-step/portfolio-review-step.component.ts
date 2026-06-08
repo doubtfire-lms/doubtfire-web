@@ -1,4 +1,3 @@
-import {Component, Input, OnInit} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {Unit} from 'src/app/api/models/unit';
@@ -8,12 +7,13 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-    selector: 'f-portfolio-review-step',
-    templateUrl: 'portfolio-review-step.component.html',
-    styleUrls: ['portfolio-review-step.component.scss'],
-    standalone: false
+  selector: 'f-portfolio-review-step',
+  templateUrl: 'portfolio-review-step.component.html',
+  styleUrls: ['portfolio-review-step.component.scss'],
+  standalone: false,
 })
 export class PortfolioReviewStepComponent implements OnInit {
   @Input() project: Project;

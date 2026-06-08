@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 
 interface Response {
   privacy: string;

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { GradeTaskModalComponent } from './grade-task-modal.component';
-import { Task } from 'src/app/api/models/doubtfire-model';
+import {Task} from 'src/app/api/models/doubtfire-model';
+import {Injectable} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {GradeTaskModalComponent} from './grade-task-modal.component';
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +9,15 @@ import { Task } from 'src/app/api/models/doubtfire-model';
 export class GradeTaskModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(task: Task, successCallback: (response: {grade: number, qualityPts: number}) => void, errorCallback: () => void): void {
+  public show(
+    task: Task,
+    successCallback: (response: {grade: number; qualityPts: number}) => void,
+    errorCallback: () => void,
+  ): void {
     this.dialog
       .open(GradeTaskModalComponent, {
         data: {
-          task: task
+          task: task,
         },
       })
       .afterClosed()

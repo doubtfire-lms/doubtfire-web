@@ -1,3 +1,10 @@
+import {Subscription} from 'rxjs';
+import {Group, GroupSet, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
+import {Project} from 'src/app/api/models/project';
+import {Unit} from 'src/app/api/models/unit';
+import {GroupService} from 'src/app/api/services/group.service';
+import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {
   AfterViewInit,
   Component,
@@ -11,19 +18,12 @@ import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
-import {Subscription} from 'rxjs';
-import {Group, GroupSet, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
-import {Project} from 'src/app/api/models/project';
-import {Unit} from 'src/app/api/models/unit';
-import {GroupService} from 'src/app/api/services/group.service';
-import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
-import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-    selector: 'f-group-selector',
-    templateUrl: './group-selector.component.html',
-    styleUrls: ['./group-selector.component.scss'],
-    standalone: false
+  selector: 'f-group-selector',
+  templateUrl: './group-selector.component.html',
+  styleUrls: ['./group-selector.component.scss'],
+  standalone: false,
 })
 export class GroupSelectorComponent
   extends EntityFormComponent<Group>

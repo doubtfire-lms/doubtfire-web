@@ -1,22 +1,43 @@
-import {Component, OnInit, Input, SimpleChanges, LOCALE_ID, ViewContainerRef} from '@angular/core';
 import {Project, Unit} from 'src/app/api/models/doubtfire-model';
-import {formatDate} from '@angular/common';
 import {AppInjector} from 'src/app/app-injector';
 import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
+import {formatDate} from '@angular/common';
+import {
+  Component,
+  Input,
+  LOCALE_ID,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewContainerRef,
+} from '@angular/core';
+
+interface BurndownPoint {
+  name: string;
+  value: number;
+}
+
+interface BurndownSeries {
+  name: string;
+  series: BurndownPoint[];
+}
 
 @Component({
-    selector: 'f-progress-burndown-chart',
-    templateUrl: './progress-burndown-chart.component.html',
-    styleUrls: ['./progress-burndown-chart.component.scss'],
-    standalone: false
+  selector: 'f-progress-burndown-chart',
+  templateUrl: './progress-burndown-chart.component.html',
+  styleUrls: ['./progress-burndown-chart.component.scss'],
+  standalone: false,
 })
-export class ProgressBurndownChartComponent extends ChartBaseComponent implements OnInit {
+export class ProgressBurndownChartComponent
+  extends ChartBaseComponent
+  implements OnChanges, OnInit
+{
   @Input() project: Project;
   @Input() unit: Unit;
-  @Input() grade: any;
+  @Input() grade: number;
 
-  data: any[] = [];
-  temp: any[] = [];
+  data: BurndownSeries[] = [];
+  temp: BurndownSeries[] = [];
 
   // options
   legend: boolean = true;
@@ -32,7 +53,7 @@ export class ProgressBurndownChartComponent extends ChartBaseComponent implement
   yScaleMin: number = 0;
   yScaleMax: number = 100;
 
-  private seriesVisibility: {[key: string]: boolean} = {};
+  private seriesVisibility: Record<string, boolean> = {};
 
   constructor(public viewContainerRef: ViewContainerRef) {
     super(viewContainerRef);
@@ -100,7 +121,7 @@ export class ProgressBurndownChartComponent extends ChartBaseComponent implement
     this.data = formattedData;
   }
 
-  onSelect(event): void {
+  onSelect(event: string | BurndownPoint): void {
     if (this.isLegend(event)) {
       const tempData = JSON.parse(JSON.stringify(this.data));
       if (this.isDataShown(event)) {
@@ -120,7 +141,7 @@ export class ProgressBurndownChartComponent extends ChartBaseComponent implement
     }
   }
 
-  isLegend(event: any): boolean {
+  isLegend(event: string | BurndownPoint): event is string {
     return typeof event === 'string';
   }
 
@@ -129,7 +150,7 @@ export class ProgressBurndownChartComponent extends ChartBaseComponent implement
     return series && series.series.some((point) => point.value !== 0);
   }
 
-  public formatPerc(input) {
+  public formatPerc(input: number) {
     return `${input}%`;
   }
 }

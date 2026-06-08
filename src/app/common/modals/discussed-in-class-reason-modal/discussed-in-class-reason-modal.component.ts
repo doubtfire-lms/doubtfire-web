@@ -8,10 +8,10 @@ export interface DiscussedInClassReasonModalData {
 }
 
 @Component({
-    selector: 'f-discussed-in-class-reason-modal',
-    templateUrl: './discussed-in-class-reason-modal.component.html',
-    styleUrl: './discussed-in-class-reason-modal.component.scss',
-    standalone: false
+  selector: 'f-discussed-in-class-reason-modal',
+  templateUrl: './discussed-in-class-reason-modal.component.html',
+  styleUrl: './discussed-in-class-reason-modal.component.scss',
+  standalone: false,
 })
 export class DiscussedInClassReasonModalComponent {
   public readonly minimumReasonLength = 25;

@@ -1,14 +1,14 @@
-import {Component, Input} from '@angular/core';
 import {Project, Unit} from 'src/app/api/models/doubtfire-model';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {Component, Input} from '@angular/core';
 
 @Component({
-    selector: 'f-portfolio-grade-select-step',
-    templateUrl: 'portfolio-grade-select-step.component.html',
-    styleUrls: ['portfolio-grade-select-step.component.scss'],
-    standalone: false
+  selector: 'f-portfolio-grade-select-step',
+  templateUrl: 'portfolio-grade-select-step.component.html',
+  styleUrls: ['portfolio-grade-select-step.component.scss'],
+  standalone: false,
 })
 export class PortfolioGradeSelectStepComponent {
   @Input() project: Project;

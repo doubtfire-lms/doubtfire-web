@@ -3,11 +3,11 @@
   matTooltip="{{ statusLabel(status) }}"
   matTooltipPosition="above"
   [matTooltipDisabled]="!showTooltip"
-  class="status-chip rounded-full cursor-pointer px-3 min-h-[30px] h-7 mx-0.5 flex justify-center items-center"
+  class="status-chip mx-0.5 flex h-7 min-h-[30px] cursor-pointer items-center justify-center rounded-full px-3"
   style="font-size: 14px; min-width: 50px"
 >
   <mat-icon
-    class="self-center justify-self-center m-0 scale-75"
+    class="m-0 scale-75 place-self-center"
     [ngClass]="{'font-black': status === 'complete'}"
     >{{ statusIcon(status) }}</mat-icon
   >

@@ -1,17 +1,17 @@
-import {Component, AfterViewInit, ViewChild, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
-import {CreateNewUnitModal} from '../../modals/create-new-unit-modal/create-new-unit-modal.component';
-import {Project} from 'src/app/api/models/project';
-import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 import {User} from 'src/app/api/models/user/user';
 import {UnitService} from 'src/app/api/services/unit.service';
+import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute} from '@angular/router';
+import {CreateNewUnitModal} from '../../modals/create-new-unit-modal/create-new-unit-modal.component';
 
-type IUnitOrProject = {
+interface IUnitOrProject {
   id: number;
   unit_code: string;
   code: string;
@@ -27,13 +27,13 @@ type IUnitOrProject = {
   matchesTutorialEnrolments?: (filter: string) => boolean;
   matchesGroup?: (filter: string) => boolean;
   matches: (filter: string) => boolean;
-};
+}
 
 @Component({
-    selector: 'f-units',
-    templateUrl: './units.component.html',
-    styleUrls: ['./units.component.scss'],
-    standalone: false
+  selector: 'f-units',
+  templateUrl: './units.component.html',
+  styleUrls: ['./units.component.scss'],
+  standalone: false,
 })
 export class FUnitsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatTable, {static: false}) table: MatTable<Unit>;
@@ -88,7 +88,7 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
 
       this.globalStateService.onLoad(() => {
         this.unitService.query(undefined, {params: {include_in_active: true}}).subscribe({
-          next: (units) => {
+          next: () => {
             this.globalStateService.loadedUnits.values.subscribe(
               (loadedUnits) =>
                 (this.dataSource.data = this.mapUnitOrProjectsToColumns(loadedUnits)),

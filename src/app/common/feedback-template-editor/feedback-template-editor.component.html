@@ -1,11 +1,11 @@
-<div class="bg-white border border-gray-200 rounded-xl shadow p-3.5">
+<div class="rounded-xl border border-gray-200 bg-white p-3.5 shadow">
   <div class="mb-0.5">
-    <h4 class="font-bold text-base text-gray-900">Edit Feedback Templates for Outcome</h4>
+    <h4 class="text-base font-bold text-gray-900">Edit Feedback Templates for Outcome</h4>
 
     <div class="flex flex-col gap-5">
       <table
         #templateTable
-        class="flex-grow f-table selectable"
+        class="f-table selectable flex-grow"
         mat-table
         [dataSource]="templateSource"
         matSort
@@ -158,7 +158,7 @@
 
       @if (selectedTemplate) {
         <div>
-          <h4 class="mt-0.5 font-bold text-base text-gray-900">Edit Template</h4>
+          <h4 class="mt-0.5 text-base font-bold text-gray-900">Edit Template</h4>
 
           <div class="flex flex-row gap-2.5">
             @if (selectedTemplate.isNew) {

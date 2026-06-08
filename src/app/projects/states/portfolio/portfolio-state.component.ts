@@ -1,8 +1,8 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
-import {GlobalStateService, ViewType} from '../index/global-state.service';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {GlobalStateService} from '../index/global-state.service';
 
 interface PortfolioStepTab {
   title: string;
@@ -11,10 +11,10 @@ interface PortfolioStepTab {
 }
 
 @Component({
-    selector: 'f-portfolio-state',
-    templateUrl: './portfolio-state.component.html',
-    styleUrls: ['./portfolio-state.component.scss'],
-    standalone: false
+  selector: 'f-portfolio-state',
+  templateUrl: './portfolio-state.component.html',
+  styleUrls: ['./portfolio-state.component.scss'],
+  standalone: false,
 })
 export class PortfolioStateComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;

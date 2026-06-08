@@ -12,19 +12,24 @@
     />
     @if (taskDefinition.hasScormData) {
       <div class="flex flex-row gap-2.5 pt-2.5">
-        <button mat-flat-button color="warn" (click)="removeScormData()" class="flex-grow me-4">
+        <button mat-flat-button color="warn" (click)="removeScormData()" class="me-4 flex-grow">
           Delete SCORM Zip
         </button>
-        <button mat-flat-button color="accent" (click)="downloadScormData()" class="flex-grow ms-4 me-4">
+        <button
+          mat-flat-button
+          color="accent"
+          (click)="downloadScormData()"
+          class="me-4 ms-4 flex-grow"
+        >
           Download SCORM Zip
         </button>
-        <button mat-flat-button color="accent" (click)="previewScormTest()" class="flex-grow me-4">
+        <button mat-flat-button color="accent" (click)="previewScormTest()" class="me-4 flex-grow">
           Preview SCORM Test
         </button>
       </div>
     }
 
-    <div class="flex-grow flex flex-row gap-2.5 pt-2.5">
+    <div class="flex flex-grow flex-row gap-2.5 pt-2.5">
       <div class="basis-1/2">
         <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormAllowReview">
           Allow students to review completed test attempt
@@ -45,7 +50,7 @@
       </mat-form-field>
     </div>
 
-    <div class="flex-grow flex flex-row gap-2.5 pt-2.5">
+    <div class="flex flex-grow flex-row gap-2.5 pt-2.5">
       <mat-checkbox
         matInput
         required

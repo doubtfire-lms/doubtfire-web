@@ -1,6 +1,7 @@
 //
 // All anchors are pointers, as well as anything with the .pointer class
 //
-a, .pointer {
+a,
+.pointer {
   cursor: pointer;
 }

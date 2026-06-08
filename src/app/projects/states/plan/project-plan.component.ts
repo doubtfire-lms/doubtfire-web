@@ -1,17 +1,17 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {MatSelectChange} from '@angular/material/select';
 import {Observable, Subscription, of} from 'rxjs';
 import {Project, ProjectService} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
+import {ActivatedRoute} from '@angular/router';
 import {TaskPlannerComponent} from './task-planner/task-planner.component';
 
 @Component({
-    selector: 'f-project-plan',
-    templateUrl: 'project-plan.component.html',
-    styleUrls: ['project-plan.component.scss'],
-    standalone: false
+  selector: 'f-project-plan',
+  templateUrl: 'project-plan.component.html',
+  styleUrls: ['project-plan.component.scss'],
+  standalone: false,
 })
 export class ProjectPlanComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;

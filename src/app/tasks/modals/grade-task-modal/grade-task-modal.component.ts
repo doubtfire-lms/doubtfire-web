@@ -1,12 +1,12 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Task, GradeService } from 'src/app/api/models/doubtfire-model';
+import {GradeService, Task} from 'src/app/api/models/doubtfire-model';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
-    selector: 'grade-task-modal',
-    templateUrl: './grade-task-modal.component.html',
-    styleUrls: ['./grade-task-modal.component.scss'],
-    standalone: false
+  selector: 'grade-task-modal',
+  templateUrl: './grade-task-modal.component.html',
+  styleUrls: ['./grade-task-modal.component.scss'],
+  standalone: false,
 })
 export class GradeTaskModalComponent implements OnInit {
   task: Task;
@@ -23,7 +23,7 @@ export class GradeTaskModalComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<GradeTaskModalComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: {task: Task},
-    private gradeService: GradeService
+    private gradeService: GradeService,
   ) {}
 
   ngOnInit(): void {
@@ -70,7 +70,7 @@ export class GradeTaskModalComponent implements OnInit {
   }
 
   updateGrade(grade: number | string): void {
-    const gradeValue = Number(grade)
+    const gradeValue = Number(grade);
     if (this.gradeValues.includes(gradeValue)) {
       this.selectedGrade = gradeValue;
     }

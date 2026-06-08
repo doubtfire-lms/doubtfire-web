@@ -1,5 +1,3 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
@@ -7,22 +5,30 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ActivatedRoute} from '@angular/router';
 import {SelectedTaskService} from '../../selected-task.service';
 import {DashboardViews} from '../../selected-task.service';
-import {MatTabChangeEvent} from '@angular/material/tabs';
 
 @Component({
-    selector: 'f-task-dashboard',
-    templateUrl: './task-dashboard.component.html',
-    styleUrls: ['./task-dashboard.component.scss'],
-    standalone: false
+  selector: 'f-task-dashboard',
+  templateUrl: './task-dashboard.component.html',
+  styleUrls: ['./task-dashboard.component.scss'],
+  standalone: false,
 })
 export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
   @Input() pdfUrl: string;
   public DashboardViews = DashboardViews;
 
-  public taskStatusData: any;
+  public taskStatusData: {
+    keys: TaskService['markedStatuses'];
+    help: TaskService['helpDescriptions'];
+    icons: TaskService['statusIcons'];
+    labels: TaskService['statusLabels'];
+    class: TaskService['statusClass'];
+  };
   public tutor = false;
   public urls: {
     taskSubmissionPdfAttachmentUrl: string;
