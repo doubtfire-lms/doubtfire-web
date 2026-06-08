@@ -193,6 +193,15 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
+  private sortDateValue(value: Date | string | number | null | undefined): number {
+    if (value === null || value === undefined || value === '') {
+      return 0;
+    }
+
+    const time = new Date(value).getTime();
+    return Number.isFinite(time) ? time : 0;
+  }
+
   sortTableData(sort: Sort) {
     if (!sort.active || sort.direction === '') {
       return;
@@ -223,8 +232,8 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
           return this.sortCompare(a.submittedGrade, b.submittedGrade, sort.direction === 'asc');
         case 'submission-date':
           return this.sortCompare(
-            a.portfolioSubmissionDate?.getTime() ?? 0,
-            b.portfolioSubmissionDate?.getTime() ?? 0,
+            this.sortDateValue(a.portfolioSubmissionDate),
+            this.sortDateValue(b.portfolioSubmissionDate),
             sort.direction === 'asc',
           );
         case 'has-portfolio':
