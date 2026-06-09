@@ -301,7 +301,14 @@ import {TaskSubmissionHistoryComponent} from './tasks/task-submission-history/ta
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
+import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
+import {CommunicationActionsComponent} from './units/states/edit/directives/unit-communications-editor/actions/communication-actions.component';
+import {EmailStaffActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/email-staff-action/email-staff-action.component';
+import {EmailStudentActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/email-student-action/email-student-action.component';
+import {TaskCommentActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/task-comment-action/task-comment-action.component';
 import {CommunicationScheduleModalComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedule-modal.component';
+import {CommunicationSchedulesComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedules.component';
+import {CommunicationConditionsComponent} from './units/states/edit/directives/unit-communications-editor/conditions/communication-conditions.component';
 import {UnitCommunicationsEditorComponent} from './units/states/edit/directives/unit-communications-editor/unit-communications-editor.component';
 import {
   D2lUnitDetailsFormComponent,
@@ -588,7 +595,14 @@ const GANTT_CHART_CONFIG = {
     UploadSubmissionModalComponent,
     ConfirmModerationModalComponent,
     TaskClaimComponent,
+    ChangeTargetGradeActionComponent,
+    CommunicationActionsComponent,
+    CommunicationConditionsComponent,
     CommunicationScheduleModalComponent,
+    CommunicationSchedulesComponent,
+    EmailStaffActionComponent,
+    EmailStudentActionComponent,
+    TaskCommentActionComponent,
     UnitCommunicationsEditorComponent,
     TutorialsComponent,
     UnitStaffEditorComponent,

@@ -1,0 +1,13 @@
+import {CommunicationSet} from 'src/app/api/models/doubtfire-model';
+import {Component, Input} from '@angular/core';
+import type {UnitCommunicationsEditorComponent} from '../unit-communications-editor.component';
+
+@Component({
+  selector: 'f-communication-schedules',
+  standalone: false,
+  templateUrl: './communication-schedules.component.html',
+})
+export class CommunicationSchedulesComponent {
+  @Input({required: true}) editor: UnitCommunicationsEditorComponent;
+  @Input({required: true}) set: CommunicationSet;
+}

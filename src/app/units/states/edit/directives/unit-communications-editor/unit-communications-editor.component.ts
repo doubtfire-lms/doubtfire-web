@@ -52,6 +52,7 @@ interface CommunicationTreeNode {
 export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnDestroy {
   @Input() unit: Unit;
 
+  readonly editorContext = this;
   sets: CommunicationSet[] = [];
   selectedSetId?: number;
   selectedRuleId?: number;

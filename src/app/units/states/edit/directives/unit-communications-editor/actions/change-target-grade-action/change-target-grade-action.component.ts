@@ -1,0 +1,14 @@
+import {CommunicationRule} from 'src/app/api/models/doubtfire-model';
+import {Component, Input} from '@angular/core';
+import type {UnitCommunicationsEditorComponent} from '../../unit-communications-editor.component';
+
+@Component({
+  selector: 'f-change-target-grade-action',
+  standalone: false,
+  templateUrl: './change-target-grade-action.component.html',
+})
+export class ChangeTargetGradeActionComponent {
+  @Input({required: true}) editor: UnitCommunicationsEditorComponent;
+  @Input({required: true}) rule: CommunicationRule;
+  @Input({required: true}) mode: 'add' | 'edit';
+}
