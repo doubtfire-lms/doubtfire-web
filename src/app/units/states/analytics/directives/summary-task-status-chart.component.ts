@@ -1,4 +1,4 @@
-import {TooltipService} from '@swimlane/ngx-charts';
+import {DataItem, MultiSeries, TooltipService} from '@swimlane/ngx-charts';
 import {
   TaskCodeStats,
   TaskCompletionSnapshot,
@@ -24,7 +24,7 @@ import {filter, map, take} from 'rxjs/operators';
 export class SummaryTaskStatusChartComponent implements OnInit {
   @Input() unit: Unit;
 
-  data: any[] = [];
+  data: MultiSeries = [];
   snapshots: TaskCompletionSnapshot[] = [];
   campuses: string[] = [];
   tutorials: string[] = [];
@@ -110,21 +110,20 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     this.campuses = [];
     this.tutorials = [];
 
-    recentSnapshot &&
-      Object.entries(recentSnapshot).forEach(([campus, campusData]) => {
-        this.campuses.push(campus);
-        Object.entries(campusData).forEach(([tutorial, tutorialData]) => {
-          if (!this.tutorials.includes(tutorial)) {
-            this.tutorials.push(tutorial);
-          }
-          Object.entries(tutorialData).forEach(([taskDef, counts]) => {
-            mergedData[taskDef] = mergedData[taskDef] || {};
-            Object.entries(counts).forEach(([status, value]) => {
-              mergedData[taskDef][status] = (mergedData[taskDef][status] || 0) + value;
-            });
+    Object.entries(recentSnapshot).forEach(([campus, campusData]) => {
+      this.campuses.push(campus);
+      Object.entries(campusData).forEach(([tutorial, tutorialData]) => {
+        if (!this.tutorials.includes(tutorial)) {
+          this.tutorials.push(tutorial);
+        }
+        Object.entries(tutorialData).forEach(([taskDef, counts]) => {
+          mergedData[taskDef] = mergedData[taskDef] || {};
+          Object.entries(counts).forEach(([status, value]) => {
+            mergedData[taskDef][status] = (mergedData[taskDef][status] || 0) + value;
           });
         });
       });
+    });
 
     // if a campus filter is set, use only that campus
     this.dataSource =
@@ -135,7 +134,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     this.data = this.buildChartData(this.dataSource);
   }
 
-  private buildChartData(taskStats: TaskCodeStats): any[] {
+  private buildChartData(taskStats: TaskCodeStats): MultiSeries {
     const taskSeqByCode = new Map(
       this.unit.taskDefinitions.map((taskDefinition) => [
         taskDefinition.abbreviation,
@@ -170,12 +169,12 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     }, {} as TaskCodeStats);
   }
 
-  onSelect(event: any) {
+  onSelect(event: DataItem): void {
     console.log(event);
   }
 
-  private extractErrorMessage(error: any, fallback: string): string {
-    if (typeof error === 'string' && error.trim().length > 0) {
+  private extractErrorMessage(error: string, fallback: string): string {
+    if (error.trim().length > 0) {
       return error;
     }
 
