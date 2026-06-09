@@ -6,14 +6,13 @@
   >
     @if (!media.isActive('xs')) {
       @if (logoSettings.hasLogo) {
-        <a [href]="logoSettings.logoLinkUrl" class="mx-6">
-          <img [src]="logoSettings.logoUrl" style="height: 32px" />
+        <a [href]="logoSettings.logoLinkUrl" class="mx-3.5">
+          <img [src]="logoSettings.logoUrl" style="height: 32px" [alt]="externalName + 'logo'" />
         </a>
       }
 
-      <a uiSref="home" class="pt-4">
+      <a routerLink="/home" class="pt-2.5">
         <mat-icon
-          uiSref="home"
           style="margin-right: 20px; margin-left: 20px"
           svgIcon="formatif-logo"
           class="formatif-icon"
@@ -26,7 +25,7 @@
       [unit]="currentUnit"
       [unitRoles]="filteredUnitRoles"
       [projects]="projects"
-      class="mr-2"
+      class="mr-1"
     >
     </unit-dropdown>
 
@@ -72,17 +71,17 @@
     }
     <mat-menu #menu="matMenu">
       @if (currentUser.role === 'Admin') {
-        <button mat-menu-item uiSref="institutionsettings">
+        <button mat-menu-item routerLink="/admin/institution-settings">
           <mat-icon matListItemIcon>business</mat-icon>
           Institution Settings
         </button>
       }
-      <button mat-menu-item uiSref="admin/units">
+      <button mat-menu-item routerLink="/admin/units">
         <mat-icon matListItemIcon>school</mat-icon>
         Manage Units
       </button>
       @if (currentUser.role === 'Admin') {
-        <button mat-menu-item uiSref="admin/users">
+        <button mat-menu-item routerLink="/admin/users">
           <mat-icon matListItemIcon>people</mat-icon>
           Manage Users
         </button>
@@ -93,7 +92,7 @@
       <user-icon [size]="32" [user]="currentUser"></user-icon>
     </button>
     <mat-menu #menu2="matMenu">
-      <button mat-menu-item uiSref="edit_profile">
+      <button mat-menu-item routerLink="/edit_profile">
         <mat-icon matListItemIcon aria-label="Edit profile">person</mat-icon>
         My Profile
       </button>

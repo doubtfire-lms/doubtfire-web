@@ -1,13 +1,13 @@
-<div class="flex flex-row justify-evenly items-center">
+<div class="flex flex-row items-center justify-evenly">
   @if (comment.assessed) {
-    <div class="flex flex-col justify-around items-center">
+    <div class="flex flex-col items-center justify-around">
       <hr class="hr-text" [attr.data-content]="message" />
       <p class="fade-text"><strong> reason:</strong> {{ comment.text }}</p>
     </div>
   }
 
   @if (!comment.assessed) {
-    <div class="flex flex-col justify-around items-center">
+    <div class="flex flex-col items-center justify-around">
       <hr class="hr-fade" />
       <p>
         {{ message }} <br />

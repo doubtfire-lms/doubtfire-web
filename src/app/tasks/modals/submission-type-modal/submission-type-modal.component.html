@@ -8,11 +8,11 @@
     You can submit it for feedback before the deadline, but you'll need to resubmit it later for
     portfolio assessment.
   </p>
-  <div class="p-5 flex justify-center gap-5">
+  <div class="flex justify-center gap-3 p-3">
     <button
       matTooltip="Receive feedback from your tutor"
       mat-raised-button
-      class="h-[175px] w-[175px] flex flex-col text-align p-2 items-center gap-3"
+      class="text-align flex h-[175px] w-[175px] flex-col items-center gap-2 p-1"
       [color]="selectedTransition === 'ready_for_feedback' ? 'primary' : 'default'"
       (click)="selectRff()"
     >
@@ -22,7 +22,7 @@
     <button
       matTooltip="Submit directly for portfolio assessment"
       mat-raised-button
-      class="h-[175px] w-[175px] flex flex-col text-align p-2 items-center gap-3"
+      class="text-align flex h-[175px] w-[175px] flex-col items-center gap-2 p-1"
       [color]="selectedTransition === 'assess_in_portfolio' ? 'primary' : 'default'"
       (click)="selectAip()"
     >

@@ -1,48 +1,50 @@
+import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
+import {
+  FeedbackTemplate,
+  FeedbackTemplateService,
+  LearningOutcome,
+  LearningOutcomeService,
+  Task,
+  TaskService,
+} from 'src/app/api/models/doubtfire-model';
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
   ViewEncapsulation,
-  EventEmitter,
-  OnInit,
 } from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
-import {
-  LearningOutcome,
-  FeedbackTemplate,
-  Task,
-  FeedbackTemplateService,
-  LearningOutcomeService,
-  TaskService,
-} from 'src/app/api/models/doubtfire-model';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 
 @Component({
   selector: 'f-task-feedback-templates',
   styleUrl: './task-feedback-templates.component.scss',
   templateUrl: './task-feedback-templates.component.html',
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   @Input() task: Task;
-  @Output() templateSelected = new EventEmitter<FeedbackTemplate>();
+  @Output() templateSelected: EventEmitter<FeedbackTemplate> = new EventEmitter();
 
   categories = ['TLO', 'ULO', 'GLO'];
   selectedTemplates: FeedbackTemplate[] = [];
   hoveredTemplate: FeedbackTemplate;
 
-  private generalTemplatesSubject = new BehaviorSubject<FeedbackTemplate[]>([]);
+  private generalTemplatesSubject: BehaviorSubject<FeedbackTemplate[]> = new BehaviorSubject([]);
   generalTemplates$ = this.generalTemplatesSubject.asObservable();
 
-  private navigationStackSubject = new BehaviorSubject<Map<number, number[]>>(
+  private navigationStackSubject: BehaviorSubject<Map<number, number[]>> = new BehaviorSubject(
     new Map<number, number[]>(),
   );
   navigationStack$ = this.navigationStackSubject.asObservable();
 
-  private searchTermSubject = new BehaviorSubject<string>('');
+  private searchTermSubject: BehaviorSubject<string> = new BehaviorSubject('');
   searchTerm$ = this.searchTermSubject.asObservable();
 
   public genTemplates$ = combineLatest([this.generalTemplates$, this.searchTerm$]).pipe(
@@ -81,7 +83,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     const greetingTemplate = new FeedbackTemplate();
     greetingTemplate.type = 'template';
     greetingTemplate.chipText = 'Greeting';
-    greetingTemplate.description = 'Insert a greeting with the student\'s name.';
+    greetingTemplate.description = "Insert a greeting with the student's name.";
 
     const summaryTemplate = new FeedbackTemplate();
     summaryTemplate.type = 'template';
@@ -91,7 +93,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     this.generalTemplatesSubject.next([greetingTemplate, summaryTemplate]);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_changes: SimpleChanges): void {
     this.selectedTemplates = [];
     this.navigationStackSubject.next(new Map<number, number[]>());
     this.searchTermSubject.next('');
@@ -179,7 +181,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   @ViewChild('uloSection') uloSection!: ElementRef;
   @ViewChild('gloSection') gloSection!: ElementRef;
 
-  scrollToSection(event: any) {
+  scrollToSection(event: MatTabChangeEvent) {
     const sections = [this.tloSection, this.uloSection, this.gloSection];
     const selectedSection = sections[event.index];
 

@@ -1,24 +1,24 @@
-<div id="home" class="w-full h-screen px-20 justify-center items-center">
-  <div class="flex flex-col gap-5 w-full max-w-4xl mx-auto justify-center items-center h-screen">
-    <div class="flex justify-center items-center">
+<div id="home" class="h-screen w-full items-center justify-center px-12">
+  <div class="mx-auto flex h-screen w-full max-w-4xl flex-col items-center justify-center gap-3">
+    <div class="flex items-center justify-center">
       <mat-icon
         svgIcon="formatif-logo"
         class="formatif-icon"
         aria-label="Formatif logo"
-        class="w-[100px] h-[100px]"
+        class="h-[100px] w-[100px]"
       ></mat-icon>
-      <h1 class="m-0 ml-5 text-6xl">OnTrack</h1>
+      <h1 class="m-0 ml-3 text-4xl">OnTrack</h1>
     </div>
 
     @if (loadingUnits) {
       <p>Loading...</p>
     } @else if (!activeUnits.length) {
-      <p class="w-full text-center text-gray-400 max-w-2xl">
+      <p class="w-full max-w-2xl text-center text-gray-400">
         You must already be a Convenor or Admin to link a unit. You are not currently assigned to
         any units.
       </p>
     } @else {
-      <p class="w-full text-center max-w-2xl">
+      <p class="w-full max-w-2xl text-center">
         Students will be automatically enrolled in this unit when they launch the OnTrack tool from
         this course.
       </p>

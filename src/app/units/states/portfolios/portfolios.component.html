@@ -1,0 +1,45 @@
+<div class="mx-auto max-w-[90vw]">
+  <h1>Student Portfolios</h1>
+  @if (unit) {
+    <mat-tab-group #tabs dynamicHeight class="overflow-visible">
+      <mat-tab label="Select Student">
+        <f-portfolios-list
+          [unit]="unit"
+          (studentSelected)="studentSelected($event)"
+        ></f-portfolios-list>
+      </mat-tab>
+      <mat-tab label="View Progress" [disabled]="!selectedProject">
+        @if (selectedProject) {
+          <f-portfolios-project-progress
+            [unit]="unit"
+            [project]="selectedProject"
+          ></f-portfolios-project-progress>
+        }
+      </mat-tab>
+
+      <!-- TODO 10.0.x: View Project Tasks/Dashboard directive (project. dashboard) -->
+
+      <mat-tab label="View Staff Notes" [disabled]="!selectedProject">
+        @if (selectedProject) {
+          <f-staff-notes [project]="selectedProject"></f-staff-notes>
+        }
+      </mat-tab>
+      <mat-tab label="View Portfolio" [disabled]="!selectedProject">
+        @if (selectedProject) {
+          <f-portfolios-portfolio-view [project]="selectedProject"></f-portfolios-portfolio-view>
+        }
+      </mat-tab>
+      <mat-tab label="Assess Portfolio" [disabled]="!selectedProject">
+        @if (selectedProject) {
+          <f-portfolios-assessment
+            [project]="selectedProject"
+            [unit]="unit"
+          ></f-portfolios-assessment>
+        }
+      </mat-tab>
+    </mat-tab-group>
+  } @else {
+    <!-- TODO 10.0.x: loading unit spinner -->
+    <div>Loading unit...</div>
+  }
+</div>

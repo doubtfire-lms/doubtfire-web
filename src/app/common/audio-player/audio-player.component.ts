@@ -1,21 +1,22 @@
-import { HttpResponse } from '@angular/common/http';
-import { Component, Inject, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { Project, Task, TaskComment } from 'src/app/api/models/doubtfire-model';
-import { FileDownloaderService } from '../file-downloader/file-downloader.service';
-import { AlertService } from '../services/alert.service';
+import {Project, Task, TaskComment} from 'src/app/api/models/doubtfire-model';
+import {HttpResponse} from '@angular/common/http';
+import {Component, ElementRef, Inject, Input, OnDestroy, ViewChild} from '@angular/core';
+import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {AlertService} from '../services/alert.service';
 
 @Component({
   selector: 'audio-player',
   templateUrl: './audio-player.component.html',
   styleUrls: ['./audio-player.component.scss'],
+  standalone: false,
 })
 export class AudioPlayerComponent implements OnDestroy {
   @Input() project: Project;
   @Input() task: Task;
   @Input() comment: TaskComment;
-  @Input() audioSrc: { src: string };
+  @Input() audioSrc: {src: string};
 
-  @ViewChild('progressBar', { read: ElementRef }) private progressBar: ElementRef;
+  @ViewChild('progressBar', {read: ElementRef}) private progressBar: ElementRef;
 
   private isLoaded = false;
   public isPlaying = false;
@@ -38,7 +39,7 @@ export class AudioPlayerComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     // Clean up the blob
-    if ( this.audio.src ) {
+    if (this.audio.src) {
       this.fileDownloader.releaseBlob(this.audio.src);
     }
   }
@@ -59,7 +60,7 @@ export class AudioPlayerComponent implements OnDestroy {
 
   public setSrc(src: string) {
     // If there was an old blob, then free the memory it uses
-    if ( this.audio.src ) {
+    if (this.audio.src) {
       this.fileDownloader.releaseBlob(this.audio.src);
     }
     this.audio.src = src;
@@ -83,7 +84,7 @@ export class AudioPlayerComponent implements OnDestroy {
 
       this.fileDownloader.downloadBlob(
         url,
-        ((blobUrl: string, response: HttpResponse<Blob>) => {
+        ((blobUrl: string, _response: HttpResponse<Blob>) => {
           this.isLoaded = true;
           this.setSrc(blobUrl);
           this.audio.src = blobUrl;
@@ -96,9 +97,9 @@ export class AudioPlayerComponent implements OnDestroy {
             fn();
           }
         }).bind(this),
-        ((error: any) => {
+        ((error: Error) => {
           this.alerts.error(`Error loading audio. ${error}`, 6000);
-        }).bind(this)
+        }).bind(this),
       );
     }
   }
@@ -114,7 +115,7 @@ export class AudioPlayerComponent implements OnDestroy {
           this.audio.pause();
           this.isPlaying = false;
         }
-      }).bind(this)
+      }).bind(this),
     );
   }
 }

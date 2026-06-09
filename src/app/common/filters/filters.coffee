@@ -1,3 +1,6 @@
+# Component is no longer used and is unlinked from the app
+# This file is left for reference, as these are migrated into Pipes
+
 angular.module("doubtfire.common.filters", [])
 
 #

@@ -1,4 +1,4 @@
-import { MarkedPipe } from './marked.pipe';
+import {MarkedPipe} from './marked.pipe';
 
 describe('MarkedPipe', () => {
   it('create an instance', () => {

@@ -1,15 +1,16 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {ConfirmModerationModalData} from './confirm-moderation-modal.service';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {TaskService} from 'src/app/api/services/task.service';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {FeedbackModerationActionType} from 'src/app/api/models/task';
 import {Task} from 'src/app/api/models/task';
+import {TaskService} from 'src/app/api/services/task.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ConfirmModerationModalData} from './confirm-moderation-modal.service';
 
 @Component({
   selector: 'f-confirm-moderation-modal',
   templateUrl: './confirm-moderation-modal.component.html',
   styleUrl: './confirm-moderation-modal.component.scss',
+  standalone: false,
 })
 export class ConfirmModerationModalComponent implements OnInit {
   task: Task;

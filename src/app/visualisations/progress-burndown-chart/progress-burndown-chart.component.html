@@ -1,0 +1,22 @@
+<div class="chart-container flex h-full min-h-[320px] pb-6">
+  <ngx-charts-line-chart
+    class="progress-burndown-chart h-full flex-1"
+    [view]=""
+    [results]="data"
+    [legend]="legend"
+    [legendTitle]="''"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxis]="xAxis"
+    [yAxis]="yAxis"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    [yAxisTickFormatting]="formatPerc"
+    [scheme]="colorScheme"
+    [yScaleMin]="yScaleMin"
+    [yScaleMax]="yScaleMax"
+    (select)="onSelect($event)"
+    legendPosition="below"
+  >
+  </ngx-charts-line-chart>
+</div>

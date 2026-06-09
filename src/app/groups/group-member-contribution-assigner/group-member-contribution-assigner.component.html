@@ -1,0 +1,51 @@
+<table
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  matSortActive="name"
+  matSortDirection="asc"
+  matSortDisableClear
+  (matSortChange)="sortTableData($event)"
+>
+  <ng-container matColumnDef="name" sticky>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Team Member</th>
+    <td mat-cell *matCellDef="let member">
+      {{ member.project.student.name }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="target-grade" sticky>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Target Grade</th>
+    <td mat-cell *matCellDef="let member">
+      <f-grade-icon [grade]="member.project.targetGrade"></f-grade-icon>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="contribution" sticky>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Contribution</th>
+    <td mat-cell *matCellDef="let member">
+      @for (i of [].constructor(numStars); track $index) {
+        <mat-icon
+          [matTooltip]="member.percent + '% effort'"
+          (click)="selectRating(member, $index + 1)"
+          (mouseenter)="hoveringOver(member, $index + 1)"
+          (mouseleave)="hoveringOver(member, null)"
+          [ngClass]="{
+            'text-amber-400':
+              member.overStar !== null
+                ? $index + 1 <= member.overStar
+                : $index + 1 <= member.rating,
+            'text-gray-300':
+              member.overStar !== null ? $index + 1 > member.overStar : $index + 1 > member.rating,
+          }"
+          class="cursor-pointer px-0.5 align-middle text-2xl"
+        >
+          person
+        </mat-icon>
+      }
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

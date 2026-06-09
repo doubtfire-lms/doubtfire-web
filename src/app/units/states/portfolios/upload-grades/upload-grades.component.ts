@@ -1,22 +1,24 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
-import {csvResultModalService, csvUploadModalService} from 'src/app/ajs-upgraded-providers';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
+import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'f-upload-grades',
   templateUrl: 'upload-grades.component.html',
   styleUrl: 'upload-grades.component.scss',
+  standalone: false,
 })
 export class UploadGradesComponent implements OnInit {
   @Input() unit: Unit;
 
   constructor(
-    @Inject(csvUploadModalService) private csvUploadModal: any,
     private sidekiqModalService: SidekiqProgressModalService,
-    @Inject(csvResultModalService) private csvResultModal: any,
+    private csvUploadModal: CsvUploadModalService,
+    private csvResultModal: CsvResultModalService,
     private alertService: AlertService,
   ) {}
 

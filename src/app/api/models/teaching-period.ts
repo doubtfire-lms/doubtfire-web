@@ -1,7 +1,7 @@
-import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
-import { Observable } from 'rxjs';
-import { AppInjector } from 'src/app/app-injector';
-import { TeachingPeriodBreakService, TeachingPeriodService, Unit } from './doubtfire-model';
+import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
+import {Observable} from 'rxjs';
+import {AppInjector} from 'src/app/app-injector';
+import {TeachingPeriodBreakService, TeachingPeriodService, Unit} from './doubtfire-model';
 
 export class TeachingPeriodBreak extends Entity {
   id: number;
@@ -27,7 +27,10 @@ export class TeachingPeriod extends Entity {
    * @param ignoreKeys
    * @returns
    */
-  public override toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+  public override toJson<T extends Entity>(
+    mappingData: EntityMapping<T>,
+    ignoreKeys?: string[],
+  ): object {
     return {
       teaching_period: super.toJson(mappingData, ignoreKeys),
     };
@@ -69,7 +72,10 @@ export class TeachingPeriod extends Entity {
     breakEntity.numberOfWeeks = weeks;
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
 
-    return breakService.create({ teaching_period_id: this.id }, { cache: this.breaksCache, entity: breakEntity });
+    return breakService.create(
+      {teaching_period_id: this.id},
+      {cache: this.breaksCache, entity: breakEntity},
+    );
   }
 
   /**
@@ -79,10 +85,17 @@ export class TeachingPeriod extends Entity {
    */
   public removeBreak(teachingBreakID: number): Observable<TeachingPeriodBreak> {
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
-    return breakService.delete({ teaching_period_id: this.id, id: teachingBreakID }, { cache: this.breaksCache });
+    return breakService.delete(
+      {teaching_period_id: this.id, id: teachingBreakID},
+      {cache: this.breaksCache},
+    );
   }
 
-  public rollover(newPeriod: TeachingPeriod, rolloverInactive: boolean, searchForward: boolean): Observable<boolean> {
+  public rollover(
+    newPeriod: TeachingPeriod,
+    rolloverInactive: boolean,
+    searchForward: boolean,
+  ): Observable<boolean> {
     const teachingPeriodService: TeachingPeriodService = AppInjector.get(TeachingPeriodService);
 
     return teachingPeriodService.post<boolean>(
@@ -94,7 +107,92 @@ export class TeachingPeriod extends Entity {
       },
       {
         endpointFormat: TeachingPeriodService.rolloverEndpointFormat,
+      },
+    );
+  }
+
+  public weekNumber(date: Date | string): number | null {
+    if (!date || !this.startDate) return null;
+
+    const targetDate = this.normalizeDay(date);
+    const startDate = this.normalizeDay(this.startDate);
+    if (!targetDate || !startDate) return null;
+
+    const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+    let result = Math.floor((targetDate.getTime() - startDate.getTime()) / millisecondsPerWeek) + 1;
+
+    for (const teachingBreak of this.breaks) {
+      const breakStart = this.normalizeDay(teachingBreak.startDate);
+      const breakEnd = this.breakEndDate(teachingBreak);
+      const firstMonday = this.firstMonday(teachingBreak);
+      const mondayAfterBreak = this.mondayAfterBreak(teachingBreak);
+
+      if (!breakStart || !breakEnd || !firstMonday || !mondayAfterBreak) continue;
+
+      if (targetDate >= breakStart) {
+        if (targetDate >= breakEnd) {
+          result -= teachingBreak.numberOfWeeks;
+        } else if (targetDate.getTime() === breakStart.getTime()) {
+          if (targetDate >= firstMonday) {
+            result -= 1;
+          }
+        } else if (targetDate >= firstMonday) {
+          result -= Math.ceil((targetDate.getTime() - firstMonday.getTime()) / millisecondsPerWeek);
+        }
+
+        if (targetDate >= breakEnd && targetDate < mondayAfterBreak) {
+          result += 1;
+        }
       }
+    }
+
+    return result;
+  }
+
+  private normalizeDay(date: Date | string | null | undefined): Date | null {
+    if (!date) return null;
+
+    const parsed = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(parsed.valueOf())) return null;
+
+    return new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
+  }
+
+  private breakEndDate(teachingBreak: TeachingPeriodBreak): Date | null {
+    const startDate = this.normalizeDay(teachingBreak.startDate);
+    if (!startDate || !teachingBreak.numberOfWeeks) return null;
+
+    return new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate() + teachingBreak.numberOfWeeks * 7,
+    );
+  }
+
+  private firstMonday(teachingBreak: TeachingPeriodBreak): Date | null {
+    const startDate = this.normalizeDay(teachingBreak.startDate);
+    if (!startDate) return null;
+
+    if (startDate.getDay() === 1) return startDate;
+    if (startDate.getDay() === 0) {
+      return new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 1);
+    }
+
+    return new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate() + (8 - startDate.getDay()),
+    );
+  }
+
+  private mondayAfterBreak(teachingBreak: TeachingPeriodBreak): Date | null {
+    const firstMonday = this.firstMonday(teachingBreak);
+    if (!firstMonday || !teachingBreak.numberOfWeeks) return null;
+
+    return new Date(
+      firstMonday.getFullYear(),
+      firstMonday.getMonth(),
+      firstMonday.getDate() + teachingBreak.numberOfWeeks * 7,
     );
   }
 }

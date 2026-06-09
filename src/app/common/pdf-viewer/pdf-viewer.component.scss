@@ -1,4 +1,4 @@
-@import '../../../styles/mixins/scrollable.scss';
+@use 'styles/mixins/scrollable' as *;
 
 #pdfContainer {
   flex-direction: column;

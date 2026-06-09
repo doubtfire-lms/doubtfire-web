@@ -1,8 +1,18 @@
-import { OnInit, Directive } from '@angular/core';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
+import {Directive, OnInit} from '@angular/core';
+
+export interface RecordingEvent extends Event {
+  detail: {
+    recording: {
+      blob: Blob;
+      blobUrl: string;
+    };
+  };
+}
 
 @Directive()
 export abstract class BaseAudioRecorderComponent implements OnInit {
-  protected mediaRecorder: any = null;
+  protected mediaRecorder: MediaRecorderService = null;
   public recordingAvailable: boolean = false;
   public isRecording: boolean = false;
   protected isPlaying: boolean = false;
@@ -18,7 +28,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     return Boolean(navigator && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   }
 
-  constructor(private mediaRecorderService: any) {}
+  constructor(private recorderService: MediaRecorderService) {}
 
   ngOnInit(): void {
     this.isSending = false;
@@ -29,12 +39,14 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
 
   protected init(): void {
     this.blob = new Blob();
-    this.mediaRecorder = new this.mediaRecorderService();
+    this.mediaRecorder = this.recorderService;
     // Required for recording multiple times
     this.mediaRecorder.config.stopTracksAndCloseCtxWhenFinished = true;
     // Required for visualising the stream
     this.mediaRecorder.config.createAnalyserNode = true;
-    this.mediaRecorder.em.addEventListener('recording', (evt: any) => this.onNewRecording(evt));
+    this.mediaRecorder.em.addEventListener('recording', (evt: Event) =>
+      this.onNewRecording(evt as RecordingEvent),
+    );
   }
 
   playStop(): void {
@@ -84,7 +96,7 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
     this.mediaRecorder.processChunks();
   }
 
-  onNewRecording(evt: any): void {
+  onNewRecording(evt: RecordingEvent): void {
     this.blob = evt.detail.recording.blob;
     this.audio.src = evt.detail.recording.blobUrl;
     this.audio.load();

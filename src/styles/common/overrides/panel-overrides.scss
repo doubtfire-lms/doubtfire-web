@@ -1,11 +1,15 @@
+@use 'sass:color';
+
 //
 // Global overrides for panels
 //
-.panel-footer .pagination, .modal-footer .pagination {
+.panel-footer .pagination,
+.modal-footer .pagination {
   margin: 0;
 }
 
-.panel-body + .panel-heading, .panel-body + * > .panel-heading {
+.panel-body + .panel-heading,
+.panel-body + * > .panel-heading {
   border-top: 1px solid #ddd !important;
   border-radius: 0 !important;
 }
@@ -27,7 +31,9 @@
   .panel > *:not(.panel-heading):not(.panel-footer):not(.panel-toolbar) {
     flex: 1;
   }
-  .panel-heading, .panel-body, .panel-footer {
+  .panel-heading,
+  .panel-body,
+  .panel-footer {
     width: 100%;
   }
   .panel + .panel {
@@ -41,7 +47,8 @@
     margin-top: 0;
     font-size: 1em;
   }
-  .panel .drop.well, .panel .file-uploader {
+  .panel .drop.well,
+  .panel .file-uploader {
     margin: 0;
   }
 }
@@ -73,11 +80,12 @@
 
 // Search options panel
 .panel-body.panel-collapseable {
-  background-color: lighten($gray-lighter, 2%);
+  background-color: color.adjust($gray-lighter, $lightness: 2%);
 }
 
 // Two panel bodies next to eachother (include those with one nested in custom element)
-.panel-body:not(.ng-hide) + * > .panel-body, .panel-body:not(.ng-hide) + .panel-body {
+.panel-body:not(.ng-hide) + * > .panel-body,
+.panel-body:not(.ng-hide) + .panel-body {
   padding-top: 0;
 }
 // Remove extra margin for callouts in padding
@@ -91,7 +99,8 @@
 // Full screen set of panels
 .panel-full-screen {
   height: $main-view-max-height;
-  & > *, & > * > .panel {
+  & > *,
+  & > * > .panel {
     height: 100%;
   }
 }

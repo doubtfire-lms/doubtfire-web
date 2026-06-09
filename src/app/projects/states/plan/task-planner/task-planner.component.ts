@@ -1,5 +1,3 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {UIRouter} from '@uirouter/core';
 import {
   GanttBaselineItem,
   GanttDate,
@@ -18,6 +16,8 @@ import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.se
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 
 interface TaskGanttItem extends GanttItem {
@@ -31,6 +31,7 @@ interface TaskGanttItem extends GanttItem {
   selector: 'f-task-planner',
   templateUrl: './task-planner.component.html',
   styleUrl: './task-planner.component.scss',
+  standalone: false,
 })
 export class TaskPlannerComponent implements OnInit {
   // Show a warning if the task's target end date is within this many days of the feedback deadline
@@ -66,7 +67,8 @@ export class TaskPlannerComponent implements OnInit {
     private confirmationModalService: ConfirmationModalService,
     private taskPlannerPrerequisitesModal: TaskPlannerPrerequisitesModalService,
     private taskPrerequisiteService: TaskPrerequisiteService,
-    private router: UIRouter,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   public get gradeValues() {
@@ -566,8 +568,9 @@ export class TaskPlannerComponent implements OnInit {
       this.ganttComponent.scrollToToday();
     }
 
-    if (this.router.globals.params.taskDef && scroll) {
-      const taskItem = this.items.find((item) => item.id === this.router.globals.params.taskDef);
+    const taskDef = this.route.snapshot.queryParamMap.get('taskDef');
+    if (taskDef && scroll) {
+      const taskItem = this.items.find((item) => item.id === taskDef);
       if (taskItem) {
         this.ganttComponent.scrollToDate(taskItem.start);
         taskItem.highlighted = true;
@@ -585,11 +588,12 @@ export class TaskPlannerComponent implements OnInit {
         setTimeout(() => (taskItem.highlighted = false), 1000);
         setTimeout(() => (this.animateBackground = false), 2000);
       }
-      this.router.stateService.go(
-        this.router.globals.current.name,
-        {taskDef: null},
-        {location: 'replace', notify: false, reload: false},
-      );
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {taskDef: null},
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
     }
   }
 

@@ -57,7 +57,7 @@ Notice the naming convention. When migrating a component we use the format _name
 Add the start of the typescript using something based on the following:
 
 ```typescript
-import { Component, Input, Inject } from '@angular/core';
+import {Component, Inject, Input} from '@angular/core';
 
 @Component({
   selector: 'task-description-card',
@@ -96,7 +96,6 @@ We want to make sure we can see our progress as quickly as possible. So lets sta
 There are a few files we need to update to achieve this.
 
 - Remove link to component from the angular module.
-
   - Open the component's CoffeeScript file and make a note of the name of the module.
 
     ```coffeescript
@@ -111,7 +110,7 @@ There are a few files we need to update to achieve this.
 - Setup the new component in **doubtfire-angular.module.ts**
   - Import like this:
     ```ts
-    import { TaskDescriptionCardComponent } from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component';
+    import {TaskDescriptionCardComponent} from './projects/states/dashboard/directives/task-dashboard/directives/task-description-card/task-description-card.component';
     ```
   - Then add the component name to the list of **declarations**. Now the component will be available in Angular.
 - Remove the old and downgrade the new in **doubtfire-angularjs.module.ts**
@@ -124,24 +123,31 @@ There are a few files we need to update to achieve this.
     ```typescript
     DoubtfireAngularJSModule.directive(
       'taskDescriptionCard',
-      downgradeComponent({ component: TaskDescriptionCardComponent })
+      downgradeComponent({component: TaskDescriptionCardComponent}),
     );
     ```
 - Update attributes on the new component usage.
-
   - Search for all of the places where the component was already used (i.e. search for the component HTML tag).
   - Update the property binding style to use the Angular form which is `[property]="value"`.
 
     For example:
 
     ```html
-    <task-description-card task-def="task.definition" task="task" unit="task.unit()"></task-description-card>
+    <task-description-card
+      task-def="task.definition"
+      task="task"
+      unit="task.unit()"
+    ></task-description-card>
     ```
 
     Needs to change to:
 
     ```html
-    <task-description-card [task-def]="task.definition" [task]="task" [unit]="task.unit()"></task-description-card>
+    <task-description-card
+      [task-def]="task.definition"
+      [task]="task"
+      [unit]="task.unit()"
+    ></task-description-card>
     ```
 
 - Add matching inputs into your components typescript declaration. These use the syntax `@Input() name: type;`. For the task description card we use:

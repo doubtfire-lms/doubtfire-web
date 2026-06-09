@@ -1,5 +1,5 @@
 <div id="portfolio-state" class="project-portfolio-wizard w-full">
-  <mat-card class="max-w-7xl mx-auto">
+  <mat-card class="mx-auto max-w-7xl">
     <!-- Main Header -->
     <mat-card-header>
       <mat-card-title class="grade-card-title">
@@ -8,22 +8,22 @@
     </mat-card-header>
 
     <mat-card-content>
-      <p class="m-4">
+      <p class="m-2.5">
         In preparing your portfolio, you need to undertake a self-assessment. Use the unit's
         assessment criteria to determine the grade your portfolio should be awarded.
       </p>
 
       <!-- Warning Card -->
-      <mat-card class="mt-4 mx-2">
+      <mat-card class="mx-1 mt-2.5">
         <mat-card-header class="bg-red-500 text-white">
-          <mat-card-title class="flex flex-row items-center gap-2">
+          <mat-card-title class="flex flex-row items-center gap-1">
             <mat-icon class="warning-icon">warning</mat-icon>
             Read the assessment criteria
           </mat-card-title>
         </mat-card-header>
 
         <mat-card-content class="bg-red-500 text-white">
-          <p class="m-3">
+          <p class="m-2">
             Make sure that you have reviewed the Assessment Criteria for the grade you are applying
             for. Each grade will have a list of criteria that you can use to determine if you meet
             the requirements to achieve that grade.
@@ -40,15 +40,15 @@
       <!-- Grade Selection -->
 
       @if (agreedToAssessmentCriteria) {
-        <mat-card class="mt-4 mx-2">
+        <mat-card class="mx-1 mt-2.5">
           <mat-card-header>
-            <mat-card-title class="flex flex-row items-center gap-2">
+            <mat-card-title class="flex flex-row items-center gap-1">
               Grade Application
             </mat-card-title>
           </mat-card-header>
 
           <mat-card-content>
-            <p class="m-3">
+            <p class="m-2">
               Select the <strong>grade</strong> you are applying for {{ unit.code }}
               {{ unit.name }} below.
             </p>
@@ -62,7 +62,7 @@
               @for (grade of gradeValues; track grade) {
                 <mat-button-toggle
                   [value]="grade"
-                  class="p-2 py-4"
+                  class="p-1 py-2.5"
                   (click)="updateSubmittedGrade(grade)"
                 >
                   <f-grade-icon [grade]="grade"></f-grade-icon>
@@ -70,7 +70,7 @@
               }
             </mat-button-toggle-group>
 
-            <p class="mt-4 text-gray-600">
+            <p class="mt-2.5 text-gray-600">
               Make sure your <strong>Learning Summary Report</strong> justifies how your portfolio
               demonstrates you have
               <strong>met all unit learning outcomes to a {{ targetGrade }} level</strong>
