@@ -1,6 +1,6 @@
 <div class="flex size-full flex-col">
   <mat-tab-group
-    class="mx-auto mb-6 w-full max-w-[900px]"
+    class="mx-auto mb-6"
     [selectedIndex]="currentIndex"
     dynamicHeight
     (selectedTabChange)="onTabChange($event)"
@@ -73,6 +73,20 @@
               [unit]="unit"
               [unitRole]="assessingUnitRole"
             ></f-unit-group-set-editor>
+          </div>
+        }
+      }
+      @case ('communication') {
+        @if (unit) {
+          <div class="mx-auto max-w-[90vw]">
+            <div class="header">
+              <h3>Communication System</h3>
+              <p>
+                Create communication sets and rules to target students and automate follow-up
+                actions.
+              </p>
+            </div>
+            <f-unit-communications-editor [unit]="unit"></f-unit-communications-editor>
           </div>
         }
       }

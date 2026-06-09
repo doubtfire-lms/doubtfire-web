@@ -1,0 +1,86 @@
+@if (mode === 'edit') {
+  <div class="flex w-full min-w-[520px] flex-col gap-3">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Task</mat-label>
+      <mat-select [(ngModel)]="editor.actionFor(rule).task_definition_id">
+        @for (taskDefinition of editor.taskDefinitions; track taskDefinition.id) {
+          <mat-option [value]="taskDefinition.id">
+            {{ taskDefinition.abbreviation }}
+            {{ taskDefinition.name }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <div class="grid items-stretch gap-3 md:grid-cols-2">
+      <mat-form-field appearance="outline" class="h-full">
+        <mat-label>Comment</mat-label>
+        <textarea matInput rows="8" [(ngModel)]="editor.actionFor(rule).body"></textarea>
+        <button mat-icon-button matSuffix [matMenuTriggerFor]="commentBodyVariableMenu">
+          <mat-icon>add_circle</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="flex h-full flex-col rounded border border-slate-200 bg-slate-50 p-3">
+        <div class="mb-2 font-medium">Comment Preview</div>
+        <div class="flex-1">
+          @if (editor.actionFor(rule).body) {
+            <div
+              [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).body, rule)"
+            ></div>
+          } @else {
+            <div class="text-black/40">Preview will appear here.</div>
+          }
+        </div>
+      </div>
+    </div>
+    <mat-menu #commentBodyVariableMenu="matMenu">
+      @for (variable of editor.emailVariables; track variable.token) {
+        <button mat-menu-item (click)="editor.insertActionVariable(rule, 'body', variable.token)">
+          {{ variable.label }}
+        </button>
+      }
+    </mat-menu>
+    <div class="text-sm text-black/50">Sent from the main convenor.</div>
+  </div>
+} @else {
+  <div class="flex w-full min-w-[520px] flex-col gap-3">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Task</mat-label>
+      <mat-select [(ngModel)]="editor.actionFor(rule).task_definition_id">
+        @for (taskDefinition of editor.taskDefinitions; track taskDefinition.id) {
+          <mat-option [value]="taskDefinition.id">
+            {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <div class="grid items-stretch gap-3 md:grid-cols-2">
+      <mat-form-field appearance="outline" class="size-full">
+        <mat-label>Comment</mat-label>
+        <textarea matInput rows="8" [(ngModel)]="editor.actionFor(rule).body"></textarea>
+        <button mat-icon-button matSuffix [matMenuTriggerFor]="commentBodyVariableMenu">
+          <mat-icon>add_circle</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="flex size-full flex-col rounded border border-slate-200 bg-slate-50 p-3">
+        <div class="mb-2 font-medium">Comment Preview</div>
+        <div class="flex-1">
+          @if (editor.actionFor(rule).body) {
+            <div
+              [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).body, rule)"
+            ></div>
+          } @else {
+            <div class="text-black/40">Preview will appear here.</div>
+          }
+        </div>
+      </div>
+    </div>
+    <mat-menu #commentBodyVariableMenu="matMenu">
+      @for (variable of editor.emailVariables; track variable.token) {
+        <button mat-menu-item (click)="editor.insertActionVariable(rule, 'body', variable.token)">
+          {{ variable.label }}
+        </button>
+      }
+    </mat-menu>
+    <div class="text-sm text-black/50">Sent from the main convenor.</div>
+  </div>
+}

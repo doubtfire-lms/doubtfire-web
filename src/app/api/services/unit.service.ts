@@ -154,6 +154,7 @@ export class UnitService extends CachedEntityService<Unit> {
         },
         toJsonFn: MappingFunctions.mapDayToJson,
       },
+      'currentUnitWeek',
       {
         keys: 'portfolioAutoGenerationDate',
         toEntityFn: (data, key, _entity, _params?) => {

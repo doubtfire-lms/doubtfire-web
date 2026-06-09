@@ -1,0 +1,13 @@
+import {CommunicationRule} from 'src/app/api/models/doubtfire-model';
+import {Component, Input} from '@angular/core';
+import type {UnitCommunicationsEditorComponent} from '../unit-communications-editor.component';
+
+@Component({
+  selector: 'f-communication-actions',
+  standalone: false,
+  templateUrl: './communication-actions.component.html',
+})
+export class CommunicationActionsComponent {
+  @Input({required: true}) editor: UnitCommunicationsEditorComponent;
+  @Input({required: true}) rule: CommunicationRule;
+}

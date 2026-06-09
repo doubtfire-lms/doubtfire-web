@@ -38,6 +38,7 @@ export * from './test-attempt';
 export * from './task-comment/scorm-comment';
 export * from './task-comment/scorm-extension-comment';
 export * from './feedback-template';
+export * from './communication';
 
 // Users -- are students or staff
 export * from './user/user';
@@ -65,3 +66,7 @@ export * from '../../common/services/grade.service';
 export * from '../services/test-attempt.service';
 export * from '../models/d2l/d2l_assessment_mapping.service';
 export * from '../services/feedback-template.service';
+export * from '../services/communication-set.service';
+export * from '../services/communication-rule.service';
+export * from '../services/communication-condition.service';
+export * from '../services/communication-action.service';

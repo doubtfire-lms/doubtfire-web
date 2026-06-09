@@ -2,6 +2,7 @@ import {Entity} from 'ngx-entity-service';
 import {Tutorial, Unit} from '../doubtfire-model';
 
 export class TutorialStream extends Entity {
+  id: number;
   name: string;
   abbreviation: string;
   activityType: string;

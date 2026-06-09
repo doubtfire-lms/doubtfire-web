@@ -4,8 +4,6 @@ import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
-// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
-// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {GANTT_GLOBAL_CONFIG, GanttLinkLineType, NgxGanttModule} from '@worktile/gantt';
 import {DateAdapter as CalendarDateAdapter, CalendarModule} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
@@ -31,6 +29,8 @@ import {
   TaskCommentComposerComponent,
 } from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import {environment} from 'src/environments/environment';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ScrollingModule} from '@angular/cdk/scrolling';
@@ -49,9 +49,9 @@ import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
+  MatNativeDateModule,
   MatOptionModule,
 } from '@angular/material/core';
-import {MatNativeDateModule} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
@@ -77,10 +77,16 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatTreeModule} from '@angular/material/tree';
 import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {ServiceWorkerModule} from '@angular/service-worker';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+import {UpgradeModule} from '@angular/upgrade/static';
 import {take} from 'rxjs/operators';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {ActivityTypeListComponent} from './admin/institution-settings/activity-type-list/activity-type-list.component';
@@ -122,6 +128,10 @@ import {
   UserService,
   WebcalService,
 } from './api/models/doubtfire-model';
+import {CommunicationActionService} from './api/services/communication-action.service';
+import {CommunicationConditionService} from './api/services/communication-condition.service';
+import {CommunicationRuleService} from './api/services/communication-rule.service';
+import {CommunicationSetService} from './api/services/communication-set.service';
 import {DiscussionPromptService} from './api/services/discussion-prompt.service';
 import {FeedbackTemplateService} from './api/services/feedback-template.service';
 import {GroupService} from './api/services/group.service';
@@ -291,6 +301,15 @@ import {TaskSubmissionHistoryComponent} from './tasks/task-submission-history/ta
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
+import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
+import {CommunicationActionsComponent} from './units/states/edit/directives/unit-communications-editor/actions/communication-actions.component';
+import {EmailStaffActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/email-staff-action/email-staff-action.component';
+import {EmailStudentActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/email-student-action/email-student-action.component';
+import {TaskCommentActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/task-comment-action/task-comment-action.component';
+import {CommunicationScheduleModalComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedule-modal.component';
+import {CommunicationSchedulesComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedules.component';
+import {CommunicationConditionsComponent} from './units/states/edit/directives/unit-communications-editor/conditions/communication-conditions.component';
+import {UnitCommunicationsEditorComponent} from './units/states/edit/directives/unit-communications-editor/unit-communications-editor.component';
 import {
   D2lUnitDetailsFormComponent,
   D2lUnitDetailsModal,
@@ -576,6 +595,15 @@ const GANTT_CHART_CONFIG = {
     UploadSubmissionModalComponent,
     ConfirmModerationModalComponent,
     TaskClaimComponent,
+    ChangeTargetGradeActionComponent,
+    CommunicationActionsComponent,
+    CommunicationConditionsComponent,
+    CommunicationScheduleModalComponent,
+    CommunicationSchedulesComponent,
+    EmailStaffActionComponent,
+    EmailStudentActionComponent,
+    TaskCommentActionComponent,
+    UnitCommunicationsEditorComponent,
     TutorialsComponent,
     UnitStaffEditorComponent,
     PortfolioGradeSelectStepComponent,
@@ -682,6 +710,10 @@ const GANTT_CHART_CONFIG = {
     OverseerStepService,
     OverseerStepResultService,
     TutorNoteService,
+    CommunicationActionService,
+    CommunicationConditionService,
+    CommunicationRuleService,
+    CommunicationSetService,
     CsvResultModalService,
     CsvUploadModalService,
   ],
@@ -728,6 +760,8 @@ const GANTT_CHART_CONFIG = {
     MatExpansionModule,
     MatGridListModule,
     MatTabsModule,
+    MatTreeModule,
+    UpgradeModule,
     MatTableModule,
     MatChipsModule,
     MatSnackBarModule,

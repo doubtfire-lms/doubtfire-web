@@ -58,6 +58,7 @@ export class Unit extends Entity {
   startDate: Date; //TODO: or string
   endDate: Date; //TODO: or string
   portfolioAutoGenerationDate: Date;
+  currentUnitWeek: number | null;
 
   assessmentEnabled: boolean;
   overseerImageId: number = null; // image needs to be lazy loadaed
@@ -270,6 +271,38 @@ export class Unit extends Entity {
    */
   public get totalWeeks(): number {
     return Math.ceil(this.totalDuration / (1000 * 60 * 60 * 24 * 7));
+  }
+
+  /**
+   * Calculate the teaching week number for a given date.
+   * Mirrors the Rails fallback in Unit#week_number when a teaching period
+   * helper is not being used on the frontend.
+   */
+  public weekNumber(date: Date | string): number | null {
+    if (!date || !this.startDate) return null;
+
+    if (this.teachingPeriod) {
+      return this.teachingPeriod.weekNumber(date);
+    }
+
+    const targetDate = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(targetDate.valueOf())) return null;
+    const normalizedTargetDate = new Date(
+      targetDate.getFullYear(),
+      targetDate.getMonth(),
+      targetDate.getDate(),
+    );
+    const normalizedStartDate = new Date(
+      this.startDate.getFullYear(),
+      this.startDate.getMonth(),
+      this.startDate.getDate(),
+    );
+    const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+    return (
+      Math.floor(
+        (normalizedTargetDate.valueOf() - normalizedStartDate.valueOf()) / millisecondsPerWeek,
+      ) + 1
+    );
   }
 
   /**

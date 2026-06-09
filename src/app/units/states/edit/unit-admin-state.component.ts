@@ -12,7 +12,8 @@ type UnitAdminTabKey =
   | 'tutorials'
   | 'students'
   | 'tasks'
-  | 'groups';
+  | 'groups'
+  | 'communication';
 
 interface UnitAdminTab {
   label: string;
@@ -35,6 +36,7 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
     {label: 'Students', routeSegment: 'students'},
     {label: 'Tasks', routeSegment: 'tasks'},
     {label: 'Groups', routeSegment: 'groups'},
+    {label: 'Communications', routeSegment: 'communication'},
   ];
 
   public unit: Unit | null = null;
