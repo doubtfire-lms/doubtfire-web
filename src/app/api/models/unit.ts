@@ -836,7 +836,7 @@ export class Unit extends Entity {
 
     params = params.set('limit', limit.toString());
 
-    return AppInjector.get(HttpClient).get<any[]>(
+    return AppInjector.get(HttpClient).get<TaskCompletionSnapshot[]>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots`,
       {params},
     );
