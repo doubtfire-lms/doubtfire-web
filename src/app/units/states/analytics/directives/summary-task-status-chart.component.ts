@@ -1,26 +1,27 @@
-import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
-import {TaskService} from 'src/app/api/services/task.service';
-import {GradeService} from 'src/app/common/services/grade.service';
-import {Unit} from 'src/app/api/models/unit';
 import {TooltipService} from '@swimlane/ngx-charts';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
-import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {
-  TaskCompletionSnapshot,
   TaskCodeStats,
-  TutorialStats,
+  TaskCompletionSnapshot,
   TaskStatusEnum,
+  TutorialStats,
 } from 'src/app/api/models/doubtfire-model';
-import {filter, map, take} from 'rxjs/operators';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {Unit} from 'src/app/api/models/unit';
+import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
+import {TaskService} from 'src/app/api/services/task.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {GradeService} from 'src/app/common/services/grade.service';
+import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
+import {filter, map, take} from 'rxjs/operators';
 
 @Component({
   selector: 'f-summary-task-status-chart',
   templateUrl: './summary-task-status-chart.component.html',
   styleUrl: './summary-task-status-chart.component.scss',
+  standalone: false,
 })
-export class SummaryTaskStatusChartComponent {
+export class SummaryTaskStatusChartComponent implements OnInit {
   @Input() unit: Unit;
 
   data: any[] = [];
@@ -136,7 +137,10 @@ export class SummaryTaskStatusChartComponent {
 
   private buildChartData(taskStats: TaskCodeStats): any[] {
     const taskSeqByCode = new Map(
-      this.unit.taskDefinitions.map((taskDefinition) => [taskDefinition.abbreviation, taskDefinition.seq]),
+      this.unit.taskDefinitions.map((taskDefinition) => [
+        taskDefinition.abbreviation,
+        taskDefinition.seq,
+      ]),
     );
 
     return Object.entries(taskStats)
