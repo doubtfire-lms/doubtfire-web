@@ -50,7 +50,7 @@
     "angular-mocks": "1.8.3",
     "angular-nvd3": "1.0.9",
     "canvas-confetti": "^1.9",
-    "core-js": "^3.21.1",
+    "core-js": "^3.49.0",
     "d3": "3.5.17",
     "date-fns": "^3.6.0",
     "es5-shim": "^4.5.12",
