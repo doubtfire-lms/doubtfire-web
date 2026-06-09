@@ -95,7 +95,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     TaskDefinitionStatusCondition: 'Task Status',
     TaskStatusCountCondition: 'Task Status Count',
     LoginStatusCondition: 'Login Status',
-    SpecConCondition: 'Special Consideration',
+    SpecConCondition: 'Special Consideration Days',
     TutorialEnrolmentCondition: 'Tutorial Enrolment',
     TutorialStreamEnrolmentCondition: 'Tutorial Stream Enrolment',
     CampusCondition: 'Campus',
@@ -165,8 +165,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     {token: '{{unit.name}}', label: 'Unit Name'},
     {token: '{{rule.name}}', label: 'Rule Name'},
     {token: '{{target_grade}}', label: 'Target Grade'},
-    {token: '{{conditions_summary}}', label: 'Conditions Summary'},
-    {token: '{{actions_summary}}', label: 'Actions Summary'},
+    // {token: '{{conditions_summary}}', label: 'Conditions Summary'},
+    // {token: '{{actions_summary}}', label: 'Actions Summary'},
   ];
   readonly taskStatuses = [
     'not_started',
