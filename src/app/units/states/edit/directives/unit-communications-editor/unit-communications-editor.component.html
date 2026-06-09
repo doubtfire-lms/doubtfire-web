@@ -890,7 +890,7 @@
                                         ></div>
                                       </div>
                                     }
-                                    <div class="flex gap-3">
+                                    <div class="flex items-stretch gap-3">
                                       <mat-form-field appearance="outline" class="w-full">
                                         <mat-label>Body</mat-label>
                                         <textarea
@@ -907,18 +907,22 @@
                                         </button>
                                       </mat-form-field>
                                       <div
-                                        class="w-full rounded border border-slate-200 bg-slate-50 p-3"
+                                        class="flex size-full flex-col rounded border border-slate-200 bg-slate-50 p-3"
                                       >
                                         <div class="mb-2 font-medium">Body Preview</div>
-                                        @if (actionFor(rule).body) {
-                                          <div
-                                            [innerHTML]="
-                                              renderTemplatePreview(actionFor(rule).body, rule)
-                                            "
-                                          ></div>
-                                        } @else {
-                                          <div class="text-black/40">Preview will appear here.</div>
-                                        }
+                                        <div class="flex-1">
+                                          @if (actionFor(rule).body) {
+                                            <div
+                                              [innerHTML]="
+                                                renderTemplatePreview(actionFor(rule).body, rule)
+                                              "
+                                            ></div>
+                                          } @else {
+                                            <div class="text-black/40">
+                                              Preview will appear here.
+                                            </div>
+                                          }
+                                        </div>
                                       </div>
                                     </div>
                                     <mat-menu #bodyVariableMenu="matMenu">
@@ -973,7 +977,7 @@
                                         ></div>
                                       </div>
                                     }
-                                    <div class="grid gap-3 md:grid-cols-2">
+                                    <div class="grid items-stretch gap-3 md:grid-cols-2">
                                       <mat-form-field appearance="outline" class="w-full">
                                         <mat-label>Body</mat-label>
                                         <textarea
@@ -989,17 +993,23 @@
                                           <mat-icon>add_circle</mat-icon>
                                         </button>
                                       </mat-form-field>
-                                      <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                      <div
+                                        class="flex h-full flex-col rounded border border-slate-200 bg-slate-50 p-3"
+                                      >
                                         <div class="mb-2 font-medium">Body Preview</div>
-                                        @if (actionFor(rule).body) {
-                                          <div
-                                            [innerHTML]="
-                                              renderTemplatePreview(actionFor(rule).body, rule)
-                                            "
-                                          ></div>
-                                        } @else {
-                                          <div class="text-black/40">Preview will appear here.</div>
-                                        }
+                                        <div class="flex-1">
+                                          @if (actionFor(rule).body) {
+                                            <div
+                                              [innerHTML]="
+                                                renderTemplatePreview(actionFor(rule).body, rule)
+                                              "
+                                            ></div>
+                                          } @else {
+                                            <div class="text-black/40">
+                                              Preview will appear here.
+                                            </div>
+                                          }
+                                        </div>
                                       </div>
                                     </div>
                                     <mat-menu #staffBodyVariableMenu="matMenu">
@@ -1043,8 +1053,8 @@
                                         }
                                       </mat-select>
                                     </mat-form-field>
-                                    <div class="grid gap-3 md:grid-cols-2">
-                                      <mat-form-field appearance="outline">
+                                    <div class="grid items-stretch gap-3 md:grid-cols-2">
+                                      <mat-form-field appearance="outline" class="h-full">
                                         <mat-label>Comment</mat-label>
                                         <textarea
                                           matInput
@@ -1059,17 +1069,23 @@
                                           <mat-icon>add_circle</mat-icon>
                                         </button>
                                       </mat-form-field>
-                                      <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                      <div
+                                        class="flex h-full flex-col rounded border border-slate-200 bg-slate-50 p-3"
+                                      >
                                         <div class="mb-2 font-medium">Comment Preview</div>
-                                        @if (actionFor(rule).body) {
-                                          <div
-                                            [innerHTML]="
-                                              renderTemplatePreview(actionFor(rule).body, rule)
-                                            "
-                                          ></div>
-                                        } @else {
-                                          <div class="text-black/40">Preview will appear here.</div>
-                                        }
+                                        <div class="flex-1">
+                                          @if (actionFor(rule).body) {
+                                            <div
+                                              [innerHTML]="
+                                                renderTemplatePreview(actionFor(rule).body, rule)
+                                              "
+                                            ></div>
+                                          } @else {
+                                            <div class="text-black/40">
+                                              Preview will appear here.
+                                            </div>
+                                          }
+                                        </div>
                                       </div>
                                     </div>
                                     <mat-menu #commentBodyVariableMenu="matMenu">
@@ -1290,7 +1306,7 @@
                                 </div>
                               }
 
-                              <div class="flex gap-3">
+                              <div class="flex items-stretch gap-3">
                                 <mat-form-field appearance="outline" class="w-full">
                                   <mat-label>Body</mat-label>
                                   <textarea
@@ -1306,17 +1322,21 @@
                                     <mat-icon>add_circle</mat-icon>
                                   </button>
                                 </mat-form-field>
-                                <div class="w-full rounded border border-slate-200 bg-slate-50 p-3">
+                                <div
+                                  class="flex size-full flex-col rounded border border-slate-200 bg-slate-50 p-3"
+                                >
                                   <div class="mb-2 font-medium">Body Preview</div>
-                                  @if (actionFor(rule).body) {
-                                    <div
-                                      [innerHTML]="
-                                        renderTemplatePreview(actionFor(rule).body, rule)
-                                      "
-                                    ></div>
-                                  } @else {
-                                    <div class="text-black/40">Preview will appear here.</div>
-                                  }
+                                  <div class="flex-1">
+                                    @if (actionFor(rule).body) {
+                                      <div
+                                        [innerHTML]="
+                                          renderTemplatePreview(actionFor(rule).body, rule)
+                                        "
+                                      ></div>
+                                    } @else {
+                                      <div class="text-black/40">Preview will appear here.</div>
+                                    }
+                                  </div>
                                 </div>
                               </div>
                               <mat-menu #bodyVariableMenu="matMenu">
@@ -1368,8 +1388,8 @@
                                 </div>
                               }
 
-                              <div class="grid gap-3 md:grid-cols-2">
-                                <mat-form-field appearance="outline" class="w-full">
+                              <div class="grid items-stretch gap-3 md:grid-cols-2">
+                                <mat-form-field appearance="outline" class="size-full">
                                   <mat-label>Body</mat-label>
                                   <textarea
                                     matInput
@@ -1384,17 +1404,21 @@
                                     <mat-icon>add_circle</mat-icon>
                                   </button>
                                 </mat-form-field>
-                                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                <div
+                                  class="flex size-full flex-col rounded border border-slate-200 bg-slate-50 p-3"
+                                >
                                   <div class="mb-2 font-medium">Body Preview</div>
-                                  @if (actionFor(rule).body) {
-                                    <div
-                                      [innerHTML]="
-                                        renderTemplatePreview(actionFor(rule).body, rule)
-                                      "
-                                    ></div>
-                                  } @else {
-                                    <div class="text-black/40">Preview will appear here.</div>
-                                  }
+                                  <div class="flex-1">
+                                    @if (actionFor(rule).body) {
+                                      <div
+                                        [innerHTML]="
+                                          renderTemplatePreview(actionFor(rule).body, rule)
+                                        "
+                                      ></div>
+                                    } @else {
+                                      <div class="text-black/40">Preview will appear here.</div>
+                                    }
+                                  </div>
                                 </div>
                               </div>
                               <mat-menu #staffBodyVariableMenu="matMenu">
@@ -1435,8 +1459,8 @@
                                   }
                                 </mat-select>
                               </mat-form-field>
-                              <div class="grid gap-3 md:grid-cols-2">
-                                <mat-form-field appearance="outline">
+                              <div class="grid items-stretch gap-3 md:grid-cols-2">
+                                <mat-form-field appearance="outline" class="size-full">
                                   <mat-label>Comment</mat-label>
                                   <textarea
                                     matInput
@@ -1451,17 +1475,21 @@
                                     <mat-icon>add_circle</mat-icon>
                                   </button>
                                 </mat-form-field>
-                                <div class="rounded border border-slate-200 bg-slate-50 p-3">
+                                <div
+                                  class="flex size-full flex-col rounded border border-slate-200 bg-slate-50 p-3"
+                                >
                                   <div class="mb-2 font-medium">Comment Preview</div>
-                                  @if (actionFor(rule).body) {
-                                    <div
-                                      [innerHTML]="
-                                        renderTemplatePreview(actionFor(rule).body, rule)
-                                      "
-                                    ></div>
-                                  } @else {
-                                    <div class="text-black/40">Preview will appear here.</div>
-                                  }
+                                  <div class="flex-1">
+                                    @if (actionFor(rule).body) {
+                                      <div
+                                        [innerHTML]="
+                                          renderTemplatePreview(actionFor(rule).body, rule)
+                                        "
+                                      ></div>
+                                    } @else {
+                                      <div class="text-black/40">Preview will appear here.</div>
+                                    }
+                                  </div>
                                 </div>
                               </div>
                               <mat-menu #commentBodyVariableMenu="matMenu">
