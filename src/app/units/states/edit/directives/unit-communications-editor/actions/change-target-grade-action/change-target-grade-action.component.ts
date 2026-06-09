@@ -6,6 +6,7 @@ import type {UnitCommunicationsEditorComponent} from '../../unit-communications-
   selector: 'f-change-target-grade-action',
   standalone: false,
   templateUrl: './change-target-grade-action.component.html',
+  host: {class: 'flex w-full flex-col items-center'},
 })
 export class ChangeTargetGradeActionComponent {
   @Input({required: true}) editor: UnitCommunicationsEditorComponent;

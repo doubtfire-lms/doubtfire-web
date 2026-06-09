@@ -4,7 +4,7 @@
       <mat-list-item class="!h-auto items-start overflow-visible py-3">
         @if (editor.editingActionId[rule.id] === action.id) {
           <div class="flex w-full flex-col gap-3 pt-2">
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="w-full max-w-80">
               <mat-label>Action</mat-label>
               <mat-select
                 [(ngModel)]="editor.actionFor(rule).type"
@@ -136,8 +136,8 @@
   </mat-list>
 
   @if (editor.actionFormOpen[rule.id] && !editor.editingActionId[rule.id]) {
-    <div class="flex flex-col flex-wrap items-center gap-3">
-      <mat-form-field appearance="outline">
+    <div class="flex w-full flex-col flex-wrap items-stretch gap-3">
+      <mat-form-field appearance="outline" class="w-full max-w-80 self-center">
         <mat-label>Action</mat-label>
         <mat-select
           [(ngModel)]="editor.actionFor(rule).type"
@@ -172,6 +172,7 @@
       <button
         mat-flat-button
         color="primary"
+        class="w-full max-w-80 self-center"
         (click)="
           editor.editingActionId[rule.id] ? editor.updateAction(rule) : editor.addAction(rule)
         "

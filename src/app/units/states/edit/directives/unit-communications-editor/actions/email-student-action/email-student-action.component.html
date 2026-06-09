@@ -1,6 +1,6 @@
 @if (mode === 'edit') {
   <div class="flex w-full min-w-[520px] flex-col gap-3">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="w-full">
       <mat-label>Subject</mat-label>
       <input matInput [(ngModel)]="editor.actionFor(rule).subject" />
       <button mat-icon-button matSuffix [matMenuTriggerFor]="subjectVariableMenu">
@@ -55,7 +55,7 @@
   </div>
 } @else {
   <div class="flex w-full min-w-[520px] flex-col gap-3">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="w-full">
       <mat-label>Subject</mat-label>
       <input matInput [(ngModel)]="editor.actionFor(rule).subject" />
       <button mat-icon-button matSuffix [matMenuTriggerFor]="subjectVariableMenu">

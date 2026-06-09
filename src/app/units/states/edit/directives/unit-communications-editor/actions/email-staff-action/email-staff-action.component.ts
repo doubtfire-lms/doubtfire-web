@@ -6,6 +6,7 @@ import type {UnitCommunicationsEditorComponent} from '../../unit-communications-
   selector: 'f-email-staff-action',
   standalone: false,
   templateUrl: './email-staff-action.component.html',
+  host: {class: 'block w-full'},
 })
 export class EmailStaffActionComponent {
   @Input({required: true}) editor: UnitCommunicationsEditorComponent;

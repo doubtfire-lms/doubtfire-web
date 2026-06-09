@@ -6,6 +6,7 @@ import type {UnitCommunicationsEditorComponent} from '../../unit-communications-
   selector: 'f-task-comment-action',
   standalone: false,
   templateUrl: './task-comment-action.component.html',
+  host: {class: 'block w-full'},
 })
 export class TaskCommentActionComponent {
   @Input({required: true}) editor: UnitCommunicationsEditorComponent;
