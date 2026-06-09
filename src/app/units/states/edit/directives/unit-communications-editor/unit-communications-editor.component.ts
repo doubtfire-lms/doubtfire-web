@@ -210,7 +210,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   private subscriptions: Subscription[] = [];
 
   get currentUnitWeek(): number | null {
-    return this.unit?.weekNumber(new Date()) ?? null;
+    return this.unit?.currentUnitWeek ?? null;
   }
 
   constructor(
