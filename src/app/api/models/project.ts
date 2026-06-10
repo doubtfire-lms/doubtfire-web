@@ -21,6 +21,7 @@ import {
   Unit,
   User,
 } from './doubtfire-model';
+import {Engagement} from './engagement';
 import {StaffNote} from './staff-note';
 import {TaskOutcomeAlignment} from './task-outcome-alignment';
 
@@ -55,6 +56,7 @@ export class Project extends Entity {
   public burndownChartData: {key: string; values: number[]}[];
   public readonly taskCache: EntityCache<Task> = new EntityCache<Task>();
   public readonly staffNoteCache: EntityCache<StaffNote> = new EntityCache<StaffNote>();
+  public readonly engagementCache: EntityCache<Engagement> = new EntityCache<Engagement>();
   public readonly tutorialEnrolmentsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
   public readonly groupCache: EntityCache<Group> = new EntityCache<Group>();
   public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> =
