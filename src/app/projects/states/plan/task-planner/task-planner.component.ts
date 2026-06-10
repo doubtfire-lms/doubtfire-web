@@ -386,7 +386,7 @@ export class TaskPlannerComponent implements OnInit {
       await this.waitForStableLayout(mainContainer);
 
       const canvas = await this.ganttPrintService.html2canvas();
-      this.downloadCanvas(canvas, `task-plan-${this.project.id}.png`);
+      this.downloadCanvas(canvas, `${this.unit.code}-Task-Plan.png`);
     } catch (error) {
       this.alertService.error(`Failed to download task plan: ${error}`, 6000);
     } finally {
