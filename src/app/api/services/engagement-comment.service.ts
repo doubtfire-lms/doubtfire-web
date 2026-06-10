@@ -20,6 +20,7 @@ export class EngagementCommentService extends CachedEntityService<EngagementComm
     this.mapping.addKeys(
       'id',
       'comment',
+      'replyToId',
       {
         keys: 'user',
         toEntityFn: (data: object, key: string) => {
@@ -41,12 +42,19 @@ export class EngagementCommentService extends CachedEntityService<EngagementComm
     return new EngagementComment(other);
   }
 
-  addComment(engagement: Engagement, comment: string): Observable<EngagementComment> {
+  addComment(
+    engagement: Engagement,
+    comment: string,
+    replyTo?: EngagementComment,
+  ): Observable<EngagementComment> {
     const options: RequestOptions<EngagementComment> = {
       endpointFormat: this.endpointFormat,
       cache: engagement.commentCache,
       constructorParams: engagement,
-      body: {comment},
+      body: {
+        comment,
+        ...(replyTo ? {reply_to_id: replyTo.id} : {}),
+      },
     };
 
     return this.create(
@@ -58,7 +66,51 @@ export class EngagementCommentService extends CachedEntityService<EngagementComm
     ).pipe(
       tap(() => {
         engagement.commentCount++;
+        this.updateCommentReplies(engagement.comments);
       }),
     );
+  }
+
+  updateComment(comment: EngagementComment, text: string): Observable<EngagementComment> {
+    return this.put(
+      {
+        projectId: comment.engagement.project.id,
+        engagementId: comment.engagement.id,
+        id: comment.id,
+      },
+      {
+        endpointFormat: this.endpointFormat,
+        cache: comment.engagement.commentCache,
+        constructorParams: comment.engagement,
+        body: {comment: text},
+      },
+    );
+  }
+
+  deleteComment(comment: EngagementComment): Observable<boolean> {
+    return this.delete<boolean>(
+      {
+        projectId: comment.engagement.project.id,
+        engagementId: comment.engagement.id,
+        id: comment.id,
+      },
+      {
+        endpointFormat: this.endpointFormat,
+        cache: comment.engagement.commentCache,
+      },
+    ).pipe(
+      tap(() => {
+        comment.engagement.commentCount--;
+        this.updateCommentReplies(comment.engagement.comments);
+      }),
+    );
+  }
+
+  updateCommentReplies(comments: readonly EngagementComment[]): void {
+    for (const comment of comments) {
+      comment.replyTo = comment.replyToId
+        ? comments.find((candidate) => candidate.id === comment.replyToId)
+        : undefined;
+    }
   }
 }

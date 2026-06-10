@@ -239,6 +239,7 @@ import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.co
 import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
 import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
 import {AddEngagementDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
+import {EngagementDetailDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-detail-dialog/engagement-detail-dialog.component';
 import {EngagementPassportCardComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-passport-card.component';
 import {ProgressDashboardComponent} from './projects/states/dashboard/directives/progress-dashboard/progress-dashboard.component';
 import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
@@ -419,6 +420,7 @@ const GANTT_CHART_CONFIG = {
     AlertComponent,
     AddEngagementDialogComponent,
     EngagementPassportCardComponent,
+    EngagementDetailDialogComponent,
     ProgressDashboardComponent,
     UnitStudentEnrolmentModalComponent,
     AboutDoubtfireModalContent,

@@ -7,6 +7,7 @@ import {
 import {Component, Input, OnChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {AddEngagementDialogComponent} from './add-engagement-dialog/add-engagement-dialog.component';
+import {EngagementDetailDialogComponent} from './engagement-detail-dialog/engagement-detail-dialog.component';
 
 interface EngagementPresentation {
   label: string;
@@ -152,6 +153,15 @@ export class EngagementPassportCardComponent implements OnChanges {
 
     dialogRef.afterClosed().subscribe((engagement?: Engagement) => {
       if (engagement) this.buildWeeks(this.project.engagementCache.currentValues);
+    });
+  }
+
+  openEngagement(engagement: Engagement): void {
+    this.dialog.open(EngagementDetailDialogComponent, {
+      data: {engagement},
+      width: 'calc(100vw - 32px)',
+      maxWidth: '900px',
+      autoFocus: false,
     });
   }
 

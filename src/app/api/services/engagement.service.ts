@@ -73,6 +73,7 @@ export class EngagementService extends CachedEntityService<Engagement> {
               {constructorParams: engagement},
             );
           });
+          this.engagementCommentService.updateCommentReplies(engagement.comments);
         },
       },
     );
@@ -96,7 +97,7 @@ export class EngagementService extends CachedEntityService<Engagement> {
   }
 
   loadEngagement(engagement: Engagement): Observable<Engagement> {
-    return this.get(
+    return this.fetch(
       {
         projectId: engagement.project.id,
         id: engagement.id,

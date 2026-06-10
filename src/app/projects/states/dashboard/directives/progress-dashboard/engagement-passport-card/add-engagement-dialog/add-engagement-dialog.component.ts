@@ -78,10 +78,8 @@ export class AddEngagementDialogComponent {
     if (mode !== 'url') {
       this.form.controls.evidenceUrl.setValue('');
     }
-    if (mode !== 'attachment') {
-      this.attachment = undefined;
-      this.attachmentError = undefined;
-    }
+    this.attachment = undefined;
+    this.attachmentError = undefined;
   }
 
   fileSelected(event: Event): void {

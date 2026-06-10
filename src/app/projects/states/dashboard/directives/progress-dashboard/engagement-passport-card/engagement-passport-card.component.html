@@ -59,17 +59,18 @@
                 @for (column of stampColumns(week.stamps); track $index) {
                   <div class="flex flex-col-reverse gap-[5px]">
                     @for (stamp of column; track $index) {
-                      <span
-                        class="inline-flex size-[35px] shrink-0 cursor-help items-center justify-center rounded-full border"
+                      <button
+                        type="button"
+                        class="inline-flex size-[35px] shrink-0 cursor-pointer items-center justify-center rounded-full border"
                         [ngClass]="stamp.classes"
                         [matTooltip]="stamp.label"
                         [attr.aria-label]="stamp.label"
-                        tabindex="0"
+                        (click)="openEngagement(stamp.engagement)"
                       >
                         <mat-icon class="!size-[18px] !text-[18px]" aria-hidden="true">
                           {{ stamp.icon }}
                         </mat-icon>
-                      </span>
+                      </button>
                     }
                   </div>
                 }

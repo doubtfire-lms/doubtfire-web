@@ -37,8 +37,8 @@
       }
     </mat-form-field>
 
-    <div class="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
-      <mat-form-field appearance="outline">
+    <div class="grid grid-cols-2 gap-2">
+      <mat-form-field class="min-w-0" appearance="outline">
         <mat-label>Date</mat-label>
         <input matInput formControlName="occurredDate" [matDatepicker]="occurredDatePicker" />
         <mat-datepicker-toggle matIconSuffix [for]="occurredDatePicker"></mat-datepicker-toggle>
@@ -48,7 +48,7 @@
         }
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field class="min-w-0" appearance="outline">
         <mat-label>Time</mat-label>
         <input matInput formControlName="occurredTime" type="time" />
         @if (form.controls.occurredTime.hasError('required')) {
