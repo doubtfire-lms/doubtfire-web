@@ -77,6 +77,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -412,6 +413,13 @@ const GANTT_CHART_CONFIG = {
   },
 };
 
+const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
+  showDelay: 0,
+  hideDelay: 0,
+  touchendHideDelay: 1500,
+  position: 'above',
+};
+
 @NgModule({
   // Components we declare
   declarations: [
@@ -726,6 +734,10 @@ const GANTT_CHART_CONFIG = {
     CommunicationSetService,
     CsvResultModalService,
     CsvUploadModalService,
+    {
+      provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
+      useValue: DEFAULT_TOOLTIP_OPTIONS,
+    },
   ],
   imports: [
     FlexLayoutModule,
