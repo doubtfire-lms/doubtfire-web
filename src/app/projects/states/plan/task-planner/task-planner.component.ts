@@ -500,17 +500,18 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   public get earliestStartDate() {
+    const today = this.normalizeDateUTC(Date.now() / 1000);
     const tasks = this.taskDefs()
       .map((td) => this.project.findTaskForDefinition(td.id))
       .filter((t) => t?.startDate);
 
     if (!tasks.length) {
-      return Math.floor(this.unit.startDate.getTime() / 1000);
+      return today;
     }
 
     const earliestTaskStart = Math.min(...tasks.map((t) => t.startDate.getTime() / 1000));
 
-    return Math.floor(Math.min(this.unit.startDate.getTime() / 1000, earliestTaskStart));
+    return Math.floor(Math.min(today, earliestTaskStart));
   }
 
   public get latestEndDate() {
