@@ -83,6 +83,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.updateDataSource();
   }
 
   ngOnDestroy(): void {
@@ -157,6 +158,10 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateDataSource(resetPagination: boolean = false): void {
+    if (!this.paginator) {
+      return;
+    }
+
     const students = this.filteredProjects();
 
     this.dataSource.data = students;
