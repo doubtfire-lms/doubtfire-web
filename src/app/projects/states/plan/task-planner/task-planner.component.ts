@@ -21,6 +21,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 
 interface TaskGanttItem extends GanttItem {
+  start: number;
+  end: number;
   highlighted?: boolean;
   taskDefinition: TaskDefinition;
   task: Task;
@@ -402,10 +404,10 @@ export class TaskPlannerComponent implements OnInit {
 
   ngOnInit(): void {
     this.viewOptions = {
-      datePrecisionUnit: 'day',
+      precisionUnit: 'day',
       start: new GanttDate(this.earliestStartDate),
       end: new GanttDate(this.latestEndDate),
-      dragPreviewDateFormat: 'MMM dd',
+      dragTooltipFormat: 'MMM dd',
     };
 
     this.unit.getTaskPrerequisites().subscribe({
@@ -529,8 +531,6 @@ export class TaskPlannerComponent implements OnInit {
       _items.push(item);
 
       // Create baseline item
-      const baselineItem = {...item};
-
       const tdTargetDate =
         (this.targetGrade === 1
           ? td.cTargetDate
@@ -549,8 +549,11 @@ export class TaskPlannerComponent implements OnInit {
               ? td.hdStartDate
               : td.startDate) ?? td.startDate;
 
-      baselineItem.start = this.normalizeDateUTC(tdStartDate.getTime() / 1000);
-      baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
+      const baselineItem: GanttBaselineItem = {
+        id: item.id,
+        start: this.normalizeDateUTC(tdStartDate.getTime() / 1000),
+        end: this.normalizeDateUTC(tdTargetDate.getTime() / 1000),
+      };
 
       _baselineItems.push(baselineItem);
 
