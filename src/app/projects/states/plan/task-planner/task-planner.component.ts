@@ -4,6 +4,7 @@ import {
   GanttItem,
   GanttLink,
   GanttLinkType,
+  GanttPrintService,
   GanttViewOptions,
   GanttViewType,
   NgxGanttComponent,
@@ -33,6 +34,7 @@ interface TaskGanttItem extends GanttItem {
   selector: 'f-task-planner',
   templateUrl: './task-planner.component.html',
   styleUrl: './task-planner.component.scss',
+  providers: [GanttPrintService],
   standalone: false,
 })
 export class TaskPlannerComponent implements OnInit {
@@ -71,6 +73,7 @@ export class TaskPlannerComponent implements OnInit {
     private taskPrerequisiteService: TaskPrerequisiteService,
     private router: Router,
     private route: ActivatedRoute,
+    private ganttPrintService: GanttPrintService,
   ) {}
 
   public get gradeValues() {
@@ -334,6 +337,34 @@ export class TaskPlannerComponent implements OnInit {
         });
       },
     );
+  }
+
+  async saveImage() {
+    const ganttEl = document.querySelector('ngx-gantt') as HTMLElement;
+    const scrollEl = ganttEl?.querySelector('.gantt-container') as HTMLElement;
+
+    if (!ganttEl || !scrollEl) {
+      void this.ganttPrintService.print(`task-plan-${this.project.id}`);
+      return;
+    }
+
+    const original = {
+      width: ganttEl.style.width,
+      height: ganttEl.style.height,
+      overflow: ganttEl.style.overflow,
+    };
+
+    ganttEl.style.width = `${scrollEl.scrollWidth}px`;
+    ganttEl.style.height = `${scrollEl.scrollHeight}px`;
+    ganttEl.style.overflow = 'visible';
+
+    await new Promise((resolve) => setTimeout(resolve));
+
+    void this.ganttPrintService.print(`task-plan-${this.project.id}`);
+
+    ganttEl.style.width = original.width;
+    ganttEl.style.height = original.height;
+    ganttEl.style.overflow = original.overflow;
   }
 
   // normalizeDateUTC = (ts: number) => {
