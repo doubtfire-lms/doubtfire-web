@@ -13,8 +13,9 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnInit,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
@@ -29,8 +30,9 @@ import {D2lTransferModal} from '../../d2l-transfer-modal/d2l-transfer.component'
   styleUrl: './portfolios-list.component.scss',
   standalone: false,
 })
-export class PortfoliosListComponent implements OnInit, AfterViewInit {
+export class PortfoliosListComponent implements OnChanges, AfterViewInit {
   @Input() unit: Unit;
+  @Input() loading = true;
 
   @Output()
   public studentSelected: EventEmitter<Project> = new EventEmitter();
@@ -62,8 +64,10 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  ngOnInit(): void {
-    this.updateDataSource();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.loading && this.unit && (changes.loading || changes.unit)) {
+      this.updateDataSource();
+    }
   }
 
   openProject(event: Event, project: Project) {

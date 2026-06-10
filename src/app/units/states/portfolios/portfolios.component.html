@@ -5,6 +5,7 @@
       <mat-tab label="Select Student">
         <f-portfolios-list
           [unit]="unit"
+          [loading]="loadingStudents"
           (studentSelected)="studentSelected($event)"
         ></f-portfolios-list>
       </mat-tab>
@@ -38,8 +39,5 @@
         }
       </mat-tab>
     </mat-tab-group>
-  } @else {
-    <!-- TODO 10.0.x: loading unit spinner -->
-    <div>Loading unit...</div>
   }
 </div>

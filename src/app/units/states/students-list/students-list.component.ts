@@ -1,4 +1,4 @@
-import {Observable, Subscription, first, of} from 'rxjs';
+import {Observable, Subscription, finalize, first, of} from 'rxjs';
 import {
   Project,
   ProjectService,
@@ -42,6 +42,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   searchText = '';
   staffFilter: 'all' | 'mine' = 'all';
   filteredSuggestions: string[] = [];
+  loadingStudents = true;
   unit: Unit;
 
   private subscriptions: Subscription[] = [];
@@ -61,6 +62,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.push(
       this.unit$?.pipe(first()).subscribe((unit) => {
         if (!unit) {
+          this.loadingStudents = false;
           return;
         }
 
@@ -76,13 +78,22 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.updateSuggestions();
         this.updateDataSource();
-        this.projectService.loadStudents(this.unit).pipe(first()).subscribe();
+        this.projectService
+          .loadStudents(this.unit)
+          .pipe(
+            first(),
+            finalize(() => {
+              this.loadingStudents = false;
+            }),
+          )
+          .subscribe();
       }),
     );
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.updateDataSource();
   }
 
   ngOnDestroy(): void {
@@ -157,6 +168,10 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateDataSource(resetPagination: boolean = false): void {
+    if (!this.paginator) {
+      return;
+    }
+
     const students = this.filteredProjects();
 
     this.dataSource.data = students;

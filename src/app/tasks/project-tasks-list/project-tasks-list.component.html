@@ -19,6 +19,9 @@
             (click)="selectChip(task)"
             class="task-status chip truncate text-center"
             [ngClass]="newTaskService.statusClass(task.status)"
+            [style.--mat-chip-elevated-container-color]="
+              newTaskService.statusColors.get(task.status)
+            "
           >
             @if (task.similarityFlag) {
               <mat-icon svgIcon="visibility"></mat-icon>
