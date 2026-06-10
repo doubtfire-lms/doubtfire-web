@@ -340,31 +340,125 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   async saveImage() {
-    const ganttEl = document.querySelector('ngx-gantt') as HTMLElement;
-    const scrollEl = ganttEl?.querySelector('.gantt-container') as HTMLElement;
+    const ganttEl = this.ganttComponent.element;
+    const mainContainer = ganttEl.querySelector<HTMLElement>('.gantt-main-container');
+    const side = ganttEl.querySelector<HTMLElement>('.gantt-side');
 
-    if (!ganttEl || !scrollEl) {
-      void this.ganttPrintService.print(`task-plan-${this.project.id}`);
+    if (!mainContainer || !side) {
       return;
     }
 
-    const original = {
+    const originalStyle = {
       width: ganttEl.style.width,
       height: ganttEl.style.height,
       overflow: ganttEl.style.overflow,
     };
+    const scrollElements = Array.from(
+      ganttEl.querySelectorAll<HTMLElement>(
+        '.gantt-main-container, .gantt-side-container, .gantt-virtual-scroll-viewport',
+      ),
+    );
+    const scrollPositions = scrollElements.map((element) => ({
+      element,
+      left: element.scrollLeft,
+      top: element.scrollTop,
+    }));
+    const windowScrollPosition = {
+      left: window.scrollX,
+      top: window.scrollY,
+    };
 
-    ganttEl.style.width = `${scrollEl.scrollWidth}px`;
-    ganttEl.style.height = `${scrollEl.scrollHeight}px`;
-    ganttEl.style.overflow = 'visible';
+    try {
+      await this.renderAllGanttBars(ganttEl);
+      this.resetGanttScroll(scrollElements);
+      window.scrollTo(windowScrollPosition.left, windowScrollPosition.top);
+      await this.waitForStableLayout(mainContainer);
 
-    await new Promise((resolve) => setTimeout(resolve));
+      const fullWidth = side.offsetWidth + this.ganttComponent.view.width;
+      const fullHeight =
+        ganttEl.offsetHeight - mainContainer.offsetHeight + mainContainer.scrollHeight;
 
-    void this.ganttPrintService.print(`task-plan-${this.project.id}`);
+      ganttEl.style.width = `${fullWidth}px`;
+      ganttEl.style.height = `${fullHeight}px`;
+      ganttEl.style.overflow = 'visible';
 
-    ganttEl.style.width = original.width;
-    ganttEl.style.height = original.height;
-    ganttEl.style.overflow = original.overflow;
+      this.resetGanttScroll(scrollElements);
+      await this.waitForStableLayout(mainContainer);
+
+      const canvas = await this.ganttPrintService.html2canvas();
+      this.downloadCanvas(canvas, `task-plan-${this.project.id}.png`);
+    } catch (error) {
+      this.alertService.error(`Failed to download task plan: ${error}`, 6000);
+    } finally {
+      ganttEl.style.width = originalStyle.width;
+      ganttEl.style.height = originalStyle.height;
+      ganttEl.style.overflow = originalStyle.overflow;
+
+      await this.nextAnimationFrame();
+      for (const position of scrollPositions) {
+        position.element.scrollTo(position.left, position.top);
+      }
+      window.scrollTo(windowScrollPosition.left, windowScrollPosition.top);
+    }
+  }
+
+  private resetGanttScroll(scrollElements: HTMLElement[]) {
+    for (const element of scrollElements) {
+      element.scrollTo(0, 0);
+    }
+  }
+
+  private async waitForStableLayout(element: HTMLElement) {
+    let previousSize = '';
+    let stableFrames = 0;
+
+    for (let attempt = 0; attempt < 30 && stableFrames < 3; attempt++) {
+      await this.nextAnimationFrame();
+
+      const size = `${element.offsetWidth}:${element.offsetHeight}:${element.scrollWidth}:${element.scrollHeight}`;
+      if (size === previousSize) {
+        stableFrames++;
+      } else {
+        previousSize = size;
+        stableFrames = 0;
+      }
+    }
+  }
+
+  private async renderAllGanttBars(ganttEl: HTMLElement) {
+    for (let pass = 0; pass < 4; pass++) {
+      if (ganttEl.querySelectorAll('[data-gantt-id]').length >= this.items.length) {
+        return;
+      }
+
+      const placeholders = Array.from(
+        ganttEl.querySelectorAll<HTMLElement>('gantt-bar-placeholder'),
+      );
+
+      for (const placeholder of placeholders) {
+        placeholder.scrollIntoView({
+          block: 'center',
+          inline: 'center',
+        });
+        await this.nextAnimationFrame();
+        await this.nextAnimationFrame();
+      }
+    }
+
+    if (ganttEl.querySelectorAll('[data-gantt-id]').length < this.items.length) {
+      throw new Error('Some chart items could not be rendered');
+    }
+  }
+
+  private nextAnimationFrame() {
+    return new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  }
+
+  private downloadCanvas(canvas: HTMLCanvasElement, filename: string) {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
   }
 
   // normalizeDateUTC = (ts: number) => {
@@ -420,17 +514,18 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   public get latestEndDate() {
+    const oneWeekInSeconds = 7 * 24 * 60 * 60;
     const tasks = this.taskDefs()
       .map((td) => this.project.findTaskForDefinition(td.id))
       .filter((t) => t?.localDueDate());
 
     if (!tasks.length) {
-      return Math.floor(this.unit.endDate.getTime() / 1000);
+      return this.earliestStartDate + oneWeekInSeconds;
     }
 
     const latestTaskEnd = Math.max(...tasks.map((t) => t.localDueDate().getTime() / 1000));
 
-    return Math.floor(Math.max(this.unit.endDate.getTime() / 1000, latestTaskEnd));
+    return Math.floor(latestTaskEnd) + oneWeekInSeconds;
   }
 
   ngOnInit(): void {
@@ -438,6 +533,10 @@ export class TaskPlannerComponent implements OnInit {
       precisionUnit: 'day',
       start: new GanttDate(this.earliestStartDate),
       end: new GanttDate(this.latestEndDate),
+      tickFormats: {
+        period: 'yyyy MMM',
+        unit: 'd',
+      },
       dragTooltipFormat: 'MMM dd',
     };
 
