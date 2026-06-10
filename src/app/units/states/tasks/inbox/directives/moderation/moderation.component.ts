@@ -26,7 +26,7 @@ export class ModerationComponent {
       this.task,
       'Overturn',
       `The original feedback will be revised and the task outcome updated.
-      Provide clear, constructive feedback explaining the changes made, and record any guidance for the tutor in the tutor notes section.`,
+      Provide clear, constructive feedback explaining the changes made, and record any guidance for the tutor in the moderation notes section.`,
       'overturn',
       false,
       () => {

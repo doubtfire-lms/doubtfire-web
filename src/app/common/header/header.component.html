@@ -46,7 +46,7 @@
     }
     @if (currentUnit && currentUnitRole && currentUnitRole.tutorNoteCount > 0) {
       <!-- TODO: Replace this with a more standardised notification system -->
-      <button mat-icon-button (click)="openTutorNotes()" matTooltip="Tutor Notes">
+      <button mat-icon-button (click)="openTutorNotes()" matTooltip="Moderation Notes">
         <mat-icon [matBadge]="currentUnitRole.tutorNoteCount" matBadgeSize="small"
           >feedback</mat-icon
         >
