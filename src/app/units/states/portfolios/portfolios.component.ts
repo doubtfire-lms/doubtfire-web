@@ -19,6 +19,7 @@ export class PortfoliosComponent implements OnInit {
   // Exposed to child components
   public unit: Unit = null;
   public selectedProject: Project;
+  public loadingStudents = true;
 
   @ViewChild('tabs') tabs!: MatTabGroup;
 
@@ -48,10 +49,12 @@ export class PortfoliosComponent implements OnInit {
     this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
     this.unit$?.pipe(first()).subscribe({
       next: (unit) => {
+        this.unit = unit;
+        this.unit.loadD2lMapping().subscribe();
+
         this.projectService.loadStudents(unit, false).subscribe({
           next: () => {
-            this.unit = unit;
-            this.unit.loadD2lMapping().subscribe();
+            this.loadingStudents = false;
           },
           error: (error) => {
             this.alertService.error(`Failed to load unit: ${error}`, 6000);
