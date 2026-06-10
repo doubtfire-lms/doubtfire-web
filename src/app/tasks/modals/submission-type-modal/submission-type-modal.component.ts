@@ -16,12 +16,20 @@ export interface SubmissionTypeModalData {
 export class SubmissionTypeModalComponent {
   selectedTransition: 'ready_for_feedback' | 'assess_in_portfolio' = null;
 
+  public get isPastFeedbackDeadline(): boolean {
+    return Date.now() > this.data.task.localDeadlineDate().getTime();
+  }
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: SubmissionTypeModalData,
     private dialogRef: MatDialogRef<SubmissionTypeModalComponent>,
   ) {}
 
   public selectRff() {
+    if (this.isPastFeedbackDeadline) {
+      return;
+    }
+
     this.selectedTransition = 'ready_for_feedback';
   }
 
@@ -30,7 +38,10 @@ export class SubmissionTypeModalComponent {
   }
 
   public submit() {
-    if (this.selectedTransition === null) {
+    if (
+      this.selectedTransition === null ||
+      (this.selectedTransition === 'ready_for_feedback' && this.isPastFeedbackDeadline)
+    ) {
       return;
     }
 
