@@ -21,6 +21,7 @@ export class PortfolioReviewStepComponent implements OnInit {
   @Input() onAdvanceActiveTab?: (index: 1 | -1) => void;
 
   public externalName: string = 'OnTrack';
+  public canCreatePortfolio: boolean = false;
 
   public readonly icons: Record<string, string> = {
     document: 'article_outlined',
