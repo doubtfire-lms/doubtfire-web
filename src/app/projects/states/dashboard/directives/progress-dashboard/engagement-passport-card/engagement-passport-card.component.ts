@@ -1,11 +1,11 @@
+import {Component, Input, OnChanges} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {
   Engagement,
   EngagementService,
   Project,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
-import {Component, Input, OnChanges} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
 import {AddEngagementDialogComponent} from './add-engagement-dialog/add-engagement-dialog.component';
 import {EngagementDetailDialogComponent} from './engagement-detail-dialog/engagement-detail-dialog.component';
 
