@@ -109,7 +109,7 @@
     "autoprefixer": "~6",
     "canonical-path": "0.0.2",
     "concurrently": "^3.2.0",
-    "eslint": "^9.39.4",
+    "eslint": "^10.4.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-tailwindcss": "^3.18.3",
