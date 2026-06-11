@@ -1,5 +1,5 @@
-import {GradeService} from 'src/app/common/services/grade.service';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {GradeService} from 'src/app/common/services/grade.service';
 import {GradeIconComponent} from './grade-icon.component';
 
 describe('GradeIconComponent', () => {

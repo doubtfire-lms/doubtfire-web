@@ -1,5 +1,5 @@
-import {CommunicationRule} from 'src/app/api/models/doubtfire-model';
 import {Component, Input} from '@angular/core';
+import {CommunicationRule} from 'src/app/api/models/doubtfire-model';
 import type {UnitCommunicationsEditorComponent} from '../../unit-communications-editor.component';
 
 @Component({

@@ -1,5 +1,5 @@
-import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-task-visualisation',

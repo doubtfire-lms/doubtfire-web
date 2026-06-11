@@ -1,6 +1,6 @@
 import {MediaObserver} from 'ng-flex-layout';
-import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Component, Input} from '@angular/core';
+import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'unit-dropdown',

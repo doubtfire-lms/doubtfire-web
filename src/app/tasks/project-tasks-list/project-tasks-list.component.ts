@@ -1,3 +1,4 @@
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   GradeService,
   Project,
@@ -6,7 +7,6 @@ import {
   TaskStatusEnum,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'f-project-tasks-list',

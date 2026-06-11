@@ -19,20 +19,6 @@ import {FlexLayoutModule} from 'ng-flex-layout';
 import {LottieComponent, provideLottieOptions} from 'ngx-lottie';
 import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
-import {interval} from 'rxjs';
-import {
-  AboutDoubtfireModal,
-  AboutDoubtfireModalContent,
-} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
-import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
-import {AlertComponent, AlertService} from 'src/app/common/services/alert.service';
-import {FTaskBadgeComponent} from 'src/app/common/task-badge/task-badge.component';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {AttachmentConfirmationDialogComponent} from 'src/app/tasks/task-comment-composer/attachment-confirmation-dialog/attachment-confirmation-dialog.component';
-import {
-  DiscussionComposerDialog,
-  TaskCommentComposerComponent,
-} from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import {environment} from 'src/environments/environment';
 // import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
 // import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
@@ -93,7 +79,21 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 // import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
 // import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {UpgradeModule} from '@angular/upgrade/static';
+import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
+import {
+  AboutDoubtfireModal,
+  AboutDoubtfireModalContent,
+} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
+import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
+import {AlertComponent, AlertService} from 'src/app/common/services/alert.service';
+import {FTaskBadgeComponent} from 'src/app/common/task-badge/task-badge.component';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {AttachmentConfirmationDialogComponent} from 'src/app/tasks/task-comment-composer/attachment-confirmation-dialog/attachment-confirmation-dialog.component';
+import {
+  DiscussionComposerDialog,
+  TaskCommentComposerComponent,
+} from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {ActivityTypeListComponent} from './admin/institution-settings/activity-type-list/activity-type-list.component';
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';

@@ -1,4 +1,6 @@
 import {CachedEntityService, MappingProcess, RequestOptions} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {
   CampusService,
@@ -9,8 +11,6 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
 import {GroupService} from './group.service';
 import {TaskOutcomeAlignmentService} from './task-outcome-alignment.service';
 import {TaskService} from './task.service';

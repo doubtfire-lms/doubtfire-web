@@ -1,7 +1,7 @@
 import {CachedEntityService} from 'ngx-entity-service';
-import API_URL from 'src/app/config/constants/apiUrl';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {FeedbackTemplate} from '../models/feedback-template';
 
 @Injectable()

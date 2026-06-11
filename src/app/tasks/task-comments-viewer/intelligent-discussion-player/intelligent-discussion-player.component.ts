@@ -1,10 +1,10 @@
 import moment from 'moment';
+import {AfterViewInit, Component, Inject, Input, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Subscription, timer} from 'rxjs';
 import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
 import {AudioPlayerComponent} from 'src/app/common/audio-player/audio-player.component';
 import {MicrophoneTesterComponent} from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
-import {AfterViewInit, Component, Inject, Input, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {IntelligentDiscussionPlayerService} from './intelligent-discussion-player.service';
 import {IntelligentDiscussionRecorderComponent} from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 

@@ -1,5 +1,5 @@
-import {UnitRole} from 'src/app/api/models/unit-role';
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {UnitRole} from 'src/app/api/models/unit-role';
 
 @Component({
   selector: 'f-tutor-notes-view',

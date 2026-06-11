@@ -1,5 +1,4 @@
 import JSZip from 'jszip';
-import {firstValueFrom} from 'rxjs';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {
   Component,
@@ -10,6 +9,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import {firstValueFrom} from 'rxjs';
 import {AlertService} from '../services/alert.service';
 import {
   ArchiveFileEntry,

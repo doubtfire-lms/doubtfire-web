@@ -1,9 +1,9 @@
+import {inject} from '@angular/core';
+import {ResolveFn} from '@angular/router';
 import {Observable, first} from 'rxjs';
 import {Unit, UnitRole, UnitService, UserService} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
-import {inject} from '@angular/core';
-import {ResolveFn} from '@angular/router';
 
 export const resolveUnit: ResolveFn<Unit> = (route, state) => {
   const unitService = inject(UnitService);

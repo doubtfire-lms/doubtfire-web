@@ -1,5 +1,5 @@
-import {Observable, interval, shareReplay} from 'rxjs';
 import {Injectable} from '@angular/core';
+import {Observable, interval, shareReplay} from 'rxjs';
 
 // we have a service so that we can share the same interval observable among multiple subscribers
 // simply, all unitCodes will tick over at the same time

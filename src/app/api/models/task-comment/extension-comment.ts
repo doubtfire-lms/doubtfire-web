@@ -1,6 +1,6 @@
 import {Observable} from 'rxjs';
-import {AppInjector} from 'src/app/app-injector';
 import {tap} from 'rxjs/operators';
+import {AppInjector} from 'src/app/app-injector';
 import {TaskCommentService} from '../../services/task-comment.service';
 import {Task, TaskComment, TaskStatusEnum} from '../doubtfire-model';
 

@@ -1,3 +1,12 @@
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {
   Project,
@@ -11,15 +20,6 @@ import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.se
 import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
 import {TaskCommentComposerData} from '../task-comment-composer/task-comment-composer.component';
 
 @Component({

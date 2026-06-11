@@ -1,6 +1,6 @@
-import {TaskComment} from 'src/app/api/models/doubtfire-model';
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {TaskComment} from 'src/app/api/models/doubtfire-model';
 
 export interface CommentsModalData {
   comment: TaskComment;

@@ -1,4 +1,4 @@
-<div class="task-list" div fxLayout="column" fxLayoutAlign="none">
+<div class="task-list flex min-h-0 flex-col p-2">
   <!-- Search Box -->
   <div class="omnisearch rounded-t-2xl md:rounded-2xl">
     <div class="flex items-center">
@@ -20,7 +20,7 @@
   </div>
 
   <!-- Scrollable Unit Task List -->
-  <div class="scrollable h-screen" itemSize="60">
+  <div class="scrollable min-h-0 flex-1" itemSize="60">
     <mat-nav-list #taskDefinitions>
       @for (taskDef of filteredTaskDefinitions; track taskDef) {
         <mat-list-item

@@ -1,5 +1,5 @@
-import {Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {Pipe, PipeTransform} from '@angular/core';
+import {Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 
 @Pipe({
   name: 'tasksOfTaskDefinition',

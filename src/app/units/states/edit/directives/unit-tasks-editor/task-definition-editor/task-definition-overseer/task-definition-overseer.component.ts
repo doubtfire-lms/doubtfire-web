@@ -1,4 +1,8 @@
 import * as monaco from 'monaco-editor';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
 import {Observable} from 'rxjs';
 import {
   OverseerImage,
@@ -18,10 +22,6 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {MatSelectChange} from '@angular/material/select';
 import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/overseer-script-editor-modal.service';
 
 @Component({

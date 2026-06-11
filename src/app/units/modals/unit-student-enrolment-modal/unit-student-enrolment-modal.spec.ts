@@ -1,5 +1,5 @@
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {UnitStudentEnrolmentModalComponent} from './unit-student-enrolment-modal.component';
 
 describe('RolloverTeachingPeriodModalComponent', () => {

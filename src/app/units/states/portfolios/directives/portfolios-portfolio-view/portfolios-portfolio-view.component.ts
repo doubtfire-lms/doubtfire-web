@@ -1,5 +1,5 @@
-import {Project} from 'src/app/api/models/project';
 import {Component, Input} from '@angular/core';
+import {Project} from 'src/app/api/models/project';
 
 @Component({
   selector: 'f-portfolios-portfolio-view',

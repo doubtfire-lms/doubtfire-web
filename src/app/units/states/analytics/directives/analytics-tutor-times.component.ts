@@ -1,3 +1,5 @@
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
@@ -5,8 +7,6 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
 interface SessionEvent {
   start: Date;

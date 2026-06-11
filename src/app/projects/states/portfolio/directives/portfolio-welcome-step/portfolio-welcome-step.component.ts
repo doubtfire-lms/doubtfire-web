@@ -1,5 +1,5 @@
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Component, Input, OnInit} from '@angular/core';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
   selector: 'f-portfolio-welcome-step',

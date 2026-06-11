@@ -1,6 +1,6 @@
+import {Component, Input} from '@angular/core';
 import {GroupSet, Project} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
-import {Component, Input} from '@angular/core';
 
 // This component is only displayed to students (projects)
 @Component({

@@ -1,5 +1,5 @@
-import {GroupSet, Task} from 'src/app/api/models/doubtfire-model';
 import {Pipe, PipeTransform} from '@angular/core';
+import {GroupSet, Task} from 'src/app/api/models/doubtfire-model';
 
 @Pipe({
   name: 'tasksForGroupset',

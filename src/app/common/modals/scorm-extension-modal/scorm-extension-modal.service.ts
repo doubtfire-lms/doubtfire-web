@@ -1,6 +1,6 @@
-import {Task} from 'src/app/api/models/task';
 import {Injectable} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {Task} from 'src/app/api/models/task';
 import {ScormExtensionModalComponent} from './scorm-extension-modal.component';
 
 @Injectable({

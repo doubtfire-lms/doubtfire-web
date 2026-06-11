@@ -1,9 +1,9 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {HttpClient} from '@angular/common/http';
 import {GroupSet, Project, ProjectService, Tutorial, Unit} from '../doubtfire-model';
 
 export interface MemberContribution {

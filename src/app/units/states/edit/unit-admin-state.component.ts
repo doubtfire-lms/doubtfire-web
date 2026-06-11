@@ -1,9 +1,9 @@
-import {Observable, Subscription, first, of} from 'rxjs';
-import {Unit, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, Subscription, first, of} from 'rxjs';
+import {Unit, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
+import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 type UnitAdminTabKey =
   | 'details'

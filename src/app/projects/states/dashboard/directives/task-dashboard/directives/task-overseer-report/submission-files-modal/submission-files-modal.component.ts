@@ -1,4 +1,7 @@
 import * as monaco from 'monaco-editor';
+import {HttpResponse} from '@angular/common/http';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
 import {
   ArchiveFileEntry,
@@ -8,9 +11,6 @@ import {
 } from 'src/app/common/archive-viewer/archive-viewer.helpers';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {HttpResponse} from '@angular/common/http';
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 export interface SubmissionFilesModalData {
   assessment: OverseerAssessment;

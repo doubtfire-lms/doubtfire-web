@@ -33,7 +33,7 @@
         <mat-tab>
           <ng-template mat-tab-label>
             <span class="inline-flex items-center gap-1">
-              Staff Notes
+              Student Notes
               @if (task.project.staffNoteCount) {
                 <span
                   class="ml-0.5 inline-flex h-[22px] w-[22px] items-center justify-center rounded-full p-0 text-[12px] font-[600] leading-[22px] text-white"
@@ -46,7 +46,7 @@
           </ng-template>
         </mat-tab>
         @if (canAccessTutorNotes) {
-          <mat-tab label="Tutor Notes"></mat-tab>
+          <mat-tab label="Moderation Notes"></mat-tab>
         }
       }
     </mat-tab-group>

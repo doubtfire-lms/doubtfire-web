@@ -1,9 +1,9 @@
+import {Component, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'create-new-unit-modal-content',
