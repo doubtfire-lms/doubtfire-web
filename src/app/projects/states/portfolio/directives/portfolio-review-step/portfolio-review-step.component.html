@@ -87,7 +87,10 @@
       </p>
 
       <p>The following tasks will be included automatically in this order:</p>
-      <f-portfolio-included-tasks [project]="project"></f-portfolio-included-tasks>
+      <f-portfolio-included-tasks
+        [project]="project"
+        (canCreatePortfolioChange)="canCreatePortfolio = $event"
+      ></f-portfolio-included-tasks>
 
       <mat-card appearance="outlined" class="p-1">
         <mat-card-header>
@@ -110,6 +113,7 @@
           <button
             mat-raised-button
             color="primary"
+            [disabled]="!canCreatePortfolio"
             (click)="createPortfolio()"
             class="m-3 mx-auto w-full max-w-4xl"
           >

@@ -567,6 +567,15 @@ export class Project extends Entity {
     return httpClient.get<number[]>(this.tasksIncludedInPortfolioUrl());
   }
 
+  public tasksStillProcessingUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.id}/tasks_processing`;
+  }
+
+  public getTasksStillProcessing(): Observable<number[]> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.get<number[]>(this.tasksStillProcessingUrl());
+  }
+
   public resetTargetDates(): Observable<Project> {
     const projectService: ProjectService = AppInjector.get(ProjectService);
     return projectService.update(
