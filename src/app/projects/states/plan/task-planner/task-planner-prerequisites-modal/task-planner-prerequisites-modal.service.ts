@@ -1,7 +1,7 @@
-import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
-import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
+import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
 import {
   TaskPlannerPrerequisitesModalComponent,
   TaskPlannerPrerequisitesModalData,

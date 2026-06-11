@@ -1,8 +1,8 @@
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Campus, Project, Unit} from 'src/app/api/models/doubtfire-model';
 import {CampusService} from 'src/app/api/services/campus.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'f-unit-student-enrolment-modal',

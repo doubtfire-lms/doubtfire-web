@@ -1,9 +1,9 @@
-import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
-import {AppInjector} from 'src/app/app-injector';
 import {Component, Inject, LOCALE_ID} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from '../../services/alert.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */

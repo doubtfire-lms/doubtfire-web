@@ -1,7 +1,7 @@
-import {Task} from 'src/app/api/models/task';
-import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Task} from 'src/app/api/models/task';
+import {TaskStatusEnum} from 'src/app/api/models/task-status';
 
 export interface SubmissionTypeModalData {
   task: Task;

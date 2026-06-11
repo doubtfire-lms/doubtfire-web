@@ -1,6 +1,6 @@
-import {Task} from 'src/app/api/models/task';
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {Task} from 'src/app/api/models/task';
 import {CalendarModalComponent} from './calendar-modal.component';
 
 @Injectable({

@@ -1,3 +1,4 @@
+import {Component, Inject, Input} from '@angular/core';
 import {Task} from 'src/app/api/models/doubtfire-model';
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -5,7 +6,6 @@ import {
   TaskAssessmentResult,
   TaskSubmissionService,
 } from 'src/app/common/services/task-submission.service';
-import {Component, Inject, Input} from '@angular/core';
 
 export interface User {
   id: number;

@@ -1,7 +1,7 @@
-import {Subject} from 'rxjs';
-import {Task} from 'src/app/api/models/doubtfire-model';
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Subject} from 'rxjs';
+import {Task} from 'src/app/api/models/doubtfire-model';
 import {TaskAssessmentModalData} from './task-assessment-modal.service';
 
 @Component({

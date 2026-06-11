@@ -1,6 +1,6 @@
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
 import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'f-task-status-pie-chart',

@@ -1,13 +1,3 @@
-import {Project} from 'src/app/api/models/project';
-import {TaskStatusEnum} from 'src/app/api/models/task-status';
-import {Unit} from 'src/app/api/models/unit';
-import {TaskService} from 'src/app/api/services/task.service';
-import {UnitService} from 'src/app/api/services/unit.service';
-import {UserService} from 'src/app/api/services/user.service';
-import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
-import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {GradeService} from 'src/app/common/services/grade.service';
 import {
   AfterViewInit,
   Component,
@@ -22,6 +12,16 @@ import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {Project} from 'src/app/api/models/project';
+import {TaskStatusEnum} from 'src/app/api/models/task-status';
+import {Unit} from 'src/app/api/models/unit';
+import {TaskService} from 'src/app/api/services/task.service';
+import {UnitService} from 'src/app/api/services/unit.service';
+import {UserService} from 'src/app/api/services/user.service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {GradeService} from 'src/app/common/services/grade.service';
 import {D2lTransferModal} from '../../d2l-transfer-modal/d2l-transfer.component';
 
 @Component({

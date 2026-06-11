@@ -1,8 +1,8 @@
 import {Entity, EntityMapping} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
 import {Observable, map} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {HttpClient} from '@angular/common/http';
 
 export type Tutor = User;
 

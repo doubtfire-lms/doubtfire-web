@@ -1,5 +1,5 @@
-import {BehaviorSubject} from 'rxjs';
 import {Sort} from '@angular/material/sort';
+import {BehaviorSubject} from 'rxjs';
 import {ContributorData} from './contributor-data';
 import {GithubProfile} from './github-profile';
 

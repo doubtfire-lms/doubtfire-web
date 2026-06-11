@@ -1,4 +1,8 @@
 import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
+import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {MatSelectionList} from '@angular/material/list';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   AuthenticationService,
   Project,
@@ -17,10 +21,6 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {DiscussedInClassReasonModalService} from 'src/app/common/modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
-import {MatSelectionList} from '@angular/material/list';
-import {MatTabChangeEvent} from '@angular/material/tabs';
-import {ActivatedRoute, Router} from '@angular/router';
 
 enum TutorDiscussionTabView {
   SHOW_COMMENTS,

@@ -1,5 +1,5 @@
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Component} from '@angular/core';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
   selector: 'institution-settings',

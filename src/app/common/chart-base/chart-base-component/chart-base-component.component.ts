@@ -1,6 +1,6 @@
 import {TooltipService} from '@swimlane/ngx-charts';
-import {AppInjector} from 'src/app/app-injector';
 import {Component, ViewContainerRef} from '@angular/core';
+import {AppInjector} from 'src/app/app-injector';
 
 /**
  * @title chart-base-component

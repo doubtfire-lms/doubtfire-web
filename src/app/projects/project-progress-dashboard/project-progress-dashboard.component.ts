@@ -1,9 +1,9 @@
+import {Component, Input, type OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {Component, Input, type OnInit} from '@angular/core';
 
 @Component({
   selector: 'f-project-progress-dashboard',

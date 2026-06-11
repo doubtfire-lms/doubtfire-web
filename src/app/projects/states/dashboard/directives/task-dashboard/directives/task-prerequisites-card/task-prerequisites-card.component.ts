@@ -1,6 +1,6 @@
+import {Component, Input} from '@angular/core';
 import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
-import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'f-task-prerequisites-card',

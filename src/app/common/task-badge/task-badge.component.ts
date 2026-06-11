@@ -1,5 +1,5 @@
-import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Component, Input} from '@angular/core';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
 
 @Component({
   selector: 'f-task-badge',

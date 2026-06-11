@@ -1,7 +1,7 @@
-import {Observable, map} from 'rxjs';
-import API_URL from 'src/app/config/constants/apiUrl';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {Observable, map} from 'rxjs';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {CommunicationAction} from '../models/communication';
 
 @Injectable()

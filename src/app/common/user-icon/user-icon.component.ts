@@ -1,4 +1,3 @@
-import {User, UserService} from 'src/app/api/models/doubtfire-model';
 import {Md5} from 'ts-md5/dist/md5';
 import {
   AfterViewInit,
@@ -9,6 +8,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import {User, UserService} from 'src/app/api/models/doubtfire-model';
 
 interface D3Selection {
   append(name: string): D3Selection;

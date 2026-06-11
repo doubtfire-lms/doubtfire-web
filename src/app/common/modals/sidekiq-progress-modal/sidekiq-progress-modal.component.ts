@@ -1,9 +1,9 @@
-import {Subject} from 'rxjs';
-import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
-import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Subject} from 'rxjs';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {AlertService} from '../../services/alert.service';
 import {SidekiqProgressModalService} from './sidekiq-progress-modal.service';
 

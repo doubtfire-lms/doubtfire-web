@@ -1,6 +1,6 @@
-import {Project, Task, TaskComment} from 'src/app/api/models/doubtfire-model';
 import {HttpResponse} from '@angular/common/http';
 import {Component, ElementRef, Inject, Input, OnDestroy, ViewChild} from '@angular/core';
+import {Project, Task, TaskComment} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {AlertService} from '../services/alert.service';
 

@@ -1,7 +1,7 @@
-import {Task} from 'src/app/api/models/task';
-import {UnitRole} from 'src/app/api/models/unit-role';
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {Task} from 'src/app/api/models/task';
+import {UnitRole} from 'src/app/api/models/unit-role';
 import {TutorNotesModalData} from './tutor-notes-modal.service';
 
 @Component({

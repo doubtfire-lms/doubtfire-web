@@ -1,6 +1,6 @@
-import {Subscription} from 'rxjs';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs';
 import {UnitCodeService} from './unit-code.service';
 
 @Component({

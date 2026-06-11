@@ -1,6 +1,6 @@
+import {Injectable} from '@angular/core';
 import {ScormDataModel, ScormPlayerContext} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {Injectable} from '@angular/core';
 import {UserService} from './user.service';
 
 @Injectable({
