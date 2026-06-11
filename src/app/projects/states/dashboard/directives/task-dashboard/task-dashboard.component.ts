@@ -6,8 +6,6 @@ import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
-import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from '../../selected-task.service';
 import {DashboardViews} from '../../selected-task.service';
 
@@ -36,7 +34,6 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     taskSheetPdfUrl?: string;
     taskSubmissionPdfUrl?: string;
   };
-  public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
   public currentView: DashboardViews;
 
   public currentIndex;
@@ -56,7 +53,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
         this.setSelectedDashboardView(DashboardViews.similarity);
         break;
       case 4:
-        this.setSelectedDashboardView(DashboardViews.overseer);
+        this.setSelectedDashboardView(DashboardViews.submission_history);
         break;
       case 5:
         this.setSelectedDashboardView(DashboardViews.staff_notes);
@@ -68,9 +65,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   }
 
   constructor(
-    private doubtfire: DoubtfireConstants,
     private taskService: TaskService,
-    private taskAssessmentModal: TaskAssessmentModalService,
     private fileDownloader: FileDownloaderService,
     private route: ActivatedRoute,
     private userService: UserService,
@@ -123,7 +118,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
         return 2;
       case DashboardViews.similarity:
         return this.canAccessStaffViews ? 3 : 0;
-      case DashboardViews.overseer:
+      case DashboardViews.submission_history:
         return this.canAccessStaffViews ? 4 : 0;
       case DashboardViews.staff_notes:
         return this.canAccessStaffViews ? 5 : 0;
@@ -137,7 +132,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   private canAccessDashboardView(view: DashboardViews): boolean {
     switch (view) {
       case DashboardViews.similarity:
-      case DashboardViews.overseer:
+      case DashboardViews.submission_history:
       case DashboardViews.staff_notes:
       case DashboardViews.discussion_prompts:
         return this.canAccessStaffViews;
@@ -146,10 +141,6 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
       default:
         return true;
     }
-  }
-
-  public get overseerEnabled() {
-    return this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled;
   }
 
   public get canAccessStaffViews(): boolean {
@@ -182,10 +173,6 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
       this.currentUnitRole.role === 'Admin' ||
       (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id)
     );
-  }
-
-  showSubmissionHistoryModal() {
-    this.taskAssessmentModal.show(this.task);
   }
 
   downloadSubmission() {

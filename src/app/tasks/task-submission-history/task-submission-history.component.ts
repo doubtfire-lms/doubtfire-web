@@ -1,9 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Subject} from 'rxjs';
-import {OverseerAssessmentService, Task} from 'src/app/api/models/doubtfire-model';
-import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {SubmissionHistory} from 'src/app/api/models/submission-history';
+import {Task} from 'src/app/api/models/task';
+import {SubmissionHistoryService} from 'src/app/api/services/submission-history.service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
+import {SubmissionFilesModalComponent} from 'src/app/projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/submission-files-modal/submission-files-modal.component';
 
 @Component({
   selector: 'f-task-submission-history',
@@ -13,98 +16,87 @@ import {TaskSubmissionService} from 'src/app/common/services/task-submission.ser
 })
 export class TaskSubmissionHistoryComponent implements OnInit {
   @Input() task: Task;
-  @Output() hasNoData: EventEmitter<boolean> = new EventEmitter();
-  tabs: OverseerAssessment[];
-  // timestamps: string[];
-  selectedTab: OverseerAssessment = new OverseerAssessment();
-  @Input() refreshTrigger: Subject<boolean>;
+
+  public histories: SubmissionHistory[] = [];
+  public comparisonSourceId: number | null = null;
+  public loading = false;
 
   constructor(
+    private historiesService: SubmissionHistoryService,
     private alerts: AlertService,
-    private submissions: TaskSubmissionService,
-    private overseerAssessmentService: OverseerAssessmentService,
+    private dialog: MatDialog,
+    private fileDownloader: FileDownloaderService,
+    private taskAssessmentModal: TaskAssessmentModalService,
   ) {}
 
-  ngOnInit() {
-    this.fillTabs();
+  ngOnInit(): void {
+    this.loadHistories();
+  }
 
-    this.refreshTrigger.subscribe(() => {
-      this.fillTabs();
+  public loadHistories(): void {
+    this.loading = true;
+    this.historiesService.queryForTask(this.task).subscribe({
+      next: (histories) => {
+        this.histories = histories;
+        this.loading = false;
+        if (!histories.some((history) => history.id === this.comparisonSourceId)) {
+          this.comparisonSourceId = null;
+        }
+      },
+      error: (error) => {
+        this.loading = false;
+        this.alerts.error(`Failed to load submission history: ${error}`, 6000);
+      },
     });
   }
 
-  private handleError(error: Error) {
-    this.alerts.error('Error: ' + error, 6000);
+  public view(history: SubmissionHistory): void {
+    this.openDialog(history);
   }
 
-  fillTabs(): void {
-    // this.submissions.getLatestSubmissionsTimestamps(this.task);
-    // let transformedData = this.overseerAssessmentService.queryForTask(this.task).pipe(
-    //   map(data => {
-    //     return data.map((ts: any) => {
-    //       let result = new SubmissionTab();
-    //         timestamp: new Date(ts.submission_timestamp * 1000),
-    //         content: '',
-    //         timestampString: ts.submission_timestamp,
-    //         taskStatus: ts.result_task_status,
-    //         submissionStatus: ts.status,
-    //         createdAt: ts.created_at,
-    //         updatedAt: ts.updated_at,
-    //         taskId: ts.task_id};
-    //     });
-    //   })
-    // );
+  public selectForComparison(history: SubmissionHistory): void {
+    this.comparisonSourceId = history.id;
+  }
 
-    this.overseerAssessmentService.queryForTask(this.task).subscribe(
-      (tabs) => {
-        if (tabs.length === 0) {
-          this.tabs = [new OverseerAssessment()];
-          this.selectedTab.content = [
-            {label: 'No Data', result: 'There are no submissions for this task at the moment.'},
-          ];
-        } else {
-          this.tabs = tabs;
-        }
-        // if (this.selectedTab.timestampString) {
-        //   this.openSubmission(tabs.filter(x => x.timestampString === this.selectedTab.timestampString)[0]);
-        // } else {
-        //   this.openSubmission(tabs[0]);
-        // }
-      },
-      (error) => {
-        this.handleError(error);
-      },
+  public compare(history: SubmissionHistory): void {
+    const selected = this.histories.find((item) => item.id === this.comparisonSourceId);
+    if (selected && selected.id !== history.id) {
+      this.openDialog(history, selected);
+    }
+  }
+
+  public download(history: SubmissionHistory): void {
+    this.fileDownloader.downloadFile(
+      history.submissionFilesUrl(),
+      `submission-${history.timestampString}.zip`,
     );
   }
 
-  triggerOverseer(tab: OverseerAssessment) {
-    this.overseerAssessmentService.triggerOverseer(tab).subscribe(
-      (_response: OverseerAssessment) => {
-        this.alerts.success('Overseer assessment will be run again.', 2000);
-      },
-      (_response: Error) => {
-        this.alerts.error('Error requesting overseer assessment.', 6000);
-      },
-    );
+  public viewOverseerReport(history: SubmissionHistory): void {
+    if (history.overseerAssessmentId) {
+      this.taskAssessmentModal.show(this.task, history.overseerAssessmentId);
+    }
   }
 
-  openSubmission(tab: OverseerAssessment) {
-    this.selectedTab = tab;
-    // this.selectedTab.timestamp = tab.timestamp;
-    // this.selectedTab.timestampString = tab.timestampString;
-    // this.selectedTab.taskStatus = tab.taskStatus;
-    // this.selectedTab.submissionStatus = tab.submissionStatus;
+  private openDialog(history: SubmissionHistory, comparedWith?: SubmissionHistory): void {
+    const historyIndex = this.histories.findIndex((item) => item.id === history.id);
+    const comparedIndex = comparedWith
+      ? this.histories.findIndex((item) => item.id === comparedWith.id)
+      : -1;
 
-    this.submissions.getSubmissionByTimestamp(this.task, tab.timestampString).subscribe(
-      (sub) => {
-        this.selectedTab.content = sub;
-        this.hasNoData.emit(false);
+    this.dialog.open(SubmissionFilesModalComponent, {
+      data: {
+        assessment: history,
+        assessmentNumber: this.histories.length - historyIndex,
+        assessmentIsMostRecent: historyIndex === 0,
+        comparedWith,
+        comparedWithNumber: comparedIndex >= 0 ? this.histories.length - comparedIndex : undefined,
+        comparedWithIsMostRecent: comparedIndex === 0,
       },
-      (error) => {
-        // TODO: make error handling more readable...
-        this.selectedTab.content = [{label: 'Error', result: error?.error?.error}];
-        this.hasNoData.emit(true);
-      },
-    );
+      maxWidth: '95vw',
+      width: '100%',
+      height: '90vh',
+      panelClass: 'submission-files-dialog',
+    });
   }
 }
