@@ -5,7 +5,8 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnInit} from '@angular/core';
+import {formatDate} from '@angular/common';
+import {Component, Inject, Input, LOCALE_ID, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -26,6 +27,7 @@ export class UnitAnalyticsComponent implements OnInit {
     private userService: UserService,
     private alertService: AlertService,
     private route: ActivatedRoute,
+    @Inject(LOCALE_ID) private locale: string,
   ) {}
 
   ngOnInit(): void {
@@ -72,10 +74,12 @@ export class UnitAnalyticsComponent implements OnInit {
   }
 
   public getOverflowTaskClaimsCsv() {
+    const timestamp = formatDate(new Date(), 'd-MMMM-y-HHmm', this.locale).toLowerCase();
+
     this.downloadCsv(
       this.unit.downloadOverflowTaskClaimsCsv(),
       'Overflow Task Claims CSV',
-      `${this.unit.code}-overflow-task-claims.csv`,
+      `${this.unit.code}-overflow-task-claims-${timestamp}.csv`,
     );
   }
 
