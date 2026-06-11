@@ -1,9 +1,9 @@
 import {Entity, EntityCache, RequestOptions} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {HttpClient} from '@angular/common/http';
 import {MappingFunctions} from '../services/mapping-fn';
 import {
   Campus,
@@ -567,6 +567,15 @@ export class Project extends Entity {
   public getTasksIncludedInPortfolio(): Observable<number[]> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get<number[]>(this.tasksIncludedInPortfolioUrl());
+  }
+
+  public tasksStillProcessingUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.id}/tasks_processing`;
+  }
+
+  public getTasksStillProcessing(): Observable<number[]> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.get<number[]>(this.tasksStillProcessingUrl());
   }
 
   public resetTargetDates(): Observable<Project> {

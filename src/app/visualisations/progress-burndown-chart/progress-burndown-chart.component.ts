@@ -1,6 +1,3 @@
-import {Project, Unit} from 'src/app/api/models/doubtfire-model';
-import {AppInjector} from 'src/app/app-injector';
-import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
 import {formatDate} from '@angular/common';
 import {
   Component,
@@ -11,6 +8,9 @@ import {
   SimpleChanges,
   ViewContainerRef,
 } from '@angular/core';
+import {Project, Unit} from 'src/app/api/models/doubtfire-model';
+import {AppInjector} from 'src/app/app-injector';
+import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
 
 interface BurndownPoint {
   name: string;

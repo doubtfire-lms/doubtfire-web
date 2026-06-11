@@ -1,12 +1,12 @@
+import {Component, Input, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatMenuTrigger} from '@angular/material/menu';
 import {OverseerAssessment, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {OverseerAssessmentService} from 'src/app/api/services/overseer-assessment.service';
 import {OverseerStepResultService} from 'src/app/api/services/overseer-step-result.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
-import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatMenuTrigger} from '@angular/material/menu';
 import {SubmissionFilesModalComponent} from './submission-files-modal/submission-files-modal.component';
 
 @Component({

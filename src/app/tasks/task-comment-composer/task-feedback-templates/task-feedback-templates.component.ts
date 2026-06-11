@@ -1,12 +1,3 @@
-import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
-import {
-  FeedbackTemplate,
-  FeedbackTemplateService,
-  LearningOutcome,
-  LearningOutcomeService,
-  Task,
-  TaskService,
-} from 'src/app/api/models/doubtfire-model';
 import {
   Component,
   ElementRef,
@@ -20,6 +11,15 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
+import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
+import {
+  FeedbackTemplate,
+  FeedbackTemplateService,
+  LearningOutcome,
+  LearningOutcomeService,
+  Task,
+  TaskService,
+} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-task-feedback-templates',

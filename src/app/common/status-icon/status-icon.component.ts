@@ -1,5 +1,5 @@
-import {TaskStatus, TaskStatusEnum} from 'src/app/api/models/task-status';
 import {Component, Input, OnInit} from '@angular/core';
+import {TaskStatus, TaskStatusEnum} from 'src/app/api/models/task-status';
 
 @Component({
   selector: 'status-icon',

@@ -8,14 +8,7 @@
   "trailingComma": "all",
   "bracketSpacing": false,
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
-  "importOrder": [
-    "^@angular/(.*)$",
-    "^rxjs/(.*)$",
-    "^@gov/(.*)$",
-    "^@core/(.*)$",
-    "^@shared/(.*)$",
-    "^[./]"
-  ],
+  "importOrder": ["^@angular/(.*)$", "^rxjs$", "^rxjs/(.*)$", "^src/app/(.*)$", "^[./]"],
   "importOrderSeparation": false,
   "importOrderSortSpecifiers": true,
   "importOrderParserPlugins": ["typescript", "decorators-legacy"]

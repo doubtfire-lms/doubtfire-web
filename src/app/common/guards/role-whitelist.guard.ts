@@ -1,8 +1,8 @@
+import {inject} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivateFn, Router, UrlTree} from '@angular/router';
 import {Observable, filter, map, of, take} from 'rxjs';
 import {AuthenticationService, UserService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
-import {inject} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivateFn, Router, UrlTree} from '@angular/router';
 
 export const roleWhitelistGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,

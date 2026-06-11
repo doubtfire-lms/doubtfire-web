@@ -1,13 +1,13 @@
-import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
-import {TeachingPeriod} from 'src/app/api/models/teaching-period';
-import {TeachingPeriodBreakService} from 'src/app/api/services/teaching-period-break.service';
-import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
+import {TeachingPeriod} from 'src/app/api/models/teaching-period';
+import {TeachingPeriodBreakService} from 'src/app/api/services/teaching-period-break.service';
+import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {TeachingPeriodUnitImportService} from '../teaching-period-unit-import/teaching-period-unit-import.dialog';
 
 @Component({

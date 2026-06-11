@@ -1,9 +1,9 @@
 import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
+import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, tap} from 'rxjs';
 import {Project, ProjectService, UserService} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {HttpClient} from '@angular/common/http';
-import {EventEmitter, Injectable} from '@angular/core';
 import {StaffNote} from '../models/staff-note';
 
 @Injectable()

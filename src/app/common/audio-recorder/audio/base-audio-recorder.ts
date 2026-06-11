@@ -1,5 +1,5 @@
-import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 import {Directive, OnInit} from '@angular/core';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 
 export interface RecordingEvent extends Event {
   detail: {

@@ -1,8 +1,8 @@
-import {Project, ProjectService, Webcal, WebcalService} from 'src/app/api/models/doubtfire-model';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {Project, ProjectService, Webcal, WebcalService} from 'src/app/api/models/doubtfire-model';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AlertService} from '../../services/alert.service';
 
 @Component({

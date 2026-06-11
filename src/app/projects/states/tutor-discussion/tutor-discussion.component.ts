@@ -1,4 +1,9 @@
 import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
+import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSelectionList} from '@angular/material/list';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   AuthenticationService,
   Project,
@@ -17,11 +22,6 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {DiscussedInClassReasonModalService} from 'src/app/common/modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSelectionList} from '@angular/material/list';
-import {MatTabChangeEvent} from '@angular/material/tabs';
-import {ActivatedRoute, Router} from '@angular/router';
 import {AddEngagementDialogComponent} from '../dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
 
 enum TutorDiscussionTabView {

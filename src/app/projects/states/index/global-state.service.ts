@@ -1,5 +1,7 @@
 import {MediaObserver} from 'ng-flex-layout';
 import {EntityCache} from 'ngx-entity-service';
+import {Injectable, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
 import {BehaviorSubject, Observable, Subject, skip, take} from 'rxjs';
 import {
   CampusService,
@@ -16,8 +18,6 @@ import {
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Injectable, OnDestroy} from '@angular/core';
-import {Router} from '@angular/router';
 
 /**
  * The different types of views that can be shown. Used by the header to determine details to show.

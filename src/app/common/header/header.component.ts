@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {MediaObserver} from 'ng-flex-layout';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {Subscription, asapScheduler, observeOn} from 'rxjs';
 import {
   AuthenticationService,
@@ -14,8 +16,6 @@ import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants, LogoSettings} from 'src/app/config/constants/doubtfire-constants';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 import {CheckForUpdateService} from 'src/app/sessions/service-worker-updater/check-for-update.service';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import {AboutDoubtfireModal} from '../modals/about-doubtfire-modal/about-doubtfire-modal.component';
 import {CalendarModalService} from '../modals/calendar-modal/calendar-modal.service';
 import {QrModalService} from '../modals/qr-modal/qr-modal.service';

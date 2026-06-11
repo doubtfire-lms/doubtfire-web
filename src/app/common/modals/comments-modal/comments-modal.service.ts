@@ -1,6 +1,6 @@
-import {TaskComment} from 'src/app/api/models/doubtfire-model';
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {TaskComment} from 'src/app/api/models/doubtfire-model';
 import {CommentsModalComponent, CommentsModalData} from './comments-modal.component';
 
 @Injectable({

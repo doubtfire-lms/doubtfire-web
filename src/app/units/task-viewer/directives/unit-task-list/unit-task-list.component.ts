@@ -1,10 +1,10 @@
+import {Location} from '@angular/common';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
-import {Location} from '@angular/common';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'f-unit-task-list',

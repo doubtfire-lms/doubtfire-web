@@ -1,10 +1,10 @@
+import {AfterViewInit, Component, Inject, Input} from '@angular/core';
 import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
 import {
   BaseAudioRecorderComponent,
   RecordingEvent,
 } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
-import {AfterViewInit, Component, Inject, Input} from '@angular/core';
 import {IntelligentDiscussionPlayerService} from '../intelligent-discussion-player.service';
 
 interface DiscussionReplyService {

@@ -1,4 +1,6 @@
 import {addWeeks} from 'date-fns';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -12,8 +14,6 @@ import {
 } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
 
 type GradeCol = 'p' | 'c' | 'd' | 'hd';
 

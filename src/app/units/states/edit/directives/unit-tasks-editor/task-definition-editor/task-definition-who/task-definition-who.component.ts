@@ -1,6 +1,6 @@
+import {Component, Input} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
-import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'f-task-definition-who',

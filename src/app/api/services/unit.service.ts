@@ -1,4 +1,6 @@
 import {CachedEntityService} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {
   GroupSetService,
@@ -15,8 +17,6 @@ import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {AppInjector} from 'src/app/app-injector';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
 import {GroupService} from './group.service';
 import {MappingFunctions} from './mapping-fn';
 import {TaskDefinitionService} from './task-definition.service';

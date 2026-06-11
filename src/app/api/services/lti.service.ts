@@ -1,8 +1,8 @@
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {CsvResult} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import LTI_API_URL from 'src/app/config/constants/ltiApiUrl';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
 import {Project} from '../models/project';
 import {SidekiqJob} from '../models/sidekiq-job';
 
