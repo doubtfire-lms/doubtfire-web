@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-23](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-22...v11.0.0-23) (2026-06-11)
+
+
+### Features
+
+* display list of tasks still being processed ([#1264](https://github.com/b0ink/doubtfire-deploy/issues/1264)) ([55ef4c0](https://github.com/b0ink/doubtfire-deploy/commit/55ef4c0409cf5a066e91763a00f2bb428670e520))
+
+
+### Bug Fixes
+
+* apply status color ([df6a6ec](https://github.com/b0ink/doubtfire-deploy/commit/df6a6ecc73d01dd2ef449270bc7c6de446d93884))
+* avoid loading rendering all students at the same time ([ba7910a](https://github.com/b0ink/doubtfire-deploy/commit/ba7910a59460a4d4139273b272e99625e5efc518))
+* ensure entire task list can be scrolled through ([8ce79a8](https://github.com/b0ink/doubtfire-deploy/commit/8ce79a8f33c82231f7f3c4033a4d37039514c015))
+
 ## [11.0.0-22](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-21...v11.0.0-22) (2026-06-09)
 
 
