@@ -5,7 +5,7 @@
       [shiftBetweenBadges]="false"
       [width]="80"
       [unit_code]="unit?.code"
-      matTooltip="{{ unit.name }}"
+      matTooltip="{{ unit?.name }}"
       [matMenuTriggerFor]="menu"
       #menuState="matMenuTrigger"
     >
@@ -24,9 +24,8 @@
 
 <mat-menu #menu="matMenu" class="unit-dropdown-menu">
   @if (media.isActive('xs')) {
-    <button uiSref="home" mat-menu-item>
+    <button routerLink="/home" mat-menu-item>
       <mat-icon
-        uiSref="home"
         style="margin-right: 20px"
         svgIcon="formatif-logo"
         class="formatif-icon"
@@ -40,17 +39,16 @@
     <mat-divider></mat-divider>
   }
 
-  <h2 mat-subheader [hidden]="unitRoles?.length === 0" class="my-3 ml-6">Units you teach</h2>
+  <h2 mat-subheader [hidden]="unitRoles?.length === 0" class="my-2 ml-3.5">Units you teach</h2>
   @for (unitRole of unitRoles; track unitRole) {
     @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
       <div
-        uiSref="units/tasks/inbox"
-        [uiParams]="{unitId: unitRole.unit.id}"
+        [routerLink]="['/units', unitRole.unit.id, 'tasks', 'inbox']"
         mat-menu-item
         class="w-full"
       >
-        <div class="flex items-center w-full">
-          <div class="flex-none unitName truncate max-w-[220px]">{{ unitRole.unit.name }}</div>
+        <div class="flex w-full items-center">
+          <div class="unitName max-w-[220px] flex-none truncate">{{ unitRole.unit.name }}</div>
           <div class="grow"></div>
           <f-unit-code [width]="80" [unit_code]="unitRole.unit.code"></f-unit-code>
         </div>
@@ -59,18 +57,17 @@
   }
 
   <mat-divider [hidden]="unitRoles?.length === 0 || projects?.length === 0"></mat-divider>
-  <h2 mat-subheader [hidden]="projects?.length === 0" class="my-3 ml-6">Units you study</h2>
+  <h2 mat-subheader [hidden]="projects?.length === 0" class="my-2 ml-3.5">Units you study</h2>
   @for (project of projects; track project) {
     @if (!project.unit.teachingPeriod || project.unit.teachingPeriod.active) {
       <button
-        uiSref="projects/dashboard"
-        [uiParams]="{projectId: project.id, taskAbbr: ''}"
-        class="flex items-center mb-2"
+        [routerLink]="['/projects', project.id, 'dashboard']"
+        class="mb-1 flex items-center"
         mat-menu-item
       >
-        <span class="flex flex-row border-box">
+        <span class="border-box flex flex-row">
           <div class="unitName">{{ project.unit.name }}</div>
-          <span class="flex-1 border-box"></span>
+          <span class="border-box flex-1"></span>
           <f-unit-code [width]="80" [unit_code]="project.unit.code"></f-unit-code>
         </span>
       </button>

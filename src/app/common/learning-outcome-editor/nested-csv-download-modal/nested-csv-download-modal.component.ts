@@ -5,6 +5,7 @@ import {FileDownloaderService} from '../../file-downloader/file-downloader.servi
 @Component({
   selector: 'f-nested-csv-download-modal',
   templateUrl: './nested-csv-download-modal.component.html',
+  standalone: false,
 })
 export class NestedCsvDownloadModalComponent {
   public includeNested = false;

@@ -1,36 +1,26 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {UnitRoleService} from 'src/app/api/services/unit-role.service';
-import {Unit} from 'src/app/api/models/unit';
 import {Tutorial, User} from 'src/app/api/models/doubtfire-model';
+import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatButtonToggleChange} from '@angular/material/button-toggle';
-import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
-import {MatSelectChange} from '@angular/material/select';
-import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
+import {UnitRoleService} from 'src/app/api/services/unit-role.service';
 import {UserService} from 'src/app/api/services/user.service';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {
+  CsvResult,
+  CsvResultModalService,
+  CsvRow,
+} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {MatSelectChange} from '@angular/material/select';
+import {MatTableDataSource} from '@angular/material/table';
 import {BulkImportStaffModalService} from './bulk-import-staff-modal/bulk-import-staff-modal.service';
-import {csvResultModalService} from 'src/app/ajs-upgraded-providers';
-
-interface CsvResultRow {
-  row: string;
-  message: string;
-}
-
-interface CsvResultResponse {
-  success: CsvResultRow[];
-  errors: CsvResultRow[];
-  ignored: CsvResultRow[];
-}
-
-interface CsvResultModal {
-  show(title: string, response: CsvResultResponse): void;
-}
 
 @Component({
   selector: 'unit-staff-editor',
   templateUrl: 'unit-staff-editor.component.html',
+  standalone: false,
 })
 export class UnitStaffEditorComponent implements OnInit {
   @Input() unit: Unit;
@@ -51,7 +41,7 @@ export class UnitStaffEditorComponent implements OnInit {
     'mentor',
     'actions',
   ];
-  dataSource = new MatTableDataSource<UnitRole>();
+  dataSource: MatTableDataSource<UnitRole> = new MatTableDataSource();
 
   // Inject services here
   constructor(
@@ -61,7 +51,7 @@ export class UnitStaffEditorComponent implements OnInit {
     private confirmationModalService: ConfirmationModalService,
     private tutorNotesModal: TutorNotesModalService,
     private bulkImportStaffModal: BulkImportStaffModalService,
-    @Inject(csvResultModalService) private csvResultModal: CsvResultModal,
+    private csvResultModal: CsvResultModalService,
   ) {}
 
   ngOnInit(): void {
@@ -319,7 +309,7 @@ export class UnitStaffEditorComponent implements OnInit {
   }
 
   groupSetName(id: number) {
-    this.unit.groupSetsCache.get(id).name || 'Individual Work';
+    return this.unit.groupSetsCache.get(id).name || 'Individual Work';
   }
 
   openTutorNotes(unitRole: UnitRole) {
@@ -335,7 +325,7 @@ export class UnitStaffEditorComponent implements OnInit {
       return;
     }
 
-    const existingStaffEmails = new Set<string>(
+    const existingStaffEmails: Set<string> = new Set(
       this.unit.staff
         .map((unitRole) => unitRole.user.email?.trim().toLowerCase())
         .filter((email): email is string => !!email),
@@ -422,15 +412,11 @@ export class UnitStaffEditorComponent implements OnInit {
     );
   }
 
-  private csvResultRow(row: string, message: string): CsvResultRow {
+  private csvResultRow(row: string, message: string): CsvRow {
     return {row, message};
   }
 
-  private csvResultResponse(
-    success: CsvResultRow[],
-    errors: CsvResultRow[],
-    ignored: CsvResultRow[],
-  ): CsvResultResponse {
+  private csvResultResponse(success: CsvRow[], errors: CsvRow[], ignored: CsvRow[]): CsvResult {
     return {success, errors, ignored};
   }
 }

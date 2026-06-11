@@ -1,6 +1,3 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {MatTableDataSource} from '@angular/material/table';
 import {Observable, Subscription} from 'rxjs';
 import {DiscussionPrompt} from 'src/app/api/models/discussion-prompt';
 import {Task} from 'src/app/api/models/task';
@@ -12,11 +9,15 @@ import {TaskDefinitionService} from 'src/app/api/services/task-definition.servic
 import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {UntypedFormControl, Validators} from '@angular/forms';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'f-task-definition-discussion-prompts',
   templateUrl: 'task-definition-discussion-prompts.component.html',
   styleUrls: ['task-definition-discussion-prompts.component.scss'],
+  standalone: false,
 })
 export class TaskDefinitionDiscussionPromptsComponent
   extends EntityFormComponent<DiscussionPrompt>
@@ -30,7 +31,7 @@ export class TaskDefinitionDiscussionPromptsComponent
 
   private prereqSub?: Subscription;
 
-  public dataSource = new MatTableDataSource<DiscussionPrompt>();
+  public dataSource: MatTableDataSource<DiscussionPrompt> = new MatTableDataSource();
 
   creatingNewDiscussionPrompt: boolean = false;
 

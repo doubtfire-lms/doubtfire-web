@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { TaskAssessmentCardComponent } from './task-assessment-card.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {TaskAssessmentCardComponent} from './task-assessment-card.component';
 
 describe('TaskAssessmentCardComponent', () => {
   let component: TaskAssessmentCardComponent;
@@ -8,9 +7,8 @@ describe('TaskAssessmentCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TaskAssessmentCardComponent ]
-    })
-    .compileComponents();
+      declarations: [TaskAssessmentCardComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TaskAssessmentCardComponent);
     component = fixture.componentInstance;

@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { TeachingPeriodListComponent } from './teaching-period-list.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {TeachingPeriodListComponent} from './teaching-period-list.component';
 
 describe('TeachingPeriodListComponent', () => {
   let component: TeachingPeriodListComponent;
@@ -8,9 +7,8 @@ describe('TeachingPeriodListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TeachingPeriodListComponent ]
-    })
-    .compileComponents();
+      declarations: [TeachingPeriodListComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TeachingPeriodListComponent);
     component = fixture.componentInstance;

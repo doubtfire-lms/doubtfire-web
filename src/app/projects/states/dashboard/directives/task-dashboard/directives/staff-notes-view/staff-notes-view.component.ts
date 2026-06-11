@@ -4,6 +4,7 @@ import {Component, Input} from '@angular/core';
   selector: 'f-staff-notes-view',
   templateUrl: './staff-notes-view.component.html',
   styleUrls: ['./staff-notes-view.component.scss'],
+  standalone: false,
 })
 export class StaffNotesViewComponent {
   @Input() project;

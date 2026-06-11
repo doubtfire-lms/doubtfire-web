@@ -1,5 +1,3 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
 import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {Observable} from 'rxjs';
 import {
@@ -10,6 +8,8 @@ import {
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {DiscussionPrompt} from '../models/discussion-prompt';
 
 @Injectable()
@@ -57,7 +57,7 @@ export class DiscussionPromptService extends CachedEntityService<DiscussionPromp
           }
           return entity.taskDefinition;
         },
-        toJsonFn: (entity: DiscussionPrompt, key: string) => {
+        toJsonFn: (entity: DiscussionPrompt, _key: string) => {
           return entity.taskDefinition?.id;
         },
       },

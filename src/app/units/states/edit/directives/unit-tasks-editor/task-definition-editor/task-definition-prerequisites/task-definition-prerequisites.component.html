@@ -1,5 +1,5 @@
 <div class="flex flex-col">
-  <div class="flex-grow flex flex-row">
+  <div class="flex flex-grow flex-row">
     <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="task-definition">
         <th mat-header-cell *matHeaderCellDef>Task</th>
@@ -39,9 +39,11 @@
                 matTooltipShowDelay="1000"
                 (selectionChange)="updateTaskPrerequisite(link)"
               >
-                <mat-option *ngFor="let state of stateOptions" [value]="state.value">
-                  {{ state.label }}
-                </mat-option>
+                @for (state of stateOptions; track state) {
+                  <mat-option [value]="state.value">
+                    {{ state.label }}
+                  </mat-option>
+                }
               </mat-select>
             }
           }
@@ -58,7 +60,7 @@
         </th>
         <td mat-cell *matCellDef="let link">
           @if (staffView) {
-            <td class="py-2 px-3 text-right">
+            <td class="px-2 py-1 text-right">
               <button
                 mat-icon-button
                 aria-label="Remove prerequisite"
@@ -82,8 +84,8 @@
   </div>
 
   @if (staffView) {
-    <div class="flex-grow flex flex-row items-center">
-      <mat-form-field appearance="outline" class="w-full mt-[22px]">
+    <div class="flex flex-grow flex-row items-center">
+      <mat-form-field appearance="outline" class="mt-[22px] w-full">
         <input
           placeholder="Select a task prerequisite"
           type="text"
@@ -95,7 +97,7 @@
         <button
           mat-raised-button
           color="primary"
-          class="min-w-xl mr-4"
+          class="min-w-xl mr-2.5"
           (click)="addTaskPrerequisite($event)"
           [disabled]="!selectedTaskPrerequisite"
           matSuffix

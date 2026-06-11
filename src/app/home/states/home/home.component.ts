@@ -1,15 +1,16 @@
-import {Component, Inject, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {analyticsService, dateService} from 'src/app/ajs-upgraded-providers';
-import {UIRouter} from '@uirouter/angular';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
-import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {Subscription} from 'rxjs';
+import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
+import {DateService} from 'src/app/common/services/date.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'home',
   templateUrl: 'home.component.html',
   styleUrls: ['home.component.scss'],
+  standalone: false,
 })
 export class HomeComponent implements OnInit, OnDestroy {
   projects: Project[];
@@ -23,15 +24,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   loadingProjects: boolean;
 
   constructor(
-    private renderer: Renderer2,
     private constants: DoubtfireConstants,
     private globalState: GlobalStateService,
     private userService: UserService,
-    @Inject(analyticsService) private AnalyticsService: any,
-    @Inject(dateService) private DateService: any,
-    @Inject(UIRouter) private router: UIRouter,
+    @Inject(DateService) private DateService: DateService,
+    private router: Router,
   ) {
-    // this.renderer.setStyle(document.body, 'background-color', '#f0f2f5');
     // projects and units are loaded as part of global state service at login
   }
 
@@ -41,12 +39,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   ngOnDestroy(): void {
-    // this.renderer.setStyle(document.body, 'background-color', '#fff');
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   ngOnInit(): void {
-    this.AnalyticsService.event('Home', 'Viewed Home page');
+    this.globalState.showHeader();
     this.globalState.setView(ViewType.OTHER);
 
     this.loadingUnitRoles = true;
@@ -55,7 +52,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.globalState.unitRolesSubject.subscribe({
         next: (unitRoles) => this.unitRolesLoaded(unitRoles),
-        error: (err) => {},
       }),
     );
 
@@ -65,14 +61,13 @@ export class HomeComponent implements OnInit, OnDestroy {
           projects = projects.filter((project) => project.unit.myRole === 'Student');
           this.projectsLoaded(projects);
         },
-        error: (err) => {},
       }),
     );
 
     this.notEnrolled = this.checkEnrolled();
 
     if (this.currentUser.role === 'Auditor') {
-      this.router.stateService.go('admin/units');
+      this.router.navigateByUrl('/admin/units');
     }
 
     this.ifAdmin = this.currentUser.role === 'Admin';

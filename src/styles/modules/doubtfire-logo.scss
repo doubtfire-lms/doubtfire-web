@@ -19,9 +19,10 @@ i.logo {
 .welcome-to-doubtfire {
   margin-top: 6em;
   margin-bottom: 3em;
-  h1, p {
+  h1,
+  p {
     @include logo-font-rendering;
-    font-family: "Grotesk";
+    font-family: 'Grotesk';
   }
   p.lead {
     color: #000;

@@ -1,9 +1,9 @@
-<div class="flex justify-between items-center p-5">
+<div class="flex items-center justify-between p-3">
   <div>
     <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
   </div>
   @if (unit.allowFlexibleDates) {
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-1">
       <button
         mat-raised-button
         (click)="confirmSaveTargetDates()"
@@ -34,20 +34,17 @@
   <ngx-gantt-table>
     <ngx-gantt-column name="Tasks" width="350px">
       <ng-template #cell let-item="item">
+        <!-- TODO: redirect to new project dashboard -->
         <div
           class="flex items-center justify-between"
-          uiSref="projects/dashboard"
-          [uiParams]="{
-            projectId: project.id,
-            taskAbbr: item.taskDefinition.abbreviation
-          }"
+          [routerLink]="['/projects', project.id, 'dashboard', item.taskDefinition.abbreviation]"
         >
-          <div class="flex items-center gap-5 w-full min-w-0">
+          <div class="flex w-full min-w-0 items-center gap-3">
             <f-grade-icon
               [grade]="item.taskDefinition.targetGrade"
               [colorful]="true"
             ></f-grade-icon>
-            <div class="truncate w-full flex-1 min-w-0">
+            <div class="w-full min-w-0 flex-1 truncate">
               {{ item.title }}
             </div>
           </div>
@@ -82,13 +79,13 @@
         [attr.data-gantt-id]="item.id"
         (mouseover)="onBarHover(item)"
         (mouseleave)="onBarLeave(item)"
-        class="gantt-bar w-full text-white flex gap-2 justify-between items-center p-2 h-[35px]"
+        class="gantt-bar flex h-[35px] w-full items-center justify-between gap-1 p-1 text-white"
         [ngClass]="getItemClasses(item)"
         [matTooltip]="getTooltip(item)"
         matTooltipShowDelay="500"
         matTooltipPosition="above"
-        ><div class="flex gap-2 items-center">
-          <div class="flex gap-2 items-center">
+        ><div class="flex items-center gap-1">
+          <div class="flex items-center gap-1">
             @if (unsavedChanges(item)) {
               <mat-icon class="scale-95">change_circle</mat-icon>
             }

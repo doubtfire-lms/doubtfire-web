@@ -1,25 +1,39 @@
-<h1>Unit Statistics</h1>
+<div class="mx-auto max-w-[90vw]">
+  <h1>Unit Statistics</h1>
 
-<div class="flex flex-col gap-4">
-  <mat-card appearance="outlined" class="mt-4 p-[16px]">
-    <mat-card-content class="flex gap-2">
-      <button mat-button (click)="getTaskCompletionCsv()">
-        <mat-icon>download</mat-icon> Task Completion Stats
-      </button>
-      <button mat-button (click)="getTutorAssessmentCsv()">
-        <mat-icon>download</mat-icon> Tutor Assessment Stats
-      </button>
-      <button mat-button (click)="getTasksAwaitingFeedbackCsv()">
-        <mat-icon>download</mat-icon> Tasks Awaiting Feedback
-      </button>
-      <button mat-button (click)="getTaskAssessmentCountCsv()">
-        <mat-icon>download</mat-icon> Task Assessment Counts
-      </button>
-      <button mat-button (click)="getOverflowTaskClaimsCsv()">
-        <mat-icon>download</mat-icon> Overflow Task Claims
-      </button>
-    </mat-card-content>
-  </mat-card>
+  <div class="flex flex-col gap-2.5">
+    <mat-card appearance="outlined" class="mt-2.5 p-[16px]">
+      <mat-card-content class="flex gap-1">
+        <button mat-button (click)="getTaskCompletionCsv()">
+          <mat-icon>download</mat-icon> Task Completion Stats
+        </button>
+        <button mat-button (click)="getTutorAssessmentCsv()">
+          <mat-icon>download</mat-icon> Tutor Assessment Stats
+        </button>
+        <button mat-button (click)="getTasksAwaitingFeedbackCsv()">
+          <mat-icon>download</mat-icon> Tasks Awaiting Feedback
+        </button>
+        <button mat-button (click)="getTaskAssessmentCountCsv()">
+          <mat-icon>download</mat-icon> Task Assessment Counts
+        </button>
+        <button mat-button (click)="getOverflowTaskClaimsCsv()">
+          <mat-icon>download</mat-icon> Overflow Task Claims
+        </button>
+      </mat-card-content>
+    </mat-card>
 
-  <f-analytics-tutor-times [unit]="unit" [downloadCsvFn]="downloadCsv"></f-analytics-tutor-times>
+    <f-analytics-tutor-times [unit]="unit" [downloadCsvFn]="downloadCsv"></f-analytics-tutor-times>
+  </div>
 </div>
+<!--
+
+  TODO: Re-implement the following charts using ngx-charts:
+    TODO: Task Status Stats (Summary Chart)
+      - View distribution of tasks by their current status either unit-wide or broken down into a specific tutorial or task
+    TODO: Target Grade Stats (Pie Chart)
+      - View distribution of student target grades either unit-wide or broken down into a specific tutorial
+    TODO: Task Completion Stats (Box Plot)
+      - View how tasks have been marked as completed as a box plot
+
+  TODO: We also want each of these as sub-states
+-->

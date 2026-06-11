@@ -1,16 +1,16 @@
 @if (unit.hasGroupwork()) {
-<mat-form-field appearance="outline" class="flex flex-grow">
-  <mat-label>Is this an individual or group task? Select group that submits</mat-label>
-  <mat-select required [(value)]="taskDefinition.groupSet">
-    @for (gs of unit.groupSets; track gs) {
-  <mat-option [value]="gs">{{ gs.name }}</mat-option>
-}
-    <mat-option value="null">None - Individual Submission</mat-option>
-  </mat-select>
-</mat-form-field>
+  <mat-form-field appearance="outline" class="flex flex-grow">
+    <mat-label>Is this an individual or group task? Select group that submits</mat-label>
+    <mat-select required [(value)]="taskDefinition.groupSet">
+      @for (gs of unit.groupSets; track gs) {
+        <mat-option [value]="gs">{{ gs.name }}</mat-option>
+      }
+      <mat-option value="null">None - Individual Submission</mat-option>
+    </mat-select>
+  </mat-form-field>
 }
 
-<div class="flex flex-row gap-10">
+<div class="flex flex-row gap-6">
   <mat-form-field appearance="outline" class="basis-1/2">
     <mat-label>Tutorial Stream - Which tutor provides feedback?</mat-label>
     <mat-select
@@ -19,8 +19,8 @@
       (selectionChange)="onTutorialStreamChange()"
     >
       @for (stream of unit.tutorialStreams; track stream) {
-  <mat-option [value]="stream">{{ stream.name }}</mat-option>
-}
+        <mat-option [value]="stream">{{ stream.name }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 
@@ -36,12 +36,12 @@
       }
 
       @if (!showAllTutorials && taskDefinition.tutorialStream?.tutorialsIn(unit)?.length > 3) {
-        <li class="mt-1">
+        <li class="mt-0.5">
           +{{ taskDefinition.tutorialStream.tutorialsIn(unit).length - 3 }} more tutorials
         </li>
       }
       @if (taskDefinition.tutorialStream?.tutorialsIn(unit).length > 3) {
-        <div class="mt-4">
+        <div class="mt-2.5">
           @if (!showAllTutorials) {
             <button mat-button color="primary" (click)="showAllTutorials = true">
               View all tutorials

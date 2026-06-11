@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ProjectProgressBarComponent } from './project-progress-bar.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ProjectProgressBarComponent} from './project-progress-bar.component';
 
 describe('ProjectProgressBarComponent', () => {
   let component: ProjectProgressBarComponent;
@@ -8,9 +7,8 @@ describe('ProjectProgressBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProjectProgressBarComponent ]
-    })
-    .compileComponents();
+      declarations: [ProjectProgressBarComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ProjectProgressBarComponent);
     component = fixture.componentInstance;

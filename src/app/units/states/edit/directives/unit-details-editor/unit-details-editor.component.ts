@@ -1,5 +1,3 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {OverseerImage, UnitService} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
@@ -10,12 +8,15 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {D2lUnitDetailsModal} from './d2l-details-form/d2l-unit-details-form.component';
 
 @Component({
   selector: 'f-unit-details-editor',
   templateUrl: 'unit-details-editor.component.html',
   styleUrls: ['unit-details-editor.component.scss'],
+  standalone: false,
 })
 export class UnitDetailsEditorComponent implements OnInit {
   @Input() unit: Unit;

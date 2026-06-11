@@ -1,8 +1,8 @@
-import { TestBed, tick, fakeAsync } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Campus } from 'src/app/api/models/doubtfire-model';
-import { CampusService } from '../campus.service';
-import { HttpRequest } from '@angular/common/http';
+import {Campus} from 'src/app/api/models/doubtfire-model';
+import {HttpRequest, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
+import {TestBed, fakeAsync, tick} from '@angular/core/testing';
+import {CampusService} from '../campus.service';
 
 describe('CampusService', () => {
   let campusService: CampusService;
@@ -10,8 +10,12 @@ describe('CampusService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [CampusService],
+      imports: [],
+      providers: [
+        CampusService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
     });
 
     campusService = TestBed.inject(CampusService);
@@ -31,9 +35,11 @@ describe('CampusService', () => {
 
     const expectedCampuses: Campus[] = [c];
 
-    campusService.query().subscribe((campuses) => expect(campuses).toEqual(expectedCampuses, 'expected campuses'));
+    campusService
+      .query()
+      .subscribe((campuses) => expect(campuses).toEqual(expectedCampuses, 'expected campuses'));
 
-    const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+    const req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/campuses/');
       expect(request.method).toBe('GET');
       return true;

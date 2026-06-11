@@ -2,38 +2,38 @@ import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {GroupService} from '../services/group.service';
+import {MarkingSessionService} from '../services/marking-session.service';
 import {ProjectService} from '../services/project.service';
 import {TaskDefinitionService} from '../services/task-definition.service';
+import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
+import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {
-  User,
-  UnitRole,
-  Task,
-  TeachingPeriod,
-  TaskDefinition,
-  TutorialStream,
-  Tutorial,
-  GroupSet,
-  Group,
-  TaskOutcomeAlignment,
-  GroupMembership,
-  UnitService,
-  Project,
-  TutorialStreamService,
-  UnitRoleService,
+  Campus,
   D2lAssessmentMappingService,
+  Group,
+  GroupMembership,
+  GroupSet,
   OverseerImage,
-  OverseerImageService,
+  Project,
+  Task,
+  TaskDefinition,
+  TaskOutcomeAlignment,
+  TeachingPeriod,
+  Tutorial,
+  TutorialStream,
+  TutorialStreamService,
+  UnitRole,
+  UnitRoleService,
+  UnitService,
+  User,
 } from './doubtfire-model';
 import {LearningOutcome} from './learning-outcome';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
-import {SidekiqJob} from './sidekiq-job';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
 import {MarkingSession} from './marking-session';
-import {MarkingSessionService} from '../services/marking-session.service';
+import {SidekiqJob} from './sidekiq-job';
 import {TaskPrerequisite} from './task-prerequisite';
 
 export class Unit extends Entity {
@@ -58,6 +58,7 @@ export class Unit extends Entity {
   startDate: Date; //TODO: or string
   endDate: Date; //TODO: or string
   portfolioAutoGenerationDate: Date;
+  currentUnitWeek: number | null;
 
   assessmentEnabled: boolean;
   overseerImageId: number = null; // image needs to be lazy loadaed
@@ -97,11 +98,9 @@ export class Unit extends Entity {
 
   public readonly groupSetsCache: EntityCache<GroupSet> = new EntityCache<GroupSet>();
 
-  groupMemberships: Array<GroupMembership>;
+  groupMemberships: GroupMembership[];
 
   readonly studentCache: EntityCache<Project> = new EntityCache<Project>();
-
-  analytics: {} = {};
 
   public override toJson<T extends Entity>(
     mappingData: EntityMapping<T>,
@@ -175,6 +174,28 @@ export class Unit extends Entity {
     return this.findStudent(id)?.enrolled;
   }
 
+  /**
+   * Enrol a student within the unit.
+   *
+   * @param idOrEmail The student id or email of the student to enrol.
+   * @param campus The student's campus
+   * @returns an observer of the post with the student project.
+   */
+  public enrolStudent(idOrEmail: string, campus: Campus): Observable<Project> {
+    const projectService = AppInjector.get(ProjectService);
+
+    return projectService.create(
+      {
+        unit_id: this.id,
+        student_num: idOrEmail,
+        campus_id: campus.id,
+      },
+      {
+        cache: this.studentCache,
+      },
+    );
+  }
+
   public get currentUserIsStaff(): boolean {
     return this.myRole !== 'Student';
   }
@@ -198,7 +219,7 @@ export class Unit extends Entity {
     taskDefinitionService
       .delete({unitId: this.id, id: taskDef.id}, {cache: this.taskDefinitionCache, entity: taskDef})
       .subscribe({
-        next: (response) => {
+        next: () => {
           alerts.success('Task Deleted', 2000);
         },
         error: (message) => alerts.error(message, 6000),
@@ -253,6 +274,38 @@ export class Unit extends Entity {
   }
 
   /**
+   * Calculate the teaching week number for a given date.
+   * Mirrors the Rails fallback in Unit#week_number when a teaching period
+   * helper is not being used on the frontend.
+   */
+  public weekNumber(date: Date | string): number | null {
+    if (!date || !this.startDate) return null;
+
+    if (this.teachingPeriod) {
+      return this.teachingPeriod.weekNumber(date);
+    }
+
+    const targetDate = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(targetDate.valueOf())) return null;
+    const normalizedTargetDate = new Date(
+      targetDate.getFullYear(),
+      targetDate.getMonth(),
+      targetDate.getDate(),
+    );
+    const normalizedStartDate = new Date(
+      this.startDate.getFullYear(),
+      this.startDate.getMonth(),
+      this.startDate.getDate(),
+    );
+    const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+    return (
+      Math.floor(
+        (normalizedTargetDate.valueOf() - normalizedStartDate.valueOf()) / millisecondsPerWeek,
+      ) + 1
+    );
+  }
+
+  /**
    * Calculate how much time has elapsed in the teaching period, based on the start and
    * end date of the unit relative to the current date.
    *
@@ -270,9 +323,11 @@ export class Unit extends Entity {
     return Math.round((startToNow / totalDuration) * 100);
   }
 
-  public rolloverTo(body: {new_unit_code?: string, start_date: Date; end_date: Date}): Observable<Unit>;
-  public rolloverTo(body: {new_unit_code?: string, teaching_period_id: number}): Observable<Unit>;
-  public rolloverTo(body: any): Observable<Unit> {
+  public rolloverTo(
+    body:
+      | {new_unit_code?: string; start_date: Date; end_date: Date}
+      | {new_unit_code?: string; teaching_period_id: number},
+  ): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
 
     return unitService.create(
@@ -423,7 +478,7 @@ export class Unit extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/grades/csv`;
   }
 
-  public taskStatusFactor(td: TaskDefinition): number {
+  public taskStatusFactor(_td: TaskDefinition): number {
     return 1;
   }
 

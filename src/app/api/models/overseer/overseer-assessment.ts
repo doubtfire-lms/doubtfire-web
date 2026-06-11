@@ -9,7 +9,7 @@ export class OverseerAssessment extends Entity {
   // overseerStepId: number;
   timestamp: Date;
   timestampString: string;
-  content?: [{label: string; result: string}];
+  content?: {label: string; result: string}[];
   task?: Task;
   taskStatus?: string;
   submissionStatus?: 'queued' | 'executing' | 'passed' | 'failed' | 'error';

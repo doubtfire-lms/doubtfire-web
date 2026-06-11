@@ -1,11 +1,13 @@
 <mat-card
-  class="bg-white rounded-lg border border-gray-300 shadow-none flex flex-col w-[338px] h-[423px]"
+  class="flex h-[423px] w-[338px] flex-col rounded-lg border border-gray-300 bg-white shadow-none"
 >
   <mat-tab-group (selectedTabChange)="scrollToSection($event)" class="category-tab-group">
-    <mat-tab *ngFor="let category of categories" [label]="category"></mat-tab>
+    @for (category of categories; track category) {
+      <mat-tab [label]="category"></mat-tab>
+    }
   </mat-tab-group>
 
-  <mat-form-field appearance="outline" class="template-search w-full pt-2 pr-2 pl-2">
+  <mat-form-field appearance="outline" class="template-search w-full px-1 pt-1">
     <input
       matInput
       placeholder="Search templates"
@@ -14,130 +16,148 @@
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
 
-  <div class="overflow-y-auto flex-grow pr-4 pl-4 pb-5 pt-0">
-    <div class="template-category mt-2 mb-2">
-      <div class="template-grid flex flex-wrap gap-1.5 mt-5">
-        <mat-chip
-          *ngFor="let template of genTemplates$ | async"
-          (mouseenter)="onHoverTemplate(template)"
-          (mouseleave)="onHoverTemplate(null)"
-          (click)="selectTemplate(template)"
-          class="px-2 py-1 rounded-full cursor-pointer hover:shadow-lg transition-shadow duration-200"
-          [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
-          [hidden]="template.chipText === 'Summarise feedback' && selectedTemplates.length < 1"
-        >
-          <mat-icon *ngIf="isTemplateSelected(template)" matChipAvatar>check_circle</mat-icon>
-          {{ template.chipText }}
-        </mat-chip>
-      </div>
-    </div>
-
-    <div #tloSection class="template-category mt-2 mb-2">
-      <div *ngFor="let item of tlos$ | async" class="outcome-section mt-4">
-        <h5 class="text-formatif-blue font-extrabold">
-          {{ item.outcome.abbreviation }} - {{ item.outcome.shortDescription }}
-        </h5>
-        <div class="template-grid flex flex-wrap gap-1.5 mt-1">
+  <div class="flex-grow overflow-y-auto px-2.5 pb-3 pt-0">
+    <div class="template-category my-1">
+      <div class="template-grid mt-3 flex flex-wrap gap-1">
+        @for (template of genTemplates$ | async; track template) {
           <mat-chip
-            *ngFor="let template of item.templates"
             (mouseenter)="onHoverTemplate(template)"
             (mouseleave)="onHoverTemplate(null)"
             (click)="selectTemplate(template)"
-            class="px-2 py-1 rounded-full cursor-pointer hover:shadow-lg transition-shadow duration-200"
+            class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
             [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+            [hidden]="template.chipText === 'Summarise feedback' && selectedTemplates.length < 1"
           >
-            <mat-icon *ngIf="isTemplateSelected(template)" matChipAvatar>check_circle</mat-icon>
-            <i
-              *ngIf="!isTemplateSelected(template) && template.taskStatus"
-              class="fa {{ taskService.statusData(template.taskStatus).icon }}"
-              matChipAvatar
-            ></i>
-            <mat-icon *ngIf="template.type === 'group' && !isGroupExpanded(template)" matChipAvatar
-              >folder</mat-icon
-            >
-            <mat-icon *ngIf="template.type === 'group' && isGroupExpanded(template)" matChipAvatar
-              >chevron_right</mat-icon
-            >
+            @if (isTemplateSelected(template)) {
+              <mat-icon matChipAvatar>check_circle</mat-icon>
+            }
             {{ template.chipText }}
           </mat-chip>
-        </div>
+        }
       </div>
     </div>
 
-    <div #uloSection class="template-category mt-2 mb-2">
-      <div *ngFor="let item of ulos$ | async" class="outcome-section mt-4">
-        <h5 class="text-formatif-blue font-extrabold">
-          {{ item.outcome.abbreviation }} - {{ item.outcome.shortDescription }}
-        </h5>
-        <div class="template-grid flex flex-wrap gap-1.5 mt-1">
-          <mat-chip
-            *ngFor="let template of item.templates"
-            (mouseenter)="onHoverTemplate(template)"
-            (mouseleave)="onHoverTemplate(null)"
-            (click)="selectTemplate(template)"
-            class="px-2 py-1 rounded-full cursor-pointer hover:shadow-lg transition-shadow duration-200"
-            [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
-          >
-            <mat-icon *ngIf="isTemplateSelected(template)" matChipAvatar>check_circle</mat-icon>
-            <i
-              *ngIf="!isTemplateSelected(template) && template.taskStatus"
-              class="fa {{ taskService.statusData(template.taskStatus).icon }}"
-              matChipAvatar
-            ></i>
-            <mat-icon *ngIf="template.type === 'group' && !isGroupExpanded(template)" matChipAvatar
-              >folder</mat-icon
-            >
-            <mat-icon *ngIf="template.type === 'group' && isGroupExpanded(template)" matChipAvatar
-              >chevron_right</mat-icon
-            >
-            {{ template.chipText }}
-          </mat-chip>
+    <div #tloSection class="template-category my-1">
+      @for (item of tlos$ | async; track item) {
+        <div class="outcome-section mt-2.5">
+          <h5 class="text-formatif-blue font-extrabold">
+            {{ item.outcome.abbreviation }} - {{ item.outcome.shortDescription }}
+          </h5>
+          <div class="template-grid mt-0.5 flex flex-wrap gap-1">
+            @for (template of item.templates; track template) {
+              <mat-chip
+                (mouseenter)="onHoverTemplate(template)"
+                (mouseleave)="onHoverTemplate(null)"
+                (click)="selectTemplate(template)"
+                class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
+                [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+              >
+                @if (isTemplateSelected(template)) {
+                  <mat-icon matChipAvatar>check_circle</mat-icon>
+                }
+                @if (!isTemplateSelected(template) && template.taskStatus) {
+                  <mat-icon matChipAvatar>{{
+                    taskService.statusData(template.taskStatus).materialIcon
+                  }}</mat-icon>
+                }
+                @if (template.type === 'group' && !isGroupExpanded(template)) {
+                  <mat-icon matChipAvatar>folder</mat-icon>
+                }
+                @if (template.type === 'group' && isGroupExpanded(template)) {
+                  <mat-icon matChipAvatar>chevron_right</mat-icon>
+                }
+                {{ template.chipText }}
+              </mat-chip>
+            }
+          </div>
         </div>
-      </div>
+      }
     </div>
 
-    <div #gloSection class="template-category mt-2 mb-2">
-      <div *ngFor="let item of glos$ | async" class="outcome-section mt-4">
-        <h5 class="text-formatif-blue font-extrabold">
-          {{ item.outcome.abbreviation }} - {{ item.outcome.shortDescription }}
-        </h5>
-        <div class="template-grid flex flex-wrap gap-1.5 mt-1">
-          <mat-chip
-            *ngFor="let template of item.templates"
-            (mouseenter)="onHoverTemplate(template)"
-            (mouseleave)="onHoverTemplate(null)"
-            (click)="selectTemplate(template)"
-            class="px-2 py-1 rounded-full cursor-pointer hover:shadow-lg transition-shadow duration-200"
-            [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
-          >
-            <mat-icon *ngIf="isTemplateSelected(template)" matChipAvatar>check_circle</mat-icon>
-            <i
-              *ngIf="!isTemplateSelected(template) && template.taskStatus"
-              class="fa {{ taskService.statusData(template.taskStatus).icon }}"
-              matChipAvatar
-            ></i>
-            <mat-icon *ngIf="template.type === 'group' && !isGroupExpanded(template)" matChipAvatar
-              >folder</mat-icon
-            >
-            <mat-icon *ngIf="template.type === 'group' && isGroupExpanded(template)" matChipAvatar
-              >chevron_right</mat-icon
-            >
-            {{ template.chipText }}
-          </mat-chip>
+    <div #uloSection class="template-category my-1">
+      @for (item of ulos$ | async; track item) {
+        <div class="outcome-section mt-2.5">
+          <h5 class="text-formatif-blue font-extrabold">
+            {{ item.outcome.abbreviation }} - {{ item.outcome.shortDescription }}
+          </h5>
+          <div class="template-grid mt-0.5 flex flex-wrap gap-1">
+            @for (template of item.templates; track template) {
+              <mat-chip
+                (mouseenter)="onHoverTemplate(template)"
+                (mouseleave)="onHoverTemplate(null)"
+                (click)="selectTemplate(template)"
+                class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
+                [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+              >
+                @if (isTemplateSelected(template)) {
+                  <mat-icon matChipAvatar>check_circle</mat-icon>
+                }
+                @if (!isTemplateSelected(template) && template.taskStatus) {
+                  <mat-icon matChipAvatar>{{
+                    taskService.statusData(template.taskStatus).materialIcon
+                  }}</mat-icon>
+                }
+                @if (template.type === 'group' && !isGroupExpanded(template)) {
+                  <mat-icon matChipAvatar>folder</mat-icon>
+                }
+                @if (template.type === 'group' && isGroupExpanded(template)) {
+                  <mat-icon matChipAvatar>chevron_right</mat-icon>
+                }
+                {{ template.chipText }}
+              </mat-chip>
+            }
+          </div>
         </div>
-      </div>
+      }
+    </div>
+
+    <div #gloSection class="template-category my-1">
+      @for (item of glos$ | async; track item) {
+        <div class="outcome-section mt-2.5">
+          <h5 class="text-formatif-blue font-extrabold">
+            {{ item.outcome.abbreviation }} - {{ item.outcome.shortDescription }}
+          </h5>
+          <div class="template-grid mt-0.5 flex flex-wrap gap-1">
+            @for (template of item.templates; track template) {
+              <mat-chip
+                (mouseenter)="onHoverTemplate(template)"
+                (mouseleave)="onHoverTemplate(null)"
+                (click)="selectTemplate(template)"
+                class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
+                [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+              >
+                @if (isTemplateSelected(template)) {
+                  <mat-icon matChipAvatar>check_circle</mat-icon>
+                }
+                @if (!isTemplateSelected(template) && template.taskStatus) {
+                  <mat-icon matChipAvatar>{{
+                    taskService.statusData(template.taskStatus).materialIcon
+                  }}</mat-icon>
+                }
+                @if (template.type === 'group' && !isGroupExpanded(template)) {
+                  <mat-icon matChipAvatar>folder</mat-icon>
+                }
+                @if (template.type === 'group' && isGroupExpanded(template)) {
+                  <mat-icon matChipAvatar>chevron_right</mat-icon>
+                }
+                {{ template.chipText }}
+              </mat-chip>
+            }
+          </div>
+        </div>
+      }
     </div>
   </div>
 
-  <div class="border-t border-gray-300 p-5 flex items-center">
-    <mat-icon class="text-4xl mr-3 flex-shrink-0">{{
+  <div class="flex items-center border-t border-gray-300 p-3">
+    <mat-icon class="mr-2 flex-shrink-0 text-2xl">{{
       hoveredTemplate?.type === 'group' ? 'folder' : 'description'
     }}</mat-icon>
     <div class="flex flex-col">
-      <p class="font-semibold text-xl mb-0">
+      <p class="mb-0 text-xs font-semibold">
         {{ hoveredTemplate?.chipText || 'Select a feedback chip' }}
       </p>
-      <p class="text-gray-500 text-base mb-0">
+      <p class="mb-0 text-xs text-gray-500">
         {{ hoveredTemplate?.description || 'This will populate the comment area with feedback.' }}
       </p>
     </div>

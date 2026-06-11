@@ -1,4 +1,4 @@
-import { HumanizedDatePipe } from './humanized-date.pipe';
+import {HumanizedDatePipe} from './humanized-date.pipe';
 
 describe('HumanizedDatePipe', () => {
   it('create an instance', () => {

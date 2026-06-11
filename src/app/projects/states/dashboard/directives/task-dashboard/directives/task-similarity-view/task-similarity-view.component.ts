@@ -1,18 +1,19 @@
-import {HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
-import {MatAccordion} from '@angular/material/expansion';
 import {Task} from 'src/app/api/models/task';
 import {TaskSimilarity} from 'src/app/api/models/task-similarity';
 import {TaskSimilarityService} from 'src/app/api/services/task-similarity.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {JplagReportViewerComponent} from 'src/app/projects/states/jplag/jplag-report-viewer.component';
+import {HttpResponse} from '@angular/common/http';
+import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {MatAccordion} from '@angular/material/expansion';
 import {SelectedTaskService} from '../../../../selected-task.service';
 
 @Component({
   selector: 'f-task-similarity-view',
   templateUrl: './task-similarity-view.component.html',
   styleUrls: ['./task-similarity-view.component.scss'],
+  standalone: false,
 })
 export class TaskSimilarityViewComponent implements OnChanges {
   @Input() task: Task;

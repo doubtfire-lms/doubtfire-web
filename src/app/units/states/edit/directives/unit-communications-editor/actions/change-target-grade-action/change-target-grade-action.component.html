@@ -1,0 +1,23 @@
+@if (mode === 'edit') {
+  <mat-form-field appearance="outline" class="w-full max-w-[30rem] self-center">
+    <mat-label>Target grade</mat-label>
+    <mat-select [(ngModel)]="editor.actionFor(rule).target_grade">
+      @for (grade of editor.targetGrades; track grade.value) {
+        <mat-option [value]="grade.value">
+          {{ grade.label }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+} @else {
+  <mat-form-field appearance="outline" class="w-full max-w-[30rem] self-center">
+    <mat-label>Target grade</mat-label>
+    <mat-select [(ngModel)]="editor.actionFor(rule).target_grade">
+      @for (grade of editor.targetGrades; track grade.value) {
+        <mat-option [value]="grade.value">
+          {{ grade.label }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+}

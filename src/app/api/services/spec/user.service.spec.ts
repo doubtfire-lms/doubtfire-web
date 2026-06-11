@@ -1,18 +1,20 @@
-import { TestBed, tick, fakeAsync } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { User, UserService } from 'src/app/api/models/doubtfire-model';
-import { HttpRequest } from '@angular/common/http';
-import { analyticsService } from 'src/app/ajs-upgraded-providers';
+import {User, UserService} from 'src/app/api/models/doubtfire-model';
+import {HttpRequest, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
+import {TestBed, fakeAsync, tick} from '@angular/core/testing';
 
 describe('UserService', () => {
   let userService: UserService;
   let httpMock: HttpTestingController;
-  let analyticsServiceStub: jasmine.SpyObj<any>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [UserService, { provide: analyticsService, useValue: analyticsServiceStub }],
+      imports: [],
+      providers: [
+        UserService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
     });
 
     userService = TestBed.inject(UserService);
@@ -40,9 +42,11 @@ describe('UserService', () => {
 
     const expectedUsers: User[] = [u];
 
-    userService.query().subscribe((users) => expect(users).toEqual(expectedUsers, 'expected users'));
+    userService
+      .query()
+      .subscribe((users) => expect(users).toEqual(expectedUsers, 'expected users'));
 
-    const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+    const req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/');
       expect(request.method).toBe('GET');
       return true;
@@ -73,7 +77,7 @@ describe('UserService', () => {
     const expectedUser = user;
     expectedUser.id = 1;
 
-    const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+    const req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/');
       expect(request.method).toBe('POST');
 
@@ -122,7 +126,7 @@ describe('UserService', () => {
       expect(result.firstName).toBe(u.firstName);
     }, fail);
 
-    let req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+    let req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/1');
       expect(request.method).toBe('PUT');
       return true;
@@ -138,7 +142,7 @@ describe('UserService', () => {
       error: fail,
     });
 
-    req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+    req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/1');
       expect(request.method).toBe('PUT');
       return true;
@@ -163,9 +167,9 @@ describe('UserService', () => {
     user.receiveFeedbackNotifications = false;
     user.receiveTaskNotifications = false;
 
-    userService.get(1).subscribe((data) => {});
+    userService.get(1).subscribe();
 
-    const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+    const req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/1');
       expect(request.method).toBe('GET');
       return true;
@@ -175,9 +179,9 @@ describe('UserService', () => {
     req.flush(user2);
     tick();
 
-    userService.get(1).subscribe((data) => {});
+    userService.get(1).subscribe();
 
-    httpMock.expectNone((request: HttpRequest<any>): boolean => {
+    httpMock.expectNone((_request: HttpRequest<object>): boolean => {
       return true;
     });
     tick();
@@ -203,7 +207,7 @@ describe('UserService', () => {
       user = data;
     });
 
-    let req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+    let req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/1');
       expect(request.method).toBe('GET');
       return true;
@@ -215,7 +219,7 @@ describe('UserService', () => {
     req.flush(user2);
     tick();
 
-    let user3;
+    let _user3;
 
     // 1 request here
     userService.fetch(1).subscribe((data) => {
@@ -223,7 +227,7 @@ describe('UserService', () => {
       user3 = data;
     });
 
-    req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+    req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/1');
       expect(request.method).toBe('GET');
       return true;
@@ -234,7 +238,7 @@ describe('UserService', () => {
     user4.firstName = 'fred';
     req.flush(user4);
 
-    httpMock.expectNone((request: HttpRequest<any>): boolean => {
+    httpMock.expectNone((_request: HttpRequest<object>): boolean => {
       return true;
     });
     tick();
