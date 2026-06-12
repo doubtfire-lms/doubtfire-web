@@ -17,6 +17,7 @@ export class OverseerAssessment extends Entity implements SubmissionArchive {
   createdAt?: Date;
   updatedAt?: Date;
   taskId?: number;
+  submissionHistoryId?: number;
 
   totalSteps: number;
   passedSteps: number;

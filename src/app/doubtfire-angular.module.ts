@@ -299,7 +299,6 @@ import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/
 import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
-import {TaskSubmissionHistoryComponent} from './tasks/task-submission-history/task-submission-history.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
@@ -499,7 +498,6 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     StatusIconComponent,
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
-    TaskSubmissionHistoryComponent,
     GradeIconComponent,
     HeaderComponent,
     UnitDropdownComponent,
