@@ -35,32 +35,22 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     taskSubmissionPdfUrl?: string;
   };
   public currentView: DashboardViews;
+  public currentIndex = 0;
 
-  public currentIndex;
+  private readonly tabViews: DashboardViews[] = [
+    DashboardViews.details,
+    DashboardViews.task,
+    DashboardViews.submission,
+    DashboardViews.submission_history,
+    DashboardViews.similarity,
+    DashboardViews.staff_notes,
+    DashboardViews.tutor_notes,
+  ];
 
   onTabChange(event: MatTabChangeEvent) {
-    switch (event.index) {
-      case 0:
-        this.setSelectedDashboardView(DashboardViews.details);
-        break;
-      case 1:
-        this.setSelectedDashboardView(DashboardViews.task);
-        break;
-      case 2:
-        this.setSelectedDashboardView(DashboardViews.submission);
-        break;
-      case 3:
-        this.setSelectedDashboardView(DashboardViews.similarity);
-        break;
-      case 4:
-        this.setSelectedDashboardView(DashboardViews.submission_history);
-        break;
-      case 5:
-        this.setSelectedDashboardView(DashboardViews.staff_notes);
-        break;
-      case 6:
-        this.setSelectedDashboardView(DashboardViews.tutor_notes);
-        break;
+    const view = this.tabViews[event.index];
+    if (view !== undefined) {
+      this.setSelectedDashboardView(view);
     }
   }
 
@@ -111,22 +101,8 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   }
 
   private tabIndexForView(view: DashboardViews): number {
-    switch (view) {
-      case DashboardViews.task:
-        return 1;
-      case DashboardViews.submission:
-        return 2;
-      case DashboardViews.similarity:
-        return this.canAccessStaffViews ? 3 : 0;
-      case DashboardViews.submission_history:
-        return this.canAccessStaffViews ? 4 : 0;
-      case DashboardViews.staff_notes:
-        return this.canAccessStaffViews ? 5 : 0;
-      case DashboardViews.tutor_notes:
-        return this.canAccessTutorNotes ? 6 : 0;
-      default:
-        return 0;
-    }
+    const index = this.tabViews.indexOf(view);
+    return index >= 0 ? index : 0;
   }
 
   private canAccessDashboardView(view: DashboardViews): boolean {
