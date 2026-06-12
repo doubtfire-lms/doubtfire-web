@@ -24,7 +24,7 @@ export class PortfolioGradeSelectStepComponent {
   ) {}
 
   public get gradeValues() {
-    return this.gradeService.gradeValues;
+    return this.gradeService.gradeValuesFor(this.unit);
   }
 
   updateSubmittedGrade(newGrade: number): void {

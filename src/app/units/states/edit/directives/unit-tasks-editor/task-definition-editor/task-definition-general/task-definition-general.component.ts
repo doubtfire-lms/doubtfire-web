@@ -12,10 +12,10 @@ import {GradeService} from 'src/app/common/services/grade.service';
 export class TaskDefinitionGeneralComponent {
   @Input() taskDefinition: TaskDefinition;
 
-  public grades: {value: number; viewValue: string}[];
+  constructor(private gradeService: GradeService) {}
 
-  constructor(private gradeService: GradeService) {
-    this.grades = this.gradeService.gradeViewData.filter((grade) => grade.value !== -1);
+  public get grades(): {value: number; viewValue: string}[] {
+    return this.gradeService.gradeViewDataFor(this.unit);
   }
 
   public get unit(): Unit {

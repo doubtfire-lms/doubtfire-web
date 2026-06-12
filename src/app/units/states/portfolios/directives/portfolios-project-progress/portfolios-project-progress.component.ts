@@ -29,7 +29,7 @@ export class PortfoliosProjectProgressComponent {
   ) {}
 
   public get gradeValues() {
-    return this.gradeService.gradeValues;
+    return this.gradeService.gradeValuesFor(this.unit);
   }
   public get grades() {
     return this.gradeService.grades;

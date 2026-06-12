@@ -31,7 +31,7 @@ export class GradeTaskModalComponent implements OnInit {
     this.rating = this.task.qualityPts || 0;
     this.selectedGrade = this.task.grade || 0;
     this.totalRating = this.task.definition.maxQualityPts || 5;
-    this.gradeValues = this.gradeService.allGradeValues;
+    this.gradeValues = this.gradeService.allGradeValuesFor(this.task.unit);
     this.updateRatingLabel();
   }
 

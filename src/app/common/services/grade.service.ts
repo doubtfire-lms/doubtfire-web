@@ -1,5 +1,9 @@
 import {Injectable} from '@angular/core';
 
+interface UnitGradeConfiguration {
+  gradeValues?: number[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -72,5 +76,21 @@ export class GradeService {
 
   public stringToGrade(value: string): number {
     return this.gradeIndex[value];
+  }
+
+  public gradeValuesFor(unit?: UnitGradeConfiguration): number[] {
+    return unit?.gradeValues?.length ? unit.gradeValues : this.gradeValues;
+  }
+
+  public allGradeValuesFor(unit?: UnitGradeConfiguration): number[] {
+    return [-1, ...this.gradeValuesFor(unit)];
+  }
+
+  public gradeViewDataFor(
+    unit?: UnitGradeConfiguration,
+    includeFail: boolean = false,
+  ): {value: number; viewValue: string}[] {
+    const values = includeFail ? this.allGradeValuesFor(unit) : this.gradeValuesFor(unit);
+    return this.gradeViewData.filter((grade) => values.includes(grade.value));
   }
 }

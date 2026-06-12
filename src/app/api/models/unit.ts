@@ -80,6 +80,7 @@ export class Unit extends Entity {
 
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
+  gradeValues: number[] = [0, 1, 2, 3];
 
   d2lMapping: D2lAssessmentMapping;
 

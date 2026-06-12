@@ -25,7 +25,7 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
   }
 
   public get gradeValues() {
-    return this.gradeService.gradeValues;
+    return this.gradeService.gradeValuesFor(this.unit);
   }
 
   public get gradeAcronyms() {

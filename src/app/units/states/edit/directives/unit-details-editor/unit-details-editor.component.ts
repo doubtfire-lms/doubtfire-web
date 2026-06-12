@@ -8,6 +8,7 @@ import {TaskDefinitionService} from 'src/app/api/services/task-definition.servic
 import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {GradeService} from 'src/app/common/services/grade.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {D2lUnitDetailsModal} from './d2l-details-form/d2l-unit-details-form.component';
@@ -30,11 +31,16 @@ export class UnitDetailsEditorComponent implements OnInit {
     private unitService: UnitService,
     private alertsService: AlertService,
     private confirmationModal: ConfirmationModalService,
+    private gradeService: GradeService,
   ) {}
 
   public teachingPeriods: TeachingPeriod[];
   public taskDefinitions: TaskDefinition[];
   public dockerImages: OverseerImage[];
+
+  public get availableGrades() {
+    return this.gradeService.gradeViewDataFor();
+  }
 
   public get overseerEnabled() {
     return this.doubtfireConstants.IsOverseerEnabled;

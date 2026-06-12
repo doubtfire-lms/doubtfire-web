@@ -136,12 +136,12 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     enrolled_in: 'Enrolled In',
     not_enrolled_in: 'Not Enrolled In',
   };
-  readonly targetGrades = [
-    {value: 0, label: 'P'},
-    {value: 1, label: 'C'},
-    {value: 2, label: 'D'},
-    {value: 3, label: 'HD'},
-  ];
+  get targetGrades() {
+    return (this.unit?.gradeValues ?? [0, 1, 2, 3]).map((value) => ({
+      value,
+      label: this.targetGradeLabels[value],
+    }));
+  }
   readonly targetGradeLabels: Record<number, string> = {
     0: 'P',
     1: 'C',
