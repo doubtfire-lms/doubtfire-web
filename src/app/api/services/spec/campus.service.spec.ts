@@ -33,11 +33,15 @@ describe('CampusService', () => {
     c.mode = 'automatic';
     c.abbreviation = 'melb';
 
-    const expectedCampuses: Campus[] = [c];
-
-    campusService
-      .query()
-      .subscribe((campuses) => expect(campuses).toEqual(expectedCampuses, 'expected campuses'));
+    campusService.query().subscribe((campuses) => {
+      expect(campuses).toHaveLength(1);
+      expect(campuses[0]).toMatchObject({
+        id: 1,
+        name: 'Melbourne',
+        mode: 'automatic',
+        abbreviation: 'melb',
+      });
+    });
 
     const req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/campuses/');
