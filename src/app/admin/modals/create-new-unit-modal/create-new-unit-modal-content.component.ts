@@ -67,7 +67,6 @@ export class CreateNewUnitModalContentComponent implements OnInit {
   }
   public handleChangeTeachingPeriod(teachingPeriod: number | string): void {
     if (typeof teachingPeriod === 'string') {
-      teachingPeriod = null;
       this.showDates = true;
     } else {
       this.showDates = false;

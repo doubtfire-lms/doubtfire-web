@@ -6,7 +6,7 @@ import {PdfViewerPanelComponent} from './pdf-viewer-panel.component';
 describe('PdfViewerPanelComponent', () => {
   let component: PdfViewerPanelComponent;
   let fixture: ComponentFixture<PdfViewerPanelComponent>;
-  let fileDownloaderServiceStub: Partial<FileDownloaderService>;
+  const fileDownloaderServiceStub: Partial<FileDownloaderService> = {};
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

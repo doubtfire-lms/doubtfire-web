@@ -107,7 +107,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   }
 
   private extractErrorMessage(error: HttpErrorResponse) {
-    let errorMessage: string = '';
+    let errorMessage: string;
     let logMessage: string = '';
     if (error.error instanceof ErrorEvent) {
       // client-side error
