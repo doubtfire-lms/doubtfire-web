@@ -29,11 +29,13 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
   }
 
   public get gradeAcronyms() {
-    return this.gradeService.gradeAcronyms;
+    return Object.fromEntries(
+      this.unit.gradeDefinitions.map((definition) => [definition.value, definition.abbreviation]),
+    );
   }
 
   public gradeString(grade: number) {
-    return this.gradeService.grades[grade];
+    return this.gradeService.gradeLabel(grade, this.unit);
   }
 
   public selectedTargetGrade: number;

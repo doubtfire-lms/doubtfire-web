@@ -7,7 +7,6 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {MappingFunctions} from '../services/mapping-fn';
 import {
   Campus,
-  Grade,
   Group,
   GroupSet,
   ProjectService,
@@ -171,11 +170,11 @@ export class Project extends Entity {
   }
 
   public get targetGradeWord(): string {
-    return Grade.GRADES[this.targetGrade];
+    return this.unit.gradeLabel(this.targetGrade);
   }
 
   public get targetGradeAcronym(): string {
-    return Grade.GRADE_ACRONYMS.get(this.targetGrade);
+    return this.unit.gradeAbbreviation(this.targetGrade);
   }
 
   public activeTasks(): Task[] {
@@ -208,7 +207,7 @@ export class Project extends Entity {
     const overdueTasks: Task[] = sortedTasks.filter((task) => task.daysUntilDueDate() <= 7);
 
     // Step 2: select tasks not complete that are overdue. Pass tasks are done first.
-    Grade.PASS_RANGE.forEach((grade) => {
+    this.unit.gradeValues.forEach((grade) => {
       // Sorting needs to be done here according to the days past the target date.
       const closeGradeTasks: Task[] = overdueTasks
         .filter((task) => task.definition.targetGrade === grade)

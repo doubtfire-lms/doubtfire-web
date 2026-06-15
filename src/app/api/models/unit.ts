@@ -36,6 +36,13 @@ import {MarkingSession} from './marking-session';
 import {SidekiqJob} from './sidekiq-job';
 import {TaskPrerequisite} from './task-prerequisite';
 
+export interface GradeDefinition {
+  id: string;
+  value: number;
+  label: string;
+  abbreviation: string;
+}
+
 export class Unit extends Entity {
   id: number;
   code: string;
@@ -80,7 +87,13 @@ export class Unit extends Entity {
 
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
-  gradeValues: number[] = [0, 1, 2, 3];
+  gradeDefinitions: GradeDefinition[] = [
+    {id: 'fail', value: -1, label: 'Fail', abbreviation: 'F'},
+    {id: 'pass', value: 0, label: 'Pass', abbreviation: 'P'},
+    {id: 'credit', value: 1, label: 'Credit', abbreviation: 'C'},
+    {id: 'distinction', value: 2, label: 'Distinction', abbreviation: 'D'},
+    {id: 'high-distinction', value: 3, label: 'High Distinction', abbreviation: 'HD'},
+  ];
 
   d2lMapping: D2lAssessmentMapping;
 
@@ -132,6 +145,20 @@ export class Unit extends Entity {
 
   public get isActive(): boolean {
     return this.active && (!this.teachingPeriod || this.teachingPeriod.active);
+  }
+
+  public get gradeValues(): number[] {
+    return this.gradeDefinitions
+      .filter((definition) => definition.value >= 0)
+      .map((definition) => definition.value);
+  }
+
+  public gradeLabel(value: number): string {
+    return this.gradeDefinitions.find((definition) => definition.value === value)?.label;
+  }
+
+  public gradeAbbreviation(value: number): string {
+    return this.gradeDefinitions.find((definition) => definition.value === value)?.abbreviation;
   }
 
   public matches(text: string): boolean {

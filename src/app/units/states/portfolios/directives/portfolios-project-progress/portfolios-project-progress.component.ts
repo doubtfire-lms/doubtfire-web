@@ -32,11 +32,13 @@ export class PortfoliosProjectProgressComponent {
     return this.gradeService.gradeValuesFor(this.unit);
   }
   public get grades() {
-    return this.gradeService.grades;
+    return Object.fromEntries(
+      this.unit.gradeDefinitions.map((definition) => [definition.value, definition.label]),
+    );
   }
 
   public gradeWord(grade) {
-    return this.gradeService.grades[grade];
+    return this.gradeService.gradeLabel(grade, this.unit);
   }
 
   updateTaskCompletionStats() {

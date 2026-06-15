@@ -17,7 +17,7 @@
                     class="p-1 py-2.5"
                     (click)="updatedTargetGrade(grade)"
                   >
-                    <f-grade-icon [grade]="grade"></f-grade-icon>
+                    <f-grade-icon [grade]="grade" [unit]="unit"></f-grade-icon>
                   </mat-button-toggle>
                 }
               </mat-button-toggle-group>
@@ -43,7 +43,7 @@
                     class="p-1 py-2.5"
                     (click)="updateSubmittedGrade(grade)"
                   >
-                    <f-grade-icon [grade]="grade"></f-grade-icon>
+                    <f-grade-icon [grade]="grade" [unit]="unit"></f-grade-icon>
                   </mat-button-toggle>
                 }
               </mat-button-toggle-group>

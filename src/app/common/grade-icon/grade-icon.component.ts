@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Unit} from 'src/app/api/models/unit';
 import {GradeService} from '../services/grade.service';
 
 @Component({
@@ -10,6 +11,7 @@ import {GradeService} from '../services/grade.service';
 })
 export class GradeIconComponent implements OnInit, OnChanges {
   @Input() grade?: number | string;
+  @Input() unit?: Unit;
   @Input() colorful: boolean = false;
 
   gradeText: string = 'Grade';
@@ -22,15 +24,17 @@ export class GradeIconComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['grade']) {
+    if (changes['grade'] || changes['unit']) {
       this.updateGrade();
     }
   }
 
   private updateGrade(): void {
     const grade: number =
-      typeof this.grade === 'string' ? this.gradeService.stringToGrade(this.grade) : this.grade;
-    this.gradeText = this.gradeService.grades[grade] || 'Grade';
-    this.gradeLetter = this.gradeService.gradeAcronyms[grade] || 'G';
+      typeof this.grade === 'string'
+        ? this.gradeService.stringToGrade(this.grade, this.unit)
+        : this.grade;
+    this.gradeText = this.gradeService.gradeLabel(grade, this.unit) || 'Grade';
+    this.gradeLetter = this.gradeService.gradeAbbreviation(grade, this.unit) || 'G';
   }
 }

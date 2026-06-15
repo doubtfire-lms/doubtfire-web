@@ -10,7 +10,7 @@
       <div [hidden]="task.hasBeenGraded()" class="callout callout-info">
         <p>
           This task will be graded against a grade standard. Your work will be assessed and assigned
-          a grade according to a Pass, Credit, Distinction or High Distinction standard.
+          a grade according to the {{ gradeStandardLabels }} standards configured for this unit.
         </p>
       </div>
       <div [hidden]="!task.hasBeenGraded()" class="callout callout-success">

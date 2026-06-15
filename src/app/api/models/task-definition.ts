@@ -6,7 +6,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {DiscussionPrompt} from './discussion-prompt';
-import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
+import {GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
 import {Task} from './doubtfire-model';
 import {OverseerStep} from './overseer/overseer-step';
 import {TaskPrerequisite} from './task-prerequisite';
@@ -252,7 +252,7 @@ export class TaskDefinition extends Entity {
   }
 
   public get targetGradeText(): string {
-    return Grade.GRADES[this.targetGrade];
+    return this.unit.gradeLabel(this.targetGrade);
   }
 
   public hasPlagiarismCheck(): boolean {

@@ -137,23 +137,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     not_enrolled_in: 'Not Enrolled In',
   };
   get targetGrades() {
-    return (this.unit?.gradeValues ?? [0, 1, 2, 3]).map((value) => ({
-      value,
-      label: this.targetGradeLabels[value],
-    }));
+    return this.unit.gradeDefinitions
+      .filter((definition) => definition.value >= 0)
+      .map((definition) => ({value: definition.value, label: definition.abbreviation}));
   }
-  readonly targetGradeLabels: Record<number, string> = {
-    0: 'P',
-    1: 'C',
-    2: 'D',
-    3: 'HD',
-  };
-  readonly targetGradeNames: Record<number, string> = {
-    0: 'Pass',
-    1: 'Credit',
-    2: 'Distinction',
-    3: 'High Distinction',
-  };
   readonly emailVariables = [
     {token: '{{student.first_name}}', label: 'Student First Name'},
     {token: '{{student.last_name}}', label: 'Student Last Name'},
@@ -773,7 +760,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   targetGradeName(targetGrade: number | undefined): string {
     if (targetGrade === undefined || targetGrade === null) return '';
 
-    return this.targetGradeNames[targetGrade] || `${targetGrade}`;
+    return this.unit.gradeLabel(targetGrade) || `${targetGrade}`;
   }
 
   taskDefinitionLabel(taskDefinitionId: number | undefined): string {
@@ -1207,7 +1194,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     }
 
     if ((key === 'target_grade' || key === 'task_target_grade') && typeof value === 'number') {
-      return this.targetGradeLabels[value] || value.toString();
+      return this.unit.gradeAbbreviation(value) || value.toString();
     }
 
     if (key === 'task_statuses' && Array.isArray(value)) {

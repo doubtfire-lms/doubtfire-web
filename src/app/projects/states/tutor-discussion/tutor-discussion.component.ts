@@ -455,7 +455,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
   }
 
   public getTargetTradeString(grade: number) {
-    return this.gradeService.grades[grade];
+    return this.gradeService.gradeLabel(grade, this.project?.unit);
   }
 
   public refresh() {

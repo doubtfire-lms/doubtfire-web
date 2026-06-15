@@ -30,7 +30,6 @@ import {
   UnitRoleService,
   UserService,
 } from './doubtfire-model';
-import {Grade} from './grade';
 import {TaskPrerequisite} from './task-prerequisite';
 
 export const FeedbackModerationAction = {
@@ -250,14 +249,14 @@ export class Task extends Entity {
   }
 
   public get gradeWord(): string {
-    if (this.grade) return Grade.GRADES[this.grade];
+    if (this.grade !== undefined && this.grade !== null) return this.unit.gradeLabel(this.grade);
     else {
       return 'Not Graded';
     }
   }
 
   public gradeDesc(): string {
-    return Grade.GRADE_ACRONYMS.get(this.grade);
+    return this.unit.gradeAbbreviation(this.grade);
   }
 
   public hasGrade(): boolean {

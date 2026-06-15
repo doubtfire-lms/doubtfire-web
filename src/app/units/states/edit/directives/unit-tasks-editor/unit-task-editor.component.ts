@@ -2,7 +2,6 @@ import {addWeeks} from 'date-fns';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
-import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
@@ -37,7 +36,11 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
 
   public manageDueDates: boolean = false;
 
-  protected gradeNames: string[] = Grade.GRADES;
+  protected get gradeNames(): Record<number, string> {
+    return Object.fromEntries(
+      this.unit.gradeDefinitions.map((definition) => [definition.value, definition.label]),
+    );
+  }
 
   isStartAfterTarget(td: TaskDefinition, g: GradeCol): boolean {
     const start = this.getGradeStartDate(td, g);

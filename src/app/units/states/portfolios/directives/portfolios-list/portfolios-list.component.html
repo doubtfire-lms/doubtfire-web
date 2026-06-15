@@ -73,7 +73,7 @@
             matTooltipPosition="above"
             class="flex items-center justify-center"
           >
-            <f-grade-icon [grade]="grade"></f-grade-icon>
+            <f-grade-icon [grade]="grade" [unit]="unit"></f-grade-icon>
           </mat-button-toggle>
         }
       </mat-button-toggle-group>
@@ -208,14 +208,14 @@
     <ng-container matColumnDef="target" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Target</th>
       <td mat-cell *matCellDef="let project">
-        <f-grade-icon [grade]="project.targetGrade"></f-grade-icon>
+        <f-grade-icon [grade]="project.targetGrade" [unit]="unit"></f-grade-icon>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="submitted-as" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Submitted as</th>
       <td mat-cell *matCellDef="let project">
-        <f-grade-icon [grade]="project.submittedGrade"></f-grade-icon>
+        <f-grade-icon [grade]="project.submittedGrade" [unit]="unit"></f-grade-icon>
       </td>
     </ng-container>
 

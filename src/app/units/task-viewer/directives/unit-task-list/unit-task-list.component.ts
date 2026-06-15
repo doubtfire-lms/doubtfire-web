@@ -3,7 +3,6 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
-import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
 
 @Component({
@@ -27,7 +26,12 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   filteredTaskDefinitions: TaskDefinition[]; // list of tasks which match the taskSearch term
   searchText: string = ''; // task search term from user input
   taskDefinitionNamePipe = new TaskDefinitionNamePipe();
-  protected gradeNames: string[] = Grade.GRADES;
+  protected get gradeNames(): Record<number, string> {
+    const unit = this.project?.unit ?? this.taskDefinitions?.[0]?.unit;
+    return Object.fromEntries(
+      (unit?.gradeDefinitions ?? []).map((definition) => [definition.value, definition.label]),
+    );
+  }
 
   constructor(
     private location: Location,

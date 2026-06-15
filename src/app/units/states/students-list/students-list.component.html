@@ -134,7 +134,7 @@
       <ng-container matColumnDef="grade">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="grade">Target Grade</th>
         <td mat-cell *matCellDef="let project">
-          <f-grade-icon [grade]="project.targetGrade"></f-grade-icon>
+          <f-grade-icon [grade]="project.targetGrade" [unit]="unit"></f-grade-icon>
         </td>
       </ng-container>
 

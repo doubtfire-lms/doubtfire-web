@@ -16,5 +16,17 @@ export class TaskAssessmentCardComponent {
   ) {}
 
   @Input() task: Task;
-  gradeNames = this.gradeService.grades;
+
+  get gradeNames() {
+    return Object.fromEntries(
+      this.task.unit.gradeDefinitions.map((definition) => [definition.value, definition.label]),
+    );
+  }
+
+  get gradeStandardLabels(): string {
+    return this.task.unit.gradeDefinitions
+      .filter((definition) => definition.value >= 0)
+      .map((definition) => definition.label)
+      .join(', ');
+  }
 }

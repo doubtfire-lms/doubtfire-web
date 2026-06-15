@@ -36,7 +36,7 @@ export class GradeTaskModalComponent implements OnInit {
   }
 
   gradeName(grade: number): string {
-    return this.gradeService.grades[grade];
+    return this.gradeService.gradeLabel(grade, this.task.unit);
   }
 
   dismiss(): void {

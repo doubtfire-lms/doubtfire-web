@@ -40,7 +40,7 @@ export class PortfolioLearningSummaryReportStepComponent {
   }
 
   public get targetGradeLabel(): string {
-    return this.gradeService.grades[this.project.targetGrade];
+    return this.gradeService.gradeLabel(this.project.targetGrade, this.unit);
   }
 
   advanceActiveTab(index: 1 | -1) {

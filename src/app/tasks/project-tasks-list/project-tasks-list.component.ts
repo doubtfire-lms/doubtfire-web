@@ -52,8 +52,8 @@ export class ProjectTasksListComponent implements OnInit {
   taskText(task: Task): string {
     let result = task.definition.abbreviation;
     if (task.definition.isGraded) {
-      if (task.grade) {
-        result += ` (${this.gradeService.gradeAcronyms[task.grade]})`;
+      if (task.grade !== undefined && task.grade !== null) {
+        result += ` (${this.gradeService.gradeAbbreviation(task.grade, this.unit)})`;
       } else {
         result += ' (?)';
       }
