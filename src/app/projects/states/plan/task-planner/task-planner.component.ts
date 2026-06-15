@@ -171,7 +171,7 @@ export class TaskPlannerComponent implements OnInit {
         return false;
       }
       const diff = this.normalizeDateUTC(item.end) - this.normalizeDateUTC(ganttItem.end);
-      const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
+      // const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
 
       if (diff > 0) {
         isAfterDependentStartDate = true;
@@ -179,18 +179,18 @@ export class TaskPlannerComponent implements OnInit {
 
       continue;
 
-      if (color === '#0079D8') {
-        // Ready for feedback
-        if (diff > 0) {
-          isAfterDependentStartDate = true;
-        }
-      } else if (color === '#31b0d5' || color === '#5BB75B') {
-        // Discuss or Complete
-        if (diff >= -7 * 24 * 60 * 60) {
-          // We need to ensure this task is submitted a week earlier than its dependent so get it in a Discuss state
-          isAfterDependentStartDate = true;
-        }
-      }
+      // if (color === '#0079D8') {
+      //   // Ready for feedback
+      //   if (diff > 0) {
+      //     isAfterDependentStartDate = true;
+      //   }
+      // } else if (color === '#31b0d5' || color === '#5BB75B') {
+      //   // Discuss or Complete
+      //   if (diff >= -7 * 24 * 60 * 60) {
+      //     // We need to ensure this task is submitted a week earlier than its dependent so get it in a Discuss state
+      //     isAfterDependentStartDate = true;
+      //   }
+      // }
     }
 
     return isAfterDependentStartDate;

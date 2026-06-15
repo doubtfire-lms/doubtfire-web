@@ -280,7 +280,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
       if (xhr.readyState === 4) {
         setTimeout(() => {
           this.uploadingInfo.complete = true;
-          let response = null;
+          let response;
           try {
             response = JSON.parse(xhr.responseText);
           } catch (e) {
