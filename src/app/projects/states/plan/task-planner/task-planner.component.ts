@@ -4,6 +4,7 @@ import {
   GanttItem,
   GanttLink,
   GanttLinkType,
+  GanttPrintService,
   GanttViewOptions,
   GanttViewType,
   NgxGanttComponent,
@@ -21,6 +22,8 @@ import {GradeService} from 'src/app/common/services/grade.service';
 import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 
 interface TaskGanttItem extends GanttItem {
+  start: number;
+  end: number;
   highlighted?: boolean;
   taskDefinition: TaskDefinition;
   task: Task;
@@ -31,6 +34,7 @@ interface TaskGanttItem extends GanttItem {
   selector: 'f-task-planner',
   templateUrl: './task-planner.component.html',
   styleUrl: './task-planner.component.scss',
+  providers: [GanttPrintService],
   standalone: false,
 })
 export class TaskPlannerComponent implements OnInit {
@@ -69,6 +73,7 @@ export class TaskPlannerComponent implements OnInit {
     private taskPrerequisiteService: TaskPrerequisiteService,
     private router: Router,
     private route: ActivatedRoute,
+    private ganttPrintService: GanttPrintService,
   ) {}
 
   public get gradeValues() {
@@ -171,7 +176,7 @@ export class TaskPlannerComponent implements OnInit {
         return false;
       }
       const diff = this.normalizeDateUTC(item.end) - this.normalizeDateUTC(ganttItem.end);
-      const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
+      // const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
 
       if (diff > 0) {
         isAfterDependentStartDate = true;
@@ -179,18 +184,18 @@ export class TaskPlannerComponent implements OnInit {
 
       continue;
 
-      if (color === '#0079D8') {
-        // Ready for feedback
-        if (diff > 0) {
-          isAfterDependentStartDate = true;
-        }
-      } else if (color === '#31b0d5' || color === '#5BB75B') {
-        // Discuss or Complete
-        if (diff >= -7 * 24 * 60 * 60) {
-          // We need to ensure this task is submitted a week earlier than its dependent so get it in a Discuss state
-          isAfterDependentStartDate = true;
-        }
-      }
+      // if (color === '#0079D8') {
+      //   // Ready for feedback
+      //   if (diff > 0) {
+      //     isAfterDependentStartDate = true;
+      //   }
+      // } else if (color === '#31b0d5' || color === '#5BB75B') {
+      //   // Discuss or Complete
+      //   if (diff >= -7 * 24 * 60 * 60) {
+      //     // We need to ensure this task is submitted a week earlier than its dependent so get it in a Discuss state
+      //     isAfterDependentStartDate = true;
+      //   }
+      // }
     }
 
     return isAfterDependentStartDate;
@@ -334,6 +339,128 @@ export class TaskPlannerComponent implements OnInit {
     );
   }
 
+  async saveImage() {
+    const ganttEl = this.ganttComponent.element;
+    const mainContainer = ganttEl.querySelector<HTMLElement>('.gantt-main-container');
+    const side = ganttEl.querySelector<HTMLElement>('.gantt-side');
+
+    if (!mainContainer || !side) {
+      return;
+    }
+
+    const originalStyle = {
+      width: ganttEl.style.width,
+      height: ganttEl.style.height,
+      overflow: ganttEl.style.overflow,
+    };
+    const scrollElements = Array.from(
+      ganttEl.querySelectorAll<HTMLElement>(
+        '.gantt-main-container, .gantt-side-container, .gantt-virtual-scroll-viewport',
+      ),
+    );
+    const scrollPositions = scrollElements.map((element) => ({
+      element,
+      left: element.scrollLeft,
+      top: element.scrollTop,
+    }));
+    const windowScrollPosition = {
+      left: window.scrollX,
+      top: window.scrollY,
+    };
+
+    try {
+      await this.renderAllGanttBars(ganttEl);
+      this.resetGanttScroll(scrollElements);
+      window.scrollTo(windowScrollPosition.left, windowScrollPosition.top);
+      await this.waitForStableLayout(mainContainer);
+
+      const fullWidth = side.offsetWidth + this.ganttComponent.view.width;
+      const fullHeight =
+        ganttEl.offsetHeight - mainContainer.offsetHeight + mainContainer.scrollHeight;
+
+      ganttEl.style.width = `${fullWidth}px`;
+      ganttEl.style.height = `${fullHeight}px`;
+      ganttEl.style.overflow = 'visible';
+
+      this.resetGanttScroll(scrollElements);
+      await this.waitForStableLayout(mainContainer);
+
+      const canvas = await this.ganttPrintService.html2canvas();
+      this.downloadCanvas(canvas, `${this.unit.code}-Task-Plan.png`);
+    } catch (error) {
+      this.alertService.error(`Failed to download task plan: ${error}`, 6000);
+    } finally {
+      ganttEl.style.width = originalStyle.width;
+      ganttEl.style.height = originalStyle.height;
+      ganttEl.style.overflow = originalStyle.overflow;
+
+      await this.nextAnimationFrame();
+      for (const position of scrollPositions) {
+        position.element.scrollTo(position.left, position.top);
+      }
+      window.scrollTo(windowScrollPosition.left, windowScrollPosition.top);
+    }
+  }
+
+  private resetGanttScroll(scrollElements: HTMLElement[]) {
+    for (const element of scrollElements) {
+      element.scrollTo(0, 0);
+    }
+  }
+
+  private async waitForStableLayout(element: HTMLElement) {
+    let previousSize = '';
+    let stableFrames = 0;
+
+    for (let attempt = 0; attempt < 30 && stableFrames < 3; attempt++) {
+      await this.nextAnimationFrame();
+
+      const size = `${element.offsetWidth}:${element.offsetHeight}:${element.scrollWidth}:${element.scrollHeight}`;
+      if (size === previousSize) {
+        stableFrames++;
+      } else {
+        previousSize = size;
+        stableFrames = 0;
+      }
+    }
+  }
+
+  private async renderAllGanttBars(ganttEl: HTMLElement) {
+    for (let pass = 0; pass < 4; pass++) {
+      if (ganttEl.querySelectorAll('[data-gantt-id]').length >= this.items.length) {
+        return;
+      }
+
+      const placeholders = Array.from(
+        ganttEl.querySelectorAll<HTMLElement>('gantt-bar-placeholder'),
+      );
+
+      for (const placeholder of placeholders) {
+        placeholder.scrollIntoView({
+          block: 'center',
+          inline: 'center',
+        });
+        await this.nextAnimationFrame();
+        await this.nextAnimationFrame();
+      }
+    }
+
+    if (ganttEl.querySelectorAll('[data-gantt-id]').length < this.items.length) {
+      throw new Error('Some chart items could not be rendered');
+    }
+  }
+
+  private nextAnimationFrame() {
+    return new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  }
+
+  private downloadCanvas(canvas: HTMLCanvasElement, filename: string) {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
   // normalizeDateUTC = (ts: number) => {
   //   const d = new GanttDate(ts * 1000);
   //   // const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0);
@@ -373,39 +500,45 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   public get earliestStartDate() {
+    const today = this.normalizeDateUTC(Date.now() / 1000);
     const tasks = this.taskDefs()
       .map((td) => this.project.findTaskForDefinition(td.id))
       .filter((t) => t?.startDate);
 
     if (!tasks.length) {
-      return Math.floor(this.unit.startDate.getTime() / 1000);
+      return today;
     }
 
     const earliestTaskStart = Math.min(...tasks.map((t) => t.startDate.getTime() / 1000));
 
-    return Math.floor(Math.min(this.unit.startDate.getTime() / 1000, earliestTaskStart));
+    return Math.floor(Math.min(today, earliestTaskStart));
   }
 
   public get latestEndDate() {
+    const oneWeekInSeconds = 7 * 24 * 60 * 60;
     const tasks = this.taskDefs()
       .map((td) => this.project.findTaskForDefinition(td.id))
       .filter((t) => t?.localDueDate());
 
     if (!tasks.length) {
-      return Math.floor(this.unit.endDate.getTime() / 1000);
+      return this.earliestStartDate + oneWeekInSeconds;
     }
 
     const latestTaskEnd = Math.max(...tasks.map((t) => t.localDueDate().getTime() / 1000));
 
-    return Math.floor(Math.max(this.unit.endDate.getTime() / 1000, latestTaskEnd));
+    return Math.floor(latestTaskEnd) + oneWeekInSeconds;
   }
 
   ngOnInit(): void {
     this.viewOptions = {
-      datePrecisionUnit: 'day',
+      precisionUnit: 'day',
       start: new GanttDate(this.earliestStartDate),
       end: new GanttDate(this.latestEndDate),
-      dragPreviewDateFormat: 'MMM dd',
+      tickFormats: {
+        period: 'yyyy MMM',
+        unit: 'd',
+      },
+      dragTooltipFormat: 'MMM dd',
     };
 
     this.unit.getTaskPrerequisites().subscribe({
@@ -529,8 +662,6 @@ export class TaskPlannerComponent implements OnInit {
       _items.push(item);
 
       // Create baseline item
-      const baselineItem = {...item};
-
       const tdTargetDate =
         (this.targetGrade === 1
           ? td.cTargetDate
@@ -549,8 +680,11 @@ export class TaskPlannerComponent implements OnInit {
               ? td.hdStartDate
               : td.startDate) ?? td.startDate;
 
-      baselineItem.start = this.normalizeDateUTC(tdStartDate.getTime() / 1000);
-      baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
+      const baselineItem: GanttBaselineItem = {
+        id: item.id,
+        start: this.normalizeDateUTC(tdStartDate.getTime() / 1000),
+        end: this.normalizeDateUTC(tdTargetDate.getTime() / 1000),
+      };
 
       _baselineItems.push(baselineItem);
 
