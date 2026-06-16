@@ -1,5 +1,5 @@
 import {Location} from '@angular/common';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
@@ -17,6 +17,12 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   @Input() project: Project;
   @Input() taskDefinitions: TaskDefinition[];
   @Input() tasks: Task[];
+  @Input() isCollapsed = false;
+
+  @HostBinding('class.collapsed')
+  public get collapsedHostClass(): boolean {
+    return this.isCollapsed;
+  }
 
   // What is the selected task definition
   @Input() selectedTaskDefinition$: BehaviorSubject<TaskDefinition>;
