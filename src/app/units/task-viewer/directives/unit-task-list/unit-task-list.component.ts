@@ -18,6 +18,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   @Input() taskDefinitions: TaskDefinition[];
   @Input() tasks: Task[];
   @Input() isCollapsed = false;
+  @Input() selectionUrlBase: unknown[] | null = null;
 
   @HostBinding('class.collapsed')
   public get collapsedHostClass(): boolean {
@@ -155,6 +156,12 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   }
 
   private buildSelectionUrlTree(taskDef: TaskDefinition | null) {
+    if (this.selectionUrlBase) {
+      return this.angularRouter.createUrlTree(
+        taskDef ? [...this.selectionUrlBase, taskDef.abbreviation] : this.selectionUrlBase,
+      );
+    }
+
     const unitId = this.route.parent?.snapshot.paramMap.get('unitId');
     if (this.route.parent?.snapshot.data.unit && unitId) {
       return this.angularRouter.createUrlTree(

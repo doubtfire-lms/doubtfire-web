@@ -28,6 +28,7 @@ import {GlobalStateService, ViewType} from '../../index/global-state.service';
 export class ProjectDashboardComponent implements OnInit {
   @Input() public project$: Observable<Project>;
   @Input() public defaultTaskListCollapsed = false;
+  @Input() public taskSelectionUrlBase: unknown[] | null = null;
 
   /**
    * The currently selected task definition - selected in the unit task list.

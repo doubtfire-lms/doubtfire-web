@@ -16,7 +16,9 @@ import {GradeService} from 'src/app/common/services/grade.service';
 export class PortfoliosProjectProgressComponent implements OnChanges {
   @Input() project: Project;
   @Input() unit: Unit;
+  @Input() taskSelectionUrlBase: unknown[] | null = null;
 
+  @Input()
   public project$: BehaviorSubject<Project> = new BehaviorSubject(null);
 
   public taskStats: {numberOfTasksCompleted: number; numberOfTasksRemaining: number} = {
