@@ -6,8 +6,8 @@
         <p class="mt-1 text-sm font-normal text-gray-500">
           Added by {{ engagement.user?.firstName }} {{ engagement.user?.lastName }}
           <span class="mx-1">·</span>
-          <span [matTooltip]="engagement.createdAt | localizedDateTime" matTooltipPosition="above">
-            {{ engagement.createdAt | humanizedDate }}
+          <span [matTooltip]="engagement.occurredAt | localizedDateTime" matTooltipPosition="above">
+            {{ engagement.occurredAt | humanizedDate }}
           </span>
         </p>
       </div>
@@ -39,11 +39,11 @@
             </mat-card-title>
             <div class="flex shrink-0 items-center">
               <mat-card-subtitle
-                [matTooltip]="engagement.occurredAt | localizedDateTime"
-                matTooltipPosition="above"
-                matTooltipShowDelay="1000"
+                [matTooltip]="
+                  'This engagement was added on ' + (engagement.createdAt | localizedDateTime)
+                "
               >
-                {{ engagement.occurredAt | humanizedDate }}
+                {{ engagement.createdAt | humanizedDate }}
               </mat-card-subtitle>
             </div>
           </div>
