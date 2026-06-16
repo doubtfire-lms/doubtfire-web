@@ -56,50 +56,42 @@
     </div>
 
     <div class="grid grid-cols-1 items-stretch gap-3.5 xl:col-span-2 xl:grid-cols-2">
-      <!-- Progress Burndown Card -->
-      <div class="flex h-full flex-col overflow-hidden rounded-lg bg-white shadow">
-        <div class="mb-2.5">
-          <div class="items-center bg-neutral-100 px-3.5">
-            <h4 class="pt-3.5 font-semibold text-gray-800">Progress Burndown</h4>
-            <p class="pb-3.5 font-light text-gray-600">
-              The burndown chart shows how much work remains for you to achieve your target grade.
-            </p>
-          </div>
-        </div>
-        <div class="flex min-h-0 flex-1 p-2.5">
+      <mat-card appearance="outlined" class="max-h-[600px]">
+        <mat-card-header>
+          <mat-card-title>Progress Burndown</mat-card-title>
+          <mat-card-subtitle>
+            The burndown chart shows how much work remains for you to achieve your target grade.
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="overflow-hidden">
           <f-progress-burndown-chart
-            class="size-full"
+            class="block"
             [project]="project"
             [unit]="project.unit"
             [grade]="project.targetGrade"
           ></f-progress-burndown-chart>
-        </div>
-        <div class="mt-2.5 p-2.5 font-light text-gray-600">
-          Aim to keep your
-          <strong class="font-semibold text-red-500">Complete</strong>
-          line close to or ahead of the
-          <strong class="font-semibold text-gray-500">Target</strong>
-          line to keep on track.
-        </div>
-      </div>
-
-      <!-- Task Statuses Card -->
-      <div class="flex h-full flex-col overflow-hidden rounded-lg bg-white shadow">
-        <div class="mb-2.5">
-          <div class="items-center bg-neutral-100 px-3.5">
-            <h4 class="pt-3.5 font-semibold text-gray-800">Task Statuses</h4>
-            <p class="pb-3.5 font-light text-gray-600">
-              Breakdown summary of each of your task statuses.
-            </p>
+          <div class="mt-2.5 p-2.5 font-light text-gray-600">
+            Aim to keep your
+            <strong class="font-semibold text-red-500">Complete</strong>
+            line close to or ahead of the
+            <strong class="font-semibold text-gray-500">Target</strong>
+            line to keep on track.
           </div>
-        </div>
-        <div class="flex-1 overflow-x-auto p-2.5">
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="max-h-[600px]">
+        <mat-card-header>
+          <mat-card-title>Task Statuses</mat-card-title>
+          <mat-card-subtitle>Breakdown summary of each of your task statuses</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
           <f-task-visualisation
             [project]="project"
             [grade]="project.targetGrade"
           ></f-task-visualisation>
-        </div>
-      </div>
+        </mat-card-content>
+      </mat-card>
     </div>
   </div>
 </div>
