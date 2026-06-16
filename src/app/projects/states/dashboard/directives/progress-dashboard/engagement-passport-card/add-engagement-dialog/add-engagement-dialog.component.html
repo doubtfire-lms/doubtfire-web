@@ -5,13 +5,17 @@
     <mat-form-field appearance="outline">
       <mat-label>Engagement type</mat-label>
       <input
+        #engagementTypeInput
         matInput
         formControlName="engagementType"
         [matAutocomplete]="engagementTypeOptions"
         maxlength="255"
         placeholder="e.g. Attendance"
       />
-      <mat-autocomplete #engagementTypeOptions="matAutocomplete">
+      <mat-autocomplete
+        #engagementTypeOptions="matAutocomplete"
+        (optionSelected)="engagementTypeSelected(engagementTypeInput)"
+      >
         @for (type of engagementTypes; track type) {
           <mat-option [value]="type">{{ type }}</mat-option>
         }
@@ -22,19 +26,16 @@
       }
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Note</mat-label>
       <textarea
         matInput
         formControlName="note"
         maxlength="4095"
         rows="4"
-        placeholder="Describe how the student engaged with the unit."
+        [placeholder]="notePlaceholder"
       ></textarea>
       <mat-hint align="end">{{ form.controls.note.value.length }} / 4095</mat-hint>
-      @if (form.controls.note.hasError('required')) {
-        <mat-error>Enter a note for this engagement.</mat-error>
-      }
     </mat-form-field>
 
     <div class="grid grid-cols-2 gap-2">

@@ -176,7 +176,7 @@ export class EngagementPassportCardComponent implements OnChanges {
       const weekNumber = this.project.unit.weekNumber(engagement.occurredAt);
       if (weekNumber === null || weekNumber < 1 || weekNumber > totalWeeks) continue;
 
-      const type = engagement.engagementType?.trim().toLowerCase();
+      const type = this.normalizeEngagementType(engagement.engagementType);
       const presentation = this.presentations[type] ?? this.fallbackPresentation;
       this.weeks[weekNumber - 1].stamps.push({
         engagement,
@@ -186,5 +186,10 @@ export class EngagementPassportCardComponent implements OnChanges {
         classes: presentation.classes,
       });
     }
+  }
+
+  private normalizeEngagementType(engagementType: string): string {
+    const type = engagementType?.trim().toLowerCase();
+    return type === 'discuss' ? 'discussion' : type;
   }
 }

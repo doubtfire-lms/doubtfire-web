@@ -22,7 +22,15 @@ interface AddEngagementForm {
   standalone: false,
 })
 export class AddEngagementDialogComponent {
-  readonly engagementTypes = ['Attendance', 'Discussion', 'Forum', 'Email', 'Negative'];
+  readonly engagementTypes = ['Attendance', 'Discuss', 'Forum', 'Email', 'Negative'];
+  readonly notePlaceholders: Record<string, string> = {
+    attendance: 'Attended tutorial and participated in class activities.',
+    discuss: 'Discussed tasks during tutorial.',
+    discussion: 'Discussed tasks during tutorial.',
+    forum: 'Posted to the unit forum and engaged with discussion.',
+    email: 'Discussed unit progress with the teaching team via email.',
+    negative: 'Engagement concern noted for follow-up.',
+  };
   readonly maxAttachmentSize = 30 * 1024 * 1024;
   readonly form: FormGroup<AddEngagementForm>;
 
@@ -44,7 +52,7 @@ export class AddEngagementDialogComponent {
       }),
       note: new FormControl('', {
         nonNullable: true,
-        validators: [Validators.required, Validators.maxLength(4095)],
+        validators: [Validators.maxLength(4095)],
       }),
       occurredDate: new FormControl(now, {
         nonNullable: true,
@@ -70,6 +78,17 @@ export class AddEngagementDialogComponent {
     if (mode === 'attachment') return this.attachment !== undefined;
 
     return true;
+  }
+
+  get notePlaceholder(): string {
+    const engagementType = this.form.controls.engagementType.value.trim().toLowerCase();
+    return (
+      this.notePlaceholders[engagementType] ?? 'Describe how the student engaged with the unit.'
+    );
+  }
+
+  engagementTypeSelected(input: HTMLInputElement): void {
+    window.setTimeout(() => input.blur());
   }
 
   evidenceModeChanged(): void {
@@ -124,7 +143,7 @@ export class AddEngagementDialogComponent {
     this.engagementService
       .createEngagement(this.data.project, {
         engagementType: values.engagementType.trim(),
-        note: values.note.trim(),
+        note: values.note.trim() || this.notePlaceholder,
         occurredAt,
         evidenceUrl: values.evidenceMode === 'url' ? values.evidenceUrl.trim() : undefined,
         attachment: values.evidenceMode === 'attachment' ? this.attachment : undefined,
