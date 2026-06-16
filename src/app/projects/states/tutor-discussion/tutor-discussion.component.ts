@@ -1,5 +1,14 @@
 import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
-import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  Input,
+  OnDestroy,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import {MatSelectionList} from '@angular/material/list';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -34,8 +43,10 @@ enum TutorDiscussionTabView {
   encapsulation: ViewEncapsulation.None,
   standalone: false,
 })
-export class TutorDiscussionComponent implements AfterViewInit {
+export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;
+  private readonly mobileDiscussionViewportContent =
+    'width=device-width, initial-scale=0.8, maximum-scale=5';
 
   @Input() unitId: number;
   @Input() username: string;
@@ -56,6 +67,8 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public loadingStudentData: boolean = false;
 
   private html5QrcodeScanner: Html5QrcodeScanner;
+  private originalViewportContent: string | null = null;
+  private mobileDiscussionZoomApplied = false;
 
   private _unitId: number;
   private _username: string;
@@ -64,6 +77,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public footerTabView: TutorDiscussionTabView = TutorDiscussionTabView.SHOW_COMMENTS;
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private unitService: UnitService,
     private authService: AuthenticationService,
     private userService: UserService,
@@ -77,6 +91,10 @@ export class TutorDiscussionComponent implements AfterViewInit {
     private taskCommentService: TaskCommentService,
     private taskService: TaskService,
   ) {}
+
+  public ngOnDestroy(): void {
+    this.restoreViewportZoom();
+  }
 
   public currentUserTutorsInStream(tutorialStream: TutorialStream): boolean {
     const user = this.userService.currentUser;
@@ -209,6 +227,34 @@ export class TutorDiscussionComponent implements AfterViewInit {
         }, 2000);
       }
     });
+  }
+
+  private applyMobileDiscussionZoom(): void {
+    if (!window.matchMedia('(max-width: 768px)').matches) {
+      return;
+    }
+
+    const viewport = this.document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (!viewport) {
+      return;
+    }
+
+    this.originalViewportContent ??= viewport.getAttribute('content');
+    viewport.setAttribute('content', this.mobileDiscussionViewportContent);
+    this.mobileDiscussionZoomApplied = true;
+  }
+
+  private restoreViewportZoom(): void {
+    if (!this.mobileDiscussionZoomApplied) {
+      return;
+    }
+
+    const viewport = this.document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (viewport && this.originalViewportContent) {
+      viewport.setAttribute('content', this.originalViewportContent);
+    }
+
+    this.mobileDiscussionZoomApplied = false;
   }
 
   hideQrScannerBloat: boolean = true;
@@ -534,6 +580,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
         this.project = project;
         this.scanningQr = false;
         this.loadingStudentData = false;
+        this.applyMobileDiscussionZoom();
       })
       .catch((e) => {
         console.error(e);
