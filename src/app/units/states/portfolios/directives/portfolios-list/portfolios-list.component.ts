@@ -120,7 +120,9 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
     const currentUser = this.userService.currentUser;
 
     const students = this.unit.students
-      .filter((p) => (this.portfolioFilter === 'submitted_only' ? p.hasPortfolio : true))
+      .filter((p) =>
+        this.portfolioFilter === 'submitted_only' ? p.hasPortfolio || p.portfolioAvailable : true,
+      )
       .filter((p) => (this.tutorialFilter === 'mine' ? p.hasTutor(currentUser) : true))
       .filter((p) => (this.gradeFilter !== null ? p.submittedGrade === this.gradeFilter : true));
 
