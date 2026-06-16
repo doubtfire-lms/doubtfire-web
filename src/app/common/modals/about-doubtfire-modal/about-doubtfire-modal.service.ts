@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-import { GithubProfile } from './github-profile';
-import { ContributorData } from './contributor-data';
-import { AboutDialogData } from './about-dialog-data';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {AboutDialogData} from './about-dialog-data';
+import {ContributorData} from './contributor-data';
+import {GithubProfile} from './github-profile';
 
 interface GithubContributors {
   login: string;
@@ -35,7 +34,10 @@ export class AboutDoubtfireModalService {
     return this.http.get<GithubProfile>(`https://api.github.com/users/${handler}`);
   }
 
-  private findOrCreateContributor(data: AboutDialogData, profile: GithubContributors): ContributorData {
+  private findOrCreateContributor(
+    data: AboutDialogData,
+    profile: GithubContributors,
+  ): ContributorData {
     let contributor: ContributorData;
     contributor = data.allContributors.value.find((c) => {
       return c.login === profile.login;
@@ -54,7 +56,7 @@ export class AboutDoubtfireModalService {
         const contributor = this.findOrCreateContributor(data, profile);
         contributor[key] = profile.contributions;
       });
-      data.sortData({ active: 'contributions', direction: 'desc' });
+      data.sortData({active: 'contributions', direction: 'desc'});
     });
   }
 
@@ -62,7 +64,7 @@ export class AboutDoubtfireModalService {
     this.getContributors(
       'https://api.github.com/repos/doubtfire-lms/doubtfire.io/contributors',
       data,
-      'ioContributions'
+      'ioContributions',
     );
   }
 
@@ -70,7 +72,7 @@ export class AboutDoubtfireModalService {
     this.getContributors(
       'https://api.github.com/repos/doubtfire-lms/doubtfire-deploy/contributors',
       data,
-      'deployContributions'
+      'deployContributions',
     );
   }
 
@@ -78,7 +80,7 @@ export class AboutDoubtfireModalService {
     this.getContributors(
       'https://api.github.com/repos/doubtfire-lms/doubtfire-web/contributors',
       data,
-      'webContributions'
+      'webContributions',
     );
   }
 
@@ -86,7 +88,7 @@ export class AboutDoubtfireModalService {
     this.getContributors(
       'https://api.github.com/repos/doubtfire-lms/doubtfire-api/contributors',
       data,
-      'apiContributions'
+      'apiContributions',
     );
   }
 }

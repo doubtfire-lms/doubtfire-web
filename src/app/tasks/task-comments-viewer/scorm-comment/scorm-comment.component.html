@@ -2,21 +2,21 @@
 <div class="flex flex-row items-center">
   <button
     mat-button
-    class="mr-4 h-12 flex-shrink-0"
+    class="mr-2.5 h-7 flex-shrink-0"
     (click)="reviewScormTest()"
     [hidden]="!user.isStaff && !task.definition.scormAllowReview"
   >
     Review
   </button>
   @if (!user.isStaff && !task.definition.scormAllowReview) {
-    <div class="markdown-to-html m-auto mb-1 mt-1" [innerHTML]="comment.text"></div>
+    <div class="markdown-to-html m-auto my-0.5" [innerHTML]="comment.text"></div>
   } @else {
     <div class="markdown-to-html flex-grow" [innerHTML]="comment.text"></div>
   }
   <button
     #menuState="matMenuTrigger"
     mat-icon-button
-    class="p-0 h-12 flex-shrink-0"
+    class="h-7 flex-shrink-0 p-0"
     [matMenuTriggerFor]="menu"
     [hidden]="!user.isStaff"
   >

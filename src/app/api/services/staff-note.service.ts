@@ -1,10 +1,10 @@
+import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
-import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
+import {Observable, tap} from 'rxjs';
 import {Project, ProjectService, UserService} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {StaffNote} from '../models/staff-note';
-import {Observable, tap} from 'rxjs';
 
 @Injectable()
 export class StaffNoteService extends CachedEntityService<StaffNote> {

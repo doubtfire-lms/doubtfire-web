@@ -61,7 +61,7 @@ export class FeedbackTemplate extends Entity {
     return !this.id;
   }
 
-  public delete(): Observable<unknown> {
+  public delete(): Observable<void> {
     const svc = AppInjector.get(FeedbackTemplateService);
 
     return svc.delete(

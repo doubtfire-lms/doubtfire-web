@@ -1,8 +1,8 @@
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { AppInjector } from 'src/app/app-injector';
-import { TaskCommentService } from '../../services/task-comment.service';
-import { TaskComment, TaskStatusEnum, Task } from '../doubtfire-model';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {AppInjector} from 'src/app/app-injector';
+import {TaskCommentService} from '../../services/task-comment.service';
+import {Task, TaskComment, TaskStatusEnum} from '../doubtfire-model';
 
 /**
  * Create a Discussion Comment, extending the base TaskComment class
@@ -46,7 +46,7 @@ export class ExtensionComment extends TaskComment {
 
         tc.project.updateBurndownChart();
         tc.project.calcTopTasks(); // Sort the task list again
-      })
+      }),
     );
   }
 

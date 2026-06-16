@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { InboxComponent } from './inbox.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {InboxComponent} from './inbox.component';
 
 describe('InboxComponent', () => {
   let component: InboxComponent;
@@ -8,9 +7,8 @@ describe('InboxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InboxComponent ]
-    })
-    .compileComponents();
+      declarations: [InboxComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(InboxComponent);
     component = fixture.componentInstance;

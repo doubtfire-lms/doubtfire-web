@@ -1,22 +1,25 @@
+@use 'sass:color';
+@use 'styles/mixins/callout' as *;
+
 //
 // Callouts used for standout information
 //
 .callout-primary {
-  @include callout($brand-primary, lighten($brand-primary, 45%));
+  @include callout($brand-primary, color.adjust($brand-primary, $lightness: 45%));
 }
 
 .callout-danger {
-  @include callout($brand-danger, lighten($brand-danger, 30%));
+  @include callout($brand-danger, color.adjust($brand-danger, $lightness: 30%));
 }
 
 .callout-warning {
-  @include callout($brand-warning, lighten($brand-warning, 30%));
+  @include callout($brand-warning, color.adjust($brand-warning, $lightness: 30%));
 }
 
 .callout-info {
-  @include callout($brand-info, lighten($brand-info, 30%));
+  @include callout($brand-info, color.adjust($brand-info, $lightness: 30%));
 }
 
 .callout-success {
-  @include callout($brand-success, lighten($brand-success, 30%));
+  @include callout($brand-success, color.adjust($brand-success, $lightness: 30%));
 }

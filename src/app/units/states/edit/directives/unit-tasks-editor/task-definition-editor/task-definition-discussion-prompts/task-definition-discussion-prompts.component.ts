@@ -17,6 +17,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-task-definition-discussion-prompts',
   templateUrl: 'task-definition-discussion-prompts.component.html',
   styleUrls: ['task-definition-discussion-prompts.component.scss'],
+  standalone: false,
 })
 export class TaskDefinitionDiscussionPromptsComponent
   extends EntityFormComponent<DiscussionPrompt>
@@ -30,7 +31,7 @@ export class TaskDefinitionDiscussionPromptsComponent
 
   private prereqSub?: Subscription;
 
-  public dataSource = new MatTableDataSource<DiscussionPrompt>();
+  public dataSource: MatTableDataSource<DiscussionPrompt> = new MatTableDataSource();
 
   creatingNewDiscussionPrompt: boolean = false;
 

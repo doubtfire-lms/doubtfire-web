@@ -1,6 +1,6 @@
+import * as monaco from 'monaco-editor';
 import {HttpResponse} from '@angular/common/http';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import * as monaco from 'monaco-editor';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
 import {
@@ -25,6 +25,7 @@ export interface SubmissionFilesModalData {
   selector: 'f-submission-files-modal',
   templateUrl: './submission-files-modal.component.html',
   styleUrls: ['./submission-files-modal.component.scss'],
+  standalone: false,
 })
 export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   private readonly diffOriginalUri = monaco.Uri.parse('inmemory://submission-compare/original');
@@ -271,7 +272,7 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
       return '';
     }
 
-    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    const digest = await crypto.subtle.digest('SHA-256', new Uint8Array(bytes).buffer);
     return Array.from(new Uint8Array(digest))
       .map((value) => value.toString(16).padStart(2, '0'))
       .join('');

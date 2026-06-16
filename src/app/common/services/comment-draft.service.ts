@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class CommentDraftService {
   private readonly PREFIX = 'df_comment_draft_'; // Prefix for localStorage keys
 

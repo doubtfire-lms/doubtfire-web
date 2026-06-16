@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { AcceptEulaComponent } from './accept-eula.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {AcceptEulaComponent} from './accept-eula.component';
 
 describe('AcceptEulaComponent', () => {
   let component: AcceptEulaComponent;
@@ -8,9 +7,8 @@ describe('AcceptEulaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AcceptEulaComponent ]
-    })
-    .compileComponents();
+      declarations: [AcceptEulaComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AcceptEulaComponent);
     component = fixture.componentInstance;

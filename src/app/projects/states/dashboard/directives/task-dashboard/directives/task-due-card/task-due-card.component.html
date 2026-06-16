@@ -56,12 +56,14 @@
     @if (task?.betweenDueDateAndDeadlineDate()) {
       <mat-card appearance="outlined">
         <mat-card-header class="bg-yellow-600 text-white">
-          <mat-card-title class="flex items-center mb-4"
+          <mat-card-title class="mb-2.5 flex items-center"
             ><mat-icon>warning</mat-icon>
             @if (flexibleDatesEnabled) {
-              <span class="ml-4">Past Target Date By {{ task?.timePastDueDateDescription() }}</span>
+              <span class="ml-2.5"
+                >Past Target Date By {{ task?.timePastDueDateDescription() }}</span
+              >
             } @else {
-              <span class="ml-4">Past Due Date By {{ task?.timePastDueDateDescription() }}</span>
+              <span class="ml-2.5">Past Due Date By {{ task?.timePastDueDateDescription() }}</span>
             }
           </mat-card-title>
         </mat-card-header>
@@ -69,14 +71,14 @@
         <mat-card-content class="bg-yellow-50" [hidden]="task?.inDiscussState()">
           <!--Not in submitted state and overdue-->
           @if (flexibleDatesEnabled) {
-            <p class="mt-2 p-2">
+            <p class="mt-1 p-1">
               You should have submitted this task by
               <strong>{{ task?.localDueDateString() }}</strong> to keep your progress on track. Try
               to finish it as soon as possible to avoid delays. You can revise your project plan
               dates, but ensure you submit before the deadline to receive feedback.
             </p>
           } @else {
-            <p class="mt-2 p-2">
+            <p class="mt-1 p-1">
               You should have completed this task by
               <strong>{{ task?.localDueDateString() }}</strong
               >. Try and finish it as soon as possible to avoid falling behind. You will need to
@@ -116,16 +118,16 @@
     @if (task?.isPastDeadline()) {
       <mat-card appearance="outlined">
         <mat-card-header class="bg-red-600 text-white">
-          <mat-card-title class="flex items-center mb-4"
+          <mat-card-title class="mb-2.5 flex items-center"
             ><mat-icon>error</mat-icon>
-            <span class="ml-4"
+            <span class="ml-2.5"
               >Passed Due Date By {{ task?.timePastDueDateDescription() }}</span
             ></mat-card-title
           >
         </mat-card-header>
         <mat-card-content class="bg-red-50" [hidden]="task?.inDiscussState()">
           <!--Past deadline and not submitted-->
-          <p class="p-2">
+          <p class="p-1">
             @if (task?.definition?.unit.markLateSubmissionsAsAssessInPortfolio) {
               You should have completed this task by
               <strong>{{ task?.localDueDateString() }}</strong

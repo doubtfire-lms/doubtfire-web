@@ -5,6 +5,7 @@ import {Project} from 'src/app/api/models/project';
   selector: 'f-task-planner-card',
   templateUrl: './task-planner-card.component.html',
   styleUrl: './task-planner-card.component.scss',
+  standalone: false,
 })
 export class TaskPlannerCardComponent {
   @Input() project: Project;

@@ -3,7 +3,12 @@
     Audio recording <br />
     only supported in modern versions of Chrome, Firefox and Safari.
   </p>
-  <mat-spinner class="send-audio-spinner" [diameter]="18" [strokeWidth]="1" [hidden]="!isSending"></mat-spinner>
+  <mat-spinner
+    class="send-audio-spinner"
+    [diameter]="18"
+    [strokeWidth]="1"
+    [hidden]="!isSending"
+  ></mat-spinner>
   <div
     style="display: flex"
     class="flex grow items-center justify-items-center w-full"
@@ -15,7 +20,9 @@
       mat-icon-button
       aria-label="Audio recording button"
     >
-      <mat-icon class="text-white">{{isRecording ? 'stop_circle' : 'radio_button_checked' }} </mat-icon>
+      <mat-icon class="text-white"
+        >{{isRecording ? 'stop_circle' : 'radio_button_checked' }}
+      </mat-icon>
     </button>
     <button
       style="transform: scale(1); margin-left: -15px; margin-right: 0px; display: flex"
@@ -27,7 +34,12 @@
       <mat-icon style="color: white">play_circle</mat-icon>
     </button>
     <audio id="audioPlayer"></audio>
-    <canvas fxFlex style="width: 100%" class="audio-visualiser" id="audio-recorder-visualiser"></canvas>
+    <canvas
+      fxFlex
+      style="width: 100%"
+      class="audio-visualiser"
+      id="audio-recorder-visualiser"
+    ></canvas>
 
     <div id="button-wrapper">
       <button

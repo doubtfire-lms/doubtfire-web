@@ -8,10 +8,10 @@
     <mat-divider></mat-divider>
     <div>
       @if (discussion.status === 'opened' && isNotStudent) {
-<div>
-        Warning: The student has opened the discussion prompts without sending a response.
-      </div>
-}
+        <div>
+          Warning: The student has opened the discussion prompts without sending a response.
+        </div>
+      }
       <div
         fxLayout="column"
         fxLayoutAlign="space-around center"
@@ -29,27 +29,25 @@
             P1
           </mat-button-toggle>
           @if (discussion.numberOfPrompts > 1) {
-<mat-button-toggle
-            matTooltip="Plays the second discussion prompt"
-            matTooltipPosition="above"
-           
-            (click)="setPromptTrack('prompt', 1)"
-            aria-label="Prompt toggle"
-          >
-            P2
-          </mat-button-toggle>
-}
+            <mat-button-toggle
+              matTooltip="Plays the second discussion prompt"
+              matTooltipPosition="above"
+              (click)="setPromptTrack('prompt', 1)"
+              aria-label="Prompt toggle"
+            >
+              P2
+            </mat-button-toggle>
+          }
           @if (discussion.numberOfPrompts > 2) {
-<mat-button-toggle
-            matTooltip="Plays the third discussion prompt"
-            matTooltipPosition="above"
-            (click)="setPromptTrack('prompt', 2)"
-           
-            aria-label="Prompt toggle"
-          >
-            P3
-          </mat-button-toggle>
-}
+            <mat-button-toggle
+              matTooltip="Plays the third discussion prompt"
+              matTooltipPosition="above"
+              (click)="setPromptTrack('prompt', 2)"
+              aria-label="Prompt toggle"
+            >
+              P3
+            </mat-button-toggle>
+          }
           <mat-button-toggle
             matTooltip="Plays the prompts, followed by the students response"
             matTooltipPosition="above"

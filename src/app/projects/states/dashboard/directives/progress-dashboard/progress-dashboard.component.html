@@ -1,0 +1,97 @@
+<div class="overflow-hidden rounded-lg bg-white shadow-md max-[991px]:mt-6 min-[992px]:mt-0">
+  <div class="items-center bg-neutral-100 px-3.5">
+    <h4 class="py-3.5 font-semibold text-gray-800">
+      Progress Dashboard
+      @if (tutor) {
+        <span>for {{ project.student.name }}</span>
+      }
+    </h4>
+  </div>
+  <div class="grid grid-cols-1 items-stretch gap-3.5 p-3.5 xl:grid-cols-2">
+    <!-- Task Planner Card -->
+    <div class="size-full xl:col-span-1">
+      <f-task-planner-card [project]="project" class="block size-full"></f-task-planner-card>
+    </div>
+
+    <!-- Target Grade Card -->
+    <div class="h-full xl:col-span-1">
+      <mat-card appearance="outlined" class="flex h-full flex-col">
+        <mat-card-header>
+          <mat-card-title>Target Grade</mat-card-title>
+          <mat-card-subtitle class="mb-2.5">
+            <p>Your target grade changes which tasks you need to complete.</p>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="flex flex-1 items-center">
+          <div class="w-full">
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>Select Target Grade</mat-label>
+              <mat-select
+                [(value)]="project.targetGrade"
+                (selectionChange)="updateTargetGrade($event.value)"
+                disabled
+              >
+                @for (grade of grades.values; track grade) {
+                  <mat-option [value]="grade">
+                    {{ grades.names[grade] }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <div class="ml-0.5 py-1 opacity-70">
+              To change your target grade, use the
+              <a [routerLink]="['/projects', project.id, 'plan']" class="cursor-pointer underline">
+                Task Planner
+              </a>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Unit learning outcomes -->
+    <div class="xl:col-span-2">
+      <f-task-ilos-card [unit]="project.unit" [iloContextType]="'Unit'"></f-task-ilos-card>
+    </div>
+
+    <div class="grid grid-cols-1 items-stretch gap-3.5 xl:col-span-2 xl:grid-cols-2">
+      <mat-card appearance="outlined" class="max-h-[600px]">
+        <mat-card-header>
+          <mat-card-title>Progress Burndown</mat-card-title>
+          <mat-card-subtitle>
+            The burndown chart shows how much work remains for you to achieve your target grade.
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="overflow-hidden">
+          <f-progress-burndown-chart
+            class="block"
+            [project]="project"
+            [unit]="project.unit"
+            [grade]="project.targetGrade"
+          ></f-progress-burndown-chart>
+          <div class="mt-2.5 p-2.5 font-light text-gray-600">
+            Aim to keep your
+            <strong class="font-semibold text-red-500">Complete</strong>
+            line close to or ahead of the
+            <strong class="font-semibold text-gray-500">Target</strong>
+            line to keep on track.
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="max-h-[600px]">
+        <mat-card-header>
+          <mat-card-title>Task Statuses</mat-card-title>
+          <mat-card-subtitle>Breakdown summary of each of your task statuses</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <f-task-visualisation
+            [project]="project"
+            [grade]="project.targetGrade"
+          ></f-task-visualisation>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

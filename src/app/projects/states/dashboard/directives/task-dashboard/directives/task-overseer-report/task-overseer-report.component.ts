@@ -13,6 +13,7 @@ import {SubmissionFilesModalComponent} from './submission-files-modal/submission
   selector: 'f-task-overseer-report',
   templateUrl: './task-overseer-report.component.html',
   styleUrl: './task-overseer-report.component.scss',
+  standalone: false,
 })
 export class TaskOverseerReportComponent implements OnInit {
   @Input() task: Task;
@@ -143,7 +144,7 @@ export class TaskOverseerReportComponent implements OnInit {
     });
   }
 
-  loadingAssessments = new Set<number>();
+  loadingAssessments: Set<number> = new Set();
 
   onAssessmentOpen(overseerAssesment: OverseerAssessment) {
     if (this.loadOverseerAssessmentId === overseerAssesment.id) {

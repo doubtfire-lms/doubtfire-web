@@ -1,10 +1,10 @@
+import {CachedEntityService} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {CachedEntityService} from 'ngx-entity-service';
+import {Observable} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {OverseerAssessment} from '../models/doubtfire-model';
 import {OverseerStepResult} from '../models/overseer/overseer-step-result';
-import {Observable} from 'rxjs';
 
 @Injectable()
 export class OverseerStepResultService extends CachedEntityService<OverseerStepResult> {
@@ -31,8 +31,8 @@ export class OverseerStepResultService extends CachedEntityService<OverseerStepR
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public createInstanceFrom(json: object, other?: any): OverseerStepResult {
-    return new OverseerStepResult(other as OverseerAssessment);
+  public createInstanceFrom(_json: object, other?: OverseerAssessment): OverseerStepResult {
+    return new OverseerStepResult(other);
   }
 
   public getOverseerStepResults(assessment: OverseerAssessment): Observable<OverseerStepResult[]> {

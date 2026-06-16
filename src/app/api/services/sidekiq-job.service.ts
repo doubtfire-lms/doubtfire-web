@@ -1,6 +1,6 @@
+import {CachedEntityService} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {CachedEntityService} from 'ngx-entity-service';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {SidekiqJob} from '../models/sidekiq-job';
@@ -18,7 +18,7 @@ export class SidekiqJobService extends CachedEntityService<SidekiqJob> {
   public jobEntries: Map<string, SidekiqJobEntry> = new Map();
 
   // Allow components to track changes to jobEntries
-  public sidekiqJobsSubject = new BehaviorSubject<SidekiqJobEntry[]>([]);
+  public sidekiqJobsSubject: BehaviorSubject<SidekiqJobEntry[]> = new BehaviorSubject([]);
 
   public setJob(jobId: string, title: string, subject: Subject<SidekiqJob>, job?: SidekiqJob) {
     this.jobEntries.set(jobId, {

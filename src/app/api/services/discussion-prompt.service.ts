@@ -1,6 +1,6 @@
+import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {Observable} from 'rxjs';
 import {
   Project,
@@ -57,7 +57,7 @@ export class DiscussionPromptService extends CachedEntityService<DiscussionPromp
           }
           return entity.taskDefinition;
         },
-        toJsonFn: (entity: DiscussionPrompt, key: string) => {
+        toJsonFn: (entity: DiscussionPrompt, _key: string) => {
           return entity.taskDefinition?.id;
         },
       },

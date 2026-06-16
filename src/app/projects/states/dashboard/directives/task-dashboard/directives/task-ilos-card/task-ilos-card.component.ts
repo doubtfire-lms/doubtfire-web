@@ -8,6 +8,7 @@ import {Unit} from 'src/app/api/models/unit';
   selector: 'f-task-ilos-card',
   templateUrl: './task-ilos-card.component.html',
   styleUrls: ['./task-ilos-card.component.scss'],
+  standalone: false,
 })
 export class TaskIlosCardComponent implements OnInit, OnChanges {
   @Input() iloContextType: 'Unit' | 'TaskDefinition' | 'Course' | 'Global';

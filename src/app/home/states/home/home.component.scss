@@ -1,4 +1,4 @@
-@import '../../../../theme.scss';
+@use 'theme' as *;
 
 #home {
   padding-top: 10px;
@@ -55,7 +55,7 @@
     color: white;
     opacity: 1;
     border-style: none;
-    --mdc-chip-disabled-label-text-color: white;
+    --mat-chip-disabled-label-text-color: white;
   }
 }
 
@@ -86,6 +86,6 @@
 }
 
 :host {
-  --mdc-linear-progress-track-height: 16px;
-  --mdc-linear-progress-active-indicator-height: 16px;
+  --mat-progress-bar-track-height: 16px;
+  --mat-progress-bar-active-indicator-height: 16px;
 }

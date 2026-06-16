@@ -5,9 +5,9 @@
   margin-bottom: 20px;
 
   &.inbox {
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     box-shadow: none;
-    margin-bottom: 0px // nice drop shadow on bottom of toolbar
+    margin-bottom: 0px; // nice drop shadow on bottom of toolbar
   }
 
   font-family: 'Grotesk';
@@ -16,5 +16,4 @@
     color: black;
     transform: scale(1.5);
   }
-
 }

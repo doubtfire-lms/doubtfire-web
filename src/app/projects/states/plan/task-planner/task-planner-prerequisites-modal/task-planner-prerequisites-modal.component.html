@@ -1,12 +1,12 @@
 <mat-card appearance="outlined">
-  <mat-card-header class="w-full flex justify-between items-center">
+  <mat-card-header class="flex w-full items-center justify-between">
     <mat-card-title class="w-full">
       {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
     </mat-card-title>
     <status-icon [status]="taskDefinition.projectTask(project).status"></status-icon>
   </mat-card-header>
   <mat-card-content>
-    <mat-card-subtitle class="py-5"
+    <mat-card-subtitle class="py-3"
       >Task Description:
       <p>{{ taskDefinition.description }}</p></mat-card-subtitle
     >
@@ -15,17 +15,17 @@
       [task]="task"
     ></f-task-prerequisites-card>
     @if (!task.hasPrerequisiteTasks()) {
-      <div class="p-5 w-full text-center text-gray-400">This task has no prerequisites.</div>
+      <div class="w-full p-3 text-center text-gray-400">This task has no prerequisites.</div>
     }
-    <mat-divider class="my-5"></mat-divider>
+    <mat-divider class="my-3"></mat-divider>
     @if (dependents.length) {
-      <mat-card appearance="outlined" class="mt-5">
+      <mat-card appearance="outlined" class="mt-3">
         <mat-card-header>
           <mat-card-title>Required by</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
-          <mat-card-subtitle class="mb-4">
+          <mat-card-subtitle class="mb-2.5">
             <strong>{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</strong> is a
             prerequisite for the following tasks. In some cases,
             <strong>{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</strong> needs to
@@ -71,7 +71,7 @@
         </mat-card-content>
       </mat-card>
     } @else {
-      <div class="p-5 w-full text-center text-gray-400">
+      <div class="w-full p-3 text-center text-gray-400">
         This task is not a prerequisite for any other tasks.
       </div>
     }

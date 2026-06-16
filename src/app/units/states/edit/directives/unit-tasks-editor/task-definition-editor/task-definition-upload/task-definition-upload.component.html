@@ -17,6 +17,7 @@
         <mat-option value="code">Code</mat-option>
         <mat-option value="document">Document</mat-option>
         <mat-option value="image">Image</mat-option>
+        <mat-option value="zip">ZIP</mat-option>
       </mat-select>
     </td>
   </ng-container>
@@ -82,7 +83,7 @@
 </table>
 
 @if (taskDefinition.needsJplag) {
-  <div class="flex-grow flex flex-row gap-4">
+  <div class="flex flex-grow flex-row gap-2.5">
     <mat-form-field appearance="outline" class="basis-1/2">
       <mat-label>Language used for JPLAG checks</mat-label>
       <mat-select [(ngModel)]="taskDefinition.similarityLanguage">

@@ -1,15 +1,20 @@
-import {Component, Inject, Input, ViewChild, ElementRef} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, Input, ViewChild} from '@angular/core';
+import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
 import {BaseAudioRecorderComponent} from 'src/app/common/audio-recorder/audio/base-audio-recorder';
-import {audioRecorderService} from 'src/app/ajs-upgraded-providers';
-import {TaskComment, TaskCommentService, Task} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 
 @Component({
   selector: 'discussion-prompt-composer',
   templateUrl: './discussion-prompt-composer.component.html',
   styleUrls: ['./discussion-prompt-composer.component.scss'],
+  providers: [MediaRecorderService],
+  standalone: false,
 })
-export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponent {
+export class DiscussionPromptComposerComponent
+  extends BaseAudioRecorderComponent
+  implements AfterViewInit
+{
   @Input() task: Task;
 
   @ViewChild('discussionPromptComposerCanvas', {static: true}) canvasRef: ElementRef;
@@ -28,7 +33,7 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
   }
 
   constructor(
-    @Inject(audioRecorderService) mediaRecorderService: any,
+    private mediaRecorderService: MediaRecorderService,
     @Inject(TaskCommentService) private taskCommentService: TaskCommentService,
     private alerts: AlertService,
   ) {
@@ -74,15 +79,12 @@ export class DiscussionPromptComposerComponent extends BaseAudioRecorderComponen
     this.taskCommentService
       .addComment(this.task, undefined, 'discussion', undefined, this.recordings)
       .subscribe(
-        (tc: TaskComment) => {
+        (_tc: TaskComment) => {
           this.isSending = false;
         },
-        (failure: any) => {
-          this.alerts.error(
-            `Failed to create discussion comment. ${
-              failure.data != null ? failure.data.error : failure
-            }`,
-          );
+        (failure: {data?: {error?: string}} | string) => {
+          const message = typeof failure === 'string' ? failure : failure.data?.error || failure;
+          this.alerts.error(`Failed to create discussion comment. ${String(message)}`);
           this.isSending = false;
         },
       );

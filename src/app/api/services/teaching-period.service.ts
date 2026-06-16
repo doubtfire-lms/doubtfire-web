@@ -1,13 +1,13 @@
+import {CachedEntityService} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
-import {CachedEntityService, Entity} from 'ngx-entity-service';
+import {Injectable} from '@angular/core';
 import {
   TeachingPeriod,
   TeachingPeriodBreakService,
   UnitService,
 } from 'src/app/api/models/doubtfire-model';
-import {Injectable} from '@angular/core';
-import API_URL from 'src/app/config/constants/apiUrl';
 import {AppInjector} from 'src/app/app-injector';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {MappingFunctions} from './mapping-fn';
 
 @Injectable()
@@ -68,7 +68,7 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
     this.cacheBehaviourOnGet = 'cacheQuery';
   }
 
-  public createInstanceFrom(json: any, other?: any): TeachingPeriod {
+  public createInstanceFrom(_json: object): TeachingPeriod {
     return new TeachingPeriod();
   }
 }

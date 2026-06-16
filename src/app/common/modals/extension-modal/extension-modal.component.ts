@@ -1,11 +1,11 @@
+import {addDays, differenceInDays, differenceInWeeks, isAfter} from 'date-fns';
 import {Component, Inject, LOCALE_ID} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {TaskComment, TaskCommentService, Task} from 'src/app/api/models/doubtfire-model';
-import {AppInjector} from 'src/app/app-injector';
-import {FormControl, Validators, FormGroup, FormGroupDirective, NgForm} from '@angular/forms';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {differenceInWeeks, differenceInDays, isAfter, addDays} from 'date-fns';
+import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from '../../services/alert.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -19,6 +19,7 @@ export class ReasonErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'extension-modal',
   templateUrl: './extension-modal.component.html',
+  standalone: false,
 })
 export class ExtensionModalComponent {
   protected reasonMinLength: number = 15;

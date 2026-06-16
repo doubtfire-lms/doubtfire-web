@@ -1,3 +1,8 @@
+import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
+import {EventEmitter, Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
 import {
   ScormComment,
   Task,
@@ -5,19 +10,13 @@ import {
   TestAttemptService,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
-import {EventEmitter, Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {tap} from 'rxjs/operators';
-import {CachedEntityService} from 'ngx-entity-service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {EmojiService} from 'src/app/common/services/emoji.service';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {DiscussionComment} from '../models/task-comment/discussion-comment';
 import {ExtensionComment} from '../models/task-comment/extension-comment';
-import {RequestOptions} from 'ngx-entity-service/lib/request-options';
-import {HttpClient} from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiUrl';
-import {EmojiService} from 'src/app/common/services/emoji.service';
-import {MappingFunctions} from './mapping-fn';
-import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {ScormExtensionComment} from '../models/task-comment/scorm-extension-comment';
+import {MappingFunctions} from './mapping-fn';
 
 @Injectable()
 export class TaskCommentService extends CachedEntityService<TaskComment> {
@@ -63,7 +62,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       },
       {
         keys: 'recipient',
-        toEntityFn: (data: object, key: string, comment: TaskComment) => {
+        toEntityFn: (data: object, key: string, _comment: TaskComment) => {
           return this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
         },
       },
@@ -72,7 +71,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       'isNew',
       {
         keys: ['text', 'comment'],
-        toEntityFn: (data, key, entity) => {
+        toEntityFn: (data, _key, _entity) => {
           return this.emojiService.colonsToNative(data['comment']);
         },
       },
@@ -133,7 +132,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
   /**
    * Create a Task Comment - use the type to determine the exact object type to return.
    */
-  public createInstanceFrom(json: any, other?: any): TaskComment {
+  public createInstanceFrom(json: {type?: string}, other?: Task): TaskComment {
     switch (json.type) {
       case 'discussion':
         return new DiscussionComment(other);
@@ -161,9 +160,9 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     options?: RequestOptions<TaskComment>,
   ): Observable<TaskComment[]> {
     return super.query(pathIds, options).pipe(
-      tap((result) => {
+      tap((_result) => {
         // Access the task and set the number of new comments to 0 - they are now read on the server
-        const task = other as any; //TODO: change to Task object
+        const task = other as Task;
         task.numNewComments = 0;
       }),
     );
@@ -258,7 +257,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
   public requestExtension(
     reason: string,
     weeksRequested: number,
-    task: any,
+    task: Task,
   ): Observable<TaskComment> {
     const opts: RequestOptions<TaskComment> = {
       endpointFormat: this.requestExtensionEndpointFormat,
@@ -293,7 +292,7 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     );
   }
 
-  public requestScormExtension(reason: string, task: any): Observable<TaskComment> {
+  public requestScormExtension(reason: string, task: Task): Observable<TaskComment> {
     const opts: RequestOptions<TaskComment> = {
       endpointFormat: this.scormRequestExtensionEndpointFormat,
       body: {

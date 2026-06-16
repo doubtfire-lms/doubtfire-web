@@ -8,6 +8,7 @@ import {AlertService} from '../../services/alert.service';
   selector: 'f-sidekiq-jobs-modal',
   templateUrl: './sidekiq-jobs-modal.component.html',
   styleUrl: './sidekiq-jobs-modal.component.scss',
+  standalone: false,
 })
 export class SidekiqJobsModalComponent implements OnInit {
   constructor(

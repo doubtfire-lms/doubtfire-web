@@ -1,6 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ScormPlayerComponent } from './scorm-player.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ScormPlayerComponent} from './scorm-player.component';
 
 describe('ScormPlayerComponent', () => {
   let component: ScormPlayerComponent;
@@ -8,9 +7,8 @@ describe('ScormPlayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScormPlayerComponent ]
-    })
-    .compileComponents();
+      declarations: [ScormPlayerComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ScormPlayerComponent);
     component = fixture.componentInstance;

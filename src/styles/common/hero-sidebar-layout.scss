@@ -8,7 +8,7 @@
   font-size: 24px;
 }
 
-.subcontainer {
+.content-panel {
   overflow-y: hidden;
   height: auto;
   padding-top: 42px;
@@ -48,8 +48,8 @@ h1 {
   }
 }
 
-f-sign-in .container,
-f-welcome .container {
+f-sign-in .content-container,
+f-welcome .content-container {
   max-width: 416px;
   width: 100%;
   margin: auto;
@@ -77,7 +77,7 @@ f-welcome .container {
   .sidebar {
     display: none; /* Hide the element */
   }
-  .wordmark{
+  .wordmark {
     display: flex; /* Show the element */
   }
 }

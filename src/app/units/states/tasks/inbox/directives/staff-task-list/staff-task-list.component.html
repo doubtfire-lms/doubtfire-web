@@ -5,7 +5,7 @@
     [ngClass]="{expanded: showSearchOptions, mobile: mobile}"
   >
     <div class="flex items-center">
-      <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
+      <button mat-icon-button aria-label="Search Icon" disabled class="flex flex-none items-center">
         <mat-icon class="flex items-center" disabled>search</mat-icon>
       </button>
 
@@ -22,7 +22,7 @@
       </div>
       @if (collapsable) {
         <button
-          class="flex-none flex items-center"
+          class="flex flex-none items-center"
           matTooltip="Filter options"
           matTooltipPosition="below"
           matTooltipShowDelay="400"
@@ -35,7 +35,7 @@
       }
       @if (!isTaskDefMode) {
         <button
-          class="flex-none flex items-center"
+          class="flex flex-none items-center"
           matTooltip="Refresh the task inbox"
           matTooltipPosition="below"
           matTooltipShowDelay="400"
@@ -104,7 +104,7 @@
       >
         <form class="search-options">
           <div class="task-definition">
-            <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-row items-center justify-between">
               <mat-form-field class="flex-1">
                 <mat-label>Task</mat-label>
                 <mat-select
@@ -135,13 +135,13 @@
             </div>
           </div>
           <!--/task-definition-->
-          <div class="flex flex-row justify-between items-center">
+          <div class="flex flex-row items-center justify-between">
             <mat-form-field class="flex-1">
               <mat-label>Students</mat-label>
               <mat-select
                 [(ngModel)]="filters.tutorialIdSelected"
                 name="tutorial"
-                (selectionChange)="tutorialIdChanged()"
+                (selectionChange)="tutorialIdChanged(true, $event.value)"
               >
                 @for (t of studentFilter; track t) {
                   <mat-option [value]="t.id">
@@ -159,7 +159,7 @@
               <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
             </button>
           </div>
-          <div class="flex flex-row justify-between items-center">
+          <div class="flex flex-row items-center justify-between">
             <mat-form-field class="flex-1">
               <mat-label>Tutors</mat-label>
               <mat-select
@@ -219,19 +219,60 @@
     </div>
   }
 
-  <div class="center-task-list" [hidden]="!loading || isNarrow">
-    <mat-icon>hourglass_bottom</mat-icon>
-  </div>
+  @if (loading) {
+    <div class="min-h-0 flex-1 overflow-hidden" [ngClass]="isNarrow ? 'pt-0' : 'pt-[10px]'">
+      @for (row of skeletonRows; track row) {
+        <div
+          class="flex h-[60px] items-center"
+          [ngClass]="isNarrow ? 'justify-center gap-0 px-[5px]' : 'gap-[10px] pl-[6px] pr-[8px]'"
+        >
+          <ngx-skeleton-loader
+            class="flex-none"
+            [class.hidden]="isNarrow"
+            appearance="circle"
+            [theme]="{width: '8px', height: '8px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            appearance="circle"
+            [theme]="{width: '30px', height: '30px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <div class="min-w-0 flex-1" [hidden]="isNarrow">
+            <ngx-skeleton-loader
+              [theme]="{
+                height: '10px',
+                width: '78%',
+                'border-radius': '999px',
+                margin: '6px 0',
+              }"
+            ></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{
+                height: '10px',
+                width: '56%',
+                'border-radius': '999px',
+                margin: '6px 0',
+              }"
+            ></ngx-skeleton-loader>
+          </div>
+          <ngx-skeleton-loader
+            [hidden]="isNarrow"
+            appearance="circle"
+            [theme]="{width: '32px', height: '32px', margin: '0'}"
+          ></ngx-skeleton-loader>
+        </div>
+      }
+    </div>
+  }
 
   <div class="center-task-list" [hidden]="loading || filteredTasks?.length !== 0 || isNarrow">
     <mat-icon>done_all</mat-icon>
   </div>
 
   <!--/search-options-->
-  @if (filteredTasks) {
+  @if (filteredTasks && !loading) {
     <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60">
       @if (filteredTasks.length) {
-        <div class="w-full text-gray-400 text-center mt-4">{{ filteredTasks.length }} Tasks</div>
+        <div class="mt-2.5 w-full text-center text-gray-400">{{ filteredTasks.length }} Tasks</div>
       }
       <mat-list class="m-0 p-0">
         <mat-list-item
@@ -245,7 +286,7 @@
               id="{{ task.taskKeyToIdString() }}"
               [ngClass]="{
                 selected: isSelectedTask(task),
-                'item-content': task.statusClass()
+                'item-content': task.statusClass(),
               }"
             >
               <div
@@ -259,13 +300,13 @@
                   class="notification"
                   [ngClass]="{
                     active: task.numNewComments > 0 || task.similaritiesDetected,
-                    similarities: task.similaritiesDetected
+                    similarities: task.similaritiesDetected,
                   }"
                 ></span>
                 <user-icon class="self-center" [user]="task.project.student" [size]="30">
                 </user-icon>
-                <div class="task-list-data truncate flex-1" [hidden]="isNarrow">
-                  <h4 class="student-name flex min-w-0 items-center gap-1">
+                <div class="task-list-data flex-1 truncate" [hidden]="isNarrow">
+                  <h4 class="student-name flex min-w-0 items-center gap-0.5">
                     @if (task.moderationType === 'escalation') {
                       <mat-icon
                         matTooltip="This task has been escalated by the student"
@@ -322,7 +363,7 @@
                   [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts"
                   matBadgePosition="before"
                   [status]="task.status"
-                  class="ml-3"
+                  class="ml-2"
                 ></status-icon>
                 <div class="overflow" [hidden]="isNarrow">
                   <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
@@ -352,7 +393,7 @@
                       <mat-icon class="mr-0">
                         {{ task.pinned ? 'remove_circle' : 'add_alert' }}
                       </mat-icon>
-                      <span class="ml-5"
+                      <span class="ml-3"
                         >{{ task.pinned ? 'Unpin from inbox' : 'Pin to inbox' }}
                       </span>
                     </button>

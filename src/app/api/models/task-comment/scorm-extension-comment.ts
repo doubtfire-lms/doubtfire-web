@@ -2,7 +2,7 @@ import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {AppInjector} from 'src/app/app-injector';
 import {TaskCommentService} from '../../services/task-comment.service';
-import {TaskComment, Task} from '../doubtfire-model';
+import {Task, TaskComment} from '../doubtfire-model';
 
 export class ScormExtensionComment extends TaskComment {
   assessed: boolean;

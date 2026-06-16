@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
 import {EntityService} from 'ngx-entity-service';
-import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {OverseerAssessment} from '../models/overseer/overseer-assessment';
 import {Task} from '../models/doubtfire-model';
+import {OverseerAssessment} from '../models/overseer/overseer-assessment';
 import {OverseerStepResultService} from './overseer-step-result.service';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
       ['submissionStatus', 'status'],
       {
         keys: ['timestamp', 'submission_timestamp'],
-        toEntityFn: (data, key, entity, params?) => {
+        toEntityFn: (data, _key, _entity, _params?) => {
           return new Date(data['submission_timestamp'] * 1000);
         },
       },
@@ -57,7 +57,7 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
     );
   }
 
-  public createInstanceFrom(json: any, other?: any): OverseerAssessment {
+  public createInstanceFrom(_json: object, other?: Task): OverseerAssessment {
     return new OverseerAssessment(other);
   }
 

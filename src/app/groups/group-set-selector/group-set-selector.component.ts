@@ -1,15 +1,16 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { Unit, GroupSet } from 'src/app/api/models/doubtfire-model';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {GroupSet, Unit} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'group-set-selector',
   templateUrl: './group-set-selector.component.html',
-  styleUrls: ['./group-set-selector.component.scss']
+  styleUrls: ['./group-set-selector.component.scss'],
+  standalone: false,
 })
 export class GroupSetSelectorComponent implements OnInit {
   @Input() unit: Unit;
   @Input() selectedGroupSet: GroupSet;
-  @Output() selectedGroupSetChange = new EventEmitter<GroupSet>();
+  @Output() selectedGroupSetChange: EventEmitter<GroupSet> = new EventEmitter();
 
   ngOnInit(): void {
     if (!this.unit) {

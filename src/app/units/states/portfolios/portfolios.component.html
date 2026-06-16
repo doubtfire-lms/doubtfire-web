@@ -1,0 +1,54 @@
+<div class="mx-auto max-w-[90vw]">
+  @if (unit) {
+    <mat-tab-group
+      class="mx-auto mb-6 max-w-fit"
+      [selectedIndex]="currentIndex"
+      dynamicHeight
+      (selectedTabChange)="onTabChange($event)"
+    >
+      @for (tab of tabs; track tab.routeSegment) {
+        <mat-tab [label]="tab.label" [disabled]="tab.requiresProject && !selectedProject"></mat-tab>
+      }
+    </mat-tab-group>
+
+    <div class="min-h-0 flex-1">
+      @switch (currentTab.routeSegment) {
+        @case ('select') {
+          <f-portfolios-list
+            [unit]="unit"
+            [loading]="loadingStudents"
+            (studentSelected)="studentSelected($event)"
+          ></f-portfolios-list>
+        }
+        @case ('progress') {
+          @if (selectedProject) {
+            <f-portfolios-project-progress
+              [unit]="unit"
+              [project]="selectedProject"
+              [project$]="selectedProject$"
+              [taskSelectionUrlBase]="progressTaskSelectionUrlBase"
+            ></f-portfolios-project-progress>
+          }
+        }
+        @case ('staff-notes') {
+          @if (selectedProject) {
+            <f-staff-notes class="h-screen" [project]="selectedProject"></f-staff-notes>
+          }
+        }
+        @case ('portfolio') {
+          @if (selectedProject) {
+            <f-portfolios-portfolio-view [project]="selectedProject"></f-portfolios-portfolio-view>
+          }
+        }
+        @case ('assessment') {
+          @if (selectedProject) {
+            <f-portfolios-assessment
+              [project]="selectedProject"
+              [unit]="unit"
+            ></f-portfolios-assessment>
+          }
+        }
+      }
+    </div>
+  }
+</div>

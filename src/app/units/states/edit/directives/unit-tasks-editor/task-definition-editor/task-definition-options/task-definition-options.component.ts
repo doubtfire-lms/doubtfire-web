@@ -7,6 +7,7 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
   selector: 'f-task-definition-options',
   templateUrl: 'task-definition-options.component.html',
   styleUrls: ['task-definition-options.component.scss'],
+  standalone: false,
 })
 export class TaskDefinitionOptionsComponent {
   @Input() taskDefinition: TaskDefinition;

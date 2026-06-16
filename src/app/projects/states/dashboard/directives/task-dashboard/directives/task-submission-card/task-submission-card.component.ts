@@ -1,27 +1,36 @@
-import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { uploadSubmissionModal } from 'src/app/ajs-upgraded-providers';
-import { Task } from 'src/app/api/models/task';
-import { TaskService } from 'src/app/api/services/task.service';
-import { FileDownloaderService } from 'src/app/common/file-downloader/file-downloader.service';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Task} from 'src/app/api/models/task';
+import {TaskService} from 'src/app/api/services/task.service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'f-task-submission-card',
   templateUrl: './task-submission-card.component.html',
   styleUrls: ['./task-submission-card.component.scss'],
+  standalone: false,
 })
 export class TaskSubmissionCardComponent implements OnChanges, OnInit {
   @Input() task: Task;
-  canReuploadEvidence: boolean;
-  canRegeneratePdf: boolean;
-  submission: { isProcessing: boolean; isUploaded: boolean } = { isProcessing: false, isUploaded: false };
-  urls: { pdf: string; files: string };
+
+  public get canRegeneratePdf(): boolean {
+    return (
+      this.taskService.pdfRegeneratableStatuses.includes(this.task?.status) && this.task?.hasPdf
+    );
+  }
+
+  public get taskPdfUrl(): string {
+    return this.task?.submissionUrl(true);
+  }
+
+  public get taskFilesUrl(): string {
+    return this.task?.submittedFilesUrl();
+  }
 
   constructor(
     private taskService: TaskService,
-    @Inject(uploadSubmissionModal) private UploadSubmissionModal,
     private alerts: AlertService,
-    private fileDownloader: FileDownloaderService
+    private fileDownloader: FileDownloaderService,
   ) {}
 
   ngOnInit(): void {
@@ -37,18 +46,7 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
   }
 
   reapplySubmissionData(): void {
-    this.task.getSubmissionDetails().subscribe(() => {
-      this.canReuploadEvidence = this.task.inSubmittedState();
-      this.canRegeneratePdf = this.taskService.pdfRegeneratableStatuses.includes(this.task.status) && this.task.hasPdf;
-      this.submission = {
-        isProcessing: this.task.processingPdf,
-        isUploaded: this.task.hasPdf,
-      };
-      this.urls = {
-        pdf: this.task.submissionUrl(true),
-        files: this.task.submittedFilesUrl(),
-      };
-    });
+    this.task.getSubmissionDetails().subscribe();
   }
 
   uploadAlternateFiles(): void {
@@ -57,28 +55,28 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
 
   regeneratePdf(): void {
     this.task.recreateSubmissionPdf().subscribe({
-      next: (response: any) => {
+      next: (response: {result: string}) => {
         if (response.result === 'false') {
           this.alerts.error('There was an error regenerating the PDF', 6000);
         } else {
           this.task.processingPdf = true;
           this.alerts.success(
             'The PDF is being regenerated. Please refresh the page in a few minutes.',
-            6000
+            6000,
           );
         }
       },
-      error: (response: any) => {
+      error: (_response: Error) => {
         this.alerts.error('Request failed, cannot recreate PDF at this time.', 6000);
       },
     });
   }
 
   downloadSubmission(): void {
-    this.fileDownloader.downloadFile(this.urls.pdf, `${this.task.definition.abbreviation}.pdf`);
+    this.fileDownloader.downloadFile(this.taskPdfUrl, `${this.task.definition.abbreviation}.pdf`);
   }
 
   downloadSubmissionFiles(): void {
-    this.fileDownloader.downloadFile(this.urls.files, `${this.task.definition.abbreviation}.zip`);
+    this.fileDownloader.downloadFile(this.taskFilesUrl, `${this.task.definition.abbreviation}.zip`);
   }
 }

@@ -15,6 +15,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-task-definition-prerequisites',
   templateUrl: 'task-definition-prerequisites.component.html',
   styleUrls: ['task-definition-prerequisites.component.scss'],
+  standalone: false,
 })
 export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   @Input() taskDefinition: TaskDefinition;
@@ -25,7 +26,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
 
   private prereqSub?: Subscription;
 
-  public dataSource = new MatTableDataSource<TaskPrerequisite>();
+  public dataSource: MatTableDataSource<TaskPrerequisite> = new MatTableDataSource();
 
   selectedTaskPrerequisite: TaskDefinition | null = null;
   searchCtrl = new FormControl('');

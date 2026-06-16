@@ -1,0 +1,229 @@
+<ng-template #TaskStatusBadges let-task="task">
+  <div class="relative mr-1 flex shrink-0 items-center justify-center pr-0.5">
+    <status-icon [status]="task.status" [compact]="isCollapsed"></status-icon>
+
+    <div
+      class="absolute -top-2 right-0.5 flex items-center gap-px drop-shadow-[0_4px_2px_rgba(0,0,0,0.15)]"
+    >
+      @if (task.numNewComments > 0) {
+        <span
+          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-blue-500 text-[12px] font-bold leading-none text-white"
+        >
+          {{ task.numNewComments }}
+        </span>
+      }
+      @if (task.similaritiesDetected) {
+        <span
+          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#da532c]"
+          matTooltip="Similarities Detected"
+        >
+          <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
+            visibility
+          </mat-icon>
+        </span>
+      }
+    </div>
+
+    <div class="absolute -bottom-2 right-0.5 flex items-center gap-px text-[10px] leading-none">
+      @if (task.hasGrade()) {
+        <span>
+          {{ task.gradeDesc() }}
+        </span>
+      }
+      @if (task.hasQualityPoints()) {
+        <span
+          class="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#e10963] font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+        >
+          <span class="mb-[6px] mr-px text-[8px]">{{ task.qualityPts }}</span>
+          <span class="font-extrabold"> &frasl; </span>
+          <span class="ml-px mt-[6px] text-[8px]">{{ task.definition.maxQualityPts }}</span>
+        </span>
+      }
+      @if (task.isDueSoon() && !task.inFinalState()) {
+        <span
+          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#fab143] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+        >
+          <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-black">
+            schedule
+          </mat-icon>
+        </span>
+      }
+      @if (task.betweenDueDateAndDeadlineDate() && !task.isPastDeadline() && !task.inFinalState()) {
+        <span
+          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#da532c] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+        >
+          <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
+            schedule
+          </mat-icon>
+        </span>
+      }
+      @if (task.isPastDeadline() && !task.inFinalState()) {
+        <span
+          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#da532c] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+        >
+          <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
+            schedule
+          </mat-icon>
+          <strong class="h-min font-bold text-white">!</strong>
+        </span>
+      }
+    </div>
+  </div>
+</ng-template>
+
+<div
+  class="task-list flex min-h-0 flex-col"
+  [ngClass]="{
+    'p-1': isCollapsed,
+    'p-2': !isCollapsed,
+  }"
+>
+  @if (!isCollapsed) {
+    <div class="omnisearch rounded-t-2xl md:rounded-2xl">
+      <div class="flex items-center">
+        <button
+          mat-icon-button
+          aria-label="Search Icon"
+          disabled
+          class="flex flex-none items-center"
+        >
+          <mat-icon class="flex items-center" disabled>search</mat-icon>
+        </button>
+        <div class="grow">
+          <input
+            class="search"
+            autocomplete="off"
+            spellcheck="false"
+            type="text"
+            placeholder="Search Tasks"
+            [(ngModel)]="searchText"
+            (ngModelChange)="applyFilters()"
+          />
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="scrollable min-h-0 flex-1" itemSize="60">
+    <mat-nav-list #taskDefinitions>
+      @for (taskDef of filteredTaskDefinitions; track taskDef) {
+        <mat-list-item
+          class="flex h-[65px] w-full cursor-pointer items-center border-b border-gray-200 p-1"
+          [disableRipple]="true"
+          (click)="setSelectedTaskDefinition(taskDef)"
+          [ngClass]="{
+            'bg-blue-50 hover:bg-blue-50': isSelectedTaskDefinition(taskDef),
+            'hover:bg-gray-50': !isSelectedTaskDefinition(taskDef),
+          }"
+        >
+          @if (taskDef) {
+            @if (isCollapsed) {
+              <div class="flex w-full items-center justify-between gap-1.5 pr-2">
+                <span
+                  class="min-w-0 flex-1 truncate text-center text-sm leading-none text-gray-700"
+                  [matTooltip]="taskDef.name"
+                >
+                  {{ taskDef.abbreviation }}
+                </span>
+                @if (taskListItem(taskDef); as task) {
+                  <ng-container
+                    *ngTemplateOutlet="TaskStatusBadges; context: {task: task}"
+                  ></ng-container>
+                }
+              </div>
+            } @else {
+              <div class="flex w-full items-center justify-between gap-2">
+                <div class="flex min-w-0 flex-1 items-center gap-3">
+                  <div class="flex min-w-0 items-center gap-3 truncate text-ellipsis">
+                    <div class="flex flex-col justify-start truncate text-ellipsis">
+                      <div class="truncate text-ellipsis">{{ taskDef.name }}</div>
+
+                      <div class="flex min-w-0 items-center gap-0.5">
+                        @if (taskDef.isGroupTask()) {
+                          <mat-icon class="shrink-0 scale-75 text-gray-600">groups</mat-icon>
+                        } @else {
+                          <mat-icon class="shrink-0 scale-75 text-gray-600">person</mat-icon>
+                        }
+
+                        <div class="truncate text-[14px] leading-none text-gray-500">
+                          {{ taskDef.abbreviation }}
+                          -
+                          {{ gradeNames[taskDef.targetGrade] }} Task
+                        </div>
+                        @if (taskListItem(taskDef); as task) {
+                          <!-- @if (task.isBeforeStartDate() && !task.inSubmittedState()) {
+                            <span
+                              class="flex shrink-0 items-center gap-px text-[12px] text-gray-500"
+                            >
+                              <mat-icon class="!h-[16px] !w-[16px] !text-[16px]"
+                                >hourglass_top</mat-icon
+                              >
+                              {{ task.timeToStart() }}
+                            </span>
+                          } -->
+                          @if (!task.isBeforeStartDate() && !task.inSubmittedState()) {
+                            <span
+                              class="flex shrink-0 items-center gap-px text-[12px] font-bold"
+                              [ngClass]="{
+                                'text-[#da532c]': task.daysUntilDueDate() <= 0,
+                                'text-[#fab143] font-normal':
+                                  task.daysUntilDueDate() > 0 && task.daysUntilDueDate() < 11,
+                                'text-gray-500 font-normal': task.daysUntilDueDate() > 11,
+                              }"
+                            >
+                              <mat-icon class="!h-[16px] !w-[16px] !text-[16px]">
+                                hourglass_bottom
+                              </mat-icon>
+                              {{ task.timeToDue() }}
+                            </span>
+                          }
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                @if (taskListItem(taskDef); as task) {
+                  <ng-container
+                    *ngTemplateOutlet="TaskStatusBadges; context: {task: task}"
+                  ></ng-container>
+                }
+              </div>
+            }
+          }
+        </mat-list-item>
+      } @empty {
+        <div class="text-muted text-center">No tasks to display</div>
+      }
+
+      @if (mode === 'project' && project) {
+        <mat-list-item
+          class="item-content flex h-[65px] w-full cursor-pointer items-center border-b border-gray-200 p-1 hover:bg-gray-50"
+          [disableRipple]="true"
+          [ngClass]="project.portfolioTaskStatusClass()"
+        >
+          @if (isCollapsed) {
+            <a
+              class="flex w-full items-center justify-between gap-1.5 pr-2 text-inherit no-underline"
+              [routerLink]="['/projects', project.id, 'portfolio']"
+            >
+              <span
+                class="flex min-w-0 flex-1 items-center justify-center truncate text-center text-sm leading-none text-gray-700"
+                matTooltip="Create Portfolio"
+              >
+                <mat-icon class="m-0 place-self-center">history_edu</mat-icon>
+              </span>
+              <div class="relative mr-1 flex shrink-0 items-center justify-center pr-0.5">
+                <status-icon
+                  [status]="project.portfolioTaskStatus()"
+                  [compact]="isCollapsed"
+                ></status-icon>
+              </div>
+            </a>
+          } @else {
+            <create-portfolio-task-list-item [project]="project"></create-portfolio-task-list-item>
+          }
+        </mat-list-item>
+      }
+    </mat-nav-list>
+  </div>
+</div>

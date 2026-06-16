@@ -1,8 +1,17 @@
-import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
+import {DOCUMENT} from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  Input,
+  OnDestroy,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import {MatSelectionList} from '@angular/material/list';
 import {MatTabChangeEvent} from '@angular/material/tabs';
-import {StateService, UIRouter} from '@uirouter/core';
-import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   AuthenticationService,
   Project,
@@ -31,10 +40,13 @@ enum TutorDiscussionTabView {
   selector: 'f-tutor-discussion',
   templateUrl: './tutor-discussion.component.html',
   styleUrl: './tutor-discussion.component.scss',
-  encapsulation: ViewEncapsulation.None, // enables custom material-ui css
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
-export class TutorDiscussionComponent implements AfterViewInit {
+export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;
+  private readonly mobileDiscussionViewportContent =
+    'width=device-width, initial-scale=0.8, maximum-scale=5';
 
   @Input() unitId: number;
   @Input() username: string;
@@ -55,6 +67,8 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public loadingStudentData: boolean = false;
 
   private html5QrcodeScanner?: Html5QrcodeScanner;
+  private originalViewportContent: string | null = null;
+  private mobileDiscussionZoomApplied = false;
 
   private _unitId: number;
   private _username: string;
@@ -63,19 +77,24 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public footerTabView: TutorDiscussionTabView = TutorDiscussionTabView.SHOW_COMMENTS;
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private unitService: UnitService,
     private authService: AuthenticationService,
     private userService: UserService,
     private projectService: ProjectService,
     private gradeService: GradeService,
-    private state: StateService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
     private discussedInClassReasonModal: DiscussedInClassReasonModalService,
-    private route: UIRouter,
     private taskCommentService: TaskCommentService,
     private taskService: TaskService,
   ) {}
+
+  public ngOnDestroy(): void {
+    this.restoreViewportZoom();
+  }
 
   public currentUserTutorsInStream(tutorialStream: TutorialStream): boolean {
     const user = this.userService.currentUser;
@@ -113,9 +132,21 @@ export class TutorDiscussionComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
+    this.unitId =
+      this.unitId ??
+      Number(
+        this.activatedRoute.parent?.snapshot.paramMap.get('unitId') ??
+          this.activatedRoute.snapshot.queryParamMap.get('unitId'),
+      );
+    this.username = this.username ?? this.activatedRoute.snapshot.queryParamMap.get('username');
+    this.attendance =
+      this.attendance ??
+      this.activatedRoute.snapshot.data.attendance ??
+      this.activatedRoute.snapshot.queryParamMap.get('attendance') === 'true';
+
     this.authService.afterAuthCall((result) => {
       if (!result) {
-        return this.state.go('sign_in');
+        return this.router.navigateByUrl('/sign_in');
       } else {
         if (this.userService.currentUser.systemRole === 'Student') {
           // Avoid prompting students for camera permissions before redirecting to unauthorised state
@@ -172,11 +203,9 @@ export class TutorDiscussionComponent implements AfterViewInit {
       // Exiting the route entirely
       this.stopQrScanner();
       if (this.unitId) {
-        this.route.stateService.go('units/tasks/inbox', {
-          unitId: this.unitId,
-        });
+        this.router.navigate(['/units', this.unitId, 'tasks', 'inbox']);
       } else {
-        this.route.stateService.go('home');
+        this.router.navigateByUrl('/home');
       }
     } else {
       // Close the camera view
@@ -200,6 +229,34 @@ export class TutorDiscussionComponent implements AfterViewInit {
         }, 2000);
       }
     });
+  }
+
+  private applyMobileDiscussionZoom(): void {
+    if (!window.matchMedia('(max-width: 768px)').matches) {
+      return;
+    }
+
+    const viewport = this.document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (!viewport) {
+      return;
+    }
+
+    this.originalViewportContent ??= viewport.getAttribute('content');
+    viewport.setAttribute('content', this.mobileDiscussionViewportContent);
+    this.mobileDiscussionZoomApplied = true;
+  }
+
+  private restoreViewportZoom(): void {
+    if (!this.mobileDiscussionZoomApplied) {
+      return;
+    }
+
+    const viewport = this.document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (viewport && this.originalViewportContent) {
+      viewport.setAttribute('content', this.originalViewportContent);
+    }
+
+    this.mobileDiscussionZoomApplied = false;
   }
 
   hideQrScannerBloat: boolean = true;
@@ -574,6 +631,7 @@ export class TutorDiscussionComponent implements AfterViewInit {
         this.scanningQr = false;
         this.loadingStudentData = false;
         this.stopQrScanner();
+        this.applyMobileDiscussionZoom();
       })
       .catch((e) => {
         console.error(e);

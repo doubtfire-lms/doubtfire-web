@@ -8,6 +8,7 @@ import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal
   selector: 'f-task-date-slider',
   styleUrl: './task-date-slider.component.scss',
   templateUrl: './task-date-slider.component.html',
+  standalone: false,
 })
 export class TaskDateSliderComponent implements OnChanges {
   @Input() task: Task;
