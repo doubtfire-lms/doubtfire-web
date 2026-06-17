@@ -6,9 +6,11 @@ import {CodeEditorModule} from '@ngstack/code-editor';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {
   GANTT_GLOBAL_CONFIG,
-  GanttI18nLocale,
+  GANTT_I18N_LOCALE_TOKEN,
+  type GanttI18nLocaleConfig,
   GanttLinkLineType,
   NgxGanttModule,
+  enUsLocale,
 } from '@worktile/gantt';
 import {DateAdapter as CalendarDateAdapter, CalendarModule} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
@@ -388,10 +390,33 @@ const MY_DATE_FORMAT = {
   },
 };
 
+const DOUBTFIRE_GANTT_LOCALE = 'doubtfire-en-au';
+
+const DOUBTFIRE_GANTT_LOCALE_CONFIG: GanttI18nLocaleConfig = {
+  ...enUsLocale,
+  id: DOUBTFIRE_GANTT_LOCALE,
+  views: {
+    ...enUsLocale.views,
+    day: {
+      ...enUsLocale.views.day,
+      tickFormats: {
+        ...enUsLocale.views.day.tickFormats,
+        unit: 'd EEE',
+      },
+    },
+  },
+};
+
+const GANTT_CHART_LOCALE_CONFIG = {
+  provide: GANTT_I18N_LOCALE_TOKEN,
+  useValue: DOUBTFIRE_GANTT_LOCALE_CONFIG,
+  multi: true,
+};
+
 const GANTT_CHART_CONFIG = {
   provide: GANTT_GLOBAL_CONFIG,
   useValue: {
-    locale: GanttI18nLocale.enUs,
+    locale: DOUBTFIRE_GANTT_LOCALE,
     dateOptions: {
       weekStartsOn: 1,
     },
@@ -400,6 +425,7 @@ const GANTT_CHART_CONFIG = {
       lineType: GanttLinkLineType.curve,
     },
     styleOptions: {
+      headerHeight: 52,
       // lineHeight: '25',
       // barHeight: '23',
       // headerHeight: '50px',
@@ -712,6 +738,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskPrerequisiteService,
     MarkingSessionService,
     DiscussionPromptService,
+    GANTT_CHART_LOCALE_CONFIG,
     GANTT_CHART_CONFIG,
     TaskPlannerPrerequisitesModalService,
     OverseerStepService,
