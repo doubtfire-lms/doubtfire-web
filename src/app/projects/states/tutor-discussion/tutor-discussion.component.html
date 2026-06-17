@@ -48,7 +48,7 @@
   }
 
   <div class="task-inbox flex w-full flex-1 flex-col items-center justify-normal">
-    <div class="relative flex w-full justify-between">
+    <div class="relative mb-5 flex w-full justify-between px-10">
       @if (project && project?.student) {
         <div></div>
         <div class="absolute left-1/2 -translate-x-1/2 transform text-center">
@@ -66,8 +66,8 @@
         <div></div>
         <div class="mt-3 italic text-gray-500">Click the QR code to open the scanner..</div>
       }
-      <button mat-icon-button color="primary" (click)="scanQrCode()">
-        <mat-icon>qr_code</mat-icon>
+      <button mat-icon-button color="primary" (click)="scanQrCode()" class="scale-[2]">
+        <mat-icon>qr_code_scanner</mat-icon>
       </button>
     </div>
 
