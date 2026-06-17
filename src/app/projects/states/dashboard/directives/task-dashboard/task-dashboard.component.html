@@ -19,6 +19,7 @@
         </ng-template>
       </mat-tab>
       @if (canAccessStaffViews) {
+        <mat-tab label="History"></mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <span class="inline-flex items-center gap-1">
@@ -29,7 +30,6 @@
             </span>
           </ng-template>
         </mat-tab>
-        <mat-tab label="Overseer" [disabled]="!overseerEnabled"></mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <span class="inline-flex items-center gap-1">
@@ -69,12 +69,6 @@
         <mat-icon>folder_zip</mat-icon>
         <span>Download submitted files</span>
       </button>
-      @if (overseerEnabled) {
-        <button mat-menu-item (click)="showSubmissionHistoryModal()">
-          <mat-icon>history</mat-icon>
-          <span>Execution history</span>
-        </button>
-      }
     </mat-menu>
   </div>
 
@@ -150,7 +144,7 @@
           </div>
         }
       }
-      @case (DashboardViews.overseer) {
+      @case (DashboardViews.submission_history) {
         @if (canAccessStaffViews) {
           <div class="h-full overflow-auto">
             <f-task-overseer-report [task]="task"></f-task-overseer-report>

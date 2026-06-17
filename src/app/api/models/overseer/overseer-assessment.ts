@@ -2,9 +2,10 @@ import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {AppInjector} from 'src/app/app-injector';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Task} from '../doubtfire-model';
+import {SubmissionArchive} from '../submission-history';
 import {OverseerStepResult} from './overseer-step-result';
 
-export class OverseerAssessment extends Entity {
+export class OverseerAssessment extends Entity implements SubmissionArchive {
   id: number;
   // overseerStepId: number;
   timestamp: Date;
@@ -16,6 +17,7 @@ export class OverseerAssessment extends Entity {
   createdAt?: Date;
   updatedAt?: Date;
   taskId?: number;
+  submissionHistoryId?: number;
 
   totalSteps: number;
   passedSteps: number;
