@@ -1,15 +1,15 @@
 @if (project) {
   <div class="w-full" id="portfolio-state">
     <mat-tab-group
-      [selectedIndex]="selectedTabIndex"
-      (selectedIndexChange)="onSelectedTabIndexChange($event)"
       class="mb-3"
       [dynamicHeight]="true"
+      [selectedIndex]="selectedTabIndex"
+      (selectedIndexChange)="onSelectedTabIndexChange($event)"
     >
       @for (tab of orderedTabs; track tab.seq) {
         <mat-tab
-          [label]="'Step ' + tab.seq + ': ' + tab.title"
           [disabled]="isTabDisabled(tab)"
+          [label]="'Step ' + tab.seq + ': ' + tab.title"
         ></mat-tab>
       }
     </mat-tab-group>
@@ -20,29 +20,29 @@
     }
     @if (activeTab === tabs.gradeStep) {
       <f-portfolio-grade-select-step
+        [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
         [project]="project"
         [unit]="project.unit"
-        [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
       ></f-portfolio-grade-select-step>
     }
     @if (activeTab === tabs.summaryStep) {
       <f-portfolio-learning-summary-report-step
-        [unit]="project.unit"
-        [project]="project"
         [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
+        [project]="project"
+        [unit]="project.unit"
       ></f-portfolio-learning-summary-report-step>
     }
     @if (activeTab === tabs.otherFilesStep) {
       <f-portfolio-add-extra-files-step
-        [project]="project"
         [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
+        [project]="project"
       ></f-portfolio-add-extra-files-step>
     }
     @if (activeTab === tabs.reviewStep) {
       <f-portfolio-review-step
+        [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
         [project]="project"
         [unit]="project.unit"
-        [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
       ></f-portfolio-review-step>
     }
   </div>

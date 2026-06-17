@@ -4,14 +4,14 @@
       <h2 mat-dialog-title>Web calendar</h2>
     </div>
     <mat-slide-toggle
-      fxFlex
       #webcalToggle
-      [matTooltip]="
-        webcal && webcal.enabled ? 'Disable the web calendar' : 'Enable the web calendar'
-      "
+      fxFlex
       matTooltipPosition="above"
       [checked]="webcal && webcal.enabled"
       [disabled]="working"
+      [matTooltip]="
+        webcal && webcal.enabled ? 'Disable the web calendar' : 'Enable the web calendar'
+      "
       (click)="onWebcalToggle()"
     >
     </mat-slide-toggle>
@@ -50,7 +50,7 @@
             URL to subscribe to your web calendar from your iCalendar client.
           </p>
           <div fxLayout="row">
-            <div fxFlex="grow" class="webcal-url-container">
+            <div class="webcal-url-container" fxFlex="grow">
               <a [href]="webcalUrl">{{ webcalUrl }}</a>
             </div>
             <div fxLayout="row">
@@ -79,7 +79,7 @@
           <mat-card appearance="outlined" class="webcal-options-card">
             <h3 style="margin-bottom: 0">Options</h3>
 
-            <div fxLayout="row" fxLayoutAlign="start center" class="webcal-options-inclusions">
+            <div class="webcal-options-inclusions" fxLayout="row" fxLayoutAlign="start center">
               <span style="font-weight: bold; margin-right: 1em"
                 >Included units in my calendar:</span
               >
@@ -89,8 +89,8 @@
               <mat-chip-listbox>
                 @for (project of includedProjects; track project) {
                   <mat-chip-option
-                    [selectable]="true"
                     [removable]="true"
+                    [selectable]="true"
                     (removed)="includeExclusion(project)"
                   >
                     {{ project.unit.code }}
@@ -114,9 +114,9 @@
             <!--/unit-inclusions-options-->
 
             <mat-checkbox
+              [disabled]="working"
               [(ngModel)]="newReminderActive"
               (change)="onToggleReminderActive()"
-              [disabled]="working"
             >
               Remind me
             </mat-checkbox>
@@ -124,15 +124,15 @@
               <mat-label>Time</mat-label>
               <input
                 matInput
-                type="number"
                 min="1"
-                [(ngModel)]="newReminderTime"
+                type="number"
                 [disabled]="working || !newReminderActive"
+                [(ngModel)]="newReminderTime"
               />
             </mat-form-field>
             <mat-form-field style="width: 7em; margin-left: 1em">
               <mat-label>Unit</mat-label>
-              <mat-select [(ngModel)]="newReminderUnit" [disabled]="working || !newReminderActive">
+              <mat-select [disabled]="working || !newReminderActive" [(ngModel)]="newReminderUnit">
                 <mat-option value="W">Weeks</mat-option>
                 <mat-option value="D">Days</mat-option>
                 <mat-option value="H">Hours</mat-option>
@@ -151,11 +151,11 @@
                   newReminderUnit !== webcal.reminder.unit))
             ) {
               <button
+                color="primary"
                 mat-icon-button
                 matTooltip="Save changes"
                 matTooltipPosition="above"
                 style="margin-left: 1em"
-                color="primary"
                 [disabled]="working"
                 (click)="onSaveReminderEdits()"
               >
@@ -176,15 +176,15 @@
             <br />
 
             <mat-checkbox
-              [(ngModel)]="webcal.includeStartDates"
               [disabled]="working"
+              [(ngModel)]="webcal.includeStartDates"
               (change)="toggleIncludeTaskStartDates()"
             >
               Include task start dates in web calendar </mat-checkbox
             ><!--/include-start-dates-option-->
 
             <div mat-dialog-actions style="float: right; overflow-y: hidden">
-              <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
+              <button color="warn" mat-dialog-close mat-stroked-button>Cancel</button>
             </div>
             <!--/webcal-cancel-button--> </mat-card
           ><!--/webcal-options-->

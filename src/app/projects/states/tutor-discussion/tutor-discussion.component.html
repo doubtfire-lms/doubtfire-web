@@ -1,15 +1,15 @@
 <div
-  [hidden]="!scanningQr"
   class="absolute left-1/2 top-1/2 z-40 h-screen w-screen -translate-x-1/2 -translate-y-1/2 transform overflow-hidden bg-gray-500/50 backdrop-blur"
+  [hidden]="!scanningQr"
 >
   @if (loadingStudentData) {
     <mat-spinner
-      color="blue"
       class="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 transform"
+      color="blue"
     ></mat-spinner>
   }
   <div [ngClass]="{'qr-reader-hide-bloat': hideQrScannerBloat}">
-    <div id="qr-reader" class="absolute top-1/2 w-full -translate-y-1/2 transform"></div>
+    <div class="absolute top-1/2 w-full -translate-y-1/2 transform" id="qr-reader"></div>
   </div>
   <div
     class="pointer-events-none absolute left-1/2 top-[150px] z-10 w-full -translate-x-1/2 transform px-6 py-3 text-center text-sm font-bold text-white"
@@ -17,10 +17,10 @@
     Scan a student's QR code to instantly load their project and mark submissions.
   </div>
   <button
-    mat-raised-button
-    color="secondary"
-    (click)="closeQrReader()"
     class="absolute bottom-[150px] left-1/2 my-3 max-w-md -translate-x-1/2 transform"
+    color="secondary"
+    mat-raised-button
+    (click)="closeQrReader()"
   >
     {{ project ? 'Cancel' : 'Exit' }}
   </button>
@@ -33,8 +33,8 @@
       <mat-form-field appearance="outline" class="mt-[22px] w-full">
         <mat-select
           placeholder="Select a task"
-          [(ngModel)]="selectedTaskDefinition"
           [disabled]="selectedTaskDefinition"
+          [(ngModel)]="selectedTaskDefinition"
         >
           @for (td of unit?.taskDefinitionCache.values | async; track td) {
             <mat-option [value]="td">{{ td.abbreviation }} - {{ td.name }}</mat-option>
@@ -42,7 +42,7 @@
         </mat-select>
       </mat-form-field>
       @if (selectedTaskDefinition) {
-        <button mat-raised-button color="red" (click)="selectedTaskDefinition = null">Clear</button>
+        <button color="red" mat-raised-button (click)="selectedTaskDefinition = null">Clear</button>
       }
     </div>
   }
@@ -66,7 +66,7 @@
         <div></div>
         <div class="mt-3 italic text-gray-500">Click the QR code to open the scanner..</div>
       }
-      <button mat-icon-button color="primary" (click)="scanQrCode()" class="scale-[2]">
+      <button class="scale-[2]" color="primary" mat-icon-button (click)="scanQrCode()">
         <mat-icon>qr_code_scanner</mat-icon>
       </button>
     </div>
@@ -74,10 +74,9 @@
     @if (project && !filteredTasks.length) {
       <div class="py-6 italic text-gray-400">No tasks to discuss.</div>
     }
-    <mat-selection-list class="m-0 h-min p-0" #tasks>
+    <mat-selection-list #tasks class="m-0 h-min p-0">
       @for (task of filteredTasks; track task) {
         <mat-list-option
-          [value]="task"
           class="clearfix w-full"
           style="padding: 0; min-height: 60px; height: min-content"
           togglePosition="before"
@@ -86,14 +85,15 @@
             (!task.definition.lockAssessmentsToTutorialStream ||
               currentUserTutorsInStream(task.definition.tutorialStream))
           "
+          [value]="task"
         >
           @if (task) {
             <div class="w-full" id="{{ task.id }}">
               <div
                 class="inbox-entry flex items-center"
                 [ngClass]="{hover: task.hover}"
-                (mouseover)="task.hover = allowHover"
                 (mouseout)="task.hover = task.optionsOpened"
+                (mouseover)="task.hover = allowHover"
               >
                 <span
                   class="notification"
@@ -102,7 +102,7 @@
                     similarities: task.similaritiesDetected,
                   }"
                 ></span>
-                <user-icon class="self-center" [user]="project?.student" [size]="30"> </user-icon>
+                <user-icon class="self-center" [size]="30" [user]="project?.student"> </user-icon>
                 <div class="mt-0 flex-1 whitespace-normal break-words" [hidden]="isNarrow">
                   <h4 class="mb-[2px] mt-[8px] text-[15px]">{{ task.definition.name }}</h4>
                   <span class="mb-0 inline text-[12px]">
@@ -118,17 +118,17 @@
                   </div>
                 }
                 <status-icon
-                  [hidden]="isNarrow"
-                  matBadge="{{ task.status === 'attention_required' ? '!' : '' }}"
-                  matBadgePosition="after"
-                  matBadgeColor="warn"
-                  [status]="task.status"
                   class="ml-2"
+                  matBadge="{{ task.status === 'attention_required' ? '!' : '' }}"
+                  matBadgeColor="warn"
+                  matBadgePosition="after"
+                  [hidden]="isNarrow"
+                  [status]="task.status"
                 ></status-icon>
 
                 <button
-                  mat-icon-button
                   aria-label="task-comments"
+                  mat-icon-button
                   [ngClass]="task.id === selectedTask?.id ? 'text-blue-500' : 'text-gray-400'"
                   (click)="loadTaskComments($event, task)"
                 >
@@ -147,11 +147,11 @@
       <div class="mt-2.5 flex w-full justify-center">
         @if (this.allTasks?.length > 0) {
           @if (this.filteredTasks?.length < this.allTasks?.length) {
-            <button mat-button color="primary" (click)="viewAllSubmittedTasks()">
+            <button color="primary" mat-button (click)="viewAllSubmittedTasks()">
               Load all submitted tasks
             </button>
           } @else {
-            <button mat-button color="primary" (click)="viewAllFilteredTasks()">
+            <button color="primary" mat-button (click)="viewAllFilteredTasks()">
               Hide all submitted tasks
             </button>
           }
@@ -168,8 +168,8 @@
         @if (attendance) {
           <button
             class="medium-icon-button bg-gray-100"
-            mat-fab
             color="secondary"
+            mat-fab
             [disabled]="!tasks.selectedOptions.selected.length"
             (click)="markSelectedTasksCheckedIn()"
           >
@@ -179,8 +179,8 @@
         } @else {
           <button
             class="medium-icon-button bg-gray-100"
-            mat-fab
             color="secondary"
+            mat-fab
             [disabled]="!tasks.selectedOptions.selected.length"
             (click)="setSelectedTasksStatus('fix_and_resubmit')"
           >
@@ -216,8 +216,8 @@
       <mat-tab label="Task Comments"></mat-tab>
 
       <mat-tab
-        [matBadge]="project?.staffNoteCount"
         label="Staff Notes{{ project?.staffNoteCount ? ' (' + project.staffNoteCount + ')' : '' }}"
+        [matBadge]="project?.staffNoteCount"
       ></mat-tab>
       <mat-tab label="Discussion Prompts"></mat-tab>
     </mat-tab-group>
@@ -227,13 +227,12 @@
         <!-- <div class="w-full text-center py-2.5">{{ selectedTask?.definition.name }}</div> -->
 
         <task-comments-viewer
-          style="background: white; border-radius: 12px"
-          [task]="selectedTask"
-          [project]="project"
           class="h-full"
-          refocus-on-task-change="true"
           ng-if="selectedTask"
-          style="padding: 0 8px 0 12px"
+          refocus-on-task-change="true"
+          style="padding: 0 8px 0 12px; background: white; border-radius: 12px"
+          [project]="project"
+          [task]="selectedTask"
         >
         </task-comments-viewer>
       </div>

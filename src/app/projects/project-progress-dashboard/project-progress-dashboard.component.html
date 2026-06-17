@@ -21,11 +21,11 @@
               info</mat-icon
             >
           </span>
-          <mat-form-field class="w-full" appearance="outline">
+          <mat-form-field appearance="outline" class="w-full">
             <mat-label>Target grade</mat-label>
             <mat-select [(value)]="project.targetGrade">
               @for (grade of grades; track grade) {
-                <mat-option (click)="targetGradeClicked(grade.value)" [value]="grade.value">{{
+                <mat-option [value]="grade.value" (click)="targetGradeClicked(grade.value)">{{
                   grade.viewValue
                 }}</mat-option>
               }
@@ -45,14 +45,14 @@
           <div class="flex size-full items-center justify-center">
             <!-- <f-project-progress-gauge [project]="project"></f-project-progress-gauge> -->
             <f-progress-burndown-chart
+              [grade]="project.targetGrade"
               [project]="project"
               [unit]="project.unit"
-              [grade]="project.targetGrade"
             ></f-progress-burndown-chart>
             <f-task-status-pie-chart
+              [grade]="project.targetGrade"
               [project]="project"
               [unit]="project.unit"
-              [grade]="project.targetGrade"
             ></f-task-status-pie-chart>
           </div>
         </mat-card-content>

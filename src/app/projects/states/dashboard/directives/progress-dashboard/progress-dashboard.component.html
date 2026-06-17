@@ -10,7 +10,7 @@
   <div class="grid grid-cols-1 items-stretch gap-3.5 p-3.5 xl:grid-cols-2">
     <!-- Task Planner Card -->
     <div class="size-full xl:col-span-1">
-      <f-task-planner-card [project]="project" class="block size-full"></f-task-planner-card>
+      <f-task-planner-card class="block size-full" [project]="project"></f-task-planner-card>
     </div>
 
     <!-- Target Grade Card -->
@@ -28,9 +28,9 @@
             <mat-form-field appearance="fill" class="w-full">
               <mat-label>Select Target Grade</mat-label>
               <mat-select
+                disabled
                 [(value)]="project.targetGrade"
                 (selectionChange)="updateTargetGrade($event.value)"
-                disabled
               >
                 @for (grade of grades.values; track grade) {
                   <mat-option [value]="grade">
@@ -41,7 +41,7 @@
             </mat-form-field>
             <div class="ml-0.5 py-1 opacity-70">
               To change your target grade, use the
-              <a [routerLink]="['/projects', project.id, 'plan']" class="cursor-pointer underline">
+              <a class="cursor-pointer underline" [routerLink]="['/projects', project.id, 'plan']">
                 Task Planner
               </a>
             </div>
@@ -52,7 +52,7 @@
 
     <!-- Unit learning outcomes -->
     <div class="xl:col-span-2">
-      <f-task-ilos-card [unit]="project.unit" [iloContextType]="'Unit'"></f-task-ilos-card>
+      <f-task-ilos-card [iloContextType]="'Unit'" [unit]="project.unit"></f-task-ilos-card>
     </div>
 
     <div class="grid grid-cols-1 items-stretch gap-3.5 xl:col-span-2 xl:grid-cols-2">
@@ -66,9 +66,9 @@
         <mat-card-content class="overflow-hidden">
           <f-progress-burndown-chart
             class="block"
+            [grade]="project.targetGrade"
             [project]="project"
             [unit]="project.unit"
-            [grade]="project.targetGrade"
           ></f-progress-burndown-chart>
           <div class="mt-2.5 p-2.5 font-light text-gray-600">
             Aim to keep your
@@ -87,8 +87,8 @@
         </mat-card-header>
         <mat-card-content>
           <f-task-visualisation
-            [project]="project"
             [grade]="project.targetGrade"
+            [project]="project"
           ></f-task-visualisation>
         </mat-card-content>
       </mat-card>

@@ -63,8 +63,8 @@
                 <mat-label>Count</mat-label>
                 <input
                   matInput
-                  type="number"
                   min="0"
+                  type="number"
                   [(ngModel)]="editor.conditionFor(rule).task_status_count"
                 />
               </mat-form-field>
@@ -97,7 +97,7 @@
               @case ('TaskDefinitionStatusCondition') {
                 <mat-form-field appearance="outline">
                   <mat-label>Statuses</mat-label>
-                  <mat-select [(ngModel)]="editor.conditionFor(rule).task_statuses" multiple>
+                  <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
                     @for (status of editor.taskStatuses; track status) {
                       <mat-option [value]="status">
                         {{ editor.taskStatusLabel(status) }}
@@ -109,7 +109,7 @@
               @case ('TaskStatusCountCondition') {
                 <mat-form-field appearance="outline" class="min-w-[320px]">
                   <mat-label>Statuses</mat-label>
-                  <mat-select [(ngModel)]="editor.conditionFor(rule).task_statuses" multiple>
+                  <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
                     @for (status of editor.taskStatuses; track status) {
                       <mat-option [value]="status">
                         {{ editor.taskStatusLabel(status) }}
@@ -133,8 +133,8 @@
                   <mat-label>Days</mat-label>
                   <input
                     matInput
-                    type="number"
                     step="1"
+                    type="number"
                     [(ngModel)]="editor.conditionFor(rule).spec_con_days"
                   />
                 </mat-form-field>
@@ -178,15 +178,15 @@
             }
 
             <button
-              mat-flat-button
-              color="primary"
-              (click)="editor.updateCondition(rule)"
               class="mb-[22px]"
+              color="primary"
+              mat-flat-button
+              (click)="editor.updateCondition(rule)"
             >
               <mat-icon>save</mat-icon>
               Save
             </button>
-            <button mat-button (click)="editor.cancelCondition(rule)" class="mb-[22px]">
+            <button class="mb-[22px]" mat-button (click)="editor.cancelCondition(rule)">
               Cancel
             </button>
           </div>
@@ -350,8 +350,8 @@
           <mat-label>Count</mat-label>
           <input
             matInput
-            type="number"
             min="0"
+            type="number"
             [(ngModel)]="editor.conditionFor(rule).task_status_count"
           />
         </mat-form-field>
@@ -385,7 +385,7 @@
         @case ('TaskDefinitionStatusCondition') {
           <mat-form-field appearance="outline">
             <mat-label>Statuses</mat-label>
-            <mat-select [(ngModel)]="editor.conditionFor(rule).task_statuses" multiple>
+            <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
               @for (status of editor.taskStatuses; track status) {
                 <mat-option [value]="status">
                   {{ editor.taskStatusLabel(status) }}
@@ -398,7 +398,7 @@
         @case ('TaskStatusCountCondition') {
           <mat-form-field appearance="outline" class="min-w-[320px]">
             <mat-label>Statuses</mat-label>
-            <mat-select [(ngModel)]="editor.conditionFor(rule).task_statuses" multiple>
+            <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
               @for (status of editor.taskStatuses; track status) {
                 <mat-option [value]="status">
                   {{ editor.taskStatusLabel(status) }}
@@ -423,8 +423,8 @@
             <mat-label>Days</mat-label>
             <input
               matInput
-              type="number"
               step="1"
+              type="number"
               [(ngModel)]="editor.conditionFor(rule).spec_con_days"
             />
           </mat-form-field>
@@ -471,24 +471,24 @@
       }
 
       <button
-        mat-flat-button
+        class="mb-[22px]"
         color="primary"
+        mat-flat-button
         (click)="
           editor.editingConditionId[rule.id]
             ? editor.updateCondition(rule)
             : editor.addCondition(rule)
         "
-        class="mb-[22px]"
       >
         <mat-icon>save</mat-icon>
         {{ editor.editingConditionId[rule.id] ? 'Update' : 'Save' }}
       </button>
 
-      <button mat-button (click)="editor.cancelCondition(rule)" class="mb-[22px]">Cancel</button>
+      <button class="mb-[22px]" mat-button (click)="editor.cancelCondition(rule)">Cancel</button>
     </div>
   } @else {
     <div class="flex justify-center">
-      <button mat-stroked-button color="primary" (click)="editor.showConditionForm(rule)">
+      <button color="primary" mat-stroked-button (click)="editor.showConditionForm(rule)">
         <mat-icon>add</mat-icon>
         Add condition
       </button>

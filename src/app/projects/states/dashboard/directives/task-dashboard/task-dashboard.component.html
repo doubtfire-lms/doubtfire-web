@@ -2,8 +2,8 @@
   <div class="z-10 flex w-full shrink-0 items-center gap-1">
     <mat-tab-group
       class="w-full"
-      [(selectedIndex)]="currentIndex"
       dynamicHeight
+      [(selectedIndex)]="currentIndex"
       (selectedTabChange)="onTabChange($event)"
     >
       <mat-tab label="Task Details"></mat-tab>
@@ -52,10 +52,10 @@
     </mat-tab-group>
 
     <button
-      mat-icon-button
-      [matMenuTriggerFor]="taskMenu"
       aria-label="Task actions"
       class="shrink-0 text-gray-600"
+      mat-icon-button
+      [matMenuTriggerFor]="taskMenu"
     >
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -77,17 +77,17 @@
       @case (DashboardViews.details) {
         <div class="flex flex-col gap-3 p-3">
           <f-task-ilos-card
-            [taskDef]="task.definition"
             [iloContextType]="'TaskDefinition'"
+            [taskDef]="task.definition"
           ></f-task-ilos-card>
           <f-task-description-card
-            [taskDef]="task.definition"
             [task]="task"
+            [taskDef]="task.definition"
             [unit]="task.unit"
           ></f-task-description-card>
           <f-task-prerequisites-card
-            [taskDefinition]="task.definition"
             [task]="task"
+            [taskDefinition]="task.definition"
           ></f-task-prerequisites-card>
           <f-task-scorm-card [task]="task"></f-task-scorm-card>
           <f-task-status-card [task]="task"></f-task-status-card>

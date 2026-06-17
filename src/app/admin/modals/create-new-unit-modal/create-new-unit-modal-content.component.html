@@ -1,29 +1,29 @@
 <h3 mat-dialog-title>Create Unit</h3>
 
 <form
-  mat-dialog-content
-  action=""
   #createUnitForm="ngForm"
-  (ngSubmit)="createUnit(createUnitForm.value)"
+  action=""
   class="pt-5"
+  mat-dialog-content
+  (ngSubmit)="createUnit(createUnitForm.value)"
 >
   <div class="flex flex-col">
     <mat-form-field appearance="outline">
       <mat-label>Unit Code</mat-label>
-      <input matInput placeholder="COS123456" name="unitCode" ngModel />
+      <input matInput name="unitCode" ngModel placeholder="COS123456" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Unit Name</mat-label>
-      <input matInput placeholder="Introduction to OnTrack" name="unitName" ngModel />
+      <input matInput name="unitName" ngModel placeholder="Introduction to OnTrack" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Teaching Period</mat-label>
       <mat-select
-        (valueChange)="handleChangeTeachingPeriod($event)"
         name="selectedTeachingPeriod"
         ngModel
+        (valueChange)="handleChangeTeachingPeriod($event)"
       >
         <mat-option value="custom"> Custom teaching period </mat-option>
         @for (tp of teachingPeriods; track tp; let i = $index) {
@@ -40,11 +40,11 @@
         <mat-date-range-input [rangePicker]="picker">
           <input
             matStartDate
-            placeholder="Start date"
             name="customStardDate"
+            placeholder="Start date"
             [(ngModel)]="startDate"
           />
-          <input matEndDate placeholder="End date" name="customEndDate" [(ngModel)]="endDate" />
+          <input matEndDate name="customEndDate" placeholder="End date" [(ngModel)]="endDate" />
         </mat-date-range-input>
         <mat-hint>DD/MM/YYYY - DD/MM/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -53,7 +53,7 @@
     }
 
     <mat-dialog-actions align="end">
-      <button mat-raised-button color="primary">Create</button>
+      <button color="primary" mat-raised-button>Create</button>
     </mat-dialog-actions>
   </div>
 </form>

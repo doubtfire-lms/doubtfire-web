@@ -6,8 +6,8 @@
   <mat-spinner
     class="send-audio-spinner"
     [diameter]="72"
-    [strokeWidth]="2"
     [hidden]="!isSending"
+    [strokeWidth]="2"
   ></mat-spinner>
   <div id="mainDIscussionVisualiser" [hidden]="!canRecord || isSending">
     <canvas class="audio-visualiser" id="mainDiscussionRecorderVisualiser"></canvas>

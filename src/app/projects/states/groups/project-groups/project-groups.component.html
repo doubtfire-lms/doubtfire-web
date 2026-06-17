@@ -1,6 +1,6 @@
 <div class="mx-auto max-w-[90vw]">
   @if (unit.hasGroupwork()) {
-    <f-group-set-manager [project]="project" [unit]="unit" [selectedGroupSet]="selectedGroupSet">
+    <f-group-set-manager [project]="project" [selectedGroupSet]="selectedGroupSet" [unit]="unit">
     </f-group-set-manager>
   } @else {
     <div class="mx-auto flex max-w-4xl flex-col items-center justify-center">

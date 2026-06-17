@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-content>
     @if (!showUploader) {
-      <button mat-raised-button color="primary" (click)="showUploader = true" class="w-full">
+      <button class="w-full" color="primary" mat-raised-button (click)="showUploader = true">
         <mat-icon>upload</mat-icon>
         Begin Upload
       </button>
@@ -24,11 +24,11 @@
 
             <div [hidden]="upload.model || upload.model?.length">
               <button
-                type="button"
                 class="file-drop-zone min-h-[250px] w-full"
+                type="button"
                 (click)="fileInput.click()"
-                (dragover)="onDragOver($event)"
                 (dragleave)="onDragLeave($event)"
+                (dragover)="onDragOver($event)"
                 (drop)="onFileDropped($event, upload)"
               >
                 @if (!upload.display.error) {
@@ -57,8 +57,8 @@
 
               <input
                 #fileInput
-                type="file"
                 class="file-input"
+                type="file"
                 [accept]="upload.accept"
                 (change)="onFileSelected($event, upload)"
               />
@@ -105,14 +105,14 @@
     @if (showUploader && !isUploading) {
       <div>
         @if (showUploadButton && readyToUpload() && uploadingInfo === null) {
-          <button mat-raised-button color="primary" (click)="initiateUploadInternal()">
+          <button color="primary" mat-raised-button (click)="initiateUploadInternal()">
             <mat-icon>upload</mat-icon>
             Start Upload
           </button>
         }
 
         @if (asButton) {
-          <button mat-button color="warn" (click)="resetUploader()">Cancel Upload</button>
+          <button color="warn" mat-button (click)="resetUploader()">Cancel Upload</button>
         }
       </div>
     }
@@ -151,7 +151,7 @@
               <p><strong>Error Message:</strong> {{ uploadingInfo.error }}</p>
 
               <div class="flex gap-3">
-                <button mat-button (click)="initiateUploadInternal()" color="primary">
+                <button color="primary" mat-button (click)="initiateUploadInternal()">
                   Retry Upload
                 </button>
                 <button mat-button (click)="onClickFailureCancel()">Cancel</button>

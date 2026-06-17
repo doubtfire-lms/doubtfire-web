@@ -61,29 +61,29 @@
     <mat-card-actions class="space-x-1 px-3 pt-0">
       <button
         mat-stroked-button
-        (click)="launchScormPlayer()"
-        [hidden]="attemptsLeft === 0"
         [disabled]="isNotStudent()"
+        [hidden]="attemptsLeft === 0"
+        (click)="launchScormPlayer()"
       >
-        <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="Launch icon">
+        <mat-icon aria-label="Launch icon" style="width: 20px; height: 20px; font-size: 20px">
           launch
         </mat-icon>
         Attempt test
       </button>
       <button
         mat-stroked-button
-        (click)="reviewLatestCompletedAttempt()"
         [hidden]="
           (!user.isStaff && !task.definition.scormAllowReview) ||
           !this.task.latestCompletedTestAttempt
         "
+        (click)="reviewLatestCompletedAttempt()"
       >
         Review last attempt
       </button>
       <button
         mat-stroked-button
-        (click)="requestExtraAttempt()"
         [hidden]="task.definition.scormAttemptLimit === 0 || attemptsLeft !== 0"
+        (click)="requestExtraAttempt()"
       >
         Request extra attempt
       </button>
