@@ -9,7 +9,15 @@ import {
   GanttViewType,
   NgxGanttComponent,
 } from '@worktile/gantt';
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
@@ -37,9 +45,11 @@ interface TaskGanttItem extends GanttItem {
   providers: [GanttPrintService],
   standalone: false,
 })
-export class TaskPlannerComponent implements OnInit {
+export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   // Show a warning if the task's target end date is within this many days of the feedback deadline
   public readonly CLOSE_TO_FEEDBACK_DEADLINE_THRESHOLD = 7;
+  private readonly svgNamespace = 'http://www.w3.org/2000/svg';
+  private ganttHeaderObserver?: MutationObserver;
 
   @Input() project: Project;
   @Input() targetGrade: number;
@@ -66,6 +76,7 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   constructor(
+    private elementRef: ElementRef<HTMLElement>,
     private gradeService: GradeService,
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
@@ -75,6 +86,14 @@ export class TaskPlannerComponent implements OnInit {
     private route: ActivatedRoute,
     private ganttPrintService: GanttPrintService,
   ) {}
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.setupGanttHeaderObserver());
+  }
+
+  ngOnDestroy(): void {
+    this.ganttHeaderObserver?.disconnect();
+  }
 
   public get gradeValues() {
     return this.gradeService.gradeValues;
@@ -534,10 +553,7 @@ export class TaskPlannerComponent implements OnInit {
       precisionUnit: 'day',
       start: new GanttDate(this.earliestStartDate),
       end: new GanttDate(this.latestEndDate),
-      tickFormats: {
-        period: 'yyyy MMM',
-        unit: 'd',
-      },
+      unitWidth: 40,
       dragTooltipFormat: 'MMM dd',
     };
 
@@ -572,6 +588,84 @@ export class TaskPlannerComponent implements OnInit {
         this.alertService.error(`Failed to get task prerequisites: ${error}`, 6000);
       },
     });
+  }
+
+  private setupGanttHeaderObserver(): void {
+    const ganttElement = this.elementRef.nativeElement.querySelector('ngx-gantt');
+
+    if (!ganttElement) {
+      return;
+    }
+
+    this.ganttHeaderObserver?.disconnect();
+    this.ganttHeaderObserver = new MutationObserver(() => this.formatGanttHeaderLabels());
+    this.ganttHeaderObserver.observe(ganttElement, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+    this.formatGanttHeaderLabels();
+  }
+
+  private formatGanttHeaderLabels(): void {
+    this.formatGanttDayLabels();
+    this.formatGanttTodayLabel();
+  }
+
+  private formatGanttDayLabels(): void {
+    const dayLabels = this.elementRef.nativeElement.querySelectorAll<SVGTextElement>(
+      'gantt-calendar-header .secondary-text',
+    );
+
+    dayLabels.forEach((label) => {
+      if (label.querySelector('tspan')) {
+        return;
+      }
+
+      const [date, day] = label.textContent?.trim().split(/\s+/) ?? [];
+
+      if (!date || !day) {
+        return;
+      }
+
+      const x = label.getAttribute('x') ?? '0';
+      const dateLine = document.createElementNS(this.svgNamespace, 'tspan');
+      dateLine.setAttribute('x', x);
+      dateLine.textContent = date;
+
+      const dayLine = document.createElementNS(this.svgNamespace, 'tspan');
+      dayLine.setAttribute('x', x);
+      dayLine.setAttribute('dy', '1.15em');
+      dayLine.textContent = day;
+
+      label.textContent = '';
+      label.append(dateLine, dayLine);
+    });
+  }
+
+  private formatGanttTodayLabel(): void {
+    const todayLabel = this.elementRef.nativeElement.querySelector<HTMLElement>(
+      'gantt-calendar-header .today-rect',
+    );
+
+    if (!todayLabel || todayLabel.querySelector('.today-weekday')) {
+      return;
+    }
+
+    const today = new Date();
+    const date = todayLabel.textContent?.trim() || today.getDate().toString();
+    const day = new Intl.DateTimeFormat('en-US', {weekday: 'short'}).format(today);
+
+    todayLabel.replaceChildren();
+
+    const dateLine = document.createElement('span');
+    dateLine.textContent = date;
+
+    const dayLine = document.createElement('span');
+    dayLine.classList.add('today-weekday');
+    dayLine.textContent = day;
+
+    todayLabel.append(dateLine, dayLine);
   }
 
   refreshItems(scroll: boolean = true) {
