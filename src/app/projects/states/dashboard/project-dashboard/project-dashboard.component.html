@@ -50,6 +50,8 @@
             [taskDefinitions]="taskDefinitionsForProject(project)"
             [tasks]="project.tasks"
             [selectedTaskDefinition$]="selectedTaskDefinition$"
+            [isCollapsed]="taskListCollapsed"
+            [selectionUrlBase]="taskSelectionUrlBase"
           ></f-unit-task-list>
         } @else {
           <div class="h-full min-h-0 flex-none" [style.width.px]="leftWidth">

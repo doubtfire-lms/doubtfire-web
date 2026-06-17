@@ -13,8 +13,8 @@ describe('HeaderComponent', () => {
   // let currentUserStub: jasmine.SpyObj<any>;
   // let calendarModalStub: jasmine.SpyObj<any>;
   // let aboutDoubtfireModalStub: jasmine.SpyObj<any>;
-  let isActiveUnitRoleStub: Partial<IsActiveUnitRole>;
-  let checkForUpdateServiceStub: Partial<CheckForUpdateService>;
+  const isActiveUnitRoleStub: Partial<IsActiveUnitRole> = {};
+  const checkForUpdateServiceStub: Partial<CheckForUpdateService> = {};
   let globalStateServiceStub: Partial<GlobalStateService>;
 
   beforeEach(waitForAsync(() => {

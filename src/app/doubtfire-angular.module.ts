@@ -4,7 +4,12 @@ import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
-import {GANTT_GLOBAL_CONFIG, GanttLinkLineType, NgxGanttModule} from '@worktile/gantt';
+import {
+  GANTT_GLOBAL_CONFIG,
+  GanttI18nLocale,
+  GanttLinkLineType,
+  NgxGanttModule,
+} from '@worktile/gantt';
 import {DateAdapter as CalendarDateAdapter, CalendarModule} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {enAU} from 'date-fns/locale';
@@ -386,15 +391,9 @@ const MY_DATE_FORMAT = {
 const GANTT_CHART_CONFIG = {
   provide: GANTT_GLOBAL_CONFIG,
   useValue: {
-    // locale: 'en-US',
-    dateFormat: {
-      // timeZone: 'UTC',
+    locale: GanttI18nLocale.enUs,
+    dateOptions: {
       weekStartsOn: 1,
-      week: 'w',
-      year: 'yyyy',
-      month: 'MMMM',
-      yearMonth: 'yyyy MMM',
-      yearQuarter: 'yyyy',
     },
     linkOptions: {
       showArrow: true,

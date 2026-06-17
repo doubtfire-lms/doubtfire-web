@@ -52,7 +52,7 @@
         >
       </button>
     }
-    @if (currentUnit) {
+    @if (currentUnit && !isTutorDiscussionRoute) {
       <button mat-icon-button (click)="showMyQr()">
         <mat-icon>qr_code_scanner</mat-icon>
       </button>
