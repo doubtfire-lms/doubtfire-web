@@ -18,6 +18,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   webcal: Webcal | null;
   working: boolean = true;
   copying: boolean = false;
+  selectedCalendarProviderIndex: number = 0;
   projects: Project[] = [];
 
   // Used to store user interaction with the reminder option. These values aren't bound directly to `this.webcal`
@@ -68,8 +69,21 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    * Invoked when the user toggles the webcal.
    */
   onWebcalToggle() {
+    if (this.webcal.enabled) {
+      this.confirmationModal.show(
+        'Disable web calendar',
+        'Disabling your web calendar will expire the current subscription URL. Any calendar apps using this URL will stop updating, and a new URL will be generated if you enable the calendar again.',
+        () => this.updateWebcalEnabled(false),
+      );
+      return;
+    }
+
+    this.updateWebcalEnabled(true);
+  }
+
+  private updateWebcalEnabled(enabled: boolean) {
     this.working = true;
-    this.webcal.enabled = !this.webcal.enabled;
+    this.webcal.enabled = enabled;
 
     this.webcalService.update(this.webcal).subscribe((webcal) => {
       this.loadWebcal(webcal);
@@ -97,7 +111,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   onChangeWebcalUrl() {
     this.confirmationModal.show(
       'Regenerate URL',
-      'Are you sure you want to regenerate your calendar URL. If you have previously subscribed to a URL, it will no longer work and you will have to unsubscribe.',
+      'Regenerating your calendar URL will disable the current subscription link. Any calendar apps using the old URL will stop updating until you subscribe again with the new one.',
       () => {
         this.working = true;
         this.webcal.shouldChangeGuid = true;
