@@ -3,6 +3,7 @@ import {MatSelectChange} from '@angular/material/select';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
 import {Project, ProjectService} from 'src/app/api/models/doubtfire-model';
+import {CalendarModalService} from 'src/app/common/modals/calendar-modal/calendar-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {TaskPlannerComponent} from './task-planner/task-planner.component';
@@ -45,6 +46,7 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
     private projectService: ProjectService,
     private alertService: AlertService,
     private route: ActivatedRoute,
+    private calendarModal: CalendarModalService,
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +64,10 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.projectSub?.unsubscribe();
+  }
+
+  openCalendar(): void {
+    this.calendarModal.show(null);
   }
 
   onTargetGradeChange(event: MatSelectChange) {
