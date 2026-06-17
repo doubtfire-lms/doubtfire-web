@@ -4,6 +4,7 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {Project, ProjectService, Webcal, WebcalService} from 'src/app/api/models/doubtfire-model';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AlertService} from '../../services/alert.service';
+import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal.service';
 
 @Component({
   selector: 'calendar-modal',
@@ -31,6 +32,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     private alerts: AlertService,
     private projectService: ProjectService,
     @Inject(MAT_DIALOG_DATA) public data: object,
+    private confirmationModal: ConfirmationModalService,
   ) {}
 
   ngOnInit() {
@@ -93,12 +95,18 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    * Invoked when the user requests their webcal URL to be changed.
    */
   onChangeWebcalUrl() {
-    this.working = true;
-    this.webcal.shouldChangeGuid = true;
-    this.webcalService.update(this.webcal).subscribe((webcal) => {
-      this.loadWebcal(webcal);
-      this.working = false;
-    });
+    this.confirmationModal.show(
+      'Regenerate URL',
+      'Are you sure you want to regenerate your calendar URL. If you have previously subscribed to a URL, it will no longer work and you will have to unsubscribe.',
+      () => {
+        this.working = true;
+        this.webcal.shouldChangeGuid = true;
+        this.webcalService.update(this.webcal).subscribe((webcal) => {
+          this.loadWebcal(webcal);
+          this.working = false;
+        });
+      },
+    );
   }
 
   /**
