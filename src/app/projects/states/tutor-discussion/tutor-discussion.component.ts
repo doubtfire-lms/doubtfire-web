@@ -160,7 +160,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
               this._username = this.username;
               this.getStudentTasks();
             } else {
-              this.scanQrCode();
+              setTimeout(() => this.scanQrCode());
             }
           } else {
             this.getUnit().then((u) => {
