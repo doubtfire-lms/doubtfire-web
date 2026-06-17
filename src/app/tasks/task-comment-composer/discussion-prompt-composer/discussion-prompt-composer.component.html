@@ -1,11 +1,11 @@
 <h4>Step 1. Record and add up to 3 prompts.</h4>
-<div [hidden]="!canRecord || isSending" fxLayout="row" fxLayoutAlign="space-around center">
+<div fxLayout="row" fxLayoutAlign="space-around center" [hidden]="!canRecord || isSending">
   <div>
     <button
-      mat-icon-button
       aria-label="Record icon button"
-      [disabled]="!canAddRecording"
       id="btnRecordPrompt"
+      mat-icon-button
+      [disabled]="!canAddRecording"
       (click)="recordingToggle()"
     >
       <mat-icon [hidden]="!isRecording">stop_rounded</mat-icon>
@@ -21,8 +21,8 @@
     <mat-spinner
       class="send-audio-spinner"
       [diameter]="72"
-      [strokeWidth]="2"
       [hidden]="!isSending"
+      [strokeWidth]="2"
     ></mat-spinner>
     <div fxLayout="row" fxLayoutAlign="center center">
       <canvas #discussionPromptComposerCanvas class="discussion-prompt-audio-visualiser"></canvas>
@@ -32,12 +32,12 @@
 
   <div>
     <button
+      class="btn-circle"
+      id="btnSave"
       mat-icon-button
       type="button"
-      id="btnSave"
-      (click)="saveRecording()"
       [disabled]="!recordingAvailable || !canAddRecording"
-      class="btn-circle"
+      (click)="saveRecording()"
     >
       <mat-icon>add</mat-icon>
     </button>
@@ -59,12 +59,12 @@
 <h4>Step 3. Send.</h4>
 <div fxLayout="row" fxLayoutAlign="end center">
   <button
-    mat-raised-button
     color="primary"
-    type="button"
     mat-dialog-close
-    (click)="sendRecording()"
+    mat-raised-button
+    type="button"
     [hidden]="recordings.length === 0"
+    (click)="sendRecording()"
   >
     Send
   </button>

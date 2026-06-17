@@ -1,10 +1,10 @@
 <div
-  [ngClass]="[statusClass, compact ? 'min-w-[30px] max-w-[30px]' : 'min-w-[50px] px-3']"
+  class="status-chip mx-0.5 flex h-7 min-h-[30px] cursor-pointer items-center justify-center rounded-full"
   matTooltip="{{ statusLabel }}"
   matTooltipPosition="above"
-  [matTooltipDisabled]="!showTooltip"
-  class="status-chip mx-0.5 flex h-7 min-h-[30px] cursor-pointer items-center justify-center rounded-full"
   style="font-size: 14px"
+  [matTooltipDisabled]="!showTooltip"
+  [ngClass]="[statusClass, compact ? 'min-w-[30px] max-w-[30px]' : 'min-w-[50px] px-3']"
 >
   <mat-icon
     class="m-0 scale-75 place-self-center"

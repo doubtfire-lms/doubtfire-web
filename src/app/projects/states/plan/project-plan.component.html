@@ -21,8 +21,8 @@
       <mat-form-field appearance="outline" class="w-full max-w-3xl">
         <mat-label>Target Grade</mat-label>
         <mat-select
-          [(ngModel)]="selectedTargetGrade"
           class="w-full"
+          [(ngModel)]="selectedTargetGrade"
           (selectionChange)="onTargetGradeChange($event)"
         >
           @for (grade of gradeValues; track grade) {

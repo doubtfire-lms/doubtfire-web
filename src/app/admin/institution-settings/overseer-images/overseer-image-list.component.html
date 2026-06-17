@@ -17,86 +17,86 @@
     </div>
   </div>
   <table
-    mat-table
-    [dataSource]="dataSource"
-    matSort
-    (matSortChange)="sortTableData($event)"
     class="f-table"
+    mat-table
+    matSort
+    [dataSource]="dataSource"
+    (matSortChange)="sortTableData($event)"
   >
     <!-- Name Column -->
-    <ng-container [formGroup]="formData" matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let overseerImage">
+    <ng-container matColumnDef="name" [formGroup]="formData">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
+      <td *matCellDef="let overseerImage" mat-cell>
         @if (!editing(overseerImage)) {
           <div>
             {{ overseerImage.name }}
           </div>
         } @else {
           <mat-form-field class="data-entry">
-            <input matInput required formControlName="name" placeholder="Name" />
+            <input formControlName="name" matInput placeholder="Name" required />
           </mat-form-field>
         }
       </td>
-      <td mat-footer-cell *matFooterCellDef>
+      <td *matFooterCellDef mat-footer-cell>
         <mat-form-field class="data-entry">
-          <input matInput required formControlName="name" placeholder="Name" />
+          <input formControlName="name" matInput placeholder="Name" required />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Tag Column -->
-    <ng-container [formGroup]="formData" matColumnDef="tag">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tag</th>
-      <td mat-cell *matCellDef="let overseerImage">
+    <ng-container matColumnDef="tag" [formGroup]="formData">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Tag</th>
+      <td *matCellDef="let overseerImage" mat-cell>
         @if (!editing(overseerImage)) {
           <div>
             {{ overseerImage.tag }}
           </div>
         } @else {
           <mat-form-field class="data-entry">
-            <input matInput required formControlName="tag" placeholder="Tag" />
+            <input formControlName="tag" matInput placeholder="Tag" required />
           </mat-form-field>
         }
       </td>
-      <td mat-footer-cell *matFooterCellDef>
+      <td *matFooterCellDef mat-footer-cell>
         <mat-form-field class="data-entry">
-          <input matInput required formControlName="tag" placeholder="Tag" />
+          <input formControlName="tag" matInput placeholder="Tag" required />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Pull Button Column -->
     <ng-container matColumnDef="pull">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let overseerImage">
+      <th *matHeaderCellDef mat-header-cell></th>
+      <td *matCellDef="let overseerImage" mat-cell>
         @if (!editing(overseerImage)) {
           <div class="right">
-            <button mat-flat-button color="primary" (click)="pullOverseerImage(overseerImage)">
+            <button color="primary" mat-flat-button (click)="pullOverseerImage(overseerImage)">
               Pull
             </button>
           </div>
         }
       </td>
-      <td mat-footer-cell *matFooterCellDef></td>
+      <td *matFooterCellDef mat-footer-cell></td>
     </ng-container>
 
     <!-- Last Pulled Column -->
     <ng-container matColumnDef="last-pulled">
-      <th mat-header-cell *matHeaderCellDef>Last Pulled</th>
-      <td mat-cell *matCellDef="let overseerImage">
+      <th *matHeaderCellDef mat-header-cell>Last Pulled</th>
+      <td *matCellDef="let overseerImage" mat-cell>
         @if (!editing(overseerImage)) {
           <div class="right">
             {{ overseerImage.lastPulledDate | humanizedDate }}
           </div>
         }
       </td>
-      <td mat-footer-cell *matFooterCellDef></td>
+      <td *matFooterCellDef mat-footer-cell></td>
     </ng-container>
 
     <!-- Status Column -->
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let overseerImage">
+      <th *matHeaderCellDef mat-header-cell>Status</th>
+      <td *matCellDef="let overseerImage" mat-cell>
         @if (!editing(overseerImage)) {
           <div
             class="right"
@@ -133,19 +133,19 @@
           </div>
         }
       </td>
-      <td mat-footer-cell *matFooterCellDef></td>
+      <td *matFooterCellDef mat-footer-cell></td>
     </ng-container>
 
     <!-- Options Column -->
     <ng-container matColumnDef="options" stickyEnd>
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let overseerImage">
+      <th *matHeaderCellDef mat-header-cell></th>
+      <td *matCellDef="let overseerImage" mat-cell>
         @if (!editing(overseerImage)) {
           <div class="right">
             <button
+              aria-label="Example icon-button with a menu"
               mat-icon-button
               [matMenuTriggerFor]="menu"
-              aria-label="Example icon-button with a menu"
             >
               <mat-icon>more_vert</mat-icon>
             </button>
@@ -159,20 +159,20 @@
         } @else {
           <div class="edit-actions right">
             <span>
-              <button mat-icon-button color="warn" (click)="cancelEdit()">
+              <button color="warn" mat-icon-button (click)="cancelEdit()">
                 <mat-icon>cancel</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="submit()">
+              <button color="primary" mat-icon-button (click)="submit()">
                 <mat-icon>save</mat-icon>
               </button>
-              <button mat-icon-button color="warn" (click)="deleteOverseerImage(overseerImage)">
+              <button color="warn" mat-icon-button (click)="deleteOverseerImage(overseerImage)">
                 <mat-icon>delete</mat-icon>
               </button>
             </span>
           </div>
         }
       </td>
-      <td mat-footer-cell *matFooterCellDef>
+      <td *matFooterCellDef mat-footer-cell>
         <div class="edit-actions right">
           <button mat-icon-button (click)="submit()">
             <mat-icon>add</mat-icon>
@@ -181,8 +181,8 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns"></tr>
-    <tr [hidden]="selected" mat-footer-row *matFooterRowDef="columns"></tr>
+    <tr *matHeaderRowDef="columns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: columns" mat-row></tr>
+    <tr *matFooterRowDef="columns" mat-footer-row [hidden]="selected"></tr>
   </table>
 </div>

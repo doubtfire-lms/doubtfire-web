@@ -1,6 +1,6 @@
 <ng-template #TaskStatusBadges let-task="task">
   <div class="relative mr-1 flex shrink-0 items-center justify-center pr-0.5">
-    <status-icon [status]="task.status" [compact]="isCollapsed"></status-icon>
+    <status-icon [compact]="isCollapsed" [status]="task.status"></status-icon>
 
     <div
       class="absolute -top-2 right-0.5 flex items-center gap-px drop-shadow-[0_4px_2px_rgba(0,0,0,0.15)]"
@@ -82,20 +82,20 @@
     <div class="omnisearch rounded-t-2xl md:rounded-2xl">
       <div class="flex items-center">
         <button
-          mat-icon-button
           aria-label="Search Icon"
-          disabled
           class="flex flex-none items-center"
+          disabled
+          mat-icon-button
         >
           <mat-icon class="flex items-center" disabled>search</mat-icon>
         </button>
         <div class="grow">
           <input
-            class="search"
             autocomplete="off"
+            class="search"
+            placeholder="Search Tasks"
             spellcheck="false"
             type="text"
-            placeholder="Search Tasks"
             [(ngModel)]="searchText"
             (ngModelChange)="applyFilters()"
           />
@@ -110,11 +110,11 @@
         <mat-list-item
           class="flex h-[65px] w-full cursor-pointer items-center border-b border-gray-200 p-1"
           [disableRipple]="true"
-          (click)="setSelectedTaskDefinition(taskDef)"
           [ngClass]="{
             'bg-blue-50 hover:bg-blue-50': isSelectedTaskDefinition(taskDef),
             'hover:bg-gray-50': !isSelectedTaskDefinition(taskDef),
           }"
+          (click)="setSelectedTaskDefinition(taskDef)"
         >
           @if (taskDef) {
             @if (isCollapsed) {
@@ -214,8 +214,8 @@
               </span>
               <div class="relative mr-1 flex shrink-0 items-center justify-center pr-0.5">
                 <status-icon
-                  [status]="project.portfolioTaskStatus()"
                   [compact]="isCollapsed"
+                  [status]="project.portfolioTaskStatus()"
                 ></status-icon>
               </div>
             </a>

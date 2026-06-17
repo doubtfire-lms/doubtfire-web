@@ -28,20 +28,20 @@
     >
   } @else if (comment.overseerStatus === 'failed') {
     <mat-icon
-      color="warn"
       class="my-1 opacity-70"
+      color="warn"
       style="width: 35px; height: 35px; font-size: 35px"
       >highlight_off_outline</mat-icon
     >
   } @else if (comment.overseerStatus === 'pre_queued') {
-    <mat-progress-spinner [diameter]="25" mode="indeterminate"></mat-progress-spinner>
+    <mat-progress-spinner mode="indeterminate" [diameter]="25"></mat-progress-spinner>
   }
 
   @if (comment.overseerStatus !== 'pre_queued') {
     <button
+      class="mb-1"
       mat-stroked-button
       (click)="showTaskAssessmentResult(comment.overseerAssessmentId)"
-      class="mb-1"
     >
       View report
     </button>

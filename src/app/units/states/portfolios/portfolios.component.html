@@ -2,12 +2,12 @@
   @if (unit) {
     <mat-tab-group
       class="mx-auto mb-6 max-w-fit"
-      [selectedIndex]="currentIndex"
       dynamicHeight
+      [selectedIndex]="currentIndex"
       (selectedTabChange)="onTabChange($event)"
     >
       @for (tab of tabs; track tab.routeSegment) {
-        <mat-tab [label]="tab.label" [disabled]="tab.requiresProject && !selectedProject"></mat-tab>
+        <mat-tab [disabled]="tab.requiresProject && !selectedProject" [label]="tab.label"></mat-tab>
       }
     </mat-tab-group>
 
@@ -15,18 +15,18 @@
       @switch (currentTab.routeSegment) {
         @case ('select') {
           <f-portfolios-list
-            [unit]="unit"
             [loading]="loadingStudents"
+            [unit]="unit"
             (studentSelected)="studentSelected($event)"
           ></f-portfolios-list>
         }
         @case ('progress') {
           @if (selectedProject) {
             <f-portfolios-project-progress
-              [unit]="unit"
               [project]="selectedProject"
               [project$]="selectedProject$"
               [taskSelectionUrlBase]="progressTaskSelectionUrlBase"
+              [unit]="unit"
             ></f-portfolios-project-progress>
           }
         }

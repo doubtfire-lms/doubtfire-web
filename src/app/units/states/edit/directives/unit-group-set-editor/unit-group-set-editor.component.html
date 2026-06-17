@@ -8,7 +8,7 @@
         <p>
           A group set is a set of related group-work. A unit can have multiple group sets for
           various kinds of group work which has multiple teams.
-          <button mat-button (click)="showHelp = true" color="primary">
+          <button color="primary" mat-button (click)="showHelp = true">
             Read more about group sets
           </button>
         </p>
@@ -16,10 +16,10 @@
         @if (showHelp) {
           <div class="callout callout-info">
             <button
-              mat-icon-button
-              class="float-right"
-              (click)="showHelp = false"
               aria-label="Close help"
+              class="float-right"
+              mat-icon-button
+              (click)="showHelp = false"
             >
               <mat-icon>close</mat-icon>
             </button>
@@ -44,11 +44,11 @@
         } @else {
           <table mat-table [dataSource]="unit.groupSets">
             <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef>Name</th>
-              <td mat-cell *matCellDef="let groupSet" (click)="selectGroupSet(groupSet)">
+              <th *matHeaderCellDef mat-header-cell>Name</th>
+              <td *matCellDef="let groupSet" mat-cell (click)="selectGroupSet(groupSet)">
                 @if (editingGroupSetId === groupSet.id && editingGroupSetModel) {
                   <mat-form-field appearance="outline" class="w-full">
-                    <input matInput [(ngModel)]="editingGroupSetModel.name" required />
+                    <input matInput required [(ngModel)]="editingGroupSetModel.name" />
                   </mat-form-field>
                 } @else {
                   {{ groupSet.name || 'No Name Set' }}
@@ -57,14 +57,14 @@
             </ng-container>
 
             <ng-container matColumnDef="capacity">
-              <th mat-header-cell *matHeaderCellDef>Capacity</th>
-              <td mat-cell *matCellDef="let groupSet" (click)="selectGroupSet(groupSet)">
+              <th *matHeaderCellDef mat-header-cell>Capacity</th>
+              <td *matCellDef="let groupSet" mat-cell (click)="selectGroupSet(groupSet)">
                 @if (editingGroupSetId === groupSet.id && editingGroupSetModel) {
                   <mat-form-field appearance="outline" class="w-full">
                     <input
                       matInput
-                      type="number"
                       min="2"
+                      type="number"
                       [(ngModel)]="editingGroupSetModel.capacity"
                     />
                   </mat-form-field>
@@ -75,8 +75,8 @@
             </ng-container>
 
             <ng-container matColumnDef="createGroups">
-              <th mat-header-cell *matHeaderCellDef>Create Groups</th>
-              <td mat-cell *matCellDef="let groupSet" (click)="selectGroupSet(groupSet)">
+              <th *matHeaderCellDef mat-header-cell>Create Groups</th>
+              <td *matCellDef="let groupSet" mat-cell (click)="selectGroupSet(groupSet)">
                 @if (editingGroupSetId === groupSet.id && editingGroupSetModel) {
                   <mat-form-field appearance="outline" class="w-full">
                     <mat-select [(ngModel)]="editingGroupSetModel.allowStudentsToCreateGroups">
@@ -92,8 +92,8 @@
             </ng-container>
 
             <ng-container matColumnDef="manageGroups">
-              <th mat-header-cell *matHeaderCellDef>Manage Groups</th>
-              <td mat-cell *matCellDef="let groupSet" (click)="selectGroupSet(groupSet)">
+              <th *matHeaderCellDef mat-header-cell>Manage Groups</th>
+              <td *matCellDef="let groupSet" mat-cell (click)="selectGroupSet(groupSet)">
                 @if (editingGroupSetId === groupSet.id && editingGroupSetModel) {
                   <mat-form-field appearance="outline" class="w-full">
                     <mat-select [(ngModel)]="editingGroupSetModel.allowStudentsToManageGroups">
@@ -109,8 +109,8 @@
             </ng-container>
 
             <ng-container matColumnDef="restrictTutorials">
-              <th mat-header-cell *matHeaderCellDef>Restrict to Tutorials</th>
-              <td mat-cell *matCellDef="let groupSet" (click)="selectGroupSet(groupSet)">
+              <th *matHeaderCellDef mat-header-cell>Restrict to Tutorials</th>
+              <td *matCellDef="let groupSet" mat-cell (click)="selectGroupSet(groupSet)">
                 @if (editingGroupSetId === groupSet.id && editingGroupSetModel) {
                   <mat-form-field appearance="outline" class="w-full">
                     <mat-select [(ngModel)]="editingGroupSetModel.keepGroupsInSameClass">
@@ -126,11 +126,11 @@
             </ng-container>
 
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>Actions</th>
-              <td mat-cell *matCellDef="let groupSet">
+              <th *matHeaderCellDef mat-header-cell>Actions</th>
+              <td *matCellDef="let groupSet" mat-cell>
                 <div class="flex gap-1">
                   @if (editingGroupSetId === groupSet.id) {
-                    <button mat-button color="primary" (click)="saveGroupSet(groupSet)">
+                    <button color="primary" mat-button (click)="saveGroupSet(groupSet)">
                       <mat-icon>save</mat-icon>
                       Save
                     </button>
@@ -151,7 +151,7 @@
                       <mat-icon>{{ groupSet.locked ? 'lock' : 'lock_open' }}</mat-icon>
                       {{ groupSet.locked ? 'Unlock' : 'Lock' }}
                     </button>
-                    <button mat-button color="warn" (click)="removeGroupSet(groupSet)">
+                    <button color="warn" mat-button (click)="removeGroupSet(groupSet)">
                       <mat-icon>delete</mat-icon>
                       Delete
                     </button>
@@ -161,7 +161,6 @@
             </ng-container>
 
             <tr
-              mat-header-row
               *matHeaderRowDef="[
                 'name',
                 'capacity',
@@ -170,9 +169,9 @@
                 'restrictTutorials',
                 'actions',
               ]"
+              mat-header-row
             ></tr>
             <tr
-              mat-row
               *matRowDef="
                 let row;
                 columns: [
@@ -184,13 +183,14 @@
                   'actions',
                 ]
               "
+              mat-row
               [class.bg-blue-50]="row === selectedGroupSet"
             ></tr>
           </table>
         }
       </mat-card-content>
       <mat-card-actions align="end">
-        <button mat-raised-button color="primary" (click)="addGroupSet()">
+        <button color="primary" mat-raised-button (click)="addGroupSet()">
           <mat-icon>groups</mat-icon>
           New Group Set
         </button>
@@ -200,9 +200,9 @@
     @if (selectedGroupSet && unit.groupSets.length > 0) {
       <div class="mt-3">
         <f-group-set-manager
-          [unit]="unit"
           [selectedGroupSet]="selectedGroupSet"
           [showGroupSetSelector]="false"
+          [unit]="unit"
           [unitRole]="unitRole"
         >
         </f-group-set-manager>
@@ -234,12 +234,12 @@
           </mat-card-actions>
           <mat-card-footer class="px-2.5 pb-2.5">
             <f-file-uploader
-              [files]="groupCSV"
-              [url]="groupCSVUploadUrl()"
-              [isUploading]="isGroupCSVUploading"
-              [onSuccess]="onGroupCSVSuccess.bind(this)"
-              [onComplete]="onGroupCSVComplete.bind(this)"
               [asButton]="true"
+              [files]="groupCSV"
+              [isUploading]="isGroupCSVUploading"
+              [onComplete]="onGroupCSVComplete.bind(this)"
+              [onSuccess]="onGroupCSVSuccess.bind(this)"
+              [url]="groupCSVUploadUrl()"
             >
             </f-file-uploader>
           </mat-card-footer>
@@ -271,12 +271,12 @@
           </mat-card-actions>
           <mat-card-footer class="px-2.5 pb-2.5">
             <f-file-uploader
-              [files]="groupCSV"
-              [url]="groupStudentCSVUploadUrl()"
-              [isUploading]="isGroupCSVUploading"
-              [onSuccess]="onGroupCSVSuccess.bind(this)"
-              [onComplete]="onGroupCSVComplete.bind(this)"
               [asButton]="true"
+              [files]="groupCSV"
+              [isUploading]="isGroupCSVUploading"
+              [onComplete]="onGroupCSVComplete.bind(this)"
+              [onSuccess]="onGroupCSVSuccess.bind(this)"
+              [url]="groupStudentCSVUploadUrl()"
             >
             </f-file-uploader>
           </mat-card-footer>
