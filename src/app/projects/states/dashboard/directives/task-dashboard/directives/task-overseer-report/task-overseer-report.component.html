@@ -10,9 +10,9 @@
     @for (history of histories; track history.id; let idx = $index) {
       <mat-expansion-panel
         [attr.id]="'history-panel-' + history.id"
-        (opened)="onHistoryOpen(history)"
         [disabled]="!assessmentFor(history)"
         [expanded]="assessmentFor(history)?.id === loadOverseerAssessmentId"
+        (opened)="onHistoryOpen(history)"
       >
         <mat-expansion-panel-header class="flex items-center justify-between">
           <mat-panel-title class="flex items-center gap-3">
@@ -48,17 +48,17 @@
               } @else {
                 <span class="flex items-center gap-3 uppercase">
                   Tests In Progress
-                  <mat-progress-spinner [diameter]="25" mode="indeterminate"></mat-progress-spinner>
+                  <mat-progress-spinner mode="indeterminate" [diameter]="25"></mat-progress-spinner>
                 </span>
               }
             }
 
             @if (history.hasSubmissionFiles && currentUnitRole) {
               <button
-                mat-icon-button
-                aria-label="Submission options"
-                [matMenuTriggerFor]="menu"
                 #submissionMenuTrigger="matMenuTrigger"
+                aria-label="Submission options"
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
                 (click)="viewSubmissionOptions($event)"
               >
                 <mat-icon>more_vert</mat-icon>
@@ -156,14 +156,14 @@
                   @if (viewOutput === 'diff' || viewOutput === 'split_diff') {
                     @if (result.expectedOutput !== result.stdout) {
                       <ngx-monaco-diff-editor
+                        [modifiedModel]="{
+                          language: 'plainttext',
+                          code: result.stdout,
+                        }"
                         [options]="diffEditorOptions"
                         [originalModel]="{
                           language: 'plaintext',
                           code: result.expectedOutput,
-                        }"
-                        [modifiedModel]="{
-                          language: 'plainttext',
-                          code: result.stdout,
                         }"
                       ></ngx-monaco-diff-editor>
                     }
