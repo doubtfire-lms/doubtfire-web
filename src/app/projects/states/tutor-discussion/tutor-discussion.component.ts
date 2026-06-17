@@ -93,6 +93,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   public ngOnDestroy(): void {
+    this.stopQrScanner();
     this.restoreViewportZoom();
   }
 
