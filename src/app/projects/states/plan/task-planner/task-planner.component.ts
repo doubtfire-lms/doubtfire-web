@@ -758,23 +758,8 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
       _items.push(item);
 
       // Create baseline item
-      const tdTargetDate =
-        (this.targetGrade === 1
-          ? td.cTargetDate
-          : this.targetGrade === 2
-            ? td.dTargetDate
-            : this.targetGrade === 3
-              ? td.hdTargetDate
-              : td.targetDate) ?? td.targetDate;
-
-      const tdStartDate =
-        (this.targetGrade === 1
-          ? td.cStartDate
-          : this.targetGrade === 2
-            ? td.dStartDate
-            : this.targetGrade === 3
-              ? td.hdStartDate
-              : td.startDate) ?? td.startDate;
+      const tdTargetDate = td.gradeTargetDate(this.targetGrade) ?? td.targetDate;
+      const tdStartDate = td.gradeStartDate(this.targetGrade) ?? td.startDate;
 
       const baselineItem: GanttBaselineItem = {
         id: item.id,

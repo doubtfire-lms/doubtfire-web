@@ -3,7 +3,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
-import {Unit} from 'src/app/api/models/unit';
+import {GradeDefinition, Unit} from 'src/app/api/models/unit';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
@@ -13,8 +13,6 @@ import {
 } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-
-type GradeCol = 'p' | 'c' | 'd' | 'hd';
 
 @Component({
   selector: 'f-unit-task-editor',
@@ -30,8 +28,6 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   public selectedTaskDefinition: TaskDefinition;
   public isTaskListCollapsed: boolean = false;
 
-  public gradeColumns: string[] = ['p', 'c', 'd', 'hd'];
-  public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
   public dueDateSource: MatTableDataSource<TaskDefinition> = new MatTableDataSource([]);
 
   public manageDueDates: boolean = false;
@@ -42,101 +38,51 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
     );
   }
 
-  isStartAfterTarget(td: TaskDefinition, g: GradeCol): boolean {
-    const start = this.getGradeStartDate(td, g);
-    const target = this.getGradeDueDate(td, g);
+  public get gradeColumns(): GradeDefinition[] {
+    return this.unit.gradeDefinitions.filter((definition) => definition.value >= 0);
+  }
+
+  public get dueDateColumns(): string[] {
+    return [
+      'taskDefinition',
+      ...this.gradeColumns.map((definition) => this.gradeColumnId(definition)),
+    ];
+  }
+
+  public gradeColumnId(grade: GradeDefinition): string {
+    return `grade-${grade.value}`;
+  }
+
+  isStartAfterTarget(td: TaskDefinition, grade: GradeDefinition): boolean {
+    const start = this.getGradeStartDate(td, grade);
+    const target = this.getGradeDueDate(td, grade);
     if (!start || !target) return false;
     return new Date(start).getTime() > new Date(target).getTime();
   }
 
-  getGradeStartDate(td: TaskDefinition, g: GradeCol): Date | null {
-    switch (g) {
-      case 'p':
-        return td.startDate ?? td.startDate; // fallback to existing startDate
-      case 'c':
-        return td.cStartDate ?? td.startDate;
-      case 'd':
-        return td.dStartDate ?? td.startDate;
-      case 'hd':
-        return td.hdStartDate ?? td.startDate;
-    }
+  getGradeStartDate(td: TaskDefinition, grade: GradeDefinition): Date | null {
+    return grade.value === 0 ? td.startDate : (td.gradeStartDate(grade.value) ?? td.startDate);
   }
 
-  isFallbackStartDate(td: TaskDefinition, g: GradeCol): boolean {
-    switch (g) {
-      case 'p':
-        return false; // P is always real
-      case 'c':
-        return !td.cStartDate;
-      case 'd':
-        return !td.dStartDate;
-      case 'hd':
-        return !td.hdStartDate;
-    }
+  isFallbackStartDate(td: TaskDefinition, grade: GradeDefinition): boolean {
+    return grade.value !== 0 && !td.gradeStartDate(grade.value);
   }
 
-  setGradeStartDate(td: TaskDefinition, g: GradeCol, value: Date | null): void {
-    switch (g) {
-      case 'p':
-        td.startDate = value;
-        break;
-      case 'c':
-        td.cStartDate = value;
-        break;
-      case 'd':
-        td.dStartDate = value;
-        break;
-      case 'hd':
-        td.hdStartDate = value;
-        break;
-    }
-
+  setGradeStartDate(td: TaskDefinition, grade: GradeDefinition, value: Date | null): void {
+    td.setGradeStartDate(grade.value, value);
     this.saveTaskDefinition(td);
   }
 
-  getGradeDueDate(td: TaskDefinition, g: GradeCol): Date | null {
-    switch (g) {
-      case 'p':
-        // return td.pTargetDate ?? td.dueDate ?? null; // fallback to existing dueDate
-        return td.targetDate ?? td.targetDate; // fallback to existing targetDate
-      case 'c':
-        return td.cTargetDate ?? td.targetDate;
-      case 'd':
-        return td.dTargetDate ?? td.targetDate;
-      case 'hd':
-        return td.hdTargetDate ?? td.targetDate;
-    }
+  getGradeDueDate(td: TaskDefinition, grade: GradeDefinition): Date | null {
+    return grade.value === 0 ? td.targetDate : (td.gradeTargetDate(grade.value) ?? td.targetDate);
   }
 
-  isFallbackTargetDate(td: TaskDefinition, g: GradeCol): boolean {
-    switch (g) {
-      case 'p':
-        return false; // P is always real
-      case 'c':
-        return !td.cTargetDate;
-      case 'd':
-        return !td.dTargetDate;
-      case 'hd':
-        return !td.hdTargetDate;
-    }
+  isFallbackTargetDate(td: TaskDefinition, grade: GradeDefinition): boolean {
+    return grade.value !== 0 && !td.gradeTargetDate(grade.value);
   }
 
-  setGradeDueDate(td: TaskDefinition, g: GradeCol, value: Date | null): void {
-    switch (g) {
-      case 'p':
-        td.targetDate = value;
-        break;
-      case 'c':
-        td.cTargetDate = value;
-        break;
-      case 'd':
-        td.dTargetDate = value;
-        break;
-      case 'hd':
-        td.hdTargetDate = value;
-        break;
-    }
-
+  setGradeDueDate(td: TaskDefinition, grade: GradeDefinition, value: Date | null): void {
+    td.setGradeTargetDate(grade.value, value);
     this.saveTaskDefinition(td);
   }
 
