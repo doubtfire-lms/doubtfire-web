@@ -50,7 +50,15 @@
   <div class="task-inbox flex w-full flex-1 flex-col items-center justify-normal">
     <div class="relative mb-5 flex w-full justify-between px-10">
       @if (project && project?.student) {
-        <div></div>
+        <button
+          aria-label="Add engagement stamp"
+          color="primary"
+          mat-icon-button
+          matTooltip="Add engagement"
+          (click)="openAddEngagementDialog()"
+        >
+          <mat-icon>approval</mat-icon>
+        </button>
         <div class="absolute left-1/2 -translate-x-1/2 transform text-center">
           <div class="text-center">
             {{ project?.student?.firstName }} {{ project?.student?.lastName }}

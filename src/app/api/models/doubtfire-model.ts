@@ -40,6 +40,7 @@ export * from './task-comment/scorm-comment';
 export * from './task-comment/scorm-extension-comment';
 export * from './feedback-template';
 export * from './communication';
+export * from './engagement';
 
 // Users -- are students or staff
 export * from './user/user';
@@ -72,3 +73,5 @@ export * from '../services/communication-set.service';
 export * from '../services/communication-rule.service';
 export * from '../services/communication-condition.service';
 export * from '../services/communication-action.service';
+export * from '../services/engagement.service';
+export * from '../services/engagement-comment.service';
