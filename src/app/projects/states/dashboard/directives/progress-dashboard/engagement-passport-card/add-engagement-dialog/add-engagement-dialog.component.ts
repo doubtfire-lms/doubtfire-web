@@ -22,14 +22,14 @@ interface AddEngagementForm {
   standalone: false,
 })
 export class AddEngagementDialogComponent {
-  readonly engagementTypes = ['Discuss', 'Attendance', 'Forum', 'Email', 'Negative'];
+  readonly engagementTypes = ['Discuss', 'Attendance', 'Forum', 'Email', 'Attention'];
   readonly notePlaceholders: Record<string, string> = {
     attendance: 'Attended tutorial and participated in class activities.',
     discuss: 'Discussed tasks during tutorial.',
     discussion: 'Discussed tasks during tutorial.',
     forum: 'Posted to the unit forum and engaged with discussion.',
     email: 'Discussed unit progress with the teaching team via email.',
-    negative: 'Engagement concern noted for follow-up.',
+    attention: 'Engagement concern noted for follow-up.',
   };
   readonly maxAttachmentSize = 30 * 1024 * 1024;
   readonly form: FormGroup<AddEngagementForm>;
