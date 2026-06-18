@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-25](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-24...v11.0.0-25) (2026-06-18)
+
+
+### Features
+
+* add day of week to gantt chart ([1fb4637](https://github.com/b0ink/doubtfire-deploy/commit/1fb4637cd2386f1aeff227043e0002bf9b77837b))
+* engagement passport ([#1257](https://github.com/b0ink/doubtfire-deploy/issues/1257)) ([7a754dc](https://github.com/b0ink/doubtfire-deploy/commit/7a754dcc82ca228f5688abab4480774df75a007e))
+* show students name if viewing other project ([38c0e85](https://github.com/b0ink/doubtfire-deploy/commit/38c0e85ebe698c71ea087f3aeecc6d7ca24c86d7))
+
+
+### Bug Fixes
+
+* ensure dashboard dropdown switches from task details view ([1ba5d1e](https://github.com/b0ink/doubtfire-deploy/commit/1ba5d1e42d302218520f8be4c0875673ad5d7a3f))
+* web calendar ([#1282](https://github.com/b0ink/doubtfire-deploy/issues/1282)) ([83b6d5e](https://github.com/b0ink/doubtfire-deploy/commit/83b6d5ea381604ae88585195314eafd239880632))
+
 ## [11.0.0-24](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-23...v11.0.0-24) (2026-06-17)
 
 
