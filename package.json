@@ -71,7 +71,7 @@
     "ng-flex-layout": "^17.3.7-beta.1",
     "ng2-pdf-viewer": "10.2.2",
     "ngx-entity-service": "^0.0.43",
-    "ngx-lottie": "^11.0.2",
+    "ngx-lottie": "^21.2.0",
     "ngx-monaco-editor-v2": "^21",
     "ngx-skeleton-loader": "^12.0.0",
     "nvd3": "1.8.6",
