@@ -211,7 +211,6 @@ export class SignInComponent implements OnInit {
    * Perform the actions needed when the user successfully signs in.
    */
   private actionSignInSuccess(): void {
-    this.globalState.loadGlobals();
     this.router.navigateByUrl(
       this.userService.currentUser.hasRunFirstTimeSetup === false ? '/welcome' : '/home',
     );
@@ -253,7 +252,6 @@ export class SignInComponent implements OnInit {
     this.authService.signIn(signInCredentials).subscribe({
       next: () => {
         if (this.isLtiLogin) {
-          this.globalState.loadGlobals();
           const params = getUrlParams(document.location.href);
           this.router.navigate(['/lti'], {queryParams: {ltik: params.ltik}});
         } else {
