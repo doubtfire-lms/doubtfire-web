@@ -38,16 +38,16 @@
 </ng-template>
 
 @if (!isMobileView) {
-  <div fxLayout="column" fxFill fxHide fxShow.gt-sm class="min-h-0 px-3">
-    <div fxLayout="row" fxLayoutAlign="center stretch" fxFlex class="min-h-0">
-      <div id="inboxpanel" #inboxpanel class="staff-task-list inbox-panel overflow-hidden">
+  <div class="min-h-0 px-3" fxFill fxHide fxLayout="column" fxShow.gt-sm>
+    <div class="min-h-0" fxFlex fxLayout="row" fxLayoutAlign="center stretch">
+      <div #inboxpanel class="staff-task-list inbox-panel overflow-hidden" id="inboxpanel">
         @if (loading) {
           <ng-container *ngTemplateOutlet="TaskListSkeleton"></ng-container>
         } @else if (taskData) {
           <df-staff-task-list
+            [filters]="filters"
             [isNarrow]="narrowTaskInbox"
             [showSearchOptions]="showSearchOptions"
-            [filters]="filters"
             [taskData]="taskData"
             [unit]="unit"
             [unitRole]="unitRole"
@@ -57,18 +57,18 @@
       </div>
       @if (subs$ | async) {
         <div
-          id="leftResizerEl"
           #leftResizerEl
-          class="resizer"
-          cdkDragLockAxis="x"
           cdkDrag
-          (cdkDragMoved)="dragging($event, inboxpanel)"
+          cdkDragLockAxis="x"
+          class="resizer"
+          id="leftResizerEl"
           (cdkDragEnded)="stoppedDragging($event, inboxpanel)"
+          (cdkDragMoved)="dragging($event, inboxpanel)"
           (cdkDragStarted)="startedDragging($event, inboxpanel)"
         ></div>
       }
 
-      <div fxFlex class="inbox-panel overflow-hidden">
+      <div class="inbox-panel overflow-hidden" fxFlex>
         @if (loading) {
           <ng-container *ngTemplateOutlet="BlankPanelSkeleton"></ng-container>
         } @else {
@@ -79,13 +79,13 @@
         }
       </div>
       <div
-        id="rightResizerEl"
         #rightResizerEl
-        class="resizer"
-        cdkDragLockAxis="x"
         cdkDrag
-        (cdkDragMoved)="dragging($event, commentspanel)"
+        cdkDragLockAxis="x"
+        class="resizer"
+        id="rightResizerEl"
         (cdkDragEnded)="stoppedDragging($event, commentspanel)"
+        (cdkDragMoved)="dragging($event, commentspanel)"
         (cdkDragStarted)="startedDragging($event, commentspanel)"
       ></div>
       <div #commentspanel class="task-comment-panel inbox-panel overflow-hidden">
@@ -99,20 +99,20 @@
     <f-footer class="z-10 shrink-0" [viewType]="viewType"></f-footer>
   </div>
 } @else {
-  <div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
+  <div #mobile fxFill fxHide fxLayout="row" fxShow.lt-md>
     <div
-      id="inboxpanel"
       #inboxpanel
       class="inbox-panel mobile overflow-hidden"
+      id="inboxpanel"
       [hidden]="taskSelected"
     >
       @if (loading) {
         <ng-container *ngTemplateOutlet="TaskListSkeleton"></ng-container>
       } @else if (taskData) {
         <df-staff-task-list
+          [filters]="filters"
           [isNarrow]="false"
           [showSearchOptions]="showSearchOptions"
-          [filters]="filters"
           [taskData]="taskData"
           [unit]="unit"
           [unitRole]="unitRole"
@@ -120,11 +120,11 @@
         ></df-staff-task-list>
       }
     </div>
-    <div [hidden]="!taskSelected" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
+    <div fxFill fxLayout="column" fxLayoutAlign="space-between stretch" [hidden]="!taskSelected">
       <div class="flex items-center">
         <button
-          mat-icon-button
           aria-label="Back to inbox"
+          mat-icon-button
           matTooltip="Back to inbox"
           (click)="taskSelected = false"
         >
@@ -133,17 +133,17 @@
         <h3 class="mb-0">{{ taskData?.selectedTask?.project.student.nickname }}</h3>
         <div fxFlex></div>
         <button
-          [disabled]="!visiblePdfUrl"
-          mat-icon-button
           aria-label="Open current document"
-          (click)="openPdfInNewTab()"
+          mat-icon-button
           matTooltip="Open current document"
+          [disabled]="!visiblePdfUrl"
+          (click)="openPdfInNewTab()"
         >
           <mat-icon>description</mat-icon>
         </button>
         <button
-          mat-icon-button
           aria-label="Go to student"
+          mat-icon-button
           matTooltip="Go to student"
           (click)="goToStudent()"
         >
@@ -151,7 +151,7 @@
         </button>
       </div>
 
-      <div fxFlex class="inbox-panel mobile overflow-hidden">
+      <div class="inbox-panel mobile overflow-hidden" fxFlex>
         @if (loading) {
           <ng-container *ngTemplateOutlet="BlankPanelSkeleton"></ng-container>
         } @else {

@@ -17,6 +17,7 @@ export interface UploadRequirement {
   type: string;
   tiiCheck?: boolean;
   tiiPct?: number;
+  submissionHistory?: boolean;
 }
 
 export interface SimilarityCheck {

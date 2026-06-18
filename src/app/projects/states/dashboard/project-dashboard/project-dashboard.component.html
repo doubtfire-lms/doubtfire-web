@@ -38,18 +38,20 @@
 
 @if (project$ | async; as project) {
   <div class="h-[calc(100vh-100px)] w-full overflow-hidden">
-    <div class="flex h-full min-h-0 flex-row" #boundary>
+    <div #boundary class="flex h-full min-h-0 flex-row">
       @if (subs$ | async) {
         @if (isProjectTaskListReady(project)) {
           <f-unit-task-list
-            class="h-full min-h-0 flex-none p-1"
-            [style.width.px]="leftWidth"
             #leftPanel
+            class="h-full min-h-0 flex-none p-1"
+            [isCollapsed]="taskListCollapsed"
             [mode]="'project'"
             [project]="project"
+            [selectedTaskDefinition$]="selectedTaskDefinition$"
+            [selectionUrlBase]="taskSelectionUrlBase"
+            [style.width.px]="leftWidth"
             [taskDefinitions]="taskDefinitionsForProject(project)"
             [tasks]="project.tasks"
-            [selectedTaskDefinition$]="selectedTaskDefinition$"
           ></f-unit-task-list>
         } @else {
           <div class="h-full min-h-0 flex-none" [style.width.px]="leftWidth">
@@ -59,13 +61,13 @@
         <div class="relative flex-none" [style.width.px]="10">
           <div
             #leftResizerEl
-            class="absolute inset-y-0 left-0 z-50 w-[10px] cursor-ew-resize bg-slate-100"
-            cdkDragLockAxis="x"
             cdkDrag
+            cdkDragLockAxis="x"
+            class="absolute inset-y-0 left-0 z-50 w-[10px] cursor-ew-resize bg-slate-100"
             [cdkDragBoundary]="boundary"
-            (cdkDragStarted)="startedDragging($event, boundary)"
-            (cdkDragMoved)="dragging($event, boundary)"
             (cdkDragEnded)="stoppedDragging($event)"
+            (cdkDragMoved)="dragging($event, boundary)"
+            (cdkDragStarted)="startedDragging($event, boundary)"
           ></div>
         </div>
       }

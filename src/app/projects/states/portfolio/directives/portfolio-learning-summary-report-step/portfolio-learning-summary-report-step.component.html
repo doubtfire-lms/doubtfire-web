@@ -46,7 +46,7 @@
         <!-- <button mat-button (click)="downloadLearningSummaryReport()" color="primary">
           View Learning Summary Report
         </button> -->
-        <button mat-button (click)="forceLSRSubmit = true" color="primary">Upload a new one</button>
+        <button color="primary" mat-button (click)="forceLSRSubmit = true">Upload a new one</button>
       </div>
     }
     <div
@@ -64,9 +64,9 @@
       </div>
       <f-file-uploader
         [files]="learningSummaryReportFileUploadData.type"
+        [onSuccess]="addNewFile.bind(this)"
         [payload]="learningSummaryReportFileUploadData.payload"
         [url]="project.portfolioUrl()"
-        [onSuccess]="addNewFile.bind(this)"
       ></f-file-uploader>
     </div>
   </mat-card-content>
@@ -79,10 +79,10 @@
         </div>
       }
       <button
-        mat-raised-button
-        (click)="advanceActiveTab(1)"
         color="primary"
+        mat-raised-button
         [disabled]="!projectHasDraftLearningSummaryReport"
+        (click)="advanceActiveTab(1)"
       >
         Next
       </button>

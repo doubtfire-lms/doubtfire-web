@@ -1,0 +1,125 @@
+<h2 mat-dialog-title>Add Engagement Stamp</h2>
+
+<mat-dialog-content>
+  <p>
+    Students can see engagement stamps, including any notes and evidence you add. They can also
+    leave comments under each engagement.
+  </p>
+  <form class="flex min-w-0 flex-col gap-1 pt-1" [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Engagement type</mat-label>
+      <input
+        #engagementTypeInput
+        formControlName="engagementType"
+        matInput
+        maxlength="255"
+        placeholder="e.g. Attendance"
+        [matAutocomplete]="engagementTypeOptions"
+      />
+      <mat-autocomplete
+        #engagementTypeOptions="matAutocomplete"
+        (optionSelected)="engagementTypeSelected(engagementTypeInput)"
+      >
+        @for (type of engagementTypes; track type) {
+          <mat-option [value]="type">{{ type }}</mat-option>
+        }
+      </mat-autocomplete>
+      <mat-hint>Choose a suggestion or enter another type.</mat-hint>
+      @if (form.controls.engagementType.hasError('required')) {
+        <mat-error>Enter an engagement type.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Note</mat-label>
+      <textarea
+        formControlName="note"
+        matInput
+        maxlength="4095"
+        rows="4"
+        [placeholder]="notePlaceholder"
+      ></textarea>
+      <mat-hint align="end">{{ form.controls.note.value.length }} / 4095</mat-hint>
+    </mat-form-field>
+
+    <div class="grid grid-cols-2 gap-2">
+      <mat-form-field appearance="outline" class="min-w-0">
+        <mat-label>Date</mat-label>
+        <input formControlName="occurredDate" matInput [matDatepicker]="occurredDatePicker" />
+        <mat-datepicker-toggle matIconSuffix [for]="occurredDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #occurredDatePicker></mat-datepicker>
+        @if (form.controls.occurredDate.hasError('required')) {
+          <mat-error>Select when the engagement occurred.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="min-w-0">
+        <mat-label>Time</mat-label>
+        <input formControlName="occurredTime" matInput type="time" />
+        @if (form.controls.occurredTime.hasError('required')) {
+          <mat-error>Select a time.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Evidence</mat-label>
+      <mat-select formControlName="evidenceMode" (selectionChange)="evidenceModeChanged()">
+        <mat-option value="none">No evidence</mat-option>
+        <mat-option value="url">External URL</mat-option>
+        <mat-option value="attachment">Upload image or PDF</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    @if (form.controls.evidenceMode.value === 'url') {
+      <mat-form-field appearance="outline">
+        <mat-label>Evidence URL</mat-label>
+        <input
+          formControlName="evidenceUrl"
+          matInput
+          placeholder="https://example.com/evidence"
+          type="url"
+        />
+        @if (
+          form.controls.evidenceUrl.hasError('pattern') ||
+          (form.controls.evidenceUrl.touched && !form.controls.evidenceUrl.value.trim())
+        ) {
+          <mat-error>Enter a valid HTTP or HTTPS URL.</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    @if (form.controls.evidenceMode.value === 'attachment') {
+      <div class="mb-4 rounded-md border border-gray-300 p-4">
+        <label class="mb-2 block text-sm font-medium text-gray-700" for="engagement-evidence">
+          Image or PDF
+        </label>
+        <input
+          accept="image/*,.pdf,application/pdf"
+          class="block w-full text-sm text-gray-600 file:mr-3 file:rounded-md file:border-0 file:bg-gray-100 file:px-3 file:py-2 file:font-medium file:text-gray-700 hover:file:bg-gray-200"
+          id="engagement-evidence"
+          type="file"
+          (change)="fileSelected($event)"
+        />
+        <p class="mt-2 text-xs text-gray-500">Maximum file size: 30 MB.</p>
+        @if (attachmentError) {
+          <p class="mt-2 text-sm text-red-600">{{ attachmentError }}</p>
+        }
+      </div>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" [disabled]="saving" [mat-dialog-close]="undefined">
+    Cancel
+  </button>
+  <button color="primary" mat-flat-button type="button" [disabled]="!canSubmit" (click)="submit()">
+    @if (saving) {
+      <mat-spinner class="mr-2 inline-block" diameter="18"></mat-spinner>
+      Adding...
+    } @else {
+      Add Stamp
+    }
+  </button>
+</mat-dialog-actions>

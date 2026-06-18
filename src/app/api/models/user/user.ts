@@ -21,6 +21,7 @@ export class User extends Entity {
   public receiveFeedbackNotifications: boolean;
   public hasRunFirstTimeSetup: boolean;
   public authenticationToken: string;
+  public authenticationTokenExpiry: string;
   public pronouns: string | null;
   public acceptedTiiEula: boolean;
 

@@ -1,10 +1,10 @@
 <hr class="hr-text" data-content="Knowledge Check Summary" [hidden]="!comment.firstInSeries" />
 <div class="flex flex-row items-center">
   <button
-    mat-button
     class="mr-2.5 h-7 flex-shrink-0"
-    (click)="reviewScormTest()"
+    mat-button
     [hidden]="!user.isStaff && !task.definition.scormAllowReview"
+    (click)="reviewScormTest()"
   >
     Review
   </button>
@@ -15,18 +15,18 @@
   }
   <button
     #menuState="matMenuTrigger"
-    mat-icon-button
     class="h-7 flex-shrink-0 p-0"
-    [matMenuTriggerFor]="menu"
+    mat-icon-button
     [hidden]="!user.isStaff"
+    [matMenuTriggerFor]="menu"
   >
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
     <button
       mat-menu-item
-      (click)="passScormAttempt()"
       [hidden]="this.comment.testAttempt.successStatus"
+      (click)="passScormAttempt()"
     >
       Pass attempt
     </button>

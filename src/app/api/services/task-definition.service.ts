@@ -66,6 +66,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
                 type: upreq.type,
                 tii_check: upreq.tiiCheck,
                 tii_pct: upreq.tiiPct,
+                submission_history: upreq.submissionHistory,
               };
             }),
           );
@@ -78,6 +79,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
               type: string;
               tii_check: boolean;
               tii_pct: number;
+              submission_history: boolean;
             }[]
           )?.map((upreq) => {
             return {
@@ -86,6 +88,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
               type: upreq.type,
               tiiCheck: upreq.tii_check,
               tiiPct: upreq.tii_pct,
+              submissionHistory: upreq.submission_history,
             };
           });
         },
