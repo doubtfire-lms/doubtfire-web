@@ -1,38 +1,37 @@
 @if (showHeader) {
   <mat-toolbar
-    [ngClass]="{inbox: globalState.isInboxState}"
     class="flex items-center justify-start"
     style="min-height: 85px"
+    [ngClass]="{inbox: globalState.isInboxState}"
   >
     @if (!media.isActive('xs')) {
       @if (logoSettings.hasLogo) {
-        <a [href]="logoSettings.logoLinkUrl" class="mx-6">
-          <img [src]="logoSettings.logoUrl" style="height: 32px" />
+        <a class="mx-3.5" [href]="logoSettings.logoLinkUrl">
+          <img style="height: 32px" [alt]="externalName + 'logo'" [src]="logoSettings.logoUrl" />
         </a>
       }
 
-      <a uiSref="home" class="pt-4">
+      <a class="pt-2.5" routerLink="/home">
         <mat-icon
-          uiSref="home"
+          aria-label="Formatif logo"
+          class="formatif-icon"
           style="margin-right: 20px; margin-left: 20px"
           svgIcon="formatif-logo"
-          class="formatif-icon"
-          aria-label="Formatif logo"
         ></mat-icon>
       </a>
     }
 
     <unit-dropdown
+      class="mr-1"
+      [projects]="projects"
       [unit]="currentUnit"
       [unitRoles]="filteredUnitRoles"
-      [projects]="projects"
-      class="mr-2"
     >
     </unit-dropdown>
 
     <task-dropdown
-      [currentUnit]="currentUnit"
       [currentProject]="currentProject"
+      [currentUnit]="currentUnit"
       [currentView]="currentView"
       [data]="data"
       [unitRole]="currentUnitRole"
@@ -41,19 +40,19 @@
     <span class="grow"></span>
     @if (sidekiqJobs.length) {
       <button mat-icon-button (click)="showSidekiqJob()">
-        <div [matBadge]="sidekiqJobs.length" matBadgeSize="small" class="z-50"></div>
+        <div class="z-50" matBadgeSize="small" [matBadge]="sidekiqJobs.length"></div>
         <mat-icon>cloud_sync_outline</mat-icon>
       </button>
     }
     @if (currentUnit && currentUnitRole && currentUnitRole.tutorNoteCount > 0) {
       <!-- TODO: Replace this with a more standardised notification system -->
-      <button mat-icon-button (click)="openTutorNotes()" matTooltip="Tutor Notes">
-        <mat-icon [matBadge]="currentUnitRole.tutorNoteCount" matBadgeSize="small"
+      <button mat-icon-button matTooltip="Moderation Notes" (click)="openTutorNotes()">
+        <mat-icon matBadgeSize="small" [matBadge]="currentUnitRole.tutorNoteCount"
           >feedback</mat-icon
         >
       </button>
     }
-    @if (currentUnit) {
+    @if (currentUnit && !isTutorDiscussionRoute) {
       <button mat-icon-button (click)="showMyQr()">
         <mat-icon>qr_code_scanner</mat-icon>
       </button>
@@ -61,10 +60,10 @@
     @if (currentUser.role === 'Admin' || currentUser.role === 'Convenor') {
       <button
         #menuState="matMenuTrigger"
-        mat-icon-button
-        fxShow.lt-sm="false"
-        fxShow.gt-md="true"
         fxShow="true"
+        fxShow.gt-md="true"
+        fxShow.lt-sm="false"
+        mat-icon-button
         [matMenuTriggerFor]="menu"
       >
         <mat-icon>admin_panel_settings</mat-icon>
@@ -72,17 +71,17 @@
     }
     <mat-menu #menu="matMenu">
       @if (currentUser.role === 'Admin') {
-        <button mat-menu-item uiSref="institutionsettings">
+        <button mat-menu-item routerLink="/admin/institution-settings">
           <mat-icon matListItemIcon>business</mat-icon>
           Institution Settings
         </button>
       }
-      <button mat-menu-item uiSref="admin/units">
+      <button mat-menu-item routerLink="/admin/units">
         <mat-icon matListItemIcon>school</mat-icon>
         Manage Units
       </button>
       @if (currentUser.role === 'Admin') {
-        <button mat-menu-item uiSref="admin/users">
+        <button mat-menu-item routerLink="/admin/users">
           <mat-icon matListItemIcon>people</mat-icon>
           Manage Users
         </button>
@@ -93,20 +92,20 @@
       <user-icon [size]="32" [user]="currentUser"></user-icon>
     </button>
     <mat-menu #menu2="matMenu">
-      <button mat-menu-item uiSref="edit_profile">
-        <mat-icon matListItemIcon aria-label="Edit profile">person</mat-icon>
+      <button mat-menu-item routerLink="/edit_profile">
+        <mat-icon aria-label="Edit profile" matListItemIcon>person</mat-icon>
         My Profile
       </button>
       <button mat-menu-item (click)="openCalendar()">
-        <mat-icon matListItemIcon aria-label="Edit calendar">calendar_month</mat-icon>
+        <mat-icon aria-label="Edit calendar" matListItemIcon>calendar_month</mat-icon>
         Calendar
       </button>
       <button mat-menu-item (click)="openAboutModal()">
-        <mat-icon matListItemIcon aria-label="About">info</mat-icon>
+        <mat-icon aria-label="About" matListItemIcon>info</mat-icon>
         About
       </button>
       <button mat-menu-item (click)="signOut()">
-        <mat-icon matListItemIcon aria-label="Sign out">logout</mat-icon>
+        <mat-icon aria-label="Sign out" matListItemIcon>logout</mat-icon>
         Sign Out
       </button>
     </mat-menu>

@@ -28,6 +28,8 @@ _Please describe the tests that you ran to verify your changes. Provide instruct
 # Checklist:
 
 - [ ] My code follows the style guidelines of this project
+- [ ] I have formatted my changes with `npm run format`
+- [ ] I have run `npm run lint` with no errors
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented my code in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation

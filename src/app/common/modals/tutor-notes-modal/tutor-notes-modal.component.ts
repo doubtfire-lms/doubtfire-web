@@ -8,6 +8,7 @@ import {TutorNotesModalData} from './tutor-notes-modal.service';
   selector: 'f-tutor-notes-modal',
   templateUrl: './tutor-notes-modal.component.html',
   styleUrl: './tutor-notes-modal.component.scss',
+  standalone: false,
 })
 export class TutorNotesModalComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: TutorNotesModalData) {}

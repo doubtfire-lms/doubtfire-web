@@ -1,12 +1,12 @@
-import {User, UserService} from 'src/app/api/models/doubtfire-model';
-import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {StateService, UIRouter, UIRouterGlobals} from '@uirouter/angular';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {AsyncSubject, Observable, catchError, map, throwError} from 'rxjs';
+import {User, UserService} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
-import {AsyncSubject, catchError, map, Observable, throwError} from 'rxjs';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 /**
  * The format for the data returned from the auth api.
@@ -14,6 +14,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 interface AuthResponse {
   user: object;
   auth_token: string;
+  auth_token_expiry: string;
   lti_token?: string;
 }
 
@@ -44,10 +45,8 @@ export class AuthenticationService {
     private httpClient: HttpClient,
     private userService: UserService,
     private alertService: AlertService,
-    private state: StateService,
+    private angularRouter: Router,
     private doubtfireConstants: DoubtfireConstants,
-    private router: UIRouter,
-    private uiRouterGlobals: UIRouterGlobals,
   ) {
     this.AUTH_URL = `${this.doubtfireConstants.API_URL}/auth`;
     // Ensure any only user data is removed from local storage
@@ -177,6 +176,7 @@ export class AuthenticationService {
 
     // Set the user's authentication token for access to api.
     user.authenticationToken = response['auth_token'];
+    user.authenticationTokenExpiry = response['auth_token_expiry'];
 
     // Record the current user
     this.userService.currentUser = user;
@@ -274,7 +274,7 @@ export class AuthenticationService {
       if (ssoSignOut && this.doubtfireConstants.SignoutURL) {
         window.location.assign(this.doubtfireConstants.SignoutURL);
       } else {
-        this.state.go('sign_in');
+        this.angularRouter.navigateByUrl('/sign_in');
       }
     };
 
@@ -290,9 +290,9 @@ export class AuthenticationService {
   }
 
   public timeoutAuthentication(): void {
-    if (this.uiRouterGlobals.current.name !== 'timeout') {
+    if (window.location.pathname !== '/timeout') {
       this.alertService.error('Authentication timed out', 6000);
-      setTimeout(() => this.router.stateService.go('timeout'), 500);
+      setTimeout(() => this.angularRouter.navigateByUrl('/timeout'), 500);
     }
   }
 

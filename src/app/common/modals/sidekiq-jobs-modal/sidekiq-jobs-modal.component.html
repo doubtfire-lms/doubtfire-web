@@ -3,13 +3,13 @@
   <mat-dialog-content>
     <div>
       @for (jobEntry of sidekiqJobs; track jobEntry) {
-        <div class="flex justify-between items-center p-2">
+        <div class="flex items-center justify-between p-1">
           <div>{{ jobEntry.title }}</div>
           <div class="flex items-center">
-            <div class="mr-10 text-center">{{ jobEntry.job?.status?.toUpperCase() }}</div>
-            <div class="flex gap-4">
-              <button mat-raised-button color="primary" (click)="viewJob(jobEntry)">View</button>
-              <button mat-raised-button color="red" (click)="removeJob(jobEntry)">Clear</button>
+            <div class="mr-6 text-center">{{ jobEntry.job?.status?.toUpperCase() }}</div>
+            <div class="flex gap-2.5">
+              <button color="primary" mat-raised-button (click)="viewJob(jobEntry)">View</button>
+              <button color="red" mat-raised-button (click)="removeJob(jobEntry)">Clear</button>
             </div>
           </div>
         </div>

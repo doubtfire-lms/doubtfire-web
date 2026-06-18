@@ -1,0 +1,345 @@
+<div class="flex flex-col gap-4">
+  <div>
+    <p>Current unit week: {{ currentUnitWeek <= 0 ? 'Not started' : currentUnitWeek }}</p>
+  </div>
+  <div class="flex flex-wrap items-center gap-3">
+    <button color="primary" mat-flat-button (click)="addSet()">
+      <mat-icon>add</mat-icon>
+      Add set
+    </button>
+  </div>
+
+  @if (loading) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  <mat-drawer-container class="min-h-[750px] border border-gray-300">
+    <mat-drawer class="w-[320px] border-r border-gray-300" mode="side" opened>
+      <!-- <div
+        class="w-full min-h-[50px] border-b border-gray-300 bg-gray-300 px-[20px] flex items-center"
+      >
+        Communication Sets & Rules
+      </div> -->
+
+      <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
+        <mat-tree-node *matTreeNodeDef="let node" class="p-0" matTreeNodePadding>
+          <div
+            class="min-h-[64px] w-full border-b border-gray-200 px-4"
+            [ngClass]="{'bg-gray-100': isSelectedRuleNode(node)}"
+          >
+            <div class="flex w-full items-center justify-between gap-3">
+              <button
+                class="min-h-[64px] w-full min-w-0 flex-1 justify-start px-0"
+                mat-button
+                (click)="selectRuleNode(node.set!, node.rule!)"
+              >
+                <div class="min-w-0 text-left">
+                  <div class="truncate font-medium">Rule: {{ node.rule?.name }}</div>
+                  <div class="text-black/30">
+                    {{ node.rule?.operator === 'and' ? 'All conditions' : 'Any condition' }}
+                  </div>
+                  <div class="text-black/70">{{ studentsTabLabel(node.rule!) }}</div>
+                </div>
+              </button>
+              <button
+                color="warn"
+                mat-icon-button
+                (click)="deleteRule(node.rule!); $event.stopPropagation()"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-tree-node>
+
+        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasTreeChild">
+          <div class="border-b border-gray-200">
+            <div
+              class="flex min-h-[56px] items-center gap-2 px-2"
+              [ngClass]="{'bg-[#e7e7ff]': isSelectedSetNode(node)}"
+            >
+              <button mat-icon-button (click)="toggleSetNode(node, $event)">
+                <mat-icon>
+                  {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+                </mat-icon>
+              </button>
+
+              <button
+                class="min-w-0 flex-1 justify-start px-2"
+                mat-button
+                (click)="selectSetNode(node.set!)"
+              >
+                <span class="truncate text-left">Set: {{ node.set?.name }}</span>
+              </button>
+            </div>
+
+            @if (treeControl.isExpanded(node)) {
+              <div>
+                <ng-container matTreeNodeOutlet></ng-container>
+
+                <!-- @if (selectedSetId === node.set?.id) {
+                  <div class="border-t border-gray-200 p-4">
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      class="w-full"
+                      (click)="addRule()"
+                      [disabled]="!selectedSetId"
+                    >
+                      <mat-icon>add</mat-icon>
+                      Add rule
+                    </button>
+                  </div>
+                } -->
+              </div>
+            }
+          </div>
+        </mat-nested-tree-node>
+      </mat-tree>
+    </mat-drawer>
+
+    <mat-drawer-content>
+      @if (selectedSet(); as set) {
+        <div class="flex min-h-[48rem] flex-col">
+          <div class="flex items-center justify-between px-[20px]">
+            <div class="flex min-w-0 flex-1 items-center gap-2 py-5">
+              @if (editingSetNameId === set.id) {
+                <mat-form-field appearance="outline" class="w-full max-w-[450px]">
+                  <mat-label>Set name</mat-label>
+                  <input matInput [(ngModel)]="setNameDraft" />
+                </mat-form-field>
+                <button
+                  class="mb-[22px]"
+                  color="primary"
+                  mat-icon-button
+                  (click)="saveSetName(set)"
+                >
+                  <mat-icon>save</mat-icon>
+                </button>
+                <button class="mb-[22px]" mat-icon-button (click)="cancelEditSetName()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              } @else {
+                <h3 class="mt-[16px] truncate">{{ set.name }}</h3>
+                <button class="scale-75 opacity-50" mat-icon-button (click)="beginEditSetName(set)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+            </div>
+            <div class="flex items-center gap-2">
+              <button
+                color="primary"
+                mat-flat-button
+                [disabled]="!selectedSetId"
+                (click)="addRule()"
+              >
+                <mat-icon>add</mat-icon>
+                Add rule
+              </button>
+              <button mat-stroked-button (click)="addSchedule(set)">
+                <mat-icon>schedule</mat-icon>
+                Add schedule
+              </button>
+              <button mat-raised-button (click)="confirmExecuteSet(set)">Execute Set</button>
+              <button color="warn" mat-icon-button (click)="deleteSet(set)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="flex flex-col">
+            <f-communication-schedules [editor]="editorContext" [set]="set" />
+
+            @if (selectedRule(); as rule) {
+              <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+                <div class="flex w-full items-center gap-2">
+                  @if (editingRuleNameId === rule.id) {
+                    <mat-form-field appearance="outline" class="w-full max-w-[450px]">
+                      <mat-label>Rule name</mat-label>
+                      <input matInput [(ngModel)]="ruleNameDraft" />
+                    </mat-form-field>
+                    <button
+                      class="mb-[22px]"
+                      color="primary"
+                      mat-icon-button
+                      (click)="saveRuleName(rule)"
+                    >
+                      <mat-icon>save</mat-icon>
+                    </button>
+                    <button class="mb-[22px]" mat-icon-button (click)="cancelEditRuleName()">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  } @else {
+                    <div class="flex items-center gap-2">
+                      <div class="font-medium">{{ rule.name }}</div>
+                      <button
+                        class="scale-75 opacity-50"
+                        mat-icon-button
+                        (click)="beginEditRuleName(rule)"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </div>
+                  }
+                </div>
+
+                <div class="flex min-w-fit items-center gap-3">
+                  <button mat-raised-button (click)="confirmExecuteRule(rule)">Execute Rule</button>
+                </div>
+              </div>
+
+              <mat-tab-group
+                dynamicHeight
+                [selectedIndex]="previewTabIndex[rule.id] || 0"
+                (selectedTabChange)="onRuleTabChange(rule, $event.index)"
+              >
+                <mat-tab label="Conditions">
+                  <f-communication-conditions [editor]="editorContext" [rule]="rule" />
+                </mat-tab>
+
+                <mat-tab label="Actions">
+                  <f-communication-actions [editor]="editorContext" [rule]="rule" />
+                </mat-tab>
+
+                <mat-tab label="Post Execution">
+                  <div class="flex flex-col gap-4 p-6">
+                    <mat-checkbox class="mb-2" [(ngModel)]="rule.send_log_to_convenors">
+                      Send action log to convenors after execution
+                    </mat-checkbox>
+
+                    <div class="flex justify-start">
+                      <button color="primary" mat-flat-button (click)="updateRule(rule)">
+                        <mat-icon>save</mat-icon>
+                        Save post execution settings
+                      </button>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <mat-tab [label]="studentsTabLabel(rule)">
+                  <div class="flex flex-col gap-4 p-6">
+                    <div class="flex justify-end">
+                      <button
+                        color="primary"
+                        mat-stroked-button
+                        [disabled]="setPreviewLoading"
+                        (click)="refreshPreview(rule)"
+                      >
+                        <mat-icon>refresh</mat-icon>
+                        Refresh preview
+                      </button>
+                    </div>
+
+                    @if (setPreviewLoading || previewLoading[rule.id]) {
+                      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    } @else if (previewLoaded[rule.id]) {
+                      <div class="font-medium">
+                        Selected for {{ rule.name }} ({{ studentsFor(rule).length }})
+                      </div>
+
+                      @if (studentsFor(rule).length === 0) {
+                        <div class="text-black/70">No students currently match this rule.</div>
+                      } @else {
+                        <table class="w-full" mat-table [dataSource]="studentsFor(rule)">
+                          <ng-container matColumnDef="preferred_name">
+                            <th *matHeaderCellDef mat-header-cell>Preferred Name</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{ student.preferred_name || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="first_name">
+                            <th *matHeaderCellDef mat-header-cell>First Name</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{ student.first_name || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="last_name">
+                            <th *matHeaderCellDef mat-header-cell>Last Name</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{ student.last_name || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="full_name">
+                            <th *matHeaderCellDef mat-header-cell>Full Name</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{ student.full_name || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="username">
+                            <th *matHeaderCellDef mat-header-cell>Username</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{ student.username || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="student_id">
+                            <th *matHeaderCellDef mat-header-cell>Student ID</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{ student.student_id || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="campus">
+                            <th *matHeaderCellDef mat-header-cell>Campus</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{ student.campus || '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="target_grade">
+                            <th *matHeaderCellDef mat-header-cell>Target Grade</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{
+                                student.target_grade ? targetGradeName(student.target_grade) : '-'
+                              }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="spec_con_days">
+                            <th *matHeaderCellDef mat-header-cell>Spec Con Days</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{ student.spec_con_days ?? '-' }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="last_sign_in_at">
+                            <th *matHeaderCellDef mat-header-cell>Last Sign In</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{
+                                student.last_sign_in_at ? dateLabel(student.last_sign_in_at) : '-'
+                              }}
+                            </td>
+                          </ng-container>
+
+                          <tr *matHeaderRowDef="previewStudentColumns" mat-header-row></tr>
+                          <tr *matRowDef="let row; columns: previewStudentColumns" mat-row></tr>
+                        </table>
+                      }
+                    } @else {
+                      <div class="text-black/70">
+                        Preview data will load when you select a communication set.
+                      </div>
+                    }
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+            } @else {
+              <div class="mt-5 flex h-full items-center justify-center text-black/60">
+                Select a communication rule to edit its conditions, actions, and preview.
+              </div>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="flex h-[48rem] items-center justify-center text-black/60">
+          Create or select a communication set to begin.
+        </div>
+      }
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

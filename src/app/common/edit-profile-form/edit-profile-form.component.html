@@ -1,17 +1,17 @@
 <form
   #form="ngForm"
-  (ngSubmit)="submit()"
   fxLayout="column"
   fxLayoutAlign="center start"
-  [ngClass]="{'p-16': modal}"
+  [ngClass]="{'p-10': modal}"
+  (ngSubmit)="submit()"
 >
-  <div class="main-container w-full flex flex-row justify-center items-start">
-    <div class="main flex flex-col justify-start items-start w-full">
+  <div class="main-container flex w-full flex-row items-start justify-center">
+    <div class="main flex w-full flex-col items-start justify-start">
       <!-- avatar -->
-      <div class="flex flex-row justify-between items-center mb-[25px] w-full">
-        <div class="flex flex-row justify-between items-center">
+      <div class="mb-[25px] flex w-full flex-row items-center justify-between">
+        <div class="flex flex-row items-center justify-between">
           <a class="ml-[20px]" href="https://gravatar.com/connect/?source=_signup/" target="_blank">
-            <user-icon [size]="80" [user]="user" style="margin-right: 25px"></user-icon
+            <user-icon style="margin-right: 25px" [size]="80" [user]="user"></user-icon
           ></a>
 
           <div>
@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div fxLayout="row" fxFlexFill>
+      <div fxFlexFill fxLayout="row">
         <!-- <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
           <mat-label>Pronouns</mat-label>
           <mat-select [(ngModel)]="formPronouns.pronouns" name="pronouns">
@@ -33,27 +33,27 @@
           </mat-select>
         </mat-form-field>
         <div fxFlex="3"></div> -->
-        <mat-form-field fxFlexFill appearance="outline">
+        <mat-form-field appearance="outline" fxFlexFill>
           <mat-label>Username</mat-label>
-          <input matInput [(ngModel)]="user.username" name="username" [disabled]="!newUser"/>
+          <input matInput name="username" [disabled]="!newUser" [(ngModel)]="user.username" />
         </mat-form-field>
       </div>
 
-      <div fxLayout="row" fxFlexFill>
-        <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="start">
+      <div fxFlexFill fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex="48" fxFlexAlign="start">
           <mat-label>First Name</mat-label>
-          <input matInput class="outline-none" [(ngModel)]="user.firstName" name="first" required />
+          <input class="outline-none" matInput name="first" required [(ngModel)]="user.firstName" />
         </mat-form-field>
 
         <div fxFlex></div>
 
-        <mat-form-field fxFlex="48" appearance="outline" fxFlexAlign="end">
+        <mat-form-field appearance="outline" fxFlex="48" fxFlexAlign="end">
           <mat-label>Second Name</mat-label>
-          <input matInput [(ngModel)]="user.lastName" name="last" required />
+          <input matInput name="last" required [(ngModel)]="user.lastName" />
         </mat-form-field>
       </div>
 
-      <div fxLayout="row" fxFlexFill>
+      <div fxFlexFill fxLayout="row">
         <!-- <mat-form-field fxFlex="25" fxFlexAlign="start" appearance="outline">
           <mat-label>Pronouns</mat-label>
           <mat-select [(ngModel)]="formPronouns.pronouns" name="pronouns">
@@ -65,95 +65,129 @@
           </mat-select>
         </mat-form-field>
         <div fxFlex="3"></div> -->
-        <mat-form-field fxFlexFill appearance="outline">
+        <mat-form-field appearance="outline" fxFlexFill>
           <mat-label>Preferred Name</mat-label>
-          <input matInput [(ngModel)]="user.nickname" name="preferred_name" />
+          <input matInput name="preferred_name" [(ngModel)]="user.nickname" />
         </mat-form-field>
       </div>
 
-      <mat-form-field fxFlexFill appearance="outline" [hidden]="!customPronouns">
+      <mat-form-field appearance="outline" fxFlexFill [hidden]="!customPronouns">
         <mat-label>Custom Pronouns</mat-label>
         <input
           matInput
           maxlength="25"
           name="custom_pronouns"
           type="text"
-          [(ngModel)]="user.pronouns"
           [required]="customPronouns"
+          [(ngModel)]="user.pronouns"
         />
       </mat-form-field>
 
       @if (user.systemRole === 'Student') {
-      <mat-form-field appearance="outline" fxFlexFill>
-        <mat-label>Student ID</mat-label>
-        <input matInput [(ngModel)]="user.studentId" name="student_id" required />
-      </mat-form-field>
+        <mat-form-field appearance="outline" fxFlexFill>
+          <mat-label>Student ID</mat-label>
+          <input matInput name="student_id" required [(ngModel)]="user.studentId" />
+        </mat-form-field>
       }
 
       <mat-form-field appearance="outline" fxFlexFill>
         <mat-label>Email</mat-label>
-        <input type="email" matInput [(ngModel)]="user.email" name="email" required />
+        <input matInput name="email" required type="email" [(ngModel)]="user.email" />
       </mat-form-field>
 
       @if (canSeeSystemRole) {
-      <mat-form-field fxFlexFill appearance="outline">
-        <mat-label>System Role</mat-label>
-        <mat-select [(ngModel)]="user.systemRole" name="systemRole" [disabled]="!canEditSystemRole">
-          <mat-option value="Admin">Administrator</mat-option>
-          <mat-option value="Convenor">Convenor</mat-option>
-          <mat-option value="Tutor">Tutor</mat-option>
-          <mat-option value="Student">Student</mat-option>
-          <mat-option value="Auditor">Auditor</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field appearance="outline" fxFlexFill>
+          <mat-label>System Role</mat-label>
+          <mat-select
+            name="systemRole"
+            [disabled]="!canEditSystemRole"
+            [(ngModel)]="user.systemRole"
+          >
+            <mat-option value="Admin">Administrator</mat-option>
+            <mat-option value="Convenor">Convenor</mat-option>
+            <mat-option value="Tutor">Tutor</mat-option>
+            <mat-option value="Student">Student</mat-option>
+            <mat-option value="Auditor">Auditor</mat-option>
+          </mat-select>
+        </mat-form-field>
       }
 
-      <section fxLayout="column" fxFlexFill fxLayoutAlign="center start">
-        <mat-checkbox class="" color="primary" [(ngModel)]="user.receiveFeedbackNotifications" name="feedback_n"
+      <section fxFlexFill fxLayout="column" fxLayoutAlign="center start">
+        <mat-checkbox
+          class=""
+          color="primary"
+          name="feedback_n"
+          [(ngModel)]="user.receiveFeedbackNotifications"
           >Receive notifications for new messages</mat-checkbox
         >
         <div fxFlex></div>
-        <mat-checkbox color="primary" [(ngModel)]="user.receivePortfolioNotifications" name="portfolio_n"
+        <mat-checkbox
+          color="primary"
+          name="portfolio_n"
+          [(ngModel)]="user.receivePortfolioNotifications"
           >Receive notifications when your portfolio is ready</mat-checkbox
         >
         <div fxFlex></div>
-        <mat-checkbox fxFlex color="primary" [(ngModel)]="user.receiveTaskNotifications" name="task_n"
+        <mat-checkbox
+          color="primary"
+          fxFlex
+          name="task_n"
+          [(ngModel)]="user.receiveTaskNotifications"
           >Receive notifications when new tasks are available</mat-checkbox
         >
       </section>
-      <section fxLayout="row" fxFlexFill fxLayoutAlign="start center">
-        <mat-checkbox color="primary" [(ngModel)]="user.optInToResearch" name="optin"
+      <section fxFlexFill fxLayout="row" fxLayoutAlign="start center">
+        <mat-checkbox color="primary" name="optin" [(ngModel)]="user.optInToResearch"
           >Send anonymous research statistics
         </mat-checkbox>
       </section>
 
-      @if(tiiEnabled){
-      <section fxLayout="row" fxFlexFill fxLayoutAlign="start center">
-        <mat-checkbox color="primary" [(ngModel)]="user.acceptedTiiEula" [disableRipple]="true" (click)="$event.preventDefault()" name="acceptedTiiEula" disabled
-          >Accepted TurnItIn EULA
-        </mat-checkbox>
-      </section>
+      @if (tiiEnabled) {
+        <section fxFlexFill fxLayout="row" fxLayoutAlign="start center">
+          <mat-checkbox
+            color="primary"
+            disabled
+            name="acceptedTiiEula"
+            [disableRipple]="true"
+            [(ngModel)]="user.acceptedTiiEula"
+            (click)="$event.preventDefault()"
+            >Accepted TurnItIn EULA
+          </mat-checkbox>
+        </section>
       }
-      <div fxLayout="row" fxFlexFill style="padding-top: 12px">
-        <button [hidden]="mode === 'edit' || mode === 'new'" fxFlexAlign="start" type="button" mat-stroked-button (click)="signOut()">
+      <div fxFlexFill fxLayout="row" style="padding-top: 12px">
+        <button
+          fxFlexAlign="start"
+          mat-stroked-button
+          type="button"
+          [hidden]="mode === 'edit' || mode === 'new'"
+          (click)="signOut()"
+        >
           Sign Out
         </button>
         <div fxFlex></div>
         @if (mode === 'create') {
-        <button [disabled]="form.invalid" fxFlexAlign="end" type="submit" mat-flat-button color="primary">
-          Confirm Account
-        </button>
-        } @if (mode === 'edit') {
-        <button
-          type="button"
-          [disabled]="form.invalid"
-          fxFlexAlign="end"
-          (click)="submit()"
-          mat-flat-button
-          color="primary"
-        >
-          Save Profile
-        </button>
+          <button
+            color="primary"
+            fxFlexAlign="end"
+            mat-flat-button
+            type="submit"
+            [disabled]="form.invalid"
+          >
+            Confirm Account
+          </button>
+        }
+        @if (mode === 'edit') {
+          <button
+            color="primary"
+            fxFlexAlign="end"
+            mat-flat-button
+            type="button"
+            [disabled]="form.invalid"
+            (click)="submit()"
+          >
+            Save Profile
+          </button>
         }
       </div>
     </div>

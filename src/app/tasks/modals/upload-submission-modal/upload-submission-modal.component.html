@@ -1,0 +1,208 @@
+<div class="flex items-center justify-between">
+  <h2 mat-dialog-title>Submit {{ task.definition.abbreviation }} {{ task.definition.name }}</h2>
+  <mat-form-field appearance="outline" class="my-2.5 mr-[24px] mt-[22px] w-full lg:max-w-sm">
+    <mat-label>Submission type</mat-label>
+    <mat-select
+      [disabled]="uploadStarted || isUploading"
+      [(ngModel)]="submissionType"
+      (ngModelChange)="onSubmissionTypeChange($event)"
+    >
+      @for (option of submissionTypeOptions; track option.id) {
+        <mat-option [value]="option.id">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<mat-dialog-content>
+  <div class="flex flex-col gap-2.5">
+    @if (isGroupStage && !uploadStarted) {
+      <mat-card>
+        <mat-card-content class="flex flex-col gap-2 pt-3.5">
+          <div>
+            <h3 class="font-semibold">Team Contribution</h3>
+            <p class="text-gray-600">
+              Please rate each team member's effort on {{ task.definition.name }}.
+            </p>
+            <p class="text-gray-500">Click the same rating twice to record no contribution.</p>
+          </div>
+
+          <f-group-member-contribution-assigner
+            [isTestSubmission]="data.isTestSubmission"
+            [project]="task.project"
+            [task]="task"
+            [(team)]="team"
+          >
+          </f-group-member-contribution-assigner>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <mat-card [class.hidden]="!isDetailsStage && !uploadStarted">
+      <mat-card-content class="flex flex-col gap-2 pt-3.5">
+        @if (!uploadStarted) {
+          <div>
+            <h3 class="font-semibold">
+              Select {{ submissionType === 'need_help' ? 'files' : 'evidence' }} to upload
+            </h3>
+
+            @if (submissionType === 'need_help') {
+              <p class="text-gray-600">
+                Upload the required files so your tutor can help with this task, even if they are
+                not finished yet.
+              </p>
+            } @else {
+              <p class="text-gray-600">
+                Upload files that show your evidence of work until each required file has been
+                selected.
+              </p>
+            }
+          </div>
+        }
+
+        <f-file-uploader
+          #fileUploader
+          [files]="fileRequirements"
+          [onBeforeUpload]="onBeforeUpload"
+          [onClickFailureCancel]="cancel"
+          [onComplete]="onUploadComplete"
+          [onSuccess]="onUploadSuccess"
+          [payload]="payload"
+          [resetAfterUpload]="false"
+          [showUploadButton]="false"
+          [singleDropZone]="true"
+          [url]="uploadUrl"
+          (isReadyChange)="onReadyChange($event)"
+          (uploadReady)="onUploaderReady($event)"
+        >
+        </f-file-uploader>
+      </mat-card-content>
+    </mat-card>
+
+    @if (!uploadStarted && isCommentsStage) {
+      <div class="flex flex-col gap-2.5">
+        <mat-card>
+          <mat-card-content class="flex flex-col gap-2.5 pt-3.5">
+            <div>
+              @if (submissionType === 'need_help') {
+                <h3 class="font-semibold">What do you need help with?</h3>
+                <p class="text-gray-600">
+                  Add a short comment so your tutor knows what help you need on this task.
+                </p>
+              } @else {
+                <h3 class="font-semibold">Final comments</h3>
+                @if (task.definition.assessInPortfolioOnly) {
+                  <p class="text-gray-600">
+                    Please specify which areas of your submission you would like feedback on.
+                  </p>
+                } @else {
+                  <p class="text-gray-600">
+                    Add an optional note for your tutor to read while assessing this submission.
+                  </p>
+                }
+              }
+            </div>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Comment</mat-label>
+              <textarea
+                matInput
+                rows="4"
+                [placeholder]="commentPlaceholder"
+                [(ngModel)]="comment"
+              ></textarea>
+            </mat-form-field>
+
+            <div class="text-right text-gray-500">
+              Character count: {{ comment.length }}
+              @if (requiresComment) {
+                <span>(Min. {{ minCommentLength }})</span>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        @if (privacyPolicy.privacy) {
+          <mat-card>
+            <mat-card-content class="flex flex-col gap-2 pt-3.5">
+              <div>
+                <h3 class="font-semibold">Declaration</h3>
+                <p class="text-[14px] text-gray-600">{{ privacyPolicy.privacy }}</p>
+              </div>
+
+              <div>
+                <button
+                  color="primary"
+                  mat-stroked-button
+                  type="button"
+                  (click)="showPlagiarism = !showPlagiarism"
+                >
+                  Plagiarism and collusion
+                </button>
+
+                @if (showPlagiarism) {
+                  <div class="mt-1 text-[13px] text-gray-600">
+                    {{ privacyPolicy.plagiarism }}
+                  </div>
+                }
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+
+@if (!uploadStarted) {
+  <mat-dialog-actions align="end">
+    <button class="mr-auto" color="warn" mat-button type="button" (click)="cancel()">
+      Cancel Submission
+    </button>
+
+    @if (isGroupStage) {
+      <button
+        color="primary"
+        mat-raised-button
+        type="button"
+        [disabled]="shouldDisableNext()"
+        (click)="goToDetailsStage()"
+      >
+        Next
+      </button>
+    }
+
+    @if (isDetailsStage && showCommentsSection) {
+      <button
+        color="primary"
+        mat-raised-button
+        type="button"
+        [disabled]="shouldDisableNext()"
+        (click)="goToCommentsStage()"
+      >
+        Next
+      </button>
+    }
+
+    @if (isDetailsStage && showGroupSection) {
+      <button mat-button type="button" (click)="goToGroupStage()">Back</button>
+    }
+
+    @if (isCommentsStage) {
+      <button mat-button type="button" (click)="goToDetailsStage()">Back</button>
+    }
+
+    @if ((!showCommentsSection && isDetailsStage) || isCommentsStage) {
+      <button
+        color="primary"
+        mat-flat-button
+        type="button"
+        [disabled]="shouldDisableSubmit()"
+        [matTooltip]="submitTooltip"
+        (click)="uploadButtonClicked()"
+      >
+        Upload Submission
+      </button>
+    }
+  </mat-dialog-actions>
+}

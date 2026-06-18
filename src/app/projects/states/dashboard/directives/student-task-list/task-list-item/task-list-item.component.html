@@ -4,15 +4,15 @@
   </h4>
   <p class="list-group-item-text">
     @if (task.isGroupTask()) {
-      <i class="fa fa-users" matTooltip="Group Task" aria-hidden="true"></i>
+      <mat-icon aria-hidden="true" inline matTooltip="Group Task">groups</mat-icon>
     }
     @if (!task.isGroupTask()) {
-      <i class="fa fa-user" matTooltip="Individual Task" aria-hidden="true"></i>
+      <mat-icon aria-hidden="true" inline matTooltip="Individual Task">person</mat-icon>
     }
     {{ task.definition.abbreviation }} - {{ gradeNames[task.definition.targetGrade] }} Task
     @if (task.isBeforeStartDate() && !task.inSubmittedState()) {
       <span class="due-time" matTooltip="Start task in {{ task.timeToStart() }}">
-        <i class="fa fa-hourglass-start"></i> {{ task.timeToStart() }}
+        <mat-icon inline>hourglass_empty</mat-icon> {{ task.timeToStart() }}
       </span>
     }
     @if (!task.isBeforeStartDate() && !task.inSubmittedState()) {
@@ -22,7 +22,7 @@
           task.isOverdue() ? 'Task Overdue!' : 'Complete task in ' + task.timeToDue()
         }}"
       >
-        <i class="fa fa-hourglass-end"></i> {{ task.timeToDue() }}
+        <mat-icon inline>hourglass_bottom</mat-icon> {{ task.timeToDue() }}
       </span>
     }
   </p>
@@ -34,19 +34,19 @@
   <div class="task-superscript-badges">
     <span
       class="task-superscript-badge new-comments-badge"
-      [hidden]="task.numNewComments <= 0"
       matTooltip="{{ task.numNewComments }} new {{
         task.numNewComments > 1 ? 'comments' : 'comment'
       }}"
+      [hidden]="task.numNewComments <= 0"
     >
       {{ task.numNewComments }}
     </span>
     <span
       class="task-superscript-badge plagiarism-detected-badge"
-      [hidden]="!task.similaritiesDetected"
       matTooltip="Plagiarism detected"
+      [hidden]="!task.similaritiesDetected"
     >
-      <i class="fa fa-eye"></i>
+      <mat-icon inline>visibility</mat-icon>
     </span>
   </div>
 
@@ -62,7 +62,7 @@
       class="task-subscript-badge soon-badge"
       [hidden]="!(task.isDueSoon() && !task.inFinalState())"
     >
-      <i class="fa fa-clock-o"></i>
+      <mat-icon inline>schedule</mat-icon>
     </span>
     <span
       class="task-subscript-badge due-badge"
@@ -70,13 +70,13 @@
         !(task.betweenDueDateAndDeadlineDate() && !task.isPastDeadline() && !task.inFinalState())
       "
     >
-      <i class="fa fa-clock-o"></i>
+      <mat-icon inline>schedule</mat-icon>
     </span>
     <span
       class="task-subscript-badge due-badge"
       [hidden]="!(task.isPastDeadline() && !task.inFinalState())"
     >
-      <i class="fa fa-clock-o"></i><strong>!</strong>
+      <mat-icon inline>schedule</mat-icon><strong>!</strong>
     </span>
   </div>
 </div>

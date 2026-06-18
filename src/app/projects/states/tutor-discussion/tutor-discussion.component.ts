@@ -1,8 +1,18 @@
-import {AfterViewInit, Component, Input, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
+import {DOCUMENT} from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  Input,
+  OnDestroy,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {MatSelectionList} from '@angular/material/list';
 import {MatTabChangeEvent} from '@angular/material/tabs';
-import {StateService, UIRouter} from '@uirouter/core';
-import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   AuthenticationService,
   Project,
@@ -21,6 +31,7 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {DiscussedInClassReasonModalService} from 'src/app/common/modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {AddEngagementDialogComponent} from '../dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
 
 enum TutorDiscussionTabView {
   SHOW_COMMENTS,
@@ -31,10 +42,13 @@ enum TutorDiscussionTabView {
   selector: 'f-tutor-discussion',
   templateUrl: './tutor-discussion.component.html',
   styleUrl: './tutor-discussion.component.scss',
-  encapsulation: ViewEncapsulation.None, // enables custom material-ui css
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
-export class TutorDiscussionComponent implements AfterViewInit {
+export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;
+  private readonly mobileDiscussionViewportContent =
+    'width=device-width, initial-scale=0.8, maximum-scale=5';
 
   @Input() unitId: number;
   @Input() username: string;
@@ -54,7 +68,9 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public scanningQr: boolean = false;
   public loadingStudentData: boolean = false;
 
-  private html5QrcodeScanner: Html5QrcodeScanner;
+  private html5QrcodeScanner?: Html5QrcodeScanner;
+  private originalViewportContent: string | null = null;
+  private mobileDiscussionZoomApplied = false;
 
   private _unitId: number;
   private _username: string;
@@ -63,19 +79,26 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public footerTabView: TutorDiscussionTabView = TutorDiscussionTabView.SHOW_COMMENTS;
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private unitService: UnitService,
     private authService: AuthenticationService,
     private userService: UserService,
     private projectService: ProjectService,
     private gradeService: GradeService,
-    private state: StateService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
     private discussedInClassReasonModal: DiscussedInClassReasonModalService,
-    private route: UIRouter,
     private taskCommentService: TaskCommentService,
     private taskService: TaskService,
+    private dialog: MatDialog,
   ) {}
+
+  public ngOnDestroy(): void {
+    this.stopQrScanner();
+    this.restoreViewportZoom();
+  }
 
   public currentUserTutorsInStream(tutorialStream: TutorialStream): boolean {
     const user = this.userService.currentUser;
@@ -113,14 +136,30 @@ export class TutorDiscussionComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
+    // this.unitId =
+    //   this.unitId ??
+    //   Number(
+    //     this.activatedRoute.parent?.snapshot.paramMap.get('unitId') ??
+    //       this.activatedRoute.snapshot.queryParamMap.get('unitId'),
+    //   );
+    // this.username = this.username ?? this.activatedRoute.snapshot.queryParamMap.get('username');
+    // this.attendance =
+    //   this.attendance ??
+    //   this.activatedRoute.snapshot.data.attendance ??
+    //   this.activatedRoute.snapshot.queryParamMap.get('attendance') === 'true';
+
     this.authService.afterAuthCall((result) => {
       if (!result) {
-        return this.state.go('sign_in');
+        return this.router.navigateByUrl('/sign_in');
       } else {
         if (this.userService.currentUser.systemRole === 'Student') {
           // Avoid prompting students for camera permissions before redirecting to unauthorised state
           return;
         }
+        this._unitId = 1;
+        this.unitId = 1;
+        this._username = 'student_9';
+        this.username = 'student_9';
         if (this.unitId) {
           this._unitId = Number(this.unitId);
           if (!this.attendance) {
@@ -129,8 +168,19 @@ export class TutorDiscussionComponent implements AfterViewInit {
               this._username = this.username;
               this.getStudentTasks();
             } else {
-              this.scanQrCode();
+              setTimeout(() => this.scanQrCode());
             }
+
+            setTimeout(() => {
+              this.changeProject();
+            }, 2000);
+
+            // if (this.username) {
+            //   this._username = this.username;
+            //   this.getStudentTasks();
+            // } else {
+            //   this.scanQrCode();
+            // }
           } else {
             this.getUnit().then((u) => {
               this.unit = u;
@@ -170,21 +220,22 @@ export class TutorDiscussionComponent implements AfterViewInit {
   public closeQrReader(): void {
     if (!this.project) {
       // Exiting the route entirely
+      this.stopQrScanner();
       if (this.unitId) {
-        this.route.stateService.go('units/tasks/inbox', {
-          unitId: this.unitId,
-        });
+        this.router.navigate(['/units', this.unitId, 'tasks', 'inbox']);
       } else {
-        this.route.stateService.go('home');
+        this.router.navigateByUrl('/home');
       }
     } else {
       // Close the camera view
       this.scanningQr = false;
+      this.stopQrScanner();
     }
   }
 
   private changeProject() {
-    this.html5QrcodeScanner.pause(true);
+    // this.html5QrcodeScanner?.pause(true);
+    // this.html5QrcodeScanner.pause(true);
     this.loadingStudentData = true;
     setTimeout(() => {
       try {
@@ -194,13 +245,111 @@ export class TutorDiscussionComponent implements AfterViewInit {
         this.loadingStudentData = false;
 
         setTimeout(() => {
-          this.html5QrcodeScanner.resume();
+          this.html5QrcodeScanner?.resume();
         }, 2000);
       }
     });
   }
 
+  private applyMobileDiscussionZoom(): void {
+    if (!window.matchMedia('(max-width: 768px)').matches) {
+      return;
+    }
+
+    const viewport = this.document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (!viewport) {
+      return;
+    }
+
+    this.originalViewportContent ??= viewport.getAttribute('content');
+    viewport.setAttribute('content', this.mobileDiscussionViewportContent);
+    this.mobileDiscussionZoomApplied = true;
+  }
+
+  private restoreViewportZoom(): void {
+    if (!this.mobileDiscussionZoomApplied) {
+      return;
+    }
+
+    const viewport = this.document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (viewport && this.originalViewportContent) {
+      viewport.setAttribute('content', this.originalViewportContent);
+    }
+
+    this.mobileDiscussionZoomApplied = false;
+  }
+
   hideQrScannerBloat: boolean = true;
+
+  private async stopQrScanner(): Promise<void> {
+    if (!this.html5QrcodeScanner) {
+      return;
+    }
+
+    try {
+      await this.html5QrcodeScanner.clear();
+    } catch (_e) {
+      // The scanner may already be stopped by its own controls.
+    } finally {
+      this.html5QrcodeScanner = undefined;
+    }
+  }
+
+  private async getCameraPermissionState(): Promise<PermissionState | null> {
+    if (!navigator.permissions?.query) {
+      return null;
+    }
+
+    try {
+      const permissionStatus = await navigator.permissions.query({
+        name: 'camera' as PermissionName,
+      });
+      return permissionStatus.state;
+    } catch (_e) {
+      return null;
+    }
+  }
+
+  private async prepareQrScannerCamera(): Promise<void> {
+    const cachedScannerData = localStorage.getItem('HTML5_QRCODE_DATA');
+    const cameraPermissionState = await this.getCameraPermissionState();
+    if (cachedScannerData) {
+      try {
+        const html5QrcodeData = JSON.parse(cachedScannerData);
+        if (html5QrcodeData?.hasPermission && cameraPermissionState === 'granted') {
+          this.hideQrScannerBloat = html5QrcodeData.lastUsedCameraId ? true : false;
+          return;
+        }
+      } catch (_e) {
+        localStorage.removeItem('HTML5_QRCODE_DATA');
+      }
+    }
+
+    // Trigger video permissions once so device labels are available for back camera selection.
+    // Stopping these tracks releases the camera; the browser keeps the permission grant.
+    const stream = await navigator.mediaDevices.getUserMedia({video: true});
+
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+
+      // Find the deviceId of the back camera
+      const backCameras = devices.filter(
+        (d) => d.kind === 'videoinput' && d.label.toLowerCase().includes('back camera'),
+      );
+
+      const html5QrcodeData = {
+        hasPermission: true,
+        lastUsedCameraId: backCameras[0]?.deviceId ?? null,
+      };
+      localStorage.setItem('HTML5_QRCODE_DATA', JSON.stringify(html5QrcodeData));
+
+      // Hide most of the UI if we found and set the back camera
+      // Otherwise, we need to reveal the UI so that the user can select which camera to use
+      this.hideQrScannerBloat = html5QrcodeData.lastUsedCameraId ? true : false;
+    } finally {
+      stream.getTracks().forEach((track) => track.stop());
+    }
+  }
 
   public scanQrCode() {
     if (this.attendance && !this.selectedTaskDefinition) {
@@ -211,39 +360,13 @@ export class TutorDiscussionComponent implements AfterViewInit {
     this.scanningQr = true;
     this.loadingStudentData = false;
 
-    if (
-      this.html5QrcodeScanner &&
-      this.html5QrcodeScanner.getState() === Html5QrcodeScannerState.PAUSED
-    ) {
+    if (this.html5QrcodeScanner?.getState() === Html5QrcodeScannerState.PAUSED) {
       this.html5QrcodeScanner.resume();
     } else {
-      this.html5QrcodeScanner?.clear();
-
-      // Trigger video permissions
-      // If we call getUserMedia when html5QrcodeScanner is already active, the scanner will break on iOS
-      navigator.mediaDevices
-        .getUserMedia({video: true})
+      this.stopQrScanner()
+        .then(() => this.prepareQrScannerCamera())
         .then(() => {
-          return navigator.mediaDevices.enumerateDevices();
-        })
-        .then((devices) => {
-          // Find the deviceId of the back camera
-          const backCameras = devices.filter(
-            (d) => d.kind === 'videoinput' && d.label.toLowerCase().includes('back camera'),
-          );
-
-          const html5QrcodeData = {
-            hasPermission: true,
-            lastUsedCameraId: backCameras[0]?.deviceId ?? null,
-          };
-          localStorage.setItem('HTML5_QRCODE_DATA', JSON.stringify(html5QrcodeData));
-
-          // Hide most of the UI if we found and set the back camera
-          // Otherwise, we need to reveal the UI so that the user can select which camera to use
-          this.hideQrScannerBloat = html5QrcodeData.lastUsedCameraId ? true : false;
-
           setTimeout(() => {
-            // Only init the scanner once and let it run in the background
             this.html5QrcodeScanner = new Html5QrcodeScanner(
               'qr-reader', // id of the div in the html
               {fps: 10, qrbox: 250},
@@ -259,8 +382,23 @@ export class TutorDiscussionComponent implements AfterViewInit {
               },
             );
           });
+        })
+        .catch((_e) => {
+          this.scanningQr = false;
+          this.alertService.error('Camera permission is required to scan QR codes', 3000);
         });
     }
+  }
+
+  public openAddEngagementDialog(): void {
+    if (!this.project) return;
+
+    this.dialog.open(AddEngagementDialogComponent, {
+      data: {project: this.project},
+      width: 'calc(100vw - 32px)',
+      maxWidth: '640px',
+      autoFocus: false,
+    });
   }
 
   public loadTaskComments(event: MouseEvent, task: Task) {
@@ -523,6 +661,8 @@ export class TutorDiscussionComponent implements AfterViewInit {
         this.project = project;
         this.scanningQr = false;
         this.loadingStudentData = false;
+        this.stopQrScanner();
+        this.applyMobileDiscussionZoom();
       })
       .catch((e) => {
         console.error(e);

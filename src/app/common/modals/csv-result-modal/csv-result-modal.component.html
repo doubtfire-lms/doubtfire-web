@@ -1,0 +1,85 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+
+<mat-dialog-content class="overflow-hidden">
+  <mat-button-toggle-group
+    class="mb-3"
+    [value]="activeCsvResponseSelection"
+    (change)="selectResponse($event.value)"
+  >
+    @for (selection of csvResponseSelections; track selection.key) {
+      <mat-button-toggle
+        [ngClass]="{
+          '!bg-green-600 !text-white !border-green-700':
+            selection.key === 'success' && activeCsvResponseSelection === 'success',
+          '!bg-green-50 !text-green-800 !border-green-300':
+            selection.key === 'success' && activeCsvResponseSelection !== 'success',
+          '!bg-red-600 !text-white !border-red-700':
+            selection.key === 'errors' && activeCsvResponseSelection === 'errors',
+          '!bg-red-50 !text-red-800 !border-red-300':
+            selection.key === 'errors' && activeCsvResponseSelection !== 'errors',
+          '!bg-amber-500 !text-white !border-amber-600':
+            selection.key === 'ignored' && activeCsvResponseSelection === 'ignored',
+          '!bg-amber-50 !text-amber-800 !border-amber-300':
+            selection.key === 'ignored' && activeCsvResponseSelection !== 'ignored',
+        }"
+        [value]="selection.key"
+      >
+        {{ selection.label }} ({{ itemData(selection.key).length }})
+      </mat-button-toggle>
+    }
+  </mat-button-toggle-group>
+
+  @if (dataSource.data.length === 0) {
+    <p>No data to show</p>
+  } @else {
+    <div class="max-h-[55vh] overflow-auto">
+      <table class="min-w-max" mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="message">
+          <th *matHeaderCellDef mat-header-cell>Message</th>
+          <td *matCellDef="let row" mat-cell>
+            <div class="max-w-[500px] whitespace-pre-wrap break-words">
+              {{ displayMessage(row.item) }}
+            </div>
+          </td>
+        </ng-container>
+
+        @for (columnId of dynamicColumnIds; track columnId) {
+          <ng-container [matColumnDef]="columnId">
+            <th *matHeaderCellDef mat-header-cell>{{ headerForColumn(columnId) }}</th>
+            <td *matCellDef="let row" mat-cell>
+              <div class="max-w-[500px] whitespace-pre-wrap break-words">
+                {{ rowValueForColumn(row.rowObject, columnId) }}
+              </div>
+            </td>
+          </ng-container>
+        }
+
+        <ng-container matColumnDef="other">
+          <th *matHeaderCellDef mat-header-cell>Other</th>
+          <td *matCellDef="let row" mat-cell>
+            <div class="max-w-[500px] whitespace-pre-wrap break-words">
+              {{ row.otherData || '-' }}
+            </div>
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+      </table>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions class="flex w-full items-center gap-1">
+  @if (dataSource.data.length > 0) {
+    <mat-paginator
+      class="flex-1"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 50, 100, 500]"
+    ></mat-paginator>
+  } @else {
+    <span class="flex-1"></span>
+  }
+
+  <button color="primary" mat-button type="button" (click)="close()">Done</button>
+</mat-dialog-actions>

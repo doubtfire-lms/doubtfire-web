@@ -1,32 +1,32 @@
 <hr class="hr-text" data-content="Knowledge Check Summary" [hidden]="!comment.firstInSeries" />
 <div class="flex flex-row items-center">
   <button
+    class="mr-2.5 h-7 flex-shrink-0"
     mat-button
-    class="mr-4 h-12 flex-shrink-0"
-    (click)="reviewScormTest()"
     [hidden]="!user.isStaff && !task.definition.scormAllowReview"
+    (click)="reviewScormTest()"
   >
     Review
   </button>
   @if (!user.isStaff && !task.definition.scormAllowReview) {
-    <div class="markdown-to-html m-auto mb-1 mt-1" [innerHTML]="comment.text"></div>
+    <div class="markdown-to-html m-auto my-0.5" [innerHTML]="comment.text"></div>
   } @else {
     <div class="markdown-to-html flex-grow" [innerHTML]="comment.text"></div>
   }
   <button
     #menuState="matMenuTrigger"
+    class="h-7 flex-shrink-0 p-0"
     mat-icon-button
-    class="p-0 h-12 flex-shrink-0"
-    [matMenuTriggerFor]="menu"
     [hidden]="!user.isStaff"
+    [matMenuTriggerFor]="menu"
   >
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
     <button
       mat-menu-item
-      (click)="passScormAttempt()"
       [hidden]="this.comment.testAttempt.successStatus"
+      (click)="passScormAttempt()"
     >
       Pass attempt
     </button>

@@ -1,12 +1,118 @@
+<ng-template #TaskListSkeleton>
+  <div class="h-full overflow-hidden">
+    <ngx-skeleton-loader
+      [theme]="{height: '48px', 'border-radius': '16px', margin: '0 0 14px'}"
+    ></ngx-skeleton-loader>
+    @for (row of [0, 1, 2, 3, 4, 5, 6, 7]; track row) {
+      <div class="flex h-[60px] items-center gap-[10px] px-[6px]">
+        <ngx-skeleton-loader
+          appearance="circle"
+          [theme]="{width: '8px', height: '8px', margin: '0'}"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          appearance="circle"
+          [theme]="{width: '30px', height: '30px', margin: '0'}"
+        ></ngx-skeleton-loader>
+        <div class="min-w-0 flex-1">
+          <ngx-skeleton-loader
+            [theme]="{height: '10px', width: '78%', 'border-radius': '999px', margin: '6px 0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            [theme]="{height: '10px', width: '56%', 'border-radius': '999px', margin: '6px 0'}"
+          ></ngx-skeleton-loader>
+        </div>
+        <ngx-skeleton-loader
+          appearance="circle"
+          [theme]="{width: '32px', height: '32px', margin: '0'}"
+        ></ngx-skeleton-loader>
+      </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #BlankPanelSkeleton>
+  <ngx-skeleton-loader
+    class="block size-full"
+    [theme]="{height: '100%', width: '100%', 'border-radius': '8px', margin: '0'}"
+  ></ngx-skeleton-loader>
+</ng-template>
+
 @if (!isMobileView) {
-<div fxLayout="column" fxFill fxHide fxShow.gt-sm>
-  <div fxLayout="row" fxLayoutAlign="center stretch" fxFill>
-    <div id="inboxpanel" #inboxpanel class="staff-task-list inbox-panel">
-      @if (taskData) {
+  <div class="min-h-0 px-3" fxFill fxHide fxLayout="column" fxShow.gt-sm>
+    <div class="min-h-0" fxFlex fxLayout="row" fxLayoutAlign="center stretch">
+      <div #inboxpanel class="staff-task-list inbox-panel overflow-hidden" id="inboxpanel">
+        @if (loading) {
+          <ng-container *ngTemplateOutlet="TaskListSkeleton"></ng-container>
+        } @else if (taskData) {
+          <df-staff-task-list
+            [filters]="filters"
+            [isNarrow]="narrowTaskInbox"
+            [showSearchOptions]="showSearchOptions"
+            [taskData]="taskData"
+            [unit]="unit"
+            [unitRole]="unitRole"
+            [viewType]="viewType"
+          ></df-staff-task-list>
+        }
+      </div>
+      @if (subs$ | async) {
+        <div
+          #leftResizerEl
+          cdkDrag
+          cdkDragLockAxis="x"
+          class="resizer"
+          id="leftResizerEl"
+          (cdkDragEnded)="stoppedDragging($event, inboxpanel)"
+          (cdkDragMoved)="dragging($event, inboxpanel)"
+          (cdkDragStarted)="startedDragging($event, inboxpanel)"
+        ></div>
+      }
+
+      <div class="inbox-panel overflow-hidden" fxFlex>
+        @if (loading) {
+          <ng-container *ngTemplateOutlet="BlankPanelSkeleton"></ng-container>
+        } @else {
+          <f-inbox-dashboard
+            [task]="taskData?.selectedTask"
+            (visiblePdfUrlChange)="visiblePdfUrl = $event"
+          ></f-inbox-dashboard>
+        }
+      </div>
+      <div
+        #rightResizerEl
+        cdkDrag
+        cdkDragLockAxis="x"
+        class="resizer"
+        id="rightResizerEl"
+        (cdkDragEnded)="stoppedDragging($event, commentspanel)"
+        (cdkDragMoved)="dragging($event, commentspanel)"
+        (cdkDragStarted)="startedDragging($event, commentspanel)"
+      ></div>
+      <div #commentspanel class="task-comment-panel inbox-panel overflow-hidden">
+        @if (loading) {
+          <ng-container *ngTemplateOutlet="BlankPanelSkeleton"></ng-container>
+        } @else {
+          <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
+        }
+      </div>
+    </div>
+    <f-footer class="z-10 shrink-0" [viewType]="viewType"></f-footer>
+  </div>
+} @else {
+  <div #mobile fxFill fxHide fxLayout="row" fxShow.lt-md>
+    <div
+      #inboxpanel
+      class="inbox-panel mobile overflow-hidden"
+      id="inboxpanel"
+      [hidden]="taskSelected"
+    >
+      @if (loading) {
+        <ng-container *ngTemplateOutlet="TaskListSkeleton"></ng-container>
+      } @else if (taskData) {
         <df-staff-task-list
-          [isNarrow]="narrowTaskInbox"
-          [showSearchOptions]="showSearchOptions"
           [filters]="filters"
+          [isNarrow]="false"
+          [showSearchOptions]="showSearchOptions"
           [taskData]="taskData"
           [unit]="unit"
           [unitRole]="unitRole"
@@ -14,77 +120,47 @@
         ></df-staff-task-list>
       }
     </div>
-    @if (subs$ | async) {
-    <div
-      id="leftResizerEl"
-      #leftResizerEl
-      class="resizer"
-      cdkDragLockAxis="x"
-      cdkDrag
-      (cdkDragMoved)="dragging($event, inboxpanel)"
-      (cdkDragEnded)="stoppedDragging($event, inboxpanel)"
-      (cdkDragStarted)="startedDragging($event, inboxpanel)"
-    ></div>
-    }
+    <div fxFill fxLayout="column" fxLayoutAlign="space-between stretch" [hidden]="!taskSelected">
+      <div class="flex items-center">
+        <button
+          aria-label="Back to inbox"
+          mat-icon-button
+          matTooltip="Back to inbox"
+          (click)="taskSelected = false"
+        >
+          <mat-icon>arrow_back_ios_new</mat-icon>
+        </button>
+        <h3 class="mb-0">{{ taskData?.selectedTask?.project.student.nickname }}</h3>
+        <div fxFlex></div>
+        <button
+          aria-label="Open current document"
+          mat-icon-button
+          matTooltip="Open current document"
+          [disabled]="!visiblePdfUrl"
+          (click)="openPdfInNewTab()"
+        >
+          <mat-icon>description</mat-icon>
+        </button>
+        <button
+          aria-label="Go to student"
+          mat-icon-button
+          matTooltip="Go to student"
+          (click)="goToStudent()"
+        >
+          <mat-icon>account_circle</mat-icon>
+        </button>
+      </div>
 
-    <div fxFlex class="inbox-panel">
-      <f-task-dashboard [task]="taskData.selectedTask" [pdfUrl]="visiblePdfUrl"></f-task-dashboard>
-    </div>
-    <div
-      id="rightResizerEl"
-      #rightResizerEl
-      class="resizer"
-      cdkDragLockAxis="x"
-      cdkDrag
-      (cdkDragMoved)="dragging($event, commentspanel)"
-      (cdkDragEnded)="stoppedDragging($event, commentspanel)"
-      (cdkDragStarted)="startedDragging($event, commentspanel)"
-    ></div>
-    <div #commentspanel class="task-comment-panel inbox-panel">
-      <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
+      <div class="inbox-panel mobile overflow-hidden" fxFlex>
+        @if (loading) {
+          <ng-container *ngTemplateOutlet="BlankPanelSkeleton"></ng-container>
+        } @else {
+          <f-inbox-dashboard
+            [task]="taskData?.selectedTask"
+            (visiblePdfUrlChange)="visiblePdfUrl = $event"
+          ></f-inbox-dashboard>
+        }
+      </div>
     </div>
   </div>
-  <f-footer class="z-10" [viewType]="viewType"></f-footer>
-</div>
-} @else {
-<div #mobile fxLayout="row" fxFill fxHide fxShow.lt-md>
-  <div id="inboxpanel" #inboxpanel class="inbox-panel mobile" [hidden]="taskSelected">
-    @if (taskData) {
-      <df-staff-task-list
-        [isNarrow]="false"
-        [showSearchOptions]="showSearchOptions"
-        [filters]="filters"
-        [taskData]="taskData"
-        [unit]="unit"
-        [unitRole]="unitRole"
-        [viewType]="viewType"
-      ></df-staff-task-list>
-    }
-  </div>
-  <div [hidden]="!taskSelected" fxLayout="column" fxFill fxLayoutAlign="space-between stretch">
-    <div class="flex items-center">
-      <button mat-icon-button aria-label="Back to inbox" matTooltip="Back to inbox" (click)="taskSelected = false">
-        <mat-icon>arrow_back_ios_new</mat-icon>
-      </button>
-      <h3 class="mb-0">{{ taskData?.selectedTask?.project.student.nickname }}</h3>
-      <div fxFlex></div>
-      <button
-        [disabled]="!this.taskData?.selectedTask?.hasPdf"
-        mat-icon-button
-        aria-label="Open Submission"
-        (click)="openPdfInNewTab()"
-        matTooltip="Open submission"
-      >
-        <mat-icon>description</mat-icon>
-      </button>
-      <button mat-icon-button aria-label="Go to student" matTooltip="Go to student" (click)="goToStudent()">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-    </div>
-
-    <div #commentspanel fxFlex class="inbox-panel task-comment-panel mobile">
-      <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
-    </div>
-  </div>
-</div>
 }

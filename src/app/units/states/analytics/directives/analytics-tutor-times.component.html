@@ -1,17 +1,17 @@
 <mat-card appearance="outlined" class="p-[16px]">
-  <mat-card-header class="flex justify-between mb-4">
+  <mat-card-header class="mb-2.5 flex justify-between">
     <mat-card-title>
       <h2>Tutor Times Session Summary</h2>
     </mat-card-title>
 
-    <div class="flex gap-2">
+    <div class="flex gap-1">
       @if (role === 'Convenor') {
         <button
           mat-button
-          (click)="getTutorTimesSummary()"
           matTooltip="Download CSV summary for the selected date range"
-          matTooltipShowDelay="1000"
           matTooltipPosition="above"
+          matTooltipShowDelay="1000"
+          (click)="getTutorTimesSummary()"
         >
           <mat-icon>download</mat-icon> Download Summary
         </button>
@@ -19,10 +19,10 @@
 
       <button
         mat-button
-        (click)="getMyTutorTimesSessions()"
         matTooltip="Download CSV of your tutor sessions for the selected date range"
-        matTooltipShowDelay="1000"
         matTooltipPosition="above"
+        matTooltipShowDelay="1000"
+        (click)="getMyTutorTimesSessions()"
       >
         <mat-icon>download</mat-icon> Download My Sessions
       </button>
@@ -30,14 +30,14 @@
   </mat-card-header>
 
   <div class="flex flex-col items-center justify-center">
-    <div class="flex flex-row gap-2 mb-5">
-      <button mat-raised-button color="primary" (click)="goPreviousWeek()" class="w-40">
+    <div class="mb-3 flex flex-row gap-1">
+      <button class="w-24" color="primary" mat-raised-button (click)="goPreviousWeek()">
         Previous
       </button>
       <button mat-raised-button (click)="goTodayWeek()">Today</button>
-      <button mat-raised-button color="primary" (click)="goNextWeek()" class="w-40">Next</button>
+      <button class="w-24" color="primary" mat-raised-button (click)="goNextWeek()">Next</button>
     </div>
-    <div class="flex flex-row gap-2 mb-5">
+    <div class="mb-3 flex flex-row gap-1">
       <mat-form-field appearance="outline">
         <mat-label>Choose a date</mat-label>
         <input
@@ -64,7 +64,7 @@
         <mat-datepicker #enddatepicker></mat-datepicker>
       </mat-form-field>
     </div>
-    <div class="flex w-full justify-end mb-2">
+    <div class="mb-1 flex w-full justify-end">
       <mat-slide-toggle
         labelPosition="before"
         [(ngModel)]="hideSessionsDuringTutorials"
@@ -75,7 +75,7 @@
   </div>
 
   <ng-template #eventTooltipTemplate let-event="event">
-    <div class="z-50 bg-[rgba(25,25,25,0.8)] text-white p-2 rounded">
+    <div class="z-50 rounded bg-[rgba(25,25,25,0.8)] p-1 text-white">
       <strong
         >{{ event.tutorName }} ({{ event.duration }} minutes)
         {{ event.duringTutorial ? 'T' : '' }}</strong
@@ -91,24 +91,24 @@
   <div class="relative">
     @if (isLoading) {
       <mat-progress-spinner
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50"
+        class="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
         mode="indeterminate"
       >
       </mat-progress-spinner>
     }
 
     <mwl-calendar-week-view
-      [viewDate]="viewDate"
-      [events]="filteredEvents"
-      (eventClicked)="eventClicked($event)"
-      [tooltipTemplate]="eventTooltipTemplate"
-      [hourDuration]="60"
-      [hourSegments]="4"
-      [weekStartsOn]="0"
-      [hourSegmentHeight]="15"
-      [minimumEventHeight]="5"
       [daysInWeek]="daysInWeek"
+      [events]="filteredEvents"
+      [hourDuration]="60"
+      [hourSegmentHeight]="15"
+      [hourSegments]="4"
+      [minimumEventHeight]="5"
+      [tooltipTemplate]="eventTooltipTemplate"
+      [viewDate]="viewDate"
+      [weekStartsOn]="0"
       (beforeViewRender)="beforeViewRender($event)"
+      (eventClicked)="eventClicked($event)"
     />
   </div>
 </mat-card>

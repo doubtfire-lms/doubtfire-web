@@ -1,14 +1,17 @@
-<div class="flex justify-between items-center p-5">
-  <div>
+<div class="flex items-center justify-between p-3">
+  <div class="flex items-center gap-2">
     <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
   </div>
   @if (unit.allowFlexibleDates) {
     <div class="flex items-center gap-2">
+      <button color="primary" mat-button (click)="saveImage()">
+        <mat-icon>save_alt</mat-icon> Download Chart
+      </button>
       <button
-        mat-raised-button
-        (click)="confirmSaveTargetDates()"
         color="primary"
+        mat-raised-button
         [disabled]="!anyUnsavedChanges()"
+        (click)="confirmSaveTargetDates()"
       >
         Save Dates
       </button>
@@ -17,37 +20,34 @@
   }
 </div>
 <ngx-gantt
-  [class.flexible-dates]="overlayLines"
   #gantt
-  [items]="items"
-  [baselineItems]="unit.allowFlexibleDates ? baselineItems : []"
-  [viewOptions]="viewOptions"
-  [draggable]="project.unit.allowFlexibleDates"
-  [viewType]="viewType"
-  [start]="earliestStartDate"
-  [end]="latestEndDate"
-  [async]="false"
-  [virtualScrollEnabled]="false"
-  [disabledLoadOnScroll]="true"
   class="h-full overflow-hidden"
+  [async]="false"
+  [baselineItems]="unit.allowFlexibleDates ? baselineItems : []"
+  [class.flexible-dates]="overlayLines"
+  [disabledLoadOnScroll]="true"
+  [draggable]="project.unit.allowFlexibleDates"
+  [end]="latestEndDate"
+  [items]="items"
+  [start]="earliestStartDate"
+  [viewOptions]="viewOptions"
+  [viewType]="viewType"
+  [virtualScrollEnabled]="false"
 >
   <ngx-gantt-table>
     <ngx-gantt-column name="Tasks" width="350px">
       <ng-template #cell let-item="item">
+        <!-- TODO: redirect to new project dashboard -->
         <div
           class="flex items-center justify-between"
-          uiSref="projects/dashboard"
-          [uiParams]="{
-            projectId: project.id,
-            taskAbbr: item.taskDefinition.abbreviation
-          }"
+          [routerLink]="['/projects', project.id, 'dashboard', item.taskDefinition.abbreviation]"
         >
-          <div class="flex items-center gap-5 w-full min-w-0">
+          <div class="flex w-full min-w-0 items-center gap-3">
             <f-grade-icon
-              [grade]="item.taskDefinition.targetGrade"
               [colorful]="true"
+              [grade]="item.taskDefinition.targetGrade"
             ></f-grade-icon>
-            <div class="truncate w-full flex-1 min-w-0">
+            <div class="w-full min-w-0 flex-1 truncate">
               {{ item.title }}
             </div>
           </div>
@@ -58,19 +58,19 @@
 
     @if (showDatesColumn) {
       <ngx-gantt-column name="Start Date" width="110px">
-        <ng-template #cell let-item="item" class="text-center">
+        <ng-template #cell class="text-center" let-item="item">
           {{ toDateString(item.start) }}
         </ng-template>
       </ngx-gantt-column>
 
       <ngx-gantt-column name="Target Date" width="110px">
-        <ng-template #cell let-item="item" class="text-center">
+        <ng-template #cell class="text-center" let-item="item">
           {{ toDateString(item.end) }}
         </ng-template>
       </ngx-gantt-column>
 
       <ngx-gantt-column name="Deadline" width="110px">
-        <ng-template #cell let-item="item" class="text-center">
+        <ng-template #cell class="text-center" let-item="item">
           {{ item.task.localDeadlineDate() ? toDateString(item.task.localDeadlineDate()) : 'N/A' }}
         </ng-template>
       </ngx-gantt-column>
@@ -78,17 +78,17 @@
 
     <ng-template #bar let-item="item">
       <span
-        (click)="barClick(item)"
-        [attr.data-gantt-id]="item.id"
-        (mouseover)="onBarHover(item)"
-        (mouseleave)="onBarLeave(item)"
-        class="gantt-bar w-full text-white flex gap-2 justify-between items-center p-2 h-[35px]"
-        [ngClass]="getItemClasses(item)"
-        [matTooltip]="getTooltip(item)"
-        matTooltipShowDelay="500"
+        class="gantt-bar flex h-[35px] w-full items-center justify-between gap-1 p-1 text-white"
         matTooltipPosition="above"
-        ><div class="flex gap-2 items-center">
-          <div class="flex gap-2 items-center">
+        matTooltipShowDelay="500"
+        [attr.data-gantt-id]="item.id"
+        [matTooltip]="getTooltip(item)"
+        [ngClass]="getItemClasses(item)"
+        (click)="barClick(item)"
+        (mouseleave)="onBarLeave(item)"
+        (mouseover)="onBarHover(item)"
+        ><div class="flex items-center gap-1">
+          <div class="flex items-center gap-1">
             @if (unsavedChanges(item)) {
               <mat-icon class="scale-95">change_circle</mat-icon>
             }

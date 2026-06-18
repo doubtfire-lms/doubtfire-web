@@ -16,14 +16,14 @@ export type TaskStatusEnum =
   | 'assess_in_portfolio'
   | 'attention_required';
 
-export type TaskStatusUiData = {
+export interface TaskStatusUiData {
   status: TaskStatusEnum;
   icon: string;
   materialIcon: string;
   label: string;
   class: string;
   help: {detail: string; reason: string; action: string};
-};
+}
 
 export class TaskStatus {
   public static readonly STATUS_KEYS: TaskStatusEnum[] = [
@@ -204,8 +204,8 @@ export class TaskStatus {
     ['attention_required', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
   ]);
 
-  public static readonly STATUS_LABELS = new Map<TaskStatusEnum, string>([
-    ['ready_for_feedback', 'Ready for Feedback'],
+  public static readonly STATUS_LABELS: Map<TaskStatusEnum, string> = new Map([
+    ['ready_for_feedback', 'Awaiting Feedback'],
     ['not_started', 'Not Started'],
     ['working_on_it', 'Working On It'],
     ['need_help', 'Need Help'],
@@ -221,26 +221,42 @@ export class TaskStatus {
     ['attention_required', 'Attention Required'],
   ]);
 
-  public static readonly STATUS_ICONS = new Map<TaskStatusEnum, string>([
-    ['ready_for_feedback', 'fa fa-thumbs-o-up'],
-    ['not_started', 'fa fa-pause'],
-    ['working_on_it', 'fa fa-bolt'],
-    ['need_help', 'fa fa-question-circle'],
-    ['redo', 'fa fa-refresh'],
-    ['feedback_exceeded', 'fa fa-low-vision'],
-    ['fix_and_resubmit', 'fa fa-wrench'],
-    ['discuss', 'fa fa-commenting'],
-    ['demonstrate', 'fa fa-commenting'],
-    ['complete', 'fa fa-check'],
-    ['fail', 'fa fa-times'],
-    ['time_exceeded', 'fa fa-clock-o'],
-    ['assess_in_portfolio', 'fa fa-folder-open'],
-    ['attention_required', 'fa fa-commenting'],
+  public static readonly STATUS_NAME_TO_KEY: Map<string, TaskStatusEnum> = new Map([
+    ['Ready for Feedback', 'ready_for_feedback'],
+    ['Awaiting Feedback', 'ready_for_feedback'],
+    ['Not Started', 'not_started'],
+    ['Working On It', 'working_on_it'],
+    ['Need Help', 'need_help'],
+    ['Redo', 'redo'],
+    ['Feedback Exceeded', 'feedback_exceeded'],
+    ['Resubmit', 'fix_and_resubmit'],
+    ['Discuss', 'discuss'],
+    ['Demonstrate', 'demonstrate'],
+    ['Complete', 'complete'],
+    ['Fail', 'fail'],
+    ['Time Exceeded', 'time_exceeded'],
+  ]);
+
+  public static readonly STATUS_ICONS: Map<TaskStatusEnum, string> = new Map([
+    ['ready_for_feedback', 'thumb_up'],
+    ['not_started', 'pause'],
+    ['working_on_it', 'bolt'],
+    ['need_help', 'help'],
+    ['redo', 'undo'],
+    ['feedback_exceeded', 'visibility_off'],
+    ['fix_and_resubmit', 'construction'],
+    ['discuss', 'question_answer'],
+    ['demonstrate', 'record_voice_over'],
+    ['complete', 'done_all'],
+    ['fail', 'close'],
+    ['time_exceeded', 'schedule'],
+    ['assess_in_portfolio', 'folder_open'],
+    ['attention_required', 'sms_failed'],
   ]);
 
   // Material icons used by newer UI elements.
-  public static readonly STATUS_MATERIAL_ICONS = new Map<TaskStatusEnum, string>([
-    ['ready_for_feedback', 'thumb_up'],
+  public static readonly STATUS_MATERIAL_ICONS: Map<TaskStatusEnum, string> = new Map([
+    ['ready_for_feedback', 'thumb_up_off_alt'],
     ['not_started', 'pause'],
     ['working_on_it', 'bolt'],
     ['need_help', 'help'],
@@ -252,12 +268,12 @@ export class TaskStatus {
     ['complete', 'done'],
     ['fail', 'close'],
     ['time_exceeded', 'schedule'],
-    ['assess_in_portfolio', 'folder_open'],
+    ['assess_in_portfolio', 'rate_review'],
     ['attention_required', 'sms_failed'],
   ]);
 
   // Please make sure this matches task-status-colors.less
-  public static readonly STATUS_COLORS = new Map<TaskStatusEnum, string>([
+  public static readonly STATUS_COLORS: Map<TaskStatusEnum, string> = new Map([
     ['ready_for_feedback', '#0079D8'],
     ['not_started', '#CCCCCC'],
     ['working_on_it', '#EB8F06'],
@@ -274,7 +290,7 @@ export class TaskStatus {
     ['attention_required', '#f1814d'],
   ]);
 
-  public static readonly STATUS_SEQ = new Map<TaskStatusEnum, number>([
+  public static readonly STATUS_SEQ: Map<TaskStatusEnum, number> = new Map([
     ['not_started', 1],
     ['fail', 2],
     ['feedback_exceeded', 3],
@@ -309,10 +325,10 @@ export class TaskStatus {
   // detail = in a brief context to the student
   // reason = reason for this status
   // action = action student can take
-  public static readonly HELP_DESCRIPTIONS = new Map<
+  public static readonly HELP_DESCRIPTIONS: Map<
     TaskStatusEnum,
     {detail: string; reason: string; action: string}
-  >([
+  > = new Map([
     [
       'ready_for_feedback',
       {
@@ -466,6 +482,6 @@ export class TaskStatus {
   }
 
   public static statusClass(status: TaskStatusEnum | undefined): string {
-    return status?.replace(new RegExp('_', 'g'), '-');
+    return status?.replace(new RegExp('_', 'g'), '-') ?? 'not-started';
   }
 }

@@ -1,0 +1,12 @@
+<div class="mx-auto max-w-[90vw]">
+  @if (unit.hasGroupwork()) {
+    <f-group-set-manager [project]="project" [selectedGroupSet]="selectedGroupSet" [unit]="unit">
+    </f-group-set-manager>
+  } @else {
+    <div class="mx-auto flex max-w-4xl flex-col items-center justify-center">
+      <mat-icon>groups</mat-icon>
+      <h1>No Group Work</h1>
+      <p class="p-1 text-center text-gray-500">There is no group work enabled for this unit.</p>
+    </div>
+  }
+</div>

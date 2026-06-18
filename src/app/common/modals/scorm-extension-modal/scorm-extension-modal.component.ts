@@ -1,9 +1,9 @@
 import {Component, Inject, LOCALE_ID} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {TaskComment, TaskCommentService, Task} from 'src/app/api/models/doubtfire-model';
-import {AppInjector} from 'src/app/app-injector';
-import {FormControl, Validators, FormGroup, FormGroupDirective, NgForm} from '@angular/forms';
+import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from '../../services/alert.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -17,6 +17,7 @@ export class ReasonErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'f-scorm-extension-modal',
   templateUrl: './scorm-extension-modal.component.html',
+  standalone: false,
 })
 export class ScormExtensionModalComponent {
   protected reasonMinLength: number = 15;

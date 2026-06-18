@@ -18,6 +18,7 @@ export interface SidekiqProgressModalData {
   selector: 'f-sidekiq-progress-modal',
   templateUrl: './sidekiq-progress-modal.component.html',
   styleUrl: './sidekiq-progress-modal.component.scss',
+  standalone: false,
 })
 export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
   private readonly pollingInterval: number = 1250;
@@ -61,7 +62,6 @@ export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
 
     this.sidekiqJobService.getSidekiqJob(this.data.jobId).subscribe({
       next: (job) => {
-        this.sidekiqJobService.sidekiqJobsSubject;
         this.sidekiqJobService.setJob(job.id, this.data.title, this.data.subject, job);
         this.job = job;
         this.pollFailureCount = 0;

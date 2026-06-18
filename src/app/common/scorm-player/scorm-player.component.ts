@@ -1,5 +1,6 @@
-import {Component, OnInit, Input, HostListener} from '@angular/core';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {ActivatedRoute} from '@angular/router';
 import {
   AuthenticationService,
   ScormPlayerContext,
@@ -29,6 +30,7 @@ declare global {
   selector: 'f-scorm-player',
   templateUrl: './scorm-player.component.html',
   styleUrls: ['./scorm-player.component.scss'],
+  standalone: false,
 })
 export class ScormPlayerComponent implements OnInit {
   context: ScormPlayerContext;
@@ -53,9 +55,16 @@ export class ScormPlayerComponent implements OnInit {
     private userService: UserService,
     private authService: AuthenticationService,
     private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.projectId = this.projectId ?? Number(this.route.snapshot.paramMap.get('projectId'));
+    this.taskDefId = this.taskDefId ?? Number(this.route.snapshot.paramMap.get('taskDefId'));
+    this.testAttemptId =
+      this.testAttemptId ?? Number(this.route.snapshot.paramMap.get('testAttemptId'));
+    this.mode = this.mode ?? (this.route.snapshot.data.mode as ScormPlayerComponent['mode']);
+
     this.globalState.setView(ViewType.OTHER);
     this.globalState.hideHeader();
     this.authService.getScormToken().subscribe((value: string) => this.setupScorm(value));

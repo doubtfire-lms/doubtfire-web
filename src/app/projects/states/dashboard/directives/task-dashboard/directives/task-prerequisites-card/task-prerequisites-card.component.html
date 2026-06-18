@@ -1,16 +1,16 @@
 <mat-card appearance="outlined" class="p-[16px]" [hidden]="!task.hasPrerequisiteTasks()">
-  <div class="flex justify-between items-center w-full">
+  <div class="flex w-full items-center justify-between">
     <mat-card-title class="f-card-title">Prerequisite Tasks</mat-card-title>
     <mat-icon>pending_actions</mat-icon>
   </div>
 
-  <mat-card-subtitle class="mb-4">
+  <mat-card-subtitle class="mb-2.5">
     You must meet the prerequisites for this task before submitting
     {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}.</mat-card-subtitle
   >
   <f-task-definition-prerequisites
-    [taskDefinition]="taskDefinition"
     [staffView]="false"
     [task]="task"
+    [taskDefinition]="taskDefinition"
   ></f-task-definition-prerequisites>
 </mat-card>

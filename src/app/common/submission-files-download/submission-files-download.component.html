@@ -1,0 +1,26 @@
+<main class="flex min-h-screen flex-col items-center justify-center gap-4">
+  @switch (downloadState) {
+    @case ('downloading') {
+      <mat-spinner diameter="32" />
+      <p class="mat-body-1">Downloading submitted files...</p>
+    }
+
+    @case ('downloaded') {
+      <mat-icon class="size-12 text-5xl" color="primary">check_circle</mat-icon>
+      <p class="mat-body-1">Submitted files downloaded.</p>
+      <button color="primary" mat-raised-button type="button" (click)="download()">
+        <mat-icon>download</mat-icon>
+        Download again
+      </button>
+    }
+
+    @case ('failed') {
+      <mat-icon class="size-12 text-5xl" color="warn">error</mat-icon>
+      <p class="mat-body-1">Could not download submitted files.</p>
+      <button color="primary" mat-raised-button type="button" (click)="download()">
+        <mat-icon>download</mat-icon>
+        Try again
+      </button>
+    }
+  }
+</main>

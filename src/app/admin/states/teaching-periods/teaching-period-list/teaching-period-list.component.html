@@ -1,60 +1,60 @@
 <div class="teaching-periods-container">
-  <div class="flex items-center my-10">
+  <div class="my-6 flex items-center">
     <h1 class="my-0">Teaching periods</h1>
     <span class="grow"></span>
-    <button mat-flat-button color="primary" (click)="addTeachingPeriod()">
+    <button color="primary" mat-flat-button (click)="addTeachingPeriod()">
       Add new teaching period
     </button>
   </div>
   <table
     #table
-    mat-table
-    [dataSource]="dataSource"
     class="f-table selectable"
+    mat-table
     matSort
     matSortActive="startDate"
     matSortDirection="desc"
+    [dataSource]="dataSource"
     (matSortChange)="sortTableData($event)"
   >
     <ng-container matColumnDef="active">
-      <th mat-header-cell *matHeaderCellDef>Active</th>
-      <td mat-cell *matCellDef="let element">
-        <mat-checkbox disabled color="primary" [checked]="element.active"> </mat-checkbox>
+      <th *matHeaderCellDef mat-header-cell>Active</th>
+      <td *matCellDef="let element" mat-cell>
+        <mat-checkbox color="primary" disabled [checked]="element.active"> </mat-checkbox>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
+      <td *matCellDef="let element" mat-cell>{{ element.name }}</td>
     </ng-container>
 
     <ng-container matColumnDef="startDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
-      <td mat-cell *matCellDef="let element">{{ element.startDate | date }}</td>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Start Date</th>
+      <td *matCellDef="let element" mat-cell>{{ element.startDate | date }}</td>
     </ng-container>
 
     <ng-container matColumnDef="endDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>End date</th>
-      <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>End date</th>
+      <td *matCellDef="let element" mat-cell>{{ element.endDate | date }}</td>
     </ng-container>
 
     <ng-container matColumnDef="activeUntil">
-      <th mat-header-cell *matHeaderCellDef>Active until</th>
-      <td mat-cell *matCellDef="let element">{{ element.activeUntil | date }}</td>
+      <th *matHeaderCellDef mat-header-cell>Active until</th>
+      <td *matCellDef="let element" mat-cell>{{ element.activeUntil | date }}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let element">
+      <th *matHeaderCellDef mat-header-cell>Actions</th>
+      <td *matCellDef="let element" mat-cell>
         <div class="edit-actions right">
           <span>
-            <button mat-icon-button (click)="importUnits(element)" aria-label="import units">
-            <mat-icon>input</mat-icon>
+            <button aria-label="import units" mat-icon-button (click)="importUnits(element)">
+              <mat-icon>input</mat-icon>
             </button>
             <button
+              aria-label="select teaching period"
               mat-icon-button
               (click)="selectTeachingPeriod(element)"
-              aria-label="select teaching period"
             >
               <mat-icon>edit</mat-icon>
             </button>
@@ -63,7 +63,7 @@
       </td>
     </ng-container>
 
-    <td mat-footer-cell *matFooterCellDef>
+    <td *matFooterCellDef mat-footer-cell>
       <div class="edit-actions right">
         <button mat-icon-button (click)="submit()">
           <mat-icon>add</mat-icon>
@@ -71,11 +71,11 @@
       </div>
     </td>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
   </table>
   <mat-paginator
-    [pageSizeOptions]="[10, 25, 100]"
     aria-label="Select page of teaching periods"
+    [pageSizeOptions]="[10, 25, 100]"
   ></mat-paginator>
 </div>

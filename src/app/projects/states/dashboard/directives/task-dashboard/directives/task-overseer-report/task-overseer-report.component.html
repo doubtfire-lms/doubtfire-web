@@ -1,55 +1,79 @@
-<div class="flex justify-end mb-5">
-  <button mat-stroked-button (click)="loadAssessments(true)">Refresh</button>
+<div class="mb-3 flex justify-end">
+  <button mat-stroked-button (click)="loadHistory(true)">Refresh</button>
 </div>
-<mat-accordion>
-  @for (oa of overseerAssessments; track oa; let idx = $index) {
-    <mat-expansion-panel
-      [attr.id]="'oa-panel-' + oa.id"
-      (opened)="onAssessmentOpen(oa)"
-      [disabled]="!oa.reportReady"
-      [expanded]="oa.id === loadOverseerAssessmentId && oa.reportReady"
-    >
-      <mat-expansion-panel-header class="flex justify-between items-center">
-        <mat-panel-title class="flex items-center gap-5">
-          <status-icon [status]="oa.taskStatus"> </status-icon>
-          Submission {{ overseerAssessments.length - idx }}: {{ oa.timestamp | humanizedDate }}
-          @if (idx === 0) {
-            <span class="text-gray-500">(Most recent)</span>
-          }
-          @if (isComparisonSource(oa)) {
-            <span class="text-blue-600">(Selected for comparison)</span>
-          }
-        </mat-panel-title>
-        @if (oa.reportReady) {
-          <div class="flex gap-5 items-center">
-            <span class="text-gray-500"> {{ oa.passedSteps }} / {{ oa.totalSteps }}</span>
-            @if (oa.passedSteps === oa.totalSteps) {
-              <mat-icon color="primary">done</mat-icon>
-            } @else {
-              <mat-icon color="warn">cancel</mat-icon>
+@if (loading) {
+  <div class="flex min-h-[240px] items-center justify-center">
+    <mat-spinner [diameter]="48"></mat-spinner>
+  </div>
+} @else {
+  <mat-accordion>
+    @for (history of histories; track history.id; let idx = $index) {
+      <mat-expansion-panel
+        [attr.id]="'history-panel-' + history.id"
+        [disabled]="!assessmentFor(history)"
+        [expanded]="assessmentFor(history)?.id === loadOverseerAssessmentId"
+        (opened)="onHistoryOpen(history)"
+      >
+        <mat-expansion-panel-header class="flex items-center justify-between">
+          <mat-panel-title class="flex items-center gap-3">
+            @if (assessmentFor(history); as oa) {
+              <status-icon [status]="oa.taskStatus"></status-icon>
             }
-            @if (oa.hasSubmissionFiles && currentUnitRole) {
+            <div class="flex flex-col">
+              <div>
+                Submission {{ histories.length - idx }}
+                @if (idx === 0) {
+                  <span class="text-gray-500">(Most recent)</span>
+                }
+                @if (isComparisonSource(history)) {
+                  <span class="text-blue-600">(Selected for comparison)</span>
+                }
+              </div>
+              <div class="text-xs font-normal text-gray-500">
+                {{ history.timestamp | date: 'dd/MM/yyyy HH:mm' }}
+              </div>
+            </div>
+          </mat-panel-title>
+
+          <div class="flex items-center gap-3">
+            @if (assessmentFor(history); as oa) {
+              @if (oa.reportReady) {
+                <span class="text-xs text-gray-500">Click to view Overseer report</span>
+                <span class="text-gray-500"> {{ oa.passedSteps }} / {{ oa.totalSteps }}</span>
+                @if (oa.passedSteps === oa.totalSteps) {
+                  <mat-icon color="primary">done</mat-icon>
+                } @else {
+                  <mat-icon color="warn">cancel</mat-icon>
+                }
+              } @else {
+                <span class="flex items-center gap-3 uppercase">
+                  Tests In Progress
+                  <mat-progress-spinner mode="indeterminate" [diameter]="25"></mat-progress-spinner>
+                </span>
+              }
+            }
+
+            @if (history.hasSubmissionFiles && currentUnitRole) {
               <button
-                mat-icon-button
-                aria-label="Submission options"
-                [matMenuTriggerFor]="menu"
                 #submissionMenuTrigger="matMenuTrigger"
+                aria-label="Submission options"
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
                 (click)="viewSubmissionOptions($event)"
               >
                 <mat-icon>more_vert</mat-icon>
               </button>
-              <div fxFlex></div>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="viewSubmissionFiles(oa, $event)">
+                <button mat-menu-item (click)="viewSubmissionFiles(history, $event)">
                   <mat-icon>folder_zip</mat-icon>
                   View Submission Files
                 </button>
-                @if (hasComparisonSourceFor(oa)) {
-                  <button mat-menu-item (click)="compareWithSelected(oa, $event)">
+                @if (hasComparisonSourceFor(history)) {
+                  <button mat-menu-item (click)="compareWithSelected(history, $event)">
                     <mat-icon>compare_arrows</mat-icon>
                     Compare With Selected
                   </button>
-                } @else if (isComparisonSource(oa)) {
+                } @else if (isComparisonSource(history)) {
                   <button mat-menu-item (click)="clearComparisonSource($event)">
                     <mat-icon>close</mat-icon>
                     Clear Compare Selection
@@ -57,7 +81,7 @@
                 } @else {
                   <button
                     mat-menu-item
-                    (click)="selectComparisonSource(oa, $event, submissionMenuTrigger)"
+                    (click)="selectComparisonSource(history, $event, submissionMenuTrigger)"
                   >
                     <mat-icon>task_alt</mat-icon>
                     Select For Comparison
@@ -66,142 +90,143 @@
               </mat-menu>
             }
           </div>
-        } @else {
-          <div class="flex gap-5 uppercase items-center">
-            Tests In Progress
-            <mat-progress-spinner [diameter]="25" mode="indeterminate"></mat-progress-spinner>
-          </div>
-        }
-      </mat-expansion-panel-header>
+        </mat-expansion-panel-header>
 
-      <mat-accordion>
-        @for (result of oa.stepResultsCache.values | async; track result.id; let idx = $index) {
-          <mat-expansion-panel>
-            <mat-expansion-panel-header class="flex justify-between items-center">
-              <mat-panel-title>
-                Step {{ idx + 1 }}: {{ result.overseerStep?.displayName }}</mat-panel-title
-              >
-              @if (result.pass) {
-                <mat-icon color="primary">done</mat-icon>
-              } @else {
-                <mat-icon color="warn">cancel</mat-icon>
-              }
-            </mat-expansion-panel-header>
+        @if (assessmentFor(history); as oa) {
+          <mat-accordion>
+            @for (result of oa.stepResultsCache.values | async; track result.id; let idx = $index) {
+              <mat-expansion-panel>
+                <mat-expansion-panel-header class="flex items-center justify-between">
+                  <mat-panel-title>
+                    Step {{ idx + 1 }}: {{ result.overseerStep?.displayName }}</mat-panel-title
+                  >
+                  @if (result.pass) {
+                    <mat-icon color="primary">done</mat-icon>
+                  } @else {
+                    <mat-icon color="warn">cancel</mat-icon>
+                  }
+                </mat-expansion-panel-header>
 
-            <!-- <p>Exit Status: {{ result.exitStatus }}</p> -->
-            <!-- <p>Pass?: {{ result.pass }}</p> -->
+                <!-- <p>Exit Status: {{ result.exitStatus }}</p> -->
+                <!-- <p>Pass?: {{ result.pass }}</p> -->
 
-            @if (!result.pass) {
-              <p class="text-gray-500 text-left w-full tracking-wide p-2 text-normal">
-                {{ result.feedbackMessage }}
-              </p>
-            }
-
-            @if (
-              result.expectedOutput &&
-              result.expectedOutput !== result.stdout &&
-              (result.overseerStep?.stepType === 'output_diff' || !result.overseerStep)
-            ) {
-              <div class="flex gap-2 mb-5 w-fill justify-center items-center">
-                <button
-                  mat-stroked-button
-                  [color]="viewOutput === 'your_output' ? 'primary' : undefined"
-                  (click)="submissionOutput()"
-                >
-                  Your Output
-                </button>
-
-                <button
-                  mat-stroked-button
-                  [color]="viewOutput === 'expected_output' ? 'primary' : undefined"
-                  (click)="expectedOutput()"
-                >
-                  Expected Output
-                </button>
-                <button
-                  mat-stroked-button
-                  [color]="viewOutput === 'diff' ? 'primary' : undefined"
-                  (click)="diff()"
-                >
-                  Diff
-                </button>
-
-                <button
-                  mat-stroked-button
-                  [color]="viewOutput === 'split_diff' ? 'primary' : undefined"
-                  (click)="splitDiff()"
-                >
-                  Split Diff
-                </button>
-              </div>
-              @if (viewOutput === 'diff' || viewOutput === 'split_diff') {
-                @if (result.expectedOutput !== result.stdout) {
-                  <ngx-monaco-diff-editor
-                    [options]="diffEditorOptions"
-                    [originalModel]="{
-                      language: 'plaintext',
-                      code: result.expectedOutput
-                    }"
-                    [modifiedModel]="{
-                      language: 'plainttext',
-                      code: result.stdout
-                    }"
-                  ></ngx-monaco-diff-editor>
+                @if (!result.pass) {
+                  <p class="text-normal w-full p-1 text-left tracking-wide text-gray-500">
+                    {{ result.feedbackMessage }}
+                  </p>
                 }
-              } @else if (viewOutput === 'your_output') {
-                <ngx-monaco-editor
-                  class="w-full p-5"
-                  [options]="editorOptions"
-                  [(ngModel)]="result.stdout"
-                ></ngx-monaco-editor>
-              } @else if (viewOutput === 'expected_output') {
-                <ngx-monaco-editor
-                  class="w-full p-5"
-                  [options]="editorOptions"
-                  [(ngModel)]="result.expectedOutput"
-                ></ngx-monaco-editor>
-              }
-            } @else if (result.stdout) {
-              <pre
-                class="max-w-full max-h-72 overflow-scroll whitespace-pre-wrap break-words scrollbar-gutter-stable"
-              ><code>{{result.stdout}}</code></pre>
-            } @else if (result.pass) {
-              <div class="uppercase text-gray-400 text-center w-full tracking-wide">SUCCESS</div>
-              <div class="uppercase text-gray-200 text-center w-full tracking-wide p-2 text-normal">
-                (No Output)
-              </div>
-            }
-          </mat-expansion-panel>
-        }
-        @if (loadingAssessments.has(oa.id)) {
-          <div class="w-full flex justify-center items-center">
-            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-          </div>
-        } @else {
-          @for (skipped of oa.stepsSkipped; track skipped.id; let idx = $index) {
-            <!-- TODO: filter oa.stepsSkipped, if this overseer assessment passed, then we can ignore this (dont render) skipped step -->
-            <!-- TODO: because it proably means the test was added after the assessment -->
-            <mat-expansion-panel disabled>
-              <mat-expansion-panel-header class="flex justify-between items-center">
-                <mat-panel-title>
-                  Step {{ oa.stepResultsCache.currentValues.length + idx + 1 }}:
-                  {{ skipped?.displayName ?? '-' }}
-                  <span class="italic ml-5">(Skipped)</span>
-                </mat-panel-title>
 
-                <mat-icon class="opacity-80">pause</mat-icon>
-              </mat-expansion-panel-header>
-            </mat-expansion-panel>
-          }
+                @if (
+                  result.expectedOutput &&
+                  result.expectedOutput !== result.stdout &&
+                  (result.overseerStep?.stepType === 'output_diff' || !result.overseerStep)
+                ) {
+                  <div class="w-fill mb-3 flex items-center justify-center gap-1">
+                    <button
+                      mat-stroked-button
+                      [color]="viewOutput === 'your_output' ? 'primary' : undefined"
+                      (click)="submissionOutput()"
+                    >
+                      Your Output
+                    </button>
+
+                    <button
+                      mat-stroked-button
+                      [color]="viewOutput === 'expected_output' ? 'primary' : undefined"
+                      (click)="expectedOutput()"
+                    >
+                      Expected Output
+                    </button>
+                    <button
+                      mat-stroked-button
+                      [color]="viewOutput === 'diff' ? 'primary' : undefined"
+                      (click)="diff()"
+                    >
+                      Diff
+                    </button>
+
+                    <button
+                      mat-stroked-button
+                      [color]="viewOutput === 'split_diff' ? 'primary' : undefined"
+                      (click)="splitDiff()"
+                    >
+                      Split Diff
+                    </button>
+                  </div>
+                  @if (viewOutput === 'diff' || viewOutput === 'split_diff') {
+                    @if (result.expectedOutput !== result.stdout) {
+                      <ngx-monaco-diff-editor
+                        [modifiedModel]="{
+                          language: 'plainttext',
+                          code: result.stdout,
+                        }"
+                        [options]="diffEditorOptions"
+                        [originalModel]="{
+                          language: 'plaintext',
+                          code: result.expectedOutput,
+                        }"
+                      ></ngx-monaco-diff-editor>
+                    }
+                  } @else if (viewOutput === 'your_output') {
+                    <ngx-monaco-editor
+                      class="w-full p-3"
+                      [options]="editorOptions"
+                      [(ngModel)]="result.stdout"
+                    ></ngx-monaco-editor>
+                  } @else if (viewOutput === 'expected_output') {
+                    <ngx-monaco-editor
+                      class="w-full p-3"
+                      [options]="editorOptions"
+                      [(ngModel)]="result.expectedOutput"
+                    ></ngx-monaco-editor>
+                  }
+                } @else if (result.stdout) {
+                  <pre
+                    class="scrollbar-gutter-stable max-h-44 max-w-full overflow-auto whitespace-pre-wrap break-words rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed text-gray-800 shadow-inner"
+                  ><code>{{result.stdout}}</code></pre>
+                } @else if (result.pass) {
+                  <div class="w-full text-center uppercase tracking-wide text-gray-400">
+                    SUCCESS
+                  </div>
+                  <div
+                    class="text-normal w-full p-1 text-center uppercase tracking-wide text-gray-200"
+                  >
+                    (No Output)
+                  </div>
+                }
+              </mat-expansion-panel>
+            }
+            @if (loadingAssessments.has(oa.id)) {
+              <div class="flex w-full items-center justify-center">
+                <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+              </div>
+            } @else {
+              @for (skipped of oa.stepsSkipped; track skipped.id; let idx = $index) {
+                <!-- TODO: filter oa.stepsSkipped, if this overseer assessment passed, then we can ignore this (dont render) skipped step -->
+                <!-- TODO: because it proably means the test was added after the assessment -->
+                <mat-expansion-panel disabled>
+                  <mat-expansion-panel-header class="flex items-center justify-between">
+                    <mat-panel-title>
+                      Step {{ oa.stepResultsCache.currentValues.length + idx + 1 }}:
+                      {{ skipped?.displayName ?? '-' }}
+                      <span class="ml-3 italic">(Skipped)</span>
+                    </mat-panel-title>
+
+                    <mat-icon class="opacity-80">pause</mat-icon>
+                  </mat-expansion-panel-header>
+                </mat-expansion-panel>
+              }
+            }
+          </mat-accordion>
         }
-      </mat-accordion>
-    </mat-expansion-panel>
-  } @empty {
-    <div class="flex flex-col w-full h-full justify-center items-center text-[#c5c5c5]">
-      <mat-icon style="height: 120px; width: 120px; font-size: 120px; color: #c5c5c5"
-        >subtitles_off</mat-icon
-      >
-      <div>No submission reports for this task.</div>
-    </div>
-  }
-</mat-accordion>
+      </mat-expansion-panel>
+    } @empty {
+      <div class="flex size-full flex-col items-center justify-center text-[#c5c5c5]">
+        <mat-icon style="height: 120px; width: 120px; font-size: 120px; color: #c5c5c5"
+          >subtitles_off</mat-icon
+        >
+        <div>No retained submissions for this task.</div>
+      </div>
+    }
+  </mat-accordion>
+}

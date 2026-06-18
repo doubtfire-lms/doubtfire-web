@@ -1,262 +1,292 @@
 <div
-  class="comments-panel h-full min-h-[350px]"
   appDragDrop
-  (fileDropped)="uploadFiles($event)"
+  class="comments-panel h-full min-h-[350px]"
   fxLayout="column"
+  (fileDropped)="uploadFiles($event)"
 >
   <div
-    fxFlex
-    class="comments-body"
     #commentsBody
+    class="comments-body"
+    fxFlex
     fxLayout="column"
     style="place-content: stretch !important"
   >
-    <div [hidden]="!loading" class="h-full" fxLayout="row" fxLayoutAlign="center center">
-      <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
+    <div class="h-full" fxLayout="row" fxLayoutAlign="center center" [hidden]="!loading">
+      <mat-spinner color="accent" diameter="100" strokeWidth="2"></mat-spinner>
     </div>
 
-    <div
-      *ngIf="!task || task.comments.length === 0"
-      fxFlexFill
-      fxLayout="column"
-      fxLayoutAlign="center center"
-    >
-      <mat-icon id="noView">forum</mat-icon>
-    </div>
+    @if (!task || task.comments.length === 0) {
+      <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon id="noView">forum</mat-icon>
+      </div>
+    }
 
-    <div *ngIf="task" class="comments-scroll-content" [hidden]="loading">
-      <span>
-        <div
-          id="comment-{{ comment.id }}"
-          *ngFor="let comment of task.comments"
-          (mouseover)="comment.hover = true"
-          (mouseout)="comment.hover = false"
-          class="anchor"
-        >
-          <p
-            id="commentTimestamp"
-            *ngIf="comment.shouldShowTimestamp"
-            [ngClass]="{own: comment.authorIsMe}"
-          >
-            {{ comment.author.preferredName }} {{ comment.author.lastName }}
-            {{ comment.createdAt | humanizedDate }}
-          </p>
-          <div
-            class="comment"
-            [ngClass]="{
-              'comment-by-other-user': !comment.authorIsMe,
-              'new-comment': comment.isNew
-            }"
-            [fxLayout]="comment.authorIsMe ? 'row-reverse' : 'row'"
-            fxLayoutAlign="start end"
-          >
+    @if (task) {
+      <div class="comments-scroll-content" [hidden]="loading">
+        <span>
+          @for (comment of task.comments; track comment) {
             <div
-              *ngIf="!comment.authorIsMe && shouldShowAuthorIcon(comment.commentType)"
-              class="comment-user-icon-wrapper"
+              class="anchor"
+              id="comment-{{ comment.id }}"
+              (mouseout)="comment.hover = false"
+              (mouseover)="comment.hover = true"
             >
-              <user-icon
-                *ngIf="comment.shouldShowAvatar && shouldShowAuthorIcon(comment.commentType)"
-                [size]="28"
-                [user]="comment.author"
-                [ngClass]="{'hidden-xs hidden-sm': comment.authorIsMe}"
-                matTooltip="{{ comment.author.name }}"
-                matTooltipPosition="left"
-              >
-              </user-icon>
-            </div>
-
-            <div
-              class="comment-container"
-              [fxLayout]="comment.authorIsMe ? 'row-reverse' : 'row'"
-              fxLayoutAlign="start center"
-              [ngSwitch]="comment.commentType"
-            >
+              @if (comment.shouldShowTimestamp) {
+                <p id="commentTimestamp" [ngClass]="{own: comment.authorIsMe}">
+                  {{ comment.author.preferredName }} {{ comment.author.lastName }}
+                  {{ comment.createdAt | humanizedDate }}
+                </p>
+              }
               <div
-                *ngSwitchCase="'status'"
-                class="comment-status"
-                [matTooltip]="comment.createdAt | humanizedDate"
-                matTooltipPosition="above"
-                matTooltipShowDelay="1000"
+                class="comment"
+                fxLayoutAlign="start end"
+                [fxLayout]="comment.authorIsMe ? 'row-reverse' : 'row'"
+                [ngClass]="{
+                  'comment-by-other-user': !comment.authorIsMe,
+                  'new-comment': comment.isNew,
+                }"
               >
-                <hr class="hr-text" [attr.data-content]="comment.text" />
-              </div>
-
-              <div
-                *ngSwitchCase="'discussed_in_class'"
-                class="w-full flex flex-col items-center my-2"
-                [matTooltip]="comment.createdAt | humanizedDate"
-                matTooltipPosition="above"
-                matTooltipShowDelay="1000"
-              >
-                <mat-card class="w-full self-end" appearance="outlined">
-                  <mat-card-header>
-                    <mat-icon class="m-auto" style="color: #9696969d">group</mat-icon>
-                  </mat-card-header>
-
-                  <mat-card-content
-                    style="color: #9696969d"
-                    class="flex flex-col justify-center items-center"
-                  >
-                    {{ comment.text }}
-                  </mat-card-content>
-                </mat-card>
-              </div>
-
-              <div
-                *ngSwitchCase="'feedback_review_request'"
-                class="w-full flex flex-col items-center my-2"
-                [matTooltip]="comment.createdAt | humanizedDate"
-                matTooltipPosition="above"
-                matTooltipShowDelay="1000"
-              >
-                <mat-card class="w-full self-end" appearance="outlined">
-                  <mat-card-header>
-                    <mat-icon class="m-auto" style="color: #9696969d">comment</mat-icon>
-                  </mat-card-header>
-
-                  <mat-card-content
-                    style="color: #9696969d"
-                    class="flex flex-col justify-center items-center"
-                  >
-                    {{ comment.text }}
-                  </mat-card-content>
-                </mat-card>
-              </div>
-
-              <div
-                *ngSwitchCase="'checked_in'"
-                class="w-full flex flex-col items-center my-2"
-                [matTooltip]="comment.createdAt | humanizedDate"
-                matTooltipPosition="above"
-                matTooltipShowDelay="1000"
-              >
-                <mat-card class="w-full self-end" appearance="outlined">
-                  <mat-card-header>
-                    <mat-icon class="m-auto" style="color: #9696969d">how_to_reg</mat-icon>
-                  </mat-card-header>
-
-                  <mat-card-content
-                    style="color: #9696969d"
-                    class="flex flex-col justify-center items-center"
-                  >
-                    {{ comment.text }}
-                  </mat-card-content>
-                </mat-card>
-              </div>
-
-              <div *ngSwitchCase="'plan'" class="comment-status">
-                <hr class="hr-text" [attr.data-content]="comment.text" />
-              </div>
-
-              <div
-                *ngSwitchCase="'assessment'"
-                class="comment-assessment overflow-x-scroll max-w-[350px] mx-auto"
-              >
-                <app-task-assessment-comment
-                  [task]="task"
-                  [comment]="comment"
-                  *ngIf="overseerEnabled"
-                ></app-task-assessment-comment>
-              </div>
-
-              <div *ngSwitchCase="'scorm'" class="comment-scorm">
-                <f-scorm-comment
-                  [task]="task"
-                  [comment]="comment"
-                  *ngIf="scormEnabled"
-                ></f-scorm-comment>
-              </div>
-
-              <div class="bubble" [ngClass]="commentClasses(comment)">
-                <a
-                  (click)="scrollToComment(comment.originalComment.id)"
-                  class="original-comment"
-                  *ngIf="!!comment.replyToId"
-                >
-                  <p class="reply-text">
-                    <i class="fa fa-reply"></i>
-                    {{ comment.originalComment ? comment.originalComment.text : 'comment removed' }}
-                  </p>
-                </a>
-                <div *ngSwitchCase="'extension'" class="comment-extension">
-                  <extension-comment [task]="task" [comment]="comment"> </extension-comment>
-                </div>
-
-                <div *ngSwitchCase="'scorm_extension'" class="comment-scorm-extension">
-                  <f-scorm-extension-comment [task]="task" [comment]="comment">
-                  </f-scorm-extension-comment>
-                </div>
+                @if (!comment.authorIsMe && shouldShowAuthorIcon(comment.commentType)) {
+                  <div class="comment-user-icon-wrapper">
+                    @if (comment.shouldShowAvatar && shouldShowAuthorIcon(comment.commentType)) {
+                      <user-icon
+                        matTooltip="{{ comment.author.name }}"
+                        matTooltipPosition="left"
+                        [ngClass]="{'hidden-xs hidden-sm': comment.authorIsMe}"
+                        [size]="28"
+                        [user]="comment.author"
+                      >
+                      </user-icon>
+                    }
+                  </div>
+                }
 
                 <div
-                  *ngSwitchCase="'text'"
-                  class="comment-text"
-                  [matTooltip]="comment.createdAt | humanizedDate"
-                  matTooltipPosition="above"
-                  matTooltipShowDelay="1000"
+                  class="comment-container"
+                  fxLayoutAlign="start center"
+                  [fxLayout]="comment.authorIsMe ? 'row-reverse' : 'row'"
                 >
-                  <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
-                </div>
+                  @switch (comment.commentType) {
+                    @case ('status') {
+                      <div
+                        class="comment-status"
+                        matTooltipPosition="above"
+                        matTooltipShowDelay="1000"
+                        [matTooltip]="comment.createdAt | humanizedDate"
+                      >
+                        <hr class="hr-text" [attr.data-content]="comment.text" />
+                      </div>
+                    }
 
-                <div *ngSwitchCase="'audio'" class="comment-audio">
-                  <audio-player
-                    [task]="task"
-                    [project]="project"
-                    [comment]="comment"
-                  ></audio-player>
-                </div>
+                    @case ('discussed_in_class') {
+                      <div
+                        class="my-1 flex w-full flex-col items-center"
+                        matTooltipPosition="above"
+                        matTooltipShowDelay="1000"
+                        [matTooltip]="comment.createdAt | humanizedDate"
+                      >
+                        <mat-card appearance="outlined" class="w-full self-end">
+                          <mat-card-header>
+                            <mat-icon class="m-auto" style="color: #9696969d">group</mat-icon>
+                          </mat-card-header>
 
-                <div *ngSwitchCase="'discussion'" class="comment-discussion">
-                  <intelligent-discussion-player
-                    [task]="task"
-                    [discussion]="comment"
-                  ></intelligent-discussion-player>
-                </div>
+                          <mat-card-content
+                            class="flex flex-col items-center justify-center"
+                            style="color: #9696969d"
+                          >
+                            {{ comment.text }}
+                          </mat-card-content>
+                        </mat-card>
+                      </div>
+                    }
 
-                <div *ngSwitchCase="'image'" class="comment-image">
-                  <pdf-image-comment
-                    [comment]="comment"
-                    [project]="project"
-                    [task]="task"
-                  ></pdf-image-comment>
-                </div>
+                    @case ('feedback_review_request') {
+                      <div
+                        class="my-1 flex w-full flex-col items-center"
+                        matTooltipPosition="above"
+                        matTooltipShowDelay="1000"
+                        [matTooltip]="comment.createdAt | humanizedDate"
+                      >
+                        <mat-card appearance="outlined" class="w-full self-end">
+                          <mat-card-header>
+                            <mat-icon class="m-auto" style="color: #9696969d">comment</mat-icon>
+                          </mat-card-header>
 
-                <div *ngSwitchCase="'pdf'" class="comment-pdf">
-                  <pdf-image-comment
-                    [comment]="comment"
-                    [project]="project"
-                    [task]="task"
-                  ></pdf-image-comment>
+                          <mat-card-content
+                            class="flex flex-col items-center justify-center"
+                            style="color: #9696969d"
+                          >
+                            {{ comment.text }}
+                          </mat-card-content>
+                        </mat-card>
+                      </div>
+                    }
+
+                    @case ('checked_in') {
+                      <div
+                        class="my-1 flex w-full flex-col items-center"
+                        matTooltipPosition="above"
+                        matTooltipShowDelay="1000"
+                        [matTooltip]="comment.createdAt | humanizedDate"
+                      >
+                        <mat-card appearance="outlined" class="w-full self-end">
+                          <mat-card-header>
+                            <mat-icon class="m-auto" style="color: #9696969d">how_to_reg</mat-icon>
+                          </mat-card-header>
+
+                          <mat-card-content
+                            class="flex flex-col items-center justify-center"
+                            style="color: #9696969d"
+                          >
+                            {{ comment.text }}
+                          </mat-card-content>
+                        </mat-card>
+                      </div>
+                    }
+
+                    @case ('plan') {
+                      <div class="comment-status">
+                        <hr class="hr-text" [attr.data-content]="comment.text" />
+                      </div>
+                    }
+
+                    @case ('assessment') {
+                      <div class="comment-assessment mx-auto max-w-[350px] overflow-x-scroll">
+                        @if (overseerEnabled) {
+                          <app-task-assessment-comment
+                            [comment]="comment"
+                            [task]="task"
+                          ></app-task-assessment-comment>
+                        }
+                      </div>
+                    }
+
+                    @case ('scorm') {
+                      <div class="comment-scorm">
+                        @if (scormEnabled) {
+                          <f-scorm-comment [comment]="comment" [task]="task"></f-scorm-comment>
+                        }
+                      </div>
+                    }
+                  }
+
+                  <div class="bubble" [ngClass]="commentClasses(comment)">
+                    @if (!!comment.replyToId) {
+                      <a
+                        class="original-comment"
+                        (click)="scrollToComment(comment.originalComment.id)"
+                      >
+                        <p class="reply-text">
+                          <mat-icon inline>reply</mat-icon>
+                          {{
+                            comment.originalComment
+                              ? comment.originalComment.text
+                              : 'comment removed'
+                          }}
+                        </p>
+                      </a>
+                    }
+
+                    @switch (comment.commentType) {
+                      @case ('extension') {
+                        <div class="comment-extension">
+                          <extension-comment [comment]="comment" [task]="task"> </extension-comment>
+                        </div>
+                      }
+
+                      @case ('scorm_extension') {
+                        <div class="comment-scorm-extension">
+                          <f-scorm-extension-comment [comment]="comment" [task]="task">
+                          </f-scorm-extension-comment>
+                        </div>
+                      }
+
+                      @case ('text') {
+                        <div
+                          class="comment-text"
+                          matTooltipPosition="above"
+                          matTooltipShowDelay="1000"
+                          [matTooltip]="comment.createdAt | humanizedDate"
+                        >
+                          <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
+                        </div>
+                      }
+
+                      @case ('audio') {
+                        <div class="comment-audio">
+                          <audio-player
+                            [comment]="comment"
+                            [project]="project"
+                            [task]="task"
+                          ></audio-player>
+                        </div>
+                      }
+
+                      @case ('discussion') {
+                        <div class="comment-discussion">
+                          <intelligent-discussion-player
+                            [discussion]="comment"
+                            [task]="task"
+                          ></intelligent-discussion-player>
+                        </div>
+                      }
+
+                      @case ('image') {
+                        <div class="comment-image">
+                          <pdf-image-comment
+                            [comment]="comment"
+                            [project]="project"
+                            [task]="task"
+                          ></pdf-image-comment>
+                        </div>
+                      }
+
+                      @case ('pdf') {
+                        <div class="comment-pdf">
+                          <pdf-image-comment
+                            [comment]="comment"
+                            [project]="project"
+                            [task]="task"
+                          ></pdf-image-comment>
+                        </div>
+                      }
+                    }
+                  </div>
+                  @if (comment.isBubbleComment) {
+                    <div class="comment-overflow">
+                      <comment-bubble-action
+                        [comment]="comment"
+                        [hidden]="!comment.hover"
+                        [sharedData]="sharedCommentComposerData"
+                      ></comment-bubble-action>
+                    </div>
+                  }
                 </div>
               </div>
-              <div *ngIf="comment.isBubbleComment" class="comment-overflow">
-                <comment-bubble-action
-                  [hidden]="!comment.hover"
-                  [comment]="comment"
-                  [sharedData]="sharedCommentComposerData"
-                ></comment-bubble-action>
-              </div>
+              @if (comment.lastRead && shouldShowReadReceipt()) {
+                <div class="read-receipt">
+                  <user-icon
+                    matTooltip="Read {{ comment.recipientReadTime | humanizedDate }} by {{
+                      comment.recipient.name
+                    }}"
+                    matTooltipPosition="above"
+                    [size]="18"
+                    [user]="comment.recipient"
+                  >
+                  </user-icon>
+                </div>
+              }
             </div>
-          </div>
-          <div *ngIf="comment.lastRead && shouldShowReadReceipt()" class="read-receipt">
-            <user-icon
-              matTooltip="Read {{ comment.recipientReadTime | humanizedDate }} by {{
-                comment.recipient.name
-              }}"
-              matTooltipPosition="above"
-              [size]="18"
-              [user]="comment.recipient"
-            >
-            </user-icon>
-          </div>
-        </div>
-      </span>
-    </div>
+          }
+        </span>
+      </div>
+    }
   </div>
   <!--/comment-list-->
   <div class="comments-footer" id="commentComposerFoter">
     <task-comment-composer
-      [task]="task"
       [sharedData]="sharedCommentComposerData"
+      [task]="task"
     ></task-comment-composer>
   </div>
 </div>

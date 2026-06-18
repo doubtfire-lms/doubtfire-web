@@ -1,42 +1,59 @@
 <h3 mat-dialog-title>Create Unit</h3>
 
-<form mat-dialog-content action="" #createUnitForm="ngForm" (ngSubmit)="createUnit(createUnitForm.value)" class="pt-8">
+<form
+  #createUnitForm="ngForm"
+  action=""
+  class="pt-5"
+  mat-dialog-content
+  (ngSubmit)="createUnit(createUnitForm.value)"
+>
   <div class="flex flex-col">
     <mat-form-field appearance="outline">
       <mat-label>Unit Code</mat-label>
-      <input matInput placeholder="COS123456" name="unitCode" ngModel />
+      <input matInput name="unitCode" ngModel placeholder="COS123456" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Unit Name</mat-label>
-      <input matInput placeholder="Introduction to OnTrack" name="unitName" ngModel />
+      <input matInput name="unitName" ngModel placeholder="Introduction to OnTrack" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Teaching Period</mat-label>
-      <mat-select (valueChange)="handleChangeTeachingPeriod($event)" name="selectedTeachingPeriod" ngModel>
+      <mat-select
+        name="selectedTeachingPeriod"
+        ngModel
+        (valueChange)="handleChangeTeachingPeriod($event)"
+      >
         <mat-option value="custom"> Custom teaching period </mat-option>
-        <mat-option *ngFor="let tp of teachingPeriods; let i = index" [value]="tp.id">
-          {{ tp.name }}
-        </mat-option>
+        @for (tp of teachingPeriods; track tp; let i = $index) {
+          <mat-option [value]="tp.id">
+            {{ tp.name }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
-    @if(showDates) {
-    <mat-form-field appearance="outline">
-      <mat-label>Enter a date range</mat-label>
-      <mat-date-range-input [rangePicker]="picker">
-        <input matStartDate placeholder="Start date" name="customStardDate" [(ngModel)]="startDate" />
-        <input matEndDate placeholder="End date" name="customEndDate" [(ngModel)]="endDate" />
-      </mat-date-range-input>
-      <mat-hint>DD/MM/YYYY - DD/MM/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-    </mat-form-field>
+    @if (showDates) {
+      <mat-form-field appearance="outline">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input
+            matStartDate
+            name="customStardDate"
+            placeholder="Start date"
+            [(ngModel)]="startDate"
+          />
+          <input matEndDate name="customEndDate" placeholder="End date" [(ngModel)]="endDate" />
+        </mat-date-range-input>
+        <mat-hint>DD/MM/YYYY - DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
     }
 
     <mat-dialog-actions align="end">
-      <button mat-raised-button color="primary">Create</button>
+      <button color="primary" mat-raised-button>Create</button>
     </mat-dialog-actions>
   </div>
 </form>

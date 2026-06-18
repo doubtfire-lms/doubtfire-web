@@ -9,6 +9,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-tutor-notes',
   templateUrl: './tutor-notes.component.html',
   styleUrl: './tutor-notes.component.scss',
+  standalone: false,
 })
 export class TutorNotesComponent implements OnInit {
   @ViewChild('tutorNotesContainer') tutorNotesContainer!: ElementRef;
@@ -40,7 +41,7 @@ export class TutorNotesComponent implements OnInit {
     }
 
     this.loadingTutorNotes = true;
-    this.tutorNoteService.loadTutorNotes(this.unitRole).subscribe((notes) => {
+    this.tutorNoteService.loadTutorNotes(this.unitRole).subscribe((_notes) => {
       this.loadingTutorNotes = false;
       this.tutorNoteService.updateTutorNoteReplies(this.unitRole?.tutorNotesCache.currentValues);
       this.scrollDown();
@@ -160,7 +161,6 @@ export class TutorNotesComponent implements OnInit {
   public autoResizeTutorNoteEditor() {
     const el = this.tutorNoteEditor.nativeElement;
     el.style.height = 'auto';
-    el.offsetHeight;
     el.style.height = el.scrollHeight + 'px';
   }
 

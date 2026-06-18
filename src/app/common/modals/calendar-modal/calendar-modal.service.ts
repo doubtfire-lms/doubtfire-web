@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { CalendarModalComponent } from './calendar-modal.component';
+import {Injectable} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {Task} from 'src/app/api/models/task';
+import {CalendarModalComponent} from './calendar-modal.component';
 
 @Injectable({
   providedIn: 'root',
@@ -8,8 +9,12 @@ import { CalendarModalComponent } from './calendar-modal.component';
 export class CalendarModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(task: any) {
-    let dialogRef: MatDialogRef<CalendarModalComponent, any>;
-    dialogRef = this.dialog.open(CalendarModalComponent);
+  public show(_task?: Task) {
+    this.dialog.open(CalendarModalComponent, {
+      height: 'h-min',
+      maxHeight: '90vh',
+      width: '800px',
+      maxWidth: '95vw',
+    });
   }
 }

@@ -1,30 +1,35 @@
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-2.5">
   <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormEnabled">
     Enable test for task
   </mat-checkbox>
 
   @if (taskDefinition.scormEnabled) {
     <f-file-drop
-      mode="event"
-      (filesDropped)="uploadScormData($event)"
       accept="application/zip"
+      mode="event"
       [desiredFileName]="'SCORM zip'"
+      (filesDropped)="uploadScormData($event)"
     />
     @if (taskDefinition.hasScormData) {
-      <div class="flex flex-row gap-4 pt-4">
-        <button mat-flat-button color="warn" (click)="removeScormData()" class="flex-grow me-4">
+      <div class="flex flex-row gap-2.5 pt-2.5">
+        <button class="me-4 flex-grow" color="warn" mat-flat-button (click)="removeScormData()">
           Delete SCORM Zip
         </button>
-        <button mat-flat-button color="accent" (click)="downloadScormData()" class="flex-grow ms-4 me-4">
+        <button
+          class="me-4 ms-4 flex-grow"
+          color="accent"
+          mat-flat-button
+          (click)="downloadScormData()"
+        >
           Download SCORM Zip
         </button>
-        <button mat-flat-button color="accent" (click)="previewScormTest()" class="flex-grow me-4">
+        <button class="me-4 flex-grow" color="accent" mat-flat-button (click)="previewScormTest()">
           Preview SCORM Test
         </button>
       </div>
     }
 
-    <div class="flex-grow flex flex-row gap-4 pt-4">
+    <div class="flex flex-grow flex-row gap-2.5 pt-2.5">
       <div class="basis-1/2">
         <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormAllowReview">
           Allow students to review completed test attempt
@@ -37,21 +42,21 @@
         <mat-label>Limit to this number of attempts - 0 is unlimited</mat-label>
         <input
           matInput
-          min="0"
           max="100"
+          min="0"
           type="number"
           [(ngModel)]="taskDefinition.scormAttemptLimit"
         />
       </mat-form-field>
     </div>
 
-    <div class="flex-grow flex flex-row gap-4 pt-4">
+    <div class="flex flex-grow flex-row gap-2.5 pt-2.5">
       <mat-checkbox
+        class="basis-1/2"
+        disabled
         matInput
         required
         [(ngModel)]="taskDefinition.scormTimeDelayEnabled"
-        disabled
-        class="basis-1/2"
       >
         Enable incremental time delays between test attempts
       </mat-checkbox>

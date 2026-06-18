@@ -1,7 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { UIRouterModule } from '@uirouter/angular';
-
-import { TaskDropdownComponent } from './task-dropdown.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {TaskDropdownComponent} from './task-dropdown.component';
 
 describe('TaskDropdownComponent', () => {
   let component: TaskDropdownComponent;
@@ -10,7 +9,7 @@ describe('TaskDropdownComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TaskDropdownComponent],
-      imports: [UIRouterModule.forRoot()],
+      imports: [RouterTestingModule],
     }).compileComponents();
   });
 

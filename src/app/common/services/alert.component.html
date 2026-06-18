@@ -1,0 +1,10 @@
+<span class="center-items flex items-center space-x-2.5">
+  <span class="flex">
+    <mat-icon>{{ data?.icon }}</mat-icon>
+  </span>
+  <span class="flex-grow">{{ data?.message }}</span>
+
+  <span class="ml-auto" matSnackBarActions>
+    <button mat-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">Close</button>
+  </span>
+</span>

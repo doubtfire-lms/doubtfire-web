@@ -2,43 +2,39 @@
   @if (currentView === 'PROJECT' && currentProject !== null && currentUnit.currentUserIsStaff) {
     <mat-icon class="f-breadcrumb">chevron_right</mat-icon>
     <button #menuState="matMenuTrigger" mat-button [matMenuTriggerFor]="menu">
-      <span class="flex items-center flex-row">
+      <span class="flex flex-row items-center">
         <span> Staff Tasks </span>
         <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
       </span>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item uiSref="units/tasks/inbox" [uiParams]="{unitId: currentUnit.id}">
+      <button mat-menu-item [routerLink]="['/units', currentUnit.id, 'tasks', 'inbox']">
         <mat-icon aria-label="Inbox icon" fontIcon="inbox"></mat-icon> <span>Inbox</span>
       </button>
-      <button mat-menu-item uiSref="units/tasks/definition" [uiParams]="{unitId: currentUnit.id}">
+      <button mat-menu-item [routerLink]="['/units', currentUnit.id, 'tasks', 'definition']">
         <mat-icon aria-label="Task Explorer Icon" fontIcon="pageview"></mat-icon> Explorer
       </button>
-      <button mat-menu-item uiSref="units/tasks/viewer" [uiParams]="{unitId: currentUnit.id}">
+      <button mat-menu-item [routerLink]="['/units', currentUnit.id, 'tasks']">
         <mat-icon aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
       </button>
       <mat-divider></mat-divider>
-      <button mat-menu-item uiSref="units/students/list" [uiParams]="{unitId: currentUnit.id}">
+      <button mat-menu-item [routerLink]="['/units', currentUnit.id, 'students']">
         <mat-icon aria-label="Students list" fontIcon="group"></mat-icon> Students
       </button>
-      <button mat-menu-item uiSref="units/students/groups" [uiParams]="{unitId: currentUnit.id}">
+      <button mat-menu-item [routerLink]="['/units', currentUnit.id, 'students', 'groups']">
         <mat-icon aria-label="Student Groups" fontIcon="groups"></mat-icon> Groups
       </button>
-      <button
-        mat-menu-item
-        uiSref="units/students/portfolios"
-        [uiParams]="{unitId: currentUnit.id}"
-      >
+      <button mat-menu-item [routerLink]="['/units', currentUnit.id, 'students', 'portfolios']">
         <mat-icon aria-label="Student portfolios icon" fontIcon="collections_bookmark"></mat-icon>
         Portfolios
       </button>
       <span>
         <mat-divider></mat-divider>
-        <button mat-menu-item uiSref="units/analytics" [uiParams]="{unitId: currentUnit.id}">
+        <button mat-menu-item [routerLink]="['/units', currentUnit.id, 'analytics']">
           <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
         </button>
         @if (currentUnit.currentUserCanViewUnitAdmin) {
-          <button mat-menu-item uiSref="units/admin" [uiParams]="{unitId: currentUnit.id}">
+          <button mat-menu-item [routerLink]="['/units', currentUnit.id, 'admin']">
             <mat-icon aria-label="Unit Administration" fontIcon="admin_panel_settings"></mat-icon>
             Administration
           </button>
@@ -48,133 +44,94 @@
   }
   @if (currentActivity) {
     <mat-icon class="f-breadcrumb">chevron_right</mat-icon>
-    <button mat-button [matMenuTriggerFor]="menu2" #menuState="matMenuTrigger">
-      <span class="flex items-center flex-row">
+    <button #menuState="matMenuTrigger" mat-button [matMenuTriggerFor]="menu2">
+      <span class="flex flex-row items-center">
         <span>{{ menuText }}</span>
         <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
       </span>
     </button>
     <mat-menu #menu2="matMenu">
       @if (currentProject !== null && currentView === 'PROJECT') {
-        <button
-          uiSref="projects/dashboard"
-          [uiParams]="{projectId: currentProject.id, taskAbbr: ''}"
-          mat-menu-item
-        >
+        <button mat-menu-item [routerLink]="['/projects', currentProject.id, 'dashboard']">
           <mat-icon aria-label="Dashboard icon" fontIcon="dashboard"></mat-icon> Dashboard
         </button>
         <mat-divider></mat-divider>
-        <button uiSref="project/plan" [uiParams]="{projectId: currentProject.id}" mat-menu-item>
+        <button mat-menu-item [routerLink]="['/projects', currentProject.id, 'plan']">
           <mat-icon aria-label="Plan icon" fontIcon="calendar_month"></mat-icon>
           Task Planner
         </button>
         <mat-divider></mat-divider>
-        <button
-          uiSref="projects/portfolio"
-          [uiParams]="{projectId: currentProject.id, taskAbbr: ''}"
-          mat-menu-item
-        >
+        <button mat-menu-item [routerLink]="['/projects', currentProject.id, 'portfolio']">
           <mat-icon aria-label="Portfolio creation icon" fontIcon="auto_stories"></mat-icon>
           Portfolio Creation
         </button>
         <mat-divider></mat-divider>
-        <button
-          uiSref="projects/groups"
-          [uiParams]="{projectId: currentProject.id, taskAbbr: ''}"
-          mat-menu-item
-        >
+        <button mat-menu-item [routerLink]="['/projects', currentProject.id, 'groups']">
           <mat-icon aria-label="Groups list icon" fontIcon="groups"></mat-icon> Groups List
         </button>
-        <button
-          uiSref="projects/tutorials"
-          [uiParams]="{projectId: currentProject.id, taskAbbr: ''}"
-          mat-menu-item
-        >
+        <button mat-menu-item [routerLink]="['/projects', currentProject.id, 'tutorials']">
           <mat-icon aria-label="Tutorial List icon" fontIcon="meeting_room"></mat-icon> Tutorial
           List
         </button>
       }
       @if (unitRole && currentView === 'UNIT') {
         <!-- <p class="task-dropdown-heading">Tasks</p> -->
-        <button uiSref="units/tasks/inbox" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+        <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'tasks', 'inbox']">
           <mat-icon aria-label="Inbox icon" fontIcon="inbox"></mat-icon> <span>Inbox</span>
         </button>
-        <button
-          uiSref="units/tasks/definition"
-          [uiParams]="{unitId: unitRole.unit.id}"
-          mat-menu-item
-        >
+        <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'tasks', 'definition']">
           <mat-icon aria-label="Task Explorer Icon" fontIcon="pageview"></mat-icon> Explorer
         </button>
 
         @if (isMentor || unitRole.role === 'Convenor') {
-          <button
-            uiSref="units/tasks/moderation"
-            [uiParams]="{unitId: unitRole.unit.id}"
-            mat-menu-item
-          >
+          <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'tasks', 'moderation']">
             <mat-icon aria-label="Audit Icon">rate_review</mat-icon> Moderation
           </button>
         }
 
         @if (canMarkOverflowTask) {
-          <button
-            uiSref="units/tasks/overflow"
-            [uiParams]="{unitId: unitRole.unit.id}"
-            mat-menu-item
-          >
+          <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'tasks', 'overflow']">
             <!-- <mat-icon aria-label="Audit Icon">pending_actions</mat-icon> Overflow -->
             <mat-icon aria-label="Audit Icon">more_time</mat-icon> Overflow
             <!-- <mat-icon aria-label="Audit Icon">work_history</mat-icon> Overflow -->
             <!-- <mat-icon aria-label="Audit Icon">safety_check</mat-icon> Overflow -->
           </button>
         }
-        <button uiSref="units/tasks/viewer" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+        <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'tasks']">
           <mat-icon aria-label="Task list icon" fontIcon="list_alt"></mat-icon> Tasks
         </button>
-        <button uiSref="tutor-discussion" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+        <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'discussion']">
           <mat-icon aria-label="Tutor Discussion icon" fontIcon="qr_code_scanner"></mat-icon
           >Discussion
         </button>
-        <button (click)="openTutorNotes()" mat-menu-item>
-          <mat-icon aria-label="Tutor Notes icon" fontIcon="local_library"></mat-icon>My Tutor Notes
+        <button mat-menu-item (click)="openTutorNotes()">
+          <mat-icon aria-label="Tutor Moderation icon" fontIcon="local_library"></mat-icon>My
+          Moderation Notes
         </button>
         <mat-divider></mat-divider>
         <!-- <p class="task-dropdown-heading">Students</p> -->
-        <button uiSref="units/students/list" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+        <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'students']">
           <mat-icon aria-label="Students list" fontIcon="group"></mat-icon> Students
         </button>
-        <button
-          uiSref="units/students/groups"
-          [uiParams]="{unitId: unitRole.unit.id}"
-          mat-menu-item
-        >
+        <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'students', 'groups']">
           <mat-icon aria-label="Student Groups" fontIcon="groups"></mat-icon> Groups
         </button>
-        <button
-          uiSref="units/students/portfolios"
-          [uiParams]="{unitId: unitRole.unit.id}"
-          mat-menu-item
-        >
+        <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'students', 'portfolios']">
           <mat-icon aria-label="Student portfolios icon" fontIcon="collections_bookmark"></mat-icon>
           Portfolios
         </button>
         <mat-divider></mat-divider>
         <!-- <p class="task-dropdown-heading">Unit</p> -->
-        <button uiSref="units/analytics" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+        <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'analytics']">
           <mat-icon aria-label="Unit Analytics icon" fontIcon="insights"></mat-icon>Analytics
         </button>
-        <button
-          uiSref="tutor-attendance"
-          [uiParams]="{unitId: unitRole.unit.id, attendance: true}"
-          mat-menu-item
-        >
+        <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'check-in']">
           <mat-icon aria-label="Student Check In icon" fontIcon="history_edu"></mat-icon>Check-in
         </button>
         @if (
           unitRole.role === 'Convenor' || unitRole.role === 'Admin' || unitRole.role === 'Auditor'
         ) {
-          <button uiSref="units/admin" [uiParams]="{unitId: unitRole.unit.id}" mat-menu-item>
+          <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'admin']">
             <mat-icon aria-label="Unit Administration" fontIcon="admin_panel_settings"></mat-icon>
             Administration
           </button>

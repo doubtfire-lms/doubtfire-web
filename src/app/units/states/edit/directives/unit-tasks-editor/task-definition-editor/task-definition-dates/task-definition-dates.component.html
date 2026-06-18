@@ -1,12 +1,12 @@
-<div class="flex flex-row gap-4">
+<div class="flex flex-row gap-2.5">
   <mat-form-field appearance="outline" class="basis-1/3">
     <mat-label>Start Date</mat-label>
     <input
       matInput
       placeholder="Start date"
+      required
       [matDatepicker]="startdatepicker"
       [(ngModel)]="taskDefinition.startDate"
-      required
     />
     <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
     <mat-datepicker #startdatepicker></mat-datepicker>
@@ -18,9 +18,9 @@
     <input
       matInput
       placeholder="Target date"
+      required
       [matDatepicker]="targetdatepicker"
       [(ngModel)]="taskDefinition.targetDate"
-      required
     />
     <mat-datepicker-toggle matIconSuffix [for]="targetdatepicker"></mat-datepicker-toggle>
     <mat-datepicker #targetdatepicker></mat-datepicker>
@@ -30,11 +30,11 @@
   <mat-form-field appearance="outline" class="basis-1/3">
     <mat-label>Final Feedback Date</mat-label>
     <input
-      placeholder="Final feedback date"
       matInput
+      placeholder="Final feedback date"
+      required
       [matDatepicker]="finaldatepicker"
       [(ngModel)]="taskDefinition.dueDate"
-      required
     />
     <mat-datepicker-toggle matIconSuffix [for]="finaldatepicker"></mat-datepicker-toggle>
     <mat-datepicker #finaldatepicker></mat-datepicker>

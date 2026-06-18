@@ -1,5 +1,5 @@
 <ng-template #textDialog let-data>
-  <mat-card class="p-4 max-w-[600px]">
+  <mat-card class="max-w-[600px] p-2.5">
     <pre>{{ data.text }}</pre>
   </mat-card>
 </ng-template>
@@ -17,153 +17,162 @@
     </div>
   </div>
   <table
-    mat-table
-    [dataSource]="dataSource"
-    matSort
-    (matSortChange)="sortTableData($event)"
     class="f-table"
+    mat-table
+    matSort
+    [dataSource]="dataSource"
+    (matSortChange)="sortTableData($event)"
   >
     <!-- Name Column -->
-    <ng-container [formGroup]="formData" matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let overseerImage">
-        <div *ngIf="!editing(overseerImage); else edit">
-          {{ overseerImage.name }}
-        </div>
-        <ng-template #edit>
+    <ng-container matColumnDef="name" [formGroup]="formData">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
+      <td *matCellDef="let overseerImage" mat-cell>
+        @if (!editing(overseerImage)) {
+          <div>
+            {{ overseerImage.name }}
+          </div>
+        } @else {
           <mat-form-field class="data-entry">
-            <input matInput required formControlName="name" placeholder="Name" />
+            <input formControlName="name" matInput placeholder="Name" required />
           </mat-form-field>
-        </ng-template>
+        }
       </td>
-      <td mat-footer-cell *matFooterCellDef>
+      <td *matFooterCellDef mat-footer-cell>
         <mat-form-field class="data-entry">
-          <input matInput required formControlName="name" placeholder="Name" />
+          <input formControlName="name" matInput placeholder="Name" required />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Tag Column -->
-    <ng-container [formGroup]="formData" matColumnDef="tag">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tag</th>
-      <td mat-cell *matCellDef="let overseerImage">
-        <div *ngIf="!editing(overseerImage); else edit">
-          {{ overseerImage.tag }}
-        </div>
-        <ng-template #edit>
+    <ng-container matColumnDef="tag" [formGroup]="formData">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Tag</th>
+      <td *matCellDef="let overseerImage" mat-cell>
+        @if (!editing(overseerImage)) {
+          <div>
+            {{ overseerImage.tag }}
+          </div>
+        } @else {
           <mat-form-field class="data-entry">
-            <input matInput required formControlName="tag" placeholder="Tag" />
+            <input formControlName="tag" matInput placeholder="Tag" required />
           </mat-form-field>
-        </ng-template>
+        }
       </td>
-      <td mat-footer-cell *matFooterCellDef>
+      <td *matFooterCellDef mat-footer-cell>
         <mat-form-field class="data-entry">
-          <input matInput required formControlName="tag" placeholder="Tag" />
+          <input formControlName="tag" matInput placeholder="Tag" required />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Pull Button Column -->
     <ng-container matColumnDef="pull">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let overseerImage">
-        <div class="right" *ngIf="!editing(overseerImage); else edit">
-          <button mat-flat-button color="primary" (click)="pullOverseerImage(overseerImage)">
-            Pull
-          </button>
-        </div>
+      <th *matHeaderCellDef mat-header-cell></th>
+      <td *matCellDef="let overseerImage" mat-cell>
+        @if (!editing(overseerImage)) {
+          <div class="right">
+            <button color="primary" mat-flat-button (click)="pullOverseerImage(overseerImage)">
+              Pull
+            </button>
+          </div>
+        }
       </td>
-      <td mat-footer-cell *matFooterCellDef></td>
+      <td *matFooterCellDef mat-footer-cell></td>
     </ng-container>
 
     <!-- Last Pulled Column -->
     <ng-container matColumnDef="last-pulled">
-      <th mat-header-cell *matHeaderCellDef>Last Pulled</th>
-      <td mat-cell *matCellDef="let overseerImage">
-        <div class="right" *ngIf="!editing(overseerImage); else edit">
-          {{ overseerImage.lastPulledDate | humanizedDate }}
-        </div>
+      <th *matHeaderCellDef mat-header-cell>Last Pulled</th>
+      <td *matCellDef="let overseerImage" mat-cell>
+        @if (!editing(overseerImage)) {
+          <div class="right">
+            {{ overseerImage.lastPulledDate | humanizedDate }}
+          </div>
+        }
       </td>
-      <td mat-footer-cell *matFooterCellDef></td>
+      <td *matFooterCellDef mat-footer-cell></td>
     </ng-container>
 
     <!-- Status Column -->
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let overseerImage">
-        <div
-          class="right"
-          *ngIf="!editing(overseerImage); else edit"
-          [ngStyle]="{
-            color:
-              overseerImage.pulledImageStatus === 'success'
-                ? 'green'
-                : overseerImage.pulledImageStatus === 'loading'
-                  ? 'orange'
-                  : overseerImage.pulledImageStatus === 'failed'
-                    ? 'red'
-                    : ''
-          }"
-        >
-          <button
-            class="status-icon"
-            *ngIf="overseerImage.pulledImageStatus === 'success'"
-            [matTooltip]="overseerImage.pulledImageText"
+      <th *matHeaderCellDef mat-header-cell>Status</th>
+      <td *matCellDef="let overseerImage" mat-cell>
+        @if (!editing(overseerImage)) {
+          <div
+            class="right"
+            [ngStyle]="{
+              color:
+                overseerImage.pulledImageStatus === 'success'
+                  ? 'green'
+                  : overseerImage.pulledImageStatus === 'loading'
+                    ? 'orange'
+                    : overseerImage.pulledImageStatus === 'failed'
+                      ? 'red'
+                      : '',
+            }"
           >
-            <mat-icon>check_circle_outline</mat-icon>
-          </button>
-          <button class="status-icon" *ngIf="overseerImage.pulledImageStatus === 'loading'">
-            <mat-icon>access_time_icon</mat-icon>
-          </button>
-          <button
-            class="status-icon"
-            *ngIf="overseerImage.pulledImageStatus === 'failed'"
-            [matTooltip]="overseerImage.pulledImageText"
-            (click)="showDialog(overseerImage)"
-          >
-            <mat-icon>error_outline</mat-icon>
-          </button>
-        </div>
+            @if (overseerImage.pulledImageStatus === 'success') {
+              <button class="status-icon" [matTooltip]="overseerImage.pulledImageText">
+                <mat-icon>check_circle_outline</mat-icon>
+              </button>
+            }
+            @if (overseerImage.pulledImageStatus === 'loading') {
+              <button class="status-icon">
+                <mat-icon>access_time_icon</mat-icon>
+              </button>
+            }
+            @if (overseerImage.pulledImageStatus === 'failed') {
+              <button
+                class="status-icon"
+                [matTooltip]="overseerImage.pulledImageText"
+                (click)="showDialog(overseerImage)"
+              >
+                <mat-icon>error_outline</mat-icon>
+              </button>
+            }
+          </div>
+        }
       </td>
-      <td mat-footer-cell *matFooterCellDef></td>
+      <td *matFooterCellDef mat-footer-cell></td>
     </ng-container>
 
     <!-- Options Column -->
     <ng-container matColumnDef="options" stickyEnd>
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let overseerImage">
-        <div class="right" *ngIf="!editing(overseerImage); else edit">
-          <button
-            mat-icon-button
-            [matMenuTriggerFor]="menu"
-            aria-label="Example icon-button with a menu"
-          >
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="flagEdit(overseerImage)">
-              <mat-icon color="primary">edit</mat-icon>
-              <span>Edit</span>
+      <th *matHeaderCellDef mat-header-cell></th>
+      <td *matCellDef="let overseerImage" mat-cell>
+        @if (!editing(overseerImage)) {
+          <div class="right">
+            <button
+              aria-label="Example icon-button with a menu"
+              mat-icon-button
+              [matMenuTriggerFor]="menu"
+            >
+              <mat-icon>more_vert</mat-icon>
             </button>
-          </mat-menu>
-        </div>
-        <ng-template #edit>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="flagEdit(overseerImage)">
+                <mat-icon color="primary">edit</mat-icon>
+                <span>Edit</span>
+              </button>
+            </mat-menu>
+          </div>
+        } @else {
           <div class="edit-actions right">
             <span>
-              <button mat-icon-button color="warn" (click)="cancelEdit()">
+              <button color="warn" mat-icon-button (click)="cancelEdit()">
                 <mat-icon>cancel</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="submit()">
+              <button color="primary" mat-icon-button (click)="submit()">
                 <mat-icon>save</mat-icon>
               </button>
-              <button mat-icon-button color="warn" (click)="deleteOverseerImage(overseerImage)">
+              <button color="warn" mat-icon-button (click)="deleteOverseerImage(overseerImage)">
                 <mat-icon>delete</mat-icon>
               </button>
             </span>
           </div>
-        </ng-template>
+        }
       </td>
-      <td mat-footer-cell *matFooterCellDef>
+      <td *matFooterCellDef mat-footer-cell>
         <div class="edit-actions right">
           <button mat-icon-button (click)="submit()">
             <mat-icon>add</mat-icon>
@@ -172,8 +181,8 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let row; columns: columns"></tr>
-    <tr [hidden]="selected" mat-footer-row *matFooterRowDef="columns"></tr>
+    <tr *matHeaderRowDef="columns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: columns" mat-row></tr>
+    <tr *matFooterRowDef="columns" mat-footer-row [hidden]="selected"></tr>
   </table>
 </div>

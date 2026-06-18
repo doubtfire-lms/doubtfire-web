@@ -1,176 +1,224 @@
-<div class="calendar-modal-component mat-typography">
-  <div fxLayout="row">
-    <div fxFlex="grow">
+<div class="flex h-full min-h-0 flex-col">
+  <div class="flex shrink-0 items-center">
+    <div class="min-w-0 flex-1">
       <h2 mat-dialog-title>Web calendar</h2>
     </div>
     <mat-slide-toggle
-      fxFlex
       #webcalToggle
-      [matTooltip]="webcal && webcal.enabled ? 'Disable the web calendar' : 'Enable the web calendar'"
+      class="mr-5 shrink-0"
       matTooltipPosition="above"
       [checked]="webcal && webcal.enabled"
       [disabled]="working"
+      [matTooltip]="
+        webcal && webcal.enabled ? 'Disable the web calendar' : 'Enable the web calendar'
+      "
       (click)="onWebcalToggle()"
     >
     </mat-slide-toggle>
   </div>
-  <!--/header-->
 
-  <div mat-dialog-content>
+  <div class="!max-h-none min-h-0 flex-1 overflow-y-auto" mat-dialog-content>
     @if (!webcal) {
-
-    <mat-progress-spinner class="webcal-progress-spinner" color="accent" mode="indeterminate" [diameter]="36">
-    </mat-progress-spinner>
-    }<!--/content-when-webcal loading-->
+      <mat-progress-spinner class="mx-auto" color="accent" mode="indeterminate" [diameter]="36">
+      </mat-progress-spinner>
+    }
 
     @if (webcal) {
+      <small>Your web calendar is currently {{ webcal.enabled ? 'enabled' : 'disabled' }}.</small>
 
-    <small>Your web calendar is currently {{ webcal.enabled ? 'enabled' : 'disabled' }}.</small>
-
-    @if (!webcal.enabled) {
-    <div>
-      <p>
-        The web calendar displays due dates of your tasks as calendar events in an iCalendar that can be added to any
-        iCalendar client (e.g. Outlook/Google/iCloud calendar).
-      </p>
-    </div>
-    }
-    <!--/content-when-webcal-disabled-->
-
-    @if (webcal.enabled) {
-    <div>
-      <p>
-        The web calendar displays due dates of your tasks as calendar events. Use the following URL to subscribe to your
-        web calendar from your iCalendar client.
-      </p>
-      <div fxLayout="row">
-        <div fxFlex="grow" class="webcal-url-container">
-          <a [href]="webcalUrl">{{ webcalUrl }}</a>
+      @if (!webcal.enabled) {
+        <div>
+          <p>
+            The web calendar displays due dates of your tasks as calendar events in an iCalendar
+            that can be added to any iCalendar client (e.g. Outlook/Google/iCloud calendar).
+          </p>
         </div>
-        <div fxLayout="row">
-          <button
-            mat-icon-button
-            matTooltip="Copy URL"
-            matTooltipPosition="above"
-            [cdkCopyToClipboard]="webcalUrl"
-            (click)="onCopyWebcalUrl()"
-          >
-            <mat-icon>{{ copying ? 'done' : 'content_copy' }}</mat-icon>
-          </button>
-          <button
-            mat-icon-button
-            matTooltip="Regenerate URL"
-            matTooltipPosition="above"
-            [disabled]="working"
-            (click)="onChangeWebcalUrl()"
-          >
-            <mat-icon>refresh</mat-icon>
-          </button>
-        </div>
-      </div>
-      <!--/webcal-url-->
+      }
 
-      <mat-card appearance="outlined" class="webcal-options-card">
-        <h3 style="margin-bottom: 0">Options</h3>
+      @if (webcal.enabled) {
+        <div>
+          <p>
+            The web calendar displays due dates of your tasks as calendar events. Use the following
+            URL to subscribe to your web calendar from your iCalendar client.
+          </p>
 
-        <div fxLayout="row" fxLayoutAlign="start center" class="webcal-options-inclusions">
-          <span style="font-weight: bold; margin-right: 1em">Included units in my calendar:</span>
-        </div>
+          <mat-card appearance="outlined">
+            <mat-card-header>
+              <mat-card-title>Options</mat-card-title>
+              <mat-card-subtitle>Included units in my calendar:</mat-card-subtitle>
+            </mat-card-header>
 
-        <div class="webcal-options-inclusions-chips">
-          <mat-chip-listbox>
-            @for (project of includedProjects; track project) {
-            <mat-chip-option [selectable]="true" [removable]="true" (removed)="includeExclusion(project)">
-              {{ project.unit.code }}
-              <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip-option>
-            } @if (excludedProjects.length > 0) {
-            <mat-chip-option [matMenuTriggerFor]="menu">
-              <mat-icon>add</mat-icon>
-              <mat-menu #menu="matMenu">
-                @for (project of excludedProjects; track project) {
-                <button mat-menu-item (click)="removeExclusion(project)">
-                  {{ project.unit.code }}: {{ project.unit.name }}
+            <mat-card-content>
+              <div class="pb-4">
+                <mat-chip-listbox>
+                  @for (project of includedProjects; track project) {
+                    <mat-chip-option
+                      [removable]="true"
+                      [selectable]="false"
+                      (removed)="includeExclusion(project)"
+                    >
+                      {{ project.unit.code }} {{ project.unit.name }}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip-option>
+                  }
+                  @if (excludedProjects.length > 0) {
+                    <mat-chip-option [matMenuTriggerFor]="menu" [selectable]="false">
+                      <mat-icon class="mt-1">add</mat-icon>
+                      <mat-menu #menu="matMenu">
+                        @for (project of excludedProjects; track project) {
+                          <button mat-menu-item (click)="removeExclusion(project)">
+                            {{ project.unit.code }} {{ project.unit.name }}
+                          </button>
+                        }
+                      </mat-menu>
+                    </mat-chip-option>
+                  }
+                </mat-chip-listbox>
+              </div>
+
+              <mat-checkbox
+                [disabled]="working"
+                [(ngModel)]="newReminderActive"
+                (change)="onToggleReminderActive()"
+              >
+                Remind me
+              </mat-checkbox>
+              <mat-form-field appearance="outline" class="ml-4 w-20">
+                <mat-label>Time</mat-label>
+                <input
+                  matInput
+                  min="1"
+                  type="number"
+                  [disabled]="working || !newReminderActive"
+                  [(ngModel)]="newReminderTime"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="ml-4 w-28">
+                <mat-label>Unit</mat-label>
+                <mat-select
+                  [disabled]="working || !newReminderActive"
+                  [(ngModel)]="newReminderUnit"
+                >
+                  <mat-option value="W">Weeks</mat-option>
+                  <mat-option value="D">Days</mat-option>
+                  <mat-option value="H">Hours</mat-option>
+                  <mat-option value="M">Minutes</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <span class="ml-4 font-bold">before each event</span>
+
+              <!--
+                Show controls to save & cancel reminder edits only if the user enables the reminder option when it was
+                previously disabled, or edits the time & unit of the reminder that previously exits.
+              -->
+              @if (
+                (!webcal.reminder && newReminderActive) ||
+                (webcal.reminder &&
+                  (newReminderTime !== webcal.reminder.time ||
+                    newReminderUnit !== webcal.reminder.unit))
+              ) {
+                <button
+                  class="ml-4"
+                  color="primary"
+                  mat-icon-button
+                  matTooltip="Save changes"
+                  matTooltipPosition="above"
+                  [disabled]="working"
+                  (click)="onSaveReminderEdits()"
+                >
+                  <mat-icon>save</mat-icon>
                 </button>
+                <button
+                  mat-icon-button
+                  matTooltip="Cancel"
+                  matTooltipPosition="above"
+                  [disabled]="working"
+                  (click)="onCancelReminderEdits()"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              <br />
+
+              <mat-checkbox
+                [disabled]="working"
+                [(ngModel)]="webcal.includeStartDates"
+                (change)="toggleIncludeTaskStartDates()"
+              >
+                Include task start dates in web calendar
+              </mat-checkbox>
+            </mat-card-content>
+          </mat-card>
+          <div
+            class="my-3 rounded border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-gray-700"
+          >
+            <mat-tab-group
+              animationDuration="0ms"
+              [selectedIndex]="selectedCalendarProviderIndex"
+              (selectedIndexChange)="selectedCalendarProviderIndex = $event"
+            >
+              <mat-tab label="For Google"></mat-tab>
+              <mat-tab label="For Apple"></mat-tab>
+              <mat-tab label="For Outlook"></mat-tab>
+            </mat-tab-group>
+
+            <div class="py-3">
+              @switch (selectedCalendarProviderIndex) {
+                @case (0) {
+                  In Google Calendar, choose <strong>Add other calendars</strong>, choose
+                  <strong>From URL</strong>, then paste the URL below.
                 }
-              </mat-menu>
-            </mat-chip-option>
-            }
-          </mat-chip-listbox>
+                @case (1) {
+                  In Apple Calendar, choose <strong>File</strong>,
+                  <strong>New Calendar Subscription</strong>, then paste the URL below.
+                }
+                @case (2) {
+                  In Outlook Calendar, choose <strong>Add calendar</strong>,
+                  <strong>Subscribe from web</strong>, then paste the URL below.
+                }
+              }
+            </div>
+
+            <div class="mt-3 rounded border border-gray-300 bg-white px-4 py-2">
+              <div class="flex items-center">
+                <div class="flex min-w-0 flex-1 items-center">
+                  <div
+                    class="flex cursor-pointer items-center gap-1 break-all text-blue-700 hover:text-blue-900"
+                    [cdkCopyToClipboard]="webcalUrl"
+                    (click)="onCopyWebcalUrl()"
+                  >
+                    <mat-icon>link</mat-icon>{{ webcalUrl }}.ics
+                  </div>
+                </div>
+                <div class="flex shrink-0 items-center">
+                  <button
+                    mat-icon-button
+                    matTooltip="Copy URL"
+                    matTooltipPosition="above"
+                    [cdkCopyToClipboard]="webcalUrl"
+                    (click)="onCopyWebcalUrl()"
+                  >
+                    <mat-icon>{{ copying ? 'done' : 'content_copy' }}</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    matTooltip="Regenerate URL"
+                    matTooltipPosition="above"
+                    [disabled]="working"
+                    (click)="onChangeWebcalUrl()"
+                  >
+                    <mat-icon>refresh</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <!--/unit-inclusions-options-->
-
-        <mat-checkbox [(ngModel)]="newReminderActive" (change)="onToggleReminderActive()" [disabled]="working">
-          Remind me
-        </mat-checkbox>
-        <mat-form-field style="width: 5em; margin-left: 1em">
-          <mat-label>Time</mat-label>
-          <input
-            matInput
-            type="number"
-            min="1"
-            [(ngModel)]="newReminderTime"
-            [disabled]="working || !newReminderActive"
-          />
-        </mat-form-field>
-        <mat-form-field style="width: 7em; margin-left: 1em">
-          <mat-label>Unit</mat-label>
-          <mat-select [(ngModel)]="newReminderUnit" [disabled]="working || !newReminderActive">
-            <mat-option value="W">Weeks</mat-option>
-            <mat-option value="D">Days</mat-option>
-            <mat-option value="H">Hours</mat-option>
-            <mat-option value="M">Minutes</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <span style="margin-left: 1em; font-weight: bold">before each event</span>
-        <!--
-            Show controls to save & cancel reminder edits only if the user enables the reminder option when it was
-            previously disabled, or edits the time & unit of the reminder that previously exits.
-          -->
-        @if ( (!webcal.reminder && newReminderActive) || (webcal.reminder && (newReminderTime !== webcal.reminder.time
-        || newReminderUnit !== webcal.reminder.unit)) ) {
-
-        <button
-          mat-icon-button
-          matTooltip="Save changes"
-          matTooltipPosition="above"
-          style="margin-left: 1em"
-          color="primary"
-          [disabled]="working"
-          (click)="onSaveReminderEdits()"
-        >
-          <mat-icon>save</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          matTooltip="Cancel"
-          matTooltipPosition="above"
-          [disabled]="working"
-          (click)="onCancelReminderEdits()"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-        }<!--/reminder-option-->
-
-        <br />
-
-        <mat-checkbox
-          [(ngModel)]="webcal.includeStartDates"
-          [disabled]="working"
-          (change)="toggleIncludeTaskStartDates()"
-        >
-          Include task start dates in web calendar </mat-checkbox
-        ><!--/include-start-dates-option-->
-
-        <div mat-dialog-actions style="float: right; overflow-y: hidden">
-          <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
-        </div>
-        <!--/webcal-cancel-button--> </mat-card
-      ><!--/webcal-options-->
-    </div>
+      }
     }
-    <!--/content-when-webcal-disabled-->
-    }<!--/content-when-webcal-loaded-->
   </div>
-  <!--/content-->
+
+  <div class="shrink-0 justify-end overflow-y-hidden" mat-dialog-actions>
+    <button color="warn" mat-dialog-close mat-stroked-button>Close</button>
+  </div>
 </div>

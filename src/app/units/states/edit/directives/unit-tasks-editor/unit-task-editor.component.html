@@ -1,10 +1,10 @@
-<div class="flex-grow flex flex-col gap-8 gap-y-0">
-  <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+<div class="flex flex-grow flex-col gap-5 gap-y-0">
+  <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
     <div>
       <h3>Task List</h3>
       <p>Plan the list of tasks for students to complete.</p>
     </div>
-    <div class="flex flex-wrap items-center gap-5 md:justify-end">
+    <div class="flex flex-wrap items-center gap-3 md:justify-end">
       <div class="flex items-center">
         <label>Definitions CSV</label>
         <div class="flex items-center">
@@ -29,118 +29,120 @@
       </div>
     </div>
   </div>
-  <div class="my-3 flex justify-end items-center gap-3 w-full">
+  <div class="my-2 flex w-full items-center justify-end gap-2">
     @if (unit.allowFlexibleDates) {
       <button mat-raised-button (click)="manageDueDates = !manageDueDates">Manage Due Dates</button>
     }
-    <button mat-raised-button color="primary" (click)="createTaskDefinition()">Add Task</button>
+    <button color="primary" mat-raised-button (click)="createTaskDefinition()">Add Task</button>
   </div>
 
   @if (unit.allowFlexibleDates) {
     @if (manageDueDates) {
       <br />
-      <mat-divider class="my-5"></mat-divider>
+      <mat-divider class="my-3"></mat-divider>
       <br />
       <div>
         <h3>Manage Target Dates</h3>
         <p>Modify or add target dates for each target grade</p>
       </div>
-      <div class="mt-6">
-        <table mat-table [dataSource]="taskDefinitionSource" class="mat-elevation-z0 w-full">
+      <div class="mt-3.5">
+        <table class="mat-elevation-z0 w-full" mat-table [dataSource]="taskDefinitionSource">
           <ng-container matColumnDef="taskDefinition">
-            <th mat-header-cell *matHeaderCellDef>Task</th>
-            <td mat-cell *matCellDef="let td" class="w-fit whitespace-nowrap">
+            <th *matHeaderCellDef mat-header-cell>Task</th>
+            <td *matCellDef="let td" class="w-fit whitespace-nowrap" mat-cell>
               {{ td.abbreviation }} {{ td.name }}
             </td>
           </ng-container>
 
-          <ng-container *ngFor="let g of gradeColumns" [matColumnDef]="g">
-            <th mat-header-cell *matHeaderCellDef class="text-center w-[160px]">
-              <div class="w-full flex justify-center">
-                <f-grade-icon [grade]="gradeColumns.indexOf(g)"></f-grade-icon>
-              </div>
-            </th>
-            <td mat-cell *matCellDef="let td">
-              <div class="flex flex-col gap-2">
-                <mat-form-field
-                  appearance="outline"
-                  class="w-[250px] flex justify-center items-center pt-[22px]"
-                  [ngClass]="{
-                    'date-error': isStartAfterTarget(td, g)
-                  }"
-                >
-                  <mat-label> Start Date </mat-label>
-                  <input
-                    matInput
-                    [matDatepicker]="dpStart"
-                    [ngModel]="getGradeStartDate(td, g)"
-                    (ngModelChange)="setGradeStartDate(td, g, $event)"
+          @for (g of gradeColumns; track g) {
+            <ng-container [matColumnDef]="g">
+              <th *matHeaderCellDef class="w-[160px] text-center" mat-header-cell>
+                <div class="flex w-full justify-center">
+                  <f-grade-icon [grade]="gradeColumns.indexOf(g)"></f-grade-icon>
+                </div>
+              </th>
+              <td *matCellDef="let td" mat-cell>
+                <div class="flex flex-col gap-1">
+                  <mat-form-field
+                    appearance="outline"
+                    class="flex w-[250px] items-center justify-center pt-[22px]"
                     [ngClass]="{
-                      'fallback-date': isFallbackStartDate(td, g)
+                      'date-error': isStartAfterTarget(td, g),
                     }"
-                    placeholder="Select date"
-                  />
-
-                  <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
-                  <mat-datepicker #dpStart></mat-datepicker>
-                </mat-form-field>
-                <mat-form-field
-                  appearance="outline"
-                  class="w-[250px] flex justify-center items-center"
-                  [ngClass]="{
-                    'date-error': isStartAfterTarget(td, g)
-                  }"
-                >
-                  <mat-label> Target Date </mat-label>
-                  <input
-                    matInput
-                    [matDatepicker]="dpTarget"
-                    [ngModel]="getGradeDueDate(td, g)"
-                    (ngModelChange)="setGradeDueDate(td, g, $event)"
+                  >
+                    <mat-label> Start Date </mat-label>
+                    <input
+                      matInput
+                      placeholder="Select date"
+                      [matDatepicker]="dpStart"
+                      [ngClass]="{
+                        'fallback-date': isFallbackStartDate(td, g),
+                      }"
+                      [ngModel]="getGradeStartDate(td, g)"
+                      (ngModelChange)="setGradeStartDate(td, g, $event)"
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
+                    <mat-datepicker #dpStart></mat-datepicker>
+                  </mat-form-field>
+                  <mat-form-field
+                    appearance="outline"
+                    class="flex w-[250px] items-center justify-center"
                     [ngClass]="{
-                      'fallback-date': isFallbackTargetDate(td, g)
+                      'date-error': isStartAfterTarget(td, g),
                     }"
-                    placeholder="Select date"
-                  />
-                  @if (isStartAfterTarget(td, g)) {
-                    <mat-hint class="text-red-500"> Target date must be after start date </mat-hint>
-                  }
+                  >
+                    <mat-label> Target Date </mat-label>
+                    <input
+                      matInput
+                      placeholder="Select date"
+                      [matDatepicker]="dpTarget"
+                      [ngClass]="{
+                        'fallback-date': isFallbackTargetDate(td, g),
+                      }"
+                      [ngModel]="getGradeDueDate(td, g)"
+                      (ngModelChange)="setGradeDueDate(td, g, $event)"
+                    />
+                    @if (isStartAfterTarget(td, g)) {
+                      <mat-hint class="text-red-500">
+                        Target date must be after start date
+                      </mat-hint>
+                    }
+                    <mat-datepicker-toggle matSuffix [for]="dpTarget"></mat-datepicker-toggle>
+                    <mat-datepicker #dpTarget></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+          }
 
-                  <mat-datepicker-toggle matSuffix [for]="dpTarget"></mat-datepicker-toggle>
-                  <mat-datepicker #dpTarget></mat-datepicker>
-                </mat-form-field>
-              </div>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="dueDateColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: dueDateColumns"></tr>
+          <tr *matHeaderRowDef="dueDateColumns" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: dueDateColumns" mat-row></tr>
         </table>
       </div>
     }
   }
 
-  <div class="flex flex-col items-start gap-4 md:flex-row">
+  <div class="flex flex-col items-start gap-2.5 md:flex-row">
     <aside
-      class="self-start md:sticky md:top-4 md:shrink-0"
+      class="self-start md:sticky md:top-2.5 md:shrink-0"
       [ngClass]="{
         'w-full md:w-[420px]': !isTaskListCollapsed,
-        'w-full md:w-[92px]': isTaskListCollapsed
+        'w-full md:w-[92px]': isTaskListCollapsed,
       }"
     >
       <div class="overflow-hidden rounded-2xl bg-white md:flex md:h-[calc(100vh-2rem)] md:flex-col">
         <div
           class="text-left text-[15px]"
           [ngClass]="{
-            'px-1': !isTaskListCollapsed,
-            'px-0': isTaskListCollapsed
+            'px-0.5': !isTaskListCollapsed,
+            'px-0': isTaskListCollapsed,
           }"
         >
           <div class="flex items-center" [ngClass]="{'justify-center': isTaskListCollapsed}">
             <button
+              class="flex flex-none items-center"
               mat-icon-button
               [attr.aria-label]="isTaskListCollapsed ? 'Expand task list' : 'Collapse task list'"
-              class="flex-none flex items-center"
               (click)="toggleTaskListCollapsed()"
             >
               <mat-icon class="flex items-center">
@@ -149,20 +151,20 @@
             </button>
             @if (!isTaskListCollapsed) {
               <button
-                mat-icon-button
                 aria-label="Search Icon"
+                class="flex flex-none items-center"
                 disabled
-                class="flex-none flex items-center"
+                mat-icon-button
               >
                 <mat-icon class="flex items-center">search</mat-icon>
               </button>
-              <div class="grow pr-2">
+              <div class="grow pr-1">
                 <input
-                  class="w-full border-0 bg-transparent outline-none"
                   autocomplete="off"
+                  class="w-full border-0 bg-transparent outline-none"
+                  placeholder="Search Tasks"
                   spellcheck="false"
                   type="text"
-                  placeholder="Search Tasks"
                   [(ngModel)]="filter"
                   (ngModelChange)="applyFilter($event)"
                 />
@@ -174,23 +176,23 @@
         <div class="h-[560px] overflow-auto md:h-auto md:flex-1">
           <mat-selection-list [multiple]="false">
             @if ((taskDefinitionSource?.filteredData ?? []).length === 0) {
-              <div class="text-center text-muted p-3">No task definitions to display</div>
+              <div class="text-muted p-2 text-center">No task definitions to display</div>
             }
             @for (
               taskDefinition of taskDefinitionSource?.filteredData ?? [];
               track taskDefinition
             ) {
-              <mat-list-item class="clearfix p-0 h-[60px]" [disableRipple]="true">
+              <mat-list-item class="clearfix h-[60px] p-0" [disableRipple]="true">
                 <div
                   class="flex h-[60px] w-full cursor-pointer items-center rounded-[6px] hover:bg-gray-50"
-                  (click)="selectTaskDefinition(taskDefinition)"
-                  [matTooltip]="taskDefinition.name"
                   matTooltipPosition="above"
+                  [matTooltip]="taskDefinition.name"
                   [matTooltipDisabled]="!isTaskListCollapsed"
                   [matTooltipShowDelay]="250"
                   [ngClass]="{
-                    'bg-[#e7e7ff]': isSelectedTaskDefinition(taskDefinition)
+                    'bg-[#e7e7ff]': isSelectedTaskDefinition(taskDefinition),
                   }"
+                  (click)="selectTaskDefinition(taskDefinition)"
                 >
                   <div class="flex w-full items-center px-[6px]">
                     <div
@@ -198,13 +200,13 @@
                       [ngClass]="{'justify-center': isTaskListCollapsed}"
                     >
                       <f-task-badge
-                        [taskDef]="taskDefinition"
                         [highlight]="isSelectedTaskDefinition(taskDefinition)"
+                        [taskDef]="taskDefinition"
                       ></f-task-badge>
 
                       @if (!isTaskListCollapsed) {
-                        <div class="flex-col ml-4 min-w-0 flex-1">
-                          <h4 class="line-clamp-1 mt-[8px] mb-[-2px] text-[15px]">
+                        <div class="ml-2.5 min-w-0 flex-1 flex-col">
+                          <h4 class="mb-[-2px] mt-[8px] line-clamp-1 text-[15px]">
                             {{ taskDefinition.name }}
                           </h4>
                           <div class="mb-0 text-[12px]">
@@ -213,23 +215,23 @@
                         </div>
 
                         <div
-                          class="flex items-center gap-1 pr-1"
+                          class="flex items-center gap-0.5 pr-0.5"
                           (click)="$event.stopPropagation()"
                         >
                           @if (taskDefinitionHasChanges(taskDefinition)) {
                             <button
-                              mat-icon-button
                               aria-label="save task definition"
                               color="primary"
+                              mat-icon-button
                               (click)="saveTaskDefinition(taskDefinition)"
                             >
                               <mat-icon>save</mat-icon>
                             </button>
                           }
                           <button
-                            mat-icon-button
                             aria-label="delete task definition"
                             color="warn"
+                            mat-icon-button
                             (click)="deleteTaskDefinition(taskDefinition)"
                           >
                             <mat-icon>delete</mat-icon>
@@ -253,7 +255,7 @@
           [unit]="unit"
         ></f-task-definition-editor>
       } @else {
-        <div class="border border-dashed border-gray-300 rounded-xl bg-gray-50 p-8 text-gray-600">
+        <div class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-5 text-gray-600">
           <h4>Select a task definition</h4>
           <p>Pick a task from the left list to edit its details.</p>
         </div>

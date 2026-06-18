@@ -1,45 +1,45 @@
 <div id="pdfContainer">
   <div id="actionBar">
     <div id="pdfViewActions" [hidden]="!pdfBlobUrl">
-      <button mat-icon-button aria-label="Switch viewer" (click)="toggleNativePdfViewer()">
+      <button aria-label="Switch viewer" mat-icon-button (click)="toggleNativePdfViewer()">
         @if (useNativePdfViewer) {
           <mat-icon>toggle_on</mat-icon>
         } @else {
           <mat-icon>toggle_off</mat-icon>
         }
       </button>
-      <button mat-icon-button aria-label="Download pdf" (click)="downloadPdf()">
+      <button aria-label="Download pdf" mat-icon-button (click)="downloadPdf()">
         <mat-icon>download</mat-icon>
       </button>
     </div>
     <div id="pdfActions" [hidden]="!loaded || useNativePdfViewer">
       <form #loginForm="ngForm">
-        <mat-form-field floatLabel="never" appearance="outline" class="pdf-form-field" ngSubmit>
+        <mat-form-field appearance="outline" class="pdf-form-field" floatLabel="never" ngSubmit>
           <mat-icon matPrefix>search</mat-icon>
           <input
             matInput
-            type="text"
+            name="pdfSearchString"
             placeholder="Search PDF"
+            type="text"
             [(ngModel)]="pdfSearchString"
             (ngModelChange)="searchPdf(pdfSearchString)"
-            name="pdfSearchString"
           />
 
           <button
-            matSuffix
+            aria-label="Zoom in PDF button"
             mat-icon-button
+            matSuffix
             type="button"
             (click)="zoomOut()"
-            aria-label="Zoom in PDF button"
           >
             <mat-icon>zoom_out</mat-icon>
           </button>
           <button
-            matSuffix
+            aria-label="Zoom in PDF button"
             mat-icon-button
+            matSuffix
             type="button"
             (click)="zoomIn()"
-            aria-label="Zoom in PDF button"
           >
             <mat-icon>zoom_in</mat-icon>
           </button>
@@ -50,20 +50,22 @@
 
   @if (pdfBlobUrl) {
     @if (useNativePdfViewer) {
-      <object [data]="pdfBlobUrl | safe" *ngIf="pdfBlobUrl"></object>
+      @if (pdfBlobUrl) {
+        <object type="application/pdf" [data]="pdfBlobUrl | safe">PDF Preview</object>
+      }
     } @else {
       <pdf-viewer
-        [zoom]="zoomValue"
-        [src]="pdfBlobUrl"
-        [render-text]="true"
         [original-size]="false"
+        [render-text]="true"
+        [show-all]="true"
+        [src]="pdfBlobUrl"
+        [zoom]="zoomValue"
         [(page)]="pageNumber"
         (after-load-complete)="onLoaded($event)"
-        [show-all]="true"
         (text-layer-rendered)="onTextLayerRendered($event)"
       ></pdf-viewer>
     }
   } @else {
-    <mat-spinner strokeWidth="2" diameter="100" color="accent"></mat-spinner>
+    <mat-spinner color="accent" diameter="100" strokeWidth="2"></mat-spinner>
   }
 </div>

@@ -1,3 +1,5 @@
+import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
+import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {
   AfterViewInit,
@@ -10,17 +12,13 @@ import {
   KeyValueDiffer,
   KeyValueDiffers,
   OnChanges,
-  OnInit,
   QueryList,
   SimpleChanges,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
-import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {analyticsService} from 'src/app/ajs-upgraded-providers';
 import {
   FeedbackTemplate,
   Task,
@@ -44,6 +42,7 @@ interface ApiError {
  */
 
 export interface TaskCommentComposerData {
+  [key: string]: TaskComment;
   originalComment: TaskComment;
   editingComment: TaskComment;
 }
@@ -77,12 +76,13 @@ const ACCEPTED_FILE_TYPES = [
       transition('false => true', [style({width: 80}), animate('150ms 0ms ease-in-out')]),
     ]),
   ],
+  standalone: false,
 })
-export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCheck, OnChanges {
+export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnChanges {
   @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
 
-  public $userIsTyping = new BehaviorSubject<boolean>(false);
+  public $userIsTyping: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private draftSaveSubscription = new Subscription();
   private readonly DRAFT_KEY_PREFIX = 'task_comment_draft_';
   public isDraftLoaded = false;
@@ -100,9 +100,10 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   @ViewChildren('cag') cag: QueryList<ElementRef>;
   @ViewChild('uploader') uploader: ElementRef;
 
-  differ: KeyValueDiffer<string, any>;
+  differ: KeyValueDiffer<string, TaskComment>;
   showEmojiPicker = false;
   emojiSearchMode = false;
+  // eslint-disable-next-line no-useless-escape
   emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;
@@ -116,7 +117,6 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
     private emojiSearch: EmojiSearch,
     private emojiService: EmojiService,
     private commentsViewer: TaskCommentsViewerComponent,
-    @Inject(analyticsService) private analytics,
     private alerts: AlertService,
     @Inject(TaskCommentService) private taskCommentService: TaskCommentService,
     private cdRef: ChangeDetectorRef,
@@ -132,8 +132,6 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       console.error('Error loading submitted tasks:', e);
     }
   }
-
-  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
     this.showFeedbackTemplatePicker = false;
@@ -184,7 +182,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
 
     const target = event.target as HTMLElement;
     const text = target.innerText;
-    const raw = target.innerText;
+    const _raw = target.innerText;
 
     // If user is typing something new after submission, reset the submitted status
     if (this.task) {
@@ -208,7 +206,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
         }
       }
 
-      const draftKey = this.getDraftKey(this.task);
+      const _draftKey = this.getDraftKey(this.task);
       // this.taskDraftContents.set(draftKey, raw);
     }
 
@@ -234,7 +232,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   }
 
   // Update saveDraftForTask to use the taskDraftContents map
-  private saveDraftForTask(task: Task, rawFromDom?: string): void {
+  private saveDraftForTask(task: Task, _rawFromDom?: string): void {
     if (!task) {
       return;
     }
@@ -307,7 +305,9 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       };
 
       retryWithTimeout();
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   private clearInput() {
@@ -572,17 +572,14 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       },
       error: (error: ApiError) => {
         this.isSending = false;
-        this.alerts.error(
-          error.error || error.message || `Failed to edit comment: ${error}`,
-          6000,
-        );
+        this.alerts.error(error.error || error.message || `Failed to edit comment: ${error}`, 6000);
       },
     });
   }
 
   addCommentWithType(comment: string, type: string) {
     this.taskCommentService.addComment(this.task, comment, type).subscribe({
-      next: (success: TaskComment) => {
+      next: (_success: TaskComment) => {
         this.comment.text = '';
         this.commentsViewer.scrollDown();
         console.log('implement - check map comments');
@@ -680,11 +677,11 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   // # Upload image files as comments to a given task
   postAttachmentComment(file) {
     this.taskCommentService.addComment(this.task, file, 'file', null).subscribe(
-      (tc: TaskComment) => {
+      (_tc: TaskComment) => {
         this.commentsViewer.scrollDown();
       },
-      (error: any) => {
-        this.alerts.error(error || error?.message, 2000);
+      (error: Error) => {
+        this.alerts.error(error.message, 2000);
       },
     );
   }
@@ -794,12 +791,11 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   selector: 'discussion-prompt-composer-dialog.html',
   templateUrl: 'discussion-prompt-composer-dialog.html',
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
+  standalone: false,
 })
-export class DiscussionComposerDialog implements OnInit {
+export class DiscussionComposerDialog {
   constructor(
     public dialogRef: MatDialogRef<DiscussionComposerDialog>,
     @Inject(MAT_DIALOG_DATA) public data: {task: Task},
   ) {}
-
-  ngOnInit() {}
 }

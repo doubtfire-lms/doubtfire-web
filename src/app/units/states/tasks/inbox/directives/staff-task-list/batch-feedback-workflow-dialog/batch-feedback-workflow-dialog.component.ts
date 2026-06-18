@@ -11,6 +11,7 @@ export interface BatchFeedbackWorkflowDialogData {
 @Component({
   selector: 'f-batch-feedback-workflow-dialog',
   templateUrl: './batch-feedback-workflow-dialog.component.html',
+  standalone: false,
 })
 export class BatchFeedbackWorkflowDialogComponent {
   constructor(

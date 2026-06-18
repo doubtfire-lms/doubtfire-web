@@ -1,23 +1,23 @@
 <div class="flex flex-col">
-  <div class="flex-grow flex flex-row">
+  <div class="flex flex-grow flex-row">
     <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="content">
-        <th mat-header-cell *matHeaderCellDef>Discussion Prompt</th>
-        <td mat-cell *matCellDef="let prompt" class="py-5">
+        <th *matHeaderCellDef mat-header-cell>Discussion Prompt</th>
+        <td *matCellDef="let prompt" class="py-3" mat-cell>
           @if (!editing(prompt)) {
             {{ prompt.content }}
           } @else {
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Discussion Prompt</mat-label>
-              <textarea matInput required pattern=".*\S.*" [(ngModel)]="prompt.content"></textarea>
+              <textarea matInput pattern=".*\S.*" required [(ngModel)]="prompt.content"></textarea>
             </mat-form-field>
           }
         </td>
       </ng-container>
 
       <ng-container matColumnDef="priority">
-        <th mat-header-cell *matHeaderCellDef>Priority</th>
-        <td mat-cell *matCellDef="let prompt">
+        <th *matHeaderCellDef mat-header-cell>Priority</th>
+        <td *matCellDef="let prompt" mat-cell>
           @if (!editing(prompt)) {
             {{ prompt.priorityLabel }}
           } @else {
@@ -37,8 +37,8 @@
       </ng-container>
 
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let prompt">
+        <th *matHeaderCellDef mat-header-cell>Actions</th>
+        <td *matCellDef="let prompt" mat-cell>
           <div class="flex">
             @if (editing(prompt)) {
               <button mat-icon-button (click)="cancelEdit()">
@@ -59,16 +59,16 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
     </table>
   </div>
   @if (!dataSource.data.length) {
-    <div class="w-full text-center text-gray-400 m-5">No discussion prompts</div>
+    <div class="m-3 w-full text-center text-gray-400">No discussion prompts</div>
   }
   @if (!creatingNewDiscussionPrompt) {
-    <div class="flex justify-center m-5">
-      <button mat-raised-button color="primary" (click)="createNewDiscussionPrompt()">
+    <div class="m-3 flex justify-center">
+      <button color="primary" mat-raised-button (click)="createNewDiscussionPrompt()">
         Add Discussion Prompt
       </button>
     </div>
@@ -77,17 +77,17 @@
   @if (creatingNewDiscussionPrompt) {
     <mat-card>
       <mat-card-content>
-        <div class="flex flex-row w-full gap-5">
+        <div class="flex w-full flex-row gap-3">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Discussion Prompt</mat-label>
             <textarea
               matInput
-              required
               pattern=".*\S.*"
+              required
               [(ngModel)]="newDiscussionPromptContent"
             ></textarea>
           </mat-form-field>
-          <mat-form-field appearance="outline" class="w-full max-w-lg max-h-16">
+          <mat-form-field appearance="outline" class="max-h-10 w-full max-w-lg">
             <mat-label>Priority</mat-label>
 
             <mat-select matInput placeholder="Priority" [(ngModel)]="newDiscussionPromptWeight">
@@ -99,7 +99,7 @@
         </div>
         <div class="flex justify-end">
           <button mat-button (click)="cancelNewDiscussionPrompt()">Cancel</button>
-          <button mat-raised-button color="primary" (click)="addNewPrompt()">Save</button>
+          <button color="primary" mat-raised-button (click)="addNewPrompt()">Save</button>
         </div>
       </mat-card-content>
     </mat-card>

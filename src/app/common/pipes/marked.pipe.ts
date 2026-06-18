@@ -1,8 +1,9 @@
-import {Pipe, PipeTransform} from '@angular/core';
 import * as marked from 'marked';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
   name: 'marked',
+  standalone: false,
 })
 export class MarkedPipe implements PipeTransform {
   // Set the options for the markdown renderer
@@ -15,9 +16,9 @@ export class MarkedPipe implements PipeTransform {
     });
   }
 
-  transform(value: string, ...args: any[]): string {
+  transform(value: string): string {
     if (value && value.length > 0) {
-      return <string>marked.parse(value.replaceAll(/\r\n|\r|\n/g, '<br />'), {async: false});
+      return marked.parse(value.replaceAll(/\r\n|\r|\n/g, '<br />'), {async: false}) as string;
     }
     return value;
   }

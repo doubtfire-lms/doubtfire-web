@@ -1,8 +1,8 @@
-<div class="p-10 w-full max-w-[500px]">
+<div class="w-full max-w-[500px] p-6">
   <div class="text-center">
     {{ caption }}
   </div>
-  <img [src]="qrCodeImage" alt="QR Code for tutor assessment" class="w-full" />
+  <img alt="QR Code for tutor assessment" class="w-full" [src]="qrCodeImage" />
   @if (footer) {
     <div class="text-center">{{ footer }}</div>
   }

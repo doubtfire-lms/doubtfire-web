@@ -15,13 +15,14 @@ export interface TaskPlannerPrerequisitesModalData {
   selector: 'f-task-planner-prerequisites-modal',
   templateUrl: './task-planner-prerequisites-modal.component.html',
   styleUrl: './task-planner-prerequisites-modal.component.scss',
+  standalone: false,
 })
 export class TaskPlannerPrerequisitesModalComponent implements OnInit {
   @Input() taskDefinition: TaskDefinition;
   @Input() project: Project;
   @Input() dependents: TaskPrerequisite[];
 
-  public dataSource = new MatTableDataSource<TaskPrerequisite>();
+  public dataSource: MatTableDataSource<TaskPrerequisite> = new MatTableDataSource();
   public displayedColumns: string[] = ['task-definition', 'current-status', 'required-status'];
 
   public get task() {

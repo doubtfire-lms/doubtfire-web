@@ -1,118 +1,120 @@
-<div class="bg-white border border-gray-200 rounded-xl shadow p-6">
-  <div class="mb-1">
-    <h4 class="font-bold text-2xl text-gray-900">Edit Feedback Templates for Outcome</h4>
+<div class="rounded-xl border border-gray-200 bg-white p-3.5 shadow">
+  <div class="mb-0.5">
+    <h4 class="text-base font-bold text-gray-900">Edit Feedback Templates for Outcome</h4>
 
-    <div class="flex flex-col gap-8">
+    <div class="flex flex-col gap-5">
       <table
         #templateTable
-        class="flex-grow f-table selectable"
+        class="f-table selectable flex-grow"
         mat-table
-        [dataSource]="templateSource"
         matSort
+        [dataSource]="templateSource"
         (matSortChange)="sortTemplateData($event)"
       >
         <ng-container matColumnDef="icon" sticky>
-          <th mat-header-cell *matHeaderCellDef></th>
+          <th *matHeaderCellDef mat-header-cell></th>
           <td
-            mat-cell
             *matCellDef="let feedbackTemplate"
-            (click)="selectFeedbackTemplate(feedbackTemplate)"
             class="pr-0"
+            mat-cell
+            (click)="selectFeedbackTemplate(feedbackTemplate)"
           >
-            <ng-container *ngIf="feedbackTemplate.type === 'group'">
+            @if (feedbackTemplate.type === 'group') {
               <mat-icon>folder</mat-icon>
-            </ng-container>
-            <ng-container *ngIf="feedbackTemplate.type === 'template'">
+            }
+            @if (feedbackTemplate.type === 'template') {
               <mat-icon>description</mat-icon>
-            </ng-container>
+            }
           </td>
         </ng-container>
         <ng-container matColumnDef="parent" sticky>
-          <th mat-header-cell *matHeaderCellDef>Parent</th>
+          <th *matHeaderCellDef mat-header-cell>Parent</th>
           <td
-            mat-cell
             *matCellDef="let feedbackTemplate"
+            mat-cell
             (click)="selectFeedbackTemplate(feedbackTemplate)"
           >
             {{ getParentChipText(feedbackTemplate.parentChipId) }}
           </td>
         </ng-container>
         <ng-container matColumnDef="chipText" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Chip Text</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>Chip Text</th>
           <td
-            mat-cell
             *matCellDef="let feedbackTemplate"
+            mat-cell
             (click)="selectFeedbackTemplate(feedbackTemplate)"
           >
             {{ feedbackTemplate.chipText }}
           </td>
         </ng-container>
         <ng-container matColumnDef="description" sticky>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>Description</th>
           <td
-            mat-cell
             *matCellDef="let feedbackTemplate"
+            mat-cell
             (click)="selectFeedbackTemplate(feedbackTemplate)"
           >
             {{ feedbackTemplate.description }}
           </td>
         </ng-container>
         <ng-container matColumnDef="commentText" sticky>
-          <th mat-header-cell *matHeaderCellDef>Comment Text</th>
+          <th *matHeaderCellDef mat-header-cell>Comment Text</th>
           <td
-            mat-cell
             *matCellDef="let feedbackTemplate"
+            mat-cell
             (click)="selectFeedbackTemplate(feedbackTemplate)"
           >
             {{ feedbackTemplate.commentText }}
           </td>
         </ng-container>
         <ng-container matColumnDef="summaryText" sticky>
-          <th mat-header-cell *matHeaderCellDef>Summary Text</th>
+          <th *matHeaderCellDef mat-header-cell>Summary Text</th>
           <td
-            mat-cell
             *matCellDef="let feedbackTemplate"
+            mat-cell
             (click)="selectFeedbackTemplate(feedbackTemplate)"
           >
             {{ feedbackTemplate.type === 'group' ? '' : feedbackTemplate.summaryText }}
           </td>
         </ng-container>
         <ng-container matColumnDef="taskStatus" sticky>
-          <th mat-header-cell *matHeaderCellDef>Task Status</th>
+          <th *matHeaderCellDef mat-header-cell>Task Status</th>
           <td
-            mat-cell
             *matCellDef="let feedbackTemplate"
+            mat-cell
             (click)="selectFeedbackTemplate(feedbackTemplate)"
           >
             @if (feedbackTemplate.taskStatus) {
               <mat-chip>
-                <i class="fa {{ taskService.statusData(feedbackTemplate.taskStatus).icon }}"></i>
+                <mat-icon matChipAvatar>
+                  {{ taskService.statusData(feedbackTemplate.taskStatus).materialIcon }}
+                </mat-icon>
                 {{ taskService.statusData(feedbackTemplate.taskStatus).label }}
               </mat-chip>
             }
           </td>
         </ng-container>
         <ng-container matColumnDef="feedbackTemplateAction" sticky>
-          <th mat-header-cell *matHeaderCellDef></th>
+          <th *matHeaderCellDef mat-header-cell></th>
           <td
-            mat-cell
             *matCellDef="let feedbackTemplate"
+            mat-cell
             (click)="selectFeedbackTemplate(feedbackTemplate)"
           >
             @if (feedbackTemplateHasChanges(feedbackTemplate)) {
               <button
-                mat-icon-button
                 aria-label="save feedback template"
                 color="primary"
+                mat-icon-button
                 (click)="saveFeedbackTemplate(feedbackTemplate)"
               >
                 <mat-icon>save</mat-icon>
               </button>
             }
             <button
-              mat-icon-button
               aria-label="delete feedback template"
               color="warn"
+              mat-icon-button
               (click)="deleteFeedbackTemplate(feedbackTemplate)"
             >
               <mat-icon>delete</mat-icon>
@@ -120,18 +122,18 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="templateColumns"></tr>
+        <tr *matHeaderRowDef="templateColumns" mat-header-row></tr>
         <tr
-          mat-row
           *matRowDef="let row; columns: templateColumns"
+          mat-row
           [style.background]="selectedTemplate === row ? 'lightblue' : ''"
         ></tr>
       </table>
 
       <span class="flex items-center">
-        <div class="h-20">
+        <div class="h-12">
           <mat-form-field appearance="outline">
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" />
+            <input matInput placeholder="Filter" (keyup)="applyFilter($event.target.value)" />
           </mat-form-field>
         </div>
         <mat-paginator
@@ -149,16 +151,16 @@
           </button>
           <span class="flex-grow"></span>
         }
-        <button mat-raised-button color="primary" (click)="createFeedbackTemplate()">
+        <button color="primary" mat-raised-button (click)="createFeedbackTemplate()">
           Add Template
         </button>
       </span>
 
       @if (selectedTemplate) {
         <div>
-          <h4 class="mt-1 font-bold text-2xl text-gray-900">Edit Template</h4>
+          <h4 class="mt-0.5 text-base font-bold text-gray-900">Edit Template</h4>
 
-          <div class="flex flex-row gap-4">
+          <div class="flex flex-row gap-2.5">
             @if (selectedTemplate.isNew) {
               <mat-form-field appearance="outline" class="basis-1/5">
                 <mat-label>Type</mat-label>
@@ -176,9 +178,11 @@
             <mat-form-field appearance="outline" class="basis-1/5">
               <mat-label>Parent</mat-label>
               <mat-select [(ngModel)]="selectedTemplate.parentChipId">
-                <mat-option *ngFor="let parent of getPossibleParents()" [value]="parent.id">
-                  {{ parent.chipText }}
-                </mat-option>
+                @for (parent of getPossibleParents(); track parent) {
+                  <mat-option [value]="parent.id">
+                    {{ parent.chipText }}
+                  </mat-option>
+                }
               </mat-select>
             </mat-form-field>
 
@@ -186,11 +190,11 @@
               <mat-label>Chip Text</mat-label>
               <input
                 matInput
-                required
-                pattern=".*\S.*"
-                [(ngModel)]="selectedTemplate.chipText"
                 maxlength="20"
+                pattern=".*\S.*"
                 placeholder="Short text shown on the chip"
+                required
+                [(ngModel)]="selectedTemplate.chipText"
               />
             </mat-form-field>
 
@@ -198,11 +202,11 @@
               <mat-label>Description</mat-label>
               <input
                 matInput
-                required
-                pattern=".*\S.*"
-                [(ngModel)]="selectedTemplate.description"
                 maxlength="116"
+                pattern=".*\S.*"
                 placeholder="Description of the feedback template"
+                required
+                [(ngModel)]="selectedTemplate.description"
               />
             </mat-form-field>
           </div>
@@ -212,23 +216,23 @@
               <mat-label>Comment Text</mat-label>
               <textarea
                 matInput
-                required
                 pattern=".*\S.*"
-                [(ngModel)]="selectedTemplate.commentText"
                 placeholder="Feedback text that is added to the comment area"
+                required
+                [(ngModel)]="selectedTemplate.commentText"
               >
               </textarea>
             </mat-form-field>
 
-            <div class="flex flex-row gap-4">
+            <div class="flex flex-row gap-2.5">
               <mat-form-field appearance="outline" class="flex-grow">
                 <mat-label>Summary Text</mat-label>
                 <input
                   matInput
-                  required
                   pattern=".*\S.*"
-                  [(ngModel)]="selectedTemplate.summaryText"
                   placeholder="Summary of the feedback"
+                  required
+                  [(ngModel)]="selectedTemplate.summaryText"
                 />
               </mat-form-field>
 
@@ -236,12 +240,11 @@
                 <mat-label>Task Status</mat-label>
                 <mat-select [(ngModel)]="selectedTemplate.taskStatus">
                   <mat-option [value]="null"></mat-option>
-                  <mat-option
-                    *ngFor="let status of taskService.feedbackTemplateStatuses"
-                    [value]="status"
-                  >
-                    {{ taskService.statusData(status).label }}
-                  </mat-option>
+                  @for (status of taskService.feedbackTemplateStatuses; track status) {
+                    <mat-option [value]="status">
+                      {{ taskService.statusData(status).label }}
+                    </mat-option>
+                  }
                 </mat-select>
               </mat-form-field>
             </div>
@@ -250,8 +253,8 @@
           <div class="flex">
             <span class="flex-grow"></span>
             <button
-              mat-raised-button
               color="primary"
+              mat-raised-button
               (click)="saveFeedbackTemplate(selectedTemplate)"
             >
               Save Template

@@ -1,21 +1,21 @@
 <div class="submission-history-modal">
-  <h3 mat-dialog-title class="panel-title">Overseer Assessment</h3>
+  <h3 class="panel-title" mat-dialog-title>Overseer Assessment</h3>
   <mat-dialog-content style="height: calc(100% - 7em)">
-    <f-task-overseer-report [task]="task" [loadOverseerAssessmentId]="overseerAssessmentId">
+    <f-task-overseer-report [loadOverseerAssessmentId]="overseerAssessmentId" [task]="task">
     </f-task-overseer-report>
   </mat-dialog-content>
   <div mat-dialog-actions style="float: right">
     @if (noDataFlag) {
       <button
+        color="primary"
         mat-button
         mat-raised-button
-        color="primary"
         style="margin-right: 6px"
         (click)="resfreshChildComponent()"
       >
-        <i class="fa fa-refresh"></i> Refresh
+        <mat-icon inline>refresh</mat-icon> Refresh
       </button>
     }
-    <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
+    <button color="warn" mat-dialog-close mat-stroked-button>Cancel</button>
   </div>
 </div>

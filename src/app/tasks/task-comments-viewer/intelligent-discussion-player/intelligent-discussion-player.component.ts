@@ -1,17 +1,19 @@
-import { Component, Inject, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { timer, Subscription } from 'rxjs';
-import { IntelligentDiscussionPlayerService } from './intelligent-discussion-player.service';
 import moment from 'moment';
-import { MicrophoneTesterComponent } from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
-import { IntelligentDiscussionRecorderComponent } from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
-import { AudioPlayerComponent } from 'src/app/common/audio-player/audio-player.component';
-import { Task, DiscussionComment } from 'src/app/api/models/doubtfire-model';
+import {AfterViewInit, Component, Inject, Input, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {Subscription, timer} from 'rxjs';
+import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
+import {AudioPlayerComponent} from 'src/app/common/audio-player/audio-player.component';
+import {MicrophoneTesterComponent} from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
+import {IntelligentDiscussionPlayerService} from './intelligent-discussion-player.service';
+import {IntelligentDiscussionRecorderComponent} from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
+
 @Component({
   selector: 'intelligent-discussion-player',
   templateUrl: './intelligent-discussion-player.component.html',
   styleUrls: ['./intelligent-discussion-player.component.scss'],
   providers: [IntelligentDiscussionPlayerService],
+  standalone: false,
 })
 export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   @Input() discussion: DiscussionComment;
@@ -20,7 +22,10 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   loading: boolean = false;
   audioProgress: number = 0;
 
-  constructor(public dialog: MatDialog, private discussionService: IntelligentDiscussionPlayerService) {}
+  constructor(
+    public dialog: MatDialog,
+    private discussionService: IntelligentDiscussionPlayerService,
+  ) {}
 
   ngAfterViewInit() {
     this.setPromptTrack('response');
@@ -35,7 +40,7 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   }
 
   setPromptTrack(track: string, promptNumber?: number) {
-    let url: string = '';
+    let url: string;
     if (track === 'prompt') {
       url = this.discussion.generateDiscussionPromptUrl(promptNumber);
     } else {
@@ -46,21 +51,22 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   }
 
   beginDiscussion(): void {
-    let dialogRef: MatDialogRef<IntelligentDiscussionDialog, any>;
-
-    dialogRef = this.dialog.open(IntelligentDiscussionDialog, {
-      data: {
-        dc: this.discussion,
-        task: this.task,
-        audioRef: this.audioPlayer.audio,
+    const dialogRef: MatDialogRef<IntelligentDiscussionDialog, void> = this.dialog.open(
+      IntelligentDiscussionDialog,
+      {
+        data: {
+          dc: this.discussion,
+          task: this.task,
+          audioRef: this.audioPlayer.audio,
+        },
+        maxWidth: '800px',
+        disableClose: true,
       },
-      maxWidth: '800px',
-      disableClose: true,
-    });
+    );
 
-    dialogRef.afterOpened().subscribe((result: any) => {});
+    dialogRef.afterOpened().subscribe();
 
-    dialogRef.afterClosed().subscribe((result: any) => {});
+    dialogRef.afterClosed().subscribe();
   }
 }
 
@@ -71,8 +77,9 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   templateUrl: 'intelligent-discussion-dialog.html',
   styleUrls: ['./intelligent-discussion-player.component.scss'],
   providers: [IntelligentDiscussionPlayerService],
+  standalone: false,
 })
-export class IntelligentDiscussionDialog implements OnInit {
+export class IntelligentDiscussionDialog {
   confirmed = false;
   timerText: string = '15m:00s';
   ticks: number = 0;
@@ -82,22 +89,22 @@ export class IntelligentDiscussionDialog implements OnInit {
   count: number = 3 * 60 * 1000; // 3 minutes
   activePromptId: number = 0;
   counter: Subscription;
-  guide = { text: 'Click start to begin' };
+  guide = {text: 'Click start to begin'};
 
-  @ViewChild('testRecorder', { static: true }) testRecorder: MicrophoneTesterComponent;
-  @ViewChild('discussionRecorder', { static: true }) discussionRecorder: IntelligentDiscussionRecorderComponent;
+  @ViewChild('testRecorder', {static: true}) testRecorder: MicrophoneTesterComponent;
+  @ViewChild('discussionRecorder', {static: true})
+  discussionRecorder: IntelligentDiscussionRecorderComponent;
 
   constructor(
     public dialogRef: MatDialogRef<IntelligentDiscussionDialog>,
     private discussionService: IntelligentDiscussionPlayerService,
-    @Inject(MAT_DIALOG_DATA) public data: {
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
       dc: DiscussionComment;
       task: Task;
       audioRef: HTMLAudioElement;
-    }
+    },
   ) {}
-
-  ngOnInit() {}
 
   disableTester() {
     this.testRecorder.stopRecording();
@@ -114,7 +121,7 @@ export class IntelligentDiscussionDialog implements OnInit {
   finishDiscussion() {
     this.discussionComplete = true;
     this.inDiscussion = false;
-    this.guide = { text: '' };
+    this.guide = {text: ''};
     this.discussionRecorder.stopRecording();
     this.data.audioRef.pause();
     this.data.audioRef.currentTime = 0;
@@ -154,25 +161,22 @@ export class IntelligentDiscussionDialog implements OnInit {
   }
 
   setPrompt() {
-    this.data.audioRef.src = this.data.dc.generateDiscussionPromptUrl(
-      this.activePromptId
-    );
+    this.data.audioRef.src = this.data.dc.generateDiscussionPromptUrl(this.activePromptId);
     this.guide.text = 'Listening to prompt';
     this.data.audioRef.load();
     this.data.audioRef.play();
-    const _this = this;
     this.data.audioRef.addEventListener('ended', () => {
       setTimeout(() => {
         const audio = new Audio();
         audio.src = '/assets/sounds/discussion-start-signal.wav';
         audio.load();
         audio.play();
-        _this.guide.text = 'Start responding';
+        this.guide.text = 'Start responding';
       }, 400);
     });
   }
 
-  responseConfirmed(e: any) {
+  responseConfirmed(_event: Event) {
     if (this.activePromptId !== this.numberOfPrompts - 1) {
       this.activePromptId++;
       this.setPrompt();

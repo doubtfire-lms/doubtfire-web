@@ -1,15 +1,29 @@
 <h4>Step 1. Record and add up to 3 prompts.</h4>
-<div [hidden]="!canRecord || isSending" fxLayout="row" fxLayoutAlign="space-around center">
+<div fxLayout="row" fxLayoutAlign="space-around center" [hidden]="!canRecord || isSending">
   <div>
-    <button mat-icon-button aria-label="Record icon button" [disabled]="!canAddRecording" id='btnRecordPrompt' (click)="recordingToggle()">
+    <button
+      aria-label="Record icon button"
+      id="btnRecordPrompt"
+      mat-icon-button
+      [disabled]="!canAddRecording"
+      (click)="recordingToggle()"
+    >
       <mat-icon [hidden]="!isRecording">stop_rounded</mat-icon>
       <mat-icon [hidden]="isRecording">fiber_manual_record</mat-icon>
     </button>
   </div>
 
   <div class="audio-recorder">
-    <p [hidden]="canRecord">Audio recording <br> only supported in modern versions of Chrome, Firefox and Safari.</p>
-    <mat-spinner class="send-audio-spinner" [diameter]="72" [strokeWidth]="2" [hidden]="!isSending"></mat-spinner>
+    <p [hidden]="canRecord">
+      Audio recording <br />
+      only supported in modern versions of Chrome, Firefox and Safari.
+    </p>
+    <mat-spinner
+      class="send-audio-spinner"
+      [diameter]="72"
+      [hidden]="!isSending"
+      [strokeWidth]="2"
+    ></mat-spinner>
     <div fxLayout="row" fxLayoutAlign="center center">
       <canvas #discussionPromptComposerCanvas class="discussion-prompt-audio-visualiser"></canvas>
     </div>
@@ -17,9 +31,15 @@
   </div>
 
   <div>
-    <button mat-icon-button type="button" id='btnSave' (click)="saveRecording()"
-      [disabled]="!recordingAvailable || !canAddRecording" class="btn-circle">
-      <i class="fa fa-plus"></i>
+    <button
+      class="btn-circle"
+      id="btnSave"
+      mat-icon-button
+      type="button"
+      [disabled]="!recordingAvailable || !canAddRecording"
+      (click)="saveRecording()"
+    >
+      <mat-icon>add</mat-icon>
     </button>
   </div>
 </div>
@@ -28,20 +48,26 @@
 <mat-action-list id="recordingList">
   <h3 mat-subheader>Discussion Prompts</h3>
   @for (recording of recordings; track recording; let i = $index) {
-  <button mat-list-item (click)="playRecording(getUrl(recording))">
-    <mat-icon mat-list-icon>play_arrow_rounded</mat-icon>
-    <h4 mat-line>Prompt {{i + 1}}</h4>
-    <p mat-line> Click to play recording </p>
-  </button>
-}
+    <button mat-list-item (click)="playRecording(getUrl(recording))">
+      <mat-icon mat-list-icon>play_arrow_rounded</mat-icon>
+      <h4 mat-line>Prompt {{ i + 1 }}</h4>
+      <p mat-line>Click to play recording</p>
+    </button>
+  }
 </mat-action-list>
 
 <h4>Step 3. Send.</h4>
 <div fxLayout="row" fxLayoutAlign="end center">
-  <button mat-raised-button color="primary" type="button" mat-dialog-close
-    (click)="sendRecording()" [hidden]="recordings.length === 0">
+  <button
+    color="primary"
+    mat-dialog-close
+    mat-raised-button
+    type="button"
+    [hidden]="recordings.length === 0"
+    (click)="sendRecording()"
+  >
     Send
   </button>
 </div>
 
-<mat-divider style="margin: 3em 0 3em 0;"></mat-divider>
+<mat-divider style="margin: 3em 0 3em 0"></mat-divider>

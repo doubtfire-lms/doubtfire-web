@@ -1,9 +1,9 @@
-<div class="w-full max-w-[1280px] mx-auto flex flex-col gap-5">
+<div class="mx-auto flex w-full flex-col gap-3">
   <div class="header">
     <h3>Unit Details</h3>
     <p>Edit and configure all details and settings for this unit.</p>
   </div>
-  <mat-card appearance="outlined" class="p-[16px] gap-2">
+  <mat-card appearance="outlined" class="gap-1 p-[16px]">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Code</mat-label>
       <input matInput required [(ngModel)]="unit.code" />
@@ -20,10 +20,10 @@
     </mat-form-field>
   </mat-card>
 
-  <mat-card appearance="outlined" class="p-[16px] gap-2">
+  <mat-card appearance="outlined" class="gap-1 p-[16px]">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Teaching Period</mat-label>
-      <mat-select [(ngModel)]="unit.teachingPeriod" placeholder="Select Teaching Period">
+      <mat-select placeholder="Select Teaching Period" [(ngModel)]="unit.teachingPeriod">
         <mat-option [value]="undefined">None</mat-option>
         @for (period of teachingPeriods; track period) {
           <mat-option [value]="period">{{ period.name }}</mat-option>
@@ -31,7 +31,7 @@
       </mat-select>
     </mat-form-field>
 
-    <div class="flex w-full gap-5">
+    <div class="flex w-full gap-3">
       @if (!unit.teachingPeriod) {
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Start Date</mat-label>
@@ -48,11 +48,11 @@
       } @else {
         <mat-form-field appearance="outline" class="w-full" disabled>
           <mat-label>{{ unit.teachingPeriod.name }} Start Date</mat-label>
-          <input matInput [value]="unit.teachingPeriod?.startDate | date" disabled readonly />
+          <input disabled matInput readonly [value]="unit.teachingPeriod?.startDate | date" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-full" disabled>
           <mat-label>{{ unit.teachingPeriod.name }} End Date</mat-label>
-          <input matInput [value]="unit.teachingPeriod?.endDate | date" disabled readonly />
+          <input disabled matInput readonly [value]="unit.teachingPeriod?.endDate | date" />
         </mat-form-field>
       }
     </div>
@@ -70,7 +70,7 @@
 
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Draft Learning Summary</mat-label>
-      <mat-select [(ngModel)]="unit.draftTaskDefinition" placeholder="Select Learning Summary Task">
+      <mat-select placeholder="Select Learning Summary Task" [(ngModel)]="unit.draftTaskDefinition">
         <mat-option [value]="undefined">None</mat-option>
         @for (td of taskDefinitions; track td) {
           <mat-option [value]="td">{{ td.abbreviation }} - {{ td.name }}</mat-option>
@@ -91,14 +91,14 @@
       </mat-hint>
     </mat-form-field>
 
-    <div class="flex w-full gap-5">
+    <div class="flex w-full gap-3">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Feedback warning after (days)</mat-label>
         <input
           matInput
-          type="number"
           min="0"
           required
+          type="number"
           [(ngModel)]="unit.feedbackWarningThresholdDays"
         />
         <mat-hint>
@@ -111,9 +111,9 @@
         <mat-label>Show task in overflow queue after (days)</mat-label>
         <input
           matInput
-          type="number"
           min="0"
           required
+          type="number"
           [(ngModel)]="unit.feedbackOverflowThresholdDays"
         />
         <mat-hint>
@@ -123,7 +123,7 @@
     </div>
   </mat-card>
 
-  <mat-card appearance="outlined" class="flex flex-col gap-5 p-[16px]">
+  <mat-card appearance="outlined" class="flex flex-col gap-3 p-[16px]">
     <div>
       <mat-slide-toggle [(ngModel)]="unit.allowFlexibleDates"
         >Allow flexible dates</mat-slide-toggle
@@ -150,8 +150,8 @@
 
     <div>
       <mat-slide-toggle
-        (change)="onToggleAssessInPortfolio($event)"
         [(ngModel)]="unit.markLateSubmissionsAsAssessInPortfolio"
+        (change)="onToggleAssessInPortfolio($event)"
         >Has tasks assessed in portfolio</mat-slide-toggle
       >
       <p>
@@ -166,7 +166,10 @@
       <mat-slide-toggle [(ngModel)]="unit.allowStudentChangeTutorial"
         >Allow students to change tutorial</mat-slide-toggle
       >
-      <p>When false only staff can change student tutorials.</p>
+      <p>
+        When false only staff can change student tutorials. When true, students may switch between
+        tutors who provide feedback on their work.
+      </p>
     </div>
 
     <div>
@@ -214,7 +217,7 @@
   </mat-card>
 
   @if (overseerEnabled.value) {
-    <mat-card class="p-[16px] gap-2">
+    <mat-card class="gap-1 p-[16px]">
       <div>
         <mat-slide-toggle [(ngModel)]="unit.assessmentEnabled"
           >Overseer assessment</mat-slide-toggle
@@ -236,18 +239,18 @@
     </mat-card>
   }
 
-  <div class="flex justify-end w-full gap-5">
-    <button mat-raised-button (click)="addD2lData()" [hidden]="!d2lEnabled.value">
+  <div class="flex w-full justify-end gap-3">
+    <button mat-raised-button [hidden]="!d2lEnabled.value" (click)="addD2lData()">
       D2L Details
     </button>
     <button
       mat-raised-button
       matTooltip="Rollover the unit into a new teaching period"
       matTooltipShowDelay="1000"
-      uiSref="units/rollover"
+      [routerLink]="['/units', unit.id, 'rollover']"
     >
       Copy
     </button>
-    <button mat-raised-button color="primary" (click)="saveUnit()">Update</button>
+    <button color="primary" mat-raised-button (click)="saveUnit()">Update</button>
   </div>
 </div>

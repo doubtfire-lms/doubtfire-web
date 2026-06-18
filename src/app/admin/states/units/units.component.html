@@ -1,0 +1,133 @@
+<div class="flex flex-row gap-5 md:px-16">
+  <div class="flex flex-grow flex-col gap-5 gap-y-0">
+    <div class="flex flex-col">
+      <div>
+        <h3>{{ title }}</h3>
+      </div>
+      <div>
+        <mat-form-field appearance="outline" class="w-full min-w-[160px] max-w-[720px]">
+          <mat-label>Search</mat-label>
+          <input matInput (keyup)="applyFilter($event)" />
+          <mat-icon matPrefix> search </mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+    <table
+      class="f-table selectable flex-grow"
+      mat-table
+      matSort
+      matSortActive="start_date"
+      matSortDirection="desc"
+      matSortDisableClear
+      [dataSource]="dataSource"
+      (matSortChange)="sortTableData($event)"
+    >
+      <!-- Unit Code Column -->
+      <ng-container matColumnDef="unit_code" sticky>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Unit Code</th>
+        <td *matCellDef="let element" class="w-0 min-w-full" mat-cell>
+          <f-unit-code [unit_code]="element.unit_code"></f-unit-code>
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name" sticky>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
+        <td *matCellDef="let element" mat-cell>{{ element.name }}</td>
+      </ng-container>
+
+      <!-- Unit Role Column -->
+      <ng-container matColumnDef="unit_role" sticky>
+        <th
+          *matHeaderCellDef
+          mat-header-cell
+          mat-sort-header
+          [hidden]="!shouldShowUnitRoleColumn()"
+        >
+          Unit Role
+        </th>
+        <td *matCellDef="let element" mat-cell [hidden]="!shouldShowUnitRoleColumn()">
+          {{ element.unit_role }}
+        </td>
+      </ng-container>
+
+      <!-- Teaching Period Column -->
+      <ng-container matColumnDef="teaching_period" sticky>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Teaching Period</th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.teaching_period }}
+        </td>
+      </ng-container>
+
+      <!-- Start Date Column -->
+      <ng-container matColumnDef="start_date" sticky>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Start Date</th>
+        <td *matCellDef="let element" mat-cell>{{ element.start_date | date: 'EEE d MMM y' }}</td>
+      </ng-container>
+
+      <!-- End Date Column -->
+      <ng-container matColumnDef="end_date" sticky>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>End Date</th>
+        <td *matCellDef="let element" mat-cell>{{ element.end_date | date: 'EEE d MMM y' }}</td>
+      </ng-container>
+
+      <!-- Active Column -->
+      <ng-container matColumnDef="active" sticky>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Active</th>
+        <td *matCellDef="let element" mat-cell>
+          <!-- If element.teachingPeriod exists -->
+          @if (element.teachingPeriod) {
+            @if (element.teachingPeriod.active && element.active) {
+              <mat-icon>done</mat-icon>
+            }
+            @if (!element.teachingPeriod.active || !element.active) {
+              <mat-icon>close</mat-icon>
+            }
+          } @else {
+            @if (element.active) {
+              <mat-icon>done</mat-icon>
+            }
+            @if (!element.active) {
+              <mat-icon>close</mat-icon>
+            }
+          }
+
+          <!-- If element.teachingPeriod does not exist -->
+        </td>
+      </ng-container>
+
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      @if (mode === 'tutor') {
+        <tr
+          *matRowDef="let row; columns: displayedColumns"
+          mat-row
+          [routerLink]="['/units', row.id, 'tasks', 'inbox']"
+        ></tr>
+      }
+      @if (mode === 'admin') {
+        <tr
+          *matRowDef="let row; columns: displayedColumns"
+          mat-row
+          [routerLink]="['/units', row.id, 'admin']"
+        ></tr>
+      }
+      @if (mode === 'student') {
+        <tr
+          *matRowDef="let row; columns: displayedColumns"
+          mat-row
+          [routerLink]="['/projects', row.id, 'dashboard']"
+        ></tr>
+      }
+    </table>
+    <span class="flex items-center">
+      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+      <span class="flex-grow"></span>
+      @if (mode === 'admin') {
+        <button color="primary" mat-raised-button (click)="createUnit()">
+          <mat-icon class="icon_display">add</mat-icon>
+          Create Unit
+        </button>
+      }
+    </span>
+  </div>
+</div>

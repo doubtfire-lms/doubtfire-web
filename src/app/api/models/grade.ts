@@ -2,7 +2,10 @@ export class Grade {
   public static readonly PASS_RANGE: number[] = [0, 1, 2, 3];
   public static readonly FULL_RANGE: number[] = [-1, 0, 1, 2, 3];
 
-  public static readonly GRADE_ACRONYMS: Map<string | number, string> = new Map<string | number, string>([
+  public static readonly GRADE_ACRONYMS: Map<string | number, string> = new Map<
+    string | number,
+    string
+  >([
     ['Fail', 'F'],
     ['Pass', 'P'],
     ['Credit', 'C'],

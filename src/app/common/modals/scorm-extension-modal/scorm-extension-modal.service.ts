@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Task} from 'src/app/api/models/task';
-import {MatDialogRef, MatDialog} from '@angular/material/dialog';
 import {ScormExtensionModalComponent} from './scorm-extension-modal.component';
 
 @Injectable({
@@ -9,18 +9,19 @@ import {ScormExtensionModalComponent} from './scorm-extension-modal.component';
 export class ScormExtensionModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(task: Task, afterApplication?: any) {
-    let dialogRef: MatDialogRef<ScormExtensionModalComponent, any>;
-
-    dialogRef = this.dialog.open(ScormExtensionModalComponent, {
-      data: {
-        task,
-        afterApplication,
+  public show(task: Task, afterApplication?: () => void) {
+    const dialogRef: MatDialogRef<ScormExtensionModalComponent, void> = this.dialog.open(
+      ScormExtensionModalComponent,
+      {
+        data: {
+          task,
+          afterApplication,
+        },
       },
-    });
+    );
 
-    dialogRef.afterOpened().subscribe((result: any) => {});
+    dialogRef.afterOpened().subscribe();
 
-    dialogRef.afterClosed().subscribe((result: any) => {});
+    dialogRef.afterClosed().subscribe();
   }
 }

@@ -1,28 +1,38 @@
-<button id="dialogCloseButton" mat-icon-button mat-dialog-close aria-label="Close dialog button">
+<button aria-label="Close dialog button" id="dialogCloseButton" mat-dialog-close mat-icon-button>
   <mat-icon aria-label="Quit cross icon">close</mat-icon>
 </button>
 
-<mat-horizontal-stepper id="discussionPromptStepper" [linear]="true" #stepper>
+<mat-horizontal-stepper #stepper id="discussionPromptStepper" [linear]="true">
   <mat-step>
     <ng-template matStepLabel>Introduction</ng-template>
     <div class="introduction-text">
-      <img id="discussion-splash-image" src="/assets/images/discussion_splash_1.svg" alt="Discussion Splash Image">
+      <img
+        alt="Discussion Splash Image"
+        id="discussion-splash-image"
+        src="/assets/images/discussion_splash_1.svg"
+      />
       <p>
-        Discussions are a great way for both you and your students to gauge student's understanding of concepts and is a
-        great learning opportunity for them.
-        <br> <br>
+        Discussions are a great way for both you and your students to gauge student's understanding
+        of concepts and is a great learning opportunity for them.
+        <br />
+        <br />
 
-        Discussion comments allow you to present up to three discussion prompts to a students on a task. These
-        prompts are presented to the student, at which point their spoken reply will be recorded in real time. This
-        means you are receiving their unfiltered and immediate response, just like an informal chat in the classroom.
-        <br> <br>
+        Discussion comments allow you to present up to three discussion prompts to a students on a
+        task. These prompts are presented to the student, at which point their spoken reply will be
+        recorded in real time. This means you are receiving their unfiltered and immediate response,
+        just like an informal chat in the classroom.
+        <br />
+        <br />
 
-        These discussions are designed to be casual and informal and will require a working microphone and speakers.
+        These discussions are designed to be casual and informal and will require a working
+        microphone and speakers.
       </p>
     </div>
 
     <div>
-      <button mat-button mat-raised-button matStepperNext color="primary" style="float: right;">Next</button>
+      <button color="primary" mat-button mat-raised-button matStepperNext style="float: right">
+        Next
+      </button>
     </div>
   </mat-step>
 
@@ -31,7 +41,9 @@
     <discussion-prompt-composer [task]="data.task"></discussion-prompt-composer>
 
     <div>
-      <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
+      <button color="primary" mat-button mat-raised-button matStepperNext matStepperPrevious>
+        Back
+      </button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

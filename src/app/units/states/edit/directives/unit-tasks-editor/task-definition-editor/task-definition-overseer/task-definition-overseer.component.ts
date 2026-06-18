@@ -1,9 +1,10 @@
+import * as monaco from 'monaco-editor';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
 import {Observable} from 'rxjs';
 import {
-  OverseerAssessment,
   OverseerImage,
   OverseerImageService,
   Task,
@@ -22,12 +23,12 @@ import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/overseer-script-editor-modal.service';
-import * as monaco from 'monaco-editor';
-import {MatSelectChange} from '@angular/material/select';
+
 @Component({
   selector: 'f-task-definition-overseer',
   templateUrl: 'task-definition-overseer.component.html',
   styleUrls: ['task-definition-overseer.component.scss'],
+  standalone: false,
 })
 export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   @Input() taskDefinition: TaskDefinition;
@@ -228,7 +229,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
           },
         )
         .subscribe({
-          next: (result) => {
+          next: (_result) => {
             this.alerts.success('Saved overseer step', 3000);
           },
           error: (error) => {
@@ -300,7 +301,6 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     if (!this.currentUserTask) return;
 
     this.submissions.getLatestSubmissionsTimestamps(this.currentUserTask).subscribe({
-      next: (result: OverseerAssessment[]) => {},
       error: (error) => {
         this.alerts.error('Error: ' + error, 6000);
       },

@@ -13,6 +13,7 @@ import {SelectedTaskService} from '../../../../selected-task.service';
   selector: 'f-task-similarity-view',
   templateUrl: './task-similarity-view.component.html',
   styleUrls: ['./task-similarity-view.component.scss'],
+  standalone: false,
 })
 export class TaskSimilarityViewComponent implements OnChanges {
   @Input() task: Task;

@@ -1,26 +1,22 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatMenuModule } from '@angular/material/menu';
-import { dateService } from 'src/app/ajs-upgraded-providers';
-
-import { UnitDropdownComponent } from './unit-dropdown.component';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {MatMenuModule} from '@angular/material/menu';
+import {DateService} from 'src/app/common/services/date.service';
+import {UnitDropdownComponent} from './unit-dropdown.component';
 
 describe('UnitDropdownComponent', () => {
   let component: UnitDropdownComponent;
   let fixture: ComponentFixture<UnitDropdownComponent>;
-  let dateServiceStub: jasmine.SpyObj<any>;
+  let dateServiceStub: Pick<DateService, 'showDate'>;
 
-  beforeEach(
-    waitForAsync(() => {
-      dateServiceStub = jasmine.createSpy();
-      dateServiceStub.showDate = true;
+  beforeEach(waitForAsync(() => {
+    dateServiceStub = {showDate: true};
 
-      TestBed.configureTestingModule({
-        declarations: [UnitDropdownComponent],
-        imports: [MatMenuModule],
-        providers: [{ provide: dateService, useValue: dateServiceStub }],
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      declarations: [UnitDropdownComponent],
+      imports: [MatMenuModule],
+      providers: [{provide: DateService, useValue: dateServiceStub}],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UnitDropdownComponent);

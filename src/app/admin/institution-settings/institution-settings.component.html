@@ -12,8 +12,8 @@
     <mat-tab label="Learning Outcomes">
       <div class="learning-outcomes-container">
         <div class="header">
-          <div class="mt-10">
-            <h1 class="mb-1">Learning Outcomes</h1>
+          <div class="mt-6">
+            <h1 class="mb-0.5">Learning Outcomes</h1>
             <p>Manage global learning outcomes for the institution</p>
           </div>
         </div>
@@ -21,13 +21,14 @@
       </div>
     </mat-tab>
     @if (overseerEnabled) {
-    <mat-tab label="Overseer Images">
-      <overseer-image-list></overseer-image-list>
-    </mat-tab>
-    } @if (tiiEnabled) {
-    <mat-tab label="TurnItIn">
-      <f-tii-action-log></f-tii-action-log>
-    </mat-tab>
+      <mat-tab label="Overseer Images">
+        <overseer-image-list></overseer-image-list>
+      </mat-tab>
+    }
+    @if (tiiEnabled) {
+      <mat-tab label="TurnItIn">
+        <f-tii-action-log></f-tii-action-log>
+      </mat-tab>
     }
   </mat-tab-group>
 </div>

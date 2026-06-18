@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+
+<mat-dialog-content>
+  @if (data.message) {
+    <p>{{ data.message }}</p>
+  }
+
+  <f-file-uploader [files]="data.batchFiles" [onSuccess]="onUploadSuccess" [url]="data.url">
+  </f-file-uploader>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button color="primary" mat-button type="button" (click)="close()">Done</button>
+</mat-dialog-actions>

@@ -1,0 +1,91 @@
+<mat-card appearance="outlined" class="mx-auto max-w-[1100px]">
+  <mat-card-header>
+    <mat-card-title>Learning Summary Report</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p class="pt-3">
+      Upload the Learning Summary Report, the primary porfolio document which justifies your desired
+      grade.
+    </p>
+    <p>
+      Your Learning Summary Report is a
+      <strong>summary of what you have learnt in this unit</strong>. It consists of two sections:
+    </p>
+
+    <ol class="ml-2.5 list-inside list-decimal space-y-1 py-3">
+      <li>a self-assessment, and</li>
+      <li>your reflections on the unit.</li>
+    </ol>
+
+    <p>
+      The <strong>self-assessment</strong> indicates how your portfolio aligns with the assessment
+      criteria, and which grade you are applying for.
+    </p>
+
+    <p>
+      Your <strong>reflections</strong> are a personal comment on what you have learnt in the unit,
+      and how your knowledge and skills have developed.
+    </p>
+
+    @if (
+      projectHasDraftLearningSummaryReport && !forceLSRSubmit && !acceptUploadNewLearningSummary
+    ) {
+      <div class="mx-auto flex max-w-4xl flex-col items-center justify-center py-3 text-center">
+        <div class="submitted flex items-center justify-center gap-3 py-3 text-center text-2xl">
+          <mat-icon color="primary">check_circle</mat-icon>
+          Learning Summary Report Submitted
+        </div>
+        @if (draftTaskDefinitionWasUsed()) {
+          <div class="w-full max-w-2xl py-1 text-center text-xs text-gray-400">
+            Your learning summary report was automatically submitted from your
+            {{ unit.draftTaskDefinition.abbreviation }} {{ unit.draftTaskDefinition.name }}
+            submission.
+          </div>
+        }
+
+        <!-- <button mat-button (click)="downloadLearningSummaryReport()" color="primary">
+          View Learning Summary Report
+        </button> -->
+        <button color="primary" mat-button (click)="forceLSRSubmit = true">Upload a new one</button>
+      </div>
+    }
+    <div
+      [hidden]="
+        projectHasDraftLearningSummaryReport && !(forceLSRSubmit || acceptUploadNewLearningSummary)
+      "
+    >
+      <div
+        class="mx-auto flex items-center justify-center gap-3 rounded border-yellow-500 bg-yellow-200 p-2.5"
+      >
+        <mat-icon>warning</mat-icon>
+
+        Remember to provide a justification for why you believe you have achieved a
+        {{ targetGradeLabel }} in {{ unit.code }} {{ unit.name }}.
+      </div>
+      <f-file-uploader
+        [files]="learningSummaryReportFileUploadData.type"
+        [onSuccess]="addNewFile.bind(this)"
+        [payload]="learningSummaryReportFileUploadData.payload"
+        [url]="project.portfolioUrl()"
+      ></f-file-uploader>
+    </div>
+  </mat-card-content>
+  <mat-card-footer class="flex w-full justify-between p-3">
+    <button mat-raised-button (click)="advanceActiveTab(-1)">Back</button>
+    <div class="flex items-center justify-center gap-3">
+      @if (!projectHasDraftLearningSummaryReport) {
+        <div class="text-gray-400">
+          You're missing a Learning Summary Report. Upload one to continue.
+        </div>
+      }
+      <button
+        color="primary"
+        mat-raised-button
+        [disabled]="!projectHasDraftLearningSummaryReport"
+        (click)="advanceActiveTab(1)"
+      >
+        Next
+      </button>
+    </div>
+  </mat-card-footer>
+</mat-card>

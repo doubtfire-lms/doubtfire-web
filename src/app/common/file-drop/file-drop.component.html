@@ -1,51 +1,54 @@
 <input
-  type="file"
+  #fileUpload
   class="hidden"
+  type="file"
   [accept]="accept"
   [multiple]="multiple"
   (change)="onFileSelected($event)"
-  #fileUpload
 />
 
-<div class="flex items-center w-full" appDragDrop (fileDropped)="onFileDragOver($event)">
+<div appDragDrop class="flex w-full items-center" (fileDropped)="onFileDragOver($event)">
   <button
-    mat-flat-button
-    class="h-[52px] rounded-r-none border-r-0 rounded-lg shrink-0"
+    class="h-[52px] shrink-0 rounded-lg rounded-r-none border-r-0"
     color="primary"
-    (click)="fileUpload.click()"
+    mat-flat-button
     [disabled]="uploadProgress"
+    (click)="fileUpload.click()"
   >
     @if (uploadProgress) {
-    <mat-spinner [diameter]="18" [strokeWidth]="0.5" mode="indeterminate"></mat-spinner>
-    } @if (!uploadProgress) {
-    <span>Choose file</span>
+      <mat-spinner mode="indeterminate" [diameter]="18" [strokeWidth]="0.5"></mat-spinner>
+    }
+    @if (!uploadProgress) {
+      <span>Choose file</span>
     }
   </button>
   <div class="f-inner-border flex grow items-center rounded-lg rounded-l-none bg-white">
-    <div class="flex flex-col w-full">
-      <div class="flex ml-4 h-[48px] items-center">
+    <div class="flex w-full flex-col">
+      <div class="ml-2.5 flex h-[48px] items-center">
         @if (file?.name) {
-        <mat-icon class="mr-2">upload_file</mat-icon>
+          <mat-icon class="mr-1">upload_file</mat-icon>
         }
-        <span class="truncate grow max-w-xs mt-[4px]"> {{ file?.name || message }} </span>
+        <span class="mt-[4px] max-w-xs grow truncate"> {{ file?.name || message }} </span>
         {{ uploadProgress }}
         <button
-          [disabled]="!file?.name"
           class="ml-auto"
           mat-icon-button
+          [disabled]="!file?.name"
           (click)="uploadProgress ? cancelUpload() : upload()"
         >
           @if (!uploadProgress) {
-          <mat-icon [ngClass]="{ 'animate-bounce': file?.name }">upload</mat-icon>
-          } @if (uploadProgress) {
-          <mat-icon>cancel</mat-icon>
+            <mat-icon [ngClass]="{'animate-bounce': file?.name}">upload</mat-icon>
+          }
+          @if (uploadProgress) {
+            <mat-icon>cancel</mat-icon>
           }
         </button>
       </div>
       @if (uploadProgress) {
-      <mat-progress-bar mode="determinate" [value]="uploadProgress"> </mat-progress-bar>
-      } @if (!uploadProgress) {
-      <span class="h-[4px]"></span>
+        <mat-progress-bar mode="determinate" [value]="uploadProgress"> </mat-progress-bar>
+      }
+      @if (!uploadProgress) {
+        <span class="h-[4px]"></span>
       }
     </div>
   </div>

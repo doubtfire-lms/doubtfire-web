@@ -13,14 +13,15 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'overseer-image-list',
   templateUrl: 'overseer-image-list.component.html',
   styleUrls: ['overseer-image-list.component.scss'],
+  standalone: false,
 })
 export class OverseerImageListComponent
   extends EntityFormComponent<OverseerImage>
   implements AfterViewInit
 {
-  @ViewChild('textDialog') textDialog!: TemplateRef<any>;
+  @ViewChild('textDialog') textDialog!: TemplateRef<object>;
 
-  @ViewChild(MatTable, {static: true}) table: MatTable<any>;
+  @ViewChild(MatTable, {static: true}) table: MatTable<OverseerImage>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   // Set up the table
@@ -74,7 +75,11 @@ export class OverseerImageListComponent
   // to the datasource
   private pushToTable(value: OverseerImage | OverseerImage[]) {
     if (!value) return;
-    value instanceof Array ? this.overseerImages.push(...value) : this.overseerImages.push(value);
+    if (value instanceof Array) {
+      this.overseerImages.push(...value);
+    } else {
+      this.overseerImages.push(value);
+    }
     this.dataSource.sort = this.sort;
   }
 
@@ -102,7 +107,7 @@ export class OverseerImageListComponent
 
   deleteOverseerImage(image: OverseerImage) {
     this.overseerImageService.delete(image).subscribe(
-      ((response) => {
+      ((_response) => {
         this.cancelEdit();
         this.overseerImages.splice(this.overseerImages.indexOf(image), 1);
         this.dataSource.data = this.overseerImages;

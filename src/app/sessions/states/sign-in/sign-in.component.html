@@ -1,76 +1,77 @@
-<section class="welcome flex flex-row custom-md-h-screen">
-  <f-hero-sidebar class="sidebar self-start flex-col h-full"></f-hero-sidebar>
-  <section class="content flex flex-col custom-md-h-screen">
+<section class="welcome custom-md-h-screen flex flex-row">
+  <f-hero-sidebar class="sidebar h-full flex-col self-start"></f-hero-sidebar>
+  <section class="content custom-md-h-screen flex flex-col">
     @if (!isLoading) {
-      <div class="container" *ngIf="!isLoading">
-        <div class="subcontainer">
-          <div class="wordmark flex-row place-content-start">
-            <img src="../../../assets/images/logo-bw.svg" width="40px" alt="Homepage Logo" />
-            <p>{{ externalName.value }}</p>
-          </div>
-          <h1 class="welcome-heading flex flex-row place-content-start">
-            Welcome to {{ externalName.value }}
-          </h1>
-          <form
-            #form="ngForm"
-            (ngSubmit)="
-              signIn({
-                username: formData.username,
-                password: formData.password,
-                remember: authService.rememberMe,
-                autoLogin: autoLogin
-              })
-            "
-            class="sign-in-form flex flex-col"
-          >
-            @if (showCredentials) {
-              <mat-form-field appearance="outline" class="flex-1 h-full w-full">
-                <mat-label>Username</mat-label>
-                <input matInput name="username" required [(ngModel)]="formData.username" />
-              </mat-form-field>
-            }
-
-            @if (showCredentials) {
-              <mat-form-field appearance="outline" class="flex-1 h-full w-full">
-                <mat-label>Password</mat-label>
-                <input
-                  type="password"
-                  matInput
-                  name="password"
-                  required
-                  [(ngModel)]="formData.password"
-                />
-              </mat-form-field>
-            }
-            @if (!showCredentials) {
-              <mat-checkbox matInput name="autoLogin" [(ngModel)]="autoLogin">
-                Automatically redirect
-              </mat-checkbox>
-            }
-            <mat-checkbox matInput name="remember" [(ngModel)]="authService.rememberMe">
-              Stay logged in
-            </mat-checkbox>
-            <button
-              class="w-full"
-              mat-flat-button
-              color="primary"
-              type="form"
-              [disabled]="form.invalid"
+      @if (!isLoading) {
+        <div class="m-auto w-full max-w-md p-4">
+          <div class="subcontainer">
+            <div class="wordmark flex-row place-content-start">
+              <img alt="Homepage Logo" src="../../../assets/images/logo-bw.svg" width="40px" />
+              <p>{{ externalName.value }}</p>
+            </div>
+            <h1 class="welcome-heading flex flex-row place-content-start">
+              Welcome to {{ externalName.value }}
+            </h1>
+            <form
+              #form="ngForm"
+              class="sign-in-form flex flex-col"
+              (ngSubmit)="
+                signIn({
+                  username: formData.username,
+                  password: formData.password,
+                  remember: authService.rememberMe,
+                  autoLogin: autoLogin,
+                })
+              "
             >
-              <div class="flex items-center gap-2">
-                @if (redirectingSSO) {
-                  Signing In...
-                  <mat-spinner diameter="20"></mat-spinner>
-                } @else {
-                  Sign In
-                }
-              </div>
-            </button>
-          </form>
+              @if (showCredentials) {
+                <mat-form-field appearance="outline" class="size-full flex-1">
+                  <mat-label>Username</mat-label>
+                  <input matInput name="username" required [(ngModel)]="formData.username" />
+                </mat-form-field>
+              }
+              @if (showCredentials) {
+                <mat-form-field appearance="outline" class="size-full flex-1">
+                  <mat-label>Password</mat-label>
+                  <input
+                    matInput
+                    name="password"
+                    required
+                    type="password"
+                    [(ngModel)]="formData.password"
+                  />
+                </mat-form-field>
+              }
+              @if (!showCredentials) {
+                <mat-checkbox matInput name="autoLogin" [(ngModel)]="autoLogin">
+                  Automatically redirect
+                </mat-checkbox>
+              }
+              <mat-checkbox matInput name="remember" [(ngModel)]="authService.rememberMe">
+                Stay logged in
+              </mat-checkbox>
+              <button
+                class="w-full"
+                color="primary"
+                mat-flat-button
+                type="form"
+                [disabled]="form.invalid"
+              >
+                <div class="flex items-center gap-1">
+                  @if (redirectingSSO) {
+                    Signing In...
+                    <mat-spinner diameter="20"></mat-spinner>
+                  } @else {
+                    Sign In
+                  }
+                </div>
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
+      }
     } @else if (authMethodFailed) {
-      <div class="maintenance flex-1 flex flex-col items-center justify-center text-center">
+      <div class="maintenance flex flex-1 flex-col items-center justify-center text-center">
         <f-unavailable-card></f-unavailable-card>
       </div>
     }

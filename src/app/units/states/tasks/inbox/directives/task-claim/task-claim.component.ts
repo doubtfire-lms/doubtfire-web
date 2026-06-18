@@ -10,6 +10,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-task-claim',
   templateUrl: './task-claim.component.html',
   styleUrl: './task-claim.component.scss',
+  standalone: false,
 })
 export class TaskClaimComponent {
   @Input() selectedTask: Task;

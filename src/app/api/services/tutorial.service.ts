@@ -1,6 +1,7 @@
-import {Inject, Injectable} from '@angular/core';
-import {analyticsService} from 'src/app/ajs-upgraded-providers';
+import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
 import {
   CampusService,
   Project,
@@ -8,10 +9,8 @@ import {
   Unit,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
-import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
-import API_URL from 'src/app/config/constants/apiUrl';
-import {Observable} from 'rxjs';
 import {AlertService} from 'src/app/common/services/alert.service';
+import API_URL from 'src/app/config/constants/apiUrl';
 
 @Injectable()
 export class TutorialService extends CachedEntityService<Tutorial> {
@@ -23,7 +22,6 @@ export class TutorialService extends CachedEntityService<Tutorial> {
     httpClient: HttpClient,
     private campusService: CampusService,
     private userService: UserService,
-    @Inject(analyticsService) private AnalyticsService: any,
     private alerts: AlertService,
   ) {
     super(httpClient, API_URL);
@@ -36,22 +34,22 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       'abbreviation',
       {
         keys: ['campus', 'campus_id'],
-        toEntityOp: (data: object, key: string, entity: Tutorial, params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Tutorial) => {
           this.campusService.get(data['campus_id']).subscribe((campus) => {
             entity.campus = campus;
           });
         },
-        toJsonFn: (entity: Tutorial, key: string) => {
+        toJsonFn: (entity: Tutorial, _key: string) => {
           return entity.campus ? entity.campus.id : -1;
         },
       },
       'capacity',
       {
         keys: ['tutor', 'tutor_id'],
-        toEntityFn: (data: object, key: string, entity: Tutorial, params?: any) => {
+        toEntityFn: (data: object, key: string) => {
           return this.userService.cache.get(data[key]);
         },
-        toJsonFn: (entity: Tutorial, key: string) => {
+        toJsonFn: (entity: Tutorial, _key: string) => {
           return entity.tutor?.id;
         },
       },
@@ -59,17 +57,17 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       'numStudents',
       {
         keys: ['tutorialStream', 'tutorial_stream_abbr'],
-        toEntityFn: (data: object, key: string, entity: Tutorial, params?: any) => {
+        toEntityFn: (data: object, key: string, entity: Tutorial) => {
           return entity.unit.tutorialStreamForAbbr(data[key]);
         },
-        toJsonFn: (entity: Tutorial, key: string) => {
+        toJsonFn: (entity: Tutorial, _key: string) => {
           return entity.tutorialStream ? entity.tutorialStream.abbreviation : null;
         },
       },
 
       {
         keys: ['unit', 'unit_id'],
-        toJsonFn: (entity: Tutorial, key: string) => {
+        toJsonFn: (entity: Tutorial, _key: string) => {
           return entity.unit?.id;
         },
       },
@@ -78,11 +76,11 @@ export class TutorialService extends CachedEntityService<Tutorial> {
     this.mapping.mapAllKeysToJsonExcept('numStudents');
   }
 
-  public createInstanceFrom(json: any, other?: any): Tutorial {
-    return new Tutorial(other as Unit);
+  public createInstanceFrom(_json: object, other?: Unit): Tutorial {
+    return new Tutorial(other);
   }
 
-  public override keyForJson(json: any): string | number {
+  public override keyForJson(json: {tutorial_id?: number}): string | number {
     if (json.tutorial_id) {
       return json.tutorial_id;
     } else {
@@ -104,7 +102,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
       body: {},
     };
 
-    var observer: Observable<any>;
+    let observer: Observable<{enrolments: {tutorial_id: number}[]}>;
     if (isEnrol) {
       observer = this.post(pathIds, options);
     } else {

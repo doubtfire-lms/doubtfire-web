@@ -1,7 +1,9 @@
-<div style="min-width: 600px; min-height: 600px flex flex-col" class="pr-12 pl-12 pt-12 pb-12">
-  <mat-tab-group class="mb-8">
-    <mat-tab label="Edit Teaching Period"> <ng-template [ngTemplateOutlet]="EditTeachingPeriod"></ng-template></mat-tab>
-    <mat-tab [disabled]="!newOrSelectedTeachingPeriod.id" label="Edit Breaks">
+<div class="p-7" style="min-width: 600px; min-height: 600px flex flex-col">
+  <mat-tab-group class="mb-5">
+    <mat-tab label="Edit Teaching Period">
+      <ng-template [ngTemplateOutlet]="EditTeachingPeriod"></ng-template
+    ></mat-tab>
+    <mat-tab label="Edit Breaks" [disabled]="!newOrSelectedTeachingPeriod.id">
       <ng-template [ngTemplateOutlet]="EditBreaks"></ng-template>
     </mat-tab>
     <!-- TODO: Write rollover -->
@@ -9,23 +11,35 @@
       <ng-template [ngTemplateOutlet]="ImportUnits"></ng-template>
     </mat-tab> -->
   </mat-tab-group>
-  <div class="flex justify-end self-end space-x-4 bottom-6">
-    <button mat-stroked-button class="" mat-dialog-close>Cancel</button>
-    <button mat-flat-button color="primary" class="ml-4" (click)="submitTeachingPeriod()">
+  <div class="bottom-3.5 flex justify-end space-x-2.5 self-end">
+    <button class="" mat-dialog-close mat-stroked-button>Cancel</button>
+    <button class="ml-2.5" color="primary" mat-flat-button (click)="submitTeachingPeriod()">
       {{ newOrSelectedTeachingPeriod.id ? 'Save' : 'Create' }}
     </button>
   </div>
 </div>
 
 <ng-template #EditTeachingPeriod>
-  <form class="teaching-period-form flex flex-col ml-6 mr-6 pt-12 overflow-hidden">
+  <form class="teaching-period-form mx-3.5 flex flex-col overflow-hidden pt-7">
     <mat-form-field appearance="outline">
       <mat-label>Teaching Period Name</mat-label>
-      <input type="text" matInput [(ngModel)]="newOrSelectedTeachingPeriod.period" name="name" required />
+      <input
+        matInput
+        name="name"
+        required
+        type="text"
+        [(ngModel)]="newOrSelectedTeachingPeriod.period"
+      />
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Teaching Period Year</mat-label>
-      <input type="number" matInput [(ngModel)]="newOrSelectedTeachingPeriod.year" name="year" required />
+      <input
+        matInput
+        name="year"
+        required
+        type="number"
+        [(ngModel)]="newOrSelectedTeachingPeriod.year"
+      />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -33,17 +47,17 @@
       <mat-date-range-input [rangePicker]="picker">
         <input
           matStartDate
-          placeholder="Start date"
-          [(ngModel)]="newOrSelectedTeachingPeriod.startDate"
           name="startDate"
+          placeholder="Start date"
           required
+          [(ngModel)]="newOrSelectedTeachingPeriod.startDate"
         />
         <input
           matEndDate
-          placeholder="End date"
-          [(ngModel)]="newOrSelectedTeachingPeriod.endDate"
           name="endDate"
+          placeholder="End date"
           required
+          [(ngModel)]="newOrSelectedTeachingPeriod.endDate"
         />
       </mat-date-range-input>
 
@@ -55,10 +69,10 @@
       <mat-label>Active Until</mat-label>
       <input
         matInput
-        [matDatepicker]="activeUntilPicker"
-        [(ngModel)]="newOrSelectedTeachingPeriod.activeUntil"
         name="activeUntil"
         required
+        [matDatepicker]="activeUntilPicker"
+        [(ngModel)]="newOrSelectedTeachingPeriod.activeUntil"
       />
       <mat-hint>DD/MM/YYYY</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="activeUntilPicker"></mat-datepicker-toggle>
@@ -68,34 +82,34 @@
 </ng-template>
 
 <ng-template #EditBreaks>
-  <h4 class="pt-8">Teaching Breaks for {{ newOrSelectedTeachingPeriod.name }}</h4>
+  <h4 class="pt-5">Teaching Breaks for {{ newOrSelectedTeachingPeriod.name }}</h4>
   <mat-list>
     @for (break of newOrSelectedTeachingPeriod.breaksCache.values | async; track break) {
-    <mat-list-item>
-      <span class="flex items-center">
-        <span>
-          <span matListItemTitle>{{ break.startDate | date }}</span>
-          <span matListItemLine>{{ break.numberOfWeeks }} week(s)</span>
+      <mat-list-item>
+        <span class="flex items-center">
+          <span>
+            <span matListItemTitle>{{ break.startDate | date }}</span>
+            <span matListItemLine>{{ break.numberOfWeeks }} week(s)</span>
+          </span>
+          <span class="grow"></span>
+          <button mat-icon-button (click)="deleteBreak(newOrSelectedTeachingPeriod, break)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </span>
-        <span class="grow"></span>
-        <button mat-icon-button (click)="deleteBreak(newOrSelectedTeachingPeriod, break)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </span>
-    </mat-list-item>
+      </mat-list-item>
     }
   </mat-list>
 
-  <form class="ml-6 mr-6 pt-12 overflow-hidden">
-    <span class="flex items-center gap-6">
+  <form class="mx-3.5 overflow-hidden pt-7">
+    <span class="flex items-center gap-3.5">
       <mat-form-field appearance="outline">
         <mat-label>Break Start Date</mat-label>
         <input
           matInput
-          [matDatepicker]="breakStartDatePicker"
-          [(ngModel)]="tempBreak.startDate"
           name="breakStartDate"
           required
+          [matDatepicker]="breakStartDatePicker"
+          [(ngModel)]="tempBreak.startDate"
         />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="breakStartDatePicker"></mat-datepicker-toggle>
@@ -105,13 +119,19 @@
       <!-- <span class="grow"></span> -->
       <mat-form-field appearance="outline">
         <mat-label>Number of weeks</mat-label>
-        <input type="number" matInput [(ngModel)]="tempBreak.numberOfWeeks" name="breakNumWeeks" required />
+        <input
+          matInput
+          name="breakNumWeeks"
+          required
+          type="number"
+          [(ngModel)]="tempBreak.numberOfWeeks"
+        />
       </mat-form-field>
 
       <button
-        [disabled]="!(tempBreak.startDate && tempBreak.numberOfWeeks)"
         class="self-start"
         mat-icon-button
+        [disabled]="!(tempBreak.startDate && tempBreak.numberOfWeeks)"
         (click)="addTeachingBreak()"
       >
         <mat-icon>add_circle</mat-icon>

@@ -1,0 +1,297 @@
+<div class="">
+  <h2>Mark portfolios</h2>
+  <p>Assess student portfolios</p>
+  <div class="flex items-center justify-between">
+    <div class="flex flex-row items-center justify-end gap-3">
+      <mat-form-field appearance="outline" class="mt-[22px]">
+        <mat-label>Filter</mat-label>
+        <input
+          #input
+          matInput
+          placeholder="Eg. Student ID"
+          [disabled]="loading"
+          (keyup)="applyFilter($event)"
+        />
+      </mat-form-field>
+      <mat-button-toggle-group
+        hideSingleSelectionIndicator
+        [disabled]="loading"
+        [(ngModel)]="portfolioFilter"
+        (change)="onPortfolioFilterChange($event)"
+      >
+        <mat-button-toggle
+          matTooltip="Show all students, even those without portfolios"
+          matTooltipPosition="above"
+          value="all"
+          ><mat-icon>public</mat-icon></mat-button-toggle
+        >
+        <mat-button-toggle
+          matTooltip="Show only students with a submitted portfolio"
+          matTooltipPosition="above"
+          value="submitted_only"
+          ><mat-icon>menu_book</mat-icon></mat-button-toggle
+        >
+      </mat-button-toggle-group>
+
+      <mat-button-toggle-group
+        hideSingleSelectionIndicator
+        [disabled]="loading"
+        [(ngModel)]="tutorialFilter"
+        (change)="onTutorialFilterChange($event)"
+      >
+        <mat-button-toggle
+          matTooltip="Show students from all tutorials"
+          matTooltipPosition="above"
+          value="all"
+          ><mat-icon>account_balance</mat-icon></mat-button-toggle
+        >
+        <mat-button-toggle
+          matTooltip="Show students from my tutorials"
+          matTooltipPosition="above"
+          value="mine"
+          ><mat-icon>edit</mat-icon></mat-button-toggle
+        >
+      </mat-button-toggle-group>
+
+      <mat-button-toggle-group
+        hideSingleSelectionIndicator
+        [disabled]="loading"
+        [(ngModel)]="gradeFilter"
+        (change)="onGradeFilterChange($event)"
+      >
+        <mat-button-toggle
+          matTooltip="Show students aiming for any grade"
+          matTooltipPosition="above"
+          [value]="null"
+        >
+          All
+        </mat-button-toggle>
+        @for (grade of gradeValues; track grade) {
+          <mat-button-toggle
+            class="flex items-center justify-center"
+            matTooltip="Show students aiming for a {{ gradeLabel(grade) }}"
+            matTooltipPosition="above"
+            [value]="grade"
+          >
+            <f-grade-icon [grade]="grade"></f-grade-icon>
+          </mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+    </div>
+  </div>
+  <div class="mb-1 flex items-center justify-start gap-1">
+    <button mat-button [disabled]="loading" (click)="downloadGrades()">
+      <mat-icon>download</mat-icon>Download Grades
+    </button>
+
+    <button
+      mat-button
+      matTooltip="Downloading all portfolios may take a long time"
+      matTooltipPosition="above"
+      matTooltipShowDelay="500"
+      [disabled]="loading"
+      (click)="downloadPortfolios()"
+    >
+      <mat-icon>download</mat-icon>Download Portfolios
+    </button>
+
+    <f-download-staff-notes [unit]="unit"></f-download-staff-notes>
+    <f-upload-grades [unit]="unit"></f-upload-grades>
+
+    @if (hasD2lMapping()) {
+      <button mat-button [disabled]="loading" (click)="transferToD2l()">
+        <mat-icon>upload</mat-icon>Transfer Grades to D2L
+      </button>
+    }
+  </div>
+
+  @if (loading) {
+    <div aria-busy="true" aria-label="Loading student portfolios" class="overflow-x-auto">
+      <div class="min-w-[1600px]">
+        <div class="flex h-14 items-center gap-6 border-b px-4">
+          @for (
+            width of [
+              '110px',
+              '170px',
+              '150px',
+              '130px',
+              '80px',
+              '110px',
+              '180px',
+              '400px',
+              '80px',
+              '50px',
+            ];
+            track $index
+          ) {
+            <ngx-skeleton-loader
+              class="block shrink-0"
+              [style.width]="width"
+              [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+            ></ngx-skeleton-loader>
+          }
+        </div>
+
+        @for (row of [0, 1, 2, 3, 4, 5, 6, 7]; track row) {
+          <div class="flex h-[60px] items-center gap-6 border-b px-4">
+            @for (
+              width of [
+                '110px',
+                '170px',
+                '150px',
+                '130px',
+                '80px',
+                '110px',
+                '180px',
+                '400px',
+                '80px',
+                '50px',
+              ];
+              track $index
+            ) {
+              <ngx-skeleton-loader
+                class="block shrink-0"
+                [style.width]="width"
+                [theme]="{
+                  width: '100%',
+                  height: $index === 7 ? '25px' : '12px',
+                  'border-radius': $index === 7 ? '4px' : '999px',
+                  margin: '0',
+                }"
+              ></ngx-skeleton-loader>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <table
+    class="f-table selectable"
+    mat-table
+    matSort
+    matSortActive="student"
+    matSortDirection="asc"
+    matSortDisableClear
+    [dataSource]="dataSource"
+    [hidden]="loading"
+    (matSortChange)="sortTableData($event)"
+  >
+    <ng-container matColumnDef="student" sticky>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Student</th>
+      <td *matCellDef="let project" mat-cell>
+        {{ project.student.studentId || project.student.username }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name" sticky>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
+      <td *matCellDef="let project" mat-cell>
+        {{ project.student.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tutor" sticky>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Tutor</th>
+      <td *matCellDef="let project" mat-cell>
+        {{ project.tutorNames() }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tutorial" sticky>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Tutorial</th>
+      <td *matCellDef="let project" mat-cell>
+        {{ project.shortTutorialDescription() }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="target" sticky>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Target</th>
+      <td *matCellDef="let project" mat-cell>
+        <f-grade-icon [grade]="project.targetGrade"></f-grade-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="submitted-as" sticky>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Submitted as</th>
+      <td *matCellDef="let project" mat-cell>
+        <f-grade-icon [grade]="project.submittedGrade"></f-grade-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="submission-date" sticky>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Submission Date</th>
+      <td *matCellDef="let project" mat-cell>
+        {{ project.portfolioSubmissionDate | date: 'EEE d MMM y, h:mm a' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="has-portfolio" sticky>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Has Portfolio</th>
+      <td *matCellDef="let project" mat-cell>
+        {{ project.hasPortfolio ? 'Yes' : 'No' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="stats" sticky>
+      <th *matHeaderCellDef mat-header-cell>Stats</th>
+      <td *matCellDef="let project" mat-cell>
+        <div class="flex h-[25px] w-[400px] overflow-hidden rounded">
+          @for (bar of project.taskStats; track bar) {
+            <div
+              class="flex h-[25px] items-center justify-center overflow-hidden"
+              matTooltipDelay="100"
+              matTooltipPosition="above"
+              [matTooltip]="statusLabel(bar.key) + ' ' + bar.value + '%'"
+              [ngStyle]="{
+                width: bar.value + '%',
+                background: statusColor(bar.key),
+              }"
+            >
+              @if (bar.key === 'not_started') {
+                <span class="text-xs text-black"> {{ bar.value }}% </span>
+              }
+              @if (bar.key === 'complete') {
+                <span class="text-xs text-white"> {{ bar.value }}% </span>
+              }
+            </div>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="grade" sticky>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Grade</th>
+      <td *matCellDef="let project" mat-cell>
+        {{ project.grade }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions" sticky>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>View</th>
+      <td *matCellDef="let project" mat-cell>
+        <button mat-icon-button (click)="openProject($event, project)">
+          <mat-icon>launch</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr
+      *matRowDef="let project; columns: displayedColumns"
+      mat-row
+      (click)="selectStudent(project)"
+    ></tr>
+
+    <tr *matNoDataRow class="mat-row w-full">
+      <td class="mat-cell w-full p-3 text-center" colspan="4">No students found</td>
+    </tr>
+  </table>
+
+  <mat-paginator
+    [disabled]="loading"
+    [hidden]="loading"
+    [pageSize]="25"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+  ></mat-paginator>
+</div>

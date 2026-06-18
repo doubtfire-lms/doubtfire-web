@@ -1,0 +1,58 @@
+@if (unit$ | async; as unit) {
+  <div>
+    <!-- Wide Window Display -->
+    <div fxFill fxHide fxLayout="column" fxShow.gt-sm>
+      <div fxFill fxLayoutAlign="center stretch">
+        <!-- Panel 1 -->
+        <div #tasklistpanel class="vertical-panel min-w-12" id="tasklistpanel">
+          <f-unit-task-list
+            [mode]="'all-tasks'"
+            [selectedTaskDefinition$]="selectedTaskDefinition$"
+            [taskDefinitions]="unit.taskDefinitions"
+          ></f-unit-task-list>
+        </div>
+        <div class="vertical-spacer"></div>
+        <!-- Panel 2 -->
+        <div class="vertical-panel size-full">
+          @if (selectedTaskDefinition$ | async; as selectedTaskDef) {
+            <div class="flex h-full flex-col">
+              <div class="shrink">
+                <f-task-details-view
+                  [taskDef]="selectedTaskDef"
+                  [unit]="unit"
+                ></f-task-details-view>
+              </div>
+              <f-task-sheet-view class="h-full" [taskDef]="selectedTaskDef"> </f-task-sheet-view>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <!-- Narrow Window / Mobile Display -->
+    <div #mobile fxFill fxHide fxLayout="row" fxShow.lt-md>
+      <div class="vertical-panel mobile" [hidden]="selectedTaskDefinition$ | async">
+        <f-unit-task-list
+          [mode]="'all-tasks'"
+          [selectedTaskDefinition$]="selectedTaskDefinition$"
+          [taskDefinitions]="unit.taskDefinitions"
+        ></f-unit-task-list>
+      </div>
+      <div fxFill fxLayout="column" fxLayoutAlign="space-between stretch" [hidden]="!taskSelected">
+        <div class="flex items-center">
+          <button
+            aria-label="Back to task list"
+            mat-icon-button
+            matTooltip="Back to list"
+            (click)="clearTaskSelection()"
+          >
+            <mat-icon>arrow_back_ios_new</mat-icon>
+          </button>
+        </div>
+        <div class="vertical-panel mobile" fxFlex>
+          <f-task-details-view [taskDef]="selectedTaskDef" [unit]="unit"></f-task-details-view>
+        </div>
+        <f-task-sheet-view class="h-full" [taskDef]="selectedTaskDef"> </f-task-sheet-view>
+      </div>
+    </div>
+  </div>
+}

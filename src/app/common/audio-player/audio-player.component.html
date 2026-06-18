@@ -1,11 +1,13 @@
 <div class="audio-comment-container" fxLayout="row" fxLayoutAlign="start center">
   <button class="play-button" (click)="pausePlay()">
-    <i id="playButton" class="play-button fa" [ngClass]="isPlaying ? 'fa-pause-circle' : 'fa-play-circle'"></i>
+    <mat-icon class="play-button" id="playButton">{{
+      isPlaying ? 'pause_circle' : 'play_circle'
+    }}</mat-icon>
   </button>
   <mat-progress-bar
     #progressBar
-    id="progressBar"
     class="progress-bar-container"
+    id="progressBar"
     [value]="audioProgress"
     (click)="seek($event)"
   ></mat-progress-bar>

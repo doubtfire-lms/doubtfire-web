@@ -1,11 +1,11 @@
 // From https://gist.github.com/juukie/d71133e69877b46f060e
 
-$screen-xl:                  1560px !default;
-$screen-xl-min:              $screen-xl !default;
-$screen-xl-desktop:          $screen-xl-min !default;
-$screen-lg-max:              ($screen-xl-min - 1) !default;
-$container-xlarge-desktop:   (1530px + $grid-gutter-width) !default;
-$container-xl:               $container-xlarge-desktop !default;
+$screen-xl: 1560px !default;
+$screen-xl-min: $screen-xl !default;
+$screen-xl-desktop: $screen-xl-min !default;
+$screen-lg-max: ($screen-xl-min - 1) !default;
+$container-xlarge-desktop: (1530px + $grid-gutter-width) !default;
+$container-xl: $container-xlarge-desktop !default;
 
 .container {
   // @include container-fixed; No need for, already done.
@@ -26,7 +26,7 @@ $container-xl:               $container-xlarge-desktop !default;
 @mixin make-xl-column($columns, $gutter: $grid-gutter-width) {
   position: relative;
   min-height: 1px;
-  padding-left:  ($gutter / 2);
+  padding-left: ($gutter / 2);
   padding-right: ($gutter / 2);
 
   @media (min-width: $screen-xl-min) {
@@ -50,16 +50,16 @@ $container-xl:               $container-xlarge-desktop !default;
   }
 }
 
-@mixin make-grid-columns($i: 1, $list: ".col-xl-#{$i}") {
+@mixin make-grid-columns($i: 1, $list: '.col-xl-#{$i}') {
   @for $i from (1 + 1) through $grid-columns {
-    $list: "#{$list}, .col-xl-#{$i}";
+    $list: '#{$list}, .col-xl-#{$i}';
   }
   #{$list} {
     position: relative;
     // Prevent columns from collapsing when empty
     min-height: 1px;
     // Inner gutter via padding
-    padding-left:  ($grid-gutter-width / 2);
+    padding-left: ($grid-gutter-width / 2);
     padding-right: ($grid-gutter-width / 2);
   }
 }
