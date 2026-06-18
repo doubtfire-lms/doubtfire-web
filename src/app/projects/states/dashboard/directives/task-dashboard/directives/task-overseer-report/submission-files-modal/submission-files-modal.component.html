@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <button mat-stroked-button color="warn" mat-dialog-close>Close</button>
+  <button color="warn" mat-dialog-close mat-stroked-button>Close</button>
 </div>
 
 <div class="flex min-h-0 flex-1 overflow-hidden p-6">
@@ -41,10 +41,10 @@
             <f-archive-viewer
               class="block size-full min-h-0 overflow-hidden"
               [archiveFile]="archiveBlob"
-              [uploadRequirementNames]="uploadRequirementNames"
+              [preloadSelectedFile]="true"
               [readOnly]="true"
               [showPreview]="false"
-              [preloadSelectedFile]="true"
+              [uploadRequirementNames]="uploadRequirementNames"
               (filesLoaded)="onPrimaryFilesLoaded()"
               (selectedFileChanged)="onPrimarySelectionChange($event)"
             ></f-archive-viewer>
@@ -63,10 +63,10 @@
               <f-archive-viewer
                 class="block size-full min-h-0 overflow-hidden"
                 [archiveFile]="comparedArchiveBlob"
-                [uploadRequirementNames]="uploadRequirementNames"
+                [preloadSelectedFile]="true"
                 [readOnly]="true"
                 [showPreview]="false"
-                [preloadSelectedFile]="true"
+                [uploadRequirementNames]="uploadRequirementNames"
                 (filesLoaded)="onComparedFilesLoaded()"
                 (selectedFileChanged)="onComparedSelectionChange($event)"
               ></f-archive-viewer>
@@ -95,9 +95,9 @@
               </div>
               <ngx-monaco-diff-editor
                 class="block size-full flex-1"
+                [modifiedModel]="diffModifiedModel"
                 [options]="diffEditorOptions"
                 [originalModel]="diffOriginalModel"
-                [modifiedModel]="diffModifiedModel"
               ></ngx-monaco-diff-editor>
             </div>
           } @else {
@@ -138,8 +138,8 @@
       <f-archive-viewer
         class="block size-full min-h-0 overflow-hidden"
         [archiveFile]="archiveBlob"
-        [uploadRequirementNames]="uploadRequirementNames"
         [readOnly]="true"
+        [uploadRequirementNames]="uploadRequirementNames"
       ></f-archive-viewer>
     </div>
   } @else {
@@ -151,8 +151,8 @@
 
 <ng-template
   #submissionHeading
-  let-number="number"
   let-isMostRecent="isMostRecent"
+  let-number="number"
   let-timestamp="timestamp"
 >
   <div class="shrink-0 px-2 py-1 text-slate-500">
@@ -162,7 +162,7 @@
   </div>
 </ng-template>
 
-<ng-template #selectedFilePreviewPane let-file="file" let-editorOptions="editorOptions">
+<ng-template #selectedFilePreviewPane let-editorOptions="editorOptions" let-file="file">
   <div class="flex min-h-0 flex-col overflow-hidden rounded">
     <div
       class="flex shrink-0 items-center gap-1 px-2 py-1 text-slate-500"
@@ -184,8 +184,8 @@
     @if (isArchiveCodeOrTextFile(file)) {
       <ngx-monaco-editor
         class="block size-full"
-        [options]="editorOptions"
         [ngModel]="file?.textContent ?? ''"
+        [options]="editorOptions"
       ></ngx-monaco-editor>
     } @else if (isArchivePdfFile(file)) {
       <f-pdf-viewer class="block size-full" [pdfUrl]="file?.blobUrl ?? ''"></f-pdf-viewer>
@@ -193,8 +193,8 @@
       <div class="flex size-full items-center justify-center p-2">
         <img
           class="max-h-full max-w-full object-contain"
-          [src]="file?.blobUrl"
           [alt]="file?.name"
+          [src]="file?.blobUrl"
         />
       </div>
     } @else {

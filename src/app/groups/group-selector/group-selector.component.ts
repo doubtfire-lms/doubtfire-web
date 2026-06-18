@@ -134,7 +134,7 @@ export class GroupSelectorComponent
       );
       return;
     }
-    let tutorialId = -1;
+    let tutorialId;
     if (this.project) {
       tutorialId = this.project.tutorials[0].id || this.unit.tutorials[0].id;
     } else {

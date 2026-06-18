@@ -1,4 +1,4 @@
-<div class="p-3">
+<div class="">
   <h2>Mark portfolios</h2>
   <p>Assess student portfolios</p>
   <div class="flex items-center justify-between">
@@ -6,72 +6,72 @@
       <mat-form-field appearance="outline" class="mt-[22px]">
         <mat-label>Filter</mat-label>
         <input
+          #input
           matInput
-          (keyup)="applyFilter($event)"
           placeholder="Eg. Student ID"
           [disabled]="loading"
-          #input
+          (keyup)="applyFilter($event)"
         />
       </mat-form-field>
       <mat-button-toggle-group
         hideSingleSelectionIndicator
+        [disabled]="loading"
         [(ngModel)]="portfolioFilter"
         (change)="onPortfolioFilterChange($event)"
-        [disabled]="loading"
       >
         <mat-button-toggle
-          value="all"
           matTooltip="Show all students, even those without portfolios"
           matTooltipPosition="above"
+          value="all"
           ><mat-icon>public</mat-icon></mat-button-toggle
         >
         <mat-button-toggle
-          value="submitted_only"
           matTooltip="Show only students with a submitted portfolio"
           matTooltipPosition="above"
+          value="submitted_only"
           ><mat-icon>menu_book</mat-icon></mat-button-toggle
         >
       </mat-button-toggle-group>
 
       <mat-button-toggle-group
         hideSingleSelectionIndicator
+        [disabled]="loading"
         [(ngModel)]="tutorialFilter"
         (change)="onTutorialFilterChange($event)"
-        [disabled]="loading"
       >
         <mat-button-toggle
-          value="all"
           matTooltip="Show students from all tutorials"
           matTooltipPosition="above"
+          value="all"
           ><mat-icon>account_balance</mat-icon></mat-button-toggle
         >
         <mat-button-toggle
-          value="mine"
           matTooltip="Show students from my tutorials"
           matTooltipPosition="above"
+          value="mine"
           ><mat-icon>edit</mat-icon></mat-button-toggle
         >
       </mat-button-toggle-group>
 
       <mat-button-toggle-group
         hideSingleSelectionIndicator
+        [disabled]="loading"
         [(ngModel)]="gradeFilter"
         (change)="onGradeFilterChange($event)"
-        [disabled]="loading"
       >
         <mat-button-toggle
-          [value]="null"
           matTooltip="Show students aiming for any grade"
           matTooltipPosition="above"
+          [value]="null"
         >
           All
         </mat-button-toggle>
         @for (grade of gradeValues; track grade) {
           <mat-button-toggle
-            [value]="grade"
+            class="flex items-center justify-center"
             matTooltip="Show students aiming for a {{ gradeLabel(grade) }}"
             matTooltipPosition="above"
-            class="flex items-center justify-center"
+            [value]="grade"
           >
             <f-grade-icon [grade]="grade" [unit]="unit"></f-grade-icon>
           </mat-button-toggle>
@@ -86,11 +86,11 @@
 
     <button
       mat-button
-      (click)="downloadPortfolios()"
       matTooltip="Downloading all portfolios may take a long time"
-      matTooltipShowDelay="500"
       matTooltipPosition="above"
+      matTooltipShowDelay="500"
       [disabled]="loading"
+      (click)="downloadPortfolios()"
     >
       <mat-icon>download</mat-icon>Download Portfolios
     </button>
@@ -106,7 +106,7 @@
   </div>
 
   @if (loading) {
-    <div class="overflow-x-auto" aria-label="Loading student portfolios" aria-busy="true">
+    <div aria-busy="true" aria-label="Loading student portfolios" class="overflow-x-auto">
       <div class="min-w-[1600px]">
         <div class="flex h-14 items-center gap-6 border-b px-4">
           @for (
@@ -167,86 +167,86 @@
   }
 
   <table
+    class="f-table selectable"
     mat-table
-    [dataSource]="dataSource"
     matSort
     matSortActive="student"
     matSortDirection="asc"
     matSortDisableClear
-    class="f-table selectable"
-    (matSortChange)="sortTableData($event)"
+    [dataSource]="dataSource"
     [hidden]="loading"
+    (matSortChange)="sortTableData($event)"
   >
     <ng-container matColumnDef="student" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Student</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Student</th>
+      <td *matCellDef="let project" mat-cell>
         {{ project.student.studentId || project.student.username }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="name" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
+      <td *matCellDef="let project" mat-cell>
         {{ project.student.name }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="tutor" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tutor</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Tutor</th>
+      <td *matCellDef="let project" mat-cell>
         {{ project.tutorNames() }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="tutorial" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tutorial</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Tutorial</th>
+      <td *matCellDef="let project" mat-cell>
         {{ project.shortTutorialDescription() }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="target" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Target</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Target</th>
+      <td *matCellDef="let project" mat-cell>
         <f-grade-icon [grade]="project.targetGrade" [unit]="unit"></f-grade-icon>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="submitted-as" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Submitted as</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Submitted as</th>
+      <td *matCellDef="let project" mat-cell>
         <f-grade-icon [grade]="project.submittedGrade" [unit]="unit"></f-grade-icon>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="submission-date" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Submission Date</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Submission Date</th>
+      <td *matCellDef="let project" mat-cell>
         {{ project.portfolioSubmissionDate | date: 'EEE d MMM y, h:mm a' }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="has-portfolio" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Has Portfolio</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Has Portfolio</th>
+      <td *matCellDef="let project" mat-cell>
         {{ project.hasPortfolio ? 'Yes' : 'No' }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="stats" sticky>
-      <th mat-header-cell *matHeaderCellDef>Stats</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell>Stats</th>
+      <td *matCellDef="let project" mat-cell>
         <div class="flex h-[25px] w-[400px] overflow-hidden rounded">
           @for (bar of project.taskStats; track bar) {
             <div
               class="flex h-[25px] items-center justify-center overflow-hidden"
+              matTooltipDelay="100"
+              matTooltipPosition="above"
+              [matTooltip]="statusLabel(bar.key) + ' ' + bar.value + '%'"
               [ngStyle]="{
                 width: bar.value + '%',
                 background: statusColor(bar.key),
               }"
-              [matTooltip]="statusLabel(bar.key) + ' ' + bar.value + '%'"
-              matTooltipPosition="above"
-              matTooltipDelay="100"
             >
               @if (bar.key === 'not_started') {
                 <span class="text-xs text-black"> {{ bar.value }}% </span>
@@ -261,37 +261,37 @@
     </ng-container>
 
     <ng-container matColumnDef="grade" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Grade</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Grade</th>
+      <td *matCellDef="let project" mat-cell>
         {{ project.grade }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="actions" sticky>
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>View</th>
-      <td mat-cell *matCellDef="let project">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>View</th>
+      <td *matCellDef="let project" mat-cell>
         <button mat-icon-button (click)="openProject($event, project)">
           <mat-icon>launch</mat-icon>
         </button>
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
     <tr
-      mat-row
       *matRowDef="let project; columns: displayedColumns"
+      mat-row
       (click)="selectStudent(project)"
     ></tr>
 
-    <tr class="mat-row w-full" *matNoDataRow>
+    <tr *matNoDataRow class="mat-row w-full">
       <td class="mat-cell w-full p-3 text-center" colspan="4">No students found</td>
     </tr>
   </table>
 
   <mat-paginator
-    [pageSizeOptions]="[10, 25, 50, 100]"
-    [pageSize]="25"
     [disabled]="loading"
     [hidden]="loading"
+    [pageSize]="25"
+    [pageSizeOptions]="[10, 25, 50, 100]"
   ></mat-paginator>
 </div>

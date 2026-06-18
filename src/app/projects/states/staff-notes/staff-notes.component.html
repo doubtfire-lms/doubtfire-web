@@ -32,12 +32,12 @@
           </div>
         }
         <mat-card
-          [id]="'note-' + note.id"
           class="mb-2.5 p-3"
-          (mouseover)="hoveredNoteId = note.id"
+          [id]="'note-' + note.id"
           (mouseout)="hoveredNoteId = null"
+          (mouseover)="hoveredNoteId = note.id"
         >
-          <div [hidden]="hoveredNoteId !== note.id" class="absolute bottom-3 right-3 flex">
+          <div class="absolute bottom-3 right-3 flex" [hidden]="hoveredNoteId !== note.id">
             @if (note.authorIsMe) {
               <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
             }
@@ -46,14 +46,14 @@
           </div>
           <div class="flex justify-between">
             <mat-card-title class="flex items-center">
-              <user-icon size="25" [user]="note.user" style="margin-right: 8px"></user-icon>
+              <user-icon size="25" style="margin-right: 8px" [user]="note.user"></user-icon>
               {{ note.user?.firstName }} {{ note.user?.lastName }}</mat-card-title
             >
             <div class="flex items-center">
               <mat-card-subtitle
-                [matTooltip]="note.createdAt | localizedDateTime"
                 matTooltipPosition="above"
                 matTooltipShowDelay="1000"
+                [matTooltip]="note.createdAt | localizedDateTime"
                 >{{ note.createdAt | humanizedDate }}</mat-card-subtitle
               >
             </div>
@@ -64,15 +64,15 @@
               <mat-form-field appearance="outline" class="flex w-full items-center">
                 <mat-label>Update Note</mat-label>
                 <textarea
-                  (input)="autoResizeStaffNoteEditor()"
                   #staffNoteEditor
+                  class="w-full resize-none overflow-hidden px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
                   matInput
                   [(ngModel)]="editingNoteText"
-                  class="w-full resize-none overflow-hidden px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
+                  (input)="autoResizeStaffNoteEditor()"
                 ></textarea>
                 <div class="flex justify-end gap-1">
-                  <button mat-raised-button color="" (click)="cancelEditingNote()">Cancel</button>
-                  <button mat-raised-button color="primary" (click)="updateNote(note)">
+                  <button color="" mat-raised-button (click)="cancelEditingNote()">Cancel</button>
+                  <button color="primary" mat-raised-button (click)="updateNote(note)">
                     Update Note
                   </button>
                 </div>
@@ -115,12 +115,12 @@
     <mat-form-field appearance="outline" class="flex w-full items-center">
       <mat-label>Staff Note</mat-label>
       <textarea
+        class="w-full resize-none px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
         matInput
         [(ngModel)]="noteText"
-        class="w-full resize-none px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
       ></textarea>
       <div class="flex justify-end">
-        <button mat-raised-button color="primary" (click)="submitNote()">Submit</button>
+        <button color="primary" mat-raised-button (click)="submitNote()">Submit</button>
       </div>
     </mat-form-field>
   </div>

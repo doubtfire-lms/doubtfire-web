@@ -11,8 +11,8 @@
       <p>{{ taskDefinition.description }}</p></mat-card-subtitle
     >
     <f-task-prerequisites-card
-      [taskDefinition]="taskDefinition"
       [task]="task"
+      [taskDefinition]="taskDefinition"
     ></f-task-prerequisites-card>
     @if (!task.hasPrerequisiteTasks()) {
       <div class="w-full p-3 text-center text-gray-400">This task has no prerequisites.</div>
@@ -34,15 +34,15 @@
           </mat-card-subtitle>
           <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="task-definition">
-              <th mat-header-cell *matHeaderCellDef>Task</th>
-              <td mat-cell *matCellDef="let link">
+              <th *matHeaderCellDef mat-header-cell>Task</th>
+              <td *matCellDef="let link" mat-cell>
                 {{ link.taskDefinition?.abbreviation }} {{ link.taskDefinition?.name }}
               </td>
             </ng-container>
 
             <ng-container matColumnDef="current-status">
-              <th mat-header-cell *matHeaderCellDef>Submission Open</th>
-              <td mat-cell *matCellDef="let link">
+              <th *matHeaderCellDef mat-header-cell>Submission Open</th>
+              <td *matCellDef="let link" mat-cell>
                 @if (link.taskDefinition.projectTask(project).blockedByPrerequisiteTasks()) {
                   <mat-icon>block_outlined</mat-icon>
                 } @else {
@@ -56,17 +56,17 @@
             </ng-container>
 
             <ng-container matColumnDef="required-status">
-              <th mat-header-cell *matHeaderCellDef class="whitespace-nowrap">Required Status</th>
-              <td mat-cell *matCellDef="let link">
+              <th *matHeaderCellDef class="whitespace-nowrap" mat-header-cell>Required Status</th>
+              <td *matCellDef="let link" mat-cell>
                 <status-icon
-                  matTooltip=""
                   matBadgePosition="before"
+                  matTooltip=""
                   [status]="link.taskStatus ?? 'complete'"
                 ></status-icon>
               </td>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
           </table>
         </mat-card-content>
       </mat-card>

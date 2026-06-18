@@ -1,18 +1,18 @@
-<table #upreqTable mat-table [dataSource]="taskDefinition.uploadRequirements" class="table-fixed">
+<table #upreqTable class="table-fixed" mat-table [dataSource]="taskDefinition.uploadRequirements">
   <!-- File name Column -->
   <ng-container matColumnDef="file-name" sticky>
-    <th style="width: 30%" mat-header-cell *matHeaderCellDef>Filename</th>
-    <td style="width: 30%" mat-cell *matCellDef="let upreq">
+    <th *matHeaderCellDef mat-header-cell style="width: 30%">Filename</th>
+    <td *matCellDef="let upreq" mat-cell style="width: 30%">
       <mat-form-field appearance="outline">
-        <input matInput [(ngModel)]="upreq.name" required />
+        <input matInput required [(ngModel)]="upreq.name" />
       </mat-form-field>
     </td>
   </ng-container>
 
   <!-- File Type Column -->
   <ng-container matColumnDef="file-type" sticky>
-    <th style="width: 20%" mat-header-cell *matHeaderCellDef>Type</th>
-    <td style="width: 20%" mat-cell *matCellDef="let upreq">
+    <th *matHeaderCellDef mat-header-cell style="width: 20%">Type</th>
+    <td *matCellDef="let upreq" mat-cell style="width: 20%">
       <mat-select placeholder="File Type" [(ngModel)]="upreq.type">
         <mat-option value="code">Code</mat-option>
         <mat-option value="document">Document</mat-option>
@@ -22,10 +22,20 @@
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="submission-history" sticky>
+    <th *matHeaderCellDef mat-header-cell style="width: 15%">Submission History</th>
+    <td *matCellDef="let upreq" mat-cell style="width: 15%">
+      <mat-checkbox
+        matTooltip="Retain this file in the task's submission history"
+        [(ngModel)]="upreq.submissionHistory"
+      ></mat-checkbox>
+    </td>
+  </ng-container>
+
   <!-- TurnItIn Check Column -->
   <ng-container matColumnDef="tii-check" sticky>
-    <th style="width: 20%" mat-header-cell *matHeaderCellDef>Check Similarity</th>
-    <td style="width: 20%" mat-cell *matCellDef="let upreq">
+    <th *matHeaderCellDef mat-header-cell style="width: 20%">Check Similarity</th>
+    <td *matCellDef="let upreq" mat-cell style="width: 20%">
       @if (upreq.type === 'document' && tiiEnabled()) {
         <mat-checkbox [(ngModel)]="upreq.tiiCheck">TurnItIn</mat-checkbox>
       }
@@ -37,11 +47,11 @@
 
   <!-- Flag Pct -->
   <ng-container matColumnDef="flag-pct" sticky>
-    <th style="width: 20%" mat-header-cell *matHeaderCellDef>Flag At</th>
-    <td style="width: 20%" mat-cell *matCellDef="let upreq">
+    <th *matHeaderCellDef mat-header-cell style="width: 20%">Flag At</th>
+    <td *matCellDef="let upreq" mat-cell style="width: 20%">
       @if (upreq.type === 'document' && upreq.tiiCheck) {
         <mat-form-field appearance="outline" style="width: 7em">
-          <input matInput [(ngModel)]="upreq.tiiPct" type="number" />
+          <input matInput type="number" [(ngModel)]="upreq.tiiPct" />
           <span matTextSuffix>&nbsp;%</span>
         </mat-form-field>
       }
@@ -50,12 +60,12 @@
 
   <!-- Actions -->
   <ng-container matColumnDef="row-actions" sticky>
-    <th style="width: 10%" mat-header-cell *matHeaderCellDef></th>
-    <td style="width: 10%" mat-cell *matCellDef="let upreq">
+    <th *matHeaderCellDef mat-header-cell style="width: 10%"></th>
+    <td *matCellDef="let upreq" mat-cell style="width: 10%">
       <button
-        mat-icon-button
         aria-label="delete upload requirement"
         color="warn"
+        mat-icon-button
         (click)="removeUpReq(upreq)"
       >
         <mat-icon>delete</mat-icon>
@@ -65,11 +75,11 @@
 
   <!-- Disclaimer column -->
   <ng-container matColumnDef="actions">
-    <td mat-footer-cell *matFooterCellDef [colSpan]="columns.length">
+    <td *matFooterCellDef mat-footer-cell [colSpan]="columns.length">
       <mat-toolbar>
         <mat-toolbar-row>
           <span class="flex flex-grow"></span>
-          <button mat-flat-button color="primary" (click)="addUpReq()">
+          <button color="primary" mat-flat-button (click)="addUpReq()">
             <mat-icon>add</mat-icon> Add
           </button>
         </mat-toolbar-row>
@@ -77,10 +87,16 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="columns"></tr>
-  <tr mat-row *matRowDef="let row; columns: columns" class="table-row"></tr>
-  <tr mat-footer-row *matFooterRowDef="['actions']"></tr>
+  <tr *matHeaderRowDef="columns" mat-header-row></tr>
+  <tr *matRowDef="let row; columns: columns" class="table-row" mat-row></tr>
+  <tr *matFooterRowDef="['actions']" mat-footer-row></tr>
 </table>
+
+@if (missingOverseerSubmissionHistory) {
+  <div class="mt-2 text-sm text-red-700">
+    Overseer requires at least one upload requirement to be retained in submission history.
+  </div>
+}
 
 @if (taskDefinition.needsJplag) {
   <div class="flex flex-grow flex-row gap-2.5">
@@ -111,7 +127,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="basis-1/2">
       <mat-label>Similarity percent to flag for JPLAG checks</mat-label>
-      <input matInput [(ngModel)]="taskDefinition.plagiarismWarnPct" type="number" />
+      <input matInput type="number" [(ngModel)]="taskDefinition.plagiarismWarnPct" />
     </mat-form-field>
   </div>
   <div class="flex flex-grow">

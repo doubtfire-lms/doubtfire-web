@@ -14,6 +14,7 @@ import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global
 interface AuthResponse {
   user: object;
   auth_token: string;
+  auth_token_expiry: string;
   lti_token?: string;
 }
 
@@ -175,6 +176,7 @@ export class AuthenticationService {
 
     // Set the user's authentication token for access to api.
     user.authenticationToken = response['auth_token'];
+    user.authenticationTokenExpiry = response['auth_token_expiry'];
 
     // Record the current user
     this.userService.currentUser = user;

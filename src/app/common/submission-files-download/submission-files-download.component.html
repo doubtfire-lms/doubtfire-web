@@ -6,18 +6,18 @@
     }
 
     @case ('downloaded') {
-      <mat-icon color="primary" class="size-12 text-5xl">check_circle</mat-icon>
+      <mat-icon class="size-12 text-5xl" color="primary">check_circle</mat-icon>
       <p class="mat-body-1">Submitted files downloaded.</p>
-      <button mat-raised-button color="primary" type="button" (click)="download()">
+      <button color="primary" mat-raised-button type="button" (click)="download()">
         <mat-icon>download</mat-icon>
         Download again
       </button>
     }
 
     @case ('failed') {
-      <mat-icon color="warn" class="size-12 text-5xl">error</mat-icon>
+      <mat-icon class="size-12 text-5xl" color="warn">error</mat-icon>
       <p class="mat-body-1">Could not download submitted files.</p>
-      <button mat-raised-button color="primary" type="button" (click)="download()">
+      <button color="primary" mat-raised-button type="button" (click)="download()">
         <mat-icon>download</mat-icon>
         Try again
       </button>

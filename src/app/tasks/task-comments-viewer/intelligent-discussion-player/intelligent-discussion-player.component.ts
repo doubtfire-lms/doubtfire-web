@@ -40,7 +40,7 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   }
 
   setPromptTrack(track: string, promptNumber?: number) {
-    let url: string = '';
+    let url: string;
     if (track === 'prompt') {
       url = this.discussion.generateDiscussionPromptUrl(promptNumber);
     } else {

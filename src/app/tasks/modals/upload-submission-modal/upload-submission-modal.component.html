@@ -3,9 +3,9 @@
   <mat-form-field appearance="outline" class="my-2.5 mr-[24px] mt-[22px] w-full lg:max-w-sm">
     <mat-label>Submission type</mat-label>
     <mat-select
+      [disabled]="uploadStarted || isUploading"
       [(ngModel)]="submissionType"
       (ngModelChange)="onSubmissionTypeChange($event)"
-      [disabled]="uploadStarted || isUploading"
     >
       @for (option of submissionTypeOptions; track option.id) {
         <mat-option [value]="option.id">{{ option.label }}</mat-option>
@@ -29,8 +29,8 @@
 
           <f-group-member-contribution-assigner
             [isTestSubmission]="data.isTestSubmission"
-            [task]="task"
             [project]="task.project"
+            [task]="task"
             [(team)]="team"
           >
           </f-group-member-contribution-assigner>
@@ -63,17 +63,17 @@
         <f-file-uploader
           #fileUploader
           [files]="fileRequirements"
-          [url]="uploadUrl"
+          [onBeforeUpload]="onBeforeUpload"
+          [onClickFailureCancel]="cancel"
+          [onComplete]="onUploadComplete"
+          [onSuccess]="onUploadSuccess"
           [payload]="payload"
-          [singleDropZone]="true"
-          [showUploadButton]="false"
           [resetAfterUpload]="false"
+          [showUploadButton]="false"
+          [singleDropZone]="true"
+          [url]="uploadUrl"
           (isReadyChange)="onReadyChange($event)"
           (uploadReady)="onUploaderReady($event)"
-          [onClickFailureCancel]="cancel"
-          [onBeforeUpload]="onBeforeUpload"
-          [onSuccess]="onUploadSuccess"
-          [onComplete]="onUploadComplete"
         >
         </f-file-uploader>
       </mat-card-content>
@@ -108,8 +108,8 @@
               <textarea
                 matInput
                 rows="4"
-                [(ngModel)]="comment"
                 [placeholder]="commentPlaceholder"
+                [(ngModel)]="comment"
               ></textarea>
             </mat-form-field>
 
@@ -132,9 +132,9 @@
 
               <div>
                 <button
+                  color="primary"
                   mat-stroked-button
                   type="button"
-                  color="primary"
                   (click)="showPlagiarism = !showPlagiarism"
                 >
                   Plagiarism and collusion
@@ -156,17 +156,17 @@
 
 @if (!uploadStarted) {
   <mat-dialog-actions align="end">
-    <button mat-button color="warn" type="button" class="mr-auto" (click)="cancel()">
+    <button class="mr-auto" color="warn" mat-button type="button" (click)="cancel()">
       Cancel Submission
     </button>
 
     @if (isGroupStage) {
       <button
-        mat-raised-button
         color="primary"
+        mat-raised-button
         type="button"
-        (click)="goToDetailsStage()"
         [disabled]="shouldDisableNext()"
+        (click)="goToDetailsStage()"
       >
         Next
       </button>
@@ -174,11 +174,11 @@
 
     @if (isDetailsStage && showCommentsSection) {
       <button
-        mat-raised-button
         color="primary"
+        mat-raised-button
         type="button"
-        (click)="goToCommentsStage()"
         [disabled]="shouldDisableNext()"
+        (click)="goToCommentsStage()"
       >
         Next
       </button>
@@ -194,12 +194,12 @@
 
     @if ((!showCommentsSection && isDetailsStage) || isCommentsStage) {
       <button
-        mat-flat-button
         color="primary"
+        mat-flat-button
         type="button"
-        (click)="uploadButtonClicked()"
         [disabled]="shouldDisableSubmit()"
         [matTooltip]="submitTooltip"
+        (click)="uploadButtonClicked()"
       >
         Upload Submission
       </button>

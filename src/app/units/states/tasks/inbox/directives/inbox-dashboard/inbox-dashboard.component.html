@@ -3,8 +3,8 @@
     <div class="z-10 flex w-full shrink-0 items-center gap-1">
       <mat-tab-group
         class="w-full"
-        [selectedIndex]="currentIndex"
         dynamicHeight
+        [selectedIndex]="currentIndex"
         (selectedTabChange)="onTabChange($event)"
       >
         <mat-tab label="Submission"></mat-tab>
@@ -42,10 +42,10 @@
       </mat-tab-group>
 
       <button
-        mat-icon-button
-        [matMenuTriggerFor]="taskMenu"
         aria-label="Task actions"
         class="shrink-0 text-gray-600"
+        mat-icon-button
+        [matMenuTriggerFor]="taskMenu"
       >
         <mat-icon>more_vert</mat-icon>
       </button>

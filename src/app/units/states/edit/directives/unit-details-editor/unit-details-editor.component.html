@@ -161,7 +161,7 @@
   <mat-card appearance="outlined" class="gap-1 p-[16px]">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Teaching Period</mat-label>
-      <mat-select [(ngModel)]="unit.teachingPeriod" placeholder="Select Teaching Period">
+      <mat-select placeholder="Select Teaching Period" [(ngModel)]="unit.teachingPeriod">
         <mat-option [value]="undefined">None</mat-option>
         @for (period of teachingPeriods; track period) {
           <mat-option [value]="period">{{ period.name }}</mat-option>
@@ -186,11 +186,11 @@
       } @else {
         <mat-form-field appearance="outline" class="w-full" disabled>
           <mat-label>{{ unit.teachingPeriod.name }} Start Date</mat-label>
-          <input matInput [value]="unit.teachingPeriod?.startDate | date" disabled readonly />
+          <input disabled matInput readonly [value]="unit.teachingPeriod?.startDate | date" />
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-full" disabled>
           <mat-label>{{ unit.teachingPeriod.name }} End Date</mat-label>
-          <input matInput [value]="unit.teachingPeriod?.endDate | date" disabled readonly />
+          <input disabled matInput readonly [value]="unit.teachingPeriod?.endDate | date" />
         </mat-form-field>
       }
     </div>
@@ -208,7 +208,7 @@
 
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Draft Learning Summary</mat-label>
-      <mat-select [(ngModel)]="unit.draftTaskDefinition" placeholder="Select Learning Summary Task">
+      <mat-select placeholder="Select Learning Summary Task" [(ngModel)]="unit.draftTaskDefinition">
         <mat-option [value]="undefined">None</mat-option>
         @for (td of taskDefinitions; track td) {
           <mat-option [value]="td">{{ td.abbreviation }} - {{ td.name }}</mat-option>
@@ -234,9 +234,9 @@
         <mat-label>Feedback warning after (days)</mat-label>
         <input
           matInput
-          type="number"
           min="0"
           required
+          type="number"
           [(ngModel)]="unit.feedbackWarningThresholdDays"
         />
         <mat-hint>
@@ -249,9 +249,9 @@
         <mat-label>Show task in overflow queue after (days)</mat-label>
         <input
           matInput
-          type="number"
           min="0"
           required
+          type="number"
           [(ngModel)]="unit.feedbackOverflowThresholdDays"
         />
         <mat-hint>
@@ -288,8 +288,8 @@
 
     <div>
       <mat-slide-toggle
-        (change)="onToggleAssessInPortfolio($event)"
         [(ngModel)]="unit.markLateSubmissionsAsAssessInPortfolio"
+        (change)="onToggleAssessInPortfolio($event)"
         >Has tasks assessed in portfolio</mat-slide-toggle
       >
       <p>
@@ -378,7 +378,7 @@
   }
 
   <div class="flex w-full justify-end gap-3">
-    <button mat-raised-button (click)="addD2lData()" [hidden]="!d2lEnabled.value">
+    <button mat-raised-button [hidden]="!d2lEnabled.value" (click)="addD2lData()">
       D2L Details
     </button>
     <button
@@ -389,6 +389,6 @@
     >
       Copy
     </button>
-    <button mat-raised-button color="primary" (click)="saveUnit()">Update</button>
+    <button color="primary" mat-raised-button (click)="saveUnit()">Update</button>
   </div>
 </div>

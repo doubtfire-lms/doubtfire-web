@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 import {ProjectService} from 'src/app/api/services/project.service';
+import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 
@@ -14,7 +15,6 @@ export class ProgressDashboardComponent implements OnInit {
   @Input() project: Project;
   @Output() doUpdateTargetGrade: EventEmitter<void> = new EventEmitter();
 
-  tutor: boolean;
   grades: {names: Record<number, string>; values: number[]} = {
     names: this.gradeService.grades,
     values: this.gradeService.gradeValues,
@@ -28,6 +28,7 @@ export class ProgressDashboardComponent implements OnInit {
     private gradeService: GradeService,
     private projectService: ProjectService,
     private alertService: AlertService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -37,7 +38,13 @@ export class ProgressDashboardComponent implements OnInit {
     );
     this.updateTaskCompletionValues();
     this.project?.refreshBurndownChartData();
-    this.tutor = this.project.myRole === 'Tutor' ? true : false;
+  }
+
+  public get viewingOtherStudentProject(): boolean {
+    const role = this.project?.unit?.myRole;
+    const currentUser = this.userService.currentUser;
+
+    return !!role && role !== 'Student' && this.project?.student?.id !== currentUser?.id;
   }
 
   updateTargetGrade(newGrade: number): void {
