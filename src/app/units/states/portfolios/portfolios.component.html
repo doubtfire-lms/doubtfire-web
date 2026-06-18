@@ -32,7 +32,15 @@
         }
         @case ('staff-notes') {
           @if (selectedProject) {
-            <f-staff-notes class="h-screen" [project]="selectedProject"></f-staff-notes>
+            <div class="h-[calc(100vh-250px)] p-3">
+              <h2>Staff Notes for {{ selectedProject.student.name }}</h2>
+              <p>
+                Use these notes for private staff discussions about the student. Students cannot
+                view them.
+              </p>
+
+              <f-staff-notes class="h-full" [project]="selectedProject"></f-staff-notes>
+            </div>
           }
         }
         @case ('portfolio') {
