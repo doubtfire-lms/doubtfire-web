@@ -22,7 +22,7 @@ interface AddEngagementForm {
   standalone: false,
 })
 export class AddEngagementDialogComponent {
-  readonly engagementTypes = ['Attendance', 'Discuss', 'Forum', 'Email', 'Negative'];
+  readonly engagementTypes = ['Discuss', 'Attendance', 'Forum', 'Email', 'Negative'];
   readonly notePlaceholders: Record<string, string> = {
     attendance: 'Attended tutorial and participated in class activities.',
     discuss: 'Discussed tasks during tutorial.',
