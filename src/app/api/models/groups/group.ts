@@ -4,7 +4,13 @@ import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {GroupSet, Project, ProjectService, Tutorial, Unit} from '../doubtfire-model';
+import {
+  GroupSet,
+  Project,
+  ProjectService,
+  Tutorial,
+  Unit,
+} from '../doubtfire-model';
 
 export interface MemberContribution {
   project: Project;
@@ -22,7 +28,8 @@ export class Group extends Entity {
   public locked: boolean;
   public studentCount: number;
 
-  public readonly projectsCache: EntityCache<Project> = new EntityCache<Project>();
+  public readonly projectsCache: EntityCache<Project> =
+    new EntityCache<Project>();
 
   public readonly unit: Unit;
 
@@ -51,7 +58,10 @@ export class Group extends Entity {
     return this.unit.id;
   }
 
-  public toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+  public toJson<T extends Entity>(
+    mappingData: EntityMapping<T>,
+    ignoreKeys?: string[],
+  ): object {
     return {
       group: super.toJson(mappingData, ignoreKeys),
     };
@@ -78,13 +88,19 @@ export class Group extends Entity {
   public addMember(member: Project, onSuccess?: () => void) {
     const alerts = AppInjector.get(AlertService);
     if (!member) {
-      alerts.error('The student you are trying to add to the group could not be found.', 6000);
+      alerts.error(
+        'The student you are trying to add to the group could not be found.',
+        6000,
+      );
       return;
     }
 
     const httpClient = AppInjector.get(HttpClient);
     httpClient
-      .post(`${AppInjector.get(DoubtfireConstants).API_URL}/${this.memberUri(member)}`, {})
+      .post(
+        `${AppInjector.get(DoubtfireConstants).API_URL}/${this.memberUri(member)}`,
+        {},
+      )
       .subscribe({
         next: () => {
           // Get old group..
@@ -101,7 +117,10 @@ export class Group extends Entity {
 
           // Has members so add this member
           this.projectsCache.add(member);
-          alerts.success(`${member.student.name} was added to '${this.name}'`, 3000);
+          alerts.success(
+            `${member.student.name} was added to '${this.name}'`,
+            3000,
+          );
           if (onSuccess) onSuccess();
         },
         error: (message) => alerts.error(message || 'Unknown Error', 6000),
@@ -111,20 +130,29 @@ export class Group extends Entity {
   public removeMember(member: Project) {
     const alerts = AppInjector.get(AlertService);
     if (!member) {
-      alerts.error('The student you are trying to add to the group could not be found.', 6000);
+      alerts.error(
+        'The student you are trying to add to the group could not be found.',
+        6000,
+      );
       return;
     }
 
     const httpClient = AppInjector.get(HttpClient);
     httpClient
-      .delete(`${AppInjector.get(DoubtfireConstants).API_URL}/${this.memberUri(member)}`, {})
+      .delete(
+        `${AppInjector.get(DoubtfireConstants).API_URL}/${this.memberUri(member)}`,
+        {},
+      )
       .subscribe({
         next: () => {
           // Get old group..
           this.projectsCache.delete(member);
           member.groupCache.delete(this);
           this.studentCount--;
-          alerts.success(`${member.student.name} was removed from '${this.name}'`, 3000);
+          alerts.success(
+            `${member.student.name} was removed from '${this.name}'`,
+            3000,
+          );
         },
         error: (message) => alerts.error(message || 'Unknown Error', 6000),
       });
@@ -155,11 +183,17 @@ export class Group extends Entity {
     if (this.groupSet.capacity == null) {
       return true;
     } else {
-      return this.memberCount < this.groupSet.capacity + this.capacityAdjustment;
+      return (
+        this.memberCount < this.groupSet.capacity + this.capacityAdjustment
+      );
     }
   }
 
-  public contributionSum(contrib: MemberContribution[], member?: Project, value?: number): number {
+  public contributionSum(
+    contrib: MemberContribution[],
+    member?: Project,
+    value?: number,
+  ): number {
     return contrib.reduce<number>((prevValue: number, current) => {
       if (current.project === member) {
         return prevValue + value;

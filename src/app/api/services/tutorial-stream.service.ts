@@ -6,7 +6,8 @@ import API_URL from 'src/app/config/constants/apiUrl';
 
 @Injectable()
 export class TutorialStreamService extends CachedEntityService<TutorialStream> {
-  protected readonly endpointFormat = 'units/:unit_id:/tutorial_streams/:abbreviation:';
+  protected readonly endpointFormat =
+    'units/:unit_id:/tutorial_streams/:abbreviation:';
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);

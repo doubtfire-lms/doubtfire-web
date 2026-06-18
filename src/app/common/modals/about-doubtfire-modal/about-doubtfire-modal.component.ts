@@ -48,10 +48,12 @@ export class AboutDoubtfireModal {
     this.loaded = false;
     this.aboutDialogData = new AboutDialogData();
 
-    this.aboutDialogData.mainContributors = this.constants.mainContributors.map((c) => ({
-      avatar_url: '/assets/images/person-unknown.gif',
-      login: c,
-    })) as GithubProfile[];
+    this.aboutDialogData.mainContributors = this.constants.mainContributors.map(
+      (c) => ({
+        avatar_url: '/assets/images/person-unknown.gif',
+        login: c,
+      }),
+    ) as GithubProfile[];
   }
 
   public show(): void {
@@ -96,7 +98,9 @@ export class AboutDoubtfireModal {
   private getContributorData() {
     this.aboutDoubtfireModalService.getAPIContributors(this.aboutDialogData);
     this.aboutDoubtfireModalService.getWebContributors(this.aboutDialogData);
-    this.aboutDoubtfireModalService.getDoubtfireIOWebContributors(this.aboutDialogData);
+    this.aboutDoubtfireModalService.getDoubtfireIOWebContributors(
+      this.aboutDialogData,
+    );
     this.aboutDoubtfireModalService.getDeployContributors(this.aboutDialogData);
   }
 }

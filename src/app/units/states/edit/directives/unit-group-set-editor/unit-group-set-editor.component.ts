@@ -64,15 +64,22 @@ export class UnitGroupSetEditorComponent implements OnInit {
   addGroupSet(): void {
     const groupSet = this.groupSetService.createInstanceFrom({}, this.unit);
     const gsCount = this.unit.groupSets.length;
-    groupSet.name = gsCount === 0 ? 'Group Work' : `Group Work Set ${gsCount + 1}`;
+    groupSet.name =
+      gsCount === 0 ? 'Group Work' : `Group Work Set ${gsCount + 1}`;
 
-    this.groupSetService.store(groupSet, {cache: this.unit.groupSetsCache}).subscribe({
-      next: (createdGroupSet) => {
-        this.alertService.success('Group set created.', 2000);
-        this.selectGroupSet(createdGroupSet ?? groupSet);
-      },
-      error: (message) => this.alertService.error(`Failed to create group set. ${message}`, 6000),
-    });
+    this.groupSetService
+      .store(groupSet, {cache: this.unit.groupSetsCache})
+      .subscribe({
+        next: (createdGroupSet) => {
+          this.alertService.success('Group set created.', 2000);
+          this.selectGroupSet(createdGroupSet ?? groupSet);
+        },
+        error: (message) =>
+          this.alertService.error(
+            `Failed to create group set. ${message}`,
+            6000,
+          ),
+      });
   }
 
   startEditGroupSet(groupSet: GroupSet): void {
@@ -97,9 +104,12 @@ export class UnitGroupSetEditorComponent implements OnInit {
     }
 
     groupSet.name = this.editingGroupSetModel.name;
-    groupSet.allowStudentsToCreateGroups = this.editingGroupSetModel.allowStudentsToCreateGroups;
-    groupSet.allowStudentsToManageGroups = this.editingGroupSetModel.allowStudentsToManageGroups;
-    groupSet.keepGroupsInSameClass = this.editingGroupSetModel.keepGroupsInSameClass;
+    groupSet.allowStudentsToCreateGroups =
+      this.editingGroupSetModel.allowStudentsToCreateGroups;
+    groupSet.allowStudentsToManageGroups =
+      this.editingGroupSetModel.allowStudentsToManageGroups;
+    groupSet.keepGroupsInSameClass =
+      this.editingGroupSetModel.keepGroupsInSameClass;
     groupSet.capacity = this.editingGroupSetModel.capacity;
 
     this.groupSetService.update(groupSet).subscribe({
@@ -107,7 +117,8 @@ export class UnitGroupSetEditorComponent implements OnInit {
         this.alertService.success('Group set updated.', 2000);
         this.cancelEditGroupSet();
       },
-      error: (message) => this.alertService.error(`Failed to update group set. ${message}`, 6000),
+      error: (message) =>
+        this.alertService.error(`Failed to update group set. ${message}`, 6000),
     });
   }
 
@@ -133,15 +144,21 @@ export class UnitGroupSetEditorComponent implements OnInit {
   }
 
   removeGroupSet(groupSet: GroupSet): void {
-    this.groupSetService.delete(groupSet, {cache: this.unit.groupSetsCache}).subscribe({
-      next: () => {
-        if (groupSet === this.selectedGroupSet) {
-          this.selectGroupSet(this.unit.groupSets[0] ?? null);
-        }
-        this.alertService.success('Group set deleted.', 2000);
-      },
-      error: (message) => this.alertService.error(`Failed to delete group set. ${message}`, 6000),
-    });
+    this.groupSetService
+      .delete(groupSet, {cache: this.unit.groupSetsCache})
+      .subscribe({
+        next: () => {
+          if (groupSet === this.selectedGroupSet) {
+            this.selectGroupSet(this.unit.groupSets[0] ?? null);
+          }
+          this.alertService.success('Group set deleted.', 2000);
+        },
+        error: (message) =>
+          this.alertService.error(
+            `Failed to delete group set. ${message}`,
+            6000,
+          ),
+      });
   }
 
   selectGroupSet(groupSet: GroupSet | null): void {

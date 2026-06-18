@@ -16,6 +16,8 @@ export class TutorialStream extends Entity {
   }
 
   public tutorialsIn(unit: Unit): Tutorial[] {
-    return unit.tutorials.filter((tutorial) => tutorial.tutorialStream === this);
+    return unit.tutorials.filter(
+      (tutorial) => tutorial.tutorialStream === this,
+    );
   }
 }

@@ -49,7 +49,9 @@ export class ProgressBurndownChartComponent
   showXAxisLabel: boolean = true;
   xAxisLabel: string = 'Time';
   yAxisLabel: string = 'Tasks Remaining';
-  colorScheme = {domain: ['#AAAAAA', '#777777', '#0079d8', '#E01B5D', 'transparent']};
+  colorScheme = {
+    domain: ['#AAAAAA', '#777777', '#0079d8', '#E01B5D', 'transparent'],
+  };
   yScaleMin: number = 0;
   yScaleMax: number = 100;
 
@@ -90,7 +92,10 @@ export class ProgressBurndownChartComponent
     const formattedData = chartData.map((series) => ({
       name: series.key, // Use the "key" as the "name"
       series: series.values
-        .filter((value) => value[0] >= startDate.getTime() && value[0] <= endDate.getTime()) // Filter values based on the date range
+        .filter(
+          (value) =>
+            value[0] >= startDate.getTime() && value[0] <= endDate.getTime(),
+        ) // Filter values based on the date range
         .map((value) => {
           if (value[1] < 0) {
             value[1] = 0; // If the value is negative, set it to 0
@@ -107,10 +112,12 @@ export class ProgressBurndownChartComponent
     const target = formattedData.find((series) => series.name === 'Target');
     if (target) {
       const start = target.series.find(
-        (point) => point.name === formatDate(new Date(startDate), 'd MMM', locale),
+        (point) =>
+          point.name === formatDate(new Date(startDate), 'd MMM', locale),
       );
       const end = target.series.find(
-        (point) => point.name === formatDate(new Date(endDate), 'd MMM', locale),
+        (point) =>
+          point.name === formatDate(new Date(endDate), 'd MMM', locale),
       );
 
       if (start) start.value = 100; // Update start
@@ -131,8 +138,12 @@ export class ProgressBurndownChartComponent
           }
         });
       } else {
-        const originalSeries = this.temp.find((series) => series.name === event);
-        const seriesIndex = tempData.findIndex((series) => series.name === event);
+        const originalSeries = this.temp.find(
+          (series) => series.name === event,
+        );
+        const seriesIndex = tempData.findIndex(
+          (series) => series.name === event,
+        );
         if (seriesIndex >= 0) {
           tempData[seriesIndex] = JSON.parse(JSON.stringify(originalSeries));
         }

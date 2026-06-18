@@ -11,7 +11,12 @@
     fxLayout="column"
     style="place-content: stretch !important"
   >
-    <div class="h-full" fxLayout="row" fxLayoutAlign="center center" [hidden]="!loading">
+    <div
+      class="h-full"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      [hidden]="!loading"
+    >
       <mat-spinner color="accent" diameter="100" strokeWidth="2"></mat-spinner>
     </div>
 
@@ -33,7 +38,8 @@
             >
               @if (comment.shouldShowTimestamp) {
                 <p id="commentTimestamp" [ngClass]="{own: comment.authorIsMe}">
-                  {{ comment.author.preferredName }} {{ comment.author.lastName }}
+                  {{ comment.author.preferredName }}
+                  {{ comment.author.lastName }}
                   {{ comment.createdAt | humanizedDate }}
                 </p>
               }
@@ -46,9 +52,15 @@
                   'new-comment': comment.isNew,
                 }"
               >
-                @if (!comment.authorIsMe && shouldShowAuthorIcon(comment.commentType)) {
+                @if (
+                  !comment.authorIsMe &&
+                  shouldShowAuthorIcon(comment.commentType)
+                ) {
                   <div class="comment-user-icon-wrapper">
-                    @if (comment.shouldShowAvatar && shouldShowAuthorIcon(comment.commentType)) {
+                    @if (
+                      comment.shouldShowAvatar &&
+                      shouldShowAuthorIcon(comment.commentType)
+                    ) {
                       <user-icon
                         matTooltip="{{ comment.author.name }}"
                         matTooltipPosition="left"
@@ -74,7 +86,10 @@
                         matTooltipShowDelay="1000"
                         [matTooltip]="comment.createdAt | humanizedDate"
                       >
-                        <hr class="hr-text" [attr.data-content]="comment.text" />
+                        <hr
+                          class="hr-text"
+                          [attr.data-content]="comment.text"
+                        />
                       </div>
                     }
 
@@ -87,7 +102,9 @@
                       >
                         <mat-card appearance="outlined" class="w-full self-end">
                           <mat-card-header>
-                            <mat-icon class="m-auto" style="color: #9696969d">group</mat-icon>
+                            <mat-icon class="m-auto" style="color: #9696969d"
+                              >group</mat-icon
+                            >
                           </mat-card-header>
 
                           <mat-card-content
@@ -109,7 +126,9 @@
                       >
                         <mat-card appearance="outlined" class="w-full self-end">
                           <mat-card-header>
-                            <mat-icon class="m-auto" style="color: #9696969d">comment</mat-icon>
+                            <mat-icon class="m-auto" style="color: #9696969d"
+                              >comment</mat-icon
+                            >
                           </mat-card-header>
 
                           <mat-card-content
@@ -131,7 +150,9 @@
                       >
                         <mat-card appearance="outlined" class="w-full self-end">
                           <mat-card-header>
-                            <mat-icon class="m-auto" style="color: #9696969d">how_to_reg</mat-icon>
+                            <mat-icon class="m-auto" style="color: #9696969d"
+                              >how_to_reg</mat-icon
+                            >
                           </mat-card-header>
 
                           <mat-card-content
@@ -146,12 +167,17 @@
 
                     @case ('plan') {
                       <div class="comment-status">
-                        <hr class="hr-text" [attr.data-content]="comment.text" />
+                        <hr
+                          class="hr-text"
+                          [attr.data-content]="comment.text"
+                        />
                       </div>
                     }
 
                     @case ('assessment') {
-                      <div class="comment-assessment mx-auto max-w-[350px] overflow-x-scroll">
+                      <div
+                        class="comment-assessment mx-auto max-w-[350px] overflow-x-scroll"
+                      >
                         @if (overseerEnabled) {
                           <app-task-assessment-comment
                             [comment]="comment"
@@ -164,7 +190,10 @@
                     @case ('scorm') {
                       <div class="comment-scorm">
                         @if (scormEnabled) {
-                          <f-scorm-comment [comment]="comment" [task]="task"></f-scorm-comment>
+                          <f-scorm-comment
+                            [comment]="comment"
+                            [task]="task"
+                          ></f-scorm-comment>
                         }
                       </div>
                     }
@@ -190,13 +219,17 @@
                     @switch (comment.commentType) {
                       @case ('extension') {
                         <div class="comment-extension">
-                          <extension-comment [comment]="comment" [task]="task"> </extension-comment>
+                          <extension-comment [comment]="comment" [task]="task">
+                          </extension-comment>
                         </div>
                       }
 
                       @case ('scorm_extension') {
                         <div class="comment-scorm-extension">
-                          <f-scorm-extension-comment [comment]="comment" [task]="task">
+                          <f-scorm-extension-comment
+                            [comment]="comment"
+                            [task]="task"
+                          >
                           </f-scorm-extension-comment>
                         </div>
                       }
@@ -208,7 +241,10 @@
                           matTooltipShowDelay="1000"
                           [matTooltip]="comment.createdAt | humanizedDate"
                         >
-                          <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
+                          <div
+                            class="markdown-to-html"
+                            [innerHTML]="comment.text | marked"
+                          ></div>
                         </div>
                       }
 
@@ -266,9 +302,9 @@
               @if (comment.lastRead && shouldShowReadReceipt()) {
                 <div class="read-receipt">
                   <user-icon
-                    matTooltip="Read {{ comment.recipientReadTime | humanizedDate }} by {{
-                      comment.recipient.name
-                    }}"
+                    matTooltip="Read {{
+                      comment.recipientReadTime | humanizedDate
+                    }} by {{ comment.recipient.name }}"
                     matTooltipPosition="above"
                     [size]="18"
                     [user]="comment.recipient"

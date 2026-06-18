@@ -82,8 +82,12 @@ export class SignInComponent implements OnInit {
         if (params.isLtiLogin && params.ltik) {
           this.globalState.hideHeader();
           this.userService.currentUser.ltik = params.ltik;
-          return this.router.navigate(['/lti'], {queryParams: {ltik: params.ltik}});
-        } else if (this.userService.currentUser.hasRunFirstTimeSetup === false) {
+          return this.router.navigate(['/lti'], {
+            queryParams: {ltik: params.ltik},
+          });
+        } else if (
+          this.userService.currentUser.hasRunFirstTimeSetup === false
+        ) {
           return this.router.navigateByUrl('/welcome');
         } else {
           this.globalState.goHome();
@@ -123,7 +127,9 @@ export class SignInComponent implements OnInit {
     this.ltiToken = queryParams.ltiToken || params.ltiToken || undefined;
     this.ltik = queryParams.ltik || params.ltik || undefined;
     this.isLtiLogin =
-      (queryParams.isLtiLogin || params.isLtiLogin)?.toLowerCase() === 'true' ? true : false;
+      (queryParams.isLtiLogin || params.isLtiLogin)?.toLowerCase() === 'true'
+        ? true
+        : false;
 
     // wait 2 seconds with rxjs
     const wait = new Promise((resolve) => setTimeout(resolve, 3000));
@@ -212,7 +218,9 @@ export class SignInComponent implements OnInit {
    */
   private actionSignInSuccess(): void {
     this.router.navigateByUrl(
-      this.userService.currentUser.hasRunFirstTimeSetup === false ? '/welcome' : '/home',
+      this.userService.currentUser.hasRunFirstTimeSetup === false
+        ? '/welcome'
+        : '/home',
     );
   }
 

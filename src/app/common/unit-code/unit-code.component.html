@@ -1,5 +1,8 @@
 <f-chip>
-  <div class="flex flex-row items-center justify-center px-2" [style.minWidth.px]="width">
+  <div
+    class="flex flex-row items-center justify-center px-2"
+    [style.minWidth.px]="width"
+  >
     @if (isDualBadge && shiftBetweenBadges) {
       @for (part of unitCodeParts; track part; let i = $index) {
         @if (i === currentIndex) {

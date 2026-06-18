@@ -56,10 +56,16 @@ module.exports = tseslint.config(
     processor: angular.processInlineTemplates,
     // Override specific rules for TypeScript files (these will take priority over the extended configs above)
     rules: {
-      '@angular-eslint/component-max-inline-declarations': ['error', {template: 0, styles: 0}],
+      '@angular-eslint/component-max-inline-declarations': [
+        'error',
+        {template: 0, styles: 0},
+      ],
       '@angular-eslint/prefer-inject': 'off',
       '@angular-eslint/prefer-standalone': 'off',
-      '@typescript-eslint/consistent-generic-constructors': ['error', 'type-annotation'],
+      '@typescript-eslint/consistent-generic-constructors': [
+        'error',
+        'type-annotation',
+      ],
       '@typescript-eslint/no-inferrable-types': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',

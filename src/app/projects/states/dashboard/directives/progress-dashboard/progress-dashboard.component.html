@@ -1,4 +1,6 @@
-<div class="overflow-hidden rounded-lg bg-white shadow-md max-[991px]:mt-6 min-[992px]:mt-0">
+<div
+  class="overflow-hidden rounded-lg bg-white shadow-md max-[991px]:mt-6 min-[992px]:mt-0"
+>
   <div class="items-center bg-neutral-100 px-3.5">
     <h4 class="py-3.5 font-semibold text-gray-800">
       Progress Dashboard
@@ -10,7 +12,10 @@
   <div class="grid grid-cols-1 items-stretch gap-3.5 p-3.5 xl:grid-cols-2">
     <!-- Task Planner Card -->
     <div class="size-full xl:col-span-1">
-      <f-task-planner-card class="block size-full" [project]="project"></f-task-planner-card>
+      <f-task-planner-card
+        class="block size-full"
+        [project]="project"
+      ></f-task-planner-card>
     </div>
 
     <!-- Target Grade Card -->
@@ -41,7 +46,10 @@
             </mat-form-field>
             <div class="ml-0.5 py-1 opacity-70">
               To change your target grade, use the
-              <a class="cursor-pointer underline" [routerLink]="['/projects', project.id, 'plan']">
+              <a
+                class="cursor-pointer underline"
+                [routerLink]="['/projects', project.id, 'plan']"
+              >
                 Task Planner
               </a>
             </div>
@@ -52,20 +60,28 @@
 
     <!-- Unit learning outcomes -->
     <div class="xl:col-span-2">
-      <f-task-ilos-card [iloContextType]="'Unit'" [unit]="project.unit"></f-task-ilos-card>
+      <f-task-ilos-card
+        [iloContextType]="'Unit'"
+        [unit]="project.unit"
+      ></f-task-ilos-card>
     </div>
 
     <!-- Engagement Passport Card -->
     <div class="xl:col-span-2">
-      <f-engagement-passport-card [project]="project"></f-engagement-passport-card>
+      <f-engagement-passport-card
+        [project]="project"
+      ></f-engagement-passport-card>
     </div>
 
-    <div class="grid grid-cols-1 items-stretch gap-3.5 xl:col-span-2 xl:grid-cols-2">
+    <div
+      class="grid grid-cols-1 items-stretch gap-3.5 xl:col-span-2 xl:grid-cols-2"
+    >
       <mat-card appearance="outlined" class="max-h-[600px]">
         <mat-card-header>
           <mat-card-title>Progress Burndown</mat-card-title>
           <mat-card-subtitle>
-            The burndown chart shows how much work remains for you to achieve your target grade.
+            The burndown chart shows how much work remains for you to achieve
+            your target grade.
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content class="overflow-hidden">
@@ -88,7 +104,9 @@
       <mat-card appearance="outlined" class="max-h-[600px]">
         <mat-card-header>
           <mat-card-title>Task Statuses</mat-card-title>
-          <mat-card-subtitle>Breakdown summary of each of your task statuses</mat-card-subtitle>
+          <mat-card-subtitle
+            >Breakdown summary of each of your task statuses</mat-card-subtitle
+          >
         </mat-card-header>
         <mat-card-content>
           <f-task-visualisation

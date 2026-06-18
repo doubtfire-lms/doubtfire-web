@@ -2,7 +2,11 @@ import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, tap} from 'rxjs';
-import {Project, ProjectService, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  Project,
+  ProjectService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {StaffNote} from '../models/staff-note';
 
@@ -22,7 +26,9 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     this.mapping.addKeys('id', 'note', 'createdAt', 'updatedAt', 'replyToId', {
       keys: ['user', 'user_id'],
       toEntityFn: (data: object, key: string, staffNote: StaffNote) => {
-        const userRole = staffNote.project.unit.staff.find((s) => s.user.id === data['user_id']);
+        const userRole = staffNote.project.unit.staff.find(
+          (s) => s.user.id === data['user_id'],
+        );
 
         // const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
         return userRole.user;
@@ -36,7 +42,11 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     return new StaffNote(other);
   }
 
-  public addNote(project: Project, text: string, originalNote: StaffNote): Observable<StaffNote> {
+  public addNote(
+    project: Project,
+    text: string,
+    originalNote: StaffNote,
+  ): Observable<StaffNote> {
     const pathId = {
       projectId: project.id,
     };
@@ -48,7 +58,9 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
 
     body.append('note', text);
 
-    const opts: RequestOptions<StaffNote> = {endpointFormat: this.endpointFormat};
+    const opts: RequestOptions<StaffNote> = {
+      endpointFormat: this.endpointFormat,
+    };
     opts.cache = project.staffNoteCache;
     opts.body = body;
     opts.constructorParams = project;
@@ -74,7 +86,11 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     }
   }
 
-  public updateNote(project: Project, note: StaffNote, text: string): Observable<StaffNote> {
+  public updateNote(
+    project: Project,
+    note: StaffNote,
+    text: string,
+  ): Observable<StaffNote> {
     const pathId = {
       projectId: project.id,
       id: note.id,
@@ -83,7 +99,9 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     const body: FormData = new FormData();
     body.append('note', text);
 
-    const opts: RequestOptions<StaffNote> = {endpointFormat: this.endpointFormat};
+    const opts: RequestOptions<StaffNote> = {
+      endpointFormat: this.endpointFormat,
+    };
     opts.cache = project.staffNoteCache;
     opts.body = body;
     opts.constructorParams = project;
@@ -95,7 +113,10 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     );
   }
 
-  public loadStaffNotes(project: Project, useFetch: boolean = false): Observable<StaffNote[]> {
+  public loadStaffNotes(
+    project: Project,
+    useFetch: boolean = false,
+  ): Observable<StaffNote[]> {
     const options: RequestOptions<StaffNote> = {
       endpointFormat: this.endpointFormat,
       cache: project.staffNoteCache,

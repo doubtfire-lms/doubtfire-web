@@ -29,8 +29,9 @@
   @if (showDismissAll) {
     <p>
       <mat-checkbox [(ngModel)]="dismissAllTasks">
-        Apply this action to all {{ task.definition.abbreviation }} {{ task.definition.name }} tasks
-        from {{ task.tutor?.user.name ?? 'N/A' }}, currently waiting for moderation
+        Apply this action to all {{ task.definition.abbreviation }}
+        {{ task.definition.name }} tasks from
+        {{ task.tutor?.user.name ?? 'N/A' }}, currently waiting for moderation
       </mat-checkbox>
     </p>
   }

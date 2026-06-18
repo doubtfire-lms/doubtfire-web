@@ -1,11 +1,17 @@
 <div class="sticky top-0 z-10 w-full bg-white pb-2" id="task-def-head">
-  <h3>Details for {{ taskDefinition.abbreviation }} - {{ taskDefinition.name }}</h3>
+  <h3>
+    Details for {{ taskDefinition.abbreviation }} - {{ taskDefinition.name }}
+  </h3>
   <mat-divider></mat-divider>
 </div>
 
 <div class="flex flex-col items-start gap-2.5 md:flex-row">
-  <aside class="sticky top-0 z-[9] w-full self-start md:top-12 md:w-[240px] md:shrink-0">
-    <div class="flex flex-col gap-0.5 overflow-y-auto overflow-x-hidden rounded-xl bg-white p-1">
+  <aside
+    class="sticky top-0 z-[9] w-full self-start md:top-12 md:w-[240px] md:shrink-0"
+  >
+    <div
+      class="flex flex-col gap-0.5 overflow-y-auto overflow-x-hidden rounded-xl bg-white p-1"
+    >
       @for (section of visibleSections; track section.id) {
         <button
           class="w-full cursor-pointer whitespace-nowrap rounded-lg border-0 bg-transparent px-2 py-3 text-left transition-colors"
@@ -14,9 +20,13 @@
             'font-semibold': activeSectionId === section.id,
             'text-gray-700 hover:bg-gray-100': activeSectionId !== section.id,
           }"
-          [style.backgroundColor]="activeSectionId === section.id ? '#e7e7ff' : null"
+          [style.backgroundColor]="
+            activeSectionId === section.id ? '#e7e7ff' : null
+          "
           [style.color]="
-            activeSectionId === section.id ? 'var(--mat-theme-primary, #3939ff)' : null
+            activeSectionId === section.id
+              ? 'var(--mat-theme-primary, #3939ff)'
+              : null
           "
           (click)="scrollToSection(section.id)"
         >
@@ -33,8 +43,12 @@
       data-section-id="task-details"
     >
       <h3>Task Details</h3>
-      <p class="pb-1 font-normal text-gray-500">Name the task and set target grade</p>
-      <f-task-definition-general [taskDefinition]="taskDefinition"></f-task-definition-general>
+      <p class="pb-1 font-normal text-gray-500">
+        Name the task and set target grade
+      </p>
+      <f-task-definition-general
+        [taskDefinition]="taskDefinition"
+      ></f-task-definition-general>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
 
@@ -44,8 +58,12 @@
       data-section-id="task-learning-outcomes"
     >
       <h3>Task Learning Outcomes</h3>
-      <p class="pb-1 font-normal text-gray-500">Add learning outcomes for this task</p>
-      <f-learning-outcome-editor [context]="taskDefinition"></f-learning-outcome-editor>
+      <p class="pb-1 font-normal text-gray-500">
+        Add learning outcomes for this task
+      </p>
+      <f-learning-outcome-editor
+        [context]="taskDefinition"
+      ></f-learning-outcome-editor>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
 
@@ -58,7 +76,9 @@
       <p class="pb-1 font-normal text-gray-500">
         Who assesses {{ unit.hasGroupwork() ? 'and submits ' : '' }}this task?
       </p>
-      <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
+      <f-task-definition-who
+        [taskDefinition]="taskDefinition"
+      ></f-task-definition-who>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
 
@@ -69,7 +89,9 @@
     >
       <h3>Due Dates</h3>
       <p class="pb-1 font-normal text-gray-500">When is the task due?</p>
-      <f-task-definition-dates [taskDefinition]="taskDefinition"></f-task-definition-dates>
+      <f-task-definition-dates
+        [taskDefinition]="taskDefinition"
+      ></f-task-definition-dates>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
 
@@ -79,8 +101,12 @@
       data-section-id="upload-requirements"
     >
       <h3>Upload Requirements</h3>
-      <p class="pb-1 font-normal text-gray-500">What do students need to upload?</p>
-      <f-task-definition-upload [taskDefinition]="taskDefinition"></f-task-definition-upload>
+      <p class="pb-1 font-normal text-gray-500">
+        What do students need to upload?
+      </p>
+      <f-task-definition-upload
+        [taskDefinition]="taskDefinition"
+      ></f-task-definition-upload>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
 
@@ -90,8 +116,12 @@
       data-section-id="task-resources"
     >
       <h3>Task Resources</h3>
-      <p class="pb-1 font-normal text-gray-500">Upload task descriptions and resources</p>
-      <f-task-definition-resources [taskDefinition]="taskDefinition"></f-task-definition-resources>
+      <p class="pb-1 font-normal text-gray-500">
+        Upload task descriptions and resources
+      </p>
+      <f-task-definition-resources
+        [taskDefinition]="taskDefinition"
+      ></f-task-definition-resources>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
 
@@ -103,10 +133,15 @@
       <h3>Prerequisite Tasks</h3>
       <p class="pb-1 font-normal text-gray-500">
         Select which tasks need to be submitted before
-        <span class="font-bold">{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</span>
+        <span class="font-bold"
+          >{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</span
+        >
         can be submitted
       </p>
-      <f-task-definition-prerequisites [staffView]="true" [taskDefinition]="taskDefinition">
+      <f-task-definition-prerequisites
+        [staffView]="true"
+        [taskDefinition]="taskDefinition"
+      >
       </f-task-definition-prerequisites>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
@@ -118,9 +153,13 @@
     >
       <h3>Discussion Prompts</h3>
       <p class="pb-1 font-normal text-gray-500">
-        Discussion prompts for tutors to use when discussing student tasks in class
+        Discussion prompts for tutors to use when discussing student tasks in
+        class
       </p>
-      <f-task-definition-discussion-prompts [staffView]="true" [taskDefinition]="taskDefinition">
+      <f-task-definition-discussion-prompts
+        [staffView]="true"
+        [taskDefinition]="taskDefinition"
+      >
       </f-task-definition-discussion-prompts>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
@@ -132,8 +171,12 @@
         data-section-id="task-assessment-automation"
       >
         <h3>Task Assessment Automation</h3>
-        <p class="pb-1 font-normal text-gray-500">Configure automated assessment</p>
-        <f-task-definition-overseer [taskDefinition]="taskDefinition"></f-task-definition-overseer>
+        <p class="pb-1 font-normal text-gray-500">
+          Configure automated assessment
+        </p>
+        <f-task-definition-overseer
+          [taskDefinition]="taskDefinition"
+        ></f-task-definition-overseer>
       </section>
       <mat-divider class="my-[25px]"></mat-divider>
     }
@@ -147,7 +190,9 @@
       <p class="pb-1 font-normal text-gray-500">
         Upload the corresponding SCORM 2004 test (e.g. Numbas)
       </p>
-      <f-task-definition-scorm [taskDefinition]="taskDefinition"></f-task-definition-scorm>
+      <f-task-definition-scorm
+        [taskDefinition]="taskDefinition"
+      ></f-task-definition-scorm>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
 
@@ -158,7 +203,9 @@
     >
       <h3>Optional Settings</h3>
       <p class="pb-1 font-normal text-gray-500">Apply other options</p>
-      <f-task-definition-options [taskDefinition]="taskDefinition"></f-task-definition-options>
+      <f-task-definition-options
+        [taskDefinition]="taskDefinition"
+      ></f-task-definition-options>
     </section>
 
     <!-- 725px is enough space to ensure the last section ("Optional Settings") can be scrolled to the top of the browser -->

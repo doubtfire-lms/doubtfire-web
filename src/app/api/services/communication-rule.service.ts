@@ -2,14 +2,20 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, map} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {CommunicationRule, CommunicationRulePreviewResponse} from '../models/communication';
+import {
+  CommunicationRule,
+  CommunicationRulePreviewResponse,
+} from '../models/communication';
 import {SidekiqJob} from '../models/sidekiq-job';
 
 @Injectable()
 export class CommunicationRuleService {
   constructor(private httpClient: HttpClient) {}
 
-  public getForSet(unitId: number, setId: number): Observable<CommunicationRule[]> {
+  public getForSet(
+    unitId: number,
+    setId: number,
+  ): Observable<CommunicationRule[]> {
     return this.httpClient
       .get<Partial<CommunicationRule>[]>(this.setEndpoint(unitId, setId))
       .pipe(map((rules) => rules.map((rule) => new CommunicationRule(rule))));
@@ -30,7 +36,9 @@ export class CommunicationRuleService {
   public updateForUnit(
     unitId: number,
     ruleId: number,
-    rule: Partial<Pick<CommunicationRule, 'name' | 'operator' | 'send_log_to_convenors'>>,
+    rule: Partial<
+      Pick<CommunicationRule, 'name' | 'operator' | 'send_log_to_convenors'>
+    >,
   ): Observable<CommunicationRule> {
     return this.httpClient
       .put<Partial<CommunicationRule>>(`${this.endpoint(unitId)}/${ruleId}`, {
@@ -53,8 +61,14 @@ export class CommunicationRuleService {
     );
   }
 
-  public executeForUnit(unitId: number, ruleId: number): Observable<SidekiqJob> {
-    return this.httpClient.post<SidekiqJob>(`${this.endpoint(unitId)}/${ruleId}/execute`, {});
+  public executeForUnit(
+    unitId: number,
+    ruleId: number,
+  ): Observable<SidekiqJob> {
+    return this.httpClient.post<SidekiqJob>(
+      `${this.endpoint(unitId)}/${ruleId}/execute`,
+      {},
+    );
   }
 
   private endpoint(unitId: number): string {

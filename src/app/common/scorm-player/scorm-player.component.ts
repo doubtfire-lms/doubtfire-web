@@ -9,7 +9,10 @@ import {
 import {ScormAdapterService} from 'src/app/api/services/scorm-adapter.service';
 import {AppInjector} from 'src/app/app-injector';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {
+  GlobalStateService,
+  ViewType,
+} from 'src/app/projects/states/index/global-state.service';
 
 declare global {
   interface Window {
@@ -59,15 +62,22 @@ export class ScormPlayerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.projectId = this.projectId ?? Number(this.route.snapshot.paramMap.get('projectId'));
-    this.taskDefId = this.taskDefId ?? Number(this.route.snapshot.paramMap.get('taskDefId'));
+    this.projectId =
+      this.projectId ?? Number(this.route.snapshot.paramMap.get('projectId'));
+    this.taskDefId =
+      this.taskDefId ?? Number(this.route.snapshot.paramMap.get('taskDefId'));
     this.testAttemptId =
-      this.testAttemptId ?? Number(this.route.snapshot.paramMap.get('testAttemptId'));
-    this.mode = this.mode ?? (this.route.snapshot.data.mode as ScormPlayerComponent['mode']);
+      this.testAttemptId ??
+      Number(this.route.snapshot.paramMap.get('testAttemptId'));
+    this.mode =
+      this.mode ??
+      (this.route.snapshot.data.mode as ScormPlayerComponent['mode']);
 
     this.globalState.setView(ViewType.OTHER);
     this.globalState.hideHeader();
-    this.authService.getScormToken().subscribe((value: string) => this.setupScorm(value));
+    this.authService
+      .getScormToken()
+      .subscribe((value: string) => this.setupScorm(value));
   }
 
   private setupScorm(token: string): void {
@@ -84,18 +94,24 @@ export class ScormPlayerComponent implements OnInit {
         Initialize: () => this.scormAdapter.Initialize(),
         Terminate: () => this.scormAdapter.Terminate(),
         GetValue: (element: string) => this.scormAdapter.GetValue(element),
-        SetValue: (element: string, value: string) => this.scormAdapter.SetValue(element, value),
+        SetValue: (element: string, value: string) =>
+          this.scormAdapter.SetValue(element, value),
         Commit: () => this.scormAdapter.Commit(),
         GetLastError: () => this.scormAdapter.GetLastError(),
-        GetErrorString: (errorCode: string) => this.scormAdapter.GetErrorString(errorCode),
-        GetDiagnostic: (errorCode: string) => this.scormAdapter.GetDiagnostic(errorCode),
+        GetErrorString: (errorCode: string) =>
+          this.scormAdapter.GetErrorString(errorCode),
+        GetDiagnostic: (errorCode: string) =>
+          this.scormAdapter.GetDiagnostic(errorCode),
       };
     } else {
       window.API_1484_11 = undefined;
     }
 
     // Encode . as %2e to avoid issue with grape treating the username as a file extension
-    const username = this.userService.currentUser.username.replaceAll('.', '%2e');
+    const username = this.userService.currentUser.username.replaceAll(
+      '.',
+      '%2e',
+    );
 
     this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(
       `${AppInjector.get(DoubtfireConstants).API_URL}/scorm/${this.taskDefId}/${username}/${token}/index.html`,

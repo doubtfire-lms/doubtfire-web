@@ -20,13 +20,16 @@ export class QrModalService {
     footer: string = '',
     liveTimestamp: boolean = false,
   ) {
-    const _dialogRef = this.dialog.open<QrModalComponent, QrModalData>(QrModalComponent, {
-      data: {
-        qrCodeImage: qrText,
-        caption,
-        footer,
-        liveTimestamp,
+    const _dialogRef = this.dialog.open<QrModalComponent, QrModalData>(
+      QrModalComponent,
+      {
+        data: {
+          qrCodeImage: qrText,
+          caption,
+          footer,
+          liveTimestamp,
+        },
       },
-    });
+    );
   }
 }

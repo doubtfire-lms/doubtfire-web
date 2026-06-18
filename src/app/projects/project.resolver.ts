@@ -2,7 +2,10 @@ import {inject} from '@angular/core';
 import {ResolveFn} from '@angular/router';
 import {Observable} from 'rxjs';
 import {Project, ProjectService} from 'src/app/api/models/doubtfire-model';
-import {GlobalStateService, ViewType} from './states/index/global-state.service';
+import {
+  GlobalStateService,
+  ViewType,
+} from './states/index/global-state.service';
 
 export const resolveProject: ResolveFn<Project> = (route, state) => {
   const projectService = inject(ProjectService);
@@ -21,7 +24,11 @@ export const resolveProject: ResolveFn<Project> = (route, state) => {
 
     globalState.onLoad(() => {
       if (resolveProgressively) {
-        observer.next(projectService.cache.getOrCreate(projectId, projectService, {id: projectId}));
+        observer.next(
+          projectService.cache.getOrCreate(projectId, projectService, {
+            id: projectId,
+          }),
+        );
         observer.complete();
         return;
       }

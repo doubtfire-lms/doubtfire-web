@@ -67,7 +67,9 @@ export class SelectedTaskService {
   }
 
   public showTaskSheet() {
-    this.currentPdfUrl$.next(this.task$.value?.definition?.getTaskPDFUrl(false));
+    this.currentPdfUrl$.next(
+      this.task$.value?.definition?.getTaskPDFUrl(false),
+    );
     this.currentView$.next(DashboardViews.task);
   }
 

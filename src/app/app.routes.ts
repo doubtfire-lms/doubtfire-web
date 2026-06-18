@@ -68,7 +68,11 @@ export const routes: Routes = [
     component: SubmissionFilesDownloadComponent,
   },
   {path: 'view-all-units', component: FUnitsComponent, data: {mode: 'tutor'}},
-  {path: 'view-all-projects', component: FUnitsComponent, data: {mode: 'student'}},
+  {
+    path: 'view-all-projects',
+    component: FUnitsComponent,
+    data: {mode: 'student'},
+  },
   {
     path: 'admin/units',
     component: FUnitsComponent,
@@ -110,8 +114,16 @@ export const routes: Routes = [
         },
         children: [
           {path: '', pathMatch: 'full', redirectTo: 'tasks/inbox'},
-          {path: 'analytics', component: UnitAnalyticsComponent, data: {task: 'Unit Analytics'}},
-          {path: 'students/groups', component: UnitGroupsComponent, data: {task: 'Student Groups'}},
+          {
+            path: 'analytics',
+            component: UnitAnalyticsComponent,
+            data: {task: 'Unit Analytics'},
+          },
+          {
+            path: 'students/groups',
+            component: UnitGroupsComponent,
+            data: {task: 'Student Groups'},
+          },
           {
             path: 'students/portfolios',
             component: PortfoliosComponent,
@@ -132,21 +144,39 @@ export const routes: Routes = [
             component: PortfoliosComponent,
             data: {task: 'Student Portfolios'},
           },
-          {path: 'students', component: StudentsListComponent, data: {task: 'Student List'}},
+          {
+            path: 'students',
+            component: StudentsListComponent,
+            data: {task: 'Student List'},
+          },
           {
             path: 'admin',
             component: UnitAdminStateComponent,
             canActivate: [roleWhitelistGuard],
-            data: {task: 'Unit Administration', roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
+            data: {
+              task: 'Unit Administration',
+              roleWhitelist: ['Convenor', 'Admin', 'Auditor'],
+            },
           },
           {
             path: 'admin/:tab',
             component: UnitAdminStateComponent,
             canActivate: [roleWhitelistGuard],
-            data: {task: 'Unit Administration', roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
+            data: {
+              task: 'Unit Administration',
+              roleWhitelist: ['Convenor', 'Admin', 'Auditor'],
+            },
           },
-          {path: 'rollover', component: RolloverComponent, data: {task: 'Unit Rollover'}},
-          {path: 'discussion', component: TutorDiscussionComponent, data: {task: 'Discussion'}},
+          {
+            path: 'rollover',
+            component: RolloverComponent,
+            data: {task: 'Unit Rollover'},
+          },
+          {
+            path: 'discussion',
+            component: TutorDiscussionComponent,
+            data: {task: 'Discussion'},
+          },
           {
             path: 'check-in',
             component: TutorDiscussionComponent,
@@ -156,7 +186,10 @@ export const routes: Routes = [
             path: 'tasks',
             pathMatch: 'full',
             component: TaskViewerStateComponent,
-            data: {task: 'Task Lists', roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
+            data: {
+              task: 'Task Lists',
+              roleWhitelist: ['Convenor', 'Admin', 'Auditor'],
+            },
             canActivate: [roleWhitelistGuard],
           },
           {
@@ -239,14 +272,26 @@ export const routes: Routes = [
             component: ProjectDashboardComponent,
             data: {task: 'Dashboard'},
           },
-          {path: 'plan', component: ProjectPlanComponent, data: {task: 'Plan Tasks'}},
+          {
+            path: 'plan',
+            component: ProjectPlanComponent,
+            data: {task: 'Plan Tasks'},
+          },
           {
             path: 'portfolio',
             component: PortfolioStateComponent,
             data: {task: 'Portfolio Creation'},
           },
-          {path: 'groups', component: ProjectGroupsStateComponent, data: {task: 'Groups List'}},
-          {path: 'tutorials', component: TutorialsComponent, data: {task: 'Tutorial List'}},
+          {
+            path: 'groups',
+            component: ProjectGroupsStateComponent,
+            data: {task: 'Groups List'},
+          },
+          {
+            path: 'tutorials',
+            component: TutorialsComponent,
+            data: {task: 'Tutorial List'},
+          },
         ],
       },
     ],

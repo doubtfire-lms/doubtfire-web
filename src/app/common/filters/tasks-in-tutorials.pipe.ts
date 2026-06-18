@@ -6,7 +6,11 @@ import {Task} from '../../api/models/doubtfire-model';
   standalone: false,
 })
 export class TasksInTutorialsPipe implements PipeTransform {
-  transform(tasks: Task[], tutorialIds: number[], forceStream: boolean): Task[] {
+  transform(
+    tasks: Task[],
+    tutorialIds: number[],
+    forceStream: boolean,
+  ): Task[] {
     // Return nothing if there are no tasks
     if (!tasks) {
       return tasks;
@@ -43,7 +47,10 @@ export class TasksInTutorialsPipe implements PipeTransform {
           return tutorialIds.includes(tutorial?.id);
         } else {
           const tutorials = task?.project.tutorials;
-          return tutorials?.filter((tutorial) => tutorialIds.includes(tutorial.id)).length > 0;
+          return (
+            tutorials?.filter((tutorial) => tutorialIds.includes(tutorial.id))
+              .length > 0
+          );
         }
       }
     });

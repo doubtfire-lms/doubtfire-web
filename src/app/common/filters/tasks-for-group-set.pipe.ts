@@ -10,7 +10,10 @@ export class TasksForGroupsetPipe implements PipeTransform {
     if (!tasks) return tasks;
 
     return tasks.filter((task) => {
-      return task.definition.groupSet === groupSet || (!task.definition.groupSet && !groupSet);
+      return (
+        task.definition.groupSet === groupSet ||
+        (!task.definition.groupSet && !groupSet)
+      );
     });
   }
 }

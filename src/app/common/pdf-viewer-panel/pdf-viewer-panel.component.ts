@@ -12,10 +12,16 @@ export class PdfViewerPanelComponent {
   @Input() footerText: string;
   @Input() resourcesUrl: string;
   @Input() hideFooter: boolean;
-  constructor(@Inject(FileDownloaderService) private fileDownloader: FileDownloaderService) {}
+  constructor(
+    @Inject(FileDownloaderService)
+    private fileDownloader: FileDownloaderService,
+  ) {}
 
   downloadPdf() {
-    this.fileDownloader.downloadFile(this.pdfUrl + '?as_attachment=true', 'displayed-pdf.pdf');
+    this.fileDownloader.downloadFile(
+      this.pdfUrl + '?as_attachment=true',
+      'displayed-pdf.pdf',
+    );
   }
 
   downloadResources() {

@@ -17,20 +17,32 @@
           >Members of
           @if (!editingGroupName) {
             {{ selectedGroup?.name }}
-            @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
-              <button class="p-1" mat-icon-button (click)="startEditingGroupName()">
+            @if (
+              unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups
+            ) {
+              <button
+                class="p-1"
+                mat-icon-button
+                (click)="startEditingGroupName()"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
             }
           } @else {
-            @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
+            @if (
+              unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups
+            ) {
               <mat-form-field appearance="outline" class="ml-1 mt-[22px]">
                 <input matInput required [(ngModel)]="selectedGroup.name" />
               </mat-form-field>
               <button class="p-1" mat-icon-button (click)="updateGroup()">
                 <mat-icon>save</mat-icon>
               </button>
-              <button class="p-1" mat-icon-button (click)="stopEditinGroupName()">
+              <button
+                class="p-1"
+                mat-icon-button
+                (click)="stopEditinGroupName()"
+              >
                 <mat-icon>close</mat-icon>
               </button>
             }
@@ -65,7 +77,9 @@
               (optionSelected)="addMember($event.option.value)"
             >
               @for (project of filteredProjects | async; track project) {
-                <mat-option [value]="project"> {{ project.student.name }} </mat-option>
+                <mat-option [value]="project">
+                  {{ project.student.name }}
+                </mat-option>
               }
             </mat-autocomplete>
           </mat-form-field>

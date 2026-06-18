@@ -5,6 +5,12 @@
   <span class="flex-grow">{{ data?.message }}</span>
 
   <span class="ml-auto" matSnackBarActions>
-    <button mat-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">Close</button>
+    <button
+      mat-button
+      matSnackBarAction
+      (click)="snackBarRef.dismissWithAction()"
+    >
+      Close
+    </button>
   </span>
 </span>

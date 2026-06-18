@@ -33,7 +33,9 @@ export class TaskDateSliderComponent implements OnChanges {
   ) {}
 
   public get max(): number {
-    return this.task.unit.totalWeeks + Math.ceil(this.task.project.specConDays / 7);
+    return (
+      this.task.unit.totalWeeks + Math.ceil(this.task.project.specConDays / 7)
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -95,7 +97,10 @@ export class TaskDateSliderComponent implements OnChanges {
   }
 
   public closeToDeadline(): boolean {
-    return MappingFunctions.addDays(this.task.localDueDate(), 7) > this.task.localDeadlineDate();
+    return (
+      MappingFunctions.addDays(this.task.localDueDate(), 7) >
+      this.task.localDeadlineDate()
+    );
   }
 
   public canEdit(): boolean {

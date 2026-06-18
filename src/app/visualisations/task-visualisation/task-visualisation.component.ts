@@ -1,4 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
 
 @Component({
@@ -30,7 +36,9 @@ export class TaskVisualisationComponent implements OnChanges, OnInit {
 
   updateData(): void {
     if (this.project) {
-      const taskCounts = new Map(TaskStatus.STATUS_KEYS.map((status) => [status, 0]));
+      const taskCounts = new Map(
+        TaskStatus.STATUS_KEYS.map((status) => [status, 0]),
+      );
       const activeTasks = this.project.activeTasks();
       activeTasks.forEach((task) => {
         if (task.status) {
@@ -64,9 +72,11 @@ export class TaskVisualisationComponent implements OnChanges, OnInit {
           return aIndex - bIndex;
         });
 
-      this.colors = Array.from(TaskStatus.STATUS_COLORS).map(([status, color]) => {
-        return {name: TaskStatus.STATUS_LABELS.get(status), value: color};
-      });
+      this.colors = Array.from(TaskStatus.STATUS_COLORS).map(
+        ([status, color]) => {
+          return {name: TaskStatus.STATUS_LABELS.get(status), value: color};
+        },
+      );
 
       // console.log('Data:', this.data);
       // console.log('Colors:', this.colors);

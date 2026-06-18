@@ -25,7 +25,8 @@ export class FTaskBadgeComponent {
     const fontSizeIncrement = -0.1; // Amount to reduce font size for each additional character
 
     // Calculate font size based on length
-    let fontSize = baseFontSize - Math.max(0, length - maxLength) * fontSizeIncrement;
+    let fontSize =
+      baseFontSize - Math.max(0, length - maxLength) * fontSizeIncrement;
 
     // Ensure font size doesn't go below a minimum value
     fontSize = Math.max(fontSize, 0.8); // Adjust as needed

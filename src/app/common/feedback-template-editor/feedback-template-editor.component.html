@@ -1,6 +1,8 @@
 <div class="rounded-xl border border-gray-200 bg-white p-3.5 shadow">
   <div class="mb-0.5">
-    <h4 class="text-base font-bold text-gray-900">Edit Feedback Templates for Outcome</h4>
+    <h4 class="text-base font-bold text-gray-900">
+      Edit Feedback Templates for Outcome
+    </h4>
 
     <div class="flex flex-col gap-5">
       <table
@@ -74,7 +76,11 @@
             mat-cell
             (click)="selectFeedbackTemplate(feedbackTemplate)"
           >
-            {{ feedbackTemplate.type === 'group' ? '' : feedbackTemplate.summaryText }}
+            {{
+              feedbackTemplate.type === 'group'
+                ? ''
+                : feedbackTemplate.summaryText
+            }}
           </td>
         </ng-container>
         <ng-container matColumnDef="taskStatus" sticky>
@@ -87,7 +93,10 @@
             @if (feedbackTemplate.taskStatus) {
               <mat-chip>
                 <mat-icon matChipAvatar>
-                  {{ taskService.statusData(feedbackTemplate.taskStatus).materialIcon }}
+                  {{
+                    taskService.statusData(feedbackTemplate.taskStatus)
+                      .materialIcon
+                  }}
                 </mat-icon>
                 {{ taskService.statusData(feedbackTemplate.taskStatus).label }}
               </mat-chip>
@@ -133,7 +142,11 @@
       <span class="flex items-center">
         <div class="h-12">
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Filter" (keyup)="applyFilter($event.target.value)" />
+            <input
+              matInput
+              placeholder="Filter"
+              (keyup)="applyFilter($event.target.value)"
+            />
           </mat-form-field>
         </div>
         <mat-paginator
@@ -151,14 +164,20 @@
           </button>
           <span class="flex-grow"></span>
         }
-        <button color="primary" mat-raised-button (click)="createFeedbackTemplate()">
+        <button
+          color="primary"
+          mat-raised-button
+          (click)="createFeedbackTemplate()"
+        >
           Add Template
         </button>
       </span>
 
       @if (selectedTemplate) {
         <div>
-          <h4 class="mt-0.5 text-base font-bold text-gray-900">Edit Template</h4>
+          <h4 class="mt-0.5 text-base font-bold text-gray-900">
+            Edit Template
+          </h4>
 
           <div class="flex flex-row gap-2.5">
             @if (selectedTemplate.isNew) {
@@ -240,7 +259,10 @@
                 <mat-label>Task Status</mat-label>
                 <mat-select [(ngModel)]="selectedTemplate.taskStatus">
                   <mat-option [value]="null"></mat-option>
-                  @for (status of taskService.feedbackTemplateStatuses; track status) {
+                  @for (
+                    status of taskService.feedbackTemplateStatuses;
+                    track status
+                  ) {
                     <mat-option [value]="status">
                       {{ taskService.statusData(status).label }}
                     </mat-option>

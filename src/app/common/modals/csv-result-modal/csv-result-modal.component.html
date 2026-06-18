@@ -10,17 +10,23 @@
       <mat-button-toggle
         [ngClass]="{
           '!bg-green-600 !text-white !border-green-700':
-            selection.key === 'success' && activeCsvResponseSelection === 'success',
+            selection.key === 'success' &&
+            activeCsvResponseSelection === 'success',
           '!bg-green-50 !text-green-800 !border-green-300':
-            selection.key === 'success' && activeCsvResponseSelection !== 'success',
+            selection.key === 'success' &&
+            activeCsvResponseSelection !== 'success',
           '!bg-red-600 !text-white !border-red-700':
-            selection.key === 'errors' && activeCsvResponseSelection === 'errors',
+            selection.key === 'errors' &&
+            activeCsvResponseSelection === 'errors',
           '!bg-red-50 !text-red-800 !border-red-300':
-            selection.key === 'errors' && activeCsvResponseSelection !== 'errors',
+            selection.key === 'errors' &&
+            activeCsvResponseSelection !== 'errors',
           '!bg-amber-500 !text-white !border-amber-600':
-            selection.key === 'ignored' && activeCsvResponseSelection === 'ignored',
+            selection.key === 'ignored' &&
+            activeCsvResponseSelection === 'ignored',
           '!bg-amber-50 !text-amber-800 !border-amber-300':
-            selection.key === 'ignored' && activeCsvResponseSelection !== 'ignored',
+            selection.key === 'ignored' &&
+            activeCsvResponseSelection !== 'ignored',
         }"
         [value]="selection.key"
       >
@@ -45,7 +51,9 @@
 
         @for (columnId of dynamicColumnIds; track columnId) {
           <ng-container [matColumnDef]="columnId">
-            <th *matHeaderCellDef mat-header-cell>{{ headerForColumn(columnId) }}</th>
+            <th *matHeaderCellDef mat-header-cell>
+              {{ headerForColumn(columnId) }}
+            </th>
             <td *matCellDef="let row" mat-cell>
               <div class="max-w-[500px] whitespace-pre-wrap break-words">
                 {{ rowValueForColumn(row.rowObject, columnId) }}
@@ -81,5 +89,7 @@
     <span class="flex-1"></span>
   }
 
-  <button color="primary" mat-button type="button" (click)="close()">Done</button>
+  <button color="primary" mat-button type="button" (click)="close()">
+    Done
+  </button>
 </mat-dialog-actions>

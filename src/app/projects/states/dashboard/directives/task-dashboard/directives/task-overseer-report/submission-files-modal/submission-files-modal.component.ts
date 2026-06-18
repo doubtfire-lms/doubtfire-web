@@ -28,8 +28,12 @@ export interface SubmissionFilesModalData {
   standalone: false,
 })
 export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
-  private readonly diffOriginalUri = monaco.Uri.parse('inmemory://submission-compare/original');
-  private readonly diffModifiedUri = monaco.Uri.parse('inmemory://submission-compare/modified');
+  private readonly diffOriginalUri = monaco.Uri.parse(
+    'inmemory://submission-compare/original',
+  );
+  private readonly diffModifiedUri = monaco.Uri.parse(
+    'inmemory://submission-compare/modified',
+  );
   public readonly isArchiveCodeOrTextFile = isArchiveCodeOrTextFile;
   public readonly isArchiveImageFile = isArchiveImageFile;
   public readonly isArchivePdfFile = isArchivePdfFile;
@@ -77,16 +81,18 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   };
   public primarySingleEditorOptions = {...this.singleEditorOptions};
   public comparedSingleEditorOptions = {...this.singleEditorOptions};
-  public diffOriginalModel: {language: string; code: string; uri: monaco.Uri} = {
-    language: 'plaintext',
-    code: '',
-    uri: this.diffOriginalUri,
-  };
-  public diffModifiedModel: {language: string; code: string; uri: monaco.Uri} = {
-    language: 'plaintext',
-    code: '',
-    uri: this.diffModifiedUri,
-  };
+  public diffOriginalModel: {language: string; code: string; uri: monaco.Uri} =
+    {
+      language: 'plaintext',
+      code: '',
+      uri: this.diffOriginalUri,
+    };
+  public diffModifiedModel: {language: string; code: string; uri: monaco.Uri} =
+    {
+      language: 'plaintext',
+      code: '',
+      uri: this.diffModifiedUri,
+    };
 
   constructor(
     private fileDownloader: FileDownloaderService,
@@ -138,10 +144,16 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
 
     try {
       if (this.data.comparedWith) {
-        this.archiveBlob = await this.downloadSubmissionArchive(this.data.assessment);
-        this.comparedArchiveBlob = await this.downloadSubmissionArchive(this.data.comparedWith);
+        this.archiveBlob = await this.downloadSubmissionArchive(
+          this.data.assessment,
+        );
+        this.comparedArchiveBlob = await this.downloadSubmissionArchive(
+          this.data.comparedWith,
+        );
       } else {
-        this.archiveBlob = await this.downloadSubmissionArchive(this.data.assessment);
+        this.archiveBlob = await this.downloadSubmissionArchive(
+          this.data.assessment,
+        );
       }
     } catch (error) {
       this.errorMessage = `Failed to load submission files: ${error}`;
@@ -151,7 +163,9 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  private downloadSubmissionArchive(assessment: SubmissionArchive): Promise<Blob> {
+  private downloadSubmissionArchive(
+    assessment: SubmissionArchive,
+  ): Promise<Blob> {
     return new Promise((resolve, reject) => {
       this.fileDownloader.downloadBlob(
         assessment.submissionFilesUrl(),
@@ -203,8 +217,16 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   }
 
   private resetDiffModels(): void {
-    this.diffOriginalModel = {language: 'plaintext', code: '', uri: this.diffOriginalUri};
-    this.diffModifiedModel = {language: 'plaintext', code: '', uri: this.diffModifiedUri};
+    this.diffOriginalModel = {
+      language: 'plaintext',
+      code: '',
+      uri: this.diffOriginalUri,
+    };
+    this.diffModifiedModel = {
+      language: 'plaintext',
+      code: '',
+      uri: this.diffModifiedUri,
+    };
   }
 
   private refreshDiffModels(): void {
@@ -226,8 +248,14 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   }
 
   private resetSingleEditorOptions(): void {
-    this.primarySingleEditorOptions = {...this.singleEditorOptions, language: 'plaintext'};
-    this.comparedSingleEditorOptions = {...this.singleEditorOptions, language: 'plaintext'};
+    this.primarySingleEditorOptions = {
+      ...this.singleEditorOptions,
+      language: 'plaintext',
+    };
+    this.comparedSingleEditorOptions = {
+      ...this.singleEditorOptions,
+      language: 'plaintext',
+    };
   }
 
   private refreshSingleEditorOptions(): void {
@@ -272,7 +300,10 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
       return '';
     }
 
-    const digest = await crypto.subtle.digest('SHA-256', new Uint8Array(bytes).buffer);
+    const digest = await crypto.subtle.digest(
+      'SHA-256',
+      new Uint8Array(bytes).buffer,
+    );
     return Array.from(new Uint8Array(digest))
       .map((value) => value.toString(16).padStart(2, '0'))
       .join('');

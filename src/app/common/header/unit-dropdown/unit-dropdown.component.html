@@ -9,14 +9,18 @@
       [unit_code]="unit?.code"
       [width]="80"
     >
-      <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+      <mat-icon
+        >{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}
+      </mat-icon>
     </f-unit-code>
   }
   @if (!unit) {
     <button #menuState="matMenuTrigger" mat-button [matMenuTriggerFor]="menu">
       <span class="flex items-center">
         <span>Select Unit</span>
-        <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>
+        <mat-icon
+          >{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}
+        </mat-icon>
       </span>
     </button>
   }
@@ -39,25 +43,38 @@
     <mat-divider></mat-divider>
   }
 
-  <h2 class="my-2 ml-3.5" mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</h2>
+  <h2 class="my-2 ml-3.5" mat-subheader [hidden]="unitRoles?.length === 0">
+    Units you teach
+  </h2>
   @for (unitRole of unitRoles; track unitRole) {
-    @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
+    @if (
+      !unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active
+    ) {
       <div
         class="w-full"
         mat-menu-item
         [routerLink]="['/units', unitRole.unit.id, 'tasks', 'inbox']"
       >
         <div class="flex w-full items-center">
-          <div class="unitName max-w-[220px] flex-none truncate">{{ unitRole.unit.name }}</div>
+          <div class="unitName max-w-[220px] flex-none truncate">
+            {{ unitRole.unit.name }}
+          </div>
           <div class="grow"></div>
-          <f-unit-code [unit_code]="unitRole.unit.code" [width]="80"></f-unit-code>
+          <f-unit-code
+            [unit_code]="unitRole.unit.code"
+            [width]="80"
+          ></f-unit-code>
         </div>
       </div>
     }
   }
 
-  <mat-divider [hidden]="unitRoles?.length === 0 || projects?.length === 0"></mat-divider>
-  <h2 class="my-2 ml-3.5" mat-subheader [hidden]="projects?.length === 0">Units you study</h2>
+  <mat-divider
+    [hidden]="unitRoles?.length === 0 || projects?.length === 0"
+  ></mat-divider>
+  <h2 class="my-2 ml-3.5" mat-subheader [hidden]="projects?.length === 0">
+    Units you study
+  </h2>
   @for (project of projects; track project) {
     @if (!project.unit.teachingPeriod || project.unit.teachingPeriod.active) {
       <button
@@ -68,7 +85,10 @@
         <span class="border-box flex flex-row">
           <div class="unitName">{{ project.unit.name }}</div>
           <span class="border-box flex-1"></span>
-          <f-unit-code [unit_code]="project.unit.code" [width]="80"></f-unit-code>
+          <f-unit-code
+            [unit_code]="project.unit.code"
+            [width]="80"
+          ></f-unit-code>
         </span>
       </button>
     }

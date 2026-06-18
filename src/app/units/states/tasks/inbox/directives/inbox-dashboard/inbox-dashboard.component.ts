@@ -1,4 +1,11 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
@@ -48,7 +55,10 @@ export class InboxDashboardComponent implements OnChanges {
       return;
     }
 
-    this.fileDownloader.downloadFile(this.task.submissionUrl(true), 'submission.pdf');
+    this.fileDownloader.downloadFile(
+      this.task.submissionUrl(true),
+      'submission.pdf',
+    );
   }
 
   downloadSubmittedFiles(): void {
@@ -56,7 +66,10 @@ export class InboxDashboardComponent implements OnChanges {
       return;
     }
 
-    this.fileDownloader.downloadFile(this.task.submittedFilesUrl(), 'submitted-files.zip');
+    this.fileDownloader.downloadFile(
+      this.task.submittedFilesUrl(),
+      'submitted-files.zip',
+    );
   }
 
   public get overseerEnabled(): boolean {
@@ -88,7 +101,9 @@ export class InboxDashboardComponent implements OnChanges {
       case InboxDashboardTab.submission:
         return this.task.hasPdf ? this.task.submissionUrl() : null;
       case InboxDashboardTab.taskSheet:
-        return this.task.definition?.hasTaskSheet ? this.task.definition.getTaskPDFUrl() : null;
+        return this.task.definition?.hasTaskSheet
+          ? this.task.definition.getTaskPDFUrl()
+          : null;
       default:
         return null;
     }

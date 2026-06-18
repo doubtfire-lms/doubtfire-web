@@ -1,4 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
@@ -15,7 +21,8 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
 
   public get canRegeneratePdf(): boolean {
     return (
-      this.taskService.pdfRegeneratableStatuses.includes(this.task?.status) && this.task?.hasPdf
+      this.taskService.pdfRegeneratableStatuses.includes(this.task?.status) &&
+      this.task?.hasPdf
     );
   }
 
@@ -67,16 +74,25 @@ export class TaskSubmissionCardComponent implements OnChanges, OnInit {
         }
       },
       error: (_response: Error) => {
-        this.alerts.error('Request failed, cannot recreate PDF at this time.', 6000);
+        this.alerts.error(
+          'Request failed, cannot recreate PDF at this time.',
+          6000,
+        );
       },
     });
   }
 
   downloadSubmission(): void {
-    this.fileDownloader.downloadFile(this.taskPdfUrl, `${this.task.definition.abbreviation}.pdf`);
+    this.fileDownloader.downloadFile(
+      this.taskPdfUrl,
+      `${this.task.definition.abbreviation}.pdf`,
+    );
   }
 
   downloadSubmissionFiles(): void {
-    this.fileDownloader.downloadFile(this.taskFilesUrl, `${this.task.definition.abbreviation}.zip`);
+    this.fileDownloader.downloadFile(
+      this.taskFilesUrl,
+      `${this.task.definition.abbreviation}.zip`,
+    );
   }
 }

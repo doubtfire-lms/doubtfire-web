@@ -79,13 +79,19 @@ export class UserService extends CachedEntityService<User> {
     return this.adminOrAuditorRoleFor('Admin', unitId, user);
   }
 
-  public adminOrAuditorRoleFor(role: 'Admin' | 'Auditor', unitId: number, user: User): UnitRole {
+  public adminOrAuditorRoleFor(
+    role: 'Admin' | 'Auditor',
+    unitId: number,
+    user: User,
+  ): UnitRole {
     const result = new UnitRole();
     result.role = role;
     result.user = user;
 
     const unitService = AppInjector.get(UnitService);
-    result.unit = unitService.cache.getOrCreate(unitId, unitService, {id: unitId});
+    result.unit = unitService.cache.getOrCreate(unitId, unitService, {
+      id: unitId,
+    });
 
     return result;
   }

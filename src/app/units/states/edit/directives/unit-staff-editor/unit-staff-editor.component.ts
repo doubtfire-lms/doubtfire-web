@@ -114,7 +114,8 @@ export class UnitStaffEditorComponent implements OnInit {
     unitRole.canMarkOverflowTasks = !unitRole.canMarkOverflowTasks;
     unitRole.roleId = unitRole.role === 'Tutor' ? 2 : 3;
     this.unitRoleService.update(unitRole).subscribe({
-      next: () => this.alertService.success('Overflow marking permissions updated', 2000),
+      next: () =>
+        this.alertService.success('Overflow marking permissions updated', 2000),
       error: (response) => {
         // Revert changes on error
         unitRole.canMarkOverflowTasks = previousValue;
@@ -150,7 +151,8 @@ export class UnitStaffEditorComponent implements OnInit {
       `Do you want to make ${staff.user.name} the main convenor for this unit?`,
       () => {
         this.unit.changeMainConvenor(staff).subscribe({
-          next: (_response) => this.alertService.success('Main convenor changed', 2000),
+          next: (_response) =>
+            this.alertService.success('Main convenor changed', 2000),
           error: (response) => this.alertService.error(response, 6000),
         });
       },
@@ -247,7 +249,9 @@ export class UnitStaffEditorComponent implements OnInit {
         return;
       }
 
-      const tutorialList = assignedTutorials.map((tutorial) => tutorial.abbreviation).join(', ');
+      const tutorialList = assignedTutorials
+        .map((tutorial) => tutorial.abbreviation)
+        .join(', ');
 
       this.confirmationModalService.show(
         'Reassign Tutorials',
@@ -263,7 +267,10 @@ export class UnitStaffEditorComponent implements OnInit {
                 assignedTutorials.forEach((tutorial) => {
                   tutorial.tutor = targetRole.user;
                 });
-                this.alertService.success('Staff member removed and tutorials reassigned', 2000);
+                this.alertService.success(
+                  'Staff member removed and tutorials reassigned',
+                  2000,
+                );
               },
               error: (response) => this.alertService.error(response, 6000),
             });
@@ -279,29 +286,37 @@ export class UnitStaffEditorComponent implements OnInit {
       'Remove staff member',
       `Are you sure you want to remove ${staff.user.name} from ${this.unit.code} ${this.unit.name}?`,
       () => {
-        this.unitRoleService.delete(staff, {cache: this.unit.staffCache}).subscribe({
-          next: () => this.alertService.success('Staff member removed', 2000),
-          error: (response) => this.alertService.error(response, 6000),
-        });
+        this.unitRoleService
+          .delete(staff, {cache: this.unit.staffCache})
+          .subscribe({
+            next: () => this.alertService.success('Staff member removed', 2000),
+            error: (response) => this.alertService.error(response, 6000),
+          });
       },
     );
   }
 
   private tutorialsForUnitRole(unitRole: UnitRole): Tutorial[] {
-    return this.unit.tutorials.filter((tutorial) => tutorial.tutor?.id === unitRole.user.id);
+    return this.unit.tutorials.filter(
+      (tutorial) => tutorial.tutor?.id === unitRole.user.id,
+    );
   }
 
   private reassignmentTargetFor(unitRole: UnitRole): UnitRole | undefined {
     const currentUserRole = this.unit.staff.find(
       (staffRole) =>
-        staffRole.user.id === this.userService.currentUser.id && staffRole.id !== unitRole.id,
+        staffRole.user.id === this.userService.currentUser.id &&
+        staffRole.id !== unitRole.id,
     );
 
     if (currentUserRole) {
       return currentUserRole;
     }
 
-    if (this.unit.mainConvenor?.id && this.unit.mainConvenor.id !== unitRole.id) {
+    if (
+      this.unit.mainConvenor?.id &&
+      this.unit.mainConvenor.id !== unitRole.id
+    ) {
       return this.unit.mainConvenor;
     }
 
@@ -321,7 +336,10 @@ export class UnitStaffEditorComponent implements OnInit {
     const parsedEmails = this.parseEmailList(emailList);
 
     if (parsedEmails.length === 0) {
-      this.alertService.error('Please enter at least one valid email address.', 6000);
+      this.alertService.error(
+        'Please enter at least one valid email address.',
+        6000,
+      );
       return;
     }
 
@@ -336,7 +354,9 @@ export class UnitStaffEditorComponent implements OnInit {
         .map((staff) => [staff.email.trim().toLowerCase(), staff] as const),
     );
 
-    const alreadyAssignedEmails = parsedEmails.filter((email) => existingStaffEmails.has(email));
+    const alreadyAssignedEmails = parsedEmails.filter((email) =>
+      existingStaffEmails.has(email),
+    );
     const matchedUsers = parsedEmails
       .filter((email) => !existingStaffEmails.has(email))
       .map((email) => staffByEmail.get(email))
@@ -359,26 +379,38 @@ export class UnitStaffEditorComponent implements OnInit {
       return;
     }
 
-    this.addStaffUsersSequentially(matchedUsers, [], [], ({addedEmails, failedEmails}) => {
-      const successRows = addedEmails.map((email) =>
-        this.csvResultRow(email, 'Staff member added'),
-      );
-      const failedRows = failedEmails.map((email) =>
-        this.csvResultRow(email, 'Could not add staff member to this unit'),
-      );
+    this.addStaffUsersSequentially(
+      matchedUsers,
+      [],
+      [],
+      ({addedEmails, failedEmails}) => {
+        const successRows = addedEmails.map((email) =>
+          this.csvResultRow(email, 'Staff member added'),
+        );
+        const failedRows = failedEmails.map((email) =>
+          this.csvResultRow(email, 'Could not add staff member to this unit'),
+        );
 
-      this.csvResultModal.show(
-        'Bulk staff import results',
-        this.csvResultResponse(successRows, [...unmatchedRows, ...failedRows], ignoredRows),
-      );
-    });
+        this.csvResultModal.show(
+          'Bulk staff import results',
+          this.csvResultResponse(
+            successRows,
+            [...unmatchedRows, ...failedRows],
+            ignoredRows,
+          ),
+        );
+      },
+    );
   }
 
   private addStaffUsersSequentially(
     users: User[],
     addedEmails: string[],
     failedEmails: string[],
-    onComplete: (result: {addedEmails: string[]; failedEmails: string[]}) => void,
+    onComplete: (result: {
+      addedEmails: string[];
+      failedEmails: string[];
+    }) => void,
   ): void {
     if (users.length === 0) {
       onComplete({addedEmails, failedEmails});
@@ -390,11 +422,21 @@ export class UnitStaffEditorComponent implements OnInit {
     this.unit.addStaff(nextUser).subscribe({
       next: () => {
         addedEmails.push(nextUser.email);
-        this.addStaffUsersSequentially(remainingUsers, addedEmails, failedEmails, onComplete);
+        this.addStaffUsersSequentially(
+          remainingUsers,
+          addedEmails,
+          failedEmails,
+          onComplete,
+        );
       },
       error: () => {
         failedEmails.push(nextUser.email);
-        this.addStaffUsersSequentially(remainingUsers, addedEmails, failedEmails, onComplete);
+        this.addStaffUsersSequentially(
+          remainingUsers,
+          addedEmails,
+          failedEmails,
+          onComplete,
+        );
       },
     });
   }
@@ -416,7 +458,11 @@ export class UnitStaffEditorComponent implements OnInit {
     return {row, message};
   }
 
-  private csvResultResponse(success: CsvRow[], errors: CsvRow[], ignored: CsvRow[]): CsvResult {
+  private csvResultResponse(
+    success: CsvRow[],
+    errors: CsvRow[],
+    ignored: CsvRow[],
+  ): CsvResult {
     return {success, errors, ignored};
   }
 }

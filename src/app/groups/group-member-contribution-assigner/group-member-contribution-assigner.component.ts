@@ -20,14 +20,17 @@ import {Task} from 'src/app/api/models/task';
   styleUrls: ['./group-member-contribution-assigner.component.scss'],
   standalone: false,
 })
-export class GroupMemberContributionAssignerComponent implements OnInit, OnChanges {
+export class GroupMemberContributionAssignerComponent
+  implements OnInit, OnChanges
+{
   @Input() isTestSubmission: boolean;
 
   @Input() task: Task;
   @Input() project: Project;
   @Input() team = {memberContributions: [] as MemberContribution[]};
-  @Output() teamChange: EventEmitter<{memberContributions: MemberContribution[]}> =
-    new EventEmitter();
+  @Output() teamChange: EventEmitter<{
+    memberContributions: MemberContribution[];
+  }> = new EventEmitter();
 
   selectedGroupSet: GroupSet;
   selectedGroup: Group;
@@ -43,7 +46,9 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
   };
 
   displayedColumns = ['name', 'target-grade', 'contribution'];
-  dataSource: MatTableDataSource<MemberContribution> = new MatTableDataSource([]);
+  dataSource: MatTableDataSource<MemberContribution> = new MatTableDataSource(
+    [],
+  );
 
   ngOnInit(): void {
     this.initializeGroupData();
@@ -104,11 +109,18 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
     }
   }
 
-  private memberPercentage(contrib: MemberContribution, rating: number): number {
+  private memberPercentage(
+    contrib: MemberContribution,
+    rating: number,
+  ): number {
     return +(
       100 *
       (rating /
-        this.selectedGroup.contributionSum(this.team.memberContributions, contrib.project, rating))
+        this.selectedGroup.contributionSum(
+          this.team.memberContributions,
+          contrib.project,
+          rating,
+        ))
     ).toFixed();
   }
 
@@ -127,7 +139,11 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
     contrib.percent = this.memberPercentage(contrib, value);
   }
 
-  private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+  private sortCompare(
+    aValue: number | string,
+    bValue: number | string,
+    isAsc: boolean,
+  ) {
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 

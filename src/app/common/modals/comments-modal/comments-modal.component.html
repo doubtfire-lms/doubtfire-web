@@ -6,6 +6,7 @@
       [src]="commentResourceUrl"
     />
   } @else if (taskComment.commentType === 'pdf') {
-    <f-pdf-viewer class="block h-[85vh] w-full" [pdfUrl]="commentResourceUrl"> </f-pdf-viewer>
+    <f-pdf-viewer class="block h-[85vh] w-full" [pdfUrl]="commentResourceUrl">
+    </f-pdf-viewer>
   }
 </div>

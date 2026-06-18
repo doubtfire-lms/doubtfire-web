@@ -19,7 +19,9 @@ import {AlertService} from '../services/alert.service';
   styleUrls: ['./pdf-viewer.component.scss'],
   standalone: false,
 })
-export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit {
+export class fPdfViewerComponent
+  implements OnDestroy, OnChanges, AfterViewInit
+{
   private readonly ZOOM_MIN = 0.5;
   private readonly ZOOM_MAX = 2.5;
 
@@ -40,7 +42,8 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   loaded = false;
 
   constructor(
-    @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
+    @Inject(FileDownloaderService)
+    private fileDownloader: FileDownloaderService,
     private alerts: AlertService,
   ) {}
 
@@ -52,10 +55,15 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   }
 
   ngAfterViewInit(): void {
-    this.useNativePdfViewer = localStorage.getItem('useNativePdfViewer') === 'true';
-    const storedZoomValue = parseFloat(localStorage.getItem('pdfViewerZoom')) || 1;
+    this.useNativePdfViewer =
+      localStorage.getItem('useNativePdfViewer') === 'true';
+    const storedZoomValue =
+      parseFloat(localStorage.getItem('pdfViewerZoom')) || 1;
     // Clamp zoom value between ZOOM_MIN and ZOOM_MAX
-    this.zoomValue = Math.min(Math.max(storedZoomValue, this.ZOOM_MIN), this.ZOOM_MAX);
+    this.zoomValue = Math.min(
+      Math.max(storedZoomValue, this.ZOOM_MIN),
+      this.ZOOM_MAX,
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -115,12 +123,18 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   }
 
   public downloadPdf() {
-    this.fileDownloader.downloadBlobToFile(this.pdfBlobUrl, 'displayed-pdf.pdf');
+    this.fileDownloader.downloadBlobToFile(
+      this.pdfBlobUrl,
+      'displayed-pdf.pdf',
+    );
   }
 
   public toggleNativePdfViewer() {
     this.useNativePdfViewer = !this.useNativePdfViewer;
-    localStorage.setItem('useNativePdfViewer', this.useNativePdfViewer.toString());
+    localStorage.setItem(
+      'useNativePdfViewer',
+      this.useNativePdfViewer.toString(),
+    );
   }
 
   private downloadBlob(downloadUrl: string): void {

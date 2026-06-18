@@ -1,5 +1,8 @@
 import {Injectable} from '@angular/core';
-import {ScormDataModel, ScormPlayerContext} from 'src/app/api/models/doubtfire-model';
+import {
+  ScormDataModel,
+  ScormPlayerContext,
+} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {UserService} from './user.service';
 
@@ -58,8 +61,15 @@ export class ScormAdapterService {
     }
 
     if (this.context.mode === 'review') {
-      this.xhr.open('GET', `${API_URL}/test_attempts/${this.context.attemptId}/review`, false);
-      this.xhr.setRequestHeader('Auth-Token', this.context.user.authenticationToken);
+      this.xhr.open(
+        'GET',
+        `${API_URL}/test_attempts/${this.context.attemptId}/review`,
+        false,
+      );
+      this.xhr.setRequestHeader(
+        'Auth-Token',
+        this.context.user.authenticationToken,
+      );
       this.xhr.setRequestHeader('Username', this.context.user.username);
 
       this.xhr.send();
@@ -79,7 +89,10 @@ export class ScormAdapterService {
       `${API_URL}/projects/${this.context.projectId}/task_def_id/${this.context.taskDefId}/test_attempts/latest`,
       false,
     );
-    this.xhr.setRequestHeader('Auth-Token', this.context.user.authenticationToken);
+    this.xhr.setRequestHeader(
+      'Auth-Token',
+      this.context.user.authenticationToken,
+    );
     this.xhr.setRequestHeader('Username', this.context.user.username);
 
     let noTestFound = false;
@@ -115,8 +128,15 @@ export class ScormAdapterService {
     }
 
     if (!startNewTest) {
-      this.xhr.open('PATCH', `${API_URL}/test_attempts/${this.context.attemptId}`, false);
-      this.xhr.setRequestHeader('Auth-Token', this.context.user.authenticationToken);
+      this.xhr.open(
+        'PATCH',
+        `${API_URL}/test_attempts/${this.context.attemptId}`,
+        false,
+      );
+      this.xhr.setRequestHeader(
+        'Auth-Token',
+        this.context.user.authenticationToken,
+      );
       this.xhr.setRequestHeader('Username', this.context.user.username);
       this.xhr.send();
       // console.log(this.xhr.responseText);
@@ -132,7 +152,10 @@ export class ScormAdapterService {
         `${API_URL}/projects/${this.context.projectId}/task_def_id/${this.context.taskDefId}/test_attempts`,
         false,
       );
-      this.xhr.setRequestHeader('Auth-Token', this.context.user.authenticationToken);
+      this.xhr.setRequestHeader(
+        'Auth-Token',
+        this.context.user.authenticationToken,
+      );
       this.xhr.setRequestHeader('Username', this.context.user.username);
       this.xhr.send();
       // console.log(this.xhr.responseText);
@@ -163,8 +186,15 @@ export class ScormAdapterService {
         break;
     }
 
-    this.xhr.open('PATCH', `${API_URL}/test_attempts/${this.context.attemptId}`, false);
-    this.xhr.setRequestHeader('Auth-Token', this.context.user.authenticationToken);
+    this.xhr.open(
+      'PATCH',
+      `${API_URL}/test_attempts/${this.context.attemptId}`,
+      false,
+    );
+    this.xhr.setRequestHeader(
+      'Auth-Token',
+      this.context.user.authenticationToken,
+    );
     this.xhr.setRequestHeader('Username', this.context.user.username);
     this.xhr.setRequestHeader('Content-Type', 'application/json');
     const requestData = {
@@ -236,8 +266,15 @@ export class ScormAdapterService {
         break;
     }
 
-    this.xhr.open('PATCH', `${API_URL}/test_attempts/${this.context.attemptId}`, true);
-    this.xhr.setRequestHeader('Auth-Token', this.context.user.authenticationToken);
+    this.xhr.open(
+      'PATCH',
+      `${API_URL}/test_attempts/${this.context.attemptId}`,
+      true,
+    );
+    this.xhr.setRequestHeader(
+      'Auth-Token',
+      this.context.user.authenticationToken,
+    );
     this.xhr.setRequestHeader('Username', this.context.user.username);
     this.xhr.setRequestHeader('Content-Type', 'application/json');
     const requestData = {

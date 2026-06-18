@@ -18,7 +18,12 @@ export class Grade {
     [3, 'HD'],
   ]);
 
-  public static readonly GRADES: string[] = ['Pass', 'Credit', 'Distinction', 'High Distinction'];
+  public static readonly GRADES: string[] = [
+    'Pass',
+    'Credit',
+    'Distinction',
+    'High Distinction',
+  ];
 
   static {
     Grade.GRADES[-1] = 'Fail';

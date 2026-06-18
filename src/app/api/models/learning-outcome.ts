@@ -66,7 +66,13 @@ export class LearningOutcome extends Entity {
       // GLO
       if (this.isNew) {
         return svc
-          .create({}, {entity: this, endpointFormat: LearningOutcomeService.globalEndpoint})
+          .create(
+            {},
+            {
+              entity: this,
+              endpointFormat: LearningOutcomeService.globalEndpoint,
+            },
+          )
           .pipe(
             tap((response: LearningOutcome) => {
               Object.assign(this, response);
@@ -95,7 +101,9 @@ export class LearningOutcome extends Entity {
   private originalSaveData: string;
 
   public get hasOriginalSaveData(): boolean {
-    return this.originalSaveData !== undefined && this.originalSaveData !== null;
+    return (
+      this.originalSaveData !== undefined && this.originalSaveData !== null
+    );
   }
 
   /**

@@ -1,6 +1,16 @@
 import moment from 'moment';
-import {AfterViewInit, Component, Inject, Input, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  Input,
+  ViewChild,
+} from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import {Subscription, timer} from 'rxjs';
 import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
 import {AudioPlayerComponent} from 'src/app/common/audio-player/audio-player.component';
@@ -51,9 +61,8 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   }
 
   beginDiscussion(): void {
-    const dialogRef: MatDialogRef<IntelligentDiscussionDialog, void> = this.dialog.open(
-      IntelligentDiscussionDialog,
-      {
+    const dialogRef: MatDialogRef<IntelligentDiscussionDialog, void> =
+      this.dialog.open(IntelligentDiscussionDialog, {
         data: {
           dc: this.discussion,
           task: this.task,
@@ -61,8 +70,7 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
         },
         maxWidth: '800px',
         disableClose: true,
-      },
-    );
+      });
 
     dialogRef.afterOpened().subscribe();
 
@@ -91,7 +99,8 @@ export class IntelligentDiscussionDialog {
   counter: Subscription;
   guide = {text: 'Click start to begin'};
 
-  @ViewChild('testRecorder', {static: true}) testRecorder: MicrophoneTesterComponent;
+  @ViewChild('testRecorder', {static: true})
+  testRecorder: MicrophoneTesterComponent;
   @ViewChild('discussionRecorder', {static: true})
   discussionRecorder: IntelligentDiscussionRecorderComponent;
 
@@ -161,7 +170,9 @@ export class IntelligentDiscussionDialog {
   }
 
   setPrompt() {
-    this.data.audioRef.src = this.data.dc.generateDiscussionPromptUrl(this.activePromptId);
+    this.data.audioRef.src = this.data.dc.generateDiscussionPromptUrl(
+      this.activePromptId,
+    );
     this.guide.text = 'Listening to prompt';
     this.data.audioRef.load();
     this.data.audioRef.play();

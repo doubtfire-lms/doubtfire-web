@@ -1,5 +1,10 @@
 import {Entity} from 'ngx-entity-service';
-import {Project, Task, TaskCommentService, User} from 'src/app/api/models/doubtfire-model';
+import {
+  Project,
+  Task,
+  TaskCommentService,
+  User,
+} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
@@ -55,12 +60,16 @@ export class TaskComment extends Entity {
   }
 
   public get isBubbleComment(): boolean {
-    return ['text', 'discussion', 'audio', 'image', 'pdf'].includes(this.commentType);
+    return ['text', 'discussion', 'audio', 'image', 'pdf'].includes(
+      this.commentType,
+    );
   }
 
   public get isStaffAuthored(): boolean {
     return (
-      this.task?.unit?.staff?.some((unitRole) => unitRole.user.id === this.author?.id) ?? false
+      this.task?.unit?.staff?.some(
+        (unitRole) => unitRole.user.id === this.author?.id,
+      ) ?? false
     );
   }
 
@@ -85,7 +94,8 @@ export class TaskComment extends Entity {
       this.authorIsMe &&
       this.commentType === 'text' &&
       this.createdAt instanceof Date &&
-      new Date().getTime() - this.createdAt.getTime() <= TaskComment.EDIT_WINDOW_MS
+      new Date().getTime() - this.createdAt.getTime() <=
+        TaskComment.EDIT_WINDOW_MS
     );
   }
 
@@ -97,7 +107,11 @@ export class TaskComment extends Entity {
     const tcs: TaskCommentService = AppInjector.get(TaskCommentService);
     tcs
       .delete(
-        {projectId: this.project.id, taskDefinitionId: this.task.definition.id, id: this.id},
+        {
+          projectId: this.project.id,
+          taskDefinitionId: this.task.definition.id,
+          id: this.id,
+        },
         {cache: this.task.commentCache},
       )
       .subscribe({

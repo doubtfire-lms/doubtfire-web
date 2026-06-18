@@ -1,5 +1,9 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -20,9 +24,17 @@ export class TeachingPeriodListComponent implements OnInit {
   @ViewChild(MatSort) sort = new MatSort();
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public dataSource: MatTableDataSource<TeachingPeriod> = new MatTableDataSource();
+  public dataSource: MatTableDataSource<TeachingPeriod> =
+    new MatTableDataSource();
 
-  displayedColumns: string[] = ['active', 'name', 'startDate', 'endDate', 'activeUntil', 'actions'];
+  displayedColumns: string[] = [
+    'active',
+    'name',
+    'startDate',
+    'endDate',
+    'activeUntil',
+    'actions',
+  ];
 
   constructor(
     private teachingPeriodsService: TeachingPeriodService,
@@ -53,9 +65,13 @@ export class TeachingPeriodListComponent implements OnInit {
   }
 
   selectTeachingPeriod(selectedTeachingPeriod: TeachingPeriod) {
-    this.teachingPeriodsService.get(selectedTeachingPeriod.id).subscribe((teachingPeriod) => {
-      this.dialog.open(NewTeachingPeriodDialogComponent, {data: {teachingPeriod: teachingPeriod}});
-    });
+    this.teachingPeriodsService
+      .get(selectedTeachingPeriod.id)
+      .subscribe((teachingPeriod) => {
+        this.dialog.open(NewTeachingPeriodDialogComponent, {
+          data: {teachingPeriod: teachingPeriod},
+        });
+      });
   }
 
   /**
@@ -67,7 +83,11 @@ export class TeachingPeriodListComponent implements OnInit {
    *
    * @returns truthy comparison between aValue and bValue.
    */
-  protected sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+  protected sortCompare(
+    aValue: number | string,
+    bValue: number | string,
+    isAsc: boolean,
+  ) {
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
@@ -105,7 +125,8 @@ export class NewTeachingPeriodDialogComponent {
     public teachingPeriodBreakService: TeachingPeriodBreakService,
     public alertService: AlertService,
   ) {}
-  public newOrSelectedTeachingPeriod = this.data.teachingPeriod || new TeachingPeriod();
+  public newOrSelectedTeachingPeriod =
+    this.data.teachingPeriod || new TeachingPeriod();
 
   public tempBreak = new TeachingPeriodBreak();
 
@@ -123,7 +144,10 @@ export class NewTeachingPeriodDialogComponent {
       });
   }
 
-  deleteBreak(teachingPeriod: TeachingPeriod, teachingBreak: TeachingPeriodBreak): void {
+  deleteBreak(
+    teachingPeriod: TeachingPeriod,
+    teachingBreak: TeachingPeriodBreak,
+  ): void {
     teachingPeriod.removeBreak(teachingBreak.id).subscribe({
       next: (teachingPeriodBreak) => {
         console.log(teachingPeriodBreak);

@@ -19,7 +19,9 @@ export class UserBadgeComponent {
   }
 
   get studentDashboardRoute(): unknown[] | null {
-    return this.unselected ? null : ['/projects', this.selectedTask.project.id, 'dashboard'];
+    return this.unselected
+      ? null
+      : ['/projects', this.selectedTask.project.id, 'dashboard'];
   }
 
   get studentTaskRoute(): unknown[] | null {

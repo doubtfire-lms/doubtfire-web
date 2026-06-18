@@ -10,7 +10,9 @@ import {AlertService} from 'src/app/common/services/alert.service';
 export type OnSuccessMethod<T> = (object: T, isNew: boolean) => void;
 
 @Directive()
-export abstract class EntityFormComponent<T extends Entity> implements AfterViewInit {
+export abstract class EntityFormComponent<
+  T extends Entity,
+> implements AfterViewInit {
   // formData consists of the various FormControl elements that the form is made up of.
   // See FormGroup:     https://angular.io/api/forms/FormGroup
   // See FormControl:   https://angular.io/api/forms/FormControl
@@ -120,7 +122,11 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    * @param alertService the alert service used to provide alerts.
    * @param success the function, provided by inheritor, that is executed on success of CRUD methods.
    */
-  submit(service: EntityService<T>, alertService: AlertService, success: OnSuccessMethod<T>) {
+  submit(
+    service: EntityService<T>,
+    alertService: AlertService,
+    success: OnSuccessMethod<T>,
+  ) {
     // response is what we get back from the server
     // when creating or updating
     let response: Observable<T>;
@@ -138,7 +144,10 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
         // Copy the changes from the form to the data that will be sent to the server
         // Then send it off
         this.copyChangesFromForm();
-        response = service.update(this.selected, this.optionsOnRequest('update'));
+        response = service.update(
+          this.selected,
+          this.optionsOnRequest('update'),
+        );
       } else if (!this.selected) {
         // Nothing selected, which means we're creating something new
         const data = this.formDataToNewObject(this.serverKey); // sent as path id and body
@@ -180,7 +189,11 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
     }
   }
 
-  protected delete(entity: T, entities: T[], service: EntityService<T>): Observable<void> {
+  protected delete(
+    entity: T,
+    entities: T[],
+    service: EntityService<T>,
+  ): Observable<void> {
     return service.delete<void>(entity, this.optionsOnRequest('delete')).pipe(
       tap((_obj) => {
         this.cancelEdit();
@@ -214,7 +227,9 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    * to the entity constructor when an object is created. This is then passed along
    * in the `create` call as the `other` value to the EntityService's create method.
    */
-  protected optionsOnRequest(_kind: 'create' | 'update' | 'delete'): RequestOptions<T> {
+  protected optionsOnRequest(
+    _kind: 'create' | 'update' | 'delete',
+  ): RequestOptions<T> {
     return undefined;
   }
 
@@ -315,7 +330,11 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    *
    * @returns truthy comparison between aValue and bValue.
    */
-  protected sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+  protected sortCompare(
+    aValue: number | string,
+    bValue: number | string,
+    isAsc: boolean,
+  ) {
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }

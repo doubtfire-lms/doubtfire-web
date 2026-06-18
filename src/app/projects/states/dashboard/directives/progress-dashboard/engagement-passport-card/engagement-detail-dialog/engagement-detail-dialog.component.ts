@@ -1,4 +1,11 @@
-import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {
   Engagement,
@@ -65,11 +72,13 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.evidenceBlobUrl) this.fileDownloader.releaseBlob(this.evidenceBlobUrl);
+    if (this.evidenceBlobUrl)
+      this.fileDownloader.releaseBlob(this.evidenceBlobUrl);
   }
 
   openAttachment(): void {
-    if (this.evidenceBlobUrl) window.open(this.evidenceBlobUrl, '_blank', 'noopener,noreferrer');
+    if (this.evidenceBlobUrl)
+      window.open(this.evidenceBlobUrl, '_blank', 'noopener,noreferrer');
   }
 
   submitComment(): void {
@@ -117,10 +126,13 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
     const text = this.editingCommentText.trim();
     if (!this.editingComment || !text) return;
 
-    this.engagementCommentService.updateComment(this.editingComment, text).subscribe({
-      next: () => this.cancelEdit(),
-      error: (error) => this.alerts.error(error?.error ?? 'Unable to update this comment.'),
-    });
+    this.engagementCommentService
+      .updateComment(this.editingComment, text)
+      .subscribe({
+        next: () => this.cancelEdit(),
+        error: (error) =>
+          this.alerts.error(error?.error ?? 'Unable to update this comment.'),
+      });
   }
 
   deleteComment(comment: EngagementComment): void {
@@ -134,7 +146,8 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
           next: () => {
             if (this.replyingToComment?.id === comment.id) this.cancelReply();
           },
-          error: (error) => this.alerts.error(error?.error ?? 'Unable to delete this comment.'),
+          error: (error) =>
+            this.alerts.error(error?.error ?? 'Unable to delete this comment.'),
         });
       },
     );

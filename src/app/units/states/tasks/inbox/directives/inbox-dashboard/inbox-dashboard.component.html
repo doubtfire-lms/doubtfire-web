@@ -8,7 +8,10 @@
         (selectedTabChange)="onTabChange($event)"
       >
         <mat-tab label="Submission"></mat-tab>
-        <mat-tab label="Task Sheet" [disabled]="!task.definition.hasTaskSheet"></mat-tab>
+        <mat-tab
+          label="Task Sheet"
+          [disabled]="!task.definition.hasTaskSheet"
+        ></mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <span class="inline-flex items-center gap-1">
@@ -51,11 +54,19 @@
       </button>
 
       <mat-menu #taskMenu="matMenu" xPosition="before">
-        <button mat-menu-item [disabled]="!task.hasPdf" (click)="downloadSubmission()">
+        <button
+          mat-menu-item
+          [disabled]="!task.hasPdf"
+          (click)="downloadSubmission()"
+        >
           <mat-icon>download</mat-icon>
           <span>Download submission PDF</span>
         </button>
-        <button mat-menu-item [disabled]="!task" (click)="downloadSubmittedFiles()">
+        <button
+          mat-menu-item
+          [disabled]="!task"
+          (click)="downloadSubmittedFiles()"
+        >
           <mat-icon>folder_zip</mat-icon>
           <span>Download submitted files</span>
         </button>
@@ -70,7 +81,9 @@
               <f-pdf-viewer [pdfUrl]="task.submissionUrl()"></f-pdf-viewer>
             } @else {
               <div class="flex h-full flex-col items-center justify-center">
-                <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">
+                <mat-icon
+                  class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]"
+                >
                   description_off
                 </mat-icon>
               </div>
@@ -80,10 +93,14 @@
         @case (InboxDashboardTab.taskSheet) {
           <div class="h-full">
             @if (task.definition.hasTaskSheet) {
-              <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()"></f-pdf-viewer>
+              <f-pdf-viewer
+                [pdfUrl]="task.definition.getTaskPDFUrl()"
+              ></f-pdf-viewer>
             } @else {
               <div class="flex h-full flex-col items-center justify-center">
-                <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">
+                <mat-icon
+                  class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]"
+                >
                   subtitles_off
                 </mat-icon>
               </div>
@@ -116,7 +133,9 @@
     </div>
   } @else {
     <div class="flex h-full flex-col items-center justify-center">
-      <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">subtitles_off</mat-icon>
+      <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]"
+        >subtitles_off</mat-icon
+      >
       <p class="mt-1 text-[#c5c5c5]">Select a task to review</p>
     </div>
   }

@@ -15,10 +15,20 @@
         ></ngx-skeleton-loader>
         <div class="min-w-0 flex-1">
           <ngx-skeleton-loader
-            [theme]="{height: '10px', width: '78%', 'border-radius': '999px', margin: '6px 0'}"
+            [theme]="{
+              height: '10px',
+              width: '78%',
+              'border-radius': '999px',
+              margin: '6px 0',
+            }"
           ></ngx-skeleton-loader>
           <ngx-skeleton-loader
-            [theme]="{height: '10px', width: '56%', 'border-radius': '999px', margin: '6px 0'}"
+            [theme]="{
+              height: '10px',
+              width: '56%',
+              'border-radius': '999px',
+              margin: '6px 0',
+            }"
           ></ngx-skeleton-loader>
         </div>
         <ngx-skeleton-loader
@@ -33,14 +43,23 @@
 <ng-template #BlankPanelSkeleton>
   <ngx-skeleton-loader
     class="block size-full"
-    [theme]="{height: '100%', width: '100%', 'border-radius': '8px', margin: '0'}"
+    [theme]="{
+      height: '100%',
+      width: '100%',
+      'border-radius': '8px',
+      margin: '0',
+    }"
   ></ngx-skeleton-loader>
 </ng-template>
 
 @if (!isMobileView) {
   <div class="min-h-0 px-3" fxFill fxHide fxLayout="column" fxShow.gt-sm>
     <div class="min-h-0" fxFlex fxLayout="row" fxLayoutAlign="center stretch">
-      <div #inboxpanel class="staff-task-list inbox-panel overflow-hidden" id="inboxpanel">
+      <div
+        #inboxpanel
+        class="staff-task-list inbox-panel overflow-hidden"
+        id="inboxpanel"
+      >
         @if (loading) {
           <ng-container *ngTemplateOutlet="TaskListSkeleton"></ng-container>
         } @else if (taskData) {
@@ -88,11 +107,15 @@
         (cdkDragMoved)="dragging($event, commentspanel)"
         (cdkDragStarted)="startedDragging($event, commentspanel)"
       ></div>
-      <div #commentspanel class="task-comment-panel inbox-panel overflow-hidden">
+      <div
+        #commentspanel
+        class="task-comment-panel inbox-panel overflow-hidden"
+      >
         @if (loading) {
           <ng-container *ngTemplateOutlet="BlankPanelSkeleton"></ng-container>
         } @else {
-          <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
+          <task-comments-viewer [task]="taskData.selectedTask">
+          </task-comments-viewer>
         }
       </div>
     </div>
@@ -120,7 +143,12 @@
         ></df-staff-task-list>
       }
     </div>
-    <div fxFill fxLayout="column" fxLayoutAlign="space-between stretch" [hidden]="!taskSelected">
+    <div
+      fxFill
+      fxLayout="column"
+      fxLayoutAlign="space-between stretch"
+      [hidden]="!taskSelected"
+    >
       <div class="flex items-center">
         <button
           aria-label="Back to inbox"
@@ -130,7 +158,9 @@
         >
           <mat-icon>arrow_back_ios_new</mat-icon>
         </button>
-        <h3 class="mb-0">{{ taskData?.selectedTask?.project.student.nickname }}</h3>
+        <h3 class="mb-0">
+          {{ taskData?.selectedTask?.project.student.nickname }}
+        </h3>
         <div fxFlex></div>
         <button
           aria-label="Open current document"

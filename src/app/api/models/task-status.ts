@@ -184,24 +184,45 @@ export class TaskStatus {
   ]);
 
   // Which status should not show up in the task status drop down... for students
-  public static readonly REJECT_FUTURE_STATES: Map<TaskStatusEnum, TaskStatusEnum[]> = new Map<
+  public static readonly REJECT_FUTURE_STATES: Map<
     TaskStatusEnum,
     TaskStatusEnum[]
-  >([
+  > = new Map<TaskStatusEnum, TaskStatusEnum[]>([
     ['not_started', []],
     ['working_on_it', []],
     ['need_help', []],
     ['ready_for_feedback', []],
-    ['complete', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
-    ['discuss', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
-    ['demonstrate', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
+    [
+      'complete',
+      ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help'],
+    ],
+    [
+      'discuss',
+      ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help'],
+    ],
+    [
+      'demonstrate',
+      ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help'],
+    ],
     ['fix_and_resubmit', []],
     ['redo', []],
-    ['feedback_exceeded', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
-    ['time_exceeded', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
-    ['fail', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
+    [
+      'feedback_exceeded',
+      ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help'],
+    ],
+    [
+      'time_exceeded',
+      ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help'],
+    ],
+    [
+      'fail',
+      ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help'],
+    ],
     ['assess_in_portfolio', ['not_started']],
-    ['attention_required', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
+    [
+      'attention_required',
+      ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help'],
+    ],
   ]);
 
   public static readonly STATUS_LABELS: Map<TaskStatusEnum, string> = new Map([
@@ -221,21 +242,22 @@ export class TaskStatus {
     ['attention_required', 'Attention Required'],
   ]);
 
-  public static readonly STATUS_NAME_TO_KEY: Map<string, TaskStatusEnum> = new Map([
-    ['Ready for Feedback', 'ready_for_feedback'],
-    ['Awaiting Feedback', 'ready_for_feedback'],
-    ['Not Started', 'not_started'],
-    ['Working On It', 'working_on_it'],
-    ['Need Help', 'need_help'],
-    ['Redo', 'redo'],
-    ['Feedback Exceeded', 'feedback_exceeded'],
-    ['Resubmit', 'fix_and_resubmit'],
-    ['Discuss', 'discuss'],
-    ['Demonstrate', 'demonstrate'],
-    ['Complete', 'complete'],
-    ['Fail', 'fail'],
-    ['Time Exceeded', 'time_exceeded'],
-  ]);
+  public static readonly STATUS_NAME_TO_KEY: Map<string, TaskStatusEnum> =
+    new Map([
+      ['Ready for Feedback', 'ready_for_feedback'],
+      ['Awaiting Feedback', 'ready_for_feedback'],
+      ['Not Started', 'not_started'],
+      ['Working On It', 'working_on_it'],
+      ['Need Help', 'need_help'],
+      ['Redo', 'redo'],
+      ['Feedback Exceeded', 'feedback_exceeded'],
+      ['Resubmit', 'fix_and_resubmit'],
+      ['Discuss', 'discuss'],
+      ['Demonstrate', 'demonstrate'],
+      ['Complete', 'complete'],
+      ['Fail', 'fail'],
+      ['Time Exceeded', 'time_exceeded'],
+    ]);
 
   public static readonly STATUS_ICONS: Map<TaskStatusEnum, string> = new Map([
     ['ready_for_feedback', 'thumb_up'],
@@ -255,22 +277,23 @@ export class TaskStatus {
   ]);
 
   // Material icons used by newer UI elements.
-  public static readonly STATUS_MATERIAL_ICONS: Map<TaskStatusEnum, string> = new Map([
-    ['ready_for_feedback', 'thumb_up_off_alt'],
-    ['not_started', 'pause'],
-    ['working_on_it', 'bolt'],
-    ['need_help', 'help'],
-    ['redo', 'undo'],
-    ['feedback_exceeded', 'visibility_off'],
-    ['fix_and_resubmit', 'construction'],
-    ['discuss', 'question_answer'],
-    ['demonstrate', 'record_voice_over'],
-    ['complete', 'done'],
-    ['fail', 'close'],
-    ['time_exceeded', 'schedule'],
-    ['assess_in_portfolio', 'rate_review'],
-    ['attention_required', 'sms_failed'],
-  ]);
+  public static readonly STATUS_MATERIAL_ICONS: Map<TaskStatusEnum, string> =
+    new Map([
+      ['ready_for_feedback', 'thumb_up_off_alt'],
+      ['not_started', 'pause'],
+      ['working_on_it', 'bolt'],
+      ['need_help', 'help'],
+      ['redo', 'undo'],
+      ['feedback_exceeded', 'visibility_off'],
+      ['fix_and_resubmit', 'construction'],
+      ['discuss', 'question_answer'],
+      ['demonstrate', 'record_voice_over'],
+      ['complete', 'done'],
+      ['fail', 'close'],
+      ['time_exceeded', 'schedule'],
+      ['assess_in_portfolio', 'rate_review'],
+      ['attention_required', 'sms_failed'],
+    ]);
 
   // Please make sure this matches task-status-colors.less
   public static readonly STATUS_COLORS: Map<TaskStatusEnum, string> = new Map([
@@ -308,7 +331,12 @@ export class TaskStatus {
   ]);
 
   public static readonly SWITCHABLE_STATES = {
-    student: ['not_started', 'working_on_it', 'need_help', 'ready_for_feedback'],
+    student: [
+      'not_started',
+      'working_on_it',
+      'need_help',
+      'ready_for_feedback',
+    ],
     tutor: [
       'complete',
       'discuss',
@@ -344,22 +372,26 @@ export class TaskStatus {
       {
         detail: 'Task not started',
         reason: 'You have not yet started the Task.',
-        action: 'Depending on when the target date is, you should start this task soon.',
+        action:
+          'Depending on when the target date is, you should start this task soon.',
       },
     ],
     [
       'working_on_it',
       {
         detail: 'Working on the task',
-        reason: 'You are working on the task, but it is not yet ready to assess.',
-        action: 'Finish working on this task and then set it to ready for feedback.',
+        reason:
+          'You are working on the task, but it is not yet ready to assess.',
+        action:
+          'Finish working on this task and then set it to ready for feedback.',
       },
     ],
     [
       'need_help',
       {
         detail: 'Need help for the task',
-        reason: 'You are working on the task but would like some help to get it complete.',
+        reason:
+          'You are working on the task but would like some help to get it complete.',
         action:
           'Upload the task with what you have completed so far and add a comment on what you would like help on.',
       },
@@ -399,7 +431,8 @@ export class TaskStatus {
       {
         detail: 'Your work needs to be discussed further.',
         reason: 'Your work looks good and your tutor believes it is on track.',
-        action: 'For this to be marked as complete, attend class and discuss it with your tutor.',
+        action:
+          'For this to be marked as complete, attend class and discuss it with your tutor.',
       },
     ],
     [
@@ -425,7 +458,8 @@ export class TaskStatus {
       'complete',
       {
         detail: 'You are finished with this task 🎉',
-        reason: 'Your tutor is happy with your work and it has been discussed with them.',
+        reason:
+          'Your tutor is happy with your work and it has been discussed with them.',
         action:
           'No further action required. Move onto the next task, or go party if everything is done.',
       },
@@ -455,7 +489,8 @@ export class TaskStatus {
         detail: 'Your submission will be assessed in your portfolio',
         reason:
           'This task will no longer be checked by tutors, and will be assessed directly in your final portfolio submission.',
-        action: 'You will need to ensure this task is at an adequate standard in your portfolio.',
+        action:
+          'You will need to ensure this task is at an adequate standard in your portfolio.',
       },
     ],
     // [

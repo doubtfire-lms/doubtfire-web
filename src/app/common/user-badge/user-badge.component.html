@@ -11,7 +11,10 @@
       [user]="selectedTask?.project.student"
     ></user-icon>
   </a>
-  <div class="flex-col items-start justify-center" style="line-height: 0.5em; margin-top: 4px">
+  <div
+    class="flex-col items-start justify-center"
+    style="line-height: 0.5em; margin-top: 4px"
+  >
     <div id="placeholder1" style="margin-top: 6px" [hidden]="!unselected"></div>
     <div id="placeholder2" [hidden]="!unselected"></div>
     <a
@@ -20,7 +23,8 @@
       [routerLink]="studentDashboardRoute"
     >
       <h4 class="mat-h4" style="margin-bottom: 1px">
-        {{ selectedTask?.project.student.firstName }} {{ selectedTask?.project.student.lastName }}
+        {{ selectedTask?.project.student.firstName }}
+        {{ selectedTask?.project.student.lastName }}
       </h4>
     </a>
     <a

@@ -1,7 +1,8 @@
 <div class="flex h-full flex-col">
   @if (!loadingStaffNotes && project?.staffNoteCount === 0) {
     <div class="flex size-full items-center justify-center text-gray-300">
-      No staff notes for {{ project.student.preferredName }} {{ project.student.lastName }}
+      No staff notes for {{ project.student.preferredName }}
+      {{ project.student.lastName }}
     </div>
   }
   <div #staffNotesContainer class="flex-1 overflow-auto p-2.5">
@@ -13,7 +14,10 @@
           >
             <div
               class="flex items-center"
-              [ngClass]="note.replyTo && 'hover:text-blue-500 hover:underline cursor-pointer'"
+              [ngClass]="
+                note.replyTo &&
+                'hover:text-blue-500 hover:underline cursor-pointer'
+              "
               (click)="scrollToNote(note.replyTo)"
             >
               <mat-icon class="mr-2">reply</mat-icon>
@@ -21,11 +25,17 @@
                 @if (note.replyTo) {
                   <span class="font-medium">
                     Replying to {{ note.replyTo.user.preferredName }}
-                    {{ note.replyTo.user.lastName }} ({{ note.replyTo.user.nickname }})
+                    {{ note.replyTo.user.lastName }} ({{
+                      note.replyTo.user.nickname
+                    }})
                   </span>
-                  <span class="text-xs text-gray-600">{{ note.replyTo.note }}</span>
+                  <span class="text-xs text-gray-600">{{
+                    note.replyTo.note
+                  }}</span>
                 } @else {
-                  <span class="text-xs italic text-gray-400">Replying to: Deleted note</span>
+                  <span class="text-xs italic text-gray-400"
+                    >Replying to: Deleted note</span
+                  >
                 }
               </div>
             </div>
@@ -37,7 +47,10 @@
           (mouseout)="hoveredNoteId = null"
           (mouseover)="hoveredNoteId = note.id"
         >
-          <div class="absolute bottom-3 right-3 flex" [hidden]="hoveredNoteId !== note.id">
+          <div
+            class="absolute bottom-3 right-3 flex"
+            [hidden]="hoveredNoteId !== note.id"
+          >
             @if (note.authorIsMe) {
               <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
             }
@@ -46,8 +59,13 @@
           </div>
           <div class="flex justify-between">
             <mat-card-title class="flex items-center">
-              <user-icon size="25" style="margin-right: 8px" [user]="note.user"></user-icon>
-              {{ note.user?.firstName }} {{ note.user?.lastName }}</mat-card-title
+              <user-icon
+                size="25"
+                style="margin-right: 8px"
+                [user]="note.user"
+              ></user-icon>
+              {{ note.user?.firstName }}
+              {{ note.user?.lastName }}</mat-card-title
             >
             <div class="flex items-center">
               <mat-card-subtitle
@@ -61,7 +79,10 @@
 
           <mat-card-content class="py-2.5">
             @if (editingNote && editingNote.id === note.id) {
-              <mat-form-field appearance="outline" class="flex w-full items-center">
+              <mat-form-field
+                appearance="outline"
+                class="flex w-full items-center"
+              >
                 <mat-label>Update Note</mat-label>
                 <textarea
                   #staffNoteEditor
@@ -71,14 +92,27 @@
                   (input)="autoResizeStaffNoteEditor()"
                 ></textarea>
                 <div class="flex justify-end gap-1">
-                  <button color="" mat-raised-button (click)="cancelEditingNote()">Cancel</button>
-                  <button color="primary" mat-raised-button (click)="updateNote(note)">
+                  <button
+                    color=""
+                    mat-raised-button
+                    (click)="cancelEditingNote()"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    color="primary"
+                    mat-raised-button
+                    (click)="updateNote(note)"
+                  >
                     Update Note
                   </button>
                 </div>
               </mat-form-field>
             } @else {
-              <div class="markdown-to-html" [innerHTML]="note.note | marked"></div>
+              <div
+                class="markdown-to-html"
+                [innerHTML]="note.note | marked"
+              ></div>
             }
           </mat-card-content>
         </mat-card>
@@ -101,14 +135,17 @@
           <mat-icon class="mr-2 mt-0.5">reply</mat-icon>
           <div class="flex flex-col">
             <span class="font-medium">
-              Replying to {{ replyingToNote.user.firstName }} {{ replyingToNote.user.lastName }} ({{
+              Replying to {{ replyingToNote.user.firstName }}
+              {{ replyingToNote.user.lastName }} ({{
                 replyingToNote.user.nickname
               }})
             </span>
             <span class="text-xs text-gray-600">{{ replyingToNote.note }}</span>
           </div>
         </div>
-        <mat-icon class="cursor-pointer" (click)="cancelReplyingToNote()">close</mat-icon>
+        <mat-icon class="cursor-pointer" (click)="cancelReplyingToNote()"
+          >close</mat-icon
+        >
       </div>
     }
 
@@ -120,7 +157,9 @@
         [(ngModel)]="noteText"
       ></textarea>
       <div class="flex justify-end">
-        <button color="primary" mat-raised-button (click)="submitNote()">Submit</button>
+        <button color="primary" mat-raised-button (click)="submitNote()">
+          Submit
+        </button>
       </div>
     </mat-form-field>
   </div>

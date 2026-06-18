@@ -16,7 +16,10 @@ export interface BatchFeedbackWorkflowDialogData {
 export class BatchFeedbackWorkflowDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: BatchFeedbackWorkflowDialogData,
-    private dialogRef: MatDialogRef<BatchFeedbackWorkflowDialogComponent, {openUpload?: boolean}>,
+    private dialogRef: MatDialogRef<
+      BatchFeedbackWorkflowDialogComponent,
+      {openUpload?: boolean}
+    >,
   ) {}
 
   get taskLabel(): string {

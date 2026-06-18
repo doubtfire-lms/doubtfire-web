@@ -1,7 +1,11 @@
 <div id="pdfContainer">
   <div id="actionBar">
     <div id="pdfViewActions" [hidden]="!pdfBlobUrl">
-      <button aria-label="Switch viewer" mat-icon-button (click)="toggleNativePdfViewer()">
+      <button
+        aria-label="Switch viewer"
+        mat-icon-button
+        (click)="toggleNativePdfViewer()"
+      >
         @if (useNativePdfViewer) {
           <mat-icon>toggle_on</mat-icon>
         } @else {
@@ -14,7 +18,12 @@
     </div>
     <div id="pdfActions" [hidden]="!loaded || useNativePdfViewer">
       <form #loginForm="ngForm">
-        <mat-form-field appearance="outline" class="pdf-form-field" floatLabel="never" ngSubmit>
+        <mat-form-field
+          appearance="outline"
+          class="pdf-form-field"
+          floatLabel="never"
+          ngSubmit
+        >
           <mat-icon matPrefix>search</mat-icon>
           <input
             matInput
@@ -51,7 +60,9 @@
   @if (pdfBlobUrl) {
     @if (useNativePdfViewer) {
       @if (pdfBlobUrl) {
-        <object type="application/pdf" [data]="pdfBlobUrl | safe">PDF Preview</object>
+        <object type="application/pdf" [data]="pdfBlobUrl | safe">
+          PDF Preview
+        </object>
       }
     } @else {
       <pdf-viewer

@@ -10,7 +10,9 @@ export interface AttachmentConfirmationDialogData {
   templateUrl: './attachment-confirmation-dialog.component.html',
   standalone: false,
 })
-export class AttachmentConfirmationDialogComponent implements OnInit, OnDestroy {
+export class AttachmentConfirmationDialogComponent
+  implements OnInit, OnDestroy
+{
   public file: File;
   public previewUrl: string | null = null;
 
@@ -35,7 +37,10 @@ export class AttachmentConfirmationDialogComponent implements OnInit, OnDestroy 
   }
 
   get isPdf(): boolean {
-    return this.file?.type === 'application/pdf' || this.file?.name?.toLowerCase().endsWith('.pdf');
+    return (
+      this.file?.type === 'application/pdf' ||
+      this.file?.name?.toLowerCase().endsWith('.pdf')
+    );
   }
 
   get isAudio(): boolean {

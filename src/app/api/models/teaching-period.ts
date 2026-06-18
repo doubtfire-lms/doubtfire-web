@@ -1,7 +1,11 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {Observable} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
-import {TeachingPeriodBreakService, TeachingPeriodService, Unit} from './doubtfire-model';
+import {
+  TeachingPeriodBreakService,
+  TeachingPeriodService,
+  Unit,
+} from './doubtfire-model';
 
 export class TeachingPeriodBreak extends Entity {
   id: number;
@@ -18,7 +22,8 @@ export class TeachingPeriod extends Entity {
   activeUntil: string;
   active: boolean;
 
-  breaksCache: EntityCache<TeachingPeriodBreak> = new EntityCache<TeachingPeriodBreak>();
+  breaksCache: EntityCache<TeachingPeriodBreak> =
+    new EntityCache<TeachingPeriodBreak>();
   unitsCache: EntityCache<Unit> = new EntityCache<Unit>();
 
   /**
@@ -63,14 +68,21 @@ export class TeachingPeriod extends Entity {
    * @returns true if there is a unit with the same code in this teaching period
    */
   public hasUnitLike(unit: Unit): boolean {
-    return unit && this.unitsCache.currentValues.some((u) => u.code === unit.code);
+    return (
+      unit && this.unitsCache.currentValues.some((u) => u.code === unit.code)
+    );
   }
 
-  public addBreak(startDate: Date, weeks: number): Observable<TeachingPeriodBreak> {
+  public addBreak(
+    startDate: Date,
+    weeks: number,
+  ): Observable<TeachingPeriodBreak> {
     const breakEntity = new TeachingPeriodBreak();
     breakEntity.startDate = startDate;
     breakEntity.numberOfWeeks = weeks;
-    const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
+    const breakService: TeachingPeriodBreakService = AppInjector.get(
+      TeachingPeriodBreakService,
+    );
 
     return breakService.create(
       {teaching_period_id: this.id},
@@ -84,7 +96,9 @@ export class TeachingPeriod extends Entity {
    * @returns an observable that emits the teaching period with the removed break, and indicates if any errors occured
    */
   public removeBreak(teachingBreakID: number): Observable<TeachingPeriodBreak> {
-    const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
+    const breakService: TeachingPeriodBreakService = AppInjector.get(
+      TeachingPeriodBreakService,
+    );
     return breakService.delete(
       {teaching_period_id: this.id, id: teachingBreakID},
       {cache: this.breaksCache},
@@ -96,7 +110,9 @@ export class TeachingPeriod extends Entity {
     rolloverInactive: boolean,
     searchForward: boolean,
   ): Observable<boolean> {
-    const teachingPeriodService: TeachingPeriodService = AppInjector.get(TeachingPeriodService);
+    const teachingPeriodService: TeachingPeriodService = AppInjector.get(
+      TeachingPeriodService,
+    );
 
     return teachingPeriodService.post<boolean>(
       {
@@ -119,7 +135,10 @@ export class TeachingPeriod extends Entity {
     if (!targetDate || !startDate) return null;
 
     const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-    let result = Math.floor((targetDate.getTime() - startDate.getTime()) / millisecondsPerWeek) + 1;
+    let result =
+      Math.floor(
+        (targetDate.getTime() - startDate.getTime()) / millisecondsPerWeek,
+      ) + 1;
 
     for (const teachingBreak of this.breaks) {
       const breakStart = this.normalizeDay(teachingBreak.startDate);
@@ -127,7 +146,8 @@ export class TeachingPeriod extends Entity {
       const firstMonday = this.firstMonday(teachingBreak);
       const mondayAfterBreak = this.mondayAfterBreak(teachingBreak);
 
-      if (!breakStart || !breakEnd || !firstMonday || !mondayAfterBreak) continue;
+      if (!breakStart || !breakEnd || !firstMonday || !mondayAfterBreak)
+        continue;
 
       if (targetDate >= breakStart) {
         if (targetDate >= breakEnd) {
@@ -137,7 +157,10 @@ export class TeachingPeriod extends Entity {
             result -= 1;
           }
         } else if (targetDate >= firstMonday) {
-          result -= Math.ceil((targetDate.getTime() - firstMonday.getTime()) / millisecondsPerWeek);
+          result -= Math.ceil(
+            (targetDate.getTime() - firstMonday.getTime()) /
+              millisecondsPerWeek,
+          );
         }
 
         if (targetDate >= breakEnd && targetDate < mondayAfterBreak) {
@@ -175,7 +198,11 @@ export class TeachingPeriod extends Entity {
 
     if (startDate.getDay() === 1) return startDate;
     if (startDate.getDay() === 0) {
-      return new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 1);
+      return new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate() + 1,
+      );
     }
 
     return new Date(

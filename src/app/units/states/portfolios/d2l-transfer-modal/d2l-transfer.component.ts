@@ -3,7 +3,11 @@
 //
 import {HttpClient} from '@angular/common/http';
 import {Component, Inject, Injectable, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import {D2lAssessmentMapping} from 'src/app/api/models/d2l/d2l_assessment_mapping';
 import {D2lAssessmentMappingService} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
@@ -18,7 +22,9 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   standalone: false,
 })
 export class D2lTransferComponent implements OnInit {
-  public d2lDataMapping: D2lAssessmentMapping = new D2lAssessmentMapping(this.data);
+  public d2lDataMapping: D2lAssessmentMapping = new D2lAssessmentMapping(
+    this.data,
+  );
   private apiEndpoint: string;
   private weightedUnit: boolean = false;
 
@@ -49,19 +55,25 @@ export class D2lTransferComponent implements OnInit {
       },
     });
 
-    this.httpClient.get<string>(`${this.doubtfireConstants.API_URL}/d2l/endpoint`).subscribe({
-      next: (response) => {
-        this.apiEndpoint = response;
-      },
-      error: (err) => {
-        this.alertService.error(`Failed to get locaiton of D2L instance: ${err}`);
-      },
-    });
+    this.httpClient
+      .get<string>(`${this.doubtfireConstants.API_URL}/d2l/endpoint`)
+      .subscribe({
+        next: (response) => {
+          this.apiEndpoint = response;
+        },
+        error: (err) => {
+          this.alertService.error(
+            `Failed to get locaiton of D2L instance: ${err}`,
+          );
+        },
+      });
   }
 
   public checkUnitGradesWeighted(): void {
     this.httpClient
-      .get<boolean>(`${this.doubtfireConstants.API_URL}/units/${this.data.id}/d2l/grades/weighted`)
+      .get<boolean>(
+        `${this.doubtfireConstants.API_URL}/units/${this.data.id}/d2l/grades/weighted`,
+      )
       .subscribe({
         next: (response) => {
           this.weightedUnit = response;
@@ -121,7 +133,10 @@ export class D2lTransferComponent implements OnInit {
             this.alertService.error('Transfer in progress, please wait');
           } else if (response.available) {
             const url = `${this.doubtfireConstants.API_URL}/units/${this.data.id}/d2l/grades`;
-            this.fileDownloader.downloadFile(url, `${this.data.code}-d2l-grades.csv`);
+            this.fileDownloader.downloadFile(
+              url,
+              `${this.data.code}-d2l-grades.csv`,
+            );
           } else {
             this.alertService.error(
               'No grade transfer results are available, and grade transfer does not appear to be in progress',

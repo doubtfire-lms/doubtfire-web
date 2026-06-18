@@ -55,15 +55,24 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       {
         keys: 'author',
         toEntityFn: (data: object, key: string, comment: TaskComment) => {
-          const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
-          comment.initials = `${user.preferredName[0]}${user.lastName[0]}`.toUpperCase();
+          const user = this.userService.cache.getOrCreate(
+            data[key]?.id,
+            userService,
+            data[key],
+          );
+          comment.initials =
+            `${user.preferredName[0]}${user.lastName[0]}`.toUpperCase();
           return user;
         },
       },
       {
         keys: 'recipient',
         toEntityFn: (data: object, key: string, _comment: TaskComment) => {
-          return this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
+          return this.userService.cache.getOrCreate(
+            data[key]?.id,
+            userService,
+            data[key],
+          );
         },
       },
       'recipientReadTime',
@@ -185,7 +194,9 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       body.append('reply_to_id', originalComment?.id.toString());
     }
 
-    const opts: RequestOptions<TaskComment> = {endpointFormat: this.commentEndpointFormat};
+    const opts: RequestOptions<TaskComment> = {
+      endpointFormat: this.commentEndpointFormat,
+    };
 
     // Based on the comment type - add to the body and configure the end point
     if (commentType === 'text' || commentType === 'scorm') {
@@ -227,7 +238,10 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     );
   }
 
-  public editComment(comment: TaskComment, text: string): Observable<TaskComment> {
+  public editComment(
+    comment: TaskComment,
+    text: string,
+  ): Observable<TaskComment> {
     const opts: RequestOptions<TaskComment> = {
       endpointFormat: this.commentEndpointFormat,
       entity: comment,
@@ -276,7 +290,9 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     );
   }
 
-  public assessScormExtension(extension: ScormExtensionComment): Observable<TaskComment> {
+  public assessScormExtension(
+    extension: ScormExtensionComment,
+  ): Observable<TaskComment> {
     const opts: RequestOptions<TaskComment> = {
       endpointFormat: this.scormExtensionGrantEndpointFormat,
       entity: extension,
@@ -292,7 +308,10 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     );
   }
 
-  public requestScormExtension(reason: string, task: Task): Observable<TaskComment> {
+  public requestScormExtension(
+    reason: string,
+    task: Task,
+  ): Observable<TaskComment> {
     const opts: RequestOptions<TaskComment> = {
       endpointFormat: this.scormRequestExtensionEndpointFormat,
       body: {
@@ -309,7 +328,10 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     );
   }
 
-  public postDiscussionReply(comment: TaskComment, replyAudio: Blob): Observable<TaskComment> {
+  public postDiscussionReply(
+    comment: TaskComment,
+    replyAudio: Blob,
+  ): Observable<TaskComment> {
     const form = new FormData();
     const pathIds = {
       project_id: comment.project.id,

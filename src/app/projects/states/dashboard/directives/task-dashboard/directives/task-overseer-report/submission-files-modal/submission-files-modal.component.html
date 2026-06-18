@@ -9,7 +9,9 @@
     </h3>
     <div class="truncate text-slate-600">
       {{ data.assessment.task.definition.abbreviation }}
-      {{ data.assessment.task.definition.name }} ({{ data.assessment.task.project.student.name }})
+      {{ data.assessment.task.definition.name }} ({{
+        data.assessment.task.project.student.name
+      }})
     </div>
   </div>
 
@@ -22,7 +24,9 @@
       <mat-spinner [diameter]="56"></mat-spinner>
     </div>
   } @else if (errorMessage) {
-    <div class="flex size-full min-h-[300px] items-center justify-center text-xs text-red-700">
+    <div
+      class="flex size-full min-h-[300px] items-center justify-center text-xs text-red-700"
+    >
       {{ errorMessage }}
     </div>
   } @else if (compareMode) {
@@ -71,7 +75,9 @@
                 (selectedFileChanged)="onComparedSelectionChange($event)"
               ></f-archive-viewer>
             } @else {
-              <div class="flex h-full min-h-[240px] items-center justify-center text-slate-500">
+              <div
+                class="flex h-full min-h-[240px] items-center justify-center text-slate-500"
+              >
                 Loading archive...
               </div>
             }
@@ -80,12 +86,16 @@
 
         <div class="flex min-h-0 flex-1 overflow-hidden rounded">
           @if (!bothSelectionsReady) {
-            <div class="flex size-full items-center justify-center px-2.5 text-xs text-slate-500">
+            <div
+              class="flex size-full items-center justify-center px-2.5 text-xs text-slate-500"
+            >
               Select a file in both submissions to compare.
             </div>
           } @else if (canShowDiffEditor) {
             <div class="flex size-full min-h-0 flex-col">
-              <div class="grid w-full grid-cols-1 gap-2.5 px-2 py-1 text-slate-500 lg:grid-cols-2">
+              <div
+                class="grid w-full grid-cols-1 gap-2.5 px-2 py-1 text-slate-500 lg:grid-cols-2"
+              >
                 <div class="min-w-0 overflow-hidden truncate whitespace-nowrap">
                   {{ primarySelectedFile?.path ?? primarySelectedFile?.name }}
                 </div>
@@ -101,7 +111,9 @@
               ></ngx-monaco-diff-editor>
             </div>
           } @else {
-            <div class="grid size-full grid-cols-1 gap-2.5 p-2.5 lg:grid-cols-2">
+            <div
+              class="grid size-full grid-cols-1 gap-2.5 p-2.5 lg:grid-cols-2"
+            >
               <ng-container
                 [ngTemplateOutlet]="selectedFilePreviewPane"
                 [ngTemplateOutletContext]="{
@@ -121,7 +133,9 @@
         </div>
       </div>
     } @else {
-      <div class="flex size-full min-h-[300px] items-center justify-center text-xs text-slate-500">
+      <div
+        class="flex size-full min-h-[300px] items-center justify-center text-xs text-slate-500"
+      >
         Unable to load one or both submission archives.
       </div>
     }
@@ -143,7 +157,9 @@
       ></f-archive-viewer>
     </div>
   } @else {
-    <div class="flex size-full min-h-[300px] items-center justify-center text-xs text-slate-500">
+    <div
+      class="flex size-full min-h-[300px] items-center justify-center text-xs text-slate-500"
+    >
       Unable to load submission files.
     </div>
   }
@@ -162,7 +178,11 @@
   </div>
 </ng-template>
 
-<ng-template #selectedFilePreviewPane let-editorOptions="editorOptions" let-file="file">
+<ng-template
+  #selectedFilePreviewPane
+  let-editorOptions="editorOptions"
+  let-file="file"
+>
   <div class="flex min-h-0 flex-col overflow-hidden rounded">
     <div
       class="flex shrink-0 items-center gap-1 px-2 py-1 text-slate-500"
@@ -188,7 +208,10 @@
         [options]="editorOptions"
       ></ngx-monaco-editor>
     } @else if (isArchivePdfFile(file)) {
-      <f-pdf-viewer class="block size-full" [pdfUrl]="file?.blobUrl ?? ''"></f-pdf-viewer>
+      <f-pdf-viewer
+        class="block size-full"
+        [pdfUrl]="file?.blobUrl ?? ''"
+      ></f-pdf-viewer>
     } @else if (isArchiveImageFile(file)) {
       <div class="flex size-full items-center justify-center p-2">
         <img
@@ -198,7 +221,9 @@
         />
       </div>
     } @else {
-      <div class="flex size-full items-center justify-center p-2 text-slate-500">
+      <div
+        class="flex size-full items-center justify-center p-2 text-slate-500"
+      >
         Preview not available for this file type.
       </div>
     }

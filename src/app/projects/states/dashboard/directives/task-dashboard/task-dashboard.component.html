@@ -7,7 +7,10 @@
       (selectedTabChange)="onTabChange($event)"
     >
       <mat-tab label="Task Details"></mat-tab>
-      <mat-tab label="Task Sheet" [disabled]="!task.definition.hasTaskSheet"></mat-tab>
+      <mat-tab
+        label="Task Sheet"
+        [disabled]="!task.definition.hasTaskSheet"
+      ></mat-tab>
       <mat-tab [disabled]="!task.hasPdf && !task.processingPdf">
         <ng-template mat-tab-label>
           <span class="flex items-center gap-1">
@@ -61,11 +64,19 @@
     </button>
 
     <mat-menu #taskMenu="matMenu" xPosition="before">
-      <button mat-menu-item [disabled]="!task.hasPdf" (click)="downloadSubmission()">
+      <button
+        mat-menu-item
+        [disabled]="!task.hasPdf"
+        (click)="downloadSubmission()"
+      >
         <mat-icon>download</mat-icon>
         <span>Download submission PDF</span>
       </button>
-      <button mat-menu-item [disabled]="!task.hasPdf" (click)="downloadSubmittedFiles()">
+      <button
+        mat-menu-item
+        [disabled]="!task.hasPdf"
+        (click)="downloadSubmittedFiles()"
+      >
         <mat-icon>folder_zip</mat-icon>
         <span>Download submitted files</span>
       </button>
@@ -113,15 +124,21 @@
           >
             <mat-icon class="mr-1">warning</mat-icon>
             Warning: This task has
-            {{ task.definition.taskPrerequisitesCache.currentValues.length }} prerequisite{{
-              task.definition.taskPrerequisitesCache.currentValues.length > 1 ? 's' : ''
+            {{ task.definition.taskPrerequisitesCache.currentValues.length }}
+            prerequisite{{
+              task.definition.taskPrerequisitesCache.currentValues.length > 1
+                ? 's'
+                : ''
             }}
-            that you still need to complete. You won’t be able to submit this task until all
-            prerequisites are met.
+            that you still need to complete. You won’t be able to submit this
+            task until all prerequisites are met.
           </div>
         }
         @if (task.definition.hasTaskSheet) {
-          <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()" [startPage]="1"></f-pdf-viewer>
+          <f-pdf-viewer
+            [pdfUrl]="task.definition.getTaskPDFUrl()"
+            [startPage]="1"
+          ></f-pdf-viewer>
         } @else {
           <div class="flex size-full flex-col items-center justify-center">
             <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
@@ -130,7 +147,10 @@
       }
       @case (DashboardViews.submission) {
         @if (task.hasPdf) {
-          <f-pdf-viewer [pdfUrl]="task.submissionUrl()" [startPage]="2"></f-pdf-viewer>
+          <f-pdf-viewer
+            [pdfUrl]="task.submissionUrl()"
+            [startPage]="2"
+          ></f-pdf-viewer>
         } @else {
           <div class="flex size-full flex-col items-center justify-center">
             <mat-icon class="empty-state-icon">subtitles_off</mat-icon>

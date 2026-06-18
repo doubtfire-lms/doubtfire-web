@@ -148,13 +148,21 @@
               "includePaths": ["src"]
             },
             "scripts": [],
-            "assets": ["src/favicon.ico", "src/assets", "src/manifest.webmanifest"]
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/manifest.webmanifest"
+            ]
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html", "src/**/*.html"]
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.component.html",
+              "src/**/*.html"
+            ]
           }
         },
         "eslint": {

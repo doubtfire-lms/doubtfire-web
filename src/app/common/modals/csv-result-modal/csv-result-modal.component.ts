@@ -2,7 +2,11 @@ import {AfterViewInit, Component, Inject, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
-import {CsvResult, CsvResultModalData, CsvRow} from './csv-result-modal.service';
+import {
+  CsvResult,
+  CsvResultModalData,
+  CsvRow,
+} from './csv-result-modal.service';
 
 type CsvResultSelection = 'success' | 'errors' | 'ignored';
 
@@ -24,12 +28,17 @@ export class CsvResultModalComponent implements AfterViewInit {
   public commonKeys: string[] = [];
   public displayedColumns: string[] = ['message', 'other'];
   public dynamicColumnIds: string[] = [];
-  public dataSource: MatTableDataSource<CsvDisplayRow> = new MatTableDataSource([]);
+  public dataSource: MatTableDataSource<CsvDisplayRow> = new MatTableDataSource(
+    [],
+  );
   private columnKeyById: Map<string, string> = new Map();
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
 
-  public readonly csvResponseSelections: {key: CsvResultSelection; label: string}[] = [
+  public readonly csvResponseSelections: {
+    key: CsvResultSelection;
+    label: string;
+  }[] = [
     {key: 'success', label: 'Success'},
     {key: 'errors', label: 'Errors'},
     {key: 'ignored', label: 'Ignored'},
@@ -40,7 +49,9 @@ export class CsvResultModalComponent implements AfterViewInit {
     private dialogRef: MatDialogRef<CsvResultModalComponent>,
   ) {
     this.data.csvResult = this.normaliseResponse(data.csvResult);
-    this.activeCsvResponseSelection = this.defaultSelection(this.data.csvResult);
+    this.activeCsvResponseSelection = this.defaultSelection(
+      this.data.csvResult,
+    );
     this.rebuildTableData();
   }
 
@@ -65,7 +76,10 @@ export class CsvResultModalComponent implements AfterViewInit {
     return item.message ?? item.error ?? '';
   }
 
-  public rowValue(rowObject: Record<string, unknown> | null, key: string): string {
+  public rowValue(
+    rowObject: Record<string, unknown> | null,
+    key: string,
+  ): string {
     if (!rowObject || !Object.prototype.hasOwnProperty.call(rowObject, key)) {
       return '';
     }
@@ -77,7 +91,10 @@ export class CsvResultModalComponent implements AfterViewInit {
     return this.columnKeyById.get(columnId) ?? columnId;
   }
 
-  public rowValueForColumn(rowObject: Record<string, unknown> | null, columnId: string): string {
+  public rowValueForColumn(
+    rowObject: Record<string, unknown> | null,
+    columnId: string,
+  ): string {
     const key = this.columnKeyById.get(columnId);
     if (!key) {
       return '';
@@ -128,7 +145,9 @@ export class CsvResultModalComponent implements AfterViewInit {
       .map(([key]) => key)
       .sort((a, b) => a.localeCompare(b));
 
-    this.dynamicColumnIds = this.commonKeys.map((_, index) => `csv_col_${index}`);
+    this.dynamicColumnIds = this.commonKeys.map(
+      (_, index) => `csv_col_${index}`,
+    );
     this.columnKeyById.clear();
     this.dynamicColumnIds.forEach((columnId, index) => {
       this.columnKeyById.set(columnId, this.commonKeys[index]);
@@ -144,7 +163,9 @@ export class CsvResultModalComponent implements AfterViewInit {
       };
     });
 
-    const hasAnyOtherData = displayRows.some((row) => row.otherData.trim().length > 0);
+    const hasAnyOtherData = displayRows.some(
+      (row) => row.otherData.trim().length > 0,
+    );
     this.displayedColumns = hasAnyOtherData
       ? ['message', ...this.dynamicColumnIds, 'other']
       : ['message', ...this.dynamicColumnIds];
@@ -162,7 +183,9 @@ export class CsvResultModalComponent implements AfterViewInit {
     }
 
     const commonKeySet = new Set(commonKeys);
-    const additionalEntries = Object.entries(rowObject).filter(([key]) => !commonKeySet.has(key));
+    const additionalEntries = Object.entries(rowObject).filter(
+      ([key]) => !commonKeySet.has(key),
+    );
     if (additionalEntries.length === 0) {
       return '';
     }
@@ -182,7 +205,9 @@ export class CsvResultModalComponent implements AfterViewInit {
     if (Array.isArray(row)) {
       const entries = row.filter(
         (entry): entry is [string, unknown] =>
-          Array.isArray(entry) && entry.length >= 2 && typeof entry[0] === 'string',
+          Array.isArray(entry) &&
+          entry.length >= 2 &&
+          typeof entry[0] === 'string',
       );
 
       if (entries.length === row.length && entries.length > 0) {

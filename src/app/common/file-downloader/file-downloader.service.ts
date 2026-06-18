@@ -45,9 +45,16 @@ export class FileDownloaderService {
           const end = parseInt(contentRangeParts[1], 10);
 
           // Check the start is the same as the length of the binary data received
-          if (start !== data.binaryData.map((value) => value.size).reduce((pv, cv) => pv + cv, 0)) {
+          if (
+            start !==
+            data.binaryData
+              .map((value) => value.size)
+              .reduce((pv, cv) => pv + cv, 0)
+          ) {
             console.log('Error: start != oldLen');
-            this.alerts.error('Error downloading file part received out of order');
+            this.alerts.error(
+              'Error downloading file part received out of order',
+            );
           }
           data.binaryData.push(data.response.body);
 
@@ -55,7 +62,11 @@ export class FileDownloaderService {
           if (end + 1 < totalSize) {
             const rangeHeader = {Range: `bytes=${end + 1}-${totalSize}`};
             this.httpClient
-              .get(data.url, {responseType: 'blob', observe: 'response', headers: rangeHeader})
+              .get(data.url, {
+                responseType: 'blob',
+                observe: 'response',
+                headers: rangeHeader,
+              })
               .subscribe({
                 next: (response2) => {
                   data.response = response2;
@@ -74,7 +85,9 @@ export class FileDownloaderService {
       }
     } else {
       // no range... so we can't do anything!
-      console.log('Error reading response from server - no range with 206 response');
+      console.log(
+        'Error reading response from server - no range with 206 response',
+      );
       if (data.failure) data.failure('Unable to read data from server');
     }
   }
@@ -105,20 +118,22 @@ export class FileDownloaderService {
     // Declare binary data outside of the subscription so that it can be accessed in the second requests when partial content is returned
     const binaryData = [];
 
-    this.httpClient.get(url, {responseType: 'blob', observe: 'response'}).subscribe({
-      next: (response) => {
-        this.processHttpResponse({
-          url: url,
-          response: response,
-          success: success,
-          failure: failure,
-          binaryData: binaryData,
-        });
-      },
-      error: (error) => {
-        if (failure) failure(error);
-      },
-    });
+    this.httpClient
+      .get(url, {responseType: 'blob', observe: 'response'})
+      .subscribe({
+        next: (response) => {
+          this.processHttpResponse({
+            url: url,
+            response: response,
+            success: success,
+            failure: failure,
+            binaryData: binaryData,
+          });
+        },
+        error: (error) => {
+          if (failure) failure(error);
+        },
+      });
   }
 
   public releaseBlob(url: string): void {
@@ -149,7 +164,9 @@ export class FileDownloaderService {
       (resourceUrl: string, response: HttpResponse<Blob>) => {
         const filenameRegex = /filename[^;=\n]*=((['']).*?\2|[^;\n]*)/;
 
-        const matches = filenameRegex.exec(response.headers.get('Content-Disposition'));
+        const matches = filenameRegex.exec(
+          response.headers.get('Content-Disposition'),
+        );
         let filename: string;
 
         if (matches != null && matches[1]) {

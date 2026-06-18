@@ -22,7 +22,8 @@
                   [unit]="unit"
                 ></f-task-details-view>
               </div>
-              <f-task-sheet-view class="h-full" [taskDef]="selectedTaskDef"> </f-task-sheet-view>
+              <f-task-sheet-view class="h-full" [taskDef]="selectedTaskDef">
+              </f-task-sheet-view>
             </div>
           }
         </div>
@@ -30,14 +31,22 @@
     </div>
     <!-- Narrow Window / Mobile Display -->
     <div #mobile fxFill fxHide fxLayout="row" fxShow.lt-md>
-      <div class="vertical-panel mobile" [hidden]="selectedTaskDefinition$ | async">
+      <div
+        class="vertical-panel mobile"
+        [hidden]="selectedTaskDefinition$ | async"
+      >
         <f-unit-task-list
           [mode]="'all-tasks'"
           [selectedTaskDefinition$]="selectedTaskDefinition$"
           [taskDefinitions]="unit.taskDefinitions"
         ></f-unit-task-list>
       </div>
-      <div fxFill fxLayout="column" fxLayoutAlign="space-between stretch" [hidden]="!taskSelected">
+      <div
+        fxFill
+        fxLayout="column"
+        fxLayoutAlign="space-between stretch"
+        [hidden]="!taskSelected"
+      >
         <div class="flex items-center">
           <button
             aria-label="Back to task list"
@@ -49,9 +58,13 @@
           </button>
         </div>
         <div class="vertical-panel mobile" fxFlex>
-          <f-task-details-view [taskDef]="selectedTaskDef" [unit]="unit"></f-task-details-view>
+          <f-task-details-view
+            [taskDef]="selectedTaskDef"
+            [unit]="unit"
+          ></f-task-details-view>
         </div>
-        <f-task-sheet-view class="h-full" [taskDef]="selectedTaskDef"> </f-task-sheet-view>
+        <f-task-sheet-view class="h-full" [taskDef]="selectedTaskDef">
+        </f-task-sheet-view>
       </div>
     </div>
   </div>

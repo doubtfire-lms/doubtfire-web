@@ -10,7 +10,9 @@ describe('SplashScreenComponent', () => {
   let globalStateServiceStub: Partial<GlobalStateService>;
 
   beforeEach(waitForAsync(() => {
-    const isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject(true);
+    const isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject(
+      true,
+    );
 
     globalStateServiceStub = {
       isLoadingSubject: isLoadingSubject,
@@ -19,7 +21,9 @@ describe('SplashScreenComponent', () => {
     TestBed.configureTestingModule({
       declarations: [SplashScreenComponent],
       imports: [BrowserAnimationsModule],
-      providers: [{provide: GlobalStateService, useValue: globalStateServiceStub}],
+      providers: [
+        {provide: GlobalStateService, useValue: globalStateServiceStub},
+      ],
     }).compileComponents();
   }));
 

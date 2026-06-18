@@ -8,14 +8,18 @@ import {BulkImportStaffModalComponent} from './bulk-import-staff-modal.component
 export class BulkImportStaffModalService {
   constructor(private dialog: MatDialog) {}
 
-  public show(): MatDialogRef<BulkImportStaffModalComponent, string | undefined> {
-    return this.dialog.open<BulkImportStaffModalComponent, undefined, string | undefined>(
+  public show(): MatDialogRef<
+    BulkImportStaffModalComponent,
+    string | undefined
+  > {
+    return this.dialog.open<
       BulkImportStaffModalComponent,
-      {
-        position: {top: '2.5%'},
-        width: '100%',
-        maxWidth: '700px',
-      },
-    );
+      undefined,
+      string | undefined
+    >(BulkImportStaffModalComponent, {
+      position: {top: '2.5%'},
+      width: '100%',
+      maxWidth: '700px',
+    });
   }
 }

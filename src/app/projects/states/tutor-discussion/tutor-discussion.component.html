@@ -9,12 +9,16 @@
     ></mat-spinner>
   }
   <div [ngClass]="{'qr-reader-hide-bloat': hideQrScannerBloat}">
-    <div class="absolute top-1/2 w-full -translate-y-1/2 transform" id="qr-reader"></div>
+    <div
+      class="absolute top-1/2 w-full -translate-y-1/2 transform"
+      id="qr-reader"
+    ></div>
   </div>
   <div
     class="pointer-events-none absolute left-1/2 top-[150px] z-10 w-full -translate-x-1/2 transform px-6 py-3 text-center text-sm font-bold text-white"
   >
-    Scan a student's QR code to instantly load their project and mark submissions.
+    Scan a student's QR code to instantly load their project and mark
+    submissions.
   </div>
   <button
     class="absolute bottom-[150px] left-1/2 my-3 max-w-md -translate-x-1/2 transform"
@@ -37,17 +41,27 @@
           [(ngModel)]="selectedTaskDefinition"
         >
           @for (td of unit?.taskDefinitionCache.values | async; track td) {
-            <mat-option [value]="td">{{ td.abbreviation }} - {{ td.name }}</mat-option>
+            <mat-option [value]="td"
+              >{{ td.abbreviation }} - {{ td.name }}</mat-option
+            >
           }
         </mat-select>
       </mat-form-field>
       @if (selectedTaskDefinition) {
-        <button color="red" mat-raised-button (click)="selectedTaskDefinition = null">Clear</button>
+        <button
+          color="red"
+          mat-raised-button
+          (click)="selectedTaskDefinition = null"
+        >
+          Clear
+        </button>
       }
     </div>
   }
 
-  <div class="task-inbox flex w-full flex-1 flex-col items-center justify-normal">
+  <div
+    class="task-inbox flex w-full flex-1 flex-col items-center justify-normal"
+  >
     <div class="relative mb-5 flex w-full justify-between px-10">
       @if (project && project?.student) {
         <button
@@ -72,9 +86,16 @@
         </div>
       } @else {
         <div></div>
-        <div class="mt-3 italic text-gray-500">Click the QR code to open the scanner..</div>
+        <div class="mt-3 italic text-gray-500">
+          Click the QR code to open the scanner..
+        </div>
       }
-      <button class="scale-[2]" color="primary" mat-icon-button (click)="scanQrCode()">
+      <button
+        class="scale-[2]"
+        color="primary"
+        mat-icon-button
+        (click)="scanQrCode()"
+      >
         <mat-icon>qr_code_scanner</mat-icon>
       </button>
     </div>
@@ -106,28 +127,46 @@
                 <span
                   class="notification"
                   [ngClass]="{
-                    active: task.numNewComments > 0 || task.similaritiesDetected,
+                    active:
+                      task.numNewComments > 0 || task.similaritiesDetected,
                     similarities: task.similaritiesDetected,
                   }"
                 ></span>
-                <user-icon class="self-center" [size]="30" [user]="project?.student"> </user-icon>
-                <div class="mt-0 flex-1 whitespace-normal break-words" [hidden]="isNarrow">
-                  <h4 class="mb-[2px] mt-[8px] text-[15px]">{{ task.definition.name }}</h4>
+                <user-icon
+                  class="self-center"
+                  [size]="30"
+                  [user]="project?.student"
+                >
+                </user-icon>
+                <div
+                  class="mt-0 flex-1 whitespace-normal break-words"
+                  [hidden]="isNarrow"
+                >
+                  <h4 class="mb-[2px] mt-[8px] text-[15px]">
+                    {{ task.definition.name }}
+                  </h4>
                   <span class="mb-0 inline text-[12px]">
                     {{ task.definition.abbreviation }} -
                     {{ getTargetTradeString(task.definition.targetGrade) }} Task
                   </span>
                 </div>
                 @if (task.hasGrade()) {
-                  <div matTooltip="The grade assigned to the submission" matTooltipPosition="above">
-                    <mat-chip-option style="margin-right: 6px" [hidden]="isNarrow"
+                  <div
+                    matTooltip="The grade assigned to the submission"
+                    matTooltipPosition="above"
+                  >
+                    <mat-chip-option
+                      style="margin-right: 6px"
+                      [hidden]="isNarrow"
                       >{{ task.gradeDesc() }}
                     </mat-chip-option>
                   </div>
                 }
                 <status-icon
                   class="ml-2"
-                  matBadge="{{ task.status === 'attention_required' ? '!' : '' }}"
+                  matBadge="{{
+                    task.status === 'attention_required' ? '!' : ''
+                  }}"
                   matBadgeColor="warn"
                   matBadgePosition="after"
                   [hidden]="isNarrow"
@@ -137,7 +176,11 @@
                 <button
                   aria-label="task-comments"
                   mat-icon-button
-                  [ngClass]="task.id === selectedTask?.id ? 'text-blue-500' : 'text-gray-400'"
+                  [ngClass]="
+                    task.id === selectedTask?.id
+                      ? 'text-blue-500'
+                      : 'text-gray-400'
+                  "
                   (click)="loadTaskComments($event, task)"
                 >
                   <mat-icon>chat-bubble</mat-icon>
@@ -155,7 +198,11 @@
       <div class="mt-2.5 flex w-full justify-center">
         @if (this.allTasks?.length > 0) {
           @if (this.filteredTasks?.length < this.allTasks?.length) {
-            <button color="primary" mat-button (click)="viewAllSubmittedTasks()">
+            <button
+              color="primary"
+              mat-button
+              (click)="viewAllSubmittedTasks()"
+            >
               Load all submitted tasks
             </button>
           } @else {
@@ -224,7 +271,9 @@
       <mat-tab label="Task Comments"></mat-tab>
 
       <mat-tab
-        label="Staff Notes{{ project?.staffNoteCount ? ' (' + project.staffNoteCount + ')' : '' }}"
+        label="Staff Notes{{
+          project?.staffNoteCount ? ' (' + project.staffNoteCount + ')' : ''
+        }}"
         [matBadge]="project?.staffNoteCount"
       ></mat-tab>
       <mat-tab label="Discussion Prompts"></mat-tab>
@@ -246,8 +295,13 @@
       </div>
     } @else if (footerTabView === TutorDiscussionTabView.SHOW_STAFF_NOTES) {
       <f-staff-notes class="min-h-[350px]" [project]="project"></f-staff-notes>
-    } @else if (footerTabView === TutorDiscussionTabView.SHOW_DISCUSSION_PROMPTS) {
-      <f-discussion-prompts class="min-h-[350px]" [project]="project"></f-discussion-prompts>
+    } @else if (
+      footerTabView === TutorDiscussionTabView.SHOW_DISCUSSION_PROMPTS
+    ) {
+      <f-discussion-prompts
+        class="min-h-[350px]"
+        [project]="project"
+      ></f-discussion-prompts>
     }
   }
 </div>

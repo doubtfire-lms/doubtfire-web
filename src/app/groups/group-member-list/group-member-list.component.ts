@@ -1,4 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {Group, UnitRole} from 'src/app/api/models/doubtfire-model';
@@ -23,7 +29,12 @@ export class GroupMemberListComponent implements OnInit, OnChanges {
 
   canRemoveMembers = false;
 
-  displayedColumns: string[] = ['student_id', 'name', 'target_grade', 'actions'];
+  displayedColumns: string[] = [
+    'student_id',
+    'name',
+    'target_grade',
+    'actions',
+  ];
   groupMembers: Project[] = [];
   dataSource = new MatTableDataSource();
 
@@ -36,9 +47,11 @@ export class GroupMemberListComponent implements OnInit, OnChanges {
       return;
     }
 
-    this.groupMembersSub = this.selectedGroup.projectsCache.values.subscribe((values) => {
-      this.dataSource.data = values;
-    });
+    this.groupMembersSub = this.selectedGroup.projectsCache.values.subscribe(
+      (values) => {
+        this.dataSource.data = values;
+      },
+    );
   }
 
   public removeMember(member: Project) {
@@ -54,17 +67,22 @@ export class GroupMemberListComponent implements OnInit, OnChanges {
           this.onMembersLoaded?.();
           this.canRemoveMembers =
             !!this.unitRole ||
-            (this.selectedGroup.groupSet.allowStudentsToManageGroups && !this.selectedGroup.locked);
+            (this.selectedGroup.groupSet.allowStudentsToManageGroups &&
+              !this.selectedGroup.locked);
 
           this.dataSource.data = members;
 
           this.groupMembersSub?.unsubscribe();
-          this.groupMembersSub = this.selectedGroup.projectsCache.values.subscribe((values) => {
-            this.dataSource.data = values;
-          });
+          this.groupMembersSub =
+            this.selectedGroup.projectsCache.values.subscribe((values) => {
+              this.dataSource.data = values;
+            });
         },
         error: (error) => {
-          this.alertService.error(`Failed to fetch group members: ${error}`, 6000);
+          this.alertService.error(
+            `Failed to fetch group members: ${error}`,
+            6000,
+          );
           this.selectedGroup = null;
         },
       });

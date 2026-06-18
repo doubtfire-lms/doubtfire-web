@@ -54,7 +54,10 @@ export class OverseerStepService extends CachedEntityService<OverseerStep> {
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public createInstanceFrom(_json: object, other?: TaskDefinition): OverseerStep {
+  public createInstanceFrom(
+    _json: object,
+    other?: TaskDefinition,
+  ): OverseerStep {
     return new OverseerStep(other);
   }
 }

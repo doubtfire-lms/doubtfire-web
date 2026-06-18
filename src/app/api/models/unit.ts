@@ -87,7 +87,8 @@ export class Unit extends Entity {
     new EntityCache<LearningOutcome>();
   public readonly tutorialStreamsCache: EntityCache<TutorialStream> =
     new EntityCache<TutorialStream>();
-  public readonly tutorialsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
+  public readonly tutorialsCache: EntityCache<Tutorial> =
+    new EntityCache<Tutorial>();
   // readonly tutorialEnrolments: EntityCache<TutorialEnrolment>;
   public readonly taskDefinitionCache: EntityCache<TaskDefinition> =
     new EntityCache<TaskDefinition>();
@@ -96,7 +97,8 @@ export class Unit extends Entity {
 
   readonly staffCache: EntityCache<UnitRole> = new EntityCache<UnitRole>();
 
-  public readonly groupSetsCache: EntityCache<GroupSet> = new EntityCache<GroupSet>();
+  public readonly groupSetsCache: EntityCache<GroupSet> =
+    new EntityCache<GroupSet>();
 
   groupMemberships: GroupMembership[];
 
@@ -119,13 +121,17 @@ export class Unit extends Entity {
 
   public get nameAndPeriod(): string {
     return `${this.name} (${
-      this.teachingPeriod ? this.teachingPeriod.name : this.startDate.toLocaleDateString()
+      this.teachingPeriod
+        ? this.teachingPeriod.name
+        : this.startDate.toLocaleDateString()
     })`;
   }
 
   public get codeAndPeriod(): string {
     return `${this.code} (${
-      this.teachingPeriod ? this.teachingPeriod.name : this.startDate.toLocaleDateString()
+      this.teachingPeriod
+        ? this.teachingPeriod.name
+        : this.startDate.toLocaleDateString()
     })`;
   }
 
@@ -134,10 +140,16 @@ export class Unit extends Entity {
   }
 
   public matches(text: string): boolean {
-    return this.code.toLowerCase().indexOf(text) >= 0 || this.name.toLowerCase().indexOf(text) >= 0;
+    return (
+      this.code.toLowerCase().indexOf(text) >= 0 ||
+      this.name.toLowerCase().indexOf(text) >= 0
+    );
   }
 
-  public addStaff(user: User, role: 'Tutor' | 'Convenor' = 'Tutor'): Observable<UnitRole> {
+  public addStaff(
+    user: User,
+    role: 'Tutor' | 'Convenor' = 'Tutor',
+  ): Observable<UnitRole> {
     const unitRoleService = AppInjector.get(UnitRoleService);
     return unitRoleService.create(
       {
@@ -155,7 +167,9 @@ export class Unit extends Entity {
     const unitService = AppInjector.get(UnitService);
     const oldConvenor = this.mainConvenor;
     this.mainConvenor = unitRole;
-    return unitService.update(this).pipe(tap({error: () => (this.mainConvenor = oldConvenor)}));
+    return unitService
+      .update(this)
+      .pipe(tap({error: () => (this.mainConvenor = oldConvenor)}));
   }
 
   public get staff(): readonly UnitRole[] {
@@ -201,7 +215,11 @@ export class Unit extends Entity {
   }
 
   public get currentUserCanViewUnitAdmin(): boolean {
-    return this.myRole === 'Convenor' || this.myRole === 'Admin' || this.myRole === 'Auditor';
+    return (
+      this.myRole === 'Convenor' ||
+      this.myRole === 'Admin' ||
+      this.myRole === 'Auditor'
+    );
   }
 
   public get taskDefinitions(): readonly TaskDefinition[] {
@@ -217,7 +235,10 @@ export class Unit extends Entity {
     const alerts = AppInjector.get(AlertService);
 
     taskDefinitionService
-      .delete({unitId: this.id, id: taskDef.id}, {cache: this.taskDefinitionCache, entity: taskDef})
+      .delete(
+        {unitId: this.id, id: taskDef.id},
+        {cache: this.taskDefinitionCache, entity: taskDef},
+      )
       .subscribe({
         next: () => {
           alerts.success('Task Deleted', 2000);
@@ -300,7 +321,8 @@ export class Unit extends Entity {
     const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
     return (
       Math.floor(
-        (normalizedTargetDate.valueOf() - normalizedStartDate.valueOf()) / millisecondsPerWeek,
+        (normalizedTargetDate.valueOf() - normalizedStartDate.valueOf()) /
+          millisecondsPerWeek,
       ) + 1
     );
   }
@@ -362,14 +384,20 @@ export class Unit extends Entity {
     });
   }
 
-  public fillWithUnStartedTasks(tasks: Task[], taskDef: TaskDefinition | number): Task[] {
+  public fillWithUnStartedTasks(
+    tasks: Task[],
+    taskDef: TaskDefinition | number,
+  ): Task[] {
     // Make sure the task definition is a task definition object from the unit
-    const td = taskDef instanceof TaskDefinition ? taskDef : this.taskDef(taskDef);
+    const td =
+      taskDef instanceof TaskDefinition ? taskDef : this.taskDef(taskDef);
 
     // Now fill for the students in the unit
     return this.students.map((p) => {
       // See if we already have the task
-      let t = tasks.find((t) => t.project.id === p.id && t.definition.id === td.id);
+      let t = tasks.find(
+        (t) => t.project.id === p.id && t.definition.id === td.id,
+      );
       if (!t) {
         // No task in array, find task in project
         t = p.tasks.find((t) => t.definition.id == td.id);
@@ -458,7 +486,9 @@ export class Unit extends Entity {
     return this.taskOutcomeAlignmentsCache.currentValues;
   }
 
-  public staffAlignmentsForTaskDefinition(td: TaskDefinition): TaskOutcomeAlignment[] {
+  public staffAlignmentsForTaskDefinition(
+    td: TaskDefinition,
+  ): TaskOutcomeAlignment[] {
     return this.taskOutcomeAlignments
       .filter((alignment: TaskOutcomeAlignment) => {
         return alignment.taskDefinition.id === td.id;
@@ -494,11 +524,17 @@ export class Unit extends Entity {
     return this.tutorialStreamsCache.size > 1;
   }
 
-  public nextStream(activityTypeAbbreviation: string): Observable<TutorialStream> {
+  public nextStream(
+    activityTypeAbbreviation: string,
+  ): Observable<TutorialStream> {
     const tutorialStreamService = AppInjector.get(TutorialStreamService);
 
     return tutorialStreamService.create(
-      {unit_id: this.id, activity_type_abbr: activityTypeAbbreviation, abbreviation: undefined},
+      {
+        unit_id: this.id,
+        activity_type_abbr: activityTypeAbbreviation,
+        abbreviation: undefined,
+      },
       {cache: this.tutorialStreamsCache},
     );
   }
@@ -548,10 +584,16 @@ export class Unit extends Entity {
   }
 
   public get overseerEnabled(): boolean {
-    return this.assessmentEnabled && AppInjector.get(DoubtfireConstants).IsOverseerEnabled.value; // && this.overseerImageId !== null && this.overseerImageId !== undefined;
+    return (
+      this.assessmentEnabled &&
+      AppInjector.get(DoubtfireConstants).IsOverseerEnabled.value
+    ); // && this.overseerImageId !== null && this.overseerImageId !== undefined;
   }
 
-  private addStudentTypeAheadData(students: readonly Project[], appendTo: string[]): void {
+  private addStudentTypeAheadData(
+    students: readonly Project[],
+    appendTo: string[],
+  ): void {
     students.forEach((project) => {
       appendTo.push(project.student.name);
       appendTo.push(project.student.username);
@@ -580,10 +622,13 @@ export class Unit extends Entity {
 
     if (gs.keepGroupsInSameClass) {
       result = this.activeStudents.filter(
-        (student) => student.isEnrolledIn(group.tutorial) && !members.has(student.id),
+        (student) =>
+          student.isEnrolledIn(group.tutorial) && !members.has(student.id),
       );
     } else {
-      result = this.activeStudents.filter((student) => !members.has(student.id));
+      result = this.activeStudents.filter(
+        (student) => !members.has(student.id),
+      );
     }
 
     return result;
@@ -641,10 +686,14 @@ export class Unit extends Entity {
     }`;
   }
 
-  public getBatchFeedbackUploadUrl(taskDefinition: TaskDefinition | number): string {
+  public getBatchFeedbackUploadUrl(
+    taskDefinition: TaskDefinition | number,
+  ): string {
     const params = new URLSearchParams({unit_id: `${this.id}`});
     const taskDefinitionId =
-      taskDefinition instanceof TaskDefinition ? taskDefinition.id : taskDefinition;
+      taskDefinition instanceof TaskDefinition
+        ? taskDefinition.id
+        : taskDefinition;
 
     params.set('task_definition_id', `${taskDefinitionId}`);
 
@@ -735,7 +784,10 @@ export class Unit extends Entity {
 
     params = params.set('timezone', timezone);
 
-    params = params.set('ignore_sessions_during_tutorials', ignoreSessionsDuringTutorials ?? false);
+    params = params.set(
+      'ignore_sessions_during_tutorials',
+      ignoreSessionsDuringTutorials ?? false,
+    );
 
     return AppInjector.get(HttpClient).get<SidekiqJob>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_times_summary`,

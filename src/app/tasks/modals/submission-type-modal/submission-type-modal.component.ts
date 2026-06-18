@@ -40,7 +40,8 @@ export class SubmissionTypeModalComponent {
   public submit() {
     if (
       this.selectedTransition === null ||
-      (this.selectedTransition === 'ready_for_feedback' && this.isPastFeedbackDeadline)
+      (this.selectedTransition === 'ready_for_feedback' &&
+        this.isPastFeedbackDeadline)
     ) {
       return;
     }

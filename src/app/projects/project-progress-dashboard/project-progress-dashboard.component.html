@@ -6,7 +6,8 @@
         <mat-card-content>
           <!-- <f-unit-code class="w-28" [unit_code]="project.unit.code"></f-unit-code> -->
           <h1 class="mb-1 text-3xl">
-            {{ project.student.nickname || project.student.firstName }}'s {{ project.unit.name }}
+            {{ project.student.nickname || project.student.firstName }}'s
+            {{ project.unit.name }}
           </h1>
           <p class="text-base">{{ project.unit.description }}</p>
         </mat-card-content>
@@ -17,7 +18,9 @@
         <mat-card-content class="w-full">
           <span class="mb-5 flex flex-row items-center">
             <h1 class="mb-0 mr-1 text-3xl">Targetting</h1>
-            <mat-icon matTooltip="Your target grade changes which tasks you need to complete.">
+            <mat-icon
+              matTooltip="Your target grade changes which tasks you need to complete."
+            >
               info</mat-icon
             >
           </span>
@@ -25,9 +28,11 @@
             <mat-label>Target grade</mat-label>
             <mat-select [(value)]="project.targetGrade">
               @for (grade of grades; track grade) {
-                <mat-option [value]="grade.value" (click)="targetGradeClicked(grade.value)">{{
-                  grade.viewValue
-                }}</mat-option>
+                <mat-option
+                  [value]="grade.value"
+                  (click)="targetGradeClicked(grade.value)"
+                  >{{ grade.viewValue }}</mat-option
+                >
               }
             </mat-select>
           </mat-form-field>

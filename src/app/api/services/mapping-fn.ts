@@ -16,7 +16,11 @@ export class MappingFunctions {
 
   public static mapDateToDay(data, key: string, _entity, _params?) {
     const jsonDate = new Date(data[key]);
-    return new Date(jsonDate.getFullYear(), jsonDate.getMonth(), jsonDate.getDate());
+    return new Date(
+      jsonDate.getFullYear(),
+      jsonDate.getMonth(),
+      jsonDate.getDate(),
+    );
   }
 
   public static mapDate(data, key: string, _entity, _params?) {
@@ -25,7 +29,9 @@ export class MappingFunctions {
 
   public static mapDayToJson<T>(entity: T, key: string): string {
     if (entity[key]) {
-      const dateValue = moment.isMoment(entity[key]) ? entity[key].toDate() : entity[key];
+      const dateValue = moment.isMoment(entity[key])
+        ? entity[key].toDate()
+        : entity[key];
       const month = dateValue.getMonth() + 1;
       const day = dateValue.getDate();
       return `${dateValue.getFullYear()}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
@@ -50,7 +56,11 @@ export class MappingFunctions {
     return 7 * this.dayMs(1) * value;
   }
 
-  public static step(start: number, limit: number, stepValue: number): number[] {
+  public static step(
+    start: number,
+    limit: number,
+    stepValue: number,
+  ): number[] {
     const result: number[] = [];
 
     for (let val = start; val <= limit; val += stepValue) {

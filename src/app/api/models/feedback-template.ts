@@ -10,7 +10,12 @@ export class FeedbackTemplate extends Entity {
   description: string;
   commentText: string;
   summaryText: string;
-  taskStatus: 'fix_and_resubmit' | 'discuss' | 'redo' | 'complete' | 'feedback_exceeded';
+  taskStatus:
+    | 'fix_and_resubmit'
+    | 'discuss'
+    | 'redo'
+    | 'complete'
+    | 'feedback_exceeded';
   parentChipId: number;
   learningOutcomeId: number;
 
@@ -19,7 +24,10 @@ export class FeedbackTemplate extends Entity {
 
     if (this.isNew) {
       return svc
-        .create({}, {entity: this, endpointFormat: FeedbackTemplateService.addEndpoint})
+        .create(
+          {},
+          {entity: this, endpointFormat: FeedbackTemplateService.addEndpoint},
+        )
         .pipe(
           tap((response: FeedbackTemplate) => {
             Object.assign(this, response);
@@ -29,7 +37,10 @@ export class FeedbackTemplate extends Entity {
       return svc
         .update(
           {id: this.id},
-          {entity: this, endpointFormat: FeedbackTemplateService.updateEndpoint},
+          {
+            entity: this,
+            endpointFormat: FeedbackTemplateService.updateEndpoint,
+          },
         )
         .pipe(
           tap((response: FeedbackTemplate) => {
@@ -42,7 +53,9 @@ export class FeedbackTemplate extends Entity {
   private originalSaveData: string;
 
   public get hasOriginalSaveData(): boolean {
-    return this.originalSaveData !== undefined && this.originalSaveData !== null;
+    return (
+      this.originalSaveData !== undefined && this.originalSaveData !== null
+    );
   }
 
   public setOriginalSaveData(mapping: EntityMapping<FeedbackTemplate>) {

@@ -159,7 +159,9 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   barClick(item: TaskGanttItem) {
     const td = item.taskDefinition;
-    const prereqs = this.taskPrerequisites.filter((p) => p.prerequisiteId === td.id);
+    const prereqs = this.taskPrerequisites.filter(
+      (p) => p.prerequisiteId === td.id,
+    );
     this.taskPlannerPrerequisitesModal.show(this.project, td, prereqs);
   }
 
@@ -194,7 +196,8 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
       if (!ganttItem) {
         return false;
       }
-      const diff = this.normalizeDateUTC(item.end) - this.normalizeDateUTC(ganttItem.end);
+      const diff =
+        this.normalizeDateUTC(item.end) - this.normalizeDateUTC(ganttItem.end);
       // const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
 
       if (diff > 0) {
@@ -232,7 +235,8 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     for (const link of prerequisites) {
       if (this.prerequisiteConflict(link)) {
-        const diff = this.normalizeDateUTC(link.end) - this.normalizeDateUTC(item.end);
+        const diff =
+          this.normalizeDateUTC(link.end) - this.normalizeDateUTC(item.end);
         if (diff > 0) {
           return true;
         }
@@ -276,7 +280,10 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.normalizeDateUTC(task.localDeadlineDate().getTime() / 1000) -
       this.normalizeDateUTC(item.end);
 
-    return diff >= 0 && diff <= this.CLOSE_TO_FEEDBACK_DEADLINE_THRESHOLD * 24 * 60 * 60;
+    return (
+      diff >= 0 &&
+      diff <= this.CLOSE_TO_FEEDBACK_DEADLINE_THRESHOLD * 24 * 60 * 60
+    );
   }
 
   toDateStr = (timestamp: number) => {
@@ -300,21 +307,25 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
     const td = item.taskDefinition;
     const task = item.task;
 
-    task.saveTargetDates(this.toDateStr(item.start), this.toDateStr(item.end)).subscribe({
-      next: (data) => {
-        task.targetDueDate = data.targetDueDate;
-        task.targetStartDate = data.targetStartDate;
-        item.start = this.normalizeDateUTC(data.targetStartDate.getTime() / 1000);
-        item.end = this.normalizeDateUTC(data.targetDueDate.getTime() / 1000);
-        this.items = [...this.items];
-      },
-      error: (error) => {
-        this.alertService.error(
-          `Failed to save target date for ${td.abbreviation}: ${error}`,
-          6000,
-        );
-      },
-    });
+    task
+      .saveTargetDates(this.toDateStr(item.start), this.toDateStr(item.end))
+      .subscribe({
+        next: (data) => {
+          task.targetDueDate = data.targetDueDate;
+          task.targetStartDate = data.targetStartDate;
+          item.start = this.normalizeDateUTC(
+            data.targetStartDate.getTime() / 1000,
+          );
+          item.end = this.normalizeDateUTC(data.targetDueDate.getTime() / 1000);
+          this.items = [...this.items];
+        },
+        error: (error) => {
+          this.alertService.error(
+            `Failed to save target date for ${td.abbreviation}: ${error}`,
+            6000,
+          );
+        },
+      });
   }
 
   anyUnsavedChanges() {
@@ -342,16 +353,25 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
               task.targetDueDate = null;
               task.targetStartDate = null;
 
-              const item = this.items.find((item) => item.id === task.definition.id.toString());
+              const item = this.items.find(
+                (item) => item.id === task.definition.id.toString(),
+              );
               if (item) {
-                item.start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
-                item.end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
+                item.start = this.normalizeDateUTC(
+                  task.startDate.getTime() / 1000,
+                );
+                item.end = this.normalizeDateUTC(
+                  task.localDueDate().getTime() / 1000,
+                );
               }
             }
             this.items = [...this.items];
           },
           error: (error) => {
-            this.alertService.error(`Failed to reset target dates: ${error}`, 6000);
+            this.alertService.error(
+              `Failed to reset target dates: ${error}`,
+              6000,
+            );
           },
         });
       },
@@ -360,7 +380,9 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async saveImage() {
     const ganttEl = this.ganttComponent.element;
-    const mainContainer = ganttEl.querySelector<HTMLElement>('.gantt-main-container');
+    const mainContainer = ganttEl.querySelector<HTMLElement>(
+      '.gantt-main-container',
+    );
     const side = ganttEl.querySelector<HTMLElement>('.gantt-side');
 
     if (!mainContainer || !side) {
@@ -395,7 +417,9 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
       const fullWidth = side.offsetWidth + this.ganttComponent.view.width;
       const fullHeight =
-        ganttEl.offsetHeight - mainContainer.offsetHeight + mainContainer.scrollHeight;
+        ganttEl.offsetHeight -
+        mainContainer.offsetHeight +
+        mainContainer.scrollHeight;
 
       ganttEl.style.width = `${fullWidth}px`;
       ganttEl.style.height = `${fullHeight}px`;
@@ -446,7 +470,9 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private async renderAllGanttBars(ganttEl: HTMLElement) {
     for (let pass = 0; pass < 4; pass++) {
-      if (ganttEl.querySelectorAll('[data-gantt-id]').length >= this.items.length) {
+      if (
+        ganttEl.querySelectorAll('[data-gantt-id]').length >= this.items.length
+      ) {
         return;
       }
 
@@ -464,13 +490,17 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
-    if (ganttEl.querySelectorAll('[data-gantt-id]').length < this.items.length) {
+    if (
+      ganttEl.querySelectorAll('[data-gantt-id]').length < this.items.length
+    ) {
       throw new Error('Some chart items could not be rendered');
     }
   }
 
   private nextAnimationFrame() {
-    return new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    return new Promise<void>((resolve) =>
+      requestAnimationFrame(() => resolve()),
+    );
   }
 
   private downloadCanvas(canvas: HTMLCanvasElement, filename: string) {
@@ -499,7 +529,8 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   // };
 
   toDateString(timestamp: number | Date) {
-    const date = timestamp instanceof Date ? timestamp : new Date(timestamp * 1000);
+    const date =
+      timestamp instanceof Date ? timestamp : new Date(timestamp * 1000);
     return date.toLocaleDateString('en-AU', {
       month: 'short',
       day: 'numeric',
@@ -511,7 +542,10 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
     const task = item.task;
     const start = this.normalizeDateUTC(task.startDate.getTime() / 1000);
     const end = this.normalizeDateUTC(task.localDueDate().getTime() / 1000);
-    return start !== this.normalizeDateUTC(item.start) || end !== this.normalizeDateUTC(item.end);
+    return (
+      start !== this.normalizeDateUTC(item.start) ||
+      end !== this.normalizeDateUTC(item.end)
+    );
   }
 
   getTooltip(item: TaskGanttItem) {
@@ -528,7 +562,9 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
       return today;
     }
 
-    const earliestTaskStart = Math.min(...tasks.map((t) => t.startDate.getTime() / 1000));
+    const earliestTaskStart = Math.min(
+      ...tasks.map((t) => t.startDate.getTime() / 1000),
+    );
 
     return Math.floor(Math.min(today, earliestTaskStart));
   }
@@ -543,7 +579,9 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
       return this.earliestStartDate + oneWeekInSeconds;
     }
 
-    const latestTaskEnd = Math.max(...tasks.map((t) => t.localDueDate().getTime() / 1000));
+    const latestTaskEnd = Math.max(
+      ...tasks.map((t) => t.localDueDate().getTime() / 1000),
+    );
 
     return Math.floor(latestTaskEnd) + oneWeekInSeconds;
   }
@@ -585,20 +623,26 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.refreshItems();
       },
       error: (error) => {
-        this.alertService.error(`Failed to get task prerequisites: ${error}`, 6000);
+        this.alertService.error(
+          `Failed to get task prerequisites: ${error}`,
+          6000,
+        );
       },
     });
   }
 
   private setupGanttHeaderObserver(): void {
-    const ganttElement = this.elementRef.nativeElement.querySelector('ngx-gantt');
+    const ganttElement =
+      this.elementRef.nativeElement.querySelector('ngx-gantt');
 
     if (!ganttElement) {
       return;
     }
 
     this.ganttHeaderObserver?.disconnect();
-    this.ganttHeaderObserver = new MutationObserver(() => this.formatGanttHeaderLabels());
+    this.ganttHeaderObserver = new MutationObserver(() =>
+      this.formatGanttHeaderLabels(),
+    );
     this.ganttHeaderObserver.observe(ganttElement, {
       childList: true,
       subtree: true,
@@ -613,9 +657,10 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private formatGanttDayLabels(): void {
-    const dayLabels = this.elementRef.nativeElement.querySelectorAll<SVGTextElement>(
-      'gantt-calendar-header .secondary-text',
-    );
+    const dayLabels =
+      this.elementRef.nativeElement.querySelectorAll<SVGTextElement>(
+        'gantt-calendar-header .secondary-text',
+      );
 
     dayLabels.forEach((label) => {
       if (label.querySelector('tspan')) {
@@ -654,7 +699,9 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const today = new Date();
     const date = todayLabel.textContent?.trim() || today.getDate().toString();
-    const day = new Intl.DateTimeFormat('en-US', {weekday: 'short'}).format(today);
+    const day = new Intl.DateTimeFormat('en-US', {weekday: 'short'}).format(
+      today,
+    );
 
     todayLabel.replaceChildren();
 
@@ -805,7 +852,9 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.animateBackground = true;
 
         setTimeout(() => {
-          const el = document.querySelector(`[data-gantt-id="${taskItem.id}"]`) as HTMLElement;
+          const el = document.querySelector(
+            `[data-gantt-id="${taskItem.id}"]`,
+          ) as HTMLElement;
 
           el?.scrollIntoView({
             behavior: 'smooth',

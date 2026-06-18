@@ -3,8 +3,9 @@
     <div>
       <h2>Tutorials</h2>
       <p class="max-w-5xl">
-        View available tutorials and manage your enrolment. Note that availability is subject to
-        capacity. If you are unable to enrol in a tutorial, please contact your unit coordinator.
+        View available tutorials and manage your enrolment. Note that
+        availability is subject to capacity. If you are unable to enrol in a
+        tutorial, please contact your unit coordinator.
       </p>
     </div>
     <table
@@ -73,7 +74,10 @@
         <td *matCellDef="let tutorial" mat-cell>
           @if (project.isEnrolledIn(tutorial)) {
             @if (unit.allowStudentChangeTutorial) {
-              <button mat-raised-button (click)="project.switchToTutorial(tutorial)">
+              <button
+                mat-raised-button
+                (click)="project.switchToTutorial(tutorial)"
+              >
                 Withdraw
               </button>
             } @else {

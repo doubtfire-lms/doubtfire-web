@@ -21,7 +21,9 @@
   >
     <!-- Username Column -->
     <ng-container matColumnDef="username" sticky>
-      <th *matHeaderCellDef class="bg-white" mat-header-cell mat-sort-header>Username</th>
+      <th *matHeaderCellDef class="bg-white" mat-header-cell mat-sort-header>
+        Username
+      </th>
       <td *matCellDef="let project" class="bg-white" mat-cell>
         {{ project.student.username }}
       </td>
@@ -67,7 +69,10 @@
     <ng-container matColumnDef="tutorial">
       <th *matHeaderCellDef mat-header-cell>Tutorial</th>
       <td *matCellDef="let project" class="pt-2.5" mat-cell>
-        <student-tutorial-select [student]="project" [unit]="unit"></student-tutorial-select>
+        <student-tutorial-select
+          [student]="project"
+          [unit]="unit"
+        ></student-tutorial-select>
       </td>
     </ng-container>
 

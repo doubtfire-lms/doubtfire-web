@@ -53,13 +53,23 @@
           </div>
         } @else {
           <mat-form-field appearance="outline" class="data-entry">
-            <input formControlName="abbreviation" matInput placeholder="Abbreviation" required />
+            <input
+              formControlName="abbreviation"
+              matInput
+              placeholder="Abbreviation"
+              required
+            />
           </mat-form-field>
         }
       </td>
       <td *matFooterCellDef mat-footer-cell>
         <mat-form-field appearance="outline" class="data-entry">
-          <input formControlName="abbreviation" matInput placeholder="Abbreviation" required />
+          <input
+            formControlName="abbreviation"
+            matInput
+            placeholder="Abbreviation"
+            required
+          />
         </mat-form-field>
       </td>
     </ng-container>
@@ -75,7 +85,10 @@
         } @else {
           <mat-form-field appearance="outline" class="data-entry">
             <mat-label>Campus</mat-label>
-            <mat-select formControlName="campus" [compareWith]="compareSelection">
+            <mat-select
+              formControlName="campus"
+              [compareWith]="compareSelection"
+            >
               <mat-option [value]="null">Not Specified</mat-option>
               @for (campus of campuses; track campus) {
                 <mat-option [value]="campus">
@@ -111,13 +124,23 @@
           </div>
         } @else {
           <mat-form-field appearance="outline" class="data-entry">
-            <input formControlName="meetingLocation" matInput placeholder="Location" required />
+            <input
+              formControlName="meetingLocation"
+              matInput
+              placeholder="Location"
+              required
+            />
           </mat-form-field>
         }
       </td>
       <td *matFooterCellDef mat-footer-cell>
         <mat-form-field appearance="outline" class="data-entry">
-          <input formControlName="meetingLocation" matInput placeholder="Location" required />
+          <input
+            formControlName="meetingLocation"
+            matInput
+            placeholder="Location"
+            required
+          />
         </mat-form-field>
       </td>
     </ng-container>
@@ -179,7 +202,12 @@
       </td>
       <td *matFooterCellDef mat-footer-cell>
         <mat-form-field appearance="outline" class="data-entry">
-          <input formControlName="meetingTime" matInput placeholder="Time" required />
+          <input
+            formControlName="meetingTime"
+            matInput
+            placeholder="Time"
+            required
+          />
         </mat-form-field>
       </td>
     </ng-container>
@@ -195,7 +223,11 @@
         } @else {
           <mat-form-field appearance="outline" class="data-entry">
             <mat-label>Tutor</mat-label>
-            <mat-select formControlName="tutor" required [compareWith]="compareSelection">
+            <mat-select
+              formControlName="tutor"
+              required
+              [compareWith]="compareSelection"
+            >
               @for (tutor of unit.staffUsers; track tutor) {
                 <mat-option [value]="tutor">
                   {{ tutor.name }}
@@ -227,13 +259,23 @@
           <div>{{ tutorial.numStudents }} / {{ tutorial.capacity }}</div>
         } @else {
           <mat-form-field appearance="outline" class="data-entry">
-            <input formControlName="capacity" matInput placeholder="Capacity" required />
+            <input
+              formControlName="capacity"
+              matInput
+              placeholder="Capacity"
+              required
+            />
           </mat-form-field>
         }
       </td>
       <td *matFooterCellDef mat-footer-cell>
         <mat-form-field appearance="outline" class="data-entry">
-          <input formControlName="capacity" matInput placeholder="Capacity" required />
+          <input
+            formControlName="capacity"
+            matInput
+            placeholder="Capacity"
+            required
+          />
         </mat-form-field>
       </td>
     </ng-container>
@@ -256,7 +298,11 @@
             <button color="warn" mat-icon-button (click)="cancelEdit()">
               <mat-icon>cancel</mat-icon>
             </button>
-            <button color="warn" mat-icon-button (click)="deleteTutorial(tutorial)">
+            <button
+              color="warn"
+              mat-icon-button
+              (click)="deleteTutorial(tutorial)"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </div>

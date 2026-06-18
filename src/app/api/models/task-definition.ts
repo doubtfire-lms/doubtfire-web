@@ -6,7 +6,14 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {DiscussionPrompt} from './discussion-prompt';
-import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
+import {
+  Grade,
+  GroupSet,
+  LearningOutcome,
+  Project,
+  TutorialStream,
+  Unit,
+} from './doubtfire-model';
 import {Task} from './doubtfire-model';
 import {OverseerStep} from './overseer/overseer-step';
 import {TaskPrerequisite} from './task-prerequisite';
@@ -86,7 +93,8 @@ export class TaskDefinition extends Entity {
   public readonly learningOutcomesCache: EntityCache<LearningOutcome> =
     new EntityCache<LearningOutcome>();
 
-  public readonly overseerStepsCache: EntityCache<OverseerStep> = new EntityCache<OverseerStep>();
+  public readonly overseerStepsCache: EntityCache<OverseerStep> =
+    new EntityCache<OverseerStep>();
 
   readonly unit: Unit;
 
@@ -95,7 +103,10 @@ export class TaskDefinition extends Entity {
     this.unit = unit;
   }
 
-  public toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+  public toJson<T extends Entity>(
+    mappingData: EntityMapping<T>,
+    ignoreKeys?: string[],
+  ): object {
     return {
       task_def: super.toJson(mappingData, ignoreKeys),
     };
@@ -133,7 +144,9 @@ export class TaskDefinition extends Entity {
   private originalSaveData: string;
 
   public get hasOriginalSaveData(): boolean {
-    return this.originalSaveData !== undefined && this.originalSaveData !== null;
+    return (
+      this.originalSaveData !== undefined && this.originalSaveData !== null
+    );
   }
 
   /**
@@ -261,7 +274,9 @@ export class TaskDefinition extends Entity {
   }
 
   public get needsJplag(): boolean {
-    return this.uploadRequirements.some((upreq) => upreq.type === 'code' && upreq.tiiCheck);
+    return this.uploadRequirements.some(
+      (upreq) => upreq.type === 'code' && upreq.tiiCheck,
+    );
   }
 
   public get taskSheetUploadUrl(): string {

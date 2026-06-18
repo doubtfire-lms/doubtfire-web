@@ -15,7 +15,9 @@ export class TaskDefinitionGeneralComponent {
   public grades: {value: number; viewValue: string}[];
 
   constructor(private gradeService: GradeService) {
-    this.grades = this.gradeService.gradeViewData.filter((grade) => grade.value !== -1);
+    this.grades = this.gradeService.gradeViewData.filter(
+      (grade) => grade.value !== -1,
+    );
   }
 
   public get unit(): Unit {

@@ -3,13 +3,16 @@
   <div [hidden]="loading">
     <h4 id="discussion-title">
       Discussion {{ discussion.status }}
-      <mat-icon aria-label="discussion comment status">question_answer</mat-icon>
+      <mat-icon aria-label="discussion comment status"
+        >question_answer</mat-icon
+      >
     </h4>
     <mat-divider></mat-divider>
     <div>
       @if (discussion.status === 'opened' && isNotStudent) {
         <div>
-          Warning: The student has opened the discussion prompts without sending a response.
+          Warning: The student has opened the discussion prompts without sending
+          a response.
         </div>
       }
       <div
@@ -63,7 +66,13 @@
 
     <div [hidden]="responseAvailable || isNotStudent">
       <p>Your tutor would like to discuss this task with you.</p>
-      <button id="startDiscussionBtn" mat-flat-button (click)="beginDiscussion()">Begin</button>
+      <button
+        id="startDiscussionBtn"
+        mat-flat-button
+        (click)="beginDiscussion()"
+      >
+        Begin
+      </button>
     </div>
   </div>
 </div>

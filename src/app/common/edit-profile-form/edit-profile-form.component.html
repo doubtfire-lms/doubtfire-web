@@ -10,8 +10,16 @@
       <!-- avatar -->
       <div class="mb-[25px] flex w-full flex-row items-center justify-between">
         <div class="flex flex-row items-center justify-between">
-          <a class="ml-[20px]" href="https://gravatar.com/connect/?source=_signup/" target="_blank">
-            <user-icon style="margin-right: 25px" [size]="80" [user]="user"></user-icon
+          <a
+            class="ml-[20px]"
+            href="https://gravatar.com/connect/?source=_signup/"
+            target="_blank"
+          >
+            <user-icon
+              style="margin-right: 25px"
+              [size]="80"
+              [user]="user"
+            ></user-icon
           ></a>
 
           <div>
@@ -35,14 +43,25 @@
         <div fxFlex="3"></div> -->
         <mat-form-field appearance="outline" fxFlexFill>
           <mat-label>Username</mat-label>
-          <input matInput name="username" [disabled]="!newUser" [(ngModel)]="user.username" />
+          <input
+            matInput
+            name="username"
+            [disabled]="!newUser"
+            [(ngModel)]="user.username"
+          />
         </mat-form-field>
       </div>
 
       <div fxFlexFill fxLayout="row">
         <mat-form-field appearance="outline" fxFlex="48" fxFlexAlign="start">
           <mat-label>First Name</mat-label>
-          <input class="outline-none" matInput name="first" required [(ngModel)]="user.firstName" />
+          <input
+            class="outline-none"
+            matInput
+            name="first"
+            required
+            [(ngModel)]="user.firstName"
+          />
         </mat-form-field>
 
         <div fxFlex></div>
@@ -71,7 +90,11 @@
         </mat-form-field>
       </div>
 
-      <mat-form-field appearance="outline" fxFlexFill [hidden]="!customPronouns">
+      <mat-form-field
+        appearance="outline"
+        fxFlexFill
+        [hidden]="!customPronouns"
+      >
         <mat-label>Custom Pronouns</mat-label>
         <input
           matInput
@@ -86,13 +109,24 @@
       @if (user.systemRole === 'Student') {
         <mat-form-field appearance="outline" fxFlexFill>
           <mat-label>Student ID</mat-label>
-          <input matInput name="student_id" required [(ngModel)]="user.studentId" />
+          <input
+            matInput
+            name="student_id"
+            required
+            [(ngModel)]="user.studentId"
+          />
         </mat-form-field>
       }
 
       <mat-form-field appearance="outline" fxFlexFill>
         <mat-label>Email</mat-label>
-        <input matInput name="email" required type="email" [(ngModel)]="user.email" />
+        <input
+          matInput
+          name="email"
+          required
+          type="email"
+          [(ngModel)]="user.email"
+        />
       </mat-form-field>
 
       @if (canSeeSystemRole) {
@@ -137,7 +171,10 @@
         >
       </section>
       <section fxFlexFill fxLayout="row" fxLayoutAlign="start center">
-        <mat-checkbox color="primary" name="optin" [(ngModel)]="user.optInToResearch"
+        <mat-checkbox
+          color="primary"
+          name="optin"
+          [(ngModel)]="user.optInToResearch"
           >Send anonymous research statistics
         </mat-checkbox>
       </section>

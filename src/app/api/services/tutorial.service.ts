@@ -61,7 +61,9 @@ export class TutorialService extends CachedEntityService<Tutorial> {
           return entity.unit.tutorialStreamForAbbr(data[key]);
         },
         toJsonFn: (entity: Tutorial, _key: string) => {
-          return entity.tutorialStream ? entity.tutorialStream.abbreviation : null;
+          return entity.tutorialStream
+            ? entity.tutorialStream.abbreviation
+            : null;
         },
       },
 
@@ -88,7 +90,11 @@ export class TutorialService extends CachedEntityService<Tutorial> {
     }
   }
 
-  public switchTutorial(project: Project, tutorial: Tutorial, isEnrol: boolean): void {
+  public switchTutorial(
+    project: Project,
+    tutorial: Tutorial,
+    isEnrol: boolean,
+  ): void {
     const pathIds = {
       unitId: project.unit.id,
       tutorialAbbreviation: tutorial.abbreviation,
@@ -111,7 +117,10 @@ export class TutorialService extends CachedEntityService<Tutorial> {
 
     observer.subscribe({
       next: (value: {enrolments: {tutorial_id: number}[]}) => {
-        this.alerts.success(`Tutorial enrolment updated for ${project.student.name}`, 3000);
+        this.alerts.success(
+          `Tutorial enrolment updated for ${project.student.name}`,
+          3000,
+        );
         if (isEnrol) {
           project.tutorialEnrolmentsCache.clear();
           for (const enrolment of value.enrolments) {
@@ -124,7 +133,10 @@ export class TutorialService extends CachedEntityService<Tutorial> {
         }
       },
       error: (error) => {
-        this.alerts.error(`Failed to update tutorial enrolment. ${error}`, 8000);
+        this.alerts.error(
+          `Failed to update tutorial enrolment. ${error}`,
+          8000,
+        );
       },
     });
   }

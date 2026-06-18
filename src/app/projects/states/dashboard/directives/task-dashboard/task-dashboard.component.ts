@@ -1,4 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute} from '@angular/router';
 import {UnitRole} from 'src/app/api/models/doubtfire-model';
@@ -66,13 +72,17 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     this.tutor = this.route.snapshot.queryParamMap.has('tutor');
     this.setSelectedDashboardView(DashboardViews.details);
     this.selectedTaskService.currentView$.subscribe((view) => {
-      this.currentView = this.canAccessDashboardView(view) ? view : DashboardViews.details;
+      this.currentView = this.canAccessDashboardView(view)
+        ? view
+        : DashboardViews.details;
       this.currentIndex = this.tabIndexForView(this.currentView);
     });
 
     this.taskStatusData = {
       keys: this.taskService.markedStatuses.slice().sort((a, b) => {
-        return this.taskService.statusSeq.get(a) - this.taskService.statusSeq.get(b);
+        return (
+          this.taskService.statusSeq.get(a) - this.taskService.statusSeq.get(b)
+        );
       }),
       help: this.taskService.helpDescriptions,
       icons: this.taskService.statusIcons,
@@ -86,7 +96,8 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
       this.urls = {
         taskSheetPdfUrl: changes.task.currentValue.definition.getTaskPDFUrl(),
         taskSubmissionPdfUrl: changes.task.currentValue.submissionUrl(),
-        taskSubmissionPdfAttachmentUrl: changes.task.currentValue.submissionUrl(true),
+        taskSubmissionPdfAttachmentUrl:
+          changes.task.currentValue.submissionUrl(true),
         taskFilesUrl: changes.task.currentValue.submittedFilesUrl(),
       };
       this.setSelectedDashboardView(DashboardViews.details);
@@ -94,7 +105,9 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   }
 
   setSelectedDashboardView(view: DashboardViews): void {
-    const nextView = this.canAccessDashboardView(view) ? view : DashboardViews.details;
+    const nextView = this.canAccessDashboardView(view)
+      ? view
+      : DashboardViews.details;
     this.selectedTaskService.currentView$.next(nextView);
     this.currentView = nextView;
     this.currentIndex = this.tabIndexForView(nextView);
@@ -152,10 +165,16 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   }
 
   downloadSubmission() {
-    this.fileDownloader.downloadFile(this.urls.taskSubmissionPdfAttachmentUrl, 'submission.pdf');
+    this.fileDownloader.downloadFile(
+      this.urls.taskSubmissionPdfAttachmentUrl,
+      'submission.pdf',
+    );
   }
 
   downloadSubmittedFiles() {
-    this.fileDownloader.downloadFile(this.urls.taskFilesUrl, 'submitted-files.zip');
+    this.fileDownloader.downloadFile(
+      this.urls.taskFilesUrl,
+      'submitted-files.zip',
+    );
   }
 }

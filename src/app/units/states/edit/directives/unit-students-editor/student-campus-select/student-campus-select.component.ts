@@ -1,6 +1,11 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
-import {Campus, CampusService, Project, Unit} from 'src/app/api/models/doubtfire-model';
+import {
+  Campus,
+  CampusService,
+  Project,
+  Unit,
+} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
@@ -36,7 +41,10 @@ export class StudentCampusSelectComponent implements OnChanges, OnInit {
     if (this.update) {
       this.student.switchToCampus(event.value).subscribe({
         next: (project: Project) => {
-          this.alerts.success(`Campus changed for ${project.student.name}`, 2000);
+          this.alerts.success(
+            `Campus changed for ${project.student.name}`,
+            2000,
+          );
           this.originalCampus = project.campus;
         },
         error: (message) => {

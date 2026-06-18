@@ -92,7 +92,10 @@ export class LtiDashboardComponent implements AfterViewInit {
           });
         },
         error: (_error) => {
-          this.alertsService.error('Unauthorised. Please relaunch the app.', 6000);
+          this.alertsService.error(
+            'Unauthorised. Please relaunch the app.',
+            6000,
+          );
           this.unauthorised = true;
         },
       });
@@ -172,7 +175,10 @@ export class LtiDashboardComponent implements AfterViewInit {
                       'Enrolment sync',
                       JSON.parse(completedJob.result),
                     );
-                    this.alertsService.success('Successfully imported users into OnTrack', 5000);
+                    this.alertsService.success(
+                      'Successfully imported users into OnTrack',
+                      5000,
+                    );
                   });
               },
               error: (error) => {
@@ -199,7 +205,10 @@ export class LtiDashboardComponent implements AfterViewInit {
         this.ltiService.syncStudentsGrades().subscribe({
           next: (result) => {
             this.isSyncingGrades = false;
-            this.alertsService.success('Successfully synced grades from OnTrack', 5000);
+            this.alertsService.success(
+              'Successfully synced grades from OnTrack',
+              5000,
+            );
             this.csvResultModalService.show('Grade sync', result);
           },
           error: (error) => {

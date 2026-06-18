@@ -1,5 +1,10 @@
 import {Component, Input} from '@angular/core';
-import {Project, Tutorial, TutorialStream, Unit} from 'src/app/api/models/doubtfire-model';
+import {
+  Project,
+  Tutorial,
+  TutorialStream,
+  Unit,
+} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'student-tutorial-select',
@@ -24,7 +29,10 @@ export class StudentTutorialSelectComponent {
     return aEntity.id === bEntity.id;
   }
 
-  public tutorialsForStreamAndStudent(student: Project, stream?: TutorialStream) {
+  public tutorialsForStreamAndStudent(
+    student: Project,
+    stream?: TutorialStream,
+  ) {
     return this.unit.tutorials.filter((tutorial) => {
       const result: boolean =
         student.campus == null ||

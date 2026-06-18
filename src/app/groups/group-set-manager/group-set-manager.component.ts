@@ -1,7 +1,13 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable, map, startWith} from 'rxjs';
-import {Group, GroupSet, Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
+import {
+  Group,
+  GroupSet,
+  Project,
+  Unit,
+  UnitRole,
+} from 'src/app/api/models/doubtfire-model';
 import {GroupService} from 'src/app/api/services/group.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
@@ -54,7 +60,9 @@ export class GroupSetManagerComponent implements OnInit {
     this.selectedGroup = group;
 
     const students = this.unit.studentsForGroupTypeAhead(group) || [];
-    this.projects = students.filter((project) => !group.projects.find((p) => project.id === p.id));
+    this.projects = students.filter(
+      (project) => !group.projects.find((p) => project.id === p.id),
+    );
 
     this.originalGroupName = group.name;
   }
@@ -67,7 +75,9 @@ export class GroupSetManagerComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.projects.filter(
       (project) =>
-        project.student.name.toLowerCase().includes(filterValue.toLowerCase()) && // Find by name
+        project.student.name
+          .toLowerCase()
+          .includes(filterValue.toLowerCase()) && // Find by name
         !this.selectedGroup.projects.find((p) => project.id === p.id), // Not already assigned to the group
     );
   }

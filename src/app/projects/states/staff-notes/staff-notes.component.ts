@@ -13,7 +13,8 @@ import {AlertService} from 'src/app/common/services/alert.service';
 })
 export class StaffNotesComponent implements OnInit {
   @ViewChild('staffNotesContainer') staffNotesContainer!: ElementRef;
-  @ViewChild('staffNoteEditor', {static: false}) staffNoteEditor!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('staffNoteEditor', {static: false})
+  staffNoteEditor!: ElementRef<HTMLTextAreaElement>;
 
   @Input() project: Project;
 
@@ -38,7 +39,9 @@ export class StaffNotesComponent implements OnInit {
     this.loadingStaffNotes = true;
     this.staffNoteService.loadStaffNotes(this.project).subscribe((_notes) => {
       this.loadingStaffNotes = false;
-      this.staffNoteService.updateStaffNoteReplies(this.project?.staffNoteCache.currentValues);
+      this.staffNoteService.updateStaffNoteReplies(
+        this.project?.staffNoteCache.currentValues,
+      );
       this.scrollDown();
     });
   }
@@ -62,19 +65,23 @@ export class StaffNotesComponent implements OnInit {
 
     this.noteText = '';
 
-    this.staffNoteService.addNote(this.project, noteText, this.replyingToNote).subscribe({
-      next: (_note) => {
-        this.alertService.success('Succesfully submitted note', 4000);
-        this.scrollDown();
-        this.project.staffNoteCount++;
-        this.replyingToNote = null;
-        this.staffNoteService.updateStaffNoteReplies(this.project?.staffNoteCache.currentValues);
-      },
-      error: (error) => {
-        this.alertService.error(`Failed to create note: ${error}`, 4000);
-        this.noteText = noteText;
-      },
-    });
+    this.staffNoteService
+      .addNote(this.project, noteText, this.replyingToNote)
+      .subscribe({
+        next: (_note) => {
+          this.alertService.success('Succesfully submitted note', 4000);
+          this.scrollDown();
+          this.project.staffNoteCount++;
+          this.replyingToNote = null;
+          this.staffNoteService.updateStaffNoteReplies(
+            this.project?.staffNoteCache.currentValues,
+          );
+        },
+        error: (error) => {
+          this.alertService.error(`Failed to create note: ${error}`, 4000);
+          this.noteText = noteText;
+        },
+      });
   }
 
   public updateNote() {
@@ -83,16 +90,18 @@ export class StaffNotesComponent implements OnInit {
       return;
     }
 
-    this.staffNoteService.updateNote(this.project, this.editingNote, noteText).subscribe({
-      next: (_note) => {
-        this.alertService.success('Succesfully updated note', 4000);
-        this.editingNote = null;
-        this.editingNoteText = '';
-      },
-      error: (error) => {
-        this.alertService.error(`Failed to update note: ${error}`, 4000);
-      },
-    });
+    this.staffNoteService
+      .updateNote(this.project, this.editingNote, noteText)
+      .subscribe({
+        next: (_note) => {
+          this.alertService.success('Succesfully updated note', 4000);
+          this.editingNote = null;
+          this.editingNoteText = '';
+        },
+        error: (error) => {
+          this.alertService.error(`Failed to update note: ${error}`, 4000);
+        },
+      });
   }
 
   public deleteNote(note: StaffNote) {

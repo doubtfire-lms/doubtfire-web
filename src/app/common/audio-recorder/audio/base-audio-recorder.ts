@@ -25,7 +25,11 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   protected blob: Blob;
 
   get canRecord(): boolean {
-    return Boolean(navigator && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+    return Boolean(
+      navigator &&
+      navigator.mediaDevices &&
+      navigator.mediaDevices.getUserMedia,
+    );
   }
 
   constructor(private recorderService: MediaRecorderService) {}
@@ -130,7 +134,12 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
         const bar_height = -(dataArray[i] / 8) + 1;
         this.canvasCtx.fillStyle = 'white';
         this.canvasCtx.fillRect(bar_x, bar_y, bar_width, bar_height);
-        this.canvasCtx.fillRect(bar_x, bar_y - bar_height, bar_width, bar_height);
+        this.canvasCtx.fillRect(
+          bar_x,
+          bar_y - bar_height,
+          bar_width,
+          bar_height,
+        );
       }
     };
 

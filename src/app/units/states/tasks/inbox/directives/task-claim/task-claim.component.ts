@@ -24,7 +24,9 @@ export class TaskClaimComponent {
 
   public get currentUnitRole(): UnitRole | undefined {
     const currentUser = this.userService.currentUser;
-    return this.selectedTask.unit.staff.find((ur) => ur.user.id === currentUser.id);
+    return this.selectedTask.unit.staff.find(
+      (ur) => ur.user.id === currentUser.id,
+    );
   }
 
   claimTask(task: Task) {

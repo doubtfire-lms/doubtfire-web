@@ -12,7 +12,12 @@
     />
     @if (taskDefinition.hasScormData) {
       <div class="flex flex-row gap-2.5 pt-2.5">
-        <button class="me-4 flex-grow" color="warn" mat-flat-button (click)="removeScormData()">
+        <button
+          class="me-4 flex-grow"
+          color="warn"
+          mat-flat-button
+          (click)="removeScormData()"
+        >
           Delete SCORM Zip
         </button>
         <button
@@ -23,7 +28,12 @@
         >
           Download SCORM Zip
         </button>
-        <button class="me-4 flex-grow" color="accent" mat-flat-button (click)="previewScormTest()">
+        <button
+          class="me-4 flex-grow"
+          color="accent"
+          mat-flat-button
+          (click)="previewScormTest()"
+        >
           Preview SCORM Test
         </button>
       </div>
@@ -31,10 +41,18 @@
 
     <div class="flex flex-grow flex-row gap-2.5 pt-2.5">
       <div class="basis-1/2">
-        <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormAllowReview">
+        <mat-checkbox
+          matInput
+          required
+          [(ngModel)]="taskDefinition.scormAllowReview"
+        >
           Allow students to review completed test attempt
         </mat-checkbox>
-        <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormBypassTest">
+        <mat-checkbox
+          matInput
+          required
+          [(ngModel)]="taskDefinition.scormBypassTest"
+        >
           Allow file upload regardless of test pass status
         </mat-checkbox>
       </div>
@@ -61,8 +79,9 @@
         Enable incremental time delays between test attempts
       </mat-checkbox>
       <span class="basis-1/2" disabled
-        >If enabled, first 2 attempts can be completed immediately. Subsequently, a time delay will
-        be added, increasing by 2 hours every attempt made.</span
+        >If enabled, first 2 attempts can be completed immediately.
+        Subsequently, a time delay will be added, increasing by 2 hours every
+        attempt made.</span
       >
     </div>
   }

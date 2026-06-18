@@ -13,7 +13,12 @@
   </mat-tab-group>
   <div class="bottom-3.5 flex justify-end space-x-2.5 self-end">
     <button class="" mat-dialog-close mat-stroked-button>Cancel</button>
-    <button class="ml-2.5" color="primary" mat-flat-button (click)="submitTeachingPeriod()">
+    <button
+      class="ml-2.5"
+      color="primary"
+      mat-flat-button
+      (click)="submitTeachingPeriod()"
+    >
       {{ newOrSelectedTeachingPeriod.id ? 'Save' : 'Create' }}
     </button>
   </div>
@@ -61,7 +66,10 @@
         />
       </mat-date-range-input>
 
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
 
@@ -75,16 +83,24 @@
         [(ngModel)]="newOrSelectedTeachingPeriod.activeUntil"
       />
       <mat-hint>DD/MM/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="activeUntilPicker"></mat-datepicker-toggle>
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="activeUntilPicker"
+      ></mat-datepicker-toggle>
       <mat-datepicker #activeUntilPicker></mat-datepicker>
     </mat-form-field>
   </form>
 </ng-template>
 
 <ng-template #EditBreaks>
-  <h4 class="pt-5">Teaching Breaks for {{ newOrSelectedTeachingPeriod.name }}</h4>
+  <h4 class="pt-5">
+    Teaching Breaks for {{ newOrSelectedTeachingPeriod.name }}
+  </h4>
   <mat-list>
-    @for (break of newOrSelectedTeachingPeriod.breaksCache.values | async; track break) {
+    @for (
+      break of newOrSelectedTeachingPeriod.breaksCache.values | async;
+      track break
+    ) {
       <mat-list-item>
         <span class="flex items-center">
           <span>
@@ -92,7 +108,10 @@
             <span matListItemLine>{{ break.numberOfWeeks }} week(s)</span>
           </span>
           <span class="grow"></span>
-          <button mat-icon-button (click)="deleteBreak(newOrSelectedTeachingPeriod, break)">
+          <button
+            mat-icon-button
+            (click)="deleteBreak(newOrSelectedTeachingPeriod, break)"
+          >
             <mat-icon>delete</mat-icon>
           </button>
         </span>
@@ -112,7 +131,10 @@
           [(ngModel)]="tempBreak.startDate"
         />
         <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="breakStartDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="breakStartDatePicker"
+        ></mat-datepicker-toggle>
         <mat-datepicker #breakStartDatePicker></mat-datepicker>
       </mat-form-field>
 

@@ -1,4 +1,9 @@
-import {HttpClient, HttpErrorResponse, HttpEventType, HttpResponse} from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpEventType,
+  HttpResponse,
+} from '@angular/common/http';
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Subscription, throwError} from 'rxjs';
 import {AlertService} from '../services/alert.service';
@@ -28,7 +33,8 @@ export class FileDropComponent {
   @Input() endpoint: string;
   @Input() body: object;
   @Output() fileChange: EventEmitter<File> = new EventEmitter();
-  @Output() uploadSuccess: EventEmitter<HttpResponse<object>> = new EventEmitter();
+  @Output() uploadSuccess: EventEmitter<HttpResponse<object>> =
+    new EventEmitter();
 
   protected uploadProgress: number;
   protected uploadSub: Subscription;
@@ -81,11 +87,16 @@ export class FileDropComponent {
 
         formData.append('file', this.file);
         this.http
-          .post(this.endpoint, formData, {reportProgress: true, observe: 'events'})
+          .post(this.endpoint, formData, {
+            reportProgress: true,
+            observe: 'events',
+          })
           .subscribe(
             (data) => {
               if (data.type == HttpEventType.UploadProgress) {
-                this.uploadProgress = Math.round(100 * (data.loaded / data.total));
+                this.uploadProgress = Math.round(
+                  100 * (data.loaded / data.total),
+                );
               }
               if (data.type == HttpEventType.Response) {
                 if (data.ok) {

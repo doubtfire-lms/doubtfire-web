@@ -1,5 +1,7 @@
 <div class="mx-auto max-w-[90vw]">
-  <div class="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between">
+  <div
+    class="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between"
+  >
     <div>
       <h2>Students</h2>
       <p>Browse progress, filter tutorial groups, and manage enrolments.</p>
@@ -29,17 +31,29 @@
       [ngModel]="staffFilter"
       (ngModelChange)="setStaffFilter($event)"
     >
-      <mat-button-toggle class="w-full" value="all">All Tutorials</mat-button-toggle>
-      <mat-button-toggle class="w-full" value="mine">My Tutorials</mat-button-toggle>
+      <mat-button-toggle class="w-full" value="all"
+        >All Tutorials</mat-button-toggle
+      >
+      <mat-button-toggle class="w-full" value="mine"
+        >My Tutorials</mat-button-toggle
+      >
     </mat-button-toggle-group>
   </div>
 
   @if (loadingStudents) {
     <div aria-busy="true" aria-label="Loading students" class="overflow-hidden">
       <div class="flex h-14 items-center gap-6 border-b px-4">
-        @for (width of ['4%', '10%', '16%', '28%', '8%', '8%', '8%', '10%', '10%']; track $index) {
+        @for (
+          width of ['4%', '10%', '16%', '28%', '8%', '8%', '8%', '10%', '10%'];
+          track $index
+        ) {
           <ngx-skeleton-loader
-            [theme]="{width: width, height: '12px', 'border-radius': '999px', margin: '0'}"
+            [theme]="{
+              width: width,
+              height: '12px',
+              'border-radius': '999px',
+              margin: '0',
+            }"
           ></ngx-skeleton-loader>
         }
       </div>
@@ -52,20 +66,40 @@
           ></ngx-skeleton-loader>
           <ngx-skeleton-loader
             class="w-[10%]"
-            [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+            [theme]="{
+              width: '100%',
+              height: '12px',
+              'border-radius': '999px',
+              margin: '0',
+            }"
           ></ngx-skeleton-loader>
           <ngx-skeleton-loader
             class="w-[16%]"
-            [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+            [theme]="{
+              width: '100%',
+              height: '12px',
+              'border-radius': '999px',
+              margin: '0',
+            }"
           ></ngx-skeleton-loader>
           <ngx-skeleton-loader
             class="w-[28%]"
-            [theme]="{width: '100%', height: '25px', 'border-radius': '4px', margin: '0'}"
+            [theme]="{
+              width: '100%',
+              height: '25px',
+              'border-radius': '4px',
+              margin: '0',
+            }"
           ></ngx-skeleton-loader>
           @for (column of [0, 1, 2, 3, 4]; track column) {
             <ngx-skeleton-loader
               class="w-[8%]"
-              [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+              [theme]="{
+                width: '100%',
+                height: '12px',
+                'border-radius': '999px',
+                margin: '0',
+              }"
             ></ngx-skeleton-loader>
           }
         </div>
@@ -132,23 +166,31 @@
       </ng-container>
 
       <ng-container matColumnDef="grade">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header="grade">Target Grade</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header="grade">
+          Target Grade
+        </th>
         <td *matCellDef="let project" mat-cell>
           <f-grade-icon [grade]="project.targetGrade"></f-grade-icon>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="portfolio">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header="portfolio">Portfolio</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header="portfolio">
+          Portfolio
+        </th>
         <td *matCellDef="let project" mat-cell>
           @if (project.hasPortfolio) {
-            <mat-icon [class.text-muted]="project.compilePortfolio">menu_book</mat-icon>
+            <mat-icon [class.text-muted]="project.compilePortfolio"
+              >menu_book</mat-icon
+            >
           }
         </td>
       </ng-container>
 
       <ng-container matColumnDef="similarity">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header="similarity">Similarity</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header="similarity">
+          Similarity
+        </th>
         <td *matCellDef="let project" mat-cell>
           @if (project.similarityFlag) {
             <mat-icon>visibility</mat-icon>
@@ -158,7 +200,11 @@
 
       <ng-container matColumnDef="campus">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Campus</th>
-        <td *matCellDef="let project" mat-cell (click)="$event.stopPropagation()">
+        <td
+          *matCellDef="let project"
+          mat-cell
+          (click)="$event.stopPropagation()"
+        >
           <div class="pt-[22px]">
             <student-campus-select
               [student]="project"
@@ -171,9 +217,16 @@
 
       <ng-container matColumnDef="tutorial">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Tutorial</th>
-        <td *matCellDef="let project" mat-cell (click)="$event.stopPropagation()">
+        <td
+          *matCellDef="let project"
+          mat-cell
+          (click)="$event.stopPropagation()"
+        >
           <div class="pt-[22px]">
-            <student-tutorial-select [student]="project" [unit]="unit"></student-tutorial-select>
+            <student-tutorial-select
+              [student]="project"
+              [unit]="unit"
+            ></student-tutorial-select>
           </div>
         </td>
       </ng-container>
@@ -187,16 +240,26 @@
       ></tr>
 
       <tr *matNoDataRow class="mat-row">
-        <td class="mat-cell p-2.5 text-center" [attr.colspan]="displayedColumns.length">
+        <td
+          class="mat-cell p-2.5 text-center"
+          [attr.colspan]="displayedColumns.length"
+        >
           No students were found using the filters specified.
         </td>
       </tr>
     </table>
   </div>
 
-  <div class="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:justify-between">
+  <div
+    class="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:justify-between"
+  >
     <div class="flex flex-wrap gap-1">
-      <button mat-stroked-button type="button" [disabled]="loadingStudents" (click)="exportCsv()">
+      <button
+        mat-stroked-button
+        type="button"
+        [disabled]="loadingStudents"
+        (click)="exportCsv()"
+      >
         <mat-icon>download</mat-icon>
         Export CSV
       </button>

@@ -49,7 +49,9 @@
         );
       }
       &.not-started {
-        @include custom-box-shadow(color.adjust(task-status-color('not-started'), $lightness: 5%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('not-started'), $lightness: 5%)
+        );
       }
       &.working-on-it {
         @include custom-box-shadow(
@@ -57,7 +59,9 @@
         );
       }
       &.need-help {
-        @include custom-box-shadow(color.adjust(task-status-color('need-help'), $lightness: 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('need-help'), $lightness: 15%)
+        );
       }
       &.fix-and-resubmit {
         @include custom-box-shadow(
@@ -70,19 +74,29 @@
         );
       }
       &.fail {
-        @include custom-box-shadow(color.adjust(task-status-color('fail'), $lightness: 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('fail'), $lightness: 15%)
+        );
       }
       &.redo {
-        @include custom-box-shadow(color.adjust(task-status-color('redo'), $lightness: 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('redo'), $lightness: 15%)
+        );
       }
       &.discuss {
-        @include custom-box-shadow(color.adjust(task-status-color('discuss'), $lightness: 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('discuss'), $lightness: 15%)
+        );
       }
       &.demonstrate {
-        @include custom-box-shadow(color.adjust(task-status-color('demonstrate'), $lightness: 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('demonstrate'), $lightness: 15%)
+        );
       }
       &.complete {
-        @include custom-box-shadow(color.adjust(task-status-color('complete'), $lightness: 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('complete'), $lightness: 15%)
+        );
       }
       &.time-exceeded {
         @include custom-box-shadow(
@@ -91,7 +105,10 @@
       }
       &.assess-in-portfolio {
         @include custom-box-shadow(
-          color.adjust(task-status-color('assess-in-portfolio'), $lightness: 15%)
+          color.adjust(
+            task-status-color('assess-in-portfolio'),
+            $lightness: 15%
+          )
         );
       }
       &.attention-required {

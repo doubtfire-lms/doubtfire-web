@@ -13,10 +13,17 @@ import {
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {
+  GlobalStateService,
+  ViewType,
+} from 'src/app/projects/states/index/global-state.service';
 
 export type UnitTaskViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
-export type UnitTaskRouteMode = 'inbox' | 'definition' | 'moderation' | 'overflow';
+export type UnitTaskRouteMode =
+  | 'inbox'
+  | 'definition'
+  | 'moderation'
+  | 'overflow';
 
 export interface TaskKey {
   studentId: string | number;
@@ -135,27 +142,37 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     if (this.shouldRefreshUnit(unitId)) {
       return this.unitService
         .fetch(unitId)
-        .pipe(tap(() => UnitTaskInboxStateComponent.lastUnitFetchAt.set(unitId, Date.now())));
+        .pipe(
+          tap(() =>
+            UnitTaskInboxStateComponent.lastUnitFetchAt.set(unitId, Date.now()),
+          ),
+        );
     }
 
     return this.unitService.get(unitId);
   }
 
   private shouldRefreshUnit(unitId: number): boolean {
-    const lastFetchedAt = UnitTaskInboxStateComponent.lastUnitFetchAt.get(unitId);
+    const lastFetchedAt =
+      UnitTaskInboxStateComponent.lastUnitFetchAt.get(unitId);
 
     return (
       !lastFetchedAt ||
-      Date.now() - lastFetchedAt > UnitTaskInboxStateComponent.UNIT_REFRESH_INTERVAL_MS
+      Date.now() - lastFetchedAt >
+        UnitTaskInboxStateComponent.UNIT_REFRESH_INTERVAL_MS
     );
   }
 
   private getTaskSource(): TaskSource {
     switch (this.routeMode) {
       case 'definition':
-        return this.taskService.queryTasksForTaskExplorer.bind(this.taskService);
+        return this.taskService.queryTasksForTaskExplorer.bind(
+          this.taskService,
+        );
       case 'moderation':
-        return this.taskService.queryTasksForMentorModeration.bind(this.taskService);
+        return this.taskService.queryTasksForMentorModeration.bind(
+          this.taskService,
+        );
       case 'overflow':
         return this.taskService.queryTasksForOverflow.bind(this.taskService);
       case 'inbox':
@@ -243,7 +260,8 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   }
 
   private findUnitRole(unitId: number): UnitRole {
-    const currentView = this.globalStateService.currentViewAndEntitySubject$.value;
+    const currentView =
+      this.globalStateService.currentViewAndEntitySubject$.value;
 
     if (currentView?.viewType === ViewType.UNIT) {
       const currentUnitRole = currentView.entity as UnitRole;

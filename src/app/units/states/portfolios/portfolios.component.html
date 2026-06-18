@@ -7,7 +7,10 @@
       (selectedTabChange)="onTabChange($event)"
     >
       @for (tab of tabs; track tab.routeSegment) {
-        <mat-tab [disabled]="tab.requiresProject && !selectedProject" [label]="tab.label"></mat-tab>
+        <mat-tab
+          [disabled]="tab.requiresProject && !selectedProject"
+          [label]="tab.label"
+        ></mat-tab>
       }
     </mat-tab-group>
 
@@ -35,17 +38,22 @@
             <div class="h-[calc(100vh-250px)] p-3">
               <h2>Staff Notes for {{ selectedProject.student.name }}</h2>
               <p>
-                Use these notes for private staff discussions about the student. Students cannot
-                view them.
+                Use these notes for private staff discussions about the student.
+                Students cannot view them.
               </p>
 
-              <f-staff-notes class="h-full" [project]="selectedProject"></f-staff-notes>
+              <f-staff-notes
+                class="h-full"
+                [project]="selectedProject"
+              ></f-staff-notes>
             </div>
           }
         }
         @case ('portfolio') {
           @if (selectedProject) {
-            <f-portfolios-portfolio-view [project]="selectedProject"></f-portfolios-portfolio-view>
+            <f-portfolios-portfolio-view
+              [project]="selectedProject"
+            ></f-portfolios-portfolio-view>
           }
         }
         @case ('assessment') {

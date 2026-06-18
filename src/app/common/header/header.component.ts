@@ -11,10 +11,19 @@ import {
   UnitRole,
   User,
 } from 'src/app/api/models/doubtfire-model';
-import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
+import {
+  SidekiqJobEntry,
+  SidekiqJobService,
+} from 'src/app/api/services/sidekiq-job.service';
 import {UserService} from 'src/app/api/services/user.service';
-import {DoubtfireConstants, LogoSettings} from 'src/app/config/constants/doubtfire-constants';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {
+  DoubtfireConstants,
+  LogoSettings,
+} from 'src/app/config/constants/doubtfire-constants';
+import {
+  GlobalStateService,
+  ViewType,
+} from 'src/app/projects/states/index/global-state.service';
 import {CheckForUpdateService} from 'src/app/sessions/service-worker-updater/check-for-update.service';
 import {AboutDoubtfireModal} from '../modals/about-doubtfire-modal/about-doubtfire-modal.component';
 import {CalendarModalService} from '../modals/calendar-modal/calendar-modal.service';
@@ -109,7 +118,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.globalState.projectsSubject.subscribe({
         next: (projects) => {
           if (!projects) return;
-          this.projects = projects.filter((project) => project?.unit?.myRole === 'Student');
+          this.projects = projects.filter(
+            (project) => project?.unit?.myRole === 'Student',
+          );
         },
         error: (err) => {
           console.log(`Error fetching projects: ${err}`);
@@ -119,28 +130,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // get the current active unit or project
     this.subscriptions.push(
-      this.globalState.currentViewAndEntitySubject$.pipe(observeOn(asapScheduler)).subscribe({
-        next: (currentViewAndEntity) => {
-          this.currentView = currentViewAndEntity?.viewType;
+      this.globalState.currentViewAndEntitySubject$
+        .pipe(observeOn(asapScheduler))
+        .subscribe({
+          next: (currentViewAndEntity) => {
+            this.currentView = currentViewAndEntity?.viewType;
 
-          if (this.currentView == ViewType.PROJECT) {
-            this.updateSelectedProject(currentViewAndEntity.entity as Project);
-          } else if (this.currentView == ViewType.UNIT) {
-            if (currentViewAndEntity.entity instanceof UnitRole) {
-              this.updateSelectedUnitRole(currentViewAndEntity.entity as UnitRole);
-            } else if (currentViewAndEntity.entity instanceof Unit) {
-              this.updateSelectedUnit(currentViewAndEntity.entity as Unit);
+            if (this.currentView == ViewType.PROJECT) {
+              this.updateSelectedProject(
+                currentViewAndEntity.entity as Project,
+              );
+            } else if (this.currentView == ViewType.UNIT) {
+              if (currentViewAndEntity.entity instanceof UnitRole) {
+                this.updateSelectedUnitRole(
+                  currentViewAndEntity.entity as UnitRole,
+                );
+              } else if (currentViewAndEntity.entity instanceof Unit) {
+                this.updateSelectedUnit(currentViewAndEntity.entity as Unit);
+              }
+            } else {
+              this.currentUnit = null;
+              this.currentProject = null;
             }
-          } else {
-            this.currentUnit = null;
-            this.currentProject = null;
-          }
-        },
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        error: (err) => {
-          console.log(`Error on switching view and entity: ${err}`);
-        },
-      }),
+          },
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          error: (err) => {
+            console.log(`Error on switching view and entity: ${err}`);
+          },
+        }),
     );
 
     // Subscribe to logo changes
@@ -168,7 +185,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.currentProject.student &&
       this.currentProject.student.username !== this.currentUser.username;
 
-    const username = projectView ? this.currentProject.student.username : this.currentUser.username;
+    const username = projectView
+      ? this.currentProject.student.username
+      : this.currentUser.username;
     if (projectView || this.currentUser.role === 'Student') {
       const url = `${hostName}/tutor-discussion?unitId=${this.currentUnit.id}&username=${username}`;
       this.qrModalService.show(
@@ -195,7 +214,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   isUniqueRole = (unit) => {
-    const units = this.unitRoles.filter((role: UnitRole) => role.unit?.id === unit.unit?.id);
+    const units = this.unitRoles.filter(
+      (role: UnitRole) => role.unit?.id === unit.unit?.id,
+    );
     return units.length == 1 || unit.role == 'Tutor';
   };
 

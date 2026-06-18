@@ -143,7 +143,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.taskData && !changes.taskData.isFirstChange() && this.tasks?.length) {
+    if (
+      changes.taskData &&
+      !changes.taskData.isFirstChange() &&
+      this.tasks?.length
+    ) {
       this.setTaskDefFromTaskKey(this.taskData.taskKey);
       this.syncSelectedTaskFromTaskKey();
     }
@@ -169,7 +173,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    const registeredHotkeys = this.hotkeys.getHotkeys().map((hotkey) => hotkey.keys);
+    const registeredHotkeys = this.hotkeys
+      .getHotkeys()
+      .map((hotkey) => hotkey.keys);
 
     if (!registeredHotkeys.includes('control.shift.arrowdown')) {
       this.hotkeys
@@ -197,7 +203,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
     // Does the current user have any tutorials?
     this.userHasTutorials =
-      this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
+      this.unit.tutorialsForUserName(this.userService.currentUser.name)
+        ?.length > 0;
 
     const staff = this.unit.staff.slice();
 
@@ -220,7 +227,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         tutorialIdSelected: shouldDefaultToMyStudents ? 'mine' : 'all',
         tutorials: [],
         unitRoleIdSelected:
-          mentored.length > 0 && this.viewType === 'moderation' ? 'mentoring_all' : 'all',
+          mentored.length > 0 && this.viewType === 'moderation'
+            ? 'mentoring_all'
+            : 'all',
         taskDefinitionIdSelected: null,
         taskDefinition: null,
         forceStream: true,
@@ -230,7 +239,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
     this.studentFilter = [
       ...[
-        {id: 'all', inboxDescription: 'All Students', abbreviation: '__all', forceStream: false},
+        {
+          id: 'all',
+          inboxDescription: 'All Students',
+          abbreviation: '__all',
+          forceStream: false,
+        },
         {
           id: 'mine',
           inboxDescription: 'My Students',
@@ -294,7 +308,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.taskDefinitionService.zipSubmissionPdfs(taskDef).subscribe({
       next: (newJob) => {
         this.sidekiqProgressModalService
-          .show(`Downloading submission pdfs for ${taskDef.abbreviation}`, newJob.id)
+          .show(
+            `Downloading submission pdfs for ${taskDef.abbreviation}`,
+            newJob.id,
+          )
           .subscribe({
             next: (_job) => {
               this.fileDownloaderService.downloadFile(
@@ -317,7 +334,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.taskDefinitionService.zipSubmissionFiles(taskDef).subscribe({
       next: (newJob) => {
         this.sidekiqProgressModalService
-          .show(`Downloading submission files for ${taskDef.abbreviation}`, newJob.id)
+          .show(
+            `Downloading submission files for ${taskDef.abbreviation}`,
+            newJob.id,
+          )
           .subscribe({
             next: (_job) => {
               this.fileDownloaderService.downloadFile(
@@ -339,7 +359,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     const taskDefinition = this.filters.taskDefinition ?? undefined;
 
     if (!taskDefinition) {
-      this.alertService.error('Select a task definition before uploading batch feedback.', 5000);
+      this.alertService.error(
+        'Select a task definition before uploading batch feedback.',
+        5000,
+      );
       return;
     }
 
@@ -372,10 +395,16 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
           }
 
           this.sidekiqProgressModalService
-            .show(`Uploading ${taskDefinition.abbreviation} Batch Feedback`, response.id)
+            .show(
+              `Uploading ${taskDefinition.abbreviation} Batch Feedback`,
+              response.id,
+            )
             .subscribe({
               next: (job) => {
-                this.csvResultModal.show('Batch Feedback Upload Results', JSON.parse(job.result));
+                this.csvResultModal.show(
+                  'Batch Feedback Upload Results',
+                  JSON.parse(job.result),
+                );
                 this.refreshData();
               },
               error: (error) => {
@@ -395,7 +424,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       `${this.unit.code}-${taskDef.abbreviation}-jplag-report.zip`,
     );
 
-    const url = this.router.serializeUrl(this.router.createUrlTree(['/jplag-report-viewer']));
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/jplag-report-viewer']),
+    );
     window.open(url, '_blank');
   }
 
@@ -410,7 +441,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   applyFilters() {
-    let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
+    let filteredTasks = this.definedTasksPipe.transform(
+      this.tasks,
+      this.filters.taskDefinition,
+    );
     if (this.filters.tutorials) {
       filteredTasks = this.tasksInTutorialsPipe.transform(
         filteredTasks,
@@ -427,7 +461,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
+    filteredTasks = this.taskWithStudentNamePipe.transform(
+      filteredTasks,
+      this.filters.studentName,
+    );
     filteredTasks = this.sortPinnedTasksFirst(filteredTasks);
     this.filteredTasks = filteredTasks;
 
@@ -441,7 +478,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     // Clear selected task only when the active filters hide it.
     if (
       this.taskData.selectedTask &&
-      !filteredTasks?.some((task) => task?.hasTaskKey(this.taskData.selectedTask.taskKey()))
+      !filteredTasks?.some((task) =>
+        task?.hasTaskKey(this.taskData.selectedTask.taskKey()),
+      )
     ) {
       this.setSelectedTask(null);
     }
@@ -484,7 +523,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       });
     }
 
-    const filterOption = this.studentFilter.find((f) => String(f.id) === String(tutorialId));
+    const filterOption = this.studentFilter.find(
+      (f) => String(f.id) === String(tutorialId),
+    );
 
     if (!filterOption) {
       return;
@@ -493,7 +534,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.filters.forceStream = filterOption.forceStream;
 
     if (tutorialId === 'mine') {
-      this.filters.tutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name);
+      this.filters.tutorials = this.unit.tutorialsForUserName(
+        this.userService.currentUser.name,
+      );
       this.filters.unitRoleIdSelected = 'all';
     } else if (tutorialId === 'all') {
       // Ignore tutorials filter
@@ -516,7 +559,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     let taskDef;
     const taskDefId = this.filters.taskDefinitionIdSelected;
     if (taskDefId) {
-      taskDef = taskDefId instanceof TaskDefinition ? taskDefId : this.unit.taskDef(taskDefId);
+      taskDef =
+        taskDefId instanceof TaskDefinition
+          ? taskDefId
+          : this.unit.taskDef(taskDefId);
     } else {
       taskDef = null;
     }
@@ -568,7 +614,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.loading = true;
     // Tasks for feedback or tasks for task, depending on the data source
     this.taskData
-      .source(this.unit, this.filters?.taskDefinitionIdSelected, fetchMyStudentsOnly)
+      .source(
+        this.unit,
+        this.filters?.taskDefinitionIdSelected,
+        fetchMyStudentsOnly,
+      )
       .subscribe({
         next: (response) => {
           this.tasks = response;
@@ -621,8 +671,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isSelectedTask(task: Task) {
-    const sameProject = this.taskData.selectedTask?.project.id === task.project.id;
-    const sameTaskDef = this.taskData.selectedTask?.definition.id === task.definition.id;
+    const sameProject =
+      this.taskData.selectedTask?.project.id === task.project.id;
+    const sameTaskDef =
+      this.taskData.selectedTask?.definition.id === task.definition.id;
     return sameProject && sameTaskDef;
   }
 
@@ -630,7 +682,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     if (!this.filteredTasks) {
       return;
     }
-    const currentTaskIndex = this.filteredTasks.findIndex((task) => this.isSelectedTask(task));
+    const currentTaskIndex = this.filteredTasks.findIndex((task) =>
+      this.isSelectedTask(task),
+    );
     if (currentTaskIndex >= this.filteredTasks.length) {
       return;
     }
@@ -641,7 +695,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   previousTask(): void {
-    const currentTaskIndex = this.filteredTasks.findIndex((task) => this.isSelectedTask(task));
+    const currentTaskIndex = this.filteredTasks.findIndex((task) =>
+      this.isSelectedTask(task),
+    );
     if (currentTaskIndex === 0) {
       return;
     }
@@ -658,11 +714,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (this.states[this.taskDefSort].sort == 'ascending') {
       this.filteredTasks = [
-        ...this.filteredTasks.sort((a, b) => a.definition.seq - b.definition.seq),
+        ...this.filteredTasks.sort(
+          (a, b) => a.definition.seq - b.definition.seq,
+        ),
       ];
     } else if (this.states[this.taskDefSort].sort == 'descending') {
       this.filteredTasks = [
-        ...this.filteredTasks.sort((a, b) => b.definition.seq - a.definition.seq),
+        ...this.filteredTasks.sort(
+          (a, b) => b.definition.seq - a.definition.seq,
+        ),
       ];
     } else {
       this.filteredTasks = [...this.originalFilteredTasks];

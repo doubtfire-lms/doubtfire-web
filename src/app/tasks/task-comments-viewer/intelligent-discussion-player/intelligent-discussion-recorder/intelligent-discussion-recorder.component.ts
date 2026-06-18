@@ -36,7 +36,8 @@ export class IntelligentDiscussionRecorderComponent
 
   constructor(
     private mediaRecorderService: MediaRecorderService,
-    @Inject(IntelligentDiscussionPlayerService) private dps: DiscussionReplyService,
+    @Inject(IntelligentDiscussionPlayerService)
+    private dps: DiscussionReplyService,
   ) {
     super(mediaRecorderService);
   }
@@ -49,7 +50,9 @@ export class IntelligentDiscussionRecorderComponent
 
   init(): void {
     super.init();
-    this.canvas = document.getElementById('mainDiscussionRecorderVisualiser') as HTMLCanvasElement;
+    this.canvas = document.getElementById(
+      'mainDiscussionRecorderVisualiser',
+    ) as HTMLCanvasElement;
     this.canvasCtx = this.canvas.getContext('2d');
   }
 

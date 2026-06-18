@@ -1,16 +1,33 @@
 import {Component, Inject, LOCALE_ID} from '@angular/core';
-import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  NgForm,
+  Validators,
+} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {
+  Task,
+  TaskComment,
+  TaskCommentService,
+} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from '../../services/alert.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class ReasonErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null,
+  ): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched || isSubmitted)
+    );
   }
 }
 
@@ -24,7 +41,8 @@ export class ScormExtensionModalComponent {
   protected reasonMaxLength: number = 256;
   constructor(
     public dialogRef: MatDialogRef<ScormExtensionModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {task: Task; afterApplication?: () => void},
+    @Inject(MAT_DIALOG_DATA)
+    public data: {task: Task; afterApplication?: () => void},
     private alerts: AlertService,
   ) {}
 
@@ -49,7 +67,10 @@ export class ScormExtensionModalComponent {
   submitApplication() {
     const tcs: TaskCommentService = AppInjector.get(TaskCommentService);
     tcs
-      .requestScormExtension(this.extensionData.controls.extensionReason.value, this.data.task)
+      .requestScormExtension(
+        this.extensionData.controls.extensionReason.value,
+        this.data.task,
+      )
       .subscribe({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         next: ((tc: TaskComment) => {

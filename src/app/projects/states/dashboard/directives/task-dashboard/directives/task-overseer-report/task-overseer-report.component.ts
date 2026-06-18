@@ -2,7 +2,11 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {forkJoin} from 'rxjs';
-import {OverseerAssessment, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  OverseerAssessment,
+  UnitRole,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {SubmissionHistory} from 'src/app/api/models/submission-history';
 import {Task} from 'src/app/api/models/task';
 import {OverseerAssessmentService} from 'src/app/api/services/overseer-assessment.service';
@@ -39,7 +43,8 @@ export class TaskOverseerReportComponent implements OnInit {
     return this.task.unit.staff.find((ur) => ur.user.id === currentUser.id);
   }
 
-  public viewOutput: 'your_output' | 'expected_output' | 'diff' | 'split_diff' = 'your_output';
+  public viewOutput: 'your_output' | 'expected_output' | 'diff' | 'split_diff' =
+    'your_output';
 
   stdoutOptions = {
     theme: 'vs-dark',
@@ -107,7 +112,11 @@ export class TaskOverseerReportComponent implements OnInit {
     if (!this.comparisonSourceHistoryId) {
       return null;
     }
-    return this.histories.find((history) => history.id === this.comparisonSourceHistoryId) ?? null;
+    return (
+      this.histories.find(
+        (history) => history.id === this.comparisonSourceHistoryId,
+      ) ?? null
+    );
   }
 
   ngOnInit(): void {
@@ -130,16 +139,19 @@ export class TaskOverseerReportComponent implements OnInit {
 
         if (
           this.comparisonSourceHistoryId &&
-          !this.histories.some((history) => history.id === this.comparisonSourceHistoryId)
+          !this.histories.some(
+            (history) => history.id === this.comparisonSourceHistoryId,
+          )
         ) {
           this.comparisonSourceHistoryId = null;
         }
 
         for (const oa of this.overseerAssessments) {
           for (const result of oa.stepResultsCache.currentValues) {
-            result.overseerStep = this.task.definition.overseerStepsCache.currentValues.find(
-              (step) => step.id === result.overseerStepId,
-            );
+            result.overseerStep =
+              this.task.definition.overseerStepsCache.currentValues.find(
+                (step) => step.id === result.overseerStepId,
+              );
           }
         }
         this.loading = false;
@@ -174,22 +186,25 @@ export class TaskOverseerReportComponent implements OnInit {
 
     this.loadingAssessments.add(overseerAssessment.id);
 
-    this.overseerStepResultsService.getOverseerStepResults(overseerAssessment).subscribe({
-      next: () => {
-        for (const oa of this.overseerAssessments) {
-          for (const result of oa.stepResultsCache.currentValues) {
-            result.overseerStep = this.task.definition.overseerStepsCache.currentValues.find(
-              (step) => step.id === result.overseerStepId,
-            );
+    this.overseerStepResultsService
+      .getOverseerStepResults(overseerAssessment)
+      .subscribe({
+        next: () => {
+          for (const oa of this.overseerAssessments) {
+            for (const result of oa.stepResultsCache.currentValues) {
+              result.overseerStep =
+                this.task.definition.overseerStepsCache.currentValues.find(
+                  (step) => step.id === result.overseerStepId,
+                );
+            }
           }
-        }
-        this.loadingAssessments.delete(overseerAssessment.id);
-      },
-      error: (error) => {
-        console.error(error);
-        this.loadingAssessments.delete(overseerAssessment.id);
-      },
-    });
+          this.loadingAssessments.delete(overseerAssessment.id);
+        },
+        error: (error) => {
+          console.error(error);
+          this.loadingAssessments.delete(overseerAssessment.id);
+        },
+      });
   }
 
   viewSubmissionOptions(event: Event) {
@@ -201,14 +216,24 @@ export class TaskOverseerReportComponent implements OnInit {
   }
 
   hasComparisonSourceFor(history: SubmissionHistory): boolean {
-    return this.comparisonSourceHistoryId !== null && this.comparisonSourceHistoryId !== history.id;
+    return (
+      this.comparisonSourceHistoryId !== null &&
+      this.comparisonSourceHistoryId !== history.id
+    );
   }
 
-  selectComparisonSource(history: SubmissionHistory, event?: Event, menuTrigger?: MatMenuTrigger) {
+  selectComparisonSource(
+    history: SubmissionHistory,
+    event?: Event,
+    menuTrigger?: MatMenuTrigger,
+  ) {
     event?.stopPropagation();
     this.comparisonSourceHistoryId = history.id;
     menuTrigger?.closeMenu();
-    this.alerts.message(`Selected submission ${history.timestampString} for comparison.`, 3500);
+    this.alerts.message(
+      `Selected submission ${history.timestampString} for comparison.`,
+      3500,
+    );
   }
 
   clearComparisonSource(event?: Event) {
@@ -231,8 +256,13 @@ export class TaskOverseerReportComponent implements OnInit {
     this.openSubmissionFilesDialog(history);
   }
 
-  private openSubmissionFilesDialog(history: SubmissionHistory, comparedWith?: SubmissionHistory) {
-    const historyIndex = this.histories.findIndex((item) => item.id === history.id);
+  private openSubmissionFilesDialog(
+    history: SubmissionHistory,
+    comparedWith?: SubmissionHistory,
+  ) {
+    const historyIndex = this.histories.findIndex(
+      (item) => item.id === history.id,
+    );
     const comparedWithIndex = comparedWith
       ? this.histories.findIndex((item) => item.id === comparedWith.id)
       : -1;
@@ -240,11 +270,14 @@ export class TaskOverseerReportComponent implements OnInit {
     this.dialog.open(SubmissionFilesModalComponent, {
       data: {
         assessment: history,
-        assessmentNumber: historyIndex >= 0 ? this.histories.length - historyIndex : undefined,
+        assessmentNumber:
+          historyIndex >= 0 ? this.histories.length - historyIndex : undefined,
         assessmentIsMostRecent: historyIndex === 0,
         comparedWith,
         comparedWithNumber:
-          comparedWithIndex >= 0 ? this.histories.length - comparedWithIndex : undefined,
+          comparedWithIndex >= 0
+            ? this.histories.length - comparedWithIndex
+            : undefined,
         comparedWithIsMostRecent: comparedWithIndex === 0,
       },
       maxWidth: '95vw',

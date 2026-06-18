@@ -31,11 +31,16 @@ export class OverseerStepResultService extends CachedEntityService<OverseerStepR
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public createInstanceFrom(_json: object, other?: OverseerAssessment): OverseerStepResult {
+  public createInstanceFrom(
+    _json: object,
+    other?: OverseerAssessment,
+  ): OverseerStepResult {
     return new OverseerStepResult(other);
   }
 
-  public getOverseerStepResults(assessment: OverseerAssessment): Observable<OverseerStepResult[]> {
+  public getOverseerStepResults(
+    assessment: OverseerAssessment,
+  ): Observable<OverseerStepResult[]> {
     const pathIds = {
       projectId: assessment.task.project.id,
       taskDefId: assessment.task.definition.id,

@@ -40,7 +40,11 @@ export class ProgressDashboardComponent implements OnInit {
     const role = this.project?.unit?.myRole;
     const currentUser = this.userService.currentUser;
 
-    return !!role && role !== 'Student' && this.project?.student?.id !== currentUser?.id;
+    return (
+      !!role &&
+      role !== 'Student' &&
+      this.project?.student?.id !== currentUser?.id
+    );
   }
 
   updateTargetGrade(newGrade: number): void {

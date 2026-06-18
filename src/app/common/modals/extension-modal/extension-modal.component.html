@@ -1,8 +1,8 @@
 <h3 mat-dialog-title>Extension request</h3>
 <div mat-dialog-content [formGroup]="extensionData">
   <p class="w-full">
-    Please explain why you require an extension for this task, the teaching team will assess the
-    request shortly.
+    Please explain why you require an extension for this task, the teaching team
+    will assess the request shortly.
   </p>
 
   <mat-form-field appearance="outline" style="width: 100%">
@@ -15,16 +15,23 @@
       [formControl]="extensionData.controls.extensionReason"
     ></textarea>
     <mat-hint align="end"
-      >{{ extensionData.controls.extensionReason.value.length }} / {{ reasonMaxLength }}</mat-hint
+      >{{ extensionData.controls.extensionReason.value.length }} /
+      {{ reasonMaxLength }}</mat-hint
     >
     @if (extensionData.controls.extensionReason.hasError('required')) {
       <mat-error>You must enter a reason</mat-error>
     }
     @if (extensionData.controls.extensionReason.hasError('minlength')) {
-      <mat-error>The reason must be at least {{ reasonMinLength }} characters long</mat-error>
+      <mat-error
+        >The reason must be at least {{ reasonMinLength }} characters
+        long</mat-error
+      >
     }
     @if (extensionData.controls.extensionReason.hasError('maxlength')) {
-      <mat-error>The reason must be less than {{ reasonMaxLength }} characters long</mat-error>
+      <mat-error
+        >The reason must be less than {{ reasonMaxLength }} characters
+        long</mat-error
+      >
     }
   </mat-form-field>
 
@@ -38,7 +45,10 @@
       [min]="minDate"
       (dateInput)="addEvent('input', $event)"
     />
-    <mat-datepicker-toggle matSuffix [for]="extensionDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="extensionDatePicker"
+    ></mat-datepicker-toggle>
     <mat-datepicker #extensionDatePicker></mat-datepicker>
   </mat-form-field>
 </div>

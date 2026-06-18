@@ -32,7 +32,9 @@ export class CheckForUpdateService {
     });
 
     this.updates.unrecoverable.subscribe((_event) => {
-      _snackBar.open('An error occurred during update, please refresh the page');
+      _snackBar.open(
+        'An error occurred during update, please refresh the page',
+      );
     });
   }
 

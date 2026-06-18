@@ -102,7 +102,10 @@ export class ModerationComponent {
     );
   }
 
-  private moderateTask(action: FeedbackModerationActionType, applyToAll: boolean = false) {
+  private moderateTask(
+    action: FeedbackModerationActionType,
+    applyToAll: boolean = false,
+  ) {
     this.task.moderateFeedback(action, applyToAll).subscribe({
       next: (_response) => {
         if (applyToAll) {

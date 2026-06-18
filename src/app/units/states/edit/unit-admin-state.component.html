@@ -26,14 +26,19 @@
               <h3>Unit Learning Outcomes</h3>
               <p>Manage unit outcomes and related feedback templates.</p>
             </div>
-            <f-learning-outcome-editor [context]="unit"></f-learning-outcome-editor>
+            <f-learning-outcome-editor
+              [context]="unit"
+            ></f-learning-outcome-editor>
           </div>
         }
       }
       @case ('staff') {
         @if (unit) {
           <div class="mx-auto max-w-[90vw]">
-            <unit-staff-editor [staff]="staff" [unit]="unit"></unit-staff-editor>
+            <unit-staff-editor
+              [staff]="staff"
+              [unit]="unit"
+            ></unit-staff-editor>
           </div>
         }
       }
@@ -82,11 +87,13 @@
             <div class="header">
               <h3>Communication System</h3>
               <p>
-                Create communication sets and rules to target students and automate follow-up
-                actions.
+                Create communication sets and rules to target students and
+                automate follow-up actions.
               </p>
             </div>
-            <f-unit-communications-editor [unit]="unit"></f-unit-communications-editor>
+            <f-unit-communications-editor
+              [unit]="unit"
+            ></f-unit-communications-editor>
           </div>
         }
       }

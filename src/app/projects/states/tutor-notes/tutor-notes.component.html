@@ -13,7 +13,10 @@
           >
             <div
               class="flex items-center"
-              [ngClass]="note.replyTo && 'hover:text-blue-500 hover:underline cursor-pointer'"
+              [ngClass]="
+                note.replyTo &&
+                'hover:text-blue-500 hover:underline cursor-pointer'
+              "
               (click)="scrollToNote(note.replyTo)"
             >
               <mat-icon class="mr-2">reply</mat-icon>
@@ -21,11 +24,17 @@
                 @if (note.replyTo) {
                   <span class="font-medium">
                     Replying to {{ note.replyTo.user.preferredName }}
-                    {{ note.replyTo.user.lastName }} ({{ note.replyTo.user.nickname }})
+                    {{ note.replyTo.user.lastName }} ({{
+                      note.replyTo.user.nickname
+                    }})
                   </span>
-                  <span class="text-xs text-gray-600">{{ note.replyTo.note }}</span>
+                  <span class="text-xs text-gray-600">{{
+                    note.replyTo.note
+                  }}</span>
                 } @else {
-                  <span class="text-xs italic text-gray-400">Replying to: Deleted note</span>
+                  <span class="text-xs italic text-gray-400"
+                    >Replying to: Deleted note</span
+                  >
                 }
               </div>
             </div>
@@ -42,12 +51,20 @@
               @if (note.authorIsMe) {
                 <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
               }
-              <mat-icon type="button" (click)="replyToNote(note)">reply</mat-icon>
-              <mat-icon type="button" (click)="deleteNote(note)">delete</mat-icon>
+              <mat-icon type="button" (click)="replyToNote(note)"
+                >reply</mat-icon
+              >
+              <mat-icon type="button" (click)="deleteNote(note)"
+                >delete</mat-icon
+              >
             </div>
             @if (!note.readByUnitRole) {
               @if (note.noteIsForMe) {
-                <button color="primary" mat-stroked-button (click)="markAsRead(note)">
+                <button
+                  color="primary"
+                  mat-stroked-button
+                  (click)="markAsRead(note)"
+                >
                   Mark as read
                 </button>
               }
@@ -58,8 +75,13 @@
 
           <div class="flex justify-between">
             <mat-card-title class="flex items-center">
-              <user-icon size="25" style="margin-right: 8px" [user]="note.user"></user-icon>
-              {{ note.user?.firstName }} {{ note.user?.lastName }}</mat-card-title
+              <user-icon
+                size="25"
+                style="margin-right: 8px"
+                [user]="note.user"
+              ></user-icon>
+              {{ note.user?.firstName }}
+              {{ note.user?.lastName }}</mat-card-title
             >
             <div class="flex items-center">
               <mat-card-subtitle
@@ -74,7 +96,8 @@
           <div class="flex gap-3 py-1">
             @if (note.taskDefinition) {
               <mat-chip class="w-fit"
-                >{{ note.taskDefinition?.abbreviation }} {{ note.taskDefinition.name }}</mat-chip
+                >{{ note.taskDefinition?.abbreviation }}
+                {{ note.taskDefinition.name }}</mat-chip
               >
             }
             @if (note.project) {
@@ -91,7 +114,10 @@
 
           <mat-card-content class="py-2.5">
             @if (editingNote && editingNote.id === note.id) {
-              <mat-form-field appearance="outline" class="flex w-full items-center">
+              <mat-form-field
+                appearance="outline"
+                class="flex w-full items-center"
+              >
                 <mat-label>Update Note</mat-label>
                 <textarea
                   #tutorNoteEditor
@@ -101,14 +127,27 @@
                   (input)="autoResizeTutorNoteEditor()"
                 ></textarea>
                 <div class="flex justify-end gap-1">
-                  <button color="" mat-raised-button (click)="cancelEditingNote()">Cancel</button>
-                  <button color="primary" mat-raised-button (click)="updateNote(note)">
+                  <button
+                    color=""
+                    mat-raised-button
+                    (click)="cancelEditingNote()"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    color="primary"
+                    mat-raised-button
+                    (click)="updateNote(note)"
+                  >
                     Update Note
                   </button>
                 </div>
               </mat-form-field>
             } @else {
-              <div class="markdown-to-html" [innerHTML]="note.note | marked"></div>
+              <div
+                class="markdown-to-html"
+                [innerHTML]="note.note | marked"
+              ></div>
             }
           </mat-card-content>
         </mat-card>
@@ -149,14 +188,17 @@
           <mat-icon class="mr-2 mt-0.5">reply</mat-icon>
           <div class="flex flex-col">
             <span class="font-medium">
-              Replying to {{ replyingToNote.user.firstName }} {{ replyingToNote.user.lastName }} ({{
+              Replying to {{ replyingToNote.user.firstName }}
+              {{ replyingToNote.user.lastName }} ({{
                 replyingToNote.user.nickname
               }})
             </span>
             <span class="text-xs text-gray-600">{{ replyingToNote.note }}</span>
           </div>
         </div>
-        <mat-icon class="cursor-pointer" (click)="cancelReplyingToNote()">close</mat-icon>
+        <mat-icon class="cursor-pointer" (click)="cancelReplyingToNote()"
+          >close</mat-icon
+        >
       </div>
     }
 
@@ -168,7 +210,9 @@
         [(ngModel)]="noteText"
       ></textarea>
       <div class="flex justify-end">
-        <button color="primary" mat-raised-button (click)="submitNote()">Submit</button>
+        <button color="primary" mat-raised-button (click)="submitNote()">
+          Submit
+        </button>
       </div>
     </mat-form-field>
   </div>

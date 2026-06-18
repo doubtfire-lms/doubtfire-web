@@ -1,7 +1,10 @@
 <div>
   <div class="header">
     <h3>Unit Staff</h3>
-    <p>Manage unit staff by adding members and assigning them as convenors or tutors.</p>
+    <p>
+      Manage unit staff by adding members and assigning them as convenors or
+      tutors.
+    </p>
   </div>
   <table mat-table matSort [dataSource]="dataSource">
     <ng-container matColumnDef="name">
@@ -9,7 +12,11 @@
 
       <td *matCellDef="let unitRole" mat-cell>
         <div class="flex items-center gap-3">
-          <user-icon aria-hidden="true" [size]="30" [user]="unitRole.user"></user-icon
+          <user-icon
+            aria-hidden="true"
+            [size]="30"
+            [user]="unitRole.user"
+          ></user-icon
           >{{ unitRole.user.name }}
         </div>
       </td>

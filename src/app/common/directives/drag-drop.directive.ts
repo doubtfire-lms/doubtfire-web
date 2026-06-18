@@ -1,4 +1,10 @@
-import {Directive, EventEmitter, HostBinding, HostListener, Output} from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Output,
+} from '@angular/core';
 
 /**
  * The "appDragDrop" directive can be added to angular components to allow them to act as

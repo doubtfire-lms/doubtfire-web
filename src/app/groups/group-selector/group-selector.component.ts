@@ -12,7 +12,12 @@ import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
-import {Group, GroupSet, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  Group,
+  GroupSet,
+  UnitRole,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {GroupService} from 'src/app/api/services/group.service';
@@ -37,7 +42,13 @@ export class GroupSelectorComponent
   @Input() onSelect: (group: Group) => void;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  displayedColumns: string[] = ['name', 'tutorial', 'capacity_adjustment', 'capacity', 'actions'];
+  displayedColumns: string[] = [
+    'name',
+    'tutorial',
+    'capacity_adjustment',
+    'capacity',
+    'actions',
+  ];
   public groups: Group[] = [];
 
   public newGroupName: string;
@@ -88,9 +99,11 @@ export class GroupSelectorComponent
 
   refreshGroups() {
     this.groupsSub?.unsubscribe();
-    this.groupsSub = this.selectedGroupSet?.groupsCache.values.subscribe((values) => {
-      this.groups = [...values];
-    });
+    this.groupsSub = this.selectedGroupSet?.groupsCache.values.subscribe(
+      (values) => {
+        this.groups = [...values];
+      },
+    );
     this.applyFilters();
   }
 
@@ -106,10 +119,14 @@ export class GroupSelectorComponent
           (this.unitRole && g.tutorial.tutor.id === this.unitRole.user.id),
       )
       .filter(
-        (g) => !this.newGroupName || g.name.toLowerCase().includes(this.newGroupName.toLowerCase()),
+        (g) =>
+          !this.newGroupName ||
+          g.name.toLowerCase().includes(this.newGroupName.toLowerCase()),
       );
 
-    this.dataSource.data = filteredGroups.sort((a, b) => a.name.localeCompare(b.name));
+    this.dataSource.data = filteredGroups.sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -138,7 +155,8 @@ export class GroupSelectorComponent
     if (this.project) {
       tutorialId = this.project.tutorials[0].id || this.unit.tutorials[0].id;
     } else {
-      const tutorName = this.unitRole?.user.name || this.userService.currentUser.name;
+      const tutorName =
+        this.unitRole?.user.name || this.userService.currentUser.name;
       tutorialId =
         this.unit.tutorials.find((t) => t.tutor?.name === tutorName)?.id ??
         this.unit.tutorials[0].id;
@@ -211,18 +229,20 @@ export class GroupSelectorComponent
   deleteGroup(event: Event, group: Group) {
     event.stopPropagation();
 
-    this.groupService.delete(group, {cache: this.selectedGroupSet.groupsCache}).subscribe({
-      next: () => {
-        this.alertService.success('Deleted group', 3000);
-        if (group.id === this.selectedGroup?.id) {
-          this.selectedGroup = null;
-          this.selectGroup(null);
-        }
-      },
-      error: (error) => {
-        this.alertService.error(`Failed to delete group: ${error}`, 6000);
-      },
-    });
+    this.groupService
+      .delete(group, {cache: this.selectedGroupSet.groupsCache})
+      .subscribe({
+        next: () => {
+          this.alertService.success('Deleted group', 3000);
+          if (group.id === this.selectedGroup?.id) {
+            this.selectedGroup = null;
+            this.selectGroup(null);
+          }
+        },
+        error: (error) => {
+          this.alertService.error(`Failed to delete group: ${error}`, 6000);
+        },
+      });
   }
 
   toggleLocked(event: Event, group: Group) {
@@ -234,10 +254,16 @@ export class GroupSelectorComponent
     this.groupService.update(group).subscribe({
       next: (success) => {
         group.locked = success.locked;
-        this.alertService.success(`Group has been ${!group.locked ? 'un' : ''}locked`, 3000);
+        this.alertService.success(
+          `Group has been ${!group.locked ? 'un' : ''}locked`,
+          3000,
+        );
       },
       error: (error) => {
-        this.alertService.error(`Failed to ${!group.locked ? 'un' : ''}lock group: ${error}`, 6000);
+        this.alertService.error(
+          `Failed to ${!group.locked ? 'un' : ''}lock group: ${error}`,
+          6000,
+        );
         group.locked = originalLockedState;
       },
     });
@@ -255,7 +281,11 @@ export class GroupSelectorComponent
 
   saveEdit(event: Event) {
     event.stopPropagation();
-    super.submit(this.groupService, this.alertService, this.onSuccess.bind(this));
+    super.submit(
+      this.groupService,
+      this.alertService,
+      this.onSuccess.bind(this),
+    );
     this.cancelEdit();
   }
 

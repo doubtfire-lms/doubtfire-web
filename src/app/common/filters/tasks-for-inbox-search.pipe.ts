@@ -20,7 +20,9 @@ export class TasksForInboxSearchPipe implements PipeTransform {
       searchTerms
         .map((term: string) => task.matches(term))
         .reduce((prev: boolean, current: boolean, currentIndex: number) =>
-          operators[currentIndex - 1] === '&' ? prev && current : prev || current,
+          operators[currentIndex - 1] === '&'
+            ? prev && current
+            : prev || current,
         ),
     );
   }

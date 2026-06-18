@@ -134,7 +134,11 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'discussionPromptsCount',
       {
         keys: 'ilos',
-        toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
+        toEntityOp: (
+          data: object,
+          key: string,
+          taskDefinition: TaskDefinition,
+        ) => {
           data[key]?.forEach((ilo) => {
             taskDefinition.learningOutcomesCache.getOrCreate(
               ilo['id'],
@@ -148,7 +152,11 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'lockAssessmentsToTutorialStream',
       {
         keys: 'overseerSteps',
-        toEntityOp: (data: object, key: string, taskDefinition: TaskDefinition) => {
+        toEntityOp: (
+          data: object,
+          key: string,
+          taskDefinition: TaskDefinition,
+        ) => {
           taskDefinition.overseerStepsCache.clear();
           data[key]?.forEach((overseerStep) => {
             taskDefinition.overseerStepsCache.getOrCreate(
@@ -210,17 +218,29 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     );
   }
 
-  public override createInstanceFrom(_json: object, other?: Unit): TaskDefinition {
+  public override createInstanceFrom(
+    _json: object,
+    other?: Unit,
+  ): TaskDefinition {
     return new TaskDefinition(other);
   }
 
-  public uploadTaskSheet(taskDefinition: TaskDefinition, file: File): Observable<boolean> {
+  public uploadTaskSheet(
+    taskDefinition: TaskDefinition,
+    file: File,
+  ): Observable<boolean> {
     const formData = new FormData();
     formData.append('file', file);
-    return AppInjector.get(HttpClient).post<boolean>(taskDefinition.taskSheetUploadUrl, formData);
+    return AppInjector.get(HttpClient).post<boolean>(
+      taskDefinition.taskSheetUploadUrl,
+      formData,
+    );
   }
 
-  public uploadTaskResources(taskDefinition: TaskDefinition, file: File): Observable<boolean> {
+  public uploadTaskResources(
+    taskDefinition: TaskDefinition,
+    file: File,
+  ): Observable<boolean> {
     const formData = new FormData();
     formData.append('file', file);
     return AppInjector.get(HttpClient).post<boolean>(
@@ -229,7 +249,10 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     );
   }
 
-  public uploadOverseerResources(taskDefinition: TaskDefinition, file: File): Observable<string[]> {
+  public uploadOverseerResources(
+    taskDefinition: TaskDefinition,
+    file: File,
+  ): Observable<string[]> {
     const formData = new FormData();
     formData.append('file', file);
     return AppInjector.get(HttpClient).post<string[]>(
@@ -238,20 +261,29 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     );
   }
 
-  public uploadScormData(taskDefinition: TaskDefinition, file: File): Observable<boolean> {
+  public uploadScormData(
+    taskDefinition: TaskDefinition,
+    file: File,
+  ): Observable<boolean> {
     const formData = new FormData();
     formData.append('file', file);
-    return AppInjector.get(HttpClient).post<boolean>(taskDefinition.scormDataUploadUrl, formData);
+    return AppInjector.get(HttpClient).post<boolean>(
+      taskDefinition.scormDataUploadUrl,
+      formData,
+    );
   }
 
   public addTaskPrerequisite(
     taskDefinition: TaskDefinition,
     prerequsite: TaskDefinition,
   ): Observable<TaskPrerequisite> {
-    return AppInjector.get(HttpClient).post<TaskPrerequisite>(taskDefinition.taskPrerequisiteUrl, {
-      task_def_id: taskDefinition.id,
-      prerequisite_id: prerequsite.id,
-    });
+    return AppInjector.get(HttpClient).post<TaskPrerequisite>(
+      taskDefinition.taskPrerequisiteUrl,
+      {
+        task_def_id: taskDefinition.id,
+        prerequisite_id: prerequsite.id,
+      },
+    );
   }
 
   public updateTaskPrerequisite(
@@ -266,13 +298,17 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     );
   }
 
-  public zipSubmissionFiles(taskDefinition: TaskDefinition): Observable<SidekiqJob> {
+  public zipSubmissionFiles(
+    taskDefinition: TaskDefinition,
+  ): Observable<SidekiqJob> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/submission/units/${taskDefinition.unit.id}/task_definitions/${taskDefinition.id}/download_submissions/zip`;
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get<SidekiqJob>(url);
   }
 
-  public zipSubmissionPdfs(taskDefinition: TaskDefinition): Observable<SidekiqJob> {
+  public zipSubmissionPdfs(
+    taskDefinition: TaskDefinition,
+  ): Observable<SidekiqJob> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/submission/units/${taskDefinition.unit.id}/task_definitions/${taskDefinition.id}/student_pdfs/zip`;
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get<SidekiqJob>(url);

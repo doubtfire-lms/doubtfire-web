@@ -8,10 +8,17 @@ import {CommunicationAction} from '../models/communication';
 export class CommunicationActionService {
   constructor(private httpClient: HttpClient) {}
 
-  public getForRule(unitId: number, ruleId: number): Observable<CommunicationAction[]> {
+  public getForRule(
+    unitId: number,
+    ruleId: number,
+  ): Observable<CommunicationAction[]> {
     return this.httpClient
       .get<Partial<CommunicationAction>[]>(this.endpoint(unitId, ruleId))
-      .pipe(map((actions) => actions.map((action) => new CommunicationAction(action))));
+      .pipe(
+        map((actions) =>
+          actions.map((action) => new CommunicationAction(action)),
+        ),
+      );
   }
 
   public create(
@@ -26,8 +33,14 @@ export class CommunicationActionService {
       .pipe(map((created) => new CommunicationAction(created)));
   }
 
-  public delete(unitId: number, ruleId: number, actionId: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.endpoint(unitId, ruleId)}/${actionId}`);
+  public delete(
+    unitId: number,
+    ruleId: number,
+    actionId: number,
+  ): Observable<void> {
+    return this.httpClient.delete<void>(
+      `${this.endpoint(unitId, ruleId)}/${actionId}`,
+    );
   }
 
   public update(
@@ -37,9 +50,12 @@ export class CommunicationActionService {
     action: Partial<CommunicationAction>,
   ): Observable<CommunicationAction> {
     return this.httpClient
-      .put<Partial<CommunicationAction>>(`${this.endpoint(unitId, ruleId)}/${actionId}`, {
-        communication_action: action,
-      })
+      .put<Partial<CommunicationAction>>(
+        `${this.endpoint(unitId, ruleId)}/${actionId}`,
+        {
+          communication_action: action,
+        },
+      )
       .pipe(map((updated) => new CommunicationAction(updated)));
   }
 

@@ -1,5 +1,7 @@
 <div class="h-screen w-full items-center justify-center px-12" id="home">
-  <div class="mx-auto flex h-screen w-full max-w-2xl flex-col items-center justify-center gap-3">
+  <div
+    class="mx-auto flex h-screen w-full max-w-2xl flex-col items-center justify-center gap-3"
+  >
     <div class="flex items-center justify-center">
       <mat-icon
         aria-label="Formatif logo"
@@ -11,7 +13,9 @@
 
     @if (isLoading) {
       @if (unauthorised) {
-        <div class="w-full rounded-lg bg-red-200 p-3 text-center font-semibold text-red-800">
+        <div
+          class="w-full rounded-lg bg-red-200 p-3 text-center font-semibold text-red-800"
+        >
           An error occurred. Please refresh the page.
         </div>
       } @else {
@@ -20,7 +24,10 @@
       }
     } @else {
       <div class="flex justify-center gap-3">
-        @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
+        @if (
+          currentUser?.systemRole === 'Convenor' ||
+          currentUser?.systemRole === 'Admin'
+        ) {
           <button
             aria-label=""
             class="relative h-[60px] w-[60px]"
@@ -76,18 +83,32 @@
       <div class="mt-2.5 w-full text-center text-gray-300">
         @if (linkedUnit) {
           {{ linkedUnit.code }} &mdash; {{ linkedUnit.name }}
-          @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
+          @if (
+            currentUser?.systemRole === 'Convenor' ||
+            currentUser?.systemRole === 'Admin'
+          ) {
             <br />
-            <button class="text-blue-400 underline" mat-button (click)="removeLink()">
+            <button
+              class="text-blue-400 underline"
+              mat-button
+              (click)="removeLink()"
+            >
               Unlink
             </button>
           }
         } @else {
           This course has not yet been linked to an OnTrack Unit.
 
-          @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
+          @if (
+            currentUser?.systemRole === 'Convenor' ||
+            currentUser?.systemRole === 'Admin'
+          ) {
             <br />
-            <button class="text-blue-400 underline" mat-button (click)="goToLinkUnit()">
+            <button
+              class="text-blue-400 underline"
+              mat-button
+              (click)="goToLinkUnit()"
+            >
               Link it now
             </button>
           } @else {

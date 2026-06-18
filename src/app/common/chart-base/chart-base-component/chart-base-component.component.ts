@@ -15,6 +15,8 @@ import {AppInjector} from 'src/app/app-injector';
 export class ChartBaseComponent {
   constructor(public viewContainerRef: ViewContainerRef) {
     const chartToolTipService = AppInjector.get(TooltipService);
-    chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
+    chartToolTipService.injectionService.setRootViewContainer(
+      this.viewContainerRef,
+    );
   }
 }

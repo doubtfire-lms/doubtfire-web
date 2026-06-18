@@ -34,7 +34,9 @@
                 ? $index + 1 <= member.overStar
                 : $index + 1 <= member.rating,
             'text-gray-300':
-              member.overStar !== null ? $index + 1 > member.overStar : $index + 1 > member.rating,
+              member.overStar !== null
+                ? $index + 1 > member.overStar
+                : $index + 1 > member.rating,
           }"
           (click)="selectRating(member, $index + 1)"
           (mouseenter)="hoveringOver(member, $index + 1)"

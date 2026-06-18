@@ -10,7 +10,10 @@
 }
 
 $comment-bubble-color: #3939ff;
-$comment-bubble-color-darker: color.adjust($comment-bubble-color, $lightness: -10%);
+$comment-bubble-color-darker: color.adjust(
+  $comment-bubble-color,
+  $lightness: -10%
+);
 $comment-bubble-color-other-user: rgb(241, 240, 240);
 $comment-bubble-color-other-user-darker: color.adjust(
   $comment-bubble-color-other-user,
@@ -174,7 +177,12 @@ $comment-inner-border-radius: 4px;
 
       &:before {
         content: '';
-        background: linear-gradient(to right, transparent, #9696969d, transparent);
+        background: linear-gradient(
+          to right,
+          transparent,
+          #9696969d,
+          transparent
+        );
         position: absolute;
         left: 0;
         top: 50%;

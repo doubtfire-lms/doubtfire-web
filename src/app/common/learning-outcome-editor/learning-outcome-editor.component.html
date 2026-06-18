@@ -18,7 +18,9 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="shortDescription" sticky>
-      <th *matHeaderCellDef mat-header-cell mat-sort-header>Short Description</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>
+        Short Description
+      </th>
       <td
         *matCellDef="let learningOutcome"
         mat-cell
@@ -28,7 +30,9 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="fullOutcomeDescription" sticky>
-      <th *matHeaderCellDef mat-header-cell mat-sort-header>Full Outcome Description</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>
+        Full Outcome Description
+      </th>
       <td
         *matCellDef="let learningOutcome"
         mat-cell
@@ -44,7 +48,10 @@
         mat-cell
         (click)="selectLearningOutcome(learningOutcome)"
       >
-        @for (outcome of getLinkedOutcomes(learningOutcome); track outcome.abbreviation) {
+        @for (
+          outcome of getLinkedOutcomes(learningOutcome);
+          track outcome.abbreviation
+        ) {
           <mat-chip-row matTooltip="{{ outcome.shortDescription }}">{{
             outcome.abbreviation
           }}</mat-chip-row>
@@ -90,10 +97,17 @@
   <span class="flex items-center">
     <div class="h-12">
       <mat-form-field appearance="outline">
-        <input matInput placeholder="Filter" (keyup)="applyFilter($event.target.value)" />
+        <input
+          matInput
+          placeholder="Filter"
+          (keyup)="applyFilter($event.target.value)"
+        />
       </mat-form-field>
     </div>
-    <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    <mat-paginator
+      class="mat-elevation-z0"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+    ></mat-paginator>
     <span class="flex-grow"></span>
     @if (abbreviationPrefix !== 'GLO') {
       <label>Outcomes CSV</label>
@@ -113,7 +127,9 @@
       <mat-icon>upload_file</mat-icon>
     </button>
     <span class="flex-grow"></span>
-    <button color="primary" mat-raised-button (click)="createLearningOutcome()">Add Outcome</button>
+    <button color="primary" mat-raised-button (click)="createLearningOutcome()">
+      Add Outcome
+    </button>
   </span>
 
   @if (selectedOutcome) {
@@ -159,10 +175,16 @@
           <mat-form-field appearance="outline" class="flex flex-grow">
             <mat-label>Connected Learning Outcomes</mat-label>
             <mat-chip-grid #chipGrid aria-label="Outcome selection">
-              @for (outcome of selectedConnectedOutcomes(); track outcome.abbreviation) {
+              @for (
+                outcome of selectedConnectedOutcomes();
+                track outcome.abbreviation
+              ) {
                 <mat-chip-row (removed)="remove(outcome)">
                   {{ outcome.abbreviation }}
-                  <button matChipRemove [attr.aria-label]="'remove ' + outcome.abbreviation">
+                  <button
+                    matChipRemove
+                    [attr.aria-label]="'remove ' + outcome.abbreviation"
+                  >
                     <mat-icon>cancel</mat-icon>
                   </button>
                 </mat-chip-row>
@@ -179,10 +201,14 @@
               [(ngModel)]="typedConnectedOutcome"
               (matChipInputTokenEnd)="add($event)"
             />
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="select($event)">
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              (optionSelected)="select($event)"
+            >
               @for (outcome of filteredOutcomes(); track outcome) {
                 <mat-option [value]="outcome.abbreviation"
-                  >{{ outcome.abbreviation }} - {{ outcome.shortDescription }}</mat-option
+                  >{{ outcome.abbreviation }} -
+                  {{ outcome.shortDescription }}</mat-option
                 >
               }
             </mat-autocomplete>
@@ -191,7 +217,11 @@
 
         <div class="flex">
           <span class="flex-grow"></span>
-          <button color="primary" mat-raised-button (click)="saveLearningOutcome(selectedOutcome)">
+          <button
+            color="primary"
+            mat-raised-button
+            (click)="saveLearningOutcome(selectedOutcome)"
+          >
             Save Outcome
           </button>
         </div>

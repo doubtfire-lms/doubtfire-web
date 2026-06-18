@@ -22,7 +22,8 @@ export class SubmissionHistoryService extends EntityService<SubmissionHistory> {
       'overseerAssessmentId',
       {
         keys: ['timestamp', 'submission_timestamp'],
-        toEntityFn: (data) => new Date(Number(data['submission_timestamp']) * 1000),
+        toEntityFn: (data) =>
+          new Date(Number(data['submission_timestamp']) * 1000),
       },
       ['timestampString', 'submission_timestamp'],
     );

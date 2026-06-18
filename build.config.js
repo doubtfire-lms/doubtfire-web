@@ -22,7 +22,10 @@ module.exports = {
    */
   preprocess: {
     api: {
-      src: ['build/src/app/api/api-url.js', 'build/src/app/config/external-name/external-name.js'],
+      src: [
+        'build/src/app/api/api-url.js',
+        'build/src/app/config/external-name/external-name.js',
+      ],
       options: {
         inline: true,
       },
@@ -41,7 +44,11 @@ module.exports = {
     js: ['src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js'],
     jsunit: ['src/**/*.spec.js'],
 
-    coffee: ['src/**/*.coffee', '!src/**/*.spec.coffee', '!src/**/*.old.coffee'],
+    coffee: [
+      'src/**/*.coffee',
+      '!src/**/*.spec.coffee',
+      '!src/**/*.old.coffee',
+    ],
     coffeeunit: ['src/**/*.spec.coffee'],
 
     atpl: ['src/app/**/*.tpl.html'],

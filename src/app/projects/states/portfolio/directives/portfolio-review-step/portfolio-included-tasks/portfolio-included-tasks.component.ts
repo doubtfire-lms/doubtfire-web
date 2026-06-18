@@ -1,4 +1,11 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {Subscription, interval} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
@@ -12,7 +19,8 @@ import {AlertService} from 'src/app/common/services/alert.service';
 })
 export class PortfolioIncludedTasksComponent implements OnInit, OnDestroy {
   @Input() project: Project;
-  @Output() canCreatePortfolioChange: EventEmitter<boolean> = new EventEmitter();
+  @Output() canCreatePortfolioChange: EventEmitter<boolean> =
+    new EventEmitter();
 
   constructor(private alertService: AlertService) {}
 
@@ -45,17 +53,23 @@ export class PortfolioIncludedTasksComponent implements OnInit, OnDestroy {
         this.updateCanCreatePortfolio();
       },
       error: (error) => {
-        this.alertService.error(`Failed to get tasks for portfolio: ${error}`, 6000);
+        this.alertService.error(
+          `Failed to get tasks for portfolio: ${error}`,
+          6000,
+        );
       },
     });
   }
 
-  public getProcessingTasks(refreshIncludedTasksOnCountChange: boolean = false) {
+  public getProcessingTasks(
+    refreshIncludedTasksOnCountChange: boolean = false,
+  ) {
     this.loadingProcessingTasks = true;
     this.canCreatePortfolioChange.emit(false);
     this.project.getTasksStillProcessing().subscribe({
       next: (tasks) => {
-        const processingTaskCountChanged = tasks.length !== this.tasksStillProcessing.length;
+        const processingTaskCountChanged =
+          tasks.length !== this.tasksStillProcessing.length;
 
         this.hasTasksStillProcessing = tasks.length > 0;
         this.tasksStillProcessing = this.getProjectTasks(tasks);
@@ -69,7 +83,10 @@ export class PortfolioIncludedTasksComponent implements OnInit, OnDestroy {
         this.updateCanCreatePortfolio();
       },
       error: (error) => {
-        this.alertService.error(`Failed to get tasks for portfolio: ${error}`, 6000);
+        this.alertService.error(
+          `Failed to get tasks for portfolio: ${error}`,
+          6000,
+        );
       },
     });
   }
@@ -96,7 +113,9 @@ export class PortfolioIncludedTasksComponent implements OnInit, OnDestroy {
 
   private updateCanCreatePortfolio(): void {
     this.canCreatePortfolioChange.emit(
-      !this.loadingIncludedTasks && !this.loadingProcessingTasks && !this.hasTasksStillProcessing,
+      !this.loadingIncludedTasks &&
+        !this.loadingProcessingTasks &&
+        !this.hasTasksStillProcessing,
     );
   }
 }

@@ -1,4 +1,10 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -61,7 +67,8 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.data = this.userService.cache.currentValuesClone();
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = (data, filter: string) => data.matches(filter);
+    this.dataSource.filterPredicate = (data, filter: string) =>
+      data.matches(filter);
 
     this.subscriptions.push(
       this.userService.cache.values.subscribe((users) => {
@@ -75,7 +82,10 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   protected downloadUsers() {
-    this.fileDownloaderService.downloadFile(this.userService.csvURL, 'Users.csv');
+    this.fileDownloaderService.downloadFile(
+      this.userService.csvURL,
+      'Users.csv',
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -108,7 +118,11 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
     this.editProfileDialogService.openDialog(userToShow, 'edit');
   }
 
-  public compare(a: number | string, b: number | string, isAsc: boolean): number {
+  public compare(
+    a: number | string,
+    b: number | string,
+    isAsc: boolean,
+  ): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 

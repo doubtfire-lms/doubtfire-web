@@ -1,4 +1,10 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -87,17 +93,21 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
       this.title = 'Administer units';
 
       this.globalStateService.onLoad(() => {
-        this.unitService.query(undefined, {params: {include_in_active: true}}).subscribe({
-          next: () => {
-            this.globalStateService.loadedUnits.values.subscribe(
-              (loadedUnits) =>
-                (this.dataSource.data = this.mapUnitOrProjectsToColumns(loadedUnits)),
-            );
-          },
-        });
+        this.unitService
+          .query(undefined, {params: {include_in_active: true}})
+          .subscribe({
+            next: () => {
+              this.globalStateService.loadedUnits.values.subscribe(
+                (loadedUnits) =>
+                  (this.dataSource.data =
+                    this.mapUnitOrProjectsToColumns(loadedUnits)),
+              );
+            },
+          });
 
         this.globalStateService.loadedUnits.values.subscribe(
-          (units) => (this.dataSource.data = this.mapUnitOrProjectsToColumns(units)),
+          (units) =>
+            (this.dataSource.data = this.mapUnitOrProjectsToColumns(units)),
         );
       });
     } else if (this.mode === 'student') {
@@ -105,13 +115,16 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
 
       this.globalStateService.onLoad(() => {
         this.globalStateService.currentUserProjects.values.subscribe(
-          (projects) => (this.dataSource.data = this.mapUnitOrProjectsToColumns(projects)),
+          (projects) =>
+            (this.dataSource.data = this.mapUnitOrProjectsToColumns(projects)),
         );
       });
     }
   }
 
-  mapUnitSourceToColumn(unitOrProject: Unit | Project | UnitRole): IUnitOrProject {
+  mapUnitSourceToColumn(
+    unitOrProject: Unit | Project | UnitRole,
+  ): IUnitOrProject {
     if (unitOrProject instanceof Unit) {
       return {
         id: unitOrProject.id,
@@ -165,15 +178,20 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  mapUnitOrProjectsToColumns(unitOrProjects: readonly (Unit | Project | UnitRole)[]) {
+  mapUnitOrProjectsToColumns(
+    unitOrProjects: readonly (Unit | Project | UnitRole)[],
+  ) {
     // copy the array of units/projects/unitRole and map each unit through the mapUnitSourceToColumn function
-    return [...unitOrProjects].map((unitOrProject) => this.mapUnitSourceToColumn(unitOrProject));
+    return [...unitOrProjects].map((unitOrProject) =>
+      this.mapUnitSourceToColumn(unitOrProject),
+    );
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = (data, filter: string) => data.matches(filter);
+    this.dataSource.filterPredicate = (data, filter: string) =>
+      data.matches(filter);
   }
 
   createUnit() {
@@ -188,7 +206,11 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+  private sortCompare(
+    aValue: number | string,
+    bValue: number | string,
+    isAsc: boolean,
+  ) {
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
@@ -199,13 +221,25 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
     this.dataSource.data = this.dataSource.data.sort((a, b) => {
       switch (sort.active) {
         case 'unit_code':
-          return this.sortCompare(a.unit_code, b.unit_code, sort.direction === 'asc');
+          return this.sortCompare(
+            a.unit_code,
+            b.unit_code,
+            sort.direction === 'asc',
+          );
         case 'name':
           return this.sortCompare(a.name, b.name, sort.direction === 'asc');
         case 'unit_role':
-          return this.sortCompare(a.unit_role, b.unit_role, sort.direction === 'asc');
+          return this.sortCompare(
+            a.unit_role,
+            b.unit_role,
+            sort.direction === 'asc',
+          );
         case 'teaching_period': {
-          return this.sortCompare(a.teaching_period, b.teaching_period, sort.direction === 'asc');
+          return this.sortCompare(
+            a.teaching_period,
+            b.teaching_period,
+            sort.direction === 'asc',
+          );
         }
         case 'start_date': {
           return this.sortCompare(
@@ -222,7 +256,11 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
           );
         }
         case 'active':
-          return this.sortCompare(+!!a.active, +!!b.active, sort.direction === 'asc');
+          return this.sortCompare(
+            +!!a.active,
+            +!!b.active,
+            sort.direction === 'asc',
+          );
         default:
           return 0;
       }

@@ -2,13 +2,19 @@ import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, tap} from 'rxjs';
-import {ProjectService, Task, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  ProjectService,
+  Task,
+  UnitRole,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {TutorNote} from '../models/tutor-note';
 
 @Injectable()
 export class TutorNoteService extends CachedEntityService<TutorNote> {
-  protected readonly endpointFormat = 'unit_roles/:unitRoleId:/tutor_notes/:id:';
+  protected readonly endpointFormat =
+    'unit_roles/:unitRoleId:/tutor_notes/:id:';
   protected readonly markAsReadEndpointFormat =
     'unit_roles/:unitRoleId:/tutor_notes/:id:/mark_as_read';
 
@@ -28,7 +34,9 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
       {
         keys: ['user', 'user_id'],
         toEntityFn: (data: object, _key: string, tutorNote: TutorNote) => {
-          const userRole = tutorNote.unitRole.unit.staff.find((s) => s.user.id === data['user_id']);
+          const userRole = tutorNote.unitRole.unit.staff.find(
+            (s) => s.user.id === data['user_id'],
+          );
           // If the user is not a staff in the unit it will be null
           return userRole?.user;
         },
@@ -45,7 +53,9 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
       {
         keys: ['project', 'project_id'],
         toEntityFn: (data: object, key: string, tutorNote: TutorNote) => {
-          const project = tutorNote.unitRole.unit.students.find((p) => p.id === data['project_id']);
+          const project = tutorNote.unitRole.unit.students.find(
+            (p) => p.id === data['project_id'],
+          );
           return project;
         },
       },
@@ -80,7 +90,9 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
 
     body.append('note', text);
 
-    const opts: RequestOptions<TutorNote> = {endpointFormat: this.endpointFormat};
+    const opts: RequestOptions<TutorNote> = {
+      endpointFormat: this.endpointFormat,
+    };
     opts.cache = unitRole.tutorNotesCache;
     opts.body = body;
     opts.constructorParams = unitRole;
@@ -102,7 +114,11 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
     }
   }
 
-  public updateNote(unitRole: UnitRole, note: TutorNote, text: string): Observable<TutorNote> {
+  public updateNote(
+    unitRole: UnitRole,
+    note: TutorNote,
+    text: string,
+  ): Observable<TutorNote> {
     const pathId = {
       unitRoleId: unitRole.id,
       id: note.id,
@@ -111,7 +127,9 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
     const body: FormData = new FormData();
     body.append('note', text);
 
-    const opts: RequestOptions<TutorNote> = {endpointFormat: this.endpointFormat};
+    const opts: RequestOptions<TutorNote> = {
+      endpointFormat: this.endpointFormat,
+    };
     opts.cache = unitRole.tutorNotesCache;
     opts.body = body;
     opts.constructorParams = unitRole;
@@ -129,7 +147,9 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
       id: note.id,
     };
 
-    const opts: RequestOptions<TutorNote> = {endpointFormat: this.markAsReadEndpointFormat};
+    const opts: RequestOptions<TutorNote> = {
+      endpointFormat: this.markAsReadEndpointFormat,
+    };
     opts.cache = unitRole.tutorNotesCache;
     opts.constructorParams = unitRole;
 
@@ -148,7 +168,10 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
     );
   }
 
-  public loadTutorNotes(unitRole: UnitRole, useFetch: boolean = false): Observable<TutorNote[]> {
+  public loadTutorNotes(
+    unitRole: UnitRole,
+    useFetch: boolean = false,
+  ): Observable<TutorNote[]> {
     const options: RequestOptions<TutorNote> = {
       endpointFormat: this.endpointFormat,
       cache: unitRole.tutorNotesCache,

@@ -82,7 +82,9 @@ export class EditProfileFormComponent implements OnInit {
   }
 
   public submit(): void {
-    this.user.pronouns = this.customPronouns ? this.user.pronouns : this.formPronouns.pronouns;
+    this.user.pronouns = this.customPronouns
+      ? this.user.pronouns
+      : this.formPronouns.pronouns;
     this.user.hasRunFirstTimeSetup = true;
 
     if (this.newUser) {

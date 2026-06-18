@@ -2,7 +2,11 @@ import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, tap} from 'rxjs';
-import {Engagement, EngagementComment, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  Engagement,
+  EngagementComment,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {MappingFunctions} from './mapping-fn';
 
@@ -24,7 +28,11 @@ export class EngagementCommentService extends CachedEntityService<EngagementComm
       {
         keys: 'user',
         toEntityFn: (data: object, key: string) => {
-          return this.userService.cache.getOrCreate(data[key].id, this.userService, data[key]);
+          return this.userService.cache.getOrCreate(
+            data[key].id,
+            this.userService,
+            data[key],
+          );
         },
       },
       {
@@ -71,7 +79,10 @@ export class EngagementCommentService extends CachedEntityService<EngagementComm
     );
   }
 
-  updateComment(comment: EngagementComment, text: string): Observable<EngagementComment> {
+  updateComment(
+    comment: EngagementComment,
+    text: string,
+  ): Observable<EngagementComment> {
     return this.put(
       {
         projectId: comment.engagement.project.id,

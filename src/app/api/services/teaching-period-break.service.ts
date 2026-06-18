@@ -7,7 +7,8 @@ import {MappingFunctions} from './mapping-fn';
 
 @Injectable()
 export class TeachingPeriodBreakService extends CachedEntityService<TeachingPeriodBreak> {
-  protected readonly endpointFormat = 'teaching_periods/:teaching_period_id:/breaks/:id:';
+  protected readonly endpointFormat =
+    'teaching_periods/:teaching_period_id:/breaks/:id:';
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);

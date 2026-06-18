@@ -1,6 +1,10 @@
-<div class="mx-auto flex w-full flex-col items-center justify-center overflow-hidden">
+<div
+  class="mx-auto flex w-full flex-col items-center justify-center overflow-hidden"
+>
   <!-- TODO: dont render this comment if we're still in pre_queued and the submission timestamp is over 1 hour etc -->
-  <div class="flex w-full items-center justify-center text-center text-[#9696969d] opacity-80">
+  <div
+    class="flex w-full items-center justify-center text-center text-[#9696969d] opacity-80"
+  >
     <div
       class="h-px w-full flex-grow bg-gradient-to-r from-transparent via-gray-400/60 to-transparent"
     ></div>
@@ -9,9 +13,11 @@
       @if (comment.overseerStatus === 'pre_queued') {
         Tests In Progress
       } @else if (comment.overseerStatus === 'passed') {
-        Tests Passed {{ comment.overseerPassedSteps }} / {{ comment.overseerTotalSteps }}
+        Tests Passed {{ comment.overseerPassedSteps }} /
+        {{ comment.overseerTotalSteps }}
       } @else if (comment.overseerStatus === 'failed') {
-        Tests Failed {{ comment.overseerPassedSteps }} / {{ comment.overseerTotalSteps }}
+        Tests Failed {{ comment.overseerPassedSteps }} /
+        {{ comment.overseerTotalSteps }}
       }
     </div>
 
@@ -34,7 +40,10 @@
       >highlight_off_outline</mat-icon
     >
   } @else if (comment.overseerStatus === 'pre_queued') {
-    <mat-progress-spinner mode="indeterminate" [diameter]="25"></mat-progress-spinner>
+    <mat-progress-spinner
+      mode="indeterminate"
+      [diameter]="25"
+    ></mat-progress-spinner>
   }
 
   @if (comment.overseerStatus !== 'pre_queued') {

@@ -33,15 +33,18 @@ export class CsvResultModalService {
     const normalised = this.normaliseResponse(csvResult);
     this.showSummaryAlert(normalised);
 
-    this.dialog.open<CsvResultModalComponent, CsvResultModalData>(CsvResultModalComponent, {
-      width: '90vw',
-      maxWidth: '1200px',
-      maxHeight: '90vh',
-      data: {
-        title,
-        csvResult: normalised,
+    this.dialog.open<CsvResultModalComponent, CsvResultModalData>(
+      CsvResultModalComponent,
+      {
+        width: '90vw',
+        maxWidth: '1200px',
+        maxHeight: '90vh',
+        data: {
+          title,
+          csvResult: normalised,
+        },
       },
-    });
+    );
   }
 
   private normaliseResponse(csvResult: CsvResult): CsvResult {
@@ -57,7 +60,10 @@ export class CsvResultModalService {
     const errorCount = csvResult.errors?.length ?? 0;
 
     if (errorCount === 0) {
-      this.alertService.success(`Data uploaded. Success with ${successCount} items.`, 2000);
+      this.alertService.success(
+        `Data uploaded. Success with ${successCount} items.`,
+        2000,
+      );
       return;
     }
 

@@ -19,24 +19,46 @@
             </mat-form-field>
             @switch (editor.actionFor(rule).type) {
               @case ('EmailStudentAction') {
-                <f-email-student-action mode="edit" [editor]="editor" [rule]="rule" />
+                <f-email-student-action
+                  mode="edit"
+                  [editor]="editor"
+                  [rule]="rule"
+                />
               }
               @case ('EmailStaffAction') {
-                <f-email-staff-action mode="edit" [editor]="editor" [rule]="rule" />
+                <f-email-staff-action
+                  mode="edit"
+                  [editor]="editor"
+                  [rule]="rule"
+                />
               }
               @case ('TaskCommentAction') {
-                <f-task-comment-action mode="edit" [editor]="editor" [rule]="rule" />
+                <f-task-comment-action
+                  mode="edit"
+                  [editor]="editor"
+                  [rule]="rule"
+                />
               }
               @case ('ChangeTargetGradeAction') {
-                <f-change-target-grade-action mode="edit" [editor]="editor" [rule]="rule" />
+                <f-change-target-grade-action
+                  mode="edit"
+                  [editor]="editor"
+                  [rule]="rule"
+                />
               }
             }
             <div class="flex gap-3">
-              <button color="primary" mat-flat-button (click)="editor.updateAction(rule)">
+              <button
+                color="primary"
+                mat-flat-button
+                (click)="editor.updateAction(rule)"
+              >
                 <mat-icon>save</mat-icon>
                 Update action
               </button>
-              <button mat-button (click)="editor.cancelAction(rule)">Cancel</button>
+              <button mat-button (click)="editor.cancelAction(rule)">
+                Cancel
+              </button>
             </div>
           </div>
         } @else {
@@ -49,26 +71,41 @@
                 @switch (action.type) {
                   @case ('ChangeTargetGradeAction') {
                     <span>Change student's target grade to</span>
-                    <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
+                    >
                       {{ editor.targetGradeName(action.target_grade) }}
                     </span>
                   }
                   @case ('EmailStudentAction') {
                     @if (action.subject || action.body) {
-                      <div class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3">
+                      <div
+                        class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3"
+                      >
                         @if (action.subject) {
                           <div>
-                            <div class="mb-1 font-medium text-black/80">Subject</div>
+                            <div class="mb-1 font-medium text-black/80">
+                              Subject
+                            </div>
                             <div
-                              [innerHTML]="editor.renderTemplatePreview(action.subject, rule)"
+                              [innerHTML]="
+                                editor.renderTemplatePreview(
+                                  action.subject,
+                                  rule
+                                )
+                              "
                             ></div>
                           </div>
                         }
                         @if (action.body) {
                           <div>
-                            <div class="mb-1 font-medium text-black/80">Body</div>
+                            <div class="mb-1 font-medium text-black/80">
+                              Body
+                            </div>
                             <div
-                              [innerHTML]="editor.renderTemplatePreview(action.body, rule)"
+                              [innerHTML]="
+                                editor.renderTemplatePreview(action.body, rule)
+                              "
                             ></div>
                           </div>
                         }
@@ -77,24 +114,39 @@
                   }
                   @case ('EmailStaffAction') {
                     <span>Send email to</span>
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                    >
                       {{ editor.staffAudienceLabel(action) }}
                     </span>
                     @if (action.subject || action.body) {
-                      <div class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3">
+                      <div
+                        class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3"
+                      >
                         @if (action.subject) {
                           <div>
-                            <div class="mb-1 font-medium text-black/80">Subject</div>
+                            <div class="mb-1 font-medium text-black/80">
+                              Subject
+                            </div>
                             <div
-                              [innerHTML]="editor.renderTemplatePreview(action.subject, rule)"
+                              [innerHTML]="
+                                editor.renderTemplatePreview(
+                                  action.subject,
+                                  rule
+                                )
+                              "
                             ></div>
                           </div>
                         }
                         @if (action.body) {
                           <div>
-                            <div class="mb-1 font-medium text-black/80">Body</div>
+                            <div class="mb-1 font-medium text-black/80">
+                              Body
+                            </div>
                             <div
-                              [innerHTML]="editor.renderTemplatePreview(action.body, rule)"
+                              [innerHTML]="
+                                editor.renderTemplatePreview(action.body, rule)
+                              "
                             ></div>
                           </div>
                         }
@@ -103,14 +155,26 @@
                   }
                   @case ('TaskCommentAction') {
                     <span>Add comment to</span>
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
-                      {{ editor.taskDefinitionLabel(action.task_definition_id) }}
+                    <span
+                      class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                    >
+                      {{
+                        editor.taskDefinitionLabel(action.task_definition_id)
+                      }}
                     </span>
                     @if (action.body) {
-                      <div class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3">
+                      <div
+                        class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3"
+                      >
                         <div>
-                          <div class="mb-1 font-medium text-black/80">Comment</div>
-                          <div [innerHTML]="editor.renderTemplatePreview(action.body, rule)"></div>
+                          <div class="mb-1 font-medium text-black/80">
+                            Comment
+                          </div>
+                          <div
+                            [innerHTML]="
+                              editor.renderTemplatePreview(action.body, rule)
+                            "
+                          ></div>
                         </div>
                       </div>
                     }
@@ -125,7 +189,10 @@
               <button mat-icon-button (click)="editor.editAction(rule, action)">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button (click)="editor.deleteAction(rule, action)">
+              <button
+                mat-icon-button
+                (click)="editor.deleteAction(rule, action)"
+              >
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -165,7 +232,11 @@
         }
 
         @case ('ChangeTargetGradeAction') {
-          <f-change-target-grade-action mode="add" [editor]="editor" [rule]="rule" />
+          <f-change-target-grade-action
+            mode="add"
+            [editor]="editor"
+            [rule]="rule"
+          />
         }
       }
 
@@ -174,18 +245,26 @@
         color="primary"
         mat-flat-button
         (click)="
-          editor.editingActionId[rule.id] ? editor.updateAction(rule) : editor.addAction(rule)
+          editor.editingActionId[rule.id]
+            ? editor.updateAction(rule)
+            : editor.addAction(rule)
         "
       >
         <mat-icon>save</mat-icon>
         {{ editor.editingActionId[rule.id] ? 'Update action' : 'Save action' }}
       </button>
 
-      <button class="mb-[22px]" mat-button (click)="editor.cancelAction(rule)">Cancel</button>
+      <button class="mb-[22px]" mat-button (click)="editor.cancelAction(rule)">
+        Cancel
+      </button>
     </div>
   } @else {
     <div class="flex items-center justify-center">
-      <button color="primary" mat-stroked-button (click)="editor.showActionForm(rule)">
+      <button
+        color="primary"
+        mat-stroked-button
+        (click)="editor.showActionForm(rule)"
+      >
         <mat-icon>add</mat-icon>
         Add action
       </button>

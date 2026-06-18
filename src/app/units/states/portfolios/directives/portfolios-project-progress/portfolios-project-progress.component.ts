@@ -1,4 +1,10 @@
-import {Component, ElementRef, HostListener, Input, OnChanges} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnChanges,
+} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
@@ -21,7 +27,10 @@ export class PortfoliosProjectProgressComponent implements OnChanges {
   @Input()
   public project$: BehaviorSubject<Project> = new BehaviorSubject(null);
 
-  public taskStats: {numberOfTasksCompleted: number; numberOfTasksRemaining: number} = {
+  public taskStats: {
+    numberOfTasksCompleted: number;
+    numberOfTasksRemaining: number;
+  } = {
     numberOfTasksCompleted: 0,
     numberOfTasksRemaining: 0,
   };
@@ -41,7 +50,10 @@ export class PortfoliosProjectProgressComponent implements OnChanges {
     }
 
     const projectDashboard = event.target.closest('f-project-dashboard');
-    if (!projectDashboard || !this.elementRef.nativeElement.contains(projectDashboard)) {
+    if (
+      !projectDashboard ||
+      !this.elementRef.nativeElement.contains(projectDashboard)
+    ) {
       return;
     }
 
@@ -49,7 +61,10 @@ export class PortfoliosProjectProgressComponent implements OnChanges {
       return;
     }
 
-    const innerScrollContainer = this.findInnerScrollContainer(event.target, projectDashboard);
+    const innerScrollContainer = this.findInnerScrollContainer(
+      event.target,
+      projectDashboard,
+    );
     if (
       event.deltaY < 0 &&
       innerScrollContainer &&
@@ -126,7 +141,10 @@ export class PortfoliosProjectProgressComponent implements OnChanges {
     });
   }
 
-  private findInnerScrollContainer(target: HTMLElement, root: Element): HTMLElement | null {
+  private findInnerScrollContainer(
+    target: HTMLElement,
+    root: Element,
+  ): HTMLElement | null {
     let element: HTMLElement | null = target;
 
     while (element && element !== root) {
@@ -160,7 +178,9 @@ export class PortfoliosProjectProgressComponent implements OnChanges {
     }
 
     const overflowY = getComputedStyle(element).overflowY;
-    return overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay';
+    return (
+      overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay'
+    );
   }
 
   private canScroll(element: HTMLElement, deltaY: number): boolean {

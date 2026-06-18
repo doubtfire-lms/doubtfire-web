@@ -48,18 +48,23 @@ export class OverseerAssessment extends Entity implements SubmissionArchive {
   public get stepsSkipped() {
     return this.task?.definition.overseerStepsCache.currentValues.filter(
       (step) =>
-        !this.stepResultsCache.currentValues.find((result) => result.overseerStepId === step.id),
+        !this.stepResultsCache.currentValues.find(
+          (result) => result.overseerStepId === step.id,
+        ),
     );
   }
 
   public get reportReady() {
-    return this.submissionStatus === 'passed' || this.submissionStatus === 'failed';
+    return (
+      this.submissionStatus === 'passed' || this.submissionStatus === 'failed'
+    );
   }
 
   public submissionFilesUrl(): string {
     const constants = AppInjector.get(DoubtfireConstants);
     const timestamp =
-      this.timestampString ?? Math.floor(this.timestamp.getTime() / 1000).toString();
+      this.timestampString ??
+      Math.floor(this.timestamp.getTime() / 1000).toString();
     return `${constants.API_URL}/projects/${this.task.project.id}/task_def_id/${this.task.definition.id}/submissions/timestamps/${timestamp}/files`;
   }
 }

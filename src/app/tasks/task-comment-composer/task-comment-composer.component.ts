@@ -17,7 +17,11 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {
   FeedbackTemplate,
@@ -72,13 +76,21 @@ const ACCEPTED_FILE_TYPES = [
   styleUrls: ['./task-comment-composer.component.scss'],
   animations: [
     trigger('shrinkgrow', [
-      transition('true => false', [style({width: 38.4}), animate('150ms 0ms ease-in-out')]),
-      transition('false => true', [style({width: 80}), animate('150ms 0ms ease-in-out')]),
+      transition('true => false', [
+        style({width: 38.4}),
+        animate('150ms 0ms ease-in-out'),
+      ]),
+      transition('false => true', [
+        style({width: 80}),
+        animate('150ms 0ms ease-in-out'),
+      ]),
     ]),
   ],
   standalone: false,
 })
-export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnChanges {
+export class TaskCommentComposerComponent
+  implements AfterViewInit, DoCheck, OnChanges
+{
   @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
 
@@ -136,7 +148,10 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   ngOnChanges(changes: SimpleChanges) {
     this.showFeedbackTemplatePicker = false;
 
-    if (changes.task && changes.task.currentValue !== changes.task.previousValue) {
+    if (
+      changes.task &&
+      changes.task.currentValue !== changes.task.previousValue
+    ) {
       const newTask = changes.task.currentValue as Task;
       // Check if the task has changed
 
@@ -268,7 +283,8 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
       return;
     }
 
-    const taskKey = task.id || `${task.projectId || task.project?.id}_${task.definition?.id}`;
+    const taskKey =
+      task.id || `${task.projectId || task.project?.id}_${task.definition?.id}`;
 
     if (this.submittedTaskIds.has(taskKey)) {
       return;
@@ -284,7 +300,11 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
 
       const maxRetries = 5;
       const retryWithTimeout = (attempt = 0) => {
-        if (!this.input || !this.input.first || !this.input.first.nativeElement) {
+        if (
+          !this.input ||
+          !this.input.first ||
+          !this.input.first.nativeElement
+        ) {
           if (attempt < maxRetries) {
             setTimeout(() => retryWithTimeout(attempt + 1), 200);
             return;
@@ -400,7 +420,8 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   keyTyped() {
     setTimeout(() => {
       const commentText: string = this.input.first.nativeElement.innerText;
-      this.emojiSearchMode = !commentText.includes('`') && this.emojiRegex.test(commentText);
+      this.emojiSearchMode =
+        !commentText.includes('`') && this.emojiRegex.test(commentText);
 
       if (this.emojiSearchMode) {
         // get the cursor position in the content-editable
@@ -414,7 +435,10 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
 
         // The emoji search term will be from the position after the last :
         // Note, the second parameter is a length not position, so we subtract.
-        this.emojiMatch = testText.substr(lastColPos + 1, cursorPosition - lastColPos);
+        this.emojiMatch = testText.substr(
+          lastColPos + 1,
+          cursorPosition - lastColPos,
+        );
 
         if (this.emojiMatch?.includes(' ')) {
           this.emojiSearchMode = false;
@@ -431,10 +455,11 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   }
 
   emojiSelected(emoji: string) {
-    this.input.first.nativeElement.innerText = this.input.first.nativeElement.innerText.replace(
-      `:${this.emojiMatch}`,
-      emoji,
-    );
+    this.input.first.nativeElement.innerText =
+      this.input.first.nativeElement.innerText.replace(
+        `:${this.emojiMatch}`,
+        emoji,
+      );
     this.emojiSearchMode = false;
   }
 
@@ -521,38 +546,46 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
       this.cancelReply();
     }
 
-    const text = this.emojiService.nativeEmojiToColons(this.input.first.nativeElement.innerText);
+    const text = this.emojiService.nativeEmojiToColons(
+      this.input.first.nativeElement.innerText,
+    );
 
     const taskKey =
-      this.task.id || `${this.task.projectId || this.task.project?.id}_${this.task.definition?.id}`;
+      this.task.id ||
+      `${this.task.projectId || this.task.project?.id}_${this.task.definition?.id}`;
 
     const draftKey = this.getDraftKey(this.task);
-    this.taskCommentService.addComment(this.task, text, 'text', originalComment).subscribe({
-      next: (_tc: TaskComment) => {
-        this.isSending = false;
+    this.taskCommentService
+      .addComment(this.task, text, 'text', originalComment)
+      .subscribe({
+        next: (_tc: TaskComment) => {
+          this.isSending = false;
 
-        this.submittedTaskIds.add(taskKey);
+          this.submittedTaskIds.add(taskKey);
 
-        try {
-          sessionStorage.setItem(
-            'task_comments_submitted',
-            JSON.stringify([...this.submittedTaskIds]),
+          try {
+            sessionStorage.setItem(
+              'task_comments_submitted',
+              JSON.stringify([...this.submittedTaskIds]),
+            );
+          } catch (e) {
+            console.error('Error saving submitted tasks:', e);
+          }
+
+          if (this.task) {
+            localStorage.removeItem(draftKey);
+          }
+
+          this.input.first.nativeElement.innerText = '';
+        },
+        error: (error: ApiError) => {
+          this.isSending = false;
+          this.alerts.error(
+            error.error || error.message || `Failed to add comment: ${error}`,
+            6000,
           );
-        } catch (e) {
-          console.error('Error saving submitted tasks:', e);
-        }
-
-        if (this.task) {
-          localStorage.removeItem(draftKey);
-        }
-
-        this.input.first.nativeElement.innerText = '';
-      },
-      error: (error: ApiError) => {
-        this.isSending = false;
-        this.alerts.error(error.error || error.message || `Failed to add comment: ${error}`, 6000);
-      },
-    });
+        },
+      });
   }
 
   saveEditedComment() {
@@ -561,7 +594,9 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
     }
 
     this.isSending = true;
-    const text = this.emojiService.nativeEmojiToColons(this.input.first.nativeElement.innerText);
+    const text = this.emojiService.nativeEmojiToColons(
+      this.input.first.nativeElement.innerText,
+    );
 
     this.taskCommentService.editComment(this.editingComment, text).subscribe({
       next: (_tc: TaskComment) => {
@@ -572,7 +607,10 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
       },
       error: (error: ApiError) => {
         this.isSending = false;
-        this.alerts.error(error.error || error.message || `Failed to edit comment: ${error}`, 6000);
+        this.alerts.error(
+          error.error || error.message || `Failed to edit comment: ${error}`,
+          6000,
+        );
       },
     });
   }
@@ -634,7 +672,10 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
       ) {
         acceptedFiles.push(file);
       } else {
-        this.alerts.error('Cannot upload that file - only images, audio, and PDFs.', 4000);
+        this.alerts.error(
+          'Cannot upload that file - only images, audio, and PDFs.',
+          4000,
+        );
       }
     });
 
@@ -790,7 +831,9 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
 @Component({
   selector: 'discussion-prompt-composer-dialog.html',
   templateUrl: 'discussion-prompt-composer-dialog.html',
-  styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
+  styleUrls: [
+    './discussion-prompt-composer/discussion-prompt-composer.component.scss',
+  ],
   standalone: false,
 })
 export class DiscussionComposerDialog {

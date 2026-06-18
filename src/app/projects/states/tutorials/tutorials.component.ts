@@ -37,7 +37,8 @@ export class TutorialsComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.project$ = this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
+    this.project$ =
+      this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
 
     this.projectSub = this.project$?.subscribe((project) => {
       if (!project || !project.unit) {
@@ -46,7 +47,10 @@ export class TutorialsComponent implements OnInit, OnDestroy {
 
       this.project = project;
       this.unit = project.unit;
-      this.filteredTutorials = this.tutorialCampusFilter([...(this.unit.tutorials ?? [])], project);
+      this.filteredTutorials = this.tutorialCampusFilter(
+        [...(this.unit.tutorials ?? [])],
+        project,
+      );
       this.dataSource.data = this.filteredTutorials;
     });
   }
@@ -131,11 +135,23 @@ export class TutorialsComponent implements OnInit, OnDestroy {
             sort.direction === 'asc',
           );
         case 'campus':
-          return this.sortCompare(a.campus?.name, b.campus?.name, sort.direction === 'asc');
+          return this.sortCompare(
+            a.campus?.name,
+            b.campus?.name,
+            sort.direction === 'asc',
+          );
         case 'code':
-          return this.sortCompare(a.abbreviation, b.abbreviation, sort.direction === 'asc');
+          return this.sortCompare(
+            a.abbreviation,
+            b.abbreviation,
+            sort.direction === 'asc',
+          );
         case 'day': {
-          return this.sortCompare(a.meetingDay, b.meetingDay, sort.direction === 'asc');
+          return this.sortCompare(
+            a.meetingDay,
+            b.meetingDay,
+            sort.direction === 'asc',
+          );
         }
         case 'time': {
           return this.sortCompare(
@@ -145,10 +161,18 @@ export class TutorialsComponent implements OnInit, OnDestroy {
           );
         }
         case 'room': {
-          return this.sortCompare(a.meetingLocation, b.meetingLocation, sort.direction === 'asc');
+          return this.sortCompare(
+            a.meetingLocation,
+            b.meetingLocation,
+            sort.direction === 'asc',
+          );
         }
         case 'tutor':
-          return this.sortCompare(a.tutorName, b.tutorName, sort.direction === 'asc');
+          return this.sortCompare(
+            a.tutorName,
+            b.tutorName,
+            sort.direction === 'asc',
+          );
         default:
           return 0;
       }

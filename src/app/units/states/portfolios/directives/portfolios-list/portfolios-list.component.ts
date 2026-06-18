@@ -76,26 +76,34 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
   }
 
   downloadGrades() {
-    this.fileDownloaderService.downloadFile(this.unit.gradesUrl, `${this.unit.code}-grades.csv`);
+    this.fileDownloaderService.downloadFile(
+      this.unit.gradesUrl,
+      `${this.unit.code}-grades.csv`,
+    );
   }
 
   downloadPortfolios() {
     this.unitService.zipPortfolios(this.unit).subscribe({
       next: (newJob) => {
-        this.sidekiq.show(`Downloading Portfolios: ${this.unit.code}`, newJob.id).subscribe({
-          next: () => {
-            this.fileDownloaderService.downloadFile(
-              this.unit.portfoliosUrl,
-              `${this.unit.code}-portfolios.zip`,
-            );
-          },
-          error: (error) => {
-            this.alertService.error(error, 6000);
-          },
-        });
+        this.sidekiq
+          .show(`Downloading Portfolios: ${this.unit.code}`, newJob.id)
+          .subscribe({
+            next: () => {
+              this.fileDownloaderService.downloadFile(
+                this.unit.portfoliosUrl,
+                `${this.unit.code}-portfolios.zip`,
+              );
+            },
+            error: (error) => {
+              this.alertService.error(error, 6000);
+            },
+          });
       },
       error: (error) => {
-        this.alertService.error(`Could not download portfolios: ${error}`, 6000);
+        this.alertService.error(
+          `Could not download portfolios: ${error}`,
+          6000,
+        );
       },
     });
   }
@@ -121,10 +129,18 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
 
     const students = this.unit.students
       .filter((p) =>
-        this.portfolioFilter === 'submitted_only' ? p.hasPortfolio || p.portfolioAvailable : true,
+        this.portfolioFilter === 'submitted_only'
+          ? p.hasPortfolio || p.portfolioAvailable
+          : true,
       )
-      .filter((p) => (this.tutorialFilter === 'mine' ? p.hasTutor(currentUser) : true))
-      .filter((p) => (this.gradeFilter !== null ? p.submittedGrade === this.gradeFilter : true));
+      .filter((p) =>
+        this.tutorialFilter === 'mine' ? p.hasTutor(currentUser) : true,
+      )
+      .filter((p) =>
+        this.gradeFilter !== null
+          ? p.submittedGrade === this.gradeFilter
+          : true,
+      );
 
     this.displayedColumns = [
       'student',
@@ -195,11 +211,17 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
     return this.taskService.statusLabels.get(status);
   }
 
-  private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+  private sortCompare(
+    aValue: number | string,
+    bValue: number | string,
+    isAsc: boolean,
+  ) {
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  private sortDateValue(value: Date | string | number | null | undefined): number {
+  private sortDateValue(
+    value: Date | string | number | null | undefined,
+  ): number {
     if (value === null || value === undefined || value === '') {
       return 0;
     }
@@ -221,9 +243,17 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
             sort.direction === 'asc',
           );
         case 'name':
-          return this.sortCompare(a.student?.name, b.student?.name, sort.direction === 'asc');
+          return this.sortCompare(
+            a.student?.name,
+            b.student?.name,
+            sort.direction === 'asc',
+          );
         case 'tutor': {
-          return this.sortCompare(a.tutorNames(), b.tutorNames(), sort.direction === 'asc');
+          return this.sortCompare(
+            a.tutorNames(),
+            b.tutorNames(),
+            sort.direction === 'asc',
+          );
         }
         case 'tutorial':
           return this.sortCompare(
@@ -233,9 +263,17 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
           );
 
         case 'target':
-          return this.sortCompare(a.targetGrade, b.targetGrade, sort.direction === 'asc');
+          return this.sortCompare(
+            a.targetGrade,
+            b.targetGrade,
+            sort.direction === 'asc',
+          );
         case 'submitted-as':
-          return this.sortCompare(a.submittedGrade, b.submittedGrade, sort.direction === 'asc');
+          return this.sortCompare(
+            a.submittedGrade,
+            b.submittedGrade,
+            sort.direction === 'asc',
+          );
         case 'submission-date':
           return this.sortCompare(
             this.sortDateValue(a.portfolioSubmissionDate),

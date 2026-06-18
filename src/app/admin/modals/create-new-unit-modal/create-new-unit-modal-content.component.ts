@@ -57,7 +57,9 @@ export class CreateNewUnitModalContentComponent implements OnInit {
       })
       .subscribe({
         next: (unit) => {
-          this.alerts.success(`Unit ${unit.code} - ${unit.name} has been created.`);
+          this.alerts.success(
+            `Unit ${unit.code} - ${unit.name} has been created.`,
+          );
           this.dialogRef.close(unit);
         },
         error: (error) => {

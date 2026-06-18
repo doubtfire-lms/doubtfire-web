@@ -38,7 +38,11 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
       ['timestampString', 'submission_timestamp'],
       {
         keys: 'overseerStepResults',
-        toEntityOp: (data: object, key: string, overseerAssesment: OverseerAssessment) => {
+        toEntityOp: (
+          data: object,
+          key: string,
+          overseerAssesment: OverseerAssessment,
+        ) => {
           data[key]?.forEach((overseerStep) => {
             overseerAssesment.stepResultsCache.getOrCreate(
               overseerStep['id'],
@@ -73,7 +77,9 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
     });
   }
 
-  public triggerOverseer(assessment: OverseerAssessment): Observable<OverseerAssessment> {
+  public triggerOverseer(
+    assessment: OverseerAssessment,
+  ): Observable<OverseerAssessment> {
     const pathIds = {
       project_id: assessment.task.project.id,
       td_id: assessment.task.definition.id,

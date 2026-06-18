@@ -4,18 +4,24 @@
   </mat-card-header>
   <mat-card-content>
     <p class="py-3">
-      Now is your chance to upload any extra files to include in your portfolio. They'll appear at
-      the very top of your portfolio, before your tasks.
+      Now is your chance to upload any extra files to include in your portfolio.
+      They'll appear at the very top of your portfolio, before your tasks.
     </p>
     <div class="pb-3">
       <ol>
         @for (file of extraFiles; track file) {
-          <li class="flex items-center justify-between border-b-2 border-b-gray-100 py-1">
+          <li
+            class="flex items-center justify-between border-b-2 border-b-gray-100 py-1"
+          >
             <div class="flex items-center justify-between gap-1">
               <mat-icon>{{ icons[file.kind] }}</mat-icon>
               {{ file.name }}
             </div>
-            <button color="primary" mat-button (click)="deleteFileFromPortfolio(file)">
+            <button
+              color="primary"
+              mat-button
+              (click)="deleteFileFromPortfolio(file)"
+            >
               Remove
             </button>
           </li>
@@ -27,7 +33,10 @@
     <div class="flex items-center justify-center">
       <mat-form-field appearance="outline" class="w-full max-w-2xl">
         <mat-label>Select type of file:</mat-label>
-        <mat-select [(ngModel)]="uploadType" (selectionChange)="onTypeChange($event)">
+        <mat-select
+          [(ngModel)]="uploadType"
+          (selectionChange)="onTypeChange($event)"
+        >
           <mat-option value="document">Document File</mat-option>
           <mat-option value="code">Code File</mat-option>
           <mat-option value="image">Image File</mat-option>
@@ -47,6 +56,8 @@
   </mat-card-content>
   <mat-card-footer class="flex w-full justify-between p-3">
     <button mat-raised-button (click)="advanceActiveTab(-1)">Back</button>
-    <button color="primary" mat-raised-button (click)="advanceActiveTab(1)">Next</button>
+    <button color="primary" mat-raised-button (click)="advanceActiveTab(1)">
+      Next
+    </button>
   </mat-card-footer>
 </mat-card>

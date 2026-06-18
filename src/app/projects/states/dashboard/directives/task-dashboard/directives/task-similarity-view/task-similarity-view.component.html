@@ -8,7 +8,9 @@
         <button mat-button (click)="accordion.closeAll()">Collapse All</button>
       }
       @if (jplagOpenState) {
-        <button mat-button (click)="jplagOpenState = false">Back to Summary</button>
+        <button mat-button (click)="jplagOpenState = false">
+          Back to Summary
+        </button>
       }
     </div>
   </div>
@@ -17,7 +19,10 @@
 
   @if (!jplagOpenState) {
     <mat-accordion multi>
-      @for (similarity of task?.similarityCache.values | async; track similarity) {
+      @for (
+        similarity of task?.similarityCache.values | async;
+        track similarity
+      ) {
         <div class="my-3">
           @for (part of similarity.parts; track part; let i = $index) {
             <mat-expansion-panel
@@ -25,18 +30,24 @@
               (closed)="part.panelOpenState = false"
               (opened)="part.panelOpenState = true"
             >
-              <mat-expansion-panel-header [ngClass]="{flagged: similarity.flagged}">
+              <mat-expansion-panel-header
+                [ngClass]="{flagged: similarity.flagged}"
+              >
                 <mat-panel-title>
                   {{ similarity.friendlyTypeName }}
                 </mat-panel-title>
-                <mat-panel-description> {{ part.description }} </mat-panel-description>
+                <mat-panel-description>
+                  {{ part.description }}
+                </mat-panel-description>
                 @if (similarity.readyForViewer) {
                   @if (similarity.type === 'JplagTaskSimilarity') {
                     <button
                       aria-label="View Detailed Report"
                       mat-icon-button
                       matTooltip="View JPlag report for this similarity"
-                      (click)="viewJplagReport(similarity); $event.stopPropagation()"
+                      (click)="
+                        viewJplagReport(similarity); $event.stopPropagation()
+                      "
                     >
                       <mat-icon>summarize</mat-icon>
                     </button>
@@ -55,7 +66,11 @@
                   <button
                     aria-label="Flag similarities"
                     mat-icon-button
-                    [matTooltip]="similarity.flagged ? 'Unflag similarity' : 'Flag similarity'"
+                    [matTooltip]="
+                      similarity.flagged
+                        ? 'Unflag similarity'
+                        : 'Flag similarity'
+                    "
                     (click)="toggleFlag($event, similarity)"
                   >
                     <mat-icon [color]="similarity.flagged ? 'warn' : ''">{{

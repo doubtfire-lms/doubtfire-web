@@ -1,7 +1,18 @@
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {Project, ProjectService, Webcal, WebcalService} from 'src/app/api/models/doubtfire-model';
+import {
+  Project,
+  ProjectService,
+  Webcal,
+  WebcalService,
+} from 'src/app/api/models/doubtfire-model';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AlertService} from '../../services/alert.service';
 import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal.service';
@@ -48,7 +59,9 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     this.projectService
       .query(undefined, {params: {include_in_active: false}})
       .subscribe((projects) => {
-        this.projects = projects.filter((p) => p.unit.teachingPeriod?.active ?? true);
+        this.projects = projects.filter(
+          (p) => p.unit.teachingPeriod?.active ?? true,
+        );
       });
   }
 
@@ -196,7 +209,9 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    */
   get excludedProjects(): Project[] {
     if (this.webcal.unitExclusions && this.webcal.unitExclusions.length > 0) {
-      return this.projects.filter((p) => this.webcal.unitExclusions.indexOf(p.unit.id) !== -1);
+      return this.projects.filter(
+        (p) => this.webcal.unitExclusions.indexOf(p.unit.id) !== -1,
+      );
     } else {
       return [];
     }
@@ -207,7 +222,9 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    */
   get includedProjects(): Project[] {
     if (this.webcal.unitExclusions && this.webcal.unitExclusions.length > 0) {
-      return this.projects.filter((p) => this.webcal.unitExclusions.indexOf(p.unit.id) === -1);
+      return this.projects.filter(
+        (p) => this.webcal.unitExclusions.indexOf(p.unit.id) === -1,
+      );
     } else {
       return this.projects;
     }
@@ -218,7 +235,9 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    */
   removeExclusion(project) {
     this.working = true;
-    this.webcal.unitExclusions = this.webcal.unitExclusions.filter((p) => p !== project.unit.id);
+    this.webcal.unitExclusions = this.webcal.unitExclusions.filter(
+      (p) => p !== project.unit.id,
+    );
     this.webcalService.update(this.webcal).subscribe((webcal) => {
       this.loadWebcal(webcal);
       this.working = false;
@@ -230,7 +249,10 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    */
   includeExclusion(project) {
     this.working = true;
-    this.webcal.unitExclusions = [...this.webcal.unitExclusions, project.unit.id];
+    this.webcal.unitExclusions = [
+      ...this.webcal.unitExclusions,
+      project.unit.id,
+    ];
     this.webcalService.update(this.webcal).subscribe((webcal) => {
       this.loadWebcal(webcal);
       this.working = false;

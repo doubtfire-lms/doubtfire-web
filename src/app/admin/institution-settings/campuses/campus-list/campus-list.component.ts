@@ -12,14 +12,24 @@ import {AlertService} from 'src/app/common/services/alert.service';
   styleUrls: ['campus-list.component.scss'],
   standalone: false,
 })
-export class CampusListComponent extends EntityFormComponent<Campus> implements AfterViewInit {
+export class CampusListComponent
+  extends EntityFormComponent<Campus>
+  implements AfterViewInit
+{
   @ViewChild(MatTable, {static: true}) table: MatTable<Campus>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   syncModes = ['timetable', 'automatic', 'manual'];
 
   // Set up the table
-  columns: string[] = ['name', 'abbreviation', 'mode', 'timezone', 'active', 'options'];
+  columns: string[] = [
+    'name',
+    'abbreviation',
+    'mode',
+    'timezone',
+    'active',
+    'options',
+  ];
   campuses: Campus[] = new Array<Campus>();
   dataSource = new MatTableDataSource(this.campuses);
 

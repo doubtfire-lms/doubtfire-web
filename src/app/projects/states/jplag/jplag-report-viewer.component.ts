@@ -7,7 +7,8 @@ import {AlertService} from 'src/app/common/services/alert.service';
   standalone: false,
 })
 export class JplagReportViewerComponent {
-  @ViewChild('jplagIframe', {static: true}) jplagIframe!: ElementRef<HTMLIFrameElement>;
+  @ViewChild('jplagIframe', {static: true})
+  jplagIframe!: ElementRef<HTMLIFrameElement>;
 
   @Input() hidden: boolean = false;
 

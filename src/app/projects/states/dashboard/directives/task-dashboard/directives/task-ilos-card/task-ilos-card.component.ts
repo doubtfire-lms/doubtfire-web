@@ -1,4 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {LearningOutcome} from 'src/app/api/models/learning-outcome';
 import {Project} from 'src/app/api/models/project';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -53,7 +59,9 @@ export class TaskIlosCardComponent implements OnInit, OnChanges {
   }
 
   getLinkedOutcomes(ilo: LearningOutcome): LearningOutcome[] {
-    return this.allOutcomesCache.filter((outcome) => ilo.linkedOutcomeIds.includes(outcome.id));
+    return this.allOutcomesCache.filter((outcome) =>
+      ilo.linkedOutcomeIds.includes(outcome.id),
+    );
   }
 
   public getIloContextLabel(): string {

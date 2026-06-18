@@ -16,19 +16,27 @@
         </button>
         <ul class="dropdown-menu">
           <li>
-            <a ng-click="setSelectedDashboardView('details')">View Task Details</a>
+            <a ng-click="setSelectedDashboardView('details')"
+              >View Task Details</a
+            >
           </li>
           <li ng-show="task.hasPdf">
-            <a ng-click="setSelectedDashboardView('submission')">View Submission</a>
+            <a ng-click="setSelectedDashboardView('submission')"
+              >View Submission</a
+            >
           </li>
           <li ng-show="task.definition.hasTaskSheet">
             <a ng-click="setSelectedDashboardView('task')">View Task Sheet</a>
           </li>
           <li ng-show="tutor">
-            <a ng-click="setSelectedDashboardView('similarities')">View Similarities</a>
+            <a ng-click="setSelectedDashboardView('similarities')"
+              >View Similarities</a
+            >
           </li>
           <li ng-if="overseerEnabled()">
-            <a ng-click="setSelectedDashboardView('overseer')">View Overseer Reports</a>
+            <a ng-click="setSelectedDashboardView('overseer')"
+              >View Overseer Reports</a
+            >
           </li>
           <li class="divider" ng-show="task.hasPdf"></li>
           <li ng-show="task.hasPdf">
@@ -82,17 +90,21 @@
     class="flex items-center text-center px-2.5 py-2 bg-yellow-100 border-l-4 border-r-4 border-yellow-500 text-yellow-700"
   >
     <i class="fa fa-exclamation-triangle mr-1 fa-lg"></i>
-    Warning: This task has {{task.definition.taskPrerequisitesCache.currentValues.length}}
-    prerequisite{{ task.definition.taskPrerequisitesCache.currentValues.length > 1 ? 's' : '' }}
-    that you still need to complete. You won’t be able to submit this task until all prerequisites
-    are met.
+    Warning: This task has
+    {{task.definition.taskPrerequisitesCache.currentValues.length}}
+    prerequisite{{ task.definition.taskPrerequisitesCache.currentValues.length >
+    1 ? 's' : '' }} that you still need to complete. You won’t be able to submit
+    this task until all prerequisites are met.
   </div>
   <!-- /Incomplete Task Prerequisites Warning -->
   <div class="panel-body has-pdf" ng-if="isCurrentView('task')">
     <f-pdf-viewer [pdf-url]="urls.taskSheetPdfUrl"></f-pdf-viewer>
   </div>
   <!--/panel-body-->
-  <div class="panel-body has-pdf" ng-if="isCurrentView('submission') && task.hasPdf">
+  <div
+    class="panel-body has-pdf"
+    ng-if="isCurrentView('submission') && task.hasPdf"
+  >
     <!-- <pdf-viewer-panel [pdf-url]="urls.taskSubmissionPdfUrl"></pdf-viewer-panel> -->
     <f-pdf-viewer [pdf-url]="urls.taskSubmissionPdfUrl"></f-pdf-viewer>
   </div>
@@ -100,10 +112,16 @@
     <f-task-similarity-view [task]="task"></f-task-similarity-view>
   </div>
   <div class="panel-body" ng-if="isCurrentView('overseer')">
-    <f-task-overseer-report [task]="task" class="max-w-full"></f-task-overseer-report>
+    <f-task-overseer-report
+      [task]="task"
+      class="max-w-full"
+    ></f-task-overseer-report>
   </div>
   <!--/panel-body-->
-  <div class="panel-body text-muted no-pdf" ng-show="isCurrentView('submission') && !task.hasPdf">
+  <div
+    class="panel-body text-muted no-pdf"
+    ng-show="isCurrentView('submission') && !task.hasPdf"
+  >
     <i class="fa fa-file-pdf-o"></i>
     <span ng-show="task && task.processingPdf"> PDF Still Processing </span>
     <span ng-show="task && !task.processingPdf"> No Submission Uploaded </span>

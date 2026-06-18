@@ -106,7 +106,11 @@
   </div>
 
   @if (loading) {
-    <div aria-busy="true" aria-label="Loading student portfolios" class="overflow-x-auto">
+    <div
+      aria-busy="true"
+      aria-label="Loading student portfolios"
+      class="overflow-x-auto"
+    >
       <div class="min-w-[1600px]">
         <div class="flex h-14 items-center gap-6 border-b px-4">
           @for (
@@ -127,7 +131,12 @@
             <ngx-skeleton-loader
               class="block shrink-0"
               [style.width]="width"
-              [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+              [theme]="{
+                width: '100%',
+                height: '12px',
+                'border-radius': '999px',
+                margin: '0',
+              }"
             ></ngx-skeleton-loader>
           }
         </div>
@@ -284,7 +293,9 @@
     ></tr>
 
     <tr *matNoDataRow class="mat-row w-full">
-      <td class="mat-cell w-full p-3 text-center" colspan="4">No students found</td>
+      <td class="mat-cell w-full p-3 text-center" colspan="4">
+        No students found
+      </td>
     </tr>
   </table>
 

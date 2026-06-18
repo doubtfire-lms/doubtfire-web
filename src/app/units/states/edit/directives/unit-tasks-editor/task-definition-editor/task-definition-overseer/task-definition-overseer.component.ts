@@ -1,7 +1,14 @@
 import * as monaco from 'monaco-editor';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
 import {Observable} from 'rxjs';
 import {
@@ -111,7 +118,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     this.newOverseerStep.runCommand = '#!/bin/bash\n\n';
     this.newOverseerStep.showExpectedOutput = true;
 
-    this.newOverseerStep.sortOrder = this.taskDefinition.overseerStepsCache.currentValues.length;
+    this.newOverseerStep.sortOrder =
+      this.taskDefinition.overseerStepsCache.currentValues.length;
     this.selectedOverseerStep = this.newOverseerStep;
   }
 
@@ -147,10 +155,16 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
       this.alerts.error('Please save changes before re-ordering steps', 3000);
       return;
     }
-    moveItemInArray(this.overseerSteps, event.previousIndex, event.currentIndex);
+    moveItemInArray(
+      this.overseerSteps,
+      event.previousIndex,
+      event.currentIndex,
+    );
     // TODO: open endpoint to update sort orders in a single request
     for (let i = 0; i < this.overseerSteps.length; i++) {
-      const step = this.taskDefinition.overseerStepsCache.get(this.overseerSteps[i].id);
+      const step = this.taskDefinition.overseerStepsCache.get(
+        this.overseerSteps[i].id,
+      );
       if (step.sortOrder === i) {
         // Ignore if no change
         continue;
@@ -173,14 +187,20 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
             // console.log('updated!');
           },
           error: (error) => {
-            this.alerts.error(`Failed to update order of steps: ${error}`, 6000);
+            this.alerts.error(
+              `Failed to update order of steps: ${error}`,
+              6000,
+            );
           },
         });
     }
   }
 
   deleteStep() {
-    if (this.selectedOverseerStep && this.selectedOverseerStep === this.newOverseerStep) {
+    if (
+      this.selectedOverseerStep &&
+      this.selectedOverseerStep === this.newOverseerStep
+    ) {
       this.newOverseerStep = null;
       this.selectedOverseerStep = null;
       return;
@@ -286,7 +306,11 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
       // this.hasAnySubmissions();
     }
 
-    this.currentUserTask.presentTaskSubmissionModal(this.currentUserTask.status, false, true);
+    this.currentUserTask.presentTaskSubmissionModal(
+      this.currentUserTask.status,
+      false,
+      true,
+    );
   }
 
   editScript() {
@@ -300,11 +324,13 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   private hasAnySubmissions() {
     if (!this.currentUserTask) return;
 
-    this.submissions.getLatestSubmissionsTimestamps(this.currentUserTask).subscribe({
-      error: (error) => {
-        this.alerts.error('Error: ' + error, 6000);
-      },
-    });
+    this.submissions
+      .getLatestSubmissionsTimestamps(this.currentUserTask)
+      .subscribe({
+        error: (error) => {
+          this.alerts.error('Error: ' + error, 6000);
+        },
+      });
   }
 
   public removeOverseerResources() {
@@ -327,21 +353,28 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
 
   public uploadOverseerResources(files: FileList) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(
-      (f) => f.type === 'application/zip' || f.type === 'application/x-zip-compressed',
+      (f) =>
+        f.type === 'application/zip' ||
+        f.type === 'application/x-zip-compressed',
     );
     if (validFiles.length > 0) {
       const file = validFiles[0];
-      this.taskDefinitionService.uploadOverseerResources(this.taskDefinition, file).subscribe({
-        next: (resourceFiles) => {
-          this.alerts.success('Uploaded Overseer Resources', 2000);
-          this.taskDefinition.hasTaskAssessmentResources = true;
-          this.taskDefinition.overseerResourceFiles = [...resourceFiles];
-          this.overseerResourcesArchive = file;
-        },
-        error: (message) => this.alerts.error(message, 6000),
-      });
+      this.taskDefinitionService
+        .uploadOverseerResources(this.taskDefinition, file)
+        .subscribe({
+          next: (resourceFiles) => {
+            this.alerts.success('Uploaded Overseer Resources', 2000);
+            this.taskDefinition.hasTaskAssessmentResources = true;
+            this.taskDefinition.overseerResourceFiles = [...resourceFiles];
+            this.overseerResourcesArchive = file;
+          },
+          error: (message) => this.alerts.error(message, 6000),
+        });
     } else {
-      this.alerts.error('Please drop a zip with scripts for this task to upload', 6000);
+      this.alerts.error(
+        'Please drop a zip with scripts for this task to upload',
+        6000,
+      );
     }
   }
 
@@ -368,18 +401,24 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
 
   private loadOverseerResourcesArchive() {
     this.isLoadingOverseerResourcesArchive = true;
-    this.http.get(this.taskDefinition.getOverseerResourcesUrl(), {responseType: 'blob'}).subscribe({
-      next: (archiveBlob) => {
-        this.overseerResourcesArchive = archiveBlob;
-      },
-      error: (error) => {
-        this.isLoadingOverseerResourcesArchive = false;
-        this.showOverseerResourcesEditor = false;
-        this.alerts.error(`Failed to load Overseer Resources Zip: ${error?.error?.error ?? error}`);
-      },
-      complete: () => {
-        this.isLoadingOverseerResourcesArchive = false;
-      },
-    });
+    this.http
+      .get(this.taskDefinition.getOverseerResourcesUrl(), {
+        responseType: 'blob',
+      })
+      .subscribe({
+        next: (archiveBlob) => {
+          this.overseerResourcesArchive = archiveBlob;
+        },
+        error: (error) => {
+          this.isLoadingOverseerResourcesArchive = false;
+          this.showOverseerResourcesEditor = false;
+          this.alerts.error(
+            `Failed to load Overseer Resources Zip: ${error?.error?.error ?? error}`,
+          );
+        },
+        complete: () => {
+          this.isLoadingOverseerResourcesArchive = false;
+        },
+      });
   }
 }

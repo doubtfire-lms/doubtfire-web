@@ -22,14 +22,21 @@ export class TaskPlannerPrerequisitesModalComponent implements OnInit {
   @Input() project: Project;
   @Input() dependents: TaskPrerequisite[];
 
-  public dataSource: MatTableDataSource<TaskPrerequisite> = new MatTableDataSource();
-  public displayedColumns: string[] = ['task-definition', 'current-status', 'required-status'];
+  public dataSource: MatTableDataSource<TaskPrerequisite> =
+    new MatTableDataSource();
+  public displayedColumns: string[] = [
+    'task-definition',
+    'current-status',
+    'required-status',
+  ];
 
   public get task() {
     return this.project?.findTaskForDefinition(this.taskDefinition?.id);
   }
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: TaskPlannerPrerequisitesModalData) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: TaskPlannerPrerequisitesModalData,
+  ) {}
 
   ngOnInit(): void {
     this.taskDefinition = this.data.taskDefinition;

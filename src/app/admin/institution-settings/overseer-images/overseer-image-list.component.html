@@ -13,7 +13,9 @@
           ({{ diskSpace ?? 'N/A' }} GB available)
         }
       </h3>
-      <p>Add new image or modify existing ones used for automated task analysis</p>
+      <p>
+        Add new image or modify existing ones used for automated task analysis
+      </p>
     </div>
   </div>
   <table
@@ -33,7 +35,12 @@
           </div>
         } @else {
           <mat-form-field class="data-entry">
-            <input formControlName="name" matInput placeholder="Name" required />
+            <input
+              formControlName="name"
+              matInput
+              placeholder="Name"
+              required
+            />
           </mat-form-field>
         }
       </td>
@@ -71,7 +78,11 @@
       <td *matCellDef="let overseerImage" mat-cell>
         @if (!editing(overseerImage)) {
           <div class="right">
-            <button color="primary" mat-flat-button (click)="pullOverseerImage(overseerImage)">
+            <button
+              color="primary"
+              mat-flat-button
+              (click)="pullOverseerImage(overseerImage)"
+            >
               Pull
             </button>
           </div>
@@ -112,7 +123,10 @@
             }"
           >
             @if (overseerImage.pulledImageStatus === 'success') {
-              <button class="status-icon" [matTooltip]="overseerImage.pulledImageText">
+              <button
+                class="status-icon"
+                [matTooltip]="overseerImage.pulledImageText"
+              >
                 <mat-icon>check_circle_outline</mat-icon>
               </button>
             }
@@ -165,7 +179,11 @@
               <button color="primary" mat-icon-button (click)="submit()">
                 <mat-icon>save</mat-icon>
               </button>
-              <button color="warn" mat-icon-button (click)="deleteOverseerImage(overseerImage)">
+              <button
+                color="warn"
+                mat-icon-button
+                (click)="deleteOverseerImage(overseerImage)"
+              >
                 <mat-icon>delete</mat-icon>
               </button>
             </span>

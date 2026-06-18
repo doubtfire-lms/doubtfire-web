@@ -46,7 +46,10 @@ export class CommunicationScheduleModalComponent implements OnInit {
 
   constructor(
     private campusService: CampusService,
-    public dialogRef: MatDialogRef<CommunicationScheduleModalComponent, CommunicationSetSchedule>,
+    public dialogRef: MatDialogRef<
+      CommunicationScheduleModalComponent,
+      CommunicationSetSchedule
+    >,
     @Inject(MAT_DIALOG_DATA) public data: CommunicationScheduleModalData,
   ) {
     if (data.schedule) {
@@ -110,7 +113,8 @@ export class CommunicationScheduleModalComponent implements OnInit {
         parts.push('Runs once');
     }
 
-    if (this.draft.repeat_count) parts.push(`up to ${this.draft.repeat_count} times`);
+    if (this.draft.repeat_count)
+      parts.push(`up to ${this.draft.repeat_count} times`);
     if (this.untilDateTime) parts.push(`until ${this.untilDateTime}`);
 
     return parts.join(' | ');
@@ -128,7 +132,9 @@ export class CommunicationScheduleModalComponent implements OnInit {
     return Math.min(59, Math.max(0, Number(this.draft.minute ?? 0)));
   }
 
-  private toIceCubePayload(schedule: CommunicationSetSchedule): Record<string, unknown> {
+  private toIceCubePayload(
+    schedule: CommunicationSetSchedule,
+  ): Record<string, unknown> {
     const payload: Record<string, unknown> = {
       timezone: schedule.timezone || 'UTC',
       anchor: this.anchorPayload(schedule),
@@ -168,7 +174,9 @@ export class CommunicationScheduleModalComponent implements OnInit {
     return payload;
   }
 
-  private anchorPayload(schedule: CommunicationSetSchedule): Record<string, unknown> {
+  private anchorPayload(
+    schedule: CommunicationSetSchedule,
+  ): Record<string, unknown> {
     return {
       week: schedule.anchor_week || 1,
       day: schedule.anchor_day || 'Monday',

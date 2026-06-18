@@ -8,11 +8,16 @@ import {CommunicationCondition} from '../models/communication';
 export class CommunicationConditionService {
   constructor(private httpClient: HttpClient) {}
 
-  public getForRule(unitId: number, ruleId: number): Observable<CommunicationCondition[]> {
+  public getForRule(
+    unitId: number,
+    ruleId: number,
+  ): Observable<CommunicationCondition[]> {
     return this.httpClient
       .get<Partial<CommunicationCondition>[]>(this.endpoint(unitId, ruleId))
       .pipe(
-        map((conditions) => conditions.map((condition) => new CommunicationCondition(condition))),
+        map((conditions) =>
+          conditions.map((condition) => new CommunicationCondition(condition)),
+        ),
       );
   }
 
@@ -28,8 +33,14 @@ export class CommunicationConditionService {
       .pipe(map((created) => new CommunicationCondition(created)));
   }
 
-  public delete(unitId: number, ruleId: number, conditionId: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.endpoint(unitId, ruleId)}/${conditionId}`);
+  public delete(
+    unitId: number,
+    ruleId: number,
+    conditionId: number,
+  ): Observable<void> {
+    return this.httpClient.delete<void>(
+      `${this.endpoint(unitId, ruleId)}/${conditionId}`,
+    );
   }
 
   public update(
@@ -39,9 +50,12 @@ export class CommunicationConditionService {
     condition: Partial<CommunicationCondition>,
   ): Observable<CommunicationCondition> {
     return this.httpClient
-      .put<Partial<CommunicationCondition>>(`${this.endpoint(unitId, ruleId)}/${conditionId}`, {
-        communication_condition: condition,
-      })
+      .put<Partial<CommunicationCondition>>(
+        `${this.endpoint(unitId, ruleId)}/${conditionId}`,
+        {
+          communication_condition: condition,
+        },
+      )
       .pipe(map((updated) => new CommunicationCondition(updated)));
   }
 

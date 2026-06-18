@@ -9,7 +9,10 @@ import {BaseAudioRecorderComponent} from '../base-audio-recorder';
   providers: [MediaRecorderService],
   standalone: false,
 })
-export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implements AfterViewInit {
+export class MicrophoneTesterComponent
+  extends BaseAudioRecorderComponent
+  implements AfterViewInit
+{
   @Input() task: Task;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
@@ -27,8 +30,12 @@ export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implem
 
   init(): void {
     super.init();
-    this.canvas = document.getElementById('micTesterVisualiser') as HTMLCanvasElement;
-    this.audio = document.getElementById('micTesterAudioPlayer') as HTMLAudioElement;
+    this.canvas = document.getElementById(
+      'micTesterVisualiser',
+    ) as HTMLCanvasElement;
+    this.audio = document.getElementById(
+      'micTesterAudioPlayer',
+    ) as HTMLAudioElement;
     this.canvasCtx = this.canvas.getContext('2d');
   }
 

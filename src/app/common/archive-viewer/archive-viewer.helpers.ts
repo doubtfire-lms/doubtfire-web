@@ -29,7 +29,10 @@ export interface ArchiveFileEntry {
 }
 
 type ArchiveFileKindLike = Pick<ArchiveFileEntry, 'kind'> | null | undefined;
-type ArchiveFilePreviewLike = Pick<ArchiveFileEntry, 'kind' | 'blobUrl'> | null | undefined;
+type ArchiveFilePreviewLike =
+  | Pick<ArchiveFileEntry, 'kind' | 'blobUrl'>
+  | null
+  | undefined;
 
 export function isArchiveCodeOrTextFile(file: ArchiveFileKindLike): boolean {
   return file?.kind === 'code' || file?.kind === 'text';
@@ -74,7 +77,9 @@ export function getOrderedUploadFileIndex(path: string): number | null {
 
 export function isArchivePathHidden(path: string): boolean {
   const segments = path.split('/').filter((segment) => segment.length > 0);
-  return segments.some((segment) => segment.startsWith('.') || segment === '__MACOSX');
+  return segments.some(
+    (segment) => segment.startsWith('.') || segment === '__MACOSX',
+  );
 }
 
 function toArrayBuffer(data: Uint8Array): ArrayBuffer {
@@ -108,7 +113,10 @@ export function createArchiveFileEntry(
   };
 }
 
-export function classifyArchiveFile(path: string, data: Uint8Array): ArchiveFileClassification {
+export function classifyArchiveFile(
+  path: string,
+  data: Uint8Array,
+): ArchiveFileClassification {
   const detectedMimeType = detectMimeType(data);
   if (detectedMimeType === 'application/pdf') {
     return {kind: 'pdf', mimeType: detectedMimeType};
@@ -123,14 +131,27 @@ export function classifyArchiveFile(path: string, data: Uint8Array): ArchiveFile
     if (decoded !== null) {
       const language = getMonacoLanguageForPath(path);
       if (language && language !== 'plaintext') {
-        return {kind: 'code', mimeType: 'text/plain', textContent: decoded, language};
+        return {
+          kind: 'code',
+          mimeType: 'text/plain',
+          textContent: decoded,
+          language,
+        };
       }
 
-      return {kind: 'text', mimeType: 'text/plain', textContent: decoded, language: 'plaintext'};
+      return {
+        kind: 'text',
+        mimeType: 'text/plain',
+        textContent: decoded,
+        language: 'plaintext',
+      };
     }
   }
 
-  return {kind: 'binary', mimeType: detectedMimeType || 'application/octet-stream'};
+  return {
+    kind: 'binary',
+    mimeType: detectedMimeType || 'application/octet-stream',
+  };
 }
 
 export function getMonacoLanguageForPath(path: string): string | undefined {
@@ -141,7 +162,9 @@ export function getMonacoLanguageForPath(path: string): string | undefined {
     if (language.filenames?.some((f) => f.toLowerCase() === fileName)) {
       return language.id;
     }
-    if (language.extensions?.some((ext) => fileName.endsWith(ext.toLowerCase()))) {
+    if (
+      language.extensions?.some((ext) => fileName.endsWith(ext.toLowerCase()))
+    ) {
       return language.id;
     }
   }

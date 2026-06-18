@@ -16,7 +16,12 @@
 
 <div align="end" mat-dialog-actions>
   <button color="warn" mat-stroked-button (click)="cancel()">Cancel</button>
-  <button color="primary" mat-flat-button [disabled]="!emailList.trim()" (click)="submit()">
+  <button
+    color="primary"
+    mat-flat-button
+    [disabled]="!emailList.trim()"
+    (click)="submit()"
+  >
     Import staff
   </button>
 </div>

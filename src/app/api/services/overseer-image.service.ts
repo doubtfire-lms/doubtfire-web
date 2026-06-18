@@ -9,7 +9,8 @@ import {SidekiqJob} from '../models/sidekiq-job';
 @Injectable()
 export class OverseerImageService extends CachedEntityService<OverseerImage> {
   protected readonly endpointFormat = 'admin/overseer_images/:id:';
-  protected readonly pullImageEndpointFormat = 'admin/overseer_images/:id:/pull_image';
+  protected readonly pullImageEndpointFormat =
+    'admin/overseer_images/:id:/pull_image';
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);

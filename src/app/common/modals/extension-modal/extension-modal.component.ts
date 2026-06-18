@@ -1,18 +1,35 @@
 import {addDays, differenceInDays, differenceInWeeks, isAfter} from 'date-fns';
 import {Component, Inject, LOCALE_ID} from '@angular/core';
-import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  NgForm,
+  Validators,
+} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {
+  Task,
+  TaskComment,
+  TaskCommentService,
+} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from '../../services/alert.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class ReasonErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null,
+  ): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched || isSubmitted)
+    );
   }
 }
 
@@ -26,7 +43,8 @@ export class ExtensionModalComponent {
   protected reasonMaxLength: number = 256;
   constructor(
     public dialogRef: MatDialogRef<ExtensionModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {task: Task; afterApplication?: () => void},
+    @Inject(MAT_DIALOG_DATA)
+    public data: {task: Task; afterApplication?: () => void},
     private alerts: AlertService,
   ) {}
 
@@ -42,8 +60,14 @@ export class ExtensionModalComponent {
 
   get extensionDuration(): number {
     // calculating the number of weeks between now and the requested date, rounding up
-    const days = differenceInDays(this.extensionDate, this.data.task.localDueDate());
-    let weeks = differenceInWeeks(this.extensionDate, this.data.task.localDueDate());
+    const days = differenceInDays(
+      this.extensionDate,
+      this.data.task.localDueDate(),
+    );
+    let weeks = differenceInWeeks(
+      this.extensionDate,
+      this.data.task.localDueDate(),
+    );
     if (days % 7 > 0 || weeks == 0) {
       // round week count up if there are less than a week left or requested range is not in weeks
       weeks++;

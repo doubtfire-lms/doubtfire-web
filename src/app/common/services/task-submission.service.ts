@@ -59,14 +59,18 @@ export class TaskSubmissionService {
     private overseerAssessmentService: OverseerAssessmentService,
   ) {}
 
-  public getLatestTaskAssessment(taskInfo: Task): Observable<TaskAssessmentResponse> {
+  public getLatestTaskAssessment(
+    taskInfo: Task,
+  ): Observable<TaskAssessmentResponse> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${
       taskInfo.project.id
     }/task_def_id/${taskInfo.definition.id}/submissions/latest`;
     return this.http.get<TaskAssessmentResponse>(url);
   }
 
-  public getLatestSubmissionsTimestamps(taskInfo: Task): Observable<OverseerAssessment[]> {
+  public getLatestSubmissionsTimestamps(
+    taskInfo: Task,
+  ): Observable<OverseerAssessment[]> {
     return this.overseerAssessmentService.queryForTask(taskInfo);
   }
 

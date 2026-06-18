@@ -29,11 +29,17 @@ export class TaskSimilarityService extends CachedEntityService<TaskSimilarity> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public override createInstanceFrom(_json: object, constructorParams: Task): TaskSimilarity {
+  public override createInstanceFrom(
+    _json: object,
+    constructorParams: Task,
+  ): TaskSimilarity {
     return new TaskSimilarity(constructorParams);
   }
 
-  public getSimilarityReportUrl(taskId: number, similarityId: number): Observable<string> {
+  public getSimilarityReportUrl(
+    taskId: number,
+    similarityId: number,
+  ): Observable<string> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get<string>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${taskId}/similarities/${similarityId}/viewer_url`,

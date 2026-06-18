@@ -1,11 +1,20 @@
 <!-- The search bar template -->
-<ng-template #OmnisearchTemplate let-collapsable="collapsable" let-mobile="mobile">
+<ng-template
+  #OmnisearchTemplate
+  let-collapsable="collapsable"
+  let-mobile="mobile"
+>
   <div
     class="omnisearch rounded-t-2xl md:rounded-2xl"
     [ngClass]="{expanded: showSearchOptions, mobile: mobile}"
   >
     <div class="flex items-center">
-      <button aria-label="Search Icon" class="flex flex-none items-center" disabled mat-icon-button>
+      <button
+        aria-label="Search Icon"
+        class="flex flex-none items-center"
+        disabled
+        mat-icon-button
+      >
         <mat-icon class="flex items-center" disabled>search</mat-icon>
       </button>
 
@@ -30,7 +39,9 @@
           matTooltipShowDelay="400"
           (click)="showSearchOptions = !showSearchOptions"
         >
-          <mat-icon>{{ showSearchOptions ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
+          <mat-icon>{{
+            showSearchOptions ? 'arrow_drop_up' : 'arrow_drop_down'
+          }}</mat-icon>
         </button>
       }
       @if (!isTaskDefMode) {
@@ -114,9 +125,14 @@
                   <mat-option value="" [hidden]="taskData.taskDefMode"
                     >All Task Definitions</mat-option
                   >
-                  @for (td of unit.taskDefinitionCache.values | async; track td) {
+                  @for (
+                    td of unit.taskDefinitionCache.values | async;
+                    track td
+                  ) {
                     <mat-option [value]="td.id">
-                      <span class="truncate">{{ td.abbreviation + ' - ' + td.name }}</span>
+                      <span class="truncate">{{
+                        td.abbreviation + ' - ' + td.name
+                      }}</span>
                     </mat-option>
                   }
                 </mat-select>
@@ -125,7 +141,8 @@
                 aria-label="Sort by task definition icon"
                 mat-icon-button
                 [disabled]="
-                  filters.taskDefinitionIdSelected || !filters.taskDefinitionIdSelected === ''
+                  filters.taskDefinitionIdSelected ||
+                  !filters.taskDefinitionIdSelected === ''
                 "
                 (click)="toggleTaskDefSort()"
               >
@@ -192,7 +209,10 @@
 <!-- Narrow width search dialog template-->
 <ng-template #searchDialog>
   <ng-container
-    *ngTemplateOutlet="OmnisearchTemplate; context: {collapsable: false, mobile: true}"
+    *ngTemplateOutlet="
+      OmnisearchTemplate;
+      context: {collapsable: false, mobile: true}
+    "
   ></ng-container>
   <div align="end" mat-dialog-actions>
     <button mat-button [mat-dialog-close]>OK</button>
@@ -213,17 +233,27 @@
   @if (!isNarrow) {
     <div>
       <ng-container
-        *ngTemplateOutlet="OmnisearchTemplate; context: {collapsable: true, mobile: false}"
+        *ngTemplateOutlet="
+          OmnisearchTemplate;
+          context: {collapsable: true, mobile: false}
+        "
       ></ng-container>
     </div>
   }
 
   @if (loading) {
-    <div class="min-h-0 flex-1 overflow-hidden" [ngClass]="isNarrow ? 'pt-0' : 'pt-[10px]'">
+    <div
+      class="min-h-0 flex-1 overflow-hidden"
+      [ngClass]="isNarrow ? 'pt-0' : 'pt-[10px]'"
+    >
       @for (row of skeletonRows; track row) {
         <div
           class="flex h-[60px] items-center"
-          [ngClass]="isNarrow ? 'justify-center gap-0 px-[5px]' : 'gap-[10px] pl-[6px] pr-[8px]'"
+          [ngClass]="
+            isNarrow
+              ? 'justify-center gap-0 px-[5px]'
+              : 'gap-[10px] pl-[6px] pr-[8px]'
+          "
         >
           <ngx-skeleton-loader
             appearance="circle"
@@ -263,15 +293,23 @@
     </div>
   }
 
-  <div class="center-task-list" [hidden]="loading || filteredTasks?.length !== 0 || isNarrow">
+  <div
+    class="center-task-list"
+    [hidden]="loading || filteredTasks?.length !== 0 || isNarrow"
+  >
     <mat-icon>done_all</mat-icon>
   </div>
 
   <!--/search-options-->
   @if (filteredTasks && !loading) {
-    <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60">
+    <cdk-virtual-scroll-viewport
+      class="tasks-viewport scrollable"
+      itemSize="60"
+    >
       @if (filteredTasks.length) {
-        <div class="mt-2.5 w-full text-center text-gray-400">{{ filteredTasks.length }} Tasks</div>
+        <div class="mt-2.5 w-full text-center text-gray-400">
+          {{ filteredTasks.length }} Tasks
+        </div>
       }
       <mat-list class="m-0 p-0">
         <mat-list-item
@@ -298,11 +336,16 @@
                 <span
                   class="notification"
                   [ngClass]="{
-                    active: task.numNewComments > 0 || task.similaritiesDetected,
+                    active:
+                      task.numNewComments > 0 || task.similaritiesDetected,
                     similarities: task.similaritiesDetected,
                   }"
                 ></span>
-                <user-icon class="self-center" [size]="30" [user]="task.project.student">
+                <user-icon
+                  class="self-center"
+                  [size]="30"
+                  [user]="task.project.student"
+                >
                 </user-icon>
                 <div class="task-list-data flex-1 truncate" [hidden]="isNarrow">
                   <h4 class="student-name flex min-w-0 items-center gap-0.5">
@@ -333,7 +376,9 @@
                       </mat-icon>
                     }
 
-                    <span class="truncate">{{ task.project.student.name }}</span>
+                    <span class="truncate">{{
+                      task.project.student.name
+                    }}</span>
                   </h4>
                   <div class="task-details truncate">
                     {{ task.definition.abbreviation }} -
@@ -350,22 +395,35 @@
               </div> -->
                 </div>
                 @if (task.hasGrade()) {
-                  <div matTooltip="The grade assigned to the submission" matTooltipPosition="above">
-                    <mat-chip-option style="margin-right: 6px" [hidden]="isNarrow"
+                  <div
+                    matTooltip="The grade assigned to the submission"
+                    matTooltipPosition="above"
+                  >
+                    <mat-chip-option
+                      style="margin-right: 6px"
+                      [hidden]="isNarrow"
                       >{{ task.gradeDesc() }}
                     </mat-chip-option>
                   </div>
                 }
                 <status-icon
                   class="ml-2"
-                  matBadge="{{ task.qualityPts }}/{{ task.definition.maxQualityPts }}"
+                  matBadge="{{ task.qualityPts }}/{{
+                    task.definition.maxQualityPts
+                  }}"
                   matBadgePosition="before"
                   [hidden]="isNarrow"
-                  [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts"
+                  [matBadgeHidden]="
+                    !task.hasQualityPoints() || !task.qualityPts
+                  "
                   [status]="task.status"
                 ></status-icon>
                 <div class="overflow" [hidden]="isNarrow">
-                  <button aria-label="task-overflow" mat-icon-button [hidden]="task.hover">
+                  <button
+                    aria-label="task-overflow"
+                    mat-icon-button
+                    [hidden]="task.hover"
+                  >
                     <!-- <mat-icon class="warn-icon" *ngIf="task.similaritiesDetected">remove_red_eye</mat-icon> -->
 
                     @if (task.pinned) {
@@ -382,13 +440,21 @@
                     matTooltipShowDelay="400"
                     [hidden]="!task.hover"
                     [matMenuTriggerFor]="overflowMenu"
-                    (menuClosed)="task.hover = false; task.optionsOpened = false"
-                    (menuOpened)="setSelectedTask(task); task.optionsOpened = true"
+                    (menuClosed)="
+                      task.hover = false; task.optionsOpened = false
+                    "
+                    (menuOpened)="
+                      setSelectedTask(task); task.optionsOpened = true
+                    "
                   >
                     <mat-icon>more_horiz</mat-icon>
                   </button>
                   <mat-menu #overflowMenu="matMenu" yPosition="below">
-                    <button class="flex items-center" mat-menu-item (click)="togglePin(task)">
+                    <button
+                      class="flex items-center"
+                      mat-menu-item
+                      (click)="togglePin(task)"
+                    >
                       <mat-icon class="mr-0">
                         {{ task.pinned ? 'remove_circle' : 'add_alert' }}
                       </mat-icon>

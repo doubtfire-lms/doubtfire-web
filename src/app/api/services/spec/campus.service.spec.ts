@@ -1,5 +1,12 @@
-import {HttpRequest, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
+import {
+  HttpRequest,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import {TestBed, fakeAsync, tick} from '@angular/core/testing';
 import {Campus} from 'src/app/api/models/doubtfire-model';
 import {CampusService} from '../campus.service';
@@ -37,7 +44,9 @@ describe('CampusService', () => {
 
     campusService
       .query()
-      .subscribe((campuses) => expect(campuses).toEqual(expectedCampuses, 'expected campuses'));
+      .subscribe((campuses) =>
+        expect(campuses).toEqual(expectedCampuses, 'expected campuses'),
+      );
 
     const req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/campuses/');

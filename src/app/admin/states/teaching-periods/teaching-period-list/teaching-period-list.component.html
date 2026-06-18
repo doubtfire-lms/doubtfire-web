@@ -19,7 +19,8 @@
     <ng-container matColumnDef="active">
       <th *matHeaderCellDef mat-header-cell>Active</th>
       <td *matCellDef="let element" mat-cell>
-        <mat-checkbox color="primary" disabled [checked]="element.active"> </mat-checkbox>
+        <mat-checkbox color="primary" disabled [checked]="element.active">
+        </mat-checkbox>
       </td>
     </ng-container>
 
@@ -40,7 +41,9 @@
 
     <ng-container matColumnDef="activeUntil">
       <th *matHeaderCellDef mat-header-cell>Active until</th>
-      <td *matCellDef="let element" mat-cell>{{ element.activeUntil | date }}</td>
+      <td *matCellDef="let element" mat-cell>
+        {{ element.activeUntil | date }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
@@ -48,7 +51,11 @@
       <td *matCellDef="let element" mat-cell>
         <div class="edit-actions right">
           <span>
-            <button aria-label="import units" mat-icon-button (click)="importUnits(element)">
+            <button
+              aria-label="import units"
+              mat-icon-button
+              (click)="importUnits(element)"
+            >
               <mat-icon>input</mat-icon>
             </button>
             <button

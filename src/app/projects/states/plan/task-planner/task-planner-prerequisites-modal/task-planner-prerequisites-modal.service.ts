@@ -13,15 +13,19 @@ import {
 export class TaskPlannerPrerequisitesModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(project: Project, taskDefinition: TaskDefinition, dependents: TaskPrerequisite[]) {
-    this.dialog.open<TaskPlannerPrerequisitesModalComponent, TaskPlannerPrerequisitesModalData>(
+  public show(
+    project: Project,
+    taskDefinition: TaskDefinition,
+    dependents: TaskPrerequisite[],
+  ) {
+    this.dialog.open<
       TaskPlannerPrerequisitesModalComponent,
-      {
-        data: {taskDefinition, project, dependents},
-        width: '100%',
-        maxWidth: '900px',
-        panelClass: 'overflow-y-auto',
-      },
-    );
+      TaskPlannerPrerequisitesModalData
+    >(TaskPlannerPrerequisitesModalComponent, {
+      data: {taskDefinition, project, dependents},
+      width: '100%',
+      maxWidth: '900px',
+      panelClass: 'overflow-y-auto',
+    });
   }
 }

@@ -4,7 +4,10 @@
   matTooltipPosition="above"
   style="font-size: 14px"
   [matTooltipDisabled]="!showTooltip"
-  [ngClass]="[statusClass, compact ? 'min-w-[30px] max-w-[30px]' : 'min-w-[50px] px-3']"
+  [ngClass]="[
+    statusClass,
+    compact ? 'min-w-[30px] max-w-[30px]' : 'min-w-[50px] px-3',
+  ]"
 >
   <mat-icon
     class="m-0 scale-75 place-self-center"

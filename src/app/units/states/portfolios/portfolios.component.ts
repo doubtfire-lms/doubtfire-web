@@ -7,7 +7,12 @@ import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
-type PortfolioTabKey = 'select' | 'progress' | 'staff-notes' | 'portfolio' | 'assessment';
+type PortfolioTabKey =
+  | 'select'
+  | 'progress'
+  | 'staff-notes'
+  | 'portfolio'
+  | 'assessment';
 
 interface PortfolioTab {
   label: string;
@@ -27,14 +32,23 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   public readonly tabs: PortfolioTab[] = [
     {label: 'Select Student', routeSegment: 'select', requiresProject: false},
     {label: 'View Progress', routeSegment: 'progress', requiresProject: true},
-    {label: 'View Staff Notes', routeSegment: 'staff-notes', requiresProject: true},
+    {
+      label: 'View Staff Notes',
+      routeSegment: 'staff-notes',
+      requiresProject: true,
+    },
     {label: 'View Portfolio', routeSegment: 'portfolio', requiresProject: true},
-    {label: 'Assess Portfolio', routeSegment: 'assessment', requiresProject: true},
+    {
+      label: 'Assess Portfolio',
+      routeSegment: 'assessment',
+      requiresProject: true,
+    },
   ];
 
   public unit: Unit = null;
   public selectedProject: Project | null = null;
-  public selectedProject$: BehaviorSubject<Project | null> = new BehaviorSubject(null);
+  public selectedProject$: BehaviorSubject<Project | null> =
+    new BehaviorSubject(null);
   public loadingStudents = true;
   public currentTab: PortfolioTab = this.tabs[0];
 
@@ -58,7 +72,10 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
           this.loadStudents();
           this.subscriptions.push(
             this.route.paramMap.subscribe((params) => {
-              this.updateCurrentTabFromState(params.get('tab'), params.get('projectId'));
+              this.updateCurrentTabFromState(
+                params.get('tab'),
+                params.get('projectId'),
+              );
             }),
           );
         },
@@ -75,7 +92,9 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   }
 
   public get currentIndex(): number {
-    const index = this.tabs.findIndex((tab) => tab.routeSegment === this.currentTab.routeSegment);
+    const index = this.tabs.findIndex(
+      (tab) => tab.routeSegment === this.currentTab.routeSegment,
+    );
     return index >= 0 ? index : 0;
   }
 
@@ -84,7 +103,14 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    return ['/units', this.unit.id, 'students', 'portfolios', this.selectedProject.id, 'progress'];
+    return [
+      '/units',
+      this.unit.id,
+      'students',
+      'portfolios',
+      this.selectedProject.id,
+      'progress',
+    ];
   }
 
   public studentSelected(project: Project): void {
@@ -96,7 +122,9 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
     this.currentTab = nextTab;
 
     if (nextTab.routeSegment === 'select' || !this.selectedProject) {
-      this.router.navigate(['/units', this.unit.id, 'students', 'portfolios'], {replaceUrl: true});
+      this.router.navigate(['/units', this.unit.id, 'students', 'portfolios'], {
+        replaceUrl: true,
+      });
       return;
     }
 
@@ -138,7 +166,10 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
     this.loadProject(projectId);
   }
 
-  private tabFromRoute(tabParam: string | null, hasProject: boolean): PortfolioTab {
+  private tabFromRoute(
+    tabParam: string | null,
+    hasProject: boolean,
+  ): PortfolioTab {
     if (!hasProject) {
       return this.tabs[0];
     }
@@ -147,7 +178,11 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
       (tab) => tab.routeSegment === tabParam && tab.routeSegment !== 'select',
     );
 
-    return routeTab ?? this.tabs.find((tab) => tab.routeSegment === 'progress') ?? this.tabs[0];
+    return (
+      routeTab ??
+      this.tabs.find((tab) => tab.routeSegment === 'progress') ??
+      this.tabs[0]
+    );
   }
 
   private loadProject(projectId: number): void {
@@ -173,8 +208,11 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   }
 
   private navigateToProject(projectId: number, tab: PortfolioTabKey): void {
-    this.router.navigate(['/units', this.unit.id, 'students', 'portfolios', projectId, tab], {
-      replaceUrl: true,
-    });
+    this.router.navigate(
+      ['/units', this.unit.id, 'students', 'portfolios', projectId, tab],
+      {
+        replaceUrl: true,
+      },
+    );
   }
 }

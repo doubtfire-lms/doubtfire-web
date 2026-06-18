@@ -18,7 +18,10 @@ export class DiscussedInClassReasonModalComponent {
   public reasonBody = '';
 
   constructor(
-    public dialogRef: MatDialogRef<DiscussedInClassReasonModalComponent, string | undefined>,
+    public dialogRef: MatDialogRef<
+      DiscussedInClassReasonModalComponent,
+      string | undefined
+    >,
     @Inject(MAT_DIALOG_DATA) public data: DiscussedInClassReasonModalData,
   ) {}
 

@@ -6,7 +6,11 @@
         <div class="m-auto w-full max-w-md p-4">
           <div class="subcontainer">
             <div class="wordmark flex-row place-content-start">
-              <img alt="Homepage Logo" src="../../../assets/images/logo-bw.svg" width="40px" />
+              <img
+                alt="Homepage Logo"
+                src="../../../assets/images/logo-bw.svg"
+                width="40px"
+              />
               <p>{{ externalName.value }}</p>
             </div>
             <h1 class="welcome-heading flex flex-row place-content-start">
@@ -27,7 +31,12 @@
               @if (showCredentials) {
                 <mat-form-field appearance="outline" class="size-full flex-1">
                   <mat-label>Username</mat-label>
-                  <input matInput name="username" required [(ngModel)]="formData.username" />
+                  <input
+                    matInput
+                    name="username"
+                    required
+                    [(ngModel)]="formData.username"
+                  />
                 </mat-form-field>
               }
               @if (showCredentials) {
@@ -47,7 +56,11 @@
                   Automatically redirect
                 </mat-checkbox>
               }
-              <mat-checkbox matInput name="remember" [(ngModel)]="authService.rememberMe">
+              <mat-checkbox
+                matInput
+                name="remember"
+                [(ngModel)]="authService.rememberMe"
+              >
                 Stay logged in
               </mat-checkbox>
               <button
@@ -71,7 +84,9 @@
         </div>
       }
     } @else if (authMethodFailed) {
-      <div class="maintenance flex flex-1 flex-col items-center justify-center text-center">
+      <div
+        class="maintenance flex flex-1 flex-col items-center justify-center text-center"
+      >
         <f-unavailable-card></f-unavailable-card>
       </div>
     }

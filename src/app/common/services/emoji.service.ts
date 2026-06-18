@@ -24,7 +24,9 @@ export class EmojiService {
       case '❤':
         return ':heart:';
       default: {
-        const emojiList: EmojiData[] = Object.values(this.emojiSearch.emojisList);
+        const emojiList: EmojiData[] = Object.values(
+          this.emojiSearch.emojisList,
+        );
         return emojiList.find((e) => e.native === emoji)?.colons;
       }
     }

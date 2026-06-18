@@ -8,10 +8,20 @@
     />
     @if (taskDefinition.hasTaskSheet) {
       <div class="flex flex-row gap-2.5 pt-2.5">
-        <button class="me-4 flex-grow" color="warn" mat-flat-button (click)="removeTaskSheet()">
+        <button
+          class="me-4 flex-grow"
+          color="warn"
+          mat-flat-button
+          (click)="removeTaskSheet()"
+        >
           Delete Task Sheet
         </button>
-        <button class="ms-4 flex-grow" color="accent" mat-flat-button (click)="downloadTaskSheet()">
+        <button
+          class="ms-4 flex-grow"
+          color="accent"
+          mat-flat-button
+          (click)="downloadTaskSheet()"
+        >
           Download Task Sheet
         </button>
       </div>
@@ -26,7 +36,12 @@
     />
     @if (taskDefinition.hasTaskResources) {
       <div class="flex flex-row gap-2.5 pt-2.5">
-        <button class="me-4 flex-grow" color="warn" mat-flat-button (click)="removeTaskResources()">
+        <button
+          class="me-4 flex-grow"
+          color="warn"
+          mat-flat-button
+          (click)="removeTaskResources()"
+        >
           Delete Task Zip
         </button>
         <button

@@ -1,7 +1,12 @@
 <mat-card>
   <mat-card-content>
     @if (!showUploader) {
-      <button class="w-full" color="primary" mat-raised-button (click)="showUploader = true">
+      <button
+        class="w-full"
+        color="primary"
+        mat-raised-button
+        (click)="showUploader = true"
+      >
         <mat-icon>upload</mat-icon>
         Begin Upload
       </button>
@@ -40,7 +45,9 @@
                       >
                     </span>
                   } @else {
-                    <span class="select-none">Click to select {{ upload.display.type }} file</span>
+                    <span class="select-none"
+                      >Click to select {{ upload.display.type }} file</span
+                    >
                   }
                 } @else {
                   <span
@@ -49,7 +56,8 @@
                     <mat-icon>block</mat-icon>
                     <span>Invalid file provided</span>
                     <small class="w-full text-center"
-                      >Accepted: {{ upload.accept.split(',').join(', ') }}</small
+                      >Accepted:
+                      {{ upload.accept.split(',').join(', ') }}</small
                     >
                   </span>
                 }
@@ -105,21 +113,29 @@
     @if (showUploader && !isUploading) {
       <div>
         @if (showUploadButton && readyToUpload() && uploadingInfo === null) {
-          <button color="primary" mat-raised-button (click)="initiateUploadInternal()">
+          <button
+            color="primary"
+            mat-raised-button
+            (click)="initiateUploadInternal()"
+          >
             <mat-icon>upload</mat-icon>
             Start Upload
           </button>
         }
 
         @if (asButton) {
-          <button color="warn" mat-button (click)="resetUploader()">Cancel Upload</button>
+          <button color="warn" mat-button (click)="resetUploader()">
+            Cancel Upload
+          </button>
         }
       </div>
     }
 
     @if (showUploader && readyToUpload() && isUploading) {
       @if (!uploadingInfo?.complete) {
-        <div class="uploading flex min-h-[300px] w-full flex-col items-center justify-center gap-3">
+        <div
+          class="uploading flex min-h-[300px] w-full flex-col items-center justify-center gap-3"
+        >
           <div class="flex items-center justify-center gap-1">
             @for (upload of uploadZones; track upload) {
               <mat-icon>{{ upload.display.icon }}</mat-icon>
@@ -128,13 +144,18 @@
             <i class="logo h-[75px] w-[75px]"></i>
           </div>
 
-          <mat-progress-bar mode="determinate" [value]="uploadingInfo?.progress">
+          <mat-progress-bar
+            mode="determinate"
+            [value]="uploadingInfo?.progress"
+          >
           </mat-progress-bar>
         </div>
       }
 
       @if (uploadingInfo?.complete) {
-        <div class="complete flex min-h-[300px] flex-col items-center justify-center gap-3">
+        <div
+          class="complete flex min-h-[300px] flex-col items-center justify-center gap-3"
+        >
           <div class="flex w-full items-center justify-center gap-3">
             <mat-icon color="{{ uploadingInfo.success ? 'primary' : 'warn' }}">
               {{ uploadingInfo.success ? 'check_circle' : 'cancel' }}
@@ -151,10 +172,16 @@
               <p><strong>Error Message:</strong> {{ uploadingInfo.error }}</p>
 
               <div class="flex gap-3">
-                <button color="primary" mat-button (click)="initiateUploadInternal()">
+                <button
+                  color="primary"
+                  mat-button
+                  (click)="initiateUploadInternal()"
+                >
                   Retry Upload
                 </button>
-                <button mat-button (click)="onClickFailureCancel()">Cancel</button>
+                <button mat-button (click)="onClickFailureCancel()">
+                  Cancel
+                </button>
               </div>
             </div>
           }

@@ -1,6 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
+import {
+  SidekiqJobEntry,
+  SidekiqJobService,
+} from 'src/app/api/services/sidekiq-job.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from '../../services/alert.service';
 
@@ -30,11 +33,13 @@ export class SidekiqJobsModalComponent implements OnInit {
   }
 
   viewJob(jobEntry: SidekiqJobEntry) {
-    this.sidekiqProgressModalService.show(jobEntry.title, jobEntry.job.id).subscribe({
-      next: (job) => {
-        jobEntry.resultSubject.next(job);
-      },
-    });
+    this.sidekiqProgressModalService
+      .show(jobEntry.title, jobEntry.job.id)
+      .subscribe({
+        next: (job) => {
+          jobEntry.resultSubject.next(job);
+        },
+      });
 
     this.dismissModal();
   }

@@ -9,7 +9,8 @@ import {MappingFunctions} from './mapping-fn';
 export class TiiActionService extends CachedEntityService<TiiAction> {
   protected readonly endpointFormat = 'tii_actions/:id:';
 
-  public static readonly rolloverEndpointFormat = 'teaching_periods/:id:/rollover';
+  public static readonly rolloverEndpointFormat =
+    'teaching_periods/:id:/rollover';
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);

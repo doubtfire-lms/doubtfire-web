@@ -1,4 +1,11 @@
-import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {UnitRole} from 'src/app/api/models/unit-role';
@@ -41,7 +48,8 @@ export class FooterComponent implements OnInit {
 
   @ViewChild('similaritiesButton', {static: false, read: ElementRef})
   similaritiesButton: ElementRef;
-  @ViewChild('warningText', {static: false, read: ElementRef}) warningText: ElementRef;
+  @ViewChild('warningText', {static: false, read: ElementRef})
+  warningText: ElementRef;
   public leftOffset: number;
   public topOffset: number;
   public warningTextLeftOffset: number;
@@ -55,14 +63,17 @@ export class FooterComponent implements OnInit {
   findSimilaritiesButton() {
     if (!this.selectedTask?.similaritiesDetected) return;
 
-    const w = this.similaritiesButton?.nativeElement.getBoundingClientRect().width;
+    const w =
+      this.similaritiesButton?.nativeElement.getBoundingClientRect().width;
     this.leftOffset = this.similaritiesButton?.nativeElement.offsetLeft + w / 2;
     this.topOffset = this.similaritiesButton?.nativeElement.offsetTop - 14;
 
     const totalPaddingOffset = 30;
     this.warningTextLeftOffset =
       this.leftOffset -
-      (this.warningText?.nativeElement.getBoundingClientRect().width + totalPaddingOffset) / 2;
+      (this.warningText?.nativeElement.getBoundingClientRect().width +
+        totalPaddingOffset) /
+        2;
   }
 
   public get canAccessTutorNotes(): boolean {
@@ -170,7 +181,9 @@ export class FooterComponent implements OnInit {
 
   public get currentUnitRole(): UnitRole | undefined {
     const currentUser = this.userService.currentUser;
-    return this.selectedTask.unit.staff.find((ur) => ur.user.id === currentUser.id);
+    return this.selectedTask.unit.staff.find(
+      (ur) => ur.user.id === currentUser.id,
+    );
   }
 
   public get actionButtonEnabled(): boolean {
@@ -228,7 +241,10 @@ export class FooterComponent implements OnInit {
         'No, just this task',
       );
     } catch (error) {
-      this.alertService.error(`Failed to check dependent task statuses: ${error}`, 6000);
+      this.alertService.error(
+        `Failed to check dependent task statuses: ${error}`,
+        6000,
+      );
       task.updateTaskStatus('fix_and_resubmit');
     }
   }

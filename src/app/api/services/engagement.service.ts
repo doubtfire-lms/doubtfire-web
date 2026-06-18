@@ -46,7 +46,11 @@ export class EngagementService extends CachedEntityService<Engagement> {
       {
         keys: 'user',
         toEntityFn: (data: object, key: string) => {
-          return this.userService.cache.getOrCreate(data[key].id, this.userService, data[key]);
+          return this.userService.cache.getOrCreate(
+            data[key].id,
+            this.userService,
+            data[key],
+          );
         },
       },
       {
@@ -73,7 +77,9 @@ export class EngagementService extends CachedEntityService<Engagement> {
               {constructorParams: engagement},
             );
           });
-          this.engagementCommentService.updateCommentReplies(engagement.comments);
+          this.engagementCommentService.updateCommentReplies(
+            engagement.comments,
+          );
         },
       },
     );
@@ -83,7 +89,10 @@ export class EngagementService extends CachedEntityService<Engagement> {
     return new Engagement(other);
   }
 
-  loadEngagements(project: Project, refresh: boolean = false): Observable<Engagement[]> {
+  loadEngagements(
+    project: Project,
+    refresh: boolean = false,
+  ): Observable<Engagement[]> {
     const options: RequestOptions<Engagement> = {
       endpointFormat: this.endpointFormat,
       cache: project.engagementCache,
@@ -93,7 +102,9 @@ export class EngagementService extends CachedEntityService<Engagement> {
     };
     const pathIds = {projectId: project.id};
 
-    return refresh ? this.fetchAll(pathIds, options) : this.query(pathIds, options);
+    return refresh
+      ? this.fetchAll(pathIds, options)
+      : this.query(pathIds, options);
   }
 
   loadEngagement(engagement: Engagement): Observable<Engagement> {
@@ -110,7 +121,10 @@ export class EngagementService extends CachedEntityService<Engagement> {
     );
   }
 
-  createEngagement(project: Project, data: EngagementData): Observable<Engagement> {
+  createEngagement(
+    project: Project,
+    data: EngagementData,
+  ): Observable<Engagement> {
     return this.create(
       {projectId: project.id},
       {
@@ -122,7 +136,10 @@ export class EngagementService extends CachedEntityService<Engagement> {
     );
   }
 
-  updateEngagement(engagement: Engagement, data: EngagementUpdate): Observable<Engagement> {
+  updateEngagement(
+    engagement: Engagement,
+    data: EngagementUpdate,
+  ): Observable<Engagement> {
     return this.put(
       {
         projectId: engagement.project.id,

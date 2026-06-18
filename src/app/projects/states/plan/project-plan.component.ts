@@ -2,7 +2,11 @@ import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
-import {Project, ProjectService, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  Project,
+  ProjectService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {CalendarModalService} from 'src/app/common/modals/calendar-modal/calendar-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
@@ -51,7 +55,8 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.project$ = this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
+    this.project$ =
+      this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
 
     this.projectSub = this.project$?.subscribe((project) => {
       if (!project) {
@@ -75,7 +80,11 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
     const role = this.project?.unit?.myRole;
     const currentUser = this.userService.currentUser;
 
-    return !!role && role !== 'Student' && this.project?.student?.id !== currentUser?.id;
+    return (
+      !!role &&
+      role !== 'Student' &&
+      this.project?.student?.id !== currentUser?.id
+    );
   }
 
   onTargetGradeChange(event: MatSelectChange) {
@@ -90,7 +99,10 @@ export class ProjectPlanComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.project.targetGrade = previousTargetGrade;
         this.selectedTargetGrade = previousTargetGrade;
-        this.alertService.error(`Failed to update target grade: ${error}`, 6000);
+        this.alertService.error(
+          `Failed to update target grade: ${error}`,
+          6000,
+        );
       },
     });
   }

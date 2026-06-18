@@ -4,7 +4,10 @@ import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {OverseerImage, OverseerImageService} from 'src/app/api/models/doubtfire-model';
+import {
+  OverseerImage,
+  OverseerImageService,
+} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -25,7 +28,14 @@ export class OverseerImageListComponent
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   // Set up the table
-  columns: string[] = ['name', 'tag', 'pull', 'last-pulled', 'status', 'options'];
+  columns: string[] = [
+    'name',
+    'tag',
+    'pull',
+    'last-pulled',
+    'status',
+    'options',
+  ];
   overseerImages: OverseerImage[] = new Array<OverseerImage>();
   dataSource = new MatTableDataSource(this.overseerImages);
   loading = false;
@@ -86,7 +96,11 @@ export class OverseerImageListComponent
   // This method is called when the form is submitted,
   // which then calls the parent's submit.
   submit() {
-    super.submit(this.overseerImageService, this.alerts, this.onSuccess.bind(this));
+    super.submit(
+      this.overseerImageService,
+      this.alerts,
+      this.onSuccess.bind(this),
+    );
   }
 
   // This method is called when pull button is clicked to pull overseer image.

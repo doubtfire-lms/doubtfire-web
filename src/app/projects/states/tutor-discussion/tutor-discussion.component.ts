@@ -76,7 +76,8 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   private _username: string;
 
   public TutorDiscussionTabView = TutorDiscussionTabView;
-  public footerTabView: TutorDiscussionTabView = TutorDiscussionTabView.SHOW_COMMENTS;
+  public footerTabView: TutorDiscussionTabView =
+    TutorDiscussionTabView.SHOW_COMMENTS;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -256,7 +257,9 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const viewport = this.document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    const viewport = this.document.querySelector<HTMLMetaElement>(
+      'meta[name="viewport"]',
+    );
     if (!viewport) {
       return;
     }
@@ -271,7 +274,9 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const viewport = this.document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    const viewport = this.document.querySelector<HTMLMetaElement>(
+      'meta[name="viewport"]',
+    );
     if (viewport && this.originalViewportContent) {
       viewport.setAttribute('content', this.originalViewportContent);
     }
@@ -316,8 +321,13 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     if (cachedScannerData) {
       try {
         const html5QrcodeData = JSON.parse(cachedScannerData);
-        if (html5QrcodeData?.hasPermission && cameraPermissionState === 'granted') {
-          this.hideQrScannerBloat = html5QrcodeData.lastUsedCameraId ? true : false;
+        if (
+          html5QrcodeData?.hasPermission &&
+          cameraPermissionState === 'granted'
+        ) {
+          this.hideQrScannerBloat = html5QrcodeData.lastUsedCameraId
+            ? true
+            : false;
           return;
         }
       } catch (_e) {
@@ -334,14 +344,19 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
 
       // Find the deviceId of the back camera
       const backCameras = devices.filter(
-        (d) => d.kind === 'videoinput' && d.label.toLowerCase().includes('back camera'),
+        (d) =>
+          d.kind === 'videoinput' &&
+          d.label.toLowerCase().includes('back camera'),
       );
 
       const html5QrcodeData = {
         hasPermission: true,
         lastUsedCameraId: backCameras[0]?.deviceId ?? null,
       };
-      localStorage.setItem('HTML5_QRCODE_DATA', JSON.stringify(html5QrcodeData));
+      localStorage.setItem(
+        'HTML5_QRCODE_DATA',
+        JSON.stringify(html5QrcodeData),
+      );
 
       // Hide most of the UI if we found and set the back camera
       // Otherwise, we need to reveal the UI so that the user can select which camera to use
@@ -360,7 +375,9 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     this.scanningQr = true;
     this.loadingStudentData = false;
 
-    if (this.html5QrcodeScanner?.getState() === Html5QrcodeScannerState.PAUSED) {
+    if (
+      this.html5QrcodeScanner?.getState() === Html5QrcodeScannerState.PAUSED
+    ) {
       this.html5QrcodeScanner.resume();
     } else {
       this.stopQrScanner()
@@ -385,7 +402,10 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
         })
         .catch((_e) => {
           this.scanningQr = false;
-          this.alertService.error('Camera permission is required to scan QR codes', 3000);
+          this.alertService.error(
+            'Camera permission is required to scan QR codes',
+            3000,
+          );
         });
     }
   }
@@ -407,13 +427,16 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   }
 
   public async setSelectedTasksStatus(status: TaskStatusEnum) {
-    const selectedTasks = this.tasksList.selectedOptions.selected.map((taskOption) => {
-      return taskOption.value as Task;
-    });
+    const selectedTasks = this.tasksList.selectedOptions.selected.map(
+      (taskOption) => {
+        return taskOption.value as Task;
+      },
+    );
 
     if (status === 'complete') {
       const blockedTasks = selectedTasks.filter(
-        (task) => !task.definition.assessInPortfolioOnly && !task.canMarkComplete,
+        (task) =>
+          !task.definition.assessInPortfolioOnly && !task.canMarkComplete,
       );
       if (blockedTasks.length > 0) {
         this.alertService.error(
@@ -428,7 +451,9 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
         const hasReadyDependents = (
           await Promise.all(
             selectedTasks.map((task) =>
-              task?.definition && task?.project ? task.hasReadyForFeedbackDependents() : false,
+              task?.definition && task?.project
+                ? task.hasReadyForFeedbackDependents()
+                : false,
             ),
           )
         ).some(Boolean);
@@ -449,7 +474,10 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
           return;
         }
       } catch (error) {
-        this.alertService.error(`Failed to check dependent task statuses: ${error}`, 6000);
+        this.alertService.error(
+          `Failed to check dependent task statuses: ${error}`,
+          6000,
+        );
       }
     }
 
@@ -471,7 +499,10 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       }
 
       if (task.definition.assessInPortfolioOnly) {
-        task.updateTaskStatus(status === 'complete' ? 'working_on_it' : status, true);
+        task.updateTaskStatus(
+          status === 'complete' ? 'working_on_it' : status,
+          true,
+        );
       } else if (status === 'fix_and_resubmit') {
         task.updateTaskStatus(status, true, moveDependentTasks);
       } else {
@@ -560,24 +591,30 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
 
   private loadStudents(unit: Unit): Promise<Project> {
     return new Promise((resolve, reject) => {
-      this.projectService.loadStudents(unit, false, false).subscribe((projects) => {
-        const project = projects.find((p) => p.student.username === this._username);
-        if (!project) {
-          reject('Student is not a part of this unit');
-        }
-        resolve(project);
-      });
+      this.projectService
+        .loadStudents(unit, false, false)
+        .subscribe((projects) => {
+          const project = projects.find(
+            (p) => p.student.username === this._username,
+          );
+          if (!project) {
+            reject('Student is not a part of this unit');
+          }
+          resolve(project);
+        });
     });
   }
 
   private getProject(unit: Unit, projectId: number): Promise<Project> {
     return new Promise((resolve, reject) => {
-      this.projectService.loadProject(projectId, unit, true).subscribe((project) => {
-        if (!project) {
-          reject('No project found');
-        }
-        resolve(project);
-      });
+      this.projectService
+        .loadProject(projectId, unit, true)
+        .subscribe((project) => {
+          if (!project) {
+            reject('No project found');
+          }
+          resolve(project);
+        });
     });
   }
 
@@ -622,7 +659,9 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   }
 
   public viewAllFilteredTasks() {
-    const discussionTasks = this.filteredDiscussionTasks(this.project?.tasks ?? []);
+    const discussionTasks = this.filteredDiscussionTasks(
+      this.project?.tasks ?? [],
+    );
     this.filteredTasks = [...discussionTasks];
   }
 
@@ -653,7 +692,9 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
           ];
         } else {
           this.filteredTasks = [
-            project.tasks.find((t) => t.definition.id === this.selectedTaskDefinition.id),
+            project.tasks.find(
+              (t) => t.definition.id === this.selectedTaskDefinition.id,
+            ),
           ];
         }
 

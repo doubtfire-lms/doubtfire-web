@@ -1,13 +1,15 @@
 <div class="mx-auto max-w-[90vw]">
   <mat-card appearance="outlined" class="mx-auto max-w-7xl">
     <mat-card-header>
-      <mat-card-title>Copy {{ unit?.code }} {{ unit?.nameAndPeriod }}</mat-card-title>
+      <mat-card-title
+        >Copy {{ unit?.code }} {{ unit?.nameAndPeriod }}</mat-card-title
+      >
     </mat-card-header>
 
     <mat-card-content class="py-3">
       <p>
-        Duplicate this unit by copying it to the indicated teaching period, or a custom start and
-        end date.
+        Duplicate this unit by copying it to the indicated teaching period, or a
+        custom start and end date.
       </p>
 
       <div class="py-3">
@@ -16,7 +18,9 @@
           <mat-select [(ngModel)]="teachingPeriod">
             <mat-option [value]="false">Custom Date</mat-option>
             @for (period of teachingPeriods; track period) {
-              <mat-option [value]="period">{{ period.year }} {{ period.period }}</mat-option>
+              <mat-option [value]="period"
+                >{{ period.year }} {{ period.period }}</mat-option
+              >
             }
           </mat-select>
         </mat-form-field>
@@ -25,32 +29,58 @@
           @if (!teachingPeriod) {
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Start Date</mat-label>
-              <input matInput [matDatepicker]="startdatepicker" [(ngModel)]="newStartDate" />
+              <input
+                matInput
+                [matDatepicker]="startdatepicker"
+                [(ngModel)]="newStartDate"
+              />
               <mat-hint>DD/MM/YYYY</mat-hint>
-              <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="startdatepicker"
+              ></mat-datepicker-toggle>
               <mat-datepicker #startdatepicker></mat-datepicker>
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>End Date</mat-label>
-              <input matInput [matDatepicker]="enddatepicker" [(ngModel)]="newEndDate" />
+              <input
+                matInput
+                [matDatepicker]="enddatepicker"
+                [(ngModel)]="newEndDate"
+              />
               <mat-hint>DD/MM/YYYY</mat-hint>
-              <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="enddatepicker"
+              ></mat-datepicker-toggle>
               <mat-datepicker #enddatepicker></mat-datepicker>
             </mat-form-field>
           } @else {
             <mat-form-field appearance="outline" class="w-full" disabled>
               <mat-label>{{ teachingPeriod.name }} Start Date</mat-label>
-              <input disabled matInput readonly [value]="teachingPeriod?.startDate | date" />
+              <input
+                disabled
+                matInput
+                readonly
+                [value]="teachingPeriod?.startDate | date"
+              />
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-full" disabled>
               <mat-label>{{ teachingPeriod.name }} End Date</mat-label>
-              <input disabled matInput readonly [value]="teachingPeriod?.endDate | date" />
+              <input
+                disabled
+                matInput
+                readonly
+                [value]="teachingPeriod?.endDate | date"
+              />
             </mat-form-field>
           }
         </div>
       </div>
       <mat-card-footer class="flex justify-end">
-        <button color="primary" mat-raised-button (click)="createUnit()">Create Unit</button>
+        <button color="primary" mat-raised-button (click)="createUnit()">
+          Create Unit
+        </button>
       </mat-card-footer>
     </mat-card-content>
   </mat-card>

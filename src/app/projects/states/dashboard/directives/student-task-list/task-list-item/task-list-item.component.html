@@ -4,14 +4,22 @@
   </h4>
   <p class="list-group-item-text">
     @if (task.isGroupTask()) {
-      <mat-icon aria-hidden="true" inline matTooltip="Group Task">groups</mat-icon>
+      <mat-icon aria-hidden="true" inline matTooltip="Group Task"
+        >groups</mat-icon
+      >
     }
     @if (!task.isGroupTask()) {
-      <mat-icon aria-hidden="true" inline matTooltip="Individual Task">person</mat-icon>
+      <mat-icon aria-hidden="true" inline matTooltip="Individual Task"
+        >person</mat-icon
+      >
     }
-    {{ task.definition.abbreviation }} - {{ gradeNames[task.definition.targetGrade] }} Task
+    {{ task.definition.abbreviation }} -
+    {{ gradeNames[task.definition.targetGrade] }} Task
     @if (task.isBeforeStartDate() && !task.inSubmittedState()) {
-      <span class="due-time" matTooltip="Start task in {{ task.timeToStart() }}">
+      <span
+        class="due-time"
+        matTooltip="Start task in {{ task.timeToStart() }}"
+      >
         <mat-icon inline>hourglass_empty</mat-icon> {{ task.timeToStart() }}
       </span>
     }
@@ -19,7 +27,9 @@
       <span
         class="due-time"
         matTooltip="{{
-          task.isOverdue() ? 'Task Overdue!' : 'Complete task in ' + task.timeToDue()
+          task.isOverdue()
+            ? 'Task Overdue!'
+            : 'Complete task in ' + task.timeToDue()
         }}"
       >
         <mat-icon inline>hourglass_bottom</mat-icon> {{ task.timeToDue() }}
@@ -54,7 +64,10 @@
     <span class="task-subscript-badge grade-badge" [hidden]="!task.hasGrade()">
       {{ task.gradeDesc() }}
     </span>
-    <span class="task-subscript-badge quality-badge" [hidden]="!task.hasQualityPoints()">
+    <span
+      class="task-subscript-badge quality-badge"
+      [hidden]="!task.hasQualityPoints()"
+    >
       <sup>{{ task.qualityPts }}</sup
       >&frasl;<sub>{{ task.definition.maxQualityPts }}</sub>
     </span>
@@ -67,7 +80,11 @@
     <span
       class="task-subscript-badge due-badge"
       [hidden]="
-        !(task.betweenDueDateAndDeadlineDate() && !task.isPastDeadline() && !task.inFinalState())
+        !(
+          task.betweenDueDateAndDeadlineDate() &&
+          !task.isPastDeadline() &&
+          !task.inFinalState()
+        )
       "
     >
       <mat-icon inline>schedule</mat-icon>

@@ -47,21 +47,30 @@ export class TaskDefinitionScormComponent {
 
   public uploadScormData(files: FileList) {
     // console.log(Array.from(files).map((f) => f.type));
-    const validMimeTypes = ['application/zip', 'application/x-zip-compressed', 'multipart/x-zip'];
+    const validMimeTypes = [
+      'application/zip',
+      'application/x-zip-compressed',
+      'multipart/x-zip',
+    ];
     const validFiles = Array.from(files as ArrayLike<File>).filter((f) =>
       validMimeTypes.includes(f.type),
     );
     if (validFiles.length > 0) {
       const file = validFiles[0];
-      this.taskDefinitionService.uploadScormData(this.taskDefinition, file).subscribe({
-        next: () => {
-          this.alerts.success('Uploaded SCORM test data', 2000);
-          this.taskDefinition.hasScormData = true;
-        },
-        error: (message) => this.alerts.error(message, 6000),
-      });
+      this.taskDefinitionService
+        .uploadScormData(this.taskDefinition, file)
+        .subscribe({
+          next: () => {
+            this.alerts.success('Uploaded SCORM test data', 2000);
+            this.taskDefinition.hasScormData = true;
+          },
+          error: (message) => this.alerts.error(message, 6000),
+        });
     } else {
-      this.alerts.error('Please drop a zip file to upload SCORM test data for this task', 6000);
+      this.alerts.error(
+        'Please drop a zip file to upload SCORM test data for this task',
+        6000,
+      );
     }
   }
 }

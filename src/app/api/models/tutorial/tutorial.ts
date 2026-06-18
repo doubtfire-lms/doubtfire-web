@@ -44,7 +44,10 @@ export class Tutorial extends Entity {
   //   return result;
   // }
 
-  public toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+  public toJson<T extends Entity>(
+    mappingData: EntityMapping<T>,
+    ignoreKeys?: string[],
+  ): object {
     return {
       tutorial: super.toJson(mappingData, ignoreKeys),
     };

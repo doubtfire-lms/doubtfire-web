@@ -43,7 +43,11 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
       {
         keys: 'user',
         toEntityFn: (data: object) => {
-          return this.userService.cache.getOrCreate(data['user']['id'], userService, data['user']);
+          return this.userService.cache.getOrCreate(
+            data['user']['id'],
+            userService,
+            data['user'],
+          );
         },
       },
       'role',

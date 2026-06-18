@@ -97,7 +97,8 @@ export class GlobalStateService implements OnDestroy {
    * This keeps track of whether the application is loading data or not. This is used to
    * protect views from attempting to access details before they are loaded.
    */
-  public isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public isLoadingSubject: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(true);
 
   public showHideHeader: Subject<boolean> = new Subject<boolean>();
 
@@ -122,24 +123,26 @@ export class GlobalStateService implements OnDestroy {
     // Use timeout to ensure everything is loaded before we try to login
     setTimeout(() => {
       // Try to login using the refresh token
-      this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
-        if (result) {
-          if (
-            this.userService.currentUser.hasRunFirstTimeSetup === false &&
-            window.location.pathname !== '/welcome'
-          ) {
-            this.router.navigateByUrl('/welcome');
-          }
-        } else {
-          // Loading is finshed...
-          this.isLoadingSubject.next(false);
+      this.authenticationService.attemptLoginUsingRefreshToken(
+        (result: boolean) => {
+          if (result) {
+            if (
+              this.userService.currentUser.hasRunFirstTimeSetup === false &&
+              window.location.pathname !== '/welcome'
+            ) {
+              this.router.navigateByUrl('/welcome');
+            }
+          } else {
+            // Loading is finshed...
+            this.isLoadingSubject.next(false);
 
-          // and if we are not going to the sign in page, then redirect to it
-          if (window.location.pathname !== '/sign_in') {
-            this.router.navigateByUrl('/sign_in');
+            // and if we are not going to the sign in page, then redirect to it
+            if (window.location.pathname !== '/sign_in') {
+              this.router.navigateByUrl('/sign_in');
+            }
           }
-        }
-      });
+        },
+      );
     }, 100);
 
     // this is a hack to workaround horrific IOS "feature"
@@ -244,7 +247,10 @@ export class GlobalStateService implements OnDestroy {
           subscriber.next(++loaded);
         },
         error: (_response) => {
-          this.alerts.error('Unable to access service. Failed loading campuses.', 6000);
+          this.alerts.error(
+            'Unable to access service. Failed loading campuses.',
+            6000,
+          );
         },
       });
 
@@ -256,7 +262,10 @@ export class GlobalStateService implements OnDestroy {
               subscriber.next(null);
             },
             error: (_response) => {
-              this.alerts.error('Unable to access service. Failed loading GLOs.', 6000);
+              this.alerts.error(
+                'Unable to access service. Failed loading GLOs.',
+                6000,
+              );
             },
           });
 
@@ -281,7 +290,10 @@ export class GlobalStateService implements OnDestroy {
           subscriber.next(++loaded);
         },
         error: (_response) => {
-          this.alerts.error('Unable to access service. Failed loading teaching periods.', 6000);
+          this.alerts.error(
+            'Unable to access service. Failed loading teaching periods.',
+            6000,
+          );
         },
       });
     });
@@ -303,18 +315,20 @@ export class GlobalStateService implements OnDestroy {
       next: (_unitRoles: UnitRole[]) => {
         // unit roles are now in the cache
 
-        this.projectService.query(undefined, {params: {include_in_active: false}}).subscribe({
-          next: (_projects: Project[]) => {
-            // projects updated in cache
+        this.projectService
+          .query(undefined, {params: {include_in_active: false}})
+          .subscribe({
+            next: (_projects: Project[]) => {
+              // projects updated in cache
 
-            setTimeout(() => {
-              this.isLoadingSubject.next(false);
-            }, 800);
-          },
-          error: (_response) => {
-            this.alerts.error('Unable to access the units you study.', 6000);
-          },
-        });
+              setTimeout(() => {
+                this.isLoadingSubject.next(false);
+              }, 800);
+            },
+            error: (_response) => {
+              this.alerts.error('Unable to access the units you study.', 6000);
+            },
+          });
       },
       error: (_response) => {
         this.alerts.error('Unable to access your units.', 6000);

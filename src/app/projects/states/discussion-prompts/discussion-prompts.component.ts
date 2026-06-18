@@ -1,6 +1,10 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {DiscussionPrompt} from 'src/app/api/models/discussion-prompt';
-import {Project, TaskDefinition, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  Project,
+  TaskDefinition,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {StaffNote} from 'src/app/api/models/staff-note';
 import {DiscussionPromptService} from 'src/app/api/services/discussion-prompt.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
@@ -14,7 +18,8 @@ import {AlertService} from 'src/app/common/services/alert.service';
 })
 export class DiscussionPromptsComponent implements OnInit {
   @ViewChild('staffNotesContainer') staffNotesContainer!: ElementRef;
-  @ViewChild('staffNoteEditor', {static: false}) staffNoteEditor!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('staffNoteEditor', {static: false})
+  staffNoteEditor!: ElementRef<HTMLTextAreaElement>;
 
   @Input() project: Project;
   @Input() taskDefinition: TaskDefinition;

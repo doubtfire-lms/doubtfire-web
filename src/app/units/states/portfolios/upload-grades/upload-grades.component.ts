@@ -42,15 +42,20 @@ export class UploadGradesComponent implements OnInit {
           return;
         }
 
-        this.sidekiqModalService.show('Import student grades', response.id).subscribe({
-          next: (job) => {
-            this.csvResultModal.show('Student grade import results', JSON.parse(job.result));
-          },
-          error: (error) => {
-            console.error(error);
-            this.alertService.error('Failed to import grades', 6000);
-          },
-        });
+        this.sidekiqModalService
+          .show('Import student grades', response.id)
+          .subscribe({
+            next: (job) => {
+              this.csvResultModal.show(
+                'Student grade import results',
+                JSON.parse(job.result),
+              );
+            },
+            error: (error) => {
+              console.error(error);
+              this.alertService.error('Failed to import grades', 6000);
+            },
+          });
       },
     );
   }

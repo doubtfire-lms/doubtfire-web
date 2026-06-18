@@ -17,7 +17,9 @@
       [(ngModel)]="reasonBody"
     ></textarea>
     @if (reasonBody.length > 0 && !hasReasonBody) {
-      <mat-error> Please enter at least {{ minimumReasonLength }} characters. </mat-error>
+      <mat-error>
+        Please enter at least {{ minimumReasonLength }} characters.
+      </mat-error>
     }
     <div class="flex justify-end">
       <mat-hint>{{ trimmedReasonBody.length }}/1000</mat-hint>
@@ -27,7 +29,12 @@
 
 <mat-dialog-actions align="end">
   <button mat-stroked-button (click)="cancel()">Cancel</button>
-  <button color="primary" mat-raised-button [disabled]="!hasReasonBody" (click)="submit()">
+  <button
+    color="primary"
+    mat-raised-button
+    [disabled]="!hasReasonBody"
+    (click)="submit()"
+  >
     Save and Mark Discussed
   </button>
 </mat-dialog-actions>

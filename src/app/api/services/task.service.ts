@@ -1,4 +1,8 @@
-import {CachedEntityService, EntityCache, RequestOptions} from 'ngx-entity-service';
+import {
+  CachedEntityService,
+  EntityCache,
+  RequestOptions,
+} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, map, tap} from 'rxjs';
@@ -18,13 +22,16 @@ import {MappingFunctions} from './mapping-fn';
 export class TaskService extends CachedEntityService<Task> {
   public readonly taskStatusUpdated$: EventEmitter<Task> = new EventEmitter();
 
-  protected readonly endpointFormat = '/projects/:projectId:/task_def_id/:taskDefId:';
+  protected readonly endpointFormat =
+    '/projects/:projectId:/task_def_id/:taskDefId:';
 
   private readonly taskInboxEndpoint = '/units/:id:/tasks/inbox';
-  private readonly taskExplorerEndpoint = '/units/:id:/task_definitions/:task_def_id:/tasks';
+  private readonly taskExplorerEndpoint =
+    '/units/:id:/task_definitions/:task_def_id:/tasks';
   private readonly taskModerationEndpoint = '/units/:id:/tasks/moderation';
   private readonly taskOverflowEndpoint = '/units/:id:/tasks/overflow';
-  private readonly refreshTaskEndpoint = 'projects/:projectId:/refresh_tasks/:taskDefinitionId:';
+  private readonly refreshTaskEndpoint =
+    'projects/:projectId:/refresh_tasks/:taskDefinitionId:';
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
@@ -41,7 +48,9 @@ export class TaskService extends CachedEntityService<Task> {
       {
         keys: 'taskDefinitionId',
         toEntityOp: (data: object, key: string, entity: Task) => {
-          entity.definition = entity.project.unit.taskDef(data['task_definition_id']);
+          entity.definition = entity.project.unit.taskDef(
+            data['task_definition_id'],
+          );
         },
       },
       'tutorialId',
@@ -90,7 +99,9 @@ export class TaskService extends CachedEntityService<Task> {
             const proj = entity.unit.findStudent(details.id);
             if (proj) {
               // Update the other project's task status overview
-              const otherTask = proj.findTaskForDefinition(entity.definition.id);
+              const otherTask = proj.findTaskForDefinition(
+                entity.definition.id,
+              );
               if (otherTask) {
                 otherTask.project.taskStats = details['new_stats'];
                 otherTask.grade = data['grade'];
@@ -103,7 +114,12 @@ export class TaskService extends CachedEntityService<Task> {
       'moderationType',
     );
 
-    this.mapping.addJsonKey('qualityPts', 'grade', 'includeInPortfolio', 'trigger');
+    this.mapping.addJsonKey(
+      'qualityPts',
+      'grade',
+      'includeInPortfolio',
+      'trigger',
+    );
   }
 
   public createInstanceFrom(_json: object, other?: Project): Task {
@@ -190,7 +206,10 @@ export class TaskService extends CachedEntityService<Task> {
       },
     ).pipe(
       map((tasks: Task[]) =>
-        tasks.filter((t) => t.daysSinceSubmission() >= t.unit.feedbackOverflowThresholdDays),
+        tasks.filter(
+          (t) =>
+            t.daysSinceSubmission() >= t.unit.feedbackOverflowThresholdDays,
+        ),
       ),
       tap((tasks: Task[]) => {
         unit.incorporateTasks(tasks);
@@ -219,18 +238,25 @@ export class TaskService extends CachedEntityService<Task> {
   public readonly toBeWorkedOn = TaskStatus.TO_BE_WORKED_ON;
   public readonly discussionStatuses = TaskStatus.DISCUSSION_STATES;
   public readonly gradeableStatuses = TaskStatus.GRADEABLE_STATUSES;
-  public readonly stateThatAllowsExtension = TaskStatus.STATE_THAT_ALLOWS_EXTENSION;
-  public readonly pdfRegeneratableStatuses = TaskStatus.PDF_REGENERATABLE_STATES;
+  public readonly stateThatAllowsExtension =
+    TaskStatus.STATE_THAT_ALLOWS_EXTENSION;
+  public readonly pdfRegeneratableStatuses =
+    TaskStatus.PDF_REGENERATABLE_STATES;
   public readonly submittableStatuses = TaskStatus.SUBMITTABLE_STATUSES;
-  public readonly feedbackTemplateStatuses = TaskStatus.FEEDBACK_TEMPLATE_STATUSES;
+  public readonly feedbackTemplateStatuses =
+    TaskStatus.FEEDBACK_TEMPLATE_STATUSES;
   public readonly completeStatus: TaskStatusEnum = 'complete';
-  public readonly learningWeight: Map<TaskStatusEnum, number> = TaskStatus.LEARNING_WEIGHT;
-  public readonly statusAcronym: Map<TaskStatusEnum, string> = TaskStatus.STATUS_ACRONYM;
-  public readonly statusLabels: Map<TaskStatusEnum, string> = TaskStatus.STATUS_LABELS;
+  public readonly learningWeight: Map<TaskStatusEnum, number> =
+    TaskStatus.LEARNING_WEIGHT;
+  public readonly statusAcronym: Map<TaskStatusEnum, string> =
+    TaskStatus.STATUS_ACRONYM;
+  public readonly statusLabels: Map<TaskStatusEnum, string> =
+    TaskStatus.STATUS_LABELS;
   public readonly markedStatuses = TaskStatus.MARKED_STATUSES;
   public readonly statusSeq = TaskStatus.STATUS_SEQ;
   public readonly helpDescriptions = TaskStatus.HELP_DESCRIPTIONS;
-  public readonly statusIcons: Map<TaskStatusEnum, string> = TaskStatus.STATUS_ICONS;
+  public readonly statusIcons: Map<TaskStatusEnum, string> =
+    TaskStatus.STATUS_ICONS;
   public readonly statusMaterialIcons: Map<TaskStatusEnum, string> =
     TaskStatus.STATUS_MATERIAL_ICONS;
   public readonly rejectFutureStates = TaskStatus.REJECT_FUTURE_STATES;
@@ -250,7 +276,11 @@ export class TaskService extends CachedEntityService<Task> {
     return TaskStatus.STATUS_LABELS.get(status);
   }
 
-  public helpDescription(status: TaskStatusEnum): {detail: string; reason: string; action: string} {
+  public helpDescription(status: TaskStatusEnum): {
+    detail: string;
+    reason: string;
+    action: string;
+  } {
     return TaskStatus.HELP_DESCRIPTIONS.get(status);
   }
 
@@ -258,7 +288,10 @@ export class TaskService extends CachedEntityService<Task> {
     return TaskStatus.statusData(data);
   }
 
-  public taskKeyFromString(taskKeyString: string): {studentId: string; taskDefAbbr: string} {
+  public taskKeyFromString(taskKeyString: string): {
+    studentId: string;
+    taskDefAbbr: string;
+  } {
     const taskKeyComponents = taskKeyString?.split('/');
     if (taskKeyComponents) {
       const studentId = taskKeyComponents[0];

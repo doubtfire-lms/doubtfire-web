@@ -1,6 +1,9 @@
 <!-- <div class="flex justify-center py-1">Tutor: {{ task.tutor?.user.name }}</div> -->
 <span class="center-buttons mx-3 flex justify-around gap-3">
-  @if (task.moderationType === 'random_sample' || task.moderationType === 'first_feedback') {
+  @if (
+    task.moderationType === 'random_sample' ||
+    task.moderationType === 'first_feedback'
+  ) {
     <button
       aria-label=""
       class="button"

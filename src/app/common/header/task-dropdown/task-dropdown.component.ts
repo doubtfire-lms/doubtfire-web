@@ -51,12 +51,16 @@ export class TaskDropdownComponent {
   public get canMarkOverflowTask() {
     // this.unitRole does not have permission-based fields exposed such as canMarkOverflowTasks
     // so we must access them via the unit data
-    const staff = this.currentUnit.staff.find((ur) => ur.id === this.unitRole.id);
+    const staff = this.currentUnit.staff.find(
+      (ur) => ur.id === this.unitRole.id,
+    );
     return staff?.canMarkOverflowTasks;
   }
 
   public get isMentor(): boolean {
-    return this.currentUnit.staff.some((ur) => ur.mentorId === this.unitRole.id);
+    return this.currentUnit.staff.some(
+      (ur) => ur.mentorId === this.unitRole.id,
+    );
   }
 
   openTutorNotes() {
@@ -71,6 +75,7 @@ export class TaskDropdownComponent {
     }
 
     this.currentActivity = route.snapshot.data.task;
-    this.menuText = this.taskToShortName?.[this.currentActivity] ?? this.currentActivity;
+    this.menuText =
+      this.taskToShortName?.[this.currentActivity] ?? this.currentActivity;
   }
 }

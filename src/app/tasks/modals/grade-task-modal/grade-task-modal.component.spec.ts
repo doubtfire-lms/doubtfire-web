@@ -6,7 +6,10 @@ import {GradeTaskModalComponent} from './grade-task-modal.component';
 describe('GradeTaskModalComponent', () => {
   let component: GradeTaskModalComponent;
   let fixture: ComponentFixture<GradeTaskModalComponent>;
-  let gradeServiceStub: Pick<GradeService, 'grades' | 'gradeAcronyms' | 'allGradeValues'>;
+  let gradeServiceStub: Pick<
+    GradeService,
+    'grades' | 'gradeAcronyms' | 'allGradeValues'
+  >;
   let dialogRefMock: {close: () => void};
   let dialogDataStub: {
     task: {
@@ -107,7 +110,9 @@ describe('GradeTaskModalComponent', () => {
     expect(component.task).toEqual(newRatingTask);
     expect(component.rating).toEqual(newRatingTask.quality_pts);
     expect(component.selectedGrade).toEqual(newRatingTask.grade);
-    expect(component.totalRating).toEqual(newRatingTask.definition.max_quality_pts);
+    expect(component.totalRating).toEqual(
+      newRatingTask.definition.max_quality_pts,
+    );
   });
 
   it('should not allow a rating higher than the max rating', () => {

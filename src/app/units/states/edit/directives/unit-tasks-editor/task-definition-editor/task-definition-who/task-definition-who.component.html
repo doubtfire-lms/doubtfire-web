@@ -1,6 +1,8 @@
 @if (unit.hasGroupwork()) {
   <mat-form-field appearance="outline" class="flex flex-grow">
-    <mat-label>Is this an individual or group task? Select group that submits</mat-label>
+    <mat-label
+      >Is this an individual or group task? Select group that submits</mat-label
+    >
     <mat-select required [(value)]="taskDefinition.groupSet">
       @for (gs of unit.groupSets; track gs) {
         <mat-option [value]="gs">{{ gs.name }}</mat-option>
@@ -35,15 +37,23 @@
         <li>{{ tutorial?.abbreviation }} {{ tutorial.tutor?.name }}</li>
       }
 
-      @if (!showAllTutorials && taskDefinition.tutorialStream?.tutorialsIn(unit)?.length > 3) {
+      @if (
+        !showAllTutorials &&
+        taskDefinition.tutorialStream?.tutorialsIn(unit)?.length > 3
+      ) {
         <li class="mt-0.5">
-          +{{ taskDefinition.tutorialStream.tutorialsIn(unit).length - 3 }} more tutorials
+          +{{ taskDefinition.tutorialStream.tutorialsIn(unit).length - 3 }} more
+          tutorials
         </li>
       }
       @if (taskDefinition.tutorialStream?.tutorialsIn(unit).length > 3) {
         <div class="mt-2.5">
           @if (!showAllTutorials) {
-            <button color="primary" mat-button (click)="showAllTutorials = true">
+            <button
+              color="primary"
+              mat-button
+              (click)="showAllTutorials = true"
+            >
               View all tutorials
             </button>
           } @else {
@@ -59,6 +69,7 @@
 
 <div>
   <mat-slide-toggle [(ngModel)]="taskDefinition.lockAssessmentsToTutorialStream"
-    >Only allow tutors in this tutorial stream to assess this task</mat-slide-toggle
+    >Only allow tutors in this tutorial stream to assess this
+    task</mat-slide-toggle
   >
 </div>

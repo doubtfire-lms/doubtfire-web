@@ -2,7 +2,8 @@
   --mat-tab-container-height: 40px;
 }
 
-.template-search .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+.template-search
+  .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
   height: 0px;
 }
 
@@ -27,6 +28,7 @@
   padding-top: 5px;
 }
 
-.template-grid .mdc-evolution-chip__graphic.mat-mdc-chip-graphic.ng-star-inserted {
+.template-grid
+  .mdc-evolution-chip__graphic.mat-mdc-chip-graphic.ng-star-inserted {
   padding-right: 2px;
 }

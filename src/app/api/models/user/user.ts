@@ -49,7 +49,9 @@ export class User extends Entity {
     const fn = this.firstName.slice(0, 11).trim();
     const sn = this.lastName.slice(0, 11).trim();
     const nn =
-      this.nickname && this.nickname.trim() ? ` (${this.nickname.trim().slice(0, 11).trim()})` : '';
+      this.nickname && this.nickname.trim()
+        ? ` (${this.nickname.trim().slice(0, 11).trim()})`
+        : '';
     return `${fn} ${sn}${nn}`;
   }
 

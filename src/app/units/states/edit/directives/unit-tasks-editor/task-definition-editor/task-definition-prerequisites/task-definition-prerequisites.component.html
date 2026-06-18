@@ -28,7 +28,10 @@
           @if (!staffView) {
             <status-icon
               matBadgePosition="before"
-              [status]="link.prerequisite?.projectTask(task?.project)?.status ?? 'not_started'"
+              [status]="
+                link.prerequisite?.projectTask(task?.project)?.status ??
+                'not_started'
+              "
             ></status-icon>
           } @else {
             @if (link.taskStatus) {
@@ -107,7 +110,9 @@
         </button>
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
           @for (td of filteredTaskDefs; track td) {
-            <mat-option [value]="td"> {{ td.abbreviation }} - {{ td.name }} </mat-option>
+            <mat-option [value]="td">
+              {{ td.abbreviation }} - {{ td.name }}
+            </mat-option>
           }
         </mat-autocomplete>
       </mat-form-field>

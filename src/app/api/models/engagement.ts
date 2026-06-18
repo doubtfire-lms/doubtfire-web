@@ -18,7 +18,8 @@ export class Engagement extends Entity {
   createdAt: Date;
   updatedAt: Date;
 
-  readonly commentCache: EntityCache<EngagementComment> = new EntityCache<EngagementComment>();
+  readonly commentCache: EntityCache<EngagementComment> =
+    new EntityCache<EngagementComment>();
 
   constructor(project?: Project) {
     super();
@@ -64,6 +65,8 @@ export class EngagementComment extends Entity {
   }
 
   get currentUserCanDelete(): boolean {
-    return this.authorIsMe || this.engagement.project.unit.myRole === 'Convenor';
+    return (
+      this.authorIsMe || this.engagement.project.unit.myRole === 'Convenor'
+    );
   }
 }

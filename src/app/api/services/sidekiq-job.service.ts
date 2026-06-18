@@ -18,9 +18,15 @@ export class SidekiqJobService extends CachedEntityService<SidekiqJob> {
   public jobEntries: Map<string, SidekiqJobEntry> = new Map();
 
   // Allow components to track changes to jobEntries
-  public sidekiqJobsSubject: BehaviorSubject<SidekiqJobEntry[]> = new BehaviorSubject([]);
+  public sidekiqJobsSubject: BehaviorSubject<SidekiqJobEntry[]> =
+    new BehaviorSubject([]);
 
-  public setJob(jobId: string, title: string, subject: Subject<SidekiqJob>, job?: SidekiqJob) {
+  public setJob(
+    jobId: string,
+    title: string,
+    subject: Subject<SidekiqJob>,
+    job?: SidekiqJob,
+  ) {
     this.jobEntries.set(jobId, {
       job,
       title,
@@ -47,20 +53,35 @@ export class SidekiqJobService extends CachedEntityService<SidekiqJob> {
       'status',
       {
         keys: 'pctComplete',
-        toEntityOp: (data: object, jsonKey: string, job: SidekiqJob, _params?) => {
+        toEntityOp: (
+          data: object,
+          jsonKey: string,
+          job: SidekiqJob,
+          _params?,
+        ) => {
           job.pctComplete = Number(data[jsonKey]);
         },
       },
       'message',
       {
         keys: 'processedCount',
-        toEntityOp: (data: object, jsonKey: string, job: SidekiqJob, _params?) => {
+        toEntityOp: (
+          data: object,
+          jsonKey: string,
+          job: SidekiqJob,
+          _params?,
+        ) => {
           job.processedCount = Number(data[jsonKey]);
         },
       },
       {
         keys: 'totalCount',
-        toEntityOp: (data: object, jsonKey: string, job: SidekiqJob, _params?) => {
+        toEntityOp: (
+          data: object,
+          jsonKey: string,
+          job: SidekiqJob,
+          _params?,
+        ) => {
           job.totalCount = Number(data[jsonKey]);
         },
       },

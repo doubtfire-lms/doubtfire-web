@@ -1,5 +1,11 @@
 import {HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {MatAccordion} from '@angular/material/expansion';
 import {Task} from 'src/app/api/models/task';
 import {TaskSimilarity} from 'src/app/api/models/task-similarity';
@@ -43,14 +49,18 @@ export class TaskSimilarityViewComponent implements OnChanges {
     e.stopPropagation();
     similarity.flagged = !similarity.flagged;
     this.taskSimilarityService
-      .update({taskId: similarity.task.id, id: similarity.id}, {entity: similarity})
+      .update(
+        {taskId: similarity.task.id, id: similarity.id},
+        {entity: similarity},
+      )
       .subscribe((_) => {
         this.alertsService.success('Similarity flag updated');
-        similarity.task.similarityFlag = similarity.task.similarityCache.currentValues
-          .map((s) => {
-            return s.flagged;
-          })
-          .reduce((a, b) => a || b, false);
+        similarity.task.similarityFlag =
+          similarity.task.similarityCache.currentValues
+            .map((s) => {
+              return s.flagged;
+            })
+            .reduce((a, b) => a || b, false);
         this.selectedTaskService.checkFooterHeight();
       });
   }

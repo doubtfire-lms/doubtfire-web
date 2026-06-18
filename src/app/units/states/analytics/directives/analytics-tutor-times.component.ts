@@ -66,7 +66,9 @@ export class AnalyticsTutorTimesComponent implements OnInit {
   ) {}
 
   get role() {
-    return this.unit.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
+    return this.unit.staff.find(
+      (s) => s.user.id === this.userService.currentUser.id,
+    )?.role;
   }
 
   ngOnInit(): void {
@@ -79,7 +81,9 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     this.tutorTimeSummaryEndDate.setHours(0, 0, 0, 0);
 
     this.tutorTimeSummaryStartDate = new Date(this.tutorTimeSummaryEndDate);
-    this.tutorTimeSummaryStartDate.setDate(this.tutorTimeSummaryEndDate.getDate() - 7);
+    this.tutorTimeSummaryStartDate.setDate(
+      this.tutorTimeSummaryEndDate.getDate() - 7,
+    );
 
     const startOfWeek = new Date(this.viewDate);
     startOfWeek.setDate(this.viewDate.getDate() - this.daysInWeek + 1);
@@ -92,12 +96,16 @@ export class AnalyticsTutorTimesComponent implements OnInit {
 
   goPreviousWeek() {
     this.canLoadSessions = true;
-    this.viewDate = new Date(this.viewDate.getTime() - this.daysInWeek * 24 * 60 * 60 * 1000);
+    this.viewDate = new Date(
+      this.viewDate.getTime() - this.daysInWeek * 24 * 60 * 60 * 1000,
+    );
   }
 
   goNextWeek() {
     this.canLoadSessions = true;
-    this.viewDate = new Date(this.viewDate.getTime() + this.daysInWeek * 24 * 60 * 60 * 1000);
+    this.viewDate = new Date(
+      this.viewDate.getTime() + this.daysInWeek * 24 * 60 * 60 * 1000,
+    );
   }
 
   goTodayWeek() {
@@ -139,7 +147,8 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     // Includes both the selected start & end days
     const diffDays =
       Math.floor(
-        (this.tutorTimeSummaryEndDate.getTime() - this.tutorTimeSummaryStartDate.getTime()) /
+        (this.tutorTimeSummaryEndDate.getTime() -
+          this.tutorTimeSummaryStartDate.getTime()) /
           (1000 * 60 * 60 * 24),
       ) + 1;
 
@@ -212,16 +221,26 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     this.canLoadSessions = false;
     this.isLoading = true;
     this.unit
-      .getUserMarkingSessions(this.tutorTimeSummaryStartDate, this.tutorTimeSummaryEndDate, tz)
+      .getUserMarkingSessions(
+        this.tutorTimeSummaryStartDate,
+        this.tutorTimeSummaryEndDate,
+        tz,
+      )
       .subscribe({
         next: (data) => {
           this.isLoading = false;
           this.canLoadSessions = false;
           this.events = data.map((session) => {
-            const tutor = this.unit.staff.find((t) => t.user.id === session.user?.id);
+            const tutor = this.unit.staff.find(
+              (t) => t.user.id === session.user?.id,
+            );
 
-            const primary = tutor ? this.stringToHexColor(tutor.user.firstName) : '#e0e0e0';
-            const secondary = tutor ? this.stringToHexColor(tutor.user.firstName) : '#e3e2e1';
+            const primary = tutor
+              ? this.stringToHexColor(tutor.user.firstName)
+              : '#e0e0e0';
+            const secondary = tutor
+              ? this.stringToHexColor(tutor.user.firstName)
+              : '#e3e2e1';
             return {
               start: new Date(session.startTime),
               end: new Date(session.endTime),
@@ -270,7 +289,11 @@ export class AnalyticsTutorTimesComponent implements OnInit {
 
   private stringToHexColor(
     name: string,
-    opts?: {hue?: [number, number]; sat?: [number, number]; lit?: [number, number]},
+    opts?: {
+      hue?: [number, number];
+      sat?: [number, number];
+      lit?: [number, number];
+    },
   ): string {
     const options = {
       hue: opts?.hue || [0, 360],

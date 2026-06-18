@@ -1,7 +1,12 @@
 <section class="welcome" fxFlex fxLayout="row">
   <f-hero-sidebar fxFlexAlign="start" fxHide.lt-md></f-hero-sidebar>
   <!-- <section class="content" fxFlex.gt-sm  > -->
-  <section class="content" fxFlex.gt-sm fxLayout.gt-sm="column" [ngClass.gt-sm]="'large'">
+  <section
+    class="content"
+    fxFlex.gt-sm
+    fxLayout.gt-sm="column"
+    [ngClass.gt-sm]="'large'"
+  >
     <div class="m-auto w-full max-w-md p-4">
       <div class="subcontainer">
         <div
@@ -11,10 +16,16 @@
           fxLayout="row"
           fxLayoutAlign="start center"
         >
-          <img alt="Homepage Logo" src="../../../assets/images/logo-bw.svg" width="40px" />
+          <img
+            alt="Homepage Logo"
+            src="../../../assets/images/logo-bw.svg"
+            width="40px"
+          />
           <p>{{ externalName.value }}</p>
         </div>
-        <h1 class="welcome-heading" fxFlexAlign="start">Welcome to {{ externalName.value }}</h1>
+        <h1 class="welcome-heading" fxFlexAlign="start">
+          Welcome to {{ externalName.value }}
+        </h1>
         @if (!loading) {
           <f-edit-profile-form mode="create"></f-edit-profile-form>
         }

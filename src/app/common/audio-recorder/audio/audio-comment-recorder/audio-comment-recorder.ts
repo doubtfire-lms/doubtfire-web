@@ -1,5 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {
+  Task,
+  TaskComment,
+  TaskCommentService,
+} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 import {BaseAudioRecorderComponent} from '../base-audio-recorder';
@@ -10,7 +14,10 @@ import {BaseAudioRecorderComponent} from '../base-audio-recorder';
   providers: [MediaRecorderService],
   standalone: false,
 })
-export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent implements OnInit {
+export class AudioCommentRecorderComponent
+  extends BaseAudioRecorderComponent
+  implements OnInit
+{
   @Input() task: Task;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
@@ -31,7 +38,9 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent im
 
   init(): void {
     super.init();
-    this.canvas = document.getElementById('audio-recorder-visualiser') as HTMLCanvasElement;
+    this.canvas = document.getElementById(
+      'audio-recorder-visualiser',
+    ) as HTMLCanvasElement;
     this.audio = document.getElementById('audioPlayer') as HTMLAudioElement;
     this.canvasCtx = this.canvas.getContext('2d');
   }

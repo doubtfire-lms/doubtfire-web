@@ -67,7 +67,9 @@ describe('GradeIconComponent', () => {
 
       expect(component.index).toEqual(gradeServiceStub.grades.indexOf(grade));
       expect(component.gradeText).toEqual(grade);
-      expect(component.gradeLetter).toEqual(gradeServiceStub.gradeAcronyms[grade]);
+      expect(component.gradeLetter).toEqual(
+        gradeServiceStub.gradeAcronyms[grade],
+      );
     });
   });
 
@@ -77,8 +79,12 @@ describe('GradeIconComponent', () => {
       component.ngOnInit();
 
       expect(component.index).toEqual(index - 1);
-      expect(component.gradeText).toEqual(gradeServiceStub.grades[component.index]);
-      expect(component.gradeLetter).toEqual(gradeServiceStub.gradeAcronyms[component.gradeText]);
+      expect(component.gradeText).toEqual(
+        gradeServiceStub.grades[component.index],
+      );
+      expect(component.gradeLetter).toEqual(
+        gradeServiceStub.gradeAcronyms[component.gradeText],
+      );
     });
   });
 });

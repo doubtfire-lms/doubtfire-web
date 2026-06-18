@@ -1,8 +1,16 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
-import {GroupSet, Unit, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {
+  GroupSet,
+  Unit,
+  UnitRole,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
+import {
+  GlobalStateService,
+  ViewType,
+} from 'src/app/projects/states/index/global-state.service';
 
 // This component is only displayed to staff
 // Students will be shown the projects/states/groups (project-groups) component
@@ -45,7 +53,8 @@ export class UnitGroupsComponent implements OnInit, OnDestroy {
   }
 
   private findUnitRole(unitId: number): UnitRole {
-    const currentView = this.globalStateService.currentViewAndEntitySubject$.value;
+    const currentView =
+      this.globalStateService.currentViewAndEntitySubject$.value;
 
     if (currentView?.viewType === ViewType.UNIT) {
       const currentUnitRole = currentView.entity as UnitRole;

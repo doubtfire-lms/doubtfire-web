@@ -31,11 +31,23 @@
 
   <div class="flex flex-col items-center justify-center">
     <div class="mb-3 flex flex-row gap-1">
-      <button class="w-24" color="primary" mat-raised-button (click)="goPreviousWeek()">
+      <button
+        class="w-24"
+        color="primary"
+        mat-raised-button
+        (click)="goPreviousWeek()"
+      >
         Previous
       </button>
       <button mat-raised-button (click)="goTodayWeek()">Today</button>
-      <button class="w-24" color="primary" mat-raised-button (click)="goNextWeek()">Next</button>
+      <button
+        class="w-24"
+        color="primary"
+        mat-raised-button
+        (click)="goNextWeek()"
+      >
+        Next
+      </button>
     </div>
     <div class="mb-3 flex flex-row gap-1">
       <mat-form-field appearance="outline">
@@ -47,7 +59,10 @@
           (dateChange)="onDateChange($event)"
         />
         <mat-hint>Sessions from this day onward</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="startdatepicker"></mat-datepicker-toggle>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="startdatepicker"
+        ></mat-datepicker-toggle>
         <mat-datepicker #startdatepicker></mat-datepicker>
       </mat-form-field>
 
@@ -60,7 +75,10 @@
           (dateChange)="onDateChange($event)"
         />
         <mat-hint>Sessions up to this day</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="enddatepicker"
+        ></mat-datepicker-toggle>
         <mat-datepicker #enddatepicker></mat-datepicker>
       </mat-form-field>
     </div>

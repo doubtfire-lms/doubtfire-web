@@ -1,5 +1,12 @@
 import {HttpResponse} from '@angular/common/http';
-import {Component, ElementRef, Inject, Input, OnDestroy, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import {Project, Task, TaskComment} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {AlertService} from '../services/alert.service';
@@ -21,15 +28,19 @@ export class AudioPlayerComponent implements OnDestroy {
   private isLoaded = false;
   public isPlaying = false;
   public audioProgress = 0;
-  public audio: HTMLAudioElement = document.createElement('AUDIO') as HTMLAudioElement;
+  public audio: HTMLAudioElement = document.createElement(
+    'AUDIO',
+  ) as HTMLAudioElement;
 
   constructor(
-    @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
+    @Inject(FileDownloaderService)
+    private fileDownloader: FileDownloaderService,
     private alerts: AlertService,
   ) {
     this.audio.ontimeupdate = () => {
       const percentagePlayed = this.audio.currentTime / this.audio.duration;
-      this.audioProgress = (isNaN(percentagePlayed) ? 0 : percentagePlayed) * 100;
+      this.audioProgress =
+        (isNaN(percentagePlayed) ? 0 : percentagePlayed) * 100;
     };
 
     this.audio.onended = () => {

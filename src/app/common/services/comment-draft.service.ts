@@ -11,7 +11,11 @@ export class CommentDraftService {
     return of(draft || ''); // Return empty string if no draft exists
   }
 
-  saveDraft(projectId: number, taskDefinitionId: number, text: string): Observable<boolean> {
+  saveDraft(
+    projectId: number,
+    taskDefinitionId: number,
+    text: string,
+  ): Observable<boolean> {
     const key = this.generateKey(projectId, taskDefinitionId);
     localStorage.setItem(key, text);
     return of(true); // Simulate successful save

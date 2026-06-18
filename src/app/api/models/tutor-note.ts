@@ -2,7 +2,14 @@ import {Entity} from 'ngx-entity-service';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TutorNoteService} from '../services/tutor-note.service';
-import {Project, Task, TaskDefinition, UnitRole, User, UserService} from './doubtfire-model';
+import {
+  Project,
+  Task,
+  TaskDefinition,
+  UnitRole,
+  User,
+  UserService,
+} from './doubtfire-model';
 
 export class TutorNote extends Entity {
   id: number;
@@ -40,15 +47,25 @@ export class TutorNote extends Entity {
   }
 
   public delete() {
-    const tutorNoteService: TutorNoteService = AppInjector.get(TutorNoteService);
+    const tutorNoteService: TutorNoteService =
+      AppInjector.get(TutorNoteService);
     tutorNoteService
-      .delete({unitRoleId: this.unitRole.id, id: this.id}, {cache: this.unitRole.tutorNotesCache})
+      .delete(
+        {unitRoleId: this.unitRole.id, id: this.id},
+        {cache: this.unitRole.tutorNotesCache},
+      )
       .subscribe({
         next: () => {
-          AppInjector.get(AlertService).error('Successfully deleted tutor note', 4000);
+          AppInjector.get(AlertService).error(
+            'Successfully deleted tutor note',
+            4000,
+          );
         },
         error: (error) => {
-          AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
+          AppInjector.get(AlertService).error(
+            error?.message || error || 'Unknown error',
+            2000,
+          );
         },
       });
   }

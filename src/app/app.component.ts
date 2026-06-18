@@ -19,7 +19,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.setBodyBackground(this.router.url);
     this.routerSub = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => this.setBodyBackground(event.urlAfterRedirects));
+      .subscribe((event: NavigationEnd) =>
+        this.setBodyBackground(event.urlAfterRedirects),
+      );
   }
 
   ngOnDestroy(): void {

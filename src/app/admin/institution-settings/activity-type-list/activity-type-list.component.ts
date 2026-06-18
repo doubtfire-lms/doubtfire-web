@@ -2,7 +2,10 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {ActivityType, ActivityTypeService} from 'src/app/api/models/doubtfire-model';
+import {
+  ActivityType,
+  ActivityTypeService,
+} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {AlertService} from 'src/app/common/services/alert.service';
 
@@ -70,16 +73,26 @@ export class ActivityTypeListComponent
   // This method is called when the form is submitted,
   // which then calls the parent's submit.
   submit() {
-    super.submit(this.activityTypeService, this.alertService, this.onSuccess.bind(this));
+    super.submit(
+      this.activityTypeService,
+      this.alertService,
+      this.onSuccess.bind(this),
+    );
   }
 
   deleteActivity(activity: ActivityType) {
-    this.delete(activity, this.activityTypes, this.activityTypeService).subscribe({
+    this.delete(
+      activity,
+      this.activityTypes,
+      this.activityTypeService,
+    ).subscribe({
       next: () => {
         this.alertService.success(`${activity.name} has been deleted.`, 2000);
       },
       error: (response) => {
-        this.alertService.error(response.error?.error || 'Unable to delete activity type.');
+        this.alertService.error(
+          response.error?.error || 'Unable to delete activity type.',
+        );
       },
     });
   }

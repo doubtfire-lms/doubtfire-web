@@ -2,7 +2,11 @@
 // Modal to show Doubtfire version info
 //
 import {Component, Inject, Injectable, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {D2lAssessmentMapping} from 'src/app/api/models/d2l/d2l_assessment_mapping';
 import {D2lAssessmentMappingService} from 'src/app/api/models/doubtfire-model';
@@ -16,7 +20,9 @@ import {AlertService} from 'src/app/common/services/alert.service';
   standalone: false,
 })
 export class D2lUnitDetailsFormComponent implements OnInit {
-  public d2lDataMapping: D2lAssessmentMapping = new D2lAssessmentMapping(this.data);
+  public d2lDataMapping: D2lAssessmentMapping = new D2lAssessmentMapping(
+    this.data,
+  );
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Unit,
@@ -40,7 +46,10 @@ export class D2lUnitDetailsFormComponent implements OnInit {
 
   private saveAction(): Observable<D2lAssessmentMapping> {
     if (!this.d2lDataMapping.id) {
-      if (!this.d2lDataMapping.orgUnitId && !this.d2lDataMapping.gradeObjectId) {
+      if (
+        !this.d2lDataMapping.orgUnitId &&
+        !this.d2lDataMapping.gradeObjectId
+      ) {
         return null;
       }
       return this.d2lAssessmentMappingService.post(
@@ -53,7 +62,9 @@ export class D2lUnitDetailsFormComponent implements OnInit {
           constructorParams: this.data,
         },
       );
-    } else if (this.d2lDataMapping.hasChanges(this.d2lAssessmentMappingService.mapping)) {
+    } else if (
+      this.d2lDataMapping.hasChanges(this.d2lAssessmentMappingService.mapping)
+    ) {
       return this.d2lAssessmentMappingService.update(
         {
           unitId: this.data.id,

@@ -1,6 +1,12 @@
 import {PDFProgressData} from 'ng2-pdf-viewer';
 import {HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+} from '@angular/core';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {AlertService} from '../services/alert.service';
 
@@ -42,7 +48,9 @@ export class FileViewerComponent implements OnDestroy, OnChanges {
   protected pdfLoadingProgressPercentage = 0;
 
   protected onProgress(progress: PDFProgressData) {
-    this.pdfLoadingProgressPercentage = Math.round(progress.loaded / progress.total);
+    this.pdfLoadingProgressPercentage = Math.round(
+      progress.loaded / progress.total,
+    );
   }
 
   /**

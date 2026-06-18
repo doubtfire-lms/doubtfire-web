@@ -7,7 +7,11 @@
   (change)="onFileSelected($event)"
 />
 
-<div appDragDrop class="flex w-full items-center" (fileDropped)="onFileDragOver($event)">
+<div
+  appDragDrop
+  class="flex w-full items-center"
+  (fileDropped)="onFileDragOver($event)"
+>
   <button
     class="h-[52px] shrink-0 rounded-lg rounded-r-none border-r-0"
     color="primary"
@@ -16,19 +20,27 @@
     (click)="fileUpload.click()"
   >
     @if (uploadProgress) {
-      <mat-spinner mode="indeterminate" [diameter]="18" [strokeWidth]="0.5"></mat-spinner>
+      <mat-spinner
+        mode="indeterminate"
+        [diameter]="18"
+        [strokeWidth]="0.5"
+      ></mat-spinner>
     }
     @if (!uploadProgress) {
       <span>Choose file</span>
     }
   </button>
-  <div class="f-inner-border flex grow items-center rounded-lg rounded-l-none bg-white">
+  <div
+    class="f-inner-border flex grow items-center rounded-lg rounded-l-none bg-white"
+  >
     <div class="flex w-full flex-col">
       <div class="ml-2.5 flex h-[48px] items-center">
         @if (file?.name) {
           <mat-icon class="mr-1">upload_file</mat-icon>
         }
-        <span class="mt-[4px] max-w-xs grow truncate"> {{ file?.name || message }} </span>
+        <span class="mt-[4px] max-w-xs grow truncate">
+          {{ file?.name || message }}
+        </span>
         {{ uploadProgress }}
         <button
           class="ml-auto"
@@ -37,7 +49,9 @@
           (click)="uploadProgress ? cancelUpload() : upload()"
         >
           @if (!uploadProgress) {
-            <mat-icon [ngClass]="{'animate-bounce': file?.name}">upload</mat-icon>
+            <mat-icon [ngClass]="{'animate-bounce': file?.name}"
+              >upload</mat-icon
+            >
           }
           @if (uploadProgress) {
             <mat-icon>cancel</mat-icon>
@@ -45,7 +59,8 @@
         </button>
       </div>
       @if (uploadProgress) {
-        <mat-progress-bar mode="determinate" [value]="uploadProgress"> </mat-progress-bar>
+        <mat-progress-bar mode="determinate" [value]="uploadProgress">
+        </mat-progress-bar>
       }
       @if (!uploadProgress) {
         <span class="h-[4px]"></span>

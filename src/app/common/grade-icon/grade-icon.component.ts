@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {GradeService} from '../services/grade.service';
 
 @Component({
@@ -29,7 +35,9 @@ export class GradeIconComponent implements OnInit, OnChanges {
 
   private updateGrade(): void {
     const grade: number =
-      typeof this.grade === 'string' ? this.gradeService.stringToGrade(this.grade) : this.grade;
+      typeof this.grade === 'string'
+        ? this.gradeService.stringToGrade(this.grade)
+        : this.grade;
     this.gradeText = this.gradeService.grades[grade] || 'Grade';
     this.gradeLetter = this.gradeService.gradeAcronyms[grade] || 'G';
   }

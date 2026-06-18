@@ -1,7 +1,15 @@
 import {inject} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivateFn, Router, UrlTree} from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  Router,
+  UrlTree,
+} from '@angular/router';
 import {Observable, filter, map, of, take} from 'rxjs';
-import {AuthenticationService, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  AuthenticationService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 
 export const roleWhitelistGuard: CanActivateFn = (
@@ -34,7 +42,9 @@ function roleForRoute(
   userService: UserService,
   globalState: GlobalStateService,
 ): string | undefined {
-  const unitId = Number(route.paramMap.get('unitId') ?? route.parent?.paramMap.get('unitId'));
+  const unitId = Number(
+    route.paramMap.get('unitId') ?? route.parent?.paramMap.get('unitId'),
+  );
 
   if (!Number.isNaN(unitId) && unitId > 0) {
     const unitRole = globalState.loadedUnitRoles.currentValues.find(
@@ -45,7 +55,10 @@ function roleForRoute(
       return unitRole.role;
     }
 
-    if (userService.currentUser.role === 'Admin' || userService.currentUser.role === 'Auditor') {
+    if (
+      userService.currentUser.role === 'Admin' ||
+      userService.currentUser.role === 'Auditor'
+    ) {
       return userService.currentUser.role;
     }
 

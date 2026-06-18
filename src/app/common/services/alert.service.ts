@@ -1,5 +1,9 @@
 import {Component, Inject, Injectable, inject} from '@angular/core';
-import {MAT_SNACK_BAR_DATA, MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
+import {
+  MAT_SNACK_BAR_DATA,
+  MatSnackBar,
+  MatSnackBarRef,
+} from '@angular/material/snack-bar';
 import {ConfettiService} from './confetti.service';
 
 interface AlertData {
@@ -16,7 +20,11 @@ export class AlertService {
     private confetti: ConfettiService,
   ) {}
 
-  private _openSnackBar(message: string, icon: string, duration: number = 3000): void {
+  private _openSnackBar(
+    message: string,
+    icon: string,
+    duration: number = 3000,
+  ): void {
     this.snackBar.openFromComponent(AlertComponent, {
       duration: duration,
       horizontalPosition: 'end',

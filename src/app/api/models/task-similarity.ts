@@ -64,7 +64,10 @@ export class TaskSimilarity extends Entity {
    * Return an ovserverable that will fetch the similarity report url for this task similarity.
    */
   public fetchSimilarityReportUrl(): Observable<string> {
-    return AppInjector.get(TaskSimilarityService).getSimilarityReportUrl(this.task.id, this.id);
+    return AppInjector.get(TaskSimilarityService).getSimilarityReportUrl(
+      this.task.id,
+      this.id,
+    );
   }
 
   public get friendlyTypeName(): string {

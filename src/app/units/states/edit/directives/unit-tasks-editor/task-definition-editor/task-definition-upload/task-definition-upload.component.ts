@@ -1,6 +1,9 @@
 import {Component, Input, ViewChild} from '@angular/core';
 import {MatTable} from '@angular/material/table';
-import {TaskDefinition, UploadRequirement} from 'src/app/api/models/task-definition';
+import {
+  TaskDefinition,
+  UploadRequirement,
+} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
@@ -49,13 +52,16 @@ export class TaskDefinitionUploadComponent {
   public get missingOverseerSubmissionHistory(): boolean {
     return (
       this.taskDefinition.assessmentEnabled &&
-      !this.taskDefinition.uploadRequirements.some((requirement) => requirement.submissionHistory)
+      !this.taskDefinition.uploadRequirements.some(
+        (requirement) => requirement.submissionHistory,
+      )
     );
   }
 
   public removeUpReq(upreq: UploadRequirement) {
-    this.taskDefinition.uploadRequirements = this.taskDefinition.uploadRequirements.filter(
-      (anUpReq) => anUpReq.key != upreq.key,
-    );
+    this.taskDefinition.uploadRequirements =
+      this.taskDefinition.uploadRequirements.filter(
+        (anUpReq) => anUpReq.key != upreq.key,
+      );
   }
 }

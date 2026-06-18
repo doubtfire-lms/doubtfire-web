@@ -16,18 +16,18 @@ export class TutorNotesModalService {
   constructor(public dialog: MatDialog) {}
 
   public show(task?: Task, unitRole?: UnitRole) {
-    const _dialogRef = this.dialog.open<TutorNotesModalComponent, TutorNotesModalData>(
+    const _dialogRef = this.dialog.open<
       TutorNotesModalComponent,
-      {
-        data: {
-          task,
-          unitRole,
-        },
-        width: '100%',
-        height: '90vh',
-        maxWidth: '1200px',
-        panelClass: 'overflow-y-auto',
+      TutorNotesModalData
+    >(TutorNotesModalComponent, {
+      data: {
+        task,
+        unitRole,
       },
-    );
+      width: '100%',
+      height: '90vh',
+      maxWidth: '1200px',
+      panelClass: 'overflow-y-auto',
+    });
   }
 }

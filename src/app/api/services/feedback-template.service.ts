@@ -6,7 +6,8 @@ import {FeedbackTemplate} from '../models/feedback-template';
 
 @Injectable()
 export class FeedbackTemplateService extends CachedEntityService<FeedbackTemplate> {
-  protected readonly endpointFormat = ':contextType:/:contextId:/feedback_chips';
+  protected readonly endpointFormat =
+    ':contextType:/:contextId:/feedback_chips';
   public static addEndpoint = 'feedback_chips';
   public static updateEndpoint = 'feedback_chips/:id:';
   public static globalEndpoint = 'global/feedback_chips';

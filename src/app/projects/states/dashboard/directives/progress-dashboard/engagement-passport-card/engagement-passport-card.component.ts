@@ -79,9 +79,9 @@ export class EngagementPassportCardComponent implements OnChanges {
     },
   };
 
-  readonly legend: EngagementLegendItem[] = Object.entries(this.presentations).map(
-    ([type, presentation]) => ({type, ...presentation}),
-  );
+  readonly legend: EngagementLegendItem[] = Object.entries(
+    this.presentations,
+  ).map(([type, presentation]) => ({type, ...presentation}));
 
   constructor(
     private engagementService: EngagementService,
@@ -97,7 +97,9 @@ export class EngagementPassportCardComponent implements OnChanges {
     const currentUserId = this.userService.currentUser?.id;
     return (
       currentUserId !== undefined &&
-      this.project?.unit?.staff.some((unitRole) => unitRole.user.id === currentUserId)
+      this.project?.unit?.staff.some(
+        (unitRole) => unitRole.user.id === currentUserId,
+      )
     );
   }
 
@@ -139,7 +141,9 @@ export class EngagementPassportCardComponent implements OnChanges {
 
     return Math.max(
       58,
-      columnCount * stampWidth + (columnCount - 1) * columnGap + horizontalPadding,
+      columnCount * stampWidth +
+        (columnCount - 1) * columnGap +
+        horizontalPadding,
     );
   }
 
@@ -152,7 +156,8 @@ export class EngagementPassportCardComponent implements OnChanges {
     });
 
     dialogRef.afterClosed().subscribe((engagement?: Engagement) => {
-      if (engagement) this.buildWeeks(this.project.engagementCache.currentValues);
+      if (engagement)
+        this.buildWeeks(this.project.engagementCache.currentValues);
     });
   }
 
@@ -174,10 +179,12 @@ export class EngagementPassportCardComponent implements OnChanges {
 
     for (const engagement of engagements) {
       const weekNumber = this.project.unit.weekNumber(engagement.occurredAt);
-      if (weekNumber === null || weekNumber < 1 || weekNumber > totalWeeks) continue;
+      if (weekNumber === null || weekNumber < 1 || weekNumber > totalWeeks)
+        continue;
 
       const type = this.normalizeEngagementType(engagement.engagementType);
-      const presentation = this.presentations[type] ?? this.fallbackPresentation;
+      const presentation =
+        this.presentations[type] ?? this.fallbackPresentation;
       this.weeks[weekNumber - 1].stamps.push({
         engagement,
         type,

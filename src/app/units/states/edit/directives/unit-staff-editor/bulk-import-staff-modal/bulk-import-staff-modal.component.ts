@@ -9,7 +9,12 @@ import {MatDialogRef} from '@angular/material/dialog';
 export class BulkImportStaffModalComponent {
   public emailList = '';
 
-  constructor(public dialogRef: MatDialogRef<BulkImportStaffModalComponent, string | undefined>) {}
+  constructor(
+    public dialogRef: MatDialogRef<
+      BulkImportStaffModalComponent,
+      string | undefined
+    >,
+  ) {}
 
   public cancel(): void {
     this.dialogRef.close(undefined);

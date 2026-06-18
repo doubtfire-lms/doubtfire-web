@@ -55,9 +55,12 @@ export class Project extends Entity {
 
   public burndownChartData: {key: string; values: number[]}[];
   public readonly taskCache: EntityCache<Task> = new EntityCache<Task>();
-  public readonly staffNoteCache: EntityCache<StaffNote> = new EntityCache<StaffNote>();
-  public readonly engagementCache: EntityCache<Engagement> = new EntityCache<Engagement>();
-  public readonly tutorialEnrolmentsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
+  public readonly staffNoteCache: EntityCache<StaffNote> =
+    new EntityCache<StaffNote>();
+  public readonly engagementCache: EntityCache<Engagement> =
+    new EntityCache<Engagement>();
+  public readonly tutorialEnrolmentsCache: EntityCache<Tutorial> =
+    new EntityCache<Tutorial>();
   public readonly groupCache: EntityCache<Group> = new EntityCache<Group>();
   public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> =
     new EntityCache<TaskOutcomeAlignment>();
@@ -99,7 +102,11 @@ export class Project extends Entity {
 
   // Search through the student's groups for a match
   public matchesGroup(matchText: string): boolean {
-    return this.groups.find((grp) => grp.name.toLowerCase().indexOf(matchText) >= 0) !== undefined;
+    return (
+      this.groups.find(
+        (grp) => grp.name.toLowerCase().indexOf(matchText) >= 0,
+      ) !== undefined
+    );
   }
 
   public groupForGroupSet(gs: GroupSet) {
@@ -155,7 +162,9 @@ export class Project extends Entity {
   }
 
   public tutorialForStream(stream: TutorialStream): Tutorial {
-    return this.tutorials.find((tute) => tute.tutorialStream === stream || !tute.tutorialStream);
+    return this.tutorials.find(
+      (tute) => tute.tutorialStream === stream || !tute.tutorialStream,
+    );
   }
 
   public get taskOutcomeAlignments(): readonly TaskOutcomeAlignment[] {
@@ -207,7 +216,9 @@ export class Project extends Entity {
       .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
       .sort((a, b) => a.definition.seq - b.definition.seq);
 
-    const overdueTasks: Task[] = sortedTasks.filter((task) => task.daysUntilDueDate() <= 7);
+    const overdueTasks: Task[] = sortedTasks.filter(
+      (task) => task.daysUntilDueDate() <= 7,
+    );
 
     // Step 2: select tasks not complete that are overdue. Pass tasks are done first.
     Grade.PASS_RANGE.forEach((grade) => {
@@ -286,7 +297,11 @@ export class Project extends Entity {
     return httpClient.delete<void>(this.portfolioUrl(false));
   }
 
-  public deleteFileFromPortfolio(file: {idx: number; kind: string; name: string}) {
+  public deleteFileFromPortfolio(file: {
+    idx: number;
+    kind: string;
+    name: string;
+  }) {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient
       .delete<void>(
@@ -301,17 +316,22 @@ export class Project extends Entity {
       )
       .pipe(
         tap(() => {
-          this.portfolioFiles = this.portfolioFiles.filter((value) => value != file);
+          this.portfolioFiles = this.portfolioFiles.filter(
+            (value) => value != file,
+          );
         }),
       );
   }
 
   public numberTasks(status: string) {
-    return this.taskCache.currentValues.filter((task) => task.status === status).length;
+    return this.taskCache.currentValues.filter((task) => task.status === status)
+      .length;
   }
 
   public findTaskForDefinition(id: number): Task {
-    return this.taskCache.currentValues.find((task) => task.definition.id === id);
+    return this.taskCache.currentValues.find(
+      (task) => task.definition.id === id,
+    );
   }
 
   public switchToCampus(newCampus: Campus): Observable<Project> {
@@ -350,8 +370,9 @@ export class Project extends Entity {
       const groupSet = task.definition.groupSet;
 
       return (
-        this.groups.find((group) => group.groupSet.id === task.definition.groupSet.id) ||
-        groupSet.groups.find((group) => group.projects.includes(this))
+        this.groups.find(
+          (group) => group.groupSet.id === task.definition.groupSet.id,
+        ) || groupSet.groups.find((group) => group.projects.includes(this))
       );
     }
   }
@@ -381,7 +402,11 @@ export class Project extends Entity {
   public switchToTutorial(tutorial: Tutorial) {
     // newId = if tutorial? then (if _.isString(tutorial) || _.isNumber(tutorial) then +tutorial else tutorial?.id) else -1
     const tutorialService: TutorialService = AppInjector.get(TutorialService);
-    tutorialService.switchTutorial(this, tutorial, !this.isEnrolledIn(tutorial));
+    tutorialService.switchTutorial(
+      this,
+      tutorial,
+      !this.isEnrolledIn(tutorial),
+    );
   }
 
   public get progressStats() {
@@ -412,7 +437,8 @@ export class Project extends Entity {
 
     // Get the weeks between start and end date as an array
     // dates = unit.start_date.to_date.step(unit.end_date.to_date + 1.week, step=7).to_a
-    const endDateValue = this.unit.endDate.getTime() + MappingFunctions.weeksMs(3);
+    const endDateValue =
+      this.unit.endDate.getTime() + MappingFunctions.weeksMs(3);
     const dates = MappingFunctions.step(
       this.unit.startDate.getTime(),
       endDateValue,
@@ -436,9 +462,13 @@ export class Project extends Entity {
     const tasks = this.tasks;
 
     const readyOrCompleteTasks = tasks.filter((task) =>
-      ['ready_for_feedback', 'discuss', 'demonstrate', 'complete', 'assess_in_portfolio'].includes(
-        task.status,
-      ),
+      [
+        'ready_for_feedback',
+        'discuss',
+        'demonstrate',
+        'complete',
+        'assess_in_portfolio',
+      ].includes(task.status),
     );
     // let lastTargetDate: Date;
 
@@ -447,9 +477,13 @@ export class Project extends Entity {
     // Get the tasks currently marked as done (or ready to mark)
     const doneTasks = tasks.filter(
       (t) =>
-        !['working_on_it', 'not_started', 'fix_and_resubmit', 'redo', 'need_help'].includes(
-          t.status,
-        ),
+        ![
+          'working_on_it',
+          'not_started',
+          'fix_and_resubmit',
+          'redo',
+          'need_help',
+        ].includes(t.status),
     );
 
     // last done task date)
@@ -463,12 +497,17 @@ export class Project extends Entity {
 
     // today is used to determine when to stop adding done tasks
     const today =
-      new Date().getTime() > this.unit.endDate.getTime() ? this.unit.endDate : new Date();
+      new Date().getTime() > this.unit.endDate.getTime()
+        ? this.unit.endDate
+        : new Date();
 
     // use weekly completion rate to determine projected progress
     let completionRate: number = 0;
     if (readyOrCompleteTasks.length > 0) {
-      const weeksElapsed = MappingFunctions.weeksBetween(this.unit.startDate, today);
+      const weeksElapsed = MappingFunctions.weeksBetween(
+        this.unit.startDate,
+        today,
+      );
       if (weeksElapsed > 0) {
         const completedTasksWeight = readyOrCompleteTasks
           .map((t) => t.definition.weighting)
@@ -501,7 +540,9 @@ export class Project extends Entity {
         date.getTime(),
         (total -
           doneTasks
-            .filter((task) => task.submissionDate && task.submissionDate <= date)
+            .filter(
+              (task) => task.submissionDate && task.submissionDate <= date,
+            )
             .map((task) => task.definition.weighting)
             .reduce((prev, current) => prev + current, 0)) /
           total,
@@ -552,7 +593,10 @@ export class Project extends Entity {
   public applySpecCon(days: number): Observable<Project> {
     const projectService: ProjectService = AppInjector.get(ProjectService);
     return projectService
-      .update(this, {body: {spec_con_days: days}, endpointFormat: 'projects/:id:/spec_con'})
+      .update(this, {
+        body: {spec_con_days: days},
+        endpointFormat: 'projects/:id:/spec_con',
+      })
       .pipe(
         tap((project: Project) => {
           project.specConDays = days;

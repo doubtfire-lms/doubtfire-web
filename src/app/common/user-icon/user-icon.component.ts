@@ -14,7 +14,10 @@ interface D3Selection {
   append(name: string): D3Selection;
   attr(
     name: string,
-    value: string | number | ((datum: IconLine, index: number) => string | number),
+    value:
+      | string
+      | number
+      | ((datum: IconLine, index: number) => string | number),
   ): D3Selection;
   call(
     callback: (selection: D3Selection, size: number, radius: number) => void,
@@ -72,7 +75,9 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
 
   get backgroundUrl(): string {
     const hash =
-      this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
+      this.email != null
+        ? Md5.hashStr(this.email.trim().toLowerCase())
+        : Md5.hashStr('');
     return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size * 4}`;
   }
 
@@ -82,7 +87,9 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
 
   get initials(): string {
     const result = this.user?.name != null ? this.user.name.split(' ') : '  ';
-    return result.length > 1 ? `${result[0][0]}${result[1][0]}`.toUpperCase() : '  ';
+    return result.length > 1
+      ? `${result[0][0]}${result[1][0]}`.toUpperCase()
+      : '  ';
   }
 
   get words(): string[] {
@@ -185,7 +192,11 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
       .attr('height', this.size)
       .attr('text-anchor', 'middle');
 
-    function appendCircle(selection: D3Selection, size: number, radius: number) {
+    function appendCircle(
+      selection: D3Selection,
+      size: number,
+      radius: number,
+    ) {
       selection
         .append('circle')
         .attr('cx', size / 2)

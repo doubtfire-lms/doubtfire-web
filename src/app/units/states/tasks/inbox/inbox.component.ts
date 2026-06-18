@@ -1,10 +1,25 @@
 import {HotkeysHelpComponent, HotkeysService} from '@ngneat/hotkeys';
 import {MediaObserver} from 'ng-flex-layout';
 import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
-import {Observable, Subject, auditTime, merge, of, tap, withLatestFrom} from 'rxjs';
+import {
+  Observable,
+  Subject,
+  auditTime,
+  merge,
+  of,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
 import {Tutorial} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -43,7 +58,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   subs$: Observable<unknown>;
 
   private inboxStartSize$: Subject<number> = new Subject();
-  private dragMove$: Subject<{event: CdkDragMove; div: HTMLDivElement}> = new Subject();
+  private dragMove$: Subject<{event: CdkDragMove; div: HTMLDivElement}> =
+    new Subject();
   private dragMoveAudited$;
 
   // protected filters;
@@ -81,7 +97,9 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const registeredHotkeys = this.hotkeys.getHotkeys().map((hotkey) => hotkey.keys);
+    const registeredHotkeys = this.hotkeys
+      .getHotkeys()
+      .map((hotkey) => hotkey.keys);
 
     if (!registeredHotkeys.includes('shift.?')) {
       this.hotkeys.registerHelpModal(() => {
@@ -99,7 +117,9 @@ export class InboxComponent implements OnInit, OnDestroy {
           keys: 'control.shift.f',
           description: 'Mark selected task as fix',
         })
-        .subscribe(() => this.selectedTask.selectedTask?.updateTaskStatus('fix_and_resubmit'));
+        .subscribe(() =>
+          this.selectedTask.selectedTask?.updateTaskStatus('fix_and_resubmit'),
+        );
     }
 
     if (!registeredHotkeys.includes('control.shift.c')) {
@@ -128,7 +148,9 @@ export class InboxComponent implements OnInit, OnDestroy {
           keys: 'control.shift.d',
           description: 'Mark selected task as discuss',
         })
-        .subscribe(() => this.selectedTask.selectedTask?.updateTaskStatus('discuss'));
+        .subscribe(() =>
+          this.selectedTask.selectedTask?.updateTaskStatus('discuss'),
+        );
     }
 
     this.dragMoveAudited$ = this.dragMove$.pipe(
@@ -191,7 +213,11 @@ export class InboxComponent implements OnInit, OnDestroy {
     //   tutor: true,
     //   taskAbbr: '',
     // });
-    this.router.navigate(['/projects', this.taskData.selectedTask.project.id, 'dashboard']);
+    this.router.navigate([
+      '/projects',
+      this.taskData.selectedTask.project.id,
+      'dashboard',
+    ]);
   }
 
   openPdfInNewTab(): void {

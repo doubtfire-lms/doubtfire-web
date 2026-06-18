@@ -14,7 +14,8 @@ import {MappingFunctions} from './mapping-fn';
 export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
   protected readonly endpointFormat = 'teaching_periods/:id:';
 
-  public static readonly rolloverEndpointFormat = 'teaching_periods/:id:/rollover';
+  public static readonly rolloverEndpointFormat =
+    'teaching_periods/:id:/rollover';
 
   constructor(
     httpClient: HttpClient,
@@ -47,7 +48,8 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
         toEntityOp: (data, key, entity) => {
           data['breaks']?.forEach((breakJson) => {
             const teachingPeriod = entity as TeachingPeriod;
-            const breakEntity = this.teachingPeriodBreakService.buildInstance(breakJson);
+            const breakEntity =
+              this.teachingPeriodBreakService.buildInstance(breakJson);
             teachingPeriod.breaksCache.add(breakEntity);
           });
         },
@@ -57,7 +59,11 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
         toEntityOp: (data, key, entity) => {
           data[key]?.forEach((unitJson) => {
             const unitService: UnitService = AppInjector.get(UnitService);
-            const unit = unitService.cache.getOrCreate(unitJson['id'], unitService, unitJson);
+            const unit = unitService.cache.getOrCreate(
+              unitJson['id'],
+              unitService,
+              unitJson,
+            );
             entity.unitsCache.add(unit);
           });
         },

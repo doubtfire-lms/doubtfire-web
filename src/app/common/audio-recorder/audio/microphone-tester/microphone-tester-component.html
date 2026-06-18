@@ -13,7 +13,12 @@
     <div fxLayout="row" fxLayoutAlign="space-between start">
       <div fxLayout="column" fxLayoutAlign="start start">
         <h1>Step 1. Record some audio!</h1>
-        <button class="btn-circle-xl" id="btnRecord" type="button" (click)="recordingToggle()">
+        <button
+          class="btn-circle-xl"
+          id="btnRecord"
+          type="button"
+          (click)="recordingToggle()"
+        >
           <p [hidden]="isRecording">record</p>
           <mat-icon [hidden]="!isRecording">stop</mat-icon>
         </button>
@@ -25,8 +30,15 @@
       </div>
     </div>
 
-    <div fxLayout="row" fxLayoutAlign="space-between start" style="margin-bottom: 48px">
-      <h1>Step 2. Stop the recording, and playback the audio to make sure it's audible:</h1>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="space-between start"
+      style="margin-bottom: 48px"
+    >
+      <h1>
+        Step 2. Stop the recording, and playback the audio to make sure it's
+        audible:
+      </h1>
       <button
         color="primary"
         id="btnPlay"
@@ -39,7 +51,11 @@
       </button>
     </div>
 
-    <div fxLayout="row" fxLayoutAlign="space-between start" style="margin-bottom: 24px">
+    <div
+      fxLayout="row"
+      fxLayoutAlign="space-between start"
+      style="margin-bottom: 24px"
+    >
       <h1>Step 3. Check the "Ready to go" cehckbox below if you're all set!</h1>
     </div>
   </div>

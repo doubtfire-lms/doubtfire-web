@@ -23,7 +23,8 @@ export class TaskDescriptionCardComponent {
 
   constructor(
     private GradeService: GradeService,
-    @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
+    @Inject(FileDownloaderService)
+    private fileDownloader: FileDownloaderService,
   ) {
     this.grades = {
       names: GradeService.grades,

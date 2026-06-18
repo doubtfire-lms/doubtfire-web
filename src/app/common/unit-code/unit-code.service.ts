@@ -11,7 +11,9 @@ export class UnitCodeService {
 
   constructor() {
     // we use shareReplay to share the same interval observable among multiple subscribers
-    this.interval$ = interval(3000).pipe(shareReplay({bufferSize: 1, refCount: true}));
+    this.interval$ = interval(3000).pipe(
+      shareReplay({bufferSize: 1, refCount: true}),
+    );
   }
 
   getInterval(): Observable<number> {

@@ -2,8 +2,16 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, Subscription, first, of} from 'rxjs';
-import {Unit, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {
+  Unit,
+  UnitRole,
+  User,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
+import {
+  GlobalStateService,
+  ViewType,
+} from 'src/app/projects/states/index/global-state.service';
 
 type UnitAdminTabKey =
   | 'details'
@@ -72,7 +80,9 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
     }
 
     this.subscriptions.push(
-      this.route.paramMap.subscribe((params) => this.updateCurrentTabFromState(params.get('tab'))),
+      this.route.paramMap.subscribe((params) =>
+        this.updateCurrentTabFromState(params.get('tab')),
+      ),
     );
   }
 
@@ -81,7 +91,9 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   }
 
   public get currentIndex(): number {
-    const index = this.tabs.findIndex((tab) => tab.routeSegment === this.currentTab.routeSegment);
+    const index = this.tabs.findIndex(
+      (tab) => tab.routeSegment === this.currentTab.routeSegment,
+    );
     return index >= 0 ? index : 0;
   }
 
@@ -110,7 +122,8 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   }
 
   private findUnitRole(unitId: number): UnitRole | null {
-    const currentView = this.globalStateService.currentViewAndEntitySubject$.value;
+    const currentView =
+      this.globalStateService.currentViewAndEntitySubject$.value;
 
     if (currentView?.viewType === ViewType.UNIT) {
       const currentUnitRole = currentView.entity as UnitRole;

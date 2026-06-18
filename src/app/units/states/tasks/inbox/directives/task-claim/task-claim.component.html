@@ -12,7 +12,9 @@
     color="primary"
     mat-raised-button
     [disabled]="
-      !selectedTask || selectedTask.loadingSubmissionDetails || selectedTask.claimedByUnitRoleId
+      !selectedTask ||
+      selectedTask.loadingSubmissionDetails ||
+      selectedTask.claimedByUnitRoleId
     "
     (click)="claimTask(selectedTask)"
   >

@@ -105,14 +105,18 @@ export class UnitTutorialsListComponent
   private filterTutorials(): void {
     this.tutorials = this.unit.tutorials.filter(
       (tutorial) =>
-        tutorial.tutorialStream === this.stream || (!tutorial.tutorialStream && !this.stream),
+        tutorial.tutorialStream === this.stream ||
+        (!tutorial.tutorialStream && !this.stream),
     );
     this.dataSource.data = this.tutorials;
   }
 
   public saveStream(): void {
     this.tutorialStreamService
-      .update({abbreviation: this.origStreamAbbr, unit_id: this.unit.id}, {entity: this.stream})
+      .update(
+        {abbreviation: this.origStreamAbbr, unit_id: this.unit.id},
+        {entity: this.stream},
+      )
       .subscribe({
         next: (stream: TutorialStream) => {
           this.stream = stream;
@@ -122,7 +126,10 @@ export class UnitTutorialsListComponent
           this.alerts.success('Stream updated successfully', 2000);
         },
         error: (error: HttpErrorResponse) => {
-          this.alerts.error('Something went wrong - ' + JSON.stringify(error.error), 6000);
+          this.alerts.error(
+            'Something went wrong - ' + JSON.stringify(error.error),
+            6000,
+          );
         },
       });
   }
@@ -157,11 +164,13 @@ export class UnitTutorialsListComponent
 
   // Handle the removal of a tutorial
   public deleteTutorial(tutorial: Tutorial): void {
-    this.tutorialService.delete(tutorial, this.optionsOnRequest('delete')).subscribe((_result) => {
-      this.cancelEdit();
-      this.filterTutorials();
-      this.renderTable();
-    });
+    this.tutorialService
+      .delete(tutorial, this.optionsOnRequest('delete'))
+      .subscribe((_result) => {
+        this.cancelEdit();
+        this.filterTutorials();
+        this.renderTable();
+      });
   }
 
   private renderTable() {
@@ -175,7 +184,10 @@ export class UnitTutorialsListComponent
     super.submit(this.tutorialService, this.alerts, this.onSuccess.bind(this));
   }
 
-  protected formDataToNewObject(endPointKey: string, _associations?: object): object {
+  protected formDataToNewObject(
+    endPointKey: string,
+    _associations?: object,
+  ): object {
     this.selected = new Tutorial(this.unit);
     this.copyChangesFromForm();
     this.selected.tutorialStream = this.stream;
@@ -188,7 +200,10 @@ export class UnitTutorialsListComponent
   // tutorial. The function is bound to the compareFn attribute on the related
   // mat-selects.
   // See: https://angular.io/api/forms/SelectControlValueAccessor
-  compareSelection(aEntity: User | Campus | {user_id: number}, bEntity: User | Campus) {
+  compareSelection(
+    aEntity: User | Campus | {user_id: number},
+    bEntity: User | Campus,
+  ) {
     if (!aEntity || !bEntity) {
       return;
     }
@@ -210,7 +225,10 @@ export class UnitTutorialsListComponent
         this.unit.deleteStream(stream).subscribe({
           next: (response: boolean) => {
             if (response) {
-              this.alerts.success(`Deleted stream. ${stream.abbreviation}`, 8000);
+              this.alerts.success(
+                `Deleted stream. ${stream.abbreviation}`,
+                8000,
+              );
             } else {
               this.alerts.error(`Failed to delete stream.`, 8000);
             }

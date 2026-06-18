@@ -1,6 +1,9 @@
 <div class="flex flex-col gap-4">
   <div>
-    <p>Current unit week: {{ currentUnitWeek <= 0 ? 'Not started' : currentUnitWeek }}</p>
+    <p>
+      Current unit week:
+      {{ currentUnitWeek <= 0 ? 'Not started' : currentUnitWeek }}
+    </p>
   </div>
   <div class="flex flex-wrap items-center gap-3">
     <button color="primary" mat-flat-button (click)="addSet()">
@@ -22,7 +25,11 @@
       </div> -->
 
       <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
-        <mat-tree-node *matTreeNodeDef="let node" class="p-0" matTreeNodePadding>
+        <mat-tree-node
+          *matTreeNodeDef="let node"
+          class="p-0"
+          matTreeNodePadding
+        >
           <div
             class="min-h-[64px] w-full border-b border-gray-200 px-4"
             [ngClass]="{'bg-gray-100': isSelectedRuleNode(node)}"
@@ -34,11 +41,19 @@
                 (click)="selectRuleNode(node.set!, node.rule!)"
               >
                 <div class="min-w-0 text-left">
-                  <div class="truncate font-medium">Rule: {{ node.rule?.name }}</div>
-                  <div class="text-black/30">
-                    {{ node.rule?.operator === 'and' ? 'All conditions' : 'Any condition' }}
+                  <div class="truncate font-medium">
+                    Rule: {{ node.rule?.name }}
                   </div>
-                  <div class="text-black/70">{{ studentsTabLabel(node.rule!) }}</div>
+                  <div class="text-black/30">
+                    {{
+                      node.rule?.operator === 'and'
+                        ? 'All conditions'
+                        : 'Any condition'
+                    }}
+                  </div>
+                  <div class="text-black/70">
+                    {{ studentsTabLabel(node.rule!) }}
+                  </div>
                 </div>
               </button>
               <button
@@ -60,7 +75,11 @@
             >
               <button mat-icon-button (click)="toggleSetNode(node, $event)">
                 <mat-icon>
-                  {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+                  {{
+                    treeControl.isExpanded(node)
+                      ? 'expand_more'
+                      : 'chevron_right'
+                  }}
                 </mat-icon>
               </button>
 
@@ -69,7 +88,9 @@
                 mat-button
                 (click)="selectSetNode(node.set!)"
               >
-                <span class="truncate text-left">Set: {{ node.set?.name }}</span>
+                <span class="truncate text-left"
+                  >Set: {{ node.set?.name }}</span
+                >
               </button>
             </div>
 
@@ -104,7 +125,10 @@
           <div class="flex items-center justify-between px-[20px]">
             <div class="flex min-w-0 flex-1 items-center gap-2 py-5">
               @if (editingSetNameId === set.id) {
-                <mat-form-field appearance="outline" class="w-full max-w-[450px]">
+                <mat-form-field
+                  appearance="outline"
+                  class="w-full max-w-[450px]"
+                >
                   <mat-label>Set name</mat-label>
                   <input matInput [(ngModel)]="setNameDraft" />
                 </mat-form-field>
@@ -116,12 +140,20 @@
                 >
                   <mat-icon>save</mat-icon>
                 </button>
-                <button class="mb-[22px]" mat-icon-button (click)="cancelEditSetName()">
+                <button
+                  class="mb-[22px]"
+                  mat-icon-button
+                  (click)="cancelEditSetName()"
+                >
                   <mat-icon>close</mat-icon>
                 </button>
               } @else {
                 <h3 class="mt-[16px] truncate">{{ set.name }}</h3>
-                <button class="scale-75 opacity-50" mat-icon-button (click)="beginEditSetName(set)">
+                <button
+                  class="scale-75 opacity-50"
+                  mat-icon-button
+                  (click)="beginEditSetName(set)"
+                >
                   <mat-icon>edit</mat-icon>
                 </button>
               }
@@ -140,7 +172,9 @@
                 <mat-icon>schedule</mat-icon>
                 Add schedule
               </button>
-              <button mat-raised-button (click)="confirmExecuteSet(set)">Execute Set</button>
+              <button mat-raised-button (click)="confirmExecuteSet(set)">
+                Execute Set
+              </button>
               <button color="warn" mat-icon-button (click)="deleteSet(set)">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -152,10 +186,15 @@
             <f-communication-schedules [editor]="editorContext" [set]="set" />
 
             @if (selectedRule(); as rule) {
-              <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+              <div
+                class="flex items-center justify-between border-b border-gray-200 px-6 py-4"
+              >
                 <div class="flex w-full items-center gap-2">
                   @if (editingRuleNameId === rule.id) {
-                    <mat-form-field appearance="outline" class="w-full max-w-[450px]">
+                    <mat-form-field
+                      appearance="outline"
+                      class="w-full max-w-[450px]"
+                    >
                       <mat-label>Rule name</mat-label>
                       <input matInput [(ngModel)]="ruleNameDraft" />
                     </mat-form-field>
@@ -167,7 +206,11 @@
                     >
                       <mat-icon>save</mat-icon>
                     </button>
-                    <button class="mb-[22px]" mat-icon-button (click)="cancelEditRuleName()">
+                    <button
+                      class="mb-[22px]"
+                      mat-icon-button
+                      (click)="cancelEditRuleName()"
+                    >
                       <mat-icon>close</mat-icon>
                     </button>
                   } @else {
@@ -185,7 +228,9 @@
                 </div>
 
                 <div class="flex min-w-fit items-center gap-3">
-                  <button mat-raised-button (click)="confirmExecuteRule(rule)">Execute Rule</button>
+                  <button mat-raised-button (click)="confirmExecuteRule(rule)">
+                    Execute Rule
+                  </button>
                 </div>
               </div>
 
@@ -195,21 +240,34 @@
                 (selectedTabChange)="onRuleTabChange(rule, $event.index)"
               >
                 <mat-tab label="Conditions">
-                  <f-communication-conditions [editor]="editorContext" [rule]="rule" />
+                  <f-communication-conditions
+                    [editor]="editorContext"
+                    [rule]="rule"
+                  />
                 </mat-tab>
 
                 <mat-tab label="Actions">
-                  <f-communication-actions [editor]="editorContext" [rule]="rule" />
+                  <f-communication-actions
+                    [editor]="editorContext"
+                    [rule]="rule"
+                  />
                 </mat-tab>
 
                 <mat-tab label="Post Execution">
                   <div class="flex flex-col gap-4 p-6">
-                    <mat-checkbox class="mb-2" [(ngModel)]="rule.send_log_to_convenors">
+                    <mat-checkbox
+                      class="mb-2"
+                      [(ngModel)]="rule.send_log_to_convenors"
+                    >
                       Send action log to convenors after execution
                     </mat-checkbox>
 
                     <div class="flex justify-start">
-                      <button color="primary" mat-flat-button (click)="updateRule(rule)">
+                      <button
+                        color="primary"
+                        mat-flat-button
+                        (click)="updateRule(rule)"
+                      >
                         <mat-icon>save</mat-icon>
                         Save post execution settings
                       </button>
@@ -235,22 +293,34 @@
                       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                     } @else if (previewLoaded[rule.id]) {
                       <div class="font-medium">
-                        Selected for {{ rule.name }} ({{ studentsFor(rule).length }})
+                        Selected for {{ rule.name }} ({{
+                          studentsFor(rule).length
+                        }})
                       </div>
 
                       @if (studentsFor(rule).length === 0) {
-                        <div class="text-black/70">No students currently match this rule.</div>
+                        <div class="text-black/70">
+                          No students currently match this rule.
+                        </div>
                       } @else {
-                        <table class="w-full" mat-table [dataSource]="studentsFor(rule)">
+                        <table
+                          class="w-full"
+                          mat-table
+                          [dataSource]="studentsFor(rule)"
+                        >
                           <ng-container matColumnDef="preferred_name">
-                            <th *matHeaderCellDef mat-header-cell>Preferred Name</th>
+                            <th *matHeaderCellDef mat-header-cell>
+                              Preferred Name
+                            </th>
                             <td *matCellDef="let student" mat-cell>
                               {{ student.preferred_name || '-' }}
                             </td>
                           </ng-container>
 
                           <ng-container matColumnDef="first_name">
-                            <th *matHeaderCellDef mat-header-cell>First Name</th>
+                            <th *matHeaderCellDef mat-header-cell>
+                              First Name
+                            </th>
                             <td *matCellDef="let student" mat-cell>
                               {{ student.first_name || '-' }}
                             </td>
@@ -278,7 +348,9 @@
                           </ng-container>
 
                           <ng-container matColumnDef="student_id">
-                            <th *matHeaderCellDef mat-header-cell>Student ID</th>
+                            <th *matHeaderCellDef mat-header-cell>
+                              Student ID
+                            </th>
                             <td *matCellDef="let student" mat-cell>
                               {{ student.student_id || '-' }}
                             </td>
@@ -292,45 +364,65 @@
                           </ng-container>
 
                           <ng-container matColumnDef="target_grade">
-                            <th *matHeaderCellDef mat-header-cell>Target Grade</th>
+                            <th *matHeaderCellDef mat-header-cell>
+                              Target Grade
+                            </th>
                             <td *matCellDef="let student" mat-cell>
                               {{
-                                student.target_grade ? targetGradeName(student.target_grade) : '-'
+                                student.target_grade
+                                  ? targetGradeName(student.target_grade)
+                                  : '-'
                               }}
                             </td>
                           </ng-container>
 
                           <ng-container matColumnDef="spec_con_days">
-                            <th *matHeaderCellDef mat-header-cell>Spec Con Days</th>
+                            <th *matHeaderCellDef mat-header-cell>
+                              Spec Con Days
+                            </th>
                             <td *matCellDef="let student" mat-cell>
                               {{ student.spec_con_days ?? '-' }}
                             </td>
                           </ng-container>
 
                           <ng-container matColumnDef="last_sign_in_at">
-                            <th *matHeaderCellDef mat-header-cell>Last Sign In</th>
+                            <th *matHeaderCellDef mat-header-cell>
+                              Last Sign In
+                            </th>
                             <td *matCellDef="let student" mat-cell>
                               {{
-                                student.last_sign_in_at ? dateLabel(student.last_sign_in_at) : '-'
+                                student.last_sign_in_at
+                                  ? dateLabel(student.last_sign_in_at)
+                                  : '-'
                               }}
                             </td>
                           </ng-container>
 
-                          <tr *matHeaderRowDef="previewStudentColumns" mat-header-row></tr>
-                          <tr *matRowDef="let row; columns: previewStudentColumns" mat-row></tr>
+                          <tr
+                            *matHeaderRowDef="previewStudentColumns"
+                            mat-header-row
+                          ></tr>
+                          <tr
+                            *matRowDef="let row; columns: previewStudentColumns"
+                            mat-row
+                          ></tr>
                         </table>
                       }
                     } @else {
                       <div class="text-black/70">
-                        Preview data will load when you select a communication set.
+                        Preview data will load when you select a communication
+                        set.
                       </div>
                     }
                   </div>
                 </mat-tab>
               </mat-tab-group>
             } @else {
-              <div class="mt-5 flex h-full items-center justify-center text-black/60">
-                Select a communication rule to edit its conditions, actions, and preview.
+              <div
+                class="mt-5 flex h-full items-center justify-center text-black/60"
+              >
+                Select a communication rule to edit its conditions, actions, and
+                preview.
               </div>
             }
           </div>

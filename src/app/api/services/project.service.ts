@@ -1,4 +1,8 @@
-import {CachedEntityService, MappingProcess, RequestOptions} from 'ngx-entity-service';
+import {
+  CachedEntityService,
+  MappingProcess,
+  RequestOptions,
+} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
@@ -38,13 +42,19 @@ export class ProjectService extends CachedEntityService<Project> {
         keys: ['campus', 'campus_id'],
         toEntityOp: (data: object, key: string, entity: Project) => {
           if (data['campus_id']) {
-            return this.campusService.get(data['campus_id']).subscribe((campus) => {
-              entity.campus = campus;
-            });
+            return this.campusService
+              .get(data['campus_id'])
+              .subscribe((campus) => {
+                entity.campus = campus;
+              });
           }
         },
         toJsonFn: (entity: Project, _key: string) => {
-          return entity.campus ? entity.campus.id : entity.originalJson['camput_id'] ? -1 : null;
+          return entity.campus
+            ? entity.campus.id
+            : entity.originalJson['camput_id']
+              ? -1
+              : null;
         },
       },
       {
@@ -52,7 +62,11 @@ export class ProjectService extends CachedEntityService<Project> {
         toEntityFn: (data: object) => {
           const userData = data['student'];
 
-          return this.userService.cache.getOrCreate(userData.id, this.userService, userData);
+          return this.userService.cache.getOrCreate(
+            userData.id,
+            this.userService,
+            userData,
+          );
         },
       },
       {
@@ -126,7 +140,11 @@ export class ProjectService extends CachedEntityService<Project> {
         toEntityFn: (data: object, key: string, entity: Project) => {
           const unitService: UnitService = AppInjector.get(UnitService);
           const unitData = data['unit'];
-          const result = unitService.cache.getOrCreate(unitData.id, unitService, unitData);
+          const result = unitService.cache.getOrCreate(
+            unitData.id,
+            unitService,
+            unitData,
+          );
           result.studentCache.add(entity);
           return result;
         },
@@ -140,7 +158,11 @@ export class ProjectService extends CachedEntityService<Project> {
           const unitService: UnitService = AppInjector.get(UnitService);
           const unitId = process.data['unit_id'];
           // Load what we have... or a a stub for now...
-          process.entity.unit = unitService.cache.getOrCreate(unitId, unitService, {id: unitId});
+          process.entity.unit = unitService.cache.getOrCreate(
+            unitId,
+            unitService,
+            {id: unitId},
+          );
           return unitService.get(unitId).subscribe((unit) => {
             process.entity.unit = unit;
             unit.studentCache.add(process.entity);
@@ -154,7 +176,9 @@ export class ProjectService extends CachedEntityService<Project> {
           const unit: Unit = project.unit;
           data[key]?.forEach((tutorialEnrolment: {tutorial_id: number}) => {
             if (tutorialEnrolment.tutorial_id) {
-              const tutorial = unit.tutorialsCache.get(tutorialEnrolment.tutorial_id);
+              const tutorial = unit.tutorialsCache.get(
+                tutorialEnrolment.tutorial_id,
+              );
               project.tutorialEnrolmentsCache.add(tutorial);
             }
           });
@@ -183,9 +207,14 @@ export class ProjectService extends CachedEntityService<Project> {
         toEntityOp: (data: object, key: string, project: Project) => {
           // create tasks from json
           data['tasks']?.forEach((taskData) => {
-            project.taskCache.getOrCreate(taskData['id'], this.taskService, taskData, {
-              constructorParams: project,
-            });
+            project.taskCache.getOrCreate(
+              taskData['id'],
+              this.taskService,
+              taskData,
+              {
+                constructorParams: project,
+              },
+            );
           });
 
           project.unit.setupTasksForStudent(project);

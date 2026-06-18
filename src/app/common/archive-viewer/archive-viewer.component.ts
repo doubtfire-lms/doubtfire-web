@@ -54,9 +54,11 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Input() saveFileName = 'archive.zip';
 
   @Output() filesLoaded: EventEmitter<number> = new EventEmitter();
-  @Output() saveSuccess: EventEmitter<HttpResponse<unknown>> = new EventEmitter();
+  @Output() saveSuccess: EventEmitter<HttpResponse<unknown>> =
+    new EventEmitter();
   @Output() saveError: EventEmitter<unknown> = new EventEmitter();
-  @Output() selectedFileChanged: EventEmitter<ArchiveFileEntry | null> = new EventEmitter();
+  @Output() selectedFileChanged: EventEmitter<ArchiveFileEntry | null> =
+    new EventEmitter();
 
   public files: ArchiveFileEntry[] = [];
   public selectedTab = 0;
@@ -126,7 +128,12 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   }
 
   public get canSave(): boolean {
-    return !this.readOnly && !!this.saveEndpoint && this.hasDirtyFiles && !this.isSaving;
+    return (
+      !this.readOnly &&
+      !!this.saveEndpoint &&
+      this.hasDirtyFiles &&
+      !this.isSaving
+    );
   }
 
   public trackByPath(index: number, file: ArchiveFileEntry): string {
@@ -146,7 +153,9 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   }
 
   public treeNodeLabel(node: ArchiveFileTreeNode): string {
-    return node.fileIndex === null ? node.name : this.files[node.fileIndex]?.tabLabel || node.name;
+    return node.fileIndex === null
+      ? node.name
+      : this.files[node.fileIndex]?.tabLabel || node.name;
   }
 
   public selectTab(index: number): void {
@@ -161,7 +170,11 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       return 'plaintext';
     }
 
-    return selectedFile.language ?? getMonacoLanguageForPath(selectedFile.path) ?? 'plaintext';
+    return (
+      selectedFile.language ??
+      getMonacoLanguageForPath(selectedFile.path) ??
+      'plaintext'
+    );
   }
 
   public onEditorChange(value: string): void {
@@ -176,7 +189,8 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
     }
 
     selectedFile.textContent = value;
-    selectedFile.dirty = selectedFile.textContent !== selectedFile.originalTextContent;
+    selectedFile.dirty =
+      selectedFile.textContent !== selectedFile.originalTextContent;
   }
 
   public async downloadSelectedFile(): Promise<void> {
@@ -205,7 +219,11 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       const zip = new JSZip();
 
       for (const file of this.files) {
-        if (file.isLoaded && isArchiveCodeOrTextFile(file) && file.textContent !== undefined) {
+        if (
+          file.isLoaded &&
+          isArchiveCodeOrTextFile(file) &&
+          file.textContent !== undefined
+        ) {
           const encoded = new TextEncoder().encode(file.textContent);
           file.data = encoded;
           file.originalTextContent = file.textContent;
@@ -223,14 +241,20 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       }
 
       const archiveBlob = await zip.generateAsync({type: 'blob'});
-      const archiveUpload = new File([archiveBlob], this.saveFileName, {type: 'application/zip'});
+      const archiveUpload = new File([archiveBlob], this.saveFileName, {
+        type: 'application/zip',
+      });
       const formData = new FormData();
       formData.append(this.saveFieldName, archiveUpload);
 
       const request =
         this.saveMethod === 'PUT'
-          ? this.http.put<unknown>(this.saveEndpoint, formData, {observe: 'response'})
-          : this.http.post<unknown>(this.saveEndpoint, formData, {observe: 'response'});
+          ? this.http.put<unknown>(this.saveEndpoint, formData, {
+              observe: 'response',
+            })
+          : this.http.post<unknown>(this.saveEndpoint, formData, {
+              observe: 'response',
+            });
 
       const response = await firstValueFrom(request);
       for (const file of this.files) {
@@ -298,7 +322,8 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
         this.selectedFileChanged.emit(null);
       }
     } catch {
-      this.errorMessage = 'Unable to read archive. Please provide a valid zip file.';
+      this.errorMessage =
+        'Unable to read archive. Please provide a valid zip file.';
       this.filesLoaded.emit(0);
     } finally {
       if (requestedArchive === this.archiveFile) {
@@ -329,7 +354,10 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
 
     const getOrCreateNode = (
       siblings: ArchiveFileTreeNode[],
-      node: Pick<ArchiveFileTreeNode, 'name' | 'path' | 'isDirectory' | 'fileIndex'>,
+      node: Pick<
+        ArchiveFileTreeNode,
+        'name' | 'path' | 'isDirectory' | 'fileIndex'
+      >,
     ): ArchiveFileTreeNode => {
       const existing = siblings.find(
         (candidate) =>
@@ -358,7 +386,9 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
 
     for (let fileIndex = 0; fileIndex < this.files.length; fileIndex++) {
       const file = this.files[fileIndex];
-      const segments = file.path.split('/').filter((segment) => segment.length > 0);
+      const segments = file.path
+        .split('/')
+        .filter((segment) => segment.length > 0);
       if (segments.length === 0) {
         continue;
       }
@@ -426,7 +456,10 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
       }
     } catch {
       file.isLoading = false;
-      this.alerts.error(`Unable to open file '${file.path}' from archive`, 6000);
+      this.alerts.error(
+        `Unable to open file '${file.path}' from archive`,
+        6000,
+      );
     }
   }
 

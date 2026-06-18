@@ -57,15 +57,24 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
     private commentsModalRef: CommentsModalService,
     private alerts: AlertService,
   ) {
-    this.commentAddedSub = this.taskCommentService.commentAdded$.subscribe((_tc: TaskComment) => {
-      this.scrollDown();
-    });
+    this.commentAddedSub = this.taskCommentService.commentAdded$.subscribe(
+      (_tc: TaskComment) => {
+        this.scrollDown();
+      },
+    );
 
-    this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
-      if (task && task.project && this.project && task.project.id === this.project.id) {
-        this.fetchComments(task, false);
-      }
-    });
+    this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe(
+      (task) => {
+        if (
+          task &&
+          task.project &&
+          this.project &&
+          task.project.id === this.project.id
+        ) {
+          this.fetchComments(task, false);
+        }
+      },
+    );
   }
 
   ngOnDestroy(): void {
@@ -83,7 +92,11 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
     }
   }
 
-  fetchComments(task: Task, useCache: boolean = true, fetchAfterCache: boolean = false) {
+  fetchComments(
+    task: Task,
+    useCache: boolean = true,
+    fetchAfterCache: boolean = false,
+  ) {
     if (!task.comments.length) {
       // If the cache is empty we know the query will attempt to fetch, so we can avoid fetching a second time
       useCache = false;
@@ -139,7 +152,8 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
         .slice()
         .reverse()
         .find(
-          (comment: TaskComment) => comment.recipientReadTime != null && !comment.recipientIsMe,
+          (comment: TaskComment) =>
+            comment.recipientReadTime != null && !comment.recipientIsMe,
         );
 
       setTimeout(() => {
@@ -160,9 +174,13 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
 
     if (this.project.unit.currentUserIsStaff) {
       this.feedbackTemplateService
-        .query({contextType: 'task_definitions', contextId: task.definition.id}, {})
+        .query(
+          {contextType: 'task_definitions', contextId: task.definition.id},
+          {},
+        )
         .subscribe({
-          error: () => this.alerts.error('Error loading task feedback templates.'),
+          error: () =>
+            this.alerts.error('Error loading task feedback templates.'),
         });
     }
   }
@@ -209,7 +227,10 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
       ) {
         this.postAttachmentComment(file);
       } else {
-        this.alerts.error('I cannot upload that file - only images, audio, and PDFs.', 4000);
+        this.alerts.error(
+          'I cannot upload that file - only images, audio, and PDFs.',
+          4000,
+        );
       }
     });
     console.log('implement - check map comments');
@@ -218,11 +239,13 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
 
   // # Upload image files as comments to a given task
   postAttachmentComment(file) {
-    this.taskCommentService.addComment(this.task, file, 'file', null).subscribe({
-      error: (error) => {
-        this.alerts.error(error || error?.message, 2000);
-      },
-    });
+    this.taskCommentService
+      .addComment(this.task, file, 'file', null)
+      .subscribe({
+        error: (error) => {
+          this.alerts.error(error || error?.message, 2000);
+        },
+      });
   }
 
   scrollToComment(commentID) {

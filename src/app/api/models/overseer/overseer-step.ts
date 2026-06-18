@@ -57,20 +57,30 @@ export class OverseerStep extends Entity {
   }
 
   public delete() {
-    const overseerStepService: OverseerStepService = AppInjector.get(OverseerStepService);
+    const overseerStepService: OverseerStepService =
+      AppInjector.get(OverseerStepService);
     overseerStepService
       .delete(
         {
           id: this.id,
         },
-        {cache: this.taskDefinition.overseerStepsCache, endpointFormat: 'overseer_steps/:id:'},
+        {
+          cache: this.taskDefinition.overseerStepsCache,
+          endpointFormat: 'overseer_steps/:id:',
+        },
       )
       .subscribe({
         next: (_response: object) => {
-          AppInjector.get(AlertService).success('Successfully deleted overseer step', 4000);
+          AppInjector.get(AlertService).success(
+            'Successfully deleted overseer step',
+            4000,
+          );
         },
         error: (error) => {
-          AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
+          AppInjector.get(AlertService).error(
+            error?.message || error || 'Unknown error',
+            2000,
+          );
         },
       });
   }

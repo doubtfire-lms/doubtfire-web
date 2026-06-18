@@ -17,7 +17,12 @@
     <button
       aria-label="Audio recording button"
       mat-icon-button
-      style="transform: scale(1); margin-left: -15px; margin-right: 0px; display: flex"
+      style="
+        transform: scale(1);
+        margin-left: -15px;
+        margin-right: 0px;
+        display: flex;
+      "
       (click)="recordingToggle()"
     >
       <mat-icon class="text-white"
@@ -27,7 +32,12 @@
     <button
       aria-label="Play audio recording"
       mat-icon-button
-      style="transform: scale(1); margin-left: -15px; margin-right: 0px; display: flex"
+      style="
+        transform: scale(1);
+        margin-left: -15px;
+        margin-right: 0px;
+        display: flex;
+      "
       [hidden]="!recordingAvailable"
       (click)="playStop()"
     >
@@ -45,7 +55,12 @@
       <button
         aria-label="Send audio recording"
         mat-icon-button
-        style="transform: scale(1); margin-left: -15px; margin-right: 0px; display: flex"
+        style="
+          transform: scale(1);
+          margin-left: -15px;
+          margin-right: 0px;
+          display: flex;
+        "
         [disabled]="!recordingAvailable"
         (click)="sendRecording()"
       >

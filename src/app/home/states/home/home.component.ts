@@ -1,10 +1,18 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  Project,
+  UnitRole,
+  User,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {DateService} from 'src/app/common/services/date.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {
+  GlobalStateService,
+  ViewType,
+} from 'src/app/projects/states/index/global-state.service';
 
 @Component({
   selector: 'home',
@@ -34,7 +42,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public externalName = this.constants.ExternalName;
-  public userFirstName = this.currentUser.nickname || this.currentUser.firstName;
+  public userFirstName =
+    this.currentUser.nickname || this.currentUser.firstName;
 
   private subscriptions: Subscription[] = [];
 
@@ -58,7 +67,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.globalState.projectsSubject.subscribe({
         next: (projects) => {
-          projects = projects.filter((project) => project.unit.myRole === 'Student');
+          projects = projects.filter(
+            (project) => project.unit.myRole === 'Student',
+          );
           this.projectsLoaded(projects);
         },
       }),

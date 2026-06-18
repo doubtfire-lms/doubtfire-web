@@ -1,7 +1,10 @@
 <mat-card
   class="flex h-[423px] w-[338px] flex-col rounded-lg border border-gray-300 bg-white shadow-none"
 >
-  <mat-tab-group class="category-tab-group" (selectedTabChange)="scrollToSection($event)">
+  <mat-tab-group
+    class="category-tab-group"
+    (selectedTabChange)="scrollToSection($event)"
+  >
     @for (category of categories; track category) {
       <mat-tab [label]="category"></mat-tab>
     }
@@ -22,8 +25,13 @@
         @for (template of genTemplates$ | async; track template) {
           <mat-chip
             class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
-            [hidden]="template.chipText === 'Summarise feedback' && selectedTemplates.length < 1"
-            [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+            [hidden]="
+              template.chipText === 'Summarise feedback' &&
+              selectedTemplates.length < 1
+            "
+            [ngStyle]="
+              isTemplateSelected(template) ? {'border': '1px solid'} : {}
+            "
             (click)="selectTemplate(template)"
             (mouseenter)="onHoverTemplate(template)"
             (mouseleave)="onHoverTemplate(null)"
@@ -41,13 +49,16 @@
       @for (item of tlos$ | async; track item) {
         <div class="outcome-section mt-2.5">
           <h5 class="text-formatif-blue font-extrabold">
-            {{ item.outcome.abbreviation }} - {{ item.outcome.shortDescription }}
+            {{ item.outcome.abbreviation }} -
+            {{ item.outcome.shortDescription }}
           </h5>
           <div class="template-grid mt-0.5 flex flex-wrap gap-1">
             @for (template of item.templates; track template) {
               <mat-chip
                 class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
-                [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+                [ngStyle]="
+                  isTemplateSelected(template) ? {'border': '1px solid'} : {}
+                "
                 (click)="selectTemplate(template)"
                 (mouseenter)="onHoverTemplate(template)"
                 (mouseleave)="onHoverTemplate(null)"
@@ -78,13 +89,16 @@
       @for (item of ulos$ | async; track item) {
         <div class="outcome-section mt-2.5">
           <h5 class="text-formatif-blue font-extrabold">
-            {{ item.outcome.abbreviation }} - {{ item.outcome.shortDescription }}
+            {{ item.outcome.abbreviation }} -
+            {{ item.outcome.shortDescription }}
           </h5>
           <div class="template-grid mt-0.5 flex flex-wrap gap-1">
             @for (template of item.templates; track template) {
               <mat-chip
                 class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
-                [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+                [ngStyle]="
+                  isTemplateSelected(template) ? {'border': '1px solid'} : {}
+                "
                 (click)="selectTemplate(template)"
                 (mouseenter)="onHoverTemplate(template)"
                 (mouseleave)="onHoverTemplate(null)"
@@ -115,13 +129,16 @@
       @for (item of glos$ | async; track item) {
         <div class="outcome-section mt-2.5">
           <h5 class="text-formatif-blue font-extrabold">
-            {{ item.outcome.abbreviation }} - {{ item.outcome.shortDescription }}
+            {{ item.outcome.abbreviation }} -
+            {{ item.outcome.shortDescription }}
           </h5>
           <div class="template-grid mt-0.5 flex flex-wrap gap-1">
             @for (template of item.templates; track template) {
               <mat-chip
                 class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
-                [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+                [ngStyle]="
+                  isTemplateSelected(template) ? {'border': '1px solid'} : {}
+                "
                 (click)="selectTemplate(template)"
                 (mouseenter)="onHoverTemplate(template)"
                 (mouseleave)="onHoverTemplate(null)"
@@ -158,7 +175,10 @@
         {{ hoveredTemplate?.chipText || 'Select a feedback chip' }}
       </p>
       <p class="mb-0 text-xs text-gray-500">
-        {{ hoveredTemplate?.description || 'This will populate the comment area with feedback.' }}
+        {{
+          hoveredTemplate?.description ||
+            'This will populate the comment area with feedback.'
+        }}
       </p>
     </div>
   </div>

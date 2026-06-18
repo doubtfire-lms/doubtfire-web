@@ -57,12 +57,18 @@ export class UploadSubmissionModalService {
     return {
       result: new Promise<Task>((resolve, reject) => {
         dialogRef.afterClosed().subscribe((result) => {
-          if ((result as UploadSubmissionModalDismissResult | undefined)?.dismissed) {
+          if (
+            (result as UploadSubmissionModalDismissResult | undefined)
+              ?.dismissed
+          ) {
             reject(result);
             return;
           }
 
-          resolve((result as UploadSubmissionModalCloseResult | undefined)?.value ?? task);
+          resolve(
+            (result as UploadSubmissionModalCloseResult | undefined)?.value ??
+              task,
+          );
         });
       }),
     };

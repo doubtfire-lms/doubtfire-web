@@ -32,7 +32,10 @@ export class UnitStudentEnrolmentModalComponent implements OnInit {
 
   enrolStudent(studentIdOrEmail: string, campus: Campus) {
     if (!campus) {
-      this.alertService.error('Campus missing. Please indicate student campus', 5000);
+      this.alertService.error(
+        'Campus missing. Please indicate student campus',
+        5000,
+      );
       return;
     }
     this.unit.enrolStudent(studentIdOrEmail, campus).subscribe({

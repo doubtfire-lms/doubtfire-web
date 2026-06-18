@@ -1,7 +1,11 @@
 import {Component, Inject} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Engagement, EngagementService, Project} from 'src/app/api/models/doubtfire-model';
+import {
+  Engagement,
+  EngagementService,
+  Project,
+} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 type EvidenceMode = 'none' | 'url' | 'attachment';
@@ -22,7 +26,13 @@ interface AddEngagementForm {
   standalone: false,
 })
 export class AddEngagementDialogComponent {
-  readonly engagementTypes = ['Discuss', 'Attendance', 'Forum', 'Email', 'Attention'];
+  readonly engagementTypes = [
+    'Discuss',
+    'Attendance',
+    'Forum',
+    'Email',
+    'Attention',
+  ];
   readonly notePlaceholders: Record<string, string> = {
     attendance: 'Attended tutorial and participated in class activities.',
     discuss: 'Discussed tasks during tutorial.',
@@ -71,19 +81,24 @@ export class AddEngagementDialogComponent {
   }
 
   get canSubmit(): boolean {
-    if (this.form.invalid || this.saving || this.attachmentError !== undefined) return false;
+    if (this.form.invalid || this.saving || this.attachmentError !== undefined)
+      return false;
 
     const mode = this.form.controls.evidenceMode.value;
-    if (mode === 'url') return this.form.controls.evidenceUrl.value.trim().length > 0;
+    if (mode === 'url')
+      return this.form.controls.evidenceUrl.value.trim().length > 0;
     if (mode === 'attachment') return this.attachment !== undefined;
 
     return true;
   }
 
   get notePlaceholder(): string {
-    const engagementType = this.form.controls.engagementType.value.trim().toLowerCase();
+    const engagementType = this.form.controls.engagementType.value
+      .trim()
+      .toLowerCase();
     return (
-      this.notePlaceholders[engagementType] ?? 'Describe how the student engaged with the unit.'
+      this.notePlaceholders[engagementType] ??
+      'Describe how the student engaged with the unit.'
     );
   }
 
@@ -145,8 +160,10 @@ export class AddEngagementDialogComponent {
         engagementType: values.engagementType.trim(),
         note: values.note.trim() || this.notePlaceholder,
         occurredAt,
-        evidenceUrl: values.evidenceMode === 'url' ? values.evidenceUrl.trim() : undefined,
-        attachment: values.evidenceMode === 'attachment' ? this.attachment : undefined,
+        evidenceUrl:
+          values.evidenceMode === 'url' ? values.evidenceUrl.trim() : undefined,
+        attachment:
+          values.evidenceMode === 'attachment' ? this.attachment : undefined,
       })
       .subscribe({
         next: (engagement: Engagement) => {
@@ -155,7 +172,9 @@ export class AddEngagementDialogComponent {
         },
         error: (error) => {
           this.saving = false;
-          this.alerts.error(error?.error ?? 'Unable to add the engagement stamp.');
+          this.alerts.error(
+            error?.error ?? 'Unable to add the engagement stamp.',
+          );
         },
       });
   }

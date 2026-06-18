@@ -40,8 +40,9 @@ export class DiscussionPrompt extends Entity {
   }
 
   public delete() {
-    const discussionPromptService: DiscussionPromptService =
-      AppInjector.get(DiscussionPromptService);
+    const discussionPromptService: DiscussionPromptService = AppInjector.get(
+      DiscussionPromptService,
+    );
     discussionPromptService
       .delete(
         {task_definition_id: this.taskDefinition.id, id: this.id},
@@ -49,7 +50,10 @@ export class DiscussionPrompt extends Entity {
       )
       .subscribe({
         next: (_response: object) => {
-          AppInjector.get(AlertService).success('Successfully deleted discussion note', 4000);
+          AppInjector.get(AlertService).success(
+            'Successfully deleted discussion note',
+            4000,
+          );
         },
         error: (error: Error) => {
           const message = error.message || 'Unknown error';

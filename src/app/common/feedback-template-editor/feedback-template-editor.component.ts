@@ -1,4 +1,11 @@
-import {AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSelectChange} from '@angular/material/select';
 import {MatSort, Sort} from '@angular/material/sort';
@@ -25,11 +32,14 @@ import {CsvUploadModalService} from '../modals/csv-upload-modal/csv-upload-modal
   templateUrl: 'feedback-template-editor.component.html',
   standalone: false,
 })
-export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit {
+export class FeedbackTemplateEditorComponent
+  implements OnChanges, AfterViewInit
+{
   @Input() context?: TaskDefinition | Unit;
   @Input() selectedOutcome: LearningOutcome;
 
-  @ViewChild('templateTable', {static: false}) templateTable: MatTable<FeedbackTemplate>;
+  @ViewChild('templateTable', {static: false})
+  templateTable: MatTable<FeedbackTemplate>;
   @ViewChild(MatSort, {static: false}) templateSort: MatSort;
   @ViewChild(MatPaginator, {static: false}) templatePaginator: MatPaginator;
 
@@ -67,13 +77,20 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
   }
 
   initialiseTable(feedbackTemplates: FeedbackTemplate[]) {
-    this.templateSource = new MatTableDataSource<FeedbackTemplate>(feedbackTemplates);
+    this.templateSource = new MatTableDataSource<FeedbackTemplate>(
+      feedbackTemplates,
+    );
     this.templateSource.paginator = this.templatePaginator;
     this.templateSource.sort = this.templateSort;
-    this.templateSource.filterPredicate = (data: FeedbackTemplate, filter: string) => {
+    this.templateSource.filterPredicate = (
+      data: FeedbackTemplate,
+      filter: string,
+    ) => {
       const filterValue = filter.trim().toLowerCase();
       return (
-        this.getParentChipText(data.parentChipId).toLowerCase().includes(filterValue) ||
+        this.getParentChipText(data.parentChipId)
+          .toLowerCase()
+          .includes(filterValue) ||
         data.chipText.toLowerCase().includes(filterValue) ||
         data.commentText?.toLowerCase().includes(filterValue) ||
         data.summaryText?.toLowerCase().includes(filterValue) ||
@@ -88,7 +105,9 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
       const outcomeTemplates = templates.filter(
         (temp) => temp.learningOutcomeId === this.selectedOutcome.id,
       );
-      this.possibleParents = outcomeTemplates.filter((temp) => temp.type === 'group');
+      this.possibleParents = outcomeTemplates.filter(
+        (temp) => temp.type === 'group',
+      );
       this.initialiseTable(outcomeTemplates);
     });
   }
@@ -98,18 +117,26 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
       !feedbackTemplate.chipText.trim() ||
       !feedbackTemplate.description.trim() ||
       (feedbackTemplate.type === 'template' &&
-        (!feedbackTemplate.commentText.trim() || !feedbackTemplate.summaryText.trim()))
+        (!feedbackTemplate.commentText.trim() ||
+          !feedbackTemplate.summaryText.trim()))
     ) {
-      this.alerts.error('Failed to save feedback template. Fill in required fields.');
+      this.alerts.error(
+        'Failed to save feedback template. Fill in required fields.',
+      );
       return;
     }
     feedbackTemplate.save().subscribe({
       next: () => {
         this.alerts.success('Template saved');
-        feedbackTemplate.setOriginalSaveData(this.feedbackTemplateService.mapping);
+        feedbackTemplate.setOriginalSaveData(
+          this.feedbackTemplateService.mapping,
+        );
         this.selectFeedbackTemplate(this.selectedTemplate);
       },
-      error: () => this.alerts.error('Failed to save feedback template. Please try again.'),
+      error: () =>
+        this.alerts.error(
+          'Failed to save feedback template. Please try again.',
+        ),
     });
   }
 
@@ -120,7 +147,9 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
       this.selectedTemplate = feedbackTemplate;
 
       if (!this.selectedTemplate.hasOriginalSaveData) {
-        this.selectedTemplate.setOriginalSaveData(this.feedbackTemplateService.mapping);
+        this.selectedTemplate.setOriginalSaveData(
+          this.feedbackTemplateService.mapping,
+        );
       }
     }
   }
@@ -159,7 +188,8 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
 
       while (parentId) {
         depth++;
-        parentId = sortedTemplates.find((t) => t.id === parentId)?.parentChipId ?? null;
+        parentId =
+          sortedTemplates.find((t) => t.id === parentId)?.parentChipId ?? null;
       }
 
       depthMap.set(template.id, depth);
@@ -178,11 +208,16 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
 
     // Assign hierarchical order to groups using depth-based multiplier
     feedbackGroups.forEach((template) => {
-      const parentOrder = template.parentChipId ? orderMap.get(template.parentChipId)! : 0;
+      const parentOrder = template.parentChipId
+        ? orderMap.get(template.parentChipId)!
+        : 0;
       const depth = depthMap.get(template.id) ?? 0;
       const multiplier = 10 ** (maxDepth + 5 - depth * 3); // Proper scaling based on depth
 
-      orderMap.set(template.id, parentOrder + orderMap.get(template.id)! * multiplier);
+      orderMap.set(
+        template.id,
+        parentOrder + orderMap.get(template.id)! * multiplier,
+      );
     });
 
     // Assign order values to templates by directly adding their parent's order
@@ -205,7 +240,9 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
     }
   }
 
-  public feedbackTemplateHasChanges(feedbackTemplate: FeedbackTemplate): boolean {
+  public feedbackTemplateHasChanges(
+    feedbackTemplate: FeedbackTemplate,
+  ): boolean {
     return feedbackTemplate.hasChanges(this.feedbackTemplateService.mapping);
   }
 
@@ -220,7 +257,10 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
             if (this.selectedTemplate === feedbackTemplate)
               this.selectFeedbackTemplate(this.selectedTemplate);
           },
-          error: () => this.alerts.error('Failed to delete feedback template. Please try again.'),
+          error: () =>
+            this.alerts.error(
+              'Failed to delete feedback template. Please try again.',
+            ),
         });
       },
     );
@@ -235,7 +275,10 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
       {file: {name: 'Feedback Templates CSV Data', type: 'csv'}},
       url,
       (response: CsvResult) => {
-        this.csvResultModalService.show('Feedback Templates CSV Upload Results', response);
+        this.csvResultModalService.show(
+          'Feedback Templates CSV Upload Results',
+          response,
+        );
         if (response.success.length > 0) {
           let contextType: 'units' | 'task_definitions';
 
@@ -251,7 +294,8 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
               .fetchAll({contextType, contextId: this.context.id}, {})
               .subscribe({
                 next: () => this.getFeedbackChips(),
-                error: () => this.alerts.error('Error loading task feedback templates.'),
+                error: () =>
+                  this.alerts.error('Error loading task feedback templates.'),
               });
           }
         }
@@ -265,7 +309,8 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
 
     if (this.context instanceof TaskDefinition)
       name = `${this.context.unit.code}-${this.context.abbreviation}-${name}`;
-    else if (this.context instanceof Unit) name = `${this.context.code}-${name}`;
+    else if (this.context instanceof Unit)
+      name = `${this.context.code}-${name}`;
 
     this.fileDownloaderService.downloadFile(url, name);
   }
@@ -300,7 +345,9 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
   getPossibleParents(): FeedbackTemplate[] {
     if (!this.selectedTemplate.isNew)
       return this.possibleParents.filter(
-        (p) => p.id != this.selectedTemplate.id && !this.isAncestor(this.selectedTemplate.id, p),
+        (p) =>
+          p.id != this.selectedTemplate.id &&
+          !this.isAncestor(this.selectedTemplate.id, p),
       );
     else return this.possibleParents;
   }
@@ -308,7 +355,9 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
   isAncestor(idToCheck: number, descendant: FeedbackTemplate): boolean {
     if (descendant.parentChipId === idToCheck) return true;
 
-    const parent = this.possibleParents.find((p) => p.id === descendant.parentChipId);
+    const parent = this.possibleParents.find(
+      (p) => p.id === descendant.parentChipId,
+    );
     if (!parent) return false;
 
     return this.isAncestor(idToCheck, parent);

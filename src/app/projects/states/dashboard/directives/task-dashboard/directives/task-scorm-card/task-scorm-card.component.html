@@ -4,7 +4,9 @@
       <mat-card-header class="bg-green-600 text-white">
         <mat-card-title class="mb-2.5 flex items-center"
           ><mat-icon class="font-extrabold">check</mat-icon>
-          <span class="ml-2.5">Knowledge Check Passed Without Mistakes</span></mat-card-title
+          <span class="ml-2.5"
+            >Knowledge Check Passed Without Mistakes</span
+          ></mat-card-title
         >
       </mat-card-header>
     }
@@ -18,8 +20,8 @@
     }
     <mat-card-content class="bg-green-50">
       <p class="pb-0.5 pt-1">
-        You have successfully completed this knowledge check. You can now proceed to submitting task
-        files.
+        You have successfully completed this knowledge check. You can now
+        proceed to submitting task files.
       </p>
     </mat-card-content>
     <mat-card-actions
@@ -38,7 +40,9 @@
       <mat-card-header class="bg-red-600 text-white">
         <mat-card-title class="mb-2.5 flex items-center"
           ><mat-icon class="font-extrabold">close</mat-icon>
-          <span class="ml-2.5">Knowledge Check Unsuccessful</span></mat-card-title
+          <span class="ml-2.5"
+            >Knowledge Check Unsuccessful</span
+          ></mat-card-title
         >
       </mat-card-header>
     }
@@ -48,14 +52,17 @@
       </mat-card-header>
     }
     <mat-card-content>
-      <p class="pt-1">You have to successfully pass this knowledge check to complete the task.</p>
+      <p class="pt-1">
+        You have to successfully pass this knowledge check to complete the task.
+      </p>
       <p>
-        You have {{ attemptsLeft !== undefined ? attemptsLeft : 'unlimited' }} attempts left to
-        complete this test.
+        You have
+        {{ attemptsLeft !== undefined ? attemptsLeft : 'unlimited' }} attempts
+        left to complete this test.
       </p>
       <p class="mb-2.5" [hidden]="!task.definition.scormTimeDelayEnabled">
-        There will be an increased time delay between test attempts. First 2 attempts will not have
-        a time delay in between.
+        There will be an increased time delay between test attempts. First 2
+        attempts will not have a time delay in between.
       </p>
     </mat-card-content>
     <mat-card-actions class="space-x-1 px-3 pt-0">
@@ -65,7 +72,10 @@
         [hidden]="attemptsLeft === 0"
         (click)="launchScormPlayer()"
       >
-        <mat-icon aria-label="Launch icon" style="width: 20px; height: 20px; font-size: 20px">
+        <mat-icon
+          aria-label="Launch icon"
+          style="width: 20px; height: 20px; font-size: 20px"
+        >
           launch
         </mat-icon>
         Attempt test

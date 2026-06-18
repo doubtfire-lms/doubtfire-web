@@ -1,7 +1,18 @@
-import {Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
-import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
+import {
+  Project,
+  Task,
+  TaskDefinition,
+} from 'src/app/api/models/doubtfire-model';
 import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
 
@@ -53,7 +64,9 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
 
       if (
         this.selectedTaskDef &&
-        !this.filteredTaskDefinitions?.some((taskDef) => taskDef.id === this.selectedTaskDef.id)
+        !this.filteredTaskDefinitions?.some(
+          (taskDef) => taskDef.id === this.selectedTaskDef.id,
+        )
       ) {
         this.selectedTaskDefinition$.next(null);
       }
@@ -110,7 +123,9 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
 
     queueMicrotask(() => {
       if (param) {
-        const taskDef = this.taskDefinitions.find((t) => t.abbreviation === param);
+        const taskDef = this.taskDefinitions.find(
+          (t) => t.abbreviation === param,
+        );
 
         if (taskDef !== current) {
           this.selectedTaskDefinition$.next(taskDef);
@@ -156,14 +171,18 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   private buildSelectionUrlTree(taskDef: TaskDefinition | null) {
     if (this.selectionUrlBase) {
       return this.angularRouter.createUrlTree(
-        taskDef ? [...this.selectionUrlBase, taskDef.abbreviation] : this.selectionUrlBase,
+        taskDef
+          ? [...this.selectionUrlBase, taskDef.abbreviation]
+          : this.selectionUrlBase,
       );
     }
 
     const unitId = this.route.parent?.snapshot.paramMap.get('unitId');
     if (this.route.parent?.snapshot.data.unit && unitId) {
       return this.angularRouter.createUrlTree(
-        taskDef ? ['/units', unitId, 'tasks', taskDef.abbreviation] : ['/units', unitId, 'tasks'],
+        taskDef
+          ? ['/units', unitId, 'tasks', taskDef.abbreviation]
+          : ['/units', unitId, 'tasks'],
       );
     }
 

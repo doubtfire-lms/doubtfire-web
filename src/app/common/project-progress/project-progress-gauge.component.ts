@@ -1,5 +1,11 @@
 import {TooltipService} from '@swimlane/ngx-charts';
-import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
+import {
+  Component,
+  Injector,
+  Input,
+  OnInit,
+  ViewContainerRef,
+} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 
 @Component({
@@ -31,7 +37,9 @@ export class ProjectProgressGaugeComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
+    this.chartToolTipService.injectionService.setRootViewContainer(
+      this.viewContainerRef,
+    );
 
     console.log(this.project.taskStats);
   }

@@ -9,7 +9,12 @@
           } @else {
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Discussion Prompt</mat-label>
-              <textarea matInput pattern=".*\S.*" required [(ngModel)]="prompt.content"></textarea>
+              <textarea
+                matInput
+                pattern=".*\S.*"
+                required
+                [(ngModel)]="prompt.content"
+              ></textarea>
             </mat-form-field>
           }
         </td>
@@ -25,7 +30,11 @@
               <mat-form-field appearance="outline">
                 <mat-label>Priority</mat-label>
 
-                <mat-select matInput placeholder="Priority" [(ngModel)]="prompt.weight">
+                <mat-select
+                  matInput
+                  placeholder="Priority"
+                  [(ngModel)]="prompt.weight"
+                >
                   <mat-option [value]="3">High</mat-option>
                   <mat-option [value]="2">Medium</mat-option>
                   <mat-option [value]="1">Low</mat-option>
@@ -64,11 +73,17 @@
     </table>
   </div>
   @if (!dataSource.data.length) {
-    <div class="m-3 w-full text-center text-gray-400">No discussion prompts</div>
+    <div class="m-3 w-full text-center text-gray-400">
+      No discussion prompts
+    </div>
   }
   @if (!creatingNewDiscussionPrompt) {
     <div class="m-3 flex justify-center">
-      <button color="primary" mat-raised-button (click)="createNewDiscussionPrompt()">
+      <button
+        color="primary"
+        mat-raised-button
+        (click)="createNewDiscussionPrompt()"
+      >
         Add Discussion Prompt
       </button>
     </div>
@@ -90,7 +105,11 @@
           <mat-form-field appearance="outline" class="max-h-10 w-full max-w-lg">
             <mat-label>Priority</mat-label>
 
-            <mat-select matInput placeholder="Priority" [(ngModel)]="newDiscussionPromptWeight">
+            <mat-select
+              matInput
+              placeholder="Priority"
+              [(ngModel)]="newDiscussionPromptWeight"
+            >
               <mat-option [value]="3">High</mat-option>
               <mat-option [value]="2">Medium</mat-option>
               <mat-option [value]="1">Low</mat-option>
@@ -98,8 +117,12 @@
           </mat-form-field>
         </div>
         <div class="flex justify-end">
-          <button mat-button (click)="cancelNewDiscussionPrompt()">Cancel</button>
-          <button color="primary" mat-raised-button (click)="addNewPrompt()">Save</button>
+          <button mat-button (click)="cancelNewDiscussionPrompt()">
+            Cancel
+          </button>
+          <button color="primary" mat-raised-button (click)="addNewPrompt()">
+            Save
+          </button>
         </div>
       </mat-card-content>
     </mat-card>

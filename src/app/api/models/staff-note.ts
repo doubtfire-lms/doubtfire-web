@@ -37,14 +37,23 @@ export class StaffNote extends Entity {
   }
 
   public delete() {
-    const staffNoteService: StaffNoteService = AppInjector.get(StaffNoteService);
+    const staffNoteService: StaffNoteService =
+      AppInjector.get(StaffNoteService);
     staffNoteService
-      .delete({projectId: this.project.id, id: this.id}, {cache: this.project.staffNoteCache})
+      .delete(
+        {projectId: this.project.id, id: this.id},
+        {cache: this.project.staffNoteCache},
+      )
       .subscribe({
         next: () => {
-          AppInjector.get(AlertService).error('Successfully deleted staff note', 4000);
+          AppInjector.get(AlertService).error(
+            'Successfully deleted staff note',
+            4000,
+          );
           this.project.staffNoteCount--;
-          staffNoteService.updateStaffNoteReplies(this.project.staffNoteCache.currentValues);
+          staffNoteService.updateStaffNoteReplies(
+            this.project.staffNoteCache.currentValues,
+          );
         },
         error: (error: Error) => {
           const message = error.message || 'Unknown error';

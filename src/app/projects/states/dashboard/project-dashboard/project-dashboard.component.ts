@@ -39,10 +39,12 @@ export class ProjectDashboardComponent implements OnInit {
 
   subs$: Observable<unknown>;
   readonly skeletonRows = Array.from({length: 10}, (_, index) => index);
-  private readonly projectSubject: BehaviorSubject<Project> = new BehaviorSubject(null);
+  private readonly projectSubject: BehaviorSubject<Project> =
+    new BehaviorSubject(null);
 
   private leftComponentStartSize$: Subject<number> = new Subject();
-  private dragMove$: Subject<{event: CdkDragMove; div: HTMLDivElement}> = new Subject();
+  private dragMove$: Subject<{event: CdkDragMove; div: HTMLDivElement}> =
+    new Subject();
   private dragMoveAudited$;
   private projectReady = false;
 
@@ -101,7 +103,10 @@ export class ProjectDashboardComponent implements OnInit {
     const delta = x - this.startLeftX;
     const newWidth = this.startWidth + delta;
 
-    this.leftWidth = Math.max(this.taskListCollapsedWidth, Math.min(500, newWidth));
+    this.leftWidth = Math.max(
+      this.taskListCollapsedWidth,
+      Math.min(500, newWidth),
+    );
 
     // keep the handle visually glued to the divider
     event.source.reset();
@@ -123,7 +128,8 @@ export class ProjectDashboardComponent implements OnInit {
     initialProject$.pipe(first()).subscribe((project) => {
       this.projectSubject.next(project);
       this.loadProject(
-        project?.id ?? Number(this.route.parent?.snapshot.paramMap.get('projectId')),
+        project?.id ??
+          Number(this.route.parent?.snapshot.paramMap.get('projectId')),
       );
     });
 

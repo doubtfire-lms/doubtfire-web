@@ -4,23 +4,31 @@
   </h3>
   <mat-dialog-content>
     <div>
-      This job is running in the background. You can close this dialog and monitor progress anytime.
+      This job is running in the background. You can close this dialog and
+      monitor progress anytime.
     </div>
     <div class="mb-1 mt-3 flex w-full justify-between">
       @if (job?.status === 'complete') {
         <div>COMPLETE</div>
       } @else {
-        <div>{{ job?.status.toUpperCase() }}{{ job?.message ? ': ' + job.message : '' }}</div>
+        <div>
+          {{ job?.status.toUpperCase()
+          }}{{ job?.message ? ': ' + job.message : '' }}
+        </div>
       }
       <div>
-        {{ job?.status === 'complete' ? job?.totalCount : job?.processedCount }}/{{
-          job?.totalCount
-        }}
-        ({{ job?.status === 'complete' ? '100' : job?.pctComplete }}%)
+        {{
+          job?.status === 'complete' ? job?.totalCount : job?.processedCount
+        }}/{{ job?.totalCount }} ({{
+          job?.status === 'complete' ? '100' : job?.pctComplete
+        }}%)
       </div>
     </div>
     @if (job?.status === 'queued') {
-      <mat-progress-bar mode="buffer" [value]="job?.pctComplete ?? 0"></mat-progress-bar>
+      <mat-progress-bar
+        mode="buffer"
+        [value]="job?.pctComplete ?? 0"
+      ></mat-progress-bar>
     } @else {
       <mat-progress-bar
         mode="determinate"
@@ -31,7 +39,9 @@
   <mat-dialog-actions class="flex justify-between">
     <button mat-raised-button (click)="dismissModal()">Dismiss</button>
     @if (job?.status !== 'working' && job?.result) {
-      <button color="primary" mat-raised-button (click)="viewResult()">View Result</button>
+      <button color="primary" mat-raised-button (click)="viewResult()">
+        View Result
+      </button>
     }
   </mat-dialog-actions>
 </div>

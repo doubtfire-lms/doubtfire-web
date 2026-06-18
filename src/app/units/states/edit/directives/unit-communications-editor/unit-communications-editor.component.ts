@@ -1,5 +1,12 @@
 import {NestedTreeControl} from '@angular/cdk/tree';
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {Subscription} from 'rxjs';
@@ -49,7 +56,9 @@ interface CommunicationTreeNode {
   templateUrl: './unit-communications-editor.component.html',
   styleUrl: './unit-communications-editor.component.scss',
 })
-export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnDestroy {
+export class UnitCommunicationsEditorComponent
+  implements OnInit, OnChanges, OnDestroy
+{
   @Input() unit: Unit;
 
   readonly editorContext = this;
@@ -201,9 +210,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   editingRuleNameId?: number;
   setNameDraft = '';
   ruleNameDraft = '';
-  readonly treeControl: NestedTreeControl<CommunicationTreeNode> = new NestedTreeControl(
-    (node) => node.children,
-  );
+  readonly treeControl: NestedTreeControl<CommunicationTreeNode> =
+    new NestedTreeControl((node) => node.children);
   readonly treeDataSource: MatTreeNestedDataSource<CommunicationTreeNode> =
     new MatTreeNestedDataSource();
   private expandedSetIds: Set<number> = new Set();
@@ -248,7 +256,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     const newSet = {
       name: this.defaultSetName(),
       active: true,
-    } as Pick<CommunicationSet, 'name'> & Partial<Pick<CommunicationSet, 'active'>>;
+    } as Pick<CommunicationSet, 'name'> &
+      Partial<Pick<CommunicationSet, 'active'>>;
 
     this.setService.createForUnit(this.unit.id, newSet).subscribe({
       next: (set) => {
@@ -324,13 +333,20 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.openScheduleModal(set);
   }
 
-  editSchedule(set: CommunicationSet, schedule: CommunicationSetSchedule): void {
+  editSchedule(
+    set: CommunicationSet,
+    schedule: CommunicationSetSchedule,
+  ): void {
     this.openScheduleModal(set, schedule);
   }
 
-  deleteSchedule(set: CommunicationSet, schedule: CommunicationSetSchedule): void {
+  deleteSchedule(
+    set: CommunicationSet,
+    schedule: CommunicationSetSchedule,
+  ): void {
     const updatedSchedules = (set.schedules || []).filter(
-      (item) => (item.id || item.client_key) !== (schedule.id || schedule.client_key),
+      (item) =>
+        (item.id || item.client_key) !== (schedule.id || schedule.client_key),
     );
     this.persistSchedules(set, updatedSchedules, 'Schedule removed');
   }
@@ -358,11 +374,15 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   scheduleNextRunSummary(schedule: CommunicationSetSchedule): string {
-    return schedule.next_run_at ? this.dateLabel(schedule.next_run_at) : 'Not scheduled';
+    return schedule.next_run_at
+      ? this.dateLabel(schedule.next_run_at)
+      : 'Not scheduled';
   }
 
   scheduleLastRunSummary(schedule: CommunicationSetSchedule): string {
-    return schedule.last_run_at ? this.dateLabel(schedule.last_run_at) : 'Not yet run';
+    return schedule.last_run_at
+      ? this.dateLabel(schedule.last_run_at)
+      : 'Not yet run';
   }
 
   iceCubePreview(schedule: CommunicationSetSchedule): string {
@@ -422,13 +442,15 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   updateRuleOperator(rule: CommunicationRule): void {
-    this.ruleService.updateForUnit(this.unit.id, rule.id, {operator: rule.operator}).subscribe({
-      next: (updated) => {
-        rule.operator = updated.operator;
-        this.refreshPreview(rule);
-      },
-      error: (error) => this.showError(error),
-    });
+    this.ruleService
+      .updateForUnit(this.unit.id, rule.id, {operator: rule.operator})
+      .subscribe({
+        next: (updated) => {
+          rule.operator = updated.operator;
+          this.refreshPreview(rule);
+        },
+        error: (error) => this.showError(error),
+      });
   }
 
   updateRule(rule: CommunicationRule): void {
@@ -530,16 +552,20 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     if (!conditionId) return;
 
     const condition = this.newConditions[rule.id] || this.blankCondition();
-    this.conditionService.update(this.unit.id, rule.id, conditionId, condition).subscribe({
-      next: (updated) => {
-        rule.conditions = rule.conditions.map((item) => (item.id === updated.id ? updated : item));
-        this.newConditions[rule.id] = this.blankCondition();
-        this.conditionFormOpen[rule.id] = false;
-        this.editingConditionId[rule.id] = undefined;
-        this.refreshPreview(rule);
-      },
-      error: (error) => this.showError(error),
-    });
+    this.conditionService
+      .update(this.unit.id, rule.id, conditionId, condition)
+      .subscribe({
+        next: (updated) => {
+          rule.conditions = rule.conditions.map((item) =>
+            item.id === updated.id ? updated : item,
+          );
+          this.newConditions[rule.id] = this.blankCondition();
+          this.conditionFormOpen[rule.id] = false;
+          this.editingConditionId[rule.id] = undefined;
+          this.refreshPreview(rule);
+        },
+        error: (error) => this.showError(error),
+      });
   }
 
   showConditionForm(rule: CommunicationRule): void {
@@ -554,23 +580,35 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.editingConditionId[rule.id] = undefined;
   }
 
-  editCondition(rule: CommunicationRule, condition: CommunicationCondition): void {
+  editCondition(
+    rule: CommunicationRule,
+    condition: CommunicationCondition,
+  ): void {
     this.newConditions[rule.id] = {
       ...condition,
-      task_statuses: condition.task_statuses ? [...condition.task_statuses] : [],
+      task_statuses: condition.task_statuses
+        ? [...condition.task_statuses]
+        : [],
     };
     this.conditionFormOpen[rule.id] = true;
     this.editingConditionId[rule.id] = condition.id;
   }
 
-  deleteCondition(rule: CommunicationRule, condition: CommunicationCondition): void {
-    this.conditionService.delete(this.unit.id, rule.id, condition.id).subscribe({
-      next: () => {
-        rule.conditions = rule.conditions.filter((item) => item.id !== condition.id);
-        this.refreshPreview(rule);
-      },
-      error: (error) => this.showError(error),
-    });
+  deleteCondition(
+    rule: CommunicationRule,
+    condition: CommunicationCondition,
+  ): void {
+    this.conditionService
+      .delete(this.unit.id, rule.id, condition.id)
+      .subscribe({
+        next: () => {
+          rule.conditions = rule.conditions.filter(
+            (item) => item.id !== condition.id,
+          );
+          this.refreshPreview(rule);
+        },
+        error: (error) => this.showError(error),
+      });
   }
 
   addAction(rule: CommunicationRule): void {
@@ -592,18 +630,25 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     if (!actionId) return;
 
     const action = this.newActions[rule.id] || this.blankAction();
-    this.actionService.update(this.unit.id, rule.id, actionId, action).subscribe({
-      next: (updated) => {
-        rule.actions = rule.actions.map((item) => (item.id === updated.id ? updated : item));
-        this.newActions[rule.id] = this.blankAction();
-        this.actionFormOpen[rule.id] = false;
-        this.editingActionId[rule.id] = undefined;
-      },
-      error: (error) => this.showError(error),
-    });
+    this.actionService
+      .update(this.unit.id, rule.id, actionId, action)
+      .subscribe({
+        next: (updated) => {
+          rule.actions = rule.actions.map((item) =>
+            item.id === updated.id ? updated : item,
+          );
+          this.newActions[rule.id] = this.blankAction();
+          this.actionFormOpen[rule.id] = false;
+          this.editingActionId[rule.id] = undefined;
+        },
+        error: (error) => this.showError(error),
+      });
   }
 
-  showActionForm(rule: CommunicationRule, _mode: 'standard' | 'post_execution' = 'standard'): void {
+  showActionForm(
+    rule: CommunicationRule,
+    _mode: 'standard' | 'post_execution' = 'standard',
+  ): void {
     this.newActions[rule.id] = this.blankAction();
     this.actionFormOpen[rule.id] = true;
     this.editingActionId[rule.id] = undefined;
@@ -644,7 +689,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.selectedRuleId = rule.id;
   }
 
-  hasTreeChild = (_: number, node: CommunicationTreeNode): boolean => node.type === 'set';
+  hasTreeChild = (_: number, node: CommunicationTreeNode): boolean =>
+    node.type === 'set';
 
   isSelectedSetNode(node: CommunicationTreeNode): boolean {
     return node.type === 'set' && node.id === this.selectedSetId;
@@ -698,7 +744,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return this.previewStudents[rule.id] || [];
   }
 
-  previewAllocationsFor(rule: CommunicationRule): CommunicationRulePreviewAllocation[] {
+  previewAllocationsFor(
+    rule: CommunicationRule,
+  ): CommunicationRulePreviewAllocation[] {
     return this.previewAllocations[rule.id] || [];
   }
 
@@ -710,7 +758,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   studentsTabLabel(rule: CommunicationRule): string {
-    const matchedCount = this.previewLoaded[rule.id] ? this.studentsFor(rule).length : 0;
+    const matchedCount = this.previewLoaded[rule.id]
+      ? this.studentsFor(rule).length
+      : 0;
     const totalStudents = this.availableStudentsForRule(rule);
 
     return `Students (${matchedCount}/${totalStudents})`;
@@ -737,9 +787,15 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return Object.entries(record)
       .filter(
         ([key, value]) =>
-          !hiddenKeys.includes(key) && value !== undefined && value !== null && value !== '',
+          !hiddenKeys.includes(key) &&
+          value !== undefined &&
+          value !== null &&
+          value !== '',
       )
-      .map(([key, value]) => `${this.prettyKey(key)}: ${this.prettyValue(key, value)}`)
+      .map(
+        ([key, value]) =>
+          `${this.prettyKey(key)}: ${this.prettyValue(key, value)}`,
+      )
       .join(', ');
   }
 
@@ -781,7 +837,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       return 'Task';
     }
 
-    const taskDefinition = this.taskDefinitions.find((task) => task.id === taskDefinitionId);
+    const taskDefinition = this.taskDefinitions.find(
+      (task) => task.id === taskDefinitionId,
+    );
 
     if (!taskDefinition) {
       return `Task ${taskDefinitionId}`;
@@ -795,7 +853,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   taskStatusesLabel(taskStatuses: string[] = []): string {
-    return taskStatuses.map((status) => this.taskStatusLabel(status)).join(', ');
+    return taskStatuses
+      .map((status) => this.taskStatusLabel(status))
+      .join(', ');
   }
 
   staffAudienceLabel(action: Partial<CommunicationAction>): string {
@@ -805,15 +865,26 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return audiences.join(' and ') || 'staff';
   }
 
-  insertActionVariable(rule: CommunicationRule, field: 'subject' | 'body', token: string): void {
+  insertActionVariable(
+    rule: CommunicationRule,
+    field: 'subject' | 'body',
+    token: string,
+  ): void {
     const action = this.actionFor(rule);
     const currentValue = action[field] ?? '';
     const separator =
-      currentValue && !currentValue.endsWith(' ') && !currentValue.endsWith('\n') ? ' ' : '';
+      currentValue &&
+      !currentValue.endsWith(' ') &&
+      !currentValue.endsWith('\n')
+        ? ' '
+        : '';
     action[field] = `${currentValue}${separator}${token}`;
   }
 
-  renderTemplatePreview(value: string | undefined, rule: CommunicationRule): string {
+  renderTemplatePreview(
+    value: string | undefined,
+    rule: CommunicationRule,
+  ): string {
     if (!value) return '';
 
     const escaped = this.escapeHtml(value);
@@ -838,11 +909,15 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   tutorialLabel(tutorialId: number): string {
     const tutorial = this.tutorials.find((item) => item.id === tutorialId);
-    return tutorial ? `${tutorial.abbreviation} ${tutorial.description}` : `Tutorial ${tutorialId}`;
+    return tutorial
+      ? `${tutorial.abbreviation} ${tutorial.description}`
+      : `Tutorial ${tutorialId}`;
   }
 
   tutorialStreamLabel(tutorialStreamId: number): string {
-    const tutorialStream = this.tutorialStreams.find((item) => item.id === tutorialStreamId);
+    const tutorialStream = this.tutorialStreams.find(
+      (item) => item.id === tutorialStreamId,
+    );
     return tutorialStream
       ? `${tutorialStream.abbreviation} ${tutorialStream.name}`
       : `Tutorial Stream ${tutorialStreamId}`;
@@ -1017,12 +1092,18 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     });
   }
 
-  private applySetPreviewResponse(setResponse: CommunicationSetPreviewResponse): void {
-    const rules = (setResponse.rules || []).map((rule) => new CommunicationRule(rule));
+  private applySetPreviewResponse(
+    setResponse: CommunicationSetPreviewResponse,
+  ): void {
+    const rules = (setResponse.rules || []).map(
+      (rule) => new CommunicationRule(rule),
+    );
     const existingSet = this.sets.find((set) => set.id === setResponse.id);
     const schedules =
       setResponse.schedules !== undefined
-        ? (setResponse.schedules || []).map((schedule) => new CommunicationSetSchedule(schedule))
+        ? (setResponse.schedules || []).map(
+            (schedule) => new CommunicationSetSchedule(schedule),
+          )
         : existingSet?.schedules || [];
     const updatedSet = new CommunicationSet({
       id: setResponse.id,
@@ -1049,11 +1130,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     });
 
     setResponse.previews.forEach((preview) => {
-      this.previewAllocations[preview.target_rule_id] = preview.allocations || [];
-      this.previewStudents[preview.target_rule_id] = this.studentsForPreviewRule(
-        preview.target_rule_id,
-        preview,
-      );
+      this.previewAllocations[preview.target_rule_id] =
+        preview.allocations || [];
+      this.previewStudents[preview.target_rule_id] =
+        this.studentsForPreviewRule(preview.target_rule_id, preview);
       this.previewLoaded[preview.target_rule_id] = true;
       this.previewLoading[preview.target_rule_id] = false;
     });
@@ -1069,7 +1149,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     ruleId: number,
     preview: CommunicationRulePreviewResponse,
   ): CommunicationRulePreviewStudent[] {
-    return preview.allocations.find((allocation) => allocation.rule_id === ruleId)?.students || [];
+    return (
+      preview.allocations.find((allocation) => allocation.rule_id === ruleId)
+        ?.students || []
+    );
   }
 
   private availableStudentsForRule(rule: CommunicationRule): number {
@@ -1089,7 +1172,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return this.studentsFor(rule)[0];
   }
 
-  private openScheduleModal(set: CommunicationSet, schedule?: CommunicationSetSchedule): void {
+  private openScheduleModal(
+    set: CommunicationSet,
+    schedule?: CommunicationSetSchedule,
+  ): void {
     const dialogRef = this.dialog.open(CommunicationScheduleModalComponent, {
       width: '960px',
       maxWidth: '96vw',
@@ -1108,13 +1194,18 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
       const hydrated = new CommunicationSetSchedule({
         ...result,
-        client_key: schedule?.client_key || result.client_key || this.newScheduleClientKey(),
+        client_key:
+          schedule?.client_key ||
+          result.client_key ||
+          this.newScheduleClientKey(),
         communication_set_id: set.id,
       });
 
       const schedules = [...(set.schedules || [])];
       const existingIndex = schedules.findIndex(
-        (item) => (item.id || item.client_key) === (schedule?.id || schedule?.client_key),
+        (item) =>
+          (item.id || item.client_key) ===
+          (schedule?.id || schedule?.client_key),
       );
 
       if (existingIndex >= 0) {
@@ -1165,7 +1256,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   private showError(error): void {
-    this.alerts.error(error?.message || error?.error || error || 'Communication update failed');
+    this.alerts.error(
+      error?.message || error?.error || error || 'Communication update failed',
+    );
   }
 
   private showExecutionProgress(job: SidekiqJob, title: string): void {
@@ -1206,7 +1299,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       return this.operatorLabel(value);
     }
 
-    if ((key === 'target_grade' || key === 'task_target_grade') && typeof value === 'number') {
+    if (
+      (key === 'target_grade' || key === 'task_target_grade') &&
+      typeof value === 'number'
+    ) {
       return this.targetGradeLabels[value] || value.toString();
     }
 
@@ -1230,7 +1326,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       .replace(/'/g, '&#39;');
   }
 
-  private resolveTemplateVariable(token: string, rule: CommunicationRule): string | undefined {
+  private resolveTemplateVariable(
+    token: string,
+    rule: CommunicationRule,
+  ): string | undefined {
     const student = this.sampleStudentForRule(rule);
 
     switch (token) {
@@ -1242,7 +1341,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         return student?.preferred_name || student?.first_name;
       case '{{student.full_name}}':
         return (
-          student?.full_name || [student?.first_name, student?.last_name].filter(Boolean).join(' ')
+          student?.full_name ||
+          [student?.first_name, student?.last_name].filter(Boolean).join(' ')
         );
       case '{{student.username}}':
         return student?.username;
@@ -1257,7 +1357,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       case '{{rule.name}}':
         return rule.name;
       case '{{target_grade}}':
-        return student?.target_grade !== undefined && student?.target_grade !== null
+        return student?.target_grade !== undefined &&
+          student?.target_grade !== null
           ? this.targetGradeName(student.target_grade)
           : undefined;
       case '{{conditions_summary}}':
@@ -1269,7 +1370,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     }
   }
 
-  private hiddenKeysForRecord(record: CommunicationCondition | CommunicationAction): string[] {
+  private hiddenKeysForRecord(
+    record: CommunicationCondition | CommunicationAction,
+  ): string[] {
     const baseHiddenKeys = ['id', 'type', 'communication_rule_id', 'operator'];
 
     if (!('type' in record)) {
@@ -1278,9 +1381,20 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
     switch (record.type) {
       case 'ChangeTargetGradeAction':
-        return [...baseHiddenKeys, 'subject', 'body', 'email_tutors', 'email_convenors'];
+        return [
+          ...baseHiddenKeys,
+          'subject',
+          'body',
+          'email_tutors',
+          'email_convenors',
+        ];
       case 'EmailStudentAction':
-        return [...baseHiddenKeys, 'target_grade', 'email_tutors', 'email_convenors'];
+        return [
+          ...baseHiddenKeys,
+          'target_grade',
+          'email_tutors',
+          'email_convenors',
+        ];
       case 'EmailStaffAction':
         return [...baseHiddenKeys, 'target_grade'];
       default:
@@ -1297,7 +1411,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   actionsSummary(rule: CommunicationRule): string {
-    return (rule.actions || []).map((action) => `- ${this.actionSummary(action)}`).join('\n');
+    return (rule.actions || [])
+      .map((action) => `- ${this.actionSummary(action)}`)
+      .join('\n');
   }
 
   private titleize(value: string): string {

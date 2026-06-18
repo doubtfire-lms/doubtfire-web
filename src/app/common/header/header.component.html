@@ -7,7 +7,11 @@
     @if (!media.isActive('xs')) {
       @if (logoSettings.hasLogo) {
         <a class="mx-3.5" [href]="logoSettings.logoLinkUrl">
-          <img style="height: 32px" [alt]="externalName + 'logo'" [src]="logoSettings.logoUrl" />
+          <img
+            style="height: 32px"
+            [alt]="externalName + 'logo'"
+            [src]="logoSettings.logoUrl"
+          />
         </a>
       }
 
@@ -40,14 +44,24 @@
     <span class="grow"></span>
     @if (sidekiqJobs.length) {
       <button mat-icon-button (click)="showSidekiqJob()">
-        <div class="z-50" matBadgeSize="small" [matBadge]="sidekiqJobs.length"></div>
+        <div
+          class="z-50"
+          matBadgeSize="small"
+          [matBadge]="sidekiqJobs.length"
+        ></div>
         <mat-icon>cloud_sync_outline</mat-icon>
       </button>
     }
     @if (currentUnit && currentUnitRole && currentUnitRole.tutorNoteCount > 0) {
       <!-- TODO: Replace this with a more standardised notification system -->
-      <button mat-icon-button matTooltip="Moderation Notes" (click)="openTutorNotes()">
-        <mat-icon matBadgeSize="small" [matBadge]="currentUnitRole.tutorNoteCount"
+      <button
+        mat-icon-button
+        matTooltip="Moderation Notes"
+        (click)="openTutorNotes()"
+      >
+        <mat-icon
+          matBadgeSize="small"
+          [matBadge]="currentUnitRole.tutorNoteCount"
           >feedback</mat-icon
         >
       </button>
@@ -97,7 +111,9 @@
         My Profile
       </button>
       <button mat-menu-item (click)="openCalendar()">
-        <mat-icon aria-label="Edit calendar" matListItemIcon>calendar_month</mat-icon>
+        <mat-icon aria-label="Edit calendar" matListItemIcon
+          >calendar_month</mat-icon
+        >
         Calendar
       </button>
       <button mat-menu-item (click)="openAboutModal()">

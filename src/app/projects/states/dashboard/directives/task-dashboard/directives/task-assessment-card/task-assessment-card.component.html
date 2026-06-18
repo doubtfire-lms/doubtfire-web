@@ -9,8 +9,9 @@
     <div [hidden]="!task.definition.isGraded">
       <div class="callout callout-info" [hidden]="task.hasBeenGraded()">
         <p>
-          This task will be graded against a grade standard. Your work will be assessed and assigned
-          a grade according to a Pass, Credit, Distinction or High Distinction standard.
+          This task will be graded against a grade standard. Your work will be
+          assessed and assigned a grade according to a Pass, Credit, Distinction
+          or High Distinction standard.
         </p>
       </div>
       <div class="callout callout-success" [hidden]="!task.hasBeenGraded()">
@@ -24,17 +25,26 @@
     <!--/graded-task-is-graded-->
     <!--/graded-task-->
     <div [hidden]="!(task.definition.maxQualityPts > 0)">
-      <p class="callout callout-info" [hidden]="task.hasBeenGivenQualityPoints()">
+      <p
+        class="callout callout-info"
+        [hidden]="task.hasBeenGivenQualityPoints()"
+      >
         This task will be graded against a quality scale from
         <strong>0 to {{ task.definition.maxQualityPts }}</strong
-        >. Your work will assessed and assigned a star rating based on the quality of your
-        submission.
+        >. Your work will assessed and assigned a star rating based on the
+        quality of your submission.
       </p>
-      <div class="callout callout-success" [hidden]="!task.hasBeenGivenQualityPoints()">
+      <div
+        class="callout callout-success"
+        [hidden]="!task.hasBeenGivenQualityPoints()"
+      >
         <b>This task has been assessed for quality.</b>
         <p>
           You have been awarded
-          <strong>{{ task.qualityPts }} out of {{ task.definition.maxQualityPts }}</strong>
+          <strong
+            >{{ task.qualityPts }} out of
+            {{ task.definition.maxQualityPts }}</strong
+          >
           available points for this task.
         </p>
       </div>

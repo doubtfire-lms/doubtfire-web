@@ -11,7 +11,10 @@ import {EmojiService} from 'src/app/common/services/emoji.service';
 import {PrivacyPolicy} from 'src/app/config/privacy-policy/privacy-policy';
 
 type UploadStage = 'group' | 'details' | 'comments';
-type UploadSubmissionType = TaskStatusEnum | 'reupload_evidence' | 'test_submission';
+type UploadSubmissionType =
+  | TaskStatusEnum
+  | 'reupload_evidence'
+  | 'test_submission';
 
 interface UploadSubmissionTypeOption {
   id: UploadSubmissionType;
@@ -60,7 +63,8 @@ export type UploadSubmissionModalResult =
   standalone: false,
 })
 export class UploadSubmissionModalComponent implements OnInit {
-  @ViewChild(FileUploaderComponent) private fileUploader?: FileUploaderComponent;
+  @ViewChild(FileUploaderComponent)
+  private fileUploader?: FileUploaderComponent;
 
   public readonly minCommentLength = 25;
   public readonly task = this.data.task;
@@ -93,7 +97,10 @@ export class UploadSubmissionModalComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: UploadSubmissionModalData,
-    private dialogRef: MatDialogRef<UploadSubmissionModalComponent, UploadSubmissionModalResult>,
+    private dialogRef: MatDialogRef<
+      UploadSubmissionModalComponent,
+      UploadSubmissionModalResult
+    >,
     private taskService: TaskService,
     private projectService: ProjectService,
     private privacyPolicyService: PrivacyPolicy,
@@ -117,7 +124,9 @@ export class UploadSubmissionModalComponent implements OnInit {
   }
 
   public get showGroupSection(): boolean {
-    return this.submissionType === 'ready_for_feedback' && this.task.isGroupTask();
+    return (
+      this.submissionType === 'ready_for_feedback' && this.task.isGroupTask()
+    );
   }
 
   public get showCommentsSection(): boolean {
@@ -146,7 +155,8 @@ export class UploadSubmissionModalComponent implements OnInit {
   }
 
   public get submitTooltip(): string {
-    return this.requiresComment && this.comment.trim().length < this.minCommentLength
+    return this.requiresComment &&
+      this.comment.trim().length < this.minCommentLength
       ? 'This submission requires a comment'
       : '';
   }
@@ -187,7 +197,8 @@ export class UploadSubmissionModalComponent implements OnInit {
       this.uploadSubmitLocked ||
       (this.showGroupSection && !this.hasRatedTeamMember) ||
       !this.isUploaderReady ||
-      (this.requiresComment && this.comment.trim().length < this.minCommentLength)
+      (this.requiresComment &&
+        this.comment.trim().length < this.minCommentLength)
     );
   }
 
@@ -249,7 +260,8 @@ export class UploadSubmissionModalComponent implements OnInit {
 
     const trimmedComment = this.comment.trim();
     if (trimmedComment !== '') {
-      this.payload['comment'] = this.emojiService.nativeEmojiToColons(trimmedComment);
+      this.payload['comment'] =
+        this.emojiService.nativeEmojiToColons(trimmedComment);
     }
   };
 
@@ -258,11 +270,13 @@ export class UploadSubmissionModalComponent implements OnInit {
       this.uploadResponse = response;
 
       if (this.data.isTestSubmission) {
-        this.projectService.loadProject(response.project_id, this.task.unit).subscribe({
-          next: (project) => {
-            this.task.project = project;
-          },
-        });
+        this.projectService
+          .loadProject(response.project_id, this.task.unit)
+          .subscribe({
+            next: (project) => {
+              this.task.project = project;
+            },
+          });
       }
 
       return;
@@ -292,12 +306,16 @@ export class UploadSubmissionModalComponent implements OnInit {
       }
 
       const expectedStatus =
-        this.submissionType === 'need_help' || this.submissionType === 'ready_for_feedback'
+        this.submissionType === 'need_help' ||
+        this.submissionType === 'ready_for_feedback'
           ? this.submissionType
           : response.status;
 
       this.task.updateFromJson(response, this.taskService.mapping);
-      this.task.processTaskStatusChange(expectedStatus as TaskStatusEnum, this.alertService);
+      this.task.processTaskStatusChange(
+        expectedStatus as TaskStatusEnum,
+        this.alertService,
+      );
     }, 1500);
   };
 
@@ -317,12 +335,11 @@ export class UploadSubmissionModalComponent implements OnInit {
       return [{id: 'test_submission', label: 'Test Submission'}];
     }
 
-    const options: UploadSubmissionTypeOption[] = this.taskService.submittableStatuses.map(
-      (status) => ({
+    const options: UploadSubmissionTypeOption[] =
+      this.taskService.submittableStatuses.map((status) => ({
         id: status,
         label: this.taskService.statusLabels.get(status) ?? status,
-      }),
-    );
+      }));
 
     if (this.task.inSubmittedState()) {
       options.push({id: 'reupload_evidence', label: 'New Evidence'});
@@ -339,7 +356,8 @@ export class UploadSubmissionModalComponent implements OnInit {
   }
 
   private mapTeamToPayload(): {project_id: number; pct: string; pts: number}[] {
-    const total = this.task.group?.contributionSum(this.team.memberContributions) ?? 0;
+    const total =
+      this.task.group?.contributionSum(this.team.memberContributions) ?? 0;
 
     return this.team.memberContributions.map((member) => ({
       project_id: member.project.id,
@@ -348,9 +366,16 @@ export class UploadSubmissionModalComponent implements OnInit {
     }));
   }
 
-  private isValidUploadResponse(response: unknown): response is UploadSubmissionResponse {
+  private isValidUploadResponse(
+    response: unknown,
+  ): response is UploadSubmissionResponse {
     const candidate = response as Partial<UploadSubmissionResponse> | null;
 
-    return !!candidate && typeof candidate === 'object' && !!candidate.id && !!candidate.project_id;
+    return (
+      !!candidate &&
+      typeof candidate === 'object' &&
+      !!candidate.id &&
+      !!candidate.project_id
+    );
   }
 }

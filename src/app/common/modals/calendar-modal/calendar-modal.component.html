@@ -10,7 +10,9 @@
       [checked]="webcal && webcal.enabled"
       [disabled]="working"
       [matTooltip]="
-        webcal && webcal.enabled ? 'Disable the web calendar' : 'Enable the web calendar'
+        webcal && webcal.enabled
+          ? 'Disable the web calendar'
+          : 'Enable the web calendar'
       "
       (click)="onWebcalToggle()"
     >
@@ -19,18 +21,27 @@
 
   <div class="!max-h-none min-h-0 flex-1 overflow-y-auto" mat-dialog-content>
     @if (!webcal) {
-      <mat-progress-spinner class="mx-auto" color="accent" mode="indeterminate" [diameter]="36">
+      <mat-progress-spinner
+        class="mx-auto"
+        color="accent"
+        mode="indeterminate"
+        [diameter]="36"
+      >
       </mat-progress-spinner>
     }
 
     @if (webcal) {
-      <small>Your web calendar is currently {{ webcal.enabled ? 'enabled' : 'disabled' }}.</small>
+      <small
+        >Your web calendar is currently
+        {{ webcal.enabled ? 'enabled' : 'disabled' }}.</small
+      >
 
       @if (!webcal.enabled) {
         <div>
           <p>
-            The web calendar displays due dates of your tasks as calendar events in an iCalendar
-            that can be added to any iCalendar client (e.g. Outlook/Google/iCloud calendar).
+            The web calendar displays due dates of your tasks as calendar events
+            in an iCalendar that can be added to any iCalendar client (e.g.
+            Outlook/Google/iCloud calendar).
           </p>
         </div>
       }
@@ -38,14 +49,17 @@
       @if (webcal.enabled) {
         <div>
           <p>
-            The web calendar displays due dates of your tasks as calendar events. Use the following
-            URL to subscribe to your web calendar from your iCalendar client.
+            The web calendar displays due dates of your tasks as calendar
+            events. Use the following URL to subscribe to your web calendar from
+            your iCalendar client.
           </p>
 
           <mat-card appearance="outlined">
             <mat-card-header>
               <mat-card-title>Options</mat-card-title>
-              <mat-card-subtitle>Included units in my calendar:</mat-card-subtitle>
+              <mat-card-subtitle
+                >Included units in my calendar:</mat-card-subtitle
+              >
             </mat-card-header>
 
             <mat-card-content>
@@ -62,11 +76,17 @@
                     </mat-chip-option>
                   }
                   @if (excludedProjects.length > 0) {
-                    <mat-chip-option [matMenuTriggerFor]="menu" [selectable]="false">
+                    <mat-chip-option
+                      [matMenuTriggerFor]="menu"
+                      [selectable]="false"
+                    >
                       <mat-icon class="mt-1">add</mat-icon>
                       <mat-menu #menu="matMenu">
                         @for (project of excludedProjects; track project) {
-                          <button mat-menu-item (click)="removeExclusion(project)">
+                          <button
+                            mat-menu-item
+                            (click)="removeExclusion(project)"
+                          >
                             {{ project.unit.code }} {{ project.unit.name }}
                           </button>
                         }
@@ -165,12 +185,14 @@
             <div class="py-3">
               @switch (selectedCalendarProviderIndex) {
                 @case (0) {
-                  In Google Calendar, choose <strong>Add other calendars</strong>, choose
+                  In Google Calendar, choose
+                  <strong>Add other calendars</strong>, choose
                   <strong>From URL</strong>, then paste the URL below.
                 }
                 @case (1) {
                   In Apple Calendar, choose <strong>File</strong>,
-                  <strong>New Calendar Subscription</strong>, then paste the URL below.
+                  <strong>New Calendar Subscription</strong>, then paste the URL
+                  below.
                 }
                 @case (2) {
                   In Outlook Calendar, choose <strong>Add calendar</strong>,

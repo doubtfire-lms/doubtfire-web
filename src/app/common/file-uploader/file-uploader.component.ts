@@ -193,7 +193,9 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     for (const upload of this.shownUploadZones) {
       if (upload.model?.length) {
         const name: string = upload.model[0].name.toLowerCase();
-        const accepts: string[] = upload.accepts.map((ext: string) => ext.toLowerCase());
+        const accepts: string[] = upload.accepts.map((ext: string) =>
+          ext.toLowerCase(),
+        );
         const valid = accepts.some((ext) => name.endsWith(ext));
         if (!valid) {
           upload.model = null;
@@ -272,7 +274,9 @@ export class FileUploaderComponent implements OnInit, OnChanges {
 
     xhr.upload.onprogress = (event) => {
       if (event.total) {
-        this.uploadingInfo.progress = Math.floor((event.loaded / event.total) * 100);
+        this.uploadingInfo.progress = Math.floor(
+          (event.loaded / event.total) * 100,
+        );
       }
     };
 
@@ -286,7 +290,9 @@ export class FileUploaderComponent implements OnInit, OnChanges {
           } catch (e) {
             console.error(e);
             if (xhr.status === 0) {
-              response = {error: `Could not connect to ${this.externalName} the server`};
+              response = {
+                error: `Could not connect to ${this.externalName} the server`,
+              };
             } else {
               response = xhr.responseText;
             }
@@ -304,7 +310,8 @@ export class FileUploaderComponent implements OnInit, OnChanges {
           } else {
             this.onFailure?.(response);
             this.uploadingInfo.success = false;
-            this.uploadingInfo.error = (response?.error ?? 'Unknown error') as string;
+            this.uploadingInfo.error = (response?.error ??
+              'Unknown error') as string;
           }
         }, 2000);
       }
@@ -312,7 +319,10 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     const method = this.method ?? 'POST';
     xhr.open(method, this.url, true);
 
-    xhr.setRequestHeader('Auth-Token', this.userService.currentUser.authenticationToken);
+    xhr.setRequestHeader(
+      'Auth-Token',
+      this.userService.currentUser.authenticationToken,
+    );
     xhr.setRequestHeader('Username', this.userService.currentUser.username);
 
     xhr.send(form);
@@ -324,16 +334,22 @@ export class FileUploaderComponent implements OnInit, OnChanges {
 
   refreshShownUploadZones = () => {
     if (this.singleDropZone) {
-      const firstEmpty = this.uploadZones.find((z) => !z.model || z.model.length === 0);
+      const firstEmpty = this.uploadZones.find(
+        (z) => !z.model || z.model.length === 0,
+      );
       this.shownUploadZones = firstEmpty ? [firstEmpty] : [];
     }
   };
 
   createUploadZones(files: FileData[]) {
     const zones = Object.entries(files).map(([uploadName, uploadData]) => {
-      const uploadType = uploadData.type === 'archive' ? 'zip' : uploadData.type;
+      const uploadType =
+        uploadData.type === 'archive' ? 'zip' : uploadData.type;
       const typeData = ACCEPTED_TYPES[uploadType];
-      if (!typeData) throw new Error(`Invalid type provided to File Uploader ${uploadData.type}`);
+      if (!typeData)
+        throw new Error(
+          `Invalid type provided to File Uploader ${uploadData.type}`,
+        );
 
       return {
         name: uploadName,

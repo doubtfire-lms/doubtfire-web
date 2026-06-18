@@ -1,7 +1,16 @@
-<button aria-label="Close dialog button" id="dialogCloseButton" mat-dialog-close mat-icon-button>
+<button
+  aria-label="Close dialog button"
+  id="dialogCloseButton"
+  mat-dialog-close
+  mat-icon-button
+>
   <mat-icon aria-label="Quit cross icon">close</mat-icon>
 </button>
-<mat-horizontal-stepper #stepper id="intelligentDiscussionStepper" [linear]="true">
+<mat-horizontal-stepper
+  #stepper
+  id="intelligentDiscussionStepper"
+  [linear]="true"
+>
   <mat-step>
     <ng-template matStepLabel>Introduction</ng-template>
     <div class="introduction-text">
@@ -11,15 +20,16 @@
         src="/assets/images/discussion_splash_1.svg"
       />
       <p>
-        Your tutor would like to discuss some topics with you regarding this task Discussions are a
-        great way for you and your tutor to gauge your understanding of concepts and are an
-        important aspect of your portfolio. These discussions are designed to be casual and
-        informal, and will <strong>require a working microphone and speakers.</strong>
+        Your tutor would like to discuss some topics with you regarding this
+        task Discussions are a great way for you and your tutor to gauge your
+        understanding of concepts and are an important aspect of your portfolio.
+        These discussions are designed to be casual and informal, and will
+        <strong>require a working microphone and speakers.</strong>
 
         These are timed discussions,
         <strong>
-          you will have a few minutes from when you hear your tutor's discussion prompt to
-          reply.</strong
+          you will have a few minutes from when you hear your tutor's discussion
+          prompt to reply.</strong
         >
         <br /><br /><br /><br />
 
@@ -27,7 +37,13 @@
       </p>
     </div>
     <div>
-      <button color="primary" mat-button mat-raised-button matStepperNext style="float: right">
+      <button
+        color="primary"
+        mat-button
+        mat-raised-button
+        matStepperNext
+        style="float: right"
+      >
         Next
       </button>
     </div>
@@ -36,11 +52,22 @@
   <mat-step [completed]="confirmed">
     <ng-template matStepLabel>Test everything is working</ng-template>
     <microphone-tester #testRecorder></microphone-tester>
-    <button color="primary" mat-button mat-raised-button matStepperNext matStepperPrevious>
+    <button
+      color="primary"
+      mat-button
+      mat-raised-button
+      matStepperNext
+      matStepperPrevious
+    >
       Back
     </button>
     <div style="float: right">
-      <mat-checkbox matStepperNext required style="margin-right: 20px" [(ngModel)]="confirmed">
+      <mat-checkbox
+        matStepperNext
+        required
+        style="margin-right: 20px"
+        [(ngModel)]="confirmed"
+      >
         Ready to go!
       </mat-checkbox>
       <button
@@ -58,7 +85,11 @@
 
   <mat-step>
     <ng-template matStepLabel>Discussion</ng-template>
-    <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
+    <div
+      fxLayout="row"
+      fxLayoutAlign="space-around center"
+      id="discussionRecorderContainer"
+    >
       <intelligent-discussion-recorder
         #discussionRecorder
         [discussion]="data.dc"
@@ -80,8 +111,14 @@
     >
       Start discussion
     </button>
-    <div fxLayout="row" fxLayoutAlign="space-evenly center" [hidden]="!inDiscussion">
-      <h2 class="mat-headline-5">Prompt {{activePromptId+1}} of {{numberOfPrompts}}</h2>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="space-evenly center"
+      [hidden]="!inDiscussion"
+    >
+      <h2 class="mat-headline-5">
+        Prompt {{activePromptId+1}} of {{numberOfPrompts}}
+      </h2>
       <button
         mat-button
         mat-stroked-button

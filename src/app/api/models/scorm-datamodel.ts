@@ -26,7 +26,8 @@ export class ScormDataModel {
     if (key.match('cmi.interactions.\\d+.id')) {
       // cmi.interactions._count must be incremented after a new interaction is created
       const interactionPath = key.match('cmi.interactions.\\d+');
-      const objectivesCounterForInteraction = interactionPath.toString() + '.objectives._count';
+      const objectivesCounterForInteraction =
+        interactionPath.toString() + '.objectives._count';
       // console.log('Incrementing cmi.interactions._count');
       this.dataModel['cmi.interactions._count'] =
         Number(this.dataModel['cmi.interactions._count'] ?? 0) + 1;
@@ -36,11 +37,14 @@ export class ScormDataModel {
     }
     if (key.match('cmi.interactions.\\d+.objectives.\\d+.id')) {
       const interactionPath = key.match('cmi.interactions.\\d+.objectives');
-      const objectivesCounterForInteraction = interactionPath.toString() + '._count';
+      const objectivesCounterForInteraction =
+        interactionPath.toString() + '._count';
       // cmi.interactions.n.objectives._count must be incremented after objective creation
       // console.log(`Incrementing ${objectivesCounterForInteraction}`);
       this.dataModel[objectivesCounterForInteraction.toString()] =
-        Number(this.dataModel[objectivesCounterForInteraction.toString()] ?? 0) + 1;
+        Number(
+          this.dataModel[objectivesCounterForInteraction.toString()] ?? 0,
+        ) + 1;
     }
     if (key.match('cmi.objectives.\\d+.id')) {
       // cmi.objectives._count must be incremented after a new objective is created

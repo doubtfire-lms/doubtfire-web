@@ -2,7 +2,10 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatMenuModule} from '@angular/material/menu';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {
+  GlobalStateService,
+  ViewType,
+} from 'src/app/projects/states/index/global-state.service';
 import {CheckForUpdateService} from 'src/app/sessions/service-worker-updater/check-for-update.service';
 import {IsActiveUnitRole} from '../pipes/is-active-unit-role.pipe';
 import {HeaderComponent} from './header.component';
@@ -19,8 +22,12 @@ describe('HeaderComponent', () => {
 
   beforeEach(waitForAsync(() => {
     const showHideHeader: Subject<boolean> = new Subject();
-    const unitRolesSubject: BehaviorSubject<UnitRole[]> = new BehaviorSubject(null);
-    const projectsSubject: BehaviorSubject<Project[]> = new BehaviorSubject(null);
+    const unitRolesSubject: BehaviorSubject<UnitRole[]> = new BehaviorSubject(
+      null,
+    );
+    const projectsSubject: BehaviorSubject<Project[]> = new BehaviorSubject(
+      null,
+    );
     const currentViewAndEntitySubject$: BehaviorSubject<{
       viewType: ViewType;
       entity: Unit | Project | UnitRole;

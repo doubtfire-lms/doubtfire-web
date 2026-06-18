@@ -4,15 +4,24 @@
       <div>
         <div>{{ engagement.engagementType }} Engagement</div>
         <p class="mt-1 text-sm font-normal text-gray-500">
-          Added by {{ engagement.user?.firstName }} {{ engagement.user?.lastName }}
+          Added by {{ engagement.user?.firstName }}
+          {{ engagement.user?.lastName }}
           <span class="mx-1">·</span>
-          <span matTooltipPosition="above" [matTooltip]="engagement.occurredAt | localizedDateTime">
+          <span
+            matTooltipPosition="above"
+            [matTooltip]="engagement.occurredAt | localizedDateTime"
+          >
             {{ engagement.occurredAt | humanizedDate }}
           </span>
         </p>
       </div>
 
-      <button aria-label="Close engagement" mat-dialog-close mat-icon-button type="button">
+      <button
+        aria-label="Close engagement"
+        mat-dialog-close
+        mat-icon-button
+        type="button"
+      >
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -32,7 +41,11 @@
         <mat-card class="mb-2.5 p-3">
           <div class="flex justify-between gap-3">
             <mat-card-title class="flex min-w-0 items-center">
-              <user-icon class="mr-2" size="25" [user]="engagement.user"></user-icon>
+              <user-icon
+                class="mr-2"
+                size="25"
+                [user]="engagement.user"
+              ></user-icon>
               <span class="truncate">
                 {{ engagement.user?.firstName }} {{ engagement.user?.lastName }}
               </span>
@@ -40,7 +53,8 @@
             <div class="flex shrink-0 items-center">
               <mat-card-subtitle
                 [matTooltip]="
-                  'This engagement was added on ' + (engagement.createdAt | localizedDateTime)
+                  'This engagement was added on ' +
+                  (engagement.createdAt | localizedDateTime)
                 "
               >
                 {{ engagement.createdAt | humanizedDate }}
@@ -67,16 +81,26 @@
                   </a>
                 }
 
-                @if (engagement.hasAttachment && engagement.contentType === 'image') {
+                @if (
+                  engagement.hasAttachment && engagement.contentType === 'image'
+                ) {
                   @if (evidenceLoading) {
-                    <div class="flex min-h-32 items-center justify-center rounded-md bg-gray-50">
+                    <div
+                      class="flex min-h-32 items-center justify-center rounded-md bg-gray-50"
+                    >
                       <mat-spinner diameter="28"></mat-spinner>
                     </div>
                   } @else if (evidenceBlobUrl) {
-                    <button class="block" type="button" (click)="openAttachment()">
+                    <button
+                      class="block"
+                      type="button"
+                      (click)="openAttachment()"
+                    >
                       <img
                         class="max-h-64 max-w-full rounded-md border border-gray-200 object-contain"
-                        [alt]="engagement.attachmentFileName || 'Engagement evidence'"
+                        [alt]="
+                          engagement.attachmentFileName || 'Engagement evidence'
+                        "
                         [src]="evidenceBlobUrl | safe"
                         (load)="scrollToBottom()"
                       />
@@ -99,7 +123,9 @@
                 }
 
                 @if (evidenceLoadFailed) {
-                  <p class="text-sm text-red-600">Unable to load the attached evidence.</p>
+                  <p class="text-sm text-red-600">
+                    Unable to load the attached evidence.
+                  </p>
                 }
               </div>
             }
@@ -113,7 +139,10 @@
             >
               <div
                 class="flex items-center"
-                [ngClass]="comment.replyTo && 'cursor-pointer hover:text-blue-500 hover:underline'"
+                [ngClass]="
+                  comment.replyTo &&
+                  'cursor-pointer hover:text-blue-500 hover:underline'
+                "
                 (click)="scrollToComment(comment.replyTo)"
               >
                 <mat-icon class="mr-2">reply</mat-icon>
@@ -123,9 +152,13 @@
                       Replying to {{ comment.replyTo.user?.preferredName }}
                       {{ comment.replyTo.user?.lastName }}
                     </span>
-                    <span class="text-xs text-gray-600">{{ comment.replyTo.comment }}</span>
+                    <span class="text-xs text-gray-600">{{
+                      comment.replyTo.comment
+                    }}</span>
                   } @else {
-                    <span class="text-xs italic text-gray-400">Replying to: Deleted comment</span>
+                    <span class="text-xs italic text-gray-400"
+                      >Replying to: Deleted comment</span
+                    >
                   }
                 </div>
               </div>
@@ -139,7 +172,9 @@
             (mouseout)="hoveredCommentId = undefined"
             (mouseover)="hoveredCommentId = comment.id"
           >
-            <div class="action absolute bottom-3 right-3 z-10 flex items-center">
+            <div
+              class="action absolute bottom-3 right-3 z-10 flex items-center"
+            >
               @if (comment.currentUserCanEdit) {
                 <mat-icon
                   aria-label="Edit comment"
@@ -172,7 +207,11 @@
 
             <div class="flex justify-between">
               <mat-card-title class="flex items-center">
-                <user-icon size="25" style="margin-right: 8px" [user]="comment.user"></user-icon>
+                <user-icon
+                  size="25"
+                  style="margin-right: 8px"
+                  [user]="comment.user"
+                ></user-icon>
                 {{ comment.user?.firstName }} {{ comment.user?.lastName }}
               </mat-card-title>
               <div class="flex items-center">
@@ -188,7 +227,10 @@
 
             <mat-card-content class="pb-8 pt-2.5">
               @if (editingComment?.id === comment.id) {
-                <mat-form-field appearance="outline" class="flex w-full items-center">
+                <mat-form-field
+                  appearance="outline"
+                  class="flex w-full items-center"
+                >
                   <mat-label>Update Comment</mat-label>
                   <textarea
                     class="w-full resize-none overflow-hidden px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
@@ -199,7 +241,13 @@
                     (keydown.meta.enter)="updateComment()"
                   ></textarea>
                   <div class="flex justify-end gap-1">
-                    <button mat-raised-button type="button" (click)="cancelEdit()">Cancel</button>
+                    <button
+                      mat-raised-button
+                      type="button"
+                      (click)="cancelEdit()"
+                    >
+                      Cancel
+                    </button>
                     <button
                       color="primary"
                       mat-raised-button
@@ -212,7 +260,10 @@
                   </div>
                 </mat-form-field>
               } @else {
-                <div class="markdown-to-html" [innerHTML]="comment.comment | marked"></div>
+                <div
+                  class="markdown-to-html"
+                  [innerHTML]="comment.comment | marked"
+                ></div>
               }
             </mat-card-content>
           </mat-card>
@@ -249,7 +300,12 @@
                 </span>
               </div>
             </div>
-            <button aria-label="Cancel reply" mat-icon-button type="button" (click)="cancelReply()">
+            <button
+              aria-label="Cancel reply"
+              mat-icon-button
+              type="button"
+              (click)="cancelReply()"
+            >
               <mat-icon>close</mat-icon>
             </button>
           </div>
@@ -275,7 +331,10 @@
             (click)="submitComment()"
           >
             @if (submitting) {
-              <mat-spinner class="mr-2 inline-block" diameter="18"></mat-spinner>
+              <mat-spinner
+                class="mr-2 inline-block"
+                diameter="18"
+              ></mat-spinner>
               Posting...
             } @else {
               Submit

@@ -5,7 +5,10 @@ import {Unit} from 'src/app/api/models/unit';
 import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {
+  GlobalStateService,
+  ViewType,
+} from 'src/app/projects/states/index/global-state.service';
 
 @Component({
   selector: 'f-rollover',
@@ -34,7 +37,8 @@ export class RolloverComponent implements OnInit {
     private teachingPeriodService: TeachingPeriodService,
   ) {}
   ngOnInit(): void {
-    this.unitId = this.unitId ?? Number(this.route.parent?.snapshot.paramMap.get('unitId'));
+    this.unitId =
+      this.unitId ?? Number(this.route.parent?.snapshot.paramMap.get('unitId'));
     this.globalStateService.onLoad(() => {
       this.unitService.get(this.unitId).subscribe({
         next: (unit) => {
@@ -55,9 +59,12 @@ export class RolloverComponent implements OnInit {
   initUnit() {
     this.teachingPeriodService.cache.values.subscribe((periods) => {
       this.teachingPeriods = periods;
-      this.teachingPeriods = periods.filter((p) => p.endDate.getTime() > Date.now());
+      this.teachingPeriods = periods.filter(
+        (p) => p.endDate.getTime() > Date.now(),
+      );
       if (this.teachingPeriods.length) {
-        this.teachingPeriod = this.teachingPeriods[this.teachingPeriods.length - 1];
+        this.teachingPeriod =
+          this.teachingPeriods[this.teachingPeriods.length - 1];
       }
     });
   }

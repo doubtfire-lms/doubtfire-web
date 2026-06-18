@@ -71,7 +71,9 @@ export class PortfolioReviewStepComponent implements OnInit {
   }
 
   public get extraFiles(): {kind: string; name: string; idx: number}[] {
-    return (this.project?.portfolioFiles ?? []).filter((file) => file.idx !== 0);
+    return (this.project?.portfolioFiles ?? []).filter(
+      (file) => file.idx !== 0,
+    );
   }
 
   public get selectedTasks(): Task[] {
@@ -112,7 +114,10 @@ export class PortfolioReviewStepComponent implements OnInit {
             this.alertService.message('Portfolio has been deleted!', 5000);
           },
           error: (error) => {
-            this.alertService.error(`Could not delete portfolio: ${error}`, 6000);
+            this.alertService.error(
+              `Could not delete portfolio: ${error}`,
+              6000,
+            );
           },
         });
       },

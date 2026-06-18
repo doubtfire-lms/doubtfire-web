@@ -23,7 +23,12 @@
           </div>
         } @else {
           <mat-form-field appearance="outline" class="data-entry">
-            <input formControlName="name" matInput placeholder="Name" required />
+            <input
+              formControlName="name"
+              matInput
+              placeholder="Name"
+              required
+            />
           </mat-form-field>
         }
       </td>
@@ -44,20 +49,32 @@
           </div>
         } @else {
           <mat-form-field appearance="outline" class="data-entry">
-            <input formControlName="abbreviation" matInput placeholder="Abbreviation" required />
+            <input
+              formControlName="abbreviation"
+              matInput
+              placeholder="Abbreviation"
+              required
+            />
           </mat-form-field>
         }
       </td>
       <td *matFooterCellDef mat-footer-cell>
         <mat-form-field appearance="outline" class="data-entry">
-          <input formControlName="abbreviation" matInput placeholder="Abbreviation" required />
+          <input
+            formControlName="abbreviation"
+            matInput
+            placeholder="Abbreviation"
+            required
+          />
         </mat-form-field>
       </td>
     </ng-container>
 
     <!-- Mode Column -->
     <ng-container matColumnDef="mode" [formGroup]="formData">
-      <th *matHeaderCellDef mat-header-cell mat-sort-header>Default Sync Mode</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>
+        Default Sync Mode
+      </th>
       <td *matCellDef="let campus" mat-cell>
         @if (!editing(campus)) {
           <div>
@@ -109,7 +126,11 @@
       <td *matFooterCellDef mat-footer-cell>
         <mat-form-field appearance="outline" class="data-entry">
           <mat-label>Timezone</mat-label>
-          <input formControlName="timezone" matInput placeholder="Eg. Australia/Melbourne" />
+          <input
+            formControlName="timezone"
+            matInput
+            placeholder="Eg. Australia/Melbourne"
+          />
         </mat-form-field>
       </td>
     </ng-container>
@@ -123,7 +144,8 @@
             <mat-checkbox disabled [checked]="campus.active"> </mat-checkbox>
           </div>
         } @else {
-          <mat-checkbox formControlName="active" [checked]="campus.active"> </mat-checkbox>
+          <mat-checkbox formControlName="active" [checked]="campus.active">
+          </mat-checkbox>
         }
       </td>
       <td *matFooterCellDef mat-footer-cell>
@@ -141,7 +163,11 @@
             <mat-icon>more_vert</mat-icon>
           </button> -->
             <!-- <mat-menu #menu="matMenu"> -->
-            <button aria-label="edit campus" mat-icon-button (click)="flagEdit(campus)">
+            <button
+              aria-label="edit campus"
+              mat-icon-button
+              (click)="flagEdit(campus)"
+            >
               <mat-icon>edit</mat-icon>
             </button>
             <!-- </mat-menu> -->
@@ -149,7 +175,12 @@
         } @else {
           <div class="edit-actions right">
             <span>
-              <button aria-label="cancel edit" color="warn" mat-icon-button (click)="cancelEdit()">
+              <button
+                aria-label="cancel edit"
+                color="warn"
+                mat-icon-button
+                (click)="cancelEdit()"
+              >
                 <mat-icon>cancel</mat-icon>
               </button>
               <button

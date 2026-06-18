@@ -9,12 +9,12 @@ export class NestedCsvDownloadModalService {
   constructor(public dialog: MatDialog) {}
 
   public show(url: string, name: string, type: string) {
-    this.dialog.open<NestedCsvDownloadModalComponent, {url: string; name: string; type: string}>(
+    this.dialog.open<
       NestedCsvDownloadModalComponent,
-      {
-        data: {url, name, type},
-        width: '500px',
-      },
-    );
+      {url: string; name: string; type: string}
+    >(NestedCsvDownloadModalComponent, {
+      data: {url, name, type},
+      width: '500px',
+    });
   }
 }

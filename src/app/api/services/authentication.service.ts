@@ -6,7 +6,10 @@ import {User, UserService} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {
+  GlobalStateService,
+  ViewType,
+} from 'src/app/projects/states/index/global-state.service';
 
 /**
  * The format for the data returned from the auth api.
@@ -107,11 +110,17 @@ export class AuthenticationService {
   }
 
   public get rememberMe(): boolean {
-    return localStorage.getItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) !== 'false';
+    return (
+      localStorage.getItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN) !==
+      'false'
+    );
   }
 
   public set rememberMe(remember: boolean) {
-    localStorage.setItem(this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN, remember ? 'true' : 'false');
+    localStorage.setItem(
+      this.REMEMBER_DOUBTFIRE_CREDENTIALS_TOKEN,
+      remember ? 'true' : 'false',
+    );
   }
 
   /**
@@ -145,7 +154,10 @@ export class AuthenticationService {
   ];
 
   private isValidRoleWhitelist(roleWhitelist: string[]) {
-    return roleWhitelist.filter((role: string) => this.validRoles.includes(role)).length !== 0;
+    return (
+      roleWhitelist.filter((role: string) => this.validRoles.includes(role))
+        .length !== 0
+    );
   }
 
   public isAuthorised(roleWhitelist: string[], role?: string): boolean {
@@ -166,7 +178,10 @@ export class AuthenticationService {
    *
    * @param response the response from the authentication API
    */
-  private setupUserFromResponse(response: AuthResponse, firstTime: boolean = true): void {
+  private setupUserFromResponse(
+    response: AuthResponse,
+    firstTime: boolean = true,
+  ): void {
     // Extract relevant data from response and construct user object to store in cache.
     const user: User = this.userService.cache.getOrCreate(
       response.user['id'],
@@ -235,7 +250,10 @@ export class AuthenticationService {
     );
   }
 
-  public signInWithLti(userCredentials: {ltik: string; lti_token: string}): Observable<void> {
+  public signInWithLti(userCredentials: {
+    ltik: string;
+    lti_token: string;
+  }): Observable<void> {
     return this.httpClient.post(`${this.AUTH_URL}/lti`, userCredentials).pipe(
       map((response: AuthResponse) => {
         const username = encodeURIComponent(response.user['username']);
@@ -280,10 +298,12 @@ export class AuthenticationService {
 
     // If we have a token, delete it...
     if (this.userService.currentUser.authenticationToken) {
-      this.httpClient.delete(this.AUTH_URL, {params: {remember: false}}).subscribe({
-        next: (_response) => doSignOut(),
-        error: (_response) => doSignOut(),
-      });
+      this.httpClient
+        .delete(this.AUTH_URL, {params: {remember: false}})
+        .subscribe({
+          next: (_response) => doSignOut(),
+          error: (_response) => doSignOut(),
+        });
     } else {
       doSignOut();
     }

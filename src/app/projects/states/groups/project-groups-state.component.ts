@@ -24,7 +24,8 @@ export class ProjectGroupsStateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.project$ = this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
+    this.project$ =
+      this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
 
     this.projectSub = this.project$?.subscribe((project) => {
       if (!project) {
@@ -32,7 +33,8 @@ export class ProjectGroupsStateComponent implements OnInit, OnDestroy {
       }
 
       this.project = project;
-      this.selectedGroupSet = this.selectedGroupSet ?? project.unit?.groupSets?.[0];
+      this.selectedGroupSet =
+        this.selectedGroupSet ?? project.unit?.groupSets?.[0];
     });
   }
 

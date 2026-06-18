@@ -11,11 +11,19 @@
           {{ panelOpenState() ? 'Hide' : 'Show' }} task details
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <f-task-description-card [taskDef]="taskDef" [unit]="unit"></f-task-description-card>
+      <f-task-description-card
+        [taskDef]="taskDef"
+        [unit]="unit"
+      ></f-task-description-card>
     </mat-expansion-panel>
   </div>
 
-  <div fxFlexFill fxLayout="column" fxLayoutAlign="center center" [hidden]="taskDef">
+  <div
+    fxFlexFill
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    [hidden]="taskDef"
+  >
     <mat-icon>subtitles_off</mat-icon>
   </div>
 </div>

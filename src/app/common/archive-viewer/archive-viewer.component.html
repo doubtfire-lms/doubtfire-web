@@ -1,21 +1,29 @@
 <div class="flex size-full min-h-0 min-w-0 max-w-full flex-col">
   @if (isLoading) {
-    <div class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-slate-600">
+    <div
+      class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-slate-600"
+    >
       <mat-spinner diameter="40" strokeWidth="3"></mat-spinner>
       <span>Loading archive...</span>
     </div>
   } @else if (errorMessage) {
-    <div class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-red-700">
+    <div
+      class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-red-700"
+    >
       <mat-icon class="size-5">error_outline</mat-icon>
       <span>{{ errorMessage }}</span>
     </div>
   } @else if (!archiveFile) {
-    <div class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-slate-600">
+    <div
+      class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-slate-600"
+    >
       <mat-icon class="size-5">folder_zip</mat-icon>
       <span>Select an archive to preview.</span>
     </div>
   } @else if (!hasFiles) {
-    <div class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-slate-600">
+    <div
+      class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-slate-600"
+    >
       <mat-icon class="size-5">folder_off</mat-icon>
       <span>No files to display.</span>
     </div>
@@ -65,9 +73,19 @@
             [value]="selectedTab"
             (change)="selectTab($event.value)"
           >
-            @for (file of files; track trackByPath($index, file); let i = $index) {
-              <mat-button-toggle class="flex-none" [title]="file.path" [value]="i">
-                <span class="inline-block max-w-36 truncate align-bottom">{{ file.tabLabel }}</span>
+            @for (
+              file of files;
+              track trackByPath($index, file);
+              let i = $index
+            ) {
+              <mat-button-toggle
+                class="flex-none"
+                [title]="file.path"
+                [value]="i"
+              >
+                <span class="inline-block max-w-36 truncate align-bottom">{{
+                  file.tabLabel
+                }}</span>
               </mat-button-toggle>
             }
           </mat-button-toggle-group>
@@ -108,7 +126,9 @@
               [ngTemplateOutlet]="filePathLabel"
               [ngTemplateOutletContext]="{$implicit: file.path}"
             ></ng-container>
-            <div class="flex min-h-[350px] w-full flex-1 items-center justify-center p-2.5">
+            <div
+              class="flex min-h-[350px] w-full flex-1 items-center justify-center p-2.5"
+            >
               <img
                 class="max-h-full max-w-full object-contain"
                 [alt]="file.name"
@@ -122,7 +142,10 @@
               [ngTemplateOutlet]="filePathLabel"
               [ngTemplateOutletContext]="{$implicit: file.path}"
             ></ng-container>
-            <f-pdf-viewer class="block size-full flex-1" [pdfUrl]="file.blobUrl"></f-pdf-viewer>
+            <f-pdf-viewer
+              class="block size-full flex-1"
+              [pdfUrl]="file.blobUrl"
+            ></f-pdf-viewer>
           </div>
         } @else {
           <div
@@ -131,7 +154,11 @@
             <mat-icon class="size-6">insert_drive_file</mat-icon>
             <div>
               <p class="mb-2">This file type cannot be previewed.</p>
-              <button color="primary" mat-stroked-button (click)="downloadSelectedFile()">
+              <button
+                color="primary"
+                mat-stroked-button
+                (click)="downloadSelectedFile()"
+              >
                 <mat-icon>download</mat-icon>
                 Download {{ file.name }}
               </button>

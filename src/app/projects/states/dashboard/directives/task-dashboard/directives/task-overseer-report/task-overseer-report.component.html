@@ -38,8 +38,12 @@
           <div class="flex items-center gap-3">
             @if (assessmentFor(history); as oa) {
               @if (oa.reportReady) {
-                <span class="text-xs text-gray-500">Click to view Overseer report</span>
-                <span class="text-gray-500"> {{ oa.passedSteps }} / {{ oa.totalSteps }}</span>
+                <span class="text-xs text-gray-500"
+                  >Click to view Overseer report</span
+                >
+                <span class="text-gray-500">
+                  {{ oa.passedSteps }} / {{ oa.totalSteps }}</span
+                >
                 @if (oa.passedSteps === oa.totalSteps) {
                   <mat-icon color="primary">done</mat-icon>
                 } @else {
@@ -48,7 +52,10 @@
               } @else {
                 <span class="flex items-center gap-3 uppercase">
                   Tests In Progress
-                  <mat-progress-spinner mode="indeterminate" [diameter]="25"></mat-progress-spinner>
+                  <mat-progress-spinner
+                    mode="indeterminate"
+                    [diameter]="25"
+                  ></mat-progress-spinner>
                 </span>
               }
             }
@@ -64,12 +71,18 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="viewSubmissionFiles(history, $event)">
+                <button
+                  mat-menu-item
+                  (click)="viewSubmissionFiles(history, $event)"
+                >
                   <mat-icon>folder_zip</mat-icon>
                   View Submission Files
                 </button>
                 @if (hasComparisonSourceFor(history)) {
-                  <button mat-menu-item (click)="compareWithSelected(history, $event)">
+                  <button
+                    mat-menu-item
+                    (click)="compareWithSelected(history, $event)"
+                  >
                     <mat-icon>compare_arrows</mat-icon>
                     Compare With Selected
                   </button>
@@ -81,7 +94,13 @@
                 } @else {
                   <button
                     mat-menu-item
-                    (click)="selectComparisonSource(history, $event, submissionMenuTrigger)"
+                    (click)="
+                      selectComparisonSource(
+                        history,
+                        $event,
+                        submissionMenuTrigger
+                      )
+                    "
                   >
                     <mat-icon>task_alt</mat-icon>
                     Select For Comparison
@@ -94,11 +113,18 @@
 
         @if (assessmentFor(history); as oa) {
           <mat-accordion>
-            @for (result of oa.stepResultsCache.values | async; track result.id; let idx = $index) {
+            @for (
+              result of oa.stepResultsCache.values | async;
+              track result.id;
+              let idx = $index
+            ) {
               <mat-expansion-panel>
-                <mat-expansion-panel-header class="flex items-center justify-between">
+                <mat-expansion-panel-header
+                  class="flex items-center justify-between"
+                >
                   <mat-panel-title>
-                    Step {{ idx + 1 }}: {{ result.overseerStep?.displayName }}</mat-panel-title
+                    Step {{ idx + 1 }}:
+                    {{ result.overseerStep?.displayName }}</mat-panel-title
                   >
                   @if (result.pass) {
                     <mat-icon color="primary">done</mat-icon>
@@ -111,7 +137,9 @@
                 <!-- <p>Pass?: {{ result.pass }}</p> -->
 
                 @if (!result.pass) {
-                  <p class="text-normal w-full p-1 text-left tracking-wide text-gray-500">
+                  <p
+                    class="text-normal w-full p-1 text-left tracking-wide text-gray-500"
+                  >
                     {{ result.feedbackMessage }}
                   </p>
                 }
@@ -119,12 +147,17 @@
                 @if (
                   result.expectedOutput &&
                   result.expectedOutput !== result.stdout &&
-                  (result.overseerStep?.stepType === 'output_diff' || !result.overseerStep)
+                  (result.overseerStep?.stepType === 'output_diff' ||
+                    !result.overseerStep)
                 ) {
-                  <div class="w-fill mb-3 flex items-center justify-center gap-1">
+                  <div
+                    class="w-fill mb-3 flex items-center justify-center gap-1"
+                  >
                     <button
                       mat-stroked-button
-                      [color]="viewOutput === 'your_output' ? 'primary' : undefined"
+                      [color]="
+                        viewOutput === 'your_output' ? 'primary' : undefined
+                      "
                       (click)="submissionOutput()"
                     >
                       Your Output
@@ -132,7 +165,9 @@
 
                     <button
                       mat-stroked-button
-                      [color]="viewOutput === 'expected_output' ? 'primary' : undefined"
+                      [color]="
+                        viewOutput === 'expected_output' ? 'primary' : undefined
+                      "
                       (click)="expectedOutput()"
                     >
                       Expected Output
@@ -147,7 +182,9 @@
 
                     <button
                       mat-stroked-button
-                      [color]="viewOutput === 'split_diff' ? 'primary' : undefined"
+                      [color]="
+                        viewOutput === 'split_diff' ? 'primary' : undefined
+                      "
                       (click)="splitDiff()"
                     >
                       Split Diff
@@ -185,7 +222,9 @@
                     class="scrollbar-gutter-stable max-h-44 max-w-full overflow-auto whitespace-pre-wrap break-words rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed text-gray-800 shadow-inner"
                   ><code>{{result.stdout}}</code></pre>
                 } @else if (result.pass) {
-                  <div class="w-full text-center uppercase tracking-wide text-gray-400">
+                  <div
+                    class="w-full text-center uppercase tracking-wide text-gray-400"
+                  >
                     SUCCESS
                   </div>
                   <div
@@ -198,16 +237,25 @@
             }
             @if (loadingAssessments.has(oa.id)) {
               <div class="flex w-full items-center justify-center">
-                <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+                <mat-progress-spinner
+                  mode="indeterminate"
+                ></mat-progress-spinner>
               </div>
             } @else {
-              @for (skipped of oa.stepsSkipped; track skipped.id; let idx = $index) {
+              @for (
+                skipped of oa.stepsSkipped;
+                track skipped.id;
+                let idx = $index
+              ) {
                 <!-- TODO: filter oa.stepsSkipped, if this overseer assessment passed, then we can ignore this (dont render) skipped step -->
                 <!-- TODO: because it proably means the test was added after the assessment -->
                 <mat-expansion-panel disabled>
-                  <mat-expansion-panel-header class="flex items-center justify-between">
+                  <mat-expansion-panel-header
+                    class="flex items-center justify-between"
+                  >
                     <mat-panel-title>
-                      Step {{ oa.stepResultsCache.currentValues.length + idx + 1 }}:
+                      Step
+                      {{ oa.stepResultsCache.currentValues.length + idx + 1 }}:
                       {{ skipped?.displayName ?? '-' }}
                       <span class="ml-3 italic">(Skipped)</span>
                     </mat-panel-title>
@@ -221,8 +269,11 @@
         }
       </mat-expansion-panel>
     } @empty {
-      <div class="flex size-full flex-col items-center justify-center text-[#c5c5c5]">
-        <mat-icon style="height: 120px; width: 120px; font-size: 120px; color: #c5c5c5"
+      <div
+        class="flex size-full flex-col items-center justify-center text-[#c5c5c5]"
+      >
+        <mat-icon
+          style="height: 120px; width: 120px; font-size: 120px; color: #c5c5c5"
           >subtitles_off</mat-icon
         >
         <div>No retained submissions for this task.</div>

@@ -1,4 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {Observable, Subscription} from 'rxjs';
@@ -31,7 +37,8 @@ export class TaskDefinitionDiscussionPromptsComponent
 
   private prereqSub?: Subscription;
 
-  public dataSource: MatTableDataSource<DiscussionPrompt> = new MatTableDataSource();
+  public dataSource: MatTableDataSource<DiscussionPrompt> =
+    new MatTableDataSource();
 
   creatingNewDiscussionPrompt: boolean = false;
 
@@ -61,20 +68,25 @@ export class TaskDefinitionDiscussionPromptsComponent
   }
 
   ngOnInit(): void {
-    this.prereqSub = this.taskDefinition.discussionPromptsCache.values.subscribe((values) => {
-      this.dataSource.data = values;
-    });
+    this.prereqSub =
+      this.taskDefinition.discussionPromptsCache.values.subscribe((values) => {
+        this.dataSource.data = values;
+      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
       changes.taskDefinition &&
-      changes.taskDefinition.previousValue?.id !== changes.taskDefinition.currentValue?.id
+      changes.taskDefinition.previousValue?.id !==
+        changes.taskDefinition.currentValue?.id
     ) {
       this.prereqSub?.unsubscribe();
-      this.prereqSub = this.taskDefinition.discussionPromptsCache.values.subscribe((values) => {
-        this.dataSource.data = values;
-      });
+      this.prereqSub =
+        this.taskDefinition.discussionPromptsCache.values.subscribe(
+          (values) => {
+            this.dataSource.data = values;
+          },
+        );
       this.fetchDiscussionPrompts();
     }
   }
@@ -84,14 +96,19 @@ export class TaskDefinitionDiscussionPromptsComponent
     if (!taskDefinition.id) {
       return;
     }
-    this.discussionPromptService.loadDiscussionPrompts(null, taskDefinition).subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
-      },
-      error: (error) => {
-        this.alertService.error(`Failed to load discussion prompts: ${error}`, 6000);
-      },
-    });
+    this.discussionPromptService
+      .loadDiscussionPrompts(null, taskDefinition)
+      .subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+        },
+        error: (error) => {
+          this.alertService.error(
+            `Failed to load discussion prompts: ${error}`,
+            6000,
+          );
+        },
+      });
   }
 
   public addNewPrompt() {
@@ -113,9 +130,12 @@ export class TaskDefinitionDiscussionPromptsComponent
         next: (_result) => {
           this.cancelNewDiscussionPrompt();
           this.prereqSub?.unsubscribe();
-          this.prereqSub = this.taskDefinition.discussionPromptsCache.values.subscribe((values) => {
-            this.dataSource.data = values;
-          });
+          this.prereqSub =
+            this.taskDefinition.discussionPromptsCache.values.subscribe(
+              (values) => {
+                this.dataSource.data = values;
+              },
+            );
           this.alertService.success(`Succesfully created prompt`, 3000);
         },
         error: (error) => {

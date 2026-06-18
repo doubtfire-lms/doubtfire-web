@@ -8,7 +8,12 @@
         ></ngx-skeleton-loader>
         <ngx-skeleton-loader
           class="min-w-0 flex-1"
-          [theme]="{height: '16px', width: '100%', 'border-radius': '999px', margin: '0'}"
+          [theme]="{
+            height: '16px',
+            width: '100%',
+            'border-radius': '999px',
+            margin: '0',
+          }"
         ></ngx-skeleton-loader>
       </div>
     </div>
@@ -20,10 +25,20 @@
         >
           <div class="min-w-0 flex-1">
             <ngx-skeleton-loader
-              [theme]="{height: '12px', width: '82%', 'border-radius': '999px', margin: '0 0 8px'}"
+              [theme]="{
+                height: '12px',
+                width: '82%',
+                'border-radius': '999px',
+                margin: '0 0 8px',
+              }"
             ></ngx-skeleton-loader>
             <ngx-skeleton-loader
-              [theme]="{height: '10px', width: '58%', 'border-radius': '999px', margin: '0'}"
+              [theme]="{
+                height: '10px',
+                width: '58%',
+                'border-radius': '999px',
+                margin: '0',
+              }"
             ></ngx-skeleton-loader>
           </div>
           <ngx-skeleton-loader
@@ -78,7 +93,9 @@
           ></f-task-dashboard>
         </div>
         <div #commentspanel class="w-1/4 flex-none rounded-lg bg-white p-1">
-          <task-comments-viewer [task]="project.findTaskForDefinition(selectedTaskDefinition.id)">
+          <task-comments-viewer
+            [task]="project.findTaskForDefinition(selectedTaskDefinition.id)"
+          >
           </task-comments-viewer>
         </div>
       } @else if (!isProjectTaskListReady(project)) {
@@ -93,16 +110,29 @@
               }"
             ></ngx-skeleton-loader>
             <ngx-skeleton-loader
-              [theme]="{height: '140px', width: '100%', 'border-radius': '8px', margin: '0 0 16px'}"
+              [theme]="{
+                height: '140px',
+                width: '100%',
+                'border-radius': '8px',
+                margin: '0 0 16px',
+              }"
             ></ngx-skeleton-loader>
             <ngx-skeleton-loader
-              [theme]="{height: '220px', width: '100%', 'border-radius': '8px', margin: '0'}"
+              [theme]="{
+                height: '220px',
+                width: '100%',
+                'border-radius': '8px',
+                margin: '0',
+              }"
             ></ngx-skeleton-loader>
           </div>
         </div>
       } @else {
         <div class="min-h-0 flex-1 overflow-y-auto p-1">
-          <f-progress-dashboard class="w-full" [project]="project"></f-progress-dashboard>
+          <f-progress-dashboard
+            class="w-full"
+            [project]="project"
+          ></f-progress-dashboard>
         </div>
       }
     </div>

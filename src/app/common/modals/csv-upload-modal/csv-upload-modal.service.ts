@@ -19,17 +19,20 @@ export class CsvUploadModalService {
     url: string,
     onSuccess?: (response: unknown) => void,
   ): void {
-    this.dialog.open<CsvUploadModalComponent, CsvUploadModalData>(CsvUploadModalComponent, {
-      width: '90vw',
-      maxWidth: '900px',
-      maxHeight: '90vh',
-      data: {
-        title,
-        message,
-        batchFiles,
-        url,
-        onSuccess,
+    this.dialog.open<CsvUploadModalComponent, CsvUploadModalData>(
+      CsvUploadModalComponent,
+      {
+        width: '90vw',
+        maxWidth: '900px',
+        maxHeight: '90vh',
+        data: {
+          title,
+          message,
+          batchFiles,
+          url,
+          onSuccess,
+        },
       },
-    });
+    );
   }
 }

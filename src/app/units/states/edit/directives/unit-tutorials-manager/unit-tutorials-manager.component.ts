@@ -32,10 +32,16 @@ export class UnitTutorialsManagerComponent implements OnInit {
   onClickNewActivity(activity: ActivityType) {
     this.unit.nextStream(activity.abbreviation).subscribe({
       next: (value: TutorialStream) => {
-        this.alertService.success(`Added tutorial stream ${value.abbreviation}`, 2000);
+        this.alertService.success(
+          `Added tutorial stream ${value.abbreviation}`,
+          2000,
+        );
       },
       error: (message) => {
-        this.alertService.error(`Error creating tutorial stream: ${message}`, 8000);
+        this.alertService.error(
+          `Error creating tutorial stream: ${message}`,
+          8000,
+        );
       },
     });
   }

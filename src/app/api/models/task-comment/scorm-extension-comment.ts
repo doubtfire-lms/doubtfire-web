@@ -18,7 +18,8 @@ export class ScormExtensionComment extends TaskComment {
     const tcs: TaskCommentService = AppInjector.get(TaskCommentService);
     return tcs.assessScormExtension(this).pipe(
       tap((tc: TaskComment) => {
-        const scormExtension: ScormExtensionComment = tc as ScormExtensionComment;
+        const scormExtension: ScormExtensionComment =
+          tc as ScormExtensionComment;
 
         const task = tc.task;
         task.scormExtensions = scormExtension.taskScormExtensions;

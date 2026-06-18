@@ -41,31 +41,39 @@ export class DoubtfireConstants {
   public SignoutURL: string;
 
   // initialise exernal name to loading.
-  public ExternalName: BehaviorSubject<string> = new BehaviorSubject<string>('Loading...');
+  public ExternalName: BehaviorSubject<string> = new BehaviorSubject<string>(
+    'Loading...',
+  );
 
   /**
    * Whether or not the Overseer feature is enabled.
    */
-  public IsOverseerEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public IsOverseerEnabled: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
   /**
    * Whether or not the D2L integration is enabled.
    */
-  public IsD2LEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public IsD2LEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false,
+  );
 
   /**
    * Details on the logo
    */
-  public LogoSettings: BehaviorSubject<LogoSettings> = new BehaviorSubject<LogoSettings>({
-    hasLogo: false,
-    logoUrl: '/assets/images/institution-logo.png',
-    logoLinkUrl: '/',
-  });
+  public LogoSettings: BehaviorSubject<LogoSettings> =
+    new BehaviorSubject<LogoSettings>({
+      hasLogo: false,
+      logoUrl: '/assets/images/institution-logo.png',
+      logoLinkUrl: '/',
+    });
 
   /**
    * Whether or not the TurnItIn integration is enabled.
    */
-  public IsTiiEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public IsTiiEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false,
+  );
 
   private readonly settingsUrl: string = `${this.API_URL}/settings`;
 
@@ -87,17 +95,19 @@ export class DoubtfireConstants {
 
   // publish update to ExternalName when get request finishes.
   private loadSettings() {
-    this.http.get<SettingsResponseFormat>(this.settingsUrl).subscribe((result) => {
-      this.ExternalName.next(result.externalName);
-      this.IsOverseerEnabled.next(result.overseerEnabled);
-      this.IsTiiEnabled.next(result.tiiEnabled);
-      this.IsD2LEnabled.next(result.d2lEnabled);
+    this.http
+      .get<SettingsResponseFormat>(this.settingsUrl)
+      .subscribe((result) => {
+        this.ExternalName.next(result.externalName);
+        this.IsOverseerEnabled.next(result.overseerEnabled);
+        this.IsTiiEnabled.next(result.tiiEnabled);
+        this.IsD2LEnabled.next(result.d2lEnabled);
 
-      this.LogoSettings.next({
-        hasLogo: result.hasLogo,
-        logoUrl: result.logoUrl,
-        logoLinkUrl: result.logoLinkUrl,
+        this.LogoSettings.next({
+          hasLogo: result.hasLogo,
+          logoUrl: result.logoUrl,
+          logoLinkUrl: result.logoLinkUrl,
+        });
       });
-    });
   }
 }

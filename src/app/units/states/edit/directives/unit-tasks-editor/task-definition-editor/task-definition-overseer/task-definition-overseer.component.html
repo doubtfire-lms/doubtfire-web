@@ -10,14 +10,18 @@
     </mat-checkbox>
     <br />
     <mat-hint>
-      You can add or modify Overseer steps while keeping this unchecked and use the test submission
-      feature. Once everything is ready, enable automation to apply it to all student submissions.
+      You can add or modify Overseer steps while keeping this unchecked and use
+      the test submission feature. Once everything is ready, enable automation
+      to apply it to all student submissions.
     </mat-hint>
   </div>
 
   <mat-form-field appearance="outline" class="flex-grow">
     <mat-label>Docker Image</mat-label>
-    <mat-select [disabled]="!overseerEnabled" [(value)]="taskDefinition.overseerImageId">
+    <mat-select
+      [disabled]="!overseerEnabled"
+      [(value)]="taskDefinition.overseerImageId"
+    >
       @for (image of images | async; track image) {
         <mat-option [value]="image.id">{{ image.description }}</mat-option>
       }
@@ -33,10 +37,20 @@
   />
   @if (taskDefinition.hasTaskAssessmentResources) {
     <div class="flex flex-row flex-wrap gap-2.5 pt-2.5">
-      <button class="grow" color="warn" mat-flat-button (click)="removeOverseerResources()">
+      <button
+        class="grow"
+        color="warn"
+        mat-flat-button
+        (click)="removeOverseerResources()"
+      >
         Delete Overseer Resources Zip
       </button>
-      <button class="grow" color="accent" mat-flat-button (click)="downloadOverseerResources()">
+      <button
+        class="grow"
+        color="accent"
+        mat-flat-button
+        (click)="downloadOverseerResources()"
+      >
         Download Overseer Resources Zip
       </button>
       <button
@@ -45,7 +59,9 @@
         mat-flat-button
         (click)="toggleOverseerResourcesEditor()"
       >
-        <mat-icon>{{ showOverseerResourcesEditor ? 'visibility_off' : 'edit' }}</mat-icon>
+        <mat-icon>{{
+          showOverseerResourcesEditor ? 'visibility_off' : 'edit'
+        }}</mat-icon>
         {{
           showOverseerResourcesEditor
             ? 'Hide Overseer Resource Editor'
@@ -57,7 +73,9 @@
     @if (showOverseerResourcesEditor) {
       <div class="mt-2.5 rounded border border-slate-200 p-1">
         @if (isLoadingOverseerResourcesArchive) {
-          <div class="flex h-[32rem] items-center justify-center text-slate-600">
+          <div
+            class="flex h-[32rem] items-center justify-center text-slate-600"
+          >
             Loading Overseer Resources archive...
           </div>
         } @else if (overseerResourcesArchive) {
@@ -67,12 +85,16 @@
             [archiveFile]="overseerResourcesArchive"
             [readOnly]="false"
             [saveEndpoint]="taskDefinition.taskOverseerResourcesUploadUrl"
-            [saveFileName]="'Task ' + taskDefinition.abbreviation + ' Overseer zip'"
+            [saveFileName]="
+              'Task ' + taskDefinition.abbreviation + ' Overseer zip'
+            "
             [saveMethod]="'POST'"
             (saveSuccess)="onOverseerResourcesArchiveSaved($event)"
           ></f-archive-viewer>
         } @else {
-          <div class="flex h-[32rem] items-center justify-center text-slate-600">
+          <div
+            class="flex h-[32rem] items-center justify-center text-slate-600"
+          >
             Unable to load Overseer Resources archive.
           </div>
         }
@@ -109,23 +131,37 @@
     <div class="flex justify-end">
       <div class="flex gap-1">
         @if (this.selectedOverseerStep) {
-          <button color="warn" mat-raised-button (click)="deleteStep()">Delete</button>
-          <button color="primary" mat-raised-button (click)="saveStep()">Save</button>
+          <button color="warn" mat-raised-button (click)="deleteStep()">
+            Delete
+          </button>
+          <button color="primary" mat-raised-button (click)="saveStep()">
+            Save
+          </button>
         }
       </div>
     </div>
 
     <mat-drawer-container class="example-container">
-      <mat-drawer class="min-w-[300px] border border-gray-300" mode="side" opened>
+      <mat-drawer
+        class="min-w-[300px] border border-gray-300"
+        mode="side"
+        opened
+      >
         <div
           class="flex min-h-[50px] w-[300px] items-center justify-between border border-gray-300 bg-gray-300 px-[20px]"
         >
           <div>Overseer Steps</div>
           @if (!newOverseerStep) {
-            <button mat-icon-button (click)="addStep()"><mat-icon>add</mat-icon></button>
+            <button mat-icon-button (click)="addStep()">
+              <mat-icon>add</mat-icon>
+            </button>
           }
         </div>
-        <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+        <div
+          cdkDropList
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"
+        >
           @for (step of overseerSteps; track step.id) {
             <div
               cdkDrag
@@ -135,7 +171,9 @@
               }"
               (click)="selectStep(step)"
             >
-              <mat-icon cdkDragHandle class="cursor-move">drag_indicator</mat-icon>
+              <mat-icon cdkDragHandle class="cursor-move"
+                >drag_indicator</mat-icon
+              >
               {{ step.sortOrder }}. {{ step.name ?? 'Untitled Step' }}
             </div>
           }
@@ -146,7 +184,8 @@
               class="example-box bg-gray-100"
               (click)="selectStep(newOverseerStep)"
             >
-              {{ newOverseerStep.sortOrder }}. {{ newOverseerStep.name || 'Untitled Step' }}
+              {{ newOverseerStep.sortOrder }}.
+              {{ newOverseerStep.name || 'Untitled Step' }}
             </div>
           }
         </div>
@@ -158,7 +197,11 @@
               <div class="flex w-full gap-3">
                 <mat-form-field appearance="outline" class="basis-1/3">
                   <mat-label>Step Name</mat-label>
-                  <input matInput required [(ngModel)]="selectedOverseerStep.name" />
+                  <input
+                    matInput
+                    required
+                    [(ngModel)]="selectedOverseerStep.name"
+                  />
                   <mat-hint>Visible to staff only</mat-hint>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-full" required>
@@ -175,7 +218,10 @@
 
               <mat-form-field appearance="outline" class="mt-3">
                 <mat-label>Step Type</mat-label>
-                <mat-select required [(ngModel)]="selectedOverseerStep.stepType">
+                <mat-select
+                  required
+                  [(ngModel)]="selectedOverseerStep.stepType"
+                >
                   <mat-option value="status_check">Custom Script</mat-option>
                   <mat-option value="output_diff">Input/Output</mat-option>
                 </mat-select>
@@ -187,31 +233,46 @@
                     <mat-form-field appearance="outline" class="w-full">
                       <mat-label>Script Input File</mat-label>
                       <!-- Input for command (Standard input)-->
-                      <mat-select [(ngModel)]="selectedOverseerStep.stdinInputFile">
+                      <mat-select
+                        [(ngModel)]="selectedOverseerStep.stdinInputFile"
+                      >
                         <mat-option value="">(none)</mat-option>
-                        @for (file of taskDefinition.overseerResourceFiles; track file) {
+                        @for (
+                          file of taskDefinition.overseerResourceFiles;
+                          track file
+                        ) {
                           <mat-option [value]="file">{{ file }}</mat-option>
                         }
                       </mat-select>
                       <mat-hint
-                        >The selected file will be passed as standard input to the program when it
-                        runs.
+                        >The selected file will be passed as standard input to
+                        the program when it runs.
                       </mat-hint>
                     </mat-form-field>
-                    <mat-slide-toggle class="mt-1" [(ngModel)]="selectedOverseerStep.showStdin">
+                    <mat-slide-toggle
+                      class="mt-1"
+                      [(ngModel)]="selectedOverseerStep.showStdin"
+                    >
                       Show input file to student
                     </mat-slide-toggle>
                   </div>
                   <div class="w-full">
                     <mat-form-field appearance="outline" class="w-full">
                       <mat-label>Expected Output File</mat-label>
-                      <mat-select [(ngModel)]="selectedOverseerStep.expectedOutputFile">
+                      <mat-select
+                        [(ngModel)]="selectedOverseerStep.expectedOutputFile"
+                      >
                         <mat-option value="">(none)</mat-option>
-                        @for (file of taskDefinition.overseerResourceFiles; track file) {
+                        @for (
+                          file of taskDefinition.overseerResourceFiles;
+                          track file
+                        ) {
                           <mat-option [value]="file">{{ file }}</mat-option>
                         }
                       </mat-select>
-                      <mat-hint> Program output must exactly match this file to pass. </mat-hint>
+                      <mat-hint>
+                        Program output must exactly match this file to pass.
+                      </mat-hint>
                     </mat-form-field>
                     <mat-slide-toggle
                       class="mt-1"
@@ -227,8 +288,9 @@
                     >
                     <br />
                     <mat-hint>
-                      If enabled, test passes if the expected output appears anywhere in the
-                      student's output. Otherwise, only exact matches pass.
+                      If enabled, test passes if the expected output appears
+                      anywhere in the student's output. Otherwise, only exact
+                      matches pass.
                     </mat-hint>
                   </div>
                 </div>
@@ -258,15 +320,18 @@
                   class="w-full"
                   [options]="editorOptions"
                   [(ngModel)]="selectedOverseerStep.decodedRunCommand"
-                  (ngModelChange)="onRunCommandChange(selectedOverseerStep, $event)"
+                  (ngModelChange)="
+                    onRunCommandChange(selectedOverseerStep, $event)
+                  "
                 ></ngx-monaco-editor>
                 <mat-hint class="w-full pl-1 text-xs">
                   @if (selectedOverseerStep.stepType === 'status_check') {
-                    This step passes only if the script exits with status 0. Any non-zero exit code
-                    marks the step as failed.
+                    This step passes only if the script exits with status 0. Any
+                    non-zero exit code marks the step as failed.
                   } @else if (selectedOverseerStep.stepType === 'output_diff') {
-                    The script output is compared against the expected output. If noisy warnings
-                    cause failures, move that logic into a separate step.
+                    The script output is compared against the expected output.
+                    If noisy warnings cause failures, move that logic into a
+                    separate step.
                   }
                 </mat-hint>
               </div>
@@ -280,8 +345,9 @@
                   [(ngModel)]="selectedOverseerStep.timeout"
                 />
                 <mat-hint
-                  >How long the code can execute for before overseer automatically kills the
-                  process. A timeout will result in a failed test (Exit status 124)</mat-hint
+                  >How long the code can execute for before overseer
+                  automatically kills the process. A timeout will result in a
+                  failed test (Exit status 124)</mat-hint
                 >
               </mat-form-field>
               <div class="flex w-full gap-3">
@@ -297,10 +363,14 @@
                     @if (selectedOverseerStep.haltOnSuccess) {
                       <mat-form-field appearance="outline" class="w-full">
                         <mat-label>Status on Success</mat-label>
-                        <mat-select [(ngModel)]="selectedOverseerStep.statusOnSuccess">
+                        <mat-select
+                          [(ngModel)]="selectedOverseerStep.statusOnSuccess"
+                        >
                           <mat-option value="no_change">No Change</mat-option>
                           @for (status of statusKeys; track status) {
-                            <mat-option [value]="status">{{ statusName(status) }}</mat-option>
+                            <mat-option [value]="status">{{
+                              statusName(status)
+                            }}</mat-option>
                           }
                         </mat-select>
                       </mat-form-field>
@@ -322,10 +392,14 @@
                       <mat-form-field appearance="outline" class="w-full">
                         <!-- On Fail, which status, should halt, feedback message? -->
                         <mat-label>Status on Fail</mat-label>
-                        <mat-select [(ngModel)]="selectedOverseerStep.statusOnFailure">
+                        <mat-select
+                          [(ngModel)]="selectedOverseerStep.statusOnFailure"
+                        >
                           <mat-option value="no_change">No Change</mat-option>
                           @for (status of statusKeys; track status) {
-                            <mat-option [value]="status">{{ statusName(status) }}</mat-option>
+                            <mat-option [value]="status">{{
+                              statusName(status)
+                            }}</mat-option>
                           }
                         </mat-select>
                       </mat-form-field>
@@ -349,11 +423,19 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-full">
                   <mat-label>Description</mat-label>
-                  <input matInput required [(ngModel)]="selectedOverseerStep.displayDescription" />
+                  <input
+                    matInput
+                    required
+                    [(ngModel)]="selectedOverseerStep.displayDescription"
+                  />
                   <mat-hint>Shown to student in overseer report</mat-hint>
                 </mat-form-field>
               </div>
-              <mat-form-field appearance="outline" class="mt-3 w-full" floatLabel="always">
+              <mat-form-field
+                appearance="outline"
+                class="mt-3 w-full"
+                floatLabel="always"
+              >
                 <mat-label>Feedback message</mat-label>
                 <input
                   matInput
@@ -361,8 +443,9 @@
                   [(ngModel)]="selectedOverseerStep.feedbackMessage"
                 />
                 <mat-hint
-                  >Feedback to provide to the student if the task failed. You can leave this blank
-                  and a default will message will be used instead.</mat-hint
+                  >Feedback to provide to the student if the task failed. You
+                  can leave this blank and a default will message will be used
+                  instead.</mat-hint
                 >
               </mat-form-field>
 
@@ -372,8 +455,8 @@
                 >
                 <br />
                 <mat-hint>
-                  If disabled, this step will not run and will not appear in the Overseer report for
-                  students.
+                  If disabled, this step will not run and will not appear in the
+                  Overseer report for students.
                 </mat-hint>
               </div>
 
@@ -383,16 +466,20 @@
                 >
                 <br />
                 <mat-hint>
-                  When enabled, students can see this step’s standard output, including script
-                  output, program output, and compile errors.
+                  When enabled, students can see this step’s standard output,
+                  including script output, program output, and compile errors.
                 </mat-hint>
               </div>
             </mat-card-content>
           </mat-card>
         } @else {
-          <div class="flex min-h-[350px] w-full flex-col items-center justify-center bg-gray-50">
+          <div
+            class="flex min-h-[350px] w-full flex-col items-center justify-center bg-gray-50"
+          >
             No steps selected
-            <mat-icon style="width: 75px; height: 75px; font-size: 75px">tab_unselected</mat-icon>
+            <mat-icon style="width: 75px; height: 75px; font-size: 75px"
+              >tab_unselected</mat-icon
+            >
           </div>
         }
       </mat-drawer-content>

@@ -3,7 +3,12 @@ import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
-import {Project, TaskDefinition, TaskStatus, TaskStatusEnum} from './doubtfire-model';
+import {
+  Project,
+  TaskDefinition,
+  TaskStatus,
+  TaskStatusEnum,
+} from './doubtfire-model';
 
 export interface TaskPrerequisiteData {
   taskDefinitionId: number;
@@ -41,7 +46,10 @@ export class TaskPrerequisite extends Entity {
     this.taskStatus = json.taskStatus;
   }
 
-  public toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+  public toJson<T extends Entity>(
+    mappingData: EntityMapping<T>,
+    ignoreKeys?: string[],
+  ): object {
     return {
       task_prerequisite: super.toJson(mappingData, ignoreKeys),
     };
@@ -68,8 +76,9 @@ export class TaskPrerequisite extends Entity {
   }
 
   public delete(): Observable<void> {
-    const taskPrerequisiteService: TaskPrerequisiteService =
-      AppInjector.get(TaskPrerequisiteService);
+    const taskPrerequisiteService: TaskPrerequisiteService = AppInjector.get(
+      TaskPrerequisiteService,
+    );
 
     return taskPrerequisiteService
       .delete<void>(
@@ -83,11 +92,17 @@ export class TaskPrerequisite extends Entity {
       .pipe(
         tap({
           next: () => {
-            AppInjector.get(AlertService).error('Successfully deleted prerequisite', 4000);
+            AppInjector.get(AlertService).error(
+              'Successfully deleted prerequisite',
+              4000,
+            );
             this.taskDefinition.taskPrerequisitesCache.delete(this.id);
           },
           error: (error) => {
-            AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
+            AppInjector.get(AlertService).error(
+              error?.message || error || 'Unknown error',
+              2000,
+            );
           },
         }),
       );

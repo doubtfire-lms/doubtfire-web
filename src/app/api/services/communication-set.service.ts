@@ -21,7 +21,8 @@ export class CommunicationSetService {
 
   public createForUnit(
     unitId: number,
-    set: Pick<CommunicationSet, 'name'> & Partial<Pick<CommunicationSet, 'active'>>,
+    set: Pick<CommunicationSet, 'name'> &
+      Partial<Pick<CommunicationSet, 'active'>>,
   ): Observable<CommunicationSet> {
     return this.httpClient
       .post<Partial<CommunicationSet>>(this.endpoint(unitId), {
@@ -58,7 +59,10 @@ export class CommunicationSetService {
   }
 
   public executeForUnit(unitId: number, setId: number): Observable<SidekiqJob> {
-    return this.httpClient.post<SidekiqJob>(`${this.endpoint(unitId)}/${setId}/execute`, {});
+    return this.httpClient.post<SidekiqJob>(
+      `${this.endpoint(unitId)}/${setId}/execute`,
+      {},
+    );
   }
 
   private endpoint(unitId: number): string {

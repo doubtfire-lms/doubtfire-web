@@ -16,7 +16,10 @@ import {UnitCodeService} from './unit-code.service';
         animate('500ms ease-in-out'),
       ]),
       transition('in => out', [
-        animate('500ms ease-in-out', style({transform: 'translateX(-100%)', opacity: 0})),
+        animate(
+          '500ms ease-in-out',
+          style({transform: 'translateX(-100%)', opacity: 0}),
+        ),
       ]),
     ]),
   ],

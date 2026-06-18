@@ -37,7 +37,10 @@ export class ScormCommentComponent {
       'Pass Test Attempt',
       'Are you sure you want to pass this test attempt? This action will override the success status of this test attempt to a pass.',
       () => {
-        this.testAttemptService.overrideSuccessStatus(this.comment.testAttempt.id, true);
+        this.testAttemptService.overrideSuccessStatus(
+          this.comment.testAttempt.id,
+          true,
+        );
       },
     );
   }

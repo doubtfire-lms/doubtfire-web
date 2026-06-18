@@ -21,7 +21,10 @@ export class GroupSet extends Entity {
     this.unit = unit;
   }
 
-  public toJson<T extends Entity>(mappingData: EntityMapping<T>, ignoreKeys?: string[]): object {
+  public toJson<T extends Entity>(
+    mappingData: EntityMapping<T>,
+    ignoreKeys?: string[],
+  ): object {
     return {
       group_set: super.toJson(mappingData, ignoreKeys),
     };

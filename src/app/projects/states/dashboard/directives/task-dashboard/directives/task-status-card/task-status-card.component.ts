@@ -1,5 +1,12 @@
 import * as _ from 'lodash';
-import {AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
@@ -20,7 +27,9 @@ import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-m
   styleUrls: ['./task-status-card.component.scss'],
   standalone: false,
 })
-export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class TaskStatusCardComponent
+  implements OnChanges, AfterViewInit, OnDestroy
+{
   triggers: TaskStatusUiData[];
   textCss: string;
   private taskStatusSub: Subscription;
@@ -35,11 +44,13 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
     private userService: UserService,
     private feedbackAppealService: FeedbackAppealModalService,
   ) {
-    this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
-      if (this.isCurrentTask(task)) {
-        this.reapplyTriggers();
-      }
-    });
+    this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe(
+      (task) => {
+        if (this.isCurrentTask(task)) {
+          this.reapplyTriggers();
+        }
+      },
+    );
   }
 
   @Input() task: Task;
@@ -51,7 +62,9 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
     if (changes.task) {
       this.task = changes.task.currentValue;
       this.reapplyTriggers();
-      this.taskStatusColor = this.taskService.statusColors.get(this.task.statusClass());
+      this.taskStatusColor = this.taskService.statusColors.get(
+        this.task.statusClass(),
+      );
       this.project = this.task.project;
       this.textCss = `::ng-deep f-task-status-card .mat-mdc-text-field-wrapper.mdc-text-field {
         background-color: #${this.taskStatusColor} !important;
@@ -93,7 +106,8 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
         this.taskService.switchableStates.student as TaskStatusEnum[],
         (k) => this.taskService.statusData(k),
       );
-      const filteredStudentTriggers = this.task.filterFutureStates(studentTriggers);
+      const filteredStudentTriggers =
+        this.task.filterFutureStates(studentTriggers);
       this.triggers = filteredStudentTriggers;
       // Ensure the current task's status is in the list
       if (!this.triggers.find((t) => t.status === this.task.status)) {
@@ -159,6 +173,9 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
   }
 
   public get isTutor(): boolean {
-    return this.currentUnitRole?.role === 'Convenor' || this.currentUnitRole?.role === 'Tutor';
+    return (
+      this.currentUnitRole?.role === 'Convenor' ||
+      this.currentUnitRole?.role === 'Tutor'
+    );
   }
 }

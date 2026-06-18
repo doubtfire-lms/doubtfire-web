@@ -39,5 +39,7 @@ export class PortfoliosAssessmentComponent {
     },
   ];
 
-  public maxScoresPerRow = Math.max(...this.gradeResults.map((g) => g.scores.length));
+  public maxScoresPerRow = Math.max(
+    ...this.gradeResults.map((g) => g.scores.length),
+  );
 }

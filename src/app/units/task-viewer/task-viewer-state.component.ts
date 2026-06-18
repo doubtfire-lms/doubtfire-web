@@ -19,11 +19,14 @@ export class TaskViewerStateComponent {
     private router: Router,
   ) {
     this.unit$ = of(this.route.parent.snapshot.data.unit);
-    const taskAbbreviation = this.route.snapshot.paramMap.get('taskAbbreviation');
+    const taskAbbreviation =
+      this.route.snapshot.paramMap.get('taskAbbreviation');
     if (taskAbbreviation) {
       this.unit$.subscribe((unit) => {
         this.selectedTaskDefinition$.next(
-          unit.taskDefinitions.find((taskDef) => taskDef.abbreviation === taskAbbreviation) ?? null,
+          unit.taskDefinitions.find(
+            (taskDef) => taskDef.abbreviation === taskAbbreviation,
+          ) ?? null,
         );
       });
     }
@@ -33,9 +36,8 @@ export class TaskViewerStateComponent {
    * Monitor and publish the selected task definition for child components.
    * We monitor the task definition list for changes in selected task definition.
    */
-  selectedTaskDefinition$: BehaviorSubject<TaskDefinition> = new BehaviorSubject<TaskDefinition>(
-    null,
-  );
+  selectedTaskDefinition$: BehaviorSubject<TaskDefinition> =
+    new BehaviorSubject<TaskDefinition>(null);
 
   public get taskSelected(): boolean {
     return this.selectedTaskDef !== null;
@@ -48,7 +50,10 @@ export class TaskViewerStateComponent {
   public clearTaskSelection(): void {
     this.selectedTaskDefinition$.next(null);
     if (this.route.parent?.snapshot.data.unit) {
-      this.router.navigate(['../tasks'], {relativeTo: this.route, replaceUrl: true});
+      this.router.navigate(['../tasks'], {
+        relativeTo: this.route,
+        replaceUrl: true,
+      });
       return;
     }
   }

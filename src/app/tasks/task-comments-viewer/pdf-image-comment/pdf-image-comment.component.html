@@ -1,6 +1,11 @@
 <a (click)="openCommentsModal()">
   @if (comment.commentType === 'image' && resourceUrl) {
-    <img alt="Image attachment preview" height="100%" width="100%" [src]="resourceUrl | safe" />
+    <img
+      alt="Image attachment preview"
+      height="100%"
+      width="100%"
+      [src]="resourceUrl | safe"
+    />
   }
   @if (comment.commentType === 'pdf') {
     <p><mat-icon inline>picture_as_pdf</mat-icon> view pdf</p>

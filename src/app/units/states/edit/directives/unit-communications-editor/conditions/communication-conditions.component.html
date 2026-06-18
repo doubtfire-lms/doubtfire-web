@@ -2,7 +2,10 @@
   <div class="flex">
     <mat-form-field appearance="outline" class="min-w-[320px]">
       <mat-label>Conditions</mat-label>
-      <mat-select [(ngModel)]="rule.operator" (selectionChange)="editor.updateRuleOperator(rule)">
+      <mat-select
+        [(ngModel)]="rule.operator"
+        (selectionChange)="editor.updateRuleOperator(rule)"
+      >
         @for (option of editor.logicalOperatorOptions; track option.value) {
           <mat-option [value]="option.value">
             {{ option.label }}
@@ -31,13 +34,21 @@
               </mat-select>
             </mat-form-field>
 
-            @if (editor.conditionFor(rule).type === 'TaskDefinitionStatusCondition') {
+            @if (
+              editor.conditionFor(rule).type === 'TaskDefinitionStatusCondition'
+            ) {
               <mat-form-field appearance="outline" class="min-w-[450px]">
                 <mat-label>Task</mat-label>
-                <mat-select [(ngModel)]="editor.conditionFor(rule).task_definition_id">
-                  @for (taskDefinition of editor.taskDefinitions; track taskDefinition.id) {
+                <mat-select
+                  [(ngModel)]="editor.conditionFor(rule).task_definition_id"
+                >
+                  @for (
+                    taskDefinition of editor.taskDefinitions;
+                    track taskDefinition.id
+                  ) {
                     <mat-option [value]="taskDefinition.id">
-                      {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
+                      {{ taskDefinition.abbreviation }}
+                      {{ taskDefinition.name }}
                     </mat-option>
                   }
                 </mat-select>
@@ -48,7 +59,9 @@
               <mat-label>Operator</mat-label>
               <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
                 @for (
-                  operator of editor.operatorsFor(editor.conditionFor(rule).type);
+                  operator of editor.operatorsFor(
+                    editor.conditionFor(rule).type
+                  );
                   track operator
                 ) {
                   <mat-option [value]="operator">
@@ -58,7 +71,9 @@
               </mat-select>
             </mat-form-field>
 
-            @if (editor.conditionFor(rule).type === 'TaskStatusCountCondition') {
+            @if (
+              editor.conditionFor(rule).type === 'TaskStatusCountCondition'
+            ) {
               <mat-form-field appearance="outline" class="w-32">
                 <mat-label>Count</mat-label>
                 <input
@@ -71,7 +86,9 @@
 
               <mat-form-field appearance="outline" class="w-22">
                 <mat-label>Task grade</mat-label>
-                <mat-select [(ngModel)]="editor.conditionFor(rule).task_target_grade">
+                <mat-select
+                  [(ngModel)]="editor.conditionFor(rule).task_target_grade"
+                >
                   @for (grade of editor.targetGrades; track grade.value) {
                     <mat-option [value]="grade.value">
                       {{ grade.label }}
@@ -85,7 +102,9 @@
               @case ('TargetGradeCondition') {
                 <mat-form-field appearance="outline">
                   <mat-label>Target grade</mat-label>
-                  <mat-select [(ngModel)]="editor.conditionFor(rule).target_grade">
+                  <mat-select
+                    [(ngModel)]="editor.conditionFor(rule).target_grade"
+                  >
                     @for (grade of editor.targetGrades; track grade.value) {
                       <mat-option [value]="grade.value">
                         {{ grade.label }}
@@ -97,7 +116,10 @@
               @case ('TaskDefinitionStatusCondition') {
                 <mat-form-field appearance="outline">
                   <mat-label>Statuses</mat-label>
-                  <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
+                  <mat-select
+                    multiple
+                    [(ngModel)]="editor.conditionFor(rule).task_statuses"
+                  >
                     @for (status of editor.taskStatuses; track status) {
                       <mat-option [value]="status">
                         {{ editor.taskStatusLabel(status) }}
@@ -109,7 +131,10 @@
               @case ('TaskStatusCountCondition') {
                 <mat-form-field appearance="outline" class="min-w-[320px]">
                   <mat-label>Statuses</mat-label>
-                  <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
+                  <mat-select
+                    multiple
+                    [(ngModel)]="editor.conditionFor(rule).task_statuses"
+                  >
                     @for (status of editor.taskStatuses; track status) {
                       <mat-option [value]="status">
                         {{ editor.taskStatusLabel(status) }}
@@ -142,7 +167,9 @@
               @case ('TutorialEnrolmentCondition') {
                 <mat-form-field appearance="outline" class="min-w-[550px]">
                   <mat-label>Tutorial</mat-label>
-                  <mat-select [(ngModel)]="editor.conditionFor(rule).tutorial_id">
+                  <mat-select
+                    [(ngModel)]="editor.conditionFor(rule).tutorial_id"
+                  >
                     @for (tutorial of editor.tutorials; track tutorial.id) {
                       <mat-option [value]="tutorial.id">
                         {{ tutorial.abbreviation }} {{ tutorial.description }}
@@ -154,7 +181,9 @@
               @case ('TutorialStreamEnrolmentCondition') {
                 <mat-form-field appearance="outline" class="min-w-[350px]">
                   <mat-label>Tutorial stream</mat-label>
-                  <mat-select [(ngModel)]="editor.conditionFor(rule).tutorial_stream_id">
+                  <mat-select
+                    [(ngModel)]="editor.conditionFor(rule).tutorial_stream_id"
+                  >
                     @for (stream of editor.tutorialStreams; track stream.id) {
                       <mat-option [value]="stream.id">
                         {{ stream.abbreviation }} {{ stream.name }}
@@ -186,7 +215,11 @@
               <mat-icon>save</mat-icon>
               Save
             </button>
-            <button class="mb-[22px]" mat-button (click)="editor.cancelCondition(rule)">
+            <button
+              class="mb-[22px]"
+              mat-button
+              (click)="editor.cancelCondition(rule)"
+            >
               Cancel
             </button>
           </div>
@@ -200,66 +233,102 @@
                 @switch (condition.type) {
                   @case ('TargetGradeCondition') {
                     Students with a
-                    <strong class="font-semibold text-black/90">Target Grade</strong>
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                    <strong class="font-semibold text-black/90"
+                      >Target Grade</strong
+                    >
+                    <span
+                      class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                    >
                       {{ editor.operatorLabel(condition.operator) }}
                     </span>
-                    <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
+                    >
                       {{ editor.targetGradeName(condition.target_grade) }}
                     </span>
                   }
                   @case ('TaskDefinitionStatusCondition') {
                     Students that have
                     <strong class="font-semibold text-black/90">
-                      {{ editor.taskDefinitionLabel(condition.task_definition_id) }}
+                      {{
+                        editor.taskDefinitionLabel(condition.task_definition_id)
+                      }}
                     </strong>
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                    >
                       {{ editor.taskStatusPredicate(condition.operator) }}
                     </span>
-                    <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
+                    >
                       {{ editor.taskStatusesLabel(condition.task_statuses) }}
                     </span>
                   }
                   @case ('TaskStatusCountCondition') {
                     Students with
-                    <strong class="font-semibold text-black/90">Task Status Count</strong>
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                    <strong class="font-semibold text-black/90"
+                      >Task Status Count</strong
+                    >
+                    <span
+                      class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                    >
                       {{ editor.operatorLabel(condition.operator) }}
                     </span>
-                    <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
+                    >
                       {{ condition.task_status_count }}
                     </span>
-                    <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
+                    >
                       {{ editor.targetGradeName(condition.task_target_grade) }}
                     </span>
                     tasks in
-                    <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
+                    >
                       {{ editor.taskStatusesLabel(condition.task_statuses) }}
                     </span>
                   }
                   @case ('LoginStatusCondition') {
                     Students with a
-                    <strong class="font-semibold text-black/90">Last Sign In</strong>
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                    <strong class="font-semibold text-black/90"
+                      >Last Sign In</strong
+                    >
+                    <span
+                      class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                    >
                       {{ editor.operatorLabel(condition.operator) }}
                     </span>
-                    <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
+                    >
                       {{ editor.dateLabel(condition.last_sign_in_at) }}
                     </span>
                   }
                   @case ('SpecConCondition') {
                     Students with
-                    <strong class="font-semibold text-black/90">Special Consideration Days</strong>
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                    <strong class="font-semibold text-black/90"
+                      >Special Consideration Days</strong
+                    >
+                    <span
+                      class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                    >
                       {{ editor.operatorLabel(condition.operator) }}
                     </span>
-                    <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
+                    >
                       {{ condition.spec_con_days }}
                     </span>
                   }
                   @case ('TutorialEnrolmentCondition') {
                     Students
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                    >
                       {{ editor.enrolmentPredicate(condition.operator) }}
                     </span>
                     <strong class="mx-1 font-semibold text-black/90">
@@ -268,19 +337,27 @@
                   }
                   @case ('TutorialStreamEnrolmentCondition') {
                     Students
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                    >
                       {{ editor.enrolmentPredicate(condition.operator) }}
                     </span>
                     <strong class="mx-1 font-semibold text-black/90">
-                      {{ editor.tutorialStreamLabel(condition.tutorial_stream_id) }}
+                      {{
+                        editor.tutorialStreamLabel(condition.tutorial_stream_id)
+                      }}
                     </strong>
                   }
                   @case ('CampusCondition') {
                     Students
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800"
+                    >
                       {{ editor.enrolmentPredicate(condition.operator) }}
                     </span>
-                    <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
+                    <span
+                      class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800"
+                    >
                       {{ editor.campusLabel(condition.campus_id) }}
                     </span>
                   }
@@ -292,10 +369,16 @@
               </div>
             </div>
             <div class="flex shrink-0 items-center">
-              <button mat-icon-button (click)="editor.editCondition(rule, condition)">
+              <button
+                mat-icon-button
+                (click)="editor.editCondition(rule, condition)"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button (click)="editor.deleteCondition(rule, condition)">
+              <button
+                mat-icon-button
+                (click)="editor.deleteCondition(rule, condition)"
+              >
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -305,7 +388,9 @@
     }
   </mat-list>
 
-  @if (editor.conditionFormOpen[rule.id] && !editor.editingConditionId[rule.id]) {
+  @if (
+    editor.conditionFormOpen[rule.id] && !editor.editingConditionId[rule.id]
+  ) {
     <div class="flex flex-wrap items-center gap-3">
       <mat-form-field appearance="outline">
         <mat-label>Condition</mat-label>
@@ -324,8 +409,13 @@
       @if (editor.conditionFor(rule).type === 'TaskDefinitionStatusCondition') {
         <mat-form-field appearance="outline" class="min-w-[450px]">
           <mat-label>Task</mat-label>
-          <mat-select [(ngModel)]="editor.conditionFor(rule).task_definition_id">
-            @for (taskDefinition of editor.taskDefinitions; track taskDefinition.id) {
+          <mat-select
+            [(ngModel)]="editor.conditionFor(rule).task_definition_id"
+          >
+            @for (
+              taskDefinition of editor.taskDefinitions;
+              track taskDefinition.id
+            ) {
               <mat-option [value]="taskDefinition.id">
                 {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
               </mat-option>
@@ -337,7 +427,10 @@
       <mat-form-field appearance="outline" class="min-w-[300px]">
         <mat-label>Operator</mat-label>
         <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
-          @for (operator of editor.operatorsFor(editor.conditionFor(rule).type); track operator) {
+          @for (
+            operator of editor.operatorsFor(editor.conditionFor(rule).type);
+            track operator
+          ) {
             <mat-option [value]="operator">
               {{ editor.operatorLabel(operator) }}
             </mat-option>
@@ -385,7 +478,10 @@
         @case ('TaskDefinitionStatusCondition') {
           <mat-form-field appearance="outline">
             <mat-label>Statuses</mat-label>
-            <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
+            <mat-select
+              multiple
+              [(ngModel)]="editor.conditionFor(rule).task_statuses"
+            >
               @for (status of editor.taskStatuses; track status) {
                 <mat-option [value]="status">
                   {{ editor.taskStatusLabel(status) }}
@@ -398,7 +494,10 @@
         @case ('TaskStatusCountCondition') {
           <mat-form-field appearance="outline" class="min-w-[320px]">
             <mat-label>Statuses</mat-label>
-            <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
+            <mat-select
+              multiple
+              [(ngModel)]="editor.conditionFor(rule).task_statuses"
+            >
               @for (status of editor.taskStatuses; track status) {
                 <mat-option [value]="status">
                   {{ editor.taskStatusLabel(status) }}
@@ -446,7 +545,9 @@
         @case ('TutorialStreamEnrolmentCondition') {
           <mat-form-field appearance="outline" class="min-w-[350px]">
             <mat-label>Tutorial stream</mat-label>
-            <mat-select [(ngModel)]="editor.conditionFor(rule).tutorial_stream_id">
+            <mat-select
+              [(ngModel)]="editor.conditionFor(rule).tutorial_stream_id"
+            >
               @for (stream of editor.tutorialStreams; track stream.id) {
                 <mat-option [value]="stream.id">
                   {{ stream.abbreviation }} {{ stream.name }}
@@ -484,11 +585,21 @@
         {{ editor.editingConditionId[rule.id] ? 'Update' : 'Save' }}
       </button>
 
-      <button class="mb-[22px]" mat-button (click)="editor.cancelCondition(rule)">Cancel</button>
+      <button
+        class="mb-[22px]"
+        mat-button
+        (click)="editor.cancelCondition(rule)"
+      >
+        Cancel
+      </button>
     </div>
   } @else {
     <div class="flex justify-center">
-      <button color="primary" mat-stroked-button (click)="editor.showConditionForm(rule)">
+      <button
+        color="primary"
+        mat-stroked-button
+        (click)="editor.showConditionForm(rule)"
+      >
         <mat-icon>add</mat-icon>
         Add condition
       </button>

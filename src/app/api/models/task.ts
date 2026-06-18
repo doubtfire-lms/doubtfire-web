@@ -82,10 +82,13 @@ export class Task extends Entity {
   targetDueDate: Date;
 
   public topWeight: number = 0;
-  public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
+  public readonly commentCache: EntityCache<TaskComment> =
+    new EntityCache<TaskComment>();
 
-  public readonly similarityCache: EntityCache<TaskSimilarity> = new EntityCache<TaskSimilarity>();
-  public readonly testAttemptCache: EntityCache<TestAttempt> = new EntityCache<TestAttempt>();
+  public readonly similarityCache: EntityCache<TaskSimilarity> =
+    new EntityCache<TaskSimilarity>();
+  public readonly testAttemptCache: EntityCache<TestAttempt> =
+    new EntityCache<TestAttempt>();
 
   suggestedTaskStatus;
 
@@ -119,7 +122,9 @@ export class Task extends Entity {
   }
 
   public get hasDiscussedInClassComment(): boolean {
-    return this.comments.some((comment) => comment.commentType === 'discussed_in_class');
+    return this.comments.some(
+      (comment) => comment.commentType === 'discussed_in_class',
+    );
   }
 
   public get requiresDiscussionForComplete(): boolean {
@@ -127,7 +132,9 @@ export class Task extends Entity {
   }
 
   public get canMarkComplete(): boolean {
-    return !this.requiresDiscussionForComplete || this.hasDiscussedInClassComment;
+    return (
+      !this.requiresDiscussionForComplete || this.hasDiscussedInClassComment
+    );
   }
 
   public get latestReadyForFeedbackAt(): Date | null {
@@ -135,9 +142,10 @@ export class Task extends Entity {
   }
 
   public get tutor(): UnitRole {
-    const enrolments = this.project.tutorialEnrolmentsCache.currentValues.filter(
-      (t) => t.tutorialStream.name === this.definition.tutorialStream.name,
-    );
+    const enrolments =
+      this.project.tutorialEnrolmentsCache.currentValues.filter(
+        (t) => t.tutorialStream.name === this.definition.tutorialStream.name,
+      );
     if (enrolments.length === 1) {
       const user = enrolments[0].tutor;
       return this.unit.staff.find((ur) => ur.user.id === user.id);
@@ -162,8 +170,12 @@ export class Task extends Entity {
     }
 
     return this.comments.filter((comment) => {
-      const createdAt = comment.createdAt ? new Date(comment.createdAt).getTime() : NaN;
-      return Number.isFinite(createdAt) && createdAt >= latestReadyForFeedbackAt;
+      const createdAt = comment.createdAt
+        ? new Date(comment.createdAt).getTime()
+        : NaN;
+      return (
+        Number.isFinite(createdAt) && createdAt >= latestReadyForFeedbackAt
+      );
     });
   }
 
@@ -181,7 +193,8 @@ export class Task extends Entity {
 
     return breaks.reduce((overlap, teachingBreak) => {
       const breakStart = new Date(teachingBreak.startDate).getTime();
-      const breakDuration = (teachingBreak.numberOfWeeks ?? 0) * 7 * millisecondsPerDay;
+      const breakDuration =
+        (teachingBreak.numberOfWeeks ?? 0) * 7 * millisecondsPerDay;
       const breakEnd = breakStart + breakDuration;
 
       if (!Number.isFinite(breakStart) || breakDuration <= 0) {
@@ -211,7 +224,8 @@ export class Task extends Entity {
     );
 
     return Math.floor(
-      Math.max(0, nowTime - submissionTime - pausedMilliseconds) / millisecondsPerDay,
+      Math.max(0, nowTime - submissionTime - pausedMilliseconds) /
+        millisecondsPerDay,
     );
   }
 
@@ -223,7 +237,9 @@ export class Task extends Entity {
    */
   public matches(matchText: string): boolean {
     return (
-      TaskStatus.STATUS_LABELS.get(this.status)?.toLowerCase().indexOf(matchText) >= 0 ||
+      TaskStatus.STATUS_LABELS.get(this.status)
+        ?.toLowerCase()
+        .indexOf(matchText) >= 0 ||
       this.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
       this.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
       (this.hasExtensions && 'extension'.indexOf(matchText) == 0) ||
@@ -269,7 +285,10 @@ export class Task extends Entity {
   }
 
   public hasQualityPoints(): boolean {
-    return this.definition.maxQualityPts > 0 && TaskStatus.GRADEABLE_STATUSES.includes(this.status);
+    return (
+      this.definition.maxQualityPts > 0 &&
+      TaskStatus.GRADEABLE_STATUSES.includes(this.status)
+    );
   }
 
   public hasBeenGraded(): boolean {
@@ -280,7 +299,9 @@ export class Task extends Entity {
   }
 
   public hasBeenGivenQualityPoints(): boolean {
-    return this.qualityPts > 0 || TaskStatus.GRADEABLE_STATUSES.includes(this.status);
+    return (
+      this.qualityPts > 0 || TaskStatus.GRADEABLE_STATUSES.includes(this.status)
+    );
   }
 
   public localDueDate(): Date {
@@ -346,11 +367,16 @@ export class Task extends Entity {
     const newWeekDueMs = MappingFunctions.weeksMs(week);
 
     // Adjust due date based on difference in current and new due weeks
-    this.dueDate = new Date(this.localDueDate().getTime() - currentWeekDueMs + newWeekDueMs);
+    this.dueDate = new Date(
+      this.localDueDate().getTime() - currentWeekDueMs + newWeekDueMs,
+    );
   }
 
   public localDeadlineDate(): Date {
-    return MappingFunctions.addDays(this.definition.localDeadlineDate(), this.project.specConDays);
+    return MappingFunctions.addDays(
+      this.definition.localDeadlineDate(),
+      this.project.specConDays,
+    );
   }
 
   public savePlannedDate(): Observable<Task> {
@@ -371,7 +397,10 @@ export class Task extends Entity {
     );
   }
 
-  public saveTargetDates(startDate: Date | string, dueDate: Date | string): Observable<Task> {
+  public saveTargetDates(
+    startDate: Date | string,
+    dueDate: Date | string,
+  ): Observable<Task> {
     const taskService: TaskService = AppInjector.get(TaskService);
 
     return taskService.update(
@@ -380,7 +409,8 @@ export class Task extends Entity {
         taskDefId: this.definition.id,
       },
       {
-        endpointFormat: '/projects/:projectId:/task_def_id/:taskDefId:/target_dates',
+        endpointFormat:
+          '/projects/:projectId:/task_def_id/:taskDefId:/target_dates',
         entity: this,
         body: {
           target_start_date: startDate,
@@ -434,7 +464,11 @@ export class Task extends Entity {
   }
 
   public isDueSoon(): boolean {
-    return this.daysUntilDueDate() <= 7 && this.timePastDueDate() < 0 && !this.inFinalState();
+    return (
+      this.daysUntilDueDate() <= 7 &&
+      this.timePastDueDate() < 0 &&
+      !this.inFinalState()
+    );
   }
 
   public isPastDueDate(): boolean {
@@ -470,7 +504,10 @@ export class Task extends Entity {
 
     if (this.extensions < 0) {
       // If the task has an extension, the start date is the due date minus the extension
-      return MappingFunctions.addWeeks(this.definition.startDate, this.extensions);
+      return MappingFunctions.addWeeks(
+        this.definition.startDate,
+        this.extensions,
+      );
     } else {
       // If the task does not have an extension, the start date is the definition's start date
       return this.definition.startDate;
@@ -558,14 +595,19 @@ export class Task extends Entity {
   // Are we approaching the deadline?
   public isDeadlineSoon() {
     return (
-      this.daysUntilDeadlineDate() <= 14 && this.timePastDeadlineDate() < 0 && !this.inFinalState()
+      this.daysUntilDeadlineDate() <= 14 &&
+      this.timePastDeadlineDate() < 0 &&
+      !this.inFinalState()
     );
   }
 
   public betweenDueDateAndDeadlineDate(): boolean {
     const now = new Date().getTime();
 
-    return now > this.localDueDate().getTime() && now < this.localDeadlineDate().getTime();
+    return (
+      now > this.localDueDate().getTime() &&
+      now < this.localDeadlineDate().getTime()
+    );
   }
 
   public timePastDueDate() {
@@ -573,7 +615,9 @@ export class Task extends Entity {
   }
 
   private hoursBetween(time1: Date, time2: Date): number {
-    return Math.floor(Math.abs(time1.getTime() - time2.getTime()) / 1000 / 60 / 60);
+    return Math.floor(
+      Math.abs(time1.getTime() - time2.getTime()) / 1000 / 60 / 60,
+    );
   }
 
   public refresh(): void {
@@ -609,7 +653,8 @@ export class Task extends Entity {
 
       // if the comment is preceeded by a non-content comment, mark it as start of series.
       comments[i].firstInSeries =
-        comments[i].isBubbleComment && (i === 0 || !comments[i - 1].isBubbleComment);
+        comments[i].isBubbleComment &&
+        (i === 0 || !comments[i - 1].isBubbleComment);
 
       // if the comment is proceeded by a non-conent comment, mark it as end of series.
       if (comments[i].isBubbleComment && !comments[i + 1]?.isBubbleComment) {
@@ -618,12 +663,15 @@ export class Task extends Entity {
 
       // Link in original messages for replies
       if (comments[i].replyToId) {
-        comments[i].originalComment = comments.find((tc) => tc.id === comments[i].replyToId);
+        comments[i].originalComment = comments.find(
+          (tc) => tc.id === comments[i].replyToId,
+        );
       }
 
       // Scorm series
       if (comments[i].commentType === 'scorm') {
-        comments[i].firstInSeries = i === 0 || comments[i - 1].commentType !== 'scorm';
+        comments[i].firstInSeries =
+          i === 0 || comments[i - 1].commentType !== 'scorm';
         (comments[i] as ScormComment).lastInScormSeries =
           i + 1 === comments.length || comments[i + 1]?.commentType !== 'scorm';
         if (!comments[i].firstInSeries) comments[i].shouldShowTimestamp = false;
@@ -642,7 +690,10 @@ export class Task extends Entity {
 
   public taskKeyToIdString(): string {
     const key = this.taskKey();
-    return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(/[.# ]/g, '-');
+    return `task-key-${key.studentId}-${key.taskDefAbbr}`.replace(
+      /[.# ]/g,
+      '-',
+    );
   }
 
   public get similaritiesDetected(): boolean {
@@ -656,7 +707,11 @@ export class Task extends Entity {
     );
   }
 
-  public updateSimilarity(match: number, other: object, dismissed: boolean): Observable<object> {
+  public updateSimilarity(
+    match: number,
+    other: object,
+    dismissed: boolean,
+  ): Observable<object> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.put(
       `${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`,
@@ -740,26 +795,39 @@ export class Task extends Entity {
           this.loadingSubmissionDetails = false;
           this.hasPdf = response['has_pdf'];
           this.processingPdf = response['processing_pdf'];
-          this.submissionDate = MappingFunctions.mapDate(response, 'submission_date', this);
-          if (response['task_status'] && TaskStatus.STATUS_KEYS.includes(response['task_status'])) {
+          this.submissionDate = MappingFunctions.mapDate(
+            response,
+            'submission_date',
+            this,
+          );
+          if (
+            response['task_status'] &&
+            TaskStatus.STATUS_KEYS.includes(response['task_status'])
+          ) {
             this.status = response['task_status'];
           }
           if ('claimed_by_unit_role_id' in response) {
-            this.claimedByUnitRoleId = response['claimed_by_unit_role_id'] as number | null;
+            this.claimedByUnitRoleId = response['claimed_by_unit_role_id'] as
+              | number
+              | null;
           }
           return this;
         }),
       );
   }
 
-  private mapUnitTaskPrerequisites(prerequisites: TaskPrerequisite[]): TaskPrerequisite[] {
+  private mapUnitTaskPrerequisites(
+    prerequisites: TaskPrerequisite[],
+  ): TaskPrerequisite[] {
     const definitions = this.unit.taskDefinitions;
 
     return prerequisites.map((prerequisite) => {
       prerequisite.taskDefinition = definitions.find(
         (td) => td.id === prerequisite.taskDefinitionId,
       );
-      prerequisite.prerequisite = definitions.find((td) => td.id === prerequisite.prerequisiteId);
+      prerequisite.prerequisite = definitions.find(
+        (td) => td.id === prerequisite.prerequisiteId,
+      );
       return prerequisite;
     });
   }
@@ -771,20 +839,28 @@ export class Task extends Entity {
     return dependentTask;
   }
 
-  private async dependentTaskNeedsRecursiveFix(definition: TaskDefinition): Promise<boolean> {
+  private async dependentTaskNeedsRecursiveFix(
+    definition: TaskDefinition,
+  ): Promise<boolean> {
     const cachedTask = this.project.findTaskForDefinition(definition.id);
     if (cachedTask) {
       return cachedTask.status === 'ready_for_feedback';
     }
 
     const dependentTask = this.buildProjectTaskForDefinition(definition);
-    const taskWithSubmissionDetails = await firstValueFrom(dependentTask.getSubmissionDetails());
+    const taskWithSubmissionDetails = await firstValueFrom(
+      dependentTask.getSubmissionDetails(),
+    );
     return taskWithSubmissionDetails.status === 'ready_for_feedback';
   }
 
   public async hasReadyForFeedbackDependents(): Promise<boolean> {
-    const allPrerequisites = await firstValueFrom(this.unit.getTaskPrerequisites());
-    const dependentPrerequisites = this.mapUnitTaskPrerequisites(allPrerequisites).filter(
+    const allPrerequisites = await firstValueFrom(
+      this.unit.getTaskPrerequisites(),
+    );
+    const dependentPrerequisites = this.mapUnitTaskPrerequisites(
+      allPrerequisites,
+    ).filter(
       (prerequisite) => prerequisite.prerequisiteId === this.definition.id,
     );
 
@@ -793,9 +869,8 @@ export class Task extends Entity {
         continue;
       }
 
-      const shouldTriggerRecursiveFix = await this.dependentTaskNeedsRecursiveFix(
-        prerequisite.taskDefinition,
-      );
+      const shouldTriggerRecursiveFix =
+        await this.dependentTaskNeedsRecursiveFix(prerequisite.taskDefinition);
       if (shouldTriggerRecursiveFix) {
         return true;
       }
@@ -828,11 +903,15 @@ export class Task extends Entity {
   }
 
   public get isReadyForUpload(): boolean {
-    return !this.scormEnabled || this.definition.scormBypassTest || this.scormPassed;
+    return (
+      !this.scormEnabled || this.definition.scormBypassTest || this.scormPassed
+    );
   }
 
   public get latestCompletedTestAttempt(): TestAttempt {
-    return this.testAttemptCache.currentValues.find((attempt) => attempt.terminated);
+    return this.testAttemptCache.currentValues.find(
+      (attempt) => attempt.terminated,
+    );
   }
 
   public submissionUrl(asAttachment: boolean = false): string {
@@ -878,7 +957,9 @@ export class Task extends Entity {
     if (!isTestSubmission) {
       this.status = status;
     }
-    const uploadModal: UploadSubmissionModalService = AppInjector.get(UploadSubmissionModalService);
+    const uploadModal: UploadSubmissionModalService = AppInjector.get(
+      UploadSubmissionModalService,
+    );
 
     const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission);
     // Modal failed to present
@@ -905,7 +986,10 @@ export class Task extends Entity {
     );
   }
 
-  public processTaskStatusChange(expectedStatus: TaskStatusEnum, alerts: AlertService) {
+  public processTaskStatusChange(
+    expectedStatus: TaskStatusEnum,
+    alerts: AlertService,
+  ) {
     if (this.inTimeExceeded() && !this.isPastDeadline()) {
       alerts.message(
         'You have submitted after the deadline for feedback. Your task will not be reviewed by a tutor. It is now your responsibility to ensure this task meets the required standard.',
@@ -947,7 +1031,10 @@ export class Task extends Entity {
         .subscribe({
           next: (_response) => {
             taskService.notifyStatusChange(this);
-            alerts.success('Task successfully marked as discussed in class.', 4000);
+            alerts.success(
+              'Task successfully marked as discussed in class.',
+              4000,
+            );
           },
           error: (error) => {
             alerts.error(error, 6000);
@@ -981,7 +1068,10 @@ export class Task extends Entity {
             markDiscussed();
           },
           error: (error) => {
-            alerts.error(`Unable to save the required tutor note: ${error}`, 6000);
+            alerts.error(
+              `Unable to save the required tutor note: ${error}`,
+              6000,
+            );
           },
         });
       return;
@@ -999,7 +1089,10 @@ export class Task extends Entity {
     const alerts: AlertService = AppInjector.get(AlertService);
 
     if (status === 'complete' && !this.canMarkComplete) {
-      alerts.error('This task must be discussed in class before it can marked complete.', 6000);
+      alerts.error(
+        'This task must be discussed in class before it can marked complete.',
+        6000,
+      );
       return;
     }
 
@@ -1054,7 +1147,9 @@ export class Task extends Entity {
       (this.definition.isGraded || this.definition.maxQualityPts > 0) &&
       TaskStatus.GRADEABLE_STATUSES.includes(status)
     ) {
-      const gradeModal: GradeTaskModalService = AppInjector.get(GradeTaskModalService);
+      const gradeModal: GradeTaskModalService = AppInjector.get(
+        GradeTaskModalService,
+      );
       gradeModal.show(
         this,
         // Grade was selected (modal closed with result)
@@ -1079,8 +1174,9 @@ export class Task extends Entity {
     const alerts: AlertService = AppInjector.get(AlertService);
 
     const requiresFileUpload =
-      ['ready_for_feedback', 'need_help', 'assess_in_portfolio'].includes(status) &&
-      this.requiresFileUpload();
+      ['ready_for_feedback', 'need_help', 'assess_in_portfolio'].includes(
+        status,
+      ) && this.requiresFileUpload();
 
     if (requiresFileUpload && this.isReadyForUpload) {
       this.presentTaskSubmissionModal(status);
@@ -1112,22 +1208,30 @@ export class Task extends Entity {
   public pin(onSuccess?: () => void): void {
     const http = AppInjector.get(HttpClient);
 
-    http.post(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`, {}).subscribe({
-      next: (_data) => {
-        this.pinned = true;
-        onSuccess?.();
-      },
-      error: (message) => {
-        (AppInjector.get(AlertService) as AlertService).error(message, 6000);
-      },
-    });
+    http
+      .post(
+        `${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`,
+        {},
+      )
+      .subscribe({
+        next: (_data) => {
+          this.pinned = true;
+          onSuccess?.();
+        },
+        error: (message) => {
+          (AppInjector.get(AlertService) as AlertService).error(message, 6000);
+        },
+      });
   }
 
   public unpin(onSuccess?: () => void): void {
     const http = AppInjector.get(HttpClient);
 
     http
-      .delete(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`, {})
+      .delete(
+        `${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`,
+        {},
+      )
       .subscribe({
         next: (_data) => {
           this.pinned = false;
@@ -1141,7 +1245,8 @@ export class Task extends Entity {
 
   public canApplyForExtension(): boolean {
     return (
-      (this.unit.allowStudentExtensionRequests || this.unit.currentUserIsStaff) &&
+      (this.unit.allowStudentExtensionRequests ||
+        this.unit.currentUserIsStaff) &&
       !this.unit.allowFlexibleDates &&
       this.inStateThatAllowsExtension() &&
       (!this.isPastDeadline() || this.wasSubmittedOnTime()) &&
@@ -1152,12 +1257,15 @@ export class Task extends Entity {
   public wasSubmittedOnTime() {
     return (
       this.submissionDate &&
-      this.submissionDate.getTime() <= this.definition.finalDeadlineDate().getTime()
+      this.submissionDate.getTime() <=
+        this.definition.finalDeadlineDate().getTime()
     );
   }
 
   public maxWeeksCanExtend(): number {
-    return Math.ceil(this.daysBetween(this.localDueDate(), this.localDeadlineDate()) / 7);
+    return Math.ceil(
+      this.daysBetween(this.localDueDate(), this.localDeadlineDate()) / 7,
+    );
   }
 
   /**
@@ -1165,7 +1273,9 @@ export class Task extends Entity {
    * able to available for tutors to provide feedback.
    */
   public minWeeksCanExtend(): number {
-    const minWeeks = Math.ceil(this.daysBetween(this.localDueDate(), new Date()) / 7);
+    const minWeeks = Math.ceil(
+      this.daysBetween(this.localDueDate(), new Date()) / 7,
+    );
     if (minWeeks < 0) {
       return 0;
     } else {
@@ -1177,7 +1287,9 @@ export class Task extends Entity {
    * Fetch the task similarities for this task.
    */
   public fetchSimilarities(): Observable<TaskSimilarity[]> {
-    const taskSimilarityService: TaskSimilarityService = AppInjector.get(TaskSimilarityService);
+    const taskSimilarityService: TaskSimilarityService = AppInjector.get(
+      TaskSimilarityService,
+    );
     return taskSimilarityService.query(
       {taskId: this.id},
       {
@@ -1191,7 +1303,8 @@ export class Task extends Entity {
    * Fetch the SCORM test attempts for this task.
    */
   public fetchTestAttempts(): Observable<TestAttempt[]> {
-    const testAttemptService: TestAttemptService = AppInjector.get(TestAttemptService);
+    const testAttemptService: TestAttemptService =
+      AppInjector.get(TestAttemptService);
     return testAttemptService.query(
       {
         project_id: this.project.id,
@@ -1226,7 +1339,9 @@ export class Task extends Entity {
 
     for (const prerequisiteLink of prereqs) {
       const prerequisiteTask = prerequisiteLink.prerequisite;
-      const task = this.project.tasks.find((t) => t.definition.id === prerequisiteTask.id);
+      const task = this.project.tasks.find(
+        (t) => t.definition.id === prerequisiteTask.id,
+      );
 
       // If the task doesnt exist or its state has not met the minimum require state, block submission
       if (!task || !prerequisiteLink.hasMetRequiredState(this.project)) {

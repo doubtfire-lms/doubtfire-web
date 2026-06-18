@@ -1,38 +1,48 @@
-<mat-card appearance="outlined" [hidden]="!(task?.hasPdf || task?.processingPdf)">
+<mat-card
+  appearance="outlined"
+  [hidden]="!(task?.hasPdf || task?.processingPdf)"
+>
   <mat-card-header>
     <mat-card-title
-      >Submission <span [hidden]="!task?.processingPdf">Processing</span></mat-card-title
+      >Submission
+      <span [hidden]="!task?.processingPdf">Processing</span></mat-card-title
     >
   </mat-card-header>
   <mat-card-content>
     <p [hidden]="!task?.processingPdf">
-      Your submission is being processed and will be avaliable to view soon. You will also be able
-      to download your most recently submitted files.
+      Your submission is being processed and will be avaliable to view soon. You
+      will also be able to download your most recently submitted files.
     </p>
     <p [hidden]="!task?.hasPdf">
-      You can choose to download your <em [hidden]="!task?.processingPdf">previous</em>
+      You can choose to download your
+      <em [hidden]="!task?.processingPdf">previous</em>
       submission or the files you uploaded below.
     </p>
     @if (task?.hasPdf && task.submissionDate) {
       <p>
-        You uploaded this submission <strong>{{ task.submissionDate | date: 'dd/MM/yyyy' }}</strong
+        You uploaded this submission
+        <strong>{{ task.submissionDate | date: 'dd/MM/yyyy' }}</strong
         >.
       </p>
     }
     <p [hidden]="!canRegeneratePdf">
-      If you feel there has been an error in your submission, you can request to regenerate your
-      submission under the "Actions" dropdown menu.
+      If you feel there has been an error in your submission, you can request to
+      regenerate your submission under the "Actions" dropdown menu.
     </p>
     <p [hidden]="!task?.inSubmittedState()">
-      If you would like to submit alternate evidence for use in your portfolio, you can upload
-      alternate files under the "Actions" dropdown menu.
+      If you would like to submit alternate evidence for use in your portfolio,
+      you can upload alternate files under the "Actions" dropdown menu.
     </p></mat-card-content
   >
   <mat-card-actions
     class="space-x-1"
     [hidden]="!(task?.hasPdf || task?.inSubmittedState() || canRegeneratePdf)"
   >
-    <button mat-stroked-button [hidden]="!task?.hasPdf" (click)="downloadSubmission()">
+    <button
+      mat-stroked-button
+      [hidden]="!task?.hasPdf"
+      (click)="downloadSubmission()"
+    >
       Download submission
     </button>
     <button
@@ -45,7 +55,9 @@
     </button>
     <div fxFlex></div>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="downloadSubmissionFiles()">Download original files</button>
+      <button mat-menu-item (click)="downloadSubmissionFiles()">
+        Download original files
+      </button>
     </mat-menu>
 
     <button
@@ -62,10 +74,18 @@
       >
     </button>
     <mat-menu #menu2="matMenu">
-      <button mat-menu-item [hidden]="!task?.inSubmittedState()" (click)="uploadAlternateFiles()">
+      <button
+        mat-menu-item
+        [hidden]="!task?.inSubmittedState()"
+        (click)="uploadAlternateFiles()"
+      >
         Upload alternate files
       </button>
-      <button mat-menu-item [hidden]="!canRegeneratePdf" (click)="regeneratePdf()">
+      <button
+        mat-menu-item
+        [hidden]="!canRegeneratePdf"
+        (click)="regeneratePdf()"
+      >
         Regenerate PDFs
       </button>
     </mat-menu>

@@ -1,5 +1,9 @@
 <h4>Step 1. Record and add up to 3 prompts.</h4>
-<div fxLayout="row" fxLayoutAlign="space-around center" [hidden]="!canRecord || isSending">
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-around center"
+  [hidden]="!canRecord || isSending"
+>
   <div>
     <button
       aria-label="Record icon button"
@@ -25,7 +29,10 @@
       [strokeWidth]="2"
     ></mat-spinner>
     <div fxLayout="row" fxLayoutAlign="center center">
-      <canvas #discussionPromptComposerCanvas class="discussion-prompt-audio-visualiser"></canvas>
+      <canvas
+        #discussionPromptComposerCanvas
+        class="discussion-prompt-audio-visualiser"
+      ></canvas>
     </div>
     <audio #discussionPromptComposerAudio></audio>
   </div>

@@ -17,7 +17,8 @@ export class DiscussionPromptService extends CachedEntityService<DiscussionPromp
   protected readonly endpointFormat =
     'task_definitions/:task_definition_id:/discussion_prompts/:id:';
 
-  protected readonly projectEndpointFormat = 'projects/:projectId:/discussion_prompts';
+  protected readonly projectEndpointFormat =
+    'projects/:projectId:/discussion_prompts';
   protected readonly taskDefinitionProjectEndpointFormat =
     'projects/:projectId:/discussion_prompts';
   protected readonly taskDefinitionEndpointFormat =
@@ -38,12 +39,17 @@ export class DiscussionPromptService extends CachedEntityService<DiscussionPromp
         keys: ['createdBy', 'created_by_id'],
         toEntityFn: (data: object, key: string, prompt: DiscussionPrompt) => {
           if (prompt.project) {
-            return prompt.project.unit.staff.find((s) => s.user.id === data['created_by_id']).user;
+            return prompt.project.unit.staff.find(
+              (s) => s.user.id === data['created_by_id'],
+            ).user;
           } else if (prompt.taskDefinition) {
-            return prompt.taskDefinition.unit.staff.find((s) => s.user.id === data['created_by_id'])
-              ?.user;
+            return prompt.taskDefinition.unit.staff.find(
+              (s) => s.user.id === data['created_by_id'],
+            )?.user;
           } else if (prompt.unit) {
-            return prompt.unit.staff.find((s) => s.user.id === data['created_by_id'])?.user;
+            return prompt.unit.staff.find(
+              (s) => s.user.id === data['created_by_id'],
+            )?.user;
           }
         },
       },

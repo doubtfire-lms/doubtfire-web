@@ -1,4 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
 import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
 
@@ -8,7 +14,10 @@ import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component
   styleUrls: ['./task-status-pie-chart.component.scss'],
   standalone: false,
 })
-export class TaskStatusPieChartComponent extends ChartBaseComponent implements OnChanges, OnInit {
+export class TaskStatusPieChartComponent
+  extends ChartBaseComponent
+  implements OnChanges, OnInit
+{
   @Input() project: Project;
   @Input() grade: number;
 
@@ -28,7 +37,9 @@ export class TaskStatusPieChartComponent extends ChartBaseComponent implements O
 
   updateData(): void {
     if (this.project) {
-      const taskCounts = new Map(TaskStatus.STATUS_KEYS.map((status) => [status, 0]));
+      const taskCounts = new Map(
+        TaskStatus.STATUS_KEYS.map((status) => [status, 0]),
+      );
       const activeTasks = this.project.activeTasks();
       activeTasks.forEach((task) => {
         if (task.status) {
@@ -69,9 +80,11 @@ export class TaskStatusPieChartComponent extends ChartBaseComponent implements O
           return aIndex - bIndex;
         });
 
-      this.colors = Array.from(TaskStatus.STATUS_COLORS).map(([status, color]) => {
-        return {name: TaskStatus.STATUS_LABELS.get(status), value: color};
-      });
+      this.colors = Array.from(TaskStatus.STATUS_COLORS).map(
+        ([status, color]) => {
+          return {name: TaskStatus.STATUS_LABELS.get(status), value: color};
+        },
+      );
     }
   }
 }

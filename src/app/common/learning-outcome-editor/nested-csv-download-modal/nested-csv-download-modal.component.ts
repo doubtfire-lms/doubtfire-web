@@ -13,7 +13,8 @@ export class NestedCsvDownloadModalComponent {
   constructor(
     private fileDownloaderService: FileDownloaderService,
     public dialogRef: MatDialogRef<NestedCsvDownloadModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {url: string; name: string; type: string},
+    @Inject(MAT_DIALOG_DATA)
+    public data: {url: string; name: string; type: string},
   ) {}
 
   downloadCsv() {

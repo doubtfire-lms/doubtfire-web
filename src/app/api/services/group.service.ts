@@ -6,7 +6,8 @@ import API_URL from 'src/app/config/constants/apiUrl';
 
 @Injectable()
 export class GroupService extends CachedEntityService<Group> {
-  protected override readonly endpointFormat = 'units/:unitId:/group_sets/:groupSetId:/groups/:id:';
+  protected override readonly endpointFormat =
+    'units/:unitId:/group_sets/:groupSetId:/groups/:id:';
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);

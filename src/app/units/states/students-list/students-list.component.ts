@@ -1,4 +1,11 @@
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -160,10 +167,14 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private updateSuggestions(): void {
     const searchValue = this.searchText.trim().toLowerCase();
-    const suggestions = Array.from(new Set(this.unit?.studentFilterTypeAheadData ?? []));
+    const suggestions = Array.from(
+      new Set(this.unit?.studentFilterTypeAheadData ?? []),
+    );
 
     this.filteredSuggestions = suggestions
-      .filter((item) => !searchValue || item.toLowerCase().includes(searchValue))
+      .filter(
+        (item) => !searchValue || item.toLowerCase().includes(searchValue),
+      )
       .slice(0, 8);
   }
 
@@ -186,14 +197,19 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
     const currentUser = this.userService.currentUser;
 
     return [...(this.unit?.students ?? [])]
-      .filter((project) => (this.staffFilter === 'mine' ? project.hasTutor(currentUser) : true))
-      .filter((project) => (searchValue ? this.matchesSearch(project, searchValue) : true))
+      .filter((project) =>
+        this.staffFilter === 'mine' ? project.hasTutor(currentUser) : true,
+      )
+      .filter((project) =>
+        searchValue ? this.matchesSearch(project, searchValue) : true,
+      )
       .sort((a, b) => this.compareProjects(a, b));
   }
 
   private matchesSearch(project: Project, searchValue: string): boolean {
     return (
-      project.matches(searchValue) || project.student.username?.toLowerCase().includes(searchValue)
+      project.matches(searchValue) ||
+      project.student.username?.toLowerCase().includes(searchValue)
     );
   }
 
@@ -244,7 +260,9 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
     const result = ['username', 'name', 'email', 'portfolio'];
 
     if (this.unit.tutorialStreamsCache.size > 0) {
-      this.unit.tutorialStreams.forEach((stream) => result.push(stream.abbreviation));
+      this.unit.tutorialStreams.forEach((stream) =>
+        result.push(stream.abbreviation),
+      );
     } else {
       result.push('tutorial');
     }

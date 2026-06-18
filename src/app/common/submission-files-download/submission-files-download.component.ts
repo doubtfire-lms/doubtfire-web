@@ -49,7 +49,9 @@ export class SubmissionFilesDownloadComponent implements OnInit {
 
   private filenameFromResponse(response: HttpResponse<Blob>): string | null {
     const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-    const matches = filenameRegex.exec(response.headers.get('Content-Disposition'));
+    const matches = filenameRegex.exec(
+      response.headers.get('Content-Disposition'),
+    );
 
     return matches?.[1]?.replace(/['"]/g, '') ?? null;
   }

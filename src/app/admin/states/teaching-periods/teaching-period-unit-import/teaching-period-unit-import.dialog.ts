@@ -1,6 +1,10 @@
 import {Component, Inject, Injectable, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Observable, map, startWith} from 'rxjs';
 import {
@@ -32,9 +36,12 @@ export class TeachingPeriodUnitImportService {
   constructor(public dialog: MatDialog) {}
 
   openImportUnitsDialog(teachingPeriod: TeachingPeriod): void {
-    const dialogRef = this.dialog.open(TeachingPeriodUnitImportDialogComponent, {
-      data: {teachingPeriod: teachingPeriod},
-    });
+    const dialogRef = this.dialog.open(
+      TeachingPeriodUnitImportDialogComponent,
+      {
+        data: {teachingPeriod: teachingPeriod},
+      },
+    );
 
     dialogRef.afterClosed().subscribe(() => {
       console.log('The dialog was closed');
@@ -92,7 +99,9 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   ngOnInit(): void {
     // Listen for units to be loaded
     this.globalStateService.onLoad(() => {
-      this.globalStateService.loadedUnits.values.subscribe((units) => (this.allUnits = units));
+      this.globalStateService.loadedUnits.values.subscribe(
+        (units) => (this.allUnits = units),
+      );
     });
 
     // Load all teaching staff
@@ -113,20 +122,24 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   private _filter(name: string): User[] {
     const filterValue = name.toLowerCase();
 
-    return this.teachingStaff.filter((option) => option.name.toLowerCase().includes(filterValue));
+    return this.teachingStaff.filter((option) =>
+      option.name.toLowerCase().includes(filterValue),
+    );
   }
 
   private loadAllUnits() {
     // Load all units
-    this.unitService.query(undefined, {params: {include_in_active: true}}).subscribe({
-      next: () => {
-        return;
-      },
-      error: (failure) => {
-        //TODO: Add alert
-        console.log(failure);
-      },
-    });
+    this.unitService
+      .query(undefined, {params: {include_in_active: true}})
+      .subscribe({
+        next: () => {
+          return;
+        },
+        error: (failure) => {
+          //TODO: Add alert
+          console.log(failure);
+        },
+      });
   }
 
   public onCloseClick(): void {
@@ -141,10 +154,17 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   public codeChange(code: string, value: UnitImportData) {
     value.relatedUnits = this.relatedUnits(code);
     // add source unit to realted units - so that it is retained on code change
-    if (value.sourceUnit && !value.relatedUnits.find((u) => u.value.id === value.sourceUnit.id)) {
-      value.relatedUnits.unshift({value: value.sourceUnit, text: value.sourceUnit.codeAndPeriod});
+    if (
+      value.sourceUnit &&
+      !value.relatedUnits.find((u) => u.value.id === value.sourceUnit.id)
+    ) {
+      value.relatedUnits.unshift({
+        value: value.sourceUnit,
+        text: value.sourceUnit.codeAndPeriod,
+      });
     }
-    value.sourceUnit = value.relatedUnits.length > 0 ? value.relatedUnits[0].value : null;
+    value.sourceUnit =
+      value.relatedUnits.length > 0 ? value.relatedUnits[0].value : null;
   }
 
   public relatedUnits(code: string): {value: Unit; text: string}[] {
@@ -166,7 +186,10 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
     if (!value.sourceUnit) return 'Create new unit';
     if (this.teachigPeriod.hasUnitLike(value.sourceUnit))
       return 'Skip - Already in teaching period';
-    if (this.unitsToImport.filter((u) => u.unitCode === value.sourceUnit.code).length > 1) {
+    if (
+      this.unitsToImport.filter((u) => u.unitCode === value.sourceUnit.code)
+        .length > 1
+    ) {
       return 'Duplicate - Source unit appears twice';
     }
 
@@ -179,7 +202,9 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
    * @param value The unit to remove from the list of units to import
    */
   public removeUnitToAdd(value: UnitImportData) {
-    this.unitsToImport = this.unitsToImport.filter((u) => u.unitCode !== value.unitCode);
+    this.unitsToImport = this.unitsToImport.filter(
+      (u) => u.unitCode !== value.unitCode,
+    );
     // Ensure we use the new array object in the data source
     this.dataSource.data = this.unitsToImport;
     this.table.renderRows();
@@ -200,7 +225,8 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
       this.unitsToImport.push({
         unitCode: code,
         sourceUnit: sourceUnit,
-        convenor: sourceUnit?.mainConvenor?.user || sourceUnit?.mainConvenorUser,
+        convenor:
+          sourceUnit?.mainConvenor?.user || sourceUnit?.mainConvenorUser,
         relatedUnits: relatedUnits,
         convenorFormControl: formControl,
         filteredStaff: formControl.valueChanges.pipe(
@@ -227,10 +253,15 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
         next: (newUnit: Unit) => {
           unitToImport.done = true;
           // Employ the convenor
-          if (unitToImport.convenor && unitToImport.convenor !== newUnit.mainConvenorUser) {
+          if (
+            unitToImport.convenor &&
+            unitToImport.convenor !== newUnit.mainConvenorUser
+          ) {
             newUnit.addStaff(unitToImport.convenor, 'Convenor').subscribe({
               next: (newRole) => {
-                console.log(`Employed ${unitToImport.convenor.name} in ${newUnit.code}`);
+                console.log(
+                  `Employed ${unitToImport.convenor.name} in ${newUnit.code}`,
+                );
                 newUnit.changeMainConvenor(newRole).subscribe({
                   next: () => {
                     console.log(
@@ -285,9 +316,14 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
     if (idx >= this.unitsToImport.length) return;
     const unitToImport = this.unitsToImport[idx];
 
-    const code = unitToImport.sourceUnit ? unitToImport.sourceUnit.code : unitToImport.unitCode;
+    const code = unitToImport.sourceUnit
+      ? unitToImport.sourceUnit.code
+      : unitToImport.unitCode;
 
-    if (unitToImport.done !== undefined || this.teachigPeriod.hasUnitWithCode(code)) {
+    if (
+      unitToImport.done !== undefined ||
+      this.teachigPeriod.hasUnitWithCode(code)
+    ) {
       // Skip units already done
       this.importUnit(idx + 1);
     } else {

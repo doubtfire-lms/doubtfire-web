@@ -31,7 +31,9 @@ export class AboutDoubtfireModalService {
   constructor(private http: HttpClient) {}
 
   public getGithubProfiles(handler: string) {
-    return this.http.get<GithubProfile>(`https://api.github.com/users/${handler}`);
+    return this.http.get<GithubProfile>(
+      `https://api.github.com/users/${handler}`,
+    );
   }
 
   private findOrCreateContributor(
@@ -43,7 +45,11 @@ export class AboutDoubtfireModalService {
       return c.login === profile.login;
     });
     if (!contributor) {
-      contributor = new ContributorData(profile.login, profile.html_url, profile.avatar_url);
+      contributor = new ContributorData(
+        profile.login,
+        profile.html_url,
+        profile.avatar_url,
+      );
 
       data.addContributor(contributor);
     }

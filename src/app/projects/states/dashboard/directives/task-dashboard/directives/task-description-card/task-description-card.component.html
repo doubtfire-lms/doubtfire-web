@@ -6,7 +6,10 @@
     </div>
   </mat-card-header>
   <mat-card-content>
-    <div class="markdown-to-pdf" [innerHTML]="taskDef?.description | marked"></div>
+    <div
+      class="markdown-to-pdf"
+      [innerHTML]="taskDef?.description | marked"
+    ></div>
     @if (task) {
       <f-task-date-slider [task]="task" />
     }
@@ -14,13 +17,19 @@
       <li>{{ grades.names[taskDef?.targetGrade] }} Task</li>
 
       @if (unit?.allowFlexibleDates ?? taskDef?.unit?.allowFlexibleDates) {
-        <li>I'm planning to <b>start</b> this task by {{ startDate() | date: 'EEE d MMM' }}.</li>
+        <li>
+          I'm planning to <b>start</b> this task by
+          {{ startDate() | date: 'EEE d MMM' }}.
+        </li>
         <li [hidden]="!task?.extensions || task?.extensions <= 0">
           The due date has been <b>extended</b> by {{ task?.extensions }} week{{
             task?.extensions > 1 ? 's' : ''
           }}.
         </li>
-        <li>I'm aiming to <b>submit</b> this task by {{ dueDate() | date: 'EEE d MMM' }}.</li>
+        <li>
+          I'm aiming to <b>submit</b> this task by
+          {{ dueDate() | date: 'EEE d MMM' }}.
+        </li>
         <li>
           To receive <b>feedback</b>, I must submit this task by
           {{ feedbackDate() | date: 'EEE d MMM' }}.
@@ -51,14 +60,27 @@
       >
       Task Sheet
     </button> -->
-    <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="downloadTaskSheet()">
-      <mat-icon aria-label="Download icon" style="width: 20px; height: 20px; font-size: 20px"
+    <button
+      mat-stroked-button
+      [hidden]="!taskDef?.hasTaskSheet"
+      (click)="downloadTaskSheet()"
+    >
+      <mat-icon
+        aria-label="Download icon"
+        style="width: 20px; height: 20px; font-size: 20px"
         >download</mat-icon
       >
       Task Sheet
     </button>
-    <button mat-stroked-button [hidden]="!taskDef?.hasTaskResources" (click)="downloadResources()">
-      <mat-icon aria-label="Download icon" inline style="width: 20px; height: 20px; font-size: 20px"
+    <button
+      mat-stroked-button
+      [hidden]="!taskDef?.hasTaskResources"
+      (click)="downloadResources()"
+    >
+      <mat-icon
+        aria-label="Download icon"
+        inline
+        style="width: 20px; height: 20px; font-size: 20px"
         >download</mat-icon
       ><span>Resources</span>
     </button>

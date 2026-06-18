@@ -3,7 +3,9 @@
     <mat-card-title class="w-full">
       {{ taskDefinition.abbreviation }} {{ taskDefinition.name }}
     </mat-card-title>
-    <status-icon [status]="taskDefinition.projectTask(project).status"></status-icon>
+    <status-icon
+      [status]="taskDefinition.projectTask(project).status"
+    ></status-icon>
   </mat-card-header>
   <mat-card-content>
     <mat-card-subtitle class="py-3"
@@ -15,7 +17,9 @@
       [taskDefinition]="taskDefinition"
     ></f-task-prerequisites-card>
     @if (!task.hasPrerequisiteTasks()) {
-      <div class="w-full p-3 text-center text-gray-400">This task has no prerequisites.</div>
+      <div class="w-full p-3 text-center text-gray-400">
+        This task has no prerequisites.
+      </div>
     }
     <mat-divider class="my-3"></mat-divider>
     @if (dependents.length) {
@@ -26,24 +30,36 @@
 
         <mat-card-content>
           <mat-card-subtitle class="mb-2.5">
-            <strong>{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</strong> is a
-            prerequisite for the following tasks. In some cases,
-            <strong>{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</strong> needs to
-            reach the <strong>Discuss</strong> or <strong>Complete</strong> status, which requires
-            tutor feedback. Plan ahead to avoid being locked out of submission.
+            <strong
+              >{{ taskDefinition.abbreviation }}
+              {{ taskDefinition.name }}</strong
+            >
+            is a prerequisite for the following tasks. In some cases,
+            <strong
+              >{{ taskDefinition.abbreviation }}
+              {{ taskDefinition.name }}</strong
+            >
+            needs to reach the <strong>Discuss</strong> or
+            <strong>Complete</strong> status, which requires tutor feedback.
+            Plan ahead to avoid being locked out of submission.
           </mat-card-subtitle>
           <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="task-definition">
               <th *matHeaderCellDef mat-header-cell>Task</th>
               <td *matCellDef="let link" mat-cell>
-                {{ link.taskDefinition?.abbreviation }} {{ link.taskDefinition?.name }}
+                {{ link.taskDefinition?.abbreviation }}
+                {{ link.taskDefinition?.name }}
               </td>
             </ng-container>
 
             <ng-container matColumnDef="current-status">
               <th *matHeaderCellDef mat-header-cell>Submission Open</th>
               <td *matCellDef="let link" mat-cell>
-                @if (link.taskDefinition.projectTask(project).blockedByPrerequisiteTasks()) {
+                @if (
+                  link.taskDefinition
+                    .projectTask(project)
+                    .blockedByPrerequisiteTasks()
+                ) {
                   <mat-icon>block_outlined</mat-icon>
                 } @else {
                   <mat-icon>check_circle</mat-icon>
@@ -56,7 +72,9 @@
             </ng-container>
 
             <ng-container matColumnDef="required-status">
-              <th *matHeaderCellDef class="whitespace-nowrap" mat-header-cell>Required Status</th>
+              <th *matHeaderCellDef class="whitespace-nowrap" mat-header-cell>
+                Required Status
+              </th>
               <td *matCellDef="let link" mat-cell>
                 <status-icon
                   matBadgePosition="before"

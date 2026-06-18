@@ -9,7 +9,10 @@ import {
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
 import {catchError, filter, finalize, switchMap, take} from 'rxjs/operators';
-import {AuthenticationService, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  AuthenticationService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
@@ -23,20 +26,26 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
   attemptRefresh$(): Observable<void> {
     return new Observable<void>((observer) => {
-      this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
-        if (result) {
-          observer.next();
-          observer.complete();
-        } else {
-          this.authenticationService.timeoutAuthentication();
-          this.refreshTokenInProgress = false;
-          observer.error(new Error('Authentication timed out'));
-        }
-      }, false); // Don't display splashscreen
+      this.authenticationService.attemptLoginUsingRefreshToken(
+        (result: boolean) => {
+          if (result) {
+            observer.next();
+            observer.complete();
+          } else {
+            this.authenticationService.timeoutAuthentication();
+            this.refreshTokenInProgress = false;
+            observer.error(new Error('Authentication timed out'));
+          }
+        },
+        false,
+      ); // Don't display splashscreen
     });
   }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<any>> {
     const request$ = this.isAccessTokenExpired(request)
       ? throwError(() => new HttpErrorResponse({status: 419}))
       : next.handle(request);
@@ -54,7 +63,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             this.refreshTokenSubject.next(null);
             return this.attemptRefresh$().pipe(
               switchMap(() => {
-                this.refreshTokenSubject.next(this.userService.currentUser.authenticationToken);
+                this.refreshTokenSubject.next(
+                  this.userService.currentUser.authenticationToken,
+                );
                 return next.handle(this.injectToken(request));
               }),
               catchError((err: HttpErrorResponse) => {
@@ -87,7 +98,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   }
 
   private isAuthError(error: HttpErrorResponse) {
-    return error.status === 419 || (error.status === 403 && this.userService.isAnonymousUser());
+    return (
+      error.status === 419 ||
+      (error.status === 403 && this.userService.isAnonymousUser())
+    );
   }
 
   private isAccessTokenExpired(request: HttpRequest<any>) {

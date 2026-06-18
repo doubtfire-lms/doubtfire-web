@@ -1,4 +1,9 @@
-<table #upreqTable class="table-fixed" mat-table [dataSource]="taskDefinition.uploadRequirements">
+<table
+  #upreqTable
+  class="table-fixed"
+  mat-table
+  [dataSource]="taskDefinition.uploadRequirements"
+>
   <!-- File name Column -->
   <ng-container matColumnDef="file-name" sticky>
     <th *matHeaderCellDef mat-header-cell style="width: 30%">Filename</th>
@@ -23,7 +28,9 @@
   </ng-container>
 
   <ng-container matColumnDef="submission-history" sticky>
-    <th *matHeaderCellDef mat-header-cell style="width: 15%">Submission History</th>
+    <th *matHeaderCellDef mat-header-cell style="width: 15%">
+      Submission History
+    </th>
     <td *matCellDef="let upreq" mat-cell style="width: 15%">
       <mat-checkbox
         matTooltip="Retain this file in the task's submission history"
@@ -34,7 +41,9 @@
 
   <!-- TurnItIn Check Column -->
   <ng-container matColumnDef="tii-check" sticky>
-    <th *matHeaderCellDef mat-header-cell style="width: 20%">Check Similarity</th>
+    <th *matHeaderCellDef mat-header-cell style="width: 20%">
+      Check Similarity
+    </th>
     <td *matCellDef="let upreq" mat-cell style="width: 20%">
       @if (upreq.type === 'document' && tiiEnabled()) {
         <mat-checkbox [(ngModel)]="upreq.tiiCheck">TurnItIn</mat-checkbox>
@@ -94,7 +103,8 @@
 
 @if (missingOverseerSubmissionHistory) {
   <div class="mt-2 text-sm text-red-700">
-    Overseer requires at least one upload requirement to be retained in submission history.
+    Overseer requires at least one upload requirement to be retained in
+    submission history.
   </div>
 }
 
@@ -127,18 +137,25 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="basis-1/2">
       <mat-label>Similarity percent to flag for JPLAG checks</mat-label>
-      <input matInput type="number" [(ngModel)]="taskDefinition.plagiarismWarnPct" />
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="taskDefinition.plagiarismWarnPct"
+      />
     </mat-form-field>
   </div>
   <div class="flex flex-grow">
     <div class="basis-1/2">
-      <mat-slide-toggle [(ngModel)]="taskDefinition.useResourcesForJplagBaseCode">
+      <mat-slide-toggle
+        [(ngModel)]="taskDefinition.useResourcesForJplagBaseCode"
+      >
         Use Task Resources for JPlag Base Code</mat-slide-toggle
       >
       <p>
-        Base code is a common framework included in all submissions. When enabled, student code
-        matching this base code will be ignored during JPlag similarity checks. The base code will
-        be automatically extracted from the task resources.
+        Base code is a common framework included in all submissions. When
+        enabled, student code matching this base code will be ignored during
+        JPlag similarity checks. The base code will be automatically extracted
+        from the task resources.
       </p>
     </div>
     <div class="basis-1/2"></div>

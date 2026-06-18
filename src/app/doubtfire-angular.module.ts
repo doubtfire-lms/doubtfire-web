@@ -12,7 +12,10 @@ import {
   NgxGanttModule,
   enUsLocale,
 } from '@worktile/gantt';
-import {DateAdapter as CalendarDateAdapter, CalendarModule} from 'angular-calendar';
+import {
+  DateAdapter as CalendarDateAdapter,
+  CalendarModule,
+} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {enAU} from 'date-fns/locale';
 import player from 'lottie-web';
@@ -70,7 +73,10 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
+import {
+  MAT_TOOLTIP_DEFAULT_OPTIONS,
+  MatTooltipDefaultOptions,
+} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -88,7 +94,10 @@ import {
   AboutDoubtfireModalContent,
 } from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
 import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
-import {AlertComponent, AlertService} from 'src/app/common/services/alert.service';
+import {
+  AlertComponent,
+  AlertService,
+} from 'src/app/common/services/alert.service';
 import {FTaskBadgeComponent} from 'src/app/common/task-badge/task-badge.component';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AttachmentConfirmationDialogComponent} from 'src/app/tasks/task-comment-composer/attachment-confirmation-dialog/attachment-confirmation-dialog.component';
@@ -823,7 +832,10 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
       enabled: environment.production,
       registrationStrategy: () => interval(6000).pipe(take(1)),
     }),
-    CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
+    CalendarModule.forRoot({
+      provide: CalendarDateAdapter,
+      useFactory: adapterFactory,
+    }),
     CodeEditorModule.forRoot(),
     NgxGanttModule,
     MonacoEditorModule.forRoot(),
@@ -852,7 +864,9 @@ export class DoubtfireAngularModule {
 
     this.matIconRegistry.addSvgIcon(
       'formatif-logo',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/logo.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        'assets/images/logo.svg',
+      ),
     );
   }
 }

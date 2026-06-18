@@ -3,7 +3,9 @@
     <h1>D2L Unit Details</h1>
   </div>
   <div class="modal-body">
-    <p>Enter the D2L identifier to allow grades to be transfered once entered.</p>
+    <p>
+      Enter the D2L identifier to allow grades to be transfered once entered.
+    </p>
     <mat-form-field appearance="outline">
       <input
         matInput
@@ -22,7 +24,9 @@
         type="text"
         [(ngModel)]="d2lDataMapping.gradeObjectId"
       />
-      <mat-hint align="start">Created during grades transfer if not set</mat-hint>
+      <mat-hint align="start"
+        >Created during grades transfer if not set</mat-hint
+      >
     </mat-form-field>
   </div>
 </mat-dialog-content>

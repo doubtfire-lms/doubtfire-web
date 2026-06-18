@@ -43,7 +43,11 @@ export class PdfImageCommentComponent implements OnInit, OnDestroy {
         this.resourceUrl = blobUrl;
         if (fn) fn(blobUrl);
       }).bind(this),
-      ((error) => this.alerts.error(`Unable to download image comment. ${error}`, 6000)).bind(this),
+      ((error) =>
+        this.alerts.error(
+          `Unable to download image comment. ${error}`,
+          6000,
+        )).bind(this),
     );
   }
 

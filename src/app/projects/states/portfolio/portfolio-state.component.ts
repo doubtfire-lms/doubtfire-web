@@ -50,7 +50,9 @@ export class PortfolioStateComponent implements OnInit, OnDestroy {
     },
   };
 
-  public readonly orderedTabs = Object.values(this.tabs).sort((a, b) => a.seq - b.seq);
+  public readonly orderedTabs = Object.values(this.tabs).sort(
+    (a, b) => a.seq - b.seq,
+  );
   public activeTab: PortfolioStepTab = this.tabs.welcomeStep;
 
   private projectSub?: Subscription;
@@ -65,7 +67,10 @@ export class PortfolioStateComponent implements OnInit, OnDestroy {
   }
 
   public get hasSubmittedGrade(): boolean {
-    return this.project?.submittedGrade !== null && this.project?.submittedGrade !== undefined;
+    return (
+      this.project?.submittedGrade !== null &&
+      this.project?.submittedGrade !== undefined
+    );
   }
 
   public get hasLearningSummaryReport(): boolean {
@@ -76,7 +81,8 @@ export class PortfolioStateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.project$ = this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
+    this.project$ =
+      this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
 
     this.projectSub = this.project$?.subscribe((project) => {
       if (!project) {

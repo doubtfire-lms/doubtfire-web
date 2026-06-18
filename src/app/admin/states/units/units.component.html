@@ -5,7 +5,10 @@
         <h3>{{ title }}</h3>
       </div>
       <div>
-        <mat-form-field appearance="outline" class="w-full min-w-[160px] max-w-[720px]">
+        <mat-form-field
+          appearance="outline"
+          class="w-full min-w-[160px] max-w-[720px]"
+        >
           <mat-label>Search</mat-label>
           <input matInput (keyup)="applyFilter($event)" />
           <mat-icon matPrefix> search </mat-icon>
@@ -46,14 +49,20 @@
         >
           Unit Role
         </th>
-        <td *matCellDef="let element" mat-cell [hidden]="!shouldShowUnitRoleColumn()">
+        <td
+          *matCellDef="let element"
+          mat-cell
+          [hidden]="!shouldShowUnitRoleColumn()"
+        >
           {{ element.unit_role }}
         </td>
       </ng-container>
 
       <!-- Teaching Period Column -->
       <ng-container matColumnDef="teaching_period" sticky>
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Teaching Period</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          Teaching Period
+        </th>
         <td *matCellDef="let element" mat-cell>
           {{ element.teaching_period }}
         </td>
@@ -62,13 +71,17 @@
       <!-- Start Date Column -->
       <ng-container matColumnDef="start_date" sticky>
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Start Date</th>
-        <td *matCellDef="let element" mat-cell>{{ element.start_date | date: 'EEE d MMM y' }}</td>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.start_date | date: 'EEE d MMM y' }}
+        </td>
       </ng-container>
 
       <!-- End Date Column -->
       <ng-container matColumnDef="end_date" sticky>
         <th *matHeaderCellDef mat-header-cell mat-sort-header>End Date</th>
-        <td *matCellDef="let element" mat-cell>{{ element.end_date | date: 'EEE d MMM y' }}</td>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.end_date | date: 'EEE d MMM y' }}
+        </td>
       </ng-container>
 
       <!-- Active Column -->
@@ -120,7 +133,10 @@
       }
     </table>
     <span class="flex items-center">
-      <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+      <mat-paginator
+        class="mat-elevation-z0"
+        [pageSizeOptions]="[10, 25, 100]"
+      ></mat-paginator>
       <span class="flex-grow"></span>
       @if (mode === 'admin') {
         <button color="primary" mat-raised-button (click)="createUnit()">

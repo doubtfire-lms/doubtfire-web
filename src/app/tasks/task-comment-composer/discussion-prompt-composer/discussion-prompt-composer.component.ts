@@ -1,5 +1,16 @@
-import {AfterViewInit, Component, ElementRef, Inject, Input, ViewChild} from '@angular/core';
-import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  ViewChild,
+} from '@angular/core';
+import {
+  Task,
+  TaskComment,
+  TaskCommentService,
+} from 'src/app/api/models/doubtfire-model';
 import {BaseAudioRecorderComponent} from 'src/app/common/audio-recorder/audio/base-audio-recorder';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
@@ -17,8 +28,10 @@ export class DiscussionPromptComposerComponent
 {
   @Input() task: Task;
 
-  @ViewChild('discussionPromptComposerCanvas', {static: true}) canvasRef: ElementRef;
-  @ViewChild('discussionPromptComposerAudio', {static: true}) audioRef: ElementRef;
+  @ViewChild('discussionPromptComposerCanvas', {static: true})
+  canvasRef: ElementRef;
+  @ViewChild('discussionPromptComposerAudio', {static: true})
+  audioRef: ElementRef;
   recordings: Blob[] = new Array<Blob>();
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
@@ -77,14 +90,25 @@ export class DiscussionPromptComposerComponent
 
   sendRecording(): void {
     this.taskCommentService
-      .addComment(this.task, undefined, 'discussion', undefined, this.recordings)
+      .addComment(
+        this.task,
+        undefined,
+        'discussion',
+        undefined,
+        this.recordings,
+      )
       .subscribe(
         (_tc: TaskComment) => {
           this.isSending = false;
         },
         (failure: {data?: {error?: string}} | string) => {
-          const message = typeof failure === 'string' ? failure : failure.data?.error || failure;
-          this.alerts.error(`Failed to create discussion comment. ${String(message)}`);
+          const message =
+            typeof failure === 'string'
+              ? failure
+              : failure.data?.error || failure;
+          this.alerts.error(
+            `Failed to create discussion comment. ${String(message)}`,
+          );
           this.isSending = false;
         },
       );
@@ -108,7 +132,12 @@ export class DiscussionPromptComposerComponent
         const bar_y = HEIGHT / 2;
         const bar_height = -(dataArray[i] / 4) + 1;
         this.canvasCtx.fillRect(bar_x, bar_y, bar_width, bar_height);
-        this.canvasCtx.fillRect(bar_x, bar_y - bar_height, bar_width, bar_height);
+        this.canvasCtx.fillRect(
+          bar_x,
+          bar_y - bar_height,
+          bar_width,
+          bar_height,
+        );
         i++;
       }
     };

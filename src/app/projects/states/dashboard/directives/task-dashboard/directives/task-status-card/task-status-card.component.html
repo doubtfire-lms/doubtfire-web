@@ -8,14 +8,20 @@
       >
         <mat-select-trigger>
           <span style="display: inline-flex">
-            <status-icon style="margin-right: 10px" [status]="task?.status"></status-icon>
+            <status-icon
+              style="margin-right: 10px"
+              [status]="task?.status"
+            ></status-icon>
             <h2 class="mb-0">{{ task?.statusLabel() }}</h2>
           </span>
         </mat-select-trigger>
         @for (trigger of triggers; track trigger) {
           <mat-option [value]="trigger.status">
             <div class="flex items-center">
-              <status-icon [showTooltip]="false" [status]="trigger.status"></status-icon>
+              <status-icon
+                [showTooltip]="false"
+                [status]="trigger.status"
+              ></status-icon>
               <h5 class="m-0 ml-2">{{ trigger.label }}</h5>
             </div>
           </mat-option>
@@ -26,7 +32,10 @@
   @if (triggers?.length < 0) {
     <mat-card-title>
       <span style="display: inline-flex">
-        <status-icon style="margin-right: 10px" [status]="task?.status"></status-icon>
+        <status-icon
+          style="margin-right: 10px"
+          [status]="task?.status"
+        ></status-icon>
         <h5>{{ task?.statusLabel() }}</h5>
       </span>
     </mat-card-title>
@@ -36,7 +45,8 @@
     <p>{{ task?.statusHelp().reason }} {{ task?.statusHelp().action }}</p>
     @if (task?.blockedByPrerequisiteTasks()) {
       <p>
-        To submit this task, you must first complete all tasks that are listed as prerequisites.
+        To submit this task, you must first complete all tasks that are listed
+        as prerequisites.
       </p>
     }
   </mat-card-content>
@@ -56,20 +66,30 @@
       </button>
 
       @if (task?.canApplyForExtension()) {
-        <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
+        <button mat-stroked-button (click)="applyForExtension()">
+          Request extension
+        </button>
       }
       @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
-        <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
+        <button mat-stroked-button (click)="updateFilesInSubmission()">
+          Upload new files
+        </button>
       }
     </div>
 
     <div>
-      <button aria-label="More task options" mat-icon-button [matMenuTriggerFor]="menu">
+      <button
+        aria-label="More task options"
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+      >
         <mat-icon>more_vert</mat-icon>
       </button>
       <div fxFlex></div>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="openFeedbackAppealModal()">Request Feedback Review</button>
+        <button mat-menu-item (click)="openFeedbackAppealModal()">
+          Request Feedback Review
+        </button>
       </mat-menu>
     </div>
   </mat-card-actions>

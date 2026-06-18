@@ -36,7 +36,9 @@ export class UnitAnalyticsComponent implements OnInit {
   }
 
   get role() {
-    return this.unit?.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
+    return this.unit?.staff.find(
+      (s) => s.user.id === this.userService.currentUser.id,
+    )?.role;
   }
 
   public getTaskCompletionCsv() {
@@ -71,18 +73,24 @@ export class UnitAnalyticsComponent implements OnInit {
     );
   }
 
-  public downloadCsv(newJob: Observable<SidekiqJob>, title: string, filename: string) {
+  public downloadCsv(
+    newJob: Observable<SidekiqJob>,
+    title: string,
+    filename: string,
+  ) {
     newJob.subscribe({
       next: (job) => {
         if (!job || !job.id) {
           return this.alertsService.error(`Failed to download ${title}`, 6000);
         }
-        this.sidekiqProgressModalService.show(`Downloading ${title}`, job.id).subscribe((job) => {
-          const blob = new Blob([job.result], {type: 'text/csv'});
-          const url = URL.createObjectURL(blob);
+        this.sidekiqProgressModalService
+          .show(`Downloading ${title}`, job.id)
+          .subscribe((job) => {
+            const blob = new Blob([job.result], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
 
-          this.fileDownloaderService.downloadBlobToFile(url, filename);
-        });
+            this.fileDownloaderService.downloadBlobToFile(url, filename);
+          });
       },
       error: (_error) => {
         this.alertsService.error(`Could not download ${title}`, 6000);

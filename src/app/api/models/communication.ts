@@ -1,6 +1,10 @@
 import {Entity} from 'ngx-entity-service';
 
-export type CommunicationScheduleRecurrence = 'none' | 'daily' | 'weekly' | 'monthly';
+export type CommunicationScheduleRecurrence =
+  | 'none'
+  | 'daily'
+  | 'weekly'
+  | 'monthly';
 
 export class CommunicationSetSchedule extends Entity {
   id?: number;
@@ -118,8 +122,11 @@ export class CommunicationRule extends Entity {
     Object.assign(this, json);
 
     this.conditions =
-      json?.conditions?.map((condition) => new CommunicationCondition(condition)) ?? [];
-    this.actions = json?.actions?.map((action) => new CommunicationAction(action)) ?? [];
+      json?.conditions?.map(
+        (condition) => new CommunicationCondition(condition),
+      ) ?? [];
+    this.actions =
+      json?.actions?.map((action) => new CommunicationAction(action)) ?? [];
   }
 }
 
@@ -136,7 +143,9 @@ export class CommunicationSet extends Entity {
     Object.assign(this, json);
 
     this.schedules =
-      json?.schedules?.map((schedule) => new CommunicationSetSchedule(schedule)) ?? [];
+      json?.schedules?.map(
+        (schedule) => new CommunicationSetSchedule(schedule),
+      ) ?? [];
     this.rules = json?.rules?.map((rule) => new CommunicationRule(rule)) ?? [];
   }
 }

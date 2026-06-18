@@ -129,7 +129,9 @@ export class UnitService extends CachedEntityService<Unit> {
         keys: ['teachingPeriod', 'teaching_period_id'],
         toEntityFn: (data, key, entity) => {
           if (data['teaching_period_id']) {
-            const teachingPeriod = this.teachingPeriodService.cache.get(data['teaching_period_id']);
+            const teachingPeriod = this.teachingPeriodService.cache.get(
+              data['teaching_period_id'],
+            );
             teachingPeriod?.unitsCache.add(entity);
             return teachingPeriod;
           } else {
@@ -195,7 +197,11 @@ export class UnitService extends CachedEntityService<Unit> {
         keys: 'ilos',
         toEntityOp: (data: object, key: string, unit: Unit) => {
           data[key]?.forEach((ilo) => {
-            unit.learningOutcomesCache.getOrCreate(ilo['id'], this.learningOutcomeService, ilo);
+            unit.learningOutcomesCache.getOrCreate(
+              ilo['id'],
+              this.learningOutcomeService,
+              ilo,
+            );
           });
         },
       },
@@ -204,7 +210,9 @@ export class UnitService extends CachedEntityService<Unit> {
         toEntityOp: (data, key, entity) => {
           data['tutorial_streams'].forEach((streamJson: object) => {
             entity.tutorialStreamsCache.add(
-              this.tutorialStreamService.buildInstance(streamJson, {constructorParams: entity}),
+              this.tutorialStreamService.buildInstance(streamJson, {
+                constructorParams: entity,
+              }),
             );
           });
         },
@@ -215,7 +223,9 @@ export class UnitService extends CachedEntityService<Unit> {
           data['tutorials'].forEach((tutorialJson: object) => {
             if (tutorialJson) {
               entity.tutorialsCache.add(
-                this.tutorialService.buildInstance(tutorialJson, {constructorParams: entity}),
+                this.tutorialService.buildInstance(tutorialJson, {
+                  constructorParams: entity,
+                }),
               );
             }
           });
@@ -227,7 +237,9 @@ export class UnitService extends CachedEntityService<Unit> {
         toEntityOp: (data, key, unit) => {
           data[key]?.forEach((groupSetJson: object) => {
             unit.groupSetsCache.add(
-              this.groupSetService.buildInstance(groupSetJson, {constructorParams: unit}),
+              this.groupSetService.buildInstance(groupSetJson, {
+                constructorParams: unit,
+              }),
             );
           });
         },
@@ -236,7 +248,9 @@ export class UnitService extends CachedEntityService<Unit> {
         keys: 'groups',
         toEntityOp: (data, key, unit) => {
           data[key]?.forEach((groupJson: object) => {
-            const group = this.groupService.buildInstance(groupJson, {constructorParams: unit});
+            const group = this.groupService.buildInstance(groupJson, {
+              constructorParams: unit,
+            });
             group.groupSet.groupsCache.add(group);
           });
         },

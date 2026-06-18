@@ -24,7 +24,9 @@
                 }} standard"
                 aria-label="Mark task as {{ gradeName(idx) }}"
                 class="grade-toggle"
-                matTooltip="This student completed the task to a {{ gradeName(idx) }} standard"
+                matTooltip="This student completed the task to a {{
+                  gradeName(idx)
+                }} standard"
                 [matTooltipShowDelay]="500"
                 [value]="idx"
               >
@@ -44,7 +46,13 @@
             {{ task.definition.abbreviation }}
           </span>
         </p>
-        <mat-slider class="slider" [discrete]="true" [max]="totalRating" [min]="0" [step]="1">
+        <mat-slider
+          class="slider"
+          [discrete]="true"
+          [max]="totalRating"
+          [min]="0"
+          [step]="1"
+        >
           <input matSliderThumb [(ngModel)]="rating" />
         </mat-slider>
         <div class="label-rating">

@@ -13,7 +13,8 @@ import {AlertService} from 'src/app/common/services/alert.service';
 })
 export class TutorNotesComponent implements OnInit {
   @ViewChild('tutorNotesContainer') tutorNotesContainer!: ElementRef;
-  @ViewChild('tutorNoteEditor', {static: false}) tutorNoteEditor!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('tutorNoteEditor', {static: false})
+  tutorNoteEditor!: ElementRef<HTMLTextAreaElement>;
 
   @Input() unitRole: UnitRole;
   @Input() task: Task;
@@ -43,7 +44,9 @@ export class TutorNotesComponent implements OnInit {
     this.loadingTutorNotes = true;
     this.tutorNoteService.loadTutorNotes(this.unitRole).subscribe((_notes) => {
       this.loadingTutorNotes = false;
-      this.tutorNoteService.updateTutorNoteReplies(this.unitRole?.tutorNotesCache.currentValues);
+      this.tutorNoteService.updateTutorNoteReplies(
+        this.unitRole?.tutorNotesCache.currentValues,
+      );
       this.scrollDown();
     });
     if (this.task) {
@@ -96,16 +99,18 @@ export class TutorNotesComponent implements OnInit {
       return;
     }
 
-    this.tutorNoteService.updateNote(this.unitRole, this.editingNote, noteText).subscribe({
-      next: (_note) => {
-        this.alertService.success('Succesfully updated note', 4000);
-        this.editingNote = null;
-        this.editingNoteText = '';
-      },
-      error: (error) => {
-        this.alertService.error(`Failed to update note: ${error}`, 4000);
-      },
-    });
+    this.tutorNoteService
+      .updateNote(this.unitRole, this.editingNote, noteText)
+      .subscribe({
+        next: (_note) => {
+          this.alertService.success('Succesfully updated note', 4000);
+          this.editingNote = null;
+          this.editingNoteText = '';
+        },
+        error: (error) => {
+          this.alertService.error(`Failed to update note: ${error}`, 4000);
+        },
+      });
   }
 
   public markAsRead(note: TutorNote) {
@@ -173,7 +178,10 @@ export class TutorNotesComponent implements OnInit {
     }
   }
 
-  public selectedTaskDefinitions: Map<string, boolean> = new Map<string, boolean>();
+  public selectedTaskDefinitions: Map<string, boolean> = new Map<
+    string,
+    boolean
+  >();
 
   public get filteredNotes() {
     const selected = this.selectedTaskDefinitions;

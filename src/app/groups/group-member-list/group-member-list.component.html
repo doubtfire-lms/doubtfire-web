@@ -3,14 +3,18 @@
     Loading members...
   </div>
 } @else if (!selectedGroup || selectedGroup.members.length === 0) {
-  <div class="flex size-full flex-col items-center justify-center p-2.5 text-gray-400">
+  <div
+    class="flex size-full flex-col items-center justify-center p-2.5 text-gray-400"
+  >
     <mat-icon class="scale-125">group_off</mat-icon>
     <p class="p-2.5">There are no members in this group</p>
   </div>
 } @else {
   <table mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="student_id">
-      <th *matHeaderCellDef mat-header-cell>{{ unitRole ? 'Student ID' : '' }}</th>
+      <th *matHeaderCellDef mat-header-cell>
+        {{ unitRole ? 'Student ID' : '' }}
+      </th>
       <td *matCellDef="let member" mat-cell>
         @if (unitRole) {
           {{ member.student.username || 'N/A' }}
@@ -26,7 +30,9 @@
     </ng-container>
 
     <ng-container matColumnDef="target_grade">
-      <th *matHeaderCellDef mat-header-cell>{{ unitRole ? 'Target Grade' : '' }}</th>
+      <th *matHeaderCellDef mat-header-cell>
+        {{ unitRole ? 'Target Grade' : '' }}
+      </th>
       <td *matCellDef="let member" mat-cell>
         @if (unitRole) {
           <f-grade-icon [grade]="member.targetGrade"></f-grade-icon>
@@ -35,7 +41,9 @@
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th *matHeaderCellDef mat-header-cell>{{ canRemoveMembers ? 'Actions' : '' }}</th>
+      <th *matHeaderCellDef mat-header-cell>
+        {{ canRemoveMembers ? 'Actions' : '' }}
+      </th>
       <td *matCellDef="let member" mat-cell>
         @if (canRemoveMembers) {
           @if (!project && unitRole) {
@@ -43,7 +51,9 @@
               <mat-icon>delete</mat-icon>
             </button>
           } @else if (project && project.id === member.id) {
-            <button mat-raised-button (click)="removeMember(member)">Leave</button>
+            <button mat-raised-button (click)="removeMember(member)">
+              Leave
+            </button>
           }
         }
       </td>

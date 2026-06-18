@@ -30,32 +30,40 @@ import {
 })
 export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   @Input() task: Task;
-  @Output() templateSelected: EventEmitter<FeedbackTemplate> = new EventEmitter();
+  @Output() templateSelected: EventEmitter<FeedbackTemplate> =
+    new EventEmitter();
 
   categories = ['TLO', 'ULO', 'GLO'];
   selectedTemplates: FeedbackTemplate[] = [];
   hoveredTemplate: FeedbackTemplate;
 
-  private generalTemplatesSubject: BehaviorSubject<FeedbackTemplate[]> = new BehaviorSubject([]);
+  private generalTemplatesSubject: BehaviorSubject<FeedbackTemplate[]> =
+    new BehaviorSubject([]);
   generalTemplates$ = this.generalTemplatesSubject.asObservable();
 
-  private navigationStackSubject: BehaviorSubject<Map<number, number[]>> = new BehaviorSubject(
-    new Map<number, number[]>(),
-  );
+  private navigationStackSubject: BehaviorSubject<Map<number, number[]>> =
+    new BehaviorSubject(new Map<number, number[]>());
   navigationStack$ = this.navigationStackSubject.asObservable();
 
   private searchTermSubject: BehaviorSubject<string> = new BehaviorSubject('');
   searchTerm$ = this.searchTermSubject.asObservable();
 
-  public genTemplates$ = combineLatest([this.generalTemplates$, this.searchTerm$]).pipe(
+  public genTemplates$ = combineLatest([
+    this.generalTemplates$,
+    this.searchTerm$,
+  ]).pipe(
     map(([templates, searchTerm]) =>
       templates.filter((template) =>
         template.chipText.toLowerCase().includes(searchTerm.toLowerCase()),
       ),
     ),
   );
-  public tlos$: Observable<{outcome: LearningOutcome; templates: FeedbackTemplate[]}[]>;
-  public ulos$: Observable<{outcome: LearningOutcome; templates: FeedbackTemplate[]}[]>;
+  public tlos$: Observable<
+    {outcome: LearningOutcome; templates: FeedbackTemplate[]}[]
+  >;
+  public ulos$: Observable<
+    {outcome: LearningOutcome; templates: FeedbackTemplate[]}[]
+  >;
   public glos$ = combineLatest([
     this.learningOutcomeService.cache.values,
     this.feedbackTemplateService.cache.values,
@@ -67,7 +75,12 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
         .filter((outcome) => outcome.contextType === null)
         .map((outcome) => ({
           outcome: outcome,
-          templates: this.getTemplatesToDisplay(outcome.id, templates, navigationStack, searchTerm),
+          templates: this.getTemplatesToDisplay(
+            outcome.id,
+            templates,
+            navigationStack,
+            searchTerm,
+          ),
         }))
         .filter((glo) => glo.templates.length > 0),
     ),
@@ -151,19 +164,29 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     navigationStack: Map<number, number[]>,
     searchTerm: string,
   ): FeedbackTemplate[] {
-    const allTemplates = templates.filter((template) => template.learningOutcomeId === outcomeId);
+    const allTemplates = templates.filter(
+      (template) => template.learningOutcomeId === outcomeId,
+    );
     let templatesToDisplay: FeedbackTemplate[] = [];
 
-    if (navigationStack.get(outcomeId) && navigationStack.get(outcomeId).length > 0) {
+    if (
+      navigationStack.get(outcomeId) &&
+      navigationStack.get(outcomeId).length > 0
+    ) {
       const outcomeStack = navigationStack.get(outcomeId);
       const groupId = outcomeStack[outcomeStack.length - 1];
 
-      templatesToDisplay.push(allTemplates.find((template) => template.id === groupId));
+      templatesToDisplay.push(
+        allTemplates.find((template) => template.id === groupId),
+      );
       allTemplates.forEach((template) => {
-        if (template.parentChipId === groupId) templatesToDisplay.push(template);
+        if (template.parentChipId === groupId)
+          templatesToDisplay.push(template);
       });
     } else {
-      templatesToDisplay = allTemplates.filter((template) => !template.parentChipId);
+      templatesToDisplay = allTemplates.filter(
+        (template) => !template.parentChipId,
+      );
     }
 
     templatesToDisplay = templatesToDisplay.filter((template) =>
@@ -186,7 +209,10 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     const selectedSection = sections[event.index];
 
     if (selectedSection) {
-      selectedSection.nativeElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+      selectedSection.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
   }
 
@@ -195,7 +221,8 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
       if (template.chipText === 'Greeting') {
         template.commentText = `Hi ${this.task.project.student.preferredName}. `;
       } else if (template.chipText === 'Summarise feedback') {
-        if (!this.selectedTemplates || this.selectedTemplates.length < 1) return;
+        if (!this.selectedTemplates || this.selectedTemplates.length < 1)
+          return;
         template.commentText = 'Summary of the given feedback:';
         this.selectedTemplates.forEach((t) => {
           if (!t.summaryText) return;
@@ -235,9 +262,12 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
 
   private suggestTaskStatus(template: FeedbackTemplate) {
     if (template.taskStatus && this.task.suggestedTaskStatus) {
-      const currentSeq = this.taskService.statusSeq.get(this.task.suggestedTaskStatus);
+      const currentSeq = this.taskService.statusSeq.get(
+        this.task.suggestedTaskStatus,
+      );
       const templateSeq = this.taskService.statusSeq.get(template.taskStatus);
-      if (templateSeq < currentSeq) this.task.suggestedTaskStatus = template.taskStatus;
+      if (templateSeq < currentSeq)
+        this.task.suggestedTaskStatus = template.taskStatus;
     } else {
       this.task.suggestedTaskStatus = template.taskStatus;
     }

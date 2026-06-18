@@ -26,14 +26,16 @@ type GradeCol = 'p' | 'c' | 'd' | 'hd';
 export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
 
-  public taskDefinitionSource: MatTableDataSource<TaskDefinition> = new MatTableDataSource([]);
+  public taskDefinitionSource: MatTableDataSource<TaskDefinition> =
+    new MatTableDataSource([]);
   public filter: string = '';
   public selectedTaskDefinition: TaskDefinition;
   public isTaskListCollapsed: boolean = false;
 
   public gradeColumns: string[] = ['p', 'c', 'd', 'hd'];
   public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
-  public dueDateSource: MatTableDataSource<TaskDefinition> = new MatTableDataSource([]);
+  public dueDateSource: MatTableDataSource<TaskDefinition> =
+    new MatTableDataSource([]);
 
   public manageDueDates: boolean = false;
 
@@ -145,8 +147,10 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
     private csvUploadModal: CsvUploadModalService,
     private confirmationModal: ConfirmationModalService,
   ) {
-    this.taskDefinitionSource.filterPredicate = (data: TaskDefinition, filter: string) =>
-      data.matches(filter);
+    this.taskDefinitionSource.filterPredicate = (
+      data: TaskDefinition,
+      filter: string,
+    ) => data.matches(filter);
   }
 
   ngOnInit(): void {
@@ -183,13 +187,22 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
 
     // Record original save data if none present
     if (!this.selectedTaskDefinition.hasOriginalSaveData) {
-      this.selectedTaskDefinition.setOriginalSaveData(this.taskDefinitionService.mapping);
+      this.selectedTaskDefinition.setOriginalSaveData(
+        this.taskDefinitionService.mapping,
+      );
     }
 
     this.feedbackTemplateService
-      .query({contextType: 'task_definitions', contextId: this.selectedTaskDefinition.id}, {})
+      .query(
+        {
+          contextType: 'task_definitions',
+          contextId: this.selectedTaskDefinition.id,
+        },
+        {},
+      )
       .subscribe({
-        error: () => this.alerts.error('Error loading task feedback templates.'),
+        error: () =>
+          this.alerts.error('Error loading task feedback templates.'),
       });
   }
 
@@ -213,7 +226,9 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
     if (this.unit.taskDefinitions.length == 0) {
       return '1.1P';
     } else {
-      const lastAbbr = this.unit.taskDefinitions[this.unit.taskDefinitions.length - 1].abbreviation;
+      const lastAbbr =
+        this.unit.taskDefinitions[this.unit.taskDefinitions.length - 1]
+          .abbreviation;
       const regex = /(.*)(\d+)(\D*)/;
       const match = regex.exec(lastAbbr);
       if (match) {
@@ -247,7 +262,10 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
       this.unit.getTaskDefinitionBatchUploadUrl(),
       (response: CsvResult) => {
         // at least one student?
-        this.csvResultModalService.show('Task Definition Import Results', response);
+        this.csvResultModalService.show(
+          'Task Definition Import Results',
+          response,
+        );
         if (response.success.length > 0) {
           this.unit.refresh();
         }
@@ -263,7 +281,10 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
       this.unit.taskUploadUrl,
       (response: CsvResult) => {
         // at least one student?
-        this.csvResultModalService.show('Task Sheet and Resources Import Results', response);
+        this.csvResultModalService.show(
+          'Task Sheet and Resources Import Results',
+          response,
+        );
         if (response.success.length > 0) {
           this.unit.refresh();
         }

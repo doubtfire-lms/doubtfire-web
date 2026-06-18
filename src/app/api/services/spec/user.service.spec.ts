@@ -1,5 +1,12 @@
-import {HttpRequest, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
+import {
+  HttpRequest,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import {TestBed, fakeAsync, tick} from '@angular/core/testing';
 import {User, UserService} from 'src/app/api/models/doubtfire-model';
 
@@ -44,7 +51,9 @@ describe('UserService', () => {
 
     userService
       .query()
-      .subscribe((users) => expect(users).toEqual(expectedUsers, 'expected users'));
+      .subscribe((users) =>
+        expect(users).toEqual(expectedUsers, 'expected users'),
+      );
 
     const req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/users/');

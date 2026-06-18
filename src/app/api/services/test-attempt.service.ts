@@ -29,7 +29,10 @@ export class TestAttemptService extends CachedEntityService<TestAttempt> {
     );
   }
 
-  public override createInstanceFrom(_json: object, constructorParams: Task): TestAttempt {
+  public override createInstanceFrom(
+    _json: object,
+    constructorParams: Task,
+  ): TestAttempt {
     return new TestAttempt(constructorParams);
   }
 
@@ -47,7 +50,10 @@ export class TestAttemptService extends CachedEntityService<TestAttempt> {
     );
   }
 
-  public overrideSuccessStatus(testAttemptId: number, successStatus: boolean): void {
+  public overrideSuccessStatus(
+    testAttemptId: number,
+    successStatus: boolean,
+  ): void {
     const http = AppInjector.get(HttpClient);
 
     http
@@ -72,7 +78,10 @@ export class TestAttemptService extends CachedEntityService<TestAttempt> {
     const http = AppInjector.get(HttpClient);
 
     http
-      .delete(`${AppInjector.get(DoubtfireConstants).API_URL}/test_attempts/${testAttemptId}`, {})
+      .delete(
+        `${AppInjector.get(DoubtfireConstants).API_URL}/test_attempts/${testAttemptId}`,
+        {},
+      )
       .subscribe({
         next: (_data) => {
           (AppInjector.get(AlertService) as AlertService).success(

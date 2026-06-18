@@ -43,11 +43,16 @@ interface TaskDefinitionSection {
   styleUrls: ['task-definition-editor.component.scss'],
   standalone: false,
 })
-export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class TaskDefinitionEditorComponent
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+{
   @Input() taskDefinition: TaskDefinition;
   @Input() unit: Unit;
-  @ViewChild('sectionScrollContainer') sectionScrollContainer: ElementRef<HTMLElement>;
-  @ViewChildren('sectionElement') sectionElements: QueryList<ElementRef<HTMLElement>>;
+  @ViewChild('sectionScrollContainer')
+  sectionScrollContainer: ElementRef<HTMLElement>;
+  @ViewChildren('sectionElement') sectionElements: QueryList<
+    ElementRef<HTMLElement>
+  >;
 
   public overseerEnabled: boolean = false;
   public activeSectionId: TaskDefinitionSectionId = 'task-details';
@@ -65,7 +70,8 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
     {id: 'optional-settings', label: 'Optional Settings'},
   ];
 
-  private sectionElementMap: Map<TaskDefinitionSectionId, HTMLElement> = new Map();
+  private sectionElementMap: Map<TaskDefinitionSectionId, HTMLElement> =
+    new Map();
   private sectionChangesSubscription?: Subscription;
   private overseerEnabledSubscription?: Subscription;
   private readonly scrollTopOffsetPx: number = 112;
@@ -77,19 +83,22 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
   ) {}
 
   public ngOnInit() {
-    this.overseerEnabledSubscription = this.constants.IsOverseerEnabled.subscribe((enabled) => {
-      this.overseerEnabled = enabled && this.unit.overseerEnabled;
-      this.ensureActiveSectionIsVisible();
-      this.rebuildSectionElementMap();
-    });
+    this.overseerEnabledSubscription =
+      this.constants.IsOverseerEnabled.subscribe((enabled) => {
+        this.overseerEnabled = enabled && this.unit.overseerEnabled;
+        this.ensureActiveSectionIsVisible();
+        this.rebuildSectionElementMap();
+      });
   }
 
   public ngAfterViewInit() {
     this.rebuildSectionElementMap();
-    this.sectionChangesSubscription = this.sectionElements.changes.subscribe(() => {
-      this.rebuildSectionElementMap();
-      this.syncActiveSectionOnScroll();
-    });
+    this.sectionChangesSubscription = this.sectionElements.changes.subscribe(
+      () => {
+        this.rebuildSectionElementMap();
+        this.syncActiveSectionOnScroll();
+      },
+    );
     queueMicrotask(() => this.syncActiveSectionOnScroll());
   }
 
@@ -108,7 +117,9 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
   public get visibleSections(): TaskDefinitionSection[] {
     return this.overseerEnabled
       ? this.sectionList
-      : this.sectionList.filter((section) => section.id !== 'task-assessment-automation');
+      : this.sectionList.filter(
+          (section) => section.id !== 'task-assessment-automation',
+        );
   }
 
   public scrollToSection(sectionId: TaskDefinitionSectionId) {
@@ -150,7 +161,8 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
       const sectionElement = this.sectionElementMap.get(section.id);
       if (
         sectionElement &&
-        this.getSectionTopInContainer(container, sectionElement) <= scrollPosition
+        this.getSectionTopInContainer(container, sectionElement) <=
+          scrollPosition
       ) {
         nextActiveSection = section.id;
       }
@@ -178,7 +190,11 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
   }
 
   private ensureActiveSectionIsVisible() {
-    if (!this.visibleSections.some((section) => section.id === this.activeSectionId)) {
+    if (
+      !this.visibleSections.some(
+        (section) => section.id === this.activeSectionId,
+      )
+    ) {
       this.activeSectionId = this.visibleSections[0]?.id ?? 'task-details';
     }
   }
@@ -188,7 +204,9 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
 
     this.sectionElements?.forEach((sectionElementRef) => {
       const nativeElement = sectionElementRef.nativeElement;
-      const sectionId = nativeElement.getAttribute('data-section-id') as TaskDefinitionSectionId;
+      const sectionId = nativeElement.getAttribute(
+        'data-section-id',
+      ) as TaskDefinitionSectionId;
 
       if (sectionId) {
         this.sectionElementMap.set(sectionId, nativeElement);
@@ -196,7 +214,10 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
     });
   }
 
-  private getSectionTopInContainer(container: HTMLElement, sectionElement: HTMLElement): number {
+  private getSectionTopInContainer(
+    container: HTMLElement,
+    sectionElement: HTMLElement,
+  ): number {
     const containerRect = container.getBoundingClientRect();
     const sectionRect = sectionElement.getBoundingClientRect();
     return container.scrollTop + (sectionRect.top - containerRect.top);
@@ -208,7 +229,10 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
 
     this.visibleSections.forEach((section) => {
       const sectionElement = this.sectionElementMap.get(section.id);
-      if (sectionElement && sectionElement.getBoundingClientRect().top <= threshold) {
+      if (
+        sectionElement &&
+        sectionElement.getBoundingClientRect().top <= threshold
+      ) {
         nextActiveSection = section.id;
       }
     });

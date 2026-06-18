@@ -22,13 +22,18 @@ export class TaskScormCardComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.task && changes.task.currentValue && changes.task.currentValue.scormEnabled) {
+    if (
+      changes.task &&
+      changes.task.currentValue &&
+      changes.task.currentValue.scormEnabled
+    ) {
       this.attemptsLeft = undefined;
       this.isPassed = undefined;
 
       this.task?.fetchTestAttempts().subscribe(() => {
         this.getAttemptsLeft();
-        if (this.task.latestCompletedTestAttempt) this.isPassed = this.task.scormPassed;
+        if (this.task.latestCompletedTestAttempt)
+          this.isPassed = this.task.scormPassed;
       });
     }
   }
@@ -39,7 +44,9 @@ export class TaskScormCardComponent implements OnChanges {
       let count = attempts.length;
       if (count > 0 && attempts[0].terminated === false) count--;
       this.attemptsLeft =
-        this.task.definition.scormAttemptLimit + this.task.scormExtensions - count;
+        this.task.definition.scormAttemptLimit +
+        this.task.scormExtensions -
+        count;
     }
   }
 

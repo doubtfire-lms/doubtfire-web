@@ -1,11 +1,22 @@
 import {HttpClient} from '@angular/common/http';
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Project, ProjectService, Unit} from 'src/app/api/models/doubtfire-model';
+import {
+  Project,
+  ProjectService,
+  Unit,
+} from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {
@@ -24,7 +35,9 @@ import {UnitStudentEnrolmentModalService} from 'src/app/units/modals/unit-studen
   styleUrls: ['unit-students-editor.component.scss'],
   standalone: false,
 })
-export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDestroy {
+export class UnitStudentsEditorComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @ViewChild(MatTable, {static: false}) table: MatTable<Project>;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -62,7 +75,8 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
 
   ngOnInit(): void {
     this.dataSource.data = this.unit.studentCache.currentValuesClone();
-    this.dataSource.filterPredicate = (data: Project, filter: string) => data.matches(filter);
+    this.dataSource.filterPredicate = (data: Project, filter: string) =>
+      data.matches(filter);
 
     this.subscriptions.push(
       this.unit.studentCache.values.subscribe((students) => {
@@ -95,7 +109,11 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
     }
   }
 
-  private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+  private sortCompare(
+    aValue: number | string,
+    bValue: number | string,
+    isAsc: boolean,
+  ) {
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
@@ -115,7 +133,11 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
         case 'enrolled':
           return this.sortCompare(a[sort.active], b[sort.active], isAsc);
         case 'campus':
-          return this.sortCompare(a.campus?.abbreviation, b.campus?.abbreviation, isAsc);
+          return this.sortCompare(
+            a.campus?.abbreviation,
+            b.campus?.abbreviation,
+            isAsc,
+          );
         default:
           return 0;
       }
@@ -123,7 +145,9 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
   }
 
   public gotoStudent(student: Project) {
-    this.router.navigate(['/projects', student.id, 'dashboard'], {queryParams: {tutor: true}});
+    this.router.navigate(['/projects', student.id, 'dashboard'], {
+      queryParams: {tutor: true},
+    });
   }
 
   enrolStudent() {

@@ -22,7 +22,12 @@
           </div>
         } @else {
           <mat-form-field appearance="outline" class="data-entry">
-            <input formControlName="name" matInput placeholder="Name" required />
+            <input
+              formControlName="name"
+              matInput
+              placeholder="Name"
+              required
+            />
           </mat-form-field>
         }
       </td>
@@ -43,13 +48,23 @@
           </div>
         } @else {
           <mat-form-field appearance="outline" class="data-entry">
-            <input formControlName="abbreviation" matInput placeholder="Abbreviation" required />
+            <input
+              formControlName="abbreviation"
+              matInput
+              placeholder="Abbreviation"
+              required
+            />
           </mat-form-field>
         }
       </td>
       <td *matFooterCellDef mat-footer-cell>
         <mat-form-field appearance="outline" class="data-entry">
-          <input formControlName="abbreviation" matInput placeholder="Abbreviation" required />
+          <input
+            formControlName="abbreviation"
+            matInput
+            placeholder="Abbreviation"
+            required
+          />
         </mat-form-field>
       </td>
     </ng-container>
@@ -71,7 +86,12 @@
         } @else {
           <div class="edit-actions right">
             <span>
-              <button aria-label="cancel edit" color="warn" mat-icon-button (click)="cancelEdit()">
+              <button
+                aria-label="cancel edit"
+                color="warn"
+                mat-icon-button
+                (click)="cancelEdit()"
+              >
                 <mat-icon>cancel</mat-icon>
               </button>
               <button
