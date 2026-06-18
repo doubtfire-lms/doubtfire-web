@@ -1,5 +1,5 @@
-import {Project, Tutorial, TutorialStream, Unit} from 'src/app/api/models/doubtfire-model';
 import {Component, Input} from '@angular/core';
+import {Project, Tutorial, TutorialStream, Unit} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'student-tutorial-select',

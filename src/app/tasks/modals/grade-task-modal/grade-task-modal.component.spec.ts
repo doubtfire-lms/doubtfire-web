@@ -1,6 +1,6 @@
-import {GradeService} from 'src/app/common/services/grade.service';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {GradeService} from 'src/app/common/services/grade.service';
 import {GradeTaskModalComponent} from './grade-task-modal.component';
 
 describe('GradeTaskModalComponent', () => {

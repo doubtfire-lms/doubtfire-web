@@ -11,11 +11,11 @@
       </div>
       <div class="pull-right btn-group">
         @if (resourcesUrl) {
-          <a (click)="downloadResources()" class="btn btn-primary">
+          <a class="btn btn-primary" (click)="downloadResources()">
             <mat-icon inline>download</mat-icon><span> Resources</span>
           </a>
         }
-        <button (click)="downloadPdf()" class="btn btn-success">
+        <button class="btn btn-success" (click)="downloadPdf()">
           <mat-icon inline>download</mat-icon><span [hidden]="!resourcesUrl"> PDF</span>
         </button>
       </div>

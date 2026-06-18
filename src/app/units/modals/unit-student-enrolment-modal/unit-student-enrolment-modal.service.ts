@@ -1,6 +1,6 @@
-import {Unit} from 'src/app/api/models/doubtfire-model';
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {Unit} from 'src/app/api/models/doubtfire-model';
 import {UnitStudentEnrolmentModalComponent} from './unit-student-enrolment-modal.component';
 
 @Injectable({

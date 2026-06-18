@@ -19,20 +19,20 @@
             </mat-form-field>
             @switch (editor.actionFor(rule).type) {
               @case ('EmailStudentAction') {
-                <f-email-student-action [editor]="editor" [rule]="rule" mode="edit" />
+                <f-email-student-action mode="edit" [editor]="editor" [rule]="rule" />
               }
               @case ('EmailStaffAction') {
-                <f-email-staff-action [editor]="editor" [rule]="rule" mode="edit" />
+                <f-email-staff-action mode="edit" [editor]="editor" [rule]="rule" />
               }
               @case ('TaskCommentAction') {
-                <f-task-comment-action [editor]="editor" [rule]="rule" mode="edit" />
+                <f-task-comment-action mode="edit" [editor]="editor" [rule]="rule" />
               }
               @case ('ChangeTargetGradeAction') {
-                <f-change-target-grade-action [editor]="editor" [rule]="rule" mode="edit" />
+                <f-change-target-grade-action mode="edit" [editor]="editor" [rule]="rule" />
               }
             }
             <div class="flex gap-3">
-              <button mat-flat-button color="primary" (click)="editor.updateAction(rule)">
+              <button color="primary" mat-flat-button (click)="editor.updateAction(rule)">
                 <mat-icon>save</mat-icon>
                 Update action
               </button>
@@ -153,26 +153,26 @@
 
       @switch (editor.actionFor(rule).type) {
         @case ('EmailStudentAction') {
-          <f-email-student-action [editor]="editor" [rule]="rule" mode="add" />
+          <f-email-student-action mode="add" [editor]="editor" [rule]="rule" />
         }
 
         @case ('EmailStaffAction') {
-          <f-email-staff-action [editor]="editor" [rule]="rule" mode="add" />
+          <f-email-staff-action mode="add" [editor]="editor" [rule]="rule" />
         }
 
         @case ('TaskCommentAction') {
-          <f-task-comment-action [editor]="editor" [rule]="rule" mode="add" />
+          <f-task-comment-action mode="add" [editor]="editor" [rule]="rule" />
         }
 
         @case ('ChangeTargetGradeAction') {
-          <f-change-target-grade-action [editor]="editor" [rule]="rule" mode="add" />
+          <f-change-target-grade-action mode="add" [editor]="editor" [rule]="rule" />
         }
       }
 
       <button
-        mat-flat-button
-        color="primary"
         class="w-full max-w-80 self-center"
+        color="primary"
+        mat-flat-button
         (click)="
           editor.editingActionId[rule.id] ? editor.updateAction(rule) : editor.addAction(rule)
         "
@@ -181,11 +181,11 @@
         {{ editor.editingActionId[rule.id] ? 'Update action' : 'Save action' }}
       </button>
 
-      <button mat-button (click)="editor.cancelAction(rule)" class="mb-[22px]">Cancel</button>
+      <button class="mb-[22px]" mat-button (click)="editor.cancelAction(rule)">Cancel</button>
     </div>
   } @else {
     <div class="flex items-center justify-center">
-      <button mat-stroked-button color="primary" (click)="editor.showActionForm(rule)">
+      <button color="primary" mat-stroked-button (click)="editor.showActionForm(rule)">
         <mat-icon>add</mat-icon>
         Add action
       </button>

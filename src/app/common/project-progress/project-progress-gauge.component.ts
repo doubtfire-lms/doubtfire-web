@@ -1,6 +1,6 @@
 import {TooltipService} from '@swimlane/ngx-charts';
-import {Project} from 'src/app/api/models/project';
 import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
+import {Project} from 'src/app/api/models/project';
 
 @Component({
   selector: 'f-project-progress-gauge',

@@ -43,11 +43,11 @@
       @if (taskDefinition.tutorialStream?.tutorialsIn(unit).length > 3) {
         <div class="mt-2.5">
           @if (!showAllTutorials) {
-            <button mat-button color="primary" (click)="showAllTutorials = true">
+            <button color="primary" mat-button (click)="showAllTutorials = true">
               View all tutorials
             </button>
           } @else {
-            <button mat-button color="warn" (click)="showAllTutorials = false">
+            <button color="warn" mat-button (click)="showAllTutorials = false">
               Collapse list
             </button>
           }

@@ -1,6 +1,6 @@
-import {DateService} from 'src/app/common/services/date.service';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatMenuModule} from '@angular/material/menu';
+import {DateService} from 'src/app/common/services/date.service';
 import {UnitDropdownComponent} from './unit-dropdown.component';
 
 describe('UnitDropdownComponent', () => {

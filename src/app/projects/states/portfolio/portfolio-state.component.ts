@@ -1,7 +1,7 @@
-import {Observable, Subscription, of} from 'rxjs';
-import {Project} from 'src/app/api/models/project';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {Observable, Subscription, of} from 'rxjs';
+import {Project} from 'src/app/api/models/project';
 import {GlobalStateService} from '../index/global-state.service';
 
 interface PortfolioStepTab {

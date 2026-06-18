@@ -1,9 +1,9 @@
 import {CachedEntityService} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {OverseerImage} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
 import {SidekiqJob} from '../models/sidekiq-job';
 
 @Injectable()

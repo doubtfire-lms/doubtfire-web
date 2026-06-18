@@ -1,5 +1,5 @@
-import {Task} from 'src/app/api/models/doubtfire-model';
 import {Component, Input} from '@angular/core';
+import {Task} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-user-badge',

@@ -1,8 +1,8 @@
+import {Component, Input} from '@angular/core';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter} from 'rxjs';
 import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {ViewType} from 'src/app/projects/states/index/global-state.service';
-import {Component, Input} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {TutorNotesModalService} from '../../modals/tutor-notes-modal/tutor-notes-modal.service';
 
 @Component({

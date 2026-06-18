@@ -1,7 +1,7 @@
-import {Observable, Subscription, of} from 'rxjs';
-import {GroupSet, Project} from 'src/app/api/models/doubtfire-model';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {Observable, Subscription, of} from 'rxjs';
+import {GroupSet, Project} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService} from '../index/global-state.service';
 
 @Component({

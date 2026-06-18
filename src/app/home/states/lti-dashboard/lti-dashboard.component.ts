@@ -1,3 +1,5 @@
+import {AfterViewInit, Component, Input} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -8,8 +10,6 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {AfterViewInit, Component, Input} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'f-lti-dashboard',

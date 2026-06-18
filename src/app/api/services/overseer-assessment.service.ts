@@ -1,8 +1,8 @@
 import {EntityService} from 'ngx-entity-service';
-import {Observable} from 'rxjs';
-import API_URL from 'src/app/config/constants/apiUrl';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {Task} from '../models/doubtfire-model';
 import {OverseerAssessment} from '../models/overseer/overseer-assessment';
 import {OverseerStepResultService} from './overseer-step-result.service';
@@ -24,6 +24,7 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
       'id',
       'submissionTimestamp',
       'taskId',
+      'submissionHistoryId',
       'createdAt',
       'updatedAt',
       ['taskStatus', 'result_task_status'],

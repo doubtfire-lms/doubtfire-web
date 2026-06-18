@@ -2,8 +2,8 @@
   <div [hidden]="!taskDef">
     <mat-expansion-panel
       [expanded]="true"
-      (opened)="panelOpenState.set(true)"
       (closed)="panelOpenState.set(false)"
+      (opened)="panelOpenState.set(true)"
     >
       <mat-expansion-panel-header>
         <mat-panel-title> Task Details </mat-panel-title>
@@ -15,7 +15,7 @@
     </mat-expansion-panel>
   </div>
 
-  <div [hidden]="taskDef" fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+  <div fxFlexFill fxLayout="column" fxLayoutAlign="center center" [hidden]="taskDef">
     <mat-icon>subtitles_off</mat-icon>
   </div>
 </div>

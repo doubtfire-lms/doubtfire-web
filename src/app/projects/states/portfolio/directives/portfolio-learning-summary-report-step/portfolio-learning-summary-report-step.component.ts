@@ -1,7 +1,7 @@
+import {Component, Injector, Input} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {Component, Injector, Input} from '@angular/core';
 
 @Component({
   selector: 'f-portfolio-learning-summary-report-step',

@@ -22,8 +22,8 @@
           @for (part of similarity.parts; track part; let i = $index) {
             <mat-expansion-panel
               hideToggle
-              (opened)="part.panelOpenState = true"
               (closed)="part.panelOpenState = false"
+              (opened)="part.panelOpenState = true"
             >
               <mat-expansion-panel-header [ngClass]="{flagged: similarity.flagged}">
                 <mat-panel-title>
@@ -33,18 +33,18 @@
                 @if (similarity.readyForViewer) {
                   @if (similarity.type === 'JplagTaskSimilarity') {
                     <button
-                      matTooltip="View JPlag report for this similarity"
-                      mat-icon-button
                       aria-label="View Detailed Report"
+                      mat-icon-button
+                      matTooltip="View JPlag report for this similarity"
                       (click)="viewJplagReport(similarity); $event.stopPropagation()"
                     >
                       <mat-icon>summarize</mat-icon>
                     </button>
                   } @else if (similarity.type === 'TiiTaskSimilarity') {
                     <button
-                      matTooltip="View report in TurnItIn"
-                      mat-icon-button
                       aria-label="View report"
+                      mat-icon-button
+                      matTooltip="View report in TurnItIn"
                       (click)="openReport($event, similarity)"
                     >
                       <mat-icon>summarize</mat-icon>
@@ -53,9 +53,9 @@
                 }
                 @if (i === 0) {
                   <button
-                    [matTooltip]="similarity.flagged ? 'Unflag similarity' : 'Flag similarity'"
-                    mat-icon-button
                     aria-label="Flag similarities"
+                    mat-icon-button
+                    [matTooltip]="similarity.flagged ? 'Unflag similarity' : 'Flag similarity'"
                     (click)="toggleFlag($event, similarity)"
                   >
                     <mat-icon [color]="similarity.flagged ? 'warn' : ''">{{
@@ -73,9 +73,9 @@
                     ></f-file-viewer>
                   } @else if (part.format === 'jplag') {
                     <button
-                      mat-raised-button
-                      color="primary"
                       class="mx-auto block"
+                      color="primary"
+                      mat-raised-button
                       (click)="viewJplagReport(similarity)"
                     >
                       View JPlag Similarity

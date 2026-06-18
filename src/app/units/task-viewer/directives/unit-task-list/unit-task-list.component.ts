@@ -1,10 +1,9 @@
+import {Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
-import {Location} from '@angular/common';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'f-unit-task-list',
@@ -17,6 +16,13 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   @Input() project: Project;
   @Input() taskDefinitions: TaskDefinition[];
   @Input() tasks: Task[];
+  @Input() isCollapsed = false;
+  @Input() selectionUrlBase: unknown[] | null = null;
+
+  @HostBinding('class.collapsed')
+  public get collapsedHostClass(): boolean {
+    return this.isCollapsed;
+  }
 
   // What is the selected task definition
   @Input() selectedTaskDefinition$: BehaviorSubject<TaskDefinition>;
@@ -30,7 +36,6 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   protected gradeNames: string[] = Grade.GRADES;
 
   constructor(
-    private location: Location,
     private angularRouter: Router,
     private route: ActivatedRoute,
   ) {}
@@ -145,10 +150,16 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
       return;
     }
 
-    this.location.replaceState(this.angularRouter.serializeUrl(urlTree));
+    this.angularRouter.navigateByUrl(urlTree, {replaceUrl: true});
   }
 
   private buildSelectionUrlTree(taskDef: TaskDefinition | null) {
+    if (this.selectionUrlBase) {
+      return this.angularRouter.createUrlTree(
+        taskDef ? [...this.selectionUrlBase, taskDef.abbreviation] : this.selectionUrlBase,
+      );
+    }
+
     const unitId = this.route.parent?.snapshot.paramMap.get('unitId');
     if (this.route.parent?.snapshot.data.unit && unitId) {
       return this.angularRouter.createUrlTree(

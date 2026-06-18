@@ -1,5 +1,5 @@
-import {Task} from 'src/app/api/models/task';
 import {Component, Input} from '@angular/core';
+import {Task} from 'src/app/api/models/task';
 
 @Component({
   selector: 'f-task-due-card',

@@ -1,7 +1,7 @@
 import {AnimationOptions} from 'ngx-lottie';
+import {Component, ContentChild, OnInit, TemplateRef} from '@angular/core';
 import {Observable} from 'rxjs';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
-import {Component, ContentChild, OnInit, TemplateRef} from '@angular/core';
 import {LoadingService} from './LoadingService.service';
 
 @Component({

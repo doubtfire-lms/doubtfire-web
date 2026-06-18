@@ -8,8 +8,8 @@
     @if (isImage) {
       <img
         class="aspect-square w-full max-w-[520px] object-contain object-center"
-        [src]="previewUrl"
         [alt]="file.name"
+        [src]="previewUrl"
       />
     } @else if (isPdf) {
       <div class="flex items-center gap-2 p-3">
@@ -28,7 +28,7 @@
             <span>{{ file.type || 'Audio file' }}</span>
           </div>
         </div>
-        <audio class="mt-2.5 w-full" [src]="previewUrl" controls></audio>
+        <audio class="mt-2.5 w-full" controls [src]="previewUrl"></audio>
       </div>
     } @else {
       <div class="flex items-center gap-2 p-3">
@@ -51,5 +51,5 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="dismiss(false)">Cancel</button>
-  <button mat-raised-button color="primary" (click)="dismiss(true)">Post Attachment</button>
+  <button color="primary" mat-raised-button (click)="dismiss(true)">Post Attachment</button>
 </mat-dialog-actions>

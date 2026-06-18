@@ -1,9 +1,9 @@
 import {Entity, EntityCache, RequestOptions} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {HttpClient} from '@angular/common/http';
 import {MappingFunctions} from '../services/mapping-fn';
 import {
   Campus,
@@ -21,6 +21,7 @@ import {
   Unit,
   User,
 } from './doubtfire-model';
+import {Engagement} from './engagement';
 import {StaffNote} from './staff-note';
 import {TaskOutcomeAlignment} from './task-outcome-alignment';
 
@@ -55,6 +56,7 @@ export class Project extends Entity {
   public burndownChartData: {key: string; values: number[]}[];
   public readonly taskCache: EntityCache<Task> = new EntityCache<Task>();
   public readonly staffNoteCache: EntityCache<StaffNote> = new EntityCache<StaffNote>();
+  public readonly engagementCache: EntityCache<Engagement> = new EntityCache<Engagement>();
   public readonly tutorialEnrolmentsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
   public readonly groupCache: EntityCache<Group> = new EntityCache<Group>();
   public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> =

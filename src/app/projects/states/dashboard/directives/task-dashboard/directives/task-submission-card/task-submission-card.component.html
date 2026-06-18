@@ -36,10 +36,10 @@
       Download submission
     </button>
     <button
-      mat-icon-button
       aria-label="More download options"
-      [matMenuTriggerFor]="menu"
+      mat-icon-button
       [hidden]="!task?.hasPdf"
+      [matMenuTriggerFor]="menu"
     >
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -49,8 +49,8 @@
     </mat-menu>
 
     <button
-      [hidden]="!task?.inSubmittedState() || !canRegeneratePdf"
       mat-stroked-button
+      [hidden]="!task?.inSubmittedState() || !canRegeneratePdf"
       [matMenuTriggerFor]="menu2"
     >
       Actions
@@ -62,10 +62,10 @@
       >
     </button>
     <mat-menu #menu2="matMenu">
-      <button [hidden]="!task?.inSubmittedState()" mat-menu-item (click)="uploadAlternateFiles()">
+      <button mat-menu-item [hidden]="!task?.inSubmittedState()" (click)="uploadAlternateFiles()">
         Upload alternate files
       </button>
-      <button [hidden]="!canRegeneratePdf" mat-menu-item (click)="regeneratePdf()">
+      <button mat-menu-item [hidden]="!canRegeneratePdf" (click)="regeneratePdf()">
         Regenerate PDFs
       </button>
     </mat-menu>

@@ -1,6 +1,8 @@
 import {MediaObserver} from 'ng-flex-layout';
 import {EntityCache} from 'ngx-entity-service';
-import {BehaviorSubject, Observable, Subject, skip, take} from 'rxjs';
+import {Injectable, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
+import {BehaviorSubject, Observable, Subject, find} from 'rxjs';
 import {
   CampusService,
   LearningOutcomeService,
@@ -16,8 +18,6 @@ import {
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Injectable, OnDestroy} from '@angular/core';
-import {Router} from '@angular/router';
 
 /**
  * The different types of views that can be shown. Used by the header to determine details to show.
@@ -124,8 +124,6 @@ export class GlobalStateService implements OnDestroy {
       // Try to login using the refresh token
       this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
         if (result) {
-          this.loadGlobals();
-
           if (
             this.userService.currentUser.hasRunFirstTimeSetup === false &&
             window.location.pathname !== '/welcome'
@@ -234,6 +232,7 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public loadGlobals(): void {
+    let loaded = 0;
     // Indicate we are loading data...
     this.isLoadingSubject.next(true);
 
@@ -242,7 +241,7 @@ export class GlobalStateService implements OnDestroy {
       // Loading campuses
       this.campusService.query().subscribe({
         next: (_response) => {
-          subscriber.next(true);
+          subscriber.next(++loaded);
         },
         error: (_response) => {
           this.alerts.error('Unable to access service. Failed loading campuses.', 6000);
@@ -254,7 +253,7 @@ export class GlobalStateService implements OnDestroy {
           .query({}, {endpointFormat: LearningOutcomeService.globalEndpoint})
           .subscribe({
             next: (_response) => {
-              subscriber.next(true);
+              subscriber.next(null);
             },
             error: (_response) => {
               this.alerts.error('Unable to access service. Failed loading GLOs.', 6000);
@@ -265,7 +264,7 @@ export class GlobalStateService implements OnDestroy {
           .query({}, {endpointFormat: FeedbackTemplateService.globalEndpoint})
           .subscribe({
             next: (_response) => {
-              subscriber.next(true);
+              subscriber.next(null);
             },
             error: (_response) => {
               this.alerts.error(
@@ -279,7 +278,7 @@ export class GlobalStateService implements OnDestroy {
       // Loading teaching periods
       this.teachingPeriodService.query().subscribe({
         next: (_response) => {
-          subscriber.next(true);
+          subscriber.next(++loaded);
         },
         error: (_response) => {
           this.alerts.error('Unable to access service. Failed loading teaching periods.', 6000);
@@ -288,7 +287,7 @@ export class GlobalStateService implements OnDestroy {
     });
 
     // Watch for load of campuses and teaching periods, then trigger loading of unit roles and projects
-    loadingObserver.pipe(skip(1), take(1)).subscribe({
+    loadingObserver.pipe(find((loaded) => loaded === 2)).subscribe({
       next: () => {
         // trigger loading of units and projects - this will end the loading when complete
         this.loadUnitsAndProjects();

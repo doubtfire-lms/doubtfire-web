@@ -1,4 +1,6 @@
 import {CachedEntityService} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {
   TeachingPeriod,
   TeachingPeriodBreakService,
@@ -6,8 +8,6 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
 import {MappingFunctions} from './mapping-fn';
 
 @Injectable()

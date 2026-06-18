@@ -1,3 +1,7 @@
+import {NestedTreeControl} from '@angular/cdk/tree';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {Subscription} from 'rxjs';
 import {
   Campus,
@@ -25,10 +29,6 @@ import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {NestedTreeControl} from '@angular/cdk/tree';
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {
   CommunicationScheduleModalComponent,
   CommunicationScheduleModalData,

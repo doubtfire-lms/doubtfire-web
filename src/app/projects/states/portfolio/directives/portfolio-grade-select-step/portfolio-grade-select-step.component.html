@@ -1,4 +1,4 @@
-<div id="portfolio-state" class="project-portfolio-wizard w-full">
+<div class="project-portfolio-wizard w-full" id="portfolio-state">
   <mat-card class="mx-auto max-w-7xl">
     <!-- Main Header -->
     <mat-card-header>
@@ -61,8 +61,8 @@
             >
               @for (grade of gradeValues; track grade) {
                 <mat-button-toggle
-                  [value]="grade"
                   class="p-1 py-2.5"
+                  [value]="grade"
                   (click)="updateSubmittedGrade(grade)"
                 >
                   <f-grade-icon [grade]="grade"></f-grade-icon>
@@ -82,10 +82,10 @@
 
     <!-- Footer Buttons -->
     <mat-card-actions class="flex justify-between">
-      <button mat-raised-button color="primary" (click)="goToPreviousStep()">Back</button>
+      <button color="primary" mat-raised-button (click)="goToPreviousStep()">Back</button>
       <button
-        mat-raised-button
         color="primary"
+        mat-raised-button
         [disabled]="
           !agreedToAssessmentCriteria ||
           project.submittedGrade === null ||

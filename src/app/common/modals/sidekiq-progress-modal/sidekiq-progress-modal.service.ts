@@ -1,8 +1,8 @@
+import {Injectable} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
-import {Injectable} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
 import {
   SidekiqProgressModalComponent,
   SidekiqProgressModalData,

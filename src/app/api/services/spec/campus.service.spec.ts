@@ -1,7 +1,7 @@
-import {Campus} from 'src/app/api/models/doubtfire-model';
 import {HttpRequest, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {TestBed, fakeAsync, tick} from '@angular/core/testing';
+import {Campus} from 'src/app/api/models/doubtfire-model';
 import {CampusService} from '../campus.service';
 
 describe('CampusService', () => {
