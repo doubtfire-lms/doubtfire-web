@@ -1,10 +1,10 @@
 //
 // Modal to show Doubtfire version info
 //
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Component, Inject, Injectable} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {Sort} from '@angular/material/sort';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AboutDoubtfireModalService} from '../about-doubtfire-modal/about-doubtfire-modal.service';
 import {AboutDialogData} from './about-dialog-data';
 import {GithubProfile} from './github-profile';

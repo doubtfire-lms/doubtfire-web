@@ -1,6 +1,6 @@
-import {Task} from 'src/app/api/models/doubtfire-model';
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {Task} from 'src/app/api/models/doubtfire-model';
 import {GradeTaskModalComponent} from './grade-task-modal.component';
 
 @Injectable({

@@ -1,7 +1,7 @@
 <mat-card
   class="flex h-[423px] w-[338px] flex-col rounded-lg border border-gray-300 bg-white shadow-none"
 >
-  <mat-tab-group (selectedTabChange)="scrollToSection($event)" class="category-tab-group">
+  <mat-tab-group class="category-tab-group" (selectedTabChange)="scrollToSection($event)">
     @for (category of categories; track category) {
       <mat-tab [label]="category"></mat-tab>
     }
@@ -21,12 +21,12 @@
       <div class="template-grid mt-3 flex flex-wrap gap-1">
         @for (template of genTemplates$ | async; track template) {
           <mat-chip
+            class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
+            [hidden]="template.chipText === 'Summarise feedback' && selectedTemplates.length < 1"
+            [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+            (click)="selectTemplate(template)"
             (mouseenter)="onHoverTemplate(template)"
             (mouseleave)="onHoverTemplate(null)"
-            (click)="selectTemplate(template)"
-            class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
-            [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
-            [hidden]="template.chipText === 'Summarise feedback' && selectedTemplates.length < 1"
           >
             @if (isTemplateSelected(template)) {
               <mat-icon matChipAvatar>check_circle</mat-icon>
@@ -46,11 +46,11 @@
           <div class="template-grid mt-0.5 flex flex-wrap gap-1">
             @for (template of item.templates; track template) {
               <mat-chip
-                (mouseenter)="onHoverTemplate(template)"
-                (mouseleave)="onHoverTemplate(null)"
-                (click)="selectTemplate(template)"
                 class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
                 [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+                (click)="selectTemplate(template)"
+                (mouseenter)="onHoverTemplate(template)"
+                (mouseleave)="onHoverTemplate(null)"
               >
                 @if (isTemplateSelected(template)) {
                   <mat-icon matChipAvatar>check_circle</mat-icon>
@@ -83,11 +83,11 @@
           <div class="template-grid mt-0.5 flex flex-wrap gap-1">
             @for (template of item.templates; track template) {
               <mat-chip
-                (mouseenter)="onHoverTemplate(template)"
-                (mouseleave)="onHoverTemplate(null)"
-                (click)="selectTemplate(template)"
                 class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
                 [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+                (click)="selectTemplate(template)"
+                (mouseenter)="onHoverTemplate(template)"
+                (mouseleave)="onHoverTemplate(null)"
               >
                 @if (isTemplateSelected(template)) {
                   <mat-icon matChipAvatar>check_circle</mat-icon>
@@ -120,11 +120,11 @@
           <div class="template-grid mt-0.5 flex flex-wrap gap-1">
             @for (template of item.templates; track template) {
               <mat-chip
-                (mouseenter)="onHoverTemplate(template)"
-                (mouseleave)="onHoverTemplate(null)"
-                (click)="selectTemplate(template)"
                 class="cursor-pointer rounded-full px-1 py-0.5 transition-shadow duration-200 hover:shadow-lg"
                 [ngStyle]="isTemplateSelected(template) ? {'border': '1px solid'} : {}"
+                (click)="selectTemplate(template)"
+                (mouseenter)="onHoverTemplate(template)"
+                (mouseleave)="onHoverTemplate(null)"
               >
                 @if (isTemplateSelected(template)) {
                   <mat-icon matChipAvatar>check_circle</mat-icon>

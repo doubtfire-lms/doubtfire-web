@@ -1,6 +1,6 @@
+import {Component, Input, signal} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
-import {Component, Input, signal} from '@angular/core';
 
 @Component({
   selector: 'f-task-details-view',

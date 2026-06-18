@@ -1,6 +1,6 @@
-import {TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
 
 export interface BatchFeedbackWorkflowDialogData {
   unit: Unit;

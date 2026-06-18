@@ -1,7 +1,7 @@
+import {Component, Input} from '@angular/core';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'f-task-assessment-card',

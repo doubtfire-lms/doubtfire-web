@@ -1,4 +1,6 @@
 import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {
   CampusService,
@@ -9,8 +11,6 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import API_URL from 'src/app/config/constants/apiUrl';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
 
 @Injectable()
 export class TutorialService extends CachedEntityService<Tutorial> {

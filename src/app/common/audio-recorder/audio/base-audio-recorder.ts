@@ -1,5 +1,5 @@
-import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 import {Directive, OnInit} from '@angular/core';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 
 export interface RecordingEvent extends Event {
   detail: {
@@ -107,8 +107,8 @@ export abstract class BaseAudioRecorderComponent implements OnInit {
   // Which can be overridden
   protected visualise(): void {
     const draw = () => {
-      let WIDTH = this.canvas.clientWidth;
-      let HEIGHT = this.canvas.clientHeight;
+      let WIDTH: number;
+      let HEIGHT: number;
 
       this.canvas.width = 1;
       this.canvas.height = 1;

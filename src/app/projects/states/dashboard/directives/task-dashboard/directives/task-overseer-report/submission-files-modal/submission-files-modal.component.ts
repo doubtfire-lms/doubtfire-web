@@ -1,5 +1,8 @@
 import * as monaco from 'monaco-editor';
-import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
+import {HttpResponse} from '@angular/common/http';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {SubmissionArchive} from 'src/app/api/models/submission-history';
 import {
   ArchiveFileEntry,
   isArchiveCodeOrTextFile,
@@ -8,15 +11,12 @@ import {
 } from 'src/app/common/archive-viewer/archive-viewer.helpers';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {HttpResponse} from '@angular/common/http';
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 export interface SubmissionFilesModalData {
-  assessment: OverseerAssessment;
+  assessment: SubmissionArchive;
   assessmentNumber?: number;
   assessmentIsMostRecent?: boolean;
-  comparedWith?: OverseerAssessment;
+  comparedWith?: SubmissionArchive;
   comparedWithNumber?: number;
   comparedWithIsMostRecent?: boolean;
 }
@@ -151,7 +151,7 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  private downloadSubmissionArchive(assessment: OverseerAssessment): Promise<Blob> {
+  private downloadSubmissionArchive(assessment: SubmissionArchive): Promise<Blob> {
     return new Promise((resolve, reject) => {
       this.fileDownloader.downloadBlob(
         assessment.submissionFilesUrl(),

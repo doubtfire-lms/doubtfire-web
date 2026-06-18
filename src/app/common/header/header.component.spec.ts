@@ -1,9 +1,9 @@
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {MatMenuModule} from '@angular/material/menu';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 import {CheckForUpdateService} from 'src/app/sessions/service-worker-updater/check-for-update.service';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatMenuModule} from '@angular/material/menu';
 import {IsActiveUnitRole} from '../pipes/is-active-unit-role.pipe';
 import {HeaderComponent} from './header.component';
 
@@ -13,8 +13,8 @@ describe('HeaderComponent', () => {
   // let currentUserStub: jasmine.SpyObj<any>;
   // let calendarModalStub: jasmine.SpyObj<any>;
   // let aboutDoubtfireModalStub: jasmine.SpyObj<any>;
-  let isActiveUnitRoleStub: Partial<IsActiveUnitRole>;
-  let checkForUpdateServiceStub: Partial<CheckForUpdateService>;
+  const isActiveUnitRoleStub: Partial<IsActiveUnitRole> = {};
+  const checkForUpdateServiceStub: Partial<CheckForUpdateService> = {};
   let globalStateServiceStub: Partial<GlobalStateService>;
 
   beforeEach(waitForAsync(() => {

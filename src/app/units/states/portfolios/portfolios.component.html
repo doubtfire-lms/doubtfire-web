@@ -1,43 +1,54 @@
 <div class="mx-auto max-w-[90vw]">
-  <h1>Student Portfolios</h1>
   @if (unit) {
-    <mat-tab-group #tabs dynamicHeight class="overflow-visible">
-      <mat-tab label="Select Student">
-        <f-portfolios-list
-          [unit]="unit"
-          [loading]="loadingStudents"
-          (studentSelected)="studentSelected($event)"
-        ></f-portfolios-list>
-      </mat-tab>
-      <mat-tab label="View Progress" [disabled]="!selectedProject">
-        @if (selectedProject) {
-          <f-portfolios-project-progress
-            [unit]="unit"
-            [project]="selectedProject"
-          ></f-portfolios-project-progress>
-        }
-      </mat-tab>
-
-      <!-- TODO 10.0.x: View Project Tasks/Dashboard directive (project. dashboard) -->
-
-      <mat-tab label="View Staff Notes" [disabled]="!selectedProject">
-        @if (selectedProject) {
-          <f-staff-notes [project]="selectedProject"></f-staff-notes>
-        }
-      </mat-tab>
-      <mat-tab label="View Portfolio" [disabled]="!selectedProject">
-        @if (selectedProject) {
-          <f-portfolios-portfolio-view [project]="selectedProject"></f-portfolios-portfolio-view>
-        }
-      </mat-tab>
-      <mat-tab label="Assess Portfolio" [disabled]="!selectedProject">
-        @if (selectedProject) {
-          <f-portfolios-assessment
-            [project]="selectedProject"
-            [unit]="unit"
-          ></f-portfolios-assessment>
-        }
-      </mat-tab>
+    <mat-tab-group
+      class="mx-auto mb-6 max-w-fit"
+      dynamicHeight
+      [selectedIndex]="currentIndex"
+      (selectedTabChange)="onTabChange($event)"
+    >
+      @for (tab of tabs; track tab.routeSegment) {
+        <mat-tab [disabled]="tab.requiresProject && !selectedProject" [label]="tab.label"></mat-tab>
+      }
     </mat-tab-group>
+
+    <div class="min-h-0 flex-1">
+      @switch (currentTab.routeSegment) {
+        @case ('select') {
+          <f-portfolios-list
+            [loading]="loadingStudents"
+            [unit]="unit"
+            (studentSelected)="studentSelected($event)"
+          ></f-portfolios-list>
+        }
+        @case ('progress') {
+          @if (selectedProject) {
+            <f-portfolios-project-progress
+              [project]="selectedProject"
+              [project$]="selectedProject$"
+              [taskSelectionUrlBase]="progressTaskSelectionUrlBase"
+              [unit]="unit"
+            ></f-portfolios-project-progress>
+          }
+        }
+        @case ('staff-notes') {
+          @if (selectedProject) {
+            <f-staff-notes class="h-screen" [project]="selectedProject"></f-staff-notes>
+          }
+        }
+        @case ('portfolio') {
+          @if (selectedProject) {
+            <f-portfolios-portfolio-view [project]="selectedProject"></f-portfolios-portfolio-view>
+          }
+        }
+        @case ('assessment') {
+          @if (selectedProject) {
+            <f-portfolios-assessment
+              [project]="selectedProject"
+              [unit]="unit"
+            ></f-portfolios-assessment>
+          }
+        }
+      }
+    </div>
   }
 </div>

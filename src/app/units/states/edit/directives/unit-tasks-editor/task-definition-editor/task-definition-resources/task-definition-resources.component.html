@@ -1,17 +1,17 @@
 <div class="flex flex-row gap-2.5">
   <div class="flex basis-1/2 flex-col">
     <f-file-drop
-      mode="event"
-      (filesDropped)="uploadTaskSheet($event)"
       accept="application/pdf"
+      mode="event"
       [desiredFileName]="'Task ' + taskDefinition.abbreviation + ' pdf'"
+      (filesDropped)="uploadTaskSheet($event)"
     />
     @if (taskDefinition.hasTaskSheet) {
       <div class="flex flex-row gap-2.5 pt-2.5">
-        <button mat-flat-button color="warn" (click)="removeTaskSheet()" class="me-4 flex-grow">
+        <button class="me-4 flex-grow" color="warn" mat-flat-button (click)="removeTaskSheet()">
           Delete Task Sheet
         </button>
-        <button mat-flat-button color="accent" (click)="downloadTaskSheet()" class="ms-4 flex-grow">
+        <button class="ms-4 flex-grow" color="accent" mat-flat-button (click)="downloadTaskSheet()">
           Download Task Sheet
         </button>
       </div>
@@ -19,21 +19,21 @@
   </div>
   <div class="flex basis-1/2 flex-col">
     <f-file-drop
-      mode="event"
-      (filesDropped)="uploadTaskResources($event)"
       accept="application/zip,application/x-zip-compressed"
+      mode="event"
       [desiredFileName]="'Task ' + taskDefinition.abbreviation + ' zip'"
+      (filesDropped)="uploadTaskResources($event)"
     />
     @if (taskDefinition.hasTaskResources) {
       <div class="flex flex-row gap-2.5 pt-2.5">
-        <button mat-flat-button color="warn" (click)="removeTaskResources()" class="me-4 flex-grow">
+        <button class="me-4 flex-grow" color="warn" mat-flat-button (click)="removeTaskResources()">
           Delete Task Zip
         </button>
         <button
-          mat-flat-button
-          color="accent"
-          (click)="downloadTaskResources()"
           class="ms-4 flex-grow"
+          color="accent"
+          mat-flat-button
+          (click)="downloadTaskResources()"
         >
           Download Task Zip
         </button>

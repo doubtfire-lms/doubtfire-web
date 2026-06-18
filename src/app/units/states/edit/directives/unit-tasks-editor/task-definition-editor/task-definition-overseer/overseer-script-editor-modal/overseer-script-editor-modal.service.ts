@@ -1,6 +1,6 @@
-import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {OverseerScriptEditorModalComponent} from './overseer-script-editor-modal.component';
 
 export interface OverseerScriptEditorModalData {

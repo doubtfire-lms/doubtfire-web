@@ -1,9 +1,9 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {HttpClient} from '@angular/common/http';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {DiscussionPrompt} from './discussion-prompt';
 import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
@@ -17,6 +17,7 @@ export interface UploadRequirement {
   type: string;
   tiiCheck?: boolean;
   tiiPct?: number;
+  submissionHistory?: boolean;
 }
 
 export interface SimilarityCheck {

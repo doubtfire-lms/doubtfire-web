@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Observable} from 'rxjs';
-import {Unit} from 'src/app/api/models/doubtfire-model';
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {Observable} from 'rxjs';
+import {Unit} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-unit-root-state',

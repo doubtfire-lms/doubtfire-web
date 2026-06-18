@@ -87,7 +87,10 @@
       </p>
 
       <p>The following tasks will be included automatically in this order:</p>
-      <f-portfolio-included-tasks [project]="project"></f-portfolio-included-tasks>
+      <f-portfolio-included-tasks
+        [project]="project"
+        (canCreatePortfolioChange)="canCreatePortfolio = $event"
+      ></f-portfolio-included-tasks>
 
       <mat-card appearance="outlined" class="p-1">
         <mat-card-header>
@@ -108,10 +111,11 @@
         </mat-card-content>
         <mat-card-actions class="">
           <button
-            mat-raised-button
-            color="primary"
-            (click)="createPortfolio()"
             class="m-3 mx-auto w-full max-w-4xl"
+            color="primary"
+            mat-raised-button
+            [disabled]="!canCreatePortfolio"
+            (click)="createPortfolio()"
           >
             <mat-icon>menu_book</mat-icon>
             Create My Portfolio
@@ -139,10 +143,10 @@
           </p>
         </mat-card-content>
         <mat-card-actions class="flex gap-2 py-3">
-          <button mat-raised-button color="warn" class="text-white" (click)="deletePortfolio()">
+          <button class="text-white" color="warn" mat-raised-button (click)="deletePortfolio()">
             Delete Portfolio
           </button>
-          <button mat-raised-button color="primary" (click)="downloadPortfolio()">
+          <button color="primary" mat-raised-button (click)="downloadPortfolio()">
             Download Portfolio
           </button>
         </mat-card-actions>

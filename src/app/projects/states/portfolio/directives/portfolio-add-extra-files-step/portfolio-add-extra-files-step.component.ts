@@ -1,7 +1,7 @@
-import {Project} from 'src/app/api/models/project';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {Component, Input, OnInit} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
+import {Project} from 'src/app/api/models/project';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'f-portfolio-add-extra-files-step',

@@ -1,14 +1,14 @@
-<button id="dialogCloseButton" mat-icon-button mat-dialog-close aria-label="Close dialog button">
+<button aria-label="Close dialog button" id="dialogCloseButton" mat-dialog-close mat-icon-button>
   <mat-icon aria-label="Quit cross icon">close</mat-icon>
 </button>
-<mat-horizontal-stepper id="intelligentDiscussionStepper" [linear]="true" #stepper>
+<mat-horizontal-stepper #stepper id="intelligentDiscussionStepper" [linear]="true">
   <mat-step>
     <ng-template matStepLabel>Introduction</ng-template>
     <div class="introduction-text">
       <img
+        alt="Discussion Splash Image"
         id="discussion-splash-image"
         src="/assets/images/discussion_splash_1.svg"
-        alt="Discussion Splash Image"
       />
       <p>
         Your tutor would like to discuss some topics with you regarding this task Discussions are a
@@ -27,7 +27,7 @@
       </p>
     </div>
     <div>
-      <button mat-button mat-raised-button matStepperNext color="primary" style="float: right">
+      <button color="primary" mat-button mat-raised-button matStepperNext style="float: right">
         Next
       </button>
     </div>
@@ -36,21 +36,20 @@
   <mat-step [completed]="confirmed">
     <ng-template matStepLabel>Test everything is working</ng-template>
     <microphone-tester #testRecorder></microphone-tester>
-    <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>
+    <button color="primary" mat-button mat-raised-button matStepperNext matStepperPrevious>
       Back
     </button>
     <div style="float: right">
-      <mat-checkbox style="margin-right: 20px" [(ngModel)]="confirmed" matStepperNext required>
+      <mat-checkbox matStepperNext required style="margin-right: 20px" [(ngModel)]="confirmed">
         Ready to go!
       </mat-checkbox>
       <button
-        [disabled]="!confirmed"
-        (click)="disableTester()"
+        color="primary"
         mat-button
         mat-raised-button
         matStepperNext
-        color="primary"
-        matStepperNext
+        [disabled]="!confirmed"
+        (click)="disableTester()"
       >
         Next
       </button>
@@ -61,9 +60,9 @@
     <ng-template matStepLabel>Discussion</ng-template>
     <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
       <intelligent-discussion-recorder
-        [task]="data.task"
-        [discussion]="data.dc"
         #discussionRecorder
+        [discussion]="data.dc"
+        [task]="data.task"
       >
       </intelligent-discussion-recorder>
       <div fxLayout="column" fxLayoutAlign="start end">
@@ -73,9 +72,9 @@
     </div>
     <mat-divider></mat-divider>
     <button
-      style="margin-bottom: 3em"
       mat-button
       mat-stroked-button
+      style="margin-bottom: 3em"
       [hidden]="startedDiscussion"
       (click)="startDiscussion()"
     >
@@ -84,10 +83,10 @@
     <div fxLayout="row" fxLayoutAlign="space-evenly center" [hidden]="!inDiscussion">
       <h2 class="mat-headline-5">Prompt {{activePromptId+1}} of {{numberOfPrompts}}</h2>
       <button
-        style="margin-bottom: 3em"
-        [hidden]="activePromptId === numberOfPrompts "
         mat-button
         mat-stroked-button
+        style="margin-bottom: 3em"
+        [hidden]="activePromptId === numberOfPrompts "
         (click)="responseConfirmed($event)"
       >
         {{activePromptId+1 === numberOfPrompts ? 'Finish' : 'Next Prompt' }}
@@ -96,24 +95,23 @@
 
     <div>
       <button
-        [disabled]="!discussionComplete"
+        color="primary"
         mat-button
         mat-raised-button
         matStepperNext
-        color="primary"
-        matStepperNext
         required
         style="float: right"
+        [disabled]="!discussionComplete"
       >
         Complete
       </button>
       <button
-        [disabled]="startedDiscussion"
+        color="primary"
         mat-button
         mat-raised-button
         matStepperNext
-        color="primary"
         matStepperPrevious
+        [disabled]="startedDiscussion"
       >
         Back
       </button>

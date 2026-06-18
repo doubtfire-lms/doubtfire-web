@@ -1,7 +1,7 @@
-import {BehaviorSubject} from 'rxjs';
-import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {BehaviorSubject} from 'rxjs';
+import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 import {SplashScreenComponent} from './splash-screen.component';
 
 describe('SplashScreenComponent', () => {

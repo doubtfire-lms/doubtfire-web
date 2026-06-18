@@ -1,5 +1,3 @@
-import {UserService} from 'src/app/api/services/user.service';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {
   Component,
   EventEmitter,
@@ -9,6 +7,8 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import {UserService} from 'src/app/api/services/user.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 interface FileData {
   name: string;
@@ -280,7 +280,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
       if (xhr.readyState === 4) {
         setTimeout(() => {
           this.uploadingInfo.complete = true;
-          let response = null;
+          let response;
           try {
             response = JSON.parse(xhr.responseText);
           } catch (e) {

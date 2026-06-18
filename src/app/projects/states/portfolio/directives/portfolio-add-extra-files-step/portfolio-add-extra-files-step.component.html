@@ -15,7 +15,7 @@
               <mat-icon>{{ icons[file.kind] }}</mat-icon>
               {{ file.name }}
             </div>
-            <button mat-button (click)="deleteFileFromPortfolio(file)" color="primary">
+            <button color="primary" mat-button (click)="deleteFileFromPortfolio(file)">
               Remove
             </button>
           </li>
@@ -36,17 +36,17 @@
       </mat-form-field>
     </div>
     <f-file-uploader
-      [showName]="false"
       [files]="uploadFileType"
-      [payload]="uploadFilePayload"
       [isUploading]="isUploading"
-      [url]="project.portfolioUrl()"
       [onSuccess]="addNewFilesToPortfolio.bind(this)"
+      [payload]="uploadFilePayload"
+      [showName]="false"
+      [url]="project.portfolioUrl()"
     >
     </f-file-uploader>
   </mat-card-content>
   <mat-card-footer class="flex w-full justify-between p-3">
     <button mat-raised-button (click)="advanceActiveTab(-1)">Back</button>
-    <button mat-raised-button (click)="advanceActiveTab(1)" color="primary">Next</button>
+    <button color="primary" mat-raised-button (click)="advanceActiveTab(1)">Next</button>
   </mat-card-footer>
 </mat-card>

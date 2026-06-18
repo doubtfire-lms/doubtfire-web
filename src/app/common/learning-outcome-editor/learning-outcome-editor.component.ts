@@ -1,15 +1,4 @@
 import {isEqual} from 'lodash';
-import {Subscription} from 'rxjs';
-import {
-  FeedbackTemplateService,
-  LearningOutcome,
-  LearningOutcomeService,
-  TaskDefinition,
-  TaskService,
-  Unit,
-} from 'src/app/api/models/doubtfire-model';
-import {AlertService} from 'src/app/common/services/alert.service';
-import API_URL from 'src/app/config/constants/apiUrl';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {
@@ -32,6 +21,17 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {Subscription} from 'rxjs';
+import {
+  FeedbackTemplateService,
+  LearningOutcome,
+  LearningOutcomeService,
+  TaskDefinition,
+  TaskService,
+  Unit,
+} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
 import {

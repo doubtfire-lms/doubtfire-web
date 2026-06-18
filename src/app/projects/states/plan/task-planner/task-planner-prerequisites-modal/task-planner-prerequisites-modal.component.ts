@@ -1,9 +1,9 @@
-import {Project} from 'src/app/api/models/project';
-import {TaskDefinition} from 'src/app/api/models/task-definition';
-import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
+import {Project} from 'src/app/api/models/project';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
 
 export interface TaskPlannerPrerequisitesModalData {
   taskDefinition: TaskDefinition;

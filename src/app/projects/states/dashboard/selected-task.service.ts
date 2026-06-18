@@ -1,7 +1,7 @@
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
-import {Injectable} from '@angular/core';
 import {GlobalStateService} from '../index/global-state.service';
 
 export enum DashboardViews {
@@ -12,7 +12,7 @@ export enum DashboardViews {
   staff_notes,
   tutor_notes,
   discussion_prompts,
-  overseer,
+  submission_history,
 }
 
 @Injectable({
@@ -84,7 +84,11 @@ export class SelectedTaskService {
   }
 
   public showOverseerReports() {
-    this.currentView$.next(DashboardViews.overseer);
+    this.currentView$.next(DashboardViews.submission_history);
+  }
+
+  public showSubmissionHistory() {
+    this.currentView$.next(DashboardViews.submission_history);
   }
 
   public showDiscussionPrompts() {

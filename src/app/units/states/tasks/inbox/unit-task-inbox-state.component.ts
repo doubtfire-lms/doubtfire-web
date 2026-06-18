@@ -1,3 +1,5 @@
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, first, of, tap} from 'rxjs';
 import {
   ProjectService,
@@ -12,8 +14,6 @@ import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 
 export type UnitTaskViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
 export type UnitTaskRouteMode = 'inbox' | 'definition' | 'moderation' | 'overflow';

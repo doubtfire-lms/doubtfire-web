@@ -1,7 +1,7 @@
-import {Campus, CampusService, Project, Unit} from 'src/app/api/models/doubtfire-model';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
+import {Campus, CampusService, Project, Unit} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'student-campus-select',

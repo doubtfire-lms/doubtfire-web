@@ -14,19 +14,19 @@
           <mat-button-toggle-group
             #group="matButtonToggleGroup"
             hideSingleSelectionIndicator="true"
-            [(ngModel)]="selectedGrade"
             [value]="selectedGrade"
+            [(ngModel)]="selectedGrade"
           >
             @for (idx of gradeValues; track idx) {
               <mat-button-toggle
-                class="grade-toggle"
-                [value]="idx"
-                aria-label="Mark task as {{ gradeName(idx) }}"
-                matTooltip="This student completed the task to a {{ gradeName(idx) }} standard"
-                [matTooltipShowDelay]="500"
                 aria-describedby="This student completed the task to a {{
                   gradeName(idx)
                 }} standard"
+                aria-label="Mark task as {{ gradeName(idx) }}"
+                class="grade-toggle"
+                matTooltip="This student completed the task to a {{ gradeName(idx) }} standard"
+                [matTooltipShowDelay]="500"
+                [value]="idx"
               >
                 <f-grade-icon [grade]="idx"></f-grade-icon>
               </mat-button-toggle>
@@ -44,7 +44,7 @@
             {{ task.definition.abbreviation }}
           </span>
         </p>
-        <mat-slider class="slider" [max]="totalRating" [min]="0" [step]="1" [discrete]="true">
+        <mat-slider class="slider" [discrete]="true" [max]="totalRating" [min]="0" [step]="1">
           <input matSliderThumb [(ngModel)]="rating" />
         </mat-slider>
         <div class="label-rating">
@@ -57,10 +57,10 @@
   <mat-card-actions align="end">
     <button mat-raised-button (click)="dismiss()">Dismiss</button>
     <button
-      mat-raised-button
       color="primary"
-      [mat-dialog-close]="{grade: selectedGrade, qualityPts: rating}"
+      mat-raised-button
       [disabled]="!isValid()"
+      [mat-dialog-close]="{grade: selectedGrade, qualityPts: rating}"
     >
       Submit
     </button>

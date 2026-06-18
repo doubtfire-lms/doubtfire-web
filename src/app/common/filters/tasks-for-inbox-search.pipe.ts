@@ -1,5 +1,5 @@
-import {Task} from 'src/app/api/models/task';
 import {Pipe, PipeTransform} from '@angular/core';
+import {Task} from 'src/app/api/models/task';
 
 @Pipe({
   name: 'tasksWithStudentName',

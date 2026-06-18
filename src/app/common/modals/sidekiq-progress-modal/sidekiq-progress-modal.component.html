@@ -31,7 +31,7 @@
   <mat-dialog-actions class="flex justify-between">
     <button mat-raised-button (click)="dismissModal()">Dismiss</button>
     @if (job?.status !== 'working' && job?.result) {
-      <button mat-raised-button color="primary" (click)="viewResult()">View Result</button>
+      <button color="primary" mat-raised-button (click)="viewResult()">View Result</button>
     }
   </mat-dialog-actions>
 </div>

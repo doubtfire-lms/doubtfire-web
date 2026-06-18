@@ -1,5 +1,5 @@
-import {GroupSet, Unit} from 'src/app/api/models/doubtfire-model';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {GroupSet, Unit} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'group-set-selector',

@@ -1,10 +1,10 @@
-import {ActivityType, ActivityTypeService} from 'src/app/api/models/doubtfire-model';
-import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {ActivityType, ActivityTypeService} from 'src/app/api/models/doubtfire-model';
+import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'activity-type-list',
