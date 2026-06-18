@@ -1,6 +1,11 @@
 @if (project) {
   <div class="mx-auto flex max-w-[90vw] flex-col">
-    <h2>Task Planner</h2>
+    <h2>
+      Task Planner
+      @if (viewingOtherStudentProject) {
+        for {{ project.student.name }}
+      }
+    </h2>
     <p>
       @if (unit.allowFlexibleDates) {
         View and adjust the due dates for your tasks. Remember to leave time to get and respond to
