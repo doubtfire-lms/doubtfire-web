@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-24](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-23...v11.0.0-24) (2026-06-17)
+
+
+### Features
+
+* check access token expiry locally before attempting request ([#1270](https://github.com/b0ink/doubtfire-deploy/issues/1270)) ([4ff5562](https://github.com/b0ink/doubtfire-deploy/commit/4ff55627566f9004872c915658bd91bc348dd8e8))
+* submission history ([#1269](https://github.com/b0ink/doubtfire-deploy/issues/1269)) ([4cdae07](https://github.com/b0ink/doubtfire-deploy/commit/4cdae07eb5bef0f9866927892e92b6b80dde0c74))
+* upgrade gantt chart and add screenshotting ability ([#1263](https://github.com/b0ink/doubtfire-deploy/issues/1263)) ([08a8eee](https://github.com/b0ink/doubtfire-deploy/commit/08a8eee9337331aa328960e206722f8905c2a0f9))
+
+
+### Bug Fixes
+
+* use either portfolio available field ([f8d5142](https://github.com/b0ink/doubtfire-deploy/commit/f8d514261c7eca5465ac3af95da33b95a39d3f23))
+
 ## [11.0.0-23](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-22...v11.0.0-23) (2026-06-11)
 
 

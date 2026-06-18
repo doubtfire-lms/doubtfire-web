@@ -3,10 +3,10 @@
     <mat-label>{{ label }}</mat-label>
   }
   <mat-select
-    [(value)]="target"
-    [placeholder]="placeholder"
-    (selectionChange)="selectionChange($event)"
     [compareWith]="compareFn"
+    [placeholder]="placeholder"
+    [(value)]="target"
+    (selectionChange)="selectionChange($event)"
   >
     @if (placeholder) {
       <mat-option [value]="null">

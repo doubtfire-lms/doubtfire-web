@@ -12,7 +12,7 @@ export enum DashboardViews {
   staff_notes,
   tutor_notes,
   discussion_prompts,
-  overseer,
+  submission_history,
 }
 
 @Injectable({
@@ -84,7 +84,11 @@ export class SelectedTaskService {
   }
 
   public showOverseerReports() {
-    this.currentView$.next(DashboardViews.overseer);
+    this.currentView$.next(DashboardViews.submission_history);
+  }
+
+  public showSubmissionHistory() {
+    this.currentView$.next(DashboardViews.submission_history);
   }
 
   public showDiscussionPrompts() {

@@ -1,8 +1,8 @@
 <div class="flex size-full flex-col">
   <mat-tab-group
     class="mx-auto mb-6"
-    [selectedIndex]="currentIndex"
     dynamicHeight
+    [selectedIndex]="currentIndex"
     (selectedTabChange)="onTabChange($event)"
   >
     @for (tab of tabs; track tab.routeSegment) {
@@ -33,7 +33,7 @@
       @case ('staff') {
         @if (unit) {
           <div class="mx-auto max-w-[90vw]">
-            <unit-staff-editor [unit]="unit" [staff]="staff"></unit-staff-editor>
+            <unit-staff-editor [staff]="staff" [unit]="unit"></unit-staff-editor>
           </div>
         }
       }

@@ -1,15 +1,15 @@
-<button id="dialogCloseButton" mat-icon-button mat-dialog-close aria-label="Close dialog button">
+<button aria-label="Close dialog button" id="dialogCloseButton" mat-dialog-close mat-icon-button>
   <mat-icon aria-label="Quit cross icon">close</mat-icon>
 </button>
 
-<mat-horizontal-stepper id="discussionPromptStepper" [linear]="true" #stepper>
+<mat-horizontal-stepper #stepper id="discussionPromptStepper" [linear]="true">
   <mat-step>
     <ng-template matStepLabel>Introduction</ng-template>
     <div class="introduction-text">
       <img
+        alt="Discussion Splash Image"
         id="discussion-splash-image"
         src="/assets/images/discussion_splash_1.svg"
-        alt="Discussion Splash Image"
       />
       <p>
         Discussions are a great way for both you and your students to gauge student's understanding
@@ -30,7 +30,7 @@
     </div>
 
     <div>
-      <button mat-button mat-raised-button matStepperNext color="primary" style="float: right">
+      <button color="primary" mat-button mat-raised-button matStepperNext style="float: right">
         Next
       </button>
     </div>
@@ -41,7 +41,7 @@
     <discussion-prompt-composer [task]="data.task"></discussion-prompt-composer>
 
     <div>
-      <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>
+      <button color="primary" mat-button mat-raised-button matStepperNext matStepperPrevious>
         Back
       </button>
     </div>

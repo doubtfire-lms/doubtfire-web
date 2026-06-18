@@ -6,9 +6,11 @@ import {CodeEditorModule} from '@ngstack/code-editor';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {
   GANTT_GLOBAL_CONFIG,
-  GanttI18nLocale,
+  GANTT_I18N_LOCALE_TOKEN,
+  type GanttI18nLocaleConfig,
   GanttLinkLineType,
   NgxGanttModule,
+  enUsLocale,
 } from '@worktile/gantt';
 import {DateAdapter as CalendarDateAdapter, CalendarModule} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
@@ -124,6 +126,7 @@ import {
   OverseerAssessmentService,
   OverseerImageService,
   ProjectService,
+  SubmissionHistoryService,
   TaskCommentService,
   TaskService,
   TaskSimilarityService,
@@ -308,7 +311,6 @@ import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/
 import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
-import {TaskSubmissionHistoryComponent} from './tasks/task-submission-history/task-submission-history.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
@@ -393,10 +395,33 @@ const MY_DATE_FORMAT = {
   },
 };
 
+const DOUBTFIRE_GANTT_LOCALE = 'doubtfire-en-au';
+
+const DOUBTFIRE_GANTT_LOCALE_CONFIG: GanttI18nLocaleConfig = {
+  ...enUsLocale,
+  id: DOUBTFIRE_GANTT_LOCALE,
+  views: {
+    ...enUsLocale.views,
+    day: {
+      ...enUsLocale.views.day,
+      tickFormats: {
+        ...enUsLocale.views.day.tickFormats,
+        unit: 'd EEE',
+      },
+    },
+  },
+};
+
+const GANTT_CHART_LOCALE_CONFIG = {
+  provide: GANTT_I18N_LOCALE_TOKEN,
+  useValue: DOUBTFIRE_GANTT_LOCALE_CONFIG,
+  multi: true,
+};
+
 const GANTT_CHART_CONFIG = {
   provide: GANTT_GLOBAL_CONFIG,
   useValue: {
-    locale: GanttI18nLocale.enUs,
+    locale: DOUBTFIRE_GANTT_LOCALE,
     dateOptions: {
       weekStartsOn: 1,
     },
@@ -405,6 +430,7 @@ const GANTT_CHART_CONFIG = {
       lineType: GanttLinkLineType.curve,
     },
     styleOptions: {
+      headerHeight: 52,
       // lineHeight: '25',
       // barHeight: '23',
       // headerHeight: '50px',
@@ -505,7 +531,6 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     StatusIconComponent,
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
-    TaskSubmissionHistoryComponent,
     GradeIconComponent,
     HeaderComponent,
     UnitDropdownComponent,
@@ -674,6 +699,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ActivityTypeService,
     OverseerImageService,
     OverseerAssessmentService,
+    SubmissionHistoryService,
     EmojiService,
     FileDownloaderService,
     CheckForUpdateService,
@@ -722,6 +748,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskPrerequisiteService,
     MarkingSessionService,
     DiscussionPromptService,
+    GANTT_CHART_LOCALE_CONFIG,
     GANTT_CHART_CONFIG,
     TaskPlannerPrerequisitesModalService,
     OverseerStepService,

@@ -4,10 +4,10 @@
   </h4>
   <p class="list-group-item-text">
     @if (task.isGroupTask()) {
-      <mat-icon inline matTooltip="Group Task" aria-hidden="true">groups</mat-icon>
+      <mat-icon aria-hidden="true" inline matTooltip="Group Task">groups</mat-icon>
     }
     @if (!task.isGroupTask()) {
-      <mat-icon inline matTooltip="Individual Task" aria-hidden="true">person</mat-icon>
+      <mat-icon aria-hidden="true" inline matTooltip="Individual Task">person</mat-icon>
     }
     {{ task.definition.abbreviation }} - {{ gradeNames[task.definition.targetGrade] }} Task
     @if (task.isBeforeStartDate() && !task.inSubmittedState()) {
@@ -34,17 +34,17 @@
   <div class="task-superscript-badges">
     <span
       class="task-superscript-badge new-comments-badge"
-      [hidden]="task.numNewComments <= 0"
       matTooltip="{{ task.numNewComments }} new {{
         task.numNewComments > 1 ? 'comments' : 'comment'
       }}"
+      [hidden]="task.numNewComments <= 0"
     >
       {{ task.numNewComments }}
     </span>
     <span
       class="task-superscript-badge plagiarism-detected-badge"
-      [hidden]="!task.similaritiesDetected"
       matTooltip="Plagiarism detected"
+      [hidden]="!task.similaritiesDetected"
     >
       <mat-icon inline>visibility</mat-icon>
     </span>

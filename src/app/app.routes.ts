@@ -117,6 +117,21 @@ export const routes: Routes = [
             component: PortfoliosComponent,
             data: {task: 'Student Portfolios'},
           },
+          {
+            path: 'students/portfolios/:projectId',
+            component: PortfoliosComponent,
+            data: {task: 'Student Portfolios'},
+          },
+          {
+            path: 'students/portfolios/:projectId/:tab',
+            component: PortfoliosComponent,
+            data: {task: 'Student Portfolios'},
+          },
+          {
+            path: 'students/portfolios/:projectId/:tab/:taskAbbreviation',
+            component: PortfoliosComponent,
+            data: {task: 'Student Portfolios'},
+          },
           {path: 'students', component: StudentsListComponent, data: {task: 'Student List'}},
           {
             path: 'admin',

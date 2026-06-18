@@ -24,6 +24,7 @@ export class OverseerAssessmentService extends EntityService<OverseerAssessment>
       'id',
       'submissionTimestamp',
       'taskId',
+      'submissionHistoryId',
       'createdAt',
       'updatedAt',
       ['taskStatus', 'result_task_status'],
