@@ -10,10 +10,10 @@
 
       @if (currentUserCanAddEngagement) {
         <button
-          mat-icon-button
-          type="button"
           aria-label="Add engagement stamp"
+          mat-icon-button
           matTooltip="Add engagement"
+          type="button"
           (click)="openAddEngagementDialog()"
         >
           <mat-icon>add</mat-icon>
@@ -23,14 +23,14 @@
   </mat-card-header>
 
   <mat-card-content>
-    <div class="mb-4 flex flex-wrap gap-x-5 gap-y-2" aria-label="Engagement stamp legend">
+    <div aria-label="Engagement stamp legend" class="mb-4 flex flex-wrap gap-x-5 gap-y-2">
       @for (item of legend; track item.type) {
         <div class="flex items-center gap-1.5 text-sm text-gray-600">
           <span
             class="inline-flex size-6 shrink-0 items-center justify-center rounded-full border"
             [ngClass]="item.classes"
           >
-            <mat-icon class="!size-[15px] !text-[15px]" aria-hidden="true">
+            <mat-icon aria-hidden="true" class="!size-[15px] !text-[15px]">
               {{ item.icon }}
             </mat-icon>
           </span>
@@ -46,28 +46,28 @@
     } @else {
       <div class="overflow-x-auto pb-1">
         <div
-          class="flex min-w-[812px] border-b border-gray-300"
           aria-label="Engagement stamps across the semester"
+          class="flex min-w-[812px] border-b border-gray-300"
         >
           @for (week of weeks; track week.week) {
             <div
               class="flex flex-1 flex-col border-r border-gray-200 first:border-l"
-              [style.min-width.px]="weekWidth(week.stamps)"
               [class.bg-blue-50]="week.week === currentWeek"
+              [style.min-width.px]="weekWidth(week.stamps)"
             >
               <div class="flex min-h-[210px] flex-1 items-end justify-center gap-[5px] px-2 py-2.5">
                 @for (column of stampColumns(week.stamps); track $index) {
                   <div class="flex flex-col-reverse gap-[5px]">
                     @for (stamp of column; track $index) {
                       <button
-                        type="button"
                         class="inline-flex size-[35px] shrink-0 cursor-pointer items-center justify-center rounded-full border"
-                        [ngClass]="stamp.classes"
-                        [matTooltip]="stamp.label"
+                        type="button"
                         [attr.aria-label]="stamp.label"
+                        [matTooltip]="stamp.label"
+                        [ngClass]="stamp.classes"
                         (click)="openEngagement(stamp.engagement)"
                       >
-                        <mat-icon class="!size-[18px] !text-[18px]" aria-hidden="true">
+                        <mat-icon aria-hidden="true" class="!size-[18px] !text-[18px]">
                           {{ stamp.icon }}
                         </mat-icon>
                       </button>

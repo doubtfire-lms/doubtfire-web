@@ -6,11 +6,11 @@
       <mat-label>Engagement type</mat-label>
       <input
         #engagementTypeInput
-        matInput
         formControlName="engagementType"
-        [matAutocomplete]="engagementTypeOptions"
+        matInput
         maxlength="255"
         placeholder="e.g. Attendance"
+        [matAutocomplete]="engagementTypeOptions"
       />
       <mat-autocomplete
         #engagementTypeOptions="matAutocomplete"
@@ -29,8 +29,8 @@
     <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Note</mat-label>
       <textarea
-        matInput
         formControlName="note"
+        matInput
         maxlength="4095"
         rows="4"
         [placeholder]="notePlaceholder"
@@ -39,9 +39,9 @@
     </mat-form-field>
 
     <div class="grid grid-cols-2 gap-2">
-      <mat-form-field class="min-w-0" appearance="outline">
+      <mat-form-field appearance="outline" class="min-w-0">
         <mat-label>Date</mat-label>
-        <input matInput formControlName="occurredDate" [matDatepicker]="occurredDatePicker" />
+        <input formControlName="occurredDate" matInput [matDatepicker]="occurredDatePicker" />
         <mat-datepicker-toggle matIconSuffix [for]="occurredDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #occurredDatePicker></mat-datepicker>
         @if (form.controls.occurredDate.hasError('required')) {
@@ -49,9 +49,9 @@
         }
       </mat-form-field>
 
-      <mat-form-field class="min-w-0" appearance="outline">
+      <mat-form-field appearance="outline" class="min-w-0">
         <mat-label>Time</mat-label>
-        <input matInput formControlName="occurredTime" type="time" />
+        <input formControlName="occurredTime" matInput type="time" />
         @if (form.controls.occurredTime.hasError('required')) {
           <mat-error>Select a time.</mat-error>
         }
@@ -71,10 +71,10 @@
       <mat-form-field appearance="outline">
         <mat-label>Evidence URL</mat-label>
         <input
-          matInput
           formControlName="evidenceUrl"
-          type="url"
+          matInput
           placeholder="https://example.com/evidence"
+          type="url"
         />
         @if (
           form.controls.evidenceUrl.hasError('pattern') ||
@@ -91,10 +91,10 @@
           Image or PDF
         </label>
         <input
-          id="engagement-evidence"
-          class="block w-full text-sm text-gray-600 file:mr-3 file:rounded-md file:border-0 file:bg-gray-100 file:px-3 file:py-2 file:font-medium file:text-gray-700 hover:file:bg-gray-200"
-          type="file"
           accept="image/*,.pdf,application/pdf"
+          class="block w-full text-sm text-gray-600 file:mr-3 file:rounded-md file:border-0 file:bg-gray-100 file:px-3 file:py-2 file:font-medium file:text-gray-700 hover:file:bg-gray-200"
+          id="engagement-evidence"
+          type="file"
           (change)="fileSelected($event)"
         />
         <p class="mt-2 text-xs text-gray-500">Maximum file size: 30 MB.</p>
@@ -107,10 +107,10 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button type="button" [mat-dialog-close]="undefined" [disabled]="saving">
+  <button mat-button type="button" [disabled]="saving" [mat-dialog-close]="undefined">
     Cancel
   </button>
-  <button mat-flat-button color="primary" type="button" [disabled]="!canSubmit" (click)="submit()">
+  <button color="primary" mat-flat-button type="button" [disabled]="!canSubmit" (click)="submit()">
     @if (saving) {
       <mat-spinner class="mr-2 inline-block" diameter="18"></mat-spinner>
       Adding...

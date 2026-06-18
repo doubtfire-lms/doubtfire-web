@@ -1,18 +1,18 @@
 <div class="flex max-h-[85vh] min-h-[75vh] flex-col overflow-hidden">
-  <div mat-dialog-title class="flex w-full shrink-0 items-start py-5">
+  <div class="flex w-full shrink-0 items-start py-5" mat-dialog-title>
     <div class="flex w-full items-start justify-between gap-4">
       <div>
         <div>{{ engagement.engagementType }} Engagement</div>
         <p class="mt-1 text-sm font-normal text-gray-500">
           Added by {{ engagement.user?.firstName }} {{ engagement.user?.lastName }}
           <span class="mx-1">·</span>
-          <span [matTooltip]="engagement.occurredAt | localizedDateTime" matTooltipPosition="above">
+          <span matTooltipPosition="above" [matTooltip]="engagement.occurredAt | localizedDateTime">
             {{ engagement.occurredAt | humanizedDate }}
           </span>
         </p>
       </div>
 
-      <button mat-icon-button mat-dialog-close type="button" aria-label="Close engagement">
+      <button aria-label="Close engagement" mat-dialog-close mat-icon-button type="button">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -58,9 +58,9 @@
                 @if (engagement.evidenceUrl) {
                   <a
                     class="inline-flex items-center gap-2 text-sm text-blue-700 hover:underline"
-                    [href]="engagement.evidenceUrl"
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
+                    [href]="engagement.evidenceUrl"
                   >
                     <mat-icon>link</mat-icon>
                     {{ engagement.evidenceUrl }}
@@ -76,8 +76,8 @@
                     <button class="block" type="button" (click)="openAttachment()">
                       <img
                         class="max-h-64 max-w-full rounded-md border border-gray-200 object-contain"
-                        [src]="evidenceBlobUrl | safe"
                         [alt]="engagement.attachmentFileName || 'Engagement evidence'"
+                        [src]="evidenceBlobUrl | safe"
                         (load)="scrollToBottom()"
                       />
                     </button>
@@ -133,36 +133,36 @@
           }
 
           <mat-card
-            [id]="'engagement-comment-' + comment.id"
             class="mb-2.5 p-3"
             [class.!rounded-t-none]="comment.replyToId"
-            (mouseover)="hoveredCommentId = comment.id"
+            [id]="'engagement-comment-' + comment.id"
             (mouseout)="hoveredCommentId = undefined"
+            (mouseover)="hoveredCommentId = comment.id"
           >
             <div class="action absolute bottom-3 right-3 z-10 flex items-center">
               @if (comment.currentUserCanEdit) {
                 <mat-icon
-                  type="button"
                   aria-label="Edit comment"
                   matTooltip="Edit"
+                  type="button"
                   (click)="editComment(comment)"
                 >
                   edit
                 </mat-icon>
               }
               <mat-icon
-                type="button"
                 aria-label="Reply to comment"
                 matTooltip="Reply"
+                type="button"
                 (click)="replyToComment(comment)"
               >
                 reply
               </mat-icon>
               @if (comment.currentUserCanDelete) {
                 <mat-icon
-                  type="button"
                   aria-label="Delete comment"
                   matTooltip="Delete"
+                  type="button"
                   (click)="deleteComment(comment)"
                 >
                   delete
@@ -172,14 +172,14 @@
 
             <div class="flex justify-between">
               <mat-card-title class="flex items-center">
-                <user-icon size="25" [user]="comment.user" style="margin-right: 8px"></user-icon>
+                <user-icon size="25" style="margin-right: 8px" [user]="comment.user"></user-icon>
                 {{ comment.user?.firstName }} {{ comment.user?.lastName }}
               </mat-card-title>
               <div class="flex items-center">
                 <mat-card-subtitle
-                  [matTooltip]="comment.createdAt | localizedDateTime"
                   matTooltipPosition="above"
                   matTooltipShowDelay="1000"
+                  [matTooltip]="comment.createdAt | localizedDateTime"
                 >
                   {{ comment.createdAt | humanizedDate }}
                 </mat-card-subtitle>
@@ -191,18 +191,18 @@
                 <mat-form-field appearance="outline" class="flex w-full items-center">
                   <mat-label>Update Comment</mat-label>
                   <textarea
+                    class="w-full resize-none overflow-hidden px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
                     matInput
                     maxlength="4095"
                     [(ngModel)]="editingCommentText"
-                    class="w-full resize-none overflow-hidden px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
                     (keydown.control.enter)="updateComment()"
                     (keydown.meta.enter)="updateComment()"
                   ></textarea>
                   <div class="flex justify-end gap-1">
                     <button mat-raised-button type="button" (click)="cancelEdit()">Cancel</button>
                     <button
-                      mat-raised-button
                       color="primary"
+                      mat-raised-button
                       type="button"
                       [disabled]="!editingCommentText.trim()"
                       (click)="updateComment()"
@@ -249,7 +249,7 @@
                 </span>
               </div>
             </div>
-            <button mat-icon-button type="button" aria-label="Cancel reply" (click)="cancelReply()">
+            <button aria-label="Cancel reply" mat-icon-button type="button" (click)="cancelReply()">
               <mat-icon>close</mat-icon>
             </button>
           </div>
@@ -259,17 +259,17 @@
       <mat-form-field appearance="outline" class="flex w-full items-center">
         <mat-label>Comment</mat-label>
         <textarea
+          class="w-full resize-none px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
           matInput
           maxlength="4095"
           [(ngModel)]="commentText"
-          class="w-full resize-none px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
           (keydown.control.enter)="submitComment()"
           (keydown.meta.enter)="submitComment()"
         ></textarea>
         <div class="flex justify-end">
           <button
-            mat-raised-button
             color="primary"
+            mat-raised-button
             type="button"
             [disabled]="!commentText.trim() || submitting"
             (click)="submitComment()"
