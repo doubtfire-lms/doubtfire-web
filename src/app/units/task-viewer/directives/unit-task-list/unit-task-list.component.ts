@@ -1,4 +1,3 @@
-import {Location} from '@angular/common';
 import {Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
@@ -37,7 +36,6 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   protected gradeNames: string[] = Grade.GRADES;
 
   constructor(
-    private location: Location,
     private angularRouter: Router,
     private route: ActivatedRoute,
   ) {}
@@ -152,7 +150,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
       return;
     }
 
-    this.location.replaceState(this.angularRouter.serializeUrl(urlTree));
+    this.angularRouter.navigateByUrl(urlTree, {replaceUrl: true});
   }
 
   private buildSelectionUrlTree(taskDef: TaskDefinition | null) {
