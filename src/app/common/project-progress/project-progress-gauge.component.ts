@@ -1,12 +1,4 @@
-import {TooltipService} from '@swimlane/ngx-charts';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Injector,
-  Input,
-  OnInit,
-  ViewContainerRef,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 
 @Component({
@@ -16,7 +8,7 @@ import {Project} from 'src/app/api/models/project';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class ProjectProgressGaugeComponent implements OnInit {
+export class ProjectProgressGaugeComponent {
   @Input() project: Project;
 
   protected gaugeData = [
@@ -37,19 +29,6 @@ export class ProjectProgressGaugeComponent implements OnInit {
       'value': 19,
     },
   ];
-
-  ngOnInit(): void {
-    this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
-
-    console.log(this.project.taskStats);
-  }
-
-  constructor(private injectorObj: Injector) {
-    this.chartToolTipService = this.injectorObj.get(TooltipService);
-    this.viewContainerRef = this.injectorObj.get(ViewContainerRef);
-  }
-  private chartToolTipService: TooltipService;
-  readonly viewContainerRef: ViewContainerRef;
 
   smallView = [90, 90];
   view = [500, 500];

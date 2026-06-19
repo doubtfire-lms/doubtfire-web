@@ -90,25 +90,43 @@
 
   <div class="relative">
     @if (isLoading) {
-      <mat-progress-spinner
-        class="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
-        mode="indeterminate"
-      >
-      </mat-progress-spinner>
+      <div
+        aria-label="Loading analytics"
+        class="analytics-loading-spinner absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
+        role="status"
+      ></div>
     }
 
     <mwl-calendar-week-view
       [daysInWeek]="daysInWeek"
+      [eventTemplate]="calendarEventTemplate"
       [events]="filteredEvents"
       [hourDuration]="60"
       [hourSegmentHeight]="15"
       [hourSegments]="4"
       [minimumEventHeight]="5"
-      [tooltipTemplate]="eventTooltipTemplate"
       [viewDate]="viewDate"
       [weekStartsOn]="0"
       (beforeViewRender)="beforeViewRender($event)"
       (eventClicked)="eventClicked($event)"
     />
+
+    <ng-template #calendarEventTemplate let-eventClicked="eventClicked" let-weekEvent="weekEvent">
+      <div
+        class="cal-event"
+        role="application"
+        tabindex="0"
+        [attr.title]="sessionEventTitle(weekEvent.event)"
+        [ngStyle]="{
+          color: weekEvent.event.color?.secondaryText,
+          backgroundColor: weekEvent.event.color?.secondary,
+          borderColor: weekEvent.event.color?.primary,
+        }"
+        (click)="eventClicked.emit({sourceEvent: $event})"
+        (keydown.enter)="eventClicked.emit({sourceEvent: $event})"
+      >
+        {{ weekEvent.event.title }}
+      </div>
+    </ng-template>
   </div>
 </mat-card>

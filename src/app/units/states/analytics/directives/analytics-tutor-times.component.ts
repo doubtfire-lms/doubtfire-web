@@ -269,6 +269,17 @@ export class AnalyticsTutorTimesComponent implements OnInit {
     }
   }
 
+  sessionEventTitle(event: SessionEvent): string {
+    return [
+      `${event.tutorName} (${event.duration} minutes)${event.duringTutorial ? ' T' : ''}`,
+      `${event.startHour} - ${event.endHour}`,
+      `Assessments: ${event.assessments || 0}`,
+      `Comments: ${event.commentsAdded || 0}`,
+      `Submissions opened: ${event.submissionsOpened || 0}`,
+      `During Tutorial?: ${event.duringTutorial ? 'yes' : 'no'}`,
+    ].join('\n');
+  }
+
   private stringToHexColor(
     name: string,
     opts?: {hue?: [number, number]; sat?: [number, number]; lit?: [number, number]},
