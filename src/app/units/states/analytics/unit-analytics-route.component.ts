@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {formatDate} from '@angular/common';
+import {ChangeDetectionStrategy, Component, Inject, Input, LOCALE_ID, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, first, of} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -27,6 +28,7 @@ export class UnitAnalyticsComponent implements OnInit {
     private userService: UserService,
     private alertService: AlertService,
     private route: ActivatedRoute,
+    @Inject(LOCALE_ID) private locale: string,
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +71,16 @@ export class UnitAnalyticsComponent implements OnInit {
       this.unit.downloadTaskAssessmentCountsCsv(),
       'Task Assessment Counts CSV',
       `${this.unit.code}-task-assessment-counts.csv`,
+    );
+  }
+
+  public getOverflowTaskClaimsCsv() {
+    const timestamp = formatDate(new Date(), 'd-MMMM-y-HHmm', this.locale).toLowerCase();
+
+    this.downloadCsv(
+      this.unit.downloadOverflowTaskClaimsCsv(),
+      'Overflow Task Claims CSV',
+      `${this.unit.code}-overflow-task-claims-${timestamp}.csv`,
     );
   }
 
