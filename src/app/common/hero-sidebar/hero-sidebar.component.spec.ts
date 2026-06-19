@@ -1,5 +1,7 @@
 import {beforeEach, describe, expect, it} from 'vitest';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {BehaviorSubject} from 'rxjs';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {HeroSidebarComponent} from './hero-sidebar.component';
 
 describe('HeroSidebarComponent', () => {
@@ -9,6 +11,12 @@ describe('HeroSidebarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [HeroSidebarComponent],
+      providers: [
+        {
+          provide: DoubtfireConstants,
+          useValue: {ExternalName: new BehaviorSubject<string>('Doubtfire')},
+        },
+      ],
     }).compileComponents();
   });
 
