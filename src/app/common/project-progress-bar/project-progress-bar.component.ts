@@ -1,9 +1,10 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'f-project-progress-bar',
   templateUrl: './project-progress-bar.component.html',
   styleUrls: ['./project-progress-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectProgressBarComponent implements OnChanges {

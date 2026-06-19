@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {Observable, ReplaySubject, take} from 'rxjs';
 import {UserService} from 'src/app/api/models/doubtfire-model';
@@ -10,6 +10,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   selector: 'f-accept-eula',
   templateUrl: './accept-eula.component.html',
   styleUrls: ['./accept-eula.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AcceptEulaComponent {

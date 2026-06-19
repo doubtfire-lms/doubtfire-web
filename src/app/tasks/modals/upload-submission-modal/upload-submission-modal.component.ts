@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MemberContribution} from 'src/app/api/models/groups/group';
 import {Task} from 'src/app/api/models/task';
@@ -57,6 +57,7 @@ export type UploadSubmissionModalResult =
 @Component({
   selector: 'f-upload-submission-modal',
   templateUrl: './upload-submission-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UploadSubmissionModalComponent implements OnInit {

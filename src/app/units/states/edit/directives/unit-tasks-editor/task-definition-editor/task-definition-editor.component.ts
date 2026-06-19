@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostListener,
@@ -41,6 +42,7 @@ interface TaskDefinitionSection {
   selector: 'f-task-definition-editor',
   templateUrl: 'task-definition-editor.component.html',
   styleUrls: ['task-definition-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {

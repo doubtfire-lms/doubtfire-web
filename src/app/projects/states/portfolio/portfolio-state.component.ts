@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
@@ -14,6 +14,7 @@ interface PortfolioStepTab {
   selector: 'f-portfolio-state',
   templateUrl: './portfolio-state.component.html',
   styleUrls: ['./portfolio-state.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PortfolioStateComponent implements OnInit, OnDestroy {

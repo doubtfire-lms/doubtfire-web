@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -28,6 +29,7 @@ import {D2lTransferModal} from '../../d2l-transfer-modal/d2l-transfer.component'
   selector: 'f-portfolios-list',
   templateUrl: './portfolios-list.component.html',
   styleUrl: './portfolios-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PortfoliosListComponent implements OnChanges, AfterViewInit {

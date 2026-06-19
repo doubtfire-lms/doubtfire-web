@@ -1,6 +1,7 @@
 import JSZip from 'jszip';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -39,6 +40,7 @@ interface ArchiveFileTreeNode {
   selector: 'f-archive-viewer',
   templateUrl: './archive-viewer.component.html',
   styleUrls: ['./archive-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ArchiveViewerComponent implements OnChanges, OnDestroy {

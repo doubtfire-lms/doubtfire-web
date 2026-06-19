@@ -1,5 +1,13 @@
 import {NestedTreeControl} from '@angular/cdk/tree';
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {Subscription} from 'rxjs';
@@ -47,6 +55,7 @@ interface CommunicationTreeNode {
   selector: 'f-unit-communications-editor',
   standalone: false,
   templateUrl: './unit-communications-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './unit-communications-editor.component.scss',
 })
 export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnDestroy {

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {OverseerImage, UnitService} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -16,6 +16,7 @@ import {D2lUnitDetailsModal} from './d2l-details-form/d2l-unit-details-form.comp
   selector: 'f-unit-details-editor',
   templateUrl: 'unit-details-editor.component.html',
   styleUrls: ['unit-details-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitDetailsEditorComponent implements OnInit {

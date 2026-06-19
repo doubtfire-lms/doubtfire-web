@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
@@ -11,6 +11,7 @@ export interface SubmissionTypeModalData {
   selector: 'f-submission-type-modal',
   templateUrl: './submission-type-modal.component.html',
   styleUrls: ['./submission-type-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SubmissionTypeModalComponent {

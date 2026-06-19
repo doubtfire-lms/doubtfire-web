@@ -1,5 +1,13 @@
 import {HttpClient} from '@angular/common/http';
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -22,6 +30,7 @@ import {UnitStudentEnrolmentModalService} from 'src/app/units/modals/unit-studen
   selector: 'unit-students-editor',
   templateUrl: 'unit-students-editor.component.html',
   styleUrls: ['unit-students-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDestroy {

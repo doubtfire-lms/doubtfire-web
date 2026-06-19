@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {GradeService, Task} from 'src/app/api/models/doubtfire-model';
 
@@ -6,6 +6,7 @@ import {GradeService, Task} from 'src/app/api/models/doubtfire-model';
   selector: 'grade-task-modal',
   templateUrl: './grade-task-modal.component.html',
   styleUrls: ['./grade-task-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GradeTaskModalComponent implements OnInit {

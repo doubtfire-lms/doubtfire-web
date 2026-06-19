@@ -36,7 +36,10 @@
           [disabled]="selectedTaskDefinition"
           [(ngModel)]="selectedTaskDefinition"
         >
-          @for (td of unit?.taskDefinitionCache.values | async; track td) {
+          @for (
+            td of $safeNavigationMigration(unit?.taskDefinitionCache.values) | async;
+            track td
+          ) {
             <mat-option [value]="td">{{ td.abbreviation }} - {{ td.name }}</mat-option>
           }
         </mat-select>
@@ -67,7 +70,7 @@
             }
           </div>
           <div class="text-center">
-            Target Grade: {{ getTargetTradeString(project?.targetGrade) }}
+            Target Grade: {{ getTargetTradeString($safeNavigationMigration(project?.targetGrade)) }}
           </div>
         </div>
       } @else {
@@ -110,7 +113,12 @@
                     similarities: task.similaritiesDetected,
                   }"
                 ></span>
-                <user-icon class="self-center" [size]="30" [user]="project?.student"> </user-icon>
+                <user-icon
+                  class="self-center"
+                  [size]="30"
+                  [user]="$safeNavigationMigration(project?.student)"
+                >
+                </user-icon>
                 <div class="mt-0 flex-1 whitespace-normal break-words" [hidden]="isNarrow">
                   <h4 class="mb-[2px] mt-[8px] text-[15px]">{{ task.definition.name }}</h4>
                   <span class="mb-0 inline text-[12px]">
@@ -225,7 +233,7 @@
 
       <mat-tab
         label="Staff Notes{{ project?.staffNoteCount ? ' (' + project.staffNoteCount + ')' : '' }}"
-        [matBadge]="project?.staffNoteCount"
+        [matBadge]="$safeNavigationMigration(project?.staffNoteCount)"
       ></mat-tab>
       <mat-tab label="Discussion Prompts"></mat-tab>
     </mat-tab-group>

@@ -1,4 +1,11 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute} from '@angular/router';
 import {UnitRole} from 'src/app/api/models/doubtfire-model';
@@ -13,6 +20,7 @@ import {DashboardViews} from '../../selected-task.service';
   selector: 'f-task-dashboard',
   templateUrl: './task-dashboard.component.html',
   styleUrls: ['./task-dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDashboardComponent implements OnInit, OnChanges {

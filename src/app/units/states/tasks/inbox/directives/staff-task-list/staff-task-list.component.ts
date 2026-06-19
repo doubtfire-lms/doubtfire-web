@@ -1,6 +1,7 @@
 /* eslint-disable no-shadow, @typescript-eslint/no-shadow */
 import {HotkeysService} from '@ngneat/hotkeys';
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   OnChanges,
@@ -42,6 +43,7 @@ import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-di
   selector: 'df-staff-task-list',
   templateUrl: './staff-task-list.component.html',
   styleUrls: ['./staff-task-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {

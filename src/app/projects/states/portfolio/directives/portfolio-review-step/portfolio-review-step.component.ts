@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {Unit} from 'src/app/api/models/unit';
@@ -13,6 +13,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   selector: 'f-portfolio-review-step',
   templateUrl: 'portfolio-review-step.component.html',
   styleUrls: ['portfolio-review-step.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PortfolioReviewStepComponent implements OnInit {

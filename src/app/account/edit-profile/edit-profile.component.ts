@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 
@@ -6,6 +6,7 @@ import {AuthenticationService} from 'src/app/api/services/authentication.service
   selector: 'f-edit-profile',
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EditProfileComponent implements OnInit {

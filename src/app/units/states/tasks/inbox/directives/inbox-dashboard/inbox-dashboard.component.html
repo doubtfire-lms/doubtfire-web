@@ -92,7 +92,9 @@
         }
         @case (InboxDashboardTab.staffNotes) {
           <div class="h-full">
-            <f-staff-notes-view [project]="task?.project"></f-staff-notes-view>
+            <f-staff-notes-view
+              [project]="$safeNavigationMigration(task?.project)"
+            ></f-staff-notes-view>
           </div>
         }
         @case (InboxDashboardTab.tutorNotes) {

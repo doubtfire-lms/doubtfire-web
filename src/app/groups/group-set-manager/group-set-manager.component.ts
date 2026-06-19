@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable, map, startWith} from 'rxjs';
 import {Group, GroupSet, Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
@@ -9,6 +9,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-group-set-manager',
   templateUrl: './group-set-manager.component.html',
   styleUrls: ['./group-set-manager.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GroupSetManagerComponent implements OnInit {

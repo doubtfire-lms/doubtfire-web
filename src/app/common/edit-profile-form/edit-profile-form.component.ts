@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit, Optional} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, OnInit, Optional} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
@@ -11,6 +11,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   selector: 'f-edit-profile-form',
   templateUrl: './edit-profile-form.component.html',
   styleUrls: ['./edit-profile-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EditProfileFormComponent implements OnInit {

@@ -1,4 +1,11 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {Task, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {TutorNote} from 'src/app/api/models/tutor-note';
 import {TutorNoteService} from 'src/app/api/services/tutor-note.service';
@@ -9,6 +16,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-tutor-notes',
   templateUrl: './tutor-notes.component.html',
   styleUrl: './tutor-notes.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TutorNotesComponent implements OnInit {

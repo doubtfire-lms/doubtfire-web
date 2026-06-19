@@ -1,4 +1,11 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {Observable, Subscription} from 'rxjs';
@@ -15,6 +22,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-task-definition-prerequisites',
   templateUrl: 'task-definition-prerequisites.component.html',
   styleUrls: ['task-definition-prerequisites.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -10,6 +10,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'campus-list',
   templateUrl: 'campus-list.component.html',
   styleUrls: ['campus-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CampusListComponent extends EntityFormComponent<Campus> implements AfterViewInit {

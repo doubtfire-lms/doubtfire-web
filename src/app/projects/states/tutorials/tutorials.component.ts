@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute} from '@angular/router';
@@ -9,6 +9,7 @@ import {Project, Tutorial, Unit} from 'src/app/api/models/doubtfire-model';
   selector: 'f-tutorials',
   templateUrl: './tutorials.component.html',
   styleUrls: ['./tutorials.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TutorialsComponent implements OnInit, OnDestroy {

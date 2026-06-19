@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
@@ -9,6 +9,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-task-definition-scorm',
   templateUrl: 'task-definition-scorm.component.html',
   styleUrls: ['task-definition-scorm.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDefinitionScormComponent {

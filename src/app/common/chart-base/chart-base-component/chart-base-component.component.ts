@@ -1,5 +1,5 @@
 import {TooltipService} from '@swimlane/ngx-charts';
-import {Component, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ViewContainerRef} from '@angular/core';
 import {AppInjector} from 'src/app/app-injector';
 
 /**
@@ -10,6 +10,7 @@ import {AppInjector} from 'src/app/app-injector';
  */
 @Component({
   templateUrl: './chart-base-component.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ChartBaseComponent {

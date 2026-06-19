@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -10,6 +10,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-tii-action-log',
   templateUrl: './tii-action-log.component.html',
   styleUrls: ['./tii-action-log.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TiiActionLogComponent implements AfterViewInit {

@@ -1,5 +1,12 @@
 import moment from 'moment';
-import {AfterViewInit, Component, Inject, Input, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Input,
+  ViewChild,
+} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Subscription, timer} from 'rxjs';
 import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
@@ -13,6 +20,7 @@ import {IntelligentDiscussionRecorderComponent} from './intelligent-discussion-r
   templateUrl: './intelligent-discussion-player.component.html',
   styleUrls: ['./intelligent-discussion-player.component.scss'],
   providers: [IntelligentDiscussionPlayerService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
@@ -77,6 +85,7 @@ export class IntelligentDiscussionPlayerComponent implements AfterViewInit {
   templateUrl: 'intelligent-discussion-dialog.html',
   styleUrls: ['./intelligent-discussion-player.component.scss'],
   providers: [IntelligentDiscussionPlayerService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class IntelligentDiscussionDialog {

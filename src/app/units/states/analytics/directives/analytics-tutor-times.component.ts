@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -32,6 +32,7 @@ interface SessionEvent {
   templateUrl: 'analytics-tutor-times.component.html',
   styleUrls: ['analytics-tutor-times.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AnalyticsTutorTimesComponent implements OnInit {

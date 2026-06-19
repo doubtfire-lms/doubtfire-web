@@ -1,6 +1,6 @@
 import * as monaco from 'monaco-editor';
 import {HttpResponse} from '@angular/common/http';
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SubmissionArchive} from 'src/app/api/models/submission-history';
 import {
@@ -25,6 +25,7 @@ export interface SubmissionFilesModalData {
   selector: 'f-submission-files-modal',
   templateUrl: './submission-files-modal.component.html',
   styleUrls: ['./submission-files-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SubmissionFilesModalComponent implements OnInit, OnDestroy {

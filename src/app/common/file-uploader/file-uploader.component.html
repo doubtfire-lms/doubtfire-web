@@ -128,7 +128,10 @@
             <i class="logo h-[75px] w-[75px]"></i>
           </div>
 
-          <mat-progress-bar mode="determinate" [value]="uploadingInfo?.progress">
+          <mat-progress-bar
+            mode="determinate"
+            [value]="$safeNavigationMigration(uploadingInfo?.progress)"
+          >
           </mat-progress-bar>
         </div>
       }

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
 
 /**
@@ -9,6 +9,7 @@ import {MatSelectChange} from '@angular/material/select';
 @Component({
   selector: 'object-select',
   templateUrl: 'object-select.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ObjectSelectComponent<T> {

@@ -1,4 +1,11 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -33,6 +40,7 @@ interface IUnitOrProject {
   selector: 'f-units',
   templateUrl: './units.component.html',
   styleUrls: ['./units.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FUnitsComponent implements OnInit, AfterViewInit {

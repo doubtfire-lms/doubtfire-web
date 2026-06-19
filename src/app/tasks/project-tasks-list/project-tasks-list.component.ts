@@ -1,4 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   GradeService,
   Project,
@@ -12,6 +19,7 @@ import {
   selector: 'f-project-tasks-list',
   templateUrl: './project-tasks-list.component.html',
   styleUrls: ['./project-tasks-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectTasksListComponent implements OnInit {

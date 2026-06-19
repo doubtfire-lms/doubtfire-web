@@ -1,4 +1,12 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {Subscription, interval} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
@@ -8,6 +16,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-portfolio-included-tasks',
   templateUrl: 'portfolio-included-tasks.component.html',
   styleUrls: ['portfolio-included-tasks.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PortfolioIncludedTasksComponent implements OnInit, OnDestroy {

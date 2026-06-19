@@ -1,11 +1,19 @@
 import {TooltipService} from '@swimlane/ngx-charts';
-import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Injector,
+  Input,
+  OnInit,
+  ViewContainerRef,
+} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 
 @Component({
   selector: 'f-project-progress-gauge',
   templateUrl: './project-progress-gauge.component.html',
   styleUrl: './project-progress-gauge.component.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectProgressGaugeComponent implements OnInit {

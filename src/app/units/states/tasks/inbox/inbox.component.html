@@ -73,7 +73,7 @@
           <ng-container *ngTemplateOutlet="BlankPanelSkeleton"></ng-container>
         } @else {
           <f-inbox-dashboard
-            [task]="taskData?.selectedTask"
+            [task]="$safeNavigationMigration(taskData?.selectedTask)"
             (visiblePdfUrlChange)="visiblePdfUrl = $event"
           ></f-inbox-dashboard>
         }
@@ -156,7 +156,7 @@
           <ng-container *ngTemplateOutlet="BlankPanelSkeleton"></ng-container>
         } @else {
           <f-inbox-dashboard
-            [task]="taskData?.selectedTask"
+            [task]="$safeNavigationMigration(taskData?.selectedTask)"
             (visiblePdfUrlChange)="visiblePdfUrl = $event"
           ></f-inbox-dashboard>
         }

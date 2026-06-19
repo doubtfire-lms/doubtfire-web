@@ -1,4 +1,11 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {Observable, Subscription} from 'rxjs';
@@ -17,6 +24,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-task-definition-discussion-prompts',
   templateUrl: 'task-definition-discussion-prompts.component.html',
   styleUrls: ['task-definition-discussion-prompts.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDefinitionDiscussionPromptsComponent

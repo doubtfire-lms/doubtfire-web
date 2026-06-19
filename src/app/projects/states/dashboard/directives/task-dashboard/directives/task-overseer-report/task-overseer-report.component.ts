@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {forkJoin} from 'rxjs';
@@ -15,6 +15,7 @@ import {SubmissionFilesModalComponent} from './submission-files-modal/submission
   selector: 'f-task-overseer-report',
   templateUrl: './task-overseer-report.component.html',
   styleUrl: './task-overseer-report.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskOverseerReportComponent implements OnInit {

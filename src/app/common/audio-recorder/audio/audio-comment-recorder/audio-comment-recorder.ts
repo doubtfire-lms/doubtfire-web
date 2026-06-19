@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
@@ -8,6 +8,7 @@ import {BaseAudioRecorderComponent} from '../base-audio-recorder';
   selector: 'audio-comment-recorder',
   templateUrl: './audio-comment-recorder.html',
   providers: [MediaRecorderService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent implements OnInit {

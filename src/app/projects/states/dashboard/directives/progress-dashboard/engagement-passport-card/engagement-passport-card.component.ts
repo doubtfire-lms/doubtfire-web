@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {
   Engagement,
@@ -36,6 +36,7 @@ interface EngagementLegendItem extends EngagementPresentation {
   selector: 'f-engagement-passport-card',
   templateUrl: './engagement-passport-card.component.html',
   styleUrl: './engagement-passport-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EngagementPassportCardComponent implements OnChanges {

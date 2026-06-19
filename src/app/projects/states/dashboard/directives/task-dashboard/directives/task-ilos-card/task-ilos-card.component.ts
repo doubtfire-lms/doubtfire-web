@@ -1,4 +1,11 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {LearningOutcome} from 'src/app/api/models/learning-outcome';
 import {Project} from 'src/app/api/models/project';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -8,6 +15,7 @@ import {Unit} from 'src/app/api/models/unit';
   selector: 'f-task-ilos-card',
   templateUrl: './task-ilos-card.component.html',
   styleUrls: ['./task-ilos-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskIlosCardComponent implements OnInit, OnChanges {
