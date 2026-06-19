@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FeedbackModerationActionType} from 'src/app/api/models/task';
 import {Task} from 'src/app/api/models/task';
@@ -10,6 +10,7 @@ import {ConfirmModerationModalData} from './confirm-moderation-modal.service';
   selector: 'f-confirm-moderation-modal',
   templateUrl: './confirm-moderation-modal.component.html',
   styleUrl: './confirm-moderation-modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ConfirmModerationModalComponent implements OnInit {

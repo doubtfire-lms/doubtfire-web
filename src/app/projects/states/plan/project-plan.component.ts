@@ -1,4 +1,11 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
@@ -12,6 +19,7 @@ import {TaskPlannerComponent} from './task-planner/task-planner.component';
   selector: 'f-project-plan',
   templateUrl: 'project-plan.component.html',
   styleUrls: ['project-plan.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectPlanComponent implements OnInit, OnDestroy {

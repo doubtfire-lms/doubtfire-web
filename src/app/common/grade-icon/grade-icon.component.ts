@@ -1,11 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {GradeService} from '../services/grade.service';
 
 @Component({
   selector: 'f-grade-icon',
   templateUrl: './grade-icon.component.html',
   styleUrls: ['./grade-icon.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GradeIconComponent implements OnInit, OnChanges {

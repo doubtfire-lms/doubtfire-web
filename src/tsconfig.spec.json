@@ -5,5 +5,13 @@
     "typeRoots": ["../node_modules/@types", "../node_modules"],
     "types": ["vitest/globals", "node"]
   },
-  "include": ["**/*.spec.ts", "**/*.d.ts", "vitest-setup.ts"]
+  "include": ["**/*.spec.ts", "**/*.d.ts", "vitest-setup.ts"],
+  "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
+  }
 }

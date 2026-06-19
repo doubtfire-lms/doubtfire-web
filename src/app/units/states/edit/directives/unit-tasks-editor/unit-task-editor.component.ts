@@ -1,5 +1,5 @@
 import {addWeeks} from 'date-fns';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {Grade} from 'src/app/api/models/grade';
@@ -21,6 +21,7 @@ type GradeCol = 'p' | 'c' | 'd' | 'hd';
   selector: 'f-unit-task-editor',
   templateUrl: 'unit-task-editor.component.html',
   styleUrls: ['unit-task-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitTaskEditorComponent implements OnInit, OnDestroy {

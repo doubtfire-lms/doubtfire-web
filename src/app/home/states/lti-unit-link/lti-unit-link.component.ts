@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CreateNewUnitModal} from 'src/app/admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {Unit} from 'src/app/api/models/unit';
@@ -13,6 +13,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-lti-unit-link',
   templateUrl: 'lti-unit-link.component.html',
   styleUrls: ['lti-unit-link.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class LtiUnitLinkComponent implements AfterViewInit {

@@ -1,4 +1,11 @@
-import {Component, Inject, Injectable, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Injectable,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -50,6 +57,7 @@ export class TeachingPeriodUnitImportService {
   selector: 'f-teaching-period-unit-import',
   templateUrl: 'teaching-period-unit-import.dialog.html',
   styleUrls: ['teaching-period-unit-import.dialog.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TeachingPeriodUnitImportDialogComponent implements OnInit {

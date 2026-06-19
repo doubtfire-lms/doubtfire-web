@@ -6,7 +6,7 @@
       [isDropdown]="true"
       [matMenuTriggerFor]="menu"
       [shiftBetweenBadges]="false"
-      [unit_code]="unit?.code"
+      [unit_code]="$safeNavigationMigration(unit?.code)"
       [width]="80"
     >
       <mat-icon>{{ menuState.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }} </mat-icon>

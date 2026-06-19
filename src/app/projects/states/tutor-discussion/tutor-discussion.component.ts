@@ -2,6 +2,7 @@ import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
 import {DOCUMENT} from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   Inject,
   Input,
@@ -43,6 +44,7 @@ enum TutorDiscussionTabView {
   templateUrl: './tutor-discussion.component.html',
   styleUrl: './tutor-discussion.component.scss',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {

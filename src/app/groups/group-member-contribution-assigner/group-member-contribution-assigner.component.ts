@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -18,6 +19,7 @@ import {Task} from 'src/app/api/models/task';
   selector: 'f-group-member-contribution-assigner',
   templateUrl: './group-member-contribution-assigner.component.html',
   styleUrls: ['./group-member-contribution-assigner.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GroupMemberContributionAssignerComponent implements OnInit, OnChanges {

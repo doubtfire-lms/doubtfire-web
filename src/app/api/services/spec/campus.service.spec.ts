@@ -1,5 +1,10 @@
 import {afterEach, beforeEach, describe, expect, it} from 'vitest';
-import {HttpRequest, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {
+  HttpRequest,
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withXhr,
+} from '@angular/common/http';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {TestBed} from '@angular/core/testing';
 import {Campus} from 'src/app/api/models/doubtfire-model';
@@ -14,7 +19,7 @@ describe('CampusService', () => {
       imports: [],
       providers: [
         CampusService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
     });

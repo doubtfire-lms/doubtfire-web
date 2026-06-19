@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {TaskComment} from 'src/app/api/models/doubtfire-model';
 
@@ -11,6 +11,7 @@ export interface CommentsModalData {
   selector: 'comments-modal',
   templateUrl: './comments-modal.component.html',
   styleUrls: ['./comments-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CommentsModalComponent implements OnInit {

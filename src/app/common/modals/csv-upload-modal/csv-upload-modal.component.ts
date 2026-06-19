@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 export interface CsvUploadFileSpec {
@@ -20,6 +20,7 @@ export interface CsvUploadModalData {
   selector: 'f-csv-upload-modal',
   templateUrl: './csv-upload-modal.component.html',
   styleUrls: ['./csv-upload-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CsvUploadModalComponent {

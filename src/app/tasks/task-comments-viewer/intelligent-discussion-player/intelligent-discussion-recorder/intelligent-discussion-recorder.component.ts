@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Inject, Input} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, Inject, Input} from '@angular/core';
 import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
 import {
   BaseAudioRecorderComponent,
@@ -22,6 +22,7 @@ interface DiscussionReplyService {
   templateUrl: './intelligent-discussion-recorder.component.html',
   styleUrls: ['./intelligent-discussion-recorder.component.css'],
   providers: [MediaRecorderService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class IntelligentDiscussionRecorderComponent

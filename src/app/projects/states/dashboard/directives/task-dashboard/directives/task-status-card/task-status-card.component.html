@@ -3,12 +3,15 @@
     <mat-form-field appearance="outline" class="px-2.5 pt-2.5">
       <mat-select
         [disabled]="task?.blockedByPrerequisiteTasks() && !isTutor"
-        [value]="task?.status"
+        [value]="$safeNavigationMigration(task?.status)"
         (selectionChange)="triggerTransition($event.value)"
       >
         <mat-select-trigger>
           <span style="display: inline-flex">
-            <status-icon style="margin-right: 10px" [status]="task?.status"></status-icon>
+            <status-icon
+              style="margin-right: 10px"
+              [status]="$safeNavigationMigration(task?.status)"
+            ></status-icon>
             <h2 class="mb-0">{{ task?.statusLabel() }}</h2>
           </span>
         </mat-select-trigger>
@@ -26,7 +29,10 @@
   @if (triggers?.length < 0) {
     <mat-card-title>
       <span style="display: inline-flex">
-        <status-icon style="margin-right: 10px" [status]="task?.status"></status-icon>
+        <status-icon
+          style="margin-right: 10px"
+          [status]="$safeNavigationMigration(task?.status)"
+        ></status-icon>
         <h5>{{ task?.statusLabel() }}</h5>
       </span>
     </mat-card-title>

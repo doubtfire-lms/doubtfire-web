@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Subject} from 'rxjs';
@@ -18,6 +18,7 @@ export interface SidekiqProgressModalData {
   selector: 'f-sidekiq-progress-modal',
   templateUrl: './sidekiq-progress-modal.component.html',
   styleUrl: './sidekiq-progress-modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SidekiqProgressModalComponent implements OnInit, OnDestroy {

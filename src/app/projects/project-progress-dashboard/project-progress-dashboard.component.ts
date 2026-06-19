@@ -1,4 +1,4 @@
-import {Component, Input, type OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, type OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {ProjectService} from 'src/app/api/services/project.service';
@@ -9,6 +9,7 @@ import {GradeService} from 'src/app/common/services/grade.service';
   selector: 'f-project-progress-dashboard',
   templateUrl: './project-progress-dashboard.component.html',
   styleUrl: './project-progress-dashboard.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectProgressDashboardComponent implements OnInit {

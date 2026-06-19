@@ -1,4 +1,4 @@
-import {Component, Inject, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input} from '@angular/core';
 import {Task} from 'src/app/api/models/doubtfire-model';
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -37,6 +37,7 @@ export interface TaskAssessmentComment {
   selector: 'app-task-assessment-comment',
   templateUrl: './task-assessment-comment.component.html',
   styleUrls: ['./task-assessment-comment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskAssessmentCommentComponent {

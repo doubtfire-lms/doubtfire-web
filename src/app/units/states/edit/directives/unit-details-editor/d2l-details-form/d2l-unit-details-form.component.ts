@@ -1,7 +1,7 @@
 //
 // Modal to show Doubtfire version info
 //
-import {Component, Inject, Injectable, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Injectable, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {D2lAssessmentMapping} from 'src/app/api/models/d2l/d2l_assessment_mapping';
@@ -13,6 +13,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-d2l-unit-details-form',
   templateUrl: 'd2l-unit-details-form.component.html',
   styleUrl: 'd2l-unit-details-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class D2lUnitDetailsFormComponent implements OnInit {

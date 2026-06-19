@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   Input,
   OnChanges,
@@ -23,6 +24,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-group-selector',
   templateUrl: './group-selector.component.html',
   styleUrls: ['./group-selector.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GroupSelectorComponent

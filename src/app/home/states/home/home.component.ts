@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
@@ -10,6 +10,7 @@ import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global
   selector: 'home',
   templateUrl: 'home.component.html',
   styleUrls: ['home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class HomeComponent implements OnInit, OnDestroy {

@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Engagement, EngagementService, Project} from 'src/app/api/models/doubtfire-model';
@@ -19,6 +19,7 @@ interface AddEngagementForm {
   selector: 'f-add-engagement-dialog',
   templateUrl: './add-engagement-dialog.component.html',
   styleUrl: './add-engagement-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AddEngagementDialogComponent {

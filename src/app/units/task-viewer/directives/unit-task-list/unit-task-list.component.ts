@@ -1,4 +1,12 @@
-import {Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
@@ -9,6 +17,7 @@ import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-nam
   selector: 'f-unit-task-list',
   templateUrl: './unit-task-list.component.html',
   styleUrls: ['./unit-task-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FUnitTaskListComponent implements OnChanges, OnInit {
