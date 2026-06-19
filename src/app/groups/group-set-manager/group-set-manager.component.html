@@ -24,7 +24,7 @@
             }
           } @else {
             @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
-              <mat-form-field appearance="outline" class="ml-1 mt-[22px]">
+              <mat-form-field appearance="outline" class="mt-[22px] ml-1">
                 <input matInput required [(ngModel)]="selectedGroup.name" />
               </mat-form-field>
               <button class="p-1" mat-icon-button (click)="updateGroup()">

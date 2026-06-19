@@ -86,10 +86,10 @@
           } @else if (canShowDiffEditor) {
             <div class="flex size-full min-h-0 flex-col">
               <div class="grid w-full grid-cols-1 gap-2.5 px-2 py-1 text-slate-500 lg:grid-cols-2">
-                <div class="min-w-0 overflow-hidden truncate whitespace-nowrap">
+                <div class="min-w-0 truncate overflow-hidden whitespace-nowrap">
                   {{ primarySelectedFile?.path ?? primarySelectedFile?.name }}
                 </div>
-                <div class="min-w-0 overflow-hidden truncate whitespace-nowrap">
+                <div class="min-w-0 truncate overflow-hidden whitespace-nowrap">
                   {{ comparedSelectedFile?.path ?? comparedSelectedFile?.name }}
                 </div>
               </div>
@@ -168,7 +168,7 @@
       class="flex shrink-0 items-center gap-1 px-2 py-1 text-slate-500"
       [title]="file?.path ?? ''"
     >
-      <span class="min-w-0 flex-1 overflow-hidden truncate whitespace-nowrap">
+      <span class="min-w-0 flex-1 truncate overflow-hidden whitespace-nowrap">
         {{ file?.path ?? file?.name }}
       </span>
       @if (selectedFilesMatch !== null) {

@@ -9,11 +9,11 @@
       @for (note of filteredNotes; track note) {
         @if (note.replyToId) {
           <div
-            class="flex select-none items-center justify-between rounded-t-md border border-gray-300 p-1 text-sm"
+            class="flex items-center justify-between rounded-t-md border border-gray-300 p-1 text-sm select-none"
           >
             <div
               class="flex items-center"
-              [ngClass]="note.replyTo && 'hover:text-blue-500 hover:underline cursor-pointer'"
+              [ngClass]="note.replyTo && 'cursor-pointer hover:text-blue-500 hover:underline'"
               (click)="scrollToNote(note.replyTo)"
             >
               <mat-icon class="mr-2">reply</mat-icon>
@@ -25,7 +25,7 @@
                   </span>
                   <span class="text-xs text-gray-600">{{ note.replyTo.note }}</span>
                 } @else {
-                  <span class="text-xs italic text-gray-400">Replying to: Deleted note</span>
+                  <span class="text-xs text-gray-400 italic">Replying to: Deleted note</span>
                 }
               </div>
             </div>
@@ -37,7 +37,7 @@
           (mouseout)="hoveredNoteId = null"
           (mouseover)="hoveredNoteId = note.id"
         >
-          <div class="absolute bottom-3 right-3 flex items-center gap-3">
+          <div class="absolute right-3 bottom-3 flex items-center gap-3">
             <div class="flex items-center" [hidden]="hoveredNoteId !== note.id">
               @if (note.authorIsMe) {
                 <mat-icon type="button" (click)="editNote(note)">edit</mat-icon>
@@ -52,7 +52,7 @@
                 </button>
               }
             } @else {
-              <div class="px-3 italic text-gray-400">Read by tutor</div>
+              <div class="px-3 text-gray-400 italic">Read by tutor</div>
             }
           </div>
 
@@ -143,10 +143,10 @@
 
     @if (replyingToNote) {
       <div
-        class="flex select-none items-center justify-between rounded-t-md border border-b-0 border-gray-300 p-1 text-sm"
+        class="flex items-center justify-between rounded-t-md border border-b-0 border-gray-300 p-1 text-sm select-none"
       >
         <div class="flex items-center">
-          <mat-icon class="mr-2 mt-0.5">reply</mat-icon>
+          <mat-icon class="mt-0.5 mr-2">reply</mat-icon>
           <div class="flex flex-col">
             <span class="font-medium">
               Replying to {{ replyingToNote.user.firstName }} {{ replyingToNote.user.lastName }} ({{
