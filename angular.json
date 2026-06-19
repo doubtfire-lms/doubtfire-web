@@ -93,6 +93,13 @@
               "extractLicenses": false,
               "sourceMap": true
             },
+            "testing": {
+              "aot": false,
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "polyfills": ["zone.js"]
+            },
             "devcontainer": {
               "optimization": false,
               "extractLicenses": false,
@@ -137,18 +144,12 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "buildTarget": "doubtfire:build:testing",
             "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": [],
-            "stylePreprocessorOptions": {
-              "includePaths": ["src"]
-            },
-            "scripts": [],
-            "assets": ["src/favicon.ico", "src/assets", "src/manifest.webmanifest"]
+            "runner": "vitest",
+            "setupFiles": ["src/vitest-setup.ts"]
           }
         },
         "lint": {

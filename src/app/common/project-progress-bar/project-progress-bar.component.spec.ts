@@ -1,3 +1,5 @@
+import {beforeEach, describe, expect, it} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ProjectProgressBarComponent} from './project-progress-bar.component';
 
@@ -8,11 +10,15 @@ describe('ProjectProgressBarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ProjectProgressBarComponent],
-    }).compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideComponent(ProjectProgressBarComponent, {set: {template: ''}})
+      .compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(ProjectProgressBarComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

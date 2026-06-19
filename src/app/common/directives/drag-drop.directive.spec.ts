@@ -1,3 +1,4 @@
+import {describe, expect, it} from 'vitest';
 import {DragDropDirective} from './drag-drop.directive';
 
 describe('DragDropDirective', () => {
