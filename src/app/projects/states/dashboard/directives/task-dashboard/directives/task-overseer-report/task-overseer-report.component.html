@@ -182,14 +182,14 @@
                   }
                 } @else if (result.stdout) {
                   <pre
-                    class="scrollbar-gutter-stable max-h-44 max-w-full overflow-auto whitespace-pre-wrap break-words rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed text-gray-800 shadow-inner"
+                    class="max-h-44 max-w-full scrollbar-gutter-stable overflow-auto rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed break-words whitespace-pre-wrap text-gray-800 shadow-inner"
                   ><code>{{result.stdout}}</code></pre>
                 } @else if (result.pass) {
-                  <div class="w-full text-center uppercase tracking-wide text-gray-400">
+                  <div class="w-full text-center tracking-wide text-gray-400 uppercase">
                     SUCCESS
                   </div>
                   <div
-                    class="text-normal w-full p-1 text-center uppercase tracking-wide text-gray-200"
+                    class="text-normal w-full p-1 text-center tracking-wide text-gray-200 uppercase"
                   >
                     (No Output)
                   </div>

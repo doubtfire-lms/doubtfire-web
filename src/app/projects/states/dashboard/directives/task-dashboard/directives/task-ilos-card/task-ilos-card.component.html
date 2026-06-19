@@ -11,7 +11,7 @@
       <tbody>
         @for (ilo of learningOutcomes; track ilo) {
           <tr class="border-b border-gray-200 odd:bg-gray-100 even:bg-white">
-            <td class="px-3.5 py-2.5 uppercase text-black">{{ ilo.abbreviation }}</td>
+            <td class="px-3.5 py-2.5 text-black uppercase">{{ ilo.abbreviation }}</td>
             <td class="px-3.5 py-2.5 text-gray-500">{{ ilo.fullOutcomeDescription }}</td>
             <td class="flex justify-end px-3.5 py-2.5 text-gray-500">
               @for (outcome of getLinkedOutcomes(ilo); track outcome.abbreviation) {

@@ -5,7 +5,7 @@
         <h3>{{ title }}</h3>
       </div>
       <div>
-        <mat-form-field appearance="outline" class="w-full min-w-[160px] max-w-[720px]">
+        <mat-form-field appearance="outline" class="w-full max-w-[720px] min-w-[160px]">
           <mat-label>Search</mat-label>
           <input matInput (keyup)="applyFilter($event)" />
           <mat-icon matPrefix> search </mat-icon>

@@ -27,7 +27,7 @@
       <p class="p-6 text-sm text-red-600">Unable to load this engagement.</p>
     } @else {
       <div
-        class="p-2.5 font-['Inter','open-sans','Roboto'] text-[15px] font-normal leading-6 tracking-normal text-[rgba(0,0,0,0.87)]"
+        class="p-2.5 font-['Inter','open-sans','Roboto'] text-[15px] leading-6 font-normal tracking-normal text-[rgba(0,0,0,0.87)]"
       >
         <mat-card class="mb-2.5 p-3">
           <div class="flex justify-between gap-3">
@@ -109,7 +109,7 @@
         @for (comment of comments; track comment.id) {
           @if (comment.replyToId) {
             <div
-              class="flex select-none items-center justify-between rounded-t-md border border-gray-300 p-1 text-sm"
+              class="flex items-center justify-between rounded-t-md border border-gray-300 p-1 text-sm select-none"
             >
               <div
                 class="flex items-center"
@@ -125,7 +125,7 @@
                     </span>
                     <span class="text-xs text-gray-600">{{ comment.replyTo.comment }}</span>
                   } @else {
-                    <span class="text-xs italic text-gray-400">Replying to: Deleted comment</span>
+                    <span class="text-xs text-gray-400 italic">Replying to: Deleted comment</span>
                   }
                 </div>
               </div>
@@ -139,7 +139,7 @@
             (mouseout)="hoveredCommentId = undefined"
             (mouseover)="hoveredCommentId = comment.id"
           >
-            <div class="action absolute bottom-3 right-3 z-10 flex items-center">
+            <div class="action absolute right-3 bottom-3 z-10 flex items-center">
               @if (comment.currentUserCanEdit) {
                 <mat-icon
                   aria-label="Edit comment"
@@ -186,7 +186,7 @@
               </div>
             </div>
 
-            <mat-card-content class="pb-8 pt-2.5">
+            <mat-card-content class="pt-2.5 pb-8">
               @if (editingComment?.id === comment.id) {
                 <mat-form-field appearance="outline" class="flex w-full items-center">
                   <mat-label>Update Comment</mat-label>
@@ -235,7 +235,7 @@
       @if (replyingToComment) {
         <div class="h-[55px]">
           <div
-            class="flex h-full select-none items-center justify-between rounded-t-md border border-b-0 border-gray-300 p-1 text-sm"
+            class="flex h-full items-center justify-between rounded-t-md border border-b-0 border-gray-300 p-1 text-sm select-none"
           >
             <div class="flex min-w-0 items-center">
               <mat-icon class="mr-2 shrink-0">reply</mat-icon>

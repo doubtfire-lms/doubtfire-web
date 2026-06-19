@@ -7,7 +7,7 @@
     >
       @if (task.numNewComments > 0) {
         <span
-          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-blue-500 text-[12px] font-bold leading-none text-white"
+          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-blue-500 text-[12px] leading-none font-bold text-white"
         >
           {{ task.numNewComments }}
         </span>
@@ -24,7 +24,7 @@
       }
     </div>
 
-    <div class="absolute -bottom-2 right-0.5 flex items-center gap-px text-[10px] leading-none">
+    <div class="absolute right-0.5 -bottom-2 flex items-center gap-px text-[10px] leading-none">
       @if (task.hasGrade()) {
         <span>
           {{ task.gradeDesc() }}
@@ -34,9 +34,9 @@
         <span
           class="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#e10963] font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
         >
-          <span class="mb-[6px] mr-px text-[8px]">{{ task.qualityPts }}</span>
+          <span class="mr-px mb-[6px] text-[8px]">{{ task.qualityPts }}</span>
           <span class="font-extrabold"> &frasl; </span>
-          <span class="ml-px mt-[6px] text-[8px]">{{ task.definition.maxQualityPts }}</span>
+          <span class="mt-[6px] ml-px text-[8px]">{{ task.definition.maxQualityPts }}</span>
         </span>
       }
       @if (task.isDueSoon() && !task.inFinalState()) {
@@ -166,9 +166,9 @@
                               class="flex shrink-0 items-center gap-px text-[12px] font-bold"
                               [ngClass]="{
                                 'text-[#da532c]': task.daysUntilDueDate() <= 0,
-                                'text-[#fab143] font-normal':
+                                'font-normal text-[#fab143]':
                                   task.daysUntilDueDate() > 0 && task.daysUntilDueDate() < 11,
-                                'text-gray-500 font-normal': task.daysUntilDueDate() > 11,
+                                'font-normal text-gray-500': task.daysUntilDueDate() > 11,
                               }"
                             >
                               <mat-icon class="!h-[16px] !w-[16px] !text-[16px]">

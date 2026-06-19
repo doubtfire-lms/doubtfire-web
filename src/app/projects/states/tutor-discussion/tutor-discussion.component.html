@@ -1,10 +1,10 @@
 <div
-  class="absolute left-1/2 top-1/2 z-40 h-screen w-screen -translate-x-1/2 -translate-y-1/2 transform overflow-hidden bg-gray-500/50 backdrop-blur"
+  class="absolute top-1/2 left-1/2 z-40 h-screen w-screen -translate-x-1/2 -translate-y-1/2 transform overflow-hidden bg-gray-500/50 backdrop-blur"
   [hidden]="!scanningQr"
 >
   @if (loadingStudentData) {
     <mat-spinner
-      class="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 transform"
+      class="absolute top-1/2 left-1/2 z-50 -translate-x-1/2 transform"
       color="blue"
     ></mat-spinner>
   }
@@ -12,7 +12,7 @@
     <div class="absolute top-1/2 w-full -translate-y-1/2 transform" id="qr-reader"></div>
   </div>
   <div
-    class="pointer-events-none absolute left-1/2 top-[150px] z-10 w-full -translate-x-1/2 transform px-6 py-3 text-center text-sm font-bold text-white"
+    class="pointer-events-none absolute top-[150px] left-1/2 z-10 w-full -translate-x-1/2 transform px-6 py-3 text-center text-sm font-bold text-white"
   >
     Scan a student's QR code to instantly load their project and mark submissions.
   </div>
@@ -75,7 +75,7 @@
         </div>
       } @else {
         <div></div>
-        <div class="mt-3 italic text-gray-500">Click the QR code to open the scanner..</div>
+        <div class="mt-3 text-gray-500 italic">Click the QR code to open the scanner..</div>
       }
       <button class="scale-[2]" color="primary" mat-icon-button (click)="scanQrCode()">
         <mat-icon>qr_code_scanner</mat-icon>
@@ -83,7 +83,7 @@
     </div>
 
     @if (project && !filteredTasks.length) {
-      <div class="py-6 italic text-gray-400">No tasks to discuss.</div>
+      <div class="py-6 text-gray-400 italic">No tasks to discuss.</div>
     }
     <mat-selection-list #tasks class="m-0 h-min p-0">
       @for (task of filteredTasks; track task) {
@@ -119,8 +119,8 @@
                   [user]="$safeNavigationMigration(project?.student)"
                 >
                 </user-icon>
-                <div class="mt-0 flex-1 whitespace-normal break-words" [hidden]="isNarrow">
-                  <h4 class="mb-[2px] mt-[8px] text-[15px]">{{ task.definition.name }}</h4>
+                <div class="mt-0 flex-1 break-words whitespace-normal" [hidden]="isNarrow">
+                  <h4 class="mt-[8px] mb-[2px] text-[15px]">{{ task.definition.name }}</h4>
                   <span class="mb-0 inline text-[12px]">
                     {{ task.definition.abbreviation }} -
                     {{ getTargetTradeString(task.definition.targetGrade) }} Task
