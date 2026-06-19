@@ -138,17 +138,17 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit(): void {
-    // this.unitId =
-    //   this.unitId ??
-    //   Number(
-    //     this.activatedRoute.parent?.snapshot.paramMap.get('unitId') ??
-    //       this.activatedRoute.snapshot.queryParamMap.get('unitId'),
-    //   );
-    // this.username = this.username ?? this.activatedRoute.snapshot.queryParamMap.get('username');
-    // this.attendance =
-    //   this.attendance ??
-    //   this.activatedRoute.snapshot.data.attendance ??
-    //   this.activatedRoute.snapshot.queryParamMap.get('attendance') === 'true';
+    this.unitId =
+      this.unitId ??
+      Number(
+        this.activatedRoute.parent?.snapshot.paramMap.get('unitId') ??
+          this.activatedRoute.snapshot.queryParamMap.get('unitId'),
+      );
+    this.username = this.username ?? this.activatedRoute.snapshot.queryParamMap.get('username');
+    this.attendance =
+      this.attendance ??
+      this.activatedRoute.snapshot.data.attendance ??
+      this.activatedRoute.snapshot.queryParamMap.get('attendance') === 'true';
 
     this.authService.afterAuthCall((result) => {
       if (!result) {
@@ -158,10 +158,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
           // Avoid prompting students for camera permissions before redirecting to unauthorised state
           return;
         }
-        this._unitId = 1;
-        this.unitId = 1;
-        this._username = 'student_9';
-        this.username = 'student_9';
         if (this.unitId) {
           this._unitId = Number(this.unitId);
           if (!this.attendance) {
@@ -172,17 +168,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
             } else {
               setTimeout(() => this.scanQrCode());
             }
-
-            setTimeout(() => {
-              this.changeProject();
-            }, 2000);
-
-            // if (this.username) {
-            //   this._username = this.username;
-            //   this.getStudentTasks();
-            // } else {
-            //   this.scanQrCode();
-            // }
           } else {
             this.getUnit().then((u) => {
               this.unit = u;
@@ -236,8 +221,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   }
 
   private changeProject() {
-    // this.html5QrcodeScanner?.pause(true);
-    // this.html5QrcodeScanner.pause(true);
+    this.html5QrcodeScanner?.pause(true);
     this.loadingStudentData = true;
     setTimeout(() => {
       try {
