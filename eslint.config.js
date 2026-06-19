@@ -61,6 +61,7 @@ module.exports = tseslint.config(
       '@angular-eslint/prefer-standalone': 'off',
       '@typescript-eslint/consistent-generic-constructors': ['error', 'type-annotation'],
       '@typescript-eslint/no-inferrable-types': 'off',
+      '@angular-eslint/prefer-on-push-component-change-detection': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
