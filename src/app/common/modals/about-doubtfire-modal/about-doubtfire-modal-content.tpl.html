@@ -1,5 +1,5 @@
 <mat-dialog-content class="mat-typography">
-  <div class="flex items-center text-center justify-center w-full gap-5">
+  <div class="flex w-full items-center justify-center gap-5 text-center">
     <img class="mb-3 h-24 w-24" src="/assets/images/logo.svg" alt="OnTrack logo" />
     <h1 class="logo text-5xl sm:text-6xl">
       {{data.externalName}}
@@ -13,7 +13,7 @@
   </div>
   <mat-divider class="my-6"></mat-divider>
   <div>
-    <h2 class="text-center text-xl font-bold uppercase text-gray-800">Lead Contributors</h2>
+    <h2 class="text-center text-xl font-bold text-gray-800 uppercase">Lead Contributors</h2>
     <ul
       class="mx-auto flex w-11/12 list-none flex-wrap justify-center gap-y-8 p-0 sm:w-5/6 sm:gap-x-10 sm:py-12"
     >
@@ -25,13 +25,13 @@
           [href]="person.html_url"
         >
           <img class="mx-auto mb-4 w-full rounded-full" [src]="person.avatar_url" />
-          <div class="text-center font-bold leading-none">{{person.name}}</div>
+          <div class="text-center leading-none font-bold">{{person.name}}</div>
           <div class="mt-1 block text-lg">&#64;{{person.login}}</div>
         </a>
       </li>
       }
     </ul>
-    <h2 class="text-center text-xl font-bold uppercase text-gray-800">Contributors</h2>
+    <h2 class="text-center text-xl font-bold text-gray-800 uppercase">Contributors</h2>
     <table
       class="mb-4 w-full"
       mat-table
