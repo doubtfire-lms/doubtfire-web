@@ -1,6 +1,7 @@
+import {afterEach, beforeEach, describe, expect, it} from 'vitest';
 import {HttpRequest, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
-import {TestBed, fakeAsync, tick} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {Campus} from 'src/app/api/models/doubtfire-model';
 import {CampusService} from '../campus.service';
 
@@ -26,7 +27,7 @@ describe('CampusService', () => {
     httpMock.verify();
   });
 
-  it('should return expected campuses (HttpClient called once)', fakeAsync(() => {
+  it('should return expected campuses (HttpClient called once)', () => {
     const c = new Campus();
 
     c.name = 'Melbourne';
@@ -51,7 +52,5 @@ describe('CampusService', () => {
 
     c.id = 1;
     req.flush(c);
-
-    tick();
-  }));
+  });
 });

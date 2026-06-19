@@ -1,5 +1,6 @@
+import {beforeEach, describe, expect, it} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {GradeIconComponent} from './grade-icon.component';
 
@@ -8,15 +9,15 @@ describe('GradeIconComponent', () => {
   let fixture: ComponentFixture<GradeIconComponent>;
   let gradeService: GradeService;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     gradeService = new GradeService();
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       declarations: [GradeIconComponent],
       providers: [{provide: GradeService, useValue: gradeService}],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GradeIconComponent);

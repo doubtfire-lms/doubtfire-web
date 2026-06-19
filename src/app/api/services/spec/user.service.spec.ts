@@ -1,6 +1,7 @@
+import {afterEach, beforeEach, describe, expect, it} from 'vitest';
 import {HttpRequest, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
-import {TestBed, fakeAsync, tick} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {User, UserService} from 'src/app/api/models/doubtfire-model';
 
 describe('UserService', () => {
@@ -25,7 +26,7 @@ describe('UserService', () => {
     httpMock.verify();
   });
 
-  it('should return expected users (HttpClient called once)', fakeAsync(() => {
+  it('should return expected users (HttpClient called once)', () => {
     const u = new User();
     u.id = 1;
     u.lastName = 'renzella';
@@ -69,10 +70,9 @@ describe('UserService', () => {
       receive_feedback_notifications: false,
       receive_task_notifications: false,
     });
-    tick();
-  }));
+  });
 
-  it('should create a new user', fakeAsync(() => {
+  it('should create a new user', () => {
     const user = new User();
     user.lastName = 'renzella';
     user.firstName = 'Jake';
@@ -115,30 +115,29 @@ describe('UserService', () => {
       receive_feedback_notifications: false,
       receive_task_notifications: false,
     });
-    tick();
-  }));
+  });
 
-  it.skip('should delete a user', fakeAsync(() => {
-    // let user = new User();
-    // user.updateFromJson({
-    //   name: 'jake', lastName: 'renzella', firstName: 'Jake', nickname: 'jake',
-    //   systemRole: 'admin', hasRunFirstTimeSetup: false, email: 'jake@jake.jake',
-    //   student_id: '1', username: 'test', optInToResearch: true, receivePortfolioNotifications: false,
-    //   receiveFeedbackNotifications: false, receiveTaskNotifications: false
-    // });
-    // userService.delete(1).subscribe(
-    //   result => expect(result).toEqual(user, 'expected users')
-    // );
-    // const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
-    //   expect(request.url).toEqual('http://localhost:3000/api/users/1');
-    //   expect(request.method).toBe('DELETE');
-    //   return true;
-    // });
-    // req.flush(user);
-    // tick();
-  }));
+  // it.skip('should delete a user', () => {
+  // let user = new User();
+  // user.updateFromJson({
+  //   name: 'jake', lastName: 'renzella', firstName: 'Jake', nickname: 'jake',
+  //   systemRole: 'admin', hasRunFirstTimeSetup: false, email: 'jake@jake.jake',
+  //   student_id: '1', username: 'test', optInToResearch: true, receivePortfolioNotifications: false,
+  //   receiveFeedbackNotifications: false, receiveTaskNotifications: false
+  // });
+  // userService.delete(1).subscribe(
+  //   result => expect(result).toEqual(user, 'expected users')
+  // );
+  // const req = httpMock.expectOne((request: HttpRequest<any>): boolean => {
+  //   expect(request.url).toEqual('http://localhost:3000/api/users/1');
+  //   expect(request.method).toBe('DELETE');
+  //   return true;
+  // });
+  // req.flush(user);
+  // tick();
+  // });
 
-  it('should update a User', fakeAsync(() => {
+  it('should update a User', () => {
     const u = new User();
     u.id = 1;
     u.lastName = 'renzella';
@@ -168,7 +167,6 @@ describe('UserService', () => {
       return true;
     });
     req.flush(u);
-    tick();
 
     u.firstName = 'andrew';
     userService.update(u).subscribe({
@@ -187,10 +185,9 @@ describe('UserService', () => {
     });
 
     req.flush(u);
-    tick();
-  }));
+  });
 
-  it('should cache the result of a get request', fakeAsync(() => {
+  it('should cache the result of a get request', () => {
     const user = new User();
     user.id = 1;
     user.lastName = 'renzella';
@@ -215,17 +212,15 @@ describe('UserService', () => {
     const user2 = user;
     user2.id = 1;
     req.flush(user2);
-    tick();
 
     userService.get(1).subscribe();
 
     httpMock.expectNone((_request: HttpRequest<object>): boolean => {
       return true;
     });
-    tick();
-  }));
+  });
 
-  it('should cache fetch/get', fakeAsync(() => {
+  it('should cache fetch/get', () => {
     let user = new User();
     user.id = 1;
     user.lastName = 'renzella';
@@ -255,7 +250,6 @@ describe('UserService', () => {
     Object.keys(user).forEach((key) => (user2[key] = user[key]));
     user2.id = 1;
     req.flush(user2);
-    tick();
 
     let user3: User;
 
@@ -280,6 +274,5 @@ describe('UserService', () => {
     httpMock.expectNone((_request: HttpRequest<object>): boolean => {
       return true;
     });
-    tick();
-  }));
+  });
 });

@@ -1,6 +1,6 @@
-import {vi} from 'vitest';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {GradeTaskModalComponent} from './grade-task-modal.component';
@@ -18,7 +18,7 @@ describe('GradeTaskModalComponent', () => {
     };
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     gradeServiceStub = new GradeService();
 
     dialogDataStub = {
@@ -37,7 +37,7 @@ describe('GradeTaskModalComponent', () => {
       },
     };
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       declarations: [GradeTaskModalComponent],
       providers: [
         {provide: GradeService, useValue: gradeServiceStub},
@@ -46,7 +46,7 @@ describe('GradeTaskModalComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GradeTaskModalComponent);
