@@ -1,22 +1,21 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {MediaObserver} from 'ng-flex-layout';
+import {beforeEach, describe, expect, it} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatMenuModule} from '@angular/material/menu';
-import {DateService} from 'src/app/common/services/date.service';
 import {UnitDropdownComponent} from './unit-dropdown.component';
 
 describe('UnitDropdownComponent', () => {
   let component: UnitDropdownComponent;
   let fixture: ComponentFixture<UnitDropdownComponent>;
-  let dateServiceStub: Pick<DateService, 'showDate'>;
-
-  beforeEach(waitForAsync(() => {
-    dateServiceStub = {showDate: true};
-
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [UnitDropdownComponent],
       imports: [MatMenuModule],
-      providers: [{provide: DateService, useValue: dateServiceStub}],
+      providers: [{provide: MediaObserver, useValue: {isActive: () => false}}],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UnitDropdownComponent);

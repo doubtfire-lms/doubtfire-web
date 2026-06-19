@@ -1,47 +1,50 @@
-// import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-// import { EventEmitter } from '@angular/core';
-// import { alertService, commentsModal } from 'src/app/ajs-upgraded-providers';
-// import { TaskComment, TaskCommentService } from 'src/app/api/models/doubtfire-model';
-// import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
+import {beforeEach, describe, expect, it} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {EMPTY} from 'rxjs';
+import {TaskCommentService, TaskService, UserService} from 'src/app/api/models/doubtfire-model';
+import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
+import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {TaskCommentsViewerComponent} from './task-comments-viewer.component';
 
-// import { TaskCommentsViewerComponent } from './task-comments-viewer.component';
+const taskCommentServiceStub = {
+  commentAdded$: EMPTY,
+};
+const taskServiceStub = {
+  taskStatusUpdated$: EMPTY,
+};
+const emptyProvider = {};
 
-// describe('TaskCommentsViewerComponent', () => {
-//   let component: TaskCommentsViewerComponent;
-//   let fixture: ComponentFixture<TaskCommentsViewerComponent>;
-//   let taskCommentServiceStub: Partial<TaskCommentService>;
-//   let doubtfireConstantsStub: Partial<DoubtfireConstants>;
-//   let commentsModalStub: jasmine.SpyObj<any>;
-//   let taskStub: jasmine.SpyObj<any>;
-//   let alertServiceStub: jasmine.SpyObj<any>;
+describe('TaskCommentsViewerComponent', () => {
+  let component: TaskCommentsViewerComponent;
+  let fixture: ComponentFixture<TaskCommentsViewerComponent>;
 
-//   beforeEach(
-//     waitForAsync(() => {
-//       const commentAdded: EventEmitter<TaskComment> = new EventEmitter();
-//       taskCommentServiceStub = {
-//         commentAdded$: commentAdded,
-//       };
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [TaskCommentsViewerComponent],
+      providers: [
+        {provide: TaskCommentService, useValue: taskCommentServiceStub},
+        {provide: FeedbackTemplateService, useValue: emptyProvider},
+        {provide: UserService, useValue: emptyProvider},
+        {provide: TaskService, useValue: taskServiceStub},
+        {provide: DoubtfireConstants, useValue: emptyProvider},
+        {provide: CommentsModalService, useValue: emptyProvider},
+        {provide: AlertService, useValue: emptyProvider},
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideComponent(TaskCommentsViewerComponent, {set: {template: ''}})
+      .compileComponents();
+  });
 
-//       TestBed.configureTestingModule({
-//         declarations: [TaskCommentsViewerComponent],
-//         providers: [
-//           { provide: TaskCommentService, useValue: taskCommentServiceStub },
-//           { provide: DoubtfireConstants, useValue: doubtfireConstantsStub },
-//           { provide: commentsModal, useValue: commentsModalStub },
-//           { provide: Task, useValue: taskStub },
-//           { provide: alertService, useValue: alertServiceStub },
-//         ],
-//       }).compileComponents();
-//     })
-//   );
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TaskCommentsViewerComponent);
+    component = fixture.componentInstance;
+  });
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(TaskCommentsViewerComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
-
-//   it('should create', () => {
-//     expect(component).toBeTruthy();
-//   });
-// });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

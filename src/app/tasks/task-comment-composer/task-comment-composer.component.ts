@@ -3,6 +3,7 @@ import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -76,6 +77,7 @@ const ACCEPTED_FILE_TYPES = [
       transition('false => true', [style({width: 80}), animate('150ms 0ms ease-in-out')]),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnChanges {
@@ -791,6 +793,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   selector: 'discussion-prompt-composer-dialog.html',
   templateUrl: 'discussion-prompt-composer-dialog.html',
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class DiscussionComposerDialog {

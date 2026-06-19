@@ -1,3 +1,4 @@
+import {describe, expect, it} from 'vitest';
 import {MarkedPipe} from './marked.pipe';
 
 describe('MarkedPipe', () => {

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {
   ScormComment,
   Task,
@@ -12,6 +12,7 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
   selector: 'f-scorm-comment',
   templateUrl: './scorm-comment.component.html',
   styleUrls: ['./scorm-comment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ScormCommentComponent {

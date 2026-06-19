@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Task} from 'src/app/api/models/doubtfire-model';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 import {BaseAudioRecorderComponent} from '../base-audio-recorder';
@@ -7,6 +7,7 @@ import {BaseAudioRecorderComponent} from '../base-audio-recorder';
   selector: 'microphone-tester',
   templateUrl: './microphone-tester-component.html',
   providers: [MediaRecorderService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implements AfterViewInit {

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
@@ -7,6 +7,7 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
   selector: 'f-task-definition-options',
   templateUrl: 'task-definition-options.component.html',
   styleUrls: ['task-definition-options.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDefinitionOptionsComponent {

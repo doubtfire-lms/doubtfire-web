@@ -15,13 +15,13 @@
         <mat-card-content>
           <!--Due and not in discuss-->
           @if (flexibleDatesEnabled) {
-            <p [hidden]="task?.inDiscussState()">
+            <p [hidden]="$safeNavigationMigration(task?.inDiscussState())">
               Your target due date for this task is
               <strong>{{ task?.localDueDateString() }}</strong
               >. You should aim to complete this task before then to keep your progress on track.
             </p>
           } @else {
-            <p [hidden]="task?.inDiscussState()">
+            <p [hidden]="$safeNavigationMigration(task?.inDiscussState())">
               This task's due date is <strong>{{ task?.localDueDateString() }}</strong
               >. You should aim to complete this task before then to keep your progress on track.
             </p>
@@ -68,7 +68,10 @@
           </mat-card-title>
         </mat-card-header>
 
-        <mat-card-content class="bg-yellow-50" [hidden]="task?.inDiscussState()">
+        <mat-card-content
+          class="bg-yellow-50"
+          [hidden]="$safeNavigationMigration(task?.inDiscussState())"
+        >
           <!--Not in submitted state and overdue-->
           @if (flexibleDatesEnabled) {
             <p class="mt-1 p-1">
@@ -125,7 +128,10 @@
             ></mat-card-title
           >
         </mat-card-header>
-        <mat-card-content class="bg-red-50" [hidden]="task?.inDiscussState()">
+        <mat-card-content
+          class="bg-red-50"
+          [hidden]="$safeNavigationMigration(task?.inDiscussState())"
+        >
           <!--Past deadline and not submitted-->
           <p class="p-1">
             @if (task?.definition?.unit.markLateSubmissionsAsAssessInPortfolio) {

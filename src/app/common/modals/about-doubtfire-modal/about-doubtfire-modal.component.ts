@@ -1,7 +1,7 @@
 //
 // Modal to show Doubtfire version info
 //
-import {Component, Inject, Injectable} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Injectable} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {Sort} from '@angular/material/sort';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
@@ -12,6 +12,7 @@ import {GithubProfile} from './github-profile';
 @Component({
   selector: 'about-doubtfire-dialog',
   templateUrl: 'about-doubtfire-modal-content.tpl.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AboutDoubtfireModalContent {

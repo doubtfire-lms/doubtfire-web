@@ -11,6 +11,7 @@ import {
 } from '@worktile/gantt';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Input,
@@ -43,6 +44,7 @@ interface TaskGanttItem extends GanttItem {
   templateUrl: './task-planner.component.html',
   styleUrl: './task-planner.component.scss',
   providers: [GanttPrintService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {

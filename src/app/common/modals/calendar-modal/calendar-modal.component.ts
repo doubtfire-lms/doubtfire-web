@@ -1,4 +1,11 @@
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {Project, ProjectService, Webcal, WebcalService} from 'src/app/api/models/doubtfire-model';
@@ -10,6 +17,7 @@ import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal
   selector: 'calendar-modal',
   templateUrl: './calendar-modal.component.html',
   styleUrls: ['./calendar-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CalendarModalComponent implements OnInit, AfterViewInit {

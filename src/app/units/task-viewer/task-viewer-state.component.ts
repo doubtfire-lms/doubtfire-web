@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {of} from 'rxjs';
@@ -9,6 +9,7 @@ import {TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
   selector: 'f-task-viewer-state',
   templateUrl: './task-viewer-state.component.html',
   styleUrl: './task-viewer-state.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskViewerStateComponent {

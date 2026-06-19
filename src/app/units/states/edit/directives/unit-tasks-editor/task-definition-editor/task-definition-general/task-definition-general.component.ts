@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {GradeService} from 'src/app/common/services/grade.service';
@@ -7,6 +7,7 @@ import {GradeService} from 'src/app/common/services/grade.service';
   selector: 'f-task-definition-general',
   templateUrl: 'task-definition-general.component.html',
   styleUrls: ['task-definition-general.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDefinitionGeneralComponent {

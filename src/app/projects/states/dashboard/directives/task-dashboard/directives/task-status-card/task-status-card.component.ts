@@ -1,5 +1,13 @@
 import * as _ from 'lodash';
-import {AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
@@ -18,6 +26,7 @@ import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-m
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
   styleUrls: ['./task-status-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDestroy {

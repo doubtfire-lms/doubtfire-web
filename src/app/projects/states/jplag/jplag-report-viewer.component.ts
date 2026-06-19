@@ -1,9 +1,10 @@
-import {Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'f-jplag-report-viewer',
   templateUrl: './jplag-report-viewer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class JplagReportViewerComponent {

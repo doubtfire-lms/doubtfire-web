@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -26,6 +27,7 @@ import {
   styleUrl: './task-feedback-templates.component.scss',
   templateUrl: './task-feedback-templates.component.html',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {

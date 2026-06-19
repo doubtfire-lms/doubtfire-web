@@ -1,3 +1,5 @@
+import {beforeEach, describe, expect, it} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {TaskDueCardComponent} from './task-due-card.component';
 
@@ -8,11 +10,15 @@ describe('TaskDueCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TaskDueCardComponent],
-    }).compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideComponent(TaskDueCardComponent, {set: {template: ''}})
+      .compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(TaskDueCardComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

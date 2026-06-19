@@ -1,5 +1,5 @@
 import {HttpClient, HttpErrorResponse, HttpEventType, HttpResponse} from '@angular/common/http';
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Subscription, throwError} from 'rxjs';
 import {AlertService} from '../services/alert.service';
 
@@ -10,6 +10,7 @@ import {AlertService} from '../services/alert.service';
   selector: 'f-file-drop',
   templateUrl: 'file-drop.component.html',
   styleUrls: ['file-drop.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FileDropComponent {

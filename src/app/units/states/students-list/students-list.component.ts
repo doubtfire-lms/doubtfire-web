@@ -1,4 +1,12 @@
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -18,6 +26,7 @@ import {UnitStudentEnrolmentModalService} from '../../modals/unit-student-enrolm
 @Component({
   selector: 'f-students-list',
   templateUrl: './students-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {

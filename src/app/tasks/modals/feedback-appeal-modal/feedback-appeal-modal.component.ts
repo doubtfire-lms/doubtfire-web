@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
@@ -9,6 +9,7 @@ import {FeedbackAppealModalData} from './feedback-appeal-modal.service';
   selector: 'f-feedback-appeal-modal',
   templateUrl: './feedback-appeal-modal.component.html',
   styleUrl: './feedback-appeal-modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FeedbackAppealModalComponent implements OnInit {

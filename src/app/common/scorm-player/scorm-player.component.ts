@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostListener, Input, OnInit} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
 import {
@@ -30,6 +30,7 @@ declare global {
   selector: 'f-scorm-player',
   templateUrl: './scorm-player.component.html',
   styleUrls: ['./scorm-player.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ScormPlayerComponent implements OnInit {

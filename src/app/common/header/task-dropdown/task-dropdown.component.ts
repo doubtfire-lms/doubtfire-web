@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter} from 'rxjs';
 import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
@@ -9,6 +9,7 @@ import {TutorNotesModalService} from '../../modals/tutor-notes-modal/tutor-notes
   selector: 'task-dropdown',
   templateUrl: './task-dropdown.component.html',
   styleUrls: ['./task-dropdown.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDropdownComponent {

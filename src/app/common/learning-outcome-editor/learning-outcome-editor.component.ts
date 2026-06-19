@@ -3,6 +3,7 @@ import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   Input,
   OnChanges,
@@ -44,6 +45,7 @@ import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-
 @Component({
   selector: 'f-learning-outcome-editor',
   templateUrl: 'learning-outcome-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {

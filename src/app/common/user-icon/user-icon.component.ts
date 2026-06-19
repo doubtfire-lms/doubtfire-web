@@ -1,6 +1,7 @@
 import {Md5} from 'ts-md5/dist/md5';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Input,
@@ -42,6 +43,7 @@ declare const d3: {
   selector: 'user-icon',
   templateUrl: './user-icon.component.html',
   styleUrls: ['./user-icon.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UserIconComponent implements AfterViewInit, OnChanges {

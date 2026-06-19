@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {
   Campus,
@@ -25,6 +25,7 @@ export const SCHEDULE_WEEKDAYS = [
 @Component({
   selector: 'f-communication-schedule-modal',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './communication-schedule-modal.component.html',
 })
 export class CommunicationScheduleModalComponent implements OnInit {

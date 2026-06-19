@@ -1,5 +1,5 @@
 import {addDays, differenceInDays, differenceInWeeks, isAfter} from 'date-fns';
-import {Component, Inject, LOCALE_ID} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, LOCALE_ID} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
@@ -19,6 +19,7 @@ export class ReasonErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'extension-modal',
   templateUrl: './extension-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ExtensionModalComponent {

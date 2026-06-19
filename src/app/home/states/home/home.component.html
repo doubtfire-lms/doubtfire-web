@@ -19,7 +19,15 @@
       @for (unitRole of unitRoles | isActiveUnitRole; track unitRole) {
         <div>
           @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
-            <div class="removeStyle" [routerLink]="['/units', unitRole.unit?.id, 'tasks', 'inbox']">
+            <div
+              class="removeStyle"
+              [routerLink]="[
+                '/units',
+                $safeNavigationMigration(unitRole.unit?.id),
+                'tasks',
+                'inbox',
+              ]"
+            >
               <mat-card class="unit-card">
                 <mat-card-header>
                   <mat-card-title class="f-card-title">{{ unitRole.unit?.name }}</mat-card-title>
@@ -55,7 +63,7 @@
       <mat-card
         appearance="outlined"
         class="unit-card"
-        [hidden]="(unitRoles | isActiveUnitRole)?.length > 0"
+        [hidden]="$safeNavigationMigration((unitRoles | isActiveUnitRole)?.length) > 0"
       >
         <mat-card-content>
           <p>You do not teach any active units</p>

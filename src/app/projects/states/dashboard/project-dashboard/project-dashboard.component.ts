@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
   BehaviorSubject,
@@ -23,6 +23,7 @@ import {GlobalStateService, ViewType} from '../../index/global-state.service';
   selector: 'f-project-dashboard',
   templateUrl: './project-dashboard.component.html',
   styleUrl: './project-dashboard.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectDashboardComponent implements OnInit {

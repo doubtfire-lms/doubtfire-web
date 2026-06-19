@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -32,6 +32,7 @@ interface SessionEvent {
   templateUrl: 'analytics-tutor-times.component.html',
   styleUrls: ['analytics-tutor-times.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AnalyticsTutorTimesComponent implements OnInit {
@@ -266,6 +267,17 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       }
       this.applyFilters();
     }
+  }
+
+  sessionEventTitle(event: SessionEvent): string {
+    return [
+      `${event.tutorName} (${event.duration} minutes)${event.duringTutorial ? ' T' : ''}`,
+      `${event.startHour} - ${event.endHour}`,
+      `Assessments: ${event.assessments || 0}`,
+      `Comments: ${event.commentsAdded || 0}`,
+      `Submissions opened: ${event.submissionsOpened || 0}`,
+      `During Tutorial?: ${event.duringTutorial ? 'yes' : 'no'}`,
+    ].join('\n');
   }
 
   private stringToHexColor(

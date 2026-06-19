@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {
   ActivityType,
   ActivityTypeService,
@@ -11,6 +11,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'unit-tutorials-manager',
   templateUrl: 'unit-tutorials-manager.component.html',
   styleUrls: ['unit-tutorials-manager.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitTutorialsManagerComponent implements OnInit {

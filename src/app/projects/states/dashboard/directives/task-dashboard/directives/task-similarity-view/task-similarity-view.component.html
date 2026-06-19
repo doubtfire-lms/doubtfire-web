@@ -17,7 +17,10 @@
 
   @if (!jplagOpenState) {
     <mat-accordion multi>
-      @for (similarity of task?.similarityCache.values | async; track similarity) {
+      @for (
+        similarity of $safeNavigationMigration(task?.similarityCache.values) | async;
+        track similarity
+      ) {
         <div class="my-3">
           @for (part of similarity.parts; track part; let i = $index) {
             <mat-expansion-panel
