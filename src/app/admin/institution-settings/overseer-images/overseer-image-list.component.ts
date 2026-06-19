@@ -1,5 +1,11 @@
 import {HttpClient} from '@angular/common/http';
-import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSort, Sort} from '@angular/material/sort';
@@ -13,6 +19,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'overseer-image-list',
   templateUrl: 'overseer-image-list.component.html',
   styleUrls: ['overseer-image-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class OverseerImageListComponent

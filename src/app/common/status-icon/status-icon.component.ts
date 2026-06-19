@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {TaskStatus, TaskStatusEnum} from 'src/app/api/models/task-status';
 
 @Component({
   selector: 'status-icon',
   templateUrl: './status-icon.component.html',
   styleUrls: ['./status-icon.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class StatusIconComponent implements OnInit {

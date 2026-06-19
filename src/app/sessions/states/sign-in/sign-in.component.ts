@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -39,6 +39,7 @@ type signInData =
   selector: 'f-sign-in',
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SignInComponent implements OnInit {

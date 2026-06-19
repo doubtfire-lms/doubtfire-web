@@ -1,5 +1,6 @@
 import {formatDate} from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   LOCALE_ID,
@@ -26,6 +27,7 @@ interface BurndownSeries {
   selector: 'f-progress-burndown-chart',
   templateUrl: './progress-burndown-chart.component.html',
   styleUrls: ['./progress-burndown-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProgressBurndownChartComponent

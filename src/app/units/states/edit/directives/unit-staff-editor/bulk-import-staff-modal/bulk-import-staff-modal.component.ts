@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'bulk-import-staff-modal',
   templateUrl: './bulk-import-staff-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class BulkImportStaffModalComponent {

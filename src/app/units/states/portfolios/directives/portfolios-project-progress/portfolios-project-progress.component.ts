@@ -1,4 +1,11 @@
-import {Component, ElementRef, HostListener, Input, OnChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnChanges,
+} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
@@ -11,6 +18,7 @@ import {GradeService} from 'src/app/common/services/grade.service';
   selector: 'f-portfolios-project-progress',
   templateUrl: './portfolios-project-progress.component.html',
   styleUrl: './portfolios-project-progress.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PortfoliosProjectProgressComponent implements OnChanges {

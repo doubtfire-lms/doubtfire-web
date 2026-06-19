@@ -1,4 +1,12 @@
-import {AfterViewInit, Component, ElementRef, Inject, Input, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  ViewChild,
+} from '@angular/core';
 import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
 import {BaseAudioRecorderComponent} from 'src/app/common/audio-recorder/audio/base-audio-recorder';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -9,6 +17,7 @@ import {MediaRecorderService} from 'src/app/common/services/recorder-service';
   templateUrl: './discussion-prompt-composer.component.html',
   styleUrls: ['./discussion-prompt-composer.component.scss'],
   providers: [MediaRecorderService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class DiscussionPromptComposerComponent

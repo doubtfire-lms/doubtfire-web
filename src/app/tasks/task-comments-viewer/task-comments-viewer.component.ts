@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Input,
@@ -26,6 +27,7 @@ import {TaskCommentComposerData} from '../task-comment-composer/task-comment-com
   selector: 'task-comments-viewer',
   templateUrl: './task-comments-viewer.component.html',
   styleUrls: ['./task-comments-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {

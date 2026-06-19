@@ -19,7 +19,8 @@ import player from 'lottie-web';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
 import {FlexLayoutModule} from 'ng-flex-layout';
 import {LottieComponent, provideLottieOptions} from 'ngx-lottie';
-import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
+// TODO: replace back to original ngx-monaco-editor-v2 once it supports angular 22
+import {MonacoEditorModule} from 'ngx-monaco-editor-v2-alternative';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 import {environment} from 'src/environments/environment';
 // import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {Unit} from 'src/app/api/models/unit';
@@ -11,6 +11,7 @@ import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global
   selector: 'f-rollover',
   templateUrl: './rollover.component.html',
   styleUrl: './rollover.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class RolloverComponent implements OnInit {

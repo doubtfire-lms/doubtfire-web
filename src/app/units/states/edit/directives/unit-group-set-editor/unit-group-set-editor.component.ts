@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {GroupSet, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {GroupSetService} from 'src/app/api/services/group-set.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
@@ -20,6 +20,7 @@ interface GroupSetEditModel {
   selector: 'f-unit-group-set-editor',
   templateUrl: './unit-group-set-editor.component.html',
   styleUrls: ['./unit-group-set-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitGroupSetEditorComponent implements OnInit {

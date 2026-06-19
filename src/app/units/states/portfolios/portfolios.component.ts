@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Observable, Subscription, first, of} from 'rxjs';
@@ -19,6 +19,7 @@ interface PortfolioTab {
   selector: 'f-portfolios',
   templateUrl: './portfolios.component.html',
   styleUrl: './portfolios.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PortfoliosComponent implements OnInit, OnDestroy {

@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, first, of, tap} from 'rxjs';
 import {
@@ -42,6 +42,7 @@ type TaskSource = (
 @Component({
   selector: 'f-unit-task-inbox-state',
   templateUrl: './unit-task-inbox-state.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {

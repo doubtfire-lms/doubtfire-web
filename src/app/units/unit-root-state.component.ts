@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {Unit} from 'src/app/api/models/doubtfire-model';
@@ -8,6 +8,7 @@ import {Unit} from 'src/app/api/models/doubtfire-model';
   selector: 'f-unit-root-state',
   templateUrl: './unit-root-state.component.html',
   styleUrl: './unit-root-state.component.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitRootStateComponent implements OnInit {

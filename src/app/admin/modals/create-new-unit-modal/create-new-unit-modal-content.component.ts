@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
@@ -8,6 +8,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 @Component({
   selector: 'create-new-unit-modal-content',
   templateUrl: 'create-new-unit-modal-content.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class CreateNewUnitModalContentComponent implements OnInit {

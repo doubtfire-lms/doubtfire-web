@@ -1,5 +1,12 @@
 import {HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {MatAccordion} from '@angular/material/expansion';
 import {Task} from 'src/app/api/models/task';
 import {TaskSimilarity} from 'src/app/api/models/task-similarity';
@@ -13,6 +20,7 @@ import {SelectedTaskService} from '../../../../selected-task.service';
   selector: 'f-task-similarity-view',
   templateUrl: './task-similarity-view.component.html',
   styleUrls: ['./task-similarity-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskSimilarityViewComponent implements OnChanges {

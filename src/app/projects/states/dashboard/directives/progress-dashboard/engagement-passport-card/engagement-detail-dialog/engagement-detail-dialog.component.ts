@@ -1,4 +1,12 @@
-import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {
   Engagement,
@@ -14,6 +22,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-engagement-detail-dialog',
   templateUrl: './engagement-detail-dialog.component.html',
   styleUrl: './engagement-detail-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class EngagementDetailDialogComponent implements OnInit, OnDestroy {

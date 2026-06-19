@@ -6,6 +6,6 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   imports: [],
   templateUrl: './student-task-list.component.html',
   styleUrl: './student-task-list.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class StudentTaskListComponent {}

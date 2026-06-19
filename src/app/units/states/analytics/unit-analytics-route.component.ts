@@ -1,5 +1,5 @@
 import {formatDate} from '@angular/common';
-import {Component, Inject, Input, LOCALE_ID, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, LOCALE_ID, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, first, of} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -13,6 +13,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-unit-analytics',
   templateUrl: 'unit-analytics-route.component.html',
   styleUrls: ['unit-analytics-route.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitAnalyticsComponent implements OnInit {

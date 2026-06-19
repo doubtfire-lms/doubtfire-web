@@ -1,10 +1,18 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-task-visualisation',
   templateUrl: './task-visualisation.component.html',
   styleUrls: ['./task-visualisation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskVisualisationComponent implements OnChanges, OnInit {

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
@@ -14,6 +14,7 @@ import {TeachingPeriodUnitImportService} from '../teaching-period-unit-import/te
   selector: 'f-teaching-period-list',
   templateUrl: './teaching-period-list.component.html',
   styleUrls: ['./teaching-period-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TeachingPeriodListComponent implements OnInit {
@@ -95,6 +96,7 @@ export class TeachingPeriodListComponent implements OnInit {
 @Component({
   selector: 'f-new-teaching-period-dialog',
   templateUrl: 'new-teaching-period-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class NewTeachingPeriodDialogComponent {

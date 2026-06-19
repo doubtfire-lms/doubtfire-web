@@ -37,7 +37,9 @@
           (click)="uploadProgress ? cancelUpload() : upload()"
         >
           @if (!uploadProgress) {
-            <mat-icon [ngClass]="{'animate-bounce': file?.name}">upload</mat-icon>
+            <mat-icon [ngClass]="{'animate-bounce': $safeNavigationMigration(file?.name)}"
+              >upload</mat-icon
+            >
           }
           @if (uploadProgress) {
             <mat-icon>cancel</mat-icon>

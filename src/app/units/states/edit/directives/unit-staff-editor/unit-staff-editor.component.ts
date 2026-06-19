@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatSelectChange} from '@angular/material/select';
 import {MatTableDataSource} from '@angular/material/table';
@@ -20,6 +20,7 @@ import {BulkImportStaffModalService} from './bulk-import-staff-modal/bulk-import
 @Component({
   selector: 'unit-staff-editor',
   templateUrl: 'unit-staff-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitStaffEditorComponent implements OnInit {

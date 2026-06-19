@@ -1,7 +1,15 @@
 import * as monaco from 'monaco-editor';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
 import {Observable} from 'rxjs';
 import {
@@ -28,6 +36,7 @@ import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/o
   selector: 'f-task-definition-overseer',
   templateUrl: 'task-definition-overseer.component.html',
   styleUrls: ['task-definition-overseer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {

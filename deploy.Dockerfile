@@ -1,5 +1,5 @@
 ### STAGE 1: Build ###
-FROM node:20 AS build
+FROM node:22 AS build
 
 USER node
 
