@@ -6,7 +6,7 @@
   "license": "AGPL-3.0",
   "repository": {},
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=22.22.3"
   },
   "scripts": {
     "build": "ng build",
