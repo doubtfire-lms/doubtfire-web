@@ -28,6 +28,10 @@ export class PortfolioGradeSelectStepComponent {
     return this.gradeService.gradeValues;
   }
 
+  public get targetGrade(): string {
+    return this.gradeService.grades[this.project.submittedGrade] ?? 'selected grade';
+  }
+
   updateSubmittedGrade(newGrade: number): void {
     const previousSubmittedGrade = this.project.submittedGrade;
     this.project.submittedGrade = newGrade;

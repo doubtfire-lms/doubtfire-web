@@ -53,7 +53,7 @@ export class TaskDefinitionResourcesComponent {
     });
   }
 
-  public uploadTaskSheet(files: FileList) {
+  public uploadTaskSheet(files: ArrayLike<File>) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(
       (f) => f.type === 'application/pdf',
     );
@@ -71,7 +71,7 @@ export class TaskDefinitionResourcesComponent {
     }
   }
 
-  public uploadTaskResources(files: FileList) {
+  public uploadTaskResources(files: ArrayLike<File>) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(
       (f) => f.type === 'application/zip' || f.type === 'application/x-zip-compressed',
     );

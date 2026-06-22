@@ -152,9 +152,12 @@
 
                     @case ('assessment') {
                       <div class="comment-assessment mx-auto max-w-[350px] overflow-x-scroll">
-                        @if (overseerEnabled) {
+                        @if (
+                          overseerEnabled && asAssessmentComment(comment);
+                          as assessmentComment
+                        ) {
                           <app-task-assessment-comment
-                            [comment]="comment"
+                            [comment]="assessmentComment"
                             [task]="task"
                           ></app-task-assessment-comment>
                         }
@@ -163,8 +166,8 @@
 
                     @case ('scorm') {
                       <div class="comment-scorm">
-                        @if (scormEnabled) {
-                          <f-scorm-comment [comment]="comment" [task]="task"></f-scorm-comment>
+                        @if (scormEnabled && asScormComment(comment); as scormComment) {
+                          <f-scorm-comment [comment]="scormComment" [task]="task"></f-scorm-comment>
                         }
                       </div>
                     }
@@ -190,14 +193,22 @@
                     @switch (comment.commentType) {
                       @case ('extension') {
                         <div class="comment-extension">
-                          <extension-comment [comment]="comment" [task]="task"> </extension-comment>
+                          @if (asExtensionComment(comment); as extensionComment) {
+                            <extension-comment [comment]="extensionComment" [task]="task">
+                            </extension-comment>
+                          }
                         </div>
                       }
 
                       @case ('scorm_extension') {
                         <div class="comment-scorm-extension">
-                          <f-scorm-extension-comment [comment]="comment" [task]="task">
-                          </f-scorm-extension-comment>
+                          @if (asScormExtensionComment(comment); as scormExtensionComment) {
+                            <f-scorm-extension-comment
+                              [comment]="scormExtensionComment"
+                              [task]="task"
+                            >
+                            </f-scorm-extension-comment>
+                          }
                         </div>
                       }
 
@@ -224,10 +235,12 @@
 
                       @case ('discussion') {
                         <div class="comment-discussion">
-                          <intelligent-discussion-player
-                            [discussion]="comment"
-                            [task]="task"
-                          ></intelligent-discussion-player>
+                          @if (asDiscussionComment(comment); as discussionComment) {
+                            <intelligent-discussion-player
+                              [discussion]="discussionComment"
+                              [task]="task"
+                            ></intelligent-discussion-player>
+                          }
                         </div>
                       }
 

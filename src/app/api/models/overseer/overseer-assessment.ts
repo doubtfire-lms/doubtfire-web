@@ -3,6 +3,7 @@ import {AppInjector} from 'src/app/app-injector';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Task} from '../doubtfire-model';
 import {SubmissionArchive} from '../submission-history';
+import {TaskStatusEnum} from '../task-status';
 import {OverseerStepResult} from './overseer-step-result';
 
 export class OverseerAssessment extends Entity implements SubmissionArchive {
@@ -12,7 +13,7 @@ export class OverseerAssessment extends Entity implements SubmissionArchive {
   timestampString: string;
   content?: {label: string; result: string}[];
   task?: Task;
-  taskStatus?: string;
+  taskStatus?: TaskStatusEnum;
   submissionStatus?: 'queued' | 'executing' | 'passed' | 'failed' | 'error';
   createdAt?: Date;
   updatedAt?: Date;

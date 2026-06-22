@@ -46,7 +46,7 @@
           </div>
           <div class="flex justify-between">
             <mat-card-title class="flex items-center">
-              <user-icon size="25" style="margin-right: 8px" [user]="note.user"></user-icon>
+              <user-icon style="margin-right: 8px" [size]="25" [user]="note.user"></user-icon>
               {{ note.user?.firstName }} {{ note.user?.lastName }}</mat-card-title
             >
             <div class="flex items-center">
@@ -72,7 +72,7 @@
                 ></textarea>
                 <div class="flex justify-end gap-1">
                   <button color="" mat-raised-button (click)="cancelEditingNote()">Cancel</button>
-                  <button color="primary" mat-raised-button (click)="updateNote(note)">
+                  <button color="primary" mat-raised-button (click)="updateNote()">
                     Update Note
                   </button>
                 </div>

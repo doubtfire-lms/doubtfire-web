@@ -9,6 +9,10 @@
     </button>
   </div>
   @if (!loading) {
-    <ngs-code-editor class="h-[70vh] w-full" readOnly [codeModel]="model"></ngs-code-editor>
+    <ngs-code-editor
+      class="h-[70vh] w-full"
+      [codeModel]="model"
+      [readOnly]="true"
+    ></ngs-code-editor>
   }
 </div>

@@ -14,7 +14,7 @@
     </div>
     <div id="pdfActions" [hidden]="!loaded || useNativePdfViewer">
       <form #loginForm="ngForm">
-        <mat-form-field appearance="outline" class="pdf-form-field" floatLabel="never" ngSubmit>
+        <mat-form-field appearance="outline" class="pdf-form-field" floatLabel="auto" ngSubmit>
           <mat-icon matPrefix>search</mat-icon>
           <input
             matInput
@@ -62,7 +62,7 @@
         [zoom]="zoomValue"
         [(page)]="pageNumber"
         (after-load-complete)="onLoaded($event)"
-        (text-layer-rendered)="onTextLayerRendered($event)"
+        (text-layer-rendered)="onTextLayerRendered()"
       ></pdf-viewer>
     }
   } @else {

@@ -52,7 +52,7 @@
             [(ngModel)]="unitToImport.convenor"
           />
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-            @for (staff of unitToImport.filteredStaff | async; track staff) {
+            @for (staff of filteredStaffFor(unitToImport) | async; track staff) {
             <mat-option [value]="staff"> {{staff.name}} </mat-option>
             }
           </mat-autocomplete>

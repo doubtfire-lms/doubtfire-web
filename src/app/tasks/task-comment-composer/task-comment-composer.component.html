@@ -52,7 +52,7 @@
   @for (emoji of emojiSearchResults; track emoji) {
     <mat-list-item (click)="emojiSelected(emoji.native)">
       <div fxLayout="row" fxLayoutAlign="start center">
-        <ngx-emoji set="apple" size="20" style="align-items: center" [emoji]="emoji"></ngx-emoji>
+        <ngx-emoji set="apple" style="align-items: center" [emoji]="emoji" [size]="20"></ngx-emoji>
         <div class="emoji-details" fxLayout="column" fxLayoutAlign="center start">
           <div style="font-weight: 500; font-size: 12px">{{ emoji.name }}</div>
           <div style="font-size: 10px">{{ emoji.colons }}</div>

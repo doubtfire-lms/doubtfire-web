@@ -6,7 +6,7 @@ import {TaskDefinition} from '../../api/models/doubtfire-model';
   standalone: false,
 })
 export class TaskDefinitionNamePipe implements PipeTransform {
-  transform(taskDefinitions: TaskDefinition[], searchName: string): TaskDefinition[] {
+  transform(taskDefinitions: readonly TaskDefinition[], searchName: string): TaskDefinition[] {
     searchName = searchName.toLowerCase();
     return taskDefinitions.filter(
       // use lodash filter?

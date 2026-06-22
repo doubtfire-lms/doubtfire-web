@@ -60,7 +60,7 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
     private alerts: AlertService,
     private feedbackTemplateService: FeedbackTemplateService,
     private fileDownloaderService: FileDownloaderService,
-    private taskService: TaskService,
+    public taskService: TaskService,
     private csvResultModalService: CsvResultModalService,
     private csvUploadModalService: CsvUploadModalService,
     private confirmationModal: ConfirmationModalService,

@@ -31,11 +31,8 @@
         >
           @if (isSaving) {
             <mat-icon class="animate-spin">sync</mat-icon>
-            Saving...
-          } @else {
-            <!-- <mat-icon>save</mat-icon> -->
-            Save Archive
           }
+          {{ isSaving ? 'Saving...' : 'Save Archive' }}
         </button>
       </div>
     }

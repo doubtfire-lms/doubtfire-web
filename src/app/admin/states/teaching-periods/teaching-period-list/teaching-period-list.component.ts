@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {Observable} from 'rxjs';
 import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {TeachingPeriodBreakService} from 'src/app/api/services/teaching-period-break.service';
@@ -107,7 +108,10 @@ export class NewTeachingPeriodDialogComponent {
     public teachingPeriodBreakService: TeachingPeriodBreakService,
     public alertService: AlertService,
   ) {}
-  public newOrSelectedTeachingPeriod = this.data.teachingPeriod || new TeachingPeriod();
+  public newOrSelectedTeachingPeriod: TeachingPeriod =
+    this.data.teachingPeriod || new TeachingPeriod();
+  public teachingBreaks$: Observable<TeachingPeriodBreak[]> = this.newOrSelectedTeachingPeriod
+    .breaksCache.values as Observable<TeachingPeriodBreak[]>;
 
   public tempBreak = new TeachingPeriodBreak();
 
