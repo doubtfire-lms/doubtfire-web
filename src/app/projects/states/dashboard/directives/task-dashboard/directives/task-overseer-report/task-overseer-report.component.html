@@ -17,7 +17,9 @@
         <mat-expansion-panel-header class="flex items-center justify-between">
           <mat-panel-title class="flex items-center gap-3">
             @if (assessmentFor(history); as oa) {
-              <status-icon [status]="oa.taskStatus"></status-icon>
+              @if (oa.taskStatus) {
+                <status-icon [status]="oa.taskStatus"></status-icon>
+              }
             }
             <div class="flex flex-col">
               <div>
