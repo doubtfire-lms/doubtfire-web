@@ -35,14 +35,13 @@
         <h3 mat-subheader>Discussion audio</h3>
 
         @for (promptNumber of promptNumbers; track promptNumber) {
-          <mat-list-item class="cursor-pointer" (click)="togglePromptTrack(promptNumber)">
+          <mat-list-item class="max-h-10 cursor-pointer" (click)="togglePromptTrack(promptNumber)">
             <mat-icon class="text-black" matListItemIcon>
               {{
                 isTrackPlaying(promptTrackKey(promptNumber)) ? 'stop_circle' : 'play_arrow_rounded'
               }}
             </mat-icon>
             <span matListItemTitle>Prompt {{ promptNumber + 1 }}</span>
-            <span matListItemLine>Original tutor prompt</span>
           </mat-list-item>
         }
 
