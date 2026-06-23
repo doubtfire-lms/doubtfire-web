@@ -11,7 +11,9 @@
       <mat-expansion-panel
         [attr.id]="'history-panel-' + history.id"
         [disabled]="!assessmentFor(history)"
-        [expanded]="assessmentFor(history)?.id === loadOverseerAssessmentId"
+        [expanded]="
+          assessmentFor(history) && assessmentFor(history)?.id === loadOverseerAssessmentId
+        "
         (opened)="onHistoryOpen(history)"
       >
         <mat-expansion-panel-header class="flex items-center justify-between">
