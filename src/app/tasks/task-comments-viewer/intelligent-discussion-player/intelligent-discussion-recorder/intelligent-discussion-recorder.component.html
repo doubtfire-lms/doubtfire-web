@@ -1,15 +1,25 @@
-<div class="audio-recorder">
-  <p [hidden]="canRecord">
-    Audio recording <br />
-    only supported in modern versions of Chrome, Firefox and Safari.
+<div>
+  <p class="rounded-md bg-amber-50 p-3 text-sm text-amber-800" [hidden]="canRecord">
+    Audio recording is only supported in modern versions of Chrome, Firefox and Safari.
   </p>
   <mat-spinner
-    class="send-audio-spinner"
+    class="mx-auto my-4"
     [diameter]="72"
     [hidden]="!isSending"
     [strokeWidth]="2"
   ></mat-spinner>
-  <div id="mainDIscussionVisualiser" [hidden]="!canRecord || isSending">
-    <canvas class="audio-visualiser" id="mainDiscussionRecorderVisualiser"></canvas>
+  <div
+    class="relative overflow-hidden rounded-lg border border-green-100 bg-green-50"
+    id="mainDIscussionVisualiser"
+    [hidden]="!canRecord || isSending"
+  >
+    <canvas
+      #mainDiscussionRecorderVisualiser
+      class="h-[72px] w-full"
+      id="mainDiscussionRecorderVisualiser"
+    ></canvas>
+    <div
+      class="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/50 via-transparent to-white/50"
+    ></div>
   </div>
 </div>

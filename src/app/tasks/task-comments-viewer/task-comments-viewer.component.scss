@@ -342,7 +342,6 @@ $comment-inner-border-radius: 4px;
 
     .comment-text,
     .comment-pdf,
-    .comment-discussion,
     .markdown-to-html p {
       padding-right: 6px;
       padding-left: 4px;
@@ -429,7 +428,7 @@ $comment-inner-border-radius: 4px;
   }
 
   // Disucssion comments
-  .comment .discussion-bubble {
+  /* .comment .discussion-bubble {
     @include base-bubble;
     max-width: 300px;
 
@@ -438,7 +437,7 @@ $comment-inner-border-radius: 4px;
     }
 
     background: $discussion-comment-bubble-color;
-  }
+  } */
 
   .comment.comment-by-other-user .text-bubble {
     background: $comment-bubble-color-other-user;

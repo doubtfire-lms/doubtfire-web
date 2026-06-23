@@ -15,7 +15,7 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent im
   @Input() task: Task;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
-  isSending: boolean;
+  isSending: boolean = false;
 
   constructor(
     private mediaRecorderService: MediaRecorderService,
