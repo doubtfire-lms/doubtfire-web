@@ -78,7 +78,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   constructor(
     private learningOutcomeService: LearningOutcomeService,
     private feedbackTemplateService: FeedbackTemplateService,
-    private taskService: TaskService,
+    public taskService: TaskService,
   ) {}
 
   ngOnInit(): void {

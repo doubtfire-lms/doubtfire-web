@@ -334,7 +334,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     );
   }
 
-  public uploadOverseerResources(files: FileList) {
+  public uploadOverseerResources(files: ArrayLike<File>) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(
       (f) => f.type === 'application/zip' || f.type === 'application/x-zip-compressed',
     );

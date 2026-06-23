@@ -83,8 +83,8 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
   }
 
   get initials(): string {
-    const result = this.user?.name != null ? this.user.name.split(' ') : '  ';
-    return result.length > 1 ? `${result[0][0]}${result[1][0]}`.toUpperCase() : '  ';
+    const words = this.user?.name.split(' ').filter(Boolean) ?? [];
+    return words.length > 1 ? `${words[0][0]}${words[1][0]}`.toUpperCase() : '  ';
   }
 
   get words(): string[] {

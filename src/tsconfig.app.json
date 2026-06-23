@@ -7,12 +7,11 @@
   "files": ["main.ts", "polyfills.ts"],
   "include": ["src/**/*.d.ts", "src/**/*.ts"],
   "angularCompilerOptions": {
-    // TODO: Re-enable extendedDiagnostics after strictTempaltes is enabled
-    // "extendedDiagnostics": {
-    //   "checks": {
-    //     "nullishCoalescingNotNullable": "suppress",
-    //     "optionalChainNotNullable": "suppress"
-    //   }
-    // }
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
   }
 }

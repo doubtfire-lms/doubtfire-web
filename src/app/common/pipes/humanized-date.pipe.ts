@@ -6,9 +6,9 @@ import {Pipe, PipeTransform} from '@angular/core';
   standalone: false,
 })
 export class HumanizedDatePipe implements PipeTransform {
-  transform(value: unknown, ..._args: unknown[]): unknown {
+  transform(value: unknown, ..._args: unknown[]): string {
     if (value == null) {
-      return;
+      return '';
     }
     return moment(value).calendar(null, {
       sameDay: '',

@@ -89,6 +89,10 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
     'actions',
   ];
 
+  public filteredStaffFor(unitToImport: UnitImportData): Observable<User[]> {
+    return unitToImport.filteredStaff;
+  }
+
   constructor(
     public dialogRef: MatDialogRef<TeachingPeriodUnitImportData>,
     private userService: UserService,

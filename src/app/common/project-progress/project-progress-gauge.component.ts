@@ -1,3 +1,4 @@
+import {LegendPosition} from '@swimlane/ngx-charts';
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 
@@ -30,10 +31,11 @@ export class ProjectProgressGaugeComponent {
     },
   ];
 
-  smallView = [90, 90];
-  view = [500, 500];
+  smallView: [number, number] = [90, 90];
+  view: [number, number] = [500, 500];
   legend: boolean = true;
-  legendPosition: string = 'below';
+  legendPosition: LegendPosition = LegendPosition.Below;
+  rightLegendPosition: LegendPosition = LegendPosition.Right;
 
   colorScheme = {
     domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5'],

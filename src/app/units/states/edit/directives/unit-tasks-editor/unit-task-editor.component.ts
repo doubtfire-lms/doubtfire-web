@@ -32,7 +32,7 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   public selectedTaskDefinition: TaskDefinition;
   public isTaskListCollapsed: boolean = false;
 
-  public gradeColumns: string[] = ['p', 'c', 'd', 'hd'];
+  public gradeColumns: GradeCol[] = ['p', 'c', 'd', 'hd'];
   public dueDateColumns: string[] = ['taskDefinition', 'p', 'c', 'd', 'hd'];
   public dueDateSource: MatTableDataSource<TaskDefinition> = new MatTableDataSource([]);
 

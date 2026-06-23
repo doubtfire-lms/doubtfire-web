@@ -23,6 +23,18 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 
+interface InboxTaskData {
+  source: (
+    unit: Unit,
+    taskDef?: TaskDefinition | number,
+    fetchMyStudentsOnly?: boolean,
+  ) => Observable<Task[]> | null;
+  selectedTask: Task | null;
+  taskKey: unknown;
+  onSelectedTaskChange: (task: Task | null) => void;
+  taskDefMode: boolean;
+}
+
 @Component({
   selector: 'f-inbox',
   templateUrl: './inbox.component.html',
@@ -33,7 +45,7 @@ import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-ta
 export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
-  @Input() taskData: {selectedTask: Task};
+  @Input() taskData: InboxTaskData;
   @Input() loading = false;
   @Input() filters: Partial<{
     taskDefinition: TaskDefinition;

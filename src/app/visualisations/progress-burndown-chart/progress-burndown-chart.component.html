@@ -1,15 +1,15 @@
 <div class="chart-container flex h-full min-h-[320px] pb-6">
   <ngx-charts-line-chart
     class="progress-burndown-chart h-full flex-1"
-    legendPosition="below"
     [legend]="legend"
+    [legendPosition]="legendPosition"
     [legendTitle]="''"
     [results]="data"
     [scheme]="colorScheme"
     [showXAxisLabel]="showXAxisLabel"
     [showYAxisLabel]="showYAxisLabel"
     [tooltipDisabled]="true"
-    [view]=""
+    [view]="undefined"
     [xAxis]="xAxis"
     [xAxisLabel]="xAxisLabel"
     [yAxis]="yAxis"

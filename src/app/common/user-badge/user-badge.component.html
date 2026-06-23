@@ -5,8 +5,8 @@
     [routerLink]="studentDashboardRoute"
   >
     <user-icon
-      size="40"
       style="margin-right: 8px"
+      [size]="40"
       [unselected]="unselected"
       [user]="$safeNavigationMigration(selectedTask?.project.student)"
     ></user-icon>

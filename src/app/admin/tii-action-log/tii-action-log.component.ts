@@ -19,6 +19,7 @@ export class TiiActionLogComponent implements AfterViewInit {
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   public tiiActionsSource: MatTableDataSource<TiiAction>;
+  public selectedTaskDefinition: TiiAction | null = null;
   public columns: string[] = [
     'type',
     'lastRun',

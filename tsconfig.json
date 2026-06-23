@@ -23,7 +23,7 @@
     "skipLibCheck": true
   },
   "angularCompilerOptions": {
-    "strictTemplates": false,
+    "strictTemplates": true,
     "typeCheckHostBindings": false
   }
 }

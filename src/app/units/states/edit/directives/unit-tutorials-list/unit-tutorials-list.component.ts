@@ -59,7 +59,7 @@ export class UnitTutorialsListComponent
   tutorials: Tutorial[] = [];
   dataSource: MatTableDataSource<Tutorial> = new MatTableDataSource();
 
-  private editingStream: boolean = false;
+  public editingStream: boolean = false;
 
   /**
    * The original stream abbreviation is required to update the stream - as it may change but is used in the url.
