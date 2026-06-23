@@ -26,7 +26,9 @@ export class IntelligentDiscussionRecorderComponent
   extends BaseAudioRecorderComponent
   implements AfterViewInit
 {
+  @Input() countdownText: number;
   @Input() discussion: DiscussionComment;
+  @Input() promptActive = false;
   @Input() task: Task;
   @ViewChild('mainDiscussionRecorderVisualiser') canvasRef: ElementRef<HTMLCanvasElement>;
   canvas: HTMLCanvasElement;
@@ -50,6 +52,7 @@ export class IntelligentDiscussionRecorderComponent
     super.init();
     this.canvas = this.canvasRef.nativeElement;
     this.canvasCtx = this.canvas.getContext('2d');
+    this.clearWaveform();
   }
 
   onNewRecording(evt: RecordingEvent): void {
@@ -63,6 +66,7 @@ export class IntelligentDiscussionRecorderComponent
     if (this.isRecording) {
       this.mediaRecorder.stopRecording();
       this.isRecording = false;
+      this.clearWaveform();
     }
   }
 
@@ -105,7 +109,7 @@ export class IntelligentDiscussionRecorderComponent
         const barX = i * (barWidth + barGap);
         const barY = HEIGHT / 2;
         const barHeight = -(dataArray[i] / 8) + 1;
-        this.canvasCtx.fillStyle = '#16a34a';
+        this.canvasCtx.fillStyle = this.waveformColour;
         this.canvasCtx.fillRect(barX, barY, barWidth, barHeight);
         this.canvasCtx.fillRect(barX, barY - barHeight, barWidth, barHeight);
       }
@@ -116,5 +120,24 @@ export class IntelligentDiscussionRecorderComponent
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
     draw();
+  }
+
+  private get waveformColour(): string {
+    if (!this.isRecording) {
+      return '#2563eb';
+    }
+
+    return this.promptActive ? '#b91c1c66' : '#dc2626';
+  }
+
+  private clearWaveform(): void {
+    if (!this.canvas || !this.canvasCtx) {
+      return;
+    }
+
+    this.canvas.width = this.canvas.clientWidth;
+    this.canvas.height = this.canvas.clientHeight;
+
+    this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 }

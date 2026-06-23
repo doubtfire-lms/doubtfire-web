@@ -149,9 +149,11 @@ export class IntelligentDiscussionDialog implements OnDestroy {
   promptLoading = false;
   promptPlaying = false;
   responseRecording = false;
+  countdownValue: number = null;
   count: number = 3 * 60 * 1000; // 3 minutes
   activePromptId: number = 0;
   counter: Subscription;
+  private countdownTimer: ReturnType<typeof setInterval>;
   guide = {text: 'Click start to begin'};
   private promptBlobUrl: string;
 
@@ -174,6 +176,7 @@ export class IntelligentDiscussionDialog implements OnDestroy {
 
   ngOnDestroy(): void {
     this.counter?.unsubscribe();
+    this.clearCountdown();
     this.data.audioRef.pause();
     this.releasePromptBlob();
   }
@@ -195,6 +198,9 @@ export class IntelligentDiscussionDialog implements OnDestroy {
   }
 
   get discussionStatusTitle(): string {
+    if (this.countdownValue) {
+      return 'Starting discussion';
+    }
     if (!this.startedDiscussion) {
       return 'Ready when you are';
     }
@@ -214,6 +220,9 @@ export class IntelligentDiscussionDialog implements OnDestroy {
   }
 
   get discussionStatusHint(): string {
+    if (this.countdownValue) {
+      return 'Get ready. Recording will begin when the countdown finishes.';
+    }
     if (!this.startedDiscussion) {
       return 'When you start, your microphone will begin recording and the first prompt will play.';
     }
@@ -238,6 +247,7 @@ export class IntelligentDiscussionDialog implements OnDestroy {
     this.promptLoading = false;
     this.promptPlaying = false;
     this.responseRecording = false;
+    this.clearCountdown();
     this.guide = {text: ''};
     this.discussionRecorder.stopRecording();
     this.data.audioRef.pause();
@@ -248,33 +258,57 @@ export class IntelligentDiscussionDialog implements OnDestroy {
 
   startDiscussion() {
     if (!this.startedDiscussion) {
-      this.setPrompt();
-
-      // start recording
-      this.discussionRecorder.startRecording();
-
-      // start the discussion
       this.startedDiscussion = true;
       this.inDiscussion = true;
-
-      // get the cutoff date from the server
-      // For now this is stubbed as 15 minutes from now.
-      const discussionCutoff = moment().add(15, 'minutes');
-
-      this.counter = timer(0, 1000).subscribe((val) => {
-        let difference = discussionCutoff.diff(moment());
-        if (difference <= 0) {
-          difference = 0;
-        }
-        this.timerText = moment.utc(difference).format('mm[m]:ss[s]');
-        this.ticks = val;
-
-        if (difference === 0) {
-          this.inDiscussion = false;
-          this.counter.unsubscribe();
-        }
-      });
+      this.startCountdown();
     }
+  }
+
+  private beginRecordingAndFirstPrompt(): void {
+    // start recording
+    this.discussionRecorder.startRecording();
+
+    this.setPrompt();
+
+    // get the cutoff date from the server
+    // For now this is stubbed as 15 minutes from now.
+    const discussionCutoff = moment().add(15, 'minutes');
+
+    this.counter = timer(0, 1000).subscribe((val) => {
+      let difference = discussionCutoff.diff(moment());
+      if (difference <= 0) {
+        difference = 0;
+      }
+      this.timerText = moment.utc(difference).format('mm[m]:ss[s]');
+      this.ticks = val;
+
+      if (difference === 0) {
+        this.inDiscussion = false;
+        this.counter.unsubscribe();
+      }
+    });
+  }
+
+  private startCountdown(): void {
+    this.countdownValue = 3;
+    this.guide.text = 'Starting discussion';
+
+    this.countdownTimer = setInterval(() => {
+      this.countdownValue--;
+
+      if (this.countdownValue <= 0) {
+        this.clearCountdown();
+        this.beginRecordingAndFirstPrompt();
+      }
+    }, 1000);
+  }
+
+  private clearCountdown(): void {
+    if (this.countdownTimer) {
+      clearInterval(this.countdownTimer);
+      this.countdownTimer = undefined;
+    }
+    this.countdownValue = null;
   }
 
   setPrompt() {

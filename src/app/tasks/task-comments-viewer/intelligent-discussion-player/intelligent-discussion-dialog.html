@@ -105,8 +105,9 @@
         <intelligent-discussion-recorder
           #discussionRecorder
           class="mt-4 block"
-          [class.hidden]="!responseRecording"
+          [countdownText]="countdownValue"
           [discussion]="data.dc"
+          [promptActive]="promptLoading || promptPlaying"
           [task]="data.task"
         ></intelligent-discussion-recorder>
       </div>
