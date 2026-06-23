@@ -46,16 +46,16 @@ export class User extends Entity {
   }
 
   public get name(): string {
-    const fn = this.firstName.slice(0, 11).trim();
-    const sn = this.lastName.slice(0, 11).trim();
+    const fn = (this.firstName ?? '').slice(0, 11).trim();
+    const sn = (this.lastName ?? '').slice(0, 11).trim();
     const nn =
       this.nickname && this.nickname.trim() ? ` (${this.nickname.trim().slice(0, 11).trim()})` : '';
-    return `${fn} ${sn}${nn}`;
+    return `${fn} ${sn}${nn}`.trim();
   }
 
   public get preferredName(): string {
     const nickname = this.nickname?.trim();
-    const firstName = this.firstName.trim();
+    const firstName = this.firstName?.trim() ?? '';
     if (nickname) {
       return nickname;
     }

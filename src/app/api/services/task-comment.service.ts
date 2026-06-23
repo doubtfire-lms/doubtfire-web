@@ -56,7 +56,8 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
         keys: 'author',
         toEntityFn: (data: object, key: string, comment: TaskComment) => {
           const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
-          comment.initials = `${user.preferredName[0]}${user.lastName[0]}`.toUpperCase();
+          comment.initials =
+            `${user.preferredName[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase();
           return user;
         },
       },
