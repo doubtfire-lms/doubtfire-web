@@ -42,13 +42,13 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
   protected readonly endpointFormat = this.commentEndpointFormat;
 
   constructor(
-    httpClient: HttpClient,
+    private apiHttpClient: HttpClient,
     private emojiService: EmojiService,
     private userService: UserService,
     private downloader: FileDownloaderService,
     private testAttemptService: TestAttemptService,
   ) {
-    super(httpClient, API_URL);
+    super(apiHttpClient, API_URL);
 
     this.mapping.addKeys(
       'id',
@@ -310,17 +310,15 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     );
   }
 
-  public postDiscussionReply(comment: TaskComment, replyAudio: Blob): Observable<TaskComment> {
+  public postDiscussionReply(comment: TaskComment, replyAudio: Blob): Observable<void> {
     const form = new FormData();
-    const pathIds = {
-      project_id: comment.project.id,
-      task_definition_id: comment.task.id,
-      task_comment_id: comment.id,
-    };
 
     form.append('attachment', replyAudio);
 
-    return this.create(pathIds, {body: form, cache: comment.task.commentCache});
+    return this.apiHttpClient.post<void>(
+      `${API_URL}/projects/${comment.project.id}/task_def_id/${comment.task.definition.id}/comments/${comment.id}/discussion_comment/reply`,
+      form,
+    );
   }
 
   // public getDiscussionComment() ->
