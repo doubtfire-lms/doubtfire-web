@@ -150,6 +150,7 @@ export class NewTeachingPeriodDialogComponent {
     observer.subscribe({
       next: (teachingPeriod) => {
         this.alertService.success(`${teachingPeriod.name} saved`);
+        this.dialogRef.close(teachingPeriod);
       },
       error: (response) => {
         this.alertService.error(`Error saving teaching period. ${response}`);
