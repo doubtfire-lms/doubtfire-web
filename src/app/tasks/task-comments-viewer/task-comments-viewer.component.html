@@ -32,7 +32,12 @@
               (mouseover)="comment.hover = true"
             >
               @if (comment.shouldShowTimestamp) {
-                <p id="commentTimestamp" [ngClass]="{own: comment.authorIsMe}">
+                <p
+                  id="commentTimestamp"
+                  matTooltipPosition="above"
+                  [matTooltip]="comment.createdAt | localizedDateTime"
+                  [ngClass]="{own: comment.authorIsMe}"
+                >
                   {{ comment.author.preferredName }} {{ comment.author.lastName }}
                   {{ comment.createdAt | humanizedDate }}
                 </p>
@@ -72,7 +77,7 @@
                         class="comment-status"
                         matTooltipPosition="above"
                         matTooltipShowDelay="1000"
-                        [matTooltip]="comment.createdAt | humanizedDate"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
                       >
                         <hr class="hr-text" [attr.data-content]="comment.text" />
                       </div>
@@ -83,7 +88,7 @@
                         class="my-1 flex w-full flex-col items-center"
                         matTooltipPosition="above"
                         matTooltipShowDelay="1000"
-                        [matTooltip]="comment.createdAt | humanizedDate"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
                       >
                         <mat-card appearance="outlined" class="w-full self-end">
                           <mat-card-header>
@@ -105,7 +110,7 @@
                         class="my-1 flex w-full flex-col items-center"
                         matTooltipPosition="above"
                         matTooltipShowDelay="1000"
-                        [matTooltip]="comment.createdAt | humanizedDate"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
                       >
                         <mat-card appearance="outlined" class="w-full self-end">
                           <mat-card-header>
@@ -127,7 +132,7 @@
                         class="my-1 flex w-full flex-col items-center"
                         matTooltipPosition="above"
                         matTooltipShowDelay="1000"
-                        [matTooltip]="comment.createdAt | humanizedDate"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
                       >
                         <mat-card appearance="outlined" class="w-full self-end">
                           <mat-card-header>
@@ -145,7 +150,12 @@
                     }
 
                     @case ('plan') {
-                      <div class="comment-status">
+                      <div
+                        class="comment-status"
+                        matTooltipPosition="above"
+                        matTooltipShowDelay="1000"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
+                      >
                         <hr class="hr-text" [attr.data-content]="comment.text" />
                       </div>
                     }
@@ -217,7 +227,7 @@
                           class="comment-text"
                           matTooltipPosition="above"
                           matTooltipShowDelay="1000"
-                          [matTooltip]="comment.createdAt | humanizedDate"
+                          [matTooltip]="comment.createdAt | localizedDateTime"
                         >
                           <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
                         </div>
