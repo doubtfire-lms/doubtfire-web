@@ -81,7 +81,6 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 // import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 // import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
 // import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
-import {UpgradeModule} from '@angular/upgrade/static';
 import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {
@@ -810,7 +809,6 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     MatGridListModule,
     MatTabsModule,
     MatTreeModule,
-    UpgradeModule,
     MatTableModule,
     MatChipsModule,
     MatSnackBarModule,
