@@ -34,12 +34,12 @@ export class GradeTaskModalComponent implements OnInit {
     this.qualityRatingSelected = this.task.qualityPts >= 0;
     this.selectedGrade = this.task.grade || 0;
     this.totalRating = this.task.definition.maxQualityPts || 5;
-    this.gradeValues = this.gradeService.allGradeValues;
+    this.gradeValues = this.gradeService.allGradeValuesFor(this.task.unit);
     this.updateRatingLabel();
   }
 
   gradeName(grade: number): string {
-    return this.gradeService.grades[grade];
+    return this.gradeService.gradeLabel(grade, this.task.unit);
   }
 
   dismiss(): void {

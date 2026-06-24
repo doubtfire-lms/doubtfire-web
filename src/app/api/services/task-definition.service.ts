@@ -163,41 +163,30 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
         },
       },
       'overseerResourceFiles',
-      // {
-      //   keys: 'pTargetDate',
-      //   toEntityFn: MappingFunctions.mapDateToDay,
-      //   toJsonFn: MappingFunctions.mapDayToJson,
-      // },
       {
-        keys: 'cTargetDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
-      },
-      {
-        keys: 'dTargetDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
-      },
-      {
-        keys: 'hdTargetDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
-      },
-
-      {
-        keys: 'cStartDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
-      },
-      {
-        keys: 'dStartDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
-      },
-      {
-        keys: 'hdStartDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
+        keys: ['gradeDueDates', 'grade_due_dates'],
+        toEntityFn: (data: object, key: string) => {
+          return (data[key] ?? []).map((gradeDate) => ({
+            targetGrade: gradeDate.target_grade,
+            targetDueDate: gradeDate.target_due_date
+              ? MappingFunctions.mapDateToDay(gradeDate, 'target_due_date', null)
+              : undefined,
+            startDate: gradeDate.start_date
+              ? MappingFunctions.mapDateToDay(gradeDate, 'start_date', null)
+              : undefined,
+          }));
+        },
+        toJsonFn: (taskDefinition: TaskDefinition) => {
+          return taskDefinition.gradeDueDates.map((gradeDate) => ({
+            target_grade: gradeDate.targetGrade,
+            target_due_date: gradeDate.targetDueDate
+              ? MappingFunctions.mapDayToJson(gradeDate, 'targetDueDate')
+              : undefined,
+            start_date: gradeDate.startDate
+              ? MappingFunctions.mapDayToJson(gradeDate, 'startDate')
+              : undefined,
+          }));
+        },
       },
     );
 

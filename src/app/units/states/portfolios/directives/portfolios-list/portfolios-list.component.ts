@@ -111,11 +111,11 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
   }
 
   public get gradeValues() {
-    return this.gradeService.gradeValues;
+    return this.gradeService.gradeValuesFor(this.unit);
   }
 
   public gradeLabel(grade) {
-    return this.gradeService.grades[grade];
+    return this.gradeService.gradeLabel(grade, this.unit);
   }
 
   updateDataSource() {

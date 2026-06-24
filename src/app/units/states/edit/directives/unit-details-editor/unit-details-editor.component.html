@@ -133,6 +133,144 @@
     </div>
   </mat-card>
 
+  <mat-card appearance="outlined" class="flex flex-col gap-3 p-4">
+    <div>
+      <h4 class="mb-1">Grade definitions</h4>
+      <p class="text-sm text-gray-600">
+        Index -1 is used when work fails assessment. Target grades start at index 0, and higher
+        indexes include tasks from every lower level.
+      </p>
+      <p class="text-sm text-gray-600">
+        Grades already used by tasks, students, or communications can be renamed, but cannot be
+        removed or moved to another index.
+      </p>
+    </div>
+
+    <div>
+      <table mat-table [dataSource]="gradeDefinitions">
+        <ng-container matColumnDef="index">
+          <th *matHeaderCellDef mat-header-cell>Index</th>
+          <td *matCellDef="let grade" mat-cell>{{ grade.value }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="label">
+          <th *matHeaderCellDef mat-header-cell>Label</th>
+          <td *matCellDef="let grade; let index = index" mat-cell>
+            @if (editingGradeId === grade.id) {
+              <mat-form-field appearance="outline" class="mt-4" subscriptSizing="dynamic">
+                <mat-label>Label</mat-label>
+                <input
+                  matInput
+                  maxlength="50"
+                  required
+                  [ngModel]="grade.label"
+                  (ngModelChange)="updateGrade(index, 'label', $event)"
+                />
+              </mat-form-field>
+            } @else {
+              {{ grade.label }}
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="abbreviation">
+          <th *matHeaderCellDef mat-header-cell>Abbreviation</th>
+          <td *matCellDef="let grade; let index = index" mat-cell>
+            @if (editingGradeId === grade.id) {
+              <mat-form-field appearance="outline" class="mt-4" subscriptSizing="dynamic">
+                <mat-label>Abbreviation</mat-label>
+                <input
+                  matInput
+                  maxlength="10"
+                  required
+                  [ngModel]="grade.abbreviation"
+                  (ngModelChange)="updateGrade(index, 'abbreviation', $event)"
+                />
+              </mat-form-field>
+            } @else {
+              {{ grade.abbreviation }}
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th *matHeaderCellDef mat-header-cell>Actions</th>
+          <td *matCellDef="let grade; let index = index" mat-cell>
+            <div class="flex">
+              @if (index > 0) {
+                <button
+                  aria-label="Move grade down"
+                  mat-icon-button
+                  matTooltip="Move down"
+                  type="button"
+                  [disabled]="index === gradeDefinitions.length - 1"
+                  (click)="moveGrade(index, 1)"
+                >
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+                <button
+                  aria-label="Move grade up"
+                  mat-icon-button
+                  matTooltip="Move up"
+                  type="button"
+                  [disabled]="index === 1"
+                  (click)="moveGrade(index, -1)"
+                >
+                  <mat-icon>arrow_upward</mat-icon>
+                </button>
+              }
+
+              @if (editingGradeId === grade.id) {
+                <button
+                  aria-label="Finish editing grade"
+                  mat-icon-button
+                  matTooltip="Done"
+                  type="button"
+                  (click)="finishEditingGrade()"
+                >
+                  <mat-icon>check</mat-icon>
+                </button>
+              } @else {
+                <button
+                  aria-label="Edit grade"
+                  mat-icon-button
+                  matTooltip="Edit"
+                  type="button"
+                  (click)="editGrade(grade)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+
+              @if (index > 0) {
+                <button
+                  aria-label="Remove grade"
+                  mat-icon-button
+                  matTooltip="Delete"
+                  type="button"
+                  [disabled]="gradeDefinitions.length === 2"
+                  (click)="removeGrade(index)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </div>
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="gradeDefinitionColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: gradeDefinitionColumns" mat-row></tr>
+      </table>
+    </div>
+
+    <div>
+      <button mat-stroked-button type="button" (click)="addGrade()">
+        <mat-icon>add</mat-icon>
+        Add grade
+      </button>
+    </div>
+  </mat-card>
+
   <mat-card appearance="outlined" class="flex flex-col gap-3 p-[16px]">
     <div>
       <mat-slide-toggle [(ngModel)]="unit.allowFlexibleDates"

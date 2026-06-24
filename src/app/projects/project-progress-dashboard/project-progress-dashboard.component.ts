@@ -26,9 +26,8 @@ export class ProjectProgressDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.project$.subscribe((project) => {
       this.project = project;
+      this.grades = this.gradeService.gradeViewDataFor(project.unit);
     });
-
-    this.grades = this.gradeService.gradeViewData.slice(1);
 
     setTimeout(() => {
       console.log(this.project.taskStats);

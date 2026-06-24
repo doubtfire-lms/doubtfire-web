@@ -29,7 +29,7 @@
       <th *matHeaderCellDef mat-header-cell>{{ unitRole ? 'Target Grade' : '' }}</th>
       <td *matCellDef="let member" mat-cell>
         @if (unitRole) {
-          <f-grade-icon [grade]="member.targetGrade"></f-grade-icon>
+          <f-grade-icon [grade]="member.targetGrade" [unit]="unit"></f-grade-icon>
         }
       </td>
     </ng-container>

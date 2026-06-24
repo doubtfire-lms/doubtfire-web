@@ -23,7 +23,7 @@ export class ProgressDashboardComponent implements OnInit {
   @Input() project: Project;
   @Output() doUpdateTargetGrade: EventEmitter<void> = new EventEmitter();
 
-  grades = {
+  grades: {names: Record<number, string>; values: number[]} = {
     names: this.gradeService.grades,
     values: this.gradeService.gradeValues,
   };
@@ -40,6 +40,10 @@ export class ProgressDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.grades.values = this.gradeService.gradeValuesFor(this.project.unit);
+    this.grades.names = Object.fromEntries(
+      this.project.unit.gradeDefinitions.map((definition) => [definition.value, definition.label]),
+    );
     this.updateTaskCompletionValues();
     this.project?.refreshBurndownChartData();
   }

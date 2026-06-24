@@ -98,15 +98,17 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public get gradeValues() {
-    return this.gradeService.gradeValues;
+    return this.gradeService.gradeValuesFor(this.unit);
   }
 
   public get gradeAcronyms() {
-    return this.gradeService.gradeAcronyms;
+    return Object.fromEntries(
+      this.unit.gradeDefinitions.map((definition) => [definition.value, definition.abbreviation]),
+    );
   }
 
   public gradeString(grade: number) {
-    return this.gradeService.grades[grade];
+    return this.gradeService.gradeLabel(grade, this.unit);
   }
 
   onBarHover(item: TaskGanttItem) {
@@ -758,23 +760,8 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
       _items.push(item);
 
       // Create baseline item
-      const tdTargetDate =
-        (this.targetGrade === 1
-          ? td.cTargetDate
-          : this.targetGrade === 2
-            ? td.dTargetDate
-            : this.targetGrade === 3
-              ? td.hdTargetDate
-              : td.targetDate) ?? td.targetDate;
-
-      const tdStartDate =
-        (this.targetGrade === 1
-          ? td.cStartDate
-          : this.targetGrade === 2
-            ? td.dStartDate
-            : this.targetGrade === 3
-              ? td.hdStartDate
-              : td.startDate) ?? td.startDate;
+      const tdTargetDate = td.gradeTargetDate(this.targetGrade) ?? td.targetDate;
+      const tdStartDate = td.gradeStartDate(this.targetGrade) ?? td.startDate;
 
       const baselineItem: GanttBaselineItem = {
         id: item.id,

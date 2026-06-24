@@ -30,7 +30,6 @@ import {
   UnitRoleService,
   UserService,
 } from './doubtfire-model';
-import {Grade} from './grade';
 import {TaskPrerequisite} from './task-prerequisite';
 
 export const FeedbackModerationAction = {
@@ -252,14 +251,14 @@ export class Task extends Entity {
   }
 
   public get gradeWord(): string {
-    if (this.grade) return Grade.GRADES[this.grade];
+    if (this.grade !== undefined && this.grade !== null) return this.unit.gradeLabel(this.grade);
     else {
       return 'Not Graded';
     }
   }
 
   public gradeDesc(): string {
-    return Grade.GRADE_ACRONYMS.get(this.grade);
+    return this.unit.gradeAbbreviation(this.grade);
   }
 
   public hasGrade(): boolean {
@@ -296,16 +295,8 @@ export class Task extends Entity {
         return this.targetDueDate;
       }
 
-      // Unit target dates per grade guidelines
-      if (this.project.targetGrade === 1 && this.definition.cTargetDate) {
-        return this.definition.cTargetDate;
-      }
-      if (this.project.targetGrade === 2 && this.definition.dTargetDate) {
-        return this.definition.dTargetDate;
-      }
-      if (this.project.targetGrade === 3 && this.definition.hdTargetDate) {
-        return this.definition.hdTargetDate;
-      }
+      const gradeTargetDate = this.definition.gradeTargetDate(this.project.targetGrade);
+      if (gradeTargetDate) return gradeTargetDate;
     }
 
     if (this.dueDate) {
@@ -462,16 +453,8 @@ export class Task extends Entity {
         return this.targetStartDate;
       }
 
-      // Unit start dates per grade guidelines
-      if (this.project.targetGrade === 1 && this.definition.cStartDate) {
-        return this.definition.cStartDate;
-      }
-      if (this.project.targetGrade === 2 && this.definition.dStartDate) {
-        return this.definition.dStartDate;
-      }
-      if (this.project.targetGrade === 3 && this.definition.hdStartDate) {
-        return this.definition.hdStartDate;
-      }
+      const gradeStartDate = this.definition.gradeStartDate(this.project.targetGrade);
+      if (gradeStartDate) return gradeStartDate;
     }
 
     if (this.extensions < 0) {

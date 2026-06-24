@@ -6,7 +6,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {DiscussionPrompt} from './discussion-prompt';
-import {Grade, GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
+import {GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtfire-model';
 import {Task} from './doubtfire-model';
 import {OverseerStep} from './overseer/overseer-step';
 import {TaskPrerequisite} from './task-prerequisite';
@@ -24,6 +24,12 @@ export interface SimilarityCheck {
   key: string;
   type: string;
   pattern: string;
+}
+
+export interface TaskDefinitionGradeDueDate {
+  targetGrade: number;
+  targetDueDate?: Date;
+  startDate?: Date;
 }
 
 export class TaskDefinition extends Entity {
@@ -68,14 +74,7 @@ export class TaskDefinition extends Entity {
   discussionPromptsCount: number;
   overseerResourceFiles: string[] = [];
 
-  // pTargetDate: Date;
-  cTargetDate: Date;
-  dTargetDate: Date;
-  hdTargetDate: Date;
-
-  cStartDate: Date;
-  dStartDate: Date;
-  hdStartDate: Date;
+  gradeDueDates: TaskDefinitionGradeDueDate[] = [];
 
   public readonly taskPrerequisitesCache: EntityCache<TaskPrerequisite> =
     new EntityCache<TaskPrerequisite>();
@@ -182,6 +181,43 @@ export class TaskDefinition extends Entity {
     return this.targetDate;
   }
 
+  public gradeTargetDate(targetGrade: number): Date | null {
+    return this.gradeDueDates.find((date) => date.targetGrade === targetGrade)?.targetDueDate;
+  }
+
+  public gradeStartDate(targetGrade: number): Date | null {
+    return this.gradeDueDates.find((date) => date.targetGrade === targetGrade)?.startDate;
+  }
+
+  public setGradeTargetDate(targetGrade: number, value: Date | null): void {
+    if (targetGrade === 0) {
+      this.targetDate = value;
+      return;
+    }
+
+    this.gradeDueDateFor(targetGrade).targetDueDate = value;
+  }
+
+  public setGradeStartDate(targetGrade: number, value: Date | null): void {
+    if (targetGrade === 0) {
+      this.startDate = value;
+      return;
+    }
+
+    this.gradeDueDateFor(targetGrade).startDate = value;
+  }
+
+  private gradeDueDateFor(targetGrade: number): TaskDefinitionGradeDueDate {
+    let gradeDueDate = this.gradeDueDates.find((date) => date.targetGrade === targetGrade);
+
+    if (!gradeDueDate) {
+      gradeDueDate = {targetGrade};
+      this.gradeDueDates.push(gradeDueDate);
+    }
+
+    return gradeDueDate;
+  }
+
   public localDeadlineDate(): Date {
     return this.dueDate;
   }
@@ -253,7 +289,7 @@ export class TaskDefinition extends Entity {
   }
 
   public get targetGradeText(): string {
-    return Grade.GRADES[this.targetGrade];
+    return this.unit.gradeLabel(this.targetGrade);
   }
 
   public hasPlagiarismCheck(): boolean {

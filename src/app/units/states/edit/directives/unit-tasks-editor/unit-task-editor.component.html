@@ -54,11 +54,11 @@
             </td>
           </ng-container>
 
-          @for (g of gradeColumns; track g) {
-            <ng-container [matColumnDef]="g">
+          @for (grade of gradeColumns; track grade.value) {
+            <ng-container [matColumnDef]="gradeColumnId(grade)">
               <th *matHeaderCellDef class="w-[160px] text-center" mat-header-cell>
                 <div class="flex w-full justify-center">
-                  <f-grade-icon [grade]="gradeColumns.indexOf(g)"></f-grade-icon>
+                  <f-grade-icon [grade]="grade.value" [unit]="unit"></f-grade-icon>
                 </div>
               </th>
               <td *matCellDef="let td" mat-cell>
@@ -67,7 +67,7 @@
                     appearance="outline"
                     class="flex w-[250px] items-center justify-center pt-[22px]"
                     [ngClass]="{
-                      'date-error': isStartAfterTarget(td, g),
+                      'date-error': isStartAfterTarget(td, grade),
                     }"
                   >
                     <mat-label> Start Date </mat-label>
@@ -76,10 +76,10 @@
                       placeholder="Select date"
                       [matDatepicker]="dpStart"
                       [ngClass]="{
-                        'fallback-date': isFallbackStartDate(td, g),
+                        'fallback-date': isFallbackStartDate(td, grade),
                       }"
-                      [ngModel]="getGradeStartDate(td, g)"
-                      (ngModelChange)="setGradeStartDate(td, g, $event)"
+                      [ngModel]="getGradeStartDate(td, grade)"
+                      (ngModelChange)="setGradeStartDate(td, grade, $event)"
                     />
                     <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
                     <mat-datepicker #dpStart></mat-datepicker>
@@ -88,7 +88,7 @@
                     appearance="outline"
                     class="flex w-[250px] items-center justify-center"
                     [ngClass]="{
-                      'date-error': isStartAfterTarget(td, g),
+                      'date-error': isStartAfterTarget(td, grade),
                     }"
                   >
                     <mat-label> Target Date </mat-label>
@@ -97,12 +97,12 @@
                       placeholder="Select date"
                       [matDatepicker]="dpTarget"
                       [ngClass]="{
-                        'fallback-date': isFallbackTargetDate(td, g),
+                        'fallback-date': isFallbackTargetDate(td, grade),
                       }"
-                      [ngModel]="getGradeDueDate(td, g)"
-                      (ngModelChange)="setGradeDueDate(td, g, $event)"
+                      [ngModel]="getGradeDueDate(td, grade)"
+                      (ngModelChange)="setGradeDueDate(td, grade, $event)"
                     />
-                    @if (isStartAfterTarget(td, g)) {
+                    @if (isStartAfterTarget(td, grade)) {
                       <mat-hint class="text-red-500">
                         Target date must be after start date
                       </mat-hint>

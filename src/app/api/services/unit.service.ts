@@ -283,6 +283,9 @@ export class UnitService extends CachedEntityService<Unit> {
       // 'groupMemberships', - map to group memberships
       'feedbackWarningThresholdDays',
       'feedbackOverflowThresholdDays',
+      {
+        keys: ['gradeDefinitions', 'grade_definitions'],
+      },
       'enforceFeedbackBeforeDiscussedInClass',
     );
 
@@ -315,6 +318,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'allowStudentChangeTutorial',
       'feedbackWarningThresholdDays',
       'feedbackOverflowThresholdDays',
+      'gradeDefinitions',
       'enforceFeedbackBeforeDiscussedInClass',
     );
   }

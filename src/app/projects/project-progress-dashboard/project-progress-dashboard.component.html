@@ -24,7 +24,7 @@
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Target grade</mat-label>
             <mat-select [(value)]="project.targetGrade">
-              @for (grade of grades; track grade) {
+              @for (grade of grades; track grade.value) {
                 <mat-option [value]="grade.value" (click)="targetGradeClicked(grade.value)">{{
                   grade.viewValue
                 }}</mat-option>
