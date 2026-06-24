@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -98,8 +97,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
           return this.task.canMarkComplete || this.task.status === 'complete';
         });
     } else {
-      const studentTriggers = _.map(
-        this.taskService.switchableStates.student as TaskStatusEnum[],
+      const studentTriggers = (this.taskService.switchableStates.student as TaskStatusEnum[]).map(
         (k) => this.taskService.statusData(k),
       );
       const filteredStudentTriggers = this.task.filterFutureStates(studentTriggers);
