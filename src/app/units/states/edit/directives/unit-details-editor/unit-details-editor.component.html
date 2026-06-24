@@ -164,6 +164,7 @@
                   maxlength="50"
                   required
                   [ngModel]="grade.label"
+                  (keydown.space)="$event.stopPropagation()"
                   (ngModelChange)="updateGrade(index, 'label', $event)"
                 />
               </mat-form-field>
@@ -184,6 +185,7 @@
                   maxlength="10"
                   required
                   [ngModel]="grade.abbreviation"
+                  (keydown.space)="$event.stopPropagation()"
                   (ngModelChange)="updateGrade(index, 'abbreviation', $event)"
                 />
               </mat-form-field>
@@ -193,8 +195,8 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="actions">
-          <th *matHeaderCellDef mat-header-cell>Actions</th>
+        <ng-container matColumnDef="order">
+          <th *matHeaderCellDef mat-header-cell>Order</th>
           <td *matCellDef="let grade; let index = index" mat-cell>
             <div class="flex">
               @if (index > 0) {
@@ -203,7 +205,7 @@
                   mat-icon-button
                   matTooltip="Move down"
                   type="button"
-                  [disabled]="index === gradeDefinitions.length - 1"
+                  [disabled]="isAddingGrade() || index === gradeDefinitions.length - 1"
                   (click)="moveGrade(index, 1)"
                 >
                   <mat-icon>arrow_downward</mat-icon>
@@ -213,22 +215,29 @@
                   mat-icon-button
                   matTooltip="Move up"
                   type="button"
-                  [disabled]="index === 1"
+                  [disabled]="isAddingGrade() || index === 1"
                   (click)="moveGrade(index, -1)"
                 >
                   <mat-icon>arrow_upward</mat-icon>
                 </button>
               }
+            </div>
+          </td>
+        </ng-container>
 
+        <ng-container matColumnDef="actions">
+          <th *matHeaderCellDef mat-header-cell>Actions</th>
+          <td *matCellDef="let grade; let index = index" mat-cell>
+            <div class="flex">
               @if (editingGradeId === grade.id) {
                 <button
-                  aria-label="Finish editing grade"
+                  aria-label="Save grade"
                   mat-icon-button
-                  matTooltip="Done"
+                  matTooltip="Save"
                   type="button"
-                  (click)="finishEditingGrade()"
+                  (click)="saveGrade()"
                 >
-                  <mat-icon>check</mat-icon>
+                  <mat-icon>save</mat-icon>
                 </button>
               } @else {
                 <button
@@ -236,6 +245,7 @@
                   mat-icon-button
                   matTooltip="Edit"
                   type="button"
+                  [disabled]="isAddingGrade()"
                   (click)="editGrade(grade)"
                 >
                   <mat-icon>edit</mat-icon>
@@ -248,7 +258,10 @@
                   mat-icon-button
                   matTooltip="Delete"
                   type="button"
-                  [disabled]="gradeDefinitions.length === 2"
+                  [disabled]="
+                    gradeDefinitions.length === 2 ||
+                    (isAddingGrade() && editingGradeId !== grade.id)
+                  "
                   (click)="removeGrade(index)"
                 >
                   <mat-icon>delete</mat-icon>
@@ -264,7 +277,7 @@
     </div>
 
     <div>
-      <button mat-stroked-button type="button" (click)="addGrade()">
+      <button mat-stroked-button type="button" [disabled]="isAddingGrade()" (click)="addGrade()">
         <mat-icon>add</mat-icon>
         Add grade
       </button>
