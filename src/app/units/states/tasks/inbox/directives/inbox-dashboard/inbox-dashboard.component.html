@@ -27,7 +27,7 @@
               Staff Notes
               @if (task.project.staffNoteCount) {
                 <span
-                  class="ml-0.5 inline-flex h-[22px] w-[22px] items-center justify-center rounded-full p-0 text-[12px] leading-[22px] font-[600] text-white"
+                  class="ml-0.5 inline-flex size-[22px] items-center justify-center rounded-full p-0 text-[12px] leading-[22px] font-semibold text-white"
                   style="background-color: #3939ff"
                 >
                   {{ task.project.staffNoteCount }}
@@ -70,7 +70,7 @@
               <f-pdf-viewer [pdfUrl]="task.submissionUrl()"></f-pdf-viewer>
             } @else {
               <div class="flex h-full flex-col items-center justify-center">
-                <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">
+                <mat-icon class="size-[120px] text-[120px] text-[#c5c5c5]">
                   description_off
                 </mat-icon>
               </div>
@@ -83,7 +83,7 @@
               <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()"></f-pdf-viewer>
             } @else {
               <div class="flex h-full flex-col items-center justify-center">
-                <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">
+                <mat-icon class="size-[120px] text-[120px] text-[#c5c5c5]">
                   subtitles_off
                 </mat-icon>
               </div>
@@ -118,7 +118,7 @@
     </div>
   } @else {
     <div class="flex h-full flex-col items-center justify-center">
-      <mat-icon class="h-[120px] w-[120px] text-[120px] text-[#c5c5c5]">subtitles_off</mat-icon>
+      <mat-icon class="size-[120px] text-[120px] text-[#c5c5c5]">subtitles_off</mat-icon>
       <p class="mt-1 text-[#c5c5c5]">Select a task to review</p>
     </div>
   }
