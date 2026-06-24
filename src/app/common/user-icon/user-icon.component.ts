@@ -1,4 +1,3 @@
-import {Md5} from 'ts-md5/dist/md5';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -55,6 +54,7 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
 
   lineHeight = 12;
   usingCurrentUser: boolean;
+  private renderSequence = 0;
 
   ngAfterViewInit(): void {
     if (this.user == null) {
@@ -72,10 +72,17 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
 
   constructor(private userService: UserService) {}
 
-  get backgroundUrl(): string {
-    const hash =
-      this.email != null ? Md5.hashStr(this.email.trim().toLowerCase()) : Md5.hashStr('');
+  private async backgroundUrl(): Promise<string> {
+    const hash = await this.sha256(this.email?.trim().toLowerCase() ?? '');
     return `https://www.gravatar.com/avatar/${hash}.png?default=blank&size=${this.size * 4}`;
+  }
+
+  private async sha256(value: string): Promise<string> {
+    const bytes = new TextEncoder().encode(value);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join(
+      '',
+    );
   }
 
   get email(): string {
@@ -153,21 +160,24 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
     return context.measureText(text).width;
   }
 
-  drawUserIcon(): void {
+  async drawUserIcon(): Promise<void> {
+    const svgElement = this.svg?.nativeElement;
+    if (!svgElement) return;
+
+    const renderSequence = ++this.renderSequence;
+    const backgroundUrl = await this.backgroundUrl();
+    if (renderSequence !== this.renderSequence) return;
+
     // TODO: Consider caching SVG on a per-user basis
     // clear svg
-    d3.select(this.svg?.nativeElement).selectAll('*').remove();
+    d3.select(svgElement).selectAll('*').remove();
     // if this.unselected is undefined or true
     if (this.unselected) {
-      if (this.svg?.nativeElement) {
-        // hide div from DOM (but don't remove it)
-        this.svg.nativeElement.style.display = 'none';
-      }
+      // hide div from DOM (but don't remove it)
+      svgElement.style.display = 'none';
     } else {
-      if (this.svg?.nativeElement) {
-        // add div to DOM
-        this.svg.nativeElement.style.display = 'block';
-      }
+      // add div to DOM
+      svgElement.style.display = 'block';
     }
     const lines = this.generateLines();
 
@@ -179,7 +189,7 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
     }
 
     const svg = d3
-      .select(this.svg?.nativeElement)
+      .select(svgElement)
       .style('font', '8px sans-serif')
       .attr('width', this.size)
       .attr('shape-rendering', 'geometricPrecision')
@@ -227,7 +237,7 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
 
     svg
       .append('image')
-      .attr('xlink:href', this.backgroundUrl)
+      .attr('xlink:href', backgroundUrl)
       .attr('width', this.size)
       .attr('height', this.size)
       .attr('x', 0)
