@@ -359,7 +359,9 @@
                   matBadge="{{ task.qualityPts }}/{{ task.definition.maxQualityPts }}"
                   matBadgePosition="before"
                   [hidden]="isNarrow"
-                  [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts"
+                  [matBadgeHidden]="
+                    !task.hasQualityPoints() || !task.qualityPts || task.qualityPts <= 0
+                  "
                   [status]="task.status"
                 ></status-icon>
                 <div class="overflow" [hidden]="isNarrow">
