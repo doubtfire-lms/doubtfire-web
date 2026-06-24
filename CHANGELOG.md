@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-27](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-26...v11.0.0-27) (2026-06-24)
+
+
+### Features
+
+* customisable grades ([#1271](https://github.com/b0ink/doubtfire-deploy/issues/1271)) ([c2b68ac](https://github.com/b0ink/doubtfire-deploy/commit/c2b68aca0b5b0873443823795fc50bbcdc81fa4d))
+
+
+### Bug Fixes
+
+* allow empty strings to fix create user dialog ([efb4e5d](https://github.com/b0ink/doubtfire-deploy/commit/efb4e5d97f9641843f3e3e50f1fd38bb560fe853))
+* center div ([1c20dd7](https://github.com/b0ink/doubtfire-deploy/commit/1c20dd73befb5c0e204874140ca494c968487bd3))
+* close dialog after creating teachiing period ([af9ab4d](https://github.com/b0ink/doubtfire-deploy/commit/af9ab4d692f3e4c5e84a10e54a7f63d289a8092b))
+* ensure overseer assessment is valid before expanding ([6cad43c](https://github.com/b0ink/doubtfire-deploy/commit/6cad43c1c6aac6cf7552ed9db937d6a73cb17369))
+* ensure user is authenticated before loading scorm ([1b066c0](https://github.com/b0ink/doubtfire-deploy/commit/1b066c0e08cffc7a1176c7ec7f1b23da4ce6cf3f))
+* extend reply height to avoid text cutoff ([b4af5d1](https://github.com/b0ink/doubtfire-deploy/commit/b4af5d1b64dc32bea17b65c817aeaf56139be0fb))
+* hide quality pts if negative ([e43b96d](https://github.com/b0ink/doubtfire-deploy/commit/e43b96d77f21ebc654b4ca9e0b5a1cfeb5b8058c))
+* only show status icon if set ([46f494c](https://github.com/b0ink/doubtfire-deploy/commit/46f494c926b604f0c1fd396b59678f5ee74a7492))
+* truncate portfolio task list item correctly ([a02fe9e](https://github.com/b0ink/doubtfire-deploy/commit/a02fe9ebe57ae4157b9124d8a8a1c7aea364ba60))
+* update husky hooks for v9 ([5961860](https://github.com/b0ink/doubtfire-deploy/commit/596186040329ee198e1ef703d76676d15ad3ce89))
+* use correct scorm url ([d95c4ca](https://github.com/b0ink/doubtfire-deploy/commit/d95c4ca400a7aee7dd50f816e1b342e3754db87a))
+
 ## [11.0.0-26](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-25...v11.0.0-26) (2026-06-19)
 
 
