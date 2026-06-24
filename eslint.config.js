@@ -85,14 +85,18 @@ module.exports = tseslint.config(
   {
     files: ['**/*.component.html'],
     plugins: {prettier: prettierPlugin},
-    extends: [...tailwindcss.configs['flat/recommended']],
+    extends: [tailwindcss.configs.recommended],
     settings: {
       tailwindcss: {
-        config: {},
+        cssConfigPath: './src/tailwind-intellisense.css',
       },
     },
     rules: {
+      'tailwindcss/classnames-order': 'warn',
+      'tailwindcss/enforces-shorthand': 'warn',
+      'tailwindcss/no-contradicting-classname': 'warn',
       'tailwindcss/no-custom-classname': 'off',
+      'tailwindcss/no-unnecessary-arbitrary-value': 'warn',
       'prettier/prettier': 'warn',
     },
   },

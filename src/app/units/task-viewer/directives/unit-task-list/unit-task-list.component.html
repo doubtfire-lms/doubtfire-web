@@ -7,14 +7,14 @@
     >
       @if (task.numNewComments > 0) {
         <span
-          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-blue-500 text-[12px] leading-none font-bold text-white"
+          class="flex size-[20px] items-center justify-center rounded-full bg-blue-500 text-[12px] leading-none font-bold text-white"
         >
           {{ task.numNewComments }}
         </span>
       }
       @if (task.similaritiesDetected) {
         <span
-          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#da532c]"
+          class="flex size-[20px] items-center justify-center rounded-full bg-[#da532c]"
           matTooltip="Similarities Detected"
         >
           <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
@@ -32,7 +32,7 @@
       }
       @if (task.hasQualityPoints()) {
         <span
-          class="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#e10963] font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+          class="flex size-[22px] items-center justify-center rounded-full bg-[#e10963] font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
         >
           <span class="mr-px mb-[6px] text-[8px]">{{ task.qualityPts }}</span>
           <span class="font-extrabold"> &frasl; </span>
@@ -41,7 +41,7 @@
       }
       @if (task.isDueSoon() && !task.inFinalState()) {
         <span
-          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#fab143] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+          class="flex size-[20px] items-center justify-center rounded-full bg-[#fab143] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
         >
           <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-black">
             schedule
@@ -50,7 +50,7 @@
       }
       @if (task.betweenDueDateAndDeadlineDate() && !task.isPastDeadline() && !task.inFinalState()) {
         <span
-          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#da532c] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+          class="flex size-[20px] items-center justify-center rounded-full bg-[#da532c] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
         >
           <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
             schedule
@@ -59,7 +59,7 @@
       }
       @if (task.isPastDeadline() && !task.inFinalState()) {
         <span
-          class="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-[#da532c] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+          class="flex size-[20px] items-center justify-center rounded-full bg-[#da532c] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
         >
           <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
             schedule

@@ -3,7 +3,7 @@
     <div class="flex items-center justify-center">
       <mat-icon
         aria-label="Formatif logo"
-        class="formatif-icon h-[100px] w-[100px]"
+        class="formatif-icon size-[100px]"
         svgIcon="formatif-logo"
       ></mat-icon>
       <h1 class="m-0 ml-3 text-4xl">OnTrack</h1>
@@ -23,7 +23,7 @@
         @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
           <button
             aria-label=""
-            class="relative h-[60px] w-[60px]"
+            class="relative size-[60px]"
             color="default"
             mat-fab
             matTooltip="Sync enrolments"
@@ -34,7 +34,7 @@
           >
             @if (isSyncingEnrolments) {
               <mat-spinner
-                class="absolute top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
+                class="absolute top-1/2 left-1/2 z-50 -translate-1/2"
                 diameter="35"
               ></mat-spinner>
             }
@@ -42,7 +42,7 @@
           </button>
           <button
             aria-label=""
-            class="relative h-[60px] w-[60px]"
+            class="relative size-[60px]"
             color="default"
             mat-fab
             matTooltip="Sync grades"
@@ -55,7 +55,7 @@
 
             @if (isSyncingGrades) {
               <mat-spinner
-                class="absolute top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
+                class="absolute top-1/2 left-1/2 z-50 -translate-1/2"
                 diameter="35"
               ></mat-spinner>
             }
