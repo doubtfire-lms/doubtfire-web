@@ -52,6 +52,8 @@
     "!/sidekiq/**",
     "!/sidekiq",
     "!/beta/**",
-    "!/beta"
+    "!/beta",
+    "!/legacy",
+    "!/legacy/**"
   ]
 }
