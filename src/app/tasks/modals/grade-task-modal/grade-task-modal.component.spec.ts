@@ -97,6 +97,40 @@ describe('GradeTaskModalComponent', () => {
     expect(component.totalRating).toEqual(newRatingTask.definition.maxQualityPts);
   });
 
+  it('should treat an unrated quality task as unselected in the modal', () => {
+    dialogDataStub.task = {
+      grade: undefined,
+      qualityPts: -1,
+      definition: {
+        maxQualityPts: 5,
+      },
+    };
+
+    component.ngOnInit();
+
+    expect(component.rating).toEqual(0);
+    expect(component.ratingLabel).toEqual('0 / 5');
+    expect(component.qualityRatingSelected).toBe(false);
+    expect(component.isValid()).toBe(false);
+  });
+
+  it('should allow 0 as a selected quality rating', () => {
+    dialogDataStub.task = {
+      grade: undefined,
+      qualityPts: -1,
+      definition: {
+        maxQualityPts: 5,
+      },
+    };
+
+    component.ngOnInit();
+    component.updateRating(0);
+
+    expect(component.rating).toEqual(0);
+    expect(component.qualityRatingSelected).toBe(true);
+    expect(component.isValid()).toBe(true);
+  });
+
   it('should not allow a rating higher than the max rating', () => {
     component.ngOnInit();
     component.rating = 1;

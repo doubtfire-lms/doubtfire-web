@@ -271,7 +271,11 @@ export class Task extends Entity {
   }
 
   public hasQualityPoints(): boolean {
-    return this.definition.maxQualityPts > 0 && TaskStatus.GRADEABLE_STATUSES.includes(this.status);
+    return (
+      this.definition.maxQualityPts > 0 &&
+      this.qualityPts >= 0 &&
+      TaskStatus.GRADEABLE_STATUSES.includes(this.status)
+    );
   }
 
   public hasBeenGraded(): boolean {
@@ -282,7 +286,7 @@ export class Task extends Entity {
   }
 
   public hasBeenGivenQualityPoints(): boolean {
-    return this.qualityPts > 0 || TaskStatus.GRADEABLE_STATUSES.includes(this.status);
+    return this.definition.maxQualityPts > 0 && this.qualityPts >= 0;
   }
 
   public localDueDate(): Date {
@@ -998,6 +1002,8 @@ export class Task extends Entity {
     triggerRecursiveFix?: boolean,
   ) {
     const oldStatus = this.status;
+    const oldGrade = this.grade;
+    const oldQualityPts = this.qualityPts;
     const alerts: AlertService = AppInjector.get(AlertService);
 
     if (status === 'complete' && !this.canMarkComplete) {
@@ -1005,15 +1011,15 @@ export class Task extends Entity {
       return;
     }
 
-    const updateFunc = () => {
+    const updateFunc = (grade = this.grade, qualityPts = this.qualityPts) => {
       const taskService: TaskService = AppInjector.get(TaskService);
       const options: RequestOptions<Task> = {
         entity: this,
         cache: this.project.taskCache,
         body: {
           trigger: status,
-          grade: this.grade,
-          quality_pts: this.qualityPts,
+          grade: grade,
+          quality_pts: qualityPts,
         },
       };
 
@@ -1037,6 +1043,8 @@ export class Task extends Entity {
         )
         .subscribe({
           next: (_response) => {
+            this.grade = grade;
+            this.qualityPts = qualityPts;
             if (!hasId && this.id > 0) {
               this.project.taskCache.delete(this.definition.abbreviation);
               this.project.taskCache.add(this);
@@ -1046,6 +1054,8 @@ export class Task extends Entity {
           },
           error: (error) => {
             this.status = oldStatus;
+            this.grade = oldGrade;
+            this.qualityPts = oldQualityPts;
             alerts.error(error, 6000);
           },
         });
@@ -1061,9 +1071,7 @@ export class Task extends Entity {
         this,
         // Grade was selected (modal closed with result)
         (response) => {
-          this.grade = response.grade;
-          this.qualityPts = response.qualityPts;
-          updateFunc();
+          updateFunc(response.grade, response.qualityPts);
         },
         // Grade was not selected (modal was dismissed)
         () => {
