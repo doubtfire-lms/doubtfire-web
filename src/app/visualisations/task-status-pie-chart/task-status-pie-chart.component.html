@@ -1,13 +1,13 @@
 <div class="chart-container pb-6">
   <ngx-charts-pie-chart
     class="task-status-pie-chart"
-    legendPosition="below"
     [customColors]="colors"
     [legend]="true"
+    [legendPosition]="legendPosition"
     [legendTitle]="''"
     [results]="data"
     [tooltipDisabled]="true"
-    [view]=""
+    [view]="undefined"
   >
   </ngx-charts-pie-chart>
 </div>

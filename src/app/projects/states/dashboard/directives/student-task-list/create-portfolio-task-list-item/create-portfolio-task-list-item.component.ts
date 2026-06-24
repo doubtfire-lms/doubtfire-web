@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {Project, Task} from 'src/app/api/models/doubtfire-model';
+import {Project, Task, TaskStatusEnum} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'create-portfolio-task-list-item',
@@ -12,7 +12,7 @@ export class CreatePortfolioTaskListItemComponent {
   @Input() setSelectedTask: Task;
   @Input() project: Project;
 
-  public status(): string {
+  public status(): TaskStatusEnum {
     return this.project.portfolioTaskStatus();
   }
 

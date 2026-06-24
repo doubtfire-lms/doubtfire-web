@@ -1,3 +1,4 @@
+import {Color, LegendPosition, ScaleType} from '@swimlane/ngx-charts';
 import {formatDate} from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -51,7 +52,13 @@ export class ProgressBurndownChartComponent
   showXAxisLabel: boolean = true;
   xAxisLabel: string = 'Time';
   yAxisLabel: string = 'Tasks Remaining';
-  colorScheme = {domain: ['#AAAAAA', '#777777', '#0079d8', '#E01B5D', 'transparent']};
+  legendPosition: LegendPosition = LegendPosition.Below;
+  colorScheme: Color = {
+    name: 'Burndown',
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: ['#AAAAAA', '#777777', '#0079d8', '#E01B5D', 'transparent'],
+  };
   yScaleMin: number = 0;
   yScaleMax: number = 100;
 

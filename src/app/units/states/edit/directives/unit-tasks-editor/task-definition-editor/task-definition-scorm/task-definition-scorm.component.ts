@@ -46,7 +46,7 @@ export class TaskDefinitionScormComponent {
     });
   }
 
-  public uploadScormData(files: FileList) {
+  public uploadScormData(files: ArrayLike<File>) {
     // console.log(Array.from(files).map((f) => f.type));
     const validMimeTypes = ['application/zip', 'application/x-zip-compressed', 'multipart/x-zip'];
     const validFiles = Array.from(files as ArrayLike<File>).filter((f) =>

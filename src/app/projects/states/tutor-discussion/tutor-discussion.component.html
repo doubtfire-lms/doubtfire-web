@@ -33,7 +33,7 @@
       <mat-form-field appearance="outline" class="mt-[22px] w-full">
         <mat-select
           placeholder="Select a task"
-          [disabled]="selectedTaskDefinition"
+          [disabled]="!!selectedTaskDefinition"
           [(ngModel)]="selectedTaskDefinition"
         >
           @for (

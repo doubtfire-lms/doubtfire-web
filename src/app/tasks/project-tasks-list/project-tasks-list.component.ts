@@ -31,7 +31,7 @@ export class ProjectTasksListComponent implements OnInit {
   groupTasks = [];
 
   constructor(
-    private newTaskService: TaskService,
+    public newTaskService: TaskService,
     public gradeService: GradeService,
   ) {}
 

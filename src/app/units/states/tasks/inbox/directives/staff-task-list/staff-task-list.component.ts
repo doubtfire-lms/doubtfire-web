@@ -55,12 +55,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() taskData: {
     source: (
       unit: Unit,
-      taskDef: TaskDefinition | number,
+      taskDef?: TaskDefinition | number,
       fetchMyStudentsOnly?: boolean,
     ) => Observable<Task[]>;
-    selectedTask: Task;
-    taskKey: string;
-    onSelectedTaskChange: (task: Task) => void;
+    selectedTask: Task | null;
+    taskKey: unknown;
+    onSelectedTaskChange: (task: Task | null) => void;
     taskDefMode: boolean;
   };
   @Input() unit: Unit;
@@ -124,6 +124,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   tutorialSort = 0;
   originalFilteredTasks: Task[] = null;
   allowHover = true;
+
+  toggleTutorialSort() {
+    this.tutorialSort = (this.tutorialSort + 1) % this.states.length;
+  }
 
   // Track if all tasks have already been fetched
   // Avoids redundant API calls when changing tutorial filters

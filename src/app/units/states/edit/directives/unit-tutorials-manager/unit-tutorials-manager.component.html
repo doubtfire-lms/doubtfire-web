@@ -3,7 +3,7 @@
   @for (stream of unit.tutorialStreams; track stream) {
     <df-unit-tutorials-list [stream]="stream" [unit]="unit"></df-unit-tutorials-list>
   } @empty {
-    <div class="no-tutorials container">
+    <div class="no-tutorials container mx-auto">
       <div class="mx-auto flex max-w-4xl flex-col items-center justify-center">
         <mat-icon>groups</mat-icon>
         <h1>No Tutorials</h1>

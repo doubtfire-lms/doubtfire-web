@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-26](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-25...v11.0.0-26) (2026-06-19)
+
+
+### Bug Fixes
+
+* avoid converting colons in urls to emojis [#706](https://github.com/b0ink/doubtfire-deploy/issues/706) ([550b867](https://github.com/b0ink/doubtfire-deploy/commit/550b867df0e52026825e594a72d8544c9505a22b))
+* improve global loading logic for staff ([d81ac52](https://github.com/b0ink/doubtfire-deploy/commit/d81ac52cf1b90e139a34bf13ed08142919b6cc53))
+* prevent multiple global fetches ([f1528d1](https://github.com/b0ink/doubtfire-deploy/commit/f1528d1aedc7d6485b094ed3c4923b44c786d45b))
+
 ## [11.0.0-25](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-24...v11.0.0-25) (2026-06-18)
 
 

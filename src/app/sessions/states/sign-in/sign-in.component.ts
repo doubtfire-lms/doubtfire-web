@@ -64,7 +64,7 @@ export class SignInComponent implements OnInit {
   @Input() isLtiLogin: boolean;
 
   constructor(
-    private authService: AuthenticationService,
+    public authService: AuthenticationService,
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,

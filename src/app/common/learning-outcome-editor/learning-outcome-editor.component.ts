@@ -1,4 +1,3 @@
-import {isEqual} from 'lodash';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {
@@ -95,10 +94,18 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
       const linkedOutcomes = this.selectedConnectedOutcomes().map((outcome) => outcome.id);
       if (
         this.selectedOutcome &&
-        !isEqual(linkedOutcomes.sort(), this.selectedOutcome.linkedOutcomeIds.sort())
+        !this.sameIds(linkedOutcomes, this.selectedOutcome.linkedOutcomeIds)
       )
         this.selectedOutcome.linkedOutcomeIds = linkedOutcomes;
     });
+  }
+
+  private sameIds(left: number[], right: number[]): boolean {
+    if (left.length !== right.length) return false;
+
+    const sortedLeft = [...left].sort((a, b) => a - b);
+    const sortedRight = [...right].sort((a, b) => a - b);
+    return sortedLeft.every((id, index) => id === sortedRight[index]);
   }
 
   ngOnInit(): void {

@@ -76,6 +76,8 @@ export class Task extends Entity {
   loadingSubmissionDetails: boolean = false;
 
   pinned: boolean = false;
+  hover?: boolean;
+  optionsOpened?: boolean;
 
   targetStartDate: Date;
   targetDueDate: Date;
@@ -806,7 +808,7 @@ export class Task extends Entity {
    * Launch the SCORM player for this task in a new window.
    */
   public launchScormPlayer(): void {
-    const url = `#/projects/${this.project.id}/task_def_id/${this.taskDefId}/scorm-player/normal`;
+    const url = `/projects/${this.project.id}/task_def_id/${this.taskDefId}/scorm-player/normal`;
     window.open(url, '_blank');
   }
 

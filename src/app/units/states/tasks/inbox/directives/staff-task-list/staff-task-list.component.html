@@ -124,9 +124,7 @@
               <button
                 aria-label="Sort by task definition icon"
                 mat-icon-button
-                [disabled]="
-                  filters.taskDefinitionIdSelected || !filters.taskDefinitionIdSelected === ''
-                "
+                [disabled]="!!filters.taskDefinitionIdSelected"
                 (click)="toggleTaskDefSort()"
               >
                 <mat-icon>{{ states[taskDefSort].icon }}</mat-icon>

@@ -63,14 +63,6 @@
       </td>
     </ng-container>
 
-    <td *matFooterCellDef mat-footer-cell>
-      <div class="edit-actions right">
-        <button mat-icon-button (click)="submit()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-    </td>
-
     <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
     <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
   </table>

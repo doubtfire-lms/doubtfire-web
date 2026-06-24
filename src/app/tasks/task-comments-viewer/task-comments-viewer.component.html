@@ -32,7 +32,12 @@
               (mouseover)="comment.hover = true"
             >
               @if (comment.shouldShowTimestamp) {
-                <p id="commentTimestamp" [ngClass]="{own: comment.authorIsMe}">
+                <p
+                  id="commentTimestamp"
+                  matTooltipPosition="above"
+                  [matTooltip]="comment.createdAt | localizedDateTime"
+                  [ngClass]="{own: comment.authorIsMe}"
+                >
                   {{ comment.author.preferredName }} {{ comment.author.lastName }}
                   {{ comment.createdAt | humanizedDate }}
                 </p>
@@ -72,7 +77,7 @@
                         class="comment-status"
                         matTooltipPosition="above"
                         matTooltipShowDelay="1000"
-                        [matTooltip]="comment.createdAt | humanizedDate"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
                       >
                         <hr class="hr-text" [attr.data-content]="comment.text" />
                       </div>
@@ -83,7 +88,7 @@
                         class="my-1 flex w-full flex-col items-center"
                         matTooltipPosition="above"
                         matTooltipShowDelay="1000"
-                        [matTooltip]="comment.createdAt | humanizedDate"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
                       >
                         <mat-card appearance="outlined" class="w-full self-end">
                           <mat-card-header>
@@ -105,7 +110,7 @@
                         class="my-1 flex w-full flex-col items-center"
                         matTooltipPosition="above"
                         matTooltipShowDelay="1000"
-                        [matTooltip]="comment.createdAt | humanizedDate"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
                       >
                         <mat-card appearance="outlined" class="w-full self-end">
                           <mat-card-header>
@@ -127,7 +132,7 @@
                         class="my-1 flex w-full flex-col items-center"
                         matTooltipPosition="above"
                         matTooltipShowDelay="1000"
-                        [matTooltip]="comment.createdAt | humanizedDate"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
                       >
                         <mat-card appearance="outlined" class="w-full self-end">
                           <mat-card-header>
@@ -145,16 +150,24 @@
                     }
 
                     @case ('plan') {
-                      <div class="comment-status">
+                      <div
+                        class="comment-status"
+                        matTooltipPosition="above"
+                        matTooltipShowDelay="1000"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
+                      >
                         <hr class="hr-text" [attr.data-content]="comment.text" />
                       </div>
                     }
 
                     @case ('assessment') {
                       <div class="comment-assessment mx-auto max-w-[350px] overflow-x-scroll">
-                        @if (overseerEnabled) {
+                        @if (
+                          overseerEnabled && asAssessmentComment(comment);
+                          as assessmentComment
+                        ) {
                           <app-task-assessment-comment
-                            [comment]="comment"
+                            [comment]="assessmentComment"
                             [task]="task"
                           ></app-task-assessment-comment>
                         }
@@ -163,8 +176,8 @@
 
                     @case ('scorm') {
                       <div class="comment-scorm">
-                        @if (scormEnabled) {
-                          <f-scorm-comment [comment]="comment" [task]="task"></f-scorm-comment>
+                        @if (scormEnabled && asScormComment(comment); as scormComment) {
+                          <f-scorm-comment [comment]="scormComment" [task]="task"></f-scorm-comment>
                         }
                       </div>
                     }
@@ -190,14 +203,22 @@
                     @switch (comment.commentType) {
                       @case ('extension') {
                         <div class="comment-extension">
-                          <extension-comment [comment]="comment" [task]="task"> </extension-comment>
+                          @if (asExtensionComment(comment); as extensionComment) {
+                            <extension-comment [comment]="extensionComment" [task]="task">
+                            </extension-comment>
+                          }
                         </div>
                       }
 
                       @case ('scorm_extension') {
                         <div class="comment-scorm-extension">
-                          <f-scorm-extension-comment [comment]="comment" [task]="task">
-                          </f-scorm-extension-comment>
+                          @if (asScormExtensionComment(comment); as scormExtensionComment) {
+                            <f-scorm-extension-comment
+                              [comment]="scormExtensionComment"
+                              [task]="task"
+                            >
+                            </f-scorm-extension-comment>
+                          }
                         </div>
                       }
 
@@ -206,7 +227,7 @@
                           class="comment-text"
                           matTooltipPosition="above"
                           matTooltipShowDelay="1000"
-                          [matTooltip]="comment.createdAt | humanizedDate"
+                          [matTooltip]="comment.createdAt | localizedDateTime"
                         >
                           <div class="markdown-to-html" [innerHTML]="comment.text | marked"></div>
                         </div>
@@ -223,11 +244,13 @@
                       }
 
                       @case ('discussion') {
-                        <div class="comment-discussion">
-                          <intelligent-discussion-player
-                            [discussion]="comment"
-                            [task]="task"
-                          ></intelligent-discussion-player>
+                        <div class="comment-discussion-asdf">
+                          @if (asDiscussionComment(comment); as discussionComment) {
+                            <intelligent-discussion-player
+                              [discussion]="discussionComment"
+                              [task]="task"
+                            ></intelligent-discussion-player>
+                          }
                         </div>
                       }
 

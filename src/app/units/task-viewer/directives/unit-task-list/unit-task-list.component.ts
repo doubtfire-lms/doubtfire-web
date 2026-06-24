@@ -22,8 +22,8 @@ import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-nam
 export class FUnitTaskListComponent implements OnChanges, OnInit {
   @Input() mode: 'project' | 'all-tasks';
   @Input() project: Project;
-  @Input() taskDefinitions: TaskDefinition[];
-  @Input() tasks: Task[];
+  @Input() taskDefinitions: readonly TaskDefinition[];
+  @Input() tasks: readonly Task[];
   @Input() isCollapsed = false;
   @Input() selectionUrlBase: unknown[] | null = null;
 

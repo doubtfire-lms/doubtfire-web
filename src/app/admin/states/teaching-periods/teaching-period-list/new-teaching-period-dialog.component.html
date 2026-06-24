@@ -84,7 +84,7 @@
 <ng-template #EditBreaks>
   <h4 class="pt-5">Teaching Breaks for {{ newOrSelectedTeachingPeriod.name }}</h4>
   <mat-list>
-    @for (break of newOrSelectedTeachingPeriod.breaksCache.values | async; track break) {
+    @for (break of teachingBreaks$ | async; track break) {
       <mat-list-item>
         <span class="flex items-center">
           <span>
