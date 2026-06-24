@@ -90,7 +90,8 @@
               "outputHashing": "bundles",
               "sourceMap": false,
               "extractLicenses": true,
-              "serviceWorker": "ngsw-config.json"
+              "baseHref": "/legacy",
+              "deployUrl": "/legacy"
             },
             "development": {
               "optimization": false,
