@@ -90,8 +90,8 @@
               "outputHashing": "bundles",
               "sourceMap": false,
               "extractLicenses": true,
-              "baseHref": "/legacy",
-              "deployUrl": "/legacy"
+              "baseHref": "/legacy/",
+              "deployUrl": "/legacy/"
             },
             "development": {
               "optimization": false,
