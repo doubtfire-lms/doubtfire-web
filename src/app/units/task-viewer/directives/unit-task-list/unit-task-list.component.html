@@ -26,13 +26,17 @@
 
     <div class="absolute right-0.5 -bottom-2 flex items-center gap-px text-[10px] leading-none">
       @if (task.hasGrade()) {
-        <span>
-          {{ task.gradeDesc() }}
+        <span
+          class="mr-3 flex size-5.5 items-center justify-center rounded-full bg-gray-800 font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+        >
+          <span>
+            {{ task.gradeDesc() }}
+          </span>
         </span>
       }
       @if (task.hasQualityPoints()) {
         <span
-          class="flex size-[22px] items-center justify-center rounded-full bg-[#e10963] font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+          class="flex size-[22px] items-center justify-center rounded-full bg-formatif-blue font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
         >
           <span class="mr-px mb-[6px] text-[8px]">{{ task.qualityPts }}</span>
           <span class="font-extrabold"> &frasl; </span>

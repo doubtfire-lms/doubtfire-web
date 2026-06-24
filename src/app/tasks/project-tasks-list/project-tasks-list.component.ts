@@ -67,7 +67,7 @@ export class ProjectTasksListComponent implements OnInit {
       }
     }
     if (task.definition.maxQualityPts > 0) {
-      if (task.qualityPts) {
+      if (task.qualityPts >= 0) {
         result += ` (${task.qualityPts}/${task.definition.maxQualityPts})`;
       } else {
         result += ` (?/${task.definition.maxQualityPts})`;
