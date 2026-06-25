@@ -3,6 +3,7 @@
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {CodeEditorModule} from '@ngstack/code-editor';
+import * as Sentry from '@sentry/angular';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {
   GANTT_GLOBAL_CONFIG,
@@ -29,7 +30,7 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {Injector, NgModule} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, Injector, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DateFnsAdapter} from '@angular/material-date-fns-adapter';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -70,17 +71,16 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
+import {
+  MAT_TOOLTIP_DEFAULT_OPTIONS,
+  MatTooltipDefaultOptions,
+  MatTooltipModule,
+} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterModule} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 import {ServiceWorkerModule} from '@angular/service-worker';
-// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
-// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
-// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
-// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {
@@ -290,6 +290,10 @@ import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.com
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {CheckForUpdateService} from './sessions/service-worker-updater/check-for-update.service';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
@@ -760,6 +764,20 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     CommunicationSetService,
     CsvResultModalService,
     CsvUploadModalService,
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler(),
+    },
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {},
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
       useValue: DEFAULT_TOOLTIP_OPTIONS,
