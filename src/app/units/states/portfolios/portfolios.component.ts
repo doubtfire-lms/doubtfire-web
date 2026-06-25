@@ -7,7 +7,7 @@ import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
-type PortfolioTabKey = 'select' | 'progress' | 'staff-notes' | 'portfolio' | 'assessment';
+type PortfolioTabKey = 'select' | 'progress' | 'student-notes' | 'portfolio' | 'assessment';
 
 interface PortfolioTab {
   label: string;
@@ -28,7 +28,7 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   public readonly tabs: PortfolioTab[] = [
     {label: 'Select Student', routeSegment: 'select', requiresProject: false},
     {label: 'View Progress', routeSegment: 'progress', requiresProject: true},
-    {label: 'View Staff Notes', routeSegment: 'staff-notes', requiresProject: true},
+    {label: 'View Student Notes', routeSegment: 'student-notes', requiresProject: true},
     {label: 'View Portfolio', routeSegment: 'portfolio', requiresProject: true},
     {label: 'Assess Portfolio', routeSegment: 'assessment', requiresProject: true},
   ];

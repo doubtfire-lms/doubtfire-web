@@ -232,7 +232,9 @@
       <mat-tab label="Task Comments"></mat-tab>
 
       <mat-tab
-        label="Staff Notes{{ project?.staffNoteCount ? ' (' + project.staffNoteCount + ')' : '' }}"
+        label="Student Notes{{
+          project?.staffNoteCount ? ' (' + project.staffNoteCount + ')' : ''
+        }}"
         [matBadge]="$safeNavigationMigration(project?.staffNoteCount)"
       ></mat-tab>
       <mat-tab label="Discussion Prompts"></mat-tab>
