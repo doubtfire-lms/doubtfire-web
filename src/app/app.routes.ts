@@ -88,6 +88,12 @@ export const routes: Routes = [
     data: {roleWhitelist: ['Admin', 'Auditor']},
   },
   {
+    path: 'admin/institution-settings/:tab',
+    component: InstitutionSettingsComponent,
+    canActivate: [roleWhitelistGuard],
+    data: {roleWhitelist: ['Admin', 'Auditor']},
+  },
+  {
     path: 'tutor-discussion',
     component: TutorDiscussionComponent,
     canActivate: [roleWhitelistGuard],
