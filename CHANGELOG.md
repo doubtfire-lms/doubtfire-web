@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-34](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-33...v11.0.0-34) (2026-06-25)
+
+
+### Bug Fixes
+
+* align icons ([8af5f5a](https://github.com/b0ink/doubtfire-deploy/commit/8af5f5ab177a8057e6b894ae7b039b8b8203c19f))
+* set correct button size ([ec8eef4](https://github.com/b0ink/doubtfire-deploy/commit/ec8eef49ca4275f00502872dab5b0cf23251c337))
+
 ## [11.0.0-33](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-32...v11.0.0-33) (2026-06-25)
 
 
