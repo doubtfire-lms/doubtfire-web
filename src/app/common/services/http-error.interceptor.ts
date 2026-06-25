@@ -147,19 +147,25 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       Sentry.startSpan(
         {
           name: `Error ${statusCode}`,
-          op: `${statusCode}`,
+          op: 'http.client_error',
+          attributes: {
+            'http.response.status_code': statusCode,
+          },
         },
         () => {
-          throw new SentryExampleError(message);
+          throw new HttpRequestError(message, statusCode);
         },
       );
     });
   }
 }
 
-class SentryExampleError extends Error {
-  constructor(message: string | undefined) {
+class HttpRequestError extends Error {
+  constructor(
+    message: string | undefined,
+    public readonly statusCode: number,
+  ) {
     super(message);
-    this.name = message;
+    this.name = 'HttpRequestError';
   }
 }
