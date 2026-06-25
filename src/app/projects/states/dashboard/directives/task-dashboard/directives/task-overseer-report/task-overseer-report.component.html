@@ -104,11 +104,13 @@
                   <mat-panel-title>
                     Step {{ idx + 1 }}: {{ result.overseerStep?.displayName }}</mat-panel-title
                   >
-                  @if (result.pass) {
-                    <mat-icon color="primary">done</mat-icon>
-                  } @else {
-                    <mat-icon color="warn">cancel</mat-icon>
-                  }
+                  <div class="mr-9">
+                    @if (result.pass) {
+                      <mat-icon color="primary">done</mat-icon>
+                    } @else {
+                      <mat-icon color="warn">cancel</mat-icon>
+                    }
+                  </div>
                 </mat-expansion-panel-header>
 
                 <!-- <p>Exit Status: {{ result.exitStatus }}</p> -->
