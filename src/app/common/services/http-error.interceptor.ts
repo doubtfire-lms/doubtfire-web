@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import * as Sentry from '@sentry/angular';
 import {
   HttpErrorResponse,
   HttpEvent,
@@ -126,6 +127,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       logMessage = `Error Code: ${error.status}`;
     }
 
+    this.throwError(`${logMessage}: ${errorMessage}`, error.status);
+
     console.error(`${logMessage}: ${errorMessage}`);
     return errorMessage;
   }
@@ -137,5 +140,26 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         Username: this.userService.currentUser.username,
       },
     });
+  }
+
+  throwError(message: string, statusCode: number) {
+    Sentry.diagnoseSdkConnectivity().then(() => {
+      Sentry.startSpan(
+        {
+          name: `Error ${statusCode}`,
+          op: `${statusCode}`,
+        },
+        () => {
+          throw new SentryExampleError(message);
+        },
+      );
+    });
+  }
+}
+
+class SentryExampleError extends Error {
+  constructor(message: string | undefined) {
+    super(message);
+    this.name = message;
   }
 }
