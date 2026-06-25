@@ -1,126 +1,176 @@
-<div class="coursemap">
+<div class="coursemap" cdkDropListGroup>
   <!-- Required Units Panel -->
   <div class="required-units-container">
     <div class="required-units-header">
       <h3 class="required-units-title">Required Units</h3>
     </div>
-    <div
-      cdkDropList
-      [cdkDropListData]="requiredUnits"
-      (cdkDropListDropped)="drop($event)"
-      [cdkDropListConnectedTo]="connectedDropLists"
-      [id]="'requiredUnits'"
-    >
-      <div class="unit" *ngFor="let unit of requiredUnits" cdkDrag>
-        <strong>{{ unit.code }}</strong> - {{ unit.name }}
+
+    <div class="units-container">
+      <div
+        cdkDropList
+        cdkDropListId="requiredUnits"
+        [cdkDropListData]="requiredUnits"
+        (cdkDropListDropped)="drop($event)"
+        class="units-list"
+      >
+        <div
+          class="unit"
+          *ngFor="let unit of requiredUnits"
+          cdkDrag
+          [cdkDragData]="{unit: unit, sourceContainerId: 'requiredUnits'}"
+        >
+          <strong>{{ unit.code }}</strong> - {{ unit.name }}
+        </div>
       </div>
     </div>
+
+    <!-- Electives section at bottom -->
     <div class="electives-container">
-      <h3 class="electives-title">Elective Units</h3>
-      <p class="text">Electives remaining: {{ remainingSlots }} of {{ maxElectiveUnits }}</p>
+      <div class="electives-header">
+        <h3 class="electives-title">Elective Units</h3>
+        <span class="electives-remaining">
+          {{ remainingSlots }} of {{ maxElectiveUnits }} remaining
+        </span>
+      </div>
       <div
         *ngIf="electiveUnits"
         cdkDropList
+        cdkDropListId="electiveUnits"
         [cdkDropListData]="electiveUnits"
         (cdkDropListDropped)="drop($event)"
-        [cdkDropListConnectedTo]="connectedDropLists"
-        [id]="electiveUnits"
+        class="units-list"
       >
-        <div class="text" *ngFor="let unit of electiveUnits" cdkDrag class="unit">
-          <p >
-            <strong>{{ unit.code }}</strong> - {{ unit.name }}
-          </p>
+        <div
+          class="unit"
+          *ngFor="let unit of electiveUnits"
+          cdkDrag
+          [cdkDragData]="{unit: unit, sourceContainerId: 'electiveUnits'}"
+        >
+          <strong>{{ unit.code }}</strong> - {{ unit.name }}
         </div>
       </div>
-      <form class="form" (ngSubmit)="fetchUnitByCode()">
-        <div>
-          <mat-form-field appearance="fill">
-            <mat-label>Enter Unit Code</mat-label>
-            <input class="search-bar" matInput [(ngModel)]="unitCode" name="unitCode" id="unitCode"/>
-          </mat-form-field>
-          <button mat-flat-button class="button" color="primary" type="submit">Add Unit</button>
-
-          <div *ngIf="errorMessage" class="error">
-            {{ errorMessage }}
-          </div>
-        </div>
+      <form class="search-form" (ngSubmit)="fetchUnitByCode()">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Enter Unit Code</mat-label>
+          <input
+            class="search-bar"
+            matInput
+            [(ngModel)]="unitCode"
+            name="unitCode"
+            id="unitCode"
+            placeholder="e.g., CS101"
+          />
+          <button mat-flat-button class="add-unit-button" color="primary" type="submit" matSuffix>
+            Add
+          </button>
+        </mat-form-field>
       </form>
+      <div *ngIf="errorMessage" class="error"><mat-icon>error</mat-icon> {{ errorMessage }}</div>
     </div>
   </div>
+
   <!-- Study Periods Panel -->
   <div class="study-periods-container">
     <div class="study-periods-header">
       <h3 class="study-periods-title">Study Periods</h3>
     </div>
-    <!-- Year Container -->
-    <div *ngFor="let year of years; let i = index" class="year-container">
-      <div class="year-header">
-        <h3 class="year-title">{{ year.year }}</h3>
-        <button class="delete-button" mat-icon-button (click)="deleteYear(i)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-      <!-- Trimester 1 -->
-      <div
-      *ngIf="year.trimester1"
-        class="trimester-list"
-        cdkDropList
-        [cdkDropListData]="year.trimester1"
-        (cdkDropListDropped)="drop($event)"
-        [cdkDropListConnectedTo]="connectedDropLists"
-        [id]="'trimester1-' + i"
-      >
-        <h5 class="trimester-heading">Trimester 1</h5>
 
-        <div *ngFor="let unit of year.trimester1" cdkDrag class="unit">
-          <strong>{{ unit.code }}</strong> - {{ unit.name }}
+    <!-- Loop through each Year -->
+    <div *ngFor="let year of years; let yIndex = index" class="year-container">
+      <!-- Left side vertical year label + delete button -->
+      <div class="year-label-section">
+        <div class="year-header">
+          <!-- The label for "Year 1," "Year 2," etc. turned vertical. -->
+          <h3 class="vertical-year-title">
+            {{ year.year }}
+          </h3>
         </div>
-        <button class="delete-button" mat-icon-button (click)="deleteTrimester(i, 0)">
+        <button class="delete-button" mat-icon-button (click)="deleteYear(yIndex)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
-      <!-- Trimester 2 -->
-      <div
-      *ngIf="year.trimester2"
-        class="trimester-list"
-        cdkDropList
-        [cdkDropListData]="year.trimester2"
-        (cdkDropListDropped)="drop($event)"
-        [cdkDropListConnectedTo]="connectedDropLists"
-        [id]="'trimester2-' + i"
-      >
-        <h5 class="trimester-heading">Trimester 2</h5>
 
-        <div *ngFor="let unit of year.trimester2" cdkDrag class="unit">
-          <strong>{{ unit.code }}</strong> - {{ unit.name }}
-        </div>
-        <button class="delete-button" mat-icon-button (click)="deleteTrimester(i, 1)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-      <!-- Trimester 3 -->
-      <div
-      *ngIf="year.trimester3"
-        cdkDropList
-        class="trimester-list"
-        [cdkDropListData]="year.trimester3"
-        (cdkDropListDropped)="drop($event)"
-        [cdkDropListConnectedTo]="connectedDropLists"
-        [id]="'trimester3-' + i"
-      >
-        <h5 class="trimester-heading">Trimester 3</h5>
+      <!-- Right side: all trimesters for this year -->
+      <!-- Inside the .year-container -->
+      <div class="year-trimesters">
+        <!-- Loop through trimester keys -->
+        <ng-container *ngFor="let trimesterKey of trimesterKeys; let tIndex = index">
+          <!-- Render trimester only if it exists on the year object -->
+          <div *ngIf="year[trimesterKey]" class="trimester-list">
+            <div class="trimester-heading">
+              <span class="trimester-heading-text"
+                >Trimester {{ getTrimesterNumber(trimesterKey) }}</span
+              >
+            </div>
 
-        <div *ngFor="let unit of year.trimester3" cdkDrag class="unit">
-          <strong>{{ unit.code }}</strong> - {{ unit.name }}
-        </div>
-        <button class="delete-button" mat-icon-button (click)="deleteTrimester(i, 2)">
-          <mat-icon>delete</mat-icon>
+            <div class="slots-container">
+              <div
+                class="slot"
+                *ngFor="let idx of [0, 1, 2, 3]; let slotIndex = index; trackBy: trackBySlotIndex"
+                cdkDropList
+                [cdkDropListId]="trimesterKey + '-' + yIndex + '-slot-' + slotIndex"
+                [cdkDropListData]="{
+                  yearIndex: yIndex,
+                  trimesterKey: trimesterKey,
+                  slotIndex: slotIndex
+                }"
+                (cdkDropListDropped)="drop($event)"
+                [class.has-unit]="year[trimesterKey] && year[trimesterKey][slotIndex]"
+              >
+                <!-- If there's a unit occupying this slot, display it -->
+                <div
+                  class="unit"
+                  *ngIf="year[trimesterKey][slotIndex] as unitInSlot"
+                  cdkDrag
+                  [cdkDragData]="{
+                    unit: unitInSlot,
+                    sourceContainerId: 'slot',
+                    sourceYearIndex: yIndex,
+                    sourceTrimesterKey: trimesterKey,
+                    sourceSlotIndex: slotIndex
+                  }"
+                >
+                  <strong>{{ unitInSlot.code }}</strong> - {{ unitInSlot.name }}
+                  <button mat-icon-button class="unit-menu-button" [matMenuTriggerFor]="unitMenu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+
+                  <!-- Menu Definition (remains the same, but context is now dynamic) -->
+                  <mat-menu #unitMenu="matMenu">
+                    <button
+                      mat-menu-item
+                      (click)="removeUnitFromSlot(yIndex, trimesterKey, slotIndex)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                      <span>Remove</span>
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+
+            <!-- Delete button for this specific trimester -->
+            <button class="delete-button" mat-icon-button (click)="deleteTrimester(yIndex, tIndex)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+
+        <!-- Add Trimester Button (logic remains the same) -->
+        <button
+          mat-icon-button
+          *ngIf="countTrimesters(year) < 3"
+          (click)="addTrimester(yIndex)"
+          class="add-trimester-button"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
         </button>
       </div>
-      <button mat-icon-button *ngIf="countTrimesters(year) < 3" (click)="addTrimester(i)">
-        <mat-icon>add_circle_outline</mat-icon>
-      </button>
+      <!-- End of .year-trimesters -->
+      <!-- End of .year-trimesters -->
     </div>
+    <!-- End of Year loop -->
+
     <button (click)="addYear()" mat-icon-button>
       <mat-icon>add_circle_outline</mat-icon>
     </button>

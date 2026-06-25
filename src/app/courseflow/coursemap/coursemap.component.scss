@@ -1,129 +1,326 @@
+/*** Required Units Container ***/
 .required-units-container {
-  border: 1px solid #337ab7;
-  border-radius: 6px;
+  border: 1px solid rgb(245, 245, 245);
+  border-radius: 8px;
   display: flex;
   height: 80vh;
   vertical-align: top;
-  align-items: left;
   flex-direction: column;
-  width: 100%; /* Fill available space on mobile */
+  width: 100%;
   max-width: 25vw;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.year-container {
-  margin: 16px;
-  border: 1px solid #337ab7;
-  border-radius: 9px;
-  display: flex;
-  vertical-align: top;
-  flex-direction: column;
-  border-radius: 6px;
-  width: 98%;
-  justify-content: center;
-  align-items: center;
-}
-
-.trimester-list {
-  display: flex;
-  flex-direction: row; /* Makes the items within the list display horizontally */
-  padding: 10px;
-  border-radius: 6px;
-  background-color: rgb(238, 238, 238);
-  margin: 10px;
-  align-items: center;
-  width: 95%;
-}
-
-.unit {
-  padding: 8px;
-  margin: 8px 0 8px 5%;
-  background-color: #357bb9a8;
-  color: white;
-  border-radius: 6px;
-  cursor: move;
-  align-content: center;
-  height: 8vh;
-  width: 90%;
-}
-
+/*** Study Periods Panel ***/
 .study-periods-container {
   display: flex;
   flex-direction: column;
-  border: 1px solid #337ab7;
-  border-radius: 6px;
+  border: 1px solid rgb(245, 245, 245);
+  border-radius: 8px;
   margin-left: 20px;
   width: 70vw;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   align-items: center;
 }
 
-.study-periods-header, .required-units-header, .year-header{
-  background-color: #337ab7;
-  border-radius: 5px 5px 0 0;
-  color: white;
-  height: 40px;
+.study-periods-header {
+  background-color: rgb(245, 245, 245);
+  border-radius: 7px 7px 0 0;
+  height: 48px;
   align-items: center;
   display: flex;
-  padding: 0 10px;
+  padding: 0 15px;
   width: 100%;
-  font-size: 1.2rem; /* Adjust to ensure readability on smaller screens */
+  font-size: 1.2rem;
 }
 
-.study-periods-title, .required-units-title, .year-title, .electives-title {
-  font-size: 2rem; /* Default font size for larger screens */
-  margin: 0 2%;
+/*** Year Container ***/
+.year-container {
+  margin: 16px;
+  border: 1px solid rgb(245, 245, 245);
+  border-radius: 9px;
+  display: flex;
+  flex-direction: row;
+  width: 98%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.form {
-  margin: 0 2%;
+.year-header {
+  display: flex;
+}
+.year-label-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  background-color: rgb(245, 245, 245);
+  border-right: 1px solid #eee;
+}
+.vertical-year-title {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  margin: 0;
+  padding: 8px;
+  font-size: 18px;
+  border-radius: 4px;
+  text-align: center;
 }
 
-.text {
-  margin: auto 2% auto 2%;
+.year-trimesters {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 10px 10px;
+}
+
+/*** Trimester Rows ***/
+.trimester-list {
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 10px 0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.trimester-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(245, 245, 245);
+  padding: 4px 8px;
+  margin-right: 16px;
+  border-radius: 4px;
+
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.trimester-heading-text {
+  font-weight: 500;
+  color: #555;
+}
+
+/*** Slots Container ***/
+.slots-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+  flex: 1;
+}
+
+.slot {
+  flex: 1;
+  min-width: 160px;
+  min-height: 80px;
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+  position: relative;
+
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+
+  &.has-unit {
+    border-color: transparent;
+  }
+}
+
+/*** Unit Cards ***/
+.unit {
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  cursor: move;
+  min-width: 100px;
+  text-align: center;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
+
+  &:hover {
+    background-color: #f2f2f2;
+    transform: translateY(-2px);
+  }
+}
+
+.units-list .unit {
+  width: auto;
+  height: auto;
+  min-width: 100px;
+  margin: 12px 0 8px;
+}
+
+.unit-menu-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  line-height: normal;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  min-width: 0;
+  color: #666;
+}
+
+.unit-menu-button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+}
+
+/*** Buttons, etc. ***/
+.delete-button {
+  margin-left: auto;
+  color: #666;
+
+  &:hover {
+    color: #f44336;
+  }
+}
+
+.add-trimester-button {
+  align-self: flex-start;
+  margin: 10px 0 0 10px;
+}
+
+/*** Electives / Required / Misc ***/
+.required-units-header {
+  background-color: rgb(245, 245, 245);
+  border-radius: 7px 7px 0 0;
+  height: 48px;
+  align-items: center;
+  display: flex;
+  padding: 0 15px;
+  font-size: 1.2rem;
+  margin-bottom: 0;
 }
 
 .electives-container {
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  margin: auto 0 8px 5%;
+  padding: 15px;
+  margin-top: auto;
 }
 
-mat-form-field {
-  width: 75%;
+.study-periods-title,
+.required-units-title,
+.year-title,
+.electives-title {
+  font-size: 1.4rem;
+  margin: 0 2%;
+  font-weight: 500;
+}
 
+.electives-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.electives-title {
+  margin: 0;
+  padding: 0;
+}
+
+.electives-remaining {
+  font-size: 0.9rem;
+  color: #777;
+  margin-left: 10px;
+  padding: 3px 8px;
+  background-color: #f1f1f1;
+  border-radius: 12px;
+}
+
+.search-form {
+  width: 100%;
+  margin: 5px 0;
+}
+
+.search-field {
+  width: 100%;
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  ::ng-deep .mat-form-field-outline {
+    border-radius: 25px;
+  }
 }
 
 .search-bar {
-  margin: 0 1% 0 1%;
-  width: 70%;
+  padding-right: 70px;
 }
 
-.button {
-  border-radius: 5px;
-  margin: 0 2% 2% 2%;
+.add-unit-button {
+  border-radius: 20px;
+  height: 36px;
+  line-height: 36px;
+  min-width: 64px;
+  margin-right: 5px;
+}
+
+.units-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 15px;
+}
+
+.units-list {
+  min-height: 50px;
+}
+
+.units-list:empty {
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+.error {
+  color: #f44336;
+  font-size: 1rem;
+  margin: -18px 0 -8px;
+  padding: 0 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
 }
 
 .coursemap {
   display: flex;
   flex-direction: row;
+  padding: 20px;
+  gap: 20px;
 }
 
-.trimester-heading {
-  margin-right: 20px;
-  align-items: center;
-}
-
-.delete-button {
-  margin-left: auto;
-  right: 2%;
-  display: flex;
-  flex-shrink: 1;
+.text {
+  margin: auto 2% auto 2%;
 }
 
 @media only screen and (max-width: 775px) {
-  .study-periods-title, .required-units-title, .year-title, .electives-title {
+  .study-periods-title,
+  .required-units-title,
+  .year-title,
+  .electives-title {
     font-size: 2.7vw;
+  }
+
+  .electives-remaining {
+    font-size: 2vw;
   }
 
   .text {
@@ -131,12 +328,7 @@ mat-form-field {
     font-size: 1.7vw;
   }
 
-  .unit {
-    font-size: 1.65vw;
+  .coursemap {
+    flex-direction: column;
   }
-
-
 }
-
-
-
