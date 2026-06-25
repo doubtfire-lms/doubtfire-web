@@ -7,7 +7,7 @@ import {DoubtfireAngularModule} from './app/doubtfire-angular.module';
 if (environment.sentryDsn) {
   Sentry.init({
     dsn: environment.sentryDsn,
-    tunnel: '/api/sentry/tunnel',
+    tunnel: '/api/client-reports',
     release: environment.sentryRelease || undefined,
     dist: environment.sentryDist || undefined,
     integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
