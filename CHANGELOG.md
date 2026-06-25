@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-30](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-29...v11.0.0-30) (2026-06-25)
+
+
+### Bug Fixes
+
+* tunnel sentry requests ([2d24ebc](https://github.com/b0ink/doubtfire-deploy/commit/2d24ebc9e611dbf7ca0cbdcd8507b238538d9ea3))
+
 ## [11.0.0-29](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-28...v11.0.0-29) (2026-06-25)
 
 
