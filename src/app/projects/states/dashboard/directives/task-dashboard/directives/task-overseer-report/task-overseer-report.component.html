@@ -10,10 +10,10 @@
     @for (history of histories; track history.id; let idx = $index) {
       <mat-expansion-panel
         [attr.id]="'history-panel-' + history.id"
-        [disabled]="!assessmentFor(history)"
         [expanded]="
           assessmentFor(history) && assessmentFor(history)?.id === loadOverseerAssessmentId
         "
+        [hideToggle]="!assessmentFor(history)"
         (opened)="onHistoryOpen(history)"
       >
         <mat-expansion-panel-header class="flex items-center justify-between">
@@ -99,7 +99,7 @@
         @if (assessmentFor(history); as oa) {
           <mat-accordion>
             @for (result of oa.stepResultsCache.values | async; track result.id; let idx = $index) {
-              <mat-expansion-panel>
+              <mat-expansion-panel class="mb-4">
                 <mat-expansion-panel-header class="flex items-center justify-between">
                   <mat-panel-title>
                     Step {{ idx + 1 }}: {{ result.overseerStep?.displayName }}</mat-panel-title
@@ -224,6 +224,17 @@
               }
             }
           </mat-accordion>
+        }
+        @if (history.hasSubmissionFiles && currentUnitRole) {
+          <div class="flex justify-center">
+            <button
+              color="primary"
+              mat-raised-button
+              (click)="viewSubmissionFiles(history, $event)"
+            >
+              View Submission
+            </button>
+          </div>
         }
       </mat-expansion-panel>
     } @empty {
