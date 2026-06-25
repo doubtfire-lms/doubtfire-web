@@ -70,13 +70,15 @@
             {{ overseerImage.name }}
           </div>
         } @else {
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
+            <mat-label>Name</mat-label>
             <input formControlName="name" matInput placeholder="Name" required />
           </mat-form-field>
         }
       </td>
       <td *matFooterCellDef mat-footer-cell>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
+          <mat-label>Name</mat-label>
           <input formControlName="name" matInput placeholder="Name" required />
         </mat-form-field>
       </td>
@@ -91,13 +93,15 @@
             {{ overseerImage.tag }}
           </div>
         } @else {
-          <mat-form-field class="data-entry">
+          <mat-form-field appearance="outline" class="data-entry">
+            <mat-label>Tag</mat-label>
             <input formControlName="tag" matInput placeholder="Tag" required />
           </mat-form-field>
         }
       </td>
       <td *matFooterCellDef mat-footer-cell>
-        <mat-form-field class="data-entry">
+        <mat-form-field appearance="outline" class="data-entry">
+          <mat-label>Tag</mat-label>
           <input formControlName="tag" matInput placeholder="Tag" required />
         </mat-form-field>
       </td>
@@ -195,18 +199,16 @@
             </mat-menu>
           </div>
         } @else {
-          <div class="edit-actions right">
-            <span>
-              <button color="warn" mat-icon-button (click)="cancelEdit()">
-                <mat-icon>cancel</mat-icon>
-              </button>
-              <button color="primary" mat-icon-button (click)="submit()">
-                <mat-icon>save</mat-icon>
-              </button>
-              <button color="warn" mat-icon-button (click)="deleteOverseerImage(overseerImage)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </span>
+          <div class="flex gap-2">
+            <button color="warn" mat-icon-button (click)="cancelEdit()">
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <button color="primary" mat-icon-button (click)="submit()">
+              <mat-icon>save</mat-icon>
+            </button>
+            <button color="warn" mat-icon-button (click)="deleteOverseerImage(overseerImage)">
+              <mat-icon>delete</mat-icon>
+            </button>
           </div>
         }
       </td>
