@@ -29,7 +29,7 @@ ENV SENTRY_DIST=$SENTRY_DIST
 RUN envsubst '${SENTRY_DSN} ${SENTRY_RELEASE} ${SENTRY_DIST}' < src/environments/environment.prod.ts > src/environments/environment.prod.ts.tmp && mv src/environments/environment.prod.ts.tmp src/environments/environment.prod.ts
 
 # Launch - build to dist folder
-RUN npm run-script deploy:build2api
+RUN npm run-script deploy
 
 
 ## STAGE 2: Host ###
