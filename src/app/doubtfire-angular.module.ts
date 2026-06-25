@@ -83,10 +83,6 @@ import {Router, RouterModule} from '@angular/router';
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
-// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
-// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
-// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
-// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {
   AboutDoubtfireModal,
   AboutDoubtfireModalContent,
