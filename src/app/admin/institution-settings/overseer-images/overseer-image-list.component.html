@@ -16,11 +16,49 @@
       <p>Add new image or modify existing ones used for automated task analysis</p>
     </div>
   </div>
+  @if (loadingImages) {
+    <div aria-busy="true" aria-label="Loading overseer images" class="overflow-hidden">
+      <div class="flex h-14 items-center gap-6 border-b border-gray-300 px-4">
+        @for (width of ['22%', '18%', '8%', '16%', '10%', '4%']; track $index) {
+          <ngx-skeleton-loader
+            [theme]="{width: width, height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+        }
+      </div>
+
+      @for (row of skeletonRows; track row) {
+        <div class="flex h-[72px] items-center gap-6 border-b border-y-gray-300 px-4">
+          <ngx-skeleton-loader
+            class="w-[28%]"
+            [theme]="{width: '35%', height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class="w-[28%]"
+            [theme]="{width: '35%', height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class="w-[10%]"
+            [theme]="{width: '35%', height: '32px', 'border-radius': '4px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class="w-[15%]"
+            [theme]="{width: '50%', height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            appearance="circle"
+            [theme]="{width: '28px', height: '28px', margin: '0'}"
+          ></ngx-skeleton-loader>
+        </div>
+      }
+    </div>
+  }
+
   <table
     class=""
     mat-table
     matSort
     [dataSource]="dataSource"
+    [hidden]="loadingImages"
     (matSortChange)="sortTableData($event)"
   >
     <!-- Name Column -->

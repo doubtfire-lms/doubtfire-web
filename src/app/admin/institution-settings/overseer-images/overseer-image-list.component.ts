@@ -10,6 +10,7 @@ import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {finalize} from 'rxjs';
 import {OverseerImage, OverseerImageService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
@@ -36,6 +37,8 @@ export class OverseerImageListComponent
   overseerImages: OverseerImage[] = new Array<OverseerImage>();
   dataSource = new MatTableDataSource(this.overseerImages);
   loading = false;
+  loadingImages = true;
+  skeletonRows = Array.from({length: 2}, (_, index) => index);
 
   public diskSpace: number | null = null;
 
@@ -59,9 +62,13 @@ export class OverseerImageListComponent
 
   ngAfterViewInit() {
     // Get all the overseer images and add them to the table
-    this.overseerImageService.fetchAll().subscribe((response) => {
-      this.pushToTable(response);
-    });
+    this.loadingImages = true;
+    this.overseerImageService
+      .fetchAll()
+      .pipe(finalize(() => (this.loadingImages = false)))
+      .subscribe((response) => {
+        this.pushToTable(response);
+      });
 
     this.httpClient.get<number>('/api/admin/disk_space').subscribe({
       next: (diskSpace) => {
