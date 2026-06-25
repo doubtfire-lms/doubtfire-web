@@ -44,10 +44,7 @@
     {
       "name": "external_assets",
       "resources": {
-        "urls": [
-          "https://maxcdn.bootstrapcdn.com/bootstrap/**",
-          "https://www.gravatar.com/avatar/**"
-        ]
+        "urls": ["https://www.gravatar.com/avatar/**"]
       }
     }
   ],
