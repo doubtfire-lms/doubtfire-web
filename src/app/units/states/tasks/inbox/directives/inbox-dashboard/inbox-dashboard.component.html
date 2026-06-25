@@ -20,7 +20,8 @@
           </ng-template>
         </mat-tab>
 
-        <mat-tab label="Overseer" [disabled]="!overseerEnabled"></mat-tab>
+        <!-- TODO: only show this if the task does not have any submission history/overseer assessments -->
+        <mat-tab label="History"></mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <span class="inline-flex items-center gap-1">
