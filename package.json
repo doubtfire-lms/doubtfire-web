@@ -48,7 +48,7 @@
     "@swimlane/ngx-charts": "^20.5.0",
     "@tailwindcss/postcss": "^4.3.1",
     "@worktile/gantt": "^21.0.0",
-    "angular-calendar": "^0.31.1",
+    "angular-calendar": "^0.32.2",
     "canvas-confetti": "^1.9",
     "d3": "^7.9.0",
     "date-fns": "^4.4.0",
