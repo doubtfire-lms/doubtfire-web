@@ -18,6 +18,8 @@
       <th *matHeaderCellDef mat-header-cell>Role</th>
       <td *matCellDef="let unitRole" mat-cell>
         <mat-button-toggle-group
+          appearance="legacy"
+          class="my-3"
           hideSingleSelectionIndicator
           name="role"
           [ngModel]="unitRole.role"
