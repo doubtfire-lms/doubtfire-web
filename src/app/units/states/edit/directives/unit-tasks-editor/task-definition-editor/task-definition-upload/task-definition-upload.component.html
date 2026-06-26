@@ -49,7 +49,7 @@
   <ng-container matColumnDef="flag-pct" sticky>
     <th *matHeaderCellDef mat-header-cell style="width: 20%">Flag At</th>
     <td *matCellDef="let upreq" mat-cell style="width: 20%">
-      @if (upreq.type === 'document' && upreq.tiiCheck) {
+      @if (upreq.type === 'document' && upreq.tiiCheck && tiiEnabled()) {
         <mat-form-field appearance="outline" style="width: 7em">
           <input matInput type="number" [(ngModel)]="upreq.tiiPct" />
           <span matTextSuffix>&nbsp;%</span>
