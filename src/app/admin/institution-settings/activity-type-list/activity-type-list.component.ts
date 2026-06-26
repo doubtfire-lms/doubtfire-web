@@ -2,6 +2,7 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@ang
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {finalize} from 'rxjs';
 import {ActivityType, ActivityTypeService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -24,6 +25,8 @@ export class ActivityTypeListComponent
   columns: string[] = ['name', 'abbreviation', 'options'];
   activityTypes: ActivityType[] = new Array<ActivityType>();
   dataSource = new MatTableDataSource(this.activityTypes);
+  loadingActivities = true;
+  skeletonRows = Array.from({length: 3}, (_, index) => index);
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
@@ -42,9 +45,13 @@ export class ActivityTypeListComponent
 
   ngAfterViewInit() {
     // Get all the activity types and add them to the table
-    this.activityTypeService.query().subscribe((activityTypes) => {
-      this.pushToTable(activityTypes);
-    });
+    this.loadingActivities = true;
+    this.activityTypeService
+      .query()
+      .pipe(finalize(() => (this.loadingActivities = false)))
+      .subscribe((activityTypes) => {
+        this.pushToTable(activityTypes);
+      });
   }
 
   // This method is passed to the submit method on the parent
