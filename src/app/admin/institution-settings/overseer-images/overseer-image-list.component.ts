@@ -15,6 +15,7 @@ import {OverseerImage, OverseerImageService} from 'src/app/api/models/doubtfire-
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import API_URL from 'src/app/config/constants/apiUrl';
 
 @Component({
   selector: 'overseer-image-list',
@@ -70,7 +71,7 @@ export class OverseerImageListComponent
         this.pushToTable(response);
       });
 
-    this.httpClient.get<number>('/api/admin/disk_space').subscribe({
+    this.httpClient.get<number>(`${API_URL}/admin/disk_space`).subscribe({
       next: (diskSpace) => {
         this.diskSpace = diskSpace;
       },
