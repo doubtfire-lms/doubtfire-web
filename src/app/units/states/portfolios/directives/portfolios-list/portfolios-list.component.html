@@ -104,61 +104,72 @@
       </button>
     }
   </div>
-
   @if (loading) {
     <div aria-busy="true" aria-label="Loading student portfolios" class="overflow-x-auto">
       <div class="min-w-[1600px]">
-        <div class="flex h-14 items-center gap-6 border-b px-4">
+        <div class="flex h-14 items-center gap-6 border-b border-gray-300 px-4">
           @for (
-            width of [
-              '110px',
-              '170px',
-              '150px',
-              '130px',
-              '80px',
-              '110px',
-              '180px',
-              '400px',
-              '80px',
-              '50px',
+            column of [
+              {columnWidth: '110px', rowWidth: '100%'},
+              {columnWidth: '170px', rowWidth: '50%'},
+              {columnWidth: '180px', rowWidth: '50%'},
+              {columnWidth: '130px', rowWidth: '75%'},
+              {columnWidth: '80px', rowWidth: '28px'},
+              {columnWidth: '80px', rowWidth: '28px'},
+              {columnWidth: '180px', rowWidth: '100%'},
+              {columnWidth: '400px', rowWidth: '100%'},
+              {columnWidth: '80px', rowWidth: '100%'},
             ];
             track $index
           ) {
             <ngx-skeleton-loader
               class="block shrink-0"
-              [style.width]="width"
-              [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+              [style.width]="column.columnWidth"
+              [theme]="{
+                width: column.rowWidth,
+                height: '12px',
+                'border-radius': '999px',
+                margin: '0',
+              }"
             ></ngx-skeleton-loader>
           }
         </div>
 
         @for (row of [0, 1, 2, 3, 4, 5, 6, 7]; track row) {
-          <div class="flex h-[60px] items-center gap-6 border-b px-4">
+          <div class="flex h-15 items-center gap-6 border-b border-gray-300 px-4">
             @for (
-              width of [
-                '110px',
-                '170px',
-                '150px',
-                '130px',
-                '80px',
-                '110px',
-                '180px',
-                '400px',
-                '80px',
-                '50px',
+              column of [
+                {columnWidth: '110px', rowWidth: '100%'},
+                {columnWidth: '170px', rowWidth: '100%'},
+                {columnWidth: '180px', rowWidth: '75%'},
+                {columnWidth: '130px', rowWidth: '70%'},
+                {columnWidth: '80px', rowWidth: '28px'},
+                {columnWidth: '80px', rowWidth: '28px'},
+                {columnWidth: '180px', rowWidth: '100%'},
+                {columnWidth: '400px', rowWidth: '100%'},
+                {columnWidth: '80px', rowWidth: '100%'},
               ];
               track $index
             ) {
-              <ngx-skeleton-loader
-                class="block shrink-0"
-                [style.width]="width"
-                [theme]="{
-                  width: '100%',
-                  height: $index === 7 ? '25px' : '12px',
-                  'border-radius': $index === 7 ? '4px' : '999px',
-                  margin: '0',
-                }"
-              ></ngx-skeleton-loader>
+              @if ($index === 4 || $index === 5) {
+                <ngx-skeleton-loader
+                  appearance="circle"
+                  class="block shrink-0"
+                  [style.width]="column.columnWidth"
+                  [theme]="{width: column.rowWidth, height: '28px', margin: '0'}"
+                ></ngx-skeleton-loader>
+              } @else {
+                <ngx-skeleton-loader
+                  class="block shrink-0"
+                  [style.width]="column.columnWidth"
+                  [theme]="{
+                    width: column.rowWidth,
+                    height: $index === 7 ? '25px' : '12px',
+                    'border-radius': $index === 7 ? '4px' : '999px',
+                    margin: '0',
+                  }"
+                ></ngx-skeleton-loader>
+              }
             }
           </div>
         }
@@ -167,7 +178,7 @@
   }
 
   <table
-    class="f-table selectable"
+    class="table-selectable"
     mat-table
     matSort
     matSortActive="student"
