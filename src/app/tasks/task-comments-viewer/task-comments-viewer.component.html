@@ -175,7 +175,7 @@
                     }
 
                     @case ('scorm') {
-                      <div class="comment-scorm">
+                      <div class="comment-scorm my-2">
                         @if (scormEnabled && asScormComment(comment); as scormComment) {
                           <f-scorm-comment [comment]="scormComment" [task]="task"></f-scorm-comment>
                         }

@@ -1,36 +1,37 @@
-<hr class="hr-text" data-content="Knowledge Check Summary" [hidden]="!comment.firstInSeries" />
-<div class="flex flex-row items-center">
-  <button
-    class="mr-2.5 h-7 flex-shrink-0"
-    mat-button
-    [hidden]="!user.isStaff && !task.definition.scormAllowReview"
-    (click)="reviewScormTest()"
-  >
-    Review
-  </button>
+<hr class="hr-text my-2" data-content="Knowledge Check Summary" [hidden]="!comment.firstInSeries" />
+<div class="flex w-full flex-col justify-center">
   @if (!user.isStaff && !task.definition.scormAllowReview) {
-    <div class="markdown-to-html m-auto my-0.5" [innerHTML]="comment.text"></div>
+    <div class="markdown-to-html m-auto my-0.5 text-center" [innerHTML]="comment.text"></div>
   } @else {
-    <div class="markdown-to-html flex-grow" [innerHTML]="comment.text"></div>
+    <div class="markdown-to-html grow text-center" [innerHTML]="comment.text"></div>
   }
-  <button
-    #menuState="matMenuTrigger"
-    class="h-7 flex-shrink-0 p-0"
-    mat-icon-button
-    [hidden]="!user.isStaff"
-    [matMenuTriggerFor]="menu"
-  >
-    <mat-icon>more_vert</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
+  <div class="relative flex w-full items-center justify-center py-4">
     <button
-      mat-menu-item
-      [hidden]="this.comment.testAttempt.successStatus"
-      (click)="passScormAttempt()"
+      color="primary"
+      mat-stroked-button
+      [hidden]="!user.isStaff && !task.definition.scormAllowReview"
+      (click)="reviewScormTest()"
     >
-      Pass attempt
+      Review
     </button>
-    <button mat-menu-item (click)="deleteScormAttempt()">Delete attempt</button>
-  </mat-menu>
+    <button
+      #menuState="matMenuTrigger"
+      class="absolute right-0 h-7 p-0"
+      mat-icon-button
+      [hidden]="!user.isStaff"
+      [matMenuTriggerFor]="menu"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button
+        mat-menu-item
+        [hidden]="this.comment.testAttempt.successStatus"
+        (click)="passScormAttempt()"
+      >
+        Pass attempt
+      </button>
+      <button mat-menu-item (click)="deleteScormAttempt()">Delete attempt</button>
+    </mat-menu>
+  </div>
 </div>
-<hr class="hr-fade" [hidden]="!comment.lastInScormSeries" />
