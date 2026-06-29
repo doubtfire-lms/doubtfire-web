@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-36](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-35...v11.0.0-36) (2026-06-29)
+
+
+### Bug Fixes
+
+* modify grey border ([59c102d](https://github.com/b0ink/doubtfire-deploy/commit/59c102d7708e4c28a5584cc3614046e8e8f5fd52))
+
 ## [11.0.0-35](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-34...v11.0.0-35) (2026-06-29)
 
 
