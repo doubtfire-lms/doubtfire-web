@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-35](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-34...v11.0.0-35) (2026-06-29)
+
+
+### Features
+
+* add skeleton loading ui to overseer image list ([b833a1c](https://github.com/b0ink/doubtfire-deploy/commit/b833a1c58ce07e6bf9b6a12c77a1bbea1635da10))
+* add skeleton ui for activities ([47ffe2b](https://github.com/b0ink/doubtfire-deploy/commit/47ffe2b261d26be39e93e7b89204c65b5d5b1f57))
+
+
+### Bug Fixes
+
+* reveal tii threshold if tii enabled ([ab1a401](https://github.com/b0ink/doubtfire-deploy/commit/ab1a401a3f67db83f7a55aa25060f2a29116eae1))
+* use correct api url ([ed4dba4](https://github.com/b0ink/doubtfire-deploy/commit/ed4dba4552ebf088893dfa58fffac2546690cedd))
+
 ## [11.0.0-34](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-33...v11.0.0-34) (2026-06-25)
 
 
