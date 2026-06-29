@@ -97,133 +97,139 @@
         </mat-expansion-panel-header>
 
         @if (assessmentFor(history); as oa) {
-          <mat-accordion>
-            @for (result of oa.stepResultsCache.values | async; track result.id; let idx = $index) {
-              <mat-expansion-panel class="mb-4">
-                <mat-expansion-panel-header class="flex items-center justify-between">
-                  <mat-panel-title>
-                    Step {{ idx + 1 }}: {{ result.overseerStep?.displayName }}</mat-panel-title
-                  >
-                  <div class="mr-9">
-                    @if (result.pass) {
-                      <mat-icon color="primary">done</mat-icon>
-                    } @else {
-                      <mat-icon color="warn">cancel</mat-icon>
-                    }
-                  </div>
-                </mat-expansion-panel-header>
-
-                <!-- <p>Exit Status: {{ result.exitStatus }}</p> -->
-                <!-- <p>Pass?: {{ result.pass }}</p> -->
-
-                @if (!result.pass) {
-                  <p class="text-normal w-full p-1 text-left tracking-wide text-gray-500">
-                    {{ result.feedbackMessage }}
-                  </p>
-                }
-
-                @if (
-                  result.expectedOutput &&
-                  result.expectedOutput !== result.stdout &&
-                  (result.overseerStep?.stepType === 'output_diff' || !result.overseerStep)
-                ) {
-                  <div class="w-fill mb-3 flex items-center justify-center gap-1">
-                    <button
-                      mat-stroked-button
-                      [color]="viewOutput === 'your_output' ? 'primary' : undefined"
-                      (click)="submissionOutput()"
-                    >
-                      Your Output
-                    </button>
-
-                    <button
-                      mat-stroked-button
-                      [color]="viewOutput === 'expected_output' ? 'primary' : undefined"
-                      (click)="expectedOutput()"
-                    >
-                      Expected Output
-                    </button>
-                    <button
-                      mat-stroked-button
-                      [color]="viewOutput === 'diff' ? 'primary' : undefined"
-                      (click)="diff()"
-                    >
-                      Diff
-                    </button>
-
-                    <button
-                      mat-stroked-button
-                      [color]="viewOutput === 'split_diff' ? 'primary' : undefined"
-                      (click)="splitDiff()"
-                    >
-                      Split Diff
-                    </button>
-                  </div>
-                  @if (viewOutput === 'diff' || viewOutput === 'split_diff') {
-                    @if (result.expectedOutput !== result.stdout) {
-                      <ngx-monaco-diff-editor
-                        [modifiedModel]="{
-                          language: 'plainttext',
-                          code: result.stdout,
-                        }"
-                        [options]="diffEditorOptions"
-                        [originalModel]="{
-                          language: 'plaintext',
-                          code: result.expectedOutput,
-                        }"
-                      ></ngx-monaco-diff-editor>
-                    }
-                  } @else if (viewOutput === 'your_output') {
-                    <ngx-monaco-editor
-                      class="w-full p-3"
-                      [options]="editorOptions"
-                      [(ngModel)]="result.stdout"
-                    ></ngx-monaco-editor>
-                  } @else if (viewOutput === 'expected_output') {
-                    <ngx-monaco-editor
-                      class="w-full p-3"
-                      [options]="editorOptions"
-                      [(ngModel)]="result.expectedOutput"
-                    ></ngx-monaco-editor>
-                  }
-                } @else if (result.stdout) {
-                  <pre
-                    class="max-h-44 max-w-full scrollbar-gutter-stable overflow-auto rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed break-words whitespace-pre-wrap text-gray-800 shadow-inner"
-                  ><code>{{result.stdout}}</code></pre>
-                } @else if (result.pass) {
-                  <div class="w-full text-center tracking-wide text-gray-400 uppercase">
-                    SUCCESS
-                  </div>
-                  <div
-                    class="text-normal w-full p-1 text-center tracking-wide text-gray-200 uppercase"
-                  >
-                    (No Output)
-                  </div>
-                }
-              </mat-expansion-panel>
-            }
-            @if (loadingAssessments.has(oa.id)) {
-              <div class="flex w-full items-center justify-center">
-                <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-              </div>
-            } @else {
-              @for (skipped of oa.stepsSkipped; track skipped.id; let idx = $index) {
-                <!-- TODO: filter oa.stepsSkipped, if this overseer assessment passed, then we can ignore this (dont render) skipped step -->
-                <!-- TODO: because it proably means the test was added after the assessment -->
-                <mat-expansion-panel disabled>
+          <div class="mb-4">
+            <mat-accordion>
+              @for (
+                result of oa.stepResultsCache.values | async;
+                track result.id;
+                let idx = $index
+              ) {
+                <mat-expansion-panel>
                   <mat-expansion-panel-header class="flex items-center justify-between">
                     <mat-panel-title>
-                      Step {{ oa.stepResultsCache.currentValues.length + idx + 1 }}:
-                      {{ skipped?.displayName ?? '-' }}
-                      <span class="ml-3 italic">(Skipped)</span>
-                    </mat-panel-title>
-
-                    <mat-icon class="opacity-80">pause</mat-icon>
+                      Step {{ idx + 1 }}: {{ result.overseerStep?.displayName }}</mat-panel-title
+                    >
+                    <div class="mr-9">
+                      @if (result.pass) {
+                        <mat-icon color="primary">done</mat-icon>
+                      } @else {
+                        <mat-icon color="warn">cancel</mat-icon>
+                      }
+                    </div>
                   </mat-expansion-panel-header>
+
+                  <!-- <p>Exit Status: {{ result.exitStatus }}</p> -->
+                  <!-- <p>Pass?: {{ result.pass }}</p> -->
+
+                  @if (!result.pass) {
+                    <p class="text-normal w-full p-1 text-left tracking-wide text-gray-500">
+                      {{ result.feedbackMessage }}
+                    </p>
+                  }
+
+                  @if (
+                    result.expectedOutput &&
+                    result.expectedOutput !== result.stdout &&
+                    (result.overseerStep?.stepType === 'output_diff' || !result.overseerStep)
+                  ) {
+                    <div class="w-fill mb-3 flex items-center justify-center gap-1">
+                      <button
+                        mat-stroked-button
+                        [color]="viewOutput === 'your_output' ? 'primary' : undefined"
+                        (click)="submissionOutput()"
+                      >
+                        Your Output
+                      </button>
+
+                      <button
+                        mat-stroked-button
+                        [color]="viewOutput === 'expected_output' ? 'primary' : undefined"
+                        (click)="expectedOutput()"
+                      >
+                        Expected Output
+                      </button>
+                      <button
+                        mat-stroked-button
+                        [color]="viewOutput === 'diff' ? 'primary' : undefined"
+                        (click)="diff()"
+                      >
+                        Diff
+                      </button>
+
+                      <button
+                        mat-stroked-button
+                        [color]="viewOutput === 'split_diff' ? 'primary' : undefined"
+                        (click)="splitDiff()"
+                      >
+                        Split Diff
+                      </button>
+                    </div>
+                    @if (viewOutput === 'diff' || viewOutput === 'split_diff') {
+                      @if (result.expectedOutput !== result.stdout) {
+                        <ngx-monaco-diff-editor
+                          [modifiedModel]="{
+                            language: 'plainttext',
+                            code: result.stdout,
+                          }"
+                          [options]="diffEditorOptions"
+                          [originalModel]="{
+                            language: 'plaintext',
+                            code: result.expectedOutput,
+                          }"
+                        ></ngx-monaco-diff-editor>
+                      }
+                    } @else if (viewOutput === 'your_output') {
+                      <ngx-monaco-editor
+                        class="w-full p-3"
+                        [options]="editorOptions"
+                        [(ngModel)]="result.stdout"
+                      ></ngx-monaco-editor>
+                    } @else if (viewOutput === 'expected_output') {
+                      <ngx-monaco-editor
+                        class="w-full p-3"
+                        [options]="editorOptions"
+                        [(ngModel)]="result.expectedOutput"
+                      ></ngx-monaco-editor>
+                    }
+                  } @else if (result.stdout) {
+                    <pre
+                      class="max-h-44 max-w-full scrollbar-gutter-stable overflow-auto rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed break-words whitespace-pre-wrap text-gray-800 shadow-inner"
+                    ><code>{{result.stdout}}</code></pre>
+                  } @else if (result.pass) {
+                    <div class="w-full text-center tracking-wide text-gray-400 uppercase">
+                      SUCCESS
+                    </div>
+                    <div
+                      class="text-normal w-full p-1 text-center tracking-wide text-gray-200 uppercase"
+                    >
+                      (No Output)
+                    </div>
+                  }
                 </mat-expansion-panel>
               }
-            }
-          </mat-accordion>
+              @if (loadingAssessments.has(oa.id)) {
+                <div class="flex w-full items-center justify-center">
+                  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+                </div>
+              } @else {
+                @for (skipped of oa.stepsSkipped; track skipped.id; let idx = $index) {
+                  <!-- TODO: filter oa.stepsSkipped, if this overseer assessment passed, then we can ignore this (dont render) skipped step -->
+                  <!-- TODO: because it proably means the test was added after the assessment -->
+                  <mat-expansion-panel disabled>
+                    <mat-expansion-panel-header class="flex items-center justify-between">
+                      <mat-panel-title>
+                        Step {{ oa.stepResultsCache.currentValues.length + idx + 1 }}:
+                        {{ skipped?.displayName ?? '-' }}
+                        <span class="ml-3 italic">(Skipped)</span>
+                      </mat-panel-title>
+
+                      <mat-icon class="opacity-80">pause</mat-icon>
+                    </mat-expansion-panel-header>
+                  </mat-expansion-panel>
+                }
+              }
+            </mat-accordion>
+          </div>
         }
         @if (history.hasSubmissionFiles && currentUnitRole) {
           <div class="flex justify-center">
