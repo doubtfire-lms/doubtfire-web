@@ -38,7 +38,7 @@
     "@angular/material-date-fns-adapter": "^22.0.2",
     "@angular/platform-browser": "^22.0.3",
     "@angular/platform-browser-dynamic": "^22.0.3",
-    "@angular/router": "^22.0.3",
+    "@angular/router": "^22.0.4",
     "@angular/service-worker": "^22.0.3",
     "@ctrl/ngx-emoji-mart": "^9.3.0",
     "@eslint/js": "^10.0.1",
