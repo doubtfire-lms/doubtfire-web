@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-37](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-36...v11.0.0-37) (2026-06-29)
+
+
+### Bug Fixes
+
+* fetch images on init ([b28bc69](https://github.com/b0ink/doubtfire-deploy/commit/b28bc6905b43d5843eee010cefff4938568edb10))
+
 ## [11.0.0-36](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-35...v11.0.0-36) (2026-06-29)
 
 
