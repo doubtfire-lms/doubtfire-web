@@ -18,7 +18,7 @@
   <mat-form-field appearance="outline" class="flex-grow">
     <mat-label>Docker Image</mat-label>
     <mat-select [disabled]="!overseerEnabled" [(value)]="taskDefinition.overseerImageId">
-      @for (image of images | async; track image) {
+      @for (image of images | async; track image.id) {
         <mat-option [value]="image.id">{{ image.description }}</mat-option>
       }
     </mat-select>

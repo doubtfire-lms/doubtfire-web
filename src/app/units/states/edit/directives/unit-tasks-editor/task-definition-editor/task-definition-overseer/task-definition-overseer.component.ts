@@ -61,6 +61,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   public showOverseerResourcesEditor = false;
   public isLoadingOverseerResourcesArchive = false;
   public overseerResourcesArchive: Blob | File | null = null;
+  public images: Observable<OverseerImage[]>;
+
   constructor(
     private http: HttpClient,
     private alerts: AlertService,
@@ -136,6 +138,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
+    this.images = this.overseerImageService.query();
+
     this.taskDefinition.overseerStepsCache.values.subscribe((steps) => {
       this.overseerSteps = [...steps];
     });
@@ -255,10 +259,6 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
 
   public get unit(): Unit {
     return this.taskDefinition?.unit;
-  }
-
-  public get images(): Observable<OverseerImage[]> {
-    return this.overseerImageService.query();
   }
 
   get currentUser(): User {
