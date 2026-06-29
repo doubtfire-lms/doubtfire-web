@@ -68,6 +68,7 @@
           matTooltipPosition="above"
           matTooltipShowDelay="1000"
           [checked]="unitRole.observerOnly"
+          [disabled]="unitRole.id === unit.mainConvenor.id"
           (change)="toggleObserverOnly(unitRole)"
         ></mat-slide-toggle>
       </td>
