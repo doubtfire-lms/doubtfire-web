@@ -36,7 +36,7 @@
 
   @if (loadingStudents) {
     <div aria-busy="true" aria-label="Loading students" class="overflow-hidden">
-      <div class="flex h-14 items-center gap-6 border-b px-4">
+      <div class="flex h-14 items-center gap-6 border-b border-gray-300 px-4">
         @for (width of ['4%', '10%', '16%', '28%', '8%', '8%', '8%', '10%', '10%']; track $index) {
           <ngx-skeleton-loader
             [theme]="{width: width, height: '12px', 'border-radius': '999px', margin: '0'}"
@@ -45,7 +45,7 @@
       </div>
 
       @for (row of [0, 1, 2, 3, 4, 5, 6, 7]; track row) {
-        <div class="flex h-[72px] items-center gap-6 border-b px-4">
+        <div class="flex h-[72px] items-center gap-6 border-b border-gray-300 px-4">
           <ngx-skeleton-loader
             appearance="circle"
             [theme]="{width: '30px', height: '30px', margin: '0'}"
