@@ -65,12 +65,10 @@ export const resolveUnit: ResolveFn<Unit> = (route, state) => {
   }).pipe(first());
 };
 
-// Only `/units/:unitId/tasks...` can safely start with a placeholder unit because those screens
-// immediately fetch their own inbox/explorer data. Admin routes like `/units/:unitId/admin/tasks`
-// still need the full unit payload here so staff, tutorials, and task definitions are populated.
+// These routes can activate their outer shell while their component fetches detailed data.
 function shouldResolveUnitProgressively(url: string, unitId: number): boolean {
   const pathname = url.split('?')[0];
-  return new RegExp(`^/units/${unitId}/tasks(?:/|$)`).test(pathname);
+  return new RegExp(`^/units/${unitId}/(?:tasks|admin)(?:/|$)`).test(pathname);
 }
 
 function routeEntity(unit: Unit, unitRole?: UnitRole): Unit | UnitRole {
