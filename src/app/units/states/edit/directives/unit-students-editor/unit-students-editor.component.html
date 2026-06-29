@@ -8,15 +8,54 @@
     <div class="filter">
       <mat-form-field appearance="outline">
         <mat-label>Search</mat-label>
-        <input matInput (keyup)="applyFilter($event)" />
+        <input matInput [disabled]="loadingStudents" (keyup)="applyFilter($event)" />
       </mat-form-field>
     </div>
   </div>
+  @if (loadingStudents) {
+    <div aria-busy="true" aria-label="Loading students" class="overflow-hidden">
+      <div class="flex h-14 items-center gap-6 border-b border-gray-300 px-4">
+        @for (width of ['10%', '12%', '12%', '20%', '10%', '20%', '8%', '8%']; track $index) {
+          <ngx-skeleton-loader
+            [theme]="{width: width, height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+        }
+      </div>
+
+      @for (row of [0, 1, 2, 3, 4, 5, 6, 7]; track row) {
+        <div class="flex h-[72px] items-center gap-6 border-b border-gray-300 px-4">
+          <ngx-skeleton-loader
+            class="w-[10%]"
+            [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class="w-[12%]"
+            [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class="w-[12%]"
+            [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class="w-[20%]"
+            [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          @for (column of [0, 1, 2, 3]; track column) {
+            <ngx-skeleton-loader
+              class="w-[10%]"
+              [theme]="{width: '100%', height: '25px', 'border-radius': '4px', margin: '0'}"
+            ></ngx-skeleton-loader>
+          }
+        </div>
+      }
+    </div>
+  }
   <table
-    class="f-table"
+    class=""
     mat-table
     matSort
     [dataSource]="dataSource"
+    [hidden]="loadingStudents"
     (matSortChange)="sortTableData($event)"
   >
     <!-- Username Column -->

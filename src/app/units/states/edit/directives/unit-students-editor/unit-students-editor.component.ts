@@ -12,7 +12,8 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
-import {Subscription} from 'rxjs';
+import {Subscription, finalize, timer} from 'rxjs';
+import {switchMap} from 'rxjs/operators';
 import {Project, ProjectService, Unit} from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
@@ -53,6 +54,7 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
     'goto',
   ];
   dataSource: MatTableDataSource<Project> = new MatTableDataSource([]);
+  loadingStudents = true;
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
@@ -79,11 +81,7 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
       }),
     );
 
-    this.subscriptions.push(
-      this.projectService.loadStudents(this.unit, false, true).subscribe(() => {
-        // projects included in unit...
-      }),
-    );
+    this.refreshStudentsAfterRender();
   }
 
   // The paginator is inside the table
@@ -102,6 +100,21 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  private refreshStudentsAfterRender(): void {
+    this.subscriptions.push(
+      timer(0)
+        .pipe(
+          switchMap(() => this.projectService.loadStudents(this.unit, false, true)),
+          finalize(() => {
+            this.loadingStudents = false;
+          }),
+        )
+        .subscribe(() => {
+          // projects included in unit...
+        }),
+    );
   }
 
   private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
