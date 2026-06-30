@@ -7,6 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import {Project} from 'src/app/api/models/project';
+import {GradeDefinition} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -53,6 +54,14 @@ export class ProgressDashboardComponent implements OnInit {
     const currentUser = this.userService.currentUser;
 
     return !!role && role !== 'Student' && this.project?.student?.id !== currentUser?.id;
+  }
+
+  public get targetGradeDefinitions(): GradeDefinition[] {
+    return this.project.unit.gradeDefinitions.filter((definition) => definition.value >= 0);
+  }
+
+  public contentRouteForGrade(grade: GradeDefinition): unknown[] {
+    return ['/units', this.project.unit.id, 'content', 'grades', grade.id];
   }
 
   updateTargetGrade(newGrade: number): void {

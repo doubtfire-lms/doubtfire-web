@@ -270,6 +270,7 @@ import {TaskSubmissionCardComponent} from './projects/states/dashboard/directive
 import {TutorNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/tutor-notes-view/tutor-notes-view.component';
 import {TaskDashboardComponent} from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
 import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
+import {ProjectContentComponent} from './projects/states/content/project-content.component';
 import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
 import {ProjectGroupsStateComponent} from './projects/states/groups/project-groups-state.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
@@ -576,6 +577,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     FTaskSheetViewComponent,
     UnitRootStateComponent,
     ProjectRootStateComponent,
+    ProjectContentComponent,
     TaskViewerStateComponent,
     FUsersComponent,
     ProjectProgressGaugeComponent,

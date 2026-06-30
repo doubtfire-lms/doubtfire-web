@@ -187,6 +187,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this.router.url.split('?')[0].endsWith('/discussion');
   }
 
+  public get isContentRoute(): boolean {
+    return /\/content(?:\/|$)/.test(this.router.url.split('?')[0]);
+  }
+
   showSidekiqJob() {
     this.sidekiqJobsModalService.show();
   }

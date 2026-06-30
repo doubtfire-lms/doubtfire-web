@@ -9,36 +9,36 @@
   </div>
   <div class="grid grid-cols-1 items-stretch gap-3.5 p-3.5 xl:grid-cols-2">
     <!-- Task Planner Card -->
-    <div class="size-full xl:col-span-1">
-      <f-task-planner-card class="block size-full" [project]="project"></f-task-planner-card>
+    <div class="xl:col-span-1">
+      <f-task-planner-card class="block" [project]="project"></f-task-planner-card>
     </div>
 
     <!-- Target Grade Card -->
-    <div class="h-full xl:col-span-1">
-      <mat-card appearance="outlined" class="flex h-full flex-col">
+    <div class="col-span-1 h-full">
+      <mat-card appearance="outlined" class="flex h-full max-h-[190px] flex-col">
         <mat-card-header>
           <mat-card-title>Target Grade</mat-card-title>
-          <mat-card-subtitle class="mb-2.5">
+          <mat-card-subtitle>
             <p>Your target grade changes which tasks you need to complete.</p>
           </mat-card-subtitle>
         </mat-card-header>
 
-        <mat-card-content class="flex flex-1 items-center">
-          <div class="w-full">
-            <mat-form-field appearance="fill" class="w-full">
-              <mat-label>Select Target Grade</mat-label>
-              <mat-select
-                disabled
-                [(value)]="project.targetGrade"
-                (selectionChange)="updateTargetGrade($event.value)"
-              >
-                @for (grade of grades.values; track grade) {
-                  <mat-option [value]="grade">
-                    {{ grades.names[grade] }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+        <mat-card-content class="flex flex-1 items-center justify-center">
+          <div class="flex w-full flex-col">
+            <div class="grid w-full grid-cols-2 items-center justify-center gap-2 sm:grid-cols-4">
+              @for (grade of targetGradeDefinitions; track grade.id) {
+                <a
+                  class="flex items-center justify-center rounded border border-gray-300 bg-white px-2 py-3 text-gray-800 no-underline transition-colors hover:border-gray-500 hover:bg-gray-50"
+                  [routerLink]="contentRouteForGrade(grade)"
+                >
+                  <div class="flex flex-col items-center justify-center gap-2 text-center">
+                    <f-grade-icon [colorful]="true" [grade]="grade.value" [unit]="project.unit">
+                    </f-grade-icon>
+                    <!-- <span class="text-sm leading-tight">{{ grade.label }}</span> -->
+                  </div>
+                </a>
+              }
+            </div>
             <div class="ml-0.5 py-1 opacity-70">
               To change your target grade, use the
               <a class="cursor-pointer underline" [routerLink]="['/projects', project.id, 'plan']">
