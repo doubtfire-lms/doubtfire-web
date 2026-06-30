@@ -247,6 +247,7 @@ import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.c
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
 import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
+import {ProjectContentComponent} from './projects/states/content/project-content.component';
 import {AddEngagementDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
 import {EngagementDetailDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-detail-dialog/engagement-detail-dialog.component';
 import {EngagementPassportCardComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-passport-card.component';
@@ -270,7 +271,6 @@ import {TaskSubmissionCardComponent} from './projects/states/dashboard/directive
 import {TutorNotesViewComponent} from './projects/states/dashboard/directives/task-dashboard/directives/tutor-notes-view/tutor-notes-view.component';
 import {TaskDashboardComponent} from './projects/states/dashboard/directives/task-dashboard/task-dashboard.component';
 import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
-import {ProjectContentComponent} from './projects/states/content/project-content.component';
 import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
 import {ProjectGroupsStateComponent} from './projects/states/groups/project-groups-state.component';
 import {ProjectGroupsComponent} from './projects/states/groups/project-groups/project-groups.component';
