@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  sentryDsn:
-    'https://df7d196f30d8d20863d4c09d0040c630@o4511380111884288.ingest.de.sentry.io/4511380116996176',
+  sentryDsn: '',
   sentryRelease: '',
   sentryDist: '',
 };
