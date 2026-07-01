@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-39](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-38...v11.0.0-39) (2026-07-01)
+
+
+### Bug Fixes
+
+* dynamic hint sizing to prevent overlap ([518b58b](https://github.com/b0ink/doubtfire-deploy/commit/518b58ba30c23dc4456a98ebfbe41cb48446e715))
+
 ## [11.0.0-38](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-37...v11.0.0-38) (2026-06-29)
 
 ## [11.0.0-37](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-36...v11.0.0-37) (2026-06-29)
