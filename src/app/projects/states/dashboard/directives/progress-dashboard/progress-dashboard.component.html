@@ -9,41 +9,49 @@
   </div>
   <div class="grid grid-cols-1 items-stretch gap-3.5 p-3.5 xl:grid-cols-2">
     <!-- Task Planner Card -->
-    <div class="xl:col-span-1">
+    <div class="min-h-50 xl:col-span-1">
       <f-task-planner-card class="block" [project]="project"></f-task-planner-card>
     </div>
 
     <!-- Target Grade Card -->
     <div class="col-span-1 h-full">
-      <mat-card appearance="outlined" class="flex h-full max-h-[190px] flex-col">
+      <mat-card appearance="outlined" class="flex h-full min-h-50 flex-col">
         <mat-card-header>
           <mat-card-title>Target Grade</mat-card-title>
           <mat-card-subtitle>
-            <p>Your target grade changes which tasks you need to complete.</p>
+            <p>
+              <!-- TODO: "Click on a grade to learn more about it" shows when a content is linked to it -->
+              Your target grade changes which tasks you need to complete. Click on a grade to learn
+              more about it.
+              @if (targetGradeDefinitions.length > 1) {
+                To change your target grade, use the
+                <a
+                  class="cursor-pointer underline"
+                  [routerLink]="['/projects', project.id, 'plan']"
+                >
+                  Task Planner
+                </a>
+              }
+            </p>
           </mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content class="flex flex-1 items-center justify-center">
           <div class="flex w-full flex-col">
-            <div class="grid w-full grid-cols-2 items-center justify-center gap-2 sm:grid-cols-4">
+            <div class="flex flex-wrap justify-center gap-2 self-center">
               @for (grade of targetGradeDefinitions; track grade.id) {
-                <a
-                  class="flex items-center justify-center rounded border border-gray-300 bg-white px-2 py-3 text-gray-800 no-underline transition-colors hover:border-gray-500 hover:bg-gray-50"
-                  [routerLink]="contentRouteForGrade(grade)"
+                <button
+                  class="flex size-16 cursor-pointer items-center justify-center rounded-full border border-gray-300 bg-white text-gray-800 no-underline transition-colors hover:border-gray-500 hover:bg-gray-50"
+                  type="button"
+                  (click)="openContentForGrade(grade)"
                 >
                   <div class="flex flex-col items-center justify-center gap-2 text-center">
                     <f-grade-icon [colorful]="true" [grade]="grade.value" [unit]="project.unit">
                     </f-grade-icon>
                     <!-- <span class="text-sm leading-tight">{{ grade.label }}</span> -->
                   </div>
-                </a>
+                </button>
               }
-            </div>
-            <div class="ml-0.5 py-1 opacity-70">
-              To change your target grade, use the
-              <a class="cursor-pointer underline" [routerLink]="['/projects', project.id, 'plan']">
-                Task Planner
-              </a>
             </div>
           </div>
         </mat-card-content>

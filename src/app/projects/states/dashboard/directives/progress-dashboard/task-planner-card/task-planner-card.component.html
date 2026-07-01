@@ -1,4 +1,4 @@
-<mat-card appearance="outlined">
+<mat-card appearance="outlined" class="flex min-h-[200px] flex-col">
   <mat-card-header>
     <mat-card-title>Plan Your Tasks</mat-card-title>
     <mat-card-subtitle class="mb-2.5">
@@ -17,7 +17,7 @@
       }
     </mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content class="mt-auto">
     <button mat-stroked-button [routerLink]="['/projects', project.id, 'plan']">
       <mat-icon aria-label="Launch icon" style="width: 20px; height: 20px; font-size: 20px">
         launch

@@ -6,12 +6,14 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {Project} from 'src/app/api/models/project';
 import {GradeDefinition} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {ProjectContentComponent} from '../../../content/project-content.component';
 
 @Component({
   selector: 'f-progress-dashboard',
@@ -38,6 +40,7 @@ export class ProgressDashboardComponent implements OnInit {
     private projectService: ProjectService,
     private alertService: AlertService,
     private userService: UserService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -60,8 +63,17 @@ export class ProgressDashboardComponent implements OnInit {
     return this.project.unit.gradeDefinitions.filter((definition) => definition.value >= 0);
   }
 
-  public contentRouteForGrade(grade: GradeDefinition): unknown[] {
-    return ['/units', this.project.unit.id, 'content', 'grades', grade.id];
+  public openContentForGrade(grade: GradeDefinition): void {
+    this.dialog.open(ProjectContentComponent, {
+      data: {
+        contentRoute: `/grades/${grade.id}`,
+        unit: this.project.unit,
+      },
+      height: '90vh',
+      maxWidth: 'calc(100vw - 32px)',
+      panelClass: 'overflow-hidden',
+      width: 'calc(100vw - 32px)',
+    });
   }
 
   updateTargetGrade(newGrade: number): void {

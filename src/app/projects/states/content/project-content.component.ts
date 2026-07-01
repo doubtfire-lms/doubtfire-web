@@ -5,11 +5,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Inject,
   Input,
   OnDestroy,
   OnInit,
+  Optional,
   ViewChild,
 } from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ActivatedRoute, Router, UrlSegment} from '@angular/router';
 import {Subscription, firstValueFrom} from 'rxjs';
 import {Project, Unit} from 'src/app/api/models/doubtfire-model';
@@ -18,6 +21,11 @@ import {GlobalStateService, ViewType} from '../index/global-state.service';
 
 const ignoredArchivePath = /(^|\/)(?:__MACOSX|\.DS_Store|._[^/]+)(?:\/|$)/;
 const externalUrl = /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i;
+
+export interface ProjectContentDialogData {
+  contentRoute: string;
+  unit: Unit;
+}
 
 @Component({
   selector: 'f-project-content',
@@ -38,6 +46,12 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
   public archiveFileCount = 0;
   public srcFileCount = 0;
 
+  public get contentShellClass(): string {
+    return this.dialogData
+      ? 'flex h-full min-h-0 flex-col bg-[#f7f8fa]'
+      : 'flex min-h-[calc(100vh-64px)] flex-col bg-[#f7f8fa]';
+  }
+
   private archiveBlobUrl?: string;
   private assetUrls?: Map<string, string>;
   private contentArchive?: JSZip;
@@ -56,9 +70,17 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
     private route: ActivatedRoute,
     private router: Router,
     private globalState: GlobalStateService,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData?: ProjectContentDialogData,
   ) {}
 
   public ngOnInit(): void {
+    if (this.dialogData) {
+      this.setContentRouteFromPath(this.dialogData.contentRoute);
+      this.setHeaderContext(this.dialogData.unit);
+      void this.fetchContentArchive(this.dialogData.unit.id);
+      return;
+    }
+
     this.setContentRoute(this.route.snapshot.url);
     this.routeSubscription = this.route.url.subscribe((segments) => {
       const routeChanged = this.setContentRoute(segments);
@@ -132,6 +154,16 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
 
       event.preventDefault();
 
+      if (this.dialogData) {
+        this.setContentRouteFromPath(archiveRoute.path);
+
+        if (this.contentArchive) {
+          void this.loadRouteFromArchive(this.contentArchive, archiveRoute.fragment);
+        }
+
+        return;
+      }
+
       const commands = ['/units', this.currentUnitId, 'content'];
       const segments = archiveRoute.path
         .replace(/^\/+|\/+$/g, '')
@@ -145,7 +177,11 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
     this.iframeClickCleanup = () => doc.removeEventListener('click', clickHandler, true);
   }
 
-  private loadIframeUrl(url: string): void {
+  private loadIframeUrl(url: string, fragment?: string): void {
+    if (fragment) {
+      url = `${url}#${fragment}`;
+    }
+
     if (this.iframeUrl === url) {
       return;
     }
@@ -209,14 +245,14 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
-  private async loadRouteFromArchive(zip: JSZip): Promise<void> {
+  private async loadRouteFromArchive(zip: JSZip, fragment?: string): Promise<void> {
     this.archiveError = undefined;
     const loadId = ++this.loadSequence;
     const route = this.normalizedContentRoute();
     const cachedHtmlBlobUrl = this.htmlBlobUrls.get(route);
 
     if (cachedHtmlBlobUrl) {
-      this.loadIframeUrl(cachedHtmlBlobUrl);
+      this.loadIframeUrl(cachedHtmlBlobUrl, fragment);
       return;
     }
 
@@ -239,7 +275,7 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
       return;
     }
 
-    this.loadIframeUrl(htmlBlobUrl);
+    this.loadIframeUrl(htmlBlobUrl, fragment);
   }
 
   private findHtmlPath(zip: JSZip): string {
@@ -306,6 +342,16 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
         .slice(1)
         .map((segment) => segment.path)
         .join('/')}`.replace(/\/+$/g, '') || '/';
+    const normalizedRoute = nextRoute === '' ? '/' : nextRoute;
+    const routeChanged = this.contentRoute !== normalizedRoute;
+
+    this.contentRoute = normalizedRoute;
+
+    return routeChanged;
+  }
+
+  private setContentRouteFromPath(path: string): boolean {
+    const nextRoute = `/${path.replace(/^\/+|\/+$/g, '')}`.replace(/\/+$/g, '') || '/';
     const normalizedRoute = nextRoute === '' ? '/' : nextRoute;
     const routeChanged = this.contentRoute !== normalizedRoute;
 
