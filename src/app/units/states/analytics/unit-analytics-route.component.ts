@@ -101,8 +101,8 @@ export class UnitAnalyticsComponent implements OnInit {
           this.fileDownloaderService.downloadBlobToFile(url, filename);
         });
       },
-      error: (_error) => {
-        this.alertsService.error(`Could not download ${title}`, 6000);
+      error: (error) => {
+        this.alertsService.error(`Could not download ${title}: ${error}`, 6000);
       },
     });
   }
