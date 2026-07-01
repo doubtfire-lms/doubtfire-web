@@ -1,3 +1,6 @@
+import {ChangeDetectionStrategy, Component, HostListener, Input, OnInit} from '@angular/core';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {ActivatedRoute} from '@angular/router';
 import {
   AuthenticationService,
   ScormPlayerContext,
@@ -7,9 +10,6 @@ import {ScormAdapterService} from 'src/app/api/services/scorm-adapter.service';
 import {AppInjector} from 'src/app/app-injector';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
-import {Component, HostListener, Input, OnInit} from '@angular/core';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
-import {ActivatedRoute} from '@angular/router';
 
 declare global {
   interface Window {
@@ -30,6 +30,7 @@ declare global {
   selector: 'f-scorm-player',
   templateUrl: './scorm-player.component.html',
   styleUrls: ['./scorm-player.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ScormPlayerComponent implements OnInit {
@@ -67,7 +68,10 @@ export class ScormPlayerComponent implements OnInit {
 
     this.globalState.setView(ViewType.OTHER);
     this.globalState.hideHeader();
-    this.authService.getScormToken().subscribe((value: string) => this.setupScorm(value));
+    this.authService.afterAuthCall((result) => {
+      if (!result) return;
+      this.authService.getScormToken().subscribe((value: string) => this.setupScorm(value));
+    });
   }
 
   private setupScorm(token: string): void {

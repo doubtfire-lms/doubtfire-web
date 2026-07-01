@@ -4,10 +4,22 @@ import {
   GanttItem,
   GanttLink,
   GanttLinkType,
+  GanttPrintService,
   GanttViewOptions,
   GanttViewType,
   NgxGanttComponent,
 } from '@worktile/gantt';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -16,11 +28,11 @@ import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.se
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 
 interface TaskGanttItem extends GanttItem {
+  start: number;
+  end: number;
   highlighted?: boolean;
   taskDefinition: TaskDefinition;
   task: Task;
@@ -31,11 +43,15 @@ interface TaskGanttItem extends GanttItem {
   selector: 'f-task-planner',
   templateUrl: './task-planner.component.html',
   styleUrl: './task-planner.component.scss',
+  providers: [GanttPrintService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class TaskPlannerComponent implements OnInit {
+export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   // Show a warning if the task's target end date is within this many days of the feedback deadline
   public readonly CLOSE_TO_FEEDBACK_DEADLINE_THRESHOLD = 7;
+  private readonly svgNamespace = 'http://www.w3.org/2000/svg';
+  private ganttHeaderObserver?: MutationObserver;
 
   @Input() project: Project;
   @Input() targetGrade: number;
@@ -62,6 +78,7 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   constructor(
+    private elementRef: ElementRef<HTMLElement>,
     private gradeService: GradeService,
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
@@ -69,18 +86,29 @@ export class TaskPlannerComponent implements OnInit {
     private taskPrerequisiteService: TaskPrerequisiteService,
     private router: Router,
     private route: ActivatedRoute,
+    private ganttPrintService: GanttPrintService,
   ) {}
 
+  ngAfterViewInit(): void {
+    setTimeout(() => this.setupGanttHeaderObserver());
+  }
+
+  ngOnDestroy(): void {
+    this.ganttHeaderObserver?.disconnect();
+  }
+
   public get gradeValues() {
-    return this.gradeService.gradeValues;
+    return this.gradeService.gradeValuesFor(this.unit);
   }
 
   public get gradeAcronyms() {
-    return this.gradeService.gradeAcronyms;
+    return Object.fromEntries(
+      this.unit.gradeDefinitions.map((definition) => [definition.value, definition.abbreviation]),
+    );
   }
 
   public gradeString(grade: number) {
-    return this.gradeService.grades[grade];
+    return this.gradeService.gradeLabel(grade, this.unit);
   }
 
   onBarHover(item: TaskGanttItem) {
@@ -171,7 +199,7 @@ export class TaskPlannerComponent implements OnInit {
         return false;
       }
       const diff = this.normalizeDateUTC(item.end) - this.normalizeDateUTC(ganttItem.end);
-      const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
+      // const color = typeof ganttLink.color === 'string' ? ganttLink.color : ganttLink.color.default;
 
       if (diff > 0) {
         isAfterDependentStartDate = true;
@@ -179,18 +207,18 @@ export class TaskPlannerComponent implements OnInit {
 
       continue;
 
-      if (color === '#0079D8') {
-        // Ready for feedback
-        if (diff > 0) {
-          isAfterDependentStartDate = true;
-        }
-      } else if (color === '#31b0d5' || color === '#5BB75B') {
-        // Discuss or Complete
-        if (diff >= -7 * 24 * 60 * 60) {
-          // We need to ensure this task is submitted a week earlier than its dependent so get it in a Discuss state
-          isAfterDependentStartDate = true;
-        }
-      }
+      // if (color === '#0079D8') {
+      //   // Ready for feedback
+      //   if (diff > 0) {
+      //     isAfterDependentStartDate = true;
+      //   }
+      // } else if (color === '#31b0d5' || color === '#5BB75B') {
+      //   // Discuss or Complete
+      //   if (diff >= -7 * 24 * 60 * 60) {
+      //     // We need to ensure this task is submitted a week earlier than its dependent so get it in a Discuss state
+      //     isAfterDependentStartDate = true;
+      //   }
+      // }
     }
 
     return isAfterDependentStartDate;
@@ -334,6 +362,128 @@ export class TaskPlannerComponent implements OnInit {
     );
   }
 
+  async saveImage() {
+    const ganttEl = this.ganttComponent.element;
+    const mainContainer = ganttEl.querySelector<HTMLElement>('.gantt-main-container');
+    const side = ganttEl.querySelector<HTMLElement>('.gantt-side');
+
+    if (!mainContainer || !side) {
+      return;
+    }
+
+    const originalStyle = {
+      width: ganttEl.style.width,
+      height: ganttEl.style.height,
+      overflow: ganttEl.style.overflow,
+    };
+    const scrollElements = Array.from(
+      ganttEl.querySelectorAll<HTMLElement>(
+        '.gantt-main-container, .gantt-side-container, .gantt-virtual-scroll-viewport',
+      ),
+    );
+    const scrollPositions = scrollElements.map((element) => ({
+      element,
+      left: element.scrollLeft,
+      top: element.scrollTop,
+    }));
+    const windowScrollPosition = {
+      left: window.scrollX,
+      top: window.scrollY,
+    };
+
+    try {
+      await this.renderAllGanttBars(ganttEl);
+      this.resetGanttScroll(scrollElements);
+      window.scrollTo(windowScrollPosition.left, windowScrollPosition.top);
+      await this.waitForStableLayout(mainContainer);
+
+      const fullWidth = side.offsetWidth + this.ganttComponent.view.width;
+      const fullHeight =
+        ganttEl.offsetHeight - mainContainer.offsetHeight + mainContainer.scrollHeight;
+
+      ganttEl.style.width = `${fullWidth}px`;
+      ganttEl.style.height = `${fullHeight}px`;
+      ganttEl.style.overflow = 'visible';
+
+      this.resetGanttScroll(scrollElements);
+      await this.waitForStableLayout(mainContainer);
+
+      const canvas = await this.ganttPrintService.html2canvas();
+      this.downloadCanvas(canvas, `${this.unit.code}-Task-Plan.png`);
+    } catch (error) {
+      this.alertService.error(`Failed to download task plan: ${error}`, 6000);
+    } finally {
+      ganttEl.style.width = originalStyle.width;
+      ganttEl.style.height = originalStyle.height;
+      ganttEl.style.overflow = originalStyle.overflow;
+
+      await this.nextAnimationFrame();
+      for (const position of scrollPositions) {
+        position.element.scrollTo(position.left, position.top);
+      }
+      window.scrollTo(windowScrollPosition.left, windowScrollPosition.top);
+    }
+  }
+
+  private resetGanttScroll(scrollElements: HTMLElement[]) {
+    for (const element of scrollElements) {
+      element.scrollTo(0, 0);
+    }
+  }
+
+  private async waitForStableLayout(element: HTMLElement) {
+    let previousSize = '';
+    let stableFrames = 0;
+
+    for (let attempt = 0; attempt < 30 && stableFrames < 3; attempt++) {
+      await this.nextAnimationFrame();
+
+      const size = `${element.offsetWidth}:${element.offsetHeight}:${element.scrollWidth}:${element.scrollHeight}`;
+      if (size === previousSize) {
+        stableFrames++;
+      } else {
+        previousSize = size;
+        stableFrames = 0;
+      }
+    }
+  }
+
+  private async renderAllGanttBars(ganttEl: HTMLElement) {
+    for (let pass = 0; pass < 4; pass++) {
+      if (ganttEl.querySelectorAll('[data-gantt-id]').length >= this.items.length) {
+        return;
+      }
+
+      const placeholders = Array.from(
+        ganttEl.querySelectorAll<HTMLElement>('gantt-bar-placeholder'),
+      );
+
+      for (const placeholder of placeholders) {
+        placeholder.scrollIntoView({
+          block: 'center',
+          inline: 'center',
+        });
+        await this.nextAnimationFrame();
+        await this.nextAnimationFrame();
+      }
+    }
+
+    if (ganttEl.querySelectorAll('[data-gantt-id]').length < this.items.length) {
+      throw new Error('Some chart items could not be rendered');
+    }
+  }
+
+  private nextAnimationFrame() {
+    return new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  }
+
+  private downloadCanvas(canvas: HTMLCanvasElement, filename: string) {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
   // normalizeDateUTC = (ts: number) => {
   //   const d = new GanttDate(ts * 1000);
   //   // const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0);
@@ -373,39 +523,42 @@ export class TaskPlannerComponent implements OnInit {
   }
 
   public get earliestStartDate() {
+    const today = this.normalizeDateUTC(Date.now() / 1000);
     const tasks = this.taskDefs()
       .map((td) => this.project.findTaskForDefinition(td.id))
       .filter((t) => t?.startDate);
 
     if (!tasks.length) {
-      return Math.floor(this.unit.startDate.getTime() / 1000);
+      return today;
     }
 
     const earliestTaskStart = Math.min(...tasks.map((t) => t.startDate.getTime() / 1000));
 
-    return Math.floor(Math.min(this.unit.startDate.getTime() / 1000, earliestTaskStart));
+    return Math.floor(Math.min(today, earliestTaskStart));
   }
 
   public get latestEndDate() {
+    const oneWeekInSeconds = 7 * 24 * 60 * 60;
     const tasks = this.taskDefs()
       .map((td) => this.project.findTaskForDefinition(td.id))
       .filter((t) => t?.localDueDate());
 
     if (!tasks.length) {
-      return Math.floor(this.unit.endDate.getTime() / 1000);
+      return this.earliestStartDate + oneWeekInSeconds;
     }
 
     const latestTaskEnd = Math.max(...tasks.map((t) => t.localDueDate().getTime() / 1000));
 
-    return Math.floor(Math.max(this.unit.endDate.getTime() / 1000, latestTaskEnd));
+    return Math.floor(latestTaskEnd) + oneWeekInSeconds;
   }
 
   ngOnInit(): void {
     this.viewOptions = {
-      datePrecisionUnit: 'day',
+      precisionUnit: 'day',
       start: new GanttDate(this.earliestStartDate),
       end: new GanttDate(this.latestEndDate),
-      dragPreviewDateFormat: 'MMM dd',
+      unitWidth: 40,
+      dragTooltipFormat: 'MMM dd',
     };
 
     this.unit.getTaskPrerequisites().subscribe({
@@ -439,6 +592,84 @@ export class TaskPlannerComponent implements OnInit {
         this.alertService.error(`Failed to get task prerequisites: ${error}`, 6000);
       },
     });
+  }
+
+  private setupGanttHeaderObserver(): void {
+    const ganttElement = this.elementRef.nativeElement.querySelector('ngx-gantt');
+
+    if (!ganttElement) {
+      return;
+    }
+
+    this.ganttHeaderObserver?.disconnect();
+    this.ganttHeaderObserver = new MutationObserver(() => this.formatGanttHeaderLabels());
+    this.ganttHeaderObserver.observe(ganttElement, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+    this.formatGanttHeaderLabels();
+  }
+
+  private formatGanttHeaderLabels(): void {
+    this.formatGanttDayLabels();
+    this.formatGanttTodayLabel();
+  }
+
+  private formatGanttDayLabels(): void {
+    const dayLabels = this.elementRef.nativeElement.querySelectorAll<SVGTextElement>(
+      'gantt-calendar-header .secondary-text',
+    );
+
+    dayLabels.forEach((label) => {
+      if (label.querySelector('tspan')) {
+        return;
+      }
+
+      const [date, day] = label.textContent?.trim().split(/\s+/) ?? [];
+
+      if (!date || !day) {
+        return;
+      }
+
+      const x = label.getAttribute('x') ?? '0';
+      const dateLine = document.createElementNS(this.svgNamespace, 'tspan');
+      dateLine.setAttribute('x', x);
+      dateLine.textContent = date;
+
+      const dayLine = document.createElementNS(this.svgNamespace, 'tspan');
+      dayLine.setAttribute('x', x);
+      dayLine.setAttribute('dy', '1.15em');
+      dayLine.textContent = day;
+
+      label.textContent = '';
+      label.append(dateLine, dayLine);
+    });
+  }
+
+  private formatGanttTodayLabel(): void {
+    const todayLabel = this.elementRef.nativeElement.querySelector<HTMLElement>(
+      'gantt-calendar-header .today-rect',
+    );
+
+    if (!todayLabel || todayLabel.querySelector('.today-weekday')) {
+      return;
+    }
+
+    const today = new Date();
+    const date = todayLabel.textContent?.trim() || today.getDate().toString();
+    const day = new Intl.DateTimeFormat('en-US', {weekday: 'short'}).format(today);
+
+    todayLabel.replaceChildren();
+
+    const dateLine = document.createElement('span');
+    dateLine.textContent = date;
+
+    const dayLine = document.createElement('span');
+    dayLine.classList.add('today-weekday');
+    dayLine.textContent = day;
+
+    todayLabel.append(dateLine, dayLine);
   }
 
   refreshItems(scroll: boolean = true) {
@@ -529,28 +760,14 @@ export class TaskPlannerComponent implements OnInit {
       _items.push(item);
 
       // Create baseline item
-      const baselineItem = {...item};
+      const tdTargetDate = td.gradeTargetDate(this.targetGrade) ?? td.targetDate;
+      const tdStartDate = td.gradeStartDate(this.targetGrade) ?? td.startDate;
 
-      const tdTargetDate =
-        (this.targetGrade === 1
-          ? td.cTargetDate
-          : this.targetGrade === 2
-            ? td.dTargetDate
-            : this.targetGrade === 3
-              ? td.hdTargetDate
-              : td.targetDate) ?? td.targetDate;
-
-      const tdStartDate =
-        (this.targetGrade === 1
-          ? td.cStartDate
-          : this.targetGrade === 2
-            ? td.dStartDate
-            : this.targetGrade === 3
-              ? td.hdStartDate
-              : td.startDate) ?? td.startDate;
-
-      baselineItem.start = this.normalizeDateUTC(tdStartDate.getTime() / 1000);
-      baselineItem.end = this.normalizeDateUTC(tdTargetDate.getTime() / 1000);
+      const baselineItem: GanttBaselineItem = {
+        id: item.id,
+        start: this.normalizeDateUTC(tdStartDate.getTime() / 1000),
+        end: this.normalizeDateUTC(tdTargetDate.getTime() / 1000),
+      };
 
       _baselineItems.push(baselineItem);
 

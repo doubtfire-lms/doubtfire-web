@@ -1,3 +1,5 @@
+import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MemberContribution} from 'src/app/api/models/groups/group';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
@@ -7,8 +9,6 @@ import {FileUploaderComponent} from 'src/app/common/file-uploader/file-uploader.
 import {AlertService} from 'src/app/common/services/alert.service';
 import {EmojiService} from 'src/app/common/services/emoji.service';
 import {PrivacyPolicy} from 'src/app/config/privacy-policy/privacy-policy';
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 type UploadStage = 'group' | 'details' | 'comments';
 type UploadSubmissionType = TaskStatusEnum | 'reupload_evidence' | 'test_submission';
@@ -57,6 +57,7 @@ export type UploadSubmissionModalResult =
 @Component({
   selector: 'f-upload-submission-modal',
   templateUrl: './upload-submission-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UploadSubmissionModalComponent implements OnInit {

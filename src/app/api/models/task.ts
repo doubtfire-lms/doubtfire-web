@@ -1,13 +1,13 @@
 import {Entity, EntityCache, RequestOptions} from 'ngx-entity-service';
+import {formatDate} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
+import {LOCALE_ID} from '@angular/core';
 import {Observable, firstValueFrom, map} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GradeTaskModalService} from 'src/app/tasks/modals/grade-task-modal/grade-task-modal.service';
 import {UploadSubmissionModalService} from 'src/app/tasks/modals/upload-submission-modal/upload-submission-modal.service';
-import {formatDate} from '@angular/common';
-import {HttpClient} from '@angular/common/http';
-import {LOCALE_ID} from '@angular/core';
 import {MappingFunctions} from '../services/mapping-fn';
 import {TutorNoteService} from '../services/tutor-note.service';
 import {
@@ -30,7 +30,6 @@ import {
   UnitRoleService,
   UserService,
 } from './doubtfire-model';
-import {Grade} from './grade';
 import {TaskPrerequisite} from './task-prerequisite';
 
 export const FeedbackModerationAction = {
@@ -77,6 +76,8 @@ export class Task extends Entity {
   loadingSubmissionDetails: boolean = false;
 
   pinned: boolean = false;
+  hover?: boolean;
+  optionsOpened?: boolean;
 
   targetStartDate: Date;
   targetDueDate: Date;
@@ -250,14 +251,14 @@ export class Task extends Entity {
   }
 
   public get gradeWord(): string {
-    if (this.grade) return Grade.GRADES[this.grade];
+    if (this.grade !== undefined && this.grade !== null) return this.unit.gradeLabel(this.grade);
     else {
       return 'Not Graded';
     }
   }
 
   public gradeDesc(): string {
-    return Grade.GRADE_ACRONYMS.get(this.grade);
+    return this.unit.gradeAbbreviation(this.grade);
   }
 
   public hasGrade(): boolean {
@@ -269,7 +270,11 @@ export class Task extends Entity {
   }
 
   public hasQualityPoints(): boolean {
-    return this.definition.maxQualityPts > 0 && TaskStatus.GRADEABLE_STATUSES.includes(this.status);
+    return (
+      this.definition.maxQualityPts > 0 &&
+      this.qualityPts >= 0 &&
+      TaskStatus.GRADEABLE_STATUSES.includes(this.status)
+    );
   }
 
   public hasBeenGraded(): boolean {
@@ -280,7 +285,7 @@ export class Task extends Entity {
   }
 
   public hasBeenGivenQualityPoints(): boolean {
-    return this.qualityPts > 0 || TaskStatus.GRADEABLE_STATUSES.includes(this.status);
+    return this.definition.maxQualityPts > 0 && this.qualityPts >= 0;
   }
 
   public localDueDate(): Date {
@@ -290,16 +295,8 @@ export class Task extends Entity {
         return this.targetDueDate;
       }
 
-      // Unit target dates per grade guidelines
-      if (this.project.targetGrade === 1 && this.definition.cTargetDate) {
-        return this.definition.cTargetDate;
-      }
-      if (this.project.targetGrade === 2 && this.definition.dTargetDate) {
-        return this.definition.dTargetDate;
-      }
-      if (this.project.targetGrade === 3 && this.definition.hdTargetDate) {
-        return this.definition.hdTargetDate;
-      }
+      const gradeTargetDate = this.definition.gradeTargetDate(this.project.targetGrade);
+      if (gradeTargetDate) return gradeTargetDate;
     }
 
     if (this.dueDate) {
@@ -456,16 +453,8 @@ export class Task extends Entity {
         return this.targetStartDate;
       }
 
-      // Unit start dates per grade guidelines
-      if (this.project.targetGrade === 1 && this.definition.cStartDate) {
-        return this.definition.cStartDate;
-      }
-      if (this.project.targetGrade === 2 && this.definition.dStartDate) {
-        return this.definition.dStartDate;
-      }
-      if (this.project.targetGrade === 3 && this.definition.hdStartDate) {
-        return this.definition.hdStartDate;
-      }
+      const gradeStartDate = this.definition.gradeStartDate(this.project.targetGrade);
+      if (gradeStartDate) return gradeStartDate;
     }
 
     if (this.extensions < 0) {
@@ -823,7 +812,7 @@ export class Task extends Entity {
    * Launch the SCORM player for this task in a new window.
    */
   public launchScormPlayer(): void {
-    const url = `#/projects/${this.project.id}/task_def_id/${this.taskDefId}/scorm-player/normal`;
+    const url = `/projects/${this.project.id}/task_def_id/${this.taskDefId}/scorm-player/normal`;
     window.open(url, '_blank');
   }
 
@@ -996,6 +985,8 @@ export class Task extends Entity {
     triggerRecursiveFix?: boolean,
   ) {
     const oldStatus = this.status;
+    const oldGrade = this.grade;
+    const oldQualityPts = this.qualityPts;
     const alerts: AlertService = AppInjector.get(AlertService);
 
     if (status === 'complete' && !this.canMarkComplete) {
@@ -1003,15 +994,15 @@ export class Task extends Entity {
       return;
     }
 
-    const updateFunc = () => {
+    const updateFunc = (grade = this.grade, qualityPts = this.qualityPts) => {
       const taskService: TaskService = AppInjector.get(TaskService);
       const options: RequestOptions<Task> = {
         entity: this,
         cache: this.project.taskCache,
         body: {
           trigger: status,
-          grade: this.grade,
-          quality_pts: this.qualityPts,
+          grade: grade,
+          quality_pts: qualityPts,
         },
       };
 
@@ -1035,6 +1026,8 @@ export class Task extends Entity {
         )
         .subscribe({
           next: (_response) => {
+            this.grade = grade;
+            this.qualityPts = qualityPts;
             if (!hasId && this.id > 0) {
               this.project.taskCache.delete(this.definition.abbreviation);
               this.project.taskCache.add(this);
@@ -1044,6 +1037,8 @@ export class Task extends Entity {
           },
           error: (error) => {
             this.status = oldStatus;
+            this.grade = oldGrade;
+            this.qualityPts = oldQualityPts;
             alerts.error(error, 6000);
           },
         });
@@ -1059,9 +1054,7 @@ export class Task extends Entity {
         this,
         // Grade was selected (modal closed with result)
         (response) => {
-          this.grade = response.grade;
-          this.qualityPts = response.qualityPts;
-          updateFunc();
+          updateFunc(response.grade, response.qualityPts);
         },
         // Grade was not selected (modal was dismissed)
         () => {

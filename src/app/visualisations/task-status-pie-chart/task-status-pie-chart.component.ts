@@ -1,20 +1,31 @@
-import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
+import {LegendPosition} from '@swimlane/ngx-charts';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+import {Project, TaskStatus, Unit} from 'src/app/api/models/doubtfire-model';
 import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'f-task-status-pie-chart',
   templateUrl: './task-status-pie-chart.component.html',
   styleUrls: ['./task-status-pie-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskStatusPieChartComponent extends ChartBaseComponent implements OnChanges, OnInit {
   @Input() project: Project;
+  @Input() unit?: Unit;
   @Input() grade: number;
 
   data: {name: string; value: number}[] = [];
   colors: {name: string; value: string}[];
   view: number[] = [700, 400];
+  legendPosition: LegendPosition = LegendPosition.Below;
 
   ngOnInit(): void {
     this.updateData();

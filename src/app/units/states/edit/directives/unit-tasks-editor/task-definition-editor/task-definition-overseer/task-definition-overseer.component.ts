@@ -1,4 +1,16 @@
 import * as monaco from 'monaco-editor';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
 import {Observable} from 'rxjs';
 import {
   OverseerImage,
@@ -18,16 +30,13 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {MatSelectChange} from '@angular/material/select';
 import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/overseer-script-editor-modal.service';
 
 @Component({
   selector: 'f-task-definition-overseer',
   templateUrl: 'task-definition-overseer.component.html',
   styleUrls: ['task-definition-overseer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
@@ -52,6 +61,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   public showOverseerResourcesEditor = false;
   public isLoadingOverseerResourcesArchive = false;
   public overseerResourcesArchive: Blob | File | null = null;
+  public images: Observable<OverseerImage[]>;
+
   constructor(
     private http: HttpClient,
     private alerts: AlertService,
@@ -127,6 +138,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
+    this.images = this.overseerImageService.query();
+
     this.taskDefinition.overseerStepsCache.values.subscribe((steps) => {
       this.overseerSteps = [...steps];
     });
@@ -248,10 +261,6 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     return this.taskDefinition?.unit;
   }
 
-  public get images(): Observable<OverseerImage[]> {
-    return this.overseerImageService.query();
-  }
-
   get currentUser(): User {
     return this.userService.currentUser;
   }
@@ -325,7 +334,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     );
   }
 
-  public uploadOverseerResources(files: FileList) {
+  public uploadOverseerResources(files: ArrayLike<File>) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(
       (f) => f.type === 'application/zip' || f.type === 'application/x-zip-compressed',
     );

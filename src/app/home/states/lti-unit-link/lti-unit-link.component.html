@@ -1,11 +1,10 @@
-<div id="home" class="h-screen w-full items-center justify-center px-12">
+<div class="h-screen w-full items-center justify-center px-12" id="home">
   <div class="mx-auto flex h-screen w-full max-w-4xl flex-col items-center justify-center gap-3">
     <div class="flex items-center justify-center">
       <mat-icon
-        svgIcon="formatif-logo"
-        class="formatif-icon"
         aria-label="Formatif logo"
-        class="h-[100px] w-[100px]"
+        class="formatif-icon size-[100px]"
+        svgIcon="formatif-logo"
       ></mat-icon>
       <h1 class="m-0 ml-3 text-4xl">OnTrack</h1>
     </div>
@@ -33,11 +32,11 @@
         </mat-select>
       </mat-form-field>
       <button
-        mat-raised-button
         class="w-full max-w-lg"
         color="primary"
-        (click)="submit()"
+        mat-raised-button
         [disabled]="!selectedUnit"
+        (click)="submit()"
       >
         Confirm
       </button>

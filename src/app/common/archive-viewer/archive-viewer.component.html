@@ -1,4 +1,4 @@
-<div class="flex size-full min-h-0 min-w-0 max-w-full flex-col">
+<div class="flex size-full min-h-0 max-w-full min-w-0 flex-col">
   @if (isLoading) {
     <div class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-slate-600">
       <mat-spinner diameter="40" strokeWidth="3"></mat-spinner>
@@ -23,19 +23,16 @@
     @if (!readOnly && saveEndpoint) {
       <div class="flex items-center justify-end px-2 pt-2">
         <button
-          mat-flat-button
-          color="primary"
-          (click)="saveArchive()"
-          [disabled]="!canSave"
           class="flex items-center gap-1"
+          color="primary"
+          mat-flat-button
+          [disabled]="!canSave"
+          (click)="saveArchive()"
         >
           @if (isSaving) {
             <mat-icon class="animate-spin">sync</mat-icon>
-            Saving...
-          } @else {
-            <!-- <mat-icon>save</mat-icon> -->
-            Save Archive
           }
+          {{ isSaving ? 'Saving...' : 'Save Archive' }}
         </button>
       </div>
     }
@@ -43,7 +40,7 @@
     @if (navigationMode === 'tree') {
       <div class="flex min-h-0 w-full flex-1 border-t border-slate-200">
         <aside
-          class="w-44 min-w-52 max-w-[45%] shrink-0 overflow-y-auto border-r border-slate-200 bg-slate-50/60 py-1"
+          class="w-44 max-w-[45%] min-w-52 shrink-0 overflow-y-auto border-r border-slate-200 bg-slate-50/60 py-1"
         >
           <ng-container
             [ngTemplateOutlet]="treeNodesTemplate"
@@ -56,17 +53,17 @@
       </div>
     } @else {
       <div
-        class="sticky top-0 z-10 w-full min-w-0 max-w-full shrink-0 overflow-x-auto overflow-y-hidden bg-white px-0.5 pb-0.5"
+        class="sticky top-0 z-10 w-full max-w-full min-w-0 shrink-0 overflow-x-auto overflow-y-hidden bg-white px-0.5 pb-0.5"
       >
         <div class="inline-block min-w-full">
           <mat-button-toggle-group
-            [value]="selectedTab"
-            (change)="selectTab($event.value)"
             class="inline-flex whitespace-nowrap"
             style="display: inline-flex; width: max-content"
+            [value]="selectedTab"
+            (change)="selectTab($event.value)"
           >
             @for (file of files; track trackByPath($index, file); let i = $index) {
-              <mat-button-toggle [value]="i" [title]="file.path" class="flex-none">
+              <mat-button-toggle class="flex-none" [title]="file.path" [value]="i">
                 <span class="inline-block max-w-36 truncate align-bottom">{{ file.tabLabel }}</span>
               </mat-button-toggle>
             }
@@ -97,8 +94,8 @@
             ></ng-container>
             <ngx-monaco-editor
               class="archive-monaco block size-full flex-1"
-              [options]="editorOptionsForSelectedFile"
               [ngModel]="file.textContent"
+              [options]="editorOptionsForSelectedFile"
               (ngModelChange)="onEditorChange($event)"
             ></ngx-monaco-editor>
           </div>
@@ -111,8 +108,8 @@
             <div class="flex min-h-[350px] w-full flex-1 items-center justify-center p-2.5">
               <img
                 class="max-h-full max-w-full object-contain"
-                [src]="file.blobUrl"
                 [alt]="file.name"
+                [src]="file.blobUrl"
               />
             </div>
           </div>
@@ -131,7 +128,7 @@
             <mat-icon class="size-6">insert_drive_file</mat-icon>
             <div>
               <p class="mb-2">This file type cannot be previewed.</p>
-              <button mat-stroked-button color="primary" (click)="downloadSelectedFile()">
+              <button color="primary" mat-stroked-button (click)="downloadSelectedFile()">
                 <mat-icon>download</mat-icon>
                 Download {{ file.name }}
               </button>
@@ -143,7 +140,7 @@
   }
 </ng-template>
 
-<ng-template #treeNodesTemplate let-nodes let-depth="depth">
+<ng-template #treeNodesTemplate let-depth="depth" let-nodes>
   @for (node of nodes; track trackTreeNode($index, node)) {
     @if (node.isDirectory) {
       <div
@@ -160,13 +157,13 @@
       ></ng-container>
     } @else {
       <button
-        type="button"
         class="flex w-full items-center gap-0.5 py-0.5 pr-1 text-left hover:bg-slate-200/70"
-        [style.paddingLeft.px]="8 + depth * 14"
+        type="button"
         [ngClass]="{
           'bg-slate-200/80 text-slate-900': selectedTab === node.fileIndex,
           'text-slate-700': selectedTab !== node.fileIndex,
         }"
+        [style.paddingLeft.px]="8 + depth * 14"
         [title]="node.path"
         (click)="selectTreeNode(node)"
       >
@@ -179,7 +176,7 @@
 
 <ng-template #filePathLabel let-path>
   <div
-    class="shrink-0 overflow-hidden truncate whitespace-nowrap px-2.5 py-1 text-slate-700"
+    class="shrink-0 truncate overflow-hidden px-2.5 py-1 whitespace-nowrap text-slate-700"
     [title]="path"
   >
     {{ path }}

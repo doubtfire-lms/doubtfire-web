@@ -3,8 +3,16 @@
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {CodeEditorModule} from '@ngstack/code-editor';
+import * as Sentry from '@sentry/angular';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
-import {GANTT_GLOBAL_CONFIG, GanttLinkLineType, NgxGanttModule} from '@worktile/gantt';
+import {
+  GANTT_GLOBAL_CONFIG,
+  GANTT_I18N_LOCALE_TOKEN,
+  type GanttI18nLocaleConfig,
+  GanttLinkLineType,
+  NgxGanttModule,
+  enUsLocale,
+} from '@worktile/gantt';
 import {DateAdapter as CalendarDateAdapter, CalendarModule} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {enAU} from 'date-fns/locale';
@@ -12,22 +20,9 @@ import player from 'lottie-web';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
 import {FlexLayoutModule} from 'ng-flex-layout';
 import {LottieComponent, provideLottieOptions} from 'ngx-lottie';
-import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
+// TODO: replace back to original ngx-monaco-editor-v2 once it supports angular 22
+import {MonacoEditorModule} from 'ngx-monaco-editor-v2-alternative';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
-import {interval} from 'rxjs';
-import {
-  AboutDoubtfireModal,
-  AboutDoubtfireModalContent,
-} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
-import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
-import {AlertComponent, AlertService} from 'src/app/common/services/alert.service';
-import {FTaskBadgeComponent} from 'src/app/common/task-badge/task-badge.component';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {AttachmentConfirmationDialogComponent} from 'src/app/tasks/task-comment-composer/attachment-confirmation-dialog/attachment-confirmation-dialog.component';
-import {
-  DiscussionComposerDialog,
-  TaskCommentComposerComponent,
-} from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import {environment} from 'src/environments/environment';
 // import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
 // import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
@@ -35,7 +30,7 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {Injector, NgModule} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, Injector, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DateFnsAdapter} from '@angular/material-date-fns-adapter';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -76,18 +71,31 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import {
+  MAT_TOOLTIP_DEFAULT_OPTIONS,
+  MatTooltipDefaultOptions,
+  MatTooltipModule,
+} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import {BrowserModule, DomSanitizer, Title} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterModule} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 import {ServiceWorkerModule} from '@angular/service-worker';
-// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
-// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
-// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
-// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
-import {UpgradeModule} from '@angular/upgrade/static';
+import {interval} from 'rxjs';
 import {take} from 'rxjs/operators';
+import {
+  AboutDoubtfireModal,
+  AboutDoubtfireModalContent,
+} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.component';
+import {AboutDoubtfireModalService} from 'src/app/common/modals/about-doubtfire-modal/about-doubtfire-modal.service';
+import {AlertComponent, AlertService} from 'src/app/common/services/alert.service';
+import {FTaskBadgeComponent} from 'src/app/common/task-badge/task-badge.component';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {AttachmentConfirmationDialogComponent} from 'src/app/tasks/task-comment-composer/attachment-confirmation-dialog/attachment-confirmation-dialog.component';
+import {
+  DiscussionComposerDialog,
+  TaskCommentComposerComponent,
+} from 'src/app/tasks/task-comment-composer/task-comment-composer.component';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {ActivityTypeListComponent} from './admin/institution-settings/activity-type-list/activity-type-list.component';
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
@@ -111,11 +119,14 @@ import {
   AuthenticationService,
   CampusService,
   D2lAssessmentMappingService,
+  EngagementCommentService,
+  EngagementService,
   GroupSetService,
   LearningOutcomeService,
   OverseerAssessmentService,
   OverseerImageService,
   ProjectService,
+  SubmissionHistoryService,
   TaskCommentService,
   TaskService,
   TaskSimilarityService,
@@ -236,6 +247,9 @@ import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.c
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
 import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
+import {AddEngagementDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
+import {EngagementDetailDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-detail-dialog/engagement-detail-dialog.component';
+import {EngagementPassportCardComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-passport-card.component';
 import {ProgressDashboardComponent} from './projects/states/dashboard/directives/progress-dashboard/progress-dashboard.component';
 import {TaskPlannerCardComponent} from './projects/states/dashboard/directives/progress-dashboard/task-planner-card/task-planner-card.component';
 import {CreatePortfolioTaskListItemComponent} from './projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
@@ -276,6 +290,10 @@ import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.com
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
+// import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+// import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {CheckForUpdateService} from './sessions/service-worker-updater/check-for-update.service';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
@@ -297,7 +315,6 @@ import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/
 import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
-import {TaskSubmissionHistoryComponent} from './tasks/task-submission-history/task-submission-history.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
 import {SummaryTaskStatusChartComponent} from './units/states/analytics/directives/summary-task-status-chart.component';
@@ -383,29 +400,54 @@ const MY_DATE_FORMAT = {
   },
 };
 
+const DOUBTFIRE_GANTT_LOCALE = 'doubtfire-en-au';
+
+const DOUBTFIRE_GANTT_LOCALE_CONFIG: GanttI18nLocaleConfig = {
+  ...enUsLocale,
+  id: DOUBTFIRE_GANTT_LOCALE,
+  views: {
+    ...enUsLocale.views,
+    day: {
+      ...enUsLocale.views.day,
+      tickFormats: {
+        ...enUsLocale.views.day.tickFormats,
+        unit: 'd EEE',
+      },
+    },
+  },
+};
+
+const GANTT_CHART_LOCALE_CONFIG = {
+  provide: GANTT_I18N_LOCALE_TOKEN,
+  useValue: DOUBTFIRE_GANTT_LOCALE_CONFIG,
+  multi: true,
+};
+
 const GANTT_CHART_CONFIG = {
   provide: GANTT_GLOBAL_CONFIG,
   useValue: {
-    // locale: 'en-US',
-    dateFormat: {
-      // timeZone: 'UTC',
+    locale: DOUBTFIRE_GANTT_LOCALE,
+    dateOptions: {
       weekStartsOn: 1,
-      week: 'w',
-      year: 'yyyy',
-      month: 'MMMM',
-      yearMonth: 'yyyy MMM',
-      yearQuarter: 'yyyy',
     },
     linkOptions: {
       showArrow: true,
       lineType: GanttLinkLineType.curve,
     },
     styleOptions: {
+      headerHeight: 52,
       // lineHeight: '25',
       // barHeight: '23',
       // headerHeight: '50px',
     },
   },
+};
+
+const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
+  showDelay: 0,
+  hideDelay: 0,
+  touchendHideDelay: 1500,
+  position: 'above',
 };
 
 @NgModule({
@@ -414,6 +456,9 @@ const GANTT_CHART_CONFIG = {
     AppComponent,
     TaskStatusPieChartComponent,
     AlertComponent,
+    AddEngagementDialogComponent,
+    EngagementPassportCardComponent,
+    EngagementDetailDialogComponent,
     ProgressDashboardComponent,
     UnitStudentEnrolmentModalComponent,
     AboutDoubtfireModalContent,
@@ -491,7 +536,6 @@ const GANTT_CHART_CONFIG = {
     StatusIconComponent,
     TaskAssessmentCommentComponent,
     TaskAssessmentModalComponent,
-    TaskSubmissionHistoryComponent,
     GradeIconComponent,
     HeaderComponent,
     UnitDropdownComponent,
@@ -661,6 +705,7 @@ const GANTT_CHART_CONFIG = {
     ActivityTypeService,
     OverseerImageService,
     OverseerAssessmentService,
+    SubmissionHistoryService,
     EmojiService,
     FileDownloaderService,
     CheckForUpdateService,
@@ -670,6 +715,8 @@ const GANTT_CHART_CONFIG = {
     {provide: DateAdapter, useClass: DateFnsAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT},
     TaskCommentService,
+    EngagementCommentService,
+    EngagementService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpAuthenticationInterceptor,
@@ -707,6 +754,7 @@ const GANTT_CHART_CONFIG = {
     TaskPrerequisiteService,
     MarkingSessionService,
     DiscussionPromptService,
+    GANTT_CHART_LOCALE_CONFIG,
     GANTT_CHART_CONFIG,
     TaskPlannerPrerequisitesModalService,
     OverseerStepService,
@@ -718,6 +766,24 @@ const GANTT_CHART_CONFIG = {
     CommunicationSetService,
     CsvResultModalService,
     CsvUploadModalService,
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler(),
+    },
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {},
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
+    {
+      provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
+      useValue: DEFAULT_TOOLTIP_OPTIONS,
+    },
   ],
   imports: [
     FlexLayoutModule,
@@ -763,7 +829,6 @@ const GANTT_CHART_CONFIG = {
     MatGridListModule,
     MatTabsModule,
     MatTreeModule,
-    UpgradeModule,
     MatTableModule,
     MatChipsModule,
     MatSnackBarModule,

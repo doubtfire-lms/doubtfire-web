@@ -1,8 +1,7 @@
-import {Project, Unit} from 'src/app/api/models/doubtfire-model';
-import {AppInjector} from 'src/app/app-injector';
-import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
+import {Color, LegendPosition, ScaleType} from '@swimlane/ngx-charts';
 import {formatDate} from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   LOCALE_ID,
@@ -11,6 +10,9 @@ import {
   SimpleChanges,
   ViewContainerRef,
 } from '@angular/core';
+import {Project, Unit} from 'src/app/api/models/doubtfire-model';
+import {AppInjector} from 'src/app/app-injector';
+import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component/chart-base-component.component';
 
 interface BurndownPoint {
   name: string;
@@ -26,6 +28,7 @@ interface BurndownSeries {
   selector: 'f-progress-burndown-chart',
   templateUrl: './progress-burndown-chart.component.html',
   styleUrls: ['./progress-burndown-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProgressBurndownChartComponent
@@ -49,7 +52,13 @@ export class ProgressBurndownChartComponent
   showXAxisLabel: boolean = true;
   xAxisLabel: string = 'Time';
   yAxisLabel: string = 'Tasks Remaining';
-  colorScheme = {domain: ['#AAAAAA', '#777777', '#0079d8', '#E01B5D', 'transparent']};
+  legendPosition: LegendPosition = LegendPosition.Below;
+  colorScheme: Color = {
+    name: 'Burndown',
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: ['#AAAAAA', '#777777', '#0079d8', '#E01B5D', 'transparent'],
+  };
   yScaleMin: number = 0;
   yScaleMax: number = 100;
 

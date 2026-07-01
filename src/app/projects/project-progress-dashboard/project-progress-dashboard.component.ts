@@ -1,14 +1,15 @@
+import {ChangeDetectionStrategy, Component, Input, type OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {Component, Input, type OnInit} from '@angular/core';
 
 @Component({
   selector: 'f-project-progress-dashboard',
   templateUrl: './project-progress-dashboard.component.html',
   styleUrl: './project-progress-dashboard.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectProgressDashboardComponent implements OnInit {
@@ -25,9 +26,8 @@ export class ProjectProgressDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.project$.subscribe((project) => {
       this.project = project;
+      this.grades = this.gradeService.gradeViewDataFor(project.unit);
     });
-
-    this.grades = this.gradeService.gradeViewData.slice(1);
 
     setTimeout(() => {
       console.log(this.project.taskStats);

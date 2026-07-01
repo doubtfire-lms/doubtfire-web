@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 export interface AttachmentConfirmationDialogData {
@@ -8,6 +8,7 @@ export interface AttachmentConfirmationDialogData {
 @Component({
   selector: 'f-attachment-confirmation-dialog',
   templateUrl: './attachment-confirmation-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AttachmentConfirmationDialogComponent implements OnInit, OnDestroy {

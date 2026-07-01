@@ -1,4 +1,4 @@
-@if (loading) {
+@if (loadingIncludedTasks) {
   <div class="flex min-h-[150px] w-full flex-col items-center justify-center gap-3">
     <div>Loading tasks...</div>
     <mat-progress-spinner mode="indeterminate"> </mat-progress-spinner>
@@ -22,5 +22,34 @@
         </li>
       }
     </ol>
+  }
+  @if (tasksStillProcessing.length > 0) {
+    <div class="my-4 rounded-md border border-amber-200 bg-amber-50 p-4">
+      <div class="mb-3 flex items-start gap-3">
+        <mat-icon class="text-amber-600">hourglass_top</mat-icon>
+        <div>
+          <p class="font-medium text-amber-900">Tasks still processing</p>
+          <p class="mt-1 text-sm text-amber-800">
+            Please wait until these tasks have finished processing before creating your portfolio to
+            ensure they are included.
+          </p>
+        </div>
+      </div>
+      <ol class="border-t border-amber-200">
+        @for (task of tasksStillProcessing; track task) {
+          <li class="flex items-center justify-between gap-3 py-3">
+            <div class="text-sm text-amber-950">
+              {{ task.definition.abbreviation }} &mdash; {{ task.definition.name }}
+            </div>
+            <div class="shrink-0">
+              <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+            </div>
+          </li>
+        }
+      </ol>
+      <p class="mt-4 px-4 py-3 text-center text-sm text-amber-800">
+        This list will automatically refresh as tasks finish processing.
+      </p>
+    </div>
   }
 }

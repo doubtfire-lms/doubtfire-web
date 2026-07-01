@@ -1,10 +1,18 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {GroupSet, Unit} from 'src/app/api/models/doubtfire-model';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'group-set-selector',
   templateUrl: './group-set-selector.component.html',
   styleUrls: ['./group-set-selector.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GroupSetSelectorComponent implements OnInit {

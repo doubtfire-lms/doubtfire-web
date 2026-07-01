@@ -1,6 +1,6 @@
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {Task} from 'src/app/api/models/doubtfire-model';
 import {MappingFunctions} from 'src/app/api/services/mapping-fn';
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {AlertService} from '../../services/alert.service';
 import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal.service';
 
@@ -8,6 +8,7 @@ import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal
   selector: 'f-task-date-slider',
   styleUrl: './task-date-slider.component.scss',
   templateUrl: './task-date-slider.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDateSliderComponent implements OnChanges {

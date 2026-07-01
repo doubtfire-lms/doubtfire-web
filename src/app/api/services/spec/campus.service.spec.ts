@@ -1,7 +1,13 @@
-import {Campus} from 'src/app/api/models/doubtfire-model';
-import {HttpRequest, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {afterEach, beforeEach, describe, expect, it} from 'vitest';
+import {
+  HttpRequest,
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withXhr,
+} from '@angular/common/http';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
-import {TestBed, fakeAsync, tick} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
+import {Campus} from 'src/app/api/models/doubtfire-model';
 import {CampusService} from '../campus.service';
 
 describe('CampusService', () => {
@@ -13,7 +19,7 @@ describe('CampusService', () => {
       imports: [],
       providers: [
         CampusService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
     });
@@ -26,18 +32,22 @@ describe('CampusService', () => {
     httpMock.verify();
   });
 
-  it('should return expected campuses (HttpClient called once)', fakeAsync(() => {
+  it('should return expected campuses (HttpClient called once)', () => {
     const c = new Campus();
 
     c.name = 'Melbourne';
     c.mode = 'automatic';
     c.abbreviation = 'melb';
 
-    const expectedCampuses: Campus[] = [c];
-
-    campusService
-      .query()
-      .subscribe((campuses) => expect(campuses).toEqual(expectedCampuses, 'expected campuses'));
+    campusService.query().subscribe((campuses) => {
+      expect(campuses).toHaveLength(1);
+      expect(campuses[0]).toMatchObject({
+        id: 1,
+        name: 'Melbourne',
+        mode: 'automatic',
+        abbreviation: 'melb',
+      });
+    });
 
     const req = httpMock.expectOne((request: HttpRequest<object>): boolean => {
       expect(request.url).toEqual('http://localhost:3000/api/campuses/');
@@ -47,7 +57,5 @@ describe('CampusService', () => {
 
     c.id = 1;
     req.flush(c);
-
-    tick();
-  }));
+  });
 });

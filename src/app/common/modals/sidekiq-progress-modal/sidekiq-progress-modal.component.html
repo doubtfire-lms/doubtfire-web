@@ -6,7 +6,7 @@
     <div>
       This job is running in the background. You can close this dialog and monitor progress anytime.
     </div>
-    <div class="mb-1 mt-3 flex w-full justify-between">
+    <div class="mt-3 mb-1 flex w-full justify-between">
       @if (job?.status === 'complete') {
         <div>COMPLETE</div>
       } @else {
@@ -31,7 +31,7 @@
   <mat-dialog-actions class="flex justify-between">
     <button mat-raised-button (click)="dismissModal()">Dismiss</button>
     @if (job?.status !== 'working' && job?.result) {
-      <button mat-raised-button color="primary" (click)="viewResult()">View Result</button>
+      <button color="primary" mat-raised-button (click)="viewResult()">View Result</button>
     }
   </mat-dialog-actions>
 </div>

@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {
   BehaviorSubject,
   Observable,
@@ -14,19 +17,19 @@ import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {UserService} from 'src/app/api/services/user.service';
-import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
-import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {GlobalStateService, ViewType} from '../../index/global-state.service';
 
 @Component({
   selector: 'f-project-dashboard',
   templateUrl: './project-dashboard.component.html',
   styleUrl: './project-dashboard.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectDashboardComponent implements OnInit {
   @Input() public project$: Observable<Project>;
+  @Input() public defaultTaskListCollapsed = false;
+  @Input() public taskSelectionUrlBase: unknown[] | null = null;
 
   /**
    * The currently selected task definition - selected in the unit task list.
@@ -54,11 +57,18 @@ export class ProjectDashboardComponent implements OnInit {
     private route: ActivatedRoute,
   ) {}
 
-  public leftWidth = 400;
+  public readonly taskListCollapsedWidth = 125;
+  public readonly taskListExpandedWidth = 400;
+  public readonly taskListCollapseThreshold = 175;
+  public leftWidth = this.taskListExpandedWidth;
   public lastX;
   public startWidth = 0;
 
   public startLeftX = 0;
+
+  public get taskListCollapsed(): boolean {
+    return this.leftWidth < this.taskListCollapseThreshold;
+  }
 
   public isProjectTaskListReady(project: Project): boolean {
     return (
@@ -92,7 +102,7 @@ export class ProjectDashboardComponent implements OnInit {
     const delta = x - this.startLeftX;
     const newWidth = this.startWidth + delta;
 
-    this.leftWidth = Math.max(150, Math.min(500, newWidth));
+    this.leftWidth = Math.max(this.taskListCollapsedWidth, Math.min(500, newWidth));
 
     // keep the handle visually glued to the divider
     event.source.reset();
@@ -104,6 +114,10 @@ export class ProjectDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.defaultTaskListCollapsed) {
+      this.leftWidth = this.taskListCollapsedWidth;
+    }
+
     const initialProject$ =
       this.project$ ?? of(this.route.parent?.snapshot.data.project as Project);
     this.project$ = this.projectSubject.asObservable();

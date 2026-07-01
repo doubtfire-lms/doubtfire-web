@@ -40,17 +40,27 @@
           } @else {
             <mat-form-field appearance="outline" class="w-full" disabled>
               <mat-label>{{ teachingPeriod.name }} Start Date</mat-label>
-              <input matInput [value]="teachingPeriod?.startDate | date" disabled readonly />
+              <input
+                disabled
+                matInput
+                readonly
+                [value]="$safeNavigationMigration(teachingPeriod?.startDate) | date"
+              />
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-full" disabled>
               <mat-label>{{ teachingPeriod.name }} End Date</mat-label>
-              <input matInput [value]="teachingPeriod?.endDate | date" disabled readonly />
+              <input
+                disabled
+                matInput
+                readonly
+                [value]="$safeNavigationMigration(teachingPeriod?.endDate) | date"
+              />
             </mat-form-field>
           }
         </div>
       </div>
       <mat-card-footer class="flex justify-end">
-        <button mat-raised-button color="primary" (click)="createUnit()">Create Unit</button>
+        <button color="primary" mat-raised-button (click)="createUnit()">Create Unit</button>
       </mat-card-footer>
     </mat-card-content>
   </mat-card>

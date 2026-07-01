@@ -16,16 +16,16 @@
       <mat-card class="h-[250px] w-full px-7 py-14">
         <mat-card-content class="w-full">
           <span class="mb-5 flex flex-row items-center">
-            <h1 class="mb-0 mr-1 text-3xl">Targetting</h1>
+            <h1 class="mr-1 mb-0 text-3xl">Targetting</h1>
             <mat-icon matTooltip="Your target grade changes which tasks you need to complete.">
               info</mat-icon
             >
           </span>
-          <mat-form-field class="w-full" appearance="outline">
+          <mat-form-field appearance="outline" class="w-full">
             <mat-label>Target grade</mat-label>
             <mat-select [(value)]="project.targetGrade">
-              @for (grade of grades; track grade) {
-                <mat-option (click)="targetGradeClicked(grade.value)" [value]="grade.value">{{
+              @for (grade of grades; track grade.value) {
+                <mat-option [value]="grade.value" (click)="targetGradeClicked(grade.value)">{{
                   grade.viewValue
                 }}</mat-option>
               }
@@ -45,14 +45,14 @@
           <div class="flex size-full items-center justify-center">
             <!-- <f-project-progress-gauge [project]="project"></f-project-progress-gauge> -->
             <f-progress-burndown-chart
+              [grade]="project.targetGrade"
               [project]="project"
               [unit]="project.unit"
-              [grade]="project.targetGrade"
             ></f-progress-burndown-chart>
             <f-task-status-pie-chart
+              [grade]="project.targetGrade"
               [project]="project"
               [unit]="project.unit"
-              [grade]="project.targetGrade"
             ></f-task-status-pie-chart>
           </div>
         </mat-card-content>

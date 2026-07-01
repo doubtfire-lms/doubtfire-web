@@ -1,12 +1,13 @@
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
 import {Campus, CampusService, Project, Unit} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {MatSelectChange} from '@angular/material/select';
 
 @Component({
   selector: 'student-campus-select',
   templateUrl: 'student-campus-select.component.html',
   styleUrls: ['student-campus-select.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class StudentCampusSelectComponent implements OnChanges, OnInit {

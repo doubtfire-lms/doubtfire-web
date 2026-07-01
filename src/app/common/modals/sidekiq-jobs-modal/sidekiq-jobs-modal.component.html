@@ -8,8 +8,8 @@
           <div class="flex items-center">
             <div class="mr-6 text-center">{{ jobEntry.job?.status?.toUpperCase() }}</div>
             <div class="flex gap-2.5">
-              <button mat-raised-button color="primary" (click)="viewJob(jobEntry)">View</button>
-              <button mat-raised-button color="red" (click)="removeJob(jobEntry)">Clear</button>
+              <button color="primary" mat-raised-button (click)="viewJob(jobEntry)">View</button>
+              <button color="red" mat-raised-button (click)="removeJob(jobEntry)">Clear</button>
             </div>
           </div>
         </div>

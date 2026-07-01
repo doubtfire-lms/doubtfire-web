@@ -1,8 +1,8 @@
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
 import {GroupSet, Unit, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 
 // This component is only displayed to staff
 // Students will be shown the projects/states/groups (project-groups) component
@@ -10,6 +10,7 @@ import {ActivatedRoute} from '@angular/router';
   selector: 'f-unit-groups',
   templateUrl: './unit-groups.component.html',
   styleUrl: './unit-groups.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitGroupsComponent implements OnInit, OnDestroy {

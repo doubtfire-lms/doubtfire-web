@@ -1,14 +1,15 @@
-import {TooltipService} from '@swimlane/ngx-charts';
+import {LegendPosition} from '@swimlane/ngx-charts';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
-import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
 
 @Component({
   selector: 'f-project-progress-gauge',
   templateUrl: './project-progress-gauge.component.html',
   styleUrl: './project-progress-gauge.component.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class ProjectProgressGaugeComponent implements OnInit {
+export class ProjectProgressGaugeComponent {
   @Input() project: Project;
 
   protected gaugeData = [
@@ -30,23 +31,11 @@ export class ProjectProgressGaugeComponent implements OnInit {
     },
   ];
 
-  ngOnInit(): void {
-    this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
-
-    console.log(this.project.taskStats);
-  }
-
-  constructor(private injectorObj: Injector) {
-    this.chartToolTipService = this.injectorObj.get(TooltipService);
-    this.viewContainerRef = this.injectorObj.get(ViewContainerRef);
-  }
-  private chartToolTipService: TooltipService;
-  readonly viewContainerRef: ViewContainerRef;
-
-  smallView = [90, 90];
-  view = [500, 500];
+  smallView: [number, number] = [90, 90];
+  view: [number, number] = [500, 500];
   legend: boolean = true;
-  legendPosition: string = 'below';
+  legendPosition: LegendPosition = LegendPosition.Below;
+  rightLegendPosition: LegendPosition = LegendPosition.Right;
 
   colorScheme = {
     domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5'],

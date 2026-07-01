@@ -1,19 +1,8 @@
-import {isEqual} from 'lodash';
-import {Subscription} from 'rxjs';
-import {
-  FeedbackTemplateService,
-  LearningOutcome,
-  LearningOutcomeService,
-  TaskDefinition,
-  TaskService,
-  Unit,
-} from 'src/app/api/models/doubtfire-model';
-import {AlertService} from 'src/app/common/services/alert.service';
-import API_URL from 'src/app/config/constants/apiUrl';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   Input,
   OnChanges,
@@ -32,6 +21,17 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {Subscription} from 'rxjs';
+import {
+  FeedbackTemplateService,
+  LearningOutcome,
+  LearningOutcomeService,
+  TaskDefinition,
+  TaskService,
+  Unit,
+} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
 import {
@@ -44,6 +44,7 @@ import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-
 @Component({
   selector: 'f-learning-outcome-editor',
   templateUrl: 'learning-outcome-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
@@ -93,10 +94,18 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
       const linkedOutcomes = this.selectedConnectedOutcomes().map((outcome) => outcome.id);
       if (
         this.selectedOutcome &&
-        !isEqual(linkedOutcomes.sort(), this.selectedOutcome.linkedOutcomeIds.sort())
+        !this.sameIds(linkedOutcomes, this.selectedOutcome.linkedOutcomeIds)
       )
         this.selectedOutcome.linkedOutcomeIds = linkedOutcomes;
     });
+  }
+
+  private sameIds(left: number[], right: number[]): boolean {
+    if (left.length !== right.length) return false;
+
+    const sortedLeft = [...left].sort((a, b) => a - b);
+    const sortedRight = [...right].sort((a, b) => a - b);
+    return sortedLeft.every((id, index) => id === sortedRight[index]);
   }
 
   ngOnInit(): void {

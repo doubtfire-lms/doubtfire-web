@@ -1,11 +1,12 @@
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
-import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'f-portfolios-assessment',
   templateUrl: './portfolios-assessment.component.html',
   styleUrl: './portfolios-assessment.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PortfoliosAssessmentComponent {

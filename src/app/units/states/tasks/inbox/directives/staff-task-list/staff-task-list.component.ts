@@ -1,5 +1,18 @@
 /* eslint-disable no-shadow, @typescript-eslint/no-shadow */
 import {HotkeysService} from '@ngneat/hotkeys';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {
   Project,
@@ -24,24 +37,13 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {ActivatedRoute, Router} from '@angular/router';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 
 @Component({
   selector: 'df-staff-task-list',
   templateUrl: './staff-task-list.component.html',
   styleUrls: ['./staff-task-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
@@ -53,12 +55,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() taskData: {
     source: (
       unit: Unit,
-      taskDef: TaskDefinition | number,
+      taskDef?: TaskDefinition | number,
       fetchMyStudentsOnly?: boolean,
     ) => Observable<Task[]>;
-    selectedTask: Task;
-    taskKey: string;
-    onSelectedTaskChange: (task: Task) => void;
+    selectedTask: Task | null;
+    taskKey: unknown;
+    onSelectedTaskChange: (task: Task | null) => void;
     taskDefMode: boolean;
   };
   @Input() unit: Unit;
@@ -122,6 +124,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   tutorialSort = 0;
   originalFilteredTasks: Task[] = null;
   allowHover = true;
+
+  toggleTutorialSort() {
+    this.tutorialSort = (this.tutorialSort + 1) % this.states.length;
+  }
 
   // Track if all tasks have already been fetched
   // Avoids redundant API calls when changing tutorial filters

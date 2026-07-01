@@ -1,15 +1,16 @@
-import {TiiAction} from 'src/app/api/models/doubtfire-model';
-import {TiiActionService} from 'src/app/api/services/tii-action.service';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {TiiAction} from 'src/app/api/models/doubtfire-model';
+import {TiiActionService} from 'src/app/api/services/tii-action.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'f-tii-action-log',
   templateUrl: './tii-action-log.component.html',
   styleUrls: ['./tii-action-log.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TiiActionLogComponent implements AfterViewInit {
@@ -18,6 +19,7 @@ export class TiiActionLogComponent implements AfterViewInit {
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   public tiiActionsSource: MatTableDataSource<TiiAction>;
+  public selectedTaskDefinition: TiiAction | null = null;
   public columns: string[] = [
     'type',
     'lastRun',

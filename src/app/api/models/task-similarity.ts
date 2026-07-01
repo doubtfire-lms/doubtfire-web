@@ -27,6 +27,7 @@ export class TaskSimilarityPart {
   idx: number;
   format: TaskSimilarityPartFormat;
   description: string;
+  panelOpenState?: boolean;
 }
 
 /**

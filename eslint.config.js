@@ -61,6 +61,7 @@ module.exports = tseslint.config(
       '@angular-eslint/prefer-standalone': 'off',
       '@typescript-eslint/consistent-generic-constructors': ['error', 'type-annotation'],
       '@typescript-eslint/no-inferrable-types': 'off',
+      '@angular-eslint/prefer-on-push-component-change-detection': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -84,14 +85,18 @@ module.exports = tseslint.config(
   {
     files: ['**/*.component.html'],
     plugins: {prettier: prettierPlugin},
-    extends: [...tailwindcss.configs['flat/recommended']],
+    extends: [tailwindcss.configs.recommended],
     settings: {
       tailwindcss: {
-        config: {},
+        cssConfigPath: './src/tailwind-intellisense.css',
       },
     },
     rules: {
+      'tailwindcss/classnames-order': 'warn',
+      'tailwindcss/enforces-shorthand': 'warn',
+      'tailwindcss/no-contradicting-classname': 'warn',
       'tailwindcss/no-custom-classname': 'off',
+      'tailwindcss/no-unnecessary-arbitrary-value': 'warn',
       'prettier/prettier': 'warn',
     },
   },
@@ -102,6 +107,20 @@ module.exports = tseslint.config(
     // and inline templates as long as we have the `processor` set on our TypeScript config above)
     files: ['**/*.html'],
     rules: {
+      '@angular-eslint/template/attributes-order': [
+        'error',
+        {
+          alphabetical: true,
+          order: [
+            'STRUCTURAL_DIRECTIVE',
+            'TEMPLATE_REFERENCE',
+            'ATTRIBUTE_BINDING',
+            'INPUT_BINDING',
+            'TWO_WAY_BINDING',
+            'OUTPUT_BINDING',
+          ],
+        },
+      ],
       '@angular-eslint/template/prefer-control-flow': 'error',
       // TODO: remove below eslint rule ignores to improve accessibility
       '@angular-eslint/template/label-has-associated-control': 'off',

@@ -16,10 +16,15 @@
         <button mat-button (click)="getTaskAssessmentCountCsv()">
           <mat-icon>download</mat-icon> Task Assessment Counts
         </button>
+        @if (role === 'Convenor' || isAdmin) {
+          <button mat-button (click)="getOverflowTaskClaimsCsv()">
+            <mat-icon>download</mat-icon> Overflow Task Claims
+          </button>
+        }
       </mat-card-content>
     </mat-card>
     <f-summary-task-status-chart [unit]="unit"></f-summary-task-status-chart>
-    <f-analytics-tutor-times [unit]="unit" [downloadCsvFn]="downloadCsv"></f-analytics-tutor-times>
+    <f-analytics-tutor-times [downloadCsvFn]="downloadCsv" [unit]="unit"></f-analytics-tutor-times>
   </div>
 </div>
 <!--

@@ -1,36 +1,23 @@
+import {beforeEach, describe, expect, it} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {GradeIconComponent} from './grade-icon.component';
 
 describe('GradeIconComponent', () => {
   let component: GradeIconComponent;
   let fixture: ComponentFixture<GradeIconComponent>;
-  let gradeServiceStub: Pick<GradeService, 'grades' | 'gradeAcronyms'>;
+  let gradeService: GradeService;
 
-  beforeEach(waitForAsync(() => {
-    gradeServiceStub = {
-      grades: ['Pass', 'Credit', 'Distinction', 'High Distinction'],
-      gradeAcronyms: {
-        Fail: 'F',
-        Pass: 'P',
-        Credit: 'C',
-        Distinction: 'D',
-        'High Distinction': 'HD',
-        0: 'P',
-        1: 'C',
-        2: 'D',
-        3: 'HD',
-      },
-    };
+  beforeEach(async () => {
+    gradeService = new GradeService();
 
-    gradeServiceStub.grades[-1] = 'Fail';
-    gradeServiceStub.gradeAcronyms[-1] = 'F';
-
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       declarations: [GradeIconComponent],
-      providers: [{provide: GradeService, useValue: gradeServiceStub}],
+      providers: [{provide: GradeService, useValue: gradeService}],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GradeIconComponent);
@@ -42,43 +29,39 @@ describe('GradeIconComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set the index value when undefined', () => {
-    component.index = undefined;
+  it('should show the default icon when the grade is undefined', () => {
+    component.grade = undefined;
     component.ngOnInit();
 
-    expect(component.index).toEqual(-1);
+    expect(component.gradeText).toEqual('Grade');
+    expect(component.gradeLetter).toEqual('G');
   });
 
-  it('should set the grade to Fail when given invalid input', () => {
-    component.index = undefined;
+  it('should show the default icon when given invalid input', () => {
     component.grade = 'Tomato';
     component.ngOnInit();
 
-    expect(component.index).toEqual(-1);
-    expect(component.gradeText).toEqual('Fail');
-    expect(component.gradeLetter).toEqual('F');
+    expect(component.gradeText).toEqual('Grade');
+    expect(component.gradeLetter).toEqual('G');
   });
 
-  it('should appropriate set the grade when passed a grade value', () => {
-    gradeServiceStub.grades.forEach((grade: string) => {
+  it('should set the grade when passed a grade name', () => {
+    Object.entries(gradeService.gradeIndex).forEach(([grade, value]) => {
       component.grade = grade;
-      component.index = undefined;
       component.ngOnInit();
 
-      expect(component.index).toEqual(gradeServiceStub.grades.indexOf(grade));
       expect(component.gradeText).toEqual(grade);
-      expect(component.gradeLetter).toEqual(gradeServiceStub.gradeAcronyms[grade]);
+      expect(component.gradeLetter).toEqual(gradeService.gradeAcronyms[value]);
     });
   });
 
-  it('should appropriate set the grade when passed a grade index', () => {
-    gradeServiceStub.grades.forEach((_, index: number) => {
-      component.index = index - 1;
+  it('should set the grade when passed a numeric grade', () => {
+    gradeService.allGradeValues.forEach((grade) => {
+      component.grade = grade;
       component.ngOnInit();
 
-      expect(component.index).toEqual(index - 1);
-      expect(component.gradeText).toEqual(gradeServiceStub.grades[component.index]);
-      expect(component.gradeLetter).toEqual(gradeServiceStub.gradeAcronyms[component.gradeText]);
+      expect(component.gradeText).toEqual(gradeService.grades[grade]);
+      expect(component.gradeLetter).toEqual(gradeService.gradeAcronyms[grade]);
     });
   });
 });

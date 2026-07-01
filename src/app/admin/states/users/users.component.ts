@@ -1,3 +1,14 @@
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {User} from 'src/app/api/models/doubtfire-model';
 import {UserService} from 'src/app/api/models/doubtfire-model';
@@ -5,15 +16,12 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {EditProfileDialogService} from 'src/app/common/modals/edit-profile-dialog/edit-profile-dialog.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'f-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -103,7 +111,7 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
     this.userService.query();
   }
 
-  public showUserModal(user: User) {
+  public showUserModal(user?: User) {
     const userToShow = user ? user : this.userService.createInstanceFrom({});
     this.editProfileDialogService.openDialog(userToShow, 'edit');
   }

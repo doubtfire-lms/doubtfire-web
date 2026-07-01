@@ -1,14 +1,21 @@
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute} from '@angular/router';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {User} from 'src/app/api/models/user/user';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute} from '@angular/router';
 import {CreateNewUnitModal} from '../../modals/create-new-unit-modal/create-new-unit-modal.component';
 
 interface IUnitOrProject {
@@ -33,6 +40,7 @@ interface IUnitOrProject {
   selector: 'f-units',
   templateUrl: './units.component.html',
   styleUrls: ['./units.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FUnitsComponent implements OnInit, AfterViewInit {

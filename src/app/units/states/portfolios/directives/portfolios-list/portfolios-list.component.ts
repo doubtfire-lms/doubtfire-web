@@ -1,3 +1,18 @@
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {Project} from 'src/app/api/models/project';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import {Unit} from 'src/app/api/models/unit';
@@ -8,29 +23,18 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import {MatButtonToggleChange} from '@angular/material/button-toggle';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
 import {D2lTransferModal} from '../../d2l-transfer-modal/d2l-transfer.component';
 
 @Component({
   selector: 'f-portfolios-list',
   templateUrl: './portfolios-list.component.html',
   styleUrl: './portfolios-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class PortfoliosListComponent implements OnInit, AfterViewInit {
+export class PortfoliosListComponent implements OnChanges, AfterViewInit {
   @Input() unit: Unit;
+  @Input() loading = true;
 
   @Output()
   public studentSelected: EventEmitter<Project> = new EventEmitter();
@@ -62,8 +66,10 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  ngOnInit(): void {
-    this.updateDataSource();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.loading && this.unit && (changes.loading || changes.unit)) {
+      this.updateDataSource();
+    }
   }
 
   openProject(event: Event, project: Project) {
@@ -105,18 +111,20 @@ export class PortfoliosListComponent implements OnInit, AfterViewInit {
   }
 
   public get gradeValues() {
-    return this.gradeService.gradeValues;
+    return this.gradeService.gradeValuesFor(this.unit);
   }
 
   public gradeLabel(grade) {
-    return this.gradeService.grades[grade];
+    return this.gradeService.gradeLabel(grade, this.unit);
   }
 
   updateDataSource() {
     const currentUser = this.userService.currentUser;
 
     const students = this.unit.students
-      .filter((p) => (this.portfolioFilter === 'submitted_only' ? p.hasPortfolio : true))
+      .filter((p) =>
+        this.portfolioFilter === 'submitted_only' ? p.hasPortfolio || p.portfolioAvailable : true,
+      )
       .filter((p) => (this.tutorialFilter === 'mine' ? p.hasTutor(currentUser) : true))
       .filter((p) => (this.gradeFilter !== null ? p.submittedGrade === this.gradeFilter : true));
 

@@ -1,12 +1,20 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  Output,
+} from '@angular/core';
 import {Task, TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {Component, EventEmitter, Inject, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'f-task-description-card',
   templateUrl: 'task-description-card.component.html',
   styleUrls: ['task-description-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskDescriptionCardComponent {

@@ -9,9 +9,10 @@
       <mat-label>Search for students or tutors...</mat-label>
       <input
         matInput
+        [disabled]="loadingStudents"
+        [matAutocomplete]="studentSearch"
         [(ngModel)]="searchText"
         (ngModelChange)="onSearchChange()"
-        [matAutocomplete]="studentSearch"
       />
       <mat-autocomplete #studentSearch="matAutocomplete">
         @for (suggestion of filteredSuggestions; track suggestion) {
@@ -23,60 +24,100 @@
 
   <div class="flex w-full justify-center">
     <mat-button-toggle-group
-      [ngModel]="staffFilter"
       class="w-full max-w-lg"
+      [disabled]="loadingStudents"
+      [ngModel]="staffFilter"
       (ngModelChange)="setStaffFilter($event)"
     >
-      <mat-button-toggle value="all" class="w-full">All Tutorials</mat-button-toggle>
-      <mat-button-toggle value="mine" class="w-full">My Tutorials</mat-button-toggle>
+      <mat-button-toggle class="w-full" value="all">All Tutorials</mat-button-toggle>
+      <mat-button-toggle class="w-full" value="mine">My Tutorials</mat-button-toggle>
     </mat-button-toggle-group>
   </div>
 
-  <div class="overflow-x-auto">
+  @if (loadingStudents) {
+    <div aria-busy="true" aria-label="Loading students" class="overflow-hidden">
+      <div class="flex h-14 items-center gap-6 border-b border-gray-300 px-4">
+        @for (width of ['4%', '10%', '16%', '28%', '8%', '8%', '8%', '10%', '10%']; track $index) {
+          <ngx-skeleton-loader
+            [theme]="{width: width, height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+        }
+      </div>
+
+      @for (row of [0, 1, 2, 3, 4, 5, 6, 7]; track row) {
+        <div class="flex h-[72px] items-center gap-6 border-b border-gray-300 px-4">
+          <ngx-skeleton-loader
+            appearance="circle"
+            [theme]="{width: '30px', height: '30px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class="w-[10%]"
+            [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class="w-[16%]"
+            [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class="w-[28%]"
+            [theme]="{width: '100%', height: '25px', 'border-radius': '4px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          @for (column of [0, 1, 2, 3, 4]; track column) {
+            <ngx-skeleton-loader
+              class="w-[8%]"
+              [theme]="{width: '100%', height: '12px', 'border-radius': '999px', margin: '0'}"
+            ></ngx-skeleton-loader>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <div class="overflow-x-auto" [hidden]="loadingStudents">
     <table
+      class="min-w-full"
       mat-table
-      [dataSource]="dataSource"
       matSort
+      [dataSource]="dataSource"
       [matSortActive]="sortState.active"
       [matSortDirection]="sortState.direction"
       (matSortChange)="sortTableData($event)"
-      class="min-w-full"
     >
       <ng-container matColumnDef="avatar">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let project">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let project" mat-cell>
           <user-icon [size]="30" [user]="project.student"></user-icon>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="username">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
-        <td mat-cell *matCellDef="let project">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Username</th>
+        <td *matCellDef="let project" mat-cell>
           {{ project.student.username || 'N/A' }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let project">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
+        <td *matCellDef="let project" mat-cell>
           {{ project.student.name }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="stats">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="stats">Stats</th>
-        <td mat-cell *matCellDef="let project">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header="stats">Stats</th>
+        <td *matCellDef="let project" mat-cell>
           <div class="flex h-[25px] w-[400px] overflow-hidden rounded">
             @for (bar of project.taskStats; track bar.key) {
               <div
                 class="flex h-[25px] items-center justify-center overflow-hidden"
+                matTooltipDelay="100"
+                matTooltipPosition="above"
+                [matTooltip]="statusLabel(bar.key) + ' ' + bar.value + '%'"
                 [ngStyle]="{
                   width: bar.value + '%',
                   background: statusColor(bar.key),
                 }"
-                [matTooltip]="statusLabel(bar.key) + ' ' + bar.value + '%'"
-                matTooltipPosition="above"
-                matTooltipDelay="100"
               >
                 @if (bar.key === 'not_started') {
                   <span class="text-black">{{ bar.value }}%</span>
@@ -91,15 +132,15 @@
       </ng-container>
 
       <ng-container matColumnDef="grade">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="grade">Target Grade</th>
-        <td mat-cell *matCellDef="let project">
-          <f-grade-icon [grade]="project.targetGrade"></f-grade-icon>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header="grade">Target Grade</th>
+        <td *matCellDef="let project" mat-cell>
+          <f-grade-icon [grade]="project.targetGrade" [unit]="unit"></f-grade-icon>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="portfolio">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="portfolio">Portfolio</th>
-        <td mat-cell *matCellDef="let project">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header="portfolio">Portfolio</th>
+        <td *matCellDef="let project" mat-cell>
           @if (project.hasPortfolio) {
             <mat-icon [class.text-muted]="project.compilePortfolio">menu_book</mat-icon>
           }
@@ -107,8 +148,8 @@
       </ng-container>
 
       <ng-container matColumnDef="similarity">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="similarity">Similarity</th>
-        <td mat-cell *matCellDef="let project">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header="similarity">Similarity</th>
+        <td *matCellDef="let project" mat-cell>
           @if (project.similarityFlag) {
             <mat-icon>visibility</mat-icon>
           }
@@ -116,12 +157,12 @@
       </ng-container>
 
       <ng-container matColumnDef="campus">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Campus</th>
-        <td mat-cell *matCellDef="let project" (click)="$event.stopPropagation()">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Campus</th>
+        <td *matCellDef="let project" mat-cell (click)="$event.stopPropagation()">
           <div class="pt-[22px]">
             <student-campus-select
-              [unit]="unit"
               [student]="project"
+              [unit]="unit"
               [update]="true"
             ></student-campus-select>
           </div>
@@ -129,23 +170,23 @@
       </ng-container>
 
       <ng-container matColumnDef="tutorial">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tutorial</th>
-        <td mat-cell *matCellDef="let project" (click)="$event.stopPropagation()">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Tutorial</th>
+        <td *matCellDef="let project" mat-cell (click)="$event.stopPropagation()">
           <div class="pt-[22px]">
-            <student-tutorial-select [unit]="unit" [student]="project"></student-tutorial-select>
+            <student-tutorial-select [student]="project" [unit]="unit"></student-tutorial-select>
           </div>
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
       <tr
-        mat-row
         *matRowDef="let project; columns: displayedColumns"
         class="cursor-pointer"
+        mat-row
         (click)="viewStudent(project)"
       ></tr>
 
-      <tr class="mat-row" *matNoDataRow>
+      <tr *matNoDataRow class="mat-row">
         <td class="mat-cell p-2.5 text-center" [attr.colspan]="displayedColumns.length">
           No students were found using the filters specified.
         </td>
@@ -155,20 +196,27 @@
 
   <div class="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:justify-between">
     <div class="flex flex-wrap gap-1">
-      <button mat-stroked-button type="button" (click)="exportCsv()">
+      <button mat-stroked-button type="button" [disabled]="loadingStudents" (click)="exportCsv()">
         <mat-icon>download</mat-icon>
         Export CSV
       </button>
-      <button mat-flat-button color="primary" type="button" (click)="showEnrolModal()">
+      <button
+        color="primary"
+        mat-flat-button
+        type="button"
+        [disabled]="loadingStudents"
+        (click)="showEnrolModal()"
+      >
         <mat-icon>person_add</mat-icon>
         Enrol Student
       </button>
     </div>
 
     <mat-paginator
-      [pageSizeOptions]="[15, 25, 50, 100]"
-      [pageSize]="15"
       showFirstLastButtons
+      [disabled]="loadingStudents"
+      [pageSize]="15"
+      [pageSizeOptions]="[15, 25, 50, 100]"
     ></mat-paginator>
   </div>
 </div>

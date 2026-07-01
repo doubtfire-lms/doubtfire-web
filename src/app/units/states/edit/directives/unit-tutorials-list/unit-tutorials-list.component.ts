@@ -1,4 +1,9 @@
 import {RequestOptions} from 'ngx-entity-service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {AfterViewInit, ChangeDetectionStrategy, Component, Input, ViewChild} from '@angular/core';
+import {UntypedFormControl, Validators} from '@angular/forms';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {
   Campus,
   CampusService,
@@ -12,16 +17,12 @@ import {
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {HttpErrorResponse} from '@angular/common/http';
-import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'df-unit-tutorials-list',
   templateUrl: 'unit-tutorials-list.component.html',
   styleUrls: ['unit-tutorials-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitTutorialsListComponent
@@ -58,7 +59,7 @@ export class UnitTutorialsListComponent
   tutorials: Tutorial[] = [];
   dataSource: MatTableDataSource<Tutorial> = new MatTableDataSource();
 
-  private editingStream: boolean = false;
+  public editingStream: boolean = false;
 
   /**
    * The original stream abbreviation is required to update the stream - as it may change but is used in the url.

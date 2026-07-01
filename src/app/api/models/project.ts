@@ -1,13 +1,12 @@
 import {Entity, EntityCache, RequestOptions} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {HttpClient} from '@angular/common/http';
 import {MappingFunctions} from '../services/mapping-fn';
 import {
   Campus,
-  Grade,
   Group,
   GroupSet,
   ProjectService,
@@ -21,6 +20,7 @@ import {
   Unit,
   User,
 } from './doubtfire-model';
+import {Engagement} from './engagement';
 import {StaffNote} from './staff-note';
 import {TaskOutcomeAlignment} from './task-outcome-alignment';
 
@@ -55,6 +55,7 @@ export class Project extends Entity {
   public burndownChartData: {key: string; values: number[]}[];
   public readonly taskCache: EntityCache<Task> = new EntityCache<Task>();
   public readonly staffNoteCache: EntityCache<StaffNote> = new EntityCache<StaffNote>();
+  public readonly engagementCache: EntityCache<Engagement> = new EntityCache<Engagement>();
   public readonly tutorialEnrolmentsCache: EntityCache<Tutorial> = new EntityCache<Tutorial>();
   public readonly groupCache: EntityCache<Group> = new EntityCache<Group>();
   public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> =
@@ -171,11 +172,11 @@ export class Project extends Entity {
   }
 
   public get targetGradeWord(): string {
-    return Grade.GRADES[this.targetGrade];
+    return this.unit.gradeLabel(this.targetGrade);
   }
 
   public get targetGradeAcronym(): string {
-    return Grade.GRADE_ACRONYMS.get(this.targetGrade);
+    return this.unit.gradeAbbreviation(this.targetGrade);
   }
 
   public activeTasks(): Task[] {
@@ -208,7 +209,7 @@ export class Project extends Entity {
     const overdueTasks: Task[] = sortedTasks.filter((task) => task.daysUntilDueDate() <= 7);
 
     // Step 2: select tasks not complete that are overdue. Pass tasks are done first.
-    Grade.PASS_RANGE.forEach((grade) => {
+    this.unit.gradeValues.forEach((grade) => {
       // Sorting needs to be done here according to the days past the target date.
       const closeGradeTasks: Task[] = overdueTasks
         .filter((task) => task.definition.targetGrade === grade)
@@ -263,7 +264,7 @@ export class Project extends Entity {
   }
 
   //# Get the status of the portfolio
-  public portfolioTaskStatus(): string {
+  public portfolioTaskStatus(): TaskStatusEnum {
     if (this.portfolioAvailable) return 'complete';
     else if (this.compilePortfolio) return 'working_on_it';
     else return 'not_started';
@@ -565,6 +566,15 @@ export class Project extends Entity {
   public getTasksIncludedInPortfolio(): Observable<number[]> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get<number[]>(this.tasksIncludedInPortfolioUrl());
+  }
+
+  public tasksStillProcessingUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.id}/tasks_processing`;
+  }
+
+  public getTasksStillProcessing(): Observable<number[]> {
+    const httpClient = AppInjector.get(HttpClient);
+    return httpClient.get<number[]>(this.tasksStillProcessingUrl());
   }
 
   public resetTargetDates(): Observable<Project> {

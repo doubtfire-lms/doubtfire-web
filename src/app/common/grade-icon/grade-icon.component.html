@@ -1,6 +1,8 @@
 <div>
   <span
-    class="m-0 flex h-[2.25em] w-[2.25em] items-center justify-center rounded-full bg-[#333] text-[1em] font-[100] text-white"
+    class="m-0 flex size-[2.25em] items-center justify-center rounded-full bg-[#333] text-[1em] font-thin text-white"
+    matTooltip="{{ gradeText }}"
+    matTooltipPosition="above"
     [ngClass]="{
       colorful: colorful,
       'grade-0': grade === 0,
@@ -8,8 +10,6 @@
       'grade-2': grade === 2,
       'grade-3': grade === 3,
     }"
-    matTooltipPosition="above"
-    matTooltip="{{ gradeText }}"
   >
     {{ gradeLetter }}
   </span>

@@ -1,11 +1,12 @@
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {Task, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {ScormExtensionModalService} from 'src/app/common/modals/scorm-extension-modal/scorm-extension-modal.service';
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'f-task-scorm-card',
   templateUrl: './task-scorm-card.component.html',
   styleUrls: ['./task-scorm-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskScormCardComponent implements OnChanges {

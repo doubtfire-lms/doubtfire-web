@@ -1,4 +1,4 @@
-import {Component, Inject, Injectable, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Injectable, inject} from '@angular/core';
 import {MAT_SNACK_BAR_DATA, MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
 import {ConfettiService} from './confetti.service';
 
@@ -49,6 +49,7 @@ export class AlertService {
 @Component({
   selector: 'f-alert',
   templateUrl: './alert.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AlertComponent {

@@ -1,11 +1,12 @@
-import {GradeService, Task} from 'src/app/api/models/doubtfire-model';
-import {Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {GradeService, Task} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'grade-task-modal',
   templateUrl: './grade-task-modal.component.html',
   styleUrls: ['./grade-task-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GradeTaskModalComponent implements OnInit {
@@ -16,6 +17,7 @@ export class GradeTaskModalComponent implements OnInit {
   totalRating: number;
   rating: number;
   ratingLabel: string;
+  qualityRatingSelected: boolean;
 
   // Grade Select
   selectedGrade: number;
@@ -28,15 +30,16 @@ export class GradeTaskModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.task = this.dialogData.task;
-    this.rating = this.task.qualityPts || 0;
+    this.rating = this.task.qualityPts > 0 ? this.task.qualityPts : 0;
+    this.qualityRatingSelected = this.task.qualityPts >= 0;
     this.selectedGrade = this.task.grade || 0;
     this.totalRating = this.task.definition.maxQualityPts || 5;
-    this.gradeValues = this.gradeService.allGradeValues;
+    this.gradeValues = this.gradeService.allGradeValuesFor(this.task.unit);
     this.updateRatingLabel();
   }
 
   gradeName(grade: number): string {
-    return this.gradeService.grades[grade];
+    return this.gradeService.gradeLabel(grade, this.task.unit);
   }
 
   dismiss(): void {
@@ -54,13 +57,14 @@ export class GradeTaskModalComponent implements OnInit {
   isValid() {
     return (
       (this.task.definition.isGraded && this.selectedGrade) ||
-      (this.task.definition.maxQualityPts > 0 && this.rating)
+      (this.task.definition.maxQualityPts > 0 && this.qualityRatingSelected)
     );
   }
 
   updateRating(value: number): void {
     if (value >= 0 && value <= this.totalRating) {
       this.rating = value;
+      this.qualityRatingSelected = true;
       this.updateRatingLabel();
     }
   }

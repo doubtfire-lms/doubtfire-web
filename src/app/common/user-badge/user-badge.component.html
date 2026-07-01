@@ -1,32 +1,32 @@
 <div class="flex flex-row items-start justify-start">
   <a
-    [routerLink]="studentDashboardRoute"
-    [queryParams]="unselected ? null : {tutor: true}"
     style="display: flex"
+    [queryParams]="unselected ? null : {tutor: true}"
+    [routerLink]="studentDashboardRoute"
   >
     <user-icon
-      size="40"
-      [unselected]="unselected"
-      [user]="selectedTask?.project.student"
       style="margin-right: 8px"
+      [size]="40"
+      [unselected]="unselected"
+      [user]="$safeNavigationMigration(selectedTask?.project.student)"
     ></user-icon>
   </a>
   <div class="flex-col items-start justify-center" style="line-height: 0.5em; margin-top: 4px">
-    <div style="margin-top: 6px" id="placeholder1" [hidden]="!unselected"></div>
+    <div id="placeholder1" style="margin-top: 6px" [hidden]="!unselected"></div>
     <div id="placeholder2" [hidden]="!unselected"></div>
     <a
-      [routerLink]="studentDashboardRoute"
-      [queryParams]="unselected ? null : {tutor: true}"
       style="display: flex"
+      [queryParams]="unselected ? null : {tutor: true}"
+      [routerLink]="studentDashboardRoute"
     >
-      <h4 style="margin-bottom: 1px" class="mat-h4">
+      <h4 class="mat-h4" style="margin-bottom: 1px">
         {{ selectedTask?.project.student.firstName }} {{ selectedTask?.project.student.lastName }}
       </h4>
     </a>
     <a
-      [routerLink]="studentTaskRoute"
-      [queryParams]="unselected ? null : {tutor: true}"
       style="display: flex"
+      [queryParams]="unselected ? null : {tutor: true}"
+      [routerLink]="studentTaskRoute"
     >
       <p class="mat-caption">{{ selectedTask?.definition.name }}</p>
     </a>

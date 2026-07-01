@@ -1,5 +1,17 @@
 import {HotkeysHelpComponent, HotkeysService} from '@ngneat/hotkeys';
 import {MediaObserver} from 'ng-flex-layout';
+import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
 import {Observable, Subject, auditTime, merge, of, tap, withLatestFrom} from 'rxjs';
 import {Tutorial} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
@@ -10,21 +22,30 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
-import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {Router} from '@angular/router';
+
+interface InboxTaskData {
+  source: (
+    unit: Unit,
+    taskDef?: TaskDefinition | number,
+    fetchMyStudentsOnly?: boolean,
+  ) => Observable<Task[]> | null;
+  selectedTask: Task | null;
+  taskKey: unknown;
+  onSelectedTaskChange: (task: Task | null) => void;
+  taskDefMode: boolean;
+}
 
 @Component({
   selector: 'f-inbox',
   templateUrl: './inbox.component.html',
   styleUrls: ['./inbox.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
-  @Input() taskData: {selectedTask: Task};
+  @Input() taskData: InboxTaskData;
   @Input() loading = false;
   @Input() filters: Partial<{
     taskDefinition: TaskDefinition;

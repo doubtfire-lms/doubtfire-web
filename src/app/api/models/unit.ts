@@ -1,10 +1,10 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {HttpClient, HttpParams} from '@angular/common/http';
 import {GroupService} from '../services/group.service';
 import {MarkingSessionService} from '../services/marking-session.service';
 import {ProjectService} from '../services/project.service';
@@ -36,6 +36,13 @@ import {LearningOutcome} from './learning-outcome';
 import {MarkingSession} from './marking-session';
 import {SidekiqJob} from './sidekiq-job';
 import {TaskPrerequisite} from './task-prerequisite';
+
+export interface GradeDefinition {
+  id: string;
+  value: number;
+  label: string;
+  abbreviation: string;
+}
 
 export class Unit extends Entity {
   id: number;
@@ -81,6 +88,13 @@ export class Unit extends Entity {
 
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
+  gradeDefinitions: GradeDefinition[] = [
+    {id: 'fail', value: -1, label: 'Fail', abbreviation: 'F'},
+    {id: 'pass', value: 0, label: 'Pass', abbreviation: 'P'},
+    {id: 'credit', value: 1, label: 'Credit', abbreviation: 'C'},
+    {id: 'distinction', value: 2, label: 'Distinction', abbreviation: 'D'},
+    {id: 'high-distinction', value: 3, label: 'High Distinction', abbreviation: 'HD'},
+  ];
 
   d2lMapping: D2lAssessmentMapping;
 
@@ -132,6 +146,20 @@ export class Unit extends Entity {
 
   public get isActive(): boolean {
     return this.active && (!this.teachingPeriod || this.teachingPeriod.active);
+  }
+
+  public get gradeValues(): number[] {
+    return this.gradeDefinitions
+      .filter((definition) => definition.value >= 0)
+      .map((definition) => definition.value);
+  }
+
+  public gradeLabel(value: number): string {
+    return this.gradeDefinitions.find((definition) => definition.value === value)?.label;
+  }
+
+  public gradeAbbreviation(value: number): string {
+    return this.gradeDefinitions.find((definition) => definition.value === value)?.abbreviation;
   }
 
   public matches(text: string): boolean {
@@ -671,6 +699,12 @@ export class Unit extends Entity {
   public downloadTaskAssessmentCountsCsv(): Observable<SidekiqJob> {
     return AppInjector.get(HttpClient).get<SidekiqJob>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/task_assessment_counts`,
+    );
+  }
+
+  public downloadOverflowTaskClaimsCsv(): Observable<SidekiqJob> {
+    return AppInjector.get(HttpClient).get<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/overflow_task_claims`,
     );
   }
 

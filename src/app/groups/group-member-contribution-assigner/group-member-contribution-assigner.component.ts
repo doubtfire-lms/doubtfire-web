@@ -1,8 +1,5 @@
-import {GroupSet} from 'src/app/api/models/doubtfire-model';
-import {Group, MemberContribution} from 'src/app/api/models/groups/group';
-import {Project} from 'src/app/api/models/project';
-import {Task} from 'src/app/api/models/task';
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -13,11 +10,16 @@ import {
 } from '@angular/core';
 import {Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {GroupSet} from 'src/app/api/models/doubtfire-model';
+import {Group, MemberContribution} from 'src/app/api/models/groups/group';
+import {Project} from 'src/app/api/models/project';
+import {Task} from 'src/app/api/models/task';
 
 @Component({
   selector: 'f-group-member-contribution-assigner',
   templateUrl: './group-member-contribution-assigner.component.html',
   styleUrls: ['./group-member-contribution-assigner.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GroupMemberContributionAssignerComponent implements OnInit, OnChanges {

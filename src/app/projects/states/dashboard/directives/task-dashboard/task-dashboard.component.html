@@ -2,8 +2,8 @@
   <div class="z-10 flex w-full shrink-0 items-center gap-1">
     <mat-tab-group
       class="w-full"
-      [(selectedIndex)]="currentIndex"
       dynamicHeight
+      [(selectedIndex)]="currentIndex"
       (selectedTabChange)="onTabChange($event)"
     >
       <mat-tab label="Task Details"></mat-tab>
@@ -19,6 +19,7 @@
         </ng-template>
       </mat-tab>
       @if (canAccessStaffViews) {
+        <mat-tab label="History"></mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <span class="inline-flex items-center gap-1">
@@ -29,14 +30,13 @@
             </span>
           </ng-template>
         </mat-tab>
-        <mat-tab label="Overseer" [disabled]="!overseerEnabled"></mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <span class="inline-flex items-center gap-1">
-              Staff Notes
+              Student Notes
               @if (task.project.staffNoteCount) {
                 <span
-                  class="ml-0.5 inline-flex h-[22px] w-[22px] items-center justify-center rounded-full p-0 text-[12px] font-[600] leading-[22px] text-white"
+                  class="ml-0.5 inline-flex size-[22px] items-center justify-center rounded-full p-0 text-[12px] leading-[22px] font-semibold text-white"
                   style="background-color: #3939ff"
                 >
                   {{ task.project.staffNoteCount }}
@@ -46,16 +46,16 @@
           </ng-template>
         </mat-tab>
         @if (canAccessTutorNotes) {
-          <mat-tab label="Tutor Notes"></mat-tab>
+          <mat-tab label="Mod Notes"></mat-tab>
         }
       }
     </mat-tab-group>
 
     <button
-      mat-icon-button
-      [matMenuTriggerFor]="taskMenu"
       aria-label="Task actions"
       class="shrink-0 text-gray-600"
+      mat-icon-button
+      [matMenuTriggerFor]="taskMenu"
     >
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -69,12 +69,6 @@
         <mat-icon>folder_zip</mat-icon>
         <span>Download submitted files</span>
       </button>
-      @if (overseerEnabled) {
-        <button mat-menu-item (click)="showSubmissionHistoryModal()">
-          <mat-icon>history</mat-icon>
-          <span>Execution history</span>
-        </button>
-      }
     </mat-menu>
   </div>
 
@@ -83,17 +77,17 @@
       @case (DashboardViews.details) {
         <div class="flex flex-col gap-3 p-3">
           <f-task-ilos-card
-            [taskDef]="task.definition"
             [iloContextType]="'TaskDefinition'"
+            [taskDef]="task.definition"
           ></f-task-ilos-card>
           <f-task-description-card
-            [taskDef]="task.definition"
             [task]="task"
+            [taskDef]="task.definition"
             [unit]="task.unit"
           ></f-task-description-card>
           <f-task-prerequisites-card
-            [taskDefinition]="task.definition"
             [task]="task"
+            [taskDefinition]="task.definition"
           ></f-task-prerequisites-card>
           <f-task-scorm-card [task]="task"></f-task-scorm-card>
           <f-task-status-card [task]="task"></f-task-status-card>
@@ -150,7 +144,7 @@
           </div>
         }
       }
-      @case (DashboardViews.overseer) {
+      @case (DashboardViews.submission_history) {
         @if (canAccessStaffViews) {
           <div class="h-full overflow-auto">
             <f-task-overseer-report [task]="task"></f-task-overseer-report>

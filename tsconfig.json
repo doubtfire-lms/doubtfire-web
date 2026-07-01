@@ -1,9 +1,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": "./",
     "importHelpers": true,
     "module": "es2020",
+    "rootDir": ".",
     "outDir": "./build",
     "sourceMap": true,
     "esModuleInterop": true,
@@ -21,7 +23,7 @@
     "skipLibCheck": true
   },
   "angularCompilerOptions": {
-    "strictTemplates": false,
+    "strictTemplates": true,
     "typeCheckHostBindings": false
   }
 }

@@ -1,22 +1,36 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
-import {Grade} from 'src/app/api/models/grade';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
-import {Location} from '@angular/common';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'f-unit-task-list',
   templateUrl: './unit-task-list.component.html',
   styleUrls: ['./unit-task-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FUnitTaskListComponent implements OnChanges, OnInit {
   @Input() mode: 'project' | 'all-tasks';
   @Input() project: Project;
-  @Input() taskDefinitions: TaskDefinition[];
-  @Input() tasks: Task[];
+  @Input() taskDefinitions: readonly TaskDefinition[];
+  @Input() tasks: readonly Task[];
+  @Input() isCollapsed = false;
+  @Input() selectionUrlBase: unknown[] | null = null;
+
+  @HostBinding('class.collapsed')
+  public get collapsedHostClass(): boolean {
+    return this.isCollapsed;
+  }
 
   // What is the selected task definition
   @Input() selectedTaskDefinition$: BehaviorSubject<TaskDefinition>;
@@ -27,10 +41,14 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   filteredTaskDefinitions: TaskDefinition[]; // list of tasks which match the taskSearch term
   searchText: string = ''; // task search term from user input
   taskDefinitionNamePipe = new TaskDefinitionNamePipe();
-  protected gradeNames: string[] = Grade.GRADES;
+  protected get gradeNames(): Record<number, string> {
+    const unit = this.project?.unit ?? this.taskDefinitions?.[0]?.unit;
+    return Object.fromEntries(
+      (unit?.gradeDefinitions ?? []).map((definition) => [definition.value, definition.label]),
+    );
+  }
 
   constructor(
-    private location: Location,
     private angularRouter: Router,
     private route: ActivatedRoute,
   ) {}
@@ -145,10 +163,16 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
       return;
     }
 
-    this.location.replaceState(this.angularRouter.serializeUrl(urlTree));
+    this.angularRouter.navigateByUrl(urlTree, {replaceUrl: true});
   }
 
   private buildSelectionUrlTree(taskDef: TaskDefinition | null) {
+    if (this.selectionUrlBase) {
+      return this.angularRouter.createUrlTree(
+        taskDef ? [...this.selectionUrlBase, taskDef.abbreviation] : this.selectionUrlBase,
+      );
+    }
+
     const unitId = this.route.parent?.snapshot.paramMap.get('unitId');
     if (this.route.parent?.snapshot.data.unit && unitId) {
       return this.angularRouter.createUrlTree(

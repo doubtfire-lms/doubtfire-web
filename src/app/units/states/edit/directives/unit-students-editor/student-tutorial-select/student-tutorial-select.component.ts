@@ -1,10 +1,11 @@
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Project, Tutorial, TutorialStream, Unit} from 'src/app/api/models/doubtfire-model';
-import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'student-tutorial-select',
   templateUrl: 'student-tutorial-select.component.html',
   styleUrls: ['student-tutorial-select.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class StudentTutorialSelectComponent {

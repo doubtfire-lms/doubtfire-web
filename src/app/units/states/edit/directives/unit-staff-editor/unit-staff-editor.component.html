@@ -3,52 +3,54 @@
     <h3>Unit Staff</h3>
     <p>Manage unit staff by adding members and assigning them as convenors or tutors.</p>
   </div>
-  <table mat-table [dataSource]="dataSource" matSort>
+  <table mat-table matSort [dataSource]="dataSource">
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <th *matHeaderCellDef mat-header-cell>Name</th>
 
-      <td mat-cell *matCellDef="let unitRole">
+      <td *matCellDef="let unitRole" mat-cell>
         <div class="flex items-center gap-3">
-          <user-icon [size]="30" [user]="unitRole.user" aria-hidden="true"></user-icon
+          <user-icon aria-hidden="true" [size]="30" [user]="unitRole.user"></user-icon
           >{{ unitRole.user.name }}
         </div>
       </td>
     </ng-container>
     <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef>Role</th>
-      <td mat-cell *matCellDef="let unitRole">
+      <th *matHeaderCellDef mat-header-cell>Role</th>
+      <td *matCellDef="let unitRole" mat-cell>
         <mat-button-toggle-group
+          appearance="legacy"
+          class="my-3"
+          hideSingleSelectionIndicator
           name="role"
           [ngModel]="unitRole.role"
           (change)="onRoleChange(unitRole, $event)"
-          hideSingleSelectionIndicator
         >
           <mat-button-toggle
-            value="Tutor"
             matTooltip="Tutors deliver unit content"
-            matTooltipShowDelay="1000"
             matTooltipPosition="above"
+            matTooltipShowDelay="1000"
+            value="Tutor"
             >Tutor</mat-button-toggle
           >
           <mat-button-toggle
-            value="Convenor"
             matTooltip="Convenors manage the unit"
-            matTooltipShowDelay="1000"
             matTooltipPosition="above"
+            matTooltipShowDelay="1000"
+            value="Convenor"
             >Convenor</mat-button-toggle
           >
         </mat-button-toggle-group>
       </td>
     </ng-container>
     <ng-container matColumnDef="main-convenor">
-      <th mat-header-cell *matHeaderCellDef>Main Convenor</th>
-      <td mat-cell *matCellDef="let unitRole">
+      <th *matHeaderCellDef mat-header-cell>Main Convenor</th>
+      <td *matCellDef="let unitRole" mat-cell>
         @if (unitRole?.role === 'Convenor') {
           <button
-            [disabled]="unitRole.id === unit?.mainConvenor?.id"
-            mat-icon-button
-            (click)="changeMainConvenor(unitRole)"
             aria-label="Make staff member the Main Convenor"
+            mat-icon-button
+            [disabled]="unitRole.id === unit?.mainConvenor?.id"
+            (click)="changeMainConvenor(unitRole)"
           >
             <mat-icon aria-hidden="true">
               {{ unitRole.id === unit?.mainConvenor?.id ? 'check' : 'close' }}
@@ -59,38 +61,39 @@
     </ng-container>
 
     <ng-container matColumnDef="observer-only">
-      <th mat-header-cell *matHeaderCellDef>Observer Only</th>
-      <td mat-cell *matCellDef="let unitRole">
+      <th *matHeaderCellDef mat-header-cell>Observer Only</th>
+      <td *matCellDef="let unitRole" mat-cell>
         <mat-slide-toggle
-          [checked]="unitRole.observerOnly"
-          (change)="toggleObserverOnly(unitRole)"
           matTooltip="This staff member will have read-only access as an observer"
-          matTooltipShowDelay="1000"
           matTooltipPosition="above"
+          matTooltipShowDelay="1000"
+          [checked]="unitRole.observerOnly"
+          [disabled]="unitRole.id === unit.mainConvenor.id"
+          (change)="toggleObserverOnly(unitRole)"
         ></mat-slide-toggle>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="overflow-marking">
-      <th mat-header-cell *matHeaderCellDef>Overflow Marking</th>
-      <td mat-cell *matCellDef="let unitRole">
+      <th *matHeaderCellDef mat-header-cell>Overflow Marking</th>
+      <td *matCellDef="let unitRole" mat-cell>
         <mat-slide-toggle
+          matTooltip="This staff member can mark overflow tasks"
+          matTooltipPosition="above"
+          matTooltipShowDelay="1000"
           [checked]="unitRole.canMarkOverflowTasks"
           (change)="toggleCanOverflowMark(unitRole)"
-          matTooltip="This staff member can mark overflow tasks"
-          matTooltipShowDelay="1000"
-          matTooltipPosition="above"
         ></mat-slide-toggle>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="mentor">
-      <th mat-header-cell *matHeaderCellDef>Mentor</th>
-      <td mat-cell *matCellDef="let unitRole">
+      <th *matHeaderCellDef mat-header-cell>Mentor</th>
+      <td *matCellDef="let unitRole" mat-cell>
         <mat-select
           class="w-full min-w-[140px]"
-          (selectionChange)="selectMentor(unitRole, $event)"
           [ngModel]="unitRole.mentorId"
+          (selectionChange)="selectMentor(unitRole, $event)"
         >
           <mat-option value="">(None)</mat-option>
           @for (unitRole of unitStaff; track unitRole) {
@@ -103,34 +106,38 @@
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let unitRole">
+      <th *matHeaderCellDef mat-header-cell>Actions</th>
+      <td *matCellDef="let unitRole" mat-cell>
         <div class="flex gap-1">
-          <button mat-icon-button matTooltip="View Tutor Notes" (click)="openTutorNotes(unitRole)">
+          <button
+            mat-icon-button
+            matTooltip="View Moderation Notes"
+            (click)="openTutorNotes(unitRole)"
+          >
             <mat-icon>local_library</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="removeStaff(unitRole)">
+          <button color="warn" mat-icon-button (click)="removeStaff(unitRole)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
       </td>
     </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
   </table>
   <div class="mt-3 flex flex-col items-center gap-2 md:flex-row md:items-start">
-    <mat-form-field class="w-full" appearance="outline">
+    <mat-form-field appearance="outline" class="w-full">
       <input
         matInput
         placeholder="Staff Name"
+        [matAutocomplete]="auto"
         [(ngModel)]="searchTerm"
         (ngModelChange)="filterStaffList()"
-        [matAutocomplete]="auto"
       />
       <mat-autocomplete
         #auto="matAutocomplete"
-        (optionSelected)="addSelectedStaff($event.option.value)"
         [displayWith]="displayStaffName"
+        (optionSelected)="addSelectedStaff($event.option.value)"
       >
         @for (staff of filteredStaff; track staff) {
           <mat-option [value]="staff">
@@ -141,10 +148,10 @@
     </mat-form-field>
 
     <button
-      mat-stroked-button
-      color="primary"
-      type="button"
       class="mt-[11px] min-w-fit"
+      color="primary"
+      mat-stroked-button
+      type="button"
       (click)="openBulkImportModal()"
     >
       Bulk Import

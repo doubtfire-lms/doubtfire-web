@@ -14,11 +14,14 @@
         ) {
           <mat-chip
             #tooltip="matTooltip"
+            class="task-status chip truncate text-center"
             matTooltip="{{ task.definition.name }}: {{ task.statusLabel() }}"
             [class.mat-chip-clicked]="selectedTask === task"
-            (click)="selectChip(task)"
-            class="task-status chip truncate text-center"
             [ngClass]="newTaskService.statusClass(task.status)"
+            [style.--mat-chip-elevated-container-color]="
+              newTaskService.statusColors.get(task.status)
+            "
+            (click)="selectChip(task)"
           >
             @if (task.similarityFlag) {
               <mat-icon svgIcon="visibility"></mat-icon>

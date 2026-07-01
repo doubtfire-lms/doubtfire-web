@@ -1,7 +1,7 @@
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {HttpResponse} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 
 type DownloadState = 'downloading' | 'downloaded' | 'failed';
@@ -9,6 +9,7 @@ type DownloadState = 'downloading' | 'downloaded' | 'failed';
 @Component({
   selector: 'f-submission-files-download',
   templateUrl: './submission-files-download.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SubmissionFilesDownloadComponent implements OnInit {

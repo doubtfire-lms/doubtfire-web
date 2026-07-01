@@ -10,6 +10,18 @@ $my-palette: mat.m2-define-palette($md-formatif);
   padding-right: 8px;
 }
 
+:host(.collapsed) {
+  padding-right: 0;
+
+  .mat-mdc-list-item {
+    overflow: visible;
+  }
+
+  ::ng-deep .mdc-list-item__content {
+    overflow: visible;
+  }
+}
+
 ::ng-deep .cdk-virtual-scroll-content-wrapper {
   width: 100%;
 }

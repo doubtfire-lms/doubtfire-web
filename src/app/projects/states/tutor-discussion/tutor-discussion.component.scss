@@ -97,17 +97,40 @@ user-icon {
 
 #html5-qrcode-button-camera-stop,
 #html5-qrcode-button-camera-start {
-  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2.5 rounded shadow w-full uppercase;
+  width: 100%;
   max-width: 1000px;
   height: 45px;
+  padding: 0.25rem 0.625rem;
   margin-top: 15px;
+  border-radius: 0.25rem;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 10%),
+    0 1px 2px -1px rgb(0 0 0 / 10%);
+  font-weight: 500;
+  color: white;
+  text-transform: uppercase;
+  background-color: #2563eb;
+}
+
+#html5-qrcode-button-camera-stop:hover,
+#html5-qrcode-button-camera-start:hover,
+#html5-qrcode-button-camera-permission:hover {
+  background-color: #1d4ed8;
 }
 
 #html5-qrcode-button-camera-permission {
-  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2.5 rounded shadow w-full uppercase;
   width: 100%;
   max-width: 250px;
   height: 60px;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.25rem;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 10%),
+    0 1px 2px -1px rgb(0 0 0 / 10%);
+  font-weight: 500;
+  color: white;
+  text-transform: uppercase;
+  background-color: #2563eb;
 }
 
 .comment-user-icon-wrapper.ng-star-inserted {

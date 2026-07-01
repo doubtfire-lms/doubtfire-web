@@ -1,10 +1,11 @@
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'f-portfolio-welcome-step',
   templateUrl: 'portfolio-welcome-step.component.html',
   styleUrls: ['portfolio-welcome-step.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PortfolioWelcomeStepComponent implements OnInit {

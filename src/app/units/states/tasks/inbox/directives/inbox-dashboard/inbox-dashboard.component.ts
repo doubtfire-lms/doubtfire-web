@@ -1,9 +1,17 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 import {UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {MatTabChangeEvent} from '@angular/material/tabs';
 
 enum InboxDashboardTab {
   submission = 0,
@@ -18,6 +26,7 @@ enum InboxDashboardTab {
   selector: 'f-inbox-dashboard',
   templateUrl: './inbox-dashboard.component.html',
   host: {'class': 'block h-full'},
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class InboxDashboardComponent implements OnChanges {

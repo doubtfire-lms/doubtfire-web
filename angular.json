@@ -53,10 +53,7 @@
             ],
             "scripts": [
               "node_modules/moment/moment.js",
-              "node_modules/d3/d3.js",
-              "node_modules/lodash/lodash.js",
-              "node_modules/underscore.string/dist/underscore.string.min.js",
-              "node_modules/es5-shim/es5-shim.js",
+              "node_modules/d3/dist/d3.min.js",
               "node_modules/canvas-confetti/dist/confetti.browser.js"
             ],
             "extractLicenses": false,
@@ -85,13 +82,19 @@
               "outputHashing": "bundles",
               "sourceMap": false,
               "extractLicenses": true,
-              "baseHref": "/beta/",
-              "deployUrl": "/beta/"
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "testing": {
+              "aot": false,
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "polyfills": ["zone.js"]
             },
             "devcontainer": {
               "optimization": false,
@@ -137,18 +140,12 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "buildTarget": "doubtfire:build:testing",
             "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": [],
-            "stylePreprocessorOptions": {
-              "includePaths": ["src"]
-            },
-            "scripts": [],
-            "assets": ["src/favicon.ico", "src/assets", "src/manifest.webmanifest"]
+            "runner": "vitest",
+            "setupFiles": ["src/vitest-setup.ts"]
           }
         },
         "lint": {

@@ -1,15 +1,37 @@
-<div class="audio-recorder">
-  <p [hidden]="canRecord">
-    Audio recording <br />
-    only supported in modern versions of Chrome, Firefox and Safari.
+<div>
+  <p class="rounded-md bg-amber-50 p-3 text-sm text-amber-800" [hidden]="canRecord">
+    Audio recording is only supported in modern versions of Chrome, Firefox and Safari.
   </p>
-  <mat-spinner
-    class="send-audio-spinner"
-    [diameter]="72"
-    [strokeWidth]="2"
-    [hidden]="!isSending"
-  ></mat-spinner>
-  <div id="mainDIscussionVisualiser" [hidden]="!canRecord || isSending">
-    <canvas class="audio-visualiser" id="mainDiscussionRecorderVisualiser"></canvas>
+  <div
+    class="relative overflow-hidden rounded-lg border"
+    id="mainDIscussionVisualiser"
+    [class.bg-blue-50]="!isRecording"
+    [class.bg-gray-100]="isRecording && promptActive"
+    [class.bg-red-50]="isRecording && !promptActive"
+    [class.border-blue-100]="!isRecording"
+    [class.border-gray-200]="isRecording && promptActive"
+    [class.border-red-100]="isRecording && !promptActive"
+    [hidden]="!canRecord"
+  >
+    <canvas
+      #mainDiscussionRecorderVisualiser
+      class="h-[72px] w-full"
+      id="mainDiscussionRecorderVisualiser"
+    ></canvas>
+    <div
+      class="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/50 via-transparent to-white/50"
+    ></div>
+    <div
+      class="absolute inset-0 flex items-center justify-center text-4xl font-semibold text-blue-700"
+      [hidden]="!countdownText"
+    >
+      {{ countdownText }}
+    </div>
+    <div
+      class="absolute inset-0 flex items-center justify-center bg-white/70"
+      [hidden]="!isSending"
+    >
+      <mat-spinner [diameter]="36" [strokeWidth]="2"></mat-spinner>
+    </div>
   </div>
 </div>

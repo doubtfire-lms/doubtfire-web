@@ -2,27 +2,27 @@
 
 <mat-dialog-content class="overflow-hidden">
   <mat-button-toggle-group
+    class="mb-3"
     [value]="activeCsvResponseSelection"
     (change)="selectResponse($event.value)"
-    class="mb-3"
   >
     @for (selection of csvResponseSelections; track selection.key) {
       <mat-button-toggle
-        [value]="selection.key"
         [ngClass]="{
-          '!bg-green-600 !text-white !border-green-700':
+          '!border-green-700 !bg-green-600 !text-white':
             selection.key === 'success' && activeCsvResponseSelection === 'success',
-          '!bg-green-50 !text-green-800 !border-green-300':
+          '!border-green-300 !bg-green-50 !text-green-800':
             selection.key === 'success' && activeCsvResponseSelection !== 'success',
-          '!bg-red-600 !text-white !border-red-700':
+          '!border-red-700 !bg-red-600 !text-white':
             selection.key === 'errors' && activeCsvResponseSelection === 'errors',
-          '!bg-red-50 !text-red-800 !border-red-300':
+          '!border-red-300 !bg-red-50 !text-red-800':
             selection.key === 'errors' && activeCsvResponseSelection !== 'errors',
-          '!bg-amber-500 !text-white !border-amber-600':
+          '!border-amber-600 !bg-amber-500 !text-white':
             selection.key === 'ignored' && activeCsvResponseSelection === 'ignored',
-          '!bg-amber-50 !text-amber-800 !border-amber-300':
+          '!border-amber-300 !bg-amber-50 !text-amber-800':
             selection.key === 'ignored' && activeCsvResponseSelection !== 'ignored',
         }"
+        [value]="selection.key"
       >
         {{ selection.label }} ({{ itemData(selection.key).length }})
       </mat-button-toggle>
@@ -33,11 +33,11 @@
     <p>No data to show</p>
   } @else {
     <div class="max-h-[55vh] overflow-auto">
-      <table mat-table [dataSource]="dataSource" class="min-w-max">
+      <table class="min-w-max" mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="message">
-          <th mat-header-cell *matHeaderCellDef>Message</th>
-          <td mat-cell *matCellDef="let row">
-            <div class="max-w-[500px] whitespace-pre-wrap break-words">
+          <th *matHeaderCellDef mat-header-cell>Message</th>
+          <td *matCellDef="let row" mat-cell>
+            <div class="max-w-[500px] break-words whitespace-pre-wrap">
               {{ displayMessage(row.item) }}
             </div>
           </td>
@@ -45,9 +45,9 @@
 
         @for (columnId of dynamicColumnIds; track columnId) {
           <ng-container [matColumnDef]="columnId">
-            <th mat-header-cell *matHeaderCellDef>{{ headerForColumn(columnId) }}</th>
-            <td mat-cell *matCellDef="let row">
-              <div class="max-w-[500px] whitespace-pre-wrap break-words">
+            <th *matHeaderCellDef mat-header-cell>{{ headerForColumn(columnId) }}</th>
+            <td *matCellDef="let row" mat-cell>
+              <div class="max-w-[500px] break-words whitespace-pre-wrap">
                 {{ rowValueForColumn(row.rowObject, columnId) }}
               </div>
             </td>
@@ -55,16 +55,16 @@
         }
 
         <ng-container matColumnDef="other">
-          <th mat-header-cell *matHeaderCellDef>Other</th>
-          <td mat-cell *matCellDef="let row">
-            <div class="max-w-[500px] whitespace-pre-wrap break-words">
+          <th *matHeaderCellDef mat-header-cell>Other</th>
+          <td *matCellDef="let row" mat-cell>
+            <div class="max-w-[500px] break-words whitespace-pre-wrap">
               {{ row.otherData || '-' }}
             </div>
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
       </table>
     </div>
   }
@@ -81,5 +81,5 @@
     <span class="flex-1"></span>
   }
 
-  <button mat-button color="primary" type="button" (click)="close()">Done</button>
+  <button color="primary" mat-button type="button" (click)="close()">Done</button>
 </mat-dialog-actions>

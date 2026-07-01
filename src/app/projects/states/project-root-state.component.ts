@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {Project} from 'src/app/api/models/doubtfire-model';
-import {Component, Input} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'f-project-root-state',
   templateUrl: './project-root-state.component.html',
   styleUrl: './project-root-state.component.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectRootStateComponent {

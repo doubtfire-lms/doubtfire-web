@@ -1,13 +1,13 @@
 <div class="audio-comment-container" fxLayout="row" fxLayoutAlign="start center">
   <button class="play-button" (click)="pausePlay()">
-    <mat-icon id="playButton" class="play-button">{{
+    <mat-icon class="play-button" id="playButton">{{
       isPlaying ? 'pause_circle' : 'play_circle'
     }}</mat-icon>
   </button>
   <mat-progress-bar
     #progressBar
-    id="progressBar"
     class="progress-bar-container"
+    id="progressBar"
     [value]="audioProgress"
     (click)="seek($event)"
   ></mat-progress-bar>

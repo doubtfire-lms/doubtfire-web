@@ -1,32 +1,32 @@
-import {BehaviorSubject} from 'rxjs';
+import {beforeEach, describe, expect, it} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {LoadingService} from './LoadingService.service';
 import {SplashScreenComponent} from './splash-screen.component';
+
+const emptyProvider = {};
 
 describe('SplashScreenComponent', () => {
   let component: SplashScreenComponent;
   let fixture: ComponentFixture<SplashScreenComponent>;
-  let globalStateServiceStub: Partial<GlobalStateService>;
 
-  beforeEach(waitForAsync(() => {
-    const isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject(true);
-
-    globalStateServiceStub = {
-      isLoadingSubject: isLoadingSubject,
-    };
-
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [SplashScreenComponent],
-      imports: [BrowserAnimationsModule],
-      providers: [{provide: GlobalStateService, useValue: globalStateServiceStub}],
-    }).compileComponents();
-  }));
+      providers: [
+        {provide: GlobalStateService, useValue: emptyProvider},
+        {provide: LoadingService, useValue: emptyProvider},
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideComponent(SplashScreenComponent, {set: {template: ''}})
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SplashScreenComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

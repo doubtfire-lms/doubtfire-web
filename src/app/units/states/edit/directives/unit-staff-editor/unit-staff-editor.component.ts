@@ -1,3 +1,7 @@
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {MatSelectChange} from '@angular/material/select';
+import {MatTableDataSource} from '@angular/material/table';
 import {Tutorial, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
@@ -11,15 +15,12 @@ import {
 } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnInit} from '@angular/core';
-import {MatButtonToggleChange} from '@angular/material/button-toggle';
-import {MatSelectChange} from '@angular/material/select';
-import {MatTableDataSource} from '@angular/material/table';
 import {BulkImportStaffModalService} from './bulk-import-staff-modal/bulk-import-staff-modal.service';
 
 @Component({
   selector: 'unit-staff-editor',
   templateUrl: 'unit-staff-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitStaffEditorComponent implements OnInit {

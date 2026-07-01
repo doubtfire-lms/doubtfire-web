@@ -1,4 +1,6 @@
 import {CachedEntityService} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {
   LearningOutcomeService,
@@ -9,8 +11,6 @@ import {
 import {AppInjector} from 'src/app/app-injector';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
 import {SidekiqJob} from '../models/sidekiq-job';
 import {TaskPrerequisite} from '../models/task-prerequisite';
 import {MappingFunctions} from './mapping-fn';
@@ -66,6 +66,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
                 type: upreq.type,
                 tii_check: upreq.tiiCheck,
                 tii_pct: upreq.tiiPct,
+                submission_history: upreq.submissionHistory,
               };
             }),
           );
@@ -78,6 +79,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
               type: string;
               tii_check: boolean;
               tii_pct: number;
+              submission_history: boolean;
             }[]
           )?.map((upreq) => {
             return {
@@ -86,6 +88,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
               type: upreq.type,
               tiiCheck: upreq.tii_check,
               tiiPct: upreq.tii_pct,
+              submissionHistory: upreq.submission_history,
             };
           });
         },
@@ -160,41 +163,30 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
         },
       },
       'overseerResourceFiles',
-      // {
-      //   keys: 'pTargetDate',
-      //   toEntityFn: MappingFunctions.mapDateToDay,
-      //   toJsonFn: MappingFunctions.mapDayToJson,
-      // },
       {
-        keys: 'cTargetDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
-      },
-      {
-        keys: 'dTargetDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
-      },
-      {
-        keys: 'hdTargetDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
-      },
-
-      {
-        keys: 'cStartDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
-      },
-      {
-        keys: 'dStartDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
-      },
-      {
-        keys: 'hdStartDate',
-        toEntityFn: MappingFunctions.mapDateToDay,
-        toJsonFn: MappingFunctions.mapDayToJson,
+        keys: ['gradeDueDates', 'grade_due_dates'],
+        toEntityFn: (data: object, key: string) => {
+          return (data[key] ?? []).map((gradeDate) => ({
+            targetGrade: gradeDate.target_grade,
+            targetDueDate: gradeDate.target_due_date
+              ? MappingFunctions.mapDateToDay(gradeDate, 'target_due_date', null)
+              : undefined,
+            startDate: gradeDate.start_date
+              ? MappingFunctions.mapDateToDay(gradeDate, 'start_date', null)
+              : undefined,
+          }));
+        },
+        toJsonFn: (taskDefinition: TaskDefinition) => {
+          return taskDefinition.gradeDueDates.map((gradeDate) => ({
+            target_grade: gradeDate.targetGrade,
+            target_due_date: gradeDate.targetDueDate
+              ? MappingFunctions.mapDayToJson(gradeDate, 'targetDueDate')
+              : undefined,
+            start_date: gradeDate.startDate
+              ? MappingFunctions.mapDayToJson(gradeDate, 'startDate')
+              : undefined,
+          }));
+        },
       },
     );
 

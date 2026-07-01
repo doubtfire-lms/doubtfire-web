@@ -1,3 +1,14 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Injectable,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Observable, map, startWith} from 'rxjs';
 import {
   TeachingPeriod,
@@ -7,10 +18,6 @@ import {
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
-import {Component, Inject, Injectable, OnInit, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
 
 export interface TeachingPeriodUnitImportData {
   teachingPeriod: TeachingPeriod;
@@ -50,6 +57,7 @@ export class TeachingPeriodUnitImportService {
   selector: 'f-teaching-period-unit-import',
   templateUrl: 'teaching-period-unit-import.dialog.html',
   styleUrls: ['teaching-period-unit-import.dialog.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TeachingPeriodUnitImportDialogComponent implements OnInit {
@@ -80,6 +88,10 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
     'status',
     'actions',
   ];
+
+  public filteredStaffFor(unitToImport: UnitImportData): Observable<User[]> {
+    return unitToImport.filteredStaff;
+  }
 
   constructor(
     public dialogRef: MatDialogRef<TeachingPeriodUnitImportData>,

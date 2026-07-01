@@ -1,36 +1,36 @@
 <div class="flex w-full gap-3">
   <f-group-selector
     class="w-full"
-    [unit]="unit"
-    [unitRole]="unitRole"
+    [onSelect]="groupSelectHandler"
     [project]="project"
     [selectedGroup]="selectedGroup"
     [selectedGroupSet]="selectedGroupSet"
-    [onSelect]="groupSelectHandler"
+    [unit]="unit"
+    [unitRole]="unitRole"
   >
   </f-group-selector>
 
   @if (selectedGroup) {
-    <mat-card class="flex w-full flex-col self-stretch" appearance="outlined">
+    <mat-card appearance="outlined" class="flex w-full flex-col self-stretch">
       <mat-card-header class="flex items-center justify-between">
         <mat-card-title class="flex items-center"
           >Members of
           @if (!editingGroupName) {
             {{ selectedGroup?.name }}
             @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
-              <button mat-icon-button class="p-1" (click)="startEditingGroupName()">
+              <button class="p-1" mat-icon-button (click)="startEditingGroupName()">
                 <mat-icon>edit</mat-icon>
               </button>
             }
           } @else {
             @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
-              <mat-form-field appearance="outline" class="ml-1 mt-[22px]">
-                <input matInput [(ngModel)]="selectedGroup.name" required />
+              <mat-form-field appearance="outline" class="mt-[22px] ml-1">
+                <input matInput required [(ngModel)]="selectedGroup.name" />
               </mat-form-field>
-              <button mat-icon-button class="p-1" (click)="updateGroup()">
+              <button class="p-1" mat-icon-button (click)="updateGroup()">
                 <mat-icon>save</mat-icon>
               </button>
-              <button mat-icon-button class="p-1" (click)="stopEditinGroupName()">
+              <button class="p-1" mat-icon-button (click)="stopEditinGroupName()">
                 <mat-icon>close</mat-icon>
               </button>
             }
@@ -43,21 +43,21 @@
 
       <f-group-member-list
         class="flex-1"
-        [unit]="unit"
-        [unitRole]="unitRole"
         [project]="project"
         [selectedGroup]="selectedGroup"
+        [unit]="unit"
+        [unitRole]="unitRole"
       >
       </f-group-member-list>
       @if (unitRole) {
         <mat-card-footer class="mt-auto">
           <mat-form-field appearance="outline" class="mt-3 w-full px-3">
             <input
-              type="text"
               matInput
-              [matAutocomplete]="auto"
               placeholder="Enter student name or username..."
+              type="text"
               [formControl]="control"
+              [matAutocomplete]="auto"
             />
             <mat-autocomplete
               #auto="matAutocomplete"

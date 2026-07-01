@@ -1,13 +1,21 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'f-task-submission-card',
   templateUrl: './task-submission-card.component.html',
   styleUrls: ['./task-submission-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskSubmissionCardComponent implements OnChanges, OnInit {

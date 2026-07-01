@@ -1,3 +1,6 @@
+import {CalendarEvent} from 'angular-calendar';
+import {ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
@@ -5,19 +8,10 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
-interface SessionEvent {
-  start: Date;
-  end: Date;
+interface SessionEvent extends CalendarEvent {
   startHour: string;
   endHour: string;
-  title: string;
-  color: {
-    primary: string;
-    secondary: string;
-  };
   userId: number;
   commentsAdded: number;
   assessments: number;
@@ -32,6 +26,7 @@ interface SessionEvent {
   templateUrl: 'analytics-tutor-times.component.html',
   styleUrls: ['analytics-tutor-times.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AnalyticsTutorTimesComponent implements OnInit {
@@ -47,7 +42,7 @@ export class AnalyticsTutorTimesComponent implements OnInit {
 
   viewDate = new Date();
   events: SessionEvent[] = [];
-  filteredEvents = [];
+  filteredEvents: SessionEvent[] = [];
 
   tutorTimeSummaryStartDate: Date;
   tutorTimeSummaryEndDate: Date;
@@ -257,7 +252,11 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       });
   }
 
-  eventClicked({event}: {event: SessionEvent}): void {
+  eventClicked({event}: {event: CalendarEvent; sourceEvent?: MouseEvent | KeyboardEvent}): void {
+    if (!this.isSessionEvent(event)) {
+      return;
+    }
+
     if (event.userId !== undefined) {
       if (this.selectedUserId === null) {
         this.selectedUserId = Number(event.userId);
@@ -266,6 +265,21 @@ export class AnalyticsTutorTimesComponent implements OnInit {
       }
       this.applyFilters();
     }
+  }
+
+  private isSessionEvent(event: CalendarEvent): event is SessionEvent {
+    return 'userId' in event && 'duration' in event;
+  }
+
+  sessionEventTitle(event: SessionEvent): string {
+    return [
+      `${event.tutorName} (${event.duration} minutes)${event.duringTutorial ? ' T' : ''}`,
+      `${event.startHour} - ${event.endHour}`,
+      `Assessments: ${event.assessments || 0}`,
+      `Comments: ${event.commentsAdded || 0}`,
+      `Submissions opened: ${event.submissionsOpened || 0}`,
+      `During Tutorial?: ${event.duringTutorial ? 'yes' : 'no'}`,
+    ].join('\n');
   }
 
   private stringToHexColor(

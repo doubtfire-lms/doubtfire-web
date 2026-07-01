@@ -1,17 +1,9 @@
 import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
 import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
-import {BehaviorSubject, Subscription} from 'rxjs';
-import {
-  FeedbackTemplate,
-  Task,
-  TaskComment,
-  TaskCommentService,
-} from 'src/app/api/models/doubtfire-model';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {EmojiService} from 'src/app/common/services/emoji.service';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -27,6 +19,15 @@ import {
   ViewChildren,
 } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {BehaviorSubject, Subscription} from 'rxjs';
+import {
+  FeedbackTemplate,
+  Task,
+  TaskComment,
+  TaskCommentService,
+} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {EmojiService} from 'src/app/common/services/emoji.service';
 import {TaskCommentsViewerComponent} from '../task-comments-viewer/task-comments-viewer.component';
 import {AttachmentConfirmationDialogComponent} from './attachment-confirmation-dialog/attachment-confirmation-dialog.component';
 
@@ -76,6 +77,7 @@ const ACCEPTED_FILE_TYPES = [
       transition('false => true', [style({width: 80}), animate('150ms 0ms ease-in-out')]),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnChanges {
@@ -791,6 +793,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   selector: 'discussion-prompt-composer-dialog.html',
   templateUrl: 'discussion-prompt-composer-dialog.html',
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class DiscussionComposerDialog {

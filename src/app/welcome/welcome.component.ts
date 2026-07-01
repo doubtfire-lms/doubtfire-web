@@ -1,7 +1,7 @@
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import {UserService} from '../api/services/user.service';
 import {GlobalStateService} from '../projects/states/index/global-state.service';
 
@@ -9,6 +9,7 @@ import {GlobalStateService} from '../projects/states/index/global-state.service'
   selector: 'f-welcome',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class WelcomeComponent implements OnInit {

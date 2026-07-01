@@ -1,15 +1,23 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {Group, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'f-group-member-list',
   templateUrl: './group-member-list.component.html',
   styleUrls: ['./group-member-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class GroupMemberListComponent implements OnInit, OnChanges {

@@ -1,13 +1,5 @@
-import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
 import {
-  FeedbackTemplate,
-  FeedbackTemplateService,
-  LearningOutcome,
-  LearningOutcomeService,
-  Task,
-  TaskService,
-} from 'src/app/api/models/doubtfire-model';
-import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -20,12 +12,22 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
+import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
+import {
+  FeedbackTemplate,
+  FeedbackTemplateService,
+  LearningOutcome,
+  LearningOutcomeService,
+  Task,
+  TaskService,
+} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-task-feedback-templates',
   styleUrl: './task-feedback-templates.component.scss',
   templateUrl: './task-feedback-templates.component.html',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
@@ -76,7 +78,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   constructor(
     private learningOutcomeService: LearningOutcomeService,
     private feedbackTemplateService: FeedbackTemplateService,
-    private taskService: TaskService,
+    public taskService: TaskService,
   ) {}
 
   ngOnInit(): void {

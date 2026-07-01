@@ -1,20 +1,23 @@
-<div class="confirmation-modal">
-  <h3 mat-dialog-title>
-    <div class="flex flex-row items-center">
-      <mat-icon class="pull-left mr-1">help</mat-icon>
-      <div class="flex flex-col">
-        <div>{{ title }}</div>
-        <small>Please confirm that you want to perform this action.</small>
-      </div>
-    </div>
-  </h3>
-  <mat-dialog-content>
-    {{ message }}
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-raised-button color="primary" (click)="confirmAction()">
-      <mat-icon inline>check</mat-icon> {{ confirmText }}
-    </button>
-    <button mat-button color="warn" (click)="cancelAction()">{{ cancelText }}</button>
-  </mat-dialog-actions>
+<div class="m-0 flex flex-col items-center justify-center gap-1 p-0 pt-5">
+  <h2
+    class="m-0 flex flex-col items-center justify-center gap-4 p-0 leading-none before:hidden"
+    mat-dialog-title
+  >
+    <mat-icon class="size-10 text-[40px]">help</mat-icon>{{ title }}
+  </h2>
+  <!-- <small>Please confirm that you want to perform this action</small> -->
 </div>
+<mat-dialog-content>
+  <p class="mx-auto max-w-100 text-center text-sm">
+    {{ message }}
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="flex w-full justify-center gap-2">
+    <button color="warn" mat-button (click)="cancelAction()">{{ cancelText }}</button>
+    <button color="primary" mat-raised-button (click)="confirmAction()">
+      <mat-icon inline>check</mat-icon>
+      {{ confirmText }}
+    </button>
+  </div>
+</mat-dialog-actions>

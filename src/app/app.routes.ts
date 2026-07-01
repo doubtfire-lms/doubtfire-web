@@ -88,6 +88,12 @@ export const routes: Routes = [
     data: {roleWhitelist: ['Admin', 'Auditor']},
   },
   {
+    path: 'admin/institution-settings/:tab',
+    component: InstitutionSettingsComponent,
+    canActivate: [roleWhitelistGuard],
+    data: {roleWhitelist: ['Admin', 'Auditor']},
+  },
+  {
     path: 'tutor-discussion',
     component: TutorDiscussionComponent,
     canActivate: [roleWhitelistGuard],
@@ -114,6 +120,21 @@ export const routes: Routes = [
           {path: 'students/groups', component: UnitGroupsComponent, data: {task: 'Student Groups'}},
           {
             path: 'students/portfolios',
+            component: PortfoliosComponent,
+            data: {task: 'Student Portfolios'},
+          },
+          {
+            path: 'students/portfolios/:projectId',
+            component: PortfoliosComponent,
+            data: {task: 'Student Portfolios'},
+          },
+          {
+            path: 'students/portfolios/:projectId/:tab',
+            component: PortfoliosComponent,
+            data: {task: 'Student Portfolios'},
+          },
+          {
+            path: 'students/portfolios/:projectId/:tab/:taskAbbreviation',
             component: PortfoliosComponent,
             data: {task: 'Student Portfolios'},
           },

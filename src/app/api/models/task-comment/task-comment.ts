@@ -32,6 +32,7 @@ export class TaskComment extends Entity {
   shouldShowAvatar: boolean = false;
   firstInSeries: boolean = false;
   lastRead: boolean = false;
+  hover?: boolean;
 
   /**
    * Create a new TaskComment

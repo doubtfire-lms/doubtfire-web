@@ -1,4 +1,17 @@
-import {Observable, Subscription, first, of} from 'rxjs';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, Subscription, finalize, first, of} from 'rxjs';
 import {
   Project,
   ProjectService,
@@ -7,17 +20,13 @@ import {
   Unit,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute, Router} from '@angular/router';
 import {UnitStudentEnrolmentModalService} from '../../modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 
 // State for both convenors and tutors to access student list
 @Component({
   selector: 'f-students-list',
   templateUrl: './students-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -42,6 +51,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   searchText = '';
   staffFilter: 'all' | 'mine' = 'all';
   filteredSuggestions: string[] = [];
+  loadingStudents = true;
   unit: Unit;
 
   private subscriptions: Subscription[] = [];
@@ -61,6 +71,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.push(
       this.unit$?.pipe(first()).subscribe((unit) => {
         if (!unit) {
+          this.loadingStudents = false;
           return;
         }
 
@@ -76,13 +87,22 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.updateSuggestions();
         this.updateDataSource();
-        this.projectService.loadStudents(this.unit).pipe(first()).subscribe();
+        this.projectService
+          .loadStudents(this.unit)
+          .pipe(
+            first(),
+            finalize(() => {
+              this.loadingStudents = false;
+            }),
+          )
+          .subscribe();
       }),
     );
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.updateDataSource();
   }
 
   ngOnDestroy(): void {
@@ -157,6 +177,10 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateDataSource(resetPagination: boolean = false): void {
+    if (!this.paginator) {
+      return;
+    }
+
     const students = this.filteredProjects();
 
     this.dataSource.data = students;

@@ -1,20 +1,21 @@
 //
 // Modal to show Doubtfire version info
 //
+import {HttpClient} from '@angular/common/http';
+import {ChangeDetectionStrategy, Component, Inject, Injectable, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {D2lAssessmentMapping} from 'src/app/api/models/d2l/d2l_assessment_mapping';
 import {D2lAssessmentMappingService} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {HttpClient} from '@angular/common/http';
-import {Component, Inject, Injectable, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'f-d2l-transfer',
   templateUrl: 'd2l-transfer.component.html',
   styleUrl: 'd2l-transfer.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class D2lTransferComponent implements OnInit {

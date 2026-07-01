@@ -1,10 +1,11 @@
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Task} from 'src/app/api/models/doubtfire-model';
-import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'f-user-badge',
   templateUrl: './user-badge.component.html',
   styleUrls: ['./user-badge.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UserBadgeComponent {

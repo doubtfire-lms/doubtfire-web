@@ -1,34 +1,44 @@
 <div class="institution-settings-container">
-  <mat-tab-group>
-    <mat-tab label="Campuses">
-      <campus-list></campus-list>
-    </mat-tab>
-    <mat-tab label="Activities">
-      <activity-type-list></activity-type-list>
-    </mat-tab>
-    <mat-tab label="Teaching Periods">
-      <f-teaching-period-list></f-teaching-period-list>
-    </mat-tab>
-    <mat-tab label="Learning Outcomes">
-      <div class="learning-outcomes-container">
-        <div class="header">
-          <div class="mt-6">
-            <h1 class="mb-0.5">Learning Outcomes</h1>
-            <p>Manage global learning outcomes for the institution</p>
-          </div>
-        </div>
-        <f-learning-outcome-editor></f-learning-outcome-editor>
-      </div>
-    </mat-tab>
-    @if (overseerEnabled) {
-      <mat-tab label="Overseer Images">
-        <overseer-image-list></overseer-image-list>
-      </mat-tab>
-    }
-    @if (tiiEnabled) {
-      <mat-tab label="TurnItIn">
-        <f-tii-action-log></f-tii-action-log>
-      </mat-tab>
+  <!-- <h1 class="py-2 text-center text-gray-800">Institution settings</h1> -->
+  <mat-tab-group
+    class="mx-auto mb-6 max-w-fit"
+    dynamicHeight
+    [selectedIndex]="currentIndex"
+    (selectedTabChange)="onTabChange($event)"
+  >
+    @for (tab of tabs; track tab.routeSegment) {
+      <mat-tab [label]="tab.label"></mat-tab>
     }
   </mat-tab-group>
+
+  <div class="min-h-0 flex-1">
+    @switch (currentTab.routeSegment) {
+      @case ('campuses') {
+        <campus-list></campus-list>
+      }
+      @case ('activities') {
+        <activity-type-list></activity-type-list>
+      }
+      @case ('teaching-periods') {
+        <f-teaching-period-list></f-teaching-period-list>
+      }
+      @case ('learning-outcomes') {
+        <div class="learning-outcomes-container">
+          <div class="header">
+            <div class="mt-6">
+              <h1 class="mb-0.5">Learning Outcomes</h1>
+              <p>Manage global learning outcomes for the institution</p>
+            </div>
+          </div>
+          <f-learning-outcome-editor></f-learning-outcome-editor>
+        </div>
+      }
+      @case ('overseer-images') {
+        <overseer-image-list></overseer-image-list>
+      }
+      @case ('turnitin') {
+        <f-tii-action-log></f-tii-action-log>
+      }
+    }
+  </div>
 </div>

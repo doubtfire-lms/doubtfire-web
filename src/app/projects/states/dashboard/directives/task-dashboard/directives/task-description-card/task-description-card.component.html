@@ -1,12 +1,15 @@
-<mat-card appearance="">
+<mat-card>
   <mat-card-header>
     <div class="mb-2.5 flex">
-      <f-task-badge [taskDef]="taskDef" class="mr-2.5"></f-task-badge>
+      <f-task-badge class="mr-2.5" [taskDef]="taskDef"></f-task-badge>
       <mat-card-title>{{ taskDef?.name }}</mat-card-title>
     </div>
   </mat-card-header>
   <mat-card-content>
-    <div class="markdown-to-pdf" [innerHTML]="taskDef?.description | marked"></div>
+    <div
+      class="markdown-to-pdf"
+      [innerHTML]="$safeNavigationMigration(taskDef?.description) | marked"
+    ></div>
     @if (task) {
       <f-task-date-slider [task]="task" />
     }
@@ -52,13 +55,13 @@
       Task Sheet
     </button> -->
     <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="downloadTaskSheet()">
-      <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="Download icon"
+      <mat-icon aria-label="Download icon" style="width: 20px; height: 20px; font-size: 20px"
         >download</mat-icon
       >
       Task Sheet
     </button>
     <button mat-stroked-button [hidden]="!taskDef?.hasTaskResources" (click)="downloadResources()">
-      <mat-icon style="width: 20px; height: 20px; font-size: 20px" inline aria-label="Download icon"
+      <mat-icon aria-label="Download icon" inline style="width: 20px; height: 20px; font-size: 20px"
         >download</mat-icon
       ><span>Resources</span>
     </button>

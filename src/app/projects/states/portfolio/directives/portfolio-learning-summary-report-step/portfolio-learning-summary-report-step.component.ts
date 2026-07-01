@@ -1,12 +1,13 @@
+import {ChangeDetectionStrategy, Component, Injector, Input} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {Component, Injector, Input} from '@angular/core';
 
 @Component({
   selector: 'f-portfolio-learning-summary-report-step',
   templateUrl: 'portfolio-learning-summary-report-step.component.html',
   styleUrls: ['portfolio-learning-summary-report-step.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PortfolioLearningSummaryReportStepComponent {
@@ -40,7 +41,7 @@ export class PortfolioLearningSummaryReportStepComponent {
   }
 
   public get targetGradeLabel(): string {
-    return this.gradeService.grades[this.project.targetGrade];
+    return this.gradeService.gradeLabel(this.project.targetGrade, this.unit);
   }
 
   advanceActiveTab(index: 1 | -1) {

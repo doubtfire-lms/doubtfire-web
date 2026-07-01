@@ -1,19 +1,21 @@
+import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {Observable} from 'rxjs';
 import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {TeachingPeriodBreakService} from 'src/app/api/services/teaching-period-break.service';
 import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
 import {TeachingPeriodUnitImportService} from '../teaching-period-unit-import/teaching-period-unit-import.dialog';
 
 @Component({
   selector: 'f-teaching-period-list',
   templateUrl: './teaching-period-list.component.html',
   styleUrls: ['./teaching-period-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TeachingPeriodListComponent implements OnInit {
@@ -95,6 +97,7 @@ export class TeachingPeriodListComponent implements OnInit {
 @Component({
   selector: 'f-new-teaching-period-dialog',
   templateUrl: 'new-teaching-period-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class NewTeachingPeriodDialogComponent {
@@ -105,7 +108,10 @@ export class NewTeachingPeriodDialogComponent {
     public teachingPeriodBreakService: TeachingPeriodBreakService,
     public alertService: AlertService,
   ) {}
-  public newOrSelectedTeachingPeriod = this.data.teachingPeriod || new TeachingPeriod();
+  public newOrSelectedTeachingPeriod: TeachingPeriod =
+    this.data.teachingPeriod || new TeachingPeriod();
+  public teachingBreaks$: Observable<TeachingPeriodBreak[]> = this.newOrSelectedTeachingPeriod
+    .breaksCache.values as Observable<TeachingPeriodBreak[]>;
 
   public tempBreak = new TeachingPeriodBreak();
 
@@ -144,6 +150,7 @@ export class NewTeachingPeriodDialogComponent {
     observer.subscribe({
       next: (teachingPeriod) => {
         this.alertService.success(`${teachingPeriod.name} saved`);
+        this.dialogRef.close(teachingPeriod);
       },
       error: (response) => {
         this.alertService.error(`Error saving teaching period. ${response}`);

@@ -1,17 +1,5 @@
-import {Subscription} from 'rxjs';
 import {
-  Project,
-  Task,
-  TaskComment,
-  TaskCommentService,
-  TaskService,
-  UserService,
-} from 'src/app/api/models/doubtfire-model';
-import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
-import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Input,
@@ -20,12 +8,31 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import {Subscription} from 'rxjs';
+import {
+  DiscussionComment,
+  Project,
+  ScormComment,
+  ScormExtensionComment,
+  Task,
+  TaskComment,
+  TaskCommentService,
+  TaskService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
+import {ExtensionComment} from 'src/app/api/models/task-comment/extension-comment';
+import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
+import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {TaskCommentComposerData} from '../task-comment-composer/task-comment-composer.component';
+import {TaskAssessmentComment} from './task-assessment-comment/task-assessment-comment.component';
 
 @Component({
   selector: 'task-comments-viewer',
   templateUrl: './task-comments-viewer.component.html',
   styleUrls: ['./task-comments-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
@@ -33,7 +40,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   @ViewChild('commentsBody') commentsBody: ElementRef;
 
   lastComment: TaskComment;
-  project: Project;
+  @Input() project: Project;
   loading: boolean = true;
 
   sharedCommentComposerData: TaskCommentComposerData = {
@@ -71,6 +78,28 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this.taskStatusSub?.unsubscribe();
     this.commentAddedSub?.unsubscribe();
+  }
+
+  public asAssessmentComment(comment: TaskComment): TaskAssessmentComment | null {
+    return comment.commentType === 'assessment'
+      ? (comment as unknown as TaskAssessmentComment)
+      : null;
+  }
+
+  public asScormComment(comment: TaskComment): ScormComment | null {
+    return comment.commentType === 'scorm' ? (comment as ScormComment) : null;
+  }
+
+  public asExtensionComment(comment: TaskComment): ExtensionComment | null {
+    return comment.commentType === 'extension' ? (comment as ExtensionComment) : null;
+  }
+
+  public asScormExtensionComment(comment: TaskComment): ScormExtensionComment | null {
+    return comment.commentType === 'scorm_extension' ? (comment as ScormExtensionComment) : null;
+  }
+
+  public asDiscussionComment(comment: TaskComment): DiscussionComment | null {
+    return comment.commentType === 'discussion' ? (comment as DiscussionComment) : null;
   }
 
   ngOnChanges(changes: SimpleChanges) {

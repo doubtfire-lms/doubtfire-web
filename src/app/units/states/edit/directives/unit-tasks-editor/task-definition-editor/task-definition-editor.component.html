@@ -1,15 +1,15 @@
-<div id="task-def-head" class="sticky top-0 z-10 w-full bg-white pb-2">
+<div class="sticky top-0 z-10 w-full bg-white pb-2" id="task-def-head">
   <h3>Details for {{ taskDefinition.abbreviation }} - {{ taskDefinition.name }}</h3>
   <mat-divider></mat-divider>
 </div>
 
 <div class="flex flex-col items-start gap-2.5 md:flex-row">
   <aside class="sticky top-0 z-[9] w-full self-start md:top-12 md:w-[240px] md:shrink-0">
-    <div class="flex flex-col gap-0.5 overflow-y-auto overflow-x-hidden rounded-xl bg-white p-1">
+    <div class="flex flex-col gap-0.5 overflow-x-hidden overflow-y-auto rounded-xl bg-white p-1">
       @for (section of visibleSections; track section.id) {
         <button
+          class="w-full cursor-pointer rounded-lg border-0 bg-transparent px-2 py-3 text-left whitespace-nowrap transition-colors"
           type="button"
-          class="w-full cursor-pointer whitespace-nowrap rounded-lg border-0 bg-transparent px-2 py-3 text-left transition-colors"
           [ngClass]="{
             'font-semibold': activeSectionId === section.id,
             'text-gray-700 hover:bg-gray-100': activeSectionId !== section.id,
@@ -26,10 +26,10 @@
     </div>
   </aside>
 
-  <div class="w-full flex-1 pb-28 pr-0.5 md:pb-40" #sectionScrollContainer>
+  <div #sectionScrollContainer class="w-full flex-1 pr-0.5 pb-28 md:pb-40">
     <section
-      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       data-section-id="task-details"
     >
       <h3>Task Details</h3>
@@ -39,8 +39,8 @@
     <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       data-section-id="task-learning-outcomes"
     >
       <h3>Task Learning Outcomes</h3>
@@ -50,8 +50,8 @@
     <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       data-section-id="inbox"
     >
       <h3>Inbox</h3>
@@ -63,8 +63,8 @@
     <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       data-section-id="due-dates"
     >
       <h3>Due Dates</h3>
@@ -74,8 +74,8 @@
     <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       data-section-id="upload-requirements"
     >
       <h3>Upload Requirements</h3>
@@ -85,8 +85,8 @@
     <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       data-section-id="task-resources"
     >
       <h3>Task Resources</h3>
@@ -96,8 +96,8 @@
     <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       data-section-id="prerequisite-tasks"
     >
       <h3>Prerequisite Tasks</h3>
@@ -106,29 +106,29 @@
         <span class="font-bold">{{ taskDefinition.abbreviation }} {{ taskDefinition.name }}</span>
         can be submitted
       </p>
-      <f-task-definition-prerequisites [taskDefinition]="taskDefinition" [staffView]="true">
+      <f-task-definition-prerequisites [staffView]="true" [taskDefinition]="taskDefinition">
       </f-task-definition-prerequisites>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       data-section-id="discussion-prompts"
     >
       <h3>Discussion Prompts</h3>
       <p class="pb-1 font-normal text-gray-500">
         Discussion prompts for tutors to use when discussing student tasks in class
       </p>
-      <f-task-definition-discussion-prompts [taskDefinition]="taskDefinition" [staffView]="true">
+      <f-task-definition-discussion-prompts [staffView]="true" [taskDefinition]="taskDefinition">
       </f-task-definition-discussion-prompts>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
 
     @if (overseerEnabled) {
       <section
-        class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
         #sectionElement
+        class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
         data-section-id="task-assessment-automation"
       >
         <h3>Task Assessment Automation</h3>
@@ -139,8 +139,8 @@
     }
 
     <section
-      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       data-section-id="scorm-test"
     >
       <h3>SCORM Test</h3>
@@ -152,8 +152,8 @@
     <mat-divider class="my-[25px]"></mat-divider>
 
     <section
-      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
       data-section-id="optional-settings"
     >
       <h3>Optional Settings</h3>
@@ -163,12 +163,12 @@
 
     <!-- 725px is enough space to ensure the last section ("Optional Settings") can be scrolled to the top of the browser -->
     <!-- This value may need to change as we add or modify task-definition-editor components -->
-    <div class="h-[725px]" aria-hidden="true"></div>
+    <div aria-hidden="true" class="h-[725px]"></div>
   </div>
 </div>
-<div class="fixed bottom-[50px] right-[50px] z-50">
+<div class="fixed right-[50px] bottom-[50px] z-50">
   <div>
-    <button mat-fab color="primary" (click)="save()">
+    <button color="primary" mat-fab (click)="save()">
       <mat-icon>save</mat-icon>
     </button>
   </div>

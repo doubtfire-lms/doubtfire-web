@@ -1,4 +1,12 @@
 import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
   GradeService,
   Project,
   Task,
@@ -6,12 +14,12 @@ import {
   TaskStatusEnum,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'f-project-tasks-list',
   templateUrl: './project-tasks-list.component.html',
   styleUrls: ['./project-tasks-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class ProjectTasksListComponent implements OnInit {
@@ -23,7 +31,7 @@ export class ProjectTasksListComponent implements OnInit {
   groupTasks = [];
 
   constructor(
-    private newTaskService: TaskService,
+    public newTaskService: TaskService,
     public gradeService: GradeService,
   ) {}
 
@@ -52,14 +60,14 @@ export class ProjectTasksListComponent implements OnInit {
   taskText(task: Task): string {
     let result = task.definition.abbreviation;
     if (task.definition.isGraded) {
-      if (task.grade) {
-        result += ` (${this.gradeService.gradeAcronyms[task.grade]})`;
+      if (task.grade !== undefined && task.grade !== null) {
+        result += ` (${this.gradeService.gradeAbbreviation(task.grade, this.unit)})`;
       } else {
         result += ' (?)';
       }
     }
     if (task.definition.maxQualityPts > 0) {
-      if (task.qualityPts) {
+      if (task.qualityPts >= 0) {
         result += ` (${task.qualityPts}/${task.definition.maxQualityPts})`;
       } else {
         result += ` (?/${task.definition.maxQualityPts})`;

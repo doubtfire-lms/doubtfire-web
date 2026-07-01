@@ -1,46 +1,32 @@
-import {GradeService} from 'src/app/common/services/grade.service';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {GradeService} from 'src/app/common/services/grade.service';
 import {GradeTaskModalComponent} from './grade-task-modal.component';
 
 describe('GradeTaskModalComponent', () => {
   let component: GradeTaskModalComponent;
   let fixture: ComponentFixture<GradeTaskModalComponent>;
-  let gradeServiceStub: Pick<GradeService, 'grades' | 'gradeAcronyms' | 'allGradeValues'>;
+  let gradeServiceStub: GradeService;
   let dialogRefMock: {close: () => void};
   let dialogDataStub: {
     task: {
       grade?: number;
-      quality_pts?: number;
-      definition: {max_quality_pts?: number};
+      qualityPts?: number;
+      definition: {maxQualityPts?: number};
     };
   };
 
-  beforeEach(waitForAsync(() => {
-    gradeServiceStub = {
-      grades: ['Pass', 'Credit', 'Distinction', 'High Distinction'],
-      gradeAcronyms: {
-        Fail: 'F',
-        Pass: 'P',
-        Credit: 'C',
-        Distinction: 'D',
-        'High Distinction': 'HD',
-        0: 'P',
-        1: 'C',
-        2: 'D',
-        3: 'HD',
-      },
-      allGradeValues: [-1, 0, 1, 2, 3],
-    };
-    gradeServiceStub.grades[-1] = 'Fail';
-    gradeServiceStub.gradeAcronyms[-1] = 'F';
+  beforeEach(async () => {
+    gradeServiceStub = new GradeService();
 
     dialogDataStub = {
       task: {
         grade: undefined,
-        quality_pts: undefined,
+        qualityPts: undefined,
         definition: {
-          max_quality_pts: undefined,
+          maxQualityPts: undefined,
         },
       },
     };
@@ -51,15 +37,16 @@ describe('GradeTaskModalComponent', () => {
       },
     };
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       declarations: [GradeTaskModalComponent],
       providers: [
         {provide: GradeService, useValue: gradeServiceStub},
         {provide: MatDialogRef, useValue: dialogRefMock},
         {provide: MAT_DIALOG_DATA, useValue: dialogDataStub},
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GradeTaskModalComponent);
@@ -72,7 +59,7 @@ describe('GradeTaskModalComponent', () => {
   });
 
   it('should return rating & grade when closed', () => {
-    spyOn(component.dialogRef, 'close');
+    vi.spyOn(component.dialogRef, 'close');
 
     component.rating = 5;
     component.selectedGrade = 2;
@@ -85,7 +72,7 @@ describe('GradeTaskModalComponent', () => {
   });
 
   it('should dismiss', () => {
-    spyOn(component.dialogRef, 'close');
+    vi.spyOn(component.dialogRef, 'close');
     component.dismiss();
     expect(component.dialogRef.close).toHaveBeenCalled();
   });
@@ -96,18 +83,52 @@ describe('GradeTaskModalComponent', () => {
   it('should accept a new task object', () => {
     const newRatingTask = {
       grade: undefined,
-      quality_pts: 5,
+      qualityPts: 5,
       definition: {
-        max_quality_pts: 10,
+        maxQualityPts: 10,
       },
     };
     dialogDataStub.task = newRatingTask;
 
     component.ngOnInit();
     expect(component.task).toEqual(newRatingTask);
-    expect(component.rating).toEqual(newRatingTask.quality_pts);
-    expect(component.selectedGrade).toEqual(newRatingTask.grade);
-    expect(component.totalRating).toEqual(newRatingTask.definition.max_quality_pts);
+    expect(component.rating).toEqual(newRatingTask.qualityPts);
+    expect(component.selectedGrade).toEqual(0);
+    expect(component.totalRating).toEqual(newRatingTask.definition.maxQualityPts);
+  });
+
+  it('should treat an unrated quality task as unselected in the modal', () => {
+    dialogDataStub.task = {
+      grade: undefined,
+      qualityPts: -1,
+      definition: {
+        maxQualityPts: 5,
+      },
+    };
+
+    component.ngOnInit();
+
+    expect(component.rating).toEqual(0);
+    expect(component.ratingLabel).toEqual('0 / 5');
+    expect(component.qualityRatingSelected).toBe(false);
+    expect(component.isValid()).toBe(false);
+  });
+
+  it('should allow 0 as a selected quality rating', () => {
+    dialogDataStub.task = {
+      grade: undefined,
+      qualityPts: -1,
+      definition: {
+        maxQualityPts: 5,
+      },
+    };
+
+    component.ngOnInit();
+    component.updateRating(0);
+
+    expect(component.rating).toEqual(0);
+    expect(component.qualityRatingSelected).toBe(true);
+    expect(component.isValid()).toBe(true);
   });
 
   it('should not allow a rating higher than the max rating', () => {
@@ -167,9 +188,9 @@ describe('GradeTaskModalComponent', () => {
   it('should not accept a new invalid grade', () => {
     component.ngOnInit();
     component.updateGrade(10);
-    expect(component.selectedGrade).toEqual(undefined);
+    expect(component.selectedGrade).toEqual(0);
 
     component.updateGrade(-10);
-    expect(component.selectedGrade).toEqual(undefined);
+    expect(component.selectedGrade).toEqual(0);
   });
 });

@@ -1,13 +1,14 @@
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Project, Unit} from 'src/app/api/models/doubtfire-model';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'f-portfolio-grade-select-step',
   templateUrl: 'portfolio-grade-select-step.component.html',
   styleUrls: ['portfolio-grade-select-step.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class PortfolioGradeSelectStepComponent {
@@ -24,7 +25,11 @@ export class PortfolioGradeSelectStepComponent {
   ) {}
 
   public get gradeValues() {
-    return this.gradeService.gradeValues;
+    return this.gradeService.gradeValuesFor(this.unit);
+  }
+
+  public get targetGrade(): string {
+    return this.gradeService.grades[this.project.submittedGrade] ?? 'selected grade';
   }
 
   updateSubmittedGrade(newGrade: number): void {

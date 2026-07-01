@@ -1,6 +1,5 @@
-import {UserService} from 'src/app/api/services/user.service';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -9,11 +8,15 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import {UserService} from 'src/app/api/services/user.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
-interface FileData {
+export interface FileData {
   name: string;
   type: string;
 }
+
+export type FileUploadSpec = FileData[] | Record<string, FileData>;
 
 interface UploadDisplay {
   name: string;
@@ -79,10 +82,11 @@ export const ACCEPTED_TYPES = {
   selector: 'f-file-uploader',
   templateUrl: './file-uploader.component.html',
   styleUrls: ['./file-uploader.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class FileUploaderComponent implements OnInit, OnChanges {
-  @Input() files: FileData[];
+  @Input() files: FileUploadSpec;
   @Input() url: string;
   @Input() method = 'POST';
   @Input() payload?: unknown;
@@ -280,7 +284,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
       if (xhr.readyState === 4) {
         setTimeout(() => {
           this.uploadingInfo.complete = true;
-          let response = null;
+          let response;
           try {
             response = JSON.parse(xhr.responseText);
           } catch (e) {
@@ -329,7 +333,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     }
   };
 
-  createUploadZones(files: FileData[]) {
+  createUploadZones(files: FileUploadSpec) {
     const zones = Object.entries(files).map(([uploadName, uploadData]) => {
       const uploadType = uploadData.type === 'archive' ? 'zip' : uploadData.type;
       const typeData = ACCEPTED_TYPES[uploadType];

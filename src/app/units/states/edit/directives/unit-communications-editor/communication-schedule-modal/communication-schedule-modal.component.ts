@@ -1,11 +1,11 @@
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {
   Campus,
   CampusService,
   CommunicationSetSchedule,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 export interface CommunicationScheduleModalData {
   schedule?: CommunicationSetSchedule;
@@ -25,6 +25,7 @@ export const SCHEDULE_WEEKDAYS = [
 @Component({
   selector: 'f-communication-schedule-modal',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './communication-schedule-modal.component.html',
 })
 export class CommunicationScheduleModalComponent implements OnInit {

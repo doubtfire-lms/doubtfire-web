@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {MediaObserver} from 'ng-flex-layout';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {Subscription, asapScheduler, observeOn} from 'rxjs';
 import {
   AuthenticationService,
@@ -14,8 +16,6 @@ import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants, LogoSettings} from 'src/app/config/constants/doubtfire-constants';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 import {CheckForUpdateService} from 'src/app/sessions/service-worker-updater/check-for-update.service';
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import {AboutDoubtfireModal} from '../modals/about-doubtfire-modal/about-doubtfire-modal.component';
 import {CalendarModalService} from '../modals/calendar-modal/calendar-modal.service';
 import {QrModalService} from '../modals/qr-modal/qr-modal.service';
@@ -27,6 +27,7 @@ import {IsActiveUnitRole} from '../pipes/is-active-unit-role.pipe';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
@@ -180,6 +181,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/units', this.currentUnit.id, 'discussion']);
     }
+  }
+
+  public get isTutorDiscussionRoute(): boolean {
+    return this.router.url.split('?')[0].endsWith('/discussion');
   }
 
   showSidekiqJob() {

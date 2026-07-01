@@ -3,15 +3,13 @@
 @use '@worktile/gantt/styles/index';
 @use 'theme' as *;
 @use 'styles/common/typeface';
+@use 'tailwindcss';
+@config '../tailwind.config.js';
 
 @include mat.elevation-classes();
 @include mat.app-background();
 
 @import '../node_modules/angular-calendar/css/angular-calendar.css';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 // Keep Angular's [hidden] bindings stronger than display utilities such as Tailwind's .flex.
 [hidden] {
@@ -70,6 +68,15 @@ $main-view-max-height: calc((var(--vh, 1vh) * (100)) - 85px);
     .mat-mdc-row .mat-mdc-cell {
       cursor: pointer;
     }
+  }
+}
+
+.table-selectable {
+  .mat-mdc-row:hover .mat-mdc-cell {
+    background-color: rgb(243, 243, 243);
+  }
+  .mat-mdc-row .mat-mdc-cell {
+    cursor: pointer;
   }
 }
 

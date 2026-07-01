@@ -1,8 +1,8 @@
 import {CachedEntityService} from 'ngx-entity-service';
-import {Group, Unit} from 'src/app/api/models/doubtfire-model';
-import API_URL from 'src/app/config/constants/apiUrl';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {Group, Unit} from 'src/app/api/models/doubtfire-model';
+import API_URL from 'src/app/config/constants/apiUrl';
 
 @Injectable()
 export class GroupService extends CachedEntityService<Group> {

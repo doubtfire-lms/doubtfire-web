@@ -1,3 +1,15 @@
+import {NestedTreeControl} from '@angular/cdk/tree';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {Subscription} from 'rxjs';
 import {
   Campus,
@@ -25,10 +37,6 @@ import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {NestedTreeControl} from '@angular/cdk/tree';
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {
   CommunicationScheduleModalComponent,
   CommunicationScheduleModalData,
@@ -47,6 +55,7 @@ interface CommunicationTreeNode {
   selector: 'f-unit-communications-editor',
   standalone: false,
   templateUrl: './unit-communications-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './unit-communications-editor.component.scss',
 })
 export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnDestroy {
@@ -136,24 +145,11 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     enrolled_in: 'Enrolled In',
     not_enrolled_in: 'Not Enrolled In',
   };
-  readonly targetGrades = [
-    {value: 0, label: 'P'},
-    {value: 1, label: 'C'},
-    {value: 2, label: 'D'},
-    {value: 3, label: 'HD'},
-  ];
-  readonly targetGradeLabels: Record<number, string> = {
-    0: 'P',
-    1: 'C',
-    2: 'D',
-    3: 'HD',
-  };
-  readonly targetGradeNames: Record<number, string> = {
-    0: 'Pass',
-    1: 'Credit',
-    2: 'Distinction',
-    3: 'High Distinction',
-  };
+  get targetGrades() {
+    return this.unit.gradeDefinitions
+      .filter((definition) => definition.value >= 0)
+      .map((definition) => ({value: definition.value, label: definition.abbreviation}));
+  }
   readonly emailVariables = [
     {token: '{{student.first_name}}', label: 'Student First Name'},
     {token: '{{student.last_name}}', label: 'Student Last Name'},
@@ -773,7 +769,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   targetGradeName(targetGrade: number | undefined): string {
     if (targetGrade === undefined || targetGrade === null) return '';
 
-    return this.targetGradeNames[targetGrade] || `${targetGrade}`;
+    return this.unit.gradeLabel(targetGrade) || `${targetGrade}`;
   }
 
   taskDefinitionLabel(taskDefinitionId: number | undefined): string {
@@ -1207,7 +1203,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     }
 
     if ((key === 'target_grade' || key === 'task_target_grade') && typeof value === 'number') {
-      return this.targetGradeLabels[value] || value.toString();
+      return this.unit.gradeAbbreviation(value) || value.toString();
     }
 
     if (key === 'task_statuses' && Array.isArray(value)) {
