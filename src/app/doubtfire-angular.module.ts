@@ -134,6 +134,8 @@ import {
   TeachingPeriodService,
   TutorialService,
   TutorialStreamService,
+  UnitContentLinkService,
+  UnitContentSiteService,
   UnitRoleService,
   UnitService,
   UserService,
@@ -328,6 +330,7 @@ import {CommunicationScheduleModalComponent} from './units/states/edit/directive
 import {CommunicationSchedulesComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedules.component';
 import {CommunicationConditionsComponent} from './units/states/edit/directives/unit-communications-editor/conditions/communication-conditions.component';
 import {UnitCommunicationsEditorComponent} from './units/states/edit/directives/unit-communications-editor/unit-communications-editor.component';
+import {UnitContentEditorComponent} from './units/states/edit/directives/unit-content-editor/unit-content-editor.component';
 import {
   D2lUnitDetailsFormComponent,
   D2lUnitDetailsModal,
@@ -650,6 +653,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     EmailStudentActionComponent,
     TaskCommentActionComponent,
     UnitCommunicationsEditorComponent,
+    UnitContentEditorComponent,
     TutorialsComponent,
     UnitStaffEditorComponent,
     PortfolioGradeSelectStepComponent,
@@ -686,6 +690,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     GroupSetService,
     GroupService,
     UnitService,
+    UnitContentLinkService,
+    UnitContentSiteService,
     D2lAssessmentMappingService,
     ProjectService,
     UnitRoleService,

@@ -1,0 +1,172 @@
+<div class="flex flex-col gap-4">
+  <div class="header">
+    <h3>Unit Content</h3>
+    <p>Upload static content site zips and map grade entry points to site routes.</p>
+  </div>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Content Sites</mat-card-title>
+      <mat-card-subtitle>Upload a zipped static site for this unit.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="flex flex-col gap-3">
+      <f-file-drop
+        accept=".zip,application/zip,application/x-zip-compressed,application/octet-stream"
+        class="mt-2"
+        desiredFileName="content site zip"
+        mode="event"
+        (filesDropped)="uploadSites($event)"
+      ></f-file-drop>
+
+      @if (sites.length) {
+        <table class="w-full" mat-table [dataSource]="sites">
+          <ng-container matColumnDef="name">
+            <th *matHeaderCellDef mat-header-cell>Site</th>
+            <td *matCellDef="let site" mat-cell>
+              <div class="flex flex-col">
+                <span class="font-medium">{{ site.name }}</span>
+                <span class="text-xs text-gray-600">{{ site.originalFilename }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="rootDir">
+            <th *matHeaderCellDef mat-header-cell>Root directory</th>
+            <td *matCellDef="let site" mat-cell>
+              <mat-select
+                class="min-w-52"
+                [value]="site.rootDir"
+                (selectionChange)="updateSiteRootDir(site, $event.value)"
+              >
+                @for (rootDir of site.rootDirOptions; track rootDir) {
+                  <mat-option [value]="rootDir">{{ rootDirLabel(rootDir) }}</mat-option>
+                }
+              </mat-select>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="isMain">
+            <th *matHeaderCellDef mat-header-cell>Default</th>
+            <td *matCellDef="let site" mat-cell>
+              <mat-radio-button
+                [checked]="site.isMain"
+                (change)="updateMainSite(site)"
+              ></mat-radio-button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th *matHeaderCellDef mat-header-cell></th>
+            <td *matCellDef="let site" mat-cell>
+              <button
+                aria-label="Preview site"
+                mat-icon-button
+                type="button"
+                (click)="previewSite(site)"
+              >
+                <mat-icon>open_in_new</mat-icon>
+              </button>
+              <button
+                aria-label="Delete site"
+                mat-icon-button
+                type="button"
+                (click)="deleteSite(site)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr *matHeaderRowDef="siteDisplayedColumns" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: siteDisplayedColumns" mat-row></tr>
+        </table>
+      } @else {
+        <p class="text-gray-600">No content sites have been uploaded yet.</p>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Grade Routes</mat-card-title>
+      <mat-card-subtitle
+        >Select which uploaded site and route each grade should open.</mat-card-subtitle
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <table class="w-full" mat-table [dataSource]="rows">
+        <ng-container matColumnDef="context">
+          <th *matHeaderCellDef mat-header-cell>Content link</th>
+          <td *matCellDef="let row" mat-cell>
+            <div class="flex flex-col">
+              <span>{{ row.label }}</span>
+              <span class="text-xs text-gray-600">{{ row.contextType }}:{{ row.contextKey }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="site">
+          <th *matHeaderCellDef mat-header-cell>Site</th>
+          <td *matCellDef="let row" mat-cell>
+            <mat-select class="min-w-52" placeholder="No site" [(ngModel)]="row.unitContentSiteId">
+              <mat-option [value]="null">No site</mat-option>
+              @for (site of sites; track site.id) {
+                <mat-option [value]="site.id">{{ site.name }}</mat-option>
+              }
+            </mat-select>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="route">
+          <th *matHeaderCellDef mat-header-cell>Route</th>
+          <td *matCellDef="let row" mat-cell>
+            <mat-form-field appearance="outline" class="w-full pt-4">
+              <input matInput placeholder="/grades/pass" [(ngModel)]="row.route" />
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="preview">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let row" mat-cell>
+            @if (rowHasUnsavedChanges(row)) {
+              <button
+                aria-label="Save content routes"
+                mat-icon-button
+                type="button"
+                [disabled]="saving"
+                (click)="saveLinks()"
+              >
+                <mat-icon>save</mat-icon>
+              </button>
+            } @else {
+              <button
+                aria-label="Preview content route"
+                mat-icon-button
+                type="button"
+                [disabled]="!row.unitContentSiteId"
+                (click)="previewRow(row)"
+              >
+                <mat-icon>open_in_new</mat-icon>
+              </button>
+            }
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+      </table>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        color="primary"
+        mat-flat-button
+        type="button"
+        [disabled]="saving"
+        (click)="saveLinks()"
+      >
+        Save Content Routes
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

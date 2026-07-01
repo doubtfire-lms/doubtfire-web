@@ -20,6 +20,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GroupService} from './group.service';
 import {MappingFunctions} from './mapping-fn';
 import {TaskDefinitionService} from './task-definition.service';
+import {UnitContentLinkService} from './unit-content-link.service';
 import {UnitRoleService} from './unit-role.service';
 
 export type IloStats = {
@@ -74,6 +75,7 @@ export class UnitService extends CachedEntityService<Unit> {
     private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
     private groupSetService: GroupSetService,
     private groupService: GroupService,
+    private unitContentLinkService: UnitContentLinkService,
   ) {
     super(httpClient, API_URL);
 
@@ -285,6 +287,17 @@ export class UnitService extends CachedEntityService<Unit> {
       'feedbackOverflowThresholdDays',
       {
         keys: ['gradeDefinitions', 'grade_definitions'],
+      },
+      {
+        keys: 'contentLinks',
+        toEntityOp: (data: object, key: string, unit: Unit) => {
+          unit.unitContentLinkCache.clear();
+          data[key]?.forEach((link) => {
+            unit.unitContentLinkCache.getOrCreate(link.id, this.unitContentLinkService, link, {
+              constructorParams: unit,
+            });
+          });
+        },
       },
       'enforceFeedbackBeforeDiscussedInClass',
     );

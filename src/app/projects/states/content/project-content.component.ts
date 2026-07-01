@@ -1,5 +1,5 @@
 import JSZip from 'jszip';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -23,6 +23,7 @@ const ignoredArchivePath = /(^|\/)(?:__MACOSX|\.DS_Store|._[^/]+)(?:\/|$)/;
 const externalUrl = /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i;
 
 export interface ProjectContentDialogData {
+  contentSiteId?: number;
   contentRoute: string;
   unit: Unit;
 }
@@ -53,6 +54,8 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   private archiveBlobUrl?: string;
+  private archiveEntryRoute?: string;
+  private archiveRootDir = '';
   private assetUrls?: Map<string, string>;
   private contentArchive?: JSZip;
   private contentBlobUrls: string[] = [];
@@ -85,8 +88,8 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
     this.routeSubscription = this.route.url.subscribe((segments) => {
       const routeChanged = this.setContentRoute(segments);
 
-      if (routeChanged && this.contentArchive) {
-        void this.loadRouteFromArchive(this.contentArchive);
+      if (routeChanged && this.currentUnitId) {
+        void this.fetchContentArchive(this.currentUnitId);
       }
     });
 
@@ -157,8 +160,8 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
       if (this.dialogData) {
         this.setContentRouteFromPath(archiveRoute.path);
 
-        if (this.contentArchive) {
-          void this.loadRouteFromArchive(this.contentArchive, archiveRoute.fragment);
+        if (this.currentUnitId) {
+          void this.fetchContentArchive(this.currentUnitId, archiveRoute.fragment);
         }
 
         return;
@@ -209,14 +212,28 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
     iframe.src = url;
   }
 
-  private async fetchContentArchive(unitId: number): Promise<void> {
+  private async fetchContentArchive(unitId: number, fragment?: string): Promise<void> {
     this.isLoadingArchive = true;
     this.archiveError = undefined;
     this.currentUnitId = unitId;
 
     try {
       const archive = await firstValueFrom(
-        this.http.get(`${API_URL}/units/${unitId}/content`, {responseType: 'blob'}),
+        this.http.get(`${API_URL}/units/${unitId}/content`, {
+          observe: 'response',
+          params: this.contentArchiveParams(),
+          responseType: 'blob',
+        }),
+      );
+      const archiveBlob = archive.body;
+
+      if (!archiveBlob) {
+        throw new Error('Unit content archive response was empty.');
+      }
+
+      this.archiveEntryRoute = archive.headers.get('X-Content-Route') ?? this.contentRoute;
+      this.archiveRootDir = this.normalizedArchivePath(
+        archive.headers.get('X-Content-Root-Dir') ?? '',
       );
 
       if (this.archiveBlobUrl) {
@@ -224,9 +241,9 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
       }
 
       this.clearContentCache();
-      this.archiveBlobUrl = URL.createObjectURL(archive);
+      this.archiveBlobUrl = URL.createObjectURL(archiveBlob);
 
-      const zip = await JSZip.loadAsync(archive);
+      const zip = await JSZip.loadAsync(archiveBlob);
       this.contentArchive = zip;
       const files = Object.values(zip.files).filter(
         (file) => !file.dir && !ignoredArchivePath.test(file.name),
@@ -237,12 +254,22 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
         file.name.startsWith(`${this.contentSrcDirectory}/`),
       ).length;
 
-      await this.loadRouteFromArchive(zip);
+      await this.loadRouteFromArchive(zip, fragment);
     } catch {
       this.archiveError = 'Could not load the unit content route from the archive.';
     } finally {
       this.isLoadingArchive = false;
     }
+  }
+
+  private contentArchiveParams(): HttpParams {
+    let params = new HttpParams().set('content_route', this.contentRoute);
+
+    if (this.dialogData?.contentSiteId) {
+      params = params.set('content_site_id', this.dialogData.contentSiteId);
+    }
+
+    return params;
   }
 
   private async loadRouteFromArchive(zip: JSZip, fragment?: string): Promise<void> {
@@ -284,10 +311,13 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
       .filter((file) => !file.dir && !ignoredArchivePath.test(file.name))
       .map((file) => file.name);
 
-    const candidates = route ? [`${route}/index.html`, `${route}.html`, route] : ['index.html'];
+    const routeCandidates = route
+      ? [`${route}/index.html`, `${route}.html`, route]
+      : ['index.html'];
+    const candidates = routeCandidates.map((candidate) => this.archivePathWithinRoot(candidate));
 
     for (const candidate of candidates) {
-      const match = filePaths.find((path) => path.endsWith(candidate));
+      const match = filePaths.find((path) => path === candidate);
 
       if (match) {
         return match;
@@ -329,11 +359,14 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
 
   private hasHtmlPath(zip: JSZip, routePath: string): boolean {
     const route = routePath.replace(/^\/+|\/+$/g, '');
-    const candidates = route ? [`${route}/index.html`, `${route}.html`, route] : ['index.html'];
+    const routeCandidates = route
+      ? [`${route}/index.html`, `${route}.html`, route]
+      : ['index.html'];
+    const candidates = routeCandidates.map((candidate) => this.archivePathWithinRoot(candidate));
 
     return Object.values(zip.files)
       .filter((file) => !file.dir && !ignoredArchivePath.test(file.name))
-      .some((file) => candidates.some((candidate) => file.name.endsWith(candidate)));
+      .some((file) => candidates.includes(file.name));
   }
 
   private setContentRoute(segments: UrlSegment[]): boolean {
@@ -361,11 +394,25 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   private normalizedContentRoute(): string {
-    return this.contentRoute.replace(/^\/+|\/+$/g, '');
+    return (this.archiveEntryRoute ?? this.contentRoute).replace(/^\/+|\/+$/g, '');
+  }
+
+  private normalizedArchivePath(path: string): string {
+    return path.replace(/^\/+|\/+$/g, '');
+  }
+
+  private archivePathWithinRoot(path: string): string {
+    const normalizedPath = this.normalizedArchivePath(path);
+
+    return this.archiveRootDir
+      ? `${this.archiveRootDir}/${normalizedPath}`.replace(/\/+$/g, '')
+      : normalizedPath;
   }
 
   private contentRouteForBase(): string {
-    return this.contentRoute.endsWith('/') ? this.contentRoute : `${this.contentRoute}/`;
+    const route = this.archiveEntryRoute ?? this.contentRoute;
+
+    return route.endsWith('/') ? route : `${route}/`;
   }
 
   private async createAssetBlobUrls(zip: JSZip, htmlPath: string): Promise<Map<string, string>> {
@@ -513,7 +560,7 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   private archiveRootFor(path: string): string {
-    return path.includes('/') ? path.slice(0, path.indexOf('/')) : '';
+    return this.archiveRootDir;
   }
 
   private mimeTypeFor(path: string): string {

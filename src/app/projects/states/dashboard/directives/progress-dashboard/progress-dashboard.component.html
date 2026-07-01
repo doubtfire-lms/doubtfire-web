@@ -20,9 +20,19 @@
           <mat-card-title>Target Grade</mat-card-title>
           <mat-card-subtitle>
             <p>
-              <!-- TODO: "Click on a grade to learn more about it" shows when a content is linked to it -->
-              Your target grade changes which tasks you need to complete. Click on a grade to learn
-              more about it.
+              Your target grade changes which tasks you need to complete.
+              @if (hasGradeContentLinks) {
+                Click on a grade to learn more about it.
+              }
+              @if (gradeOverviewContentLink) {
+                You can view all the grades
+                <a
+                  class="cursor-pointer underline"
+                  [routerLink]="contentRouteForLink(gradeOverviewContentLink)"
+                >
+                  here</a
+                >.
+              }
               @if (targetGradeDefinitions.length > 1) {
                 To change your target grade, use the
                 <a
@@ -41,8 +51,9 @@
             <div class="flex flex-wrap justify-center gap-2 self-center">
               @for (grade of targetGradeDefinitions; track grade.id) {
                 <button
-                  class="flex size-16 cursor-pointer items-center justify-center rounded-full border border-gray-300 bg-white text-gray-800 no-underline transition-colors hover:border-gray-500 hover:bg-gray-50"
+                  class="flex size-16 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-800 no-underline transition-colors enabled:cursor-pointer enabled:hover:border-gray-500 enabled:hover:bg-gray-50"
                   type="button"
+                  [disabled]="!contentLinkForGrade(grade)"
                   (click)="openContentForGrade(grade)"
                 >
                   <div class="flex flex-col items-center justify-center gap-2 text-center">
