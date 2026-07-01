@@ -46,7 +46,7 @@
     "@ngstack/code-editor": "^9.0.0",
     "@sentry/angular": "^10.61.0",
     "@sentry/cli": "^3.5.1",
-    "@swimlane/ngx-charts": "^20.5.0",
+    "@swimlane/ngx-charts": "^24.0.0",
     "@tailwindcss/postcss": "^4.3.1",
     "@worktile/gantt": "^21.0.0",
     "angular-calendar": "^0.32.2",
@@ -118,5 +118,17 @@
     "@nx/nx-win32-x64-msvc": "^23.0.1",
     "@rollup/rollup-linux-arm64-gnu": "^4.62.2",
     "@rollup/rollup-linux-x64-gnu": "^4.62.2"
+  },
+  "overrides": {
+    "@swimlane/ngx-charts": {
+      "@angular/common": "$@angular/common",
+      "@angular/core": "$@angular/core",
+      "@angular/cdk": "$@angular/cdk",
+      "@angular/forms": "$@angular/forms",
+      "@angular/localize": "$@angular/localize",
+      "@angular/animations": "$@angular/animations",
+      "@angular/platform-browser": "$@angular/platform-browser",
+      "@angular/platform-browser-dynamic": "$@angular/platform-browser-dynamic"
+    }
   }
 }
