@@ -1,4 +1,6 @@
 import {DataItem, MultiSeries, TooltipService} from '@swimlane/ngx-charts';
+import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
+import {filter, map, take} from 'rxjs/operators';
 import {
   TaskCodeStats,
   TaskCompletionSnapshot,
@@ -12,8 +14,6 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
-import {filter, map, take} from 'rxjs/operators';
 
 @Component({
   selector: 'f-summary-task-status-chart',
