@@ -42,6 +42,10 @@ export class UnitAnalyticsComponent implements OnInit {
     return this.unit?.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
   }
 
+  get isAdmin() {
+    return this.userService.currentUser?.systemRole === 'Admin';
+  }
+
   public getTaskCompletionCsv() {
     this.downloadCsv(
       this.unit.downloadTaskCompletionCsv(),

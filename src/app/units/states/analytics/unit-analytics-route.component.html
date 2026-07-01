@@ -16,9 +16,11 @@
         <button mat-button (click)="getTaskAssessmentCountCsv()">
           <mat-icon>download</mat-icon> Task Assessment Counts
         </button>
-        <button mat-button (click)="getOverflowTaskClaimsCsv()">
-          <mat-icon>download</mat-icon> Overflow Task Claims
-        </button>
+        @if (role === 'Convenor' || isAdmin) {
+          <button mat-button (click)="getOverflowTaskClaimsCsv()">
+            <mat-icon>download</mat-icon> Overflow Task Claims
+          </button>
+        }
       </mat-card-content>
     </mat-card>
 
