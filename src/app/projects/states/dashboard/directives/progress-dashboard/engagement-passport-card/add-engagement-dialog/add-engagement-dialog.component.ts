@@ -72,11 +72,17 @@ export class AddEngagementDialogComponent {
   }
 
   get canSubmit(): boolean {
-    if (this.form.invalid || this.saving || this.attachmentError !== undefined) return false;
+    if (this.form.invalid || this.saving || this.attachmentError !== undefined) {
+      return false;
+    }
 
     const mode = this.form.controls.evidenceMode.value;
-    if (mode === 'url') return this.form.controls.evidenceUrl.value.trim().length > 0;
-    if (mode === 'attachment') return this.attachment !== undefined;
+    if (mode === 'url') {
+      return this.form.controls.evidenceUrl.value.trim().length > 0;
+    }
+    if (mode === 'attachment') {
+      return this.attachment !== undefined;
+    }
 
     return true;
   }
@@ -109,7 +115,9 @@ export class AddEngagementDialogComponent {
     this.attachment = undefined;
     this.attachmentError = undefined;
 
-    if (!file) return;
+    if (!file) {
+      return;
+    }
     if (file.size === 0) {
       this.attachmentError = 'The selected file is empty.';
       input.value = '';

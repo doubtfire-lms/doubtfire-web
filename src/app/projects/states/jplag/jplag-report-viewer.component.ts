@@ -35,7 +35,9 @@ export class JplagReportViewerComponent {
       const wrapper = doc.querySelector(
         '.vue-recycle-scroller__item-wrapper',
       ) as HTMLElement | null;
-      if (!wrapper) return null;
+      if (!wrapper) {
+        return null;
+      }
 
       let cur = wrapper.parentElement as HTMLElement | null;
       while (cur) {
@@ -55,7 +57,9 @@ export class JplagReportViewerComponent {
     let elapsed = 0;
     const interval = setInterval(() => {
       const doc = iframe.contentDocument;
-      if (!doc) return;
+      if (!doc) {
+        return;
+      }
 
       const el = findLink(doc);
       if (el) {

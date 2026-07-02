@@ -320,7 +320,9 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   }
 
   private saveCurrentDraft() {
-    if (!this.task) return;
+    if (!this.task) {
+      return;
+    }
     this.saveDraftForTask(this.task);
   }
 

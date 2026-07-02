@@ -191,7 +191,9 @@ export class TutorNotesComponent implements OnInit {
       this.unitRole?.tutorNotesCache?.currentValues?.filter((note) => {
         const abbr = note.taskDefinition?.abbreviation;
         // if (!abbr) return false; // skip notes without taskDefinition
-        if (allSelected) return true;
+        if (allSelected) {
+          return true;
+        }
         return selected.get(abbr);
       }) ?? []
     );

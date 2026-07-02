@@ -90,7 +90,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   checkEnrolled(): boolean {
-    if (this.unitRoles != null || this.projects != null) return false;
+    if (this.unitRoles != null || this.projects != null) {
+      return false;
+    }
 
     return (
       (this.unitRoles?.length === 0 && this.currentUser.role === 'Tutor') ||

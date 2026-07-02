@@ -307,7 +307,9 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   }
 
   private hasAnySubmissions() {
-    if (!this.currentUserTask) return;
+    if (!this.currentUserTask) {
+      return;
+    }
 
     this.submissions.getLatestSubmissionsTimestamps(this.currentUserTask).subscribe({
       error: (error) => {

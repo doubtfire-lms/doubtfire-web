@@ -112,11 +112,15 @@ export class TeachingPeriod extends Entity {
   }
 
   public weekNumber(date: Date | string): number | null {
-    if (!date || !this.startDate) return null;
+    if (!date || !this.startDate) {
+      return null;
+    }
 
     const targetDate = this.normalizeDay(date);
     const startDate = this.normalizeDay(this.startDate);
-    if (!targetDate || !startDate) return null;
+    if (!targetDate || !startDate) {
+      return null;
+    }
 
     const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
     let result = Math.floor((targetDate.getTime() - startDate.getTime()) / millisecondsPerWeek) + 1;
@@ -127,7 +131,9 @@ export class TeachingPeriod extends Entity {
       const firstMonday = this.firstMonday(teachingBreak);
       const mondayAfterBreak = this.mondayAfterBreak(teachingBreak);
 
-      if (!breakStart || !breakEnd || !firstMonday || !mondayAfterBreak) continue;
+      if (!breakStart || !breakEnd || !firstMonday || !mondayAfterBreak) {
+        continue;
+      }
 
       if (targetDate >= breakStart) {
         if (targetDate >= breakEnd) {
@@ -150,17 +156,23 @@ export class TeachingPeriod extends Entity {
   }
 
   private normalizeDay(date: Date | string | null | undefined): Date | null {
-    if (!date) return null;
+    if (!date) {
+      return null;
+    }
 
     const parsed = date instanceof Date ? date : new Date(date);
-    if (Number.isNaN(parsed.valueOf())) return null;
+    if (Number.isNaN(parsed.valueOf())) {
+      return null;
+    }
 
     return new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
   }
 
   private breakEndDate(teachingBreak: TeachingPeriodBreak): Date | null {
     const startDate = this.normalizeDay(teachingBreak.startDate);
-    if (!startDate || !teachingBreak.numberOfWeeks) return null;
+    if (!startDate || !teachingBreak.numberOfWeeks) {
+      return null;
+    }
 
     return new Date(
       startDate.getFullYear(),
@@ -171,9 +183,13 @@ export class TeachingPeriod extends Entity {
 
   private firstMonday(teachingBreak: TeachingPeriodBreak): Date | null {
     const startDate = this.normalizeDay(teachingBreak.startDate);
-    if (!startDate) return null;
+    if (!startDate) {
+      return null;
+    }
 
-    if (startDate.getDay() === 1) return startDate;
+    if (startDate.getDay() === 1) {
+      return startDate;
+    }
     if (startDate.getDay() === 0) {
       return new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 1);
     }
@@ -187,7 +203,9 @@ export class TeachingPeriod extends Entity {
 
   private mondayAfterBreak(teachingBreak: TeachingPeriodBreak): Date | null {
     const firstMonday = this.firstMonday(teachingBreak);
-    if (!firstMonday || !teachingBreak.numberOfWeeks) return null;
+    if (!firstMonday || !teachingBreak.numberOfWeeks) {
+      return null;
+    }
 
     return new Date(
       firstMonday.getFullYear(),

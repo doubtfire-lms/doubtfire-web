@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-41](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-40...v11.0.0-41) (2026-07-02)
+
+
+### Bug Fixes
+
+* add padding when user cant view submission ([f16d9dc](https://github.com/b0ink/doubtfire-deploy/commit/f16d9dc6ee815e93022f9b8446dd32d1852ce088))
+* avoid repeated unit fetching ([cfe04dc](https://github.com/b0ink/doubtfire-deploy/commit/cfe04dc29f78ab815a17312f929e6deb052a88ed))
+* remove hash prefix ([51794b8](https://github.com/b0ink/doubtfire-deploy/commit/51794b800d2d731d6445cd21b5b592302e43defd))
+* tutorials route transition error ([db1294a](https://github.com/b0ink/doubtfire-deploy/commit/db1294a37e7333612202a8413256288ae97c05aa))
+
 ## [11.0.0-40](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-39...v11.0.0-40) (2026-07-01)
 
 

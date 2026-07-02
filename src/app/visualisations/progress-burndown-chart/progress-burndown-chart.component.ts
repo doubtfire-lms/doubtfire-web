@@ -122,8 +122,12 @@ export class ProgressBurndownChartComponent
         (point) => point.name === formatDate(new Date(endDate), 'd MMM', locale),
       );
 
-      if (start) start.value = 100; // Update start
-      if (end) end.value = 0; // Update end
+      if (start) {
+        start.value = 100;
+      } // Update start
+      if (end) {
+        end.value = 0;
+      } // Update end
     }
 
     this.temp = JSON.parse(JSON.stringify(formattedData));

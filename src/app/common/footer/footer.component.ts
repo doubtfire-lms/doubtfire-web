@@ -62,7 +62,9 @@ export class FooterComponent implements OnInit {
   }
 
   findSimilaritiesButton() {
-    if (!this.selectedTask?.similaritiesDetected) return;
+    if (!this.selectedTask?.similaritiesDetected) {
+      return;
+    }
 
     const w = this.similaritiesButton?.nativeElement.getBoundingClientRect().width;
     this.leftOffset = this.similaritiesButton?.nativeElement.offsetLeft + w / 2;

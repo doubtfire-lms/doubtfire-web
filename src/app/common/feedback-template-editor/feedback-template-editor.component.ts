@@ -226,8 +226,9 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
         feedbackTemplate.delete().subscribe({
           next: () => {
             this.alerts.success('Feedback template deleted');
-            if (this.selectedTemplate === feedbackTemplate)
+            if (this.selectedTemplate === feedbackTemplate) {
               this.selectFeedbackTemplate(this.selectedTemplate);
+            }
           },
           error: () => this.alerts.error('Failed to delete feedback template. Please try again.'),
         });
@@ -272,9 +273,11 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
     const url = this.selectedOutcome.getFeedbackTemplateBatchUploadUrl();
     let name = `${this.selectedOutcome.abbreviation}-FeedbackTemplates.csv`;
 
-    if (this.context instanceof TaskDefinition)
+    if (this.context instanceof TaskDefinition) {
       name = `${this.context.unit.code}-${this.context.abbreviation}-${name}`;
-    else if (this.context instanceof Unit) name = `${this.context.code}-${name}`;
+    } else if (this.context instanceof Unit) {
+      name = `${this.context.code}-${name}`;
+    }
 
     this.fileDownloaderService.downloadFile(url, name);
   }
@@ -307,18 +310,24 @@ export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit
   }
 
   getPossibleParents(): FeedbackTemplate[] {
-    if (!this.selectedTemplate.isNew)
+    if (!this.selectedTemplate.isNew) {
       return this.possibleParents.filter(
         (p) => p.id != this.selectedTemplate.id && !this.isAncestor(this.selectedTemplate.id, p),
       );
-    else return this.possibleParents;
+    } else {
+      return this.possibleParents;
+    }
   }
 
   isAncestor(idToCheck: number, descendant: FeedbackTemplate): boolean {
-    if (descendant.parentChipId === idToCheck) return true;
+    if (descendant.parentChipId === idToCheck) {
+      return true;
+    }
 
     const parent = this.possibleParents.find((p) => p.id === descendant.parentChipId);
-    if (!parent) return false;
+    if (!parent) {
+      return false;
+    }
 
     return this.isAncestor(idToCheck, parent);
   }

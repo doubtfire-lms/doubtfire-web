@@ -173,11 +173,18 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   }
 
   public statusForUnit(value: UnitImportData): string {
-    if (value.done) return 'Done!';
-    if (value.done !== undefined && !value.done) return 'Error! - check log';
-    if (!value.sourceUnit) return 'Create new unit';
-    if (this.teachigPeriod.hasUnitLike(value.sourceUnit))
+    if (value.done) {
+      return 'Done!';
+    }
+    if (value.done !== undefined && !value.done) {
+      return 'Error! - check log';
+    }
+    if (!value.sourceUnit) {
+      return 'Create new unit';
+    }
+    if (this.teachigPeriod.hasUnitLike(value.sourceUnit)) {
       return 'Skip - Already in teaching period';
+    }
     if (this.unitsToImport.filter((u) => u.unitCode === value.sourceUnit.code).length > 1) {
       return 'Duplicate - Source unit appears twice';
     }
@@ -200,8 +207,12 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   public addUnitsByCode() {
     const codes = this.codesToAdd.split(',').map((code) => code.trim());
     for (const code of codes) {
-      if (code.length == 0) continue;
-      if (this.unitsToImport.find((u) => u.unitCode === code)) continue;
+      if (code.length == 0) {
+        continue;
+      }
+      if (this.unitsToImport.find((u) => u.unitCode === code)) {
+        continue;
+      }
 
       const relatedUnits = this.relatedUnits(code);
       const sourceUnit = relatedUnits.length > 0 ? relatedUnits[0].value : null;
@@ -294,7 +305,9 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
   private importUnit(idx: number) {
     // Stop when past last unit to import
-    if (idx >= this.unitsToImport.length) return;
+    if (idx >= this.unitsToImport.length) {
+      return;
+    }
     const unitToImport = this.unitsToImport[idx];
 
     const code = unitToImport.sourceUnit ? unitToImport.sourceUnit.code : unitToImport.unitCode;

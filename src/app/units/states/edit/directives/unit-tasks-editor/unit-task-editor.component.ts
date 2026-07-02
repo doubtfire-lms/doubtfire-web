@@ -57,7 +57,9 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   isStartAfterTarget(td: TaskDefinition, grade: GradeDefinition): boolean {
     const start = this.getGradeStartDate(td, grade);
     const target = this.getGradeDueDate(td, grade);
-    if (!start || !target) return false;
+    if (!start || !target) {
+      return false;
+    }
     return new Date(start).getTime() > new Date(target).getTime();
   }
 
@@ -152,7 +154,9 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(filterValue: string) {
-    if (!this.taskDefinitionSource) return;
+    if (!this.taskDefinitionSource) {
+      return;
+    }
 
     this.taskDefinitionSource.filter = filterValue.trim().toLowerCase();
 

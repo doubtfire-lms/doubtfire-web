@@ -93,7 +93,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.globalState.unitRolesSubject.subscribe({
         next: (unitRoles) => {
-          if (unitRoles == null) return; // might be signing out, or the data has been cleared
+          if (unitRoles == null) {
+            return;
+          } // might be signing out, or the data has been cleared
           this.unitRoles = unitRoles;
 
           this.filteredUnitRoles = this.isActiveUnitRole
@@ -109,7 +111,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.globalState.projectsSubject.subscribe({
         next: (projects) => {
-          if (!projects) return;
+          if (!projects) {
+            return;
+          }
           this.projects = projects.filter((project) => project?.unit?.myRole === 'Student');
         },
         error: (err) => {

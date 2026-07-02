@@ -162,7 +162,9 @@ export class UnitTutorialsListComponent
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: Tutorial | Tutorial[]) {
-    if (!value) return;
+    if (!value) {
+      return;
+    }
     if (value instanceof Array) {
       this.tutorials.push(...value);
     } else {

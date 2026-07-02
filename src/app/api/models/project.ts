@@ -265,9 +265,13 @@ export class Project extends Entity {
 
   //# Get the status of the portfolio
   public portfolioTaskStatus(): TaskStatusEnum {
-    if (this.portfolioAvailable) return 'complete';
-    else if (this.compilePortfolio) return 'working_on_it';
-    else return 'not_started';
+    if (this.portfolioAvailable) {
+      return 'complete';
+    } else if (this.compilePortfolio) {
+      return 'working_on_it';
+    } else {
+      return 'not_started';
+    }
   }
 
   public portfolioTaskStatusClass(): string {

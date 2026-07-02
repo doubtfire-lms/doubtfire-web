@@ -39,7 +39,12 @@
             </div>
           </mat-panel-title>
 
-          <div class="flex items-center gap-3">
+          <div
+            class="flex items-center gap-3"
+            [ngClass]="{
+              'pr-15': !currentUnitRole,
+            }"
+          >
             @if (assessmentFor(history); as oa) {
               @if (oa.reportReady) {
                 <span class="text-xs text-gray-500">Click to view Overseer report</span>
@@ -193,8 +198,8 @@
                     }
                   } @else if (result.stdout) {
                     <pre
-                      class="max-h-44 max-w-full scrollbar-gutter-stable overflow-auto rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed break-words whitespace-pre-wrap text-gray-800 shadow-inner"
-                    ><code>{{result.stdout}}</code></pre>
+                      class="max-h-64 max-w-full scrollbar-gutter-stable overflow-auto rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed break-words whitespace-pre-wrap text-gray-800 shadow-inner"
+                    ><code [innerHTML]="renderOutput(result.stdout)"></code></pre>
                   } @else if (result.pass) {
                     <div class="w-full text-center tracking-wide text-gray-400 uppercase">
                       SUCCESS

@@ -103,7 +103,9 @@ export class EngagementPassportCardComponent implements OnChanges {
   }
 
   ngOnChanges(): void {
-    if (!this.project?.id) return;
+    if (!this.project?.id) {
+      return;
+    }
 
     const cachedEngagements = this.project.engagementCache.currentValues;
     this.buildWeeks(cachedEngagements);
@@ -153,7 +155,9 @@ export class EngagementPassportCardComponent implements OnChanges {
     });
 
     dialogRef.afterClosed().subscribe((engagement?: Engagement) => {
-      if (engagement) this.buildWeeks(this.project.engagementCache.currentValues);
+      if (engagement) {
+        this.buildWeeks(this.project.engagementCache.currentValues);
+      }
     });
   }
 
@@ -175,7 +179,9 @@ export class EngagementPassportCardComponent implements OnChanges {
 
     for (const engagement of engagements) {
       const weekNumber = this.project.unit.weekNumber(engagement.occurredAt);
-      if (weekNumber === null || weekNumber < 1 || weekNumber > totalWeeks) continue;
+      if (weekNumber === null || weekNumber < 1 || weekNumber > totalWeeks) {
+        continue;
+      }
 
       const type = this.normalizeEngagementType(engagement.engagementType);
       const presentation = this.presentations[type] ?? this.fallbackPresentation;

@@ -269,7 +269,9 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     if (this.payload) {
       for (const [key, value] of Object.entries(this.payload)) {
         let v = value;
-        if (typeof v === 'object') v = JSON.stringify(v);
+        if (typeof v === 'object') {
+          v = JSON.stringify(v);
+        }
         form.append(key, v);
       }
     }
@@ -337,7 +339,9 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     const zones = Object.entries(files).map(([uploadName, uploadData]) => {
       const uploadType = uploadData.type === 'archive' ? 'zip' : uploadData.type;
       const typeData = ACCEPTED_TYPES[uploadType];
-      if (!typeData) throw new Error(`Invalid type provided to File Uploader ${uploadData.type}`);
+      if (!typeData) {
+        throw new Error(`Invalid type provided to File Uploader ${uploadData.type}`);
+      }
 
       return {
         name: uploadName,

@@ -119,7 +119,9 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
     const container = this.sectionScrollContainer?.nativeElement;
     const target = this.sectionElementMap.get(sectionId);
 
-    if (!container || !target) return;
+    if (!container || !target) {
+      return;
+    }
 
     if (this.isContainerScrollable(container)) {
       const targetTop = this.getSectionTopInContainer(container, target);
@@ -138,7 +140,9 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
 
   public syncActiveSectionOnScroll() {
     const container = this.sectionScrollContainer?.nativeElement;
-    if (!container) return;
+    if (!container) {
+      return;
+    }
 
     if (!this.isContainerScrollable(container)) {
       this.syncActiveSectionOnWindowScroll();
