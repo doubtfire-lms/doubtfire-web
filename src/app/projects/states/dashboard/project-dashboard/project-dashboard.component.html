@@ -72,7 +72,7 @@
         </div>
       }
       @if (selectedTaskDefinition$ | async; as selectedTaskDefinition) {
-        <div class="flex-1 rounded-lg bg-white p-1">
+        <div class="min-w-0 flex-1 rounded-lg bg-white p-1">
           <f-task-dashboard
             [task]="project.findTaskForDefinition(selectedTaskDefinition.id)"
           ></f-task-dashboard>
