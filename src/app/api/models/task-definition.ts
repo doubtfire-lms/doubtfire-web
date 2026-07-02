@@ -285,7 +285,7 @@ export class TaskDefinition extends Entity {
    * Open the SCORM test in a new tab - using preview mode.
    */
   public previewScormTest(): void {
-    window.open(`#/task_def_id/${this.id}/preview-scorm`, '_blank');
+    window.open(`/task_def_id/${this.id}/preview-scorm`, '_blank');
   }
 
   public get targetGradeText(): string {
