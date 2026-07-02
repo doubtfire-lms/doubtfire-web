@@ -126,7 +126,7 @@
             <th *matHeaderCellDef mat-header-cell>Route</th>
             <td *matCellDef="let row" mat-cell>
               @if (row.unitContentSiteId) {
-                <mat-form-field appearance="outline" class="w-full pt-4">
+                <mat-form-field appearance="outline" class="w-full py-2" subscriptSizing="dynamic">
                   <input matInput [placeholder]="row.defaultRoute" [(ngModel)]="row.route" />
                 </mat-form-field>
               }
