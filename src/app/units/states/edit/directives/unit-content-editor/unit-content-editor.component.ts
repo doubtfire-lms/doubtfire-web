@@ -14,12 +14,32 @@ import {UnitContentSiteService} from 'src/app/api/services/unit-content-site.ser
 import {AlertService} from 'src/app/common/services/alert.service';
 import {UnitContentViewerComponent} from 'src/app/projects/states/content/unit-content-viewer.component';
 
-interface UnitContentRow {
-  label: string;
-  contextType: UnitContentContextType;
-  contextKey: string;
-  unitContentSiteId: number | null;
+interface ContentRouteSnapshot {
   route: string;
+  unitContentSiteId: number | null;
+}
+
+interface ContentRouteRow extends ContentRouteSnapshot {
+  contextKey: string;
+  contextType: UnitContentContextType;
+  defaultRoute: string;
+  description: string;
+  id: string;
+  label: string;
+}
+
+interface ContentRouteSection {
+  id: string;
+  rows: ContentRouteRow[];
+  subtitle: string;
+  title: string;
+}
+
+interface ContentRouteSectionDefinition {
+  buildRows: (unit: Unit) => ContentRouteRow[];
+  id: string;
+  subtitle: string;
+  title: string;
 }
 
 @Component({
@@ -32,14 +52,29 @@ export class UnitContentEditorComponent implements OnInit {
   @Input() unit: Unit;
 
   public sites: UnitContentSite[] = [];
-  public rows: UnitContentRow[] = [];
-  public taskDefinitionRows: UnitContentRow[] = [];
+  public routeSections: ContentRouteSection[] = [];
   public loading = true;
   public saving = false;
   public uploading = false;
   public readonly siteDisplayedColumns = ['name', 'rootDir', 'isMain', 'actions'];
-  public readonly displayedColumns = ['context', 'site', 'route', 'preview'];
-  private savedRows: UnitContentRow[] = [];
+  public readonly routeDisplayedColumns = ['context', 'site', 'route', 'preview'];
+
+  private readonly routeSectionDefinitions: ContentRouteSectionDefinition[] = [
+    {
+      id: 'grades',
+      title: 'Grade Routes',
+      subtitle: 'Choose the content route each target grade should open.',
+      buildRows: (unit) => this.gradeRouteRows(unit),
+    },
+    {
+      id: 'task-sheets',
+      title: 'Task Sheet Routes',
+      subtitle: 'Replace task sheet PDFs with saved routes from uploaded unit content.',
+      buildRows: (unit) => this.taskSheetRouteRows(unit),
+    },
+  ];
+
+  private savedRouteSnapshots: Map<string, ContentRouteSnapshot> = new Map();
 
   constructor(
     private dialog: MatDialog,
@@ -49,9 +84,16 @@ export class UnitContentEditorComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.rows = this.defaultRows();
-    this.taskDefinitionRows = this.defaultTaskDefinitionRows();
+    this.routeSections = this.buildRouteSections();
     this.loadContentManagement();
+  }
+
+  public get allRouteRows(): ContentRouteRow[] {
+    return this.routeSections.flatMap((section) => section.rows);
+  }
+
+  public get hasUnsavedRouteChanges(): boolean {
+    return this.allRouteRows.some((row) => this.routeHasUnsavedChanges(row));
   }
 
   public uploadSites(files: File[]): void {
@@ -109,49 +151,43 @@ export class UnitContentEditorComponent implements OnInit {
     });
   }
 
-  public rootDirLabel(rootDir: string): string {
-    return rootDir;
-  }
-
   public previewSite(site: UnitContentSite): void {
     this.openPreview('/', site.id);
   }
 
-  public previewRow(row: UnitContentRow): void {
-    if (!row.unitContentSiteId) {
+  public previewRoute(row: ContentRouteRow): void {
+    if (!this.routeCanBePreviewed(row)) {
       return;
     }
 
     this.openPreview(row.route || '/', row.unitContentSiteId);
   }
 
-  public rowHasUnsavedChanges(row: UnitContentRow): boolean {
-    const savedRow = this.savedRows.find(
-      (candidate) =>
-        candidate.contextType === row.contextType && candidate.contextKey === row.contextKey,
-    );
+  public routeCanBePreviewed(row: ContentRouteRow): boolean {
+    return !!row.unitContentSiteId && !this.routeHasUnsavedChanges(row);
+  }
 
-    if (!savedRow) {
+  public routeHasUnsavedChanges(row: ContentRouteRow): boolean {
+    const savedRoute = this.savedRouteSnapshots.get(row.id);
+
+    if (!savedRoute) {
       return !!row.unitContentSiteId;
     }
 
+    if (!savedRoute.unitContentSiteId && !row.unitContentSiteId) {
+      return false;
+    }
+
     return (
-      savedRow.unitContentSiteId !== row.unitContentSiteId ||
-      this.normalizedRoute(savedRow.route) !== this.normalizedRoute(row.route)
+      savedRoute.unitContentSiteId !== row.unitContentSiteId ||
+      this.normalizedRoute(savedRoute.route) !== this.normalizedRoute(row.route)
     );
   }
 
-  public saveLinks(): void {
-    const links = [...this.rows, ...this.taskDefinitionRows]
+  public saveContentRoutes(): void {
+    const links = this.allRouteRows
       .filter((row) => row.unitContentSiteId)
-      .map((row) => {
-        const link = new UnitContentLink(this.unit);
-        link.contextType = row.contextType;
-        link.contextKey = row.contextKey;
-        link.unitContentSiteId = row.unitContentSiteId;
-        link.route = row.route || '/';
-        return link;
-      });
+      .map((row) => this.contentLinkFromRoute(row));
 
     this.saving = true;
     this.unitContentLinkService
@@ -191,79 +227,119 @@ export class UnitContentEditorComponent implements OnInit {
       .subscribe({
         next: ({sites, links}) => {
           this.sites = sites;
-
-          const gradeLinks = links.filter(
-            (link) => link.contextType === 'grade' || link.contextType === 'grade_overview',
-          );
-
-          const taskDefinitionLinks = links.filter(
-            (link) => link.contextType === 'task_definition',
-          );
-
-          this.rows = this.defaultRows()
-            .filter((row) => row.contextType === 'grade' || row.contextType === 'grade_overview')
-            .map((row) => {
-              const link = gradeLinks.find((candidate) => candidate.contextKey === row.contextKey);
-
-              return {
-                ...row,
-                unitContentSiteId: link?.unitContentSiteId ?? null,
-                route: link?.route ?? row.route,
-              };
-            });
-
-          this.taskDefinitionRows = this.taskDefinitionRows.map((row) => {
-            const link = taskDefinitionLinks.find(
-              (candidate) => candidate.contextKey === row.contextKey,
-            );
-
-            return {
-              ...row,
-              unitContentSiteId: link?.unitContentSiteId ?? null,
-              route: link?.route ?? row.route,
-            };
-          });
-
-          this.savedRows = [
-            ...this.rows.map((row) => ({...row})),
-            ...this.taskDefinitionRows.map((row) => ({...row})),
-          ];
+          this.routeSections = this.buildRouteSections(links);
+          this.savedRouteSnapshots = this.snapshotRoutes(this.allRouteRows);
         },
         error: (error) => this.alerts.error(`Failed to load unit content: ${error}`, 6000),
       });
   }
 
-  private defaultRows(): UnitContentRow[] {
+  private buildRouteSections(savedLinks: UnitContentLink[] = []): ContentRouteSection[] {
+    return this.routeSectionDefinitions.map((definition) => ({
+      id: definition.id,
+      title: definition.title,
+      subtitle: definition.subtitle,
+      rows: definition
+        .buildRows(this.unit)
+        .map((row) => this.applySavedContentLink(row, savedLinks)),
+    }));
+  }
+
+  private gradeRouteRows(unit: Unit): ContentRouteRow[] {
     return [
-      {
+      this.contentRouteRow({
         label: 'Grade overview',
+        description: 'Overview shown before a student selects a target grade.',
         contextType: 'grade_overview',
         contextKey: 'overview',
-        unitContentSiteId: null,
-        route: '/grades',
-      },
-      ...this.unit.gradeDefinitions
+        defaultRoute: '/grades',
+      }),
+      ...unit.gradeDefinitions
         .filter((grade) => grade.value >= 0)
-        .map((grade: GradeDefinition) => ({
-          label: grade.label,
-          contextType: 'grade' as const,
-          contextKey: grade.id,
-          unitContentSiteId: null,
-          route: `/grades/${grade.id}`,
-        })),
+        .map((grade: GradeDefinition) =>
+          this.contentRouteRow({
+            label: grade.label,
+            description: `${grade.abbreviation} target grade content.`,
+            contextType: 'grade',
+            contextKey: grade.id,
+            defaultRoute: `/grades/${grade.id}`,
+          }),
+        ),
     ];
   }
 
-  private defaultTaskDefinitionRows(): UnitContentRow[] {
-    return [
-      ...this.unit.taskDefinitions.map((td: TaskDefinition) => ({
-        label: td.abbreviation,
-        contextType: 'task_definition' as const,
-        contextKey: td.abbreviation,
-        unitContentSiteId: null,
-        route: `/task/${td.abbreviation}`,
-      })),
-    ];
+  private taskSheetRouteRows(unit: Unit): ContentRouteRow[] {
+    return unit.taskDefinitions.map((taskDefinition: TaskDefinition) =>
+      this.contentRouteRow({
+        label: `${taskDefinition.abbreviation} ${taskDefinition.name}`,
+        description: 'Task sheet replacement content.',
+        contextType: 'task_definition',
+        contextKey: taskDefinition.abbreviation,
+        defaultRoute: `/task/${taskDefinition.abbreviation}`,
+      }),
+    );
+  }
+
+  private contentRouteRow(params: {
+    contextKey: string;
+    contextType: UnitContentContextType;
+    defaultRoute: string;
+    description: string;
+    label: string;
+  }): ContentRouteRow {
+    return {
+      ...params,
+      id: this.routeId(params.contextType, params.contextKey),
+      route: params.defaultRoute,
+      unitContentSiteId: null,
+    };
+  }
+
+  private applySavedContentLink(
+    row: ContentRouteRow,
+    savedLinks: UnitContentLink[],
+  ): ContentRouteRow {
+    const link = savedLinks.find(
+      (candidate) =>
+        candidate.contextType === row.contextType && candidate.contextKey === row.contextKey,
+    );
+
+    if (!link) {
+      return row;
+    }
+
+    return {
+      ...row,
+      route: link.route ?? row.defaultRoute,
+      unitContentSiteId: link.unitContentSiteId,
+    };
+  }
+
+  private contentLinkFromRoute(row: ContentRouteRow): UnitContentLink {
+    const link = new UnitContentLink(this.unit);
+
+    link.contextType = row.contextType;
+    link.contextKey = row.contextKey;
+    link.unitContentSiteId = row.unitContentSiteId;
+    link.route = this.normalizedRoute(row.route || row.defaultRoute);
+
+    return link;
+  }
+
+  private snapshotRoutes(rows: ContentRouteRow[]): Map<string, ContentRouteSnapshot> {
+    return new Map(
+      rows.map((row) => [
+        row.id,
+        {
+          route: row.route,
+          unitContentSiteId: row.unitContentSiteId,
+        },
+      ]),
+    );
+  }
+
+  private routeId(contextType: UnitContentContextType, contextKey: string): string {
+    return `${contextType}:${contextKey}`;
   }
 
   private normalizedRoute(route: string): string {

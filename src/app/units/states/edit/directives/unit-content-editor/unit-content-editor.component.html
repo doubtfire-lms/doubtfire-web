@@ -1,13 +1,15 @@
 <div class="flex flex-col gap-4">
   <div class="header">
     <h3>Unit Content</h3>
-    <p>Upload static content site zips and map grade entry points to site routes.</p>
+    <p>Upload static content site zips and connect unit screens to saved site routes.</p>
   </div>
 
   <mat-card appearance="outlined">
     <mat-card-header>
       <mat-card-title>Content Sites</mat-card-title>
-      <mat-card-subtitle>Upload a zipped static site for this unit.</mat-card-subtitle>
+      <mat-card-subtitle
+        >Upload and manage the zipped static sites available to this unit.</mat-card-subtitle
+      >
     </mat-card-header>
     <mat-card-content class="flex flex-col gap-3">
       <f-file-drop
@@ -39,7 +41,7 @@
                 (selectionChange)="updateSiteRootDir(site, $event.value)"
               >
                 @for (rootDir of site.rootDirOptions; track rootDir) {
-                  <mat-option [value]="rootDir">{{ rootDirLabel(rootDir) }}</mat-option>
+                  <mat-option [value]="rootDir">{{ rootDir || '/' }}</mat-option>
                 }
               </mat-select>
             </td>
@@ -86,171 +88,85 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>Grade Routes</mat-card-title>
-      <mat-card-subtitle
-        >Select which uploaded site and route each grade should open.</mat-card-subtitle
-      >
-    </mat-card-header>
-    <mat-card-content>
-      <table class="w-full" mat-table [dataSource]="rows">
-        <ng-container matColumnDef="context">
-          <th *matHeaderCellDef mat-header-cell>Content link</th>
-          <td *matCellDef="let row" mat-cell>
-            <div class="flex flex-col">
-              <span>{{ row.label }}</span>
-              <span class="text-xs text-gray-600">{{ row.contextType }}:{{ row.contextKey }}</span>
-            </div>
-          </td>
-        </ng-container>
+  @for (section of routeSections; track section.id) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ section.title }}</mat-card-title>
+        <mat-card-subtitle>{{ section.subtitle }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <table class="w-full" mat-table [dataSource]="section.rows">
+          <ng-container matColumnDef="context">
+            <th *matHeaderCellDef mat-header-cell>Content link</th>
+            <td *matCellDef="let row" mat-cell>
+              <div class="flex flex-col">
+                <span>{{ row.label }}</span>
+                <span class="text-xs text-gray-600">{{ row.description }}</span>
+              </div>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="site">
-          <th *matHeaderCellDef mat-header-cell>Site</th>
-          <td *matCellDef="let row" mat-cell>
-            <mat-select class="min-w-52" placeholder="No site" [(ngModel)]="row.unitContentSiteId">
-              <mat-option [value]="null">No site</mat-option>
-              @for (site of sites; track site.id) {
-                <mat-option [value]="site.id">{{ site.name }}</mat-option>
-              }
-            </mat-select>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="route">
-          <th *matHeaderCellDef mat-header-cell>Route</th>
-          <td *matCellDef="let row" mat-cell>
-            <mat-form-field appearance="outline" class="w-full pt-4">
-              <input matInput placeholder="/grades/pass" [(ngModel)]="row.route" />
-            </mat-form-field>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="preview">
-          <th *matHeaderCellDef mat-header-cell></th>
-          <td *matCellDef="let row" mat-cell>
-            @if (rowHasUnsavedChanges(row)) {
-              <button
-                aria-label="Save content routes"
-                mat-icon-button
-                type="button"
-                [disabled]="saving"
-                (click)="saveLinks()"
+          <ng-container matColumnDef="site">
+            <th *matHeaderCellDef mat-header-cell>Site</th>
+            <td *matCellDef="let row" mat-cell>
+              <mat-select
+                class="min-w-52"
+                placeholder="No site"
+                [(ngModel)]="row.unitContentSiteId"
               >
-                <mat-icon>save</mat-icon>
-              </button>
-            } @else {
+                <mat-option [value]="null">No site</mat-option>
+                @for (site of sites; track site.id) {
+                  <mat-option [value]="site.id">{{ site.name }}</mat-option>
+                }
+              </mat-select>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="route">
+            <th *matHeaderCellDef mat-header-cell>Route</th>
+            <td *matCellDef="let row" mat-cell>
+              @if (row.unitContentSiteId) {
+                <mat-form-field appearance="outline" class="w-full pt-4">
+                  <input matInput [placeholder]="row.defaultRoute" [(ngModel)]="row.route" />
+                </mat-form-field>
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="preview">
+            <th *matHeaderCellDef mat-header-cell></th>
+            <td *matCellDef="let row" mat-cell>
               <button
                 aria-label="Preview content route"
                 mat-icon-button
                 type="button"
-                [disabled]="!row.unitContentSiteId"
-                (click)="previewRow(row)"
+                [disabled]="!routeCanBePreviewed(row)"
+                [ngClass]="{
+                  'opacity-40': !routeCanBePreviewed(row),
+                }"
+                (click)="previewRoute(row)"
               >
                 <mat-icon>open_in_new</mat-icon>
               </button>
-            }
-          </td>
-        </ng-container>
+            </td>
+          </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
-      </table>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button
-        color="primary"
-        mat-flat-button
-        type="button"
-        [disabled]="saving"
-        (click)="saveLinks()"
-      >
-        Save Content Routes
-      </button>
-    </mat-card-actions>
-  </mat-card>
+          <tr *matHeaderRowDef="routeDisplayedColumns" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: routeDisplayedColumns" mat-row></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  }
 
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>Task Definition Task Sheet Routes</mat-card-title>
-      <mat-card-subtitle
-        >Override task sheet PDFs with a route from the unit content.</mat-card-subtitle
-      >
-    </mat-card-header>
-    <mat-card-content>
-      <table class="w-full" mat-table [dataSource]="taskDefinitionRows">
-        <ng-container matColumnDef="context">
-          <th *matHeaderCellDef mat-header-cell>Content link</th>
-          <td *matCellDef="let row" mat-cell>
-            <div class="flex flex-col">
-              <span>{{ row.label }}</span>
-              <span class="text-xs text-gray-600">{{ row.contextType }}:{{ row.contextKey }}</span>
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="site">
-          <th *matHeaderCellDef mat-header-cell>Site</th>
-          <td *matCellDef="let row" mat-cell>
-            <mat-select class="min-w-52" placeholder="No site" [(ngModel)]="row.unitContentSiteId">
-              <mat-option [value]="null">No site</mat-option>
-              @for (site of sites; track site.id) {
-                <mat-option [value]="site.id">{{ site.name }}</mat-option>
-              }
-            </mat-select>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="route">
-          <th *matHeaderCellDef mat-header-cell>Route</th>
-          <td *matCellDef="let row" mat-cell>
-            <mat-form-field appearance="outline" class="w-full pt-4">
-              <input matInput placeholder="/grades/pass" [(ngModel)]="row.route" />
-            </mat-form-field>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="preview">
-          <th *matHeaderCellDef mat-header-cell></th>
-          <td *matCellDef="let row" mat-cell>
-            @if (rowHasUnsavedChanges(row)) {
-              <button
-                aria-label="Save content routes"
-                mat-icon-button
-                type="button"
-                [disabled]="saving"
-                (click)="saveLinks()"
-              >
-                <mat-icon>save</mat-icon>
-              </button>
-            } @else {
-              <button
-                aria-label="Preview content route"
-                mat-icon-button
-                type="button"
-                [disabled]="!row.unitContentSiteId"
-                (click)="previewRow(row)"
-              >
-                <mat-icon>open_in_new</mat-icon>
-              </button>
-            }
-          </td>
-        </ng-container>
-
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
-      </table>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button
-        color="primary"
-        mat-flat-button
-        type="button"
-        [disabled]="saving"
-        (click)="saveLinks()"
-      >
-        Save Content Routes
-      </button>
-    </mat-card-actions>
-  </mat-card>
+  <div class="sticky bottom-0 z-10 flex justify-end bg-white py-3">
+    <button
+      color="primary"
+      mat-flat-button
+      type="button"
+      [disabled]="saving || !hasUnsavedRouteChanges"
+      (click)="saveContentRoutes()"
+    >
+      Save Content Routes
+    </button>
+  </div>
 </div>
