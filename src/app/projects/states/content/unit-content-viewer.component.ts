@@ -1,0 +1,295 @@
+import JSZip from 'jszip';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Optional,
+  ViewChild,
+} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {ActivatedRoute, Router, UrlSegment} from '@angular/router';
+import {Subscription, firstValueFrom} from 'rxjs';
+import {Project, Unit} from 'src/app/api/models/doubtfire-model';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {GlobalStateService, ViewType} from '../index/global-state.service';
+import {UnitContentArchive} from './unit-content-archive';
+
+export interface UnitContentViewerDialogData {
+  contentSiteId?: number;
+  contentRoute: string;
+  unit: Unit;
+}
+
+@Component({
+  selector: 'f-unit-content-viewer',
+  templateUrl: './unit-content-viewer.component.html',
+  styleUrl: './unit-content-viewer.component.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
+})
+export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('contentIframe') contentIframe?: ElementRef<HTMLIFrameElement>;
+
+  @Input() public contentRoute = '/';
+  @Input() public contentSiteId?: number;
+  @Input() public unit?: Unit;
+
+  public isLoadingArchive = false;
+  public archiveError?: string;
+
+  public get contentShellClass(): string {
+    return this.dialogData
+      ? 'flex h-full min-h-0 flex-col bg-[#f7f8fa]'
+      : 'flex min-h-[calc(100vh-64px)] flex-col bg-[#f7f8fa]';
+  }
+
+  private contentArchive?: UnitContentArchive;
+  private currentUnitId?: number;
+  private iframeClickCleanup?: () => void;
+  private iframeReady = false;
+  private iframeUrl?: string;
+  private pendingIframeUrl?: string;
+  private routeSubscription?: Subscription;
+
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private globalState: GlobalStateService,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData?: UnitContentViewerDialogData,
+  ) {}
+
+  public ngOnInit(): void {
+    if (this.unit) {
+      this.dialogData = {
+        contentRoute: this.contentRoute,
+        contentSiteId: this.contentSiteId,
+        unit: this.unit,
+      };
+    }
+
+    if (this.dialogData) {
+      this.setContentRouteFromPath(this.dialogData.contentRoute);
+      this.setHeaderContext(this.dialogData.unit);
+      void this.fetchContentArchive(this.dialogData.unit.id);
+      return;
+    }
+
+    this.setContentRoute(this.route.snapshot.url);
+    this.routeSubscription = this.route.url.subscribe((segments) => {
+      const routeChanged = this.setContentRoute(segments);
+
+      if (routeChanged && this.currentUnitId) {
+        void this.fetchContentArchive(this.currentUnitId);
+      }
+    });
+
+    const unit = this.route.parent?.snapshot.data.unit as Unit | undefined;
+
+    if (unit) {
+      this.setHeaderContext(unit);
+      void this.fetchContentArchive(unit.id);
+    }
+  }
+
+  public ngAfterViewInit(): void {
+    this.iframeReady = true;
+    this.applyPendingIframeUrl();
+  }
+
+  public ngOnDestroy(): void {
+    this.routeSubscription?.unsubscribe();
+    this.iframeClickCleanup?.();
+    this.contentArchive?.dispose();
+  }
+
+  public onIframeLoad(): void {
+    this.iframeClickCleanup?.();
+    this.iframeClickCleanup = undefined;
+
+    const doc = this.contentIframe?.nativeElement.contentDocument;
+
+    if (!doc) {
+      return;
+    }
+
+    const clickHandler = (event: MouseEvent) => this.handleIframeClick(event);
+
+    doc.addEventListener('click', clickHandler, true);
+    this.iframeClickCleanup = () => doc.removeEventListener('click', clickHandler, true);
+  }
+
+  private setHeaderContext(unit: Unit): void {
+    const studentProject = this.globalState.currentUserProjects.currentValues.find(
+      (project: Project) => project.unit?.id === unit.id,
+    );
+
+    if (unit.myRole === 'Student' && studentProject) {
+      this.globalState.setView(ViewType.PROJECT, studentProject);
+      return;
+    }
+
+    this.globalState.setView(ViewType.UNIT, unit);
+  }
+
+  private handleIframeClick(event: MouseEvent): void {
+    const target = event.target as {closest?: (selector: string) => HTMLAnchorElement | null};
+    const link = target?.closest?.('a[href]') ?? null;
+
+    if (!link || link.target === '_blank' || event.ctrlKey || event.metaKey || event.shiftKey) {
+      return;
+    }
+
+    const archiveRoute = this.contentArchive?.routeFromHref(
+      link.getAttribute('href'),
+      this.contentRoute,
+    );
+
+    if (!archiveRoute || !this.currentUnitId) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (this.dialogData) {
+      this.setContentRouteFromPath(archiveRoute.path);
+      void this.loadCurrentArchiveRoute(archiveRoute.fragment);
+      return;
+    }
+
+    const commands = ['/units', this.currentUnitId, 'content'];
+    const segments = archiveRoute.path
+      .replace(/^\/+|\/+$/g, '')
+      .split('/')
+      .filter(Boolean);
+
+    void this.router.navigate([...commands, ...segments], {fragment: archiveRoute.fragment});
+  }
+
+  private async fetchContentArchive(unitId: number, fragment?: string): Promise<void> {
+    this.isLoadingArchive = true;
+    this.archiveError = undefined;
+    this.currentUnitId = unitId;
+
+    try {
+      const archive = await firstValueFrom(
+        this.http.get(`${API_URL}/units/${unitId}/content`, {
+          observe: 'response',
+          params: this.contentArchiveParams(),
+          responseType: 'blob',
+        }),
+      );
+      const archiveBlob = archive.body;
+
+      if (!archiveBlob) {
+        throw new Error('Unit content archive response was empty.');
+      }
+
+      const archiveRootDir = this.normalizedArchivePath(
+        archive.headers.get('X-Content-Root-Dir') ?? '',
+      );
+      const zip = await JSZip.loadAsync(archiveBlob);
+
+      this.contentArchive?.dispose();
+      this.contentArchive = new UnitContentArchive(zip, archiveRootDir);
+
+      await this.loadCurrentArchiveRoute(fragment);
+    } catch {
+      this.archiveError = 'Could not load the unit content route from the archive.';
+    } finally {
+      this.isLoadingArchive = false;
+    }
+  }
+
+  private async loadCurrentArchiveRoute(fragment?: string): Promise<void> {
+    if (!this.contentArchive) {
+      return;
+    }
+
+    try {
+      const result = await this.contentArchive.loadRoute(this.contentRoute, fragment);
+      this.loadIframeUrl(result.iframeUrl, result.fragment);
+    } catch {
+      this.archiveError = 'Could not load the unit content route from the archive.';
+    }
+  }
+
+  private contentArchiveParams(): HttpParams {
+    let params = new HttpParams().set('content_route', this.contentRoute);
+
+    if (this.dialogData?.contentSiteId) {
+      params = params.set('content_site_id', this.dialogData.contentSiteId);
+    }
+
+    return params;
+  }
+
+  private loadIframeUrl(url: string, fragment?: string): void {
+    const nextUrl = fragment ? `${url}#${fragment}` : url;
+
+    if (this.iframeUrl === nextUrl) {
+      return;
+    }
+
+    this.pendingIframeUrl = nextUrl;
+    this.applyPendingIframeUrl();
+  }
+
+  private applyPendingIframeUrl(): void {
+    if (!this.iframeReady || !this.pendingIframeUrl || !this.contentIframe) {
+      return;
+    }
+
+    const iframe = this.contentIframe.nativeElement;
+    const url = this.pendingIframeUrl;
+
+    this.pendingIframeUrl = undefined;
+    this.iframeUrl = url;
+
+    if (iframe.contentWindow) {
+      iframe.contentWindow.location.replace(url);
+      return;
+    }
+
+    iframe.src = url;
+  }
+
+  private setContentRoute(segments: UrlSegment[]): boolean {
+    const normalizedRoute = this.normalizedRouteFromPath(
+      segments
+        .slice(1)
+        .map((segment) => segment.path)
+        .join('/'),
+    );
+    const routeChanged = this.contentRoute !== normalizedRoute;
+
+    this.contentRoute = normalizedRoute;
+
+    return routeChanged;
+  }
+
+  private setContentRouteFromPath(path: string): boolean {
+    const normalizedRoute = this.normalizedRouteFromPath(path);
+    const routeChanged = this.contentRoute !== normalizedRoute;
+
+    this.contentRoute = normalizedRoute;
+
+    return routeChanged;
+  }
+
+  private normalizedRouteFromPath(path: string): string {
+    const route = this.normalizedArchivePath(path);
+
+    return route ? `/${route}` : '/';
+  }
+
+  private normalizedArchivePath(path: string): string {
+    return path.replace(/^\/+|\/+$/g, '');
+  }
+}

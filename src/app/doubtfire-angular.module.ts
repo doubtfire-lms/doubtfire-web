@@ -249,7 +249,7 @@ import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.c
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
 import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
-import {ProjectContentComponent} from './projects/states/content/project-content.component';
+import {UnitContentViewerComponent} from './projects/states/content/unit-content-viewer.component';
 import {AddEngagementDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
 import {EngagementDetailDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-detail-dialog/engagement-detail-dialog.component';
 import {EngagementPassportCardComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-passport-card.component';
@@ -580,7 +580,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     FTaskSheetViewComponent,
     UnitRootStateComponent,
     ProjectRootStateComponent,
-    ProjectContentComponent,
+    UnitContentViewerComponent,
     TaskViewerStateComponent,
     FUsersComponent,
     ProjectProgressGaugeComponent,

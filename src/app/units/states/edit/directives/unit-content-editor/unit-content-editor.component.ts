@@ -12,7 +12,7 @@ import {
 import {UnitContentLinkService} from 'src/app/api/services/unit-content-link.service';
 import {UnitContentSiteService} from 'src/app/api/services/unit-content-site.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {ProjectContentComponent} from 'src/app/projects/states/content/project-content.component';
+import {UnitContentViewerComponent} from 'src/app/projects/states/content/unit-content-viewer.component';
 
 interface UnitContentRow {
   label: string;
@@ -167,7 +167,7 @@ export class UnitContentEditorComponent implements OnInit {
   }
 
   private openPreview(contentRoute: string, contentSiteId: number): void {
-    this.dialog.open(ProjectContentComponent, {
+    this.dialog.open(UnitContentViewerComponent, {
       data: {
         contentRoute,
         contentSiteId,

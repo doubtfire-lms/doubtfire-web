@@ -15,7 +15,7 @@ import {UnitContentLinkService} from 'src/app/api/services/unit-content-link.ser
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
-import {ProjectContentComponent} from '../../../content/project-content.component';
+import {UnitContentViewerComponent} from '../../../content/unit-content-viewer.component';
 
 @Component({
   selector: 'f-progress-dashboard',
@@ -101,7 +101,7 @@ export class ProgressDashboardComponent implements OnInit {
       return;
     }
 
-    this.dialog.open(ProjectContentComponent, {
+    this.dialog.open(UnitContentViewerComponent, {
       data: {
         contentRoute: link.route,
         unit: this.project.unit,
