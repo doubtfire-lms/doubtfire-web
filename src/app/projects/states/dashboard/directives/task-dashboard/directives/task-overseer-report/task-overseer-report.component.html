@@ -39,7 +39,12 @@
             </div>
           </mat-panel-title>
 
-          <div class="flex items-center gap-3">
+          <div
+            class="flex items-center gap-3"
+            [ngClass]="{
+              'pr-15': !currentUnitRole,
+            }"
+          >
             @if (assessmentFor(history); as oa) {
               @if (oa.reportReady) {
                 <span class="text-xs text-gray-500">Click to view Overseer report</span>
