@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {forkJoin} from 'rxjs';
 import {finalize} from 'rxjs/operators';
+import {TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {GradeDefinition, Unit} from 'src/app/api/models/unit';
 import {
   UnitContentContextType,
@@ -32,6 +33,7 @@ export class UnitContentEditorComponent implements OnInit {
 
   public sites: UnitContentSite[] = [];
   public rows: UnitContentRow[] = [];
+  public taskDefinitionRows: UnitContentRow[] = [];
   public loading = true;
   public saving = false;
   public uploading = false;
@@ -48,6 +50,7 @@ export class UnitContentEditorComponent implements OnInit {
 
   public ngOnInit(): void {
     this.rows = this.defaultRows();
+    this.taskDefinitionRows = this.defaultTaskDefinitionRows();
     this.loadContentManagement();
   }
 
@@ -139,7 +142,7 @@ export class UnitContentEditorComponent implements OnInit {
   }
 
   public saveLinks(): void {
-    const links = this.rows
+    const links = [...this.rows, ...this.taskDefinitionRows]
       .filter((row) => row.unitContentSiteId)
       .map((row) => {
         const link = new UnitContentLink(this.unit);
@@ -179,6 +182,7 @@ export class UnitContentEditorComponent implements OnInit {
 
   private loadContentManagement(): void {
     this.loading = true;
+
     forkJoin({
       sites: this.unitContentSiteService.getForUnit(this.unit),
       links: this.unitContentLinkService.loadForUnit(this.unit),
@@ -187,11 +191,30 @@ export class UnitContentEditorComponent implements OnInit {
       .subscribe({
         next: ({sites, links}) => {
           this.sites = sites;
-          this.rows = this.defaultRows().map((row) => {
-            const link = links.find(
-              (candidate) =>
-                candidate.contextType === row.contextType &&
-                candidate.contextKey === row.contextKey,
+
+          const gradeLinks = links.filter(
+            (link) => link.contextType === 'grade' || link.contextType === 'grade_overview',
+          );
+
+          const taskDefinitionLinks = links.filter(
+            (link) => link.contextType === 'task_definition',
+          );
+
+          this.rows = this.defaultRows()
+            .filter((row) => row.contextType === 'grade' || row.contextType === 'grade_overview')
+            .map((row) => {
+              const link = gradeLinks.find((candidate) => candidate.contextKey === row.contextKey);
+
+              return {
+                ...row,
+                unitContentSiteId: link?.unitContentSiteId ?? null,
+                route: link?.route ?? row.route,
+              };
+            });
+
+          this.taskDefinitionRows = this.taskDefinitionRows.map((row) => {
+            const link = taskDefinitionLinks.find(
+              (candidate) => candidate.contextKey === row.contextKey,
             );
 
             return {
@@ -200,7 +223,11 @@ export class UnitContentEditorComponent implements OnInit {
               route: link?.route ?? row.route,
             };
           });
-          this.savedRows = this.rows.map((row) => ({...row}));
+
+          this.savedRows = [
+            ...this.rows.map((row) => ({...row})),
+            ...this.taskDefinitionRows.map((row) => ({...row})),
+          ];
         },
         error: (error) => this.alerts.error(`Failed to load unit content: ${error}`, 6000),
       });
@@ -224,6 +251,18 @@ export class UnitContentEditorComponent implements OnInit {
           unitContentSiteId: null,
           route: `/grades/${grade.id}`,
         })),
+    ];
+  }
+
+  private defaultTaskDefinitionRows(): UnitContentRow[] {
+    return [
+      ...this.unit.taskDefinitions.map((td: TaskDefinition) => ({
+        label: td.abbreviation,
+        contextType: 'task_definition' as const,
+        contextKey: td.abbreviation,
+        unitContentSiteId: null,
+        route: `/task/${td.abbreviation}`,
+      })),
     ];
   }
 

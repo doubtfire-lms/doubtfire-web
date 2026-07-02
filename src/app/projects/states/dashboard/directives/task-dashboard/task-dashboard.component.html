@@ -122,6 +122,10 @@
         }
         @if (task.definition.hasTaskSheet) {
           <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()" [startPage]="1"></f-pdf-viewer>
+          <!-- <f-project-content
+            contentRoute="/overview"
+            [unit]="task.project.unit"
+          ></f-project-content> -->
         } @else {
           <div class="flex size-full flex-col items-center justify-center">
             <mat-icon class="empty-state-icon">subtitles_off</mat-icon>

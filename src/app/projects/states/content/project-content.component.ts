@@ -39,6 +39,7 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
   @ViewChild('contentIframe') contentIframe?: ElementRef<HTMLIFrameElement>;
 
   @Input() public contentRoute = '/';
+  @Input() public unit?: Unit;
 
   public isLoadingArchive = false;
   public archiveError?: string;
@@ -71,6 +72,12 @@ export class ProjectContentComponent implements OnInit, AfterViewInit, OnDestroy
   ) {}
 
   public ngOnInit(): void {
+    if (this.unit) {
+      this.dialogData = {
+        contentRoute: this.contentRoute,
+        unit: this.unit,
+      };
+    }
     if (this.dialogData) {
       this.setContentRouteFromPath(this.dialogData.contentRoute);
       this.setHeaderContext(this.dialogData.unit);
