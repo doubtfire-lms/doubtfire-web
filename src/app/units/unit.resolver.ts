@@ -65,10 +65,10 @@ export const resolveUnit: ResolveFn<Unit> = (route, state) => {
   }).pipe(first());
 };
 
-// These routes can activate their outer shell while their component fetches detailed data.
+// Task routes can activate their outer shell while their component fetches detailed data.
 function shouldResolveUnitProgressively(url: string, unitId: number): boolean {
   const pathname = url.split('?')[0];
-  return new RegExp(`^/units/${unitId}/(?:tasks|admin)(?:/|$)`).test(pathname);
+  return new RegExp(`^/units/${unitId}/tasks(?:/|$)`).test(pathname);
 }
 
 function routeEntity(unit: Unit, unitRole?: UnitRole): Unit | UnitRole {

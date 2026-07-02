@@ -42,6 +42,10 @@ export class UnitAnalyticsComponent implements OnInit {
     return this.unit?.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
   }
 
+  get isAdmin() {
+    return this.userService.currentUser?.systemRole === 'Admin';
+  }
+
   public getTaskCompletionCsv() {
     this.downloadCsv(
       this.unit.downloadTaskCompletionCsv(),
@@ -97,8 +101,8 @@ export class UnitAnalyticsComponent implements OnInit {
           this.fileDownloaderService.downloadBlobToFile(url, filename);
         });
       },
-      error: (_error) => {
-        this.alertsService.error(`Could not download ${title}`, 6000);
+      error: (error) => {
+        this.alertsService.error(`Could not download ${title}: ${error}`, 6000);
       },
     });
   }
