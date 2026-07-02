@@ -39,7 +39,9 @@ export class TaskOverseerReportComponent implements OnInit {
     private userService: UserService,
   ) {
     DOMPurify.addHook('uponSanitizeAttribute', (_node, data) => {
-      if (data.attrName !== 'style') return;
+      if (data.attrName !== 'style') {
+        return;
+      }
       data.attrValue = data.attrValue
         .split(';')
         .map((rule) => rule.trim())

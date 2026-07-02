@@ -379,7 +379,9 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   }
 
   public openAddEngagementDialog(): void {
-    if (!this.project) return;
+    if (!this.project) {
+      return;
+    }
 
     this.dialog.open(AddEngagementDialogComponent, {
       data: {project: this.project},

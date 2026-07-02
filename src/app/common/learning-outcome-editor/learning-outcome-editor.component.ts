@@ -95,13 +95,16 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
       if (
         this.selectedOutcome &&
         !this.sameIds(linkedOutcomes, this.selectedOutcome.linkedOutcomeIds)
-      )
+      ) {
         this.selectedOutcome.linkedOutcomeIds = linkedOutcomes;
+      }
     });
   }
 
   private sameIds(left: number[], right: number[]): boolean {
-    if (left.length !== right.length) return false;
+    if (left.length !== right.length) {
+      return false;
+    }
 
     const sortedLeft = [...left].sort((a, b) => a - b);
     const sortedRight = [...right].sort((a, b) => a - b);
@@ -162,9 +165,13 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
   }
 
   setAbbreviationPrefix(): void {
-    if (!this.context) this.abbreviationPrefix = 'GLO';
-    else if (this.context instanceof TaskDefinition) this.abbreviationPrefix = 'TLO';
-    else if (this.context instanceof Unit) this.abbreviationPrefix = 'ULO';
+    if (!this.context) {
+      this.abbreviationPrefix = 'GLO';
+    } else if (this.context instanceof TaskDefinition) {
+      this.abbreviationPrefix = 'TLO';
+    } else if (this.context instanceof Unit) {
+      this.abbreviationPrefix = 'ULO';
+    }
   }
 
   public saveLearningOutcome(learningOutcome: LearningOutcome) {
@@ -193,7 +200,9 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
     } else {
       this.selectedOutcome = learningOutcome;
       this.selectedConnectedOutcomes.update(() => this.getLinkedOutcomes(learningOutcome));
-      if (!this.selectedOutcome.context) this.selectedOutcome.context = this.context;
+      if (!this.selectedOutcome.context) {
+        this.selectedOutcome.context = this.context;
+      }
 
       if (!this.selectedOutcome.hasOriginalSaveData) {
         this.selectedOutcome.setOriginalSaveData(this.learningOutcomeService.mapping);
@@ -247,8 +256,9 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
         learningOutcome.delete().subscribe({
           next: () => {
             this.alerts.success('Learning outcome deleted');
-            if (this.selectedOutcome === learningOutcome)
+            if (this.selectedOutcome === learningOutcome) {
               this.selectLearningOutcome(this.selectedOutcome);
+            }
           },
           error: () => this.alerts.error('Failed to delete learning outcome. Please try again.'),
         });
@@ -259,10 +269,14 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
   public uploadCsv(type: 'Learning Outcomes' | 'Feedback Templates') {
     let url: string;
 
-    if (type === 'Learning Outcomes') url = this.context.getOutcomeBatchUploadUrl();
-    else {
-      if (this.context) url = this.context.getFeedbackTemplateBatchUploadUrl();
-      else url = `${API_URL}/global/feedback_chips/csv`;
+    if (type === 'Learning Outcomes') {
+      url = this.context.getOutcomeBatchUploadUrl();
+    } else {
+      if (this.context) {
+        url = this.context.getFeedbackTemplateBatchUploadUrl();
+      } else {
+        url = `${API_URL}/global/feedback_chips/csv`;
+      }
     }
 
     this.csvUploadModal.show(
@@ -296,20 +310,29 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
   public downloadCsv(type: 'Learning Outcomes' | 'Feedback Templates') {
     let url: string;
 
-    if (type === 'Learning Outcomes') url = this.context.getOutcomeBatchUploadUrl();
-    else {
-      if (this.context) url = this.context.getFeedbackTemplateBatchUploadUrl();
-      else url = `${API_URL}/global/feedback_chips/csv`;
+    if (type === 'Learning Outcomes') {
+      url = this.context.getOutcomeBatchUploadUrl();
+    } else {
+      if (this.context) {
+        url = this.context.getFeedbackTemplateBatchUploadUrl();
+      } else {
+        url = `${API_URL}/global/feedback_chips/csv`;
+      }
     }
 
     let name = `${type}.csv`;
 
-    if (this.context instanceof TaskDefinition)
+    if (this.context instanceof TaskDefinition) {
       name = `${this.context.unit.code}-${this.context.abbreviation}-${name}`;
-    else if (this.context instanceof Unit) name = `${this.context.code}-${name}`;
+    } else if (this.context instanceof Unit) {
+      name = `${this.context.code}-${name}`;
+    }
 
-    if (this.context instanceof Unit) this.nestedCsvDownloadModalService.show(url, name, type);
-    else this.fileDownloaderService.downloadFile(url, name);
+    if (this.context instanceof Unit) {
+      this.nestedCsvDownloadModalService.show(url, name, type);
+    } else {
+      this.fileDownloaderService.downloadFile(url, name);
+    }
   }
 
   public createLearningOutcome() {
@@ -317,8 +340,11 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
 
     if (this.context) {
       learningOutcome.context = this.context;
-      if (this.context instanceof TaskDefinition) learningOutcome.contextType = 'TaskDefinition';
-      else if (this.context instanceof Unit) learningOutcome.contextType = 'Unit';
+      if (this.context instanceof TaskDefinition) {
+        learningOutcome.contextType = 'TaskDefinition';
+      } else if (this.context instanceof Unit) {
+        learningOutcome.contextType = 'Unit';
+      }
       learningOutcome.contextId = this.context.id;
     }
     learningOutcome.abbreviation = this.abbreviationPrefix + String(this.getNextOutcomeNumber());

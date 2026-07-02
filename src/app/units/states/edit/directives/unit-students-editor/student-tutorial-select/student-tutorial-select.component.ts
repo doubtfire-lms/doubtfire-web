@@ -31,7 +31,9 @@ export class StudentTutorialSelectComponent {
         student.campus == null ||
         tutorial.campus == null ||
         student.campus.id === tutorial.campus.id;
-      if (!result) return result;
+      if (!result) {
+        return result;
+      }
       if (tutorial.tutorialStream && stream) {
         return tutorial.tutorialStream.abbreviation === stream.abbreviation;
       } else if (!tutorial.tutorialStream && !stream) {

@@ -690,7 +690,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getWarningIcon(task: Task): 'warning' | 'overflow' | null {
-    if (!task.submissionDate) return null;
+    if (!task.submissionDate) {
+      return null;
+    }
     if (task.status !== 'ready_for_feedback') {
       return null;
     }

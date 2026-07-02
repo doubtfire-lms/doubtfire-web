@@ -162,11 +162,15 @@ export class UserIconComponent implements AfterViewInit, OnChanges {
 
   async drawUserIcon(): Promise<void> {
     const svgElement = this.svg?.nativeElement;
-    if (!svgElement) return;
+    if (!svgElement) {
+      return;
+    }
 
     const renderSequence = ++this.renderSequence;
     const backgroundUrl = await this.backgroundUrl();
-    if (renderSequence !== this.renderSequence) return;
+    if (renderSequence !== this.renderSequence) {
+      return;
+    }
 
     // TODO: Consider caching SVG on a per-user basis
     // clear svg

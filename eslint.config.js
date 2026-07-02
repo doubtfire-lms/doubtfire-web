@@ -73,6 +73,7 @@ module.exports = tseslint.config(
         },
       ],
       'prettier/prettier': 'warn',
+      'curly': ['error', 'all'],
     },
   },
   {

@@ -29,7 +29,9 @@ export class TaskScormCardComponent implements OnChanges {
 
       this.task?.fetchTestAttempts().subscribe(() => {
         this.getAttemptsLeft();
-        if (this.task.latestCompletedTestAttempt) this.isPassed = this.task.scormPassed;
+        if (this.task.latestCompletedTestAttempt) {
+          this.isPassed = this.task.scormPassed;
+        }
       });
     }
   }
@@ -38,7 +40,9 @@ export class TaskScormCardComponent implements OnChanges {
     if (this.task.definition.scormAttemptLimit != 0) {
       const attempts = this.task.testAttemptCache.currentValues;
       let count = attempts.length;
-      if (count > 0 && attempts[0].terminated === false) count--;
+      if (count > 0 && attempts[0].terminated === false) {
+        count--;
+      }
       this.attemptsLeft =
         this.task.definition.scormAttemptLimit + this.task.scormExtensions - count;
     }

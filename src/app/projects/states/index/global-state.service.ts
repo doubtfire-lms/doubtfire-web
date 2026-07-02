@@ -204,14 +204,18 @@ export class GlobalStateService implements OnDestroy {
   // called when we need to set the footer to be a bit taller
   // to account for the alert div
   public showFooterWarning(): void {
-    if (!this._showFooter) return;
+    if (!this._showFooter) {
+      return;
+    }
     this._showFooterWarning = true;
     this.resetHeight();
   }
 
   // called when we need to set the footer to be normal sized
   public hideFooterWarning(): void {
-    if (!this._showFooter) return;
+    if (!this._showFooter) {
+      return;
+    }
     this._showFooterWarning = false;
     this.resetHeight();
   }

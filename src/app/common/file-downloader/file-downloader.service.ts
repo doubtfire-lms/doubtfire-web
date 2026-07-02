@@ -62,7 +62,9 @@ export class FileDownloaderService {
                   this.processHttpResponse(data);
                 },
                 error: (error) => {
-                  if (data.failure) data.failure(error);
+                  if (data.failure) {
+                    data.failure(error);
+                  }
                 },
               });
             return;
@@ -75,7 +77,9 @@ export class FileDownloaderService {
     } else {
       // no range... so we can't do anything!
       console.log('Error reading response from server - no range with 206 response');
-      if (data.failure) data.failure('Unable to read data from server');
+      if (data.failure) {
+        data.failure('Unable to read data from server');
+      }
     }
   }
 
@@ -116,7 +120,9 @@ export class FileDownloaderService {
         });
       },
       error: (error) => {
-        if (failure) failure(error);
+        if (failure) {
+          failure(error);
+        }
       },
     });
   }

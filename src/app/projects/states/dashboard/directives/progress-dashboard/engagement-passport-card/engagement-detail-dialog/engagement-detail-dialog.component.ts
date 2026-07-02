@@ -74,16 +74,22 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.evidenceBlobUrl) this.fileDownloader.releaseBlob(this.evidenceBlobUrl);
+    if (this.evidenceBlobUrl) {
+      this.fileDownloader.releaseBlob(this.evidenceBlobUrl);
+    }
   }
 
   openAttachment(): void {
-    if (this.evidenceBlobUrl) window.open(this.evidenceBlobUrl, '_blank', 'noopener,noreferrer');
+    if (this.evidenceBlobUrl) {
+      window.open(this.evidenceBlobUrl, '_blank', 'noopener,noreferrer');
+    }
   }
 
   submitComment(): void {
     const comment = this.commentText.trim();
-    if (!comment || this.submitting) return;
+    if (!comment || this.submitting) {
+      return;
+    }
 
     this.submitting = true;
     this.engagementCommentService
@@ -111,7 +117,9 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
   }
 
   editComment(comment: EngagementComment): void {
-    if (!comment.currentUserCanEdit) return;
+    if (!comment.currentUserCanEdit) {
+      return;
+    }
 
     this.editingComment = comment;
     this.editingCommentText = comment.comment;
@@ -124,7 +132,9 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
 
   updateComment(): void {
     const text = this.editingCommentText.trim();
-    if (!this.editingComment || !text) return;
+    if (!this.editingComment || !text) {
+      return;
+    }
 
     this.engagementCommentService.updateComment(this.editingComment, text).subscribe({
       next: () => this.cancelEdit(),
@@ -133,7 +143,9 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
   }
 
   deleteComment(comment: EngagementComment): void {
-    if (!comment.currentUserCanDelete) return;
+    if (!comment.currentUserCanDelete) {
+      return;
+    }
 
     this.confirmationModal.show(
       'Delete comment',
@@ -141,7 +153,9 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
       () => {
         this.engagementCommentService.deleteComment(comment).subscribe({
           next: () => {
-            if (this.replyingToComment?.id === comment.id) this.cancelReply();
+            if (this.replyingToComment?.id === comment.id) {
+              this.cancelReply();
+            }
           },
           error: (error) => this.alerts.error(error?.error ?? 'Unable to delete this comment.'),
         });
@@ -150,14 +164,18 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
   }
 
   scrollToComment(comment?: EngagementComment): void {
-    if (!comment) return;
+    if (!comment) {
+      return;
+    }
 
     const element = document.getElementById(`engagement-comment-${comment.id}`);
     element?.scrollIntoView({behavior: 'smooth', block: 'center'});
   }
 
   private loadAttachment(): void {
-    if (!this.engagement.hasAttachment) return;
+    if (!this.engagement.hasAttachment) {
+      return;
+    }
 
     this.evidenceLoading = true;
     this.fileDownloader.downloadBlob(
