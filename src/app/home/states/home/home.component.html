@@ -12,6 +12,10 @@
   }
   <div [hidden]="unitRoles?.length === 0">
     <h2>Units you teach</h2>
+    <h3>The tasks we have: {{ tasks()?.length }}</h3>
+    @for (task of tasks(); track task.id) {
+      <div>{{ task.status }}</div>
+    }
     <div style="height: 185px" [hidden]="!loadingUnitRoles">
       <mat-spinner color="accent" diameter="40"></mat-spinner>
     </div>

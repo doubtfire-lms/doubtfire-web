@@ -114,6 +114,7 @@ import {
 import {FUnitsComponent} from './admin/states/units/units.component';
 import {FUsersComponent} from './admin/states/users/users.component';
 import {TiiActionLogComponent} from './admin/tii-action-log/tii-action-log.component';
+import {ApiModule, Configuration} from './api/generated';
 import {
   ActivityTypeService,
   AuthenticationService,
@@ -846,6 +847,12 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     MonacoEditorModule.forRoot(),
     MatChipListbox,
     NgxSkeletonLoaderModule,
+    ApiModule.forRoot(
+      () =>
+        new Configuration({
+          basePath: '',
+        }),
+    ),
   ],
   bootstrap: [AppComponent],
 })

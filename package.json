@@ -84,6 +84,7 @@
     "@angular/language-service": "^22.0.3",
     "@commitlint/cli": "^21.1.0",
     "@commitlint/config-conventional": "^21.1.0",
+    "@openapitools/openapi-generator-cli": "^2.39.1",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/canvas-confetti": "^1.6.0",
     "@types/d3": "^7.4.3",

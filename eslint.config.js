@@ -31,7 +31,14 @@ const htmlTemplateConfigs = (configs) =>
 // Export our config array, which is composed together thanks to the typed utility function from typescript-eslint
 module.exports = tseslint.config(
   {
-    ignores: ['build/**', 'coverage/**', 'dist/**', 'docs/**', '**/*.tpl.html'],
+    ignores: [
+      'build/**',
+      'coverage/**',
+      'dist/**',
+      'docs/**',
+      '**/*.tpl.html',
+      'src/app/api/generated/**',
+    ],
   },
   {
     linterOptions: {
