@@ -1,3 +1,5 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,18 +8,47 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatCard, MatCardContent, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Project, UserService} from 'src/app/api/models/doubtfire-model';
 import {StaffNote} from 'src/app/api/models/staff-note';
 import {StaffNoteService} from 'src/app/api/services/staff-note.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {HumanizedDatePipe} from '../../../common/pipes/humanized-date.pipe';
+import {LocalizedDatePipe} from '../../../common/pipes/localized-date.pipe';
+import {MarkedPipe} from '../../../common/pipes/marked.pipe';
+import {UserIconComponent} from '../../../common/user-icon/user-icon.component';
 
 @Component({
   selector: 'f-staff-notes',
   templateUrl: './staff-notes.component.html',
   styleUrl: './staff-notes.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    ExtendedModule,
+    NgClass,
+    MatIcon,
+    MatCard,
+    MatCardTitle,
+    UserIconComponent,
+    MatCardSubtitle,
+    MatTooltip,
+    MatCardContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    MatButton,
+    MarkedPipe,
+    HumanizedDatePipe,
+    LocalizedDatePipe,
+  ],
 })
 export class StaffNotesComponent implements OnInit {
   @ViewChild('staffNotesContainer') staffNotesContainer!: ElementRef;

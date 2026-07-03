@@ -1,4 +1,6 @@
+import {FlexModule} from 'ng-flex-layout/flex';
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatButton} from '@angular/material/button';
 import {Task, TaskComment} from 'src/app/api/models/doubtfire-model';
 import {ExtensionComment} from 'src/app/api/models/task-comment/extension-comment';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -8,7 +10,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: './extension-comment.component.html',
   styleUrls: ['./extension-comment.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [FlexModule, MatButton],
 })
 export class ExtensionCommentComponent {
   @Input() comment: ExtensionComment;

@@ -1,5 +1,14 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
 import {AlertService} from '../../services/alert.service';
 
 export interface ConfirmationModalData {
@@ -16,7 +25,7 @@ export interface ConfirmationModalData {
   templateUrl: './confirmation-modal.component.html',
   styleUrls: ['./confirmation-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatDialogTitle, MatIcon, CdkScrollable, MatDialogContent, MatDialogActions, MatButton],
 })
 export class ConfirmationModalComponent implements OnInit {
   @Input() title: string;

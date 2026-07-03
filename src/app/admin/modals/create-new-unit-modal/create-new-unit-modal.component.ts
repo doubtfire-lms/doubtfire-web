@@ -6,7 +6,6 @@ import {CreateNewUnitModalContentComponent} from './create-new-unit-modal-conten
   selector: 'create-new-unit-modal',
   templateUrl: './create-new-unit-modal.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class CreateNewUnitModal {
   constructor(public dialog: MatDialog) {}

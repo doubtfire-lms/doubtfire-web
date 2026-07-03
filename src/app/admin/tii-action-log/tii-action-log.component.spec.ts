@@ -13,7 +13,7 @@ describe('TiiActionLogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TiiActionLogComponent],
+      imports: [TiiActionLogComponent],
       providers: [
         {provide: TiiActionService, useValue: emptyProvider},
         {provide: AlertService, useValue: emptyProvider},

@@ -16,7 +16,7 @@ describe('ScormPlayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ScormPlayerComponent],
+      imports: [ScormPlayerComponent],
       providers: [
         {provide: GlobalStateService, useValue: emptyProvider},
         {provide: ScormAdapterService, useValue: emptyProvider},

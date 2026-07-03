@@ -1,12 +1,32 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FileDownloaderService} from '../../file-downloader/file-downloader.service';
 
 @Component({
   selector: 'f-nested-csv-download-modal',
   templateUrl: './nested-csv-download-modal.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    CdkScrollable,
+    MatDialogContent,
+    MatDialogTitle,
+    MatSlideToggle,
+    FormsModule,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
 })
 export class NestedCsvDownloadModalComponent {
   public includeNested = false;

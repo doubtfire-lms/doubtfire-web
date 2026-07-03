@@ -1,9 +1,33 @@
 import {addDays, differenceInDays, differenceInWeeks, isAfter} from 'date-fns';
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject, LOCALE_ID} from '@angular/core';
-import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
 import {ErrorStateMatcher} from '@angular/material/core';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerInputEvent,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
 import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from '../../services/alert.service';
@@ -20,7 +44,25 @@ export class ReasonErrorStateMatcher implements ErrorStateMatcher {
   selector: 'extension-modal',
   templateUrl: './extension-modal.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatHint,
+    MatError,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
 })
 export class ExtensionModalComponent {
   protected reasonMinLength: number = 15;

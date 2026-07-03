@@ -1,4 +1,31 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardFooter,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatFormField} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
 import {GroupSet, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {GroupSetService} from 'src/app/api/services/group-set.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
@@ -7,6 +34,8 @@ import {
   CsvResultModalService,
 } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {FileUploaderComponent} from '../../../../../common/file-uploader/file-uploader.component';
+import {GroupSetManagerComponent} from '../../../../../groups/group-set-manager/group-set-manager.component';
 
 interface GroupSetEditModel {
   name: string;
@@ -21,7 +50,34 @@ interface GroupSetEditModel {
   templateUrl: './unit-group-set-editor.component.html',
   styleUrls: ['./unit-group-set-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatButton,
+    MatIconButton,
+    MatIcon,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatFormField,
+    MatInput,
+    FormsModule,
+    MatSelect,
+    MatOption,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatCardActions,
+    GroupSetManagerComponent,
+    MatCardFooter,
+    FileUploaderComponent,
+  ],
 })
 export class UnitGroupSetEditorComponent implements OnInit {
   @Input() unit: Unit;

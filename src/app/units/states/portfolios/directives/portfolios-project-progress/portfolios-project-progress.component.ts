@@ -13,13 +13,14 @@ import {ProjectService} from 'src/app/api/services/project.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {ProjectDashboardComponent} from '../../../../../projects/states/dashboard/project-dashboard/project-dashboard.component';
 
 @Component({
   selector: 'f-portfolios-project-progress',
   templateUrl: './portfolios-project-progress.component.html',
   styleUrl: './portfolios-project-progress.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [ProjectDashboardComponent],
 })
 export class PortfoliosProjectProgressComponent implements OnChanges {
   @Input() project: Project;

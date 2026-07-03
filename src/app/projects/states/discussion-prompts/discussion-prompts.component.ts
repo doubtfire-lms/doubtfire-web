@@ -6,6 +6,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatTooltip} from '@angular/material/tooltip';
 import {DiscussionPrompt} from 'src/app/api/models/discussion-prompt';
 import {Project, TaskDefinition, UserService} from 'src/app/api/models/doubtfire-model';
 import {StaffNote} from 'src/app/api/models/staff-note';
@@ -18,7 +20,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: './discussion-prompts.component.html',
   styleUrl: './discussion-prompts.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatCard, MatCardContent, MatTooltip],
 })
 export class DiscussionPromptsComponent implements OnInit {
   @ViewChild('staffNotesContainer') staffNotesContainer!: ElementRef;

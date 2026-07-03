@@ -1,9 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
-@Pipe({
-  name: 'orderBy',
-  standalone: false,
-})
+@Pipe({name: 'orderBy'})
 export class OrderByPipe implements PipeTransform {
   transform<T>(array: readonly T[], field: string | string[], reverse: boolean = false): T[] {
     if (!array || !field) {

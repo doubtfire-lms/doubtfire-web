@@ -1,15 +1,17 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
 import {Project, Task, TaskComment} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {SafePipe} from '../../../common/pipes/safe.pipe';
 
 @Component({
   selector: 'pdf-image-comment',
   templateUrl: './pdf-image-comment.component.html',
   styleUrls: [],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIcon, SafePipe],
 })
 export class PdfImageCommentComponent implements OnInit, OnDestroy {
   @Input() comment: TaskComment;

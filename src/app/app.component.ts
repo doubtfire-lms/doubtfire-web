@@ -1,12 +1,14 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {Subscription, filter} from 'rxjs';
+import {HeaderComponent} from './common/header/header.component';
+import {SplashScreenComponent} from './home/splash-screen/splash-screen.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [HeaderComponent, SplashScreenComponent, RouterOutlet],
 })
 export class AppComponent implements OnInit, OnDestroy {
   private routerSub?: Subscription;

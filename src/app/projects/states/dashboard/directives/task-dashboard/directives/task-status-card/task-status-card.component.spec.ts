@@ -23,7 +23,7 @@ describe('TaskStatusCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TaskStatusCardComponent],
+      imports: [TaskStatusCardComponent],
       providers: [
         {provide: ExtensionModalService, useValue: emptyProvider},
         {provide: TaskService, useValue: taskServiceStub},

@@ -1,11 +1,12 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {MatProgressBar} from '@angular/material/progress-bar';
 
 @Component({
   selector: 'f-project-progress-bar',
   templateUrl: './project-progress-bar.component.html',
   styleUrls: ['./project-progress-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatProgressBar],
 })
 export class ProjectProgressBarComponent implements OnChanges {
   @Input() progress: {value: number}[];

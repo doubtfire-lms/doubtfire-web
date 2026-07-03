@@ -8,10 +8,34 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {FormsModule, ReactiveFormsModule, UntypedFormControl, Validators} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {
+  MatButtonToggle,
+  MatButtonToggleChange,
+  MatButtonToggleGroup,
+} from '@angular/material/button-toggle';
+import {MatCard, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {MatFormField} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatSelect} from '@angular/material/select';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {RouterLink} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Group, GroupSet, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {Project} from 'src/app/api/models/project';
@@ -25,7 +49,34 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: './group-selector.component.html',
   styleUrls: ['./group-selector.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatFormField,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    MatInput,
+    MatButton,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    MatIcon,
+    MatTable,
+    MatColumnDef,
+    ReactiveFormsModule,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    RouterLink,
+  ],
 })
 export class GroupSelectorComponent
   extends EntityFormComponent<Group>

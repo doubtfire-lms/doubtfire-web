@@ -1,5 +1,8 @@
 import {HttpResponse} from '@angular/common/http';
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {ActivatedRoute} from '@angular/router';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
@@ -10,7 +13,7 @@ type DownloadState = 'downloading' | 'downloaded' | 'failed';
   selector: 'f-submission-files-download',
   templateUrl: './submission-files-download.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatProgressSpinner, MatIcon, MatButton],
 })
 export class SubmissionFilesDownloadComponent implements OnInit {
   protected downloadState: DownloadState = 'downloading';

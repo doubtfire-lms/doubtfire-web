@@ -25,7 +25,7 @@ describe('TutorDiscussionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TutorDiscussionComponent],
+      imports: [TutorDiscussionComponent],
       providers: [
         {provide: UnitService, useValue: emptyProvider},
         {provide: AuthenticationService, useValue: emptyProvider},

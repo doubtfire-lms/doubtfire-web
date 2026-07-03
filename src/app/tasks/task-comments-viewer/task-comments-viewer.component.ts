@@ -1,3 +1,6 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {FlexModule} from 'ng-flex-layout/flex';
+import {NgClass} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,6 +11,10 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import {MatCard, MatCardContent, MatCardHeader} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Subscription} from 'rxjs';
 import {
   DiscussionComment,
@@ -25,15 +32,57 @@ import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.se
 import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {TaskCommentComposerData} from '../task-comment-composer/task-comment-composer.component';
-import {TaskAssessmentComment} from './task-assessment-comment/task-assessment-comment.component';
+import {AudioPlayerComponent} from '../../common/audio-player/audio-player.component';
+import {DragDropDirective} from '../../common/directives/drag-drop.directive';
+import {HumanizedDatePipe} from '../../common/pipes/humanized-date.pipe';
+import {LocalizedDatePipe} from '../../common/pipes/localized-date.pipe';
+import {MarkedPipe} from '../../common/pipes/marked.pipe';
+import {UserIconComponent} from '../../common/user-icon/user-icon.component';
+import {
+  TaskCommentComposerComponent,
+  TaskCommentComposerData,
+} from '../task-comment-composer/task-comment-composer.component';
+import {CommentBubbleActionComponent} from './comment-bubble-action/comment-bubble-action.component';
+import {ExtensionCommentComponent} from './extension-comment/extension-comment.component';
+import {IntelligentDiscussionPlayerComponent} from './intelligent-discussion-player/intelligent-discussion-player.component';
+import {PdfImageCommentComponent} from './pdf-image-comment/pdf-image-comment.component';
+import {ScormCommentComponent} from './scorm-comment/scorm-comment.component';
+import {ScormExtensionCommentComponent} from './scorm-extension-comment/scorm-extension-comment.component';
+import {
+  TaskAssessmentComment,
+  TaskAssessmentCommentComponent,
+} from './task-assessment-comment/task-assessment-comment.component';
 
 @Component({
   selector: 'task-comments-viewer',
   templateUrl: './task-comments-viewer.component.html',
   styleUrls: ['./task-comments-viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    DragDropDirective,
+    FlexModule,
+    MatProgressSpinner,
+    MatIcon,
+    MatTooltip,
+    ExtendedModule,
+    NgClass,
+    UserIconComponent,
+    MatCard,
+    MatCardHeader,
+    MatCardContent,
+    TaskAssessmentCommentComponent,
+    ScormCommentComponent,
+    ExtensionCommentComponent,
+    ScormExtensionCommentComponent,
+    AudioPlayerComponent,
+    IntelligentDiscussionPlayerComponent,
+    PdfImageCommentComponent,
+    CommentBubbleActionComponent,
+    TaskCommentComposerComponent,
+    MarkedPipe,
+    HumanizedDatePipe,
+    LocalizedDatePipe,
+  ],
 })
 export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   // Get the comments body from the HTML template

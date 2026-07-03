@@ -25,7 +25,7 @@ describe('StaffTaskListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StaffTaskListComponent],
+      imports: [StaffTaskListComponent],
       providers: [
         {provide: SelectedTaskService, useValue: emptyProvider},
         {provide: AlertService, useValue: emptyProvider},

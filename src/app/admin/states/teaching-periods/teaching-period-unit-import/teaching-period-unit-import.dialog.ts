@@ -1,3 +1,5 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
+import {AsyncPipe} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,9 +8,32 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
 import {Observable, map, startWith} from 'rxjs';
 import {
   TeachingPeriod,
@@ -18,6 +43,7 @@ import {
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+import {ObjectSelectComponent} from '../../../../common/obect-select/object-select.component';
 
 export interface TeachingPeriodUnitImportData {
   teachingPeriod: TeachingPeriod;
@@ -58,7 +84,33 @@ export class TeachingPeriodUnitImportService {
   templateUrl: 'teaching-period-unit-import.dialog.html',
   styleUrls: ['teaching-period-unit-import.dialog.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatFormField,
+    MatInput,
+    FormsModule,
+    ObjectSelectComponent,
+    MatLabel,
+    MatAutocompleteTrigger,
+    ReactiveFormsModule,
+    MatAutocomplete,
+    MatOption,
+    MatButton,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatDialogActions,
+    AsyncPipe,
+  ],
 })
 export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   @ViewChild(MatTable, {static: true}) table: MatTable<UnitImportData>;

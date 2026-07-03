@@ -1,7 +1,9 @@
-import {CodeModel} from '@ngstack/code-editor';
+import {CodeEditorComponent, CodeModel} from '@ngstack/code-editor';
 import {HttpClient} from '@angular/common/http';
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
+import {MatIconButton} from '@angular/material/button';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {OverseerScriptEditorModalData} from './overseer-script-editor-modal.service';
 
@@ -10,7 +12,7 @@ import {OverseerScriptEditorModalData} from './overseer-script-editor-modal.serv
   templateUrl: './overseer-script-editor-modal.component.html',
   styleUrls: ['./overseer-script-editor-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIconButton, MatIcon, CodeEditorComponent],
 })
 export class OverseerScriptEditorModalComponent implements OnInit {
   constructor(

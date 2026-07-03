@@ -1,3 +1,5 @@
+import {FlexModule} from 'ng-flex-layout/flex';
+import {DatePipe} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +8,16 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
@@ -16,7 +28,21 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: './task-submission-card.component.html',
   styleUrls: ['./task-submission-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatCardActions,
+    MatButton,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    FlexModule,
+    MatMenu,
+    MatMenuItem,
+    DatePipe,
+  ],
 })
 export class TaskSubmissionCardComponent implements OnChanges, OnInit {
   @Input() task: Task;

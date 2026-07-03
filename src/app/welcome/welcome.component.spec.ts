@@ -32,7 +32,7 @@ describe('WelcomeComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [WelcomeComponent],
+      imports: [WelcomeComponent],
       providers: [
         {
           provide: DoubtfireConstants,

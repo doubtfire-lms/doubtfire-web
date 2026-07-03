@@ -1,5 +1,14 @@
 import * as monaco from 'monaco-editor';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {EditorComponent} from 'ngx-monaco-editor-v2-alternative';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragHandle,
+  CdkDropList,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
+import {AsyncPipe, NgClass} from '@angular/common';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -10,7 +19,19 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {MatSelectChange} from '@angular/material/select';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatFormField, MatHint, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatDivider} from '@angular/material/list';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
+import {MatDrawer, MatDrawerContainer, MatDrawerContent} from '@angular/material/sidenav';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Observable} from 'rxjs';
 import {
   OverseerImage,
@@ -30,6 +51,8 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
+import {ArchiveViewerComponent} from '../../../../../../../common/archive-viewer/archive-viewer.component';
+import {FileDropComponent} from '../../../../../../../common/file-drop/file-drop.component';
 import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/overseer-script-editor-modal.service';
 
 @Component({
@@ -37,7 +60,36 @@ import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/o
   templateUrl: 'task-definition-overseer.component.html',
   styleUrls: ['task-definition-overseer.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCheckbox,
+    FormsModule,
+    MatHint,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    FileDropComponent,
+    MatButton,
+    MatIcon,
+    ArchiveViewerComponent,
+    MatDrawerContainer,
+    MatDrawer,
+    MatIconButton,
+    CdkDropList,
+    CdkDrag,
+    ExtendedModule,
+    NgClass,
+    CdkDragHandle,
+    MatDrawerContent,
+    MatCard,
+    MatCardContent,
+    MatInput,
+    MatSlideToggle,
+    EditorComponent,
+    MatTooltip,
+    MatDivider,
+    AsyncPipe,
+  ],
 })
 export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   @Input() taskDefinition: TaskDefinition;

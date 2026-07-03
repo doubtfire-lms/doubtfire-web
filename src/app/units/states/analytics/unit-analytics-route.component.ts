@@ -1,5 +1,8 @@
 import {formatDate} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Inject, Input, LOCALE_ID, OnInit} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, first, of} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -8,13 +11,14 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {AnalyticsTutorTimesComponent} from './directives/analytics-tutor-times.component';
 
 @Component({
   selector: 'f-unit-analytics',
   templateUrl: 'unit-analytics-route.component.html',
   styleUrls: ['unit-analytics-route.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatCard, MatCardContent, MatButton, MatIcon, AnalyticsTutorTimesComponent],
 })
 export class UnitAnalyticsComponent implements OnInit {
   @Input() public unit$: Observable<Unit>;

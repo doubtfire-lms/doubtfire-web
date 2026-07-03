@@ -1,12 +1,14 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {RouterLink} from '@angular/router';
 import {Task} from 'src/app/api/models/doubtfire-model';
+import {UserIconComponent} from '../user-icon/user-icon.component';
 
 @Component({
   selector: 'f-user-badge',
   templateUrl: './user-badge.component.html',
   styleUrls: ['./user-badge.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [RouterLink, UserIconComponent],
 })
 export class UserBadgeComponent {
   @Input() selectedTask: Task;

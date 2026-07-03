@@ -1,5 +1,14 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatProgressBar} from '@angular/material/progress-bar';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Subject} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -19,7 +28,14 @@ export interface SidekiqProgressModalData {
   templateUrl: './sidekiq-progress-modal.component.html',
   styleUrl: './sidekiq-progress-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatProgressBar,
+    MatDialogActions,
+    MatButton,
+  ],
 })
 export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
   private readonly pollingInterval: number = 1250;

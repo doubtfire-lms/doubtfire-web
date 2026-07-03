@@ -1,3 +1,5 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,19 +10,52 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatIcon} from '@angular/material/icon';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {GroupSet} from 'src/app/api/models/doubtfire-model';
 import {Group, MemberContribution} from 'src/app/api/models/groups/group';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
+import {GradeIconComponent} from '../../common/grade-icon/grade-icon.component';
 
 @Component({
   selector: 'f-group-member-contribution-assigner',
   templateUrl: './group-member-contribution-assigner.component.html',
   styleUrls: ['./group-member-contribution-assigner.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    GradeIconComponent,
+    MatIcon,
+    MatTooltip,
+    ExtendedModule,
+    NgClass,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+  ],
 })
 export class GroupMemberContributionAssignerComponent implements OnInit, OnChanges {
   @Input() isTestSubmission: boolean;

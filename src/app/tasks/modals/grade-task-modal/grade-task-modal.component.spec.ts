@@ -38,7 +38,7 @@ describe('GradeTaskModalComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [GradeTaskModalComponent],
+      imports: [GradeTaskModalComponent],
       providers: [
         {provide: GradeService, useValue: gradeServiceStub},
         {provide: MatDialogRef, useValue: dialogRefMock},

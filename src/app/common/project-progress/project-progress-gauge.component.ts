@@ -1,4 +1,4 @@
-import {LegendPosition} from '@swimlane/ngx-charts';
+import {GaugeModule, LegendPosition} from '@swimlane/ngx-charts';
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Project} from 'src/app/api/models/project';
 
@@ -7,7 +7,7 @@ import {Project} from 'src/app/api/models/project';
   templateUrl: './project-progress-gauge.component.html',
   styleUrl: './project-progress-gauge.component.css',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [GaugeModule],
 })
 export class ProjectProgressGaugeComponent {
   @Input() project: Project;

@@ -8,7 +8,7 @@ describe('FChipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FChipComponent],
+      imports: [FChipComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FChipComponent);

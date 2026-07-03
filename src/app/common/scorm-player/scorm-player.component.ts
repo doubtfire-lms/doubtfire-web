@@ -31,7 +31,6 @@ declare global {
   templateUrl: './scorm-player.component.html',
   styleUrls: ['./scorm-player.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class ScormPlayerComponent implements OnInit {
   context: ScormPlayerContext;

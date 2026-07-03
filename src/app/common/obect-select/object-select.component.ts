@@ -1,5 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {MatSelectChange} from '@angular/material/select';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
 
 /**
  * Object select component used to overcome limitations with the angularjs version used.
@@ -10,7 +12,7 @@ import {MatSelectChange} from '@angular/material/select';
   selector: 'object-select',
   templateUrl: 'object-select.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatFormField, MatLabel, MatSelect, MatOption],
 })
 export class ObjectSelectComponent<T> {
   @Input() source: {value: T; text: string}[];

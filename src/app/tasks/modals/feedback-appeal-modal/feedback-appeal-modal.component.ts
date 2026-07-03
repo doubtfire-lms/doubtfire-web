@@ -1,5 +1,16 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatFormField, MatHint, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -10,7 +21,18 @@ import {FeedbackAppealModalData} from './feedback-appeal-modal.service';
   templateUrl: './feedback-appeal-modal.component.html',
   styleUrl: './feedback-appeal-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    MatHint,
+    MatDialogActions,
+    MatButton,
+  ],
 })
 export class FeedbackAppealModalComponent implements OnInit {
   task: Task;

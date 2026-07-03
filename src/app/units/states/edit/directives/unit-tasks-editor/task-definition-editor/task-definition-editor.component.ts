@@ -1,3 +1,5 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -13,12 +15,26 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
+import {MatFabButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatDivider} from '@angular/material/list';
 import {Subscription} from 'rxjs';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {LearningOutcomeEditorComponent} from '../../../../../../common/learning-outcome-editor/learning-outcome-editor.component';
+import {TaskDefinitionDatesComponent} from './task-definition-dates/task-definition-dates.component';
+import {TaskDefinitionDiscussionPromptsComponent} from './task-definition-discussion-prompts/task-definition-discussion-prompts.component';
+import {TaskDefinitionGeneralComponent} from './task-definition-general/task-definition-general.component';
+import {TaskDefinitionOptionsComponent} from './task-definition-options/task-definition-options.component';
+import {TaskDefinitionOverseerComponent} from './task-definition-overseer/task-definition-overseer.component';
+import {TaskDefinitionPrerequisitesComponent} from './task-definition-prerequisites/task-definition-prerequisites.component';
+import {TaskDefinitionResourcesComponent} from './task-definition-resources/task-definition-resources.component';
+import {TaskDefinitionScormComponent} from './task-definition-scorm/task-definition-scorm.component';
+import {TaskDefinitionUploadComponent} from './task-definition-upload/task-definition-upload.component';
+import {TaskDefinitionWhoComponent} from './task-definition-who/task-definition-who.component';
 
 type TaskDefinitionSectionId =
   | 'task-details'
@@ -43,7 +59,24 @@ interface TaskDefinitionSection {
   templateUrl: 'task-definition-editor.component.html',
   styleUrls: ['task-definition-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDivider,
+    ExtendedModule,
+    NgClass,
+    TaskDefinitionGeneralComponent,
+    LearningOutcomeEditorComponent,
+    TaskDefinitionWhoComponent,
+    TaskDefinitionDatesComponent,
+    TaskDefinitionUploadComponent,
+    TaskDefinitionResourcesComponent,
+    TaskDefinitionPrerequisitesComponent,
+    TaskDefinitionDiscussionPromptsComponent,
+    TaskDefinitionOverseerComponent,
+    TaskDefinitionScormComponent,
+    TaskDefinitionOptionsComponent,
+    MatFabButton,
+    MatIcon,
+  ],
 })
 export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() taskDefinition: TaskDefinition;

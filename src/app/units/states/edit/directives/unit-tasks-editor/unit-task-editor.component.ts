@@ -1,6 +1,28 @@
 import {addWeeks} from 'date-fns';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
+import {FormsModule} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
+import {MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatDivider, MatListItem, MatSelectionList} from '@angular/material/list';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Subscription} from 'rxjs';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {GradeDefinition, Unit} from 'src/app/api/models/unit';
@@ -13,13 +35,48 @@ import {
 } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {GradeIconComponent} from '../../../../../common/grade-icon/grade-icon.component';
+import {FTaskBadgeComponent} from '../../../../../common/task-badge/task-badge.component';
+import {TaskDefinitionEditorComponent} from './task-definition-editor/task-definition-editor.component';
 
 @Component({
   selector: 'f-unit-task-editor',
   templateUrl: 'unit-task-editor.component.html',
   styleUrls: ['unit-task-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatIconButton,
+    MatIcon,
+    MatButton,
+    MatDivider,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    GradeIconComponent,
+    MatFormField,
+    ExtendedModule,
+    NgClass,
+    MatLabel,
+    MatInput,
+    MatDatepickerInput,
+    FormsModule,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatHint,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatSelectionList,
+    MatListItem,
+    MatTooltip,
+    FTaskBadgeComponent,
+    TaskDefinitionEditorComponent,
+  ],
 })
 export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;

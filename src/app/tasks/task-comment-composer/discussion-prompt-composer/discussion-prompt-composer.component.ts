@@ -8,6 +8,19 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatDialogClose} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
+import {
+  MatActionList,
+  MatListItem,
+  MatListItemIcon,
+  MatListItemLine,
+  MatListItemMeta,
+  MatListItemTitle,
+  MatListSubheaderCssMatStyler,
+} from '@angular/material/list';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
 import {BaseAudioRecorderComponent} from 'src/app/common/audio-recorder/audio/base-audio-recorder';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -19,7 +32,20 @@ import {MediaRecorderService} from 'src/app/common/services/recorder-service';
   styleUrls: ['./discussion-prompt-composer.component.scss'],
   providers: [MediaRecorderService],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatProgressSpinner,
+    MatIconButton,
+    MatIcon,
+    MatButton,
+    MatActionList,
+    MatListSubheaderCssMatStyler,
+    MatListItem,
+    MatListItemIcon,
+    MatListItemTitle,
+    MatListItemLine,
+    MatListItemMeta,
+    MatDialogClose,
+  ],
 })
 export class DiscussionPromptComposerComponent
   extends BaseAudioRecorderComponent

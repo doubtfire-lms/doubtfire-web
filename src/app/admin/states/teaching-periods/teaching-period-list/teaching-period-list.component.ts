@@ -1,8 +1,38 @@
+import {AsyncPipe, DatePipe, NgTemplateOutlet} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {
+  MatDateRangeInput,
+  MatDateRangePicker,
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatEndDate,
+  MatStartDate,
+} from '@angular/material/datepicker';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogClose, MatDialogRef} from '@angular/material/dialog';
+import {MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatList, MatListItem, MatListItemLine, MatListItemTitle} from '@angular/material/list';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {Observable} from 'rxjs';
 import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
@@ -16,7 +46,26 @@ import {TeachingPeriodUnitImportService} from '../teaching-period-unit-import/te
   templateUrl: './teaching-period-list.component.html',
   styleUrls: ['./teaching-period-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatButton,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatCheckbox,
+    MatSortHeader,
+    MatIconButton,
+    MatIcon,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    DatePipe,
+  ],
 })
 export class TeachingPeriodListComponent implements OnInit {
   @ViewChild(MatSort) sort = new MatSort();
@@ -98,7 +147,34 @@ export class TeachingPeriodListComponent implements OnInit {
   selector: 'f-new-teaching-period-dialog',
   templateUrl: 'new-teaching-period-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTabGroup,
+    MatTab,
+    NgTemplateOutlet,
+    MatButton,
+    MatDialogClose,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatDateRangeInput,
+    MatStartDate,
+    MatEndDate,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDateRangePicker,
+    MatDatepickerInput,
+    MatHint,
+    MatDatepicker,
+    MatList,
+    MatListItem,
+    MatListItemTitle,
+    MatListItemLine,
+    MatIconButton,
+    MatIcon,
+    AsyncPipe,
+    DatePipe,
+  ],
 })
 export class NewTeachingPeriodDialogComponent {
   constructor(

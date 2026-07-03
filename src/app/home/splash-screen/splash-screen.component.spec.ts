@@ -13,7 +13,7 @@ describe('SplashScreenComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SplashScreenComponent],
+      imports: [SplashScreenComponent],
       providers: [
         {provide: GlobalStateService, useValue: emptyProvider},
         {provide: LoadingService, useValue: emptyProvider},

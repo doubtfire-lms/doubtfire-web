@@ -1,21 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
+import {NgxSkeletonLoaderComponent} from 'ngx-skeleton-loader';
+import {CdkDrag, CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
 import {BreakpointObserver} from '@angular/cdk/layout';
+import {AsyncPipe, NgTemplateOutlet} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatIconButton, MatMiniFabButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, Observable, Subject, first, of, takeUntil} from 'rxjs';
 import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {UserService} from 'src/app/api/services/user.service';
+import {TaskCommentsViewerComponent} from '../../../../tasks/task-comments-viewer/task-comments-viewer.component';
+import {FUnitTaskListComponent} from '../../../../units/task-viewer/directives/unit-task-list/unit-task-list.component';
 import {GlobalStateService, ViewType} from '../../index/global-state.service';
+import {ProgressDashboardComponent} from '../directives/progress-dashboard/progress-dashboard.component';
+import {TaskDashboardComponent} from '../directives/task-dashboard/task-dashboard.component';
 
 @Component({
   selector: 'f-project-dashboard',
   templateUrl: './project-dashboard.component.html',
   styleUrl: './project-dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    NgxSkeletonLoaderComponent,
+    FUnitTaskListComponent,
+    NgTemplateOutlet,
+    CdkDrag,
+    TaskDashboardComponent,
+    MatMiniFabButton,
+    MatTooltip,
+    MatIcon,
+    MatIconButton,
+    TaskCommentsViewerComponent,
+    ProgressDashboardComponent,
+    AsyncPipe,
+  ],
 })
 export class ProjectDashboardComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;

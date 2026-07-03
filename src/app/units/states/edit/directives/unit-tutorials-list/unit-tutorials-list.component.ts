@@ -8,9 +8,31 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {FormsModule, ReactiveFormsModule, UntypedFormControl, Validators} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatIconButton} from '@angular/material/button';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatFooterRow,
+  MatFooterRowDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {
   Campus,
@@ -31,7 +53,33 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'unit-tutorials-list.component.html',
   styleUrls: ['unit-tutorials-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatIconButton,
+    MatIcon,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    ReactiveFormsModule,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatSelect,
+    MatOption,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+  ],
 })
 export class UnitTutorialsListComponent
   extends EntityFormComponent<Tutorial>

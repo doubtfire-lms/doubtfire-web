@@ -1,27 +1,15 @@
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import {NgTemplateOutlet} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
+import {FChipComponent} from '../f-chip/chip.component';
 import {UnitCodeService} from './unit-code.service';
 
 @Component({
   selector: 'f-unit-code',
   templateUrl: './unit-code.component.html',
   styleUrls: ['./unit-code.component.css'],
-  animations: [
-    trigger('flip', [
-      state('in', style({transform: 'translateX(0%)', opacity: 1})),
-      state('out', style({transform: 'translateX(-100%)', opacity: 0})),
-      transition('void => in', [
-        style({transform: 'translateX(100%)', opacity: 0}),
-        animate('500ms ease-in-out'),
-      ]),
-      transition('in => out', [
-        animate('500ms ease-in-out', style({transform: 'translateX(-100%)', opacity: 0})),
-      ]),
-    ]),
-  ],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [FChipComponent, NgTemplateOutlet],
 })
 export class UnitCodeComponent implements OnInit, OnDestroy {
   @Input() unit_code: string;

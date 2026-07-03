@@ -1,3 +1,5 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass, NgTemplateOutlet} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,17 +9,37 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatListItem, MatNavList} from '@angular/material/list';
+import {MatTooltip} from '@angular/material/tooltip';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
+import {StatusIconComponent} from '../../../../common/status-icon/status-icon.component';
+import {CreatePortfolioTaskListItemComponent} from '../../../../projects/states/dashboard/directives/student-task-list/create-portfolio-task-list-item/create-portfolio-task-list-item.component';
 
 @Component({
   selector: 'f-unit-task-list',
   templateUrl: './unit-task-list.component.html',
   styleUrls: ['./unit-task-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    ExtendedModule,
+    NgClass,
+    StatusIconComponent,
+    MatTooltip,
+    MatIcon,
+    MatIconButton,
+    FormsModule,
+    MatNavList,
+    MatListItem,
+    NgTemplateOutlet,
+    RouterLink,
+    CreatePortfolioTaskListItemComponent,
+  ],
 })
 export class FUnitTaskListComponent implements OnChanges, OnInit {
   @Input() mode: 'project' | 'all-tasks';

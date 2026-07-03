@@ -1,3 +1,5 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +8,9 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import {MatChip} from '@angular/material/chips';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {
   GradeService,
   Project,
@@ -14,13 +19,23 @@ import {
   TaskStatusEnum,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
+import {OrderByPipe} from '../../common/filters/order-by.pipe';
+import {TasksForGroupsetPipe} from '../../common/filters/tasks-for-group-set.pipe';
 
 @Component({
   selector: 'f-project-tasks-list',
   templateUrl: './project-tasks-list.component.html',
   styleUrls: ['./project-tasks-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatChip,
+    MatTooltip,
+    ExtendedModule,
+    NgClass,
+    MatIcon,
+    TasksForGroupsetPipe,
+    OrderByPipe,
+  ],
 })
 export class ProjectTasksListComponent implements OnInit {
   @Input() unit?: Unit;

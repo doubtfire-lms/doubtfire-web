@@ -13,7 +13,7 @@ describe('EditProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [EditProfileComponent],
+      imports: [EditProfileComponent],
       providers: [
         {provide: AuthenticationService, useValue: emptyProvider},
         {provide: Router, useValue: emptyProvider},

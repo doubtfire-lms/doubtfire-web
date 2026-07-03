@@ -1,6 +1,8 @@
-import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
-import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
-import {animate, style, transition, trigger} from '@angular/animations';
+import {EmojiSearch, PickerComponent} from '@ctrl/ngx-emoji-mart';
+import {EmojiComponent, EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {FlexModule} from 'ng-flex-layout/flex';
+import {AsyncPipe, NgClass} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -18,7 +20,19 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogClose, MatDialogRef} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
+import {MatActionList, MatListItem} from '@angular/material/list';
+import {
+  MatStep,
+  MatStepLabel,
+  MatStepper,
+  MatStepperNext,
+  MatStepperPrevious,
+} from '@angular/material/stepper';
+import {MatTooltip} from '@angular/material/tooltip';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {
   FeedbackTemplate,
@@ -28,8 +42,11 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {EmojiService} from 'src/app/common/services/emoji.service';
+import {AudioCommentRecorderComponent} from '../../common/audio-recorder/audio/audio-comment-recorder/audio-comment-recorder';
 import {TaskCommentsViewerComponent} from '../task-comments-viewer/task-comments-viewer.component';
 import {AttachmentConfirmationDialogComponent} from './attachment-confirmation-dialog/attachment-confirmation-dialog.component';
+import {DiscussionPromptComposerComponent} from './discussion-prompt-composer/discussion-prompt-composer.component';
+import {TaskFeedbackTemplatesComponent} from './task-feedback-templates/task-feedback-templates.component';
 
 interface ApiError {
   error?: string;
@@ -71,14 +88,23 @@ const ACCEPTED_FILE_TYPES = [
   selector: 'task-comment-composer',
   templateUrl: './task-comment-composer.component.html',
   styleUrls: ['./task-comment-composer.component.scss'],
-  animations: [
-    trigger('shrinkgrow', [
-      transition('true => false', [style({width: 38.4}), animate('150ms 0ms ease-in-out')]),
-      transition('false => true', [style({width: 80}), animate('150ms 0ms ease-in-out')]),
-    ]),
-  ],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    PickerComponent,
+    MatIconButton,
+    MatIcon,
+    MatActionList,
+    MatListItem,
+    FlexModule,
+    EmojiComponent,
+    FormsModule,
+    TaskFeedbackTemplatesComponent,
+    MatTooltip,
+    ExtendedModule,
+    NgClass,
+    AudioCommentRecorderComponent,
+    AsyncPipe,
+  ],
 })
 export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnChanges {
   @Input() task: Task;
@@ -796,7 +822,18 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
   templateUrl: 'discussion-prompt-composer-dialog.html',
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatIconButton,
+    MatDialogClose,
+    MatIcon,
+    MatStepper,
+    MatStep,
+    MatStepLabel,
+    MatButton,
+    MatStepperNext,
+    DiscussionPromptComposerComponent,
+    MatStepperPrevious,
+  ],
 })
 export class DiscussionComposerDialog {
   constructor(

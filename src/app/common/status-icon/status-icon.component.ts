@@ -1,4 +1,8 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {TaskStatus, TaskStatusEnum} from 'src/app/api/models/task-status';
 
 @Component({
@@ -6,7 +10,7 @@ import {TaskStatus, TaskStatusEnum} from 'src/app/api/models/task-status';
   templateUrl: './status-icon.component.html',
   styleUrls: ['./status-icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatTooltip, ExtendedModule, NgClass, MatIcon],
 })
 export class StatusIconComponent implements OnInit {
   @Input() status?: TaskStatusEnum = 'not_started';

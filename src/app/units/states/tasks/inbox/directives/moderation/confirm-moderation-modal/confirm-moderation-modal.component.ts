@@ -1,5 +1,16 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
 import {FeedbackModerationActionType} from 'src/app/api/models/task';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
@@ -11,7 +22,16 @@ import {ConfirmModerationModalData} from './confirm-moderation-modal.service';
   templateUrl: './confirm-moderation-modal.component.html',
   styleUrl: './confirm-moderation-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    MatIcon,
+    CdkScrollable,
+    MatDialogContent,
+    MatCheckbox,
+    FormsModule,
+    MatDialogActions,
+    MatButton,
+  ],
 })
 export class ConfirmModerationModalComponent implements OnInit {
   task: Task;

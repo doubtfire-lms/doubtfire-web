@@ -1,6 +1,20 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatButton} from '@angular/material/button';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
 import {Project, Tutorial, Unit} from 'src/app/api/models/doubtfire-model';
@@ -10,7 +24,22 @@ import {Project, Tutorial, Unit} from 'src/app/api/models/doubtfire-model';
   templateUrl: './tutorials.component.html',
   styleUrls: ['./tutorials.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatButton,
+    MatTooltip,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+  ],
 })
 export class TutorialsComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;

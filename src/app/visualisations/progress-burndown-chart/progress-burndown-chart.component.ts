@@ -1,4 +1,4 @@
-import {Color, LegendPosition, ScaleType} from '@swimlane/ngx-charts';
+import {Color, LegendPosition, LineChartModule, ScaleType} from '@swimlane/ngx-charts';
 import {formatDate} from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -29,7 +29,7 @@ interface BurndownSeries {
   templateUrl: './progress-burndown-chart.component.html',
   styleUrls: ['./progress-burndown-chart.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [LineChartModule],
 })
 export class ProgressBurndownChartComponent
   extends ChartBaseComponent

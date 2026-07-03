@@ -1,10 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {Task} from '../../api/models/doubtfire-model';
 
-@Pipe({
-  name: 'tasksInTutorials',
-  standalone: false,
-})
+@Pipe({name: 'tasksInTutorials'})
 export class TasksInTutorialsPipe implements PipeTransform {
   transform(tasks: Task[], tutorialIds: number[], forceStream: boolean): Task[] {
     // Return nothing if there are no tasks

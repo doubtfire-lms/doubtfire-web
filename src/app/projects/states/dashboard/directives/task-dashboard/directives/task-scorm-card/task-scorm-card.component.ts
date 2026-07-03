@@ -1,4 +1,13 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
 import {Task, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {ScormExtensionModalService} from 'src/app/common/modals/scorm-extension-modal/scorm-extension-modal.service';
 
@@ -7,7 +16,15 @@ import {ScormExtensionModalService} from 'src/app/common/modals/scorm-extension-
   templateUrl: './task-scorm-card.component.html',
   styleUrls: ['./task-scorm-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatIcon,
+    MatCardContent,
+    MatCardActions,
+    MatButton,
+  ],
 })
 export class TaskScormCardComponent implements OnChanges {
   @Input() task: Task;

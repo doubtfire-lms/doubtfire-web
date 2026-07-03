@@ -1,7 +1,28 @@
+import {NgxSkeletonLoaderComponent} from 'ngx-skeleton-loader';
 import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {FormsModule, ReactiveFormsModule, UntypedFormControl, Validators} from '@angular/forms';
+import {MatIconButton} from '@angular/material/button';
+import {MatFormField} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatFooterRow,
+  MatFooterRowDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
 import {finalize} from 'rxjs';
 import {ActivityType, ActivityTypeService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
@@ -12,7 +33,31 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'activity-type-list.component.html',
   styleUrls: ['activity-type-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    NgxSkeletonLoaderComponent,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    FormsModule,
+    ReactiveFormsModule,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatFormField,
+    MatInput,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatIconButton,
+    MatIcon,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+  ],
 })
 export class ActivityTypeListComponent
   extends EntityFormComponent<ActivityType>

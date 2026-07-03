@@ -1,4 +1,10 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {AfterViewInit, ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatButton, MatFabButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatTooltip} from '@angular/material/tooltip';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
@@ -16,7 +22,15 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'lti-dashboard.component.html',
   styleUrls: ['lti-dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatIcon,
+    MatFabButton,
+    MatTooltip,
+    ExtendedModule,
+    NgClass,
+    MatProgressSpinner,
+    MatButton,
+  ],
 })
 export class LtiDashboardComponent implements AfterViewInit {
   constructor(

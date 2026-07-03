@@ -1,3 +1,6 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgxSkeletonLoaderComponent} from 'ngx-skeleton-loader';
+import {NgStyle} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {
   AfterViewInit,
@@ -6,23 +9,81 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule, UntypedFormControl, Validators} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCard} from '@angular/material/card';
 import {MatDialog} from '@angular/material/dialog';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatFooterRow,
+  MatFooterRowDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {finalize} from 'rxjs';
 import {OverseerImage, OverseerImageService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {HumanizedDatePipe} from '../../../common/pipes/humanized-date.pipe';
 
 @Component({
   selector: 'overseer-image-list',
   templateUrl: 'overseer-image-list.component.html',
   styleUrls: ['overseer-image-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    NgxSkeletonLoaderComponent,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    FormsModule,
+    ReactiveFormsModule,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatButton,
+    ExtendedModule,
+    NgStyle,
+    MatTooltip,
+    MatIcon,
+    MatIconButton,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    HumanizedDatePipe,
+  ],
 })
 export class OverseerImageListComponent
   extends EntityFormComponent<OverseerImage>

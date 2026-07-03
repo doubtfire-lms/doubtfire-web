@@ -31,7 +31,7 @@ describe('IntelligentDiscussionPlayerComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [IntelligentDiscussionPlayerComponent],
+      imports: [IntelligentDiscussionPlayerComponent],
       providers: [
         {provide: MatDialog, useValue: {open: vi.fn()}},
         {provide: TaskCommentService, useValue: {}},

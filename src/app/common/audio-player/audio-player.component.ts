@@ -1,3 +1,4 @@
+import {FlexModule} from 'ng-flex-layout/flex';
 import {HttpResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -10,6 +11,8 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressBar} from '@angular/material/progress-bar';
 import {Project, Task, TaskComment} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {AlertService} from '../services/alert.service';
@@ -19,7 +22,7 @@ import {AlertService} from '../services/alert.service';
   templateUrl: './audio-player.component.html',
   styleUrls: ['./audio-player.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [FlexModule, MatIcon, MatProgressBar],
 })
 export class AudioPlayerComponent implements OnDestroy {
   @Input() project: Project;

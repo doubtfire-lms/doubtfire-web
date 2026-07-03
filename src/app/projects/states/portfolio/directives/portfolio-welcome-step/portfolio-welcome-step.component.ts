@@ -1,4 +1,12 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardFooter,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
@@ -6,7 +14,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   templateUrl: 'portfolio-welcome-step.component.html',
   styleUrls: ['portfolio-welcome-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardFooter, MatButton],
 })
 export class PortfolioWelcomeStepComponent implements OnInit {
   @Input() onAdvanceActiveTab?: (index: 1 | -1) => void;

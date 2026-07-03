@@ -6,6 +6,9 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {Task} from 'src/app/api/models/doubtfire-model';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 import {BaseAudioRecorderComponent} from '../base-audio-recorder';
@@ -15,7 +18,7 @@ import {BaseAudioRecorderComponent} from '../base-audio-recorder';
   templateUrl: './microphone-tester-component.html',
   providers: [MediaRecorderService],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatProgressSpinner, MatIconButton, MatIcon, MatButton],
 })
 export class MicrophoneTesterComponent extends BaseAudioRecorderComponent implements AfterViewInit {
   @Input() task: Task;

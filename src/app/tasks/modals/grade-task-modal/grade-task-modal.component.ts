@@ -1,13 +1,41 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef} from '@angular/material/dialog';
+import {MatSlider, MatSliderThumb} from '@angular/material/slider';
+import {MatTooltip} from '@angular/material/tooltip';
 import {GradeService, Task} from 'src/app/api/models/doubtfire-model';
+import {GradeIconComponent} from '../../../common/grade-icon/grade-icon.component';
 
 @Component({
   selector: 'grade-task-modal',
   templateUrl: './grade-task-modal.component.html',
   styleUrls: ['./grade-task-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatButtonToggleGroup,
+    FormsModule,
+    MatButtonToggle,
+    MatTooltip,
+    GradeIconComponent,
+    MatSlider,
+    MatSliderThumb,
+    MatCardActions,
+    MatButton,
+    MatDialogClose,
+  ],
 })
 export class GradeTaskModalComponent implements OnInit {
   task: Task;

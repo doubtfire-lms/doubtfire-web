@@ -1,3 +1,4 @@
+import {FlexModule} from 'ng-flex-layout/flex';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -7,6 +8,13 @@ import {
   OnDestroy,
   SimpleChanges,
 } from '@angular/core';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
+import {MatFormField} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatSelect, MatSelectTrigger} from '@angular/material/select';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
@@ -20,13 +28,31 @@ import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';
+import {StatusIconComponent} from '../../../../../../../common/status-icon/status-icon.component';
 
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
   styleUrls: ['./task-status-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatFormField,
+    MatSelect,
+    MatSelectTrigger,
+    StatusIconComponent,
+    MatOption,
+    MatCardTitle,
+    MatCardContent,
+    MatCardActions,
+    MatButton,
+    MatIconButton,
+    MatMenuTrigger,
+    MatIcon,
+    FlexModule,
+    MatMenu,
+    MatMenuItem,
+  ],
 })
 export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDestroy {
   triggers: TaskStatusUiData[];

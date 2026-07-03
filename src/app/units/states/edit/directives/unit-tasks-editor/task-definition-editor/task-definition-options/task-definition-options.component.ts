@@ -1,4 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
@@ -8,7 +12,7 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
   templateUrl: 'task-definition-options.component.html',
   styleUrls: ['task-definition-options.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatCheckbox, FormsModule, MatFormField, MatLabel, MatInput],
 })
 export class TaskDefinitionOptionsComponent {
   @Input() taskDefinition: TaskDefinition;

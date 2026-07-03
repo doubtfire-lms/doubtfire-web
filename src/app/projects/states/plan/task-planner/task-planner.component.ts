@@ -8,7 +8,11 @@ import {
   GanttViewOptions,
   GanttViewType,
   NgxGanttComponent,
+  NgxGanttTableColumnComponent,
+  NgxGanttTableComponent,
 } from '@worktile/gantt';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -19,7 +23,12 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {MatTooltip} from '@angular/material/tooltip';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -28,6 +37,8 @@ import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.se
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {GradeIconComponent} from '../../../../common/grade-icon/grade-icon.component';
+import {StatusIconComponent} from '../../../../common/status-icon/status-icon.component';
 import {TaskPlannerPrerequisitesModalService} from './task-planner-prerequisites-modal/task-planner-prerequisites-modal.service';
 
 interface TaskGanttItem extends GanttItem {
@@ -45,7 +56,21 @@ interface TaskGanttItem extends GanttItem {
   styleUrl: './task-planner.component.scss',
   providers: [GanttPrintService],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatSlideToggle,
+    FormsModule,
+    MatButton,
+    MatIcon,
+    NgxGanttComponent,
+    NgxGanttTableComponent,
+    NgxGanttTableColumnComponent,
+    RouterLink,
+    GradeIconComponent,
+    StatusIconComponent,
+    MatTooltip,
+    ExtendedModule,
+    NgClass,
+  ],
 })
 export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   // Show a warning if the task's target end date is within this many days of the feedback deadline

@@ -1,4 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 
@@ -7,7 +11,7 @@ import {Unit} from 'src/app/api/models/unit';
   templateUrl: './portfolios-assessment.component.html',
   styleUrl: './portfolios-assessment.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatFormField, MatLabel, MatInput, FormsModule, MatButton],
 })
 export class PortfoliosAssessmentComponent {
   @Input() project: Project;

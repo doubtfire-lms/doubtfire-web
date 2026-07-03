@@ -12,7 +12,7 @@ describe('FUnitTaskListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FUnitTaskListComponent],
+      imports: [FUnitTaskListComponent],
       providers: [
         {provide: Router, useValue: emptyProvider},
         {provide: ActivatedRoute, useValue: emptyProvider},

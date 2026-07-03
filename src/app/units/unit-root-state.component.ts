@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {AsyncPipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {ActivatedRoute, RouterOutlet} from '@angular/router';
 import {Observable} from 'rxjs';
 import {Unit} from 'src/app/api/models/doubtfire-model';
 
@@ -9,7 +11,7 @@ import {Unit} from 'src/app/api/models/doubtfire-model';
   templateUrl: './unit-root-state.component.html',
   styleUrl: './unit-root-state.component.css',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [RouterOutlet, MatProgressSpinner, AsyncPipe],
 })
 export class UnitRootStateComponent implements OnInit {
   @Input() public unit$: Observable<Unit>;

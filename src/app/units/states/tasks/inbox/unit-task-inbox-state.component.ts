@@ -14,6 +14,7 @@ import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {InboxComponent} from './inbox.component';
 
 export type UnitTaskViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
 export type UnitTaskRouteMode = 'inbox' | 'definition' | 'moderation' | 'overflow';
@@ -43,7 +44,7 @@ type TaskSource = (
   selector: 'f-unit-task-inbox-state',
   templateUrl: './unit-task-inbox-state.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [InboxComponent],
 })
 export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   private static readonly UNIT_REFRESH_INTERVAL_MS = 60_000;

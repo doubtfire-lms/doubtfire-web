@@ -6,7 +6,6 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   templateUrl: './hero-sidebar.component.html',
   styleUrls: ['./hero-sidebar.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class HeroSidebarComponent {
   public externalName = this.constants.ExternalName;

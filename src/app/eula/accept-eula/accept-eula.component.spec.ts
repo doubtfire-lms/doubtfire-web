@@ -21,7 +21,7 @@ describe('AcceptEulaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AcceptEulaComponent],
+      imports: [AcceptEulaComponent],
       providers: [
         {provide: DoubtfireConstants, useValue: constantsStub},
         {provide: TiiService, useValue: emptyProvider},

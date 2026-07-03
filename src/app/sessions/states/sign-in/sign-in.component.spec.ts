@@ -18,7 +18,7 @@ describe('SignInComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SignInComponent],
+      imports: [SignInComponent],
       providers: [
         {provide: AuthenticationService, useValue: emptyProvider},
         {provide: UserService, useValue: emptyProvider},

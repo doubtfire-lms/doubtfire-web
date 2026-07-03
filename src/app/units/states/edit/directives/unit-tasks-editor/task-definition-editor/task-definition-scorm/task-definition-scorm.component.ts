@@ -1,16 +1,30 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {FileDropComponent} from '../../../../../../../common/file-drop/file-drop.component';
 
 @Component({
   selector: 'f-task-definition-scorm',
   templateUrl: 'task-definition-scorm.component.html',
   styleUrls: ['task-definition-scorm.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCheckbox,
+    FormsModule,
+    FileDropComponent,
+    MatButton,
+    MatFormField,
+    MatLabel,
+    MatInput,
+  ],
 })
 export class TaskDefinitionScormComponent {
   @Input() taskDefinition: TaskDefinition;

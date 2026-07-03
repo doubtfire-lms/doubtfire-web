@@ -1,4 +1,6 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
 import {NestedTreeControl} from '@angular/cdk/tree';
+import {NgClass} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,8 +10,38 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
 import {MatDialog} from '@angular/material/dialog';
-import {MatTreeNestedDataSource} from '@angular/material/tree';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatDivider} from '@angular/material/list';
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {MatDrawer, MatDrawerContainer, MatDrawerContent} from '@angular/material/sidenav';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {
+  MatNestedTreeNode,
+  MatTree,
+  MatTreeNestedDataSource,
+  MatTreeNode,
+  MatTreeNodeDef,
+  MatTreeNodeOutlet,
+  MatTreeNodePadding,
+} from '@angular/material/tree';
 import {Subscription} from 'rxjs';
 import {
   Campus,
@@ -37,10 +69,13 @@ import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {CommunicationActionsComponent} from './actions/communication-actions.component';
 import {
   CommunicationScheduleModalComponent,
   CommunicationScheduleModalData,
 } from './communication-schedule-modal/communication-schedule-modal.component';
+import {CommunicationSchedulesComponent} from './communication-schedule-modal/communication-schedules.component';
+import {CommunicationConditionsComponent} from './conditions/communication-conditions.component';
 
 interface CommunicationTreeNode {
   type: 'set' | 'rule';
@@ -53,10 +88,47 @@ interface CommunicationTreeNode {
 
 @Component({
   selector: 'f-unit-communications-editor',
-  standalone: false,
   templateUrl: './unit-communications-editor.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './unit-communications-editor.component.scss',
+  imports: [
+    MatButton,
+    MatIcon,
+    MatProgressBar,
+    MatDrawerContainer,
+    MatDrawer,
+    MatTree,
+    MatTreeNodeDef,
+    MatTreeNode,
+    MatTreeNodePadding,
+    ExtendedModule,
+    NgClass,
+    MatIconButton,
+    MatNestedTreeNode,
+    MatTreeNodeOutlet,
+    MatDrawerContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    MatDivider,
+    CommunicationSchedulesComponent,
+    MatTabGroup,
+    MatTab,
+    CommunicationConditionsComponent,
+    CommunicationActionsComponent,
+    MatCheckbox,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+  ],
 })
 export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnDestroy {
   @Input() unit: Unit;

@@ -1,4 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {
   ScormComment,
   Task,
@@ -13,7 +16,7 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
   templateUrl: './scorm-comment.component.html',
   styleUrls: ['./scorm-comment.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatButton, MatIconButton, MatMenuTrigger, MatIcon, MatMenu, MatMenuItem],
 })
 export class ScormCommentComponent {
   @Input() task: Task;

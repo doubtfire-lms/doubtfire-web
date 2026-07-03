@@ -1,17 +1,51 @@
 import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {MatFabButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardFooter,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
+import {MatDivider} from '@angular/material/list';
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatTooltip} from '@angular/material/tooltip';
+import {Router, RouterLink} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {DateService} from 'src/app/common/services/date.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {FChipComponent} from '../../../common/f-chip/chip.component';
+import {IsActiveUnitRole} from '../../../common/pipes/is-active-unit-role.pipe';
 
 @Component({
   selector: 'home',
   templateUrl: 'home.component.html',
   styleUrls: ['home.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatProgressSpinner,
+    RouterLink,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardSubtitle,
+    MatCardContent,
+    MatDivider,
+    MatCardActions,
+    FChipComponent,
+    MatCardFooter,
+    MatTooltip,
+    MatProgressBar,
+    MatFabButton,
+    MatIcon,
+    IsActiveUnitRole,
+  ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   projects: Project[];

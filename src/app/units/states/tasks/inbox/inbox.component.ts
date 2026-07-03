@@ -1,7 +1,11 @@
 import {HotkeysHelpComponent, HotkeysService} from '@ngneat/hotkeys';
 import {MediaObserver} from 'ng-flex-layout';
-import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {FlexModule} from 'ng-flex-layout/flex';
+import {NgxSkeletonLoaderComponent} from 'ngx-skeleton-loader';
+import {CdkDrag, CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
 import {BreakpointObserver} from '@angular/cdk/layout';
+import {AsyncPipe, NgTemplateOutlet} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +15,10 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import {MatIconButton, MatMiniFabButton} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Router} from '@angular/router';
 import {Observable, Subject, auditTime, merge, of, takeUntil, tap, withLatestFrom} from 'rxjs';
 import {Tutorial} from 'src/app/api/models/doubtfire-model';
@@ -23,6 +30,10 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import {FooterComponent} from '../../../../common/footer/footer.component';
+import {TaskCommentsViewerComponent} from '../../../../tasks/task-comments-viewer/task-comments-viewer.component';
+import {InboxDashboardComponent} from './directives/inbox-dashboard/inbox-dashboard.component';
+import {StaffTaskListComponent} from './directives/staff-task-list/staff-task-list.component';
 
 interface InboxTaskData {
   source: (
@@ -41,7 +52,22 @@ interface InboxTaskData {
   templateUrl: './inbox.component.html',
   styleUrls: ['./inbox.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    NgxSkeletonLoaderComponent,
+    FlexModule,
+    ExtendedModule,
+    NgTemplateOutlet,
+    StaffTaskListComponent,
+    CdkDrag,
+    InboxDashboardComponent,
+    MatMiniFabButton,
+    MatTooltip,
+    MatIcon,
+    MatIconButton,
+    TaskCommentsViewerComponent,
+    FooterComponent,
+    AsyncPipe,
+  ],
 })
 export class InboxComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;

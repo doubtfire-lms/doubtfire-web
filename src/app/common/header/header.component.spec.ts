@@ -25,7 +25,7 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HeaderComponent],
+      imports: [HeaderComponent],
       providers: [
         {provide: CalendarModalService, useValue: emptyProvider},
         {provide: AboutDoubtfireModal, useValue: emptyProvider},

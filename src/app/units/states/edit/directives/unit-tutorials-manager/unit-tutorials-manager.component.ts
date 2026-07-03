@@ -1,4 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {
   ActivityType,
   ActivityTypeService,
@@ -6,13 +9,14 @@ import {
   Unit,
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {UnitTutorialsListComponent} from '../unit-tutorials-list/unit-tutorials-list.component';
 
 @Component({
   selector: 'unit-tutorials-manager',
   templateUrl: 'unit-tutorials-manager.component.html',
   styleUrls: ['unit-tutorials-manager.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [UnitTutorialsListComponent, MatIcon, MatButton, MatMenuTrigger, MatMenu, MatMenuItem],
 })
 export class UnitTutorialsManagerComponent implements OnInit {
   @Input() unit: Unit;

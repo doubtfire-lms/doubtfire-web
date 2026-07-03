@@ -6,6 +6,7 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
 import {TaskCommentService} from 'src/app/api/models/doubtfire-model';
 import {
@@ -20,7 +21,7 @@ import {MediaRecorderService} from 'src/app/common/services/recorder-service';
   styleUrls: ['./intelligent-discussion-recorder.component.css'],
   providers: [MediaRecorderService],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatProgressSpinner],
 })
 export class IntelligentDiscussionRecorderComponent
   extends BaseAudioRecorderComponent

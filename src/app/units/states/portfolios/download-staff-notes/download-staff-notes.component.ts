@@ -1,4 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
 import {Unit} from 'src/app/api/models/unit';
 import {AlertService} from 'src/app/common/services/alert.service';
 
@@ -7,7 +9,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'download-staff-notes.component.html',
   styleUrl: 'download-staff-notes.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatButton, MatIcon],
 })
 export class DownloadStaffNotesComponent implements OnInit {
   @Input() unit: Unit;

@@ -3,7 +3,7 @@
     @if (isDualBadge && shiftBetweenBadges) {
       @for (part of unitCodeParts; track part; let i = $index) {
         @if (i === currentIndex) {
-          <span [@flip]="showState">{{ part }}</span>
+          <span class="unit-code-part" [class.out]="showState === 'out'">{{ part }}</span>
         }
       }
     } @else {

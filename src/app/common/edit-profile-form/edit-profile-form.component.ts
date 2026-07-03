@@ -1,18 +1,42 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {FlexModule} from 'ng-flex-layout/flex';
+import {NgClass} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Inject, Input, OnInit, Optional} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {User} from 'src/app/api/models/user/user';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {UserIconComponent} from '../user-icon/user-icon.component';
 
 @Component({
   selector: 'f-edit-profile-form',
   templateUrl: './edit-profile-form.component.html',
   styleUrls: ['./edit-profile-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    FormsModule,
+    FlexModule,
+    ExtendedModule,
+    NgClass,
+    UserIconComponent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatSelect,
+    MatOption,
+    MatCheckbox,
+    MatButton,
+  ],
 })
 export class EditProfileFormComponent implements OnInit {
   constructor(

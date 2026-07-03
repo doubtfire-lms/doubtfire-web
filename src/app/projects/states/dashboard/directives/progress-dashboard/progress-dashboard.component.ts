@@ -6,18 +6,50 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import {MatOption} from '@angular/material/autocomplete';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatSelect} from '@angular/material/select';
+import {RouterLink} from '@angular/router';
 import {Project} from 'src/app/api/models/project';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {ProgressBurndownChartComponent} from '../../../../../visualisations/progress-burndown-chart/progress-burndown-chart.component';
+import {TaskVisualisationComponent} from '../../../../../visualisations/task-visualisation/task-visualisation.component';
+import {TaskIlosCardComponent} from '../task-dashboard/directives/task-ilos-card/task-ilos-card.component';
+import {EngagementPassportCardComponent} from './engagement-passport-card/engagement-passport-card.component';
+import {TaskPlannerCardComponent} from './task-planner-card/task-planner-card.component';
 
 @Component({
   selector: 'f-progress-dashboard',
   templateUrl: './progress-dashboard.component.html',
   styleUrls: ['./progress-dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    TaskPlannerCardComponent,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardSubtitle,
+    MatCardContent,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    RouterLink,
+    TaskIlosCardComponent,
+    EngagementPassportCardComponent,
+    ProgressBurndownChartComponent,
+    TaskVisualisationComponent,
+  ],
 })
 export class ProgressDashboardComponent implements OnInit {
   @Input() project: Project;

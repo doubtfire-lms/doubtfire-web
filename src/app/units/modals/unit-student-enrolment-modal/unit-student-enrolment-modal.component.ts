@@ -1,5 +1,18 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatDivider} from '@angular/material/list';
+import {MatSelect} from '@angular/material/select';
 import {Campus, Project, Unit} from 'src/app/api/models/doubtfire-model';
 import {CampusService} from 'src/app/api/services/campus.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -9,7 +22,20 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'unit-student-enrolment-modal.component.html',
   styleUrls: ['unit-student-enrolment-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatDivider,
+    MatCardContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    MatSelect,
+    MatOption,
+    MatCardActions,
+  ],
 })
 export class UnitStudentEnrolmentModalComponent implements OnInit {
   unit: Unit;

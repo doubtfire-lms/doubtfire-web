@@ -1,4 +1,9 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatSelect} from '@angular/material/select';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CreateNewUnitModal} from 'src/app/admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {Unit} from 'src/app/api/models/unit';
@@ -14,7 +19,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'lti-unit-link.component.html',
   styleUrls: ['lti-unit-link.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIcon, MatFormField, MatLabel, MatSelect, MatOption, MatButton],
 })
 export class LtiUnitLinkComponent implements AfterViewInit {
   constructor(

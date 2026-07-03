@@ -9,7 +9,7 @@ describe('FTaskSheetViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FTaskSheetViewComponent],
+      imports: [FTaskSheetViewComponent],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(FTaskSheetViewComponent, {set: {template: ''}})

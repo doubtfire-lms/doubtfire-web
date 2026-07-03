@@ -1,4 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject, Input} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {Task} from 'src/app/api/models/doubtfire-model';
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -38,7 +41,7 @@ export interface TaskAssessmentComment {
   templateUrl: './task-assessment-comment.component.html',
   styleUrls: ['./task-assessment-comment.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIcon, MatProgressSpinner, MatButton],
 })
 export class TaskAssessmentCommentComponent {
   @Input() task: Task;

@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatButton} from '@angular/material/button';
 import {ScormExtensionComment, Task, TaskComment} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 
@@ -7,7 +8,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: './scorm-extension-comment.component.html',
   styleUrls: ['./scorm-extension-comment.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatButton],
 })
 export class ScormExtensionCommentComponent {
   @Input() comment: ScormExtensionComment;

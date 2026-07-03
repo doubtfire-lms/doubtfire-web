@@ -1,6 +1,13 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {HttpClient, HttpErrorResponse, HttpEventType, HttpResponse} from '@angular/common/http';
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {Subscription, throwError} from 'rxjs';
+import {DragDropDirective} from '../directives/drag-drop.directive';
 import {AlertService} from '../services/alert.service';
 
 /**
@@ -11,7 +18,16 @@ import {AlertService} from '../services/alert.service';
   templateUrl: 'file-drop.component.html',
   styleUrls: ['file-drop.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    DragDropDirective,
+    MatButton,
+    MatProgressSpinner,
+    MatIcon,
+    MatIconButton,
+    ExtendedModule,
+    NgClass,
+    MatProgressBar,
+  ],
 })
 export class FileDropComponent {
   @Input({required: true}) mode: 'endpoint' | 'event';

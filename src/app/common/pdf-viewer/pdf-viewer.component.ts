@@ -1,4 +1,4 @@
-import {PDFDocumentProxy, PdfViewerComponent} from 'ng2-pdf-viewer';
+import {PDFDocumentProxy, PdfViewerComponent, PdfViewerModule} from 'ng2-pdf-viewer';
 import {HttpResponse} from '@angular/common/http';
 import {
   AfterViewInit,
@@ -11,7 +11,14 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatIconButton} from '@angular/material/button';
+import {MatFormField, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {SafePipe} from '../pipes/safe.pipe';
 import {AlertService} from '../services/alert.service';
 
 @Component({
@@ -19,7 +26,18 @@ import {AlertService} from '../services/alert.service';
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatIconButton,
+    MatIcon,
+    FormsModule,
+    MatFormField,
+    MatPrefix,
+    MatInput,
+    MatSuffix,
+    PdfViewerModule,
+    MatProgressSpinner,
+    SafePipe,
+  ],
 })
 export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit {
   private readonly ZOOM_MIN = 0.5;

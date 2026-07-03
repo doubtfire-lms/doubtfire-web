@@ -1,14 +1,41 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {MatSelectChange} from '@angular/material/select';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardFooter,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {Project} from 'src/app/api/models/project';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {FileUploaderComponent} from '../../../../../common/file-uploader/file-uploader.component';
 
 @Component({
   selector: 'f-portfolio-add-extra-files-step',
   templateUrl: 'portfolio-add-extra-files-step.component.html',
   styleUrls: ['portfolio-add-extra-files-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatIcon,
+    MatButton,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    FileUploaderComponent,
+    MatCardFooter,
+  ],
 })
 export class PortfolioAddExtraFilesStepComponent implements OnInit {
   @Input() project: Project;

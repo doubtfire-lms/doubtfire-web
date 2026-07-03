@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {GradeService} from 'src/app/common/services/grade.service';
@@ -8,7 +9,7 @@ import {GradeService} from 'src/app/common/services/grade.service';
   templateUrl: './task-assessment-card.component.html',
   styleUrls: ['./task-assessment-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent],
 })
 export class TaskAssessmentCardComponent {
   constructor(

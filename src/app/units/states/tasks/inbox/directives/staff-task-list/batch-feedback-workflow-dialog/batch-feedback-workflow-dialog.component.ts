@@ -1,5 +1,14 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
 import {TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
 
 export interface BatchFeedbackWorkflowDialogData {
@@ -12,7 +21,7 @@ export interface BatchFeedbackWorkflowDialogData {
   selector: 'f-batch-feedback-workflow-dialog',
   templateUrl: './batch-feedback-workflow-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatIcon, MatDialogActions, MatButton],
 })
 export class BatchFeedbackWorkflowDialogComponent {
   constructor(

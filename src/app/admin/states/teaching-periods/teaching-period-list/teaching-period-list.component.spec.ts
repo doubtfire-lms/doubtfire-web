@@ -14,7 +14,7 @@ describe('TeachingPeriodListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TeachingPeriodListComponent],
+      imports: [TeachingPeriodListComponent],
       providers: [
         {provide: TeachingPeriodService, useValue: emptyProvider},
         {provide: MatDialog, useValue: emptyProvider},

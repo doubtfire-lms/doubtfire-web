@@ -1,3 +1,5 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {AsyncPipe, NgClass} from '@angular/common';
 import {HttpResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -7,13 +9,24 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {MatAccordion} from '@angular/material/expansion';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelDescription,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle,
+} from '@angular/material/expansion';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Task} from 'src/app/api/models/task';
 import {TaskSimilarity} from 'src/app/api/models/task-similarity';
 import {TaskSimilarityService} from 'src/app/api/services/task-similarity.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {JplagReportViewerComponent} from 'src/app/projects/states/jplag/jplag-report-viewer.component';
+import {FileViewerComponent} from '../../../../../../../common/file-viewer/file-viewer.component';
+import {JplagReportViewerComponent as JplagReportViewerComponent_1} from '../../../../../jplag/jplag-report-viewer.component';
 import {SelectedTaskService} from '../../../../selected-task.service';
 
 @Component({
@@ -21,7 +34,22 @@ import {SelectedTaskService} from '../../../../selected-task.service';
   templateUrl: './task-similarity-view.component.html',
   styleUrls: ['./task-similarity-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatIcon,
+    MatButton,
+    JplagReportViewerComponent_1,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    ExtendedModule,
+    NgClass,
+    MatExpansionPanelTitle,
+    MatExpansionPanelDescription,
+    MatIconButton,
+    MatTooltip,
+    FileViewerComponent,
+    AsyncPipe,
+  ],
 })
 export class TaskSimilarityViewComponent implements OnChanges {
   @Input() task: Task;

@@ -10,8 +10,7 @@ describe('UnitDropdownComponent', () => {
   let fixture: ComponentFixture<UnitDropdownComponent>;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UnitDropdownComponent],
-      imports: [MatMenuModule],
+      imports: [MatMenuModule, UnitDropdownComponent],
       providers: [{provide: MediaObserver, useValue: {isActive: () => false}}],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

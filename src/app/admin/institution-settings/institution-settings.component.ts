@@ -1,8 +1,14 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MatTab, MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {LearningOutcomeEditorComponent} from '../../common/learning-outcome-editor/learning-outcome-editor.component';
+import {TeachingPeriodListComponent} from '../states/teaching-periods/teaching-period-list/teaching-period-list.component';
+import {TiiActionLogComponent} from '../tii-action-log/tii-action-log.component';
+import {ActivityTypeListComponent} from './activity-type-list/activity-type-list.component';
+import {CampusListComponent} from './campuses/campus-list/campus-list.component';
+import {OverseerImageListComponent} from './overseer-images/overseer-image-list.component';
 
 type InstitutionSettingsTabKey =
   | 'campuses'
@@ -23,7 +29,16 @@ interface InstitutionSettingsTab {
   templateUrl: 'institution-settings.component.html',
   styleUrls: ['institution-settings.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTabGroup,
+    MatTab,
+    CampusListComponent,
+    ActivityTypeListComponent,
+    TeachingPeriodListComponent,
+    LearningOutcomeEditorComponent,
+    OverseerImageListComponent,
+    TiiActionLogComponent,
+  ],
 })
 export class InstitutionSettingsComponent implements OnInit, OnDestroy {
   public currentTab: InstitutionSettingsTab = {

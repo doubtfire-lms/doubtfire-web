@@ -1,3 +1,4 @@
+import {NgxSkeletonLoaderComponent} from 'ngx-skeleton-loader';
 import {HttpClient} from '@angular/common/http';
 import {
   AfterViewInit,
@@ -8,9 +9,32 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatFooterRow,
+  MatFooterRowDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatToolbar, MatToolbarRow} from '@angular/material/toolbar';
 import {Router} from '@angular/router';
 import {Subscription, finalize, timer} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
@@ -26,13 +50,46 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {SpecConModalService} from 'src/app/common/modals/spec-con-modal/spec-con-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {UnitStudentEnrolmentModalService} from 'src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
+import {StudentCampusSelectComponent} from './student-campus-select/student-campus-select.component';
+import {StudentTutorialSelectComponent} from './student-tutorial-select/student-tutorial-select.component';
 
 @Component({
   selector: 'unit-students-editor',
   templateUrl: 'unit-students-editor.component.html',
   styleUrls: ['unit-students-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatInput,
+    NgxSkeletonLoaderComponent,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    StudentCampusSelectComponent,
+    StudentTutorialSelectComponent,
+    MatCheckbox,
+    FormsModule,
+    MatIconButton,
+    MatIcon,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatToolbar,
+    MatToolbarRow,
+    MatButton,
+    MatPaginator,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+  ],
 })
 export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatTable, {static: false}) table: MatTable<Project>;

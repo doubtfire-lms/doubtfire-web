@@ -1,5 +1,13 @@
 /* eslint-disable no-shadow, @typescript-eslint/no-shadow */
 import {HotkeysService} from '@ngneat/hotkeys';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgxSkeletonLoaderComponent} from 'ngx-skeleton-loader';
+import {
+  CdkFixedSizeVirtualScroll,
+  CdkVirtualForOf,
+  CdkVirtualScrollViewport,
+} from '@angular/cdk/scrolling';
+import {AsyncPipe, NgClass, NgTemplateOutlet} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +19,19 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatOptgroup, MatOption} from '@angular/material/autocomplete';
+import {MatBadge} from '@angular/material/badge';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatChipOption} from '@angular/material/chips';
+import {MatDialog, MatDialogActions, MatDialogClose} from '@angular/material/dialog';
+import {MatAccordion, MatExpansionPanel} from '@angular/material/expansion';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatList, MatListItem} from '@angular/material/list';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatSelect} from '@angular/material/select';
+import {MatTooltip} from '@angular/material/tooltip';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {
@@ -37,6 +57,8 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import {StatusIconComponent} from '../../../../../../common/status-icon/status-icon.component';
+import {UserIconComponent} from '../../../../../../common/user-icon/user-icon.component';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 
 @Component({
@@ -44,7 +66,39 @@ import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-di
   templateUrl: './staff-task-list.component.html',
   styleUrls: ['./staff-task-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    ExtendedModule,
+    NgClass,
+    MatIconButton,
+    MatIcon,
+    FormsModule,
+    MatTooltip,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatAccordion,
+    MatExpansionPanel,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatOptgroup,
+    NgTemplateOutlet,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+    NgxSkeletonLoaderComponent,
+    CdkVirtualScrollViewport,
+    CdkFixedSizeVirtualScroll,
+    MatList,
+    CdkVirtualForOf,
+    MatListItem,
+    UserIconComponent,
+    MatChipOption,
+    StatusIconComponent,
+    MatBadge,
+    AsyncPipe,
+  ],
 })
 export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('searchDialog') searchDialog: TemplateRef<object>;

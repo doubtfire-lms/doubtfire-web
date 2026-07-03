@@ -12,7 +12,7 @@ describe('CommentBubbleActionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CommentBubbleActionComponent],
+      imports: [CommentBubbleActionComponent],
       providers: [{provide: ConfirmationModalService, useValue: emptyProvider}],
       schemas: [NO_ERRORS_SCHEMA],
     })

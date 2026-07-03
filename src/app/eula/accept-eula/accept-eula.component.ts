@@ -1,4 +1,6 @@
+import {AsyncPipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {Observable, ReplaySubject, take} from 'rxjs';
 import {UserService} from 'src/app/api/models/doubtfire-model';
@@ -11,7 +13,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   templateUrl: './accept-eula.component.html',
   styleUrls: ['./accept-eula.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatButton, AsyncPipe],
 })
 export class AcceptEulaComponent {
   public toolName: Observable<string>;

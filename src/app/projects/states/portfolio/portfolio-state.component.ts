@@ -1,8 +1,14 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {GlobalStateService} from '../index/global-state.service';
+import {PortfolioAddExtraFilesStepComponent} from './directives/portfolio-add-extra-files-step/portfolio-add-extra-files-step.component';
+import {PortfolioGradeSelectStepComponent} from './directives/portfolio-grade-select-step/portfolio-grade-select-step.component';
+import {PortfolioLearningSummaryReportStepComponent} from './directives/portfolio-learning-summary-report-step/portfolio-learning-summary-report-step.component';
+import {PortfolioReviewStepComponent} from './directives/portfolio-review-step/portfolio-review-step.component';
+import {PortfolioWelcomeStepComponent} from './directives/portfolio-welcome-step/portfolio-welcome-step.component';
 
 interface PortfolioStepTab {
   title: string;
@@ -15,7 +21,15 @@ interface PortfolioStepTab {
   templateUrl: './portfolio-state.component.html',
   styleUrls: ['./portfolio-state.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTabGroup,
+    MatTab,
+    PortfolioWelcomeStepComponent,
+    PortfolioGradeSelectStepComponent,
+    PortfolioLearningSummaryReportStepComponent,
+    PortfolioAddExtraFilesStepComponent,
+    PortfolioReviewStepComponent,
+  ],
 })
 export class PortfolioStateComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;

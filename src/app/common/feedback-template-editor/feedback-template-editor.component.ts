@@ -7,10 +7,29 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatChip, MatChipAvatar} from '@angular/material/chips';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSelectChange} from '@angular/material/select';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
 import {
   FeedbackTemplate,
   FeedbackTemplateService,
@@ -32,7 +51,32 @@ import {CsvUploadModalService} from '../modals/csv-upload-modal/csv-upload-modal
   selector: 'f-feedback-template-editor',
   templateUrl: 'feedback-template-editor.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIcon,
+    MatSortHeader,
+    MatChip,
+    MatChipAvatar,
+    MatIconButton,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFormField,
+    MatInput,
+    MatPaginator,
+    MatButton,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    FormsModule,
+  ],
 })
 export class FeedbackTemplateEditorComponent implements OnChanges, AfterViewInit {
   @Input() context?: TaskDefinition | Unit;

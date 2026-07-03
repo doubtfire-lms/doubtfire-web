@@ -3,7 +3,6 @@ import {TaskDefinition} from '../../api/models/doubtfire-model';
 
 @Pipe({
   name: 'taskDefinitionName',
-  standalone: false,
 })
 export class TaskDefinitionNamePipe implements PipeTransform {
   transform(taskDefinitions: readonly TaskDefinition[], searchName: string): TaskDefinition[] {

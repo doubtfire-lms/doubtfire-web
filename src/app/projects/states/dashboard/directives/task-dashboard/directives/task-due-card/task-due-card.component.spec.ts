@@ -9,7 +9,7 @@ describe('TaskDueCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TaskDueCardComponent],
+      imports: [TaskDueCardComponent],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(TaskDueCardComponent, {set: {template: ''}})

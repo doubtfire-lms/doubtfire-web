@@ -1,8 +1,11 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
 import {GroupSet, Unit, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {GroupSetManagerComponent} from '../../../../groups/group-set-manager/group-set-manager.component';
 
 // This component is only displayed to staff
 // Students will be shown the projects/states/groups (project-groups) component
@@ -11,7 +14,7 @@ import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global
   templateUrl: './unit-groups.component.html',
   styleUrl: './unit-groups.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [GroupSetManagerComponent, MatIcon, MatButton, RouterLink],
 })
 export class UnitGroupsComponent implements OnInit, OnDestroy {
   @Input() unit$: Observable<Unit>;

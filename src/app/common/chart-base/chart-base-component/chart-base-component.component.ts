@@ -9,7 +9,6 @@ import {ChangeDetectionStrategy, Component, ViewContainerRef} from '@angular/cor
 @Component({
   templateUrl: './chart-base-component.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class ChartBaseComponent {
   constructor(public viewContainerRef: ViewContainerRef) {}

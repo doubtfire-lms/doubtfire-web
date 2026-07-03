@@ -1,5 +1,14 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {FileUploaderComponent} from '../../file-uploader/file-uploader.component';
 
 export interface CsvUploadFileSpec {
   name: string;
@@ -21,7 +30,14 @@ export interface CsvUploadModalData {
   templateUrl: './csv-upload-modal.component.html',
   styleUrls: ['./csv-upload-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    FileUploaderComponent,
+    MatDialogActions,
+    MatButton,
+  ],
 })
 export class CsvUploadModalComponent {
   constructor(

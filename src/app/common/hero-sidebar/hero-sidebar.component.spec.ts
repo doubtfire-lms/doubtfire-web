@@ -10,7 +10,7 @@ describe('HeroSidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HeroSidebarComponent],
+      imports: [HeroSidebarComponent],
       providers: [
         {
           provide: DoubtfireConstants,

@@ -1,5 +1,6 @@
 import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
-import {DOCUMENT} from '@angular/common';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {AsyncPipe, DOCUMENT, NgClass} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -10,9 +11,19 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatBadge} from '@angular/material/badge';
+import {MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
+import {MatChipOption} from '@angular/material/chips';
 import {MatDialog} from '@angular/material/dialog';
-import {MatSelectionList} from '@angular/material/list';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MatFormField} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatListOption, MatSelectionList} from '@angular/material/list';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatSelect} from '@angular/material/select';
+import {MatTab, MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
+import {MatTooltip} from '@angular/material/tooltip';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   AuthenticationService,
@@ -32,7 +43,12 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {DiscussedInClassReasonModalService} from 'src/app/common/modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {StatusIconComponent} from '../../../common/status-icon/status-icon.component';
+import {UserIconComponent} from '../../../common/user-icon/user-icon.component';
+import {TaskCommentsViewerComponent} from '../../../tasks/task-comments-viewer/task-comments-viewer.component';
 import {AddEngagementDialogComponent} from '../dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
+import {DiscussionPromptsComponent} from '../discussion-prompts/discussion-prompts.component';
+import {StaffNotesComponent} from '../staff-notes/staff-notes.component';
 
 enum TutorDiscussionTabView {
   SHOW_COMMENTS,
@@ -45,7 +61,32 @@ enum TutorDiscussionTabView {
   styleUrl: './tutor-discussion.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatProgressSpinner,
+    ExtendedModule,
+    NgClass,
+    MatButton,
+    MatFormField,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+    MatSelectionList,
+    MatListOption,
+    UserIconComponent,
+    MatChipOption,
+    StatusIconComponent,
+    MatBadge,
+    MatFabButton,
+    MatTabGroup,
+    MatTab,
+    TaskCommentsViewerComponent,
+    StaffNotesComponent,
+    DiscussionPromptsComponent,
+    AsyncPipe,
+  ],
 })
 export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;

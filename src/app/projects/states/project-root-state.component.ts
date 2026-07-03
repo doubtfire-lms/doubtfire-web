@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, RouterOutlet} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {Project} from 'src/app/api/models/doubtfire-model';
 
@@ -9,7 +9,7 @@ import {Project} from 'src/app/api/models/doubtfire-model';
   templateUrl: './project-root-state.component.html',
   styleUrl: './project-root-state.component.css',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [RouterOutlet],
 })
 export class ProjectRootStateComponent {
   @Input() public project$: Observable<Project>;

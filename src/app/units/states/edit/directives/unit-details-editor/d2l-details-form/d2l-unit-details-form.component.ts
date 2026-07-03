@@ -1,8 +1,19 @@
 //
 // Modal to show Doubtfire version info
 //
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject, Injectable, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import {MatFormField, MatHint} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
 import {Observable} from 'rxjs';
 import {D2lAssessmentMapping} from 'src/app/api/models/d2l/d2l_assessment_mapping';
 import {D2lAssessmentMappingService} from 'src/app/api/models/doubtfire-model';
@@ -14,7 +25,16 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'd2l-unit-details-form.component.html',
   styleUrl: 'd2l-unit-details-form.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    CdkScrollable,
+    MatDialogContent,
+    MatFormField,
+    MatInput,
+    FormsModule,
+    MatHint,
+    MatDialogActions,
+    MatButton,
+  ],
 })
 export class D2lUnitDetailsFormComponent implements OnInit {
   public d2lDataMapping: D2lAssessmentMapping = new D2lAssessmentMapping(this.data);

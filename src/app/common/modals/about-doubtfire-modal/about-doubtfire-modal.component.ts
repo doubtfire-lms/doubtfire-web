@@ -1,9 +1,30 @@
 //
 // Modal to show Doubtfire version info
 //
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject, Injectable} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import {Sort} from '@angular/material/sort';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+} from '@angular/material/dialog';
+import {MatDivider} from '@angular/material/list';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AboutDoubtfireModalService} from '../about-doubtfire-modal/about-doubtfire-modal.service';
 import {AboutDialogData} from './about-dialog-data';
@@ -13,7 +34,26 @@ import {GithubProfile} from './github-profile';
   selector: 'about-doubtfire-dialog',
   templateUrl: 'about-doubtfire-modal-content.tpl.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    CdkScrollable,
+    MatDialogContent,
+    MatDivider,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
 })
 export class AboutDoubtfireModalContent {
   public displayedColumns: string[] = [

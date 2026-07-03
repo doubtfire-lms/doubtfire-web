@@ -1,4 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {GradeService} from 'src/app/common/services/grade.service';
@@ -8,7 +13,7 @@ import {GradeService} from 'src/app/common/services/grade.service';
   templateUrl: 'task-definition-general.component.html',
   styleUrls: ['task-definition-general.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatFormField, MatLabel, MatSelect, FormsModule, MatOption, MatInput],
 })
 export class TaskDefinitionGeneralComponent {
   @Input() taskDefinition: TaskDefinition;

@@ -6,7 +6,11 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {MatSelectChange} from '@angular/material/select';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
 import {Project, ProjectService, UserService} from 'src/app/api/models/doubtfire-model';
@@ -20,7 +24,15 @@ import {TaskPlannerComponent} from './task-planner/task-planner.component';
   templateUrl: 'project-plan.component.html',
   styleUrls: ['project-plan.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    MatButton,
+    TaskPlannerComponent,
+  ],
 })
 export class ProjectPlanComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;

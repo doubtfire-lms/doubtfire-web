@@ -6,8 +6,27 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {MatTableDataSource} from '@angular/material/table';
+import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatFormField, MatSuffix} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Observable, Subscription} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -17,13 +36,39 @@ import {Unit} from 'src/app/api/models/unit';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {StatusIconComponent} from '../../../../../../../common/status-icon/status-icon.component';
 
 @Component({
   selector: 'f-task-definition-prerequisites',
   templateUrl: 'task-definition-prerequisites.component.html',
   styleUrls: ['task-definition-prerequisites.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    StatusIconComponent,
+    MatSelect,
+    MatTooltip,
+    MatOption,
+    MatIconButton,
+    MatIcon,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFormField,
+    MatInput,
+    FormsModule,
+    MatAutocompleteTrigger,
+    ReactiveFormsModule,
+    MatButton,
+    MatSuffix,
+    MatAutocomplete,
+  ],
 })
 export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   @Input() taskDefinition: TaskDefinition;

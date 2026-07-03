@@ -78,7 +78,7 @@
     ></f-task-feedback-templates>
   }
   <div class="composer-container" fxLayout="row" fxLayoutAlign="space-around center">
-    <div class="composer-action-group" [@shrinkgrow]="$userIsTyping | async">
+    <div class="composer-action-group" [class.typing]="$userIsTyping | async">
       <!-- if active -->
       <div fxLayout="row" fxLayoutAlign="start center">
         @if ($userIsTyping | async) {

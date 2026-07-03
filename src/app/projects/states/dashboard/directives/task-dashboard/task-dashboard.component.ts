@@ -6,22 +6,64 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatTab, MatTabChangeEvent, MatTabGroup, MatTabLabel} from '@angular/material/tabs';
 import {ActivatedRoute} from '@angular/router';
 import {UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {fPdfViewerComponent} from '../../../../../common/pdf-viewer/pdf-viewer.component';
 import {SelectedTaskService} from '../../selected-task.service';
 import {DashboardViews} from '../../selected-task.service';
+import {DiscussionPromptsViewComponent} from './directives/discussion-prompts-view/discussion-prompts-view.component';
+import {StaffNotesViewComponent} from './directives/staff-notes-view/staff-notes-view.component';
+import {TaskAssessmentCardComponent} from './directives/task-assessment-card/task-assessment-card.component';
+import {TaskDescriptionCardComponent} from './directives/task-description-card/task-description-card.component';
+import {TaskDueCardComponent} from './directives/task-due-card/task-due-card.component';
+import {TaskIlosCardComponent} from './directives/task-ilos-card/task-ilos-card.component';
+import {TaskOverseerReportComponent} from './directives/task-overseer-report/task-overseer-report.component';
+import {TaskPrerequisitesCardComponent} from './directives/task-prerequisites-card/task-prerequisites-card.component';
+import {TaskScormCardComponent} from './directives/task-scorm-card/task-scorm-card.component';
+import {TaskSimilarityViewComponent} from './directives/task-similarity-view/task-similarity-view.component';
+import {TaskStatusCardComponent} from './directives/task-status-card/task-status-card.component';
+import {TaskSubmissionCardComponent} from './directives/task-submission-card/task-submission-card.component';
+import {TutorNotesViewComponent} from './directives/tutor-notes-view/tutor-notes-view.component';
 
 @Component({
   selector: 'f-task-dashboard',
   templateUrl: './task-dashboard.component.html',
   styleUrls: ['./task-dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTabGroup,
+    MatTab,
+    MatTabLabel,
+    MatProgressSpinner,
+    MatIcon,
+    MatIconButton,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    TaskIlosCardComponent,
+    TaskDescriptionCardComponent,
+    TaskPrerequisitesCardComponent,
+    TaskScormCardComponent,
+    TaskStatusCardComponent,
+    TaskDueCardComponent,
+    TaskAssessmentCardComponent,
+    TaskSubmissionCardComponent,
+    fPdfViewerComponent,
+    TaskSimilarityViewComponent,
+    TaskOverseerReportComponent,
+    StaffNotesViewComponent,
+    TutorNotesViewComponent,
+    DiscussionPromptsViewComponent,
+  ],
 })
 export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;

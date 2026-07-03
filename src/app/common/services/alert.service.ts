@@ -1,5 +1,13 @@
 import {ChangeDetectionStrategy, Component, Inject, Injectable, inject} from '@angular/core';
-import {MAT_SNACK_BAR_DATA, MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {
+  MAT_SNACK_BAR_DATA,
+  MatSnackBar,
+  MatSnackBarAction,
+  MatSnackBarActions,
+  MatSnackBarRef,
+} from '@angular/material/snack-bar';
 import {ConfettiService} from './confetti.service';
 
 interface AlertData {
@@ -50,7 +58,7 @@ export class AlertService {
   selector: 'f-alert',
   templateUrl: './alert.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIcon, MatSnackBarActions, MatButton, MatSnackBarAction],
 })
 export class AlertComponent {
   snackBarRef = inject(MatSnackBarRef);

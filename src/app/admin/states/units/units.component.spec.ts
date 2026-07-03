@@ -15,7 +15,7 @@ describe('FUnitsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FUnitsComponent],
+      imports: [FUnitsComponent],
       providers: [
         {provide: CreateNewUnitModal, useValue: emptyProvider},
         {provide: GlobalStateService, useValue: emptyProvider},

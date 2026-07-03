@@ -1,7 +1,18 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
 import {Subject} from 'rxjs';
 import {Task} from 'src/app/api/models/doubtfire-model';
+import {TaskOverseerReportComponent} from '../../../projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
 import {TaskAssessmentModalData} from './task-assessment-modal.service';
 
 @Component({
@@ -9,7 +20,16 @@ import {TaskAssessmentModalData} from './task-assessment-modal.service';
   templateUrl: './task-assessment-modal.component.html',
   styleUrls: ['./task-assessment-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    TaskOverseerReportComponent,
+    MatDialogActions,
+    MatButton,
+    MatIcon,
+    MatDialogClose,
+  ],
 })
 export class TaskAssessmentModalComponent implements OnInit {
   @Input() task: Task;

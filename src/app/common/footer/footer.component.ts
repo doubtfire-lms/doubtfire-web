@@ -1,3 +1,6 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {FlexModule} from 'ng-flex-layout/flex';
+import {NgClass, NgTemplateOutlet} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,6 +10,13 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import {MatIconButton} from '@angular/material/button';
+import {MatChipListbox, MatChipOption} from '@angular/material/chips';
+import {MatIcon} from '@angular/material/icon';
+import {MatDivider, MatListItemIcon} from '@angular/material/list';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatToolbar} from '@angular/material/toolbar';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Observable} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {UnitRole} from 'src/app/api/models/unit-role';
@@ -14,18 +24,42 @@ import {ProjectService} from 'src/app/api/services/project.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import {ModerationComponent} from '../../units/states/tasks/inbox/directives/moderation/moderation.component';
+import {TaskClaimComponent} from '../../units/states/tasks/inbox/directives/task-claim/task-claim.component';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
 import {DiscussedInClassReasonModalService} from '../modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
 import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
+import {ProjectProgressBarComponent} from '../project-progress-bar/project-progress-bar.component';
 import {AlertService} from '../services/alert.service';
+import {UserBadgeComponent} from '../user-badge/user-badge.component';
 
 @Component({
   selector: 'f-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatToolbar,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+    ExtendedModule,
+    NgClass,
+    UserBadgeComponent,
+    FlexModule,
+    NgTemplateOutlet,
+    MatDivider,
+    ModerationComponent,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatListItemIcon,
+    TaskClaimComponent,
+    ProjectProgressBarComponent,
+    MatChipListbox,
+    MatChipOption,
+  ],
 })
 export class FooterComponent implements OnInit {
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;

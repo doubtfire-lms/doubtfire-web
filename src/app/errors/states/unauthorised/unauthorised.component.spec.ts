@@ -12,7 +12,7 @@ describe('UnauthorisedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UnauthorisedComponent],
+      imports: [UnauthorisedComponent],
       providers: [{provide: Location, useValue: emptyProvider}],
       schemas: [NO_ERRORS_SCHEMA],
     })

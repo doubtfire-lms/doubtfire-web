@@ -9,8 +9,7 @@ describe('TaskDropdownComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TaskDropdownComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, TaskDropdownComponent],
     }).compileComponents();
   });
 

@@ -1,5 +1,16 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
 
@@ -12,7 +23,16 @@ export interface SubmissionTypeModalData {
   templateUrl: './submission-type-modal.component.html',
   styleUrls: ['./submission-type-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatButton,
+    MatTooltip,
+    MatIcon,
+    MatDialogActions,
+    MatDialogClose,
+  ],
 })
 export class SubmissionTypeModalComponent {
   selectedTransition: 'ready_for_feedback' | 'assess_in_portfolio' = null;

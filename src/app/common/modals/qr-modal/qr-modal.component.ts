@@ -8,7 +8,6 @@ import {QrModalData} from './qr-modal.service';
   templateUrl: './qr-modal.component.html',
   styleUrls: ['./qr-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class QrModalComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: QrModalData) {}

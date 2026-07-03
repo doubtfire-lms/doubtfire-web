@@ -12,7 +12,7 @@ describe('PdfViewerPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PdfViewerPanelComponent],
+      imports: [PdfViewerPanelComponent],
       providers: [{provide: FileDownloaderService, useValue: emptyProvider}],
       schemas: [NO_ERRORS_SCHEMA],
     })

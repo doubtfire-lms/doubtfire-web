@@ -6,10 +6,7 @@ import {Directive, EventEmitter, HostBinding, HostListener, Output} from '@angul
  * onto the component. While a file is being dragged over the component, the dragover css
  * class will be applied to the element.
  */
-@Directive({
-  selector: '[appDragDrop]',
-  standalone: false,
-})
+@Directive({selector: '[appDragDrop]'})
 export class DragDropDirective {
   @Output() fileDropped: EventEmitter<FileList> = new EventEmitter();
 

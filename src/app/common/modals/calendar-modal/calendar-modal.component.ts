@@ -1,3 +1,5 @@
+import {CdkCopyToClipboard} from '@angular/cdk/clipboard';
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -6,8 +8,34 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatChipListbox, MatChipOption, MatChipRemove} from '@angular/material/chips';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatSelect} from '@angular/material/select';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Project, ProjectService, Webcal, WebcalService} from 'src/app/api/models/doubtfire-model';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AlertService} from '../../services/alert.service';
@@ -18,7 +46,40 @@ import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal
   templateUrl: './calendar-modal.component.html',
   styleUrls: ['./calendar-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    MatSlideToggle,
+    MatTooltip,
+    CdkScrollable,
+    MatDialogContent,
+    MatProgressSpinner,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardSubtitle,
+    MatCardContent,
+    MatChipListbox,
+    MatChipOption,
+    MatIcon,
+    MatChipRemove,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatCheckbox,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatSelect,
+    MatOption,
+    MatIconButton,
+    MatTabGroup,
+    MatTab,
+    CdkCopyToClipboard,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
 })
 export class CalendarModalComponent implements OnInit, AfterViewInit {
   @ViewChild('webcalToggle') webcalToggle: MatSlideToggle;

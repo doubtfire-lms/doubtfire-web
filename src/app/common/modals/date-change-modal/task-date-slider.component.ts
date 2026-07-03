@@ -1,4 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatSlider, MatSliderThumb} from '@angular/material/slider';
+import {RouterLink} from '@angular/router';
 import {Task} from 'src/app/api/models/doubtfire-model';
 import {MappingFunctions} from 'src/app/api/services/mapping-fn';
 import {AlertService} from '../../services/alert.service';
@@ -9,7 +13,7 @@ import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal
   styleUrl: './task-date-slider.component.scss',
   templateUrl: './task-date-slider.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatSlider, MatSliderThumb, FormsModule, MatButton, RouterLink],
 })
 export class TaskDateSliderComponent implements OnChanges {
   @Input() task: Task;

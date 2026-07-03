@@ -1,13 +1,16 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Task} from 'src/app/api/models/doubtfire-model';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {StatusIconComponent} from '../../../../../../common/status-icon/status-icon.component';
 
 @Component({
   selector: 'task-list-item',
   templateUrl: 'task-list-item.component.html',
   styleUrls: ['task-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIcon, MatTooltip, StatusIconComponent],
 })
 export class TaskListItemComponent implements OnInit {
   @Input() task: Task;

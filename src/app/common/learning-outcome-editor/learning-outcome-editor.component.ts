@@ -16,11 +16,40 @@ import {
   model,
   signal,
 } from '@angular/core';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatChipInputEvent} from '@angular/material/chips';
+import {FormsModule} from '@angular/forms';
+import {
+  MatAutocomplete,
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+  MatOption,
+} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {
+  MatChipGrid,
+  MatChipInput,
+  MatChipInputEvent,
+  MatChipRemove,
+  MatChipRow,
+} from '@angular/material/chips';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Subscription} from 'rxjs';
 import {
   FeedbackTemplateService,
@@ -32,6 +61,7 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {FeedbackTemplateEditorComponent} from '../feedback-template-editor/feedback-template-editor.component';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
 import {
@@ -45,7 +75,37 @@ import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-
   selector: 'f-learning-outcome-editor',
   templateUrl: 'learning-outcome-editor.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatChipRow,
+    MatTooltip,
+    MatIconButton,
+    MatIcon,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFormField,
+    MatInput,
+    MatPaginator,
+    MatButton,
+    MatLabel,
+    FormsModule,
+    MatChipGrid,
+    MatChipRemove,
+    MatAutocompleteTrigger,
+    MatChipInput,
+    MatAutocomplete,
+    MatOption,
+    FeedbackTemplateEditorComponent,
+  ],
 })
 export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
   @Input() context?: TaskDefinition | Unit;

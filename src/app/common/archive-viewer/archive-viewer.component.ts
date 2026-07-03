@@ -1,4 +1,7 @@
 import JSZip from 'jszip';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {EditorComponent} from 'ngx-monaco-editor-v2-alternative';
+import {NgClass, NgTemplateOutlet} from '@angular/common';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -10,7 +13,13 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {firstValueFrom} from 'rxjs';
+import {fPdfViewerComponent} from '../pdf-viewer/pdf-viewer.component';
 import {AlertService} from '../services/alert.service';
 import {
   ArchiveFileEntry,
@@ -41,7 +50,19 @@ interface ArchiveFileTreeNode {
   templateUrl: './archive-viewer.component.html',
   styleUrls: ['./archive-viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatProgressSpinner,
+    MatIcon,
+    MatButton,
+    NgTemplateOutlet,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    EditorComponent,
+    FormsModule,
+    fPdfViewerComponent,
+    ExtendedModule,
+    NgClass,
+  ],
 })
 export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Input() archiveFile: File | Blob | null = null;

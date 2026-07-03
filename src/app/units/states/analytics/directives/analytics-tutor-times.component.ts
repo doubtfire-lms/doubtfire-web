@@ -1,6 +1,21 @@
-import {CalendarEvent} from 'angular-calendar';
+import {CalendarEvent, CalendarWeekViewComponent} from 'angular-calendar';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgStyle} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatCard, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerInputEvent,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import {MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Observable} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
@@ -27,7 +42,27 @@ interface SessionEvent extends CalendarEvent {
   styleUrls: ['analytics-tutor-times.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatButton,
+    MatTooltip,
+    MatIcon,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatDatepickerInput,
+    FormsModule,
+    MatHint,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatSlideToggle,
+    CalendarWeekViewComponent,
+    ExtendedModule,
+    NgStyle,
+  ],
 })
 export class AnalyticsTutorTimesComponent implements OnInit {
   @Input() unit: Unit;

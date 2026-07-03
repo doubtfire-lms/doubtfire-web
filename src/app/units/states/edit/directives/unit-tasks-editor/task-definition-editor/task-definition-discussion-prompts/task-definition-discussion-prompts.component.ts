@@ -6,8 +6,27 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {MatTableDataSource} from '@angular/material/table';
+import {FormsModule, UntypedFormControl, Validators} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
 import {Observable, Subscription} from 'rxjs';
 import {DiscussionPrompt} from 'src/app/api/models/discussion-prompt';
 import {Task} from 'src/app/api/models/task';
@@ -25,7 +44,29 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'task-definition-discussion-prompts.component.html',
   styleUrls: ['task-definition-discussion-prompts.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    MatSelect,
+    MatOption,
+    MatIconButton,
+    MatIcon,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatButton,
+    MatCard,
+    MatCardContent,
+  ],
 })
 export class TaskDefinitionDiscussionPromptsComponent
   extends EntityFormComponent<DiscussionPrompt>

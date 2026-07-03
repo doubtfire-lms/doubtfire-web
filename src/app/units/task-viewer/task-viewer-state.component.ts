@@ -1,16 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {FlexModule} from 'ng-flex-layout/flex';
+import {AsyncPipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {of} from 'rxjs';
 import {TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
+import {FTaskDetailsViewComponent} from './directives/task-details-view/task-details-view.component';
+import {FTaskSheetViewComponent} from './directives/task-sheet-view/task-sheet-view.component';
+import {FUnitTaskListComponent} from './directives/unit-task-list/unit-task-list.component';
 
 @Component({
   selector: 'f-task-viewer-state',
   templateUrl: './task-viewer-state.component.html',
   styleUrl: './task-viewer-state.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    FlexModule,
+    ExtendedModule,
+    FUnitTaskListComponent,
+    FTaskDetailsViewComponent,
+    FTaskSheetViewComponent,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+    AsyncPipe,
+  ],
 })
 export class TaskViewerStateComponent {
   @Input() public unit$: Observable<Unit>;

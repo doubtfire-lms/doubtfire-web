@@ -1,12 +1,14 @@
 import {ChangeDetectionStrategy, Component, Inject, Input} from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {fPdfViewerComponent} from '../pdf-viewer/pdf-viewer.component';
 
 @Component({
   selector: 'pdf-viewer-panel',
   templateUrl: './pdf-viewer-panel.component.html',
   styleUrls: ['./pdf-viewer-panel.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [fPdfViewerComponent, MatIcon],
 })
 export class PdfViewerPanelComponent {
   @Input() pdfUrl: string;

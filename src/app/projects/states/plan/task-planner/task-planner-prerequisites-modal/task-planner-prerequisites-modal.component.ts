@@ -1,9 +1,33 @@
 import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle,
+} from '@angular/material/card';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatIcon} from '@angular/material/icon';
+import {MatDivider} from '@angular/material/list';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Project} from 'src/app/api/models/project';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
+import {StatusIconComponent} from '../../../../../common/status-icon/status-icon.component';
+import {TaskPrerequisitesCardComponent} from '../../../dashboard/directives/task-dashboard/directives/task-prerequisites-card/task-prerequisites-card.component';
 
 export interface TaskPlannerPrerequisitesModalData {
   taskDefinition: TaskDefinition;
@@ -16,7 +40,28 @@ export interface TaskPlannerPrerequisitesModalData {
   templateUrl: './task-planner-prerequisites-modal.component.html',
   styleUrl: './task-planner-prerequisites-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    StatusIconComponent,
+    MatCardContent,
+    MatCardSubtitle,
+    TaskPrerequisitesCardComponent,
+    MatDivider,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIcon,
+    MatTooltip,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+  ],
 })
 export class TaskPlannerPrerequisitesModalComponent implements OnInit {
   @Input() taskDefinition: TaskDefinition;

@@ -1,5 +1,24 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {
+  MatDateRangeInput,
+  MatDateRangePicker,
+  MatDatepickerToggle,
+  MatEndDate,
+  MatStartDate,
+} from '@angular/material/datepicker';
+import {
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
 import {UnitService} from 'src/app/api/services/unit.service';
@@ -9,7 +28,26 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'create-new-unit-modal-content',
   templateUrl: 'create-new-unit-modal-content.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    FormsModule,
+    CdkScrollable,
+    MatDialogContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatSelect,
+    MatOption,
+    MatDateRangeInput,
+    MatStartDate,
+    MatEndDate,
+    MatHint,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDateRangePicker,
+    MatDialogActions,
+    MatButton,
+  ],
 })
 export class CreateNewUnitModalContentComponent implements OnInit {
   constructor(

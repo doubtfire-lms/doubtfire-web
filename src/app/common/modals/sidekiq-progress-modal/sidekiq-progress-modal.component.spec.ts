@@ -16,7 +16,7 @@ describe('SidekiqProgressModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SidekiqProgressModalComponent],
+      imports: [SidekiqProgressModalComponent],
       providers: [
         {provide: AlertService, useValue: emptyProvider},
         {provide: MAT_DIALOG_DATA, useValue: emptyProvider},

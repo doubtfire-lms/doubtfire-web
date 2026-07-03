@@ -1,4 +1,19 @@
+import {DatePipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardFooter,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
+import {MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {Unit} from 'src/app/api/models/unit';
@@ -12,7 +27,26 @@ import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global
   templateUrl: './rollover.component.html',
   styleUrl: './rollover.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    MatInput,
+    MatDatepickerInput,
+    MatHint,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatCardFooter,
+    MatButton,
+    DatePipe,
+  ],
 })
 export class RolloverComponent implements OnInit {
   @Input() unitId: number;

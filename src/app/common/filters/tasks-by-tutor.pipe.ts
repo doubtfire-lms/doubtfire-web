@@ -3,7 +3,6 @@ import {Task, UnitRole} from '../../api/models/doubtfire-model';
 
 @Pipe({
   name: 'tasksByTutor',
-  standalone: false,
 })
 export class TasksByTutorPipe implements PipeTransform {
   transform(currentUnitRole: UnitRole, tasks: Task[], unitRoleId?: number | string): Task[] {

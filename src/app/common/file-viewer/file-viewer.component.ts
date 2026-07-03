@@ -1,4 +1,4 @@
-import {PDFProgressData} from 'ng2-pdf-viewer';
+import {PDFProgressData, PdfViewerModule} from 'ng2-pdf-viewer';
 import {HttpResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -8,7 +8,9 @@ import {
   OnDestroy,
   SimpleChanges,
 } from '@angular/core';
+import {MatProgressBar} from '@angular/material/progress-bar';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {SafePipe} from '../pipes/safe.pipe';
 import {AlertService} from '../services/alert.service';
 
 /**
@@ -19,7 +21,7 @@ import {AlertService} from '../services/alert.service';
   templateUrl: './file-viewer.component.html',
   styleUrls: ['./file-viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatProgressBar, PdfViewerModule, SafePipe],
 })
 export class FileViewerComponent implements OnDestroy, OnChanges {
   /**

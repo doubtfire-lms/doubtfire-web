@@ -8,6 +8,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
 import {User, UserService} from 'src/app/api/models/doubtfire-model';
 
 interface D3Selection {
@@ -43,7 +44,7 @@ declare const d3: {
   templateUrl: './user-icon.component.html',
   styleUrls: ['./user-icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIcon],
 })
 export class UserIconComponent implements AfterViewInit, OnChanges {
   @Input() user: User;

@@ -14,7 +14,7 @@ describe('UnitStudentEnrolmentModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UnitStudentEnrolmentModalComponent],
+      imports: [UnitStudentEnrolmentModalComponent],
       providers: [
         {provide: MatDialogRef, useValue: emptyProvider},
         {provide: MAT_DIALOG_DATA, useValue: emptyProvider},

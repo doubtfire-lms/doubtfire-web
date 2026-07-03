@@ -15,7 +15,7 @@ describe('StaffNotesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StaffNotesComponent],
+      imports: [StaffNotesComponent],
       providers: [
         {provide: UserService, useValue: emptyProvider},
         {provide: StaffNoteService, useValue: emptyProvider},

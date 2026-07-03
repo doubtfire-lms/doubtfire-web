@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {MediaObserver} from 'ng-flex-layout';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {MatBadge} from '@angular/material/badge';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatListItemIcon} from '@angular/material/list';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatToolbar} from '@angular/material/toolbar';
+import {MatTooltip} from '@angular/material/tooltip';
+import {Router, RouterLink} from '@angular/router';
 import {Subscription, asapScheduler, observeOn} from 'rxjs';
 import {
   AuthenticationService,
@@ -22,13 +31,33 @@ import {QrModalService} from '../modals/qr-modal/qr-modal.service';
 import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
 import {TutorNotesModalService} from '../modals/tutor-notes-modal/tutor-notes-modal.service';
 import {IsActiveUnitRole} from '../pipes/is-active-unit-role.pipe';
+import {UserIconComponent} from '../user-icon/user-icon.component';
+import {TaskDropdownComponent} from './task-dropdown/task-dropdown.component';
+import {UnitDropdownComponent} from './unit-dropdown/unit-dropdown.component';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatToolbar,
+    ExtendedModule,
+    NgClass,
+    RouterLink,
+    MatIcon,
+    UnitDropdownComponent,
+    TaskDropdownComponent,
+    MatIconButton,
+    MatBadge,
+    MatTooltip,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatListItemIcon,
+    MatButton,
+    UserIconComponent,
+  ],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   task: Task;

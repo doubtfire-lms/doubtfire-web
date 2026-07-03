@@ -23,7 +23,7 @@ describe('TaskCommentsViewerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TaskCommentsViewerComponent],
+      imports: [TaskCommentsViewerComponent],
       providers: [
         {provide: TaskCommentService, useValue: taskCommentServiceStub},
         {provide: FeedbackTemplateService, useValue: emptyProvider},

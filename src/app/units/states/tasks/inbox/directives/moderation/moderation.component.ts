@@ -1,4 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Router} from '@angular/router';
 import {FeedbackModerationActionType, Task} from 'src/app/api/models/task';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -9,7 +12,7 @@ import {ConfirmModerationModalService} from './confirm-moderation-modal/confirm-
   templateUrl: './moderation.component.html',
   styleUrl: './moderation.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIconButton, MatTooltip, MatIcon],
 })
 export class ModerationComponent {
   @Input() task: Task;

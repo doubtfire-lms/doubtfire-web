@@ -1,16 +1,42 @@
+import {AsyncPipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
+import {MatIconButton} from '@angular/material/button';
+import {MatCard, MatCardFooter, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {MatFormField} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
 import {Observable, map, startWith} from 'rxjs';
 import {Group, GroupSet, Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {GroupService} from 'src/app/api/services/group.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {GroupMemberListComponent} from '../group-member-list/group-member-list.component';
+import {GroupSelectorComponent} from '../group-selector/group-selector.component';
 
 @Component({
   selector: 'f-group-set-manager',
   templateUrl: './group-set-manager.component.html',
   styleUrls: ['./group-set-manager.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    GroupSelectorComponent,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatIconButton,
+    MatIcon,
+    MatFormField,
+    MatInput,
+    FormsModule,
+    GroupMemberListComponent,
+    MatCardFooter,
+    MatAutocompleteTrigger,
+    ReactiveFormsModule,
+    MatAutocomplete,
+    MatOption,
+    AsyncPipe,
+  ],
 })
 export class GroupSetManagerComponent implements OnInit {
   @Input() project: Project;

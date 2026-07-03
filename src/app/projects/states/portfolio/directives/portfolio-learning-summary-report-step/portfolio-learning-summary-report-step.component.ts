@@ -1,14 +1,33 @@
 import {ChangeDetectionStrategy, Component, Injector, Input} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardFooter,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {FileUploaderComponent} from '../../../../../common/file-uploader/file-uploader.component';
 
 @Component({
   selector: 'f-portfolio-learning-summary-report-step',
   templateUrl: 'portfolio-learning-summary-report-step.component.html',
   styleUrls: ['portfolio-learning-summary-report-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatIcon,
+    MatButton,
+    FileUploaderComponent,
+    MatCardFooter,
+  ],
 })
 export class PortfolioLearningSummaryReportStepComponent {
   @Input() unit: Unit;

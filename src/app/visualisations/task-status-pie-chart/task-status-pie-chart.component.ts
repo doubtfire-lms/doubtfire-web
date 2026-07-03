@@ -1,4 +1,4 @@
-import {LegendPosition} from '@swimlane/ngx-charts';
+import {LegendPosition, PieChartModule} from '@swimlane/ngx-charts';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,7 +15,7 @@ import {ChartBaseComponent} from 'src/app/common/chart-base/chart-base-component
   templateUrl: './task-status-pie-chart.component.html',
   styleUrls: ['./task-status-pie-chart.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [PieChartModule],
 })
 export class TaskStatusPieChartComponent extends ChartBaseComponent implements OnChanges, OnInit {
   @Input() project: Project;

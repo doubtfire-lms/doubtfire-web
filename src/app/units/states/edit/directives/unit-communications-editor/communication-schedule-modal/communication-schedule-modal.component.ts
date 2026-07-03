@@ -1,5 +1,19 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {
   Campus,
   CampusService,
@@ -24,9 +38,22 @@ export const SCHEDULE_WEEKDAYS = [
 
 @Component({
   selector: 'f-communication-schedule-modal',
-  standalone: false,
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './communication-schedule-modal.component.html',
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    MatSlideToggle,
+    MatSelect,
+    MatOption,
+    MatDialogActions,
+    MatButton,
+  ],
 })
 export class CommunicationScheduleModalComponent implements OnInit {
   readonly weekdays = SCHEDULE_WEEKDAYS;

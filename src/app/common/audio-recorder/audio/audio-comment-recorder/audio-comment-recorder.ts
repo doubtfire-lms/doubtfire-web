@@ -1,4 +1,8 @@
+import {FlexModule} from 'ng-flex-layout/flex';
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
@@ -9,7 +13,7 @@ import {BaseAudioRecorderComponent} from '../base-audio-recorder';
   templateUrl: './audio-comment-recorder.html',
   providers: [MediaRecorderService],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatProgressSpinner, MatIconButton, MatIcon, FlexModule],
 })
 export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent implements OnInit {
   @Input() task: Task;

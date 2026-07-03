@@ -13,7 +13,7 @@ describe('GradeIconComponent', () => {
     gradeService = new GradeService();
 
     await TestBed.configureTestingModule({
-      declarations: [GradeIconComponent],
+      imports: [GradeIconComponent],
       providers: [{provide: GradeService, useValue: gradeService}],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

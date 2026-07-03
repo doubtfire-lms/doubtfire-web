@@ -1,4 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 import {TaskComment} from 'src/app/api/models/doubtfire-model';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {TaskCommentComposerData} from '../../task-comment-composer/task-comment-composer.component';
@@ -8,7 +10,7 @@ import {TaskCommentComposerData} from '../../task-comment-composer/task-comment-
   templateUrl: './comment-bubble-action.component.html',
   styleUrls: ['./comment-bubble-action.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIcon, MatTooltip],
 })
 export class CommentBubbleActionComponent {
   @Input() comment: TaskComment;

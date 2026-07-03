@@ -1,5 +1,31 @@
 import {ChangeDetectionStrategy, Component, Input, ViewChild} from '@angular/core';
-import {MatTable} from '@angular/material/table';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatFooterRow,
+  MatFooterRowDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
+import {MatToolbar, MatToolbarRow} from '@angular/material/toolbar';
+import {MatTooltip} from '@angular/material/tooltip';
 import {TaskDefinition, UploadRequirement} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
@@ -9,7 +35,37 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   templateUrl: 'task-definition-upload.component.html',
   styleUrls: ['task-definition-upload.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatFormField,
+    MatInput,
+    FormsModule,
+    MatSelect,
+    MatOption,
+    MatCheckbox,
+    MatTooltip,
+    MatSuffix,
+    MatIconButton,
+    MatIcon,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatToolbar,
+    MatToolbarRow,
+    MatButton,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    MatLabel,
+    MatSlideToggle,
+  ],
 })
 export class TaskDefinitionUploadComponent {
   @Input() public taskDefinition: TaskDefinition;

@@ -16,7 +16,7 @@ describe('TaskDashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TaskDashboardComponent],
+      imports: [TaskDashboardComponent],
       providers: [
         {provide: TaskService, useValue: emptyProvider},
         {provide: FileDownloaderService, useValue: emptyProvider},

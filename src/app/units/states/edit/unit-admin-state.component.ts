@@ -1,9 +1,18 @@
+import {NgxSkeletonLoaderComponent} from 'ngx-skeleton-loader';
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MatTab, MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, Subscription, first, of} from 'rxjs';
 import {Unit, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {LearningOutcomeEditorComponent} from '../../../common/learning-outcome-editor/learning-outcome-editor.component';
+import {UnitCommunicationsEditorComponent} from './directives/unit-communications-editor/unit-communications-editor.component';
+import {UnitDetailsEditorComponent} from './directives/unit-details-editor/unit-details-editor.component';
+import {UnitGroupSetEditorComponent} from './directives/unit-group-set-editor/unit-group-set-editor.component';
+import {UnitStaffEditorComponent} from './directives/unit-staff-editor/unit-staff-editor.component';
+import {UnitStudentsEditorComponent} from './directives/unit-students-editor/unit-students-editor.component';
+import {UnitTaskEditorComponent} from './directives/unit-tasks-editor/unit-task-editor.component';
+import {UnitTutorialsManagerComponent} from './directives/unit-tutorials-manager/unit-tutorials-manager.component';
 
 type UnitAdminTabKey =
   | 'details'
@@ -24,7 +33,19 @@ interface UnitAdminTab {
   selector: 'f-unit-admin-state',
   templateUrl: './unit-admin-state.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTabGroup,
+    MatTab,
+    NgxSkeletonLoaderComponent,
+    UnitDetailsEditorComponent,
+    LearningOutcomeEditorComponent,
+    UnitStaffEditorComponent,
+    UnitTutorialsManagerComponent,
+    UnitStudentsEditorComponent,
+    UnitTaskEditorComponent,
+    UnitGroupSetEditorComponent,
+    UnitCommunicationsEditorComponent,
+  ],
 })
 export class UnitAdminStateComponent implements OnInit, OnDestroy {
   @Input() public unit$: Observable<Unit>;

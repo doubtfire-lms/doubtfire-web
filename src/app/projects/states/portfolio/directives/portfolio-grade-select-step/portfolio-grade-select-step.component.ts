@@ -1,15 +1,41 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatIcon} from '@angular/material/icon';
 import {Project, Unit} from 'src/app/api/models/doubtfire-model';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {GradeIconComponent} from '../../../../../common/grade-icon/grade-icon.component';
 
 @Component({
   selector: 'f-portfolio-grade-select-step',
   templateUrl: 'portfolio-grade-select-step.component.html',
   styleUrls: ['portfolio-grade-select-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatIcon,
+    MatCardActions,
+    MatCheckbox,
+    FormsModule,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    GradeIconComponent,
+    MatButton,
+  ],
 })
 export class PortfolioGradeSelectStepComponent {
   @Input() project: Project;

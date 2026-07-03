@@ -9,7 +9,7 @@ describe('UserBadgeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserBadgeComponent],
+      imports: [UserBadgeComponent],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(UserBadgeComponent, {set: {template: ''}})

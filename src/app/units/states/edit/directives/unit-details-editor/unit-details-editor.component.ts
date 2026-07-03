@@ -1,5 +1,29 @@
+import {DatePipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCard} from '@angular/material/card';
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
+import {MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
+import {RouterLink} from '@angular/router';
 import {OverseerImage, UnitService} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
@@ -17,7 +41,37 @@ import {D2lUnitDetailsModal} from './d2l-details-form/d2l-unit-details-form.comp
   templateUrl: 'unit-details-editor.component.html',
   styleUrls: ['unit-details-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    MatSelect,
+    MatOption,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatHint,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatButton,
+    MatSlideToggle,
+    RouterLink,
+    DatePipe,
+  ],
 })
 export class UnitDetailsEditorComponent implements OnInit {
   @Input() unit: Unit;

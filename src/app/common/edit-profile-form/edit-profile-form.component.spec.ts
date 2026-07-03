@@ -17,7 +17,7 @@ describe('EditProfileFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [EditProfileFormComponent],
+      imports: [EditProfileFormComponent],
       providers: [
         {provide: DoubtfireConstants, useValue: emptyProvider},
         {provide: UserService, useValue: emptyProvider},

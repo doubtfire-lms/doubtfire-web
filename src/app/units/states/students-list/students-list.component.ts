@@ -1,3 +1,6 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgxSkeletonLoaderComponent} from 'ngx-skeleton-loader';
+import {NgStyle} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -7,9 +10,30 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatNoDataRow,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, Subscription, finalize, first, of} from 'rxjs';
 import {
@@ -20,14 +44,52 @@ import {
   Unit,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
+import {GradeIconComponent} from '../../../common/grade-icon/grade-icon.component';
+import {UserIconComponent} from '../../../common/user-icon/user-icon.component';
 import {UnitStudentEnrolmentModalService} from '../../modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
+import {StudentCampusSelectComponent} from '../edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
+import {StudentTutorialSelectComponent} from '../edit/directives/unit-students-editor/student-tutorial-select/student-tutorial-select.component';
 
 // State for both convenors and tutors to access student list
 @Component({
   selector: 'f-students-list',
   templateUrl: './students-list.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatAutocompleteTrigger,
+    FormsModule,
+    MatAutocomplete,
+    MatOption,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    NgxSkeletonLoaderComponent,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    UserIconComponent,
+    MatSortHeader,
+    MatTooltip,
+    ExtendedModule,
+    NgStyle,
+    GradeIconComponent,
+    MatIcon,
+    StudentCampusSelectComponent,
+    StudentTutorialSelectComponent,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatNoDataRow,
+    MatButton,
+    MatPaginator,
+  ],
 })
 export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() unit$: Observable<Unit>;

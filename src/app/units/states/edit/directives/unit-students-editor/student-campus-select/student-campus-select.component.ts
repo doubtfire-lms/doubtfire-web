@@ -1,5 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit} from '@angular/core';
-import {MatSelectChange} from '@angular/material/select';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatFormField} from '@angular/material/form-field';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {Campus, CampusService, Project, Unit} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 
@@ -8,7 +10,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'student-campus-select.component.html',
   styleUrls: ['student-campus-select.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatFormField, MatSelect, MatOption],
 })
 export class StudentCampusSelectComponent implements OnChanges, OnInit {
   @Input() unit: Unit;

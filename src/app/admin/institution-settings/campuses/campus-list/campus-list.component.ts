@@ -1,7 +1,31 @@
+import {TitleCasePipe} from '@angular/common';
 import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {FormsModule, ReactiveFormsModule, UntypedFormControl, Validators} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatIconButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatFooterRow,
+  MatFooterRowDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
 import {Campus, CampusService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -11,7 +35,35 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'campus-list.component.html',
   styleUrls: ['campus-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    FormsModule,
+    ReactiveFormsModule,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatFormField,
+    MatInput,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatCheckbox,
+    MatIconButton,
+    MatIcon,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    TitleCasePipe,
+  ],
 })
 export class CampusListComponent extends EntityFormComponent<Campus> implements AfterViewInit {
   @ViewChild(MatTable, {static: true}) table: MatTable<Campus>;

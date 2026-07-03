@@ -1,3 +1,5 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {AsyncPipe, NgStyle} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +13,12 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MatCard} from '@angular/material/card';
+import {MatChip, MatChipAvatar} from '@angular/material/chips';
+import {MatFormField, MatSuffix} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatTab, MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
 import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
 import {
   FeedbackTemplate,
@@ -28,7 +35,20 @@ import {
   templateUrl: './task-feedback-templates.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatTabGroup,
+    MatTab,
+    MatFormField,
+    MatInput,
+    MatIcon,
+    MatSuffix,
+    MatChip,
+    ExtendedModule,
+    NgStyle,
+    MatChipAvatar,
+    AsyncPipe,
+  ],
 })
 export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   @Input() task: Task;

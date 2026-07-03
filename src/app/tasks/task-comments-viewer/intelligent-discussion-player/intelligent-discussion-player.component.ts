@@ -7,13 +7,36 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogClose, MatDialogRef} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
+import {
+  MatActionList,
+  MatDivider,
+  MatListItem,
+  MatListItemIcon,
+  MatListItemLine,
+  MatListItemTitle,
+  MatListSubheaderCssMatStyler,
+} from '@angular/material/list';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {
+  MatStep,
+  MatStepLabel,
+  MatStepper,
+  MatStepperNext,
+  MatStepperPrevious,
+} from '@angular/material/stepper';
 import {Subscription, timer} from 'rxjs';
 import {DiscussionComment, Task} from 'src/app/api/models/doubtfire-model';
 import {AudioPlayerComponent} from 'src/app/common/audio-player/audio-player.component';
 import {MicrophoneTesterComponent} from 'src/app/common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {AudioPlayerComponent as AudioPlayerComponent_1} from '../../../common/audio-player/audio-player.component';
+import {MicrophoneTesterComponent as MicrophoneTesterComponent_1} from '../../../common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import {IntelligentDiscussionPlayerService} from './intelligent-discussion-player.service';
 import {IntelligentDiscussionRecorderComponent} from './intelligent-discussion-recorder/intelligent-discussion-recorder.component';
 
@@ -23,7 +46,19 @@ import {IntelligentDiscussionRecorderComponent} from './intelligent-discussion-r
   styleUrls: ['./intelligent-discussion-player.component.scss'],
   providers: [IntelligentDiscussionPlayerService],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatProgressSpinner,
+    MatIcon,
+    MatDivider,
+    AudioPlayerComponent_1,
+    MatActionList,
+    MatListSubheaderCssMatStyler,
+    MatListItem,
+    MatListItemIcon,
+    MatListItemTitle,
+    MatListItemLine,
+    MatButton,
+  ],
 })
 export class IntelligentDiscussionPlayerComponent {
   @Input() discussion: DiscussionComment;
@@ -137,7 +172,21 @@ export class IntelligentDiscussionPlayerComponent {
   styleUrls: ['./intelligent-discussion-player.component.scss'],
   providers: [IntelligentDiscussionPlayerService],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatIconButton,
+    MatDialogClose,
+    MatIcon,
+    MatStepper,
+    MatStep,
+    MatStepLabel,
+    MatButton,
+    MatStepperNext,
+    MicrophoneTesterComponent_1,
+    MatStepperPrevious,
+    MatCheckbox,
+    FormsModule,
+    IntelligentDiscussionRecorderComponent,
+  ],
 })
 export class IntelligentDiscussionDialog implements OnDestroy {
   confirmed = false;

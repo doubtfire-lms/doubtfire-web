@@ -6,6 +6,10 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatFormField} from '@angular/material/form-field';
+import {MatSelect} from '@angular/material/select';
 import {GroupSet, Unit} from 'src/app/api/models/doubtfire-model';
 
 @Component({
@@ -13,7 +17,7 @@ import {GroupSet, Unit} from 'src/app/api/models/doubtfire-model';
   templateUrl: './group-set-selector.component.html',
   styleUrls: ['./group-set-selector.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatFormField, MatSelect, FormsModule, MatOption],
 })
 export class GroupSetSelectorComponent implements OnInit {
   @Input() unit: Unit;

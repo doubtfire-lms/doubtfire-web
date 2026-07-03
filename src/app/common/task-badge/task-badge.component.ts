@@ -6,7 +6,6 @@ import {TaskDefinition} from 'src/app/api/models/task-definition';
   templateUrl: './task-badge.component.html',
   styleUrl: './task-badge.component.css',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class FTaskBadgeComponent {
   @Input() taskDef: TaskDefinition;

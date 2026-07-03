@@ -1,3 +1,6 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {CdkScrollable} from '@angular/cdk/scrolling';
+import {NgClass} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,7 +10,20 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCard, MatCardContent, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatTooltip} from '@angular/material/tooltip';
 import {
   Engagement,
   EngagementComment,
@@ -17,13 +33,43 @@ import {
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {HumanizedDatePipe} from '../../../../../../../common/pipes/humanized-date.pipe';
+import {LocalizedDatePipe} from '../../../../../../../common/pipes/localized-date.pipe';
+import {MarkedPipe} from '../../../../../../../common/pipes/marked.pipe';
+import {SafePipe} from '../../../../../../../common/pipes/safe.pipe';
+import {UserIconComponent} from '../../../../../../../common/user-icon/user-icon.component';
 
 @Component({
   selector: 'f-engagement-detail-dialog',
   templateUrl: './engagement-detail-dialog.component.html',
   styleUrl: './engagement-detail-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    MatTooltip,
+    MatIconButton,
+    MatDialogClose,
+    MatIcon,
+    CdkScrollable,
+    MatDialogContent,
+    MatProgressSpinner,
+    MatCard,
+    MatCardTitle,
+    UserIconComponent,
+    MatCardSubtitle,
+    MatCardContent,
+    ExtendedModule,
+    NgClass,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    MatButton,
+    MarkedPipe,
+    HumanizedDatePipe,
+    SafePipe,
+    LocalizedDatePipe,
+  ],
 })
 export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
   @ViewChild('commentsEnd') commentsEnd?: ElementRef<HTMLElement>;

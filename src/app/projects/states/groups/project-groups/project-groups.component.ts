@@ -1,6 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
 import {GroupSet, Project} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
+import {GroupSetManagerComponent} from '../../../../groups/group-set-manager/group-set-manager.component';
 
 // This component is only displayed to students (projects)
 @Component({
@@ -8,7 +10,7 @@ import {Unit} from 'src/app/api/models/unit';
   templateUrl: './project-groups.component.html',
   styleUrl: './project-groups.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [GroupSetManagerComponent, MatIcon],
 })
 export class ProjectGroupsComponent {
   @Input() unit: Unit;

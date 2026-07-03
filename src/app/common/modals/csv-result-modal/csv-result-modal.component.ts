@@ -1,7 +1,30 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {CdkScrollable} from '@angular/cdk/scrolling';
+import {NgClass} from '@angular/common';
 import {AfterViewInit, ChangeDetectionStrategy, Component, Inject, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatButton} from '@angular/material/button';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
 import {CsvResult, CsvResultModalData, CsvRow} from './csv-result-modal.service';
 
 type CsvResultSelection = 'success' | 'errors' | 'ignored';
@@ -17,7 +40,28 @@ interface CsvDisplayRow {
   templateUrl: './csv-result-modal.component.html',
   styleUrls: ['./csv-result-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    ExtendedModule,
+    NgClass,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatDialogActions,
+    MatPaginator,
+    MatButton,
+  ],
 })
 export class CsvResultModalComponent implements AfterViewInit {
   public readonly pageSize = 10;

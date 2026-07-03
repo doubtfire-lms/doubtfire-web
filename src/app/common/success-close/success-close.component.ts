@@ -5,7 +5,6 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   templateUrl: 'success-close.component.html',
   styleUrls: ['success-close.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class SuccessCloseComponent implements OnInit {
   ngOnInit(): void {

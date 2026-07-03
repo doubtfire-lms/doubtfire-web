@@ -5,7 +5,6 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-jplag-report-viewer',
   templateUrl: './jplag-report-viewer.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class JplagReportViewerComponent {
   @ViewChild('jplagIframe', {static: true}) jplagIframe!: ElementRef<HTMLIFrameElement>;

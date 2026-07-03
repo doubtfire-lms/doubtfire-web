@@ -1,4 +1,14 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
+import {RouterLink} from '@angular/router';
 import {Project} from 'src/app/api/models/project';
 
 @Component({
@@ -6,7 +16,16 @@ import {Project} from 'src/app/api/models/project';
   templateUrl: './task-planner-card.component.html',
   styleUrl: './task-planner-card.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardSubtitle,
+    MatCardContent,
+    MatButton,
+    RouterLink,
+    MatIcon,
+  ],
 })
 export class TaskPlannerCardComponent {
   @Input() project: Project;

@@ -1,3 +1,4 @@
+import {FlexModule} from 'ng-flex-layout/flex';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -6,9 +7,31 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle,
+} from '@angular/material/expansion';
+import {MatFormField} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {User} from 'src/app/api/models/doubtfire-model';
 import {UserService} from 'src/app/api/models/doubtfire-model';
@@ -16,13 +39,40 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {EditProfileDialogService} from 'src/app/common/modals/edit-profile-dialog/edit-profile-dialog.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {FileDropComponent} from '../../../common/file-drop/file-drop.component';
+import {UserIconComponent} from '../../../common/user-icon/user-icon.component';
 
 @Component({
   selector: 'f-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    FlexModule,
+    MatFormField,
+    MatInput,
+    FormsModule,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    UserIconComponent,
+    MatSortHeader,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    MatButton,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    FileDropComponent,
+    MatIcon,
+  ],
 })
 export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatTable, {static: false}) table: MatTable<User>;

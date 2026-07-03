@@ -1,5 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatDivider} from '@angular/material/list';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {ActivatedRoute, NavigationEnd, Router, RouterLink} from '@angular/router';
 import {filter} from 'rxjs';
 import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {ViewType} from 'src/app/projects/states/index/global-state.service';
@@ -10,7 +14,7 @@ import {TutorNotesModalService} from '../../modals/tutor-notes-modal/tutor-notes
   templateUrl: './task-dropdown.component.html',
   styleUrls: ['./task-dropdown.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIcon, MatButton, MatMenuTrigger, MatMenu, MatMenuItem, RouterLink, MatDivider],
 })
 export class TaskDropdownComponent {
   currentActivity: string;

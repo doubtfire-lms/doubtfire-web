@@ -1,5 +1,11 @@
 import {HttpClient} from '@angular/common/http';
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -7,6 +13,8 @@ import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+import {HeroSidebarComponent} from '../../../common/hero-sidebar/hero-sidebar.component';
+import {UnavailableCardComponent} from '../../../errors/unavailable-card/unavailable-card.component';
 
 // Add fallback to check url for query parameters
 type IParams = Record<string, string>;
@@ -40,7 +48,17 @@ type signInData =
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    HeroSidebarComponent,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatCheckbox,
+    MatButton,
+    MatProgressSpinner,
+    UnavailableCardComponent,
+  ],
 })
 export class SignInComponent implements OnInit {
   public signingIn: boolean;

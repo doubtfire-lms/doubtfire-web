@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {TaskComment} from 'src/app/api/models/doubtfire-model';
+import {fPdfViewerComponent} from '../../pdf-viewer/pdf-viewer.component';
 
 export interface CommentsModalData {
   comment: TaskComment;
@@ -12,7 +13,7 @@ export interface CommentsModalData {
   templateUrl: './comments-modal.component.html',
   styleUrls: ['./comments-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [fPdfViewerComponent],
 })
 export class CommentsModalComponent implements OnInit {
   @Input() taskComment: TaskComment;

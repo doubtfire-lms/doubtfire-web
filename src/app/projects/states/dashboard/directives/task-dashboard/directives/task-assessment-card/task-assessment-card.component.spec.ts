@@ -13,7 +13,7 @@ describe('TaskAssessmentCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TaskAssessmentCardComponent],
+      imports: [TaskAssessmentCardComponent],
       providers: [
         {provide: TaskService, useValue: emptyProvider},
         {provide: GradeService, useValue: emptyProvider},

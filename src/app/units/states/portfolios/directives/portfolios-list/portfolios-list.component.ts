@@ -1,3 +1,6 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgxSkeletonLoaderComponent} from 'ngx-skeleton-loader';
+import {DatePipe, NgStyle} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -9,10 +12,33 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {FormsModule} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {
+  MatButtonToggle,
+  MatButtonToggleChange,
+  MatButtonToggleGroup,
+} from '@angular/material/button-toggle';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatNoDataRow,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Project} from 'src/app/api/models/project';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import {Unit} from 'src/app/api/models/unit';
@@ -23,14 +49,49 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {GradeIconComponent} from '../../../../../common/grade-icon/grade-icon.component';
 import {D2lTransferModal} from '../../d2l-transfer-modal/d2l-transfer.component';
+import {DownloadStaffNotesComponent} from '../../download-staff-notes/download-staff-notes.component';
+import {UploadGradesComponent} from '../../upload-grades/upload-grades.component';
 
 @Component({
   selector: 'f-portfolios-list',
   templateUrl: './portfolios-list.component.html',
   styleUrl: './portfolios-list.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatButtonToggleGroup,
+    FormsModule,
+    MatButtonToggle,
+    MatTooltip,
+    MatIcon,
+    GradeIconComponent,
+    MatButton,
+    DownloadStaffNotesComponent,
+    UploadGradesComponent,
+    NgxSkeletonLoaderComponent,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    ExtendedModule,
+    NgStyle,
+    MatIconButton,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatNoDataRow,
+    MatPaginator,
+    DatePipe,
+  ],
 })
 export class PortfoliosListComponent implements OnChanges, AfterViewInit {
   @Input() unit: Unit;

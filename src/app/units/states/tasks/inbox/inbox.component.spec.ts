@@ -27,7 +27,7 @@ describe('InboxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InboxComponent],
+      imports: [InboxComponent],
       providers: [
         {provide: HotkeysService, useValue: hotkeysServiceStub},
         {provide: SelectedTaskService, useValue: selectedTaskServiceStub},

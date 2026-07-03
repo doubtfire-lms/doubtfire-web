@@ -7,11 +7,19 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatTab, MatTabChangeEvent, MatTabGroup, MatTabLabel} from '@angular/material/tabs';
 import {UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {fPdfViewerComponent} from '../../../../../../common/pdf-viewer/pdf-viewer.component';
+import {StaffNotesViewComponent} from '../../../../../../projects/states/dashboard/directives/task-dashboard/directives/staff-notes-view/staff-notes-view.component';
+import {TaskOverseerReportComponent} from '../../../../../../projects/states/dashboard/directives/task-dashboard/directives/task-overseer-report/task-overseer-report.component';
+import {TaskSimilarityViewComponent} from '../../../../../../projects/states/dashboard/directives/task-dashboard/directives/task-similarity-view/task-similarity-view.component';
+import {TutorNotesViewComponent} from '../../../../../../projects/states/dashboard/directives/task-dashboard/directives/tutor-notes-view/tutor-notes-view.component';
 
 enum InboxDashboardTab {
   submission = 0,
@@ -27,7 +35,21 @@ enum InboxDashboardTab {
   templateUrl: './inbox-dashboard.component.html',
   host: {'class': 'block h-full'},
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTabGroup,
+    MatTab,
+    MatTabLabel,
+    MatIcon,
+    MatIconButton,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    fPdfViewerComponent,
+    StaffNotesViewComponent,
+    TutorNotesViewComponent,
+    TaskSimilarityViewComponent,
+    TaskOverseerReportComponent,
+  ],
 })
 export class InboxDashboardComponent implements OnChanges {
   @Input() task: Task;

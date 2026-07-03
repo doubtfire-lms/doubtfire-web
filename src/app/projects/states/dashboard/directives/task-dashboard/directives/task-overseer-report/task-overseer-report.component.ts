@@ -1,8 +1,21 @@
 import Convert from 'ansi-to-html';
 import DOMPurify from 'dompurify';
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {DiffEditorComponent, EditorComponent} from 'ngx-monaco-editor-v2-alternative';
+import {AsyncPipe, DatePipe, NgClass} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
-import {MatMenuTrigger} from '@angular/material/menu';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle,
+} from '@angular/material/expansion';
+import {MatIcon} from '@angular/material/icon';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {forkJoin} from 'rxjs';
 import {OverseerAssessment, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
@@ -12,6 +25,7 @@ import {OverseerAssessmentService} from 'src/app/api/services/overseer-assessmen
 import {OverseerStepResultService} from 'src/app/api/services/overseer-step-result.service';
 import {SubmissionHistoryService} from 'src/app/api/services/submission-history.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {StatusIconComponent} from '../../../../../../../common/status-icon/status-icon.component';
 import {SubmissionFilesModalComponent} from './submission-files-modal/submission-files-modal.component';
 
 @Component({
@@ -19,7 +33,27 @@ import {SubmissionFilesModalComponent} from './submission-files-modal/submission
   templateUrl: './task-overseer-report.component.html',
   styleUrl: './task-overseer-report.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatButton,
+    MatProgressSpinner,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    StatusIconComponent,
+    ExtendedModule,
+    NgClass,
+    MatIcon,
+    MatIconButton,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    DiffEditorComponent,
+    EditorComponent,
+    FormsModule,
+    AsyncPipe,
+    DatePipe,
+  ],
 })
 export class TaskOverseerReportComponent implements OnInit {
   @Input() task: Task;

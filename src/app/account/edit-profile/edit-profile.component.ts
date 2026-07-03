@@ -1,13 +1,15 @@
+import {FlexModule} from 'ng-flex-layout/flex';
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
+import {EditProfileFormComponent} from '../../common/edit-profile-form/edit-profile-form.component';
 
 @Component({
   selector: 'f-edit-profile',
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [FlexModule, EditProfileFormComponent],
 })
 export class EditProfileComponent implements OnInit {
   public loading: boolean = true;

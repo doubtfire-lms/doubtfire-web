@@ -1,7 +1,27 @@
+import {DatePipe} from '@angular/common';
 import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatIconButton} from '@angular/material/button';
+import {MatFormField} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
 import {TiiAction} from 'src/app/api/models/doubtfire-model';
 import {TiiActionService} from 'src/app/api/services/tii-action.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -11,7 +31,28 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: './tii-action-log.component.html',
   styleUrls: ['./tii-action-log.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatFormField,
+    MatInput,
+    FormsModule,
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatSortHeader,
+    MatCellDef,
+    MatCell,
+    MatIconButton,
+    MatIcon,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    DatePipe,
+  ],
 })
 export class TiiActionLogComponent implements AfterViewInit {
   @ViewChild(MatTable, {static: false}) table: MatTable<TiiAction>;

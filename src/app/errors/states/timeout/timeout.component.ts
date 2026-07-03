@@ -1,11 +1,12 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
 import {AuthenticationService} from '../../../api/services/authentication.service';
 
 @Component({
   selector: 'f-timeout',
   templateUrl: 'timeout.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatIcon],
 })
 export class TimeoutComponent implements OnInit, OnDestroy {
   private timeoutHandle: ReturnType<typeof setTimeout> | null = null;

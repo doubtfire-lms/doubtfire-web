@@ -7,17 +7,20 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {Subscription, interval} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {StatusIconComponent} from '../../../../../../common/status-icon/status-icon.component';
 
 @Component({
   selector: 'f-portfolio-included-tasks',
   templateUrl: 'portfolio-included-tasks.component.html',
   styleUrls: ['portfolio-included-tasks.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatProgressSpinner, MatIcon, StatusIconComponent],
 })
 export class PortfolioIncludedTasksComponent implements OnInit, OnDestroy {
   @Input() project: Project;

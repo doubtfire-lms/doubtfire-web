@@ -6,6 +6,9 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import {MatCard, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
+import {MatChipRow} from '@angular/material/chips';
+import {MatTooltip} from '@angular/material/tooltip';
 import {LearningOutcome} from 'src/app/api/models/learning-outcome';
 import {Project} from 'src/app/api/models/project';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -16,7 +19,7 @@ import {Unit} from 'src/app/api/models/unit';
   templateUrl: './task-ilos-card.component.html',
   styleUrls: ['./task-ilos-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatCard, MatCardTitle, MatCardSubtitle, MatChipRow, MatTooltip],
 })
 export class TaskIlosCardComponent implements OnInit, OnChanges {
   @Input() iloContextType: 'Unit' | 'TaskDefinition' | 'Course' | 'Global';

@@ -1,5 +1,18 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnChanges} from '@angular/core';
+import {MatIconButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle,
+} from '@angular/material/card';
 import {MatDialog} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatTooltip} from '@angular/material/tooltip';
 import {
   Engagement,
   EngagementService,
@@ -37,7 +50,19 @@ interface EngagementLegendItem extends EngagementPresentation {
   templateUrl: './engagement-passport-card.component.html',
   styleUrl: './engagement-passport-card.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardSubtitle,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+    MatCardContent,
+    ExtendedModule,
+    NgClass,
+    MatProgressSpinner,
+  ],
 })
 export class EngagementPassportCardComponent implements OnChanges {
   @Input() project: Project;

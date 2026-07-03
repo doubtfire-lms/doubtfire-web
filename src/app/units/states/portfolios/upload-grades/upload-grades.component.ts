@@ -1,4 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
 import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
@@ -11,7 +13,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   templateUrl: 'upload-grades.component.html',
   styleUrl: 'upload-grades.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatButton, MatIcon],
 })
 export class UploadGradesComponent implements OnInit {
   @Input() unit: Unit;

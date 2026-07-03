@@ -5,6 +5,5 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   templateUrl: './chip.component.html',
   styleUrls: ['./chip.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class FChipComponent {}

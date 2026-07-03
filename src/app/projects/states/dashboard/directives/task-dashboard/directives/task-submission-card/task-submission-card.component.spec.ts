@@ -14,7 +14,7 @@ describe('TaskSubmissionCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TaskSubmissionCardComponent],
+      imports: [TaskSubmissionCardComponent],
       providers: [
         {provide: TaskService, useValue: emptyProvider},
         {provide: AlertService, useValue: emptyProvider},

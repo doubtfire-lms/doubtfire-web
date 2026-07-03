@@ -1,3 +1,4 @@
+import {NumberCardModule} from '@swimlane/ngx-charts';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -13,7 +14,7 @@ import {Project, TaskStatus} from 'src/app/api/models/doubtfire-model';
   templateUrl: './task-visualisation.component.html',
   styleUrls: ['./task-visualisation.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [NumberCardModule],
 })
 export class TaskVisualisationComponent implements OnChanges, OnInit {
   @Input() project: Project;

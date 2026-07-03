@@ -1,11 +1,16 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MatTab, MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Observable, Subscription, first, of} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {StaffNotesComponent} from '../../../projects/states/staff-notes/staff-notes.component';
+import {PortfoliosAssessmentComponent} from './directives/portfolios-assessment/portfolios-assessment.component';
+import {PortfoliosListComponent} from './directives/portfolios-list/portfolios-list.component';
+import {PortfoliosPortfolioViewComponent} from './directives/portfolios-portfolio-view/portfolios-portfolio-view.component';
+import {PortfoliosProjectProgressComponent} from './directives/portfolios-project-progress/portfolios-project-progress.component';
 
 type PortfolioTabKey = 'select' | 'progress' | 'student-notes' | 'portfolio' | 'assessment';
 
@@ -20,7 +25,15 @@ interface PortfolioTab {
   templateUrl: './portfolios.component.html',
   styleUrl: './portfolios.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTabGroup,
+    MatTab,
+    PortfoliosListComponent,
+    PortfoliosProjectProgressComponent,
+    StaffNotesComponent,
+    PortfoliosPortfolioViewComponent,
+    PortfoliosAssessmentComponent,
+  ],
 })
 export class PortfoliosComponent implements OnInit, OnDestroy {
   @Input() unit$: Observable<Unit>;

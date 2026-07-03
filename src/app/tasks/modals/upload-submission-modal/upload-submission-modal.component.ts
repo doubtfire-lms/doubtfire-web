@@ -1,5 +1,20 @@
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {MatTooltip} from '@angular/material/tooltip';
 import {MemberContribution} from 'src/app/api/models/groups/group';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
@@ -9,6 +24,8 @@ import {FileUploaderComponent} from 'src/app/common/file-uploader/file-uploader.
 import {AlertService} from 'src/app/common/services/alert.service';
 import {EmojiService} from 'src/app/common/services/emoji.service';
 import {PrivacyPolicy} from 'src/app/config/privacy-policy/privacy-policy';
+import {FileUploaderComponent as FileUploaderComponent_1} from '../../../common/file-uploader/file-uploader.component';
+import {GroupMemberContributionAssignerComponent} from '../../../groups/group-member-contribution-assigner/group-member-contribution-assigner.component';
 
 type UploadStage = 'group' | 'details' | 'comments';
 type UploadSubmissionType = TaskStatusEnum | 'reupload_evidence' | 'test_submission';
@@ -58,7 +75,24 @@ export type UploadSubmissionModalResult =
   selector: 'f-upload-submission-modal',
   templateUrl: './upload-submission-modal.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    CdkScrollable,
+    MatDialogContent,
+    MatCard,
+    MatCardContent,
+    GroupMemberContributionAssignerComponent,
+    FileUploaderComponent_1,
+    MatInput,
+    MatButton,
+    MatDialogActions,
+    MatTooltip,
+  ],
 })
 export class UploadSubmissionModalComponent implements OnInit {
   @ViewChild(FileUploaderComponent) private fileUploader?: FileUploaderComponent;

@@ -8,6 +8,10 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatCard, MatCardContent} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressBar} from '@angular/material/progress-bar';
 import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
@@ -83,7 +87,7 @@ export const ACCEPTED_TYPES = {
   templateUrl: './file-uploader.component.html',
   styleUrls: ['./file-uploader.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatCard, MatCardContent, MatButton, MatIcon, MatIconButton, MatProgressBar],
 })
 export class FileUploaderComponent implements OnInit, OnChanges {
   @Input() files: FileUploadSpec;

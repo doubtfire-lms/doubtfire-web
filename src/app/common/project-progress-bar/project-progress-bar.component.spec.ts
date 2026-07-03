@@ -9,7 +9,7 @@ describe('ProjectProgressBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProjectProgressBarComponent],
+      imports: [ProjectProgressBarComponent],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(ProjectProgressBarComponent, {set: {template: ''}})

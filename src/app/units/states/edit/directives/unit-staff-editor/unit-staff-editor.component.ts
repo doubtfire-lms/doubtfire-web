@@ -1,7 +1,32 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {MatButtonToggleChange} from '@angular/material/button-toggle';
-import {MatSelectChange} from '@angular/material/select';
-import {MatTableDataSource} from '@angular/material/table';
+import {FormsModule} from '@angular/forms';
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {
+  MatButtonToggle,
+  MatButtonToggleChange,
+  MatButtonToggleGroup,
+} from '@angular/material/button-toggle';
+import {MatFormField} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {MatSort} from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Tutorial, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
@@ -15,13 +40,41 @@ import {
 } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {UserIconComponent} from '../../../../../common/user-icon/user-icon.component';
 import {BulkImportStaffModalService} from './bulk-import-staff-modal/bulk-import-staff-modal.service';
 
 @Component({
   selector: 'unit-staff-editor',
   templateUrl: 'unit-staff-editor.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatTable,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    UserIconComponent,
+    MatButtonToggleGroup,
+    FormsModule,
+    MatButtonToggle,
+    MatTooltip,
+    MatIconButton,
+    MatIcon,
+    MatSlideToggle,
+    MatSelect,
+    MatOption,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFormField,
+    MatInput,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    MatButton,
+  ],
 })
 export class UnitStaffEditorComponent implements OnInit {
   @Input() unit: Unit;

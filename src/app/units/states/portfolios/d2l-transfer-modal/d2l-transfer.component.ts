@@ -1,9 +1,19 @@
 //
 // Modal to show Doubtfire version info
 //
+import {CdkScrollable} from '@angular/cdk/scrolling';
 import {HttpClient} from '@angular/common/http';
 import {ChangeDetectionStrategy, Component, Inject, Injectable, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
 import {D2lAssessmentMapping} from 'src/app/api/models/d2l/d2l_assessment_mapping';
 import {D2lAssessmentMappingService} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
@@ -16,7 +26,15 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   templateUrl: 'd2l-transfer.component.html',
   styleUrl: 'd2l-transfer.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    CdkScrollable,
+    MatDialogContent,
+    MatIconButton,
+    MatIcon,
+    MatDialogActions,
+    MatButton,
+    MatDialogClose,
+  ],
 })
 export class D2lTransferComponent implements OnInit {
   public d2lDataMapping: D2lAssessmentMapping = new D2lAssessmentMapping(this.data);

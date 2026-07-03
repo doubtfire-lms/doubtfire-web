@@ -1,3 +1,5 @@
+import {ExtendedModule} from 'ng-flex-layout/extended';
+import {NgClass} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +8,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import {MatTooltip} from '@angular/material/tooltip';
 import {Unit} from 'src/app/api/models/unit';
 import {GradeService} from '../services/grade.service';
 
@@ -14,7 +17,7 @@ import {GradeService} from '../services/grade.service';
   templateUrl: './grade-icon.component.html',
   styleUrls: ['./grade-icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [MatTooltip, ExtendedModule, NgClass],
 })
 export class GradeIconComponent implements OnInit, OnChanges {
   @Input() grade?: number | string;

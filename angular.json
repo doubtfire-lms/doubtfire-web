@@ -11,7 +11,7 @@
       "schematics": {
         "@schematics/angular:application": {
           "strict": false,
-          "standalone": false,
+          "standalone": true,
           "style": "scss",
           "skipTests": true
         }

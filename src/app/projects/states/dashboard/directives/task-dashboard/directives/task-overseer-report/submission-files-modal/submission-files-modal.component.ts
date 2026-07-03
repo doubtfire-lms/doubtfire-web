@@ -1,7 +1,12 @@
 import * as monaco from 'monaco-editor';
+import {DiffEditorComponent, EditorComponent} from 'ngx-monaco-editor-v2-alternative';
+import {DatePipe, NgTemplateOutlet} from '@angular/common';
 import {HttpResponse} from '@angular/common/http';
 import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef} from '@angular/material/dialog';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {SubmissionArchive} from 'src/app/api/models/submission-history';
 import {
   ArchiveFileEntry,
@@ -11,6 +16,8 @@ import {
 } from 'src/app/common/archive-viewer/archive-viewer.helpers';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {ArchiveViewerComponent} from '../../../../../../../../common/archive-viewer/archive-viewer.component';
+import {fPdfViewerComponent} from '../../../../../../../../common/pdf-viewer/pdf-viewer.component';
 
 export interface SubmissionFilesModalData {
   assessment: SubmissionArchive;
@@ -26,7 +33,18 @@ export interface SubmissionFilesModalData {
   templateUrl: './submission-files-modal.component.html',
   styleUrls: ['./submission-files-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatButton,
+    MatDialogClose,
+    MatProgressSpinner,
+    NgTemplateOutlet,
+    ArchiveViewerComponent,
+    DiffEditorComponent,
+    EditorComponent,
+    FormsModule,
+    fPdfViewerComponent,
+    DatePipe,
+  ],
 })
 export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   private readonly diffOriginalUri = monaco.Uri.parse('inmemory://submission-compare/original');

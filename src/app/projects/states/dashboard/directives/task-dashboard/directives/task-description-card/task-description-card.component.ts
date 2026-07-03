@@ -1,3 +1,4 @@
+import {DatePipe} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,16 +7,40 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
+import {MatIcon} from '@angular/material/icon';
 import {Task, TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {TaskDateSliderComponent} from '../../../../../../../common/modals/date-change-modal/task-date-slider.component';
+import {MarkedPipe} from '../../../../../../../common/pipes/marked.pipe';
+import {FTaskBadgeComponent} from '../../../../../../../common/task-badge/task-badge.component';
 
 @Component({
   selector: 'f-task-description-card',
   templateUrl: 'task-description-card.component.html',
   styleUrls: ['task-description-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    FTaskBadgeComponent,
+    MatCardTitle,
+    MatCardContent,
+    TaskDateSliderComponent,
+    MatCardActions,
+    MatButton,
+    MatIcon,
+    DatePipe,
+    MarkedPipe,
+  ],
 })
 export class TaskDescriptionCardComponent {
   @Output() switchView$: EventEmitter<string> = new EventEmitter();

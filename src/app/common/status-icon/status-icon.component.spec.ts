@@ -9,7 +9,7 @@ describe('StatusIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StatusIconComponent],
+      imports: [StatusIconComponent],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(StatusIconComponent, {set: {template: ''}})

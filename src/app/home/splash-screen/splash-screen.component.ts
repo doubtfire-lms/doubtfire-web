@@ -1,4 +1,5 @@
-import {AnimationOptions} from 'ngx-lottie';
+import {AnimationOptions, LottieComponent} from 'ngx-lottie';
+import {AsyncPipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, ContentChild, OnInit, TemplateRef} from '@angular/core';
 import {Observable} from 'rxjs';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
@@ -9,7 +10,7 @@ import {LoadingService} from './LoadingService.service';
   templateUrl: './splash-screen.component.html',
   styleUrls: ['./splash-screen.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [LottieComponent, AsyncPipe],
 })
 export class SplashScreenComponent implements OnInit {
   constructor(
