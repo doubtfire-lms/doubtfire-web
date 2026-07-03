@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-43](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-42...v11.0.0-43) (2026-07-03)
+
+
+### Bug Fixes
+
+* regenerate ngsw cache after sourcemaps removed ([be85d84](https://github.com/b0ink/doubtfire-deploy/commit/be85d8443b56f20a6866c0fc8d65915d5fe63a2a))
+
 ## [11.0.0-42](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-41...v11.0.0-42) (2026-07-03)
 
 
