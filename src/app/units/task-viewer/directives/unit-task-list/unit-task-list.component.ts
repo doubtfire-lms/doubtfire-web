@@ -89,6 +89,10 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     return this.taskForTaskDef(taskDef);
   }
 
+  public taskStatusClass(taskDef: TaskDefinition): string {
+    return this.taskListItem(taskDef)?.statusClass() ?? 'not-started';
+  }
+
   /*
     TODO: There's still an issue where loading the route for the first time will cause child components (like task-dashboard) to load trigger OnInit and OnChanges twice...
     Causing duplicate queries to submission_details and task comments.

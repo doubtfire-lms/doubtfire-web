@@ -80,6 +80,79 @@
   </div>
 </ng-template>
 
+<ng-template #CollapsedTaskBadges let-task="task">
+  <div
+    class="pointer-events-none absolute top-[-7px] right-[3px] z-[2] flex items-center gap-px drop-shadow-[0_2px_2px_rgba(0,0,0,0.2)]"
+  >
+    @if (task.numNewComments > 0) {
+      <span
+        class="pointer-events-auto flex size-[20px] items-center justify-center rounded-full bg-blue-500 text-[12px] leading-none font-bold text-white"
+      >
+        {{ task.numNewComments }}
+      </span>
+    }
+    @if (task.similaritiesDetected) {
+      <span
+        class="pointer-events-auto flex size-[20px] items-center justify-center rounded-full bg-[#da532c]"
+        matTooltip="Similarities Detected"
+      >
+        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
+          visibility
+        </mat-icon>
+      </span>
+    }
+  </div>
+
+  <div
+    class="pointer-events-none absolute right-[3px] bottom-[-7px] z-[2] flex items-center gap-px drop-shadow-[0_2px_2px_rgba(0,0,0,0.2)]"
+  >
+    @if (task.hasGrade()) {
+      <span
+        class="pointer-events-auto flex size-5.5 items-center justify-center rounded-full bg-gray-800 text-[10px] leading-none font-bold text-white"
+      >
+        {{ task.gradeDesc() }}
+      </span>
+    }
+    @if (task.hasQualityPoints()) {
+      <span
+        class="pointer-events-auto flex size-[22px] items-center justify-center rounded-full bg-formatif-blue text-[10px] leading-none font-bold text-white"
+      >
+        <span class="mr-px mb-[6px] text-[8px]">{{ task.qualityPts }}</span>
+        <span class="font-extrabold"> &frasl; </span>
+        <span class="mt-[6px] ml-px text-[8px]">{{ task.definition.maxQualityPts }}</span>
+      </span>
+    }
+    @if (task.isDueSoon() && !task.inFinalState()) {
+      <span
+        class="pointer-events-auto flex size-[20px] items-center justify-center rounded-full bg-[#fab143]"
+      >
+        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-black">
+          schedule
+        </mat-icon>
+      </span>
+    }
+    @if (task.betweenDueDateAndDeadlineDate() && !task.isPastDeadline() && !task.inFinalState()) {
+      <span
+        class="pointer-events-auto flex size-[20px] items-center justify-center rounded-full bg-[#da532c]"
+      >
+        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
+          schedule
+        </mat-icon>
+      </span>
+    }
+    @if (task.isPastDeadline() && !task.inFinalState()) {
+      <span
+        class="pointer-events-auto flex size-[20px] items-center justify-center rounded-full bg-[#da532c]"
+      >
+        <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
+          schedule
+        </mat-icon>
+        <strong class="h-min font-bold text-white">!</strong>
+      </span>
+    }
+  </div>
+</ng-template>
+
 <div
   class="task-list flex min-h-0 flex-col"
   [ngClass]="{
@@ -117,33 +190,38 @@
     <mat-nav-list #taskDefinitions>
       @for (taskDef of filteredTaskDefinitions; track taskDef) {
         <mat-list-item
-          class="flex w-full cursor-pointer items-center border-b border-gray-200 p-1"
+          class="relative flex h-16.25 w-full cursor-pointer items-center overflow-visible border-b border-gray-200 p-1 transition-shadow"
+          [class.bg-blue-50]="!isCollapsed && isSelectedTaskDefinition(taskDef)"
+          [class.hover:bg-blue-50]="!isCollapsed && isSelectedTaskDefinition(taskDef)"
+          [class.hover:bg-gray-50]="!isCollapsed && !isSelectedTaskDefinition(taskDef)"
+          [class.hover:z-10]="isCollapsed"
+          [class.task-list-item--collapsed]="isCollapsed"
           [disableRipple]="true"
-          [ngClass]="{
-            'bg-blue-50 hover:bg-blue-50': isSelectedTaskDefinition(taskDef),
-            'hover:bg-gray-50': !isSelectedTaskDefinition(taskDef),
-            'h-16.25': !isCollapsed,
-            'h-21': isCollapsed,
-          }"
+          [ngClass]="
+            isCollapsed
+              ? taskStatusClass(taskDef) +
+                (isSelectedTaskDefinition(taskDef)
+                  ? ' shadow-[inset_0_0_0_2px_rgba(17,24,39,0.32)]'
+                  : '')
+              : null
+          "
           (click)="setSelectedTaskDefinition(taskDef)"
         >
           @if (taskDef) {
             @if (isCollapsed) {
+              @if (taskListItem(taskDef); as task) {
+                <ng-container
+                  *ngTemplateOutlet="CollapsedTaskBadges; context: {task: task}"
+                ></ng-container>
+              }
               <div
-                class="flex w-full flex-col items-center justify-center gap-2 py-2"
+                class="flex size-full items-center justify-center px-1"
                 matTooltipShowDelay="250"
                 [matTooltip]="taskDef.name"
               >
-                <span
-                  class="min-w-0 flex-1 truncate text-center text-sm leading-none font-bold text-gray-700"
-                >
+                <span class="min-w-0 truncate text-center text-sm leading-none font-bold">
                   {{ taskDef.abbreviation }}
                 </span>
-                @if (taskListItem(taskDef); as task) {
-                  <ng-container
-                    *ngTemplateOutlet="TaskStatusBadges; context: {task: task}"
-                  ></ng-container>
-                }
               </div>
             } @else {
               <div class="flex w-full items-center justify-between gap-2">
@@ -211,27 +289,26 @@
 
       @if (mode === 'project' && project) {
         <mat-list-item
-          class="item-content flex h-21 w-full cursor-pointer items-center border-b border-gray-200 p-1 hover:bg-gray-50"
+          class="item-content relative flex w-full cursor-pointer items-center overflow-visible border-b border-gray-200 p-1 transition-shadow"
+          [class.h-16.25]="isCollapsed"
+          [class.h-21]="!isCollapsed"
+          [class.hover:bg-gray-50]="!isCollapsed"
+          [class.hover:z-10]="isCollapsed"
+          [class.task-list-item--collapsed]="isCollapsed"
           [disableRipple]="true"
           [ngClass]="project.portfolioTaskStatusClass()"
         >
           @if (isCollapsed) {
             <a
-              class="flex w-full flex-col items-center justify-center gap-2 py-2 text-inherit no-underline"
+              class="flex size-full items-center justify-center px-1 text-inherit no-underline"
               [routerLink]="['/projects', project.id, 'portfolio']"
             >
               <span
-                class="flex min-w-0 flex-1 items-center justify-center truncate text-center text-sm leading-none text-gray-700"
+                class="flex min-w-0 items-center justify-center truncate text-center text-sm leading-none font-bold"
                 matTooltip="Create Portfolio"
               >
                 <mat-icon class="m-0 place-self-center">history_edu</mat-icon>
               </span>
-              <div class="relative flex shrink-0 items-center justify-center">
-                <status-icon
-                  [compact]="isCollapsed"
-                  [status]="project.portfolioTaskStatus()"
-                ></status-icon>
-              </div>
             </a>
           } @else {
             <create-portfolio-task-list-item [project]="project"></create-portfolio-task-list-item>
