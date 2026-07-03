@@ -84,3 +84,16 @@ $main-view-max-height: calc((var(--vh, 1vh) * (100)) - 85px);
 .mat-spinner circle {
   stroke: #ddd !important;
 }
+
+/* Ensures smooth resizing of task list in project dashboard */
+body.split-pane-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+body.split-pane-resizing iframe,
+body.split-pane-resizing object,
+body.split-pane-resizing embed,
+body.split-pane-resizing pdf-viewer {
+  pointer-events: none !important;
+}

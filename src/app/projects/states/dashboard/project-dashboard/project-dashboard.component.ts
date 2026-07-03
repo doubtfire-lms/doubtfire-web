@@ -1,18 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  auditTime,
-  first,
-  merge,
-  of,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, first, of, takeUntil} from 'rxjs';
 import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {UnitService} from 'src/app/api/services/unit.service';
@@ -26,7 +17,7 @@ import {GlobalStateService, ViewType} from '../../index/global-state.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class ProjectDashboardComponent implements OnInit {
+export class ProjectDashboardComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;
   @Input() public defaultTaskListCollapsed = false;
   @Input() public taskSelectionUrlBase: unknown[] | null = null;
@@ -38,13 +29,11 @@ export class ProjectDashboardComponent implements OnInit {
   public selectedTaskDefinition$: BehaviorSubject<TaskDefinition> =
     new BehaviorSubject<TaskDefinition>(null);
 
-  subs$: Observable<unknown>;
+  subs$: Observable<unknown> = of(true);
   readonly skeletonRows = Array.from({length: 10}, (_, index) => index);
   private readonly projectSubject: BehaviorSubject<Project> = new BehaviorSubject(null);
 
-  private leftComponentStartSize$: Subject<number> = new Subject();
-  private dragMove$: Subject<{event: CdkDragMove; div: HTMLDivElement}> = new Subject();
-  private dragMoveAudited$;
+  private readonly destroy$: Subject<void> = new Subject();
   private projectReady = false;
 
   projectTasks = [];
@@ -55,16 +44,25 @@ export class ProjectDashboardComponent implements OnInit {
     private unitService: UnitService,
     private globalStateService: GlobalStateService,
     private route: ActivatedRoute,
+    private breakpointObserver: BreakpointObserver,
   ) {}
 
-  public readonly taskListCollapsedWidth = 125;
+  public readonly taskListCollapsedWidth = 75;
   public readonly taskListExpandedWidth = 400;
-  public readonly taskListCollapseThreshold = 175;
+  public readonly taskListCollapseThreshold = 125;
   public leftWidth = this.taskListExpandedWidth;
   public lastX;
   public startWidth = 0;
 
   public startLeftX = 0;
+  public isCommentsNarrow = false;
+  public commentsCollapsed = false;
+
+  private readonly commentsBreakpoint = '(max-width: 999.98px)';
+
+  public get commentsPanelCollapsed(): boolean {
+    return this.isCommentsNarrow && this.commentsCollapsed;
+  }
 
   public get taskListCollapsed(): boolean {
     return this.leftWidth < this.taskListCollapseThreshold;
@@ -89,6 +87,8 @@ export class ProjectDashboardComponent implements OnInit {
   }
 
   startedDragging(event: CdkDragStart, boundary: HTMLElement) {
+    document.body.classList.add('split-pane-resizing');
+    event.source.element.nativeElement.classList.add('hovering');
     const rect = boundary.getBoundingClientRect();
     // x relative to the container
     this.startLeftX = (event.event as MouseEvent).clientX - rect.left;
@@ -110,10 +110,20 @@ export class ProjectDashboardComponent implements OnInit {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   stoppedDragging(event: CdkDragEnd, _div: HTMLDivElement) {
+    document.body.classList.remove('split-pane-resizing');
     event.source.element.nativeElement.classList.remove('hovering');
   }
 
   ngOnInit(): void {
+    this.breakpointObserver
+      .observe(this.commentsBreakpoint)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({matches}) => {
+        this.isCommentsNarrow = matches;
+        this.commentsCollapsed = matches;
+        window.dispatchEvent(new Event('resize'));
+      });
+
     if (this.defaultTaskListCollapsed) {
       this.leftWidth = this.taskListCollapsedWidth;
     }
@@ -128,34 +138,17 @@ export class ProjectDashboardComponent implements OnInit {
       );
     });
 
-    this.dragMoveAudited$ = this.dragMove$.pipe(
-      withLatestFrom(this.leftComponentStartSize$),
-      auditTime(30),
-      tap(([moveEvent, startSize]) => {
-        window.dispatchEvent(new Event('resize'));
+    window.dispatchEvent(new Event('resize'));
+  }
 
-        let newWidth: number;
-        let width: number;
-        if (moveEvent.div.id === 'inboxpanel') {
-          newWidth = startSize + moveEvent.event.distance.x;
+  ngOnDestroy(): void {
+    document.body.classList.remove('split-pane-resizing');
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-          // if width is belo 250, snap to 50px
-          if (newWidth < 250 && newWidth > 100) {
-            width = 250;
-          } else if (newWidth < 150) {
-            width = 50;
-          } else {
-            width = Math.min(newWidth, 500);
-          }
-        } else {
-          newWidth = startSize - moveEvent.event.distance.x;
-          width = Math.min(Math.max(newWidth, 250), 500);
-        }
-        moveEvent.div.style.width = `${width}px`;
-        moveEvent.event.source.reset();
-      }),
-    );
-    this.subs$ = merge(this.dragMoveAudited$, of(true));
+  public toggleCommentsPanel(): void {
+    this.commentsCollapsed = !this.commentsCollapsed;
     window.dispatchEvent(new Event('resize'));
   }
 

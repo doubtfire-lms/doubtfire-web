@@ -78,17 +78,49 @@
           ></f-inbox-dashboard>
         }
       </div>
+      @if (isCommentsNarrow && commentsCollapsed && !loading && taskData?.selectedTask) {
+        <button
+          aria-label="Open task comments"
+          class="comments-floating-toggle"
+          color="primary"
+          mat-mini-fab
+          matTooltip="Open comments"
+          type="button"
+          (click)="toggleCommentsPanel()"
+        >
+          <mat-icon class="comments-floating-toggle__edge-icon">chevron_left</mat-icon>
+          <mat-icon class="comments-floating-toggle__hover-icon">forum</mat-icon>
+        </button>
+      }
       <div
         #rightResizerEl
         cdkDrag
         cdkDragLockAxis="x"
         class="resizer"
         id="rightResizerEl"
+        [class.hidden]="isCommentsNarrow"
         (cdkDragEnded)="stoppedDragging($event, commentspanel)"
         (cdkDragMoved)="dragging($event, commentspanel)"
         (cdkDragStarted)="startedDragging($event, commentspanel)"
       ></div>
-      <div #commentspanel class="task-comment-panel inbox-panel overflow-hidden">
+      <div
+        #commentspanel
+        class="task-comment-panel comments-sidebar inbox-panel overflow-hidden"
+        [class.comments-sidebar--narrow]="isCommentsNarrow"
+        [class.hidden]="commentsPanelCollapsed"
+      >
+        @if (isCommentsNarrow && !commentsCollapsed) {
+          <button
+            aria-label="Collapse task comments"
+            class="comments-sidebar__collapse"
+            mat-icon-button
+            matTooltip="Collapse comments"
+            type="button"
+            (click)="toggleCommentsPanel()"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        }
         @if (loading) {
           <ng-container *ngTemplateOutlet="BlankPanelSkeleton"></ng-container>
         } @else {
@@ -159,6 +191,40 @@
             [task]="$safeNavigationMigration(taskData?.selectedTask)"
             (visiblePdfUrlChange)="visiblePdfUrl = $event"
           ></f-inbox-dashboard>
+        }
+      </div>
+      @if (isCommentsNarrow && commentsCollapsed && !loading && taskData?.selectedTask) {
+        <button
+          aria-label="Open task comments"
+          class="comments-floating-toggle"
+          color="primary"
+          mat-mini-fab
+          matTooltip="Open comments"
+          type="button"
+          (click)="toggleCommentsPanel()"
+        >
+          <mat-icon class="comments-floating-toggle__edge-icon">chevron_left</mat-icon>
+          <mat-icon class="comments-floating-toggle__hover-icon">forum</mat-icon>
+        </button>
+      }
+      <div
+        class="task-comment-panel comments-sidebar comments-sidebar--mobile inbox-panel overflow-hidden"
+        [class.hidden]="commentsPanelCollapsed || !taskData?.selectedTask"
+      >
+        @if (isCommentsNarrow && !commentsCollapsed) {
+          <button
+            aria-label="Collapse task comments"
+            class="comments-sidebar__collapse"
+            mat-icon-button
+            matTooltip="Collapse comments"
+            type="button"
+            (click)="toggleCommentsPanel()"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        }
+        @if (!loading && taskData?.selectedTask) {
+          <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
         }
       </div>
     </div>
