@@ -58,12 +58,12 @@
             <ng-container *ngTemplateOutlet="TaskListSkeleton"></ng-container>
           </div>
         }
-        <div class="relative flex-none" [style.width.px]="10">
+        <div class="relative flex-none" [style.width.px]="3">
           <div
             #leftResizerEl
             cdkDrag
             cdkDragLockAxis="x"
-            class="absolute inset-y-0 left-0 z-50 w-[10px] cursor-ew-resize bg-slate-100"
+            class="absolute inset-y-0 left-0 z-50 w-[3px] cursor-ew-resize bg-slate-100"
             [cdkDragBoundary]="boundary"
             (cdkDragEnded)="stoppedDragging($event, boundary)"
             (cdkDragMoved)="dragging($event, boundary)"
