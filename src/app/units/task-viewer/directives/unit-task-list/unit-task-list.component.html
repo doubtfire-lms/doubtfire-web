@@ -129,10 +129,13 @@
         >
           @if (taskDef) {
             @if (isCollapsed) {
-              <div class="flex w-full flex-col items-center justify-center gap-2 py-2">
+              <div
+                class="flex w-full flex-col items-center justify-center gap-2 py-2"
+                matTooltipShowDelay="250"
+                [matTooltip]="taskDef.name"
+              >
                 <span
-                  class="min-w-0 flex-1 truncate text-center text-sm leading-none text-gray-700"
-                  [matTooltip]="taskDef.name"
+                  class="min-w-0 flex-1 truncate text-center text-sm leading-none font-bold text-gray-700"
                 >
                   {{ taskDef.abbreviation }}
                 </span>
