@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-42](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-41...v11.0.0-42) (2026-07-03)
+
+
+### Features
+
+* collapse task comments in narrow screen sizes ([380f277](https://github.com/b0ink/doubtfire-deploy/commit/380f2773b44d6582b62b13785b90a146a7002123))
+* render ansi output to html ([732aedd](https://github.com/b0ink/doubtfire-deploy/commit/732aedd2414dcfe3d74a78b4b9ca0bc17d4f5521))
+
+
+### Bug Fixes
+
+* add tooltip to collapsed task list item ([c81e61e](https://github.com/b0ink/doubtfire-deploy/commit/c81e61ef48b83f076ba7dac2d039b4bade5c9717))
+* ensure project is valid ([095315b](https://github.com/b0ink/doubtfire-deploy/commit/095315b212fff98cbe661df7a33a7b091cb66b1e))
+
 ## [11.0.0-41](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-40...v11.0.0-41) (2026-07-02)
 
 
