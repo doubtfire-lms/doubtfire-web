@@ -1,5 +1,10 @@
 <ng-template #TaskStatusBadges let-task="task">
-  <div class="relative mr-1 flex shrink-0 items-center justify-center pr-0.5">
+  <div
+    class="relative mr-1 flex shrink-0 items-center justify-center"
+    [ngClass]="{
+      'pr-0.5': !isCollapsed,
+    }"
+  >
     <status-icon [compact]="isCollapsed" [status]="task.status"></status-icon>
 
     <div
@@ -108,21 +113,23 @@
     </div>
   }
 
-  <div class="scrollable min-h-0 flex-1" itemSize="60">
+  <div class="scrollable min-h-0 flex-1 overflow-x-hidden" itemSize="60">
     <mat-nav-list #taskDefinitions>
       @for (taskDef of filteredTaskDefinitions; track taskDef) {
         <mat-list-item
-          class="flex h-[65px] w-full cursor-pointer items-center border-b border-gray-200 p-1"
+          class="flex w-full cursor-pointer items-center border-b border-gray-200 p-1"
           [disableRipple]="true"
           [ngClass]="{
             'bg-blue-50 hover:bg-blue-50': isSelectedTaskDefinition(taskDef),
             'hover:bg-gray-50': !isSelectedTaskDefinition(taskDef),
+            'h-16.25': !isCollapsed,
+            'h-21': isCollapsed,
           }"
           (click)="setSelectedTaskDefinition(taskDef)"
         >
           @if (taskDef) {
             @if (isCollapsed) {
-              <div class="flex w-full items-center justify-between gap-1.5 pr-2">
+              <div class="flex w-full flex-col items-center justify-center gap-2 py-2">
                 <span
                   class="min-w-0 flex-1 truncate text-center text-sm leading-none text-gray-700"
                   [matTooltip]="taskDef.name"
@@ -201,13 +208,13 @@
 
       @if (mode === 'project' && project) {
         <mat-list-item
-          class="item-content flex h-[65px] w-full cursor-pointer items-center border-b border-gray-200 p-1 hover:bg-gray-50"
+          class="item-content flex h-21 w-full cursor-pointer items-center border-b border-gray-200 p-1 hover:bg-gray-50"
           [disableRipple]="true"
           [ngClass]="project.portfolioTaskStatusClass()"
         >
           @if (isCollapsed) {
             <a
-              class="flex w-full items-center justify-between gap-1.5 pr-2 text-inherit no-underline"
+              class="flex w-full flex-col items-center justify-center gap-2 py-2 text-inherit no-underline"
               [routerLink]="['/projects', project.id, 'portfolio']"
             >
               <span
@@ -216,7 +223,7 @@
               >
                 <mat-icon class="m-0 place-self-center">history_edu</mat-icon>
               </span>
-              <div class="relative mr-1 flex shrink-0 items-center justify-center pr-0.5">
+              <div class="relative flex shrink-0 items-center justify-center">
                 <status-icon
                   [compact]="isCollapsed"
                   [status]="project.portfolioTaskStatus()"

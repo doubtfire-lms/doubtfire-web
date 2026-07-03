@@ -72,12 +72,43 @@
         </div>
       }
       @if (selectedTaskDefinition$ | async; as selectedTaskDefinition) {
-        <div class="flex-1 rounded-lg bg-white p-1">
+        <div class="min-w-0 flex-1 rounded-lg bg-white p-1">
           <f-task-dashboard
             [task]="project.findTaskForDefinition(selectedTaskDefinition.id)"
           ></f-task-dashboard>
         </div>
-        <div #commentspanel class="w-1/4 flex-none rounded-lg bg-white p-1">
+        @if (isCommentsNarrow && commentsCollapsed) {
+          <button
+            aria-label="Open task comments"
+            class="comments-floating-toggle"
+            color="primary"
+            mat-mini-fab
+            matTooltip="Open comments"
+            type="button"
+            (click)="toggleCommentsPanel()"
+          >
+            <mat-icon class="comments-floating-toggle__edge-icon">chevron_left</mat-icon>
+            <mat-icon class="comments-floating-toggle__hover-icon">forum</mat-icon>
+          </button>
+        }
+        <div
+          #commentspanel
+          class="comments-sidebar w-1/4 flex-none bg-white p-1"
+          [class.comments-sidebar--narrow]="isCommentsNarrow"
+          [class.hidden]="commentsPanelCollapsed"
+        >
+          @if (isCommentsNarrow && !commentsCollapsed) {
+            <button
+              aria-label="Collapse task comments"
+              class="comments-sidebar__collapse"
+              mat-icon-button
+              matTooltip="Collapse comments"
+              type="button"
+              (click)="toggleCommentsPanel()"
+            >
+              <mat-icon>chevron_right</mat-icon>
+            </button>
+          }
           <task-comments-viewer [task]="project.findTaskForDefinition(selectedTaskDefinition.id)">
           </task-comments-viewer>
         </div>
