@@ -45,7 +45,7 @@
     "@ngneat/hotkeys": "^4.0.0",
     "@ngstack/code-editor": "^9.0.0",
     "@sentry/angular": "^10.61.0",
-    "@sentry/cli": "^3.5.1",
+    "@sentry/cli": "^3.6.0",
     "@swimlane/ngx-charts": "^20.5.0",
     "@tailwindcss/postcss": "^4.3.2",
     "@worktile/gantt": "^21.0.0",
