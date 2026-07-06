@@ -84,7 +84,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   get isMobileView(): boolean {
-    return this.mediaObserver.isActive('lt-md');
+    return this.mediaObserver.isActive('xs');
   }
 
   get commentsPanelCollapsed(): boolean {
