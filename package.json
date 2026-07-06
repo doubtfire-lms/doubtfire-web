@@ -47,7 +47,7 @@
     "@sentry/angular": "^10.61.0",
     "@sentry/cli": "^3.5.1",
     "@swimlane/ngx-charts": "^20.5.0",
-    "@tailwindcss/postcss": "^4.3.1",
+    "@tailwindcss/postcss": "^4.3.2",
     "@worktile/gantt": "^21.0.0",
     "angular-calendar": "^0.32.2",
     "ansi-to-html": "^0.7.2",
