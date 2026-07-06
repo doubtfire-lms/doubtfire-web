@@ -98,6 +98,10 @@ export class InboxDashboardComponent implements OnChanges {
       case InboxDashboardTab.submission:
         return this.task.hasPdf ? this.task.submissionUrl() : null;
       case InboxDashboardTab.taskSheet:
+        if (this.task.definition?.hasContentLink) {
+          return null;
+        }
+
         return this.task.definition?.hasTaskSheet ? this.task.definition.getTaskPDFUrl() : null;
       default:
         return null;
