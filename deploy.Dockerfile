@@ -35,6 +35,7 @@ RUN --mount=type=secret,id=sentry_auth_token,uid=1000 \
     npm run deploy:build2api:sourcemaps; \
     SENTRY_AUTH_TOKEN="$(cat /run/secrets/sentry_auth_token)" npm run sentry:sourcemaps; \
     find dist/browser -name '*.map' -delete; \
+    npx ngsw-config dist/browser ngsw-config.json /; \
   else \
     npm run-script deploy; \
   fi
