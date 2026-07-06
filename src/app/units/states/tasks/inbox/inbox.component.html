@@ -38,7 +38,7 @@
 </ng-template>
 
 @if (!isMobileView) {
-  <div class="min-h-0 px-3" fxFill fxHide fxLayout="column" fxShow.gt-sm>
+  <div class="min-h-0 px-3" fxFill fxHide fxLayout="column" fxShow.gt-xs>
     <div class="min-h-0" fxFlex fxLayout="row" fxLayoutAlign="center stretch">
       <div #inboxpanel class="staff-task-list inbox-panel overflow-hidden" id="inboxpanel">
         @if (loading) {
@@ -136,7 +136,7 @@
     <f-footer class="z-10 shrink-0" [viewType]="viewType"></f-footer>
   </div>
 } @else {
-  <div #mobile fxFill fxHide fxLayout="row" fxShow.lt-md>
+  <div #mobile fxFill fxHide fxLayout="row" fxShow.xs>
     <div
       #inboxpanel
       class="inbox-panel mobile overflow-hidden"
