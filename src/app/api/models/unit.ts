@@ -78,6 +78,7 @@ export class Unit extends Entity {
   enableSyncTimetable: boolean;
 
   draftTaskDefinition: TaskDefinition;
+  hasMainContentSite: boolean = false;
 
   allowStudentExtensionRequests: boolean;
   allowFlexibleDates: boolean = false;

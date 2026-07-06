@@ -61,26 +61,6 @@
                 } @else {
                   <div class="flex items-center gap-1">
                     <span class="font-medium">{{ site.name }}</span>
-                    <button
-                      aria-label="Edit site name"
-                      mat-icon-button
-                      matTooltip="Edit Name"
-                      type="button"
-                      [disabled]="replacingSite(site)"
-                      (click)="editSiteName(site)"
-                    >
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                    <button
-                      aria-label="Delete site"
-                      mat-icon-button
-                      matTooltip="Delete Site"
-                      type="button"
-                      [disabled]="replacingSite(site)"
-                      (click)="deleteSite(site)"
-                    >
-                      <mat-icon>delete</mat-icon>
-                    </button>
                   </div>
                 }
                 <span class="text-xs text-gray-600">{{ site.originalFilename }}</span>
@@ -91,15 +71,17 @@
           <ng-container matColumnDef="rootDir">
             <th *matHeaderCellDef mat-header-cell>Root directory</th>
             <td *matCellDef="let site" mat-cell>
-              <mat-select
-                class="min-w-52"
-                [value]="site.rootDir"
-                (selectionChange)="updateSiteRootDir(site, $event.value)"
-              >
-                @for (rootDir of site.rootDirOptions; track rootDir) {
-                  <mat-option [value]="rootDir">{{ rootDir || '/' }}</mat-option>
-                }
-              </mat-select>
+              <div class="pr-5">
+                <mat-select
+                  class="min-w-52"
+                  [value]="site.rootDir"
+                  (selectionChange)="updateSiteRootDir(site, $event.value)"
+                >
+                  @for (rootDir of site.rootDirOptions; track rootDir) {
+                    <mat-option [value]="rootDir">{{ rootDir || '/' }}</mat-option>
+                  }
+                </mat-select>
+              </div>
             </td>
           </ng-container>
 
@@ -110,46 +92,80 @@
               matTooltip="Default site when students navigate to Unit Content"
               matTooltipShowDelay="500"
             >
-              Default
+              Default Unit Content
             </th>
             <td *matCellDef="let site" mat-cell>
-              <mat-radio-button
-                [checked]="site.isMain"
-                (change)="updateMainSite(site)"
-              ></mat-radio-button>
+              @if (site.isMain) {
+                <mat-icon aria-label="Default unit content" matTooltip="Default unit content">
+                  check
+                </mat-icon>
+              }
             </td>
           </ng-container>
 
           <ng-container matColumnDef="contentActions">
             <th *matHeaderCellDef mat-header-cell></th>
             <td *matCellDef="let site" mat-cell>
-              <input
-                #replaceSiteUpload
-                accept=".zip,application/zip,application/x-zip-compressed,application/octet-stream"
-                class="hidden"
-                type="file"
-                (change)="replaceSite(site, $event)"
-              />
-              <button
-                aria-label="Replace site content"
-                mat-icon-button
-                matTooltip="Replace ZIP"
-                type="button"
-                [disabled]="replacingSite(site)"
-                (click)="confirmReplaceSite(site, replaceSiteUpload)"
-              >
-                <mat-icon>upload_file</mat-icon>
-              </button>
-              <button
-                aria-label="Preview site"
-                mat-icon-button
-                matTooltip="Preview Site"
-                type="button"
-                [disabled]="replacingSite(site)"
-                (click)="previewSite(site)"
-              >
-                <mat-icon>open_in_new</mat-icon>
-              </button>
+              <div class="flex justify-end gap-1">
+                <input
+                  #replaceSiteUpload
+                  accept=".zip,application/zip,application/x-zip-compressed,application/octet-stream"
+                  class="hidden"
+                  type="file"
+                  (change)="replaceSite(site, $event)"
+                />
+                <button
+                  aria-label="Replace site content"
+                  mat-icon-button
+                  matTooltip="Replace ZIP"
+                  type="button"
+                  [disabled]="replacingSite(site)"
+                  (click)="confirmReplaceSite(site, replaceSiteUpload)"
+                >
+                  <mat-icon>upload_file</mat-icon>
+                </button>
+                <button
+                  aria-label="Preview site"
+                  mat-icon-button
+                  matTooltip="Preview Site"
+                  type="button"
+                  [disabled]="replacingSite(site)"
+                  (click)="previewSite(site)"
+                >
+                  <mat-icon>open_in_new</mat-icon>
+                </button>
+                <button
+                  aria-label="More site actions"
+                  mat-icon-button
+                  matTooltip="More Actions"
+                  type="button"
+                  [disabled]="replacingSite(site)"
+                  [matMenuTriggerFor]="siteActionsMenu"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #siteActionsMenu="matMenu" xPosition="before">
+                  @if (site.isMain) {
+                    <button mat-menu-item (click)="clearMainSite()">
+                      <mat-icon>radio_button_unchecked</mat-icon>
+                      <span>Remove default unit content</span>
+                    </button>
+                  } @else {
+                    <button mat-menu-item (click)="updateMainSite(site)">
+                      <mat-icon>check_circle</mat-icon>
+                      <span>Make default unit content</span>
+                    </button>
+                  }
+                  <button mat-menu-item (click)="editSiteName(site)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit name</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteSite(site)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete site</span>
+                  </button>
+                </mat-menu>
+              </div>
             </td>
           </ng-container>
 

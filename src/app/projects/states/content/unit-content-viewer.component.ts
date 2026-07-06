@@ -81,21 +81,29 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
       return;
     }
 
+    const unit = this.route.parent?.snapshot.data.unit as Unit | undefined;
     this.setContentRoute(this.route.snapshot.url);
+
+    if (unit) {
+      if (this.redirectFromUnavailableDefaultContent(unit)) {
+        return;
+      }
+
+      this.setHeaderContext(unit);
+      void this.fetchContentArchive(unit.id);
+    }
+
     this.routeSubscription = this.route.url.subscribe((segments) => {
       const routeChanged = this.setContentRoute(segments);
+
+      if (unit && this.redirectFromUnavailableDefaultContent(unit)) {
+        return;
+      }
 
       if (routeChanged && this.currentUnitId) {
         void this.fetchContentArchive(this.currentUnitId);
       }
     });
-
-    const unit = this.route.parent?.snapshot.data.unit as Unit | undefined;
-
-    if (unit) {
-      this.setHeaderContext(unit);
-      void this.fetchContentArchive(unit.id);
-    }
   }
 
   public ngAfterViewInit(): void {
@@ -126,9 +134,7 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private setHeaderContext(unit: Unit): void {
-    const studentProject = this.globalState.currentUserProjects.currentValues.find(
-      (project: Project) => project.unit?.id === unit.id,
-    );
+    const studentProject = this.studentProjectForUnit(unit);
 
     if (unit.myRole === 'Student' && studentProject) {
       this.globalState.setView(ViewType.PROJECT, studentProject);
@@ -136,6 +142,28 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     }
 
     this.globalState.setView(ViewType.UNIT, unit);
+  }
+
+  private redirectFromUnavailableDefaultContent(unit: Unit): boolean {
+    if (this.dialogData || unit.hasMainContentSite || this.contentRoute !== '/') {
+      return false;
+    }
+
+    const studentProject = this.studentProjectForUnit(unit);
+    const commands =
+      unit.myRole === 'Student' && studentProject
+        ? ['/projects', studentProject.id, 'dashboard']
+        : ['/units', unit.id, 'tasks', 'inbox'];
+
+    void this.router.navigate(commands, {replaceUrl: true});
+
+    return true;
+  }
+
+  private studentProjectForUnit(unit: Unit): Project | undefined {
+    return this.globalState.currentUserProjects.currentValues.find(
+      (project: Project) => project.unit?.id === unit.id,
+    );
   }
 
   private handleIframeClick(event: MouseEvent): void {

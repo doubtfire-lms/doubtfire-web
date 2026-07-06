@@ -224,9 +224,29 @@ export class UnitContentEditorComponent implements OnInit {
         this.sites.forEach((currentSite) => {
           currentSite.isMain = currentSite.id === updatedSite.id;
         });
+        this.unit.hasMainContentSite = true;
         this.alerts.success('Main content site updated', 2000);
       },
       error: (error) => this.alerts.error(`Failed to update main content site: ${error}`, 6000),
+    });
+  }
+
+  public clearMainSite(): void {
+    const mainSite = this.sites.find((site) => site.isMain);
+
+    if (!mainSite) {
+      return;
+    }
+
+    this.unitContentSiteService.updateForUnit(this.unit, mainSite, {isMain: false}).subscribe({
+      next: () => {
+        this.sites.forEach((site) => {
+          site.isMain = false;
+        });
+        this.unit.hasMainContentSite = false;
+        this.alerts.success('Default content site cleared', 2000);
+      },
+      error: (error) => this.alerts.error(`Failed to clear default content site: ${error}`, 6000),
     });
   }
 
@@ -306,6 +326,7 @@ export class UnitContentEditorComponent implements OnInit {
       .subscribe({
         next: ({sites, links}) => {
           this.sites = sites;
+          this.unit.hasMainContentSite = sites.some((site) => site.isMain);
           this.routeSections = this.buildRouteSections(links);
           this.savedRouteSnapshots = this.snapshotRoutes(this.allRouteRows);
         },
