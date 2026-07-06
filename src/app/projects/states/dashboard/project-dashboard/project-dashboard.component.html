@@ -87,7 +87,9 @@
             type="button"
             (click)="toggleCommentsPanel()"
           >
-            <mat-icon class="comments-floating-toggle__edge-icon">keyboard_double_arrow_left</mat-icon>
+            <mat-icon class="comments-floating-toggle__edge-icon"
+              >keyboard_double_arrow_left</mat-icon
+            >
             <mat-icon class="comments-floating-toggle__hover-icon">forum</mat-icon>
           </button>
         }
@@ -102,11 +104,11 @@
             <button
               aria-label="Collapse task comments"
               class="comments-sidebar__collapse"
-              [class.comments-sidebar__collapse--narrow]="isCommentsNarrow"
-              [class.comments-sidebar__collapse--wide]="!isCommentsNarrow"
               mat-icon-button
               matTooltip="Collapse comments"
               type="button"
+              [class.comments-sidebar__collapse--narrow]="isCommentsNarrow"
+              [class.comments-sidebar__collapse--wide]="!isCommentsNarrow"
               (click)="toggleCommentsPanel()"
             >
               <mat-icon>keyboard_double_arrow_right</mat-icon>
