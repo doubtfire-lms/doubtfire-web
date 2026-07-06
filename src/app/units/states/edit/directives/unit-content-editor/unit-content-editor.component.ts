@@ -11,6 +11,7 @@ import {
 } from 'src/app/api/models/unit-content-link';
 import {UnitContentLinkService} from 'src/app/api/services/unit-content-link.service';
 import {UnitContentSiteService} from 'src/app/api/services/unit-content-site.service';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {UnitContentViewerComponent} from 'src/app/projects/states/content/unit-content-viewer.component';
 
@@ -56,9 +57,11 @@ export class UnitContentEditorComponent implements OnInit {
   public loading = true;
   public saving = false;
   public uploading = false;
-  public readonly siteDisplayedColumns = ['name', 'rootDir', 'isMain', 'actions'];
+  public editingSiteNames: Record<number, string> = {};
+  public readonly siteDisplayedColumns = ['name', 'rootDir', 'isMain', 'contentActions'];
   public readonly routeDisplayedColumns = ['context', 'site', 'route', 'preview'];
 
+  private replacingSiteIds = new Set<number>();
   private readonly routeSectionDefinitions: ContentRouteSectionDefinition[] = [
     {
       id: 'grades',
@@ -80,6 +83,7 @@ export class UnitContentEditorComponent implements OnInit {
     private dialog: MatDialog,
     private unitContentLinkService: UnitContentLinkService,
     private unitContentSiteService: UnitContentSiteService,
+    private confirmationModal: ConfirmationModalService,
     private alerts: AlertService,
   ) {}
 
@@ -123,6 +127,82 @@ export class UnitContentEditorComponent implements OnInit {
         this.loadContentManagement();
       },
       error: (error) => this.alerts.error(`Failed to delete content site: ${error}`, 6000),
+    });
+  }
+
+  public confirmReplaceSite(site: UnitContentSite, input: HTMLInputElement): void {
+    this.confirmationModal.show(
+      'Overwrite content site ZIP',
+      `Are you sure you want to overwrite the ZIP contents for "${site.name}"? This action is irreversible.`,
+      () => input.click(),
+      undefined,
+      'Replace ZIP',
+    );
+  }
+
+  public replaceSite(site: UnitContentSite, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    input.value = '';
+
+    if (!file) {
+      return;
+    }
+
+    this.replacingSiteIds.add(site.id);
+    this.unitContentSiteService
+      .replaceArchiveForUnit(this.unit, site, file)
+      .pipe(finalize(() => this.replacingSiteIds.delete(site.id)))
+      .subscribe({
+        next: (updatedSite) => {
+          this.sites = this.sites.map((currentSite) =>
+            currentSite.id === updatedSite.id ? updatedSite : currentSite,
+          );
+          this.alerts.success('Content site replaced', 2000);
+        },
+        error: (error) => this.alerts.error(`Failed to replace content site: ${error}`, 6000),
+      });
+  }
+
+  public replacingSite(site: UnitContentSite): boolean {
+    return this.replacingSiteIds.has(site.id);
+  }
+
+  public editingSite(site: UnitContentSite): boolean {
+    return site.id in this.editingSiteNames;
+  }
+
+  public editSiteName(site: UnitContentSite): void {
+    this.editingSiteNames[site.id] = site.name;
+  }
+
+  public cancelEditSiteName(site: UnitContentSite): void {
+    delete this.editingSiteNames[site.id];
+  }
+
+  public saveSiteName(site: UnitContentSite): void {
+    const name = this.editingSiteNames[site.id]?.trim();
+
+    if (!name) {
+      this.alerts.error('Content site name cannot be blank', 3000);
+      return;
+    }
+
+    if (name === site.name) {
+      this.cancelEditSiteName(site);
+      return;
+    }
+
+    this.unitContentSiteService.updateForUnit(this.unit, site, {name}).subscribe({
+      next: (updatedSite) => {
+        this.sites = this.sites.map((currentSite) =>
+          currentSite.id === updatedSite.id ? updatedSite : currentSite,
+        );
+        this.alerts.success('Content site name updated', 2000);
+        this.cancelEditSiteName(site);
+      },
+      error: (error) => this.alerts.error(`Failed to update content site name: ${error}`, 6000),
     });
   }
 

@@ -25,8 +25,64 @@
           <ng-container matColumnDef="name">
             <th *matHeaderCellDef mat-header-cell>Site</th>
             <td *matCellDef="let site" mat-cell>
-              <div class="flex flex-col">
-                <span class="font-medium">{{ site.name }}</span>
+              <div class="flex min-w-64 flex-col py-2">
+                @if (editingSite(site)) {
+                  <div class="flex items-center gap-1">
+                    <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+                      <input
+                        matInput
+                        [disabled]="replacingSite(site)"
+                        [(ngModel)]="editingSiteNames[site.id]"
+                        (keydown.enter)="saveSiteName(site)"
+                        (keydown.escape)="cancelEditSiteName(site)"
+                      />
+                    </mat-form-field>
+                    <button
+                      aria-label="Save site name"
+                      mat-icon-button
+                      matTooltip="Save"
+                      type="button"
+                      [disabled]="replacingSite(site)"
+                      (click)="saveSiteName(site)"
+                    >
+                      <mat-icon>save</mat-icon>
+                    </button>
+                    <button
+                      aria-label="Cancel site name edit"
+                      mat-icon-button
+                      matTooltip="Cancel"
+                      type="button"
+                      [disabled]="replacingSite(site)"
+                      (click)="cancelEditSiteName(site)"
+                    >
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                } @else {
+                  <div class="flex items-center gap-1">
+                    <span class="font-medium">{{ site.name }}</span>
+                    <button
+                      aria-label="Edit site name"
+                      mat-icon-button
+                      matTooltip="Edit Name"
+                      type="button"
+                      [disabled]="replacingSite(site)"
+                      (click)="editSiteName(site)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button
+                      aria-label="Delete site"
+                      mat-icon-button
+                      matTooltip="Delete Site"
+                      type="button"
+                      [disabled]="replacingSite(site)"
+                      (click)="deleteSite(site)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                }
                 <span class="text-xs text-gray-600">{{ site.originalFilename }}</span>
               </div>
             </td>
@@ -57,24 +113,35 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="actions">
+          <ng-container matColumnDef="contentActions">
             <th *matHeaderCellDef mat-header-cell></th>
             <td *matCellDef="let site" mat-cell>
+              <input
+                #replaceSiteUpload
+                accept=".zip,application/zip,application/x-zip-compressed,application/octet-stream"
+                class="hidden"
+                type="file"
+                (change)="replaceSite(site, $event)"
+              />
+              <button
+                aria-label="Replace site content"
+                mat-icon-button
+                matTooltip="Replace ZIP"
+                type="button"
+                [disabled]="replacingSite(site)"
+                (click)="confirmReplaceSite(site, replaceSiteUpload)"
+              >
+                <mat-icon>upload_file</mat-icon>
+              </button>
               <button
                 aria-label="Preview site"
                 mat-icon-button
+                matTooltip="Preview Site"
                 type="button"
+                [disabled]="replacingSite(site)"
                 (click)="previewSite(site)"
               >
                 <mat-icon>open_in_new</mat-icon>
-              </button>
-              <button
-                aria-label="Delete site"
-                mat-icon-button
-                type="button"
-                (click)="deleteSite(site)"
-              >
-                <mat-icon>delete</mat-icon>
               </button>
             </td>
           </ng-container>

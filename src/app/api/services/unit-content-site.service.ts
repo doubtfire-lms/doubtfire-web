@@ -46,6 +46,25 @@ export class UnitContentSiteService extends CachedEntityService<UnitContentSite>
     );
   }
 
+  public replaceArchiveForUnit(
+    unit: Unit,
+    site: UnitContentSite,
+    file: File,
+  ): Observable<UnitContentSite> {
+    const formData = new FormData();
+
+    formData.append('file', file);
+
+    return this.update(
+      {unitId: unit.id, id: site.id},
+      {
+        body: formData,
+        entity: site,
+        endpointFormat: this.endpointFormat,
+      },
+    );
+  }
+
   public deleteForUnit(unit: Unit, site: UnitContentSite): Observable<boolean> {
     return this.delete<boolean>({unitId: unit.id, id: site.id});
   }
