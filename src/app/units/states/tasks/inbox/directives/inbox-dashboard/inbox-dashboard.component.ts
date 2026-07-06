@@ -25,6 +25,7 @@ enum InboxDashboardTab {
 @Component({
   selector: 'f-inbox-dashboard',
   templateUrl: './inbox-dashboard.component.html',
+  styleUrls: ['./inbox-dashboard.component.scss'],
   host: {'class': 'block h-full'},
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,

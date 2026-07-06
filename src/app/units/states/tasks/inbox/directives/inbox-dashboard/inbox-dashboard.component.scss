@@ -1,0 +1,20 @@
+:host ::ng-deep .inbox-dashboard-tabs {
+  .mat-mdc-tab-header {
+    justify-content: center;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+  }
+
+  .mat-mdc-tab-label-container {
+    flex: 0 0 auto;
+    margin: 0 auto;
+    overflow: visible;
+  }
+
+  .mat-mdc-tab-list,
+  .mat-mdc-tab-labels {
+    width: max-content;
+  }
+}
