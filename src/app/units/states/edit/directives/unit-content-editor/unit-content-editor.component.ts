@@ -141,10 +141,9 @@ export class UnitContentEditorComponent implements OnInit {
   public updateMainSite(site: UnitContentSite): void {
     this.unitContentSiteService.updateForUnit(this.unit, site, {isMain: true}).subscribe({
       next: (updatedSite) => {
-        this.sites = this.sites.map((currentSite) => ({
-          ...currentSite,
-          isMain: currentSite.id === updatedSite.id,
-        }));
+        this.sites.forEach((currentSite) => {
+          currentSite.isMain = currentSite.id === updatedSite.id;
+        });
         this.alerts.success('Main content site updated', 2000);
       },
       error: (error) => this.alerts.error(`Failed to update main content site: ${error}`, 6000),

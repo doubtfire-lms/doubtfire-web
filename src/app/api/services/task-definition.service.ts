@@ -13,10 +13,10 @@ import API_URL from 'src/app/config/constants/apiUrl';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SidekiqJob} from '../models/sidekiq-job';
 import {TaskPrerequisite} from '../models/task-prerequisite';
-import {UnitContentLink, UnitContentSite} from '../models/unit-content-link';
 import {MappingFunctions} from './mapping-fn';
 import {OverseerStepService} from './overseer-step.service';
 import {TaskPrerequisiteService} from './task-prerequisite.service';
+import {UnitContentLinkService} from './unit-content-link.service';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -27,6 +27,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     private learningOutcomeService: LearningOutcomeService,
     private taskPrerequisiteService: TaskPrerequisiteService,
     private overseerStepService: OverseerStepService,
+    private unitContentLinkService: UnitContentLinkService,
   ) {
     super(httpClient, API_URL);
 
@@ -127,53 +128,19 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       {
         keys: ['contentLink', 'content_link'],
         toEntityFn: (data: object, key: string, taskDefinition: TaskDefinition) => {
-          const linkData = data[key] as {
-            id: number;
-            unit_id: number;
-            unit_content_site_id: number;
-            context_type: 'grade' | 'grade_overview' | 'task_definition';
-            context_key: string;
-            route: string;
-            site?: {
-              id: number;
-              unit_id: number;
-              name: string;
-              original_filename: string;
-              root_dir: string;
-              root_dir_options: string[];
-              is_main: boolean;
-              created_at: string;
-              updated_at: string;
-            };
-          };
-
+          const linkData = data[key] as {id?: number};
           if (!linkData) {
             return undefined;
           }
 
-          const link = new UnitContentLink(taskDefinition.unit);
-          link.id = linkData['id'];
-          link.unitId = linkData['unit_id'];
-          link.unitContentSiteId = linkData['unit_content_site_id'];
-          link.contextType = linkData['context_type'];
-          link.contextKey = linkData['context_key'];
-          link.route = linkData['route'];
-
-          if (linkData.site) {
-            link.site = new UnitContentSite({
-              id: linkData.site.id,
-              unitId: linkData.site.unit_id,
-              name: linkData.site.name,
-              originalFilename: linkData.site.original_filename,
-              rootDir: linkData.site.root_dir,
-              rootDirOptions: linkData.site.root_dir_options,
-              isMain: linkData.site.is_main,
-              createdAt: linkData.site.created_at,
-              updatedAt: linkData.site.updated_at,
-            });
-          }
-
-          return link;
+          return taskDefinition.unit.unitContentLinkCache.getOrCreate(
+            linkData.id,
+            this.unitContentLinkService,
+            linkData,
+            {
+              constructorParams: taskDefinition.unit,
+            },
+          );
         },
       },
       'scormAllowReview',

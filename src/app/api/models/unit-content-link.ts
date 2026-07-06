@@ -3,7 +3,7 @@ import type {Unit} from './unit';
 
 export type UnitContentContextType = 'grade' | 'grade_overview' | 'task_definition';
 
-export class UnitContentSite {
+export class UnitContentSite extends Entity {
   id: number;
   unitId: number;
   name: string;
@@ -15,6 +15,7 @@ export class UnitContentSite {
   updatedAt: string;
 
   constructor(json?: Partial<UnitContentSite>) {
+    super();
     Object.assign(this, json);
   }
 }

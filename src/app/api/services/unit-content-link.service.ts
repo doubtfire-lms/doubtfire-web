@@ -3,36 +3,43 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, map} from 'rxjs';
 import type {Unit} from 'src/app/api/models/unit';
-import {UnitContentLink, UnitContentSite} from 'src/app/api/models/unit-content-link';
+import {UnitContentLink} from 'src/app/api/models/unit-content-link';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {UnitContentSiteService} from './unit-content-site.service';
 
 @Injectable()
 export class UnitContentLinkService extends CachedEntityService<UnitContentLink> {
   protected readonly endpointFormat = 'units/:unitId:/content/links/:id:';
   private readonly unitContentHttpClient: HttpClient;
 
-  constructor(httpClient: HttpClient) {
+  constructor(
+    httpClient: HttpClient,
+    private unitContentSiteService: UnitContentSiteService,
+  ) {
     super(httpClient, API_URL);
     this.unitContentHttpClient = httpClient;
 
     this.mapping.addKeys(
       'id',
       'route',
-      {
-        keys: ['unitId', 'unit_id'],
-      },
-      {
-        keys: ['unitContentSiteId', 'unit_content_site_id'],
-      },
-      {
-        keys: ['contextType', 'context_type'],
-      },
-      {
-        keys: ['contextKey', 'context_key'],
-      },
+      'unitId',
+      'unitContentSiteId',
+      'contextType',
+      'contextKey',
       {
         keys: 'site',
-        toEntityFn: (data, key) => this.buildSite(data[key]),
+        toEntityFn: (data, key) => {
+          const site = data[key] as {id: number};
+          if (!site) {
+            return undefined;
+          }
+
+          return this.unitContentSiteService.cache.getOrCreate(
+            site.id,
+            this.unitContentSiteService,
+            site,
+          );
+        },
       },
     );
   }
@@ -77,33 +84,5 @@ export class UnitContentLinkService extends CachedEntityService<UnitContentLink>
       cacheBehaviourOnGet: 'cacheQuery',
       constructorParams: unit,
     };
-  }
-
-  private buildSite(site?: {
-    id: number;
-    unit_id: number;
-    name: string;
-    original_filename: string;
-    root_dir: string;
-    root_dir_options: string[];
-    is_main: boolean;
-    created_at: string;
-    updated_at: string;
-  }): UnitContentSite | undefined {
-    if (!site) {
-      return undefined;
-    }
-
-    return new UnitContentSite({
-      id: site.id,
-      unitId: site.unit_id,
-      name: site.name,
-      originalFilename: site.original_filename,
-      rootDir: site.root_dir,
-      rootDirOptions: site.root_dir_options,
-      isMain: site.is_main,
-      createdAt: site.created_at,
-      updatedAt: site.updated_at,
-    });
   }
 }
