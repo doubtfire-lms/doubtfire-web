@@ -5,6 +5,7 @@ import {BehaviorSubject, Observable, Subscription, first, of} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
+import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 type PortfolioTabKey = 'select' | 'progress' | 'student-notes' | 'portfolio' | 'assessment';
@@ -47,6 +48,7 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private alertService: AlertService,
+    private userService: UserService,
   ) {}
 
   public ngOnInit(): void {
@@ -55,7 +57,14 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
       this.unit$.pipe(first()).subscribe({
         next: (unit) => {
           this.unit = unit;
-          this.unit.loadD2lMapping().subscribe();
+
+          if (
+            this.userService.currentUser.systemRole === 'Admin' ||
+            this.userService.currentUser.systemRole === 'Convenor'
+          ) {
+            this.unit.loadD2lMapping().subscribe();
+          }
+
           this.loadStudents();
           this.subscriptions.push(
             this.route.paramMap.subscribe((params) => {
