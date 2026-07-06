@@ -61,7 +61,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   private readonly commentsBreakpoint = '(max-width: 999.98px)';
 
   public get commentsPanelCollapsed(): boolean {
-    return this.isCommentsNarrow && this.commentsCollapsed;
+    return this.commentsCollapsed;
   }
 
   public get taskListCollapsed(): boolean {
