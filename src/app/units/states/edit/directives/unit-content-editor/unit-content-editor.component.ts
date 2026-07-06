@@ -61,7 +61,7 @@ export class UnitContentEditorComponent implements OnInit {
   public readonly siteDisplayedColumns = ['name', 'rootDir', 'isMain', 'contentActions'];
   public readonly routeDisplayedColumns = ['context', 'site', 'route', 'preview'];
 
-  private replacingSiteIds = new Set<number>();
+  private replacingSiteIds: Set<number> = new Set();
   private readonly routeSectionDefinitions: ContentRouteSectionDefinition[] = [
     {
       id: 'grades',
