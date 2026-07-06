@@ -104,7 +104,14 @@
           </ng-container>
 
           <ng-container matColumnDef="isMain">
-            <th *matHeaderCellDef mat-header-cell>Default</th>
+            <th
+              *matHeaderCellDef
+              mat-header-cell
+              matTooltip="Default site when students navigate to Unit Content"
+              matTooltipShowDelay="500"
+            >
+              Default
+            </th>
             <td *matCellDef="let site" mat-cell>
               <mat-radio-button
                 [checked]="site.isMain"
