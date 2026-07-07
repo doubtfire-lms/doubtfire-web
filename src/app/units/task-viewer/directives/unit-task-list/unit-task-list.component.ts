@@ -331,7 +331,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   }
 
   private compareTaskDefinitions(a: TaskDefinition, b: TaskDefinition): number {
-    let result = 0;
+    let result: number;
 
     switch (this.viewPreferences.sortBy) {
       case 'abbreviation':
