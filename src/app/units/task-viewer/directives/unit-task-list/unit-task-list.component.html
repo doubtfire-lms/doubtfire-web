@@ -89,19 +89,19 @@
 >
   @if (!isCollapsed) {
     <div class="omnisearch rounded-t-2xl md:rounded-2xl">
-      <div class="flex items-center">
-        <button
-          aria-label="Search Icon"
-          class="flex flex-none items-center"
-          disabled
-          mat-icon-button
-        >
-          <mat-icon class="flex items-center" disabled>search</mat-icon>
-        </button>
-        <div class="grow">
+      <div class="flex items-center justify-between">
+        <div class="flex min-w-0 flex-1 items-center">
+          <button
+            aria-label="Search Icon"
+            class="flex flex-none items-center"
+            disabled
+            mat-icon-button
+          >
+            <mat-icon class="flex items-center" disabled>search</mat-icon>
+          </button>
           <input
             autocomplete="off"
-            class="search"
+            class="search w-full"
             placeholder="Search Tasks"
             spellcheck="false"
             type="text"
@@ -109,6 +109,81 @@
             (ngModelChange)="applyFilters()"
           />
         </div>
+        <button
+          aria-label="Task list filters"
+          mat-icon-button
+          matBadgeColor="primary"
+          matBadgeSize="small"
+          matTooltip="Task list filters"
+          [matBadge]="activeViewPreferenceCount || null"
+          [matMenuTriggerFor]="taskListFiltersMenu"
+        >
+          <mat-icon class="text-gray-500">tune</mat-icon>
+        </button>
+        <mat-menu #taskListFiltersMenu="matMenu" class="task-list-filters-menu" xPosition="after">
+          <div class="px-3 py-2" (click)="$event.stopPropagation()">
+            <div class="mb-1 text-xs font-bold tracking-normal text-gray-500 uppercase">
+              Sort tasks
+            </div>
+            <div class="mb-2 rounded border border-gray-200">
+              @for (option of sortOptions; track option.value) {
+                <button
+                  class="flex h-10 w-full items-center gap-2 px-2 text-left text-sm hover:bg-gray-50"
+                  type="button"
+                  [ngClass]="{
+                    'bg-blue-50 text-formatif-blue': viewPreferences.sortBy === option.value,
+                    'text-gray-700': viewPreferences.sortBy !== option.value,
+                  }"
+                  (click)="setSortBy(option.value)"
+                >
+                  <mat-icon class="task-list-menu-icon shrink-0">{{ option.icon }}</mat-icon>
+                  <span class="min-w-0 flex-1 truncate">{{ option.label }}</span>
+                  <mat-icon
+                    class="task-list-menu-icon shrink-0"
+                    [ngClass]="{
+                      invisible: viewPreferences.sortBy !== option.value,
+                    }"
+                  >
+                    {{ sortStateIconFor(option) }}
+                  </mat-icon>
+                </button>
+              }
+            </div>
+
+            <div class="mb-1 text-xs font-bold tracking-normal text-gray-500 uppercase">
+              Filters
+            </div>
+            <div class="flex flex-col gap-2 rounded border border-gray-200 p-2">
+              <mat-checkbox
+                color="primary"
+                [ngModel]="viewPreferences.hideCompleted"
+                (ngModelChange)="toggleHideCompleted($event)"
+              >
+                Hide completed tasks
+              </mat-checkbox>
+              <mat-checkbox
+                color="primary"
+                [disabled]="!project"
+                [ngModel]="viewPreferences.hideAboveTargetGrade"
+                (ngModelChange)="toggleHideAboveTargetGrade($event)"
+              >
+                Hide tasks above target grade
+              </mat-checkbox>
+            </div>
+
+            <div class="mt-2 flex items-center justify-between gap-2 text-xs text-gray-500">
+              <span class="min-w-0 truncate">Current: {{ selectedSortLabel }}</span>
+              <button
+                class="shrink-0 text-formatif-blue disabled:text-gray-400"
+                type="button"
+                [disabled]="activeViewPreferenceCount === 0"
+                (click)="resetViewPreferences()"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </mat-menu>
       </div>
     </div>
   }
