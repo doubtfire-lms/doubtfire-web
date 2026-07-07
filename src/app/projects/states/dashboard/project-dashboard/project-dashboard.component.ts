@@ -21,6 +21,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   @Input() public project$: Observable<Project>;
   @Input() public defaultTaskListCollapsed = false;
   @Input() public taskSelectionUrlBase: unknown[] | null = null;
+  @Input() public showSubmittedGrade?: boolean = false;
 
   /**
    * The currently selected task definition - selected in the unit task list.

@@ -133,7 +133,11 @@
         </div>
       } @else {
         <div class="min-h-0 flex-1 overflow-y-auto p-1">
-          <f-progress-dashboard class="w-full" [project]="project"></f-progress-dashboard>
+          <f-progress-dashboard
+            class="w-full"
+            [project]="project"
+            [showSubmittedGrade]="showSubmittedGrade"
+          ></f-progress-dashboard>
         </div>
       }
     </div>

@@ -9,7 +9,14 @@
   </div>
   <div class="grid grid-cols-1 items-stretch gap-3.5 p-3.5 xl:grid-cols-2">
     <!-- Task Planner Card -->
-    <div class="size-full xl:col-span-1">
+    <div
+      class="size-full"
+      [ngClass]="
+        showSubmittedGrade
+          ? 'xl:col-span-2 xl:mx-auto xl:w-[calc((100%-0.875rem)/2)]'
+          : 'xl:col-span-1'
+      "
+    >
       <f-task-planner-card class="block size-full" [project]="project"></f-task-planner-card>
     </div>
 
@@ -49,6 +56,35 @@
         </mat-card-content>
       </mat-card>
     </div>
+
+    @if (showSubmittedGrade) {
+      <!-- Submitted Grade Card -->
+      <div class="h-full xl:col-span-1">
+        <mat-card appearance="outlined" class="flex h-full flex-col">
+          <mat-card-header>
+            <mat-card-title>Submitted Grade</mat-card-title>
+            <mat-card-subtitle class="mb-2.5">
+              <p>The grade you are submitting your portfolio for.</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content class="flex flex-1 items-center">
+            <div class="w-full">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Select Submitted Grade</mat-label>
+                <mat-select disabled [value]="project.submittedGrade">
+                  @for (grade of grades.values; track grade) {
+                    <mat-option [value]="grade">
+                      {{ grades.names[grade] }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    }
 
     <!-- Unit learning outcomes -->
     <div class="xl:col-span-2">
