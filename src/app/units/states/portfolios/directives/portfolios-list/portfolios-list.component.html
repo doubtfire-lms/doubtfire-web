@@ -10,7 +10,8 @@
           matInput
           placeholder="Eg. Student ID"
           [disabled]="loading"
-          (keyup)="applyFilter($event)"
+          [value]="filterText"
+          (input)="applyFilter($event)"
         />
       </mat-form-field>
       <mat-button-toggle-group

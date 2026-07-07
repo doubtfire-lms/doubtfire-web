@@ -15,8 +15,10 @@
       @switch (currentTab.routeSegment) {
         @case ('select') {
           <f-portfolios-list
+            [filters]="portfolioListFilters"
             [loading]="loadingStudents"
             [unit]="unit"
+            (filtersChange)="portfolioListFiltersChange($event)"
             (studentSelected)="studentSelected($event)"
           ></f-portfolios-list>
         }
