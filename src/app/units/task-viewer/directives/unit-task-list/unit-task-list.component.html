@@ -125,7 +125,7 @@
             <div class="mb-1 text-xs font-bold tracking-normal text-gray-500 uppercase">
               Sort tasks
             </div>
-            <div class="mb-2 rounded border border-gray-200">
+            <div class="mb-2">
               @for (option of sortOptions; track option.value) {
                 <button
                   class="flex h-10 w-full items-center gap-2 px-2 text-left text-sm hover:bg-gray-50"
@@ -153,7 +153,7 @@
             <div class="mb-1 text-xs font-bold tracking-normal text-gray-500 uppercase">
               Filters
             </div>
-            <div class="flex flex-col gap-2 rounded border border-gray-200 p-2">
+            <div class="flex flex-col gap-1">
               <mat-checkbox
                 color="primary"
                 [ngModel]="viewPreferences.hideCompleted"
@@ -171,10 +171,10 @@
               </mat-checkbox>
             </div>
 
-            <div class="mt-2 flex items-center justify-between gap-2 text-xs text-gray-500">
-              <span class="min-w-0 truncate">Current: {{ selectedSortLabel }}</span>
+            <div class="mt-2 flex items-center justify-end gap-2 text-xs text-gray-500">
               <button
                 class="shrink-0 text-formatif-blue disabled:text-gray-400"
+                mat-button
                 type="button"
                 [disabled]="activeViewPreferenceCount === 0"
                 (click)="resetViewPreferences()"
