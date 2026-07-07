@@ -59,9 +59,15 @@
             <div class="flex flex-wrap justify-center gap-2 self-center">
               @for (grade of targetGradeDefinitions; track grade.id) {
                 <button
-                  class="flex size-16 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-800 no-underline transition-colors enabled:cursor-pointer enabled:hover:border-gray-500 enabled:hover:bg-gray-50"
+                  class="flex size-16 items-center justify-center rounded-full border no-underline transition-colors enabled:cursor-pointer"
                   type="button"
                   [disabled]="!contentLinkForGrade(grade)"
+                  [ngClass]="{
+                    'border-blue-600 bg-blue-200 enabled:hover:border-blue-800 enabled:hover:bg-blue-300':
+                      project.targetGrade === grade.value,
+                    'bg-white border-gray-300 text-gray-800 enabled:hover:border-gray-500 enabled:hover:bg-gray-50':
+                      project.targetGrade !== grade.value,
+                  }"
                   (click)="openContentForGrade(grade)"
                 >
                   <div class="flex flex-col items-center justify-center gap-2 text-center">
