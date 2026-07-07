@@ -112,13 +112,16 @@
         <button
           aria-label="Task list filters"
           mat-icon-button
-          matBadgeColor="primary"
-          matBadgeSize="small"
           matTooltip="Task list filters"
-          [matBadge]="activeViewPreferenceCount || null"
           [matMenuTriggerFor]="taskListFiltersMenu"
         >
-          <mat-icon class="text-gray-500">tune</mat-icon>
+          <mat-icon
+            class="text-gray-500"
+            matBadgeColor="accent"
+            matBadgeSize="small"
+            [matBadge]="activeViewPreferenceCount || null"
+            >tune</mat-icon
+          >
         </button>
         <mat-menu #taskListFiltersMenu="matMenu" class="task-list-filters-menu" xPosition="after">
           <div class="px-3 py-2" (click)="$event.stopPropagation()">
