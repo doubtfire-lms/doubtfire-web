@@ -69,7 +69,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   taskDefinitionNamePipe = new TaskDefinitionNamePipe();
   viewPreferences: TaskListViewPreferences = {...DEFAULT_VIEW_PREFERENCES};
   sortOptions: TaskListSortOptionView[] = [
-    {value: 'default', label: 'Default', icon: 'sort'},
+    {value: 'default', label: 'Priority', icon: 'sort'},
     {value: 'abbreviation', label: 'Abbreviation', icon: 'sort_by_alpha'},
     {value: 'startDate', label: 'Start date', icon: 'event_available'},
     {value: 'targetDate', label: 'Target date', icon: 'event'},
@@ -145,7 +145,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   public get selectedSortLabel(): string {
     const label =
       this.sortOptions.find((option) => option.value === this.viewPreferences.sortBy)?.label ??
-      'Default';
+      'Priority';
 
     if (this.viewPreferences.sortBy === 'default') {
       return label;
