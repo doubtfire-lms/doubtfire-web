@@ -89,6 +89,8 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   ) {}
 
   applyFilters() {
+    this.refreshTopTaskWeights();
+
     const matchingTaskDefinitions = this.taskDefinitionNamePipe.transform(
       this.taskDefinitions,
       this.searchText,
@@ -380,10 +382,20 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
         result = this.compareDates(this.feedbackDateFor(a), this.feedbackDateFor(b));
         break;
       default:
-        return 0;
+        result = this.defaultSortWeightFor(a) - this.defaultSortWeightFor(b);
     }
 
     return this.viewPreferences.sortDirection === 'asc' ? result : result * -1;
+  }
+
+  private refreshTopTaskWeights(): void {
+    if (this.project && this.hasTasks) {
+      this.project.calcTopTasks();
+    }
+  }
+
+  private defaultSortWeightFor(taskDef: TaskDefinition): number {
+    return this.taskForTaskDef(taskDef)?.topWeight ?? taskDef?.seq ?? Number.MAX_SAFE_INTEGER;
   }
 
   private targetDateFor(taskDef: TaskDefinition): Date {
