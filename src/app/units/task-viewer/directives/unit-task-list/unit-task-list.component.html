@@ -234,23 +234,27 @@
                           <mat-icon class="shrink-0 scale-75 text-gray-600">person</mat-icon>
                         }
 
-                        <div class="truncate text-[14px] leading-none text-gray-500">
+                        <div class="mr-1 truncate text-[14px] leading-none text-gray-500">
                           {{ taskDef.abbreviation }}
                           -
                           {{ gradeNames[taskDef.targetGrade] }} Task
                         </div>
                         @if (taskListItem(taskDef); as task) {
-                          <!-- @if (task.isBeforeStartDate() && !task.inSubmittedState()) {
+                          @if (taskStartApproaching(task)) {
                             <span
-                              class="flex shrink-0 items-center gap-px text-[12px] text-gray-500"
+                              class="flex shrink-0 items-center gap-px text-[12px] font-normal text-sky-500"
                             >
-                              <mat-icon class="!h-[16px] !w-[16px] !text-[16px]"
-                                >hourglass_top</mat-icon
-                              >
-                              {{ task.timeToStart() }}
+                              <mat-icon class="size-4! text-[16px]!"> event_upcoming </mat-icon>
+                              {{ taskStartLabel(task) }}
                             </span>
-                          } -->
-                          @if (!task.isBeforeStartDate() && !task.inSubmittedState()) {
+                          } @else if (taskOngoing(task)) {
+                            <span
+                              class="flex shrink-0 items-center gap-px text-[12px] font-normal text-sky-500"
+                            >
+                              <mat-icon class="size-4! text-[16px]!"> event_upcoming </mat-icon>
+                              Start now
+                            </span>
+                          } @else if (!task.isBeforeStartDate() && !task.inSubmittedState()) {
                             <span
                               class="flex shrink-0 items-center gap-px text-[12px] font-bold"
                               [ngClass]="{

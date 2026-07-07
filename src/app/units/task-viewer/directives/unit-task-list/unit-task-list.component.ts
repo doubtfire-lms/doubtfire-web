@@ -36,6 +36,8 @@ const DEFAULT_VIEW_PREFERENCES: TaskListViewPreferences = {
   hideAboveTargetGrade: false,
 };
 
+const START_APPROACHING_DAYS = 7;
+
 @Component({
   selector: 'f-unit-task-list',
   templateUrl: './unit-task-list.component.html',
@@ -201,6 +203,37 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
 
   public taskListItem(taskDef: TaskDefinition): Task {
     return this.taskForTaskDef(taskDef);
+  }
+
+  public taskStartApproaching(task: Task): boolean {
+    return (
+      !!task &&
+      !task.inFinalState() &&
+      task.isBeforeStartDate() &&
+      task.daysUntilStartDate() <= START_APPROACHING_DAYS
+    );
+  }
+
+  public taskStartLabel(task: Task): string {
+    const days = task.daysUntilStartDate();
+
+    if (days <= 0) {
+      return 'Start today';
+    }
+
+    return `Start in ${days} ${days === 1 ? 'day' : 'days'}`;
+  }
+
+  public taskOngoing(task: Task): boolean {
+    if (!task || task.inFinalState()) {
+      return false;
+    }
+
+    const now = Date.now();
+    const startTime = this.dateTime(task.startDate);
+    const dueTime = this.dateTime(task.localDueDate());
+
+    return now >= startTime && now < dueTime;
   }
 
   /*
