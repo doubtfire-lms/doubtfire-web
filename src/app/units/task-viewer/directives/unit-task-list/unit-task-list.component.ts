@@ -12,7 +12,7 @@ import {BehaviorSubject} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
 
-type TaskListSortOption = 'default' | 'abbreviation' | 'targetDate' | 'startDate' | 'feedbackDate';
+type TaskListSortOption = 'default' | 'abbreviation' | 'targetDate' | 'startDate' | 'dueDate';
 
 type TaskListSortDirection = 'asc' | 'desc';
 
@@ -73,7 +73,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     {value: 'abbreviation', label: 'Abbreviation', icon: 'sort_by_alpha'},
     {value: 'startDate', label: 'Start date', icon: 'event_available'},
     {value: 'targetDate', label: 'Target date', icon: 'event'},
-    {value: 'feedbackDate', label: 'Feedback date', icon: 'event_repeat'},
+    {value: 'dueDate', label: 'Due date', icon: 'event_repeat'},
   ];
 
   protected get gradeNames(): Record<number, string> {
@@ -378,7 +378,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
       case 'startDate':
         result = this.compareDates(this.startDateFor(a), this.startDateFor(b));
         break;
-      case 'feedbackDate':
+      case 'dueDate':
         result = this.compareDates(this.feedbackDateFor(a), this.feedbackDateFor(b));
         break;
       default:
@@ -487,8 +487,8 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
       targetDateDesc: {sortBy: 'targetDate', sortDirection: 'desc'},
       startDateAsc: {sortBy: 'startDate', sortDirection: 'asc'},
       startDateDesc: {sortBy: 'startDate', sortDirection: 'desc'},
-      feedbackDateAsc: {sortBy: 'feedbackDate', sortDirection: 'asc'},
-      feedbackDateDesc: {sortBy: 'feedbackDate', sortDirection: 'desc'},
+      feedbackDateAsc: {sortBy: 'dueDate', sortDirection: 'asc'},
+      feedbackDateDesc: {sortBy: 'dueDate', sortDirection: 'desc'},
     };
 
     return migrations[value as string] ?? DEFAULT_VIEW_PREFERENCES;
