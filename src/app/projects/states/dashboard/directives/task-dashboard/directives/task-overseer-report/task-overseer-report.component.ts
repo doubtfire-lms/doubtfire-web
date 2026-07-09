@@ -1,6 +1,9 @@
+import Convert from 'ansi-to-html';
+import DOMPurify from 'dompurify';
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatMenuTrigger} from '@angular/material/menu';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {forkJoin} from 'rxjs';
 import {OverseerAssessment, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {SubmissionHistory} from 'src/app/api/models/submission-history';
@@ -32,8 +35,24 @@ export class TaskOverseerReportComponent implements OnInit {
     private overseerAssessmentService: OverseerAssessmentService,
     private overseerStepResultsService: OverseerStepResultService,
     private dialog: MatDialog,
+    private readonly sanitizer: DomSanitizer,
     private userService: UserService,
-  ) {}
+  ) {
+    DOMPurify.addHook('uponSanitizeAttribute', (_node, data) => {
+      if (data.attrName !== 'style') {
+        return;
+      }
+      data.attrValue = data.attrValue
+        .split(';')
+        .map((rule) => rule.trim())
+        .filter((rule) =>
+          /^(color|background-color|font-weight|font-style)\s*:\s*(#[0-9a-f]{3,8}|[a-z]+|\d+)\b/i.test(
+            rule,
+          ),
+        )
+        .join('; ');
+    });
+  }
 
   public get currentUnitRole(): UnitRole | undefined {
     const currentUser = this.userService.currentUser;
@@ -79,6 +98,24 @@ export class TaskOverseerReportComponent implements OnInit {
     },
     lineNumbers: 'off',
   };
+
+  private ansi = new Convert({
+    newline: false,
+    escapeXML: true,
+    fg: '#1f2937',
+    bg: '#f9fafb',
+  });
+
+  protected renderOutput(output?: string | null): SafeHtml {
+    const html = this.ansi.toHtml(output ?? '');
+
+    const clean = DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: ['span', 'br', 'i', 'b', 'strong', 'em', 'code'],
+      ALLOWED_ATTR: ['style'],
+    });
+
+    return this.sanitizer.bypassSecurityTrustHtml(clean);
+  }
 
   diff() {
     this.diffEditorOptions.renderSideBySide = false;

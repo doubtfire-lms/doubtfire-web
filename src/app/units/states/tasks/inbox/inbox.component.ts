@@ -1,6 +1,7 @@
 import {HotkeysHelpComponent, HotkeysService} from '@ngneat/hotkeys';
 import {MediaObserver} from 'ng-flex-layout';
 import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
+import {BreakpointObserver} from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,7 +13,7 @@ import {
 } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
-import {Observable, Subject, auditTime, merge, of, tap, withLatestFrom} from 'rxjs';
+import {Observable, Subject, auditTime, merge, of, takeUntil, tap, withLatestFrom} from 'rxjs';
 import {Tutorial} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -66,11 +67,15 @@ export class InboxComponent implements OnInit, OnDestroy {
   private inboxStartSize$: Subject<number> = new Subject();
   private dragMove$: Subject<{event: CdkDragMove; div: HTMLDivElement}> = new Subject();
   private dragMoveAudited$;
+  private readonly destroy$: Subject<void> = new Subject();
+  private readonly commentsBreakpoint = '(max-width: 999.98px)';
 
   // protected filters;
   // protected showSearchOptions;
 
   public taskSelected = false;
+  public isCommentsNarrow = false;
+  public commentsCollapsed = false;
 
   visiblePdfUrl: string;
 
@@ -79,7 +84,11 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   get isMobileView(): boolean {
-    return this.mediaObserver.isActive('lt-md');
+    return this.mediaObserver.isActive('xs');
+  }
+
+  get commentsPanelCollapsed(): boolean {
+    return this.isCommentsNarrow && this.commentsCollapsed;
   }
 
   constructor(
@@ -91,6 +100,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private userService: UserService,
     private constants: DoubtfireConstants,
+    private breakpointObserver: BreakpointObserver,
   ) {
     this.selectedTask.currentPdfUrl$.subscribe((url) => {
       this.visiblePdfUrl = url;
@@ -102,6 +112,15 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.breakpointObserver
+      .observe(this.commentsBreakpoint)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({matches}) => {
+        this.isCommentsNarrow = matches;
+        this.commentsCollapsed = matches;
+        window.dispatchEvent(new Event('resize'));
+      });
+
     const registeredHotkeys = this.hotkeys.getHotkeys().map((hotkey) => hotkey.keys);
 
     if (!registeredHotkeys.includes('shift.?')) {
@@ -184,13 +203,22 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    document.body.classList.remove('split-pane-resizing');
+    this.destroy$.next();
+    this.destroy$.complete();
     this.hotkeys.removeShortcuts('control.shift.d');
     this.hotkeys.removeShortcuts('control.shift.f');
     this.hotkeys.removeShortcuts('control.shift.c');
     this.hotkeys.removeShortcuts('shift.?');
   }
 
+  public toggleCommentsPanel(): void {
+    this.commentsCollapsed = !this.commentsCollapsed;
+    window.dispatchEvent(new Event('resize'));
+  }
+
   startedDragging(event: CdkDragStart, div: HTMLDivElement) {
+    document.body.classList.add('split-pane-resizing');
     event.source.element.nativeElement.classList.add('hovering');
     const w = div.getBoundingClientRect().width;
     this.inboxStartSize$.next(w);
@@ -203,6 +231,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   stoppedDragging(event: CdkDragEnd, _div: HTMLDivElement) {
+    document.body.classList.remove('split-pane-resizing');
     event.source.element.nativeElement.classList.remove('hovering');
   }
 

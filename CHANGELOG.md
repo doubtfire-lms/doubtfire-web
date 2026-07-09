@@ -2,6 +2,52 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-44](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-43...v11.0.0-44) (2026-07-08)
+
+
+### Features
+
+* display submitted grade in portfolio view ([a76cecf](https://github.com/b0ink/doubtfire-deploy/commit/a76cecfe1e4f3a78becf9507900e621e87447d69))
+
+
+### Bug Fixes
+
+* ensure accurate tutor views ([3b5e693](https://github.com/b0ink/doubtfire-deploy/commit/3b5e69397abcc53136942428fb97ac81a5cddb3d))
+* only call d2l mapping as convenor ([d6ecd44](https://github.com/b0ink/doubtfire-deploy/commit/d6ecd44658f6a668dde409d399944f53793c1c35))
+* persist portfolio filters in url ([322eef2](https://github.com/b0ink/doubtfire-deploy/commit/322eef29e57d13267a2466da4bcb4a55a7b49db6))
+* reduce threshold for mobile view in inbox dashboard ([9479351](https://github.com/b0ink/doubtfire-deploy/commit/9479351619479fed2ac26199f77946ac64903e7c))
+
+## [11.0.0-43](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-42...v11.0.0-43) (2026-07-03)
+
+
+### Bug Fixes
+
+* regenerate ngsw cache after sourcemaps removed ([be85d84](https://github.com/b0ink/doubtfire-deploy/commit/be85d8443b56f20a6866c0fc8d65915d5fe63a2a))
+
+## [11.0.0-42](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-41...v11.0.0-42) (2026-07-03)
+
+
+### Features
+
+* collapse task comments in narrow screen sizes ([380f277](https://github.com/b0ink/doubtfire-deploy/commit/380f2773b44d6582b62b13785b90a146a7002123))
+* render ansi output to html ([732aedd](https://github.com/b0ink/doubtfire-deploy/commit/732aedd2414dcfe3d74a78b4b9ca0bc17d4f5521))
+
+
+### Bug Fixes
+
+* add tooltip to collapsed task list item ([c81e61e](https://github.com/b0ink/doubtfire-deploy/commit/c81e61ef48b83f076ba7dac2d039b4bade5c9717))
+* ensure project is valid ([095315b](https://github.com/b0ink/doubtfire-deploy/commit/095315b212fff98cbe661df7a33a7b091cb66b1e))
+
+## [11.0.0-41](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-40...v11.0.0-41) (2026-07-02)
+
+
+### Bug Fixes
+
+* add padding when user cant view submission ([f16d9dc](https://github.com/b0ink/doubtfire-deploy/commit/f16d9dc6ee815e93022f9b8446dd32d1852ce088))
+* avoid repeated unit fetching ([cfe04dc](https://github.com/b0ink/doubtfire-deploy/commit/cfe04dc29f78ab815a17312f929e6deb052a88ed))
+* remove hash prefix ([51794b8](https://github.com/b0ink/doubtfire-deploy/commit/51794b800d2d731d6445cd21b5b592302e43defd))
+* tutorials route transition error ([db1294a](https://github.com/b0ink/doubtfire-deploy/commit/db1294a37e7333612202a8413256288ae97c05aa))
+
 ## [11.0.0-40](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-39...v11.0.0-40) (2026-07-01)
 
 

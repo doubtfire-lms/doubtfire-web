@@ -64,8 +64,11 @@ export class Tutorial extends Entity {
   }
 
   public get tutorName(): string {
-    if (this.tutor) return this.tutor.name;
-    else return '';
+    if (this.tutor) {
+      return this.tutor.name;
+    } else {
+      return '';
+    }
   }
 
   public hasCapacity(): boolean {

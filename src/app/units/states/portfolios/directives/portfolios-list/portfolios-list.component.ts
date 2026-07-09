@@ -25,6 +25,20 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
 import {D2lTransferModal} from '../../d2l-transfer-modal/d2l-transfer.component';
 
+export interface PortfolioListFilters {
+  portfolioFilter: 'all' | 'submitted_only';
+  tutorialFilter: 'all' | 'mine';
+  gradeFilter: number | null;
+  filterText: string;
+}
+
+export const DEFAULT_PORTFOLIO_LIST_FILTERS: PortfolioListFilters = {
+  portfolioFilter: 'submitted_only',
+  tutorialFilter: 'all',
+  gradeFilter: null,
+  filterText: '',
+};
+
 @Component({
   selector: 'f-portfolios-list',
   templateUrl: './portfolios-list.component.html',
@@ -35,9 +49,12 @@ import {D2lTransferModal} from '../../d2l-transfer-modal/d2l-transfer.component'
 export class PortfoliosListComponent implements OnChanges, AfterViewInit {
   @Input() unit: Unit;
   @Input() loading = true;
+  @Input() filters: PortfolioListFilters = DEFAULT_PORTFOLIO_LIST_FILTERS;
 
   @Output()
   public studentSelected: EventEmitter<Project> = new EventEmitter();
+  @Output()
+  public filtersChange: EventEmitter<PortfolioListFilters> = new EventEmitter();
 
   displayedColumns: string[] = [];
 
@@ -49,6 +66,7 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
   public portfolioFilter: 'all' | 'submitted_only' = 'submitted_only';
   public tutorialFilter: 'all' | 'mine' = 'all';
   public gradeFilter: number | null = null;
+  public filterText = '';
 
   constructor(
     private taskService: TaskService,
@@ -64,17 +82,32 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.applyTextFilter();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.filters) {
+      this.portfolioFilter = this.filters.portfolioFilter;
+      this.tutorialFilter = this.filters.tutorialFilter;
+      this.gradeFilter = this.filters.gradeFilter;
+      this.filterText = this.filters.filterText;
+    }
+
     if (!this.loading && this.unit && (changes.loading || changes.unit)) {
       this.updateDataSource();
+    }
+
+    if (changes.filters) {
+      this.applyTextFilter();
+      if (!this.loading && this.unit) {
+        this.updateDataSource();
+      }
     }
   }
 
   openProject(event: Event, project: Project) {
     event.stopPropagation();
-    window.open(`/#/projects/${project.id}/dashboard/?tutor=true`, '_blank');
+    window.open(`/projects/${project.id}/dashboard/?tutor=true`, '_blank');
   }
 
   downloadGrades() {
@@ -144,31 +177,34 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
 
     this.dataSource.data = students;
     this.dataSource.paginator?.firstPage();
+    this.applyTextFilter();
   }
 
   onPortfolioFilterChange(event: MatButtonToggleChange) {
     this.portfolioFilter = event.value;
     this.updateDataSource();
+    this.emitFilters();
   }
 
   onTutorialFilterChange(event: MatButtonToggleChange) {
     this.tutorialFilter = event.value;
     this.updateDataSource();
+    this.emitFilters();
   }
 
   onGradeFilterChange(event: MatButtonToggleChange) {
     this.gradeFilter = event.value;
     this.updateDataSource();
+    this.emitFilters();
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.filterText = (event.target as HTMLInputElement).value;
+    this.applyTextFilter();
+    this.emitFilters();
+  }
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-
+  private applyTextFilter() {
     this.dataSource.filterPredicate = (project, filter) => {
       const text = [
         project.student.studentId,
@@ -183,6 +219,21 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
 
       return text.includes(filter);
     };
+
+    this.dataSource.filter = this.filterText.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  private emitFilters() {
+    this.filtersChange.emit({
+      portfolioFilter: this.portfolioFilter,
+      tutorialFilter: this.tutorialFilter,
+      gradeFilter: this.gradeFilter,
+      filterText: this.filterText,
+    });
   }
 
   selectStudent(project: Project) {

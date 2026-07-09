@@ -239,7 +239,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   addSet(): void {
-    if (!this.unit) return;
+    if (!this.unit) {
+      return;
+    }
 
     const newSet = {
       name: this.defaultSetName(),
@@ -283,7 +285,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   saveSetName(set: CommunicationSet): void {
     const name = this.setNameDraft.trim();
-    if (!name) return;
+    if (!name) {
+      return;
+    }
 
     this.setService.updateForUnit(this.unit.id, set.id, {name}).subscribe({
       next: (updated) => {
@@ -381,9 +385,13 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   addRule(): void {
-    if (!this.unit) return;
+    if (!this.unit) {
+      return;
+    }
     const set = this.selectedSet();
-    if (!set) return;
+    if (!set) {
+      return;
+    }
 
     const newRule = {
       name: this.defaultRuleName(),
@@ -461,7 +469,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   saveRuleName(rule: CommunicationRule): void {
     const name = this.ruleNameDraft.trim();
-    if (!name) return;
+    if (!name) {
+      return;
+    }
 
     this.ruleService
       .updateForUnit(this.unit.id, rule.id, {
@@ -523,7 +533,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   updateCondition(rule: CommunicationRule): void {
     const conditionId = this.editingConditionId[rule.id];
-    if (!conditionId) return;
+    if (!conditionId) {
+      return;
+    }
 
     const condition = this.newConditions[rule.id] || this.blankCondition();
     this.conditionService.update(this.unit.id, rule.id, conditionId, condition).subscribe({
@@ -585,7 +597,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   updateAction(rule: CommunicationRule): void {
     const actionId = this.editingActionId[rule.id];
-    if (!actionId) return;
+    if (!actionId) {
+      return;
+    }
 
     const action = this.newActions[rule.id] || this.blankAction();
     this.actionService.update(this.unit.id, rule.id, actionId, action).subscribe({
@@ -652,7 +666,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   toggleSetNode(node: CommunicationTreeNode, event?: Event): void {
     event?.stopPropagation();
-    if (!node.set) return;
+    if (!node.set) {
+      return;
+    }
 
     if (this.treeControl.isExpanded(node)) {
       this.treeControl.collapse(node);
@@ -767,7 +783,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   targetGradeName(targetGrade: number | undefined): string {
-    if (targetGrade === undefined || targetGrade === null) return '';
+    if (targetGrade === undefined || targetGrade === null) {
+      return '';
+    }
 
     return this.unit.gradeLabel(targetGrade) || `${targetGrade}`;
   }
@@ -796,8 +814,12 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   staffAudienceLabel(action: Partial<CommunicationAction>): string {
     const audiences: string[] = [];
-    if (action.email_tutors) audiences.push('tutors');
-    if (action.email_convenors) audiences.push('convenors');
+    if (action.email_tutors) {
+      audiences.push('tutors');
+    }
+    if (action.email_convenors) {
+      audiences.push('convenors');
+    }
     return audiences.join(' and ') || 'staff';
   }
 
@@ -810,7 +832,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   renderTemplatePreview(value: string | undefined, rule: CommunicationRule): string {
-    if (!value) return '';
+    if (!value) {
+      return '';
+    }
 
     const escaped = this.escapeHtml(value);
     const rendered = escaped.replace(/\{\{[\w.]+\}\}/g, (token) => {
@@ -894,7 +918,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   private loadSets(): void {
-    if (!this.unit) return;
+    if (!this.unit) {
+      return;
+    }
 
     this.loading = true;
     this.setService.getForUnit(this.unit.id).subscribe({
@@ -918,7 +944,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     this.subscriptions = [];
 
-    if (!this.unit) return;
+    if (!this.unit) {
+      return;
+    }
 
     this.taskDefinitions = this.unit.taskDefinitionCache.currentValues;
     this.tutorials = this.unit.tutorials;
@@ -1070,7 +1098,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   private availableStudentsForRule(rule: CommunicationRule): number {
     const totalStudents = this.unit?.students?.length ?? 0;
-    if (!this.previewLoaded[rule.id]) return totalStudents;
+    if (!this.previewLoaded[rule.id]) {
+      return totalStudents;
+    }
 
     const claimedByPreviousRules = this.previewAllocationsFor(rule)
       .filter((allocation) => allocation.rule_id !== rule.id)
@@ -1100,7 +1130,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (!result) return;
+      if (!result) {
+        return;
+      }
 
       const hydrated = new CommunicationSetSchedule({
         ...result,

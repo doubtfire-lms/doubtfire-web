@@ -93,14 +93,14 @@
       <ng-container matColumnDef="username">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Username</th>
         <td *matCellDef="let project" mat-cell>
-          {{ project.student.username || 'N/A' }}
+          {{ project.student?.username || 'N/A' }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="name">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
         <td *matCellDef="let project" mat-cell>
-          {{ project.student.name }}
+          {{ project.student?.name || 'N/A' }}
         </td>
       </ng-container>
 

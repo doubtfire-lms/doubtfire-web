@@ -308,14 +308,18 @@ export class Unit extends Entity {
    * helper is not being used on the frontend.
    */
   public weekNumber(date: Date | string): number | null {
-    if (!date || !this.startDate) return null;
+    if (!date || !this.startDate) {
+      return null;
+    }
 
     if (this.teachingPeriod) {
       return this.teachingPeriod.weekNumber(date);
     }
 
     const targetDate = date instanceof Date ? date : new Date(date);
-    if (Number.isNaN(targetDate.valueOf())) return null;
+    if (Number.isNaN(targetDate.valueOf())) {
+      return null;
+    }
     const normalizedTargetDate = new Date(
       targetDate.getFullYear(),
       targetDate.getMonth(),
@@ -344,8 +348,12 @@ export class Unit extends Entity {
     const today = new Date();
 
     //use Math.abs to avoid sign
-    if (today <= this.startDate) return 0;
-    if (today >= this.endDate) return 100;
+    if (today <= this.startDate) {
+      return 0;
+    }
+    if (today >= this.endDate) {
+      return 100;
+    }
 
     const startToNow = Math.abs(today.valueOf() - this.startDate.valueOf());
     const totalDuration = Math.abs(this.totalDuration);

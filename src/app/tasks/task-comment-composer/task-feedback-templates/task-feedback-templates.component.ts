@@ -162,7 +162,9 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
 
       templatesToDisplay.push(allTemplates.find((template) => template.id === groupId));
       allTemplates.forEach((template) => {
-        if (template.parentChipId === groupId) templatesToDisplay.push(template);
+        if (template.parentChipId === groupId) {
+          templatesToDisplay.push(template);
+        }
       });
     } else {
       templatesToDisplay = allTemplates.filter((template) => !template.parentChipId);
@@ -197,10 +199,14 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
       if (template.chipText === 'Greeting') {
         template.commentText = `Hi ${this.task.project.student.preferredName}. `;
       } else if (template.chipText === 'Summarise feedback') {
-        if (!this.selectedTemplates || this.selectedTemplates.length < 1) return;
+        if (!this.selectedTemplates || this.selectedTemplates.length < 1) {
+          return;
+        }
         template.commentText = 'Summary of the given feedback:';
         this.selectedTemplates.forEach((t) => {
-          if (!t.summaryText) return;
+          if (!t.summaryText) {
+            return;
+          }
           template.commentText += '\n- ' + t.summaryText;
         });
       } else {
@@ -212,8 +218,11 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
       const updatedStack = new Map(this.navigationStackSubject.getValue());
       const outcomeStack = updatedStack.get(template.learningOutcomeId) || [];
       const index = outcomeStack.indexOf(template.id);
-      if (index === -1) outcomeStack.push(template.id);
-      else outcomeStack.splice(index, 1);
+      if (index === -1) {
+        outcomeStack.push(template.id);
+      } else {
+        outcomeStack.splice(index, 1);
+      }
       updatedStack.set(template.learningOutcomeId, outcomeStack);
       this.navigationStackSubject.next(updatedStack);
     }
@@ -227,8 +236,11 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     const stack = this.navigationStackSubject.getValue();
     const outcomeStack = stack.get(template.learningOutcomeId) || [];
     const index = outcomeStack.indexOf(template.id);
-    if (index === -1) return false;
-    else return true;
+    if (index === -1) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   onHoverTemplate(template: FeedbackTemplate) {
@@ -239,7 +251,9 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     if (template.taskStatus && this.task.suggestedTaskStatus) {
       const currentSeq = this.taskService.statusSeq.get(this.task.suggestedTaskStatus);
       const templateSeq = this.taskService.statusSeq.get(template.taskStatus);
-      if (templateSeq < currentSeq) this.task.suggestedTaskStatus = template.taskStatus;
+      if (templateSeq < currentSeq) {
+        this.task.suggestedTaskStatus = template.taskStatus;
+      }
     } else {
       this.task.suggestedTaskStatus = template.taskStatus;
     }

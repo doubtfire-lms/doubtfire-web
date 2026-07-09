@@ -71,7 +71,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.tutor = this.route.snapshot.queryParamMap.has('tutor');
+    this.tutor = this.currentUnitRole !== undefined;
     this.setSelectedDashboardView(DashboardViews.details);
     this.selectedTaskService.currentView$.subscribe((view) => {
       this.currentView = this.canAccessDashboardView(view) ? view : DashboardViews.details;

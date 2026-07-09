@@ -80,9 +80,13 @@ export class ProjectService extends CachedEntityService<Project> {
         toEntityFn: (data: object, key: string, entity: Project) => {
           const result = data[key] === true;
 
-          if (result) entity.portfolioStatus = 1;
-          else if (entity.compilePortfolio) entity.portfolioStatus = 0.5;
-          else entity.portfolioStatus = 0;
+          if (result) {
+            entity.portfolioStatus = 1;
+          } else if (entity.compilePortfolio) {
+            entity.portfolioStatus = 0.5;
+          } else {
+            entity.portfolioStatus = 0;
+          }
 
           return result;
         },

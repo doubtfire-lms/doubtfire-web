@@ -21,6 +21,7 @@ import {GradeService} from 'src/app/common/services/grade.service';
 })
 export class ProgressDashboardComponent implements OnInit {
   @Input() project: Project;
+  @Input() showSubmittedGrade?: boolean = false;
   @Output() doUpdateTargetGrade: EventEmitter<void> = new EventEmitter();
 
   grades: {names: Record<number, string>; values: number[]} = {

@@ -1,9 +1,17 @@
 import {RequestOptions} from 'ngx-entity-service';
 import {HttpErrorResponse} from '@angular/common/http';
-import {AfterViewInit, ChangeDetectionStrategy, Component, Input, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {Subscription} from 'rxjs';
 import {
   Campus,
   CampusService,
@@ -27,7 +35,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 })
 export class UnitTutorialsListComponent
   extends EntityFormComponent<Tutorial>
-  implements AfterViewInit
+  implements OnInit, OnDestroy
 {
   @ViewChild(MatTable, {static: true}) table: MatTable<Tutorial>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -60,6 +68,7 @@ export class UnitTutorialsListComponent
   dataSource: MatTableDataSource<Tutorial> = new MatTableDataSource();
 
   public editingStream: boolean = false;
+  private subscriptions: Subscription[] = [];
 
   /**
    * The original stream abbreviation is required to update the stream - as it may change but is used in the url.
@@ -88,7 +97,7 @@ export class UnitTutorialsListComponent
     );
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     if (this.stream) {
       this.origStreamAbbr = this.stream.abbreviation;
       this.origName = this.stream.name;
@@ -100,7 +109,13 @@ export class UnitTutorialsListComponent
 
     this.filterTutorials();
 
-    this.unit.tutorialsCache.values.subscribe((_t) => this.filterTutorials());
+    this.subscriptions.push(
+      this.unit.tutorialsCache.values.subscribe((_t) => this.filterTutorials()),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   private filterTutorials(): void {
@@ -147,7 +162,9 @@ export class UnitTutorialsListComponent
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: Tutorial | Tutorial[]) {
-    if (!value) return;
+    if (!value) {
+      return;
+    }
     if (value instanceof Array) {
       this.tutorials.push(...value);
     } else {

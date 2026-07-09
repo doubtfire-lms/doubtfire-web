@@ -86,7 +86,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
 
   reapplyTriggers(): void {
     // if tutor is in queryParam
-    if (this.route.snapshot.queryParamMap.has('tutor')) {
+    if (this.isTutor) {
       this.triggers = this.taskService.statusKeys
         .map((k) => this.taskService.statusData(k))
         .filter((trigger) => {
@@ -162,10 +162,14 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
 
   public get currentUnitRole(): UnitRole | undefined {
     const currentUser = this.userService.currentUser;
-    return this.project.unit.staff.find((ur) => ur.user.id === currentUser.id);
+    return this.project?.unit?.staff.find((ur) => ur.user.id === currentUser.id);
   }
 
   public get isTutor(): boolean {
-    return this.currentUnitRole?.role === 'Convenor' || this.currentUnitRole?.role === 'Tutor';
+    return (
+      this.currentUnitRole?.role === 'Convenor' ||
+      this.currentUnitRole?.role === 'Tutor' ||
+      this.userService.currentUser.systemRole === 'Admin'
+    );
   }
 }

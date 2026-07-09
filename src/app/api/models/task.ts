@@ -169,7 +169,9 @@ export class Task extends Entity {
   }
 
   public get unit(): Unit {
-    if (this._unit) return this._unit;
+    if (this._unit) {
+      return this._unit;
+    }
     return this.project.unit;
   }
 
@@ -251,8 +253,9 @@ export class Task extends Entity {
   }
 
   public get gradeWord(): string {
-    if (this.grade !== undefined && this.grade !== null) return this.unit.gradeLabel(this.grade);
-    else {
+    if (this.grade !== undefined && this.grade !== null) {
+      return this.unit.gradeLabel(this.grade);
+    } else {
       return 'Not Graded';
     }
   }
@@ -296,7 +299,9 @@ export class Task extends Entity {
       }
 
       const gradeTargetDate = this.definition.gradeTargetDate(this.project.targetGrade);
-      if (gradeTargetDate) return gradeTargetDate;
+      if (gradeTargetDate) {
+        return gradeTargetDate;
+      }
     }
 
     if (this.dueDate) {
@@ -454,7 +459,9 @@ export class Task extends Entity {
       }
 
       const gradeStartDate = this.definition.gradeStartDate(this.project.targetGrade);
-      if (gradeStartDate) return gradeStartDate;
+      if (gradeStartDate) {
+        return gradeStartDate;
+      }
     }
 
     if (this.extensions < 0) {
@@ -572,7 +579,9 @@ export class Task extends Entity {
 
   public refreshCommentData(): void {
     const comments: readonly TaskComment[] = this.comments;
-    if (comments.length === 0) return;
+    if (comments.length === 0) {
+      return;
+    }
 
     comments[0].shouldShowTimestamp = true;
 
@@ -615,7 +624,9 @@ export class Task extends Entity {
         comments[i].firstInSeries = i === 0 || comments[i - 1].commentType !== 'scorm';
         (comments[i] as ScormComment).lastInScormSeries =
           i + 1 === comments.length || comments[i + 1]?.commentType !== 'scorm';
-        if (!comments[i].firstInSeries) comments[i].shouldShowTimestamp = false;
+        if (!comments[i].firstInSeries) {
+          comments[i].shouldShowTimestamp = false;
+        }
       }
     }
 
@@ -1068,7 +1079,9 @@ export class Task extends Entity {
   }
 
   public async triggerTransition(status: TaskStatusEnum): Promise<void> {
-    if (this.status === status) return;
+    if (this.status === status) {
+      return;
+    }
     const alerts: AlertService = AppInjector.get(AlertService);
 
     const requiresFileUpload =

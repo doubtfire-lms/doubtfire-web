@@ -1,11 +1,16 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {BehaviorSubject, Observable, Subscription, first, of} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
+import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {
+  DEFAULT_PORTFOLIO_LIST_FILTERS,
+  PortfolioListFilters,
+} from './directives/portfolios-list/portfolios-list.component';
 
 type PortfolioTabKey = 'select' | 'progress' | 'student-notes' | 'portfolio' | 'assessment';
 
@@ -38,6 +43,7 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   public selectedProject$: BehaviorSubject<Project | null> = new BehaviorSubject(null);
   public loadingStudents = true;
   public currentTab: PortfolioTab = this.tabs[0];
+  public portfolioListFilters: PortfolioListFilters = {...DEFAULT_PORTFOLIO_LIST_FILTERS};
 
   private subscriptions: Subscription[] = [];
   private selectedProjectId: number | null = null;
@@ -47,6 +53,7 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private alertService: AlertService,
+    private userService: UserService,
   ) {}
 
   public ngOnInit(): void {
@@ -55,11 +62,21 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
       this.unit$.pipe(first()).subscribe({
         next: (unit) => {
           this.unit = unit;
-          this.unit.loadD2lMapping().subscribe();
+
+          if (
+            this.userService.currentUser.systemRole === 'Admin' ||
+            this.userService.currentUser.systemRole === 'Convenor'
+          ) {
+            this.unit.loadD2lMapping().subscribe();
+          }
+
           this.loadStudents();
           this.subscriptions.push(
             this.route.paramMap.subscribe((params) => {
               this.updateCurrentTabFromState(params.get('tab'), params.get('projectId'));
+            }),
+            this.route.queryParamMap.subscribe((params) => {
+              this.updatePortfolioListFiltersFromQueryParams(params);
             }),
           );
         },
@@ -92,12 +109,27 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
     this.navigateToProject(project.id, 'progress');
   }
 
+  public portfolioListFiltersChange(filters: PortfolioListFilters): void {
+    this.portfolioListFilters = {...filters};
+
+    if (this.currentTab.routeSegment === 'select') {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: this.portfolioListFilterQueryParams(),
+        replaceUrl: true,
+      });
+    }
+  }
+
   public onTabChange(event: MatTabChangeEvent): void {
     const nextTab = this.tabs[event.index] ?? this.tabs[0];
     this.currentTab = nextTab;
 
     if (nextTab.routeSegment === 'select' || !this.selectedProject) {
-      this.router.navigate(['/units', this.unit.id, 'students', 'portfolios'], {replaceUrl: true});
+      this.router.navigate(['/units', this.unit.id, 'students', 'portfolios'], {
+        queryParams: this.portfolioListFilterQueryParams(),
+        replaceUrl: true,
+      });
       return;
     }
 
@@ -114,6 +146,52 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl('/home');
       },
     });
+  }
+
+  private updatePortfolioListFiltersFromQueryParams(params: ParamMap): void {
+    const filters: PortfolioListFilters = {
+      portfolioFilter: params.get('portfolio') === 'all' ? 'all' : 'submitted_only',
+      tutorialFilter: params.get('tutorial') === 'mine' ? 'mine' : 'all',
+      gradeFilter: this.gradeFilterFromQueryParam(params.get('grade')),
+      filterText: params.get('search') ?? '',
+    };
+
+    if (!this.portfolioListFiltersEqual(filters, this.portfolioListFilters)) {
+      this.portfolioListFilters = filters;
+    }
+  }
+
+  private gradeFilterFromQueryParam(grade: string | null): number | null {
+    if (grade === null) {
+      return null;
+    }
+
+    const gradeValue = Number(grade);
+    return Number.isFinite(gradeValue) ? gradeValue : null;
+  }
+
+  private portfolioListFilterQueryParams(): Record<string, string | number | null> {
+    return {
+      portfolio:
+        this.portfolioListFilters.portfolioFilter === DEFAULT_PORTFOLIO_LIST_FILTERS.portfolioFilter
+          ? null
+          : this.portfolioListFilters.portfolioFilter,
+      tutorial:
+        this.portfolioListFilters.tutorialFilter === DEFAULT_PORTFOLIO_LIST_FILTERS.tutorialFilter
+          ? null
+          : this.portfolioListFilters.tutorialFilter,
+      grade: this.portfolioListFilters.gradeFilter,
+      search: this.portfolioListFilters.filterText.trim() || null,
+    };
+  }
+
+  private portfolioListFiltersEqual(a: PortfolioListFilters, b: PortfolioListFilters): boolean {
+    return (
+      a.portfolioFilter === b.portfolioFilter &&
+      a.tutorialFilter === b.tutorialFilter &&
+      a.gradeFilter === b.gradeFilter &&
+      a.filterText === b.filterText
+    );
   }
 
   private updateCurrentTabFromState(
@@ -175,6 +253,7 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
 
   private navigateToProject(projectId: number, tab: PortfolioTabKey): void {
     this.router.navigate(['/units', this.unit.id, 'students', 'portfolios', projectId, tab], {
+      queryParams: this.portfolioListFilterQueryParams(),
       replaceUrl: true,
     });
   }
