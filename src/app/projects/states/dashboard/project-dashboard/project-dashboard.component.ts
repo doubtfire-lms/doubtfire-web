@@ -103,12 +103,12 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  public taskDefinitionsForProject(project: Project): TaskDefinition[] {
+  public taskDefinitionsForProject(project: Project): readonly TaskDefinition[] {
     if (!this.isProjectTaskListReady(project)) {
       return [];
     }
 
-    return project.unit.taskDefinitionsForGrade(project.targetGrade);
+    return project.unit.taskDefinitions;
   }
 
   startedDragging(event: CdkDragStart, boundary: HTMLElement) {
