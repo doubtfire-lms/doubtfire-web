@@ -89,19 +89,19 @@
 >
   @if (!isCollapsed) {
     <div class="omnisearch rounded-t-2xl md:rounded-2xl">
-      <div class="flex items-center">
-        <button
-          aria-label="Search Icon"
-          class="flex flex-none items-center"
-          disabled
-          mat-icon-button
-        >
-          <mat-icon class="flex items-center" disabled>search</mat-icon>
-        </button>
-        <div class="grow">
+      <div class="flex items-center justify-between">
+        <div class="flex min-w-0 flex-1 items-center">
+          <button
+            aria-label="Search Icon"
+            class="flex flex-none items-center"
+            disabled
+            mat-icon-button
+          >
+            <mat-icon class="flex items-center" disabled>search</mat-icon>
+          </button>
           <input
             autocomplete="off"
-            class="search"
+            class="search w-full"
             placeholder="Search Tasks"
             spellcheck="false"
             type="text"
@@ -109,6 +109,84 @@
             (ngModelChange)="applyFilters()"
           />
         </div>
+        <button
+          aria-label="Task list filters"
+          mat-icon-button
+          matTooltip="Task list filters"
+          [matMenuTriggerFor]="taskListFiltersMenu"
+        >
+          <mat-icon
+            class="text-gray-500"
+            matBadgeColor="accent"
+            matBadgeSize="small"
+            [matBadge]="activeViewPreferenceCount || null"
+            >tune</mat-icon
+          >
+        </button>
+        <mat-menu #taskListFiltersMenu="matMenu" class="task-list-filters-menu" xPosition="after">
+          <div class="px-3 py-2" (click)="$event.stopPropagation()">
+            <div class="mb-1 text-xs font-bold tracking-normal text-gray-500 uppercase">
+              Sort tasks
+            </div>
+            <div class="mb-2">
+              @for (option of sortOptions; track option.value) {
+                <button
+                  class="flex h-10 w-full items-center gap-2 px-2 text-left text-sm hover:bg-gray-50"
+                  type="button"
+                  [ngClass]="{
+                    'bg-blue-50 text-formatif-blue': viewPreferences.sortBy === option.value,
+                    'text-gray-700': viewPreferences.sortBy !== option.value,
+                  }"
+                  (click)="setSortBy(option.value)"
+                >
+                  <mat-icon class="task-list-menu-icon shrink-0">{{ option.icon }}</mat-icon>
+                  <span class="min-w-0 flex-1 truncate">{{ option.label }}</span>
+                  <mat-icon
+                    class="task-list-menu-icon shrink-0"
+                    [ngClass]="{
+                      invisible: viewPreferences.sortBy !== option.value,
+                    }"
+                  >
+                    {{ sortStateIconFor(option) }}
+                  </mat-icon>
+                </button>
+              }
+            </div>
+
+            <div class="mb-1 text-xs font-bold tracking-normal text-gray-500 uppercase">
+              Filters
+            </div>
+            <div class="flex flex-col gap-1">
+              <mat-checkbox
+                color="primary"
+                [ngModel]="viewPreferences.hideCompleted"
+                (ngModelChange)="toggleHideCompleted($event)"
+              >
+                Hide completed tasks
+              </mat-checkbox>
+              <mat-checkbox
+                color="primary"
+                [disabled]="!project"
+                [ngModel]="viewPreferences.hideAboveTargetGrade"
+                (ngModelChange)="toggleHideAboveTargetGrade($event)"
+              >
+                Hide tasks beyond target grade
+              </mat-checkbox>
+            </div>
+
+            <div class="mt-2 flex items-center justify-end gap-2 text-xs text-gray-500">
+              <button
+                class="shrink-0 text-formatif-blue disabled:text-gray-400"
+                mat-button
+                type="button"
+                [disabled]="activeViewPreferenceCount === 0"
+                (click)="resetViewPreferences()"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </mat-menu>
       </div>
     </div>
   }
@@ -159,23 +237,27 @@
                           <mat-icon class="shrink-0 scale-75 text-gray-600">person</mat-icon>
                         }
 
-                        <div class="truncate text-[14px] leading-none text-gray-500">
+                        <div class="mr-1 truncate text-[14px] leading-none text-gray-500">
                           {{ taskDef.abbreviation }}
                           -
                           {{ gradeNames[taskDef.targetGrade] }} Task
                         </div>
                         @if (taskListItem(taskDef); as task) {
-                          <!-- @if (task.isBeforeStartDate() && !task.inSubmittedState()) {
+                          @if (taskStartApproaching(task)) {
                             <span
-                              class="flex shrink-0 items-center gap-px text-[12px] text-gray-500"
+                              class="flex shrink-0 items-center gap-px text-[12px] font-normal text-sky-500"
                             >
-                              <mat-icon class="!h-[16px] !w-[16px] !text-[16px]"
-                                >hourglass_top</mat-icon
-                              >
-                              {{ task.timeToStart() }}
+                              <mat-icon class="size-4! text-[16px]!"> event_upcoming </mat-icon>
+                              {{ taskStartLabel(task) }}
                             </span>
-                          } -->
-                          @if (!task.isBeforeStartDate() && !task.inSubmittedState()) {
+                          } @else if (taskOngoing(task)) {
+                            <span
+                              class="flex shrink-0 items-center gap-px text-[12px] font-normal text-sky-500"
+                            >
+                              <mat-icon class="size-4! text-[16px]!"> event_upcoming </mat-icon>
+                              Start now
+                            </span>
+                          } @else if (!task.isBeforeStartDate() && !task.inSubmittedState()) {
                             <span
                               class="flex shrink-0 items-center gap-px text-[12px] font-bold"
                               [ngClass]="{

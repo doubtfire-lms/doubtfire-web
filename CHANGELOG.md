@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-44](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-43...v11.0.0-44) (2026-07-08)
+
+
+### Features
+
+* display submitted grade in portfolio view ([a76cecf](https://github.com/b0ink/doubtfire-deploy/commit/a76cecfe1e4f3a78becf9507900e621e87447d69))
+
+
+### Bug Fixes
+
+* ensure accurate tutor views ([3b5e693](https://github.com/b0ink/doubtfire-deploy/commit/3b5e69397abcc53136942428fb97ac81a5cddb3d))
+* only call d2l mapping as convenor ([d6ecd44](https://github.com/b0ink/doubtfire-deploy/commit/d6ecd44658f6a668dde409d399944f53793c1c35))
+* persist portfolio filters in url ([322eef2](https://github.com/b0ink/doubtfire-deploy/commit/322eef29e57d13267a2466da4bcb4a55a7b49db6))
+* reduce threshold for mobile view in inbox dashboard ([9479351](https://github.com/b0ink/doubtfire-deploy/commit/9479351619479fed2ac26199f77946ac64903e7c))
+
 ## [11.0.0-43](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-42...v11.0.0-43) (2026-07-03)
 
 

@@ -1,6 +1,12 @@
 <div class="flex items-center justify-between p-3">
   <div class="flex items-center gap-2">
     <mat-slide-toggle [(ngModel)]="showDatesColumn">Show Task Dates</mat-slide-toggle>
+    <mat-slide-toggle
+      [ngModel]="hideTasksAboveTargetGrade"
+      (ngModelChange)="setHideTasksAboveTargetGrade($event)"
+    >
+      Hide tasks beyond target grade
+    </mat-slide-toggle>
   </div>
   @if (unit.allowFlexibleDates) {
     <div class="flex items-center gap-2">
