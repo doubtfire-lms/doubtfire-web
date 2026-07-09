@@ -70,10 +70,10 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   viewPreferences: TaskListViewPreferences = {...DEFAULT_VIEW_PREFERENCES};
   sortOptions: TaskListSortOptionView[] = [
     {value: 'default', label: 'Priority', icon: 'sort'},
-    {value: 'abbreviation', label: 'Abbreviation', icon: 'sort_by_alpha'},
     {value: 'startDate', label: 'Start date', icon: 'event_available'},
     {value: 'targetDate', label: 'Target date', icon: 'event'},
     {value: 'dueDate', label: 'Due date', icon: 'event_repeat'},
+    {value: 'abbreviation', label: 'Abbreviation', icon: 'sort_by_alpha'},
   ];
 
   protected get gradeNames(): Record<number, string> {
