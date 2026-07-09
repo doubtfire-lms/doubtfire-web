@@ -42,7 +42,7 @@ export class UnitContentArchive {
 
     this.assetUrls ??= await this.createAssetBlobUrls();
     const html = await htmlFile.async('text');
-    const rewrittenHtml = this.rewriteHtmlUrls(html, htmlPath, this.assetUrls);
+    const rewrittenHtml = await this.rewriteHtmlUrls(html, htmlPath, this.assetUrls);
     const htmlBlobUrl = URL.createObjectURL(new Blob([rewrittenHtml], {type: 'text/html'}));
 
     this.blobUrls.push(htmlBlobUrl);
@@ -147,7 +147,11 @@ export class UnitContentArchive {
       (file) => !file.dir && !ignoredArchivePath.test(file.name) && !file.name.endsWith('.html'),
     );
     const cssFiles = assetFiles.filter((file) => file.name.endsWith('.css'));
-    const otherFiles = assetFiles.filter((file) => !file.name.endsWith('.css'));
+    const jsFiles = assetFiles.filter((file) => this.isJavaScriptPath(file.name));
+    const jsFilesByPath = new Map(jsFiles.map((file) => [file.name, file]));
+    const otherFiles = assetFiles.filter(
+      (file) => !file.name.endsWith('.css') && !this.isJavaScriptPath(file.name),
+    );
 
     await Promise.all(
       otherFiles.map(async (file) => {
@@ -164,13 +168,52 @@ export class UnitContentArchive {
       }),
     );
 
+    const jsFilesBeingRewritten: Set<string> = new Set();
+    const rewriteJavaScriptFile = async (file: JSZip.JSZipObject): Promise<string | undefined> => {
+      const existingUrl = urls.get(file.name);
+
+      if (existingUrl) {
+        return existingUrl;
+      }
+
+      if (jsFilesBeingRewritten.has(file.name)) {
+        return undefined;
+      }
+
+      jsFilesBeingRewritten.add(file.name);
+
+      try {
+        const js = await file.async('text');
+        const rewrittenJs = await this.rewriteJavaScriptFile(
+          js,
+          file.name,
+          urls,
+          jsFilesByPath,
+          rewriteJavaScriptFile,
+        );
+        const blob = new Blob([rewrittenJs], {type: this.mimeTypeFor(file.name)});
+
+        return this.addArchiveBlobUrl(urls, file.name, blob);
+      } finally {
+        jsFilesBeingRewritten.delete(file.name);
+      }
+    };
+
+    await Promise.all(jsFiles.map((file) => rewriteJavaScriptFile(file)));
+
     return urls;
   }
 
-  private addArchiveBlobUrl(urls: Map<string, string>, filePath: string, blob: Blob): void {
+  private addArchiveBlobUrl(urls: Map<string, string>, filePath: string, blob: Blob): string {
     const blobUrl = URL.createObjectURL(new Blob([blob], {type: this.mimeTypeFor(filePath)}));
 
     this.blobUrls.push(blobUrl);
+    this.setArchiveBlobUrl(urls, filePath, blobUrl);
+
+    return blobUrl;
+  }
+
+  private setArchiveBlobUrl(urls: Map<string, string>, filePath: string, blobUrl: string): void {
     urls.set(filePath, blobUrl);
     urls.set(`/${filePath}`, blobUrl);
 
@@ -202,7 +245,11 @@ export class UnitContentArchive {
     });
   }
 
-  private rewriteHtmlUrls(html: string, htmlPath: string, urls: Map<string, string>): string {
+  private async rewriteHtmlUrls(
+    html: string,
+    htmlPath: string,
+    urls: Map<string, string>,
+  ): Promise<string> {
     let rewritten = html.replace(
       /\b(src|href|poster)=("|')([^"']+)\2/g,
       (match, attr, quote, url) => {
@@ -226,7 +273,131 @@ export class UnitContentArchive {
       return `srcset=${quote}${rewrittenSrcset}${quote}`;
     });
 
+    const scriptReplacements: Array<{from: string; to: string}> = [];
+
+    for (const match of rewritten.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+      const [scriptTag, attributes, scriptContent] = match;
+
+      if (!this.shouldRewriteInlineScript(attributes, scriptContent)) {
+        continue;
+      }
+
+      const rewrittenScript = await this.rewriteJavaScriptFile(
+        scriptContent,
+        htmlPath,
+        urls,
+        new Map(),
+        async () => undefined,
+      );
+
+      scriptReplacements.push({
+        from: scriptTag,
+        to: `<script${attributes}>${rewrittenScript}</script>`,
+      });
+    }
+
+    rewritten = scriptReplacements.reduce(
+      (updatedHtml, replacement) => updatedHtml.replace(replacement.from, replacement.to),
+      rewritten,
+    );
+
     return rewritten;
+  }
+
+  private async rewriteJavaScriptFile(
+    js: string,
+    jsPath: string,
+    urls: Map<string, string>,
+    jsFilesByPath: Map<string, JSZip.JSZipObject>,
+    rewriteJavaScriptFile: (file: JSZip.JSZipObject) => Promise<string | undefined>,
+  ): Promise<string> {
+    let rewritten = await this.replaceJavaScriptModuleSpecifiers(
+      js,
+      /\b((?:import|export)(?:\s*[^'"]*?\s*from\s*)?\s*)(["'])([^"']+)\2/g,
+      jsPath,
+      urls,
+      jsFilesByPath,
+      rewriteJavaScriptFile,
+    );
+
+    rewritten = await this.replaceJavaScriptModuleSpecifiers(
+      rewritten,
+      /\b(import\s*\(\s*)(["'])([^"']+)\2(\s*\))/g,
+      jsPath,
+      urls,
+      jsFilesByPath,
+      rewriteJavaScriptFile,
+    );
+
+    return rewritten;
+  }
+
+  private async replaceJavaScriptModuleSpecifiers(
+    js: string,
+    pattern: RegExp,
+    jsPath: string,
+    urls: Map<string, string>,
+    jsFilesByPath: Map<string, JSZip.JSZipObject>,
+    rewriteJavaScriptFile: (file: JSZip.JSZipObject) => Promise<string | undefined>,
+  ): Promise<string> {
+    const replacements: Array<{from: string; to: string}> = [];
+
+    for (const match of js.matchAll(pattern)) {
+      const specifier = match[3];
+      const blobUrl = await this.blobUrlForJavaScriptSpecifier(
+        specifier,
+        jsPath,
+        urls,
+        jsFilesByPath,
+        rewriteJavaScriptFile,
+      );
+
+      if (blobUrl) {
+        replacements.push({from: match[0], to: this.replaceMatchedSpecifier(match, blobUrl)});
+      }
+    }
+
+    return replacements.reduce(
+      (rewritten, replacement) => rewritten.replace(replacement.from, replacement.to),
+      js,
+    );
+  }
+
+  private async blobUrlForJavaScriptSpecifier(
+    specifier: string,
+    jsPath: string,
+    urls: Map<string, string>,
+    jsFilesByPath: Map<string, JSZip.JSZipObject>,
+    rewriteJavaScriptFile: (file: JSZip.JSZipObject) => Promise<string | undefined>,
+  ): Promise<string | undefined> {
+    if (externalUrl.test(specifier)) {
+      return undefined;
+    }
+
+    const {path, suffix} = this.splitUrlSuffix(specifier);
+    const resolvedPath = this.resolveArchivePath(path, jsPath);
+    const jsFile = jsFilesByPath.get(resolvedPath);
+    const blobUrl = jsFile
+      ? await rewriteJavaScriptFile(jsFile)
+      : (urls.get(resolvedPath) ?? urls.get(`/${resolvedPath}`));
+
+    return blobUrl ? `${blobUrl}${suffix}` : undefined;
+  }
+
+  private replaceMatchedSpecifier(match: RegExpMatchArray, specifier: string): string {
+    if (match.length === 5) {
+      return `${match[1]}${match[2]}${specifier}${match[2]}${match[4]}`;
+    }
+
+    return `${match[1]}${match[2]}${specifier}${match[2]}`;
+  }
+
+  private shouldRewriteInlineScript(attributes: string, scriptContent: string): boolean {
+    if (/\bsrc\s*=/i.test(attributes)) {
+      return false;
+    }
+
+    return /\btype\s*=\s*["']module["']/i.test(attributes) || /\bimport\s*\(/.test(scriptContent);
   }
 
   private blobUrlForUrl(
@@ -244,7 +415,7 @@ export class UnitContentArchive {
   }
 
   private resolveArchivePath(url: string, currentPath: string): string {
-    const [pathOnly] = url.split(/[?#]/);
+    const {path: pathOnly} = this.splitUrlSuffix(url);
 
     if (pathOnly.startsWith('/')) {
       return this.archiveRootDir ? `${this.archiveRootDir}${pathOnly}` : pathOnly.slice(1);
@@ -272,6 +443,20 @@ export class UnitContentArchive {
 
   private normalizedArchivePath(path: string): string {
     return path.replace(/^\/+|\/+$/g, '');
+  }
+
+  private splitUrlSuffix(url: string): {path: string; suffix: string} {
+    const suffixStart = url.search(/[?#]/);
+
+    if (suffixStart === -1) {
+      return {path: url, suffix: ''};
+    }
+
+    return {path: url.slice(0, suffixStart), suffix: url.slice(suffixStart)};
+  }
+
+  private isJavaScriptPath(path: string): boolean {
+    return /\.(?:js|mjs)$/i.test(path);
   }
 
   private mimeTypeFor(path: string): string {

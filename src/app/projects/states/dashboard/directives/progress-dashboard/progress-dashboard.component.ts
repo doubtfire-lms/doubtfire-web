@@ -86,13 +86,12 @@ export class ProgressDashboardComponent implements OnInit {
     );
   }
 
-  public contentRouteForLink(link: UnitContentLink): unknown[] {
-    const routeSegments = link.route
-      .replace(/^\/+|\/+$/g, '')
-      .split('/')
-      .filter(Boolean);
+  public contentRoute(): unknown[] {
+    return ['/units', this.project.unit.id, 'content'];
+  }
 
-    return ['/units', this.project.unit.id, 'content', ...routeSegments];
+  public contentQueryParamsForLink(link: UnitContentLink): {q?: string} {
+    return link.route === '/' ? {} : {q: link.route};
   }
 
   public openContentForGrade(grade: GradeDefinition): void {

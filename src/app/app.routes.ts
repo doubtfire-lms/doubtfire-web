@@ -1,4 +1,4 @@
-import {Routes, UrlMatchResult, UrlSegment} from '@angular/router';
+import {Routes} from '@angular/router';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
@@ -35,14 +35,6 @@ import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.co
 import {UnitRootStateComponent} from './units/unit-root-state.component';
 import {resolveUnit} from './units/unit.resolver';
 import {WelcomeComponent} from './welcome/welcome.component';
-
-export function contentMatcher(segments: UrlSegment[]): UrlMatchResult | null {
-  if (segments[0]?.path !== 'content') {
-    return null;
-  }
-
-  return {consumed: segments};
-}
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -149,7 +141,7 @@ export const routes: Routes = [
           },
           {path: 'students', component: StudentsListComponent, data: {task: 'Student List'}},
           {
-            matcher: contentMatcher,
+            path: 'content',
             component: UnitContentViewerComponent,
             data: {task: 'Unit Content'},
           },

@@ -36,7 +36,8 @@
                 You can view all the grades
                 <a
                   class="cursor-pointer underline"
-                  [routerLink]="contentRouteForLink(gradeOverviewContentLink)"
+                  [queryParams]="contentQueryParamsForLink(gradeOverviewContentLink)"
+                  [routerLink]="contentRoute()"
                 >
                   here</a
                 >.
