@@ -1,7 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
 import {BreakpointObserver} from '@angular/cdk/layout';
-import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, Observable, Subject, first, of, takeUntil} from 'rxjs';
 import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
@@ -22,6 +30,13 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   @Input() public defaultTaskListCollapsed = false;
   @Input() public taskSelectionUrlBase: unknown[] | null = null;
   @Input() public showSubmittedGrade?: boolean = false;
+  @Input() public set taskListWidth(width: number | undefined) {
+    if (typeof width === 'number') {
+      this._leftWidth = width;
+    }
+  }
+
+  @Output() public taskListWidthChange: EventEmitter<number> = new EventEmitter();
 
   /**
    * The currently selected task definition - selected in the unit task list.
@@ -51,7 +66,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   public readonly taskListCollapsedWidth = 75;
   public readonly taskListExpandedWidth = 400;
   public readonly taskListCollapseThreshold = 125;
-  public leftWidth = this.taskListExpandedWidth;
+  private _leftWidth = this.taskListExpandedWidth;
   public lastX;
   public startWidth = 0;
 
@@ -67,6 +82,15 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   public get taskListCollapsed(): boolean {
     return this.leftWidth < this.taskListCollapseThreshold;
+  }
+
+  public get leftWidth(): number {
+    return this._leftWidth;
+  }
+
+  public set leftWidth(width: number) {
+    this._leftWidth = width;
+    this.taskListWidthChange.emit(width);
   }
 
   public isProjectTaskListReady(project: Project): boolean {
