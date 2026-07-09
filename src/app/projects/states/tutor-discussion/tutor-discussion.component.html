@@ -92,7 +92,7 @@
           style="padding: 0; min-height: 60px; height: min-content"
           togglePosition="before"
           [selected]="
-            (task.status === 'discuss' || attendance) &&
+            (['discuss', 'rediscuss'].includes(task.status) || attendance) &&
             (!task.definition.lockAssessmentsToTutorialStream ||
               currentUserTutorsInStream(task.definition.tutorialStream))
           "
@@ -222,6 +222,17 @@
             <!-- Mark as Discussed -->
             <mat-icon>group</mat-icon>
           </button>
+          @if (selectedTasksIncludeDiscuss) {
+            <button
+              class="medium-icon-button bg-[#126352] text-white"
+              mat-fab
+              matTooltip="Mark as Rediscuss"
+              [disabled]="!tasks.selectedOptions.selected.length"
+              (click)="setSelectedTasksStatus('rediscuss')"
+            >
+              <mat-icon>feedback</mat-icon>
+            </button>
+          }
         }
       </div>
     </div>

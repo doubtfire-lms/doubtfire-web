@@ -439,9 +439,14 @@ export class Project extends Entity {
     const tasks = this.tasks;
 
     const readyOrCompleteTasks = tasks.filter((task) =>
-      ['ready_for_feedback', 'discuss', 'demonstrate', 'complete', 'assess_in_portfolio'].includes(
-        task.status,
-      ),
+      [
+        'ready_for_feedback',
+        'discuss',
+        'rediscuss',
+        'demonstrate',
+        'complete',
+        'assess_in_portfolio',
+      ].includes(task.status),
     );
     // let lastTargetDate: Date;
 

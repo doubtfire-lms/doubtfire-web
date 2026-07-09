@@ -168,7 +168,10 @@ export class InboxComponent implements OnInit, OnDestroy {
           keys: 'control.shift.d',
           description: 'Mark selected task as discuss',
         })
-        .subscribe(() => this.selectedTask.selectedTask?.updateTaskStatus('discuss'));
+        .subscribe(() => {
+          const task = this.selectedTask.selectedTask;
+          task?.updateTaskStatus(task.status === 'discuss' ? 'rediscuss' : 'discuss');
+        });
     }
 
     this.dragMoveAudited$ = this.dragMove$.pipe(
