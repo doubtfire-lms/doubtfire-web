@@ -1,0 +1,13 @@
+<div class="mx-auto my-1 w-fit max-w-[34rem] text-center text-gray-500">
+  <div
+    class="inline-flex items-center justify-center gap-1.5 font-semibold leading-tight"
+    [ngClass]="expired ? 'text-red-600' : 'text-amber-600'"
+  >
+    <mat-icon class="!h-[1.15rem] !w-[1.15rem] !text-[1.15rem]">{{ icon }}</mat-icon>
+    <span>{{ title }}</span>
+  </div>
+  <div
+    class="discuss-timeout-comment__body markdown-to-html mt-0.5 text-sm leading-snug"
+    [innerHTML]="comment.text | marked"
+  ></div>
+</div>

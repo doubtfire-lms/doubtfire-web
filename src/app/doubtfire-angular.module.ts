@@ -304,6 +304,7 @@ import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-task
 import {DiscussionPromptComposerComponent} from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task-feedback-templates/task-feedback-templates.component';
 import {CommentBubbleActionComponent} from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
+import {DiscussTimeoutCommentComponent} from './tasks/task-comments-viewer/discuss-timeout-comment/discuss-timeout-comment.component';
 import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import {
   IntelligentDiscussionDialog,
@@ -475,6 +476,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
+    DiscussTimeoutCommentComponent,
     ExtensionCommentComponent,
     PdfImageCommentComponent,
     CampusListComponent,
