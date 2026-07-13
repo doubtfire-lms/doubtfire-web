@@ -62,6 +62,12 @@ $task-status-colors: (
     light: color.adjust(#31b0d5, $lightness: 15%),
     fore: $task-status-foreground-color-light,
   ),
+  rediscuss: (
+    base: #126352,
+    dark: color.adjust(#126352, $lightness: -15%),
+    light: color.adjust(#126352, $lightness: 15%),
+    fore: $task-status-foreground-color-light,
+  ),
   demonstrate: (
     base: #428bca,
     dark: color.adjust(#428bca, $lightness: -15%),
