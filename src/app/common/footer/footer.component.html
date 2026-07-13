@@ -87,16 +87,17 @@
         }
 
         <button
-          aria-label=""
-          class="button status-chip discuss"
+          aria-label="Mark as {{ discussActionLabel }}"
+          class="button status-chip"
           mat-icon-button
-          matTooltip="Mark as Discuss"
+          matTooltip="Mark as {{ discussActionLabel }}"
           matTooltipPosition="above"
           [class.large-button]="!(selectedTask && selectedTask.suggestedTaskStatus)"
           [disabled]="!actionButtonEnabled"
-          (click)="selectedTask?.updateTaskStatus('discuss')"
+          [ngClass]="discussActionClass"
+          (click)="selectedTask?.updateTaskStatus(discussActionStatus)"
         >
-          <mat-icon>question_answer</mat-icon>
+          <mat-icon>{{ discussActionIcon }}</mat-icon>
         </button>
 
         <div
