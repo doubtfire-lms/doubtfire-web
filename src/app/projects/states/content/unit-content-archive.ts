@@ -250,7 +250,38 @@ export class UnitContentArchive {
     htmlPath: string,
     urls: Map<string, string>,
   ): Promise<string> {
-    let rewritten = html.replace(
+    let rewritten = html.replace(/<a\b[^>]*>/gi, (anchor) => {
+      const hrefMatch = anchor.match(/\bhref=("|')([^"']+)\1/i);
+
+      if (!hrefMatch) {
+        return anchor;
+      }
+
+      const [, quote, url] = hrefMatch;
+      const blobUrl = this.blobUrlForUrl(url, htmlPath, urls);
+
+      if (!blobUrl) {
+        return anchor;
+      }
+
+      const filename = this.filenameForUrl(url, htmlPath);
+      const rewrittenAnchor = anchor.replace(hrefMatch[0], `href=${quote}${blobUrl}${quote}`);
+      const downloadMatch = rewrittenAnchor.match(/\bdownload(?:\s*=\s*("|')([^"']*)\1)?/i);
+
+      if (downloadMatch?.[2]) {
+        return rewrittenAnchor;
+      }
+
+      const downloadAttribute = `download="${this.escapeHtmlAttribute(filename)}"`;
+
+      if (downloadMatch) {
+        return rewrittenAnchor.replace(downloadMatch[0], downloadAttribute);
+      }
+
+      return rewrittenAnchor.replace(/>$/, ` ${downloadAttribute}>`);
+    });
+
+    rewritten = rewritten.replace(
       /\b(src|href|poster)=("|')([^"']+)\2/g,
       (match, attr, quote, url) => {
         const blobUrl = this.blobUrlForUrl(url, htmlPath, urls);
@@ -302,6 +333,25 @@ export class UnitContentArchive {
     );
 
     return rewritten;
+  }
+
+  private filenameForUrl(url: string, currentPath: string): string {
+    const resolvedPath = this.resolveArchivePath(url, currentPath);
+    const filename = resolvedPath.split('/').pop() ?? 'download';
+
+    try {
+      return decodeURIComponent(filename);
+    } catch {
+      return filename;
+    }
+  }
+
+  private escapeHtmlAttribute(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 
   private async rewriteJavaScriptFile(
