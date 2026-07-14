@@ -128,6 +128,7 @@
             class="block size-full"
             [contentRoute]="task.definition.contentLink.route"
             [contentSiteId]="task.definition.contentLink.unitContentSiteId"
+            [task]="task"
             [unit]="task.project.unit"
           ></f-unit-content-viewer>
         } @else if (task.definition.hasTaskSheet) {

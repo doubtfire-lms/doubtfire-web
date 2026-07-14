@@ -15,7 +15,7 @@ import {
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription, combineLatest, firstValueFrom} from 'rxjs';
-import {Project, Unit} from 'src/app/api/models/doubtfire-model';
+import {Project, Task, Unit} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {GlobalStateService, ViewType} from '../index/global-state.service';
 import {UnitContentArchive} from './unit-content-archive';
@@ -39,6 +39,7 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
 
   @Input() public contentRoute = '/';
   @Input() public contentSiteId?: number;
+  @Input() public task?: Task;
   @Input() public unit?: Unit;
 
   public isLoadingArchive = false;
@@ -197,8 +198,13 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private handleIframeClick(event: MouseEvent): void {
-    const target = event.target as {closest?: (selector: string) => HTMLAnchorElement | null};
-    const link = target?.closest?.('a[href]') ?? null;
+    const target = event.target as {closest?: (selector: string) => HTMLElement | null};
+
+    if (this.handleOnTrackAction(event, target)) {
+      return;
+    }
+
+    const link = (target?.closest?.('a[href]') as HTMLAnchorElement | null) ?? null;
 
     if (!link || link.target === '_blank' || event.ctrlKey || event.metaKey || event.shiftKey) {
       return;
@@ -225,6 +231,48 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
       fragment: archiveRoute.fragment,
       queryParams: this.contentRouteQueryParams(archiveRoute.path),
     });
+  }
+
+  private handleOnTrackAction(
+    event: MouseEvent,
+    target: {closest?: (selector: string) => HTMLElement | null},
+  ): boolean {
+    const actionElement = target?.closest?.('[data-ontrack-action]') ?? null;
+
+    if (
+      !event.isTrusted ||
+      actionElement?.getAttribute('data-ontrack-action') !== 'move-to-working-on-it'
+    ) {
+      return false;
+    }
+
+    const taskAbbreviation = actionElement.getAttribute('data-ontrack-task')?.trim();
+    const task = taskAbbreviation ? this.taskForContentAction(taskAbbreviation) : undefined;
+
+    if (!task || task.project.unit.myRole !== 'Student') {
+      return false;
+    }
+
+    event.preventDefault();
+    void task.triggerTransition('working_on_it');
+
+    return true;
+  }
+
+  private taskForContentAction(abbreviation: string): Task | undefined {
+    const project = this.task?.project;
+
+    if (!project) {
+      return undefined;
+    }
+
+    if (this.task.definition.abbreviation === abbreviation) {
+      return this.task;
+    }
+
+    return project.taskCache.currentValues.find(
+      (task) => task.definition.abbreviation === abbreviation,
+    );
   }
 
   private async fetchContentArchive(unitId: number, fragment?: string): Promise<void> {
