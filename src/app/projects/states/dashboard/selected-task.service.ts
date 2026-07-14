@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
+import {TaskCableService} from 'src/app/api/services/task-cable.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {GlobalStateService} from '../index/global-state.service';
 
@@ -21,7 +22,23 @@ export class SelectedTaskService {
   constructor(
     private taskService: TaskService,
     private globalState: GlobalStateService,
-  ) {}
+    private taskCableService: TaskCableService,
+  ) {
+    this.taskCableService.events$.subscribe((event) => {
+      const task = this.task$.value;
+      if (
+        event.event === 'status_changed' &&
+        task?.project?.id === event.projectId &&
+        task?.definition?.id === event.taskDefinitionId
+      ) {
+        task.getSubmissionDetails().subscribe(() => {
+          if (this.currentView$.value === DashboardViews.submission) {
+            this.showSubmission();
+          }
+        });
+      }
+    });
+  }
 
   private task$ = new BehaviorSubject<Task>(null);
   public currentPdfUrl$ = new BehaviorSubject<string>(null);
@@ -46,14 +63,18 @@ export class SelectedTaskService {
 
   public setSelectedTask(task: number | Task) {
     if (typeof task === 'number') {
-      this.taskService.get(task).subscribe(this.task$);
+      this.taskService.get(task).subscribe((selectedTask) => this.selectTask(selectedTask));
     } else {
-      this.task$.next(task);
-
-      task?.getSubmissionDetails().subscribe();
+      this.selectTask(task);
     }
     this.checkFooterHeight();
     this.showSubmission();
+  }
+
+  private selectTask(task: Task): void {
+    this.task$.next(task);
+    this.taskCableService.subscribeToTask(task);
+    task?.getSubmissionDetails().subscribe();
   }
 
   public showTaskSheet() {

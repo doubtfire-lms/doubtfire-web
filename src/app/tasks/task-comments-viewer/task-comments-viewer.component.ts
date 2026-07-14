@@ -24,6 +24,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
 import {Subscription} from 'rxjs';
+import {TaskCableService} from 'src/app/api/services/task-cable.service';
 
 @Component({
   selector: 'task-comments-viewer',
@@ -49,6 +50,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
 
   private taskStatusSub: Subscription;
   private commentAddedSub: Subscription;
+  private taskCableSub: Subscription;
 
   constructor(
     private taskCommentService: TaskCommentService,
@@ -58,6 +60,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
     private constants: DoubtfireConstants,
     @Inject(commentsModal) private commentsModalRef: CommentsModalService,
     private alerts: AlertService,
+    private taskCableService: TaskCableService,
   ) {
     const self = this;
     this.commentAddedSub = this.taskCommentService.commentAdded$.subscribe((tc: TaskComment) => {
@@ -69,6 +72,22 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
         this.fetchComments(task, false);
       }
     });
+
+    this.taskCableSub = this.taskCableService.events$.subscribe((event) => {
+      if (
+        !this.task ||
+        this.task.project?.id !== event.projectId ||
+        this.task.definition?.id !== event.taskDefinitionId
+      ) {
+        return;
+      }
+
+      if (event.event === 'comment_created') {
+        this.fetchComments(this.task, false);
+      } else if (event.event === 'status_changed') {
+        this.task.getSubmissionDetails().subscribe();
+      }
+    });
   }
 
   ngOnInit(): void {}
@@ -76,12 +95,15 @@ export class TaskCommentsViewerComponent implements OnChanges, OnInit, OnDestroy
   ngOnDestroy(): void {
     this.taskStatusSub?.unsubscribe();
     this.commentAddedSub?.unsubscribe();
+    this.taskCableSub?.unsubscribe();
+    this.taskCableService.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     // Must have project for task to be mapped
     if (changes.task?.currentValue?.project != null) {
       this.project = changes.task.currentValue.project;
+      this.taskCableService.subscribeToTask(this.task);
       this.fetchComments(this.task, true, true);
     } else {
       this.loading = false;
