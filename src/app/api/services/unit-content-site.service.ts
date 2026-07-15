@@ -21,6 +21,7 @@ export class UnitContentSiteService extends CachedEntityService<UnitContentSite>
       'originalFilename',
       'rootDir',
       'rootDirOptions',
+      'filePaths',
       'isMain',
       'createdAt',
       'updatedAt',

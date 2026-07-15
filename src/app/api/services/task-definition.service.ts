@@ -143,6 +143,24 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
           );
         },
       },
+      {
+        keys: ['taskResourceLink', 'task_resource_link'],
+        toEntityFn: (data: object, key: string, taskDefinition: TaskDefinition) => {
+          const linkData = data[key] as {id?: number};
+          if (!linkData) {
+            return undefined;
+          }
+
+          return taskDefinition.unit.unitContentLinkCache.getOrCreate(
+            linkData.id,
+            this.unitContentLinkService,
+            linkData,
+            {
+              constructorParams: taskDefinition.unit,
+            },
+          );
+        },
+      },
       'scormAllowReview',
       'scormBypassTest',
       'scormTimeDelayEnabled',
@@ -217,6 +235,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'hasTaskAssessmentResources',
       'hasScormData',
       'contentLink',
+      'taskResourceLink',
     );
   }
 

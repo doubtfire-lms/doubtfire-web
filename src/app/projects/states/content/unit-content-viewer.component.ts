@@ -16,6 +16,7 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription, combineLatest, firstValueFrom} from 'rxjs';
 import {Project, Task, Unit} from 'src/app/api/models/doubtfire-model';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {GlobalStateService, ViewType} from '../index/global-state.service';
 import {UnitContentArchive} from './unit-content-archive';
@@ -78,6 +79,7 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     private route: ActivatedRoute,
     private router: Router,
     private globalState: GlobalStateService,
+    private fileDownloader: FileDownloaderService,
     @Optional() @Inject(MAT_DIALOG_DATA) private dialogData?: UnitContentViewerDialogData,
   ) {}
 
@@ -206,7 +208,19 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
 
     const link = (target?.closest?.('a[href]') as HTMLAnchorElement | null) ?? null;
 
-    if (!link || link.target === '_blank' || event.ctrlKey || event.metaKey || event.shiftKey) {
+    if (!link) {
+      return;
+    }
+
+    const downloadFilename = link.getAttribute('download')?.trim();
+
+    if (link.href.startsWith('blob:') && downloadFilename) {
+      event.preventDefault();
+      this.fileDownloader.downloadBlobToFile(link.href, downloadFilename);
+      return;
+    }
+
+    if (link.target === '_blank' || event.ctrlKey || event.metaKey || event.shiftKey) {
       return;
     }
 
@@ -238,18 +252,29 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     target: {closest?: (selector: string) => HTMLElement | null},
   ): boolean {
     const actionElement = target?.closest?.('[data-ontrack-action]') ?? null;
+    const action = actionElement?.getAttribute('data-ontrack-action');
 
-    if (
-      !event.isTrusted ||
-      actionElement?.getAttribute('data-ontrack-action') !== 'move-to-working-on-it'
-    ) {
+    if (!event.isTrusted || !actionElement || !action) {
       return false;
     }
 
     const taskAbbreviation = actionElement.getAttribute('data-ontrack-task')?.trim();
     const task = taskAbbreviation ? this.taskForContentAction(taskAbbreviation) : undefined;
 
-    if (!task || task.project.unit.myRole !== 'Student') {
+    if (action === 'download-task-resources') {
+      if (task?.definition.hasTaskResources) {
+        event.preventDefault();
+        this.fileDownloader.downloadFile(
+          task.definition.getTaskResourcesUrl(true),
+          `${task.definition.abbreviation}-resources.zip`,
+        );
+        return true;
+      }
+
+      return false;
+    }
+
+    if (action !== 'move-to-working-on-it' || !task || task.unit.myRole !== 'Student') {
       return false;
     }
 
@@ -260,17 +285,15 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private taskForContentAction(abbreviation: string): Task | undefined {
-    const project = this.task?.project;
-
-    if (!project) {
-      return undefined;
-    }
-
-    if (this.task.definition.abbreviation === abbreviation) {
+    if (this.task?.definition.abbreviation === abbreviation) {
       return this.task;
     }
 
-    return project.taskCache.currentValues.find(
+    const project = this.globalState.currentUserProjects.currentValues.find(
+      (candidate) => candidate.unit?.id === this.currentUnitId,
+    );
+
+    return project?.taskCache.currentValues.find(
       (task) => task.definition.abbreviation === abbreviation,
     );
   }

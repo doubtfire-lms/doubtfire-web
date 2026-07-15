@@ -27,6 +27,7 @@ interface ContentRouteRow extends ContentRouteSnapshot {
   description: string;
   id: string;
   label: string;
+  valueKind: 'file' | 'route';
 }
 
 interface ContentRouteSection {
@@ -34,6 +35,7 @@ interface ContentRouteSection {
   rows: ContentRouteRow[];
   subtitle: string;
   title: string;
+  valueLabel: string;
 }
 
 interface ContentRouteSectionDefinition {
@@ -41,6 +43,7 @@ interface ContentRouteSectionDefinition {
   id: string;
   subtitle: string;
   title: string;
+  valueLabel: string;
 }
 
 @Component({
@@ -67,13 +70,22 @@ export class UnitContentEditorComponent implements OnInit {
       id: 'grades',
       title: 'Grade Routes',
       subtitle: 'Choose the content route each target grade should open.',
+      valueLabel: 'Route',
       buildRows: (unit) => this.gradeRouteRows(unit),
     },
     {
       id: 'task-sheets',
       title: 'Task Sheet Routes',
       subtitle: 'Replace task sheet PDFs with saved routes from uploaded unit content.',
+      valueLabel: 'Route',
       buildRows: (unit) => this.taskSheetRouteRows(unit),
+    },
+    {
+      id: 'task-resources',
+      title: 'Task Resources',
+      subtitle: 'Replace uploaded task resource ZIPs with files from uploaded unit content.',
+      valueLabel: 'File path',
+      buildRows: (unit) => this.taskResourceRows(unit),
     },
   ];
 
@@ -98,6 +110,10 @@ export class UnitContentEditorComponent implements OnInit {
 
   public get hasUnsavedRouteChanges(): boolean {
     return this.allRouteRows.some((row) => this.routeHasUnsavedChanges(row));
+  }
+
+  public get hasInvalidResourcePaths(): boolean {
+    return this.allRouteRows.some((row) => !this.resourcePathIsValid(row));
   }
 
   public uploadSites(files: File[]): void {
@@ -263,7 +279,33 @@ export class UnitContentEditorComponent implements OnInit {
   }
 
   public routeCanBePreviewed(row: ContentRouteRow): boolean {
-    return !!row.unitContentSiteId && !this.routeHasUnsavedChanges(row);
+    return (
+      row.valueKind === 'route' && !!row.unitContentSiteId && !this.routeHasUnsavedChanges(row)
+    );
+  }
+
+  public updateRowSite(row: ContentRouteRow, siteId: number | null): void {
+    row.unitContentSiteId = siteId;
+
+    if (row.valueKind !== 'file') {
+      return;
+    }
+
+    if (!siteId || !this.filePathsForRow(row).includes(row.route)) {
+      row.route = '';
+    }
+  }
+
+  public filePathsForRow(row: ContentRouteRow): string[] {
+    return this.sites.find((site) => site.id === row.unitContentSiteId)?.filePaths ?? [];
+  }
+
+  public resourcePathIsValid(row: ContentRouteRow): boolean {
+    if (row.valueKind !== 'file' || !row.unitContentSiteId) {
+      return true;
+    }
+
+    return this.filePathsForRow(row).includes(this.normalizedRoute(row.route));
   }
 
   public routeHasUnsavedChanges(row: ContentRouteRow): boolean {
@@ -285,7 +327,7 @@ export class UnitContentEditorComponent implements OnInit {
 
   public saveContentRoutes(): void {
     const links = this.allRouteRows
-      .filter((row) => row.unitContentSiteId)
+      .filter((row) => row.unitContentSiteId && this.resourcePathIsValid(row))
       .map((row) => this.contentLinkFromRoute(row));
 
     this.saving = true;
@@ -294,10 +336,10 @@ export class UnitContentEditorComponent implements OnInit {
       .pipe(finalize(() => (this.saving = false)))
       .subscribe({
         next: () => {
-          this.alerts.success('Content routes updated', 2000);
+          this.alerts.success('Content links updated', 2000);
           this.loadContentManagement();
         },
-        error: (error) => this.alerts.error(`Failed to update content routes: ${error}`, 6000),
+        error: (error) => this.alerts.error(`Failed to update content links: ${error}`, 6000),
       });
   }
 
@@ -339,6 +381,7 @@ export class UnitContentEditorComponent implements OnInit {
       id: definition.id,
       title: definition.title,
       subtitle: definition.subtitle,
+      valueLabel: definition.valueLabel,
       rows: definition
         .buildRows(this.unit)
         .map((row) => this.applySavedContentLink(row, savedLinks)),
@@ -353,6 +396,7 @@ export class UnitContentEditorComponent implements OnInit {
         contextType: 'grade_overview',
         contextKey: 'overview',
         defaultRoute: '/grades',
+        valueKind: 'route',
       }),
       ...unit.gradeDefinitions
         .filter((grade) => grade.value >= 0)
@@ -363,6 +407,7 @@ export class UnitContentEditorComponent implements OnInit {
             contextType: 'grade',
             contextKey: grade.id,
             defaultRoute: `/grades/${grade.id}`,
+            valueKind: 'route',
           }),
         ),
     ];
@@ -375,7 +420,21 @@ export class UnitContentEditorComponent implements OnInit {
         description: 'Task sheet replacement content.',
         contextType: 'task_definition',
         contextKey: taskDefinition.abbreviation,
-        defaultRoute: `/task/${taskDefinition.abbreviation}`,
+        defaultRoute: `/tasks/${taskDefinition.abbreviation}`,
+        valueKind: 'route',
+      }),
+    );
+  }
+
+  private taskResourceRows(unit: Unit): ContentRouteRow[] {
+    return unit.taskDefinitions.map((taskDefinition: TaskDefinition) =>
+      this.contentRouteRow({
+        label: `${taskDefinition.abbreviation} ${taskDefinition.name}`,
+        description: 'Task resource replacement file.',
+        contextType: 'task_definition_resource',
+        contextKey: taskDefinition.abbreviation,
+        defaultRoute: '',
+        valueKind: 'file',
       }),
     );
   }
@@ -386,6 +445,7 @@ export class UnitContentEditorComponent implements OnInit {
     defaultRoute: string;
     description: string;
     label: string;
+    valueKind: 'file' | 'route';
   }): ContentRouteRow {
     return {
       ...params,

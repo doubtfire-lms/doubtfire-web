@@ -266,7 +266,7 @@ export class UnitContentArchive {
 
       const filename = this.filenameForUrl(url, htmlPath);
       const rewrittenAnchor = anchor.replace(hrefMatch[0], `href=${quote}${blobUrl}${quote}`);
-      const downloadMatch = rewrittenAnchor.match(/\bdownload(?:\s*=\s*("|')([^"']*)\1)?/i);
+      const downloadMatch = rewrittenAnchor.match(/\sdownload(?:\s*=\s*("|')([^"']*)\1)?(?=\s|>)/i);
 
       if (downloadMatch?.[2]) {
         return rewrittenAnchor;
@@ -275,7 +275,7 @@ export class UnitContentArchive {
       const downloadAttribute = `download="${this.escapeHtmlAttribute(filename)}"`;
 
       if (downloadMatch) {
-        return rewrittenAnchor.replace(downloadMatch[0], downloadAttribute);
+        return rewrittenAnchor.replace(downloadMatch[0], ` ${downloadAttribute}`);
       }
 
       return rewrittenAnchor.replace(/>$/, ` ${downloadAttribute}>`);

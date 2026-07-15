@@ -74,6 +74,7 @@ export class TaskDefinition extends Entity {
   lockAssessmentsToTutorialStream: boolean;
   discussionPromptsCount: number;
   contentLink?: UnitContentLink;
+  taskResourceLink?: UnitContentLink;
   overseerResourceFiles: string[] = [];
 
   gradeDueDates: TaskDefinitionGradeDueDate[] = [];
@@ -254,6 +255,10 @@ export class TaskDefinition extends Entity {
 
   public get hasContentLink(): boolean {
     return !!this.contentLink?.unitContentSiteId;
+  }
+
+  public get hasTaskResourceLink(): boolean {
+    return !!this.taskResourceLink?.unitContentSiteId;
   }
 
   public getTaskPDFUrl(asAttachment: boolean = false): string {

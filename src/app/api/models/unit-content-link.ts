@@ -1,7 +1,11 @@
 import {Entity} from 'ngx-entity-service';
 import type {Unit} from './unit';
 
-export type UnitContentContextType = 'grade' | 'grade_overview' | 'task_definition';
+export type UnitContentContextType =
+  | 'grade'
+  | 'grade_overview'
+  | 'task_definition'
+  | 'task_definition_resource';
 
 export class UnitContentSite extends Entity {
   id: number;
@@ -10,6 +14,7 @@ export class UnitContentSite extends Entity {
   originalFilename: string;
   rootDir: string;
   rootDirOptions: string[];
+  filePaths: string[];
   isMain: boolean;
   createdAt: string;
   updatedAt: string;

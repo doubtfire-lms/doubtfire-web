@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-4">
   <div class="header">
     <h3>Unit Content</h3>
-    <p>Upload static content site zips and connect unit screens to saved site routes.</p>
+    <p>Upload static content site zips and connect unit screens and resources to saved content.</p>
   </div>
 
   <mat-card appearance="outlined">
@@ -202,7 +202,8 @@
               <mat-select
                 class="min-w-52"
                 placeholder="No site"
-                [(ngModel)]="row.unitContentSiteId"
+                [ngModel]="row.unitContentSiteId"
+                (ngModelChange)="updateRowSite(row, $event)"
               >
                 <mat-option [value]="null">No site</mat-option>
                 @for (site of sites; track site.id) {
@@ -213,12 +214,35 @@
           </ng-container>
 
           <ng-container matColumnDef="route">
-            <th *matHeaderCellDef mat-header-cell>Route</th>
+            <th *matHeaderCellDef mat-header-cell>{{ section.valueLabel }}</th>
             <td *matCellDef="let row" mat-cell>
               @if (row.unitContentSiteId) {
-                <mat-form-field appearance="outline" class="w-full py-2" subscriptSizing="dynamic">
-                  <input matInput [placeholder]="row.defaultRoute" [(ngModel)]="row.route" />
-                </mat-form-field>
+                @if (row.valueKind === 'file') {
+                  <mat-form-field
+                    appearance="outline"
+                    class="w-full py-2"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-select placeholder="Select a file" [(ngModel)]="row.route">
+                      @for (path of filePathsForRow(row); track path) {
+                        <mat-option [value]="path">{{ path }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (!resourcePathIsValid(row)) {
+                      <mat-hint class="text-red-600"
+                        >Select a file from this content site.</mat-hint
+                      >
+                    }
+                  </mat-form-field>
+                } @else {
+                  <mat-form-field
+                    appearance="outline"
+                    class="w-full py-2"
+                    subscriptSizing="dynamic"
+                  >
+                    <input matInput [placeholder]="row.defaultRoute" [(ngModel)]="row.route" />
+                  </mat-form-field>
+                }
               }
             </td>
           </ng-container>
@@ -226,18 +250,20 @@
           <ng-container matColumnDef="preview">
             <th *matHeaderCellDef mat-header-cell></th>
             <td *matCellDef="let row" mat-cell>
-              <button
-                aria-label="Preview content route"
-                mat-icon-button
-                type="button"
-                [disabled]="!routeCanBePreviewed(row)"
-                [ngClass]="{
-                  'opacity-40': !routeCanBePreviewed(row),
-                }"
-                (click)="previewRoute(row)"
-              >
-                <mat-icon>open_in_new</mat-icon>
-              </button>
+              @if (row.valueKind === 'route') {
+                <button
+                  aria-label="Preview content route"
+                  mat-icon-button
+                  type="button"
+                  [disabled]="!routeCanBePreviewed(row)"
+                  [ngClass]="{
+                    'opacity-40': !routeCanBePreviewed(row),
+                  }"
+                  (click)="previewRoute(row)"
+                >
+                  <mat-icon>open_in_new</mat-icon>
+                </button>
+              }
             </td>
           </ng-container>
 
@@ -253,10 +279,10 @@
       color="primary"
       mat-flat-button
       type="button"
-      [disabled]="saving || !hasUnsavedRouteChanges"
+      [disabled]="saving || hasInvalidResourcePaths || !hasUnsavedRouteChanges"
       (click)="saveContentRoutes()"
     >
-      Save Content Routes
+      Save Content Links
     </button>
   </div>
 </div>
