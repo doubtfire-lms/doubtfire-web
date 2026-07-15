@@ -111,7 +111,7 @@
     "tailwindcss": "^4.3.1",
     "ts-node": "~10.9",
     "typescript": "~6.0.3",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.10"
   },
   "optionalDependencies": {
     "@nx/nx-darwin-arm64": "^23.0.1",
