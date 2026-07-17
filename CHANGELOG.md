@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-46](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-45...v11.0.0-46) (2026-07-16)
+
+
+### Features
+
+* add rediscuss status ([2be78d4](https://github.com/b0ink/doubtfire-deploy/commit/2be78d4e120a856c3260ce1765c2e0f4dc48ae01))
+* add support for word document submissions ([350cd02](https://github.com/b0ink/doubtfire-deploy/commit/350cd02dbd4f1a5e5c59fd0e9be0ef70eaa54477))
+
 ## [11.0.0-45](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-44...v11.0.0-45) (2026-07-13)
 
 

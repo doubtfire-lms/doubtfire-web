@@ -118,8 +118,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     this.newOverseerStep.statusOnFailure = 'no_change';
     this.newOverseerStep.statusOnSuccess = 'no_change';
     this.newOverseerStep.commandLanguage = 'shell';
-    this.newOverseerStep.decodedRunCommand = '#!/bin/bash\n\n';
-    this.newOverseerStep.runCommand = '#!/bin/bash\n\n';
+    this.newOverseerStep.decodedRunCommand = '#!/usr/bin/env bash\n\n';
+    this.newOverseerStep.runCommand = '#!/usr/bin/env bash\n\n';
     this.newOverseerStep.showExpectedOutput = true;
 
     this.newOverseerStep.sortOrder = this.taskDefinition.overseerStepsCache.currentValues.length;
