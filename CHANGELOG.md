@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-48](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-47...v11.0.0-48) (2026-07-19)
+
+
+### Features
+
+* content management system ([#1327](https://github.com/b0ink/doubtfire-deploy/issues/1327)) ([c902828](https://github.com/b0ink/doubtfire-deploy/commit/c902828951f1ce7853de81b53ce6c1940052bd39))
+
+## [11.0.0-47](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-46...v11.0.0-47) (2026-07-19)
+
+## [11.0.0-46](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-45...v11.0.0-46) (2026-07-16)
+
+
+### Features
+
+* add rediscuss status ([2be78d4](https://github.com/b0ink/doubtfire-deploy/commit/2be78d4e120a856c3260ce1765c2e0f4dc48ae01))
+* add support for word document submissions ([350cd02](https://github.com/b0ink/doubtfire-deploy/commit/350cd02dbd4f1a5e5c59fd0e9be0ef70eaa54477))
+
+## [11.0.0-45](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-44...v11.0.0-45) (2026-07-13)
+
+
+### Features
+
+* add label for starting tasks ([46100f5](https://github.com/b0ink/doubtfire-deploy/commit/46100f50ca8ddac11668e97deb482994f47f87f9))
+* add task list filters and sorting ([c65279c](https://github.com/b0ink/doubtfire-deploy/commit/c65279cb1900b5198e764d53b671719512486a83))
+* show all tasks in task planner ([eb87251](https://github.com/b0ink/doubtfire-deploy/commit/eb87251dbef37d5cca8d11c29816c42722605764))
+
+
+### Bug Fixes
+
+* dont reset task list sidebar when switching between project and task dashboard ([acc3ac2](https://github.com/b0ink/doubtfire-deploy/commit/acc3ac2625137075262c44239772d121e52c3a34))
+* lint ([dab681d](https://github.com/b0ink/doubtfire-deploy/commit/dab681d0e3d0e025804d3477eb68727ab42330ed))
+* use task weighting system as default sorting ([aa3c261](https://github.com/b0ink/doubtfire-deploy/commit/aa3c2613f9c1027eea761f51297380a4443a42b2))
+
 ## [11.0.0-44](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-43...v11.0.0-44) (2026-07-08)
 
 

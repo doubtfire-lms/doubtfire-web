@@ -42,7 +42,7 @@ interface UploadingInfo {
 
 export const ACCEPTED_TYPES = {
   document: {
-    extensions: ['pdf', 'ps'],
+    extensions: ['pdf', 'ps', 'docx'],
     // icon: 'picture_as_pdf',
     icon: 'article_outlined',
     name: 'PDF',

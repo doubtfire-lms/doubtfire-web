@@ -15,6 +15,7 @@ export * from './tutorial/tutorial';
 export * from './tutorial-stream/tutorial-stream';
 export * from './teaching-period';
 export * from './unit';
+export * from './unit-content-link';
 export * from './project';
 export * from './task';
 export * from './task-definition';
@@ -50,6 +51,8 @@ export * from './webcal/webcal';
 
 export * from '../services/authentication.service';
 export * from '../services/unit.service';
+export * from '../services/unit-content-link.service';
+export * from '../services/unit-content-site.service';
 export * from '../services/project.service';
 export * from '../services/task.service';
 export * from '../services/tutorial.service';

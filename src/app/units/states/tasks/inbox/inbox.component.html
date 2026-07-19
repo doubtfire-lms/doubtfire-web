@@ -78,7 +78,7 @@
           ></f-inbox-dashboard>
         }
       </div>
-      @if (isCommentsNarrow && commentsCollapsed && !loading && taskData?.selectedTask) {
+      @if (commentsCollapsed && !loading && taskData?.selectedTask) {
         <button
           aria-label="Open task comments"
           class="comments-floating-toggle"
@@ -88,7 +88,9 @@
           type="button"
           (click)="toggleCommentsPanel()"
         >
-          <mat-icon class="comments-floating-toggle__edge-icon">chevron_left</mat-icon>
+          <mat-icon class="comments-floating-toggle__edge-icon"
+            >keyboard_double_arrow_left</mat-icon
+          >
           <mat-icon class="comments-floating-toggle__hover-icon">forum</mat-icon>
         </button>
       }
@@ -98,27 +100,30 @@
         cdkDragLockAxis="x"
         class="resizer"
         id="rightResizerEl"
-        [class.hidden]="isCommentsNarrow"
+        [class.hidden]="isCommentsNarrow || commentsPanelCollapsed"
         (cdkDragEnded)="stoppedDragging($event, commentspanel)"
         (cdkDragMoved)="dragging($event, commentspanel)"
         (cdkDragStarted)="startedDragging($event, commentspanel)"
       ></div>
       <div
         #commentspanel
-        class="task-comment-panel comments-sidebar inbox-panel overflow-hidden"
+        class="task-comment-panel comments-sidebar inbox-panel"
         [class.comments-sidebar--narrow]="isCommentsNarrow"
+        [class.comments-sidebar--wide]="!isCommentsNarrow"
         [class.hidden]="commentsPanelCollapsed"
       >
-        @if (isCommentsNarrow && !commentsCollapsed) {
+        @if (!commentsCollapsed) {
           <button
             aria-label="Collapse task comments"
             class="comments-sidebar__collapse"
             mat-icon-button
             matTooltip="Collapse comments"
             type="button"
+            [class.comments-sidebar__collapse--narrow]="isCommentsNarrow"
+            [class.comments-sidebar__collapse--wide]="!isCommentsNarrow"
             (click)="toggleCommentsPanel()"
           >
-            <mat-icon>chevron_right</mat-icon>
+            <mat-icon>keyboard_double_arrow_right</mat-icon>
           </button>
         }
         @if (loading) {
@@ -193,7 +198,7 @@
           ></f-inbox-dashboard>
         }
       </div>
-      @if (isCommentsNarrow && commentsCollapsed && !loading && taskData?.selectedTask) {
+      @if (commentsCollapsed && !loading && taskData?.selectedTask) {
         <button
           aria-label="Open task comments"
           class="comments-floating-toggle"
@@ -203,24 +208,29 @@
           type="button"
           (click)="toggleCommentsPanel()"
         >
-          <mat-icon class="comments-floating-toggle__edge-icon">chevron_left</mat-icon>
+          <mat-icon class="comments-floating-toggle__edge-icon"
+            >keyboard_double_arrow_left</mat-icon
+          >
           <mat-icon class="comments-floating-toggle__hover-icon">forum</mat-icon>
         </button>
       }
       <div
-        class="task-comment-panel comments-sidebar comments-sidebar--mobile inbox-panel overflow-hidden"
+        class="task-comment-panel comments-sidebar comments-sidebar--mobile inbox-panel"
+        [class.comments-sidebar--wide]="!isCommentsNarrow"
         [class.hidden]="commentsPanelCollapsed || !taskData?.selectedTask"
       >
-        @if (isCommentsNarrow && !commentsCollapsed) {
+        @if (!commentsCollapsed) {
           <button
             aria-label="Collapse task comments"
             class="comments-sidebar__collapse"
             mat-icon-button
             matTooltip="Collapse comments"
             type="button"
+            [class.comments-sidebar__collapse--narrow]="isCommentsNarrow"
+            [class.comments-sidebar__collapse--wide]="!isCommentsNarrow"
             (click)="toggleCommentsPanel()"
           >
-            <mat-icon>chevron_right</mat-icon>
+            <mat-icon>keyboard_double_arrow_right</mat-icon>
           </button>
         }
         @if (!loading && taskData?.selectedTask) {

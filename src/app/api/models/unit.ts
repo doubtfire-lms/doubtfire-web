@@ -35,6 +35,7 @@ import {LearningOutcome} from './learning-outcome';
 import {MarkingSession} from './marking-session';
 import {SidekiqJob} from './sidekiq-job';
 import {TaskPrerequisite} from './task-prerequisite';
+import {UnitContentLink} from './unit-content-link';
 
 export interface GradeDefinition {
   id: string;
@@ -77,6 +78,7 @@ export class Unit extends Entity {
   enableSyncTimetable: boolean;
 
   draftTaskDefinition: TaskDefinition;
+  hasMainContentSite: boolean = false;
 
   allowStudentExtensionRequests: boolean;
   allowFlexibleDates: boolean = false;
@@ -110,6 +112,8 @@ export class Unit extends Entity {
     new EntityCache<TaskDefinition>();
   public readonly taskOutcomeAlignmentsCache: EntityCache<TaskOutcomeAlignment> =
     new EntityCache<TaskOutcomeAlignment>();
+  public readonly unitContentLinkCache: EntityCache<UnitContentLink> =
+    new EntityCache<UnitContentLink>();
 
   readonly staffCache: EntityCache<UnitRole> = new EntityCache<UnitRole>();
 
@@ -237,6 +241,10 @@ export class Unit extends Entity {
 
   public get taskDefinitions(): readonly TaskDefinition[] {
     return this.taskDefinitionCache.currentValues;
+  }
+
+  public get contentLinks(): readonly UnitContentLink[] {
+    return this.unitContentLinkCache.currentValues;
   }
 
   public taskDefinitionsForGrade(grade: number): TaskDefinition[] {

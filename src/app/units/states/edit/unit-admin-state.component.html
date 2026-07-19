@@ -91,6 +91,13 @@
             </div>
           }
         }
+        @case ('content') {
+          @if (unit) {
+            <div class="mx-auto max-w-[90vw]">
+              <f-unit-content-editor [unit]="unit"></f-unit-content-editor>
+            </div>
+          }
+        }
         @case ('groups') {
           @if (unit) {
             <div class="mx-auto max-w-[90vw]">
