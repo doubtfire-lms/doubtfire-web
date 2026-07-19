@@ -61,6 +61,13 @@
           Task Planner
         </button>
         <mat-divider></mat-divider>
+        @if (currentUnit.hasMainContentSite) {
+          <button mat-menu-item [routerLink]="['/units', currentUnit.id, 'content']">
+            <mat-icon aria-label="Unit content icon" fontIcon="menu_book"></mat-icon>
+            Unit Content
+          </button>
+          <mat-divider></mat-divider>
+        }
         <button mat-menu-item [routerLink]="['/projects', currentProject.id, 'portfolio']">
           <mat-icon aria-label="Portfolio creation icon" fontIcon="auto_stories"></mat-icon>
           Portfolio Creation

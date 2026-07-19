@@ -10,6 +10,7 @@ import {GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtf
 import {Task} from './doubtfire-model';
 import {OverseerStep} from './overseer/overseer-step';
 import {TaskPrerequisite} from './task-prerequisite';
+import {UnitContentLink} from './unit-content-link';
 
 export interface UploadRequirement {
   key: string;
@@ -72,6 +73,8 @@ export class TaskDefinition extends Entity {
   useResourcesForJplagBaseCode: boolean;
   lockAssessmentsToTutorialStream: boolean;
   discussionPromptsCount: number;
+  contentLink?: UnitContentLink;
+  taskResourceLink?: UnitContentLink;
   overseerResourceFiles: string[] = [];
 
   gradeDueDates: TaskDefinitionGradeDueDate[] = [];
@@ -248,6 +251,14 @@ export class TaskDefinition extends Entity {
 
   public isGroupTask(): boolean {
     return this.groupSet !== null && this.groupSet !== undefined;
+  }
+
+  public get hasContentLink(): boolean {
+    return !!this.contentLink?.unitContentSiteId;
+  }
+
+  public get hasTaskResourceLink(): boolean {
+    return !!this.taskResourceLink?.unitContentSiteId;
   }
 
   public getTaskPDFUrl(asAttachment: boolean = false): string {

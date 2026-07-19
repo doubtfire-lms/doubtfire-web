@@ -88,7 +88,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   get commentsPanelCollapsed(): boolean {
-    return this.isCommentsNarrow && this.commentsCollapsed;
+    return this.commentsCollapsed;
   }
 
   constructor(

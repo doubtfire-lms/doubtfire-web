@@ -12,6 +12,7 @@ type UnitAdminTabKey =
   | 'tutorials'
   | 'students'
   | 'tasks'
+  | 'content'
   | 'groups'
   | 'communication';
 
@@ -31,6 +32,7 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
 
   public readonly tabs: UnitAdminTab[] = [
     {label: 'Unit Details', routeSegment: 'details'},
+    {label: 'Content', routeSegment: 'content'},
     {label: 'Learning Outcomes', routeSegment: 'learning-outcomes'},
     {label: 'Staff', routeSegment: 'staff'},
     {label: 'Tutorials', routeSegment: 'tutorials'},
