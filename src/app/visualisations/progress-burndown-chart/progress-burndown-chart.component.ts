@@ -1,4 +1,4 @@
-import {Color, LegendPosition, ScaleType} from '@swimlane/ngx-charts';
+import {Color, LegendPosition, ScaleType} from '@glitchtip/ng-charts';
 import {formatDate} from '@angular/common';
 import {
   ChangeDetectionStrategy,

@@ -2,9 +2,15 @@
 // import {LottieModule, LottieCacheModule} from 'ngx-lottie';
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import {
+  BarVerticalNormalizedComponent,
+  GaugeComponent,
+  LineChartComponent,
+  NumberCardComponent,
+  PieChartComponent,
+} from '@glitchtip/ng-charts';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import * as Sentry from '@sentry/angular';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {
   GANTT_GLOBAL_CONFIG,
   GANTT_I18N_LOCALE_TOKEN,
@@ -841,7 +847,11 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
-    NgxChartsModule,
+    BarVerticalNormalizedComponent,
+    GaugeComponent,
+    LineChartComponent,
+    NumberCardComponent,
+    PieChartComponent,
     PdfViewerModule,
     LottieComponent,
     ServiceWorkerModule.register('ngsw-worker.js', {
