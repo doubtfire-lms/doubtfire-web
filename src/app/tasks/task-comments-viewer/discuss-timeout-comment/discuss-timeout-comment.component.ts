@@ -20,6 +20,6 @@ export class DiscussTimeoutCommentComponent {
   }
 
   get title(): string {
-    return this.expired ? 'Discuss timeout expired' : 'Discuss timeout warning';
+    return this.expired ? 'Discussion deadline missed' : 'Discussion deadline approaching';
   }
 }
