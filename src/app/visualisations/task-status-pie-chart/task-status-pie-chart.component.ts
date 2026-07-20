@@ -1,4 +1,4 @@
-import {LegendPosition} from '@swimlane/ngx-charts';
+import {LegendPosition} from '@glitchtip/ng-charts';
 import {
   ChangeDetectionStrategy,
   Component,
