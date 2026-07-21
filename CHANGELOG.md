@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-49](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-48...v11.0.0-49) (2026-07-21)
+
+
+### Bug Fixes
+
+* preserve ltik during lti sign-in ([c8182cb](https://github.com/b0ink/doubtfire-deploy/commit/c8182cb3429115a1c231015d65c5ab470af1bd4a))
+
 ## [11.0.0-48](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-47...v11.0.0-48) (2026-07-19)
 
 
