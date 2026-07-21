@@ -153,13 +153,13 @@ export class FileDownloaderService {
     this.downloadBlob(
       url,
       (resourceUrl: string, response: HttpResponse<Blob>) => {
-        const filenameRegex = /filename[^;=\n]*=((['']).*?\2|[^;\n]*)/;
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
 
         const matches = filenameRegex.exec(response.headers.get('Content-Disposition'));
         let filename: string;
 
         if (matches != null && matches[1]) {
-          filename = matches[1].replace(/['']/g, '');
+          filename = matches[1].trim().replace(/^(['"])(.*)\1$/, '$2');
         } else {
           filename = defaultFilename;
         }

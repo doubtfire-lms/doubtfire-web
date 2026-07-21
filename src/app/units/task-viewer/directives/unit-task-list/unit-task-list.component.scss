@@ -123,6 +123,17 @@ $my-palette: mat.m2-define-palette($md-formatif);
   }
 }
 
+.task-list-menu-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+::ng-deep .task-list-filters-menu.mat-mdc-menu-panel {
+  margin-left: 50px;
+}
+
 .full-width {
   width: 100%;
 }

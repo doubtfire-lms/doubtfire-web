@@ -21,6 +21,7 @@ ARG SENTRY_ORG
 ARG SENTRY_PROJECT
 ARG SENTRY_RELEASE
 ARG SENTRY_DIST
+ARG UPLOAD_SENTRY_SOURCEMAPS=false
 ENV SENTRY_DSN=$SENTRY_DSN
 ENV SENTRY_ORG=$SENTRY_ORG
 ENV SENTRY_PROJECT=$SENTRY_PROJECT
@@ -29,7 +30,15 @@ ENV SENTRY_DIST=$SENTRY_DIST
 RUN envsubst '${SENTRY_DSN} ${SENTRY_RELEASE} ${SENTRY_DIST}' < src/environments/environment.prod.ts > src/environments/environment.prod.ts.tmp && mv src/environments/environment.prod.ts.tmp src/environments/environment.prod.ts
 
 # Launch - build to dist folder
-RUN npm run-script deploy
+RUN --mount=type=secret,id=sentry_auth_token,uid=1000 \
+  if [ "$UPLOAD_SENTRY_SOURCEMAPS" = "true" ]; then \
+    npm run deploy:build2api:sourcemaps; \
+    SENTRY_AUTH_TOKEN="$(cat /run/secrets/sentry_auth_token)" npm run sentry:sourcemaps; \
+    find dist/browser -name '*.map' -delete; \
+    npx ngsw-config dist/browser ngsw-config.json /; \
+  else \
+    npm run-script deploy; \
+  fi
 
 
 ## STAGE 2: Host ###

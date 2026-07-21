@@ -482,6 +482,14 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  public get selectedTasksIncludeDiscuss(): boolean {
+    const selectedTasks = this.tasksList?.selectedOptions?.selected ?? [];
+    return selectedTasks.some((taskOption) => {
+      const task = taskOption.value as Task;
+      return task.status === 'discuss';
+    });
+  }
+
   public markSelectedTasksDicussed() {
     const selectedTasks = this.tasksList.selectedOptions.selected;
     if (!this.unit?.enforceFeedbackBeforeDiscussedInClass) {
@@ -588,6 +596,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     // 'complete',
     'fix_and_resubmit',
     'redo',
+    'rediscuss',
   ];
 
   public viewAllSubmittedTasks() {

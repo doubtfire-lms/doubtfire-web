@@ -180,6 +180,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     'time_exceeded',
     'assess_in_portfolio',
     'attention_required',
+    'rediscuss',
   ];
 
   newConditions: Record<number, Partial<CommunicationCondition>> = {};

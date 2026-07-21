@@ -14,6 +14,7 @@ import {HomeComponent} from './home/states/home/home.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {resolveProject} from './projects/project.resolver';
+import {UnitContentViewerComponent} from './projects/states/content/unit-content-viewer.component';
 import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
 import {ProjectGroupsStateComponent} from './projects/states/groups/project-groups-state.component';
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
@@ -31,6 +32,7 @@ import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {StudentsListComponent} from './units/states/students-list/students-list.component';
 import {UnitTaskInboxStateComponent} from './units/states/tasks/inbox/unit-task-inbox-state.component';
 import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
+import {resolveUnitCodeContent} from './units/unit-code-content.guard';
 import {UnitRootStateComponent} from './units/unit-root-state.component';
 import {resolveUnit} from './units/unit.resolver';
 import {WelcomeComponent} from './welcome/welcome.component';
@@ -105,6 +107,11 @@ export const routes: Routes = [
     data: {attendance: true, task: 'Check-in'},
   },
   {
+    path: ':unitCode/content',
+    component: UnitContentViewerComponent,
+    canActivate: [resolveUnitCodeContent],
+  },
+  {
     path: 'units',
     children: [
       {path: '', pathMatch: 'full', redirectTo: '/home'},
@@ -139,6 +146,11 @@ export const routes: Routes = [
             data: {task: 'Student Portfolios'},
           },
           {path: 'students', component: StudentsListComponent, data: {task: 'Student List'}},
+          {
+            path: 'content',
+            component: UnitContentViewerComponent,
+            data: {task: 'Unit Content'},
+          },
           {
             path: 'admin',
             component: UnitAdminStateComponent,

@@ -1,0 +1,288 @@
+<div class="flex flex-col gap-4">
+  <div class="header">
+    <h3>Unit Content</h3>
+    <p>Upload static content site zips and connect unit screens and resources to saved content.</p>
+  </div>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Content Sites</mat-card-title>
+      <mat-card-subtitle
+        >Upload and manage the zipped static sites available to this unit.</mat-card-subtitle
+      >
+    </mat-card-header>
+    <mat-card-content class="flex flex-col gap-3">
+      <f-file-drop
+        accept=".zip,application/zip,application/x-zip-compressed,application/octet-stream"
+        class="mt-2"
+        desiredFileName="content site zip"
+        mode="event"
+        (filesDropped)="uploadSites($event)"
+      ></f-file-drop>
+
+      @if (sites.length) {
+        <table class="w-full" mat-table [dataSource]="sites">
+          <ng-container matColumnDef="name">
+            <th *matHeaderCellDef mat-header-cell>Site</th>
+            <td *matCellDef="let site" mat-cell>
+              <div class="flex min-w-64 flex-col py-2">
+                @if (editingSite(site)) {
+                  <div class="flex items-center gap-1">
+                    <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+                      <input
+                        matInput
+                        [disabled]="replacingSite(site)"
+                        [(ngModel)]="editingSiteNames[site.id]"
+                        (keydown.enter)="saveSiteName(site)"
+                        (keydown.escape)="cancelEditSiteName(site)"
+                      />
+                    </mat-form-field>
+                    <button
+                      aria-label="Save site name"
+                      mat-icon-button
+                      matTooltip="Save"
+                      type="button"
+                      [disabled]="replacingSite(site)"
+                      (click)="saveSiteName(site)"
+                    >
+                      <mat-icon>save</mat-icon>
+                    </button>
+                    <button
+                      aria-label="Cancel site name edit"
+                      mat-icon-button
+                      matTooltip="Cancel"
+                      type="button"
+                      [disabled]="replacingSite(site)"
+                      (click)="cancelEditSiteName(site)"
+                    >
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                } @else {
+                  <div class="flex items-center gap-1">
+                    <span class="font-medium">{{ site.name }}</span>
+                  </div>
+                }
+                <span class="text-xs text-gray-600">{{ site.originalFilename }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="rootDir">
+            <th *matHeaderCellDef mat-header-cell>Root directory</th>
+            <td *matCellDef="let site" mat-cell>
+              <div class="pr-5">
+                <mat-select
+                  class="min-w-52"
+                  [value]="site.rootDir"
+                  (selectionChange)="updateSiteRootDir(site, $event.value)"
+                >
+                  @for (rootDir of site.rootDirOptions; track rootDir) {
+                    <mat-option [value]="rootDir">{{ rootDir || '/' }}</mat-option>
+                  }
+                </mat-select>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="isMain">
+            <th
+              *matHeaderCellDef
+              mat-header-cell
+              matTooltip="Default site when students navigate to Unit Content"
+              matTooltipShowDelay="500"
+            >
+              Default Unit Content
+            </th>
+            <td *matCellDef="let site" mat-cell>
+              @if (site.isMain) {
+                <mat-icon aria-label="Default unit content" matTooltip="Default unit content">
+                  check
+                </mat-icon>
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="contentActions">
+            <th *matHeaderCellDef mat-header-cell></th>
+            <td *matCellDef="let site" mat-cell>
+              <div class="flex justify-end gap-1">
+                <input
+                  #replaceSiteUpload
+                  accept=".zip,application/zip,application/x-zip-compressed,application/octet-stream"
+                  class="hidden"
+                  type="file"
+                  (change)="replaceSite(site, $event)"
+                />
+                <button
+                  aria-label="Replace site content"
+                  mat-icon-button
+                  matTooltip="Replace ZIP"
+                  type="button"
+                  [disabled]="replacingSite(site)"
+                  (click)="confirmReplaceSite(site, replaceSiteUpload)"
+                >
+                  <mat-icon>upload_file</mat-icon>
+                </button>
+                <button
+                  aria-label="Preview site"
+                  mat-icon-button
+                  matTooltip="Preview Site"
+                  type="button"
+                  [disabled]="replacingSite(site)"
+                  (click)="previewSite(site)"
+                >
+                  <mat-icon>open_in_new</mat-icon>
+                </button>
+                <button
+                  aria-label="More site actions"
+                  mat-icon-button
+                  matTooltip="More Actions"
+                  type="button"
+                  [disabled]="replacingSite(site)"
+                  [matMenuTriggerFor]="siteActionsMenu"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #siteActionsMenu="matMenu" xPosition="before">
+                  @if (site.isMain) {
+                    <button mat-menu-item (click)="clearMainSite()">
+                      <mat-icon>radio_button_unchecked</mat-icon>
+                      <span>Remove default unit content</span>
+                    </button>
+                  } @else {
+                    <button mat-menu-item (click)="updateMainSite(site)">
+                      <mat-icon>check_circle</mat-icon>
+                      <span>Make default unit content</span>
+                    </button>
+                  }
+                  <button mat-menu-item (click)="editSiteName(site)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit name</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteSite(site)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete site</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr *matHeaderRowDef="siteDisplayedColumns" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: siteDisplayedColumns" mat-row></tr>
+        </table>
+      } @else {
+        <p class="text-gray-600">No content sites have been uploaded yet.</p>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  @for (section of routeSections; track section.id) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ section.title }}</mat-card-title>
+        <mat-card-subtitle>{{ section.subtitle }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <table class="w-full" mat-table [dataSource]="section.rows">
+          <ng-container matColumnDef="context">
+            <th *matHeaderCellDef mat-header-cell>Content link</th>
+            <td *matCellDef="let row" mat-cell>
+              <div class="flex flex-col">
+                <span>{{ row.label }}</span>
+                <span class="text-xs text-gray-600">{{ row.description }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="site">
+            <th *matHeaderCellDef mat-header-cell>Site</th>
+            <td *matCellDef="let row" mat-cell>
+              <mat-select
+                class="min-w-52"
+                placeholder="No site"
+                [ngModel]="row.unitContentSiteId"
+                (ngModelChange)="updateRowSite(row, $event)"
+              >
+                <mat-option [value]="null">No site</mat-option>
+                @for (site of sites; track site.id) {
+                  <mat-option [value]="site.id">{{ site.name }}</mat-option>
+                }
+              </mat-select>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="route">
+            <th *matHeaderCellDef mat-header-cell>{{ section.valueLabel }}</th>
+            <td *matCellDef="let row" mat-cell>
+              @if (row.unitContentSiteId) {
+                @if (row.valueKind === 'file') {
+                  <mat-form-field
+                    appearance="outline"
+                    class="w-full py-2"
+                    subscriptSizing="dynamic"
+                  >
+                    <mat-select placeholder="Select a file" [(ngModel)]="row.route">
+                      @for (path of filePathsForRow(row); track path) {
+                        <mat-option [value]="path">{{ path }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (!resourcePathIsValid(row)) {
+                      <mat-hint class="text-red-600"
+                        >Select a file from this content site.</mat-hint
+                      >
+                    }
+                  </mat-form-field>
+                } @else {
+                  <mat-form-field
+                    appearance="outline"
+                    class="w-full py-2"
+                    subscriptSizing="dynamic"
+                  >
+                    <input matInput [placeholder]="row.defaultRoute" [(ngModel)]="row.route" />
+                  </mat-form-field>
+                }
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="preview">
+            <th *matHeaderCellDef mat-header-cell></th>
+            <td *matCellDef="let row" mat-cell>
+              @if (row.valueKind === 'route') {
+                <button
+                  aria-label="Preview content route"
+                  mat-icon-button
+                  type="button"
+                  [disabled]="!routeCanBePreviewed(row)"
+                  [ngClass]="{
+                    'opacity-40': !routeCanBePreviewed(row),
+                  }"
+                  (click)="previewRoute(row)"
+                >
+                  <mat-icon>open_in_new</mat-icon>
+                </button>
+              }
+            </td>
+          </ng-container>
+
+          <tr *matHeaderRowDef="routeDisplayedColumns" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: routeDisplayedColumns" mat-row></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <div class="sticky bottom-0 z-10 flex justify-end bg-white py-3">
+    <button
+      color="primary"
+      mat-flat-button
+      type="button"
+      [disabled]="saving || hasInvalidResourcePaths || !hasUnsavedRouteChanges"
+      (click)="saveContentRoutes()"
+    >
+      Save Content Links
+    </button>
+  </div>
+</div>

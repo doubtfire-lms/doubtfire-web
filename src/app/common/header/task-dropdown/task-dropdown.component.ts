@@ -33,6 +33,7 @@ export class TaskDropdownComponent {
     'Task Inbox': 'Inbox',
     'Task Lists': 'Tasks',
     'Tutorial List': 'Tutorials',
+    'Unit Content': 'Content',
     'Unit Administration': 'Admin',
     'Unit Analytics': 'Analytics',
   };

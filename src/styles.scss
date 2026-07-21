@@ -97,3 +97,7 @@ body.split-pane-resizing embed,
 body.split-pane-resizing pdf-viewer {
   pointer-events: none !important;
 }
+
+.mat-badge-accent .mat-badge-content {
+  color: white;
+}

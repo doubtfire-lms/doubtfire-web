@@ -1,14 +1,17 @@
 <div class="flex size-full flex-col overflow-hidden">
   @if (task) {
-    <div class="z-10 flex w-full shrink-0 items-center gap-1">
+    <div class="z-10 flex w-full min-w-0 shrink-0 items-center gap-1">
       <mat-tab-group
-        class="w-full"
+        class="inbox-dashboard-tabs min-w-0 flex-1"
         dynamicHeight
         [selectedIndex]="currentIndex"
         (selectedTabChange)="onTabChange($event)"
       >
         <mat-tab label="Submission"></mat-tab>
-        <mat-tab label="Task Sheet" [disabled]="!task.definition.hasTaskSheet"></mat-tab>
+        <mat-tab
+          label="Task Sheet"
+          [disabled]="!task.definition.hasTaskSheet && !task.definition.hasContentLink"
+        ></mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <span class="inline-flex items-center gap-1">
@@ -80,7 +83,15 @@
         }
         @case (InboxDashboardTab.taskSheet) {
           <div class="h-full">
-            @if (task.definition.hasTaskSheet) {
+            @if (task.definition.hasContentLink) {
+              <f-unit-content-viewer
+                class="block size-full"
+                [contentRoute]="task.definition.contentLink.route"
+                [contentSiteId]="task.definition.contentLink.unitContentSiteId"
+                [task]="task"
+                [unit]="task.project.unit"
+              ></f-unit-content-viewer>
+            } @else if (task.definition.hasTaskSheet) {
               <f-pdf-viewer [pdfUrl]="task.definition.getTaskPDFUrl()"></f-pdf-viewer>
             } @else {
               <div class="flex h-full flex-col items-center justify-center">

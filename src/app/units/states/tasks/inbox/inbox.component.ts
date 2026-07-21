@@ -84,11 +84,11 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   get isMobileView(): boolean {
-    return this.mediaObserver.isActive('lt-md');
+    return this.mediaObserver.isActive('xs');
   }
 
   get commentsPanelCollapsed(): boolean {
-    return this.isCommentsNarrow && this.commentsCollapsed;
+    return this.commentsCollapsed;
   }
 
   constructor(
@@ -168,7 +168,10 @@ export class InboxComponent implements OnInit, OnDestroy {
           keys: 'control.shift.d',
           description: 'Mark selected task as discuss',
         })
-        .subscribe(() => this.selectedTask.selectedTask?.updateTaskStatus('discuss'));
+        .subscribe(() => {
+          const task = this.selectedTask.selectedTask;
+          task?.updateTaskStatus(task.status === 'discuss' ? 'rediscuss' : 'discuss');
+        });
     }
 
     this.dragMoveAudited$ = this.dragMove$.pipe(

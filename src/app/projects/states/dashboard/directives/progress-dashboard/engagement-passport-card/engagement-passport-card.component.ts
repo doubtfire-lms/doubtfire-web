@@ -73,8 +73,8 @@ export class EngagementPassportCardComponent implements OnChanges {
       icon: 'mail',
       classes: 'border-violet-300 bg-violet-50 text-violet-700',
     },
-    attention: {
-      label: 'Needs attention',
+    opportunity: {
+      label: 'Opportunity',
       icon: 'feedback',
       classes: 'border-yellow-300 bg-yellow-50 text-yellow-700',
     },
