@@ -58,6 +58,10 @@ export class TaskService extends CachedEntityService<Task> {
         keys: 'targetDueDate',
         toEntityFn: MappingFunctions.mapDateToEndOfDay,
       },
+      {
+        keys: 'discussTimeoutExpiryDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+      },
       'extensions',
       'scormExtensions',
       {
