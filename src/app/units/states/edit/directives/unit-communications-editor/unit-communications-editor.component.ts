@@ -73,9 +73,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   loading = false;
   setPreviewLoading = false;
   readonly previewStudentColumns = [
-    'preferred_name',
-    'first_name',
-    'last_name',
     'full_name',
     'username',
     'student_id',
