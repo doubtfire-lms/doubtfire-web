@@ -73,9 +73,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   loading = false;
   setPreviewLoading = false;
   readonly previewStudentColumns = [
-    'preferred_name',
-    'first_name',
-    'last_name',
     'full_name',
     'username',
     'student_id',
@@ -83,6 +80,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     'target_grade',
     'spec_con_days',
     'last_sign_in_at',
+    'last_viewed_at',
   ];
 
   readonly logicalOperators = ['and', 'or'];
@@ -95,6 +93,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     'TaskDefinitionStatusCondition',
     'TaskStatusCountCondition',
     'LoginStatusCondition',
+    'UnitViewedStatusCondition',
     'SpecConCondition',
     'TutorialEnrolmentCondition',
     'TutorialStreamEnrolmentCondition',
@@ -105,6 +104,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     TaskDefinitionStatusCondition: 'Task Status',
     TaskStatusCountCondition: 'Task Status Count',
     LoginStatusCondition: 'Login Status',
+    UnitViewedStatusCondition: 'Unit Viewed Status',
     SpecConCondition: 'Special Consideration Days',
     TutorialEnrolmentCondition: 'Tutorial Enrolment',
     TutorialStreamEnrolmentCondition: 'Tutorial Stream Enrolment',
@@ -131,7 +131,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     'not_equal_to',
   ];
   readonly equalityOperators = ['equal_to', 'not_equal_to'];
-  readonly dateOperators = ['before', 'after'];
+  readonly activityOperators = ['more_than', 'within_last'];
   readonly enrolmentOperators = ['enrolled_in', 'not_enrolled_in'];
   readonly operatorLabels: Record<string, string> = {
     greater_than: 'Greater Than',
@@ -140,8 +140,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     less_than_or_equal_to: 'Less Than Or Equal To',
     equal_to: 'Equal To',
     not_equal_to: 'Not Equal To',
-    before: 'Before',
-    after: 'After',
+    more_than: 'More Than',
+    within_last: 'Within Last',
     enrolled_in: 'Enrolled In',
     not_enrolled_in: 'Not Enrolled In',
   };
@@ -738,7 +738,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       case 'TaskDefinitionStatusCondition':
         return this.equalityOperators;
       case 'LoginStatusCondition':
-        return this.dateOperators;
+      case 'UnitViewedStatusCondition':
+        return this.activityOperators;
       default:
         return this.enrolmentOperators;
     }
@@ -811,6 +812,26 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   taskStatusesLabel(taskStatuses: string[] = []): string {
     return taskStatuses.map((status) => this.taskStatusLabel(status)).join(', ');
+  }
+
+  activityConditionSummary(condition: CommunicationCondition): string {
+    if (!condition.activity_days) {
+      return 'This condition must be recreated with a relative day threshold.';
+    }
+
+    const activity =
+      condition.type === 'UnitViewedStatusCondition' ? 'viewed this unit' : 'signed in';
+    const duration = `${condition.activity_days} ${condition.activity_days === 1 ? 'day' : 'days'}`;
+
+    return condition.operator === 'more_than'
+      ? `Students who have not ${activity} for more than ${duration}`
+      : `Students who ${activity} within the last ${duration}`;
+  }
+
+  neverActivityLabel(conditionType: string | undefined): string {
+    return conditionType === 'UnitViewedStatusCondition'
+      ? 'Includes students who have never viewed this unit.'
+      : 'Includes students who have never signed in.';
   }
 
   staffAudienceLabel(action: Partial<CommunicationAction>): string {
@@ -901,6 +922,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
     if (current.type === 'SpecConCondition') {
       this.newConditions[rule.id].spec_con_days = 0;
+    }
+
+    if (current.type === 'LoginStatusCondition' || current.type === 'UnitViewedStatusCondition') {
+      this.newConditions[rule.id].activity_days = 7;
     }
   }
 
@@ -1217,6 +1242,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       task_status_count: 'Task Status Count',
       task_target_grade: 'Task Target Grade',
       last_sign_in_at: 'Last Sign In',
+      activity_days: 'Activity Days',
       spec_con_days: 'Special Consideration Days',
       tutorial_id: 'Tutorial',
       tutorial_stream_id: 'Tutorial Stream',
