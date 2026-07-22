@@ -295,7 +295,18 @@
                             <th *matHeaderCellDef mat-header-cell>Last Sign In</th>
                             <td *matCellDef="let student" mat-cell>
                               {{
-                                student.last_sign_in_at ? dateLabel(student.last_sign_in_at) : '-'
+                                student.last_sign_in_at
+                                  ? dateLabel(student.last_sign_in_at)
+                                  : 'Never'
+                              }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="last_viewed_at">
+                            <th *matHeaderCellDef mat-header-cell>Last Unit View</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{
+                                student.last_viewed_at ? dateLabel(student.last_viewed_at) : 'Never'
                               }}
                             </td>
                           </ng-container>
