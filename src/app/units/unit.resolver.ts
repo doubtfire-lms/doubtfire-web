@@ -65,10 +65,13 @@ export const resolveUnit: ResolveFn<Unit> = (route, state) => {
   }).pipe(first());
 };
 
-// Task routes can activate their outer shell while their component fetches detailed data.
+// Inbox-style task routes can activate their outer shell while their component fetches detailed
+// data. The task list routes use the resolved unit directly, so they must wait for the full unit.
 function shouldResolveUnitProgressively(url: string, unitId: number): boolean {
   const pathname = url.split('?')[0];
-  return new RegExp(`^/units/${unitId}/tasks(?:/|$)`).test(pathname);
+  return new RegExp(`^/units/${unitId}/tasks/(?:inbox|definition|moderation|overflow)(?:/|$)`).test(
+    pathname,
+  );
 }
 
 function routeEntity(unit: Unit, unitRole?: UnitRole): Unit | UnitRole {
