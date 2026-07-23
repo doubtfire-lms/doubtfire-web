@@ -44,6 +44,7 @@ export class CommunicationCondition extends Entity {
   tutorial_id?: number;
   tutorial_stream_id?: number;
   campus_id?: number;
+  submitted_portfolio?: boolean;
 
   constructor(json?: Partial<CommunicationCondition>) {
     super();
@@ -61,6 +62,7 @@ export interface CommunicationRulePreviewStudent {
   campus?: string;
   target_grade?: number;
   spec_con_days?: number;
+  has_portfolio?: boolean;
   last_sign_in_at?: string;
   last_viewed_at?: string;
 }

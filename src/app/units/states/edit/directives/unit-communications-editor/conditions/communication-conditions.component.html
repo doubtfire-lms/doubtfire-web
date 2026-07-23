@@ -44,19 +44,21 @@
               </mat-form-field>
             }
 
-            <mat-form-field appearance="outline" class="min-w-[300px]">
-              <mat-label>Operator</mat-label>
-              <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
-                @for (
-                  operator of editor.operatorsFor(editor.conditionFor(rule).type);
-                  track operator
-                ) {
-                  <mat-option [value]="operator">
-                    {{ editor.operatorLabel(operator) }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+            @if (editor.conditionFor(rule).type !== 'PortfolioSubmittedCondition') {
+              <mat-form-field appearance="outline" class="min-w-[300px]">
+                <mat-label>Operator</mat-label>
+                <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
+                  @for (
+                    operator of editor.operatorsFor(editor.conditionFor(rule).type);
+                    track operator
+                  ) {
+                    <mat-option [value]="operator">
+                      {{ editor.operatorLabel(operator) }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
 
             @if (editor.conditionFor(rule).type === 'TaskStatusCountCondition') {
               <mat-form-field appearance="outline" class="w-32">
@@ -199,6 +201,14 @@
                   </mat-select>
                 </mat-form-field>
               }
+              @case ('PortfolioSubmittedCondition') {
+                <mat-slide-toggle
+                  class="mt-3 mb-[22px]"
+                  [(ngModel)]="editor.conditionFor(rule).submitted_portfolio"
+                >
+                  Has submitted portfolio
+                </mat-slide-toggle>
+              }
             }
 
             <button
@@ -304,6 +314,16 @@
                       {{ editor.campusLabel(condition.campus_id) }}
                     </span>
                   }
+                  @case ('PortfolioSubmittedCondition') {
+                    Students who
+                    <strong class="mx-1 font-semibold text-black/90">
+                      {{
+                        condition.submitted_portfolio
+                          ? 'have submitted a portfolio'
+                          : 'have not submitted a portfolio'
+                      }}
+                    </strong>
+                  }
                   @default {
                     {{ editor.operatorLabel(condition.operator) }}
                     {{ editor.labelFor(condition) }}
@@ -354,16 +374,18 @@
         </mat-form-field>
       }
 
-      <mat-form-field appearance="outline" class="min-w-[300px]">
-        <mat-label>Operator</mat-label>
-        <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
-          @for (operator of editor.operatorsFor(editor.conditionFor(rule).type); track operator) {
-            <mat-option [value]="operator">
-              {{ editor.operatorLabel(operator) }}
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+      @if (editor.conditionFor(rule).type !== 'PortfolioSubmittedCondition') {
+        <mat-form-field appearance="outline" class="min-w-[300px]">
+          <mat-label>Operator</mat-label>
+          <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
+            @for (operator of editor.operatorsFor(editor.conditionFor(rule).type); track operator) {
+              <mat-option [value]="operator">
+                {{ editor.operatorLabel(operator) }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
 
       @if (editor.conditionFor(rule).type === 'TaskStatusCountCondition') {
         <mat-form-field appearance="outline" class="w-32">
@@ -507,6 +529,15 @@
               }
             </mat-select>
           </mat-form-field>
+        }
+
+        @case ('PortfolioSubmittedCondition') {
+          <mat-slide-toggle
+            class="mb-[22px]"
+            [(ngModel)]="editor.conditionFor(rule).submitted_portfolio"
+          >
+            Has submitted portfolio
+          </mat-slide-toggle>
         }
       }
 
