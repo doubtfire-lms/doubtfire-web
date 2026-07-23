@@ -246,7 +246,7 @@
     </ng-container>
 
     <ng-container matColumnDef="stats" sticky>
-      <th *matHeaderCellDef mat-header-cell>Stats</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Stats</th>
       <td *matCellDef="let project" mat-cell>
         <div class="flex h-[25px] w-[400px] overflow-hidden rounded">
           @for (bar of project.taskStats; track bar) {
@@ -280,7 +280,7 @@
     </ng-container>
 
     <ng-container matColumnDef="actions" sticky>
-      <th *matHeaderCellDef mat-header-cell mat-sort-header>View</th>
+      <th *matHeaderCellDef mat-header-cell>View</th>
       <td *matCellDef="let project" mat-cell>
         <button mat-icon-button (click)="openProject($event, project)">
           <mat-icon>launch</mat-icon>

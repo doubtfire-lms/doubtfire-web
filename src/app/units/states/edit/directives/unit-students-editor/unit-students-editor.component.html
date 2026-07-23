@@ -104,7 +104,7 @@
 
     <!-- Tutorial Column -->
     <ng-container matColumnDef="tutorial">
-      <th *matHeaderCellDef mat-header-cell>Tutorial</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Tutorial</th>
       <td *matCellDef="let project" class="pt-2.5" mat-cell>
         <student-tutorial-select [student]="project" [unit]="unit"></student-tutorial-select>
       </td>
@@ -124,7 +124,7 @@
 
     <!-- Goto Column -->
     <ng-container matColumnDef="goto">
-      <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+      <th *matHeaderCellDef mat-header-cell></th>
       <td *matCellDef="let project" mat-cell>
         <div class="flex flex-row">
           <button mat-icon-button (click)="updateSpecCon(project)">

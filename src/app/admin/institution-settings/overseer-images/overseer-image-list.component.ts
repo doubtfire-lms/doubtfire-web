@@ -142,7 +142,29 @@ export class OverseerImageListComponent
       case 'name':
       case 'tag':
         return super.sortTableData(sort);
+      case 'last-pulled':
+        this.dataSource.data = [...this.dataSource.data].sort((a, b) =>
+          this.sortCompare(
+            this.sortDateValue(a.lastPulledDate),
+            this.sortDateValue(b.lastPulledDate),
+            sort.direction === 'asc',
+          ),
+        );
+        return;
+      case 'status':
+        this.dataSource.data = [...this.dataSource.data].sort((a, b) =>
+          this.sortCompare(a.pulledImageStatus, b.pulledImageStatus, sort.direction === 'asc'),
+        );
+        return;
     }
+  }
+
+  private sortDateValue(value: string): number {
+    if (!value) {
+      return 0;
+    }
+    const time = new Date(value).getTime();
+    return Number.isFinite(time) ? time : 0;
   }
 
   public showDialog(image: OverseerImage) {

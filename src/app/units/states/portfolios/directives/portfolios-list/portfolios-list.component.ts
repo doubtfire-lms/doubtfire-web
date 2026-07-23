@@ -249,6 +249,9 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
   }
 
   private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+    if (aValue === bValue) {
+      return 0;
+    }
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
@@ -265,7 +268,7 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
     if (!sort.active || sort.direction === '') {
       return;
     }
-    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       switch (sort.active) {
         case 'student':
           return this.sortCompare(
@@ -297,10 +300,12 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
           );
         case 'has-portfolio':
           return this.sortCompare(
-            a.hasPortfolio.toString(),
-            b.hasPortfolio.toString(),
+            Number(a.hasPortfolio),
+            Number(b.hasPortfolio),
             sort.direction === 'asc',
           );
+        case 'stats':
+          return this.sortCompare(a.orderScale ?? 0, b.orderScale ?? 0, sort.direction === 'asc');
         case 'grade':
           return this.sortCompare(a.grade, b.grade, sort.direction === 'asc');
         default:

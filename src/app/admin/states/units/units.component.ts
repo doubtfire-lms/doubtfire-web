@@ -197,6 +197,9 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
   }
 
   private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+    if (aValue === bValue) {
+      return 0;
+    }
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
@@ -204,7 +207,7 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
     if (!sort.active || sort.direction === '') {
       return;
     }
-    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       switch (sort.active) {
         case 'unit_code':
           return this.sortCompare(a.unit_code, b.unit_code, sort.direction === 'asc');
