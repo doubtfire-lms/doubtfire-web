@@ -26,11 +26,11 @@ describe('TaskDueCardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('updates the discussion deadline when the unit expiry threshold changes', () => {
+  it('updates when the API-provided discussion deadline changes', () => {
     const year = new Date().getFullYear();
     component.task = {
       status: 'discuss',
-      movedToDiscussAt: new Date(year, 6, 1),
+      discussTimeoutExpiryAt: new Date(year, 6, 8),
       unit: {
         discussTimeoutEnabled: true,
         discussTimeoutExpireDays: 7,
@@ -39,7 +39,7 @@ describe('TaskDueCardComponent', () => {
 
     expect(component.discussTimeoutExpiryDate).toBe('8th July');
 
-    component.task.unit.discussTimeoutExpireDays = 14;
+    component.task.discussTimeoutExpiryAt = new Date(year, 6, 15);
 
     expect(component.discussTimeoutExpiryDate).toBe('15th July');
   });

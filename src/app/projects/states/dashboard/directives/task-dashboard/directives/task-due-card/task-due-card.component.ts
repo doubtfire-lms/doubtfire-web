@@ -19,20 +19,13 @@ export class TaskDueCardComponent {
   }
 
   public get discussTimeoutExpiryDate(): string | null {
-    const movedToDiscussAt = this.task?.movedToDiscussAt;
+    const expiryAt = this.task?.discussTimeoutExpiryAt;
     const timeoutEnabled = this.task?.unit?.discussTimeoutEnabled;
-    const expireDays = this.task?.unit?.discussTimeoutExpireDays;
-    if (
-      this.task?.status !== 'discuss' ||
-      !timeoutEnabled ||
-      !movedToDiscussAt ||
-      expireDays == null
-    ) {
+    if (this.task?.status !== 'discuss' || !timeoutEnabled || !expiryAt) {
       return null;
     }
 
-    const expiryDate = new Date(movedToDiscussAt);
-    expiryDate.setDate(expiryDate.getDate() + expireDays);
+    const expiryDate = new Date(expiryAt);
 
     const day = expiryDate.getDate();
     const suffix = day >= 11 && day <= 13 ? 'th' : (['th', 'st', 'nd', 'rd'][day % 10] ?? 'th');

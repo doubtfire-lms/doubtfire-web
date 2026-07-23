@@ -62,6 +62,10 @@ export class TaskService extends CachedEntityService<Task> {
         keys: 'movedToDiscussAt',
         toEntityFn: MappingFunctions.mapDate,
       },
+      {
+        keys: 'discussTimeoutExpiryAt',
+        toEntityFn: MappingFunctions.mapDate,
+      },
       'extensions',
       'scormExtensions',
       {
