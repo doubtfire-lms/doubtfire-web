@@ -1,8 +1,9 @@
-import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
+import {of} from 'rxjs';
 import {
   AuthenticationService,
   ProjectService,
@@ -52,6 +53,10 @@ describe('TutorDiscussionComponent', () => {
     component = fixture.componentInstance;
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -92,5 +97,38 @@ describe('TutorDiscussionComponent', () => {
     statusUpdateSucceeded();
 
     expect(task.markAsDiscussed).toHaveBeenCalledOnce();
+  });
+
+  it('requests attendance recording after a QR scan', () => {
+    vi.useFakeTimers();
+    const getStudentTasks = vi
+      .spyOn(component, 'getStudentTasks')
+      .mockImplementation(() => undefined);
+
+    (component as unknown as {changeProject: () => void}).changeProject();
+    vi.runAllTimers();
+
+    expect(getStudentTasks).toHaveBeenCalledWith(true);
+  });
+
+  it('passes attendance recording to the project fetch', async () => {
+    const project = {id: 42};
+    const unit = {studentCache: {}};
+    const projectService = TestBed.inject(ProjectService) as unknown as {
+      loadProject: ReturnType<typeof vi.fn>;
+    };
+    projectService.loadProject = vi.fn().mockReturnValue(of(project));
+
+    await (
+      component as unknown as {
+        getProject: (
+          requestedUnit: typeof unit,
+          projectId: number,
+          recordAttendance: boolean,
+        ) => Promise<typeof project>;
+      }
+    ).getProject(unit, project.id, true);
+
+    expect(projectService.loadProject).toHaveBeenCalledWith(project.id, unit, true, true);
   });
 });

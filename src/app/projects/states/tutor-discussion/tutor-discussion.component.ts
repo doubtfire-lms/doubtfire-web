@@ -227,7 +227,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     this.loadingStudentData = true;
     setTimeout(() => {
       try {
-        this.getStudentTasks();
+        this.getStudentTasks(true);
       } catch (_e) {
         this.alertService.error(`Invalid QR code`, 2000);
         this.loadingStudentData = false;
@@ -570,14 +570,20 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private getProject(unit: Unit, projectId: number): Promise<Project> {
+  private getProject(
+    unit: Unit,
+    projectId: number,
+    recordAttendance: boolean = false,
+  ): Promise<Project> {
     return new Promise((resolve, reject) => {
-      this.projectService.loadProject(projectId, unit, true).subscribe((project) => {
-        if (!project) {
-          reject('No project found');
-        }
-        resolve(project);
-      });
+      this.projectService
+        .loadProject(projectId, unit, true, recordAttendance)
+        .subscribe((project) => {
+          if (!project) {
+            reject('No project found');
+          }
+          resolve(project);
+        });
     });
   }
 
@@ -627,7 +633,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     this.filteredTasks = [...discussionTasks];
   }
 
-  public getStudentTasks(): void {
+  public getStudentTasks(recordAttendance: boolean = false): void {
     console.time('getStudentTasks()');
     // this.project = null;
     // this.filteredTasks = [];
@@ -639,7 +645,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
         return this.loadStudents(this.unit);
       })
       .then((student) => {
-        return this.getProject(this.unit, student.id);
+        return this.getProject(this.unit, student.id, recordAttendance);
       })
       .then((project) => {
         const discussionTasks = this.filteredDiscussionTasks(project.tasks);
