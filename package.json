@@ -82,7 +82,7 @@
     "@angular-eslint/template-parser": "^22.0.0",
     "@angular/build": "^22.0.4",
     "@angular/cli": "^22.0.4",
-    "@angular/compiler-cli": "^22.0.3",
+    "@angular/compiler-cli": "^22.0.8",
     "@angular/language-service": "^22.0.3",
     "@commitlint/cli": "^21.1.0",
     "@commitlint/config-conventional": "^21.1.0",
