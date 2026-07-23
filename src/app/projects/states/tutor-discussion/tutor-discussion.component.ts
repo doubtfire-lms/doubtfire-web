@@ -461,11 +461,13 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       }
 
       if (task.definition.assessInPortfolioOnly) {
-        task.updateTaskStatus(status === 'complete' ? 'working_on_it' : status, true);
+        task.updateTaskStatus(status === 'complete' ? 'working_on_it' : status, false, false, () =>
+          task.markAsDiscussed(),
+        );
       } else if (status === 'fix_and_resubmit') {
-        task.updateTaskStatus(status, true, moveDependentTasks);
+        task.updateTaskStatus(status, false, moveDependentTasks, () => task.markAsDiscussed());
       } else {
-        task.updateTaskStatus(status, true);
+        task.updateTaskStatus(status, false, false, () => task.markAsDiscussed());
       }
     }
   }

@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it} from 'vitest';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
@@ -54,5 +54,43 @@ describe('TutorDiscussionComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('marks a task as discussed only after its status update succeeds', async () => {
+    let statusUpdateSucceeded: () => void = () => {
+      throw new Error('Status update callback was not registered');
+    };
+    const task = {
+      definition: {assessInPortfolioOnly: false},
+      canMarkComplete: true,
+      updateTaskStatus: vi.fn(
+        (
+          _status: string,
+          _markAsDiscussed: boolean,
+          _moveDependentTasks: boolean,
+          onSuccess: () => void,
+        ) => {
+          statusUpdateSucceeded = onSuccess;
+        },
+      ),
+      markAsDiscussed: vi.fn(),
+    };
+    component.tasksList = {
+      selectedOptions: {selected: [{value: task}]},
+    } as unknown as typeof component.tasksList;
+
+    await component.setSelectedTasksStatus('complete');
+
+    expect(task.updateTaskStatus).toHaveBeenCalledWith(
+      'complete',
+      false,
+      false,
+      expect.any(Function),
+    );
+    expect(task.markAsDiscussed).not.toHaveBeenCalled();
+
+    statusUpdateSucceeded();
+
+    expect(task.markAsDiscussed).toHaveBeenCalledOnce();
   });
 });

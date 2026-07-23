@@ -994,6 +994,7 @@ export class Task extends Entity {
     status: TaskStatusEnum,
     markAsDiscussed?: boolean,
     triggerRecursiveFix?: boolean,
+    onSuccess?: () => void,
   ) {
     const oldStatus = this.status;
     const oldGrade = this.grade;
@@ -1045,6 +1046,7 @@ export class Task extends Entity {
             }
             this.processTaskStatusChange(status, alerts);
             taskService.notifyStatusChange(this);
+            onSuccess?.();
           },
           error: (error) => {
             this.status = oldStatus;
