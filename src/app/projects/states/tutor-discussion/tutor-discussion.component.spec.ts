@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {of} from 'rxjs';
 import {
   AuthenticationService,
+  EngagementService,
   ProjectService,
   TaskCommentService,
   TaskService,
@@ -32,6 +33,7 @@ describe('TutorDiscussionComponent', () => {
         {provide: AuthenticationService, useValue: emptyProvider},
         {provide: UserService, useValue: emptyProvider},
         {provide: ProjectService, useValue: emptyProvider},
+        {provide: EngagementService, useValue: emptyProvider},
         {provide: GradeService, useValue: emptyProvider},
         {provide: Router, useValue: emptyProvider},
         {provide: ActivatedRoute, useValue: emptyProvider},
@@ -66,16 +68,20 @@ describe('TutorDiscussionComponent', () => {
       throw new Error('Status update callback was not registered');
     };
     const task = {
-      definition: {assessInPortfolioOnly: false},
+      definition: {id: 7, assessInPortfolioOnly: false},
+      status: 'ready_for_feedback',
       canMarkComplete: true,
       updateTaskStatus: vi.fn(
         (
-          _status: string,
+          status: string,
           _markAsDiscussed: boolean,
           _moveDependentTasks: boolean,
           onSuccess: () => void,
         ) => {
-          statusUpdateSucceeded = onSuccess;
+          statusUpdateSucceeded = () => {
+            task.status = status;
+            onSuccess();
+          };
         },
       ),
       markAsDiscussed: vi.fn(),
@@ -83,6 +89,9 @@ describe('TutorDiscussionComponent', () => {
     component.tasksList = {
       selectedOptions: {selected: [{value: task}]},
     } as unknown as typeof component.tasksList;
+    const recordClassDiscussion = vi
+      .spyOn(component, 'recordClassDiscussion')
+      .mockImplementation(() => undefined);
 
     await component.setSelectedTasksStatus('complete');
 
@@ -97,6 +106,16 @@ describe('TutorDiscussionComponent', () => {
     statusUpdateSucceeded();
 
     expect(task.markAsDiscussed).toHaveBeenCalledOnce();
+    expect(recordClassDiscussion).toHaveBeenCalledWith(
+      [
+        {
+          taskDefinitionId: 7,
+          fromStatus: 'ready_for_feedback',
+          toStatus: 'complete',
+        },
+      ],
+      false,
+    );
   });
 
   it('requests attendance recording after a QR scan', () => {
@@ -130,5 +149,18 @@ describe('TutorDiscussionComponent', () => {
     ).getProject(unit, project.id, true);
 
     expect(projectService.loadProject).toHaveBeenCalledWith(project.id, unit, true, true);
+  });
+
+  it('records a class discussion without task status updates', () => {
+    const project = {id: 42};
+    const engagementService = TestBed.inject(EngagementService) as unknown as {
+      recordClassDiscussion: ReturnType<typeof vi.fn>;
+    };
+    engagementService.recordClassDiscussion = vi.fn().mockReturnValue(of(true));
+    component.project = project as typeof component.project;
+
+    component.recordClassDiscussion([], false);
+
+    expect(engagementService.recordClassDiscussion).toHaveBeenCalledWith(project, []);
   });
 });

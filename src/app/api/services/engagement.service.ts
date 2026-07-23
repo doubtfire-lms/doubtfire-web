@@ -23,9 +23,17 @@ export interface EngagementUpdate extends Partial<EngagementData> {
   removeEvidence?: boolean;
 }
 
+export interface DiscussionTaskStatusUpdate {
+  taskDefinitionId: number;
+  fromStatus: string;
+  toStatus: string;
+}
+
 @Injectable()
 export class EngagementService extends CachedEntityService<Engagement> {
   protected readonly endpointFormat = 'projects/:projectId:/engagements/:id:';
+  private readonly classDiscussionEndpointFormat =
+    'projects/:projectId:/engagements/class_discussion';
 
   constructor(
     httpClient: HttpClient,
@@ -118,6 +126,25 @@ export class EngagementService extends CachedEntityService<Engagement> {
         cache: project.engagementCache,
         constructorParams: project,
         body: this.toFormData(data),
+      },
+    );
+  }
+
+  recordClassDiscussion(
+    project: Project,
+    taskStatusUpdates: DiscussionTaskStatusUpdate[] = [],
+  ): Observable<boolean> {
+    return this.post<boolean>(
+      {projectId: project.id},
+      {
+        endpointFormat: this.classDiscussionEndpointFormat,
+        body: {
+          task_status_updates: taskStatusUpdates.map((update) => ({
+            task_definition_id: update.taskDefinitionId,
+            from_status: update.fromStatus,
+            to_status: update.toStatus,
+          })),
+        },
       },
     );
   }
