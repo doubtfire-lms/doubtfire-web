@@ -1,16 +1,9 @@
 <div [class]="contentShellClass">
   <iframe
-    #primaryContentIframe
+    #contentIframe
+    class="absolute inset-0 size-full border-0 bg-white"
     src="about:blank"
     title="Unit content"
-    [class]="contentIframeClass(0)"
-    (load)="onIframeLoad(0)"
-  ></iframe>
-  <iframe
-    #secondaryContentIframe
-    src="about:blank"
-    title="Unit content"
-    [class]="contentIframeClass(1)"
-    (load)="onIframeLoad(1)"
+    (load)="onIframeLoad()"
   ></iframe>
 </div>

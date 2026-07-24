@@ -29,7 +29,6 @@ export const resolveUnitCodeContent: CanActivateFn = (
 
       return router.createUrlTree(['/units', unit.id, 'content'], {
         fragment: route.fragment,
-        queryParams: route.queryParams,
       });
     }),
   );
