@@ -1,5 +1,4 @@
-import JSZip from 'jszip';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpParams} from '@angular/common/http';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -14,7 +13,7 @@ import {
 } from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Subscription, combineLatest, firstValueFrom} from 'rxjs';
+import {Subscription, combineLatest} from 'rxjs';
 import {Project, Task, Unit} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import API_URL from 'src/app/config/constants/apiUrl';
@@ -75,7 +74,6 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   private routeSubscription?: Subscription;
 
   constructor(
-    private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
     private globalState: GlobalStateService,
@@ -100,7 +98,10 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     }
 
     const unit = this.route.parent?.snapshot.data.unit as Unit | undefined;
-    this.setContentRouteFromQuery(this.route.snapshot.queryParamMap.get('q'));
+    this.setContentRouteFromLocation(
+      this.route.snapshot.paramMap.get('contentRoute'),
+      this.route.snapshot.queryParamMap.get('q'),
+    );
     this.setContentFragment(this.route.snapshot.fragment);
 
     if (unit) {
@@ -113,22 +114,21 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     }
 
     this.routeSubscription = combineLatest([
+      this.route.paramMap,
       this.route.queryParamMap,
       this.route.fragment,
-    ]).subscribe(([queryParamMap, fragment]) => {
-      const routeChanged = this.setContentRouteFromQuery(queryParamMap.get('q'));
+    ]).subscribe(([paramMap, queryParamMap, fragment]) => {
+      const routeChanged = this.setContentRouteFromLocation(
+        paramMap.get('contentRoute'),
+        queryParamMap.get('q'),
+      );
       const fragmentChanged = this.setContentFragment(fragment);
 
       if (unit && this.redirectFromUnavailableDefaultContent(unit)) {
         return;
       }
 
-      if ((routeChanged || fragmentChanged) && this.contentArchive) {
-        void this.loadCurrentArchiveRoute(this.contentFragment);
-        return;
-      }
-
-      if (routeChanged && this.currentUnitId) {
+      if ((routeChanged || fragmentChanged) && this.currentUnitId) {
         void this.fetchContentArchive(this.currentUnitId, this.contentFragment);
       }
     });
@@ -224,10 +224,9 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
       return;
     }
 
-    const archiveRoute = this.contentArchive?.routeFromHref(
-      link.getAttribute('href'),
-      this.contentRoute,
-    );
+    const archiveRoute =
+      this.contentArchive?.routeFromHref(link.getAttribute('href'), this.contentRoute) ??
+      this.routeFromHref(link.getAttribute('href'));
 
     if (!archiveRoute || !this.currentUnitId) {
       return;
@@ -241,9 +240,8 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
       return;
     }
 
-    void this.router.navigate(['/units', this.currentUnitId, 'content'], {
+    void this.router.navigate(this.contentRouteCommands(archiveRoute.path), {
       fragment: archiveRoute.fragment,
-      queryParams: this.contentRouteQueryParams(archiveRoute.path),
     });
   }
 
@@ -299,63 +297,54 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private async fetchContentArchive(unitId: number, fragment?: string): Promise<void> {
-    const loadId = ++this.archiveLoadSequence;
     const contentRoute = this.contentRoute;
 
+    ++this.archiveLoadSequence;
     this.isLoadingArchive = true;
     this.archiveError = undefined;
     this.currentUnitId = unitId;
 
-    try {
-      const archive = await firstValueFrom(
-        this.http.get(`${API_URL}/units/${unitId}/content`, {
-          observe: 'response',
-          params: this.contentArchiveParams(contentRoute),
-          responseType: 'blob',
-        }),
-      );
-      const archiveBlob = archive.body;
+    const params = this.contentArchiveParams(contentRoute);
+    const iframeUrl = `${API_URL}/units/${unitId}/content2?${params.toString()}`;
 
-      if (!archiveBlob) {
-        throw new Error('Unit content archive response was empty.');
-      }
-
-      const archiveRootDir = this.normalizedArchivePath(
-        archive.headers.get('X-Content-Root-Dir') ?? '',
-      );
-      const zip = await JSZip.loadAsync(archiveBlob);
-      const nextArchive = new UnitContentArchive(zip, archiveRootDir);
-      const result = await nextArchive.loadRoute(contentRoute, fragment);
-
-      if (loadId !== this.archiveLoadSequence) {
-        nextArchive.dispose();
-        return;
-      }
-
-      this.stageContentArchive(nextArchive);
-      this.loadIframeUrl(result.iframeUrl, result.fragment);
-    } catch {
-      if (loadId === this.archiveLoadSequence) {
-        this.archiveError = 'Could not load the unit content route from the archive.';
-      }
-    } finally {
-      if (loadId === this.archiveLoadSequence) {
-        this.isLoadingArchive = false;
-      }
-    }
+    this.loadIframeUrl(iframeUrl, fragment);
+    this.isLoadingArchive = false;
   }
 
   private async loadCurrentArchiveRoute(fragment?: string): Promise<void> {
-    if (!this.contentArchive) {
+    if (!this.currentUnitId) {
       return;
     }
 
-    try {
-      const result = await this.contentArchive.loadRoute(this.contentRoute, fragment);
-      this.loadIframeUrl(result.iframeUrl, result.fragment);
-    } catch {
-      this.archiveError = 'Could not load the unit content route from the archive.';
+    await this.fetchContentArchive(this.currentUnitId, fragment);
+  }
+
+  private routeFromHref(
+    href: string | null,
+  ): {path: string; fragment?: string} | undefined {
+    if (!href || href.startsWith('#')) {
+      return undefined;
     }
+
+    let url: URL;
+
+    try {
+      const baseRoute = this.contentRoute.endsWith('/')
+        ? this.contentRoute
+        : `${this.contentRoute}/`;
+      url = new URL(href, `https://archive.local${baseRoute}`);
+    } catch {
+      return undefined;
+    }
+
+    if (url.hostname !== 'archive.local') {
+      return undefined;
+    }
+
+    return {
+      path: url.pathname === '/' ? '/' : url.pathname.replace(/\/+$/g, ''),
+      fragment: url.hash ? url.hash.slice(1) : undefined,
+    };
   }
 
   private stageContentArchive(archive: UnitContentArchive): void {
@@ -483,8 +472,8 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     this.iframeClickCleanups = [];
   }
 
-  private setContentRouteFromQuery(path: string | null): boolean {
-    return this.setContentRouteFromPath(path ?? '/');
+  private setContentRouteFromLocation(path: string | null, legacyQueryPath: string | null): boolean {
+    return this.setContentRouteFromPath(this.decodedContentRoute(path ?? legacyQueryPath ?? '/'));
   }
 
   private setContentFragment(fragment: string | null): boolean {
@@ -496,10 +485,12 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     return fragmentChanged;
   }
 
-  private contentRouteQueryParams(path: string): {q?: string} {
-    const route = this.normalizedRouteFromPath(path);
+  private contentRouteCommands(path: string): Array<string | number> {
+    const routeParts = this.normalizedArchivePath(this.decodedContentRoute(path))
+      .split('/')
+      .filter(Boolean);
 
-    return route === '/' ? {} : {q: route};
+    return ['/units', this.currentUnitId!, 'content', ...routeParts];
   }
 
   private setContentRouteFromPath(path: string): boolean {
@@ -519,5 +510,13 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
 
   private normalizedArchivePath(path: string): string {
     return path.replace(/^\/+|\/+$/g, '');
+  }
+
+  private decodedContentRoute(path: string): string {
+    try {
+      return decodeURIComponent(path);
+    } catch {
+      return path;
+    }
   }
 }
