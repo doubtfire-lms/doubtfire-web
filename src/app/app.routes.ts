@@ -53,6 +53,19 @@ function unitContentRouteMatcher(segments: UrlSegment[]): UrlMatchResult | null 
   };
 }
 
+function unitCodeContentRouteMatcher(segments: UrlSegment[]): UrlMatchResult | null {
+  if (segments.length < 2 || segments[1].path !== 'content') {
+    return null;
+  }
+
+  return {
+    consumed: segments,
+    posParams: {
+      unitCode: segments[0],
+    },
+  };
+}
+
 export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
   {path: 'home', component: HomeComponent},
@@ -123,7 +136,7 @@ export const routes: Routes = [
     data: {attendance: true, task: 'Check-in'},
   },
   {
-    path: ':unitCode/content',
+    matcher: unitCodeContentRouteMatcher,
     component: UnitContentViewerComponent,
     canActivate: [resolveUnitCodeContent],
   },
