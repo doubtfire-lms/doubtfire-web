@@ -151,7 +151,7 @@ export class UnitContentViewerComponent implements OnInit, OnDestroy {
   }
 
   private handleIframeClick(event: MouseEvent): void {
-    const target = event.target instanceof Element ? event.target : null;
+    const target = event.target as Element | null;
 
     if (this.handleOnTrackAction(event, target)) {
       return;
