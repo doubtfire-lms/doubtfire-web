@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-52](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-51...v11.0.0-52) (2026-07-24)
+
+
+### Features
+
+* invert toggle to show tasks beyond target grade ([6b19089](https://github.com/b0ink/doubtfire-deploy/commit/6b19089dc32c82f74f3bfeaa8e54c8228cf393d5))
+
 ## [11.0.0-51](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-50...v11.0.0-51) (2026-07-24)
 
 ## [11.0.0-50](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-49...v11.0.0-50) (2026-07-24)
