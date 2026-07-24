@@ -284,6 +284,15 @@
                             </td>
                           </ng-container>
 
+                          <ng-container matColumnDef="has_portfolio">
+                            <th *matHeaderCellDef mat-header-cell>Portfolio</th>
+                            <td *matCellDef="let student" mat-cell>
+                              @if (student.has_portfolio) {
+                                <mat-icon aria-label="Portfolio available">check</mat-icon>
+                              }
+                            </td>
+                          </ng-container>
+
                           <ng-container matColumnDef="spec_con_days">
                             <th *matHeaderCellDef mat-header-cell>Spec Con Days</th>
                             <td *matCellDef="let student" mat-cell>
