@@ -7,7 +7,6 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   SimpleChanges,
   ViewChild,
   computed,
@@ -47,7 +46,7 @@ import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
+export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() context?: TaskDefinition | Unit;
 
   @ViewChild('outcomeTable', {static: false}) outcomeTable: MatTable<LearningOutcome>;
@@ -111,16 +110,15 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
     return sortedLeft.every((id, index) => id === sortedRight[index]);
   }
 
-  ngOnInit(): void {
-    this.subscribeToLearningOutcomes();
-  }
-
   ngAfterViewInit(): void {
     this.outcomeSource.paginator = this.outcomePaginator;
     this.outcomeSource.sort = this.outcomeSort;
   }
 
   private subscribeToLearningOutcomes(): void {
+    this.unsubscribeFromLearningOutcomes();
+    this.outcomeSource.data = [];
+    this.allOutcomes = [];
     this.setAbbreviationPrefix();
 
     if (!this.context) {
@@ -155,13 +153,21 @@ export class LearningOutcomeEditorComponent implements OnChanges, OnInit, AfterV
     }
   }
 
-  ngOnChanges(_changes: SimpleChanges): void {
-    this.setAbbreviationPrefix();
-    this.selectedOutcome = null;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.context) {
+      this.selectedOutcome = null;
+      this.selectedConnectedOutcomes.set([]);
+      this.subscribeToLearningOutcomes();
+    }
   }
 
   ngOnDestroy(): void {
+    this.unsubscribeFromLearningOutcomes();
+  }
+
+  private unsubscribeFromLearningOutcomes(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
+    this.subscriptions = [];
   }
 
   setAbbreviationPrefix(): void {

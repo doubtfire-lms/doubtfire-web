@@ -71,15 +71,15 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public animateBackground: boolean = false;
   public showDatesColumn: boolean = false;
-  public hideTasksAboveTargetGrade: boolean = false;
+  public showTasksBeyondTargetGrade: boolean = false;
   public overlayLines: boolean = false;
 
   public get unit() {
     return this.project?.unit;
   }
 
-  private get hideTasksAboveTargetGradeStorageKey(): string {
-    return `ontrack.taskPlanner.${this.project?.id ?? 'unknown'}.hideTasksAboveTargetGrade`;
+  private get showTasksBeyondTargetGradeStorageKey(): string {
+    return `ontrack.taskPlanner.${this.project?.id ?? 'unknown'}.showTasksBeyondTargetGrade`;
   }
 
   constructor(
@@ -172,9 +172,9 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.taskPlannerPrerequisitesModal.show(this.project, td, prereqs);
   }
 
-  setHideTasksAboveTargetGrade(value: boolean) {
-    this.hideTasksAboveTargetGrade = value;
-    localStorage.setItem(this.hideTasksAboveTargetGradeStorageKey, JSON.stringify(value));
+  setShowTasksBeyondTargetGrade(value: boolean) {
+    this.showTasksBeyondTargetGrade = value;
+    localStorage.setItem(this.showTasksBeyondTargetGradeStorageKey, JSON.stringify(value));
     this.refreshItems(false);
   }
 
@@ -570,7 +570,7 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadHideTasksAboveTargetGradePreference();
+    this.loadShowTasksBeyondTargetGradePreference();
 
     this.viewOptions = {
       precisionUnit: 'day',
@@ -613,12 +613,12 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private loadHideTasksAboveTargetGradePreference(): void {
-    const rawPreference = localStorage.getItem(this.hideTasksAboveTargetGradeStorageKey);
+  private loadShowTasksBeyondTargetGradePreference(): void {
+    const rawPreference = localStorage.getItem(this.showTasksBeyondTargetGradeStorageKey);
     try {
-      this.hideTasksAboveTargetGrade = rawPreference ? JSON.parse(rawPreference) === true : false;
+      this.showTasksBeyondTargetGrade = rawPreference ? JSON.parse(rawPreference) === true : false;
     } catch {
-      this.hideTasksAboveTargetGrade = false;
+      this.showTasksBeyondTargetGrade = false;
     }
   }
 
@@ -849,7 +849,7 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return this.project.unit.taskDefinitions
       .filter(
-        (taskDef) => !this.hideTasksAboveTargetGrade || taskDef.targetGrade <= this.targetGrade,
+        (taskDef) => this.showTasksBeyondTargetGrade || taskDef.targetGrade <= this.targetGrade,
       )
       .sort((a, b) => {
         const taskA = this.project.findTaskForDefinition(a.id);

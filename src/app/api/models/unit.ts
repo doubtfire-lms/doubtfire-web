@@ -89,6 +89,9 @@ export class Unit extends Entity {
 
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
+  discussTimeoutEnabled: boolean;
+  discussTimeoutWarningDays: number;
+  discussTimeoutExpireDays: number;
   gradeDefinitions: GradeDefinition[] = [
     {id: 'fail', value: -1, label: 'Fail', abbreviation: 'F'},
     {id: 'pass', value: 0, label: 'Pass', abbreviation: 'P'},

@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-53](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-52...v11.0.0-53) (2026-07-24)
+
+
+### Features
+
+* add ui for submitted portfolio communication condition ([39f10f9](https://github.com/b0ink/doubtfire-deploy/commit/39f10f91abbea730cf87c70ff9a6a2c7ac396052))
+
+
+### Bug Fixes
+
+* ensure content viewer updates when switching between task sheets ([68e9c9f](https://github.com/b0ink/doubtfire-deploy/commit/68e9c9f6f759546d87e602849a3fa67525114ae3))
+* normalise upload upload requirement file keys on save ([54954f2](https://github.com/b0ink/doubtfire-deploy/commit/54954f292a01d9bf93894207436260b59027ad55))
+
+## [11.0.0-52](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-51...v11.0.0-52) (2026-07-24)
+
+
+### Features
+
+* invert toggle to show tasks beyond target grade ([6b19089](https://github.com/b0ink/doubtfire-deploy/commit/6b19089dc32c82f74f3bfeaa8e54c8228cf393d5))
+
+## [11.0.0-51](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-50...v11.0.0-51) (2026-07-24)
+
+## [11.0.0-50](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-49...v11.0.0-50) (2026-07-24)
+
+
+### Features
+
+* add last sign in and last unit access communication conditions ([73295ff](https://github.com/b0ink/doubtfire-deploy/commit/73295ff02008475cc488f1b65b1db01f1f8c046b))
+* discuss timeout ([#1343](https://github.com/b0ink/doubtfire-deploy/issues/1343)) ([dc979fe](https://github.com/b0ink/doubtfire-deploy/commit/dc979fe6f48eede85b55382440e42477f6e6bd2b))
+
+
+### Bug Fixes
+
+* ensure learning outcomes update when switching between tasks ([0558d63](https://github.com/b0ink/doubtfire-deploy/commit/0558d630969d6a18cd771830126c3ff4c30efc06))
+* ensure unit is fetched in tasks list route ([afb492e](https://github.com/b0ink/doubtfire-deploy/commit/afb492eee80bdbfe9ef808154d915809408a3c8e))
+* prevent discussed in class comment unless status update was success ([4b99371](https://github.com/b0ink/doubtfire-deploy/commit/4b9937167e0d06ed36937c29ada4c42f95a254ea))
+* redirect to correct host ([4f30251](https://github.com/b0ink/doubtfire-deploy/commit/4f30251c1f232d672c9087e0f3e374d5a0157b8b))
+* render content link if available in unit task list route ([04d56ab](https://github.com/b0ink/doubtfire-deploy/commit/04d56abecddd541016c508710e5e584253bfd1b9))
+
 ## [11.0.0-49](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-48...v11.0.0-49) (2026-07-21)
 
 

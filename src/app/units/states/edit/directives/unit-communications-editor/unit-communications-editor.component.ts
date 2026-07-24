@@ -78,6 +78,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     'student_id',
     'campus',
     'target_grade',
+    'has_portfolio',
     'spec_con_days',
     'last_sign_in_at',
     'last_viewed_at',
@@ -98,6 +99,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     'TutorialEnrolmentCondition',
     'TutorialStreamEnrolmentCondition',
     'CampusCondition',
+    'PortfolioSubmittedCondition',
   ];
   readonly conditionTypeLabels: Record<string, string> = {
     TargetGradeCondition: 'Target Grade',
@@ -109,6 +111,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     TutorialEnrolmentCondition: 'Tutorial Enrolment',
     TutorialStreamEnrolmentCondition: 'Tutorial Stream Enrolment',
     CampusCondition: 'Campus',
+    PortfolioSubmittedCondition: 'Submitted Portfolio',
   };
   readonly actionTypes = [
     'EmailStudentAction',
@@ -736,6 +739,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       case 'SpecConCondition':
         return this.gradeOperators;
       case 'TaskDefinitionStatusCondition':
+      case 'PortfolioSubmittedCondition':
         return this.equalityOperators;
       case 'LoginStatusCondition':
       case 'UnitViewedStatusCondition':
@@ -926,6 +930,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
     if (current.type === 'LoginStatusCondition' || current.type === 'UnitViewedStatusCondition') {
       this.newConditions[rule.id].activity_days = 7;
+    }
+
+    if (current.type === 'PortfolioSubmittedCondition') {
+      this.newConditions[rule.id].submitted_portfolio = true;
     }
   }
 

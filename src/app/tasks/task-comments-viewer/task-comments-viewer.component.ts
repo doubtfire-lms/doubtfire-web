@@ -271,7 +271,9 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
       commentType === 'scorm' ||
       commentType === 'scorm_extension' ||
       commentType === 'discussed_in_class' ||
-      commentType === 'checked_in'
+      commentType === 'checked_in' ||
+      commentType === 'discuss_timeout_warning' ||
+      commentType === 'discuss_timeout_expired'
     );
   }
 

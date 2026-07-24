@@ -1,25 +1,29 @@
-import JSZip from 'jszip';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpParams} from '@angular/common/http';
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Inject,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Optional,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription, combineLatest, firstValueFrom} from 'rxjs';
-import {Project, Task, Unit} from 'src/app/api/models/doubtfire-model';
+import {
+  AuthenticationService,
+  Project,
+  Task,
+  Unit,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {GlobalStateService, ViewType} from '../index/global-state.service';
-import {UnitContentArchive} from './unit-content-archive';
 
 export interface UnitContentViewerDialogData {
   contentSiteId?: number;
@@ -30,21 +34,25 @@ export interface UnitContentViewerDialogData {
 @Component({
   selector: 'f-unit-content-viewer',
   templateUrl: './unit-content-viewer.component.html',
-  styleUrl: './unit-content-viewer.component.css',
-  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('primaryContentIframe') primaryContentIframe?: ElementRef<HTMLIFrameElement>;
-  @ViewChild('secondaryContentIframe') secondaryContentIframe?: ElementRef<HTMLIFrameElement>;
+export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy {
+  @ViewChild('primaryContentIframe')
+  private set primaryContentIframeRef(element: ElementRef<HTMLIFrameElement> | undefined) {
+    this.contentIframes[0] = element?.nativeElement;
+    this.applyPendingIframeUrl();
+  }
+
+  @ViewChild('secondaryContentIframe')
+  private set secondaryContentIframeRef(element: ElementRef<HTMLIFrameElement> | undefined) {
+    this.contentIframes[1] = element?.nativeElement;
+    this.applyPendingIframeUrl();
+  }
 
   @Input() public contentRoute = '/';
   @Input() public contentSiteId?: number;
   @Input() public task?: Task;
   @Input() public unit?: Unit;
-
-  public isLoadingArchive = false;
-  public archiveError?: string;
 
   public get contentShellClass(): string {
     return this.dialogData
@@ -53,117 +61,108 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public contentIframeClass(frameIndex: number): string {
-    const base = 'absolute inset-0 h-full w-full border-0 bg-white';
+    const base = 'absolute inset-0 size-full border-0 bg-white';
 
     return frameIndex === this.activeIframeIndex
       ? `${base} visible opacity-100`
       : `${base} invisible opacity-0`;
   }
 
-  private contentArchive?: UnitContentArchive;
-  private currentUnitId?: number;
-  private contentFragment?: string;
   private activeIframeIndex = 0;
-  private iframeClickCleanups: Array<(() => void) | undefined> = [];
-  private iframeReady = false;
+  private contentIframes: Array<HTMLIFrameElement | undefined> = [];
+  private currentUnitId?: number;
+  private contentRequestId = 0;
   private iframeUrls: Array<string | undefined> = [];
   private loadingIframeIndex?: number;
-  private pendingContentArchive?: UnitContentArchive;
   private pendingIframeUrl?: string;
-  private archiveLoadSequence = 0;
-  private retiredContentArchives: UnitContentArchive[] = [];
   private routeSubscription?: Subscription;
+  private initialized = false;
 
   constructor(
-    private http: HttpClient,
+    private authService: AuthenticationService,
     private route: ActivatedRoute,
     private router: Router,
     private globalState: GlobalStateService,
     private fileDownloader: FileDownloaderService,
+    private userService: UserService,
     @Optional() @Inject(MAT_DIALOG_DATA) private dialogData?: UnitContentViewerDialogData,
   ) {}
 
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (
+      !this.initialized ||
+      !this.unit ||
+      !('contentRoute' in changes || 'contentSiteId' in changes || 'unit' in changes)
+    ) {
+      return;
+    }
+
+    this.configureInputContent();
+  }
+
   public ngOnInit(): void {
+    this.initialized = true;
+
     if (this.unit) {
-      this.dialogData = {
-        contentRoute: this.contentRoute,
-        contentSiteId: this.contentSiteId,
-        unit: this.unit,
-      };
+      this.configureInputContent();
+      return;
     }
 
     if (this.dialogData) {
-      this.setContentRouteFromPath(this.dialogData.contentRoute);
+      this.setContentRoute(this.dialogData.contentRoute);
       this.setHeaderContext(this.dialogData.unit);
-      void this.fetchContentArchive(this.dialogData.unit.id);
+      void this.loadContentRoute(this.dialogData.unit.id);
       return;
     }
 
     const unit = this.route.parent?.snapshot.data.unit as Unit | undefined;
-    this.setContentRouteFromQuery(this.route.snapshot.queryParamMap.get('q'));
-    this.setContentFragment(this.route.snapshot.fragment);
 
-    if (unit) {
-      if (this.redirectFromUnavailableDefaultContent(unit)) {
-        return;
-      }
-
-      this.setHeaderContext(unit);
-      void this.fetchContentArchive(unit.id);
+    if (!unit) {
+      return;
     }
 
-    this.routeSubscription = combineLatest([
-      this.route.queryParamMap,
-      this.route.fragment,
-    ]).subscribe(([queryParamMap, fragment]) => {
-      const routeChanged = this.setContentRouteFromQuery(queryParamMap.get('q'));
-      const fragmentChanged = this.setContentFragment(fragment);
+    this.setHeaderContext(unit);
+    this.routeSubscription = combineLatest([this.route.paramMap, this.route.fragment]).subscribe(
+      ([paramMap, fragment]) => {
+        this.setContentRoute(paramMap.get('contentRoute') ?? '/');
 
-      if (unit && this.redirectFromUnavailableDefaultContent(unit)) {
-        return;
-      }
+        if (this.redirectFromUnavailableDefaultContent(unit)) {
+          return;
+        }
 
-      if ((routeChanged || fragmentChanged) && this.contentArchive) {
-        void this.loadCurrentArchiveRoute(this.contentFragment);
-        return;
-      }
-
-      if (routeChanged && this.currentUnitId) {
-        void this.fetchContentArchive(this.currentUnitId, this.contentFragment);
-      }
-    });
+        void this.loadContentRoute(unit.id, fragment ?? undefined);
+      },
+    );
   }
 
-  public ngAfterViewInit(): void {
-    this.iframeReady = true;
-    this.applyPendingIframeUrl();
+  private configureInputContent(): void {
+    this.dialogData = {
+      contentRoute: this.contentRoute,
+      contentSiteId: this.contentSiteId,
+      unit: this.unit!,
+    };
+    this.setContentRoute(this.dialogData.contentRoute);
+    this.setHeaderContext(this.dialogData.unit);
+    void this.loadContentRoute(this.dialogData.unit.id);
   }
 
   public ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
-    this.clearIframeClickHandlers();
-    this.pendingContentArchive?.dispose();
-    this.contentArchive?.dispose();
-    this.disposeRetiredContentArchives();
   }
 
   public onIframeLoad(frameIndex: number): void {
-    if (!this.isExpectedIframeLoad(frameIndex)) {
+    if (frameIndex !== this.loadingIframeIndex || !this.isExpectedIframeLoad(frameIndex)) {
       return;
     }
 
-    if (frameIndex === this.loadingIframeIndex) {
-      this.activeIframeIndex = frameIndex;
-      this.loadingIframeIndex = undefined;
+    this.activeIframeIndex = frameIndex;
+    this.loadingIframeIndex = undefined;
 
-      this.activatePendingContentArchive();
-      this.disposeRetiredContentArchives();
-    }
-
-    if (frameIndex === this.activeIframeIndex) {
-      this.clearIframeClickHandlers();
-      this.attachIframeClickHandler(frameIndex);
-    }
+    this.contentIframes[frameIndex]?.contentDocument?.addEventListener(
+      'click',
+      (event) => this.handleIframeClick(event),
+      true,
+    );
   }
 
   private setHeaderContext(unit: Unit): void {
@@ -200,23 +199,15 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private handleIframeClick(event: MouseEvent): void {
-    const target = event.target as {closest?: (selector: string) => HTMLElement | null};
+    const target = event.target as Element | null;
 
     if (this.handleOnTrackAction(event, target)) {
       return;
     }
 
-    const link = (target?.closest?.('a[href]') as HTMLAnchorElement | null) ?? null;
+    const link = target?.closest<HTMLAnchorElement>('a[href]');
 
     if (!link) {
-      return;
-    }
-
-    const downloadFilename = link.getAttribute('download')?.trim();
-
-    if (link.href.startsWith('blob:') && downloadFilename) {
-      event.preventDefault();
-      this.fileDownloader.downloadBlobToFile(link.href, downloadFilename);
       return;
     }
 
@@ -224,54 +215,52 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
       return;
     }
 
-    const archiveRoute = this.contentArchive?.routeFromHref(
-      link.getAttribute('href'),
-      this.contentRoute,
-    );
+    const route = this.routeFromHref(link.getAttribute('href'));
 
-    if (!archiveRoute || !this.currentUnitId) {
+    if (!route || !this.currentUnitId) {
       return;
     }
 
     event.preventDefault();
 
-    if (this.dialogData) {
-      this.setContentRouteFromPath(archiveRoute.path);
-      void this.loadCurrentArchiveRoute(archiveRoute.fragment);
+    if (/\.docx$/i.test(route.path)) {
+      void this.downloadContentDocument(route.path);
       return;
     }
 
-    void this.router.navigate(['/units', this.currentUnitId, 'content'], {
-      fragment: archiveRoute.fragment,
-      queryParams: this.contentRouteQueryParams(archiveRoute.path),
+    if (this.dialogData) {
+      this.setContentRoute(route.path);
+      void this.loadContentRoute(this.currentUnitId, route.fragment);
+      return;
+    }
+
+    void this.router.navigate(this.contentRouteCommands(route.path), {
+      fragment: route.fragment,
     });
   }
 
-  private handleOnTrackAction(
-    event: MouseEvent,
-    target: {closest?: (selector: string) => HTMLElement | null},
-  ): boolean {
-    const actionElement = target?.closest?.('[data-ontrack-action]') ?? null;
-    const action = actionElement?.getAttribute('data-ontrack-action');
+  private handleOnTrackAction(event: MouseEvent, target: Element | null): boolean {
+    const actionElement = target?.closest<HTMLElement>('[data-ontrack-action]');
+    const action = actionElement?.dataset.ontrackAction;
 
     if (!event.isTrusted || !actionElement || !action) {
       return false;
     }
 
-    const taskAbbreviation = actionElement.getAttribute('data-ontrack-task')?.trim();
+    const taskAbbreviation = actionElement.dataset.ontrackTask?.trim();
     const task = taskAbbreviation ? this.taskForContentAction(taskAbbreviation) : undefined;
 
     if (action === 'download-task-resources') {
-      if (task?.definition.hasTaskResources) {
-        event.preventDefault();
-        this.fileDownloader.downloadFile(
-          task.definition.getTaskResourcesUrl(true),
-          `${task.definition.abbreviation}-resources.zip`,
-        );
-        return true;
+      if (!task?.definition.hasTaskResources) {
+        return false;
       }
 
-      return false;
+      event.preventDefault();
+      this.fileDownloader.downloadFile(
+        task.definition.getTaskResourcesUrl(true),
+        `${task.definition.abbreviation}-resources.zip`,
+      );
+      return true;
     }
 
     if (action !== 'move-to-working-on-it' || !task || task.unit.myRole !== 'Student') {
@@ -298,113 +287,52 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     );
   }
 
-  private async fetchContentArchive(unitId: number, fragment?: string): Promise<void> {
-    const loadId = ++this.archiveLoadSequence;
+  private async loadContentRoute(unitId: number, fragment?: string): Promise<void> {
+    const requestId = ++this.contentRequestId;
     const contentRoute = this.contentRoute;
 
-    this.isLoadingArchive = true;
-    this.archiveError = undefined;
     this.currentUnitId = unitId;
 
     try {
-      const archive = await firstValueFrom(
-        this.http.get(`${API_URL}/units/${unitId}/content`, {
-          observe: 'response',
-          params: this.contentArchiveParams(contentRoute),
-          responseType: 'blob',
-        }),
-      );
-      const archiveBlob = archive.body;
+      const url = await this.contentUrl(unitId, contentRoute);
 
-      if (!archiveBlob) {
-        throw new Error('Unit content archive response was empty.');
+      if (requestId === this.contentRequestId) {
+        this.setIframeUrl(url, fragment);
       }
-
-      const archiveRootDir = this.normalizedArchivePath(
-        archive.headers.get('X-Content-Root-Dir') ?? '',
-      );
-      const zip = await JSZip.loadAsync(archiveBlob);
-      const nextArchive = new UnitContentArchive(zip, archiveRootDir);
-      const result = await nextArchive.loadRoute(contentRoute, fragment);
-
-      if (loadId !== this.archiveLoadSequence) {
-        nextArchive.dispose();
-        return;
-      }
-
-      this.stageContentArchive(nextArchive);
-      this.loadIframeUrl(result.iframeUrl, result.fragment);
     } catch {
-      if (loadId === this.archiveLoadSequence) {
-        this.archiveError = 'Could not load the unit content route from the archive.';
-      }
-    } finally {
-      if (loadId === this.archiveLoadSequence) {
-        this.isLoadingArchive = false;
-      }
+      // Authentication errors are handled by the global HTTP interceptor.
     }
   }
 
-  private async loadCurrentArchiveRoute(fragment?: string): Promise<void> {
-    if (!this.contentArchive) {
+  private async downloadContentDocument(path: string): Promise<void> {
+    if (!this.currentUnitId) {
       return;
     }
 
     try {
-      const result = await this.contentArchive.loadRoute(this.contentRoute, fragment);
-      this.loadIframeUrl(result.iframeUrl, result.fragment);
+      const filename = this.decodeRoute(path).split('/').pop() ?? 'document.docx';
+
+      this.fileDownloader.downloadBlobToFile(
+        await this.contentUrl(this.currentUnitId, path),
+        filename,
+      );
     } catch {
-      this.archiveError = 'Could not load the unit content route from the archive.';
+      // Authentication errors are handled by the global HTTP interceptor.
     }
   }
 
-  private stageContentArchive(archive: UnitContentArchive): void {
-    if (this.pendingContentArchive) {
-      this.retiredContentArchives.push(this.pendingContentArchive);
-    }
+  private async contentUrl(unitId: number, contentRoute: string): Promise<string> {
+    const params = await this.contentRequestParams(contentRoute);
 
-    this.pendingContentArchive = archive;
+    return `${API_URL}/units/${unitId}/content?${params.toString()}`;
   }
 
-  private activatePendingContentArchive(): void {
-    if (!this.pendingContentArchive) {
-      return;
-    }
-
-    if (this.contentArchive) {
-      this.retiredContentArchives.push(this.contentArchive);
-    }
-
-    this.contentArchive = this.pendingContentArchive;
-    this.pendingContentArchive = undefined;
-  }
-
-  private disposeRetiredContentArchives(): void {
-    this.retiredContentArchives.forEach((archive) => archive.dispose());
-    this.retiredContentArchives = [];
-  }
-
-  private isExpectedIframeLoad(frameIndex: number): boolean {
-    if (this.loadingIframeIndex !== undefined && frameIndex !== this.loadingIframeIndex) {
-      return false;
-    }
-
-    const iframe = this.contentIframe(frameIndex);
-    const expectedUrl = this.iframeUrls[frameIndex];
-
-    if (!expectedUrl || !iframe?.contentWindow) {
-      return true;
-    }
-
-    try {
-      return iframe.contentWindow.location.href === expectedUrl;
-    } catch {
-      return true;
-    }
-  }
-
-  private contentArchiveParams(contentRoute: string): HttpParams {
-    let params = new HttpParams().set('content_route', contentRoute);
+  private async contentRequestParams(contentRoute: string): Promise<HttpParams> {
+    const contentToken = await firstValueFrom(this.authService.getContentToken());
+    let params = new HttpParams()
+      .set('content_route', contentRoute)
+      .set('username', this.userService.currentUser.username)
+      .set('content_token', contentToken);
 
     if (this.dialogData?.contentSiteId) {
       params = params.set('content_site_id', this.dialogData.contentSiteId);
@@ -413,7 +341,39 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     return params;
   }
 
-  private loadIframeUrl(url: string, fragment?: string): void {
+  private routeFromHref(href: string | null): {path: string; fragment?: string} | undefined {
+    if (!href || href.startsWith('#')) {
+      return undefined;
+    }
+
+    let url: URL;
+
+    try {
+      const baseRoute = this.contentRoute.endsWith('/')
+        ? this.contentRoute
+        : `${this.contentRoute}/`;
+      url = new URL(href, `https://archive.local${baseRoute}`);
+    } catch {
+      return undefined;
+    }
+
+    if (url.hostname !== 'archive.local') {
+      return undefined;
+    }
+
+    let pathEnd = url.pathname.length;
+
+    while (pathEnd > 1 && url.pathname[pathEnd - 1] === '/') {
+      pathEnd -= 1;
+    }
+
+    return {
+      path: url.pathname.slice(0, pathEnd),
+      fragment: url.hash ? url.hash.slice(1) : undefined,
+    };
+  }
+
+  private setIframeUrl(url: string, fragment?: string): void {
     const nextUrl = fragment ? `${url}#${fragment}` : url;
 
     if (this.iframeUrls[this.activeIframeIndex] === nextUrl) {
@@ -425,99 +385,68 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private applyPendingIframeUrl(): void {
-    if (!this.iframeReady || !this.pendingIframeUrl) {
+    if (!this.pendingIframeUrl) {
       return;
     }
 
-    const url = this.pendingIframeUrl;
-    const frameIndex = this.iframeUrls[this.activeIframeIndex]
-      ? this.inactiveIframeIndex()
-      : this.activeIframeIndex;
-    const iframe = this.contentIframe(frameIndex);
+    const frameIndex =
+      this.loadingIframeIndex ??
+      (this.iframeUrls[this.activeIframeIndex]
+        ? this.inactiveIframeIndex()
+        : this.activeIframeIndex);
+    const iframe = this.contentIframes[frameIndex];
 
     if (!iframe) {
       return;
     }
 
+    const url = this.pendingIframeUrl;
+
     this.pendingIframeUrl = undefined;
     this.loadingIframeIndex = frameIndex;
     this.iframeUrls[frameIndex] = url;
-
-    if (iframe.contentWindow) {
-      iframe.contentWindow.location.replace(url);
-      return;
-    }
-
     iframe.src = url;
   }
 
-  private contentIframe(frameIndex: number): HTMLIFrameElement | undefined {
-    return frameIndex === 0
-      ? this.primaryContentIframe?.nativeElement
-      : this.secondaryContentIframe?.nativeElement;
+  private isExpectedIframeLoad(frameIndex: number): boolean {
+    const iframe = this.contentIframes[frameIndex];
+    const expectedUrl = this.iframeUrls[frameIndex];
+
+    if (!iframe?.contentWindow || !expectedUrl) {
+      return false;
+    }
+
+    try {
+      return iframe.contentWindow.location.href === expectedUrl;
+    } catch {
+      return true;
+    }
   }
 
   private inactiveIframeIndex(): number {
     return this.activeIframeIndex === 0 ? 1 : 0;
   }
 
-  private attachIframeClickHandler(frameIndex: number): void {
-    this.iframeClickCleanups[frameIndex]?.();
-    this.iframeClickCleanups[frameIndex] = undefined;
-
-    const doc = this.contentIframe(frameIndex)?.contentDocument;
-
-    if (!doc) {
-      return;
-    }
-
-    const clickHandler = (event: MouseEvent) => this.handleIframeClick(event);
-
-    doc.addEventListener('click', clickHandler, true);
-    this.iframeClickCleanups[frameIndex] = () =>
-      doc.removeEventListener('click', clickHandler, true);
+  private setContentRoute(path: string): void {
+    const route = this.normalizedRoute(this.decodeRoute(path));
+    this.contentRoute = route ? `/${route}` : '/';
   }
 
-  private clearIframeClickHandlers(): void {
-    this.iframeClickCleanups.forEach((cleanup) => cleanup?.());
-    this.iframeClickCleanups = [];
+  private contentRouteCommands(path: string): Array<string | number> {
+    const routeParts = this.normalizedRoute(this.decodeRoute(path)).split('/').filter(Boolean);
+
+    return ['/units', this.currentUnitId!, 'content', ...routeParts];
   }
 
-  private setContentRouteFromQuery(path: string | null): boolean {
-    return this.setContentRouteFromPath(path ?? '/');
-  }
-
-  private setContentFragment(fragment: string | null): boolean {
-    const normalizedFragment = fragment ?? undefined;
-    const fragmentChanged = this.contentFragment !== normalizedFragment;
-
-    this.contentFragment = normalizedFragment;
-
-    return fragmentChanged;
-  }
-
-  private contentRouteQueryParams(path: string): {q?: string} {
-    const route = this.normalizedRouteFromPath(path);
-
-    return route === '/' ? {} : {q: route};
-  }
-
-  private setContentRouteFromPath(path: string): boolean {
-    const normalizedRoute = this.normalizedRouteFromPath(path);
-    const routeChanged = this.contentRoute !== normalizedRoute;
-
-    this.contentRoute = normalizedRoute;
-
-    return routeChanged;
-  }
-
-  private normalizedRouteFromPath(path: string): string {
-    const route = this.normalizedArchivePath(path);
-
-    return route ? `/${route}` : '/';
-  }
-
-  private normalizedArchivePath(path: string): string {
+  private normalizedRoute(path: string): string {
     return path.replace(/^\/+|\/+$/g, '');
+  }
+
+  private decodeRoute(path: string): string {
+    try {
+      return decodeURIComponent(path);
+    } catch {
+      return path;
+    }
   }
 }

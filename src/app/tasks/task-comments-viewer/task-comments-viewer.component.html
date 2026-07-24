@@ -149,6 +149,28 @@
                       </div>
                     }
 
+                    @case ('discuss_timeout_warning') {
+                      <div
+                        class="comment-discuss-timeout my-1 w-full"
+                        matTooltipPosition="above"
+                        matTooltipShowDelay="1000"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
+                      >
+                        <f-discuss-timeout-comment [comment]="comment"></f-discuss-timeout-comment>
+                      </div>
+                    }
+
+                    @case ('discuss_timeout_expired') {
+                      <div
+                        class="comment-discuss-timeout my-1 w-full"
+                        matTooltipPosition="above"
+                        matTooltipShowDelay="1000"
+                        [matTooltip]="comment.createdAt | localizedDateTime"
+                      >
+                        <f-discuss-timeout-comment [comment]="comment"></f-discuss-timeout-comment>
+                      </div>
+                    }
+
                     @case ('plan') {
                       <div
                         class="comment-status"
