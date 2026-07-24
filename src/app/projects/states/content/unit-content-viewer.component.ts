@@ -35,9 +35,15 @@ export interface UnitContentViewerDialogData {
   standalone: false,
 })
 export class UnitContentViewerComponent implements OnInit, OnDestroy {
-  @ViewChild('contentIframe')
-  private set contentIframeRef(element: ElementRef<HTMLIFrameElement> | undefined) {
-    this.contentIframe = element?.nativeElement;
+  @ViewChild('primaryContentIframe')
+  private set primaryContentIframeRef(element: ElementRef<HTMLIFrameElement> | undefined) {
+    this.contentIframes[0] = element?.nativeElement;
+    this.applyPendingIframeUrl();
+  }
+
+  @ViewChild('secondaryContentIframe')
+  private set secondaryContentIframeRef(element: ElementRef<HTMLIFrameElement> | undefined) {
+    this.contentIframes[1] = element?.nativeElement;
     this.applyPendingIframeUrl();
   }
 
@@ -52,8 +58,20 @@ export class UnitContentViewerComponent implements OnInit, OnDestroy {
       : 'relative flex min-h-[calc(100vh-64px)] flex-col bg-[#f7f8fa]';
   }
 
-  private contentIframe?: HTMLIFrameElement;
+  public contentIframeClass(frameIndex: number): string {
+    const base = 'absolute inset-0 size-full border-0 bg-white';
+
+    return frameIndex === this.activeIframeIndex
+      ? `${base} visible opacity-100`
+      : `${base} invisible opacity-0`;
+  }
+
+  private activeIframeIndex = 0;
+  private contentIframes: Array<HTMLIFrameElement | undefined> = [];
   private currentUnitId?: number;
+  private contentRequestId = 0;
+  private iframeUrls: Array<string | undefined> = [];
+  private loadingIframeIndex?: number;
   private pendingIframeUrl?: string;
   private routeSubscription?: Subscription;
 
@@ -107,14 +125,19 @@ export class UnitContentViewerComponent implements OnInit, OnDestroy {
     this.routeSubscription?.unsubscribe();
   }
 
-  public onIframeLoad(): void {
-    const document = this.contentIframe?.contentDocument;
-
-    if (!document) {
+  public onIframeLoad(frameIndex: number): void {
+    if (frameIndex !== this.loadingIframeIndex || !this.isExpectedIframeLoad(frameIndex)) {
       return;
     }
 
-    document.addEventListener('click', (event) => this.handleIframeClick(event), true);
+    this.activeIframeIndex = frameIndex;
+    this.loadingIframeIndex = undefined;
+
+    this.contentIframes[frameIndex]?.contentDocument?.addEventListener(
+      'click',
+      (event) => this.handleIframeClick(event),
+      true,
+    );
   }
 
   private setHeaderContext(unit: Unit): void {
@@ -240,10 +263,17 @@ export class UnitContentViewerComponent implements OnInit, OnDestroy {
   }
 
   private async loadContentRoute(unitId: number, fragment?: string): Promise<void> {
+    const requestId = ++this.contentRequestId;
+    const contentRoute = this.contentRoute;
+
     this.currentUnitId = unitId;
 
     try {
-      this.setIframeUrl(await this.contentUrl(unitId, this.contentRoute), fragment);
+      const url = await this.contentUrl(unitId, contentRoute);
+
+      if (requestId === this.contentRequestId) {
+        this.setIframeUrl(url, fragment);
+      }
     } catch {
       // Authentication errors are handled by the global HTTP interceptor.
     }
@@ -319,17 +349,57 @@ export class UnitContentViewerComponent implements OnInit, OnDestroy {
   }
 
   private setIframeUrl(url: string, fragment?: string): void {
-    this.pendingIframeUrl = fragment ? `${url}#${fragment}` : url;
+    const nextUrl = fragment ? `${url}#${fragment}` : url;
+
+    if (this.iframeUrls[this.activeIframeIndex] === nextUrl) {
+      return;
+    }
+
+    this.pendingIframeUrl = nextUrl;
     this.applyPendingIframeUrl();
   }
 
   private applyPendingIframeUrl(): void {
-    if (!this.contentIframe || !this.pendingIframeUrl) {
+    if (!this.pendingIframeUrl) {
       return;
     }
 
-    this.contentIframe.src = this.pendingIframeUrl;
+    const frameIndex =
+      this.loadingIframeIndex ??
+      (this.iframeUrls[this.activeIframeIndex]
+        ? this.inactiveIframeIndex()
+        : this.activeIframeIndex);
+    const iframe = this.contentIframes[frameIndex];
+
+    if (!iframe) {
+      return;
+    }
+
+    const url = this.pendingIframeUrl;
+
     this.pendingIframeUrl = undefined;
+    this.loadingIframeIndex = frameIndex;
+    this.iframeUrls[frameIndex] = url;
+    iframe.src = url;
+  }
+
+  private isExpectedIframeLoad(frameIndex: number): boolean {
+    const iframe = this.contentIframes[frameIndex];
+    const expectedUrl = this.iframeUrls[frameIndex];
+
+    if (!iframe?.contentWindow || !expectedUrl) {
+      return false;
+    }
+
+    try {
+      return iframe.contentWindow.location.href === expectedUrl;
+    } catch {
+      return true;
+    }
+  }
+
+  private inactiveIframeIndex(): number {
+    return this.activeIframeIndex === 0 ? 1 : 0;
   }
 
   private setContentRoute(path: string): void {
