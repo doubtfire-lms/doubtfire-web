@@ -13,12 +13,17 @@ import {
 } from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Subscription, combineLatest} from 'rxjs';
-import {Project, Task, Unit} from 'src/app/api/models/doubtfire-model';
+import {Subscription, combineLatest, firstValueFrom} from 'rxjs';
+import {
+  AuthenticationService,
+  Project,
+  Task,
+  Unit,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {GlobalStateService, ViewType} from '../index/global-state.service';
-import {UnitContentArchive} from './unit-content-archive';
 
 export interface UnitContentViewerDialogData {
   contentSiteId?: number;
@@ -59,7 +64,6 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
       : `${base} invisible opacity-0`;
   }
 
-  private contentArchive?: UnitContentArchive;
   private currentUnitId?: number;
   private contentFragment?: string;
   private activeIframeIndex = 0;
@@ -67,17 +71,17 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   private iframeReady = false;
   private iframeUrls: Array<string | undefined> = [];
   private loadingIframeIndex?: number;
-  private pendingContentArchive?: UnitContentArchive;
   private pendingIframeUrl?: string;
-  private archiveLoadSequence = 0;
-  private retiredContentArchives: UnitContentArchive[] = [];
+  private contentAuthToken?: Promise<string>;
   private routeSubscription?: Subscription;
 
   constructor(
+    private authService: AuthenticationService,
     private route: ActivatedRoute,
     private router: Router,
     private globalState: GlobalStateService,
     private fileDownloader: FileDownloaderService,
+    private userService: UserService,
     @Optional() @Inject(MAT_DIALOG_DATA) private dialogData?: UnitContentViewerDialogData,
   ) {}
 
@@ -142,9 +146,6 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   public ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
     this.clearIframeClickHandlers();
-    this.pendingContentArchive?.dispose();
-    this.contentArchive?.dispose();
-    this.disposeRetiredContentArchives();
   }
 
   public onIframeLoad(frameIndex: number): void {
@@ -155,9 +156,6 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     if (frameIndex === this.loadingIframeIndex) {
       this.activeIframeIndex = frameIndex;
       this.loadingIframeIndex = undefined;
-
-      this.activatePendingContentArchive();
-      this.disposeRetiredContentArchives();
     }
 
     if (frameIndex === this.activeIframeIndex) {
@@ -224,15 +222,18 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
       return;
     }
 
-    const archiveRoute =
-      this.contentArchive?.routeFromHref(link.getAttribute('href'), this.contentRoute) ??
-      this.routeFromHref(link.getAttribute('href'));
+    const archiveRoute = this.routeFromHref(link.getAttribute('href'));
 
     if (!archiveRoute || !this.currentUnitId) {
       return;
     }
 
     event.preventDefault();
+
+    if (/\.docx$/i.test(archiveRoute.path)) {
+      void this.downloadContentDocument(archiveRoute.path);
+      return;
+    }
 
     if (this.dialogData) {
       this.setContentRouteFromPath(archiveRoute.path);
@@ -243,6 +244,28 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     void this.router.navigate(this.contentRouteCommands(archiveRoute.path), {
       fragment: archiveRoute.fragment,
     });
+  }
+
+  private async downloadContentDocument(path: string): Promise<void> {
+    if (!this.currentUnitId) {
+      return;
+    }
+
+    try {
+      const authToken = await (this.contentAuthToken ??= firstValueFrom(
+        this.authService.getContentToken(),
+      ));
+      const params = this.contentArchiveParams(path)
+        .set('username', this.userService.currentUser.username)
+        .set('auth_token', authToken);
+      const downloadUrl = `${API_URL}/units/${this.currentUnitId}/content?${params.toString()}`;
+      const filename = this.decodedContentRoute(path).split('/').pop() ?? 'document.docx';
+
+      this.fileDownloader.downloadBlobToFile(downloadUrl, filename);
+    } catch {
+      this.contentAuthToken = undefined;
+      this.archiveError = 'Could not authenticate the document download.';
+    }
   }
 
   private handleOnTrackAction(
@@ -299,16 +322,26 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
   private async fetchContentArchive(unitId: number, fragment?: string): Promise<void> {
     const contentRoute = this.contentRoute;
 
-    ++this.archiveLoadSequence;
     this.isLoadingArchive = true;
     this.archiveError = undefined;
     this.currentUnitId = unitId;
 
-    const params = this.contentArchiveParams(contentRoute);
-    const iframeUrl = `${API_URL}/units/${unitId}/content2?${params.toString()}`;
+    try {
+      const authToken = await (this.contentAuthToken ??= firstValueFrom(
+        this.authService.getContentToken(),
+      ));
+      const params = this.contentArchiveParams(contentRoute)
+        .set('username', this.userService.currentUser.username)
+        .set('auth_token', authToken);
+      const iframeUrl = `${API_URL}/units/${unitId}/content?${params.toString()}`;
 
-    this.loadIframeUrl(iframeUrl, fragment);
-    this.isLoadingArchive = false;
+      this.loadIframeUrl(iframeUrl, fragment);
+    } catch {
+      this.contentAuthToken = undefined;
+      this.archiveError = 'Could not authenticate the unit content request.';
+    } finally {
+      this.isLoadingArchive = false;
+    }
   }
 
   private async loadCurrentArchiveRoute(fragment?: string): Promise<void> {
@@ -319,9 +352,7 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     await this.fetchContentArchive(this.currentUnitId, fragment);
   }
 
-  private routeFromHref(
-    href: string | null,
-  ): {path: string; fragment?: string} | undefined {
+  private routeFromHref(href: string | null): {path: string; fragment?: string} | undefined {
     if (!href || href.startsWith('#')) {
       return undefined;
     }
@@ -345,32 +376,6 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
       path: url.pathname === '/' ? '/' : url.pathname.replace(/\/+$/g, ''),
       fragment: url.hash ? url.hash.slice(1) : undefined,
     };
-  }
-
-  private stageContentArchive(archive: UnitContentArchive): void {
-    if (this.pendingContentArchive) {
-      this.retiredContentArchives.push(this.pendingContentArchive);
-    }
-
-    this.pendingContentArchive = archive;
-  }
-
-  private activatePendingContentArchive(): void {
-    if (!this.pendingContentArchive) {
-      return;
-    }
-
-    if (this.contentArchive) {
-      this.retiredContentArchives.push(this.contentArchive);
-    }
-
-    this.contentArchive = this.pendingContentArchive;
-    this.pendingContentArchive = undefined;
-  }
-
-  private disposeRetiredContentArchives(): void {
-    this.retiredContentArchives.forEach((archive) => archive.dispose());
-    this.retiredContentArchives = [];
   }
 
   private isExpectedIframeLoad(frameIndex: number): boolean {
@@ -472,7 +477,10 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
     this.iframeClickCleanups = [];
   }
 
-  private setContentRouteFromLocation(path: string | null, legacyQueryPath: string | null): boolean {
+  private setContentRouteFromLocation(
+    path: string | null,
+    legacyQueryPath: string | null,
+  ): boolean {
     return this.setContentRouteFromPath(this.decodedContentRoute(path ?? legacyQueryPath ?? '/'));
   }
 
