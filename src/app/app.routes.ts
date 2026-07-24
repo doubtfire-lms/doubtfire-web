@@ -1,4 +1,4 @@
-import {Routes} from '@angular/router';
+import {Routes, UrlMatchResult, UrlSegment} from '@angular/router';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
@@ -36,6 +36,35 @@ import {resolveUnitCodeContent} from './units/unit-code-content.guard';
 import {UnitRootStateComponent} from './units/unit-root-state.component';
 import {resolveUnit} from './units/unit.resolver';
 import {WelcomeComponent} from './welcome/welcome.component';
+
+function unitContentRouteMatcher(segments: UrlSegment[]): UrlMatchResult | null {
+  if (segments[0]?.path !== 'content') {
+    return null;
+  }
+
+  const contentRoute = segments
+    .slice(1)
+    .map((segment) => segment.path)
+    .join('/');
+
+  return {
+    consumed: segments,
+    posParams: contentRoute ? {contentRoute: new UrlSegment(contentRoute, {})} : {},
+  };
+}
+
+function unitCodeContentRouteMatcher(segments: UrlSegment[]): UrlMatchResult | null {
+  if (segments.length < 2 || segments[1].path !== 'content') {
+    return null;
+  }
+
+  return {
+    consumed: segments,
+    posParams: {
+      unitCode: segments[0],
+    },
+  };
+}
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -107,7 +136,7 @@ export const routes: Routes = [
     data: {attendance: true, task: 'Check-in'},
   },
   {
-    path: ':unitCode/content',
+    matcher: unitCodeContentRouteMatcher,
     component: UnitContentViewerComponent,
     canActivate: [resolveUnitCodeContent],
   },
@@ -147,7 +176,7 @@ export const routes: Routes = [
           },
           {path: 'students', component: StudentsListComponent, data: {task: 'Student List'}},
           {
-            path: 'content',
+            matcher: unitContentRouteMatcher,
             component: UnitContentViewerComponent,
             data: {task: 'Unit Content'},
           },
