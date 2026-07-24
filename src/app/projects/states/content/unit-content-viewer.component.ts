@@ -306,8 +306,14 @@ export class UnitContentViewerComponent implements OnInit, OnDestroy {
       return undefined;
     }
 
+    let pathEnd = url.pathname.length;
+
+    while (pathEnd > 1 && url.pathname[pathEnd - 1] === '/') {
+      pathEnd -= 1;
+    }
+
     return {
-      path: url.pathname === '/' ? '/' : url.pathname.replace(/\/+$/g, ''),
+      path: url.pathname.slice(0, pathEnd),
       fragment: url.hash ? url.hash.slice(1) : undefined,
     };
   }
