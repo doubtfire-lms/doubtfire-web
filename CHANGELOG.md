@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-53](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-52...v11.0.0-53) (2026-07-24)
+
+
+### Features
+
+* add ui for submitted portfolio communication condition ([39f10f9](https://github.com/b0ink/doubtfire-deploy/commit/39f10f91abbea730cf87c70ff9a6a2c7ac396052))
+
+
+### Bug Fixes
+
+* ensure content viewer updates when switching between task sheets ([68e9c9f](https://github.com/b0ink/doubtfire-deploy/commit/68e9c9f6f759546d87e602849a3fa67525114ae3))
+* normalise upload upload requirement file keys on save ([54954f2](https://github.com/b0ink/doubtfire-deploy/commit/54954f292a01d9bf93894207436260b59027ad55))
+
 ## [11.0.0-52](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-51...v11.0.0-52) (2026-07-24)
 
 
