@@ -257,7 +257,7 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
       ));
       const params = this.contentArchiveParams(path)
         .set('username', this.userService.currentUser.username)
-        .set('auth_token', authToken);
+        .set('content_token', authToken);
       const downloadUrl = `${API_URL}/units/${this.currentUnitId}/content?${params.toString()}`;
       const filename = this.decodedContentRoute(path).split('/').pop() ?? 'document.docx';
 
@@ -332,7 +332,7 @@ export class UnitContentViewerComponent implements OnInit, AfterViewInit, OnDest
       ));
       const params = this.contentArchiveParams(contentRoute)
         .set('username', this.userService.currentUser.username)
-        .set('auth_token', authToken);
+        .set('content_token', authToken);
       const iframeUrl = `${API_URL}/units/${unitId}/content?${params.toString()}`;
 
       this.loadIframeUrl(iframeUrl, fragment);
