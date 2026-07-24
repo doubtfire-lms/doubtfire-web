@@ -313,12 +313,4 @@ export class AuthenticationService {
       }),
     );
   }
-
-  public getContentToken(): Observable<string> {
-    return this.httpClient.get(this.AUTH_URL + '/content').pipe(
-      map((response) => {
-        return response['content_auth_token'];
-      }),
-    );
-  }
 }

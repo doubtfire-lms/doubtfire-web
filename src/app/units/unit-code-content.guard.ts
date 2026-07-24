@@ -12,7 +12,6 @@ export const resolveUnitCodeContent: CanActivateFn = (
   const globalState = inject(GlobalStateService);
   const router = inject(Router);
   const unitCode = route.paramMap.get('unitCode') ?? '';
-  const contentRouteSegments = route.url.slice(2).map((segment) => segment.path);
 
   return globalState.isLoadingSubject.pipe(
     filter((isLoading) => !isLoading),
@@ -28,8 +27,9 @@ export const resolveUnitCodeContent: CanActivateFn = (
         return router.createUrlTree(['/home']);
       }
 
-      return router.createUrlTree(['/units', unit.id, 'content', ...contentRouteSegments], {
+      return router.createUrlTree(['/units', unit.id, 'content'], {
         fragment: route.fragment,
+        queryParams: route.queryParams,
       });
     }),
   );
