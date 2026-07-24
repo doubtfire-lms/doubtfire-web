@@ -63,7 +63,7 @@
     "moment": "^2.30",
     "monaco-editor": "^0.55.1",
     "ng-flex-layout": "^17.3.7-beta.1",
-    "ng2-pdf-viewer": "10.2.2",
+    "ng2-pdf-viewer": "10.4.0",
     "ngx-entity-service": "^0.0.44",
     "ngx-lottie": "^22.0.0",
     "ngx-monaco-editor-v2-alternative": "^22.0.0",
