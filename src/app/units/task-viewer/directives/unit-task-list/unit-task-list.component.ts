@@ -20,7 +20,7 @@ interface TaskListViewPreferences {
   sortBy: TaskListSortOption;
   sortDirection: TaskListSortDirection;
   hideCompleted: boolean;
-  hideAboveTargetGrade: boolean;
+  showBeyondTargetGrade: boolean;
 }
 
 interface TaskListSortOptionView {
@@ -33,7 +33,7 @@ const DEFAULT_VIEW_PREFERENCES: TaskListViewPreferences = {
   sortBy: 'default',
   sortDirection: 'asc',
   hideCompleted: false,
-  hideAboveTargetGrade: false,
+  showBeyondTargetGrade: false,
 };
 
 const START_APPROACHING_DAYS = 7;
@@ -127,10 +127,10 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     this.applyFilters();
   }
 
-  public toggleHideAboveTargetGrade(value: boolean): void {
+  public toggleShowBeyondTargetGrade(value: boolean): void {
     this.viewPreferences = {
       ...this.viewPreferences,
-      hideAboveTargetGrade: value,
+      showBeyondTargetGrade: value,
     };
     this.persistViewPreferences();
     this.applyFilters();
@@ -169,8 +169,14 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
   public get activeViewPreferenceCount(): number {
     return (
       (this.viewPreferences.sortBy !== 'default' ? 1 : 0) +
-      (this.viewPreferences.hideCompleted ? 1 : 0) +
-      (this.viewPreferences.hideAboveTargetGrade ? 1 : 0)
+      (this.viewPreferences.hideCompleted ? 1 : 0)
+    );
+  }
+
+  public get hasModifiedViewPreferences(): boolean {
+    return (
+      this.activeViewPreferenceCount > 0 ||
+      this.viewPreferences.showBeyondTargetGrade !== DEFAULT_VIEW_PREFERENCES.showBeyondTargetGrade
     );
   }
 
@@ -354,7 +360,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     }
 
     return !(
-      this.viewPreferences.hideAboveTargetGrade &&
+      !this.viewPreferences.showBeyondTargetGrade &&
       this.project?.targetGrade !== undefined &&
       this.project?.targetGrade !== null &&
       taskDef.targetGrade > this.project.targetGrade
@@ -450,7 +456,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
           ? parsedPreferences.sortDirection
           : migratedSort.sortDirection,
         hideCompleted: !!parsedPreferences.hideCompleted,
-        hideAboveTargetGrade: !!parsedPreferences.hideAboveTargetGrade,
+        showBeyondTargetGrade: !!parsedPreferences.showBeyondTargetGrade,
       };
     } catch {
       this.viewPreferences = {...DEFAULT_VIEW_PREFERENCES};

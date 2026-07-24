@@ -2,7 +2,7 @@ import {beforeEach, describe, expect, it} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
+import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {FUnitTaskListComponent} from './unit-task-list.component';
 
 const emptyProvider = {};
@@ -107,5 +107,41 @@ describe('FUnitTaskListComponent', () => {
     component.applyFilters();
 
     expect(component.filteredTaskDefinitions).toEqual([firstTask, secondTask, thirdTask]);
+  });
+
+  it('hides tasks beyond the project target grade by default', () => {
+    const targetGradeTask = {
+      ...taskDefinition(0, 'P'),
+      targetGrade: 1,
+    } as TaskDefinition;
+    const beyondTargetGradeTask = {
+      ...taskDefinition(1, 'C'),
+      targetGrade: 2,
+    } as TaskDefinition;
+    component.project = {targetGrade: 1} as Project;
+    component.taskDefinitions = [targetGradeTask, beyondTargetGradeTask];
+
+    component.applyFilters();
+
+    expect(component.filteredTaskDefinitions).toEqual([targetGradeTask]);
+  });
+
+  it('shows tasks beyond the target grade without adding a filter badge', () => {
+    const targetGradeTask = {
+      ...taskDefinition(0, 'P'),
+      targetGrade: 1,
+    } as TaskDefinition;
+    const beyondTargetGradeTask = {
+      ...taskDefinition(1, 'C'),
+      targetGrade: 2,
+    } as TaskDefinition;
+    component.project = {targetGrade: 1} as Project;
+    component.taskDefinitions = [targetGradeTask, beyondTargetGradeTask];
+
+    component.toggleShowBeyondTargetGrade(true);
+
+    expect(component.filteredTaskDefinitions).toEqual([targetGradeTask, beyondTargetGradeTask]);
+    expect(component.activeViewPreferenceCount).toBe(0);
+    expect(component.hasModifiedViewPreferences).toBe(true);
   });
 });

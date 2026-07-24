@@ -167,10 +167,10 @@
               <mat-checkbox
                 color="primary"
                 [disabled]="!project"
-                [ngModel]="viewPreferences.hideAboveTargetGrade"
-                (ngModelChange)="toggleHideAboveTargetGrade($event)"
+                [ngModel]="viewPreferences.showBeyondTargetGrade"
+                (ngModelChange)="toggleShowBeyondTargetGrade($event)"
               >
-                Hide tasks beyond target grade
+                Show tasks beyond target grade
               </mat-checkbox>
             </div>
 
@@ -179,7 +179,7 @@
                 class="shrink-0 text-formatif-blue disabled:text-gray-400"
                 mat-button
                 type="button"
-                [disabled]="activeViewPreferenceCount === 0"
+                [disabled]="!hasModifiedViewPreferences"
                 (click)="resetViewPreferences()"
               >
                 Reset
