@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-54](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-53...v11.0.0-54) (2026-07-24)
+
+
+### Features
+
+* add engagement stamp for task status updates ([553f12e](https://github.com/b0ink/doubtfire-deploy/commit/553f12e76ac76b0417c955eb72789ae8392f5bec))
+* automated engagement stamps ([#1372](https://github.com/b0ink/doubtfire-deploy/issues/1372)) ([4fbdd11](https://github.com/b0ink/doubtfire-deploy/commit/4fbdd111ec8fbc205c581060a008a229ef1a0b78))
+* fetch project with record attendance param in mobile view ([ea7e8c4](https://github.com/b0ink/doubtfire-deploy/commit/ea7e8c440b4414350d0925fafeaf14f0943f0547))
+
+
+### Bug Fixes
+
+* ensure successful status change ([35e423c](https://github.com/b0ink/doubtfire-deploy/commit/35e423c2aa633c09eb4e96f36e51f7792b4f4f3d))
+
 ## [11.0.0-53](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-52...v11.0.0-53) (2026-07-24)
 
 
