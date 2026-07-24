@@ -4,9 +4,11 @@ import {
   ElementRef,
   Inject,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Optional,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -34,7 +36,7 @@ export interface UnitContentViewerDialogData {
   templateUrl: './unit-content-viewer.component.html',
   standalone: false,
 })
-export class UnitContentViewerComponent implements OnInit, OnDestroy {
+export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild('primaryContentIframe')
   private set primaryContentIframeRef(element: ElementRef<HTMLIFrameElement> | undefined) {
     this.contentIframes[0] = element?.nativeElement;
@@ -74,6 +76,7 @@ export class UnitContentViewerComponent implements OnInit, OnDestroy {
   private loadingIframeIndex?: number;
   private pendingIframeUrl?: string;
   private routeSubscription?: Subscription;
+  private initialized = false;
 
   constructor(
     private authService: AuthenticationService,
@@ -85,13 +88,24 @@ export class UnitContentViewerComponent implements OnInit, OnDestroy {
     @Optional() @Inject(MAT_DIALOG_DATA) private dialogData?: UnitContentViewerDialogData,
   ) {}
 
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (
+      !this.initialized ||
+      !this.unit ||
+      !('contentRoute' in changes || 'contentSiteId' in changes || 'unit' in changes)
+    ) {
+      return;
+    }
+
+    this.configureInputContent();
+  }
+
   public ngOnInit(): void {
+    this.initialized = true;
+
     if (this.unit) {
-      this.dialogData = {
-        contentRoute: this.contentRoute,
-        contentSiteId: this.contentSiteId,
-        unit: this.unit,
-      };
+      this.configureInputContent();
+      return;
     }
 
     if (this.dialogData) {
@@ -119,6 +133,17 @@ export class UnitContentViewerComponent implements OnInit, OnDestroy {
         void this.loadContentRoute(unit.id, fragment ?? undefined);
       },
     );
+  }
+
+  private configureInputContent(): void {
+    this.dialogData = {
+      contentRoute: this.contentRoute,
+      contentSiteId: this.contentSiteId,
+      unit: this.unit!,
+    };
+    this.setContentRoute(this.dialogData.contentRoute);
+    this.setHeaderContext(this.dialogData.unit);
+    void this.loadContentRoute(this.dialogData.unit.id);
   }
 
   public ngOnDestroy(): void {
