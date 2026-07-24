@@ -118,6 +118,34 @@ describe('TutorDiscussionComponent', () => {
     );
   });
 
+  it('does not mark a task as discussed when the backend leaves its status unchanged', async () => {
+    const task = {
+      definition: {id: 7, assessInPortfolioOnly: false},
+      status: 'ready_for_feedback',
+      canMarkComplete: true,
+      updateTaskStatus: vi.fn(
+        (
+          _status: string,
+          _markAsDiscussed: boolean,
+          _moveDependentTasks: boolean,
+          onSuccess: () => void,
+        ) => onSuccess(),
+      ),
+      markAsDiscussed: vi.fn(),
+    };
+    component.tasksList = {
+      selectedOptions: {selected: [{value: task}]},
+    } as unknown as typeof component.tasksList;
+    const recordClassDiscussion = vi
+      .spyOn(component, 'recordClassDiscussion')
+      .mockImplementation(() => undefined);
+
+    await component.setSelectedTasksStatus('complete');
+
+    expect(task.markAsDiscussed).not.toHaveBeenCalled();
+    expect(recordClassDiscussion).not.toHaveBeenCalled();
+  });
+
   it('requests attendance recording after a QR scan', () => {
     vi.useFakeTimers();
     const getStudentTasks = vi

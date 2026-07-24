@@ -1049,7 +1049,9 @@ export class Task extends Entity {
             }
             this.processTaskStatusChange(status, alerts);
             taskService.notifyStatusChange(this);
-            onSuccess?.();
+            if (this.status === status) {
+              onSuccess?.();
+            }
           },
           error: (error) => {
             this.status = oldStatus;

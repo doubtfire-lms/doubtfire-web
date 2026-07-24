@@ -454,7 +454,15 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     status: TaskStatusEnum,
     moveDependentTasks: boolean,
   ) {
-    const onStatusUpdated = (task: Task, fromStatus: TaskStatusEnum) => {
+    const onStatusUpdated = (
+      task: Task,
+      fromStatus: TaskStatusEnum,
+      expectedStatus: TaskStatusEnum,
+    ) => {
+      if (task.status !== expectedStatus) {
+        return;
+      }
+
       task.markAsDiscussed();
       this.recordClassDiscussion(
         [
@@ -479,15 +487,18 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
 
       const fromStatus = task.status;
       if (task.definition.assessInPortfolioOnly) {
-        task.updateTaskStatus(status === 'complete' ? 'working_on_it' : status, false, false, () =>
-          onStatusUpdated(task, fromStatus),
+        const expectedStatus = status === 'complete' ? 'working_on_it' : status;
+        task.updateTaskStatus(expectedStatus, false, false, () =>
+          onStatusUpdated(task, fromStatus, expectedStatus),
         );
       } else if (status === 'fix_and_resubmit') {
         task.updateTaskStatus(status, false, moveDependentTasks, () =>
-          onStatusUpdated(task, fromStatus),
+          onStatusUpdated(task, fromStatus, status),
         );
       } else {
-        task.updateTaskStatus(status, false, false, () => onStatusUpdated(task, fromStatus));
+        task.updateTaskStatus(status, false, false, () =>
+          onStatusUpdated(task, fromStatus, status),
+        );
       }
     }
   }
