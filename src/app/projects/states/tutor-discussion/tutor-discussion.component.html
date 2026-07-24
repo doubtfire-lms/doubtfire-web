@@ -178,60 +178,67 @@
     <!-- </cdk-virtual-scroll-viewport> -->
   </div>
 
-  @if (project && filteredTasks.length) {
+  @if (project) {
     <div class="mt-1">
       <div class="my-2 flex w-full items-center justify-center gap-5">
-        @if (attendance) {
-          <button
-            class="medium-icon-button bg-gray-100"
-            color="secondary"
-            mat-fab
-            [disabled]="!tasks.selectedOptions.selected.length"
-            (click)="markSelectedTasksCheckedIn()"
-          >
-            <!-- Redo -->
-            <mat-icon>how_to_reg</mat-icon>
+        @if (!attendance && !tasks.selectedOptions.selected.length) {
+          <button color="primary" mat-raised-button (click)="recordClassDiscussion()">
+            <mat-icon>record_voice_over</mat-icon>
+            Add discussion stamp
           </button>
-        } @else {
-          <button
-            class="medium-icon-button bg-gray-100"
-            color="secondary"
-            mat-fab
-            [disabled]="!tasks.selectedOptions.selected.length"
-            (click)="setSelectedTasksStatus('fix_and_resubmit')"
-          >
-            <!-- Redo -->
-            <mat-icon>construction</mat-icon>
-          </button>
-          <button
-            class="medium-icon-button bg-green-400"
-            mat-fab
-            [disabled]="!canMarkSelectedTasksComplete"
-            (click)="setSelectedTasksStatus('complete')"
-          >
-            <!-- Mark as Complete -->
-            <mat-icon>done</mat-icon>
-          </button>
-
-          <button
-            class="medium-icon-button bg-blue-300"
-            mat-fab
-            [disabled]="!tasks.selectedOptions.selected.length"
-            (click)="markSelectedTasksDicussed()"
-          >
-            <!-- Mark as Discussed -->
-            <mat-icon>group</mat-icon>
-          </button>
-          @if (selectedTasksIncludeDiscuss) {
+        } @else if (filteredTasks.length) {
+          @if (attendance) {
             <button
-              class="medium-icon-button bg-[#126352] text-white"
+              class="medium-icon-button bg-gray-100"
+              color="secondary"
               mat-fab
-              matTooltip="Mark as Rediscuss"
               [disabled]="!tasks.selectedOptions.selected.length"
-              (click)="setSelectedTasksStatus('rediscuss')"
+              (click)="markSelectedTasksCheckedIn()"
             >
-              <mat-icon>feedback</mat-icon>
+              <!-- Redo -->
+              <mat-icon>how_to_reg</mat-icon>
             </button>
+          } @else {
+            <button
+              class="medium-icon-button bg-gray-100"
+              color="secondary"
+              mat-fab
+              [disabled]="!tasks.selectedOptions.selected.length"
+              (click)="setSelectedTasksStatus('fix_and_resubmit')"
+            >
+              <!-- Redo -->
+              <mat-icon>construction</mat-icon>
+            </button>
+            <button
+              class="medium-icon-button bg-green-400"
+              mat-fab
+              [disabled]="!canMarkSelectedTasksComplete"
+              (click)="setSelectedTasksStatus('complete')"
+            >
+              <!-- Mark as Complete -->
+              <mat-icon>done</mat-icon>
+            </button>
+
+            <button
+              class="medium-icon-button bg-blue-300"
+              mat-fab
+              [disabled]="!tasks.selectedOptions.selected.length"
+              (click)="markSelectedTasksDicussed()"
+            >
+              <!-- Mark as Discussed -->
+              <mat-icon>group</mat-icon>
+            </button>
+            @if (selectedTasksIncludeDiscuss) {
+              <button
+                class="medium-icon-button bg-[#126352] text-white"
+                mat-fab
+                matTooltip="Mark as Rediscuss"
+                [disabled]="!tasks.selectedOptions.selected.length"
+                (click)="setSelectedTasksStatus('rediscuss')"
+              >
+                <mat-icon>feedback</mat-icon>
+              </button>
+            }
           }
         }
       </div>

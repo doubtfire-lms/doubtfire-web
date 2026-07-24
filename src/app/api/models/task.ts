@@ -925,7 +925,7 @@ export class Task extends Entity {
     taskService.notifyStatusChange(this);
   }
 
-  public async markAsDiscussed(reasonText?: string) {
+  public async markAsDiscussed(reasonText?: string, onSuccess?: () => void) {
     const alerts: AlertService = AppInjector.get(AlertService);
     const taskService: TaskService = AppInjector.get(TaskService);
 
@@ -950,6 +950,7 @@ export class Task extends Entity {
           next: (_response) => {
             taskService.notifyStatusChange(this);
             alerts.success('Task successfully marked as discussed in class.', 4000);
+            onSuccess?.();
           },
           error: (error) => {
             alerts.error(error, 6000);
@@ -1048,7 +1049,9 @@ export class Task extends Entity {
             }
             this.processTaskStatusChange(status, alerts);
             taskService.notifyStatusChange(this);
-            onSuccess?.();
+            if (this.status === status) {
+              onSuccess?.();
+            }
           },
           error: (error) => {
             this.status = oldStatus;
