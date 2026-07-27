@@ -83,7 +83,7 @@
     "@angular/build": "^22.0.4",
     "@angular/cli": "^22.0.4",
     "@angular/compiler-cli": "^22.0.3",
-    "@angular/language-service": "^22.0.3",
+    "@angular/language-service": "^22.0.8",
     "@commitlint/cli": "^21.1.0",
     "@commitlint/config-conventional": "^21.1.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
