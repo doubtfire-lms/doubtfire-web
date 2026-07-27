@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-55](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-54...v11.0.0-55) (2026-07-27)
+
+
+### Bug Fixes
+
+* enable tasks access to tutor roles ([b346ba4](https://github.com/b0ink/doubtfire-deploy/commit/b346ba49a46bdcfd3a82f02f1e5d37c3f89eb6ee))
+* init unit exclusions array ([3ca7c94](https://github.com/b0ink/doubtfire-deploy/commit/3ca7c948c1a7d943617dff09fed6f99700916e20))
+
 ## [11.0.0-54](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-53...v11.0.0-54) (2026-07-24)
 
 
