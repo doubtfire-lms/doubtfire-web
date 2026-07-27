@@ -203,7 +203,7 @@ export const routes: Routes = [
             path: 'tasks',
             pathMatch: 'full',
             component: TaskViewerStateComponent,
-            data: {task: 'Task Lists', roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
+            data: {task: 'Task Lists', roleWhitelist: ['Convenor', 'Admin', 'Auditor', 'Tutor']},
             canActivate: [roleWhitelistGuard],
           },
           {
