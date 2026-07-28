@@ -61,7 +61,7 @@
     "lottie-web": "^5.13.0",
     "marked": "^18.0.7",
     "moment": "^2.30",
-    "monaco-editor": "^0.55.1",
+    "monaco-editor": "^0.56.0",
     "ng-flex-layout": "^17.3.7-beta.1",
     "ng2-pdf-viewer": "10.2.2",
     "ngx-entity-service": "^0.0.44",
