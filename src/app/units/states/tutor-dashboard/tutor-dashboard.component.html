@@ -1,0 +1,261 @@
+<div class="mx-auto flex w-full max-w-[1600px] flex-col gap-5 p-4 md:p-6">
+  <header class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <p class="m-0 text-sm font-medium text-gray-500">{{ unit.code }}</p>
+      <h1 class="m-0 text-2xl font-semibold">Tutor dashboard</h1>
+      @if (dashboard) {
+        <p class="m-0 text-sm text-gray-500">
+          {{ dashboard.unit_role.user.name }} · Updated
+          {{ dashboard.generated_at | localizedDateTime }}
+        </p>
+      }
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      @if (dashboard?.permissions.can_switch_tutor) {
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>View tutor</mat-label>
+          <mat-select [value]="selectedUnitRole.id" (selectionChange)="selectTutor($event.value)">
+            @for (unitRole of selectableTutors; track unitRole.id) {
+              <mat-option [value]="unitRole.id">
+                {{ unitRole.user.name }} ({{ unitRole.role }})
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+      <button mat-stroked-button [disabled]="loading" (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+  </header>
+
+  @if (loading) {
+    <div aria-label="Loading tutor dashboard" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      @for (_ of [1, 2, 3, 4]; track $index) {
+        <mat-card class="h-32 animate-pulse !bg-gray-100"></mat-card>
+      }
+    </div>
+    <mat-card class="flex min-h-64 items-center justify-center">
+      <mat-spinner diameter="44"></mat-spinner>
+    </mat-card>
+  } @else if (error) {
+    <mat-card class="flex min-h-72 flex-col items-center justify-center gap-3 p-8 text-center">
+      <mat-icon class="!size-14 !text-5xl text-red-500">error_outline</mat-icon>
+      <h2 class="m-0">Dashboard unavailable</h2>
+      <p class="m-0 text-gray-600">We could not load this tutor dashboard.</p>
+      <button color="primary" mat-raised-button (click)="refresh()">Try again</button>
+    </mat-card>
+  } @else if (dashboard) {
+    <nav aria-label="Tutor dashboard shortcuts" class="flex flex-wrap gap-2">
+      <a
+        color="primary"
+        mat-raised-button
+        [queryParams]="{students: 'all', tutor: selectedUnitRole.id}"
+        [routerLink]="['/units', unit.id, 'tasks', 'inbox']"
+      >
+        <mat-icon>inbox</mat-icon>
+        Open inbox
+      </a>
+      @if (dashboard.permissions.can_view_moderation) {
+        <a mat-stroked-button [routerLink]="['/units', unit.id, 'tasks', 'moderation']">
+          <mat-icon>rate_review</mat-icon>
+          Moderation
+          @if (dashboard.moderation.pending_count !== null) {
+            ({{ dashboard.moderation.pending_count }})
+          }
+        </a>
+      }
+      @if (dashboard.permissions.can_view_overflow) {
+        <a mat-stroked-button [routerLink]="['/units', unit.id, 'tasks', 'overflow']">
+          <mat-icon>more_time</mat-icon>
+          Overflow
+        </a>
+      }
+    </nav>
+
+    <section aria-label="Workload summary" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <mat-card class="border-l-4 !border-l-blue-500 p-4">
+        <span class="text-sm font-medium text-gray-500">Ready for feedback</span>
+        <strong class="mt-2 block text-4xl">{{ dashboard.inbox.ready_for_feedback_count }}</strong>
+        <span class="text-sm text-gray-500"
+          >{{ dashboard.inbox.total_count }} total inbox items</span
+        >
+      </mat-card>
+      <mat-card class="border-l-4 !border-l-red-500 p-4">
+        <span class="text-sm font-medium text-gray-500">Overdue</span>
+        <strong class="mt-2 block text-4xl text-red-600">{{
+          dashboard.inbox.overdue_count
+        }}</strong>
+        <span class="text-sm text-gray-500">
+          Past {{ dashboard.thresholds.overflow_days }} days
+        </span>
+      </mat-card>
+      <mat-card class="border-l-4 !border-l-amber-500 p-4">
+        <span class="text-sm font-medium text-gray-500">Oldest task</span>
+        <strong class="mt-2 block text-4xl">
+          {{ dashboard.inbox.oldest_tasks[0]?.days_awaiting_feedback ?? 0 }}
+          <small class="text-lg font-normal">days</small>
+        </strong>
+        <span class="block truncate text-sm text-gray-500">
+          {{ dashboard.inbox.oldest_tasks[0]?.student_name || 'No tasks waiting' }}
+        </span>
+      </mat-card>
+      <mat-card class="border-l-4 !border-l-purple-500 p-4">
+        <span class="text-sm font-medium text-gray-500">Needs attention</span>
+        <strong class="mt-2 block text-4xl">
+          {{ dashboard.inbox.needs_help_count + dashboard.inbox.unread_activity_count }}
+        </strong>
+        <span class="text-sm text-gray-500">
+          {{ dashboard.inbox.needs_help_count }} help ·
+          {{ dashboard.inbox.unread_activity_count }} with unread activity
+        </span>
+      </mat-card>
+    </section>
+
+    <div class="grid min-h-0 gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(340px,2fr)]">
+      <div class="flex min-w-0 flex-col gap-5">
+        <mat-card class="p-5">
+          <mat-card-title>Feedback age</mat-card-title>
+          <mat-card-subtitle>
+            Warning after {{ dashboard.thresholds.warning_days }} days; overflow after
+            {{ dashboard.thresholds.overflow_days }} days
+          </mat-card-subtitle>
+          <mat-card-content class="!px-0 pt-5">
+            @if (dashboard.inbox.ready_for_feedback_count) {
+              <div class="flex h-8 w-full overflow-hidden rounded-lg bg-gray-100">
+                <div
+                  class="bg-emerald-500"
+                  matTooltip="Within threshold"
+                  [style.width.%]="
+                    ageBucketWidth(dashboard.inbox.age_buckets.within_threshold_count)
+                  "
+                ></div>
+                <div
+                  class="bg-amber-500"
+                  matTooltip="Warning"
+                  [style.width.%]="ageBucketWidth(dashboard.inbox.age_buckets.warning_count)"
+                ></div>
+                <div
+                  class="bg-red-500"
+                  matTooltip="Overdue"
+                  [style.width.%]="ageBucketWidth(dashboard.inbox.age_buckets.overdue_count)"
+                ></div>
+                <div
+                  class="bg-gray-400"
+                  matTooltip="No submission date"
+                  [style.width.%]="
+                    ageBucketWidth(dashboard.inbox.age_buckets.missing_submission_date_count)
+                  "
+                ></div>
+              </div>
+              <div class="mt-3 grid gap-2 text-sm sm:grid-cols-2">
+                <span
+                  ><i class="mr-2 inline-block size-3 rounded bg-emerald-500"></i>Within threshold:
+                  {{ dashboard.inbox.age_buckets.within_threshold_count }}</span
+                >
+                <span
+                  ><i class="mr-2 inline-block size-3 rounded bg-amber-500"></i>Warning:
+                  {{ dashboard.inbox.age_buckets.warning_count }}</span
+                >
+                <span
+                  ><i class="mr-2 inline-block size-3 rounded bg-red-500"></i>Overdue:
+                  {{ dashboard.inbox.age_buckets.overdue_count }}</span
+                >
+                <span
+                  ><i class="mr-2 inline-block size-3 rounded bg-gray-400"></i>No submission date:
+                  {{ dashboard.inbox.age_buckets.missing_submission_date_count }}</span
+                >
+              </div>
+            } @else {
+              <p class="m-0 py-8 text-center text-gray-500">No tasks are waiting for feedback.</p>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="p-5">
+          <mat-card-title>Workload by task</mat-card-title>
+          <mat-card-content class="!px-0 pt-4">
+            @for (row of dashboard.inbox.by_task_definition; track row.task_definition_id) {
+              <div class="mb-4">
+                <div class="mb-1 flex items-center justify-between gap-3 text-sm">
+                  <span class="min-w-0 truncate" [matTooltip]="row.name">
+                    <strong>{{ row.abbreviation }}</strong> · {{ row.name }}
+                  </span>
+                  <span class="shrink-0">
+                    {{ row.ready_for_feedback_count }} ready
+                    @if (row.overdue_count) {
+                      · <strong class="text-red-600">{{ row.overdue_count }} overdue</strong>
+                    }
+                  </span>
+                </div>
+                <div class="h-3 overflow-hidden rounded bg-gray-100">
+                  <div
+                    class="h-full rounded bg-blue-500"
+                    [style.width.%]="taskDefinitionWidth(row)"
+                  ></div>
+                </div>
+              </div>
+            } @empty {
+              <p class="m-0 py-8 text-center text-gray-500">No task workload to display.</p>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="p-5">
+          <mat-card-title>Oldest tasks awaiting feedback</mat-card-title>
+          <mat-card-content class="!px-0 pt-3">
+            <div class="divide-y divide-gray-200">
+              @for (task of dashboard.inbox.oldest_tasks; track task.id) {
+                <a
+                  class="flex items-center gap-3 rounded px-2 py-3 text-inherit no-underline hover:bg-gray-50"
+                  [queryParams]="{students: 'all', tutor: selectedUnitRole.id}"
+                  [routerLink]="[
+                    '/units',
+                    unit.id,
+                    'tasks',
+                    'inbox',
+                    task.student_id,
+                    task.task_definition_abbreviation,
+                  ]"
+                >
+                  <span
+                    class="flex size-11 shrink-0 items-center justify-center rounded-full bg-red-50 font-semibold text-red-700"
+                  >
+                    {{ task.days_awaiting_feedback }}d
+                  </span>
+                  <span class="min-w-0 flex-1">
+                    <strong class="block truncate">{{ task.student_name }}</strong>
+                    <span class="block truncate text-sm text-gray-500">
+                      {{ task.task_definition_abbreviation }} · {{ task.task_definition_name }}
+                    </span>
+                  </span>
+                  <mat-icon>chevron_right</mat-icon>
+                </a>
+              } @empty {
+                <p class="m-0 py-8 text-center text-gray-500">Inbox clear—nothing is waiting.</p>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      @if (dashboard.permissions.can_access_tutor_notes) {
+        <mat-card class="flex min-h-[620px] flex-col overflow-hidden">
+          <div class="flex items-center justify-between border-b border-gray-200 px-4 py-3">
+            <div>
+              <mat-card-title>Tutor notes</mat-card-title>
+              <mat-card-subtitle>
+                {{ dashboard.tutor_notes.total_count }} notes ·
+                {{ dashboard.tutor_notes.unread_by_tutor_count }} unread by tutor
+              </mat-card-subtitle>
+            </div>
+            <mat-icon>local_library</mat-icon>
+          </div>
+          <f-tutor-notes class="min-h-0 flex-1" [unitRole]="selectedUnitRole"></f-tutor-notes>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

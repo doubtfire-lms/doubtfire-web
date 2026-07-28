@@ -60,6 +60,74 @@ export interface TaskCompletionStats {
   grade: Record<number, TaskCompletionSummary>;
 }
 
+export interface TutorDashboardTask {
+  id: number;
+  project_id: number;
+  student_id: number;
+  student_name: string;
+  task_definition_id: number;
+  task_definition_abbreviation: string;
+  task_definition_name: string;
+  submission_date: string;
+  days_awaiting_feedback: number;
+}
+
+export interface TutorDashboardTaskDefinition {
+  task_definition_id: number;
+  abbreviation: string;
+  name: string;
+  ready_for_feedback_count: number;
+  overdue_count: number;
+}
+
+export interface TutorDashboardResponse {
+  generated_at: string;
+  unit_role: {
+    id: number;
+    role: string;
+    user: {
+      id: number;
+      name: string;
+      first_name: string;
+      last_name: string;
+      nickname: string;
+    };
+  };
+  thresholds: {
+    warning_days: number;
+    overflow_days: number;
+  };
+  inbox: {
+    total_count: number;
+    ready_for_feedback_count: number;
+    overdue_count: number;
+    needs_help_count: number;
+    unread_activity_count: number;
+    pinned_count: number;
+    age_buckets: {
+      within_threshold_count: number;
+      warning_count: number;
+      overdue_count: number;
+      missing_submission_date_count: number;
+    };
+    oldest_tasks: TutorDashboardTask[];
+    by_task_definition: TutorDashboardTaskDefinition[];
+  };
+  tutor_notes: {
+    total_count: number;
+    unread_by_tutor_count: number;
+  };
+  moderation: {
+    pending_count: number | null;
+  };
+  permissions: {
+    can_switch_tutor: boolean;
+    can_view_moderation: boolean;
+    can_view_overflow: boolean;
+    can_access_tutor_notes: boolean;
+  };
+}
+
 @Injectable()
 export class UnitService extends CachedEntityService<Unit> {
   protected readonly endpointFormat = 'units/:id:';
@@ -380,6 +448,15 @@ export class UnitService extends CachedEntityService<Unit> {
     const httpClient = AppInjector.get(HttpClient);
 
     return httpClient.get<TaskCompletionStats>(url);
+  }
+
+  public tutorDashboard(unit: Unit, unitRoleId: number): Observable<TutorDashboardResponse> {
+    const url = `${AppInjector.get(DoubtfireConstants).API_URL}/units/${
+      unit.id
+    }/tutor_dashboard/${unitRoleId}`;
+    const httpClient = AppInjector.get(HttpClient);
+
+    return httpClient.get<TutorDashboardResponse>(url);
   }
 
   public zipPortfolios(unit: Unit): Observable<SidekiqJob> {
