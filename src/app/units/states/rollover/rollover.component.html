@@ -1,4 +1,4 @@
-<div class="mx-auto max-w-[90vw]">
+<div class="mx-auto max-w-[50vw]">
   <mat-card appearance="outlined" class="mx-auto max-w-7xl">
     <mat-card-header>
       <mat-card-title>Copy {{ unit?.code }} {{ unit?.nameAndPeriod }}</mat-card-title>
@@ -11,15 +11,22 @@
       </p>
 
       <div class="py-3">
-        <mat-form-field appearance="outline">
-          <mat-label>Teaching Period</mat-label>
-          <mat-select [(ngModel)]="teachingPeriod">
-            <mat-option [value]="false">Custom Date</mat-option>
-            @for (period of teachingPeriods; track period) {
-              <mat-option [value]="period">{{ period.year }} {{ period.period }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+        <div class="flex gap-1">
+          <mat-form-field appearance="outline" class="w-1/2">
+            <mat-label>New Unit Code</mat-label>
+            <input matInput required [(ngModel)]="newUnitCode" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-1/2">
+            <mat-label>Teaching Period</mat-label>
+            <mat-select [(ngModel)]="teachingPeriod">
+              <mat-option [value]="false">Custom Date</mat-option>
+              @for (period of teachingPeriods; track period) {
+                <mat-option [value]="period">{{ period.year }} {{ period.period }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
 
         <div class="flex gap-1">
           @if (!teachingPeriod) {
@@ -60,7 +67,14 @@
         </div>
       </div>
       <mat-card-footer class="flex justify-end">
-        <button color="primary" mat-raised-button (click)="createUnit()">Create Unit</button>
+        <button
+          color="primary"
+          mat-raised-button
+          [disabled]="!newUnitCode?.trim()"
+          (click)="createUnit()"
+        >
+          Create Unit
+        </button>
       </mat-card-footer>
     </mat-card-content>
   </mat-card>
