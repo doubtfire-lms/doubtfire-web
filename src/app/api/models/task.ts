@@ -1004,7 +1004,7 @@ export class Task extends Entity {
     const oldQualityPts = this.qualityPts;
     const alerts: AlertService = AppInjector.get(AlertService);
 
-    if (status === 'complete' && !this.canMarkComplete) {
+    if (status === 'complete' && !this.canMarkComplete && markAsDiscussed !== true) {
       alerts.error('This task must be discussed in class before it can marked complete.', 6000);
       return;
     }

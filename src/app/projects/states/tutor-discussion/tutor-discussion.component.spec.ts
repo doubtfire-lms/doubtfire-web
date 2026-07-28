@@ -63,14 +63,14 @@ describe('TutorDiscussionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('marks a task as discussed only after its status update succeeds', async () => {
+  it('marks a task complete with the discussed flag', async () => {
     let statusUpdateSucceeded: () => void = () => {
       throw new Error('Status update callback was not registered');
     };
     const task = {
       definition: {id: 7, assessInPortfolioOnly: false},
       status: 'ready_for_feedback',
-      canMarkComplete: true,
+      canMarkComplete: false,
       updateTaskStatus: vi.fn(
         (
           status: string,
@@ -84,7 +84,6 @@ describe('TutorDiscussionComponent', () => {
           };
         },
       ),
-      markAsDiscussed: vi.fn(),
     };
     component.tasksList = {
       selectedOptions: {selected: [{value: task}]},
@@ -97,15 +96,14 @@ describe('TutorDiscussionComponent', () => {
 
     expect(task.updateTaskStatus).toHaveBeenCalledWith(
       'complete',
-      false,
+      true,
       false,
       expect.any(Function),
     );
-    expect(task.markAsDiscussed).not.toHaveBeenCalled();
+    expect(recordClassDiscussion).not.toHaveBeenCalled();
 
     statusUpdateSucceeded();
 
-    expect(task.markAsDiscussed).toHaveBeenCalledOnce();
     expect(recordClassDiscussion).toHaveBeenCalledWith(
       [
         {
@@ -122,7 +120,7 @@ describe('TutorDiscussionComponent', () => {
     const task = {
       definition: {id: 7, assessInPortfolioOnly: false},
       status: 'ready_for_feedback',
-      canMarkComplete: true,
+      canMarkComplete: false,
       updateTaskStatus: vi.fn(
         (
           _status: string,
@@ -131,7 +129,6 @@ describe('TutorDiscussionComponent', () => {
           onSuccess: () => void,
         ) => onSuccess(),
       ),
-      markAsDiscussed: vi.fn(),
     };
     component.tasksList = {
       selectedOptions: {selected: [{value: task}]},
@@ -142,7 +139,6 @@ describe('TutorDiscussionComponent', () => {
 
     await component.setSelectedTasksStatus('complete');
 
-    expect(task.markAsDiscussed).not.toHaveBeenCalled();
     expect(recordClassDiscussion).not.toHaveBeenCalled();
   });
 

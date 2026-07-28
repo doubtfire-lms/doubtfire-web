@@ -404,18 +404,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       return taskOption.value as Task;
     });
 
-    if (status === 'complete') {
-      const blockedTasks = selectedTasks.filter(
-        (task) => !task.definition.assessInPortfolioOnly && !task.canMarkComplete,
-      );
-      if (blockedTasks.length > 0) {
-        this.alertService.error(
-          'Some selected tasks cannot be marked as complete until they are marked as discussed in class.',
-          5000,
-        );
-      }
-    }
-
     if (status === 'fix_and_resubmit') {
       try {
         const hasReadyDependents = (
@@ -463,7 +451,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
         return;
       }
 
-      task.markAsDiscussed();
       this.recordClassDiscussion(
         [
           {
@@ -477,28 +464,18 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     };
 
     for (const task of selectedTasks) {
-      if (
-        status === 'complete' &&
-        !task.definition.assessInPortfolioOnly &&
-        !task.canMarkComplete
-      ) {
-        continue;
-      }
-
       const fromStatus = task.status;
       if (task.definition.assessInPortfolioOnly) {
         const expectedStatus = status === 'complete' ? 'working_on_it' : status;
-        task.updateTaskStatus(expectedStatus, false, false, () =>
+        task.updateTaskStatus(expectedStatus, true, false, () =>
           onStatusUpdated(task, fromStatus, expectedStatus),
         );
       } else if (status === 'fix_and_resubmit') {
-        task.updateTaskStatus(status, false, moveDependentTasks, () =>
+        task.updateTaskStatus(status, true, moveDependentTasks, () =>
           onStatusUpdated(task, fromStatus, status),
         );
       } else {
-        task.updateTaskStatus(status, false, false, () =>
-          onStatusUpdated(task, fromStatus, status),
-        );
+        task.updateTaskStatus(status, true, false, () => onStatusUpdated(task, fromStatus, status));
       }
     }
   }
@@ -509,10 +486,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       return false;
     }
 
-    return selectedTasks.every((taskOption) => {
-      const task = taskOption.value as Task;
-      return task.definition.assessInPortfolioOnly || task.canMarkComplete;
-    });
+    return true;
   }
 
   public get selectedTasksIncludeDiscuss(): boolean {
