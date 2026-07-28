@@ -49,6 +49,19 @@
           </div>
 
           <mat-card-content class="py-2.5">
+            @if (engagement.students.length) {
+              <div class="mb-3 border-b border-gray-200 pb-3">
+                <p class="mb-2 text-sm font-medium text-gray-600">
+                  Student{{ engagement.students.length === 1 ? '' : 's' }}
+                </p>
+                <mat-chip-set aria-label="Students included in this engagement">
+                  @for (student of engagement.students; track student.id) {
+                    <mat-chip>{{ student.name }}</mat-chip>
+                  }
+                </mat-chip-set>
+              </div>
+            }
+
             <div class="whitespace-pre-wrap">{{ engagement.note }}</div>
 
             @if (engagement.evidenceUrl || engagement.hasAttachment) {

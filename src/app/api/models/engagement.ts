@@ -7,6 +7,7 @@ export class Engagement extends Entity {
   id: number;
   project: Project;
   user: User;
+  students: User[] = [];
   engagementType: string;
   note: string;
   occurredAt: Date;

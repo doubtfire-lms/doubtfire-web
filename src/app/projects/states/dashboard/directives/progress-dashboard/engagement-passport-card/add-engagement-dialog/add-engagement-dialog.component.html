@@ -36,27 +36,62 @@
 
     @if (groupMode) {
       <div class="mb-4 rounded-md bg-gray-50 p-3">
-        <div class="mb-3 flex max-h-32 flex-wrap gap-2 overflow-y-auto">
-          @for (project of groupProjects; track project.id) {
-            <span class="flex items-center rounded-full bg-white py-1 pr-1 pl-3 text-sm shadow-sm">
-              {{ project.student.name }}
-              @if (project.id !== data.project.id) {
-                <button
-                  aria-label="Remove student from engagement group"
-                  mat-icon-button
-                  matTooltip="Remove student"
-                  type="button"
-                  (click)="removeStudent(project)"
-                >
-                  <mat-icon>close</mat-icon>
-                </button>
-              }
-            </span>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Students</mat-label>
+          <mat-chip-grid #studentChipGrid aria-label="Selected students">
+            @for (project of groupProjects; track project.id) {
+              <mat-chip-row (removed)="removeStudent(project)">
+                {{ project.student.name }}
+                @if (project.id !== data.project.id) {
+                  <button
+                    matChipRemove
+                    type="button"
+                    [attr.aria-label]="'Remove ' + project.student.name"
+                  >
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                }
+              </mat-chip-row>
+            }
+          </mat-chip-grid>
+          <input
+            matInput
+            placeholder="Name, username, or student ID"
+            [formControl]="studentSearch"
+            [matAutocomplete]="studentOptions"
+            [matChipInputFor]="studentChipGrid"
+          />
+          <mat-autocomplete
+            #studentOptions="matAutocomplete"
+            (optionSelected)="studentSelected($event.option.value)"
+          >
+            @for (project of filteredStudents; track project.id) {
+              <mat-option class="!h-auto !min-h-12 !py-2" [value]="project">
+                <span class="block font-medium">{{ project.student.name }}</span>
+                <span class="block text-xs text-gray-500">
+                  {{ project.student.username }}
+                  @if (project.student.studentId) {
+                    · {{ project.student.studentId }}
+                  }
+                </span>
+              </mat-option>
+            }
+          </mat-autocomplete>
+          @if (loadingStudents) {
+            <mat-spinner matSuffix class="mr-3" diameter="20"></mat-spinner>
           }
+          <mat-hint>Type at least two characters to find a student.</mat-hint>
+        </mat-form-field>
+
+        <div class="mb-3 flex items-center gap-3 text-xs text-gray-400">
+          <span class="h-px flex-1 bg-gray-200"></span>
+          or
+          <span class="h-px flex-1 bg-gray-200"></span>
         </div>
+
         <button color="primary" mat-stroked-button type="button" (click)="addStudent()">
           <mat-icon>qr_code_scanner</mat-icon>
-          Add student
+          Scan student QR
         </button>
       </div>
     }

@@ -59,6 +59,14 @@ export class EngagementService extends CachedEntityService<Engagement> {
         },
       },
       {
+        keys: 'students',
+        toEntityOp: (data: object, key: string, engagement: Engagement) => {
+          engagement.students = (data[key] ?? []).map((student) =>
+            this.userService.cache.getOrCreate(student.id, this.userService, student),
+          );
+        },
+      },
+      {
         keys: 'occurredAt',
         toEntityFn: MappingFunctions.mapDate,
       },

@@ -46,6 +46,10 @@ export class AddEngagementDialogComponent implements OnDestroy {
   saving = false;
   groupMode = false;
   groupProjects: Project[];
+  unitProjects: Project[] = [];
+  readonly studentSearch = new FormControl('', {nonNullable: true});
+  loadingStudents = false;
+  studentsLoaded = false;
   scanningStudent = false;
   loadingStudent = false;
 
@@ -105,6 +109,25 @@ export class AddEngagementDialogComponent implements OnDestroy {
     return this.groupMode ? this.groupProjects : [this.data.project];
   }
 
+  get filteredStudents(): Project[] {
+    const search = this.studentSearch.value.trim().toLowerCase();
+    if (search.length < 2) {
+      return [];
+    }
+
+    return this.unitProjects
+      .filter(
+        (project) =>
+          project.enrolled &&
+          !this.groupProjects.some((member) => member.id === project.id) &&
+          [project.student.name, project.student.username, project.student.studentId]
+            .filter(Boolean)
+            .some((value) => String(value).toLowerCase().includes(search)),
+      )
+      .sort((left, right) => left.student.name.localeCompare(right.student.name))
+      .slice(0, 8);
+  }
+
   get notePlaceholder(): string {
     const engagementType = this.form.controls.engagementType.value.trim().toLowerCase();
     return (
@@ -118,6 +141,20 @@ export class AddEngagementDialogComponent implements OnDestroy {
 
   modeChanged(index: number): void {
     this.groupMode = index === 1;
+    if (this.groupMode) {
+      this.loadUnitStudents();
+    }
+  }
+
+  addStudentProject(project: Project): void {
+    if (!this.groupProjects.some((member) => member.id === project.id)) {
+      this.groupProjects = [...this.groupProjects, project];
+    }
+  }
+
+  studentSelected(project: Project): void {
+    this.addStudentProject(project);
+    setTimeout(() => this.studentSearch.setValue(''));
   }
 
   addStudent(): void {
@@ -270,7 +307,7 @@ export class AddEngagementDialogComponent implements OnDestroy {
         }
 
         if (!this.groupProjects.some((member) => member.id === project.id)) {
-          this.groupProjects = [...this.groupProjects, project];
+          this.addStudentProject(project);
           this.alerts.success(`${project.student.name} added to the group.`);
         } else {
           this.alerts.message(`${project.student.name} is already in the group.`);
@@ -291,6 +328,26 @@ export class AddEngagementDialogComponent implements OnDestroy {
         this.qrScanner.resume();
       }
     }, 1000);
+  }
+
+  private loadUnitStudents(): void {
+    if (this.loadingStudents || this.studentsLoaded) {
+      return;
+    }
+
+    this.unitProjects = [...this.data.project.unit.studentCache.currentValues];
+    this.loadingStudents = true;
+    this.projectService.loadStudents(this.data.project.unit, false, false).subscribe({
+      next: (projects) => {
+        this.unitProjects = projects;
+        this.studentsLoaded = true;
+        this.loadingStudents = false;
+      },
+      error: (error) => {
+        this.loadingStudents = false;
+        this.alerts.error(error?.error ?? 'Unable to load students for this unit.');
+      },
+    });
   }
 
   private closeStudentScanner(): void {
