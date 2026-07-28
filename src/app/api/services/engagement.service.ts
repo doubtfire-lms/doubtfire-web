@@ -15,6 +15,7 @@ export interface EngagementData {
   engagementType: string;
   note: string;
   occurredAt: Date;
+  projectIds?: number[];
   evidenceUrl?: string;
   attachment?: File;
 }
@@ -189,6 +190,7 @@ export class EngagementService extends CachedEntityService<Engagement> {
     if (data.occurredAt !== undefined) {
       body.append('occurred_at', data.occurredAt.toISOString());
     }
+    data.projectIds?.forEach((projectId) => body.append('project_ids[]', String(projectId)));
     if (data.evidenceUrl !== undefined) {
       body.append('evidence_url', data.evidenceUrl);
     }
