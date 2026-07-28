@@ -110,7 +110,16 @@
       <div class="flex gap-1">
         @if (this.selectedOverseerStep) {
           <button color="warn" mat-raised-button (click)="deleteStep()">Delete</button>
-          <button color="primary" mat-raised-button (click)="saveStep()">Save</button>
+          @if (overseerStepHasUnsavedChanges(selectedOverseerStep)) {
+            <button
+              color="primary"
+              mat-raised-button
+              [disabled]="isSavingStep(selectedOverseerStep)"
+              (click)="saveStep()"
+            >
+              Save
+            </button>
+          }
         }
       </div>
     </div>
@@ -136,7 +145,21 @@
               (click)="selectStep(step)"
             >
               <mat-icon cdkDragHandle class="cursor-move">drag_indicator</mat-icon>
-              {{ step.sortOrder }}. {{ step.name ?? 'Untitled Step' }}
+              <span class="min-w-0 flex-1 truncate">
+                {{ step.sortOrder }}. {{ step.name ?? 'Untitled Step' }}
+              </span>
+              @if (overseerStepHasUnsavedChanges(step)) {
+                <button
+                  class="shrink-0"
+                  color="primary"
+                  mat-icon-button
+                  matTooltip="Save changes"
+                  [disabled]="isSavingStep(step)"
+                  (click)="saveStepFromRow(step, $event)"
+                >
+                  <mat-icon>save</mat-icon>
+                </button>
+              }
             </div>
           }
           @if (newOverseerStep) {
@@ -146,7 +169,20 @@
               class="example-box bg-gray-100"
               (click)="selectStep(newOverseerStep)"
             >
-              {{ newOverseerStep.sortOrder }}. {{ newOverseerStep.name || 'Untitled Step' }}
+              <span class="min-w-0 flex-1 truncate">
+                {{ newOverseerStep.sortOrder }}.
+                {{ newOverseerStep.name || 'Untitled Step' }}
+              </span>
+              <button
+                class="shrink-0"
+                color="primary"
+                mat-button
+                matTooltip="Save new step"
+                [disabled]="isSavingStep(newOverseerStep)"
+                (click)="saveStepFromRow(newOverseerStep, $event)"
+              >
+                <mat-icon>save</mat-icon> Save
+              </button>
             </div>
           }
         </div>
