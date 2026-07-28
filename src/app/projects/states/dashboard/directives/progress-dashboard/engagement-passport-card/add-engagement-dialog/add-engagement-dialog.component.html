@@ -8,7 +8,7 @@
       </p>
       @if (loadingStudent) {
         <mat-spinner
-          class="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
+          class="absolute top-1/2 left-1/2 z-10 -translate-1/2"
           diameter="48"
         ></mat-spinner>
       }
@@ -78,7 +78,7 @@
             }
           </mat-autocomplete>
           @if (loadingStudents) {
-            <mat-spinner matSuffix class="mr-3" diameter="20"></mat-spinner>
+            <mat-spinner class="mr-3" diameter="20" matSuffix></mat-spinner>
           }
           <mat-hint>Type at least two characters to find a student.</mat-hint>
         </mat-form-field>
