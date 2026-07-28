@@ -49,6 +49,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   editorOptions = {
     theme: 'vs',
     language: 'shell',
+    automaticLayout: true,
     renderMinimap: false,
 
     minimap: {
