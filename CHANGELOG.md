@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-56](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-55...v11.0.0-56) (2026-07-28)
+
+
+### Bug Fixes
+
+* resize overseer editor when task sidebar collapses ([4f9fc24](https://github.com/b0ink/doubtfire-deploy/commit/4f9fc24d17bde2cd19ce1432af06aa51366f5853))
+
 ## [11.0.0-55](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-54...v11.0.0-55) (2026-07-27)
 
 
