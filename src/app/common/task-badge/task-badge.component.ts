@@ -10,6 +10,7 @@ import {TaskDefinition} from 'src/app/api/models/task-definition';
 })
 export class FTaskBadgeComponent {
   @Input() taskDef: TaskDefinition;
+  @Input() abbreviationText?: string;
   @Input() size = 100;
   @Input() highlight = false;
 
@@ -17,7 +18,7 @@ export class FTaskBadgeComponent {
 
   get abbreviation(): string {
     // return the first 3 characters of the task abbreviation
-    return this.taskDef?.abbreviation.substring(0, 4);
+    return (this.abbreviationText ?? this.taskDef?.abbreviation ?? '').substring(0, 4);
   }
 
   calculateFontSize(length: number): string {

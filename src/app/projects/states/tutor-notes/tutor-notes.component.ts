@@ -25,6 +25,7 @@ export class TutorNotesComponent implements OnInit {
 
   @Input() unitRole: UnitRole;
   @Input() task: Task;
+  @Input() focusNoteId?: number;
 
   loadingTutorNotes: boolean = true;
 
@@ -53,6 +54,14 @@ export class TutorNotesComponent implements OnInit {
       this.loadingTutorNotes = false;
       this.tutorNoteService.updateTutorNoteReplies(this.unitRole?.tutorNotesCache.currentValues);
       this.scrollDown();
+      if (this.focusNoteId) {
+        setTimeout(() => {
+          const note = this.unitRole.tutorNotesCache.get(this.focusNoteId);
+          if (note) {
+            this.scrollToNote(note);
+          }
+        }, 100);
+      }
     });
     if (this.task) {
       this.selectedTaskDefinitions.set(this.task.definition.abbreviation, true);

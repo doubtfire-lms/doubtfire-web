@@ -1,0 +1,118 @@
+<button
+  aria-label="Notifications"
+  mat-icon-button
+  matTooltip="Notifications"
+  [matMenuTriggerFor]="notificationMenu"
+  (menuOpened)="load()"
+>
+  <mat-icon
+    class="scale-150 text-black"
+    matBadgeSize="small"
+    [matBadge]="unreadCount"
+    [matBadgeHidden]="unreadCount === 0"
+  >
+    notifications
+  </mat-icon>
+</button>
+
+<mat-menu
+  #notificationMenu="matMenu"
+  class="w-[500px] max-w-[calc(100vw-24px)] min-w-0"
+  [overlapTrigger]="false"
+>
+  <div class="w-[500px] max-w-full">
+    <div class="flex items-center justify-between px-4 pt-3.5 pb-2.5">
+      <strong>Notifications</strong>
+      <span class="text-xs text-slate-500">{{ unreadCount }} unread</span>
+    </div>
+
+    @if (loading) {
+      <div
+        class="flex min-h-28 flex-col items-center justify-center gap-2.5 p-4 text-center text-slate-500"
+      >
+        <mat-spinner diameter="28"></mat-spinner>
+        <span>Loading notifications…</span>
+      </div>
+    } @else if (loadFailed) {
+      <div
+        class="flex min-h-28 flex-col items-center justify-center gap-2.5 p-4 text-center text-slate-500"
+      >
+        <span>Notifications could not be loaded.</span>
+        <button mat-button type="button" (click)="load()">Try again</button>
+      </div>
+    } @else if (groups.length === 0) {
+      <div
+        class="flex min-h-28 flex-col items-center justify-center gap-2.5 p-4 text-center text-slate-500"
+      >
+        <mat-icon>notifications_none</mat-icon>
+        <span>You’re all caught up.</span>
+      </div>
+    } @else {
+      @for (group of groups; track group.key) {
+        <button
+          class="!h-auto min-h-[76px] !py-2.5 !leading-[1.3] !whitespace-normal"
+          mat-menu-item
+          type="button"
+          [attr.aria-label]="group.summary"
+          (click)="open(group)"
+        >
+          <span class="flex w-full min-w-0 flex-col gap-[7px]">
+            <span class="block w-full text-xs [overflow-wrap:anywhere] text-slate-500">
+              {{ group.unit.code }}
+              @if (group.task) {
+                · {{ group.task.name }}
+              }
+              @if (group.task?.studentName) {
+                · {{ group.task.studentName }}
+              }
+              · {{ group.latestAt | humanizedDate }}
+            </span>
+            <span class="flex min-w-0 items-center gap-3">
+              @if (group.task) {
+                <span class="relative flex w-10 shrink-0 grow-0">
+                  <f-task-badge [abbreviationText]="group.task.abbreviation"></f-task-badge>
+                  <span
+                    class="absolute top-[-3px] right-[-3px] size-2 flex-none rounded-full [box-shadow:0_0_0_2px_white]"
+                    [ngClass]="
+                      group.severity === 'critical'
+                        ? 'bg-[#c62828]'
+                        : group.severity === 'warning'
+                          ? 'bg-[#ed6c02]'
+                          : 'bg-blue-600'
+                    "
+                  ></span>
+                </span>
+              } @else {
+                <span
+                  class="flex size-10 flex-none items-center justify-center rounded-md bg-gray-200 text-slate-600"
+                >
+                  <mat-icon class="m-0">notifications</mat-icon>
+                </span>
+              }
+              <span class="min-w-0 flex-1">
+                <span class="mt-[3px] block [overflow-wrap:anywhere] text-slate-800">
+                  {{ summaryText(group) }}
+                </span>
+              </span>
+              @if (group.latestStatus) {
+                <span class="flex flex-none items-center justify-center">
+                  <status-icon [compact]="false" [status]="group.latestStatus"></status-icon>
+                </span>
+              }
+            </span>
+          </span>
+        </button>
+      }
+    }
+
+    <mat-divider></mat-divider>
+    <a
+      class="flex justify-between font-semibold text-blue-700"
+      mat-menu-item
+      routerLink="/notifications"
+    >
+      View all notifications
+      <mat-icon class="text-blue-700">arrow_forward</mat-icon>
+    </a>
+  </div>
+</mat-menu>
