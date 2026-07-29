@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-58](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-57...v11.0.0-58) (2026-07-29)
+
+
+### Bug Fixes
+
+* ensure rediscuss unlocks submission with prereqs ([bcaaa4d](https://github.com/b0ink/doubtfire-deploy/commit/bcaaa4d97bee8f04b7bf24d011ab45f8ebea234e))
+* show withdrawn students in admin students list ([2e3c250](https://github.com/b0ink/doubtfire-deploy/commit/2e3c250d5c1eae6d5e6c9100525afb2957357cbd))
+
 ## [11.0.0-57](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-56...v11.0.0-57) (2026-07-28)
 
 
