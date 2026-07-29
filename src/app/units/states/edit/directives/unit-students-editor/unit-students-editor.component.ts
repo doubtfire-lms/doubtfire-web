@@ -106,7 +106,11 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
     this.subscriptions.push(
       timer(0)
         .pipe(
-          switchMap(() => this.projectService.loadStudents(this.unit, false, true)),
+          switchMap(() =>
+            this.projectService
+              .loadStudents(this.unit, false, true)
+              .pipe(switchMap(() => this.projectService.loadStudents(this.unit, true, true))),
+          ),
           finalize(() => {
             this.loadingStudents = false;
           }),
