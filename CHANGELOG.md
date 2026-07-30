@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-60](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-59...v11.0.0-60) (2026-07-30)
+
+
+### Bug Fixes
+
+* ensure administrator system role overrides unit role ([69ac63f](https://github.com/b0ink/doubtfire-deploy/commit/69ac63f9ba4e25f81128ce330181fea4e0fd4109))
+
 ## [11.0.0-59](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-58...v11.0.0-59) (2026-07-30)
 
 
