@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-59](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-58...v11.0.0-59) (2026-07-30)
+
+
+### Features
+
+* display denied requests by f5 waf to client ([b7edf5d](https://github.com/b0ink/doubtfire-deploy/commit/b7edf5dcfa9cb662caa15445818f57b2e51d3651))
+* enable unit content zip download ([71f251c](https://github.com/b0ink/doubtfire-deploy/commit/71f251caccc9fb5d89f89b008041fa0e8ae97849))
+
+
+### Bug Fixes
+
+* track file upload zones by name ([ccc7d0f](https://github.com/b0ink/doubtfire-deploy/commit/ccc7d0f67458cf497927730d29700762ff0e7ca6))
+
 ## [11.0.0-58](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-57...v11.0.0-58) (2026-07-29)
 
 
