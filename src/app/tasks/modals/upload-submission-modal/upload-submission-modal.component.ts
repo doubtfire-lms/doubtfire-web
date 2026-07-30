@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MemberContribution} from 'src/app/api/models/groups/group';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
@@ -9,6 +9,7 @@ import {FileUploaderComponent} from 'src/app/common/file-uploader/file-uploader.
 import {AlertService} from 'src/app/common/services/alert.service';
 import {EmojiService} from 'src/app/common/services/emoji.service';
 import {PrivacyPolicy} from 'src/app/config/privacy-policy/privacy-policy';
+import {SubmissionRequestDeniedModalComponent} from '../submission-request-denied-modal/submission-request-denied-modal.component';
 
 type UploadStage = 'group' | 'details' | 'comments';
 type UploadSubmissionType = TaskStatusEnum | 'reupload_evidence' | 'test_submission';
@@ -40,6 +41,7 @@ export interface UploadSubmissionModalData {
   task: Task;
   reuploadEvidence: boolean;
   isTestSubmission: boolean;
+  originalTaskStatus: TaskStatusEnum;
 }
 
 export interface UploadSubmissionModalCloseResult {
@@ -90,11 +92,13 @@ export class UploadSubmissionModalComponent implements OnInit {
   public uploadSubmitLocked = false;
 
   private uploadResponse: UploadSubmissionResponse | null = null;
+  private uploadRequestedAt: Date | null = null;
   private startUpload?: () => void;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: UploadSubmissionModalData,
     private dialogRef: MatDialogRef<UploadSubmissionModalComponent, UploadSubmissionModalResult>,
+    private dialog: MatDialog,
     private taskService: TaskService,
     private projectService: ProjectService,
     private privacyPolicyService: PrivacyPolicy,
@@ -269,6 +273,33 @@ export class UploadSubmissionModalComponent implements OnInit {
       return;
     }
 
+    const supportId = this.extractWafSupportId(response);
+    if (supportId) {
+      this.uploadSubmitLocked = false;
+
+      this.dialogRef.afterClosed().subscribe(() => {
+        const requestDeniedDialogRef = this.dialog.open(SubmissionRequestDeniedModalComponent, {
+          autoFocus: false,
+          width: '100%',
+          maxWidth: '640px',
+          data: {
+            requestedAt: this.uploadRequestedAt ?? new Date(),
+            supportId,
+          },
+        });
+
+        requestDeniedDialogRef.afterClosed().subscribe(() => {
+          this.task.status = this.data.originalTaskStatus;
+          this.alertService.message(
+            'Submission was not received. The task status has been restored.',
+            6000,
+          );
+        });
+      });
+      this.dialogRef.close({value: this.task});
+      return;
+    }
+
     console.error('Invalid response', response);
     this.dialogRef.close({value: this.task});
     this.alertService.error(
@@ -310,6 +341,7 @@ export class UploadSubmissionModalComponent implements OnInit {
     this.uploadSubmitLocked = true;
     this.uploadStarted = true;
     this.currentStage = 'details';
+    this.uploadRequestedAt = new Date();
     this.startUpload?.();
   }
 
@@ -336,6 +368,7 @@ export class UploadSubmissionModalComponent implements OnInit {
     this.uploadStarted = false;
     this.uploadSubmitLocked = false;
     this.uploadResponse = null;
+    this.uploadRequestedAt = null;
     this.currentStage = this.showGroupSection ? 'group' : 'details';
   }
 
@@ -353,5 +386,17 @@ export class UploadSubmissionModalComponent implements OnInit {
     const candidate = response as Partial<UploadSubmissionResponse> | null;
 
     return !!candidate && typeof candidate === 'object' && !!candidate.id && !!candidate.project_id;
+  }
+
+  private extractWafSupportId(response: unknown): string | null {
+    if (
+      typeof response !== 'string' ||
+      !/Request Rejected/i.test(response) ||
+      !/requested URL was rejected/i.test(response)
+    ) {
+      return null;
+    }
+
+    return response.match(/Your support ID is\s*([^<\r\n]+)/i)?.[1]?.trim() || null;
   }
 }
