@@ -1,8 +1,8 @@
-<mat-card appearance="outlined" class="p-[16px]">
+<mat-card appearance="outlined" class="p-4">
   <mat-card-title>
     <h2>Task Completion Status</h2>
   </mat-card-title>
-  <div class="flex items-center gap-2 p-[16px]">
+  <div class="flex items-center gap-2 p-4">
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-select [(ngModel)]="campusFilter" (selectionChange)="refreshData()">
         <mat-option value="all">All</mat-option>
@@ -20,23 +20,41 @@
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
-  <div class="h-[500px]">
-    <ngx-charts-bar-vertical-normalized
-      class="reverse-legend-order"
-      [animations]="animations"
-      [gradient]="gradient"
-      [legend]="showLegend"
-      [results]="data"
-      [scheme]="$any(colorScheme)"
-      [showXAxisLabel]="showXAxisLabel"
-      [showYAxisLabel]="showYAxisLabel"
-      [tooltipDisabled]="false"
-      [xAxis]="showXAxis"
-      [xAxisLabel]="xAxisLabel"
-      [yAxis]="showYAxis"
-      [yAxisLabel]="yAxisLabel"
-      (select)="onSelect($event)"
-    >
-    </ngx-charts-bar-vertical-normalized>
+  <div class="h-125">
+      <ngx-charts-bar-vertical-normalized
+        class="reverse-legend-order"
+        [animations]="animations"
+        [gradient]="gradient"
+        [legend]="showLegend"
+        [results]="data"
+        [scheme]="$any(colorScheme)"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [tooltipDisabled]="false"
+        [xAxis]="showXAxis"
+        [xAxisLabel]="xAxisLabel"
+        [yAxis]="showYAxis"
+        [yAxisLabel]="yAxisLabel"
+      >
+      </ngx-charts-bar-vertical-normalized>
   </div>
-</mat-card>
+  <div class="flex items-center gap-3 px-4 pb-4 pt-0">
+    <div class="min-w-24 text-sm text-slate-600">{{ selectedSnapshotDate }}</div>
+    <mat-slider
+      class="w-full"
+      [disabled]="snapshots.length <= 1"
+      [discrete]="true"
+      [max]="sliderMax"
+      [min]="0"
+      [step]="1"
+    >
+      <input
+        matSliderThumb
+        [ngModel]="sliderSelect"
+        (ngModelChange)="onSnapshotSliderChange($event)"
+      />
+    </mat-slider>
+    <div class="min-w-24 text-right text-sm text-slate-600">
+      {{ sliderSelect + 1 }} / {{ snapshots.length }}
+    </div>
+  </div>

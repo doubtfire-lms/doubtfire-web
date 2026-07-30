@@ -1,4 +1,4 @@
-import {DataItem, MultiSeries, TooltipService} from '@swimlane/ngx-charts';
+import {MultiSeries, TooltipService} from '@swimlane/ngx-charts';
 import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
 import {filter, map, take} from 'rxjs/operators';
 import {
@@ -13,7 +13,6 @@ import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {GradeService} from 'src/app/common/services/grade.service';
 
 @Component({
   selector: 'f-summary-task-status-chart',
@@ -25,9 +24,9 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   @Input() unit: Unit;
 
   data: MultiSeries = [];
+  sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
   campuses: string[] = [];
-  tutorials: string[] = [];
 
   // options
   showXAxis: boolean = true;
@@ -44,7 +43,18 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     domain: [''],
   };
 
-  dataSource: TaskCodeStats = {};
+  get sliderMax(): number {
+    return Math.max(this.snapshots.length - 1, 0);
+  }
+
+  get selectedSnapshot(): TaskCompletionSnapshot | undefined {
+    return this.snapshots[this.sliderSelect];
+  }
+
+  get selectedSnapshotDate(): string {
+    return this.selectedSnapshot?.snapshot_date ?? '';
+  }
+
   private autoCaptureAttempted: boolean = false;
 
   private readonly statusMapping: TaskStatusEnum[] = [
@@ -65,7 +75,6 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   ];
 
   constructor(
-    private gradeService: GradeService,
     private taskService: TaskService,
     private alertService: AlertService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
@@ -79,11 +88,6 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     this.viewContainerRef = this.injectorObj.get(ViewContainerRef);
   }
 
-  statusLabelsArr = Array.from(this.taskService.statusLabels.entries()) as [
-    TaskStatusEnum,
-    string,
-  ][];
-
   campusFilter: string = 'all';
 
   ngOnInit(): void {
@@ -96,42 +100,25 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   }
 
   refreshData() {
-    const mergedData: TaskCodeStats = {};
-    const recentSnapshot = this.snapshots[0]?.stats;
+    const selectedSnapshot = this.selectedSnapshot;
 
-    if (!recentSnapshot) {
+    if (!selectedSnapshot) {
       this.data = [];
       this.campuses = [];
       return;
     }
 
-    // combine all campuses
+    this.campuses = Object.keys(selectedSnapshot.stats);
 
-    this.campuses = [];
-    this.tutorials = [];
+    this.data =
+      this.campusFilter !== 'all' && selectedSnapshot.stats[this.campusFilter]
+        ? this.buildChartData(this.aggregateCampusData(selectedSnapshot.stats[this.campusFilter]))
+        : this.buildChartData(this.aggregateAllCampuses(selectedSnapshot.stats));
+  }
 
-    Object.entries(recentSnapshot).forEach(([campus, campusData]) => {
-      this.campuses.push(campus);
-      Object.entries(campusData).forEach(([tutorial, tutorialData]) => {
-        if (!this.tutorials.includes(tutorial)) {
-          this.tutorials.push(tutorial);
-        }
-        Object.entries(tutorialData).forEach(([taskDef, counts]) => {
-          mergedData[taskDef] = mergedData[taskDef] || {};
-          Object.entries(counts).forEach(([status, value]) => {
-            mergedData[taskDef][status] = (mergedData[taskDef][status] || 0) + value;
-          });
-        });
-      });
-    });
-
-    // if a campus filter is set, use only that campus
-    this.dataSource =
-      this.campusFilter && this.campusFilter !== 'all' && recentSnapshot[this.campusFilter]
-        ? this.aggregateCampusData(recentSnapshot[this.campusFilter])
-        : mergedData;
-
-    this.data = this.buildChartData(this.dataSource);
+  onSnapshotSliderChange(value: number): void {
+    this.sliderSelect = Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax);
+    this.refreshData();
   }
 
   private buildChartData(taskStats: TaskCodeStats): MultiSeries {
@@ -141,7 +128,6 @@ export class SummaryTaskStatusChartComponent implements OnInit {
         taskDefinition.seq,
       ]),
     );
-
     return Object.entries(taskStats)
       .sort(([taskCodeA], [taskCodeB]) => {
         const seqA = taskSeqByCode.get(taskCodeA) ?? Number.MAX_SAFE_INTEGER;
@@ -169,24 +155,35 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     }, {} as TaskCodeStats);
   }
 
-  onSelect(event: DataItem): void {
-    console.log(event);
+  private aggregateAllCampuses(snapshotStats: TaskCompletionSnapshot['stats']): TaskCodeStats {
+    return Object.values(snapshotStats).reduce((acc, campusData) => {
+      Object.entries(this.aggregateCampusData(campusData)).forEach(([taskDef, counts]) => {
+        acc[taskDef] = acc[taskDef] || {};
+        Object.entries(counts).forEach(([status, value]) => {
+          acc[taskDef][status] = (acc[taskDef][status] || 0) + value;
+        });
+      });
+
+      return acc;
+    }, {} as TaskCodeStats);
   }
 
-  private extractErrorMessage(error: string, fallback: string): string {
-    if (error.trim().length > 0) {
-      return error;
-    }
-
-    return fallback;
+  onSelect(): void {
   }
 
   loadRecentSnapshot(): void {
-    this.unit.getTaskCompletionSnapshots(undefined, undefined, 1).subscribe({
-      next: (data) => {
-        this.snapshots = data as TaskCompletionSnapshot[];
-        this.refreshData();
+    if (!this.unit) {
+      return;
+    }
 
+    this.unit.getTaskCompletionSnapshots().subscribe({
+      next: (data) => {
+        this.snapshots = [...(data as TaskCompletionSnapshot[])].sort(
+          (left, right) => Number(left.snapshot_timestamp) - Number(right.snapshot_timestamp),
+        );
+        this.sliderSelect = 0;
+        this.refreshData();
+        console.log(this.snapshots);
         if (this.snapshots.length === 0 && !this.autoCaptureAttempted) {
           this.autoCaptureAttempted = true;
           this.captureNow();
@@ -194,10 +191,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
       },
       error: (error) => {
         console.log('Snapshot load failed', error);
-        const errorMessage = this.extractErrorMessage(
-          error,
-          'Failed to load task completion snapshot.',
-        );
+        const errorMessage = error ? error.message || error.toString() : 'Failed to load task completion snapshot.';
         this.alertService.error(errorMessage, 6000);
       },
     });
@@ -234,10 +228,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
       },
       error: (error) => {
         console.log('Snapshot capture failed', error);
-        const errorMessage = this.extractErrorMessage(
-          error,
-          'Failed to capture task completion snapshot.',
-        );
+        const errorMessage = error ? error.message || error.toString() : 'Failed to capture task completion snapshot.';
         this.alertService.error(errorMessage, 6000);
       },
     });
