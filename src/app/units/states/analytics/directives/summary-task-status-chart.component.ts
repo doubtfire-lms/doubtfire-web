@@ -168,8 +168,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     }, {} as TaskCodeStats);
   }
 
-  onSelect(): void {
-  }
+  onSelect(): void {}
 
   loadRecentSnapshot(): void {
     if (!this.unit) {
@@ -191,7 +190,9 @@ export class SummaryTaskStatusChartComponent implements OnInit {
       },
       error: (error) => {
         console.log('Snapshot load failed', error);
-        const errorMessage = error ? error.message || error.toString() : 'Failed to load task completion snapshot.';
+        const errorMessage = error
+          ? error.message || error.toString()
+          : 'Failed to load task completion snapshot.';
         this.alertService.error(errorMessage, 6000);
       },
     });
@@ -228,7 +229,9 @@ export class SummaryTaskStatusChartComponent implements OnInit {
       },
       error: (error) => {
         console.log('Snapshot capture failed', error);
-        const errorMessage = error ? error.message || error.toString() : 'Failed to capture task completion snapshot.';
+        const errorMessage = error
+          ? error.message || error.toString()
+          : 'Failed to capture task completion snapshot.';
         this.alertService.error(errorMessage, 6000);
       },
     });
