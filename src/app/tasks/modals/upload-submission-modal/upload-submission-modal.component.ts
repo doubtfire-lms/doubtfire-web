@@ -53,8 +53,7 @@ export interface UploadSubmissionModalDismissResult {
 }
 
 export type UploadSubmissionModalResult =
-  | UploadSubmissionModalCloseResult
-  | UploadSubmissionModalDismissResult;
+  UploadSubmissionModalCloseResult | UploadSubmissionModalDismissResult;
 
 @Component({
   selector: 'f-upload-submission-modal',
