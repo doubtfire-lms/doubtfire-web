@@ -142,28 +142,25 @@ export class SummaryTaskStatusChartComponent implements OnInit {
         })),
       }));
   }
+  private mergeTaskCounts(target: TaskCodeStats, source: TaskCodeStats): void {
+    Object.entries(source).forEach(([taskDef, counts]) => {
+      target[taskDef] = target[taskDef] || {};
+      Object.entries(counts).forEach(([status, value]) => {
+        target[taskDef][status] = (target[taskDef][status] || 0) + value;
+      });
+    });
+  }
 
   private aggregateCampusData(campusData: TutorialStats): TaskCodeStats {
     return Object.values(campusData).reduce((acc, tutorialData) => {
-      Object.entries(tutorialData).forEach(([taskDef, counts]) => {
-        acc[taskDef] = acc[taskDef] || {};
-        Object.entries(counts).forEach(([status, value]) => {
-          acc[taskDef][status] = (acc[taskDef][status] || 0) + value;
-        });
-      });
+      this.mergeTaskCounts(acc, tutorialData);
       return acc;
     }, {} as TaskCodeStats);
   }
 
   private aggregateAllCampuses(snapshotStats: TaskCompletionSnapshot['stats']): TaskCodeStats {
     return Object.values(snapshotStats).reduce((acc, campusData) => {
-      Object.entries(this.aggregateCampusData(campusData)).forEach(([taskDef, counts]) => {
-        acc[taskDef] = acc[taskDef] || {};
-        Object.entries(counts).forEach(([status, value]) => {
-          acc[taskDef][status] = (acc[taskDef][status] || 0) + value;
-        });
-      });
-
+      this.mergeTaskCounts(acc, this.aggregateCampusData(campusData));
       return acc;
     }, {} as TaskCodeStats);
   }
