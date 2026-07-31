@@ -1,7 +1,19 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, first, of, tap} from 'rxjs';
 import {
+  Observable,
+  Subject,
+  catchError,
+  distinctUntilChanged,
+  filter,
+  map,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
+import {
+  Project,
   ProjectService,
   TaskDefinition,
   Tutorial,
@@ -48,6 +60,7 @@ type TaskSource = (
 export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   private static readonly UNIT_REFRESH_INTERVAL_MS = 60_000;
   private static readonly lastUnitFetchAt: Map<number, number> = new Map();
+  private readonly destroy$: Subject<void> = new Subject();
 
   @Input() public unit$: Observable<Unit>;
   @Input() public routeMode: UnitTaskRouteMode = 'inbox';
@@ -101,27 +114,37 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     this.configureRouteMode();
     this.setTaskKeyFromRoute();
 
-    const routeUnit = this.route.parent?.parent?.snapshot.data.unit;
-    if (!this.unit$ && routeUnit) {
-      this.unit$ = of(routeUnit);
-    }
+    const routeUnit$ =
+      this.unit$ ??
+      this.route.parent?.parent?.data.pipe(
+        map((data) => data.unit as Unit),
+        filter((unit): unit is Unit => !!unit),
+      );
 
-    this.unit$.pipe(first()).subscribe((routeUnit) => {
-      this.loadUnit(routeUnit.id)
-        .pipe(first())
-        .subscribe((unit) => this.loadInboxData(unit));
-    });
+    routeUnit$
+      ?.pipe(
+        distinctUntilChanged((previous, current) => previous.id === current.id),
+        tap(() => this.prepareForUnitChange()),
+        switchMap((routeUnit) => this.loadUnit(routeUnit.id)),
+        switchMap((unit) => this.loadInboxData(unit)),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {
+        this.studentsLoaded = true;
+      });
 
-    this.route.paramMap.subscribe(() => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.setTaskKeyFromRoute();
     });
 
-    this.route.queryParamMap.subscribe(() => {
+    this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.setTaskKeyFromRoute();
     });
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
     this.globalStateService.setNotInboxState();
     this.clearSelectedTask();
   }
@@ -193,7 +216,15 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private loadInboxData(unit: Unit): void {
+  private prepareForUnitChange(): void {
+    this.clearSelectedTask();
+    this.unit = null;
+    this.unitRole = null;
+    this.studentsLoaded = false;
+    this.filters = {};
+  }
+
+  private loadInboxData(unit: Unit): Observable<Project[]> {
     this.unit = unit;
     this.unitRole = this.findUnitRole(unit.id);
     if (this.unitRole) {
@@ -208,17 +239,7 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
       ...this.getFilterOverrides(unit),
     };
 
-    this.projectService
-      .loadStudents(unit)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.studentsLoaded = true;
-        },
-        error: () => {
-          this.studentsLoaded = true;
-        },
-      });
+    return this.projectService.loadStudents(unit).pipe(catchError(() => of([])));
   }
 
   private getFilterOverrides(unit: Unit): Partial<TaskFilters> {
