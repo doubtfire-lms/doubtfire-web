@@ -6,3 +6,12 @@
 :host ::ng-deep .reverse-legend-order .legend-label {
   transform: scaleY(-1);
 }
+
+:host ::ng-deep .snapshot-slider {
+  --mat-slider-value-indicator-width: max-content;
+  --mat-slider-value-indicator-padding: 0 16px;
+}
+
+:host ::ng-deep .snapshot-slider .mdc-slider__value-indicator-text {
+  white-space: nowrap;
+}

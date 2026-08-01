@@ -39,14 +39,16 @@
     </ngx-charts-bar-vertical-normalized>
   </div>
   <div class="flex items-center gap-3 px-4 pt-0 pb-4">
-    <div class="min-w-24 text-sm text-slate-600">{{ selectedSnapshotDate }}</div>
+    <div class="min-w-24 text-sm text-slate-600">{{ firstSnapshotDate }}</div>
     <mat-slider
-      class="w-full"
+      class="snapshot-slider w-full"
       [disabled]="snapshots.length <= 1"
       [discrete]="true"
+      [showTickMarks]="true"
       [max]="sliderMax"
       [min]="0"
       [step]="1"
+      [displayWith]="formatSnapshotDate"
     >
       <input
         matSliderThumb
@@ -55,7 +57,7 @@
       />
     </mat-slider>
     <div class="min-w-24 text-right text-sm text-slate-600">
-      {{ sliderSelect + 1 }} / {{ snapshots.length }}
+      {{ lastSnapshotDate }}
     </div>
   </div>
 </mat-card>

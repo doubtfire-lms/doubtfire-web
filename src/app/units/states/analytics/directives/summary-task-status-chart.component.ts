@@ -52,8 +52,38 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   }
 
   get selectedSnapshotDate(): string {
-    return this.selectedSnapshot?.snapshot_date ?? '';
+    return this.formatSnapshotLabel(this.selectedSnapshot?.snapshot_date);
   }
+
+  get firstSnapshotDate(): string {
+    return this.formatSnapshotLabel(this.snapshots[0]?.snapshot_date);
+  }
+
+  get lastSnapshotDate(): string {
+    return this.formatSnapshotLabel(this.snapshots[this.snapshots.length - 1]?.snapshot_date);
+  }
+
+  formatSnapshotDate = (value: number): string => {
+    return this.formatSnapshotLabel(
+      this.snapshots[Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax)]?.snapshot_date,
+    );
+  };
+
+  private formatSnapshotLabel(snapshotDate?: string): string {
+    if (!snapshotDate) {
+      return '';
+    }
+
+    const date = new Date(snapshotDate);
+    if (Number.isNaN(date.valueOf())) {
+      return snapshotDate;
+    }
+
+    const dayName = new Intl.DateTimeFormat(undefined, {weekday: 'short'}).format(date);
+    const weekNumber = this.unit?.weekNumber(date);
+
+    return weekNumber ? `${dayName} W${weekNumber}` : dayName;
+  };
 
   private autoCaptureAttempted: boolean = false;
 
@@ -179,7 +209,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
         );
         this.sliderSelect = 0;
         this.refreshData();
-        console.log(this.snapshots);
+
         if (this.snapshots.length === 0 && !this.autoCaptureAttempted) {
           this.autoCaptureAttempted = true;
           this.captureNow();
