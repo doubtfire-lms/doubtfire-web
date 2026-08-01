@@ -81,6 +81,8 @@ export class Task extends Entity {
 
   targetStartDate: Date;
   targetDueDate: Date;
+  movedToDiscussAt: Date;
+  discussTimeoutExpiryAt: Date;
 
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
@@ -880,7 +882,7 @@ export class Task extends Entity {
     }
     const uploadModal: UploadSubmissionModalService = AppInjector.get(UploadSubmissionModalService);
 
-    const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission);
+    const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission, oldStatus);
     // Modal failed to present
     if (!modal) {
       if (!isTestSubmission) {
@@ -923,7 +925,7 @@ export class Task extends Entity {
     taskService.notifyStatusChange(this);
   }
 
-  public async markAsDiscussed(reasonText?: string) {
+  public async markAsDiscussed(reasonText?: string, onSuccess?: () => void) {
     const alerts: AlertService = AppInjector.get(AlertService);
     const taskService: TaskService = AppInjector.get(TaskService);
 
@@ -948,6 +950,7 @@ export class Task extends Entity {
           next: (_response) => {
             taskService.notifyStatusChange(this);
             alerts.success('Task successfully marked as discussed in class.', 4000);
+            onSuccess?.();
           },
           error: (error) => {
             alerts.error(error, 6000);
@@ -994,13 +997,14 @@ export class Task extends Entity {
     status: TaskStatusEnum,
     markAsDiscussed?: boolean,
     triggerRecursiveFix?: boolean,
+    onSuccess?: () => void,
   ) {
     const oldStatus = this.status;
     const oldGrade = this.grade;
     const oldQualityPts = this.qualityPts;
     const alerts: AlertService = AppInjector.get(AlertService);
 
-    if (status === 'complete' && !this.canMarkComplete) {
+    if (status === 'complete' && !this.canMarkComplete && markAsDiscussed !== true) {
       alerts.error('This task must be discussed in class before it can marked complete.', 6000);
       return;
     }
@@ -1045,6 +1049,9 @@ export class Task extends Entity {
             }
             this.processTaskStatusChange(status, alerts);
             taskService.notifyStatusChange(this);
+            if (this.status === status) {
+              onSuccess?.();
+            }
           },
           error: (error) => {
             this.status = oldStatus;

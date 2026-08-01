@@ -1,7 +1,14 @@
 <div class="h-screen w-full overflow-auto">
   @switch (taskDef) {
     @case (taskDef) {
-      @if (taskDef?.hasTaskSheet) {
+      @if (taskDef?.hasContentLink) {
+        <f-unit-content-viewer
+          class="block size-full"
+          [contentRoute]="taskDef.contentLink.route"
+          [contentSiteId]="taskDef.contentLink.unitContentSiteId"
+          [unit]="taskDef.unit"
+        ></f-unit-content-viewer>
+      } @else if (taskDef?.hasTaskSheet) {
         <f-pdf-viewer [pdfUrl]="taskDef.getTaskPDFUrl()"></f-pdf-viewer>
       } @else {
         <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">

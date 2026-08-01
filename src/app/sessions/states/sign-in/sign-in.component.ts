@@ -250,11 +250,10 @@ export class SignInComponent implements OnInit {
     // Indicate we are signing in...
     this.signingIn = true;
 
-    this.authService.signIn(signInCredentials).subscribe({
+    this.authService.signIn(signInCredentials, this.isLtiLogin ? this.ltik : undefined).subscribe({
       next: () => {
         if (this.isLtiLogin) {
-          const params = getUrlParams(document.location.href);
-          this.router.navigate(['/lti'], {queryParams: {ltik: params.ltik}});
+          this.router.navigate(['/lti'], {queryParams: {ltik: this.ltik}});
         } else {
           this.actionSignInSuccess();
         }

@@ -106,7 +106,11 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
     this.subscriptions.push(
       timer(0)
         .pipe(
-          switchMap(() => this.projectService.loadStudents(this.unit, false, true)),
+          switchMap(() =>
+            this.projectService
+              .loadStudents(this.unit, false, true)
+              .pipe(switchMap(() => this.projectService.loadStudents(this.unit, true, true))),
+          ),
           finalize(() => {
             this.loadingStudents = false;
           }),
@@ -118,6 +122,9 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
   }
 
   private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+    if (aValue === bValue) {
+      return 0;
+    }
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
@@ -127,17 +134,28 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
     if (!sort.active || sort.direction === '') {
       return;
     }
-    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'username':
+          return this.sortCompare(a.student.username, b.student.username, isAsc);
         case 'firstName':
+          return this.sortCompare(a.student.firstName, b.student.firstName, isAsc);
         case 'lastName':
+          return this.sortCompare(a.student.lastName, b.student.lastName, isAsc);
         case 'email':
+          return this.sortCompare(a.student.email, b.student.email, isAsc);
         case 'enrolled':
-          return this.sortCompare(a[sort.active], b[sort.active], isAsc);
+          return this.sortCompare(Number(a.enrolled), Number(b.enrolled), isAsc);
         case 'campus':
           return this.sortCompare(a.campus?.abbreviation, b.campus?.abbreviation, isAsc);
+        case 'tutorial':
+          return this.sortCompare(
+            a.shortTutorialDescription(),
+            b.shortTutorialDescription(),
+            isAsc,
+          );
         default:
           return 0;
       }

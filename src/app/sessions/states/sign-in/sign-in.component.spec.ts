@@ -1,8 +1,9 @@
-import {beforeEach, describe, expect, it} from 'vitest';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {HttpClient} from '@angular/common/http';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ActivatedRoute, Router} from '@angular/router';
+import {of} from 'rxjs';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -15,14 +16,19 @@ const emptyProvider = {};
 describe('SignInComponent', () => {
   let component: SignInComponent;
   let fixture: ComponentFixture<SignInComponent>;
+  let authenticationService: {signIn: ReturnType<typeof vi.fn>};
+  let router: {navigate: ReturnType<typeof vi.fn>};
 
   beforeEach(async () => {
+    authenticationService = {signIn: vi.fn(() => of(undefined))};
+    router = {navigate: vi.fn()};
+
     await TestBed.configureTestingModule({
       declarations: [SignInComponent],
       providers: [
-        {provide: AuthenticationService, useValue: emptyProvider},
+        {provide: AuthenticationService, useValue: authenticationService},
         {provide: UserService, useValue: emptyProvider},
-        {provide: Router, useValue: emptyProvider},
+        {provide: Router, useValue: router},
         {provide: ActivatedRoute, useValue: emptyProvider},
         {provide: DoubtfireConstants, useValue: emptyProvider},
         {provide: HttpClient, useValue: emptyProvider},
@@ -42,5 +48,25 @@ describe('SignInComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('keeps the ltik attached while completing an LTI sign in', () => {
+    const credentials = {
+      auth_token: 'one-time-token',
+      username: 'user',
+      remember: true,
+    };
+    component.isLtiLogin = true;
+    component.ltik = 'signed-lti-launch-token';
+
+    component.signIn(credentials);
+
+    expect(authenticationService.signIn).toHaveBeenCalledWith(
+      credentials,
+      'signed-lti-launch-token',
+    );
+    expect(router.navigate).toHaveBeenCalledWith(['/lti'], {
+      queryParams: {ltik: 'signed-lti-launch-token'},
+    });
   });
 });

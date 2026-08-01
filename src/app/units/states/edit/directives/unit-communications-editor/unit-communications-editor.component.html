@@ -242,31 +242,15 @@
                         <div class="text-black/70">No students currently match this rule.</div>
                       } @else {
                         <table class="w-full" mat-table [dataSource]="studentsFor(rule)">
-                          <ng-container matColumnDef="preferred_name">
-                            <th *matHeaderCellDef mat-header-cell>Preferred Name</th>
-                            <td *matCellDef="let student" mat-cell>
-                              {{ student.preferred_name || '-' }}
-                            </td>
-                          </ng-container>
-
-                          <ng-container matColumnDef="first_name">
-                            <th *matHeaderCellDef mat-header-cell>First Name</th>
-                            <td *matCellDef="let student" mat-cell>
-                              {{ student.first_name || '-' }}
-                            </td>
-                          </ng-container>
-
-                          <ng-container matColumnDef="last_name">
-                            <th *matHeaderCellDef mat-header-cell>Last Name</th>
-                            <td *matCellDef="let student" mat-cell>
-                              {{ student.last_name || '-' }}
-                            </td>
-                          </ng-container>
-
                           <ng-container matColumnDef="full_name">
                             <th *matHeaderCellDef mat-header-cell>Full Name</th>
                             <td *matCellDef="let student" mat-cell>
-                              {{ student.full_name || '-' }}
+                              {{
+                                (student.full_name || '-') +
+                                  (student.preferred_name
+                                    ? ' (' + student.preferred_name + ')'
+                                    : '')
+                              }}
                             </td>
                           </ng-container>
 
@@ -300,6 +284,15 @@
                             </td>
                           </ng-container>
 
+                          <ng-container matColumnDef="has_portfolio">
+                            <th *matHeaderCellDef mat-header-cell>Portfolio</th>
+                            <td *matCellDef="let student" mat-cell>
+                              @if (student.has_portfolio) {
+                                <mat-icon aria-label="Portfolio available">check</mat-icon>
+                              }
+                            </td>
+                          </ng-container>
+
                           <ng-container matColumnDef="spec_con_days">
                             <th *matHeaderCellDef mat-header-cell>Spec Con Days</th>
                             <td *matCellDef="let student" mat-cell>
@@ -311,7 +304,18 @@
                             <th *matHeaderCellDef mat-header-cell>Last Sign In</th>
                             <td *matCellDef="let student" mat-cell>
                               {{
-                                student.last_sign_in_at ? dateLabel(student.last_sign_in_at) : '-'
+                                student.last_sign_in_at
+                                  ? dateLabel(student.last_sign_in_at)
+                                  : 'Never'
+                              }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="last_viewed_at">
+                            <th *matHeaderCellDef mat-header-cell>Last Unit View</th>
+                            <td *matCellDef="let student" mat-cell>
+                              {{
+                                student.last_viewed_at ? dateLabel(student.last_viewed_at) : 'Never'
                               }}
                             </td>
                           </ng-container>

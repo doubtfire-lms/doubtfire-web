@@ -12,7 +12,7 @@ import {
   PortfolioListFilters,
 } from './directives/portfolios-list/portfolios-list.component';
 
-type PortfolioTabKey = 'select' | 'progress' | 'student-notes' | 'portfolio' | 'assessment';
+type PortfolioTabKey = 'select' | 'progress' | 'staff-notes' | 'portfolio' | 'assessment';
 
 interface PortfolioTab {
   label: string;
@@ -33,7 +33,7 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   public readonly tabs: PortfolioTab[] = [
     {label: 'Select Student', routeSegment: 'select', requiresProject: false},
     {label: 'View Progress', routeSegment: 'progress', requiresProject: true},
-    {label: 'View Student Notes', routeSegment: 'student-notes', requiresProject: true},
+    {label: 'View Staff Notes', routeSegment: 'staff-notes', requiresProject: true},
     {label: 'View Portfolio', routeSegment: 'portfolio', requiresProject: true},
     {label: 'Assess Portfolio', routeSegment: 'assessment', requiresProject: true},
   ];

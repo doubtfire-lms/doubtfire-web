@@ -39,10 +39,12 @@ export class CommunicationCondition extends Entity {
   task_status_count?: number;
   task_target_grade?: number;
   last_sign_in_at?: string;
+  activity_days?: number;
   spec_con_days?: number;
   tutorial_id?: number;
   tutorial_stream_id?: number;
   campus_id?: number;
+  submitted_portfolio?: boolean;
 
   constructor(json?: Partial<CommunicationCondition>) {
     super();
@@ -60,7 +62,9 @@ export interface CommunicationRulePreviewStudent {
   campus?: string;
   target_grade?: number;
   spec_con_days?: number;
+  has_portfolio?: boolean;
   last_sign_in_at?: string;
+  last_viewed_at?: string;
 }
 
 export interface CommunicationRulePreviewAllocation {

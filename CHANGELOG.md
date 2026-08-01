@@ -2,6 +2,156 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-61](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-60...v11.0.0-61) (2026-07-31)
+
+
+### Bug Fixes
+
+* ensure unit is fetched when switching between unit dropdown ([90980ff](https://github.com/b0ink/doubtfire-deploy/commit/90980ff1357135ce53f0d8b7af4dc38825eef2ea))
+
+## [11.0.0-60](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-59...v11.0.0-60) (2026-07-30)
+
+
+### Bug Fixes
+
+* ensure administrator system role overrides unit role ([69ac63f](https://github.com/b0ink/doubtfire-deploy/commit/69ac63f9ba4e25f81128ce330181fea4e0fd4109))
+
+## [11.0.0-59](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-58...v11.0.0-59) (2026-07-30)
+
+
+### Features
+
+* display denied requests by f5 waf to client ([b7edf5d](https://github.com/b0ink/doubtfire-deploy/commit/b7edf5dcfa9cb662caa15445818f57b2e51d3651))
+* enable unit content zip download ([71f251c](https://github.com/b0ink/doubtfire-deploy/commit/71f251caccc9fb5d89f89b008041fa0e8ae97849))
+
+
+### Bug Fixes
+
+* track file upload zones by name ([ccc7d0f](https://github.com/b0ink/doubtfire-deploy/commit/ccc7d0f67458cf497927730d29700762ff0e7ca6))
+
+## [11.0.0-58](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-57...v11.0.0-58) (2026-07-29)
+
+
+### Bug Fixes
+
+* ensure rediscuss unlocks submission with prereqs ([bcaaa4d](https://github.com/b0ink/doubtfire-deploy/commit/bcaaa4d97bee8f04b7bf24d011ab45f8ebea234e))
+* show withdrawn students in admin students list ([2e3c250](https://github.com/b0ink/doubtfire-deploy/commit/2e3c250d5c1eae6d5e6c9100525afb2957357cbd))
+
+## [11.0.0-57](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-56...v11.0.0-57) (2026-07-28)
+
+
+### Bug Fixes
+
+* submit discussion with status updates ([736d38a](https://github.com/b0ink/doubtfire-deploy/commit/736d38ad59b84e0d555f27a92a0e203488914808))
+
+## [11.0.0-56](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-55...v11.0.0-56) (2026-07-28)
+
+
+### Bug Fixes
+
+* resize overseer editor when task sidebar collapses ([4f9fc24](https://github.com/b0ink/doubtfire-deploy/commit/4f9fc24d17bde2cd19ce1432af06aa51366f5853))
+
+## [11.0.0-55](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-54...v11.0.0-55) (2026-07-27)
+
+
+### Bug Fixes
+
+* enable tasks access to tutor roles ([b346ba4](https://github.com/b0ink/doubtfire-deploy/commit/b346ba49a46bdcfd3a82f02f1e5d37c3f89eb6ee))
+* init unit exclusions array ([3ca7c94](https://github.com/b0ink/doubtfire-deploy/commit/3ca7c948c1a7d943617dff09fed6f99700916e20))
+
+## [11.0.0-54](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-53...v11.0.0-54) (2026-07-24)
+
+
+### Features
+
+* add engagement stamp for task status updates ([553f12e](https://github.com/b0ink/doubtfire-deploy/commit/553f12e76ac76b0417c955eb72789ae8392f5bec))
+* automated engagement stamps ([#1372](https://github.com/b0ink/doubtfire-deploy/issues/1372)) ([4fbdd11](https://github.com/b0ink/doubtfire-deploy/commit/4fbdd111ec8fbc205c581060a008a229ef1a0b78))
+* fetch project with record attendance param in mobile view ([ea7e8c4](https://github.com/b0ink/doubtfire-deploy/commit/ea7e8c440b4414350d0925fafeaf14f0943f0547))
+
+
+### Bug Fixes
+
+* ensure successful status change ([35e423c](https://github.com/b0ink/doubtfire-deploy/commit/35e423c2aa633c09eb4e96f36e51f7792b4f4f3d))
+
+## [11.0.0-53](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-52...v11.0.0-53) (2026-07-24)
+
+
+### Features
+
+* add ui for submitted portfolio communication condition ([39f10f9](https://github.com/b0ink/doubtfire-deploy/commit/39f10f91abbea730cf87c70ff9a6a2c7ac396052))
+
+
+### Bug Fixes
+
+* ensure content viewer updates when switching between task sheets ([68e9c9f](https://github.com/b0ink/doubtfire-deploy/commit/68e9c9f6f759546d87e602849a3fa67525114ae3))
+* normalise upload upload requirement file keys on save ([54954f2](https://github.com/b0ink/doubtfire-deploy/commit/54954f292a01d9bf93894207436260b59027ad55))
+
+## [11.0.0-52](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-51...v11.0.0-52) (2026-07-24)
+
+
+### Features
+
+* invert toggle to show tasks beyond target grade ([6b19089](https://github.com/b0ink/doubtfire-deploy/commit/6b19089dc32c82f74f3bfeaa8e54c8228cf393d5))
+
+## [11.0.0-51](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-50...v11.0.0-51) (2026-07-24)
+
+## [11.0.0-50](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-49...v11.0.0-50) (2026-07-24)
+
+
+### Features
+
+* add last sign in and last unit access communication conditions ([73295ff](https://github.com/b0ink/doubtfire-deploy/commit/73295ff02008475cc488f1b65b1db01f1f8c046b))
+* discuss timeout ([#1343](https://github.com/b0ink/doubtfire-deploy/issues/1343)) ([dc979fe](https://github.com/b0ink/doubtfire-deploy/commit/dc979fe6f48eede85b55382440e42477f6e6bd2b))
+
+
+### Bug Fixes
+
+* ensure learning outcomes update when switching between tasks ([0558d63](https://github.com/b0ink/doubtfire-deploy/commit/0558d630969d6a18cd771830126c3ff4c30efc06))
+* ensure unit is fetched in tasks list route ([afb492e](https://github.com/b0ink/doubtfire-deploy/commit/afb492eee80bdbfe9ef808154d915809408a3c8e))
+* prevent discussed in class comment unless status update was success ([4b99371](https://github.com/b0ink/doubtfire-deploy/commit/4b9937167e0d06ed36937c29ada4c42f95a254ea))
+* redirect to correct host ([4f30251](https://github.com/b0ink/doubtfire-deploy/commit/4f30251c1f232d672c9087e0f3e374d5a0157b8b))
+* render content link if available in unit task list route ([04d56ab](https://github.com/b0ink/doubtfire-deploy/commit/04d56abecddd541016c508710e5e584253bfd1b9))
+
+## [11.0.0-49](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-48...v11.0.0-49) (2026-07-21)
+
+
+### Bug Fixes
+
+* preserve ltik during lti sign-in ([c8182cb](https://github.com/b0ink/doubtfire-deploy/commit/c8182cb3429115a1c231015d65c5ab470af1bd4a))
+
+## [11.0.0-48](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-47...v11.0.0-48) (2026-07-19)
+
+
+### Features
+
+* content management system ([#1327](https://github.com/b0ink/doubtfire-deploy/issues/1327)) ([c902828](https://github.com/b0ink/doubtfire-deploy/commit/c902828951f1ce7853de81b53ce6c1940052bd39))
+
+## [11.0.0-47](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-46...v11.0.0-47) (2026-07-19)
+
+## [11.0.0-46](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-45...v11.0.0-46) (2026-07-16)
+
+
+### Features
+
+* add rediscuss status ([2be78d4](https://github.com/b0ink/doubtfire-deploy/commit/2be78d4e120a856c3260ce1765c2e0f4dc48ae01))
+* add support for word document submissions ([350cd02](https://github.com/b0ink/doubtfire-deploy/commit/350cd02dbd4f1a5e5c59fd0e9be0ef70eaa54477))
+
+## [11.0.0-45](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-44...v11.0.0-45) (2026-07-13)
+
+
+### Features
+
+* add label for starting tasks ([46100f5](https://github.com/b0ink/doubtfire-deploy/commit/46100f50ca8ddac11668e97deb482994f47f87f9))
+* add task list filters and sorting ([c65279c](https://github.com/b0ink/doubtfire-deploy/commit/c65279cb1900b5198e764d53b671719512486a83))
+* show all tasks in task planner ([eb87251](https://github.com/b0ink/doubtfire-deploy/commit/eb87251dbef37d5cca8d11c29816c42722605764))
+
+
+### Bug Fixes
+
+* dont reset task list sidebar when switching between project and task dashboard ([acc3ac2](https://github.com/b0ink/doubtfire-deploy/commit/acc3ac2625137075262c44239772d121e52c3a34))
+* lint ([dab681d](https://github.com/b0ink/doubtfire-deploy/commit/dab681d0e3d0e025804d3477eb68727ab42330ed))
+* use task weighting system as default sorting ([aa3c261](https://github.com/b0ink/doubtfire-deploy/commit/aa3c2613f9c1027eea761f51297380a4443a42b2))
+
 ## [11.0.0-44](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-43...v11.0.0-44) (2026-07-08)
 
 

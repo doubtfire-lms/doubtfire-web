@@ -258,25 +258,23 @@ export class UnitTutorialsListComponent
     if (!sort.active || sort.direction === '') {
       return;
     }
-    switch (sort.active) {
-      case 'abbreviation':
-      case 'location':
-      case 'day':
-      case 'time':
-      case 'capacity':
-        return super.sortTableData(sort);
-    }
-    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
+        case 'abbreviation':
+          return this.sortCompare(a.abbreviation, b.abbreviation, isAsc);
         case 'campus':
-          return this.sortCompare(
-            a.campus ? a.campus.abbreviation : '',
-            b.campus ? b.campus.abbreviation : '',
-            isAsc,
-          );
+          return this.sortCompare(a.campus?.abbreviation, b.campus?.abbreviation, isAsc);
+        case 'location':
+          return this.sortCompare(a.meetingLocation, b.meetingLocation, isAsc);
+        case 'day':
+          return this.sortCompare(a.meetingDay, b.meetingDay, isAsc);
+        case 'time':
+          return this.sortCompare(a.meetingTime, b.meetingTime, isAsc);
         case 'tutor':
-          return this.sortCompare(a.tutor.name, b.tutor.name, isAsc);
+          return this.sortCompare(a.tutorName, b.tutorName, isAsc);
+        case 'capacity':
+          return this.sortCompare(a.capacity, b.capacity, isAsc);
         default:
           return 0;
       }

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Task} from 'src/app/api/models/task';
+import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {
   UploadSubmissionModalCloseResult,
@@ -27,6 +28,7 @@ export class UploadSubmissionModalService {
     task: Task,
     reuploadEvidence: boolean,
     isTestSubmission: boolean = false,
+    originalTaskStatus: TaskStatusEnum = task.status,
   ): UploadSubmissionModalHandle<Task> | null {
     if (!isTestSubmission && task.isGroupTask() && !task.group) {
       this.alertService.error(
@@ -51,6 +53,7 @@ export class UploadSubmissionModalService {
         task,
         reuploadEvidence,
         isTestSubmission,
+        originalTaskStatus,
       },
     });
 

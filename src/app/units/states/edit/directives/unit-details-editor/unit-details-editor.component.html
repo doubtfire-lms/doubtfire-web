@@ -344,6 +344,42 @@
     </div>
 
     <div>
+      <mat-slide-toggle [(ngModel)]="unit.discussTimeoutEnabled">Discuss timeout</mat-slide-toggle>
+      <p>
+        When enabled, students are warned when tasks stay in Discuss too long, then overdue tasks
+        are moved to Fix and Resubmit.
+      </p>
+    </div>
+
+    @if (unit.discussTimeoutEnabled) {
+      <div class="flex w-full gap-3">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Warn after (days)</mat-label>
+          <input
+            matInput
+            min="0"
+            required
+            type="number"
+            [(ngModel)]="unit.discussTimeoutWarningDays"
+          />
+          <mat-hint>Creates a warning comment when the task is still in Discuss.</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Expire after (days)</mat-label>
+          <input
+            matInput
+            min="1"
+            required
+            type="number"
+            [(ngModel)]="unit.discussTimeoutExpireDays"
+          />
+          <mat-hint>Moves the task to Fix and Resubmit when it is still in Discuss.</mat-hint>
+        </mat-form-field>
+      </div>
+    }
+
+    <div>
       <mat-slide-toggle [(ngModel)]="unit.sendNotifications"
         >Send notification emails</mat-slide-toggle
       >

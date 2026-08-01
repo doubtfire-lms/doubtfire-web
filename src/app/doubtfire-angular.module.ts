@@ -2,9 +2,15 @@
 // import {LottieModule, LottieCacheModule} from 'ngx-lottie';
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import {
+  BarVerticalNormalizedComponent,
+  GaugeComponent,
+  LineChartComponent,
+  NumberCardComponent,
+  PieChartComponent,
+} from '@glitchtip/ng-charts';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import * as Sentry from '@sentry/angular';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {
   GANTT_GLOBAL_CONFIG,
   GANTT_I18N_LOCALE_TOKEN,
@@ -134,6 +140,8 @@ import {
   TeachingPeriodService,
   TutorialService,
   TutorialStreamService,
+  UnitContentLinkService,
+  UnitContentSiteService,
   UnitRoleService,
   UnitService,
   UserService,
@@ -247,6 +255,7 @@ import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.c
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
 import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
+import {UnitContentViewerComponent} from './projects/states/content/unit-content-viewer.component';
 import {AddEngagementDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
 import {EngagementDetailDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-detail-dialog/engagement-detail-dialog.component';
 import {EngagementPassportCardComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-passport-card.component';
@@ -298,12 +307,14 @@ import {CheckForUpdateService} from './sessions/service-worker-updater/check-for
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
 import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+import {SubmissionRequestDeniedModalComponent} from './tasks/modals/submission-request-denied-modal/submission-request-denied-modal.component';
 import {SubmissionTypeModalComponent} from './tasks/modals/submission-type-modal/submission-type-modal.component';
 import {UploadSubmissionModalComponent} from './tasks/modals/upload-submission-modal/upload-submission-modal.component';
 import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-tasks-list.component';
 import {DiscussionPromptComposerComponent} from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task-feedback-templates/task-feedback-templates.component';
 import {CommentBubbleActionComponent} from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
+import {DiscussTimeoutCommentComponent} from './tasks/task-comments-viewer/discuss-timeout-comment/discuss-timeout-comment.component';
 import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import {
   IntelligentDiscussionDialog,
@@ -328,6 +339,7 @@ import {CommunicationScheduleModalComponent} from './units/states/edit/directive
 import {CommunicationSchedulesComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedules.component';
 import {CommunicationConditionsComponent} from './units/states/edit/directives/unit-communications-editor/conditions/communication-conditions.component';
 import {UnitCommunicationsEditorComponent} from './units/states/edit/directives/unit-communications-editor/unit-communications-editor.component';
+import {UnitContentEditorComponent} from './units/states/edit/directives/unit-content-editor/unit-content-editor.component';
 import {
   D2lUnitDetailsFormComponent,
   D2lUnitDetailsModal,
@@ -476,6 +488,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
+    DiscussTimeoutCommentComponent,
     ExtensionCommentComponent,
     PdfImageCommentComponent,
     CampusListComponent,
@@ -577,6 +590,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     FTaskSheetViewComponent,
     UnitRootStateComponent,
     ProjectRootStateComponent,
+    UnitContentViewerComponent,
     TaskViewerStateComponent,
     FUsersComponent,
     ProjectProgressGaugeComponent,
@@ -638,6 +652,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ModerationComponent,
     TutorNotesModalComponent,
     FeedbackAppealModalComponent,
+    SubmissionRequestDeniedModalComponent,
     UploadSubmissionModalComponent,
     ConfirmModerationModalComponent,
     TaskClaimComponent,
@@ -650,6 +665,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     EmailStudentActionComponent,
     TaskCommentActionComponent,
     UnitCommunicationsEditorComponent,
+    UnitContentEditorComponent,
     TutorialsComponent,
     UnitStaffEditorComponent,
     PortfolioGradeSelectStepComponent,
@@ -686,6 +702,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     GroupSetService,
     GroupService,
     UnitService,
+    UnitContentLinkService,
+    UnitContentSiteService,
     D2lAssessmentMappingService,
     ProjectService,
     UnitRoleService,
@@ -835,7 +853,11 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
-    NgxChartsModule,
+    BarVerticalNormalizedComponent,
+    GaugeComponent,
+    LineChartComponent,
+    NumberCardComponent,
+    PieChartComponent,
     PdfViewerModule,
     LottieComponent,
     ServiceWorkerModule.register('ngsw-worker.js', {

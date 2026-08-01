@@ -124,7 +124,7 @@
 
     <!-- Last Pulled Column -->
     <ng-container matColumnDef="last-pulled">
-      <th *matHeaderCellDef mat-header-cell>Last Pulled</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Last Pulled</th>
       <td *matCellDef="let overseerImage" mat-cell>
         @if (!editing(overseerImage)) {
           <div class="right">
@@ -137,7 +137,7 @@
 
     <!-- Status Column -->
     <ng-container matColumnDef="status">
-      <th *matHeaderCellDef mat-header-cell>Status</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Status</th>
       <td *matCellDef="let overseerImage" mat-cell>
         @if (!editing(overseerImage)) {
           <div

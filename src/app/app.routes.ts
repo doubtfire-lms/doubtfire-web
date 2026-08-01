@@ -1,4 +1,4 @@
-import {Routes} from '@angular/router';
+import {Routes, UrlMatchResult, UrlSegment} from '@angular/router';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
@@ -14,6 +14,7 @@ import {HomeComponent} from './home/states/home/home.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {resolveProject} from './projects/project.resolver';
+import {UnitContentViewerComponent} from './projects/states/content/unit-content-viewer.component';
 import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
 import {ProjectGroupsStateComponent} from './projects/states/groups/project-groups-state.component';
 import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-viewer.component';
@@ -31,9 +32,39 @@ import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {StudentsListComponent} from './units/states/students-list/students-list.component';
 import {UnitTaskInboxStateComponent} from './units/states/tasks/inbox/unit-task-inbox-state.component';
 import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
+import {resolveUnitCodeContent} from './units/unit-code-content.guard';
 import {UnitRootStateComponent} from './units/unit-root-state.component';
 import {resolveUnit} from './units/unit.resolver';
 import {WelcomeComponent} from './welcome/welcome.component';
+
+function unitContentRouteMatcher(segments: UrlSegment[]): UrlMatchResult | null {
+  if (segments[0]?.path !== 'content') {
+    return null;
+  }
+
+  const contentRoute = segments
+    .slice(1)
+    .map((segment) => segment.path)
+    .join('/');
+
+  return {
+    consumed: segments,
+    posParams: contentRoute ? {contentRoute: new UrlSegment(contentRoute, {})} : {},
+  };
+}
+
+function unitCodeContentRouteMatcher(segments: UrlSegment[]): UrlMatchResult | null {
+  if (segments.length < 2 || segments[1].path !== 'content') {
+    return null;
+  }
+
+  return {
+    consumed: segments,
+    posParams: {
+      unitCode: segments[0],
+    },
+  };
+}
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -105,6 +136,11 @@ export const routes: Routes = [
     data: {attendance: true, task: 'Check-in'},
   },
   {
+    matcher: unitCodeContentRouteMatcher,
+    component: UnitContentViewerComponent,
+    canActivate: [resolveUnitCodeContent],
+  },
+  {
     path: 'units',
     children: [
       {path: '', pathMatch: 'full', redirectTo: '/home'},
@@ -140,6 +176,11 @@ export const routes: Routes = [
           },
           {path: 'students', component: StudentsListComponent, data: {task: 'Student List'}},
           {
+            matcher: unitContentRouteMatcher,
+            component: UnitContentViewerComponent,
+            data: {task: 'Unit Content'},
+          },
+          {
             path: 'admin',
             component: UnitAdminStateComponent,
             canActivate: [roleWhitelistGuard],
@@ -162,7 +203,7 @@ export const routes: Routes = [
             path: 'tasks',
             pathMatch: 'full',
             component: TaskViewerStateComponent,
-            data: {task: 'Task Lists', roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
+            data: {task: 'Task Lists', roleWhitelist: ['Convenor', 'Admin', 'Auditor', 'Tutor']},
             canActivate: [roleWhitelistGuard],
           },
           {

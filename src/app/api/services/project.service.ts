@@ -255,6 +255,7 @@ export class ProjectService extends CachedEntityService<Project> {
     proj: Project | number,
     unit: Unit,
     useFetch: boolean = false,
+    recordAttendance: boolean = false,
   ): Observable<Project> {
     const options: RequestOptions<Project> = {
       cache: unit.studentCache,
@@ -262,6 +263,10 @@ export class ProjectService extends CachedEntityService<Project> {
       constructorParams: unit,
       cacheBehaviourOnGet: 'cacheQuery',
     };
+
+    if (recordAttendance) {
+      options.params = {record_attendance: true};
+    }
 
     if (useFetch) {
       return super.fetch(proj, options);

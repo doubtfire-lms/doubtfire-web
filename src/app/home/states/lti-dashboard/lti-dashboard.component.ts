@@ -213,6 +213,6 @@ export class LtiDashboardComponent implements AfterViewInit {
     );
   }
   public launchApplication(): void {
-    window.open('http://localhost:4200/home', '_blank');
+    window.open(`${window.location.origin}/home`, '_blank');
   }
 }

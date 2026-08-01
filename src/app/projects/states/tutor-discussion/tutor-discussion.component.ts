@@ -16,6 +16,8 @@ import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   AuthenticationService,
+  DiscussionTaskStatusUpdate,
+  EngagementService,
   Project,
   ProjectService,
   Task,
@@ -96,6 +98,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     private discussedInClassReasonModal: DiscussedInClassReasonModalService,
     private taskCommentService: TaskCommentService,
     private taskService: TaskService,
+    private engagementService: EngagementService,
     private dialog: MatDialog,
   ) {}
 
@@ -227,7 +230,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     this.loadingStudentData = true;
     setTimeout(() => {
       try {
-        this.getStudentTasks();
+        this.getStudentTasks(true);
       } catch (_e) {
         this.alertService.error(`Invalid QR code`, 2000);
         this.loadingStudentData = false;
@@ -401,18 +404,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       return taskOption.value as Task;
     });
 
-    if (status === 'complete') {
-      const blockedTasks = selectedTasks.filter(
-        (task) => !task.definition.assessInPortfolioOnly && !task.canMarkComplete,
-      );
-      if (blockedTasks.length > 0) {
-        this.alertService.error(
-          'Some selected tasks cannot be marked as complete until they are marked as discussed in class.',
-          5000,
-        );
-      }
-    }
-
     if (status === 'fix_and_resubmit') {
       try {
         const hasReadyDependents = (
@@ -451,21 +442,40 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     status: TaskStatusEnum,
     moveDependentTasks: boolean,
   ) {
-    for (const task of selectedTasks) {
-      if (
-        status === 'complete' &&
-        !task.definition.assessInPortfolioOnly &&
-        !task.canMarkComplete
-      ) {
-        continue;
+    const onStatusUpdated = (
+      task: Task,
+      fromStatus: TaskStatusEnum,
+      expectedStatus: TaskStatusEnum,
+    ) => {
+      if (task.status !== expectedStatus) {
+        return;
       }
 
+      this.recordClassDiscussion(
+        [
+          {
+            taskDefinitionId: task.definition.id,
+            fromStatus: fromStatus,
+            toStatus: task.status,
+          },
+        ],
+        false,
+      );
+    };
+
+    for (const task of selectedTasks) {
+      const fromStatus = task.status;
       if (task.definition.assessInPortfolioOnly) {
-        task.updateTaskStatus(status === 'complete' ? 'working_on_it' : status, true);
+        const expectedStatus = status === 'complete' ? 'working_on_it' : status;
+        task.updateTaskStatus(expectedStatus, true, false, () =>
+          onStatusUpdated(task, fromStatus, expectedStatus),
+        );
       } else if (status === 'fix_and_resubmit') {
-        task.updateTaskStatus(status, true, moveDependentTasks);
+        task.updateTaskStatus(status, true, moveDependentTasks, () =>
+          onStatusUpdated(task, fromStatus, status),
+        );
       } else {
-        task.updateTaskStatus(status, true);
+        task.updateTaskStatus(status, true, false, () => onStatusUpdated(task, fromStatus, status));
       }
     }
   }
@@ -476,18 +486,31 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       return false;
     }
 
-    return selectedTasks.every((taskOption) => {
+    return true;
+  }
+
+  public get selectedTasksIncludeDiscuss(): boolean {
+    const selectedTasks = this.tasksList?.selectedOptions?.selected ?? [];
+    return selectedTasks.some((taskOption) => {
       const task = taskOption.value as Task;
-      return task.definition.assessInPortfolioOnly || task.canMarkComplete;
+      return task.status === 'discuss';
     });
   }
 
   public markSelectedTasksDicussed() {
     const selectedTasks = this.tasksList.selectedOptions.selected;
+    let classDiscussionRecorded = false;
+    const onDiscussionRecorded = () => {
+      if (!classDiscussionRecorded) {
+        classDiscussionRecorded = true;
+        this.recordClassDiscussion([], false);
+      }
+    };
+
     if (!this.unit?.enforceFeedbackBeforeDiscussedInClass) {
       for (const taskOption of selectedTasks) {
         const task = taskOption.value as Task;
-        task.markAsDiscussed();
+        task.markAsDiscussed(undefined, onDiscussionRecorded);
       }
       return;
     }
@@ -508,9 +531,29 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
 
         for (const taskOption of selectedTasks) {
           const task = taskOption.value as Task;
-          task.markAsDiscussed(reason);
+          task.markAsDiscussed(reason, onDiscussionRecorded);
         }
       });
+  }
+
+  public recordClassDiscussion(
+    taskStatusUpdates: DiscussionTaskStatusUpdate[] = [],
+    showConfirmation: boolean = true,
+  ): void {
+    if (!this.project) {
+      return;
+    }
+
+    this.engagementService.recordClassDiscussion(this.project, taskStatusUpdates).subscribe({
+      next: () => {
+        if (showConfirmation) {
+          this.alertService.success('Class discussion recorded.', 3000);
+        }
+      },
+      error: (_error) => {
+        this.alertService.error('Unable to record the class discussion.', 5000);
+      },
+    });
   }
 
   public markSelectedTasksCheckedIn() {
@@ -560,14 +603,20 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private getProject(unit: Unit, projectId: number): Promise<Project> {
+  private getProject(
+    unit: Unit,
+    projectId: number,
+    recordAttendance: boolean = false,
+  ): Promise<Project> {
     return new Promise((resolve, reject) => {
-      this.projectService.loadProject(projectId, unit, true).subscribe((project) => {
-        if (!project) {
-          reject('No project found');
-        }
-        resolve(project);
-      });
+      this.projectService
+        .loadProject(projectId, unit, true, recordAttendance)
+        .subscribe((project) => {
+          if (!project) {
+            reject('No project found');
+          }
+          resolve(project);
+        });
     });
   }
 
@@ -588,6 +637,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     // 'complete',
     'fix_and_resubmit',
     'redo',
+    'rediscuss',
   ];
 
   public viewAllSubmittedTasks() {
@@ -616,7 +666,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     this.filteredTasks = [...discussionTasks];
   }
 
-  public getStudentTasks(): void {
+  public getStudentTasks(recordAttendance: boolean = false): void {
     console.time('getStudentTasks()');
     // this.project = null;
     // this.filteredTasks = [];
@@ -628,7 +678,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
         return this.loadStudents(this.unit);
       })
       .then((student) => {
-        return this.getProject(this.unit, student.id);
+        return this.getProject(this.unit, student.id, recordAttendance);
       })
       .then((project) => {
         const discussionTasks = this.filteredDiscussionTasks(project.tasks);

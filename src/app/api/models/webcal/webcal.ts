@@ -10,7 +10,7 @@ export class Webcal extends Entity {
     time: number;
     unit: string;
   };
-  unitExclusions: number[];
+  unitExclusions: number[] = [];
 
   // Used only when updating the webcal. Never returned from the API.
   shouldChangeGuid?: boolean;

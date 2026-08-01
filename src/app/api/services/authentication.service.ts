@@ -166,7 +166,11 @@ export class AuthenticationService {
    *
    * @param response the response from the authentication API
    */
-  private setupUserFromResponse(response: AuthResponse, firstTime: boolean = true): void {
+  private setupUserFromResponse(
+    response: AuthResponse,
+    firstTime: boolean = true,
+    ltik?: string,
+  ): void {
     // Extract relevant data from response and construct user object to store in cache.
     const user: User = this.userService.cache.getOrCreate(
       response.user['id'],
@@ -177,6 +181,11 @@ export class AuthenticationService {
     // Set the user's authentication token for access to api.
     user.authenticationToken = response['auth_token'];
     user.authenticationTokenExpiry = response['auth_token_expiry'];
+    // Keep the launch-scoped LTI token on the authenticated user before
+    // global loading and auth-complete subscribers are released.
+    if (ltik !== undefined) {
+      user.ltik = ltik;
+    }
 
     // Record the current user
     this.userService.currentUser = user;
@@ -221,10 +230,11 @@ export class AuthenticationService {
           username: string;
           remember: boolean;
         },
+    ltik?: string,
   ): Observable<void> {
     return this.httpClient.post(this.AUTH_URL, userCredentials).pipe(
       map((response: AuthResponse) => {
-        this.setupUserFromResponse(response);
+        this.setupUserFromResponse(response, true, ltik);
       }),
       catchError((error) => {
         // this.authComplete$.next(false);
@@ -300,6 +310,14 @@ export class AuthenticationService {
     return this.httpClient.get(this.AUTH_URL + '/scorm').pipe(
       map((response) => {
         return response['scorm_auth_token'];
+      }),
+    );
+  }
+
+  public getContentToken(): Observable<string> {
+    return this.httpClient.get(this.AUTH_URL + '/content').pipe(
+      map((response) => {
+        return response['content_auth_token'];
       }),
     );
   }

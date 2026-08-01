@@ -16,6 +16,7 @@ import {TaskPrerequisite} from '../models/task-prerequisite';
 import {MappingFunctions} from './mapping-fn';
 import {OverseerStepService} from './overseer-step.service';
 import {TaskPrerequisiteService} from './task-prerequisite.service';
+import {UnitContentLinkService} from './unit-content-link.service';
 
 @Injectable()
 export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
@@ -26,6 +27,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
     private learningOutcomeService: LearningOutcomeService,
     private taskPrerequisiteService: TaskPrerequisiteService,
     private overseerStepService: OverseerStepService,
+    private unitContentLinkService: UnitContentLinkService,
   ) {
     super(httpClient, API_URL);
 
@@ -123,6 +125,42 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'hasTaskAssessmentScript',
       'scormEnabled',
       'hasScormData',
+      {
+        keys: ['contentLink', 'content_link'],
+        toEntityFn: (data: object, key: string, taskDefinition: TaskDefinition) => {
+          const linkData = data[key] as {id?: number};
+          if (!linkData) {
+            return undefined;
+          }
+
+          return taskDefinition.unit.unitContentLinkCache.getOrCreate(
+            linkData.id,
+            this.unitContentLinkService,
+            linkData,
+            {
+              constructorParams: taskDefinition.unit,
+            },
+          );
+        },
+      },
+      {
+        keys: ['taskResourceLink', 'task_resource_link'],
+        toEntityFn: (data: object, key: string, taskDefinition: TaskDefinition) => {
+          const linkData = data[key] as {id?: number};
+          if (!linkData) {
+            return undefined;
+          }
+
+          return taskDefinition.unit.unitContentLinkCache.getOrCreate(
+            linkData.id,
+            this.unitContentLinkService,
+            linkData,
+            {
+              constructorParams: taskDefinition.unit,
+            },
+          );
+        },
+      },
       'scormAllowReview',
       'scormBypassTest',
       'scormTimeDelayEnabled',
@@ -196,6 +234,8 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'hasTaskResources',
       'hasTaskAssessmentResources',
       'hasScormData',
+      'contentLink',
+      'taskResourceLink',
     );
   }
 

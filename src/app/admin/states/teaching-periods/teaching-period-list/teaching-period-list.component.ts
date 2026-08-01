@@ -70,7 +70,15 @@ export class TeachingPeriodListComponent implements OnInit {
    * @returns truthy comparison between aValue and bValue.
    */
   protected sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+    if (aValue === bValue) {
+      return 0;
+    }
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  private sortDateValue(value: Date | string): number {
+    const time = new Date(value).getTime();
+    return Number.isFinite(time) ? time : 0;
   }
 
   // Sorting function to sort data when sort
@@ -79,18 +87,35 @@ export class TeachingPeriodListComponent implements OnInit {
     if (!sort.active || sort.direction === '') {
       return;
     }
-    switch (sort.active) {
-      case 'active':
-      case 'name':
-      case 'startDate':
-      case 'endDate':
-      case 'activeUntil':
-        this.dataSource.data = this.dataSource.data.sort((a, b) => {
-          const isAsc = sort.direction === 'asc';
-          return this.sortCompare(a[sort.active], b[sort.active], isAsc);
-        });
-        return;
-    }
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'active':
+          return this.sortCompare(Number(a.active), Number(b.active), isAsc);
+        case 'name':
+          return this.sortCompare(a.name, b.name, isAsc);
+        case 'startDate':
+          return this.sortCompare(
+            this.sortDateValue(a.startDate),
+            this.sortDateValue(b.startDate),
+            isAsc,
+          );
+        case 'endDate':
+          return this.sortCompare(
+            this.sortDateValue(a.endDate),
+            this.sortDateValue(b.endDate),
+            isAsc,
+          );
+        case 'activeUntil':
+          return this.sortCompare(
+            this.sortDateValue(a.activeUntil),
+            this.sortDateValue(b.activeUntil),
+            isAsc,
+          );
+        default:
+          return 0;
+      }
+    });
   }
 }
 
