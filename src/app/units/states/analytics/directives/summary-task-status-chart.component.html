@@ -44,11 +44,11 @@
       class="snapshot-slider w-full"
       [disabled]="snapshots.length <= 1"
       [discrete]="true"
-      [showTickMarks]="true"
+      [displayWith]="formatSnapshotDate"
       [max]="sliderMax"
       [min]="0"
+      [showTickMarks]="true"
       [step]="1"
-      [displayWith]="formatSnapshotDate"
     >
       <input
         matSliderThumb

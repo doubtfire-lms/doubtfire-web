@@ -65,7 +65,8 @@ export class SummaryTaskStatusChartComponent implements OnInit {
 
   formatSnapshotDate = (value: number): string => {
     return this.formatSnapshotLabel(
-      this.snapshots[Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax)]?.snapshot_date,
+      this.snapshots[Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax)]
+        ?.snapshot_date,
     );
   };
 
@@ -83,7 +84,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     const weekNumber = this.unit?.weekNumber(date);
 
     return weekNumber ? `${dayName} W${weekNumber}` : dayName;
-  };
+  }
 
   private autoCaptureAttempted: boolean = false;
 

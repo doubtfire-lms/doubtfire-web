@@ -862,19 +862,14 @@ export class Unit extends Entity {
   ): Observable<TaskCompletionSnapshot[]> {
     let params = new HttpParams();
 
-    if (startDate) {
-      params = params.set(
-        'start_date',
-        `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
-      );
-    }
-
-    if (endDate) {
-      params = params.set(
-        'end_date',
-        `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`,
-      );
-    }
+    [startDate, endDate].forEach((date) => {
+      if (date) {
+        params = params.set(
+          date === startDate ? 'start_date' : 'end_date',
+          `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
+        );
+      }
+    });
 
     params = params.set('limit', limit.toString());
 
