@@ -152,9 +152,12 @@ export class AddEngagementDialogComponent implements OnDestroy {
     }
   }
 
-  studentSelected(project: Project): void {
+  studentSelected(project: Project, input: HTMLInputElement): void {
     this.addStudentProject(project);
-    setTimeout(() => this.studentSearch.setValue(''));
+    window.setTimeout(() => {
+      this.studentSearch.setValue('');
+      input.value = '';
+    });
   }
 
   addStudent(): void {
