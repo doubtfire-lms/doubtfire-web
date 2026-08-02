@@ -29,7 +29,7 @@ export const roleWhitelistGuard: CanActivateFn = (
   );
 };
 
-function roleForRoute(
+export function roleForRoute(
   route: ActivatedRouteSnapshot,
   userService: UserService,
   globalState: GlobalStateService,
@@ -37,6 +37,10 @@ function roleForRoute(
   const unitId = Number(route.paramMap.get('unitId') ?? route.parent?.paramMap.get('unitId'));
 
   if (!Number.isNaN(unitId) && unitId > 0) {
+    if (userService.currentUser.role === 'Admin') {
+      return userService.currentUser.role;
+    }
+
     const unitRole = globalState.loadedUnitRoles.currentValues.find(
       (role) => role.unit?.id === unitId,
     );

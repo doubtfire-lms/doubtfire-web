@@ -882,7 +882,7 @@ export class Task extends Entity {
     }
     const uploadModal: UploadSubmissionModalService = AppInjector.get(UploadSubmissionModalService);
 
-    const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission);
+    const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission, oldStatus);
     // Modal failed to present
     if (!modal) {
       if (!isTestSubmission) {

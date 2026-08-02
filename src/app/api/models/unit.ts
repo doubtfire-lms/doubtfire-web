@@ -615,7 +615,7 @@ export class Unit extends Entity {
       }
     });
 
-    this.addStudentTypeAheadData(this.students, result);
+    this.addStudentTypeAheadData(this.activeStudents, result);
 
     return result;
   }

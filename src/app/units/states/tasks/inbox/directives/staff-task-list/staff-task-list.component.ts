@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable, Subject, Subscription, takeUntil} from 'rxjs';
 import {
   Project,
   Task,
@@ -47,6 +47,9 @@ import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-di
   standalone: false,
 })
 export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
+  private readonly destroy$: Subject<void> = new Subject();
+  private taskLoadSubscription?: Subscription;
+
   @ViewChild('searchDialog') searchDialog: TemplateRef<object>;
 
   @Input() task: Task;
@@ -154,22 +157,21 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       this.syncSelectedTaskFromTaskKey();
     }
 
-    if (!this.isTaskDefMode || !this.filters) {
-      return;
-    }
-
     const unitChanged =
       !!changes.unit &&
       !changes.unit.isFirstChange() &&
       changes.unit.currentValue?.id &&
       changes.unit.previousValue?.id !== changes.unit.currentValue?.id;
 
-    if (unitChanged) {
-      this.refreshData();
+    if (unitChanged && this.filters) {
+      this.initializeUnitData();
     }
   }
 
   ngOnDestroy(): void {
+    this.taskLoadSubscription?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
     this.hotkeys.removeShortcuts('control.shift.arrowdown');
     this.hotkeys.removeShortcuts('control.shift.arrowup');
   }
@@ -200,6 +202,15 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     if (navigator.maxTouchPoints > 1) {
       this.allowHover = false;
     }
+
+    this.initializeUnitData();
+  }
+
+  private initializeUnitData(): void {
+    this.tasks = null;
+    this.filteredTasks = null;
+    this.originalFilteredTasks = null;
+    this.fetchedAllTasks = false;
 
     // Does the current user have any tutorials?
     this.userHasTutorials =
@@ -572,9 +583,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     const fetchMyStudentsOnly = this.filters.tutorialIdSelected === 'mine';
 
     this.loading = true;
+    this.taskLoadSubscription?.unsubscribe();
     // Tasks for feedback or tasks for task, depending on the data source
-    this.taskData
+    this.taskLoadSubscription = this.taskData
       .source(this.unit, this.filters?.taskDefinitionIdSelected, fetchMyStudentsOnly)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
           this.tasks = response;

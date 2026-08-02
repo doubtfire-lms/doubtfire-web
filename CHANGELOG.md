@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-61](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-60...v11.0.0-61) (2026-07-31)
+
+
+### Bug Fixes
+
+* ensure unit is fetched when switching between unit dropdown ([90980ff](https://github.com/b0ink/doubtfire-deploy/commit/90980ff1357135ce53f0d8b7af4dc38825eef2ea))
+
+## [11.0.0-60](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-59...v11.0.0-60) (2026-07-30)
+
+
+### Bug Fixes
+
+* ensure administrator system role overrides unit role ([69ac63f](https://github.com/b0ink/doubtfire-deploy/commit/69ac63f9ba4e25f81128ce330181fea4e0fd4109))
+
+## [11.0.0-59](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-58...v11.0.0-59) (2026-07-30)
+
+
+### Features
+
+* display denied requests by f5 waf to client ([b7edf5d](https://github.com/b0ink/doubtfire-deploy/commit/b7edf5dcfa9cb662caa15445818f57b2e51d3651))
+* enable unit content zip download ([71f251c](https://github.com/b0ink/doubtfire-deploy/commit/71f251caccc9fb5d89f89b008041fa0e8ae97849))
+
+
+### Bug Fixes
+
+* track file upload zones by name ([ccc7d0f](https://github.com/b0ink/doubtfire-deploy/commit/ccc7d0f67458cf497927730d29700762ff0e7ca6))
+
+## [11.0.0-58](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-57...v11.0.0-58) (2026-07-29)
+
+
+### Bug Fixes
+
+* ensure rediscuss unlocks submission with prereqs ([bcaaa4d](https://github.com/b0ink/doubtfire-deploy/commit/bcaaa4d97bee8f04b7bf24d011ab45f8ebea234e))
+* show withdrawn students in admin students list ([2e3c250](https://github.com/b0ink/doubtfire-deploy/commit/2e3c250d5c1eae6d5e6c9100525afb2957357cbd))
+
 ## [11.0.0-57](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-56...v11.0.0-57) (2026-07-28)
 
 
