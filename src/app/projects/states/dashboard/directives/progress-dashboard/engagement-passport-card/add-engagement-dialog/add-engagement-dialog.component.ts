@@ -29,7 +29,14 @@ interface AddEngagementForm {
   standalone: false,
 })
 export class AddEngagementDialogComponent implements OnDestroy {
-  readonly engagementTypes = ['Discuss', 'Attendance', 'Forum', 'Email', 'Opportunity'];
+  readonly engagementTypes = [
+    'Discuss',
+    'Attendance',
+    'Forum',
+    'Email',
+    'Opportunity',
+    'Group Activity',
+  ];
   readonly notePlaceholders: Record<string, string> = {
     attendance: 'Attended tutorial and participated in class activities.',
     discuss: 'Discussed tasks during tutorial.',
@@ -37,6 +44,7 @@ export class AddEngagementDialogComponent implements OnDestroy {
     forum: 'Posted to the unit forum and engaged with discussion.',
     email: 'Discussed unit progress with the teaching team via email.',
     opportunity: 'Engagement concern noted for follow-up.',
+    'group activity': 'Participated in a group activity and collaborated with peers.',
   };
   readonly maxAttachmentSize = 30 * 1024 * 1024;
   readonly form: FormGroup<AddEngagementForm>;
