@@ -199,6 +199,30 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
     );
   }
 
+  uploadStaffNotes() {
+    this.csvUploadModal.show(
+      'Upload Staff Notes',
+      'Upload a CSV with a comment and either a username or login_id column.',
+      {file: {name: 'Staff Notes CSV Data', type: 'csv'}},
+      this.unit.staffNotesCsvUploadUrl,
+      (response: SidekiqJob) => {
+        if (!response || !response.id) {
+          return this.alerts.error('Failed to start staff notes import job', 6000);
+        }
+        this.sidekiqProgressModalService
+          .show(`Importing Staff Notes: ${this.unit.code}`, response.id)
+          .subscribe({
+            next: (job) => {
+              this.csvResultModal.show('Staff Notes CSV Results', JSON.parse(job.result));
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+      },
+    );
+  }
+
   uploadWithdrawals() {
     this.csvUploadModal.show(
       'Upload Students to Withdraw',

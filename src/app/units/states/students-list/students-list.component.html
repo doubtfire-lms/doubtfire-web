@@ -210,17 +210,6 @@
         <mat-icon>person_add</mat-icon>
         Enrol Student
       </button>
-      @if (unit.myRole === 'Convenor' || unit.myRole === 'Admin') {
-        <button
-          mat-stroked-button
-          type="button"
-          [disabled]="loadingStudents"
-          (click)="uploadStaffNotes()"
-        >
-          <mat-icon>upload</mat-icon>
-          Bulk Upload Staff Notes
-        </button>
-      }
     </div>
 
     <mat-paginator
