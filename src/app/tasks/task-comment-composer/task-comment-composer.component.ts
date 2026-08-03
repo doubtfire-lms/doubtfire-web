@@ -534,7 +534,7 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
 
     // insertText participates in the browser's native contenteditable undo history,
     // including when the feedback replaces a selected section of the comment.
-    let insertedWithUndo = false;
+    let insertedWithUndo;
     try {
       insertedWithUndo = doc.execCommand('insertText', false, char);
     } catch (_error) {
