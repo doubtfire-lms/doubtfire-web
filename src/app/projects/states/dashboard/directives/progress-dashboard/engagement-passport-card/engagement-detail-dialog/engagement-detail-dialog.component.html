@@ -1,7 +1,7 @@
 <div class="flex max-h-[85vh] min-h-[75vh] flex-col overflow-hidden">
   <div class="flex w-full shrink-0 items-start py-5" mat-dialog-title>
     <div class="flex w-full items-start justify-between gap-4">
-      <div>
+      <div class="min-w-0 flex-1">
         <div>{{ engagement.engagementType }} Engagement</div>
         <p class="mt-1 text-sm font-normal text-gray-500">
           Added by {{ engagement.user?.firstName }} {{ engagement.user?.lastName }}
@@ -10,6 +10,15 @@
             {{ engagement.occurredAt | humanizedDate }}
           </span>
         </p>
+        @if (engagement.students.length) {
+          <div class="mt-2 max-h-20 overflow-y-auto">
+            <mat-chip-set aria-label="Students included in this engagement">
+              @for (student of engagement.students; track student.id) {
+                <mat-chip>{{ student.name }}</mat-chip>
+              }
+            </mat-chip-set>
+          </div>
+        }
       </div>
 
       <button aria-label="Close engagement" mat-dialog-close mat-icon-button type="button">
