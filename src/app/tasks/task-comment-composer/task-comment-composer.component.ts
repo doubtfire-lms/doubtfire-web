@@ -92,6 +92,8 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
 
   public isSending: boolean = false;
   private draftBeforeEdit: string = '';
+  private lastCaretOffset: number | null = null;
+  private lastComposerRange: Range | null = null;
 
   comment = {
     text: '',
@@ -212,7 +214,13 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
       // this.taskDraftContents.set(draftKey, raw);
     }
 
+    this.rememberCaretPosition();
     this.saveCurrentDraft();
+  }
+
+  onComposerBlur(): void {
+    this.rememberCaretPosition();
+    this.$userIsTyping.next(false);
   }
 
   private getDraftKey(task: Task): string {
@@ -442,29 +450,53 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
     this.emojiSearchMode = false;
   }
 
-  private caretOffset() {
+  private currentCaretOffset(): number | null {
     const element = this.input.first.nativeElement;
-    let caretOffset: number = 0;
-    const doc = element.ownerDocument || element.document;
-    const win = doc.defaultView || doc.parentWindow;
-    let sel;
-    if (typeof win.getSelection !== 'undefined') {
-      sel = win.getSelection();
-      if (sel.rangeCount > 0) {
-        const range = win.getSelection().getRangeAt(0);
-        const preCaretRange = range.cloneRange();
-        preCaretRange.selectNodeContents(element);
-        preCaretRange.setEnd(range.endContainer, range.endOffset);
-        caretOffset = preCaretRange.toString().length;
-      }
-    } else if (sel === doc.selection && sel.type !== 'Control') {
-      const textRange = sel.createRange();
-      const preCaretTextRange = doc.body.createTextRange();
-      preCaretTextRange.moveToElementText(element);
-      preCaretTextRange.setEndPoint('EndToEnd', textRange);
-      caretOffset = preCaretTextRange.text.length;
+    const range = this.currentComposerRange();
+    if (!range) {
+      return null;
     }
-    return caretOffset;
+
+    const preCaretRange = range.cloneRange();
+    preCaretRange.selectNodeContents(element);
+    preCaretRange.setEnd(range.endContainer, range.endOffset);
+    return preCaretRange.toString().length;
+  }
+
+  private caretOffset(): number {
+    return (
+      this.currentCaretOffset() ??
+      this.lastCaretOffset ??
+      this.input.first.nativeElement.innerText.length
+    );
+  }
+
+  rememberCaretPosition(): void {
+    const range = this.currentComposerRange();
+    if (range) {
+      this.lastComposerRange = range;
+    }
+
+    const offset = this.currentCaretOffset();
+    if (offset !== null) {
+      this.lastCaretOffset = offset;
+    }
+  }
+
+  private currentComposerRange(): Range | null {
+    const element = this.input.first.nativeElement;
+    const selection = element.ownerDocument.defaultView?.getSelection();
+
+    if (!selection || selection.rangeCount === 0) {
+      return null;
+    }
+
+    const range = selection.getRangeAt(0);
+    if (!element.contains(range.startContainer) || !element.contains(range.endContainer)) {
+      return null;
+    }
+
+    return range.cloneRange();
   }
 
   addEmoji(e): void {
@@ -485,14 +517,42 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
 
   addFeedback(template: FeedbackTemplate): void {
     const char = template.commentText;
-    const text = this.input.first.nativeElement.innerText;
-    const position = this.caretOffset();
-    this.input.first.nativeElement.innerText = [
-      text.slice(0, position),
-      char,
-      text.slice(position),
-    ].join('');
-    this.input.first.nativeElement.focus();
+    const element = this.input.first.nativeElement;
+    const doc = element.ownerDocument;
+    const selection = doc.defaultView?.getSelection();
+    let range = this.currentComposerRange() ?? this.lastComposerRange?.cloneRange();
+
+    if (!range || !element.contains(range.commonAncestorContainer)) {
+      range = doc.createRange();
+      range.selectNodeContents(element);
+      range.collapse(false);
+    }
+
+    element.focus();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+
+    // insertText participates in the browser's native contenteditable undo history,
+    // including when the feedback replaces a selected section of the comment.
+    let insertedWithUndo = false;
+    try {
+      insertedWithUndo = doc.execCommand('insertText', false, char);
+    } catch (_error) {
+      insertedWithUndo = false;
+    }
+
+    if (!insertedWithUndo) {
+      range.deleteContents();
+      const insertedText = doc.createTextNode(char);
+      range.insertNode(insertedText);
+      range.setStartAfter(insertedText);
+      range.collapse(true);
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    }
+
+    this.rememberCaretPosition();
+
     setTimeout(() => {
       this.saveDraftForTask(this.task);
     });
@@ -786,6 +846,8 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
 
     selection.removeAllRanges();
     selection.addRange(range);
+    this.lastComposerRange = range.cloneRange();
+    this.lastCaretOffset = element.innerText.length;
   }
 }
 
