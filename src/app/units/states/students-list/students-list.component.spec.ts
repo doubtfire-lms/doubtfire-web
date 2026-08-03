@@ -17,6 +17,10 @@ describe('StudentsListComponent', () => {
       {currentUser: new User()} as never,
       {} as never,
       {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
     );
     component.unit = unit;
 

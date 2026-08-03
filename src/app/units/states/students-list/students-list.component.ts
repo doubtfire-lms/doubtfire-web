@@ -20,6 +20,11 @@ import {
   Unit,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {UnitStudentEnrolmentModalService} from '../../modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 
 // State for both convenors and tutors to access student list
@@ -64,6 +69,10 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
     private userService: UserService,
     private taskService: TaskService,
     private projectService: ProjectService,
+    private csvUploadModal: CsvUploadModalService,
+    private csvResultModal: CsvResultModalService,
+    private sidekiqProgressModalService: SidekiqProgressModalService,
+    private alerts: AlertService,
   ) {}
 
   ngOnInit(): void {
@@ -135,6 +144,30 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public showEnrolModal(): void {
     this.enrolModal.show(this.unit);
+  }
+
+  public uploadStaffNotes(): void {
+    this.csvUploadModal.show(
+      'Upload Staff Notes',
+      'Upload a CSV with a comment and either a username or login_id column.',
+      {file: {name: 'Staff Notes CSV Data', type: 'csv'}},
+      this.unit.staffNotesCsvUploadUrl,
+      (response: SidekiqJob) => {
+        if (!response || !response.id) {
+          return this.alerts.error('Failed to start staff notes import job', 6000);
+        }
+        this.sidekiqProgressModalService
+          .show(`Importing Staff Notes: ${this.unit.code}`, response.id)
+          .subscribe({
+            next: (job) => {
+              this.csvResultModal.show('Staff Notes CSV Results', JSON.parse(job.result));
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+      },
+    );
   }
 
   public exportCsv(): void {

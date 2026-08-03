@@ -682,6 +682,10 @@ export class Unit extends Entity {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/withdraw`;
   }
 
+  public get staffNotesCsvUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/staff_notes`;
+  }
+
   public getTaskMarkingUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/assess.json?unit_id=${
       this.id
