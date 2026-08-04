@@ -217,6 +217,7 @@ export class UnitExternalToolsComponent implements OnInit {
       tutorialStreamId: null,
       tutorialId: null,
       createIfMissing: false,
+      createTutorialIfMissing: false,
     });
   }
 
@@ -236,6 +237,7 @@ export class UnitExternalToolsComponent implements OnInit {
     mapping.tutorialStreamId = null;
     mapping.tutorialId = null;
     mapping.createIfMissing = false;
+    mapping.createTutorialIfMissing = false;
   }
 
   public groupSetSelected(mapping: MoodleGroupMapping): void {
@@ -250,7 +252,22 @@ export class UnitExternalToolsComponent implements OnInit {
     if (mapping.createIfMissing) {
       mapping.groupId = null;
       mapping.tutorialId = null;
+      mapping.tutorialStreamId = null;
+      mapping.createTutorialIfMissing = false;
+    } else if (mapping.targetType === 'group') {
+      mapping.tutorialId = null;
+      mapping.tutorialStreamId = null;
+      mapping.createTutorialIfMissing = false;
     }
+  }
+
+  public groupTutorialModeChanged(
+    mapping: MoodleGroupMapping,
+    createTutorialIfMissing: boolean,
+  ): void {
+    mapping.createTutorialIfMissing = createTutorialIfMissing;
+    mapping.tutorialId = null;
+    mapping.tutorialStreamId = null;
   }
 
   public groupsFor(groupSetId: number | null): readonly Group[] {
@@ -281,7 +298,9 @@ export class UnitExternalToolsComponent implements OnInit {
       if (mapping.targetType === 'tutorial') {
         return !!mapping.tutorialStreamId && (mapping.createIfMissing || !!mapping.tutorialId);
       }
-      return !!mapping.groupSetId && (mapping.createIfMissing || !!mapping.groupId);
+      if (!mapping.groupSetId) return false;
+      if (!mapping.createIfMissing) return !!mapping.groupId;
+      return mapping.createTutorialIfMissing ? !!mapping.tutorialStreamId : !!mapping.tutorialId;
     });
   }
 

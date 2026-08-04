@@ -29,6 +29,7 @@ export interface MoodleGroupMapping {
   tutorialStreamId: number | null;
   tutorialId: number | null;
   createIfMissing: boolean;
+  createTutorialIfMissing: boolean;
 }
 
 export interface MoodlePermissionResult {

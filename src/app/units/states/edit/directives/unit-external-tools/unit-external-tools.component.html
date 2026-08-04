@@ -271,6 +271,58 @@
                       >
                         Create the group if it is missing, using the Moodle group name
                       </mat-checkbox>
+
+                      @if (mapping.createIfMissing) {
+                        <div class="mt-4 flex w-full flex-wrap items-start gap-4">
+                          <mat-button-toggle-group
+                            aria-label="Tutorial for new group"
+                            hideSingleSelectionIndicator
+                            [disabled]="!connection"
+                            [ngModel]="mapping.createTutorialIfMissing"
+                            (ngModelChange)="groupTutorialModeChanged(mapping, $event)"
+                          >
+                            <mat-button-toggle [value]="false">
+                              Use existing tutorial
+                            </mat-button-toggle>
+                            <mat-button-toggle [value]="true">
+                              Create matching tutorial
+                            </mat-button-toggle>
+                          </mat-button-toggle-group>
+
+                          @if (mapping.createTutorialIfMissing) {
+                            <mat-form-field appearance="outline" class="min-w-64 flex-1">
+                              <mat-label>Tutorial stream</mat-label>
+                              <mat-select
+                                [disabled]="!connection"
+                                [(ngModel)]="mapping.tutorialStreamId"
+                              >
+                                <mat-option [value]="null">Select a tutorial stream</mat-option>
+                                @for (stream of unit.tutorialStreams; track stream.id) {
+                                  <mat-option [value]="stream.id">
+                                    {{ stream.description }}
+                                  </mat-option>
+                                }
+                              </mat-select>
+                              <mat-hint>
+                                A tutorial named {{ mapping.moodleGroupName }} will be created if
+                                needed.
+                              </mat-hint>
+                            </mat-form-field>
+                          } @else {
+                            <mat-form-field appearance="outline" class="min-w-64 flex-1">
+                              <mat-label>Tutorial for new group</mat-label>
+                              <mat-select [disabled]="!connection" [(ngModel)]="mapping.tutorialId">
+                                <mat-option [value]="null">Select a tutorial</mat-option>
+                                @for (tutorial of unit.tutorials; track tutorial.id) {
+                                  <mat-option [value]="tutorial.id">
+                                    {{ tutorial.abbreviation }} · {{ tutorial.description }}
+                                  </mat-option>
+                                }
+                              </mat-select>
+                            </mat-form-field>
+                          }
+                        </div>
+                      }
                     }
 
                     <button
@@ -333,7 +385,12 @@
           <button
             mat-stroked-button
             type="button"
-            [disabled]="studentImportAction || !integration.apiKeyConfigured || settingsDirty"
+            [disabled]="
+              studentImportAction ||
+              !integration.apiKeyConfigured ||
+              settingsDirty ||
+              !groupMappingsValid
+            "
             (click)="importStudents(true)"
           >
             <mat-icon>preview</mat-icon>
@@ -343,7 +400,12 @@
             color="primary"
             mat-flat-button
             type="button"
-            [disabled]="studentImportAction || !integration.apiKeyConfigured || settingsDirty"
+            [disabled]="
+              studentImportAction ||
+              !integration.apiKeyConfigured ||
+              settingsDirty ||
+              !groupMappingsValid
+            "
             (click)="importStudents(false)"
           >
             <mat-icon>person_add</mat-icon>

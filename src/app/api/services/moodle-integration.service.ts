@@ -36,6 +36,11 @@ export class MoodleIntegrationService extends EntityService<MoodleIntegration> {
             tutorialStreamId: (mapping['tutorial_stream_id'] as number) ?? null,
             tutorialId: (mapping['tutorial_id'] as number) ?? null,
             createIfMissing: mapping['create_if_missing'] as boolean,
+            createTutorialIfMissing:
+              mapping['target_type'] === 'group' &&
+              mapping['create_if_missing'] === true &&
+              !mapping['tutorial_id'] &&
+              !!mapping['tutorial_stream_id'],
           }));
         },
         toJsonFn: (integration: MoodleIntegration) => {
