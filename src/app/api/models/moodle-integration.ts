@@ -7,11 +7,28 @@ export class MoodleIntegration extends Entity {
   public assignmentId: number | null = null;
   public assignmentName: string | null = null;
   public fetchExtensions = false;
+  public groupMappingEnabled = false;
+  public groupMappings: MoodleGroupMapping[] = [];
   public apiKeyConfigured = false;
 
   constructor(public unit: Unit) {
     super();
   }
+}
+
+export type MoodleGroupTargetType = 'group' | 'campus' | 'tutorial';
+
+export interface MoodleGroupMapping {
+  id?: number;
+  moodleGroupId: number | null;
+  moodleGroupName: string;
+  targetType: MoodleGroupTargetType | null;
+  groupSetId: number | null;
+  groupId: number | null;
+  campusId: number | null;
+  tutorialStreamId: number | null;
+  tutorialId: number | null;
+  createIfMissing: boolean;
 }
 
 export interface MoodlePermissionResult {
@@ -33,8 +50,15 @@ export interface MoodleAssignment {
   duedate: number;
 }
 
+export interface MoodleGroup {
+  id: number;
+  name: string;
+  idnumber?: string;
+}
+
 export interface MoodleConnectionResult {
   course: MoodleCourse | null;
   assignments: MoodleAssignment[];
+  groups: MoodleGroup[];
   permissions: MoodlePermissionResult[];
 }

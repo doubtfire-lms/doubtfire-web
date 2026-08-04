@@ -1,4 +1,4 @@
-<div class="mx-auto max-w-4xl px-4 pb-12">
+<div class="mx-auto max-w-[80vw] px-4 pb-12">
   <mat-card appearance="outlined">
     <mat-card-header>
       <mat-card-title>Moodle</mat-card-title>
@@ -96,9 +96,7 @@
         >
           Fetch extensions from assignment
         </mat-checkbox>
-        <p class="ml-8 text-sm">
-          Update OnTrack special consideration days from Moodle extensions.
-        </p>
+        <p class="ml-8 text-sm">Update special consideration days from Moodle extensions.</p>
         @if (!connection) {
           <p class="ml-8 text-sm">Test the API connection first to load available assignments.</p>
         }
@@ -127,12 +125,191 @@
           </mat-form-field>
         }
 
+        <mat-divider class="my-6"></mat-divider>
+
+        <section>
+          <mat-checkbox
+            [disabled]="!connection && !integration.groupMappingEnabled"
+            [(ngModel)]="integration.groupMappingEnabled"
+          >
+            Enable group mapping
+          </mat-checkbox>
+          <p class="ml-8 text-sm">Map Moodle group membership to an group, campus, or tutorial.</p>
+          @if (!connection) {
+            <p class="ml-8 text-sm">Test the API connection first to load Moodle groups.</p>
+          }
+
+          @if (integration.groupMappingEnabled) {
+            <div class="mt-5 grid gap-4">
+              @for (mapping of integration.groupMappings; track $index; let index = $index) {
+                <mat-card appearance="outlined">
+                  <mat-card-content class="pt-4">
+                    <div class="flex w-full flex-wrap gap-4">
+                      <mat-form-field appearance="outline" class="min-w-48 flex-1">
+                        <mat-label>Moodle group</mat-label>
+                        <mat-select
+                          [disabled]="!connection"
+                          [(ngModel)]="mapping.moodleGroupId"
+                          (ngModelChange)="moodleGroupSelected(mapping)"
+                        >
+                          <mat-option [value]="null">Select a Moodle group</mat-option>
+                          @for (group of moodleGroups; track group.id) {
+                            <mat-option [value]="group.id">{{ group.name }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline" class="min-w-48 flex-1">
+                        <mat-label>Map as</mat-label>
+                        <mat-select
+                          [disabled]="!connection"
+                          [(ngModel)]="mapping.targetType"
+                          (ngModelChange)="targetTypeSelected(mapping)"
+                        >
+                          <mat-option [value]="null">Select a target</mat-option>
+                          <mat-option value="group">Group</mat-option>
+                          <mat-option value="campus">Campus</mat-option>
+                          <mat-option value="tutorial">Tutorial</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                      @if (mapping.targetType === 'campus') {
+                        <mat-form-field appearance="outline" class="min-w-48 flex-1">
+                          <mat-label>Campus</mat-label>
+                          <mat-select [disabled]="!connection" [(ngModel)]="mapping.campusId">
+                            <mat-option [value]="null">Select a campus</mat-option>
+                            @for (campus of campuses; track campus.id) {
+                              <mat-option [value]="campus.id">{{ campus.name }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                      }
+
+                      @if (mapping.targetType === 'tutorial') {
+                        <mat-form-field appearance="outline" class="min-w-48 flex-1">
+                          <mat-label>Tutorial stream</mat-label>
+                          <mat-select
+                            [disabled]="!connection"
+                            [(ngModel)]="mapping.tutorialStreamId"
+                            (ngModelChange)="tutorialStreamSelected(mapping)"
+                          >
+                            <mat-option [value]="null">Select a tutorial stream</mat-option>
+                            @for (stream of unit.tutorialStreams; track stream.id) {
+                              <mat-option [value]="stream.id">{{ stream.description }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+
+                        @if (!mapping.createIfMissing) {
+                          <mat-form-field appearance="outline" class="min-w-48 flex-1">
+                            <mat-label>Tutorial</mat-label>
+                            <mat-select
+                              [disabled]="!connection || !mapping.tutorialStreamId"
+                              [(ngModel)]="mapping.tutorialId"
+                            >
+                              <mat-option [value]="null">Select a tutorial</mat-option>
+                              @for (
+                                tutorial of tutorialsFor(mapping.tutorialStreamId);
+                                track tutorial.id
+                              ) {
+                                <mat-option [value]="tutorial.id">
+                                  {{ tutorial.abbreviation }} · {{ tutorial.description }}
+                                </mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      }
+
+                      @if (mapping.targetType === 'group') {
+                        <mat-form-field appearance="outline" class="min-w-48 flex-1">
+                          <mat-label>Group set</mat-label>
+                          <mat-select
+                            [disabled]="!connection"
+                            [(ngModel)]="mapping.groupSetId"
+                            (ngModelChange)="groupSetSelected(mapping)"
+                          >
+                            <mat-option [value]="null">Select a group set</mat-option>
+                            @for (groupSet of unit.groupSets; track groupSet.id) {
+                              <mat-option [value]="groupSet.id">{{ groupSet.name }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+
+                        @if (!mapping.createIfMissing) {
+                          <mat-form-field appearance="outline" class="min-w-48 flex-1">
+                            <mat-label>Group</mat-label>
+                            <mat-select
+                              [disabled]="!connection || !mapping.groupSetId"
+                              [(ngModel)]="mapping.groupId"
+                            >
+                              <mat-option [value]="null">Select a group</mat-option>
+                              @for (group of groupsFor(mapping.groupSetId); track group.id) {
+                                <mat-option [value]="group.id">{{ group.name }}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+                      }
+                    </div>
+
+                    @if (mapping.targetType === 'tutorial') {
+                      <mat-checkbox
+                        [disabled]="!connection"
+                        [(ngModel)]="mapping.createIfMissing"
+                        (ngModelChange)="createIfMissingChanged(mapping)"
+                      >
+                        Create the tutorial if it is missing, using the Moodle group name
+                      </mat-checkbox>
+                    }
+
+                    @if (mapping.targetType === 'group') {
+                      <mat-checkbox
+                        [disabled]="!connection"
+                        [(ngModel)]="mapping.createIfMissing"
+                        (ngModelChange)="createIfMissingChanged(mapping)"
+                      >
+                        Create the group if it is missing, using the Moodle group name
+                      </mat-checkbox>
+                    }
+
+                    <button
+                      color="warn"
+                      mat-button
+                      type="button"
+                      [disabled]="!connection"
+                      (click)="removeGroupMapping(index)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                      Remove mapping
+                    </button>
+                  </mat-card-content>
+                </mat-card>
+              }
+
+              <button
+                class="justify-self-start"
+                mat-stroked-button
+                type="button"
+                [disabled]="!connection"
+                (click)="addGroupMapping()"
+              >
+                <mat-icon>add</mat-icon>
+                Add group mapping
+              </button>
+              @if (!integration.groupMappings.length) {
+                <p>Add at least one mapping, or disable group mapping.</p>
+              }
+            </div>
+          }
+        </section>
+
         <button
           class="mt-5"
           color="primary"
           mat-flat-button
           type="button"
-          [disabled]="saving"
+          [disabled]="saving || !groupMappingsValid"
           (click)="save()"
         >
           <mat-icon>{{ saving ? 'hourglass_top' : 'save' }}</mat-icon>

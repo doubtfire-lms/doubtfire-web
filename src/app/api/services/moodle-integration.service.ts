@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {MoodleIntegration} from 'src/app/api/models/moodle-integration';
+import {MoodleGroupMapping, MoodleIntegration} from 'src/app/api/models/moodle-integration';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
 import API_URL from 'src/app/config/constants/apiUrl';
@@ -21,6 +21,37 @@ export class MoodleIntegrationService extends EntityService<MoodleIntegration> {
       'assignmentId',
       'assignmentName',
       'fetchExtensions',
+      'groupMappingEnabled',
+      {
+        keys: 'groupMappings',
+        toEntityFn: (data: object, key: string) => {
+          return (data[key] ?? []).map((mapping: Record<string, unknown>) => ({
+            id: mapping['id'] as number,
+            moodleGroupId: mapping['moodle_group_id'] as number,
+            moodleGroupName: mapping['moodle_group_name'] as string,
+            targetType: mapping['target_type'] as MoodleGroupMapping['targetType'],
+            groupSetId: (mapping['group_set_id'] as number) ?? null,
+            groupId: (mapping['group_id'] as number) ?? null,
+            campusId: (mapping['campus_id'] as number) ?? null,
+            tutorialStreamId: (mapping['tutorial_stream_id'] as number) ?? null,
+            tutorialId: (mapping['tutorial_id'] as number) ?? null,
+            createIfMissing: mapping['create_if_missing'] as boolean,
+          }));
+        },
+        toJsonFn: (integration: MoodleIntegration) => {
+          return integration.groupMappings.map((mapping) => ({
+            moodle_group_id: mapping.moodleGroupId,
+            moodle_group_name: mapping.moodleGroupName,
+            target_type: mapping.targetType,
+            group_set_id: mapping.groupSetId,
+            group_id: mapping.groupId,
+            campus_id: mapping.campusId,
+            tutorial_stream_id: mapping.tutorialStreamId,
+            tutorial_id: mapping.tutorialId,
+            create_if_missing: mapping.createIfMissing,
+          }));
+        },
+      },
       'apiKeyConfigured',
     );
     this.mapping.mapAllKeysToJsonExcept('id', 'apiKeyConfigured');

@@ -1,12 +1,16 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {finalize} from 'rxjs/operators';
+import {Campus, Group, Tutorial} from 'src/app/api/models/doubtfire-model';
 import {
   MoodleAssignment,
   MoodleConnectionResult,
+  MoodleGroup,
+  MoodleGroupMapping,
   MoodleIntegration,
 } from 'src/app/api/models/moodle-integration';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
+import {CampusService} from 'src/app/api/services/campus.service';
 import {MoodleIntegrationService} from 'src/app/api/services/moodle-integration.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {
@@ -28,6 +32,8 @@ export class UnitExternalToolsComponent implements OnInit {
   public apiKey = '';
   public editingApiKey = false;
   public assignments: MoodleAssignment[] = [];
+  public moodleGroups: MoodleGroup[] = [];
+  public campuses: Campus[] = [];
   public connection: MoodleConnectionResult | null = null;
   public saving = false;
   public testing = false;
@@ -37,9 +43,12 @@ export class UnitExternalToolsComponent implements OnInit {
   private savedAssignmentId: number | null = null;
   private savedAssignmentName: string | null = null;
   private savedFetchExtensions = false;
+  private savedGroupMappingEnabled = false;
+  private savedGroupMappings = '[]';
 
   constructor(
     private moodleService: MoodleIntegrationService,
+    private campusService: CampusService,
     private sidekiqProgressModal: SidekiqProgressModalService,
     private csvResultModal: CsvResultModalService,
     private confirmationModal: ConfirmationModalService,
@@ -49,10 +58,12 @@ export class UnitExternalToolsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.integration = new MoodleIntegration(this.unit);
+    this.campusService.query().subscribe((campuses) => (this.campuses = campuses));
     this.moodleService.getSettings(this.unit).subscribe({
       next: (integration) => {
         this.integration = integration;
         this.restoreSavedAssignment();
+        this.restoreSavedGroups();
         this.rememberSavedSettings();
         this.changeDetector.markForCheck();
       },
@@ -71,6 +82,10 @@ export class UnitExternalToolsComponent implements OnInit {
       (!this.integration.apiKeyConfigured && !this.apiKey)
     ) {
       this.alerts.error('Enter a Moodle course ID and API key.');
+      return;
+    }
+    if (!this.groupMappingsValid) {
+      this.alerts.error('Complete each Moodle group mapping before saving.');
       return;
     }
 
@@ -116,7 +131,7 @@ export class UnitExternalToolsComponent implements OnInit {
     if (!previewOnly) {
       this.confirmationModal.show(
         'Import Moodle students?',
-        `Make sure Moodle course ID ${this.integration.courseId} is the intended course. Run Preview student import first and verify the usernames, student IDs, names, and email addresses before continuing.`,
+        `Make sure Moodle course ID ${this.integration.courseId} is the intended course. Run Preview student import first and verify the student details and any group, campus, or tutorial mappings before continuing.`,
         () => this.startStudentImport(false),
         undefined,
         'Import students',
@@ -191,6 +206,77 @@ export class UnitExternalToolsComponent implements OnInit {
       this.assignments.find((assignment) => assignment.id === assignmentId)?.name ?? null;
   }
 
+  public addGroupMapping(): void {
+    this.integration.groupMappings.push({
+      moodleGroupId: null,
+      moodleGroupName: '',
+      targetType: null,
+      groupSetId: null,
+      groupId: null,
+      campusId: null,
+      tutorialStreamId: null,
+      tutorialId: null,
+      createIfMissing: false,
+    });
+  }
+
+  public removeGroupMapping(index: number): void {
+    this.integration.groupMappings.splice(index, 1);
+  }
+
+  public moodleGroupSelected(mapping: MoodleGroupMapping): void {
+    mapping.moodleGroupName =
+      this.moodleGroups.find((group) => group.id === mapping.moodleGroupId)?.name ?? '';
+  }
+
+  public targetTypeSelected(mapping: MoodleGroupMapping): void {
+    mapping.groupSetId = null;
+    mapping.groupId = null;
+    mapping.campusId = null;
+    mapping.tutorialStreamId = null;
+    mapping.tutorialId = null;
+    mapping.createIfMissing = false;
+  }
+
+  public groupSetSelected(mapping: MoodleGroupMapping): void {
+    mapping.groupId = null;
+  }
+
+  public tutorialStreamSelected(mapping: MoodleGroupMapping): void {
+    mapping.tutorialId = null;
+  }
+
+  public createIfMissingChanged(mapping: MoodleGroupMapping): void {
+    if (mapping.createIfMissing) {
+      mapping.groupId = null;
+      mapping.tutorialId = null;
+    }
+  }
+
+  public groupsFor(groupSetId: number | null): readonly Group[] {
+    return this.unit.groupSets.find((groupSet) => groupSet.id === groupSetId)?.groups ?? [];
+  }
+
+  public tutorialsFor(tutorialStreamId: number | null): readonly Tutorial[] {
+    return this.unit.tutorials.filter(
+      (tutorial) => tutorial.tutorialStream?.id === tutorialStreamId,
+    );
+  }
+
+  public get groupMappingsValid(): boolean {
+    if (!this.integration.groupMappingEnabled) return true;
+    if (!this.integration.groupMappings.length) return false;
+
+    return this.integration.groupMappings.every((mapping) => {
+      if (!mapping.moodleGroupId || !mapping.moodleGroupName || !mapping.targetType) return false;
+      if (mapping.targetType === 'campus') return !!mapping.campusId;
+      if (mapping.targetType === 'tutorial') {
+        return !!mapping.tutorialStreamId && (mapping.createIfMissing || !!mapping.tutorialId);
+      }
+      return !!mapping.groupSetId && (mapping.createIfMissing || !!mapping.groupId);
+    });
+  }
+
   public get apiKeyInputValue(): string {
     if (this.editingApiKey || this.apiKey) {
       return this.apiKey;
@@ -209,7 +295,9 @@ export class UnitExternalToolsComponent implements OnInit {
       this.integration.courseId !== this.savedCourseId ||
       this.integration.fetchExtensions !== this.savedFetchExtensions ||
       assignmentId !== this.savedAssignmentId ||
-      this.integration.assignmentName !== this.savedAssignmentName
+      this.integration.assignmentName !== this.savedAssignmentName ||
+      this.integration.groupMappingEnabled !== this.savedGroupMappingEnabled ||
+      JSON.stringify(this.integration.groupMappings) !== this.savedGroupMappings
     );
   }
 
@@ -222,6 +310,8 @@ export class UnitExternalToolsComponent implements OnInit {
     this.savedAssignmentId = this.integration.assignmentId;
     this.savedAssignmentName = this.integration.assignmentName;
     this.savedFetchExtensions = this.integration.fetchExtensions;
+    this.savedGroupMappingEnabled = this.integration.groupMappingEnabled;
+    this.savedGroupMappings = JSON.stringify(this.integration.groupMappings);
   }
 
   private restoreSavedAssignment(): void {
@@ -236,6 +326,13 @@ export class UnitExternalToolsComponent implements OnInit {
     }
   }
 
+  private restoreSavedGroups(): void {
+    this.moodleGroups = this.integration.groupMappings.map((mapping) => ({
+      id: mapping.moodleGroupId,
+      name: mapping.moodleGroupName,
+    }));
+  }
+
   private showConnectionTest(job: SidekiqJob): void {
     if (!job?.id) {
       this.alerts.error('Failed to start Moodle connection test.');
@@ -246,6 +343,7 @@ export class UnitExternalToolsComponent implements OnInit {
       next: (completedJob) => {
         this.connection = JSON.parse(completedJob.result) as MoodleConnectionResult;
         this.assignments = this.connection.assignments;
+        this.moodleGroups = this.connection.groups;
         this.assignmentSelected(this.integration.assignmentId);
         this.changeDetector.markForCheck();
       },
