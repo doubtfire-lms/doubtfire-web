@@ -1,13 +1,10 @@
-<div class="mx-auto max-w-[80vw] px-4 pb-12">
+<div class="mx-auto pb-12">
+  <div class="header">
+    <h3>Moodle</h3>
+    <p>Import enrolled students and special consideration days from a Moodle assignment.</p>
+  </div>
   <mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>Moodle</mat-card-title>
-      <mat-card-subtitle>
-        Import enrolled students and special consideration days from a Moodle assignment.
-      </mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content class="mt-6">
+    <mat-card-content>
       <div class="grid gap-4 sm:grid-cols-2">
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Moodle course ID</mat-label>
@@ -49,8 +46,13 @@
             <mat-card-header>
               <mat-card-title>{{ connection.course.fullname }}</mat-card-title>
               <mat-card-subtitle>
-                {{ connection.course.shortname }} · Moodle course ID {{ connection.course.id }}
+                {{ connection.course.shortname }}
+                @if (connection.course.startdate && connection.course.enddate) {
+                  · {{ connection.course.startdate * 1000 | date: 'd MMM y' }} —
+                  {{ connection.course.enddate * 1000 | date: 'd MMM y' }}
+                }
               </mat-card-subtitle>
+              <mat-card-subtitle>Moodle course ID {{ connection.course.id }}</mat-card-subtitle>
             </mat-card-header>
           } @else {
             <mat-card-header>
@@ -121,6 +123,12 @@
               <mat-hint>Test the API connection to change assignments.</mat-hint>
             } @else if (!assignments.length) {
               <mat-hint>Test the API connection to load assignments.</mat-hint>
+            } @else if (selectedAssignment?.duedate) {
+              <mat-hint>
+                Deadline: {{ selectedAssignment.duedate * 1000 | date: 'd MMM y, h:mm a' }}
+              </mat-hint>
+            } @else if (selectedAssignment) {
+              <mat-hint>No deadline set for this assignment.</mat-hint>
             }
           </mat-form-field>
         }
@@ -251,6 +259,18 @@
                           </mat-form-field>
                         }
                       }
+
+                      <button
+                        aria-label="Remove mapping"
+                        color="warn"
+                        mat-icon-button
+                        matTooltip="Remove mapping"
+                        type="button"
+                        [disabled]="!connection"
+                        (click)="removeGroupMapping(index)"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
                     </div>
 
                     @if (mapping.targetType === 'tutorial') {
@@ -273,9 +293,10 @@
                       </mat-checkbox>
 
                       @if (mapping.createIfMissing) {
-                        <div class="mt-4 flex w-full flex-wrap items-start gap-4">
+                        <div class="mt-4 flex w-full flex-wrap items-center gap-4">
                           <mat-button-toggle-group
                             aria-label="Tutorial for new group"
+                            class="mb-5.5"
                             hideSingleSelectionIndicator
                             [disabled]="!connection"
                             [ngModel]="mapping.createTutorialIfMissing"
@@ -324,17 +345,6 @@
                         </div>
                       }
                     }
-
-                    <button
-                      color="warn"
-                      mat-button
-                      type="button"
-                      [disabled]="!connection"
-                      (click)="removeGroupMapping(index)"
-                    >
-                      <mat-icon>delete</mat-icon>
-                      Remove mapping
-                    </button>
                   </mat-card-content>
                 </mat-card>
               }

@@ -206,6 +206,12 @@ export class UnitExternalToolsComponent implements OnInit {
       this.assignments.find((assignment) => assignment.id === assignmentId)?.name ?? null;
   }
 
+  public get selectedAssignment(): MoodleAssignment | null {
+    return (
+      this.assignments.find((assignment) => assignment.id === this.integration.assignmentId) ?? null
+    );
+  }
+
   public addGroupMapping(): void {
     this.integration.groupMappings.push({
       moodleGroupId: null,

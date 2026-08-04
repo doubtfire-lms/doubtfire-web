@@ -43,6 +43,8 @@ export interface MoodleCourse {
   id: number;
   fullname: string;
   shortname: string;
+  startdate: number | null;
+  enddate: number | null;
 }
 
 export interface MoodleAssignment {
