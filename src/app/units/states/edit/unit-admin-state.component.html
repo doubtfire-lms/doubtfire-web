@@ -5,7 +5,7 @@
     [selectedIndex]="currentIndex"
     (selectedTabChange)="onTabChange($event)"
   >
-    @for (tab of tabs; track tab.routeSegment) {
+    @for (tab of visibleTabs; track tab.routeSegment) {
       <mat-tab [label]="tab.label"></mat-tab>
     }
   </mat-tab-group>
@@ -109,6 +109,13 @@
                 [unit]="unit"
                 [unitRole]="assessingUnitRole"
               ></f-unit-group-set-editor>
+            </div>
+          }
+        }
+        @case ('moodle') {
+          @if (unit) {
+            <div class="mx-auto max-w-[90vw]">
+              <f-unit-external-tools [unit]="unit"></f-unit-external-tools>
             </div>
           }
         }

@@ -188,6 +188,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'sendNotifications',
       'enableSyncEnrolments',
       'enableSyncTimetable',
+      'moodleEnabled',
       'allowStudentExtensionRequests',
       'allowFlexibleDates',
       'extensionWeeksOnResubmitRequest',
@@ -321,6 +322,7 @@ export class UnitService extends CachedEntityService<Unit> {
 
       'assessmentEnabled',
       'overseerImageId',
+      'moodleEnabled',
 
       'autoApplyExtensionBeforeDeadline',
       'markLateSubmissionsAsAssessInPortfolio',

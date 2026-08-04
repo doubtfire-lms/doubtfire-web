@@ -408,6 +408,13 @@
     </div>
 
     <div>
+      <mat-slide-toggle [(ngModel)]="unit.moodleEnabled"
+        >Enable Moodle integration</mat-slide-toggle
+      >
+      <p>Shows the Moodle administration tab for this unit.</p>
+    </div>
+
+    <div>
       <mat-slide-toggle [(ngModel)]="unit.active">Active</mat-slide-toggle>
       <p>Set to false to hide unit from students and tutors.</p>
     </div>

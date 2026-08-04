@@ -76,6 +76,7 @@ export class Unit extends Entity {
   sendNotifications: boolean;
   enableSyncEnrolments: boolean;
   enableSyncTimetable: boolean;
+  moodleEnabled: boolean;
 
   draftTaskDefinition: TaskDefinition;
   hasMainContentSite: boolean = false;

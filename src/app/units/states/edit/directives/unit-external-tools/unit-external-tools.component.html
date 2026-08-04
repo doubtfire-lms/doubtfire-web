@@ -1,0 +1,213 @@
+<div class="mx-auto max-w-4xl px-4 pb-12">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Moodle</mat-card-title>
+      <mat-card-subtitle>
+        Import enrolled students and special consideration days from a Moodle assignment.
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="mt-6">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Moodle course ID</mat-label>
+          <input matInput min="1" type="number" [(ngModel)]="integration.courseId" />
+          <mat-icon matSuffix>school</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Moodle API key</mat-label>
+          <input
+            matInput
+            placeholder="Enter API key"
+            type="password"
+            [ngModel]="apiKeyInputValue"
+            (blur)="editingApiKey = false"
+            (focus)="editingApiKey = true"
+            (ngModelChange)="updateApiKey($event)"
+          />
+          <mat-icon matSuffix>key</mat-icon>
+          @if (integration.apiKeyConfigured) {
+            <mat-hint>API key saved</mat-hint>
+          }
+        </mat-form-field>
+      </div>
+
+      <button
+        mat-stroked-button
+        type="button"
+        [disabled]="testing || !integration.apiKeyConfigured || connectionSettingsDirty"
+        (click)="testConnection()"
+      >
+        <mat-icon>{{ testing ? 'hourglass_top' : 'api' }}</mat-icon>
+        {{ testing ? 'Testing…' : 'Test API connection' }}
+      </button>
+
+      @if (connection) {
+        <mat-card appearance="outlined" class="mt-6">
+          @if (connection.course) {
+            <mat-card-header>
+              <mat-card-title>{{ connection.course.fullname }}</mat-card-title>
+              <mat-card-subtitle>
+                {{ connection.course.shortname }} · Moodle course ID {{ connection.course.id }}
+              </mat-card-subtitle>
+            </mat-card-header>
+          } @else {
+            <mat-card-header>
+              <mat-icon color="warn" mat-card-avatar>error</mat-icon>
+              <mat-card-title>Course not found</mat-card-title>
+              <mat-card-subtitle>
+                The configured Moodle course could not be loaded.
+              </mat-card-subtitle>
+            </mat-card-header>
+          }
+
+          <mat-card-content class="mt-4">
+            <div class="grid gap-3 sm:grid-cols-2">
+              @for (permission of connection.permissions; track permission.function) {
+                <mat-card appearance="outlined">
+                  <mat-card-content class="flex items-start gap-3 pt-4">
+                    <mat-icon [color]="permission.success ? 'primary' : 'warn'">
+                      {{ permission.success ? 'check_circle' : 'cancel' }}
+                    </mat-icon>
+                    <div class="min-w-0">
+                      <code>{{ permission.function }}</code>
+                      @if (permission.error) {
+                        <p class="mt-1 text-sm">{{ permission.error }}</p>
+                      }
+                      @if (permission.message) {
+                        <p class="mt-1 text-sm">{{ permission.message }}</p>
+                      }
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <mat-divider class="my-6"></mat-divider>
+
+      <div>
+        <mat-checkbox
+          [disabled]="!connection && !integration.fetchExtensions"
+          [(ngModel)]="integration.fetchExtensions"
+        >
+          Fetch extensions from assignment
+        </mat-checkbox>
+        <p class="ml-8 text-sm">
+          Update OnTrack special consideration days from Moodle extensions.
+        </p>
+        @if (!connection) {
+          <p class="ml-8 text-sm">Test the API connection first to load available assignments.</p>
+        }
+
+        @if (integration.fetchExtensions) {
+          <mat-form-field appearance="outline" class="mt-5 block max-w-xl">
+            <mat-label>Portfolio assignment</mat-label>
+            <mat-select
+              [disabled]="!connection"
+              [(ngModel)]="integration.assignmentId"
+              (ngModelChange)="assignmentSelected($event)"
+            >
+              <mat-option [value]="null">Select an assignment</mat-option>
+              @for (assignment of assignments; track assignment.id) {
+                <mat-option [value]="assignment.id">
+                  {{ assignment.name }} (ID {{ assignment.id }})
+                </mat-option>
+              }
+            </mat-select>
+            <mat-icon matSuffix>assignment</mat-icon>
+            @if (!connection) {
+              <mat-hint>Test the API connection to change assignments.</mat-hint>
+            } @else if (!assignments.length) {
+              <mat-hint>Test the API connection to load assignments.</mat-hint>
+            }
+          </mat-form-field>
+        }
+
+        <button
+          class="mt-5"
+          color="primary"
+          mat-flat-button
+          type="button"
+          [disabled]="saving"
+          (click)="save()"
+        >
+          <mat-icon>{{ saving ? 'hourglass_top' : 'save' }}</mat-icon>
+          {{ saving ? 'Saving…' : 'Save Moodle settings' }}
+        </button>
+
+        @if (settingsDirty && integration.apiKeyConfigured) {
+          <p class="mt-2 flex items-center gap-1 text-sm">
+            <mat-icon>info</mat-icon>
+            Save your changes before testing or importing.
+          </p>
+        }
+      </div>
+
+      <mat-divider class="my-6"></mat-divider>
+
+      <section>
+        <h3 class="mat-title-medium">Students</h3>
+        <p>Preview the Moodle enrolment mapping, then import students into this unit.</p>
+        <div class="mt-3 flex flex-wrap gap-3">
+          <button
+            mat-stroked-button
+            type="button"
+            [disabled]="studentImportAction || !integration.apiKeyConfigured || settingsDirty"
+            (click)="importStudents(true)"
+          >
+            <mat-icon>preview</mat-icon>
+            {{ studentImportAction === 'preview' ? 'Starting preview…' : 'Preview student import' }}
+          </button>
+          <button
+            color="primary"
+            mat-flat-button
+            type="button"
+            [disabled]="studentImportAction || !integration.apiKeyConfigured || settingsDirty"
+            (click)="importStudents(false)"
+          >
+            <mat-icon>person_add</mat-icon>
+            {{ studentImportAction === 'import' ? 'Starting import…' : 'Import students' }}
+          </button>
+        </div>
+      </section>
+
+      @if (integration.fetchExtensions) {
+        <mat-divider class="my-6"></mat-divider>
+
+        <section>
+          <h3 class="mat-title-medium">Extensions</h3>
+          <p>Preview changes to special consideration days before applying them.</p>
+          <div class="mt-3 flex flex-wrap gap-3">
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="extensionImportAction || !integration.assignmentId || settingsDirty"
+              (click)="importExtensions(true)"
+            >
+              <mat-icon>preview</mat-icon>
+              {{
+                extensionImportAction === 'preview'
+                  ? 'Starting preview…'
+                  : 'Preview extension import'
+              }}
+            </button>
+            <button
+              color="primary"
+              mat-flat-button
+              type="button"
+              [disabled]="extensionImportAction || !integration.assignmentId || settingsDirty"
+              (click)="importExtensions(false)"
+            >
+              <mat-icon>event_available</mat-icon>
+              {{ extensionImportAction === 'import' ? 'Starting import…' : 'Import extensions' }}
+            </button>
+          </div>
+        </section>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

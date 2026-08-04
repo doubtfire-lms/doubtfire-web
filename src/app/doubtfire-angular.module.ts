@@ -129,6 +129,7 @@ import {
   EngagementService,
   GroupSetService,
   LearningOutcomeService,
+  MoodleIntegrationService,
   OverseerAssessmentService,
   OverseerImageService,
   ProjectService,
@@ -344,6 +345,7 @@ import {
   D2lUnitDetailsModal,
 } from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
+import {UnitExternalToolsComponent} from './units/states/edit/directives/unit-external-tools/unit-external-tools.component';
 import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
 import {BulkImportStaffModalComponent} from './units/states/edit/directives/unit-staff-editor/bulk-import-staff-modal/bulk-import-staff-modal.component';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
@@ -507,6 +509,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     UnitTutorialsManagerComponent,
     FileDropComponent,
     UnitStudentsEditorComponent,
+    UnitExternalToolsComponent,
     StudentsListComponent,
     UnitTaskEditorComponent,
     TaskDefinitionEditorComponent,
@@ -703,6 +706,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     UnitContentLinkService,
     UnitContentSiteService,
     D2lAssessmentMappingService,
+    MoodleIntegrationService,
     ProjectService,
     UnitRoleService,
     LearningOutcomeService,

@@ -42,6 +42,7 @@ export * from './task-comment/scorm-extension-comment';
 export * from './feedback-template';
 export * from './communication';
 export * from './engagement';
+export * from './moodle-integration';
 
 // Users -- are students or staff
 export * from './user/user';
@@ -66,6 +67,7 @@ export * from '../services/webcal.service';
 export * from '../services/teaching-period.service';
 export * from '../services/teaching-period-break.service';
 export * from '../services/learning-outcome.service';
+export * from '../services/moodle-integration.service';
 export * from '../services/group-set.service';
 export * from '../services/task-similarity.service';
 export * from '../../common/services/grade.service';
