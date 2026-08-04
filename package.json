@@ -114,7 +114,7 @@
     "vitest": "^4.1.9"
   },
   "optionalDependencies": {
-    "@nx/nx-darwin-arm64": "^23.0.1",
+    "@nx/nx-darwin-arm64": "^23.1.1",
     "@nx/nx-darwin-x64": "^23.1.0",
     "@nx/nx-linux-arm64-gnu": "^23.0.1",
     "@nx/nx-linux-x64-gnu": "^23.1.0",
