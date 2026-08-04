@@ -298,8 +298,12 @@ export class UnitExternalToolsComponent implements OnInit {
       if (mapping.targetType === 'tutorial') {
         return !!mapping.tutorialStreamId && (mapping.createIfMissing || !!mapping.tutorialId);
       }
-      if (!mapping.groupSetId) return false;
-      if (!mapping.createIfMissing) return !!mapping.groupId;
+      if (!mapping.groupSetId) {
+        return false;
+      }
+      if (!mapping.createIfMissing) {
+        return !!mapping.groupId;
+      }
       return mapping.createTutorialIfMissing ? !!mapping.tutorialStreamId : !!mapping.tutorialId;
     });
   }
