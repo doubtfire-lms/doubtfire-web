@@ -264,12 +264,20 @@ export class UnitExternalToolsComponent implements OnInit {
   }
 
   public get groupMappingsValid(): boolean {
-    if (!this.integration.groupMappingEnabled) return true;
-    if (!this.integration.groupMappings.length) return false;
+    if (!this.integration.groupMappingEnabled) {
+      return true;
+    }
+    if (!this.integration.groupMappings.length) {
+      return false;
+    }
 
     return this.integration.groupMappings.every((mapping) => {
-      if (!mapping.moodleGroupId || !mapping.moodleGroupName || !mapping.targetType) return false;
-      if (mapping.targetType === 'campus') return !!mapping.campusId;
+      if (!mapping.moodleGroupId || !mapping.moodleGroupName || !mapping.targetType) {
+        return false;
+      }
+      if (mapping.targetType === 'campus') {
+        return !!mapping.campusId;
+      }
       if (mapping.targetType === 'tutorial') {
         return !!mapping.tutorialStreamId && (mapping.createIfMissing || !!mapping.tutorialId);
       }
