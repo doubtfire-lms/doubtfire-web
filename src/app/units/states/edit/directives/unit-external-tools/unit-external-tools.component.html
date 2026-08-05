@@ -366,6 +366,37 @@
           }
         </section>
 
+        <mat-divider class="my-6"></mat-divider>
+
+        <section>
+          <h3 class="mat-title-medium">Automatic sync</h3>
+          <div class="grid gap-3">
+            <div>
+              <mat-checkbox [(ngModel)]="integration.autoSyncStudents">
+                Sync students daily
+              </mat-checkbox>
+              <p class="ml-8 text-sm">
+                Runs once a day while the unit is active and within its start and end dates.
+              </p>
+            </div>
+
+            <div>
+              <mat-checkbox
+                [disabled]="!integration.fetchExtensions"
+                [(ngModel)]="integration.autoSyncExtensions"
+              >
+                Sync extensions daily
+              </mat-checkbox>
+              <p class="ml-8 text-sm">
+                Runs once a day from the unit start date until 14 days after its end date.
+              </p>
+              @if (!integration.fetchExtensions) {
+                <p class="ml-8 text-sm">Enable extension imports and select an assignment first.</p>
+              }
+            </div>
+          </div>
+        </section>
+
         <button
           class="mt-5"
           color="primary"

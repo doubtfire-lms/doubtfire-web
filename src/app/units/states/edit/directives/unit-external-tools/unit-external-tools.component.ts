@@ -43,6 +43,8 @@ export class UnitExternalToolsComponent implements OnInit {
   private savedAssignmentId: number | null = null;
   private savedAssignmentName: string | null = null;
   private savedFetchExtensions = false;
+  private savedAutoSyncStudents = false;
+  private savedAutoSyncExtensions = false;
   private savedGroupMappingEnabled = false;
   private savedGroupMappings = '[]';
 
@@ -213,18 +215,7 @@ export class UnitExternalToolsComponent implements OnInit {
   }
 
   public addGroupMapping(): void {
-    this.integration.groupMappings.push({
-      moodleGroupId: null,
-      moodleGroupName: '',
-      targetType: null,
-      groupSetId: null,
-      groupId: null,
-      campusId: null,
-      tutorialStreamId: null,
-      tutorialId: null,
-      createIfMissing: false,
-      createTutorialIfMissing: false,
-    });
+    this.integration.groupMappings.push(new MoodleGroupMapping());
   }
 
   public removeGroupMapping(index: number): void {
@@ -331,6 +322,8 @@ export class UnitExternalToolsComponent implements OnInit {
       this.apiKey.length > 0 ||
       this.integration.courseId !== this.savedCourseId ||
       this.integration.fetchExtensions !== this.savedFetchExtensions ||
+      this.integration.autoSyncStudents !== this.savedAutoSyncStudents ||
+      this.integration.autoSyncExtensions !== this.savedAutoSyncExtensions ||
       assignmentId !== this.savedAssignmentId ||
       this.integration.assignmentName !== this.savedAssignmentName ||
       this.integration.groupMappingEnabled !== this.savedGroupMappingEnabled ||
@@ -347,6 +340,8 @@ export class UnitExternalToolsComponent implements OnInit {
     this.savedAssignmentId = this.integration.assignmentId;
     this.savedAssignmentName = this.integration.assignmentName;
     this.savedFetchExtensions = this.integration.fetchExtensions;
+    this.savedAutoSyncStudents = this.integration.autoSyncStudents;
+    this.savedAutoSyncExtensions = this.integration.autoSyncExtensions;
     this.savedGroupMappingEnabled = this.integration.groupMappingEnabled;
     this.savedGroupMappings = JSON.stringify(this.integration.groupMappings);
   }

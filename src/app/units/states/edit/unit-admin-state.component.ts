@@ -49,6 +49,7 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   public assessingUnitRole: UnitRole | null = null;
   public currentTab: UnitAdminTab = this.tabs[0];
   public loadingUnit = true;
+  public savedMoodleEnabled = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -94,7 +95,11 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   }
 
   public get visibleTabs(): UnitAdminTab[] {
-    return this.tabs.filter((tab) => tab.routeSegment !== 'moodle' || this.unit?.moodleEnabled);
+    return this.tabs.filter((tab) => tab.routeSegment !== 'moodle' || this.savedMoodleEnabled);
+  }
+
+  public unitUpdated(unit: Unit): void {
+    this.savedMoodleEnabled = unit.moodleEnabled;
   }
 
   public onTabChange(event: MatTabChangeEvent): void {
@@ -161,9 +166,10 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   private loadUnit(unit: Unit): void {
     this.loadingUnit = false;
     this.unit = unit;
+    this.savedMoodleEnabled = unit.moodleEnabled;
     const requestedTab = this.route.snapshot.paramMap.get('tab');
     this.updateCurrentTabFromState(requestedTab);
-    if (requestedTab === 'moodle' && !unit.moodleEnabled) {
+    if (requestedTab === 'moodle' && !this.savedMoodleEnabled) {
       this.router.navigate(['/units', unit.id, 'admin', 'details'], {replaceUrl: true});
     }
 

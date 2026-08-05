@@ -7,6 +7,8 @@ export class MoodleIntegration extends Entity {
   public assignmentId: number | null = null;
   public assignmentName: string | null = null;
   public fetchExtensions = false;
+  public autoSyncStudents = false;
+  public autoSyncExtensions = false;
   public groupMappingEnabled = false;
   public groupMappings: MoodleGroupMapping[] = [];
   public apiKeyConfigured = false;
@@ -18,18 +20,18 @@ export class MoodleIntegration extends Entity {
 
 export type MoodleGroupTargetType = 'group' | 'campus' | 'tutorial';
 
-export interface MoodleGroupMapping {
-  id?: number;
-  moodleGroupId: number | null;
-  moodleGroupName: string;
-  targetType: MoodleGroupTargetType | null;
-  groupSetId: number | null;
-  groupId: number | null;
-  campusId: number | null;
-  tutorialStreamId: number | null;
-  tutorialId: number | null;
-  createIfMissing: boolean;
-  createTutorialIfMissing: boolean;
+export class MoodleGroupMapping extends Entity {
+  public id: number | null = null;
+  public moodleGroupId: number | null = null;
+  public moodleGroupName = '';
+  public targetType: MoodleGroupTargetType | null = null;
+  public groupSetId: number | null = null;
+  public groupId: number | null = null;
+  public campusId: number | null = null;
+  public tutorialStreamId: number | null = null;
+  public tutorialId: number | null = null;
+  public createIfMissing = false;
+  public createTutorialIfMissing = false;
 }
 
 export interface MoodlePermissionResult {
