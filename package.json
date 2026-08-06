@@ -103,7 +103,7 @@
     "husky": "^9.1.7",
     "ip": "^2.0.1",
     "jsdom": "^30.0.1",
-    "npm-run-all2": "^9.0.2",
+    "npm-run-all2": "^9.0.3",
     "postcss": "^8.5.25",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.9.6",
