@@ -1,5 +1,5 @@
-import {MultiSeries, TooltipService} from '@swimlane/ngx-charts';
 import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
+import { MultiSeries, TooltipService } from '@glitchtip/ng-charts';
 import {filter, map, take} from 'rxjs/operators';
 import {
   TaskCodeStats,

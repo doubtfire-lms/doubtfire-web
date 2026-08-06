@@ -868,7 +868,6 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     CodeEditorModule.forRoot(),
     NgxGanttModule,
     MonacoEditorModule.forRoot(),
-    NgxChartsModule,
     MatChipListbox,
     NgxSkeletonLoaderModule,
   ],
