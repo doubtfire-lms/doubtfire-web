@@ -77,6 +77,8 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
   private pendingIframeUrl?: string;
   private routeSubscription?: Subscription;
   private initialized = false;
+  private readonly iframeClickHandler = (event: Event) =>
+    this.handleIframeClick(event as MouseEvent);
 
   constructor(
     private authService: AuthenticationService,
@@ -151,18 +153,62 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
   }
 
   public onIframeLoad(frameIndex: number): void {
+    if (this.recoverEscapedHomeRoute(frameIndex)) {
+      return;
+    }
+
+    // Browser back/forward restores a new iframe document without going
+    // through setIframeUrl. Reattach interception even when this was not one
+    // of the component's expected double-buffered loads.
+    this.attachIframeClickHandler(frameIndex);
+
     if (frameIndex !== this.loadingIframeIndex || !this.isExpectedIframeLoad(frameIndex)) {
       return;
     }
 
     this.activeIframeIndex = frameIndex;
     this.loadingIframeIndex = undefined;
+  }
 
-    this.contentIframes[frameIndex]?.contentDocument?.addEventListener(
-      'click',
-      (event) => this.handleIframeClick(event),
-      true,
-    );
+  private attachIframeClickHandler(frameIndex: number): void {
+    try {
+      this.contentIframes[frameIndex]?.contentDocument?.addEventListener(
+        'click',
+        this.iframeClickHandler,
+        true,
+      );
+    } catch {
+      // Cross-origin iframe documents are intentionally inaccessible.
+    }
+  }
+
+  private recoverEscapedHomeRoute(frameIndex: number): boolean {
+    const iframe = this.contentIframes[frameIndex];
+
+    if (!iframe?.contentWindow || !this.currentUnitId) {
+      return false;
+    }
+
+    try {
+      const iframeUrl = new URL(iframe.contentWindow.location.href);
+      const isOnTrackHome =
+        iframeUrl.origin === window.location.origin && /^\/home\/?$/.test(iframeUrl.pathname);
+
+      if (!isOnTrackHome) {
+        return false;
+      }
+    } catch {
+      return false;
+    }
+
+    if (this.dialogData) {
+      this.setContentRoute('/');
+      void this.loadContentRoute(this.currentUnitId);
+    } else {
+      void this.router.navigate(this.contentRouteCommands('/'), {replaceUrl: true});
+    }
+
+    return true;
   }
 
   private setHeaderContext(unit: Unit): void {
