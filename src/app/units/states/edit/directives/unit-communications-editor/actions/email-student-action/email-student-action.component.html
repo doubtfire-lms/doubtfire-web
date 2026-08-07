@@ -20,7 +20,10 @@
     @if (editor.actionFor(rule).subject) {
       <div class="rounded border border-slate-200 bg-slate-50 p-3">
         <div class="mb-2 font-medium">Subject Preview</div>
-        <div [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).subject, rule)"></div>
+        <div
+          class="text-wrap"
+          [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).subject, rule)"
+        ></div>
       </div>
     }
     <div class="flex items-stretch gap-3">
@@ -31,11 +34,14 @@
           <mat-icon>add_circle</mat-icon>
         </button>
       </mat-form-field>
-      <div class="flex size-full flex-col rounded border border-slate-200 bg-slate-50 p-3">
+      <div
+        class="flex size-full max-w-[50%] flex-col rounded border border-slate-200 bg-slate-50 p-3 text-wrap"
+      >
         <div class="mb-2 font-medium">Body Preview</div>
         <div class="flex-1">
           @if (editor.actionFor(rule).body) {
             <div
+              class="text-wrap"
               [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).body, rule)"
             ></div>
           } @else {
@@ -76,7 +82,10 @@
     @if (editor.actionFor(rule).subject) {
       <div class="rounded border border-slate-200 bg-slate-50 p-3">
         <div class="mb-2 font-medium">Subject Preview</div>
-        <div [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).subject, rule)"></div>
+        <div
+          class="text-wrap"
+          [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).subject, rule)"
+        ></div>
       </div>
     }
 
@@ -88,11 +97,14 @@
           <mat-icon>add_circle</mat-icon>
         </button>
       </mat-form-field>
-      <div class="flex size-full flex-col rounded border border-slate-200 bg-slate-50 p-3">
+      <div
+        class="flex size-full max-w-[50%] flex-col rounded border border-slate-200 bg-slate-50 p-3 text-wrap"
+      >
         <div class="mb-2 font-medium">Body Preview</div>
         <div class="flex-1">
           @if (editor.actionFor(rule).body) {
             <div
+              class="text-wrap"
               [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).body, rule)"
             ></div>
           } @else {
