@@ -279,7 +279,9 @@
                             <th *matHeaderCellDef mat-header-cell>Target Grade</th>
                             <td *matCellDef="let student" mat-cell>
                               {{
-                                student.target_grade ? targetGradeName(student.target_grade) : '-'
+                                student.target_grade !== null && student.target_grade !== undefined
+                                  ? targetGradeName(student.target_grade)
+                                  : '-'
                               }}
                             </td>
                           </ng-container>
