@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-64](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-63...v11.0.0-64) (2026-08-08)
+
+
+### Bug Fixes
+
+* ensure unit fetch request remains alive between component changes ([4df2ac9](https://github.com/b0ink/doubtfire-deploy/commit/4df2ac93fea199655b3eaeda23df2f16e2beae8d))
+
 ## [11.0.0-63](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-62...v11.0.0-63) (2026-08-08)
 
 
