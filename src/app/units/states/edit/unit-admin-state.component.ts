@@ -2,7 +2,8 @@ import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@ang
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, Subscription, first, of} from 'rxjs';
-import {Unit, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
+import {Unit, UnitRole, UnitService, User, UserService} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 type UnitAdminTabKey =
@@ -54,6 +55,8 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
+    private unitService: UnitService,
+    private alerts: AlertService,
     private globalStateService: GlobalStateService,
   ) {}
 
@@ -70,7 +73,7 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
 
           this.assessingUnitRole = this.findUnitRole(unit.id);
           this.loadTutors();
-          this.loadUnit(unit);
+          this.loadUnit(unit.id);
         }),
       );
     }
@@ -150,17 +153,26 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
     );
   }
 
-  private loadUnit(unit: Unit): void {
-    this.loadingUnit = false;
-    this.unit = unit;
-
-    if (this.assessingUnitRole) {
-      this.assessingUnitRole.unit = unit;
-    }
-
-    this.globalStateService.setView(
-      ViewType.UNIT,
-      this.assessingUnitRole ? this.assessingUnitRole : unit,
+  private loadUnit(unitId: number): void {
+    this.loadingUnit = true;
+    this.subscriptions.push(
+      this.unitService.loadDetails(unitId).subscribe({
+        next: (unit) => {
+          this.unit = unit;
+          if (this.assessingUnitRole) {
+            this.assessingUnitRole.unit = unit;
+          }
+          this.globalStateService.setView(
+            ViewType.UNIT,
+            this.assessingUnitRole ? this.assessingUnitRole : unit,
+          );
+          this.loadingUnit = false;
+        },
+        error: (error) => {
+          this.loadingUnit = false;
+          this.alerts.error('Error loading unit: ' + error, 8000);
+        },
+      }),
     );
   }
 }
