@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-66](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-65...v11.0.0-66) (2026-08-08)
+
+
+### Bug Fixes
+
+* render block-level markdown via the marked pipe ([524adee](https://github.com/b0ink/doubtfire-deploy/commit/524adee6982e5bfe075845794512697fad676015))
+
 ## [11.0.0-65](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-64...v11.0.0-65) (2026-08-08)
 
 
