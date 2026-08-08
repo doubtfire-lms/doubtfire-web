@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-63](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-62...v11.0.0-63) (2026-08-08)
+
+
+### Features
+
+* bulk upload staff notes ([#1416](https://github.com/b0ink/doubtfire-deploy/issues/1416)) ([480d108](https://github.com/b0ink/doubtfire-deploy/commit/480d108f2bacc7f329e92d800b549f48ada37ae9))
+
+
+### Bug Fixes
+
+* email action split layout ([5ceae57](https://github.com/b0ink/doubtfire-deploy/commit/5ceae57ce40d94f8cd6a3e2b8efda9c599fdbc33))
+* ensure 0 shows as pass grade ([a8faaf0](https://github.com/b0ink/doubtfire-deploy/commit/a8faaf02475b19a5d44b6a0e1de8168ad9ce77e2))
+* wording ([2080df4](https://github.com/b0ink/doubtfire-deploy/commit/2080df45ecfda6f2d52a85c442a10b059c5a33d8))
+
 ## [11.0.0-62](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-61...v11.0.0-62) (2026-08-03)
 
 
