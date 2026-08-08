@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-65](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-64...v11.0.0-65) (2026-08-08)
+
+
+### Bug Fixes
+
+* attempt access token refresh regardless of client side validity ([879cbfe](https://github.com/b0ink/doubtfire-deploy/commit/879cbfe6c3bedea2d4c6db803d4789fc95ce640f))
+
 ## [11.0.0-64](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-63...v11.0.0-64) (2026-08-08)
 
 
