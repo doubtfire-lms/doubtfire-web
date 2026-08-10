@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-67](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-66...v11.0.0-67) (2026-08-10)
+
+
+### Bug Fixes
+
+* refresh expired access token during file uploads ([6aa2a93](https://github.com/b0ink/doubtfire-deploy/commit/6aa2a934ed1045057913b5b86b6630aa27631012))
+* space block-level markdown from the marked pipe ([547be08](https://github.com/b0ink/doubtfire-deploy/commit/547be08340646d9ba22b73375e72e63fc6a85035))
+
 ## [11.0.0-66](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-65...v11.0.0-66) (2026-08-08)
 
 
