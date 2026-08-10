@@ -4,7 +4,6 @@ import {TaskComment} from 'src/app/api/models/doubtfire-model';
 @Component({
   selector: 'f-discuss-timeout-comment',
   templateUrl: './discuss-timeout-comment.component.html',
-  styleUrls: ['./discuss-timeout-comment.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
