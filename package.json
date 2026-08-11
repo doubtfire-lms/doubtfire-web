@@ -59,7 +59,7 @@
     "html5-qrcode": "^2.3.8",
     "jszip": "^3.10.1",
     "lottie-web": "^5.13.0",
-    "marked": "^18.0.7",
+    "marked": "^18.0.9",
     "moment": "^2.30",
     "monaco-editor": "^0.56.0",
     "ng-flex-layout": "^17.3.7-beta.1",
