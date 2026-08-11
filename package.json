@@ -9,15 +9,15 @@
     "node": ">=22.22.3"
   },
   "scripts": {
-    "build": "ng build",
+    "build": "ng build --subresource-integrity",
     "build:angular18": "ng build",
     "lint:fix": "ng lint --fix",
     "lint": "ng lint --max-warnings 0",
     "serve:angular18": "export NG_FORCE_TTY=false && export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --poll=2000 --configuration $NODE_ENV --proxy-config proxy.conf.json",
     "format": "prettier --write .",
     "start": "npm-run-all serve:angular18",
-    "deploy:build2api": "ng build --delete-output-path=true --optimization=true --configuration production --output-path dist",
-    "deploy:build2api:sourcemaps": "ng build --delete-output-path=true --optimization=true --configuration production --source-map=true --output-path dist",
+    "deploy:build2api": "ng build --subresource-integrity --delete-output-path=true --optimization=true --configuration production --output-path dist",
+    "deploy:build2api:sourcemaps": "ng build --subresource-integrity --delete-output-path=true --optimization=true --configuration production --source-map=true --output-path dist",
     "sentry:sourcemaps": "node scripts/upload-sentry-sourcemaps.js",
     "deploy": "run-s -l deploy:build2api",
     "prepare": "husky install",
