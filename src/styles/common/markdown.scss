@@ -1,0 +1,18 @@
+// Block-level markdown rendered from the `marked` pipe (`.markdown-to-html`) or
+// exported to PDF (`.markdown-to-pdf`). Tailwind's Preflight resets the margins
+// on paragraphs, headings, lists, code blocks, blockquotes and tables, so
+// consecutive markdown blocks would otherwise collapse onto each other with no
+// separation. Restore vertical rhythm between blocks without adding margin above
+// the first block or below the last, so the surrounding container controls the
+// outer edges.
+.markdown-to-html,
+.markdown-to-pdf {
+  > * {
+    margin-top: 0;
+    margin-bottom: 0.75em;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}

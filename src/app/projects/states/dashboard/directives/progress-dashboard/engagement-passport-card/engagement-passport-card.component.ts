@@ -73,6 +73,11 @@ export class EngagementPassportCardComponent implements OnChanges {
       icon: 'mail',
       classes: 'border-violet-300 bg-violet-50 text-violet-700',
     },
+    'group activity': {
+      label: 'Group activity',
+      icon: 'group_work',
+      classes: 'border-orange-300 bg-orange-50 text-orange-700',
+    },
     opportunity: {
       label: 'Opportunity',
       icon: 'feedback',

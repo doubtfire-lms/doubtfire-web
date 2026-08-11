@@ -4,6 +4,7 @@
 @use 'theme' as *;
 @use 'styles/common/typeface';
 @use 'tailwindcss';
+@use 'styles/common/markdown';
 @config '../tailwind.config.js';
 
 @include mat.elevation-classes();

@@ -74,6 +74,7 @@
       class="feedback-template-picker pt-2"
       [hidden]="!this.showFeedbackTemplatePicker"
       [task]="task"
+      (mousedown)="rememberCaretPosition()"
       (templateSelected)="addFeedback($event)"
     ></f-task-feedback-templates>
   }
@@ -181,11 +182,13 @@
         [class.active]="($userIsTyping | async) === false"
         [hidden]="recording"
         (beforeinput)="handleBeforeInput($event)"
-        (blur)="$userIsTyping.next(false)"
+        (blur)="onComposerBlur()"
+        (click)="rememberCaretPosition()"
         (focus)="$userIsTyping.next(true)"
         (input)="onInputChange($event)"
         (keydown)="keyTyped()"
         (keydown.enter)="send($event)"
+        (keyup)="rememberCaretPosition()"
         (paste)="handlePaste($event)"
       ></div>
       @if (recording) {

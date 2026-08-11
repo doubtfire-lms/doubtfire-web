@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-67](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-66...v11.0.0-67) (2026-08-10)
+
+
+### Bug Fixes
+
+* refresh expired access token during file uploads ([6aa2a93](https://github.com/b0ink/doubtfire-deploy/commit/6aa2a934ed1045057913b5b86b6630aa27631012))
+* space block-level markdown from the marked pipe ([547be08](https://github.com/b0ink/doubtfire-deploy/commit/547be08340646d9ba22b73375e72e63fc6a85035))
+
+## [11.0.0-66](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-65...v11.0.0-66) (2026-08-08)
+
+
+### Bug Fixes
+
+* render block-level markdown via the marked pipe ([524adee](https://github.com/b0ink/doubtfire-deploy/commit/524adee6982e5bfe075845794512697fad676015))
+
+## [11.0.0-65](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-64...v11.0.0-65) (2026-08-08)
+
+
+### Bug Fixes
+
+* attempt access token refresh regardless of client side validity ([879cbfe](https://github.com/b0ink/doubtfire-deploy/commit/879cbfe6c3bedea2d4c6db803d4789fc95ce640f))
+
+## [11.0.0-64](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-63...v11.0.0-64) (2026-08-08)
+
+
+### Bug Fixes
+
+* ensure unit fetch request remains alive between component changes ([4df2ac9](https://github.com/b0ink/doubtfire-deploy/commit/4df2ac93fea199655b3eaeda23df2f16e2beae8d))
+
+## [11.0.0-63](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-62...v11.0.0-63) (2026-08-08)
+
+
+### Features
+
+* bulk upload staff notes ([#1416](https://github.com/b0ink/doubtfire-deploy/issues/1416)) ([480d108](https://github.com/b0ink/doubtfire-deploy/commit/480d108f2bacc7f329e92d800b549f48ada37ae9))
+
+
+### Bug Fixes
+
+* email action split layout ([5ceae57](https://github.com/b0ink/doubtfire-deploy/commit/5ceae57ce40d94f8cd6a3e2b8efda9c599fdbc33))
+* ensure 0 shows as pass grade ([a8faaf0](https://github.com/b0ink/doubtfire-deploy/commit/a8faaf02475b19a5d44b6a0e1de8168ad9ce77e2))
+* wording ([2080df4](https://github.com/b0ink/doubtfire-deploy/commit/2080df45ecfda6f2d52a85c442a10b059c5a33d8))
+
+## [11.0.0-62](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-61...v11.0.0-62) (2026-08-03)
+
+
+### Features
+
+* group engagement ([#1391](https://github.com/b0ink/doubtfire-deploy/issues/1391)) ([3d95373](https://github.com/b0ink/doubtfire-deploy/commit/3d95373b1ce23b3022958819acd673a23cb39228))
+
 ## [11.0.0-61](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-60...v11.0.0-61) (2026-07-31)
 
 
