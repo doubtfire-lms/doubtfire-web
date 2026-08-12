@@ -129,7 +129,11 @@
         @if (loading) {
           <ng-container *ngTemplateOutlet="BlankPanelSkeleton"></ng-container>
         } @else {
-          <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
+          <task-comments-viewer
+            [commentsVisible]="!commentsPanelCollapsed"
+            [task]="taskData.selectedTask"
+          >
+          </task-comments-viewer>
         }
       </div>
     </div>
@@ -234,7 +238,11 @@
           </button>
         }
         @if (!loading && taskData?.selectedTask) {
-          <task-comments-viewer [task]="taskData.selectedTask"> </task-comments-viewer>
+          <task-comments-viewer
+            [commentsVisible]="!commentsPanelCollapsed"
+            [task]="taskData.selectedTask"
+          >
+          </task-comments-viewer>
         }
       </div>
     </div>
