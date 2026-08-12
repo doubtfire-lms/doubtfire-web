@@ -1,5 +1,5 @@
-import {beforeEach, describe, expect, it} from 'vitest';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {EMPTY} from 'rxjs';
 import {TaskCommentService, TaskService, UserService} from 'src/app/api/models/doubtfire-model';
@@ -46,5 +46,15 @@ describe('TaskCommentsViewerComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('scrolls to the latest comment when the comments panel becomes visible', () => {
+    const scrollDown = vi.spyOn(component, 'scrollDown');
+
+    component.ngOnChanges({
+      commentsVisible: new SimpleChange(false, true, false),
+    });
+
+    expect(scrollDown).toHaveBeenCalledOnce();
   });
 });
