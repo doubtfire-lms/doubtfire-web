@@ -4,8 +4,10 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Observable} from 'rxjs';
+import {Campus} from 'src/app/api/models/campus/campus';
 import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
+import {CampusService} from 'src/app/api/services/campus.service';
 import {TeachingPeriodBreakService} from 'src/app/api/services/teaching-period-break.service';
 import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -125,12 +127,13 @@ export class TeachingPeriodListComponent implements OnInit {
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class NewTeachingPeriodDialogComponent {
+export class NewTeachingPeriodDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     private dialogRef: MatDialogRef<NewTeachingPeriodDialogComponent>,
     public teachingPeriodService: TeachingPeriodService,
     public teachingPeriodBreakService: TeachingPeriodBreakService,
+    public campusService: CampusService,
     public alertService: AlertService,
   ) {}
   public newOrSelectedTeachingPeriod: TeachingPeriod =
@@ -139,10 +142,16 @@ export class NewTeachingPeriodDialogComponent {
     .breaksCache.values as Observable<TeachingPeriodBreak[]>;
 
   public tempBreak = new TeachingPeriodBreak();
+  public editingBreak: TeachingPeriodBreak;
+  public campuses: Campus[] = [];
+
+  ngOnInit(): void {
+    this.campusService.query().subscribe((campuses) => (this.campuses = campuses));
+  }
 
   addTeachingBreak() {
     this.newOrSelectedTeachingPeriod
-      .addBreak(this.tempBreak.startDate, this.tempBreak.numberOfWeeks)
+      .addBreak(this.tempBreak.startDate, this.tempBreak.numberOfWeeks, this.tempBreak.campusIds)
       .subscribe({
         next: (teachingPeriodBreak) => {
           this.alertService.success('Break added');
@@ -163,6 +172,45 @@ export class NewTeachingPeriodDialogComponent {
         this.alertService.error(`Error deleting break. ${response}`);
       },
     });
+  }
+
+  editTeachingBreak(teachingBreak: TeachingPeriodBreak): void {
+    this.editingBreak = Object.assign(new TeachingPeriodBreak(), teachingBreak, {
+      campusIds: [...teachingBreak.campusIds],
+    });
+  }
+
+  cancelEditingBreak(): void {
+    this.editingBreak = undefined;
+  }
+
+  saveTeachingBreak(teachingBreak: TeachingPeriodBreak): void {
+    this.teachingPeriodBreakService
+      .update(
+        {
+          teaching_period_id: this.newOrSelectedTeachingPeriod.id,
+          id: teachingBreak.id,
+        },
+        {entity: this.editingBreak},
+      )
+      .subscribe({
+        next: (updatedBreak) => {
+          Object.assign(teachingBreak, updatedBreak);
+          this.editingBreak = undefined;
+          this.alertService.success('Break updated');
+        },
+        error: (response) => {
+          this.alertService.error(`Error updating break. ${response}`);
+        },
+      });
+  }
+
+  campusName(campusId: number): string {
+    return this.campuses.find((campus) => campus.id === campusId)?.name ?? `Campus ${campusId}`;
+  }
+
+  campusNames(campusIds: number[]): string {
+    return campusIds.map((campusId) => this.campusName(campusId)).join(', ');
   }
 
   submitTeachingPeriod() {
