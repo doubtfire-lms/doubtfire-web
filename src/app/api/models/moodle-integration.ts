@@ -10,6 +10,8 @@ export class MoodleIntegration extends Entity {
   public autoSyncStudents = false;
   public autoSyncExtensions = false;
   public groupMappingEnabled = false;
+  public validated = false;
+  public validatedAt: string | null = null;
   public groupMappings: MoodleGroupMapping[] = [];
   public apiKeyConfigured = false;
 
@@ -31,6 +33,12 @@ export interface MoodleTutorialDraft {
   tutorId: number | null;
 }
 
+export interface MoodleGroupSyncIssue {
+  kind: 'added' | 'renamed' | 'deleted' | 'invalid';
+  message: string;
+  previousMoodleGroupId?: number;
+}
+
 export class MoodleGroupMapping extends Entity {
   public id: number | null = null;
   public moodleGroupId: number | null = null;
@@ -44,10 +52,31 @@ export class MoodleGroupMapping extends Entity {
   public createIfMissing = false;
   public createTutorialIfMissing = false;
   public tutorialDraft?: MoodleTutorialDraft;
+  public syncIssue?: MoodleGroupSyncIssue;
+  public duplicateNotice?: string;
 }
 
 export interface MoodleGroupMappingPrefillResult {
   groupMappings: MoodleGroupMapping[];
+}
+
+export interface MoodleIntegrationValidationResult {
+  valid: boolean;
+  validated_at: string | null;
+  groups: MoodleGroup[];
+  assignments: MoodleAssignment[];
+  issues: Array<{
+    type: string;
+    moodle_group_id?: number;
+    moodle_group_name?: string;
+    message: string;
+  }>;
+  notices: Array<{
+    type: string;
+    moodle_group_id?: number;
+    moodle_group_name?: string;
+    message: string;
+  }>;
 }
 
 export interface MoodlePermissionResult {

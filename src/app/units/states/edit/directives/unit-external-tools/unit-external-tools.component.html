@@ -95,6 +95,7 @@
         <mat-checkbox
           [disabled]="!connection && !integration.fetchExtensions"
           [(ngModel)]="integration.fetchExtensions"
+          (ngModelChange)="extensionImportSettingChanged($event)"
         >
           Fetch extensions from assignment
         </mat-checkbox>
@@ -104,6 +105,12 @@
         }
 
         @if (integration.fetchExtensions) {
+          @if (assignmentSyncIssue) {
+            <div class="mt-4 flex max-w-xl items-center gap-2 rounded bg-red-50 p-3 text-red-800">
+              <mat-icon>error</mat-icon>
+              <span>{{ assignmentSyncIssue }}</span>
+            </div>
+          }
           <mat-form-field appearance="outline" class="mt-5 block max-w-xl">
             <mat-label>Portfolio assignment</mat-label>
             <mat-select
@@ -163,262 +170,94 @@
               @for (mapping of integration.groupMappings; track $index; let index = $index) {
                 <mat-card appearance="outlined">
                   <mat-card-content class="pt-4">
-                    <div class="flex w-full flex-wrap gap-4">
-                      <mat-form-field appearance="outline" class="min-w-48 flex-1">
-                        <mat-label>Moodle group</mat-label>
-                        <mat-select
-                          [disabled]="!connection"
-                          [(ngModel)]="mapping.moodleGroupId"
-                          (ngModelChange)="moodleGroupSelected(mapping)"
-                        >
-                          <mat-option [value]="null">Select a Moodle group</mat-option>
-                          @for (group of moodleGroups; track group.id) {
-                            <mat-option [value]="group.id">{{ group.name }}</mat-option>
-                          }
-                        </mat-select>
-                      </mat-form-field>
-
-                      <mat-form-field appearance="outline" class="min-w-48 flex-1">
-                        <mat-label>Map as</mat-label>
-                        <mat-select
-                          [disabled]="!connection"
-                          [(ngModel)]="mapping.targetType"
-                          (ngModelChange)="targetTypeSelected(mapping)"
-                        >
-                          <mat-option [value]="null">Select a target</mat-option>
-                          <mat-option value="group">Group</mat-option>
-                          <mat-option value="campus">Campus</mat-option>
-                          <mat-option value="tutorial">Tutorial</mat-option>
-                          <mat-option value="ignore">Do nothing</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-
-                      @if (mapping.targetType === 'campus') {
-                        <mat-form-field appearance="outline" class="min-w-48 flex-1">
-                          <mat-label>Campus</mat-label>
-                          <mat-select [disabled]="!connection" [(ngModel)]="mapping.campusId">
-                            <mat-option [value]="null">Select a campus</mat-option>
-                            @for (campus of campuses; track campus.id) {
-                              <mat-option [value]="campus.id">{{ campus.name }}</mat-option>
-                            }
-                          </mat-select>
-                        </mat-form-field>
-                      }
-
-                      @if (mapping.targetType === 'tutorial' && !mapping.tutorialDraft) {
-                        <mat-form-field appearance="outline" class="min-w-48 flex-1">
-                          <mat-label>Tutorial stream</mat-label>
-                          <mat-select
-                            [disabled]="!connection"
-                            [(ngModel)]="mapping.tutorialStreamId"
-                            (ngModelChange)="tutorialStreamSelected(mapping)"
-                          >
-                            <mat-option [value]="null">Select a tutorial stream</mat-option>
-                            @for (stream of unit.tutorialStreams; track stream.id) {
-                              <mat-option [value]="stream.id">{{ stream.description }}</mat-option>
-                            }
-                          </mat-select>
-                        </mat-form-field>
-
-                        @if (!mapping.createIfMissing) {
-                          <mat-form-field appearance="outline" class="min-w-48 flex-1">
-                            <mat-label>Tutorial</mat-label>
-                            <mat-select
-                              [disabled]="!connection || !mapping.tutorialStreamId"
-                              [(ngModel)]="mapping.tutorialId"
-                            >
-                              <mat-option [value]="null">Select a tutorial</mat-option>
-                              @for (
-                                tutorial of tutorialsFor(mapping.tutorialStreamId);
-                                track tutorial.id
-                              ) {
-                                <mat-option [value]="tutorial.id">
-                                  {{ tutorial.abbreviation }} · {{ tutorial.description }}
-                                </mat-option>
-                              }
-                            </mat-select>
-                          </mat-form-field>
-                        }
-                      }
-
-                      @if (mapping.targetType === 'group') {
-                        <mat-form-field appearance="outline" class="min-w-48 flex-1">
-                          <mat-label>Group set</mat-label>
-                          <mat-select
-                            [disabled]="!connection"
-                            [(ngModel)]="mapping.groupSetId"
-                            (ngModelChange)="groupSetSelected(mapping)"
-                          >
-                            <mat-option [value]="null">Select a group set</mat-option>
-                            @for (groupSet of unit.groupSets; track groupSet.id) {
-                              <mat-option [value]="groupSet.id">{{ groupSet.name }}</mat-option>
-                            }
-                          </mat-select>
-                        </mat-form-field>
-
-                        @if (!mapping.createIfMissing) {
-                          <mat-form-field appearance="outline" class="min-w-48 flex-1">
-                            <mat-label>Group</mat-label>
-                            <mat-select
-                              [disabled]="!connection || !mapping.groupSetId"
-                              [(ngModel)]="mapping.groupId"
-                            >
-                              <mat-option [value]="null">Select a group</mat-option>
-                              @for (group of groupsFor(mapping.groupSetId); track group.id) {
-                                <mat-option [value]="group.id">{{ group.name }}</mat-option>
-                              }
-                            </mat-select>
-                          </mat-form-field>
-                        }
-                      }
-
-                      <button
-                        aria-label="Remove mapping"
-                        color="warn"
-                        mat-icon-button
-                        matTooltip="Remove mapping"
-                        type="button"
-                        [disabled]="!connection"
-                        (click)="removeGroupMapping(index)"
+                    @if (mapping.duplicateNotice) {
+                      <div
+                        class="mb-4 flex items-center gap-2 rounded bg-amber-50 p-3 text-amber-900"
                       >
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </div>
-
-                    @if (mapping.targetType === 'tutorial' && mapping.tutorialDraft) {
-                      @let draft = mapping.tutorialDraft;
-                      <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-                        <mat-form-field appearance="outline">
-                          <mat-label>Abbreviation</mat-label>
-                          <input matInput required [(ngModel)]="draft.abbreviation" />
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline">
-                          <mat-label>Tutorial stream</mat-label>
-                          <mat-select required [(ngModel)]="draft.tutorialStreamId">
-                            @for (stream of unit.tutorialStreams; track stream.id) {
-                              <mat-option [value]="stream.id">{{ stream.description }}</mat-option>
-                            }
-                          </mat-select>
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline">
-                          <mat-label>Campus</mat-label>
-                          <mat-select required [(ngModel)]="draft.campusId">
-                            @for (campus of campuses; track campus.id) {
-                              <mat-option [value]="campus.id">{{ campus.name }}</mat-option>
-                            }
-                          </mat-select>
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline">
-                          <mat-label>Location</mat-label>
-                          <input matInput required [(ngModel)]="draft.meetingLocation" />
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline">
-                          <mat-label>Day</mat-label>
-                          <mat-select required [(ngModel)]="draft.meetingDay">
-                            @for (day of tutorialDays; track day) {
-                              <mat-option [value]="day">{{ day }}</mat-option>
-                            }
-                          </mat-select>
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline">
-                          <mat-label>Time</mat-label>
-                          <input matInput required [(ngModel)]="draft.meetingTime" />
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline">
-                          <mat-label>Capacity</mat-label>
-                          <input
-                            matInput
-                            min="1"
-                            required
-                            type="number"
-                            [(ngModel)]="draft.capacity"
-                          />
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline">
-                          <mat-label>Tutor</mat-label>
-                          <mat-select required [(ngModel)]="draft.tutorId">
-                            @for (tutor of unit.staffUsers; track tutor.id) {
-                              <mat-option [value]="tutor.id">{{ tutor.name }}</mat-option>
-                            }
-                          </mat-select>
-                        </mat-form-field>
+                        <mat-icon>info</mat-icon>
+                        <span>{{ mapping.duplicateNotice }}</span>
                       </div>
-                      <button
-                        mat-flat-button
-                        type="button"
-                        [disabled]="
-                          !tutorialDraftValid(mapping) ||
-                          creatingTutorials.has(mapping.moodleGroupId)
-                        "
-                        (click)="createTutorial(mapping)"
-                      >
-                        {{
-                          creatingTutorials.has(mapping.moodleGroupId)
-                            ? 'Creating…'
-                            : 'Create tutorial'
-                        }}
-                      </button>
                     }
-
-                    @if (mapping.targetType === 'group') {
-                      <mat-checkbox
-                        [disabled]="!connection"
-                        [(ngModel)]="mapping.createIfMissing"
-                        (ngModelChange)="createIfMissingChanged(mapping)"
-                      >
-                        Create the group if it is missing, using the Moodle group name
-                      </mat-checkbox>
-
-                      @if (mapping.createIfMissing) {
-                        <div class="mt-4 flex w-full flex-wrap items-center gap-4">
-                          <mat-button-toggle-group
-                            aria-label="Tutorial for new group"
-                            class="mb-5.5"
-                            hideSingleSelectionIndicator
+                    @if (groupMappingEditing(mapping) || mapping.tutorialDraft) {
+                      @if (mapping.syncIssue) {
+                        <div
+                          class="mb-4 flex items-center gap-2 rounded bg-red-50 p-3 text-red-800"
+                        >
+                          <mat-icon>error</mat-icon>
+                          <span>{{ mapping.syncIssue.message }}</span>
+                        </div>
+                      }
+                      <div class="grid w-full grid-cols-1 gap-4 lg:grid-cols-4">
+                        <mat-form-field appearance="outline" class="lg:col-span-2">
+                          <mat-label>Moodle group</mat-label>
+                          <mat-select
                             [disabled]="!connection"
-                            [ngModel]="mapping.createTutorialIfMissing"
-                            (ngModelChange)="groupTutorialModeChanged(mapping, $event)"
+                            [(ngModel)]="mapping.moodleGroupId"
+                            (ngModelChange)="moodleGroupSelected(mapping)"
                           >
-                            <mat-button-toggle [value]="false">
-                              Use existing tutorial
-                            </mat-button-toggle>
-                            <mat-button-toggle [value]="true">
-                              Create matching tutorial
-                            </mat-button-toggle>
-                          </mat-button-toggle-group>
+                            <mat-option [value]="null">Select a Moodle group</mat-option>
+                            @for (group of moodleGroups; track group.id) {
+                              <mat-option [value]="group.id">{{ group.name }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
 
-                          @if (mapping.createTutorialIfMissing) {
-                            <mat-form-field appearance="outline" class="min-w-64 flex-1">
-                              <mat-label>Tutorial stream</mat-label>
+                        <mat-form-field appearance="outline">
+                          <mat-label>Map as</mat-label>
+                          <mat-select
+                            [disabled]="!connection"
+                            [(ngModel)]="mapping.targetType"
+                            (ngModelChange)="targetTypeSelected(mapping)"
+                          >
+                            <mat-option [value]="null">Select a target</mat-option>
+                            <mat-option value="group">Group</mat-option>
+                            <mat-option value="campus">Campus</mat-option>
+                            <mat-option value="tutorial">Tutorial</mat-option>
+                            <mat-option value="ignore">Do nothing</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+
+                        @if (mapping.targetType === 'campus') {
+                          <mat-form-field appearance="outline">
+                            <mat-label>Campus</mat-label>
+                            <mat-select [disabled]="!connection" [(ngModel)]="mapping.campusId">
+                              <mat-option [value]="null">Select a campus</mat-option>
+                              @for (campus of campuses; track campus.id) {
+                                <mat-option [value]="campus.id">{{ campus.name }}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        }
+
+                        @if (mapping.targetType === 'tutorial' && !mapping.tutorialDraft) {
+                          <mat-form-field appearance="outline">
+                            <mat-label>Tutorial stream</mat-label>
+                            <mat-select
+                              [disabled]="!connection"
+                              [(ngModel)]="mapping.tutorialStreamId"
+                              (ngModelChange)="tutorialStreamSelected(mapping)"
+                            >
+                              <mat-option [value]="null">Select a tutorial stream</mat-option>
+                              @for (stream of unit.tutorialStreams; track stream.id) {
+                                <mat-option [value]="stream.id">{{
+                                  stream.description
+                                }}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+
+                          @if (!mapping.createIfMissing) {
+                            <mat-form-field appearance="outline" class="lg:col-span-4">
+                              <mat-label>Tutorial</mat-label>
                               <mat-select
-                                [disabled]="!connection"
-                                [(ngModel)]="mapping.tutorialStreamId"
+                                [disabled]="!connection || !mapping.tutorialStreamId"
+                                [(ngModel)]="mapping.tutorialId"
                               >
-                                <mat-option [value]="null">Select a tutorial stream</mat-option>
-                                @for (stream of unit.tutorialStreams; track stream.id) {
-                                  <mat-option [value]="stream.id">
-                                    {{ stream.description }}
-                                  </mat-option>
-                                }
-                              </mat-select>
-                              <mat-hint>
-                                A tutorial named {{ mapping.moodleGroupName }} will be created if
-                                needed.
-                              </mat-hint>
-                            </mat-form-field>
-                          } @else {
-                            <mat-form-field appearance="outline" class="min-w-64 flex-1">
-                              <mat-label>Tutorial for new group</mat-label>
-                              <mat-select [disabled]="!connection" [(ngModel)]="mapping.tutorialId">
                                 <mat-option [value]="null">Select a tutorial</mat-option>
-                                @for (tutorial of unit.tutorials; track tutorial.id) {
+                                @for (
+                                  tutorial of tutorialsFor(mapping.tutorialStreamId);
+                                  track tutorial.id
+                                ) {
                                   <mat-option [value]="tutorial.id">
                                     {{ tutorial.abbreviation }} · {{ tutorial.description }}
                                   </mat-option>
@@ -426,8 +265,273 @@
                               </mat-select>
                             </mat-form-field>
                           }
+                        }
+
+                        @if (mapping.targetType === 'group') {
+                          <mat-form-field appearance="outline">
+                            <mat-label>Group set</mat-label>
+                            <mat-select
+                              [disabled]="!connection"
+                              [(ngModel)]="mapping.groupSetId"
+                              (ngModelChange)="groupSetSelected(mapping)"
+                            >
+                              <mat-option [value]="null">Select a group set</mat-option>
+                              @for (groupSet of unit.groupSets; track groupSet.id) {
+                                <mat-option [value]="groupSet.id">{{ groupSet.name }}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+
+                          @if (!mapping.createIfMissing) {
+                            <mat-form-field appearance="outline" class="lg:col-span-2">
+                              <mat-label>Group</mat-label>
+                              <mat-select
+                                [disabled]="!connection || !mapping.groupSetId"
+                                [(ngModel)]="mapping.groupId"
+                              >
+                                <mat-option [value]="null">Select a group</mat-option>
+                                @for (group of groupsFor(mapping.groupSetId); track group.id) {
+                                  <mat-option [value]="group.id">{{ group.name }}</mat-option>
+                                }
+                              </mat-select>
+                            </mat-form-field>
+                          }
+                        }
+                      </div>
+
+                      @if (mapping.targetType === 'tutorial' && mapping.tutorialDraft) {
+                        @let draft = mapping.tutorialDraft;
+                        <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Abbreviation</mat-label>
+                            <input matInput required [(ngModel)]="draft.abbreviation" />
+                          </mat-form-field>
+
+                          <mat-form-field appearance="outline">
+                            <mat-label>Tutorial stream</mat-label>
+                            <mat-select required [(ngModel)]="draft.tutorialStreamId">
+                              @for (stream of unit.tutorialStreams; track stream.id) {
+                                <mat-option [value]="stream.id">{{
+                                  stream.description
+                                }}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+
+                          <mat-form-field appearance="outline">
+                            <mat-label>Campus</mat-label>
+                            <mat-select required [(ngModel)]="draft.campusId">
+                              @for (campus of campuses; track campus.id) {
+                                <mat-option [value]="campus.id">{{ campus.name }}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+
+                          <mat-form-field appearance="outline">
+                            <mat-label>Location</mat-label>
+                            <input matInput required [(ngModel)]="draft.meetingLocation" />
+                          </mat-form-field>
+
+                          <mat-form-field appearance="outline">
+                            <mat-label>Day</mat-label>
+                            <mat-select required [(ngModel)]="draft.meetingDay">
+                              @for (day of tutorialDays; track day) {
+                                <mat-option [value]="day">{{ day }}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+
+                          <mat-form-field appearance="outline">
+                            <mat-label>Time</mat-label>
+                            <input matInput required [(ngModel)]="draft.meetingTime" />
+                          </mat-form-field>
+
+                          <mat-form-field appearance="outline">
+                            <mat-label>Capacity</mat-label>
+                            <input
+                              matInput
+                              min="1"
+                              required
+                              type="number"
+                              [(ngModel)]="draft.capacity"
+                            />
+                          </mat-form-field>
+
+                          <mat-form-field appearance="outline">
+                            <mat-label>Tutor</mat-label>
+                            <mat-select required [(ngModel)]="draft.tutorId">
+                              @for (tutor of unit.staffUsers; track tutor.id) {
+                                <mat-option [value]="tutor.id">{{ tutor.name }}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <button
+                          mat-raised-button
+                          type="button"
+                          [disabled]="
+                            !tutorialDraftValid(mapping) ||
+                            creatingTutorials.has(mapping.moodleGroupId)
+                          "
+                          (click)="createTutorial(mapping)"
+                        >
+                          {{
+                            creatingTutorials.has(mapping.moodleGroupId)
+                              ? 'Creating…'
+                              : 'Create tutorial'
+                          }}
+                        </button>
+                      }
+
+                      @if (mapping.targetType === 'group') {
+                        <mat-checkbox
+                          [disabled]="!connection"
+                          [(ngModel)]="mapping.createIfMissing"
+                          (ngModelChange)="createIfMissingChanged(mapping)"
+                        >
+                          Create the group if it is missing, using the Moodle group name
+                        </mat-checkbox>
+
+                        @if (mapping.createIfMissing) {
+                          <div class="mt-4 flex w-full flex-wrap items-center gap-4">
+                            <mat-button-toggle-group
+                              aria-label="Tutorial for new group"
+                              class="mb-5.5"
+                              hideSingleSelectionIndicator
+                              [disabled]="!connection"
+                              [ngModel]="mapping.createTutorialIfMissing"
+                              (ngModelChange)="groupTutorialModeChanged(mapping, $event)"
+                            >
+                              <mat-button-toggle [value]="false">
+                                Use existing tutorial
+                              </mat-button-toggle>
+                              <mat-button-toggle [value]="true">
+                                Create matching tutorial
+                              </mat-button-toggle>
+                            </mat-button-toggle-group>
+
+                            @if (mapping.createTutorialIfMissing) {
+                              <mat-form-field appearance="outline" class="min-w-64 flex-1">
+                                <mat-label>Tutorial stream</mat-label>
+                                <mat-select
+                                  [disabled]="!connection"
+                                  [(ngModel)]="mapping.tutorialStreamId"
+                                >
+                                  <mat-option [value]="null">Select a tutorial stream</mat-option>
+                                  @for (stream of unit.tutorialStreams; track stream.id) {
+                                    <mat-option [value]="stream.id">
+                                      {{ stream.description }}
+                                    </mat-option>
+                                  }
+                                </mat-select>
+                                <mat-hint>
+                                  A tutorial named {{ mapping.moodleGroupName }} will be created if
+                                  needed.
+                                </mat-hint>
+                              </mat-form-field>
+                            } @else {
+                              <mat-form-field appearance="outline" class="min-w-64 flex-1">
+                                <mat-label>Tutorial for new group</mat-label>
+                                <mat-select
+                                  [disabled]="!connection"
+                                  [(ngModel)]="mapping.tutorialId"
+                                >
+                                  <mat-option [value]="null">Select a tutorial</mat-option>
+                                  @for (tutorial of unit.tutorials; track tutorial.id) {
+                                    <mat-option [value]="tutorial.id">
+                                      {{ tutorial.abbreviation }} · {{ tutorial.description }}
+                                    </mat-option>
+                                  }
+                                </mat-select>
+                              </mat-form-field>
+                            }
+                          </div>
+                        }
+                      }
+
+                      @if (!mapping.tutorialDraft) {
+                        <div class="mt-2 flex justify-end gap-2">
+                          <button
+                            mat-stroked-button
+                            type="button"
+                            (click)="finishGroupMappingEdit(mapping)"
+                          >
+                            <mat-icon>done</mat-icon>
+                            Done
+                          </button>
+                          <button
+                            aria-label="Remove mapping"
+                            color="warn"
+                            mat-icon-button
+                            matTooltip="Remove mapping"
+                            type="button"
+                            [disabled]="!connection"
+                            (click)="removeGroupMapping(index)"
+                          >
+                            <mat-icon>delete</mat-icon>
+                          </button>
                         </div>
                       }
+                    } @else {
+                      <div class="flex items-start gap-4">
+                        <div class="min-w-0 flex-1">
+                          <div class="grid grid-cols-1 items-start gap-2 sm:grid-cols-4 sm:gap-4">
+                            <div class="min-w-0 sm:col-span-3">
+                              <div class="text-sm opacity-70">Moodle group</div>
+                              <div class="text-base break-words">{{ mapping.moodleGroupName }}</div>
+                            </div>
+                            <div>
+                              <div class="text-sm opacity-70">Map as</div>
+                              <div>{{ targetTypeLabel(mapping) }}</div>
+                              @if (
+                                mapping.targetType === 'campus' || mapping.targetType === 'group'
+                              ) {
+                                <div class="text-sm opacity-70">
+                                  {{ selectedTargetLabel(mapping) }}
+                                </div>
+                              }
+                            </div>
+                          </div>
+
+                          @if (mapping.targetType === 'tutorial') {
+                            @let tutorial = selectedTutorial(mapping);
+                            <mat-divider class="my-4"></mat-divider>
+                            <div class="text-sm opacity-70">Selected stream and tutorial</div>
+                            <div class="mt-1 text-base break-words">
+                              @if (tutorial) {
+                                {{ selectedTutorialStream(mapping) }} ·
+                                {{ tutorial.abbreviation }} · {{ tutorial.description }}
+                              } @else {
+                                {{ selectedTutorialStream(mapping) }} · Tutorial not selected
+                              }
+                            </div>
+                          }
+                        </div>
+
+                        <div class="flex shrink-0 gap-1">
+                          <button
+                            aria-label="Edit mapping"
+                            mat-icon-button
+                            matTooltip="Edit mapping"
+                            type="button"
+                            [disabled]="!connection"
+                            (click)="editGroupMapping(mapping)"
+                          >
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <button
+                            aria-label="Remove mapping"
+                            color="warn"
+                            mat-icon-button
+                            matTooltip="Remove mapping"
+                            type="button"
+                            [disabled]="!connection"
+                            (click)="removeGroupMapping(index)"
+                          >
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                      </div>
                     }
                   </mat-card-content>
                 </mat-card>
@@ -447,6 +551,60 @@
                 <p>Add at least one mapping, or disable group mapping.</p>
               }
             </div>
+
+            <div class="mt-5 rounded border p-4">
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-start gap-2">
+                  <mat-icon [color]="integration.validated && !settingsDirty ? 'primary' : 'warn'">
+                    {{ integration.validated && !settingsDirty ? 'verified' : 'warning' }}
+                  </mat-icon>
+                  <div>
+                    <div class="font-medium">
+                      {{
+                        integration.validated && !settingsDirty
+                          ? 'Moodle integration validated'
+                          : 'Moodle integration needs validation'
+                      }}
+                    </div>
+                    <p class="text-sm">
+                      @if (integration.validated && !settingsDirty) {
+                        Every current Moodle group has a valid mapping.
+                        @if (integration.fetchExtensions) {
+                          The selected assignment also matches Moodle.
+                        }
+                        @if (integration.validatedAt) {
+                          Last checked
+                          {{ integration.validatedAt | date: 'd MMM y, h:mm a' }}.
+                        }
+                      } @else if (settingsDirty) {
+                        Save your Moodle settings, then validate them against Moodle.
+                      } @else {
+                        Validate before previewing, importing, or automatically syncing Moodle data.
+                      }
+                    </p>
+                  </div>
+                </div>
+                <button
+                  color="primary"
+                  mat-stroked-button
+                  type="button"
+                  [disabled]="
+                    validatingIntegration ||
+                    !connection ||
+                    settingsDirty ||
+                    !groupMappingsValid ||
+                    !integration.apiKeyConfigured
+                  "
+                  (click)="validateIntegration()"
+                >
+                  <mat-icon>{{ validatingIntegration ? 'hourglass_top' : 'fact_check' }}</mat-icon>
+                  {{ validatingIntegration ? 'Validating…' : 'Validate Moodle integration' }}
+                </button>
+              </div>
+              @if (!connection) {
+                <p class="mt-2 text-sm">Test the API connection before validating.</p>
+              }
+            </div>
           }
         </section>
 
@@ -462,6 +620,11 @@
               <p class="ml-8 text-sm">
                 Runs once a day while the unit is active and within its start and end dates.
               </p>
+              @if (!integration.validated) {
+                <p class="ml-8 text-sm">
+                  Student sync will remain paused until the Moodle integration is validated.
+                </p>
+              }
             </div>
 
             <div>
@@ -476,6 +639,10 @@
               </p>
               @if (!integration.fetchExtensions) {
                 <p class="ml-8 text-sm">Enable extension imports and select an assignment first.</p>
+              } @else if (!integration.validated) {
+                <p class="ml-8 text-sm">
+                  Extension sync will remain paused until the Moodle integration is validated.
+                </p>
               }
             </div>
           </div>
@@ -514,7 +681,8 @@
               studentImportAction ||
               !integration.apiKeyConfigured ||
               settingsDirty ||
-              !groupMappingsValid
+              !groupMappingsValid ||
+              !integration.validated
             "
             (click)="importStudents(true)"
           >
@@ -529,7 +697,8 @@
               studentImportAction ||
               !integration.apiKeyConfigured ||
               settingsDirty ||
-              !groupMappingsValid
+              !groupMappingsValid ||
+              !integration.validated
             "
             (click)="importStudents(false)"
           >
@@ -537,6 +706,12 @@
             {{ studentImportAction === 'import' ? 'Starting import…' : 'Import students' }}
           </button>
         </div>
+        @if (!integration.validated) {
+          <p class="mt-3 flex items-center gap-1 text-sm">
+            <mat-icon color="warn">warning</mat-icon>
+            Save and validate the Moodle integration before importing students.
+          </p>
+        }
       </section>
 
       @if (integration.fetchExtensions) {
@@ -549,7 +724,12 @@
             <button
               mat-stroked-button
               type="button"
-              [disabled]="extensionImportAction || !integration.assignmentId || settingsDirty"
+              [disabled]="
+                extensionImportAction ||
+                !integration.assignmentId ||
+                settingsDirty ||
+                !integration.validated
+              "
               (click)="importExtensions(true)"
             >
               <mat-icon>preview</mat-icon>
@@ -563,13 +743,24 @@
               color="primary"
               mat-flat-button
               type="button"
-              [disabled]="extensionImportAction || !integration.assignmentId || settingsDirty"
+              [disabled]="
+                extensionImportAction ||
+                !integration.assignmentId ||
+                settingsDirty ||
+                !integration.validated
+              "
               (click)="importExtensions(false)"
             >
               <mat-icon>event_available</mat-icon>
               {{ extensionImportAction === 'import' ? 'Starting import…' : 'Import extensions' }}
             </button>
           </div>
+          @if (!integration.validated) {
+            <p class="mt-3 flex items-center gap-1 text-sm">
+              <mat-icon color="warn">warning</mat-icon>
+              Save and validate the Moodle integration before importing extensions.
+            </p>
+          }
         </section>
       }
     </mat-card-content>

@@ -33,6 +33,8 @@ export class MoodleIntegrationService extends EntityService<MoodleIntegration> {
       'autoSyncStudents',
       'autoSyncExtensions',
       'groupMappingEnabled',
+      'validated',
+      'validatedAt',
       {
         keys: 'groupMappings',
         toEntityFn: (data: object, key: string) => {
@@ -52,7 +54,7 @@ export class MoodleIntegrationService extends EntityService<MoodleIntegration> {
       },
       'apiKeyConfigured',
     );
-    this.mapping.mapAllKeysToJsonExcept('id', 'apiKeyConfigured');
+    this.mapping.mapAllKeysToJsonExcept('id', 'apiKeyConfigured', 'validated', 'validatedAt');
     this.mapping.onlyMapChanges = false;
   }
 
@@ -86,6 +88,10 @@ export class MoodleIntegrationService extends EntityService<MoodleIntegration> {
 
   public testConnection(unitId: number): Observable<SidekiqJob> {
     return this.http.post<SidekiqJob>(`${API_URL}/units/${unitId}/moodle/test`, {});
+  }
+
+  public validateIntegration(unitId: number): Observable<SidekiqJob> {
+    return this.http.post<SidekiqJob>(`${API_URL}/units/${unitId}/moodle/validate`, {});
   }
 
   public prefillGroupMappings(
