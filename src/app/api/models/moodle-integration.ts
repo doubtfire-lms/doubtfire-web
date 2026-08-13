@@ -18,7 +18,18 @@ export class MoodleIntegration extends Entity {
   }
 }
 
-export type MoodleGroupTargetType = 'group' | 'campus' | 'tutorial';
+export type MoodleGroupTargetType = 'group' | 'campus' | 'tutorial' | 'ignore';
+
+export interface MoodleTutorialDraft {
+  abbreviation: string;
+  campusId: number | null;
+  tutorialStreamId: number | null;
+  meetingLocation: string;
+  meetingDay: string;
+  meetingTime: string;
+  capacity: number | null;
+  tutorId: number | null;
+}
 
 export class MoodleGroupMapping extends Entity {
   public id: number | null = null;
@@ -32,6 +43,11 @@ export class MoodleGroupMapping extends Entity {
   public tutorialId: number | null = null;
   public createIfMissing = false;
   public createTutorialIfMissing = false;
+  public tutorialDraft?: MoodleTutorialDraft;
+}
+
+export interface MoodleGroupMappingPrefillResult {
+  groupMappings: MoodleGroupMapping[];
 }
 
 export interface MoodlePermissionResult {

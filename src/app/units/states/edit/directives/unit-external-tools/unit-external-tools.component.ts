@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {finalize} from 'rxjs/operators';
-import {Campus, Group, Tutorial} from 'src/app/api/models/doubtfire-model';
+import {Campus, Group, Tutorial, TutorialService} from 'src/app/api/models/doubtfire-model';
 import {
   MoodleAssignment,
   MoodleConnectionResult,
@@ -37,6 +37,18 @@ export class UnitExternalToolsComponent implements OnInit {
   public connection: MoodleConnectionResult | null = null;
   public saving = false;
   public testing = false;
+  public prefilling = false;
+  public creatingTutorials: Set<number> = new Set();
+  public readonly tutorialDays = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+    'Asynchronous',
+  ];
   public studentImportAction: 'preview' | 'import' | null = null;
   public extensionImportAction: 'preview' | 'import' | null = null;
   private savedCourseId: number | null = null;
@@ -50,6 +62,7 @@ export class UnitExternalToolsComponent implements OnInit {
 
   constructor(
     private moodleService: MoodleIntegrationService,
+    private tutorialService: TutorialService,
     private campusService: CampusService,
     private sidekiqProgressModal: SidekiqProgressModalService,
     private csvResultModal: CsvResultModalService,
@@ -218,6 +231,35 @@ export class UnitExternalToolsComponent implements OnInit {
     this.integration.groupMappings.push(new MoodleGroupMapping());
   }
 
+  public prefillGroupMappings(): void {
+    if (!this.connection) {
+      return;
+    }
+
+    this.prefilling = true;
+    this.moodleService
+      .prefillGroupMappings(this.unit.id, this.connection.groups)
+      .pipe(
+        finalize(() => {
+          this.prefilling = false;
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (result) => {
+          const existingIds = new Set(
+            this.integration.groupMappings.map((mapping) => mapping.moodleGroupId),
+          );
+          this.integration.groupMappings.push(
+            ...result.groupMappings.filter((mapping) => !existingIds.has(mapping.moodleGroupId)),
+          );
+          this.integration.groupMappingEnabled = true;
+          this.alerts.success('Moodle group mappings pre-filled.');
+        },
+        error: (error) => this.alerts.error(this.errorMessage(error)),
+      });
+  }
+
   public removeGroupMapping(index: number): void {
     this.integration.groupMappings.splice(index, 1);
   }
@@ -235,6 +277,7 @@ export class UnitExternalToolsComponent implements OnInit {
     mapping.tutorialId = null;
     mapping.createIfMissing = false;
     mapping.createTutorialIfMissing = false;
+    mapping.tutorialDraft = undefined;
   }
 
   public groupSetSelected(mapping: MoodleGroupMapping): void {
@@ -277,6 +320,66 @@ export class UnitExternalToolsComponent implements OnInit {
     );
   }
 
+  public tutorialDraftValid(mapping: MoodleGroupMapping): boolean {
+    const draft = mapping.tutorialDraft;
+    return !!(
+      draft?.abbreviation?.trim() &&
+      draft.campusId &&
+      draft.tutorialStreamId &&
+      draft.meetingLocation?.trim() &&
+      draft.meetingDay &&
+      draft.meetingTime?.trim() &&
+      Number.isInteger(Number(draft.capacity)) &&
+      Number(draft.capacity) > 0 &&
+      draft.tutorId
+    );
+  }
+
+  public createTutorial(mapping: MoodleGroupMapping): void {
+    const draft = mapping.tutorialDraft;
+    if (!draft || !mapping.moodleGroupId || !this.tutorialDraftValid(mapping)) {
+      return;
+    }
+
+    const tutorial = new Tutorial(this.unit);
+    tutorial.abbreviation = draft.abbreviation.trim();
+    tutorial.campus = this.campuses.find((campus) => campus.id === draft.campusId);
+    tutorial.tutorialStream = this.unit.tutorialStreams.find(
+      (stream) => stream.id === draft.tutorialStreamId,
+    );
+    tutorial.meetingLocation = draft.meetingLocation.trim();
+    tutorial.meetingDay = draft.meetingDay;
+    tutorial.meetingTime = draft.meetingTime.trim();
+    tutorial.capacity = Number(draft.capacity);
+    tutorial.tutor = this.unit.staffUsers.find((user) => user.id === draft.tutorId);
+
+    this.creatingTutorials.add(mapping.moodleGroupId);
+    this.tutorialService
+      .create(
+        {},
+        {
+          entity: tutorial,
+          constructorParams: this.unit,
+          cache: this.unit.tutorialsCache,
+        },
+      )
+      .pipe(
+        finalize(() => {
+          this.creatingTutorials.delete(mapping.moodleGroupId);
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (created) => {
+          mapping.tutorialStreamId = created.tutorialStream?.id ?? draft.tutorialStreamId;
+          mapping.tutorialId = created.id;
+          mapping.tutorialDraft = undefined;
+          this.alerts.success(`Tutorial ${created.abbreviation} created.`);
+        },
+        error: (error) => this.alerts.error(this.errorMessage(error)),
+      });
+  }
+
   public get groupMappingsValid(): boolean {
     if (!this.integration.groupMappingEnabled) {
       return true;
@@ -289,11 +392,14 @@ export class UnitExternalToolsComponent implements OnInit {
       if (!mapping.moodleGroupId || !mapping.moodleGroupName || !mapping.targetType) {
         return false;
       }
+      if (mapping.targetType === 'ignore') {
+        return true;
+      }
       if (mapping.targetType === 'campus') {
         return !!mapping.campusId;
       }
       if (mapping.targetType === 'tutorial') {
-        return !!mapping.tutorialStreamId && (mapping.createIfMissing || !!mapping.tutorialId);
+        return !!mapping.tutorialStreamId && !!mapping.tutorialId;
       }
       if (!mapping.groupSetId) {
         return false;
