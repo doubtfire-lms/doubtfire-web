@@ -50,21 +50,17 @@ describe('SignInComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('keeps the ltik in memory without propagating it to the LTI route', () => {
+  it('uses the cookie-backed LTI session without propagating an ltik', () => {
     const credentials = {
       auth_token: 'one-time-token',
       username: 'user',
       remember: true,
     };
     component.isLtiLogin = true;
-    component.ltik = 'signed-lti-launch-token';
 
     component.signIn(credentials);
 
-    expect(authenticationService.signIn).toHaveBeenCalledWith(
-      credentials,
-      'signed-lti-launch-token',
-    );
+    expect(authenticationService.signIn).toHaveBeenCalledWith(credentials);
     expect(router.navigate).toHaveBeenCalledWith(['/lti'], {replaceUrl: true});
   });
 });
