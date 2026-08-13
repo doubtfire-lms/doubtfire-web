@@ -83,7 +83,7 @@ export class SignInComponent implements OnInit {
         if (params.isLtiLogin && params.ltik) {
           this.globalState.hideHeader();
           this.userService.currentUser.ltik = params.ltik;
-          return this.router.navigate(['/lti'], {queryParams: {ltik: params.ltik}});
+          return this.router.navigate(['/lti'], {replaceUrl: true});
         } else if (this.userService.currentUser.hasRunFirstTimeSetup === false) {
           return this.router.navigateByUrl('/welcome');
         } else {
@@ -253,7 +253,7 @@ export class SignInComponent implements OnInit {
     this.authService.signIn(signInCredentials, this.isLtiLogin ? this.ltik : undefined).subscribe({
       next: () => {
         if (this.isLtiLogin) {
-          this.router.navigate(['/lti'], {queryParams: {ltik: this.ltik}});
+          this.router.navigate(['/lti'], {replaceUrl: true});
         } else {
           this.actionSignInSuccess();
         }

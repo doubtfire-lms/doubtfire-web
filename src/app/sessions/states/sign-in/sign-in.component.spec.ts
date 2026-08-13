@@ -50,7 +50,7 @@ describe('SignInComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('keeps the ltik attached while completing an LTI sign in', () => {
+  it('keeps the ltik in memory without propagating it to the LTI route', () => {
     const credentials = {
       auth_token: 'one-time-token',
       username: 'user',
@@ -65,8 +65,6 @@ describe('SignInComponent', () => {
       credentials,
       'signed-lti-launch-token',
     );
-    expect(router.navigate).toHaveBeenCalledWith(['/lti'], {
-      queryParams: {ltik: 'signed-lti-launch-token'},
-    });
+    expect(router.navigate).toHaveBeenCalledWith(['/lti'], {replaceUrl: true});
   });
 });
