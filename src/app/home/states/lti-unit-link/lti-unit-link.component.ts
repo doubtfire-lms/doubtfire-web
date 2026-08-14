@@ -1,11 +1,10 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
+import {Router} from '@angular/router';
 import {CreateNewUnitModal} from 'src/app/admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {LtiService} from 'src/app/api/services/lti.service';
 import {UnitService} from 'src/app/api/services/unit.service';
-import {UserService} from 'src/app/api/services/user.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
@@ -24,12 +23,8 @@ export class LtiUnitLinkComponent implements AfterViewInit {
     private confirmationModalService: ConfirmationModalService,
     private alertsService: AlertService,
     private ltiService: LtiService,
-    private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute,
   ) {}
-
-  @Input() ltik: string;
 
   public selectedUnit: Unit;
   public activeUnits: Unit[] = [];
@@ -39,7 +34,6 @@ export class LtiUnitLinkComponent implements AfterViewInit {
   public loadingUnits: boolean;
 
   ngAfterViewInit(): void {
-    this.ltik = this.ltik ?? this.route.snapshot.queryParamMap.get('ltik');
     this.loadingUnits = true;
 
     // Scroll to the bottom of the page in case the header is visible
@@ -47,7 +41,6 @@ export class LtiUnitLinkComponent implements AfterViewInit {
     setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
 
     this.authenticationService.afterAuthCall(() => {
-      this.userService.currentUser.ltik = this.ltik;
       this.loadUnits();
     });
 
@@ -93,7 +86,7 @@ export class LtiUnitLinkComponent implements AfterViewInit {
 
           this.alertsService.success(`Successfully linked ${unit.code}`, 5000);
 
-          this.router.navigate(['/lti'], {queryParams: {ltik: this.ltik}});
+          this.router.navigate(['/lti']);
         },
         error: (error) => {
           console.log(error);

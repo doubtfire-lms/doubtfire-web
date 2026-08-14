@@ -25,9 +25,6 @@ export class User extends Entity {
   public pronouns: string | null;
   public acceptedTiiEula: boolean;
 
-  // LTI Token
-  public ltik: string;
-
   public override toJson<T extends Entity>(
     mappingData: EntityMapping<T>,
     ignoreKeys?: string[],
