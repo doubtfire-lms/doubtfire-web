@@ -8,6 +8,7 @@ import {
   MoodleGroupMapping,
   MoodleIntegration,
   MoodleIntegrationValidationResult,
+  MoodlePermissionResult,
 } from 'src/app/api/models/moodle-integration';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
@@ -239,6 +240,10 @@ export class UnitExternalToolsComponent implements OnInit {
     return (
       this.assignments.find((assignment) => assignment.id === this.integration.assignmentId) ?? null
     );
+  }
+
+  public get failedConnectionPermissions(): MoodlePermissionResult[] {
+    return this.connection?.permissions.filter((permission) => !permission.success) ?? [];
   }
 
   public addGroupMapping(): void {

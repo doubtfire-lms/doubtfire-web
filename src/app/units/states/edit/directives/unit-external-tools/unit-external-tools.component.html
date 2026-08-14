@@ -64,28 +64,28 @@
             </mat-card-header>
           }
 
-          <mat-card-content class="mt-4">
-            <div class="grid gap-3 sm:grid-cols-2">
-              @for (permission of connection.permissions; track permission.function) {
-                <mat-card appearance="outlined">
-                  <mat-card-content class="flex items-start gap-3 pt-4">
-                    <mat-icon [color]="permission.success ? 'primary' : 'warn'">
-                      {{ permission.success ? 'check_circle' : 'cancel' }}
-                    </mat-icon>
-                    <div class="min-w-0">
-                      <code>{{ permission.function }}</code>
-                      @if (permission.error) {
-                        <p class="mt-1 text-sm">{{ permission.error }}</p>
-                      }
-                      @if (permission.message) {
-                        <p class="mt-1 text-sm">{{ permission.message }}</p>
-                      }
-                    </div>
-                  </mat-card-content>
-                </mat-card>
-              }
-            </div>
-          </mat-card-content>
+          @if (failedConnectionPermissions.length) {
+            <mat-card-content class="mt-4">
+              <div class="grid gap-3 sm:grid-cols-2">
+                @for (permission of failedConnectionPermissions; track permission.function) {
+                  <mat-card appearance="outlined">
+                    <mat-card-content class="flex items-start gap-3 pt-4">
+                      <mat-icon color="warn">cancel</mat-icon>
+                      <div class="min-w-0">
+                        <code>{{ permission.function }}</code>
+                        @if (permission.error) {
+                          <p class="mt-1 text-sm">{{ permission.error }}</p>
+                        }
+                        @if (permission.message) {
+                          <p class="mt-1 text-sm">{{ permission.message }}</p>
+                        }
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                }
+              </div>
+            </mat-card-content>
+          }
         </mat-card>
       }
 
@@ -149,7 +149,10 @@
           >
             Enable group mapping
           </mat-checkbox>
-          <p class="ml-8 text-sm">Map Moodle group membership to an group, campus, or tutorial.</p>
+          <p class="ml-8 text-sm">
+            Every Moodle group must have a mapping. Choose “Do nothing” for groups that should not
+            make any changes in OnTrack.
+          </p>
           @if (!connection) {
             <p class="ml-8 text-sm">Test the API connection first to load Moodle groups.</p>
           } @else {
