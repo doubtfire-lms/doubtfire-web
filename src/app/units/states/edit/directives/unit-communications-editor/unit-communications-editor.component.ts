@@ -1131,7 +1131,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   private availableStudentsForRule(rule: CommunicationRule): number {
-    const totalStudents = this.unit?.students?.length ?? 0;
+    const totalStudents = this.unit?.activeStudents?.length ?? 0;
     if (!this.previewLoaded[rule.id]) {
       return totalStudents;
     }
