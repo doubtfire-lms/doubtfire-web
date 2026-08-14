@@ -83,7 +83,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     const dayName = new Intl.DateTimeFormat(undefined, {weekday: 'short'}).format(date);
     const weekNumber = this.unit?.weekNumber(date);
 
-    return weekNumber ? `${dayName} W${weekNumber}` : dayName;
+    return weekNumber ? `${dayName} W${weekNumber}` : `${dayName} ${date.toLocaleDateString()}`;
   }
 
   private autoCaptureAttempted: boolean = false;
@@ -173,6 +173,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
         })),
       }));
   }
+
   private mergeTaskCounts(target: TaskCodeStats, source: TaskCodeStats): void {
     Object.entries(source).forEach(([taskDef, counts]) => {
       target[taskDef] = target[taskDef] || {};
@@ -205,10 +206,19 @@ export class SummaryTaskStatusChartComponent implements OnInit {
 
     this.unit.getTaskCompletionSnapshots().subscribe({
       next: (data) => {
-        this.snapshots = [...(data as TaskCompletionSnapshot[])].sort(
-          (left, right) => Number(left.snapshot_timestamp) - Number(right.snapshot_timestamp),
-        );
-        this.sliderSelect = 0;
+        this.snapshots = [...(data as TaskCompletionSnapshot[])]
+          .sort((left, right) =>
+            Number(left.snapshot_timestamp) - Number(right.snapshot_timestamp),
+          )
+          .reduceRight((acc, snapshot) => {
+            if (!acc.find((s) => s.snapshot_date === snapshot.snapshot_date)) {
+              acc.push(snapshot);
+            }
+            return acc;
+          }, [] as TaskCompletionSnapshot[]);
+
+
+        this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
         this.refreshData();
 
         if (this.snapshots.length === 0 && !this.autoCaptureAttempted) {
