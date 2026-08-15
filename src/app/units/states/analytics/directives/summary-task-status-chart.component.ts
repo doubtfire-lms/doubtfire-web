@@ -63,6 +63,37 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     return this.formatSnapshotLabel(this.snapshots[this.snapshots.length - 1]?.snapshot_date);
   }
 
+  get snapshotStudentCount(): number {
+    if (!this.selectedSnapshot) {
+      return 0;
+    }
+
+    const snapshotData =
+      this.campusFilter !== 'all' && this.selectedSnapshot.stats[this.campusFilter]
+        ? {[this.campusFilter]: this.selectedSnapshot.stats[this.campusFilter]}
+        : this.selectedSnapshot.stats;
+
+    const studentCount = Object.values(snapshotData).reduce((acc, campusData) => {
+      const campusStudentCount = Object.values(campusData).reduce((campusAcc, tutorialData) => {
+        const firstTaskStats = Object.values(tutorialData)[0];
+        const tutorialStudentCount = firstTaskStats
+          ? Object.values(firstTaskStats).reduce((acc, count) => acc + count, 0)
+          : 0;
+        return campusAcc + tutorialStudentCount;
+      }, 0);
+      return acc + campusStudentCount;
+    }, 0);
+
+    return studentCount;
+  }
+
+  // private tutorialStudentCount(tutorialData: TutorialStats): number {
+  //   return Object.values(tutorialData).reduce(
+  //     (tutorialAcc, statusCount) => tutorialAcc + statusCount,
+  //     0
+  //   );
+  // }
+
   formatSnapshotDate = (value: number): string => {
     return this.formatSnapshotLabel(
       this.snapshots[Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax)]
