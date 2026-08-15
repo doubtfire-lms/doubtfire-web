@@ -1,5 +1,5 @@
+import {MultiSeries, TooltipService} from '@glitchtip/ng-charts';
 import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
-import { MultiSeries, TooltipService } from '@glitchtip/ng-charts';
 import {filter, map, take} from 'rxjs/operators';
 import {
   TaskCodeStats,
@@ -207,17 +207,14 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     this.unit.getTaskCompletionSnapshots().subscribe({
       next: (data) => {
         this.snapshots = [...(data as TaskCompletionSnapshot[])]
-          .sort((left, right) =>
-            Number(left.snapshot_timestamp) - Number(right.snapshot_timestamp),
-          )
+          .sort((left, right) => Number(left.snapshot_timestamp) - Number(right.snapshot_timestamp))
           .reduceRight((acc, snapshot) => {
             if (!acc.find((s) => s.snapshot_date === snapshot.snapshot_date)) {
               acc.push(snapshot);
             }
             return acc;
           }, [] as TaskCompletionSnapshot[]);
-
-
+        this.snapshots = [...this.snapshots].reverse();
         this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
         this.refreshData();
 

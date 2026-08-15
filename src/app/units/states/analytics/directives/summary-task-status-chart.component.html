@@ -1,24 +1,30 @@
 <mat-card appearance="outlined" class="p-4">
-  <mat-card-title>
-    <h2>Task Completion Status</h2>
-  </mat-card-title>
-  <div class="flex items-center gap-2 p-4">
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-      <mat-select [(ngModel)]="campusFilter" (selectionChange)="refreshData()">
-        <mat-option value="all">All</mat-option>
-        @for (campus of campuses; track campus) {
-          <mat-option [value]="campus">{{ campus }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-    <button
-      aria-label="Capture completion snapshot now"
-      class="self-center"
-      mat-icon-button
-      (click)="captureNow()"
-    >
-      <mat-icon>refresh</mat-icon>
-    </button>
+  <div class="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between">
+    <div class="xl:max-w-[calc(50%)] text-pretty">
+      <h2>Task Completion Status</h2>
+      <p>
+        View the historical completion status of tasks across all students, filtered by campus
+        and/or tutorial. Use the slider to navigate through different snapshots.
+      </p>
+    </div>
+    <div class="flex items-center gap-2 p-4">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-select [(ngModel)]="campusFilter" (selectionChange)="refreshData()">
+          <mat-option value="all">All</mat-option>
+          @for (campus of campuses; track campus) {
+            <mat-option [value]="campus">{{ campus }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button
+        aria-label="Capture completion snapshot now"
+        class="self-center"
+        mat-icon-button
+        (click)="captureNow()"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
   </div>
   <div class="h-125">
     <ng-charts-bar-vertical-normalized
