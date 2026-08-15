@@ -67,6 +67,20 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     return this.snapshots.map((snapshot) => this.formatSnapshotLabel(snapshot.snapshot_date));
   }
 
+  get snapshotWeeks(): string[] {
+    const weeks = this.snapshots.map((snapshot) =>
+      this.formatSnapshotLabel(snapshot.snapshot_date, 'short'),
+    );
+    return weeks.reduce((acc: string[], week: string) => {
+      if (!acc.includes(week)) {
+        acc.push(week);
+      } else {
+        acc.push('');
+      }
+      return acc;
+    }, []);
+  }
+
   get snapshotStudentCount(): number {
     if (!this.selectedSnapshot) {
       return 0;
@@ -105,7 +119,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     );
   };
 
-  private formatSnapshotLabel(snapshotDate?: string, format: string = 'short'): string {
+  private formatSnapshotLabel(snapshotDate?: string, format?: string): string {
     if (!snapshotDate) {
       return '';
     }
@@ -117,10 +131,11 @@ export class SummaryTaskStatusChartComponent implements OnInit {
 
     const weekNumber = this.unit?.weekNumber(date);
 
-    if (format === 'short') {
+    if (!format) {
       const dayName = new Intl.DateTimeFormat(undefined, {weekday: 'short'}).format(date);
-
       return weekNumber ? `${dayName} W${weekNumber}` : `${dayName} ${date.toLocaleDateString()}`;
+    } else if (format === 'short') {
+      return `W${weekNumber}`;
     } else if (format === 'long') {
       return `${date.toLocaleDateString(undefined, {
         weekday: 'short',
