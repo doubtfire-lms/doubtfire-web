@@ -1,11 +1,13 @@
 <mat-card appearance="outlined" class="p-4">
   <div class="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between">
     <div class="text-pretty xl:max-w-[calc(50%)]">
-      <h2>Task Completion Status</h2>
-      <p>
-        View the historical completion status of tasks across all students, filtered by campus
-        and/or tutorial. Use the slider to navigate through different snapshots.
-      </p>
+      <mat-card-title>Task Completion Status</mat-card-title>
+      <mat-card-subtitle class="mb-2.5">
+        <p>
+          View the historical completion status of tasks across all students, filtered by campus
+          and/or tutorial. Use the slider to navigate through different snapshots.
+        </p>
+      </mat-card-subtitle>
     </div>
     <div class="flex items-center gap-2 p-4">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
@@ -27,7 +29,7 @@
     </div>
   </div>
   <div class="px-4 pt-8 text-slate-600">
-    <h3>{{ selectedSnapshotDate }}</h3>
+    <h3 class="mb-0">{{ selectedSnapshotDate }}</h3>
     <p>Student count: {{ snapshotStudentCount }}</p>
   </div>
   <div class="h-125">
