@@ -1,5 +1,12 @@
 import {MultiSeries, TooltipService} from '@glitchtip/ng-charts';
-import {Component, Injector, Input, OnInit, ViewContainerRef} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Injector,
+  Input,
+  OnInit,
+  ViewContainerRef,
+} from '@angular/core';
 import {filter, map, take} from 'rxjs/operators';
 import {
   TaskCodeStats,
@@ -24,6 +31,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   @Input() unit: Unit;
 
   data: MultiSeries = [];
+  hasChartData: boolean = false;
   sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
   campuses: string[] = [];
@@ -105,13 +113,6 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     return studentCount;
   }
 
-  // private tutorialStudentCount(tutorialData: TutorialStats): number {
-  //   return Object.values(tutorialData).reduce(
-  //     (tutorialAcc, statusCount) => tutorialAcc + statusCount,
-  //     0
-  //   );
-  // }
-
   formatSnapshotDate = (value: number): string => {
     return this.formatSnapshotLabel(
       this.snapshots[Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax)]
@@ -173,6 +174,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     private chartToolTipService: TooltipService,
     private viewContainerRef: ViewContainerRef,
     private injectorObj: Injector,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {
     // https://github.com/swimlane/ngx-charts/issues/1428#issuecomment-659237562
     this.chartToolTipService = this.injectorObj.get(TooltipService);
@@ -196,6 +198,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     if (!selectedSnapshot) {
       this.data = [];
       this.campuses = [];
+      this.hasChartData = false;
       return;
     }
 
@@ -205,6 +208,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
       this.campusFilter !== 'all' && selectedSnapshot.stats[this.campusFilter]
         ? this.buildChartData(this.aggregateCampusData(selectedSnapshot.stats[this.campusFilter]))
         : this.buildChartData(this.aggregateAllCampuses(selectedSnapshot.stats));
+    this.hasChartData = this.data.length > 0;
   }
 
   onSnapshotSliderChange(value: number): void {
@@ -277,6 +281,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
         this.snapshots = [...this.snapshots].reverse();
         this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
         this.refreshData();
+        this.changeDetectorRef.detectChanges();
 
         if (this.snapshots.length === 0 && !this.autoCaptureAttempted) {
           this.autoCaptureAttempted = true;

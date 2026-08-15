@@ -33,22 +33,28 @@
     <p>Student count: {{ snapshotStudentCount }}</p>
   </div>
   <div class="h-125">
-    <ng-charts-bar-vertical-normalized
-      class="reverse-legend-order"
-      [animations]="animations"
-      [gradient]="gradient"
-      [legend]="showLegend"
-      [results]="data"
-      [scheme]="$any(colorScheme)"
-      [showXAxisLabel]="showXAxisLabel"
-      [showYAxisLabel]="showYAxisLabel"
-      [tooltipDisabled]="false"
-      [xAxis]="showXAxis"
-      [xAxisLabel]="xAxisLabel"
-      [yAxis]="showYAxis"
-      [yAxisLabel]="yAxisLabel"
-    >
-    </ng-charts-bar-vertical-normalized>
+    @if (hasChartData) {
+      <ng-charts-bar-vertical-normalized
+        class="reverse-legend-order"
+        [animations]="animations"
+        [gradient]="gradient"
+        [legend]="showLegend"
+        [results]="data"
+        [scheme]="$any(colorScheme)"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [tooltipDisabled]="false"
+        [xAxis]="showXAxis"
+        [xAxisLabel]="xAxisLabel"
+        [yAxis]="showYAxis"
+        [yAxisLabel]="yAxisLabel"
+      >
+      </ng-charts-bar-vertical-normalized>
+    } @else {
+      <div class="flex h-full items-center justify-center">
+        <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+      </div>
+    }
   </div>
   <div class="flex flex-col items-center px-4 pt-0 pb-4">
     <div class="-mb-2 flex w-full px-4">
