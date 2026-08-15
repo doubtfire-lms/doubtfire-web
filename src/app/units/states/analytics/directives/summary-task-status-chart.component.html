@@ -69,11 +69,11 @@
     </div>
     <div class="flex w-full justify-between text-center text-sm text-slate-600">
       @if (snapshotDates.length < 5) {
-        @for (snapshotDate of snapshotDates; track snapshotDate) {
+        @for (snapshotDate of snapshotDates; track $index) {
           <span class="min-w-15">{{ snapshotDate }}</span>
         }
       } @else {
-        @for (snapshotWeek of snapshotWeeks; track snapshotWeek) {
+        @for (snapshotWeek of snapshotWeeks; track $index) {
           <span class="min-w-15">{{ snapshotWeek }}</span>
         }
       }
