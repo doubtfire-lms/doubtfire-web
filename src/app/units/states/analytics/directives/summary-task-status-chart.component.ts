@@ -52,7 +52,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   }
 
   get selectedSnapshotDate(): string {
-    return this.formatSnapshotLabel(this.selectedSnapshot?.snapshot_date);
+    return this.formatSnapshotLabel(this.selectedSnapshot?.snapshot_date, 'long');
   }
 
   get firstSnapshotDate(): string {
@@ -70,7 +70,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     );
   };
 
-  private formatSnapshotLabel(snapshotDate?: string): string {
+  private formatSnapshotLabel(snapshotDate?: string, format: string = 'short'): string {
     if (!snapshotDate) {
       return '';
     }
@@ -80,10 +80,20 @@ export class SummaryTaskStatusChartComponent implements OnInit {
       return snapshotDate;
     }
 
-    const dayName = new Intl.DateTimeFormat(undefined, {weekday: 'short'}).format(date);
     const weekNumber = this.unit?.weekNumber(date);
 
-    return weekNumber ? `${dayName} W${weekNumber}` : `${dayName} ${date.toLocaleDateString()}`;
+    if (format === 'short') {
+      const dayName = new Intl.DateTimeFormat(undefined, {weekday: 'short'}).format(date);
+
+      return weekNumber ? `${dayName} W${weekNumber}` : `${dayName} ${date.toLocaleDateString()}`;
+    } else if (format === 'long') {
+      return `${date.toLocaleDateString(undefined, {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })} | Week ${weekNumber}`;
+    }
   }
 
   private autoCaptureAttempted: boolean = false;
