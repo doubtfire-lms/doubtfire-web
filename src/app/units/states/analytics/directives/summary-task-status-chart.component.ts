@@ -63,6 +63,10 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     return this.formatSnapshotLabel(this.snapshots[this.snapshots.length - 1]?.snapshot_date);
   }
 
+  get snapshotDates(): string[] {
+    return this.snapshots.map((snapshot) => this.formatSnapshotLabel(snapshot.snapshot_date));
+  }
+
   get snapshotStudentCount(): number {
     if (!this.selectedSnapshot) {
       return 0;

@@ -48,26 +48,29 @@
     >
     </ng-charts-bar-vertical-normalized>
   </div>
-  <div class="flex items-center gap-3 px-4 pt-0 pb-4">
-    <div class="min-w-24 text-sm text-slate-600">{{ firstSnapshotDate }}</div>
-    <mat-slider
-      class="snapshot-slider w-full"
-      [disabled]="snapshots.length <= 1"
-      [discrete]="true"
-      [displayWith]="formatSnapshotDate"
-      [max]="sliderMax"
-      [min]="0"
-      [showTickMarks]="true"
-      [step]="1"
-    >
-      <input
-        matSliderThumb
-        [ngModel]="sliderSelect"
-        (ngModelChange)="onSnapshotSliderChange($event)"
-      />
-    </mat-slider>
-    <div class="min-w-24 text-right text-sm text-slate-600">
-      {{ lastSnapshotDate }}
+  <div class="flex flex-col items-center px-4 pt-0 pb-4">
+    <div class="-mb-2 flex w-full px-4">
+      <mat-slider
+        class="snapshot-slider w-full"
+        [disabled]="snapshots.length <= 1"
+        [discrete]="true"
+        [displayWith]="formatSnapshotDate"
+        [max]="sliderMax"
+        [min]="0"
+        [showTickMarks]="true"
+        [step]="1"
+      >
+        <input
+          matSliderThumb
+          [ngModel]="sliderSelect"
+          (ngModelChange)="onSnapshotSliderChange($event)"
+        />
+      </mat-slider>
+    </div>
+    <div class="flex w-full justify-between text-center text-sm text-slate-600">
+      @for (snapshotDate of snapshotDates; track snapshotDate) {
+        <span class="min-w-15">{{ snapshotDate }}</span>
+      }
     </div>
   </div>
 </mat-card>
