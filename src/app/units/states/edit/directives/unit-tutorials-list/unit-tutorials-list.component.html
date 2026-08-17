@@ -186,11 +186,11 @@
 
     <!-- Duration Column -->
     <ng-container matColumnDef="duration" [formGroup]="formData">
-      <th *matHeaderCellDef class="max-w-[90px]" mat-header-cell mat-sort-header>Duration</th>
-      <td *matCellDef="let tutorial" class="max-w-[90px]" mat-cell>
+      <th *matHeaderCellDef class="max-w-24" mat-header-cell mat-sort-header>Duration</th>
+      <td *matCellDef="let tutorial" class="max-w-24" mat-cell>
         @if (!editing(tutorial)) {
-          <div>
-            {{ formatDuration(tutorial.durationMinutes) }}
+          <div [matTooltip]="formatDuration(tutorial.durationMinutes)">
+            {{ formatDurationShort(tutorial.durationMinutes) }}
           </div>
         } @else {
           <mat-form-field appearance="outline" class="data-entry">
@@ -207,7 +207,7 @@
           </mat-form-field>
         }
       </td>
-      <td *matFooterCellDef class="max-w-[90px]" mat-footer-cell>
+      <td *matFooterCellDef class="max-w-24" mat-footer-cell>
         <mat-form-field appearance="outline" class="data-entry">
           <input
             formControlName="durationMinutes"

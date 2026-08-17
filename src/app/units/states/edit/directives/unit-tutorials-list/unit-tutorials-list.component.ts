@@ -260,8 +260,7 @@ export class UnitTutorialsListComponent
     };
   }
 
-  // Format a duration given in minutes as a human readable string, e.g. "2h" or "1h 30m" or "45m".
-  formatDuration(minutes: number): string {
+  formatDurationShort(minutes: number): string {
     if (minutes == null) {
       return '';
     }
@@ -271,9 +270,24 @@ export class UnitTutorialsListComponent
       return `${remainingMinutes}m`;
     }
     if (remainingMinutes === 0) {
-      return `${hours} Hour${hours > 1 ? 's' : ''}`;
+      return `${hours}h`;
     }
-    return `${hours} Hour${hours > 1 ? 's' : ''} ${remainingMinutes} minute${remainingMinutes > 1 ? 's' : ''}`;
+    return `${hours}h ${remainingMinutes}m`;
+  }
+
+  formatDuration(minutes: number): string {
+    if (minutes == null) {
+      return '';
+    }
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    if (hours === 0) {
+      return `${remainingMinutes} minute${remainingMinutes === 1 ? '' : 's'}`;
+    }
+    if (remainingMinutes === 0) {
+      return `${hours} hour${hours === 1 ? '' : 's'}`;
+    }
+    return `${hours} hour${hours === 1 ? '' : 's'} ${remainingMinutes} minute${remainingMinutes === 1 ? '' : 's'}`;
   }
 
   // Sorting function to sort data when sort
