@@ -85,17 +85,81 @@
   <h4 class="pt-5">Teaching Breaks for {{ newOrSelectedTeachingPeriod.name }}</h4>
   <mat-list>
     @for (break of teachingBreaks$ | async; track break) {
-      <mat-list-item>
-        <span class="flex items-center">
-          <span>
-            <span matListItemTitle>{{ break.startDate | date }}</span>
-            <span matListItemLine>{{ break.numberOfWeeks }} week(s)</span>
+      <mat-list-item class="!h-auto py-2">
+        @if (editingBreak?.id === break.id) {
+          <form class="flex w-full items-center gap-3.5 pt-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Break Start Date</mat-label>
+              <input
+                matInput
+                name="editBreakStartDate"
+                required
+                [matDatepicker]="editBreakStartDatePicker"
+                [(ngModel)]="editingBreak.startDate"
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="editBreakStartDatePicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #editBreakStartDatePicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Campuses</mat-label>
+              <mat-select multiple name="editBreakCampuses" [(ngModel)]="editingBreak.campusIds">
+                @for (campus of campuses; track campus.id) {
+                  <mat-option [value]="campus.id">{{ campus.name }}</mat-option>
+                }
+              </mat-select>
+              <mat-hint>Leave empty to apply to all campuses</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Number of weeks</mat-label>
+              <input
+                matInput
+                name="editBreakNumWeeks"
+                required
+                type="number"
+                [(ngModel)]="editingBreak.numberOfWeeks"
+              />
+            </mat-form-field>
+
+            <span class="grow"></span>
+            <button
+              mat-icon-button
+              type="button"
+              [disabled]="!(editingBreak.startDate && editingBreak.numberOfWeeks)"
+              (click)="saveTeachingBreak(break)"
+            >
+              <mat-icon>save</mat-icon>
+            </button>
+            <button mat-icon-button type="button" (click)="cancelEditingBreak()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </form>
+        } @else {
+          <span class="flex items-center">
+            <span>
+              <span matListItemTitle>{{ break.startDate | date }}</span>
+              <span matListItemLine>{{ break.numberOfWeeks }} week(s)</span>
+              <span matListItemLine>
+                {{
+                  break.campusIds.length
+                    ? 'Campuses: ' + campusNames(break.campusIds)
+                    : 'All campuses'
+                }}
+              </span>
+            </span>
+            <span class="grow"></span>
+            <button mat-icon-button (click)="editTeachingBreak(break)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteBreak(newOrSelectedTeachingPeriod, break)">
+              <mat-icon>delete</mat-icon>
+            </button>
           </span>
-          <span class="grow"></span>
-          <button mat-icon-button (click)="deleteBreak(newOrSelectedTeachingPeriod, break)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </span>
+        }
       </mat-list-item>
     }
   </mat-list>
@@ -114,6 +178,16 @@
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="breakStartDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #breakStartDatePicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Campuses</mat-label>
+        <mat-select multiple name="breakCampuses" [(ngModel)]="tempBreak.campusIds">
+          @for (campus of campuses; track campus.id) {
+            <mat-option [value]="campus.id">{{ campus.name }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>Leave empty to apply to all campuses</mat-hint>
       </mat-form-field>
 
       <!-- <span class="grow"></span> -->

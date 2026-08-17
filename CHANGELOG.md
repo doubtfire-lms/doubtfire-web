@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-70](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-69...v11.0.0-70) (2026-08-17)
+
+
+### Features
+
+* add separate breaks for different campuses ([#1451](https://github.com/b0ink/doubtfire-deploy/issues/1451)) ([18844eb](https://github.com/b0ink/doubtfire-deploy/commit/18844ebc1f79e95e989bc83bb92cc013fce98c7e))
+
+
+### Bug Fixes
+
+* ensure comments scroll to bottom when expanding comments viewer ([19d5250](https://github.com/b0ink/doubtfire-deploy/commit/19d525039dae6075f92827c0bdd0b29d117f36d6))
+* ensure students are fetched to populate group member autocomplete ([8c3a940](https://github.com/b0ink/doubtfire-deploy/commit/8c3a940e7ef55037bd19b7e0a9c72e5228a0f8dd))
+* ignore withdrawn students for total count ([e0bd163](https://github.com/b0ink/doubtfire-deploy/commit/e0bd16381ea233139ef96380421d0527cd41d870))
+
 ## [11.0.0-69](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-68...v11.0.0-69) (2026-08-11)
 
 

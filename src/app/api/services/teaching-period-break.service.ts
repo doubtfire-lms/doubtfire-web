@@ -20,6 +20,7 @@ export class TeachingPeriodBreakService extends CachedEntityService<TeachingPeri
         toJsonFn: MappingFunctions.mapDayToJson,
       },
       'numberOfWeeks',
+      'campusIds',
     );
 
     this.mapping.mapAllKeysToJsonExcept('id');
