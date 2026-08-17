@@ -208,7 +208,7 @@ export class Task extends Entity {
       return 0;
     }
 
-    const teachingBreaks = this.unit.teachingPeriod?.breaks ?? [];
+    const teachingBreaks = this.unit.teachingPeriod?.breaksFor(this.project?.campus?.id) ?? [];
     const pausedMilliseconds = this.getBreakOverlapMilliseconds(
       submissionTime,
       nowTime,

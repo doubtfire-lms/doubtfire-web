@@ -7,6 +7,7 @@ export class TeachingPeriodBreak extends Entity {
   id: number;
   startDate: Date;
   numberOfWeeks: number;
+  campusIds: number[] = [];
 }
 
 export class TeachingPeriod extends Entity {
@@ -44,6 +45,14 @@ export class TeachingPeriod extends Entity {
     return this.breaksCache.currentValues;
   }
 
+  public breaksFor(campusId?: number): readonly TeachingPeriodBreak[] {
+    return this.breaks.filter(
+      (teachingBreak) =>
+        teachingBreak.campusIds.length === 0 ||
+        (campusId && teachingBreak.campusIds.includes(campusId)),
+    );
+  }
+
   public get units(): readonly Unit[] {
     return this.unitsCache.currentValues;
   }
@@ -66,10 +75,15 @@ export class TeachingPeriod extends Entity {
     return unit && this.unitsCache.currentValues.some((u) => u.code === unit.code);
   }
 
-  public addBreak(startDate: Date, weeks: number): Observable<TeachingPeriodBreak> {
+  public addBreak(
+    startDate: Date,
+    weeks: number,
+    campusIds: number[] = [],
+  ): Observable<TeachingPeriodBreak> {
     const breakEntity = new TeachingPeriodBreak();
     breakEntity.startDate = startDate;
     breakEntity.numberOfWeeks = weeks;
+    breakEntity.campusIds = campusIds;
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
 
     return breakService.create(
