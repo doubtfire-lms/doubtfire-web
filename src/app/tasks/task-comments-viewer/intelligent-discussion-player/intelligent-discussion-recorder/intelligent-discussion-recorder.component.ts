@@ -12,6 +12,7 @@ import {
   BaseAudioRecorderComponent,
   RecordingEvent,
 } from 'src/app/common/audio-recorder/audio/base-audio-recorder';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {MediaRecorderService} from 'src/app/common/services/recorder-service';
 
 @Component({
@@ -38,6 +39,7 @@ export class IntelligentDiscussionRecorderComponent
   constructor(
     private mediaRecorderService: MediaRecorderService,
     private taskCommentService: TaskCommentService,
+    private alertService: AlertService,
   ) {
     super(mediaRecorderService);
   }
@@ -77,9 +79,9 @@ export class IntelligentDiscussionRecorderComponent
         next: () => {
           this.isSending = false;
         },
-        error: (failure: {data: {error: string}}) => {
-          console.error(failure);
+        error: (error: unknown) => {
           this.isSending = false;
+          this.alertService.error(`Unable to save discussion response: ${String(error)}`, 6000);
         },
       });
       this.blob = {} as Blob;

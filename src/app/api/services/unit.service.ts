@@ -166,6 +166,10 @@ export class UnitService extends CachedEntityService<Unit> {
         },
         toJsonFn: MappingFunctions.mapDayToJson,
       },
+      'portfolioDeadline',
+      'portfolioDeadlinePerCampus',
+      'portfolioDeadlineCampusId',
+      'lockProjectOnPortfolioSubmission',
       'assessmentEnabled',
       // 'overseerImageId',
       {
@@ -320,6 +324,10 @@ export class UnitService extends CachedEntityService<Unit> {
       'startDate',
       'endDate',
       'portfolioAutoGenerationDate',
+      'portfolioDeadline',
+      'portfolioDeadlinePerCampus',
+      'portfolioDeadlineCampusId',
+      'lockProjectOnPortfolioSubmission',
 
       'assessmentEnabled',
       'overseerImageId',

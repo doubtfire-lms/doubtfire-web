@@ -1,6 +1,11 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
-import {OverseerImage, UnitService} from 'src/app/api/models/doubtfire-model';
+import {
+  Campus,
+  CampusService,
+  OverseerImage,
+  UnitService,
+} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {GradeDefinition, Unit} from 'src/app/api/models/unit';
@@ -24,6 +29,7 @@ export class UnitDetailsEditorComponent implements OnInit {
 
   constructor(
     private teachingPeriodService: TeachingPeriodService,
+    private campusService: CampusService,
     private taskDefinitionService: TaskDefinitionService,
     private doubtfireConstants: DoubtfireConstants,
     private taskSubmissionService: TaskSubmissionService,
@@ -34,8 +40,11 @@ export class UnitDetailsEditorComponent implements OnInit {
   ) {}
 
   public teachingPeriods: TeachingPeriod[];
+  public campuses: Campus[] = [];
   public taskDefinitions: TaskDefinition[];
   public dockerImages: OverseerImage[];
+  public portfolioDeadlineDate: Date | null = null;
+  public portfolioDeadlineTime: string = '';
   public editingGradeId: string | null = null;
   public readonly gradeDefinitionColumns = ['index', 'label', 'abbreviation', 'order', 'actions'];
   private editingGradeDefinitions: GradeDefinition[] | null = null;
@@ -202,8 +211,16 @@ export class UnitDetailsEditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initialisePortfolioDeadlineInputs();
+
     this.teachingPeriodService.query().subscribe((periods) => {
       this.teachingPeriods = periods;
+    });
+
+    this.campusService.query().subscribe((campuses) => {
+      this.campuses = campuses.filter(
+        (campus) => campus.active || campus.id === this.unit.portfolioDeadlineCampusId,
+      );
     });
 
     this.unit.taskDefinitionCache.values.subscribe((taskDefs) => {
@@ -213,6 +230,40 @@ export class UnitDetailsEditorComponent implements OnInit {
     this.taskSubmissionService.getDockerImagesAsPromise().then((images) => {
       this.dockerImages = images;
     });
+  }
+
+  public updatePortfolioDeadlineDate(date: Date | null): void {
+    this.portfolioDeadlineDate = date;
+    this.syncPortfolioDeadline();
+  }
+
+  public updatePortfolioDeadlineTime(time: string): void {
+    this.portfolioDeadlineTime = time;
+    this.syncPortfolioDeadline();
+  }
+
+  private initialisePortfolioDeadlineInputs(): void {
+    const match = this.unit.portfolioDeadline?.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+    if (!match) {
+      return;
+    }
+
+    const [, year, month, day, hour, minute] = match;
+    this.portfolioDeadlineDate = new Date(Number(year), Number(month) - 1, Number(day));
+    this.portfolioDeadlineTime = `${hour}:${minute}`;
+  }
+
+  private syncPortfolioDeadline(): void {
+    const date = this.portfolioDeadlineDate;
+    if (!date || !/^([01]\d|2[0-3]):[0-5]\d$/.test(this.portfolioDeadlineTime)) {
+      this.unit.portfolioDeadline = null;
+      return;
+    }
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    this.unit.portfolioDeadline = `${year}-${month}-${day}T${this.portfolioDeadlineTime}`;
   }
 
   addD2lData() {

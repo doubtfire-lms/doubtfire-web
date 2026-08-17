@@ -66,6 +66,10 @@ export class Unit extends Entity {
   startDate: Date; //TODO: or string
   endDate: Date; //TODO: or string
   portfolioAutoGenerationDate: Date;
+  portfolioDeadline: string | null;
+  portfolioDeadlinePerCampus: boolean = true;
+  portfolioDeadlineCampusId: number | null;
+  lockProjectOnPortfolioSubmission: boolean = false;
   currentUnitWeek: number | null;
 
   assessmentEnabled: boolean;

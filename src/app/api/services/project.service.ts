@@ -92,6 +92,14 @@ export class ProjectService extends CachedEntityService<Project> {
         },
       },
       'portfolioAvailable',
+      'portfolioLocked',
+      {
+        keys: 'effectivePortfolioDeadline',
+        toEntityFn: (data: object, key: string) =>
+          data[key] ? new Date(data[key] as string) : null,
+      },
+      'effectivePortfolioDeadlineTimezone',
+      'portfolioDeadlinePassed',
       'usesDraftLearningSummary',
       {
         keys: ['taskStats', 'stats'],

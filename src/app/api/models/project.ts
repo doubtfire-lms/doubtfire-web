@@ -36,6 +36,10 @@ export class Project extends Entity {
   public enrolled: boolean;
   public compilePortfolio: boolean;
   public portfolioAvailable: boolean;
+  public portfolioLocked: boolean = false;
+  public effectivePortfolioDeadline: Date | null;
+  public effectivePortfolioDeadlineTimezone: string | null;
+  public portfolioDeadlinePassed: boolean = false;
   public usesDraftLearningSummary: boolean;
 
   public specConDays: number = 0;
@@ -284,9 +288,11 @@ export class Project extends Entity {
     }`;
   }
 
-  public deletePortfolio(): Observable<void> {
+  public deletePortfolio(confirmLate: boolean = false): Observable<void> {
     const httpClient = AppInjector.get(HttpClient);
-    return httpClient.delete<void>(this.portfolioUrl(false));
+    return httpClient.delete<void>(this.portfolioUrl(false), {
+      body: {confirm_late: confirmLate},
+    });
   }
 
   public deleteFileFromPortfolio(file: {idx: number; kind: string; name: string}) {
