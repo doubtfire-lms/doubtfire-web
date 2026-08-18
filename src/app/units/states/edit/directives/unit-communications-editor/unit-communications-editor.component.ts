@@ -34,6 +34,7 @@ import {
   Unit,
 } from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {TaskStatus, TaskStatusEnum} from 'src/app/api/models/task-status';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -168,24 +169,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     // {token: '{{conditions_summary}}', label: 'Conditions Summary'},
     // {token: '{{actions_summary}}', label: 'Actions Summary'},
   ];
-  readonly taskStatuses = [
-    'not_started',
-    'complete',
-    'need_help',
-    'working_on_it',
-    'fix_and_resubmit',
-    'feedback_exceeded',
-    'redo',
-    'discuss',
-    'ready_for_feedback',
-    'demonstrate',
-    'fail',
-    'time_exceeded',
-    'assess_in_portfolio',
-    'attention_required',
-    'rediscuss',
-  ];
-
   newConditions: Record<number, Partial<CommunicationCondition>> = {};
   conditionFormOpen: Record<number, boolean> = {};
   editingConditionId: Record<number, number | undefined> = {};
@@ -811,7 +794,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   taskStatusLabel(taskStatus: string): string {
-    return this.titleize(taskStatus);
+    return TaskStatus.STATUS_LABELS.get(taskStatus as TaskStatusEnum) ?? this.titleize(taskStatus);
   }
 
   taskStatusesLabel(taskStatuses: string[] = []): string {
