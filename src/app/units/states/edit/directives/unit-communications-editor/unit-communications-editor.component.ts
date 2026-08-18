@@ -832,12 +832,39 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return audiences.join(' and ') || 'staff';
   }
 
-  insertActionVariable(rule: CommunicationRule, field: 'subject' | 'body', token: string): void {
+  insertActionVariable(
+    rule: CommunicationRule,
+    field: 'subject' | 'body',
+    token: string,
+    input?: HTMLInputElement | HTMLTextAreaElement,
+  ): void {
     const action = this.actionFor(rule);
     const currentValue = action[field] ?? '';
-    const separator =
-      currentValue && !currentValue.endsWith(' ') && !currentValue.endsWith('\n') ? ' ' : '';
-    action[field] = `${currentValue}${separator}${token}`;
+
+    // The caret position survives the blur caused by opening the variable menu,
+    // so insert where the user last had their cursor and fall back to appending.
+    const hasCaret = !!input && input.selectionStart !== null && input.selectionEnd !== null;
+    const start = hasCaret
+      ? Math.min(input.selectionStart, currentValue.length)
+      : currentValue.length;
+    const end = hasCaret ? Math.min(input.selectionEnd, currentValue.length) : currentValue.length;
+
+    const before = currentValue.slice(0, start);
+    const after = currentValue.slice(end);
+    const prefix = before && !/\s$/.test(before) ? ' ' : '';
+    const suffix = after && !/^\s/.test(after) ? ' ' : '';
+    const insertion = `${prefix}${token}${suffix}`;
+
+    action[field] = `${before}${insertion}${after}`;
+
+    if (input) {
+      const caret = start + prefix.length + token.length;
+      setTimeout(() => {
+        input.value = action[field] ?? '';
+        input.focus();
+        input.setSelectionRange(caret, caret);
+      });
+    }
   }
 
   renderTemplatePreview(value: string | undefined, rule: CommunicationRule): string {
