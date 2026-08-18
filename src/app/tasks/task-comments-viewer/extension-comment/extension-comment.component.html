@@ -1,20 +1,20 @@
-<div fxLayout="row" fxLayoutAlign="space-evenly center">
+<div class="flex flex-row items-center justify-evenly">
   @if (comment.assessed) {
-    <div fxLayout="column" fxLayoutAlign="space-around center">
+    <div class="flex flex-col items-center justify-around">
       <hr class="hr-text" [attr.data-content]="message" />
       <p class="fade-text"><strong> reason:</strong> {{ comment.text }}</p>
     </div>
   }
 
   @if (!comment.assessed) {
-    <div fxLayout="column" fxLayoutAlign="space-around center">
+    <div class="flex flex-col items-center justify-around">
       <hr class="hr-fade" />
       <p>
         {{ message }} <br />
         <strong> reason:</strong> {{ comment.text }}
       </p>
       @if (isNotStudent) {
-        <div fxLayout="row" fxLayoutAlign="space-evenly center">
+        <div class="flex flex-row items-center justify-evenly">
           <button
             color="primary"
             mat-flat-button
