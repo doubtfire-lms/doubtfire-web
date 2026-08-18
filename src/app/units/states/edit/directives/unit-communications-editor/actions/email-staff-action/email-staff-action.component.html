@@ -26,7 +26,11 @@
     <div class="grid items-stretch gap-3 md:grid-cols-2">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Body</mat-label>
-        <textarea matInput rows="8" [(ngModel)]="editor.actionFor(rule).body"></textarea>
+        <textarea
+          matInput
+          [cdkTextareaAutosize]="true"
+          [(ngModel)]="editor.actionFor(rule).body"
+        ></textarea>
         <button mat-icon-button matSuffix [matMenuTriggerFor]="staffBodyVariableMenu">
           <mat-icon>add_circle</mat-icon>
         </button>
@@ -87,7 +91,11 @@
     <div class="grid items-stretch gap-3 md:grid-cols-2">
       <mat-form-field appearance="outline" class="size-full">
         <mat-label>Body</mat-label>
-        <textarea matInput rows="8" [(ngModel)]="editor.actionFor(rule).body"></textarea>
+        <textarea
+          matInput
+          [cdkTextareaAutosize]="true"
+          [(ngModel)]="editor.actionFor(rule).body"
+        ></textarea>
         <button mat-icon-button matSuffix [matMenuTriggerFor]="staffBodyVariableMenu">
           <mat-icon>add_circle</mat-icon>
         </button>
