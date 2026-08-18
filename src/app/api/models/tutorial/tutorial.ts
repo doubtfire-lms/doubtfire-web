@@ -11,6 +11,7 @@ export class Tutorial extends Entity {
   abbreviation: string;
   campus: Campus;
   capacity: number;
+  durationMinutes: number;
   numStudents: number;
   tutor: User;
   tutorialStream: TutorialStream;
