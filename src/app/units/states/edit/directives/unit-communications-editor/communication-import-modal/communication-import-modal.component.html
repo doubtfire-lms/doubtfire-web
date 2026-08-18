@@ -1,0 +1,99 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content class="flex max-h-[80vh] min-w-[46rem] flex-col gap-4">
+  <p class="text-black/60">
+    Choose a communication file exported from this or another unit, or paste its contents below.
+    Nothing is saved until you review what the import will do.
+  </p>
+
+  <div class="flex items-center gap-3">
+    <button color="primary" mat-stroked-button (click)="fileInput.click()">
+      <mat-icon>upload_file</mat-icon>
+      Choose file
+    </button>
+    <span class="truncate text-black/60">{{ fileName || 'No file chosen' }}</span>
+    <input
+      #fileInput
+      accept="application/json,.json"
+      class="hidden"
+      type="file"
+      (change)="onFileSelected($event)"
+    />
+  </div>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Communication document</mat-label>
+    <textarea matInput rows="10" [(ngModel)]="documentText"></textarea>
+    <mat-hint>Expects a {{ expectedFormat }} document</mat-hint>
+  </mat-form-field>
+
+  @if (busy) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  @if (errorMessage) {
+    <div class="rounded border border-red-300 bg-red-50 p-3 text-red-800">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (report) {
+    <div class="flex flex-col gap-3 rounded border border-gray-300 p-3">
+      <div>
+        <div class="font-medium">Ready to import</div>
+        @if (report.source?.unit_code) {
+          <div class="text-black/60">
+            Exported from {{ report.source.unit_code }}
+            @if (report.source.teaching_period) {
+              <span>({{ report.source.teaching_period }})</span>
+            }
+          </div>
+        }
+      </div>
+
+      @if (report.unresolved_count > 0) {
+        <div class="rounded border border-amber-300 bg-amber-50 p-3">
+          <div class="flex items-center gap-2 font-medium text-amber-900">
+            <mat-icon class="!h-5 !w-5 !text-[20px]">warning</mat-icon>
+            {{ report.unresolved_count }} reference{{ report.unresolved_count === 1 ? '' : 's' }}
+            do not exist in this unit
+          </div>
+          <p class="mt-1 text-amber-900/80">
+            These will be imported as placeholders. The rules that use them are flagged in the
+            editor and the set cannot be run until you repoint or remove them.
+          </p>
+          <ul class="mt-2 list-inside list-disc text-amber-900/80">
+            @for (item of report.unresolved; track $index) {
+              <li>
+                <span class="font-medium">{{ item.rule_name }}</span>
+                &mdash; {{ item.kind }} needs {{ item.reference.replace('_', ' ') }}
+                <span class="font-medium">{{ item.label }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+      } @else {
+        <div class="flex items-center gap-2 text-green-800">
+          <mat-icon class="!h-5 !w-5 !text-[20px]">check_circle</mat-icon>
+          Every reference resolved against this unit
+        </div>
+      }
+
+      @if (report.warnings.length) {
+        <ul class="list-inside list-disc text-black/60">
+          @for (warning of report.warnings; track $index) {
+            <li>{{ warning }}</li>
+          }
+        </ul>
+      }
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-stroked-button [disabled]="!canCheck" (click)="check()">Check document</button>
+  <button color="primary" mat-flat-button [disabled]="!canImport" (click)="confirm()">
+    Import
+  </button>
+</mat-dialog-actions>

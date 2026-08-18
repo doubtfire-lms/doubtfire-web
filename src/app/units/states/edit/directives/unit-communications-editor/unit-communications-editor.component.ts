@@ -38,6 +38,11 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {
+  CommunicationImportModalComponent,
+  CommunicationImportModalData,
+  CommunicationImportModalResult,
+} from './communication-import-modal/communication-import-modal.component';
+import {
   CommunicationScheduleModalComponent,
   CommunicationScheduleModalData,
 } from './communication-schedule-modal/communication-schedule-modal.component';
@@ -322,6 +327,88 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       next: (job) => this.showExecutionProgress(job, `Executing ${set.name}`),
       error: (error) => this.showError(error),
     });
+  }
+
+  /**
+   * Saves a set as a portable document. The document holds natural keys rather
+   * than database ids, so staff in another unit can import it and have its task
+   * and tutorial references repointed at their own records.
+   */
+  exportSet(set: CommunicationSet): void {
+    this.setService.exportForUnit(this.unit.id, set.id).subscribe({
+      next: (document) => this.downloadDocument(document, `${this.unit.code}-${set.name}`),
+      error: (error) => this.showError(error),
+    });
+  }
+
+  exportRule(rule: CommunicationRule): void {
+    this.ruleService.exportForUnit(this.unit.id, rule.id).subscribe({
+      next: (document) => this.downloadDocument(document, `${this.unit.code}-${rule.name}`),
+      error: (error) => this.showError(error),
+    });
+  }
+
+  importSet(): void {
+    this.openImportModal({unitId: this.unit.id}, (result) => {
+      this.loadSets(result.importedSetId);
+      this.reportImport(result, 'Communication set imported');
+    });
+  }
+
+  importRule(set: CommunicationSet): void {
+    this.openImportModal({unitId: this.unit.id, set}, (result) => {
+      this.loadSets(set.id);
+      this.reportImport(result, 'Communication rule imported');
+    });
+  }
+
+  /** Conditions and actions on a rule that point at records missing from this unit. */
+  unresolvedLabelsFor(rule: CommunicationRule): string[] {
+    return [...(rule.conditions || []), ...(rule.actions || [])]
+      .filter((record) => record.unresolved)
+      .map((record) => record.unresolved_summary?.label || 'a record missing from this unit');
+  }
+
+  private openImportModal(
+    data: CommunicationImportModalData,
+    onImported: (result: CommunicationImportModalResult) => void,
+  ): void {
+    this.dialog
+      .open<
+        CommunicationImportModalComponent,
+        CommunicationImportModalData,
+        CommunicationImportModalResult
+      >(CommunicationImportModalComponent, {data, width: '52rem'})
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          onImported(result);
+        }
+      });
+  }
+
+  private reportImport(result: CommunicationImportModalResult, success: string): void {
+    if (result.report.unresolved_count > 0) {
+      this.alerts.error(
+        `${success} with ${result.report.unresolved_count} unresolved reference(s). ` +
+          'Repoint them before running this set.',
+        8000,
+      );
+      return;
+    }
+
+    this.alerts.success(success, 4000);
+  }
+
+  private downloadDocument(document: Record<string, unknown>, name: string): void {
+    const blob = new Blob([JSON.stringify(document, null, 2)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const link = window.document.createElement('a');
+
+    link.href = url;
+    link.download = `${name.replace(/[^\w.-]+/g, '-')}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
   }
 
   addSchedule(set: CommunicationSet): void {
@@ -951,7 +1038,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     }
   }
 
-  private loadSets(): void {
+  private loadSets(selectSetId?: number): void {
     if (!this.unit) {
       return;
     }
@@ -960,6 +1047,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.setService.getForUnit(this.unit.id).subscribe({
       next: (sets) => {
         this.sets = sets;
+        if (selectSetId) {
+          this.selectedSetId = selectSetId;
+          this.selectedRuleId = undefined;
+        }
         if (this.selectedSetId) {
           this.expandedSetIds.add(this.selectedSetId);
         }
