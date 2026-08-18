@@ -1,0 +1,17 @@
+// Reaching into the slide toggle's internals so its own <label> stretches
+// across the row: that keeps the switch pinned to the trailing edge and leaves
+// the entire row clickable, which the component's public API cannot express.
+:host ::ng-deep .mdc-form-field {
+  width: 100%;
+  align-items: center;
+  gap: 1.5rem;
+
+  > label {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin: 0;
+    padding: 0;
+  }
+}

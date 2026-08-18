@@ -1,0 +1,10 @@
+<mat-slide-toggle
+  class="block w-full rounded-lg px-2 py-3 transition-colors hover:bg-gray-50"
+  labelPosition="before"
+  [checked]="checked()"
+  [disabled]="disabled()"
+  (change)="onChange($event)"
+>
+  <span class="text-sm font-medium text-gray-900">{{ label() }}</span>
+  <span class="max-w-prose text-sm text-gray-600 empty:hidden"><ng-content /></span>
+</mat-slide-toggle>
