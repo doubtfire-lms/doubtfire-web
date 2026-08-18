@@ -102,12 +102,23 @@
             with {{ externalName }}. This process will take some time, and you will be emailed when
             your portfolio is ready to review if you have enabled portfolio notifications.
           </p>
-          <p>
-            <strong>
-              If you would like to make any further changes after you have created your portfolio,
-              you will need to delete and recreate your portfolio.
-            </strong>
-          </p>
+
+          @if (unit.lockProjectOnPortfolioSubmission) {
+            <p>
+              <strong>
+                Your tasks will be locked after you create your portfolio. You won't be able to
+                change task statuses, submit work, or leave comments. To make changes again, you
+                must first delete your portfolio.
+              </strong>
+            </p>
+          } @else {
+            <p>
+              <strong>
+                If you would like to make any further changes after you have created your portfolio,
+                you will need to delete and recreate your portfolio.
+              </strong>
+            </p>
+          }
         </mat-card-content>
         <mat-card-actions class="">
           <button
