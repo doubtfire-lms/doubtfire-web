@@ -45,7 +45,7 @@
     "@glitchtip/ng-charts": "^1.4.0",
     "@ngneat/hotkeys": "^4.0.0",
     "@ngstack/code-editor": "^9.0.0",
-    "@sentry/angular": "^10.69.0",
+    "@sentry/angular": "^10.70.0",
     "@sentry/cli": "^3.6.2",
     "@tailwindcss/postcss": "^4.3.3",
     "@worktile/gantt": "^21.0.0",
