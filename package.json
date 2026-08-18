@@ -92,7 +92,7 @@
     "@types/dompurify": "^3.2.0",
     "@types/node": "^26.2.0",
     "@typescript-eslint/eslint-plugin": "^8.65.0",
-    "@typescript-eslint/parser": "^8.66.0",
+    "@typescript-eslint/parser": "^8.67.0",
     "angular-eslint": "^22.0.0",
     "autoprefixer": "^10.5.4",
     "concurrently": "^10.0.4",
