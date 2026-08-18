@@ -104,64 +104,23 @@ export class PortfolioReviewStepComponent implements OnInit {
   }
 
   public deletePortfolio(): void {
-    if (this.project.portfolioDeadlinePassed) {
-      this.showLateDeleteConfirmation();
-      return;
-    }
-
     this.confirmationModal.show(
       'Delete Portfolio?',
       'Are you sure you want to delete your portfolio? You will need to recreate your portfolio again if you do so.',
-      () => this.performPortfolioDeletion(false),
-      undefined,
-      'Delete',
-    );
-  }
-
-  private showLateDeleteConfirmation(): void {
-    const deadline = this.formattedEffectiveDeadline();
-    this.confirmationModal.show(
-      'Delete Portfolio and Submit Late?',
-      `Your effective portfolio deadline was ${deadline}. If you delete this portfolio, your replacement portfolio will be submitted late.`,
-      () => this.performPortfolioDeletion(true),
-      undefined,
-      'Delete and submit late',
-    );
-  }
-
-  private formattedEffectiveDeadline(): string {
-    const deadline = this.project.effectivePortfolioDeadline;
-    const timezone = this.project.effectivePortfolioDeadlineTimezone;
-    if (!deadline) {
-      return 'the configured deadline';
-    }
-
-    try {
-      return `${deadline.toLocaleString(undefined, timezone ? {timeZone: timezone} : undefined)}${
-        timezone ? ` (${timezone})` : ''
-      }`;
-    } catch (_error) {
-      return `${deadline.toLocaleString()}${timezone ? ` (${timezone})` : ''}`;
-    }
-  }
-
-  private performPortfolioDeletion(confirmLate: boolean): void {
-    this.project.deletePortfolio(confirmLate).subscribe({
-      next: () => {
-        this.project.portfolioAvailable = false;
-        this.project.portfolioLocked = false;
-        this.project.portfolioStatus = 0;
-        this.alertService.message('Portfolio has been deleted!', 5000);
+      () => {
+        this.project.deletePortfolio().subscribe({
+          next: () => {
+            this.project.portfolioAvailable = false;
+            this.project.portfolioLocked = false;
+            this.project.portfolioStatus = 0;
+            this.alertService.message('Portfolio has been deleted!', 5000);
+          },
+          error: (error) => {
+            this.alertService.error(`Could not delete portfolio: ${error}`, 6000);
+          },
+        });
       },
-      error: (error: string) => {
-        if (!confirmLate && `${error}`.toLowerCase().includes('requires confirmation')) {
-          this.project.portfolioDeadlinePassed = true;
-          this.showLateDeleteConfirmation();
-          return;
-        }
-        this.alertService.error(`Could not delete portfolio: ${error}`, 6000);
-      },
-    });
+    );
   }
 
   public downloadPortfolio(): void {

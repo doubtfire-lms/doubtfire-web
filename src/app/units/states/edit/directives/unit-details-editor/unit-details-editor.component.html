@@ -78,77 +78,15 @@
       <mat-datepicker #potfoliogendatepicker> </mat-datepicker>
     </mat-form-field>
 
-    <div class="flex w-full gap-3">
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Portfolio deadline date</mat-label>
-        <input
-          matInput
-          [matDatepicker]="portfolioDeadlineDatepicker"
-          [ngModel]="portfolioDeadlineDate"
-          (ngModelChange)="updatePortfolioDeadlineDate($event)"
-        />
-        <mat-datepicker-toggle
-          matIconSuffix
-          [for]="portfolioDeadlineDatepicker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #portfolioDeadlineDatepicker></mat-datepicker>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Portfolio deadline time (24-hour)</mat-label>
-        <input
-          lang="en-GB"
-          matInput
-          step="60"
-          type="time"
-          [ngModel]="portfolioDeadlineTime"
-          (ngModelChange)="updatePortfolioDeadlineTime($event)"
-        />
-        <mat-hint>Used when confirming deletion of a submitted portfolio.</mat-hint>
-      </mat-form-field>
-    </div>
-
-    <div class="flex flex-col gap-3">
-      <mat-radio-group
-        aria-label="Portfolio deadline timezone handling"
-        class="flex flex-col gap-2"
-        [(ngModel)]="unit.portfolioDeadlinePerCampus"
-      >
-        <mat-radio-button [value]="true">Use each student's campus timezone</mat-radio-button>
-        <span class="ml-8 text-sm text-gray-600">
-          The entered date and time applies locally for each student's campus.
-        </span>
-        <mat-radio-button [value]="false"
-          >Use one campus timezone for all students</mat-radio-button
-        >
-      </mat-radio-group>
-
-      @if (!unit.portfolioDeadlinePerCampus) {
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Deadline timezone campus</mat-label>
-          <mat-select
-            [required]="!!unit.portfolioDeadline"
-            [(ngModel)]="unit.portfolioDeadlineCampusId"
-          >
-            @for (campus of campuses; track campus.id) {
-              <mat-option [value]="campus.id">
-                {{ campus.name }} — {{ campus.timezone }}{{ campus.active ? '' : ' (inactive)' }}
-              </mat-option>
-            }
-          </mat-select>
-          <mat-hint>All students use the selected campus timezone for this deadline.</mat-hint>
-        </mat-form-field>
-      }
-
-      <div>
-        <mat-slide-toggle [(ngModel)]="unit.lockProjectOnPortfolioSubmission">
-          Lock project when portfolio is submitted
-        </mat-slide-toggle>
-        <p class="mb-0">
-          Students and teaching staff cannot change portfolio evidence, tasks, statuses, or task
-          comments while the portfolio is compiling or available.
-        </p>
-      </div>
+    <div>
+      <mat-slide-toggle [(ngModel)]="unit.lockProjectOnPortfolioSubmission">
+        Lock project when portfolio is submitted
+      </mat-slide-toggle>
+      <p class="mb-0">
+        Once a student's portfolio has been submitted (compiling or available), their task
+        statuses, comments, and portfolio evidence are frozen for staff and students alike.
+        Staff notes are not affected.
+      </p>
     </div>
 
     <mat-form-field appearance="outline" class="w-full">
