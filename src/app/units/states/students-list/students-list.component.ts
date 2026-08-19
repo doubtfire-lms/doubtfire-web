@@ -78,6 +78,9 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.unit = unit;
         this.staffFilter = unit.myRole === 'Tutor' ? 'mine' : 'all';
 
+        // Reveal cached students right away
+        this.loadingStudents = this.unit.activeStudents.length === 0;
+
         this.subscriptions.push(
           this.unit.studentCache.values.subscribe(() => {
             this.updateSuggestions();
