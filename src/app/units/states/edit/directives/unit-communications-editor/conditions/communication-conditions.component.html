@@ -97,28 +97,16 @@
                 </mat-form-field>
               }
               @case ('TaskDefinitionStatusCondition') {
-                <mat-form-field appearance="outline">
-                  <mat-label>Statuses</mat-label>
-                  <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
-                    @for (status of editor.taskStatuses; track status) {
-                      <mat-option [value]="status">
-                        {{ editor.taskStatusLabel(status) }}
-                      </mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
+                <f-task-status-select
+                  class="block min-w-[320px]"
+                  [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
+                />
               }
               @case ('TaskStatusCountCondition') {
-                <mat-form-field appearance="outline" class="min-w-[320px]">
-                  <mat-label>Statuses</mat-label>
-                  <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
-                    @for (status of editor.taskStatuses; track status) {
-                      <mat-option [value]="status">
-                        {{ editor.taskStatusLabel(status) }}
-                      </mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
+                <f-task-status-select
+                  class="block min-w-[320px]"
+                  [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
+                />
               }
               @case ('LoginStatusCondition') {
                 <mat-form-field appearance="outline" class="min-w-[320px]">
@@ -425,29 +413,17 @@
         }
 
         @case ('TaskDefinitionStatusCondition') {
-          <mat-form-field appearance="outline">
-            <mat-label>Statuses</mat-label>
-            <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
-              @for (status of editor.taskStatuses; track status) {
-                <mat-option [value]="status">
-                  {{ editor.taskStatusLabel(status) }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+          <f-task-status-select
+            class="block min-w-[320px]"
+            [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
+          />
         }
 
         @case ('TaskStatusCountCondition') {
-          <mat-form-field appearance="outline" class="min-w-[320px]">
-            <mat-label>Statuses</mat-label>
-            <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
-              @for (status of editor.taskStatuses; track status) {
-                <mat-option [value]="status">
-                  {{ editor.taskStatusLabel(status) }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+          <f-task-status-select
+            class="block min-w-[320px]"
+            [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
+          />
         }
 
         @case ('LoginStatusCondition') {

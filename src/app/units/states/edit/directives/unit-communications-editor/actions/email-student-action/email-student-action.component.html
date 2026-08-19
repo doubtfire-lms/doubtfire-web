@@ -2,7 +2,7 @@
   <div class="flex w-full min-w-[520px] flex-col gap-3">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Subject</mat-label>
-      <input matInput [(ngModel)]="editor.actionFor(rule).subject" />
+      <input #subjectInput matInput [(ngModel)]="editor.actionFor(rule).subject" />
       <button mat-icon-button matSuffix [matMenuTriggerFor]="subjectVariableMenu">
         <mat-icon>add_circle</mat-icon>
       </button>
@@ -11,7 +11,7 @@
       @for (variable of editor.emailVariables; track variable.token) {
         <button
           mat-menu-item
-          (click)="editor.insertActionVariable(rule, 'subject', variable.token)"
+          (click)="editor.insertActionVariable(rule, 'subject', variable.token, subjectInput)"
         >
           {{ variable.label }}
         </button>
@@ -30,6 +30,7 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Body</mat-label>
         <textarea
+          #bodyInput
           matInput
           [cdkTextareaAutosize]="true"
           [(ngModel)]="editor.actionFor(rule).body"
@@ -56,7 +57,10 @@
     </div>
     <mat-menu #bodyVariableMenu="matMenu">
       @for (variable of editor.emailVariables; track variable.token) {
-        <button mat-menu-item (click)="editor.insertActionVariable(rule, 'body', variable.token)">
+        <button
+          mat-menu-item
+          (click)="editor.insertActionVariable(rule, 'body', variable.token, bodyInput)"
+        >
           {{ variable.label }}
         </button>
       }
@@ -67,7 +71,7 @@
   <div class="flex w-full min-w-[520px] flex-col gap-3">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Subject</mat-label>
-      <input matInput [(ngModel)]="editor.actionFor(rule).subject" />
+      <input #subjectInputView matInput [(ngModel)]="editor.actionFor(rule).subject" />
       <button mat-icon-button matSuffix [matMenuTriggerFor]="subjectVariableMenu">
         <mat-icon>add_circle</mat-icon>
       </button>
@@ -76,7 +80,7 @@
       @for (variable of editor.emailVariables; track variable.token) {
         <button
           mat-menu-item
-          (click)="editor.insertActionVariable(rule, 'subject', variable.token)"
+          (click)="editor.insertActionVariable(rule, 'subject', variable.token, subjectInputView)"
         >
           {{ variable.label }}
         </button>
@@ -97,6 +101,7 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Body</mat-label>
         <textarea
+          #bodyInputView
           matInput
           [cdkTextareaAutosize]="true"
           [(ngModel)]="editor.actionFor(rule).body"
@@ -123,7 +128,10 @@
     </div>
     <mat-menu #bodyVariableMenu="matMenu">
       @for (variable of editor.emailVariables; track variable.token) {
-        <button mat-menu-item (click)="editor.insertActionVariable(rule, 'body', variable.token)">
+        <button
+          mat-menu-item
+          (click)="editor.insertActionVariable(rule, 'body', variable.token, bodyInputView)"
+        >
           {{ variable.label }}
         </button>
       }

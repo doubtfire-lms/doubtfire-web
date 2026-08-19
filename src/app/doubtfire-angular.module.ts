@@ -338,6 +338,7 @@ import {CommunicationImportModalComponent} from './units/states/edit/directives/
 import {CommunicationScheduleModalComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedule-modal.component';
 import {CommunicationSchedulesComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedules.component';
 import {CommunicationConditionsComponent} from './units/states/edit/directives/unit-communications-editor/conditions/communication-conditions.component';
+import {TaskStatusSelectComponent} from './units/states/edit/directives/unit-communications-editor/task-status-select/task-status-select.component';
 import {UnitCommunicationsEditorComponent} from './units/states/edit/directives/unit-communications-editor/unit-communications-editor.component';
 import {UnitContentEditorComponent} from './units/states/edit/directives/unit-content-editor/unit-content-editor.component';
 import {
@@ -664,6 +665,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     EmailStaffActionComponent,
     EmailStudentActionComponent,
     TaskCommentActionComponent,
+    TaskStatusSelectComponent,
     UnitCommunicationsEditorComponent,
     UnitContentEditorComponent,
     TutorialsComponent,
