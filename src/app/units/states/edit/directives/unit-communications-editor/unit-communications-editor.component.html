@@ -38,11 +38,16 @@
                   <div class="text-black/30">
                     {{ node.rule?.operator === 'and' ? 'All conditions' : 'Any condition' }}
                   </div>
-                  @if (isPreviewLoading(node.rule!)) {
-                    <mat-spinner class="my-1" diameter="16"></mat-spinner>
-                  } @else {
-                    <div class="text-black/70">{{ studentsTabLabel(node.rule!) }}</div>
-                  }
+                  <div class="flex items-center gap-2 text-black/70">
+                    Students:
+                    @if (isPreviewLoading(node.rule!)) {
+                      <mat-spinner class="my-1" diameter="16"></mat-spinner>
+                    } @else if (hasPreview(node.rule!)) {
+                      <span>{{ studentsCountLabel(node.rule!) }}</span>
+                    } @else {
+                      <span class="text-black/30">&mdash;</span>
+                    }
+                  </div>
                 </div>
               </button>
               <button
@@ -248,7 +253,7 @@
 
                     @if (isPreviewLoading(rule)) {
                       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                    } @else if (previewLoaded[rule.id]) {
+                    } @else if (hasPreview(rule)) {
                       <div class="font-medium">
                         Selected for {{ rule.name }} ({{ studentsFor(rule).length }})
                       </div>

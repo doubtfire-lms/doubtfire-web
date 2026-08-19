@@ -713,12 +713,24 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return !!this.previewLoading[rule.id];
   }
 
+  hasPreview(rule: CommunicationRule): boolean {
+    return !!this.previewLoaded[rule.id];
+  }
+
   availableStudentsForRule(rule: CommunicationRule): number {
     return this.previewAvailable[rule.id] ?? this.eligibleStudentCount;
   }
 
   studentsTabLabel(rule: CommunicationRule): string {
-    return `Students (${this.studentsFor(rule).length}/${this.availableStudentsForRule(rule)})`;
+    if (!this.hasPreview(rule)) {
+      return 'Students';
+    }
+
+    return `Students (${this.studentsCountLabel(rule)})`;
+  }
+
+  studentsCountLabel(rule: CommunicationRule): string {
+    return `${this.studentsFor(rule).length}/${this.availableStudentsForRule(rule)}`;
   }
 
   operatorsFor(conditionType: string): string[] {
@@ -1100,6 +1112,13 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.previewLoaded = {};
     this.previewAvailable = {};
 
+    // Only this set's rules are pending -- every other rule in the tree drops
+    // back to a bare "Students" label rather than a stale count.
+    this.previewLoading = {};
+    this.rules.forEach((rule) => {
+      this.previewLoading[rule.id] = true;
+    });
+
     const generation = this.previewGeneration;
     this.setPreviewLoading = true;
     this.setPreviewSubscription = this.setService.getForUnitById(this.unit.id, set.id).subscribe({
@@ -1113,6 +1132,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       },
       error: (error) => {
         this.setPreviewLoading = false;
+        this.rules.forEach((rule) => {
+          this.previewLoading[rule.id] = false;
+        });
         this.showError(error);
       },
     });
