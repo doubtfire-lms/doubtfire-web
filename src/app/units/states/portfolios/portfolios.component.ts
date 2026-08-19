@@ -1,7 +1,15 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {BehaviorSubject, Observable, Subscription, distinctUntilChanged, map} from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  distinctUntilChanged,
+  finalize,
+  first,
+  map,
+} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
@@ -159,15 +167,26 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   }
 
   private loadStudents(): void {
-    this.projectService.loadStudents(this.unit, false).subscribe({
-      next: () => {
-        this.loadingStudents = false;
-      },
-      error: (error) => {
-        this.alertService.error(`Failed to load unit: ${error}`, 6000);
-        this.router.navigateByUrl('/home');
-      },
-    });
+    const unit = this.unit;
+
+    // Students already in the cache can be shown while the current details load, but they may
+    // have been cached in another view minutes ago - so always ask the server for them again.
+    this.loadingStudents = unit.activeStudents.length === 0;
+    this.projectService
+      .loadStudents(unit, false, true)
+      .pipe(
+        first(),
+        finalize(() => {
+          if (this.unit === unit) {
+            this.loadingStudents = false;
+          }
+        }),
+      )
+      .subscribe({
+        error: (error) => {
+          this.alertService.error(`Failed to load students: ${error}`, 6000);
+        },
+      });
   }
 
   private updatePortfolioListFiltersFromQueryParams(params: ParamMap): void {

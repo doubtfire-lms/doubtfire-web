@@ -1,6 +1,6 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable, tap} from 'rxjs';
+import {Observable, shareReplay, switchMap, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -572,9 +572,24 @@ export class Unit extends Entity {
       );
   }
 
-  public refreshStudents(includeWithdrawnStudents: boolean = false) {
+  public refreshStudents(includeWithdrawnStudents: boolean = false): Observable<Project[]> {
     const projectService: ProjectService = AppInjector.get(ProjectService);
-    projectService.loadStudents(this, includeWithdrawnStudents, true);
+    const alerts = AppInjector.get(AlertService);
+    // loadStudents asks for either the enrolled or the withdrawn students, so both are
+    // needed to refresh the whole cohort.
+    const enrolled = projectService.loadStudents(this, false, true);
+    const result = (
+      includeWithdrawnStudents
+        ? enrolled.pipe(switchMap(() => projectService.loadStudents(this, true, true)))
+        : enrolled
+    ).pipe(shareReplay({bufferSize: 1, refCount: false}));
+
+    // Subscribe here so that the refresh runs even when the caller ignores the result.
+    result.subscribe({
+      error: (message) => alerts.error(message, 6000),
+    });
+
+    return result;
   }
 
   public findProjectForUsername(username: string): Project {

@@ -114,10 +114,11 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateSuggestions();
     this.updateDataSource(true);
 
-    // Reveal cached students right away
+    // Students already in the cache can be shown while the current details load, but they may
+    // have been cached in another view minutes ago - so always ask the server for them again.
     this.loadingStudents = unit.activeStudents.length === 0;
     this.studentLoadSubscription = this.projectService
-      .loadStudents(unit)
+      .loadStudents(unit, false, true)
       .pipe(
         first(),
         finalize(() => {
