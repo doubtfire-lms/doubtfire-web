@@ -327,6 +327,7 @@ import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
+import {UnitTutorialModalComponent} from './units/modals/unit-tutorial-modal/unit-tutorial-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
@@ -473,6 +474,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     EngagementDetailDialogComponent,
     ProgressDashboardComponent,
     UnitStudentEnrolmentModalComponent,
+    UnitTutorialModalComponent,
     AboutDoubtfireModalContent,
     D2lUnitDetailsFormComponent,
     D2lTransferComponent,
