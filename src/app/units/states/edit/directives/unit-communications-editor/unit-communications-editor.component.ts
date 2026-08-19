@@ -1,4 +1,4 @@
-import {NestedTreeControl} from '@angular/cdk/tree';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,8 +9,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {MatTreeNestedDataSource} from '@angular/material/tree';
-import {Subscription, catchError, concat, defer, of, tap} from 'rxjs';
+import {Subscription, catchError, concat, defer, forkJoin, of, tap} from 'rxjs';
 import {
   Campus,
   CampusService,
@@ -41,15 +40,6 @@ import {
   CommunicationScheduleModalComponent,
   CommunicationScheduleModalData,
 } from './communication-schedule-modal/communication-schedule-modal.component';
-
-interface CommunicationTreeNode {
-  type: 'set' | 'rule';
-  id: number;
-  label: string;
-  set?: CommunicationSet;
-  rule?: CommunicationRule;
-  children?: CommunicationTreeNode[];
-}
 
 @Component({
   selector: 'f-unit-communications-editor',
@@ -192,11 +182,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   editingRuleNameId?: number;
   setNameDraft = '';
   ruleNameDraft = '';
-  readonly treeControl: NestedTreeControl<CommunicationTreeNode> = new NestedTreeControl(
-    (node) => node.children,
-  );
-  readonly treeDataSource: MatTreeNestedDataSource<CommunicationTreeNode> =
-    new MatTreeNestedDataSource();
   private expandedSetIds: Set<number> = new Set();
 
   private subscriptions: Subscription[] = [];
@@ -292,7 +277,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
           matchingSet.name = updated.name;
         }
         this.cancelEditSetName();
-        this.rebuildTree();
       },
       error: (error) => this.showError(error),
     });
@@ -371,7 +355,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     } else {
       this.rules = [];
       this.selectedRuleId = undefined;
-      this.rebuildTree();
     }
   }
 
@@ -400,11 +383,52 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         set.rules = this.rules;
         this.selectedRuleId = rule.id;
         this.expandedSetIds.add(set.id);
-        this.rebuildTree();
         this.refreshPreview(rule);
       },
       error: (error) => this.showError(error),
     });
+  }
+
+  /**
+   * Order decides which rule claims a student first, but not what each rule
+   * matches on its own -- the cached matches stay valid, so no refetch.
+   */
+  dropRule(set: CommunicationSet, event: CdkDragDrop<CommunicationRule[]>): void {
+    const rules = set.rules ?? [];
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+
+    const previousOrder = [...rules];
+    moveItemInArray(rules, event.previousIndex, event.currentIndex);
+
+    const moved = rules.filter((rule, index) => rule.position !== index);
+    rules.forEach((rule, index) => (rule.position = index));
+    this.applyRuleOrder(set, rules);
+
+    if (moved.length === 0) {
+      return;
+    }
+
+    forkJoin(
+      moved.map((rule) =>
+        this.ruleService.updateForUnit(this.unit.id, rule.id, {position: rule.position}),
+      ),
+    ).subscribe({
+      error: (error) => {
+        previousOrder.forEach((rule, index) => (rule.position = index));
+        this.applyRuleOrder(set, previousOrder);
+        this.showError(error);
+      },
+    });
+  }
+
+  private applyRuleOrder(set: CommunicationSet, rules: CommunicationRule[]): void {
+    set.rules = rules;
+    if (set.id === this.selectedSetId) {
+      this.rules = rules;
+      this.recomputeAllocations();
+    }
   }
 
   deleteRule(rule: CommunicationRule): void {
@@ -418,7 +442,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
           this.selectedRuleId = this.rules[0]?.id;
         }
         this.recomputeAllocations();
-        this.rebuildTree();
       },
       error: (error) => this.showError(error),
     });
@@ -486,7 +509,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
             set.rules = this.rules;
           }
           this.cancelEditRuleName();
-          this.rebuildTree();
         },
         error: (error) => this.showError(error),
       });
@@ -653,28 +675,21 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.selectedRuleId = rule.id;
   }
 
-  hasTreeChild = (_: number, node: CommunicationTreeNode): boolean => node.type === 'set';
-
-  isSelectedSetNode(node: CommunicationTreeNode): boolean {
-    return node.type === 'set' && node.id === this.selectedSetId;
+  isSetExpanded(set: CommunicationSet): boolean {
+    return this.expandedSetIds.has(set.id);
   }
 
-  isSelectedRuleNode(node: CommunicationTreeNode): boolean {
-    return node.type === 'rule' && node.id === this.selectedRuleId;
+  isSelectedRule(rule: CommunicationRule): boolean {
+    return rule.id === this.selectedRuleId;
   }
 
-  toggleSetNode(node: CommunicationTreeNode, event?: Event): void {
+  toggleSet(set: CommunicationSet, event?: Event): void {
     event?.stopPropagation();
-    if (!node.set) {
-      return;
-    }
 
-    if (this.treeControl.isExpanded(node)) {
-      this.treeControl.collapse(node);
-      this.expandedSetIds.delete(node.set.id);
+    if (this.isSetExpanded(set)) {
+      this.expandedSetIds.delete(set.id);
     } else {
-      this.treeControl.expand(node);
-      this.expandedSetIds.add(node.set.id);
+      this.expandedSetIds.add(set.id);
     }
   }
 
@@ -1006,7 +1021,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         if (this.selectedSetId) {
           this.expandedSetIds.add(this.selectedSetId);
         }
-        this.rebuildTree();
         this.selectSet();
         this.loading = false;
       },
@@ -1252,7 +1266,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     }
 
     this.eligibleStudentCount = setResponse.eligible_student_count ?? this.eligibleStudentCount;
-    this.rebuildTree();
   }
 
   private sampleStudentForRule(
@@ -1513,28 +1526,5 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   private newScheduleClientKey(): string {
     return `schedule-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-  }
-
-  private rebuildTree(): void {
-    const treeData = this.sets.map((set) => ({
-      type: 'set' as const,
-      id: set.id,
-      label: set.name,
-      set,
-      children: (set.rules ?? []).map((rule) => ({
-        type: 'rule' as const,
-        id: rule.id,
-        label: rule.name,
-        set,
-        rule,
-      })),
-    }));
-
-    this.treeDataSource.data = treeData;
-    treeData.forEach((node) => {
-      if (this.expandedSetIds.has(node.id) || node.id === this.selectedSetId) {
-        this.treeControl.expand(node);
-      }
-    });
   }
 }
