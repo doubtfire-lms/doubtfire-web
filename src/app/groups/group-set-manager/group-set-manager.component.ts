@@ -1,4 +1,11 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable, map, startWith} from 'rxjs';
 import {Group, GroupSet, Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
@@ -12,7 +19,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class GroupSetManagerComponent implements OnInit {
+export class GroupSetManagerComponent implements OnInit, OnChanges {
   @Input() project: Project;
   @Input() unit: Unit;
   @Input() selectedGroupSet: GroupSet;
@@ -37,6 +44,23 @@ export class GroupSetManagerComponent implements OnInit {
       startWith(''),
       map((value) => this._filter(value)),
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Groups belong to a group set within a unit, so a selected group cannot outlive
+    // a change to either of them.
+    if (changes['unit'] || changes['selectedGroupSet']) {
+      // A rename in progress has already been applied to the cached group, so put it back
+      // before letting go of it.
+      if (this.editingGroupName && this.selectedGroup) {
+        this.selectedGroup.name = this.originalGroupName;
+      }
+
+      this.selectedGroup = null;
+      this.projects = [];
+      this.editingGroupName = false;
+      this.control.setValue('');
+    }
   }
 
   get groupSelectHandler() {

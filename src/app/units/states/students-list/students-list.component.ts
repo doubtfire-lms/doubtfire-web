@@ -11,7 +11,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, Subscription, finalize, first, of} from 'rxjs';
+import {Observable, Subscription, distinctUntilChanged, finalize, first, map} from 'rxjs';
 import {
   Project,
   ProjectService,
@@ -55,6 +55,8 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   unit: Unit;
 
   private subscriptions: Subscription[] = [];
+  private studentCacheSubscription: Subscription;
+  private studentLoadSubscription: Subscription;
   public sortState: Sort = {active: 'name', direction: 'asc'};
 
   constructor(
@@ -67,39 +69,14 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
+    // The route reuses this component when switching between units, so follow the resolved
+    // unit rather than reading it once from the route snapshot.
+    const unit$ = this.unit$ ?? this.route.parent.data.pipe(map((data) => data.unit as Unit));
+
     this.subscriptions.push(
-      this.unit$?.pipe(first()).subscribe((unit) => {
-        if (!unit) {
-          this.loadingStudents = false;
-          return;
-        }
-
-        this.unit = unit;
-        this.staffFilter = unit.myRole === 'Tutor' ? 'mine' : 'all';
-
-        // Reveal cached students right away
-        this.loadingStudents = this.unit.activeStudents.length === 0;
-
-        this.subscriptions.push(
-          this.unit.studentCache.values.subscribe(() => {
-            this.updateSuggestions();
-            this.updateDataSource();
-          }),
-        );
-
-        this.updateSuggestions();
-        this.updateDataSource();
-        this.projectService
-          .loadStudents(this.unit)
-          .pipe(
-            first(),
-            finalize(() => {
-              this.loadingStudents = false;
-            }),
-          )
-          .subscribe();
-      }),
+      unit$
+        .pipe(distinctUntilChanged((previous, current) => previous?.id === current?.id))
+        .subscribe((unit) => this.showUnit(unit)),
     );
   }
 
@@ -109,7 +86,48 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.studentCacheSubscription?.unsubscribe();
+    this.studentLoadSubscription?.unsubscribe();
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  private showUnit(unit: Unit): void {
+    this.studentCacheSubscription?.unsubscribe();
+    this.studentLoadSubscription?.unsubscribe();
+    this.unit = unit;
+    this.searchText = '';
+
+    if (!unit) {
+      this.loadingStudents = false;
+      this.filteredSuggestions = [];
+      this.updateDataSource(true);
+      return;
+    }
+
+    this.staffFilter = unit.myRole === 'Tutor' ? 'mine' : 'all';
+
+    this.studentCacheSubscription = unit.studentCache.values.subscribe(() => {
+      this.updateSuggestions();
+      this.updateDataSource();
+    });
+
+    this.updateSuggestions();
+    this.updateDataSource(true);
+
+    // Reveal cached students right away
+    this.loadingStudents = unit.activeStudents.length === 0;
+    this.studentLoadSubscription = this.projectService
+      .loadStudents(unit)
+      .pipe(
+        first(),
+        finalize(() => {
+          // A request for the unit we have moved on from must not clear this unit's skeleton.
+          if (this.unit === unit) {
+            this.loadingStudents = false;
+          }
+        }),
+      )
+      .subscribe();
   }
 
   public onSearchChange(): void {
