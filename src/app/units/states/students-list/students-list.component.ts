@@ -175,7 +175,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
     const suggestions = Array.from(new Set(this.unit?.studentFilterTypeAheadData ?? []));
 
     this.filteredSuggestions = suggestions
-      .filter((item) => !searchValue || item.toLowerCase().includes(searchValue))
+      .filter((item) => !searchValue || item?.toLowerCase().includes(searchValue))
       .slice(0, 8);
   }
 
@@ -199,14 +199,8 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return [...(this.unit?.activeStudents ?? [])]
       .filter((project) => (this.staffFilter === 'mine' ? project.hasTutor(currentUser) : true))
-      .filter((project) => (searchValue ? this.matchesSearch(project, searchValue) : true))
+      .filter((project) => (searchValue ? project.matches(searchValue) : true))
       .sort((a, b) => this.compareProjects(a, b));
-  }
-
-  private matchesSearch(project: Project, searchValue: string): boolean {
-    return (
-      project.matches(searchValue) || project.student.username?.toLowerCase().includes(searchValue)
-    );
   }
 
   private compareProjects(a: Project, b: Project): number {
@@ -232,9 +226,9 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   private sortValue(project: Project, active: string): number | string {
     switch (active) {
       case 'username':
-        return project.student.username?.toLowerCase() || '';
+        return project.student?.username?.toLowerCase() || '';
       case 'name':
-        return project.student.name?.toLowerCase() || '';
+        return project.student?.name?.toLowerCase() || '';
       case 'stats':
         return project.orderScale ?? 0;
       case 'grade':
@@ -248,7 +242,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
       case 'tutorial':
         return project.shortTutorialDescription().toLowerCase();
       default:
-        return project.student.name?.toLowerCase() || '';
+        return project.student?.name?.toLowerCase() || '';
     }
   }
 
@@ -266,9 +260,9 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private csvRow(project: Project): string[] {
     const row = [
-      project.student.username || '',
-      project.student.name || '',
-      project.student.email || '',
+      project.student?.username || '',
+      project.student?.name || '',
+      project.student?.email || '',
       String(project.portfolioStatus ?? ''),
     ];
 

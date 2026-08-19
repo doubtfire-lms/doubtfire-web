@@ -10,21 +10,57 @@ describe('StudentsListComponent', () => {
     unit.studentCache.add(enrolledProject);
     unit.studentCache.add(withdrawnProject);
 
-    const component = new StudentsListComponent(
-      {} as never,
-      {} as never,
-      {} as never,
-      {currentUser: new User()} as never,
-      {} as never,
-      {} as never,
-    );
-    component.unit = unit;
+    const component = buildComponent(unit);
 
     expect(component['filteredProjects']()).toEqual([enrolledProject]);
     expect(unit.studentFilterTypeAheadData).toContain(enrolledProject.student.name);
     expect(unit.studentFilterTypeAheadData).not.toContain(withdrawnProject.student.name);
   });
+
+  it('searches over students with incomplete details', () => {
+    const unit = new Unit();
+    const noEmail = buildProject(unit, 1, true, 'Ann');
+    noEmail.student.email = null;
+    const noLastName = buildProject(unit, 2, true, 'Bob');
+    noLastName.student.lastName = null;
+    const noStudent = buildProject(unit, 3, true, 'Cat');
+    noStudent.student = undefined;
+    unit.studentCache.add(noEmail);
+    unit.studentCache.add(noLastName);
+    unit.studentCache.add(noStudent);
+
+    const component = buildComponent(unit);
+    component.searchText = 'bob';
+
+    expect(component['filteredProjects']()).toEqual([noLastName]);
+  });
+
+  it('suggests students with incomplete details without failing', () => {
+    const unit = new Unit();
+    const noUsername = buildProject(unit, 1, true, 'Ann');
+    noUsername.student.username = undefined;
+    unit.studentCache.add(noUsername);
+
+    const component = buildComponent(unit);
+    component.searchText = 'ann';
+    component['updateSuggestions']();
+
+    expect(component.filteredSuggestions).toEqual([noUsername.student.name]);
+  });
 });
+
+function buildComponent(unit: Unit): StudentsListComponent {
+  const component = new StudentsListComponent(
+    {} as never,
+    {} as never,
+    {} as never,
+    {currentUser: new User()} as never,
+    {} as never,
+    {} as never,
+  );
+  component.unit = unit;
+  return component;
+}
 
 function buildProject(unit: Unit, id: number, enrolled: boolean, firstName: string): Project {
   const student = new User();

@@ -24,9 +24,6 @@ export class Campus extends Entity {
    * @param matchText the text to match
    */
   public matches(matchText: string): boolean {
-    return (
-      this.name.toLowerCase().indexOf(matchText) >= 0 ||
-      this.abbreviation.toLowerCase().indexOf(matchText) >= 0
-    );
+    return [this.name, this.abbreviation].some((value) => value?.toLowerCase().includes(matchText));
   }
 }

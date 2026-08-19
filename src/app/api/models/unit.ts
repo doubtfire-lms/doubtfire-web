@@ -578,7 +578,7 @@ export class Unit extends Entity {
   }
 
   public findProjectForUsername(username: string): Project {
-    return this.students.find((s) => s.student.username === username);
+    return this.students.find((s) => s.student?.username === username);
   }
 
   public get groupSets(): readonly GroupSet[] {
@@ -600,8 +600,7 @@ export class Unit extends Entity {
 
   private addStudentTypeAheadData(students: readonly Project[], appendTo: string[]): void {
     students.forEach((project) => {
-      appendTo.push(project.student.name);
-      appendTo.push(project.student.username);
+      appendTo.push(project.student?.name, project.student?.username);
     });
   }
 
@@ -617,7 +616,9 @@ export class Unit extends Entity {
 
     this.addStudentTypeAheadData(this.activeStudents, result);
 
-    return result;
+    // Students and tutorials can be missing any of these details, so drop the gaps
+    // rather than offering blank suggestions.
+    return result.filter(Boolean);
   }
 
   public studentsForGroupTypeAhead(group: Group): Project[] {

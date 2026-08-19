@@ -23,13 +23,13 @@ export class GroupSetManagerComponent implements OnInit {
 
   editingGroupName = false;
 
-  control = new FormControl('');
+  readonly control = new FormControl('');
   projects: Project[] = [];
   filteredProjects: Observable<Project[]>;
 
   constructor(
-    private groupService: GroupService,
-    private alertService: AlertService,
+    private readonly groupService: GroupService,
+    private readonly alertService: AlertService,
   ) {}
 
   ngOnInit(): void {
@@ -44,7 +44,7 @@ export class GroupSetManagerComponent implements OnInit {
   }
 
   displayFn(project: Project): string {
-    return project && project.student.name ? project.student.name : '';
+    return project?.student?.name ?? '';
   }
 
   newGroupSelected(group: Group) {
@@ -68,7 +68,7 @@ export class GroupSetManagerComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.projects.filter(
       (project) =>
-        project.student.name.toLowerCase().includes(filterValue.toLowerCase()) && // Find by name
+        project.student?.name?.toLowerCase().includes(filterValue) && // Find by name
         !this.selectedGroup.projects.find((p) => project.id === p.id), // Not already assigned to the group
     );
   }
