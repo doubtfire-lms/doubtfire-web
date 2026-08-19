@@ -228,7 +228,7 @@ export class Task extends Entity {
    */
   public matches(matchText: string): boolean {
     return (
-      TaskStatus.STATUS_LABELS.get(this.status)?.toLowerCase().indexOf(matchText) >= 0 ||
+      TaskStatus.matchesSearch(this.status, matchText) ||
       this.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
       this.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
       (this.hasExtensions && 'extension'.indexOf(matchText) == 0) ||
