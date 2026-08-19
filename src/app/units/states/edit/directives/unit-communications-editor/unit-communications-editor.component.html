@@ -38,7 +38,11 @@
                   <div class="text-black/30">
                     {{ node.rule?.operator === 'and' ? 'All conditions' : 'Any condition' }}
                   </div>
-                  <div class="text-black/70">{{ studentsTabLabel(node.rule!) }}</div>
+                  @if (isPreviewLoading(node.rule!)) {
+                    <mat-spinner class="my-1" diameter="16"></mat-spinner>
+                  } @else {
+                    <div class="text-black/70">{{ studentsTabLabel(node.rule!) }}</div>
+                  }
                 </div>
               </button>
               <button
@@ -217,13 +221,24 @@
                   </div>
                 </mat-tab>
 
-                <mat-tab [label]="studentsTabLabel(rule)">
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    @if (isPreviewLoading(rule)) {
+                      <span class="flex items-center gap-2">
+                        <mat-spinner diameter="16"></mat-spinner>
+                        Students
+                      </span>
+                    } @else {
+                      {{ studentsTabLabel(rule) }}
+                    }
+                  </ng-template>
+
                   <div class="flex flex-col gap-4 p-6">
                     <div class="flex justify-end">
                       <button
                         color="primary"
                         mat-stroked-button
-                        [disabled]="setPreviewLoading"
+                        [disabled]="isPreviewLoading(rule)"
                         (click)="refreshPreview(rule)"
                       >
                         <mat-icon>refresh</mat-icon>
@@ -231,7 +246,7 @@
                       </button>
                     </div>
 
-                    @if (setPreviewLoading || previewLoading[rule.id]) {
+                    @if (isPreviewLoading(rule)) {
                       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                     } @else if (previewLoaded[rule.id]) {
                       <div class="font-medium">

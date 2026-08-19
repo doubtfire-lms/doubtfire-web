@@ -43,13 +43,13 @@ export class CommunicationRuleService {
     return this.httpClient.delete<void>(`${this.endpoint(unitId)}/${ruleId}`);
   }
 
+  /** Students matched by this rule alone, ignoring the rules ahead of it. */
   public previewForUnit(
     unitId: number,
     ruleId: number,
   ): Observable<CommunicationRulePreviewResponse> {
-    return this.httpClient.post<CommunicationRulePreviewResponse>(
+    return this.httpClient.get<CommunicationRulePreviewResponse>(
       `${this.endpoint(unitId)}/${ruleId}/preview`,
-      {},
     );
   }
 
