@@ -187,7 +187,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   /** Bumped on each set load, so stale responses are dropped. */
   private previewGeneration = 0;
   private setPreviewSubscription?: Subscription;
-  private readonly ruleRefreshSubscriptions = new Map<number, Subscription>();
+  private readonly ruleRefreshSubscriptions: Map<number, Subscription> = new Map();
   editingSetNameId?: number;
   editingRuleNameId?: number;
   setNameDraft = '';
@@ -1190,7 +1190,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
    * earlier rule took. Rules still loading claim nobody until their matches land.
    */
   private recomputeAllocations(): void {
-    const claimed = new Set<number>();
+    const claimed: Set<number> = new Set();
 
     this.rules.forEach((rule) => {
       this.previewAvailable[rule.id] = Math.max(0, this.eligibleStudentCount - claimed.size);
