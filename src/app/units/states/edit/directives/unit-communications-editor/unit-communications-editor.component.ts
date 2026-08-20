@@ -364,7 +364,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     try {
       text = await navigator.clipboard.readText();
     } catch {
-      this.alerts.error('Could not read the clipboard. Allow clipboard access and try again.', 6000);
+      this.alerts.error(
+        'Could not read the clipboard. Allow clipboard access and try again.',
+        6000,
+      );
       return undefined;
     }
 
