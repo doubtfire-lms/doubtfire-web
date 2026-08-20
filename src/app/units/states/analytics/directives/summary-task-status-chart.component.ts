@@ -264,6 +264,34 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     }, {} as TaskCodeStats);
   }
 
+  private isPreWeekZeroSnapshot(snapshot: TaskCompletionSnapshot): boolean {
+    const snapshotDate = new Date(snapshot.snapshot_date);
+    if (Number.isNaN(snapshotDate.valueOf())) {
+      return false;
+    }
+
+    return (this.unit?.weekNumber(snapshotDate) ?? 0) < 0;
+  }
+
+  private hasOnlyNotStartedStatuses(snapshot: TaskCompletionSnapshot): boolean {
+    const aggregatedTaskStats = this.aggregateAllCampuses(snapshot.stats);
+    const taskStatusEntries = Object.values(aggregatedTaskStats);
+
+    if (taskStatusEntries.length === 0) {
+      return false;
+    }
+
+    return taskStatusEntries.every((taskStatusCounts) =>
+      Object.entries(taskStatusCounts).every(
+        ([status, value]) => status === 'not_started' || Number(value) === 0,
+      ),
+    );
+  }
+
+  private shouldIncludeSnapshot(snapshot: TaskCompletionSnapshot): boolean {
+    return !(this.isPreWeekZeroSnapshot(snapshot) && this.hasOnlyNotStartedStatuses(snapshot));
+  }
+
   onSelect(): void {}
 
   loadRecentSnapshot(): void {
@@ -280,7 +308,8 @@ export class SummaryTaskStatusChartComponent implements OnInit {
               acc.push(snapshot);
             }
             return acc;
-          }, [] as TaskCompletionSnapshot[]);
+          }, [] as TaskCompletionSnapshot[])
+          .filter((snapshot) => this.shouldIncludeSnapshot(snapshot));
         this.snapshots = [...this.snapshots].reverse();
         this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
         this.refreshData();
