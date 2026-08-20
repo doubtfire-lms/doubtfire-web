@@ -45,6 +45,7 @@ export class CommunicationCondition extends Entity {
   tutorial_stream_id?: number;
   campus_id?: number;
   submitted_portfolio?: boolean;
+  unresolved?: boolean;
 
   constructor(json?: Partial<CommunicationCondition>) {
     super();
@@ -53,6 +54,7 @@ export class CommunicationCondition extends Entity {
 }
 
 export interface CommunicationRulePreviewStudent {
+  project_id: number;
   first_name?: string;
   last_name?: string;
   preferred_name?: string;
@@ -67,16 +69,14 @@ export interface CommunicationRulePreviewStudent {
   last_viewed_at?: string;
 }
 
-export interface CommunicationRulePreviewAllocation {
+/** Every student a rule matches on its own; earlier rules are subtracted client side. */
+export interface CommunicationRulePreviewResponse {
   rule_id: number;
   rule_name: string;
   position: number;
+  eligible_student_count: number;
+  evaluated_at: string;
   students: CommunicationRulePreviewStudent[];
-}
-
-export interface CommunicationRulePreviewResponse {
-  target_rule_id: number;
-  allocations: CommunicationRulePreviewAllocation[];
 }
 
 export interface CommunicationSetPreviewResponse {
@@ -84,9 +84,10 @@ export interface CommunicationSetPreviewResponse {
   unit_id: number;
   name: string;
   active: boolean;
+  executable: boolean;
+  eligible_student_count: number;
   schedules?: Partial<CommunicationSetSchedule>[];
   rules: Partial<CommunicationRule>[];
-  previews: CommunicationRulePreviewResponse[];
 }
 
 export class CommunicationAction extends Entity {
@@ -99,6 +100,7 @@ export class CommunicationAction extends Entity {
   email_tutors?: boolean;
   email_convenors?: boolean;
   target_grade?: number;
+  unresolved?: boolean;
 
   constructor(json?: Partial<CommunicationAction>) {
     super();
@@ -114,6 +116,7 @@ export class CommunicationRule extends Entity {
   position: number;
   active: boolean;
   send_log_to_convenors: boolean;
+  unresolved?: boolean;
   conditions: CommunicationCondition[] = [];
   actions: CommunicationAction[] = [];
 
@@ -132,6 +135,7 @@ export class CommunicationSet extends Entity {
   unit_id: number;
   name: string;
   active: boolean;
+  executable?: boolean;
   schedules: CommunicationSetSchedule[] = [];
   rules: CommunicationRule[] = [];
 
