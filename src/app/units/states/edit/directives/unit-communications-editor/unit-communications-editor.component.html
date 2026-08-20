@@ -2,12 +2,6 @@
   <div>
     <p>Current unit week: {{ currentUnitWeek <= 0 ? 'Not started' : currentUnitWeek }}</p>
   </div>
-  <div class="flex flex-wrap items-center gap-3">
-    <button color="primary" mat-flat-button (click)="addSet()">
-      <mat-icon>add</mat-icon>
-      Add set
-    </button>
-  </div>
 
   @if (loading) {
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -56,7 +50,14 @@
                       (click)="selectRuleNode(set, rule)"
                     >
                       <div class="min-w-0 text-left">
-                        <div class="truncate font-medium">
+                        <div class="flex items-center gap-1 truncate font-medium">
+                          @if (rule.unresolved) {
+                            <mat-icon
+                              class="!h-4 !w-4 !text-[16px] text-amber-700"
+                              matTooltip="This rule references records that do not exist in this unit"
+                              >warning</mat-icon
+                            >
+                          }
                           Rule {{ rule.position + 1 }}: {{ rule.name }}
                         </div>
                         <div class="text-black/30">
@@ -77,7 +78,7 @@
                     <button
                       color="warn"
                       mat-icon-button
-                      (click)="deleteRule(rule); $event.stopPropagation()"
+                      (click)="confirmDeleteRule(rule); $event.stopPropagation()"
                     >
                       <mat-icon>delete</mat-icon>
                     </button>
@@ -132,8 +133,27 @@
                 <mat-icon>schedule</mat-icon>
                 Add schedule
               </button>
-              <button mat-raised-button (click)="confirmExecuteSet(set)">Execute Set</button>
-              <button color="warn" mat-icon-button (click)="deleteSet(set)">
+              <button mat-stroked-button (click)="importRule(set)">
+                <mat-icon>content_paste</mat-icon>
+                Import rule
+              </button>
+              <button mat-stroked-button (click)="copySet(set)">
+                <mat-icon>content_copy</mat-icon>
+                Copy set
+              </button>
+              <button
+                mat-raised-button
+                [disabled]="set.executable === false"
+                [matTooltip]="
+                  set.executable === false
+                    ? 'Some rules reference records that do not exist in this unit'
+                    : ''
+                "
+                (click)="confirmExecuteSet(set)"
+              >
+                Execute Set
+              </button>
+              <button color="warn" mat-icon-button (click)="confirmDeleteSet(set)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -177,7 +197,22 @@
                 </div>
 
                 <div class="flex min-w-fit items-center gap-3">
-                  <button mat-raised-button (click)="confirmExecuteRule(rule)">Execute Rule</button>
+                  <button mat-stroked-button (click)="copyRule(rule)">
+                    <mat-icon>content_copy</mat-icon>
+                    Copy rule
+                  </button>
+                  <button
+                    mat-raised-button
+                    [disabled]="set.executable === false"
+                    [matTooltip]="
+                      set.executable === false
+                        ? 'Some rules reference records that do not exist in this unit'
+                        : ''
+                    "
+                    (click)="confirmExecuteRule(rule)"
+                  >
+                    Execute Rule
+                  </button>
                 </div>
               </div>
 
@@ -351,4 +386,14 @@
       }
     </mat-drawer-content>
   </mat-drawer-container>
+</div>
+<div class="mt-4 mb-10 flex flex-wrap items-center gap-3">
+  <button color="primary" mat-flat-button (click)="addSet()">
+    <mat-icon>add</mat-icon>
+    Add set
+  </button>
+  <button mat-stroked-button (click)="importSet()">
+    <mat-icon>content_paste</mat-icon>
+    Import set
+  </button>
 </div>

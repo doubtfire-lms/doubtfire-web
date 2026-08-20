@@ -55,6 +55,22 @@ export class CommunicationRuleService {
     );
   }
 
+  public exportForUnit(unitId: number, ruleId: number): Observable<Record<string, unknown>> {
+    return this.httpClient.get<Record<string, unknown>>(
+      `${this.endpoint(unitId)}/${ruleId}/export`,
+    );
+  }
+
+  public importForSet(
+    unitId: number,
+    setId: number,
+    document: Record<string, unknown>,
+  ): Observable<CommunicationRule> {
+    return this.httpClient
+      .post<Partial<CommunicationRule>>(`${this.setEndpoint(unitId, setId)}/import`, {document})
+      .pipe(map((created) => new CommunicationRule(created)));
+  }
+
   public executeForUnit(unitId: number, ruleId: number): Observable<SidekiqJob> {
     return this.httpClient.post<SidekiqJob>(`${this.endpoint(unitId)}/${ruleId}/execute`, {});
   }

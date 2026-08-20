@@ -45,6 +45,7 @@ export class CommunicationCondition extends Entity {
   tutorial_stream_id?: number;
   campus_id?: number;
   submitted_portfolio?: boolean;
+  unresolved?: boolean;
 
   constructor(json?: Partial<CommunicationCondition>) {
     super();
@@ -83,6 +84,7 @@ export interface CommunicationSetPreviewResponse {
   unit_id: number;
   name: string;
   active: boolean;
+  executable: boolean;
   eligible_student_count: number;
   schedules?: Partial<CommunicationSetSchedule>[];
   rules: Partial<CommunicationRule>[];
@@ -98,6 +100,7 @@ export class CommunicationAction extends Entity {
   email_tutors?: boolean;
   email_convenors?: boolean;
   target_grade?: number;
+  unresolved?: boolean;
 
   constructor(json?: Partial<CommunicationAction>) {
     super();
@@ -113,6 +116,7 @@ export class CommunicationRule extends Entity {
   position: number;
   active: boolean;
   send_log_to_convenors: boolean;
+  unresolved?: boolean;
   conditions: CommunicationCondition[] = [];
   actions: CommunicationAction[] = [];
 
@@ -131,6 +135,7 @@ export class CommunicationSet extends Entity {
   unit_id: number;
   name: string;
   active: boolean;
+  executable?: boolean;
   schedules: CommunicationSetSchedule[] = [];
   rules: CommunicationRule[] = [];
 
