@@ -40,8 +40,6 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   // options
   normalisedCompletionSnapshotXLabel: string = 'Task';
   normalisedCompletionSnapshotYLabel: string = 'Status';
-  weeklyAreaXAxisLabel: string = 'Week';
-  weeklyAreaYAxisLabel: string = 'Records';
 
   colorScheme = {
     domain: [''],
