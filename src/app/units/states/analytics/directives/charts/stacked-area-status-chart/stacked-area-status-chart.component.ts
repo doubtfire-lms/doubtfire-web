@@ -1,5 +1,6 @@
-import {Component, Input} from '@angular/core';
 import {MultiSeries} from '@glitchtip/ng-charts';
+import {Component, Input} from '@angular/core';
+
 @Component({
   selector: 'f-stacked-area-status-chart',
   templateUrl: './stacked-area-status-chart.component.html',

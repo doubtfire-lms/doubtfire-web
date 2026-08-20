@@ -9,9 +9,9 @@ import {
 } from '@angular/core';
 import {filter, map, take} from 'rxjs/operators';
 import {
+  CampusStats,
   TaskCodeStats,
   TaskCompletionSnapshot,
-  TaskStatusEnum,
   TutorialStats,
 } from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
@@ -20,6 +20,13 @@ import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {
+  countStudentsFromSnapshot,
+  formatSnapshotLabel,
+  getTaskStats,
+  shouldIncludeSnapshot,
+  statusMapping,
+} from '../chart-data-helpers';
 
 @Component({
   selector: 'f-normalised-task-status-chart',
@@ -27,6 +34,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   styleUrl: './normalised-task-status-chart.component.scss',
   standalone: false,
 })
+
 export class NormalisedTaskStatusChartComponent implements OnInit {
   @Input() unit: Unit;
 
@@ -39,7 +47,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
 
   // options
   normalisedCompletionSnapshotXLabel: string = 'Task';
-  normalisedCompletionSnapshotYLabel: string = 'Status';
+  normalisedCompletionSnapshotYLabel: string = 'Percentage of Students';
 
   colorScheme = {
     domain: [''],
@@ -54,24 +62,28 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
   }
 
   get selectedSnapshotDate(): string {
-    return this.formatSnapshotLabel(this.selectedSnapshot?.snapshot_date, 'long');
+    return formatSnapshotLabel(this.unit, this.selectedSnapshot?.snapshot_date, 'long');
   }
 
   get firstSnapshotDate(): string {
-    return this.formatSnapshotLabel(this.snapshots[0]?.snapshot_date);
+    return formatSnapshotLabel(this.unit, this.snapshots[0]?.snapshot_date, 'long');
   }
 
   get lastSnapshotDate(): string {
-    return this.formatSnapshotLabel(this.snapshots[this.snapshots.length - 1]?.snapshot_date);
+    return formatSnapshotLabel(
+      this.unit,
+      this.snapshots[this.snapshots.length - 1]?.snapshot_date,
+      'long',
+    );
   }
 
   get snapshotDates(): string[] {
-    return this.snapshots.map((snapshot) => this.formatSnapshotLabel(snapshot.snapshot_date));
+    return this.snapshots.map((snapshot) => formatSnapshotLabel(this.unit, snapshot.snapshot_date));
   }
 
   get snapshotWeeks(): string[] {
     const weeks = this.snapshots.map((snapshot) =>
-      this.formatSnapshotLabel(snapshot.snapshot_date, 'short'),
+      formatSnapshotLabel(this.unit, snapshot.snapshot_date, 'short'),
     );
     return weeks.reduce((acc: string[], week: string) => {
       if (!acc.includes(week)) {
@@ -93,76 +105,19 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
         ? {[this.campusFilter]: this.selectedSnapshot.stats[this.campusFilter]}
         : this.selectedSnapshot.stats;
 
-    const studentCount = Object.values(snapshotData).reduce((acc, campusData) => {
-      const campusStudentCount = Object.values(campusData).reduce((campusAcc, tutorialData) => {
-        const firstTaskStats = Object.values(tutorialData)[0];
-        const tutorialStudentCount = firstTaskStats
-          ? Object.values(firstTaskStats).reduce((acc, count) => acc + count, 0)
-          : 0;
-        return campusAcc + tutorialStudentCount;
-      }, 0);
-      return acc + campusStudentCount;
-    }, 0);
-
-    return studentCount;
+    return countStudentsFromSnapshot(snapshotData);
   }
 
+  // Format the snapshot date for display on the slider tooltip
   formatSnapshotDate = (value: number): string => {
-    return this.formatSnapshotLabel(
+    return formatSnapshotLabel(
+      this.unit,
       this.snapshots[Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax)]
         ?.snapshot_date,
     );
   };
 
-  private formatSnapshotLabel(snapshotDate?: string, format?: string): string {
-    if (!snapshotDate) {
-      return '';
-    }
-
-    const date = new Date(snapshotDate);
-    if (Number.isNaN(date.valueOf())) {
-      return snapshotDate;
-    }
-
-    const weekNumber = this.unit?.weekNumber(date);
-    const dayName = new Intl.DateTimeFormat(undefined, {weekday: 'short'}).format(date);
-
-    if (!format) {
-      return `${dayName} ${date.toLocaleDateString(undefined, {
-        month: 'numeric',
-        day: 'numeric',
-      })}`;
-    } else if (format === 'short') {
-      return `Week ${weekNumber}`;
-    } else if (format === 'long') {
-      return `${date.toLocaleDateString(undefined, {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })} | Week ${weekNumber}`;
-    }
-  }
-
   private autoCaptureAttempted: boolean = false;
-
-  // Order determines the order of the chart legend and series.
-  private readonly statusMapping: TaskStatusEnum[] = [
-    'complete',
-    'assess_in_portfolio',
-    'discuss',
-    'demonstrate',
-    'redo',
-    'fix_and_resubmit',
-    'ready_for_feedback',
-    'working_on_it',
-    'need_help',
-    'attention_required',
-    'time_exceeded',
-    'feedback_exceeded',
-    'fail',
-    'not_started',
-  ];
 
   constructor(
     private taskService: TaskService,
@@ -184,7 +139,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
   ngOnInit(): void {
     this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
 
-    this.colorScheme.domain = this.statusMapping.map(
+    this.colorScheme.domain = statusMapping.map(
       (labels) => this.taskService.statusColors.get(labels) || '#000000',
     );
     this.loadRecentSnapshot();
@@ -203,7 +158,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
 
     this.campuses = Object.keys(selectedSnapshot.stats);
 
-    this.data = this.buildChartData(this.getTaskStats(selectedSnapshot));
+    this.data = this.buildChartData(getTaskStats(selectedSnapshot, this.campusFilter));
     this.weeklyData = this.buildWeeklyChartData(this.snapshots);
     this.hasChartData = this.data.length > 0;
   }
@@ -228,7 +183,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
       })
       .map(([taskDef, counts]) => ({
         name: taskDef,
-        series: this.statusMapping.map((status) => ({
+        series: statusMapping.map((status) => ({
           name: this.taskService.statusLabels.get(status) || status,
           value: counts[status] || 0,
         })),
@@ -239,85 +194,28 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
     const lastSnapshotByWeek: Map<string, TaskCompletionSnapshot> = new Map();
 
     snapshots.forEach((snapshot) => {
-      const weekNumber = this.formatSnapshotLabel(snapshot.snapshot_date, 'short');
+      const weekNumber = formatSnapshotLabel(this.unit, snapshot.snapshot_date, 'short');
       if (weekNumber) {
         lastSnapshotByWeek.set(weekNumber, snapshot);
       }
     });
 
     const snapshotsByWeek = [...lastSnapshotByWeek.values()];
-    return this.statusMapping.map((status) => ({
+    return statusMapping.map((status) => ({
       name: this.taskService.statusLabels.get(status) || status,
       series: snapshotsByWeek.map((snapshot) => {
-        const taskStats = this.getTaskStats(snapshot);
+        const taskStats = getTaskStats(snapshot, this.campusFilter);
         const value = Object.values(taskStats).reduce(
           (total, taskCounts) => total + (taskCounts[status] || 0),
           0,
         );
 
         return {
-          name: this.formatSnapshotLabel(snapshot.snapshot_date, 'short'),
+          name: formatSnapshotLabel(this.unit, snapshot.snapshot_date, 'short'),
           value,
         };
       }),
     }));
-  }
-
-  private getTaskStats(snapshot: TaskCompletionSnapshot): TaskCodeStats {
-    return this.campusFilter !== 'all' && snapshot.stats[this.campusFilter]
-      ? this.aggregateCampusData(snapshot.stats[this.campusFilter])
-      : this.aggregateAllCampuses(snapshot.stats);
-  }
-
-  private mergeTaskCounts(target: TaskCodeStats, source: TaskCodeStats): void {
-    Object.entries(source).forEach(([taskDef, counts]) => {
-      target[taskDef] = target[taskDef] || {};
-      Object.entries(counts).forEach(([status, value]) => {
-        target[taskDef][status] = (target[taskDef][status] || 0) + value;
-      });
-    });
-  }
-
-  private aggregateCampusData(campusData: TutorialStats): TaskCodeStats {
-    return Object.values(campusData).reduce((acc, tutorialData) => {
-      this.mergeTaskCounts(acc, tutorialData);
-      return acc;
-    }, {} as TaskCodeStats);
-  }
-
-  private aggregateAllCampuses(snapshotStats: TaskCompletionSnapshot['stats']): TaskCodeStats {
-    return Object.values(snapshotStats).reduce((acc, campusData) => {
-      this.mergeTaskCounts(acc, this.aggregateCampusData(campusData));
-      return acc;
-    }, {} as TaskCodeStats);
-  }
-
-  private isPreWeekZeroSnapshot(snapshot: TaskCompletionSnapshot): boolean {
-    const snapshotDate = new Date(snapshot.snapshot_date);
-    if (Number.isNaN(snapshotDate.valueOf())) {
-      return false;
-    }
-
-    return (this.unit?.weekNumber(snapshotDate) ?? 0) < 0;
-  }
-
-  private hasOnlyNotStartedStatuses(snapshot: TaskCompletionSnapshot): boolean {
-    const aggregatedTaskStats = this.aggregateAllCampuses(snapshot.stats);
-    const taskStatusEntries = Object.values(aggregatedTaskStats);
-
-    if (taskStatusEntries.length === 0) {
-      return false;
-    }
-
-    return taskStatusEntries.every((taskStatusCounts) =>
-      Object.entries(taskStatusCounts).every(
-        ([status, value]) => status === 'not_started' || Number(value) === 0,
-      ),
-    );
-  }
-
-  private shouldIncludeSnapshot(snapshot: TaskCompletionSnapshot): boolean {
-    return !(this.isPreWeekZeroSnapshot(snapshot) && this.hasOnlyNotStartedStatuses(snapshot));
   }
 
   onSelect(): void {}
@@ -337,7 +235,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
             }
             return acc;
           }, [] as TaskCompletionSnapshot[])
-          .filter((snapshot) => this.shouldIncludeSnapshot(snapshot));
+          .filter((snapshot) => shouldIncludeSnapshot(this.unit, snapshot));
         this.snapshots = [...this.snapshots].reverse();
         this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
         this.refreshData();
