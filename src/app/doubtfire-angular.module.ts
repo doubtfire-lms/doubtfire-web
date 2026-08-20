@@ -3,12 +3,12 @@
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {
+  AreaChartStackedComponent,
   BarVerticalNormalizedComponent,
   GaugeComponent,
   LineChartComponent,
   NumberCardComponent,
   PieChartComponent,
-  AreaChartStackedComponent,
 } from '@glitchtip/ng-charts';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import * as Sentry from '@sentry/angular';
@@ -329,7 +329,8 @@ import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
-import {SummaryTaskStatusChartComponent} from './units/states/analytics/directives/summary-task-status-chart.component';
+import {CompletionStatusChartComponent} from './units/states/analytics/directives/charts/completion-status-chart/completion-status-chart.component';
+import {SummaryTaskStatusChartComponent} from './units/states/analytics/directives/charts/summary-task-status-chart/summary-task-status-chart.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
 import {CommunicationActionsComponent} from './units/states/edit/directives/unit-communications-editor/actions/communication-actions.component';
@@ -647,6 +648,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
     SummaryTaskStatusChartComponent,
+    CompletionStatusChartComponent,
     SubmissionFilesModalComponent,
     TutorNotesComponent,
     TutorNotesViewComponent,
