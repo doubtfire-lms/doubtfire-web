@@ -1,57 +1,44 @@
-<div class="flex flex-col gap-3">
-  <div class="flex flex-grow flex-row items-center gap-3">
-    <mat-checkbox class="basis-1/2" matInput [(ngModel)]="taskDefinition.restrictStatusUpdates">
-      Restrict updates
-    </mat-checkbox>
-    <span class="basis-1/2">
-      This task will be locked once it goes into a staff-allocated status. Students will not be able
-      to resubmit, even if placed on the fix status.
-    </span>
-  </div>
+<div class="flex flex-col">
+  <f-setting-toggle label="Restrict updates" [(checked)]="taskDefinition.restrictStatusUpdates">
+    This task will be locked once it goes into a staff-allocated status. Students will not be able
+    to resubmit, even if placed on the fix status.
+  </f-setting-toggle>
 
-  <div class="flex flex-grow flex-row items-center gap-3">
-    <mat-checkbox
-      class="basis-1/2"
-      matInput
-      [(ngModel)]="taskDefinition.assessInPortfolioOnly"
-      (change)="onToggleAssessInPortfolioOnly()"
-      >Assess in Portfolio Only</mat-checkbox
-    >
-    <span class="basis-1/2">
-      This task cannot be signed off as complete and will only be assessed in the final portfolio.
-      Tutors can leave feedback and return it to the "Working on it" state. Students must then
-      update the status to "Assess in Portfolio" to ensure it's included in their portfolio.
-    </span>
-  </div>
+  <f-setting-toggle
+    class="border-t border-gray-200"
+    label="Assess in Portfolio Only"
+    [(checked)]="taskDefinition.assessInPortfolioOnly"
+    (changed)="onToggleAssessInPortfolioOnly()"
+  >
+    This task cannot be signed off as complete and will only be assessed in the final portfolio.
+    Tutors can leave feedback and return it to the "Working on it" state. Students must then update
+    the status to "Assess in Portfolio" to ensure it's included in their portfolio.
+  </f-setting-toggle>
 
-  <div class="flex flex-grow flex-row items-center gap-3">
-    <mat-checkbox class="basis-1/2" matInput [(ngModel)]="taskDefinition.requiresDiscussion">
-      Requires Discussion
-    </mat-checkbox>
-    <span class="basis-1/2">
-      Tutors cannot mark this task as complete unless it has first been marked as discussed in
-      class.
-    </span>
-  </div>
+  <f-setting-toggle
+    class="border-t border-gray-200"
+    label="Requires Discussion"
+    [(checked)]="taskDefinition.requiresDiscussion"
+  >
+    Tutors cannot mark this task as complete unless it has first been marked as discussed in class.
+  </f-setting-toggle>
 
-  <div class="flex flex-grow flex-row items-center gap-3">
-    <mat-checkbox class="basis-1/2" matInput [(ngModel)]="taskDefinition.isGraded"
-      >Graded</mat-checkbox
-    >
-    <span class="basis-1/2">
-      Provide a grade along with the complete or discuss status. We recommend avoiding this
-      practice.
-    </span>
-  </div>
+  <f-setting-toggle
+    class="border-t border-gray-200"
+    label="Graded"
+    [(checked)]="taskDefinition.isGraded"
+  >
+    Provide a grade along with the complete or discuss status. We recommend avoiding this practice.
+  </f-setting-toggle>
 
-  <div class="flex flex-grow flex-row items-center gap-3">
-    <mat-form-field appearance="outline" class="basis-1/2">
+  <div class="flex w-full border-t border-gray-200 px-2 pb-3 pt-3">
+    <mat-form-field appearance="outline" class="w-full">
       <mat-label>Quality Stars</mat-label>
       <input matInput max="100" min="0" type="number" [(ngModel)]="taskDefinition.maxQualityPts" />
+      <mat-hint>
+        Provide a number of stars alongside the task status. Make sure you have a clear reason for
+        each star within your task description.
+      </mat-hint>
     </mat-form-field>
-    <span class="mb-[22px] basis-1/2"
-      >Provide a number of stars alongside the task status. Make sure you have a clear reason for
-      each star within your task description.</span
-    >
   </div>
 </div>
