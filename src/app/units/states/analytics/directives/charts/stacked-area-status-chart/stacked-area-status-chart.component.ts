@@ -1,12 +1,12 @@
 import {Component, Input} from '@angular/core';
 import {MultiSeries} from '@glitchtip/ng-charts';
 @Component({
-  selector: 'f-completion-status-chart',
-  templateUrl: './completion-status-chart.component.html',
-  styleUrl: './completion-status-chart.component.css',
+  selector: 'f-stacked-area-status-chart',
+  templateUrl: './stacked-area-status-chart.component.html',
+  styleUrl: './stacked-area-status-chart.component.css',
   standalone: false,
 })
-export class CompletionStatusChartComponent {
+export class StackedAreaStatusChartComponent {
   @Input() weeklyData: MultiSeries = [];
   @Input() colorScheme: any = {domain: ['']};
 

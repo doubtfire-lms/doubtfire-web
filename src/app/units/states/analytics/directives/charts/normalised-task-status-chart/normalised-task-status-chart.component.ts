@@ -22,12 +22,12 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-summary-task-status-chart',
-  templateUrl: './summary-task-status-chart.component.html',
-  styleUrl: './summary-task-status-chart.component.scss',
+  selector: 'f-normalised-task-status-chart',
+  templateUrl: './normalised-task-status-chart.component.html',
+  styleUrl: './normalised-task-status-chart.component.scss',
   standalone: false,
 })
-export class SummaryTaskStatusChartComponent implements OnInit {
+export class NormalisedTaskStatusChartComponent implements OnInit {
   @Input() unit: Unit;
 
   data: MultiSeries = [];

@@ -95,7 +95,7 @@
   </mat-card-header>
   @if (hasChartData) {
     <div class="min-h-100">
-      <f-completion-status-chart [weeklyData]="weeklyData" [colorScheme]="colorScheme"/>
+      <f-stacked-area-status-chart [weeklyData]="weeklyData" [colorScheme]="colorScheme"/>
     </div>
   } @else {
     <div class="flex h-full items-center justify-center">
