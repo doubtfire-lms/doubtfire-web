@@ -133,10 +133,12 @@ export class SummaryTaskStatusChartComponent implements OnInit {
     const weekNumber = this.unit?.weekNumber(date);
 
     if (!format) {
-      const dayName = new Intl.DateTimeFormat(undefined, {weekday: 'short'}).format(date);
-      return weekNumber ? `${dayName} W${weekNumber}` : `${dayName} ${date.toLocaleDateString()}`;
+      return `${dayName} ${date.toLocaleDateString(undefined, {
+        month: 'numeric',
+        day: 'numeric',
+      })}`;
     } else if (format === 'short') {
-      return `W${weekNumber}`;
+      return `Week ${weekNumber}`;
     } else if (format === 'long') {
       return `${date.toLocaleDateString(undefined, {
         weekday: 'short',
