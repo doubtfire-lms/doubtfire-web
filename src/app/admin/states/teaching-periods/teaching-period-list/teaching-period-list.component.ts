@@ -151,7 +151,12 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
 
   addTeachingBreak() {
     this.newOrSelectedTeachingPeriod
-      .addBreak(this.tempBreak.startDate, this.tempBreak.numberOfWeeks, this.tempBreak.campusIds)
+      .addBreak(
+        this.tempBreak.startDate,
+        this.tempBreak.numberOfDays,
+        this.tempBreak.campusIds,
+        this.tempBreak.label,
+      )
       .subscribe({
         next: (teachingPeriodBreak) => {
           this.alertService.success('Break added');
@@ -211,6 +216,10 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
 
   campusNames(campusIds: number[]): string {
     return campusIds.map((campusId) => this.campusName(campusId)).join(', ');
+  }
+
+  campusSummary(campusIds: number[]): string {
+    return campusIds.length ? `Campuses: ${this.campusNames(campusIds)}` : 'All campuses';
   }
 
   submitTeachingPeriod() {

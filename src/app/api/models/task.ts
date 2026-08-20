@@ -180,13 +180,13 @@ export class Task extends Entity {
   private getBreakOverlapMilliseconds(
     startTime: number,
     endTime: number,
-    breaks: readonly {startDate: Date; numberOfWeeks: number}[],
+    breaks: readonly {startDate: Date; numberOfDays: number}[],
   ): number {
     const millisecondsPerDay = 1000 * 60 * 60 * 24;
 
     return breaks.reduce((overlap, teachingBreak) => {
       const breakStart = new Date(teachingBreak.startDate).getTime();
-      const breakDuration = (teachingBreak.numberOfWeeks ?? 0) * 7 * millisecondsPerDay;
+      const breakDuration = (teachingBreak.numberOfDays ?? 0) * millisecondsPerDay;
       const breakEnd = breakStart + breakDuration;
 
       if (!Number.isFinite(breakStart) || breakDuration <= 0) {
