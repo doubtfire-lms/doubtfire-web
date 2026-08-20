@@ -57,12 +57,10 @@ export class CommunicationSetService {
     );
   }
 
-  /** The portable document for a set, for copying to the clipboard. */
   public exportForUnit(unitId: number, setId: number): Observable<Record<string, unknown>> {
     return this.httpClient.get<Record<string, unknown>>(`${this.endpoint(unitId)}/${setId}/export`);
   }
 
-  /** Rebuilds a set from a document copied out of this or another unit. */
   public importForUnit(
     unitId: number,
     document: Record<string, unknown>,

@@ -55,14 +55,12 @@ export class CommunicationRuleService {
     );
   }
 
-  /** The portable document for a single rule, for copying to the clipboard. */
   public exportForUnit(unitId: number, ruleId: number): Observable<Record<string, unknown>> {
     return this.httpClient.get<Record<string, unknown>>(
       `${this.endpoint(unitId)}/${ruleId}/export`,
     );
   }
 
-  /** Appends a rule from a copied document to an existing set. */
   public importForSet(
     unitId: number,
     setId: number,

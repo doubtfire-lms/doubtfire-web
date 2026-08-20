@@ -310,11 +310,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     });
   }
 
-  /**
-   * Copies a set as a document that can be pasted into any unit. It carries task
-   * and tutorial abbreviations rather than ids, so the target unit's own records
-   * are matched on import.
-   */
   copySet(set: CommunicationSet): void {
     this.setService.exportForUnit(this.unit.id, set.id).subscribe({
       next: (document) => this.copyToClipboard(document, `Copied ${set.name}`),
@@ -359,6 +354,27 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     });
   }
 
+  /**
+   * Editing one condition or action only returns that record, so the rule's flag
+   * has to be rebuilt here or the warning stays up until the set is reloaded.
+   *
+   * Returns true when the rule has just become resolved: an unresolved rule
+   * matches nobody, so its preview is showing a stale zero.
+   */
+  private refreshUnresolved(rule: CommunicationRule): boolean {
+    const wasUnresolved = rule.unresolved;
+    rule.unresolved =
+      (rule.conditions || []).some((condition) => condition.unresolved) ||
+      (rule.actions || []).some((action) => action.unresolved);
+
+    const set = this.selectedSet();
+    if (set) {
+      set.executable = !(set.rules || []).some((item) => item.unresolved);
+    }
+
+    return !!wasUnresolved && !rule.unresolved;
+  }
+
   private countLabel(count: number | undefined, noun: string): string {
     const total = count || 0;
     return `${total} ${noun}${total === 1 ? '' : 's'}`;
@@ -371,7 +387,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     );
   }
 
-  /** Reads the clipboard, returning its contents only if they are the kind of document asked for. */
   private async documentFromClipboard(
     kind: 'set' | 'rule',
   ): Promise<Record<string, unknown> | undefined> {
@@ -672,6 +687,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         this.conditionFormOpen[rule.id] = false;
         this.editingConditionId[rule.id] = undefined;
         this.refreshPreview(rule);
+        this.refreshUnresolved(rule);
       },
       error: (error) => this.showError(error),
     });
@@ -691,6 +707,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         this.conditionFormOpen[rule.id] = false;
         this.editingConditionId[rule.id] = undefined;
         this.refreshPreview(rule);
+        this.refreshUnresolved(rule);
       },
       error: (error) => this.showError(error),
     });
@@ -722,6 +739,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       next: () => {
         rule.conditions = rule.conditions.filter((item) => item.id !== condition.id);
         this.refreshPreview(rule);
+        this.refreshUnresolved(rule);
       },
       error: (error) => this.showError(error),
     });
@@ -736,6 +754,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         this.newActions[rule.id] = this.blankAction();
         this.actionFormOpen[rule.id] = false;
         this.editingActionId[rule.id] = undefined;
+        if (this.refreshUnresolved(rule)) {
+          this.refreshPreview(rule);
+        }
       },
       error: (error) => this.showError(error),
     });
@@ -754,6 +775,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         this.newActions[rule.id] = this.blankAction();
         this.actionFormOpen[rule.id] = false;
         this.editingActionId[rule.id] = undefined;
+        if (this.refreshUnresolved(rule)) {
+          this.refreshPreview(rule);
+        }
       },
       error: (error) => this.showError(error),
     });
@@ -781,6 +805,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.actionService.delete(this.unit.id, rule.id, action.id).subscribe({
       next: () => {
         rule.actions = rule.actions.filter((item) => item.id !== action.id);
+        if (this.refreshUnresolved(rule)) {
+          this.refreshPreview(rule);
+        }
       },
       error: (error) => this.showError(error),
     });
@@ -1379,6 +1406,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       unit_id: setResponse.unit_id,
       name: setResponse.name,
       active: setResponse.active,
+      executable: setResponse.executable,
       schedules,
       rules,
     });
@@ -1388,7 +1416,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     }
 
     if (this.selectedSetId === updatedSet.id) {
-      this.rules = rules;
+      // The constructor re-wraps its rules, so take the array it built rather
+      // than the one passed in -- otherwise the editor and the rule list hold
+      // separate copies and editing one never updates the other.
+      this.rules = updatedSet.rules;
       if (!this.rules.some((rule) => rule.id === this.selectedRuleId)) {
         this.selectedRuleId = this.rules[0]?.id;
       }
