@@ -334,7 +334,6 @@ import {CommunicationActionsComponent} from './units/states/edit/directives/unit
 import {EmailStaffActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/email-staff-action/email-staff-action.component';
 import {EmailStudentActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/email-student-action/email-student-action.component';
 import {TaskCommentActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/task-comment-action/task-comment-action.component';
-import {CommunicationImportModalComponent} from './units/states/edit/directives/unit-communications-editor/communication-import-modal/communication-import-modal.component';
 import {CommunicationScheduleModalComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedule-modal.component';
 import {CommunicationSchedulesComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedules.component';
 import {CommunicationConditionsComponent} from './units/states/edit/directives/unit-communications-editor/conditions/communication-conditions.component';
@@ -659,7 +658,6 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ChangeTargetGradeActionComponent,
     CommunicationActionsComponent,
     CommunicationConditionsComponent,
-    CommunicationImportModalComponent,
     CommunicationScheduleModalComponent,
     CommunicationSchedulesComponent,
     EmailStaffActionComponent,

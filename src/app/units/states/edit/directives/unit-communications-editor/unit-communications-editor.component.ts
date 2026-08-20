@@ -37,11 +37,6 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {
-  CommunicationImportModalComponent,
-  CommunicationImportModalData,
-  CommunicationImportModalResult,
-} from './communication-import-modal/communication-import-modal.component';
-import {
   CommunicationScheduleModalComponent,
   CommunicationScheduleModalData,
 } from './communication-schedule-modal/communication-schedule-modal.component';
@@ -305,85 +300,98 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   }
 
   /**
-   * Saves a set as a portable document. The document holds natural keys rather
-   * than database ids, so staff in another unit can import it and have its task
-   * and tutorial references repointed at their own records.
+   * Copies a set as a document that can be pasted into any unit. It carries task
+   * and tutorial abbreviations rather than ids, so the target unit's own records
+   * are matched on import.
    */
-  exportSet(set: CommunicationSet): void {
+  copySet(set: CommunicationSet): void {
     this.setService.exportForUnit(this.unit.id, set.id).subscribe({
-      next: (document) => this.downloadDocument(document, `${this.unit.code}-${set.name}`),
+      next: (document) => this.copyToClipboard(document, `Copied ${set.name}`),
       error: (error) => this.showError(error),
     });
   }
 
-  exportRule(rule: CommunicationRule): void {
+  copyRule(rule: CommunicationRule): void {
     this.ruleService.exportForUnit(this.unit.id, rule.id).subscribe({
-      next: (document) => this.downloadDocument(document, `${this.unit.code}-${rule.name}`),
+      next: (document) => this.copyToClipboard(document, `Copied ${rule.name}`),
       error: (error) => this.showError(error),
     });
   }
 
-  importSet(): void {
-    this.openImportModal({unitId: this.unit.id}, (result) => {
-      this.loadSets(result.importedSetId);
-      this.reportImport(result, 'Communication set imported');
-    });
-  }
-
-  importRule(set: CommunicationSet): void {
-    this.openImportModal({unitId: this.unit.id, set}, (result) => {
-      this.loadSets(set.id);
-      this.reportImport(result, 'Communication rule imported');
-    });
-  }
-
-  /** Conditions and actions on a rule that point at records missing from this unit. */
-  unresolvedLabelsFor(rule: CommunicationRule): string[] {
-    return [...(rule.conditions || []), ...(rule.actions || [])]
-      .filter((record) => record.unresolved)
-      .map((record) => record.unresolved_summary?.label || 'a record missing from this unit');
-  }
-
-  private openImportModal(
-    data: CommunicationImportModalData,
-    onImported: (result: CommunicationImportModalResult) => void,
-  ): void {
-    this.dialog
-      .open<
-        CommunicationImportModalComponent,
-        CommunicationImportModalData,
-        CommunicationImportModalResult
-      >(CommunicationImportModalComponent, {data, width: '52rem'})
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          onImported(result);
-        }
-      });
-  }
-
-  private reportImport(result: CommunicationImportModalResult, success: string): void {
-    if (result.report.unresolved_count > 0) {
-      this.alerts.error(
-        `${success} with ${result.report.unresolved_count} unresolved reference(s). ` +
-          'Repoint them before running this set.',
-        8000,
-      );
+  async importSet(): Promise<void> {
+    const document = await this.documentFromClipboard('set');
+    if (!document) {
       return;
     }
 
-    this.alerts.success(success, 4000);
+    this.setService.importForUnit(this.unit.id, document).subscribe({
+      next: (set) => {
+        this.loadSets(set.id);
+        this.reportImport(set.executable !== false, `Imported ${set.name}`);
+      },
+      error: (error) => this.showError(error),
+    });
   }
 
-  private downloadDocument(document: Record<string, unknown>, name: string): void {
-    const blob = new Blob([JSON.stringify(document, null, 2)], {type: 'application/json'});
-    const url = URL.createObjectURL(blob);
-    const link = window.document.createElement('a');
+  async importRule(set: CommunicationSet): Promise<void> {
+    const document = await this.documentFromClipboard('rule');
+    if (!document) {
+      return;
+    }
 
-    link.href = url;
-    link.download = `${name.replace(/[^\w.-]+/g, '-')}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
+    this.ruleService.importForSet(this.unit.id, set.id, document).subscribe({
+      next: (rule) => {
+        this.loadSets(set.id);
+        this.reportImport(!rule.unresolved, `Imported ${rule.name}`);
+      },
+      error: (error) => this.showError(error),
+    });
+  }
+
+  private copyToClipboard(document: Record<string, unknown>, message: string): void {
+    navigator.clipboard.writeText(JSON.stringify(document)).then(
+      () => this.alerts.success(message, 3000),
+      () => this.alerts.error('Could not copy to the clipboard.', 6000),
+    );
+  }
+
+  /** Reads the clipboard, returning its contents only if they are the kind of document asked for. */
+  private async documentFromClipboard(
+    kind: 'set' | 'rule',
+  ): Promise<Record<string, unknown> | undefined> {
+    let text: string;
+
+    try {
+      text = await navigator.clipboard.readText();
+    } catch {
+      this.alerts.error('Could not read the clipboard. Allow clipboard access and try again.', 6000);
+      return undefined;
+    }
+
+    try {
+      const document = JSON.parse(text) as {format?: string};
+      if (document?.format === `ontrack.communication_${kind}`) {
+        return document as Record<string, unknown>;
+      }
+    } catch {
+      // Not a communication document -- reported below with everything else.
+    }
+
+    this.alerts.error(`Copy a communication ${kind} first, then import it here.`, 6000);
+    return undefined;
+  }
+
+  private reportImport(resolved: boolean, message: string): void {
+    if (resolved) {
+      this.alerts.success(message, 4000);
+      return;
+    }
+
+    this.alerts.error(
+      `${message}, but some rules reference records this unit does not have. ` +
+        'Fix the flagged rules before running the set.',
+      8000,
+    );
   }
 
   addSchedule(set: CommunicationSet): void {

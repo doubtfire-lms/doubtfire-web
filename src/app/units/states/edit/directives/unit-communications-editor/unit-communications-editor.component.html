@@ -8,7 +8,7 @@
       Add set
     </button>
     <button mat-stroked-button (click)="importSet()">
-      <mat-icon>file_download</mat-icon>
+      <mat-icon>content_paste</mat-icon>
       Import set
     </button>
   </div>
@@ -62,7 +62,9 @@
                       <div class="min-w-0 text-left">
                         <div class="flex items-center gap-1 truncate font-medium">
                           @if (rule.unresolved) {
-                            <mat-icon class="!h-4 !w-4 !text-[16px] text-amber-700"
+                            <mat-icon
+                              class="!h-4 !w-4 !text-[16px] text-amber-700"
+                              matTooltip="This rule references records that do not exist in this unit"
                               >warning</mat-icon
                             >
                           }
@@ -137,24 +139,24 @@
                 <mat-icon>add</mat-icon>
                 Add rule
               </button>
-              <button mat-stroked-button (click)="importRule(set)">
-                <mat-icon>file_download</mat-icon>
-                Import rule
-              </button>
               <button mat-stroked-button (click)="addSchedule(set)">
                 <mat-icon>schedule</mat-icon>
                 Add schedule
               </button>
-              <button mat-stroked-button (click)="exportSet(set)">
-                <mat-icon>file_upload</mat-icon>
-                Export set
+              <button mat-stroked-button (click)="importRule(set)">
+                <mat-icon>content_paste</mat-icon>
+                Import rule
+              </button>
+              <button mat-stroked-button (click)="copySet(set)">
+                <mat-icon>content_copy</mat-icon>
+                Copy set
               </button>
               <button
                 mat-raised-button
                 [disabled]="set.executable === false"
                 [matTooltip]="
                   set.executable === false
-                    ? 'This set references records that do not exist in this unit'
+                    ? 'Some rules reference records that do not exist in this unit'
                     : ''
                 "
                 (click)="confirmExecuteSet(set)"
@@ -167,21 +169,6 @@
             </div>
           </div>
           <mat-divider></mat-divider>
-
-          @if (set.executable === false) {
-            <div class="mx-6 mt-4 rounded border border-amber-300 bg-amber-50 p-3 text-amber-900">
-              <div class="flex items-center gap-2 font-medium">
-                <mat-icon class="!h-5 !w-5 !text-[20px]">warning</mat-icon>
-                This set cannot be run
-              </div>
-              <p class="mt-1">
-                Some rules reference tasks, tutorials or campuses that do not exist in this unit
-                &mdash; usually after an import or a rollover. Rules are applied in order and each
-                one removes the students it matches from the rules below it, so the whole set is
-                held back until every reference is repointed or removed.
-              </p>
-            </div>
-          }
 
           <div class="flex flex-col">
             <f-communication-schedules [editor]="editorContext" [set]="set" />
@@ -220,25 +207,16 @@
                 </div>
 
                 <div class="flex min-w-fit items-center gap-3">
-                  @if (rule.unresolved) {
-                    <span
-                      class="flex items-center gap-1 text-amber-800"
-                      [matTooltip]="'Missing in this unit: ' + unresolvedLabelsFor(rule).join(', ')"
-                    >
-                      <mat-icon class="!h-5 !w-5 !text-[20px]">warning</mat-icon>
-                      Unresolved references
-                    </span>
-                  }
-                  <button mat-stroked-button (click)="exportRule(rule)">
-                    <mat-icon>file_upload</mat-icon>
-                    Export rule
+                  <button mat-stroked-button (click)="copyRule(rule)">
+                    <mat-icon>content_copy</mat-icon>
+                    Copy rule
                   </button>
                   <button
                     mat-raised-button
                     [disabled]="set.executable === false"
                     [matTooltip]="
                       set.executable === false
-                        ? 'This set references records that do not exist in this unit'
+                        ? 'Some rules reference records that do not exist in this unit'
                         : ''
                     "
                     (click)="confirmExecuteRule(rule)"

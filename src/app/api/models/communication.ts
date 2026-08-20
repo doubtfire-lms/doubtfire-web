@@ -28,45 +28,6 @@ export class CommunicationSetSchedule extends Entity {
   }
 }
 
-/** What a condition or action was pointing at when the reference could not be
- * resolved in this unit -- e.g. a task that the source unit had and this one
- * does not. Kept so the editor can say what needs repointing. */
-export interface UnresolvedReferenceSummary {
-  reference: string;
-  descriptor?: Record<string, string>;
-  label: string;
-}
-
-export interface CommunicationImportUnresolved {
-  rule_name: string;
-  kind: 'condition' | 'action';
-  type: string;
-  reference: string;
-  descriptor?: Record<string, string>;
-  label: string;
-}
-
-export interface CommunicationImportReport {
-  format: string;
-  version: number;
-  source?: {unit_code?: string; unit_name?: string; teaching_period?: string};
-  imported_id?: number;
-  imported_name?: string;
-  unresolved_count: number;
-  unresolved: CommunicationImportUnresolved[];
-  warnings: string[];
-}
-
-export interface CommunicationSetImportResponse {
-  report: CommunicationImportReport;
-  communication_set?: Partial<CommunicationSet>;
-}
-
-export interface CommunicationRuleImportResponse {
-  report: CommunicationImportReport;
-  rule?: Partial<CommunicationRule>;
-}
-
 export class CommunicationCondition extends Entity {
   id: number;
   type: string;
@@ -84,9 +45,6 @@ export class CommunicationCondition extends Entity {
   tutorial_stream_id?: number;
   campus_id?: number;
   submitted_portfolio?: boolean;
-  unresolved?: boolean;
-  unresolved_references?: Record<string, Record<string, string>>;
-  unresolved_summary?: UnresolvedReferenceSummary;
 
   constructor(json?: Partial<CommunicationCondition>) {
     super();
@@ -140,9 +98,6 @@ export class CommunicationAction extends Entity {
   email_tutors?: boolean;
   email_convenors?: boolean;
   target_grade?: number;
-  unresolved?: boolean;
-  unresolved_references?: Record<string, Record<string, string>>;
-  unresolved_summary?: UnresolvedReferenceSummary;
 
   constructor(json?: Partial<CommunicationAction>) {
     super();
@@ -178,7 +133,7 @@ export class CommunicationSet extends Entity {
   unit_id: number;
   name: string;
   active: boolean;
-  /** False while any rule in the set is unresolved -- the set cannot be run. */
+  /** False while any rule is unresolved -- the set cannot be run until it is fixed. */
   executable?: boolean;
   schedules: CommunicationSetSchedule[] = [];
   rules: CommunicationRule[] = [];

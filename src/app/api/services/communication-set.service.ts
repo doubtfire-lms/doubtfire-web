@@ -4,7 +4,6 @@ import {Observable, map} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {
   CommunicationSet,
-  CommunicationSetImportResponse,
   CommunicationSetPreviewResponse,
   CommunicationSetSchedule,
 } from '../models/communication';
@@ -58,25 +57,19 @@ export class CommunicationSetService {
     );
   }
 
-  /** Fetches the portable document for a set, for saving to a file. */
+  /** The portable document for a set, for copying to the clipboard. */
   public exportForUnit(unitId: number, setId: number): Observable<Record<string, unknown>> {
     return this.httpClient.get<Record<string, unknown>>(`${this.endpoint(unitId)}/${setId}/export`);
   }
 
-  /**
-   * Rebuilds a set from a document exported elsewhere. With `dryRun` the server
-   * reports what would happen -- notably which references it cannot resolve --
-   * without writing anything.
-   */
+  /** Rebuilds a set from a document copied out of this or another unit. */
   public importForUnit(
     unitId: number,
     document: Record<string, unknown>,
-    dryRun = false,
-  ): Observable<CommunicationSetImportResponse> {
-    return this.httpClient.post<CommunicationSetImportResponse>(`${this.endpoint(unitId)}/import`, {
-      document,
-      dry_run: dryRun,
-    });
+  ): Observable<CommunicationSet> {
+    return this.httpClient
+      .post<Partial<CommunicationSet>>(`${this.endpoint(unitId)}/import`, {document})
+      .pipe(map((created) => new CommunicationSet(created)));
   }
 
   public executeForUnit(unitId: number, setId: number): Observable<SidekiqJob> {
