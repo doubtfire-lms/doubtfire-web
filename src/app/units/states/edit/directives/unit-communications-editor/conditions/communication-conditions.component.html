@@ -189,6 +189,47 @@
                   </mat-select>
                 </mat-form-field>
               }
+              @case ('GroupSetEnrolmentCondition') {
+                <mat-form-field appearance="outline" class="min-w-[350px]">
+                  <mat-label>Group set</mat-label>
+                  <mat-select [(ngModel)]="editor.conditionFor(rule).group_set_id">
+                    @for (groupSet of editor.groupSets; track groupSet.id) {
+                      <mat-option [value]="groupSet.id">
+                        {{ groupSet.name }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+              @case ('GroupEnrolmentCondition') {
+                <mat-form-field appearance="outline" class="min-w-[350px]">
+                  <mat-label>Group set</mat-label>
+                  <mat-select
+                    [(ngModel)]="editor.conditionFor(rule).group_set_id"
+                    (selectionChange)="editor.onConditionGroupSetChange(rule)"
+                  >
+                    @for (groupSet of editor.groupSets; track groupSet.id) {
+                      <mat-option [value]="groupSet.id">
+                        {{ groupSet.name }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="min-w-[350px]">
+                  <mat-label>Group</mat-label>
+                  <mat-select [(ngModel)]="editor.conditionFor(rule).group_id">
+                    @for (
+                      group of editor.groupsFor(editor.conditionFor(rule).group_set_id);
+                      track group.id
+                    ) {
+                      <mat-option [value]="group.id">
+                        {{ group.name }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
               @case ('PortfolioSubmittedCondition') {
                 <mat-slide-toggle
                   class="mt-3 mb-[22px]"
@@ -301,6 +342,25 @@
                     <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
                       {{ editor.campusLabel(condition.campus_id) }}
                     </span>
+                  }
+                  @case ('GroupSetEnrolmentCondition') {
+                    Students
+                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                      {{ editor.enrolmentPredicate(condition.operator) }}
+                    </span>
+                    a group in
+                    <strong class="mx-1 font-semibold text-black/90">
+                      {{ editor.groupSetLabel(condition.group_set_id) }}
+                    </strong>
+                  }
+                  @case ('GroupEnrolmentCondition') {
+                    Students
+                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                      {{ editor.enrolmentPredicate(condition.operator) }}
+                    </span>
+                    <strong class="mx-1 font-semibold text-black/90">
+                      {{ editor.groupLabel(condition.group_id) }}
+                    </strong>
                   }
                   @case ('PortfolioSubmittedCondition') {
                     Students who
@@ -501,6 +561,49 @@
               @for (campus of editor.campuses; track campus.id) {
                 <mat-option [value]="campus.id">
                   {{ campus.abbreviation }} {{ campus.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+
+        @case ('GroupSetEnrolmentCondition') {
+          <mat-form-field appearance="outline" class="min-w-[350px]">
+            <mat-label>Group set</mat-label>
+            <mat-select [(ngModel)]="editor.conditionFor(rule).group_set_id">
+              @for (groupSet of editor.groupSets; track groupSet.id) {
+                <mat-option [value]="groupSet.id">
+                  {{ groupSet.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+
+        @case ('GroupEnrolmentCondition') {
+          <mat-form-field appearance="outline" class="min-w-[350px]">
+            <mat-label>Group set</mat-label>
+            <mat-select
+              [(ngModel)]="editor.conditionFor(rule).group_set_id"
+              (selectionChange)="editor.onConditionGroupSetChange(rule)"
+            >
+              @for (groupSet of editor.groupSets; track groupSet.id) {
+                <mat-option [value]="groupSet.id">
+                  {{ groupSet.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="min-w-[350px]">
+            <mat-label>Group</mat-label>
+            <mat-select [(ngModel)]="editor.conditionFor(rule).group_id">
+              @for (
+                group of editor.groupsFor(editor.conditionFor(rule).group_set_id);
+                track group.id
+              ) {
+                <mat-option [value]="group.id">
+                  {{ group.name }}
                 </mat-option>
               }
             </mat-select>

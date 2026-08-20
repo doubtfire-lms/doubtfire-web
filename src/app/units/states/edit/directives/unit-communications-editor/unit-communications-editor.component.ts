@@ -25,6 +25,8 @@ import {
   CommunicationSetPreviewResponse,
   CommunicationSetSchedule,
   CommunicationSetService,
+  Group,
+  GroupSet,
   ProjectService,
   TaskDefinition,
   Tutorial,
@@ -60,6 +62,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   taskDefinitions: readonly TaskDefinition[] = [];
   tutorials: readonly Tutorial[] = [];
   tutorialStreams: readonly TutorialStream[] = [];
+  groupSets: readonly GroupSet[] = [];
   loading = false;
   setPreviewLoading = false;
   readonly previewStudentColumns = [
@@ -89,6 +92,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     'TutorialEnrolmentCondition',
     'TutorialStreamEnrolmentCondition',
     'CampusCondition',
+    'GroupSetEnrolmentCondition',
+    'GroupEnrolmentCondition',
     'PortfolioSubmittedCondition',
   ];
   readonly conditionTypeLabels: Record<string, string> = {
@@ -101,6 +106,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     TutorialEnrolmentCondition: 'Tutorial Enrolment',
     TutorialStreamEnrolmentCondition: 'Tutorial Stream Enrolment',
     CampusCondition: 'Campus',
+    GroupSetEnrolmentCondition: 'Group Set Enrolment',
+    GroupEnrolmentCondition: 'Group Enrolment',
     PortfolioSubmittedCondition: 'Submitted Portfolio',
   };
   readonly actionTypes = [
@@ -1109,6 +1116,36 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return campus ? campus.name : `Campus ${campusId}`;
   }
 
+  groupSetLabel(groupSetId: number): string {
+    const groupSet = this.groupSetFor(groupSetId);
+    return groupSet ? groupSet.name : `Group Set ${groupSetId}`;
+  }
+
+  groupLabel(groupId: number): string {
+    const group = this.groupFor(groupId);
+    return group ? `${group.groupSet.name}: ${group.name}` : `Group ${groupId}`;
+  }
+
+  /** Groups are only listed once a group set narrows them down. */
+  groupsFor(groupSetId: number): readonly Group[] {
+    return this.groupSetFor(groupSetId)?.groups ?? [];
+  }
+
+  /** Clearing the group stops a stale pick from surviving a change of set. */
+  onConditionGroupSetChange(rule: CommunicationRule): void {
+    this.conditionFor(rule).group_id = undefined;
+  }
+
+  private groupSetFor(groupSetId: number): GroupSet | undefined {
+    return this.groupSets.find((item) => item.id === groupSetId);
+  }
+
+  private groupFor(groupId: number): Group | undefined {
+    return this.groupSets
+      .flatMap((groupSet) => groupSet.groups as Group[])
+      .find((group) => group.id === groupId);
+  }
+
   enrolmentPredicate(operator: string): string {
     return operator === 'not_enrolled_in' ? 'Not Enrolled In' : 'Enrolled In';
   }
@@ -1144,6 +1181,13 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
     if (current.type === 'PortfolioSubmittedCondition') {
       this.newConditions[rule.id].submitted_portfolio = true;
+    }
+
+    if (
+      current.type === 'GroupSetEnrolmentCondition' ||
+      current.type === 'GroupEnrolmentCondition'
+    ) {
+      this.newConditions[rule.id].group_set_id = this.groupSets[0]?.id;
     }
   }
 
@@ -1198,6 +1242,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.taskDefinitions = this.unit.taskDefinitionCache.currentValues;
     this.tutorials = this.unit.tutorials;
     this.tutorialStreams = this.unit.tutorialStreams;
+    this.groupSets = this.unit.groupSets;
     this.subscriptions.push(
       this.unit.taskDefinitionCache.values.subscribe((taskDefinitions) => {
         this.taskDefinitions = taskDefinitions;
@@ -1540,6 +1585,8 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       tutorial_id: 'Tutorial',
       tutorial_stream_id: 'Tutorial Stream',
       campus_id: 'Campus',
+      group_set_id: 'Group Set',
+      group_id: 'Group',
       subject: 'Subject',
       body: 'Body',
       email_tutors: 'Email Tutors',
