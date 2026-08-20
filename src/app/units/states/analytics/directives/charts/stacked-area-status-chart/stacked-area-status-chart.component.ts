@@ -9,7 +9,7 @@ import {Component, Input} from '@angular/core';
 })
 export class StackedAreaStatusChartComponent {
   @Input() weeklyData: MultiSeries = [];
-  @Input() colorScheme: any = {domain: ['']};
+  @Input() colorScheme: {domain: string[]} = {domain: ['']};
 
   XAxisLabel: string = 'Week';
   YAxisLabel: string = 'Records';

@@ -329,8 +329,8 @@ import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
-import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
 import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
+import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
 import {CommunicationActionsComponent} from './units/states/edit/directives/unit-communications-editor/actions/communication-actions.component';

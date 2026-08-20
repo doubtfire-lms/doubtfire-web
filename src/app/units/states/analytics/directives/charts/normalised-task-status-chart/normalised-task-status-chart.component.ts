@@ -8,12 +8,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {filter, map, take} from 'rxjs/operators';
-import {
-  CampusStats,
-  TaskCodeStats,
-  TaskCompletionSnapshot,
-  TutorialStats,
-} from 'src/app/api/models/doubtfire-model';
+import {TaskCodeStats, TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
 import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
@@ -34,7 +29,6 @@ import {
   styleUrl: './normalised-task-status-chart.component.scss',
   standalone: false,
 })
-
 export class NormalisedTaskStatusChartComponent implements OnInit {
   @Input() unit: Unit;
 
