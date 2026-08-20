@@ -3,14 +3,6 @@
   <mat-select multiple [ngModel]="selection" (ngModelChange)="onSelectionChange($event)">
     <mat-select-trigger>{{ triggerLabel() }}</mat-select-trigger>
 
-    <mat-optgroup label="Task statuses">
-      @for (status of statuses; track status) {
-        <mat-option [value]="status">
-          {{ statusLabel(status) }}
-        </mat-option>
-      }
-    </mat-optgroup>
-
     <mat-optgroup label="Status groups">
       @for (group of groups; track group.key) {
         <mat-option [value]="group.key">
@@ -18,6 +10,14 @@
             <span>{{ group.label }}</span>
             <span class="text-xs text-black/50">{{ group.statuses.length }} statuses</span>
           </span>
+        </mat-option>
+      }
+    </mat-optgroup>
+
+    <mat-optgroup label="Task statuses">
+      @for (status of statuses; track status) {
+        <mat-option [value]="status">
+          {{ statusLabel(status) }}
         </mat-option>
       }
     </mat-optgroup>

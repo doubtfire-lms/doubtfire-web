@@ -13,7 +13,7 @@ import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {Subscription, finalize, timer} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
+import {switchMap, tap} from 'rxjs/operators';
 import {Project, ProjectService, Unit} from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
@@ -72,22 +72,25 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
   ) {}
 
   ngOnInit(): void {
-    this.dataSource.data = this.unit.studentCache.currentValuesClone();
     this.dataSource.filterPredicate = (data: Project, filter: string) => data.matches(filter);
+
+    // Reveal cached students right away
+    this.loadingStudents = this.unit.studentCache.currentValues.length === 0;
+
+    this.refreshStudentsAfterRender();
+  }
+
+  // Data must not reach the table before the paginator does - unpaginated, it renders a row per
+  // student and blocks the main thread on a large unit.
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
     this.subscriptions.push(
       this.unit.studentCache.values.subscribe((students) => {
         this.dataSource.data = students;
       }),
     );
-
-    this.refreshStudentsAfterRender();
-  }
-
-  // The paginator is inside the table
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   ngOnDestroy(): void {
@@ -106,11 +109,12 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
     this.subscriptions.push(
       timer(0)
         .pipe(
-          switchMap(() =>
-            this.projectService
-              .loadStudents(this.unit, false, true)
-              .pipe(switchMap(() => this.projectService.loadStudents(this.unit, true, true))),
-          ),
+          switchMap(() => this.projectService.loadStudents(this.unit, false, true)),
+          // Withdrawn students fold in behind the table rather than holding the skeleton up.
+          tap(() => {
+            this.loadingStudents = false;
+          }),
+          switchMap(() => this.projectService.loadStudents(this.unit, true, true)),
           finalize(() => {
             this.loadingStudents = false;
           }),

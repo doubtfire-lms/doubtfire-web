@@ -1,4 +1,4 @@
-import {NestedTreeControl} from '@angular/cdk/tree';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,8 +9,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {MatTreeNestedDataSource} from '@angular/material/tree';
-import {Subscription} from 'rxjs';
+import {Subscription, catchError, concat, defer, forkJoin, of, tap} from 'rxjs';
 import {
   Campus,
   CampusService,
@@ -19,7 +18,6 @@ import {
   CommunicationCondition,
   CommunicationConditionService,
   CommunicationRule,
-  CommunicationRulePreviewAllocation,
   CommunicationRulePreviewResponse,
   CommunicationRulePreviewStudent,
   CommunicationRuleService,
@@ -42,15 +40,6 @@ import {
   CommunicationScheduleModalComponent,
   CommunicationScheduleModalData,
 } from './communication-schedule-modal/communication-schedule-modal.component';
-
-interface CommunicationTreeNode {
-  type: 'set' | 'rule';
-  id: number;
-  label: string;
-  set?: CommunicationSet;
-  rule?: CommunicationRule;
-  children?: CommunicationTreeNode[];
-}
 
 @Component({
   selector: 'f-unit-communications-editor',
@@ -178,17 +167,21 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   previewTabIndex: Record<number, number> = {};
   previewLoading: Record<number, boolean> = {};
   previewLoaded: Record<number, boolean> = {};
+  /** Students each rule keeps once earlier rules have claimed theirs. */
   previewStudents: Record<number, CommunicationRulePreviewStudent[]> = {};
-  previewAllocations: Record<number, CommunicationRulePreviewAllocation[]> = {};
+  /** Students still unclaimed by the time each rule is reached. */
+  previewAvailable: Record<number, number> = {};
+  eligibleStudentCount = 0;
+  /** Each rule's matches on its own, before earlier rules take any. */
+  private ruleMatches: Record<number, CommunicationRulePreviewStudent[]> = {};
+  /** Bumped on each set load, so stale responses are dropped. */
+  private previewGeneration = 0;
+  private setPreviewSubscription?: Subscription;
+  private readonly ruleRefreshSubscriptions: Map<number, Subscription> = new Map();
   editingSetNameId?: number;
   editingRuleNameId?: number;
   setNameDraft = '';
   ruleNameDraft = '';
-  readonly treeControl: NestedTreeControl<CommunicationTreeNode> = new NestedTreeControl(
-    (node) => node.children,
-  );
-  readonly treeDataSource: MatTreeNestedDataSource<CommunicationTreeNode> =
-    new MatTreeNestedDataSource();
   private expandedSetIds: Set<number> = new Set();
 
   private subscriptions: Subscription[] = [];
@@ -246,6 +239,17 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     });
   }
 
+  confirmDeleteSet(set: CommunicationSet): void {
+    this.confirmationModalService.show(
+      'Delete Set?',
+      `Deleting "${set.name}" also deletes its ${this.countLabel(set.rules?.length, 'rule')} and ` +
+        `${this.countLabel(set.schedules?.length, 'schedule')}. This cannot be undone.`,
+      () => this.deleteSet(set),
+      undefined,
+      'Delete Set',
+    );
+  }
+
   deleteSet(set: CommunicationSet): void {
     this.setService.deleteForUnit(this.unit.id, set.id).subscribe({
       next: () => {
@@ -284,7 +288,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
           matchingSet.name = updated.name;
         }
         this.cancelEditSetName();
-        this.rebuildTree();
       },
       error: (error) => this.showError(error),
     });
@@ -305,6 +308,124 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       next: (job) => this.showExecutionProgress(job, `Executing ${set.name}`),
       error: (error) => this.showError(error),
     });
+  }
+
+  copySet(set: CommunicationSet): void {
+    this.setService.exportForUnit(this.unit.id, set.id).subscribe({
+      next: (document) => this.copyToClipboard(document, `Copied ${set.name}`),
+      error: (error) => this.showError(error),
+    });
+  }
+
+  copyRule(rule: CommunicationRule): void {
+    this.ruleService.exportForUnit(this.unit.id, rule.id).subscribe({
+      next: (document) => this.copyToClipboard(document, `Copied ${rule.name}`),
+      error: (error) => this.showError(error),
+    });
+  }
+
+  async importSet(): Promise<void> {
+    const document = await this.documentFromClipboard('set');
+    if (!document) {
+      return;
+    }
+
+    this.setService.importForUnit(this.unit.id, document).subscribe({
+      next: (set) => {
+        this.loadSets(set.id);
+        this.reportImport(set.executable !== false, `Imported ${set.name}`);
+      },
+      error: (error) => this.showError(error),
+    });
+  }
+
+  async importRule(set: CommunicationSet): Promise<void> {
+    const document = await this.documentFromClipboard('rule');
+    if (!document) {
+      return;
+    }
+
+    this.ruleService.importForSet(this.unit.id, set.id, document).subscribe({
+      next: (rule) => {
+        this.loadSets(set.id);
+        this.reportImport(!rule.unresolved, `Imported ${rule.name}`);
+      },
+      error: (error) => this.showError(error),
+    });
+  }
+
+  /**
+   * Editing one condition or action only returns that record, so the rule's flag
+   * has to be rebuilt here or the warning stays up until the set is reloaded.
+   *
+   * Returns true when the rule has just become resolved: an unresolved rule
+   * matches nobody, so its preview is showing a stale zero.
+   */
+  private refreshUnresolved(rule: CommunicationRule): boolean {
+    const wasUnresolved = rule.unresolved;
+    rule.unresolved =
+      (rule.conditions || []).some((condition) => condition.unresolved) ||
+      (rule.actions || []).some((action) => action.unresolved);
+
+    const set = this.selectedSet();
+    if (set) {
+      set.executable = !(set.rules || []).some((item) => item.unresolved);
+    }
+
+    return !!wasUnresolved && !rule.unresolved;
+  }
+
+  private countLabel(count: number | undefined, noun: string): string {
+    const total = count || 0;
+    return `${total} ${noun}${total === 1 ? '' : 's'}`;
+  }
+
+  private copyToClipboard(document: Record<string, unknown>, message: string): void {
+    navigator.clipboard.writeText(JSON.stringify(document)).then(
+      () => this.alerts.success(message, 3000),
+      () => this.alerts.error('Could not copy to the clipboard.', 6000),
+    );
+  }
+
+  private async documentFromClipboard(
+    kind: 'set' | 'rule',
+  ): Promise<Record<string, unknown> | undefined> {
+    let text: string;
+
+    try {
+      text = await navigator.clipboard.readText();
+    } catch {
+      this.alerts.error(
+        'Could not read the clipboard. Allow clipboard access and try again.',
+        6000,
+      );
+      return undefined;
+    }
+
+    try {
+      const document = JSON.parse(text) as {format?: string};
+      if (document?.format === `ontrack.communication_${kind}`) {
+        return document as Record<string, unknown>;
+      }
+    } catch {
+      // Not a communication document -- reported below with everything else.
+    }
+
+    this.alerts.error(`Copy a communication ${kind} first, then import it here.`, 6000);
+    return undefined;
+  }
+
+  private reportImport(resolved: boolean, message: string): void {
+    if (resolved) {
+      this.alerts.success(message, 4000);
+      return;
+    }
+
+    this.alerts.error(
+      `${message}, but some rules reference records this unit does not have. ` +
+        'Fix the flagged rules before running the set.',
+      8000,
+    );
   }
 
   addSchedule(set: CommunicationSet): void {
@@ -363,12 +484,12 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     } else {
       this.rules = [];
       this.selectedRuleId = undefined;
-      this.rebuildTree();
     }
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.cancelPreviewRequests();
   }
 
   addRule(): void {
@@ -391,22 +512,76 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         set.rules = this.rules;
         this.selectedRuleId = rule.id;
         this.expandedSetIds.add(set.id);
-        this.loadPreviewForSet(set);
+        this.refreshPreview(rule);
       },
       error: (error) => this.showError(error),
     });
+  }
+
+  /**
+   * Order decides which rule claims a student first, but not what each rule
+   * matches on its own -- the cached matches stay valid, so no refetch.
+   */
+  dropRule(set: CommunicationSet, event: CdkDragDrop<CommunicationRule[]>): void {
+    const rules = set.rules ?? [];
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+
+    const previousOrder = [...rules];
+    moveItemInArray(rules, event.previousIndex, event.currentIndex);
+
+    const moved = rules.filter((rule, index) => rule.position !== index);
+    rules.forEach((rule, index) => (rule.position = index));
+    this.applyRuleOrder(set, rules);
+
+    if (moved.length === 0) {
+      return;
+    }
+
+    forkJoin(
+      moved.map((rule) =>
+        this.ruleService.updateForUnit(this.unit.id, rule.id, {position: rule.position}),
+      ),
+    ).subscribe({
+      error: (error) => {
+        previousOrder.forEach((rule, index) => (rule.position = index));
+        this.applyRuleOrder(set, previousOrder);
+        this.showError(error);
+      },
+    });
+  }
+
+  private applyRuleOrder(set: CommunicationSet, rules: CommunicationRule[]): void {
+    set.rules = rules;
+    if (set.id === this.selectedSetId) {
+      this.rules = rules;
+      this.recomputeAllocations();
+    }
+  }
+
+  confirmDeleteRule(rule: CommunicationRule): void {
+    this.confirmationModalService.show(
+      'Delete Rule?',
+      `Deleting "${rule.name}" also deletes its ${this.countLabel(rule.conditions?.length, 'condition')} ` +
+        `and ${this.countLabel(rule.actions?.length, 'action')}. This cannot be undone.`,
+      () => this.deleteRule(rule),
+      undefined,
+      'Delete Rule',
+    );
   }
 
   deleteRule(rule: CommunicationRule): void {
     this.ruleService.deleteForUnit(this.unit.id, rule.id).subscribe({
       next: () => {
         this.rules = this.rules.filter((item) => item.id !== rule.id);
+        this.forgetRulePreview(rule.id);
         const set = this.selectedSet();
         if (set) {
           set.rules = this.rules;
           this.selectedRuleId = this.rules[0]?.id;
-          this.loadPreviewForSet(set);
         }
+        this.recomputeAllocations();
       },
       error: (error) => this.showError(error),
     });
@@ -474,7 +649,6 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
             set.rules = this.rules;
           }
           this.cancelEditRuleName();
-          this.rebuildTree();
         },
         error: (error) => this.showError(error),
       });
@@ -513,6 +687,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         this.conditionFormOpen[rule.id] = false;
         this.editingConditionId[rule.id] = undefined;
         this.refreshPreview(rule);
+        this.refreshUnresolved(rule);
       },
       error: (error) => this.showError(error),
     });
@@ -532,6 +707,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         this.conditionFormOpen[rule.id] = false;
         this.editingConditionId[rule.id] = undefined;
         this.refreshPreview(rule);
+        this.refreshUnresolved(rule);
       },
       error: (error) => this.showError(error),
     });
@@ -563,6 +739,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       next: () => {
         rule.conditions = rule.conditions.filter((item) => item.id !== condition.id);
         this.refreshPreview(rule);
+        this.refreshUnresolved(rule);
       },
       error: (error) => this.showError(error),
     });
@@ -577,6 +754,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         this.newActions[rule.id] = this.blankAction();
         this.actionFormOpen[rule.id] = false;
         this.editingActionId[rule.id] = undefined;
+        if (this.refreshUnresolved(rule)) {
+          this.refreshPreview(rule);
+        }
       },
       error: (error) => this.showError(error),
     });
@@ -595,6 +775,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         this.newActions[rule.id] = this.blankAction();
         this.actionFormOpen[rule.id] = false;
         this.editingActionId[rule.id] = undefined;
+        if (this.refreshUnresolved(rule)) {
+          this.refreshPreview(rule);
+        }
       },
       error: (error) => this.showError(error),
     });
@@ -622,6 +805,9 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.actionService.delete(this.unit.id, rule.id, action.id).subscribe({
       next: () => {
         rule.actions = rule.actions.filter((item) => item.id !== action.id);
+        if (this.refreshUnresolved(rule)) {
+          this.refreshPreview(rule);
+        }
       },
       error: (error) => this.showError(error),
     });
@@ -641,28 +827,21 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.selectedRuleId = rule.id;
   }
 
-  hasTreeChild = (_: number, node: CommunicationTreeNode): boolean => node.type === 'set';
-
-  isSelectedSetNode(node: CommunicationTreeNode): boolean {
-    return node.type === 'set' && node.id === this.selectedSetId;
+  isSetExpanded(set: CommunicationSet): boolean {
+    return this.expandedSetIds.has(set.id);
   }
 
-  isSelectedRuleNode(node: CommunicationTreeNode): boolean {
-    return node.type === 'rule' && node.id === this.selectedRuleId;
+  isSelectedRule(rule: CommunicationRule): boolean {
+    return rule.id === this.selectedRuleId;
   }
 
-  toggleSetNode(node: CommunicationTreeNode, event?: Event): void {
+  toggleSet(set: CommunicationSet, event?: Event): void {
     event?.stopPropagation();
-    if (!node.set) {
-      return;
-    }
 
-    if (this.treeControl.isExpanded(node)) {
-      this.treeControl.collapse(node);
-      this.expandedSetIds.delete(node.set.id);
+    if (this.isSetExpanded(set)) {
+      this.expandedSetIds.delete(set.id);
     } else {
-      this.treeControl.expand(node);
-      this.expandedSetIds.add(node.set.id);
+      this.expandedSetIds.add(set.id);
     }
   }
 
@@ -697,22 +876,28 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return this.previewStudents[rule.id] || [];
   }
 
-  previewAllocationsFor(rule: CommunicationRule): CommunicationRulePreviewAllocation[] {
-    return this.previewAllocations[rule.id] || [];
+  isPreviewLoading(rule: CommunicationRule): boolean {
+    return !!this.previewLoading[rule.id];
   }
 
-  isTargetPreviewAllocation(
-    rule: CommunicationRule,
-    allocation: CommunicationRulePreviewAllocation,
-  ): boolean {
-    return allocation.rule_id === rule.id;
+  hasPreview(rule: CommunicationRule): boolean {
+    return !!this.previewLoaded[rule.id];
+  }
+
+  availableStudentsForRule(rule: CommunicationRule): number {
+    return this.previewAvailable[rule.id] ?? this.eligibleStudentCount;
   }
 
   studentsTabLabel(rule: CommunicationRule): string {
-    const matchedCount = this.previewLoaded[rule.id] ? this.studentsFor(rule).length : 0;
-    const totalStudents = this.availableStudentsForRule(rule);
+    if (!this.hasPreview(rule)) {
+      return 'Students';
+    }
 
-    return `Students (${matchedCount}/${totalStudents})`;
+    return `Students (${this.studentsCountLabel(rule)})`;
+  }
+
+  studentsCountLabel(rule: CommunicationRule): string {
+    return `${this.studentsFor(rule).length}/${this.availableStudentsForRule(rule)}`;
   }
 
   operatorsFor(conditionType: string): string[] {
@@ -881,11 +1066,26 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return rendered.replace(/\n/g, '<br />');
   }
 
-  refreshPreview(_rule: CommunicationRule): void {
-    const set = this.selectedSet();
-    if (set) {
-      this.loadPreviewForSet(set);
+  /** Refetches one rule; the rest of the set is recomputed from cache. */
+  refreshPreview(rule: CommunicationRule): void {
+    if (!this.unit) {
+      return;
     }
+
+    this.ruleRefreshSubscriptions.get(rule.id)?.unsubscribe();
+    this.previewLoading[rule.id] = true;
+
+    const generation = this.previewGeneration;
+    this.ruleRefreshSubscriptions.set(
+      rule.id,
+      this.ruleService.previewForUnit(this.unit.id, rule.id).subscribe({
+        next: (response) => this.applyRulePreview(response, generation),
+        error: (error) => {
+          this.previewLoading[rule.id] = false;
+          this.showError(error);
+        },
+      }),
+    );
   }
 
   taskStatusPredicate(operator: string): string {
@@ -961,7 +1161,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     }
   }
 
-  private loadSets(): void {
+  private loadSets(selectSetId?: number): void {
     if (!this.unit) {
       return;
     }
@@ -970,10 +1170,13 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     this.setService.getForUnit(this.unit.id).subscribe({
       next: (sets) => {
         this.sets = sets;
+        if (selectSetId) {
+          this.selectedSetId = selectSetId;
+          this.selectedRuleId = undefined;
+        }
         if (this.selectedSetId) {
           this.expandedSetIds.add(this.selectedSetId);
         }
-        this.rebuildTree();
         this.selectSet();
         this.loading = false;
       },
@@ -1072,20 +1275,126 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       return;
     }
 
+    this.cancelPreviewRequests();
+    this.previewGeneration += 1;
+    this.ruleMatches = {};
+    this.previewStudents = {};
+    this.previewLoaded = {};
+    this.previewAvailable = {};
+
+    // Only this set's rules are pending -- every other rule in the tree drops
+    // back to a bare "Students" label rather than a stale count.
+    this.previewLoading = {};
+    this.rules.forEach((rule) => {
+      this.previewLoading[rule.id] = true;
+    });
+
+    const generation = this.previewGeneration;
     this.setPreviewLoading = true;
-    this.setService.getForUnitById(this.unit.id, set.id).subscribe({
+    this.setPreviewSubscription = this.setService.getForUnitById(this.unit.id, set.id).subscribe({
       next: (setResponse) => {
-        this.applySetPreviewResponse(setResponse);
-        this.setPreviewLoading = false;
+        if (generation !== this.previewGeneration) {
+          return;
+        }
+
+        this.applySetResponse(setResponse);
+        this.loadRulePreviews(this.rules, generation);
       },
       error: (error) => {
         this.setPreviewLoading = false;
+        this.rules.forEach((rule) => {
+          this.previewLoading[rule.id] = false;
+        });
         this.showError(error);
       },
     });
   }
 
-  private applySetPreviewResponse(setResponse: CommunicationSetPreviewResponse): void {
+  /** One request per rule -- the whole set in one query times out on large units. */
+  private loadRulePreviews(rules: CommunicationRule[], generation: number): void {
+    rules.forEach((rule) => {
+      this.previewLoading[rule.id] = true;
+      this.previewLoaded[rule.id] = false;
+    });
+    this.recomputeAllocations();
+
+    if (rules.length === 0 || !this.unit) {
+      this.setPreviewLoading = false;
+      return;
+    }
+
+    const requests = rules.map((rule) =>
+      defer(() => this.ruleService.previewForUnit(this.unit.id, rule.id)).pipe(
+        tap((response) => this.applyRulePreview(response, generation)),
+        catchError((error) => {
+          this.previewLoading[rule.id] = false;
+          this.showError(error);
+          return of(null);
+        }),
+      ),
+    );
+
+    this.setPreviewSubscription = concat(...requests).subscribe({
+      complete: () => {
+        if (generation === this.previewGeneration) {
+          this.setPreviewLoading = false;
+        }
+      },
+    });
+  }
+
+  private applyRulePreview(response: CommunicationRulePreviewResponse, generation: number): void {
+    if (generation !== this.previewGeneration) {
+      return;
+    }
+
+    this.ruleMatches[response.rule_id] = response.students || [];
+    this.eligibleStudentCount = response.eligible_student_count;
+    this.previewLoaded[response.rule_id] = true;
+    this.previewLoading[response.rule_id] = false;
+    this.recomputeAllocations();
+  }
+
+  /**
+   * The first matching rule claims a student, so each rule keeps only those no
+   * earlier rule took. Rules still loading claim nobody until their matches land.
+   */
+  private recomputeAllocations(): void {
+    const claimed: Set<number> = new Set();
+
+    this.rules.forEach((rule) => {
+      this.previewAvailable[rule.id] = Math.max(0, this.eligibleStudentCount - claimed.size);
+
+      const matches = this.ruleMatches[rule.id];
+      if (!matches) {
+        this.previewStudents[rule.id] = [];
+        return;
+      }
+
+      const students = matches.filter((student) => !claimed.has(student.project_id));
+      students.forEach((student) => claimed.add(student.project_id));
+      this.previewStudents[rule.id] = students;
+    });
+  }
+
+  private forgetRulePreview(ruleId: number): void {
+    this.ruleRefreshSubscriptions.get(ruleId)?.unsubscribe();
+    this.ruleRefreshSubscriptions.delete(ruleId);
+    delete this.ruleMatches[ruleId];
+    delete this.previewStudents[ruleId];
+    delete this.previewAvailable[ruleId];
+    delete this.previewLoaded[ruleId];
+    delete this.previewLoading[ruleId];
+  }
+
+  private cancelPreviewRequests(): void {
+    this.setPreviewSubscription?.unsubscribe();
+    this.setPreviewSubscription = undefined;
+    this.ruleRefreshSubscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.ruleRefreshSubscriptions.clear();
+  }
+
+  private applySetResponse(setResponse: CommunicationSetPreviewResponse): void {
     const rules = (setResponse.rules || []).map((rule) => new CommunicationRule(rule));
     const existingSet = this.sets.find((set) => set.id === setResponse.id);
     const schedules =
@@ -1097,6 +1406,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       unit_id: setResponse.unit_id,
       name: setResponse.name,
       active: setResponse.active,
+      executable: setResponse.executable,
       schedules,
       rules,
     });
@@ -1106,51 +1416,16 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     }
 
     if (this.selectedSetId === updatedSet.id) {
-      this.rules = rules;
+      // The constructor re-wraps its rules, so take the array it built rather
+      // than the one passed in -- otherwise the editor and the rule list hold
+      // separate copies and editing one never updates the other.
+      this.rules = updatedSet.rules;
       if (!this.rules.some((rule) => rule.id === this.selectedRuleId)) {
         this.selectedRuleId = this.rules[0]?.id;
       }
     }
 
-    this.rules.forEach((rule) => {
-      this.previewLoading[rule.id] = true;
-    });
-
-    setResponse.previews.forEach((preview) => {
-      this.previewAllocations[preview.target_rule_id] = preview.allocations || [];
-      this.previewStudents[preview.target_rule_id] = this.studentsForPreviewRule(
-        preview.target_rule_id,
-        preview,
-      );
-      this.previewLoaded[preview.target_rule_id] = true;
-      this.previewLoading[preview.target_rule_id] = false;
-    });
-
-    this.rules.forEach((rule) => {
-      this.previewLoading[rule.id] = false;
-    });
-
-    this.rebuildTree();
-  }
-
-  private studentsForPreviewRule(
-    ruleId: number,
-    preview: CommunicationRulePreviewResponse,
-  ): CommunicationRulePreviewStudent[] {
-    return preview.allocations.find((allocation) => allocation.rule_id === ruleId)?.students || [];
-  }
-
-  private availableStudentsForRule(rule: CommunicationRule): number {
-    const totalStudents = this.unit?.activeStudents?.length ?? 0;
-    if (!this.previewLoaded[rule.id]) {
-      return totalStudents;
-    }
-
-    const claimedByPreviousRules = this.previewAllocationsFor(rule)
-      .filter((allocation) => allocation.rule_id !== rule.id)
-      .reduce((sum, allocation) => sum + allocation.students.length, 0);
-
-    return Math.max(0, totalStudents - claimedByPreviousRules);
+    this.eligibleStudentCount = setResponse.eligible_student_count ?? this.eligibleStudentCount;
   }
 
   private sampleStudentForRule(
@@ -1411,28 +1686,5 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
   private newScheduleClientKey(): string {
     return `schedule-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-  }
-
-  private rebuildTree(): void {
-    const treeData = this.sets.map((set) => ({
-      type: 'set' as const,
-      id: set.id,
-      label: set.name,
-      set,
-      children: (set.rules ?? []).map((rule) => ({
-        type: 'rule' as const,
-        id: rule.id,
-        label: rule.name,
-        set,
-        rule,
-      })),
-    }));
-
-    this.treeDataSource.data = treeData;
-    treeData.forEach((node) => {
-      if (this.expandedSetIds.has(node.id) || node.id === this.selectedSetId) {
-        this.treeControl.expand(node);
-      }
-    });
   }
 }
