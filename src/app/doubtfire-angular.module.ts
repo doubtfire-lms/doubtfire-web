@@ -8,6 +8,7 @@ import {
   LineChartComponent,
   NumberCardComponent,
   PieChartComponent,
+  AreaChartStackedComponent,
 } from '@glitchtip/ng-charts';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import * as Sentry from '@sentry/angular';
@@ -854,6 +855,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     PickerModule,
     EmojiModule,
     BarVerticalNormalizedComponent,
+    AreaChartStackedComponent,
     GaugeComponent,
     LineChartComponent,
     NumberCardComponent,
