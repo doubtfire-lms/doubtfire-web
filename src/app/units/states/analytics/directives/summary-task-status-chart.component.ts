@@ -244,11 +244,13 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   }
 
   private buildWeeklyChartData(snapshots: TaskCompletionSnapshot[]): MultiSeries {
-    const lastSnapshotByWeek = new Map<string, TaskCompletionSnapshot>();
+    const lastSnapshotByWeek: Map<string, TaskCompletionSnapshot> = new Map();
 
     snapshots.forEach((snapshot) => {
       const weekNumber = this.formatSnapshotLabel(snapshot.snapshot_date, 'short');
-      weekNumber && lastSnapshotByWeek.set(weekNumber, snapshot);
+      if (weekNumber) {
+        lastSnapshotByWeek.set(weekNumber, snapshot);
+      }
     });
 
     const snapshotsByWeek = [...lastSnapshotByWeek.values()];
