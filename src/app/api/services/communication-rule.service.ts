@@ -34,7 +34,9 @@ export class CommunicationRuleService {
   public updateForUnit(
     unitId: number,
     ruleId: number,
-    rule: Partial<Pick<CommunicationRule, 'name' | 'operator' | 'send_log_to_convenors'>>,
+    rule: Partial<
+      Pick<CommunicationRule, 'name' | 'operator' | 'position' | 'send_log_to_convenors'>
+    >,
   ): Observable<CommunicationRule> {
     return this.httpClient
       .put<Partial<CommunicationRule>>(`${this.endpoint(unitId)}/${ruleId}`, {
@@ -47,13 +49,13 @@ export class CommunicationRuleService {
     return this.httpClient.delete<void>(`${this.endpoint(unitId)}/${ruleId}`);
   }
 
+  /** Students matched by this rule alone, ignoring the rules ahead of it. */
   public previewForUnit(
     unitId: number,
     ruleId: number,
   ): Observable<CommunicationRulePreviewResponse> {
-    return this.httpClient.post<CommunicationRulePreviewResponse>(
+    return this.httpClient.get<CommunicationRulePreviewResponse>(
       `${this.endpoint(unitId)}/${ruleId}/preview`,
-      {},
     );
   }
 
