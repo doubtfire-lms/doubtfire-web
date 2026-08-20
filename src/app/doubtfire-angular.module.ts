@@ -328,7 +328,7 @@ import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
-import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
+import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
 import {CompletionStatusChartComponent} from './units/states/analytics/directives/charts/completion-status-chart/completion-status-chart.component';
 import {SummaryTaskStatusChartComponent} from './units/states/analytics/directives/charts/summary-task-status-chart/summary-task-status-chart.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
