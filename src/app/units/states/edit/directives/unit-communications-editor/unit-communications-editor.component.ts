@@ -239,6 +239,17 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     });
   }
 
+  confirmDeleteSet(set: CommunicationSet): void {
+    this.confirmationModalService.show(
+      'Delete Set?',
+      `Deleting "${set.name}" also deletes its ${this.countLabel(set.rules?.length, 'rule')} and ` +
+        `${this.countLabel(set.schedules?.length, 'schedule')}. This cannot be undone.`,
+      () => this.deleteSet(set),
+      undefined,
+      'Delete Set',
+    );
+  }
+
   deleteSet(set: CommunicationSet): void {
     this.setService.deleteForUnit(this.unit.id, set.id).subscribe({
       next: () => {
@@ -346,6 +357,11 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       },
       error: (error) => this.showError(error),
     });
+  }
+
+  private countLabel(count: number | undefined, noun: string): string {
+    const total = count || 0;
+    return `${total} ${noun}${total === 1 ? '' : 's'}`;
   }
 
   private copyToClipboard(document: Record<string, unknown>, message: string): void {
@@ -527,6 +543,17 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       this.rules = rules;
       this.recomputeAllocations();
     }
+  }
+
+  confirmDeleteRule(rule: CommunicationRule): void {
+    this.confirmationModalService.show(
+      'Delete Rule?',
+      `Deleting "${rule.name}" also deletes its ${this.countLabel(rule.conditions?.length, 'condition')} ` +
+        `and ${this.countLabel(rule.actions?.length, 'action')}. This cannot be undone.`,
+      () => this.deleteRule(rule),
+      undefined,
+      'Delete Rule',
+    );
   }
 
   deleteRule(rule: CommunicationRule): void {

@@ -2,16 +2,6 @@
   <div>
     <p>Current unit week: {{ currentUnitWeek <= 0 ? 'Not started' : currentUnitWeek }}</p>
   </div>
-  <div class="flex flex-wrap items-center gap-3">
-    <button color="primary" mat-flat-button (click)="addSet()">
-      <mat-icon>add</mat-icon>
-      Add set
-    </button>
-    <button mat-stroked-button (click)="importSet()">
-      <mat-icon>content_paste</mat-icon>
-      Import set
-    </button>
-  </div>
 
   @if (loading) {
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -88,7 +78,7 @@
                     <button
                       color="warn"
                       mat-icon-button
-                      (click)="deleteRule(rule); $event.stopPropagation()"
+                      (click)="confirmDeleteRule(rule); $event.stopPropagation()"
                     >
                       <mat-icon>delete</mat-icon>
                     </button>
@@ -163,7 +153,7 @@
               >
                 Execute Set
               </button>
-              <button color="warn" mat-icon-button (click)="deleteSet(set)">
+              <button color="warn" mat-icon-button (click)="confirmDeleteSet(set)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -396,4 +386,14 @@
       }
     </mat-drawer-content>
   </mat-drawer-container>
+</div>
+<div class="mt-4 mb-10 flex flex-wrap items-center gap-3">
+  <button color="primary" mat-flat-button (click)="addSet()">
+    <mat-icon>add</mat-icon>
+    Add set
+  </button>
+  <button mat-stroked-button (click)="importSet()">
+    <mat-icon>content_paste</mat-icon>
+    Import set
+  </button>
 </div>
