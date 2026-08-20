@@ -28,6 +28,7 @@ import {Unit} from 'src/app/api/models/unit';
 import {OverseerStepService} from 'src/app/api/services/overseer-step.service';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
@@ -77,6 +78,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnDestroy, On
     private overseerScriptEditorModal: OverseerScriptEditorModalService,
     private overseerStepService: OverseerStepService,
     private taskService: TaskService,
+    private confirmationModal: ConfirmationModalService,
   ) {}
 
   public get statusKeys() {
@@ -192,14 +194,30 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnDestroy, On
     }
   }
 
-  deleteStep() {
-    if (this.selectedOverseerStep && this.selectedOverseerStep === this.newOverseerStep) {
+  public deleteStepFromRow(step: OverseerStep, event: MouseEvent): void {
+    event.stopPropagation();
+
+    // The new step only exists in the browser, so there is nothing to confirm.
+    if (step === this.newOverseerStep) {
+      this.clearSelectionOf(step);
       this.newOverseerStep = null;
-      this.selectedOverseerStep = null;
       return;
     }
-    this.selectedOverseerStep?.delete();
-    this.selectedOverseerStep = null;
+
+    this.confirmationModal.show(
+      'Delete Overseer Step',
+      `Are you sure you want to delete "${step.name || 'Untitled Step'}"? This action is final and will delete the step's script along with it.`,
+      () => {
+        this.clearSelectionOf(step);
+        step.delete();
+      },
+    );
+  }
+
+  private clearSelectionOf(step: OverseerStep): void {
+    if (step === this.selectedOverseerStep) {
+      this.selectedOverseerStep = null;
+    }
   }
 
   saveStep() {

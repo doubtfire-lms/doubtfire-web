@@ -1,20 +1,4 @@
-<div class="flex flex-col gap-2.5">
-  <div>
-    <mat-checkbox
-      matInput
-      required
-      [disabled]="!overseerEnabled"
-      [(ngModel)]="taskDefinition.assessmentEnabled"
-    >
-      Automation Enabled
-    </mat-checkbox>
-    <br />
-    <mat-hint>
-      You can add or modify Overseer steps while keeping this unchecked and use the test submission
-      feature. Once everything is ready, enable automation to apply it to all student submissions.
-    </mat-hint>
-  </div>
-
+<div class="flex flex-col gap-5">
   <mat-form-field appearance="outline" class="flex-grow">
     <mat-label>Docker Image</mat-label>
     <mat-select [disabled]="!overseerEnabled" [(value)]="taskDefinition.overseerImageId">
@@ -22,7 +6,7 @@
         <mat-option [value]="image.id">{{ image.description }}</mat-option>
       }
     </mat-select>
-    <mat-hint>Docker image for Overseer</mat-hint>
+    <mat-hint>Required before you can add test steps.</mat-hint>
   </mat-form-field>
 
   <f-file-drop
@@ -80,46 +64,27 @@
     }
   }
 
-  <div class="flex flex-row gap-2.5 pt-2.5">
-    <button
-      class="me-4 flex-grow"
-      color="primary"
-      mat-flat-button
-      [disabled]="!taskDefinition.id"
-      (click)="testSubmission()"
-    >
-      <mat-icon>upload_file</mat-icon> Test Submission
-    </button>
-    <button
-      class="ms-4 flex-grow"
-      color="accent"
-      mat-flat-button
-      [disabled]="!this.currentUserTask?.project"
-      (click)="testSubmissionHistory()"
-    >
-      <mat-icon>preview</mat-icon> Submission History
-    </button>
-  </div>
-</div>
-
-<div class="mt-3"></div>
-
-@if (taskDefinition.overseerImageId) {
-  @if (!taskDefinitionHasChanges()) {
+  @if (!taskDefinition.overseerImageId) {
+    <div class="rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm text-blue-900">
+      Select a Docker image above to start adding test steps.
+    </div>
+  } @else if (taskDefinitionHasChanges()) {
+    <div class="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+      Save the task definition to continue &mdash; the step editor works against the saved image and
+      resources.
+    </div>
+  } @else {
     <div class="flex justify-end">
       <div class="flex gap-1">
-        @if (this.selectedOverseerStep) {
-          <button color="warn" mat-raised-button (click)="deleteStep()">Delete</button>
-          @if (overseerStepHasUnsavedChanges(selectedOverseerStep)) {
-            <button
-              color="primary"
-              mat-raised-button
-              [disabled]="isSavingStep(selectedOverseerStep)"
-              (click)="saveStep()"
-            >
-              Save
-            </button>
-          }
+        @if (selectedOverseerStep && overseerStepHasUnsavedChanges(selectedOverseerStep)) {
+          <button
+            color="primary"
+            mat-raised-button
+            [disabled]="isSavingStep(selectedOverseerStep)"
+            (click)="saveStep()"
+          >
+            Save
+          </button>
         }
       </div>
     </div>
@@ -160,6 +125,15 @@
                   <mat-icon>save</mat-icon>
                 </button>
               }
+              <button
+                class="shrink-0"
+                color="warn"
+                mat-icon-button
+                matTooltip="Delete step"
+                (click)="deleteStepFromRow(step, $event)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
             </div>
           }
           @if (newOverseerStep) {
@@ -183,6 +157,15 @@
               >
                 <mat-icon>save</mat-icon> Save
               </button>
+              <button
+                class="shrink-0"
+                color="warn"
+                mat-icon-button
+                matTooltip="Discard new step"
+                (click)="deleteStepFromRow(newOverseerStep, $event)"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
             </div>
           }
         </div>
@@ -192,7 +175,7 @@
           <mat-card class="min-h-[350px] w-full">
             <mat-card-content class="flex w-full flex-col">
               <div class="flex w-full gap-3">
-                <mat-form-field appearance="outline" class="basis-1/3" subscriptSizing="dynamic">
+                <mat-form-field appearance="outline" class="basis-2/5" subscriptSizing="dynamic">
                   <mat-label>Step Name</mat-label>
                   <input matInput required [(ngModel)]="selectedOverseerStep.name" />
                   <mat-hint>Visible to staff only</mat-hint>
@@ -239,9 +222,12 @@
                         runs.
                       </mat-hint>
                     </mat-form-field>
-                    <mat-slide-toggle class="mt-1" [(ngModel)]="selectedOverseerStep.showStdin">
-                      Show input file to student
-                    </mat-slide-toggle>
+                    <f-setting-toggle
+                      label="Show input file to student"
+                      [(checked)]="selectedOverseerStep.showStdin"
+                    >
+                      Students can open this input file from the Overseer report.
+                    </f-setting-toggle>
                   </div>
                   <div class="w-full">
                     <mat-form-field appearance="outline" class="w-full">
@@ -254,23 +240,21 @@
                       </mat-select>
                       <mat-hint> Program output must exactly match this file to pass. </mat-hint>
                     </mat-form-field>
-                    <mat-slide-toggle
-                      class="mt-1"
-                      [(ngModel)]="selectedOverseerStep.showExpectedOutput"
+                    <f-setting-toggle
+                      label="Show expected output to student"
+                      [(checked)]="selectedOverseerStep.showExpectedOutput"
                     >
-                      Show expected output file to student
-                    </mat-slide-toggle>
-                    <br />
-                    <mat-slide-toggle
-                      class="mt-1"
-                      [(ngModel)]="selectedOverseerStep.partialOutputDiff"
-                      >Partial Output Comparison</mat-slide-toggle
+                      Students can open this expected output file from the Overseer report.
+                    </f-setting-toggle>
+
+                    <f-setting-toggle
+                      class="border-t border-gray-200"
+                      label="Partial output comparison"
+                      [(checked)]="selectedOverseerStep.partialOutputDiff"
                     >
-                    <br />
-                    <mat-hint>
-                      If enabled, test passes if the expected output appears anywhere in the
-                      student's output. Otherwise, only exact matches pass.
-                    </mat-hint>
+                      The step passes if the expected output appears anywhere in the student's
+                      output. When off, only an exact match passes.
+                    </f-setting-toggle>
                   </div>
                 </div>
               }
@@ -329,12 +313,14 @@
                 <div class="w-full">
                   <!-- <div class="pb-1 mt-3">Success:</div> -->
                   <div class="w-full">
-                    <mat-slide-toggle
-                      class="my-1 min-w-fit"
-                      matTooltip="Whether consecutive tasks should run even if this task fails"
-                      [(ngModel)]="selectedOverseerStep.haltOnSuccess"
-                      >Halt on success
-                    </mat-slide-toggle>
+                    <f-setting-toggle
+                      label="Halt on success"
+                      [(checked)]="selectedOverseerStep.haltOnSuccess"
+                    >
+                      Stop the run when this step passes, skipping the steps after it, and set the
+                      task to the status below. With the status left on "No Change" the run
+                      continues as normal.
+                    </f-setting-toggle>
                     @if (selectedOverseerStep.haltOnSuccess) {
                       <mat-form-field appearance="outline" class="w-full">
                         <mat-label>Status on Success</mat-label>
@@ -353,12 +339,13 @@
                   <!-- <div class="py-1 mt-1">Fail:</div> -->
                   <div class="w-full">
                     <!-- On Sucesss, which status, should halt? -->
-                    <mat-slide-toggle
-                      class="my-1 min-w-fit"
-                      matTooltip="Whether consecutive tasks should run even if this task fails"
-                      [(ngModel)]="selectedOverseerStep.haltOnFailure"
-                      >Halt on failure
-                    </mat-slide-toggle>
+                    <f-setting-toggle
+                      label="Halt on failure"
+                      [(checked)]="selectedOverseerStep.haltOnFailure"
+                    >
+                      Stop the run when this step fails, skipping the steps after it. The task is
+                      set to the status below, unless that is left on "No Change".
+                    </f-setting-toggle>
                     @if (selectedOverseerStep.haltOnFailure) {
                       <mat-form-field appearance="outline" class="w-full">
                         <!-- On Fail, which status, should halt, feedback message? -->
@@ -378,7 +365,7 @@
               <mat-divider class="my-3"></mat-divider>
               <div class="mt-3 flex w-full gap-3">
                 <!-- TODO: checkbox to use same as overseer step name -->
-                <mat-form-field appearance="outline" class="basis-1/3" subscriptSizing="dynamic">
+                <mat-form-field appearance="outline" class="basis-2/5" subscriptSizing="dynamic">
                   <mat-label>Test Name</mat-label>
                   <input
                     matInput
@@ -412,27 +399,22 @@
                 >
               </mat-form-field>
 
-              <div class="mt-3">
-                <mat-slide-toggle [(ngModel)]="selectedOverseerStep.enabled"
-                  >Enabled</mat-slide-toggle
-                >
-                <br />
-                <mat-hint>
-                  If disabled, this step will not run and will not appear in the Overseer report for
-                  students.
-                </mat-hint>
-              </div>
+              <f-setting-toggle
+                class="mt-3"
+                label="Enabled"
+                [(checked)]="selectedOverseerStep.enabled"
+              >
+                When off, this step does not run and does not appear in the Overseer report.
+              </f-setting-toggle>
 
-              <div class="mt-3">
-                <mat-slide-toggle [(ngModel)]="selectedOverseerStep.showStdout"
-                  >Show output</mat-slide-toggle
-                >
-                <br />
-                <mat-hint>
-                  When enabled, students can see this step’s standard output, including script
-                  output, program output, and compile errors.
-                </mat-hint>
-              </div>
+              <f-setting-toggle
+                class="border-t border-gray-200"
+                label="Show output to student"
+                [(checked)]="selectedOverseerStep.showStdout"
+              >
+                Students can see this step's standard output, including script output, program
+                output, and compile errors.
+              </f-setting-toggle>
             </mat-card-content>
           </mat-card>
         } @else {
@@ -443,9 +425,46 @@
         }
       </mat-drawer-content>
     </mat-drawer-container>
-  } @else {
-    <div class="p-3 text-center text-gray-500">
-      Please save the task definition before configuring the overseer steps.
+  }
+
+  <p class="m-0 text-sm text-gray-600">
+    Test submissions run the steps against a submission of your own, with automation still off.
+    Student tasks are not affected.
+  </p>
+
+  @if (!taskDefinition.id) {
+    <div class="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+      Save the task definition before running a test submission.
     </div>
   }
-}
+
+  <div class="flex flex-row gap-2.5 pt-2.5">
+    <button
+      class="me-4 flex-grow"
+      color="primary"
+      mat-flat-button
+      [disabled]="!taskDefinition.id"
+      (click)="testSubmission()"
+    >
+      <mat-icon>upload_file</mat-icon> Test Submission
+    </button>
+    <button
+      class="ms-4 flex-grow"
+      color="accent"
+      mat-flat-button
+      [disabled]="!this.currentUserTask?.project"
+      (click)="testSubmissionHistory()"
+    >
+      <mat-icon>preview</mat-icon> Submission History
+    </button>
+  </div>
+
+  <f-setting-toggle
+    label="Run automation on student submissions"
+    [disabled]="!overseerEnabled"
+    [(checked)]="taskDefinition.assessmentEnabled"
+  >
+    When on, every student submission to this task is assessed automatically by the steps above.
+    Leave it off while you are still building and testing them.
+  </f-setting-toggle>
+</div>
