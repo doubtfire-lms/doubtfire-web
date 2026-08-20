@@ -167,11 +167,17 @@ export class EngagementPassportCardComponent implements OnChanges {
   }
 
   openEngagement(engagement: Engagement): void {
-    this.dialog.open(EngagementDetailDialogComponent, {
+    const dialogRef = this.dialog.open(EngagementDetailDialogComponent, {
       data: {engagement},
       width: 'calc(100vw - 32px)',
       maxWidth: '900px',
       autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe((deleted?: boolean) => {
+      if (deleted) {
+        this.buildWeeks(this.project.engagementCache.currentValues);
+      }
     });
   }
 
