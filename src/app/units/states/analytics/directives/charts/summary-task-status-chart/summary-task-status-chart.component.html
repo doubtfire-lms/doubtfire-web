@@ -36,18 +36,18 @@
     <div class="h-125">
       <ng-charts-bar-vertical-normalized
         class="reverse-legend-order"
-        [animations]="animations"
-        [gradient]="gradient"
-        [legend]="showLegend"
+        [animations]="true"
+        [gradient]="false"
+        [legend]="true"
         [results]="data"
         [scheme]="$any(colorScheme)"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
         [tooltipDisabled]="false"
-        [xAxis]="showXAxis"
-        [xAxisLabel]="xAxisLabel"
-        [yAxis]="showYAxis"
-        [yAxisLabel]="yAxisLabel"
+        [xAxis]="true"
+        [xAxisLabel]="normalisedCompletionSnapshotXLabel"
+        [yAxis]="true"
+        [yAxisLabel]="normalisedCompletionSnapshotYLabel"
       >
       </ng-charts-bar-vertical-normalized>
     </div>
@@ -97,18 +97,18 @@
     <div class="h-125">
       <ng-charts-area-chart-stacked
         class="reverse-legend-order"
-        [animations]="animations"
-        [gradient]="gradient"
-        [legend]="showLegend"
+        [animations]="true"
+        [gradient]="false"
+        [legend]="true"
         [results]="weeklyData"
         [scheme]="$any(colorScheme)"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
         [tooltipDisabled]="false"
-        [xAxis]="showXAxis"
-        [xAxisLabel]="weeklyXAxisLabel"
-        [yAxis]="showYAxis"
-        [yAxisLabel]="weeklyYAxisLabel"
+        [xAxis]="true"
+        [xAxisLabel]="weeklyAreaXAxisLabel"
+        [yAxis]="true"
+        [yAxisLabel]="weeklyAreaYAxisLabel"
       >
       </ng-charts-area-chart-stacked>
     </div>

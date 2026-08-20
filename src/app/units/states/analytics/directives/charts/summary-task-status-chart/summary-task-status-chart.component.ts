@@ -38,17 +38,10 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   campuses: string[] = [];
 
   // options
-  showXAxis: boolean = true;
-  showYAxis: boolean = true;
-  gradient: boolean = false;
-  showLegend: boolean = true;
-  showXAxisLabel: boolean = true;
-  xAxisLabel: string = 'Task';
-  showYAxisLabel: boolean = true;
-  yAxisLabel: string = 'Status';
-  weeklyXAxisLabel: string = 'Week';
-  weeklyYAxisLabel: string = 'Records';
-  animations: boolean = true;
+  normalisedCompletionSnapshotXLabel: string = 'Task';
+  normalisedCompletionSnapshotYLabel: string = 'Status';
+  weeklyAreaXAxisLabel: string = 'Week';
+  weeklyAreaYAxisLabel: string = 'Records';
 
   colorScheme = {
     domain: [''],
@@ -155,6 +148,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
 
   private autoCaptureAttempted: boolean = false;
 
+  // Order determines the order of the chart legend and series.
   private readonly statusMapping: TaskStatusEnum[] = [
     'complete',
     'assess_in_portfolio',
