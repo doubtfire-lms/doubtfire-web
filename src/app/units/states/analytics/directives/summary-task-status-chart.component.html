@@ -28,12 +28,12 @@
       </button>
     </div>
   </div>
-  <div class="px-4 pt-8 text-slate-600">
-    <h3 class="mb-0">{{ selectedSnapshotDate }}</h3>
-    <p>Student count: {{ snapshotStudentCount }}</p>
-  </div>
-  <div class="h-125">
-    @if (hasChartData) {
+  @if (hasChartData) {
+    <div class="px-4 pt-8 text-slate-600">
+      <h3 class="mb-0">{{ selectedSnapshotDate }}</h3>
+      <p>Student count: {{ snapshotStudentCount }}</p>
+    </div>
+    <div class="h-125">
       <ng-charts-bar-vertical-normalized
         class="reverse-legend-order"
         [animations]="animations"
@@ -50,12 +50,12 @@
         [yAxisLabel]="yAxisLabel"
       >
       </ng-charts-bar-vertical-normalized>
-    } @else {
-      <div class="flex h-full items-center justify-center">
-        <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
-      </div>
-    }
-  </div>
+    </div>
+  } @else {
+    <div class="flex h-full items-center justify-center">
+      <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+    </div>
+  }
   <div class="flex flex-col items-center px-4 pt-0 pb-4">
     <div class="-mb-2 flex w-full px-4">
       <mat-slider
@@ -87,4 +87,34 @@
       }
     </div>
   </div>
+  <mat-card-header class="text-pretty xl:max-w-[calc(50%)]">
+    <mat-card-title>Task Completion Status Over Time</mat-card-title>
+    <mat-card-subtitle class="mb-2.5">
+      <p>Task completion status across all tasks over time.</p>
+    </mat-card-subtitle>
+  </mat-card-header>
+  @if (hasChartData) {
+    <div class="h-125">
+      <ng-charts-area-chart-stacked
+        class="reverse-legend-order"
+        [animations]="animations"
+        [gradient]="gradient"
+        [legend]="showLegend"
+        [results]="weeklyData"
+        [scheme]="$any(colorScheme)"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [tooltipDisabled]="false"
+        [xAxis]="showXAxis"
+        [xAxisLabel]="weeklyXAxisLabel"
+        [yAxis]="showYAxis"
+        [yAxisLabel]="weeklyYAxisLabel"
+      >
+      </ng-charts-area-chart-stacked>
+    </div>
+  } @else {
+    <div class="flex h-full items-center justify-center">
+      <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+    </div>
+  }
 </mat-card>

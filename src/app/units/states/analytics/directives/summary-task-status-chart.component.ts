@@ -31,6 +31,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   @Input() unit: Unit;
 
   data: MultiSeries = [];
+  weeklyData: MultiSeries = [];
   hasChartData: boolean = false;
   sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
@@ -45,6 +46,8 @@ export class SummaryTaskStatusChartComponent implements OnInit {
   xAxisLabel: string = 'Task';
   showYAxisLabel: boolean = true;
   yAxisLabel: string = 'Status';
+  weeklyXAxisLabel: string = 'Week';
+  weeklyYAxisLabel: string = 'Records';
   animations: boolean = true;
 
   colorScheme = {
@@ -200,6 +203,7 @@ export class SummaryTaskStatusChartComponent implements OnInit {
 
     if (!selectedSnapshot) {
       this.data = [];
+      this.weeklyData = [];
       this.campuses = [];
       this.hasChartData = false;
       return;
@@ -207,10 +211,8 @@ export class SummaryTaskStatusChartComponent implements OnInit {
 
     this.campuses = Object.keys(selectedSnapshot.stats);
 
-    this.data =
-      this.campusFilter !== 'all' && selectedSnapshot.stats[this.campusFilter]
-        ? this.buildChartData(this.aggregateCampusData(selectedSnapshot.stats[this.campusFilter]))
-        : this.buildChartData(this.aggregateAllCampuses(selectedSnapshot.stats));
+    this.data = this.buildChartData(this.getTaskStats(selectedSnapshot));
+    this.weeklyData = this.buildWeeklyChartData(this.snapshots);
     this.hasChartData = this.data.length > 0;
   }
 
@@ -239,6 +241,38 @@ export class SummaryTaskStatusChartComponent implements OnInit {
           value: counts[status] || 0,
         })),
       }));
+  }
+
+  private buildWeeklyChartData(snapshots: TaskCompletionSnapshot[]): MultiSeries {
+    const lastSnapshotByWeek = new Map<string, TaskCompletionSnapshot>();
+
+    snapshots.forEach((snapshot) => {
+      const weekNumber = this.formatSnapshotLabel(snapshot.snapshot_date, 'short');
+      weekNumber && lastSnapshotByWeek.set(weekNumber, snapshot);
+    });
+
+    const snapshotsByWeek = [...lastSnapshotByWeek.values()];
+    return this.statusMapping.map((status) => ({
+      name: this.taskService.statusLabels.get(status) || status,
+      series: snapshotsByWeek.map((snapshot) => {
+        const taskStats = this.getTaskStats(snapshot);
+        const value = Object.values(taskStats).reduce(
+          (total, taskCounts) => total + (taskCounts[status] || 0),
+          0,
+        );
+
+        return {
+          name: this.formatSnapshotLabel(snapshot.snapshot_date, 'short'),
+          value,
+        };
+      }),
+    }));
+  }
+
+  private getTaskStats(snapshot: TaskCompletionSnapshot): TaskCodeStats {
+    return this.campusFilter !== 'all' && snapshot.stats[this.campusFilter]
+      ? this.aggregateCampusData(snapshot.stats[this.campusFilter])
+      : this.aggregateAllCampuses(snapshot.stats);
   }
 
   private mergeTaskCounts(target: TaskCodeStats, source: TaskCodeStats): void {
