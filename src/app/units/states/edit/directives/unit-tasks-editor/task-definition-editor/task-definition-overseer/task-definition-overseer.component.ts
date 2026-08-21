@@ -4,6 +4,7 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
+  DoCheck,
   Input,
   OnChanges,
   OnDestroy,
@@ -41,7 +42,7 @@ import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/o
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class TaskDefinitionOverseerComponent implements OnChanges, OnDestroy, OnInit {
+export class TaskDefinitionOverseerComponent implements DoCheck, OnChanges, OnDestroy, OnInit {
   @Input() taskDefinition: TaskDefinition;
 
   @ViewChild('editor') editorComponent;
@@ -62,6 +63,16 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnDestroy, On
   public stepType: 'status_check' | 'output_diff' = 'status_check';
   public visibility = 'public';
   public showOverseerResourcesEditor = false;
+
+  /**
+   * Whether the task definition has edits that have not been saved yet. Steps
+   * are stored against the saved task definition, so editing them is held off
+   * until those edits are persisted.
+   */
+  public taskDefinitionDirty = false;
+
+  /** Whether any overseer step has edits that have not been saved yet. */
+  public overseerStepsDirty = false;
   public isLoadingOverseerResourcesArchive = false;
   public overseerResourcesArchive: Blob | File | null = null;
   public images: Observable<OverseerImage[]>;
@@ -116,6 +127,10 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnDestroy, On
   }
 
   addStep() {
+    if (this.taskDefinitionDirty) {
+      return;
+    }
+
     this.newOverseerStep = new OverseerStep(this.taskDefinition);
     this.newOverseerStep.stepType = 'status_check';
     this.newOverseerStep.timeout = 30;
@@ -297,6 +312,13 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnDestroy, On
       this.currentUserTask = proj.findTaskForDefinition(this.taskDefinition.id);
       this.hasAnySubmissions();
     }
+  }
+
+  public ngDoCheck(): void {
+    this.taskDefinitionDirty = this.taskDefinitionHasChanges();
+    this.overseerStepsDirty =
+      !!this.newOverseerStep ||
+      this.overseerSteps.some((step) => this.overseerStepHasUnsavedChanges(step));
   }
 
   public ngOnDestroy(): void {
