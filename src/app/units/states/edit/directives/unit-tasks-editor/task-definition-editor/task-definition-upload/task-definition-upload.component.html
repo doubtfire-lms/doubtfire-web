@@ -37,10 +37,10 @@
     <th *matHeaderCellDef mat-header-cell style="width: 20%">Check Similarity</th>
     <td *matCellDef="let upreq" mat-cell style="width: 20%">
       @if (upreq.type === 'document' && tiiEnabled()) {
-        <mat-checkbox [(ngModel)]="upreq.tiiCheck">TurnItIn</mat-checkbox>
+        <mat-slide-toggle [(ngModel)]="upreq.tiiCheck">TurnItIn</mat-slide-toggle>
       }
       @if (upreq.type === 'code') {
-        <mat-checkbox [(ngModel)]="upreq.tiiCheck">Jplag</mat-checkbox>
+        <mat-slide-toggle [(ngModel)]="upreq.tiiCheck">JPlag</mat-slide-toggle>
       }
     </td>
   </ng-container>
