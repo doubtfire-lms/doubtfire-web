@@ -449,9 +449,36 @@
               </mat-card-content>
             </mat-card>
           } @else {
-            <div class="flex min-h-[350px] w-full flex-col items-center justify-center bg-gray-50">
-              No steps selected
-              <mat-icon style="width: 75px; height: 75px; font-size: 75px">tab_unselected</mat-icon>
+            <div
+              class="flex min-h-[350px] w-full flex-col items-center justify-center gap-4 p-10 text-center"
+            >
+              @if (!overseerSteps.length && !newOverseerStep) {
+                <mat-icon
+                  aria-hidden="true"
+                  class="text-gray-400"
+                  style="width: 56px; height: 56px; font-size: 56px"
+                  >checklist</mat-icon
+                >
+                <div class="flex flex-col gap-1">
+                  <h4 class="m-0 text-base font-bold text-gray-900">No steps yet</h4>
+                  <p class="m-0 max-w-prose text-sm text-gray-600">
+                    Add a step with + in the list to start building the test.
+                  </p>
+                </div>
+              } @else {
+                <mat-icon
+                  aria-hidden="true"
+                  class="text-gray-400"
+                  style="width: 56px; height: 56px; font-size: 56px"
+                  >list_alt</mat-icon
+                >
+                <div class="flex flex-col gap-1">
+                  <h4 class="m-0 text-base font-bold text-gray-900">No step selected</h4>
+                  <p class="m-0 max-w-prose text-sm text-gray-600">
+                    Pick a step from the list to edit its script and settings.
+                  </p>
+                </div>
+              }
             </div>
           }
         </mat-drawer-content>
