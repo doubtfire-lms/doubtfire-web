@@ -1,9 +1,9 @@
 <table #upreqTable class="table-fixed" mat-table [dataSource]="taskDefinition.uploadRequirements">
   <!-- File name Column -->
   <ng-container matColumnDef="file-name" sticky>
-    <th *matHeaderCellDef mat-header-cell style="width: 30%">Filename</th>
-    <td *matCellDef="let upreq" mat-cell style="width: 30%">
-      <mat-form-field appearance="outline">
+    <th *matHeaderCellDef mat-header-cell style="width: 45%">Filename</th>
+    <td *matCellDef="let upreq" mat-cell style="width: 45%">
+      <mat-form-field appearance="outline" class="mt-5.5 w-full">
         <input matInput required [(ngModel)]="upreq.name" />
       </mat-form-field>
     </td>
@@ -25,10 +25,10 @@
   <ng-container matColumnDef="submission-history" sticky>
     <th *matHeaderCellDef mat-header-cell style="width: 15%">Submission History</th>
     <td *matCellDef="let upreq" mat-cell style="width: 15%">
-      <mat-checkbox
+      <mat-slide-toggle
         matTooltip="Retain this file in the task's submission history"
         [(ngModel)]="upreq.submissionHistory"
-      ></mat-checkbox>
+      ></mat-slide-toggle>
     </td>
   </ng-container>
 
@@ -37,10 +37,10 @@
     <th *matHeaderCellDef mat-header-cell style="width: 20%">Check Similarity</th>
     <td *matCellDef="let upreq" mat-cell style="width: 20%">
       @if (upreq.type === 'document' && tiiEnabled()) {
-        <mat-checkbox [(ngModel)]="upreq.tiiCheck">TurnItIn</mat-checkbox>
+        <mat-slide-toggle [(ngModel)]="upreq.tiiCheck">TurnItIn</mat-slide-toggle>
       }
       @if (upreq.type === 'code') {
-        <mat-checkbox [(ngModel)]="upreq.tiiCheck">Jplag</mat-checkbox>
+        <mat-slide-toggle [(ngModel)]="upreq.tiiCheck">JPlag</mat-slide-toggle>
       }
     </td>
   </ng-container>
@@ -130,17 +130,12 @@
       <input matInput type="number" [(ngModel)]="taskDefinition.plagiarismWarnPct" />
     </mat-form-field>
   </div>
-  <div class="flex flex-grow">
-    <div class="basis-1/2">
-      <mat-slide-toggle [(ngModel)]="taskDefinition.useResourcesForJplagBaseCode">
-        Use Task Resources for JPlag Base Code</mat-slide-toggle
-      >
-      <p>
-        Base code is a common framework included in all submissions. When enabled, student code
-        matching this base code will be ignored during JPlag similarity checks. The base code will
-        be automatically extracted from the task resources.
-      </p>
-    </div>
-    <div class="basis-1/2"></div>
-  </div>
+  <f-setting-toggle
+    label="Use task resources for JPlag base code"
+    [(checked)]="taskDefinition.useResourcesForJplagBaseCode"
+  >
+    Base code is a common framework included in all submissions. When on, student code matching the
+    base code is ignored during JPlag similarity checks. It is extracted from the task resources
+    automatically.
+  </f-setting-toggle>
 }
