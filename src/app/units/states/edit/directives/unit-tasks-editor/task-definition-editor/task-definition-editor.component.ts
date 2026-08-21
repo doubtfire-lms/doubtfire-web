@@ -65,7 +65,7 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
     {id: 'task-resources', label: 'Task Resources'},
     {id: 'prerequisite-tasks', label: 'Prerequisite Tasks'},
     {id: 'discussion-prompts', label: 'Discussion Prompts'},
-    {id: 'task-assessment-automation', label: 'Task Assessment Automation'},
+    {id: 'task-assessment-automation', label: 'Overseer'},
     {id: 'scorm-test', label: 'SCORM Test'},
     {id: 'optional-settings', label: 'Optional Settings'},
   ];
