@@ -345,8 +345,6 @@
                         label="Halt on success"
                         [(checked)]="selectedOverseerStep.haltOnSuccess"
                       >
-                        When this step passes, skip the remaining steps and set the selected status.
-                        “No Change” continues the run normally.
                       </f-setting-toggle>
                       @if (selectedOverseerStep.haltOnSuccess) {
                         <mat-form-field appearance="outline" class="w-full">
@@ -370,8 +368,6 @@
                         label="Halt on failure"
                         [(checked)]="selectedOverseerStep.haltOnFailure"
                       >
-                        When this step fails, skip the remaining steps and set the selected status.
-                        “No Change” keeps the current status.
                       </f-setting-toggle>
                       @if (selectedOverseerStep.haltOnFailure) {
                         <mat-form-field appearance="outline" class="w-full">
