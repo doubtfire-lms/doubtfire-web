@@ -1,9 +1,9 @@
 <table #upreqTable class="table-fixed" mat-table [dataSource]="taskDefinition.uploadRequirements">
   <!-- File name Column -->
   <ng-container matColumnDef="file-name" sticky>
-    <th *matHeaderCellDef mat-header-cell style="width: 30%">Filename</th>
-    <td *matCellDef="let upreq" mat-cell style="width: 30%">
-      <mat-form-field appearance="outline">
+    <th *matHeaderCellDef mat-header-cell style="width: 45%">Filename</th>
+    <td *matCellDef="let upreq" mat-cell style="width: 45%">
+      <mat-form-field appearance="outline" class="mt-5.5 w-full">
         <input matInput required [(ngModel)]="upreq.name" />
       </mat-form-field>
     </td>
@@ -25,10 +25,10 @@
   <ng-container matColumnDef="submission-history" sticky>
     <th *matHeaderCellDef mat-header-cell style="width: 15%">Submission History</th>
     <td *matCellDef="let upreq" mat-cell style="width: 15%">
-      <mat-checkbox
+      <mat-slide-toggle
         matTooltip="Retain this file in the task's submission history"
         [(ngModel)]="upreq.submissionHistory"
-      ></mat-checkbox>
+      ></mat-slide-toggle>
     </td>
   </ng-container>
 
