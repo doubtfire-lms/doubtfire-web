@@ -21,9 +21,24 @@
         }
       </div>
 
-      <button aria-label="Close engagement" mat-dialog-close mat-icon-button type="button">
-        <mat-icon>close</mat-icon>
-      </button>
+      <div class="flex shrink-0 items-center">
+        @if (currentUserCanDelete) {
+          <button
+            aria-label="Delete engagement"
+            mat-icon-button
+            matTooltip="Delete engagement"
+            type="button"
+            [disabled]="deleting"
+            (click)="deleteEngagement()"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        }
+
+        <button aria-label="Close engagement" mat-dialog-close mat-icon-button type="button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 

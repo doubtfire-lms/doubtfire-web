@@ -44,6 +44,8 @@ export class CommunicationCondition extends Entity {
   tutorial_id?: number;
   tutorial_stream_id?: number;
   campus_id?: number;
+  group_set_id?: number;
+  group_id?: number;
   submitted_portfolio?: boolean;
   unresolved?: boolean;
 
