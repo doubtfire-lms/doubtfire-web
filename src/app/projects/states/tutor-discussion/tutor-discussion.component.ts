@@ -11,7 +11,6 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {MatSelectionList} from '@angular/material/list';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -21,11 +20,9 @@ import {
   Project,
   ProjectService,
   Task,
-  TaskCommentService,
   TaskDefinition,
   TaskService,
   TaskStatusEnum,
-  TutorialStream,
   Unit,
   UnitService,
   UserService,
@@ -34,6 +31,7 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {DiscussedInClassReasonModalService} from 'src/app/common/modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GradeService} from 'src/app/common/services/grade.service';
+import {TaskCommentsViewerComponent} from 'src/app/tasks/task-comments-viewer/task-comments-viewer.component';
 import {AddEngagementDialogComponent} from '../dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
 
 enum TutorDiscussionTabView {
@@ -58,7 +56,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   @Input() username: string;
   @Input() attendance: boolean;
 
-  @ViewChild('tasks') tasksList: MatSelectionList;
+  @ViewChild('commentsViewer') commentsViewer?: TaskCommentsViewerComponent;
   selectedTaskDefinition: TaskDefinition | null = null;
 
   public filteredTasks: Task[] = [];
@@ -67,7 +65,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   public unit: Unit | null;
   public project: Project | null;
 
-  public selectedTask: Task | null;
+  public selectedTask: Task | null = null;
   public allowHover = true;
   public isNarrow = false;
 
@@ -96,7 +94,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
     private discussedInClassReasonModal: DiscussedInClassReasonModalService,
-    private taskCommentService: TaskCommentService,
     private taskService: TaskService,
     private engagementService: EngagementService,
     private dialog: MatDialog,
@@ -105,19 +102,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   public ngOnDestroy(): void {
     this.stopQrScanner();
     this.restoreViewportZoom();
-  }
-
-  public currentUserTutorsInStream(tutorialStream: TutorialStream): boolean {
-    const user = this.userService.currentUser;
-    const tutorials = this.unit.tutorials.filter(
-      (t) =>
-        t.tutorialStream.abbreviation === tutorialStream.abbreviation &&
-        t.tutorialStream.name === tutorialStream.name,
-    );
-    if (tutorials.some((t) => t.tutor.id === user.id)) {
-      return true;
-    }
-    return false;
   }
 
   onTabChange(event: MatTabChangeEvent): void {
@@ -394,38 +378,39 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  public loadTaskComments(event: MouseEvent, task: Task) {
-    event.stopPropagation();
+  public selectTask(task: Task): void {
     this.selectedTask = task;
   }
 
-  public async setSelectedTasksStatus(status: TaskStatusEnum) {
-    const selectedTasks = this.tasksList.selectedOptions.selected.map((taskOption) => {
-      return taskOption.value as Task;
-    });
+  private refreshTaskComments(task: Task): void {
+    if (this.selectedTask?.id === task.id) {
+      this.commentsViewer?.fetchComments(task, false);
+    }
+  }
+
+  public async setSelectedTaskStatus(status: TaskStatusEnum): Promise<void> {
+    const task = this.selectedTask;
+    if (!task) {
+      return;
+    }
 
     if (status === 'fix_and_resubmit') {
       try {
-        const hasReadyDependents = (
-          await Promise.all(
-            selectedTasks.map((task) =>
-              task?.definition && task?.project ? task.hasReadyForFeedbackDependents() : false,
-            ),
-          )
-        ).some(Boolean);
+        const hasReadyDependents =
+          task.definition && task.project ? await task.hasReadyForFeedbackDependents() : false;
 
         if (hasReadyDependents) {
           this.confirmationModalService.show(
             'Move dependent tasks to Fix and Resubmit?',
-            'One or more selected tasks are prerequisites for other tasks submitted by this student that are Ready for Feedback. Do you want to move those tasks to Fix and Resubmit as well?',
+            'This task is a prerequisite for other tasks submitted by this student that are Ready for Feedback. Do you want to move those tasks to Fix and Resubmit as well?',
             () => {
-              this.updateSelectedTasksStatus(selectedTasks, status, true);
+              this.updateSelectedTaskStatus(task, status, true);
             },
             () => {
-              this.updateSelectedTasksStatus(selectedTasks, status, false);
+              this.updateSelectedTaskStatus(task, status, false);
             },
             'Yes, update dependent tasks',
-            'No, just selected tasks',
+            'No, just this task',
           );
           return;
         }
@@ -434,19 +419,19 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       }
     }
 
-    this.updateSelectedTasksStatus(selectedTasks, status, false);
+    this.updateSelectedTaskStatus(task, status, false);
   }
 
-  private updateSelectedTasksStatus(
-    selectedTasks: Task[],
+  private updateSelectedTaskStatus(
+    task: Task,
     status: TaskStatusEnum,
     moveDependentTasks: boolean,
-  ) {
-    const onStatusUpdated = (
-      task: Task,
-      fromStatus: TaskStatusEnum,
-      expectedStatus: TaskStatusEnum,
-    ) => {
+  ): void {
+    const fromStatus = task.status;
+    const expectedStatus =
+      task.definition.assessInPortfolioOnly && status === 'complete' ? 'working_on_it' : status;
+
+    const onStatusUpdated = () => {
       if (task.status !== expectedStatus) {
         return;
       }
@@ -463,64 +448,43 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       );
     };
 
-    for (const task of selectedTasks) {
-      const fromStatus = task.status;
-      if (task.definition.assessInPortfolioOnly) {
-        const expectedStatus = status === 'complete' ? 'working_on_it' : status;
-        task.updateTaskStatus(expectedStatus, true, false, () =>
-          onStatusUpdated(task, fromStatus, expectedStatus),
-        );
-      } else if (status === 'fix_and_resubmit') {
-        task.updateTaskStatus(status, true, moveDependentTasks, () =>
-          onStatusUpdated(task, fromStatus, status),
-        );
-      } else {
-        task.updateTaskStatus(status, true, false, () => onStatusUpdated(task, fromStatus, status));
-      }
+    task.updateTaskStatus(
+      expectedStatus,
+      true,
+      status === 'fix_and_resubmit' && moveDependentTasks,
+      onStatusUpdated,
+      () => this.refreshTaskComments(task),
+    );
+  }
+
+  public get canMarkSelectedTaskComplete(): boolean {
+    return !!this.selectedTask;
+  }
+
+  public get selectedTaskNeedsRediscuss(): boolean {
+    return this.selectedTask?.status === 'discuss';
+  }
+
+  public markSelectedTaskDiscussed(): void {
+    const task = this.selectedTask;
+    if (!task) {
+      return;
     }
-  }
 
-  public get canMarkSelectedTasksComplete(): boolean {
-    const selectedTasks = this.tasksList?.selectedOptions?.selected ?? [];
-    if (!selectedTasks.length) {
-      return false;
-    }
-
-    return true;
-  }
-
-  public get selectedTasksIncludeDiscuss(): boolean {
-    const selectedTasks = this.tasksList?.selectedOptions?.selected ?? [];
-    return selectedTasks.some((taskOption) => {
-      const task = taskOption.value as Task;
-      return task.status === 'discuss';
-    });
-  }
-
-  public markSelectedTasksDicussed() {
-    const selectedTasks = this.tasksList.selectedOptions.selected;
-    let classDiscussionRecorded = false;
     const onDiscussionRecorded = () => {
-      if (!classDiscussionRecorded) {
-        classDiscussionRecorded = true;
-        this.recordClassDiscussion([], false);
-      }
+      this.recordClassDiscussion([], false);
     };
+    const onDiscussionRejected = () => this.refreshTaskComments(task);
 
     if (!this.unit?.enforceFeedbackBeforeDiscussedInClass) {
-      for (const taskOption of selectedTasks) {
-        const task = taskOption.value as Task;
-        task.markAsDiscussed(undefined, onDiscussionRecorded);
-      }
+      task.markAsDiscussed(undefined, onDiscussionRecorded, onDiscussionRejected);
       return;
     }
 
     this.discussedInClassReasonModal
       .show(
         'Mark Discussed in Class',
-        `Add a tutor note explaining why ${selectedTasks.length} task${
-          selectedTasks.length === 1 ? '' : 's'
-        } ${selectedTasks.length === 1 ? 'is' : 'are'} being marked as discussed in class.`,
+        'Add a tutor note explaining why this task is being marked as discussed in class.',
         this.discussedInClassNotePrefix,
       )
       .afterClosed()
@@ -529,10 +493,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
           return;
         }
 
-        for (const taskOption of selectedTasks) {
-          const task = taskOption.value as Task;
-          task.markAsDiscussed(reason, onDiscussionRecorded);
-        }
+        task.markAsDiscussed(reason, onDiscussionRecorded, onDiscussionRejected);
       });
   }
 
@@ -556,24 +517,22 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  public markSelectedTasksCheckedIn() {
-    const selectedTasks = this.tasksList.selectedOptions.selected;
-    if (selectedTasks.length > 1) {
-      this.alertService.error('Can only check-in 1 task at a time', 5000);
+  public markSelectedTaskCheckedIn(): void {
+    const task = this.selectedTask;
+    if (!task) {
       return;
     }
-    for (const taskOption of selectedTasks) {
-      const task = taskOption.value as Task;
-      this.taskService.checkInTaskForStudent(task).subscribe({
-        next: () => {
-          this.taskService.notifyStatusChange(task);
-          this.alertService.success('Successfully checked in', 2500);
-        },
-        error: (_error) => {
-          this.alertService.error('Failed to check-in', 5000);
-        },
-      });
-    }
+
+    this.taskService.checkInTaskForStudent(task).subscribe({
+      next: () => {
+        this.taskService.notifyStatusChange(task);
+        this.alertService.success('Successfully checked in', 2500);
+      },
+      error: (_error) => {
+        this.alertService.error('Failed to check-in', 5000);
+        this.refreshTaskComments(task);
+      },
+    });
   }
 
   private getUnit(): Promise<Unit> {
@@ -670,7 +629,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     console.time('getStudentTasks()');
     // this.project = null;
     // this.filteredTasks = [];
-    // this.selectedTask = null;
 
     this.getUnit()
       .then((_unit) => {
@@ -697,7 +655,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
           ];
         }
 
-        this.selectedTask = this.filteredTasks[0] ?? null;
+        this.selectedTask = null;
         this.project = project;
         this.scanningQr = false;
         this.loadingStudentData = false;

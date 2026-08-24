@@ -26,6 +26,15 @@ user-icon {
 
 .mat-mdc-list-item {
   border: none;
+  border-radius: 6px;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.mat-mdc-list-option.selected-task {
+  background-color: #eff6ff;
+  box-shadow: inset 3px 0 0 #3b82f6;
 }
 
 .mat-mdc-list-item .notification {
@@ -67,11 +76,6 @@ user-icon {
 //     color: gray;
 //   }
 // }
-
-.mdc-list-item__start.mat-mdc-list-option-checkbox-before {
-  margin-right: 0 !important;
-  padding: 0 !important;
-}
 
 .medium-icon-button {
   width: 75px !important;
