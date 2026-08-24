@@ -1,7 +1,13 @@
-import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
+import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Engagement, EngagementService, Project} from 'src/app/api/models/doubtfire-model';
+import {
+  Engagement,
+  EngagementService,
+  Project,
+  ProjectService,
+} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 type EvidenceMode = 'none' | 'url' | 'attachment';
@@ -22,8 +28,15 @@ interface AddEngagementForm {
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class AddEngagementDialogComponent {
-  readonly engagementTypes = ['Discuss', 'Attendance', 'Forum', 'Email', 'Opportunity'];
+export class AddEngagementDialogComponent implements OnDestroy {
+  readonly engagementTypes = [
+    'Discuss',
+    'Attendance',
+    'Forum',
+    'Email',
+    'Opportunity',
+    'Group Activity',
+  ];
   readonly notePlaceholders: Record<string, string> = {
     attendance: 'Attended tutorial and participated in class activities.',
     discuss: 'Discussed tasks during tutorial.',
@@ -31,6 +44,7 @@ export class AddEngagementDialogComponent {
     forum: 'Posted to the unit forum and engaged with discussion.',
     email: 'Discussed unit progress with the teaching team via email.',
     opportunity: 'Engagement concern noted for follow-up.',
+    'group activity': 'Participated in a group activity and collaborated with peers.',
   };
   readonly maxAttachmentSize = 30 * 1024 * 1024;
   readonly form: FormGroup<AddEngagementForm>;
@@ -38,13 +52,25 @@ export class AddEngagementDialogComponent {
   attachment?: File;
   attachmentError?: string;
   saving = false;
+  groupMode = false;
+  groupProjects: Project[];
+  unitProjects: Project[] = [];
+  readonly studentSearch = new FormControl('', {nonNullable: true});
+  loadingStudents = false;
+  studentsLoaded = false;
+  scanningStudent = false;
+  loadingStudent = false;
+
+  private qrScanner?: Html5QrcodeScanner;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) readonly data: {project: Project},
     private dialogRef: MatDialogRef<AddEngagementDialogComponent>,
     private engagementService: EngagementService,
+    private projectService: ProjectService,
     private alerts: AlertService,
   ) {
+    this.groupProjects = [data.project];
     const now = new Date();
     this.form = new FormGroup<AddEngagementForm>({
       engagementType: new FormControl('', {
@@ -87,6 +113,29 @@ export class AddEngagementDialogComponent {
     return true;
   }
 
+  get projects(): Project[] {
+    return this.groupMode ? this.groupProjects : [this.data.project];
+  }
+
+  get filteredStudents(): Project[] {
+    const search = this.studentSearch.value.trim().toLowerCase();
+    if (search.length < 2) {
+      return [];
+    }
+
+    return this.unitProjects
+      .filter(
+        (project) =>
+          project.enrolled &&
+          !this.groupProjects.some((member) => member.id === project.id) &&
+          [project.student.name, project.student.username, project.student.studentId]
+            .filter(Boolean)
+            .some((value) => String(value).toLowerCase().includes(search)),
+      )
+      .sort((left, right) => left.student.name.localeCompare(right.student.name))
+      .slice(0, 8);
+  }
+
   get notePlaceholder(): string {
     const engagementType = this.form.controls.engagementType.value.trim().toLowerCase();
     return (
@@ -96,6 +145,54 @@ export class AddEngagementDialogComponent {
 
   engagementTypeSelected(input: HTMLInputElement): void {
     window.setTimeout(() => input.blur());
+  }
+
+  modeChanged(index: number): void {
+    this.groupMode = index === 1;
+    if (this.groupMode) {
+      this.loadUnitStudents();
+    }
+  }
+
+  addStudentProject(project: Project): void {
+    if (!this.groupProjects.some((member) => member.id === project.id)) {
+      this.groupProjects = [...this.groupProjects, project];
+    }
+  }
+
+  studentSelected(project: Project, input: HTMLInputElement): void {
+    this.addStudentProject(project);
+    window.setTimeout(() => {
+      this.studentSearch.setValue('');
+      input.value = '';
+    });
+  }
+
+  addStudent(): void {
+    this.scanningStudent = true;
+    setTimeout(() => {
+      this.qrScanner = new Html5QrcodeScanner(
+        'engagement-group-qr-reader',
+        {fps: 10, qrbox: 250},
+        false,
+      );
+      this.qrScanner.render(
+        (data) => this.studentQrScanned(data),
+        () => {
+          // Invalid frames are expected while the camera is searching for a QR code.
+        },
+      );
+    });
+  }
+
+  cancelStudentScan(): void {
+    this.closeStudentScanner();
+  }
+
+  removeStudent(project: Project): void {
+    if (project.id !== this.data.project.id) {
+      this.groupProjects = this.groupProjects.filter((member) => member.id !== project.id);
+    }
   }
 
   evidenceModeChanged(): void {
@@ -154,6 +251,7 @@ export class AddEngagementDialogComponent {
         engagementType: values.engagementType.trim(),
         note: values.note.trim() || this.notePlaceholder,
         occurredAt,
+        projectIds: this.projects.map((project) => project.id),
         evidenceUrl: values.evidenceMode === 'url' ? values.evidenceUrl.trim() : undefined,
         attachment: values.evidenceMode === 'attachment' ? this.attachment : undefined,
       })
@@ -166,6 +264,111 @@ export class AddEngagementDialogComponent {
           this.saving = false;
           this.alerts.error(error?.error ?? 'Unable to add the engagement stamp.');
         },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.qrScanner?.clear().catch(() => undefined);
+  }
+
+  private studentQrScanned(data: string): void {
+    if (this.loadingStudent) {
+      return;
+    }
+
+    let unitId: number;
+    let projectId: number;
+    let username: string | null;
+    try {
+      const params = new URL(data).searchParams;
+      unitId = Number(params.get('unitId'));
+      projectId = Number(params.get('projectId'));
+      username = params.get('username');
+    } catch {
+      return;
+    }
+
+    if ((!unitId && projectId <= 0 && !username) || !this.qrScanner) {
+      return;
+    }
+
+    this.qrScanner.pause(true);
+    this.loadingStudent = true;
+
+    if (unitId && unitId !== this.data.project.unit.id) {
+      this.loadingStudent = false;
+      this.alerts.error('This student is not enrolled in the current unit.');
+      this.resumeStudentScanner();
+      return;
+    }
+
+    this.projectService.loadStudents(this.data.project.unit, false, false).subscribe({
+      next: (projects) => {
+        const project = projects.find(
+          (candidate) =>
+            (projectId > 0 && candidate.id === projectId) ||
+            (username && candidate.student.username === username),
+        );
+
+        if (!project) {
+          this.loadingStudent = false;
+          this.alerts.error('This student is not enrolled in the current unit.');
+          this.resumeStudentScanner();
+          return;
+        }
+
+        if (!this.groupProjects.some((member) => member.id === project.id)) {
+          this.addStudentProject(project);
+          this.alerts.success(`${project.student.name} added to the group.`);
+        } else {
+          this.alerts.message(`${project.student.name} is already in the group.`);
+        }
+        this.closeStudentScanner();
+      },
+      error: (error) => {
+        this.loadingStudent = false;
+        this.alerts.error(error?.error ?? 'Unable to load this student.');
+        this.resumeStudentScanner();
+      },
+    });
+  }
+
+  private resumeStudentScanner(): void {
+    setTimeout(() => {
+      if (this.qrScanner?.getState() === Html5QrcodeScannerState.PAUSED) {
+        this.qrScanner.resume();
+      }
+    }, 1000);
+  }
+
+  private loadUnitStudents(): void {
+    if (this.loadingStudents || this.studentsLoaded) {
+      return;
+    }
+
+    this.unitProjects = [...this.data.project.unit.studentCache.currentValues];
+    this.loadingStudents = true;
+    this.projectService.loadStudents(this.data.project.unit, false, false).subscribe({
+      next: (projects) => {
+        this.unitProjects = projects;
+        this.studentsLoaded = true;
+        this.loadingStudents = false;
+      },
+      error: (error) => {
+        this.loadingStudents = false;
+        this.alerts.error(error?.error ?? 'Unable to load students for this unit.');
+      },
+    });
+  }
+
+  private closeStudentScanner(): void {
+    const scanner = this.qrScanner;
+    this.qrScanner = undefined;
+    Promise.resolve(scanner?.clear())
+      .catch(() => undefined)
+      .finally(() => {
+        this.scanningStudent = false;
+        this.loadingStudent = false;
       });
   }
 

@@ -235,6 +235,7 @@ import {EmojiService} from './common/services/emoji.service';
 import {GradeService} from './common/services/grade.service';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
 import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
+import {SettingToggleComponent} from './common/setting-toggle/setting-toggle.component';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
@@ -310,6 +311,7 @@ import {CheckForUpdateService} from './sessions/service-worker-updater/check-for
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
 import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+import {SubmissionRequestDeniedModalComponent} from './tasks/modals/submission-request-denied-modal/submission-request-denied-modal.component';
 import {SubmissionTypeModalComponent} from './tasks/modals/submission-type-modal/submission-type-modal.component';
 import {UploadSubmissionModalComponent} from './tasks/modals/upload-submission-modal/upload-submission-modal.component';
 import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-tasks-list.component';
@@ -339,6 +341,7 @@ import {TaskCommentActionComponent} from './units/states/edit/directives/unit-co
 import {CommunicationScheduleModalComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedule-modal.component';
 import {CommunicationSchedulesComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedules.component';
 import {CommunicationConditionsComponent} from './units/states/edit/directives/unit-communications-editor/conditions/communication-conditions.component';
+import {TaskStatusSelectComponent} from './units/states/edit/directives/unit-communications-editor/task-status-select/task-status-select.component';
 import {UnitCommunicationsEditorComponent} from './units/states/edit/directives/unit-communications-editor/unit-communications-editor.component';
 import {UnitContentEditorComponent} from './units/states/edit/directives/unit-content-editor/unit-content-editor.component';
 import {
@@ -582,6 +585,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     CreateNewUnitModalContentComponent,
     TiiActionLogComponent,
     FChipComponent,
+    SettingToggleComponent,
     UnitCodeComponent,
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
@@ -653,6 +657,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ModerationComponent,
     TutorNotesModalComponent,
     FeedbackAppealModalComponent,
+    SubmissionRequestDeniedModalComponent,
     UploadSubmissionModalComponent,
     ConfirmModerationModalComponent,
     TaskClaimComponent,
@@ -664,6 +669,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     EmailStaffActionComponent,
     EmailStudentActionComponent,
     TaskCommentActionComponent,
+    TaskStatusSelectComponent,
     UnitCommunicationsEditorComponent,
     UnitContentEditorComponent,
     TutorialsComponent,

@@ -78,6 +78,9 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.unit = unit;
         this.staffFilter = unit.myRole === 'Tutor' ? 'mine' : 'all';
 
+        // Reveal cached students right away
+        this.loadingStudents = this.unit.activeStudents.length === 0;
+
         this.subscriptions.push(
           this.unit.studentCache.values.subscribe(() => {
             this.updateSuggestions();
@@ -194,7 +197,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
     const searchValue = this.searchText.trim().toLowerCase();
     const currentUser = this.userService.currentUser;
 
-    return [...(this.unit?.students ?? [])]
+    return [...(this.unit?.activeStudents ?? [])]
       .filter((project) => (this.staffFilter === 'mine' ? project.hasTutor(currentUser) : true))
       .filter((project) => (searchValue ? this.matchesSearch(project, searchValue) : true))
       .sort((a, b) => this.compareProjects(a, b));

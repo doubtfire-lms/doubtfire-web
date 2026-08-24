@@ -11,6 +11,7 @@ import {
 } from 'src/app/api/models/unit-content-link';
 import {UnitContentLinkService} from 'src/app/api/services/unit-content-link.service';
 import {UnitContentSiteService} from 'src/app/api/services/unit-content-site.service';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {UnitContentViewerComponent} from 'src/app/projects/states/content/unit-content-viewer.component';
@@ -97,6 +98,7 @@ export class UnitContentEditorComponent implements OnInit {
     private unitContentSiteService: UnitContentSiteService,
     private confirmationModal: ConfirmationModalService,
     private alerts: AlertService,
+    private fileDownloader: FileDownloaderService,
   ) {}
 
   public ngOnInit(): void {
@@ -144,6 +146,13 @@ export class UnitContentEditorComponent implements OnInit {
       },
       error: (error) => this.alerts.error(`Failed to delete content site: ${error}`, 6000),
     });
+  }
+
+  public downloadSite(site: UnitContentSite): void {
+    this.fileDownloader.downloadFile(
+      this.unitContentSiteService.archiveUrlForUnit(this.unit, site),
+      site.originalFilename,
+    );
   }
 
   public confirmReplaceSite(site: UnitContentSite, input: HTMLInputElement): void {

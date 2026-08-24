@@ -73,6 +73,11 @@ export class EngagementPassportCardComponent implements OnChanges {
       icon: 'mail',
       classes: 'border-violet-300 bg-violet-50 text-violet-700',
     },
+    'group activity': {
+      label: 'Group activity',
+      icon: 'group_work',
+      classes: 'border-orange-300 bg-orange-50 text-orange-700',
+    },
     opportunity: {
       label: 'Opportunity',
       icon: 'feedback',
@@ -162,11 +167,17 @@ export class EngagementPassportCardComponent implements OnChanges {
   }
 
   openEngagement(engagement: Engagement): void {
-    this.dialog.open(EngagementDetailDialogComponent, {
+    const dialogRef = this.dialog.open(EngagementDetailDialogComponent, {
       data: {engagement},
       width: 'calc(100vw - 32px)',
       maxWidth: '900px',
       autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe((deleted?: boolean) => {
+      if (deleted) {
+        this.buildWeeks(this.project.engagementCache.currentValues);
+      }
     });
   }
 

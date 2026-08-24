@@ -615,7 +615,7 @@ export class Unit extends Entity {
       }
     });
 
-    this.addStudentTypeAheadData(this.students, result);
+    this.addStudentTypeAheadData(this.activeStudents, result);
 
     return result;
   }
@@ -680,6 +680,10 @@ export class Unit extends Entity {
 
   public get withdrawStudentsCSVUrl(): string {
     return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/withdraw`;
+  }
+
+  public get staffNotesCsvUploadUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/staff_notes`;
   }
 
   public getTaskMarkingUrl(): string {

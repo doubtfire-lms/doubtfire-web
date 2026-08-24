@@ -39,7 +39,7 @@ export const resolveUnit: ResolveFn<Unit> = (route, state) => {
         return;
       }
 
-      unitService.get(unitId).subscribe({
+      unitService.loadDetails(unitId).subscribe({
         next: (unit) => {
           globalState.setView(ViewType.UNIT, routeEntity(unit, unitRole));
           if (!resolveProgressively) {

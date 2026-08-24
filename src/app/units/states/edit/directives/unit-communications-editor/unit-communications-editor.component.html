@@ -2,12 +2,6 @@
   <div>
     <p>Current unit week: {{ currentUnitWeek <= 0 ? 'Not started' : currentUnitWeek }}</p>
   </div>
-  <div class="flex flex-wrap items-center gap-3">
-    <button color="primary" mat-flat-button (click)="addSet()">
-      <mat-icon>add</mat-icon>
-      Add set
-    </button>
-  </div>
 
   @if (loading) {
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -21,81 +15,80 @@
         Communication Sets & Rules
       </div> -->
 
-      <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl">
-        <mat-tree-node *matTreeNodeDef="let node" class="p-0" matTreeNodePadding>
+      @for (set of sets; track set.id) {
+        <div class="border-b border-gray-200">
           <div
-            class="min-h-[64px] w-full border-b border-gray-200 px-4"
-            [ngClass]="{'bg-gray-100': isSelectedRuleNode(node)}"
+            class="flex min-h-[56px] items-center gap-2 px-2"
+            [ngClass]="{'bg-[#e7e7ff]': selectedSetId === set.id}"
           >
-            <div class="flex w-full items-center justify-between gap-3">
-              <button
-                class="min-h-[64px] w-full min-w-0 flex-1 justify-start px-0"
-                mat-button
-                (click)="selectRuleNode(node.set!, node.rule!)"
-              >
-                <div class="min-w-0 text-left">
-                  <div class="truncate font-medium">Rule: {{ node.rule?.name }}</div>
-                  <div class="text-black/30">
-                    {{ node.rule?.operator === 'and' ? 'All conditions' : 'Any condition' }}
-                  </div>
-                  <div class="text-black/70">{{ studentsTabLabel(node.rule!) }}</div>
-                </div>
-              </button>
-              <button
-                color="warn"
-                mat-icon-button
-                (click)="deleteRule(node.rule!); $event.stopPropagation()"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </div>
-        </mat-tree-node>
+            <button mat-icon-button (click)="toggleSet(set, $event)">
+              <mat-icon>{{ isSetExpanded(set) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+            </button>
 
-        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasTreeChild">
-          <div class="border-b border-gray-200">
-            <div
-              class="flex min-h-[56px] items-center gap-2 px-2"
-              [ngClass]="{'bg-[#e7e7ff]': isSelectedSetNode(node)}"
+            <button
+              class="min-w-0 flex-1 justify-start px-2"
+              mat-button
+              (click)="selectSetNode(set)"
             >
-              <button mat-icon-button (click)="toggleSetNode(node, $event)">
-                <mat-icon>
-                  {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
-                </mat-icon>
-              </button>
+              <span class="truncate text-left">Set: {{ set.name }}</span>
+            </button>
+          </div>
 
-              <button
-                class="min-w-0 flex-1 justify-start px-2"
-                mat-button
-                (click)="selectSetNode(node.set!)"
-              >
-                <span class="truncate text-left">Set: {{ node.set?.name }}</span>
-              </button>
-            </div>
-
-            @if (treeControl.isExpanded(node)) {
-              <div>
-                <ng-container matTreeNodeOutlet></ng-container>
-
-                <!-- @if (selectedSetId === node.set?.id) {
-                  <div class="border-t border-gray-200 p-4">
+          @if (isSetExpanded(set)) {
+            <div cdkDropList (cdkDropListDropped)="dropRule(set, $event)">
+              @for (rule of set.rules; track rule.id) {
+                <div
+                  cdkDrag
+                  class="min-h-[64px] border-b border-gray-200 px-4"
+                  [ngClass]="isSelectedRule(rule) ? 'bg-gray-100' : 'bg-white'"
+                >
+                  <div class="flex w-full items-center justify-between gap-3">
+                    <mat-icon cdkDragHandle class="cursor-move">drag_indicator</mat-icon>
                     <button
-                      mat-flat-button
-                      color="primary"
-                      class="w-full"
-                      (click)="addRule()"
-                      [disabled]="!selectedSetId"
+                      class="min-h-[64px] w-full min-w-0 flex-1 justify-start px-0"
+                      mat-button
+                      (click)="selectRuleNode(set, rule)"
                     >
-                      <mat-icon>add</mat-icon>
-                      Add rule
+                      <div class="min-w-0 text-left">
+                        <div class="flex items-center gap-1 truncate font-medium">
+                          @if (rule.unresolved) {
+                            <mat-icon
+                              class="!h-4 !w-4 !text-[16px] text-amber-700"
+                              matTooltip="This rule references records that do not exist in this unit"
+                              >warning</mat-icon
+                            >
+                          }
+                          Rule {{ rule.position + 1 }}: {{ rule.name }}
+                        </div>
+                        <div class="text-black/30">
+                          {{ rule.operator === 'and' ? 'All conditions' : 'Any condition' }}
+                        </div>
+                        <div class="flex items-center gap-2 text-black/70">
+                          Students:
+                          @if (isPreviewLoading(rule)) {
+                            <mat-spinner class="my-1" diameter="16"></mat-spinner>
+                          } @else if (hasPreview(rule)) {
+                            <span>{{ studentsCountLabel(rule) }}</span>
+                          } @else {
+                            <span class="text-black/30">&mdash;</span>
+                          }
+                        </div>
+                      </div>
+                    </button>
+                    <button
+                      color="warn"
+                      mat-icon-button
+                      (click)="confirmDeleteRule(rule); $event.stopPropagation()"
+                    >
+                      <mat-icon>delete</mat-icon>
                     </button>
                   </div>
-                } -->
-              </div>
-            }
-          </div>
-        </mat-nested-tree-node>
-      </mat-tree>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
     </mat-drawer>
 
     <mat-drawer-content>
@@ -140,8 +133,27 @@
                 <mat-icon>schedule</mat-icon>
                 Add schedule
               </button>
-              <button mat-raised-button (click)="confirmExecuteSet(set)">Execute Set</button>
-              <button color="warn" mat-icon-button (click)="deleteSet(set)">
+              <button mat-stroked-button (click)="importRule(set)">
+                <mat-icon>content_paste</mat-icon>
+                Import rule
+              </button>
+              <button mat-stroked-button (click)="copySet(set)">
+                <mat-icon>content_copy</mat-icon>
+                Copy set
+              </button>
+              <button
+                mat-raised-button
+                [disabled]="set.executable === false"
+                [matTooltip]="
+                  set.executable === false
+                    ? 'Some rules reference records that do not exist in this unit'
+                    : ''
+                "
+                (click)="confirmExecuteSet(set)"
+              >
+                Execute Set
+              </button>
+              <button color="warn" mat-icon-button (click)="confirmDeleteSet(set)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -185,7 +197,22 @@
                 </div>
 
                 <div class="flex min-w-fit items-center gap-3">
-                  <button mat-raised-button (click)="confirmExecuteRule(rule)">Execute Rule</button>
+                  <button mat-stroked-button (click)="copyRule(rule)">
+                    <mat-icon>content_copy</mat-icon>
+                    Copy rule
+                  </button>
+                  <button
+                    mat-raised-button
+                    [disabled]="set.executable === false"
+                    [matTooltip]="
+                      set.executable === false
+                        ? 'Some rules reference records that do not exist in this unit'
+                        : ''
+                    "
+                    (click)="confirmExecuteRule(rule)"
+                  >
+                    Execute Rule
+                  </button>
                 </div>
               </div>
 
@@ -217,13 +244,24 @@
                   </div>
                 </mat-tab>
 
-                <mat-tab [label]="studentsTabLabel(rule)">
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    @if (isPreviewLoading(rule)) {
+                      <span class="flex items-center gap-2">
+                        <mat-spinner diameter="16"></mat-spinner>
+                        Students
+                      </span>
+                    } @else {
+                      {{ studentsTabLabel(rule) }}
+                    }
+                  </ng-template>
+
                   <div class="flex flex-col gap-4 p-6">
                     <div class="flex justify-end">
                       <button
                         color="primary"
                         mat-stroked-button
-                        [disabled]="setPreviewLoading"
+                        [disabled]="isPreviewLoading(rule)"
                         (click)="refreshPreview(rule)"
                       >
                         <mat-icon>refresh</mat-icon>
@@ -231,9 +269,9 @@
                       </button>
                     </div>
 
-                    @if (setPreviewLoading || previewLoading[rule.id]) {
+                    @if (isPreviewLoading(rule)) {
                       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                    } @else if (previewLoaded[rule.id]) {
+                    } @else if (hasPreview(rule)) {
                       <div class="font-medium">
                         Selected for {{ rule.name }} ({{ studentsFor(rule).length }})
                       </div>
@@ -279,7 +317,9 @@
                             <th *matHeaderCellDef mat-header-cell>Target Grade</th>
                             <td *matCellDef="let student" mat-cell>
                               {{
-                                student.target_grade ? targetGradeName(student.target_grade) : '-'
+                                student.target_grade !== null && student.target_grade !== undefined
+                                  ? targetGradeName(student.target_grade)
+                                  : '-'
                               }}
                             </td>
                           </ng-container>
@@ -346,4 +386,14 @@
       }
     </mat-drawer-content>
   </mat-drawer-container>
+</div>
+<div class="mt-4 mb-10 flex flex-wrap items-center gap-3">
+  <button color="primary" mat-flat-button (click)="addSet()">
+    <mat-icon>add</mat-icon>
+    Add set
+  </button>
+  <button mat-stroked-button (click)="importSet()">
+    <mat-icon>content_paste</mat-icon>
+    Import set
+  </button>
 </div>

@@ -1,0 +1,62 @@
+// Block-level markdown rendered from the `marked` pipe (`.markdown-to-html`) or
+// exported to PDF (`.markdown-to-pdf`). Tailwind's Preflight resets the margins
+// on paragraphs, headings, lists, code blocks, blockquotes and tables, so
+// consecutive markdown blocks would otherwise collapse onto each other with no
+// separation. Restore vertical rhythm between blocks without adding margin above
+// the first block or below the last, so the surrounding container controls the
+// outer edges.
+.markdown-to-html,
+.markdown-to-pdf {
+  > * {
+    margin-top: 0;
+    margin-bottom: 0.75em;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+
+  // Preflight also strips list markers (`list-style: none`) and the indent that
+  // makes room for them, so ordered/unordered lists would render as plain lines.
+  ul,
+  ol {
+    padding-left: 1.5em;
+  }
+
+  ul {
+    list-style: disc outside;
+  }
+
+  ol {
+    list-style: decimal outside;
+  }
+
+  ul ul {
+    list-style-type: circle;
+  }
+
+  ul ul ul {
+    list-style-type: square;
+  }
+
+  ol ol {
+    list-style-type: lower-alpha;
+  }
+
+  ol ol ol {
+    list-style-type: lower-roman;
+  }
+
+  // Nested lists and loose list items are not direct children of the container,
+  // so give them their own rhythm without a trailing gap at the end of a list.
+  li > ul,
+  li > ol,
+  li > p {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  li + li {
+    margin-top: 0.25em;
+  }
+}

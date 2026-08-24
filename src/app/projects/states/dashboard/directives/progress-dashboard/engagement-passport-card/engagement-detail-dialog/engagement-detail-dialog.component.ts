@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {
   Engagement,
   EngagementComment,
@@ -33,6 +33,7 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
   loading = true;
   loadFailed = false;
   submitting = false;
+  deleting = false;
   replyingToComment?: EngagementComment;
   hoveredCommentId?: number;
   editingComment?: EngagementComment;
@@ -43,6 +44,7 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) readonly data: {engagement: Engagement},
+    private dialogRef: MatDialogRef<EngagementDetailDialogComponent>,
     private engagementService: EngagementService,
     private engagementCommentService: EngagementCommentService,
     private fileDownloader: FileDownloaderService,
@@ -50,6 +52,10 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
     private confirmationModal: ConfirmationModalService,
   ) {
     this.engagement = data.engagement;
+  }
+
+  get currentUserCanDelete(): boolean {
+    return this.engagement.currentUserCanDelete;
   }
 
   get comments(): readonly EngagementComment[] {
@@ -83,6 +89,27 @@ export class EngagementDetailDialogComponent implements OnInit, OnDestroy {
     if (this.evidenceBlobUrl) {
       window.open(this.evidenceBlobUrl, '_blank', 'noopener,noreferrer');
     }
+  }
+
+  deleteEngagement(): void {
+    if (!this.currentUserCanDelete || this.deleting) {
+      return;
+    }
+
+    this.confirmationModal.show(
+      'Delete engagement',
+      'Are you sure you want to delete this engagement stamp? This cannot be undone.',
+      () => {
+        this.deleting = true;
+        this.engagementService.deleteEngagement(this.engagement).subscribe({
+          next: () => this.dialogRef.close(true),
+          error: (error) => {
+            this.deleting = false;
+            this.alerts.error(error?.error ?? 'Unable to delete this engagement.');
+          },
+        });
+      },
+    );
   }
 
   submitComment(): void {

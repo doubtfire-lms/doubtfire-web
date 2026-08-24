@@ -32,6 +32,10 @@ export class UnitContentSiteService extends CachedEntityService<UnitContentSite>
     return this.query({unitId: unit.id}, {endpointFormat: this.collectionEndpointFormat});
   }
 
+  public archiveUrlForUnit(unit: Unit, site: UnitContentSite): string {
+    return `${API_URL}/units/${unit.id}/content/sites/${site.id}/archive`;
+  }
+
   public uploadForUnit(unit: Unit, file: File): Observable<UnitContentSite> {
     const formData = new FormData();
 

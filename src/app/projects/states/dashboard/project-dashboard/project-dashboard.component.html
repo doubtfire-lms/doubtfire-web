@@ -114,7 +114,10 @@
               <mat-icon>keyboard_double_arrow_right</mat-icon>
             </button>
           }
-          <task-comments-viewer [task]="project.findTaskForDefinition(selectedTaskDefinition.id)">
+          <task-comments-viewer
+            [commentsVisible]="!commentsPanelCollapsed"
+            [task]="project.findTaskForDefinition(selectedTaskDefinition.id)"
+          >
           </task-comments-viewer>
         </div>
       } @else if (!isProjectTaskListReady(project)) {
