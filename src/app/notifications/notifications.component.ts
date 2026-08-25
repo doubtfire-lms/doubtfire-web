@@ -4,8 +4,8 @@ import {Router} from '@angular/router';
 import {
   NotificationGroup,
   NotificationKind,
-  NotificationPreference,
   NotificationState,
+  NotificationUnit,
 } from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
 import {UnitService} from 'src/app/api/services/unit.service';
@@ -28,23 +28,11 @@ export class NotificationsComponent implements OnInit {
     {kind: 'discuss_expired', label: 'Discussion deadline expiries'},
     {kind: 'tutor_note', label: 'Tutor notes'},
   ];
-  public readonly weekdays = [
-    {value: 1, label: 'Monday'},
-    {value: 2, label: 'Tuesday'},
-    {value: 3, label: 'Wednesday'},
-    {value: 4, label: 'Thursday'},
-    {value: 5, label: 'Friday'},
-    {value: 6, label: 'Saturday'},
-    {value: 7, label: 'Sunday'},
-  ];
-  public readonly browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   public groups: NotificationGroup[] = [];
-  public preferences: NotificationPreference[] = [];
+  public units: NotificationUnit[] = [];
   public loading = true;
   public loadFailed = false;
-  public preferencesLoading = true;
-  public preferencesFailed = false;
   public state: NotificationState = 'all';
   public selectedUnitId?: number;
   public selectedKinds: NotificationKind[] = [];
@@ -53,7 +41,6 @@ export class NotificationsComponent implements OnInit {
   public perPage = 25;
   public total = 0;
   public unreadCount = 0;
-  public settingsOpen = false;
 
   constructor(
     private notificationService: NotificationService,
@@ -66,7 +53,7 @@ export class NotificationsComponent implements OnInit {
   public ngOnInit(): void {
     this.notificationService.startCountPolling();
     this.loadNotifications();
-    this.loadPreferences();
+    this.loadUnits();
   }
 
   public loadNotifications(): void {
@@ -176,41 +163,12 @@ export class NotificationsComponent implements OnInit {
     });
   }
 
-  public loadPreferences(): void {
-    this.preferencesLoading = true;
-    this.preferencesFailed = false;
+  /** Units for the filter dropdown. Settings live on their own page. */
+  public loadUnits(): void {
     this.notificationService.getPreferences().subscribe({
-      next: (preferences) => {
-        this.preferences = preferences.map((preference) => ({
-          ...preference,
-          timezone: preference.timezone || this.browserTimezone,
-        }));
-        this.preferencesLoading = false;
-      },
-      error: () => {
-        this.preferencesLoading = false;
-        this.preferencesFailed = true;
-        this.alerts.error('Unable to load notification settings', 5000);
-      },
+      next: (preferences) => (this.units = preferences.map((preference) => preference.unit)),
+      error: () => undefined,
     });
-  }
-
-  public savePreference(preference: NotificationPreference): void {
-    this.notificationService.updatePreference(preference).subscribe({
-      next: (updated) => {
-        const index = this.preferences.findIndex((item) => item.id === updated.id);
-        this.preferences[index] = updated;
-        this.preferences = [...this.preferences];
-        this.alerts.success(`Notification settings saved for ${updated.unit.code}`, 3000);
-      },
-      error: () => this.alerts.error('Unable to save notification settings', 5000),
-    });
-  }
-
-  public toggleCategory(preference: NotificationPreference, kind: NotificationKind): void {
-    preference.emailCategories = preference.emailCategories.includes(kind)
-      ? preference.emailCategories.filter((category) => category !== kind)
-      : [...preference.emailCategories, kind];
   }
 
   public count(group: NotificationGroup, kind: NotificationKind): number {

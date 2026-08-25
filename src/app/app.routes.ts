@@ -13,6 +13,7 @@ import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {HomeComponent} from './home/states/home/home.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
+import {NotificationSettingsComponent} from './notifications/notification-settings/notification-settings.component';
 import {NotificationsComponent} from './notifications/notifications.component';
 import {resolveProject} from './projects/project.resolver';
 import {UnitContentViewerComponent} from './projects/states/content/unit-content-viewer.component';
@@ -77,6 +78,7 @@ export const routes: Routes = [
   {path: 'success-close', component: SuccessCloseComponent},
   {path: 'edit_profile', component: EditProfileComponent},
   {path: 'notifications', component: NotificationsComponent},
+  {path: 'notifications/settings', component: NotificationSettingsComponent},
   {path: 'eula', component: AcceptEulaComponent},
   {path: 'lti', component: LtiDashboardComponent},
   {path: 'lti/link', component: LtiUnitLinkComponent},

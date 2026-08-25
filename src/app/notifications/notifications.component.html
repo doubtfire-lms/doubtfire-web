@@ -1,4 +1,4 @@
-<main class="mx-auto max-w-[1200px] p-6 max-[720px]:p-3.5">
+<main class="mx-auto max-w-[90vw] p-6 max-[720px]:p-3.5">
   <header
     class="mb-5 flex items-center justify-between gap-4 max-[720px]:flex-col max-[720px]:items-stretch"
   >
@@ -9,9 +9,9 @@
       </p>
     </div>
     <div class="flex gap-2 max-[720px]:justify-start">
-      <button mat-stroked-button type="button" (click)="settingsOpen = !settingsOpen">
+      <button mat-stroked-button routerLink="/notifications/settings" type="button">
         <mat-icon>tune</mat-icon>
-        Email settings
+        Settings
       </button>
       <button
         color="primary"
@@ -24,102 +24,6 @@
       </button>
     </div>
   </header>
-
-  @if (settingsOpen) {
-    <section class="mb-5 rounded-xl border border-[#dbe3ee] bg-slate-50 p-5">
-      <div class="mb-4">
-        <h2>Email summaries by unit</h2>
-        <p>In-app notifications always appear. These settings control email delivery only.</p>
-      </div>
-
-      @if (preferencesLoading) {
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      } @else if (preferencesFailed) {
-        <div class="flex items-center justify-between gap-3">
-          <p>Notification settings could not be loaded.</p>
-          <button mat-stroked-button type="button" (click)="loadPreferences()">Try again</button>
-        </div>
-      } @else {
-        <div class="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4">
-          @for (preference of preferences; track preference.id) {
-            <mat-card appearance="outlined">
-              <mat-card-header>
-                <mat-card-title>{{ preference.unit.code }}</mat-card-title>
-                <mat-card-subtitle>{{ preference.unit.name }}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content class="flex flex-col pt-4">
-                <mat-form-field appearance="outline">
-                  <mat-label>Email frequency</mat-label>
-                  <mat-select [(ngModel)]="preference.emailFrequency">
-                    <mat-option value="off">Off</mat-option>
-                    <mat-option value="hourly">Hourly</mat-option>
-                    <mat-option value="daily">Daily</mat-option>
-                    <mat-option value="weekly">Weekly</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                @if (preference.emailFrequency === 'weekly') {
-                  <mat-form-field appearance="outline">
-                    <mat-label>Weekday</mat-label>
-                    <mat-select [(ngModel)]="preference.emailWeekday">
-                      @for (weekday of weekdays; track weekday.value) {
-                        <mat-option [value]="weekday.value">{{ weekday.label }}</mat-option>
-                      }
-                    </mat-select>
-                  </mat-form-field>
-                }
-
-                @if (
-                  preference.emailFrequency === 'daily' || preference.emailFrequency === 'weekly'
-                ) {
-                  <mat-form-field appearance="outline">
-                    <mat-label>Delivery time</mat-label>
-                    <input matInput type="time" [(ngModel)]="preference.emailTime" />
-                  </mat-form-field>
-                }
-
-                @if (preference.emailFrequency !== 'off') {
-                  <mat-form-field appearance="outline">
-                    <mat-label>Timezone</mat-label>
-                    <input matInput [(ngModel)]="preference.timezone" />
-                    <mat-hint>Browser timezone: {{ browserTimezone }}</mat-hint>
-                  </mat-form-field>
-                  <button mat-button type="button" (click)="preference.timezone = browserTimezone">
-                    Use browser timezone
-                  </button>
-                }
-
-                <div class="flex flex-col gap-1">
-                  @for (category of categories; track category.kind) {
-                    <mat-checkbox
-                      [checked]="preference.emailCategories.includes(category.kind)"
-                      (change)="toggleCategory(preference, category.kind)"
-                    >
-                      {{ category.label }}
-                    </mat-checkbox>
-                  }
-                </div>
-                <p class="mt-3 text-[13px] text-orange-900">
-                  Discussion deadline emails are sent immediately when their category is enabled and
-                  email delivery is not Off.
-                </p>
-              </mat-card-content>
-              <mat-card-actions align="end">
-                <button
-                  color="primary"
-                  mat-flat-button
-                  type="button"
-                  (click)="savePreference(preference)"
-                >
-                  Save
-                </button>
-              </mat-card-actions>
-            </mat-card>
-          }
-        </div>
-      }
-    </section>
-  }
 
   <section class="mb-4 flex flex-wrap items-center gap-3">
     <mat-form-field appearance="outline" class="min-w-[180px] grow basis-[280px]">
@@ -141,8 +45,8 @@
       <mat-label>Unit</mat-label>
       <mat-select [(ngModel)]="selectedUnitId" (selectionChange)="applyFilters()">
         <mat-option [value]="undefined">All units</mat-option>
-        @for (preference of preferences; track preference.unit.id) {
-          <mat-option [value]="preference.unit.id">{{ preference.unit.code }}</mat-option>
+        @for (unit of units; track unit.id) {
+          <mat-option [value]="unit.id">{{ unit.code }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

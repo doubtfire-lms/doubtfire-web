@@ -1,0 +1,183 @@
+<main class="mx-auto max-w-[1200px] p-6 max-[720px]:p-3.5">
+  <header class="mb-5 flex items-center justify-between gap-4">
+    <div>
+      <h1>Notification settings</h1>
+    </div>
+    <div class="flex gap-2">
+      <button mat-stroked-button routerLink="/notifications" type="button">
+        <mat-icon>arrow_back</mat-icon>
+        Notifications
+      </button>
+      <button color="primary" mat-flat-button type="button" (click)="save()">Save changes</button>
+    </div>
+  </header>
+
+  @if (loading) {
+    <div class="flex min-h-80 items-center justify-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (!hasUnits) {
+    <section class="flex min-h-80 flex-col items-center justify-center gap-2">
+      <mat-icon class="size-16 text-[64px] text-gray-400">notifications_none</mat-icon>
+      <h2>No current units</h2>
+      <p class="text-gray-600">Settings appear here once you are enrolled in a running unit.</p>
+    </section>
+  } @else {
+    <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="selectedIndex = $event">
+      @for (scope of scopes; track scope.unitId) {
+        <mat-tab>
+          <ng-template mat-tab-label>
+            {{ scope.code }}
+            @if (scope.unitId !== null && scope.customised) {
+              <span
+                class="ml-1.5 size-1.5 rounded-full bg-blue-600"
+                matTooltip="Customised for this unit"
+              ></span>
+            }
+          </ng-template>
+        </mat-tab>
+      }
+    </mat-tab-group>
+
+    <div class="mt-5 flex flex-col gap-5">
+      @if (!isGlobalScope) {
+        <mat-card appearance="outlined" class="flex flex-col p-2">
+          <f-setting-toggle
+            label="Mute {{ currentScope.code }}"
+            [checked]="currentScope.muted"
+            (changed)="muteChanged($event.checked)"
+          >
+            Turn off all notifications for this unit.
+          </f-setting-toggle>
+
+          @if (showsInheritanceBanner) {
+            <div class="flex items-center justify-between gap-4 border-t border-gray-200 px-2 py-3">
+              @if (currentScope.customised) {
+                <p class="m-0 text-sm text-gray-600">
+                  <strong>{{ currentScope.code }}</strong> has its own settings.
+                </p>
+                <button mat-stroked-button type="button" (click)="resetToGlobal()">
+                  Reset to All units
+                </button>
+              } @else {
+                <p class="m-0 text-sm text-gray-600">Following <strong>All units</strong>.</p>
+                <button mat-stroked-button type="button" (click)="customise()">
+                  Customise for this unit
+                </button>
+              }
+            </div>
+          }
+        </mat-card>
+      }
+
+      @if (isGlobalScope) {
+        <mat-card appearance="outlined" class="p-4">
+          <h2 class="mb-0 text-base">Email digest</h2>
+          <p class="mb-4 text-sm text-gray-600">Applies to all units.</p>
+
+          <div class="flex flex-wrap items-baseline gap-3">
+            <mat-form-field appearance="outline" class="min-w-[180px]">
+              <mat-label>Send my digest</mat-label>
+              <mat-select [(ngModel)]="digestFrequency">
+                <mat-option value="off">Off</mat-option>
+                <mat-option value="hourly">Hourly</mat-option>
+                <mat-option value="daily">Daily</mat-option>
+                <mat-option value="weekly">Weekly</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            @if (digestFrequency === 'weekly') {
+              <mat-form-field appearance="outline" class="min-w-[150px]">
+                <mat-label>On</mat-label>
+                <mat-select [(ngModel)]="digestWeekday">
+                  @for (weekday of weekdays; track weekday.value) {
+                    <mat-option [value]="weekday.value">{{ weekday.label }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+
+            @if (digestFrequency === 'daily' || digestFrequency === 'weekly') {
+              <mat-form-field appearance="outline" class="min-w-[130px]">
+                <mat-label>At</mat-label>
+                <input matInput type="time" [(ngModel)]="digestTime" />
+              </mat-form-field>
+            }
+
+            @if (digestFrequency !== 'off') {
+              <mat-form-field appearance="outline" class="min-w-[220px] grow">
+                <mat-label>Timezone</mat-label>
+                <input matInput [(ngModel)]="timezone" />
+                @if (timezone !== browserTimezone) {
+                  <button
+                    mat-icon-button
+                    matSuffix
+                    type="button"
+                    [matTooltip]="'Use ' + browserTimezone"
+                    (click)="timezone = browserTimezone"
+                  >
+                    <mat-icon>my_location</mat-icon>
+                  </button>
+                }
+              </mat-form-field>
+            }
+          </div>
+        </mat-card>
+
+        <mat-card appearance="outlined" class="flex flex-col p-2">
+          <f-setting-checkbox label="Weekly progress summary" [(checked)]="weeklySummary">
+            A summary of your progress across your units.
+          </f-setting-checkbox>
+        </mat-card>
+      }
+
+      @if (showsSections) {
+        @for (section of sections; track section.key) {
+          <mat-card appearance="outlined" class="p-4">
+            <div class="flex items-center gap-2">
+              <h2 class="mb-0 text-base">{{ section.title }}</h2>
+              @if (section.audience === 'staff') {
+                <span
+                  class="rounded border border-gray-300 px-1.5 py-0.5 text-[11px] font-bold tracking-wide text-gray-500 uppercase"
+                >
+                  Staff only
+                </span>
+              }
+            </div>
+            @if (section.timing) {
+              <p class="mb-0 text-sm text-gray-600">{{ section.timing }}</p>
+            }
+
+            <div
+              class="mt-4 grid grid-cols-[minmax(0,1fr)_repeat(3,4.5rem)] items-center gap-x-2 border-b border-gray-200 px-2 pb-2 text-xs font-bold text-gray-500"
+            >
+              <span></span>
+              @for (channel of channels; track channel.key) {
+                <span class="text-center">{{ channel.label }}</span>
+              }
+            </div>
+
+            @for (type of section.types; track type.key) {
+              <div
+                class="grid grid-cols-[minmax(0,1fr)_repeat(3,4.5rem)] items-center gap-x-2 rounded-lg px-2 py-3 transition-colors not-first-of-type:border-t not-first-of-type:border-gray-200 hover:bg-gray-50"
+              >
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-sm font-bold text-gray-900">{{ type.label }}</span>
+                  <span class="max-w-prose text-sm text-gray-600">{{ type.description }}</span>
+                </div>
+                @for (channel of channels; track channel.key) {
+                  <mat-checkbox
+                    class="justify-self-center"
+                    [attr.aria-label]="type.label + ' - ' + channel.label"
+                    [checked]="isChecked(type.key, channel.key)"
+                    (change)="setChannel(type.key, channel.key, $event.checked)"
+                  ></mat-checkbox>
+                }
+              </div>
+            }
+          </mat-card>
+        }
+      }
+    </div>
+  }
+</main>

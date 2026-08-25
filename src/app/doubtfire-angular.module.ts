@@ -235,6 +235,7 @@ import {EmojiService} from './common/services/emoji.service';
 import {GradeService} from './common/services/grade.service';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
 import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
+import {SettingCheckboxComponent} from './common/setting-checkbox/setting-checkbox.component';
 import {SettingToggleComponent} from './common/setting-toggle/setting-toggle.component';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
@@ -257,6 +258,7 @@ import {HomeComponent} from './home/states/home/home.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
+import {NotificationSettingsComponent} from './notifications/notification-settings/notification-settings.component';
 import {NotificationsComponent} from './notifications/notifications.component';
 import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
 import {UnitContentViewerComponent} from './projects/states/content/unit-content-viewer.component';
@@ -585,6 +587,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     CreateNewUnitModalContentComponent,
     TiiActionLogComponent,
     FChipComponent,
+    SettingCheckboxComponent,
     SettingToggleComponent,
     UnitCodeComponent,
     NewTeachingPeriodDialogComponent,
@@ -699,6 +702,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     UnitTaskInboxStateComponent,
     LegacyRoutePlaceholderComponent,
     NotificationsComponent,
+    NotificationSettingsComponent,
   ],
   providers: [
     // Services we provide
