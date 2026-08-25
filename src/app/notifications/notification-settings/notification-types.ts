@@ -35,10 +35,10 @@ export interface NotificationSection {
   types: NotificationTypeDefinition[];
 }
 
-export const NOTIFICATION_CHANNELS: {key: NotificationChannel; label: string}[] = [
-  {key: 'inApp', label: 'In app'},
-  {key: 'email', label: 'Email'},
-  {key: 'push', label: 'Push'},
+export const NOTIFICATION_CHANNELS: {key: NotificationChannel; label: string; wire: string}[] = [
+  {key: 'inApp', label: 'In app', wire: 'in_app'},
+  {key: 'email', label: 'Email', wire: 'email'},
+  {key: 'push', label: 'Push', wire: 'push'},
 ];
 
 export const NOTIFICATION_SECTIONS: NotificationSection[] = [
@@ -122,6 +122,30 @@ export function defaultChannelSelection(): ChannelSelection {
   for (const section of NOTIFICATION_SECTIONS) {
     for (const type of section.types) {
       selection[type.key] = {inApp: true, email: true, push: false};
+    }
+  }
+  return selection;
+}
+
+/** The API stores the enabled channels per kind, e.g. { new_task_comment: ['in_app'] }. */
+export type WireChannels = Record<string, string[]>;
+
+export function channelsToWire(selection: ChannelSelection): WireChannels {
+  const wire: WireChannels = {};
+  for (const [key, channels] of Object.entries(selection)) {
+    wire[key] = NOTIFICATION_CHANNELS.filter((channel) => channels[channel.key]).map(
+      (channel) => channel.wire,
+    );
+  }
+  return wire;
+}
+
+export function channelsFromWire(wire: WireChannels): ChannelSelection {
+  const selection = defaultChannelSelection();
+  for (const key of Object.keys(selection)) {
+    const enabled = wire[key] ?? [];
+    for (const channel of NOTIFICATION_CHANNELS) {
+      selection[key][channel.key] = enabled.includes(channel.wire);
     }
   }
   return selection;

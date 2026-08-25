@@ -156,6 +156,7 @@ import {FeedbackTemplateService} from './api/services/feedback-template.service'
 import {GroupService} from './api/services/group.service';
 import {LtiService} from './api/services/lti.service';
 import {MarkingSessionService} from './api/services/marking-session.service';
+import {NotificationSettingsService} from './api/services/notification-settings.service';
 import {NotificationService} from './api/services/notification.service';
 import {OverseerStepResultService} from './api/services/overseer-step-result.service';
 import {OverseerStepService} from './api/services/overseer-step.service';
@@ -783,6 +784,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskPrerequisiteService,
     MarkingSessionService,
     NotificationService,
+    NotificationSettingsService,
     DiscussionPromptService,
     GANTT_CHART_LOCALE_CONFIG,
     GANTT_CHART_CONFIG,

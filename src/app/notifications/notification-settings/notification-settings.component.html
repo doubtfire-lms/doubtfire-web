@@ -8,7 +8,9 @@
         <mat-icon>arrow_back</mat-icon>
         Notifications
       </button>
-      <button color="primary" mat-flat-button type="button" (click)="save()">Save changes</button>
+      <button color="primary" mat-flat-button type="button" [disabled]="saving" (click)="save()">
+        Save changes
+      </button>
     </div>
   </header>
 
@@ -101,24 +103,6 @@
               <mat-form-field appearance="outline" class="min-w-[130px]">
                 <mat-label>At</mat-label>
                 <input matInput type="time" [(ngModel)]="digestTime" />
-              </mat-form-field>
-            }
-
-            @if (digestFrequency !== 'off') {
-              <mat-form-field appearance="outline" class="min-w-[220px] grow">
-                <mat-label>Timezone</mat-label>
-                <input matInput [(ngModel)]="timezone" />
-                @if (timezone !== browserTimezone) {
-                  <button
-                    mat-icon-button
-                    matSuffix
-                    type="button"
-                    [matTooltip]="'Use ' + browserTimezone"
-                    (click)="timezone = browserTimezone"
-                  >
-                    <mat-icon>my_location</mat-icon>
-                  </button>
-                }
               </mat-form-field>
             }
           </div>

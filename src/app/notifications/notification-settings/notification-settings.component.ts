@@ -1,7 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription, combineLatest} from 'rxjs';
 import {NotificationFrequency} from 'src/app/api/models/notification';
+import {NotificationSettings} from 'src/app/api/models/notification-settings';
 import {Unit} from 'src/app/api/models/unit';
+import {NotificationSettingsService} from 'src/app/api/services/notification-settings.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
@@ -11,6 +13,8 @@ import {
   NOTIFICATION_SECTIONS,
   NotificationChannel,
   NotificationSection,
+  channelsFromWire,
+  channelsToWire,
   cloneChannelSelection,
   defaultChannelSelection,
 } from './notification-types';
@@ -34,7 +38,6 @@ export interface NotificationScope {
 })
 export class NotificationSettingsComponent implements OnInit, OnDestroy {
   public readonly channels = NOTIFICATION_CHANNELS;
-  public readonly browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   public readonly weekdays = [
     {value: 1, label: 'Monday'},
     {value: 2, label: 'Tuesday'},
@@ -46,7 +49,11 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   ];
 
   public loading = true;
+  public saving = false;
   public selectedIndex = 0;
+
+  /** Saved settings are laid over the scopes once, so a cache refresh cannot undo edits. */
+  private applied = false;
 
   /** Index 0 is always the "All units" scope. */
   public scopes: NotificationScope[] = [this.buildGlobalScope()];
@@ -55,13 +62,16 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   public digestFrequency: NotificationFrequency = 'weekly';
   public digestTime = '07:00';
   public digestWeekday = 1;
-  public timezone = this.browserTimezone;
   public weeklySummary = true;
 
   private readonly subscriptions: Subscription[] = [];
 
+  private units: Unit[] = [];
+  private saved?: NotificationSettings;
+
   constructor(
     private globalState: GlobalStateService,
+    private settingsService: NotificationSettingsService,
     private userService: UserService,
     private alerts: AlertService,
   ) {}
@@ -73,13 +83,25 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
         this.globalState.unitRolesSubject,
         this.globalState.projectsSubject,
       ]).subscribe(([unitRoles, projects]) => {
-        this.syncScopes([
+        this.units = [
           ...(unitRoles ?? []).map((unitRole) => unitRole.unit),
           ...(projects ?? []).map((project) => project.unit),
-        ]);
-        this.loading = false;
+        ];
+        this.rebuildScopes();
       }),
     );
+
+    this.settingsService.load().subscribe({
+      next: (settings) => {
+        this.saved = settings;
+        this.rebuildScopes();
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.alerts.error('Unable to load your notification settings', 5000);
+      },
+    });
   }
 
   public ngOnDestroy(): void {
@@ -192,8 +214,63 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   }
 
   public save(): void {
-    // TODO: wire up once the notification preferences API matches this shape.
-    this.alerts.success('Notification settings are not saved yet - UI only for now', 4000);
+    this.saving = true;
+    this.settingsService.save(this.currentSettings()).subscribe({
+      next: () => {
+        this.saving = false;
+        this.alerts.success('Notification settings saved', 3000);
+      },
+      error: () => {
+        this.saving = false;
+        this.alerts.error('Unable to save your notification settings', 5000);
+      },
+    });
+  }
+
+  private currentSettings(): NotificationSettings {
+    const settings = this.saved ?? new NotificationSettings();
+
+    settings.channels = channelsToWire(this.scopes[0].channels);
+    settings.digestFrequency = this.digestFrequency;
+    settings.digestTime = this.digestTime;
+    settings.digestWeekday = this.digestWeekday;
+    settings.weeklySummary = this.weeklySummary;
+    // Units following the defaults have nothing to store.
+    settings.units = this.scopes
+      .slice(1)
+      .filter((scope) => scope.muted || scope.customised)
+      .map((scope) => ({
+        unitId: scope.unitId,
+        muted: scope.muted,
+        channels: scope.customised ? channelsToWire(scope.channels) : undefined,
+      }));
+
+    return settings;
+  }
+
+  /** Lays the saved settings over the units currently on screen. */
+  private rebuildScopes(): void {
+    this.syncScopes(this.units);
+    if (this.saved === undefined || this.applied) {
+      return;
+    }
+
+    this.digestFrequency = this.saved.digestFrequency;
+    this.digestTime = this.saved.digestTime;
+    this.digestWeekday = this.saved.digestWeekday;
+    this.weeklySummary = this.saved.weeklySummary;
+    this.scopes[0].channels = channelsFromWire(this.saved.channels);
+
+    for (const scope of this.scopes.slice(1)) {
+      const stored = this.saved.units.find((unit) => unit.unitId === scope.unitId);
+      scope.muted = stored?.muted ?? false;
+      scope.customised = stored?.channels !== undefined;
+      scope.channels = stored?.channels
+        ? channelsFromWire(stored.channels)
+        : cloneChannelSelection(this.scopes[0].channels);
+    }
+
+    this.applied = true;
   }
 
   private buildGlobalScope(): NotificationScope {

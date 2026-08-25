@@ -1,7 +1,8 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, of} from 'rxjs';
+import {NotificationSettingsService} from 'src/app/api/services/notification-settings.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
@@ -26,6 +27,16 @@ describe('NotificationSettingsComponent', () => {
 
   let unitRoles: BehaviorSubject<unknown[]>;
   let projects: BehaviorSubject<unknown[]>;
+  const saveSettings = vi.fn((settings) => of(settings));
+  // Saving mutates the loaded entity in place, so each test needs its own copy.
+  const savedSettings = () => ({
+    channels: {new_task_comment: ['in_app', 'email']},
+    digestFrequency: 'daily',
+    digestTime: '09:30',
+    digestWeekday: 3,
+    weeklySummary: false,
+    units: [] as unknown[],
+  });
 
   const build = async (isStaff = false) => {
     unitRoles = new BehaviorSubject<unknown[]>([{unit: running(1, 'COS10009')}]);
@@ -40,6 +51,10 @@ describe('NotificationSettingsComponent', () => {
             unitRolesSubject: unitRoles.asObservable(),
             projectsSubject: projects.asObservable(),
           },
+        },
+        {
+          provide: NotificationSettingsService,
+          useValue: {load: vi.fn(() => of(savedSettings())), save: saveSettings},
         },
         {provide: UserService, useValue: {currentUser: {isStaff}}},
         {provide: AlertService, useValue: {error: vi.fn(), success: vi.fn()}},
@@ -179,6 +194,41 @@ describe('NotificationSettingsComponent', () => {
     component.muteChanged(false);
     expect(component.showsSections).toBe(false);
     expect(component.showsInheritanceBanner).toBe(true);
+  });
+
+  it('applies the saved digest schedule and channels', () => {
+    expect(component.digestFrequency).toBe('daily');
+    expect(component.digestTime).toBe('09:30');
+    expect(component.digestWeekday).toBe(3);
+    expect(component.weeklySummary).toBe(false);
+
+    // Channels absent from the saved payload fall back to off, not to the defaults.
+    expect(component.isChecked('new_task_comment', 'email')).toBe(true);
+    expect(component.isChecked('task_status_changed', 'email')).toBe(false);
+  });
+
+  it('saves only the units that depart from the defaults', () => {
+    component.selectedIndex = 1;
+    component.customise();
+    component.setChannel('new_task_comment', 'push', true);
+
+    component.save();
+
+    const payload = saveSettings.mock.calls[0][0];
+    expect(payload.digestFrequency).toBe('daily');
+    expect(payload.units).toHaveLength(1);
+    expect(payload.units[0].unitId).toBe(1);
+    expect(payload.units[0].channels['new_task_comment']).toContain('push');
+  });
+
+  it('stores a muted unit without channels, so it keeps following the defaults', () => {
+    component.selectedIndex = 1;
+    component.muteChanged(true);
+
+    component.save();
+
+    const payload = saveSettings.mock.calls[0][0];
+    expect(payload.units).toEqual([{unitId: 1, muted: true, channels: undefined}]);
   });
 
   it('reports having no current units', () => {
