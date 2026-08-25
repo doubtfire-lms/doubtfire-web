@@ -1,0 +1,118 @@
+import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {TestBed} from '@angular/core/testing';
+import {Router} from '@angular/router';
+import {of, throwError} from 'rxjs';
+import {NotificationGroup} from 'src/app/api/models/notification';
+import {NotificationService} from 'src/app/api/services/notification.service';
+import {UnitService} from 'src/app/api/services/unit.service';
+import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
+import {NotificationActionsService} from './notification-actions.service';
+
+describe('NotificationActionsService', () => {
+  let service: NotificationActionsService;
+  const navigate = vi.fn();
+  const markRead = vi.fn(() => of({count: 1}));
+  const showTutorNotes = vi.fn();
+  const getUnit = vi.fn(() => of({staff: [{id: 22}]}));
+
+  const groupFor = (overrides: Partial<NotificationGroup> = {}) =>
+    ({
+      notificationIds: [1, 2],
+      tutorNoteNotificationIds: [],
+      task: {projectId: 8, abbreviation: 'P4', staffView: false},
+      read: false,
+      ...overrides,
+    }) as NotificationGroup;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        NotificationActionsService,
+        {provide: NotificationService, useValue: {markRead}},
+        {provide: UnitService, useValue: {get: getUnit}},
+        {provide: TutorNotesModalService, useValue: {show: showTutorNotes}},
+        {provide: Router, useValue: {navigate}},
+      ],
+    });
+    service = TestBed.inject(NotificationActionsService);
+  });
+
+  it('marks a group read before opening its task', () => {
+    service.open(groupFor());
+
+    expect(markRead).toHaveBeenCalledWith([1, 2]);
+    expect(navigate).toHaveBeenCalledWith(['/projects', 8, 'dashboard', 'P4'], {queryParams: {}});
+  });
+
+  it('does not mark an already read group again', () => {
+    service.open(groupFor({read: true}));
+
+    expect(markRead).not.toHaveBeenCalled();
+    expect(navigate).toHaveBeenCalled();
+  });
+
+  it('opens staff notifications in tutor mode', () => {
+    service.open(groupFor({task: {projectId: 9, abbreviation: 'P5', staffView: true} as never}));
+
+    expect(navigate).toHaveBeenCalledWith(['/projects', 9, 'dashboard', 'P5'], {
+      queryParams: {tutor: true},
+    });
+  });
+
+  it('opens the report for a failed overseer run', () => {
+    service.open(groupFor({overseerAssessmentId: 4242}));
+
+    expect(navigate).toHaveBeenCalledWith(['/projects', 8, 'dashboard', 'P4'], {
+      queryParams: {overseerAssessmentId: 4242},
+    });
+  });
+
+  it('opens the mod notes tab for a moderation note', () => {
+    service.open(groupFor({tutorNoteNotificationIds: [7]}));
+
+    expect(navigate).toHaveBeenCalledWith(['/projects', 8, 'dashboard', 'P4'], {
+      queryParams: {view: 'tutor_notes'},
+    });
+  });
+
+  it('prefers the overseer report when a group has both', () => {
+    service.open(groupFor({overseerAssessmentId: 1, tutorNoteNotificationIds: [7]}));
+
+    expect(navigate).toHaveBeenCalledWith(['/projects', 8, 'dashboard', 'P4'], {
+      queryParams: {overseerAssessmentId: 1},
+    });
+  });
+
+  it('opens the modal for a moderation note that has no task', () => {
+    service.open(
+      groupFor({
+        task: undefined,
+        unit: {id: 4} as never,
+        tutorNoteNotificationIds: [7, 8],
+        tutorNoteUnitRoleId: 22,
+        tutorNoteIds: [50, 51],
+      }),
+    );
+
+    expect(markRead).toHaveBeenCalledWith([7, 8]);
+    expect(getUnit).toHaveBeenCalledWith(4);
+    expect(showTutorNotes).toHaveBeenCalledWith(undefined, {id: 22}, 51);
+    expect(navigate).not.toHaveBeenCalled();
+  });
+
+  it('falls back to the notification list when there is no task and no note', () => {
+    service.open(groupFor({task: undefined}));
+
+    expect(navigate).toHaveBeenCalledWith(['/notifications']);
+  });
+
+  it('still navigates when marking read fails', () => {
+    markRead.mockReturnValueOnce(throwError(() => new Error('nope')) as never);
+
+    service.open(groupFor());
+
+    expect(navigate).toHaveBeenCalled();
+  });
+});

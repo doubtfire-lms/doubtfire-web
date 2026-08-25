@@ -9,12 +9,15 @@ import {UnitService} from 'src/app/api/services/unit.service';
 import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+import {NotificationActionsService} from './notification-actions.service';
 import {NotificationsComponent} from './notifications.component';
 
 describe('NotificationsComponent', () => {
   let component: NotificationsComponent;
   let fixture: ComponentFixture<NotificationsComponent>;
   const markRead = vi.fn(() => of({count: 1}));
+  const openGroup = vi.fn();
+  const openTutorNotes = vi.fn(() => of(undefined));
   const navigate = vi.fn();
   const getNotifications = vi.fn(() =>
     of({groups: [], page: 1, perPage: 25, total: 0, unreadCount: 0}),
@@ -44,6 +47,10 @@ describe('NotificationsComponent', () => {
           provide: GlobalStateService,
           useValue: {unitRolesSubject: of([]), projectsSubject: of([])},
         },
+        {
+          provide: NotificationActionsService,
+          useValue: {open: openGroup, openTutorNotes},
+        },
         {provide: Router, useValue: {navigate}},
         {provide: UnitService, useValue: {get: getUnit}},
         {provide: TutorNotesModalService, useValue: {show: showTutorNotes}},
@@ -58,47 +65,21 @@ describe('NotificationsComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('marks a task group read before navigating', () => {
-    const group = {
-      notificationIds: [1, 2],
-      task: {projectId: 8, abbreviation: 'P4', staffView: false},
-      read: false,
-    } as NotificationGroup;
+  it('delegates opening a group to the notification actions service', () => {
+    const group = {notificationIds: [1, 2]} as NotificationGroup;
 
     component.openTask(group);
 
-    expect(markRead).toHaveBeenCalledWith([1, 2]);
-    expect(navigate).toHaveBeenCalledWith(['/projects', 8, 'dashboard', 'P4']);
+    expect(openGroup).toHaveBeenCalledWith(group);
   });
 
-  it('opens staff task notifications in tutor mode', () => {
-    const group = {
-      notificationIds: [3],
-      task: {projectId: 9, abbreviation: 'P5', staffView: true},
-      read: true,
-    } as NotificationGroup;
-
-    component.openTask(group);
-
-    expect(markRead).not.toHaveBeenCalled();
-    expect(navigate).toHaveBeenCalledWith(['/projects', 9, 'dashboard', 'P5'], {
-      queryParams: {tutor: true},
-    });
-  });
-
-  it('marks only tutor-note events and focuses the latest relevant note', () => {
-    const group = {
-      unit: {id: 4},
-      tutorNoteUnitRoleId: 22,
-      tutorNoteNotificationIds: [7, 8],
-      tutorNoteIds: [50, 51],
-    } as NotificationGroup;
+  it('delegates opening moderation notes, then refreshes the list', () => {
+    const group = {tutorNoteNotificationIds: [7, 8]} as NotificationGroup;
 
     component.openTutorNotes(group);
 
-    expect(markRead).toHaveBeenCalledWith([7, 8]);
-    expect(getUnit).toHaveBeenCalledWith(4);
-    expect(showTutorNotes).toHaveBeenCalledWith(undefined, {id: 22}, 51);
+    expect(openTutorNotes).toHaveBeenCalledWith(group);
+    expect(getNotifications).toHaveBeenCalled();
   });
 
   it('passes search, unit, category, and read-state filters to the service', () => {

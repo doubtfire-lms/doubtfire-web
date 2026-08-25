@@ -145,6 +145,8 @@ export class NotificationService implements OnDestroy {
       latestAt: new Date(data['latest_at'] as string),
       tutorNoteIds: data['tutor_note_ids'] as number[],
       tutorNoteUnitRoleId: data['tutor_note_unit_role_id'] as number | undefined,
+      overseerAssessmentId: data['overseer_assessment_id'] as number | undefined,
+      detail: data['detail'] as string,
       summary: data['summary'] as string,
     };
   }

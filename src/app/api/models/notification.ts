@@ -44,6 +44,10 @@ export interface NotificationGroup {
   latestAt: Date;
   tutorNoteIds: number[];
   tutorNoteUnitRoleId?: number;
+  /** The newest failed overseer run in the group, so its report can be opened. */
+  overseerAssessmentId?: number;
+  /** What happened, without the task it happened to. */
+  detail: string;
   summary: string;
 }
 

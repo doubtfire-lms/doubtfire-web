@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {of} from 'rxjs';
 import {NotificationGroup} from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
+import {NotificationActionsService} from 'src/app/notifications/notification-actions.service';
 import {NotificationDropdownComponent} from './notification-dropdown.component';
 
 describe('NotificationDropdownComponent', () => {
@@ -14,6 +15,7 @@ describe('NotificationDropdownComponent', () => {
     of({groups: [], page: 1, perPage: 5, total: 0, unreadCount: 0}),
   );
   const markRead = vi.fn(() => of({count: 1}));
+  const openGroup = vi.fn();
   const navigate = vi.fn();
 
   beforeEach(async () => {
@@ -21,6 +23,7 @@ describe('NotificationDropdownComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [NotificationDropdownComponent],
       providers: [
+        {provide: NotificationActionsService, useValue: {open: openGroup}},
         {provide: Router, useValue: {navigate}},
         {
           provide: NotificationService,
@@ -54,26 +57,26 @@ describe('NotificationDropdownComponent', () => {
     expect(component.loading).toBe(false);
   });
 
-  it('marks a task notification read and opens the task', () => {
-    component.open({
-      notificationIds: [11, 12],
-      task: {
-        projectId: 7,
-        abbreviation: 'P4',
-        staffView: false,
-      },
-    } as NotificationGroup);
+  it('delegates opening a notification to the notification actions service', () => {
+    const group = {notificationIds: [1, 2]} as NotificationGroup;
 
-    expect(markRead).toHaveBeenCalledWith([11, 12]);
-    expect(navigate).toHaveBeenCalledWith(['/projects', 7, 'dashboard', 'P4']);
+    component.open(group);
+
+    expect(openGroup).toHaveBeenCalledWith(group);
   });
 
-  it('uses the task badge as the subject while retaining status text', () => {
-    const text = component.summaryText({
-      summary: 'P4 — 2 new comments and status changed to Fix and resubmit',
+  it('shows only the detail, since the task is already shown beside it', () => {
+    const withTask = {
       task: {abbreviation: 'P4'},
-    } as NotificationGroup);
+      detail: 'Overseer assessment failed',
+      summary: 'P4 - Overseer assessment failed',
+    } as NotificationGroup;
+    const withoutTask = {
+      detail: '2 moderation notes',
+      summary: 'Unit notification - 2 moderation notes',
+    } as NotificationGroup;
 
-    expect(text).toBe('2 new comments and status changed to Fix and resubmit');
+    expect(component.summaryText(withTask)).toBe('Overseer assessment failed');
+    expect(component.summaryText(withoutTask)).toBe('Unit notification - 2 moderation notes');
   });
 });

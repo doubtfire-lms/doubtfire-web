@@ -13,6 +13,7 @@ import {UnitService} from 'src/app/api/services/unit.service';
 import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+import {NotificationActionsService} from './notification-actions.service';
 
 @Component({
   selector: 'f-notifications',
@@ -51,6 +52,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     private router: Router,
     private unitService: UnitService,
     private tutorNotesModal: TutorNotesModalService,
+    private notificationActions: NotificationActionsService,
     private globalState: GlobalStateService,
     private alerts: AlertService,
   ) {}
@@ -124,57 +126,13 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   }
 
   public openTask(group: NotificationGroup): void {
-    if (!group.task) {
-      return;
-    }
-
-    const navigate = () => {
-      const task = group.task;
-      if (!task) {
-        return;
-      }
-
-      const commands = ['/projects', task.projectId, 'dashboard', task.abbreviation];
-      if (task.staffView) {
-        this.router.navigate(commands, {queryParams: {tutor: true}});
-      } else {
-        this.router.navigate(commands);
-      }
-    };
-
-    if (group.read) {
-      navigate();
-      return;
-    }
-
-    this.notificationService.markRead(group.notificationIds).subscribe({
-      next: navigate,
-      error: () => this.alerts.error('Unable to mark this notification as read', 4000),
-    });
+    this.notificationActions.open(group);
   }
 
   public openTutorNotes(group: NotificationGroup): void {
-    if (!group.tutorNoteUnitRoleId) {
-      return;
-    }
-
-    this.notificationService.markRead(group.tutorNoteNotificationIds).subscribe({
-      next: () => {
-        this.unitService.get(group.unit.id).subscribe({
-          next: (unit) => {
-            const unitRole = unit.staff.find((role) => role.id === group.tutorNoteUnitRoleId);
-            if (!unitRole) {
-              this.alerts.error('Unable to find the tutor notes for this notification', 4000);
-              return;
-            }
-
-            this.tutorNotesModal.show(undefined, unitRole, group.tutorNoteIds.at(-1));
-            this.loadNotifications();
-          },
-          error: () => this.alerts.error('Unable to load tutor notes', 4000),
-        });
-      },
-      error: () => this.alerts.error('Unable to mark the tutor note notification as read', 4000),
+    this.notificationActions.openTutorNotes(group).subscribe({
+      next: () => this.loadNotifications(),
+      error: () => this.alerts.error('Unable to load tutor notes', 4000),
     });
   }
 

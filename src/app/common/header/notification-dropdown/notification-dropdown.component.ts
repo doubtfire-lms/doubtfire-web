@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {NotificationGroup} from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
+import {NotificationActionsService} from 'src/app/notifications/notification-actions.service';
 
 @Component({
   selector: 'notification-dropdown',
@@ -21,6 +22,7 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
 
   constructor(
     private notificationService: NotificationService,
+    private notificationActions: NotificationActionsService,
     private router: Router,
   ) {}
 
@@ -56,37 +58,12 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
   }
 
   public open(group: NotificationGroup): void {
-    if (!group.task) {
-      this.router.navigate(['/notifications']);
-      return;
-    }
-
-    const task = group.task;
-    const navigate = () => {
-      const commands = ['/projects', task.projectId, 'dashboard', task.abbreviation];
-      if (task.staffView) {
-        this.router.navigate(commands, {queryParams: {tutor: true}});
-      } else {
-        this.router.navigate(commands);
-      }
-    };
-
-    const subscription = this.notificationService.markRead(group.notificationIds).subscribe({
-      next: navigate,
-      error: navigate,
-    });
-    this.subscriptions.push(subscription);
+    this.notificationActions.open(group);
   }
 
   public summaryText(group: NotificationGroup): string {
-    if (!group.task) {
-      return group.summary;
-    }
-
-    const separatorIndex = group.summary.indexOf(' — ');
-    const text =
-      separatorIndex >= 0 ? group.summary.slice(separatorIndex + ' — '.length) : group.summary;
-    return text.charAt(0).toUpperCase() + text.slice(1);
+    // The task is already shown beside the text, so only the detail is needed.
+    return group.task ? group.detail : group.summary;
   }
 
   public ngOnDestroy(): void {
