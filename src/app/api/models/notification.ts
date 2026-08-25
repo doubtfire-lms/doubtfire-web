@@ -55,18 +55,6 @@ export interface NotificationPage {
   unreadCount: number;
 }
 
-export interface NotificationPreference {
-  id: number;
-  unit: NotificationUnit;
-  emailCategories: NotificationKind[];
-  emailFrequency: NotificationFrequency;
-  emailTime: string;
-  emailWeekday: number;
-  timezone: string;
-  nextDigestAt?: Date;
-  lastDigestAt?: Date;
-}
-
 export interface NotificationQuery {
   state?: NotificationState;
   unitId?: number;

@@ -16,7 +16,6 @@ import {
   NotificationGroup,
   NotificationKind,
   NotificationPage,
-  NotificationPreference,
   NotificationQuery,
 } from '../models/notification';
 
@@ -109,24 +108,6 @@ export class NotificationService implements OnDestroy {
       .pipe(tap(() => this.refreshUnreadCount()));
   }
 
-  public getPreferences(): Observable<NotificationPreference[]> {
-    return this.httpClient
-      .get<Record<string, unknown>[]>(`${API_URL}/notification_preferences`)
-      .pipe(map((preferences) => preferences.map((preference) => this.mapPreference(preference))));
-  }
-
-  public updatePreference(preference: NotificationPreference): Observable<NotificationPreference> {
-    return this.httpClient
-      .put<Record<string, unknown>>(`${API_URL}/notification_preferences/${preference.unit.id}`, {
-        email_categories: preference.emailCategories,
-        email_frequency: preference.emailFrequency,
-        email_time: preference.emailTime,
-        email_weekday: preference.emailWeekday,
-        timezone: preference.timezone,
-      })
-      .pipe(map((response) => this.mapPreference(response)));
-  }
-
   public ngOnDestroy(): void {
     this.stopCountPolling();
   }
@@ -165,26 +146,6 @@ export class NotificationService implements OnDestroy {
       tutorNoteIds: data['tutor_note_ids'] as number[],
       tutorNoteUnitRoleId: data['tutor_note_unit_role_id'] as number | undefined,
       summary: data['summary'] as string,
-    };
-  }
-
-  private mapPreference(data: Record<string, unknown>): NotificationPreference {
-    const unit = data['unit'] as Record<string, unknown>;
-
-    return {
-      id: data['id'] as number,
-      unit: {
-        id: unit['id'] as number,
-        code: unit['code'] as string,
-        name: unit['name'] as string,
-      },
-      emailCategories: data['email_categories'] as NotificationKind[],
-      emailFrequency: data['email_frequency'] as NotificationPreference['emailFrequency'],
-      emailTime: data['email_time'] as string,
-      emailWeekday: data['email_weekday'] as number,
-      timezone: data['timezone'] as string,
-      nextDigestAt: data['next_digest_at'] ? new Date(data['next_digest_at'] as string) : undefined,
-      lastDigestAt: data['last_digest_at'] ? new Date(data['last_digest_at'] as string) : undefined,
     };
   }
 }

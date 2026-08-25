@@ -8,6 +8,7 @@ import {NotificationService} from 'src/app/api/services/notification.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 import {NotificationsComponent} from './notifications.component';
 
 describe('NotificationsComponent', () => {
@@ -35,10 +36,13 @@ describe('NotificationsComponent', () => {
           useValue: {
             startCountPolling: vi.fn(),
             getNotifications,
-            getPreferences: vi.fn(() => of([])),
             markRead,
             markAllRead: vi.fn(() => of({count: 0})),
           },
+        },
+        {
+          provide: GlobalStateService,
+          useValue: {unitRolesSubject: of([]), projectsSubject: of([])},
         },
         {provide: Router, useValue: {navigate}},
         {provide: UnitService, useValue: {get: getUnit}},

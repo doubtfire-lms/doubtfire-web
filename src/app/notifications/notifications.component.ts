@@ -1,6 +1,7 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {PageEvent} from '@angular/material/paginator';
 import {Router} from '@angular/router';
+import {Subscription, combineLatest} from 'rxjs';
 import {
   NotificationGroup,
   NotificationKind,
@@ -11,6 +12,7 @@ import {NotificationService} from 'src/app/api/services/notification.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 
 @Component({
   selector: 'f-notifications',
@@ -18,7 +20,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class NotificationsComponent implements OnInit {
+export class NotificationsComponent implements OnInit, OnDestroy {
   public readonly categories: {kind: NotificationKind; label: string}[] = [
     {kind: 'feedback_left', label: 'Feedback and messages'},
     {kind: 'task_status_changed', label: 'Task status changes'},
@@ -42,18 +44,45 @@ export class NotificationsComponent implements OnInit {
   public total = 0;
   public unreadCount = 0;
 
+  private readonly subscriptions: Subscription[] = [];
+
   constructor(
     private notificationService: NotificationService,
     private router: Router,
     private unitService: UnitService,
     private tutorNotesModal: TutorNotesModalService,
+    private globalState: GlobalStateService,
     private alerts: AlertService,
   ) {}
 
   public ngOnInit(): void {
     this.notificationService.startCountPolling();
     this.loadNotifications();
-    this.loadUnits();
+
+    this.subscriptions.push(
+      combineLatest([
+        this.globalState.unitRolesSubject,
+        this.globalState.projectsSubject,
+      ]).subscribe(([unitRoles, projects]) => {
+        const units: Map<number, NotificationUnit> = new Map();
+        for (const unit of [
+          ...(unitRoles ?? []).map((unitRole) => unitRole.unit),
+          ...(projects ?? []).map((project) => project.unit),
+        ]) {
+          if (unit) {
+            units.set(unit.id, {id: unit.id, code: unit.code, name: unit.name});
+          }
+        }
+
+        this.units = [...units.values()].sort((a, b) => a.code.localeCompare(b.code));
+      }),
+    );
+  }
+
+  public ngOnDestroy(): void {
+    for (const subscription of this.subscriptions) {
+      subscription.unsubscribe();
+    }
   }
 
   public loadNotifications(): void {
@@ -160,14 +189,6 @@ export class NotificationsComponent implements OnInit {
     this.notificationService.markAllRead(this.selectedUnitId).subscribe({
       next: () => this.loadNotifications(),
       error: () => this.alerts.error('Unable to mark notifications as read', 4000),
-    });
-  }
-
-  /** Units for the filter dropdown. Settings live on their own page. */
-  public loadUnits(): void {
-    this.notificationService.getPreferences().subscribe({
-      next: (preferences) => (this.units = preferences.map((preference) => preference.unit)),
-      error: () => undefined,
     });
   }
 
