@@ -124,7 +124,7 @@
   </ng-template>
 
   <div class="flex w-full">
-    <f-user-badge fxFlex fxFlexAlign="start start" [selectedTask]="selectedTask"></f-user-badge>
+    <f-user-badge class="flex-1" [selectedTask]="selectedTask"></f-user-badge>
     <div
       class="flex items-center"
       [ngClass]="hideMainActionButtonsForModeration ? 'w-full justify-center' : 'justify-between'"
@@ -180,7 +180,7 @@
       }
     </div>
 
-    <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
+    <div class="flex flex-1 flex-row items-center justify-end">
       <!-- @if (selectedTask?.similaritiesDetected) {
         <div class="relative inline-block">
           <div
