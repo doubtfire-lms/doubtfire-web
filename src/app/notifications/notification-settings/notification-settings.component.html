@@ -1,4 +1,4 @@
-<main class="mx-auto max-w-[1200px] p-6 max-[720px]:p-3.5">
+<main class="mx-auto max-w-300 p-6 max-[720px]:p-3.5">
   <header class="mb-5 flex items-center justify-between gap-4">
     <div>
       <h1>Notification settings</h1>
@@ -78,7 +78,7 @@
           <p class="mb-4 text-sm text-gray-600">Applies to all units.</p>
 
           <div class="flex flex-wrap items-baseline gap-3">
-            <mat-form-field appearance="outline" class="min-w-[180px]">
+            <mat-form-field appearance="outline" class="min-w-45">
               <mat-label>Send my digest</mat-label>
               <mat-select [(ngModel)]="digestFrequency">
                 <mat-option value="off">Off</mat-option>
@@ -89,7 +89,7 @@
             </mat-form-field>
 
             @if (digestFrequency === 'weekly') {
-              <mat-form-field appearance="outline" class="min-w-[150px]">
+              <mat-form-field appearance="outline" class="min-w-37.5">
                 <mat-label>On</mat-label>
                 <mat-select [(ngModel)]="digestWeekday">
                   @for (weekday of weekdays; track weekday.value) {
@@ -100,7 +100,7 @@
             }
 
             @if (digestFrequency === 'daily' || digestFrequency === 'weekly') {
-              <mat-form-field appearance="outline" class="min-w-[130px]">
+              <mat-form-field appearance="outline" class="min-w-32.5">
                 <mat-label>At</mat-label>
                 <input matInput type="time" [(ngModel)]="digestTime" />
               </mat-form-field>

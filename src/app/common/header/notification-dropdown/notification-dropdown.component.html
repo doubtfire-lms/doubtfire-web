@@ -18,10 +18,10 @@
 
 <mat-menu
   #notificationMenu="matMenu"
-  class="w-[500px] max-w-[calc(100vw-24px)] min-w-0"
+  class="w-125 max-w-[calc(100vw-24px)] min-w-0"
   [overlapTrigger]="false"
 >
-  <div class="w-[500px] max-w-full">
+  <div class="w-125 max-w-full">
     <div class="flex items-center justify-between px-4 pt-3.5 pb-2.5">
       <strong>Notifications</strong>
       <span class="flex items-center gap-1">
@@ -69,14 +69,14 @@
     } @else {
       @for (group of groups; track group.key) {
         <button
-          class="!h-auto min-h-[76px] !py-2.5 !leading-[1.3] !whitespace-normal"
+          class="h-auto! min-h-19 py-2.5! leading-[1.3]! whitespace-normal!"
           mat-menu-item
           type="button"
           [attr.aria-label]="group.summary"
           (click)="open(group)"
         >
-          <span class="flex w-full min-w-0 flex-col gap-[7px]">
-            <span class="block w-full text-xs [overflow-wrap:anywhere] text-slate-500">
+          <span class="flex w-full min-w-0 flex-col gap-1.75">
+            <span class="block w-full text-xs wrap-anywhere text-slate-500">
               {{ group.unit.code }}
               @if (group.task) {
                 · {{ group.task.abbreviation }} · {{ group.task.name }}
@@ -91,7 +91,7 @@
                 <span class="relative flex w-10 shrink-0 grow-0">
                   <f-task-badge [abbreviationText]="group.task.abbreviation"></f-task-badge>
                   <span
-                    class="absolute top-[-3px] right-[-3px] size-2 flex-none rounded-full [box-shadow:0_0_0_2px_white]"
+                    class="absolute -top-0.75 -right-0.75 size-2 flex-none rounded-full [box-shadow:0_0_0_2px_white]"
                     [ngClass]="
                       group.severity === 'critical'
                         ? 'bg-[#c62828]'
@@ -109,7 +109,7 @@
                 </span>
               }
               <span class="min-w-0 flex-1">
-                <span class="mt-[3px] block [overflow-wrap:anywhere] text-slate-800">
+                <span class="mt-0.75 block wrap-anywhere text-slate-800">
                   {{ summaryText(group) }}
                 </span>
               </span>
