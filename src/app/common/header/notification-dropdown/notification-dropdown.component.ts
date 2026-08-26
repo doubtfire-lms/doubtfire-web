@@ -17,6 +17,7 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
   public groups: NotificationGroup[] = [];
   public loading = false;
   public loadFailed = false;
+  public markingAllRead = false;
 
   private readonly subscriptions: Subscription[] = [];
 
@@ -59,6 +60,25 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
 
   public open(group: NotificationGroup): void {
     this.notificationActions.open(group);
+  }
+
+  public markAllRead(): void {
+    if (this.unreadCount === 0 || this.markingAllRead) {
+      return;
+    }
+
+    this.markingAllRead = true;
+    const subscription = this.notificationService.markAllRead().subscribe({
+      next: () => {
+        this.groups = [];
+        this.unreadCount = 0;
+        this.markingAllRead = false;
+      },
+      error: () => {
+        this.markingAllRead = false;
+      },
+    });
+    this.subscriptions.push(subscription);
   }
 
   public summaryText(group: NotificationGroup): string {

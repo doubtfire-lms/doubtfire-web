@@ -14,7 +14,7 @@ describe('NotificationDropdownComponent', () => {
   const getNotifications = vi.fn(() =>
     of({groups: [], page: 1, perPage: 5, total: 0, unreadCount: 0}),
   );
-  const markRead = vi.fn(() => of({count: 1}));
+  const markAllRead = vi.fn(() => of({count: 1}));
   const openGroup = vi.fn();
   const navigate = vi.fn();
 
@@ -32,7 +32,7 @@ describe('NotificationDropdownComponent', () => {
             stopCountPolling: vi.fn(),
             unreadCount$: of(0),
             getNotifications,
-            markRead,
+            markAllRead,
           },
         },
       ],
@@ -63,6 +63,18 @@ describe('NotificationDropdownComponent', () => {
     component.open(group);
 
     expect(openGroup).toHaveBeenCalledWith(group);
+  });
+
+  it('marks all notifications as read and clears the preview', () => {
+    component.unreadCount = 2;
+    component.groups = [{key: 'group'} as NotificationGroup];
+
+    component.markAllRead();
+
+    expect(markAllRead).toHaveBeenCalledOnce();
+    expect(component.groups).toEqual([]);
+    expect(component.unreadCount).toBe(0);
+    expect(component.markingAllRead).toBe(false);
   });
 
   it('shows only the detail, since the task is already shown beside it', () => {
