@@ -142,6 +142,16 @@
                   PDF generation failed
                 </span>
               }
+              @if (count(group, 'portfolio_failed')) {
+                <span class="rounded-full bg-red-100 px-[9px] py-1 text-xs text-red-800">
+                  Portfolio compilation failed
+                </span>
+              }
+              @if (count(group, 'portfolio_ready')) {
+                <span class="rounded-full bg-slate-200 px-[9px] py-1 text-xs text-slate-700">
+                  Portfolio ready
+                </span>
+              }
               @if (count(group, 'new_task_comment')) {
                 <span class="rounded-full bg-slate-200 px-[9px] py-1 text-xs text-slate-700">
                   {{ count(group, 'new_task_comment') }} new
@@ -162,9 +172,9 @@
             </div>
           </div>
           <div class="flex flex-wrap items-center justify-end gap-2 max-[720px]:justify-start">
-            @if (group.task) {
+            @if (group.task || group.projectId) {
               <button color="primary" mat-flat-button type="button" (click)="openTask(group)">
-                Open task
+                {{ group.task ? 'Open task' : 'Open portfolio' }}
               </button>
             }
             @if (group.tutorNoteNotificationIds.length) {

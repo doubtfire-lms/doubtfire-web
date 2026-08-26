@@ -125,6 +125,7 @@ export class NotificationService implements OnDestroy {
         code: unit['code'] as string,
         name: unit['name'] as string,
       },
+      projectId: data['project_id'] as number | undefined,
       task: task
         ? {
             id: task['id'] as number,

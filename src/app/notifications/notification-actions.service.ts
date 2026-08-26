@@ -32,6 +32,25 @@ export class NotificationActionsService {
       return;
     }
 
+    if (
+      !group.task &&
+      group.projectId &&
+      (group.counts.portfolio_ready || group.counts.portfolio_failed)
+    ) {
+      const projectId = group.projectId;
+      const navigate = () => this.router.navigate(['/projects', projectId, 'portfolio']);
+
+      if (group.read) {
+        navigate();
+      } else {
+        this.notificationService.markRead(group.notificationIds).subscribe({
+          next: navigate,
+          error: navigate,
+        });
+      }
+      return;
+    }
+
     if (!group.task) {
       this.router.navigate(['/notifications']);
       return;

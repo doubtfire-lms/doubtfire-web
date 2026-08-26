@@ -9,7 +9,9 @@ export type NotificationKind =
   | 'discuss_expired'
   | 'moderation_note_added'
   | 'moderation_note_reply'
-  | 'moderation_note_from_mentee';
+  | 'moderation_note_from_mentee'
+  | 'portfolio_ready'
+  | 'portfolio_failed';
 
 export type NotificationSeverity = 'critical' | 'warning' | 'normal';
 export type NotificationState = 'all' | 'unread' | 'read';
@@ -36,6 +38,7 @@ export interface NotificationGroup {
   notificationIds: number[];
   tutorNoteNotificationIds: number[];
   unit: NotificationUnit;
+  projectId?: number;
   task?: NotificationTask;
   counts: Partial<Record<NotificationKind, number>>;
   eventCount: number;

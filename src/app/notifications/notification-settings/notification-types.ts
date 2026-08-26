@@ -90,6 +90,24 @@ export const NOTIFICATION_SECTIONS: NotificationSection[] = [
     ],
   },
   {
+    key: 'portfolio',
+    title: 'Portfolio',
+    delivery: 'alert',
+    audience: 'student',
+    types: [
+      {
+        key: 'portfolio_ready',
+        label: 'Portfolio ready',
+        description: 'Your compiled portfolio is ready to review.',
+      },
+      {
+        key: 'portfolio_failed',
+        label: 'Portfolio compilation failed',
+        description: 'Your portfolio could not be compiled.',
+      },
+    ],
+  },
+  {
     key: 'moderation',
     title: 'Moderation notes',
     delivery: 'alert',

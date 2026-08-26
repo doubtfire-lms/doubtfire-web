@@ -32,6 +32,7 @@ describe('NotificationService', () => {
     service.getNotifications({state: 'unread'}).subscribe((page) => {
       summary = page.groups[0].summary;
       expect(page.unreadCount).toBe(1);
+      expect(page.groups[0].projectId).toBe(42);
       expect(page.groups[0].task?.projectId).toBe(42);
       expect(page.groups[0].latestAt).toBeInstanceOf(Date);
     });
@@ -47,6 +48,7 @@ describe('NotificationService', () => {
           notification_ids: [1, 2],
           tutor_note_notification_ids: [],
           unit: {id: 3, code: 'FIT1045', name: 'Programming'},
+          project_id: 42,
           task: {
             id: 9,
             project_id: 42,

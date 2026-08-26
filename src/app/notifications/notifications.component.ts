@@ -29,6 +29,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     {kind: 'pdf_generation_failed', label: 'PDF generation failures'},
     {kind: 'discuss_warning', label: 'Discussion deadline warnings'},
     {kind: 'discuss_expired', label: 'Discussion deadline expiries'},
+    {kind: 'portfolio_ready', label: 'Portfolios ready'},
+    {kind: 'portfolio_failed', label: 'Portfolio compilation failures'},
     {kind: 'moderation_note_added', label: 'Moderation notes added'},
     {kind: 'moderation_note_reply', label: 'Moderation note replies'},
     {kind: 'moderation_note_from_mentee', label: 'Notes from staff you mentor'},

@@ -108,6 +108,15 @@ describe('NotificationActionsService', () => {
     expect(navigate).toHaveBeenCalledWith(['/notifications']);
   });
 
+  it('opens the portfolio for a portfolio notification', () => {
+    service.open(
+      groupFor({task: undefined, projectId: 8, counts: {portfolio_ready: 1}, read: false}),
+    );
+
+    expect(markRead).toHaveBeenCalledWith([1, 2]);
+    expect(navigate).toHaveBeenCalledWith(['/projects', 8, 'portfolio']);
+  });
+
   it('still navigates when marking read fails', () => {
     markRead.mockReturnValueOnce(throwError(() => new Error('nope')) as never);
 
