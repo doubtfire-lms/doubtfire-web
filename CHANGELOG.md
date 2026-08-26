@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-76](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-75...v11.0.0-76) (2026-08-26)
+
+
+### Bug Fixes
+
+* center user badge vertically ([800268a](https://github.com/b0ink/doubtfire-deploy/commit/800268a890239790bcdd85187ae3fce86bf2459f))
+* highlight links ([6f08ab8](https://github.com/b0ink/doubtfire-deploy/commit/6f08ab807b820a843f11d20184c81eb7f1c82d36))
+* restore code styling in rendered markdown ([86f38c8](https://github.com/b0ink/doubtfire-deploy/commit/86f38c88dc0b495b8f8af1cb61f407d57bd843cf))
+
 ## [11.0.0-75](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-74...v11.0.0-75) (2026-08-24)
 
 
