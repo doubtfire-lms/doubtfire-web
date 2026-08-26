@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {PageEvent} from '@angular/material/paginator';
-import {Router} from '@angular/router';
 import {Subscription, combineLatest} from 'rxjs';
 import {
   NotificationGroup,
@@ -9,8 +8,6 @@ import {
   NotificationUnit,
 } from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
-import {UnitService} from 'src/app/api/services/unit.service';
-import {TutorNotesModalService} from 'src/app/common/modals/tutor-notes-modal/tutor-notes-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 import {NotificationActionsService} from './notification-actions.service';
@@ -40,7 +37,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   public units: NotificationUnit[] = [];
   public loading = true;
   public loadFailed = false;
-  public state: NotificationState = 'all';
+  public state: NotificationState = 'unread';
   public selectedUnitId?: number;
   public selectedKinds: NotificationKind[] = [];
   public search = '';
@@ -53,9 +50,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   constructor(
     private notificationService: NotificationService,
-    private router: Router,
-    private unitService: UnitService,
-    private tutorNotesModal: TutorNotesModalService,
     private notificationActions: NotificationActionsService,
     private globalState: GlobalStateService,
     private alerts: AlertService,
@@ -129,22 +123,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     this.loadNotifications();
   }
 
-  public openTask(group: NotificationGroup): void {
+  public open(group: NotificationGroup): void {
     this.notificationActions.open(group);
-  }
-
-  public openTutorNotes(group: NotificationGroup): void {
-    this.notificationActions.openTutorNotes(group).subscribe({
-      next: () => this.loadNotifications(),
-      error: () => this.alerts.error('Unable to load tutor notes', 4000),
-    });
-  }
-
-  public markGroupRead(group: NotificationGroup): void {
-    this.notificationService.markRead(group.notificationIds).subscribe({
-      next: () => this.loadNotifications(),
-      error: () => this.alerts.error('Unable to mark this notification as read', 4000),
-    });
   }
 
   public markAllRead(): void {
@@ -152,17 +132,5 @@ export class NotificationsComponent implements OnInit, OnDestroy {
       next: () => this.loadNotifications(),
       error: () => this.alerts.error('Unable to mark notifications as read', 4000),
     });
-  }
-
-  public count(group: NotificationGroup, kind: NotificationKind): number {
-    return group.counts[kind] ?? 0;
-  }
-
-  public moderationCount(group: NotificationGroup): number {
-    return (
-      this.count(group, 'moderation_note_added') +
-      this.count(group, 'moderation_note_reply') +
-      this.count(group, 'moderation_note_from_mentee')
-    );
   }
 }
