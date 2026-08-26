@@ -79,7 +79,7 @@
             <span class="block w-full text-xs [overflow-wrap:anywhere] text-slate-500">
               {{ group.unit.code }}
               @if (group.task) {
-                · {{ group.task.name }}
+                · {{ group.task.abbreviation }} · {{ group.task.name }}
               }
               @if (group.task?.studentName) {
                 · {{ group.task.studentName }}
