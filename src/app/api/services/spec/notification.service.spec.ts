@@ -55,7 +55,7 @@ describe('NotificationService', () => {
             name: 'Loops',
             staff_view: false,
           },
-          counts: {feedback_left: 2},
+          counts: {new_task_comment: 2},
           event_count: 2,
           severity: 'normal',
           read: false,

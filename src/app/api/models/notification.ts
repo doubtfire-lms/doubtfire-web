@@ -1,13 +1,15 @@
 import type {TaskStatusEnum} from './task-status';
 
 export type NotificationKind =
-  | 'feedback_left'
+  | 'new_task_comment'
   | 'task_status_changed'
   | 'overseer_failed'
   | 'pdf_generation_failed'
   | 'discuss_warning'
   | 'discuss_expired'
-  | 'tutor_note';
+  | 'moderation_note_added'
+  | 'moderation_note_reply'
+  | 'moderation_note_from_mentee';
 
 export type NotificationSeverity = 'critical' | 'warning' | 'normal';
 export type NotificationState = 'all' | 'unread' | 'read';

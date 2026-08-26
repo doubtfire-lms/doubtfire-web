@@ -23,13 +23,15 @@ import {NotificationActionsService} from './notification-actions.service';
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
   public readonly categories: {kind: NotificationKind; label: string}[] = [
-    {kind: 'feedback_left', label: 'Feedback and messages'},
+    {kind: 'new_task_comment', label: 'Feedback and messages'},
     {kind: 'task_status_changed', label: 'Task status changes'},
     {kind: 'overseer_failed', label: 'Automated assessment failures'},
     {kind: 'pdf_generation_failed', label: 'PDF generation failures'},
     {kind: 'discuss_warning', label: 'Discussion deadline warnings'},
     {kind: 'discuss_expired', label: 'Discussion deadline expiries'},
-    {kind: 'tutor_note', label: 'Tutor notes'},
+    {kind: 'moderation_note_added', label: 'Moderation notes added'},
+    {kind: 'moderation_note_reply', label: 'Moderation note replies'},
+    {kind: 'moderation_note_from_mentee', label: 'Notes from staff you mentor'},
   ];
 
   public groups: NotificationGroup[] = [];
@@ -152,5 +154,13 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   public count(group: NotificationGroup, kind: NotificationKind): number {
     return group.counts[kind] ?? 0;
+  }
+
+  public moderationCount(group: NotificationGroup): number {
+    return (
+      this.count(group, 'moderation_note_added') +
+      this.count(group, 'moderation_note_reply') +
+      this.count(group, 'moderation_note_from_mentee')
+    );
   }
 }

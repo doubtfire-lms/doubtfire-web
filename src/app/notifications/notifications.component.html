@@ -142,15 +142,16 @@
                   PDF generation failed
                 </span>
               }
-              @if (count(group, 'feedback_left')) {
+              @if (count(group, 'new_task_comment')) {
                 <span class="rounded-full bg-slate-200 px-[9px] py-1 text-xs text-slate-700">
-                  {{ count(group, 'feedback_left') }} new
-                  {{ count(group, 'feedback_left') === 1 ? 'comment' : 'comments' }}
+                  {{ count(group, 'new_task_comment') }} new
+                  {{ count(group, 'new_task_comment') === 1 ? 'comment' : 'comments' }}
                 </span>
               }
-              @if (count(group, 'tutor_note')) {
+              @if (moderationCount(group)) {
                 <span class="rounded-full bg-slate-200 px-[9px] py-1 text-xs text-slate-700">
-                  {{ count(group, 'tutor_note') }} tutor notes
+                  {{ moderationCount(group) }} moderation
+                  {{ moderationCount(group) === 1 ? 'note' : 'notes' }}
                 </span>
               }
               @if (group.latestStatus) {

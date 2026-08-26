@@ -86,7 +86,7 @@ describe('NotificationsComponent', () => {
     component.page = 3;
     component.search = 'P4';
     component.selectedUnitId = 4;
-    component.selectedKinds = ['feedback_left'];
+    component.selectedKinds = ['new_task_comment'];
     component.state = 'read';
 
     component.applyFilters();
@@ -95,7 +95,7 @@ describe('NotificationsComponent', () => {
     expect(getNotifications).toHaveBeenCalledWith({
       state: 'read',
       unitId: 4,
-      kinds: ['feedback_left'],
+      kinds: ['new_task_comment'],
       query: 'P4',
       page: 1,
       perPage: 25,
