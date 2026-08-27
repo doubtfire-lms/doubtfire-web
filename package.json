@@ -34,7 +34,7 @@
     "@angular/compiler": "^22.1.1",
     "@angular/core": "^22.1.1",
     "@angular/forms": "^22.1.1",
-    "@angular/material": "^22.1.1",
+    "@angular/material": "^22.1.3",
     "@angular/material-date-fns-adapter": "^22.1.1",
     "@angular/platform-browser": "^22.1.1",
     "@angular/platform-browser-dynamic": "^22.1.1",
