@@ -25,42 +25,47 @@
     </div>
   </header>
 
-  <section class="mb-4 flex flex-wrap items-center gap-3">
-    <mat-form-field appearance="outline" class="min-w-45 grow basis-70">
-      <mat-label>Search notifications</mat-label>
-      <mat-icon matPrefix>search</mat-icon>
-      <input matInput [(ngModel)]="search" (keyup.enter)="applyFilters()" />
-    </mat-form-field>
+  <section class="mb-5 flex flex-col items-start gap-3">
+    <div class="flex w-full flex-wrap items-center gap-3">
+      <mat-form-field appearance="outline" class="w-full max-w-[400px]" subscriptSizing="dynamic">
+        <mat-label>Search notifications</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="search"
+          (ngModelChange)="searchChanged($event)"
+        />
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="min-w-45">
-      <mat-label>Read state</mat-label>
-      <mat-select [(ngModel)]="state" (selectionChange)="applyFilters()">
-        <mat-option value="all">Unread and recent</mat-option>
-        <mat-option value="unread">Unread</mat-option>
-        <mat-option value="read">Read in the last 30 days</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-button-toggle-group
+        aria-label="Notification read state"
+        hideSingleSelectionIndicator
+        [value]="state"
+        (change)="stateChanged($event.value)"
+      >
+        <mat-button-toggle value="all">All</mat-button-toggle>
+        <mat-button-toggle value="unread">Unread</mat-button-toggle>
+        <mat-button-toggle value="read">Read</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
 
-    <mat-form-field appearance="outline" class="min-w-45">
-      <mat-label>Unit</mat-label>
-      <mat-select [(ngModel)]="selectedUnitId" (selectionChange)="applyFilters()">
-        <mat-option [value]="undefined">All units</mat-option>
+    <div class="flex max-w-full flex-col items-start gap-1">
+      <span class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Units</span>
+      <mat-chip-listbox
+        aria-label="Filter notifications by unit"
+        class="max-w-full"
+        [value]="selectedUnitId"
+        (change)="unitChanged($event.value)"
+      >
+        <mat-chip-option value="all">All units</mat-chip-option>
         @for (unit of units; track unit.id) {
-          <mat-option [value]="unit.id">{{ unit.code }}</mat-option>
+          <mat-chip-option [matTooltip]="unit.name" [value]="unit.id">
+            {{ unit.code }}
+          </mat-chip-option>
         }
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="min-w-45">
-      <mat-label>Categories</mat-label>
-      <mat-select multiple [(ngModel)]="selectedKinds" (selectionChange)="applyFilters()">
-        @for (category of categories; track category.kind) {
-          <mat-option [value]="category.kind">{{ category.label }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
-    <button mat-stroked-button type="button" (click)="applyFilters()">Apply</button>
+      </mat-chip-listbox>
+    </div>
   </section>
 
   @if (loading) {

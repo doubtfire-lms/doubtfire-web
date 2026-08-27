@@ -1,10 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {PageEvent} from '@angular/material/paginator';
 import {ActivatedRoute} from '@angular/router';
-import {Subscription, combineLatest} from 'rxjs';
+import {Subject, Subscription, combineLatest, debounceTime, distinctUntilChanged, map} from 'rxjs';
 import {
   NotificationGroup,
-  NotificationKind,
   NotificationState,
   NotificationUnit,
 } from 'src/app/api/models/notification';
@@ -20,28 +19,12 @@ import {NotificationActionsService} from './notification-actions.service';
   standalone: false,
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
-  public readonly categories: {kind: NotificationKind; label: string}[] = [
-    {kind: 'new_task_comment', label: 'Feedback and messages'},
-    {kind: 'task_status_changed', label: 'Task status changes'},
-    {kind: 'overseer_failed', label: 'Automated assessment failures'},
-    {kind: 'pdf_generation_failed', label: 'PDF generation failures'},
-    {kind: 'discuss_warning', label: 'Discussion deadline warnings'},
-    {kind: 'discuss_expired', label: 'Discussion deadline expiries'},
-    {kind: 'portfolio_ready', label: 'Portfolios ready'},
-    {kind: 'portfolio_failed', label: 'Portfolio compilation failures'},
-    {kind: 'moderation_note_added', label: 'Moderation notes added'},
-    {kind: 'moderation_note_reply', label: 'Moderation note replies'},
-    {kind: 'moderation_note_from_mentee', label: 'Notes from staff you mentor'},
-    {kind: 'communication_email', label: 'Communications emails'},
-  ];
-
   public groups: NotificationGroup[] = [];
   public units: NotificationUnit[] = [];
   public loading = true;
   public loadFailed = false;
   public state: NotificationState = 'unread';
-  public selectedUnitId?: number;
-  public selectedKinds: NotificationKind[] = [];
+  public selectedUnitId: number | 'all' = 'all';
   public search = '';
   public page = 1;
   public perPage = 25;
@@ -50,6 +33,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   public expandedNotificationId?: number;
 
   private readonly subscriptions: Subscription[] = [];
+  private readonly searchChanges: Subject<string> = new Subject();
+  private notificationsSubscription?: Subscription;
 
   constructor(
     private notificationService: NotificationService,
@@ -61,6 +46,16 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.notificationService.startCountPolling();
+    this.subscriptions.push(
+      this.searchChanges
+        .pipe(
+          debounceTime(400),
+          map((query) => query.trim()),
+          distinctUntilChanged(),
+        )
+        .subscribe(() => this.applyFilters()),
+    );
+
     const expandedId = Number(this.route.snapshot.queryParamMap.get('expanded'));
     if (Number.isInteger(expandedId) && expandedId > 0) {
       this.expandedNotificationId = expandedId;
@@ -91,19 +86,20 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.notificationsSubscription?.unsubscribe();
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
   }
 
   public loadNotifications(): void {
+    this.notificationsSubscription?.unsubscribe();
     this.loading = true;
     this.loadFailed = false;
-    this.notificationService
+    this.notificationsSubscription = this.notificationService
       .getNotifications({
         state: this.state,
-        unitId: this.selectedUnitId,
-        kinds: this.selectedKinds,
+        unitId: this.unitIdFilter,
         query: this.search.trim(),
         page: this.page,
         perPage: this.perPage,
@@ -126,6 +122,20 @@ export class NotificationsComponent implements OnInit, OnDestroy {
           this.alerts.error('Unable to load notifications', 5000);
         },
       });
+  }
+
+  public searchChanged(query: string): void {
+    this.searchChanges.next(query);
+  }
+
+  public stateChanged(state: NotificationState): void {
+    this.state = state;
+    this.applyFilters();
+  }
+
+  public unitChanged(unitId: number | 'all' | undefined): void {
+    this.selectedUnitId = unitId ?? 'all';
+    this.applyFilters();
   }
 
   public applyFilters(): void {
@@ -159,7 +169,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   }
 
   public markAllRead(): void {
-    this.notificationService.markAllRead(this.selectedUnitId).subscribe({
+    this.notificationService.markAllRead(this.unitIdFilter).subscribe({
       next: () => this.loadNotifications(),
       error: () => this.alerts.error('Unable to mark notifications as read', 4000),
     });
@@ -177,5 +187,9 @@ export class NotificationsComponent implements OnInit, OnDestroy {
       },
       error: () => this.alerts.error('Unable to mark notification as read', 4000),
     });
+  }
+
+  private get unitIdFilter(): number | undefined {
+    return typeof this.selectedUnitId === 'number' ? this.selectedUnitId : undefined;
   }
 }

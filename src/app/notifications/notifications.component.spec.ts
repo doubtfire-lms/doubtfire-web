@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ActivatedRoute, convertToParamMap} from '@angular/router';
@@ -55,6 +55,10 @@ describe('NotificationsComponent', () => {
     component = fixture.componentInstance;
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('delegates opening a notification row to the notification actions service', () => {
     const group = {notificationIds: [1, 2]} as NotificationGroup;
 
@@ -83,37 +87,43 @@ describe('NotificationsComponent', () => {
     expect(getNotifications).toHaveBeenCalledWith({
       state: 'unread',
       unitId: undefined,
-      kinds: [],
       query: '',
       page: 1,
       perPage: 25,
     });
   });
 
-  it('passes search, unit, category, and read-state filters to the service', () => {
+  it('applies unit and read-state filters immediately', () => {
     component.page = 3;
-    component.search = 'P4';
-    component.selectedUnitId = 4;
-    component.selectedKinds = ['new_task_comment'];
-    component.state = 'read';
+    component.unitChanged(4);
+    component.stateChanged('read');
 
-    component.applyFilters();
-
-    expect(component.page).toBe(1);
     expect(getNotifications).toHaveBeenCalledWith({
       state: 'read',
       unitId: 4,
-      kinds: ['new_task_comment'],
-      query: 'P4',
+      query: '',
       page: 1,
       perPage: 25,
     });
   });
 
-  it('exposes the expected delivery frequencies and discussion categories', () => {
-    expect(['off', 'hourly', 'daily', 'weekly']).toContain('weekly');
-    expect(component.categories.map((category) => category.kind)).toEqual(
-      expect.arrayContaining(['discuss_warning', 'discuss_expired']),
-    );
+  it('automatically searches shortly after typing stops', () => {
+    vi.useFakeTimers();
+    component.ngOnInit();
+    getNotifications.mockClear();
+
+    component.search = '  portfolio  ';
+    component.searchChanged(component.search);
+    vi.advanceTimersByTime(399);
+    expect(getNotifications).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1);
+    expect(getNotifications).toHaveBeenCalledWith({
+      state: 'unread',
+      unitId: undefined,
+      query: 'portfolio',
+      page: 1,
+      perPage: 25,
+    });
   });
 });
