@@ -10,7 +10,7 @@ import {NotificationActionsService} from './notification-actions.service';
 
 describe('NotificationActionsService', () => {
   let service: NotificationActionsService;
-  const navigate = vi.fn();
+  const navigate = vi.fn(() => Promise.resolve(true));
   const markRead = vi.fn(() => of({count: 1}));
   const showTutorNotes = vi.fn();
   const getUnit = vi.fn(() => of({staff: [{id: 22}]}));
@@ -39,11 +39,11 @@ describe('NotificationActionsService', () => {
     service = TestBed.inject(NotificationActionsService);
   });
 
-  it('marks a group read before opening its task', () => {
+  it('marks a group read after opening its task', async () => {
     service.open(groupFor());
 
-    expect(markRead).toHaveBeenCalledWith([1, 2]);
     expect(navigate).toHaveBeenCalledWith(['/projects', 8, 'dashboard', 'P4'], {queryParams: {}});
+    await vi.waitFor(() => expect(markRead).toHaveBeenCalledWith([1, 2]));
   });
 
   it('does not mark an already read group again', () => {
@@ -133,11 +133,21 @@ describe('NotificationActionsService', () => {
     expect(navigate).toHaveBeenCalledWith(['/projects', 8, 'portfolio']);
   });
 
-  it('still navigates when marking read fails', () => {
+  it('still opens the task when marking read fails', async () => {
     markRead.mockReturnValueOnce(throwError(() => new Error('nope')) as never);
 
     service.open(groupFor());
 
     expect(navigate).toHaveBeenCalled();
+    await vi.waitFor(() => expect(markRead).toHaveBeenCalled());
+  });
+
+  it('keeps the notification unread when navigation is cancelled', async () => {
+    navigate.mockResolvedValueOnce(false);
+
+    service.open(groupFor());
+    await navigate.mock.results[0].value;
+
+    expect(markRead).not.toHaveBeenCalled();
   });
 });

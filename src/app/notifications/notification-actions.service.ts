@@ -79,15 +79,21 @@ export class NotificationActionsService {
       });
 
     if (group.read) {
-      navigate();
+      void navigate();
       return;
     }
 
-    // Navigate either way - failing to mark it read should not trap the user.
-    this.notificationService.markRead(group.notificationIds).subscribe({
-      next: navigate,
-      error: navigate,
-    });
+    // Only consume a task notification once its destination has opened. This
+    // keeps it unread when navigation is cancelled or fails.
+    void navigate()
+      .then((opened) => {
+        if (opened) {
+          this.notificationService.markRead(group.notificationIds).subscribe({
+            error: () => undefined,
+          });
+        }
+      })
+      .catch(() => undefined);
   }
 
   /** Opens the moderation notes for a group, focused on its most recent note. */

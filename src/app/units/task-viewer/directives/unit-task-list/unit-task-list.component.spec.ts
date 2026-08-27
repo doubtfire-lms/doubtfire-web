@@ -1,7 +1,8 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, convertToParamMap} from '@angular/router';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {FUnitTaskListComponent} from './unit-task-list.component';
 
@@ -54,6 +55,28 @@ describe('FUnitTaskListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('switches the selected task when the reused route parameter changes', async () => {
+    const params: Subject<ReturnType<typeof convertToParamMap>> = new Subject();
+    const firstTask = taskDefinition(1, 'P1');
+    const secondTask = taskDefinition(2, 'P2');
+    const selectedTaskDefinition$: BehaviorSubject<TaskDefinition> = new BehaviorSubject(firstTask);
+    const routeAwareComponent = new FUnitTaskListComponent(
+      emptyProvider as Router,
+      {paramMap: params.asObservable()} as ActivatedRoute,
+    );
+    routeAwareComponent.project = {} as Project;
+    routeAwareComponent.taskDefinitions = [firstTask, secondTask];
+    routeAwareComponent.tasks = [];
+    routeAwareComponent.selectedTaskDefinition$ = selectedTaskDefinition$;
+    routeAwareComponent.ngOnInit();
+
+    params.next(convertToParamMap({taskAbbreviation: 'P2'}));
+    await Promise.resolve();
+
+    expect(selectedTaskDefinition$.value).toBe(secondTask);
+    routeAwareComponent.ngOnDestroy();
   });
 
   it('shows the ongoing state after a task starts and before it is due', () => {

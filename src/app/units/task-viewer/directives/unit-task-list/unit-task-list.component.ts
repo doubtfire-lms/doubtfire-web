@@ -4,11 +4,12 @@ import {
   HostBinding,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
 
@@ -46,7 +47,7 @@ const DUE_APPROACHING_DAYS = 5;
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class FUnitTaskListComponent implements OnChanges, OnInit {
+export class FUnitTaskListComponent implements OnChanges, OnInit, OnDestroy {
   @Input() mode: 'project' | 'all-tasks';
   @Input() project: Project;
   @Input() taskDefinitions: readonly TaskDefinition[];
@@ -76,6 +77,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     {value: 'dueDate', label: 'Due date', icon: 'event_repeat'},
     {value: 'abbreviation', label: 'Abbreviation', icon: 'sort_by_alpha'},
   ];
+  private readonly destroy$: Subject<void> = new Subject();
 
   protected get gradeNames(): Record<number, string> {
     const unit = this.project?.unit ?? this.taskDefinitions?.[0]?.unit;
@@ -283,21 +285,17 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     //   this.setSelectedTaskDefinition(this.taskDefinitions[0]);
     // }
 
-    // Load selected task from URL
-    const current = this.selectedTaskDefinition$.value;
-    const param = this.route.snapshot.paramMap.get('taskAbbreviation');
-
-    queueMicrotask(() => {
-      if (param) {
-        const taskDef = this.taskDefinitions.find((t) => t.abbreviation === param);
-
-        if (taskDef !== current) {
-          this.selectedTaskDefinition$.next(taskDef);
-        }
-      } else if (current !== null) {
-        this.selectedTaskDefinition$.next(null);
-      }
+    // The dashboard component is reused when only the task abbreviation changes,
+    // so react to route updates instead of reading the initial snapshot once.
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const param = params.get('taskAbbreviation');
+      queueMicrotask(() => this.selectTaskFromRoute(param));
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   setSelectedTaskDefinition(taskDef: TaskDefinition) {
@@ -321,6 +319,18 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
 
   public isSelectedTaskDefinition(taskDef: TaskDefinition): boolean {
     return this.selectedTaskDef?.id === taskDef?.id;
+  }
+
+  private selectTaskFromRoute(abbreviation: string | null): void {
+    const current = this.selectedTaskDefinition$.value;
+    if (abbreviation) {
+      const taskDef = this.taskDefinitions.find((task) => task.abbreviation === abbreviation);
+      if (taskDef && taskDef !== current) {
+        this.selectedTaskDefinition$.next(taskDef);
+      }
+    } else if (current !== null) {
+      this.selectedTaskDefinition$.next(null);
+    }
   }
 
   private replaceSelectionUrl(taskDef: TaskDefinition | null): void {
