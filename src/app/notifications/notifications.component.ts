@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {PageEvent} from '@angular/material/paginator';
+import {ActivatedRoute} from '@angular/router';
 import {Subscription, combineLatest} from 'rxjs';
 import {
   NotificationGroup,
@@ -31,6 +32,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     {kind: 'moderation_note_added', label: 'Moderation notes added'},
     {kind: 'moderation_note_reply', label: 'Moderation note replies'},
     {kind: 'moderation_note_from_mentee', label: 'Notes from staff you mentor'},
+    {kind: 'communication_email', label: 'Communications emails'},
   ];
 
   public groups: NotificationGroup[] = [];
@@ -45,6 +47,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   public perPage = 25;
   public total = 0;
   public unreadCount = 0;
+  public expandedNotificationId?: number;
 
   private readonly subscriptions: Subscription[] = [];
 
@@ -53,10 +56,18 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     private notificationActions: NotificationActionsService,
     private globalState: GlobalStateService,
     private alerts: AlertService,
+    private route: ActivatedRoute,
   ) {}
 
   public ngOnInit(): void {
     this.notificationService.startCountPolling();
+    const expandedId = Number(this.route.snapshot.queryParamMap.get('expanded'));
+    if (Number.isInteger(expandedId) && expandedId > 0) {
+      this.expandedNotificationId = expandedId;
+      // The dropdown marks the email read before navigating here, so include
+      // recently read notifications while resolving the expanded message.
+      this.state = 'all';
+    }
     this.loadNotifications();
 
     this.subscriptions.push(
@@ -103,6 +114,11 @@ export class NotificationsComponent implements OnInit, OnDestroy {
           this.total = result.total;
           this.unreadCount = result.unreadCount;
           this.loading = false;
+
+          const expandedGroup = this.groups.find((group) => this.isExpanded(group));
+          if (expandedGroup) {
+            this.markRead(expandedGroup);
+          }
         },
         error: () => {
           this.loading = false;
@@ -124,13 +140,42 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   }
 
   public open(group: NotificationGroup): void {
+    if (group.counts?.communication_email) {
+      this.expandedNotificationId = this.isExpanded(group) ? undefined : group.notificationIds[0];
+      if (this.isExpanded(group)) {
+        this.markRead(group);
+      }
+      return;
+    }
+
     this.notificationActions.open(group);
+  }
+
+  public isExpanded(group: NotificationGroup): boolean {
+    return (
+      this.expandedNotificationId !== undefined &&
+      group.notificationIds.includes(this.expandedNotificationId)
+    );
   }
 
   public markAllRead(): void {
     this.notificationService.markAllRead(this.selectedUnitId).subscribe({
       next: () => this.loadNotifications(),
       error: () => this.alerts.error('Unable to mark notifications as read', 4000),
+    });
+  }
+
+  private markRead(group: NotificationGroup): void {
+    if (group.read) {
+      return;
+    }
+
+    this.notificationService.markRead(group.notificationIds).subscribe({
+      next: () => {
+        group.read = true;
+        this.unreadCount = Math.max(0, this.unreadCount - 1);
+      },
+      error: () => this.alerts.error('Unable to mark notification as read', 4000),
     });
   }
 }

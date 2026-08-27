@@ -1,6 +1,7 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ActivatedRoute, convertToParamMap} from '@angular/router';
 import {of} from 'rxjs';
 import {NotificationGroup} from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
@@ -13,6 +14,7 @@ describe('NotificationsComponent', () => {
   let component: NotificationsComponent;
   let fixture: ComponentFixture<NotificationsComponent>;
   const openGroup = vi.fn();
+  const markRead = vi.fn(() => of({count: 1}));
   const getNotifications = vi.fn(() =>
     of({groups: [], page: 1, perPage: 25, total: 0, unreadCount: 0}),
   );
@@ -26,6 +28,7 @@ describe('NotificationsComponent', () => {
           useValue: {
             startCountPolling: vi.fn(),
             getNotifications,
+            markRead,
             markAllRead: vi.fn(() => of({count: 0})),
           },
         },
@@ -36,6 +39,10 @@ describe('NotificationsComponent', () => {
         {
           provide: NotificationActionsService,
           useValue: {open: openGroup},
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {snapshot: {queryParamMap: convertToParamMap({})}},
         },
         {provide: AlertService, useValue: {error: vi.fn(), success: vi.fn()}},
       ],
@@ -54,6 +61,20 @@ describe('NotificationsComponent', () => {
     component.open(group);
 
     expect(openGroup).toHaveBeenCalledWith(group);
+  });
+
+  it('expands a communications email in place and marks it read', () => {
+    const group = {
+      notificationIds: [9],
+      counts: {communication_email: 1},
+      read: false,
+    } as NotificationGroup;
+
+    component.open(group);
+
+    expect(component.isExpanded(group)).toBe(true);
+    expect(markRead).toHaveBeenCalledWith([9]);
+    expect(openGroup).not.toHaveBeenCalled();
   });
 
   it('shows unread notifications by default', () => {

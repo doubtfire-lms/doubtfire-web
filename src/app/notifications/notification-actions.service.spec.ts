@@ -108,6 +108,22 @@ describe('NotificationActionsService', () => {
     expect(navigate).toHaveBeenCalledWith(['/notifications']);
   });
 
+  it('opens a communications email expanded on the notification list', () => {
+    service.open(
+      groupFor({
+        task: undefined,
+        counts: {communication_email: 1},
+        messageSubject: 'A message',
+        messageBody: 'The full body',
+      }),
+    );
+
+    expect(markRead).toHaveBeenCalledWith([1, 2]);
+    expect(navigate).toHaveBeenCalledWith(['/notifications'], {
+      queryParams: {expanded: 1},
+    });
+  });
+
   it('opens the portfolio for a portfolio notification', () => {
     service.open(
       groupFor({task: undefined, projectId: 8, counts: {portfolio_ready: 1}, read: false}),

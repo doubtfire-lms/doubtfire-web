@@ -11,7 +11,8 @@ export type NotificationKind =
   | 'moderation_note_reply'
   | 'moderation_note_from_mentee'
   | 'portfolio_ready'
-  | 'portfolio_failed';
+  | 'portfolio_failed'
+  | 'communication_email';
 
 export type NotificationSeverity = 'critical' | 'warning' | 'normal';
 export type NotificationState = 'all' | 'unread' | 'read';
@@ -51,6 +52,9 @@ export interface NotificationGroup {
   tutorNoteUnitRoleId?: number;
   /** The newest failed overseer run in the group, so its report can be opened. */
   overseerAssessmentId?: number;
+  /** Rendered content of an email sent by the communications system. */
+  messageSubject?: string;
+  messageBody?: string;
   /** What happened, without the task it happened to. */
   detail: string;
   summary: string;

@@ -105,7 +105,9 @@
                 <span
                   class="flex size-10 flex-none items-center justify-center rounded-md bg-gray-200 text-slate-600"
                 >
-                  <mat-icon class="m-0">notifications</mat-icon>
+                  <mat-icon class="m-0">{{
+                    group.counts.communication_email ? 'mail' : 'notifications'
+                  }}</mat-icon>
                 </span>
               }
               <span class="min-w-0 flex-1">

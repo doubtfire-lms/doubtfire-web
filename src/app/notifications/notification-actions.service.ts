@@ -25,6 +25,23 @@ export class NotificationActionsService {
   ) {}
 
   public open(group: NotificationGroup): void {
+    if (group.counts?.communication_email) {
+      const navigate = () =>
+        this.router.navigate(['/notifications'], {
+          queryParams: {expanded: group.notificationIds[0]},
+        });
+
+      if (group.read) {
+        navigate();
+      } else {
+        this.notificationService.markRead(group.notificationIds).subscribe({
+          next: navigate,
+          error: navigate,
+        });
+      }
+      return;
+    }
+
     // A moderation note written against a task opens that task's Mod Notes tab.
     // One written against the unit role has no task to open, so use the modal.
     if (!group.task && group.tutorNoteNotificationIds.length) {

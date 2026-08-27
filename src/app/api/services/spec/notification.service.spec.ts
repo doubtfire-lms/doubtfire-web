@@ -35,6 +35,8 @@ describe('NotificationService', () => {
       expect(page.groups[0].projectId).toBe(42);
       expect(page.groups[0].task?.projectId).toBe(42);
       expect(page.groups[0].latestAt).toBeInstanceOf(Date);
+      expect(page.groups[0].messageSubject).toBe('Important update');
+      expect(page.groups[0].messageBody).toBe('Full message');
     });
 
     const request = httpMock.expectOne(
@@ -63,6 +65,8 @@ describe('NotificationService', () => {
           read: false,
           latest_at: '2026-07-29T09:00:00Z',
           tutor_note_ids: [],
+          message_subject: 'Important update',
+          message_body: 'Full message',
           summary: 'P4 — 2 new comments',
         },
       ],

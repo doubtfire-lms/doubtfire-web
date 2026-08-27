@@ -85,10 +85,8 @@
   } @else {
     <section class="flex flex-col gap-3">
       @for (group of groups; track group.key) {
-        <button
-          class="flex w-full items-center gap-4 rounded-lg border border-l-[5px] border-slate-300 bg-white p-5 text-left transition-shadow hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 max-[720px]:flex-col max-[720px]:items-stretch"
-          type="button"
-          [attr.aria-label]="group.summary"
+        <article
+          class="overflow-hidden rounded-lg border border-l-[5px] border-slate-300 bg-white transition-shadow hover:shadow-sm"
           [ngClass]="[
             group.severity === 'critical'
               ? 'border-l-[#c62828]'
@@ -97,35 +95,57 @@
                 : 'border-l-blue-600',
             group.read ? 'opacity-[0.72]' : '',
           ]"
-          (click)="open(group)"
         >
-          <span class="min-w-0 flex-1">
-            <span class="block text-xs font-semibold tracking-wide text-slate-500 uppercase">
-              {{ group.unit.code }}
-              @if (group.task?.studentName) {
-                · {{ group.task.studentName }}
-              }
-            </span>
-            <span class="mt-1 flex items-center gap-2 text-lg font-semibold text-slate-900">
-              <span>
-                @if (group.task) {
-                  {{ group.task.abbreviation }} - {{ group.task.name }}
-                } @else if (group.projectId) {
-                  Portfolio
-                } @else {
-                  Unit notification
+          <button
+            class="flex w-full items-center gap-4 p-5 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600 max-[720px]:flex-col max-[720px]:items-stretch"
+            type="button"
+            [attr.aria-expanded]="group.counts.communication_email ? isExpanded(group) : null"
+            [attr.aria-label]="group.summary"
+            (click)="open(group)"
+          >
+            <span class="min-w-0 flex-1">
+              <span class="block text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                {{ group.unit.code }}
+                @if (group.task?.studentName) {
+                  · {{ group.task.studentName }}
                 }
               </span>
-              @if (group.task && group.latestStatus) {
-                <status-icon [compact]="false" [status]="group.latestStatus"></status-icon>
-              }
+              <span class="mt-1 flex items-center gap-2 text-lg font-semibold text-slate-900">
+                <span>
+                  @if (group.messageSubject) {
+                    {{ group.messageSubject }}
+                  } @else if (group.task) {
+                    {{ group.task.abbreviation }} - {{ group.task.name }}
+                  } @else if (group.projectId) {
+                    Portfolio
+                  } @else {
+                    Unit notification
+                  }
+                </span>
+                @if (group.task && group.latestStatus) {
+                  <status-icon [compact]="false" [status]="group.latestStatus"></status-icon>
+                }
+              </span>
+              <span class="mt-0.5 block text-xs text-slate-500">
+                {{ group.latestAt | localizedDateTime }}
+              </span>
+              <span class="mt-2 block text-sm text-slate-700">{{ group.detail }}</span>
             </span>
-            <span class="mt-0.5 block text-xs text-slate-500">
-              {{ group.latestAt | localizedDateTime }}
-            </span>
-            <span class="mt-2 block text-sm text-slate-700">{{ group.detail }}</span>
-          </span>
-        </button>
+            @if (group.counts.communication_email) {
+              <mat-icon class="text-slate-500">
+                {{ isExpanded(group) ? 'expand_less' : 'expand_more' }}
+              </mat-icon>
+            }
+          </button>
+
+          @if (group.messageBody && isExpanded(group)) {
+            <section aria-label="Email body" class="border-t border-slate-200 px-5 py-4">
+              <div class="break-words whitespace-pre-wrap text-slate-800 select-text">
+                {{ group.messageBody }}
+              </div>
+            </section>
+          }
+        </article>
       }
     </section>
 

@@ -82,6 +82,10 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
   }
 
   public summaryText(group: NotificationGroup): string {
+    if (group.counts?.communication_email) {
+      return group.detail;
+    }
+
     // The task is already shown beside the text, so only the detail is needed.
     return group.task ? group.detail : group.summary;
   }

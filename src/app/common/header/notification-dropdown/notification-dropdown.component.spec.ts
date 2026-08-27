@@ -91,4 +91,14 @@ describe('NotificationDropdownComponent', () => {
     expect(component.summaryText(withTask)).toBe('Overseer assessment failed');
     expect(component.summaryText(withoutTask)).toBe('Unit notification - 2 moderation notes');
   });
+
+  it('shows only the sender for communication emails', () => {
+    const communicationEmail = {
+      counts: {communication_email: 1},
+      detail: 'Message from Charlotte Pierce',
+      summary: 'FIT1045 Introduction to Programming - Message from Charlotte Pierce',
+    } as NotificationGroup;
+
+    expect(component.summaryText(communicationEmail)).toBe('Message from Charlotte Pierce');
+  });
 });
