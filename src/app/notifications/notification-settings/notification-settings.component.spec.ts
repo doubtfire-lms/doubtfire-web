@@ -123,6 +123,10 @@ describe('NotificationSettingsComponent', () => {
     expect(component.sections.map((section) => section.key)).toContain('moderation');
   });
 
+  it('hides push notifications from the client-side channel columns', () => {
+    expect(component.channels.map((channel) => channel.key)).toEqual(['inApp', 'email']);
+  });
+
   it('hides the type sections on a unit that still follows "All units"', () => {
     component.selectedIndex = 1;
 

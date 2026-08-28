@@ -133,7 +133,7 @@
             }
 
             <div
-              class="mt-4 grid grid-cols-[minmax(0,1fr)_repeat(3,4.5rem)] items-center gap-x-2 border-b border-gray-200 px-2 pb-2 text-xs font-bold text-gray-500"
+              class="mt-4 grid grid-cols-[minmax(0,1fr)_repeat(2,4.5rem)] items-center gap-x-2 border-b border-gray-200 px-2 pb-2 text-xs font-bold text-gray-500"
             >
               <span></span>
               @for (channel of channels; track channel.key) {
@@ -143,7 +143,7 @@
 
             @for (type of section.types; track type.key) {
               <div
-                class="grid grid-cols-[minmax(0,1fr)_repeat(3,4.5rem)] items-center gap-x-2 rounded-lg px-2 py-3 transition-colors not-first-of-type:border-t not-first-of-type:border-gray-200 hover:bg-gray-50"
+                class="grid grid-cols-[minmax(0,1fr)_repeat(2,4.5rem)] items-center gap-x-2 rounded-lg px-2 py-3 transition-colors not-first-of-type:border-t not-first-of-type:border-gray-200 hover:bg-gray-50"
               >
                 <div class="flex flex-col gap-0.5">
                   <span class="text-sm font-bold text-gray-900">{{ type.label }}</span>

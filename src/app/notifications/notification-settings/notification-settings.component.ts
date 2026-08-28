@@ -37,7 +37,8 @@ export interface NotificationScope {
   standalone: false,
 })
 export class NotificationSettingsComponent implements OnInit, OnDestroy {
-  public readonly channels = NOTIFICATION_CHANNELS;
+  // TODO: Show the Push column when push notifications are supported by the client.
+  public readonly channels = NOTIFICATION_CHANNELS.filter((channel) => channel.key !== 'push');
   public readonly weekdays = [
     {value: 1, label: 'Monday'},
     {value: 2, label: 'Tuesday'},
