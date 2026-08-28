@@ -118,8 +118,8 @@
               <mat-form-field appearance="outline" class="min-w-32.5">
                 <mat-label>Starting at</mat-label>
                 <input
-                  matInput
                   class="digest-time-input"
+                  matInput
                   type="time"
                   [(ngModel)]="digestStartTime"
                 />
@@ -129,7 +129,7 @@
             @if (digestFrequency === 'daily' || digestFrequency === 'weekly') {
               <mat-form-field appearance="outline" class="min-w-32.5">
                 <mat-label>At</mat-label>
-                <input matInput class="digest-time-input" type="time" [(ngModel)]="digestTime" />
+                <input class="digest-time-input" matInput type="time" [(ngModel)]="digestTime" />
               </mat-form-field>
             }
           </div>
