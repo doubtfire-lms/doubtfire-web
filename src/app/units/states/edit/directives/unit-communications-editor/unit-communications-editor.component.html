@@ -283,12 +283,19 @@
                           <ng-container matColumnDef="full_name">
                             <th *matHeaderCellDef mat-header-cell>Full Name</th>
                             <td *matCellDef="let student" mat-cell>
-                              {{
-                                (student.full_name || '-') +
-                                  (student.preferred_name
-                                    ? ' (' + student.preferred_name + ')'
-                                    : '')
-                              }}
+                              <a
+                                class="text-formatif-blue hover:underline"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                [routerLink]="['/projects', student.project_id, 'dashboard']"
+                              >
+                                {{
+                                  (student.full_name || '-') +
+                                    (student.preferred_name
+                                      ? ' (' + student.preferred_name + ')'
+                                      : '')
+                                }}
+                              </a>
                             </td>
                           </ng-container>
 
