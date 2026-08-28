@@ -19,7 +19,10 @@ export class NotificationSettingsService extends EntityService<NotificationSetti
       'id',
       'channels',
       'digestFrequency',
+      'digestIntervalHours',
+      'digestStartTime',
       'digestTime',
+      'digestTimezone',
       'digestWeekday',
       'weeklySummary',
       {
@@ -51,6 +54,6 @@ export class NotificationSettingsService extends EntityService<NotificationSetti
   }
 
   public save(settings: NotificationSettings): Observable<NotificationSettings> {
-    return this.update(settings);
+    return this.update(settings, {ignoreKeys: ['digestTimezone']});
   }
 }

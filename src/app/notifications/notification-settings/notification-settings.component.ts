@@ -33,6 +33,7 @@ export interface NotificationScope {
 @Component({
   selector: 'f-notification-settings',
   templateUrl: './notification-settings.component.html',
+  styleUrl: './notification-settings.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
@@ -48,6 +49,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     {value: 6, label: 'Saturday'},
     {value: 7, label: 'Sunday'},
   ];
+  public readonly digestIntervals = [1, 2, 3, 4, 6, 12];
 
   public loading = true;
   public saving = false;
@@ -61,7 +63,10 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
 
   // One schedule for every unit, so activity that happened together stays together.
   public digestFrequency: NotificationFrequency = 'weekly';
+  public digestIntervalHours = 4;
+  public digestStartTime = '08:00';
   public digestTime = '07:00';
+  public digestTimezone = 'UTC';
   public digestWeekday = 1;
   public weeklySummary = true;
 
@@ -233,6 +238,8 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
 
     settings.channels = channelsToWire(this.scopes[0].channels);
     settings.digestFrequency = this.digestFrequency;
+    settings.digestIntervalHours = this.digestIntervalHours;
+    settings.digestStartTime = this.digestStartTime;
     settings.digestTime = this.digestTime;
     settings.digestWeekday = this.digestWeekday;
     settings.weeklySummary = this.weeklySummary;
@@ -257,7 +264,10 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     }
 
     this.digestFrequency = this.saved.digestFrequency;
+    this.digestIntervalHours = this.saved.digestIntervalHours;
+    this.digestStartTime = this.saved.digestStartTime;
     this.digestTime = this.saved.digestTime;
+    this.digestTimezone = this.saved.digestTimezone;
     this.digestWeekday = this.saved.digestWeekday;
     this.weeklySummary = this.saved.weeklySummary;
     this.scopes[0].channels = channelsFromWire(this.saved.channels);

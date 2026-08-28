@@ -16,7 +16,10 @@ export class NotificationSettings extends Entity {
 
   channels: NotificationChannelMap;
   digestFrequency: NotificationFrequency;
+  digestIntervalHours: number;
+  digestStartTime: string;
   digestTime: string;
+  digestTimezone: string;
   digestWeekday: number;
   weeklySummary: boolean;
 

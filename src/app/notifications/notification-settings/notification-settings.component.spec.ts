@@ -32,7 +32,10 @@ describe('NotificationSettingsComponent', () => {
   const savedSettings = () => ({
     channels: {new_task_comment: ['in_app', 'email']},
     digestFrequency: 'daily',
+    digestIntervalHours: 6,
+    digestStartTime: '09:00',
     digestTime: '09:30',
+    digestTimezone: 'Australia/Melbourne',
     digestWeekday: 3,
     weeklySummary: false,
     units: [] as unknown[],
@@ -202,7 +205,10 @@ describe('NotificationSettingsComponent', () => {
 
   it('applies the saved digest schedule and channels', () => {
     expect(component.digestFrequency).toBe('daily');
+    expect(component.digestIntervalHours).toBe(6);
+    expect(component.digestStartTime).toBe('09:00');
     expect(component.digestTime).toBe('09:30');
+    expect(component.digestTimezone).toBe('Australia/Melbourne');
     expect(component.digestWeekday).toBe(3);
     expect(component.weeklySummary).toBe(false);
 
@@ -220,6 +226,8 @@ describe('NotificationSettingsComponent', () => {
 
     const payload = saveSettings.mock.calls[0][0];
     expect(payload.digestFrequency).toBe('daily');
+    expect(payload.digestIntervalHours).toBe(6);
+    expect(payload.digestStartTime).toBe('09:00');
     expect(payload.units).toHaveLength(1);
     expect(payload.units[0].unitId).toBe(1);
     expect(payload.units[0].channels['new_task_comment']).toContain('push');

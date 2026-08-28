@@ -75,18 +75,33 @@
       @if (isGlobalScope) {
         <mat-card appearance="outlined" class="p-4">
           <h2 class="mb-0 text-base">Email digest</h2>
-          <p class="mb-4 text-sm text-gray-600">Applies to all units.</p>
+          <p class="mb-4 text-sm text-gray-600">
+            Applies to all units. Times use {{ digestTimezone }}.
+          </p>
 
           <div class="flex flex-wrap items-baseline gap-3">
             <mat-form-field appearance="outline" class="min-w-45">
               <mat-label>Send my digest</mat-label>
               <mat-select [(ngModel)]="digestFrequency">
                 <mat-option value="off">Off</mat-option>
-                <mat-option value="hourly">Hourly</mat-option>
+                <mat-option value="hourly">Throughout the day</mat-option>
                 <mat-option value="daily">Daily</mat-option>
                 <mat-option value="weekly">Weekly</mat-option>
               </mat-select>
             </mat-form-field>
+
+            @if (digestFrequency === 'hourly') {
+              <mat-form-field appearance="outline" class="min-w-32.5">
+                <mat-label>Every</mat-label>
+                <mat-select [(ngModel)]="digestIntervalHours">
+                  @for (interval of digestIntervals; track interval) {
+                    <mat-option [value]="interval">
+                      {{ interval }} {{ interval === 1 ? 'hour' : 'hours' }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
 
             @if (digestFrequency === 'weekly') {
               <mat-form-field appearance="outline" class="min-w-37.5">
@@ -99,10 +114,22 @@
               </mat-form-field>
             }
 
+            @if (digestFrequency === 'hourly') {
+              <mat-form-field appearance="outline" class="min-w-32.5">
+                <mat-label>Starting at</mat-label>
+                <input
+                  matInput
+                  class="digest-time-input"
+                  type="time"
+                  [(ngModel)]="digestStartTime"
+                />
+              </mat-form-field>
+            }
+
             @if (digestFrequency === 'daily' || digestFrequency === 'weekly') {
               <mat-form-field appearance="outline" class="min-w-32.5">
                 <mat-label>At</mat-label>
-                <input matInput type="time" [(ngModel)]="digestTime" />
+                <input matInput class="digest-time-input" type="time" [(ngModel)]="digestTime" />
               </mat-form-field>
             }
           </div>
