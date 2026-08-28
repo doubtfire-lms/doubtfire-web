@@ -15,6 +15,7 @@ describe('NotificationsComponent', () => {
   let fixture: ComponentFixture<NotificationsComponent>;
   const openGroup = vi.fn();
   const markRead = vi.fn(() => of({count: 1}));
+  const stopCountPolling = vi.fn();
   const getNotifications = vi.fn(() =>
     of({groups: [], page: 1, perPage: 25, total: 0, unreadCount: 0}),
   );
@@ -27,6 +28,7 @@ describe('NotificationsComponent', () => {
           provide: NotificationService,
           useValue: {
             startCountPolling: vi.fn(),
+            stopCountPolling,
             getNotifications,
             markRead,
             markAllRead: vi.fn(() => of({count: 0})),
@@ -65,6 +67,12 @@ describe('NotificationsComponent', () => {
     component.open(group);
 
     expect(openGroup).toHaveBeenCalledWith(group);
+  });
+
+  it('releases its unread-count polling request when destroyed', () => {
+    component.ngOnDestroy();
+
+    expect(stopCountPolling).toHaveBeenCalledOnce();
   });
 
   it('expands a communications email in place and marks it read', () => {

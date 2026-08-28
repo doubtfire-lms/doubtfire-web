@@ -90,6 +90,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
+    this.notificationService.stopCountPolling();
   }
 
   public loadNotifications(): void {

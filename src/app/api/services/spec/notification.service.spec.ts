@@ -2,16 +2,27 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/common/http';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {TestBed} from '@angular/core/testing';
+import {AuthenticationService} from '../authentication.service';
 import {NotificationService} from '../notification.service';
 
 describe('NotificationService', () => {
   let service: NotificationService;
   let httpMock: HttpTestingController;
+  let afterAuthCallback: ((result: boolean) => void) | undefined;
 
   beforeEach(() => {
+    afterAuthCallback = undefined;
     TestBed.configureTestingModule({
       providers: [
         NotificationService,
+        {
+          provide: AuthenticationService,
+          useValue: {
+            afterAuthCall: vi.fn((callback: (result: boolean) => void) => {
+              afterAuthCallback = callback;
+            }),
+          },
+        },
         provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
@@ -95,7 +106,7 @@ describe('NotificationService', () => {
     countRequest.flush({count: 0});
   });
 
-  it('polls the grouped unread count once per minute and can stop polling', () => {
+  it('waits for authentication before polling the grouped unread count', () => {
     vi.useFakeTimers();
     let latestCount = 0;
     const subscription = service.unreadCount$.subscribe((count) => {
@@ -103,6 +114,10 @@ describe('NotificationService', () => {
     });
 
     service.startCountPolling();
+    vi.advanceTimersByTime(0);
+    httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
+
+    afterAuthCallback?.(true);
     vi.advanceTimersByTime(0);
 
     const initialRequest = httpMock.expectOne((candidate) =>
@@ -123,6 +138,39 @@ describe('NotificationService', () => {
     httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
 
     subscription.unsubscribe();
+    vi.useRealTimers();
+  });
+
+  it('does not start polling when authentication fails', () => {
+    service.startCountPolling();
+
+    afterAuthCallback?.(false);
+
+    httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
+  });
+
+  it('does not start delayed polling after polling has been stopped', () => {
+    service.startCountPolling();
+    service.stopCountPolling();
+
+    afterAuthCallback?.(true);
+
+    httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
+  });
+
+  it('keeps a newer polling request when an older consumer stops during authentication', () => {
+    vi.useFakeTimers();
+    service.startCountPolling();
+    service.startCountPolling();
+    service.stopCountPolling();
+
+    afterAuthCallback?.(true);
+    vi.advanceTimersByTime(0);
+
+    const request = httpMock.expectOne((candidate) =>
+      candidate.url.endsWith('/notifications/unread_count'),
+    );
+    request.flush({count: 3});
     vi.useRealTimers();
   });
 });

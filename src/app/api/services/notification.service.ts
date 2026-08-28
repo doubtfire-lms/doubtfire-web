@@ -18,6 +18,7 @@ import {
   NotificationPage,
   NotificationQuery,
 } from '../models/notification';
+import {AuthenticationService} from './authentication.service';
 
 interface NotificationPageResponse {
   groups: Record<string, unknown>[];
@@ -31,16 +32,32 @@ interface NotificationPageResponse {
 export class NotificationService implements OnDestroy {
   private readonly unreadCountSubject: BehaviorSubject<number> = new BehaviorSubject(0);
   private pollingSubscription?: Subscription;
+  private pollingConsumers = 0;
+  private waitingForAuthentication = false;
 
   public readonly unreadCount$ = this.unreadCountSubject.asObservable();
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private authenticationService: AuthenticationService,
+  ) {}
 
   public startCountPolling(): void {
-    if (this.pollingSubscription) {
+    this.pollingConsumers += 1;
+    if (this.pollingSubscription || this.waitingForAuthentication) {
       return;
     }
 
+    this.waitingForAuthentication = true;
+    this.authenticationService.afterAuthCall((result) => {
+      this.waitingForAuthentication = false;
+      if (result && this.pollingConsumers > 0 && !this.pollingSubscription) {
+        this.beginCountPolling();
+      }
+    });
+  }
+
+  private beginCountPolling(): void {
     this.pollingSubscription = timer(0, 60_000)
       .pipe(
         switchMap(() =>
@@ -53,6 +70,11 @@ export class NotificationService implements OnDestroy {
   }
 
   public stopCountPolling(): void {
+    this.pollingConsumers = Math.max(0, this.pollingConsumers - 1);
+    if (this.pollingConsumers > 0) {
+      return;
+    }
+
     this.pollingSubscription?.unsubscribe();
     this.pollingSubscription = undefined;
   }
