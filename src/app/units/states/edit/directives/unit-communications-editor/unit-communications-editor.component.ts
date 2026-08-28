@@ -567,28 +567,32 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     }
   }
 
-  confirmDeleteRule(rule: CommunicationRule): void {
+  confirmDeleteRule(set: CommunicationSet, rule: CommunicationRule): void {
     this.confirmationModalService.show(
       'Delete Rule?',
       `Deleting "${rule.name}" also deletes its ${this.countLabel(rule.conditions?.length, 'condition')} ` +
         `and ${this.countLabel(rule.actions?.length, 'action')}. This cannot be undone.`,
-      () => this.deleteRule(rule),
+      () => this.deleteRule(set, rule),
       undefined,
       'Delete Rule',
     );
   }
 
-  deleteRule(rule: CommunicationRule): void {
+  deleteRule(set: CommunicationSet, rule: CommunicationRule): void {
     this.ruleService.deleteForUnit(this.unit.id, rule.id).subscribe({
       next: () => {
-        this.rules = this.rules.filter((item) => item.id !== rule.id);
+        const deletedIndex = (set.rules ?? []).findIndex((item) => item.id === rule.id);
+        const remainingRules = (set.rules ?? []).filter((item) => item.id !== rule.id);
+        remainingRules.forEach((item, index) => (item.position = index));
+
         this.forgetRulePreview(rule.id);
-        const set = this.selectedSet();
-        if (set) {
-          set.rules = this.rules;
-          this.selectedRuleId = this.rules[0]?.id;
+        set.executable = !remainingRules.some((item) => item.unresolved);
+        this.applyRuleOrder(set, remainingRules);
+
+        if (this.selectedSetId === set.id && this.selectedRuleId === rule.id) {
+          const nextIndex = Math.min(deletedIndex, remainingRules.length - 1);
+          this.selectedRuleId = remainingRules[nextIndex]?.id;
         }
-        this.recomputeAllocations();
       },
       error: (error) => this.showError(error),
     });
