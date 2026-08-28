@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-77](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-76...v11.0.0-77) (2026-08-28)
+
+
+### Features
+
+* open student project from communication preview ([d0960c6](https://github.com/b0ink/doubtfire-deploy/commit/d0960c6f3306aca67005405ce1c228ee23ed6eb8))
+
 ## [11.0.0-76](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-75...v11.0.0-76) (2026-08-26)
 
 
