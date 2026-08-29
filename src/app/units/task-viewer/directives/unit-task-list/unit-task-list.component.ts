@@ -214,6 +214,10 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     return this.taskForTaskDef(taskDef);
   }
 
+  public taskStatusClass(taskDef: TaskDefinition): string {
+    return this.taskListItem(taskDef)?.statusClass() ?? 'not-started';
+  }
+
   public taskStartApproaching(task: Task): boolean {
     return (
       !!task &&
