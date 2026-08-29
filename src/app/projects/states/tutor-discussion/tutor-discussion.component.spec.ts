@@ -8,7 +8,6 @@ import {
   AuthenticationService,
   EngagementService,
   ProjectService,
-  TaskCommentService,
   TaskService,
   UnitService,
   UserService,
@@ -40,7 +39,6 @@ describe('TutorDiscussionComponent', () => {
         {provide: AlertService, useValue: emptyProvider},
         {provide: ConfirmationModalService, useValue: emptyProvider},
         {provide: DiscussedInClassReasonModalService, useValue: emptyProvider},
-        {provide: TaskCommentService, useValue: emptyProvider},
         {provide: TaskService, useValue: emptyProvider},
         {provide: MatDialog, useValue: emptyProvider},
       ],
@@ -61,6 +59,18 @@ describe('TutorDiscussionComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('starts without a preselected task', () => {
+    expect(component.selectedTask).toBeNull();
+  });
+
+  it('selects one task for both actions and comments', () => {
+    const task = {id: 12};
+
+    component.selectTask(task as typeof component.selectedTask);
+
+    expect(component.selectedTask).toBe(task);
   });
 
   it('marks a task complete with the discussed flag', async () => {
@@ -85,19 +95,18 @@ describe('TutorDiscussionComponent', () => {
         },
       ),
     };
-    component.tasksList = {
-      selectedOptions: {selected: [{value: task}]},
-    } as unknown as typeof component.tasksList;
+    component.selectedTask = task as unknown as typeof component.selectedTask;
     const recordClassDiscussion = vi
       .spyOn(component, 'recordClassDiscussion')
       .mockImplementation(() => undefined);
 
-    await component.setSelectedTasksStatus('complete');
+    await component.setSelectedTaskStatus('complete');
 
     expect(task.updateTaskStatus).toHaveBeenCalledWith(
       'complete',
       true,
       false,
+      expect.any(Function),
       expect.any(Function),
     );
     expect(recordClassDiscussion).not.toHaveBeenCalled();
@@ -130,16 +139,38 @@ describe('TutorDiscussionComponent', () => {
         ) => onSuccess(),
       ),
     };
-    component.tasksList = {
-      selectedOptions: {selected: [{value: task}]},
-    } as unknown as typeof component.tasksList;
+    component.selectedTask = task as unknown as typeof component.selectedTask;
     const recordClassDiscussion = vi
       .spyOn(component, 'recordClassDiscussion')
       .mockImplementation(() => undefined);
 
-    await component.setSelectedTasksStatus('complete');
+    await component.setSelectedTaskStatus('complete');
 
     expect(recordClassDiscussion).not.toHaveBeenCalled();
+  });
+
+  it('refreshes the selected task comments when a status update is rejected', async () => {
+    const task = {
+      id: 12,
+      definition: {id: 7, assessInPortfolioOnly: false},
+      status: 'ready_for_feedback',
+      updateTaskStatus: vi.fn(
+        (
+          _status: string,
+          _markAsDiscussed: boolean,
+          _moveDependentTasks: boolean,
+          _onSuccess: () => void,
+          onFailure: () => void,
+        ) => onFailure(),
+      ),
+    };
+    const fetchComments = vi.fn();
+    component.selectedTask = task as unknown as typeof component.selectedTask;
+    component.commentsViewer = {fetchComments} as unknown as typeof component.commentsViewer;
+
+    await component.setSelectedTaskStatus('complete');
+
+    expect(fetchComments).toHaveBeenCalledWith(task, false);
   });
 
   it('requests attendance recording after a QR scan', () => {
