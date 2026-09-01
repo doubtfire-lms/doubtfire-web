@@ -31,6 +31,7 @@ import {
 export class TaskStatusSummaryChartComponent implements OnInit {
   @Input() unit: Unit;
 
+  chartView: 'snapshots' | 'timeseries' = 'snapshots';
   hasChartData: boolean = false;
   sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
@@ -58,8 +59,13 @@ export class TaskStatusSummaryChartComponent implements OnInit {
   ngOnInit(): void {
     this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
 
-    this.colorScheme.domain = statusMapping.map(
-      (labels) => this.taskService.statusColors.get(labels) || '#000000',
+    // this.colorScheme.domain = statusMapping.map(
+    //   (labels) => this.taskService.statusColors.get(labels) || '#000000',
+    // );
+    this.colorScheme.domain = statusMapping.map((status) =>
+      status === 'not_started'
+        ? 'transparent'
+        : this.taskService.statusColors.get(status) || '#000000',
     );
     this.loadSnapshots();
   }

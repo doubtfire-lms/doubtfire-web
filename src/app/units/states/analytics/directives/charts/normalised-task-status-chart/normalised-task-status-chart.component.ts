@@ -29,8 +29,8 @@ export class NormalisedTaskStatusChartComponent implements OnChanges {
   data: MultiSeries = [];
 
   // options
-  normalisedCompletionSnapshotXLabel: string = 'Task';
-  normalisedCompletionSnapshotYLabel: string = 'Percentage of Students';
+  XLabel: string = 'Task';
+  YLabel: string = 'Percentage of Students';
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!this.unit || !this.snapshot) {
