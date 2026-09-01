@@ -3,9 +3,9 @@ import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, Subscription, first, of} from 'rxjs';
 import {Unit, UnitRole, UnitService, User, UserService} from 'src/app/api/models/doubtfire-model';
+import {TabManagementBase} from 'src/app/common/base/tab-management.base';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
-import {TabManagementBase} from 'src/app/common/base/tab-management.base';
 
 type UnitAdminTabKey =
   | 'details'
@@ -29,7 +29,10 @@ interface UnitAdminTab {
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class UnitAdminStateComponent extends TabManagementBase<UnitAdminTab> implements OnInit, OnDestroy {
+export class UnitAdminStateComponent
+  extends TabManagementBase<UnitAdminTab>
+  implements OnInit, OnDestroy
+{
   @Input() public unit$: Observable<Unit>;
 
   public readonly tabs: UnitAdminTab[] = [
@@ -82,7 +85,9 @@ export class UnitAdminStateComponent extends TabManagementBase<UnitAdminTab> imp
     }
 
     this.subscriptions.push(
-      this.route.paramMap.subscribe((params) => this.updateCurrentTabFromState(params.get('tab'), 'details')),
+      this.route.paramMap.subscribe((params) =>
+        this.updateCurrentTabFromState(params.get('tab'), 'details'),
+      ),
     );
   }
 
