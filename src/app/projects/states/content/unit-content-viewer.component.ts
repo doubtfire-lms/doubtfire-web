@@ -215,9 +215,21 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
       return;
     }
 
-    const route = this.routeFromHref(link.getAttribute('href'));
+    const href = link.getAttribute('href');
+    const route = this.routeFromHref(href);
 
-    if (!route || !this.currentUnitId) {
+    if (!route) {
+      const remoteUrl = this.remoteUrlFromHref(href);
+
+      if (remoteUrl) {
+        event.preventDefault();
+        window.open(remoteUrl, '_blank', 'noopener,noreferrer');
+      }
+
+      return;
+    }
+
+    if (!this.currentUnitId) {
       return;
     }
 
@@ -371,6 +383,22 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
       path: url.pathname.slice(0, pathEnd),
       fragment: url.hash ? url.hash.slice(1) : undefined,
     };
+  }
+
+  private remoteUrlFromHref(href: string | null): string | undefined {
+    if (!href) {
+      return undefined;
+    }
+
+    try {
+      const url = new URL(href, 'https://archive.local');
+
+      return ['http:', 'https:'].includes(url.protocol) && url.hostname !== 'archive.local'
+        ? url.href
+        : undefined;
+    } catch {
+      return undefined;
+    }
   }
 
   private setIframeUrl(url: string, fragment?: string): void {

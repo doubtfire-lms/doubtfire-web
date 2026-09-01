@@ -5,10 +5,6 @@
   min-width: 230px;
 }
 
-::ng-deep .text-bubble .comment-text .markdown-to-html p {
-  margin: 0 0 0 0px !important;
-}
-
 $comment-bubble-color: #3939ff;
 $comment-bubble-color-darker: color.adjust($comment-bubble-color, $lightness: -10%);
 $comment-bubble-color-other-user: rgb(241, 240, 240);
@@ -341,17 +337,12 @@ $comment-inner-border-radius: 4px;
     background: $comment-bubble-color;
 
     .comment-text,
-    .comment-pdf,
-    .markdown-to-html p {
+    .comment-pdf {
       padding-right: 6px;
       padding-left: 4px;
       word-break: break-word;
       -webkit-font-smoothing: antialiased;
       margin-bottom: 0 !important;
-    }
-
-    .comment-text .markdown-to-html p {
-      margin: 0 0 0 0 !important;
     }
 
     .comment-audio {
@@ -373,6 +364,8 @@ $comment-inner-border-radius: 4px;
   .comment .text-bubble,
   .comment .pdf-bubble {
     @include base-bubble;
+    --markdown-link-color: #bae6fd;
+    --pdf-link-color: #bae6fd;
     display: inline-block;
     padding-left: $comment-text-padding;
     padding-right: $comment-text-padding;
@@ -381,18 +374,6 @@ $comment-inner-border-radius: 4px;
     a {
       color: white;
       margin-bottom: 0px;
-    }
-
-    ::ng-deep .text-bubble .comment-text .markdown-to-html p {
-      margin: 0 0 0 0px !important;
-    }
-
-    .markdown-to-html p > *:last-child {
-      margin-bottom: 0px;
-    }
-
-    .markdown-to-html p > pre:last-child {
-      margin-bottom: 0em;
     }
   }
 
@@ -415,10 +396,6 @@ $comment-inner-border-radius: 4px;
       margin-right: 0;
       padding-right: 0;
     }
-
-    .markdown-to-html > *:last-child {
-      margin-bottom: 0px;
-    }
   }
 
   // Image comments
@@ -440,12 +417,14 @@ $comment-inner-border-radius: 4px;
   } */
 
   .comment.comment-by-other-user .text-bubble {
+    --markdown-link-color: #{$comment-bubble-color};
     background: $comment-bubble-color-other-user;
     color: black;
     margin-left: 0;
   }
 
   .comment.comment-by-other-user .pdf-bubble {
+    --pdf-link-color: #{$comment-bubble-color};
     background: $comment-bubble-color-other-user;
     color: black;
     color: black;

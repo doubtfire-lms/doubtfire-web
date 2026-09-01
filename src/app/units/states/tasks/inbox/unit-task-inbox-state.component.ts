@@ -156,13 +156,10 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   }
 
   private loadUnit(unitId: number): Observable<Unit> {
-    if (this.shouldRefreshUnit(unitId)) {
-      return this.unitService
-        .fetch(unitId)
-        .pipe(tap(() => UnitTaskInboxStateComponent.lastUnitFetchAt.set(unitId, Date.now())));
-    }
-
-    return this.unitService.get(unitId);
+    const shouldRefresh = this.shouldRefreshUnit(unitId);
+    return this.unitService
+      .loadDetails(unitId, shouldRefresh)
+      .pipe(tap(() => UnitTaskInboxStateComponent.lastUnitFetchAt.set(unitId, Date.now())));
   }
 
   private shouldRefreshUnit(unitId: number): boolean {

@@ -38,51 +38,60 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const request$ = this.isAccessTokenExpired(request)
-      ? throwError(() => new HttpErrorResponse({status: 419}))
-      : next.handle(request);
+    if (this.isAccessTokenExpired(request)) {
+      return this.refreshAccessTokenAndRetry(request, next);
+    }
 
-    return request$.pipe(
+    return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (this.isAuthError(error)) {
           if (this.isAccessTokenRequest(request)) {
             return throwError(() => this.extractErrorMessage(error));
           }
 
-          if (!this.refreshTokenInProgress) {
-            console.log('Refreshing access token');
-            this.refreshTokenInProgress = true;
-            this.refreshTokenSubject.next(null);
-            return this.attemptRefresh$().pipe(
-              switchMap(() => {
-                this.refreshTokenSubject.next(this.userService.currentUser.authenticationToken);
-                return next.handle(this.injectToken(request));
-              }),
-              catchError((err: HttpErrorResponse) => {
-                this.refreshTokenInProgress = false;
-                if (this.isAuthError(err)) {
-                  this.authenticationService.timeoutAuthentication();
-                }
-                if (!(err instanceof HttpErrorResponse)) {
-                  return throwError(() => err);
-                }
-                return throwError(() => this.extractErrorMessage(err));
-              }),
-              finalize(() => (this.refreshTokenInProgress = false)),
-            );
-          } else {
-            return this.refreshTokenSubject.pipe(
-              filter((result) => result !== null),
-              take(1),
-              switchMap(() => next.handle(this.injectToken(request))),
-              catchError((err: HttpErrorResponse) => {
-                return throwError(() => this.extractErrorMessage(err));
-              }),
-            );
-          }
+          // The server is authoritative about token validity. Refresh even when the
+          // client-side expiry indicated that the access token was still valid.
+          return this.refreshAccessTokenAndRetry(request, next);
         }
 
         return throwError(() => this.extractErrorMessage(error));
+      }),
+    );
+  }
+
+  private refreshAccessTokenAndRetry(
+    request: HttpRequest<any>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<any>> {
+    if (!this.refreshTokenInProgress) {
+      console.log('Refreshing access token');
+      this.refreshTokenInProgress = true;
+      this.refreshTokenSubject.next(null);
+      return this.attemptRefresh$().pipe(
+        switchMap(() => {
+          this.refreshTokenSubject.next(this.userService.currentUser.authenticationToken);
+          return next.handle(this.injectToken(request));
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.refreshTokenInProgress = false;
+          if (this.isAuthError(err)) {
+            this.authenticationService.timeoutAuthentication();
+          }
+          if (!(err instanceof HttpErrorResponse)) {
+            return throwError(() => err);
+          }
+          return throwError(() => this.extractErrorMessage(err));
+        }),
+        finalize(() => (this.refreshTokenInProgress = false)),
+      );
+    }
+
+    return this.refreshTokenSubject.pipe(
+      filter((result) => result !== null),
+      take(1),
+      switchMap(() => next.handle(this.injectToken(request))),
+      catchError((err: HttpErrorResponse) => {
+        return throwError(() => this.extractErrorMessage(err));
       }),
     );
   }

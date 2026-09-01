@@ -1,5 +1,5 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
+import {Router} from '@angular/router';
 import {ProjectService, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -21,7 +21,6 @@ import {AlertService} from 'src/app/common/services/alert.service';
 export class LtiDashboardComponent implements AfterViewInit {
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private ltiService: LtiService,
     private userService: UserService,
     private authenticationService: AuthenticationService,
@@ -32,8 +31,6 @@ export class LtiDashboardComponent implements AfterViewInit {
     private csvResultModalService: CsvResultModalService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
-
-  @Input() ltik: string;
 
   // linkedUnit: UnitLink;
   linkedUnit: Unit;
@@ -47,8 +44,6 @@ export class LtiDashboardComponent implements AfterViewInit {
   isSyncingEnrolments: boolean;
 
   ngAfterViewInit(): void {
-    this.ltik = this.ltik ?? this.route.snapshot.queryParamMap.get('ltik');
-
     // Scroll to the bottom of the page in case the header is visible
     // Ensures our action buttons are centered
     setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
@@ -57,7 +52,6 @@ export class LtiDashboardComponent implements AfterViewInit {
     // TODO: add a spinner or loading indicator until final loading state is complete
 
     this.authenticationService.afterAuthCall(() => {
-      this.userService.currentUser.ltik = this.ltik;
       this.currentUser = this.userService.currentUser;
 
       // Retrieve linked unit ID
@@ -101,7 +95,7 @@ export class LtiDashboardComponent implements AfterViewInit {
   }
 
   goToLinkUnit(): void {
-    this.router.navigate(['/lti/link'], {queryParams: {ltik: this.ltik}});
+    this.router.navigate(['/lti/link']);
   }
 
   removeLink(): void {

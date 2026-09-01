@@ -153,6 +153,11 @@
             <button mat-button target="_blank" (click)="uploadEnrolments()">
               <mat-icon inline>upload</mat-icon> Batch Enrol
             </button>
+            @if (unit.myRole === 'Convenor' || unit.myRole === 'Admin') {
+              <button mat-button target="_blank" (click)="uploadStaffNotes()">
+                <mat-icon inline>upload</mat-icon> Batch Staff Notes
+              </button>
+            }
             <button mat-button target="_blank" (click)="uploadWithdrawals()">
               <mat-icon inline>upload</mat-icon> Batch Withdraw
             </button>
