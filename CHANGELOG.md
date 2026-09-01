@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-83](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-82...v11.0.0-83) (2026-09-01)
+
+
+### Features
+
+* display snapshot of aggregated task completion data ([#1164](https://github.com/b0ink/doubtfire-deploy/issues/1164)) ([6c003fd](https://github.com/b0ink/doubtfire-deploy/commit/6c003fdee1c258ee02e6ff3307cabe50a56f2eea))
+
 ## [11.0.0-82](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-81...v11.0.0-82) (2026-09-01)
 
 
