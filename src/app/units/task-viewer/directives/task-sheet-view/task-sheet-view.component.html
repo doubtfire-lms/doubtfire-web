@@ -11,7 +11,7 @@
       } @else if (taskDef?.hasTaskSheet) {
         <f-pdf-viewer [pdfUrl]="taskDef.getTaskPDFUrl()"></f-pdf-viewer>
       } @else {
-        <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+        <div class="size-full flex flex-col justify-center items-center">
           <mat-icon>subtitles_off</mat-icon> No Task Sheet
         </div>
       }
