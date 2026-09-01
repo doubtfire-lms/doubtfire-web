@@ -365,6 +365,7 @@ $comment-inner-border-radius: 4px;
   .comment .pdf-bubble {
     @include base-bubble;
     --markdown-link-color: #bae6fd;
+    --pdf-link-color: #bae6fd;
     display: inline-block;
     padding-left: $comment-text-padding;
     padding-right: $comment-text-padding;
@@ -423,6 +424,7 @@ $comment-inner-border-radius: 4px;
   }
 
   .comment.comment-by-other-user .pdf-bubble {
+    --pdf-link-color: #{$comment-bubble-color};
     background: $comment-bubble-color-other-user;
     color: black;
     color: black;

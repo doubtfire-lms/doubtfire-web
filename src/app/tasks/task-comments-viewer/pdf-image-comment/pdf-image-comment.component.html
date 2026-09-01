@@ -3,7 +3,7 @@
     <img alt="Image attachment preview" height="100%" width="100%" [src]="resourceUrl | safe" />
   }
   @if (comment.commentType === 'pdf') {
-    <div class="flex cursor-pointer items-center gap-1 text-formatif-blue hover:text-blue-800">
+    <div class="flex cursor-pointer items-center gap-1 text-(--pdf-link-color) hover:underline">
       <mat-icon class="">picture_as_pdf</mat-icon> view pdf
     </div>
   }
