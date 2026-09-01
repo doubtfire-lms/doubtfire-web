@@ -21,6 +21,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": "dist",
+            "subresourceIntegrity": true,
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["src/polyfills.ts"],
@@ -83,7 +84,14 @@
                   "with": "src/app/config/constants/hostUrl.prod.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "fonts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                }
+              },
               "outputHashing": "bundles",
               "sourceMap": false,
               "extractLicenses": true,
