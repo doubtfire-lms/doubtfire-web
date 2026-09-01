@@ -43,6 +43,34 @@ export class TaskStatusSummaryChartComponent implements OnInit {
     domain: [''],
   };
 
+  constructor(
+    private taskService: TaskService,
+    private alertService: AlertService,
+    private sidekiqProgressModalService: SidekiqProgressModalService,
+    private sidekiqJobService: SidekiqJobService,
+    private chartToolTipService: TooltipService,
+    private viewContainerRef: ViewContainerRef,
+    private injectorObj: Injector,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {
+    // https://github.com/swimlane/ngx-charts/issues/1428#issuecomment-659237562
+    this.chartToolTipService = this.injectorObj.get(TooltipService);
+    this.viewContainerRef = this.injectorObj.get(ViewContainerRef);
+  }
+
+  ngOnInit(): void {
+    this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
+
+    this.colorScheme.domain = statusMapping.map(
+      (labels) => this.taskService.statusColors.get(labels) || '#000000',
+    );
+    this.loadSnapshots();
+  }
+
+  private autoCaptureAttempted: boolean = false;
+
+  campusFilter: string = 'all';
+
   get sliderMax(): number {
     return Math.max(this.snapshots.length - 1, 0);
   }
@@ -106,34 +134,6 @@ export class TaskStatusSummaryChartComponent implements OnInit {
         ?.snapshot_date,
     );
   };
-
-  private autoCaptureAttempted: boolean = false;
-
-  constructor(
-    private taskService: TaskService,
-    private alertService: AlertService,
-    private sidekiqProgressModalService: SidekiqProgressModalService,
-    private sidekiqJobService: SidekiqJobService,
-    private chartToolTipService: TooltipService,
-    private viewContainerRef: ViewContainerRef,
-    private injectorObj: Injector,
-    private changeDetectorRef: ChangeDetectorRef,
-  ) {
-    // https://github.com/swimlane/ngx-charts/issues/1428#issuecomment-659237562
-    this.chartToolTipService = this.injectorObj.get(TooltipService);
-    this.viewContainerRef = this.injectorObj.get(ViewContainerRef);
-  }
-
-  campusFilter: string = 'all';
-
-  ngOnInit(): void {
-    this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
-
-    this.colorScheme.domain = statusMapping.map(
-      (labels) => this.taskService.statusColors.get(labels) || '#000000',
-    );
-    this.loadSnapshots();
-  }
 
   refreshData() {
     const selectedSnapshot = this.selectedSnapshot;
@@ -207,8 +207,6 @@ export class TaskStatusSummaryChartComponent implements OnInit {
       }),
     }));
   }
-
-  onSelect(): void {}
 
   loadSnapshots(): void {
     if (!this.unit) {
