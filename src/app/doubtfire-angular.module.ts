@@ -867,7 +867,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
       registrationStrategy: () => interval(6000).pipe(take(1)),
     }),
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
-    CodeEditorModule.forRoot(),
+    CodeEditorModule.forRoot({baseUrl: '/assets/monaco/min'}),
     NgxGanttModule,
     MonacoEditorModule.forRoot(),
     MatChipListbox,
