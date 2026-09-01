@@ -17,6 +17,7 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {TabManagementBase} from 'src/app/common/base/tab-management.base';
 
 type AnalyticsTabKey =
   | 'task-completion'
@@ -38,7 +39,7 @@ interface AnalyticsTab {
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class UnitAnalyticsComponent implements OnInit, OnDestroy {
+export class UnitAnalyticsComponent extends TabManagementBase<AnalyticsTab> implements OnInit, OnDestroy {
   @Input() public unit$: Observable<Unit>;
 
   public unit: Unit;
@@ -61,13 +62,15 @@ export class UnitAnalyticsComponent implements OnInit, OnDestroy {
     private alertsService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     private userService: UserService,
-    private route: ActivatedRoute,
-    private router: Router,
+    protected route: ActivatedRoute,
+    protected router: Router,
     @Inject(LOCALE_ID) private locale: string,
-  ) {}
+  ) {
+    super(route, router);
+  }
 
   ngOnInit(): void {
-    this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'));
+    this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'), 'task-completion');
 
     this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
     this.unit$?.pipe(first()).subscribe((unit) => {
@@ -75,7 +78,7 @@ export class UnitAnalyticsComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(
-      this.route.paramMap.subscribe((params) => this.updateCurrentTabFromState(params.get('tab'))),
+      this.route.paramMap.subscribe((params) => this.updateCurrentTabFromState(params.get('tab'), 'task-completion')),
     );
   }
 
@@ -91,33 +94,8 @@ export class UnitAnalyticsComponent implements OnInit, OnDestroy {
     return this.userService.currentUser?.systemRole === 'Admin';
   }
 
-  public get currentIndex(): number {
-    const index = this.tabs.findIndex((tab) => tab.routeSegment === this.currentTab.routeSegment);
-    return index >= 0 ? index : 0;
-  }
-
   public onTabChange(event: MatTabChangeEvent): void {
-    const nextTab = this.tabs[event.index] ?? this.tabs[0];
-    this.currentTab = nextTab;
-    if (this.route.parent?.snapshot.data.unit) {
-      this.router.navigate(
-        [
-          '/units',
-          this.route.parent.snapshot.paramMap.get('unitId'),
-          'analytics',
-          nextTab.routeSegment,
-        ],
-        {replaceUrl: true},
-      );
-      return;
-    }
-  }
-
-  private updateCurrentTabFromState(tabParam?: string | null): void {
-    this.currentTab =
-      this.tabs.find((tab) => tab.routeSegment === tabParam) ??
-      this.tabs.find((tab) => tab.routeSegment === 'task-completion') ??
-      this.tabs[0];
+    super.onTabChange(event, 'analytics');
   }
 
   public getTaskCompletionCsv() {

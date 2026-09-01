@@ -5,6 +5,7 @@ import {Observable, Subscription, first, of} from 'rxjs';
 import {Unit, UnitRole, UnitService, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+import {TabManagementBase} from 'src/app/common/base/tab-management.base';
 
 type UnitAdminTabKey =
   | 'details'
@@ -28,7 +29,7 @@ interface UnitAdminTab {
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class UnitAdminStateComponent implements OnInit, OnDestroy {
+export class UnitAdminStateComponent extends TabManagementBase<UnitAdminTab> implements OnInit, OnDestroy {
   @Input() public unit$: Observable<Unit>;
 
   public readonly tabs: UnitAdminTab[] = [
@@ -52,16 +53,18 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    protected route: ActivatedRoute,
+    protected router: Router,
     private userService: UserService,
     private unitService: UnitService,
     private alerts: AlertService,
     private globalStateService: GlobalStateService,
-  ) {}
+  ) {
+    super(route, router);
+  }
 
   public ngOnInit(): void {
-    this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'));
+    this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'), 'details');
 
     this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
     if (this.unit$) {
@@ -79,7 +82,7 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
     }
 
     this.subscriptions.push(
-      this.route.paramMap.subscribe((params) => this.updateCurrentTabFromState(params.get('tab'))),
+      this.route.paramMap.subscribe((params) => this.updateCurrentTabFromState(params.get('tab'), 'details')),
     );
   }
 
@@ -87,33 +90,8 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
-  public get currentIndex(): number {
-    const index = this.tabs.findIndex((tab) => tab.routeSegment === this.currentTab.routeSegment);
-    return index >= 0 ? index : 0;
-  }
-
   public onTabChange(event: MatTabChangeEvent): void {
-    const nextTab = this.tabs[event.index] ?? this.tabs[0];
-    this.currentTab = nextTab;
-    if (this.route.parent?.snapshot.data.unit) {
-      this.router.navigate(
-        [
-          '/units',
-          this.route.parent.snapshot.paramMap.get('unitId'),
-          'admin',
-          nextTab.routeSegment,
-        ],
-        {replaceUrl: true},
-      );
-      return;
-    }
-  }
-
-  private updateCurrentTabFromState(tabParam?: string | null): void {
-    this.currentTab =
-      this.tabs.find((tab) => tab.routeSegment === tabParam) ??
-      this.tabs.find((tab) => tab.routeSegment === 'details') ??
-      this.tabs[0];
+    super.onTabChange(event, 'admin');
   }
 
   private findUnitRole(unitId: number): UnitRole | null {
