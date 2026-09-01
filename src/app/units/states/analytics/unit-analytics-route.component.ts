@@ -19,7 +19,12 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 
 type AnalyticsTabKey =
-  'task-completion' | 'target-grades' | 'tasks-awaiting-feedback' | 'resubmissions' | 'tutor-times' | 'download-data';
+  | 'task-completion'
+  | 'target-grades'
+  | 'tasks-awaiting-feedback'
+  | 'resubmissions'
+  | 'tutor-times'
+  | 'download-data';
 
 interface AnalyticsTab {
   label: string;

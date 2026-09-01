@@ -31,7 +31,7 @@ export class StackedAreaStatusChartComponent implements OnChanges {
   XAxisLabel: string = 'Week';
   YAxisLabel: string = 'Records';
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_: SimpleChanges): void {
     if (!this.unit) {
       this.data = [];
       return;

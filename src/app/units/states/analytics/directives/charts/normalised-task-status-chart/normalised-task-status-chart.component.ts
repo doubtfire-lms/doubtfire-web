@@ -1,6 +1,5 @@
 import {MultiSeries, TooltipService} from '@glitchtip/ng-charts';
 import {
-  ChangeDetectorRef,
   Component,
   Injector,
   Input,
@@ -32,7 +31,7 @@ export class NormalisedTaskStatusChartComponent implements OnChanges {
   XLabel: string = 'Task';
   YLabel: string = 'Percentage of Students';
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_: SimpleChanges): void {
     if (!this.unit || !this.snapshot) {
       this.data = [];
       return;
@@ -78,7 +77,6 @@ export class NormalisedTaskStatusChartComponent implements OnChanges {
     private chartToolTipService: TooltipService,
     private viewContainerRef: ViewContainerRef,
     private injectorObj: Injector,
-    private changeDetectorRef: ChangeDetectorRef,
   ) {
     // https://github.com/swimlane/ngx-charts/issues/1428#issuecomment-659237562
     this.chartToolTipService = this.injectorObj.get(TooltipService);

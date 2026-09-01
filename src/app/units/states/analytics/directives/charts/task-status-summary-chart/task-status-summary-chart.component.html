@@ -1,5 +1,5 @@
 <mat-card appearance="outlined" class="p-4">
-  <div class="flex w-full gap-2.5 flex-col items-start lg:flex-row lg:justify-between p-4 pb-0">
+  <div class="flex w-full flex-col items-start gap-2.5 p-4 pb-0 lg:flex-row lg:justify-between">
     <div class="text-pretty xl:max-w-[calc(50%)]">
       <mat-card-title>Task Completion Statuses</mat-card-title>
       <mat-card-subtitle class="">
@@ -30,8 +30,8 @@
       </button>
     </div>
   </div>
-<div class="flex justify-center px-4 pt-4">
-    <mat-button-toggle-group [(ngModel)]="chartView" aria-label="Task status chart view">
+  <div class="flex justify-center px-4 pt-4">
+    <mat-button-toggle-group aria-label="Task status chart view" [(ngModel)]="chartView">
       <mat-button-toggle value="snapshots">Snapshots</mat-button-toggle>
       <mat-button-toggle value="timeseries">Timeseries</mat-button-toggle>
     </mat-button-toggle-group>
@@ -55,7 +55,7 @@
         <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
       </div>
     }
-    <div class="flex flex-col items-center px-4 pt-0 pb-4 -mt-6">
+    <div class="-mt-6 flex flex-col items-center px-4 pt-0 pb-4">
       <div class="-mb-2 flex w-full px-4">
         <mat-slider
           class="snapshot-slider w-full"
