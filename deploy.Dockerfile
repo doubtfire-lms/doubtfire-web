@@ -40,6 +40,13 @@ RUN --mount=type=secret,id=sentry_auth_token,uid=1000 \
     npm run-script deploy; \
   fi
 
+# Bake this build's inline-script hashes into the CSP. Angular's importmap
+# lists every chunk's integrity hash, so its own hash changes on each build and
+# only the build knows it. envsubst is given an explicit variable list so
+# nginx's own $csp_* variables are left alone.
+RUN CSP_SCRIPT_HASHES="$(node scripts/csp-inline-script-hashes.mjs dist/browser/index.html)" \
+  envsubst '${CSP_SCRIPT_HASHES}' < nginx.conf > nginx.conf.built
+
 
 ## STAGE 2: Host ###
 FROM nginx:1.29.0-alpine
@@ -48,7 +55,7 @@ FROM nginx:1.29.0-alpine
 RUN rm -v /etc/nginx/nginx.conf
 
 # Copy a configuration file from the current directory
-ADD nginx.conf /etc/nginx/
+COPY --from=build /doubtfire-web/nginx.conf.built /etc/nginx/nginx.conf
 
 COPY --from=build /doubtfire-web/dist/browser /usr/share/nginx/html
 

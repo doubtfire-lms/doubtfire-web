@@ -1,6 +1,6 @@
 {
   "name": "doubtfire",
-  "version": "11.0.0-77",
+  "version": "11.0.0-83",
   "homepage": "http://github.com/doubtfire-lms/",
   "description": "Learning and feedback tool.",
   "license": "AGPL-3.0",
@@ -9,15 +9,15 @@
     "node": ">=22.22.3"
   },
   "scripts": {
-    "build": "ng build --subresource-integrity",
+    "build": "ng build",
     "build:angular18": "ng build",
     "lint:fix": "ng lint --fix",
     "lint": "ng lint --max-warnings 0",
     "serve:angular18": "export NG_FORCE_TTY=false && export NODE_OPTIONS=--max_old_space_size=4096 && ng serve --poll=2000 --configuration $NODE_ENV --proxy-config proxy.conf.json",
     "format": "prettier --write .",
     "start": "npm-run-all serve:angular18",
-    "deploy:build2api": "ng build --subresource-integrity --delete-output-path=true --optimization=true --configuration production --output-path dist",
-    "deploy:build2api:sourcemaps": "ng build --subresource-integrity --delete-output-path=true --optimization=true --configuration production --source-map=true --output-path dist",
+    "deploy:build2api": "ng build --delete-output-path=true --configuration production --output-path dist",
+    "deploy:build2api:sourcemaps": "ng build --delete-output-path=true --configuration production --source-map=true --output-path dist",
     "sentry:sourcemaps": "node scripts/upload-sentry-sourcemaps.js",
     "deploy": "run-s -l deploy:build2api",
     "prepare": "husky install",
@@ -59,7 +59,7 @@
     "html5-qrcode": "^2.3.8",
     "jszip": "^3.10.1",
     "lottie-web": "^5.13.0",
-    "marked": "^18.0.10",
+    "marked": "^18.0.11",
     "moment": "^2.30",
     "monaco-editor": "^0.56.0",
     "ng-flex-layout": "^17.3.7-beta.1",
@@ -91,12 +91,12 @@
     "@types/d3": "^7.4.3",
     "@types/dompurify": "^3.2.0",
     "@types/node": "^26.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.67.0",
-    "@typescript-eslint/parser": "^8.67.0",
+    "@typescript-eslint/eslint-plugin": "^8.68.0",
+    "@typescript-eslint/parser": "^8.68.0",
     "angular-eslint": "^22.0.0",
     "autoprefixer": "^10.5.4",
     "concurrently": "^10.0.4",
-    "eslint": "^10.9.0",
+    "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-tailwindcss": "^4.0.4",
@@ -120,6 +120,6 @@
     "@nx/nx-linux-x64-gnu": "^23.1.1",
     "@nx/nx-win32-x64-msvc": "^23.1.1",
     "@rollup/rollup-linux-arm64-gnu": "^4.62.5",
-    "@rollup/rollup-linux-x64-gnu": "^4.62.5"
+    "@rollup/rollup-linux-x64-gnu": "^4.63.0"
   }
 }

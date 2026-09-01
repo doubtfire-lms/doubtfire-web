@@ -20,6 +20,7 @@ import {
   OverseerImage,
   Project,
   Task,
+  TaskCompletionSnapshot,
   TaskDefinition,
   TaskOutcomeAlignment,
   TeachingPeriod,
@@ -867,5 +868,36 @@ export class Unit extends Entity {
   public getTaskPrerequisites(): Observable<TaskPrerequisite[]> {
     const prerequisiteService = AppInjector.get(TaskPrerequisiteService);
     return prerequisiteService.getUnitPrerequisites(this.id);
+  }
+
+  public getTaskCompletionSnapshots(
+    startDate?: Date,
+    endDate?: Date,
+    limit: number = 365,
+  ): Observable<TaskCompletionSnapshot[]> {
+    let params = new HttpParams();
+
+    [startDate, endDate].forEach((date) => {
+      if (date) {
+        params = params.set(
+          date === startDate ? 'start_date' : 'end_date',
+          `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
+        );
+      }
+    });
+
+    params = params.set('limit', limit.toString());
+
+    return AppInjector.get(HttpClient).get<TaskCompletionSnapshot[]>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots`,
+      {params},
+    );
+  }
+
+  public captureTaskCompletionSnapshot(): Observable<SidekiqJob> {
+    return AppInjector.get(HttpClient).post<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots/capture`,
+      {},
+    );
   }
 }

@@ -229,7 +229,7 @@ export class TutorNotesComponent implements OnInit {
   openProject(event: Event, note: TutorNote) {
     event.stopPropagation();
     const link = document.createElement('a');
-    link.href = `/projects/${note.project.id}/dashboard/${note.taskDefinition.abbreviation}?tutor=true`;
+    link.href = `/projects/${note.project.id}/dashboard/${note.taskDefinition.abbreviation}`;
     link.target = '_blank';
     link.click();
   }

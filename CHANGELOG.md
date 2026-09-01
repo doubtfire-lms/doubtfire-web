@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-83](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-82...v11.0.0-83) (2026-09-01)
+
+
+### Features
+
+* display snapshot of aggregated task completion data ([#1164](https://github.com/b0ink/doubtfire-deploy/issues/1164)) ([6c003fd](https://github.com/b0ink/doubtfire-deploy/commit/6c003fdee1c258ee02e6ff3307cabe50a56f2eea))
+
+## [11.0.0-82](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-81...v11.0.0-82) (2026-09-01)
+
+
+### Bug Fixes
+
+* support gravatar prefetch ([e9a0028](https://github.com/b0ink/doubtfire-deploy/commit/e9a002877ba7b5679642578b59941b8a89ffeae2))
+
+## [11.0.0-81](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-80...v11.0.0-81) (2026-09-01)
+
+
+### Features
+
+* build whitelist of hashed sources ([acc0c81](https://github.com/b0ink/doubtfire-deploy/commit/acc0c812b5211f9705867a7b00e1f56439784129))
+
+## [11.0.0-80](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-79...v11.0.0-80) (2026-09-01)
+
+## [11.0.0-79](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-78...v11.0.0-79) (2026-09-01)
+
+
+### Bug Fixes
+
+* add pdfjs asset ([0cbbcdb](https://github.com/b0ink/doubtfire-deploy/commit/0cbbcdb0bc763e3787affa10439c4ed4f3411181))
+
+## [11.0.0-78](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-77...v11.0.0-78) (2026-09-01)
+
+
+### Bug Fixes
+
+* allow third party package scripts ([7ca5c4d](https://github.com/b0ink/doubtfire-deploy/commit/7ca5c4dce58d564716589e40e06aeccc60fa1d89))
+* ensure all statuses available to staff ([6b66760](https://github.com/b0ink/doubtfire-deploy/commit/6b667605b7e7fce8d8910b75aae08517c548c2e4))
+* ensure rule is deleted ([a8c5f54](https://github.com/b0ink/doubtfire-deploy/commit/a8c5f5429308f6d65d6597b3c64c5c9199d1cee1))
+* invert pdf comment as author ([f5cd8ab](https://github.com/b0ink/doubtfire-deploy/commit/f5cd8abab0e22b65b3742958e7dab8712052a682))
+* whitelist gtag script ([280d1d6](https://github.com/b0ink/doubtfire-deploy/commit/280d1d6f3469e17778c2a44bb8133592e7396743))
+
 ## [11.0.0-77](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-76...v11.0.0-77) (2026-08-28)
 
 
