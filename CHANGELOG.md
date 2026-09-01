@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-81](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-80...v11.0.0-81) (2026-09-01)
+
+
+### Features
+
+* build whitelist of hashed sources ([acc0c81](https://github.com/b0ink/doubtfire-deploy/commit/acc0c812b5211f9705867a7b00e1f56439784129))
+
 ## [11.0.0-80](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-79...v11.0.0-80) (2026-09-01)
 
 ## [11.0.0-79](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-78...v11.0.0-79) (2026-09-01)
