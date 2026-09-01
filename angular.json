@@ -21,7 +21,6 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": "dist",
-            "subresourceIntegrity": true,
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["src/polyfills.ts"],
@@ -89,9 +88,10 @@
                 "fonts": true,
                 "styles": {
                   "minify": true,
-                  "inlineCritical": true
+                  "inlineCritical": false
                 }
               },
+              "subresourceIntegrity": true,
               "outputHashing": "bundles",
               "sourceMap": false,
               "extractLicenses": true,
@@ -127,7 +127,8 @@
           "options": {
             "buildTarget": "doubtfire:build",
             "port": 4200,
-            "host": "0.0.0.0"
+            "host": "0.0.0.0",
+            "allowedHosts": ["ontrack.dev"]
           },
           "configurations": {
             "development": {
