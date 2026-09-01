@@ -1,4 +1,4 @@
-import {MultiSeries, TooltipService} from '@glitchtip/ng-charts';
+import {TooltipService} from '@glitchtip/ng-charts';
 import {
   ChangeDetectorRef,
   Component,
@@ -18,12 +18,9 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {
   countStudentsFromSnapshot,
   formatSnapshotLabel,
-  getTaskStats,
   shouldIncludeSnapshot,
   statusMapping,
 } from '../chart-data-helpers';
-import {NormalisedTaskStatusChartComponent} from '../normalised-task-status-chart/normalised-task-status-chart.component';
-import {StackedAreaStatusChartComponent} from '../stacked-area-status-chart/stacked-area-status-chart.component';
 
 @Component({
   selector: 'f-task-status-summary-chart',
