@@ -1,11 +1,11 @@
 <mat-card appearance="outlined" class="p-4">
   <div class="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between">
     <mat-card-header class="text-pretty xl:max-w-[calc(50%)]">
-      <mat-card-title>Task Completion Status</mat-card-title>
+      <mat-card-title>Task Completion Snapshots</mat-card-title>
       <mat-card-subtitle class="mb-2.5">
         <p>
-          View the historical completion status of tasks across all students, filtered by campus
-          and/or tutorial. Use the slider to navigate through different snapshots.
+          View the historical snapshots of completion status of tasks across all students, filtered
+          by campus and/or tutorial. Use the slider to navigate through different snapshots.
         </p>
       </mat-card-subtitle>
     </mat-card-header>
@@ -88,9 +88,12 @@
     </div>
   </div>
   <mat-card-header class="text-pretty xl:max-w-[calc(50%)]">
-    <mat-card-title>Task Completion Status Over Time</mat-card-title>
+    <mat-card-title>Task Completion Over Time</mat-card-title>
     <mat-card-subtitle class="mb-2.5">
-      <p>Task completion status across all tasks over time.</p>
+      <p>
+        View the task completion statuses across all tasks over time, filtered by campus and/or
+        tutorial.
+      </p>
     </mat-card-subtitle>
   </mat-card-header>
   @if (hasChartData) {
