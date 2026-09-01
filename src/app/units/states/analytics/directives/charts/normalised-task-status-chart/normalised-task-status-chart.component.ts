@@ -29,7 +29,7 @@ import {
   styleUrl: './normalised-task-status-chart.component.scss',
   standalone: false,
 })
-export class NormalisedTaskStatusChartComponent implements OnInit {
+export class  NormalisedTaskStatusChartComponent implements OnInit {
   @Input() unit: Unit;
 
   data: MultiSeries = [];
@@ -136,7 +136,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
     this.colorScheme.domain = statusMapping.map(
       (labels) => this.taskService.statusColors.get(labels) || '#000000',
     );
-    this.loadRecentSnapshot();
+    this.loadSnapshots();
   }
 
   refreshData() {
@@ -214,7 +214,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
 
   onSelect(): void {}
 
-  loadRecentSnapshot(): void {
+  loadSnapshots(): void {
     if (!this.unit) {
       return;
     }
@@ -275,7 +275,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
           )
           .subscribe((trackedJob) => {
             if (trackedJob.status === 'complete') {
-              this.loadRecentSnapshot();
+              this.loadSnapshots();
             }
           });
       },
