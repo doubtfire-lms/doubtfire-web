@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-79](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-78...v11.0.0-79) (2026-09-01)
+
+
+### Bug Fixes
+
+* add pdfjs asset ([0cbbcdb](https://github.com/b0ink/doubtfire-deploy/commit/0cbbcdb0bc763e3787affa10439c4ed4f3411181))
+
 ## [11.0.0-78](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-77...v11.0.0-78) (2026-09-01)
 
 
