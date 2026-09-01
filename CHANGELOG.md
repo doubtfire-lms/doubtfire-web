@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-82](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-81...v11.0.0-82) (2026-09-01)
+
+
+### Bug Fixes
+
+* support gravatar prefetch ([e9a0028](https://github.com/b0ink/doubtfire-deploy/commit/e9a002877ba7b5679642578b59941b8a89ffeae2))
+
 ## [11.0.0-81](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-80...v11.0.0-81) (2026-09-01)
 
 
