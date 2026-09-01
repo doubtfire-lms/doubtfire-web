@@ -8,7 +8,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {filter, map, take} from 'rxjs/operators';
-import {TaskCodeStats, TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
+import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
 import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
@@ -22,6 +22,8 @@ import {
   shouldIncludeSnapshot,
   statusMapping,
 } from '../chart-data-helpers';
+import {NormalisedTaskStatusChartComponent} from '../normalised-task-status-chart/normalised-task-status-chart.component';
+import {StackedAreaStatusChartComponent} from '../stacked-area-status-chart/stacked-area-status-chart.component';
 
 @Component({
   selector: 'f-task-status-summary-chart',
@@ -32,8 +34,6 @@ import {
 export class TaskStatusSummaryChartComponent implements OnInit {
   @Input() unit: Unit;
 
-  data: MultiSeries = [];
-  weeklyData: MultiSeries = [];
   hasChartData: boolean = false;
   sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
@@ -139,73 +139,18 @@ export class TaskStatusSummaryChartComponent implements OnInit {
     const selectedSnapshot = this.selectedSnapshot;
 
     if (!selectedSnapshot) {
-      this.data = [];
-      this.weeklyData = [];
       this.campuses = [];
       this.hasChartData = false;
       return;
     }
 
     this.campuses = Object.keys(selectedSnapshot.stats);
-
-    this.data = this.buildChartData(getTaskStats(selectedSnapshot, this.campusFilter));
-    this.weeklyData = this.buildWeeklyChartData(this.snapshots);
-    this.hasChartData = this.data.length > 0;
+    this.hasChartData = true;
   }
 
   onSnapshotSliderChange(value: number): void {
     this.sliderSelect = Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax);
     this.refreshData();
-  }
-
-  private buildChartData(taskStats: TaskCodeStats): MultiSeries {
-    const taskSeqByCode = new Map(
-      this.unit.taskDefinitions.map((taskDefinition) => [
-        taskDefinition.abbreviation,
-        taskDefinition.seq,
-      ]),
-    );
-    return Object.entries(taskStats)
-      .sort(([taskCodeA], [taskCodeB]) => {
-        const seqA = taskSeqByCode.get(taskCodeA) ?? Number.MAX_SAFE_INTEGER;
-        const seqB = taskSeqByCode.get(taskCodeB) ?? Number.MAX_SAFE_INTEGER;
-        return seqA - seqB;
-      })
-      .map(([taskDef, counts]) => ({
-        name: taskDef,
-        series: statusMapping.map((status) => ({
-          name: this.taskService.statusLabels.get(status) || status,
-          value: counts[status] || 0,
-        })),
-      }));
-  }
-
-  private buildWeeklyChartData(snapshots: TaskCompletionSnapshot[]): MultiSeries {
-    const lastSnapshotByWeek: Map<string, TaskCompletionSnapshot> = new Map();
-
-    snapshots.forEach((snapshot) => {
-      const weekNumber = formatSnapshotLabel(this.unit, snapshot.snapshot_date, 'short');
-      if (weekNumber) {
-        lastSnapshotByWeek.set(weekNumber, snapshot);
-      }
-    });
-
-    const snapshotsByWeek = [...lastSnapshotByWeek.values()];
-    return statusMapping.map((status) => ({
-      name: this.taskService.statusLabels.get(status) || status,
-      series: snapshotsByWeek.map((snapshot) => {
-        const taskStats = getTaskStats(snapshot, this.campusFilter);
-        const value = Object.values(taskStats).reduce(
-          (total, taskCounts) => total + (taskCounts[status] || 0),
-          0,
-        );
-
-        return {
-          name: formatSnapshotLabel(this.unit, snapshot.snapshot_date, 'short'),
-          value,
-        };
-      }),
-    }));
   }
 
   loadSnapshots(): void {
