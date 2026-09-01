@@ -9,15 +9,18 @@ describe('NotificationService', () => {
   let service: NotificationService;
   let httpMock: HttpTestingController;
   let afterAuthCallback: ((result: boolean) => void) | undefined;
+  let authenticated: boolean;
 
   beforeEach(() => {
     afterAuthCallback = undefined;
+    authenticated = false;
     TestBed.configureTestingModule({
       providers: [
         NotificationService,
         {
           provide: AuthenticationService,
           useValue: {
+            isAuthenticated: vi.fn(() => authenticated),
             afterAuthCall: vi.fn((callback: (result: boolean) => void) => {
               afterAuthCallback = callback;
             }),
@@ -156,6 +159,45 @@ describe('NotificationService', () => {
     afterAuthCallback?.(true);
 
     httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
+  });
+
+  it('polls immediately when the user is already authenticated', () => {
+    vi.useFakeTimers();
+    authenticated = true;
+
+    service.startCountPolling();
+    vi.advanceTimersByTime(0);
+
+    const request = httpMock.expectOne((candidate) =>
+      candidate.url.endsWith('/notifications/unread_count'),
+    );
+    request.flush({count: 5});
+
+    service.stopCountPolling();
+    vi.useRealTimers();
+  });
+
+  it('polls after sign in when an earlier wait was abandoned', () => {
+    vi.useFakeTimers();
+
+    // The header is briefly shown while signing in, and its wait is dropped when
+    // the failed refresh token login signs the anonymous user out.
+    service.startCountPolling();
+    service.stopCountPolling();
+    afterAuthCallback = undefined;
+
+    // Signing in shows the header again - this time with an authenticated user.
+    authenticated = true;
+    service.startCountPolling();
+    vi.advanceTimersByTime(0);
+
+    const request = httpMock.expectOne((candidate) =>
+      candidate.url.endsWith('/notifications/unread_count'),
+    );
+    request.flush({count: 7});
+
+    service.stopCountPolling();
+    vi.useRealTimers();
   });
 
   it('keeps a newer polling request when an older consumer stops during authentication', () => {

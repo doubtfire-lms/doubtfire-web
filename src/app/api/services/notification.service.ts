@@ -44,7 +44,19 @@ export class NotificationService implements OnDestroy {
 
   public startCountPolling(): void {
     this.pollingConsumers += 1;
-    if (this.pollingSubscription || this.waitingForAuthentication) {
+    if (this.pollingSubscription) {
+      return;
+    }
+
+    // The dropdown is created once the header is shown after sign in, so the user
+    // is usually already authenticated and we can fetch the count straight away.
+    if (this.authenticationService.isAuthenticated()) {
+      this.waitingForAuthentication = false;
+      this.beginCountPolling();
+      return;
+    }
+
+    if (this.waitingForAuthentication) {
       return;
     }
 
@@ -77,6 +89,10 @@ export class NotificationService implements OnDestroy {
 
     this.pollingSubscription?.unsubscribe();
     this.pollingSubscription = undefined;
+    // Any pending wait belongs to a sign in attempt that is no longer relevant -
+    // the authentication service replaces its completion subject on sign out, so
+    // the pending callback may never run.
+    this.waitingForAuthentication = false;
   }
 
   public refreshUnreadCount(): void {
