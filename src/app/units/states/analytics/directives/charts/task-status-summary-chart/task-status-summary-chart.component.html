@@ -1,10 +1,4 @@
 <mat-card appearance="outlined" class="p-4">
-  <div class="flex justify-center px-4 pt-4">
-    <mat-button-toggle-group [(ngModel)]="chartView" aria-label="Task status chart view">
-      <mat-button-toggle value="snapshots">Snapshots</mat-button-toggle>
-      <mat-button-toggle value="timeseries">Timeseries</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
   <div class="flex w-full gap-2.5 flex-col items-start lg:flex-row lg:justify-between p-4 pb-0">
     <div class="text-pretty xl:max-w-[calc(50%)]">
       <mat-card-title>Task Completion Statuses</mat-card-title>
@@ -36,7 +30,12 @@
       </button>
     </div>
   </div>
-
+<div class="flex justify-center px-4 pt-4">
+    <mat-button-toggle-group [(ngModel)]="chartView" aria-label="Task status chart view">
+      <mat-button-toggle value="snapshots">Snapshots</mat-button-toggle>
+      <mat-button-toggle value="timeseries">Timeseries</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
   @if (chartView === 'snapshots') {
     @if (hasChartData) {
       <div class="px-4 pt-2 text-slate-600">
