@@ -45,6 +45,21 @@ export interface SnapshotWeekSegment {
   widthStyle: string;
 }
 
+export interface SnapshotBreakSegment {
+  key: string;
+  label: string;
+  text: string;
+  tooltip: string;
+  lane: number;
+  pausesWeekCount: boolean;
+  startIndex: number;
+  endIndex: number;
+  startFraction: number;
+  endFraction: number;
+  leftStyle: string;
+  widthStyle: string;
+}
+
 // The Material slider centres its thumb between this inset and `width - inset`.
 const TICK_MARK_OFFSET = 3;
 const FULL_LABEL_MIN_WIDTH = 56;
@@ -53,6 +68,10 @@ const SHORT_LABEL_MIN_WIDTH = 28;
 const MAX_TICK_MARKS = 40;
 // Week 0 starts mid-week and the current week is only days old, so both are widened to stay readable.
 const MIN_EDGE_SEGMENT_WIDTH = 60;
+// A one week break is only a few dozen pixels wide, so its name is truncated rather
+// than hidden. Below this even an ellipsis is noise, and the tooltip has to carry it.
+const BREAK_LABEL_MIN_WIDTH = 24;
+const BREAK_LANE_HEIGHT = 24;
 
 const offsetStyle = (fraction: number) =>
   `calc(${TICK_MARK_OFFSET}px + ${fraction} * (100% - ${TICK_MARK_OFFSET * 2}px))`;
@@ -74,7 +93,10 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
   snapshots: TaskCompletionSnapshot[] = [];
   campuses: string[] = [];
   weekSegments: SnapshotWeekSegment[] = [];
+  breakSegments: SnapshotBreakSegment[] = [];
+  breakLaneCount: number = 0;
 
+  private weekBoundaries: number[] = [];
   private trackWidth: number = 0;
   private resizeObserver?: ResizeObserver;
 
@@ -211,6 +233,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
   private updateWeekBand(): void {
     if (this.trackWidth === 0) {
       this.weekSegments.forEach((segment) => (segment.text = segment.label));
+      this.breakSegments.forEach((segment) => (segment.text = segment.label));
       return;
     }
 
@@ -232,6 +255,55 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
       segment.text =
         widths[index] < requiredWidth ? '' : useFullLabels ? segment.label : segment.shortLabel;
     });
+
+    this.updateBreakBand();
+  }
+
+  /**
+   * Break pills are laid out against the week band's final geometry rather than
+   * the raw fractions, so a widened edge week cannot push them out of step.
+   */
+  private updateBreakBand(): void {
+    this.breakSegments.forEach((segment) => {
+      const left = this.pixelForFraction(segment.startFraction);
+      const right = this.pixelForFraction(segment.endFraction);
+
+      if (left === null || right === null) {
+        segment.leftStyle = offsetStyle(segment.startFraction);
+        segment.widthStyle = spanStyle(segment.endFraction - segment.startFraction);
+        segment.text = segment.label;
+        return;
+      }
+
+      const width = Math.max(right - left, 0);
+      segment.leftStyle = `${left}px`;
+      segment.widthStyle = `${width}px`;
+      // Anything wider keeps the name and lets CSS truncate it.
+      segment.text = width < BREAK_LABEL_MIN_WIDTH ? '' : segment.label;
+    });
+  }
+
+  /**
+   * Map a track fraction onto the pixel position the week band settled on, so both
+   * bands share the same boundaries.
+   */
+  private pixelForFraction(fraction: number): number | null {
+    if (this.weekBoundaries.length !== this.weekSegments.length + 1) {
+      return null;
+    }
+
+    let index = this.weekSegments.findIndex((segment) => fraction <= segment.endFraction);
+    if (index < 0) {
+      index = this.weekSegments.length - 1;
+    }
+
+    const segment = this.weekSegments[index];
+    const span = segment.endFraction - segment.startFraction;
+    const ratio = span <= 0 ? 0 : (fraction - segment.startFraction) / span;
+    const left = this.weekBoundaries[index];
+    const right = this.weekBoundaries[index + 1];
+
+    return left + Math.min(Math.max(ratio, 0), 1) * (right - left);
   }
 
   private widenEdgeSegments(widths: number[], usableWidth: number, requiredWidth: number): void {
@@ -239,6 +311,14 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
       segment.leftStyle = offsetStyle(segment.startFraction);
       segment.widthStyle = spanStyle(segment.endFraction - segment.startFraction);
     });
+
+    const boundaries = this.weekSegments.map(
+      (segment) => TICK_MARK_OFFSET + segment.startFraction * usableWidth,
+    );
+    boundaries.push(TICK_MARK_OFFSET + usableWidth);
+    // Widening below adjusts this same array in place, so the break band always
+    // reads the final geometry.
+    this.weekBoundaries = boundaries;
 
     const lastIndex = this.weekSegments.length - 1;
     if (lastIndex < 0) {
@@ -251,11 +331,6 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     if (!widenLeading && !widenTrailing) {
       return;
     }
-
-    const boundaries = this.weekSegments.map(
-      (segment) => TICK_MARK_OFFSET + segment.startFraction * usableWidth,
-    );
-    boundaries.push(TICK_MARK_OFFSET + usableWidth);
 
     const spareOf = (index: number) => Math.max((widths[index] ?? 0) - requiredWidth, 0);
 
@@ -319,6 +394,8 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     const total = this.snapshots.length;
     if (total === 0) {
       this.weekSegments = [];
+      this.breakSegments = [];
+      this.breakLaneCount = 0;
       return;
     }
 
@@ -332,8 +409,9 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
 
     this.snapshots.forEach((snapshot, index) => {
       const date = new Date(snapshot.snapshot_date);
-      // Break days are their own segment, otherwise a break reads as one very long week.
-      const teachingBreak = this.unit.teachingPeriod?.breakAt(date) ?? null;
+      // Only a break that pauses the week count has no week of its own. Breaks that
+      // leave the count running are drawn in the band above, alongside their week.
+      const teachingBreak = this.unit.teachingPeriod?.weekPausingBreakAt(date) ?? null;
       const weekNumber = teachingBreak ? null : displayWeekNumber(this.unit, date);
       // Nulls merge too, so a unit with no start date collapses to one suppressed segment.
       const key = teachingBreak ? `break-${teachingBreak.id}` : `week-${weekNumber}`;
@@ -363,12 +441,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
         : group.weekNumber === null
           ? '–'
           : `W${group.weekNumber}`;
-      const startDate = formatSnapshotLabel(
-        this.unit,
-        this.snapshots[group.startIndex]?.snapshot_date,
-      );
-      const endDate = formatSnapshotLabel(this.unit, this.snapshots[group.endIndex]?.snapshot_date);
-      const range = startDate === endDate ? startDate : `${startDate} – ${endDate}`;
+      const range = this.snapshotRangeLabel(group.startIndex, group.endIndex);
       const tooltip = group.teachingBreak
         ? [group.teachingBreak.label || 'Break', range, this.breakCampuses(group.teachingBreak)]
             .filter((part) => part)
@@ -391,7 +464,97 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
       };
     });
 
+    this.buildBreakSegments();
     this.updateWeekBand();
+  }
+
+  /**
+   * Every break that overlaps the snapshot range, drawn over the weeks it spans.
+   * A break that pauses the week count sits above its own 'Break' week segment; one
+   * that does not runs alongside the teaching weeks it overlaps, which is why the
+   * breaks need a band of their own.
+   */
+  private buildBreakSegments(): void {
+    const total = this.snapshots.length;
+    const breaks = this.unit.teachingPeriod?.breaks ?? [];
+
+    if (total === 0 || breaks.length === 0) {
+      this.breakSegments = [];
+      this.breakLaneCount = 0;
+      return;
+    }
+
+    const denominator = Math.max(total - 1, 1);
+    const snapshotDates = this.snapshots.map((snapshot) => new Date(snapshot.snapshot_date));
+
+    const spans = breaks
+      .map((teachingBreak) => {
+        const covered = snapshotDates.reduce<number[]>((acc, date, index) => {
+          if (teachingBreak.covers(date)) {
+            acc.push(index);
+          }
+          return acc;
+        }, []);
+
+        return covered.length === 0
+          ? null
+          : {
+              teachingBreak,
+              startIndex: covered[0],
+              endIndex: covered[covered.length - 1],
+            };
+      })
+      .filter((span) => span !== null)
+      .sort((left, right) => left.startIndex - right.startIndex);
+
+    // Campus specific breaks can run at the same time, so overlapping pills stack.
+    const laneEnds: number[] = [];
+
+    this.breakSegments = spans.map((span) => {
+      let lane = laneEnds.findIndex((end) => end < span.startIndex);
+      if (lane === -1) {
+        lane = laneEnds.length;
+      }
+      laneEnds[lane] = span.endIndex;
+
+      const startFraction = span.startIndex === 0 ? 0 : (span.startIndex - 0.5) / denominator;
+      const endFraction = span.endIndex === total - 1 ? 1 : (span.endIndex + 0.5) / denominator;
+      const label = span.teachingBreak.label || 'Break';
+      const range = this.snapshotRangeLabel(span.startIndex, span.endIndex);
+
+      return {
+        key: `break-${span.teachingBreak.id}`,
+        label,
+        text: label,
+        tooltip: [label, range, this.breakCampuses(span.teachingBreak)]
+          .filter((part) => part)
+          .join(' · '),
+        lane,
+        pausesWeekCount: span.teachingBreak.pauseWeekCount,
+        startIndex: span.startIndex,
+        endIndex: span.endIndex,
+        startFraction,
+        endFraction,
+        leftStyle: offsetStyle(startFraction),
+        widthStyle: spanStyle(endFraction - startFraction),
+      };
+    });
+
+    this.breakLaneCount = laneEnds.length;
+  }
+
+  get breakBandHeight(): string {
+    return `${this.breakLaneCount * BREAK_LANE_HEIGHT}px`;
+  }
+
+  breakLaneStyle(segment: SnapshotBreakSegment): string {
+    return `${segment.lane * BREAK_LANE_HEIGHT}px`;
+  }
+
+  private snapshotRangeLabel(startIndex: number, endIndex: number): string {
+    const start = formatSnapshotLabel(this.unit, this.snapshots[startIndex]?.snapshot_date);
+    const end = formatSnapshotLabel(this.unit, this.snapshots[endIndex]?.snapshot_date);
+    return start === end ? start : `${start} – ${end}`;
   }
 
   private buildChartData(taskStats: TaskCodeStats): MultiSeries {

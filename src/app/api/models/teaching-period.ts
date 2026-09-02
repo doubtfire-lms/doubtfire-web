@@ -102,18 +102,27 @@ export class TeachingPeriod extends Entity {
   }
 
   public breakAt(date: Date | string): TeachingPeriodBreak | null {
+    return this.findBreakAt(this.breaks, date);
+  }
+
+  /**
+   * The break covering this date that also pauses the week count. Breaks that do
+   * not pause it run alongside a teaching week rather than replacing it.
+   */
+  public weekPausingBreakAt(date: Date | string): TeachingPeriodBreak | null {
+    return this.findBreakAt(this.weekPausingBreaks, date);
+  }
+
+  private findBreakAt(
+    breaks: readonly TeachingPeriodBreak[],
+    date: Date | string,
+  ): TeachingPeriodBreak | null {
     const target = this.normalizeDay(date);
     if (!target) {
       return null;
     }
 
-    return (
-      this.breaks.find((teachingBreak) => {
-        const start = this.normalizeDay(teachingBreak.startDate);
-        const end = this.breakEndDate(teachingBreak);
-        return start !== null && end !== null && target >= start && target < end;
-      }) ?? null
-    );
+    return breaks.find((teachingBreak) => teachingBreak.covers(target)) ?? null;
   }
 
   public get units(): readonly Unit[] {
