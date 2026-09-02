@@ -12,7 +12,12 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {filter, map, take} from 'rxjs/operators';
-import {TaskCodeStats, TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
+import {addDays, startOfDay} from 'src/app/api/models/calendar-day';
+import {
+  CampusStats,
+  TaskCodeStats,
+  TaskCompletionSnapshot,
+} from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
 import {Unit} from 'src/app/api/models/unit';
@@ -66,8 +71,7 @@ const FULL_LABEL_MIN_WIDTH = 56;
 const SHORT_LABEL_MIN_WIDTH = 28;
 // Beyond this many snapshots the slider's tick marks merge into a solid line, so they are hidden.
 const MAX_TICK_MARKS = 40;
-// Week 0 starts mid-week and the current week is only days old, so both are widened to stay readable.
-const MIN_EDGE_SEGMENT_WIDTH = 60;
+const DAYS_PER_WEEK = 7;
 // A one week break is only a few dozen pixels wide, so its name is truncated rather
 // than hidden. Below this even an ellipsis is noise, and the tooltip has to carry it.
 const BREAK_LABEL_MIN_WIDTH = 24;
@@ -153,7 +157,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
   }
 
   get snapshotStudentCount(): number {
-    if (!this.selectedSnapshot) {
+    if (!this.selectedSnapshot || this.selectedSnapshot.placeholder) {
       return 0;
     }
 
@@ -224,7 +228,9 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     this.campuses = Object.keys(selectedSnapshot.stats);
 
     this.data = this.buildChartData(getTaskStats(selectedSnapshot, this.campusFilter));
-    this.hasChartData = this.data.length > 0;
+    // Padded week 0 days carry no stats - show the chart empty rather than falling back
+    // to the loading spinner.
+    this.hasChartData = this.snapshots.length > 0;
   }
 
   /**
@@ -256,7 +262,9 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     const widths = this.weekSegments.map(
       (segment) => (segment.endFraction - segment.startFraction) * usableWidth,
     );
-    // Format comes from the natural widths, so widening an edge week cannot flip the whole band.
+
+    // Every segment is sized by the days it covers, so a full week is always the same
+    // width as any other. Label format comes from the narrowest of them.
     const sorted = [...widths].sort((left, right) => left - right);
     const medianWidth = sorted[Math.floor(sorted.length / 2)];
     const narrowestSegment = Math.min(...sorted.filter((width) => width >= medianWidth / 2));
@@ -264,9 +272,14 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     const useFullLabels = narrowestSegment >= FULL_LABEL_MIN_WIDTH;
     const requiredWidth = useFullLabels ? FULL_LABEL_MIN_WIDTH : SHORT_LABEL_MIN_WIDTH;
 
-    this.widenEdgeSegments(widths, usableWidth, requiredWidth);
+    this.weekBoundaries = this.weekSegments.map(
+      (segment) => TICK_MARK_OFFSET + segment.startFraction * usableWidth,
+    );
+    this.weekBoundaries.push(TICK_MARK_OFFSET + usableWidth);
 
     this.weekSegments.forEach((segment, index) => {
+      segment.leftStyle = offsetStyle(segment.startFraction);
+      segment.widthStyle = spanStyle(segment.endFraction - segment.startFraction);
       segment.text =
         widths[index] < requiredWidth ? '' : useFullLabels ? segment.label : segment.shortLabel;
     });
@@ -275,8 +288,8 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Break pills are laid out against the week band's final geometry rather than
-   * the raw fractions, so a widened edge week cannot push them out of step.
+   * Break pills are laid out against the week band's own geometry, so the two bands
+   * always share boundaries.
    */
   private updateBreakBand(): void {
     this.breakSegments.forEach((segment) => {
@@ -319,57 +332,6 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     const right = this.weekBoundaries[index + 1];
 
     return left + Math.min(Math.max(ratio, 0), 1) * (right - left);
-  }
-
-  private widenEdgeSegments(widths: number[], usableWidth: number, requiredWidth: number): void {
-    this.weekSegments.forEach((segment) => {
-      segment.leftStyle = offsetStyle(segment.startFraction);
-      segment.widthStyle = spanStyle(segment.endFraction - segment.startFraction);
-    });
-
-    const boundaries = this.weekSegments.map(
-      (segment) => TICK_MARK_OFFSET + segment.startFraction * usableWidth,
-    );
-    boundaries.push(TICK_MARK_OFFSET + usableWidth);
-    // Widening below adjusts this same array in place, so the break band always
-    // reads the final geometry.
-    this.weekBoundaries = boundaries;
-
-    const lastIndex = this.weekSegments.length - 1;
-    if (lastIndex < 0) {
-      return;
-    }
-
-    const minimum = Math.min(MIN_EDGE_SEGMENT_WIDTH, usableWidth);
-    const widenLeading = widths[0] < minimum;
-    const widenTrailing = lastIndex > 0 && widths[lastIndex] < minimum;
-    if (!widenLeading && !widenTrailing) {
-      return;
-    }
-
-    const spareOf = (index: number) => Math.max((widths[index] ?? 0) - requiredWidth, 0);
-
-    if (widenLeading) {
-      boundaries[1] = boundaries[0] + Math.min(minimum, widths[0] + spareOf(1));
-    }
-    if (widenTrailing) {
-      boundaries[lastIndex] =
-        boundaries[lastIndex + 1] - Math.min(minimum, widths[lastIndex] + spareOf(lastIndex - 1));
-    }
-
-    for (let index = 1; index <= lastIndex; index += 1) {
-      boundaries[index] = Math.min(
-        Math.max(boundaries[index], boundaries[index - 1]),
-        boundaries[lastIndex + 1],
-      );
-    }
-
-    this.weekSegments.forEach((segment, index) => {
-      const width = boundaries[index + 1] - boundaries[index];
-      segment.leftStyle = `${boundaries[index]}px`;
-      segment.widthStyle = `${width}px`;
-      widths[index] = width;
-    });
   }
 
   segmentClasses(segment: SnapshotWeekSegment): string {
@@ -572,6 +534,75 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     return start === end ? start : `${start} – ${end}`;
   }
 
+  /**
+   * Week 0 holds whatever came before the teaching period started, so it is usually a
+   * few days rather than a full week and renders as a stub beside the other segments.
+   * Pad the front with blank days so it takes a full week's width, and always leave at
+   * least one blank day at the very start so the beginning of the data is visible.
+   *
+   * Only applies when there is a week 0 to begin with - a unit whose stats start on or
+   * after week 1 is left alone.
+   */
+  private padWeekZero(snapshots: TaskCompletionSnapshot[]): TaskCompletionSnapshot[] {
+    const firstDay = startOfDay(snapshots[0]?.snapshot_date);
+    if (!firstDay) {
+      return snapshots;
+    }
+
+    const weekZeroDays = snapshots.filter(
+      (snapshot) => displayWeekNumber(this.unit, new Date(snapshot.snapshot_date)) === 0,
+    ).length;
+
+    if (weekZeroDays === 0) {
+      return snapshots;
+    }
+
+    const blankDays = Math.max(DAYS_PER_WEEK - weekZeroDays, 1);
+    const stats = this.notStartedStats(snapshots[0]);
+    const padding: TaskCompletionSnapshot[] = [];
+
+    for (let offset = blankDays; offset > 0; offset -= 1) {
+      const day = addDays(firstDay, -offset);
+      padding.push({
+        snapshot_date: day.toISOString().slice(0, 10),
+        snapshot_timestamp: `${Math.floor(day.getTime() / 1000)}`,
+        stats,
+        placeholder: true,
+      });
+    }
+
+    return [...padding, ...snapshots];
+  }
+
+  /**
+   * Stats for a filler day: every task sitting at not started, so the bars read as a
+   * full column of 'not started' rather than the chart blanking out.
+   *
+   * The campus keys are copied from a real snapshot, because the campus filter is built
+   * from whichever snapshot is selected - a filler day has to offer the same choices.
+   */
+  private notStartedStats(reference: TaskCompletionSnapshot): CampusStats {
+    const taskCodes: Set<string> = new Set();
+    Object.values(reference.stats).forEach((tutorials) =>
+      Object.values(tutorials).forEach((taskStats) =>
+        Object.keys(taskStats).forEach((taskCode) => taskCodes.add(taskCode)),
+      ),
+    );
+
+    const notStarted: TaskCodeStats = {};
+    taskCodes.forEach((taskCode) => (notStarted[taskCode] = {not_started: 1}));
+
+    const stats: CampusStats = {};
+    Object.entries(reference.stats).forEach(([campus, tutorials]) => {
+      const tutorialCode = Object.keys(tutorials)[0];
+      if (tutorialCode) {
+        stats[campus] = {[tutorialCode]: notStarted};
+      }
+    });
+
+    return stats;
+  }
+
   private buildChartData(taskStats: TaskCodeStats): MultiSeries {
     const taskSeqByCode = new Map(
       this.unit.taskDefinitions.map((taskDefinition) => [
@@ -640,7 +671,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
             return acc;
           }, [] as TaskCompletionSnapshot[])
           .filter((snapshot) => shouldIncludeSnapshot(this.unit, snapshot));
-        this.snapshots = dropLeadingEmptySnapshots([...this.snapshots].reverse());
+        this.snapshots = this.padWeekZero(dropLeadingEmptySnapshots([...this.snapshots].reverse()));
         this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
         this.buildWeekSegments();
         this.refreshData();
