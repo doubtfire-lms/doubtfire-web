@@ -15,3 +15,10 @@
 :host ::ng-deep .snapshot-slider .mdc-slider__value-indicator-text {
   white-space: nowrap;
 }
+
+// The slider's own 8px side margins would put its track out of step with the week band below it.
+:host ::ng-deep .snapshot-slider.mat-mdc-slider {
+  display: block;
+  margin-inline: 0;
+  width: 100%;
+}

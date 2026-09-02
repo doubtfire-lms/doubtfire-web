@@ -2,9 +2,13 @@ import {MultiSeries, TooltipService} from '@glitchtip/ng-charts';
 import {
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Injector,
   Input,
+  NgZone,
+  OnDestroy,
   OnInit,
+  ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import {filter, map, take} from 'rxjs/operators';
@@ -17,11 +21,40 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 import {
   countStudentsFromSnapshot,
+  displayWeekNumber,
+  dropLeadingEmptySnapshots,
   formatSnapshotLabel,
   getTaskStats,
   shouldIncludeSnapshot,
   statusMapping,
 } from '../chart-data-helpers';
+
+export interface SnapshotWeekSegment {
+  key: string;
+  label: string;
+  shortLabel: string;
+  text: string;
+  tooltip: string;
+  startIndex: number;
+  endIndex: number;
+  startFraction: number;
+  endFraction: number;
+  leftStyle: string;
+  widthStyle: string;
+}
+
+// The Material slider centres its thumb between this inset and `width - inset`.
+const TICK_MARK_OFFSET = 3;
+const FULL_LABEL_MIN_WIDTH = 56;
+const SHORT_LABEL_MIN_WIDTH = 28;
+// Beyond this many snapshots the slider's tick marks merge into a solid line, so they are hidden.
+const MAX_TICK_MARKS = 40;
+// Week 0 starts mid-week and the current week is only days old, so both are widened to stay readable.
+const MIN_EDGE_SEGMENT_WIDTH = 60;
+
+const offsetStyle = (fraction: number) =>
+  `calc(${TICK_MARK_OFFSET}px + ${fraction} * (100% - ${TICK_MARK_OFFSET * 2}px))`;
+const spanStyle = (fraction: number) => `calc(${fraction} * (100% - ${TICK_MARK_OFFSET * 2}px))`;
 
 @Component({
   selector: 'f-normalised-task-status-chart',
@@ -29,7 +62,7 @@ import {
   styleUrl: './normalised-task-status-chart.component.scss',
   standalone: false,
 })
-export class NormalisedTaskStatusChartComponent implements OnInit {
+export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
 
   data: MultiSeries = [];
@@ -38,6 +71,30 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
   sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
   campuses: string[] = [];
+  weekSegments: SnapshotWeekSegment[] = [];
+
+  private trackWidth: number = 0;
+  private resizeObserver?: ResizeObserver;
+
+  @ViewChild('weekTrack')
+  set weekTrack(ref: ElementRef<HTMLElement> | undefined) {
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = undefined;
+
+    if (!ref) {
+      return;
+    }
+
+    // observe() fires the first measurement; assigning here would mutate a value already read.
+    this.resizeObserver = new ResizeObserver((entries) => {
+      this.ngZone.run(() => {
+        this.trackWidth = entries[0]?.contentRect.width ?? 0;
+        this.updateWeekBand();
+        this.changeDetectorRef.markForCheck();
+      });
+    });
+    this.resizeObserver.observe(ref.nativeElement);
+  }
 
   // options
   normalisedCompletionSnapshotXLabel: string = 'Task';
@@ -60,33 +117,15 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
   }
 
   get firstSnapshotDate(): string {
-    return formatSnapshotLabel(this.unit, this.snapshots[0]?.snapshot_date, 'long');
+    return formatSnapshotLabel(this.unit, this.snapshots[0]?.snapshot_date);
   }
 
   get lastSnapshotDate(): string {
-    return formatSnapshotLabel(
-      this.unit,
-      this.snapshots[this.snapshots.length - 1]?.snapshot_date,
-      'long',
-    );
+    return formatSnapshotLabel(this.unit, this.snapshots[this.snapshots.length - 1]?.snapshot_date);
   }
 
-  get snapshotDates(): string[] {
-    return this.snapshots.map((snapshot) => formatSnapshotLabel(this.unit, snapshot.snapshot_date));
-  }
-
-  get snapshotWeeks(): string[] {
-    const weeks = this.snapshots.map((snapshot) =>
-      formatSnapshotLabel(this.unit, snapshot.snapshot_date, 'short'),
-    );
-    return weeks.reduce((acc: string[], week: string) => {
-      if (!acc.includes(week)) {
-        acc.push(week);
-      } else {
-        acc.push('');
-      }
-      return acc;
-    }, []);
+  get showTickMarks(): boolean {
+    return this.snapshots.length <= MAX_TICK_MARKS;
   }
 
   get snapshotStudentCount(): number {
@@ -122,6 +161,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     private injectorObj: Injector,
     private changeDetectorRef: ChangeDetectorRef,
+    private ngZone: NgZone,
   ) {
     // https://github.com/swimlane/ngx-charts/issues/1428#issuecomment-659237562
     this.chartToolTipService = this.injectorObj.get(TooltipService);
@@ -137,6 +177,10 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
       (labels) => this.taskService.statusColors.get(labels) || '#000000',
     );
     this.loadRecentSnapshot();
+  }
+
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
   }
 
   refreshData() {
@@ -160,6 +204,140 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
   onSnapshotSliderChange(value: number): void {
     this.sliderSelect = Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax);
     this.refreshData();
+  }
+
+  private updateWeekBand(): void {
+    if (this.trackWidth === 0) {
+      this.weekSegments.forEach((segment) => (segment.text = segment.label));
+      return;
+    }
+
+    const usableWidth = Math.max(this.trackWidth - TICK_MARK_OFFSET * 2, 0);
+    const widths = this.weekSegments.map(
+      (segment) => (segment.endFraction - segment.startFraction) * usableWidth,
+    );
+    // Format comes from the natural widths, so widening an edge week cannot flip the whole band.
+    const sorted = [...widths].sort((left, right) => left - right);
+    const medianWidth = sorted[Math.floor(sorted.length / 2)];
+    const narrowestSegment = Math.min(...sorted.filter((width) => width >= medianWidth / 2));
+
+    const useFullLabels = narrowestSegment >= FULL_LABEL_MIN_WIDTH;
+    const requiredWidth = useFullLabels ? FULL_LABEL_MIN_WIDTH : SHORT_LABEL_MIN_WIDTH;
+
+    this.widenEdgeSegments(widths, usableWidth, requiredWidth);
+
+    this.weekSegments.forEach((segment, index) => {
+      segment.text =
+        widths[index] < requiredWidth ? '' : useFullLabels ? segment.label : segment.shortLabel;
+    });
+  }
+
+  private widenEdgeSegments(widths: number[], usableWidth: number, requiredWidth: number): void {
+    this.weekSegments.forEach((segment) => {
+      segment.leftStyle = offsetStyle(segment.startFraction);
+      segment.widthStyle = spanStyle(segment.endFraction - segment.startFraction);
+    });
+
+    const lastIndex = this.weekSegments.length - 1;
+    if (lastIndex < 0) {
+      return;
+    }
+
+    const minimum = Math.min(MIN_EDGE_SEGMENT_WIDTH, usableWidth);
+    const widenLeading = widths[0] < minimum;
+    const widenTrailing = lastIndex > 0 && widths[lastIndex] < minimum;
+    if (!widenLeading && !widenTrailing) {
+      return;
+    }
+
+    const boundaries = this.weekSegments.map(
+      (segment) => TICK_MARK_OFFSET + segment.startFraction * usableWidth,
+    );
+    boundaries.push(TICK_MARK_OFFSET + usableWidth);
+
+    const spareOf = (index: number) => Math.max((widths[index] ?? 0) - requiredWidth, 0);
+
+    if (widenLeading) {
+      boundaries[1] = boundaries[0] + Math.min(minimum, widths[0] + spareOf(1));
+    }
+    if (widenTrailing) {
+      boundaries[lastIndex] =
+        boundaries[lastIndex + 1] - Math.min(minimum, widths[lastIndex] + spareOf(lastIndex - 1));
+    }
+
+    for (let index = 1; index <= lastIndex; index += 1) {
+      boundaries[index] = Math.min(
+        Math.max(boundaries[index], boundaries[index - 1]),
+        boundaries[lastIndex + 1],
+      );
+    }
+
+    this.weekSegments.forEach((segment, index) => {
+      const width = boundaries[index + 1] - boundaries[index];
+      segment.leftStyle = `${boundaries[index]}px`;
+      segment.widthStyle = `${width}px`;
+      widths[index] = width;
+    });
+  }
+
+  isActiveWeek(segment: SnapshotWeekSegment): boolean {
+    return this.sliderSelect >= segment.startIndex && this.sliderSelect <= segment.endIndex;
+  }
+
+  selectWeek(segment: SnapshotWeekSegment): void {
+    this.onSnapshotSliderChange(segment.endIndex);
+  }
+
+  private buildWeekSegments(): void {
+    const total = this.snapshots.length;
+    if (total === 0) {
+      this.weekSegments = [];
+      return;
+    }
+
+    const groups: {weekNumber: number | null; startIndex: number; endIndex: number}[] = [];
+    this.snapshots.forEach((snapshot, index) => {
+      const weekNumber = displayWeekNumber(this.unit, new Date(snapshot.snapshot_date));
+      const current = groups[groups.length - 1];
+
+      // Nulls merge too, so a unit with no start date collapses to one suppressed segment.
+      if (current && current.weekNumber === weekNumber) {
+        current.endIndex = index;
+      } else {
+        groups.push({weekNumber, startIndex: index, endIndex: index});
+      }
+    });
+
+    const denominator = Math.max(total - 1, 1);
+
+    this.weekSegments = groups.map((group) => {
+      const startFraction = group.startIndex === 0 ? 0 : (group.startIndex - 0.5) / denominator;
+      const endFraction = group.endIndex === total - 1 ? 1 : (group.endIndex + 0.5) / denominator;
+      const label = group.weekNumber === null ? 'Unscheduled' : `Week ${group.weekNumber}`;
+      const shortLabel = group.weekNumber === null ? '–' : `W${group.weekNumber}`;
+      const startDate = formatSnapshotLabel(
+        this.unit,
+        this.snapshots[group.startIndex]?.snapshot_date,
+      );
+      const endDate = formatSnapshotLabel(this.unit, this.snapshots[group.endIndex]?.snapshot_date);
+      const range = startDate === endDate ? startDate : `${startDate} – ${endDate}`;
+
+      return {
+        key: `${label}-${group.startIndex}`,
+        label,
+        shortLabel,
+        text: label,
+        tooltip: `${label} · ${range}`,
+        startIndex: group.startIndex,
+        endIndex: group.endIndex,
+        startFraction,
+        endFraction,
+        leftStyle: offsetStyle(startFraction),
+        widthStyle: spanStyle(endFraction - startFraction),
+      };
+    });
+
+    this.updateWeekBand();
   }
 
   private buildChartData(taskStats: TaskCodeStats): MultiSeries {
@@ -230,8 +408,9 @@ export class NormalisedTaskStatusChartComponent implements OnInit {
             return acc;
           }, [] as TaskCompletionSnapshot[])
           .filter((snapshot) => shouldIncludeSnapshot(this.unit, snapshot));
-        this.snapshots = [...this.snapshots].reverse();
+        this.snapshots = dropLeadingEmptySnapshots([...this.snapshots].reverse());
         this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
+        this.buildWeekSegments();
         this.refreshData();
         this.changeDetectorRef.detectChanges();
 

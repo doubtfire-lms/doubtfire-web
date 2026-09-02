@@ -56,16 +56,16 @@
       <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
     </div>
   }
-  <div class="flex flex-col items-center px-4 pt-0 pb-4">
-    <div class="-mb-2 flex w-full px-4">
+  <div class="px-4 pt-2 pb-4">
+    <div class="relative w-full">
       <mat-slider
-        class="snapshot-slider w-full"
+        class="snapshot-slider"
         [disabled]="snapshots.length <= 1"
         [discrete]="true"
         [displayWith]="formatSnapshotDate"
         [max]="sliderMax"
         [min]="0"
-        [showTickMarks]="true"
+        [showTickMarks]="showTickMarks"
         [step]="1"
       >
         <input
@@ -74,19 +74,37 @@
           (ngModelChange)="onSnapshotSliderChange($event)"
         />
       </mat-slider>
-    </div>
-    <div class="flex w-full justify-between text-center text-sm text-slate-600">
-      @if (snapshotDates.length < 5) {
-        @for (snapshotDate of snapshotDates; track $index) {
-          <span class="min-w-15">{{ snapshotDate }}</span>
-        }
-      } @else {
-        @for (snapshotWeek of snapshotWeeks; track $index) {
-          <span class="min-w-15">{{ snapshotWeek }}</span>
-        }
+      @if (weekSegments.length > 1) {
+        <div
+          #weekTrack
+          aria-label="Teaching weeks"
+          class="relative -mt-1.5 h-6 w-full select-none"
+          role="group"
+        >
+          @for (segment of weekSegments; track segment.key) {
+            <button
+              class="absolute inset-y-0 flex cursor-pointer items-center justify-center overflow-hidden border-r border-white p-0 text-xs leading-none whitespace-nowrap tabular-nums transition-colors first:rounded-l-sm last:rounded-r-sm last:border-r-0 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-formatif-blue"
+              type="button"
+              [attr.aria-current]="isActiveWeek(segment) ? 'true' : null"
+              [attr.aria-label]="segment.tooltip"
+              [matTooltip]="segment.tooltip"
+              [ngClass]="
+                isActiveWeek(segment)
+                  ? 'bg-formatif-blue font-semibold text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              "
+              [style.left]="segment.leftStyle"
+              [style.width]="segment.widthStyle"
+              (click)="selectWeek(segment)"
+            >
+              {{ segment.text }}
+            </button>
+          }
+        </div>
       }
     </div>
   </div>
+
   <!-- <mat-card-header class="text-pretty xl:max-w-[calc(50%)]">
     <mat-card-title>Task Completion Status Over Time</mat-card-title>
     <mat-card-subtitle class="mb-2.5">
