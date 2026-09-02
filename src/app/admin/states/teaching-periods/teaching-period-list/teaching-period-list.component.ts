@@ -156,6 +156,7 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
         this.tempBreak.numberOfDays,
         this.tempBreak.campusIds,
         this.tempBreak.label,
+        this.tempBreak.pauseWeekCount,
       )
       .subscribe({
         next: (teachingPeriodBreak) => {
@@ -208,6 +209,16 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
           this.alertService.error(`Error updating break. ${response}`);
         },
       });
+  }
+
+  /**
+   * The week count can only be paused by breaks that span whole teaching weeks,
+   * so clear the flag whenever the duration is no longer a multiple of 7 days.
+   */
+  breakDurationChanged(teachingBreak: TeachingPeriodBreak): void {
+    if (!teachingBreak.canPauseWeekCount) {
+      teachingBreak.pauseWeekCount = false;
+    }
   }
 
   campusName(campusId: number): string {

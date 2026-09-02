@@ -9,6 +9,14 @@ export class TeachingPeriodBreak extends Entity {
   numberOfDays: number;
   label: string;
   campusIds: number[] = [];
+  pauseWeekCount: boolean = true;
+
+  /**
+   * Only breaks that span whole teaching weeks can pause the week count.
+   */
+  public get canPauseWeekCount(): boolean {
+    return this.numberOfDays > 0 && this.numberOfDays % 7 === 0;
+  }
 }
 
 export class TeachingPeriod extends Entity {
@@ -46,6 +54,15 @@ export class TeachingPeriod extends Entity {
     return this.breaksCache.currentValues;
   }
 
+  /**
+   * The breaks that pause the week count. Breaks without this flag still extend
+   * deadlines, but the week number continues through them so that it stays
+   * aligned across campuses.
+   */
+  public get weekPausingBreaks(): readonly TeachingPeriodBreak[] {
+    return this.breaks.filter((teachingBreak) => teachingBreak.pauseWeekCount);
+  }
+
   public breaksFor(campusId?: number): readonly TeachingPeriodBreak[] {
     return this.breaks.filter(
       (teachingBreak) =>
@@ -81,12 +98,14 @@ export class TeachingPeriod extends Entity {
     days: number,
     campusIds: number[] = [],
     label?: string,
+    pauseWeekCount: boolean = true,
   ): Observable<TeachingPeriodBreak> {
     const breakEntity = new TeachingPeriodBreak();
     breakEntity.startDate = startDate;
     breakEntity.numberOfDays = days;
     breakEntity.label = label;
     breakEntity.campusIds = campusIds;
+    breakEntity.pauseWeekCount = pauseWeekCount;
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
 
     return breakService.create(
@@ -142,7 +161,7 @@ export class TeachingPeriod extends Entity {
     const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
     let result = Math.floor((targetDate.getTime() - startDate.getTime()) / millisecondsPerWeek) + 1;
 
-    for (const teachingBreak of this.breaks) {
+    for (const teachingBreak of this.weekPausingBreaks) {
       const breakStart = this.normalizeDay(teachingBreak.startDate);
       const breakEnd = this.breakEndDate(teachingBreak);
       const firstMonday = this.firstMonday(teachingBreak);
