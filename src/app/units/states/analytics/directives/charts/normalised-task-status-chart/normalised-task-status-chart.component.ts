@@ -207,12 +207,15 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     this.resizeObserver?.disconnect();
   }
 
+  /**
+   * Rebuild the bars for the selected snapshot. This runs on every slider tick, so
+   * it must only touch the one snapshot the slider is pointing at.
+   */
   refreshData() {
     const selectedSnapshot = this.selectedSnapshot;
 
     if (!selectedSnapshot) {
       this.data = [];
-      this.weeklyData = [];
       this.campuses = [];
       this.hasChartData = false;
       return;
@@ -221,8 +224,20 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     this.campuses = Object.keys(selectedSnapshot.stats);
 
     this.data = this.buildChartData(getTaskStats(selectedSnapshot, this.campusFilter));
-    this.weeklyData = this.buildWeeklyChartData(this.snapshots);
     this.hasChartData = this.data.length > 0;
+  }
+
+  /**
+   * The weekly series covers every snapshot, so it only changes when the snapshots or
+   * the campus filter do - never when the slider moves.
+   */
+  private refreshWeeklyData(): void {
+    this.weeklyData = this.selectedSnapshot ? this.buildWeeklyChartData(this.snapshots) : [];
+  }
+
+  onCampusFilterChange(): void {
+    this.refreshData();
+    this.refreshWeeklyData();
   }
 
   onSnapshotSliderChange(value: number): void {
@@ -589,21 +604,21 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
       }
     });
 
-    const snapshotsByWeek = [...lastSnapshotByWeek.values()];
+    // Aggregate each week's snapshot once, rather than once per status series.
+    const weeks = [...lastSnapshotByWeek.entries()].map(([name, snapshot]) => ({
+      name,
+      taskStats: getTaskStats(snapshot, this.campusFilter),
+    }));
+
     return statusMapping.map((status) => ({
       name: this.taskService.statusLabels.get(status) || status,
-      series: snapshotsByWeek.map((snapshot) => {
-        const taskStats = getTaskStats(snapshot, this.campusFilter);
-        const value = Object.values(taskStats).reduce(
+      series: weeks.map((week) => ({
+        name: week.name,
+        value: Object.values(week.taskStats).reduce(
           (total, taskCounts) => total + (taskCounts[status] || 0),
           0,
-        );
-
-        return {
-          name: formatSnapshotLabel(this.unit, snapshot.snapshot_date, 'short'),
-          value,
-        };
-      }),
+        ),
+      })),
     }));
   }
 
@@ -629,6 +644,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
         this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
         this.buildWeekSegments();
         this.refreshData();
+        this.refreshWeeklyData();
         this.changeDetectorRef.detectChanges();
 
         if (this.snapshots.length === 0 && !this.autoCaptureAttempted) {

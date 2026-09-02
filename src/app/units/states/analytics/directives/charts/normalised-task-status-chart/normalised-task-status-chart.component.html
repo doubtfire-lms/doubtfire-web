@@ -11,7 +11,7 @@
     </mat-card-header>
     <div class="flex items-center gap-2 p-4">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-select [(ngModel)]="campusFilter" (selectionChange)="refreshData()">
+        <mat-select [(ngModel)]="campusFilter" (selectionChange)="onCampusFilterChange()">
           <mat-option value="all">All</mat-option>
           @for (campus of campuses; track campus) {
             <mat-option [value]="campus">{{ campus }}</mat-option>
