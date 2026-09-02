@@ -604,17 +604,23 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
   }
 
   private buildChartData(taskStats: TaskCodeStats): MultiSeries {
-    const taskSeqByCode = new Map(
+    const orderByCode = new Map(
       this.unit.taskDefinitions.map((taskDefinition) => [
         taskDefinition.abbreviation,
-        taskDefinition.seq,
+        {
+          target: taskDefinition.targetDate?.valueOf() ?? Number.MAX_SAFE_INTEGER,
+          seq: taskDefinition.seq,
+        },
       ]),
     );
+    // A task definition that has since been removed still shows up in older snapshots.
+    const unknown = {target: Number.MAX_SAFE_INTEGER, seq: Number.MAX_SAFE_INTEGER};
+
     return Object.entries(taskStats)
       .sort(([taskCodeA], [taskCodeB]) => {
-        const seqA = taskSeqByCode.get(taskCodeA) ?? Number.MAX_SAFE_INTEGER;
-        const seqB = taskSeqByCode.get(taskCodeB) ?? Number.MAX_SAFE_INTEGER;
-        return seqA - seqB;
+        const a = orderByCode.get(taskCodeA) ?? unknown;
+        const b = orderByCode.get(taskCodeB) ?? unknown;
+        return a.target - b.target || a.seq - b.seq;
       })
       .map(([taskDef, counts]) => ({
         name: taskDef,
