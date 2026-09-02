@@ -14,6 +14,7 @@ import {
 import {filter, map, take} from 'rxjs/operators';
 import {TaskCodeStats, TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
 import {Unit} from 'src/app/api/models/unit';
 import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {TaskService} from 'src/app/api/services/task.service';
@@ -31,6 +32,7 @@ import {
 
 export interface SnapshotWeekSegment {
   key: string;
+  isBreak: boolean;
   label: string;
   shortLabel: string;
   text: string;
@@ -280,6 +282,31 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     });
   }
 
+  segmentClasses(segment: SnapshotWeekSegment): string {
+    if (segment.isBreak) {
+      return this.isActiveWeek(segment)
+        ? 'bg-slate-300 font-semibold text-slate-700'
+        : 'bg-slate-50 text-slate-400 hover:bg-slate-100';
+    }
+
+    return this.isActiveWeek(segment)
+      ? 'bg-formatif-blue font-semibold text-white'
+      : 'bg-slate-100 text-slate-600 hover:bg-slate-200';
+  }
+
+  private breakCampuses(teachingBreak: TeachingPeriodBreak): string {
+    if (teachingBreak.campusIds.length === 0) {
+      return 'All campuses';
+    }
+
+    const names = this.unit.tutorials
+      .map((tutorial) => tutorial.campus)
+      .filter((campus) => campus && teachingBreak.campusIds.includes(campus.id))
+      .map((campus) => campus.name);
+
+    return [...new Set(names)].join(', ');
+  }
+
   isActiveWeek(segment: SnapshotWeekSegment): boolean {
     return this.sliderSelect >= segment.startIndex && this.sliderSelect <= segment.endIndex;
   }
@@ -295,16 +322,27 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const groups: {weekNumber: number | null; startIndex: number; endIndex: number}[] = [];
+    const groups: {
+      key: string;
+      weekNumber: number | null;
+      teachingBreak: TeachingPeriodBreak | null;
+      startIndex: number;
+      endIndex: number;
+    }[] = [];
+
     this.snapshots.forEach((snapshot, index) => {
-      const weekNumber = displayWeekNumber(this.unit, new Date(snapshot.snapshot_date));
+      const date = new Date(snapshot.snapshot_date);
+      // Break days are their own segment, otherwise a break reads as one very long week.
+      const teachingBreak = this.unit.teachingPeriod?.breakAt(date) ?? null;
+      const weekNumber = teachingBreak ? null : displayWeekNumber(this.unit, date);
+      // Nulls merge too, so a unit with no start date collapses to one suppressed segment.
+      const key = teachingBreak ? `break-${teachingBreak.id}` : `week-${weekNumber}`;
       const current = groups[groups.length - 1];
 
-      // Nulls merge too, so a unit with no start date collapses to one suppressed segment.
-      if (current && current.weekNumber === weekNumber) {
+      if (current && current.key === key) {
         current.endIndex = index;
       } else {
-        groups.push({weekNumber, startIndex: index, endIndex: index});
+        groups.push({key, weekNumber, teachingBreak, startIndex: index, endIndex: index});
       }
     });
 
@@ -313,21 +351,37 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
     this.weekSegments = groups.map((group) => {
       const startFraction = group.startIndex === 0 ? 0 : (group.startIndex - 0.5) / denominator;
       const endFraction = group.endIndex === total - 1 ? 1 : (group.endIndex + 0.5) / denominator;
-      const label = group.weekNumber === null ? 'Unscheduled' : `Week ${group.weekNumber}`;
-      const shortLabel = group.weekNumber === null ? '–' : `W${group.weekNumber}`;
+      // A break's own label can be any length, so the band always says 'Break' and the tooltip
+      // carries the real name.
+      const label = group.teachingBreak
+        ? 'Break'
+        : group.weekNumber === null
+          ? 'Unscheduled'
+          : `Week ${group.weekNumber}`;
+      const shortLabel = group.teachingBreak
+        ? 'Break'
+        : group.weekNumber === null
+          ? '–'
+          : `W${group.weekNumber}`;
       const startDate = formatSnapshotLabel(
         this.unit,
         this.snapshots[group.startIndex]?.snapshot_date,
       );
       const endDate = formatSnapshotLabel(this.unit, this.snapshots[group.endIndex]?.snapshot_date);
       const range = startDate === endDate ? startDate : `${startDate} – ${endDate}`;
+      const tooltip = group.teachingBreak
+        ? [group.teachingBreak.label || 'Break', range, this.breakCampuses(group.teachingBreak)]
+            .filter((part) => part)
+            .join(' · ')
+        : `${label} · ${range}`;
 
       return {
-        key: `${label}-${group.startIndex}`,
+        key: `${group.key}-${group.startIndex}`,
+        isBreak: group.teachingBreak !== null,
         label,
         shortLabel,
         text: label,
-        tooltip: `${label} · ${range}`,
+        tooltip,
         startIndex: group.startIndex,
         endIndex: group.endIndex,
         startFraction,

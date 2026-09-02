@@ -54,6 +54,21 @@ export class TeachingPeriod extends Entity {
     );
   }
 
+  public breakAt(date: Date | string): TeachingPeriodBreak | null {
+    const target = this.normalizeDay(date);
+    if (!target) {
+      return null;
+    }
+
+    return (
+      this.breaks.find((teachingBreak) => {
+        const start = this.normalizeDay(teachingBreak.startDate);
+        const end = this.breakEndDate(teachingBreak);
+        return start !== null && end !== null && target >= start && target < end;
+      }) ?? null
+    );
+  }
+
   public get units(): readonly Unit[] {
     return this.unitsCache.currentValues;
   }

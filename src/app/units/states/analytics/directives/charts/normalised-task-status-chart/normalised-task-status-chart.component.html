@@ -88,11 +88,7 @@
               [attr.aria-current]="isActiveWeek(segment) ? 'true' : null"
               [attr.aria-label]="segment.tooltip"
               [matTooltip]="segment.tooltip"
-              [ngClass]="
-                isActiveWeek(segment)
-                  ? 'bg-formatif-blue font-semibold text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              "
+              [ngClass]="segmentClasses(segment)"
               [style.left]="segment.leftStyle"
               [style.width]="segment.widthStyle"
               (click)="selectWeek(segment)"
