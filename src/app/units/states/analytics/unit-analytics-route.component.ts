@@ -1,13 +1,36 @@
 import {formatDate} from '@angular/common';
-import {ChangeDetectionStrategy, Component, Inject, Input, LOCALE_ID, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {Observable, first, of} from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Input,
+  LOCALE_ID,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, Subscription, first, of} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
 import {UserService} from 'src/app/api/services/user.service';
+import {TabManagementBase} from 'src/app/common/base/tab-management.base';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+
+type AnalyticsTabKey =
+  | 'task-completion'
+  | 'target-grades'
+  | 'tasks-awaiting-feedback'
+  | 'resubmissions'
+  | 'tutor-times'
+  | 'download-data';
+
+interface AnalyticsTab {
+  label: string;
+  routeSegment: AnalyticsTabKey;
+}
 
 @Component({
   selector: 'f-unit-analytics',
@@ -16,26 +39,56 @@ import {AlertService} from 'src/app/common/services/alert.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class UnitAnalyticsComponent implements OnInit {
+export class UnitAnalyticsComponent
+  extends TabManagementBase<AnalyticsTab>
+  implements OnInit, OnDestroy
+{
   @Input() public unit$: Observable<Unit>;
 
   public unit: Unit;
+
+  public readonly tabs: AnalyticsTab[] = [
+    {label: 'Task Completion', routeSegment: 'task-completion'},
+    // {label: 'Target Grades', routeSegment: 'target-grades'},
+    // {label: 'Tasks Awaiting Feedback', routeSegment: 'tasks-awaiting-feedback'},
+    // {label: 'Resubmissions', routeSegment: 'resubmissions'},
+    {label: 'Tutor Times', routeSegment: 'tutor-times'},
+    {label: 'Download Data', routeSegment: 'download-data'},
+  ];
+
+  public currentTab: AnalyticsTab = this.tabs[0];
+
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private sidekiqProgressModalService: SidekiqProgressModalService,
     private alertsService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     private userService: UserService,
-    private alertService: AlertService,
-    private route: ActivatedRoute,
+    protected route: ActivatedRoute,
+    protected router: Router,
     @Inject(LOCALE_ID) private locale: string,
-  ) {}
+  ) {
+    super(route, router);
+  }
 
   ngOnInit(): void {
+    this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'), 'task-completion');
+
     this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
     this.unit$?.pipe(first()).subscribe((unit) => {
       this.unit = unit;
     });
+
+    this.subscriptions.push(
+      this.route.paramMap.subscribe((params) =>
+        this.updateCurrentTabFromState(params.get('tab'), 'task-completion'),
+      ),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   get role() {
@@ -44,6 +97,10 @@ export class UnitAnalyticsComponent implements OnInit {
 
   get isAdmin() {
     return this.userService.currentUser?.systemRole === 'Admin';
+  }
+
+  public onTabChange(event: MatTabChangeEvent): void {
+    super.onTabChange(event, 'analytics');
   }
 
   public getTaskCompletionCsv() {

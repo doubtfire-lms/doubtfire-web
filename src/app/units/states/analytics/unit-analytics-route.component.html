@@ -1,30 +1,52 @@
 <div class="mx-auto max-w-[90vw]">
   <h1>Unit Statistics</h1>
-
-  <div class="flex flex-col gap-2.5">
-    <mat-card appearance="outlined" class="mt-2.5 p-[16px]">
-      <mat-card-content class="flex gap-1">
-        <button mat-button (click)="getTaskCompletionCsv()">
-          <mat-icon>download</mat-icon> Task Completion Stats
-        </button>
-        <button mat-button (click)="getTutorAssessmentCsv()">
-          <mat-icon>download</mat-icon> Tutor Assessment Stats
-        </button>
-        <button mat-button (click)="getTasksAwaitingFeedbackCsv()">
-          <mat-icon>download</mat-icon> Tasks Awaiting Feedback
-        </button>
-        <button mat-button (click)="getTaskAssessmentCountCsv()">
-          <mat-icon>download</mat-icon> Task Assessment Counts
-        </button>
-        @if (role === 'Convenor' || isAdmin) {
-          <button mat-button (click)="getOverflowTaskClaimsCsv()">
-            <mat-icon>download</mat-icon> Overflow Task Claims
-          </button>
-        }
-      </mat-card-content>
-    </mat-card>
-    <f-normalised-task-status-chart [unit]="unit" />
-    <f-analytics-tutor-times [downloadCsvFn]="downloadCsv" [unit]="unit"></f-analytics-tutor-times>
+  <mat-tab-group
+    class="mx-auto mb-6"
+    dynamicHeight
+    [selectedIndex]="currentIndex"
+    (selectedTabChange)="onTabChange($event)"
+  >
+    @for (tab of tabs; track tab.routeSegment) {
+      <mat-tab [label]="tab.label"></mat-tab>
+    }
+  </mat-tab-group>
+  <div class="flex flex-col gap-2.5 pb-16">
+    @switch (currentTab.routeSegment) {
+      @case ('task-completion') {
+        <f-task-status-summary-chart [unit]="unit" />
+      }
+      @case ('tutor-times') {
+        <f-analytics-tutor-times
+          [downloadCsvFn]="downloadCsv"
+          [unit]="unit"
+        ></f-analytics-tutor-times>
+      }
+      @case ('download-data') {
+        <div class="flex flex-col gap-2.5">
+          <mat-card appearance="outlined" class="mt-2.5 p-4">
+            <mat-card-content class="flex gap-1">
+              <button mat-button (click)="getTaskCompletionCsv()">
+                <mat-icon>download</mat-icon> Task Completion Stats
+              </button>
+              <button mat-button (click)="getTutorAssessmentCsv()">
+                <mat-icon>download</mat-icon> Tutor Assessment Stats
+              </button>
+              <button mat-button (click)="getTasksAwaitingFeedbackCsv()">
+                <mat-icon>download</mat-icon> Tasks Awaiting Feedback
+              </button>
+              <button mat-button (click)="getTaskAssessmentCountCsv()">
+                <mat-icon>download</mat-icon> Task Assessment Counts
+              </button>
+              @if (role === 'Convenor' || isAdmin) {
+                <button mat-button (click)="getOverflowTaskClaimsCsv()">
+                  <mat-icon>download</mat-icon> Overflow Task Claims
+                </button>
+              }
+            </mat-card-content>
+          </mat-card>
+        </div>
+      }
+    }
   </div>
 </div>
 <!--

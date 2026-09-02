@@ -1,0 +1,105 @@
+<mat-card appearance="outlined" class="p-4">
+  <div class="flex w-full flex-col items-start gap-2.5 p-4 pb-0 lg:flex-row lg:justify-between">
+    <div class="text-pretty xl:max-w-[calc(50%)]">
+      <mat-card-title>Task Completion Statuses</mat-card-title>
+      <mat-card-subtitle class="">
+        <p>View the completion status of tasks across all students.</p>
+      </mat-card-subtitle>
+    </div>
+    <div class="flex items-center gap-2 pb-4">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label for="campus-filter-select">Campus</mat-label>
+        <mat-select
+          id="campus-filter-select"
+          [(ngModel)]="campusFilter"
+          (selectionChange)="refreshData()"
+        >
+          <mat-option value="all">All</mat-option>
+          @for (campus of campuses; track campus) {
+            <mat-option [value]="campus">{{ campus }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button
+        aria-label="Capture completion snapshot now"
+        class="self-center"
+        mat-icon-button
+        (click)="captureNow()"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="flex justify-center px-4 pt-4">
+    <mat-button-toggle-group aria-label="Task status chart view" [(ngModel)]="chartView">
+      <mat-button-toggle value="snapshots">Snapshots</mat-button-toggle>
+      <mat-button-toggle value="timeseries">Timeseries</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  @if (chartView === 'snapshots') {
+    @if (hasChartData) {
+      <div class="px-4 pt-2 text-slate-600">
+        <h3 class="mb-0">{{ selectedSnapshotDate }}</h3>
+        <p>Student count: {{ snapshotStudentCount }}</p>
+      </div>
+      <div class="chart-panel">
+        <f-normalised-task-status-chart
+          [campusFilter]="campusFilter"
+          [colorScheme]="colorScheme"
+          [snapshot]="selectedSnapshot"
+          [unit]="unit"
+        />
+      </div>
+    } @else {
+      <div class="flex h-full items-center justify-center">
+        <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+      </div>
+    }
+    <div class="-mt-6 flex flex-col items-center px-4 pt-0 pb-4">
+      <div class="-mb-2 flex w-full px-4">
+        <mat-slider
+          class="snapshot-slider w-full"
+          [disabled]="snapshots.length <= 1"
+          [discrete]="true"
+          [displayWith]="formatSnapshotDate"
+          [max]="sliderMax"
+          [min]="0"
+          [showTickMarks]="true"
+          [step]="1"
+        >
+          <input
+            matSliderThumb
+            [ngModel]="sliderSelect"
+            (ngModelChange)="onSnapshotSliderChange($event)"
+          />
+        </mat-slider>
+      </div>
+      <div class="flex w-full justify-between text-center text-sm text-slate-600">
+        @if (snapshotDates.length < 5) {
+          @for (snapshotDate of snapshotDates; track $index) {
+            <span class="min-w-15">{{ snapshotDate }}</span>
+          }
+        } @else {
+          @for (snapshotWeek of snapshotWeeks; track $index) {
+            <span class="min-w-15">{{ snapshotWeek }}</span>
+          }
+        }
+      </div>
+    </div>
+  } @else {
+    @if (hasChartData) {
+      <div class="chart-panel">
+        <f-stacked-area-status-chart
+          [campusFilter]="campusFilter"
+          [colorScheme]="colorScheme"
+          [snapshots]="snapshots"
+          [unit]="unit"
+        />
+      </div>
+    } @else {
+      <div class="flex h-full items-center justify-center">
+        <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+      </div>
+    }
+  }
+</mat-card>
