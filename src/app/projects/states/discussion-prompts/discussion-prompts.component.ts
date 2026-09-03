@@ -47,12 +47,10 @@ export class DiscussionPromptsComponent implements OnInit {
     private confirmationModalService: ConfirmationModalService,
   ) {}
   ngOnInit(): void {
-    console.log('task def?', this.taskDefinition);
     this.loadingStaffNotes = true;
     this.discussionPromptService
       .loadDiscussionPromptsForPoject(this.project)
       .subscribe((prompts) => {
-        console.log(prompts);
         this.discussionPrompts = prompts;
       });
   }

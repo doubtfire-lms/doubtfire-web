@@ -646,7 +646,6 @@ export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnC
       next: (_success: TaskComment) => {
         this.comment.text = '';
         this.commentsViewer.scrollDown();
-        console.log('implement - check map comments');
         //this.task.comments = this.ts.mapComments(this.task.comments);
       },
       error: (message: string) => this.alerts.error(message, 6000),

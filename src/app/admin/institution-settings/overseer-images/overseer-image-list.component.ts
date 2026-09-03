@@ -114,8 +114,7 @@ export class OverseerImageListComponent
       this.sidekiqProgressModalService
         .show(`Pulling image ${image.name} (${image.tag})`, job.id)
         .subscribe((_job) => {
-          this.overseerImageService.fetch(image.id).subscribe((newImage) => {
-            console.log(newImage);
+          this.overseerImageService.fetch(image.id).subscribe(() => {
             this.loading = false;
           });
         });
