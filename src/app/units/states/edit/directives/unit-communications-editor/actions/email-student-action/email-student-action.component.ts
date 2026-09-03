@@ -6,6 +6,7 @@ import type {UnitCommunicationsEditorComponent} from '../../unit-communications-
   selector: 'f-email-student-action',
   standalone: false,
   templateUrl: './email-student-action.component.html',
+  styleUrl: './email-student-action.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {class: 'block w-full'},
 })

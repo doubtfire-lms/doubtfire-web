@@ -49,6 +49,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   };
 
   @Input() comment?: TaskComment;
+  @Input() commentsVisible = true;
   @Input() task: Task;
   @Input() refocusOnTaskChange: boolean;
 
@@ -103,12 +104,18 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // Must have project for task to be mapped
-    if (changes.task?.currentValue?.project != null) {
-      this.project = changes.task.currentValue.project;
-      this.fetchComments(this.task, true, true);
-    } else {
-      this.loading = false;
+    if (changes.task) {
+      // Must have project for task to be mapped
+      if (changes.task.currentValue?.project != null) {
+        this.project = changes.task.currentValue.project;
+        this.fetchComments(this.task, true, true);
+      } else {
+        this.loading = false;
+      }
+    }
+
+    if (changes.commentsVisible?.currentValue && !changes.commentsVisible.firstChange) {
+      this.scrollDown();
     }
   }
 
@@ -188,17 +195,23 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
     });
 
     if (this.project.unit.currentUserIsStaff) {
-      this.feedbackTemplateService
-        .query({contextType: 'task_definitions', contextId: task.definition.id}, {})
-        .subscribe({
-          error: () => this.alerts.error('Error loading task feedback templates.'),
+      [
+        {contextType: 'units', contextId: task.unit.id},
+        {contextType: 'task_definitions', contextId: task.definition.id},
+      ].forEach((context) => {
+        this.feedbackTemplateService.query(context, {}).subscribe({
+          error: () => this.alerts.error('Error loading feedback templates.'),
         });
+      });
     }
   }
 
   scrollDown() {
     setTimeout(() => {
-      const element = this.commentsBody.nativeElement;
+      const element = this.commentsBody?.nativeElement;
+      if (!element) {
+        return;
+      }
       element.scrollTop = element.scrollHeight;
     }, 50);
   }

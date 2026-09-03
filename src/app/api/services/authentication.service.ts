@@ -166,11 +166,7 @@ export class AuthenticationService {
    *
    * @param response the response from the authentication API
    */
-  private setupUserFromResponse(
-    response: AuthResponse,
-    firstTime: boolean = true,
-    ltik?: string,
-  ): void {
+  private setupUserFromResponse(response: AuthResponse, firstTime: boolean = true): void {
     // Extract relevant data from response and construct user object to store in cache.
     const user: User = this.userService.cache.getOrCreate(
       response.user['id'],
@@ -181,12 +177,6 @@ export class AuthenticationService {
     // Set the user's authentication token for access to api.
     user.authenticationToken = response['auth_token'];
     user.authenticationTokenExpiry = response['auth_token_expiry'];
-    // Keep the launch-scoped LTI token on the authenticated user before
-    // global loading and auth-complete subscribers are released.
-    if (ltik !== undefined) {
-      user.ltik = ltik;
-    }
-
     // Record the current user
     this.userService.currentUser = user;
 
@@ -230,32 +220,15 @@ export class AuthenticationService {
           username: string;
           remember: boolean;
         },
-    ltik?: string,
   ): Observable<void> {
     return this.httpClient.post(this.AUTH_URL, userCredentials).pipe(
       map((response: AuthResponse) => {
-        this.setupUserFromResponse(response, true, ltik);
+        this.setupUserFromResponse(response, true);
       }),
       catchError((error) => {
         // this.authComplete$.next(false);
         // this.authComplete$.complete();
 
-        return throwError(() => error);
-      }),
-    );
-  }
-
-  public signInWithLti(userCredentials: {ltik: string; lti_token: string}): Observable<void> {
-    return this.httpClient.post(`${this.AUTH_URL}/lti`, userCredentials).pipe(
-      map((response: AuthResponse) => {
-        const username = encodeURIComponent(response.user['username']);
-        const authToken = encodeURIComponent(response.auth_token);
-        const ltik = encodeURIComponent(userCredentials.ltik);
-        setTimeout(() => {
-          window.location.href = `/sign_in?username=${username}&authToken=${authToken}&ltik=${ltik}&isLtiLogin=true`;
-        });
-      }),
-      catchError((error) => {
         return throwError(() => error);
       }),
     );

@@ -3,6 +3,7 @@
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {
+  AreaChartStackedComponent,
   BarVerticalNormalizedComponent,
   GaugeComponent,
   LineChartComponent,
@@ -233,6 +234,7 @@ import {EmojiService} from './common/services/emoji.service';
 import {GradeService} from './common/services/grade.service';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
 import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
+import {SettingToggleComponent} from './common/setting-toggle/setting-toggle.component';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
@@ -327,7 +329,9 @@ import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
-import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
+import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
+import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
+import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
 import {CommunicationActionsComponent} from './units/states/edit/directives/unit-communications-editor/actions/communication-actions.component';
@@ -337,6 +341,7 @@ import {TaskCommentActionComponent} from './units/states/edit/directives/unit-co
 import {CommunicationScheduleModalComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedule-modal.component';
 import {CommunicationSchedulesComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedules.component';
 import {CommunicationConditionsComponent} from './units/states/edit/directives/unit-communications-editor/conditions/communication-conditions.component';
+import {TaskStatusSelectComponent} from './units/states/edit/directives/unit-communications-editor/task-status-select/task-status-select.component';
 import {UnitCommunicationsEditorComponent} from './units/states/edit/directives/unit-communications-editor/unit-communications-editor.component';
 import {UnitContentEditorComponent} from './units/states/edit/directives/unit-content-editor/unit-content-editor.component';
 import {
@@ -579,6 +584,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     CreateNewUnitModalContentComponent,
     TiiActionLogComponent,
     FChipComponent,
+    SettingToggleComponent,
     UnitCodeComponent,
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
@@ -644,6 +650,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskPlannerCardComponent,
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
+    NormalisedTaskStatusChartComponent,
+    StackedAreaStatusChartComponent,
     SubmissionFilesModalComponent,
     TutorNotesComponent,
     TutorNotesViewComponent,
@@ -662,6 +670,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     EmailStaffActionComponent,
     EmailStudentActionComponent,
     TaskCommentActionComponent,
+    TaskStatusSelectComponent,
     UnitCommunicationsEditorComponent,
     UnitContentEditorComponent,
     TutorialsComponent,
@@ -852,6 +861,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     PickerModule,
     EmojiModule,
     BarVerticalNormalizedComponent,
+    AreaChartStackedComponent,
     GaugeComponent,
     LineChartComponent,
     NumberCardComponent,
@@ -863,7 +873,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
       registrationStrategy: () => interval(6000).pipe(take(1)),
     }),
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
-    CodeEditorModule.forRoot(),
+    CodeEditorModule.forRoot({baseUrl: '/assets/monaco/min'}),
     NgxGanttModule,
     MonacoEditorModule.forRoot(),
     MatChipListbox,

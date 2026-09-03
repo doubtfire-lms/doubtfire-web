@@ -153,9 +153,6 @@ export class AnalyticsTutorTimesComponent implements OnInit {
   }
 
   beforeViewRender(event): void {
-    console.log(event.period.start);
-    console.log(event.period.end);
-
     this.tutorTimeSummaryStartDate = event.period.start;
     this.tutorTimeSummaryEndDate = event.period.end;
 

@@ -239,11 +239,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   goToStudent(): void {
-    // this.router.navigateByUrl('projects/dashboard', {
-    //   projectId: this.taskData.selectedTask.project.id,
-    //   tutor: true,
-    //   taskAbbr: '',
-    // });
     this.router.navigate(['/projects', this.taskData.selectedTask.project.id, 'dashboard']);
   }
 

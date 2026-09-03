@@ -43,4 +43,28 @@ describe('UnitContentViewerComponent', () => {
     expect(loadContentRoute).toHaveBeenLastCalledWith(1);
     expect(component.contentRoute).toBe('/tasks/1.4P');
   });
+
+  it('opens remote content links in a new tab', () => {
+    const link = document.createElement('a');
+    const preventDefault = vi.fn();
+    const open = vi.spyOn(window, 'open').mockReturnValue(null);
+
+    link.href = 'https://example.com/resources/week-1';
+
+    (
+      component as unknown as {
+        handleIframeClick: (event: MouseEvent) => void;
+      }
+    ).handleIframeClick({
+      target: link,
+      preventDefault,
+    } as unknown as MouseEvent);
+
+    expect(preventDefault).toHaveBeenCalledOnce();
+    expect(open).toHaveBeenCalledWith(
+      'https://example.com/resources/week-1',
+      '_blank',
+      'noopener,noreferrer',
+    );
+  });
 });

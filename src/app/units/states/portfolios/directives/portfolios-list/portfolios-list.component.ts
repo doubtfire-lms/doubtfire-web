@@ -107,7 +107,7 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
 
   openProject(event: Event, project: Project) {
     event.stopPropagation();
-    window.open(`/projects/${project.id}/dashboard/?tutor=true`, '_blank');
+    window.open(`/projects/${project.id}/dashboard`, '_blank');
   }
 
   downloadGrades() {
