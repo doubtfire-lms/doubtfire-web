@@ -690,7 +690,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
         }
       },
       error: (error) => {
-        console.log('Snapshot load failed', error);
+        console.error('Snapshot load failed', error);
         const errorMessage = error
           ? error.message || error.toString()
           : 'Failed to load task completion snapshot.';
@@ -729,7 +729,7 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
           });
       },
       error: (error) => {
-        console.log('Snapshot capture failed', error);
+        console.error('Snapshot capture failed', error);
         const errorMessage = error
           ? error.message || error.toString()
           : 'Failed to capture task completion snapshot.';

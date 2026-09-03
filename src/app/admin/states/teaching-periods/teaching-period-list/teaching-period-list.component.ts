@@ -159,9 +159,8 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
         this.tempBreak.pauseWeekCount,
       )
       .subscribe({
-        next: (teachingPeriodBreak) => {
+        next: () => {
           this.alertService.success('Break added');
-          console.log(teachingPeriodBreak);
         },
         error: (response) => {
           this.alertService.error(`Error adding break. ${response}`);
@@ -171,9 +170,6 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
 
   deleteBreak(teachingPeriod: TeachingPeriod, teachingBreak: TeachingPeriodBreak): void {
     teachingPeriod.removeBreak(teachingBreak.id).subscribe({
-      next: (teachingPeriodBreak) => {
-        console.log(teachingPeriodBreak);
-      },
       error: (response) => {
         this.alertService.error(`Error deleting break. ${response}`);
       },
