@@ -50,6 +50,7 @@ export interface NotificationGroup {
   latestAt: Date;
   tutorNoteIds: number[];
   tutorNoteUnitRoleId?: number;
+  tutorNoteOnTaskTutor: boolean;
   /** The newest failed overseer run in the group, so its report can be opened. */
   overseerAssessmentId?: number;
   /** Rendered content of an email sent by the communications system. */

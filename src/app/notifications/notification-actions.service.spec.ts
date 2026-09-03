@@ -69,20 +69,27 @@ describe('NotificationActionsService', () => {
     });
   });
 
-  it('opens the mod notes tab for a moderation note', () => {
-    service.open(groupFor({tutorNoteNotificationIds: [7]}));
+  it('opens the mod notes tab for a note about the task tutor', () => {
+    service.open(groupFor({tutorNoteNotificationIds: [7], tutorNoteOnTaskTutor: true}));
 
     expect(navigate).toHaveBeenCalledWith(['/projects', 8, 'dashboard', 'P4'], {
       queryParams: {view: 'tutor_notes'},
     });
+    expect(showTutorNotes).not.toHaveBeenCalled();
   });
 
-  it('prefers the overseer report when a group has both', () => {
-    service.open(groupFor({overseerAssessmentId: 1, tutorNoteNotificationIds: [7]}));
+  it('opens the thread itself for a note about anyone else', () => {
+    service.open(
+      groupFor({
+        unit: {id: 4} as never,
+        tutorNoteNotificationIds: [7],
+        tutorNoteUnitRoleId: 22,
+        tutorNoteIds: [50, 51],
+      }),
+    );
 
-    expect(navigate).toHaveBeenCalledWith(['/projects', 8, 'dashboard', 'P4'], {
-      queryParams: {overseerAssessmentId: 1},
-    });
+    expect(showTutorNotes).toHaveBeenCalledWith(undefined, expect.objectContaining({id: 22}), 51);
+    expect(navigate).not.toHaveBeenCalled();
   });
 
   it('opens the modal for a moderation note that has no task', () => {
@@ -96,9 +103,9 @@ describe('NotificationActionsService', () => {
       }),
     );
 
-    expect(markRead).toHaveBeenCalledWith([7, 8]);
+    expect(markRead).not.toHaveBeenCalled();
     expect(getUnit).toHaveBeenCalledWith(4);
-    expect(showTutorNotes).toHaveBeenCalledWith(undefined, {id: 22}, 51);
+    expect(showTutorNotes).toHaveBeenCalledWith(undefined, expect.objectContaining({id: 22}), 51);
     expect(navigate).not.toHaveBeenCalled();
   });
 

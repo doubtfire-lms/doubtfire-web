@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {Observable, map, of, switchMap, tap} from 'rxjs';
+import {Observable, map, of, tap} from 'rxjs';
 import {NotificationGroup} from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
 import {UnitService} from 'src/app/api/services/unit.service';
@@ -42,9 +42,9 @@ export class NotificationActionsService {
       return;
     }
 
-    // A moderation note written against a task opens that task's Mod Notes tab.
-    // One written against the unit role has no task to open, so use the modal.
-    if (!group.task && group.tutorNoteNotificationIds.length) {
+    // The task's Mod Notes tab shows its own tutor's thread, so a note about
+    // anyone else opens as a thread of its own.
+    if (group.tutorNoteNotificationIds.length && !group.tutorNoteOnTaskTutor) {
       this.openTutorNotes(group).subscribe();
       return;
     }
@@ -96,15 +96,23 @@ export class NotificationActionsService {
       .catch(() => undefined);
   }
 
-  /** Opens the moderation notes for a group, focused on its most recent note. */
+  /**
+   * Opens the moderation notes for a group, focused on its most recent note. The
+   * notification stays unread until the note itself is marked as read.
+   */
   public openTutorNotes(group: NotificationGroup): Observable<void> {
     if (!group.tutorNoteUnitRoleId) {
       return of(undefined);
     }
 
-    return this.notificationService.markRead(group.tutorNoteNotificationIds).pipe(
-      switchMap(() => this.unitService.get(group.unit.id)),
-      map((unit) => unit.staff.find((role) => role.id === group.tutorNoteUnitRoleId)),
+    return this.unitService.get(group.unit.id).pipe(
+      map((unit) => {
+        const unitRole = unit.staff.find((role) => role.id === group.tutorNoteUnitRoleId);
+        if (unitRole) {
+          unitRole.unit = unit;
+        }
+        return unitRole;
+      }),
       tap((unitRole) => {
         if (unitRole) {
           this.tutorNotesModal.show(undefined, unitRole, group.tutorNoteIds.at(-1));

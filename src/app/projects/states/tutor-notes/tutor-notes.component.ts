@@ -3,11 +3,14 @@ import {
   Component,
   ElementRef,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {Task, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {TutorNote} from 'src/app/api/models/tutor-note';
+import {NotificationService} from 'src/app/api/services/notification.service';
 import {TutorNoteService} from 'src/app/api/services/tutor-note.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -19,7 +22,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class TutorNotesComponent implements OnInit {
+export class TutorNotesComponent implements OnInit, OnChanges {
   @ViewChild('tutorNotesContainer') tutorNotesContainer!: ElementRef;
   @ViewChild('tutorNoteEditor', {static: false}) tutorNoteEditor!: ElementRef<HTMLTextAreaElement>;
 
@@ -41,33 +44,58 @@ export class TutorNotesComponent implements OnInit {
   constructor(
     private userService: UserService,
     private tutorNoteService: TutorNoteService,
+    private notificationService: NotificationService,
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
   ) {}
   ngOnInit(): void {
+    this.loadNotes();
+  }
+
+  // The dashboard keeps this component alive when you move between tasks.
+  ngOnChanges(changes: SimpleChanges): void {
+    const source = this.task ? changes.task : changes.unitRole;
+    if (source && !source.firstChange) {
+      this.loadNotes();
+    } else if (changes.focusNoteId && !changes.focusNoteId.firstChange) {
+      this.focusRequestedNote();
+    }
+  }
+
+  private loadNotes(): void {
     if (this.task && !this.unitRole) {
       this.unitRole = this.task.tutor;
     }
+
+    this.resetTaskFilter();
+    this.editingNote = null;
+    this.replyingToNote = null;
 
     this.loadingTutorNotes = true;
     this.tutorNoteService.loadTutorNotes(this.unitRole).subscribe((_notes) => {
       this.loadingTutorNotes = false;
       this.tutorNoteService.updateTutorNoteReplies(this.unitRole?.tutorNotesCache.currentValues);
       this.scrollDown();
-      if (this.focusNoteId) {
-        setTimeout(() => {
-          const note = this.unitRole.tutorNotesCache.get(this.focusNoteId);
-          if (note) {
-            this.scrollToNote(note);
-          }
-        }, 100);
-      }
+      this.focusRequestedNote();
     });
-    if (this.task) {
-      this.selectedTaskDefinitions.set(this.task.definition.abbreviation, true);
-    } else {
-      this.selectedTaskDefinitions.set('all', true);
+  }
+
+  private resetTaskFilter(): void {
+    this.selectedTaskDefinitions.clear();
+    this.selectedTaskDefinitions.set(this.task ? this.task.definition.abbreviation : 'all', true);
+  }
+
+  private focusRequestedNote(): void {
+    if (!this.focusNoteId) {
+      return;
     }
+
+    setTimeout(() => {
+      const note = this.unitRole.tutorNotesCache.get(this.focusNoteId);
+      if (note) {
+        this.scrollToNote(note);
+      }
+    }, 100);
   }
 
   scrollToComment(commentID: number) {
@@ -129,6 +157,7 @@ export class TutorNotesComponent implements OnInit {
     this.tutorNoteService.markAsRead(this.unitRole, note).subscribe({
       next: (response) => {
         if (response) {
+          this.notificationService.refreshUnreadCount();
           this.alertService.success(`Marked note as read`, 3000);
         } else {
           this.alertService.error(`Failed to mark as read`, 6000);
