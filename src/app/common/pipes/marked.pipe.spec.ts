@@ -31,9 +31,19 @@ describe('MarkedPipe', () => {
       expected: '<blockquote>\n<p>first line<br>second line</p>\n</blockquote>\n',
     },
     {
-      name: 'renders multi-line lists',
+      name: 'renders dash bullet lists',
       input: '- one\n- two\n- three',
       expected: '<ul>\n<li>one</li>\n<li>two</li>\n<li>three</li>\n</ul>\n',
+    },
+    {
+      name: 'renders asterisk bullet lists',
+      input: '* one\n* two\n* three',
+      expected: '<ul>\n<li>one</li>\n<li>two</li>\n<li>three</li>\n</ul>\n',
+    },
+    {
+      name: 'renders numbered lists',
+      input: '1. one\n2. two\n3. three',
+      expected: '<ol>\n<li>one</li>\n<li>two</li>\n<li>three</li>\n</ol>\n',
     },
     {
       name: 'keeps single newlines within a paragraph as line breaks',

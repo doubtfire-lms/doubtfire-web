@@ -6,8 +6,47 @@ import {TeachingPeriodBreakService, TeachingPeriodService, Unit} from './doubtfi
 export class TeachingPeriodBreak extends Entity {
   id: number;
   startDate: Date;
-  numberOfWeeks: number;
+  numberOfDays: number;
+  label: string;
   campusIds: number[] = [];
+  pauseWeekCount: boolean = true;
+
+  /**
+   * Only breaks that span whole teaching weeks can pause the week count.
+   */
+  public get canPauseWeekCount(): boolean {
+    return this.numberOfDays > 0 && this.numberOfDays % 7 === 0;
+  }
+
+  /**
+   * The day teaching resumes after this break.
+   */
+  public get endDate(): Date | null {
+    if (!this.startDate || !this.numberOfDays) {
+      return null;
+    }
+
+    const start = this.startDate instanceof Date ? this.startDate : new Date(this.startDate);
+    if (Number.isNaN(start.valueOf())) {
+      return null;
+    }
+
+    return new Date(start.getFullYear(), start.getMonth(), start.getDate() + this.numberOfDays);
+  }
+
+  /**
+   * Is the given date within this break?
+   */
+  public covers(date: Date): boolean {
+    const start = this.startDate instanceof Date ? this.startDate : new Date(this.startDate);
+    const end = this.endDate;
+    if (!end || Number.isNaN(start.valueOf())) {
+      return false;
+    }
+
+    const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    return day >= new Date(start.getFullYear(), start.getMonth(), start.getDate()) && day < end;
+  }
 }
 
 export class TeachingPeriod extends Entity {
@@ -45,6 +84,15 @@ export class TeachingPeriod extends Entity {
     return this.breaksCache.currentValues;
   }
 
+  /**
+   * The breaks that pause the week count. Breaks without this flag still extend
+   * deadlines, but the week number continues through them so that it stays
+   * aligned across campuses.
+   */
+  public get weekPausingBreaks(): readonly TeachingPeriodBreak[] {
+    return this.breaks.filter((teachingBreak) => teachingBreak.pauseWeekCount);
+  }
+
   public breaksFor(campusId?: number): readonly TeachingPeriodBreak[] {
     return this.breaks.filter(
       (teachingBreak) =>
@@ -77,13 +125,17 @@ export class TeachingPeriod extends Entity {
 
   public addBreak(
     startDate: Date,
-    weeks: number,
+    days: number,
     campusIds: number[] = [],
+    label?: string,
+    pauseWeekCount: boolean = true,
   ): Observable<TeachingPeriodBreak> {
     const breakEntity = new TeachingPeriodBreak();
     breakEntity.startDate = startDate;
-    breakEntity.numberOfWeeks = weeks;
+    breakEntity.numberOfDays = days;
+    breakEntity.label = label;
     breakEntity.campusIds = campusIds;
+    breakEntity.pauseWeekCount = pauseWeekCount;
     const breakService: TeachingPeriodBreakService = AppInjector.get(TeachingPeriodBreakService);
 
     return breakService.create(
@@ -139,7 +191,7 @@ export class TeachingPeriod extends Entity {
     const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
     let result = Math.floor((targetDate.getTime() - startDate.getTime()) / millisecondsPerWeek) + 1;
 
-    for (const teachingBreak of this.breaks) {
+    for (const teachingBreak of this.weekPausingBreaks) {
       const breakStart = this.normalizeDay(teachingBreak.startDate);
       const breakEnd = this.breakEndDate(teachingBreak);
       const firstMonday = this.firstMonday(teachingBreak);
@@ -151,7 +203,7 @@ export class TeachingPeriod extends Entity {
 
       if (targetDate >= breakStart) {
         if (targetDate >= breakEnd) {
-          result -= teachingBreak.numberOfWeeks;
+          result -= Math.ceil(teachingBreak.numberOfDays / 7);
         } else if (targetDate.getTime() === breakStart.getTime()) {
           if (targetDate >= firstMonday) {
             result -= 1;
@@ -183,16 +235,7 @@ export class TeachingPeriod extends Entity {
   }
 
   private breakEndDate(teachingBreak: TeachingPeriodBreak): Date | null {
-    const startDate = this.normalizeDay(teachingBreak.startDate);
-    if (!startDate || !teachingBreak.numberOfWeeks) {
-      return null;
-    }
-
-    return new Date(
-      startDate.getFullYear(),
-      startDate.getMonth(),
-      startDate.getDate() + teachingBreak.numberOfWeeks * 7,
-    );
+    return teachingBreak.endDate;
   }
 
   private firstMonday(teachingBreak: TeachingPeriodBreak): Date | null {
@@ -217,14 +260,14 @@ export class TeachingPeriod extends Entity {
 
   private mondayAfterBreak(teachingBreak: TeachingPeriodBreak): Date | null {
     const firstMonday = this.firstMonday(teachingBreak);
-    if (!firstMonday || !teachingBreak.numberOfWeeks) {
+    if (!firstMonday || !teachingBreak.numberOfDays) {
       return null;
     }
 
     return new Date(
       firstMonday.getFullYear(),
       firstMonday.getMonth(),
-      firstMonday.getDate() + teachingBreak.numberOfWeeks * 7,
+      firstMonday.getDate() + teachingBreak.numberOfDays,
     );
   }
 }

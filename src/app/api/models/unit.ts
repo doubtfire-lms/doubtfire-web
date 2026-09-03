@@ -1,6 +1,6 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable, tap} from 'rxjs';
+import {Observable, shareReplay, switchMap, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -20,6 +20,7 @@ import {
   OverseerImage,
   Project,
   Task,
+  TaskCompletionSnapshot,
   TaskDefinition,
   TaskOutcomeAlignment,
   TeachingPeriod,
@@ -573,13 +574,28 @@ export class Unit extends Entity {
       );
   }
 
-  public refreshStudents(includeWithdrawnStudents: boolean = false) {
+  public refreshStudents(includeWithdrawnStudents: boolean = false): Observable<Project[]> {
     const projectService: ProjectService = AppInjector.get(ProjectService);
-    projectService.loadStudents(this, includeWithdrawnStudents, true);
+    const alerts = AppInjector.get(AlertService);
+    // loadStudents asks for either the enrolled or the withdrawn students, so both are
+    // needed to refresh the whole cohort.
+    const enrolled = projectService.loadStudents(this, false, true);
+    const result = (
+      includeWithdrawnStudents
+        ? enrolled.pipe(switchMap(() => projectService.loadStudents(this, true, true)))
+        : enrolled
+    ).pipe(shareReplay({bufferSize: 1, refCount: false}));
+
+    // Subscribe here so that the refresh runs even when the caller ignores the result.
+    result.subscribe({
+      error: (message) => alerts.error(message, 6000),
+    });
+
+    return result;
   }
 
   public findProjectForUsername(username: string): Project {
-    return this.students.find((s) => s.student.username === username);
+    return this.students.find((s) => s.student?.username === username);
   }
 
   public get groupSets(): readonly GroupSet[] {
@@ -601,8 +617,7 @@ export class Unit extends Entity {
 
   private addStudentTypeAheadData(students: readonly Project[], appendTo: string[]): void {
     students.forEach((project) => {
-      appendTo.push(project.student.name);
-      appendTo.push(project.student.username);
+      appendTo.push(project.student?.name, project.student?.username);
     });
   }
 
@@ -618,7 +633,9 @@ export class Unit extends Entity {
 
     this.addStudentTypeAheadData(this.activeStudents, result);
 
-    return result;
+    // Students and tutorials can be missing any of these details, so drop the gaps
+    // rather than offering blank suggestions.
+    return result.filter(Boolean);
   }
 
   public studentsForGroupTypeAhead(group: Group): Project[] {
@@ -868,5 +885,36 @@ export class Unit extends Entity {
   public getTaskPrerequisites(): Observable<TaskPrerequisite[]> {
     const prerequisiteService = AppInjector.get(TaskPrerequisiteService);
     return prerequisiteService.getUnitPrerequisites(this.id);
+  }
+
+  public getTaskCompletionSnapshots(
+    startDate?: Date,
+    endDate?: Date,
+    limit: number = 365,
+  ): Observable<TaskCompletionSnapshot[]> {
+    let params = new HttpParams();
+
+    [startDate, endDate].forEach((date) => {
+      if (date) {
+        params = params.set(
+          date === startDate ? 'start_date' : 'end_date',
+          `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
+        );
+      }
+    });
+
+    params = params.set('limit', limit.toString());
+
+    return AppInjector.get(HttpClient).get<TaskCompletionSnapshot[]>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots`,
+      {params},
+    );
+  }
+
+  public captureTaskCompletionSnapshot(): Observable<SidekiqJob> {
+    return AppInjector.get(HttpClient).post<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots/capture`,
+      {},
+    );
   }
 }

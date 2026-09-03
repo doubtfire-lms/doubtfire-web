@@ -284,75 +284,69 @@
     </div>
   </mat-card>
 
-  <mat-card appearance="outlined" class="flex flex-col gap-3 p-[16px]">
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.allowFlexibleDates"
-        >Allow flexible dates</mat-slide-toggle
-      >
-      <p>Allows students to set planned due dates, without using extensions.</p>
-    </div>
+  <mat-card appearance="outlined" class="flex flex-col p-2">
+    <f-setting-toggle label="Allow flexible dates" [(checked)]="unit.allowFlexibleDates">
+      Allows students to set planned due dates, without using extensions.
+    </f-setting-toggle>
 
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.allowStudentExtensionRequests"
-        >Allow student extensions</mat-slide-toggle
-      >
-      <p>When false only staff can request extensions on behalf of students.</p>
-    </div>
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Allow student extensions"
+      [(checked)]="unit.allowStudentExtensionRequests"
+    >
+      When false only staff can request extensions on behalf of students.
+    </f-setting-toggle>
 
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.autoApplyExtensionBeforeDeadline"
-        >Auto apply extensions</mat-slide-toggle
-      >
-      <p>
-        When true, extensions will be automatically applied when they result in a date that is
-        between the task's due date and deadline.
-      </p>
-    </div>
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Auto apply extensions"
+      [(checked)]="unit.autoApplyExtensionBeforeDeadline"
+    >
+      When true, extensions will be automatically applied when they result in a date that is between
+      the task's due date and deadline.
+    </f-setting-toggle>
 
-    <div>
-      <mat-slide-toggle
-        [(ngModel)]="unit.markLateSubmissionsAsAssessInPortfolio"
-        (change)="onToggleAssessInPortfolio($event)"
-        >Has tasks assessed in portfolio</mat-slide-toggle
-      >
-      <p>
-        When enabled, late submissions will not be automatically marked as "Time Exceeded" or
-        "Feedback Exceeded", and will instead appear as "Assess in Portfolio". Tutors can still sign
-        off tasks as complete unless the task definition has the "Assess in Portfolio Only" option
-        enabled.
-      </p>
-    </div>
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Has tasks assessed in portfolio"
+      [(checked)]="unit.markLateSubmissionsAsAssessInPortfolio"
+      (changed)="onToggleAssessInPortfolio($event)"
+    >
+      When enabled, late submissions will not be automatically marked as "Time Exceeded" or
+      "Feedback Exceeded", and will instead appear as "Assess in Portfolio". Tutors can still sign
+      off tasks as complete unless the task definition has the "Assess in Portfolio Only" option
+      enabled.
+    </f-setting-toggle>
 
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.allowStudentChangeTutorial"
-        >Allow students to change tutorial</mat-slide-toggle
-      >
-      <p>
-        When false only staff can change student tutorials. When true, students may switch between
-        tutors who provide feedback on their work.
-      </p>
-    </div>
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Allow students to change tutorial"
+      [(checked)]="unit.allowStudentChangeTutorial"
+    >
+      When false only staff can change student tutorials. When true, students may switch between
+      tutors who provide feedback on their work.
+    </f-setting-toggle>
 
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.enforceFeedbackBeforeDiscussedInClass"
-        >Require feedback before discussed in class</mat-slide-toggle
-      >
-      <p>
-        When true, tutors must record feedback before they can mark discussion tasks as discussed in
-        class.
-      </p>
-    </div>
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Require feedback before discussed in class"
+      [(checked)]="unit.enforceFeedbackBeforeDiscussedInClass"
+    >
+      When true, tutors must record feedback before they can mark discussion tasks as discussed in
+      class.
+    </f-setting-toggle>
 
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.discussTimeoutEnabled">Discuss timeout</mat-slide-toggle>
-      <p>
-        When enabled, students are warned when tasks stay in Discuss too long, then overdue tasks
-        are moved to Fix and Resubmit.
-      </p>
-    </div>
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Discuss timeout"
+      [(checked)]="unit.discussTimeoutEnabled"
+    >
+      When enabled, students are warned when tasks stay in Discuss too long, then overdue tasks are
+      moved to Fix and Resubmit.
+    </f-setting-toggle>
 
     @if (unit.discussTimeoutEnabled) {
-      <div class="flex w-full gap-3">
+      <div class="flex w-full gap-3 px-2 pb-3">
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Warn after (days)</mat-label>
           <input
@@ -379,55 +373,53 @@
       </div>
     }
 
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.sendNotifications"
-        >Send notification emails</mat-slide-toggle
-      >
-      <p>
-        When true, emails will be set to students each week to indicate progress and suggest future
-        tasks for them to work on.
-      </p>
-    </div>
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Send notification emails"
+      [(checked)]="unit.sendNotifications"
+    >
+      When true, emails will be set to students each week to indicate progress and suggest future
+      tasks for them to work on.
+    </f-setting-toggle>
 
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.enableSyncEnrolments"
-        >Synchronise enrolments</mat-slide-toggle
-      >
-      <p>
-        When true student enrolments will be synchronised with other systems where this is possible.
-      </p>
-    </div>
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Synchronise enrolments"
+      [(checked)]="unit.enableSyncEnrolments"
+    >
+      When true student enrolments will be synchronised with other systems where this is possible.
+    </f-setting-toggle>
 
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.enableSyncTimetable"
-        >Synchronise timetable</mat-slide-toggle
-      >
-      <p>
-        When true timetable data will be synchronised with other systems where this is possible.
-      </p>
-    </div>
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Synchronise timetable"
+      [(checked)]="unit.enableSyncTimetable"
+    >
+      When true timetable data will be synchronised with other systems where this is possible.
+    </f-setting-toggle>
 
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.moodleEnabled"
-        >Enable Moodle integration</mat-slide-toggle
-      >
-      <p>Shows the Moodle administration tab for this unit.</p>
-    </div>
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Enable MOodle Integration"
+      [(checked)]="unit.moodleEnabled"
+    >
+      Shows the Moodle administration tab for this unit.
+    </f-setting-toggle>
 
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.active">Active</mat-slide-toggle>
-      <p>Set to false to hide unit from students and tutors.</p>
-    </div>
+    <f-setting-toggle class="border-t border-gray-200" label="Active" [(checked)]="unit.active">
+      Set to false to hide unit from students and tutors.
+    </f-setting-toggle>
   </mat-card>
 
   @if (overseerEnabled.value) {
     <mat-card class="gap-1 p-[16px]">
-      <div>
-        <mat-slide-toggle [(ngModel)]="unit.assessmentEnabled"
-          >Overseer assessment</mat-slide-toggle
-        >
-        <p>If true, unit tasks will be able to make use of Overseer automated checking.</p>
-      </div>
+      <f-setting-toggle
+        class="-mx-2 mb-2"
+        label="Overseer assessment"
+        [(checked)]="unit.assessmentEnabled"
+      >
+        If true, unit tasks will be able to make use of Overseer automated checking.
+      </f-setting-toggle>
 
       <mat-form-field appearance="outline">
         <mat-label>Overseer Docker Image</mat-label>
@@ -455,6 +447,12 @@
     >
       Copy
     </button>
-    <button color="primary" mat-raised-button (click)="saveUnit()">Update</button>
+  </div>
+</div>
+<div class="fixed right-[50px] bottom-[50px] z-50">
+  <div>
+    <button color="primary" mat-fab (click)="saveUnit()">
+      <mat-icon>save</mat-icon>
+    </button>
   </div>
 </div>

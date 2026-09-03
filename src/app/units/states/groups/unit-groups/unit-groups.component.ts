@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Observable, Subscription, of} from 'rxjs';
+import {Observable, Subscription, distinctUntilChanged, filter, map} from 'rxjs';
 import {GroupSet, Unit, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
@@ -21,6 +21,7 @@ export class UnitGroupsComponent implements OnInit, OnDestroy {
   @Input() selectedGroupSet: GroupSet;
 
   private unitSub?: Subscription;
+  private shownUnitId?: number;
 
   constructor(
     private globalStateService: GlobalStateService,
@@ -29,16 +30,28 @@ export class UnitGroupsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
-    this.unitSub = this.unit$?.subscribe((unit) => {
-      if (!unit) {
-        return;
-      }
+    // The route reuses this component when switching between units, so follow the resolved
+    // unit rather than reading it once from the route snapshot.
+    const unit$ = this.unit$ ?? this.route.parent.data.pipe(map((data) => data.unit as Unit));
 
-      this.unit = unit;
-      this.unitRole = this.findUnitRole(unit.id);
-      this.selectedGroupSet = this.selectedGroupSet ?? unit.groupSets?.[0];
-    });
+    this.unitSub = unit$
+      .pipe(
+        filter((unit) => !!unit),
+        distinctUntilChanged((previous, current) => previous.id === current.id),
+      )
+      .subscribe((unit) => {
+        // Group sets belong to a unit, so only the first unit shown can keep one that was
+        // supplied by a parent component.
+        const isUnitChange = this.shownUnitId !== undefined;
+
+        this.shownUnitId = unit.id;
+        this.unit = unit;
+        this.unitRole = this.findUnitRole(unit.id);
+
+        if (isUnitChange || !this.selectedGroupSet) {
+          this.selectedGroupSet = unit.groupSets?.[0];
+        }
+      });
   }
 
   ngOnDestroy(): void {

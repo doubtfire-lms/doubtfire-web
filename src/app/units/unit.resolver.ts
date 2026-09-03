@@ -1,7 +1,13 @@
 import {inject} from '@angular/core';
 import {ResolveFn} from '@angular/router';
 import {Observable, first} from 'rxjs';
-import {Unit, UnitRole, UnitService, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  FeedbackTemplateService,
+  Unit,
+  UnitRole,
+  UnitService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
@@ -9,6 +15,7 @@ export const resolveUnit: ResolveFn<Unit> = (route, state) => {
   const unitService = inject(UnitService);
   const globalState = inject(GlobalStateService);
   const userService = inject(UserService);
+  const feedbackTemplateService = inject(FeedbackTemplateService);
   const alertService = inject(AlertService);
   const unitId = Number(route.paramMap.get('unitId'));
 
@@ -27,6 +34,12 @@ export const resolveUnit: ResolveFn<Unit> = (route, state) => {
           unitId,
           userService.currentUser,
         );
+      }
+
+      if (unitRole && unitRole.role !== 'Student') {
+        feedbackTemplateService.query({contextType: 'units', contextId: unitId}, {}).subscribe({
+          error: () => alertService.error('Error loading unit feedback templates.', 8000),
+        });
       }
 
       const resolveProgressively = shouldResolveUnitProgressively(state.url, unitId);

@@ -11,7 +11,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, Subscription, finalize, first, of} from 'rxjs';
+import {Observable, Subscription, distinctUntilChanged, finalize, first, map} from 'rxjs';
 import {
   Project,
   ProjectService,
@@ -55,6 +55,8 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   unit: Unit;
 
   private subscriptions: Subscription[] = [];
+  private studentCacheSubscription: Subscription;
+  private studentLoadSubscription: Subscription;
   public sortState: Sort = {active: 'name', direction: 'asc'};
 
   constructor(
@@ -67,36 +69,14 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
+    // The route reuses this component when switching between units, so follow the resolved
+    // unit rather than reading it once from the route snapshot.
+    const unit$ = this.unit$ ?? this.route.parent.data.pipe(map((data) => data.unit as Unit));
+
     this.subscriptions.push(
-      this.unit$?.pipe(first()).subscribe((unit) => {
-        if (!unit) {
-          this.loadingStudents = false;
-          return;
-        }
-
-        this.unit = unit;
-        this.staffFilter = unit.myRole === 'Tutor' ? 'mine' : 'all';
-
-        this.subscriptions.push(
-          this.unit.studentCache.values.subscribe(() => {
-            this.updateSuggestions();
-            this.updateDataSource();
-          }),
-        );
-
-        this.updateSuggestions();
-        this.updateDataSource();
-        this.projectService
-          .loadStudents(this.unit)
-          .pipe(
-            first(),
-            finalize(() => {
-              this.loadingStudents = false;
-            }),
-          )
-          .subscribe();
-      }),
+      unit$
+        .pipe(distinctUntilChanged((previous, current) => previous?.id === current?.id))
+        .subscribe((unit) => this.showUnit(unit)),
     );
   }
 
@@ -106,7 +86,49 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.studentCacheSubscription?.unsubscribe();
+    this.studentLoadSubscription?.unsubscribe();
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  private showUnit(unit: Unit): void {
+    this.studentCacheSubscription?.unsubscribe();
+    this.studentLoadSubscription?.unsubscribe();
+    this.unit = unit;
+    this.searchText = '';
+
+    if (!unit) {
+      this.loadingStudents = false;
+      this.filteredSuggestions = [];
+      this.updateDataSource(true);
+      return;
+    }
+
+    this.staffFilter = unit.myRole === 'Tutor' ? 'mine' : 'all';
+
+    this.studentCacheSubscription = unit.studentCache.values.subscribe(() => {
+      this.updateSuggestions();
+      this.updateDataSource();
+    });
+
+    this.updateSuggestions();
+    this.updateDataSource(true);
+
+    // Students already in the cache can be shown while the current details load, but they may
+    // have been cached in another view minutes ago - so always ask the server for them again.
+    this.loadingStudents = unit.activeStudents.length === 0;
+    this.studentLoadSubscription = this.projectService
+      .loadStudents(unit, false, true)
+      .pipe(
+        first(),
+        finalize(() => {
+          // A request for the unit we have moved on from must not clear this unit's skeleton.
+          if (this.unit === unit) {
+            this.loadingStudents = false;
+          }
+        }),
+      )
+      .subscribe();
   }
 
   public onSearchChange(): void {
@@ -172,7 +194,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
     const suggestions = Array.from(new Set(this.unit?.studentFilterTypeAheadData ?? []));
 
     this.filteredSuggestions = suggestions
-      .filter((item) => !searchValue || item.toLowerCase().includes(searchValue))
+      .filter((item) => !searchValue || item?.toLowerCase().includes(searchValue))
       .slice(0, 8);
   }
 
@@ -196,14 +218,8 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return [...(this.unit?.activeStudents ?? [])]
       .filter((project) => (this.staffFilter === 'mine' ? project.hasTutor(currentUser) : true))
-      .filter((project) => (searchValue ? this.matchesSearch(project, searchValue) : true))
+      .filter((project) => (searchValue ? project.matches(searchValue) : true))
       .sort((a, b) => this.compareProjects(a, b));
-  }
-
-  private matchesSearch(project: Project, searchValue: string): boolean {
-    return (
-      project.matches(searchValue) || project.student.username?.toLowerCase().includes(searchValue)
-    );
   }
 
   private compareProjects(a: Project, b: Project): number {
@@ -229,9 +245,9 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
   private sortValue(project: Project, active: string): number | string {
     switch (active) {
       case 'username':
-        return project.student.username?.toLowerCase() || '';
+        return project.student?.username?.toLowerCase() || '';
       case 'name':
-        return project.student.name?.toLowerCase() || '';
+        return project.student?.name?.toLowerCase() || '';
       case 'stats':
         return project.orderScale ?? 0;
       case 'grade':
@@ -245,7 +261,7 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
       case 'tutorial':
         return project.shortTutorialDescription().toLowerCase();
       default:
-        return project.student.name?.toLowerCase() || '';
+        return project.student?.name?.toLowerCase() || '';
     }
   }
 
@@ -263,9 +279,9 @@ export class StudentsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private csvRow(project: Project): string[] {
     const row = [
-      project.student.username || '',
-      project.student.name || '',
-      project.student.email || '',
+      project.student?.username || '',
+      project.student?.name || '',
+      project.student?.email || '',
       String(project.portfolioStatus ?? ''),
     ];
 

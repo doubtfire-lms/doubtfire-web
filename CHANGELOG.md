@@ -2,6 +2,126 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-84](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-83...v11.0.0-84) (2026-09-03)
+
+
+### Features
+
+* add pause week count option to breaks ([9550457](https://github.com/b0ink/doubtfire-deploy/commit/9550457553a929345bc9a97b33f5f7c6fac7cd48))
+* add pause week count option to breaks ([#1535](https://github.com/b0ink/doubtfire-deploy/issues/1535)) ([d35572a](https://github.com/b0ink/doubtfire-deploy/commit/d35572affbcf57d93b9a7f3cc31db747aaaec256))
+* add teaching period break to communication ui ([7a0a272](https://github.com/b0ink/doubtfire-deploy/commit/7a0a2720b8e2600ff63a6f2a5684e3ef1a2e6a95))
+
+
+### Bug Fixes
+
+* follow the resolved unit when a unit view is reused ([9f7c6f3](https://github.com/b0ink/doubtfire-deploy/commit/9f7c6f3d47391fba7750b8702bba7d3c9e85a4d5))
+* keep student search working for incomplete user details ([901448c](https://github.com/b0ink/doubtfire-deploy/commit/901448c5ceb39e3f16c85eb8cf8eeef23975cefd))
+* load the current students rather than a cached response ([b154f2e](https://github.com/b0ink/doubtfire-deploy/commit/b154f2e11b71a047d2b7c78534ececdbbc72e6a7))
+* restore query to fetch unit feedback chips ([7e729bc](https://github.com/b0ink/doubtfire-deploy/commit/7e729bc2517f2807cc35b4267904065c5ae13314))
+* skip tutorial enrolments missing from the unit cache ([2cc59ab](https://github.com/b0ink/doubtfire-deploy/commit/2cc59abaaf2f64596a8d2c7fc41e145cafef425b))
+
+## [11.0.0-83](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-82...v11.0.0-83) (2026-09-01)
+
+
+### Features
+
+* display snapshot of aggregated task completion data ([#1164](https://github.com/b0ink/doubtfire-deploy/issues/1164)) ([6c003fd](https://github.com/b0ink/doubtfire-deploy/commit/6c003fdee1c258ee02e6ff3307cabe50a56f2eea))
+
+## [11.0.0-82](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-81...v11.0.0-82) (2026-09-01)
+
+
+### Bug Fixes
+
+* support gravatar prefetch ([e9a0028](https://github.com/b0ink/doubtfire-deploy/commit/e9a002877ba7b5679642578b59941b8a89ffeae2))
+
+## [11.0.0-81](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-80...v11.0.0-81) (2026-09-01)
+
+
+### Features
+
+* build whitelist of hashed sources ([acc0c81](https://github.com/b0ink/doubtfire-deploy/commit/acc0c812b5211f9705867a7b00e1f56439784129))
+
+## [11.0.0-80](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-79...v11.0.0-80) (2026-09-01)
+
+## [11.0.0-79](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-78...v11.0.0-79) (2026-09-01)
+
+
+### Bug Fixes
+
+* add pdfjs asset ([0cbbcdb](https://github.com/b0ink/doubtfire-deploy/commit/0cbbcdb0bc763e3787affa10439c4ed4f3411181))
+
+## [11.0.0-78](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-77...v11.0.0-78) (2026-09-01)
+
+
+### Bug Fixes
+
+* allow third party package scripts ([7ca5c4d](https://github.com/b0ink/doubtfire-deploy/commit/7ca5c4dce58d564716589e40e06aeccc60fa1d89))
+* ensure all statuses available to staff ([6b66760](https://github.com/b0ink/doubtfire-deploy/commit/6b667605b7e7fce8d8910b75aae08517c548c2e4))
+* ensure rule is deleted ([a8c5f54](https://github.com/b0ink/doubtfire-deploy/commit/a8c5f5429308f6d65d6597b3c64c5c9199d1cee1))
+* invert pdf comment as author ([f5cd8ab](https://github.com/b0ink/doubtfire-deploy/commit/f5cd8abab0e22b65b3742958e7dab8712052a682))
+* whitelist gtag script ([280d1d6](https://github.com/b0ink/doubtfire-deploy/commit/280d1d6f3469e17778c2a44bb8133592e7396743))
+
+## [11.0.0-77](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-76...v11.0.0-77) (2026-08-28)
+
+
+### Features
+
+* open student project from communication preview ([d0960c6](https://github.com/b0ink/doubtfire-deploy/commit/d0960c6f3306aca67005405ce1c228ee23ed6eb8))
+
+## [11.0.0-76](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-75...v11.0.0-76) (2026-08-26)
+
+
+### Bug Fixes
+
+* center user badge vertically ([800268a](https://github.com/b0ink/doubtfire-deploy/commit/800268a890239790bcdd85187ae3fce86bf2459f))
+* highlight links ([6f08ab8](https://github.com/b0ink/doubtfire-deploy/commit/6f08ab807b820a843f11d20184c81eb7f1c82d36))
+* restore code styling in rendered markdown ([86f38c8](https://github.com/b0ink/doubtfire-deploy/commit/86f38c88dc0b495b8f8af1cb61f407d57bd843cf))
+
+## [11.0.0-75](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-74...v11.0.0-75) (2026-08-24)
+
+
+### Bug Fixes
+
+* show task due countdown five days before target date ([444e86b](https://github.com/b0ink/doubtfire-deploy/commit/444e86bc420f7600c9c2630b8c7518fee5bd694d))
+
+## [11.0.0-74](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-73...v11.0.0-74) (2026-08-21)
+
+## [11.0.0-73](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-72...v11.0.0-73) (2026-08-21)
+
+## [11.0.0-72](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-71...v11.0.0-72) (2026-08-20)
+
+
+### Features
+
+* add floating save button for unit details editor ([792e79f](https://github.com/b0ink/doubtfire-deploy/commit/792e79fdff22d40c484e75a4f4f18886a6f6cb41))
+* add groups and group sets to communication conditions ([e191d8b](https://github.com/b0ink/doubtfire-deploy/commit/e191d8b6cabcd21499a62e368d5df742dbaae8b7))
+* add selectors of groups of task statuses ([53b9842](https://github.com/b0ink/doubtfire-deploy/commit/53b98421749b4c493e6fc99beeba446dae2340d8))
+* add ui to delete engagement stamps ([2ff70ca](https://github.com/b0ink/doubtfire-deploy/commit/2ff70ca76509c4bf94d5e62b95da09a5f6b4a6e9))
+* copy/paste communication rules ([#1481](https://github.com/b0ink/doubtfire-deploy/issues/1481)) ([55fc289](https://github.com/b0ink/doubtfire-deploy/commit/55fc289d839e4d82134a6007e7f883b2c8a01045))
+* enable drag and drop ordering of rules ([afcf7b8](https://github.com/b0ink/doubtfire-deploy/commit/afcf7b8243539464e0264a1997a6f9bb0a8c48d1))
+* insert communication action variable at cursor ([39b80ca](https://github.com/b0ink/doubtfire-deploy/commit/39b80cab78ece8fab46eaae73a9f7a62f29c4fdb))
+* use break duration in days and show break label ([6a9b2a0](https://github.com/b0ink/doubtfire-deploy/commit/6a9b2a0c902ea1e09e341b408e53213f591cecc5))
+* use break duration in days and show break label ([#1487](https://github.com/b0ink/doubtfire-deploy/issues/1487)) ([a1212c3](https://github.com/b0ink/doubtfire-deploy/commit/a1212c34625331567320a2f3f864ba890686944d))
+
+
+### Bug Fixes
+
+* autosize textarea ([06e6628](https://github.com/b0ink/doubtfire-deploy/commit/06e6628d3821c559fe3342bf1908e5d47d4d9558))
+* ensure full task status id can be searchable ([2a33bd6](https://github.com/b0ink/doubtfire-deploy/commit/2a33bd698030e11be2bbb4793ba8c58eb0b283c4))
+* improve render of staff list ([22cf5bb](https://github.com/b0ink/doubtfire-deploy/commit/22cf5bbfbeab33ff4fecd89ef8913bef83ebb26c))
+* lint ([64de772](https://github.com/b0ink/doubtfire-deploy/commit/64de772fee1bf980d89753a688a9b731972a6ec0))
+* restore list markers in rendered markdown ([a31130f](https://github.com/b0ink/doubtfire-deploy/commit/a31130f549c2754ab0b1f16f433266a937f3db35))
+* set corret tutor in tutorial dropdown ([f60d50f](https://github.com/b0ink/doubtfire-deploy/commit/f60d50ff38df9d460726839a37459958dd9bc643))
+* stop students tab freezing when revisited ([7aad283](https://github.com/b0ink/doubtfire-deploy/commit/7aad283bc6050bb9cd019461aea354e782ebb887))
+* text wrap body preview ([97b75d0](https://github.com/b0ink/doubtfire-deploy/commit/97b75d0637bfd0e3249d12adc13d2550114543f6))
+
+## [11.0.0-71](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-70...v11.0.0-71) (2026-08-17)
+
+
+### Features
+
+* tutorial duration ([#1463](https://github.com/b0ink/doubtfire-deploy/issues/1463)) ([4e5dbe3](https://github.com/b0ink/doubtfire-deploy/commit/4e5dbe3634dccac8d7b57c19d9d40302bbc20a1e))
+
 ## [11.0.0-70](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-69...v11.0.0-70) (2026-08-17)
 
 

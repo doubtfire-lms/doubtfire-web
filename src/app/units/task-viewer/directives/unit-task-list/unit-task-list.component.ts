@@ -37,6 +37,7 @@ const DEFAULT_VIEW_PREFERENCES: TaskListViewPreferences = {
 };
 
 const START_APPROACHING_DAYS = 7;
+const DUE_APPROACHING_DAYS = 5;
 
 @Component({
   selector: 'f-unit-task-list',
@@ -242,6 +243,15 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     const dueTime = this.dateTime(task.localDueDate());
 
     return now >= startTime && now < dueTime;
+  }
+
+  public taskDueApproaching(task: Task): boolean {
+    return (
+      !!task &&
+      !task.isBeforeStartDate() &&
+      !task.inSubmittedState() &&
+      task.daysUntilDueDate() <= DUE_APPROACHING_DAYS
+    );
   }
 
   /*
