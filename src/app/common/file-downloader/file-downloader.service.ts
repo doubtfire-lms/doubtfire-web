@@ -171,4 +171,25 @@ export class FileDownloaderService {
       },
     );
   }
+
+  /**
+   * Start a browser-managed download after Rails has issued a short-lived,
+   * HTTP-only access cookie. Unlike the Blob downloader, this streams directly
+   * to disk and appears in the browser's Downloads UI immediately.
+   */
+  public downloadNativeFile(url: string): void {
+    this.httpClient.post<void>(`${url}/access`, null).subscribe({
+      next: () => {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.setAttribute('download', '');
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+      },
+      error: (error) => {
+        this.alerts.error(`Error starting download - ${error}`);
+      },
+    });
+  }
 }

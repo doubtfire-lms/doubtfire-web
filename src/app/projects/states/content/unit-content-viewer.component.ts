@@ -1,4 +1,3 @@
-import {HttpParams} from '@angular/common/http';
 import {
   Component,
   ElementRef,
@@ -14,13 +13,7 @@ import {
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription, combineLatest, firstValueFrom} from 'rxjs';
-import {
-  AuthenticationService,
-  Project,
-  Task,
-  Unit,
-  UserService,
-} from 'src/app/api/models/doubtfire-model';
+import {AuthenticationService, Project, Task, Unit} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {GlobalStateService, ViewType} from '../index/global-state.service';
@@ -71,12 +64,15 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
   private activeIframeIndex = 0;
   private contentIframes: Array<HTMLIFrameElement | undefined> = [];
   private currentUnitId?: number;
+  private currentContentSiteId?: number;
   private contentRequestId = 0;
   private iframeUrls: Array<string | undefined> = [];
   private loadingIframeIndex?: number;
   private pendingIframeUrl?: string;
   private routeSubscription?: Subscription;
   private initialized = false;
+  private readonly iframeClickHandler = (event: Event) =>
+    this.handleIframeClick(event as MouseEvent);
 
   constructor(
     private authService: AuthenticationService,
@@ -84,7 +80,6 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
     private router: Router,
     private globalState: GlobalStateService,
     private fileDownloader: FileDownloaderService,
-    private userService: UserService,
     @Optional() @Inject(MAT_DIALOG_DATA) private dialogData?: UnitContentViewerDialogData,
   ) {}
 
@@ -151,21 +146,66 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
   }
 
   public onIframeLoad(frameIndex: number): void {
+    if (this.recoverEscapedHomeRoute(frameIndex)) {
+      return;
+    }
+
+    // Browser back/forward restores a new iframe document without going
+    // through setIframeUrl. Reattach interception even when this was not one
+    // of the component's expected double-buffered loads.
+    this.attachIframeClickHandler(frameIndex);
+
     if (frameIndex !== this.loadingIframeIndex || !this.isExpectedIframeLoad(frameIndex)) {
       return;
     }
 
     this.activeIframeIndex = frameIndex;
     this.loadingIframeIndex = undefined;
+  }
 
-    this.contentIframes[frameIndex]?.contentDocument?.addEventListener(
-      'click',
-      (event) => this.handleIframeClick(event),
-      true,
-    );
+  private attachIframeClickHandler(frameIndex: number): void {
+    try {
+      this.contentIframes[frameIndex]?.contentDocument?.addEventListener(
+        'click',
+        this.iframeClickHandler,
+        true,
+      );
+    } catch {
+      // Cross-origin iframe documents are intentionally inaccessible.
+    }
+  }
+
+  private recoverEscapedHomeRoute(frameIndex: number): boolean {
+    const iframe = this.contentIframes[frameIndex];
+
+    if (!iframe?.contentWindow || !this.currentUnitId) {
+      return false;
+    }
+
+    try {
+      const iframeUrl = new URL(iframe.contentWindow.location.href);
+      const isOnTrackHome =
+        iframeUrl.origin === window.location.origin && /^\/home\/?$/.test(iframeUrl.pathname);
+
+      if (!isOnTrackHome) {
+        return false;
+      }
+    } catch {
+      return false;
+    }
+
+    if (this.dialogData) {
+      this.setContentRoute('/');
+      void this.loadContentRoute(this.currentUnitId);
+    } else {
+      void this.router.navigate(this.contentRouteCommands('/'), {replaceUrl: true});
+    }
+
+    return true;
   }
 
   private setHeaderContext(unit: Unit): void {
+    this.currentContentSiteId = this.dialogData?.contentSiteId ?? unit.mainContentSiteId;
     const studentProject = this.studentProjectForUnit(unit);
 
     if (unit.myRole === 'Student' && studentProject) {
@@ -334,23 +374,18 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
   }
 
   private async contentUrl(unitId: number, contentRoute: string): Promise<string> {
-    const params = await this.contentRequestParams(contentRoute);
+    await firstValueFrom(this.authService.prepareContentAccess());
 
-    return `${API_URL}/units/${unitId}/content?${params.toString()}`;
-  }
-
-  private async contentRequestParams(contentRoute: string): Promise<HttpParams> {
-    const contentToken = await firstValueFrom(this.authService.getContentToken());
-    let params = new HttpParams()
-      .set('content_route', contentRoute)
-      .set('username', this.userService.currentUser.username)
-      .set('content_token', contentToken);
-
-    if (this.dialogData?.contentSiteId) {
-      params = params.set('content_site_id', this.dialogData.contentSiteId);
+    if (!this.currentContentSiteId) {
+      throw new Error('No unit content site is available');
     }
 
-    return params;
+    const encodedRoute = contentRoute
+      .split('/')
+      .map((part) => encodeURIComponent(part))
+      .join('/');
+
+    return `${API_URL}/units/${unitId}/content/sites/${this.currentContentSiteId}/files${encodedRoute}`;
   }
 
   private routeFromHref(href: string | null): {path: string; fragment?: string} | undefined {
