@@ -451,6 +451,7 @@ export class Unit extends Entity {
   }
 
   public refreshGroups(): void {
+    // TODO: Implement group refresh.
     // return unless unit.groups?.length > 0
     // # Query the groups within the unit.
     // Unit.groups.query( {id: unit.id} ,

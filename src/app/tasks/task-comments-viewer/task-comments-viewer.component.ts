@@ -254,6 +254,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
         this.alerts.error('I cannot upload that file - only images, audio, and PDFs.', 4000);
       }
     });
+    // TODO: Check whether task comments need to be remapped.
     // this.task.comments = this.ts.mapComments(this.task.comments);
   }
 
