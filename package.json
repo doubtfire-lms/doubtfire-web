@@ -116,7 +116,7 @@
   "optionalDependencies": {
     "@nx/nx-darwin-arm64": "^23.1.1",
     "@nx/nx-darwin-x64": "^23.1.2",
-    "@nx/nx-linux-arm64-gnu": "^23.1.1",
+    "@nx/nx-linux-arm64-gnu": "^23.1.2",
     "@nx/nx-linux-x64-gnu": "^23.1.1",
     "@nx/nx-win32-x64-msvc": "^23.1.2",
     "@rollup/rollup-linux-arm64-gnu": "^4.63.1",
