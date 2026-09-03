@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -48,8 +48,56 @@ describe('FUnitTaskListComponent', () => {
     component = fixture.componentInstance;
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('shows the ongoing state after a task starts and before it is due', () => {
+    const now = new Date(2026, 7, 22, 12).getTime();
+    vi.spyOn(Date, 'now').mockReturnValue(now);
+    const task = {
+      startDate: new Date(now - 9 * 24 * 60 * 60 * 1000),
+      localDueDate: () => new Date(now + 5 * 24 * 60 * 60 * 1000),
+      inFinalState: () => false,
+    } as Task;
+
+    expect(component.taskOngoing(task)).toBe(true);
+  });
+
+  it('ends the ongoing state when the task reaches its due date', () => {
+    const now = new Date(2026, 7, 22, 12).getTime();
+    vi.spyOn(Date, 'now').mockReturnValue(now);
+    const task = {
+      startDate: new Date(now - 14 * 24 * 60 * 60 * 1000),
+      localDueDate: () => new Date(now),
+      inFinalState: () => false,
+    } as Task;
+
+    expect(component.taskOngoing(task)).toBe(false);
+  });
+
+  it('shows the due state when a started task is due within five days', () => {
+    const task = {
+      isBeforeStartDate: () => false,
+      inSubmittedState: () => false,
+      daysUntilDueDate: () => 5,
+    } as Task;
+
+    expect(component.taskDueApproaching(task)).toBe(true);
+  });
+
+  it('does not show the due state more than five days before the due date', () => {
+    const task = {
+      isBeforeStartDate: () => false,
+      inSubmittedState: () => false,
+      daysUntilDueDate: () => 6,
+    } as Task;
+
+    expect(component.taskDueApproaching(task)).toBe(false);
   });
 
   it('sorts task definitions by task top weight by default', () => {

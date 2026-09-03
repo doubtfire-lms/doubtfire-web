@@ -7,9 +7,7 @@ import {
   OnDestroy,
   SimpleChanges,
 } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum, TaskStatusUiData} from 'src/app/api/models/task-status';
 import {UnitRole} from 'src/app/api/models/unit-role';
@@ -36,7 +34,6 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
   constructor(
     private extensions: ExtensionModalService,
     private taskService: TaskService,
-    private route: ActivatedRoute,
     private qrModalService: QrModalService,
     private doubtfireConstants: DoubtfireConstants,
     private submissionTypeModalService: SubmissionTypeModalService,
@@ -53,14 +50,11 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
   @Input() task: Task;
   taskStatusColor: string;
 
-  private project?: Project;
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.task) {
       this.task = changes.task.currentValue;
       this.reapplyTriggers();
       this.taskStatusColor = this.taskService.statusColors.get(this.task.statusClass());
-      this.project = this.task.project;
       this.textCss = `::ng-deep f-task-status-card .mat-mdc-text-field-wrapper.mdc-text-field {
         background-color: #${this.taskStatusColor} !important;
       }`;
@@ -85,17 +79,8 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
   }
 
   reapplyTriggers(): void {
-    // if tutor is in queryParam
     if (this.isTutor) {
-      this.triggers = this.taskService.statusKeys
-        .map((k) => this.taskService.statusData(k))
-        .filter((trigger) => {
-          if (trigger.status !== 'complete') {
-            return true;
-          }
-
-          return this.task.canMarkComplete || this.task.status === 'complete';
-        });
+      this.triggers = this.taskService.statusKeys.map((k) => this.taskService.statusData(k));
     } else {
       const studentTriggers = (this.taskService.switchableStates.student as TaskStatusEnum[]).map(
         (k) => this.taskService.statusData(k),
@@ -162,14 +147,14 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
 
   public get currentUnitRole(): UnitRole | undefined {
     const currentUser = this.userService.currentUser;
-    return this.project?.unit?.staff.find((ur) => ur.user.id === currentUser.id);
+    return this.task?.project?.unit?.staff?.find((ur) => ur.user?.id === currentUser?.id);
   }
 
   public get isTutor(): boolean {
     return (
       this.currentUnitRole?.role === 'Convenor' ||
       this.currentUnitRole?.role === 'Tutor' ||
-      this.userService.currentUser.systemRole === 'Admin'
+      this.userService.currentUser?.systemRole === 'Admin'
     );
   }
 }

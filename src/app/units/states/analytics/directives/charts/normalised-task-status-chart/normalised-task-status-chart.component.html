@@ -1,0 +1,140 @@
+<mat-card appearance="outlined" class="p-4">
+  <div class="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between">
+    <mat-card-header class="text-pretty xl:max-w-[calc(50%)]">
+      <mat-card-title>Task Completion Status</mat-card-title>
+      <mat-card-subtitle class="mb-2.5">
+        <p>
+          View the historical completion status of tasks across all students, filtered by campus
+          and/or tutorial. Use the slider to navigate through different snapshots.
+        </p>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <div class="flex items-center gap-2 p-4">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-select [(ngModel)]="campusFilter" (selectionChange)="onCampusFilterChange()">
+          <mat-option value="all">All</mat-option>
+          @for (campus of campuses; track campus) {
+            <mat-option [value]="campus">{{ campus }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button
+        aria-label="Capture completion snapshot now"
+        class="self-center"
+        mat-icon-button
+        (click)="captureNow()"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+  @if (hasChartData) {
+    <div class="px-4 pt-8 text-slate-600">
+      <h3 class="mb-0">{{ selectedSnapshotDate }}</h3>
+      <p>Student count: {{ snapshotStudentCount }}</p>
+    </div>
+    <div class="h-125">
+      <ng-charts-bar-vertical-normalized
+        class="reverse-legend-order"
+        [animations]="true"
+        [gradient]="false"
+        [legend]="true"
+        [results]="data"
+        [scheme]="$any(colorScheme)"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [tooltipDisabled]="false"
+        [xAxis]="true"
+        [xAxisLabel]="normalisedCompletionSnapshotXLabel"
+        [yAxis]="true"
+        [yAxisLabel]="normalisedCompletionSnapshotYLabel"
+      >
+      </ng-charts-bar-vertical-normalized>
+    </div>
+  } @else {
+    <div class="flex h-full min-h-148 items-center justify-center">
+      <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+    </div>
+  }
+  <div class="px-4 pt-2 pb-8">
+    <div class="relative w-full">
+      <mat-slider
+        class="snapshot-slider"
+        [disabled]="snapshots.length <= 1"
+        [discrete]="true"
+        [displayWith]="formatSnapshotDate"
+        [max]="sliderMax"
+        [min]="0"
+        [showTickMarks]="showTickMarks"
+        [step]="1"
+      >
+        <input
+          matSliderThumb
+          [ngModel]="sliderSelect"
+          (ngModelChange)="onSnapshotSliderChange($event)"
+        />
+      </mat-slider>
+      @if (breakSegments.length) {
+        <div
+          aria-label="Teaching period breaks"
+          class="relative mt-1 w-full select-none"
+          role="group"
+          [style.height]="breakBandHeight"
+        >
+          @for (segment of breakSegments; track segment.key) {
+            <div
+              class="break-pill absolute flex h-5 items-center overflow-hidden rounded px-1 text-[10px] leading-none text-slate-600"
+              [attr.aria-label]="segment.tooltip"
+              [matTooltip]="segment.tooltip"
+              [style.left]="segment.leftStyle"
+              [style.top]="breakLaneStyle(segment)"
+              [style.width]="segment.widthStyle"
+            >
+              <span class="min-w-0 flex-1 truncate">{{ segment.text }}</span>
+            </div>
+          }
+        </div>
+      }
+      @if (weekSegments.length > 1) {
+        <div
+          #weekTrack
+          aria-label="Teaching weeks"
+          class="relative -mt-1.5 h-7 w-full select-none"
+          role="group"
+        >
+          @for (segment of weekSegments; track segment.key) {
+            <button
+              class="absolute inset-y-0 flex cursor-pointer items-center justify-center overflow-hidden border-r border-white p-0 text-xs leading-none whitespace-nowrap tabular-nums transition-colors first:rounded-l-sm last:rounded-r-sm last:border-r-0 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-formatif-blue"
+              type="button"
+              [attr.aria-current]="isActiveWeek(segment) ? 'true' : null"
+              [attr.aria-label]="segment.tooltip"
+              [matTooltip]="segment.tooltip"
+              [ngClass]="segmentClasses(segment)"
+              [style.left]="segment.leftStyle"
+              [style.width]="segment.widthStyle"
+              (click)="selectWeek(segment)"
+            >
+              {{ segment.text }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- <mat-card-header class="text-pretty xl:max-w-[calc(50%)]">
+    <mat-card-title>Task Completion Status Over Time</mat-card-title>
+    <mat-card-subtitle class="mb-2.5">
+      <p>Task completion status across all tasks over time.</p>
+    </mat-card-subtitle>
+  </mat-card-header>
+  @if (hasChartData) {
+    <div class="min-h-100">
+      <f-stacked-area-status-chart [colorScheme]="colorScheme" [weeklyData]="weeklyData" />
+    </div>
+  } @else {
+    <div class="flex h-full items-center justify-center">
+      <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+    </div>
+  } -->
+</mat-card>

@@ -3,6 +3,7 @@
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {
+  AreaChartStackedComponent,
   BarVerticalNormalizedComponent,
   GaugeComponent,
   LineChartComponent,
@@ -329,7 +330,9 @@ import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {UnitTutorialModalComponent} from './units/modals/unit-tutorial-modal/unit-tutorial-modal.component';
-import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
+import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
+import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
+import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
 import {CommunicationActionsComponent} from './units/states/edit/directives/unit-communications-editor/actions/communication-actions.component';
@@ -649,6 +652,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskPlannerCardComponent,
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
+    NormalisedTaskStatusChartComponent,
+    StackedAreaStatusChartComponent,
     SubmissionFilesModalComponent,
     TutorNotesComponent,
     TutorNotesViewComponent,
@@ -858,6 +863,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     PickerModule,
     EmojiModule,
     BarVerticalNormalizedComponent,
+    AreaChartStackedComponent,
     GaugeComponent,
     LineChartComponent,
     NumberCardComponent,
@@ -869,7 +875,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
       registrationStrategy: () => interval(6000).pipe(take(1)),
     }),
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
-    CodeEditorModule.forRoot(),
+    CodeEditorModule.forRoot({baseUrl: '/assets/monaco/min'}),
     NgxGanttModule,
     MonacoEditorModule.forRoot(),
     MatChipListbox,
