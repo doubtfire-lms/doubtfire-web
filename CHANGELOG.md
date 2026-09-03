@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-84](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-83...v11.0.0-84) (2026-09-03)
+
+
+### Features
+
+* add pause week count option to breaks ([9550457](https://github.com/b0ink/doubtfire-deploy/commit/9550457553a929345bc9a97b33f5f7c6fac7cd48))
+* add pause week count option to breaks ([#1535](https://github.com/b0ink/doubtfire-deploy/issues/1535)) ([d35572a](https://github.com/b0ink/doubtfire-deploy/commit/d35572affbcf57d93b9a7f3cc31db747aaaec256))
+* add teaching period break to communication ui ([7a0a272](https://github.com/b0ink/doubtfire-deploy/commit/7a0a2720b8e2600ff63a6f2a5684e3ef1a2e6a95))
+
+
+### Bug Fixes
+
+* follow the resolved unit when a unit view is reused ([9f7c6f3](https://github.com/b0ink/doubtfire-deploy/commit/9f7c6f3d47391fba7750b8702bba7d3c9e85a4d5))
+* keep student search working for incomplete user details ([901448c](https://github.com/b0ink/doubtfire-deploy/commit/901448c5ceb39e3f16c85eb8cf8eeef23975cefd))
+* load the current students rather than a cached response ([b154f2e](https://github.com/b0ink/doubtfire-deploy/commit/b154f2e11b71a047d2b7c78534ececdbbc72e6a7))
+* restore query to fetch unit feedback chips ([7e729bc](https://github.com/b0ink/doubtfire-deploy/commit/7e729bc2517f2807cc35b4267904065c5ae13314))
+* skip tutorial enrolments missing from the unit cache ([2cc59ab](https://github.com/b0ink/doubtfire-deploy/commit/2cc59abaaf2f64596a8d2c7fc41e145cafef425b))
+
 ## [11.0.0-83](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-82...v11.0.0-83) (2026-09-01)
 
 
