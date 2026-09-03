@@ -393,6 +393,7 @@ import {StaffTaskListComponent} from './units/states/tasks/inbox/directives/staf
 import {TaskClaimComponent} from './units/states/tasks/inbox/directives/task-claim/task-claim.component';
 import {InboxComponent} from './units/states/tasks/inbox/inbox.component';
 import {UnitTaskInboxStateComponent} from './units/states/tasks/inbox/unit-task-inbox-state.component';
+import {TutorDashboardComponent} from './units/states/tutor-dashboard/tutor-dashboard.component';
 import {FTaskDetailsViewComponent} from './units/task-viewer/directives/task-details-view/task-details-view.component';
 import {FTaskSheetViewComponent} from './units/task-viewer/directives/task-sheet-view/task-sheet-view.component';
 import {FUnitTaskListComponent} from './units/task-viewer/directives/unit-task-list/unit-task-list.component';
@@ -578,6 +579,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskDashboardComponent,
     InboxComponent,
     InboxDashboardComponent,
+    TutorDashboardComponent,
     ProjectProgressBarComponent,
     TeachingPeriodListComponent,
     CreateNewUnitModal,

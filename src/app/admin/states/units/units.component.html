@@ -101,7 +101,7 @@
         <tr
           *matRowDef="let row; columns: displayedColumns"
           mat-row
-          [routerLink]="['/units', row.id, 'tasks', 'inbox']"
+          [routerLink]="['/units', row.id, 'dashboard']"
         ></tr>
       }
       @if (mode === 'admin') {

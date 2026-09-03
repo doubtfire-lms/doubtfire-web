@@ -241,6 +241,12 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
 
   private getFilterOverrides(unit: Unit): Partial<TaskFilters> {
     const selectedStudents = this.route.snapshot.queryParamMap.get('students');
+    const selectedTutor = this.route.snapshot.queryParamMap.get('tutor');
+    const selectedUnitRoleId = selectedTutor ? Number(selectedTutor) : null;
+    const tutorFilter =
+      selectedUnitRoleId && unit.staff.some((unitRole) => unitRole.id === selectedUnitRoleId)
+        ? {unitRoleIdSelected: selectedUnitRoleId}
+        : {};
 
     switch (this.routeMode) {
       case 'definition':
@@ -254,10 +260,14 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
           tutorialIdSelected: selectedStudents ?? 'all',
           taskDefinition: null,
           taskDefinitionIdSelected: null,
+          ...tutorFilter,
         };
       case 'inbox':
       default:
-        return selectedStudents ? {tutorialIdSelected: selectedStudents} : {};
+        return {
+          ...(selectedStudents ? {tutorialIdSelected: selectedStudents} : {}),
+          ...tutorFilter,
+        };
     }
   }
 
