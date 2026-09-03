@@ -29,6 +29,8 @@ import {
   GroupSet,
   ProjectService,
   TaskDefinition,
+  TeachingPeriodBreak,
+  TeachingPeriodBreakService,
   Tutorial,
   TutorialStream,
   Unit,
@@ -59,6 +61,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   selectedRuleId?: number;
   rules: CommunicationRule[] = [];
   campuses: Campus[] = [];
+  teachingBreaks: TeachingPeriodBreak[] = [];
   taskDefinitions: readonly TaskDefinition[] = [];
   tutorials: readonly Tutorial[] = [];
   tutorialStreams: readonly TutorialStream[] = [];
@@ -197,6 +200,23 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return this.unit?.currentUnitWeek ?? null;
   }
 
+  /**
+   * Breaks are not campus specific in the week count - a break only shifts the
+   * week number when it is set to pause it. Staff scope their rules by campus,
+   * so the editor just needs to show when the breaks fall.
+   */
+  breakCampusSummary(teachingBreak: TeachingPeriodBreak): string {
+    if (!teachingBreak.campusIds.length) {
+      return 'All campuses';
+    }
+
+    return teachingBreak.campusIds.map((campusId) => this.campusLabel(campusId)).join(', ');
+  }
+
+  isCurrentBreak(teachingBreak: TeachingPeriodBreak): boolean {
+    return teachingBreak.covers(new Date());
+  }
+
   constructor(
     private ruleService: CommunicationRuleService,
     private conditionService: CommunicationConditionService,
@@ -205,6 +225,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     private projectService: ProjectService,
     private dialog: MatDialog,
     private campusService: CampusService,
+    private teachingPeriodBreakService: TeachingPeriodBreakService,
     private alerts: AlertService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
     private confirmationModalService: ConfirmationModalService,
@@ -1256,6 +1277,37 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       // TODO: use spinner until students are loaded
       this.projectService.loadStudents(this.unit, false, true).subscribe({
         error: (error) => this.showError(error),
+      }),
+    );
+
+    this.loadTeachingBreaks();
+  }
+
+  /**
+   * Teaching period breaks are not included in the unit payload, so fetch them
+   * for the unit's teaching period.
+   */
+  private loadTeachingBreaks(): void {
+    const teachingPeriod = this.unit?.teachingPeriod;
+    this.teachingBreaks = [];
+
+    if (!teachingPeriod) {
+      return;
+    }
+
+    this.subscriptions.push(
+      this.teachingPeriodBreakService
+        .query({teaching_period_id: teachingPeriod.id}, {cache: teachingPeriod.breaksCache})
+        .subscribe({
+          error: (error) => this.showError(error),
+        }),
+    );
+
+    this.subscriptions.push(
+      teachingPeriod.breaksCache.values.subscribe((teachingBreaks) => {
+        this.teachingBreaks = [...teachingBreaks].sort(
+          (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+        );
       }),
     );
   }
