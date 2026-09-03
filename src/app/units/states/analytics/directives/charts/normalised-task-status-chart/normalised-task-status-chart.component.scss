@@ -15,3 +15,22 @@
 :host ::ng-deep .snapshot-slider .mdc-slider__value-indicator-text {
   white-space: nowrap;
 }
+
+// The slider's own 8px side margins would put its track out of step with the week band below it.
+:host ::ng-deep .snapshot-slider.mat-mdc-slider {
+  display: block;
+  margin-inline: 0;
+  width: 100%;
+}
+
+// Break pills are hatched so a break reads as 'no teaching' rather than as another
+// week, whether it sits above its own break segment or over the weeks it runs through.
+.break-pill {
+  background-color: var(--color-slate-50, #f8fafc);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-slate-200, #e2e8f0) 0 4px,
+    transparent 4px 8px
+  );
+  border: 1px solid var(--color-slate-200, #e2e8f0);
+}

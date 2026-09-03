@@ -10,6 +10,7 @@ import {MarkingSessionService} from '../services/marking-session.service';
 import {ProjectService} from '../services/project.service';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
+import {MILLISECONDS_PER_WEEK, startOfDay} from './calendar-day';
 import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {
   Campus,
@@ -327,26 +328,13 @@ export class Unit extends Entity {
       return this.teachingPeriod.weekNumber(date);
     }
 
-    const targetDate = date instanceof Date ? date : new Date(date);
-    if (Number.isNaN(targetDate.valueOf())) {
+    const targetDate = startOfDay(date);
+    const startDate = startOfDay(this.startDate);
+    if (!targetDate || !startDate) {
       return null;
     }
-    const normalizedTargetDate = new Date(
-      targetDate.getFullYear(),
-      targetDate.getMonth(),
-      targetDate.getDate(),
-    );
-    const normalizedStartDate = new Date(
-      this.startDate.getFullYear(),
-      this.startDate.getMonth(),
-      this.startDate.getDate(),
-    );
-    const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-    return (
-      Math.floor(
-        (normalizedTargetDate.valueOf() - normalizedStartDate.valueOf()) / millisecondsPerWeek,
-      ) + 1
-    );
+
+    return Math.floor((targetDate.valueOf() - startDate.valueOf()) / MILLISECONDS_PER_WEEK) + 1;
   }
 
   /**

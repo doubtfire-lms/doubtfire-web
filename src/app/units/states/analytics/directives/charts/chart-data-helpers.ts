@@ -7,6 +7,12 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 
+// Snapshots can predate the teaching period; fold those into week 0 rather than showing 'Week -2'.
+export function displayWeekNumber(unit: Unit, date: Date | string): number | null {
+  const weekNumber = unit.weekNumber(date);
+  return weekNumber === null ? null : Math.max(weekNumber, 0);
+}
+
 export function formatSnapshotLabel(unit: Unit, snapshotDate?: string, format?: string): string {
   if (!snapshotDate) {
     return '';
@@ -17,7 +23,7 @@ export function formatSnapshotLabel(unit: Unit, snapshotDate?: string, format?: 
     return snapshotDate;
   }
 
-  const weekNumber = unit.weekNumber(date);
+  const weekNumber = displayWeekNumber(unit, date);
   const dayName = new Intl.DateTimeFormat(undefined, {weekday: 'short'}).format(date);
 
   if (!format) {
@@ -128,4 +134,17 @@ export function hasOnlyNotStartedStatuses(snapshot: TaskCompletionSnapshot): boo
 
 export function shouldIncludeSnapshot(unit: Unit, snapshot: TaskCompletionSnapshot): boolean {
   return !(isPreWeekZeroSnapshot(unit, snapshot) && hasOnlyNotStartedStatuses(snapshot));
+}
+
+export function isEmptySnapshot(snapshot: TaskCompletionSnapshot): boolean {
+  return Object.values(aggregateAllCampuses(snapshot.stats)).every((taskStatusCounts) =>
+    Object.values(taskStatusCounts).every((value) => Number(value) === 0),
+  );
+}
+
+export function dropLeadingEmptySnapshots(
+  snapshots: TaskCompletionSnapshot[],
+): TaskCompletionSnapshot[] {
+  const firstPopulated = snapshots.findIndex((snapshot) => !isEmptySnapshot(snapshot));
+  return firstPopulated <= 0 ? snapshots : snapshots.slice(firstPopulated);
 }
