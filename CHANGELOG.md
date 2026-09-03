@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-86](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-85...v11.0.0-86) (2026-09-03)
+
+
+### Features
+
+* statistics route ([cca8e95](https://github.com/b0ink/doubtfire-deploy/commit/cca8e951e026f2a9303f526a58694945a3c684ff))
+
 ## [11.0.0-85](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-84...v11.0.0-85) (2026-09-03)
 
 
