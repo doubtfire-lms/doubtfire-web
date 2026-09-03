@@ -108,6 +108,7 @@ import {ActivityTypeListComponent} from './admin/institution-settings/activity-t
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
 import {OverseerImageListComponent} from './admin/institution-settings/overseer-images/overseer-image-list.component';
+import {StatisticsComponent} from './admin/institution-settings/statistics/statistics.component';
 import {CreateNewUnitModalContentComponent} from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
 import {CreateNewUnitModal} from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {
@@ -504,6 +505,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ConfirmationModalComponent,
     DiscussedInClassReasonModalComponent,
     InstitutionSettingsComponent,
+    StatisticsComponent,
     ProjectPlanComponent,
     SuccessCloseComponent,
     HomeComponent,
