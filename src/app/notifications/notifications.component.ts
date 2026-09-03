@@ -23,7 +23,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   public units: NotificationUnit[] = [];
   public loading = true;
   public loadFailed = false;
-  public state: NotificationState = 'unread';
+  public state: NotificationState = 'all';
   public selectedUnitId: number | 'all' = 'all';
   public search = '';
   public page = 1;

@@ -89,11 +89,11 @@ describe('NotificationsComponent', () => {
     expect(openGroup).not.toHaveBeenCalled();
   });
 
-  it('shows unread notifications by default', () => {
+  it('shows all notifications by default', () => {
     component.loadNotifications();
 
     expect(getNotifications).toHaveBeenCalledWith({
-      state: 'unread',
+      state: 'all',
       unitId: undefined,
       query: '',
       page: 1,
@@ -127,7 +127,7 @@ describe('NotificationsComponent', () => {
 
     vi.advanceTimersByTime(1);
     expect(getNotifications).toHaveBeenCalledWith({
-      state: 'unread',
+      state: 'all',
       unitId: undefined,
       query: 'portfolio',
       page: 1,
