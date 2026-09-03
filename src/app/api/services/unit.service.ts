@@ -166,6 +166,7 @@ export class UnitService extends CachedEntityService<Unit> {
         },
         toJsonFn: MappingFunctions.mapDayToJson,
       },
+      'lockProjectOnPortfolioSubmission',
       'assessmentEnabled',
       // 'overseerImageId',
       {
@@ -320,6 +321,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'startDate',
       'endDate',
       'portfolioAutoGenerationDate',
+      'lockProjectOnPortfolioSubmission',
 
       'assessmentEnabled',
       'overseerImageId',

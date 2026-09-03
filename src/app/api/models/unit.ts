@@ -67,6 +67,7 @@ export class Unit extends Entity {
   startDate: Date; //TODO: or string
   endDate: Date; //TODO: or string
   portfolioAutoGenerationDate: Date;
+  lockProjectOnPortfolioSubmission: boolean = false;
   currentUnitWeek: number | null;
 
   assessmentEnabled: boolean;
