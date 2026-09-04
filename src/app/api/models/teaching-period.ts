@@ -1,6 +1,7 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {Observable} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
+import {MILLISECONDS_PER_WEEK, addDays, startOfDay} from './calendar-day';
 import {TeachingPeriodBreakService, TeachingPeriodService, Unit} from './doubtfire-model';
 
 export class TeachingPeriodBreak extends Entity {
@@ -22,30 +23,19 @@ export class TeachingPeriodBreak extends Entity {
    * The day teaching resumes after this break.
    */
   public get endDate(): Date | null {
-    if (!this.startDate || !this.numberOfDays) {
-      return null;
-    }
-
-    const start = this.startDate instanceof Date ? this.startDate : new Date(this.startDate);
-    if (Number.isNaN(start.valueOf())) {
-      return null;
-    }
-
-    return new Date(start.getFullYear(), start.getMonth(), start.getDate() + this.numberOfDays);
+    const start = this.numberOfDays ? startOfDay(this.startDate) : null;
+    return start === null ? null : addDays(start, this.numberOfDays);
   }
 
   /**
    * Is the given date within this break?
    */
-  public covers(date: Date): boolean {
-    const start = this.startDate instanceof Date ? this.startDate : new Date(this.startDate);
+  public covers(date: Date | string): boolean {
+    const day = startOfDay(date);
+    const start = startOfDay(this.startDate);
     const end = this.endDate;
-    if (!end || Number.isNaN(start.valueOf())) {
-      return false;
-    }
 
-    const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    return day >= new Date(start.getFullYear(), start.getMonth(), start.getDate()) && day < end;
+    return day !== null && start !== null && end !== null && day >= start && day < end;
   }
 }
 
@@ -99,6 +89,30 @@ export class TeachingPeriod extends Entity {
         teachingBreak.campusIds.length === 0 ||
         (campusId && teachingBreak.campusIds.includes(campusId)),
     );
+  }
+
+  public breakAt(date: Date | string): TeachingPeriodBreak | null {
+    return this.findBreakAt(this.breaks, date);
+  }
+
+  /**
+   * The break covering this date that also pauses the week count. Breaks that do
+   * not pause it run alongside a teaching week rather than replacing it.
+   */
+  public weekPausingBreakAt(date: Date | string): TeachingPeriodBreak | null {
+    return this.findBreakAt(this.weekPausingBreaks, date);
+  }
+
+  private findBreakAt(
+    breaks: readonly TeachingPeriodBreak[],
+    date: Date | string,
+  ): TeachingPeriodBreak | null {
+    const target = this.normalizeDay(date);
+    if (!target) {
+      return null;
+    }
+
+    return breaks.find((teachingBreak) => teachingBreak.covers(target)) ?? null;
   }
 
   public get units(): readonly Unit[] {
@@ -188,8 +202,8 @@ export class TeachingPeriod extends Entity {
       return null;
     }
 
-    const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-    let result = Math.floor((targetDate.getTime() - startDate.getTime()) / millisecondsPerWeek) + 1;
+    let result =
+      Math.floor((targetDate.getTime() - startDate.getTime()) / MILLISECONDS_PER_WEEK) + 1;
 
     for (const teachingBreak of this.weekPausingBreaks) {
       const breakStart = this.normalizeDay(teachingBreak.startDate);
@@ -209,7 +223,9 @@ export class TeachingPeriod extends Entity {
             result -= 1;
           }
         } else if (targetDate >= firstMonday) {
-          result -= Math.ceil((targetDate.getTime() - firstMonday.getTime()) / millisecondsPerWeek);
+          result -= Math.ceil(
+            (targetDate.getTime() - firstMonday.getTime()) / MILLISECONDS_PER_WEEK,
+          );
         }
 
         if (targetDate >= breakEnd && targetDate < mondayAfterBreak) {
@@ -222,16 +238,7 @@ export class TeachingPeriod extends Entity {
   }
 
   private normalizeDay(date: Date | string | null | undefined): Date | null {
-    if (!date) {
-      return null;
-    }
-
-    const parsed = date instanceof Date ? date : new Date(date);
-    if (Number.isNaN(parsed.valueOf())) {
-      return null;
-    }
-
-    return new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
+    return startOfDay(date);
   }
 
   private breakEndDate(teachingBreak: TeachingPeriodBreak): Date | null {
@@ -244,18 +251,14 @@ export class TeachingPeriod extends Entity {
       return null;
     }
 
-    if (startDate.getDay() === 1) {
+    if (startDate.getUTCDay() === 1) {
       return startDate;
     }
-    if (startDate.getDay() === 0) {
-      return new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 1);
+    if (startDate.getUTCDay() === 0) {
+      return addDays(startDate, 1);
     }
 
-    return new Date(
-      startDate.getFullYear(),
-      startDate.getMonth(),
-      startDate.getDate() + (8 - startDate.getDay()),
-    );
+    return addDays(startDate, 8 - startDate.getUTCDay());
   }
 
   private mondayAfterBreak(teachingBreak: TeachingPeriodBreak): Date | null {
@@ -264,10 +267,6 @@ export class TeachingPeriod extends Entity {
       return null;
     }
 
-    return new Date(
-      firstMonday.getFullYear(),
-      firstMonday.getMonth(),
-      firstMonday.getDate() + teachingBreak.numberOfDays,
-    );
+    return addDays(firstMonday, teachingBreak.numberOfDays);
   }
 }

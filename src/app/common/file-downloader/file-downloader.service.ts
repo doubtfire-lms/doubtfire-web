@@ -46,7 +46,7 @@ export class FileDownloaderService {
 
           // Check the start is the same as the length of the binary data received
           if (start !== data.binaryData.map((value) => value.size).reduce((pv, cv) => pv + cv, 0)) {
-            console.log('Error: start != oldLen');
+            console.error('Downloaded file part was received out of order');
             this.alerts.error('Error downloading file part received out of order');
           }
           data.binaryData.push(data.response.body);
@@ -76,7 +76,8 @@ export class FileDownloaderService {
       }
     } else {
       // no range... so we can't do anything!
-      console.log('Error reading response from server - no range with 206 response');
+      console.error('Error reading response from server - no range with 206 response');
+      this.alerts.error('Unable to read data from server');
       if (data.failure) {
         data.failure('Unable to read data from server');
       }

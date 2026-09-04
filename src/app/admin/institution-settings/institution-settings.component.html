@@ -13,6 +13,9 @@
 
   <div class="min-h-0 flex-1">
     @switch (currentTab.routeSegment) {
+      @case ('statistics') {
+        <institution-statistics></institution-statistics>
+      }
       @case ('campuses') {
         <campus-list></campus-list>
       }

@@ -1,0 +1,59 @@
+<div class="px-4 pb-4">
+  <div class="flex">
+    <div class="mt-6">
+      <h1 class="mb-0.5">Statistics</h1>
+      <p>View recent user activity and basic system information</p>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div aria-label="Loading statistics" class="flex justify-center py-16">
+      <mat-spinner diameter="36"></mat-spinner>
+    </div>
+  } @else if (error && !statistics) {
+    <mat-card appearance="outlined" class="mt-6 p-6">
+      Statistics are currently unavailable.
+    </mat-card>
+  } @else if (statistics) {
+    <mat-card appearance="outlined" class="mt-6 p-6">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="mb-1 text-sm text-gray-600">Active users</p>
+          <p class="m-0 text-4xl font-semibold">{{ activeUsers }}</p>
+        </div>
+
+        <mat-button-toggle-group
+          aria-label="Active user time range"
+          hideSingleSelectionIndicator
+          [value]="selectedWindow"
+          (change)="selectedWindow = $event.value"
+        >
+          @for (window of activityWindows; track window.value) {
+            <mat-button-toggle [value]="window.value">{{ window.label }}</mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      </div>
+    </mat-card>
+
+    <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+      <mat-card appearance="outlined" class="p-6">
+        <p class="mb-1 text-sm text-gray-600">Last 24 hours</p>
+        <p class="m-0 text-2xl font-semibold">{{ statistics.activeUsers.twentyFourHours }}</p>
+        <p class="mt-1 mb-0 text-sm text-gray-500">active users</p>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="p-6">
+        <p class="mb-1 text-sm text-gray-600">Registered users</p>
+        <p class="m-0 text-2xl font-semibold">{{ statistics.totalUsers }}</p>
+        <p class="mt-1 mb-0 text-sm text-gray-500">total accounts</p>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="p-6">
+        <p class="mb-1 text-sm text-gray-600">Disk space available</p>
+        <p class="m-0 text-2xl font-semibold">
+          {{ statistics.diskSpaceGb === null ? 'Unavailable' : statistics.diskSpaceGb + ' GB' }}
+        </p>
+      </mat-card>
+    </div>
+  }
+</div>

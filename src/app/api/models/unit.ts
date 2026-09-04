@@ -10,6 +10,7 @@ import {MarkingSessionService} from '../services/marking-session.service';
 import {ProjectService} from '../services/project.service';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
+import {MILLISECONDS_PER_WEEK, startOfDay} from './calendar-day';
 import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {
   Campus,
@@ -328,26 +329,13 @@ export class Unit extends Entity {
       return this.teachingPeriod.weekNumber(date);
     }
 
-    const targetDate = date instanceof Date ? date : new Date(date);
-    if (Number.isNaN(targetDate.valueOf())) {
+    const targetDate = startOfDay(date);
+    const startDate = startOfDay(this.startDate);
+    if (!targetDate || !startDate) {
       return null;
     }
-    const normalizedTargetDate = new Date(
-      targetDate.getFullYear(),
-      targetDate.getMonth(),
-      targetDate.getDate(),
-    );
-    const normalizedStartDate = new Date(
-      this.startDate.getFullYear(),
-      this.startDate.getMonth(),
-      this.startDate.getDate(),
-    );
-    const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-    return (
-      Math.floor(
-        (normalizedTargetDate.valueOf() - normalizedStartDate.valueOf()) / millisecondsPerWeek,
-      ) + 1
-    );
+
+    return Math.floor((targetDate.valueOf() - startDate.valueOf()) / MILLISECONDS_PER_WEEK) + 1;
   }
 
   /**
@@ -439,9 +427,6 @@ export class Unit extends Entity {
     AppInjector.get(UnitService)
       .fetch(this.id)
       .subscribe({
-        next: (unit) => {
-          console.log(unit.teachingPeriod?.name);
-        },
         error: (message) => alerts.error(message, 6000),
       });
   }
@@ -467,6 +452,7 @@ export class Unit extends Entity {
   }
 
   public refreshGroups(): void {
+    // TODO: Implement group refresh.
     // return unless unit.groups?.length > 0
     // # Query the groups within the unit.
     // Unit.groups.query( {id: unit.id} ,
@@ -476,8 +462,6 @@ export class Unit extends Entity {
     //   (failure) ->
     //     alertService.error( "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
     // )
-
-    console.log('implement refresh groups');
   }
 
   public getGroups(groupSet: GroupSet): Observable<Group[]> {

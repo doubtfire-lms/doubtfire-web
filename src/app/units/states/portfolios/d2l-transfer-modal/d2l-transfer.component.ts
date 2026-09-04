@@ -87,7 +87,6 @@ export class D2lTransferComponent implements OnInit {
 
   public openWeightPage(): void {
     const url = `${this.apiEndpoint}/d2l/lms/grades/admin/manage/item_props_newedit.d2l?objectId=${this.d2lDataMapping.gradeObjectId}&ou=${this.d2lDataMapping.orgUnitId}&scroll=weight`;
-    console.log(url);
     window.open(url, '_blank');
   }
 

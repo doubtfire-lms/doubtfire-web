@@ -1,5 +1,3 @@
-// Lottie animation module
-// import {LottieModule, LottieCacheModule} from 'ngx-lottie';
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {
@@ -23,10 +21,8 @@ import {
 import {DateAdapter as CalendarDateAdapter, CalendarModule} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {enAU} from 'date-fns/locale';
-import player from 'lottie-web';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
 import {FlexLayoutModule} from 'ng-flex-layout';
-import {LottieComponent, provideLottieOptions} from 'ngx-lottie';
 // TODO: replace back to original ngx-monaco-editor-v2 once it supports angular 22
 import {MonacoEditorModule} from 'ngx-monaco-editor-v2-alternative';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
@@ -108,6 +104,7 @@ import {ActivityTypeListComponent} from './admin/institution-settings/activity-t
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
 import {OverseerImageListComponent} from './admin/institution-settings/overseer-images/overseer-image-list.component';
+import {StatisticsComponent} from './admin/institution-settings/statistics/statistics.component';
 import {CreateNewUnitModalContentComponent} from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
 import {CreateNewUnitModal} from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {
@@ -507,6 +504,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ConfirmationModalComponent,
     DiscussedInClassReasonModalComponent,
     InstitutionSettingsComponent,
+    StatisticsComponent,
     ProjectPlanComponent,
     SuccessCloseComponent,
     HomeComponent,
@@ -774,9 +772,6 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ScormAdapterService,
     TestAttemptService,
     PrivacyPolicy,
-    provideLottieOptions({
-      player: () => player,
-    }),
     FeedbackTemplateService,
     NestedCsvDownloadModalService,
     StaffNoteService,
@@ -873,7 +868,6 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     NumberCardComponent,
     PieChartComponent,
     PdfViewerModule,
-    LottieComponent,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: () => interval(6000).pipe(take(1)),

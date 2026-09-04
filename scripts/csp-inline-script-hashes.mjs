@@ -8,9 +8,10 @@
 // at image build time (see deploy.Dockerfile).
 //
 // Usage: node scripts/csp-inline-script-hashes.mjs dist/browser/index.html
-
 import {createHash} from 'node:crypto';
-import {readFileSync} from 'node:fs';
+import {readFileSync, realpathSync} from 'node:fs';
+import {dirname, isAbsolute, relative, resolve, sep} from 'node:path';
+import {fileURLToPath} from 'node:url';
 
 const indexPath = process.argv[2];
 
@@ -19,7 +20,32 @@ if (!indexPath) {
   process.exit(1);
 }
 
-const html = readFileSync(indexPath, 'utf8');
+const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const buildOutputRoot = resolve(projectRoot, 'dist/browser');
+const candidatePath = resolve(process.cwd(), indexPath);
+
+const isWithin = (root, candidate) => {
+  const relativePath = relative(root, candidate);
+  return relativePath !== '..' && !relativePath.startsWith(`..${sep}`) && !isAbsolute(relativePath);
+};
+
+// This script only operates on generated, publicly served build artifacts.
+// Check both the lexical and real paths so traversal and symlink escapes cannot
+// turn a malformed CLI argument into an arbitrary file read.
+if (!isWithin(buildOutputRoot, candidatePath)) {
+  console.error(`index path must be inside ${buildOutputRoot}`);
+  process.exit(1);
+}
+
+const realBuildOutputRoot = realpathSync(buildOutputRoot);
+const realIndexPath = realpathSync(candidatePath);
+
+if (!isWithin(realBuildOutputRoot, realIndexPath)) {
+  console.error(`index path must resolve inside ${realBuildOutputRoot}`);
+  process.exit(1);
+}
+
+const html = readFileSync(realIndexPath, 'utf8');
 
 // Inline scripts only: a src= attribute anywhere in the open tag disqualifies it.
 const inlineScript = /<script(?![^>]*\ssrc\s*=)([^>]*)>([\s\S]*?)<\/script>/gi;
