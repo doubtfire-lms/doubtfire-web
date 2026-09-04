@@ -398,6 +398,14 @@
       When true timetable data will be synchronised with other systems where this is possible.
     </f-setting-toggle>
 
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Enable Moodle Integration"
+      [(checked)]="unit.moodleEnabled"
+    >
+      Shows the Moodle administration tab for this unit.
+    </f-setting-toggle>
+
     <f-setting-toggle class="border-t border-gray-200" label="Active" [(checked)]="unit.active">
       Set to false to hide unit from students and tutors.
     </f-setting-toggle>
