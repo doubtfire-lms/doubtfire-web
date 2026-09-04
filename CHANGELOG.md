@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-88](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-87...v11.0.0-88) (2026-09-04)
+
+
+### Bug Fixes
+
+* allow native pdf viewer to work ([0db4624](https://github.com/b0ink/doubtfire-deploy/commit/0db46242533cce137a0ff4b771343e308182ee50))
+
 ## [11.0.0-87](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-86...v11.0.0-87) (2026-09-04)
 
 ## [11.0.0-86](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-85...v11.0.0-86) (2026-09-03)
