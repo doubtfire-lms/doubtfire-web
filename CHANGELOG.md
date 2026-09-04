@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-90](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-89...v11.0.0-90) (2026-09-04)
+
+
+### Bug Fixes
+
+* load correct student count from snapshot ([f1b84c8](https://github.com/b0ink/doubtfire-deploy/commit/f1b84c8c6f10360a08a6b41409485934ceebe3d7))
+
 ## [11.0.0-89](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-88...v11.0.0-89) (2026-09-04)
 
 ## [11.0.0-88](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-87...v11.0.0-88) (2026-09-04)
