@@ -161,6 +161,14 @@ export class NormalisedTaskStatusChartComponent implements OnInit, OnDestroy {
       return 0;
     }
 
+    const exactCount =
+      this.campusFilter === 'all'
+        ? this.selectedSnapshot.student_count
+        : this.selectedSnapshot.campus_student_counts?.[this.campusFilter];
+    if (exactCount !== undefined) {
+      return exactCount;
+    }
+
     const snapshotData =
       this.campusFilter !== 'all' && this.selectedSnapshot.stats[this.campusFilter]
         ? {[this.campusFilter]: this.selectedSnapshot.stats[this.campusFilter]}
