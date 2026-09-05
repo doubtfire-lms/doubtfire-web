@@ -1,0 +1,165 @@
+<main class="mx-auto max-w-[90vw] p-6 max-[720px]:p-3.5">
+  <header
+    class="mb-5 flex items-center justify-between gap-4 max-[720px]:flex-col max-[720px]:items-stretch"
+  >
+    <div>
+      <h1>Notifications</h1>
+      <p class="mt-1 text-slate-500">
+        {{ unreadCount }} unread grouped {{ unreadCount === 1 ? 'notification' : 'notifications' }}
+      </p>
+    </div>
+    <div class="flex gap-2 max-[720px]:justify-start">
+      <button mat-stroked-button routerLink="/notifications/settings" type="button">
+        <mat-icon>tune</mat-icon>
+        Settings
+      </button>
+      <button
+        color="primary"
+        mat-flat-button
+        type="button"
+        [disabled]="unreadCount === 0"
+        (click)="markAllRead()"
+      >
+        Mark all read
+      </button>
+    </div>
+  </header>
+
+  <section class="mb-5 flex flex-col items-start gap-3">
+    <div class="flex w-full flex-wrap items-center gap-3">
+      <mat-form-field appearance="outline" class="w-full max-w-[400px]" subscriptSizing="dynamic">
+        <mat-label>Search notifications</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="search"
+          (ngModelChange)="searchChanged($event)"
+        />
+      </mat-form-field>
+
+      <mat-button-toggle-group
+        aria-label="Notification read state"
+        hideSingleSelectionIndicator
+        [value]="state"
+        (change)="stateChanged($event.value)"
+      >
+        <mat-button-toggle value="all">All</mat-button-toggle>
+        <mat-button-toggle value="unread">Unread</mat-button-toggle>
+        <mat-button-toggle value="read">Read</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <div class="flex max-w-full flex-col items-start gap-1">
+      <span class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Units</span>
+      <mat-chip-listbox
+        aria-label="Filter notifications by unit"
+        class="max-w-full"
+        [value]="selectedUnitId"
+        (change)="unitChanged($event.value)"
+      >
+        <mat-chip-option value="all">All units</mat-chip-option>
+        @for (unit of units; track unit.id) {
+          <mat-chip-option [matTooltip]="unit.name" [value]="unit.id">
+            {{ unit.code }}
+          </mat-chip-option>
+        }
+      </mat-chip-listbox>
+    </div>
+  </section>
+
+  @if (loading) {
+    <div class="flex min-h-80 flex-col items-center justify-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (loadFailed) {
+    <section class="flex min-h-80 flex-col items-center justify-center">
+      <mat-icon class="size-16 text-[64px] text-slate-400">cloud_off</mat-icon>
+      <h2>Notifications could not be loaded</h2>
+      <p>Please check your connection and try again.</p>
+      <button color="primary" mat-flat-button type="button" (click)="loadNotifications()">
+        Try again
+      </button>
+    </section>
+  } @else if (groups.length === 0) {
+    <section class="flex min-h-80 flex-col items-center justify-center">
+      <mat-icon class="size-16 text-[64px] text-slate-400">notifications_none</mat-icon>
+      <h2>No notifications found</h2>
+      <p>New feedback, task changes, deadlines, and tutor notes will appear here.</p>
+    </section>
+  } @else {
+    <section class="flex flex-col gap-3">
+      @for (group of groups; track group.key) {
+        <article
+          class="overflow-hidden rounded-lg border border-l-[5px] border-slate-300 bg-white transition-shadow hover:shadow-sm"
+          [ngClass]="[
+            group.severity === 'critical'
+              ? 'border-l-[#c62828]'
+              : group.severity === 'warning'
+                ? 'border-l-[#ed6c02]'
+                : 'border-l-blue-600',
+            group.read ? 'opacity-[0.72]' : '',
+          ]"
+        >
+          <button
+            class="flex w-full cursor-pointer items-center gap-4 p-5 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600 max-[720px]:flex-col max-[720px]:items-stretch"
+            type="button"
+            [attr.aria-expanded]="group.counts.communication_email ? isExpanded(group) : null"
+            [attr.aria-label]="group.summary"
+            (click)="open(group)"
+          >
+            <span class="min-w-0 flex-1">
+              <span class="block text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                {{ group.unit.code }}
+                @if (group.task?.studentName) {
+                  · {{ group.task.studentName }}
+                }
+              </span>
+              <span class="mt-1 flex items-center gap-2 text-lg font-semibold text-slate-900">
+                <span>
+                  @if (group.messageSubject) {
+                    {{ group.messageSubject }}
+                  } @else if (group.task) {
+                    {{ group.task.abbreviation }} - {{ group.task.name }}
+                  } @else if (group.projectId) {
+                    Portfolio
+                  } @else {
+                    Unit notification
+                  }
+                </span>
+                @if (group.task && group.latestStatus) {
+                  <status-icon [compact]="false" [status]="group.latestStatus"></status-icon>
+                }
+              </span>
+              <span class="mt-0.5 block text-xs text-slate-500">
+                {{ group.latestAt | localizedDateTime }}
+              </span>
+              <span class="mt-2 block text-sm text-slate-700">{{ group.detail }}</span>
+            </span>
+            @if (group.counts.communication_email) {
+              <mat-icon class="text-slate-500">
+                {{ isExpanded(group) ? 'expand_less' : 'expand_more' }}
+              </mat-icon>
+            }
+          </button>
+
+          @if (group.messageBody && isExpanded(group)) {
+            <section aria-label="Email body" class="border-t border-slate-200 px-5 py-4">
+              <div class="max-w-[800px] break-words whitespace-pre-wrap text-slate-800 select-text">
+                {{ group.messageBody }}
+              </div>
+            </section>
+          }
+        </article>
+      }
+    </section>
+
+    <mat-paginator
+      [length]="total"
+      [pageIndex]="page - 1"
+      [pageSize]="perPage"
+      [pageSizeOptions]="[10, 25, 50]"
+      (page)="pageChanged($event)"
+    ></mat-paginator>
+  }
+</main>
