@@ -31,6 +31,7 @@ import {PortfoliosComponent} from './units/states/portfolios/portfolios.componen
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {StudentsListComponent} from './units/states/students-list/students-list.component';
 import {UnitTaskInboxStateComponent} from './units/states/tasks/inbox/unit-task-inbox-state.component';
+import {TutorDashboardComponent} from './units/states/tutor-dashboard/tutor-dashboard.component';
 import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
 import {resolveUnitCodeContent} from './units/unit-code-content.guard';
 import {UnitRootStateComponent} from './units/unit-root-state.component';
@@ -151,7 +152,19 @@ export const routes: Routes = [
           unit: resolveUnit,
         },
         children: [
-          {path: '', pathMatch: 'full', redirectTo: 'tasks/inbox'},
+          {path: '', pathMatch: 'full', redirectTo: 'dashboard'},
+          {
+            path: 'dashboard',
+            component: TutorDashboardComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {task: 'Tutor Dashboard', roleWhitelist: ['Tutor', 'Convenor']},
+          },
+          {
+            path: 'dashboard/:unitRoleId',
+            component: TutorDashboardComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {task: 'Tutor Dashboard', roleWhitelist: ['Tutor', 'Convenor']},
+          },
           {path: 'analytics', component: UnitAnalyticsComponent, data: {task: 'Unit Analytics'}},
           {path: 'students/groups', component: UnitGroupsComponent, data: {task: 'Student Groups'}},
           {

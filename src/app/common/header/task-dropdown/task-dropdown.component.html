@@ -83,6 +83,10 @@
       }
       @if (unitRole && currentView === 'UNIT') {
         <!-- <p class="task-dropdown-heading">Tasks</p> -->
+        <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'dashboard']">
+          <mat-icon aria-label="Tutor dashboard icon" fontIcon="dashboard"></mat-icon>
+          Dashboard
+        </button>
         <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'tasks', 'inbox']">
           <mat-icon aria-label="Inbox icon" fontIcon="inbox"></mat-icon> <span>Inbox</span>
         </button>
