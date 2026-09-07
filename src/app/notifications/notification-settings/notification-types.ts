@@ -62,6 +62,30 @@ export const NOTIFICATION_SECTIONS: NotificationSection[] = [
     ],
   },
   {
+    key: 'task-dates',
+    title: 'Task dates',
+    timing: 'Emailed in your digest',
+    delivery: 'digest',
+    audience: 'student',
+    types: [
+      {
+        key: 'task_start_now',
+        label: 'Start task now',
+        description: 'A task reaches its planned start date.',
+      },
+      {
+        key: 'task_due_soon',
+        label: 'Task due soon',
+        description: 'An unsubmitted task is due within 5 days.',
+      },
+      {
+        key: 'task_overdue',
+        label: 'Task past due date',
+        description: 'An unsubmitted task passes its due date.',
+      },
+    ],
+  },
+  {
     key: 'alerts',
     title: 'Alerts',
     delivery: 'alert',

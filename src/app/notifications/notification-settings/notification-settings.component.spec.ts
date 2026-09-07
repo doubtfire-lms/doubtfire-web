@@ -129,6 +129,16 @@ describe('NotificationSettingsComponent', () => {
     expect(component.channels.map((channel) => channel.key)).toEqual(['inApp', 'email']);
   });
 
+  it('offers separate controls for task date notifications', () => {
+    const taskDates = component.sections.find((section) => section.key === 'task-dates');
+
+    expect(taskDates?.types.map((type) => type.key)).toEqual([
+      'task_start_now',
+      'task_due_soon',
+      'task_overdue',
+    ]);
+  });
+
   it('hides the type sections on a unit that still follows "All units"', () => {
     component.selectedIndex = 1;
 
