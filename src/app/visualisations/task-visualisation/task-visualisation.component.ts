@@ -80,8 +80,4 @@ export class TaskVisualisationComponent implements OnChanges, OnInit {
       // console.log('Colors:', this.colors);
     }
   }
-
-  onSelect(event) {
-    console.log(event);
-  }
 }

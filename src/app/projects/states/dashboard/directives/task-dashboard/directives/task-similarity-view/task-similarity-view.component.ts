@@ -40,10 +40,7 @@ export class TaskSimilarityViewComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue && this.task?.id) {
       this.jplagOpenState = false;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      this.task?.fetchSimilarities().subscribe((_) => {
-        console.log('similarities fetched');
-      });
+      this.task?.fetchSimilarities().subscribe();
     }
   }
 

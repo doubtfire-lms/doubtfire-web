@@ -5,6 +5,7 @@ import {Subscription} from 'rxjs';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 type InstitutionSettingsTabKey =
+  | 'statistics'
   | 'campuses'
   | 'activities'
   | 'teaching-periods'
@@ -60,6 +61,7 @@ export class InstitutionSettingsComponent implements OnInit, OnDestroy {
       {label: 'Learning Outcomes', routeSegment: 'learning-outcomes', enabled: true},
       {label: 'Overseer Images', routeSegment: 'overseer-images', enabled: this.overseerEnabled},
       {label: 'TurnItIn', routeSegment: 'turnitin', enabled: this.tiiEnabled},
+      {label: 'Statistics', routeSegment: 'statistics', enabled: true},
     ];
 
     return tabs.filter((tab) => tab.enabled);

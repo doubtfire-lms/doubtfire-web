@@ -28,10 +28,6 @@ export class ProjectProgressDashboardComponent implements OnInit {
       this.project = project;
       this.grades = this.gradeService.gradeViewDataFor(project.unit);
     });
-
-    setTimeout(() => {
-      console.log(this.project.taskStats);
-    }, 3000);
   }
 
   protected targetGradeClicked(grade: number): void {

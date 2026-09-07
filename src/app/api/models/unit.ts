@@ -426,9 +426,6 @@ export class Unit extends Entity {
     AppInjector.get(UnitService)
       .fetch(this.id)
       .subscribe({
-        next: (unit) => {
-          console.log(unit.teachingPeriod?.name);
-        },
         error: (message) => alerts.error(message, 6000),
       });
   }
@@ -454,6 +451,7 @@ export class Unit extends Entity {
   }
 
   public refreshGroups(): void {
+    // TODO: Implement group refresh.
     // return unless unit.groups?.length > 0
     // # Query the groups within the unit.
     // Unit.groups.query( {id: unit.id} ,
@@ -463,8 +461,6 @@ export class Unit extends Entity {
     //   (failure) ->
     //     alertService.error( "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
     // )
-
-    console.log('implement refresh groups');
   }
 
   public getGroups(groupSet: GroupSet): Observable<Group[]> {
