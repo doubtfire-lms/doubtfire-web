@@ -24,7 +24,6 @@ export class NotificationSettingsService extends EntityService<NotificationSetti
       'digestTime',
       'digestTimezone',
       'digestWeekday',
-      'weeklySummary',
       {
         keys: 'units',
         toEntityFn: (data) =>

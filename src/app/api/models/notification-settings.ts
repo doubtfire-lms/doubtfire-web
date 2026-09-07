@@ -21,7 +21,6 @@ export class NotificationSettings extends Entity {
   digestTime: string;
   digestTimezone: string;
   digestWeekday: number;
-  weeklySummary: boolean;
 
   /** Only the units that depart from the defaults above. */
   units: NotificationUnitSettings[] = [];

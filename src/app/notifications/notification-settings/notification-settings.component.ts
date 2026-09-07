@@ -64,11 +64,10 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   // One schedule for every unit, so activity that happened together stays together.
   public digestFrequency: NotificationFrequency = 'weekly';
   public digestIntervalHours = 4;
-  public digestStartTime = '08:00';
+  public digestStartTime = '07:00';
   public digestTime = '07:00';
   public digestTimezone = 'UTC';
   public digestWeekday = 1;
-  public weeklySummary = true;
 
   private readonly subscriptions: Subscription[] = [];
 
@@ -242,7 +241,6 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     settings.digestStartTime = this.digestStartTime;
     settings.digestTime = this.digestTime;
     settings.digestWeekday = this.digestWeekday;
-    settings.weeklySummary = this.weeklySummary;
     // Units following the defaults have nothing to store.
     settings.units = this.scopes
       .slice(1)
@@ -269,7 +267,6 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     this.digestTime = this.saved.digestTime;
     this.digestTimezone = this.saved.digestTimezone;
     this.digestWeekday = this.saved.digestWeekday;
-    this.weeklySummary = this.saved.weeklySummary;
     this.scopes[0].channels = channelsFromWire(this.saved.channels);
 
     for (const scope of this.scopes.slice(1)) {

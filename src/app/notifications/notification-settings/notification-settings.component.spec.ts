@@ -37,7 +37,6 @@ describe('NotificationSettingsComponent', () => {
     digestTime: '09:30',
     digestTimezone: 'Australia/Melbourne',
     digestWeekday: 3,
-    weeklySummary: false,
     units: [] as unknown[],
   });
 
@@ -210,7 +209,6 @@ describe('NotificationSettingsComponent', () => {
     expect(component.digestTime).toBe('09:30');
     expect(component.digestTimezone).toBe('Australia/Melbourne');
     expect(component.digestWeekday).toBe(3);
-    expect(component.weeklySummary).toBe(false);
 
     // Channels absent from the saved payload fall back to off, not to the defaults.
     expect(component.isChecked('new_task_comment', 'email')).toBe(true);
