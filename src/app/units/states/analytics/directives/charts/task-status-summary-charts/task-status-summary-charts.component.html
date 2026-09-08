@@ -121,22 +121,9 @@
       }
     </div>
   </div>
-  <mat-card-header class="text-pretty xl:max-w-[calc(50%)]">
-    <mat-card-title>Task Completion Over Time</mat-card-title>
-    <mat-card-subtitle class="mb-2.5">
-      <p>
-        View the task completion statuses across all tasks over time, filtered by campus and/or
-        tutorial.
-      </p>
-    </mat-card-subtitle>
-  </mat-card-header>
-  @if (hasChartData) {
-    <div class="min-h-100">
-      <f-stacked-area-status-chart [colorScheme]="colorScheme" [weeklyData]="weeklyData" />
-    </div>
-  } @else {
-    <div class="flex h-full items-center justify-center">
-      <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
-    </div>
-  }
+  <f-stacked-area-status-chart
+    [campusFilter]="campusFilter"
+    [snapshots]="snapshots"
+    [unit]="unit"
+  />
 </mat-card>

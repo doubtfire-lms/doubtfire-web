@@ -91,7 +91,6 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
 
   data: MultiSeries = [];
-  weeklyData: MultiSeries = [];
   hasChartData: boolean = false;
   sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
@@ -241,17 +240,8 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
     this.hasChartData = this.snapshots.length > 0;
   }
 
-  /**
-   * The weekly series covers every snapshot, so it only changes when the snapshots or
-   * the campus filter do - never when the slider moves.
-   */
-  private refreshWeeklyData(): void {
-    this.weeklyData = this.selectedSnapshot ? this.buildWeeklyChartData(this.snapshots) : [];
-  }
-
   onCampusFilterChange(): void {
     this.refreshData();
-    this.refreshWeeklyData();
   }
 
   onSnapshotSliderChange(value: number): void {
@@ -639,34 +629,6 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
       }));
   }
 
-  private buildWeeklyChartData(snapshots: TaskCompletionSnapshot[]): MultiSeries {
-    const lastSnapshotByWeek: Map<string, TaskCompletionSnapshot> = new Map();
-
-    snapshots.forEach((snapshot) => {
-      const weekNumber = formatSnapshotLabel(this.unit, snapshot.snapshot_date, 'short');
-      if (weekNumber) {
-        lastSnapshotByWeek.set(weekNumber, snapshot);
-      }
-    });
-
-    // Aggregate each week's snapshot once, rather than once per status series.
-    const weeks = [...lastSnapshotByWeek.entries()].map(([name, snapshot]) => ({
-      name,
-      taskStats: getTaskStats(snapshot, this.campusFilter),
-    }));
-
-    return statusMapping.map((status) => ({
-      name: this.taskService.statusLabels.get(status) || status,
-      series: weeks.map((week) => ({
-        name: week.name,
-        value: Object.values(week.taskStats).reduce(
-          (total, taskCounts) => total + (taskCounts[status] || 0),
-          0,
-        ),
-      })),
-    }));
-  }
-
   onSelect(): void {}
 
   loadRecentSnapshot(): void {
@@ -689,7 +651,6 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
         this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
         this.buildWeekSegments();
         this.refreshData();
-        this.refreshWeeklyData();
         this.changeDetectorRef.detectChanges();
 
         if (this.snapshots.length === 0 && !this.autoCaptureAttempted) {
