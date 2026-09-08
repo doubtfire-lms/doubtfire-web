@@ -87,7 +87,6 @@ const spanStyle = (fraction: number) => `calc(${fraction} * (100% - ${TICK_MARK_
   templateUrl: './task-status-summary-charts.component.html',
   standalone: false,
 })
-
 export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
 
