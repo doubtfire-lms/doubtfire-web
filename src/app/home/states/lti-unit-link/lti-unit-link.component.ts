@@ -52,8 +52,6 @@ export class LtiUnitLinkComponent implements AfterViewInit {
       `Are you sure you want to link ${this.selectedUnit.code} ${this.selectedUnit.name} (${this.getTeachingPeriod(this.selectedUnit)}) to this course?`,
       'Once you have linked an OnTrack unit, students who launch this app will be enrolled automatically. Unlinking a unit will not withdraw students automatically.',
       () => {
-        // Trigger API call to LTI.js with our unit link request
-        console.log('Trigger API call to LTI.js');
         this.linkUnit(this.selectedUnit);
       },
     );
@@ -81,15 +79,13 @@ export class LtiUnitLinkComponent implements AfterViewInit {
         // unitName: unit.name,
       })
       .subscribe({
-        next: (link) => {
-          console.log(link);
-
+        next: () => {
           this.alertsService.success(`Successfully linked ${unit.code}`, 5000);
 
           this.router.navigate(['/lti']);
         },
         error: (error) => {
-          console.log(error);
+          console.error(error);
           this.alertsService.error(`Failed to link unit: ${error.error}`, 6000);
         },
       });

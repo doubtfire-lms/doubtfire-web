@@ -37,7 +37,6 @@ export class TiiActionLogComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.tiiActionService.query().subscribe((actions) => {
-      console.log(actions);
       this.tiiActionsSource = new MatTableDataSource<TiiAction>(actions);
       this.tiiActionsSource.paginator = this.paginator;
       this.tiiActionsSource.sort = this.sort;

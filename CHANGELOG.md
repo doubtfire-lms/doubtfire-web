@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-90](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-89...v11.0.0-90) (2026-09-04)
+
+
+### Bug Fixes
+
+* load correct student count from snapshot ([f1b84c8](https://github.com/b0ink/doubtfire-deploy/commit/f1b84c8c6f10360a08a6b41409485934ceebe3d7))
+
+## [11.0.0-89](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-88...v11.0.0-89) (2026-09-04)
+
+## [11.0.0-88](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-87...v11.0.0-88) (2026-09-04)
+
+
+### Bug Fixes
+
+* allow native pdf viewer to work ([0db4624](https://github.com/b0ink/doubtfire-deploy/commit/0db46242533cce137a0ff4b771343e308182ee50))
+
+## [11.0.0-87](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-86...v11.0.0-87) (2026-09-04)
+
+## [11.0.0-86](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-85...v11.0.0-86) (2026-09-03)
+
+
+### Features
+
+* statistics route ([cca8e95](https://github.com/b0ink/doubtfire-deploy/commit/cca8e951e026f2a9303f526a58694945a3c684ff))
+
+## [11.0.0-85](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-84...v11.0.0-85) (2026-09-03)
+
+
+### Features
+
+* add ui to indicate week distribution ([a9c1579](https://github.com/b0ink/doubtfire-deploy/commit/a9c1579aa91b34e7455acee09b54ccdcfff67655))
+* ignore non-pausing breaks, add ui to show breaks ([46a6c49](https://github.com/b0ink/doubtfire-deploy/commit/46a6c498c2e75f483de9373a49a9d89930124880))
+* show teaching period breaks ([0ea4dca](https://github.com/b0ink/doubtfire-deploy/commit/0ea4dca283cdac4955b9bde7b9163695275d10f5))
+
+
+### Bug Fixes
+
+* handle daylight savings change ([d2f1de6](https://github.com/b0ink/doubtfire-deploy/commit/d2f1de623fef0ae9ca634059fb5c0505aa75e49c))
+
 ## [11.0.0-84](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-83...v11.0.0-84) (2026-09-03)
 
 

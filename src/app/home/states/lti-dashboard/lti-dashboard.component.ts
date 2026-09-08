@@ -58,7 +58,6 @@ export class LtiDashboardComponent implements AfterViewInit {
       this.ltiService.getUnitLink().subscribe({
         next: (link) => {
           if (!link) {
-            console.log('no link, cant enrol');
             this.isLoading = false;
             return;
           }
@@ -82,6 +81,7 @@ export class LtiDashboardComponent implements AfterViewInit {
             },
             error: (error) => {
               console.error(error);
+              this.alertsService.error(error.error || 'Failed to enrol in the linked unit.', 6000);
               this.isLoading = false;
             },
           });
@@ -100,9 +100,8 @@ export class LtiDashboardComponent implements AfterViewInit {
 
   removeLink(): void {
     this.ltiService.removeUnitLink().subscribe({
-      next: (link) => {
+      next: () => {
         this.linkedUnit = null;
-        console.log(link);
       },
       error: (error) => {
         console.error(error);
@@ -171,7 +170,7 @@ export class LtiDashboardComponent implements AfterViewInit {
                   });
               },
               error: (error) => {
-                console.log(error);
+                console.error(error);
                 this.alertsService.error(`Failed to sync enrolments`);
                 this.isSyncingEnrolments = false;
               },
@@ -198,7 +197,7 @@ export class LtiDashboardComponent implements AfterViewInit {
             this.csvResultModalService.show('Grade sync', result);
           },
           error: (error) => {
-            console.log(error);
+            console.error(error);
             this.alertsService.error(`Failed to retrieve grade`);
             this.isSyncingGrades = true;
           },

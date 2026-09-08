@@ -22,6 +22,7 @@ import {QrModalService} from '../modals/qr-modal/qr-modal.service';
 import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
 import {TutorNotesModalService} from '../modals/tutor-notes-modal/tutor-notes-modal.service';
 import {IsActiveUnitRole} from '../pipes/is-active-unit-role.pipe';
+import {AlertService} from '../services/alert.service';
 
 @Component({
   selector: 'app-header',
@@ -70,6 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private qrModalService: QrModalService,
     private router: Router,
     private tutorNotesModal: TutorNotesModalService,
+    private alertService: AlertService,
   ) {}
 
   public externalName: string;
@@ -83,9 +85,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         next: (shouldShow) => {
           this.showHeader = shouldShow;
         },
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         error: (err) => {
-          console.log(`Error showing header: ${err}`);
+          console.error('Error showing header', err);
+          this.alertService.error('Unable to update header visibility.', 6000);
         },
       }),
     );
@@ -103,7 +105,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
             .filter((role) => this.isUniqueRole(role));
         },
         error: (err) => {
-          console.log(`Error fetching unit roles: ${err}`);
+          console.error('Error fetching unit roles', err);
+          this.alertService.error('Unable to load unit roles.', 6000);
         },
       }),
     );
@@ -117,7 +120,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.projects = projects.filter((project) => project?.unit?.myRole === 'Student');
         },
         error: (err) => {
-          console.log(`Error fetching projects: ${err}`);
+          console.error('Error fetching projects', err);
+          this.alertService.error('Unable to load projects.', 6000);
         },
       }),
     );
@@ -141,9 +145,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.currentProject = null;
           }
         },
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         error: (err) => {
-          console.log(`Error on switching view and entity: ${err}`);
+          console.error('Error switching view and entity', err);
+          this.alertService.error('Unable to update the current view.', 6000);
         },
       }),
     );
@@ -155,7 +159,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.logoSettings = settings;
         },
         error: (err) => {
-          console.log(`Error getting settings: ${err}`);
+          console.error('Error getting institution branding settings', err);
+          this.alertService.error('Unable to load institution branding settings.', 6000);
         },
       }),
     );

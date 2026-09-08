@@ -165,9 +165,6 @@ export class TaskDefinition extends Entity {
         id: this.id,
       })
       .subscribe({
-        next: (taskDefinition) => {
-          console.log(taskDefinition.name);
-        },
         error: (message) => alerts.error(message, 6000),
       });
   }

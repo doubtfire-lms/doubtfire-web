@@ -128,11 +128,7 @@ export class AuthenticationService {
     }
 
     // Attempt to get a new access token using the refresh token cookie
-    this.attemptLoginUsingRefreshToken((result: boolean) => {
-      if (result) {
-        console.log('Successfully refreshed access token');
-      }
-    });
+    this.attemptLoginUsingRefreshToken(() => undefined);
   }
 
   private readonly validRoles: string[] = [
