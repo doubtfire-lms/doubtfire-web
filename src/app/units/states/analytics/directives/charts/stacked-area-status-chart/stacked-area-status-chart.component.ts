@@ -30,11 +30,11 @@ export class StackedAreaStatusChartComponent implements OnChanges {
   YAxisLabel: string = 'Records';
 
   constructor(
-    private taskService: TaskService,
-    private chartToolTipService: TooltipService,
-    private viewContainerRef: ViewContainerRef,
-    private injectorObj: Injector,
-    private changeDetectorRef: ChangeDetectorRef,
+    private readonly taskService: TaskService,
+    private readonly chartToolTipService: TooltipService,
+    private readonly viewContainerRef: ViewContainerRef,
+    private readonly injectorObj: Injector,
+    private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
     // https://github.com/swimlane/ngx-charts/issues/1428#issuecomment-659237562
     this.chartToolTipService = this.injectorObj.get(TooltipService);

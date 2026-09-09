@@ -38,11 +38,11 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
   normalisedCompletionSnapshotYLabel: string = 'Percentage of Students';
 
   constructor(
-    private taskService: TaskService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private chartToolTipService: TooltipService,
-    private injectorObj: Injector,
-    private viewContainerRef: ViewContainerRef,
+    private readonly taskService: TaskService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly chartToolTipService: TooltipService,
+    private readonly injectorObj: Injector,
+    private readonly viewContainerRef: ViewContainerRef,
   ) {
     this.chartToolTipService = this.injectorObj.get(TooltipService);
   }
