@@ -1,12 +1,9 @@
-<mat-card-header class="text-pretty xl:max-w-[calc(50%)]">
-  <mat-card-title>Task Completion Over Time</mat-card-title>
-  <mat-card-subtitle class="mb-2.5">
-    <p>
-      View the task completion statuses across all tasks over time, filtered by campus and/or
-      tutorial.
-    </p>
-  </mat-card-subtitle>
-</mat-card-header>
+<div class="px-4 pt-8 text-slate-600">
+  <p>
+    View the task completion statuses across all tasks over time, filtered by campus and/or
+    tutorial.
+  </p>
+</div>
 @if (snapshots.length) {
   <div class="min-h-100">
     <ng-charts-area-chart-stacked
