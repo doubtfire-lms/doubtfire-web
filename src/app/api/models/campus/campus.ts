@@ -8,6 +8,7 @@ export class Campus extends Entity {
   mode: campusModes;
   abbreviation: string;
   timezone: string;
+  active: boolean;
 
   public override toJson<T extends Entity>(
     mappingData: EntityMapping<T>,

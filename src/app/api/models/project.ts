@@ -36,6 +36,7 @@ export class Project extends Entity {
   public enrolled: boolean;
   public compilePortfolio: boolean;
   public portfolioAvailable: boolean;
+  public portfolioLocked: boolean = false;
   public usesDraftLearningSummary: boolean;
 
   public specConDays: number = 0;
