@@ -45,7 +45,7 @@
     "@glitchtip/ng-charts": "^1.4.0",
     "@ngneat/hotkeys": "^4.0.0",
     "@ngstack/code-editor": "^9.0.0",
-    "@sentry/angular": "^10.70.0",
+    "@sentry/angular": "^10.73.0",
     "@sentry/cli": "^3.7.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@worktile/gantt": "^21.0.0",
@@ -69,8 +69,8 @@
     "qrcode": "^1.5.4",
     "rxjs": "~7.8.2",
     "tslib": "^2.8.1",
-    "typescript-eslint": "^8.68.0",
-    "zone.js": "~0.16.2"
+    "typescript-eslint": "^8.69.0",
+    "zone.js": "~0.16.3"
   },
   "devDependencies": {
     "@angular-eslint/builder": "^22.2.0",
@@ -90,7 +90,7 @@
     "@types/dompurify": "^3.2.0",
     "@types/node": "^26.4.0",
     "@typescript-eslint/eslint-plugin": "^8.68.0",
-    "@typescript-eslint/parser": "^8.68.0",
+    "@typescript-eslint/parser": "^8.69.0",
     "angular-eslint": "^22.2.0",
     "autoprefixer": "^10.5.4",
     "concurrently": "^10.0.4",
@@ -105,14 +105,14 @@
     "postcss": "^8.5.26",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.9.6",
-    "sass": "^1.103.1",
+    "sass": "^1.104.0",
     "tailwindcss": "^4.3.3",
     "ts-node": "~10.9",
     "typescript": "~6.0.3",
     "vitest": "^4.1.11"
   },
   "optionalDependencies": {
-    "@nx/nx-darwin-arm64": "^23.1.1",
+    "@nx/nx-darwin-arm64": "^23.2.0",
     "@nx/nx-darwin-x64": "^23.1.2",
     "@nx/nx-linux-arm64-gnu": "^23.1.2",
     "@nx/nx-linux-x64-gnu": "^23.1.2",
