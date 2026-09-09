@@ -34,8 +34,8 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
   hasChartData: boolean = false;
   colorScheme = {domain: ['']};
 
-  normalisedCompletionSnapshotXLabel: string = 'Task';
-  normalisedCompletionSnapshotYLabel: string = 'Percentage of Students';
+  XAxisLabel: string = 'Task';
+  YAxisLabel: string = 'Percentage of Students';
 
   constructor(
     private readonly taskService: TaskService,

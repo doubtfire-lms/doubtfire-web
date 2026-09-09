@@ -27,7 +27,7 @@ export class StackedAreaStatusChartComponent implements OnChanges {
   colorScheme = {domain: ['']};
 
   XAxisLabel: string = 'Week';
-  YAxisLabel: string = 'Records';
+  YAxisLabel: string = 'Tasks';
 
   constructor(
     private readonly taskService: TaskService,
