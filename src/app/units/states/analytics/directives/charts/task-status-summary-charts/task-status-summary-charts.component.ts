@@ -1,15 +1,12 @@
-import {MultiSeries, TooltipService} from '@glitchtip/ng-charts';
 import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Injector,
   Input,
   NgZone,
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
 import {filter, map, take} from 'rxjs/operators';
 import {addDays, startOfDay} from 'src/app/api/models/calendar-day';
@@ -22,17 +19,13 @@ import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
 import {Unit} from 'src/app/api/models/unit';
 import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
-import {TaskService} from 'src/app/api/services/task.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {
-  countStudentsFromSnapshot,
   displayWeekNumber,
   dropLeadingEmptySnapshots,
   formatSnapshotLabel,
-  getTaskStats,
   shouldIncludeSnapshot,
-  statusMapping,
 } from '../chart-data-helpers';
 
 export interface SnapshotWeekSegment {
@@ -90,8 +83,6 @@ const spanStyle = (fraction: number) => `calc(${fraction} * (100% - ${TICK_MARK_
 export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
 
-  data: MultiSeries = [];
-  hasChartData: boolean = false;
   sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
   campuses: string[] = [];
@@ -123,24 +114,8 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
     this.resizeObserver.observe(ref.nativeElement);
   }
 
-  // options
-  normalisedCompletionSnapshotXLabel: string = 'Task';
-  normalisedCompletionSnapshotYLabel: string = 'Percentage of Students';
-
-  colorScheme = {
-    domain: [''],
-  };
-
   get sliderMax(): number {
     return Math.max(this.snapshots.length - 1, 0);
-  }
-
-  get selectedSnapshot(): TaskCompletionSnapshot | undefined {
-    return this.snapshots[this.sliderSelect];
-  }
-
-  get selectedSnapshotDate(): string {
-    return formatSnapshotLabel(this.unit, this.selectedSnapshot?.snapshot_date, 'long');
   }
 
   get firstSnapshotDate(): string {
@@ -155,27 +130,6 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
     return this.snapshots.length <= MAX_TICK_MARKS;
   }
 
-  get snapshotStudentCount(): number {
-    if (!this.selectedSnapshot || this.selectedSnapshot.placeholder) {
-      return 0;
-    }
-
-    const exactCount =
-      this.campusFilter === 'all'
-        ? this.selectedSnapshot.student_count
-        : this.selectedSnapshot.campus_student_counts?.[this.campusFilter];
-    if (exactCount !== undefined) {
-      return exactCount;
-    }
-
-    const snapshotData =
-      this.campusFilter !== 'all' && this.selectedSnapshot.stats[this.campusFilter]
-        ? {[this.campusFilter]: this.selectedSnapshot.stats[this.campusFilter]}
-        : this.selectedSnapshot.stats;
-
-    return countStudentsFromSnapshot(snapshotData);
-  }
-
   // Format the snapshot date for display on the slider tooltip
   formatSnapshotDate = (value: number): string => {
     return formatSnapshotLabel(
@@ -188,29 +142,16 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
   private autoCaptureAttempted: boolean = false;
 
   constructor(
-    private taskService: TaskService,
     private alertService: AlertService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
     private sidekiqJobService: SidekiqJobService,
-    private chartToolTipService: TooltipService,
-    private viewContainerRef: ViewContainerRef,
-    private injectorObj: Injector,
     private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone,
-  ) {
-    // https://github.com/swimlane/ngx-charts/issues/1428#issuecomment-659237562
-    this.chartToolTipService = this.injectorObj.get(TooltipService);
-    this.viewContainerRef = this.injectorObj.get(ViewContainerRef);
-  }
+  ) {}
 
   campusFilter: string = 'all';
 
   ngOnInit(): void {
-    this.chartToolTipService.injectionService.setRootViewContainer(this.viewContainerRef);
-
-    this.colorScheme.domain = statusMapping.map(
-      (labels) => this.taskService.statusColors.get(labels) || '#000000',
-    );
     this.loadRecentSnapshot();
   }
 
@@ -218,35 +159,9 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
     this.resizeObserver?.disconnect();
   }
 
-  /**
-   * Rebuild the bars for the selected snapshot. This runs on every slider tick, so
-   * it must only touch the one snapshot the slider is pointing at.
-   */
-  refreshData() {
-    const selectedSnapshot = this.selectedSnapshot;
-
-    if (!selectedSnapshot) {
-      this.data = [];
-      this.campuses = [];
-      this.hasChartData = false;
-      return;
-    }
-
-    this.campuses = Object.keys(selectedSnapshot.stats);
-
-    this.data = this.buildChartData(getTaskStats(selectedSnapshot, this.campusFilter));
-    // Padded week 0 days carry no stats - show the chart empty rather than falling back
-    // to the loading spinner.
-    this.hasChartData = this.snapshots.length > 0;
-  }
-
-  onCampusFilterChange(): void {
-    this.refreshData();
-  }
-
   onSnapshotSliderChange(value: number): void {
     this.sliderSelect = Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax);
-    this.refreshData();
+    this.campuses = Object.keys(this.snapshots[this.sliderSelect]?.stats ?? {});
   }
 
   private updateWeekBand(): void {
@@ -601,34 +516,6 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
     return stats;
   }
 
-  private buildChartData(taskStats: TaskCodeStats): MultiSeries {
-    const orderByCode = new Map(
-      this.unit.taskDefinitions.map((taskDefinition) => [
-        taskDefinition.abbreviation,
-        {
-          target: taskDefinition.targetDate?.valueOf() ?? Number.MAX_SAFE_INTEGER,
-          seq: taskDefinition.seq,
-        },
-      ]),
-    );
-    // A task definition that has since been removed still shows up in older snapshots.
-    const unknown = {target: Number.MAX_SAFE_INTEGER, seq: Number.MAX_SAFE_INTEGER};
-
-    return Object.entries(taskStats)
-      .sort(([taskCodeA], [taskCodeB]) => {
-        const a = orderByCode.get(taskCodeA) ?? unknown;
-        const b = orderByCode.get(taskCodeB) ?? unknown;
-        return a.target - b.target || a.seq - b.seq;
-      })
-      .map(([taskDef, counts]) => ({
-        name: taskDef,
-        series: statusMapping.map((status) => ({
-          name: this.taskService.statusLabels.get(status) || status,
-          value: counts[status] || 0,
-        })),
-      }));
-  }
-
   onSelect(): void {}
 
   loadRecentSnapshot(): void {
@@ -649,8 +536,8 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
           .filter((snapshot) => shouldIncludeSnapshot(this.unit, snapshot));
         this.snapshots = this.padWeekZero(dropLeadingEmptySnapshots([...this.snapshots].reverse()));
         this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
+        this.campuses = Object.keys(this.snapshots[this.sliderSelect]?.stats ?? {});
         this.buildWeekSegments();
-        this.refreshData();
         this.changeDetectorRef.detectChanges();
 
         if (this.snapshots.length === 0 && !this.autoCaptureAttempted) {

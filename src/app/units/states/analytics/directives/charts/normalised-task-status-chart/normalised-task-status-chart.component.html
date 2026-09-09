@@ -1,0 +1,28 @@
+@if (hasChartData) {
+  <div class="px-4 pt-8 text-slate-600">
+    <h3 class="mb-0">{{ selectedSnapshotDate }}</h3>
+    <p>Student count: {{ snapshotStudentCount }}</p>
+  </div>
+  <div class="h-125">
+    <ng-charts-bar-vertical-normalized
+      class="reverse-legend-order"
+      [animations]="true"
+      [gradient]="false"
+      [legend]="true"
+      [results]="data"
+      [scheme]="$any(colorScheme)"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      [tooltipDisabled]="false"
+      [xAxis]="true"
+      [xAxisLabel]="normalisedCompletionSnapshotXLabel"
+      [yAxis]="true"
+      [yAxisLabel]="normalisedCompletionSnapshotYLabel"
+    >
+    </ng-charts-bar-vertical-normalized>
+  </div>
+} @else {
+  <div class="flex h-full min-h-148 items-center justify-center">
+    <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+  </div>
+}
