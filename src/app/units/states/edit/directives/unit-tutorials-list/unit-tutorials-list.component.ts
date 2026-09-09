@@ -219,7 +219,11 @@ export class UnitTutorialsListComponent
       return;
     }
     if (bEntity instanceof User) {
-      return 'user_id' in aEntity && aEntity.user_id === bEntity.id;
+      // The form control holds a User, while some payloads supply {user_id} - accept either.
+      if ('user_id' in aEntity) {
+        return aEntity.user_id === bEntity.id;
+      }
+      return aEntity.id === bEntity.id;
     } else {
       return 'id' in aEntity && aEntity.id === bEntity.id;
     }

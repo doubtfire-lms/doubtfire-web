@@ -1,7 +1,8 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatSelectChange} from '@angular/material/select';
 import {MatTableDataSource} from '@angular/material/table';
+import {Subscription} from 'rxjs';
 import {Tutorial, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {UnitRole} from 'src/app/api/models/unit-role';
@@ -23,7 +24,7 @@ import {BulkImportStaffModalService} from './bulk-import-staff-modal/bulk-import
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class UnitStaffEditorComponent implements OnInit {
+export class UnitStaffEditorComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
   @Input() staff: User[];
 
@@ -44,6 +45,8 @@ export class UnitStaffEditorComponent implements OnInit {
   ];
   dataSource: MatTableDataSource<UnitRole> = new MatTableDataSource();
 
+  private subscriptions: Subscription[] = [];
+
   // Inject services here
   constructor(
     private alertService: AlertService,
@@ -57,10 +60,22 @@ export class UnitStaffEditorComponent implements OnInit {
 
   ngOnInit(): void {
     // Subscribe to staff cache
-    this.unit.staffCache.values.subscribe((staff: UnitRole[]) => {
-      this.unitStaff = staff;
-      this.dataSource.data = staff;
-    });
+    this.subscriptions.push(
+      this.unit.staffCache.values.subscribe((staff: UnitRole[]) => {
+        this.unitStaff = staff;
+        this.dataSource.data = staff;
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  // Blank when there is no mentor, matching what the select itself renders - the placeholder must
+  // not flash a value the select is about to drop.
+  mentorName(unitRole: UnitRole): string {
+    return this.unitStaff?.find((role) => role.id === unitRole.mentorId)?.user.name ?? '';
   }
 
   onRoleChange(unitRole: UnitRole, event: MatButtonToggleChange) {

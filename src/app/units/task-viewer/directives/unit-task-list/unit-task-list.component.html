@@ -250,27 +250,25 @@
                               <mat-icon class="size-4! text-[16px]!"> event_upcoming </mat-icon>
                               {{ taskStartLabel(task) }}
                             </span>
-                          } @else if (taskOngoing(task)) {
-                            <span
-                              class="flex shrink-0 items-center gap-px text-[12px] font-normal text-sky-500"
-                            >
-                              <mat-icon class="size-4! text-[16px]!"> event_upcoming </mat-icon>
-                              Start now
-                            </span>
-                          } @else if (!task.isBeforeStartDate() && !task.inSubmittedState()) {
+                          } @else if (taskDueApproaching(task)) {
                             <span
                               class="flex shrink-0 items-center gap-px text-[12px] font-bold"
                               [ngClass]="{
                                 'text-[#da532c]': task.daysUntilDueDate() <= 0,
-                                'font-normal text-[#fab143]':
-                                  task.daysUntilDueDate() > 0 && task.daysUntilDueDate() < 11,
-                                'font-normal text-gray-500': task.daysUntilDueDate() > 11,
+                                'font-normal text-[#fab143]': task.daysUntilDueDate() > 0,
                               }"
                             >
                               <mat-icon class="!h-[16px] !w-[16px] !text-[16px]">
                                 hourglass_bottom
                               </mat-icon>
                               {{ task.timeToDue() }}
+                            </span>
+                          } @else if (taskOngoing(task)) {
+                            <span
+                              class="flex shrink-0 items-center gap-px text-[12px] font-normal text-sky-500"
+                            >
+                              <mat-icon class="size-4! text-[16px]!"> event_upcoming </mat-icon>
+                              Start now
                             </span>
                           }
                         }

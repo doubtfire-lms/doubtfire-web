@@ -58,14 +58,14 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
   public activeSectionId: TaskDefinitionSectionId = 'task-details';
   public readonly sectionList: TaskDefinitionSection[] = [
     {id: 'task-details', label: 'Task Details'},
-    {id: 'task-learning-outcomes', label: 'Task Learning Outcomes'},
+    {id: 'task-learning-outcomes', label: 'Learning Outcomes'},
     {id: 'inbox', label: 'Inbox'},
     {id: 'due-dates', label: 'Due Dates'},
     {id: 'upload-requirements', label: 'Upload Requirements'},
     {id: 'task-resources', label: 'Task Resources'},
     {id: 'prerequisite-tasks', label: 'Prerequisite Tasks'},
     {id: 'discussion-prompts', label: 'Discussion Prompts'},
-    {id: 'task-assessment-automation', label: 'Task Assessment Automation'},
+    {id: 'task-assessment-automation', label: 'Overseer'},
     {id: 'scorm-test', label: 'SCORM Test'},
     {id: 'optional-settings', label: 'Optional Settings'},
   ];

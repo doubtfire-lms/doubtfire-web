@@ -59,15 +59,21 @@ export class User extends Entity {
     return firstName;
   }
 
+  /**
+   * Does any of the user's details contain the passed in text?
+   *
+   * @param text the search text, in lower case
+   */
   public matches(text: string): boolean {
-    return (
-      this.studentId?.toLowerCase().indexOf(text) >= 0 ||
-      this.name.toLowerCase().indexOf(text) >= 0 ||
-      this.firstName.toLowerCase().indexOf(text) >= 0 ||
-      this.lastName.toLowerCase().indexOf(text) >= 0 ||
-      this.email.toLowerCase().indexOf(text) >= 0 ||
-      this.nickname?.toLowerCase().indexOf(text) >= 0
-    );
+    return [
+      this.studentId,
+      this.name,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.nickname,
+      this.username,
+    ].some((value) => value?.toLowerCase().includes(text));
   }
 
   public acceptTiiEula(): Observable<boolean> {

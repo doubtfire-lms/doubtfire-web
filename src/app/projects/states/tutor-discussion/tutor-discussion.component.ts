@@ -667,7 +667,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   }
 
   public getStudentTasks(recordAttendance: boolean = false): void {
-    console.time('getStudentTasks()');
     // this.project = null;
     // this.filteredTasks = [];
     // this.selectedTask = null;
@@ -708,9 +707,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
         console.error(e);
         this.alertService.error(e, 5000);
         this.scanQrCode();
-      })
-      .finally(() => {
-        console.timeEnd('getStudentTasks()');
       });
   }
 }

@@ -581,6 +581,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   // Callback to refresh data from the task source
   private refreshData() {
     const fetchMyStudentsOnly = this.filters.tutorialIdSelected === 'mine';
+    const requestedTaskKey = this.taskData.taskKey as {
+      studentId: string | number;
+      taskDefAbbr: string;
+    } | null;
 
     this.loading = true;
     this.taskLoadSubscription?.unsubscribe();
@@ -595,6 +599,22 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
           this.loading = false;
 
           this.fetchedAllTasks = !fetchMyStudentsOnly && !this.isTaskDefMode;
+
+          if (
+            this.viewType === 'inbox' &&
+            requestedTaskKey &&
+            !this.filteredTasks?.some((task) => task?.hasTaskKey(requestedTaskKey))
+          ) {
+            void this.router.navigate(['/units', this.unit.id, 'tasks', 'definition'], {
+              queryParams: {
+                students: 'all',
+                studentId: requestedTaskKey.studentId,
+                taskDefAbbr: requestedTaskKey.taskDefAbbr,
+              },
+              replaceUrl: true,
+            });
+            return;
+          }
 
           // If the URL carries a task key, load that task once the query results arrive.
           this.syncSelectedTaskFromTaskKey();

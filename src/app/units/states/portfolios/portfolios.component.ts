@@ -1,7 +1,15 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {BehaviorSubject, Observable, Subscription, first, of} from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  distinctUntilChanged,
+  finalize,
+  first,
+  map,
+} from 'rxjs';
 import {Project} from 'src/app/api/models/project';
 import {Unit} from 'src/app/api/models/unit';
 import {ProjectService} from 'src/app/api/services/project.service';
@@ -57,34 +65,56 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
+    // The route reuses this component when switching between units, so follow the resolved
+    // unit rather than reading it once from the route snapshot.
+    const unit$ = this.unit$ ?? this.route.parent.data.pipe(map((data) => data.unit as Unit));
+
     this.subscriptions.push(
-      this.unit$.pipe(first()).subscribe({
-        next: (unit) => {
-          this.unit = unit;
-
-          if (
-            this.userService.currentUser.systemRole === 'Admin' ||
-            this.userService.currentUser.systemRole === 'Convenor'
-          ) {
-            this.unit.loadD2lMapping().subscribe();
-          }
-
-          this.loadStudents();
-          this.subscriptions.push(
-            this.route.paramMap.subscribe((params) => {
-              this.updateCurrentTabFromState(params.get('tab'), params.get('projectId'));
-            }),
-            this.route.queryParamMap.subscribe((params) => {
-              this.updatePortfolioListFiltersFromQueryParams(params);
-            }),
-          );
-        },
-        error: (error) => {
-          this.alertService.error(`Failed to load unit: ${error}`, 6000);
-          this.router.navigateByUrl('/home');
-        },
+      unit$
+        .pipe(distinctUntilChanged((previous, current) => previous?.id === current?.id))
+        .subscribe({
+          next: (unit) => this.showUnit(unit),
+          error: (error) => {
+            this.alertService.error(`Failed to load unit: ${error}`, 6000);
+            this.router.navigateByUrl('/home');
+          },
+        }),
+      this.route.paramMap.subscribe((params) => {
+        this.updateCurrentTabFromState(params.get('tab'), params.get('projectId'));
       }),
+      this.route.queryParamMap.subscribe((params) => {
+        this.updatePortfolioListFiltersFromQueryParams(params);
+      }),
+    );
+  }
+
+  private showUnit(unit: Unit): void {
+    this.unit = unit;
+
+    // Any student selected in the previous unit is no longer relevant.
+    this.selectedProjectId = null;
+    this.selectedProject = null;
+    this.selectedProject$.next(null);
+
+    if (!unit) {
+      this.loadingStudents = false;
+      return;
+    }
+
+    if (
+      this.userService.currentUser.systemRole === 'Admin' ||
+      this.userService.currentUser.systemRole === 'Convenor'
+    ) {
+      unit.loadD2lMapping().subscribe();
+    }
+
+    this.loadStudents();
+
+    // The route may already name a student to show, and the paramMap subscription can have
+    // reported it before this unit arrived.
+    this.updateCurrentTabFromState(
+      this.route.snapshot.paramMap.get('tab'),
+      this.route.snapshot.paramMap.get('projectId'),
     );
   }
 
@@ -137,15 +167,26 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   }
 
   private loadStudents(): void {
-    this.projectService.loadStudents(this.unit, false).subscribe({
-      next: () => {
-        this.loadingStudents = false;
-      },
-      error: (error) => {
-        this.alertService.error(`Failed to load unit: ${error}`, 6000);
-        this.router.navigateByUrl('/home');
-      },
-    });
+    const unit = this.unit;
+
+    // Students already in the cache can be shown while the current details load, but they may
+    // have been cached in another view minutes ago - so always ask the server for them again.
+    this.loadingStudents = unit.activeStudents.length === 0;
+    this.projectService
+      .loadStudents(unit, false, true)
+      .pipe(
+        first(),
+        finalize(() => {
+          if (this.unit === unit) {
+            this.loadingStudents = false;
+          }
+        }),
+      )
+      .subscribe({
+        error: (error) => {
+          this.alertService.error(`Failed to load students: ${error}`, 6000);
+        },
+      });
   }
 
   private updatePortfolioListFiltersFromQueryParams(params: ParamMap): void {
@@ -210,7 +251,8 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.selectedProject?.id === projectId) {
+    // Already showing, or already loading, this student.
+    if (this.selectedProject?.id === projectId || this.selectedProjectId === projectId) {
       return;
     }
 
@@ -230,6 +272,11 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
   }
 
   private loadProject(projectId: number): void {
+    if (!this.unit) {
+      // The unit is still resolving. It will apply the route state once it arrives.
+      return;
+    }
+
     this.selectedProjectId = projectId;
 
     this.projectService.loadProject(projectId, this.unit).subscribe({

@@ -64,7 +64,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
     if (!this.refreshTokenInProgress) {
-      console.log('Refreshing access token');
       this.refreshTokenInProgress = true;
       this.refreshTokenSubject.next(null);
       return this.attemptRefresh$().pipe(

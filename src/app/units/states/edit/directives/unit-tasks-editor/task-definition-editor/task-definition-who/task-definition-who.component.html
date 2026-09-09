@@ -57,8 +57,10 @@
   </span>
 </div>
 
-<div>
-  <mat-slide-toggle [(ngModel)]="taskDefinition.lockAssessmentsToTutorialStream"
-    >Only allow tutors in this tutorial stream to assess this task</mat-slide-toggle
-  >
-</div>
+<f-setting-toggle
+  label="Restrict assessment to this stream"
+  [(checked)]="taskDefinition.lockAssessmentsToTutorialStream"
+>
+  When enabled, only tutors who run a tutorial in the selected tutorial stream can assess this task.
+  Other tutors in the unit will not be able to pick it up.
+</f-setting-toggle>

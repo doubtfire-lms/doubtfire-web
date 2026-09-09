@@ -105,7 +105,7 @@ export class GroupSelectorComponent
       .filter(
         (g) =>
           this.staffTutorialFilter === 'all' ||
-          (this.unitRole && g.tutorial.tutor.id === this.unitRole.user.id),
+          (this.unitRole && g.tutorial?.tutor?.id === this.unitRole.user.id),
       )
       .filter(
         (g) => !this.newGroupName || g.name.toLowerCase().includes(this.newGroupName.toLowerCase()),

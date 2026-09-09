@@ -30,6 +30,7 @@ export * from './task-outcome-alignment';
 export * from './learning-outcome';
 export * from './grade';
 export * from './task-status';
+export * from './task-completion-snapshot';
 export * from './task-comment/discussion-comment';
 export * from '../services/task-outcome-alignment.service';
 export * from './task-similarity';

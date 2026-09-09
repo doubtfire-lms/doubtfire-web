@@ -510,6 +510,19 @@ export class TaskStatus {
     };
   }
 
+  public static matchesSearch(status: TaskStatusEnum | undefined, matchText: string): boolean {
+    if (!status) {
+      return false;
+    }
+
+    const searchText = matchText.toLowerCase();
+
+    return (
+      (TaskStatus.STATUS_LABELS.get(status)?.toLowerCase().indexOf(searchText) ?? -1) >= 0 ||
+      status.replace(new RegExp('_', 'g'), ' ').indexOf(searchText) >= 0
+    );
+  }
+
   public static statusClass(status: TaskStatusEnum | undefined): string {
     return status?.replace(new RegExp('_', 'g'), '-') ?? 'not-started';
   }

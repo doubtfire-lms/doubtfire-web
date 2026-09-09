@@ -151,11 +151,16 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
 
   addTeachingBreak() {
     this.newOrSelectedTeachingPeriod
-      .addBreak(this.tempBreak.startDate, this.tempBreak.numberOfWeeks, this.tempBreak.campusIds)
+      .addBreak(
+        this.tempBreak.startDate,
+        this.tempBreak.numberOfDays,
+        this.tempBreak.campusIds,
+        this.tempBreak.label,
+        this.tempBreak.pauseWeekCount,
+      )
       .subscribe({
-        next: (teachingPeriodBreak) => {
+        next: () => {
           this.alertService.success('Break added');
-          console.log(teachingPeriodBreak);
         },
         error: (response) => {
           this.alertService.error(`Error adding break. ${response}`);
@@ -165,9 +170,6 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
 
   deleteBreak(teachingPeriod: TeachingPeriod, teachingBreak: TeachingPeriodBreak): void {
     teachingPeriod.removeBreak(teachingBreak.id).subscribe({
-      next: (teachingPeriodBreak) => {
-        console.log(teachingPeriodBreak);
-      },
       error: (response) => {
         this.alertService.error(`Error deleting break. ${response}`);
       },
@@ -205,12 +207,26 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
       });
   }
 
+  /**
+   * The week count can only be paused by breaks that span whole teaching weeks,
+   * so clear the flag whenever the duration is no longer a multiple of 7 days.
+   */
+  breakDurationChanged(teachingBreak: TeachingPeriodBreak): void {
+    if (!teachingBreak.canPauseWeekCount) {
+      teachingBreak.pauseWeekCount = false;
+    }
+  }
+
   campusName(campusId: number): string {
     return this.campuses.find((campus) => campus.id === campusId)?.name ?? `Campus ${campusId}`;
   }
 
   campusNames(campusIds: number[]): string {
     return campusIds.map((campusId) => this.campusName(campusId)).join(', ');
+  }
+
+  campusSummary(campusIds: number[]): string {
+    return campusIds.length ? `Campuses: ${this.campusNames(campusIds)}` : 'All campuses';
   }
 
   submitTeachingPeriod() {

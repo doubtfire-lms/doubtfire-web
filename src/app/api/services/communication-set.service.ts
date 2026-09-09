@@ -57,6 +57,19 @@ export class CommunicationSetService {
     );
   }
 
+  public exportForUnit(unitId: number, setId: number): Observable<Record<string, unknown>> {
+    return this.httpClient.get<Record<string, unknown>>(`${this.endpoint(unitId)}/${setId}/export`);
+  }
+
+  public importForUnit(
+    unitId: number,
+    document: Record<string, unknown>,
+  ): Observable<CommunicationSet> {
+    return this.httpClient
+      .post<Partial<CommunicationSet>>(`${this.endpoint(unitId)}/import`, {document})
+      .pipe(map((created) => new CommunicationSet(created)));
+  }
+
   public executeForUnit(unitId: number, setId: number): Observable<SidekiqJob> {
     return this.httpClient.post<SidekiqJob>(`${this.endpoint(unitId)}/${setId}/execute`, {});
   }

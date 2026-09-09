@@ -11,6 +11,7 @@ import {
   TaskStatusUiData,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {MappingFunctions} from './mapping-fn';
 
@@ -26,7 +27,10 @@ export class TaskService extends CachedEntityService<Task> {
   private readonly taskOverflowEndpoint = '/units/:id:/tasks/overflow';
   private readonly refreshTaskEndpoint = 'projects/:projectId:/refresh_tasks/:taskDefinitionId:';
 
-  constructor(httpClient: HttpClient) {
+  constructor(
+    httpClient: HttpClient,
+    private alertService: AlertService,
+  ) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
@@ -218,7 +222,8 @@ export class TaskService extends CachedEntityService<Task> {
 
     this.get(pathIds, options).subscribe({
       error: (message) => {
-        console.log(`Failed to refresh tasks ${message}`);
+        console.error('Failed to refresh task details', message);
+        this.alertService.error('Failed to refresh task details.', 6000);
       },
     });
   }
