@@ -142,11 +142,11 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
   private autoCaptureAttempted: boolean = false;
 
   constructor(
-    private alertService: AlertService,
-    private sidekiqProgressModalService: SidekiqProgressModalService,
-    private sidekiqJobService: SidekiqJobService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private ngZone: NgZone,
+    private readonly alertService: AlertService,
+    private readonly sidekiqProgressModalService: SidekiqProgressModalService,
+    private readonly sidekiqJobService: SidekiqJobService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly ngZone: NgZone,
   ) {}
 
   campusFilter: string = 'all';
@@ -193,8 +193,11 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
     this.weekSegments.forEach((segment, index) => {
       segment.leftStyle = offsetStyle(segment.startFraction);
       segment.widthStyle = spanStyle(segment.endFraction - segment.startFraction);
-      segment.text =
-        widths[index] < requiredWidth ? '' : useFullLabels ? segment.label : segment.shortLabel;
+      let text = '';
+      if (widths[index] >= requiredWidth) {
+        text = useFullLabels ? segment.label : segment.shortLabel;
+      }
+      segment.text = text;
     });
 
     this.updateBreakBand();
@@ -321,16 +324,18 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
       const endFraction = group.endIndex === total - 1 ? 1 : (group.endIndex + 0.5) / denominator;
       // A break's own label can be any length, so the band always says 'Break' and the tooltip
       // carries the real name.
-      const label = group.teachingBreak
-        ? 'Break'
-        : group.weekNumber === null
-          ? 'Unscheduled'
-          : `Week ${group.weekNumber}`;
-      const shortLabel = group.teachingBreak
-        ? 'Break'
-        : group.weekNumber === null
-          ? '–'
-          : `W${group.weekNumber}`;
+      let label: string;
+      let shortLabel: string;
+      if (group.teachingBreak) {
+        label = 'Break';
+        shortLabel = 'Break';
+      } else if (group.weekNumber === null) {
+        label = 'Unscheduled';
+        shortLabel = '–';
+      } else {
+        label = `Week ${group.weekNumber}`;
+        shortLabel = `W${group.weekNumber}`;
+      }
       const range = this.snapshotRangeLabel(group.startIndex, group.endIndex);
       const tooltip = group.teachingBreak
         ? [group.teachingBreak.label || 'Break', range, this.breakCampuses(group.teachingBreak)]
