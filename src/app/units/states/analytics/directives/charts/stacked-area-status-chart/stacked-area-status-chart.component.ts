@@ -16,7 +16,6 @@ import {formatSnapshotLabel, getTaskStats, statusMapping} from '../chart-data-he
 @Component({
   selector: 'f-stacked-area-status-chart',
   templateUrl: './stacked-area-status-chart.component.html',
-  styleUrl: './stacked-area-status-chart.component.css',
   standalone: false,
 })
 export class StackedAreaStatusChartComponent implements OnChanges {

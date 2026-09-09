@@ -5,6 +5,7 @@ import {
   Injector,
   Input,
   OnChanges,
+  OnInit,
   SimpleChanges,
   ViewContainerRef,
 } from '@angular/core';
@@ -21,10 +22,9 @@ import {
 @Component({
   selector: 'f-normalised-task-status-chart',
   templateUrl: './normalised-task-status-chart.component.html',
-  styleUrl: './normalised-task-status-chart.component.scss',
   standalone: false,
 })
-export class NormalisedTaskStatusChartComponent implements OnChanges {
+export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
   @Input() unit: Unit;
   @Input() snapshots: TaskCompletionSnapshot[] = [];
   @Input() campusFilter: string = 'all';
