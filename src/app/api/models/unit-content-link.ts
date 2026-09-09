@@ -10,6 +10,7 @@ export class UnitContentSite extends Entity {
   name: string;
   originalFilename: string;
   rootDir: string;
+  contentVersion: string;
   rootDirOptions: string[];
   filePaths: string[];
   isMain: boolean;

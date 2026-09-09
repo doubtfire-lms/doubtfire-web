@@ -295,6 +295,7 @@ export class UnitService extends CachedEntityService<Unit> {
       },
       'hasMainContentSite',
       'mainContentSiteId',
+      'contentSiteVersions',
       {
         keys: 'contentLinks',
         toEntityOp: (data: object, key: string, unit: Unit) => {

@@ -82,6 +82,7 @@ export class Unit extends Entity {
   draftTaskDefinition: TaskDefinition;
   hasMainContentSite: boolean = false;
   mainContentSiteId?: number;
+  contentSiteVersions: Record<number, string> = {};
 
   allowStudentExtensionRequests: boolean;
   allowFlexibleDates: boolean = false;

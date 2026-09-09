@@ -20,6 +20,7 @@ import {GlobalStateService, ViewType} from '../index/global-state.service';
 
 export interface UnitContentViewerDialogData {
   contentSiteId?: number;
+  contentVersion?: string;
   contentRoute: string;
   unit: Unit;
 }
@@ -44,6 +45,7 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
 
   @Input() public contentRoute = '/';
   @Input() public contentSiteId?: number;
+  @Input() public contentVersion?: string;
   @Input() public task?: Task;
   @Input() public unit?: Unit;
 
@@ -65,6 +67,7 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
   private contentIframes: Array<HTMLIFrameElement | undefined> = [];
   private currentUnitId?: number;
   private currentContentSiteId?: number;
+  private currentContentVersion?: string;
   private contentRequestId = 0;
   private iframeUrls: Array<string | undefined> = [];
   private loadingIframeIndex?: number;
@@ -87,7 +90,12 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
     if (
       !this.initialized ||
       !this.unit ||
-      !('contentRoute' in changes || 'contentSiteId' in changes || 'unit' in changes)
+      !(
+        'contentRoute' in changes ||
+        'contentSiteId' in changes ||
+        'contentVersion' in changes ||
+        'unit' in changes
+      )
     ) {
       return;
     }
@@ -134,6 +142,7 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
     this.dialogData = {
       contentRoute: this.contentRoute,
       contentSiteId: this.contentSiteId,
+      contentVersion: this.contentVersion,
       unit: this.unit!,
     };
     this.setContentRoute(this.dialogData.contentRoute);
@@ -205,7 +214,13 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
   }
 
   private setHeaderContext(unit: Unit): void {
+    this.currentUnitId = unit.id;
     this.currentContentSiteId = this.dialogData?.contentSiteId ?? unit.mainContentSiteId;
+    this.currentContentVersion =
+      this.dialogData?.contentVersion ??
+      (this.currentContentSiteId
+        ? unit.contentSiteVersions?.[this.currentContentSiteId]
+        : undefined);
     const studentProject = this.studentProjectForUnit(unit);
 
     if (unit.myRole === 'Student' && studentProject) {
@@ -385,7 +400,9 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
       .map((part) => encodeURIComponent(part))
       .join('/');
 
-    return `${API_URL}/units/${unitId}/content/sites/${this.currentContentSiteId}/files${encodedRoute}`;
+    const versionPath = this.currentContentVersion ? `/v/${this.currentContentVersion}` : '';
+
+    return `${API_URL}/units/${unitId}/content/sites/${this.currentContentSiteId}/files${versionPath}${encodedRoute}`;
   }
 
   private routeFromHref(href: string | null): {path: string; fragment?: string} | undefined {
@@ -408,14 +425,29 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
       return undefined;
     }
 
-    let pathEnd = url.pathname.length;
+    let contentPath = url.pathname;
+    const contentFilesPrefix =
+      this.currentUnitId && this.currentContentSiteId
+        ? `${new URL(API_URL).pathname}/units/${this.currentUnitId}/content/sites/${this.currentContentSiteId}/files`
+        : undefined;
 
-    while (pathEnd > 1 && url.pathname[pathEnd - 1] === '/') {
+    if (
+      contentFilesPrefix &&
+      (contentPath === contentFilesPrefix || contentPath.startsWith(`${contentFilesPrefix}/`))
+    ) {
+      contentPath = contentPath.slice(contentFilesPrefix.length) || '/';
+      contentPath = contentPath.replace(/^\/v\/[0-9a-f]{64}(?=\/|$)/, '') || '/';
+    }
+
+    contentPath = this.decodeRoute(contentPath);
+    let pathEnd = contentPath.length;
+
+    while (pathEnd > 1 && contentPath[pathEnd - 1] === '/') {
       pathEnd -= 1;
     }
 
     return {
-      path: url.pathname.slice(0, pathEnd),
+      path: contentPath.slice(0, pathEnd),
       fragment: url.hash ? url.hash.slice(1) : undefined,
     };
   }
