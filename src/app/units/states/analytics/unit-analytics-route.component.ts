@@ -1,22 +1,35 @@
 import {formatDate} from '@angular/common';
-import {ChangeDetectionStrategy, Component, Inject, Input, LOCALE_ID, OnInit, OnDestroy} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Input,
+  LOCALE_ID,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, first, of, Subscription} from 'rxjs';
+import {Observable, Subscription, first, of} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
 import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+
 type AnalyticsTabKey =
-  'task-completion' | 'target-grades' | 'tasks-awaiting-feedback' | 'resubmissions' | 'tutor-times' | 'download-data';
+  | 'task-completion'
+  | 'target-grades'
+  | 'tasks-awaiting-feedback'
+  | 'resubmissions'
+  | 'tutor-times'
+  | 'download-data';
 
 interface AnalyticsTab {
   label: string;
   routeSegment: AnalyticsTabKey;
 }
-
 
 @Component({
   selector: 'f-unit-analytics',
