@@ -153,6 +153,11 @@ export const routes: Routes = [
         children: [
           {path: '', pathMatch: 'full', redirectTo: 'tasks/inbox'},
           {path: 'analytics', component: UnitAnalyticsComponent, data: {task: 'Unit Analytics'}},
+          {
+            path: 'analytics/:tab',
+            component: UnitAnalyticsComponent,
+            data: {task: 'Unit Analytics'},
+          },
           {path: 'students/groups', component: UnitGroupsComponent, data: {task: 'Student Groups'}},
           {
             path: 'students/portfolios',

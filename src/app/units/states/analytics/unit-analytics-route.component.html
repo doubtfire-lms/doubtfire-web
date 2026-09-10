@@ -1,7 +1,21 @@
 <div class="mx-auto max-w-[90vw]">
   <h1>Unit Statistics</h1>
-
-  <div class="flex flex-col gap-2.5">
+ <mat-tab-group
+    class="mx-auto mb-6"
+    dynamicHeight
+    [selectedIndex]="currentIndex"
+    (selectedTabChange)="onTabChange($event)"
+  >
+    @for (tab of tabs; track tab.routeSegment) {
+      <mat-tab [label]="tab.label"></mat-tab>
+    }
+  </mat-tab-group>
+  <div class="flex flex-col gap-2.5 pb-16">
+    @switch (currentTab.routeSegment) {
+      @case ('task-completion') {
+        <f-task-status-summary-charts [unit]="unit" />
+      }
+      @case ('download-data') {
     <mat-card appearance="outlined" class="mt-2.5 p-4">
       <mat-card-content class="flex gap-1">
         <button mat-button (click)="getTaskCompletionCsv()">
@@ -23,9 +37,11 @@
         }
       </mat-card-content>
     </mat-card>
-    <f-task-status-summary-charts [unit]="unit" />
+  }
+@case ('tutor-times') {
     <f-analytics-tutor-times [downloadCsvFn]="downloadCsv" [unit]="unit"></f-analytics-tutor-times>
-  </div>
+}
+    }
 </div>
 <!--
 
