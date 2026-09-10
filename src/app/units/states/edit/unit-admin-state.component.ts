@@ -15,6 +15,7 @@ type UnitAdminTabKey =
   | 'tasks'
   | 'content'
   | 'groups'
+  | 'moodle'
   | 'communication';
 
 interface UnitAdminTab {
@@ -31,7 +32,7 @@ interface UnitAdminTab {
 export class UnitAdminStateComponent implements OnInit, OnDestroy {
   @Input() public unit$: Observable<Unit>;
 
-  public readonly tabs: UnitAdminTab[] = [
+  public tabs: UnitAdminTab[] = [
     {label: 'Unit Details', routeSegment: 'details'},
     {label: 'Content', routeSegment: 'content'},
     {label: 'Learning Outcomes', routeSegment: 'learning-outcomes'},
@@ -40,6 +41,7 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
     {label: 'Students', routeSegment: 'students'},
     {label: 'Tasks', routeSegment: 'tasks'},
     {label: 'Groups', routeSegment: 'groups'},
+    {label: 'Moodle', routeSegment: 'moodle'},
     {label: 'Communications', routeSegment: 'communication'},
   ];
 
@@ -48,6 +50,7 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   public assessingUnitRole: UnitRole | null = null;
   public currentTab: UnitAdminTab = this.tabs[0];
   public loadingUnit = true;
+  public savedMoodleEnabled = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -88,12 +91,22 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   }
 
   public get currentIndex(): number {
-    const index = this.tabs.findIndex((tab) => tab.routeSegment === this.currentTab.routeSegment);
+    const index = this.visibleTabs.findIndex(
+      (tab) => tab.routeSegment === this.currentTab.routeSegment,
+    );
     return index >= 0 ? index : 0;
   }
 
+  public get visibleTabs(): UnitAdminTab[] {
+    return this.tabs.filter((tab) => tab.routeSegment !== 'moodle' || this.savedMoodleEnabled);
+  }
+
+  public unitUpdated(unit: Unit): void {
+    this.savedMoodleEnabled = unit.moodleEnabled;
+  }
+
   public onTabChange(event: MatTabChangeEvent): void {
-    const nextTab = this.tabs[event.index] ?? this.tabs[0];
+    const nextTab = this.visibleTabs[event.index] ?? this.visibleTabs[0];
     this.currentTab = nextTab;
     if (this.route.parent?.snapshot.data.unit) {
       this.router.navigate(
@@ -111,9 +124,9 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
 
   private updateCurrentTabFromState(tabParam?: string | null): void {
     this.currentTab =
-      this.tabs.find((tab) => tab.routeSegment === tabParam) ??
-      this.tabs.find((tab) => tab.routeSegment === 'details') ??
-      this.tabs[0];
+      this.visibleTabs.find((tab) => tab.routeSegment === tabParam) ??
+      this.visibleTabs.find((tab) => tab.routeSegment === 'details') ??
+      this.visibleTabs[0];
   }
 
   private findUnitRole(unitId: number): UnitRole | null {
@@ -159,6 +172,13 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
       this.unitService.loadDetails(unitId).subscribe({
         next: (unit) => {
           this.unit = unit;
+          this.savedMoodleEnabled = unit.moodleEnabled;
+          const requestedTab = this.route.snapshot.paramMap.get('tab');
+          this.updateCurrentTabFromState(requestedTab);
+          if (requestedTab === 'moodle' && !this.savedMoodleEnabled) {
+            this.router.navigate(['/units', unit.id, 'admin', 'details'], {replaceUrl: true});
+          }
+
           if (this.assessingUnitRole) {
             this.assessingUnitRole.unit = unit;
           }
