@@ -153,6 +153,7 @@ export class NotificationService implements OnDestroy {
   private mapGroup(data: Record<string, unknown>): NotificationGroup {
     const task = data['task'] as Record<string, unknown> | null;
     const unit = data['unit'] as Record<string, unknown>;
+    const destination = data['destination'] as Record<string, unknown> | null;
 
     return {
       key: data['key'] as string,
@@ -173,6 +174,12 @@ export class NotificationService implements OnDestroy {
             name: task['name'] as string,
             staffView: task['staff_view'] as boolean,
             studentName: task['student_name'] as string | undefined,
+          }
+        : undefined,
+      destination: destination
+        ? {
+            type: destination['type'] as 'unit_inbox',
+            unitId: destination['unit_id'] as number,
           }
         : undefined,
       counts: data['counts'] as Partial<Record<NotificationKind, number>>,

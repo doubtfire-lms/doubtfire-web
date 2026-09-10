@@ -30,7 +30,10 @@ describe('NotificationSettingsComponent', () => {
   const saveSettings = vi.fn((settings) => of(settings));
   // Saving mutates the loaded entity in place, so each test needs its own copy.
   const savedSettings = () => ({
-    channels: {new_task_comment: ['in_app', 'email']},
+    channels: {
+      new_task_comment: ['in_app', 'email'],
+      feedback_warning: ['in_app', 'email'],
+    },
     digestFrequency: 'daily',
     digestIntervalHours: 6,
     digestStartTime: '09:00',
@@ -223,6 +226,19 @@ describe('NotificationSettingsComponent', () => {
     // Channels absent from the saved payload fall back to off, not to the defaults.
     expect(component.isChecked('new_task_comment', 'email')).toBe(true);
     expect(component.isChecked('task_status_changed', 'email')).toBe(false);
+  });
+
+  it('shows feedback warnings only to staff', () => {
+    expect(component.sections.some((section) => section.key === 'feedback-warning')).toBe(false);
+
+    const userService = TestBed.inject(UserService) as unknown as {
+      currentUser: {isStaff: boolean};
+    };
+    userService.currentUser.isStaff = true;
+
+    expect(component.sections.some((section) => section.key === 'feedback-warning')).toBe(true);
+    expect(component.isChecked('feedback_warning', 'inApp')).toBe(true);
+    expect(component.isChecked('feedback_warning', 'email')).toBe(true);
   });
 
   it('saves only the units that depart from the defaults', () => {

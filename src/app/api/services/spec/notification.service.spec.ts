@@ -48,6 +48,7 @@ describe('NotificationService', () => {
       expect(page.unreadCount).toBe(1);
       expect(page.groups[0].projectId).toBe(42);
       expect(page.groups[0].task?.projectId).toBe(42);
+      expect(page.groups[0].destination).toEqual({type: 'unit_inbox', unitId: 3});
       expect(page.groups[0].latestAt).toBeInstanceOf(Date);
       expect(page.groups[0].messageSubject).toBe('Important update');
       expect(page.groups[0].messageBody).toBe('Full message');
@@ -73,6 +74,7 @@ describe('NotificationService', () => {
             name: 'Loops',
             staff_view: false,
           },
+          destination: {type: 'unit_inbox', unit_id: 3},
           counts: {new_task_comment: 2},
           event_count: 2,
           severity: 'normal',

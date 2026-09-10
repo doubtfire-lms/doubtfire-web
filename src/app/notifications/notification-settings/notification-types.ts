@@ -132,6 +132,21 @@ export const NOTIFICATION_SECTIONS: NotificationSection[] = [
     ],
   },
   {
+    key: 'feedback-warning',
+    title: 'Feedback warnings',
+    timing: 'Emailed in your digest',
+    delivery: 'digest',
+    audience: 'staff',
+    types: [
+      {
+        key: 'feedback_warning',
+        label: 'Feedback warning threshold reached',
+        description:
+          'A task assigned to you has waited for feedback for the unit warning threshold.',
+      },
+    ],
+  },
+  {
     key: 'moderation',
     title: 'Moderation notes',
     delivery: 'alert',

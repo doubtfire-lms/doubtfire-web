@@ -3,6 +3,7 @@ import type {TaskStatusEnum} from './task-status';
 export type NotificationKind =
   | 'new_task_comment'
   | 'task_status_changed'
+  | 'feedback_warning'
   | 'overseer_failed'
   | 'pdf_generation_failed'
   | 'discuss_warning'
@@ -34,6 +35,11 @@ export interface NotificationTask {
   studentName?: string;
 }
 
+export interface NotificationDestination {
+  type: 'unit_inbox';
+  unitId: number;
+}
+
 export interface NotificationGroup {
   key: string;
   notificationIds: number[];
@@ -41,6 +47,7 @@ export interface NotificationGroup {
   unit: NotificationUnit;
   projectId?: number;
   task?: NotificationTask;
+  destination?: NotificationDestination;
   counts: Partial<Record<NotificationKind, number>>;
   eventCount: number;
   latestStatus?: TaskStatusEnum;

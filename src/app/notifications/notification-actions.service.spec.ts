@@ -61,6 +61,19 @@ describe('NotificationActionsService', () => {
     });
   });
 
+  it('opens a feedback warning in the unit inbox before marking it read', async () => {
+    service.open(
+      groupFor({
+        task: undefined,
+        destination: {type: 'unit_inbox', unitId: 17},
+        counts: {feedback_warning: 3},
+      }),
+    );
+
+    expect(navigate).toHaveBeenCalledWith(['/units', 17, 'tasks', 'inbox']);
+    await vi.waitFor(() => expect(markRead).toHaveBeenCalledWith([1, 2]));
+  });
+
   it('opens the report for a failed overseer run', () => {
     service.open(groupFor({overseerAssessmentId: 4242}));
 

@@ -121,6 +121,8 @@
                     {{ group.messageSubject }}
                   } @else if (group.task) {
                     {{ group.task.abbreviation }} - {{ group.task.name }}
+                  } @else if (group.destination?.type === 'unit_inbox') {
+                    Feedback required
                   } @else if (group.projectId) {
                     Portfolio
                   } @else {

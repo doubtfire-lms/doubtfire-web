@@ -106,7 +106,11 @@
                   class="flex size-10 flex-none items-center justify-center rounded-md bg-gray-200 text-slate-600"
                 >
                   <mat-icon class="m-0">{{
-                    group.counts.communication_email ? 'mail' : 'notifications'
+                    group.counts.communication_email
+                      ? 'mail'
+                      : group.destination?.type === 'unit_inbox'
+                        ? 'inbox'
+                        : 'notifications'
                   }}</mat-icon>
                 </span>
               }

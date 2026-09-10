@@ -42,6 +42,27 @@ export class NotificationActionsService {
       return;
     }
 
+    if (group.destination?.type === 'unit_inbox') {
+      const navigate = () =>
+        this.router.navigate(['/units', group.destination!.unitId, 'tasks', 'inbox']);
+
+      if (group.read) {
+        void navigate();
+        return;
+      }
+
+      void navigate()
+        .then((opened) => {
+          if (opened) {
+            this.notificationService.markRead(group.notificationIds).subscribe({
+              error: () => undefined,
+            });
+          }
+        })
+        .catch(() => undefined);
+      return;
+    }
+
     // The task's Mod Notes tab shows its own tutor's thread, so a note about
     // anyone else opens as a thread of its own.
     if (group.tutorNoteNotificationIds.length && !group.tutorNoteOnTaskTutor) {
