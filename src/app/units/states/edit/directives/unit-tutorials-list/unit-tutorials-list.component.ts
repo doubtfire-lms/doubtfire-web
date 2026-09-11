@@ -25,6 +25,7 @@ import {
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {UnitTutorialModalService} from 'src/app/units/modals/unit-tutorial-modal/unit-tutorial-modal.service';
 
 // Default duration for a new tutorial, in minutes (2 hours).
 const DEFAULT_TUTORIAL_DURATION_MINUTES = 120;
@@ -85,6 +86,7 @@ export class UnitTutorialsListComponent
     private tutorialStreamService: TutorialStreamService,
     private campusService: CampusService,
     private confirmationModal: ConfirmationModalService,
+    private tutorialModal: UnitTutorialModalService,
     private alerts: AlertService,
   ) {
     super(
@@ -159,25 +161,14 @@ export class UnitTutorialsListComponent
     this.editingStream = value;
   }
 
-  // This method is passed to the submit method on the parent
-  // and is only run when an entity is successfully created or updated
-  onSuccess(response: Tutorial, isNew: boolean): void {
-    if (isNew) {
-      this.pushToTable(response);
-    }
+  // New tutorials are created through the modal, so this form only ever edits an existing one.
+  public newTutorial(): void {
+    this.tutorialModal.show(this.unit, this.stream);
   }
 
-  // Push the values that will be displayed in the table
-  // to the datasource
-  private pushToTable(value: Tutorial | Tutorial[]) {
-    if (!value) {
-      return;
-    }
-    if (value instanceof Array) {
-      this.tutorials.push(...value);
-    } else {
-      this.tutorials.push(value);
-    }
+  // This method is passed to the submit method on the parent
+  // and is only run when an entity is successfully updated
+  onSuccess(_response: Tutorial, _isNew: boolean): void {
     this.renderTable();
   }
 
@@ -199,14 +190,6 @@ export class UnitTutorialsListComponent
   // which then calls the parent's submit.
   submit(): void {
     super.submit(this.tutorialService, this.alerts, this.onSuccess.bind(this));
-  }
-
-  protected formDataToNewObject(endPointKey: string, _associations?: object): object {
-    this.selected = new Tutorial(this.unit);
-    this.copyChangesFromForm();
-    this.selected.tutorialStream = this.stream;
-    super.formDataToNewObject(endPointKey);
-    return this.selected;
   }
 
   // This comparison function is required to determine what campus or user
