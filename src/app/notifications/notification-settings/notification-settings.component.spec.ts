@@ -33,6 +33,7 @@ describe('NotificationSettingsComponent', () => {
     channels: {
       new_task_comment: ['in_app', 'email'],
       feedback_warning: ['in_app', 'email'],
+      weekly_summary: ['in_app', 'email'],
     },
     digestFrequency: 'daily',
     digestIntervalHours: 6,
@@ -140,6 +141,14 @@ describe('NotificationSettingsComponent', () => {
       'task_due_soon',
       'task_overdue',
     ]);
+  });
+
+  it('offers weekly summaries to students and staff', () => {
+    const weeklySummary = component.sections.find((section) => section.key === 'weekly-summary');
+
+    expect(weeklySummary?.types.map((type) => type.key)).toEqual(['weekly_summary']);
+    expect(component.isChecked('weekly_summary', 'inApp')).toBe(true);
+    expect(component.isChecked('weekly_summary', 'email')).toBe(true);
   });
 
   it('hides the type sections on a unit that still follows "All units"', () => {

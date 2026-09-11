@@ -4,6 +4,7 @@ export type NotificationKind =
   | 'new_task_comment'
   | 'task_status_changed'
   | 'feedback_warning'
+  | 'weekly_summary'
   | 'overseer_failed'
   | 'pdf_generation_failed'
   | 'discuss_warning'
@@ -40,6 +41,58 @@ export interface NotificationDestination {
   unitId: number;
 }
 
+export interface WeeklySummaryTask {
+  abbreviation: string;
+  name: string;
+  reason: string;
+  reasonLabel: string;
+  status?: TaskStatusEnum;
+}
+
+export interface WeeklySummaryTutor {
+  tutorName: string;
+  students: number;
+  totalAssessments: number;
+  weeklyAssessments: number;
+  totalComments: number;
+  weeklyComments: number;
+  awaitingFeedback: number;
+  oldestTaskDays: number;
+  totalDiscussions: number;
+  weeklyDiscussions: number;
+}
+
+export interface WeeklySummaryTutorialStream {
+  name: string;
+  unallocatedStudents: number;
+  tutors: WeeklySummaryTutor[];
+}
+
+export interface WeeklySummary {
+  audience: 'student' | 'staff';
+  weekStart: string;
+  weekEnd: string;
+  unitComments: number;
+  unitTaskActivity: number;
+  sentComments: number;
+  receivedComments: number;
+  taskActivity?: number;
+  studentTaskActivity: number;
+  tutorAllocated?: boolean;
+  didRevertToPass?: boolean;
+  portfolioExists?: boolean;
+  topTasks: WeeklySummaryTask[];
+  hasStudents?: boolean;
+  isConvenor?: boolean;
+  assessedTasks?: number;
+  discussedTasks?: number;
+  awaitingFeedback?: number;
+  oldestTaskDays?: number;
+  revertedStudents: string[];
+  revertedStudentCount?: number;
+  tutorialStreams: WeeklySummaryTutorialStream[];
+}
+
 export interface NotificationGroup {
   key: string;
   notificationIds: number[];
@@ -63,6 +116,8 @@ export interface NotificationGroup {
   /** Rendered content of an email sent by the communications system. */
   messageSubject?: string;
   messageBody?: string;
+  /** Statistics captured when a weekly summary notification was created. */
+  weeklySummary?: WeeklySummary;
   /** What happened, without the task it happened to. */
   detail: string;
   summary: string;
@@ -74,6 +129,7 @@ export interface NotificationPage {
   perPage: number;
   total: number;
   unreadCount: number;
+  unreadCountsByUnit: Record<number, number>;
 }
 
 export interface NotificationQuery {

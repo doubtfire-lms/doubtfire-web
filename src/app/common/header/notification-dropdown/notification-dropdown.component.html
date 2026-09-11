@@ -108,9 +108,11 @@
                   <mat-icon class="m-0">{{
                     group.counts.communication_email
                       ? 'mail'
-                      : group.destination?.type === 'unit_inbox'
-                        ? 'inbox'
-                        : 'notifications'
+                      : group.counts.weekly_summary
+                        ? 'insights'
+                        : group.destination?.type === 'unit_inbox'
+                          ? 'inbox'
+                          : 'notifications'
                   }}</mat-icon>
                 </span>
               }

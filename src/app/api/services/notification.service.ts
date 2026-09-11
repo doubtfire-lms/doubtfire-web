@@ -17,6 +17,9 @@ import {
   NotificationKind,
   NotificationPage,
   NotificationQuery,
+  WeeklySummary,
+  WeeklySummaryTask,
+  WeeklySummaryTutorialStream,
 } from '../models/notification';
 import {AuthenticationService} from './authentication.service';
 
@@ -26,16 +29,25 @@ interface NotificationPageResponse {
   per_page: number;
   total: number;
   unread_count: number;
+  unread_counts_by_unit: Record<string, number>;
+}
+
+interface NotificationCountResponse {
+  count: number;
+  unread_counts_by_unit?: Record<string, number>;
 }
 
 @Injectable()
 export class NotificationService implements OnDestroy {
   private readonly unreadCountSubject: BehaviorSubject<number> = new BehaviorSubject(0);
+  private readonly unreadCountsByUnitSubject: BehaviorSubject<Record<number, number>> =
+    new BehaviorSubject<Record<number, number>>({});
   private pollingSubscription?: Subscription;
   private pollingConsumers = 0;
   private waitingForAuthentication = false;
 
   public readonly unreadCount$ = this.unreadCountSubject.asObservable();
+  public readonly unreadCountsByUnit$ = this.unreadCountsByUnitSubject.asObservable();
 
   constructor(
     private httpClient: HttpClient,
@@ -74,11 +86,17 @@ export class NotificationService implements OnDestroy {
       .pipe(
         switchMap(() =>
           this.httpClient
-            .get<{count: number}>(`${API_URL}/notifications/unread_count`)
-            .pipe(catchError(() => of({count: this.unreadCountSubject.value}))),
+            .get<NotificationCountResponse>(`${API_URL}/notifications/unread_count`)
+            .pipe(
+              catchError(() =>
+                of({
+                  count: this.unreadCountSubject.value,
+                }),
+              ),
+            ),
         ),
       )
-      .subscribe(({count}) => this.unreadCountSubject.next(count));
+      .subscribe((response) => this.updateUnreadCounts(response));
   }
 
   public stopCountPolling(): void {
@@ -96,10 +114,12 @@ export class NotificationService implements OnDestroy {
   }
 
   public refreshUnreadCount(): void {
-    this.httpClient.get<{count: number}>(`${API_URL}/notifications/unread_count`).subscribe({
-      next: ({count}) => this.unreadCountSubject.next(count),
-      error: () => undefined,
-    });
+    this.httpClient
+      .get<NotificationCountResponse>(`${API_URL}/notifications/unread_count`)
+      .subscribe({
+        next: (response) => this.updateUnreadCounts(response),
+        error: () => undefined,
+      });
   }
 
   public getNotifications(query: NotificationQuery = {}): Observable<NotificationPage> {
@@ -125,8 +145,12 @@ export class NotificationService implements OnDestroy {
         perPage: response.per_page,
         total: response.total,
         unreadCount: response.unread_count,
+        unreadCountsByUnit: this.mapUnreadCountsByUnit(response.unread_counts_by_unit),
       })),
-      tap((page) => this.unreadCountSubject.next(page.unreadCount)),
+      tap((page) => {
+        this.unreadCountSubject.next(page.unreadCount);
+        this.unreadCountsByUnitSubject.next(page.unreadCountsByUnit);
+      }),
     );
   }
 
@@ -148,6 +172,21 @@ export class NotificationService implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.stopCountPolling();
+  }
+
+  private updateUnreadCounts(response: NotificationCountResponse): void {
+    this.unreadCountSubject.next(response.count);
+    if (response.unread_counts_by_unit) {
+      this.unreadCountsByUnitSubject.next(
+        this.mapUnreadCountsByUnit(response.unread_counts_by_unit),
+      );
+    }
+  }
+
+  private mapUnreadCountsByUnit(counts: Record<string, number>): Record<number, number> {
+    return Object.fromEntries(
+      Object.entries(counts ?? {}).map(([unitId, count]) => [Number(unitId), count]),
+    );
   }
 
   private mapGroup(data: Record<string, unknown>): NotificationGroup {
@@ -195,8 +234,71 @@ export class NotificationService implements OnDestroy {
       overseerAssessmentId: data['overseer_assessment_id'] as number | undefined,
       messageSubject: data['message_subject'] as string | undefined,
       messageBody: data['message_body'] as string | undefined,
+      weeklySummary: this.mapWeeklySummary(
+        data['weekly_summary'] as Record<string, unknown> | undefined,
+      ),
       detail: data['detail'] as string,
       summary: data['summary'] as string,
+    };
+  }
+
+  private mapWeeklySummary(data?: Record<string, unknown>): WeeklySummary | undefined {
+    if (!data) {
+      return undefined;
+    }
+
+    return {
+      audience: data['audience'] as WeeklySummary['audience'],
+      weekStart: data['week_start'] as string,
+      weekEnd: data['week_end'] as string,
+      unitComments: data['unit_comments'] as number,
+      unitTaskActivity: data['unit_task_activity'] as number,
+      sentComments: data['sent_comments'] as number,
+      receivedComments: data['received_comments'] as number,
+      taskActivity: data['task_activity'] as number | undefined,
+      studentTaskActivity: data['student_task_activity'] as number,
+      tutorAllocated: data['tutor_allocated'] as boolean | undefined,
+      didRevertToPass: data['did_revert_to_pass'] as boolean | undefined,
+      portfolioExists: data['portfolio_exists'] as boolean | undefined,
+      topTasks: ((data['top_tasks'] as Record<string, unknown>[] | undefined) ?? []).map(
+        (task) => ({
+          abbreviation: task['abbreviation'] as string,
+          name: task['name'] as string,
+          reason: task['reason'] as string,
+          reasonLabel: task['reason_label'] as string,
+          status: task['status'] as WeeklySummaryTask['status'],
+        }),
+      ),
+      hasStudents: data['has_students'] as boolean | undefined,
+      isConvenor: data['is_convenor'] as boolean | undefined,
+      assessedTasks: data['assessed_tasks'] as number | undefined,
+      discussedTasks: data['discussed_tasks'] as number | undefined,
+      awaitingFeedback: data['awaiting_feedback'] as number | undefined,
+      oldestTaskDays: data['oldest_task_days'] as number | undefined,
+      revertedStudents: (data['reverted_students'] as string[] | undefined) ?? [],
+      revertedStudentCount: data['reverted_student_count'] as number | undefined,
+      tutorialStreams: (
+        (data['tutorial_streams'] as Record<string, unknown>[] | undefined) ?? []
+      ).map((stream) => this.mapTutorialStream(stream)),
+    };
+  }
+
+  private mapTutorialStream(data: Record<string, unknown>): WeeklySummaryTutorialStream {
+    return {
+      name: data['name'] as string,
+      unallocatedStudents: data['unallocated_students'] as number,
+      tutors: ((data['tutors'] as Record<string, unknown>[] | undefined) ?? []).map((tutor) => ({
+        tutorName: tutor['tutor_name'] as string,
+        students: tutor['students'] as number,
+        totalAssessments: tutor['total_assessments'] as number,
+        weeklyAssessments: tutor['weekly_assessments'] as number,
+        totalComments: tutor['total_comments'] as number,
+        weeklyComments: tutor['weekly_comments'] as number,
+        awaitingFeedback: tutor['awaiting_feedback'] as number,
+        oldestTaskDays: tutor['oldest_task_days'] as number,
+        totalDiscussions: tutor['total_discussions'] as number,
+        weeklyDiscussions: tutor['weekly_discussions'] as number,
+      })),
     };
   }
 }

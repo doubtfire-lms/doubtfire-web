@@ -12,7 +12,7 @@ describe('NotificationDropdownComponent', () => {
   let component: NotificationDropdownComponent;
   let fixture: ComponentFixture<NotificationDropdownComponent>;
   const getNotifications = vi.fn(() =>
-    of({groups: [], page: 1, perPage: 5, total: 0, unreadCount: 0}),
+    of({groups: [], page: 1, perPage: 5, total: 0, unreadCount: 0, unreadCountsByUnit: {}}),
   );
   const markAllRead = vi.fn(() => of({count: 1}));
   const openGroup = vi.fn();

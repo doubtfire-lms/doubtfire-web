@@ -60,8 +60,21 @@
       >
         <mat-chip-option value="all">All units</mat-chip-option>
         @for (unit of units; track unit.id) {
-          <mat-chip-option [matTooltip]="unit.name" [value]="unit.id">
-            {{ unit.code }}
+          <mat-chip-option
+            [attr.aria-label]="
+              unit.code + ', ' + unreadCountForUnit(unit.id) + ' unread notifications'
+            "
+            [matTooltip]="unit.name"
+            [value]="unit.id"
+          >
+            <span
+              matBadgeSize="small"
+              [matBadge]="unreadCountForUnit(unit.id)"
+              [matBadgeHidden]="unreadCountForUnit(unit.id) === 0"
+              [matBadgeOverlap]="false"
+            >
+              {{ unit.code }}
+            </span>
           </mat-chip-option>
         }
       </mat-chip-listbox>
@@ -104,7 +117,11 @@
           <button
             class="flex w-full cursor-pointer items-center gap-4 p-5 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600 max-[720px]:flex-col max-[720px]:items-stretch"
             type="button"
-            [attr.aria-expanded]="group.counts.communication_email ? isExpanded(group) : null"
+            [attr.aria-expanded]="
+              group.counts.communication_email || group.counts.weekly_summary
+                ? isExpanded(group)
+                : null
+            "
             [attr.aria-label]="group.summary"
             (click)="open(group)"
           >
@@ -138,7 +155,7 @@
               </span>
               <span class="mt-2 block text-sm text-slate-700">{{ group.detail }}</span>
             </span>
-            @if (group.counts.communication_email) {
+            @if (group.counts.communication_email || group.counts.weekly_summary) {
               <mat-icon class="text-slate-500">
                 {{ isExpanded(group) ? 'expand_less' : 'expand_more' }}
               </mat-icon>
@@ -150,6 +167,239 @@
               <div class="max-w-[800px] break-words whitespace-pre-wrap text-slate-800 select-text">
                 {{ group.messageBody }}
               </div>
+            </section>
+          }
+          @if (group.weeklySummary && isExpanded(group)) {
+            <section aria-label="Weekly summary" class="border-t border-slate-200 bg-slate-50 p-5">
+              <div class="mb-4 text-sm text-slate-500">
+                {{ group.weeklySummary.weekStart | date: 'd MMMM' }}–{{
+                  group.weeklySummary.weekEnd | date: 'd MMMM y'
+                }}
+              </div>
+
+              @if (group.weeklySummary.audience === 'staff') {
+                <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+                  <div class="rounded-md border border-slate-200 bg-white p-3">
+                    <strong class="block text-xl">{{
+                      group.weeklySummary.assessedTasks ?? 0
+                    }}</strong>
+                    <span class="text-xs text-slate-500">Tasks assessed</span>
+                  </div>
+                  <div class="rounded-md border border-slate-200 bg-white p-3">
+                    <strong class="block text-xl">{{
+                      group.weeklySummary.awaitingFeedback ?? 0
+                    }}</strong>
+                    <span class="text-xs text-slate-500">Awaiting feedback</span>
+                  </div>
+                  <div class="rounded-md border border-slate-200 bg-white p-3">
+                    <strong class="block text-xl">{{ group.weeklySummary.sentComments }}</strong>
+                    <span class="text-xs text-slate-500">Comments sent</span>
+                  </div>
+                  <div class="rounded-md border border-slate-200 bg-white p-3">
+                    <strong class="block text-xl">{{
+                      group.weeklySummary.discussedTasks ?? 0
+                    }}</strong>
+                    <span class="text-xs text-slate-500">Tasks discussed</span>
+                  </div>
+                </div>
+
+                <p class="mt-3 text-sm text-slate-700">
+                  Across the unit there were
+                  <strong>{{ group.weeklySummary.unitComments }} comments</strong> and
+                  <strong>{{ group.weeklySummary.unitTaskActivity }} task status changes</strong>.
+                  Your students' tasks changed state
+                  <strong>{{ group.weeklySummary.studentTaskActivity }} times</strong>, and you
+                  received <strong>{{ group.weeklySummary.receivedComments }} comments</strong>.
+                </p>
+
+                @if ((group.weeklySummary.awaitingFeedback ?? 0) > 0) {
+                  <p class="mt-3 text-sm text-slate-700">
+                    The oldest task awaiting feedback has waited
+                    <strong>{{ group.weeklySummary.oldestTaskDays }} days</strong>.
+                  </p>
+                }
+
+                @if (group.weeklySummary.revertedStudents.length) {
+                  <div
+                    class="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"
+                  >
+                    Students advised to focus on their Pass tasks:
+                    {{ group.weeklySummary.revertedStudents.join(', ') }}.
+                  </div>
+                }
+
+                @if (group.weeklySummary.isConvenor && group.weeklySummary.tutorialStreams.length) {
+                  <h3 class="mt-6 mb-3 text-base font-semibold">Tutor progress</h3>
+                  <div class="flex flex-col gap-4">
+                    @for (stream of group.weeklySummary.tutorialStreams; track stream.name) {
+                      <section class="overflow-hidden rounded-md border border-slate-200 bg-white">
+                        <h4 class="m-0 px-4 py-3 text-sm font-semibold">{{ stream.name }}</h4>
+                        @if (stream.unallocatedStudents > 0) {
+                          <div
+                            class="border-y border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900"
+                          >
+                            {{ stream.unallocatedStudents }}
+                            {{ stream.unallocatedStudents === 1 ? 'student is' : 'students are' }}
+                            not allocated to a tutorial in this stream.
+                          </div>
+                        }
+                        @if (stream.tutors.length) {
+                          <div class="overflow-x-auto">
+                            <table
+                              class="w-full min-w-190 text-sm"
+                              mat-table
+                              [dataSource]="stream.tutors"
+                            >
+                              <ng-container matColumnDef="tutor">
+                                <th *matHeaderCellDef mat-header-cell>Tutor</th>
+                                <td *matCellDef="let tutor" class="font-medium" mat-cell>
+                                  {{ tutor.tutorName }}
+                                </td>
+                              </ng-container>
+
+                              <ng-container matColumnDef="students">
+                                <th *matHeaderCellDef class="text-right" mat-header-cell>
+                                  Students
+                                </th>
+                                <td *matCellDef="let tutor" class="text-right" mat-cell>
+                                  {{ tutor.students }}
+                                </td>
+                              </ng-container>
+
+                              <ng-container matColumnDef="assessments">
+                                <th *matHeaderCellDef class="text-right" mat-header-cell>
+                                  Assessments<br />week / total
+                                </th>
+                                <td *matCellDef="let tutor" class="text-right" mat-cell>
+                                  {{ tutor.weeklyAssessments }} / {{ tutor.totalAssessments }}
+                                </td>
+                              </ng-container>
+
+                              <ng-container matColumnDef="comments">
+                                <th *matHeaderCellDef class="text-right" mat-header-cell>
+                                  Comments<br />week / total
+                                </th>
+                                <td *matCellDef="let tutor" class="text-right" mat-cell>
+                                  {{ tutor.weeklyComments }} / {{ tutor.totalComments }}
+                                </td>
+                              </ng-container>
+
+                              <ng-container matColumnDef="awaiting">
+                                <th *matHeaderCellDef class="text-right" mat-header-cell>
+                                  Awaiting<br />count / oldest
+                                </th>
+                                <td *matCellDef="let tutor" class="text-right" mat-cell>
+                                  {{ tutor.awaitingFeedback }} / {{ tutor.oldestTaskDays }}d
+                                </td>
+                              </ng-container>
+
+                              <ng-container matColumnDef="discussed">
+                                <th *matHeaderCellDef class="text-right" mat-header-cell>
+                                  Discussed<br />week / total
+                                </th>
+                                <td *matCellDef="let tutor" class="text-right" mat-cell>
+                                  {{ tutor.weeklyDiscussions }} / {{ tutor.totalDiscussions }}
+                                </td>
+                              </ng-container>
+
+                              <tr *matHeaderRowDef="tutorProgressColumns" mat-header-row></tr>
+                              <tr *matRowDef="let row; columns: tutorProgressColumns" mat-row></tr>
+                            </table>
+                          </div>
+                        }
+                      </section>
+                    }
+                  </div>
+                }
+              } @else {
+                <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+                  <div class="rounded-md border border-slate-200 bg-white p-3">
+                    <strong class="block text-xl">{{
+                      group.weeklySummary.receivedComments
+                    }}</strong>
+                    <span class="text-xs text-slate-500">Comments received</span>
+                  </div>
+                  <div class="rounded-md border border-slate-200 bg-white p-3">
+                    <strong class="block text-xl">{{ group.weeklySummary.sentComments }}</strong>
+                    <span class="text-xs text-slate-500">Comments posted</span>
+                  </div>
+                  <div class="rounded-md border border-slate-200 bg-white p-3">
+                    <strong class="block text-xl">{{
+                      group.weeklySummary.taskActivity ?? 0
+                    }}</strong>
+                    <span class="text-xs text-slate-500">Your task activity</span>
+                  </div>
+                  <div class="rounded-md border border-slate-200 bg-white p-3">
+                    <strong class="block text-xl">{{
+                      group.weeklySummary.unitTaskActivity
+                    }}</strong>
+                    <span class="text-xs text-slate-500">Unit task activity</span>
+                  </div>
+                </div>
+
+                <p class="mt-3 text-sm text-slate-700">
+                  Across the unit there were
+                  <strong>{{ group.weeklySummary.unitComments }} comments</strong>. Of your task
+                  activity,
+                  <strong>{{ group.weeklySummary.studentTaskActivity }} changes</strong> came from
+                  your own progress.
+                </p>
+
+                @if (group.weeklySummary.tutorAllocated === false) {
+                  <div
+                    class="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"
+                  >
+                    You are not currently allocated to a tutor. Please check your tutorial
+                    allocation.
+                  </div>
+                }
+
+                @if (group.weeklySummary.topTasks.length) {
+                  <h3 class="mt-5 mb-2 text-base font-semibold">What to focus on next</h3>
+                  <ul class="m-0 flex list-none flex-col gap-2 p-0">
+                    @for (task of group.weeklySummary.topTasks; track task.abbreviation) {
+                      <li class="overflow-hidden rounded-md border border-slate-200 bg-white">
+                        <a
+                          class="flex items-center gap-3 px-4 py-3 text-inherit no-underline hover:bg-slate-50"
+                          [routerLink]="[
+                            '/projects',
+                            group.projectId,
+                            'dashboard',
+                            task.abbreviation,
+                          ]"
+                        >
+                          <status-icon
+                            class="shrink-0"
+                            [compact]="true"
+                            [status]="task.status ?? 'not_started'"
+                          ></status-icon>
+                          <span class="min-w-0">
+                            <strong>{{ task.abbreviation }}</strong> — {{ task.name }}
+                            <span class="ml-1 text-xs text-slate-500">{{ task.reasonLabel }}</span>
+                          </span>
+                        </a>
+                      </li>
+                    }
+                  </ul>
+                } @else {
+                  <p class="mt-4 text-sm text-slate-700">
+                    {{
+                      group.weeklySummary.portfolioExists
+                        ? 'You have completed your tasks and prepared your portfolio.'
+                        : 'You have completed your tasks—make sure you log in and prepare your portfolio.'
+                    }}
+                  </p>
+                }
+
+                @if (group.weeklySummary.didRevertToPass) {
+                  <div
+                    class="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"
+                  >
+                    Your target grade was reset to Pass so you can focus on catching up with your
+                    Pass tasks.
+                  </div>
+                }
+              }
             </section>
           }
         </article>

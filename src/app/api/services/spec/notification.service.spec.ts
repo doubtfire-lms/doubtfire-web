@@ -52,6 +52,10 @@ describe('NotificationService', () => {
       expect(page.groups[0].latestAt).toBeInstanceOf(Date);
       expect(page.groups[0].messageSubject).toBe('Important update');
       expect(page.groups[0].messageBody).toBe('Full message');
+      expect(page.groups[0].weeklySummary?.receivedComments).toBe(3);
+      expect(page.groups[0].weeklySummary?.topTasks[0].reasonLabel).toBe('Due soon');
+      expect(page.groups[0].weeklySummary?.topTasks[0].status).toBe('fix_and_resubmit');
+      expect(page.unreadCountsByUnit).toEqual({3: 1});
     });
 
     const request = httpMock.expectOne(
@@ -83,6 +87,27 @@ describe('NotificationService', () => {
           tutor_note_ids: [],
           message_subject: 'Important update',
           message_body: 'Full message',
+          weekly_summary: {
+            audience: 'student',
+            week_start: '2026-07-20T07:00:00Z',
+            week_end: '2026-07-27T07:00:00Z',
+            unit_comments: 8,
+            unit_task_activity: 12,
+            sent_comments: 2,
+            received_comments: 3,
+            task_activity: 4,
+            student_task_activity: 3,
+            tutor_allocated: true,
+            top_tasks: [
+              {
+                abbreviation: 'P5',
+                name: 'Arrays',
+                reason: 'soon',
+                reason_label: 'Due soon',
+                status: 'fix_and_resubmit',
+              },
+            ],
+          },
           summary: 'P4 — 2 new comments',
         },
       ],
@@ -90,6 +115,7 @@ describe('NotificationService', () => {
       per_page: 25,
       total: 1,
       unread_count: 1,
+      unread_counts_by_unit: {'3': 1},
     });
 
     expect(summary).toBe('P4 — 2 new comments');
@@ -114,8 +140,12 @@ describe('NotificationService', () => {
   it('waits for authentication before polling the grouped unread count', () => {
     vi.useFakeTimers();
     let latestCount = 0;
+    let latestCountsByUnit: Record<number, number> = {};
     const subscription = service.unreadCount$.subscribe((count) => {
       latestCount = count;
+    });
+    const unitSubscription = service.unreadCountsByUnit$.subscribe((counts) => {
+      latestCountsByUnit = counts;
     });
 
     service.startCountPolling();
@@ -128,8 +158,9 @@ describe('NotificationService', () => {
     const initialRequest = httpMock.expectOne((candidate) =>
       candidate.url.endsWith('/notifications/unread_count'),
     );
-    initialRequest.flush({count: 4});
+    initialRequest.flush({count: 4, unread_counts_by_unit: {'3': 2, '7': 2}});
     expect(latestCount).toBe(4);
+    expect(latestCountsByUnit).toEqual({3: 2, 7: 2});
 
     vi.advanceTimersByTime(60_000);
     const nextRequest = httpMock.expectOne((candidate) =>
@@ -143,6 +174,7 @@ describe('NotificationService', () => {
     httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
 
     subscription.unsubscribe();
+    unitSubscription.unsubscribe();
     vi.useRealTimers();
   });
 

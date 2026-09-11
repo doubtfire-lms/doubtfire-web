@@ -11,6 +11,7 @@ import {NotificationActionsService} from './notification-actions.service';
 describe('NotificationActionsService', () => {
   let service: NotificationActionsService;
   const navigate = vi.fn(() => Promise.resolve(true));
+  const router = {navigate, url: '/notifications'};
   const markRead = vi.fn(() => of({count: 1}));
   const showTutorNotes = vi.fn();
   const getUnit = vi.fn(() => of({staff: [{id: 22}]}));
@@ -33,10 +34,11 @@ describe('NotificationActionsService', () => {
         {provide: NotificationService, useValue: {markRead}},
         {provide: UnitService, useValue: {get: getUnit}},
         {provide: TutorNotesModalService, useValue: {show: showTutorNotes}},
-        {provide: Router, useValue: {navigate}},
+        {provide: Router, useValue: router},
       ],
     });
     service = TestBed.inject(NotificationActionsService);
+    router.url = '/notifications';
   });
 
   it('marks a group read after opening its task', async () => {
@@ -71,6 +73,21 @@ describe('NotificationActionsService', () => {
     );
 
     expect(navigate).toHaveBeenCalledWith(['/units', 17, 'tasks', 'inbox']);
+    await vi.waitFor(() => expect(markRead).toHaveBeenCalledWith([1, 2]));
+  });
+
+  it('marks a feedback warning read when its unit inbox is already open', async () => {
+    router.url = '/units/17/tasks/inbox';
+    navigate.mockResolvedValueOnce(false);
+
+    service.open(
+      groupFor({
+        task: undefined,
+        destination: {type: 'unit_inbox', unitId: 17},
+        counts: {feedback_warning: 3},
+      }),
+    );
+
     await vi.waitFor(() => expect(markRead).toHaveBeenCalledWith([1, 2]));
   });
 
@@ -137,6 +154,15 @@ describe('NotificationActionsService', () => {
         messageBody: 'The full body',
       }),
     );
+
+    expect(markRead).toHaveBeenCalledWith([1, 2]);
+    expect(navigate).toHaveBeenCalledWith(['/notifications'], {
+      queryParams: {expanded: 1},
+    });
+  });
+
+  it('opens a weekly summary expanded on the notification list', () => {
+    service.open(groupFor({task: undefined, counts: {weekly_summary: 1}}));
 
     expect(markRead).toHaveBeenCalledWith([1, 2]);
     expect(navigate).toHaveBeenCalledWith(['/notifications'], {

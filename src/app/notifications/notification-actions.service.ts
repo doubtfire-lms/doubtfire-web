@@ -25,7 +25,7 @@ export class NotificationActionsService {
   ) {}
 
   public open(group: NotificationGroup): void {
-    if (group.counts?.communication_email) {
+    if (group.counts?.communication_email || group.counts?.weekly_summary) {
       const navigate = () =>
         this.router.navigate(['/notifications'], {
           queryParams: {expanded: group.notificationIds[0]},
@@ -43,6 +43,7 @@ export class NotificationActionsService {
     }
 
     if (group.destination?.type === 'unit_inbox') {
+      const inboxPath = `/units/${group.destination.unitId}/tasks/inbox`;
       const navigate = () =>
         this.router.navigate(['/units', group.destination!.unitId, 'tasks', 'inbox']);
 
@@ -53,7 +54,9 @@ export class NotificationActionsService {
 
       void navigate()
         .then((opened) => {
-          if (opened) {
+          // Angular returns false when we are already at this inbox. That is
+          // still a successful open for the notification, so clear it too.
+          if (opened || this.currentPath === inboxPath) {
             this.notificationService.markRead(group.notificationIds).subscribe({
               error: () => undefined,
             });
@@ -160,5 +163,9 @@ export class NotificationActionsService {
     }
 
     return params;
+  }
+
+  private get currentPath(): string {
+    return this.router.url.split(/[?#]/)[0].replace(/\/$/, '');
   }
 }

@@ -30,7 +30,16 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   public perPage = 25;
   public total = 0;
   public unreadCount = 0;
+  public unreadCountsByUnit: Record<number, number> = {};
   public expandedNotificationId?: number;
+  public readonly tutorProgressColumns = [
+    'tutor',
+    'students',
+    'assessments',
+    'comments',
+    'awaiting',
+    'discussed',
+  ];
 
   private readonly subscriptions: Subscription[] = [];
   private readonly searchChanges: Subject<string> = new Subject();
@@ -47,6 +56,9 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.notificationService.startCountPolling();
     this.subscriptions.push(
+      this.notificationService.unreadCountsByUnit$.subscribe((counts) => {
+        this.unreadCountsByUnit = counts;
+      }),
       this.searchChanges
         .pipe(
           debounceTime(400),
@@ -139,6 +151,10 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
 
+  public unreadCountForUnit(unitId: number): number {
+    return this.unreadCountsByUnit[unitId] ?? 0;
+  }
+
   public applyFilters(): void {
     this.page = 1;
     this.loadNotifications();
@@ -151,7 +167,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   }
 
   public open(group: NotificationGroup): void {
-    if (group.counts?.communication_email) {
+    if (group.counts?.communication_email || group.counts?.weekly_summary) {
       this.expandedNotificationId = this.isExpanded(group) ? undefined : group.notificationIds[0];
       if (this.isExpanded(group)) {
         this.markRead(group);

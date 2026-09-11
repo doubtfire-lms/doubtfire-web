@@ -17,7 +17,14 @@ describe('NotificationsComponent', () => {
   const markRead = vi.fn(() => of({count: 1}));
   const stopCountPolling = vi.fn();
   const getNotifications = vi.fn(() =>
-    of({groups: [], page: 1, perPage: 25, total: 0, unreadCount: 0}),
+    of({
+      groups: [],
+      page: 1,
+      perPage: 25,
+      total: 0,
+      unreadCount: 0,
+      unreadCountsByUnit: {3: 2},
+    }),
   );
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -29,6 +36,7 @@ describe('NotificationsComponent', () => {
           useValue: {
             startCountPolling: vi.fn(),
             stopCountPolling,
+            unreadCountsByUnit$: of({3: 2}),
             getNotifications,
             markRead,
             markAllRead: vi.fn(() => of({count: 0})),
@@ -89,6 +97,20 @@ describe('NotificationsComponent', () => {
     expect(openGroup).not.toHaveBeenCalled();
   });
 
+  it('expands a weekly summary in place and marks it read', () => {
+    const group = {
+      notificationIds: [10],
+      counts: {weekly_summary: 1},
+      read: false,
+    } as NotificationGroup;
+
+    component.open(group);
+
+    expect(component.isExpanded(group)).toBe(true);
+    expect(markRead).toHaveBeenCalledWith([10]);
+    expect(openGroup).not.toHaveBeenCalled();
+  });
+
   it('shows all notifications by default', () => {
     component.loadNotifications();
 
@@ -99,6 +121,13 @@ describe('NotificationsComponent', () => {
       page: 1,
       perPage: 25,
     });
+  });
+
+  it('keeps the unread badge count for each unit', () => {
+    component.ngOnInit();
+
+    expect(component.unreadCountForUnit(3)).toBe(2);
+    expect(component.unreadCountForUnit(4)).toBe(0);
   });
 
   it('applies unit and read-state filters immediately', () => {

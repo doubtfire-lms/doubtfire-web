@@ -86,6 +86,21 @@ export const NOTIFICATION_SECTIONS: NotificationSection[] = [
     ],
   },
   {
+    key: 'weekly-summary',
+    title: 'Weekly summary',
+    timing: 'Created each Monday morning and emailed in your next digest',
+    delivery: 'digest',
+    audience: 'student',
+    types: [
+      {
+        key: 'weekly_summary',
+        label: 'Weekly progress summary',
+        description:
+          'A snapshot of your activity and progress. Staff summaries also include feedback workload and tutor progress where available.',
+      },
+    ],
+  },
+  {
     key: 'alerts',
     title: 'Alerts',
     delivery: 'alert',
@@ -178,7 +193,12 @@ export function defaultChannelSelection(): ChannelSelection {
   const selection: ChannelSelection = {};
   for (const section of NOTIFICATION_SECTIONS) {
     for (const type of section.types) {
-      selection[type.key] = {inApp: true, email: true, push: false};
+      const enabledByDefault = type.key !== 'weekly_summary';
+      selection[type.key] = {
+        inApp: enabledByDefault,
+        email: enabledByDefault,
+        push: false,
+      };
     }
   }
   return selection;
