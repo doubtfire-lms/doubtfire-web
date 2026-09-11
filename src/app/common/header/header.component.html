@@ -44,14 +44,7 @@
         <mat-icon>cloud_sync_outline</mat-icon>
       </button>
     }
-    @if (currentUnit && currentUnitRole && currentUnitRole.tutorNoteCount > 0) {
-      <!-- TODO: Replace this with a more standardised notification system -->
-      <button mat-icon-button matTooltip="Moderation Notes" (click)="openTutorNotes()">
-        <mat-icon matBadgeSize="small" [matBadge]="currentUnitRole.tutorNoteCount"
-          >feedback</mat-icon
-        >
-      </button>
-    }
+    <notification-dropdown></notification-dropdown>
     @if (currentUnit && !isTutorDiscussionRoute) {
       <button mat-icon-button (click)="showMyQr()">
         <mat-icon>qr_code_scanner</mat-icon>

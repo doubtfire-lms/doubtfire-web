@@ -1,0 +1,19 @@
+// Reaching into the checkbox's internals so its label stretches across the row,
+// keeping the box on the trailing edge and the whole row clickable.
+//
+// Unlike f-setting-toggle, the checkbox's .mdc-form-field *is* the label, and its
+// text sits in a .mdc-label span.
+:host ::ng-deep .mdc-form-field {
+  width: 100%;
+  align-items: center;
+  gap: 1.5rem;
+
+  > .mdc-label {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin: 0;
+    padding: 0;
+  }
+}
