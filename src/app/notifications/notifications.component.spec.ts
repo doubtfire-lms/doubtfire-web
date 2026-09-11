@@ -2,7 +2,8 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ActivatedRoute, convertToParamMap} from '@angular/router';
-import {of} from 'rxjs';
+import {BehaviorSubject, of} from 'rxjs';
+import {Project, Task} from 'src/app/api/models/doubtfire-model';
 import {NotificationGroup} from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -16,6 +17,7 @@ describe('NotificationsComponent', () => {
   const openGroup = vi.fn();
   const markRead = vi.fn(() => of({count: 1}));
   const stopCountPolling = vi.fn();
+  const projects: BehaviorSubject<Project[]> = new BehaviorSubject([]);
   const getNotifications = vi.fn(() =>
     of({
       groups: [],
@@ -28,6 +30,7 @@ describe('NotificationsComponent', () => {
   );
   beforeEach(async () => {
     vi.clearAllMocks();
+    projects.next([]);
     await TestBed.configureTestingModule({
       declarations: [NotificationsComponent],
       providers: [
@@ -44,7 +47,7 @@ describe('NotificationsComponent', () => {
         },
         {
           provide: GlobalStateService,
-          useValue: {unitRolesSubject: of([]), projectsSubject: of([])},
+          useValue: {unitRolesSubject: of([]), projectsSubject: projects.asObservable()},
         },
         {
           provide: NotificationActionsService,
@@ -128,6 +131,21 @@ describe('NotificationsComponent', () => {
 
     expect(component.unreadCountForUnit(3)).toBe(2);
     expect(component.unreadCountForUnit(4)).toBe(0);
+  });
+
+  it('resolves a weekly focus item to the task loaded for the project dashboard', () => {
+    const task = {definition: {abbreviation: 'P4'}} as Task;
+    projects.next([
+      {
+        id: 42,
+        unit: {id: 3, code: 'COS10001', name: 'Programming'},
+        tasks: [task],
+      } as unknown as Project,
+    ]);
+    component.ngOnInit();
+
+    expect(component.focusTask(42, 'P4')).toBe(task);
+    expect(component.focusTask(42, 'P5')).toBeUndefined();
   });
 
   it('applies unit and read-state filters immediately', () => {

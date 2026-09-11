@@ -1,85 +1,116 @@
-<div class="task-data">
-  <h4 class="list-group-item-heading">
-    {{ task.definition.name }}
-  </h4>
-  <p class="list-group-item-text">
-    @if (task.isGroupTask()) {
-      <mat-icon aria-hidden="true" inline matTooltip="Group Task">groups</mat-icon>
-    }
-    @if (!task.isGroupTask()) {
-      <mat-icon aria-hidden="true" inline matTooltip="Individual Task">person</mat-icon>
-    }
-    {{ task.definition.abbreviation }} - {{ gradeNames[task.definition.targetGrade] }} Task
-    @if (task.isBeforeStartDate() && !task.inSubmittedState()) {
-      <span class="due-time" matTooltip="Start task in {{ task.timeToStart() }}">
-        <mat-icon inline>hourglass_empty</mat-icon> {{ task.timeToStart() }}
-      </span>
-    }
-    @if (!task.isBeforeStartDate() && !task.inSubmittedState()) {
-      <span
-        class="due-time"
-        matTooltip="{{
-          task.isOverdue() ? 'Task Overdue!' : 'Complete task in ' + task.timeToDue()
-        }}"
-      >
-        <mat-icon inline>hourglass_bottom</mat-icon> {{ task.timeToDue() }}
-      </span>
-    }
-  </p>
-</div>
-<!--/task-data-->
-<div class="task-badges">
-  <status-icon [status]="task.status"></status-icon>
+<div class="flex w-full items-center justify-between gap-2">
+  <div class="flex min-w-0 flex-1 items-center gap-3">
+    <div class="flex min-w-0 items-center gap-3 truncate text-ellipsis">
+      <div class="flex flex-col justify-start truncate text-ellipsis">
+        <div class="truncate text-ellipsis">{{ task.definition.name }}</div>
 
-  <div class="task-superscript-badges">
-    <span
-      class="task-superscript-badge new-comments-badge"
-      matTooltip="{{ task.numNewComments }} new {{
-        task.numNewComments > 1 ? 'comments' : 'comment'
-      }}"
-      [hidden]="task.numNewComments <= 0"
-    >
-      {{ task.numNewComments }}
-    </span>
-    <span
-      class="task-superscript-badge plagiarism-detected-badge"
-      matTooltip="Plagiarism detected"
-      [hidden]="!task.similaritiesDetected"
-    >
-      <mat-icon inline>visibility</mat-icon>
-    </span>
+        <div class="flex min-w-0 items-center gap-0.5">
+          @if (task.definition.isGroupTask()) {
+            <mat-icon class="shrink-0 scale-75 text-gray-600">groups</mat-icon>
+          } @else {
+            <mat-icon class="shrink-0 scale-75 text-gray-600">person</mat-icon>
+          }
+
+          <div class="mr-1 truncate text-[14px] leading-none text-gray-500">
+            {{ task.definition.abbreviation }} - {{ gradeName }} Task
+          </div>
+          @if (taskStartApproaching()) {
+            <span class="flex shrink-0 items-center gap-px text-[12px] font-normal text-sky-500">
+              <mat-icon class="size-4! text-[16px]!">event_upcoming</mat-icon>
+              {{ taskStartLabel() }}
+            </span>
+          } @else if (taskDueApproaching()) {
+            <span
+              class="flex shrink-0 items-center gap-px text-[12px] font-bold"
+              [ngClass]="{
+                'text-[#da532c]': task.daysUntilDueDate() <= 0,
+                'font-normal text-[#fab143]': task.daysUntilDueDate() > 0,
+              }"
+            >
+              <mat-icon class="!h-[16px] !w-[16px] !text-[16px]">hourglass_bottom</mat-icon>
+              {{ task.timeToDue() }}
+            </span>
+          } @else if (taskOngoing()) {
+            <span class="flex shrink-0 items-center gap-px text-[12px] font-normal text-sky-500">
+              <mat-icon class="size-4! text-[16px]!">event_upcoming</mat-icon>
+              Start now
+            </span>
+          }
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="task-subscript-badges">
-    <span class="task-subscript-badge grade-badge" [hidden]="!task.hasGrade()">
-      {{ task.gradeDesc() }}
-    </span>
-    <span class="task-subscript-badge quality-badge" [hidden]="!task.hasQualityPoints()">
-      <sup>{{ task.qualityPts }}</sup
-      >&frasl;<sub>{{ task.definition.maxQualityPts }}</sub>
-    </span>
-    <span
-      class="task-subscript-badge soon-badge"
-      [hidden]="!(task.isDueSoon() && !task.inFinalState())"
+  <div class="relative mr-1 flex shrink-0 items-center justify-center pr-0.5">
+    <status-icon [status]="task.status"></status-icon>
+
+    <div
+      class="absolute -top-2 right-0.5 flex items-center gap-px drop-shadow-[0_4px_2px_rgba(0,0,0,0.15)]"
     >
-      <mat-icon inline>schedule</mat-icon>
-    </span>
-    <span
-      class="task-subscript-badge due-badge"
-      [hidden]="
-        !(task.betweenDueDateAndDeadlineDate() && !task.isPastDeadline() && !task.inFinalState())
-      "
-    >
-      <mat-icon inline>schedule</mat-icon>
-    </span>
-    <span
-      class="task-subscript-badge due-badge"
-      [hidden]="!(task.isPastDeadline() && !task.inFinalState())"
-    >
-      <mat-icon inline>schedule</mat-icon><strong>!</strong>
-    </span>
+      @if (task.numNewComments > 0) {
+        <span
+          class="flex size-[20px] items-center justify-center rounded-full bg-blue-500 text-[12px] leading-none font-bold text-white"
+        >
+          {{ task.numNewComments }}
+        </span>
+      }
+      @if (task.similaritiesDetected) {
+        <span
+          class="flex size-[20px] items-center justify-center rounded-full bg-[#da532c]"
+          matTooltip="Similarities Detected"
+        >
+          <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
+            visibility
+          </mat-icon>
+        </span>
+      }
+    </div>
+
+    <div class="absolute right-0.5 -bottom-2 flex items-center gap-px text-[10px] leading-none">
+      @if (task.hasGrade()) {
+        <span
+          class="mr-3 flex size-5.5 items-center justify-center rounded-full bg-gray-800 font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+        >
+          <span>{{ task.gradeDesc() }}</span>
+        </span>
+      }
+      @if (task.hasQualityPoints()) {
+        <span
+          class="flex size-[22px] items-center justify-center rounded-full bg-formatif-blue font-bold text-white drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+        >
+          <span class="mr-px mb-[6px] text-[8px]">{{ task.qualityPts }}</span>
+          <span class="font-extrabold"> &frasl; </span>
+          <span class="mt-[6px] ml-px text-[8px]">{{ task.definition.maxQualityPts }}</span>
+        </span>
+      }
+      @if (task.isDueSoon() && !task.inFinalState()) {
+        <span
+          class="flex size-[20px] items-center justify-center rounded-full bg-[#fab143] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+        >
+          <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-black">
+            schedule
+          </mat-icon>
+        </span>
+      }
+      @if (task.betweenDueDateAndDeadlineDate() && !task.isPastDeadline() && !task.inFinalState()) {
+        <span
+          class="flex size-[20px] items-center justify-center rounded-full bg-[#da532c] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+        >
+          <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
+            schedule
+          </mat-icon>
+        </span>
+      }
+      @if (task.isPastDeadline() && !task.inFinalState()) {
+        <span
+          class="flex size-[20px] items-center justify-center rounded-full bg-[#da532c] drop-shadow-[0_-4px_2px_rgba(0,0,0,0.15)]"
+        >
+          <mat-icon class="!h-[12px] !w-[12px] !text-[12px] font-bold text-white">
+            schedule
+          </mat-icon>
+          <strong class="h-min font-bold text-white">!</strong>
+        </span>
+      }
+    </div>
   </div>
 </div>
-<!--/badges-->
-
-<!--/task-->

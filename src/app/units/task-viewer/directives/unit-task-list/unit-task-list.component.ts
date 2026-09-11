@@ -37,9 +37,6 @@ const DEFAULT_VIEW_PREFERENCES: TaskListViewPreferences = {
   showBeyondTargetGrade: false,
 };
 
-const START_APPROACHING_DAYS = 7;
-const DUE_APPROACHING_DAYS = 5;
-
 @Component({
   selector: 'f-unit-task-list',
   templateUrl: './unit-task-list.component.html',
@@ -78,13 +75,6 @@ export class FUnitTaskListComponent implements OnChanges, OnInit, OnDestroy {
     {value: 'abbreviation', label: 'Abbreviation', icon: 'sort_by_alpha'},
   ];
   private readonly destroy$: Subject<void> = new Subject();
-
-  protected get gradeNames(): Record<number, string> {
-    const unit = this.project?.unit ?? this.taskDefinitions?.[0]?.unit;
-    return Object.fromEntries(
-      (unit?.gradeDefinitions ?? []).map((definition) => [definition.value, definition.label]),
-    );
-  }
 
   constructor(
     private angularRouter: Router,
@@ -214,46 +204,6 @@ export class FUnitTaskListComponent implements OnChanges, OnInit, OnDestroy {
 
   public taskListItem(taskDef: TaskDefinition): Task {
     return this.taskForTaskDef(taskDef);
-  }
-
-  public taskStartApproaching(task: Task): boolean {
-    return (
-      !!task &&
-      !task.inFinalState() &&
-      task.isBeforeStartDate() &&
-      task.daysUntilStartDate() <= START_APPROACHING_DAYS
-    );
-  }
-
-  public taskStartLabel(task: Task): string {
-    const days = task.daysUntilStartDate();
-
-    if (days <= 0) {
-      return 'Start today';
-    }
-
-    return `Start in ${days} ${days === 1 ? 'day' : 'days'}`;
-  }
-
-  public taskOngoing(task: Task): boolean {
-    if (!task || task.inFinalState()) {
-      return false;
-    }
-
-    const now = Date.now();
-    const startTime = this.dateTime(task.startDate);
-    const dueTime = this.dateTime(task.localDueDate());
-
-    return now >= startTime && now < dueTime;
-  }
-
-  public taskDueApproaching(task: Task): boolean {
-    return (
-      !!task &&
-      !task.isBeforeStartDate() &&
-      !task.inSubmittedState() &&
-      task.daysUntilDueDate() <= DUE_APPROACHING_DAYS
-    );
   }
 
   /*
@@ -447,16 +397,16 @@ export class FUnitTaskListComponent implements OnChanges, OnInit, OnDestroy {
     return aTime - bTime;
   }
 
+  private dateTime(date: Date): number {
+    const time = date ? new Date(date).getTime() : NaN;
+    return Number.isFinite(time) ? time : Number.MAX_SAFE_INTEGER;
+  }
+
   private compareStrings(a: string, b: string): number {
     return (a ?? '').localeCompare(b ?? '', undefined, {
       numeric: true,
       sensitivity: 'base',
     });
-  }
-
-  private dateTime(date: Date): number {
-    const time = date ? new Date(date).getTime() : NaN;
-    return Number.isFinite(time) ? time : Number.MAX_SAFE_INTEGER;
   }
 
   private loadViewPreferences(): void {

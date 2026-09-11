@@ -356,11 +356,25 @@
 
                 @if (group.weeklySummary.topTasks.length) {
                   <h3 class="mt-5 mb-2 text-base font-semibold">What to focus on next</h3>
-                  <ul class="m-0 flex list-none flex-col gap-2 p-0">
+                  <mat-nav-list class="overflow-hidden rounded-md border border-slate-200 bg-white">
                     @for (task of group.weeklySummary.topTasks; track task.abbreviation) {
-                      <li class="overflow-hidden rounded-md border border-slate-200 bg-white">
+                      @if (focusTask(group.projectId, task.abbreviation); as projectTask) {
                         <a
-                          class="flex items-center gap-3 px-4 py-3 text-inherit no-underline hover:bg-slate-50"
+                          class="flex h-16.25 w-full cursor-pointer items-center border-b border-gray-200 p-1 hover:bg-gray-50"
+                          mat-list-item
+                          [disableRipple]="true"
+                          [routerLink]="[
+                            '/projects',
+                            group.projectId,
+                            'dashboard',
+                            task.abbreviation,
+                          ]"
+                        >
+                          <task-list-item [task]="projectTask"></task-list-item>
+                        </a>
+                      } @else {
+                        <a
+                          class="flex items-center gap-3 border-b border-gray-200 px-4 py-3 text-inherit no-underline hover:bg-gray-50"
                           [routerLink]="[
                             '/projects',
                             group.projectId,
@@ -378,9 +392,9 @@
                             <span class="ml-1 text-xs text-slate-500">{{ task.reasonLabel }}</span>
                           </span>
                         </a>
-                      </li>
+                      }
                     }
-                  </ul>
+                  </mat-nav-list>
                 } @else {
                   <p class="mt-4 text-sm text-slate-700">
                     {{

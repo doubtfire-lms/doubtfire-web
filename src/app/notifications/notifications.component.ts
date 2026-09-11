@@ -7,6 +7,7 @@ import {
   NotificationState,
   NotificationUnit,
 } from 'src/app/api/models/notification';
+import {Task} from 'src/app/api/models/task';
 import {NotificationService} from 'src/app/api/services/notification.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
@@ -43,6 +44,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
   private readonly searchChanges: Subject<string> = new Subject();
+  private focusTasksByProject: Map<number, Map<string, Task>> = new Map();
   private notificationsSubscription?: Subscription;
 
   constructor(
@@ -82,6 +84,15 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         this.globalState.unitRolesSubject,
         this.globalState.projectsSubject,
       ]).subscribe(([unitRoles, projects]) => {
+        this.focusTasksByProject = new Map(
+          (projects ?? []).map((project) => [
+            project.id,
+            new Map(
+              (project.tasks ?? []).map((task) => [task.definition.abbreviation, task] as const),
+            ),
+          ]),
+        );
+
         const units: Map<number, NotificationUnit> = new Map();
         for (const unit of [
           ...(unitRoles ?? []).map((unitRole) => unitRole.unit),
@@ -153,6 +164,10 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   public unreadCountForUnit(unitId: number): number {
     return this.unreadCountsByUnit[unitId] ?? 0;
+  }
+
+  public focusTask(projectId: number | undefined, abbreviation: string): Task | undefined {
+    return projectId ? this.focusTasksByProject.get(projectId)?.get(abbreviation) : undefined;
   }
 
   public applyFilters(): void {
