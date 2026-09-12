@@ -314,11 +314,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
           .show(`Downloading submission pdfs for ${taskDef.abbreviation}`, newJob.id)
           .subscribe({
             next: (_job) => {
-              this.fileDownloaderService.downloadFile(
+              this.fileDownloaderService.downloadNativeFile(
                 `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
                   this.unit.id
                 }/task_definitions/${taskDef.id}/student_pdfs`,
-                `${this.unit.code}-${taskDef.abbreviation}-pdfs.zip`,
               );
             },
           });
@@ -337,11 +336,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
           .show(`Downloading submission files for ${taskDef.abbreviation}`, newJob.id)
           .subscribe({
             next: (_job) => {
-              this.fileDownloaderService.downloadFile(
+              this.fileDownloaderService.downloadNativeFile(
                 `${AppInjector.get(DoubtfireConstants).API_URL}/submission/unit/${
                   this.unit.id
                 }/task_definitions/${taskDef.id}/download_submissions`,
-                `${this.unit.code}-${taskDef.abbreviation}-submissions.zip`,
               );
             },
           });

@@ -119,10 +119,7 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
       next: (newJob) => {
         this.sidekiq.show(`Downloading Portfolios: ${this.unit.code}`, newJob.id).subscribe({
           next: () => {
-            this.fileDownloaderService.downloadFile(
-              this.unit.portfoliosUrl,
-              `${this.unit.code}-portfolios.zip`,
-            );
+            this.fileDownloaderService.downloadNativeFile(this.unit.portfoliosUrl);
           },
           error: (error) => {
             this.alertService.error(error, 6000);
