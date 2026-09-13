@@ -1,4 +1,4 @@
-import {MediaObserver} from 'ng-flex-layout';
+import {BreakpointObserver} from '@angular/cdk/layout';
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 
@@ -16,5 +16,9 @@ export class UnitDropdownComponent {
 
   unitTitle: string;
 
-  constructor(public media: MediaObserver) {}
+  get isExtraSmall(): boolean {
+    return this.breakpointObserver.isMatched('(max-width: 599.98px)');
+  }
+
+  constructor(private breakpointObserver: BreakpointObserver) {}
 }
