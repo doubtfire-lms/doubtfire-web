@@ -271,6 +271,16 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
     }
 
     const href = link.getAttribute('href');
+
+    // Fragment-only links must scroll rather than navigate. The injected <base>
+    // points at the document's directory, so the browser would resolve '#x' to
+    // a different URL and reload the whole page to reach the same content.
+    if (href?.startsWith('#')) {
+      event.preventDefault();
+      this.scrollToFragment(link.ownerDocument, href.slice(1));
+      return;
+    }
+
     const route = this.routeFromHref(href);
 
     if (!route) {
@@ -403,6 +413,21 @@ export class UnitContentViewerComponent implements OnChanges, OnInit, OnDestroy 
     const versionPath = this.currentContentVersion ? `/v/${this.currentContentVersion}` : '';
 
     return `${API_URL}/units/${unitId}/content/sites/${this.currentContentSiteId}/files${versionPath}${encodedRoute}`;
+  }
+
+  private scrollToFragment(doc: Document, rawFragment: string): void {
+    const fragment = this.decodeRoute(rawFragment);
+    const target =
+      (fragment && doc.getElementById(fragment)) ||
+      (fragment && (doc.getElementsByName(fragment)[0] as HTMLElement | undefined));
+
+    if (target) {
+      target.scrollIntoView({behavior: 'smooth'});
+      return;
+    }
+
+    // An unresolvable fragment previously reloaded the page, landing at the top.
+    doc.defaultView?.scrollTo({top: 0, behavior: 'smooth'});
   }
 
   private routeFromHref(href: string | null): {path: string; fragment?: string} | undefined {
