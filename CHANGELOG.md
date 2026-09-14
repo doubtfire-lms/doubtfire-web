@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-91](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-90...v11.0.0-91) (2026-09-14)
+
+
+### Features
+
+* analytics dashboard stacked area chart ([#1565](https://github.com/b0ink/doubtfire-deploy/issues/1565)) ([2799516](https://github.com/b0ink/doubtfire-deploy/commit/27995169ee2c79b85930d113457284c0d75b8ff5))
+* analytics page tabs ([#1574](https://github.com/b0ink/doubtfire-deploy/issues/1574)) ([d79ce1f](https://github.com/b0ink/doubtfire-deploy/commit/d79ce1f40343d4feeb527de6a42c9a23d52a164a))
+* ensure inbox permalinks work for all staff ([da295f1](https://github.com/b0ink/doubtfire-deploy/commit/da295f1704859ba70f2af7e84c2659ec779040a3))
+
+
+### Bug Fixes
+
+* restore bottom padding on task description card ([d8a53a1](https://github.com/b0ink/doubtfire-deploy/commit/d8a53a169b7bb4bfc89b08f543440d097a0403dd))
+* restore bottom padding on task description card ([#1580](https://github.com/b0ink/doubtfire-deploy/issues/1580)) ([91d65b2](https://github.com/b0ink/doubtfire-deploy/commit/91d65b2ca46b651b71d42a9f0b2ef6926d0aa7b7))
+* swap your output and expected output in diff ([8192653](https://github.com/b0ink/doubtfire-deploy/commit/81926533cc5a565109120d0b560b2bd1601089bf))
+
 ## [11.0.0-90](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-89...v11.0.0-90) (2026-09-04)
 
 
