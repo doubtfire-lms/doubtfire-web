@@ -104,6 +104,7 @@ export class ProgressDashboardComponent implements OnInit {
     this.dialog.open(UnitContentViewerComponent, {
       data: {
         contentRoute: link.route,
+        contentSiteId: link.unitContentSiteId,
         unit: this.project.unit,
       },
       height: '90vh',
