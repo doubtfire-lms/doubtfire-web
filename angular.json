@@ -128,7 +128,7 @@
             "buildTarget": "doubtfire:build",
             "port": 4200,
             "host": "0.0.0.0",
-            "allowedHosts": ["ontrack.dev"]
+            "allowedHosts": ["ontrack.localhost"]
           },
           "configurations": {
             "development": {
