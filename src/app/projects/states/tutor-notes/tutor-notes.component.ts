@@ -3,7 +3,8 @@ import {
   Component,
   ElementRef,
   Input,
-  OnInit,
+  OnChanges,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {Task, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
@@ -19,7 +20,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class TutorNotesComponent implements OnInit {
+export class TutorNotesComponent implements OnChanges {
   @ViewChild('tutorNotesContainer') tutorNotesContainer!: ElementRef;
   @ViewChild('tutorNoteEditor', {static: false}) tutorNoteEditor!: ElementRef<HTMLTextAreaElement>;
 
@@ -43,11 +44,23 @@ export class TutorNotesComponent implements OnInit {
     private alertService: AlertService,
     private confirmationModalService: ConfirmationModalService,
   ) {}
-  ngOnInit(): void {
-    if (this.task && !this.unitRole) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes.unitRole && !changes.task) {
+      return;
+    }
+
+    if (changes.task && this.task) {
       this.unitRole = this.task.tutor;
     }
 
+    if (!this.unitRole) {
+      return;
+    }
+
+    this.selectedTaskDefinitions.clear();
+    this.noteText = '';
+    this.editingNote = null;
+    this.replyingToNote = null;
     this.loadingTutorNotes = true;
     this.tutorNoteService.loadTutorNotes(this.unitRole).subscribe((_notes) => {
       this.loadingTutorNotes = false;
@@ -67,7 +80,10 @@ export class TutorNotesComponent implements OnInit {
 
   scrollDown() {
     setTimeout(() => {
-      const el = this.tutorNotesContainer.nativeElement;
+      const el = this.tutorNotesContainer?.nativeElement;
+      if (!el) {
+        return;
+      }
       el.scrollTop = el.scrollHeight;
     }, 50);
   }
