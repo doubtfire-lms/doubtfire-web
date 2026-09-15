@@ -78,59 +78,9 @@ user-icon {
   height: 75px !important;
 }
 
-// Hide auto-injected QR scanner elements that are not needed in the UI
-// We only hide this if we found a "back camera" on user's device
-.qr-reader-hide-bloat #qr-reader__header_message,
-.qr-reader-hide-bloat #qr-reader__dashboard_section,
-.qr-reader-hide-bloat #qr-reader__dashboard_section_csr,
-.qr-reader-hide-bloat #qr-reader > div:not([id]):not([class]),
-.qr-reader-hide-bloat #qr-reader__scan_region > div:not([id]):not([class]),
-.qr-reader-hide-bloat #html5-qrcode-button-camera-stop,
-.qr-reader-hide-bloat #html5-qrcode-button-camera-start {
+// The scanner renders its own viewfinder into #qr-reader
+#qr-reader img {
   display: none !important;
-}
-
-#qr-reader img,
-#html5-qrcode-anchor-scan-type-change {
-  display: none !important;
-}
-
-#html5-qrcode-button-camera-stop,
-#html5-qrcode-button-camera-start {
-  width: 100%;
-  max-width: 1000px;
-  height: 45px;
-  padding: 0.25rem 0.625rem;
-  margin-top: 15px;
-  border-radius: 0.25rem;
-  box-shadow:
-    0 1px 3px 0 rgb(0 0 0 / 10%),
-    0 1px 2px -1px rgb(0 0 0 / 10%);
-  font-weight: 500;
-  color: white;
-  text-transform: uppercase;
-  background-color: #2563eb;
-}
-
-#html5-qrcode-button-camera-stop:hover,
-#html5-qrcode-button-camera-start:hover,
-#html5-qrcode-button-camera-permission:hover {
-  background-color: #1d4ed8;
-}
-
-#html5-qrcode-button-camera-permission {
-  width: 100%;
-  max-width: 250px;
-  height: 60px;
-  padding: 0.25rem 0.625rem;
-  border-radius: 0.25rem;
-  box-shadow:
-    0 1px 3px 0 rgb(0 0 0 / 10%),
-    0 1px 2px -1px rgb(0 0 0 / 10%);
-  font-weight: 500;
-  color: white;
-  text-transform: uppercase;
-  background-color: #2563eb;
 }
 
 .comment-user-icon-wrapper.ng-star-inserted {
