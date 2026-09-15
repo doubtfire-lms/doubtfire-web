@@ -57,6 +57,7 @@ describe('TutorDiscussionComponent', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    localStorage.clear();
   });
 
   it('should create', () => {
@@ -173,6 +174,63 @@ describe('TutorDiscussionComponent', () => {
     ).getProject(unit, project.id, true);
 
     expect(projectService.loadProject).toHaveBeenCalledWith(project.id, unit, true, true);
+  });
+
+  const rememberedCameraKey = 'f-tutor-discussion-camera-id';
+  const cameraStartCandidates = () =>
+    (
+      component as unknown as {
+        cameraStartCandidates: () => Array<string | MediaTrackConstraints>;
+      }
+    ).cameraStartCandidates();
+
+  it('falls back from the rear facing mode to the rear camera label, then any camera', () => {
+    component.availableCameras = [
+      {id: 'front', label: 'camera2 1, facing front'},
+      {id: 'rear', label: 'camera2 0, facing back'},
+    ];
+
+    expect(cameraStartCandidates()).toEqual([
+      {facingMode: {exact: 'environment'}},
+      'rear',
+      'front',
+    ]);
+  });
+
+  it('starts with the camera the tutor last chose', () => {
+    localStorage.setItem(rememberedCameraKey, 'front');
+    component.availableCameras = [
+      {id: 'front', label: 'Front Camera'},
+      {id: 'rear', label: 'Back Camera'},
+    ];
+
+    expect(cameraStartCandidates()[0]).toBe('front');
+  });
+
+  it('ignores a camera remembered from another device', () => {
+    localStorage.setItem(rememberedCameraKey, 'camera-from-another-device');
+    component.availableCameras = [{id: 'rear', label: 'Back Camera'}];
+
+    expect(cameraStartCandidates()).toEqual([{facingMode: {exact: 'environment'}}, 'rear']);
+  });
+
+  it('only remembers a camera once it has started', async () => {
+    const alertService = TestBed.inject(AlertService) as unknown as {
+      error: ReturnType<typeof vi.fn>;
+    };
+    alertService.error = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const startScanner = vi
+      .spyOn(component as unknown as {startScanner: () => Promise<void>}, 'startScanner')
+      .mockRejectedValue('camera in use');
+
+    await component.changeCamera('rear');
+
+    expect(startScanner).toHaveBeenCalled();
+    expect(localStorage.getItem(rememberedCameraKey)).toBeNull();
+    // The picker stays open so another camera can be tried
+    expect(component.showCameraPicker).toBe(true);
+    expect(component.switchingCamera).toBe(false);
   });
 
   it('records a class discussion without task status updates', () => {

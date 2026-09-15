@@ -2,28 +2,47 @@
   class="absolute top-1/2 left-1/2 z-40 h-screen w-screen -translate-1/2 transform overflow-hidden bg-gray-500/50 backdrop-blur"
   [hidden]="!scanningQr"
 >
-  @if (loadingStudentData) {
+  @if (loadingStudentData || switchingCamera) {
     <mat-spinner
       class="absolute top-1/2 left-1/2 z-50 -translate-x-1/2 transform"
       color="blue"
     ></mat-spinner>
   }
-  <div [ngClass]="{'qr-reader-hide-bloat': hideQrScannerBloat}">
-    <div class="absolute top-1/2 w-full -translate-y-1/2 transform" id="qr-reader"></div>
-  </div>
+  <div class="absolute top-1/2 w-full -translate-y-1/2 transform" id="qr-reader"></div>
   <div
     class="pointer-events-none absolute top-[150px] left-1/2 z-10 w-full -translate-x-1/2 transform px-6 py-3 text-center text-sm font-bold text-white"
   >
     Scan a student's QR code to instantly load their project and mark submissions.
   </div>
-  <button
-    class="absolute bottom-[150px] left-1/2 my-3 max-w-md -translate-x-1/2 transform"
-    color="secondary"
-    mat-raised-button
-    (click)="closeQrReader()"
+  <div
+    class="absolute bottom-[110px] left-1/2 z-20 flex w-full max-w-md -translate-x-1/2 transform flex-col items-center gap-2 px-6"
   >
-    {{ project ? 'Cancel' : 'Exit' }}
-  </button>
+    @if (showCameraPicker) {
+      <mat-form-field appearance="fill" class="w-full" subscriptSizing="dynamic">
+        <mat-label>Camera</mat-label>
+        <mat-select [value]="selectedCameraId" (selectionChange)="changeCamera($event.value)">
+          @for (camera of availableCameras; track camera.id; let i = $index) {
+            <mat-option [value]="camera.id">{{ cameraLabel(camera, i) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+    @if (availableCameras.length) {
+      <button
+        class="w-full"
+        color="primary"
+        mat-raised-button
+        [disabled]="switchingCamera"
+        (click)="toggleCameraPicker()"
+      >
+        <mat-icon>cameraswitch</mat-icon>
+        {{ showCameraPicker ? 'Hide cameras' : 'Change camera' }}
+      </button>
+    }
+    <button class="w-full" color="secondary" mat-raised-button (click)="closeQrReader()">
+      {{ project ? 'Cancel' : 'Exit' }}
+    </button>
+  </div>
 </div>
 
 <!-- We offset the height by 145px to compensate for the header -->
