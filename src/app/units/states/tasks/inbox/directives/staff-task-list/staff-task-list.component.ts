@@ -18,6 +18,8 @@ import {
   Project,
   Task,
   TaskDefinition,
+  TaskStatus,
+  TaskStatusEnum,
   Tutorial,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
@@ -38,6 +40,56 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
+
+type StaffTaskListSortOption = 'default' | 'feedbackDeadline' | 'submissionDate';
+
+type StaffTaskListSortDirection = 'asc' | 'desc';
+
+type StaffTaskListFilterKey = 'nearFeedbackDeadline' | 'awaitingFeedback' | 'similaritiesDetected';
+
+interface StaffTaskListViewPreferences {
+  sortBy: StaffTaskListSortOption;
+  sortDirection: StaffTaskListSortDirection;
+  filters: Record<StaffTaskListFilterKey, boolean>;
+  statuses: TaskStatusEnum[];
+}
+
+interface StaffTaskListSortOptionView {
+  value: StaffTaskListSortOption;
+  label: string;
+  icon: string;
+  // Spells out which end of the range comes first -- an arrow alone is ambiguous for dates
+  directions?: Record<StaffTaskListSortDirection, string>;
+}
+
+interface StaffTaskListFilterOptionView {
+  key: StaffTaskListFilterKey;
+  label: string;
+  tooltip: string;
+}
+
+interface StaffTaskListStatusOptionView {
+  status: TaskStatusEnum;
+  label: string;
+  color: string;
+  count: number;
+}
+
+const DEFAULT_VIEW_PREFERENCES: StaffTaskListViewPreferences = {
+  sortBy: 'default',
+  sortDirection: 'asc',
+  filters: {
+    nearFeedbackDeadline: false,
+    awaitingFeedback: false,
+    similaritiesDetected: false,
+  },
+  statuses: [],
+};
+
+const ALL_TASK_DEFINITIONS = '';
+
+const FEEDBACK_DEADLINE_SOON_DAYS = 7;
+const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
 @Component({
   selector: 'df-staff-task-list',
@@ -75,9 +127,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     studentName: string;
     tutorialIdSelected: string | number;
     unitRoleIdSelected: number | string;
-    taskDefinitionIdSelected: number | TaskDefinition;
+    taskDefinitionIdSelected: number | TaskDefinition | typeof ALL_TASK_DEFINITIONS;
   }>;
-  @Input() showSearchOptions = true;
 
   @Input() isNarrow: boolean;
 
@@ -117,20 +168,47 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   // auto-selected with the search options open task def mode -- i.e., the mode
   // for selecting tasks by task definitions
 
-  states = [
-    {sort: 'default', icon: 'horizontal_rule'},
-    {sort: 'ascending', icon: 'arrow_upward'},
-    {sort: 'descending', icon: 'arrow_downward'},
-  ];
-
-  taskDefSort = 0;
-  tutorialSort = 0;
-  originalFilteredTasks: Task[] = null;
   allowHover = true;
 
-  toggleTutorialSort() {
-    this.tutorialSort = (this.tutorialSort + 1) % this.states.length;
-  }
+  viewPreferences: StaffTaskListViewPreferences = this.defaultViewPreferences();
+
+  sortOptions: StaffTaskListSortOptionView[] = [
+    {value: 'default', label: 'Default order', icon: 'sort'},
+    {
+      value: 'feedbackDeadline',
+      label: 'Feedback deadline',
+      icon: 'event_busy',
+      directions: {asc: 'Soonest first', desc: 'Latest first'},
+    },
+    {
+      value: 'submissionDate',
+      label: 'Submission date',
+      icon: 'schedule',
+      directions: {asc: 'Oldest first', desc: 'Newest first'},
+    },
+  ];
+
+  filterOptions: StaffTaskListFilterOptionView[] = [
+    {
+      key: 'nearFeedbackDeadline',
+      label: 'Feedback deadline within a week',
+      tooltip: 'Tasks less than a week from their feedback deadline, or already past it',
+    },
+    {
+      key: 'awaitingFeedback',
+      label: 'Waiting too long for feedback',
+      tooltip: 'Submissions past this unit’s feedback warning threshold',
+    },
+    {
+      key: 'similaritiesDetected',
+      label: 'Similarities detected',
+      tooltip: 'Tasks flagged by similarity detection',
+    },
+  ];
+
+  statusOptions: StaffTaskListStatusOptionView[] = [];
+
+  filtersExpanded = false;
 
   // Track if all tasks have already been fetched
   // Avoids redundant API calls when changing tutorial filters
@@ -209,8 +287,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   private initializeUnitData(): void {
     this.tasks = null;
     this.filteredTasks = null;
-    this.originalFilteredTasks = null;
     this.fetchedAllTasks = false;
+    this.viewPreferences = this.defaultViewPreferences();
 
     // Does the current user have any tutorials?
     this.userHasTutorials =
@@ -244,6 +322,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       },
       this.filters,
     );
+
+    // mat-select skips options with a null value, so the "all" entry needs a real one to match
+    this.filters.taskDefinitionIdSelected ??= ALL_TASK_DEFINITIONS;
 
     this.studentFilter = [
       ...[
@@ -304,6 +385,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   public get isTaskDefMode(): boolean {
     return this.taskData.taskDefMode;
+  }
+
+  private get selectedTaskDefinitionId(): TaskDefinition | number | undefined {
+    const selected = this.filters?.taskDefinitionIdSelected;
+    return selected === ALL_TASK_DEFINITIONS ? undefined : selected;
   }
 
   downloadSubmissionPdfs() {
@@ -443,15 +529,16 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     filteredTasks = this.taskWithStudentNamePipe.transform(filteredTasks, this.filters.studentName);
-    filteredTasks = this.sortPinnedTasksFirst(filteredTasks);
+
+    // Status counts are taken before the status filter, so the menu keeps listing
+    // the statuses you could switch to.
+    const beforeStatusFilter = filteredTasks?.filter((task) => this.matchesQuickFilters(task));
+    this.statusOptions = this.buildStatusOptions(beforeStatusFilter);
+
+    filteredTasks = this.sortTasks(
+      beforeStatusFilter?.filter((task) => this.matchesStatusFilter(task)),
+    );
     this.filteredTasks = filteredTasks;
-
-    if (this.filteredTasks != null) {
-      this.originalFilteredTasks = [...this.filteredTasks];
-    }
-
-    this.taskDefSort = 0;
-    this.tutorialSort = 0;
 
     // Clear selected task only when the active filters hide it.
     if (
@@ -588,7 +675,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.taskLoadSubscription?.unsubscribe();
     // Tasks for feedback or tasks for task, depending on the data source
     this.taskLoadSubscription = this.taskData
-      .source(this.unit, this.filters?.taskDefinitionIdSelected, fetchMyStudentsOnly)
+      .source(this.unit, this.selectedTaskDefinitionId, fetchMyStudentsOnly)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
@@ -688,24 +775,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  toggleTaskDefSort() {
-    this.taskDefSort = this.taskDefSort < 2 ? ++this.taskDefSort : 0;
-    if (this.originalFilteredTasks == null) {
-      this.originalFilteredTasks = [...this.filteredTasks];
-    }
-    if (this.states[this.taskDefSort].sort == 'ascending') {
-      this.filteredTasks = [
-        ...this.filteredTasks.sort((a, b) => a.definition.seq - b.definition.seq),
-      ];
-    } else if (this.states[this.taskDefSort].sort == 'descending') {
-      this.filteredTasks = [
-        ...this.filteredTasks.sort((a, b) => b.definition.seq - a.definition.seq),
-      ];
-    } else {
-      this.filteredTasks = [...this.originalFilteredTasks];
-    }
-  }
-
   togglePin(task: Task) {
     if (task.id === undefined) {
       // Can't pin a task that doesn't actually exist yet
@@ -741,11 +810,216 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     return null;
   }
 
-  private sortPinnedTasksFirst(tasks: Task[]): Task[] {
-    if (!this.isTaskDefMode || !tasks?.length) {
+  public setSortBy(sortBy: StaffTaskListSortOption): void {
+    const sortDirection =
+      sortBy === 'default'
+        ? DEFAULT_VIEW_PREFERENCES.sortDirection
+        : this.viewPreferences.sortBy === sortBy
+          ? this.toggledSortDirection
+          : 'asc';
+
+    this.viewPreferences = {...this.viewPreferences, sortBy, sortDirection};
+    this.viewPreferencesChanged();
+  }
+
+  public isSortSelected(option: StaffTaskListSortOptionView): boolean {
+    return this.viewPreferences.sortBy === option.value;
+  }
+
+  public sortDirectionLabelFor(option: StaffTaskListSortOptionView): string {
+    if (!option.directions || !this.isSortSelected(option)) {
+      return '';
+    }
+
+    return option.directions[this.viewPreferences.sortDirection];
+  }
+
+  public isFilterActive(key: StaffTaskListFilterKey): boolean {
+    return this.viewPreferences.filters[key];
+  }
+
+  public toggleFilter(key: StaffTaskListFilterKey, value: boolean): void {
+    this.viewPreferences = {
+      ...this.viewPreferences,
+      filters: {...this.viewPreferences.filters, [key]: value},
+    };
+    this.viewPreferencesChanged();
+  }
+
+  public isStatusSelected(status: TaskStatusEnum): boolean {
+    return this.viewPreferences.statuses.includes(status);
+  }
+
+  public toggleStatus(status: TaskStatusEnum): void {
+    const statuses = this.isStatusSelected(status)
+      ? this.viewPreferences.statuses.filter((selected) => selected !== status)
+      : [...this.viewPreferences.statuses, status];
+
+    this.viewPreferences = {...this.viewPreferences, statuses};
+    this.viewPreferencesChanged();
+  }
+
+  public clearStatusFilter(): void {
+    this.viewPreferences = {...this.viewPreferences, statuses: []};
+    this.viewPreferencesChanged();
+  }
+
+  public resetViewPreferences(): void {
+    this.viewPreferences = this.defaultViewPreferences();
+    this.viewPreferencesChanged();
+  }
+
+  // A lone status is not worth a filter row -- everything in the list already has it
+  public get showStatusFilter(): boolean {
+    return this.statusOptions.length > 1 || this.viewPreferences.statuses.length > 0;
+  }
+
+  public get activeFilterCount(): number {
+    return Object.values(this.viewPreferences.filters).filter(Boolean).length;
+  }
+
+  public get activeViewPreferenceCount(): number {
+    return (
+      (this.viewPreferences.sortBy !== DEFAULT_VIEW_PREFERENCES.sortBy ? 1 : 0) +
+      this.activeFilterCount +
+      (this.viewPreferences.statuses.length > 0 ? 1 : 0)
+    );
+  }
+
+  public get hasModifiedViewPreferences(): boolean {
+    return this.activeViewPreferenceCount > 0;
+  }
+
+  private get hasActiveFilters(): boolean {
+    return this.activeFilterCount > 0 || this.viewPreferences.statuses.length > 0;
+  }
+
+  private viewPreferencesChanged(): void {
+    this.applyFilters();
+  }
+
+  private matchesQuickFilters(task: Task): boolean {
+    if (!task) {
+      // Keep placeholder entries while nothing is being filtered out
+      return !this.hasActiveFilters;
+    }
+
+    const filters = this.viewPreferences.filters;
+
+    if (filters.nearFeedbackDeadline && !this.isNearFeedbackDeadline(task)) {
+      return false;
+    }
+
+    if (filters.awaitingFeedback && !this.getWarningIcon(task)) {
+      return false;
+    }
+
+    return !(filters.similaritiesDetected && !task.similaritiesDetected);
+  }
+
+  private matchesStatusFilter(task: Task): boolean {
+    if (this.viewPreferences.statuses.length === 0) {
+      return true;
+    }
+
+    return !!task?.status && this.viewPreferences.statuses.includes(task.status);
+  }
+
+  private buildStatusOptions(tasks: Task[]): StaffTaskListStatusOptionView[] {
+    const counts: Map<TaskStatusEnum, number> = new Map();
+
+    // Selected statuses stay listed even once nothing matches them
+    this.viewPreferences.statuses.forEach((status) => counts.set(status, 0));
+
+    tasks?.forEach((task) => {
+      if (task?.status) {
+        counts.set(task.status, (counts.get(task.status) ?? 0) + 1);
+      }
+    });
+
+    return [...counts.entries()]
+      .sort(([a], [b]) => (TaskStatus.STATUS_SEQ.get(a) ?? 0) - (TaskStatus.STATUS_SEQ.get(b) ?? 0))
+      .map(([status, count]) => ({
+        status,
+        count,
+        label: TaskStatus.STATUS_LABELS.get(status) ?? status,
+        color: TaskStatus.STATUS_COLORS.get(status) ?? '#cccccc',
+      }));
+  }
+
+  private isNearFeedbackDeadline(task: Task): boolean {
+    const deadline = this.feedbackDeadlineFor(task);
+
+    if (!deadline) {
+      return false;
+    }
+
+    return (deadline.getTime() - Date.now()) / MILLISECONDS_PER_DAY <= FEEDBACK_DEADLINE_SOON_DAYS;
+  }
+
+  private feedbackDeadlineFor(task: Task): Date | null {
+    // localDeadlineDate() needs the definition's deadline to be set
+    if (!task?.definition?.dueDate) {
+      return null;
+    }
+
+    const deadline = task.localDeadlineDate();
+    return Number.isFinite(deadline?.getTime()) ? deadline : null;
+  }
+
+  private sortTasks(tasks: Task[]): Task[] {
+    if (!tasks?.length) {
       return tasks;
     }
 
-    return [...tasks].sort((a, b) => Number(b.pinned) - Number(a.pinned));
+    return [...tasks].sort((a, b) => {
+      if (this.isTaskDefMode) {
+        const pinned = Number(b?.pinned) - Number(a?.pinned);
+        if (pinned !== 0) {
+          return pinned;
+        }
+      }
+
+      return this.compareTasks(a, b);
+    });
+  }
+
+  private compareTasks(a: Task, b: Task): number {
+    let result: number;
+
+    switch (this.viewPreferences.sortBy) {
+      case 'feedbackDeadline':
+        result = this.compareDates(this.feedbackDeadlineFor(a), this.feedbackDeadlineFor(b));
+        break;
+      case 'submissionDate':
+        result = this.compareDates(a?.submissionDate, b?.submissionDate);
+        break;
+      default:
+        // Keep the order the tasks arrived in
+        return 0;
+    }
+
+    return this.viewPreferences.sortDirection === 'asc' ? result : result * -1;
+  }
+
+  private compareDates(a: Date, b: Date): number {
+    return this.dateTime(a) - this.dateTime(b);
+  }
+
+  private dateTime(date: Date): number {
+    const time = date ? new Date(date).getTime() : NaN;
+    return Number.isFinite(time) ? time : Number.MAX_SAFE_INTEGER;
+  }
+
+  private get toggledSortDirection(): StaffTaskListSortDirection {
+    return this.viewPreferences.sortDirection === 'asc' ? 'desc' : 'asc';
+  }
+
+  private defaultViewPreferences(): StaffTaskListViewPreferences {
+    return {
+      ...DEFAULT_VIEW_PREFERENCES,
+      filters: {...DEFAULT_VIEW_PREFERENCES.filters},
+      statuses: [],
+    };
   }
 }
