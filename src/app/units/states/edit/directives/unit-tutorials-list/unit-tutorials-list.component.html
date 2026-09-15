@@ -57,11 +57,6 @@
           </mat-form-field>
         }
       </td>
-      <td *matFooterCellDef mat-footer-cell>
-        <mat-form-field appearance="outline" class="data-entry">
-          <input formControlName="abbreviation" matInput placeholder="Abbreviation" required />
-        </mat-form-field>
-      </td>
     </ng-container>
 
     <!-- Campus Column -->
@@ -86,19 +81,6 @@
           </mat-form-field>
         }
       </td>
-      <td *matFooterCellDef mat-footer-cell>
-        <mat-form-field appearance="outline" class="data-entry">
-          <mat-label>Campus</mat-label>
-          <mat-select formControlName="campus">
-            <mat-option [value]="null">Not Specified</mat-option>
-            @for (campus of campuses; track campus) {
-              <mat-option [value]="campus">
-                {{ campus.name }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </td>
     </ng-container>
 
     <!-- Location Column -->
@@ -114,11 +96,6 @@
             <input formControlName="meetingLocation" matInput placeholder="Location" required />
           </mat-form-field>
         }
-      </td>
-      <td *matFooterCellDef mat-footer-cell>
-        <mat-form-field appearance="outline" class="data-entry">
-          <input formControlName="meetingLocation" matInput placeholder="Location" required />
-        </mat-form-field>
       </td>
     </ng-container>
 
@@ -143,18 +120,6 @@
           </mat-form-field>
         }
       </td>
-      <td *matFooterCellDef mat-footer-cell>
-        <mat-form-field appearance="outline" class="data-entry">
-          <mat-label>Day</mat-label>
-          <mat-select formControlName="meetingDay" required>
-            @for (day of days; track day) {
-              <mat-option [value]="day">
-                {{ day }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </td>
     </ng-container>
 
     <!-- Time Column -->
@@ -176,11 +141,6 @@
             />
           </mat-form-field>
         }
-      </td>
-      <td *matFooterCellDef mat-footer-cell>
-        <mat-form-field appearance="outline" class="data-entry">
-          <input formControlName="meetingTime" matInput placeholder="Time" required />
-        </mat-form-field>
       </td>
     </ng-container>
 
@@ -207,20 +167,6 @@
           </mat-form-field>
         }
       </td>
-      <td *matFooterCellDef class="max-w-24" mat-footer-cell>
-        <mat-form-field appearance="outline" class="data-entry">
-          <input
-            formControlName="durationMinutes"
-            matInput
-            min="1"
-            placeholder="Mins"
-            required
-            step="15"
-            type="number"
-          />
-          <span matTextSuffix>m</span>
-        </mat-form-field>
-      </td>
     </ng-container>
 
     <!-- Tutor Column -->
@@ -244,18 +190,6 @@
           </mat-form-field>
         }
       </td>
-      <td *matFooterCellDef mat-footer-cell>
-        <mat-form-field appearance="outline" class="data-entry">
-          <mat-label>Tutor</mat-label>
-          <mat-select formControlName="tutor" required>
-            @for (tutor of unit.staffUsers; track tutor) {
-              <mat-option [value]="tutor">
-                {{ tutor.name }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </td>
     </ng-container>
 
     <!-- Capacity Column -->
@@ -269,11 +203,6 @@
             <input formControlName="capacity" matInput placeholder="Capacity" required />
           </mat-form-field>
         }
-      </td>
-      <td *matFooterCellDef mat-footer-cell>
-        <mat-form-field appearance="outline" class="data-entry">
-          <input formControlName="capacity" matInput placeholder="Capacity" required />
-        </mat-form-field>
       </td>
     </ng-container>
 
@@ -301,17 +230,16 @@
           </div>
         }
       </td>
-      <td *matFooterCellDef mat-footer-cell>
-        <div class="edit-actions right">
-          <button class="mr-3 mb-[22px]" mat-icon-button (click)="submit()">
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
-      </td>
     </ng-container>
 
     <tr *matHeaderRowDef="columns" mat-header-row></tr>
     <tr *matRowDef="let row; columns: columns" mat-row></tr>
-    <tr *matFooterRowDef="columns" mat-footer-row [hidden]="selected"></tr>
   </table>
+
+  <div class="-mt-4 mb-8 flex justify-end">
+    <button color="primary" mat-stroked-button (click)="newTutorial()">
+      <mat-icon>add</mat-icon>
+      New Tutorial
+    </button>
+  </div>
 </div>
