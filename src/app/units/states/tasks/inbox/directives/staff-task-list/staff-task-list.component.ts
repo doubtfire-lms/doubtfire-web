@@ -897,8 +897,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public get activeViewPreferenceCount(): number {
+    // Reversing the default sort keeps sortBy on 'default', so check the direction too
+    const sortChanged =
+      this.viewPreferences.sortBy !== DEFAULT_VIEW_PREFERENCES.sortBy ||
+      this.viewPreferences.sortDirection !== DEFAULT_VIEW_PREFERENCES.sortDirection;
+
     return (
-      (this.viewPreferences.sortBy !== DEFAULT_VIEW_PREFERENCES.sortBy ? 1 : 0) +
+      (sortChanged ? 1 : 0) +
       this.activeFilterCount +
       (this.viewPreferences.statuses.length > 0 ? 1 : 0)
     );

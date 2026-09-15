@@ -208,6 +208,17 @@ describe('StaffTaskListComponent', () => {
       expect(component.filteredTasks).toEqual([last, first]);
     });
 
+    it('counts a reversed default sort as an active preference', () => {
+      component.tasks = [];
+      expect(component.activeViewPreferenceCount).toBe(0);
+
+      component.setSortBy('default');
+
+      expect(component.viewPreferences.sortDirection).toBe('desc');
+      expect(component.activeViewPreferenceCount).toBe(1);
+      expect(component.hasModifiedViewPreferences).toBe(true);
+    });
+
     it('clears every active preference on reset', () => {
       component.tasks = [buildTask({status: 'discuss'})];
       component.toggleFilter('similaritiesDetected', true);
