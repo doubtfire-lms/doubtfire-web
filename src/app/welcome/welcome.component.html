@@ -1,20 +1,14 @@
-<section class="welcome" fxFlex fxLayout="row">
-  <f-hero-sidebar fxFlexAlign="start" fxHide.lt-md></f-hero-sidebar>
-  <!-- <section class="content" fxFlex.gt-sm  > -->
-  <section class="content" fxFlex.gt-sm fxLayout.gt-sm="column" [ngClass.gt-sm]="'large'">
+<section class="welcome flex h-screen flex-row">
+  <f-hero-sidebar class="max-fl-md:hidden self-start"></f-hero-sidebar>
+  <!-- <section class="content" fxFlex.gt-sm > -->
+  <section class="content fl-md:flex-1 fl-md:overflow-auto flex flex-col">
     <div class="m-auto w-full max-w-md p-4">
       <div class="subcontainer">
-        <div
-          class="wordmark"
-          fxFlexAlign="start"
-          fxHide.gt-sm
-          fxLayout="row"
-          fxLayoutAlign="start center"
-        >
+        <div class="wordmark flex-row items-center justify-start self-start">
           <img alt="Homepage Logo" src="../../../assets/images/logo-bw.svg" width="40px" />
           <p>{{ externalName.value }}</p>
         </div>
-        <h1 class="welcome-heading" fxFlexAlign="start">Welcome to {{ externalName.value }}</h1>
+        <h1 class="welcome-heading self-start">Welcome to {{ externalName.value }}</h1>
         @if (!loading) {
           <f-edit-profile-form mode="create"></f-edit-profile-form>
         }
