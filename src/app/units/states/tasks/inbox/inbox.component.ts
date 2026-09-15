@@ -56,7 +56,6 @@ export class InboxComponent implements OnInit, OnDestroy {
     tutorialIdSelected: string | number;
     taskDefinitionIdSelected: number | TaskDefinition;
   }>;
-  @Input() showSearchOptions: boolean;
   @ViewChild('inboxpanel') inboxPanel: ElementRef;
   @ViewChild('commentspanel') commentspanel: ElementRef;
 
@@ -71,7 +70,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   private readonly commentsBreakpoint = '(max-width: 999.98px)';
 
   // protected filters;
-  // protected showSearchOptions;
 
   public taskSelected = false;
   public isCommentsNarrow = false;
