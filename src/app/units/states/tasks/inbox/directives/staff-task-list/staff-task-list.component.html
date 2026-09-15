@@ -167,12 +167,10 @@
               (click)="setSortBy(option.value)"
             >
               <mat-icon class="inbox-menu-icon shrink-0">{{ option.icon }}</mat-icon>
-              <span class="min-w-0 flex-1 truncate">{{ option.label }}</span>
+              <span class="min-w-0 flex-1 truncate">{{ sortLabelFor(option) }}</span>
               @if (isSortSelected(option)) {
-                @if (option.directions) {
-                  <span class="shrink-0 text-xs font-medium">
-                    {{ sortDirectionLabelFor(option) }}
-                  </span>
+                @if (sortDirectionLabelFor(option); as directionLabel) {
+                  <span class="shrink-0 text-xs font-medium">{{ directionLabel }}</span>
                 } @else {
                   <mat-icon class="inbox-menu-icon shrink-0">check</mat-icon>
                 }

@@ -23,10 +23,12 @@ const buildTask = (
     studentName: string;
     deadline: Date;
     submissionDate: Date;
+    waitingSince: Date;
     pinned: boolean;
   }> = {},
 ): Task => {
   const deadline = overrides.deadline ?? daysFromNow(30);
+  const submissionDate = 'submissionDate' in overrides ? overrides.submissionDate : daysFromNow(-1);
 
   return {
     status: overrides.status ?? 'ready_for_feedback',
@@ -35,7 +37,9 @@ const buildTask = (
     similaritiesDetected: false,
     hasExtensions: false,
     pinned: overrides.pinned ?? false,
-    submissionDate: overrides.submissionDate ?? daysFromNow(-1),
+    submissionDate,
+    // the API falls back to the submission date when nothing is waiting on comments
+    waitingSince: overrides.waitingSince ?? submissionDate,
     project: {student: {name: overrides.studentName ?? 'Student'}},
     definition: {id: 1, seq: 1, dueDate: deadline},
     localDeadlineDate: () => deadline,
@@ -125,24 +129,6 @@ describe('StaffTaskListComponent', () => {
       };
     });
 
-    it('keeps only tasks within a week of their feedback deadline', () => {
-      const closeToDeadline = buildTask({deadline: daysFromNow(3)});
-      component.tasks = [closeToDeadline, buildTask({deadline: daysFromNow(30)})];
-
-      component.toggleFilter('nearFeedbackDeadline', true);
-
-      expect(component.filteredTasks).toEqual([closeToDeadline]);
-    });
-
-    it('keeps tasks whose feedback deadline has already passed', () => {
-      const pastDeadline = buildTask({deadline: daysFromNow(-2)});
-      component.tasks = [pastDeadline, buildTask({deadline: daysFromNow(30)})];
-
-      component.toggleFilter('nearFeedbackDeadline', true);
-
-      expect(component.filteredTasks).toEqual([pastDeadline]);
-    });
-
     it('filters to the selected statuses and counts what each status holds', () => {
       const discuss = buildTask({status: 'discuss'});
       component.tasks = [buildTask({status: 'ready_for_feedback'}), discuss];
@@ -158,17 +144,56 @@ describe('StaffTaskListComponent', () => {
       expect(component.filteredTasks).toEqual([discuss]);
     });
 
+    it('names the default sort after whatever the view is actually ordered by', () => {
+      const defaultSort = component.sortOptions.find((option) => option.value === 'default');
+
+      component.viewType = 'inbox';
+      expect(component.sortLabelFor(defaultSort)).toBe('Longest waiting');
+
+      // the explorer and moderation have no ordering of their own to name
+      component.viewType = 'explorer';
+      expect(component.sortLabelFor(defaultSort)).toBe('Default order');
+
+      component.viewType = 'moderation';
+      expect(component.sortLabelFor(defaultSort)).toBe('Default order');
+    });
+
     it('names the direction of a date sort rather than showing an arrow', () => {
       component.tasks = [];
-      const submissionSort = component.sortOptions.find(
-        (option) => option.value === 'submissionDate',
-      );
+      const defaultSort = component.sortOptions.find((option) => option.value === 'default');
 
-      component.setSortBy('submissionDate');
-      expect(component.sortDirectionLabelFor(submissionSort)).toBe('Oldest first');
+      // the default sort is already the active one, so the first click reverses it
+      expect(component.sortDirectionLabelFor(defaultSort)).toBe('Oldest first');
 
-      component.setSortBy('submissionDate');
-      expect(component.sortDirectionLabelFor(submissionSort)).toBe('Newest first');
+      component.setSortBy('default');
+      expect(component.sortDirectionLabelFor(defaultSort)).toBe('Newest first');
+
+      component.setSortBy('default');
+      expect(component.sortDirectionLabelFor(defaultSort)).toBe('Oldest first');
+    });
+
+    it('leaves the default sort fixed in views with no ordering to reverse', () => {
+      component.viewType = 'explorer';
+      component.tasks = [];
+      const defaultSort = component.sortOptions.find((option) => option.value === 'default');
+
+      component.setSortBy('default');
+      component.setSortBy('default');
+
+      expect(component.viewPreferences.sortDirection).toBe('asc');
+      expect(component.sortDirectionLabelFor(defaultSort)).toBe('');
+    });
+
+    it('ranks a comment-only task by when the inbox started waiting on it', () => {
+      const commentOnly = buildTask({submissionDate: null, waitingSince: daysFromNow(-10)});
+      const submitted = buildTask({submissionDate: daysFromNow(-2)});
+      component.tasks = [submitted, commentOnly];
+
+      component.applyFilters();
+      expect(component.filteredTasks).toEqual([commentOnly, submitted]);
+
+      component.setSortBy('default');
+      expect(component.filteredTasks).toEqual([submitted, commentOnly]);
     });
 
     it('sorts by feedback deadline and flips direction when the sort is reselected', () => {
@@ -187,7 +212,7 @@ describe('StaffTaskListComponent', () => {
       component.tasks = [buildTask({status: 'discuss'})];
       component.toggleFilter('similaritiesDetected', true);
       component.toggleStatus('discuss');
-      component.setSortBy('submissionDate');
+      component.setSortBy('feedbackDeadline');
       expect(component.activeViewPreferenceCount).toBe(3);
 
       component.resetViewPreferences();
@@ -201,7 +226,7 @@ describe('StaffTaskListComponent', () => {
       component.tasks = [];
 
       component.toggleFilter('similaritiesDetected', true);
-      component.setSortBy('submissionDate');
+      component.setSortBy('feedbackDeadline');
 
       expect(setItem).not.toHaveBeenCalled();
       setItem.mockRestore();

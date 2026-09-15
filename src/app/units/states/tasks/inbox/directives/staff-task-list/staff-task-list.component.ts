@@ -41,11 +41,13 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 
-type StaffTaskListSortOption = 'default' | 'feedbackDeadline' | 'submissionDate';
+type StaffTaskListViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
+
+type StaffTaskListSortOption = 'default' | 'feedbackDeadline';
 
 type StaffTaskListSortDirection = 'asc' | 'desc';
 
-type StaffTaskListFilterKey = 'nearFeedbackDeadline' | 'awaitingFeedback' | 'similaritiesDetected';
+type StaffTaskListFilterKey = 'awaitingFeedback' | 'similaritiesDetected';
 
 interface StaffTaskListViewPreferences {
   sortBy: StaffTaskListSortOption;
@@ -79,7 +81,6 @@ const DEFAULT_VIEW_PREFERENCES: StaffTaskListViewPreferences = {
   sortBy: 'default',
   sortDirection: 'asc',
   filters: {
-    nearFeedbackDeadline: false,
     awaitingFeedback: false,
     similaritiesDetected: false,
   },
@@ -88,8 +89,21 @@ const DEFAULT_VIEW_PREFERENCES: StaffTaskListViewPreferences = {
 
 const ALL_TASK_DEFINITIONS = '';
 
-const FEEDBACK_DEADLINE_SOON_DAYS = 7;
-const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+// The inbox and overflow queue lead with the longest-waiting task, so their default
+// is really a date sort and can be reversed. The other views have no ordering worth
+// naming, and keep the source order the API returned.
+const WAITING_TIME_DEFAULT = {
+  label: 'Longest waiting',
+  directions: {asc: 'Oldest first', desc: 'Newest first'} as Record<
+    StaffTaskListSortDirection,
+    string
+  >,
+};
+
+const DEFAULT_SORT_BY_VIEW: Partial<Record<StaffTaskListViewType, typeof WAITING_TIME_DEFAULT>> = {
+  inbox: WAITING_TIME_DEFAULT,
+  overflow: WAITING_TIME_DEFAULT,
+};
 
 @Component({
   selector: 'df-staff-task-list',
@@ -132,7 +146,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() isNarrow: boolean;
 
-  @Input() viewType: 'inbox' | 'explorer' | 'moderation' | 'overflow';
+  @Input() viewType: StaffTaskListViewType;
 
   userHasTutorials: boolean;
   filteredTasks: Task[] = null;
@@ -180,20 +194,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       icon: 'event_busy',
       directions: {asc: 'Soonest first', desc: 'Latest first'},
     },
-    {
-      value: 'submissionDate',
-      label: 'Submission date',
-      icon: 'schedule',
-      directions: {asc: 'Oldest first', desc: 'Newest first'},
-    },
   ];
 
   filterOptions: StaffTaskListFilterOptionView[] = [
-    {
-      key: 'nearFeedbackDeadline',
-      label: 'Feedback deadline within a week',
-      tooltip: 'Tasks less than a week from their feedback deadline, or already past it',
-    },
     {
       key: 'awaitingFeedback',
       label: 'Waiting too long for feedback',
@@ -812,7 +815,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   public setSortBy(sortBy: StaffTaskListSortOption): void {
     const sortDirection =
-      sortBy === 'default'
+      sortBy === 'default' && !this.defaultSortForView
         ? DEFAULT_VIEW_PREFERENCES.sortDirection
         : this.viewPreferences.sortBy === sortBy
           ? this.toggledSortDirection
@@ -822,16 +825,31 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.viewPreferencesChanged();
   }
 
+  public sortLabelFor(option: StaffTaskListSortOptionView): string {
+    if (option.value !== 'default') {
+      return option.label;
+    }
+
+    return this.defaultSortForView?.label ?? option.label;
+  }
+
   public isSortSelected(option: StaffTaskListSortOptionView): boolean {
     return this.viewPreferences.sortBy === option.value;
   }
 
   public sortDirectionLabelFor(option: StaffTaskListSortOptionView): string {
-    if (!option.directions || !this.isSortSelected(option)) {
+    if (!this.isSortSelected(option)) {
       return '';
     }
 
-    return option.directions[this.viewPreferences.sortDirection];
+    const directions =
+      option.value === 'default' ? this.defaultSortForView?.directions : option.directions;
+
+    return directions?.[this.viewPreferences.sortDirection] ?? '';
+  }
+
+  private get defaultSortForView(): typeof WAITING_TIME_DEFAULT | undefined {
+    return DEFAULT_SORT_BY_VIEW[this.viewType];
   }
 
   public isFilterActive(key: StaffTaskListFilterKey): boolean {
@@ -906,10 +924,6 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
     const filters = this.viewPreferences.filters;
 
-    if (filters.nearFeedbackDeadline && !this.isNearFeedbackDeadline(task)) {
-      return false;
-    }
-
     if (filters.awaitingFeedback && !this.getWarningIcon(task)) {
       return false;
     }
@@ -947,14 +961,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       }));
   }
 
-  private isNearFeedbackDeadline(task: Task): boolean {
-    const deadline = this.feedbackDeadlineFor(task);
-
-    if (!deadline) {
-      return false;
-    }
-
-    return (deadline.getTime() - Date.now()) / MILLISECONDS_PER_DAY <= FEEDBACK_DEADLINE_SOON_DAYS;
+  // The inbox ranks comment-only tasks by their oldest unread comment, so prefer
+  // that date over the raw submission date when the API provides it
+  private waitingSinceFor(task: Task): Date {
+    return task?.waitingSince ?? task?.submissionDate;
   }
 
   private feedbackDeadlineFor(task: Task): Date | null {
@@ -973,11 +983,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     return [...tasks].sort((a, b) => {
-      if (this.isTaskDefMode) {
-        const pinned = Number(b?.pinned) - Number(a?.pinned);
-        if (pinned !== 0) {
-          return pinned;
-        }
+      const pinned = Number(b?.pinned) - Number(a?.pinned);
+      if (pinned !== 0) {
+        return pinned;
       }
 
       return this.compareTasks(a, b);
@@ -991,12 +999,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       case 'feedbackDeadline':
         result = this.compareDates(this.feedbackDeadlineFor(a), this.feedbackDeadlineFor(b));
         break;
-      case 'submissionDate':
-        result = this.compareDates(a?.submissionDate, b?.submissionDate);
-        break;
       default:
-        // Keep the order the tasks arrived in
-        return 0;
+        if (!this.defaultSortForView) {
+          // Nothing to order by -- keep the order the tasks arrived in
+          return 0;
+        }
+
+        result = this.compareDates(this.waitingSinceFor(a), this.waitingSinceFor(b));
     }
 
     return this.viewPreferences.sortDirection === 'asc' ? result : result * -1;
