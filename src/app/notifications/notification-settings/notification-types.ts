@@ -193,10 +193,9 @@ export function defaultChannelSelection(): ChannelSelection {
   const selection: ChannelSelection = {};
   for (const section of NOTIFICATION_SECTIONS) {
     for (const type of section.types) {
-      const enabledByDefault = type.key !== 'weekly_summary';
       selection[type.key] = {
-        inApp: enabledByDefault,
-        email: enabledByDefault,
+        inApp: true,
+        email: true,
         push: false,
       };
     }
