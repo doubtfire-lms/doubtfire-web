@@ -237,7 +237,7 @@ export class Task extends Entity {
     );
   }
 
-  public hasTaskKey(key: {studentId: number; taskDefAbbr: string}): boolean {
+  public hasTaskKey(key: {studentId: number | string; taskDefAbbr: string}): boolean {
     if (!key) {
       return false;
     }

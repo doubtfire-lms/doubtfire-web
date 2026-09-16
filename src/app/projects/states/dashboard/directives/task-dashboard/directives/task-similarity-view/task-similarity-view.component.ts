@@ -79,18 +79,12 @@ export class TaskSimilarityViewComponent implements OnChanges {
     this.fileDownloaderService.downloadBlob(
       this.task.definition.getJplagReportUrl(),
       (_, response: HttpResponse<Blob>) => {
-        // Open JPlag report viewer in embedded iframe
-        setTimeout(() => {
-          this.jplagViewer.uploadReport(response.body);
-          setTimeout(() => {
-            // Open comparison between the two students
-            this.jplagViewer.openComparison(
-              similarity.task.project.student.username,
-              similarity.otherStudent.username,
-            );
-            this.jplagOpenState = true;
-          }, 100);
-        }, 100);
+        this.jplagViewer.openComparison(
+          response.body,
+          similarity.task.project.student.username,
+          similarity.otherStudent.username,
+        );
+        this.jplagOpenState = true;
       },
       (error) => {
         console.error(error);

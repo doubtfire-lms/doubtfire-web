@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, Subscription, first, of} from 'rxjs';
 import {Unit, UnitRole, UnitService, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {TabManagementBase} from 'src/app/common/tabs/tab-management';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 type UnitAdminTabKey =
@@ -29,7 +30,10 @@ interface UnitAdminTab {
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class UnitAdminStateComponent implements OnInit, OnDestroy {
+export class UnitAdminStateComponent
+  extends TabManagementBase<UnitAdminTab>
+  implements OnInit, OnDestroy
+{
   @Input() public unit$: Observable<Unit>;
 
   public tabs: UnitAdminTab[] = [
@@ -52,16 +56,20 @@ export class UnitAdminStateComponent implements OnInit, OnDestroy {
   public loadingUnit = true;
   public savedMoodleEnabled = false;
 
+  protected readonly routeSegment = 'admin';
+
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    route: ActivatedRoute,
+    router: Router,
     private userService: UserService,
     private unitService: UnitService,
     private alerts: AlertService,
     private globalStateService: GlobalStateService,
-  ) {}
+  ) {
+    super(route, router);
+  }
 
   public ngOnInit(): void {
     this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'));
