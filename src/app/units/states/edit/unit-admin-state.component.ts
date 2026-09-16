@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, Subscription, first, of} from 'rxjs';
 import {Unit, UnitRole, UnitService, User, UserService} from 'src/app/api/models/doubtfire-model';
@@ -98,43 +97,12 @@ export class UnitAdminStateComponent
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
-  public get currentIndex(): number {
-    const index = this.visibleTabs.findIndex(
-      (tab) => tab.routeSegment === this.currentTab.routeSegment,
-    );
-    return index >= 0 ? index : 0;
-  }
-
-  public get visibleTabs(): UnitAdminTab[] {
+  public override get visibleTabs(): UnitAdminTab[] {
     return this.tabs.filter((tab) => tab.routeSegment !== 'moodle' || this.savedMoodleEnabled);
   }
 
   public unitUpdated(unit: Unit): void {
     this.savedMoodleEnabled = unit.moodleEnabled;
-  }
-
-  public onTabChange(event: MatTabChangeEvent): void {
-    const nextTab = this.visibleTabs[event.index] ?? this.visibleTabs[0];
-    this.currentTab = nextTab;
-    if (this.route.parent?.snapshot.data.unit) {
-      this.router.navigate(
-        [
-          '/units',
-          this.route.parent.snapshot.paramMap.get('unitId'),
-          'admin',
-          nextTab.routeSegment,
-        ],
-        {replaceUrl: true},
-      );
-      return;
-    }
-  }
-
-  private updateCurrentTabFromState(tabParam?: string | null): void {
-    this.currentTab =
-      this.visibleTabs.find((tab) => tab.routeSegment === tabParam) ??
-      this.visibleTabs.find((tab) => tab.routeSegment === 'details') ??
-      this.visibleTabs[0];
   }
 
   private findUnitRole(unitId: number): UnitRole | null {
