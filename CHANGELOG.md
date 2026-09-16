@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-94](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-93...v11.0.0-94) (2026-09-16)
+
+
+### Bug Fixes
+
+* switch to explorer on first page load only ([6578c27](https://github.com/b0ink/doubtfire-deploy/commit/6578c27ddfb75c45cda2a0e9212a479212a4427d))
+
 ## [11.0.0-93](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-qr-fix.1...v11.0.0-93) (2026-09-16)
 
 
