@@ -1,7 +1,7 @@
 @if (unit$ | async; as unit) {
   <div>
     <!-- Wide Window Display -->
-    <div class="hidden flex-col size-full min-[960px]:flex">
+    <div class="hidden size-full flex-col min-[960px]:flex">
       <div class="flex size-full items-stretch justify-center">
         <!-- Panel 1 -->
         <div #tasklistpanel class="vertical-panel min-w-12" id="tasklistpanel">
@@ -29,7 +29,7 @@
       </div>
     </div>
     <!-- Narrow Window / Mobile Display -->
-    <div #mobile class="hidden flex-row size-full max-[959px]:flex">
+    <div #mobile class="hidden size-full flex-row max-[959px]:flex">
       <div class="vertical-panel mobile" [hidden]="selectedTaskDefinition$ | async">
         <f-unit-task-list
           [mode]="'all-tasks'"
@@ -37,10 +37,7 @@
           [taskDefinitions]="unit.taskDefinitions"
         ></f-unit-task-list>
       </div>
-      <div
-        class="flex size-full flex-col items-stretch justify-between"
-        [hidden]="!taskSelected"
-      >
+      <div class="flex size-full flex-col items-stretch justify-between" [hidden]="!taskSelected">
         <div class="flex items-center">
           <button
             aria-label="Back to task list"
