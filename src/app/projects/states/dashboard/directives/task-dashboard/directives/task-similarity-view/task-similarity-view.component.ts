@@ -1,4 +1,3 @@
-import {HttpResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -78,13 +77,19 @@ export class TaskSimilarityViewComponent implements OnChanges {
     // In most cases, usernames are a combination of their first and last names
     this.fileDownloaderService.downloadBlob(
       this.task.definition.getJplagReportUrl(),
-      (_, response: HttpResponse<Blob>) => {
-        this.jplagViewer.openComparison(
-          response.body,
-          similarity.task.project.student.username,
-          similarity.otherStudent.username,
-        );
-        this.jplagOpenState = true;
+      (url: string) => {
+        // Reports over 10 MB arrive in ranged parts; only the stitched url holds them all
+        fetch(url)
+          .then((response) => response.blob())
+          .then((report) => {
+            this.fileDownloaderService.releaseBlob(url);
+            this.jplagViewer.openComparison(
+              report,
+              similarity.task.project.student.username,
+              similarity.otherStudent.username,
+            );
+            this.jplagOpenState = true;
+          });
       },
       (error) => {
         console.error(error);
