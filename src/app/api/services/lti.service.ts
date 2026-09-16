@@ -33,6 +33,17 @@ export interface RetrievedGrade {
 export interface UnitLink {
   contextId?: string;
   unitId: string;
+  lineItemId?: string;
+}
+
+export interface GradeLineItemStatus {
+  configured: boolean;
+  visibility: 'unknown';
+  lineItem?: {
+    id: string;
+    label: string;
+    scoreMaximum: number;
+  };
 }
 
 export interface LtiMembers {
@@ -66,6 +77,10 @@ export class LtiService {
 
   public removeUnitLink(): Observable<UnitLink> {
     return this.httpClient.delete<UnitLink>(`${LTI_API_URL}/link`);
+  }
+
+  public getGradeLineItemStatus(): Observable<GradeLineItemStatus> {
+    return this.httpClient.get<GradeLineItemStatus>(`${LTI_API_URL}/grade-line-item`);
   }
 
   public enrolUser(unit: UnitLink): Observable<Project | null> {
