@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-95](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-94...v11.0.0-95) (2026-09-17)
+
+
+### Features
+
+* show loading spinners for similarities and jplag reports ([76f1ce3](https://github.com/b0ink/doubtfire-deploy/commit/76f1ce31dc6a033eec7373d0c03dc436250f9c9b))
+
+
+### Bug Fixes
+
+* load jplag reports over 10 MB from every ranged chunk ([657f71b](https://github.com/b0ink/doubtfire-deploy/commit/657f71bece36b49a645e38ee42950657d0f07ba2))
+* wait for authentication before downloading submission files ([dcf7966](https://github.com/b0ink/doubtfire-deploy/commit/dcf796606d7afb23b8d692ec7228f31df79457c1))
+
 ## [11.0.0-94](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-93...v11.0.0-94) (2026-09-16)
 
 
