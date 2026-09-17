@@ -86,7 +86,7 @@ export class LtiUnitLinkComponent implements AfterViewInit {
         },
         error: (error) => {
           console.error(error);
-          this.alertsService.error(`Failed to link unit: ${error.error}`, 6000);
+          this.alertsService.error(`Failed to link unit: ${error}`, 6000);
         },
       });
   }
