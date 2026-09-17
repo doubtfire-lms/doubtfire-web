@@ -2,18 +2,19 @@ import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {finalize} from 'rxjs/operators';
 import {Campus, Group, Tutorial, TutorialService} from 'src/app/api/models/doubtfire-model';
 import {
-  MoodleAssignment,
-  MoodleConnectionResult,
-  MoodleGroup,
-  MoodleGroupMapping,
-  MoodleIntegration,
-  MoodleIntegrationValidationResult,
-  MoodlePermissionResult,
-} from 'src/app/api/models/moodle-integration';
+  LmsAssignment,
+  LmsCourseData,
+  LmsGradeLineItemStatus,
+  LmsGroup,
+  LmsGroupMapping,
+  LmsIntegration,
+  LmsIntegrationValidationResult,
+  LmsLink,
+} from 'src/app/api/models/lms-integration';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
 import {CampusService} from 'src/app/api/services/campus.service';
-import {MoodleIntegrationService} from 'src/app/api/services/moodle-integration.service';
+import {LmsIntegrationService} from 'src/app/api/services/lms-integration.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {
   CsvResult,
@@ -23,27 +24,33 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
-  selector: 'f-unit-external-tools',
-  templateUrl: './unit-external-tools.component.html',
+  selector: 'f-unit-lms-integration',
+  templateUrl: './unit-lms-integration.component.html',
   standalone: false,
 })
-export class UnitExternalToolsComponent implements OnInit {
+export class UnitLmsIntegrationComponent implements OnInit {
   @Input({required: true}) unit: Unit;
 
-  public integration: MoodleIntegration;
-  public apiKey = '';
-  public editingApiKey = false;
-  public assignments: MoodleAssignment[] = [];
-  public moodleGroups: MoodleGroup[] = [];
+  public loading = true;
+  public link: LmsLink | null = null;
+  public linkError: string | null = null;
+  public integration: LmsIntegration;
+  public courseData: LmsCourseData | null = null;
+  public loadingCourseData = false;
+  public gradeLineItem: LmsGradeLineItemStatus | null = null;
+  public gradeLineItemError: string | null = null;
+  public loadingGradeLineItem = false;
+  public syncingGrades = false;
+  public unlinking = false;
+  public assignments: LmsAssignment[] = [];
+  public lmsGroups: LmsGroup[] = [];
   public campuses: Campus[] = [];
-  public connection: MoodleConnectionResult | null = null;
   public saving = false;
-  public testing = false;
   public prefilling = false;
   public validatingIntegration = false;
   public assignmentSyncIssue: string | null = null;
   public creatingTutorials: Set<number> = new Set();
-  public editingGroupMappings: Set<MoodleGroupMapping> = new Set();
+  public editingGroupMappings: Set<LmsGroupMapping> = new Set();
   public readonly tutorialDays = [
     'Monday',
     'Tuesday',
@@ -56,17 +63,17 @@ export class UnitExternalToolsComponent implements OnInit {
   ];
   public studentImportAction: 'preview' | 'import' | null = null;
   public extensionImportAction: 'preview' | 'import' | null = null;
-  private savedCourseId: number | null = null;
   private savedAssignmentId: number | null = null;
   private savedAssignmentName: string | null = null;
   private savedFetchExtensions = false;
   private savedAutoSyncStudents = false;
+  private savedWithdrawMissingStudents = false;
   private savedAutoSyncExtensions = false;
   private savedGroupMappingEnabled = false;
   private savedGroupMappings = '[]';
 
   constructor(
-    private moodleService: MoodleIntegrationService,
+    private lmsService: LmsIntegrationService,
     private tutorialService: TutorialService,
     private campusService: CampusService,
     private sidekiqProgressModal: SidekiqProgressModalService,
@@ -77,42 +84,167 @@ export class UnitExternalToolsComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.integration = new MoodleIntegration(this.unit);
+    this.integration = new LmsIntegration(this.unit);
     this.campusService.query().subscribe((campuses) => (this.campuses = campuses));
-    this.moodleService.getSettings(this.unit).subscribe({
-      next: (integration) => {
-        this.integration = integration;
-        this.restoreSavedAssignment();
-        this.restoreSavedGroups();
-        this.rememberSavedSettings();
-        this.changeDetector.markForCheck();
+    this.loadOverview();
+  }
+
+  public loadOverview(): void {
+    this.loading = true;
+    this.lmsService
+      .getOverview(this.unit)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (overview) => {
+          this.link = overview.link;
+          this.linkError = overview.linkError;
+          this.integration = overview.integration;
+          this.courseData = null;
+          this.restoreSavedAssignment();
+          this.restoreSavedGroups();
+          this.rememberSavedSettings();
+          if (this.link) {
+            this.loadGradeLineItem();
+            if (this.link.courseDataAvailable) {
+              this.loadCourseData();
+            }
+          }
+        },
+        error: (error) => (this.linkError = this.errorMessage(error)),
+      });
+  }
+
+  public get courseTitle(): string {
+    return (
+      this.courseData?.course.title ??
+      this.link?.contextTitle ??
+      this.link?.contextLabel ??
+      'LMS course'
+    );
+  }
+
+  public get courseLabel(): string | null {
+    return this.courseData?.course.label ?? this.link?.contextLabel ?? null;
+  }
+
+  public loadCourseData(): void {
+    this.loadingCourseData = true;
+    this.lmsService
+      .getCourseData(this.unit.id)
+      .pipe(
+        finalize(() => {
+          this.loadingCourseData = false;
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (courseData) => {
+          this.courseData = courseData;
+          this.assignments = courseData.assignments;
+          this.lmsGroups = courseData.groups;
+          this.reconcileLmsAssignment();
+          this.reconcileLmsGroupMappings();
+        },
+        error: (error) => this.alerts.error(this.errorMessage(error)),
+      });
+  }
+
+  public loadGradeLineItem(): void {
+    this.loadingGradeLineItem = true;
+    this.gradeLineItemError = null;
+    this.lmsService
+      .getGradeLineItem(this.unit.id)
+      .pipe(
+        finalize(() => {
+          this.loadingGradeLineItem = false;
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (status) => (this.gradeLineItem = status),
+        error: (error) => {
+          this.gradeLineItem = null;
+          this.gradeLineItemError = this.errorMessage(error);
+        },
+      });
+  }
+
+  public unlink(): void {
+    this.confirmationModal.show(
+      'Unlink LMS course?',
+      `This removes the link between ${this.unit.code} and ${this.courseTitle}. Student imports, extension imports and grade sync will stop working. A unit can only be linked again by launching ${this.unit.code} from the LMS.`,
+      () => {
+        this.unlinking = true;
+        this.lmsService
+          .unlink(this.unit.id)
+          .pipe(
+            finalize(() => {
+              this.unlinking = false;
+              this.changeDetector.markForCheck();
+            }),
+          )
+          .subscribe({
+            next: () => {
+              this.link = null;
+              this.courseData = null;
+              this.gradeLineItem = null;
+              this.integration.validated = false;
+              this.integration.validatedAt = null;
+              this.alerts.success('LMS course unlinked.');
+            },
+            error: (error) => this.alerts.error(this.errorMessage(error)),
+          });
       },
-      error: (error) => {
-        this.alerts.error(this.errorMessage(error));
-        this.changeDetector.markForCheck();
+      undefined,
+      'Unlink',
+    );
+  }
+
+  public syncGrades(): void {
+    this.confirmationModal.show(
+      'Send grades to the LMS?',
+      `Enrolled students' OnTrack grades will be sent to the ${this.gradeLineItem?.lineItem?.label ?? 'OnTrack'} grade item in ${this.courseTitle}. Check in the LMS gradebook that the grade item is hidden from students unless grades are approved for release.`,
+      () => {
+        this.syncingGrades = true;
+        this.lmsService
+          .syncGrades(this.unit.id)
+          .pipe(
+            finalize(() => {
+              this.syncingGrades = false;
+              this.changeDetector.markForCheck();
+            }),
+          )
+          .subscribe({
+            next: (job) =>
+              this.showImportJob(
+                job,
+                'Sending grades to the LMS',
+                'LMS Grade Sync Results',
+                false,
+                false,
+              ),
+            error: (error) => this.alerts.error(this.errorMessage(error)),
+          });
       },
-    });
+      undefined,
+      'Send grades',
+    );
   }
 
   public save(): void {
-    const courseId = Number(this.integration.courseId);
-    if (
-      !Number.isInteger(courseId) ||
-      courseId <= 0 ||
-      (!this.integration.apiKeyConfigured && !this.apiKey)
-    ) {
-      this.alerts.error('Enter a Moodle course ID and API key.');
-      return;
-    }
     if (!this.groupMappingsValid) {
-      this.alerts.error('Complete each Moodle group mapping before saving.');
+      this.alerts.error('Complete each LMS group mapping before saving.');
       return;
     }
 
-    this.integration.courseId = courseId;
     this.saving = true;
-    this.moodleService
-      .updateSettings(this.integration, this.apiKey)
+    this.lmsService
+      .updateSettings(this.integration)
       .pipe(
         finalize(() => {
           this.saving = false;
@@ -125,36 +257,33 @@ export class UnitExternalToolsComponent implements OnInit {
           this.editingGroupMappings.clear();
           this.integration.groupMappings.forEach((mapping) => (mapping.syncIssue = undefined));
           this.updateDuplicateMappingNotices();
-          this.apiKey = '';
           this.rememberSavedSettings();
-          this.alerts.success('Moodle settings saved.');
+          this.alerts.success('LMS settings saved.');
         },
         error: (error) => this.alerts.error(this.errorMessage(error)),
       });
   }
 
-  public testConnection(): void {
-    this.testing = true;
-    this.connection = null;
-    this.moodleService.testConnection(this.unit.id).subscribe({
-      next: (job) => {
-        this.testing = false;
-        this.showConnectionTest(job);
-        this.changeDetector.markForCheck();
-      },
-      error: (error) => {
-        this.testing = false;
-        this.alerts.error(this.errorMessage(error));
-        this.changeDetector.markForCheck();
-      },
-    });
+  public get needsValidation(): boolean {
+    return this.integration.groupMappingEnabled || this.integration.fetchExtensions;
+  }
+
+  public get studentImportBlocked(): boolean {
+    return (
+      this.settingsDirty ||
+      (this.integration.groupMappingEnabled &&
+        (!this.groupMappingsValid || !this.integration.validated))
+    );
   }
 
   public importStudents(previewOnly: boolean): void {
     if (!previewOnly) {
+      const withdrawal = this.integration.withdrawMissingStudents
+        ? ' Enrolled students who are not active students in the LMS course will be withdrawn, and returning students will be re-enrolled.'
+        : '';
       this.confirmationModal.show(
-        'Import Moodle students?',
-        `Make sure Moodle course ID ${this.integration.courseId} is the intended course. Run Preview student import first and verify the student details and any group, campus, or tutorial mappings before continuing.`,
+        'Import LMS students?',
+        `Make sure ${this.courseTitle} is the intended course. Run Preview student import first and verify the student details and any group, campus, or tutorial mappings before continuing.${withdrawal}`,
         () => this.startStudentImport(false),
         undefined,
         'Import students',
@@ -168,8 +297,8 @@ export class UnitExternalToolsComponent implements OnInit {
   public importExtensions(previewOnly: boolean): void {
     if (!previewOnly) {
       this.confirmationModal.show(
-        'Import Moodle extensions?',
-        `Make sure Moodle course ID ${this.integration.courseId} and assignment ${this.integration.assignmentName} (ID ${this.integration.assignmentId}) are correct. Run Preview extension import first and verify the extension dates and special consideration days before continuing.`,
+        'Import LMS extensions?',
+        `Make sure ${this.courseTitle} and assignment ${this.integration.assignmentName} (ID ${this.integration.assignmentId}) are correct. Run Preview extension import first and verify the extension dates and special consideration days before continuing.`,
         () => this.startExtensionImport(false),
         undefined,
         'Import extensions',
@@ -182,37 +311,39 @@ export class UnitExternalToolsComponent implements OnInit {
 
   private startStudentImport(previewOnly: boolean): void {
     this.studentImportAction = previewOnly ? 'preview' : 'import';
-    this.moodleService.importStudents(this.unit.id, previewOnly).subscribe({
-      next: (job) => {
-        this.studentImportAction = null;
-        this.showImportJob(
-          job,
-          previewOnly ? 'Previewing Moodle student import' : 'Importing Moodle students',
-          previewOnly ? 'Moodle Student Import Preview' : 'Moodle Student Import Results',
-          previewOnly,
-          !previewOnly,
-        );
-        this.changeDetector.markForCheck();
-      },
-      error: (error) => {
-        this.studentImportAction = null;
-        this.alerts.error(this.errorMessage(error));
-        this.changeDetector.markForCheck();
-      },
-    });
+    this.lmsService
+      .importStudents(this.unit.id, previewOnly, this.integration.withdrawMissingStudents)
+      .subscribe({
+        next: (job) => {
+          this.studentImportAction = null;
+          this.showImportJob(
+            job,
+            previewOnly ? 'Previewing LMS student import' : 'Importing LMS students',
+            previewOnly ? 'LMS Student Import Preview' : 'LMS Student Import Results',
+            previewOnly,
+            !previewOnly,
+          );
+          this.changeDetector.markForCheck();
+        },
+        error: (error) => {
+          this.studentImportAction = null;
+          this.alerts.error(this.errorMessage(error));
+          this.changeDetector.markForCheck();
+        },
+      });
   }
 
   private startExtensionImport(previewOnly: boolean): void {
     this.extensionImportAction = previewOnly ? 'preview' : 'import';
-    this.moodleService.importExtensions(this.unit.id, previewOnly).subscribe({
+    this.lmsService.importExtensions(this.unit.id, previewOnly).subscribe({
       next: (job) => {
         this.extensionImportAction = null;
         this.showImportJob(
           job,
-          previewOnly ? 'Previewing Moodle extension import' : 'Importing Moodle extensions',
-          previewOnly ? 'Moodle Extension Import Preview' : 'Moodle Extension Import Results',
+          previewOnly ? 'Previewing LMS extension import' : 'Importing LMS extensions',
+          previewOnly ? 'LMS Extension Import Preview' : 'LMS Extension Import Results',
           previewOnly,
-          !previewOnly,
+          false,
         );
         this.changeDetector.markForCheck();
       },
@@ -236,30 +367,26 @@ export class UnitExternalToolsComponent implements OnInit {
     }
   }
 
-  public get selectedAssignment(): MoodleAssignment | null {
+  public get selectedAssignment(): LmsAssignment | null {
     return (
       this.assignments.find((assignment) => assignment.id === this.integration.assignmentId) ?? null
     );
   }
 
-  public get failedConnectionPermissions(): MoodlePermissionResult[] {
-    return this.connection?.permissions.filter((permission) => !permission.success) ?? [];
-  }
-
   public addGroupMapping(): void {
-    const mapping = new MoodleGroupMapping();
+    const mapping = new LmsGroupMapping();
     this.integration.groupMappings.push(mapping);
     this.editingGroupMappings.add(mapping);
   }
 
   public prefillGroupMappings(): void {
-    if (!this.connection) {
+    if (!this.courseData) {
       return;
     }
 
     this.prefilling = true;
-    this.moodleService
-      .prefillGroupMappings(this.unit.id, this.connection.groups)
+    this.lmsService
+      .prefillGroupMappings(this.unit.id, this.courseData.groups)
       .pipe(
         finalize(() => {
           this.prefilling = false;
@@ -269,13 +396,13 @@ export class UnitExternalToolsComponent implements OnInit {
       .subscribe({
         next: (result) => {
           const existingIds = new Set(
-            this.integration.groupMappings.map((mapping) => mapping.moodleGroupId),
+            this.integration.groupMappings.map((mapping) => mapping.lmsGroupId),
           );
           this.integration.groupMappings.push(
-            ...result.groupMappings.filter((mapping) => !existingIds.has(mapping.moodleGroupId)),
+            ...result.groupMappings.filter((mapping) => !existingIds.has(mapping.lmsGroupId)),
           );
           this.integration.groupMappingEnabled = true;
-          this.alerts.success('Moodle group mappings pre-filled.');
+          this.alerts.success('LMS group mappings pre-filled.');
         },
         error: (error) => this.alerts.error(this.errorMessage(error)),
       });
@@ -283,18 +410,22 @@ export class UnitExternalToolsComponent implements OnInit {
 
   public validateIntegration(): void {
     this.validatingIntegration = true;
-    this.moodleService.validateIntegration(this.unit.id).subscribe({
-      next: (job) => {
-        this.validatingIntegration = false;
-        this.showIntegrationValidation(job);
-        this.changeDetector.markForCheck();
-      },
-      error: (error) => {
-        this.validatingIntegration = false;
-        this.alerts.error(this.errorMessage(error));
-        this.changeDetector.markForCheck();
-      },
-    });
+    this.lmsService
+      .validateIntegration(this.unit.id)
+      .pipe(
+        finalize(() => {
+          this.validatingIntegration = false;
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (result) => this.applyValidationResult(result),
+        error: (error) => {
+          this.integration.validated = false;
+          this.integration.validatedAt = null;
+          this.alerts.error(this.errorMessage(error));
+        },
+      });
   }
 
   public removeGroupMapping(index: number): void {
@@ -303,30 +434,30 @@ export class UnitExternalToolsComponent implements OnInit {
     this.updateDuplicateMappingNotices();
   }
 
-  public editGroupMapping(mapping: MoodleGroupMapping): void {
+  public editGroupMapping(mapping: LmsGroupMapping): void {
     this.editingGroupMappings.add(mapping);
   }
 
-  public finishGroupMappingEdit(mapping: MoodleGroupMapping): void {
+  public finishGroupMappingEdit(mapping: LmsGroupMapping): void {
     if (!this.groupMappingValid(mapping)) {
-      this.alerts.error('Complete this Moodle group mapping before finishing editing.');
+      this.alerts.error('Complete this LMS group mapping before finishing editing.');
       return;
     }
     mapping.syncIssue = undefined;
     this.editingGroupMappings.delete(mapping);
   }
 
-  public groupMappingEditing(mapping: MoodleGroupMapping): boolean {
+  public groupMappingEditing(mapping: LmsGroupMapping): boolean {
     return this.editingGroupMappings.has(mapping);
   }
 
-  public moodleGroupSelected(mapping: MoodleGroupMapping): void {
-    mapping.moodleGroupName =
-      this.moodleGroups.find((group) => group.id === mapping.moodleGroupId)?.name ?? '';
+  public lmsGroupSelected(mapping: LmsGroupMapping): void {
+    mapping.lmsGroupName =
+      this.lmsGroups.find((group) => group.id === mapping.lmsGroupId)?.name ?? '';
     this.updateDuplicateMappingNotices();
   }
 
-  public targetTypeSelected(mapping: MoodleGroupMapping): void {
+  public targetTypeSelected(mapping: LmsGroupMapping): void {
     mapping.groupSetId = null;
     mapping.groupId = null;
     mapping.campusId = null;
@@ -337,15 +468,15 @@ export class UnitExternalToolsComponent implements OnInit {
     mapping.tutorialDraft = undefined;
   }
 
-  public groupSetSelected(mapping: MoodleGroupMapping): void {
+  public groupSetSelected(mapping: LmsGroupMapping): void {
     mapping.groupId = null;
   }
 
-  public tutorialStreamSelected(mapping: MoodleGroupMapping): void {
+  public tutorialStreamSelected(mapping: LmsGroupMapping): void {
     mapping.tutorialId = null;
   }
 
-  public createIfMissingChanged(mapping: MoodleGroupMapping): void {
+  public createIfMissingChanged(mapping: LmsGroupMapping): void {
     if (mapping.createIfMissing) {
       mapping.groupId = null;
       mapping.tutorialId = null;
@@ -359,7 +490,7 @@ export class UnitExternalToolsComponent implements OnInit {
   }
 
   public groupTutorialModeChanged(
-    mapping: MoodleGroupMapping,
+    mapping: LmsGroupMapping,
     createTutorialIfMissing: boolean,
   ): void {
     mapping.createTutorialIfMissing = createTutorialIfMissing;
@@ -377,18 +508,18 @@ export class UnitExternalToolsComponent implements OnInit {
     );
   }
 
-  public selectedTutorial(mapping: MoodleGroupMapping): Tutorial | undefined {
+  public selectedTutorial(mapping: LmsGroupMapping): Tutorial | undefined {
     return this.unit.tutorials.find((tutorial) => tutorial.id === mapping.tutorialId);
   }
 
-  public selectedTutorialStream(mapping: MoodleGroupMapping): string {
+  public selectedTutorialStream(mapping: LmsGroupMapping): string {
     return (
       this.unit.tutorialStreams.find((stream) => stream.id === mapping.tutorialStreamId)
         ?.description ?? 'Stream not selected'
     );
   }
 
-  public targetTypeLabel(mapping: MoodleGroupMapping): string {
+  public targetTypeLabel(mapping: LmsGroupMapping): string {
     switch (mapping.targetType) {
       case 'group':
         return 'Group';
@@ -403,21 +534,21 @@ export class UnitExternalToolsComponent implements OnInit {
     }
   }
 
-  public selectedTargetLabel(mapping: MoodleGroupMapping): string {
+  public selectedTargetLabel(mapping: LmsGroupMapping): string {
     if (mapping.targetType === 'campus') {
       return this.campuses.find((campus) => campus.id === mapping.campusId)?.name ?? 'Not selected';
     }
     if (mapping.targetType === 'group') {
       const groupSet = this.unit.groupSets.find((item) => item.id === mapping.groupSetId);
       if (mapping.createIfMissing) {
-        return groupSet ? `${groupSet.name} · Create ${mapping.moodleGroupName}` : 'Not selected';
+        return groupSet ? `${groupSet.name} · Create ${mapping.lmsGroupName}` : 'Not selected';
       }
       return groupSet?.groups.find((group) => group.id === mapping.groupId)?.name ?? 'Not selected';
     }
     return '';
   }
 
-  public tutorialDraftValid(mapping: MoodleGroupMapping): boolean {
+  public tutorialDraftValid(mapping: LmsGroupMapping): boolean {
     const draft = mapping.tutorialDraft;
     return !!(
       draft?.abbreviation?.trim() &&
@@ -432,9 +563,9 @@ export class UnitExternalToolsComponent implements OnInit {
     );
   }
 
-  public createTutorial(mapping: MoodleGroupMapping): void {
+  public createTutorial(mapping: LmsGroupMapping): void {
     const draft = mapping.tutorialDraft;
-    if (!draft || !mapping.moodleGroupId || !this.tutorialDraftValid(mapping)) {
+    if (!draft || !mapping.lmsGroupId || !this.tutorialDraftValid(mapping)) {
       return;
     }
 
@@ -450,7 +581,7 @@ export class UnitExternalToolsComponent implements OnInit {
     tutorial.capacity = Number(draft.capacity);
     tutorial.tutor = this.unit.staffUsers.find((user) => user.id === draft.tutorId);
 
-    this.creatingTutorials.add(mapping.moodleGroupId);
+    this.creatingTutorials.add(mapping.lmsGroupId);
     this.tutorialService
       .create(
         {},
@@ -462,7 +593,7 @@ export class UnitExternalToolsComponent implements OnInit {
       )
       .pipe(
         finalize(() => {
-          this.creatingTutorials.delete(mapping.moodleGroupId);
+          this.creatingTutorials.delete(mapping.lmsGroupId);
           this.changeDetector.markForCheck();
         }),
       )
@@ -490,8 +621,8 @@ export class UnitExternalToolsComponent implements OnInit {
     return this.integration.groupMappings.every((mapping) => this.groupMappingValid(mapping));
   }
 
-  public groupMappingValid(mapping: MoodleGroupMapping): boolean {
-    if (!mapping.moodleGroupId || !mapping.moodleGroupName || !mapping.targetType) {
+  public groupMappingValid(mapping: LmsGroupMapping): boolean {
+    if (!mapping.lmsGroupId || !mapping.lmsGroupName || !mapping.targetType) {
       return false;
     }
     if (mapping.targetType === 'ignore') {
@@ -512,24 +643,12 @@ export class UnitExternalToolsComponent implements OnInit {
     return mapping.createTutorialIfMissing ? !!mapping.tutorialStreamId : !!mapping.tutorialId;
   }
 
-  public get apiKeyInputValue(): string {
-    if (this.editingApiKey || this.apiKey) {
-      return this.apiKey;
-    }
-    return this.integration.apiKeyConfigured ? '*********************' : '';
-  }
-
-  public updateApiKey(value: string): void {
-    this.apiKey = value;
-  }
-
   public get settingsDirty(): boolean {
     const assignmentId = this.integration.fetchExtensions ? this.integration.assignmentId : null;
     return (
-      this.apiKey.length > 0 ||
-      this.integration.courseId !== this.savedCourseId ||
       this.integration.fetchExtensions !== this.savedFetchExtensions ||
       this.integration.autoSyncStudents !== this.savedAutoSyncStudents ||
+      this.integration.withdrawMissingStudents !== this.savedWithdrawMissingStudents ||
       this.integration.autoSyncExtensions !== this.savedAutoSyncExtensions ||
       assignmentId !== this.savedAssignmentId ||
       this.integration.assignmentName !== this.savedAssignmentName ||
@@ -538,16 +657,12 @@ export class UnitExternalToolsComponent implements OnInit {
     );
   }
 
-  public get connectionSettingsDirty(): boolean {
-    return this.apiKey.length > 0 || this.integration.courseId !== this.savedCourseId;
-  }
-
   private rememberSavedSettings(): void {
-    this.savedCourseId = this.integration.courseId;
     this.savedAssignmentId = this.integration.assignmentId;
     this.savedAssignmentName = this.integration.assignmentName;
     this.savedFetchExtensions = this.integration.fetchExtensions;
     this.savedAutoSyncStudents = this.integration.autoSyncStudents;
+    this.savedWithdrawMissingStudents = this.integration.withdrawMissingStudents;
     this.savedAutoSyncExtensions = this.integration.autoSyncExtensions;
     this.savedGroupMappingEnabled = this.integration.groupMappingEnabled;
     this.savedGroupMappings = JSON.stringify(this.integration.groupMappings);
@@ -559,67 +674,21 @@ export class UnitExternalToolsComponent implements OnInit {
         {
           id: this.integration.assignmentId,
           name: this.integration.assignmentName,
-          duedate: 0,
+          dueDate: 0,
         },
       ];
     }
   }
 
   private restoreSavedGroups(): void {
-    this.moodleGroups = this.integration.groupMappings.map((mapping) => ({
-      id: mapping.moodleGroupId,
-      name: mapping.moodleGroupName,
+    this.lmsGroups = this.integration.groupMappings.map((mapping) => ({
+      id: mapping.lmsGroupId,
+      name: mapping.lmsGroupName,
     }));
     this.updateDuplicateMappingNotices();
   }
 
-  private showConnectionTest(job: SidekiqJob): void {
-    if (!job?.id) {
-      this.alerts.error('Failed to start Moodle connection test.');
-      return;
-    }
-
-    this.sidekiqProgressModal.show('Testing Moodle API connection', job.id).subscribe({
-      next: (completedJob) => {
-        this.connection = JSON.parse(completedJob.result) as MoodleConnectionResult;
-        this.assignments = this.connection.assignments;
-        this.moodleGroups = this.connection.groups;
-        const assignmentsLoaded = this.connection.permissions.find(
-          (permission) => permission.function === 'mod_assign_get_assignments',
-        )?.success;
-        if (this.integration.fetchExtensions) {
-          if (assignmentsLoaded) {
-            this.reconcileMoodleAssignment();
-          } else {
-            this.integration.validated = false;
-            this.integration.validatedAt = null;
-            this.alerts.error(
-              'Moodle assignments could not be checked, so the selected assignment was left unchanged.',
-            );
-          }
-        }
-        const groupsLoaded = this.connection.permissions.find(
-          (permission) => permission.function === 'core_group_get_course_groups',
-        )?.success;
-        if (groupsLoaded) {
-          this.reconcileMoodleGroupMappings();
-        } else {
-          this.integration.validated = false;
-          this.integration.validatedAt = null;
-          this.alerts.error(
-            'Moodle groups could not be checked, so existing group mappings were left unchanged.',
-          );
-        }
-        this.changeDetector.markForCheck();
-      },
-      error: (error) => {
-        this.alerts.error(this.errorMessage(error));
-        this.changeDetector.markForCheck();
-      },
-    });
-  }
-
-  private reconcileMoodleAssignment(): void {
+  private reconcileLmsAssignment(): void {
     if (!this.integration.fetchExtensions || !this.integration.assignmentId) {
       return;
     }
@@ -628,9 +697,9 @@ export class UnitExternalToolsComponent implements OnInit {
     const selectedName = this.integration.assignmentName;
     const liveAssignment = this.assignments.find((assignment) => assignment.id === selectedId);
     if (!liveAssignment) {
-      this.assignmentSyncIssue = `The Moodle assignment “${selectedName}” no longer exists. Select another assignment.`;
+      this.assignmentSyncIssue = `The LMS assignment “${selectedName}” no longer exists. Select another assignment.`;
     } else if (liveAssignment.name !== selectedName) {
-      this.assignmentSyncIssue = `The Moodle assignment was renamed from “${selectedName}” to “${liveAssignment.name}”. Select it again to confirm the change.`;
+      this.assignmentSyncIssue = `The LMS assignment was renamed from “${selectedName}” to “${liveAssignment.name}”. Select it again to confirm the change.`;
     } else {
       this.assignmentSyncIssue = null;
       return;
@@ -642,16 +711,16 @@ export class UnitExternalToolsComponent implements OnInit {
     this.integration.validatedAt = null;
   }
 
-  private reconcileMoodleGroupMappings(): void {
-    if (!this.connection) {
+  private reconcileLmsGroupMappings(): void {
+    if (!this.courseData) {
       return;
     }
 
-    const liveGroups = new Map(this.connection.groups.map((group) => [group.id, group]));
+    const liveGroups = new Map(this.courseData.groups.map((group) => [group.id, group]));
     const knownGroupIds: Set<number> = new Set();
 
     for (const mapping of this.integration.groupMappings) {
-      const groupId = mapping.moodleGroupId ?? mapping.syncIssue?.previousMoodleGroupId;
+      const groupId = mapping.lmsGroupId ?? mapping.syncIssue?.previousLmsGroupId;
       if (!groupId) {
         continue;
       }
@@ -662,46 +731,51 @@ export class UnitExternalToolsComponent implements OnInit {
         this.integration.validated = false;
         this.integration.validatedAt = null;
         if (mapping.syncIssue?.kind !== 'deleted') {
-          const previousName = mapping.moodleGroupName;
+          const previousName = mapping.lmsGroupName;
           mapping.syncIssue = {
             kind: 'deleted',
-            message: `The Moodle group “${previousName}” no longer exists. Select another Moodle group or delete this mapping.`,
-            previousMoodleGroupId: groupId,
+            message: `The LMS group “${previousName}” no longer exists. Select another LMS group or delete this mapping.`,
+            previousLmsGroupId: groupId,
           };
-          mapping.moodleGroupId = null;
+          mapping.lmsGroupId = null;
         }
         this.editingGroupMappings.add(mapping);
         continue;
       }
 
-      if (mapping.moodleGroupId === null) {
-        mapping.moodleGroupId = liveGroup.id;
+      if (mapping.lmsGroupId === null) {
+        mapping.lmsGroupId = liveGroup.id;
         mapping.syncIssue = {
           kind: 'added',
-          message: `The Moodle group “${liveGroup.name}” is available again. Review and confirm this mapping.`,
+          message: `The LMS group “${liveGroup.name}” is available again. Review and confirm this mapping.`,
         };
         this.editingGroupMappings.add(mapping);
       }
-      if (mapping.moodleGroupName !== liveGroup.name) {
+      if (mapping.lmsGroupName !== liveGroup.name) {
         this.integration.validated = false;
         this.integration.validatedAt = null;
-        const previousName = mapping.moodleGroupName;
-        mapping.moodleGroupName = liveGroup.name;
+        const previousName = mapping.lmsGroupName;
+        mapping.lmsGroupName = liveGroup.name;
         mapping.syncIssue = {
           kind: 'renamed',
-          message: `This Moodle group was renamed from “${previousName}” to “${liveGroup.name}”. Review and confirm this mapping.`,
+          message: `This LMS group was renamed from “${previousName}” to “${liveGroup.name}”. Review and confirm this mapping.`,
         };
         this.editingGroupMappings.add(mapping);
       }
     }
 
-    const missingGroups = this.connection.groups.filter((group) => !knownGroupIds.has(group.id));
+    // Only prompt for new groups once mapping is in use, so plain student imports stay quiet.
+    if (!this.integration.groupMappingEnabled) {
+      return;
+    }
+
+    const missingGroups = this.courseData.groups.filter((group) => !knownGroupIds.has(group.id));
     if (!missingGroups.length) {
       return;
     }
 
     this.prefilling = true;
-    this.moodleService
+    this.lmsService
       .prefillGroupMappings(this.unit.id, missingGroups)
       .pipe(
         finalize(() => {
@@ -710,29 +784,29 @@ export class UnitExternalToolsComponent implements OnInit {
         }),
       )
       .subscribe({
-        next: (result) => this.addNewMoodleGroupMappings(result.groupMappings),
+        next: (result) => this.addNewLmsGroupMappings(result.groupMappings),
         error: (error) => {
           const mappings = missingGroups.map((group) => {
-            const mapping = new MoodleGroupMapping();
-            mapping.moodleGroupId = group.id;
-            mapping.moodleGroupName = group.name;
+            const mapping = new LmsGroupMapping();
+            mapping.lmsGroupId = group.id;
+            mapping.lmsGroupName = group.name;
             return mapping;
           });
-          this.addNewMoodleGroupMappings(mappings);
+          this.addNewLmsGroupMappings(mappings);
           this.alerts.error(
-            `New Moodle groups were added for manual mapping, but automatic pre-fill failed: ${this.errorMessage(error)}`,
+            `New LMS groups were added for manual mapping, but automatic pre-fill failed: ${this.errorMessage(error)}`,
           );
         },
       });
   }
 
-  private addNewMoodleGroupMappings(mappings: MoodleGroupMapping[]): void {
+  private addNewLmsGroupMappings(mappings: LmsGroupMapping[]): void {
     this.integration.validated = false;
     this.integration.validatedAt = null;
     for (const mapping of mappings) {
       mapping.syncIssue = {
         kind: 'added',
-        message: `The Moodle group “${mapping.moodleGroupName}” is new. Review and confirm this mapping.`,
+        message: `The LMS group “${mapping.lmsGroupName}” is new. Review and confirm this mapping.`,
       };
       this.integration.groupMappings.push(mapping);
       this.editingGroupMappings.add(mapping);
@@ -741,54 +815,43 @@ export class UnitExternalToolsComponent implements OnInit {
     this.updateDuplicateMappingNotices();
   }
 
-  private showIntegrationValidation(job: SidekiqJob): void {
-    if (!job?.id) {
-      this.alerts.error('Failed to start Moodle integration validation.');
-      return;
+  private applyValidationResult(result: LmsIntegrationValidationResult): void {
+    this.integration.validated = result.valid;
+    this.integration.validatedAt = result.validated_at;
+    if (this.courseData && this.integration.groupMappingEnabled) {
+      this.courseData.groups = result.groups;
+      this.lmsGroups = result.groups;
+      this.reconcileLmsGroupMappings();
     }
-
-    this.sidekiqProgressModal.show('Validating Moodle integration', job.id).subscribe({
-      next: (completedJob) => {
-        const result = JSON.parse(completedJob.result) as MoodleIntegrationValidationResult;
-        this.integration.validated = result.valid;
-        this.integration.validatedAt = result.validated_at;
-        if (this.connection) {
-          this.connection.groups = result.groups;
-          this.moodleGroups = result.groups;
-          this.reconcileMoodleGroupMappings();
-        }
-        this.assignments = result.assignments;
-        this.reconcileMoodleAssignment();
-        const assignmentIssue = result.issues.find((item) => item.type.startsWith('assignment_'));
-        if (assignmentIssue && !this.assignmentSyncIssue) {
-          this.assignmentSyncIssue = assignmentIssue.message;
-        }
-        this.updateDuplicateMappingNotices();
-        for (const issue of result.issues.filter((item) => item.type === 'group_invalid')) {
-          const mapping = this.integration.groupMappings.find(
-            (item) => item.moodleGroupId === issue.moodle_group_id,
-          );
-          if (mapping) {
-            mapping.syncIssue = {kind: 'invalid', message: issue.message};
-            this.editingGroupMappings.add(mapping);
-          }
-        }
-        if (result.valid) {
-          this.alerts.success('Moodle integration is valid.');
-        } else {
-          this.alerts.error(
-            'Moodle integration requires review. Resolve the highlighted settings, save, and validate again.',
-          );
-        }
-        this.changeDetector.markForCheck();
-      },
-      error: (error) => {
-        this.integration.validated = false;
-        this.integration.validatedAt = null;
-        this.alerts.error(this.errorMessage(error));
-        this.changeDetector.markForCheck();
-      },
-    });
+    if (this.integration.fetchExtensions) {
+      this.assignments = result.assignments.map((assignment) => ({
+        id: assignment.id,
+        name: assignment.name,
+        dueDate: assignment.due_date,
+      }));
+      this.reconcileLmsAssignment();
+    }
+    const assignmentIssue = result.issues.find((item) => item.type.startsWith('assignment_'));
+    if (assignmentIssue && !this.assignmentSyncIssue) {
+      this.assignmentSyncIssue = assignmentIssue.message;
+    }
+    this.updateDuplicateMappingNotices();
+    for (const issue of result.issues.filter((item) => item.type === 'group_invalid')) {
+      const mapping = this.integration.groupMappings.find(
+        (item) => item.lmsGroupId === issue.lms_group_id,
+      );
+      if (mapping) {
+        mapping.syncIssue = {kind: 'invalid', message: issue.message};
+        this.editingGroupMappings.add(mapping);
+      }
+    }
+    if (result.valid) {
+      this.alerts.success('LMS integration is valid.');
+    } else {
+      this.alerts.error(
+        'LMS integration requires review. Resolve the highlighted settings, save, and validate again.',
+      );
+    }
   }
 
   private showImportJob(
@@ -799,7 +862,7 @@ export class UnitExternalToolsComponent implements OnInit {
     refreshStudents: boolean,
   ): void {
     if (!job?.id) {
-      this.alerts.error('Failed to start Moodle import job.');
+      this.alerts.error('Failed to start LMS job.');
       return;
     }
 
@@ -809,7 +872,7 @@ export class UnitExternalToolsComponent implements OnInit {
         this.csvResultModal.show(
           resultTitle,
           result,
-          previewOnly ? 'Preview complete' : 'Import complete',
+          previewOnly ? 'Preview complete' : 'Complete',
         );
         if (refreshStudents && (result.success?.length ?? 0) > 0) {
           this.unit.refreshStudents(true);
@@ -817,8 +880,6 @@ export class UnitExternalToolsComponent implements OnInit {
         this.changeDetector.markForCheck();
       },
       error: (error) => {
-        this.integration.validated = false;
-        this.integration.validatedAt = null;
         this.alerts.error(this.errorMessage(error));
         this.changeDetector.markForCheck();
       },
@@ -826,22 +887,22 @@ export class UnitExternalToolsComponent implements OnInit {
   }
 
   private updateDuplicateMappingNotices(): void {
-    const mappingsByGroup: Map<number, MoodleGroupMapping[]> = new Map();
+    const mappingsByGroup: Map<number, LmsGroupMapping[]> = new Map();
     for (const mapping of this.integration.groupMappings) {
       mapping.duplicateNotice = undefined;
-      if (!mapping.moodleGroupId) {
+      if (!mapping.lmsGroupId) {
         continue;
       }
-      const mappings = mappingsByGroup.get(mapping.moodleGroupId) ?? [];
+      const mappings = mappingsByGroup.get(mapping.lmsGroupId) ?? [];
       mappings.push(mapping);
-      mappingsByGroup.set(mapping.moodleGroupId, mappings);
+      mappingsByGroup.set(mapping.lmsGroupId, mappings);
     }
 
     for (const mappings of mappingsByGroup.values()) {
       if (mappings.length < 2) {
         continue;
       }
-      const message = `This Moodle group has ${mappings.length} mappings; all will be applied.`;
+      const message = `This LMS group has ${mappings.length} mappings; all will be applied.`;
       mappings.forEach((mapping) => (mapping.duplicateNotice = message));
     }
   }
@@ -868,6 +929,6 @@ export class UnitExternalToolsComponent implements OnInit {
         return response.message;
       }
     }
-    return 'Moodle request failed.';
+    return 'LMS request failed.';
   }
 }

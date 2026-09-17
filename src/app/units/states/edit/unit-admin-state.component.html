@@ -44,10 +44,7 @@
         @case ('details') {
           @if (unit) {
             <div class="mx-auto max-w-[90vw]">
-              <f-unit-details-editor
-                [unit]="unit"
-                (unitUpdated)="unitUpdated($event)"
-              ></f-unit-details-editor>
+              <f-unit-details-editor [unit]="unit"></f-unit-details-editor>
             </div>
           }
         }
@@ -115,10 +112,10 @@
             </div>
           }
         }
-        @case ('moodle') {
-          @if (unit) {
+        @case ('lms') {
+          @if (unit && ltiEnabled) {
             <div class="mx-auto max-w-[90vw]">
-              <f-unit-external-tools [unit]="unit"></f-unit-external-tools>
+              <f-unit-lms-integration [unit]="unit"></f-unit-lms-integration>
             </div>
           }
         }

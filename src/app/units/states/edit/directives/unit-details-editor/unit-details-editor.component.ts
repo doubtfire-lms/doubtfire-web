@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {OverseerImage, UnitService} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
@@ -28,7 +21,6 @@ import {D2lUnitDetailsModal} from './d2l-details-form/d2l-unit-details-form.comp
 })
 export class UnitDetailsEditorComponent implements OnInit {
   @Input() unit: Unit;
-  @Output() unitUpdated: EventEmitter<Unit> = new EventEmitter();
 
   constructor(
     private teachingPeriodService: TeachingPeriodService,
@@ -230,7 +222,6 @@ export class UnitDetailsEditorComponent implements OnInit {
   saveUnit() {
     this.unitService.update(this.unit).subscribe({
       next: (_unit) => {
-        this.unitUpdated.emit(this.unit);
         this.alertsService.success('Unit updated.', 2000);
       },
       error: (response) => {

@@ -4,6 +4,7 @@ import {Observable, Subscription, first, of} from 'rxjs';
 import {Unit, UnitRole, UnitService, User, UserService} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TabManagementBase} from 'src/app/common/tabs/tab-management';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
 
 type UnitAdminTabKey =
@@ -15,7 +16,7 @@ type UnitAdminTabKey =
   | 'tasks'
   | 'content'
   | 'groups'
-  | 'moodle'
+  | 'lms'
   | 'communication';
 
 interface UnitAdminTab {
@@ -35,7 +36,7 @@ export class UnitAdminStateComponent
 {
   @Input() public unit$: Observable<Unit>;
 
-  public tabs: UnitAdminTab[] = [
+  public readonly tabs: UnitAdminTab[] = [
     {label: 'Unit Details', routeSegment: 'details'},
     {label: 'Content', routeSegment: 'content'},
     {label: 'Learning Outcomes', routeSegment: 'learning-outcomes'},
@@ -44,7 +45,7 @@ export class UnitAdminStateComponent
     {label: 'Students', routeSegment: 'students'},
     {label: 'Tasks', routeSegment: 'tasks'},
     {label: 'Groups', routeSegment: 'groups'},
-    {label: 'Moodle', routeSegment: 'moodle'},
+    {label: 'LMS', routeSegment: 'lms'},
     {label: 'Communications', routeSegment: 'communication'},
   ];
 
@@ -53,7 +54,7 @@ export class UnitAdminStateComponent
   public assessingUnitRole: UnitRole | null = null;
   public currentTab: UnitAdminTab = this.tabs[0];
   public loadingUnit = true;
-  public savedMoodleEnabled = false;
+  public ltiEnabled = false;
 
   protected readonly routeSegment = 'admin';
 
@@ -66,11 +67,18 @@ export class UnitAdminStateComponent
     private unitService: UnitService,
     private alerts: AlertService,
     private globalStateService: GlobalStateService,
+    private constants: DoubtfireConstants,
   ) {
     super(route, router);
   }
 
   public ngOnInit(): void {
+    this.subscriptions.push(
+      this.constants.IsLtiEnabled.subscribe((enabled) => {
+        this.ltiEnabled = enabled;
+        this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'));
+      }),
+    );
     this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'));
 
     this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
@@ -98,11 +106,7 @@ export class UnitAdminStateComponent
   }
 
   public override get visibleTabs(): UnitAdminTab[] {
-    return this.tabs.filter((tab) => tab.routeSegment !== 'moodle' || this.savedMoodleEnabled);
-  }
-
-  public unitUpdated(unit: Unit): void {
-    this.savedMoodleEnabled = unit.moodleEnabled;
+    return this.tabs.filter((tab) => tab.routeSegment !== 'lms' || this.ltiEnabled);
   }
 
   private findUnitRole(unitId: number): UnitRole | null {
@@ -148,12 +152,6 @@ export class UnitAdminStateComponent
       this.unitService.loadDetails(unitId).subscribe({
         next: (unit) => {
           this.unit = unit;
-          this.savedMoodleEnabled = unit.moodleEnabled;
-          const requestedTab = this.route.snapshot.paramMap.get('tab');
-          this.updateCurrentTabFromState(requestedTab);
-          if (requestedTab === 'moodle' && !this.savedMoodleEnabled) {
-            this.router.navigate(['/units', unit.id, 'admin', 'details'], {replaceUrl: true});
-          }
 
           if (this.assessingUnitRole) {
             this.assessingUnitRole.unit = unit;

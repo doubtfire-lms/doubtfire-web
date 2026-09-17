@@ -1,20 +1,20 @@
 import {CachedEntityService} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {MoodleGroupMapping} from 'src/app/api/models/moodle-integration';
+import {LmsGroupMapping} from 'src/app/api/models/lms-integration';
 import API_URL from 'src/app/config/constants/apiUrl';
 
 @Injectable()
-export class MoodleGroupMappingService extends CachedEntityService<MoodleGroupMapping> {
-  protected readonly endpointFormat = 'moodle_group_mappings/:id:';
+export class LmsGroupMappingService extends CachedEntityService<LmsGroupMapping> {
+  protected readonly endpointFormat = 'lms_group_mappings/:id:';
 
   constructor(httpClient: HttpClient) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
       'id',
-      'moodleGroupId',
-      'moodleGroupName',
+      'lmsGroupId',
+      'lmsGroupName',
       'targetType',
       'groupSetId',
       'groupId',
@@ -39,7 +39,7 @@ export class MoodleGroupMappingService extends CachedEntityService<MoodleGroupMa
     this.mapping.onlyMapChanges = false;
   }
 
-  public createInstanceFrom(): MoodleGroupMapping {
-    return new MoodleGroupMapping();
+  public createInstanceFrom(): LmsGroupMapping {
+    return new LmsGroupMapping();
   }
 }
