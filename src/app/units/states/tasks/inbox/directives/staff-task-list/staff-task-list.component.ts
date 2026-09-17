@@ -600,6 +600,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
           if (
             this.viewType === 'inbox' &&
+            !this.watchingTaskKey &&
             requestedTaskKey &&
             !this.filteredTasks?.some((task) => task?.hasTaskKey(requestedTaskKey))
           ) {

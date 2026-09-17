@@ -3,13 +3,14 @@ import {Router} from '@angular/router';
 import {ProjectService, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
-import {LtiService} from 'src/app/api/services/lti.service';
+import {GradeLineItemStatus, LtiService} from 'src/app/api/services/lti.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
   selector: 'f-lti-dashboard',
@@ -30,6 +31,7 @@ export class LtiDashboardComponent implements AfterViewInit {
     private confirmationModalService: ConfirmationModalService,
     private csvResultModalService: CsvResultModalService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
+    private constants: DoubtfireConstants,
   ) {}
 
   // linkedUnit: UnitLink;
@@ -42,6 +44,9 @@ export class LtiDashboardComponent implements AfterViewInit {
 
   isSyncingGrades: boolean;
   isSyncingEnrolments: boolean;
+  isLoadingGradeLineItemStatus: boolean;
+  gradeLineItemStatus: GradeLineItemStatus;
+  externalName = this.constants.ExternalName;
 
   ngAfterViewInit(): void {
     // Scroll to the bottom of the page in case the header is visible
@@ -60,6 +65,13 @@ export class LtiDashboardComponent implements AfterViewInit {
           if (!link) {
             this.isLoading = false;
             return;
+          }
+
+          if (
+            this.currentUser?.systemRole === 'Convenor' ||
+            this.currentUser?.systemRole === 'Admin'
+          ) {
+            this.loadGradeLineItemStatus();
           }
 
           // this.getGrade();
@@ -94,6 +106,25 @@ export class LtiDashboardComponent implements AfterViewInit {
     });
   }
 
+  private loadGradeLineItemStatus(): void {
+    this.isLoadingGradeLineItemStatus = true;
+    this.ltiService.getGradeLineItemStatus().subscribe({
+      next: (status) => {
+        this.gradeLineItemStatus = status;
+        this.isLoadingGradeLineItemStatus = false;
+      },
+      error: (error) => {
+        console.error(error);
+        this.gradeLineItemStatus = {
+          configured: false,
+          visibility: 'unknown',
+        };
+        this.isLoadingGradeLineItemStatus = false;
+        this.alertsService.error(error.error || 'Failed to check the Moodle grade item.', 6000);
+      },
+    });
+  }
+
   goToLinkUnit(): void {
     this.router.navigate(['/lti/link']);
   }
@@ -102,6 +133,7 @@ export class LtiDashboardComponent implements AfterViewInit {
     this.ltiService.removeUnitLink().subscribe({
       next: () => {
         this.linkedUnit = null;
+        this.gradeLineItemStatus = undefined;
       },
       error: (error) => {
         console.error(error);
@@ -185,9 +217,17 @@ export class LtiDashboardComponent implements AfterViewInit {
   }
 
   syncStudentsGrades(): void {
+    if (!this.gradeLineItemStatus?.configured) {
+      this.alertsService.error(
+        'A Moodle grade item must be linked before grades can be synced.',
+        6000,
+      );
+      return;
+    }
+
     this.confirmationModalService.show(
       'Sync Grades from OnTrack',
-      'Are you sure you want to sync portfolio grades from OnTrack? Please confirm that grades are final and approved for release.',
+      `Before syncing, check in Moodle Gradebook setup that the ${this.externalName.value} grade item is hidden from students. Continue only if it is hidden or the grades are approved for release.`,
       () => {
         this.isSyncingGrades = true;
         this.ltiService.syncStudentsGrades().subscribe({
@@ -198,8 +238,8 @@ export class LtiDashboardComponent implements AfterViewInit {
           },
           error: (error) => {
             console.error(error);
-            this.alertsService.error(`Failed to retrieve grade`);
-            this.isSyncingGrades = true;
+            this.alertsService.error(error.error || `Failed to sync grades`);
+            this.isSyncingGrades = false;
           },
         });
       },
