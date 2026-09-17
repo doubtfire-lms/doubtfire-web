@@ -50,6 +50,7 @@ export class UnitLmsIntegrationComponent implements OnInit {
   public validatingIntegration = false;
   public assignmentSyncIssue: string | null = null;
   public creatingTutorials: Set<number> = new Set();
+  public preparingTutorialDrafts: Set<LmsGroupMapping> = new Set();
   public editingGroupMappings: Set<LmsGroupMapping> = new Set();
   public readonly tutorialDays = [
     'Monday',
@@ -561,6 +562,59 @@ export class UnitLmsIntegrationComponent implements OnInit {
       Number(draft.capacity) > 0 &&
       draft.tutorId
     );
+  }
+
+  /**
+   * Switches a tutorial mapping to creating a new tutorial, pre-filled from institution settings
+   * when they can read the LMS group name.
+   */
+  public startTutorialDraft(mapping: LmsGroupMapping): void {
+    if (!mapping.lmsGroupId) {
+      this.alerts.error('Select an LMS group first.');
+      return;
+    }
+
+    const fallbackDraft = {
+      abbreviation: mapping.lmsGroupName,
+      campusId: null,
+      tutorialStreamId: mapping.tutorialStreamId,
+      meetingLocation: '',
+      meetingDay: '',
+      meetingTime: '',
+      capacity: null,
+      tutorId: null,
+    };
+
+    this.preparingTutorialDrafts.add(mapping);
+    this.lmsService
+      .prefillGroupMappings(this.unit.id, [{id: mapping.lmsGroupId, name: mapping.lmsGroupName}])
+      .pipe(
+        finalize(() => {
+          this.preparingTutorialDrafts.delete(mapping);
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (result) => {
+          const suggestion = result.groupMappings[0]?.tutorialDraft;
+          mapping.tutorialId = null;
+          mapping.tutorialDraft = suggestion
+            ? {
+                ...suggestion,
+                tutorialStreamId: suggestion.tutorialStreamId ?? mapping.tutorialStreamId,
+              }
+            : fallbackDraft;
+        },
+        error: () => {
+          mapping.tutorialId = null;
+          mapping.tutorialDraft = fallbackDraft;
+        },
+      });
+  }
+
+  public cancelTutorialDraft(mapping: LmsGroupMapping): void {
+    mapping.tutorialDraft = undefined;
+    this.editingGroupMappings.add(mapping);
   }
 
   public createTutorial(mapping: LmsGroupMapping): void {

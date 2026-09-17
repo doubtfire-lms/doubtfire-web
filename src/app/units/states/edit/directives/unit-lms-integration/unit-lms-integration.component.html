@@ -393,7 +393,23 @@
                                       </mat-option>
                                     }
                                   </mat-select>
+                                  <mat-hint>Not listed? Create a new tutorial instead.</mat-hint>
                                 </mat-form-field>
+                                <div class="lg:col-span-4">
+                                  <button
+                                    mat-stroked-button
+                                    type="button"
+                                    [disabled]="!courseData || preparingTutorialDrafts.has(mapping)"
+                                    (click)="startTutorialDraft(mapping)"
+                                  >
+                                    <mat-icon>add</mat-icon>
+                                    {{
+                                      preparingTutorialDrafts.has(mapping)
+                                        ? 'Preparing…'
+                                        : 'Create a new tutorial instead'
+                                    }}
+                                  </button>
+                                </div>
                               }
                             }
 
@@ -512,6 +528,15 @@
                                   ? 'Creating…'
                                   : 'Create tutorial'
                               }}
+                            </button>
+                            <button
+                              class="ml-2"
+                              mat-button
+                              type="button"
+                              [disabled]="creatingTutorials.has(mapping.lmsGroupId)"
+                              (click)="cancelTutorialDraft(mapping)"
+                            >
+                              Select an existing tutorial instead
                             </button>
                           }
 
