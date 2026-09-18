@@ -63,18 +63,6 @@
             then relaunch OnTrack from the LMS.
           </p>
         }
-        @if (!link.courseDataAvailable) {
-          <p class="text-sm opacity-70">
-            Group mapping and extension imports need the OnTrack Moodle plugin.
-          </p>
-        }
-        @if (
-          link.capabilitiesCheckedAt && (!link.namesAndRolesAvailable || !link.courseDataAvailable)
-        ) {
-          <p class="mt-1 text-xs opacity-70">
-            Checked at last launch, {{ link.capabilitiesCheckedAt | date: 'd MMM y, h:mm a' }}
-          </p>
-        }
       </mat-card-content>
       <mat-card-actions class="flex flex-wrap gap-2">
         <button
