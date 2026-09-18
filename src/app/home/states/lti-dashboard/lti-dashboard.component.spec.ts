@@ -20,12 +20,12 @@ describe('LtiDashboardComponent grade setup', () => {
       ltiService as never,
       {} as never,
       {} as never,
-      {} as never,
-      {} as never,
-      {} as never,
-      {} as never,
-      {} as never,
       alerts as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
       {ExternalName: of('OnTrack')} as never,
     );
     return {component, ltiService, alerts};
