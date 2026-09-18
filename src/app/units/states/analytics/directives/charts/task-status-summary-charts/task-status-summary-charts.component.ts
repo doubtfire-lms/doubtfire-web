@@ -156,7 +156,14 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
   campusFilter: string = 'all';
 
   get tutorials(): string[] {
-    return this.unit?.tutorials.map((tutorial) => tutorial.abbreviation).filter(Boolean) ?? [];
+    return (
+      this.unit?.tutorials
+        .filter(
+          (tutorial) => this.campusFilter === 'all' || tutorial.campus?.name === this.campusFilter,
+        )
+        .map((tutorial) => tutorial.abbreviation)
+        .filter(Boolean) ?? []
+    );
   }
 
   get taskGradeOptions(): number[] {

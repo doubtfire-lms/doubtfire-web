@@ -135,8 +135,8 @@ export function getTaskStats(
   );
 
   return Object.fromEntries(
-    Object.entries(filteredStats).filter(
-      ([taskCode]) => taskGradeFilter.includes(taskGradeByCode.get(taskCode)),
+    Object.entries(filteredStats).filter(([taskCode]) =>
+      taskGradeFilter.includes(taskGradeByCode.get(taskCode)),
     ),
   );
 }

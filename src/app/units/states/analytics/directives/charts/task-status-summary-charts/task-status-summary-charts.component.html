@@ -9,7 +9,7 @@
     <div class="flex items-center gap-2 p-4">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>Campus</mat-label>
-        <mat-select [(ngModel)]="campusFilter">
+        <mat-select [(ngModel)]="campusFilter" (ngModelChange)="onFilterChange()">
           <mat-option value="all">All</mat-option>
           @for (campus of campuses; track campus) {
             <mat-option [value]="campus">{{ campus }}</mat-option>
@@ -57,10 +57,10 @@
   @if (chartView === 'snapshots') {
     <f-normalised-task-status-chart
       [campusFilter]="campusFilter"
-      [taskGradeFilter]="taskGradeFilter"
-      [tutorialFilter]="tutorialFilter"
       [selectedSnapshotIndex]="sliderSelect"
       [snapshots]="snapshots"
+      [taskGradeFilter]="taskGradeFilter"
+      [tutorialFilter]="tutorialFilter"
       [unit]="unit"
     />
     <div class="px-4 pt-2 pb-8">
@@ -133,9 +133,9 @@
   } @else {
     <f-stacked-area-status-chart
       [campusFilter]="campusFilter"
+      [snapshots]="snapshots"
       [taskGradeFilter]="taskGradeFilter"
       [tutorialFilter]="tutorialFilter"
-      [snapshots]="snapshots"
       [unit]="unit"
     />
   }
