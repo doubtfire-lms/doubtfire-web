@@ -1,5 +1,5 @@
-import {MediaObserver} from 'ng-flex-layout';
 import {beforeEach, describe, expect, it} from 'vitest';
+import {BreakpointObserver} from '@angular/cdk/layout';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatMenuModule} from '@angular/material/menu';
@@ -12,7 +12,7 @@ describe('UnitDropdownComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [UnitDropdownComponent],
       imports: [MatMenuModule],
-      providers: [{provide: MediaObserver, useValue: {isActive: () => false}}],
+      providers: [{provide: BreakpointObserver, useValue: {isMatched: () => false}}],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
