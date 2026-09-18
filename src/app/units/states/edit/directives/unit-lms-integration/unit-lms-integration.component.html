@@ -2,115 +2,111 @@
   <div class="header">
     <h3>LMS</h3>
     <p>
-      Connect this unit to its LMS course through the {{ externalName | async }} external tool to
-      import students and extensions, and send grades back to the course gradebook.
+      Import students and extensions, and send grades to your LMS gradebook. Course links are
+      created through the {{ externalName | async }} external tool in your LMS.
     </p>
   </div>
 
   @if (loading) {
-    <mat-card appearance="outlined">
-      <mat-card-content class="flex items-center gap-3 pt-4">
-        <mat-spinner diameter="24"></mat-spinner>
-        Checking the LMS link…
-      </mat-card-content>
-    </mat-card>
+    <div class="flex flex-col items-center justify-center gap-4 py-12" role="status">
+      <mat-spinner diameter="32"></mat-spinner>
+      Checking the LMS link…
+    </div>
   } @else if (!link) {
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <mat-icon mat-card-avatar [color]="linkError ? 'warn' : undefined">
-          {{ linkError ? 'error' : 'link_off' }}
-        </mat-icon>
-        <mat-card-title>
-          {{ linkError ? 'Unable to check the LMS link' : 'Not linked to an LMS course' }}
-        </mat-card-title>
-        <mat-card-subtitle>
-          @if (linkError) {
-            {{ linkError }}
-          } @else {
-            Add OnTrack as an external tool in the LMS course, launch it, and link it to
-            {{ unit.code }}.
-          }
-        </mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-actions>
-        <button mat-stroked-button type="button" (click)="loadOverview()">
-          <mat-icon>refresh</mat-icon>
-          Check again
-        </button>
-      </mat-card-actions>
-    </mat-card>
+    <div class="mx-auto flex max-w-4xl flex-col items-center justify-center py-12 text-center">
+      <mat-icon class="size-[75px]! text-[75px]!" [color]="linkError ? 'warn' : undefined">
+        {{ linkError ? 'error' : 'cloud_off' }}
+      </mat-icon>
+      <h1>
+        {{ linkError ? 'Unable to check the LMS link' : 'Not linked to an LMS course' }}
+      </h1>
+      <p class="p-1 text-center text-gray-500">
+        @if (linkError) {
+          {{ linkError }}
+        } @else {
+          Launch the {{ externalName | async }} external tool from your LMS course to link
+          {{ unit.code }}, then refresh this page to manage syncing.
+        }
+      </p>
+      <button mat-raised-button type="button" (click)="loadOverview()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
   } @else {
     @let appName = externalName | async;
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <div class="flex items-center justify-center" mat-card-avatar>
-          <mat-icon>school</mat-icon>
+    <section aria-label="Linked LMS course" class="py-4">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex min-w-0 items-center gap-3">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Connected to LMS"
+            class="size-10! shrink-0 text-[40px]! text-green-600"
+            role="img"
+            >cloud_done</mat-icon
+          >
+          <div class="min-w-0">
+            <h4 class="m-0 font-medium break-words">
+              @if (courseLabel && !courseTitle.startsWith(courseLabel)) {
+                {{ courseLabel }} ·
+              }
+              {{ courseTitle }}
+            </h4>
+            @let course = courseData?.course;
+            @if (course?.startDate || course?.endDate) {
+              <p class="mt-1 mb-0 opacity-70">
+                @if (course.startDate) {
+                  @if (!course.endDate) {
+                    From
+                  }
+                  {{ course.startDate * 1000 | date: 'd MMM y' }}
+                }
+                @if (course.startDate && course.endDate) {
+                  —
+                }
+                @if (course.endDate) {
+                  @if (!course.startDate) {
+                    Until
+                  }
+                  {{ course.endDate * 1000 | date: 'd MMM y' }}
+                }
+              </p>
+            }
+          </div>
         </div>
-        <mat-card-title>{{ courseTitle }}</mat-card-title>
-        <mat-card-subtitle>LMS course {{ courseLabel || unit.code }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content class="mt-4">
-        @let course = courseData?.course;
-        @if (course?.startDate || course?.endDate) {
-          <p class="mb-3 flex items-center gap-2 text-sm">
-            <mat-icon class="opacity-70">event</mat-icon>
-            <span>
-              <span class="opacity-70">LMS course dates</span>
-              @if (course.startDate) {
-                {{ course.startDate * 1000 | date: 'd MMM y' }}
-              }
-              @if (course.startDate && course.endDate) {
-                –
-              }
-              @if (course.endDate) {
-                {{ course.endDate * 1000 | date: 'd MMM y' }}
-              }
-            </span>
-          </p>
-        }
-        <p class="max-w-prose text-sm opacity-80">
-          {{ unit.code }} is linked to this course through the {{ appName }} external tool in your
-          LMS. This lets {{ appName }} read the course's members, groups and assignments, so you can
-          bring students and extensions into the unit and send grades back to the course gradebook.
-        </p>
-        @if (link.contextError) {
-          <div class="mt-4 flex items-center gap-2 rounded bg-amber-50 p-3 text-amber-900">
-            <mat-icon>warning</mat-icon>
-            <span>Showing the course details from the last launch. {{ link.contextError }}</span>
-          </div>
-        }
-        @if (!link.namesAndRolesAvailable) {
-          <div class="mt-4 flex items-center gap-2 rounded bg-amber-50 p-3 text-amber-900">
-            <mat-icon>warning</mat-icon>
-            <span>
-              Can't read the course members. Enable Names and Role Provisioning for the
-              {{ appName }} tool, then relaunch {{ appName }} from the LMS.
-            </span>
-          </div>
-        }
-      </mat-card-content>
-      <mat-card-actions class="flex flex-wrap justify-end gap-2">
-        <button
-          mat-stroked-button
-          type="button"
-          [disabled]="refreshing || loadingCourseData"
-          (click)="refresh()"
-        >
-          <mat-icon>{{ refreshing || loadingCourseData ? 'hourglass_top' : 'refresh' }}</mat-icon>
-          {{ refreshing || loadingCourseData ? 'Refreshing…' : 'Refresh' }}
-        </button>
-        <button
-          color="warn"
-          mat-stroked-button
-          type="button"
-          [disabled]="unlinking"
-          (click)="unlink()"
-        >
-          <mat-icon>link_off</mat-icon>
-          {{ unlinking ? 'Unlinking…' : 'Unlink' }}
-        </button>
-      </mat-card-actions>
-    </mat-card>
+        <div class="flex shrink-0 flex-wrap items-center gap-2">
+          <button
+            mat-stroked-button
+            type="button"
+            [disabled]="refreshing || loadingCourseData"
+            (click)="refresh()"
+          >
+            <mat-icon>{{ refreshing || loadingCourseData ? 'hourglass_top' : 'refresh' }}</mat-icon>
+            {{ refreshing || loadingCourseData ? 'Refreshing…' : 'Refresh' }}
+          </button>
+          <button color="warn" mat-button type="button" [disabled]="unlinking" (click)="unlink()">
+            <mat-icon>link_off</mat-icon>
+            {{ unlinking ? 'Unlinking…' : 'Unlink' }}
+          </button>
+        </div>
+      </div>
+      @if (link.contextError) {
+        <div class="mt-4 flex items-center gap-2 rounded bg-amber-50 p-3 text-amber-900">
+          <mat-icon>warning</mat-icon>
+          <span>Showing the course details from the last launch. {{ link.contextError }}</span>
+        </div>
+      }
+      @if (!link.namesAndRolesAvailable) {
+        <div class="mt-4 flex items-center gap-2 rounded bg-amber-50 p-3 text-amber-900">
+          <mat-icon>warning</mat-icon>
+          <span>
+            Can't read the course members. Enable Names and Role Provisioning for the
+            {{ appName }} tool, then relaunch {{ appName }} from the LMS.
+          </span>
+        </div>
+      }
+    </section>
+    <mat-divider></mat-divider>
 
     <mat-card appearance="outlined" class="mt-6">
       <mat-card-content>
