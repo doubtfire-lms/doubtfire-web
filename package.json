@@ -118,6 +118,6 @@
     "@nx/nx-linux-x64-gnu": "^23.2.0",
     "@nx/nx-win32-x64-msvc": "^23.2.0",
     "@rollup/rollup-linux-arm64-gnu": "^4.63.1",
-    "@rollup/rollup-linux-x64-gnu": "^4.63.1"
+    "@rollup/rollup-linux-x64-gnu": "^4.63.3"
   }
 }
