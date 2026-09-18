@@ -39,6 +39,8 @@ export interface UnitLink {
 export interface GradeLineItemStatus {
   configured: boolean;
   visibility: 'unknown';
+  reason?: 'service_not_enabled' | 'line_item_missing' | 'line_item_unavailable';
+  message?: string;
   lineItem?: {
     id: string;
     label: string;
@@ -90,6 +92,10 @@ export class LtiService {
 
   public getGradeLineItemStatus(): Observable<GradeLineItemStatus> {
     return this.httpClient.get<GradeLineItemStatus>(`${LTI_API_URL}/grade-line-item`);
+  }
+
+  public retryGradeLineItem(): Observable<GradeLineItemStatus> {
+    return this.httpClient.post<GradeLineItemStatus>(`${LTI_API_URL}/grade-line-item`, {});
   }
 
   public enrolUser(unit: UnitLink): Observable<Project | null> {

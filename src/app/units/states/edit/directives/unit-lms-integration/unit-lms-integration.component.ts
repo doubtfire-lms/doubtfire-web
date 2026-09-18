@@ -40,6 +40,7 @@ export class UnitLmsIntegrationComponent implements OnInit {
   public gradeLineItem: LmsGradeLineItemStatus | null = null;
   public gradeLineItemError: string | null = null;
   public loadingGradeLineItem = false;
+  public retryingGradeLineItem = false;
   public syncingGrades = false;
   public unlinking = false;
   public assignments: LmsAssignment[] = [];
@@ -171,6 +172,29 @@ export class UnitLmsIntegrationComponent implements OnInit {
         error: (error) => {
           this.gradeLineItem = null;
           this.gradeLineItemError = this.errorMessage(error);
+        },
+      });
+  }
+
+  public retryGradeLineItem(): void {
+    this.retryingGradeLineItem = true;
+    this.gradeLineItemError = null;
+    this.lmsService
+      .retryGradeLineItem(this.unit.id)
+      .pipe(
+        finalize(() => {
+          this.retryingGradeLineItem = false;
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (status) => {
+          this.gradeLineItem = status;
+          this.alerts.success('LMS grade item is ready.');
+        },
+        error: (error) => {
+          this.gradeLineItemError = this.errorMessage(error);
+          this.alerts.error(this.gradeLineItemError);
         },
       });
   }

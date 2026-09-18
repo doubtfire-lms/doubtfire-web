@@ -45,6 +45,7 @@ export class LtiDashboardComponent implements AfterViewInit {
   isSyncingGrades: boolean;
   isSyncingEnrolments: boolean;
   isLoadingGradeLineItemStatus: boolean;
+  isRetryingGradeLineItem: boolean;
   gradeLineItemStatus: GradeLineItemStatus;
   externalName = this.constants.ExternalName;
 
@@ -118,9 +119,31 @@ export class LtiDashboardComponent implements AfterViewInit {
         this.gradeLineItemStatus = {
           configured: false,
           visibility: 'unknown',
+          message: error || 'Failed to check the Moodle grade item.',
         };
         this.isLoadingGradeLineItemStatus = false;
         this.alertsService.error(error || 'Failed to check the Moodle grade item.', 6000);
+      },
+    });
+  }
+
+  retryGradeLineItem(): void {
+    this.isRetryingGradeLineItem = true;
+    this.ltiService.retryGradeLineItem().subscribe({
+      next: (status) => {
+        this.gradeLineItemStatus = status;
+        this.isRetryingGradeLineItem = false;
+        this.alertsService.success('Moodle grade item is ready.', 5000);
+      },
+      error: (error) => {
+        console.error(error);
+        this.gradeLineItemStatus = {
+          configured: false,
+          visibility: 'unknown',
+          message: error || 'Failed to find or create the Moodle grade item.',
+        };
+        this.isRetryingGradeLineItem = false;
+        this.alertsService.error(error || 'Failed to find or create the Moodle grade item.', 6000);
       },
     });
   }

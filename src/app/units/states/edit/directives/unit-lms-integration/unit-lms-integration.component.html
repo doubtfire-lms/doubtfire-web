@@ -133,9 +133,9 @@
           @if (loadingGradeLineItem) {
             <p>Checking the LMS grade item…</p>
           } @else if (gradeLineItemError) {
-            <p class="flex items-center gap-1">
+            <p class="flex items-start gap-1 rounded bg-amber-50 p-3 text-amber-900">
               <mat-icon color="warn">error</mat-icon>
-              {{ gradeLineItemError }}
+              <span>{{ gradeLineItemError }}</span>
             </p>
           } @else if (gradeLineItem?.configured) {
             <p>
@@ -143,9 +143,14 @@
               (out of {{ gradeLineItem.lineItem?.scoreMaximum }}).
             </p>
           } @else {
-            <p>
-              The LMS grade item created when this unit was linked is no longer available. Unlink
-              and link the unit again from the LMS to recreate it.
+            <p class="flex items-start gap-1 rounded bg-amber-50 p-3 text-amber-900">
+              <mat-icon color="warn">warning</mat-icon>
+              <span>
+                {{
+                  gradeLineItem?.message ||
+                    "Grade sync has not been enabled for the OnTrack LTI tool. In Moodle, edit the OnTrack external tool and set 'IMS LTI Assignment and Grade Services' to 'Use this service for grade sync and column management', then relaunch OnTrack and retry."
+                }}
+              </span>
             </p>
           }
           <div class="mt-3 flex flex-wrap gap-3">
@@ -159,6 +164,17 @@
               <mat-icon>grading</mat-icon>
               {{ syncingGrades ? 'Starting grade sync…' : 'Send grades to LMS' }}
             </button>
+            @if (gradeLineItemError || !gradeLineItem?.configured) {
+              <button
+                mat-stroked-button
+                type="button"
+                [disabled]="retryingGradeLineItem || loadingGradeLineItem"
+                (click)="retryGradeLineItem()"
+              >
+                <mat-icon>{{ retryingGradeLineItem ? 'hourglass_top' : 'refresh' }}</mat-icon>
+                {{ retryingGradeLineItem ? 'Retrying…' : 'Retry grade setup' }}
+              </button>
+            }
           </div>
         </section>
 

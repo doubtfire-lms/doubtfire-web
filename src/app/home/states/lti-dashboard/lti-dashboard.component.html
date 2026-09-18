@@ -51,6 +51,7 @@
               !linkedUnit ||
               isLoadingGradeLineItemStatus ||
               !gradeLineItemStatus?.configured ||
+              isRetryingGradeLineItem ||
               isSyncingEnrolments ||
               isSyncingGrades
             "
@@ -74,9 +75,23 @@
         (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin')
       ) {
         @if (!gradeLineItemStatus?.configured) {
-          <div class="w-full max-w-lg rounded-lg bg-red-100 p-3 text-red-900">
-            A Grade Item for {{ externalName | async }} has not been created. Please try unlinking
-            and linking the unit again.
+          <div class="w-full max-w-lg rounded-lg bg-amber-100 p-3 text-amber-900">
+            <p>
+              {{
+                gradeLineItemStatus?.message ||
+                  "Grade sync has not been enabled for the OnTrack LTI tool. In Moodle, edit the OnTrack external tool and set 'IMS LTI Assignment and Grade Services' to 'Use this service for grade sync and column management', then relaunch OnTrack and retry."
+              }}
+            </p>
+            <button
+              class="mt-2"
+              mat-stroked-button
+              type="button"
+              [disabled]="isRetryingGradeLineItem"
+              (click)="retryGradeLineItem()"
+            >
+              <mat-icon>{{ isRetryingGradeLineItem ? 'hourglass_top' : 'refresh' }}</mat-icon>
+              {{ isRetryingGradeLineItem ? 'Retrying…' : 'Retry grade setup' }}
+            </button>
           </div>
         }
       }

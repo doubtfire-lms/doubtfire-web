@@ -128,6 +128,9 @@ export interface LmsCourseData {
 
 export interface LmsGradeLineItemStatus {
   configured: boolean;
+  visibility: 'unknown';
+  reason?: 'service_not_enabled' | 'line_item_missing' | 'line_item_unavailable';
+  message?: string;
   lineItem?: {
     id: string;
     label: string;
