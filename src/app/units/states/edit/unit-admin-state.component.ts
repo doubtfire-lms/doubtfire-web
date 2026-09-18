@@ -15,6 +15,7 @@ type UnitAdminTabKey =
   | 'tasks'
   | 'content'
   | 'groups'
+  | 'moodle'
   | 'communication';
 
 interface UnitAdminTab {
@@ -34,7 +35,7 @@ export class UnitAdminStateComponent
 {
   @Input() public unit$: Observable<Unit>;
 
-  public readonly tabs: UnitAdminTab[] = [
+  public tabs: UnitAdminTab[] = [
     {label: 'Unit Details', routeSegment: 'details'},
     {label: 'Content', routeSegment: 'content'},
     {label: 'Learning Outcomes', routeSegment: 'learning-outcomes'},
@@ -43,6 +44,7 @@ export class UnitAdminStateComponent
     {label: 'Students', routeSegment: 'students'},
     {label: 'Tasks', routeSegment: 'tasks'},
     {label: 'Groups', routeSegment: 'groups'},
+    {label: 'Moodle', routeSegment: 'moodle'},
     {label: 'Communications', routeSegment: 'communication'},
   ];
 
@@ -51,6 +53,7 @@ export class UnitAdminStateComponent
   public assessingUnitRole: UnitRole | null = null;
   public currentTab: UnitAdminTab = this.tabs[0];
   public loadingUnit = true;
+  public savedMoodleEnabled = false;
 
   protected readonly routeSegment = 'admin';
 
@@ -92,6 +95,14 @@ export class UnitAdminStateComponent
 
   public ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  public override get visibleTabs(): UnitAdminTab[] {
+    return this.tabs.filter((tab) => tab.routeSegment !== 'moodle' || this.savedMoodleEnabled);
+  }
+
+  public unitUpdated(unit: Unit): void {
+    this.savedMoodleEnabled = unit.moodleEnabled;
   }
 
   private findUnitRole(unitId: number): UnitRole | null {
@@ -137,6 +148,13 @@ export class UnitAdminStateComponent
       this.unitService.loadDetails(unitId).subscribe({
         next: (unit) => {
           this.unit = unit;
+          this.savedMoodleEnabled = unit.moodleEnabled;
+          const requestedTab = this.route.snapshot.paramMap.get('tab');
+          this.updateCurrentTabFromState(requestedTab);
+          if (requestedTab === 'moodle' && !this.savedMoodleEnabled) {
+            this.router.navigate(['/units', unit.id, 'admin', 'details'], {replaceUrl: true});
+          }
+
           if (this.assessingUnitRole) {
             this.assessingUnitRole.unit = unit;
           }

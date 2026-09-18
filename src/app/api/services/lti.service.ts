@@ -46,6 +46,11 @@ export interface GradeLineItemStatus {
   };
 }
 
+export interface AppHandoff {
+  username: string;
+  authToken: string;
+}
+
 export interface LtiMembers {
   members: LtiMember[];
 }
@@ -65,6 +70,10 @@ export class LtiService {
 
   public getInfo(): Observable<info> {
     return this.httpClient.get<info>(`${LTI_API_URL}/info`);
+  }
+
+  public createAppHandoff(): Observable<AppHandoff> {
+    return this.httpClient.post<AppHandoff>(`${LTI_API_URL}/app-handoff`, {});
   }
 
   public getUnitLink(): Observable<UnitLink> {

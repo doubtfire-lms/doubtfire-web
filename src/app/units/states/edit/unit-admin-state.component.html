@@ -5,7 +5,7 @@
     [selectedIndex]="currentIndex"
     (selectedTabChange)="onTabChange($event)"
   >
-    @for (tab of tabs; track tab.routeSegment) {
+    @for (tab of visibleTabs; track tab.routeSegment) {
       <mat-tab [label]="tab.label"></mat-tab>
     }
   </mat-tab-group>
@@ -44,7 +44,10 @@
         @case ('details') {
           @if (unit) {
             <div class="mx-auto max-w-[90vw]">
-              <f-unit-details-editor [unit]="unit"></f-unit-details-editor>
+              <f-unit-details-editor
+                [unit]="unit"
+                (unitUpdated)="unitUpdated($event)"
+              ></f-unit-details-editor>
             </div>
           }
         }
@@ -109,6 +112,13 @@
                 [unit]="unit"
                 [unitRole]="assessingUnitRole"
               ></f-unit-group-set-editor>
+            </div>
+          }
+        }
+        @case ('moodle') {
+          @if (unit) {
+            <div class="mx-auto max-w-[90vw]">
+              <f-unit-external-tools [unit]="unit"></f-unit-external-tools>
             </div>
           }
         }
