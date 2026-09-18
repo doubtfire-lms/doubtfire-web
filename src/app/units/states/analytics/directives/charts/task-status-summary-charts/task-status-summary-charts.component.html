@@ -8,10 +8,31 @@
     </mat-card-header>
     <div class="flex items-center gap-2 p-4">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Campus</mat-label>
         <mat-select [(ngModel)]="campusFilter">
           <mat-option value="all">All</mat-option>
           @for (campus of campuses; track campus) {
             <mat-option [value]="campus">{{ campus }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Tutorial</mat-label>
+        <mat-select [(ngModel)]="tutorialFilter" (ngModelChange)="onFilterChange()">
+          <mat-option value="all">All</mat-option>
+          @for (tutorial of tutorials; track tutorial) {
+            <mat-option [value]="tutorial">{{ tutorial }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Task grade</mat-label>
+        <mat-select multiple [(ngModel)]="taskGradeFilter">
+          <mat-select-trigger>
+            {{ taskGradeFilter.length ? selectedTaskGradeLabels : 'All' }}
+          </mat-select-trigger>
+          @for (grade of taskGradeOptions; track grade) {
+            <mat-option [value]="grade">{{ unit.gradeLabel(grade) }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -36,6 +57,8 @@
   @if (chartView === 'snapshots') {
     <f-normalised-task-status-chart
       [campusFilter]="campusFilter"
+      [taskGradeFilter]="taskGradeFilter"
+      [tutorialFilter]="tutorialFilter"
       [selectedSnapshotIndex]="sliderSelect"
       [snapshots]="snapshots"
       [unit]="unit"
@@ -110,6 +133,8 @@
   } @else {
     <f-stacked-area-status-chart
       [campusFilter]="campusFilter"
+      [taskGradeFilter]="taskGradeFilter"
+      [tutorialFilter]="tutorialFilter"
       [snapshots]="snapshots"
       [unit]="unit"
     />

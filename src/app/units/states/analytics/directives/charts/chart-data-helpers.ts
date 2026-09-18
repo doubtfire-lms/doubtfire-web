@@ -102,10 +102,43 @@ export function aggregateAllCampuses(
 export function getTaskStats(
   snapshot: TaskCompletionSnapshot,
   campusFilter: string = 'all',
+  tutorialFilter: string = 'all',
+  taskGradeFilter: number[] = [],
+  unit?: Unit,
 ): TaskCodeStats {
-  return campusFilter !== 'all' && snapshot.stats[campusFilter]
-    ? aggregateCampusData(snapshot.stats[campusFilter])
-    : aggregateAllCampuses(snapshot.stats);
+  const campusStats =
+    campusFilter !== 'all' && snapshot.stats[campusFilter]
+      ? {[campusFilter]: snapshot.stats[campusFilter]}
+      : snapshot.stats;
+
+  const filteredStats = Object.values(campusStats).reduce((acc, tutorials) => {
+    const selectedTutorials =
+      tutorialFilter === 'all' ? tutorials : {[tutorialFilter]: tutorials[tutorialFilter]};
+
+    Object.values(selectedTutorials).forEach((taskStats) => {
+      if (taskStats) {
+        mergeTaskCounts(acc, taskStats);
+      }
+    });
+    return acc;
+  }, {} as TaskCodeStats);
+
+  if (taskGradeFilter.length === 0) {
+    return filteredStats;
+  }
+
+  const taskGradeByCode = new Map(
+    (unit?.taskDefinitions ?? []).map((taskDefinition) => [
+      taskDefinition.abbreviation,
+      taskDefinition.targetGrade,
+    ]),
+  );
+
+  return Object.fromEntries(
+    Object.entries(filteredStats).filter(
+      ([taskCode]) => taskGradeFilter.includes(taskGradeByCode.get(taskCode)),
+    ),
+  );
 }
 
 export function isPreWeekZeroSnapshot(unit: Unit, snapshot: TaskCompletionSnapshot): boolean {

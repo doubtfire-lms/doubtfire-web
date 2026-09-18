@@ -88,6 +88,8 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
   sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
   campuses: string[] = [];
+  tutorialFilter: string = 'all';
+  taskGradeFilter: number[] = [];
   weekSegments: SnapshotWeekSegment[] = [];
   breakSegments: SnapshotBreakSegment[] = [];
   breakLaneCount: number = 0;
@@ -153,7 +155,26 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
 
   campusFilter: string = 'all';
 
+  get tutorials(): string[] {
+    return this.unit?.tutorials.map((tutorial) => tutorial.abbreviation).filter(Boolean) ?? [];
+  }
+
+  get taskGradeOptions(): number[] {
+    return this.unit?.gradeValues ?? [];
+  }
+
+  get selectedTaskGradeLabels(): string {
+    return this.taskGradeFilter.map((grade) => this.unit.gradeLabel(grade)).join(', ');
+  }
+
+  onFilterChange(): void {
+    this.tutorialFilter = this.tutorials.includes(this.tutorialFilter)
+      ? this.tutorialFilter
+      : 'all';
+  }
+
   ngOnInit(): void {
+    this.taskGradeFilter = [...this.taskGradeOptions];
     this.loadRecentSnapshot();
   }
 
