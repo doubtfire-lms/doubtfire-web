@@ -30,6 +30,7 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
   @Input() campusFilter: string = 'all';
   @Input() tutorialFilter: string = 'all';
   @Input() taskGradeFilter: number[] = [];
+  @Input() studentTargetGradeFilter: number[] = [];
   @Input() selectedSnapshotIndex: number = 0;
 
   data: MultiSeries = [];
@@ -62,7 +63,11 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
       return 0;
     }
 
-    if (this.tutorialFilter !== 'all' || this.taskGradeFilter.length > 0) {
+    if (
+      this.tutorialFilter !== 'all' ||
+      this.taskGradeFilter.length > 0 ||
+      this.studentTargetGradeFilter.length > 0
+    ) {
       return countStudentsFromSnapshot({
         filtered: {
           selected: getTaskStats(
@@ -70,6 +75,7 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
             this.campusFilter,
             this.tutorialFilter,
             this.taskGradeFilter,
+            this.studentTargetGradeFilter,
             this.unit,
           ),
         },
@@ -108,6 +114,7 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
       changes['campusFilter'] ||
       changes['tutorialFilter'] ||
       changes['taskGradeFilter'] ||
+      changes['studentTargetGradeFilter'] ||
       changes['selectedSnapshotIndex']
     ) {
       this.refreshData();
@@ -136,6 +143,7 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
               this.campusFilter,
               this.tutorialFilter,
               this.taskGradeFilter,
+              this.studentTargetGradeFilter,
               this.unit,
             ),
           )

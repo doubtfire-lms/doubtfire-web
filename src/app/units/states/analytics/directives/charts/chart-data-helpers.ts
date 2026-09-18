@@ -104,12 +104,32 @@ export function getTaskStats(
   campusFilter: string = 'all',
   tutorialFilter: string = 'all',
   taskGradeFilter: number[] = [],
+  studentTargetGradeFilter: number[] = [],
   unit?: Unit,
 ): TaskCodeStats {
+  const snapshotStats =
+    studentTargetGradeFilter.length === 0
+      ? snapshot.stats
+      : studentTargetGradeFilter.reduce((stats, targetGrade) => {
+          const targetGradeStats = snapshot.target_grade_stats?.[targetGrade.toString()];
+          if (!targetGradeStats) {
+            return stats;
+          }
+
+          Object.entries(targetGradeStats).forEach(([campus, tutorials]) => {
+            stats[campus] = stats[campus] || {};
+            Object.entries(tutorials).forEach(([tutorial, taskStats]) => {
+              stats[campus][tutorial] = stats[campus][tutorial] || {};
+              mergeTaskCounts(stats[campus][tutorial], taskStats);
+            });
+          });
+          return stats;
+        }, {} as CampusStats);
+
   const campusStats =
-    campusFilter !== 'all' && snapshot.stats[campusFilter]
-      ? {[campusFilter]: snapshot.stats[campusFilter]}
-      : snapshot.stats;
+    campusFilter !== 'all' && snapshotStats[campusFilter]
+      ? {[campusFilter]: snapshotStats[campusFilter]}
+      : snapshotStats;
 
   const filteredStats = Object.values(campusStats).reduce((acc, tutorials) => {
     const selectedTutorials =

@@ -24,6 +24,7 @@ export class StackedAreaStatusChartComponent implements OnChanges {
   @Input() campusFilter: string = 'all';
   @Input() tutorialFilter: string = 'all';
   @Input() taskGradeFilter: number[] = [];
+  @Input() studentTargetGradeFilter: number[] = [];
 
   weeklyData: MultiSeries = [];
   colorScheme = {domain: ['']};
@@ -49,7 +50,8 @@ export class StackedAreaStatusChartComponent implements OnChanges {
       changes['snapshots'] ||
       changes['campusFilter'] ||
       changes['tutorialFilter'] ||
-      changes['taskGradeFilter']
+      changes['taskGradeFilter'] ||
+      changes['studentTargetGradeFilter']
     ) {
       this.colorScheme.domain = statusMapping.map(
         (status) => this.taskService.statusColors.get(status) || '#000000',
@@ -76,6 +78,7 @@ export class StackedAreaStatusChartComponent implements OnChanges {
         this.campusFilter,
         this.tutorialFilter,
         this.taskGradeFilter,
+        this.studentTargetGradeFilter,
         this.unit,
       ),
     }));
