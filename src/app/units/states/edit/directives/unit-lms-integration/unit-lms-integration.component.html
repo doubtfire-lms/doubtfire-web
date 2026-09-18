@@ -1,7 +1,10 @@
 <div class="mx-auto pb-12">
   <div class="header">
     <h3>LMS</h3>
-    <p>Import students, special consideration days and send grades using the linked LMS course.</p>
+    <p>
+      Connect this unit to its LMS course through the {{ externalName | async }} external tool to
+      import students and extensions, and send grades back to the course gradebook.
+    </p>
   </div>
 
   @if (loading) {
@@ -37,34 +40,56 @@
       </mat-card-actions>
     </mat-card>
   } @else {
+    @let appName = externalName | async;
     <mat-card appearance="outlined">
       <mat-card-header>
-        <mat-icon mat-card-avatar>school</mat-icon>
+        <div class="flex items-center justify-center" mat-card-avatar>
+          <mat-icon>school</mat-icon>
+        </div>
         <mat-card-title>{{ courseTitle }}</mat-card-title>
-        <mat-card-subtitle>
-          {{ courseLabel || unit.code }}
-          @if (courseData?.course.startDate && courseData?.course.endDate) {
-            · {{ courseData.course.startDate * 1000 | date: 'd MMM y' }} –
-            {{ courseData.course.endDate * 1000 | date: 'd MMM y' }}
-          }
-        </mat-card-subtitle>
+        <mat-card-subtitle>LMS course {{ courseLabel || unit.code }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content class="mt-4">
+        @let course = courseData?.course;
+        @if (course?.startDate || course?.endDate) {
+          <p class="mb-3 flex items-center gap-2 text-sm">
+            <mat-icon class="opacity-70">event</mat-icon>
+            <span>
+              <span class="opacity-70">LMS course dates</span>
+              @if (course.startDate) {
+                {{ course.startDate * 1000 | date: 'd MMM y' }}
+              }
+              @if (course.startDate && course.endDate) {
+                –
+              }
+              @if (course.endDate) {
+                {{ course.endDate * 1000 | date: 'd MMM y' }}
+              }
+            </span>
+          </p>
+        }
+        <p class="max-w-prose text-sm opacity-80">
+          {{ unit.code }} is linked to this course through the {{ appName }} external tool in your
+          LMS. This lets {{ appName }} read the course's members, groups and assignments, so you can
+          bring students and extensions into the unit and send grades back to the course gradebook.
+        </p>
         @if (link.contextError) {
-          <div class="mb-4 flex items-center gap-2 rounded bg-amber-50 p-3 text-amber-900">
+          <div class="mt-4 flex items-center gap-2 rounded bg-amber-50 p-3 text-amber-900">
             <mat-icon>warning</mat-icon>
             <span>Showing the course details from the last launch. {{ link.contextError }}</span>
           </div>
         }
         @if (!link.namesAndRolesAvailable) {
-          <p class="flex items-center gap-2 text-sm text-amber-900">
+          <div class="mt-4 flex items-center gap-2 rounded bg-amber-50 p-3 text-amber-900">
             <mat-icon>warning</mat-icon>
-            Can't read the course members. Enable Names and Role Provisioning for the OnTrack tool,
-            then relaunch OnTrack from the LMS.
-          </p>
+            <span>
+              Can't read the course members. Enable Names and Role Provisioning for the
+              {{ appName }} tool, then relaunch {{ appName }} from the LMS.
+            </span>
+          </div>
         }
       </mat-card-content>
-      <mat-card-actions class="flex flex-wrap gap-2">
+      <mat-card-actions class="flex flex-wrap justify-end gap-2">
         <button
           mat-stroked-button
           type="button"

@@ -24,6 +24,7 @@ import {
 } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 const TOGGLE_LABELS: Record<LmsToggleSetting, string> = {
   fetchExtensions: 'Fetch extensions from assignment',
@@ -96,7 +97,12 @@ export class UnitLmsIntegrationComponent implements OnInit {
     private confirmationModal: ConfirmationModalService,
     private alerts: AlertService,
     private changeDetector: ChangeDetectorRef,
+    private constants: DoubtfireConstants,
   ) {}
+
+  public get externalName() {
+    return this.constants.ExternalName;
+  }
 
   public ngOnInit(): void {
     this.integration = new LmsIntegration(this.unit);

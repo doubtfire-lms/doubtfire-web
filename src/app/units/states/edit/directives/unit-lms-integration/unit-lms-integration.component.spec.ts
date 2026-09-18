@@ -27,6 +27,7 @@ describe('UnitLmsIntegrationComponent grade setup', () => {
       {} as never,
       alerts as never,
       changeDetector as never,
+      {} as never,
     );
     component.unit = {id: 42} as Unit;
     return {component, lmsService, alerts};
@@ -69,6 +70,7 @@ describe('UnitLmsIntegrationComponent setting toggles', () => {
       {} as never,
       alerts as never,
       {markForCheck: vi.fn()} as never,
+      {} as never,
     );
     component.unit = {id: 42} as Unit;
     component.integration = new LmsIntegration(component.unit);
@@ -132,6 +134,7 @@ describe('UnitLmsIntegrationComponent setting toggles', () => {
       {} as never,
       alerts as never,
       {markForCheck: vi.fn()} as never,
+      {} as never,
     );
     component.unit = {id: 42} as Unit;
     component.integration = new LmsIntegration(component.unit);
