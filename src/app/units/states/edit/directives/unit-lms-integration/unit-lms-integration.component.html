@@ -155,14 +155,23 @@
           }
           <div class="mt-3 flex flex-wrap gap-3">
             <button
+              mat-stroked-button
+              type="button"
+              [disabled]="gradeSyncAction"
+              (click)="previewGradeSync()"
+            >
+              <mat-icon>preview</mat-icon>
+              {{ gradeSyncAction === 'preview' ? 'Starting preview…' : 'Preview grade sync' }}
+            </button>
+            <button
               color="primary"
               mat-flat-button
               type="button"
-              [disabled]="syncingGrades || !gradeLineItem?.configured"
+              [disabled]="gradeSyncAction || !gradeLineItem?.configured"
               (click)="syncGrades()"
             >
               <mat-icon>grading</mat-icon>
-              {{ syncingGrades ? 'Starting grade sync…' : 'Send grades to LMS' }}
+              {{ gradeSyncAction === 'sync' ? 'Starting grade sync…' : 'Send grades to LMS' }}
             </button>
             @if (gradeLineItemError || !gradeLineItem?.configured) {
               <button

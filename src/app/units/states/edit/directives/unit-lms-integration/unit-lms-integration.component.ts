@@ -41,7 +41,7 @@ export class UnitLmsIntegrationComponent implements OnInit {
   public gradeLineItemError: string | null = null;
   public loadingGradeLineItem = false;
   public retryingGradeLineItem = false;
-  public syncingGrades = false;
+  public gradeSyncAction: 'preview' | 'sync' | null = null;
   public unlinking = false;
   public assignments: LmsAssignment[] = [];
   public lmsGroups: LmsGroup[] = [];
@@ -230,35 +230,41 @@ export class UnitLmsIntegrationComponent implements OnInit {
     );
   }
 
+  public previewGradeSync(): void {
+    this.startGradeSync(true);
+  }
+
   public syncGrades(): void {
     this.confirmationModal.show(
       'Send grades to the LMS?',
-      `Enrolled students' OnTrack grades will be sent to the ${this.gradeLineItem?.lineItem?.label ?? 'OnTrack'} grade item in ${this.courseTitle}. Check in the LMS gradebook that the grade item is hidden from students unless grades are approved for release.`,
-      () => {
-        this.syncingGrades = true;
-        this.lmsService
-          .syncGrades(this.unit.id)
-          .pipe(
-            finalize(() => {
-              this.syncingGrades = false;
-              this.changeDetector.markForCheck();
-            }),
-          )
-          .subscribe({
-            next: (job) =>
-              this.showImportJob(
-                job,
-                'Sending grades to the LMS',
-                'LMS Grade Sync Results',
-                false,
-                false,
-              ),
-            error: (error) => this.alerts.error(this.errorMessage(error)),
-          });
-      },
+      `Enrolled students' OnTrack grades will be sent to the ${this.gradeLineItem?.lineItem?.label ?? 'OnTrack'} grade item in ${this.courseTitle}. Run Preview grade sync first to check each LMS student is matched to the right OnTrack student. Check in the LMS gradebook that the grade item is hidden from students unless grades are approved for release.`,
+      () => this.startGradeSync(false),
       undefined,
       'Send grades',
     );
+  }
+
+  private startGradeSync(previewOnly: boolean): void {
+    this.gradeSyncAction = previewOnly ? 'preview' : 'sync';
+    this.lmsService
+      .syncGrades(this.unit.id, previewOnly)
+      .pipe(
+        finalize(() => {
+          this.gradeSyncAction = null;
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (job) =>
+          this.showImportJob(
+            job,
+            previewOnly ? 'Previewing LMS grade sync' : 'Sending grades to the LMS',
+            previewOnly ? 'LMS Grade Sync Preview' : 'LMS Grade Sync Results',
+            previewOnly,
+            false,
+          ),
+        error: (error) => this.alerts.error(this.errorMessage(error)),
+      });
   }
 
   public save(): void {

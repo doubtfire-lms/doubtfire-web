@@ -204,7 +204,9 @@ export class LmsIntegrationService extends EntityService<LmsIntegration> {
     return this.http.post<LmsGradeLineItemStatus>(`${this.url}/${unitId}/lms/grade_line_item`, {});
   }
 
-  public syncGrades(unitId: number): Observable<SidekiqJob> {
-    return this.http.post<SidekiqJob>(`${this.url}/${unitId}/lms/sync_grades`, {});
+  public syncGrades(unitId: number, previewOnly = false): Observable<SidekiqJob> {
+    return this.http.post<SidekiqJob>(`${this.url}/${unitId}/lms/sync_grades`, {
+      preview_only: previewOnly,
+    });
   }
 }
