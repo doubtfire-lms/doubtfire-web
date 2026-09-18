@@ -45,6 +45,7 @@ export class LtiDashboardComponent implements AfterViewInit {
   isSyncingGrades: boolean;
   isSyncingEnrolments: boolean;
   isLoadingGradeLineItemStatus: boolean;
+  isRetryingGradeLineItem: boolean;
   gradeLineItemStatus: GradeLineItemStatus;
   externalName = this.constants.ExternalName;
 
@@ -86,14 +87,14 @@ export class LtiDashboardComponent implements AfterViewInit {
                   this.isLoading = false;
                 },
                 error: (error) => {
-                  this.alertsService.error(error.error || error, 6000);
+                  this.alertsService.error(error, 6000);
                   this.isLoading = false;
                 },
               });
             },
             error: (error) => {
               console.error(error);
-              this.alertsService.error(error.error || 'Failed to enrol in the linked unit.', 6000);
+              this.alertsService.error(error || 'Failed to enrol in the linked unit.', 6000);
               this.isLoading = false;
             },
           });
@@ -118,9 +119,31 @@ export class LtiDashboardComponent implements AfterViewInit {
         this.gradeLineItemStatus = {
           configured: false,
           visibility: 'unknown',
+          message: error || 'Failed to check the Moodle grade item.',
         };
         this.isLoadingGradeLineItemStatus = false;
-        this.alertsService.error(error.error || 'Failed to check the Moodle grade item.', 6000);
+        this.alertsService.error(error || 'Failed to check the Moodle grade item.', 6000);
+      },
+    });
+  }
+
+  retryGradeLineItem(): void {
+    this.isRetryingGradeLineItem = true;
+    this.ltiService.retryGradeLineItem().subscribe({
+      next: (status) => {
+        this.gradeLineItemStatus = status;
+        this.isRetryingGradeLineItem = false;
+        this.alertsService.success('Moodle grade item is ready.', 5000);
+      },
+      error: (error) => {
+        console.error(error);
+        this.gradeLineItemStatus = {
+          configured: false,
+          visibility: 'unknown',
+          message: error || 'Failed to find or create the Moodle grade item.',
+        };
+        this.isRetryingGradeLineItem = false;
+        this.alertsService.error(error || 'Failed to find or create the Moodle grade item.', 6000);
       },
     });
   }
@@ -137,7 +160,7 @@ export class LtiDashboardComponent implements AfterViewInit {
       },
       error: (error) => {
         console.error(error);
-        this.alertsService.error(error.error, 6000);
+        this.alertsService.error(error || 'Failed to remove the unit link.', 6000);
       },
     });
   }
@@ -238,7 +261,7 @@ export class LtiDashboardComponent implements AfterViewInit {
           },
           error: (error) => {
             console.error(error);
-            this.alertsService.error(error.error || `Failed to sync grades`);
+            this.alertsService.error(error || 'Failed to sync grades');
             this.isSyncingGrades = false;
           },
         });
@@ -246,6 +269,25 @@ export class LtiDashboardComponent implements AfterViewInit {
     );
   }
   public launchApplication(): void {
-    window.open(`${window.location.origin}/home`, '_blank');
+    // Open synchronously so popup blockers treat it as a user action, then detach it from this frame.
+    const appWindow = window.open('about:blank', '_blank');
+    if (!appWindow) {
+      this.alertsService.error('Allow pop-ups for this site to open OnTrack in a new tab.', 6000);
+      return;
+    }
+    appWindow.opener = null;
+
+    this.ltiService.createAppHandoff().subscribe({
+      next: ({username, authToken}) => {
+        const signInUrl = new URL('/sign_in', window.location.origin);
+        signInUrl.searchParams.set('username', username);
+        signInUrl.searchParams.set('authToken', authToken);
+        appWindow.location.replace(signInUrl.toString());
+      },
+      error: (error) => {
+        appWindow.close();
+        this.alertsService.error(error || 'Failed to open OnTrack in a new tab.', 6000);
+      },
+    });
   }
 }

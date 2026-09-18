@@ -185,8 +185,10 @@ export class SignInComponent implements OnInit {
    * Perform the actions needed when the user successfully signs in.
    */
   private actionSignInSuccess(): void {
+    // Replace the sign-in URL so one-time login tokens do not stay in browser history.
     this.router.navigateByUrl(
       this.userService.currentUser.hasRunFirstTimeSetup === false ? '/welcome' : '/home',
+      {replaceUrl: true},
     );
   }
 
