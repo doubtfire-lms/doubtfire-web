@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {finalize} from 'rxjs/operators';
 import {Campus, Group, Tutorial, TutorialService} from 'src/app/api/models/doubtfire-model';
 import {
@@ -10,6 +10,8 @@ import {
   LmsIntegration,
   LmsIntegrationValidationResult,
   LmsLink,
+  LmsOverview,
+  LmsToggleSetting,
 } from 'src/app/api/models/lms-integration';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
@@ -23,15 +25,27 @@ import {
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
+const TOGGLE_LABELS: Record<LmsToggleSetting, string> = {
+  fetchExtensions: 'Fetch extensions from assignment',
+  autoSyncStudents: 'Sync students daily',
+  withdrawMissingStudents: 'Withdraw missing students',
+  autoSyncExtensions: 'Sync extensions daily',
+  groupMappingEnabled: 'Group mapping',
+  skipUngraded: 'Skip ungraded students',
+  sendGradeRationale: 'Send grade rationale as feedback',
+};
+
 @Component({
   selector: 'f-unit-lms-integration',
   templateUrl: './unit-lms-integration.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class UnitLmsIntegrationComponent implements OnInit {
   @Input({required: true}) unit: Unit;
 
   public loading = true;
+  public refreshing = false;
   public link: LmsLink | null = null;
   public linkError: string | null = null;
   public integration: LmsIntegration;
@@ -50,9 +64,15 @@ export class UnitLmsIntegrationComponent implements OnInit {
   public prefilling = false;
   public validatingIntegration = false;
   public assignmentSyncIssue: string | null = null;
+  public validationIssues: string[] = [];
+  public editingAssignment = false;
+  public assignmentDraftId: number | null = null;
+  public savingAssignment = false;
   public creatingTutorials: Set<number> = new Set();
   public preparingTutorialDrafts: Set<LmsGroupMapping> = new Set();
   public editingGroupMappings: Set<LmsGroupMapping> = new Set();
+  public groupMappingsExpanded = false;
+  public togglesSaving: Set<LmsToggleSetting> = new Set();
   public readonly tutorialDays = [
     'Monday',
     'Tuesday',
@@ -65,13 +85,6 @@ export class UnitLmsIntegrationComponent implements OnInit {
   ];
   public studentImportAction: 'preview' | 'import' | null = null;
   public extensionImportAction: 'preview' | 'import' | null = null;
-  private savedAssignmentId: number | null = null;
-  private savedAssignmentName: string | null = null;
-  private savedFetchExtensions = false;
-  private savedAutoSyncStudents = false;
-  private savedWithdrawMissingStudents = false;
-  private savedAutoSyncExtensions = false;
-  private savedGroupMappingEnabled = false;
   private savedGroupMappings = '[]';
 
   constructor(
@@ -102,23 +115,47 @@ export class UnitLmsIntegrationComponent implements OnInit {
         }),
       )
       .subscribe({
-        next: (overview) => {
-          this.link = overview.link;
-          this.linkError = overview.linkError;
-          this.integration = overview.integration;
-          this.courseData = null;
-          this.restoreSavedAssignment();
-          this.restoreSavedGroups();
-          this.rememberSavedSettings();
-          if (this.link) {
-            this.loadGradeLineItem();
-            if (this.link.courseDataAvailable) {
-              this.loadCourseData();
-            }
-          }
-        },
+        next: (overview) => this.applyOverview(overview, false),
         error: (error) => (this.linkError = this.errorMessage(error)),
       });
+  }
+
+  // Reloads the link, grade item and course data in place, keeping unsaved settings
+  public refresh(): void {
+    this.refreshing = true;
+    this.lmsService
+      .getOverview(this.unit)
+      .pipe(
+        finalize(() => {
+          this.refreshing = false;
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (overview) => this.applyOverview(overview, this.groupMappingsDirty),
+        error: (error) => this.alerts.error(this.errorMessage(error)),
+      });
+  }
+
+  private applyOverview(overview: LmsOverview, keepUnsavedSettings: boolean): void {
+    this.link = overview.link;
+    this.linkError = overview.linkError;
+    if (!keepUnsavedSettings) {
+      this.integration = overview.integration;
+      this.courseData = null;
+      this.restoreSavedAssignment();
+      this.restoreSavedGroups();
+      this.rememberSavedSettings();
+    }
+    if (!this.link) {
+      return;
+    }
+    this.loadGradeLineItem();
+    if (this.link.courseDataAvailable) {
+      this.loadCourseData();
+    } else {
+      this.courseData = null;
+    }
   }
 
   public get courseTitle(): string {
@@ -289,9 +326,42 @@ export class UnitLmsIntegrationComponent implements OnInit {
           this.integration.groupMappings.forEach((mapping) => (mapping.syncIssue = undefined));
           this.updateDuplicateMappingNotices();
           this.rememberSavedSettings();
-          this.alerts.success('LMS settings saved.');
+          this.validationIssues = [];
+          this.alerts.success('Group mappings saved.');
         },
         error: (error) => this.alerts.error(this.errorMessage(error)),
+      });
+  }
+
+  public saveToggle(setting: LmsToggleSetting, value: boolean): void {
+    const label = TOGGLE_LABELS[setting];
+    this.integration[setting] = value;
+    if (setting === 'fetchExtensions') {
+      this.extensionImportSettingChanged(value);
+    }
+    this.togglesSaving.add(setting);
+    this.lmsService
+      .updateToggle(this.integration, setting, value)
+      .pipe(
+        finalize(() => {
+          this.togglesSaving.delete(setting);
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (saved) => {
+          this.integration.autoSyncExtensions = saved.autoSyncExtensions;
+          this.integration.validated = saved.validated;
+          this.integration.validatedAt = saved.validatedAt;
+          this.alerts.success(`${label} turned ${value ? 'on' : 'off'}.`);
+          if (setting === 'fetchExtensions' && value && this.integration.assignmentId) {
+            this.revalidate();
+          }
+        },
+        error: (error) => {
+          this.integration[setting] = !value;
+          this.alerts.error(`Couldn't update ${label.toLowerCase()}: ${this.errorMessage(error)}`);
+        },
       });
   }
 
@@ -301,9 +371,18 @@ export class UnitLmsIntegrationComponent implements OnInit {
 
   public get studentImportBlocked(): boolean {
     return (
-      this.settingsDirty ||
+      this.groupMappingsDirty ||
       (this.integration.groupMappingEnabled &&
         (!this.groupMappingsValid || !this.integration.validated))
+    );
+  }
+
+  public get extensionImportBlocked(): boolean {
+    return (
+      !!this.extensionImportAction ||
+      !this.integration.assignmentId ||
+      this.assignmentEditorOpen ||
+      !this.integration.validated
     );
   }
 
@@ -386,10 +465,48 @@ export class UnitLmsIntegrationComponent implements OnInit {
     });
   }
 
-  public assignmentSelected(assignmentId: number | null): void {
-    this.integration.assignmentName =
-      this.assignments.find((assignment) => assignment.id === assignmentId)?.name ?? null;
-    this.assignmentSyncIssue = null;
+  public get assignmentEditorOpen(): boolean {
+    return this.editingAssignment || !this.integration.assignmentId;
+  }
+
+  public editAssignment(): void {
+    this.assignmentDraftId = this.integration.assignmentId;
+    this.editingAssignment = true;
+  }
+
+  public cancelAssignmentEdit(): void {
+    this.editingAssignment = false;
+  }
+
+  public saveAssignment(): void {
+    const assignment = this.assignments.find(({id}) => id === this.assignmentDraftId);
+    if (!assignment) {
+      return;
+    }
+
+    this.savingAssignment = true;
+    this.lmsService
+      .updateAssignment(this.integration, assignment.id, assignment.name)
+      .pipe(
+        finalize(() => {
+          this.savingAssignment = false;
+          this.changeDetector.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (saved) => {
+          this.integration.assignmentId = saved.assignmentId;
+          this.integration.assignmentName = saved.assignmentName;
+          this.integration.validated = saved.validated;
+          this.integration.validatedAt = saved.validatedAt;
+          this.assignmentSyncIssue = null;
+          this.editingAssignment = false;
+          this.alerts.success('Portfolio assignment saved.');
+          this.revalidate();
+        },
+        error: (error) =>
+          this.alerts.error(`Couldn't save the portfolio assignment: ${this.errorMessage(error)}`),
+      });
   }
 
   public extensionImportSettingChanged(enabled: boolean): void {
@@ -399,8 +516,26 @@ export class UnitLmsIntegrationComponent implements OnInit {
   }
 
   public get selectedAssignment(): LmsAssignment | null {
+    return this.assignmentById(this.integration.assignmentId);
+  }
+
+  public assignmentById(id: number | null): LmsAssignment | null {
+    return this.assignments.find((assignment) => assignment.id === id) ?? null;
+  }
+
+  public get groupMappingsNeedingAttention(): number {
+    return this.integration.groupMappings.filter(
+      (mapping) =>
+        this.editingGroupMappings.has(mapping) || mapping.tutorialDraft || mapping.syncIssue,
+    ).length;
+  }
+
+  // Opens when a mapping is being edited or needs fixing
+  public get groupMappingsOpen(): boolean {
     return (
-      this.assignments.find((assignment) => assignment.id === this.integration.assignmentId) ?? null
+      this.groupMappingsExpanded ||
+      this.groupMappingsNeedingAttention > 0 ||
+      !this.integration.groupMappings.length
     );
   }
 
@@ -454,9 +589,17 @@ export class UnitLmsIntegrationComponent implements OnInit {
         error: (error) => {
           this.integration.validated = false;
           this.integration.validatedAt = null;
+          this.validationIssues = [this.errorMessage(error)];
           this.alerts.error(this.errorMessage(error));
         },
       });
+  }
+
+  // Unsaved mapping edits would be validated against the saved mappings, so wait for a save
+  private revalidate(): void {
+    if (!this.integration.validated && !this.groupMappingsDirty && !this.validatingIntegration) {
+      this.validateIntegration();
+    }
   }
 
   public removeGroupMapping(index: number): void {
@@ -727,28 +870,12 @@ export class UnitLmsIntegrationComponent implements OnInit {
     return mapping.createTutorialIfMissing ? !!mapping.tutorialStreamId : !!mapping.tutorialId;
   }
 
-  public get settingsDirty(): boolean {
-    const assignmentId = this.integration.fetchExtensions ? this.integration.assignmentId : null;
-    return (
-      this.integration.fetchExtensions !== this.savedFetchExtensions ||
-      this.integration.autoSyncStudents !== this.savedAutoSyncStudents ||
-      this.integration.withdrawMissingStudents !== this.savedWithdrawMissingStudents ||
-      this.integration.autoSyncExtensions !== this.savedAutoSyncExtensions ||
-      assignmentId !== this.savedAssignmentId ||
-      this.integration.assignmentName !== this.savedAssignmentName ||
-      this.integration.groupMappingEnabled !== this.savedGroupMappingEnabled ||
-      JSON.stringify(this.integration.groupMappings) !== this.savedGroupMappings
-    );
+  // Toggles and the assignment save on their own, so only mapping edits can be unsaved
+  public get groupMappingsDirty(): boolean {
+    return JSON.stringify(this.integration.groupMappings) !== this.savedGroupMappings;
   }
 
   private rememberSavedSettings(): void {
-    this.savedAssignmentId = this.integration.assignmentId;
-    this.savedAssignmentName = this.integration.assignmentName;
-    this.savedFetchExtensions = this.integration.fetchExtensions;
-    this.savedAutoSyncStudents = this.integration.autoSyncStudents;
-    this.savedWithdrawMissingStudents = this.integration.withdrawMissingStudents;
-    this.savedAutoSyncExtensions = this.integration.autoSyncExtensions;
-    this.savedGroupMappingEnabled = this.integration.groupMappingEnabled;
     this.savedGroupMappings = JSON.stringify(this.integration.groupMappings);
   }
 
@@ -902,6 +1029,7 @@ export class UnitLmsIntegrationComponent implements OnInit {
   private applyValidationResult(result: LmsIntegrationValidationResult): void {
     this.integration.validated = result.valid;
     this.integration.validatedAt = result.validated_at;
+    this.validationIssues = result.valid ? [] : result.issues.map((issue) => issue.message);
     if (this.courseData && this.integration.groupMappingEnabled) {
       this.courseData.groups = result.groups;
       this.lmsGroups = result.groups;

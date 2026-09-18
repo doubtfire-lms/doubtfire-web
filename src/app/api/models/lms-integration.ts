@@ -11,6 +11,8 @@ export class LmsIntegration extends Entity {
   public withdrawMissingStudents = false;
   public autoSyncExtensions = false;
   public groupMappingEnabled = false;
+  public skipUngraded = true;
+  public sendGradeRationale = false;
   public validated = false;
   public validatedAt: string | null = null;
   public groupMappings: LmsGroupMapping[] = [];
@@ -19,6 +21,25 @@ export class LmsIntegration extends Entity {
     super();
   }
 }
+
+export type LmsToggleSetting =
+  | 'fetchExtensions'
+  | 'autoSyncStudents'
+  | 'withdrawMissingStudents'
+  | 'autoSyncExtensions'
+  | 'groupMappingEnabled'
+  | 'skipUngraded'
+  | 'sendGradeRationale';
+
+export const LMS_TOGGLE_PARAMS: Record<LmsToggleSetting, string> = {
+  fetchExtensions: 'fetch_extensions',
+  autoSyncStudents: 'auto_sync_students',
+  withdrawMissingStudents: 'withdraw_missing_students',
+  autoSyncExtensions: 'auto_sync_extensions',
+  groupMappingEnabled: 'group_mapping_enabled',
+  skipUngraded: 'skip_ungraded',
+  sendGradeRationale: 'send_grade_rationale',
+};
 
 export type LmsGroupTargetType = 'group' | 'campus' | 'tutorial' | 'ignore';
 

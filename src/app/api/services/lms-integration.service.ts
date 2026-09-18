@@ -4,6 +4,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {
+  LMS_TOGGLE_PARAMS,
   LmsCourseData,
   LmsGradeLineItemStatus,
   LmsGroup,
@@ -13,6 +14,7 @@ import {
   LmsIntegrationValidationResult,
   LmsLink,
   LmsOverview,
+  LmsToggleSetting,
 } from 'src/app/api/models/lms-integration';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
@@ -39,6 +41,8 @@ export class LmsIntegrationService extends EntityService<LmsIntegration> {
       'withdrawMissingStudents',
       'autoSyncExtensions',
       'groupMappingEnabled',
+      'skipUngraded',
+      'sendGradeRationale',
       'validated',
       'validatedAt',
       {
@@ -97,6 +101,50 @@ export class LmsIntegrationService extends EntityService<LmsIntegration> {
         }),
       ),
     );
+  }
+
+  public updateToggle(
+    integration: LmsIntegration,
+    setting: LmsToggleSetting,
+    value: boolean,
+  ): Observable<LmsIntegration> {
+    return this.patchSettings(integration, {[LMS_TOGGLE_PARAMS[setting]]: value});
+  }
+
+  public updateAssignment(
+    integration: LmsIntegration,
+    assignmentId: number,
+    assignmentName: string,
+  ): Observable<LmsIntegration> {
+    return this.patchSettings(integration, {
+      assignment_id: assignmentId,
+      assignment_name: assignmentName,
+    });
+  }
+
+  private patchSettings(
+    integration: LmsIntegration,
+    body: Record<string, unknown>,
+  ): Observable<LmsIntegration> {
+    return this.http
+      .patch<Record<string, unknown>>(`${this.url}/${integration.unit.id}/lms/settings`, body)
+      .pipe(
+        map((response) => {
+          const saved = new LmsIntegration(integration.unit);
+          saved.assignmentId = (response['assignment_id'] as number) ?? null;
+          saved.assignmentName = (response['assignment_name'] as string) ?? null;
+          saved.fetchExtensions = response['fetch_extensions'] as boolean;
+          saved.autoSyncStudents = response['auto_sync_students'] as boolean;
+          saved.withdrawMissingStudents = response['withdraw_missing_students'] as boolean;
+          saved.autoSyncExtensions = response['auto_sync_extensions'] as boolean;
+          saved.groupMappingEnabled = response['group_mapping_enabled'] as boolean;
+          saved.skipUngraded = response['skip_ungraded'] as boolean;
+          saved.sendGradeRationale = response['send_grade_rationale'] as boolean;
+          saved.validated = response['validated'] as boolean;
+          saved.validatedAt = (response['validated_at'] as string) ?? null;
+          return saved;
+        }),
+      );
   }
 
   public unlink(unitId: number): Observable<unknown> {
