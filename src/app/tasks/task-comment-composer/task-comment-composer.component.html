@@ -51,9 +51,9 @@
 >
   @for (emoji of emojiSearchResults; track emoji) {
     <mat-list-item (click)="emojiSelected(emoji.native)">
-      <div fxLayout="row" fxLayoutAlign="start center">
+      <div class="flex flex-row items-center justify-start">
         <ngx-emoji set="apple" style="align-items: center" [emoji]="emoji" [size]="20"></ngx-emoji>
-        <div class="emoji-details" fxLayout="column" fxLayoutAlign="center start">
+        <div class="emoji-details flex flex-col items-start justify-center">
           <div style="font-weight: 500; font-size: 12px">{{ emoji.name }}</div>
           <div style="font-size: 10px">{{ emoji.colons }}</div>
         </div>
@@ -78,10 +78,10 @@
       (templateSelected)="addFeedback($event)"
     ></f-task-feedback-templates>
   }
-  <div class="composer-container" fxLayout="row" fxLayoutAlign="space-around center">
+  <div class="composer-container flex flex-row items-center justify-around">
     <div class="composer-action-group" [@shrinkgrow]="$userIsTyping | async">
       <!-- if active -->
-      <div fxLayout="row" fxLayoutAlign="start center">
+      <div class="flex flex-row items-center justify-start">
         @if ($userIsTyping | async) {
           <button
             aria-label="Expand action buttons"
@@ -96,20 +96,6 @@
             <mat-icon>{{ recording ? 'cancel' : 'chevron_right' }}</mat-icon>
           </button>
         }
-
-        <!-- <button
-          [hidden]="shrinkGrowToggle"
-          *ngIf="isStaff"
-          matTooltip="Create a Real Talk discussion"
-          matTooltipShowDelay="400"
-          mat-icon-button
-          class="btn-no-outline"
-          type="button"
-          aria-label="launch real talk took"
-          (click)="openDiscussionComposer()"
-        >
-          <mat-icon>crisis_alert</mat-icon>
-        </button> -->
 
         @if (isStaff) {
           @if (!isEditing) {

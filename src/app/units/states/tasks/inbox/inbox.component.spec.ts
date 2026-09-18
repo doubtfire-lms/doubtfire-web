@@ -1,5 +1,4 @@
 import {HotkeysService} from '@ngneat/hotkeys';
-import {MediaObserver} from 'ng-flex-layout';
 import {beforeEach, describe, expect, it} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
@@ -31,7 +30,6 @@ describe('InboxComponent', () => {
       providers: [
         {provide: HotkeysService, useValue: hotkeysServiceStub},
         {provide: SelectedTaskService, useValue: selectedTaskServiceStub},
-        {provide: MediaObserver, useValue: emptyProvider},
         {provide: FileDownloaderService, useValue: emptyProvider},
         {provide: Router, useValue: emptyProvider},
         {provide: MatDialog, useValue: emptyProvider},
