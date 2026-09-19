@@ -6,6 +6,7 @@ $emoji-color: color.adjust(black, $lightness: 25%);
   padding-bottom: 0;
   display: flex;
   flex-grow: 1;
+
   #textFieldContainer {
     background-color: rgba(0, 0, 0, 0.05);
     border-radius: 18px;
@@ -47,6 +48,11 @@ $emoji-color: color.adjust(black, $lightness: 25%);
     user-select: text;
   }
 
+  #textField:focus-visible {
+    outline: 2px solid var(--mat-sys-primary, #3939ff);
+    outline-offset: 2px;
+  }
+
   #textField[placeholder]:empty::before {
     padding: 9px 0;
     -webkit-font-smoothing: antialiased;
@@ -71,6 +77,7 @@ $emoji-color: color.adjust(black, $lightness: 25%);
     opacity: 0.5;
     background-color: rgba(0, 0, 255, 0.05);
   }
+
   to {
     opacity: 1;
     background-color: transparent;
@@ -87,23 +94,27 @@ $emoji-color: color.adjust(black, $lightness: 25%);
     background-color: rgba(66, 133, 244, 0.2);
     box-shadow: 0 0 8px 2px rgba(66, 133, 244, 0.6);
   }
+
   70% {
     background-color: rgba(66, 133, 244, 0.1);
     box-shadow: 0 0 6px 1px rgba(66, 133, 244, 0.3);
   }
+
   100% {
     background-color: transparent;
     box-shadow: none;
   }
 }
 
-#innerButtons {
+#innerButtons,
+#staffInnerButtons {
   align-items: flex-end;
   display: flex;
   padding: 6px 0 6px 2px;
 }
 
-#emojiButton {
+#emojiButton,
+#saveEditButton {
   height: 24px;
   width: 24px;
   cursor: pointer;
@@ -128,7 +139,8 @@ $emoji-color: color.adjust(black, $lightness: 25%);
   border-color: color.adjust($color: white, $lightness: -10%);
 }
 
-#replyContainer {
+#replyContainer,
+#editContainer {
   margin: 0.4em 1em -0.2em 1em;
   font-size: 14px;
 
