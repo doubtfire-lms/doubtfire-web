@@ -40,12 +40,10 @@
   }
 </mat-action-list>
 
-<form class="input-group col-sm-12 comment-submitter flex-col" ng-submit="addComment()" role="form"
-  style="display: flex; width: 100%" [hidden]="!this.task">
-  @if (task) {
+<form class="input-group col-sm-12 comment-submitter flex-col" ng-submit="addComment()" @if (task) {
   <f-task-feedback-templates class="feedback-template-picker pt-2" [hidden]="!this.showFeedbackTemplatePicker"
-    [task]="task" (mousedown)="rememberCaretPosition()"
-    (templateSelected)="addFeedback($event)"></f-task-feedback-templates>
+  [task]="task" (mousedown)="rememberCaretPosition()" (templateSelected)="addFeedback($event)">
+  </f-task-feedback-templates>
   }
   <div class="composer-container flex flex-row items-center justify-around">
     <div class="composer-action-group" [@shrinkgrow]="$userIsTyping | async">
@@ -88,13 +86,14 @@
     </div>
     <div id="textFieldContainer" [class.active]="$userIsTyping | async"
       [ngClass]="{recording: recording, 'draft-loaded': isDraftLoaded}">
-      <div #commentInput enterkeyhint="send" id="textField" name="commentComposer" placeholder="Aa"
+      <div #commentInput enterkeyhint="send" id="comment-input" name="commentComposer" placeholder="Aa"
         [attr.contenteditable]="contentEditableValue() && !recording" role="textbox" aria-multiline="true"
         [attr.aria-label]="isEditing() ? 'Edit your comment' : 'Write a comment'"
         [class.active]="($userIsTyping | async) === false" [hidden]="recording"
         (beforeinput)="handleBeforeInput($event)" (blur)="onComposerBlur()" (click)="rememberCaretPosition()"
         (focus)="$userIsTyping.next(true)" (input)="onInputChange($event)" (keydown)="keyTyped()"
         (keydown.enter)="send($event)" (keyup)="rememberCaretPosition()" (paste)="handlePaste($event)"></div>
+      <!-- NOSONAR -->
       @if (recording) {
       <audio-comment-recorder style="display: flex; justify-content: center; width: 100%"
         [task]="task"></audio-comment-recorder>
