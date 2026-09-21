@@ -77,6 +77,10 @@ export class TaskService extends CachedEntityService<Task> {
         toEntityFn: MappingFunctions.mapDate,
       },
       {
+        keys: 'waitingSince',
+        toEntityFn: MappingFunctions.mapDate,
+      },
+      {
         keys: 'completionDate',
         toEntityFn: MappingFunctions.mapDateToDay,
       },
