@@ -33,6 +33,7 @@
         <p>Loading...</p>
       }
     } @else {
+      <!-- Sync is managed from the unit's LMS admin tab
       <div class="flex justify-center gap-3">
         @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
           <button
@@ -83,6 +84,7 @@
           </button>
         }
       </div>
+      -->
       @if (
         linkedUnit &&
         !isLoadingGradeLineItemStatus &&
