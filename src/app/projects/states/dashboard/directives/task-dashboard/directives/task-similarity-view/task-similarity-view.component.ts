@@ -1,4 +1,3 @@
-import {HttpResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {MatAccordion} from '@angular/material/expansion';
+import {finalize} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskSimilarity} from 'src/app/api/models/task-similarity';
 import {TaskSimilarityService} from 'src/app/api/services/task-similarity.service';
@@ -29,6 +29,8 @@ export class TaskSimilarityViewComponent implements OnChanges {
   @ViewChild('jplagViewer') jplagViewer!: JplagReportViewerComponent;
   panelOpenState = false;
   jplagOpenState = false;
+  loadingSimilarities = false;
+  loadingJplagReportFor: TaskSimilarity | null = null;
 
   constructor(
     private taskSimilarityService: TaskSimilarityService,
@@ -40,7 +42,11 @@ export class TaskSimilarityViewComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue && this.task?.id) {
       this.jplagOpenState = false;
-      this.task?.fetchSimilarities().subscribe();
+      this.loadingSimilarities = true;
+      this.task
+        ?.fetchSimilarities()
+        .pipe(finalize(() => (this.loadingSimilarities = false)))
+        .subscribe();
     }
   }
 
@@ -76,18 +82,27 @@ export class TaskSimilarityViewComponent implements OnChanges {
   viewJplagReport(similarity: TaskSimilarity) {
     // Students are identified by their username in JPlag reports (configured by API)
     // In most cases, usernames are a combination of their first and last names
+    this.loadingJplagReportFor = similarity;
     this.fileDownloaderService.downloadBlob(
       this.task.definition.getJplagReportUrl(),
-      (_, response: HttpResponse<Blob>) => {
-        this.jplagViewer.openComparison(
-          response.body,
-          similarity.task.project.student.username,
-          similarity.otherStudent.username,
-        );
-        this.jplagOpenState = true;
+      (url: string) => {
+        // Reports over 10 MB arrive in ranged parts; only the stitched url holds them all
+        fetch(url)
+          .then((response) => response.blob())
+          .then((report) => {
+            this.fileDownloaderService.releaseBlob(url);
+            this.jplagViewer.openComparison(
+              report,
+              similarity.task.project.student.username,
+              similarity.otherStudent.username,
+            );
+            this.jplagOpenState = true;
+            this.loadingJplagReportFor = null;
+          });
       },
       (error) => {
         console.error(error);
+        this.loadingJplagReportFor = null;
       },
     );
   }
