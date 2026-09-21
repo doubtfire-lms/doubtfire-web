@@ -21,12 +21,7 @@
           @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
             <div
               class="removeStyle"
-              [routerLink]="[
-                '/units',
-                $safeNavigationMigration(unitRole.unit?.id),
-                'tasks',
-                'inbox',
-              ]"
+              [routerLink]="['/units', $safeNavigationMigration(unitRole.unit?.id), 'dashboard']"
             >
               <mat-card class="unit-card">
                 <mat-card-header>
