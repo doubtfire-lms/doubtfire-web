@@ -300,7 +300,11 @@ export class LtiDashboardComponent implements AfterViewInit {
     window.open(window.location.origin, '_blank', 'noopener');
   }
 
-  public launchApplication(): void {
+  public openLmsSettings(): void {
+    this.launchApplication(`/units/${this.linkedUnit.id}/admin/lms`);
+  }
+
+  public launchApplication(returnTo?: string): void {
     // Open synchronously so popup blockers treat it as a user action, then detach it from this frame.
     const appWindow = window.open('about:blank', '_blank');
     if (!appWindow) {
@@ -314,6 +318,9 @@ export class LtiDashboardComponent implements AfterViewInit {
         const signInUrl = new URL('/sign_in', window.location.origin);
         signInUrl.searchParams.set('username', username);
         signInUrl.searchParams.set('authToken', authToken);
+        if (returnTo) {
+          signInUrl.searchParams.set('returnTo', returnTo);
+        }
         appWindow.location.replace(signInUrl.toString());
       },
       error: (error) => {

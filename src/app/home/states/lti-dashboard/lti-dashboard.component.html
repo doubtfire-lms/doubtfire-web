@@ -127,13 +127,10 @@
           {{ linkedUnit.code }} &mdash; {{ linkedUnit.name }}
           @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
             <br />
-            <a
-              class="text-blue-400 underline"
-              mat-button
-              [routerLink]="['/units', linkedUnit.id, 'admin', 'lms']"
-            >
+            <button class="text-blue-400 underline" mat-button (click)="openLmsSettings()">
               LMS settings
-            </a>
+              <mat-icon iconPositionEnd>open_in_new</mat-icon>
+            </button>
             <button class="text-blue-400 underline" mat-button (click)="removeLink()">
               Unlink
             </button>
