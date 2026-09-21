@@ -70,7 +70,6 @@ export class LtiDashboardComponent implements AfterViewInit {
       return;
     }
 
-    return;
     this.isLoading = true;
     // TODO: add a spinner or loading indicator until final loading state is complete
 
