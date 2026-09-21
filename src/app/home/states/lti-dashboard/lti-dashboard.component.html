@@ -124,14 +124,22 @@
       </button>
       <div class="mt-2.5 w-full text-center text-gray-300">
         @if (linkedUnit) {
-          {{ linkedUnit.code }} &mdash; {{ linkedUnit.name }}
+          <span class="text-gray-400">{{ linkedUnit.code }} &mdash; {{ linkedUnit.name }}</span>
+          <br />
+          <span
+            class="text-sm text-gray-300"
+            matTooltip="{{ linkedUnit.startDate | date: 'd MMM y' }} — {{
+              linkedUnit.endDate | date: 'd MMM y'
+            }}"
+            >{{ linkedUnit.periodLabel }}</span
+          >
           @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
             <br />
-            <button class="text-blue-400 underline" mat-button (click)="openLmsSettings()">
+            <button class="mt-6 text-blue-400 underline" mat-button (click)="openLmsSettings()">
               LMS settings
               <mat-icon iconPositionEnd>open_in_new</mat-icon>
             </button>
-            <button class="text-blue-400 underline" mat-button (click)="removeLink()">
+            <button class="mt-6 text-blue-400 underline" mat-button (click)="removeLink()">
               Unlink
             </button>
           }

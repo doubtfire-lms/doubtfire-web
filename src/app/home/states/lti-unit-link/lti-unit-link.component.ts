@@ -49,26 +49,12 @@ export class LtiUnitLinkComponent implements AfterViewInit {
 
   public submit(): void {
     this.confirmationModalService.show(
-      `Are you sure you want to link ${this.selectedUnit.code} ${this.selectedUnit.name} (${this.getTeachingPeriod(this.selectedUnit)}) to this course?`,
+      `Are you sure you want to link ${this.selectedUnit.code} ${this.selectedUnit.name} (${this.selectedUnit.periodLabel}) to this course?`,
       'Once you have linked an OnTrack unit, students who launch this app will be enrolled automatically. Unlinking a unit will not withdraw students automatically.',
       () => {
         this.linkUnit(this.selectedUnit);
       },
     );
-  }
-
-  private formatTeachingPeriod(date): string {
-    const month = date.toLocaleString('en-US', {month: 'short'});
-    const year = String(date.getFullYear()).slice(-2);
-    return `${month} '${year}`;
-  }
-
-  public getTeachingPeriod(unit: Unit) {
-    if (unit.teachingPeriod?.name) {
-      return unit.teachingPeriod.name;
-    }
-
-    return `${this.formatTeachingPeriod(unit.startDate)} - ${this.formatTeachingPeriod(unit.endDate)}`;
   }
 
   private async linkUnit(unit: Unit) {
