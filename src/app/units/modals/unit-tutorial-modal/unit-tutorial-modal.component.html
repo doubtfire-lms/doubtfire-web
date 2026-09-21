@@ -1,0 +1,81 @@
+<mat-card class="w-[560px] max-w-[90vw]">
+  <mat-card-header class="mb-4">
+    <mat-card-title class="text-2xl">New Tutorial</mat-card-title>
+    <mat-card-subtitle>{{ streamName }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <form class="mt-4 flex flex-col" [formGroup]="formData">
+      <div class="flex gap-4">
+        <mat-form-field appearance="outline" class="min-w-0 flex-1">
+          <mat-label>Abbreviation</mat-label>
+          <input formControlName="abbreviation" matInput required />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="min-w-0 flex-1">
+          <mat-label>Campus</mat-label>
+          <mat-select formControlName="campus" [compareWith]="compareSelection">
+            <mat-option [value]="null">Not Specified</mat-option>
+            @for (campus of campuses; track campus) {
+              <mat-option [value]="campus">{{ campus.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Location</mat-label>
+        <input formControlName="meetingLocation" matInput required />
+      </mat-form-field>
+
+      <div class="flex gap-4">
+        <mat-form-field appearance="outline" class="min-w-0 flex-1">
+          <mat-label>Day</mat-label>
+          <mat-select formControlName="meetingDay" required>
+            @for (day of days; track day) {
+              <mat-option [value]="day">{{ day }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="min-w-0 flex-1">
+          <mat-label>Time</mat-label>
+          <input formControlName="meetingTime" matInput placeholder="09:00" required />
+        </mat-form-field>
+      </div>
+
+      <div class="flex gap-4">
+        <mat-form-field appearance="outline" class="min-w-0 flex-1">
+          <mat-label>Duration</mat-label>
+          <input
+            formControlName="durationMinutes"
+            matInput
+            min="1"
+            required
+            step="15"
+            type="number"
+          />
+          <span matTextSuffix>m</span>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="min-w-0 flex-1">
+          <mat-label>Capacity</mat-label>
+          <input formControlName="capacity" matInput required />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tutor</mat-label>
+        <mat-select formControlName="tutor" required [compareWith]="compareSelection">
+          @for (tutor of unit.staffUsers; track tutor) {
+            <mat-option [value]="tutor">{{ tutor.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-divider></mat-divider>
+  <mat-card-actions class="mt-2 flex justify-end gap-2">
+    <button mat-button type="button" (click)="dialogRef.close()">Cancel</button>
+    <button color="primary" mat-raised-button type="button" (click)="submit()">
+      Create Tutorial
+    </button>
+  </mat-card-actions>
+</mat-card>
