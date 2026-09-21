@@ -1,5 +1,5 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -33,12 +33,19 @@ export class LtiDashboardComponent implements AfterViewInit {
     private csvResultModalService: CsvResultModalService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
     private constants: DoubtfireConstants,
+    private route: ActivatedRoute,
   ) {}
+
+  private readonly launchErrorMessages: Record<string, string> = {
+    not_member:
+      'You must be enrolled in this course to launch OnTrack, including site administrators.',
+  };
 
   // linkedUnit: UnitLink;
   linkedUnit: Unit;
   currentUser: User;
   unauthorised: boolean = false;
+  launchError: string;
 
   loadingState: 'creatingUser' | 'enrollingUser' | 'fetchingUnit';
   isLoading: boolean;
@@ -55,6 +62,15 @@ export class LtiDashboardComponent implements AfterViewInit {
     // Ensures our action buttons are centered
     setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
 
+    const launchError = this.route.snapshot.queryParamMap.get('launchError');
+    if (launchError) {
+      this.launchError =
+        this.launchErrorMessages[launchError] ?? 'OnTrack could not be launched. Please relaunch.';
+      this.alertsService.error(this.launchError, 8000);
+      return;
+    }
+
+    return;
     this.isLoading = true;
     // TODO: add a spinner or loading indicator until final loading state is complete
 
@@ -281,6 +297,10 @@ export class LtiDashboardComponent implements AfterViewInit {
       },
     );
   }
+  public openOnTrack(): void {
+    window.open(window.location.origin, '_blank', 'noopener');
+  }
+
   public launchApplication(): void {
     // Open synchronously so popup blockers treat it as a user action, then detach it from this frame.
     const appWindow = window.open('about:blank', '_blank');

@@ -12,7 +12,10 @@ describe('LtiDashboardComponent grade setup', () => {
     },
   };
 
-  function buildComponent(retryResult: Observable<unknown>) {
+  function buildComponent(
+    retryResult: Observable<unknown>,
+    queryParams: Record<string, string> = {},
+  ) {
     const ltiService = {retryGradeLineItem: vi.fn(() => retryResult)};
     const alerts = {success: vi.fn(), error: vi.fn()};
     const component = new LtiDashboardComponent(
@@ -27,6 +30,7 @@ describe('LtiDashboardComponent grade setup', () => {
       {} as never,
       {} as never,
       {ExternalName: of('OnTrack')} as never,
+      {snapshot: {queryParamMap: {get: (key: string) => queryParams[key] ?? null}}} as never,
     );
     return {component, ltiService, alerts};
   }
@@ -56,5 +60,15 @@ describe('LtiDashboardComponent grade setup', () => {
       message: 'Enable grade column management and retry.',
     });
     expect(alerts.error).toHaveBeenCalledWith('Enable grade column management and retry.', 6000);
+  });
+
+  it('shows the launch error without waiting for authentication', () => {
+    const {component, alerts} = buildComponent(of(configuredStatus), {launchError: 'not_member'});
+
+    component.ngAfterViewInit();
+
+    expect(component.launchError).toContain('must be enrolled in this course');
+    expect(component.isLoading).toBeFalsy();
+    expect(alerts.error).toHaveBeenCalledWith(component.launchError, 8000);
   });
 });

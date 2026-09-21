@@ -9,7 +9,21 @@
       <h1 class="m-0 ml-3 text-4xl">OnTrack</h1>
     </div>
 
-    @if (isLoading) {
+    @if (launchError) {
+      <div class="w-full max-w-lg rounded-lg bg-amber-100 p-3 text-center text-amber-900">
+        {{ launchError }}
+      </div>
+      <button
+        class="my-3 h-[50px] w-full max-w-lg"
+        color="primary"
+        extended
+        mat-fab
+        (click)="openOnTrack()"
+      >
+        <mat-icon>rocket_launch</mat-icon>
+        Launch OnTrack
+      </button>
+    } @else if (isLoading) {
       @if (unauthorised) {
         <div class="w-full rounded-lg bg-red-200 p-3 text-center font-semibold text-red-800">
           An error occurred. Please refresh the page.
