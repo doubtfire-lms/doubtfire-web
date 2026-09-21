@@ -24,6 +24,7 @@ import {
 } from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {errorMessage} from 'src/app/common/services/error-message';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 const TOGGLE_LABELS: Record<LmsToggleSetting, string> = {
@@ -1130,27 +1131,6 @@ export class UnitLmsIntegrationComponent implements OnInit {
   }
 
   private errorMessage(error: unknown): string {
-    if (typeof error === 'string') {
-      return error;
-    }
-    if (error instanceof Error) {
-      return error.message;
-    }
-    if (error && typeof error === 'object') {
-      const response = error as {error?: unknown; message?: unknown};
-      if (typeof response.error === 'string') {
-        return response.error;
-      }
-      if (response.error && typeof response.error === 'object') {
-        const body = response.error as {error?: unknown};
-        if (typeof body.error === 'string') {
-          return body.error;
-        }
-      }
-      if (typeof response.message === 'string') {
-        return response.message;
-      }
-    }
-    return 'LMS request failed.';
+    return errorMessage(error, 'LMS request failed.');
   }
 }

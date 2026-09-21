@@ -10,6 +10,7 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {errorMessage} from 'src/app/common/services/error-message';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
@@ -87,14 +88,20 @@ export class LtiDashboardComponent implements AfterViewInit {
                   this.isLoading = false;
                 },
                 error: (error) => {
-                  this.alertsService.error(error, 6000);
+                  this.alertsService.error(
+                    errorMessage(error, 'Failed to load the linked unit.'),
+                    6000,
+                  );
                   this.isLoading = false;
                 },
               });
             },
             error: (error) => {
               console.error(error);
-              this.alertsService.error(error || 'Failed to enrol in the linked unit.', 6000);
+              this.alertsService.error(
+                errorMessage(error, 'Failed to enrol in the linked unit.'),
+                6000,
+              );
               this.isLoading = false;
             },
           });
@@ -119,10 +126,13 @@ export class LtiDashboardComponent implements AfterViewInit {
         this.gradeLineItemStatus = {
           configured: false,
           visibility: 'unknown',
-          message: error || 'Failed to check the Moodle grade item.',
+          message: errorMessage(error, 'Failed to check the Moodle grade item.'),
         };
         this.isLoadingGradeLineItemStatus = false;
-        this.alertsService.error(error || 'Failed to check the Moodle grade item.', 6000);
+        this.alertsService.error(
+          errorMessage(error, 'Failed to check the Moodle grade item.'),
+          6000,
+        );
       },
     });
   }
@@ -140,10 +150,13 @@ export class LtiDashboardComponent implements AfterViewInit {
         this.gradeLineItemStatus = {
           configured: false,
           visibility: 'unknown',
-          message: error || 'Failed to find or create the Moodle grade item.',
+          message: errorMessage(error, 'Failed to find or create the Moodle grade item.'),
         };
         this.isRetryingGradeLineItem = false;
-        this.alertsService.error(error || 'Failed to find or create the Moodle grade item.', 6000);
+        this.alertsService.error(
+          errorMessage(error, 'Failed to find or create the Moodle grade item.'),
+          6000,
+        );
       },
     });
   }
@@ -160,7 +173,7 @@ export class LtiDashboardComponent implements AfterViewInit {
       },
       error: (error) => {
         console.error(error);
-        this.alertsService.error(error || 'Failed to remove the unit link.', 6000);
+        this.alertsService.error(errorMessage(error, 'Failed to remove the unit link.'), 6000);
       },
     });
   }
@@ -261,7 +274,7 @@ export class LtiDashboardComponent implements AfterViewInit {
           },
           error: (error) => {
             console.error(error);
-            this.alertsService.error(error || 'Failed to sync grades');
+            this.alertsService.error(errorMessage(error, 'Failed to sync grades'));
             this.isSyncingGrades = false;
           },
         });
@@ -286,7 +299,7 @@ export class LtiDashboardComponent implements AfterViewInit {
       },
       error: (error) => {
         appWindow.close();
-        this.alertsService.error(error || 'Failed to open OnTrack in a new tab.', 6000);
+        this.alertsService.error(errorMessage(error, 'Failed to open OnTrack in a new tab.'), 6000);
       },
     });
   }
