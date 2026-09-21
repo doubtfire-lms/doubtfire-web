@@ -2,8 +2,14 @@
 
 @use 'theme' as *;
 @use 'styles/mixins/scrollable' as *;
+@use 'styles/mixins/task-status-colors-generator' as *;
 
 $my-palette: mat.m2-define-palette($md-formatif);
+
+@mixin collapsed-task-status-color($status) {
+  background-color: task-status-color($status) !important;
+  color: task-status-color($status, fore) !important;
+}
 
 :host {
   --background-gray: rgba(0, 0, 0, 0.04);
@@ -19,6 +25,68 @@ $my-palette: mat.m2-define-palette($md-formatif);
 
   ::ng-deep .mdc-list-item__content {
     overflow: visible;
+  }
+}
+
+.task-list-item--collapsed {
+  &.ready-for-feedback {
+    @include collapsed-task-status-color('ready-for-feedback');
+  }
+
+  &.not-started {
+    @include collapsed-task-status-color('not-started');
+  }
+
+  &.working-on-it {
+    @include collapsed-task-status-color('working-on-it');
+  }
+
+  &.need-help {
+    @include collapsed-task-status-color('need-help');
+  }
+
+  &.fix-and-resubmit {
+    @include collapsed-task-status-color('fix-and-resubmit');
+  }
+
+  &.feedback-exceeded {
+    @include collapsed-task-status-color('feedback-exceeded');
+  }
+
+  &.time-exceeded {
+    @include collapsed-task-status-color('time-exceeded');
+  }
+
+  &.assess-in-portfolio {
+    @include collapsed-task-status-color('assess-in-portfolio');
+  }
+
+  &.redo {
+    @include collapsed-task-status-color('redo');
+  }
+
+  &.discuss {
+    @include collapsed-task-status-color('discuss');
+  }
+
+  &.demonstrate {
+    @include collapsed-task-status-color('demonstrate');
+  }
+
+  &.complete {
+    @include collapsed-task-status-color('complete');
+  }
+
+  &.fail {
+    @include collapsed-task-status-color('fail');
+  }
+
+  &.attention-required {
+    @include collapsed-task-status-color('attention-required');
+  }
+
+  ::ng-deep .mdc-list-item__primary-text {
+    color: inherit;
   }
 }
 
