@@ -43,6 +43,7 @@ export class LtiDashboardComponent implements AfterViewInit {
 
   // linkedUnit: UnitLink;
   linkedUnit: Unit;
+  linkedProjectId: number;
   currentUser: User;
   unauthorised: boolean = false;
   launchError: string;
@@ -95,7 +96,8 @@ export class LtiDashboardComponent implements AfterViewInit {
 
           // Ensure user is enrolled into the linked unit
           this.ltiService.enrolUser(link).subscribe({
-            next: () => {
+            next: (project) => {
+              this.linkedProjectId = project?.id;
               // Fetch unit information
               this.unitService.get(link.unitId).subscribe({
                 next: (unit) => {
@@ -302,6 +304,18 @@ export class LtiDashboardComponent implements AfterViewInit {
 
   public openLmsSettings(): void {
     this.launchApplication(`/units/${this.linkedUnit.id}/admin/lms`);
+  }
+
+  public launchLinkedUnit(): void {
+    if (!this.linkedUnit) {
+      return this.launchApplication();
+    }
+    if (['Tutor', 'Convenor', 'Admin', 'Auditor'].includes(this.linkedUnit.myRole)) {
+      return this.launchApplication(`/units/${this.linkedUnit.id}/tasks/inbox`);
+    }
+    this.launchApplication(
+      this.linkedProjectId ? `/projects/${this.linkedProjectId}/dashboard` : undefined,
+    );
   }
 
   public launchApplication(returnTo?: string): void {
