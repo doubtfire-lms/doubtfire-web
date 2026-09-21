@@ -31,7 +31,7 @@ const TOGGLE_LABELS: Record<LmsToggleSetting, string> = {
   autoSyncStudents: 'Sync students daily',
   withdrawMissingStudents: 'Withdraw missing students',
   autoSyncExtensions: 'Sync extensions daily',
-  groupMappingEnabled: 'Group mapping',
+  groupMappingEnabled: 'Map LMS groups',
   skipUngraded: 'Skip ungraded students',
   sendGradeRationale: 'Send grade rationale as feedback',
 };
@@ -375,11 +375,15 @@ export class UnitLmsIntegrationComponent implements OnInit {
     return this.integration.groupMappingEnabled || this.integration.fetchExtensions;
   }
 
+  // Mappings need the course-data plugin's groups, so they are not applied without it
+  public get groupMappingsActive(): boolean {
+    return this.integration.groupMappingEnabled && !!this.link?.courseDataAvailable;
+  }
+
   public get studentImportBlocked(): boolean {
     return (
       this.groupMappingsDirty ||
-      (this.integration.groupMappingEnabled &&
-        (!this.groupMappingsValid || !this.integration.validated))
+      (this.groupMappingsActive && (!this.groupMappingsValid || !this.integration.validated))
     );
   }
 

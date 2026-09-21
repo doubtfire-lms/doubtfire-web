@@ -83,6 +83,7 @@ export interface LmsLink {
   contextId: string;
   contextLabel: string | null;
   contextTitle: string | null;
+  courseUrl: string | null;
   platformName: string | null;
   platformUrl: string | null;
   namesAndRolesAvailable: boolean;

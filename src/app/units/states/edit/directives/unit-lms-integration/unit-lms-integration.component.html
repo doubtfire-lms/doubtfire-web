@@ -41,17 +41,31 @@
           <mat-icon
             aria-hidden="false"
             aria-label="Connected to LMS"
-            class="size-10! shrink-0 text-[40px]! text-green-600"
+            class="size-[30px]! shrink-0 text-[30px]! text-emerald-500"
             role="img"
             >cloud_done</mat-icon
           >
           <div class="min-w-0">
-            <h4 class="m-0 font-medium break-words">
-              @if (courseLabel && !courseTitle.startsWith(courseLabel)) {
-                {{ courseLabel }} ·
+            <div class="flex items-center gap-2">
+              <h4 class="m-0 min-w-0 font-medium break-words">
+                @if (courseLabel && !courseTitle.startsWith(courseLabel)) {
+                  {{ courseLabel }} ·
+                }
+                {{ courseTitle }}
+              </h4>
+              @if (link.courseUrl) {
+                <a
+                  aria-label="Open LMS course in a new tab"
+                  class="inline-flex shrink-0 items-center"
+                  matTooltip="Open in LMS"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  [href]="link.courseUrl"
+                >
+                  <mat-icon>launch</mat-icon>
+                </a>
               }
-              {{ courseTitle }}
-            </h4>
+            </div>
             @let course = courseData?.course;
             @if (course?.startDate || course?.endDate) {
               <p class="mt-1 mb-0 opacity-70">
@@ -130,7 +144,7 @@
               (changed)="saveToggle('autoSyncStudents', $event.checked)"
             >
               Runs once a day while the unit is active and within its start and end dates.
-              @if (integration.groupMappingEnabled && !integration.validated) {
+              @if (groupMappingsActive && !integration.validated) {
                 Paused until the LMS group mappings are validated.
               }
             </f-setting-toggle>
@@ -163,12 +177,94 @@
               <mat-icon>info</mat-icon>
               Save your group mapping changes before importing students.
             </p>
-          } @else if (integration.groupMappingEnabled && !integration.validated) {
+          } @else if (groupMappingsActive && !integration.validated) {
             <p class="mt-3 flex items-center gap-1 text-sm">
               <mat-icon color="warn">warning</mat-icon>
               Validate the LMS group mappings before importing students.
             </p>
           }
+        </section>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="mt-6">
+      <mat-card-content>
+        <section>
+          <h3 class="mat-title-medium">Grades</h3>
+          @if (loadingGradeLineItem) {
+            <p>Checking the LMS grade item…</p>
+          } @else if (gradeLineItemError) {
+            <p class="flex items-start gap-1 rounded bg-amber-50 p-3 text-amber-900">
+              <mat-icon color="warn">error</mat-icon>
+              <span>{{ gradeLineItemError }}</span>
+            </p>
+          } @else if (gradeLineItem?.configured) {
+            <p>
+              Grades are sent to the <strong>{{ gradeLineItem.lineItem?.label }}</strong> grade item
+              (out of {{ gradeLineItem.lineItem?.scoreMaximum }}).
+            </p>
+          } @else {
+            <p class="flex items-start gap-1 rounded bg-amber-50 p-3 text-amber-900">
+              <mat-icon color="warn">warning</mat-icon>
+              <span>
+                {{
+                  gradeLineItem?.message ||
+                    "Grade sync has not been enabled for the OnTrack LTI tool. In Moodle, edit the OnTrack external tool and set 'IMS LTI Assignment and Grade Services' to 'Use this service for grade sync and column management', then relaunch OnTrack and retry."
+                }}
+              </span>
+            </p>
+          }
+          <div class="mt-3">
+            <f-setting-toggle
+              label="Skip ungraded students"
+              [checked]="integration.skipUngraded"
+              [disabled]="togglesSaving.has('skipUngraded')"
+              (changed)="saveToggle('skipUngraded', $event.checked)"
+            >
+              Students with a grade of 0 are treated as not graded yet and are not sent, so they
+              don't overwrite grades in the LMS.
+            </f-setting-toggle>
+            <f-setting-toggle
+              label="Send grade rationale as feedback"
+              [checked]="integration.sendGradeRationale"
+              [disabled]="togglesSaving.has('sendGradeRationale')"
+              (changed)="saveToggle('sendGradeRationale', $event.checked)"
+            >
+              Students see the grade rationale as feedback on their LMS grade.
+            </f-setting-toggle>
+          </div>
+          <div class="mt-3 flex flex-wrap justify-end gap-3">
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="gradeSyncAction"
+              (click)="previewGradeSync()"
+            >
+              <mat-icon>preview</mat-icon>
+              {{ gradeSyncAction === 'preview' ? 'Starting preview…' : 'Preview grade sync' }}
+            </button>
+            <button
+              color="primary"
+              mat-flat-button
+              type="button"
+              [disabled]="gradeSyncAction || !gradeLineItem?.configured"
+              (click)="syncGrades()"
+            >
+              <mat-icon>grading</mat-icon>
+              {{ gradeSyncAction === 'sync' ? 'Starting grade sync…' : 'Send grades to LMS' }}
+            </button>
+            @if (gradeLineItemError || !gradeLineItem?.configured) {
+              <button
+                mat-stroked-button
+                type="button"
+                [disabled]="retryingGradeLineItem || loadingGradeLineItem"
+                (click)="retryGradeLineItem()"
+              >
+                <mat-icon>{{ retryingGradeLineItem ? 'hourglass_top' : 'refresh' }}</mat-icon>
+                {{ retryingGradeLineItem ? 'Retrying…' : 'Retry grade setup' }}
+              </button>
+            }
+          </div>
         </section>
       </mat-card-content>
     </mat-card>
@@ -360,93 +456,14 @@
 
     <mat-card appearance="outlined" class="mt-6">
       <mat-card-content>
-        <section>
-          <h3 class="mat-title-medium">Grades</h3>
-          @if (loadingGradeLineItem) {
-            <p>Checking the LMS grade item…</p>
-          } @else if (gradeLineItemError) {
-            <p class="flex items-start gap-1 rounded bg-amber-50 p-3 text-amber-900">
-              <mat-icon color="warn">error</mat-icon>
-              <span>{{ gradeLineItemError }}</span>
-            </p>
-          } @else if (gradeLineItem?.configured) {
-            <p>
-              Grades are sent to the <strong>{{ gradeLineItem.lineItem?.label }}</strong> grade item
-              (out of {{ gradeLineItem.lineItem?.scoreMaximum }}).
-            </p>
-          } @else {
-            <p class="flex items-start gap-1 rounded bg-amber-50 p-3 text-amber-900">
-              <mat-icon color="warn">warning</mat-icon>
-              <span>
-                {{
-                  gradeLineItem?.message ||
-                    "Grade sync has not been enabled for the OnTrack LTI tool. In Moodle, edit the OnTrack external tool and set 'IMS LTI Assignment and Grade Services' to 'Use this service for grade sync and column management', then relaunch OnTrack and retry."
-                }}
-              </span>
-            </p>
-          }
-          <div class="mt-3">
-            <f-setting-toggle
-              label="Skip ungraded students"
-              [checked]="integration.skipUngraded"
-              [disabled]="togglesSaving.has('skipUngraded')"
-              (changed)="saveToggle('skipUngraded', $event.checked)"
-            >
-              Students with a grade of 0 are treated as not graded yet and are not sent, so they
-              don't overwrite grades in the LMS.
-            </f-setting-toggle>
-            <f-setting-toggle
-              label="Send grade rationale as feedback"
-              [checked]="integration.sendGradeRationale"
-              [disabled]="togglesSaving.has('sendGradeRationale')"
-              (changed)="saveToggle('sendGradeRationale', $event.checked)"
-            >
-              Students see the grade rationale as feedback on their LMS grade.
-            </f-setting-toggle>
-          </div>
-          <div class="mt-3 flex flex-wrap justify-end gap-3">
-            <button
-              mat-stroked-button
-              type="button"
-              [disabled]="gradeSyncAction"
-              (click)="previewGradeSync()"
-            >
-              <mat-icon>preview</mat-icon>
-              {{ gradeSyncAction === 'preview' ? 'Starting preview…' : 'Preview grade sync' }}
-            </button>
-            <button
-              color="primary"
-              mat-flat-button
-              type="button"
-              [disabled]="gradeSyncAction || !gradeLineItem?.configured"
-              (click)="syncGrades()"
-            >
-              <mat-icon>grading</mat-icon>
-              {{ gradeSyncAction === 'sync' ? 'Starting grade sync…' : 'Send grades to LMS' }}
-            </button>
-            @if (gradeLineItemError || !gradeLineItem?.configured) {
-              <button
-                mat-stroked-button
-                type="button"
-                [disabled]="retryingGradeLineItem || loadingGradeLineItem"
-                (click)="retryGradeLineItem()"
-              >
-                <mat-icon>{{ retryingGradeLineItem ? 'hourglass_top' : 'refresh' }}</mat-icon>
-                {{ retryingGradeLineItem ? 'Retrying…' : 'Retry grade setup' }}
-              </button>
-            }
-          </div>
-        </section>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card appearance="outlined" class="mt-6">
-      <mat-card-content>
-        @if (link.courseDataAvailable) {
+        <h3 class="mat-title-medium">Group mapping</h3>
+        @if (!link.courseDataAvailable) {
+          <p class="text-sm">Group mapping needs the Moodle OnTrack course-data plugin.</p>
+        } @else {
           <div>
             <section>
               <f-setting-toggle
-                label="Group mapping"
+                label="Map LMS groups"
                 [checked]="integration.groupMappingEnabled"
                 [disabled]="
                   togglesSaving.has('groupMappingEnabled') ||
@@ -1014,11 +1031,6 @@
               }
             </section>
           </div>
-        } @else {
-          <p class="flex items-center gap-1 text-sm">
-            <mat-icon>info</mat-icon>
-            Group mapping needs the Moodle OnTrack course-data plugin.
-          </p>
         }
       </mat-card-content>
     </mat-card>
