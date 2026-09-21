@@ -40,7 +40,7 @@
         <div class="flex min-w-0 items-center gap-3">
           <mat-icon
             aria-hidden="false"
-            aria-label="Connected to LMS"
+            attr.aria-label="Connected to {{ link.platformName || 'LMS' }}"
             class="size-[30px]! shrink-0 text-[30px]! text-emerald-500"
             role="img"
             >cloud_done</mat-icon
@@ -55,9 +55,9 @@
               </h4>
               @if (link.courseUrl) {
                 <a
-                  aria-label="Open LMS course in a new tab"
+                  attr.aria-label="Open {{ link.platformName || 'LMS' }} course in a new tab"
                   class="inline-flex shrink-0 items-center"
-                  matTooltip="Open in LMS"
+                  matTooltip="Open in {{ link.platformName || 'LMS' }}"
                   rel="noopener noreferrer"
                   target="_blank"
                   [href]="link.courseUrl"
@@ -66,6 +66,7 @@
                 </a>
               }
             </div>
+            <p class="m-0 text-sm opacity-50">Connected to {{ link.platformName || 'LMS' }}</p>
             @let course = courseData?.course;
             @if (course?.startDate || course?.endDate) {
               <p class="mt-1 mb-0 opacity-70">
