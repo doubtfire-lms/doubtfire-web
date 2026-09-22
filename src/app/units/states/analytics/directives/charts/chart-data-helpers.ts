@@ -127,9 +127,7 @@ export function getTaskStats(
         }, {} as CampusStats);
 
   const campusStats =
-  campusFilter === 'all'
-    ? snapshotStats
-    : {[campusFilter]: snapshotStats[campusFilter] ?? {}};
+    campusFilter === 'all' ? snapshotStats : {[campusFilter]: snapshotStats[campusFilter] ?? {}};
 
   const filteredStats = Object.values(campusStats).reduce((acc, tutorials) => {
     const selectedTutorials =
