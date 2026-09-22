@@ -7,6 +7,7 @@ import {LtiService} from 'src/app/api/services/lti.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {errorMessage} from 'src/app/common/services/error-message';
 
 @Component({
   selector: 'f-lti-unit-link',
@@ -72,7 +73,7 @@ export class LtiUnitLinkComponent implements AfterViewInit {
         },
         error: (error) => {
           console.error(error);
-          this.alertsService.error(`Failed to link unit: ${error}`, 6000);
+          this.alertsService.error(errorMessage(error, 'Failed to link unit.'), 6000);
         },
       });
   }
