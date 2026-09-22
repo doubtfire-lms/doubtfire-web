@@ -48,7 +48,7 @@
     "@sentry/angular": "^10.73.0",
     "@sentry/cli": "^3.7.0",
     "@tailwindcss/postcss": "^4.3.3",
-    "@worktile/gantt": "^21.0.0",
+    "@worktile/gantt": "^22.0.0",
     "angular-calendar": "^0.32.2",
     "ansi-to-html": "^0.7.2",
     "canvas-confetti": "^1.9",
