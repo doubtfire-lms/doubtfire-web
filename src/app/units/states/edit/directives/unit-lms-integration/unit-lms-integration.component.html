@@ -120,6 +120,25 @@
           </span>
         </div>
       }
+      @if (integration.autoSyncLastError) {
+        <div class="mt-4 flex items-start gap-2 rounded bg-amber-50 p-3 text-amber-900">
+          <mat-icon>sync_problem</mat-icon>
+          <span>
+            @if (
+              integration.autoSyncFailingSince &&
+              (integration.autoSyncStudents || integration.autoSyncExtensions)
+            ) {
+              Daily sync has been failing since
+              {{ integration.autoSyncFailingSince | date: 'd MMM' }} and will be turned off on
+              {{ integration.autoSyncTurnOffDate | date: 'd MMM' }} if it keeps failing.
+            } @else {
+              Daily sync was turned off because it failed. Fix the problem, then turn daily sync
+              back on.
+            }
+            <span class="block opacity-70">{{ integration.autoSyncLastError }}</span>
+          </span>
+        </div>
+      }
     </section>
     <mat-divider></mat-divider>
 

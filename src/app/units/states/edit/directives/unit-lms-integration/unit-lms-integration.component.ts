@@ -360,6 +360,9 @@ export class UnitLmsIntegrationComponent implements OnInit {
           this.integration.autoSyncExtensions = saved.autoSyncExtensions;
           this.integration.validated = saved.validated;
           this.integration.validatedAt = saved.validatedAt;
+          this.integration.autoSyncFailingSince = saved.autoSyncFailingSince;
+          this.integration.autoSyncLastError = saved.autoSyncLastError;
+          this.integration.autoSyncTurnOffDate = saved.autoSyncTurnOffDate;
           this.alerts.success(`${label} turned ${value ? 'on' : 'off'}.`);
           if (setting === 'fetchExtensions' && value && this.integration.assignmentId) {
             this.revalidate();

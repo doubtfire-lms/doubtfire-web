@@ -15,6 +15,9 @@ export class LmsIntegration extends Entity {
   public sendGradeRationale = false;
   public validated = false;
   public validatedAt: string | null = null;
+  public autoSyncFailingSince: string | null = null;
+  public autoSyncLastError: string | null = null;
+  public autoSyncTurnOffDate: string | null = null;
   public groupMappings: LmsGroupMapping[] = [];
 
   constructor(public unit: Unit) {

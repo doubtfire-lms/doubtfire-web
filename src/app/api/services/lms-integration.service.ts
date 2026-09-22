@@ -45,6 +45,9 @@ export class LmsIntegrationService extends EntityService<LmsIntegration> {
       'sendGradeRationale',
       'validated',
       'validatedAt',
+      'autoSyncFailingSince',
+      'autoSyncLastError',
+      'autoSyncTurnOffDate',
       {
         keys: 'groupMappings',
         toEntityFn: (data: object, key: string) => {
@@ -63,7 +66,15 @@ export class LmsIntegrationService extends EntityService<LmsIntegration> {
         },
       },
     );
-    this.mapping.mapAllKeysToJsonExcept('id', 'source', 'validated', 'validatedAt');
+    this.mapping.mapAllKeysToJsonExcept(
+      'id',
+      'source',
+      'validated',
+      'validatedAt',
+      'autoSyncFailingSince',
+      'autoSyncLastError',
+      'autoSyncTurnOffDate',
+    );
     this.mapping.onlyMapChanges = false;
   }
 
@@ -142,6 +153,9 @@ export class LmsIntegrationService extends EntityService<LmsIntegration> {
           saved.sendGradeRationale = response['send_grade_rationale'] as boolean;
           saved.validated = response['validated'] as boolean;
           saved.validatedAt = (response['validated_at'] as string) ?? null;
+          saved.autoSyncFailingSince = (response['auto_sync_failing_since'] as string) ?? null;
+          saved.autoSyncLastError = (response['auto_sync_last_error'] as string) ?? null;
+          saved.autoSyncTurnOffDate = (response['auto_sync_turn_off_date'] as string) ?? null;
           return saved;
         }),
       );
