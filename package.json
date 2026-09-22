@@ -59,7 +59,7 @@
     "html5-qrcode": "^2.3.8",
     "jszip": "^3.10.2",
     "marked": "^18.0.12",
-    "moment": "^2.30",
+    "moment": "^2.31",
     "monaco-editor": "^0.56.0",
     "ng-flex-layout": "^17.3.7-beta.1",
     "ng2-pdf-viewer": "10.2.2",
