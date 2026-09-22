@@ -63,18 +63,39 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
       return 0;
     }
 
-    if (
-      this.tutorialFilter !== 'all' ||
-      this.taskGradeFilter.length > 0 ||
-      this.studentTargetGradeFilter.length > 0
-    ) {
+    if (this.tutorialFilter !== 'all' || this.studentTargetGradeFilter.length > 0) {
+      if (this.tutorialFilter === 'all' && this.studentTargetGradeFilter.length > 0) {
+        if (this.campusFilter === 'all' && this.selectedSnapshot.target_grade_student_counts) {
+          return this.studentTargetGradeFilter.reduce(
+            (total, targetGrade) =>
+              total +
+              (this.selectedSnapshot.target_grade_student_counts?.[targetGrade.toString()] ?? 0),
+            0,
+          );
+        }
+
+        if (
+          this.campusFilter !== 'all' &&
+          this.selectedSnapshot.target_grade_campus_student_counts
+        ) {
+          return this.studentTargetGradeFilter.reduce(
+            (total, targetGrade) =>
+              total +
+              (this.selectedSnapshot.target_grade_campus_student_counts?.[targetGrade.toString()]?.[
+                this.campusFilter
+              ] ?? 0),
+            0,
+          );
+        }
+      }
+
       return countStudentsFromSnapshot({
         filtered: {
           selected: getTaskStats(
             this.selectedSnapshot,
             this.campusFilter,
             this.tutorialFilter,
-            this.taskGradeFilter,
+            [],
             this.studentTargetGradeFilter,
             this.unit,
           ),

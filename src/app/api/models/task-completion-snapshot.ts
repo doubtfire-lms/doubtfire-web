@@ -5,6 +5,8 @@ export type TaskCompletionSnapshot = {
   target_grade_stats?: Record<string, CampusStats>;
   student_count?: number;
   campus_student_counts?: Record<string, number>;
+  target_grade_student_counts?: Record<string, number>;
+  target_grade_campus_student_counts?: Record<string, Record<string, number>>;
   /**
    * Set on the filler days the client prepends to pad out week 0. Never sent by the
    * API - it marks a day that has no real data behind it.
