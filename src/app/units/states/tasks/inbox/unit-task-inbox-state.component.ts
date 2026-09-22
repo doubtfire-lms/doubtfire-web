@@ -49,6 +49,7 @@ type TaskSource = (
   unit: Unit,
   taskDef?: TaskDefinition | number,
   fetchMyStudentsOnly?: boolean,
+  viewAsUnitRoleId?: number,
 ) => Observable<Task[]>;
 
 @Component({

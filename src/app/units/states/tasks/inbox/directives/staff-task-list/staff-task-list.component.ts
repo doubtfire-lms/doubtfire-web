@@ -1,5 +1,6 @@
 /* eslint-disable no-shadow, @typescript-eslint/no-shadow */
 import {HotkeysService} from '@ngneat/hotkeys';
+import {CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -89,6 +90,8 @@ const DEFAULT_VIEW_PREFERENCES: StaffTaskListViewPreferences = {
 
 const ALL_TASK_DEFINITIONS = '';
 
+const VIEW_AS_SELF = 'self';
+
 // The inbox and overflow queue lead with the longest-waiting task, so their default
 // is really a date sort and can be reversed. The other views have no ordering worth
 // naming, and keep the source order the API returned.
@@ -117,6 +120,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   private taskLoadSubscription?: Subscription;
 
   @ViewChild('searchDialog') searchDialog: TemplateRef<object>;
+  // Re-measured when the filter panel resizes it, or it renders too few rows
+  @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
 
   @Input() task: Task;
   @Input() project: Project;
@@ -126,6 +131,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       unit: Unit,
       taskDef?: TaskDefinition | number,
       fetchMyStudentsOnly?: boolean,
+      viewAsUnitRoleId?: number,
     ) => Observable<Task[]>;
     selectedTask: Task | null;
     taskKey: unknown;
@@ -163,6 +169,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     label: string;
     options: {id: string | number; inboxDescription: string | undefined}[];
   }[] = [];
+
+  viewAsOptions: {id: number | typeof VIEW_AS_SELF; name: string}[] = [];
+  viewAsUnitRoleId: number | typeof VIEW_AS_SELF = VIEW_AS_SELF;
 
   tasks: Task[] = null;
 
@@ -292,10 +301,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.filteredTasks = null;
     this.fetchedAllTasks = false;
     this.viewPreferences = this.defaultViewPreferences();
+    this.viewAsUnitRoleId = VIEW_AS_SELF;
 
     // Does the current user have any tutorials?
-    this.userHasTutorials =
-      this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
+    this.userHasTutorials = this.unit.tutorialsForUserName(this.inboxUserName)?.length > 0;
 
     const staff = this.unit.staff.slice();
 
@@ -308,6 +317,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       .sort(byName);
 
     const allTutors = staff.slice().sort(byName);
+
+    this.viewAsOptions = [
+      {id: VIEW_AS_SELF, name: 'Myself'},
+      ...allTutors
+        .filter((ur) => ur.id !== this.unitRole.id)
+        .map((ur) => ({id: ur.id, name: ur.user?.name})),
+    ];
     const shouldDefaultToMyStudents =
       (this.unitRole.role === 'Tutor' || this.unitRole.role === 'Convenor') &&
       this.userHasTutorials;
@@ -388,6 +404,34 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   public get isTaskDefMode(): boolean {
     return this.taskData.taskDefMode;
+  }
+
+  public get canViewInboxAs(): boolean {
+    return this.viewType === 'inbox' && this.unitRole?.role === 'Convenor';
+  }
+
+  public get isViewingAsOther(): boolean {
+    return this.viewAsUnitRoleId !== VIEW_AS_SELF;
+  }
+
+  private get viewAsUnitRole(): UnitRole | undefined {
+    if (this.viewAsUnitRoleId === VIEW_AS_SELF) {
+      return undefined;
+    }
+    return this.unit.staff.find((ur) => ur.id === this.viewAsUnitRoleId);
+  }
+
+  // "My Students" follows whoever's inbox is being viewed
+  private get inboxUserName(): string {
+    return this.viewAsUnitRole?.user?.name ?? this.userService.currentUser.name;
+  }
+
+  viewAsChanged(): void {
+    this.fetchedAllTasks = false;
+    // Another tutor's inbox is only their own students
+    const defaultTutorialId = this.userHasTutorials ? 'mine' : 'all';
+    this.tutorialIdChanged(false, this.isViewingAsOther ? 'mine' : defaultTutorialId);
+    this.refreshData();
   }
 
   private get selectedTaskDefinitionId(): TaskDefinition | number | undefined {
@@ -598,7 +642,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.filters.forceStream = filterOption.forceStream;
 
     if (tutorialId === 'mine') {
-      this.filters.tutorials = this.unit.tutorialsForUserName(this.userService.currentUser.name);
+      this.filters.tutorials = this.unit.tutorialsForUserName(this.inboxUserName);
       this.filters.unitRoleIdSelected = 'all';
     } else if (tutorialId === 'all') {
       // Ignore tutorials filter
@@ -678,7 +722,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.taskLoadSubscription?.unsubscribe();
     // Tasks for feedback or tasks for task, depending on the data source
     this.taskLoadSubscription = this.taskData
-      .source(this.unit, this.selectedTaskDefinitionId, fetchMyStudentsOnly)
+      .source(
+        this.unit,
+        this.selectedTaskDefinitionId,
+        fetchMyStudentsOnly,
+        this.viewAsUnitRole?.id,
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
