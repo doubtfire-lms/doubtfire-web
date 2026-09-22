@@ -115,6 +115,40 @@ describe('StaffTaskListComponent', () => {
     });
   });
 
+  it('fetches the inbox of the staff member a convenor is viewing as', () => {
+    const tutorRole = {id: 7, user: {name: 'Tutor'}};
+    const source = vi.fn(() => of([]));
+    component.unit = {
+      id: 20,
+      staff: [tutorRole],
+      tutorials: [],
+      tutorialsForUserName: () => [],
+    } as never;
+    component.unitRole = {id: 1, role: 'Convenor'} as never;
+    component.viewType = 'inbox';
+    component.filters = {tutorialIdSelected: 'all'};
+    component.taskData = {
+      source,
+      selectedTask: null,
+      taskKey: null,
+      onSelectedTaskChange: () => {},
+      taskDefMode: false,
+    };
+
+    component.studentFilter = [
+      {id: 'all', inboxDescription: 'All Students', abbreviation: '__all', forceStream: false},
+      {id: 'mine', inboxDescription: 'My Students', abbreviation: '__mine', forceStream: true},
+    ];
+
+    expect(component.canViewInboxAs).toBe(true);
+
+    component.viewAsUnitRoleId = 7;
+    component.viewAsChanged();
+
+    expect(source).toHaveBeenLastCalledWith(component.unit, undefined, true, 7);
+    expect(component.filters.tutorialIdSelected).toBe('mine');
+  });
+
   describe('view preferences', () => {
     beforeEach(() => {
       component.unit = {id: 20} as never;

@@ -99,9 +99,28 @@
         disabled
         hideToggle
         [expanded]="filtersExpanded"
+        (afterCollapse)="viewport?.checkViewportSize()"
+        (afterExpand)="viewport?.checkViewportSize()"
       >
         <div class="my-2 text-xs font-bold tracking-normal text-gray-500 uppercase">Show</div>
         <div class="mb-3 flex flex-col gap-3">
+          @if (canViewInboxAs) {
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>View inbox as</mat-label>
+              <mat-select
+                name="viewAs"
+                [(ngModel)]="viewAsUnitRoleId"
+                (selectionChange)="viewAsChanged()"
+              >
+                @for (option of viewAsOptions; track option.id) {
+                  <mat-option [value]="option.id">
+                    <span class="truncate">{{ option.name }}</span>
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>Task</mat-label>
             <mat-select
@@ -122,6 +141,7 @@
             <mat-label>Students</mat-label>
             <mat-select
               name="tutorial"
+              [disabled]="isViewingAsOther"
               [(ngModel)]="filters.tutorialIdSelected"
               (selectionChange)="tutorialIdChanged(true, $event.value)"
             >
@@ -137,7 +157,7 @@
             <mat-label>Tutors</mat-label>
             <mat-select
               name="tutor"
-              [disabled]="filters.tutorialIdSelected !== 'all'"
+              [disabled]="isViewingAsOther || filters.tutorialIdSelected !== 'all'"
               [(ngModel)]="filters.unitRoleIdSelected"
               (selectionChange)="unitRoleIdChanged()"
             >
