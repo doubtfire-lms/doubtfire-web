@@ -14,6 +14,7 @@ export class TargetGradeSankeyComponent implements OnChanges {
   @Input() unit: Unit;
 
   data: SankeyData = [];
+  weeks: string[] = [];
   hasChartData = false;
 
   readonly colorScheme = {
@@ -56,6 +57,7 @@ export class TargetGradeSankeyComponent implements OnChanges {
     const weeklySnapshots = [...snapshotsByWeek.entries()].filter(
       ([, snapshot]) => snapshot.target_grade_student_counts,
     );
+    this.weeks = weeklySnapshots.map(([week]) => week);
     const links: SankeyData = [];
 
     for (let index = 1; index < weeklySnapshots.length; index += 1) {
@@ -123,12 +125,17 @@ export class TargetGradeSankeyComponent implements OnChanges {
   ): void {
     if (value > 0) {
       links.push({
-        source: `${sourceWeek} ${this.gradeLabel(sourceGrade)}`,
-        target: `${targetWeek} ${this.gradeLabel(targetGrade)}`,
+        source: `${sourceWeek}|${this.gradeLabel(sourceGrade)}`,
+        target: `${targetWeek}|${this.gradeLabel(targetGrade)}`,
         value,
       });
     }
   }
+
+  formatNodeLabel = (nodeName: string): string => {
+    const separatorIndex = nodeName.indexOf('|');
+    return separatorIndex === -1 ? nodeName : nodeName.slice(separatorIndex + 1);
+  };
 
   gradeLabel(grade: string): string {
     return this.unit.gradeLabel(Number(grade));

@@ -7,17 +7,25 @@
   </mat-card-header>
 
   @if (hasChartData) {
-    <div class="h-150 pt-6">
-      <ng-charts-sankey
-        [animations]="false"
-        [gradient]="false"
-        [results]="data"
-        [scheme]="$any(colorScheme)"
-        [showLabels]="true"
-        [tooltipDisabled]="false"
-        [truncateLabels]="true"
-      >
-      </ng-charts-sankey>
+    <div class="px-3 pt-2">
+      <div class="flex justify-between pt-6">
+        @for (week of weeks; track week) {
+          <div class="text-xs">{{ week }}</div>
+        }
+      </div>
+      <div class="h-150">
+        <ng-charts-sankey
+          [animations]="false"
+          [gradient]="false"
+          [labelFormatting]="formatNodeLabel"
+          [results]="data"
+          [scheme]="$any(colorScheme)"
+          [showLabels]="true"
+          [tooltipDisabled]="false"
+          [truncateLabels]="true"
+        >
+        </ng-charts-sankey>
+      </div>
     </div>
   } @else {
     <div class="flex h-125 items-center justify-center">
