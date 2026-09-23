@@ -167,6 +167,10 @@
               @if (groupMappingsActive && !integration.validated) {
                 Paused until the LMS group mappings are validated.
               }
+              @if (groupMappingsActive) {
+                If the group mappings are no longer valid due to a change in Moodle or OnTrack,
+                automatic sync will be disabled.
+              }
             </f-setting-toggle>
           </div>
           <div class="mt-3 flex flex-wrap justify-end gap-3">
