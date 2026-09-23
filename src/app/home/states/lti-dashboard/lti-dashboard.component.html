@@ -133,7 +133,7 @@
             }}"
             >{{ linkedUnit.periodLabel }}</span
           >
-          @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
+          @if (canManageLinkedUnit) {
             <br />
             <button class="mt-6 text-blue-400 underline" mat-button (click)="openLmsSettings()">
               LMS settings

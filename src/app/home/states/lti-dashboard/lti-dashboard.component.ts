@@ -302,6 +302,11 @@ export class LtiDashboardComponent implements AfterViewInit {
     window.open(window.location.origin, '_blank', 'noopener');
   }
 
+  // Unlinking and the LMS tab need the unit's convenor or an admin, not just a system role
+  public get canManageLinkedUnit(): boolean {
+    return this.linkedUnit?.myRole === 'Convenor' || this.linkedUnit?.myRole === 'Admin';
+  }
+
   public openLmsSettings(): void {
     this.launchApplication(`/units/${this.linkedUnit.id}/admin/lms`);
   }
