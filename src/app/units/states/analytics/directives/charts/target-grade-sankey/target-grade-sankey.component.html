@@ -1,0 +1,27 @@
+<mat-card appearance="outlined" class="p-4">
+  <mat-card-header>
+    <mat-card-title>Student Target Grade Changes</mat-card-title>
+    <mat-card-subtitle>
+      Weekly flows shows changes between total students who have selected each target-grade.
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  @if (hasChartData) {
+    <div class="h-150 pt-6">
+      <ng-charts-sankey
+        [animations]="false"
+        [gradient]="false"
+        [results]="data"
+        [scheme]="$any(colorScheme)"
+        [showLabels]="true"
+        [tooltipDisabled]="false"
+        [truncateLabels]="true"
+      >
+      </ng-charts-sankey>
+    </div>
+  } @else {
+    <div class="flex h-125 items-center justify-center">
+      <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+    </div>
+  }
+</mat-card>
