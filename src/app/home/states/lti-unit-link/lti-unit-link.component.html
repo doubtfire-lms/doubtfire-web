@@ -21,12 +21,12 @@
         Students will be automatically enrolled in this unit when they launch the OnTrack tool from
         this course.
       </p>
-      <mat-form-field class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <mat-label>Select a unit to link</mat-label>
         <mat-select [(value)]="selectedUnit">
           @for (unit of activeUnits; track unit) {
             <mat-option [value]="unit"
-              >{{ unit.code }} {{ unit.name }} ({{ getTeachingPeriod(unit) }})</mat-option
+              >{{ unit.code }} {{ unit.name }} ({{ unit.periodLabel }})</mat-option
             >
           }
         </mat-select>

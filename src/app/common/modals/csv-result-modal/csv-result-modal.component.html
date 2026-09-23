@@ -33,9 +33,9 @@
     <p>No data to show</p>
   } @else {
     <div class="max-h-[55vh] overflow-auto">
-      <table class="min-w-max" mat-table [dataSource]="dataSource">
+      <table class="min-w-max" mat-table matSort [dataSource]="dataSource">
         <ng-container matColumnDef="message">
-          <th *matHeaderCellDef mat-header-cell>Message</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>Message</th>
           <td *matCellDef="let row" mat-cell>
             <div class="max-w-[500px] break-words whitespace-pre-wrap">
               {{ displayMessage(row.item) }}
@@ -45,7 +45,9 @@
 
         @for (columnId of dynamicColumnIds; track columnId) {
           <ng-container [matColumnDef]="columnId">
-            <th *matHeaderCellDef mat-header-cell>{{ headerForColumn(columnId) }}</th>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>
+              {{ headerForColumn(columnId) }}
+            </th>
             <td *matCellDef="let row" mat-cell>
               <div class="max-w-[500px] break-words whitespace-pre-wrap">
                 {{ rowValueForColumn(row.rowObject, columnId) }}
@@ -55,7 +57,7 @@
         }
 
         <ng-container matColumnDef="other">
-          <th *matHeaderCellDef mat-header-cell>Other</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>Other</th>
           <td *matCellDef="let row" mat-cell>
             <div class="max-w-[500px] break-words whitespace-pre-wrap">
               {{ row.otherData || '-' }}

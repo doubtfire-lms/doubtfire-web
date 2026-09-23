@@ -7,6 +7,7 @@ import {LtiService} from 'src/app/api/services/lti.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {errorMessage} from 'src/app/common/services/error-message';
 
 @Component({
   selector: 'f-lti-unit-link',
@@ -49,26 +50,12 @@ export class LtiUnitLinkComponent implements AfterViewInit {
 
   public submit(): void {
     this.confirmationModalService.show(
-      `Are you sure you want to link ${this.selectedUnit.code} ${this.selectedUnit.name} (${this.getTeachingPeriod(this.selectedUnit)}) to this course?`,
+      `Are you sure you want to link ${this.selectedUnit.code} ${this.selectedUnit.name} (${this.selectedUnit.periodLabel}) to this course?`,
       'Once you have linked an OnTrack unit, students who launch this app will be enrolled automatically. Unlinking a unit will not withdraw students automatically.',
       () => {
         this.linkUnit(this.selectedUnit);
       },
     );
-  }
-
-  private formatTeachingPeriod(date): string {
-    const month = date.toLocaleString('en-US', {month: 'short'});
-    const year = String(date.getFullYear()).slice(-2);
-    return `${month} '${year}`;
-  }
-
-  public getTeachingPeriod(unit: Unit) {
-    if (unit.teachingPeriod?.name) {
-      return unit.teachingPeriod.name;
-    }
-
-    return `${this.formatTeachingPeriod(unit.startDate)} - ${this.formatTeachingPeriod(unit.endDate)}`;
   }
 
   private async linkUnit(unit: Unit) {
@@ -86,7 +73,7 @@ export class LtiUnitLinkComponent implements AfterViewInit {
         },
         error: (error) => {
           console.error(error);
-          this.alertsService.error(`Failed to link unit: ${error.error}`, 6000);
+          this.alertsService.error(errorMessage(error, 'Failed to link unit.'), 6000);
         },
       });
   }

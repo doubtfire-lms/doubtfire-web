@@ -1,5 +1,5 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService, User} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -10,6 +10,7 @@ import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal
 import {CsvResultModalService} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {errorMessage} from 'src/app/common/services/error-message';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
@@ -32,12 +33,20 @@ export class LtiDashboardComponent implements AfterViewInit {
     private csvResultModalService: CsvResultModalService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
     private constants: DoubtfireConstants,
+    private route: ActivatedRoute,
   ) {}
+
+  private readonly launchErrorMessages: Record<string, string> = {
+    not_member:
+      'You must be enrolled in this course to launch OnTrack, including site administrators.',
+  };
 
   // linkedUnit: UnitLink;
   linkedUnit: Unit;
+  linkedProjectId: number;
   currentUser: User;
   unauthorised: boolean = false;
+  launchError: string;
 
   loadingState: 'creatingUser' | 'enrollingUser' | 'fetchingUnit';
   isLoading: boolean;
@@ -45,6 +54,7 @@ export class LtiDashboardComponent implements AfterViewInit {
   isSyncingGrades: boolean;
   isSyncingEnrolments: boolean;
   isLoadingGradeLineItemStatus: boolean;
+  isRetryingGradeLineItem: boolean;
   gradeLineItemStatus: GradeLineItemStatus;
   externalName = this.constants.ExternalName;
 
@@ -52,6 +62,14 @@ export class LtiDashboardComponent implements AfterViewInit {
     // Scroll to the bottom of the page in case the header is visible
     // Ensures our action buttons are centered
     setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
+
+    const launchError = this.route.snapshot.queryParamMap.get('launchError');
+    if (launchError) {
+      this.launchError =
+        this.launchErrorMessages[launchError] ?? 'OnTrack could not be launched. Please relaunch.';
+      this.alertsService.error(this.launchError, 8000);
+      return;
+    }
 
     this.isLoading = true;
     // TODO: add a spinner or loading indicator until final loading state is complete
@@ -78,7 +96,8 @@ export class LtiDashboardComponent implements AfterViewInit {
 
           // Ensure user is enrolled into the linked unit
           this.ltiService.enrolUser(link).subscribe({
-            next: () => {
+            next: (project) => {
+              this.linkedProjectId = project?.id;
               // Fetch unit information
               this.unitService.get(link.unitId).subscribe({
                 next: (unit) => {
@@ -86,14 +105,20 @@ export class LtiDashboardComponent implements AfterViewInit {
                   this.isLoading = false;
                 },
                 error: (error) => {
-                  this.alertsService.error(error.error || error, 6000);
+                  this.alertsService.error(
+                    errorMessage(error, 'Failed to load the linked unit.'),
+                    6000,
+                  );
                   this.isLoading = false;
                 },
               });
             },
             error: (error) => {
               console.error(error);
-              this.alertsService.error(error.error || 'Failed to enrol in the linked unit.', 6000);
+              this.alertsService.error(
+                errorMessage(error, 'Failed to enrol in the linked unit.'),
+                6000,
+              );
               this.isLoading = false;
             },
           });
@@ -118,9 +143,37 @@ export class LtiDashboardComponent implements AfterViewInit {
         this.gradeLineItemStatus = {
           configured: false,
           visibility: 'unknown',
+          message: errorMessage(error, 'Failed to check the Moodle grade item.'),
         };
         this.isLoadingGradeLineItemStatus = false;
-        this.alertsService.error(error.error || 'Failed to check the Moodle grade item.', 6000);
+        this.alertsService.error(
+          errorMessage(error, 'Failed to check the Moodle grade item.'),
+          6000,
+        );
+      },
+    });
+  }
+
+  retryGradeLineItem(): void {
+    this.isRetryingGradeLineItem = true;
+    this.ltiService.retryGradeLineItem().subscribe({
+      next: (status) => {
+        this.gradeLineItemStatus = status;
+        this.isRetryingGradeLineItem = false;
+        this.alertsService.success('Moodle grade item is ready.', 5000);
+      },
+      error: (error) => {
+        console.error(error);
+        this.gradeLineItemStatus = {
+          configured: false,
+          visibility: 'unknown',
+          message: errorMessage(error, 'Failed to find or create the Moodle grade item.'),
+        };
+        this.isRetryingGradeLineItem = false;
+        this.alertsService.error(
+          errorMessage(error, 'Failed to find or create the Moodle grade item.'),
+          6000,
+        );
       },
     });
   }
@@ -137,7 +190,7 @@ export class LtiDashboardComponent implements AfterViewInit {
       },
       error: (error) => {
         console.error(error);
-        this.alertsService.error(error.error, 6000);
+        this.alertsService.error(errorMessage(error, 'Failed to remove the unit link.'), 6000);
       },
     });
   }
@@ -238,14 +291,61 @@ export class LtiDashboardComponent implements AfterViewInit {
           },
           error: (error) => {
             console.error(error);
-            this.alertsService.error(error.error || `Failed to sync grades`);
+            this.alertsService.error(errorMessage(error, 'Failed to sync grades'));
             this.isSyncingGrades = false;
           },
         });
       },
     );
   }
-  public launchApplication(): void {
-    window.open(`${window.location.origin}/home`, '_blank');
+  public openOnTrack(): void {
+    window.open(window.location.origin, '_blank', 'noopener');
+  }
+
+  // Unlinking and the LMS tab need the unit's convenor or an admin, not just a system role
+  public get canManageLinkedUnit(): boolean {
+    return this.linkedUnit?.myRole === 'Convenor' || this.linkedUnit?.myRole === 'Admin';
+  }
+
+  public openLmsSettings(): void {
+    this.launchApplication(`/units/${this.linkedUnit.id}/admin/lms`);
+  }
+
+  public launchLinkedUnit(): void {
+    if (!this.linkedUnit) {
+      return this.launchApplication();
+    }
+    if (['Tutor', 'Convenor', 'Admin', 'Auditor'].includes(this.linkedUnit.myRole)) {
+      return this.launchApplication(`/units/${this.linkedUnit.id}/tasks/inbox`);
+    }
+    this.launchApplication(
+      this.linkedProjectId ? `/projects/${this.linkedProjectId}/dashboard` : undefined,
+    );
+  }
+
+  public launchApplication(returnTo?: string): void {
+    // Open synchronously so popup blockers treat it as a user action, then detach it from this frame.
+    const appWindow = window.open('about:blank', '_blank');
+    if (!appWindow) {
+      this.alertsService.error('Allow pop-ups for this site to open OnTrack in a new tab.', 6000);
+      return;
+    }
+    appWindow.opener = null;
+
+    this.ltiService.createAppHandoff().subscribe({
+      next: ({username, authToken}) => {
+        const signInUrl = new URL('/sign_in', window.location.origin);
+        signInUrl.searchParams.set('username', username);
+        signInUrl.searchParams.set('authToken', authToken);
+        if (returnTo) {
+          signInUrl.searchParams.set('returnTo', returnTo);
+        }
+        appWindow.location.replace(signInUrl.toString());
+      },
+      error: (error) => {
+        appWindow.close();
+        this.alertsService.error(errorMessage(error, 'Failed to open OnTrack in a new tab.'), 6000);
+      },
+    });
   }
 }

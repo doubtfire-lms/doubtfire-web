@@ -127,6 +127,8 @@ import {
   EngagementService,
   GroupSetService,
   LearningOutcomeService,
+  LmsGroupMappingService,
+  LmsIntegrationService,
   OverseerAssessmentService,
   OverseerImageService,
   ProjectService,
@@ -348,6 +350,7 @@ import {
 } from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
 import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
+import {UnitLmsIntegrationComponent} from './units/states/edit/directives/unit-lms-integration/unit-lms-integration.component';
 import {BulkImportStaffModalComponent} from './units/states/edit/directives/unit-staff-editor/bulk-import-staff-modal/bulk-import-staff-modal.component';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {StudentCampusSelectComponent} from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
@@ -511,6 +514,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     UnitTutorialsManagerComponent,
     FileDropComponent,
     UnitStudentsEditorComponent,
+    UnitLmsIntegrationComponent,
     StudentsListComponent,
     UnitTaskEditorComponent,
     TaskDefinitionEditorComponent,
@@ -712,6 +716,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     UnitContentLinkService,
     UnitContentSiteService,
     D2lAssessmentMappingService,
+    LmsGroupMappingService,
+    LmsIntegrationService,
     ProjectService,
     UnitRoleService,
     LearningOutcomeService,

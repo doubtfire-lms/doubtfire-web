@@ -154,6 +154,15 @@ export class Unit extends Entity {
     })`;
   }
 
+  public get periodLabel(): string {
+    if (this.teachingPeriod?.name) {
+      return this.teachingPeriod.name;
+    }
+    const format = (date: Date) =>
+      `${date.toLocaleString('en-US', {month: 'short'})} '${String(date.getFullYear()).slice(-2)}`;
+    return `${format(this.startDate)} - ${format(this.endDate)}`;
+  }
+
   public get isActive(): boolean {
     return this.active && (!this.teachingPeriod || this.teachingPeriod.active);
   }
