@@ -512,7 +512,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         {
           file: {name: 'Batch Feedback Zip', type: 'zip'},
         },
-        this.unit.getBatchFeedbackUploadUrl(taskDefinition),
+        null,
         (response: SidekiqJob) => {
           if (!response?.id) {
             this.alertService.error('Batch feedback upload failed.', 6000);
@@ -532,6 +532,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
               },
             });
         },
+        (files) => this.unit.uploadBatchFeedback(taskDefinition, files.file),
       );
     });
   }

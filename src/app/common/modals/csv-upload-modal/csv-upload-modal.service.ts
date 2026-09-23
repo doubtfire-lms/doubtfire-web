@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {Observable} from 'rxjs';
+import {UploadEvent} from 'src/app/common/services/resumable-upload.service';
 import {
   CsvUploadFileMap,
   CsvUploadModalComponent,
@@ -16,8 +18,9 @@ export class CsvUploadModalService {
     title: string,
     message: string,
     batchFiles: CsvUploadFileMap,
-    url: string,
+    url: string | null,
     onSuccess?: (response: unknown) => void,
+    uploader?: (files: Record<string, File>) => Observable<UploadEvent>,
   ): void {
     this.dialog.open<CsvUploadModalComponent, CsvUploadModalData>(CsvUploadModalComponent, {
       width: '90vw',
@@ -29,6 +32,7 @@ export class CsvUploadModalService {
         batchFiles,
         url,
         onSuccess,
+        uploader,
       },
     });
   }
