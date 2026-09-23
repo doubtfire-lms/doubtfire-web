@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-97](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-96...v11.0.0-97) (2026-09-23)
+
+
+### Features
+
+* automate lti syncing and add moodle course data ([#1600](https://github.com/b0ink/doubtfire-deploy/issues/1600)) ([c9df8f7](https://github.com/b0ink/doubtfire-deploy/commit/c9df8f7e2e542f146d1e6973156be01f9efd9aea))
+
+
+### Bug Fixes
+
+* drop .json extension from feedback upload url ([a547884](https://github.com/b0ink/doubtfire-deploy/commit/a547884c69f52371a768dadc8b56f8e6f848a424))
+
 ## [11.0.0-96](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-95...v11.0.0-96) (2026-09-23)
 
 
