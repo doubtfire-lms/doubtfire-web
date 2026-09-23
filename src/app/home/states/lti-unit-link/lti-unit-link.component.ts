@@ -48,6 +48,10 @@ export class LtiUnitLinkComponent implements AfterViewInit {
     // TODO: query our LTI API to see if we have already linked a unit
   }
 
+  public back(): void {
+    this.router.navigate(['/lti']);
+  }
+
   public submit(): void {
     this.confirmationModalService.show(
       `Are you sure you want to link ${this.selectedUnit.code} ${this.selectedUnit.name} (${this.selectedUnit.periodLabel}) to this course?`,
