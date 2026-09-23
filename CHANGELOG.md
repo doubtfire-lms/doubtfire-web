@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-98](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-97...v11.0.0-98) (2026-09-23)
+
+
+### Features
+
+* add back button ([c7dc757](https://github.com/b0ink/doubtfire-deploy/commit/c7dc757b09a5acdd0f124f7625e97bc1aa4f348a))
+
 ## [11.0.0-97](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-96...v11.0.0-97) (2026-09-23)
 
 
