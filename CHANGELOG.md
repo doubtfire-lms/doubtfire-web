@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-96](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-95...v11.0.0-96) (2026-09-23)
+
+
+### Features
+
+* view inbox of another tutor ([1241e66](https://github.com/b0ink/doubtfire-deploy/commit/1241e664d843e2cc433e550220a6f41fc562e177))
+
+
+### Bug Fixes
+
+* center title ([c052912](https://github.com/b0ink/doubtfire-deploy/commit/c052912ba37b86501b01ec228212fa3eee22a948))
+* correct tailwind class order and trailing newlines (FL-15, FL-16) ([9e02b07](https://github.com/b0ink/doubtfire-deploy/commit/9e02b0726f839b5991cd59548c414fc2e57974bc))
+* correct tailwind classnames order and trailing newline ([0bee2bd](https://github.com/b0ink/doubtfire-deploy/commit/0bee2bdf899ba44012c5e14a477b9c2b81186539))
+* repair broken div nesting from previous tailwind class fix ([f74a2e2](https://github.com/b0ink/doubtfire-deploy/commit/f74a2e296264cf7251ee5b3f9c87c144b6ea9bfd))
+* use valid 960px Tailwind variants ([731184c](https://github.com/b0ink/doubtfire-deploy/commit/731184cbce817db4cd431a7cc6fa7849318d1042))
+
 ## [11.0.0-95](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-94...v11.0.0-95) (2026-09-17)
 
 

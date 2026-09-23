@@ -711,7 +711,7 @@ export class Unit extends Entity {
 
     params.set('task_definition_id', `${taskDefinitionId}`);
 
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/batch_feedback_csv.json?${params.toString()}`;
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/batch_feedback_csv?${params.toString()}`;
   }
 
   public getTaskDefinitionBatchUploadUrl(): string {
