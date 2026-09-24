@@ -43,6 +43,22 @@ export function formatSnapshotLabel(unit: Unit, snapshotDate?: string, format?: 
   }
 }
 
+export function getLastSnapshotByWeek(
+  unit: Unit,
+  snapshots: TaskCompletionSnapshot[],
+): Map<string, TaskCompletionSnapshot> {
+  const lastSnapshotByWeek: Map<string, TaskCompletionSnapshot> = new Map();
+
+  snapshots.forEach((snapshot) => {
+    const week = formatSnapshotLabel(unit, snapshot.snapshot_date, 'short');
+    if (week) {
+      lastSnapshotByWeek.set(week, snapshot);
+    }
+  });
+
+  return lastSnapshotByWeek;
+}
+
 // Order determines the order of the chart legend and series.
 export const statusMapping: TaskStatusEnum[] = [
   'complete',

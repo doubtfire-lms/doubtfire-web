@@ -15,6 +15,9 @@
       @case ('task-completion') {
         <f-task-status-summary-charts [unit]="unit" />
       }
+      @case ('target-grades') {
+        <f-target-grade-sankey [unit]="unit" />
+      }
       @case ('download-data') {
         <mat-card appearance="outlined" class="mt-2.5 p-4">
           <mat-card-content class="flex gap-1">

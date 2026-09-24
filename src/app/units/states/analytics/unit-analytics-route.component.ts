@@ -48,7 +48,7 @@ export class UnitAnalyticsComponent
 
   public readonly tabs: AnalyticsTab[] = [
     {label: 'Task Completion', routeSegment: 'task-completion'},
-    // {label: 'Target Grades', routeSegment: 'target-grades'},
+    {label: 'Target Grades', routeSegment: 'target-grades'},
     // {label: 'Tasks Awaiting Feedback', routeSegment: 'tasks-awaiting-feedback'},
     // {label: 'Resubmissions', routeSegment: 'resubmissions'},
     {label: 'Tutor Times', routeSegment: 'tutor-times'},

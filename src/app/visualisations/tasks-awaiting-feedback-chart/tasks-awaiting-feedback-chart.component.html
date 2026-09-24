@@ -1,0 +1,34 @@
+<mat-card appearance="outlined" class="p-4">
+  <mat-card-header>
+    <mat-card-title>Days Awaiting Feedback by Tutor</mat-card-title>
+    <mat-card-subtitle>
+      Distribution of tasks waiting for feedback, with and without teaching breaks.
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  @if (isLoading) {
+    <div
+      aria-label="Loading analytics"
+      class="flex min-h-80 items-center justify-center"
+      role="status"
+    >
+      <mat-spinner />
+    </div>
+  } @else if (data.length === 0) {
+    <p class="p-4">No tasks are currently awaiting feedback.</p>
+  } @else {
+    <ng-charts-box-chart
+      class="block h-[32rem] w-full"
+      [legend]="true"
+      [legendPosition]="legendPosition"
+      [results]="data"
+      [showGridLines]="true"
+      [showYAxisLabel]="true"
+      [tooltipDisabled]="false"
+      [xAxis]="true"
+      [xAxisLabel]="'Tutor'"
+      [yAxis]="true"
+      [yAxisLabel]="'Days awaiting feedback'"
+    />
+  }
+</mat-card>
