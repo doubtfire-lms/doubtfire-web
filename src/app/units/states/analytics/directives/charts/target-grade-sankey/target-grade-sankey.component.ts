@@ -16,7 +16,7 @@ export class TargetGradeSankeyComponent implements OnChanges {
   data: SankeyData = [];
   weeks: string[] = [];
   hasChartData = false;
-  private readonly sourceTotals = new Map<string, number>();
+  private readonly sourceTotals: Map<string, number> = new Map();
 
   readonly colorScheme = {
     domain: ['#0079D8'],
