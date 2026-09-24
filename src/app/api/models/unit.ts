@@ -4,6 +4,10 @@ import {Observable, shareReplay, switchMap, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {
+  ResumableUploadService,
+  UploadEvent,
+} from 'src/app/common/services/resumable-upload.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GroupService} from '../services/group.service';
 import {MarkingSessionService} from '../services/marking-session.service';
@@ -152,6 +156,15 @@ export class Unit extends Entity {
     return `${this.code} (${
       this.teachingPeriod ? this.teachingPeriod.name : this.startDate.toLocaleDateString()
     })`;
+  }
+
+  public get periodLabel(): string {
+    if (this.teachingPeriod?.name) {
+      return this.teachingPeriod.name;
+    }
+    const format = (date: Date) =>
+      `${date.toLocaleString('en-US', {month: 'short'})} '${String(date.getFullYear()).slice(-2)}`;
+    return `${format(this.startDate)} - ${format(this.endDate)}`;
   }
 
   public get isActive(): boolean {
@@ -695,14 +708,18 @@ export class Unit extends Entity {
     }`;
   }
 
-  public getBatchFeedbackUploadUrl(taskDefinition: TaskDefinition | number): string {
-    const params = new URLSearchParams({unit_id: `${this.id}`});
+  public uploadBatchFeedback(
+    taskDefinition: TaskDefinition | number,
+    file: File,
+  ): Observable<UploadEvent> {
     const taskDefinitionId =
       taskDefinition instanceof TaskDefinition ? taskDefinition.id : taskDefinition;
 
-    params.set('task_definition_id', `${taskDefinitionId}`);
-
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/batch_feedback_csv.json?${params.toString()}`;
+    return AppInjector.get(ResumableUploadService).upload(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/batch_feedback_uploads`,
+      file,
+      {unit_id: this.id, task_definition_id: taskDefinitionId},
+    );
   }
 
   public getTaskDefinitionBatchUploadUrl(): string {

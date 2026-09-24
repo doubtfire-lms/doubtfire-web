@@ -77,6 +77,10 @@ export class TaskService extends CachedEntityService<Task> {
         toEntityFn: MappingFunctions.mapDate,
       },
       {
+        keys: 'waitingSince',
+        toEntityFn: MappingFunctions.mapDate,
+      },
+      {
         keys: 'completionDate',
         toEntityFn: MappingFunctions.mapDateToDay,
       },
@@ -126,6 +130,7 @@ export class TaskService extends CachedEntityService<Task> {
     unit: Unit,
     taskDef?: TaskDefinition | number,
     fetchMyStudentsOnly?: boolean,
+    viewAsUnitRoleId?: number,
   ): Observable<Task[]> {
     const cache: EntityCache<Task> = new EntityCache<Task>();
 
@@ -139,6 +144,7 @@ export class TaskService extends CachedEntityService<Task> {
         constructorParams: unit,
         params: {
           my_students_only: fetchMyStudentsOnly,
+          ...(viewAsUnitRoleId ? {view_as_unit_role_id: viewAsUnitRoleId} : {}),
         },
       },
     ).pipe(

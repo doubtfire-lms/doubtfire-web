@@ -24,10 +24,19 @@ export abstract class TabManagementBase<T extends Tab> {
   ) {}
 
   /**
+   * Tabs offered to the user - subclasses narrow this to hide conditional tabs
+   */
+  public get visibleTabs(): T[] {
+    return this.tabs;
+  }
+
+  /**
    * Get the index of the currently active tab
    */
   public get currentIndex(): number {
-    const index = this.tabs.findIndex((tab) => tab.routeSegment === this.currentTab.routeSegment);
+    const index = this.visibleTabs.findIndex(
+      (tab) => tab.routeSegment === this.currentTab.routeSegment,
+    );
     return index >= 0 ? index : 0;
   }
 
@@ -36,7 +45,7 @@ export abstract class TabManagementBase<T extends Tab> {
    * @param event - MatTabChangeEvent from the tab component
    */
   public onTabChange(event: MatTabChangeEvent): void {
-    const nextTab = this.tabs[event.index] ?? this.tabs[0];
+    const nextTab = this.visibleTabs[event.index] ?? this.visibleTabs[0];
     this.currentTab = nextTab;
     if (this.route.parent?.snapshot.data.unit) {
       this.router.navigate(
@@ -56,6 +65,7 @@ export abstract class TabManagementBase<T extends Tab> {
    * @param tabParam - The tab route segment from URL
    */
   protected updateCurrentTabFromState(tabParam?: string | null): void {
-    this.currentTab = this.tabs.find((tab) => tab.routeSegment === tabParam) ?? this.tabs[0];
+    this.currentTab =
+      this.visibleTabs.find((tab) => tab.routeSegment === tabParam) ?? this.visibleTabs[0];
   }
 }

@@ -1,5 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Observable} from 'rxjs';
+import {UploadEvent} from 'src/app/common/services/resumable-upload.service';
 
 export interface CsvUploadFileSpec {
   name: string;
@@ -12,8 +14,9 @@ export interface CsvUploadModalData {
   title: string;
   message?: string;
   batchFiles: CsvUploadFileMap;
-  url: string;
+  url: string | null;
   onSuccess?: (response: unknown) => void;
+  uploader?: (files: Record<string, File>) => Observable<UploadEvent>;
 }
 
 @Component({

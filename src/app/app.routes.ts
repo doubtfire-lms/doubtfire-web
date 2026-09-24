@@ -132,7 +132,7 @@ export const routes: Routes = [
     path: 'tutor-discussion',
     component: TutorDiscussionComponent,
     canActivate: [roleWhitelistGuard],
-    data: {task: 'Discussion', roleWhitelist: ['Admin', 'Auditor', 'Tutor']},
+    data: {task: 'Discussion', roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor']},
   },
   {
     path: 'tutor-attendance',

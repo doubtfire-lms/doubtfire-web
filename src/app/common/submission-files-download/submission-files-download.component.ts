@@ -1,6 +1,7 @@
 import {HttpResponse} from '@angular/common/http';
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 
@@ -20,6 +21,7 @@ export class SubmissionFilesDownloadComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly constants: DoubtfireConstants,
     private readonly fileDownloader: FileDownloaderService,
+    private readonly authenticationService: AuthenticationService,
   ) {}
 
   public ngOnInit(): void {
@@ -27,7 +29,11 @@ export class SubmissionFilesDownloadComponent implements OnInit {
     const taskDefId = this.route.snapshot.paramMap.get('taskDefId');
 
     this.downloadUrl = `${this.constants.API_URL}/projects/${projectId}/task_def_id/${taskDefId}/submission_files?as_attachment=true`;
-    this.download();
+    this.authenticationService.afterAuthCall((authenticated) => {
+      if (authenticated) {
+        this.download();
+      }
+    });
   }
 
   protected download(): void {

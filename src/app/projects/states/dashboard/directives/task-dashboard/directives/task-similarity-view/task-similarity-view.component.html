@@ -35,14 +35,24 @@
                 <mat-panel-description> {{ part.description }} </mat-panel-description>
                 @if (similarity.readyForViewer) {
                   @if (similarity.type === 'JplagTaskSimilarity') {
-                    <button
-                      aria-label="View Detailed Report"
-                      mat-icon-button
-                      matTooltip="View JPlag report for this similarity"
-                      (click)="viewJplagReport(similarity); $event.stopPropagation()"
-                    >
-                      <mat-icon>summarize</mat-icon>
-                    </button>
+                    <!-- Kept outside mat-icon-button, which resizes every svg inside it -->
+                    @if (loadingJplagReportFor === similarity) {
+                      <span
+                        class="flex size-12 shrink-0 items-center justify-center"
+                        (click)="$event.stopPropagation()"
+                      >
+                        <mat-spinner class="spinner-primary" diameter="20" />
+                      </span>
+                    } @else {
+                      <button
+                        aria-label="View Detailed Report"
+                        mat-icon-button
+                        matTooltip="View JPlag report for this similarity"
+                        (click)="viewJplagReport(similarity); $event.stopPropagation()"
+                      >
+                        <mat-icon>summarize</mat-icon>
+                      </button>
+                    }
                   } @else if (similarity.type === 'TiiTaskSimilarity') {
                     <button
                       aria-label="View report"
@@ -79,9 +89,15 @@
                       class="mx-auto block"
                       color="primary"
                       mat-raised-button
+                      [disabled]="loadingJplagReportFor === similarity"
                       (click)="viewJplagReport(similarity)"
                     >
-                      View JPlag Similarity
+                      @if (loadingJplagReportFor === similarity) {
+                        <mat-spinner class="spinner-primary mr-2 inline-block" diameter="18" />
+                        Downloading report...
+                      } @else {
+                        View JPlag Similarity
+                      }
                     </button>
                   }
                 } @else {
@@ -92,9 +108,16 @@
           }
         </div>
       } @empty {
-        <div class="mt-6 w-full text-center text-gray-400">
-          There are no similarities for this submission
-        </div>
+        @if (loadingSimilarities) {
+          <div class="mt-6 flex w-full flex-col items-center gap-2 text-gray-400">
+            <mat-spinner diameter="36" />
+            Loading similarities...
+          </div>
+        } @else {
+          <div class="mt-6 w-full text-center text-gray-400">
+            There are no similarities for this submission
+          </div>
+        }
       }
     </mat-accordion>
   }

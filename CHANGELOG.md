@@ -2,6 +2,80 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-99](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-98...v11.0.0-99) (2026-09-24)
+
+
+### Features
+
+* resumable uploads ([86607dd](https://github.com/b0ink/doubtfire-deploy/commit/86607dd885fcf51827a05be8cb64df460ecce4f3))
+
+
+### Bug Fixes
+
+* filter out staff who dont have belong to a tutorial ([ab8832d](https://github.com/b0ink/doubtfire-deploy/commit/ab8832dc857cef82e08cd0cdb1bfe034082782d5))
+
+## [11.0.0-98](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-97...v11.0.0-98) (2026-09-23)
+
+
+### Features
+
+* add back button ([c7dc757](https://github.com/b0ink/doubtfire-deploy/commit/c7dc757b09a5acdd0f124f7625e97bc1aa4f348a))
+
+## [11.0.0-97](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-96...v11.0.0-97) (2026-09-23)
+
+
+### Features
+
+* automate lti syncing and add moodle course data ([#1600](https://github.com/b0ink/doubtfire-deploy/issues/1600)) ([c9df8f7](https://github.com/b0ink/doubtfire-deploy/commit/c9df8f7e2e542f146d1e6973156be01f9efd9aea))
+
+
+### Bug Fixes
+
+* drop .json extension from feedback upload url ([a547884](https://github.com/b0ink/doubtfire-deploy/commit/a547884c69f52371a768dadc8b56f8e6f848a424))
+
+## [11.0.0-96](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-95...v11.0.0-96) (2026-09-23)
+
+
+### Features
+
+* view inbox of another tutor ([1241e66](https://github.com/b0ink/doubtfire-deploy/commit/1241e664d843e2cc433e550220a6f41fc562e177))
+
+
+### Bug Fixes
+
+* center title ([c052912](https://github.com/b0ink/doubtfire-deploy/commit/c052912ba37b86501b01ec228212fa3eee22a948))
+* correct tailwind class order and trailing newlines (FL-15, FL-16) ([9e02b07](https://github.com/b0ink/doubtfire-deploy/commit/9e02b0726f839b5991cd59548c414fc2e57974bc))
+* correct tailwind classnames order and trailing newline ([0bee2bd](https://github.com/b0ink/doubtfire-deploy/commit/0bee2bdf899ba44012c5e14a477b9c2b81186539))
+* repair broken div nesting from previous tailwind class fix ([f74a2e2](https://github.com/b0ink/doubtfire-deploy/commit/f74a2e296264cf7251ee5b3f9c87c144b6ea9bfd))
+* use valid 960px Tailwind variants ([731184c](https://github.com/b0ink/doubtfire-deploy/commit/731184cbce817db4cd431a7cc6fa7849318d1042))
+
+## [11.0.0-95](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-94...v11.0.0-95) (2026-09-17)
+
+
+### Features
+
+* show loading spinners for similarities and jplag reports ([76f1ce3](https://github.com/b0ink/doubtfire-deploy/commit/76f1ce31dc6a033eec7373d0c03dc436250f9c9b))
+
+
+### Bug Fixes
+
+* load jplag reports over 10 MB from every ranged chunk ([657f71b](https://github.com/b0ink/doubtfire-deploy/commit/657f71bece36b49a645e38ee42950657d0f07ba2))
+* wait for authentication before downloading submission files ([dcf7966](https://github.com/b0ink/doubtfire-deploy/commit/dcf796606d7afb23b8d692ec7228f31df79457c1))
+
+## [11.0.0-94](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-93...v11.0.0-94) (2026-09-16)
+
+
+### Bug Fixes
+
+* switch to explorer on first page load only ([6578c27](https://github.com/b0ink/doubtfire-deploy/commit/6578c27ddfb75c45cda2a0e9212a479212a4427d))
+
+## [11.0.0-93](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-qr-fix.1...v11.0.0-93) (2026-09-16)
+
+
+### Features
+
+* improve grade item workflow for lti ([bd49fea](https://github.com/b0ink/doubtfire-deploy/commit/bd49feaac3c76f44633a856b3d02df2e0c414d65))
+
 ## [11.0.0-92](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-91...v11.0.0-92) (2026-09-14)
 
 ## [11.0.0-91](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-90...v11.0.0-91) (2026-09-14)

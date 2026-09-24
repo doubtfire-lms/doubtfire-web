@@ -33,6 +33,24 @@ export interface RetrievedGrade {
 export interface UnitLink {
   contextId?: string;
   unitId: string;
+  lineItemId?: string;
+}
+
+export interface GradeLineItemStatus {
+  configured: boolean;
+  visibility: 'unknown';
+  reason?: 'service_not_enabled' | 'line_item_missing' | 'line_item_unavailable';
+  message?: string;
+  lineItem?: {
+    id: string;
+    label: string;
+    scoreMaximum: number;
+  };
+}
+
+export interface AppHandoff {
+  username: string;
+  authToken: string;
 }
 
 export interface LtiMembers {
@@ -56,6 +74,10 @@ export class LtiService {
     return this.httpClient.get<info>(`${LTI_API_URL}/info`);
   }
 
+  public createAppHandoff(): Observable<AppHandoff> {
+    return this.httpClient.post<AppHandoff>(`${LTI_API_URL}/app-handoff`, {});
+  }
+
   public getUnitLink(): Observable<UnitLink> {
     return this.httpClient.get<UnitLink>(`${LTI_API_URL}/link`);
   }
@@ -66,6 +88,14 @@ export class LtiService {
 
   public removeUnitLink(): Observable<UnitLink> {
     return this.httpClient.delete<UnitLink>(`${LTI_API_URL}/link`);
+  }
+
+  public getGradeLineItemStatus(): Observable<GradeLineItemStatus> {
+    return this.httpClient.get<GradeLineItemStatus>(`${LTI_API_URL}/grade-line-item`);
+  }
+
+  public retryGradeLineItem(): Observable<GradeLineItemStatus> {
+    return this.httpClient.post<GradeLineItemStatus>(`${LTI_API_URL}/grade-line-item`, {});
   }
 
   public enrolUser(unit: UnitLink): Observable<Project | null> {
