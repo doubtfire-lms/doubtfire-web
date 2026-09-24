@@ -16,6 +16,7 @@ export class TargetGradeSankeyComponent implements OnChanges {
   data: SankeyData = [];
   weeks: string[] = [];
   hasChartData = false;
+  private readonly sourceTotals = new Map<string, number>();
 
   readonly colorScheme = {
     domain: ['#0079D8'],
@@ -58,6 +59,7 @@ export class TargetGradeSankeyComponent implements OnChanges {
       ([, snapshot]) => snapshot.target_grade_student_counts,
     );
     this.weeks = weeklySnapshots.map(([week]) => week);
+    this.sourceTotals.clear();
     const links: SankeyData = [];
 
     for (let index = 1; index < weeklySnapshots.length; index += 1) {
@@ -88,6 +90,10 @@ export class TargetGradeSankeyComponent implements OnChanges {
       ]),
     );
     const links: SankeyData = [];
+
+    sourceCounts.forEach((count, grade) => {
+      this.sourceTotals.set(`${sourceWeek}|${this.gradeLabel(grade)}`, count);
+    });
 
     const remainingSource = new Map(sourceCounts);
     const remainingTarget = new Map(targetCounts);
@@ -135,6 +141,16 @@ export class TargetGradeSankeyComponent implements OnChanges {
   formatNodeLabel = (nodeName: string): string => {
     const separatorIndex = nodeName.indexOf('|');
     return separatorIndex === -1 ? nodeName : nodeName.slice(separatorIndex + 1);
+  };
+
+  formatTooltip = (model: {source: string; target: string; value: number}): string => {
+    return `${model.source.split('|')[0]} → ${model.target.split('|')[0]}`;
+  };
+
+  formatTooltipPercentage = (model: {source: string; value: number}): string => {
+    const sourceTotal = this.sourceTotals.get(model.source) ?? 0;
+    const percentage = sourceTotal === 0 ? 0 : (model.value / sourceTotal) * 100;
+    return `${percentage.toFixed(1)}%`;
   };
 
   gradeLabel(grade: string): string {
