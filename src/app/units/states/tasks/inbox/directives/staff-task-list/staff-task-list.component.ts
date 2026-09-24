@@ -316,7 +316,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       .slice()
       .sort(byName);
 
-    const allTutors = staff.slice().sort(byName);
+    // Staff without tutorials would always have an empty inbox
+    const tutorUserIds = new Set(this.unit.tutorials.map((t) => t.tutor?.id).filter(Boolean));
+    const allTutors = staff.filter((ur) => tutorUserIds.has(ur.user?.id)).sort(byName);
 
     this.viewAsOptions = [
       {id: VIEW_AS_SELF, name: 'Myself'},
