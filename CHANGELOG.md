@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-99](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-98...v11.0.0-99) (2026-09-24)
+
+
+### Features
+
+* resumable uploads ([86607dd](https://github.com/b0ink/doubtfire-deploy/commit/86607dd885fcf51827a05be8cb64df460ecce4f3))
+
+
+### Bug Fixes
+
+* filter out staff who dont have belong to a tutorial ([ab8832d](https://github.com/b0ink/doubtfire-deploy/commit/ab8832dc857cef82e08cd0cdb1bfe034082782d5))
+
 ## [11.0.0-98](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-97...v11.0.0-98) (2026-09-23)
 
 
