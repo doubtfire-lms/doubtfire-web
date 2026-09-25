@@ -43,10 +43,17 @@ describe('NotificationSettingsComponent', () => {
     digestWeekday: 3,
     units: [] as unknown[],
   });
+  const savedWithUnits = () => ({
+    ...savedSettings(),
+    units: [
+      {unitId: 1, muted: true, channels: undefined},
+      {unitId: 2, muted: false, channels: {new_task_comment: ['in_app']}},
+    ],
+  });
 
-  const build = async (isStaff = false) => {
-    unitRoles = new BehaviorSubject<unknown[]>([{unit: running(1, 'COS10009')}]);
-    projects = new BehaviorSubject<unknown[]>([{unit: running(2, 'COS20007')}]);
+  const build = async (isStaff = false, {saved = savedSettings(), unitsLoaded = true} = {}) => {
+    unitRoles = new BehaviorSubject<unknown[]>(unitsLoaded ? [{unit: running(1, 'COS10009')}] : []);
+    projects = new BehaviorSubject<unknown[]>(unitsLoaded ? [{unit: running(2, 'COS20007')}] : []);
 
     await TestBed.configureTestingModule({
       declarations: [NotificationSettingsComponent],
@@ -60,7 +67,7 @@ describe('NotificationSettingsComponent', () => {
         },
         {
           provide: NotificationSettingsService,
-          useValue: {load: vi.fn(() => of(savedSettings())), save: saveSettings},
+          useValue: {load: vi.fn(() => of(saved)), save: saveSettings},
         },
         {provide: UserService, useValue: {currentUser: {isStaff}}},
         {provide: AlertService, useValue: {error: vi.fn(), success: vi.fn()}},
@@ -119,6 +126,41 @@ describe('NotificationSettingsComponent', () => {
 
     expect(component.scopes[1].customised).toBe(true);
     expect(component.isChecked('new_task_comment', 'email')).toBe(false);
+  });
+
+  it('applies saved unit settings to units that load after the settings', async () => {
+    TestBed.resetTestingModule();
+    await build(false, {saved: savedWithUnits(), unitsLoaded: false});
+
+    unitRoles.next([{unit: running(1, 'COS10009')}]);
+    projects.next([{unit: running(2, 'COS20007')}]);
+
+    expect(component.scopes[1].muted).toBe(true);
+    expect(component.scopes[1].customised).toBe(false);
+    component.selectedIndex = 2;
+    expect(component.currentScope.customised).toBe(true);
+    expect(component.isChecked('new_task_comment', 'inApp')).toBe(true);
+    expect(component.isChecked('new_task_comment', 'email')).toBe(false);
+
+    component.save();
+
+    expect(saveSettings.mock.calls[0][0].units).toEqual([
+      {unitId: 1, muted: true, channels: undefined},
+      {
+        unitId: 2,
+        muted: false,
+        channels: expect.objectContaining({new_task_comment: ['in_app']}),
+      },
+    ]);
+  });
+
+  it('keeps saved unit settings for units without a tab when saving', async () => {
+    TestBed.resetTestingModule();
+    await build(false, {saved: savedWithUnits(), unitsLoaded: false});
+
+    component.save();
+
+    expect(saveSettings.mock.calls[0][0].units).toEqual(savedWithUnits().units);
   });
 
   it('hides moderation notes from students and shows them to staff', async () => {

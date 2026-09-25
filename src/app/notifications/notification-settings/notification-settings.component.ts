@@ -55,7 +55,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   public saving = false;
   public selectedIndex = 0;
 
-  /** Saved settings are laid over the scopes once, so a cache refresh cannot undo edits. */
+  /** Saved settings are laid over each scope once, so a cache refresh cannot undo edits. */
   private applied = false;
 
   /** Index 0 is always the "All units" scope. */
@@ -234,6 +234,9 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
 
   private currentSettings(): NotificationSettings {
     const settings = this.saved ?? new NotificationSettings();
+    // The API drops any unit left out, so units without a tab keep what they had.
+    const shown = new Set(this.scopes.slice(1).map((scope) => scope.unitId));
+    const unshown = settings.units.filter((unit) => !shown.has(unit.unitId));
 
     settings.channels = channelsToWire(this.scopes[0].channels);
     settings.digestFrequency = this.digestFrequency;
@@ -242,14 +245,17 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     settings.digestTime = this.digestTime;
     settings.digestWeekday = this.digestWeekday;
     // Units following the defaults have nothing to store.
-    settings.units = this.scopes
-      .slice(1)
-      .filter((scope) => scope.muted || scope.customised)
-      .map((scope) => ({
-        unitId: scope.unitId,
-        muted: scope.muted,
-        channels: scope.customised ? channelsToWire(scope.channels) : undefined,
-      }));
+    settings.units = [
+      ...this.scopes
+        .slice(1)
+        .filter((scope) => scope.muted || scope.customised)
+        .map((scope) => ({
+          unitId: scope.unitId,
+          muted: scope.muted,
+          channels: scope.customised ? channelsToWire(scope.channels) : undefined,
+        })),
+      ...unshown,
+    ];
 
     return settings;
   }
@@ -270,15 +276,19 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     this.scopes[0].channels = channelsFromWire(this.saved.channels);
 
     for (const scope of this.scopes.slice(1)) {
-      const stored = this.saved.units.find((unit) => unit.unitId === scope.unitId);
-      scope.muted = stored?.muted ?? false;
-      scope.customised = stored?.channels !== undefined;
-      scope.channels = stored?.channels
-        ? channelsFromWire(stored.channels)
-        : cloneChannelSelection(this.scopes[0].channels);
+      this.applySavedUnit(scope);
     }
 
     this.applied = true;
+  }
+
+  private applySavedUnit(scope: NotificationScope): void {
+    const stored = this.saved?.units.find((unit) => unit.unitId === scope.unitId);
+    scope.muted = stored?.muted ?? false;
+    scope.customised = stored?.channels !== undefined;
+    scope.channels = stored?.channels
+      ? channelsFromWire(stored.channels)
+      : cloneChannelSelection(this.scopes[0].channels);
   }
 
   private buildGlobalScope(): NotificationScope {
@@ -293,7 +303,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   }
 
   private buildUnitScope(unit: Unit): NotificationScope {
-    return {
+    const scope: NotificationScope = {
       unitId: unit.id,
       code: unit.code,
       name: unit.name,
@@ -301,5 +311,10 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
       muted: false,
       channels: defaultChannelSelection(),
     };
+    // A unit that loads after the settings still needs its stored override.
+    if (this.applied) {
+      this.applySavedUnit(scope);
+    }
+    return scope;
   }
 }
