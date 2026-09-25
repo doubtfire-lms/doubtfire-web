@@ -156,6 +156,8 @@ import {FeedbackTemplateService} from './api/services/feedback-template.service'
 import {GroupService} from './api/services/group.service';
 import {LtiService} from './api/services/lti.service';
 import {MarkingSessionService} from './api/services/marking-session.service';
+import {NotificationSettingsService} from './api/services/notification-settings.service';
+import {NotificationService} from './api/services/notification.service';
 import {OverseerStepResultService} from './api/services/overseer-step-result.service';
 import {OverseerStepService} from './api/services/overseer-step.service';
 import {ScormAdapterService} from './api/services/scorm-adapter.service';
@@ -194,6 +196,7 @@ import {TasksOfTaskDefinitionPipe} from './common/filters/tasks-of-task-definiti
 import {FooterComponent} from './common/footer/footer.component';
 import {GradeIconComponent} from './common/grade-icon/grade-icon.component';
 import {HeaderComponent} from './common/header/header.component';
+import {NotificationDropdownComponent} from './common/header/notification-dropdown/notification-dropdown.component';
 import {TaskDropdownComponent} from './common/header/task-dropdown/task-dropdown.component';
 import {UnitDropdownComponent} from './common/header/unit-dropdown/unit-dropdown.component';
 import {HeroSidebarComponent} from './common/hero-sidebar/hero-sidebar.component';
@@ -233,6 +236,7 @@ import {EmojiService} from './common/services/emoji.service';
 import {GradeService} from './common/services/grade.service';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
 import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
+import {SettingCheckboxComponent} from './common/setting-checkbox/setting-checkbox.component';
 import {SettingToggleComponent} from './common/setting-toggle/setting-toggle.component';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
@@ -255,6 +259,8 @@ import {HomeComponent} from './home/states/home/home.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
+import {NotificationSettingsComponent} from './notifications/notification-settings/notification-settings.component';
+import {NotificationsComponent} from './notifications/notifications.component';
 import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
 import {UnitContentViewerComponent} from './projects/states/content/unit-content-viewer.component';
 import {AddEngagementDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
@@ -558,6 +564,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskAssessmentModalComponent,
     GradeIconComponent,
     HeaderComponent,
+    NotificationDropdownComponent,
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
@@ -587,6 +594,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     CreateNewUnitModalContentComponent,
     TiiActionLogComponent,
     FChipComponent,
+    SettingCheckboxComponent,
     SettingToggleComponent,
     UnitCodeComponent,
     NewTeachingPeriodDialogComponent,
@@ -703,6 +711,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     UnitGroupSetEditorComponent,
     UnitTaskInboxStateComponent,
     LegacyRoutePlaceholderComponent,
+    NotificationsComponent,
+    NotificationSettingsComponent,
   ],
   providers: [
     // Services we provide
@@ -781,6 +791,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     LtiService,
     TaskPrerequisiteService,
     MarkingSessionService,
+    NotificationService,
+    NotificationSettingsService,
     DiscussionPromptService,
     GANTT_CHART_LOCALE_CONFIG,
     GANTT_CHART_CONFIG,

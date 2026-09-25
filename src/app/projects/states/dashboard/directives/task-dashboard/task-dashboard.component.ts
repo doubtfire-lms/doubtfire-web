@@ -7,12 +7,13 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material/tabs';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Params} from '@angular/router';
 import {UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {SelectedTaskService} from '../../selected-task.service';
 import {DashboardViews} from '../../selected-task.service';
 
@@ -45,6 +46,9 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   public currentView: DashboardViews;
   public currentIndex = 0;
 
+  private requestedDestination?: Params;
+  private openedAssessmentId?: number;
+
   private readonly tabViews: DashboardViews[] = [
     DashboardViews.details,
     DashboardViews.task,
@@ -67,12 +71,20 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     private fileDownloader: FileDownloaderService,
     private route: ActivatedRoute,
     private userService: UserService,
+    private taskAssessmentModal: TaskAssessmentModalService,
     public selectedTaskService: SelectedTaskService,
   ) {}
 
   ngOnInit(): void {
     this.tutor = this.currentUnitRole !== undefined;
     this.setSelectedDashboardView(DashboardViews.details);
+
+    // Subscribed rather than read once, because ngOnChanges runs before ngOnInit
+    // resets the view, and because navigating between tasks keeps this component.
+    this.route.queryParams.subscribe((params) => {
+      this.requestedDestination = params;
+      this.applyRequestedDestination();
+    });
     this.selectedTaskService.currentView$.subscribe((view) => {
       this.currentView = this.canAccessDashboardView(view) ? view : DashboardViews.details;
       this.currentIndex = this.tabIndexForView(this.currentView);
@@ -98,6 +110,28 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
         taskFilesUrl: changes.task.currentValue.submittedFilesUrl(),
       };
       this.setSelectedDashboardView(DashboardViews.details);
+      this.applyRequestedDestination();
+    }
+  }
+
+  /**
+   * Honours the query params a notification navigates with. Needs both the task
+   * and the params, which arrive in either order.
+   */
+  private applyRequestedDestination(): void {
+    if (!this.task || !this.requestedDestination) {
+      return;
+    }
+
+    const view = DashboardViews[this.requestedDestination.view as keyof typeof DashboardViews];
+    if (view !== undefined) {
+      this.setSelectedDashboardView(view);
+    }
+
+    const assessmentId = Number(this.requestedDestination.overseerAssessmentId);
+    if (assessmentId && assessmentId !== this.openedAssessmentId) {
+      this.openedAssessmentId = assessmentId;
+      this.taskAssessmentModal.show(this.task, assessmentId);
     }
   }
 
