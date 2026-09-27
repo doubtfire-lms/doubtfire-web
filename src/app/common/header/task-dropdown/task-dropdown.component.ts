@@ -31,6 +31,7 @@ export class TaskDropdownComponent {
     'Task Moderation': 'Task Moderation',
     'Task Overflow': 'Task Overflow',
     'Task Inbox': 'Inbox',
+    'Tutor Dashboard': 'Dashboard',
     'Task Lists': 'Tasks',
     'Tutorial List': 'Tutorials',
     'Unit Content': 'Content',
