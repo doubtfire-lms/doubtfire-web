@@ -7,6 +7,7 @@ import {
   OnDestroy,
   SimpleChanges,
 } from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
 import {Subscription} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum, TaskStatusUiData} from 'src/app/api/models/task-status';
@@ -102,7 +103,12 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
     return this.task.status === 'assess_in_portfolio';
   }
 
-  triggerTransition(trigger: TaskStatusEnum): void {
+  triggerTransition(change: MatSelectChange<TaskStatusEnum>): void {
+    const trigger = change.value;
+
+    // Undo the pick; [value] moves the select once the server actually changes task.status
+    change.source.value = this.task.status;
+
     if (trigger === 'complete' && !this.task.canMarkComplete) {
       return;
     }
