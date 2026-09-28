@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-100](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-99...v11.0.0-100) (2026-09-28)
+
+
+### Bug Fixes
+
+* load jplag report viewer route ([31014bb](https://github.com/b0ink/doubtfire-deploy/commit/31014bb000d64590f64a3af13407594b97b0528f))
+* revert status select when transition is rejected ([d4213ce](https://github.com/b0ink/doubtfire-deploy/commit/d4213ce7bc607402f0fe76238c6a60436998dae4))
+
 ## [11.0.0-99](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-98...v11.0.0-99) (2026-09-24)
 
 
