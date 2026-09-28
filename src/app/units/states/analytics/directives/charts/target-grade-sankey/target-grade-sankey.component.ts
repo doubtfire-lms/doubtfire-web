@@ -143,11 +143,19 @@ export class TargetGradeSankeyComponent implements OnChanges {
     return separatorIndex === -1 ? nodeName : nodeName.slice(separatorIndex + 1);
   };
 
-  formatTooltip = (model: {source: string; target: string; value: number}): string => {
+  formatTooltip = (model: {source?: string; target?: string; value?: number}): string => {
+    if (!model.source || !model.target) {
+      return '';
+    }
+
     return `${model.source.split('|')[0]} → ${model.target.split('|')[0]}`;
   };
 
-  formatTooltipPercentage = (model: {source: string; value: number}): string => {
+  formatTooltipPercentage = (model: {source?: string; value?: number}): string => {
+    if (!model.source || model.value === undefined) {
+      return '';
+    }
+
     const sourceTotal = this.sourceTotals.get(model.source) ?? 0;
     const percentage = sourceTotal === 0 ? 0 : (model.value / sourceTotal) * 100;
     return `${percentage.toFixed(1)}%`;
