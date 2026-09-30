@@ -1,0 +1,41 @@
+<mat-card appearance="outlined" class="p-4">
+  <mat-card-header>
+    <mat-card-title>Student Target Grade Changes</mat-card-title>
+    <mat-card-subtitle>
+      Weekly flows shows changes between total students who have selected each target-grade. This is
+      an estimation only, and only looks at the net change in target-grade selection.
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  @if (hasChartData) {
+    <div class="px-3 pt-2">
+      <div class="flex justify-between pt-6">
+        @for (week of weeks; track week) {
+          <div class="text-xs">{{ week }}</div>
+        }
+      </div>
+      <div class="h-150">
+        <ng-charts-sankey
+          [animations]="false"
+          [gradient]="false"
+          [labelFormatting]="formatNodeLabel"
+          [results]="data"
+          [scheme]="$any(colorScheme)"
+          [showLabels]="true"
+          [tooltipDisabled]="false"
+          [truncateLabels]="false"
+        >
+          <ng-template #tooltipTemplate let-model="model">
+            <div>{{ formatTooltip(model) }}</div>
+            <div>{{ model.value }} students</div>
+            <div>{{ formatTooltipPercentage(model) }}</div>
+          </ng-template>
+        </ng-charts-sankey>
+      </div>
+    </div>
+  } @else {
+    <div class="flex h-125 items-center justify-center">
+      <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+    </div>
+  }
+</mat-card>
