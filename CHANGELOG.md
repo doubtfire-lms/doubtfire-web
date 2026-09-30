@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-100](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-99...v11.0.0-100) (2026-09-28)
+
+
+### Bug Fixes
+
+* load jplag report viewer route ([31014bb](https://github.com/b0ink/doubtfire-deploy/commit/31014bb000d64590f64a3af13407594b97b0528f))
+* revert status select when transition is rejected ([d4213ce](https://github.com/b0ink/doubtfire-deploy/commit/d4213ce7bc607402f0fe76238c6a60436998dae4))
+
+## [11.0.0-99](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-98...v11.0.0-99) (2026-09-24)
+
+
+### Features
+
+* resumable uploads ([86607dd](https://github.com/b0ink/doubtfire-deploy/commit/86607dd885fcf51827a05be8cb64df460ecce4f3))
+
+
+### Bug Fixes
+
+* filter out staff who dont have belong to a tutorial ([ab8832d](https://github.com/b0ink/doubtfire-deploy/commit/ab8832dc857cef82e08cd0cdb1bfe034082782d5))
+
+## [11.0.0-98](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-97...v11.0.0-98) (2026-09-23)
+
+
+### Features
+
+* add back button ([c7dc757](https://github.com/b0ink/doubtfire-deploy/commit/c7dc757b09a5acdd0f124f7625e97bc1aa4f348a))
+
+## [11.0.0-97](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-96...v11.0.0-97) (2026-09-23)
+
+
+### Features
+
+* automate lti syncing and add moodle course data ([#1600](https://github.com/b0ink/doubtfire-deploy/issues/1600)) ([c9df8f7](https://github.com/b0ink/doubtfire-deploy/commit/c9df8f7e2e542f146d1e6973156be01f9efd9aea))
+
+
+### Bug Fixes
+
+* drop .json extension from feedback upload url ([a547884](https://github.com/b0ink/doubtfire-deploy/commit/a547884c69f52371a768dadc8b56f8e6f848a424))
+
 ## [11.0.0-96](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-95...v11.0.0-96) (2026-09-23)
 
 

@@ -29,9 +29,9 @@ export class CsvResultModalService {
     private alertService: AlertService,
   ) {}
 
-  public show(title: string, csvResult: CsvResult) {
+  public show(title: string, csvResult: CsvResult, actionDescription = 'Data uploaded') {
     const normalised = this.normaliseResponse(csvResult);
-    this.showSummaryAlert(normalised);
+    this.showSummaryAlert(normalised, actionDescription);
 
     this.dialog.open<CsvResultModalComponent, CsvResultModalData>(CsvResultModalComponent, {
       width: '90vw',
@@ -52,23 +52,23 @@ export class CsvResultModalService {
     };
   }
 
-  private showSummaryAlert(csvResult: CsvResult): void {
+  private showSummaryAlert(csvResult: CsvResult, actionDescription: string): void {
     const successCount = csvResult.success?.length ?? 0;
     const errorCount = csvResult.errors?.length ?? 0;
 
     if (errorCount === 0) {
-      this.alertService.success(`Data uploaded. Success with ${successCount} items.`, 2000);
+      this.alertService.success(`${actionDescription}. Success with ${successCount} items.`, 2000);
       return;
     }
 
     if (successCount > 0) {
       this.alertService.message(
-        `Data uploaded, success with ${successCount} items, but ${errorCount} errors.`,
+        `${actionDescription}, success with ${successCount} items, but ${errorCount} errors.`,
         6000,
       );
       return;
     }
 
-    this.alertService.error(`Data uploaded but ${errorCount} errors`, 6000);
+    this.alertService.error(`${actionDescription} but ${errorCount} errors`, 6000);
   }
 }

@@ -4,7 +4,7 @@
       <mat-select
         [disabled]="task?.blockedByPrerequisiteTasks() && !isTutor"
         [value]="$safeNavigationMigration(task?.status)"
-        (selectionChange)="triggerTransition($event.value)"
+        (selectionChange)="triggerTransition($event)"
       >
         <mat-select-trigger>
           <span style="display: inline-flex">

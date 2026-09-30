@@ -1,6 +1,7 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, Inject, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {CsvResult, CsvResultModalData, CsvRow} from './csv-result-modal.service';
 
@@ -30,6 +31,13 @@ export class CsvResultModalComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
 
+  // The table is inside an @if, so the sort can appear after the first view init.
+  @ViewChild(MatSort) set sort(sort: MatSort | undefined) {
+    this.matSort = sort;
+    this.dataSource.sort = sort ?? null;
+  }
+  private matSort?: MatSort;
+
   public readonly csvResponseSelections: {key: CsvResultSelection; label: string}[] = [
     {key: 'success', label: 'Success'},
     {key: 'errors', label: 'Errors'},
@@ -42,6 +50,7 @@ export class CsvResultModalComponent implements AfterViewInit {
   ) {
     this.data.csvResult = this.normaliseResponse(data.csvResult);
     this.activeCsvResponseSelection = this.defaultSelection(this.data.csvResult);
+    this.dataSource.sortingDataAccessor = (row, columnId) => this.sortValue(row, columnId);
     this.rebuildTableData();
   }
 
@@ -59,6 +68,12 @@ export class CsvResultModalComponent implements AfterViewInit {
     }
 
     this.activeCsvResponseSelection = selection;
+    // Column ids are positional, so a sort would otherwise land on a different field.
+    if (this.matSort) {
+      this.matSort.active = '';
+      this.matSort.direction = '';
+      this.matSort._stateChanges.next();
+    }
     this.rebuildTableData();
   }
 
@@ -85,6 +100,19 @@ export class CsvResultModalComponent implements AfterViewInit {
     }
 
     return this.rowValue(rowObject, key);
+  }
+
+  private sortValue(row: CsvDisplayRow, columnId: string): string | number {
+    let value: string;
+    if (columnId === 'message') {
+      value = this.displayMessage(row.item);
+    } else if (columnId === 'other') {
+      value = row.otherData;
+    } else {
+      value = this.rowValueForColumn(row.rowObject, columnId);
+    }
+    const number = Number(value);
+    return value.trim() !== '' && !Number.isNaN(number) ? number : value.toLowerCase();
   }
 
   public close(): void {

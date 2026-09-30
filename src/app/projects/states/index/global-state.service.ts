@@ -121,6 +121,15 @@ export class GlobalStateService implements OnDestroy {
 
     // Use timeout to ensure everything is loaded before we try to login
     setTimeout(() => {
+      // LTI launch errors are shown to users who have no OnTrack session
+      const isLtiLaunchError =
+        window.location.pathname === '/lti' &&
+        new URLSearchParams(window.location.search).has('launchError');
+      if (isLtiLaunchError) {
+        this.isLoadingSubject.next(false);
+        return;
+      }
+
       // Try to login using the refresh token
       this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
         if (result) {

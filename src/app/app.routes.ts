@@ -78,7 +78,7 @@ export const routes: Routes = [
   {path: 'eula', component: AcceptEulaComponent},
   {path: 'lti', component: LtiDashboardComponent},
   {path: 'lti/link', component: LtiUnitLinkComponent},
-  {path: 'jplag-report-viewer', component: JplagReportViewerComponent},
+  {path: 'jplag-report-viewer', component: JplagReportViewerComponent, data: {standalone: true}},
   {
     path: 'projects/:projectId/task_def_id/:taskDefId/scorm-player/normal',
     component: ScormPlayerComponent,
