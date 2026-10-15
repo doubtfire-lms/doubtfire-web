@@ -233,6 +233,7 @@ export class AuthenticationService {
   public signOut(ssoSignOut = true): void {
     // This function is called after the token is deleted...
     const doSignOut = () => {
+      sessionStorage.removeItem('ltiLaunch');
       // Setup ability to auth again
       this.authComplete$.complete();
       this.authComplete$ = new AsyncSubject<boolean>();
