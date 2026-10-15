@@ -71,7 +71,7 @@
                   <f-grade-icon [grade]="grade.value" [unit]="unit"></f-grade-icon>
                 </div>
               </th>
-              <td *matCellDef="let td" mat-cell>
+              <td *matCellDef="let td" class="align-top" mat-cell>
                 <div class="flex flex-col gap-1">
                   @if (dueDateMode === 'date') {
                     <mat-form-field
@@ -129,15 +129,35 @@
                       <mat-datepicker-toggle matSuffix [for]="dpTarget"></mat-datepicker-toggle>
                       <mat-datepicker #dpTarget></mat-datepicker>
                     </mat-form-field>
+                    @if (grade.value === 0) {
+                      <mat-form-field
+                        appearance="outline"
+                        class="flex w-[250px] items-center justify-center"
+                      >
+                        <mat-label> Feedback Deadline </mat-label>
+                        <input
+                          matInput
+                          placeholder="Select date"
+                          [matDatepicker]="dpDeadline"
+                          [ngModel]="td.dueDate"
+                          (ngModelChange)="setFeedbackDeadline(td, $event)"
+                        />
+                        <mat-hint align="end">
+                          Week {{ weekOf(td.dueDate) }} {{ td.dueDate | date: 'EEE' }}
+                        </mat-hint>
+                        <mat-datepicker-toggle matSuffix [for]="dpDeadline"></mat-datepicker-toggle>
+                        <mat-datepicker #dpDeadline></mat-datepicker>
+                      </mat-form-field>
+                    }
                   } @else {
                     <div
-                      class="flex w-[250px] gap-2 pt-[22px]"
+                      class="flex w-[265px] gap-2 pt-[22px]"
                       [ngClass]="{
                         'date-error': isStartAfterTarget(td, grade),
                         'fallback-date': isFallbackStartDate(td, grade),
                       }"
                     >
-                      <mat-form-field appearance="outline" class="w-[140px] shrink-0">
+                      <mat-form-field appearance="outline" class="w-[150px] shrink-0">
                         <mat-label> Start Week </mat-label>
                         <mat-select
                           [ngModel]="weekOf(getGradeStartDate(td, grade))"
@@ -178,13 +198,13 @@
                       </mat-form-field>
                     </div>
                     <div
-                      class="flex w-[250px] gap-2"
+                      class="flex w-[265px] gap-2"
                       [ngClass]="{
                         'date-error': isStartAfterTarget(td, grade),
                         'fallback-date': isFallbackTargetDate(td, grade),
                       }"
                     >
-                      <mat-form-field appearance="outline" class="w-[140px] shrink-0">
+                      <mat-form-field appearance="outline" class="w-[150px] shrink-0">
                         <mat-label> Target Week </mat-label>
                         <mat-select
                           [ngModel]="weekOf(getGradeDueDate(td, grade))"
@@ -222,6 +242,37 @@
                         </mat-hint>
                       </mat-form-field>
                     </div>
+                    @if (grade.value === 0) {
+                      <div class="flex w-[265px] gap-2">
+                        <mat-form-field appearance="outline" class="w-[150px] shrink-0">
+                          <mat-label> Deadline Week </mat-label>
+                          <mat-select
+                            [ngModel]="weekOf(td.dueDate)"
+                            (ngModelChange)="
+                              setFeedbackDeadlineWeekDay(td, $event, dayOf(td.dueDate))
+                            "
+                          >
+                            @for (week of weekOptions; track week) {
+                              <mat-option [value]="week">{{ week }}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" class="min-w-0 flex-1">
+                          <mat-label> Day </mat-label>
+                          <mat-select
+                            [ngModel]="dayOf(td.dueDate)"
+                            (ngModelChange)="
+                              setFeedbackDeadlineWeekDay(td, weekOf(td.dueDate), $event)
+                            "
+                          >
+                            @for (day of weekDays; track day.value) {
+                              <mat-option [value]="day.value">{{ day.label }}</mat-option>
+                            }
+                          </mat-select>
+                          <mat-hint align="end">{{ td.dueDate | date: 'd MMM' }}</mat-hint>
+                        </mat-form-field>
+                      </div>
+                    }
                   }
                 </div>
               </td>

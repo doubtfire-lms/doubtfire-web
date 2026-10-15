@@ -54,6 +54,19 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
     return date ? new Date(date).getDay() : null;
   }
 
+  // The feedback deadline belongs to the task itself, so it is only shown under the pass grade
+  setFeedbackDeadline(td: TaskDefinition, value: Date | null): void {
+    td.dueDate = value;
+    this.saveTaskDefinition(td);
+  }
+
+  setFeedbackDeadlineWeekDay(td: TaskDefinition, week: number, day: number): void {
+    const date = this.unit.dateForWeekAndDay(week, day);
+    if (date) {
+      this.setFeedbackDeadline(td, date);
+    }
+  }
+
   setGradeStartWeekDay(
     td: TaskDefinition,
     grade: GradeDefinition,
