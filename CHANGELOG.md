@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-101](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-100...v11.0.0-101) (2026-10-15)
+
+
+### Features
+
+* add feedback deadline ui ([a06a9d7](https://github.com/b0ink/doubtfire-deploy/commit/a06a9d719ace72461018ac303a90e579904dc0de))
+* set per-grade target dates by week and day ([7244b1f](https://github.com/b0ink/doubtfire-deploy/commit/7244b1f04233897234d4bd60bbdaaca3030f7712))
+* target grade sankey diagram ([#1612](https://github.com/b0ink/doubtfire-deploy/issues/1612)) ([2a51eab](https://github.com/b0ink/doubtfire-deploy/commit/2a51eabbaa47c10b99e6f2de1a8c371fa2b5dd67))
+
+
+### Bug Fixes
+
+* skip welcome screen in lti context ([b191de3](https://github.com/b0ink/doubtfire-deploy/commit/b191de338dc814f15e4efd1111b740979097f7f3))
+
 ## [11.0.0-100](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-99...v11.0.0-100) (2026-09-28)
 
 
