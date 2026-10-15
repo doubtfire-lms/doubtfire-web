@@ -15,7 +15,7 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {
   countStudentsFromSnapshot,
   formatSnapshotLabel,
-  getTaskStats,
+  getTaskPopulationStats,
   statusMapping,
 } from '../chart-data-helpers';
 
@@ -91,7 +91,7 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
 
       return countStudentsFromSnapshot({
         filtered: {
-          selected: getTaskStats(
+          selected: getTaskPopulationStats(
             this.selectedSnapshot,
             this.campusFilter,
             this.tutorialFilter,
@@ -159,7 +159,7 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
     this.data =
       this.unit && selectedSnapshot
         ? this.buildChartData(
-            getTaskStats(
+            getTaskPopulationStats(
               selectedSnapshot,
               this.campusFilter,
               this.tutorialFilter,
@@ -195,12 +195,20 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
         const b = orderByCode.get(taskCodeB) ?? unknown;
         return a.target - b.target || a.seq - b.seq;
       })
-      .map(([taskDef, counts]) => ({
-        name: taskDef,
-        series: statusMapping.map((status) => ({
-          name: this.taskService.statusLabels.get(status) || status,
-          value: counts[status] || 0,
-        })),
-      }));
+      .map(([taskDef, counts]) => {
+        const total = statusMapping.reduce((sum, status) => sum + (counts[status] || 0), 0);
+
+        return {
+          name: taskDef,
+          series: statusMapping.map((status) => {
+            const value = counts[status] || 0;
+            return {
+              name: this.taskService.statusLabels.get(status) || status,
+              value,
+              extra: {percentage: total > 0 ? ((value / total) * 100).toFixed(2) : '0.00'},
+            };
+          }),
+        };
+      });
   }
 }

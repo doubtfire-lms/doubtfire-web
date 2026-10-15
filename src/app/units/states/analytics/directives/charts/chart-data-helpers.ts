@@ -175,6 +175,59 @@ export function getTaskStats(
   );
 }
 
+export function getTaskPopulationStats(
+  snapshot: TaskCompletionSnapshot,
+  campusFilter: string,
+  tutorialFilter: string,
+  taskGradeFilter: number[],
+  studentTargetGradeFilter: number[],
+  unit: Unit,
+): TaskCodeStats {
+  const populationStats = snapshot.status_population_stats;
+  if (!populationStats) {
+    return getTaskStats(
+      snapshot,
+      campusFilter,
+      tutorialFilter,
+      taskGradeFilter,
+      studentTargetGradeFilter,
+      unit,
+    );
+  }
+
+  const gradeStats = studentTargetGradeFilter.length
+    ? studentTargetGradeFilter.map((grade) => populationStats.target_grades[grade.toString()] ?? {})
+    : [populationStats.all];
+  const result: TaskCodeStats = {};
+
+  gradeStats.forEach((stats) => {
+    const campuses = campusFilter === 'all' ? Object.values(stats) : [stats[campusFilter] ?? {}];
+    campuses.forEach((tutorials) => {
+      mergeTaskCounts(
+        result,
+        tutorials[tutorialFilter === 'all' ? '__all__' : tutorialFilter] ?? {},
+      );
+    });
+  });
+
+  if (taskGradeFilter.length === 0) {
+    return result;
+  }
+
+  const taskGradeByCode = new Map(
+    unit.taskDefinitions.map((taskDefinition) => [
+      taskDefinition.abbreviation,
+      taskDefinition.targetGrade,
+    ]),
+  );
+
+  return Object.fromEntries(
+    Object.entries(result).filter(([taskCode]) =>
+      taskGradeFilter.includes(taskGradeByCode.get(taskCode)),
+    ),
+  );
+}
+
 export function isPreWeekZeroSnapshot(unit: Unit, snapshot: TaskCompletionSnapshot): boolean {
   const snapshotDate = new Date(snapshot.snapshot_date);
   if (Number.isNaN(snapshotDate.valueOf())) {
