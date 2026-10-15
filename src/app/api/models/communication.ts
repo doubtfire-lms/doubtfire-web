@@ -99,6 +99,7 @@ export class CommunicationAction extends Entity {
   task_definition_id?: number;
   subject?: string;
   body?: string;
+  plain_text?: boolean;
   email_tutors?: boolean;
   email_convenors?: boolean;
   target_grade?: number;

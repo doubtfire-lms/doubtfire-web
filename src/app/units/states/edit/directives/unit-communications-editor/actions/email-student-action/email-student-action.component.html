@@ -65,6 +65,10 @@
         </button>
       }
     </mat-menu>
+    <mat-checkbox
+      [(ngModel)]="editor.actionFor(rule).plain_text"
+      matTooltip="Send only the text you enter, without the OnTrack notification layout or footer."
+    >Send as plain text</mat-checkbox>
     <div class="text-sm text-black/50">Sent from the main convenor.</div>
   </div>
 } @else {
@@ -136,6 +140,10 @@
         </button>
       }
     </mat-menu>
+    <mat-checkbox
+      [(ngModel)]="editor.actionFor(rule).plain_text"
+      matTooltip="Send only the text you enter, without the OnTrack notification layout or footer."
+    >Send as plain text</mat-checkbox>
     <div class="text-sm text-black/50">Sent from the main convenor.</div>
   </div>
 }
