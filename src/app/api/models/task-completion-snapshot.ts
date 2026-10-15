@@ -3,6 +3,10 @@ export type TaskCompletionSnapshot = {
   snapshot_timestamp: string;
   stats: CampusStats;
   target_grade_stats?: Record<string, CampusStats>;
+  status_population_stats?: {
+    all: CampusStats;
+    target_grades: Record<string, CampusStats>;
+  };
   student_count?: number;
   campus_student_counts?: Record<string, number>;
   target_grade_student_counts?: Record<string, number>;

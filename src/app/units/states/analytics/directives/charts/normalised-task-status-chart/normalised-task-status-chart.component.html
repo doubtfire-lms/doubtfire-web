@@ -19,6 +19,10 @@
       [yAxis]="true"
       [yAxisLabel]="YAxisLabel"
     >
+      <ng-template #tooltipTemplate let-model="model">
+        <div>{{ model.series }} • {{ model.name }}</div>
+        <div>{{ model.extra?.percentage }}% ({{ model.value }} students)</div>
+      </ng-template>
     </ng-charts-bar-vertical-normalized>
   </div>
 } @else {
