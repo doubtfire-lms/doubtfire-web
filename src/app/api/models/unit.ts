@@ -14,7 +14,13 @@ import {MarkingSessionService} from '../services/marking-session.service';
 import {ProjectService} from '../services/project.service';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
-import {MILLISECONDS_PER_WEEK, startOfDay} from './calendar-day';
+import {
+  MILLISECONDS_PER_WEEK,
+  addDays,
+  dayOffsetInWeek,
+  startOfDay,
+  toLocalDay,
+} from './calendar-day';
 import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {
   Campus,
@@ -350,6 +356,27 @@ export class Unit extends Entity {
     }
 
     return Math.floor((targetDate.valueOf() - startDate.valueOf()) / MILLISECONDS_PER_WEEK) + 1;
+  }
+
+  /**
+   * The inverse of {@link weekNumber}.
+   *
+   * @param day the day of the week, 0 = Sunday
+   * @returns local midnight on that day
+   */
+  public dateForWeekAndDay(week: number, day: number): Date | null {
+    if (this.teachingPeriod) {
+      return this.teachingPeriod.dateForWeekAndDay(week, day);
+    }
+
+    const startDate = startOfDay(this.startDate);
+    if (!startDate || week === null || day === null) {
+      return null;
+    }
+
+    return toLocalDay(
+      addDays(startDate, (Math.floor(week) - 1) * 7 + dayOffsetInWeek(startDate.getUTCDay(), day)),
+    );
   }
 
   /**
