@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-102](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-101...v11.0.0-102) (2026-10-16)
+
+
+### Bug Fixes
+
+* show unique student counts in task status chart tooltips ([1313b51](https://github.com/b0ink/doubtfire-deploy/commit/1313b5192dbadd4d2ff7c599bfd5164754994f84))
+
 ## [11.0.0-101](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-100...v11.0.0-101) (2026-10-15)
 
 
