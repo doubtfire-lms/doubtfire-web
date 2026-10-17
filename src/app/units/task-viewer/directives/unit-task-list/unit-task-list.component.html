@@ -224,64 +224,9 @@
                 }
               </div>
             } @else {
-              <div class="flex w-full items-center justify-between gap-2">
-                <div class="flex min-w-0 flex-1 items-center gap-3">
-                  <div class="flex min-w-0 items-center gap-3 truncate text-ellipsis">
-                    <div class="flex flex-col justify-start truncate text-ellipsis">
-                      <div class="truncate text-ellipsis">{{ taskDef.name }}</div>
-
-                      <div class="flex min-w-0 items-center gap-0.5">
-                        @if (taskDef.isGroupTask()) {
-                          <mat-icon class="shrink-0 scale-75 text-gray-600">groups</mat-icon>
-                        } @else {
-                          <mat-icon class="shrink-0 scale-75 text-gray-600">person</mat-icon>
-                        }
-
-                        <div class="mr-1 truncate text-[14px] leading-none text-gray-500">
-                          {{ taskDef.abbreviation }}
-                          -
-                          {{ gradeNames[taskDef.targetGrade] }} Task
-                        </div>
-                        @if (taskListItem(taskDef); as task) {
-                          @if (taskStartApproaching(task)) {
-                            <span
-                              class="flex shrink-0 items-center gap-px text-[12px] font-normal text-sky-500"
-                            >
-                              <mat-icon class="size-4! text-[16px]!"> event_upcoming </mat-icon>
-                              {{ taskStartLabel(task) }}
-                            </span>
-                          } @else if (taskDueApproaching(task)) {
-                            <span
-                              class="flex shrink-0 items-center gap-px text-[12px] font-bold"
-                              [ngClass]="{
-                                'text-[#da532c]': task.daysUntilDueDate() <= 0,
-                                'font-normal text-[#fab143]': task.daysUntilDueDate() > 0,
-                              }"
-                            >
-                              <mat-icon class="!h-[16px] !w-[16px] !text-[16px]">
-                                hourglass_bottom
-                              </mat-icon>
-                              {{ task.timeToDue() }}
-                            </span>
-                          } @else if (taskOngoing(task)) {
-                            <span
-                              class="flex shrink-0 items-center gap-px text-[12px] font-normal text-sky-500"
-                            >
-                              <mat-icon class="size-4! text-[16px]!"> event_upcoming </mat-icon>
-                              Start now
-                            </span>
-                          }
-                        }
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                @if (taskListItem(taskDef); as task) {
-                  <ng-container
-                    *ngTemplateOutlet="TaskStatusBadges; context: {task: task}"
-                  ></ng-container>
-                }
-              </div>
+              @if (taskListItem(taskDef); as task) {
+                <task-list-item [task]="task"></task-list-item>
+              }
             }
           }
         </mat-list-item>
