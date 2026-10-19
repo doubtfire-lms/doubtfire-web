@@ -177,7 +177,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
             // Tutor discussion view
             if (this.username) {
               this._username = this.username;
-              this.getStudentTasks();
+              this.getStudentTasks(true);
             } else {
               setTimeout(() => this.scanQrCode());
             }
