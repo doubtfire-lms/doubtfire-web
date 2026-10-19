@@ -60,7 +60,7 @@
     "jszip": "^3.10.2",
     "marked": "^18.0.13",
     "moment": "^2.31",
-    "monaco-editor": "^0.56.0",
+    "monaco-editor": "^0.57.0",
     "ng-flex-layout": "^17.3.7-beta.1",
     "ng2-pdf-viewer": "10.2.2",
     "ngx-entity-service": "^0.0.44",
