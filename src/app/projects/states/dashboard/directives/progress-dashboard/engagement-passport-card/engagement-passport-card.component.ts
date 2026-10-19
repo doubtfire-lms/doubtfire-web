@@ -63,9 +63,9 @@ export class EngagementPassportCardComponent implements OnChanges {
       icon: 'record_voice_over',
       classes: 'border-cyan-300 bg-cyan-50 text-cyan-700',
     },
-    forum: {
-      label: 'Forum post',
-      icon: 'forum',
+    community: {
+      label: 'Community',
+      icon: 'public',
       classes: 'border-blue-300 bg-blue-50 text-blue-700',
     },
     email: {
@@ -208,6 +208,9 @@ export class EngagementPassportCardComponent implements OnChanges {
 
   private normalizeEngagementType(engagementType: string): string {
     const type = engagementType?.trim().toLowerCase();
-    return type === 'discuss' ? 'discussion' : type;
+    if (type === 'discuss') {
+      return 'discussion';
+    }
+    return type === 'forum' ? 'community' : type;
   }
 }
