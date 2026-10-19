@@ -78,7 +78,7 @@ export const routes: Routes = [
   {path: 'eula', component: AcceptEulaComponent},
   {path: 'lti', component: LtiDashboardComponent},
   {path: 'lti/link', component: LtiUnitLinkComponent},
-  {path: 'jplag-report-viewer', component: JplagReportViewerComponent},
+  {path: 'jplag-report-viewer', component: JplagReportViewerComponent, data: {standalone: true}},
   {
     path: 'projects/:projectId/task_def_id/:taskDefId/scorm-player/normal',
     component: ScormPlayerComponent,
@@ -128,7 +128,7 @@ export const routes: Routes = [
     path: 'tutor-discussion',
     component: TutorDiscussionComponent,
     canActivate: [roleWhitelistGuard],
-    data: {task: 'Discussion', roleWhitelist: ['Admin', 'Auditor', 'Tutor']},
+    data: {task: 'Discussion', roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor']},
   },
   {
     path: 'tutor-attendance',
@@ -153,6 +153,11 @@ export const routes: Routes = [
         children: [
           {path: '', pathMatch: 'full', redirectTo: 'tasks/inbox'},
           {path: 'analytics', component: UnitAnalyticsComponent, data: {task: 'Unit Analytics'}},
+          {
+            path: 'analytics/:tab',
+            component: UnitAnalyticsComponent,
+            data: {task: 'Unit Analytics'},
+          },
           {path: 'students/groups', component: UnitGroupsComponent, data: {task: 'Student Groups'}},
           {
             path: 'students/portfolios',

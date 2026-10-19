@@ -53,6 +53,9 @@ export class Task extends Entity {
   extensions: number;
   scormExtensions: number;
   submissionDate: Date;
+  // When the inbox started waiting on this task: the submission, or the oldest
+  // unread comment for tasks listed only because of comments
+  waitingSince: Date;
   completionDate: Date;
   timesAssessed: number;
   grade?: number;

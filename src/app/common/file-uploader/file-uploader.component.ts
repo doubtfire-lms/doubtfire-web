@@ -9,6 +9,8 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import {Observable} from 'rxjs';
+import {UploadEvent} from 'src/app/common/services/resumable-upload.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 export interface FileData {
@@ -90,6 +92,8 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   @Input() url: string;
   @Input() method = 'POST';
   @Input() payload?: unknown;
+  // Replaces the single POST to url, e.g. to upload in chunks. Receives the chosen files by zone name.
+  @Input() uploader?: (files: Record<string, File>) => Observable<UploadEvent>;
 
   @Input() onBeforeUpload?: () => void;
   @Input() onSuccess?: (response) => void;
@@ -255,6 +259,11 @@ export class FileUploaderComponent implements OnInit, OnChanges {
 
     this.isUploading = true;
 
+    if (this.uploader) {
+      this.startCustomUpload();
+      return;
+    }
+
     const form = new FormData();
 
     // Append files
@@ -300,6 +309,26 @@ export class FileUploaderComponent implements OnInit, OnChanges {
           }
         },
       });
+  }
+
+  private startCustomUpload(): void {
+    const files: Record<string, File> = {};
+    for (const zone of this.uploadZones) {
+      if (zone.model?.length) {
+        files[zone.name] = zone.model[0];
+      }
+    }
+
+    this.uploader(files).subscribe({
+      next: (event) => {
+        if (event.type === 'progress') {
+          this.uploadingInfo.progress = event.progress;
+        } else {
+          this.handleUploadResponse(200, event.body);
+        }
+      },
+      error: (error: unknown) => this.handleUploadResponse(-1, error),
+    });
   }
 
   private handleUploadResponse(status: number, responseBody: unknown): void {

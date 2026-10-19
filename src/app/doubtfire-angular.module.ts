@@ -7,6 +7,7 @@ import {
   LineChartComponent,
   NumberCardComponent,
   PieChartComponent,
+  SankeyComponent,
 } from '@glitchtip/ng-charts';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import * as Sentry from '@sentry/angular';
@@ -127,6 +128,8 @@ import {
   EngagementService,
   GroupSetService,
   LearningOutcomeService,
+  LmsGroupMappingService,
+  LmsIntegrationService,
   OverseerAssessmentService,
   OverseerImageService,
   ProjectService,
@@ -329,6 +332,7 @@ import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-en
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
 import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
 import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
+import {TargetGradeSankeyComponent} from './units/states/analytics/directives/charts/target-grade-sankey/target-grade-sankey.component';
 import {TaskStatusSummaryChartsComponent} from './units/states/analytics/directives/charts/task-status-summary-charts/task-status-summary-charts.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
@@ -348,6 +352,7 @@ import {
 } from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
 import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
+import {UnitLmsIntegrationComponent} from './units/states/edit/directives/unit-lms-integration/unit-lms-integration.component';
 import {BulkImportStaffModalComponent} from './units/states/edit/directives/unit-staff-editor/bulk-import-staff-modal/bulk-import-staff-modal.component';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {StudentCampusSelectComponent} from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
@@ -511,6 +516,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     UnitTutorialsManagerComponent,
     FileDropComponent,
     UnitStudentsEditorComponent,
+    UnitLmsIntegrationComponent,
     StudentsListComponent,
     UnitTaskEditorComponent,
     TaskDefinitionEditorComponent,
@@ -652,6 +658,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     NormalisedTaskStatusChartComponent,
     StackedAreaStatusChartComponent,
     TaskStatusSummaryChartsComponent,
+    TargetGradeSankeyComponent,
     SubmissionFilesModalComponent,
     TutorNotesComponent,
     TutorNotesViewComponent,
@@ -712,6 +719,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     UnitContentLinkService,
     UnitContentSiteService,
     D2lAssessmentMappingService,
+    LmsGroupMappingService,
+    LmsIntegrationService,
     ProjectService,
     UnitRoleService,
     LearningOutcomeService,
@@ -863,6 +872,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     LineChartComponent,
     NumberCardComponent,
     PieChartComponent,
+    SankeyComponent,
     PdfViewerModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

@@ -49,6 +49,7 @@ type TaskSource = (
   unit: Unit,
   taskDef?: TaskDefinition | number,
   fetchMyStudentsOnly?: boolean,
+  viewAsUnitRoleId?: number,
 ) => Observable<Task[]>;
 
 @Component({
@@ -66,7 +67,6 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   @Input() public routeMode: UnitTaskRouteMode = 'inbox';
 
   public viewType: UnitTaskViewType = 'inbox';
-  public showSearchOptions = true;
 
   public unit: Unit;
   public unitRole: UnitRole;
@@ -191,23 +191,19 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     switch (this.routeMode) {
       case 'definition':
         this.viewType = 'explorer';
-        this.showSearchOptions = true;
         this.taskData.taskDefMode = true;
         break;
       case 'moderation':
         this.viewType = 'moderation';
-        this.showSearchOptions = false;
         this.taskData.taskDefMode = false;
         break;
       case 'overflow':
         this.viewType = 'overflow';
-        this.showSearchOptions = false;
         this.taskData.taskDefMode = false;
         break;
       case 'inbox':
       default:
         this.viewType = 'inbox';
-        this.showSearchOptions = false;
         this.taskData.taskDefMode = false;
         break;
     }

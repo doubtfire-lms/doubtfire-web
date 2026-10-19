@@ -43,6 +43,22 @@ export function formatSnapshotLabel(unit: Unit, snapshotDate?: string, format?: 
   }
 }
 
+export function getLastSnapshotByWeek(
+  unit: Unit,
+  snapshots: TaskCompletionSnapshot[],
+): Map<string, TaskCompletionSnapshot> {
+  const lastSnapshotByWeek: Map<string, TaskCompletionSnapshot> = new Map();
+
+  snapshots.forEach((snapshot) => {
+    const week = formatSnapshotLabel(unit, snapshot.snapshot_date, 'short');
+    if (week) {
+      lastSnapshotByWeek.set(week, snapshot);
+    }
+  });
+
+  return lastSnapshotByWeek;
+}
+
 // Order determines the order of the chart legend and series.
 export const statusMapping: TaskStatusEnum[] = [
   'complete',
@@ -102,10 +118,114 @@ export function aggregateAllCampuses(
 export function getTaskStats(
   snapshot: TaskCompletionSnapshot,
   campusFilter: string = 'all',
+  tutorialFilter: string = 'all',
+  taskGradeFilter: number[] = [],
+  studentTargetGradeFilter: number[] = [],
+  unit?: Unit,
 ): TaskCodeStats {
-  return campusFilter !== 'all' && snapshot.stats[campusFilter]
-    ? aggregateCampusData(snapshot.stats[campusFilter])
-    : aggregateAllCampuses(snapshot.stats);
+  const snapshotStats =
+    studentTargetGradeFilter.length === 0
+      ? snapshot.stats
+      : studentTargetGradeFilter.reduce((stats, targetGrade) => {
+          const targetGradeStats = snapshot.target_grade_stats?.[targetGrade.toString()];
+          if (!targetGradeStats) {
+            return stats;
+          }
+
+          Object.entries(targetGradeStats).forEach(([campus, tutorials]) => {
+            stats[campus] = stats[campus] || {};
+            Object.entries(tutorials).forEach(([tutorial, taskStats]) => {
+              stats[campus][tutorial] = stats[campus][tutorial] || {};
+              mergeTaskCounts(stats[campus][tutorial], taskStats);
+            });
+          });
+          return stats;
+        }, {} as CampusStats);
+
+  const campusStats =
+    campusFilter === 'all' ? snapshotStats : {[campusFilter]: snapshotStats[campusFilter] ?? {}};
+
+  const filteredStats = Object.values(campusStats).reduce((acc, tutorials) => {
+    const selectedTutorials =
+      tutorialFilter === 'all' ? tutorials : {[tutorialFilter]: tutorials[tutorialFilter]};
+
+    Object.values(selectedTutorials).forEach((taskStats) => {
+      if (taskStats) {
+        mergeTaskCounts(acc, taskStats);
+      }
+    });
+    return acc;
+  }, {} as TaskCodeStats);
+
+  if (taskGradeFilter.length === 0) {
+    return filteredStats;
+  }
+
+  const taskGradeByCode = new Map(
+    (unit?.taskDefinitions ?? []).map((taskDefinition) => [
+      taskDefinition.abbreviation,
+      taskDefinition.targetGrade,
+    ]),
+  );
+
+  return Object.fromEntries(
+    Object.entries(filteredStats).filter(([taskCode]) =>
+      taskGradeFilter.includes(taskGradeByCode.get(taskCode)),
+    ),
+  );
+}
+
+export function getTaskPopulationStats(
+  snapshot: TaskCompletionSnapshot,
+  campusFilter: string,
+  tutorialFilter: string,
+  taskGradeFilter: number[],
+  studentTargetGradeFilter: number[],
+  unit: Unit,
+): TaskCodeStats {
+  const populationStats = snapshot.status_population_stats;
+  if (!populationStats) {
+    return getTaskStats(
+      snapshot,
+      campusFilter,
+      tutorialFilter,
+      taskGradeFilter,
+      studentTargetGradeFilter,
+      unit,
+    );
+  }
+
+  const gradeStats = studentTargetGradeFilter.length
+    ? studentTargetGradeFilter.map((grade) => populationStats.target_grades[grade.toString()] ?? {})
+    : [populationStats.all];
+  const result: TaskCodeStats = {};
+
+  gradeStats.forEach((stats) => {
+    const campuses = campusFilter === 'all' ? Object.values(stats) : [stats[campusFilter] ?? {}];
+    campuses.forEach((tutorials) => {
+      mergeTaskCounts(
+        result,
+        tutorials[tutorialFilter === 'all' ? '__all__' : tutorialFilter] ?? {},
+      );
+    });
+  });
+
+  if (taskGradeFilter.length === 0) {
+    return result;
+  }
+
+  const taskGradeByCode = new Map(
+    unit.taskDefinitions.map((taskDefinition) => [
+      taskDefinition.abbreviation,
+      taskDefinition.targetGrade,
+    ]),
+  );
+
+  return Object.fromEntries(
+    Object.entries(result).filter(([taskCode]) =>
+      taskGradeFilter.includes(taskGradeByCode.get(taskCode)),
+    ),
+  );
 }
 
 export function isPreWeekZeroSnapshot(unit: Unit, snapshot: TaskCompletionSnapshot): boolean {

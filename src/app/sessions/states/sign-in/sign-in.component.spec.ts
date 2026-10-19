@@ -62,5 +62,7 @@ describe('SignInComponent', () => {
 
     expect(authenticationService.signIn).toHaveBeenCalledWith(credentials);
     expect(router.navigate).toHaveBeenCalledWith(['/lti'], {replaceUrl: true});
+    expect(sessionStorage.getItem('ltiLaunch')).toBe('true');
+    sessionStorage.removeItem('ltiLaunch');
   });
 });

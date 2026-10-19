@@ -9,7 +9,21 @@
       <h1 class="m-0 ml-3 text-4xl">OnTrack</h1>
     </div>
 
-    @if (isLoading) {
+    @if (launchError) {
+      <div class="w-full max-w-lg rounded-lg bg-amber-100 p-3 text-center text-amber-900">
+        {{ launchError }}
+      </div>
+      <button
+        class="my-3 h-[50px] w-full max-w-lg"
+        color="primary"
+        extended
+        mat-fab
+        (click)="openOnTrack()"
+      >
+        <mat-icon>rocket_launch</mat-icon>
+        Launch OnTrack
+      </button>
+    } @else if (isLoading) {
       @if (unauthorised) {
         <div class="w-full rounded-lg bg-red-200 p-3 text-center font-semibold text-red-800">
           An error occurred. Please refresh the page.
@@ -19,6 +33,7 @@
         <p>Loading...</p>
       }
     } @else {
+      <!-- Sync is managed from the unit's LMS admin tab
       <div class="flex justify-center gap-3">
         @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
           <button
@@ -47,7 +62,14 @@
             mat-fab
             matTooltip="Sync grades"
             matTooltipPosition="above"
-            [disabled]="!linkedUnit || isSyncingEnrolments || isSyncingGrades"
+            [disabled]="
+              !linkedUnit ||
+              isLoadingGradeLineItemStatus ||
+              !gradeLineItemStatus?.configured ||
+              isRetryingGradeLineItem ||
+              isSyncingEnrolments ||
+              isSyncingGrades
+            "
             [ngClass]="{'bg-gray-300': isSyncingGrades}"
             (click)="syncStudentsGrades()"
           >
@@ -62,23 +84,62 @@
           </button>
         }
       </div>
+      -->
+      @if (
+        linkedUnit &&
+        !isLoadingGradeLineItemStatus &&
+        (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin')
+      ) {
+        @if (!gradeLineItemStatus?.configured) {
+          <div class="w-full max-w-lg rounded-lg bg-amber-100 p-3 text-amber-900">
+            <p>
+              {{
+                gradeLineItemStatus?.message ||
+                  "Grade sync has not been enabled for the OnTrack LTI tool. In Moodle, edit the OnTrack external tool and set 'IMS LTI Assignment and Grade Services' to 'Use this service for grade sync and column management', then relaunch OnTrack and retry."
+              }}
+            </p>
+            <button
+              class="mt-2"
+              mat-stroked-button
+              type="button"
+              [disabled]="isRetryingGradeLineItem"
+              (click)="retryGradeLineItem()"
+            >
+              <mat-icon>{{ isRetryingGradeLineItem ? 'hourglass_top' : 'refresh' }}</mat-icon>
+              {{ isRetryingGradeLineItem ? 'Retrying…' : 'Retry grade setup' }}
+            </button>
+          </div>
+        }
+      }
       <button
         class="my-3 h-[50px] w-full max-w-lg"
         color="primary"
         extended
         mat-fab
         target="_blank"
-        (click)="launchApplication()"
+        (click)="launchLinkedUnit()"
       >
         <mat-icon>rocket_launch</mat-icon>
         Launch {{ linkedUnit ? linkedUnit.code : 'OnTrack' }}
       </button>
       <div class="mt-2.5 w-full text-center text-gray-300">
         @if (linkedUnit) {
-          {{ linkedUnit.code }} &mdash; {{ linkedUnit.name }}
-          @if (currentUser?.systemRole === 'Convenor' || currentUser?.systemRole === 'Admin') {
+          <span class="text-gray-400">{{ linkedUnit.code }} &mdash; {{ linkedUnit.name }}</span>
+          <br />
+          <span
+            class="text-sm text-gray-300"
+            matTooltip="{{ linkedUnit.startDate | date: 'd MMM y' }} — {{
+              linkedUnit.endDate | date: 'd MMM y'
+            }}"
+            >{{ linkedUnit.periodLabel }}</span
+          >
+          @if (canManageLinkedUnit) {
             <br />
-            <button class="text-blue-400 underline" mat-button (click)="removeLink()">
+            <button class="mt-6 text-blue-400 underline" mat-button (click)="openLmsSettings()">
+              LMS settings
+              <mat-icon iconPositionEnd>open_in_new</mat-icon>
+            </button>
+            <button class="mt-6 text-blue-400 underline" mat-button (click)="removeLink()">
               Unlink
             </button>
           }

@@ -353,10 +353,13 @@ export class UnitContentEditorComponent implements OnInit {
   }
 
   private openPreview(contentRoute: string, contentSiteId: number): void {
+    const contentVersion = this.sites.find((site) => site.id === contentSiteId)?.contentVersion;
+
     this.dialog.open(UnitContentViewerComponent, {
       data: {
         contentRoute,
         contentSiteId,
+        contentVersion,
         unit: this.unit,
       },
       height: '90vh',

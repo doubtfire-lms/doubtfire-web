@@ -15,7 +15,7 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {
   countStudentsFromSnapshot,
   formatSnapshotLabel,
-  getTaskStats,
+  getTaskPopulationStats,
   statusMapping,
 } from '../chart-data-helpers';
 
@@ -28,6 +28,9 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
   @Input() unit: Unit;
   @Input() snapshots: TaskCompletionSnapshot[] = [];
   @Input() campusFilter: string = 'all';
+  @Input() tutorialFilter: string = 'all';
+  @Input() taskGradeFilter: number[] = [];
+  @Input() studentTargetGradeFilter: number[] = [];
   @Input() selectedSnapshotIndex: number = 0;
 
   data: MultiSeries = [];
@@ -60,6 +63,46 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
       return 0;
     }
 
+    if (this.tutorialFilter !== 'all' || this.studentTargetGradeFilter.length > 0) {
+      if (this.tutorialFilter === 'all' && this.studentTargetGradeFilter.length > 0) {
+        if (this.campusFilter === 'all' && this.selectedSnapshot.target_grade_student_counts) {
+          return this.studentTargetGradeFilter.reduce(
+            (total, targetGrade) =>
+              total +
+              (this.selectedSnapshot.target_grade_student_counts?.[targetGrade.toString()] ?? 0),
+            0,
+          );
+        }
+
+        if (
+          this.campusFilter !== 'all' &&
+          this.selectedSnapshot.target_grade_campus_student_counts
+        ) {
+          return this.studentTargetGradeFilter.reduce(
+            (total, targetGrade) =>
+              total +
+              (this.selectedSnapshot.target_grade_campus_student_counts?.[targetGrade.toString()]?.[
+                this.campusFilter
+              ] ?? 0),
+            0,
+          );
+        }
+      }
+
+      return countStudentsFromSnapshot({
+        filtered: {
+          selected: getTaskPopulationStats(
+            this.selectedSnapshot,
+            this.campusFilter,
+            this.tutorialFilter,
+            [],
+            this.studentTargetGradeFilter,
+            this.unit,
+          ),
+        },
+      });
+    }
+
     const exactCount =
       this.campusFilter === 'all'
         ? this.selectedSnapshot.student_count
@@ -90,6 +133,9 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
       changes['unit'] ||
       changes['snapshots'] ||
       changes['campusFilter'] ||
+      changes['tutorialFilter'] ||
+      changes['taskGradeFilter'] ||
+      changes['studentTargetGradeFilter'] ||
       changes['selectedSnapshotIndex']
     ) {
       this.refreshData();
@@ -112,7 +158,16 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
 
     this.data =
       this.unit && selectedSnapshot
-        ? this.buildChartData(getTaskStats(selectedSnapshot, this.campusFilter))
+        ? this.buildChartData(
+            getTaskPopulationStats(
+              selectedSnapshot,
+              this.campusFilter,
+              this.tutorialFilter,
+              this.taskGradeFilter,
+              this.studentTargetGradeFilter,
+              this.unit,
+            ),
+          )
         : [];
 
     // Padded week 0 days carry no stats - show the chart empty rather than falling back
@@ -140,12 +195,20 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
         const b = orderByCode.get(taskCodeB) ?? unknown;
         return a.target - b.target || a.seq - b.seq;
       })
-      .map(([taskDef, counts]) => ({
-        name: taskDef,
-        series: statusMapping.map((status) => ({
-          name: this.taskService.statusLabels.get(status) || status,
-          value: counts[status] || 0,
-        })),
-      }));
+      .map(([taskDef, counts]) => {
+        const total = statusMapping.reduce((sum, status) => sum + (counts[status] || 0), 0);
+
+        return {
+          name: taskDef,
+          series: statusMapping.map((status) => {
+            const value = counts[status] || 0;
+            return {
+              name: this.taskService.statusLabels.get(status) || status,
+              value,
+              extra: {percentage: total > 0 ? ((value / total) * 100).toFixed(2) : '0.00'},
+            };
+          }),
+        };
+      });
   }
 }

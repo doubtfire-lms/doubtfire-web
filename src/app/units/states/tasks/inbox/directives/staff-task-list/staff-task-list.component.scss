@@ -78,10 +78,6 @@ $warn-color: #f44336;
   padding-right: 10px;
   text-align: left;
 
-  &.expanded {
-    height: 100%;
-  }
-
   &.mobile {
   }
 
@@ -93,6 +89,21 @@ $warn-color: #f44336;
 
   .mdc-icon-button {
     display: flex;
+  }
+}
+
+.inbox-menu-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.filters-panel {
+  background-color: transparent;
+
+  ::ng-deep .mat-expansion-panel-body {
+    padding: 0 12px 8px;
   }
 }
 
@@ -123,14 +134,6 @@ $warn-color: #f44336;
 
 .full-width {
   width: 100%;
-}
-
-.search-settings-panel {
-  background-color: transparent;
-}
-
-:host ::ng-deep div.mat-expansion-panel-body {
-  padding-right: 0 !important;
 }
 
 user-icon {

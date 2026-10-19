@@ -1220,6 +1220,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     const current = this.actionFor(rule);
     this.newActions[rule.id] = {
       type: current.type || 'EmailStudentAction',
+      plain_text: false,
       email_tutors: false,
       email_convenors: false,
     };
@@ -1344,6 +1345,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
   private blankAction(): Partial<CommunicationAction> {
     return {
       type: 'EmailStudentAction',
+      plain_text: false,
       email_tutors: false,
       email_convenors: false,
     };
@@ -1645,6 +1647,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
       group_id: 'Group',
       subject: 'Subject',
       body: 'Body',
+      plain_text: 'Send as plain text',
       email_tutors: 'Email Tutors',
       email_convenors: 'Email Convenors',
     };
@@ -1729,11 +1732,27 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
 
     switch (record.type) {
       case 'ChangeTargetGradeAction':
-        return [...baseHiddenKeys, 'subject', 'body', 'email_tutors', 'email_convenors'];
+        return [
+          ...baseHiddenKeys,
+          'subject',
+          'body',
+          'plain_text',
+          'email_tutors',
+          'email_convenors',
+        ];
       case 'EmailStudentAction':
         return [...baseHiddenKeys, 'target_grade', 'email_tutors', 'email_convenors'];
       case 'EmailStaffAction':
         return [...baseHiddenKeys, 'target_grade'];
+      case 'TaskCommentAction':
+        return [
+          ...baseHiddenKeys,
+          'subject',
+          'plain_text',
+          'email_tutors',
+          'email_convenors',
+          'target_grade',
+        ];
       default:
         return baseHiddenKeys;
     }
