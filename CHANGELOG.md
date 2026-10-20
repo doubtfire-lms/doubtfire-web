@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-103](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-102...v11.0.0-103) (2026-10-20)
+
+
+### Bug Fixes
+
+* add back tooltip ([56018f1](https://github.com/b0ink/doubtfire-deploy/commit/56018f1fdf66505a906f8c9d87e65f7f9aa4d801))
+* record attendance when tutors open a qr code externally ([2149954](https://github.com/b0ink/doubtfire-deploy/commit/2149954d6f2562ddb00aeb5743861d1f6cf50a69))
+
 ## [11.0.0-102](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-101...v11.0.0-102) (2026-10-16)
 
 
