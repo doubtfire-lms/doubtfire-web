@@ -19,15 +19,15 @@ export class TaskDueCardComponent {
   }
 
   public get discussTimeoutExpiryDate(): string | null {
-    const expiryAt = this.task?.discussTimeoutExpiryAt;
+    const expiryDateString = this.task?.discussTimeoutExpiryDate;
     const timeoutEnabled = this.task?.unit?.discussTimeoutEnabled;
-    if (this.task?.status !== 'discuss' || !timeoutEnabled || !expiryAt) {
+    if (this.task?.status !== 'discuss' || !timeoutEnabled || !expiryDateString) {
       return null;
     }
 
-    const expiryDate = new Date(expiryAt);
+    const [year, month, day] = expiryDateString.split('-').map(Number);
+    const expiryDate = new Date(year, month - 1, day, 12);
 
-    const day = expiryDate.getDate();
     const suffix = day >= 11 && day <= 13 ? 'th' : (['th', 'st', 'nd', 'rd'][day % 10] ?? 'th');
     const includeYear = expiryDate.getFullYear() !== new Date().getFullYear();
     const monthAndYear = formatDate(expiryDate, includeYear ? 'MMMM y' : 'MMMM', this.locale);
