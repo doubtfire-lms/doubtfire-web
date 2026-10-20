@@ -45,6 +45,7 @@
     "@glitchtip/ng-charts": "^1.4.0",
     "@ngneat/hotkeys": "^4.0.0",
     "@ngstack/code-editor": "^9.0.0",
+    "@openapitools/openapi-generator-cli": "^2.41.0",
     "@sentry/angular": "^10.75.0",
     "@sentry/cli": "^3.8.0",
     "@tailwindcss/postcss": "^4.3.3",

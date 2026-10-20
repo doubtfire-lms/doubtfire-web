@@ -13,3 +13,4 @@ karma.conf.js
 polyfills.ts
 test.ts
 main.ts
+src/app/api/generated/

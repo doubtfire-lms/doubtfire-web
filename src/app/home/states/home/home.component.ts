@@ -1,7 +1,22 @@
-import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  inject,
+  signal,
+} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
+import {InboxTaskEntity, UnitsService} from 'src/app/api/generated';
+import {
+  AuthenticationService,
+  Project,
+  UnitRole,
+  User,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {DateService} from 'src/app/common/services/date.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
@@ -24,6 +39,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   loadingUnitRoles: boolean;
   loadingProjects: boolean;
 
+  tasks = signal<InboxTaskEntity[]>([]);
+
+  #unitService = inject(UnitsService);
+  authService = inject(AuthenticationService);
+
   constructor(
     private constants: DoubtfireConstants,
     private globalState: GlobalStateService,
@@ -44,6 +64,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.authService.afterAuthCall(() => {
+      const user = this.userService.currentUser;
+      this.#unitService
+        .getApiUnitsIdTasksInbox(1, user.username, user.authenticationToken)
+        .subscribe((tasks) => this.tasks.set(tasks));
+    });
+
     this.globalState.showHeader();
     this.globalState.setView(ViewType.OTHER);
 
