@@ -86,6 +86,7 @@ export class Task extends Entity {
   targetDueDate: Date;
   movedToDiscussAt: Date;
   discussTimeoutExpiryAt: Date;
+  discussTimeoutExpiryDate: string;
 
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();

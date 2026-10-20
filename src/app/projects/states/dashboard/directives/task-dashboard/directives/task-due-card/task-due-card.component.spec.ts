@@ -30,7 +30,7 @@ describe('TaskDueCardComponent', () => {
     const year = new Date().getFullYear();
     component.task = {
       status: 'discuss',
-      discussTimeoutExpiryAt: new Date(year, 6, 8),
+      discussTimeoutExpiryDate: `${year}-07-08`,
       unit: {
         discussTimeoutEnabled: true,
         discussTimeoutExpireDays: 7,
@@ -39,7 +39,7 @@ describe('TaskDueCardComponent', () => {
 
     expect(component.discussTimeoutExpiryDate).toBe('8th July');
 
-    component.task.discussTimeoutExpiryAt = new Date(year, 6, 15);
+    component.task.discussTimeoutExpiryDate = `${year}-07-15`;
 
     expect(component.discussTimeoutExpiryDate).toBe('15th July');
   });
