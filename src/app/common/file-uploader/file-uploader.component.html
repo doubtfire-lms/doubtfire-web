@@ -10,7 +10,7 @@
     <div class="flex gap-1">
       @if (showUploader && uploadingInfo === null && shownUploadZones.length) {
         <div class="w-full">
-          @for (upload of shownUploadZones; track upload) {
+          @for (upload of shownUploadZones; track upload.name) {
             @if (!singleDropZone && showName) {
               <h5>
                 {{ uploadZones.length === 1 ? '' : $index + 1 + ' - ' }}
@@ -81,7 +81,7 @@
         <div class="w-full">
           <h5>Upload Summary</h5>
 
-          @for (upload of uploadZones; track upload) {
+          @for (upload of uploadZones; track upload.name) {
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-1">
                 <mat-icon>{{ upload.display.icon }}</mat-icon>
@@ -121,7 +121,7 @@
       @if (!uploadingInfo?.complete) {
         <div class="uploading flex min-h-[300px] w-full flex-col items-center justify-center gap-3">
           <div class="flex items-center justify-center gap-1">
-            @for (upload of uploadZones; track upload) {
+            @for (upload of uploadZones; track upload.name) {
               <mat-icon>{{ upload.display.icon }}</mat-icon>
             }
             <mat-icon>arrow_right_alt</mat-icon>

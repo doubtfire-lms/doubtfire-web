@@ -1,10 +1,16 @@
-// Lottie animation module
-// import {LottieModule, LottieCacheModule} from 'ngx-lottie';
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {EmojiModule} from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import {
+  AreaChartStackedComponent,
+  BarVerticalNormalizedComponent,
+  GaugeComponent,
+  LineChartComponent,
+  NumberCardComponent,
+  PieChartComponent,
+  SankeyComponent,
+} from '@glitchtip/ng-charts';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import * as Sentry from '@sentry/angular';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {
   GANTT_GLOBAL_CONFIG,
   GANTT_I18N_LOCALE_TOKEN,
@@ -16,10 +22,8 @@ import {
 import {DateAdapter as CalendarDateAdapter, CalendarModule} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {enAU} from 'date-fns/locale';
-import player from 'lottie-web';
 import {PdfViewerModule} from 'ng2-pdf-viewer';
 import {FlexLayoutModule} from 'ng-flex-layout';
-import {LottieComponent, provideLottieOptions} from 'ngx-lottie';
 // TODO: replace back to original ngx-monaco-editor-v2 once it supports angular 22
 import {MonacoEditorModule} from 'ngx-monaco-editor-v2-alternative';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
@@ -101,6 +105,7 @@ import {ActivityTypeListComponent} from './admin/institution-settings/activity-t
 import {CampusListComponent} from './admin/institution-settings/campuses/campus-list/campus-list.component';
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
 import {OverseerImageListComponent} from './admin/institution-settings/overseer-images/overseer-image-list.component';
+import {StatisticsComponent} from './admin/institution-settings/statistics/statistics.component';
 import {CreateNewUnitModalContentComponent} from './admin/modals/create-new-unit-modal/create-new-unit-modal-content.component';
 import {CreateNewUnitModal} from './admin/modals/create-new-unit-modal/create-new-unit-modal.component';
 import {
@@ -124,6 +129,8 @@ import {
   EngagementService,
   GroupSetService,
   LearningOutcomeService,
+  LmsGroupMappingService,
+  LmsIntegrationService,
   OverseerAssessmentService,
   OverseerImageService,
   ProjectService,
@@ -135,6 +142,8 @@ import {
   TeachingPeriodService,
   TutorialService,
   TutorialStreamService,
+  UnitContentLinkService,
+  UnitContentSiteService,
   UnitRoleService,
   UnitService,
   UserService,
@@ -226,6 +235,7 @@ import {EmojiService} from './common/services/emoji.service';
 import {GradeService} from './common/services/grade.service';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
 import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
+import {SettingToggleComponent} from './common/setting-toggle/setting-toggle.component';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
@@ -248,6 +258,7 @@ import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.c
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
 import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
+import {UnitContentViewerComponent} from './projects/states/content/unit-content-viewer.component';
 import {AddEngagementDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
 import {EngagementDetailDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-detail-dialog/engagement-detail-dialog.component';
 import {EngagementPassportCardComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/engagement-passport-card.component';
@@ -299,12 +310,14 @@ import {CheckForUpdateService} from './sessions/service-worker-updater/check-for
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
 import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
+import {SubmissionRequestDeniedModalComponent} from './tasks/modals/submission-request-denied-modal/submission-request-denied-modal.component';
 import {SubmissionTypeModalComponent} from './tasks/modals/submission-type-modal/submission-type-modal.component';
 import {UploadSubmissionModalComponent} from './tasks/modals/upload-submission-modal/upload-submission-modal.component';
 import {ProjectTasksListComponent} from './tasks/project-tasks-list/project-tasks-list.component';
 import {DiscussionPromptComposerComponent} from './tasks/task-comment-composer/discussion-prompt-composer/discussion-prompt-composer.component';
 import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task-feedback-templates/task-feedback-templates.component';
 import {CommentBubbleActionComponent} from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
+import {DiscussTimeoutCommentComponent} from './tasks/task-comments-viewer/discuss-timeout-comment/discuss-timeout-comment.component';
 import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
 import {
   IntelligentDiscussionDialog,
@@ -317,7 +330,11 @@ import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
-import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times.component';
+import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
+import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
+import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
+import {TargetGradeSankeyComponent} from './units/states/analytics/directives/charts/target-grade-sankey/target-grade-sankey.component';
+import {TaskStatusSummaryChartsComponent} from './units/states/analytics/directives/charts/task-status-summary-charts/task-status-summary-charts.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
 import {CommunicationActionsComponent} from './units/states/edit/directives/unit-communications-editor/actions/communication-actions.component';
@@ -327,13 +344,16 @@ import {TaskCommentActionComponent} from './units/states/edit/directives/unit-co
 import {CommunicationScheduleModalComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedule-modal.component';
 import {CommunicationSchedulesComponent} from './units/states/edit/directives/unit-communications-editor/communication-schedule-modal/communication-schedules.component';
 import {CommunicationConditionsComponent} from './units/states/edit/directives/unit-communications-editor/conditions/communication-conditions.component';
+import {TaskStatusSelectComponent} from './units/states/edit/directives/unit-communications-editor/task-status-select/task-status-select.component';
 import {UnitCommunicationsEditorComponent} from './units/states/edit/directives/unit-communications-editor/unit-communications-editor.component';
+import {UnitContentEditorComponent} from './units/states/edit/directives/unit-content-editor/unit-content-editor.component';
 import {
   D2lUnitDetailsFormComponent,
   D2lUnitDetailsModal,
 } from './units/states/edit/directives/unit-details-editor/d2l-details-form/d2l-unit-details-form.component';
 import {UnitDetailsEditorComponent} from './units/states/edit/directives/unit-details-editor/unit-details-editor.component';
 import {UnitGroupSetEditorComponent} from './units/states/edit/directives/unit-group-set-editor/unit-group-set-editor.component';
+import {UnitLmsIntegrationComponent} from './units/states/edit/directives/unit-lms-integration/unit-lms-integration.component';
 import {BulkImportStaffModalComponent} from './units/states/edit/directives/unit-staff-editor/bulk-import-staff-modal/bulk-import-staff-modal.component';
 import {UnitStaffEditorComponent} from './units/states/edit/directives/unit-staff-editor/unit-staff-editor.component';
 import {StudentCampusSelectComponent} from './units/states/edit/directives/unit-students-editor/student-campus-select/student-campus-select.component';
@@ -476,6 +496,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     IntelligentDiscussionDialog,
     DiscussionComposerDialog,
     IntelligentDiscussionRecorderComponent,
+    DiscussTimeoutCommentComponent,
     ExtensionCommentComponent,
     PdfImageCommentComponent,
     CampusListComponent,
@@ -487,6 +508,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ConfirmationModalComponent,
     DiscussedInClassReasonModalComponent,
     InstitutionSettingsComponent,
+    StatisticsComponent,
     ProjectPlanComponent,
     SuccessCloseComponent,
     HomeComponent,
@@ -495,6 +517,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     UnitTutorialsManagerComponent,
     FileDropComponent,
     UnitStudentsEditorComponent,
+    UnitLmsIntegrationComponent,
     StudentsListComponent,
     UnitTaskEditorComponent,
     TaskDefinitionEditorComponent,
@@ -567,6 +590,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     CreateNewUnitModalContentComponent,
     TiiActionLogComponent,
     FChipComponent,
+    SettingToggleComponent,
     UnitCodeComponent,
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
@@ -577,6 +601,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     FTaskSheetViewComponent,
     UnitRootStateComponent,
     ProjectRootStateComponent,
+    UnitContentViewerComponent,
     TaskViewerStateComponent,
     FUsersComponent,
     ProjectProgressGaugeComponent,
@@ -631,12 +656,17 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskPlannerCardComponent,
     TaskPlannerPrerequisitesModalComponent,
     TaskOverseerReportComponent,
+    NormalisedTaskStatusChartComponent,
+    StackedAreaStatusChartComponent,
+    TaskStatusSummaryChartsComponent,
+    TargetGradeSankeyComponent,
     SubmissionFilesModalComponent,
     TutorNotesComponent,
     TutorNotesViewComponent,
     ModerationComponent,
     TutorNotesModalComponent,
     FeedbackAppealModalComponent,
+    SubmissionRequestDeniedModalComponent,
     UploadSubmissionModalComponent,
     ConfirmModerationModalComponent,
     TaskClaimComponent,
@@ -648,7 +678,9 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     EmailStaffActionComponent,
     EmailStudentActionComponent,
     TaskCommentActionComponent,
+    TaskStatusSelectComponent,
     UnitCommunicationsEditorComponent,
+    UnitContentEditorComponent,
     TutorialsComponent,
     UnitStaffEditorComponent,
     PortfolioGradeSelectStepComponent,
@@ -685,7 +717,11 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     GroupSetService,
     GroupService,
     UnitService,
+    UnitContentLinkService,
+    UnitContentSiteService,
     D2lAssessmentMappingService,
+    LmsGroupMappingService,
+    LmsIntegrationService,
     ProjectService,
     UnitRoleService,
     LearningOutcomeService,
@@ -742,9 +778,6 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ScormAdapterService,
     TestAttemptService,
     PrivacyPolicy,
-    provideLottieOptions({
-      player: () => player,
-    }),
     FeedbackTemplateService,
     NestedCsvDownloadModalService,
     StaffNoteService,
@@ -834,15 +867,20 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ReactiveFormsModule,
     PickerModule,
     EmojiModule,
-    NgxChartsModule,
+    BarVerticalNormalizedComponent,
+    AreaChartStackedComponent,
+    GaugeComponent,
+    LineChartComponent,
+    NumberCardComponent,
+    PieChartComponent,
+    SankeyComponent,
     PdfViewerModule,
-    LottieComponent,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: () => interval(6000).pipe(take(1)),
     }),
     CalendarModule.forRoot({provide: CalendarDateAdapter, useFactory: adapterFactory}),
-    CodeEditorModule.forRoot(),
+    CodeEditorModule.forRoot({baseUrl: '/assets/monaco/min'}),
     NgxGanttModule,
     MonacoEditorModule.forRoot(),
     MatChipListbox,

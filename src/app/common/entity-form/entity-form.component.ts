@@ -300,7 +300,7 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
       return;
     }
 
-    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       return this.sortCompare(a[sort.active], b[sort.active], isAsc);
     });
@@ -315,7 +315,32 @@ export abstract class EntityFormComponent<T extends Entity> implements AfterView
    *
    * @returns truthy comparison between aValue and bValue.
    */
-  protected sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
-    return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
+  protected sortCompare(aValue: unknown, bValue: unknown, isAsc: boolean): number {
+    const normalise = (value: unknown): number | string => {
+      if (value instanceof Date) {
+        return value.getTime();
+      }
+      if (typeof value === 'boolean') {
+        return Number(value);
+      }
+      if (typeof value === 'number') {
+        return value;
+      }
+      return String(value ?? '').toLocaleLowerCase();
+    };
+    const left = normalise(aValue);
+    const right = normalise(bValue);
+
+    if (left === right) {
+      return 0;
+    }
+
+    const comparison =
+      typeof left === 'number' && typeof right === 'number'
+        ? left < right
+          ? -1
+          : 1
+        : String(left).localeCompare(String(right));
+    return comparison * (isAsc ? 1 : -1);
   }
 }

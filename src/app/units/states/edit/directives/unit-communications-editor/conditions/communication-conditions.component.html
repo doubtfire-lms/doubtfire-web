@@ -44,19 +44,21 @@
               </mat-form-field>
             }
 
-            <mat-form-field appearance="outline" class="min-w-[300px]">
-              <mat-label>Operator</mat-label>
-              <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
-                @for (
-                  operator of editor.operatorsFor(editor.conditionFor(rule).type);
-                  track operator
-                ) {
-                  <mat-option [value]="operator">
-                    {{ editor.operatorLabel(operator) }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+            @if (editor.conditionFor(rule).type !== 'PortfolioSubmittedCondition') {
+              <mat-form-field appearance="outline" class="min-w-[300px]">
+                <mat-label>Operator</mat-label>
+                <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
+                  @for (
+                    operator of editor.operatorsFor(editor.conditionFor(rule).type);
+                    track operator
+                  ) {
+                    <mat-option [value]="operator">
+                      {{ editor.operatorLabel(operator) }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
 
             @if (editor.conditionFor(rule).type === 'TaskStatusCountCondition') {
               <mat-form-field appearance="outline" class="w-32">
@@ -95,37 +97,49 @@
                 </mat-form-field>
               }
               @case ('TaskDefinitionStatusCondition') {
-                <mat-form-field appearance="outline">
-                  <mat-label>Statuses</mat-label>
-                  <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
-                    @for (status of editor.taskStatuses; track status) {
-                      <mat-option [value]="status">
-                        {{ editor.taskStatusLabel(status) }}
-                      </mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
+                <f-task-status-select
+                  class="block min-w-[320px]"
+                  [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
+                />
               }
               @case ('TaskStatusCountCondition') {
-                <mat-form-field appearance="outline" class="min-w-[320px]">
-                  <mat-label>Statuses</mat-label>
-                  <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
-                    @for (status of editor.taskStatuses; track status) {
-                      <mat-option [value]="status">
-                        {{ editor.taskStatusLabel(status) }}
-                      </mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
+                <f-task-status-select
+                  class="block min-w-[320px]"
+                  [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
+                />
               }
               @case ('LoginStatusCondition') {
-                <mat-form-field appearance="outline">
-                  <mat-label>Last sign in</mat-label>
+                <mat-form-field appearance="outline" class="min-w-[320px]">
+                  <mat-label>Days</mat-label>
                   <input
                     matInput
-                    type="datetime-local"
-                    [(ngModel)]="editor.conditionFor(rule).last_sign_in_at"
+                    min="1"
+                    step="1"
+                    type="number"
+                    [(ngModel)]="editor.conditionFor(rule).activity_days"
                   />
+                  @if (editor.conditionFor(rule).operator === 'more_than') {
+                    <mat-hint>{{
+                      editor.neverActivityLabel(editor.conditionFor(rule).type)
+                    }}</mat-hint>
+                  }
+                </mat-form-field>
+              }
+              @case ('UnitViewedStatusCondition') {
+                <mat-form-field appearance="outline" class="min-w-[320px]">
+                  <mat-label>Days</mat-label>
+                  <input
+                    matInput
+                    min="1"
+                    step="1"
+                    type="number"
+                    [(ngModel)]="editor.conditionFor(rule).activity_days"
+                  />
+                  @if (editor.conditionFor(rule).operator === 'more_than') {
+                    <mat-hint>{{
+                      editor.neverActivityLabel(editor.conditionFor(rule).type)
+                    }}</mat-hint>
+                  }
                 </mat-form-field>
               }
               @case ('SpecConCondition') {
@@ -174,6 +188,55 @@
                     }
                   </mat-select>
                 </mat-form-field>
+              }
+              @case ('GroupSetEnrolmentCondition') {
+                <mat-form-field appearance="outline" class="min-w-[350px]">
+                  <mat-label>Group set</mat-label>
+                  <mat-select [(ngModel)]="editor.conditionFor(rule).group_set_id">
+                    @for (groupSet of editor.groupSets; track groupSet.id) {
+                      <mat-option [value]="groupSet.id">
+                        {{ groupSet.name }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+              @case ('GroupEnrolmentCondition') {
+                <mat-form-field appearance="outline" class="min-w-[350px]">
+                  <mat-label>Group set</mat-label>
+                  <mat-select
+                    [(ngModel)]="editor.conditionFor(rule).group_set_id"
+                    (selectionChange)="editor.onConditionGroupSetChange(rule)"
+                  >
+                    @for (groupSet of editor.groupSets; track groupSet.id) {
+                      <mat-option [value]="groupSet.id">
+                        {{ groupSet.name }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="min-w-[350px]">
+                  <mat-label>Group</mat-label>
+                  <mat-select [(ngModel)]="editor.conditionFor(rule).group_id">
+                    @for (
+                      group of editor.groupsFor(editor.conditionFor(rule).group_set_id);
+                      track group.id
+                    ) {
+                      <mat-option [value]="group.id">
+                        {{ group.name }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+              @case ('PortfolioSubmittedCondition') {
+                <mat-slide-toggle
+                  class="mt-3 mb-[22px]"
+                  [(ngModel)]="editor.conditionFor(rule).submitted_portfolio"
+                >
+                  Has submitted portfolio
+                </mat-slide-toggle>
               }
             }
 
@@ -238,14 +301,10 @@
                     </span>
                   }
                   @case ('LoginStatusCondition') {
-                    Students with a
-                    <strong class="font-semibold text-black/90">Last Sign In</strong>
-                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
-                      {{ editor.operatorLabel(condition.operator) }}
-                    </span>
-                    <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
-                      {{ editor.dateLabel(condition.last_sign_in_at) }}
-                    </span>
+                    {{ editor.activityConditionSummary(condition) }}
+                  }
+                  @case ('UnitViewedStatusCondition') {
+                    {{ editor.activityConditionSummary(condition) }}
                   }
                   @case ('SpecConCondition') {
                     Students with
@@ -283,6 +342,35 @@
                     <span class="mx-1 inline-block rounded bg-red-50 p-2 leading-6 text-red-800">
                       {{ editor.campusLabel(condition.campus_id) }}
                     </span>
+                  }
+                  @case ('GroupSetEnrolmentCondition') {
+                    Students
+                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                      {{ editor.enrolmentPredicate(condition.operator) }}
+                    </span>
+                    a group in
+                    <strong class="mx-1 font-semibold text-black/90">
+                      {{ editor.groupSetLabel(condition.group_set_id) }}
+                    </strong>
+                  }
+                  @case ('GroupEnrolmentCondition') {
+                    Students
+                    <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
+                      {{ editor.enrolmentPredicate(condition.operator) }}
+                    </span>
+                    <strong class="mx-1 font-semibold text-black/90">
+                      {{ editor.groupLabel(condition.group_id) }}
+                    </strong>
+                  }
+                  @case ('PortfolioSubmittedCondition') {
+                    Students who
+                    <strong class="mx-1 font-semibold text-black/90">
+                      {{
+                        condition.submitted_portfolio
+                          ? 'have submitted a portfolio'
+                          : 'have not submitted a portfolio'
+                      }}
+                    </strong>
                   }
                   @default {
                     {{ editor.operatorLabel(condition.operator) }}
@@ -334,16 +422,18 @@
         </mat-form-field>
       }
 
-      <mat-form-field appearance="outline" class="min-w-[300px]">
-        <mat-label>Operator</mat-label>
-        <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
-          @for (operator of editor.operatorsFor(editor.conditionFor(rule).type); track operator) {
-            <mat-option [value]="operator">
-              {{ editor.operatorLabel(operator) }}
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+      @if (editor.conditionFor(rule).type !== 'PortfolioSubmittedCondition') {
+        <mat-form-field appearance="outline" class="min-w-[300px]">
+          <mat-label>Operator</mat-label>
+          <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
+            @for (operator of editor.operatorsFor(editor.conditionFor(rule).type); track operator) {
+              <mat-option [value]="operator">
+                {{ editor.operatorLabel(operator) }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
 
       @if (editor.conditionFor(rule).type === 'TaskStatusCountCondition') {
         <mat-form-field appearance="outline" class="w-32">
@@ -383,39 +473,47 @@
         }
 
         @case ('TaskDefinitionStatusCondition') {
-          <mat-form-field appearance="outline">
-            <mat-label>Statuses</mat-label>
-            <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
-              @for (status of editor.taskStatuses; track status) {
-                <mat-option [value]="status">
-                  {{ editor.taskStatusLabel(status) }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+          <f-task-status-select
+            class="block min-w-[320px]"
+            [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
+          />
         }
 
         @case ('TaskStatusCountCondition') {
-          <mat-form-field appearance="outline" class="min-w-[320px]">
-            <mat-label>Statuses</mat-label>
-            <mat-select multiple [(ngModel)]="editor.conditionFor(rule).task_statuses">
-              @for (status of editor.taskStatuses; track status) {
-                <mat-option [value]="status">
-                  {{ editor.taskStatusLabel(status) }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+          <f-task-status-select
+            class="block min-w-[320px]"
+            [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
+          />
         }
 
         @case ('LoginStatusCondition') {
-          <mat-form-field appearance="outline">
-            <mat-label>Last sign in</mat-label>
+          <mat-form-field appearance="outline" class="min-w-[320px]">
+            <mat-label>Days</mat-label>
             <input
               matInput
-              type="datetime-local"
-              [(ngModel)]="editor.conditionFor(rule).last_sign_in_at"
+              min="1"
+              step="1"
+              type="number"
+              [(ngModel)]="editor.conditionFor(rule).activity_days"
             />
+            @if (editor.conditionFor(rule).operator === 'more_than') {
+              <mat-hint>{{ editor.neverActivityLabel(editor.conditionFor(rule).type) }}</mat-hint>
+            }
+          </mat-form-field>
+        }
+        @case ('UnitViewedStatusCondition') {
+          <mat-form-field appearance="outline" class="min-w-[320px]">
+            <mat-label>Days</mat-label>
+            <input
+              matInput
+              min="1"
+              step="1"
+              type="number"
+              [(ngModel)]="editor.conditionFor(rule).activity_days"
+            />
+            @if (editor.conditionFor(rule).operator === 'more_than') {
+              <mat-hint>{{ editor.neverActivityLabel(editor.conditionFor(rule).type) }}</mat-hint>
+            }
           </mat-form-field>
         }
         @case ('SpecConCondition') {
@@ -467,6 +565,58 @@
               }
             </mat-select>
           </mat-form-field>
+        }
+
+        @case ('GroupSetEnrolmentCondition') {
+          <mat-form-field appearance="outline" class="min-w-[350px]">
+            <mat-label>Group set</mat-label>
+            <mat-select [(ngModel)]="editor.conditionFor(rule).group_set_id">
+              @for (groupSet of editor.groupSets; track groupSet.id) {
+                <mat-option [value]="groupSet.id">
+                  {{ groupSet.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+
+        @case ('GroupEnrolmentCondition') {
+          <mat-form-field appearance="outline" class="min-w-[350px]">
+            <mat-label>Group set</mat-label>
+            <mat-select
+              [(ngModel)]="editor.conditionFor(rule).group_set_id"
+              (selectionChange)="editor.onConditionGroupSetChange(rule)"
+            >
+              @for (groupSet of editor.groupSets; track groupSet.id) {
+                <mat-option [value]="groupSet.id">
+                  {{ groupSet.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="min-w-[350px]">
+            <mat-label>Group</mat-label>
+            <mat-select [(ngModel)]="editor.conditionFor(rule).group_id">
+              @for (
+                group of editor.groupsFor(editor.conditionFor(rule).group_set_id);
+                track group.id
+              ) {
+                <mat-option [value]="group.id">
+                  {{ group.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+
+        @case ('PortfolioSubmittedCondition') {
+          <mat-slide-toggle
+            class="mb-[22px]"
+            [(ngModel)]="editor.conditionFor(rule).submitted_portfolio"
+          >
+            Has submitted portfolio
+          </mat-slide-toggle>
         }
       }
 

@@ -31,15 +31,15 @@ export class TaskDefinitionUploadComponent {
   }
 
   public addUpReq() {
-    const newLength = this.taskDefinition.uploadRequirements.length + 1;
     this.taskDefinition.uploadRequirements.push({
-      key: `file${newLength - 1}`,
+      key: '',
       type: 'code',
       name: '',
       tiiCheck: false,
       tiiPct: 30,
       submissionHistory: false,
     });
+    this.normalizeUploadRequirementKeys();
     this.table.renderRows();
   }
 
@@ -56,7 +56,14 @@ export class TaskDefinitionUploadComponent {
 
   public removeUpReq(upreq: UploadRequirement) {
     this.taskDefinition.uploadRequirements = this.taskDefinition.uploadRequirements.filter(
-      (anUpReq) => anUpReq.key != upreq.key,
+      (anUpReq) => anUpReq !== upreq,
     );
+    this.normalizeUploadRequirementKeys();
+  }
+
+  private normalizeUploadRequirementKeys(): void {
+    this.taskDefinition.uploadRequirements.forEach((requirement, index) => {
+      requirement.key = `file${index}`;
+    });
   }
 }

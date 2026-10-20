@@ -1,9 +1,9 @@
 <hr class="hr-text my-2" data-content="Knowledge Check Summary" [hidden]="!comment.firstInSeries" />
 <div class="flex w-full flex-col justify-center">
   @if (!user.isStaff && !task.definition.scormAllowReview) {
-    <div class="markdown-to-html m-auto my-0.5 text-center" [innerHTML]="comment.text"></div>
+    <div class="m-auto my-0.5 text-center" [innerHTML]="comment.text"></div>
   } @else {
-    <div class="markdown-to-html grow text-center" [innerHTML]="comment.text"></div>
+    <div class="grow text-center" [innerHTML]="comment.text"></div>
   }
   <div class="relative flex w-full items-center justify-center py-4">
     <button

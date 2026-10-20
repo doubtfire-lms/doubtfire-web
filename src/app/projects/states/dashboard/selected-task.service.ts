@@ -96,7 +96,9 @@ export class SelectedTaskService {
   }
 
   public showSubmission() {
-    if (!this.task$.value) return;
+    if (!this.task$.value) {
+      return;
+    }
     this.currentPdfUrl$.next(this.task$.value.submissionUrl(false));
     this.currentView$.next(DashboardViews.submission);
   }

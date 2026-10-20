@@ -33,6 +33,59 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
 
   public manageDueDates: boolean = false;
 
+  public dueDateMode: 'date' | 'weekDay' = 'date';
+
+  // Monday first, valued by Date#getDay
+  public readonly weekDays = [1, 2, 3, 4, 5, 6, 0].map((value) => ({
+    value,
+    label: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][value],
+  }));
+
+  public get weekOptions(): number[] {
+    const lastWeek = Math.max(this.unit.weekNumber(this.unit.endDate) ?? 1, 1);
+    return Array.from({length: lastWeek}, (_, index) => index + 1);
+  }
+
+  public weekOf(date: Date | null): number | null {
+    return date ? this.unit.weekNumber(date) : null;
+  }
+
+  public dayOf(date: Date | null): number | null {
+    return date ? new Date(date).getDay() : null;
+  }
+
+  // The feedback deadline belongs to the task itself, so it is only shown under the pass grade
+  setFeedbackDeadline(td: TaskDefinition, value: Date | null): void {
+    td.dueDate = value;
+    this.saveTaskDefinition(td);
+  }
+
+  setFeedbackDeadlineWeekDay(td: TaskDefinition, week: number, day: number): void {
+    const date = this.unit.dateForWeekAndDay(week, day);
+    if (date) {
+      this.setFeedbackDeadline(td, date);
+    }
+  }
+
+  setGradeStartWeekDay(
+    td: TaskDefinition,
+    grade: GradeDefinition,
+    week: number,
+    day: number,
+  ): void {
+    const date = this.unit.dateForWeekAndDay(week, day);
+    if (date) {
+      this.setGradeStartDate(td, grade, date);
+    }
+  }
+
+  setGradeDueWeekDay(td: TaskDefinition, grade: GradeDefinition, week: number, day: number): void {
+    const date = this.unit.dateForWeekAndDay(week, day);
+    if (date) {
+      this.setGradeDueDate(td, grade, date);
+    }
+  }
+
   protected get gradeNames(): Record<number, string> {
     return Object.fromEntries(
       this.unit.gradeDefinitions.map((definition) => [definition.value, definition.label]),
@@ -57,7 +110,9 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   isStartAfterTarget(td: TaskDefinition, grade: GradeDefinition): boolean {
     const start = this.getGradeStartDate(td, grade);
     const target = this.getGradeDueDate(td, grade);
-    if (!start || !target) return false;
+    if (!start || !target) {
+      return false;
+    }
     return new Date(start).getTime() > new Date(target).getTime();
   }
 
@@ -152,7 +207,9 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(filterValue: string) {
-    if (!this.taskDefinitionSource) return;
+    if (!this.taskDefinitionSource) {
+      return;
+    }
 
     this.taskDefinitionSource.filter = filterValue.trim().toLowerCase();
 

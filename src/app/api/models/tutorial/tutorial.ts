@@ -11,6 +11,7 @@ export class Tutorial extends Entity {
   abbreviation: string;
   campus: Campus;
   capacity: number;
+  durationMinutes: number;
   numStudents: number;
   tutor: User;
   tutorialStream: TutorialStream;
@@ -64,8 +65,11 @@ export class Tutorial extends Entity {
   }
 
   public get tutorName(): string {
-    if (this.tutor) return this.tutor.name;
-    else return '';
+    if (this.tutor) {
+      return this.tutor.name;
+    } else {
+      return '';
+    }
   }
 
   public hasCapacity(): boolean {

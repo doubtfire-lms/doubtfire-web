@@ -55,7 +55,6 @@ export class PortfolioAddExtraFilesStepComponent implements OnInit {
     };
   }
   onTypeChange(event: MatSelectChange) {
-    console.log('on type change', event);
     this.uploadFileType = {
       file0: {
         name: 'Other',

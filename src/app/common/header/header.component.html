@@ -2,7 +2,7 @@
   <mat-toolbar
     class="flex items-center justify-start"
     style="min-height: 85px"
-    [ngClass]="{inbox: globalState.isInboxState}"
+    [ngClass]="{inbox: globalState.isInboxState, content: isContentRoute}"
   >
     @if (!media.isActive('xs')) {
       @if (logoSettings.hasLogo) {

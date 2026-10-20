@@ -20,9 +20,6 @@ export class HttpAuthenticationInterceptor implements HttpInterceptor {
             'Auth-Token': this.userService.currentUser.authenticationToken,
             Username: this.userService.currentUser.username,
           }),
-          ...(this.userService.currentUser.ltik && {
-            Authorization: `Bearer ${this.userService.currentUser.ltik}`,
-          }),
         },
       });
     }

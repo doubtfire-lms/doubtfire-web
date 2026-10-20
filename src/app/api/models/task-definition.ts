@@ -10,6 +10,7 @@ import {GroupSet, LearningOutcome, Project, TutorialStream, Unit} from './doubtf
 import {Task} from './doubtfire-model';
 import {OverseerStep} from './overseer/overseer-step';
 import {TaskPrerequisite} from './task-prerequisite';
+import {UnitContentLink} from './unit-content-link';
 
 export interface UploadRequirement {
   key: string;
@@ -72,6 +73,8 @@ export class TaskDefinition extends Entity {
   useResourcesForJplagBaseCode: boolean;
   lockAssessmentsToTutorialStream: boolean;
   discussionPromptsCount: number;
+  contentLink?: UnitContentLink;
+  taskResourceLink?: UnitContentLink;
   overseerResourceFiles: string[] = [];
 
   gradeDueDates: TaskDefinitionGradeDueDate[] = [];
@@ -162,9 +165,6 @@ export class TaskDefinition extends Entity {
         id: this.id,
       })
       .subscribe({
-        next: (taskDefinition) => {
-          console.log(taskDefinition.name);
-        },
         error: (message) => alerts.error(message, 6000),
       });
   }
@@ -250,6 +250,14 @@ export class TaskDefinition extends Entity {
     return this.groupSet !== null && this.groupSet !== undefined;
   }
 
+  public get hasContentLink(): boolean {
+    return !!this.contentLink?.unitContentSiteId;
+  }
+
+  public get hasTaskResourceLink(): boolean {
+    return !!this.taskResourceLink?.unitContentSiteId;
+  }
+
   public getTaskPDFUrl(asAttachment: boolean = false): string {
     const constants = AppInjector.get(DoubtfireConstants);
     return `${constants.API_URL}/units/${this.unit.id}/task_definitions/${this.id}/task_pdf.json${
@@ -285,7 +293,7 @@ export class TaskDefinition extends Entity {
    * Open the SCORM test in a new tab - using preview mode.
    */
   public previewScormTest(): void {
-    window.open(`#/task_def_id/${this.id}/preview-scorm`, '_blank');
+    window.open(`/task_def_id/${this.id}/preview-scorm`, '_blank');
   }
 
   public get targetGradeText(): string {

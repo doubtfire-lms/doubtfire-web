@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {GroupSet, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {GroupSetService} from 'src/app/api/services/group-set.service';
+import {ProjectService} from 'src/app/api/services/project.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {
   CsvResult,
@@ -51,12 +52,18 @@ export class UnitGroupSetEditorComponent implements OnInit {
 
   constructor(
     private groupSetService: GroupSetService,
+    private projectService: ProjectService,
     private alertService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     private csvResultModal: CsvResultModalService,
   ) {}
 
   ngOnInit(): void {
+    // Group management searches the unit's student cache when adding members.
+    // Populate it in the background so the search also works when Groups is the
+    // first administration tab visited.
+    this.projectService.loadStudents(this.unit).subscribe();
+
     if (this.unit?.groupSets?.length > 0) {
       this.selectGroupSet(this.unit.groupSets[0]);
     }

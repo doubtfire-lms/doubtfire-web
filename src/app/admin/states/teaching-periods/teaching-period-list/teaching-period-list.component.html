@@ -17,7 +17,7 @@
     (matSortChange)="sortTableData($event)"
   >
     <ng-container matColumnDef="active">
-      <th *matHeaderCellDef mat-header-cell>Active</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Active</th>
       <td *matCellDef="let element" mat-cell>
         <mat-checkbox color="primary" disabled [checked]="element.active"> </mat-checkbox>
       </td>
@@ -39,7 +39,7 @@
     </ng-container>
 
     <ng-container matColumnDef="activeUntil">
-      <th *matHeaderCellDef mat-header-cell>Active until</th>
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Active until</th>
       <td *matCellDef="let element" mat-cell>{{ element.activeUntil | date }}</td>
     </ng-container>
 

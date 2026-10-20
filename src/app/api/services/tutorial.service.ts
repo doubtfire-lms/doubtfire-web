@@ -44,6 +44,7 @@ export class TutorialService extends CachedEntityService<Tutorial> {
         },
       },
       'capacity',
+      'durationMinutes',
       {
         keys: ['tutor', 'tutor_id'],
         toEntityFn: (data: object, key: string) => {

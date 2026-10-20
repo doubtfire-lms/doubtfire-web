@@ -47,32 +47,6 @@ jobs:
             type=semver,pattern=prod-{{version}}
             type=semver,pattern=prod-{{major}}.{{minor}}
             type=semver,pattern=prod-{{major}}
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        if: steps.custom_config.outputs.enabled == 'true'
-        with:
-          node-version: 22
-          cache: npm
-      - name: Install dependencies
-        if: steps.custom_config.outputs.enabled == 'true'
-        run: npm ci --force --include=optional
-      - name: Install envsubst
-        if: steps.custom_config.outputs.enabled == 'true'
-        run: sudo apt-get update && sudo apt-get install -y gettext-base
-      - name: Build and upload Sentry sourcemaps
-        if: steps.custom_config.outputs.enabled == 'true'
-        env:
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-          SENTRY_RELEASE: ${{ github.ref_name }}
-          SENTRY_DIST: ${{ github.run_number }}
-        run: |
-          envsubst '${SENTRY_DSN} ${SENTRY_RELEASE} ${SENTRY_DIST}' < src/environments/environment.prod.ts > src/environments/environment.prod.ts.tmp
-          mv src/environments/environment.prod.ts.tmp src/environments/environment.prod.ts
-          npm run deploy:build2api:sourcemaps
-          npm run sentry:sourcemaps
       - name: Build and push custom web server
         id: docker_build
         uses: docker/build-push-action@v7
@@ -89,6 +63,9 @@ jobs:
             SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}
             SENTRY_RELEASE=${{ github.ref_name }}
             SENTRY_DIST=${{ github.run_number }}
+            UPLOAD_SENTRY_SOURCEMAPS=true
+          secrets: |
+            sentry_auth_token=${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Image digest
         if: steps.custom_config.outputs.enabled == 'true'
         run: echo ${{ steps.docker_build.outputs.digest }}

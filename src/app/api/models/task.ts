@@ -53,6 +53,9 @@ export class Task extends Entity {
   extensions: number;
   scormExtensions: number;
   submissionDate: Date;
+  // When the inbox started waiting on this task: the submission, or the oldest
+  // unread comment for tasks listed only because of comments
+  waitingSince: Date;
   completionDate: Date;
   timesAssessed: number;
   grade?: number;
@@ -81,6 +84,8 @@ export class Task extends Entity {
 
   targetStartDate: Date;
   targetDueDate: Date;
+  movedToDiscussAt: Date;
+  discussTimeoutExpiryAt: Date;
 
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
@@ -169,20 +174,22 @@ export class Task extends Entity {
   }
 
   public get unit(): Unit {
-    if (this._unit) return this._unit;
+    if (this._unit) {
+      return this._unit;
+    }
     return this.project.unit;
   }
 
   private getBreakOverlapMilliseconds(
     startTime: number,
     endTime: number,
-    breaks: readonly {startDate: Date; numberOfWeeks: number}[],
+    breaks: readonly {startDate: Date; numberOfDays: number}[],
   ): number {
     const millisecondsPerDay = 1000 * 60 * 60 * 24;
 
     return breaks.reduce((overlap, teachingBreak) => {
       const breakStart = new Date(teachingBreak.startDate).getTime();
-      const breakDuration = (teachingBreak.numberOfWeeks ?? 0) * 7 * millisecondsPerDay;
+      const breakDuration = (teachingBreak.numberOfDays ?? 0) * millisecondsPerDay;
       const breakEnd = breakStart + breakDuration;
 
       if (!Number.isFinite(breakStart) || breakDuration <= 0) {
@@ -204,7 +211,7 @@ export class Task extends Entity {
       return 0;
     }
 
-    const teachingBreaks = this.unit.teachingPeriod?.breaks ?? [];
+    const teachingBreaks = this.unit.teachingPeriod?.breaksFor(this.project?.campus?.id) ?? [];
     const pausedMilliseconds = this.getBreakOverlapMilliseconds(
       submissionTime,
       nowTime,
@@ -224,7 +231,7 @@ export class Task extends Entity {
    */
   public matches(matchText: string): boolean {
     return (
-      TaskStatus.STATUS_LABELS.get(this.status)?.toLowerCase().indexOf(matchText) >= 0 ||
+      TaskStatus.matchesSearch(this.status, matchText) ||
       this.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
       this.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
       (this.hasExtensions && 'extension'.indexOf(matchText) == 0) ||
@@ -233,7 +240,7 @@ export class Task extends Entity {
     );
   }
 
-  public hasTaskKey(key: {studentId: number; taskDefAbbr: string}): boolean {
+  public hasTaskKey(key: {studentId: number | string; taskDefAbbr: string}): boolean {
     if (!key) {
       return false;
     }
@@ -251,8 +258,9 @@ export class Task extends Entity {
   }
 
   public get gradeWord(): string {
-    if (this.grade !== undefined && this.grade !== null) return this.unit.gradeLabel(this.grade);
-    else {
+    if (this.grade !== undefined && this.grade !== null) {
+      return this.unit.gradeLabel(this.grade);
+    } else {
       return 'Not Graded';
     }
   }
@@ -296,7 +304,9 @@ export class Task extends Entity {
       }
 
       const gradeTargetDate = this.definition.gradeTargetDate(this.project.targetGrade);
-      if (gradeTargetDate) return gradeTargetDate;
+      if (gradeTargetDate) {
+        return gradeTargetDate;
+      }
     }
 
     if (this.dueDate) {
@@ -454,7 +464,9 @@ export class Task extends Entity {
       }
 
       const gradeStartDate = this.definition.gradeStartDate(this.project.targetGrade);
-      if (gradeStartDate) return gradeStartDate;
+      if (gradeStartDate) {
+        return gradeStartDate;
+      }
     }
 
     if (this.extensions < 0) {
@@ -572,7 +584,9 @@ export class Task extends Entity {
 
   public refreshCommentData(): void {
     const comments: readonly TaskComment[] = this.comments;
-    if (comments.length === 0) return;
+    if (comments.length === 0) {
+      return;
+    }
 
     comments[0].shouldShowTimestamp = true;
 
@@ -615,7 +629,9 @@ export class Task extends Entity {
         comments[i].firstInSeries = i === 0 || comments[i - 1].commentType !== 'scorm';
         (comments[i] as ScormComment).lastInScormSeries =
           i + 1 === comments.length || comments[i + 1]?.commentType !== 'scorm';
-        if (!comments[i].firstInSeries) comments[i].shouldShowTimestamp = false;
+        if (!comments[i].firstInSeries) {
+          comments[i].shouldShowTimestamp = false;
+        }
       }
     }
 
@@ -869,7 +885,7 @@ export class Task extends Entity {
     }
     const uploadModal: UploadSubmissionModalService = AppInjector.get(UploadSubmissionModalService);
 
-    const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission);
+    const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission, oldStatus);
     // Modal failed to present
     if (!modal) {
       if (!isTestSubmission) {
@@ -912,7 +928,7 @@ export class Task extends Entity {
     taskService.notifyStatusChange(this);
   }
 
-  public async markAsDiscussed(reasonText?: string) {
+  public async markAsDiscussed(reasonText?: string, onSuccess?: () => void) {
     const alerts: AlertService = AppInjector.get(AlertService);
     const taskService: TaskService = AppInjector.get(TaskService);
 
@@ -937,6 +953,7 @@ export class Task extends Entity {
           next: (_response) => {
             taskService.notifyStatusChange(this);
             alerts.success('Task successfully marked as discussed in class.', 4000);
+            onSuccess?.();
           },
           error: (error) => {
             alerts.error(error, 6000);
@@ -983,13 +1000,14 @@ export class Task extends Entity {
     status: TaskStatusEnum,
     markAsDiscussed?: boolean,
     triggerRecursiveFix?: boolean,
+    onSuccess?: () => void,
   ) {
     const oldStatus = this.status;
     const oldGrade = this.grade;
     const oldQualityPts = this.qualityPts;
     const alerts: AlertService = AppInjector.get(AlertService);
 
-    if (status === 'complete' && !this.canMarkComplete) {
+    if (status === 'complete' && !this.canMarkComplete && markAsDiscussed !== true) {
       alerts.error('This task must be discussed in class before it can marked complete.', 6000);
       return;
     }
@@ -1034,6 +1052,9 @@ export class Task extends Entity {
             }
             this.processTaskStatusChange(status, alerts);
             taskService.notifyStatusChange(this);
+            if (this.status === status) {
+              onSuccess?.();
+            }
           },
           error: (error) => {
             this.status = oldStatus;
@@ -1068,7 +1089,9 @@ export class Task extends Entity {
   }
 
   public async triggerTransition(status: TaskStatusEnum): Promise<void> {
-    if (this.status === status) return;
+    if (this.status === status) {
+      return;
+    }
     const alerts: AlertService = AppInjector.get(AlertService);
 
     const requiresFileUpload =

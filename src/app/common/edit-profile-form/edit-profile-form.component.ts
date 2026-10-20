@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {User} from 'src/app/api/models/user/user';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {UserService} from 'src/app/api/services/user.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Component({
@@ -24,6 +25,7 @@ export class EditProfileFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: {user: User; mode: 'edit' | 'create' | 'new'; modal: boolean},
     private _snackBar: MatSnackBar,
+    private alertService: AlertService,
   ) {
     this.user = data?.user || this.userService.currentUser;
   }
@@ -98,7 +100,7 @@ export class EditProfileFormComponent implements OnInit {
             verticalPosition: 'top',
           });
         },
-        error: (error) => console.log(error),
+        error: (error) => this.showSaveError(error, 'Unable to create user.'),
       });
     } else {
       this.userService.update(this.user).subscribe({
@@ -118,8 +120,36 @@ export class EditProfileFormComponent implements OnInit {
             });
           }
         },
-        error: (error) => console.log(error),
+        error: (error) => this.showSaveError(error, 'Unable to save profile.'),
       });
     }
+  }
+
+  private showSaveError(error: unknown, fallbackMessage: string): void {
+    this.alertService.error(this.extractErrorMessage(error) || fallbackMessage, 6000);
+  }
+
+  private extractErrorMessage(error: unknown): string | undefined {
+    if (typeof error === 'string') {
+      return error.trim() || undefined;
+    }
+
+    if (!error || typeof error !== 'object') {
+      return undefined;
+    }
+
+    const response = error as {error?: unknown; message?: unknown};
+    if (typeof response.error === 'string') {
+      return response.error.trim() || undefined;
+    }
+
+    if (response.error && typeof response.error === 'object') {
+      const nestedError = (response.error as {error?: unknown}).error;
+      if (typeof nestedError === 'string') {
+        return nestedError.trim() || undefined;
+      }
+    }
+
+    return typeof response.message === 'string' ? response.message.trim() || undefined : undefined;
   }
 }

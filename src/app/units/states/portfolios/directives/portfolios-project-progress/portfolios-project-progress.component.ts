@@ -25,6 +25,7 @@ export class PortfoliosProjectProgressComponent implements OnChanges {
   @Input() project: Project;
   @Input() unit: Unit;
   @Input() taskSelectionUrlBase: unknown[] | null = null;
+  @Input() showSubmittedGrade?: boolean = false;
 
   @Input()
   public project$: BehaviorSubject<Project> = new BehaviorSubject(null);

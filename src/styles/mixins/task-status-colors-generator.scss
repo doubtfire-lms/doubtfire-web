@@ -48,6 +48,9 @@
 @mixin task-status-color-discuss {
   @include task-status-color('discuss');
 }
+@mixin task-status-color-rediscuss {
+  @include task-status-color('rediscuss');
+}
 @mixin task-status-color-demonstrate {
   @include task-status-color('demonstrate');
 }

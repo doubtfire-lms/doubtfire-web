@@ -1,4 +1,4 @@
-import {Html5QrcodeScanner, Html5QrcodeScannerState} from 'html5-qrcode';
+import {CameraDevice, Html5Qrcode, Html5QrcodeScannerState} from 'html5-qrcode';
 import {DOCUMENT} from '@angular/common';
 import {
   AfterViewInit,
@@ -16,6 +16,8 @@ import {MatTabChangeEvent} from '@angular/material/tabs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   AuthenticationService,
+  DiscussionTaskStatusUpdate,
+  EngagementService,
   Project,
   ProjectService,
   Task,
@@ -51,6 +53,9 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;
   private readonly mobileDiscussionViewportContent =
     'width=device-width, initial-scale=0.8, maximum-scale=5';
+  private readonly rememberedCameraKey = 'f-tutor-discussion-camera-id';
+  // iOS labels its rear camera "Back Camera", Android uses "camera2 0, facing back"
+  private readonly rearCameraLabelPattern = /\b(back|rear|environment)\b/i;
 
   @Input() unitId: number;
   @Input() username: string;
@@ -72,7 +77,12 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   public scanningQr: boolean = false;
   public loadingStudentData: boolean = false;
 
-  private html5QrcodeScanner?: Html5QrcodeScanner;
+  public availableCameras: CameraDevice[] = [];
+  public selectedCameraId: string | null = null;
+  public showCameraPicker: boolean = false;
+  public switchingCamera: boolean = false;
+
+  private html5Qrcode?: Html5Qrcode;
   private originalViewportContent: string | null = null;
   private mobileDiscussionZoomApplied = false;
 
@@ -96,6 +106,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     private discussedInClassReasonModal: DiscussedInClassReasonModalService,
     private taskCommentService: TaskCommentService,
     private taskService: TaskService,
+    private engagementService: EngagementService,
     private dialog: MatDialog,
   ) {}
 
@@ -166,7 +177,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
             // Tutor discussion view
             if (this.username) {
               this._username = this.username;
-              this.getStudentTasks();
+              this.getStudentTasks(true);
             } else {
               setTimeout(() => this.scanQrCode());
             }
@@ -218,22 +229,23 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     } else {
       // Close the camera view
       this.scanningQr = false;
+      this.showCameraPicker = false;
       this.stopQrScanner();
     }
   }
 
   private changeProject() {
-    this.html5QrcodeScanner?.pause(true);
+    this.pauseScanner();
     this.loadingStudentData = true;
     setTimeout(() => {
       try {
-        this.getStudentTasks();
+        this.getStudentTasks(true);
       } catch (_e) {
         this.alertService.error(`Invalid QR code`, 2000);
         this.loadingStudentData = false;
 
         setTimeout(() => {
-          this.html5QrcodeScanner?.resume();
+          this.resumeScanner();
         }, 2000);
       }
     });
@@ -267,79 +279,149 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     this.mobileDiscussionZoomApplied = false;
   }
 
-  hideQrScannerBloat: boolean = true;
+  private pauseScanner(): void {
+    if (this.html5Qrcode?.getState() === Html5QrcodeScannerState.SCANNING) {
+      this.html5Qrcode.pause(true);
+    }
+  }
+
+  private resumeScanner(): void {
+    if (this.html5Qrcode?.getState() === Html5QrcodeScannerState.PAUSED) {
+      this.html5Qrcode.resume();
+    }
+  }
 
   private async stopQrScanner(): Promise<void> {
-    if (!this.html5QrcodeScanner) {
+    const scanner = this.html5Qrcode;
+    if (!scanner) {
+      return;
+    }
+    this.html5Qrcode = undefined;
+
+    try {
+      if (scanner.getState() !== Html5QrcodeScannerState.NOT_STARTED) {
+        await scanner.stop();
+      }
+      scanner.clear();
+    } catch (_e) {
+      // The scanner may already be stopped.
+    }
+  }
+
+  public cameraLabel(camera: CameraDevice, index: number): string {
+    return camera.label?.trim() || `Camera ${index + 1}`;
+  }
+
+  public toggleCameraPicker(): void {
+    this.showCameraPicker = !this.showCameraPicker;
+  }
+
+  public async changeCamera(cameraId: string): Promise<void> {
+    if (!cameraId) {
+      return;
+    }
+
+    this.showCameraPicker = false;
+    this.switchingCamera = true;
+
+    try {
+      await this.startScanner([cameraId]);
+      localStorage.setItem(this.rememberedCameraKey, cameraId);
+    } catch (e) {
+      console.error(e);
+      this.selectedCameraId = this.runningCameraId();
+      this.showCameraPicker = true;
+      this.alertService.error('Unable to start the selected camera', 3000);
+    } finally {
+      this.switchingCamera = false;
+    }
+  }
+
+  private rememberedCameraId(): string | null {
+    const remembered = localStorage.getItem(this.rememberedCameraKey);
+    // Ignore a camera remembered from a device the tutor is no longer using
+    return this.availableCameras.some((camera) => camera.id === remembered) ? remembered : null;
+  }
+
+  /**
+   * The cameras to try, best first. Device labels are too inconsistent to rely on alone, so
+   * the browser's own `environment` facing mode is preferred over matching on the label.
+   * Only a camera the tutor picked themselves is remembered, so a bad automatic guess is
+   * never locked in.
+   */
+  private cameraStartCandidates(): Array<string | MediaTrackConstraints> {
+    const remembered = this.rememberedCameraId();
+    const rearCamera = this.availableCameras.find((camera) =>
+      this.rearCameraLabelPattern.test(camera.label ?? ''),
+    );
+    const fallbackIds = [rearCamera?.id, this.availableCameras[0]?.id].filter(
+      (id): id is string => !!id && id !== remembered,
+    );
+
+    return [
+      ...(remembered ? [remembered] : []),
+      {facingMode: {exact: 'environment'}},
+      ...new Set(fallbackIds),
+    ];
+  }
+
+  private runningCameraId(): string | null {
+    try {
+      return this.html5Qrcode?.getRunningTrackSettings()?.deviceId ?? null;
+    } catch (_e) {
+      // Throws while no camera is running
+      return null;
+    }
+  }
+
+  private async startScanner(candidates: Array<string | MediaTrackConstraints>): Promise<void> {
+    await this.stopQrScanner();
+
+    const scanner = new Html5Qrcode('qr-reader', false); // id of the div in the html
+    this.html5Qrcode = scanner;
+
+    let lastError: unknown;
+    for (const candidate of candidates) {
+      try {
+        await scanner.start(
+          candidate,
+          {fps: 10, qrbox: 250},
+          (data) => this.decodeQrCode(data),
+          undefined,
+        );
+        this.selectedCameraId =
+          this.runningCameraId() ?? (typeof candidate === 'string' ? candidate : null);
+        return;
+      } catch (e) {
+        lastError = e;
+      }
+    }
+
+    throw lastError ?? 'No camera is available';
+  }
+
+  private async startCameraScan(): Promise<void> {
+    try {
+      // Also prompts for camera permission, which is what makes the device labels readable
+      this.availableCameras = await Html5Qrcode.getCameras();
+    } catch (e) {
+      console.error(e);
+      this.scanningQr = false;
+      this.alertService.error('Camera permission is required to scan QR codes', 3000);
       return;
     }
 
     try {
-      await this.html5QrcodeScanner.clear();
-    } catch (_e) {
-      // The scanner may already be stopped by its own controls.
-    } finally {
-      this.html5QrcodeScanner = undefined;
+      await this.startScanner(this.cameraStartCandidates());
+    } catch (e) {
+      console.error(e);
+      // Leave the scanner open on the picker so another camera can be tried
+      this.showCameraPicker = this.availableCameras.length > 0;
+      this.alertService.error('Unable to start the camera', 3000);
     }
   }
 
-  private async getCameraPermissionState(): Promise<PermissionState | null> {
-    if (!navigator.permissions?.query) {
-      return null;
-    }
-
-    try {
-      const permissionStatus = await navigator.permissions.query({
-        name: 'camera' as PermissionName,
-      });
-      return permissionStatus.state;
-    } catch (_e) {
-      return null;
-    }
-  }
-
-  private async prepareQrScannerCamera(): Promise<void> {
-    const cachedScannerData = localStorage.getItem('HTML5_QRCODE_DATA');
-    const cameraPermissionState = await this.getCameraPermissionState();
-    if (cachedScannerData) {
-      try {
-        const html5QrcodeData = JSON.parse(cachedScannerData);
-        if (html5QrcodeData?.hasPermission && cameraPermissionState === 'granted') {
-          this.hideQrScannerBloat = html5QrcodeData.lastUsedCameraId ? true : false;
-          return;
-        }
-      } catch (_e) {
-        localStorage.removeItem('HTML5_QRCODE_DATA');
-      }
-    }
-
-    // Trigger video permissions once so device labels are available for back camera selection.
-    // Stopping these tracks releases the camera; the browser keeps the permission grant.
-    const stream = await navigator.mediaDevices.getUserMedia({video: true});
-
-    try {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-
-      // Find the deviceId of the back camera
-      const backCameras = devices.filter(
-        (d) => d.kind === 'videoinput' && d.label.toLowerCase().includes('back camera'),
-      );
-
-      const html5QrcodeData = {
-        hasPermission: true,
-        lastUsedCameraId: backCameras[0]?.deviceId ?? null,
-      };
-      localStorage.setItem('HTML5_QRCODE_DATA', JSON.stringify(html5QrcodeData));
-
-      // Hide most of the UI if we found and set the back camera
-      // Otherwise, we need to reveal the UI so that the user can select which camera to use
-      this.hideQrScannerBloat = html5QrcodeData.lastUsedCameraId ? true : false;
-    } finally {
-      stream.getTracks().forEach((track) => track.stop());
-    }
-  }
-
-  public scanQrCode() {
+  public scanQrCode(): void {
     if (this.attendance && !this.selectedTaskDefinition) {
       this.alertService.error('You must select a task first', 3000);
       return;
@@ -348,38 +430,18 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     this.scanningQr = true;
     this.loadingStudentData = false;
 
-    if (this.html5QrcodeScanner?.getState() === Html5QrcodeScannerState.PAUSED) {
-      this.html5QrcodeScanner.resume();
-    } else {
-      this.stopQrScanner()
-        .then(() => this.prepareQrScannerCamera())
-        .then(() => {
-          setTimeout(() => {
-            this.html5QrcodeScanner = new Html5QrcodeScanner(
-              'qr-reader', // id of the div in the html
-              {fps: 10, qrbox: 250},
-              false,
-            );
-
-            this.html5QrcodeScanner.render(
-              (data) => {
-                this.decodeQrCode(data);
-              },
-              (_error) => {
-                // console.error(_error);
-              },
-            );
-          });
-        })
-        .catch((_e) => {
-          this.scanningQr = false;
-          this.alertService.error('Camera permission is required to scan QR codes', 3000);
-        });
+    if (this.html5Qrcode?.getState() === Html5QrcodeScannerState.PAUSED) {
+      this.resumeScanner();
+      return;
     }
+
+    this.startCameraScan();
   }
 
   public openAddEngagementDialog(): void {
-    if (!this.project) return;
+    if (!this.project) {
+      return;
+    }
 
     this.dialog.open(AddEngagementDialogComponent, {
       data: {project: this.project},
@@ -398,18 +460,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     const selectedTasks = this.tasksList.selectedOptions.selected.map((taskOption) => {
       return taskOption.value as Task;
     });
-
-    if (status === 'complete') {
-      const blockedTasks = selectedTasks.filter(
-        (task) => !task.definition.assessInPortfolioOnly && !task.canMarkComplete,
-      );
-      if (blockedTasks.length > 0) {
-        this.alertService.error(
-          'Some selected tasks cannot be marked as complete until they are marked as discussed in class.',
-          5000,
-        );
-      }
-    }
 
     if (status === 'fix_and_resubmit') {
       try {
@@ -449,21 +499,40 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     status: TaskStatusEnum,
     moveDependentTasks: boolean,
   ) {
-    for (const task of selectedTasks) {
-      if (
-        status === 'complete' &&
-        !task.definition.assessInPortfolioOnly &&
-        !task.canMarkComplete
-      ) {
-        continue;
+    const onStatusUpdated = (
+      task: Task,
+      fromStatus: TaskStatusEnum,
+      expectedStatus: TaskStatusEnum,
+    ) => {
+      if (task.status !== expectedStatus) {
+        return;
       }
 
+      this.recordClassDiscussion(
+        [
+          {
+            taskDefinitionId: task.definition.id,
+            fromStatus: fromStatus,
+            toStatus: task.status,
+          },
+        ],
+        false,
+      );
+    };
+
+    for (const task of selectedTasks) {
+      const fromStatus = task.status;
       if (task.definition.assessInPortfolioOnly) {
-        task.updateTaskStatus(status === 'complete' ? 'working_on_it' : status, true);
+        const expectedStatus = status === 'complete' ? 'working_on_it' : status;
+        task.updateTaskStatus(expectedStatus, true, false, () =>
+          onStatusUpdated(task, fromStatus, expectedStatus),
+        );
       } else if (status === 'fix_and_resubmit') {
-        task.updateTaskStatus(status, true, moveDependentTasks);
+        task.updateTaskStatus(status, true, moveDependentTasks, () =>
+          onStatusUpdated(task, fromStatus, status),
+        );
       } else {
-        task.updateTaskStatus(status, true);
+        task.updateTaskStatus(status, true, false, () => onStatusUpdated(task, fromStatus, status));
       }
     }
   }
@@ -474,18 +543,31 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       return false;
     }
 
-    return selectedTasks.every((taskOption) => {
+    return true;
+  }
+
+  public get selectedTasksIncludeDiscuss(): boolean {
+    const selectedTasks = this.tasksList?.selectedOptions?.selected ?? [];
+    return selectedTasks.some((taskOption) => {
       const task = taskOption.value as Task;
-      return task.definition.assessInPortfolioOnly || task.canMarkComplete;
+      return task.status === 'discuss';
     });
   }
 
   public markSelectedTasksDicussed() {
     const selectedTasks = this.tasksList.selectedOptions.selected;
+    let classDiscussionRecorded = false;
+    const onDiscussionRecorded = () => {
+      if (!classDiscussionRecorded) {
+        classDiscussionRecorded = true;
+        this.recordClassDiscussion([], false);
+      }
+    };
+
     if (!this.unit?.enforceFeedbackBeforeDiscussedInClass) {
       for (const taskOption of selectedTasks) {
         const task = taskOption.value as Task;
-        task.markAsDiscussed();
+        task.markAsDiscussed(undefined, onDiscussionRecorded);
       }
       return;
     }
@@ -506,9 +588,29 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
 
         for (const taskOption of selectedTasks) {
           const task = taskOption.value as Task;
-          task.markAsDiscussed(reason);
+          task.markAsDiscussed(reason, onDiscussionRecorded);
         }
       });
+  }
+
+  public recordClassDiscussion(
+    taskStatusUpdates: DiscussionTaskStatusUpdate[] = [],
+    showConfirmation: boolean = true,
+  ): void {
+    if (!this.project) {
+      return;
+    }
+
+    this.engagementService.recordClassDiscussion(this.project, taskStatusUpdates).subscribe({
+      next: () => {
+        if (showConfirmation) {
+          this.alertService.success('Class discussion recorded.', 3000);
+        }
+      },
+      error: (_error) => {
+        this.alertService.error('Unable to record the class discussion.', 5000);
+      },
+    });
   }
 
   public markSelectedTasksCheckedIn() {
@@ -558,14 +660,20 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private getProject(unit: Unit, projectId: number): Promise<Project> {
+  private getProject(
+    unit: Unit,
+    projectId: number,
+    recordAttendance: boolean = false,
+  ): Promise<Project> {
     return new Promise((resolve, reject) => {
-      this.projectService.loadProject(projectId, unit, true).subscribe((project) => {
-        if (!project) {
-          reject('No project found');
-        }
-        resolve(project);
-      });
+      this.projectService
+        .loadProject(projectId, unit, true, recordAttendance)
+        .subscribe((project) => {
+          if (!project) {
+            reject('No project found');
+          }
+          resolve(project);
+        });
     });
   }
 
@@ -586,6 +694,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     // 'complete',
     'fix_and_resubmit',
     'redo',
+    'rediscuss',
   ];
 
   public viewAllSubmittedTasks() {
@@ -614,8 +723,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     this.filteredTasks = [...discussionTasks];
   }
 
-  public getStudentTasks(): void {
-    console.time('getStudentTasks()');
+  public getStudentTasks(recordAttendance: boolean = false): void {
     // this.project = null;
     // this.filteredTasks = [];
     // this.selectedTask = null;
@@ -626,7 +734,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
         return this.loadStudents(this.unit);
       })
       .then((student) => {
-        return this.getProject(this.unit, student.id);
+        return this.getProject(this.unit, student.id, recordAttendance);
       })
       .then((project) => {
         const discussionTasks = this.filteredDiscussionTasks(project.tasks);
@@ -656,9 +764,6 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
         console.error(e);
         this.alertService.error(e, 5000);
         this.scanQrCode();
-      })
-      .finally(() => {
-        console.timeEnd('getStudentTasks()');
       });
   }
 }

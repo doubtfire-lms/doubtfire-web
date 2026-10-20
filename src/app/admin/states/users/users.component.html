@@ -1,7 +1,7 @@
 <div class="table-padding">
   <!-- Header -->
-  <div class="header-spacer" fxLayout="row">
-    <div fxLayout="column">
+  <div class="header-spacer flex flex-row">
+    <div class="flex flex-col">
       <h3>{{ externalName }} Users</h3>
       <h3>Users Administration View</h3>
     </div>
@@ -27,7 +27,7 @@
     <ng-container matColumnDef="avatar">
       <th *matHeaderCellDef mat-header-cell></th>
       <td *matCellDef="let user" mat-cell (click)="showUserModal(user)">
-        <user-icon fxFlexAlign="center" [size]="30" [user]="user"></user-icon>
+        <user-icon class="self-center" [size]="30" [user]="user"></user-icon>
       </td>
     </ng-container>
 

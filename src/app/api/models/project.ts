@@ -79,7 +79,7 @@ export class Project extends Entity {
 
   public matches(text: string): boolean {
     return (
-      this.student.matches(text) ||
+      this.student?.matches(text) ||
       this.campus?.matches(text) ||
       this.matchesTutorialEnrolments(text) ||
       this.matchesGroup(text)
@@ -87,18 +87,16 @@ export class Project extends Entity {
   }
 
   public matchesTutorialEnrolments(matchText): boolean {
-    return (
-      this.tutorials.filter(
-        (enrol) =>
-          enrol.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
-          enrol.tutorName.toLowerCase().indexOf(matchText) >= 0,
-      ).length > 0
+    return this.tutorials.some(
+      (enrol) =>
+        enrol?.abbreviation?.toLowerCase().includes(matchText) ||
+        enrol?.tutorName?.toLowerCase().includes(matchText),
     );
   }
 
   // Search through the student's groups for a match
   public matchesGroup(matchText: string): boolean {
-    return this.groups.find((grp) => grp.name.toLowerCase().indexOf(matchText) >= 0) !== undefined;
+    return this.groups.some((grp) => grp?.name?.toLowerCase().includes(matchText));
   }
 
   public groupForGroupSet(gs: GroupSet) {
@@ -265,9 +263,13 @@ export class Project extends Entity {
 
   //# Get the status of the portfolio
   public portfolioTaskStatus(): TaskStatusEnum {
-    if (this.portfolioAvailable) return 'complete';
-    else if (this.compilePortfolio) return 'working_on_it';
-    else return 'not_started';
+    if (this.portfolioAvailable) {
+      return 'complete';
+    } else if (this.compilePortfolio) {
+      return 'working_on_it';
+    } else {
+      return 'not_started';
+    }
   }
 
   public portfolioTaskStatusClass(): string {
@@ -435,9 +437,14 @@ export class Project extends Entity {
     const tasks = this.tasks;
 
     const readyOrCompleteTasks = tasks.filter((task) =>
-      ['ready_for_feedback', 'discuss', 'demonstrate', 'complete', 'assess_in_portfolio'].includes(
-        task.status,
-      ),
+      [
+        'ready_for_feedback',
+        'discuss',
+        'rediscuss',
+        'demonstrate',
+        'complete',
+        'assess_in_portfolio',
+      ].includes(task.status),
     );
     // let lastTargetDate: Date;
 

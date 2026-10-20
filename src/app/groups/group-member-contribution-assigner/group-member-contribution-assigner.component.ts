@@ -130,6 +130,9 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
   }
 
   private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+    if (aValue === bValue) {
+      return 0;
+    }
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
@@ -137,7 +140,7 @@ export class GroupMemberContributionAssignerComponent implements OnInit, OnChang
     if (!sort.active || sort.direction === '') {
       return;
     }
-    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       switch (sort.active) {
         case 'name':
           return this.sortCompare(

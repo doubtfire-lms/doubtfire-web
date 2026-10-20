@@ -3,52 +3,115 @@
     <h4 class="py-3.5 font-semibold text-gray-800">
       Progress Dashboard
       @if (viewingOtherStudentProject) {
-        <span>for {{ project.student.name }}</span>
+        <span>for {{ project?.student?.name }}</span>
       }
     </h4>
   </div>
   <div class="grid grid-cols-1 items-stretch gap-3.5 p-3.5 xl:grid-cols-2">
     <!-- Task Planner Card -->
-    <div class="size-full xl:col-span-1">
+
+    <div
+      class="min-h-50"
+      [ngClass]="
+        showSubmittedGrade
+          ? 'xl:col-span-2 xl:mx-auto xl:w-[calc((100%-0.875rem)/2)]'
+          : 'xl:col-span-1'
+      "
+    >
       <f-task-planner-card class="block size-full" [project]="project"></f-task-planner-card>
     </div>
 
     <!-- Target Grade Card -->
-    <div class="h-full xl:col-span-1">
-      <mat-card appearance="outlined" class="flex h-full flex-col">
+    <div class="col-span-1 h-full">
+      <mat-card appearance="outlined" class="flex h-full min-h-50 flex-col">
         <mat-card-header>
           <mat-card-title>Target Grade</mat-card-title>
-          <mat-card-subtitle class="mb-2.5">
-            <p>Your target grade changes which tasks you need to complete.</p>
+          <mat-card-subtitle>
+            <p>
+              Your target grade changes which tasks you need to complete.
+              @if (hasGradeContentLinks) {
+                Click on a grade to learn more about it.
+              }
+              @if (gradeOverviewContentLink) {
+                You can view all the grades
+                <a
+                  class="cursor-pointer underline"
+                  [queryParams]="contentQueryParamsForLink(gradeOverviewContentLink)"
+                  [routerLink]="contentRoute()"
+                >
+                  here</a
+                >.
+              }
+              @if (targetGradeDefinitions.length > 1) {
+                To change your target grade, use the
+                <a
+                  class="cursor-pointer underline"
+                  [routerLink]="['/projects', project.id, 'plan']"
+                >
+                  Task Planner
+                </a>
+              }
+            </p>
           </mat-card-subtitle>
         </mat-card-header>
 
-        <mat-card-content class="flex flex-1 items-center">
-          <div class="w-full">
-            <mat-form-field appearance="fill" class="w-full">
-              <mat-label>Select Target Grade</mat-label>
-              <mat-select
-                disabled
-                [(value)]="project.targetGrade"
-                (selectionChange)="updateTargetGrade($event.value)"
-              >
-                @for (grade of grades.values; track grade) {
-                  <mat-option [value]="grade">
-                    {{ grades.names[grade] }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-            <div class="ml-0.5 py-1 opacity-70">
-              To change your target grade, use the
-              <a class="cursor-pointer underline" [routerLink]="['/projects', project.id, 'plan']">
-                Task Planner
-              </a>
+        <mat-card-content class="flex flex-1 items-center justify-center">
+          <div class="flex w-full flex-col">
+            <div class="flex flex-wrap justify-center gap-2 self-center">
+              @for (grade of targetGradeDefinitions; track grade.id) {
+                <button
+                  class="flex size-16 items-center justify-center rounded-full border no-underline transition-colors enabled:cursor-pointer"
+                  type="button"
+                  [disabled]="!contentLinkForGrade(grade)"
+                  [ngClass]="{
+                    'border-blue-600 bg-blue-200 enabled:hover:border-blue-800 enabled:hover:bg-blue-300':
+                      project.targetGrade === grade.value,
+                    'bg-white border-gray-300 text-gray-800 enabled:hover:border-gray-500 enabled:hover:bg-gray-50':
+                      project.targetGrade !== grade.value,
+                  }"
+                  (click)="openContentForGrade(grade)"
+                >
+                  <div class="flex flex-col items-center justify-center gap-2 text-center">
+                    <f-grade-icon [colorful]="true" [grade]="grade.value" [unit]="project.unit">
+                    </f-grade-icon>
+                    <!-- <span class="text-sm leading-tight">{{ grade.label }}</span> -->
+                  </div>
+                </button>
+              }
             </div>
           </div>
         </mat-card-content>
       </mat-card>
     </div>
+
+    @if (showSubmittedGrade) {
+      <!-- Submitted Grade Card -->
+      <div class="h-full xl:col-span-1">
+        <mat-card appearance="outlined" class="flex h-full flex-col">
+          <mat-card-header>
+            <mat-card-title>Submitted Grade</mat-card-title>
+            <mat-card-subtitle class="mb-2.5">
+              <p>The grade you are submitting your portfolio for.</p>
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content class="flex flex-1 items-center">
+            <div class="w-full">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Select Submitted Grade</mat-label>
+                <mat-select disabled [value]="project.submittedGrade">
+                  @for (grade of grades.values; track grade) {
+                    <mat-option [value]="grade">
+                      {{ grades.names[grade] }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    }
 
     <!-- Unit learning outcomes -->
     <div class="xl:col-span-2">

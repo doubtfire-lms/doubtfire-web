@@ -5,7 +5,12 @@
     <p>{{ data.message }}</p>
   }
 
-  <f-file-uploader [files]="data.batchFiles" [onSuccess]="onUploadSuccess" [url]="data.url">
+  <f-file-uploader
+    [files]="data.batchFiles"
+    [onSuccess]="onUploadSuccess"
+    [uploader]="data.uploader"
+    [url]="data.url"
+  >
   </f-file-uploader>
 </mat-dialog-content>
 

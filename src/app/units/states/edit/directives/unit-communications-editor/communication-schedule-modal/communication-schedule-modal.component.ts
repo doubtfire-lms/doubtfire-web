@@ -63,7 +63,9 @@ export class CommunicationScheduleModalComponent implements OnInit {
     this.campusService.query().subscribe((campuses) => {
       this.campuses = campuses;
       const defaultTimezone = campuses[0]?.timezone;
-      if (!defaultTimezone) return;
+      if (!defaultTimezone) {
+        return;
+      }
 
       this.timezonePlaceholder = defaultTimezone;
       if (!this.draft.timezone || this.draft.timezone === 'UTC') {
@@ -111,8 +113,12 @@ export class CommunicationScheduleModalComponent implements OnInit {
         parts.push('Runs once');
     }
 
-    if (this.draft.repeat_count) parts.push(`up to ${this.draft.repeat_count} times`);
-    if (this.untilDateTime) parts.push(`until ${this.untilDateTime}`);
+    if (this.draft.repeat_count) {
+      parts.push(`up to ${this.draft.repeat_count} times`);
+    }
+    if (this.untilDateTime) {
+      parts.push(`until ${this.untilDateTime}`);
+    }
 
     return parts.join(' | ');
   }
@@ -178,7 +184,9 @@ export class CommunicationScheduleModalComponent implements OnInit {
   }
 
   private asDateTimeLocal(value?: string): string {
-    if (!value) return '';
+    if (!value) {
+      return '';
+    }
     return value.length >= 16 ? value.slice(0, 16) : value;
   }
 

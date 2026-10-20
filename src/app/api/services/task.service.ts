@@ -11,6 +11,7 @@ import {
   TaskStatusUiData,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {MappingFunctions} from './mapping-fn';
 
@@ -26,7 +27,10 @@ export class TaskService extends CachedEntityService<Task> {
   private readonly taskOverflowEndpoint = '/units/:id:/tasks/overflow';
   private readonly refreshTaskEndpoint = 'projects/:projectId:/refresh_tasks/:taskDefinitionId:';
 
-  constructor(httpClient: HttpClient) {
+  constructor(
+    httpClient: HttpClient,
+    private alertService: AlertService,
+  ) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
@@ -58,10 +62,22 @@ export class TaskService extends CachedEntityService<Task> {
         keys: 'targetDueDate',
         toEntityFn: MappingFunctions.mapDateToEndOfDay,
       },
+      {
+        keys: 'movedToDiscussAt',
+        toEntityFn: MappingFunctions.mapDate,
+      },
+      {
+        keys: 'discussTimeoutExpiryAt',
+        toEntityFn: MappingFunctions.mapDate,
+      },
       'extensions',
       'scormExtensions',
       {
         keys: 'submissionDate',
+        toEntityFn: MappingFunctions.mapDate,
+      },
+      {
+        keys: 'waitingSince',
         toEntityFn: MappingFunctions.mapDate,
       },
       {
@@ -114,6 +130,7 @@ export class TaskService extends CachedEntityService<Task> {
     unit: Unit,
     taskDef?: TaskDefinition | number,
     fetchMyStudentsOnly?: boolean,
+    viewAsUnitRoleId?: number,
   ): Observable<Task[]> {
     const cache: EntityCache<Task> = new EntityCache<Task>();
 
@@ -127,6 +144,7 @@ export class TaskService extends CachedEntityService<Task> {
         constructorParams: unit,
         params: {
           my_students_only: fetchMyStudentsOnly,
+          ...(viewAsUnitRoleId ? {view_as_unit_role_id: viewAsUnitRoleId} : {}),
         },
       },
     ).pipe(
@@ -210,7 +228,8 @@ export class TaskService extends CachedEntityService<Task> {
 
     this.get(pathIds, options).subscribe({
       error: (message) => {
-        console.log(`Failed to refresh tasks ${message}`);
+        console.error('Failed to refresh task details', message);
+        this.alertService.error('Failed to refresh task details.', 6000);
       },
     });
   }

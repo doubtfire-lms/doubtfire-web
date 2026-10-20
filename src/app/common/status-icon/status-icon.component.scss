@@ -41,6 +41,9 @@
   &.discuss {
     @include status-icon('discuss');
   }
+  &.rediscuss {
+    @include status-icon('rediscuss');
+  }
   &.demonstrate {
     @include status-icon('demonstrate');
   }

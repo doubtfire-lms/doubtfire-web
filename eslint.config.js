@@ -80,6 +80,8 @@ module.exports = tseslint.config(
         },
       ],
       'prettier/prettier': 'warn',
+      'curly': ['error', 'all'],
+      'no-console': ['warn', {allow: ['warn', 'error']}],
     },
   },
   {

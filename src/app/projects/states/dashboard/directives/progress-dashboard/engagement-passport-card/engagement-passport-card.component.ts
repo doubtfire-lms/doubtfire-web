@@ -73,8 +73,13 @@ export class EngagementPassportCardComponent implements OnChanges {
       icon: 'mail',
       classes: 'border-violet-300 bg-violet-50 text-violet-700',
     },
-    attention: {
-      label: 'Needs attention',
+    'group activity': {
+      label: 'Group activity',
+      icon: 'group_work',
+      classes: 'border-orange-300 bg-orange-50 text-orange-700',
+    },
+    opportunity: {
+      label: 'Opportunity',
       icon: 'feedback',
       classes: 'border-yellow-300 bg-yellow-50 text-yellow-700',
     },
@@ -103,7 +108,9 @@ export class EngagementPassportCardComponent implements OnChanges {
   }
 
   ngOnChanges(): void {
-    if (!this.project?.id) return;
+    if (!this.project?.id) {
+      return;
+    }
 
     const cachedEngagements = this.project.engagementCache.currentValues;
     this.buildWeeks(cachedEngagements);
@@ -153,16 +160,24 @@ export class EngagementPassportCardComponent implements OnChanges {
     });
 
     dialogRef.afterClosed().subscribe((engagement?: Engagement) => {
-      if (engagement) this.buildWeeks(this.project.engagementCache.currentValues);
+      if (engagement) {
+        this.buildWeeks(this.project.engagementCache.currentValues);
+      }
     });
   }
 
   openEngagement(engagement: Engagement): void {
-    this.dialog.open(EngagementDetailDialogComponent, {
+    const dialogRef = this.dialog.open(EngagementDetailDialogComponent, {
       data: {engagement},
       width: 'calc(100vw - 32px)',
       maxWidth: '900px',
       autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe((deleted?: boolean) => {
+      if (deleted) {
+        this.buildWeeks(this.project.engagementCache.currentValues);
+      }
     });
   }
 
@@ -175,7 +190,9 @@ export class EngagementPassportCardComponent implements OnChanges {
 
     for (const engagement of engagements) {
       const weekNumber = this.project.unit.weekNumber(engagement.occurredAt);
-      if (weekNumber === null || weekNumber < 1 || weekNumber > totalWeeks) continue;
+      if (weekNumber === null || weekNumber < 1 || weekNumber > totalWeeks) {
+        continue;
+      }
 
       const type = this.normalizeEngagementType(engagement.engagementType);
       const presentation = this.presentations[type] ?? this.fallbackPresentation;

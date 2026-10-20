@@ -15,6 +15,7 @@ export interface EngagementData {
   engagementType: string;
   note: string;
   occurredAt: Date;
+  projectIds?: number[];
   evidenceUrl?: string;
   attachment?: File;
 }
@@ -23,9 +24,17 @@ export interface EngagementUpdate extends Partial<EngagementData> {
   removeEvidence?: boolean;
 }
 
+export interface DiscussionTaskStatusUpdate {
+  taskDefinitionId: number;
+  fromStatus: string;
+  toStatus: string;
+}
+
 @Injectable()
 export class EngagementService extends CachedEntityService<Engagement> {
   protected readonly endpointFormat = 'projects/:projectId:/engagements/:id:';
+  private readonly classDiscussionEndpointFormat =
+    'projects/:projectId:/engagements/class_discussion';
 
   constructor(
     httpClient: HttpClient,
@@ -47,6 +56,14 @@ export class EngagementService extends CachedEntityService<Engagement> {
         keys: 'user',
         toEntityFn: (data: object, key: string) => {
           return this.userService.cache.getOrCreate(data[key].id, this.userService, data[key]);
+        },
+      },
+      {
+        keys: 'students',
+        toEntityOp: (data: object, key: string, engagement: Engagement) => {
+          engagement.students = (data[key] ?? []).map((student) =>
+            this.userService.cache.getOrCreate(student.id, this.userService, student),
+          );
         },
       },
       {
@@ -122,6 +139,25 @@ export class EngagementService extends CachedEntityService<Engagement> {
     );
   }
 
+  recordClassDiscussion(
+    project: Project,
+    taskStatusUpdates: DiscussionTaskStatusUpdate[] = [],
+  ): Observable<boolean> {
+    return this.post<boolean>(
+      {projectId: project.id},
+      {
+        endpointFormat: this.classDiscussionEndpointFormat,
+        body: {
+          task_status_updates: taskStatusUpdates.map((update) => ({
+            task_definition_id: update.taskDefinitionId,
+            from_status: update.fromStatus,
+            to_status: update.toStatus,
+          })),
+        },
+      },
+    );
+  }
+
   updateEngagement(engagement: Engagement, data: EngagementUpdate): Observable<Engagement> {
     return this.put(
       {
@@ -162,6 +198,7 @@ export class EngagementService extends CachedEntityService<Engagement> {
     if (data.occurredAt !== undefined) {
       body.append('occurred_at', data.occurredAt.toISOString());
     }
+    data.projectIds?.forEach((projectId) => body.append('project_ids[]', String(projectId)));
     if (data.evidenceUrl !== undefined) {
       body.append('evidence_url', data.evidenceUrl);
     }

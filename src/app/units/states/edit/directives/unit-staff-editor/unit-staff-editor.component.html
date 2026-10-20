@@ -90,18 +90,24 @@
     <ng-container matColumnDef="mentor">
       <th *matHeaderCellDef mat-header-cell>Mentor</th>
       <td *matCellDef="let unitRole" mat-cell>
-        <mat-select
-          class="w-full min-w-[140px]"
-          [ngModel]="unitRole.mentorId"
-          (selectionChange)="selectMentor(unitRole, $event)"
-        >
-          <mat-option value="">(None)</mat-option>
-          @for (unitRole of unitStaff; track unitRole) {
-            <mat-option class="w-full min-w-fit" [value]="unitRole.id">
-              {{ unitRole.user.name }}</mat-option
-            >
-          }
-        </mat-select>
+        <!-- A mat-select per row is the bulk of this table's render cost, so build them once the
+             table is on screen rather than while the tab is switching. -->
+        @defer (on idle) {
+          <mat-select
+            class="w-full min-w-35"
+            [ngModel]="unitRole.mentorId"
+            (selectionChange)="selectMentor(unitRole, $event)"
+          >
+            <mat-option value="">(None)</mat-option>
+            @for (unitRole of unitStaff; track unitRole) {
+              <mat-option class="w-full min-w-fit" [value]="unitRole.id">
+                {{ unitRole.user.name }}</mat-option
+              >
+            }
+          </mat-select>
+        } @placeholder {
+          <div class="w-full min-w-35 text-sm">{{ mentorName(unitRole) }}</div>
+        }
       </td>
     </ng-container>
 

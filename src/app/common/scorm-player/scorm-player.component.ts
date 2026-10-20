@@ -69,7 +69,9 @@ export class ScormPlayerComponent implements OnInit {
     this.globalState.setView(ViewType.OTHER);
     this.globalState.hideHeader();
     this.authService.afterAuthCall((result) => {
-      if (!result) return;
+      if (!result) {
+        return;
+      }
       this.authService.getScormToken().subscribe((value: string) => this.setupScorm(value));
     });
   }

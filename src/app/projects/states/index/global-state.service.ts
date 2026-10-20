@@ -1,5 +1,5 @@
-import {MediaObserver} from 'ng-flex-layout';
 import {EntityCache} from 'ngx-entity-service';
+import {BreakpointObserver} from '@angular/cdk/layout';
 import {Injectable, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {BehaviorSubject, Observable, Subject, find} from 'rxjs';
@@ -113,7 +113,7 @@ export class GlobalStateService implements OnDestroy {
     private feedbackTemplateService: FeedbackTemplateService,
     private router: Router,
     private alerts: AlertService,
-    private mediaObserver: MediaObserver,
+    private breakpointObserver: BreakpointObserver,
   ) {
     this.loadedUnitRoles = this.unitRoleService.cache;
     this.loadedUnits = this.unitService.cache;
@@ -121,12 +121,28 @@ export class GlobalStateService implements OnDestroy {
 
     // Use timeout to ensure everything is loaded before we try to login
     setTimeout(() => {
+      // LTI launch errors are shown to users who have no OnTrack session
+      const isLtiLaunchError =
+        window.location.pathname === '/lti' &&
+        new URLSearchParams(window.location.search).has('launchError');
+      if (isLtiLaunchError) {
+        this.isLoadingSubject.next(false);
+        return;
+      }
+
       // Try to login using the refresh token
       this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
         if (result) {
+          const ltiLaunch =
+            sessionStorage.getItem('ltiLaunch') === 'true' ||
+            window.location.pathname === '/lti' ||
+            (window.location.pathname === '/sign_in' &&
+              new URLSearchParams(window.location.search).get('isLtiLogin')?.toLowerCase() ===
+                'true');
           if (
             this.userService.currentUser.hasRunFirstTimeSetup === false &&
-            window.location.pathname !== '/welcome'
+            window.location.pathname !== '/welcome' &&
+            !ltiLaunch
           ) {
             this.router.navigateByUrl('/welcome');
           }
@@ -156,7 +172,7 @@ export class GlobalStateService implements OnDestroy {
 
       if (this._isInboxState) {
         document.body.style.setProperty('--vh', `${vh}px`);
-      } else if (!this.mediaObserver.isActive('gt-sm') || !this._showFooter) {
+      } else if (!this.breakpointObserver.isMatched('(min-width: 960px)') || !this._showFooter) {
         document.body.style.setProperty('--vh', `${vh - 0.2}px`);
       } else {
         if (this._showFooter && !this._showFooterWarning) {
@@ -204,14 +220,18 @@ export class GlobalStateService implements OnDestroy {
   // called when we need to set the footer to be a bit taller
   // to account for the alert div
   public showFooterWarning(): void {
-    if (!this._showFooter) return;
+    if (!this._showFooter) {
+      return;
+    }
     this._showFooterWarning = true;
     this.resetHeight();
   }
 
   // called when we need to set the footer to be normal sized
   public hideFooterWarning(): void {
-    if (!this._showFooter) return;
+    if (!this._showFooter) {
+      return;
+    }
     this._showFooterWarning = false;
     this.resetHeight();
   }

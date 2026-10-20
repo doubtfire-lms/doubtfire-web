@@ -69,7 +69,7 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="actions" sticky>
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Actions</th>
+        <th *matHeaderCellDef mat-header-cell>Actions</th>
         <td *matCellDef="let tutorial" mat-cell>
           @if (project.isEnrolledIn(tutorial)) {
             @if (unit.allowStudentChangeTutorial) {

@@ -18,7 +18,7 @@ export class MarkedPipe implements PipeTransform {
 
   transform(value: string): string {
     if (value && value.length > 0) {
-      return marked.parse(value.replaceAll(/\r\n|\r|\n/g, '<br />'), {async: false}) as string;
+      return marked.parse(value.replaceAll(/\r\n|\r/g, '\n'), {async: false}) as string;
     }
     return value;
   }

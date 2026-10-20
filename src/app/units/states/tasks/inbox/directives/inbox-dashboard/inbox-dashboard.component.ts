@@ -25,6 +25,7 @@ enum InboxDashboardTab {
 @Component({
   selector: 'f-inbox-dashboard',
   templateUrl: './inbox-dashboard.component.html',
+  styleUrls: ['./inbox-dashboard.component.scss'],
   host: {'class': 'block h-full'},
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
@@ -97,6 +98,10 @@ export class InboxDashboardComponent implements OnChanges {
       case InboxDashboardTab.submission:
         return this.task.hasPdf ? this.task.submissionUrl() : null;
       case InboxDashboardTab.taskSheet:
+        if (this.task.definition?.hasContentLink) {
+          return null;
+        }
+
         return this.task.definition?.hasTaskSheet ? this.task.definition.getTaskPDFUrl() : null;
       default:
         return null;

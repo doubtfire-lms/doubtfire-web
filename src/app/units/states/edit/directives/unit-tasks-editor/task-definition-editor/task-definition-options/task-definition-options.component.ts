@@ -25,7 +25,6 @@ export class TaskDefinitionOptionsComponent {
 
     setTimeout(() => {
       this.taskDefinition.assessInPortfolioOnly = false;
-      console.log(this.taskDefinition.assessInPortfolioOnly);
 
       this.confirmationModal.show(
         `Enable Assess in Portfolio Only?`,

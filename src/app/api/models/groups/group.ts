@@ -102,7 +102,9 @@ export class Group extends Entity {
           // Has members so add this member
           this.projectsCache.add(member);
           alerts.success(`${member.student.name} was added to '${this.name}'`, 3000);
-          if (onSuccess) onSuccess();
+          if (onSuccess) {
+            onSuccess();
+          }
         },
         error: (message) => alerts.error(message || 'Unknown Error', 6000),
       });

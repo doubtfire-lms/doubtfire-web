@@ -2,28 +2,47 @@
   class="absolute top-1/2 left-1/2 z-40 h-screen w-screen -translate-1/2 transform overflow-hidden bg-gray-500/50 backdrop-blur"
   [hidden]="!scanningQr"
 >
-  @if (loadingStudentData) {
+  @if (loadingStudentData || switchingCamera) {
     <mat-spinner
       class="absolute top-1/2 left-1/2 z-50 -translate-x-1/2 transform"
       color="blue"
     ></mat-spinner>
   }
-  <div [ngClass]="{'qr-reader-hide-bloat': hideQrScannerBloat}">
-    <div class="absolute top-1/2 w-full -translate-y-1/2 transform" id="qr-reader"></div>
-  </div>
+  <div class="absolute top-1/2 w-full -translate-y-1/2 transform" id="qr-reader"></div>
   <div
     class="pointer-events-none absolute top-[150px] left-1/2 z-10 w-full -translate-x-1/2 transform px-6 py-3 text-center text-sm font-bold text-white"
   >
     Scan a student's QR code to instantly load their project and mark submissions.
   </div>
-  <button
-    class="absolute bottom-[150px] left-1/2 my-3 max-w-md -translate-x-1/2 transform"
-    color="secondary"
-    mat-raised-button
-    (click)="closeQrReader()"
+  <div
+    class="absolute bottom-[110px] left-1/2 z-20 flex w-full max-w-md -translate-x-1/2 transform flex-col items-center gap-2 px-6"
   >
-    {{ project ? 'Cancel' : 'Exit' }}
-  </button>
+    @if (showCameraPicker) {
+      <mat-form-field appearance="fill" class="w-full" subscriptSizing="dynamic">
+        <mat-label>Camera</mat-label>
+        <mat-select [value]="selectedCameraId" (selectionChange)="changeCamera($event.value)">
+          @for (camera of availableCameras; track camera.id; let i = $index) {
+            <mat-option [value]="camera.id">{{ cameraLabel(camera, i) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+    @if (availableCameras.length) {
+      <button
+        class="w-full"
+        color="primary"
+        mat-raised-button
+        [disabled]="switchingCamera"
+        (click)="toggleCameraPicker()"
+      >
+        <mat-icon>cameraswitch</mat-icon>
+        {{ showCameraPicker ? 'Hide cameras' : 'Change camera' }}
+      </button>
+    }
+    <button class="w-full" color="secondary" mat-raised-button (click)="closeQrReader()">
+      {{ project ? 'Cancel' : 'Exit' }}
+    </button>
+  </div>
 </div>
 
 <!-- We offset the height by 145px to compensate for the header -->
@@ -92,7 +111,7 @@
           style="padding: 0; min-height: 60px; height: min-content"
           togglePosition="before"
           [selected]="
-            (task.status === 'discuss' || attendance) &&
+            (['discuss', 'rediscuss'].includes(task.status) || attendance) &&
             (!task.definition.lockAssessmentsToTutorialStream ||
               currentUserTutorsInStream(task.definition.tutorialStream))
           "
@@ -178,50 +197,68 @@
     <!-- </cdk-virtual-scroll-viewport> -->
   </div>
 
-  @if (project && filteredTasks.length) {
+  @if (project) {
     <div class="mt-1">
       <div class="my-2 flex w-full items-center justify-center gap-5">
-        @if (attendance) {
-          <button
-            class="medium-icon-button bg-gray-100"
-            color="secondary"
-            mat-fab
-            [disabled]="!tasks.selectedOptions.selected.length"
-            (click)="markSelectedTasksCheckedIn()"
-          >
-            <!-- Redo -->
-            <mat-icon>how_to_reg</mat-icon>
+        @if (!attendance && !tasks.selectedOptions.selected.length) {
+          <button color="primary" mat-raised-button (click)="recordClassDiscussion()">
+            <mat-icon>record_voice_over</mat-icon>
+            Add discussion stamp
           </button>
-        } @else {
-          <button
-            class="medium-icon-button bg-gray-100"
-            color="secondary"
-            mat-fab
-            [disabled]="!tasks.selectedOptions.selected.length"
-            (click)="setSelectedTasksStatus('fix_and_resubmit')"
-          >
-            <!-- Redo -->
-            <mat-icon>construction</mat-icon>
-          </button>
-          <button
-            class="medium-icon-button bg-green-400"
-            mat-fab
-            [disabled]="!canMarkSelectedTasksComplete"
-            (click)="setSelectedTasksStatus('complete')"
-          >
-            <!-- Mark as Complete -->
-            <mat-icon>done</mat-icon>
-          </button>
+        } @else if (filteredTasks.length) {
+          @if (attendance) {
+            <button
+              class="medium-icon-button bg-gray-100"
+              color="secondary"
+              mat-fab
+              [disabled]="!tasks.selectedOptions.selected.length"
+              (click)="markSelectedTasksCheckedIn()"
+            >
+              <!-- Redo -->
+              <mat-icon>how_to_reg</mat-icon>
+            </button>
+          } @else {
+            <button
+              class="medium-icon-button bg-gray-100"
+              color="secondary"
+              mat-fab
+              [disabled]="!tasks.selectedOptions.selected.length"
+              (click)="setSelectedTasksStatus('fix_and_resubmit')"
+            >
+              <!-- Redo -->
+              <mat-icon>construction</mat-icon>
+            </button>
+            <button
+              class="medium-icon-button bg-green-400"
+              mat-fab
+              [disabled]="!canMarkSelectedTasksComplete"
+              (click)="setSelectedTasksStatus('complete')"
+            >
+              <!-- Mark as Complete -->
+              <mat-icon>done</mat-icon>
+            </button>
 
-          <button
-            class="medium-icon-button bg-blue-300"
-            mat-fab
-            [disabled]="!tasks.selectedOptions.selected.length"
-            (click)="markSelectedTasksDicussed()"
-          >
-            <!-- Mark as Discussed -->
-            <mat-icon>group</mat-icon>
-          </button>
+            <button
+              class="medium-icon-button bg-blue-300"
+              mat-fab
+              [disabled]="!tasks.selectedOptions.selected.length"
+              (click)="markSelectedTasksDicussed()"
+            >
+              <!-- Mark as Discussed -->
+              <mat-icon>group</mat-icon>
+            </button>
+            @if (selectedTasksIncludeDiscuss) {
+              <button
+                class="medium-icon-button bg-[#126352] text-white"
+                mat-fab
+                matTooltip="Mark as Rediscuss"
+                [disabled]="!tasks.selectedOptions.selected.length"
+                (click)="setSelectedTasksStatus('rediscuss')"
+              >
+                <mat-icon>feedback</mat-icon>
+              </button>
+            }
+          }
         }
       </div>
     </div>
@@ -232,9 +269,7 @@
       <mat-tab label="Task Comments"></mat-tab>
 
       <mat-tab
-        label="Student Notes{{
-          project?.staffNoteCount ? ' (' + project.staffNoteCount + ')' : ''
-        }}"
+        label="Staff Notes{{ project?.staffNoteCount ? ' (' + project.staffNoteCount + ')' : '' }}"
         [matBadge]="$safeNavigationMigration(project?.staffNoteCount)"
       ></mat-tab>
       <mat-tab label="Discussion Prompts"></mat-tab>

@@ -123,7 +123,7 @@ export class TutorialsComponent implements OnInit, OnDestroy {
     if (!sort.active || sort.direction === '') {
       return;
     }
-    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       switch (sort.active) {
         case 'stream':
           return this.sortCompare(

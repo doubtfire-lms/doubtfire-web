@@ -1,7 +1,7 @@
 import {CachedEntityService} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, finalize, of, shareReplay, tap} from 'rxjs';
 import {
   GroupSetService,
   LearningOutcomeService,
@@ -20,6 +20,7 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GroupService} from './group.service';
 import {MappingFunctions} from './mapping-fn';
 import {TaskDefinitionService} from './task-definition.service';
+import {UnitContentLinkService} from './unit-content-link.service';
 import {UnitRoleService} from './unit-role.service';
 
 export type IloStats = {
@@ -63,6 +64,8 @@ export interface TaskCompletionStats {
 export class UnitService extends CachedEntityService<Unit> {
   protected readonly endpointFormat = 'units/:id:';
   public readonly rolloverEndpoint = 'units/:id:/rollover';
+  private readonly detailRequests: Map<number, Observable<Unit>> = new Map();
+  private readonly unitsWithDetails: WeakSet<Unit> = new WeakSet();
 
   constructor(
     httpClient: HttpClient,
@@ -74,6 +77,7 @@ export class UnitService extends CachedEntityService<Unit> {
     private taskOutcomeAlignmentService: TaskOutcomeAlignmentService,
     private groupSetService: GroupSetService,
     private groupService: GroupService,
+    private unitContentLinkService: UnitContentLinkService,
   ) {
     super(httpClient, API_URL);
 
@@ -283,8 +287,25 @@ export class UnitService extends CachedEntityService<Unit> {
       // 'groupMemberships', - map to group memberships
       'feedbackWarningThresholdDays',
       'feedbackOverflowThresholdDays',
+      'discussTimeoutEnabled',
+      'discussTimeoutWarningDays',
+      'discussTimeoutExpireDays',
       {
         keys: ['gradeDefinitions', 'grade_definitions'],
+      },
+      'hasMainContentSite',
+      'mainContentSiteId',
+      'contentSiteVersions',
+      {
+        keys: 'contentLinks',
+        toEntityOp: (data: object, key: string, unit: Unit) => {
+          unit.unitContentLinkCache.clear();
+          data[key]?.forEach((link) => {
+            unit.unitContentLinkCache.getOrCreate(link.id, this.unitContentLinkService, link, {
+              constructorParams: unit,
+            });
+          });
+        },
       },
       'enforceFeedbackBeforeDiscussedInClass',
     );
@@ -318,9 +339,40 @@ export class UnitService extends CachedEntityService<Unit> {
       'allowStudentChangeTutorial',
       'feedbackWarningThresholdDays',
       'feedbackOverflowThresholdDays',
+      'discussTimeoutEnabled',
+      'discussTimeoutWarningDays',
+      'discussTimeoutExpireDays',
       'gradeDefinitions',
       'enforceFeedbackBeforeDiscussedInClass',
     );
+  }
+
+  /**
+   * Loads the full unit payload and keeps an in-flight request alive across route changes.
+   *
+   * Unit task routes render progressively from a cached placeholder. Their components can be
+   * destroyed while this request is running, so the request must not be owned by the component's
+   * subscription. Reusing the same shared observable also prevents the destination view from
+   * issuing a duplicate request while the original one is still in flight.
+   */
+  public loadDetails(unitId: number, forceRefresh = false): Observable<Unit> {
+    const inFlightRequest = this.detailRequests.get(unitId);
+    if (inFlightRequest) {
+      return inFlightRequest;
+    }
+
+    const cachedUnit = this.cache.get(unitId);
+    if (!forceRefresh && cachedUnit && this.unitsWithDetails.has(cachedUnit)) {
+      return of(cachedUnit);
+    }
+
+    const request = this.fetch(unitId).pipe(
+      tap((unit) => this.unitsWithDetails.add(unit)),
+      finalize(() => this.detailRequests.delete(unitId)),
+      shareReplay({bufferSize: 1, refCount: false}),
+    );
+    this.detailRequests.set(unitId, request);
+    return request;
   }
 
   public override createInstanceFrom(_json: object): Unit {

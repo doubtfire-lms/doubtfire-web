@@ -89,7 +89,9 @@ export class OverseerImageListComponent
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: OverseerImage | OverseerImage[]) {
-    if (!value) return;
+    if (!value) {
+      return;
+    }
     if (value instanceof Array) {
       this.overseerImages.push(...value);
     } else {
@@ -112,8 +114,7 @@ export class OverseerImageListComponent
       this.sidekiqProgressModalService
         .show(`Pulling image ${image.name} (${image.tag})`, job.id)
         .subscribe((_job) => {
-          this.overseerImageService.fetch(image.id).subscribe((newImage) => {
-            console.log(newImage);
+          this.overseerImageService.fetch(image.id).subscribe(() => {
             this.loading = false;
           });
         });
@@ -140,7 +141,29 @@ export class OverseerImageListComponent
       case 'name':
       case 'tag':
         return super.sortTableData(sort);
+      case 'last-pulled':
+        this.dataSource.data = [...this.dataSource.data].sort((a, b) =>
+          this.sortCompare(
+            this.sortDateValue(a.lastPulledDate),
+            this.sortDateValue(b.lastPulledDate),
+            sort.direction === 'asc',
+          ),
+        );
+        return;
+      case 'status':
+        this.dataSource.data = [...this.dataSource.data].sort((a, b) =>
+          this.sortCompare(a.pulledImageStatus, b.pulledImageStatus, sort.direction === 'asc'),
+        );
+        return;
     }
+  }
+
+  private sortDateValue(value: string): number {
+    if (!value) {
+      return 0;
+    }
+    const time = new Date(value).getTime();
+    return Number.isFinite(time) ? time : 0;
   }
 
   public showDialog(image: OverseerImage) {

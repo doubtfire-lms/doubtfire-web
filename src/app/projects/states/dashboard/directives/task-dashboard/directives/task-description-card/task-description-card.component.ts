@@ -58,9 +58,13 @@ export class TaskDescriptionCardComponent {
   }
 
   public dueDate(): Date {
-    if (this.task) return this.task.localDueDate();
-    else if (this.taskDef) return this.taskDef.targetDate;
-    else return undefined;
+    if (this.task) {
+      return this.task.localDueDate();
+    } else if (this.taskDef) {
+      return this.taskDef.targetDate;
+    } else {
+      return undefined;
+    }
   }
 
   public startDate(): Date {

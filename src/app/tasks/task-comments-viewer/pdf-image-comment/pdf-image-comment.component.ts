@@ -25,7 +25,9 @@ export class PdfImageCommentComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (this.comment.commentType === 'image') this.downloadCommentResource();
+    if (this.comment.commentType === 'image') {
+      this.downloadCommentResource();
+    }
   }
 
   ngOnDestroy(): void {
@@ -42,7 +44,9 @@ export class PdfImageCommentComponent implements OnInit, OnDestroy {
       url,
       ((blobUrl, _response) => {
         this.resourceUrl = blobUrl;
-        if (fn) fn(blobUrl);
+        if (fn) {
+          fn(blobUrl);
+        }
       }).bind(this),
       ((error) => this.alerts.error(`Unable to download image comment. ${error}`, 6000)).bind(this),
     );

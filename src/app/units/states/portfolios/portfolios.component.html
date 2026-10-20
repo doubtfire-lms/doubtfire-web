@@ -15,8 +15,10 @@
       @switch (currentTab.routeSegment) {
         @case ('select') {
           <f-portfolios-list
+            [filters]="portfolioListFilters"
             [loading]="loadingStudents"
             [unit]="unit"
+            (filtersChange)="portfolioListFiltersChange($event)"
             (studentSelected)="studentSelected($event)"
           ></f-portfolios-list>
         }
@@ -25,15 +27,16 @@
             <f-portfolios-project-progress
               [project]="selectedProject"
               [project$]="selectedProject$"
+              [showSubmittedGrade]="true"
               [taskSelectionUrlBase]="progressTaskSelectionUrlBase"
               [unit]="unit"
             ></f-portfolios-project-progress>
           }
         }
-        @case ('student-notes') {
+        @case ('staff-notes') {
           @if (selectedProject) {
             <div class="h-[calc(100vh-250px)] p-3">
-              <h2>Student Notes for {{ selectedProject.student.name }}</h2>
+              <h2>Staff Notes for {{ selectedProject.student.name }}</h2>
               <p>
                 Use these notes for private staff discussions about the student. Students cannot
                 view them.

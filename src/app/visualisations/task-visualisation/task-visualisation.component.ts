@@ -49,7 +49,7 @@ export class TaskVisualisationComponent implements OnChanges, OnInit {
       const sortOrder = [
         'Complete',
         'Discuss',
-        'Awaiting Feedback',
+        'Ready for Feedback',
         'Working On It',
         'Not Started',
       ];
@@ -79,9 +79,5 @@ export class TaskVisualisationComponent implements OnChanges, OnInit {
       // console.log('Data:', this.data);
       // console.log('Colors:', this.colors);
     }
-  }
-
-  onSelect(event) {
-    console.log(event);
   }
 }

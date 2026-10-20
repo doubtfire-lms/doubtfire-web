@@ -54,12 +54,16 @@
                     </span>
                   }
                   @case ('EmailStudentAction') {
+                    @if (action.plain_text) {
+                      <div class="mb-2 text-sm text-black/60">Plain text email</div>
+                    }
                     @if (action.subject || action.body) {
                       <div class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3">
                         @if (action.subject) {
                           <div>
                             <div class="mb-1 font-medium text-black/80">Subject</div>
                             <div
+                              class="text-wrap"
                               [innerHTML]="editor.renderTemplatePreview(action.subject, rule)"
                             ></div>
                           </div>
@@ -68,6 +72,7 @@
                           <div>
                             <div class="mb-1 font-medium text-black/80">Body</div>
                             <div
+                              class="text-wrap"
                               [innerHTML]="editor.renderTemplatePreview(action.body, rule)"
                             ></div>
                           </div>
@@ -80,12 +85,16 @@
                     <span class="mx-1 inline-block rounded bg-blue-50 p-2 leading-6 text-blue-800">
                       {{ editor.staffAudienceLabel(action) }}
                     </span>
+                    @if (action.plain_text) {
+                      <div class="my-2 text-sm text-black/60">Plain text email</div>
+                    }
                     @if (action.subject || action.body) {
                       <div class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3">
                         @if (action.subject) {
                           <div>
                             <div class="mb-1 font-medium text-black/80">Subject</div>
                             <div
+                              class="text-wrap"
                               [innerHTML]="editor.renderTemplatePreview(action.subject, rule)"
                             ></div>
                           </div>
@@ -94,6 +103,7 @@
                           <div>
                             <div class="mb-1 font-medium text-black/80">Body</div>
                             <div
+                              class="text-wrap"
                               [innerHTML]="editor.renderTemplatePreview(action.body, rule)"
                             ></div>
                           </div>

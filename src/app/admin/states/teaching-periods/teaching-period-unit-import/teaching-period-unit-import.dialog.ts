@@ -17,6 +17,7 @@ import {
   User,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 
 export interface TeachingPeriodUnitImportData {
@@ -39,12 +40,8 @@ export class TeachingPeriodUnitImportService {
   constructor(public dialog: MatDialog) {}
 
   openImportUnitsDialog(teachingPeriod: TeachingPeriod): void {
-    const dialogRef = this.dialog.open(TeachingPeriodUnitImportDialogComponent, {
+    this.dialog.open(TeachingPeriodUnitImportDialogComponent, {
       data: {teachingPeriod: teachingPeriod},
-    });
-
-    dialogRef.afterClosed().subscribe(() => {
-      console.log('The dialog was closed');
     });
   }
 }
@@ -98,6 +95,7 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
     private userService: UserService,
     private unitService: UnitService,
     private globalStateService: GlobalStateService,
+    private alertService: AlertService,
     @Inject(MAT_DIALOG_DATA) public data: TeachingPeriodUnitImportData,
   ) {}
 
@@ -131,12 +129,9 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   private loadAllUnits() {
     // Load all units
     this.unitService.query(undefined, {params: {include_in_active: true}}).subscribe({
-      next: () => {
-        return;
-      },
       error: (failure) => {
-        //TODO: Add alert
-        console.log(failure);
+        console.error('Failed to load units for import', failure);
+        this.alertService.error('Failed to load units for import.', 6000);
       },
     });
   }
@@ -173,11 +168,18 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   }
 
   public statusForUnit(value: UnitImportData): string {
-    if (value.done) return 'Done!';
-    if (value.done !== undefined && !value.done) return 'Error! - check log';
-    if (!value.sourceUnit) return 'Create new unit';
-    if (this.teachigPeriod.hasUnitLike(value.sourceUnit))
+    if (value.done) {
+      return 'Done!';
+    }
+    if (value.done !== undefined && !value.done) {
+      return 'Error! - check log';
+    }
+    if (!value.sourceUnit) {
+      return 'Create new unit';
+    }
+    if (this.teachigPeriod.hasUnitLike(value.sourceUnit)) {
       return 'Skip - Already in teaching period';
+    }
     if (this.unitsToImport.filter((u) => u.unitCode === value.sourceUnit.code).length > 1) {
       return 'Duplicate - Source unit appears twice';
     }
@@ -200,8 +202,12 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   public addUnitsByCode() {
     const codes = this.codesToAdd.split(',').map((code) => code.trim());
     for (const code of codes) {
-      if (code.length == 0) continue;
-      if (this.unitsToImport.find((u) => u.unitCode === code)) continue;
+      if (code.length == 0) {
+        continue;
+      }
+      if (this.unitsToImport.find((u) => u.unitCode === code)) {
+        continue;
+      }
 
       const relatedUnits = this.relatedUnits(code);
       const sourceUnit = relatedUnits.length > 0 ? relatedUnits[0].value : null;
@@ -242,27 +248,27 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
           if (unitToImport.convenor && unitToImport.convenor !== newUnit.mainConvenorUser) {
             newUnit.addStaff(unitToImport.convenor, 'Convenor').subscribe({
               next: (newRole) => {
-                console.log(`Employed ${unitToImport.convenor.name} in ${newUnit.code}`);
                 newUnit.changeMainConvenor(newRole).subscribe({
-                  next: () => {
-                    console.log(
-                      `Set ${unitToImport.convenor.name} as main convenor in ${newUnit.code}`,
-                    );
-                  },
                   error: (failure) => {
-                    console.log(failure);
+                    console.error('Failed to set main convenor', failure);
+                    this.alertService.error(
+                      `Failed to set the main convenor for ${newUnit.code}.`,
+                      6000,
+                    );
                   },
                 });
               },
               error: (failure) => {
-                console.log(failure);
+                console.error('Failed to add convenor', failure);
+                this.alertService.error(`Failed to add the convenor to ${newUnit.code}.`, 6000);
               },
             });
           }
           this.importUnit(idx + 1);
         },
         error: (failure) => {
-          console.log(failure);
+          console.error('Failed to roll over unit', failure);
+          this.alertService.error(`Failed to roll over ${unitToImport.unitCode}.`, 6000);
           unitToImport.done = false;
           this.importUnit(idx + 1);
         },
@@ -286,7 +292,8 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
         },
         error: (failure) => {
           unitToImport.done = false;
-          console.log(failure);
+          console.error('Failed to create unit', failure);
+          this.alertService.error(`Failed to create ${unitToImport.unitCode}.`, 6000);
           this.importUnit(idx + 1);
         },
       });
@@ -294,7 +301,9 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
   private importUnit(idx: number) {
     // Stop when past last unit to import
-    if (idx >= this.unitsToImport.length) return;
+    if (idx >= this.unitsToImport.length) {
+      return;
+    }
     const unitToImport = this.unitsToImport[idx];
 
     const code = unitToImport.sourceUnit ? unitToImport.sourceUnit.code : unitToImport.unitCode;

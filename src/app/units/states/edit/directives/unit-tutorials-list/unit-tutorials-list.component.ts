@@ -26,6 +26,9 @@ import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.compon
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
+// Default duration for a new tutorial, in minutes (2 hours).
+const DEFAULT_TUTORIAL_DURATION_MINUTES = 120;
+
 @Component({
   selector: 'df-unit-tutorials-list',
   templateUrl: 'unit-tutorials-list.component.html',
@@ -60,6 +63,7 @@ export class UnitTutorialsListComponent
     'location',
     'day',
     'time',
+    'duration',
     'tutor',
     'capacity',
     'options',
@@ -91,6 +95,10 @@ export class UnitTutorialsListComponent
         abbreviation: new UntypedFormControl('', [Validators.required]),
         campus: new UntypedFormControl(null, []),
         capacity: new UntypedFormControl('', [Validators.required]),
+        durationMinutes: new UntypedFormControl(DEFAULT_TUTORIAL_DURATION_MINUTES, [
+          Validators.required,
+          Validators.min(1),
+        ]),
         tutor: new UntypedFormControl(null, [Validators.required]),
       },
       'Tutorial',
@@ -162,7 +170,9 @@ export class UnitTutorialsListComponent
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: Tutorial | Tutorial[]) {
-    if (!value) return;
+    if (!value) {
+      return;
+    }
     if (value instanceof Array) {
       this.tutorials.push(...value);
     } else {
@@ -209,7 +219,11 @@ export class UnitTutorialsListComponent
       return;
     }
     if (bEntity instanceof User) {
-      return 'user_id' in aEntity && aEntity.user_id === bEntity.id;
+      // The form control holds a User, while some payloads supply {user_id} - accept either.
+      if ('user_id' in aEntity) {
+        return aEntity.user_id === bEntity.id;
+      }
+      return aEntity.id === bEntity.id;
     } else {
       return 'id' in aEntity && aEntity.id === bEntity.id;
     }
@@ -250,31 +264,61 @@ export class UnitTutorialsListComponent
     };
   }
 
+  formatDurationShort(minutes: number): string {
+    if (minutes == null) {
+      return '';
+    }
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    if (hours === 0) {
+      return `${remainingMinutes}m`;
+    }
+    if (remainingMinutes === 0) {
+      return `${hours}h`;
+    }
+    return `${hours}h ${remainingMinutes}m`;
+  }
+
+  formatDuration(minutes: number): string {
+    if (minutes == null) {
+      return '';
+    }
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    if (hours === 0) {
+      return `${remainingMinutes} minute${remainingMinutes === 1 ? '' : 's'}`;
+    }
+    if (remainingMinutes === 0) {
+      return `${hours} hour${hours === 1 ? '' : 's'}`;
+    }
+    return `${hours} hour${hours === 1 ? '' : 's'} ${remainingMinutes} minute${remainingMinutes === 1 ? '' : 's'}`;
+  }
+
   // Sorting function to sort data when sort
   // event is triggered
   sortTableData(sort: Sort): void {
     if (!sort.active || sort.direction === '') {
       return;
     }
-    switch (sort.active) {
-      case 'abbreviation':
-      case 'location':
-      case 'day':
-      case 'time':
-      case 'capacity':
-        return super.sortTableData(sort);
-    }
-    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
+        case 'abbreviation':
+          return this.sortCompare(a.abbreviation, b.abbreviation, isAsc);
         case 'campus':
-          return this.sortCompare(
-            a.campus ? a.campus.abbreviation : '',
-            b.campus ? b.campus.abbreviation : '',
-            isAsc,
-          );
+          return this.sortCompare(a.campus?.abbreviation, b.campus?.abbreviation, isAsc);
+        case 'location':
+          return this.sortCompare(a.meetingLocation, b.meetingLocation, isAsc);
+        case 'day':
+          return this.sortCompare(a.meetingDay, b.meetingDay, isAsc);
+        case 'time':
+          return this.sortCompare(a.meetingTime, b.meetingTime, isAsc);
+        case 'duration':
+          return this.sortCompare(a.durationMinutes, b.durationMinutes, isAsc);
         case 'tutor':
-          return this.sortCompare(a.tutor.name, b.tutor.name, isAsc);
+          return this.sortCompare(a.tutorName, b.tutorName, isAsc);
+        case 'capacity':
+          return this.sortCompare(a.capacity, b.capacity, isAsc);
         default:
           return 0;
       }

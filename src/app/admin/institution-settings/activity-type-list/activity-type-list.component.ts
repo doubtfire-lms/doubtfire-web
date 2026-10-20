@@ -65,7 +65,9 @@ export class ActivityTypeListComponent
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: ActivityType | ActivityType[]) {
-    if (!value) return;
+    if (!value) {
+      return;
+    }
     if (value instanceof Array) {
       this.activityTypes.push(...value);
     } else {

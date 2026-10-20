@@ -1,3 +1,4 @@
+import {HttpClient, HttpErrorResponse, HttpEventType, HttpResponse} from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +9,8 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {UserService} from 'src/app/api/services/user.service';
+import {Observable} from 'rxjs';
+import {UploadEvent} from 'src/app/common/services/resumable-upload.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 export interface FileData {
@@ -42,7 +44,7 @@ interface UploadingInfo {
 
 export const ACCEPTED_TYPES = {
   document: {
-    extensions: ['pdf', 'ps'],
+    extensions: ['pdf', 'ps', 'docx'],
     // icon: 'picture_as_pdf',
     icon: 'article_outlined',
     name: 'PDF',
@@ -90,6 +92,8 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   @Input() url: string;
   @Input() method = 'POST';
   @Input() payload?: unknown;
+  // Replaces the single POST to url, e.g. to upload in chunks. Receives the chosen files by zone name.
+  @Input() uploader?: (files: Record<string, File>) => Observable<UploadEvent>;
 
   @Input() onBeforeUpload?: () => void;
   @Input() onSuccess?: (response) => void;
@@ -124,7 +128,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   public dropSupported: boolean = true;
 
   constructor(
-    private userService: UserService,
+    private httpClient: HttpClient,
     private constants: DoubtfireConstants,
   ) {}
 
@@ -255,7 +259,11 @@ export class FileUploaderComponent implements OnInit, OnChanges {
 
     this.isUploading = true;
 
-    const xhr = new XMLHttpRequest();
+    if (this.uploader) {
+      this.startCustomUpload();
+      return;
+    }
+
     const form = new FormData();
 
     // Append files
@@ -269,57 +277,109 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     if (this.payload) {
       for (const [key, value] of Object.entries(this.payload)) {
         let v = value;
-        if (typeof v === 'object') v = JSON.stringify(v);
+        if (typeof v === 'object') {
+          v = JSON.stringify(v);
+        }
         form.append(key, v);
       }
     }
 
-    xhr.upload.onprogress = (event) => {
-      if (event.total) {
-        this.uploadingInfo.progress = Math.floor((event.loaded / event.total) * 100);
-      }
-    };
-
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === 4) {
-        setTimeout(() => {
-          this.uploadingInfo.complete = true;
-          let response;
-          try {
-            response = JSON.parse(xhr.responseText);
-          } catch (e) {
-            console.error(e);
-            if (xhr.status === 0) {
-              response = {error: `Could not connect to ${this.externalName} the server`};
-            } else {
-              response = xhr.responseText;
-            }
+    this.httpClient
+      .request(this.method ?? 'POST', this.url, {
+        body: form,
+        observe: 'events',
+        reportProgress: true,
+        responseType: 'text',
+      })
+      .subscribe({
+        next: (event) => {
+          if (event.type === HttpEventType.UploadProgress && event.total) {
+            this.uploadingInfo.progress = Math.floor((event.loaded / event.total) * 100);
+          } else if (event instanceof HttpResponse) {
+            this.handleUploadResponse(event.status, event.body);
           }
-
-          if (xhr.status >= 200 && xhr.status < 300) {
-            this.onSuccess?.(response);
-            this.uploadingInfo.success = true;
-            setTimeout(() => {
-              this.onComplete?.();
-              if (this.resetAfterUpload) {
-                this.resetUploader();
-              }
-            }, 2500);
+        },
+        error: (error: unknown) => {
+          if (error instanceof HttpErrorResponse) {
+            this.handleUploadResponse(error.status, error.error);
           } else {
-            this.onFailure?.(response);
-            this.uploadingInfo.success = false;
-            this.uploadingInfo.error = (response?.error ?? 'Unknown error') as string;
+            // Interceptors may propagate an extracted API error rather than the
+            // original HttpErrorResponse.
+            this.handleUploadResponse(-1, error);
           }
-        }, 2000);
+        },
+      });
+  }
+
+  private startCustomUpload(): void {
+    const files: Record<string, File> = {};
+    for (const zone of this.uploadZones) {
+      if (zone.model?.length) {
+        files[zone.name] = zone.model[0];
       }
-    };
-    const method = this.method ?? 'POST';
-    xhr.open(method, this.url, true);
+    }
 
-    xhr.setRequestHeader('Auth-Token', this.userService.currentUser.authenticationToken);
-    xhr.setRequestHeader('Username', this.userService.currentUser.username);
+    this.uploader(files).subscribe({
+      next: (event) => {
+        if (event.type === 'progress') {
+          this.uploadingInfo.progress = event.progress;
+        } else {
+          this.handleUploadResponse(200, event.body);
+        }
+      },
+      error: (error: unknown) => this.handleUploadResponse(-1, error),
+    });
+  }
 
-    xhr.send(form);
+  private handleUploadResponse(status: number, responseBody: unknown): void {
+    setTimeout(() => {
+      this.uploadingInfo.complete = true;
+      const response = this.parseUploadResponse(status, responseBody);
+
+      if (status >= 200 && status < 300) {
+        this.onSuccess?.(response);
+        this.uploadingInfo.success = true;
+        setTimeout(() => {
+          this.onComplete?.();
+          if (this.resetAfterUpload) {
+            this.resetUploader();
+          }
+        }, 2500);
+      } else {
+        this.onFailure?.(response);
+        this.uploadingInfo.success = false;
+        this.uploadingInfo.error = this.extractUploadError(response);
+      }
+    }, 2000);
+  }
+
+  private parseUploadResponse(status: number, responseBody: unknown) {
+    if (status === 0) {
+      return {error: `Could not connect to the ${this.externalName} server`};
+    }
+
+    if (typeof responseBody !== 'string') {
+      return responseBody;
+    }
+
+    try {
+      return JSON.parse(responseBody);
+    } catch (error) {
+      console.error(error);
+      return responseBody;
+    }
+  }
+
+  private extractUploadError(response: unknown): string {
+    if (typeof response === 'string') {
+      return response;
+    }
+
+    if (response && typeof response === 'object' && 'error' in response) {
+      return String(response.error);
+    }
+
+    return 'Unknown error';
   }
 
   // onClickFailureCancelInternal() {
@@ -337,7 +397,9 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     const zones = Object.entries(files).map(([uploadName, uploadData]) => {
       const uploadType = uploadData.type === 'archive' ? 'zip' : uploadData.type;
       const typeData = ACCEPTED_TYPES[uploadType];
-      if (!typeData) throw new Error(`Invalid type provided to File Uploader ${uploadData.type}`);
+      if (!typeData) {
+        throw new Error(`Invalid type provided to File Uploader ${uploadData.type}`);
+      }
 
       return {
         name: uploadName,

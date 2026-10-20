@@ -87,16 +87,17 @@
         }
 
         <button
-          aria-label=""
-          class="button status-chip discuss"
+          aria-label="Mark as {{ discussActionLabel }}"
+          class="button status-chip"
           mat-icon-button
-          matTooltip="Mark as Discuss"
+          matTooltip="Mark as {{ discussActionLabel }}"
           matTooltipPosition="above"
           [class.large-button]="!(selectedTask && selectedTask.suggestedTaskStatus)"
           [disabled]="!actionButtonEnabled"
-          (click)="selectedTask?.updateTaskStatus('discuss')"
+          [ngClass]="discussActionClass"
+          (click)="selectedTask?.updateTaskStatus(discussActionStatus)"
         >
-          <mat-icon>question_answer</mat-icon>
+          <mat-icon>{{ discussActionIcon }}</mat-icon>
         </button>
 
         <div
@@ -122,8 +123,8 @@
     </span>
   </ng-template>
 
-  <div class="flex w-full">
-    <f-user-badge fxFlex fxFlexAlign="start start" [selectedTask]="selectedTask"></f-user-badge>
+  <div class="flex w-full items-center">
+    <f-user-badge class="flex-1" [selectedTask]="selectedTask"></f-user-badge>
     <div
       class="flex items-center"
       [ngClass]="hideMainActionButtonsForModeration ? 'w-full justify-center' : 'justify-between'"
@@ -179,7 +180,7 @@
       }
     </div>
 
-    <div fxFlex fxFlexAlign="end start" fxLayout="row" fxLayoutAlign="end center">
+    <div class="flex flex-1 flex-row items-center justify-end">
       <!-- @if (selectedTask?.similaritiesDetected) {
         <div class="relative inline-block">
           <div

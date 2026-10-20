@@ -71,10 +71,15 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public animateBackground: boolean = false;
   public showDatesColumn: boolean = false;
+  public showTasksBeyondTargetGrade: boolean = false;
   public overlayLines: boolean = false;
 
   public get unit() {
     return this.project?.unit;
+  }
+
+  private get showTasksBeyondTargetGradeStorageKey(): string {
+    return `ontrack.taskPlanner.${this.project?.id ?? 'unknown'}.showTasksBeyondTargetGrade`;
   }
 
   constructor(
@@ -167,6 +172,12 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.taskPlannerPrerequisitesModal.show(this.project, td, prereqs);
   }
 
+  setShowTasksBeyondTargetGrade(value: boolean) {
+    this.showTasksBeyondTargetGrade = value;
+    localStorage.setItem(this.showTasksBeyondTargetGradeStorageKey, JSON.stringify(value));
+    this.refreshItems(false);
+  }
+
   private mapPrerequisites() {
     for (const prerequisite of this.allTaskPrerequisites) {
       prerequisite.taskDefinition = this.unit.taskDefinitions.find(
@@ -253,6 +264,8 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     if (item.highlighted) {
       classes.push('[--bar-bg:#03c6fc]');
+    } else if (this.isAboveTargetGrade(item)) {
+      classes.push('[--bar-bg:#9ca3af]', 'text-white');
     } else if (this.isPastFeedbackDeadline(item)) {
       classes.push('[--bar-bg:#cd3704]', 'text-white');
     } else if (this.isBlockedByPrerequisite(item)) {
@@ -264,6 +277,10 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return classes;
+  }
+
+  isAboveTargetGrade(item: TaskGanttItem) {
+    return item.taskDefinition.targetGrade > this.targetGrade;
   }
 
   isPastFeedbackDeadline(item: TaskGanttItem) {
@@ -553,6 +570,8 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loadShowTasksBeyondTargetGradePreference();
+
     this.viewOptions = {
       precisionUnit: 'day',
       start: new GanttDate(this.earliestStartDate),
@@ -592,6 +611,15 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.alertService.error(`Failed to get task prerequisites: ${error}`, 6000);
       },
     });
+  }
+
+  private loadShowTasksBeyondTargetGradePreference(): void {
+    const rawPreference = localStorage.getItem(this.showTasksBeyondTargetGradeStorageKey);
+    try {
+      this.showTasksBeyondTargetGrade = rawPreference ? JSON.parse(rawPreference) === true : false;
+    } catch {
+      this.showTasksBeyondTargetGrade = false;
+    }
   }
 
   private setupGanttHeaderObserver(): void {
@@ -820,7 +848,9 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return this.project.unit.taskDefinitions
-      .filter((taskDef) => taskDef.targetGrade <= this.targetGrade)
+      .filter(
+        (taskDef) => this.showTasksBeyondTargetGrade || taskDef.targetGrade <= this.targetGrade,
+      )
       .sort((a, b) => {
         const taskA = this.project.findTaskForDefinition(a.id);
         const taskB = this.project.findTaskForDefinition(b.id);

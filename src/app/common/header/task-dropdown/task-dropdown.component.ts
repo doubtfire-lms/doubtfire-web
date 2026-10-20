@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter} from 'rxjs';
-import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
+import {Project, Unit, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {ViewType} from 'src/app/projects/states/index/global-state.service';
 import {TutorNotesModalService} from '../../modals/tutor-notes-modal/tutor-notes-modal.service';
 
@@ -33,6 +33,7 @@ export class TaskDropdownComponent {
     'Task Inbox': 'Inbox',
     'Task Lists': 'Tasks',
     'Tutorial List': 'Tutorials',
+    'Unit Content': 'Content',
     'Unit Administration': 'Admin',
     'Unit Analytics': 'Analytics',
   };
@@ -42,6 +43,7 @@ export class TaskDropdownComponent {
     private angularRouter: Router,
     private route: ActivatedRoute,
     private tutorNotesModal: TutorNotesModalService,
+    private userService: UserService,
   ) {
     this.angularRouter.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -58,6 +60,13 @@ export class TaskDropdownComponent {
 
   public get isMentor(): boolean {
     return this.currentUnit.staff.some((ur) => ur.mentorId === this.unitRole.id);
+  }
+
+  public get canAdministerUnit(): boolean {
+    return (
+      this.userService.currentUser.role === 'Admin' ||
+      ['Convenor', 'Admin', 'Auditor'].includes(this.unitRole.role)
+    );
   }
 
   openTutorNotes() {

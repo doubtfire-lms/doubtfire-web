@@ -128,11 +128,7 @@ export class AuthenticationService {
     }
 
     // Attempt to get a new access token using the refresh token cookie
-    this.attemptLoginUsingRefreshToken((result: boolean) => {
-      if (result) {
-        console.log('Successfully refreshed access token');
-      }
-    });
+    this.attemptLoginUsingRefreshToken(() => undefined);
   }
 
   private readonly validRoles: string[] = [
@@ -177,7 +173,6 @@ export class AuthenticationService {
     // Set the user's authentication token for access to api.
     user.authenticationToken = response['auth_token'];
     user.authenticationTokenExpiry = response['auth_token_expiry'];
-
     // Record the current user
     this.userService.currentUser = user;
 
@@ -224,7 +219,7 @@ export class AuthenticationService {
   ): Observable<void> {
     return this.httpClient.post(this.AUTH_URL, userCredentials).pipe(
       map((response: AuthResponse) => {
-        this.setupUserFromResponse(response);
+        this.setupUserFromResponse(response, true);
       }),
       catchError((error) => {
         // this.authComplete$.next(false);
@@ -235,25 +230,10 @@ export class AuthenticationService {
     );
   }
 
-  public signInWithLti(userCredentials: {ltik: string; lti_token: string}): Observable<void> {
-    return this.httpClient.post(`${this.AUTH_URL}/lti`, userCredentials).pipe(
-      map((response: AuthResponse) => {
-        const username = encodeURIComponent(response.user['username']);
-        const authToken = encodeURIComponent(response.auth_token);
-        const ltik = encodeURIComponent(userCredentials.ltik);
-        setTimeout(() => {
-          window.location.href = `/sign_in?username=${username}&authToken=${authToken}&ltik=${ltik}&isLtiLogin=true`;
-        });
-      }),
-      catchError((error) => {
-        return throwError(() => error);
-      }),
-    );
-  }
-
   public signOut(ssoSignOut = true): void {
     // This function is called after the token is deleted...
     const doSignOut = () => {
+      sessionStorage.removeItem('ltiLaunch');
       // Setup ability to auth again
       this.authComplete$.complete();
       this.authComplete$ = new AsyncSubject<boolean>();
@@ -302,5 +282,9 @@ export class AuthenticationService {
         return response['scorm_auth_token'];
       }),
     );
+  }
+
+  public prepareContentAccess(): Observable<void> {
+    return this.httpClient.get(this.AUTH_URL + '/content').pipe(map(() => undefined));
   }
 }

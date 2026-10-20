@@ -18,6 +18,7 @@ export class RolloverComponent implements OnInit {
   @Input() unitId: number;
 
   public unit: Unit;
+  public newUnitCode: string;
 
   public teachingPeriods: TeachingPeriod[] = [];
 
@@ -40,6 +41,7 @@ export class RolloverComponent implements OnInit {
       this.unitService.get(this.unitId).subscribe({
         next: (unit) => {
           this.unit = unit;
+          this.newUnitCode = unit.code;
           this.globalStateService.setView(ViewType.UNIT, unit);
           setTimeout(() => {
             this.initUnit();
@@ -65,8 +67,12 @@ export class RolloverComponent implements OnInit {
 
   createUnit() {
     const body = this.teachingPeriod
-      ? {teaching_period_id: this.teachingPeriod.id}
-      : {start_date: this.newStartDate, end_date: this.newEndDate};
+      ? {new_unit_code: this.newUnitCode, teaching_period_id: this.teachingPeriod.id}
+      : {
+          new_unit_code: this.newUnitCode,
+          start_date: this.newStartDate,
+          end_date: this.newEndDate,
+        };
 
     this.unit.rolloverTo(body).subscribe({
       next: (response) => {

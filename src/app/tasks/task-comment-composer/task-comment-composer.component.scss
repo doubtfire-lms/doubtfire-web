@@ -55,7 +55,7 @@ $emoji-color: color.adjust(black, $lightness: 25%);
     cursor: text;
   }
 
-  #textField.active {
+  #textField.active:empty {
     max-height: 39px;
     max-lines: 1;
     overflow: hidden;

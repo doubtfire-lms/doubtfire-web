@@ -60,7 +60,9 @@ export class CampusListComponent extends EntityFormComponent<Campus> implements 
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: Campus | Campus[]) {
-    if (!value) return;
+    if (!value) {
+      return;
+    }
 
     if (value instanceof Array) {
       this.campuses.push(...value);

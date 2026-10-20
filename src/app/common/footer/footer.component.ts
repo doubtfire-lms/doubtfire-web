@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import {Observable} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
+import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import {UnitRole} from 'src/app/api/models/unit-role';
 import {ProjectService} from 'src/app/api/services/project.service';
 import {TaskService} from 'src/app/api/services/task.service';
@@ -62,7 +63,9 @@ export class FooterComponent implements OnInit {
   }
 
   findSimilaritiesButton() {
-    if (!this.selectedTask?.similaritiesDetected) return;
+    if (!this.selectedTask?.similaritiesDetected) {
+      return;
+    }
 
     const w = this.similaritiesButton?.nativeElement.getBoundingClientRect().width;
     this.leftOffset = this.similaritiesButton?.nativeElement.offsetLeft + w / 2;
@@ -202,6 +205,22 @@ export class FooterComponent implements OnInit {
 
   public get completeButtonEnabled(): boolean {
     return this.actionButtonEnabled && !!this.selectedTask?.canMarkComplete;
+  }
+
+  public get discussActionStatus(): TaskStatusEnum {
+    return this.selectedTask?.status === 'discuss' ? 'rediscuss' : 'discuss';
+  }
+
+  public get discussActionLabel(): string {
+    return this.taskService.statusData(this.discussActionStatus).label;
+  }
+
+  public get discussActionIcon(): string {
+    return this.taskService.statusData(this.discussActionStatus).materialIcon;
+  }
+
+  public get discussActionClass(): string {
+    return this.taskService.statusData(this.discussActionStatus).class;
   }
 
   public get hideMainActionButtonsForModeration(): boolean {
