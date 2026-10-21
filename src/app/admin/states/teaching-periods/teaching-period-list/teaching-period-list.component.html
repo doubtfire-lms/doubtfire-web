@@ -38,6 +38,11 @@
       <td *matCellDef="let element" mat-cell>{{ element.endDate | date }}</td>
     </ng-container>
 
+    <ng-container matColumnDef="lastTeachingDate">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>Last teaching date</th>
+      <td *matCellDef="let element" mat-cell>{{ element.lastTeachingDate | date }}</td>
+    </ng-container>
+
     <ng-container matColumnDef="activeUntil">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Active until</th>
       <td *matCellDef="let element" mat-cell>{{ element.activeUntil | date }}</td>

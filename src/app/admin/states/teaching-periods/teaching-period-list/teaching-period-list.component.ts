@@ -26,7 +26,15 @@ export class TeachingPeriodListComponent implements OnInit {
 
   public dataSource: MatTableDataSource<TeachingPeriod> = new MatTableDataSource();
 
-  displayedColumns: string[] = ['active', 'name', 'startDate', 'endDate', 'activeUntil', 'actions'];
+  displayedColumns: string[] = [
+    'active',
+    'name',
+    'startDate',
+    'lastTeachingDate',
+    'endDate',
+    'activeUntil',
+    'actions',
+  ];
 
   constructor(
     private teachingPeriodsService: TeachingPeriodService,
@@ -106,6 +114,12 @@ export class TeachingPeriodListComponent implements OnInit {
           return this.sortCompare(
             this.sortDateValue(a.endDate),
             this.sortDateValue(b.endDate),
+            isAsc,
+          );
+        case 'lastTeachingDate':
+          return this.sortCompare(
+            this.sortDateValue(a.lastTeachingDate),
+            this.sortDateValue(b.lastTeachingDate),
             isAsc,
           );
         case 'activeUntil':
