@@ -130,7 +130,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       } else if (error.error instanceof Blob) {
         errorMessage = error.statusText;
       } else {
-        errorMessage = error.error || error.statusText;
+        errorMessage = error.error || 'Unknown error';
       }
       logMessage = `Error Code: ${error.status}`;
     }
