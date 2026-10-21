@@ -63,4 +63,25 @@ describe('HttpErrorInterceptor', () => {
     expect(next.handle).toHaveBeenCalledOnce();
     expect(vi.mocked(next.handle).mock.calls[0][0].headers.get('Auth-Token')).toBe('new-token');
   });
+
+  it('uses the HTTP status text when an error response has no body', () => {
+    const request = new HttpRequest('GET', '/api/units/1');
+    const response = new HttpErrorResponse({
+      status: 500,
+      statusText: 'Internal Server Error',
+      error: null,
+    });
+    const next = {
+      handle: vi.fn().mockReturnValue(throwError(() => response)),
+    } as unknown as HttpHandler;
+    const reportError = vi.spyOn(interceptor, 'throwError').mockImplementation(() => {});
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    let receivedError: unknown;
+
+    interceptor.intercept(request, next).subscribe({error: (error) => (receivedError = error)});
+
+    expect(receivedError).toBe('Internal Server Error');
+    expect(reportError).toHaveBeenCalledWith('Error Code: 500: Internal Server Error', 500);
+    consoleError.mockRestore();
+  });
 });
