@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-104](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-103...v11.0.0-104) (2026-10-21)
+
+
+### Features
+
+* add template variable for main convenor name ([fbedc3b](https://github.com/b0ink/doubtfire-deploy/commit/fbedc3b627ac5835b358756822f5998849466fda))
+
+
+### Bug Fixes
+
+* add missing route guards ([cf159ba](https://github.com/b0ink/doubtfire-deploy/commit/cf159ba8e05244bd990a4080104bb07cea7cccf4))
+* show the discussion deadline as inclusive ([e34ce52](https://github.com/b0ink/doubtfire-deploy/commit/e34ce520d9626bf1531d9aa202f43e5e064c3c19))
+
 ## [11.0.0-103](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-102...v11.0.0-103) (2026-10-20)
 
 
