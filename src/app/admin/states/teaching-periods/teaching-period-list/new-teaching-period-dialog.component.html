@@ -58,11 +58,26 @@
           placeholder="End date"
           required
           [(ngModel)]="newOrSelectedTeachingPeriod.endDate"
+          (ngModelChange)="defaultLastTeachingDate($event)"
         />
       </mat-date-range-input>
 
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Last Teaching Date</mat-label>
+      <input
+        matInput
+        name="lastTeachingDate"
+        required
+        [matDatepicker]="lastTeachingDatePicker"
+        [(ngModel)]="newOrSelectedTeachingPeriod.lastTeachingDate"
+      />
+      <mat-hint>Final day of classes; deadline notifications stop after this date.</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="lastTeachingDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #lastTeachingDatePicker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline">

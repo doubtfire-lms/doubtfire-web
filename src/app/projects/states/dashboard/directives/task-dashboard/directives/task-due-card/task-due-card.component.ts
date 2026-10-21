@@ -20,7 +20,7 @@ export class TaskDueCardComponent {
 
   public get discussTimeoutExpiryDate(): string | null {
     const expiryDateString = this.task?.discussTimeoutExpiryDate;
-    const timeoutEnabled = this.task?.unit?.discussTimeoutEnabled;
+    const timeoutEnabled = this.task?.unit?.discussTimeoutActive;
     if (this.task?.status !== 'discuss' || !timeoutEnabled || !expiryDateString) {
       return null;
     }

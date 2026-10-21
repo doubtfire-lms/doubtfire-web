@@ -149,6 +149,12 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
     this.campusService.query().subscribe((campuses) => (this.campuses = campuses));
   }
 
+  defaultLastTeachingDate(endDate: Date): void {
+    if (!this.newOrSelectedTeachingPeriod.lastTeachingDate) {
+      this.newOrSelectedTeachingPeriod.lastTeachingDate = endDate;
+    }
+  }
+
   addTeachingBreak() {
     this.newOrSelectedTeachingPeriod
       .addBreak(

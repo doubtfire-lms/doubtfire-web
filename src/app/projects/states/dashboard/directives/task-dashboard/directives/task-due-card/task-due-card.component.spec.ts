@@ -33,6 +33,7 @@ describe('TaskDueCardComponent', () => {
       discussTimeoutExpiryDate: `${year}-07-08`,
       unit: {
         discussTimeoutEnabled: true,
+        discussTimeoutActive: true,
         discussTimeoutExpireDays: 7,
       },
     } as Task;
@@ -42,5 +43,15 @@ describe('TaskDueCardComponent', () => {
     component.task.discussTimeoutExpiryDate = `${year}-07-15`;
 
     expect(component.discussTimeoutExpiryDate).toBe('15th July');
+  });
+
+  it('hides the discussion deadline after the last teaching date', () => {
+    component.task = {
+      status: 'discuss',
+      discussTimeoutExpiryDate: '2026-10-22',
+      unit: {discussTimeoutActive: false},
+    } as Task;
+
+    expect(component.discussTimeoutExpiryDate).toBeNull();
   });
 });
