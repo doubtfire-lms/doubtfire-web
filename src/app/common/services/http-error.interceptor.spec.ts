@@ -64,11 +64,11 @@ describe('HttpErrorInterceptor', () => {
     expect(vi.mocked(next.handle).mock.calls[0][0].headers.get('Auth-Token')).toBe('new-token');
   });
 
-  it('uses the HTTP status text when an error response has no body', () => {
+  it('uses a fixed message for a 500 response with no body', () => {
     const request = new HttpRequest('GET', '/api/units/1');
     const response = new HttpErrorResponse({
       status: 500,
-      statusText: 'Internal Server Error',
+      statusText: 'Unrelated status text',
       error: null,
     });
     const next = {
