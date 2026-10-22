@@ -7,6 +7,7 @@ import {TutorNotesModalComponent} from './tutor-notes-modal.component';
 export interface TutorNotesModalData {
   task?: Task;
   unitRole?: UnitRole;
+  focusNoteId?: number;
 }
 
 @Injectable({
@@ -15,13 +16,14 @@ export interface TutorNotesModalData {
 export class TutorNotesModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(task?: Task, unitRole?: UnitRole) {
+  public show(task?: Task, unitRole?: UnitRole, focusNoteId?: number) {
     const _dialogRef = this.dialog.open<TutorNotesModalComponent, TutorNotesModalData>(
       TutorNotesModalComponent,
       {
         data: {
           task,
           unitRole,
+          focusNoteId,
         },
         width: '100%',
         height: '90vh',

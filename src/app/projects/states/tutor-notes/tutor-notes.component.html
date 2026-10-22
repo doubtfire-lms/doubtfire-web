@@ -45,13 +45,11 @@
               <mat-icon type="button" (click)="replyToNote(note)">reply</mat-icon>
               <mat-icon type="button" (click)="deleteNote(note)">delete</mat-icon>
             </div>
-            @if (!note.readByUnitRole) {
-              @if (note.noteIsForMe) {
-                <button color="primary" mat-stroked-button (click)="markAsRead(note)">
-                  Mark as read
-                </button>
-              }
-            } @else {
+            @if (note.requiresCurrentUserRead) {
+              <button color="primary" mat-stroked-button (click)="markAsRead(note)">
+                Mark as read
+              </button>
+            } @else if (note.readByUnitRole) {
               <div class="px-3 text-gray-400 italic">Read by tutor</div>
             }
           </div>

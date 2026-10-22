@@ -16,6 +16,7 @@ export class TutorNote extends Entity {
   replyTo?: TutorNote;
   replyToId: number;
   readByUnitRole: boolean;
+  requiresCurrentUserRead: boolean;
 
   createdAt: Date;
   updatedAt: Date;
