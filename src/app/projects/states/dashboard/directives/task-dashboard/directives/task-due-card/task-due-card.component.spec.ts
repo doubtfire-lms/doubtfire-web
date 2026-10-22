@@ -54,4 +54,24 @@ describe('TaskDueCardComponent', () => {
 
     expect(component.discussTimeoutExpiryDate).toBeNull();
   });
+
+  it('hides deadlines that cannot expire before the last teaching date', () => {
+    const year = new Date().getFullYear();
+    component.task = {
+      status: 'discuss',
+      discussTimeoutExpiryDate: `${year}-10-20`,
+      unit: {
+        discussTimeoutActive: true,
+        lastTeachingDate: new Date(year, 9, 20),
+      },
+    } as Task;
+
+    expect(component.discussTimeoutExpiryDate).toBeNull();
+
+    component.task.discussTimeoutExpiryDate = `${year}-10-21`;
+    expect(component.discussTimeoutExpiryDate).toBeNull();
+
+    component.task.discussTimeoutExpiryDate = `${year}-10-19`;
+    expect(component.discussTimeoutExpiryDate).toBe('19th October');
+  });
 });
