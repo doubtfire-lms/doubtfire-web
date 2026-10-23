@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-108](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-107...v11.0.0-108) (2026-10-23)
+
+
+### Features
+
+* support last teaching date in teaching period and unit forms ([#1666](https://github.com/b0ink/doubtfire-deploy/issues/1666)) ([ca4c11f](https://github.com/b0ink/doubtfire-deploy/commit/ca4c11fbc0beb3259bee2edc09877805aa8145fe))
+
 ## [11.0.0-107](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-106...v11.0.0-107) (2026-10-22)
 
 ## [11.0.0-106](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-105...v11.0.0-106) (2026-10-22)
