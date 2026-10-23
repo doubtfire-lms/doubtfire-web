@@ -26,7 +26,15 @@ export class TeachingPeriodListComponent implements OnInit {
 
   public dataSource: MatTableDataSource<TeachingPeriod> = new MatTableDataSource();
 
-  displayedColumns: string[] = ['active', 'name', 'startDate', 'endDate', 'activeUntil', 'actions'];
+  displayedColumns: string[] = [
+    'active',
+    'name',
+    'startDate',
+    'lastTeachingDate',
+    'endDate',
+    'activeUntil',
+    'actions',
+  ];
 
   constructor(
     private teachingPeriodsService: TeachingPeriodService,
@@ -108,6 +116,12 @@ export class TeachingPeriodListComponent implements OnInit {
             this.sortDateValue(b.endDate),
             isAsc,
           );
+        case 'lastTeachingDate':
+          return this.sortCompare(
+            this.sortDateValue(a.lastTeachingDate),
+            this.sortDateValue(b.lastTeachingDate),
+            isAsc,
+          );
         case 'activeUntil':
           return this.sortCompare(
             this.sortDateValue(a.activeUntil),
@@ -147,6 +161,12 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.campusService.query().subscribe((campuses) => (this.campuses = campuses));
+  }
+
+  defaultLastTeachingDate(endDate: Date): void {
+    if (!this.newOrSelectedTeachingPeriod.lastTeachingDate) {
+      this.newOrSelectedTeachingPeriod.lastTeachingDate = endDate;
+    }
   }
 
   addTeachingBreak() {

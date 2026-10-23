@@ -77,6 +77,7 @@ export class Unit extends Entity {
   teachingPeriod: TeachingPeriod;
   startDate: Date; //TODO: or string
   endDate: Date; //TODO: or string
+  lastTeachingDate: Date;
   portfolioAutoGenerationDate: Date;
   currentUnitWeek: number | null;
 
@@ -104,6 +105,7 @@ export class Unit extends Entity {
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
   discussTimeoutEnabled: boolean;
+  discussTimeoutActive: boolean;
   discussTimeoutWarningDays: number;
   discussTimeoutExpireDays: number;
   gradeDefinitions: GradeDefinition[] = [
@@ -403,7 +405,7 @@ export class Unit extends Entity {
 
   public rolloverTo(
     body:
-      | {new_unit_code?: string; start_date: Date; end_date: Date}
+      | {new_unit_code?: string; start_date: Date; end_date: Date; last_teaching_date?: Date}
       | {new_unit_code?: string; teaching_period_id: number},
   ): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
