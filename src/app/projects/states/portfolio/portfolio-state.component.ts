@@ -131,6 +131,24 @@ export class PortfolioStateComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  public isStepCompleted(tab: PortfolioStepTab): boolean {
+    if (this.project?.portfolioAvailable || this.project?.compilePortfolio) {
+      return tab.seq < this.tabs.reviewStep.seq;
+    }
+
+    switch (tab.seq) {
+      case 1:
+        return true;
+      case 2:
+        return this.hasSubmittedGrade;
+      case 3:
+      case 4:
+        return this.hasLearningSummaryReport;
+      default:
+        return false;
+    }
+  }
+
   public setActiveTab(tab: PortfolioStepTab): void {
     if (!tab) {
       return;
