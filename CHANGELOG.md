@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-109](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-108...v11.0.0-109) (2026-10-25)
+
+
+### Bug Fixes
+
+* show weeks up until last teaching date ([d479e8a](https://github.com/b0ink/doubtfire-deploy/commit/d479e8a3297b2e952eea56832f3c2c6bb226b013))
+
 ## [11.0.0-108](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-107...v11.0.0-108) (2026-10-23)
 
 
