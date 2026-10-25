@@ -14,20 +14,75 @@
       <f-task-date-slider [task]="task" />
     }
     <ul>
-      <li>{{ grades.names[taskDef?.targetGrade] }} Task</li>
+      <li class="mb-3">{{ grades.names[taskDef?.targetGrade] }} Task</li>
 
       @if (unit?.allowFlexibleDates ?? taskDef?.unit?.allowFlexibleDates) {
-        <li>I'm planning to <b>start</b> this task by {{ startDate() | date: 'EEE d MMM' }}.</li>
+        <li>
+          @if (task) {
+            For my target grade, this task is <b>due</b>
+          } @else {
+            This task is <b>due</b>
+          }
+          {{ targetGradeDueDate() | date: 'EEE d MMM' }}.
+        </li>
+        <li>
+          I'm planning to <b>start</b> this task
+          @if (daysFromTargetDueDate(startDate()) < 0) {
+            {{ -daysFromTargetDueDate(startDate()) }} day{{
+              daysFromTargetDueDate(startDate()) === -1 ? '' : 's'
+            }}
+            before it is due on
+          } @else if (daysFromTargetDueDate(startDate()) > 0) {
+            {{ daysFromTargetDueDate(startDate()) }} day{{
+              daysFromTargetDueDate(startDate()) === 1 ? '' : 's'
+            }}
+            after it is due on
+          } @else {
+            on its due date,
+          }
+          {{ startDate() | date: 'EEE d MMM' }}.
+        </li>
         <li [hidden]="!task?.extensions || task?.extensions <= 0">
           The due date has been <b>extended</b> by {{ task?.extensions }} week{{
             task?.extensions > 1 ? 's' : ''
           }}.
         </li>
-        <li>I'm aiming to <b>submit</b> this task by {{ dueDate() | date: 'EEE d MMM' }}.</li>
-        <li>
-          To receive <b>feedback</b>, I must submit this task by
-          {{ feedbackDate() | date: 'EEE d MMM' }}.
+        <li
+          class="mb-3"
+          [class.bg-red-50]="daysFromTargetDueDate(dueDate()) > 0"
+          [class.text-red-800]="daysFromTargetDueDate(dueDate()) > 0"
+        >
+          I'm aiming to <b>submit</b> this task
+          @if (daysFromTargetDueDate(dueDate()) > 0) {
+            <b
+              >{{ daysFromTargetDueDate(dueDate()) }} day{{
+                daysFromTargetDueDate(dueDate()) === 1 ? '' : 's'
+              }}
+              after its due date</b
+            >, on
+          } @else if (daysFromTargetDueDate(dueDate()) < 0) {
+            {{ -daysFromTargetDueDate(dueDate()) }} day{{
+              daysFromTargetDueDate(dueDate()) === -1 ? '' : 's'
+            }}
+            before its due date, on
+          } @else {
+            on its due date,
+          }
+          {{ dueDate() | date: 'EEE d MMM' }}.
         </li>
+        @if (plannedSubmissionIsAfterFeedbackDeadline()) {
+          <li class="text-red-800">
+            If I submit as indicated, I will <b>not receive feedback</b> on my submission. To
+            receive feedback, I need to submit by {{ feedbackDate() | date: 'EEE d MMM' }}.
+          </li>
+        } @else {
+          <li>
+            If I submit as indicated, I will receive feedback on my submission.
+            @if (daysFromTargetDueDate(dueDate()) > 0) {
+              I don't need to request an extension to submit after the due date.
+            }
+          </li>
+        }
       } @else {
         <li>
           Start Date &mdash; I'm aiming to <b>start</b> this task by
