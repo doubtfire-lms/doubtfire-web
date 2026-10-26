@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-111](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-110...v11.0.0-111) (2026-10-26)
+
+
+### Features
+
+* add filter to exclude tasks in explorer from withdrawn students ([6d7e691](https://github.com/b0ink/doubtfire-deploy/commit/6d7e691c019e7f42af4e283ed70c4663dfa76d41))
+
 ## [11.0.0-110](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-109...v11.0.0-110) (2026-10-26)
 
 
