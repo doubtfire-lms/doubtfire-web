@@ -20,6 +20,11 @@ import {AlertService} from 'src/app/common/services/alert.service';
 })
 export class TaskSubmissionCardComponent implements OnChanges, OnInit {
   @Input() task: Task;
+  @Input() isTutor = false;
+
+  public get canManageSubmission(): boolean {
+    return !this.task?.definition.staffManagedTask || this.isTutor;
+  }
 
   public get canRegeneratePdf(): boolean {
     return (

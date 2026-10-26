@@ -48,7 +48,7 @@ type StaffTaskListSortOption = 'default' | 'feedbackDeadline';
 
 type StaffTaskListSortDirection = 'asc' | 'desc';
 
-type StaffTaskListFilterKey = 'awaitingFeedback' | 'similaritiesDetected';
+type StaffTaskListFilterKey = 'awaitingFeedback' | 'similaritiesDetected' | 'showWithdrawnStudents';
 
 interface StaffTaskListViewPreferences {
   sortBy: StaffTaskListSortOption;
@@ -84,6 +84,7 @@ const DEFAULT_VIEW_PREFERENCES: StaffTaskListViewPreferences = {
   filters: {
     awaitingFeedback: false,
     similaritiesDetected: false,
+    showWithdrawnStudents: false,
   },
   statuses: [],
 };
@@ -132,6 +133,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       taskDef?: TaskDefinition | number,
       fetchMyStudentsOnly?: boolean,
       viewAsUnitRoleId?: number,
+      includeWithdrawn?: boolean,
     ) => Observable<Task[]>;
     selectedTask: Task | null;
     taskKey: unknown;
@@ -730,6 +732,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedTaskDefinitionId,
         fetchMyStudentsOnly,
         this.viewAsUnitRole?.id,
+        this.viewType === 'explorer' && this.viewPreferences.filters.showWithdrawnStudents,
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -914,7 +917,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       ...this.viewPreferences,
       filters: {...this.viewPreferences.filters, [key]: value},
     };
-    this.viewPreferencesChanged();
+    if (key === 'showWithdrawnStudents' && this.viewType === 'explorer') {
+      this.refreshData();
+    } else {
+      this.viewPreferencesChanged();
+    }
   }
 
   public isStatusSelected(status: TaskStatusEnum): boolean {
@@ -936,8 +943,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public resetViewPreferences(): void {
+    const hadWithdrawnStudents = this.viewPreferences.filters.showWithdrawnStudents;
     this.viewPreferences = this.defaultViewPreferences();
-    this.viewPreferencesChanged();
+    if (hadWithdrawnStudents && this.viewType === 'explorer') {
+      this.refreshData();
+    } else {
+      this.viewPreferencesChanged();
+    }
   }
 
   // A lone status is not worth a filter row -- everything in the list already has it

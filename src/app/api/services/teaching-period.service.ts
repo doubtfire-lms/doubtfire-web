@@ -37,6 +37,11 @@ export class TeachingPeriodService extends CachedEntityService<TeachingPeriod> {
         toJsonFn: MappingFunctions.mapDayToJson,
       },
       {
+        keys: 'lastTeachingDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
+      {
         keys: 'activeUntil',
         toEntityFn: MappingFunctions.mapDateToDay,
         toJsonFn: MappingFunctions.mapDayToJson,

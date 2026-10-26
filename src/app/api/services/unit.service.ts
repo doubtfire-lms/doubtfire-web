@@ -158,6 +158,11 @@ export class UnitService extends CachedEntityService<Unit> {
         },
         toJsonFn: MappingFunctions.mapDayToJson,
       },
+      {
+        keys: 'lastTeachingDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
       'currentUnitWeek',
       {
         keys: 'portfolioAutoGenerationDate',
@@ -289,6 +294,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'feedbackWarningThresholdDays',
       'feedbackOverflowThresholdDays',
       'discussTimeoutEnabled',
+      'discussTimeoutActive',
       'discussTimeoutWarningDays',
       'discussTimeoutExpireDays',
       {
@@ -322,6 +328,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'teachingPeriod',
       'startDate',
       'endDate',
+      'lastTeachingDate',
       'portfolioAutoGenerationDate',
       'lockProjectOnPortfolioSubmission',
 

@@ -21,6 +21,7 @@ export class CreateNewUnitModalContentComponent implements OnInit {
   showDates = false;
   startDate: Date;
   endDate: Date;
+  lastTeachingDate: Date;
   selectedTeachingPeriod: number = null;
   teachingPeriods: TeachingPeriod[];
 
@@ -43,6 +44,7 @@ export class CreateNewUnitModalContentComponent implements OnInit {
         name: unit.unitName,
         start_date: this.startDate,
         end_date: this.endDate,
+        last_teaching_date: this.lastTeachingDate || this.endDate,
       };
     } else {
       newUnit = {

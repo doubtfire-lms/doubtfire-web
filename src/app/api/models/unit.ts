@@ -77,6 +77,7 @@ export class Unit extends Entity {
   teachingPeriod: TeachingPeriod;
   startDate: Date; //TODO: or string
   endDate: Date; //TODO: or string
+  lastTeachingDate: Date;
   portfolioAutoGenerationDate: Date;
   lockProjectOnPortfolioSubmission: boolean = false;
   currentUnitWeek: number | null;
@@ -105,6 +106,7 @@ export class Unit extends Entity {
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
   discussTimeoutEnabled: boolean;
+  discussTimeoutActive: boolean;
   discussTimeoutWarningDays: number;
   discussTimeoutExpireDays: number;
   gradeDefinitions: GradeDefinition[] = [
@@ -404,7 +406,7 @@ export class Unit extends Entity {
 
   public rolloverTo(
     body:
-      | {new_unit_code?: string; start_date: Date; end_date: Date}
+      | {new_unit_code?: string; start_date: Date; end_date: Date; last_teaching_date?: Date}
       | {new_unit_code?: string; teaching_period_id: number},
   ): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
@@ -441,12 +443,16 @@ export class Unit extends Entity {
     });
   }
 
-  public fillWithUnStartedTasks(tasks: Task[], taskDef: TaskDefinition | number): Task[] {
+  public fillWithUnStartedTasks(
+    tasks: Task[],
+    taskDef: TaskDefinition | number,
+    includeWithdrawn: boolean = false,
+  ): Task[] {
     // Make sure the task definition is a task definition object from the unit
     const td = taskDef instanceof TaskDefinition ? taskDef : this.taskDef(taskDef);
 
-    // Now fill for the students in the unit
-    return this.students.map((p) => {
+    // Fill rows for enrolled students, and withdrawn students when requested
+    return (includeWithdrawn ? this.students : this.activeStudents).map((p) => {
       // See if we already have the task
       let t = tasks.find((t) => t.project.id === p.id && t.definition.id === td.id);
       if (!t) {

@@ -160,6 +160,7 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     {token: '{{student.full_name}}', label: 'Student Full Name'},
     {token: '{{student.username}}', label: 'Student Username'},
     {token: '{{student.student_id}}', label: 'Student ID'},
+    {token: '{{convenor.preferred_name}}', label: 'Main Convenor Preferred Name'},
     {token: '{{affected_students_count}}', label: 'Affected Students Count'},
     {token: '{{unit.code}}', label: 'Unit Code'},
     {token: '{{unit.name}}', label: 'Unit Name'},
@@ -1702,6 +1703,10 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
         return student?.username;
       case '{{student.student_id}}':
         return student?.student_id;
+      case '{{convenor.preferred_name}}':
+        return (
+          this.unit?.mainConvenor?.user?.preferredName || this.unit?.mainConvenorUser?.preferredName
+        );
       case '{{affected_students_count}}':
         return this.studentsFor(rule).length.toString();
       case '{{unit.code}}':
