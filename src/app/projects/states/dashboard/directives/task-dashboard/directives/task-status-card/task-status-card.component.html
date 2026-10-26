@@ -2,7 +2,10 @@
   @if (triggers?.length > 0) {
     <mat-form-field appearance="outline" class="px-2.5 pt-2.5">
       <mat-select
-        [disabled]="task?.blockedByPrerequisiteTasks() && !isTutor"
+        [disabled]="
+          (task?.blockedByPrerequisiteTasks() && !isTutor) ||
+          (task?.definition.staffManagedTask && !canManageStaffTask)
+        "
         [value]="$safeNavigationMigration(task?.status)"
         (selectionChange)="triggerTransition($event)"
       >
@@ -39,11 +42,18 @@
   }
 
   <mat-card-content>
-    <p>{{ task?.statusHelp().reason }} {{ task?.statusHelp().action }}</p>
-    @if (task?.blockedByPrerequisiteTasks()) {
+    @if (task?.definition.staffManagedTask && !canManageStaffTask) {
       <p>
-        To submit this task, you must first complete all tasks that are listed as prerequisites.
+        Only teaching staff can submit this task or change its status. You don't need to submit
+        anything.
       </p>
+    } @else {
+      <p>{{ task?.statusHelp().reason }} {{ task?.statusHelp().action }}</p>
+      @if (task?.blockedByPrerequisiteTasks()) {
+        <p>
+          To submit this task, you must first complete all tasks that are listed as prerequisites.
+        </p>
+      }
     }
   </mat-card-content>
 
@@ -54,7 +64,8 @@
         [disabled]="
           isReadyForFeedback() ||
           (task?.blockedByPrerequisiteTasks() && !isTutor) ||
-          (isSubmittedForPortfolio() && !isTutor)
+          (isSubmittedForPortfolio() && isTutor) ||
+          (task?.definition.staffManagedTask && !canManageStaffTask)
         "
         (click)="uploadSubmission()"
       >
@@ -64,7 +75,11 @@
       @if (task?.canApplyForExtension()) {
         <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
       }
-      @if (task?.inSubmittedState() && task?.requiresFileUpload()) {
+      @if (
+        task?.inSubmittedState() &&
+        task?.requiresFileUpload() &&
+        (!task?.definition.staffManagedTask || canManageStaffTask)
+      ) {
         <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
       }
     </div>
