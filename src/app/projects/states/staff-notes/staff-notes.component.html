@@ -144,7 +144,7 @@
         (beforeinput)="handleBeforeInput($event)"
         (paste)="handlePaste($event)"
       ></textarea>
-      <div class="flex justify-end gap-1">
+      <div class="flex items-center justify-end gap-1">
         <input
           #attachmentUploader
           accept="image/*,.pdf"
@@ -155,6 +155,7 @@
         />
         <button
           aria-label="Attach images or PDFs"
+          class="attachment-button"
           mat-icon-button
           matTooltip="Attach images or PDFs"
           type="button"
